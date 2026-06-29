@@ -6,6 +6,7 @@
   "description": "Lekta - klijentska provjera akademskih radova prema profilima zagrebackih visokih ucilista.",
   "scripts": {
     "bootstrap": "node scripts/split-prototype.mjs",
+    "extract-data": "node scripts/extract-data.mjs",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
