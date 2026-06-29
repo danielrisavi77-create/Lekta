@@ -4,5 +4,6 @@ export default defineConfig({
   test: {
     environment: 'happy-dom',
     passWithNoTests: true,
+    setupFiles: ['./tests/setup/xml-dom.ts'],
   },
 });

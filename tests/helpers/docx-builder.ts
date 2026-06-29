@@ -1,0 +1,202 @@
+/**
+ * Minimalni .docx generator za sinteticke golden fixture (CLAUDE.md golden harness).
+ * Gradi valjan OOXML .docx s pohranjenim (stored, bez kompresije) ZIP zapisima koje
+ * cita ZipReader u src/main.ts (method 0 vraca bajtove izravno, bez DecompressionStream).
+ *
+ * Namjena: kontrolirani ulazi za provjeru da auditi (font, velicina, prored, margine,
+ * sadrzaj, sekcije) ispravno okidaju. NIJE pravi studentski rad i nije izvor pravila.
+ */
+
+const TWIPS_PER_CM = 567; // src/main.ts dijeli twips s 567 za cm
+
+export interface ParaSpec {
+  text: string;
+  font?: string; // w:rFonts w:ascii
+  sizePt?: number; // tipografske tocke (w:sz je pola-tocke)
+  bold?: boolean;
+  italic?: boolean;
+  jc?: 'both' | 'left' | 'center' | 'right'; // poravnanje
+  spacing15?: boolean; // true => prored 1,5 (w:line 360 auto)
+  styleId?: string; // npr. "Heading1" za naslov
+}
+
+export interface DocSpec {
+  paragraphs: ParaSpec[];
+  pageCm?: { w: number; h: number }; // default A4 21 x 29,7
+  marginsCm?: { top: number; right: number; bottom: number; left: number };
+}
+
+function esc(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function paraXml(p: ParaSpec): string {
+  const rpr: string[] = [];
+  if (p.font) rpr.push(`<w:rFonts w:ascii="${esc(p.font)}" w:hAnsi="${esc(p.font)}"/>`);
+  if (p.sizePt) rpr.push(`<w:sz w:val="${Math.round(p.sizePt * 2)}"/>`);
+  if (p.bold) rpr.push('<w:b/>');
+  if (p.italic) rpr.push('<w:i/>');
+  const rPr = rpr.length ? `<w:rPr>${rpr.join('')}</w:rPr>` : '';
+
+  const ppr: string[] = [];
+  if (p.styleId) ppr.push(`<w:pStyle w:val="${esc(p.styleId)}"/>`);
+  if (p.spacing15) ppr.push('<w:spacing w:line="360" w:lineRule="auto"/>');
+  if (p.jc) ppr.push(`<w:jc w:val="${p.jc}"/>`);
+  const pPr = ppr.length ? `<w:pPr>${ppr.join('')}</w:pPr>` : '';
+
+  return `<w:p>${pPr}<w:r>${rPr}<w:t xml:space="preserve">${esc(p.text)}</w:t></w:r></w:p>`;
+}
+
+function sectPrXml(spec: DocSpec): string {
+  const page = spec.pageCm ?? { w: 21.0, h: 29.7 };
+  const m = spec.marginsCm ?? { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 };
+  const tw = (cm: number) => Math.round(cm * TWIPS_PER_CM);
+  return (
+    `<w:sectPr>` +
+    `<w:pgSz w:w="${tw(page.w)}" w:h="${tw(page.h)}"/>` +
+    `<w:pgMar w:top="${tw(m.top)}" w:right="${tw(m.right)}" w:bottom="${tw(m.bottom)}" w:left="${tw(m.left)}"/>` +
+    `</w:sectPr>`
+  );
+}
+
+export function documentXml(spec: DocSpec): string {
+  const body = spec.paragraphs.map(paraXml).join('');
+  return (
+    `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
+    `<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">` +
+    `<w:body>${body}${sectPrXml(spec)}</w:body></w:document>`
+  );
+}
+
+const STYLES_XML =
+  `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
+  `<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">` +
+  `<w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="24"/></w:rPr></w:rPrDefault></w:docDefaults>` +
+  `<w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/></w:style>` +
+  `<w:style w:type="paragraph" w:styleId="Heading2"><w:name w:val="heading 2"/></w:style>` +
+  `</w:styles>`;
+
+const CONTENT_TYPES =
+  `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
+  `<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">` +
+  `<Default Extension="xml" ContentType="application/xml"/>` +
+  `<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>` +
+  `<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>` +
+  `<Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>` +
+  `</Types>`;
+
+const RELS =
+  `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
+  `<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">` +
+  `<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>` +
+  `</Relationships>`;
+
+// --- CRC32 ---
+const CRC_TABLE = (() => {
+  const t = new Uint32Array(256);
+  for (let n = 0; n < 256; n++) {
+    let c = n;
+    for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
+    t[n] = c >>> 0;
+  }
+  return t;
+})();
+function crc32(bytes: Uint8Array): number {
+  let c = 0xffffffff;
+  for (let i = 0; i < bytes.length; i++) c = CRC_TABLE[(c ^ bytes[i]) & 0xff] ^ (c >>> 8);
+  return (c ^ 0xffffffff) >>> 0;
+}
+
+interface ZipFile { name: string; data: Uint8Array }
+
+/** Sastavi ZIP s pohranjenim (nekompresiranim) zapisima koje ZipReader cita (method 0). */
+function zipStore(files: ZipFile[]): Uint8Array {
+  const enc = new TextEncoder();
+  const locals: Uint8Array[] = [];
+  const centrals: Uint8Array[] = [];
+  let offset = 0;
+
+  for (const f of files) {
+    const nameBytes = enc.encode(f.name);
+    const crc = crc32(f.data);
+    const size = f.data.length;
+
+    const lh = new Uint8Array(30 + nameBytes.length);
+    const lv = new DataView(lh.buffer);
+    lv.setUint32(0, 0x04034b50, true);
+    lv.setUint16(4, 20, true); // version needed
+    lv.setUint16(6, 0, true); // flags
+    lv.setUint16(8, 0, true); // method 0 = stored
+    lv.setUint16(10, 0, true); // mod time
+    lv.setUint16(12, 0x21, true); // mod date (1980-01-01)
+    lv.setUint32(14, crc, true);
+    lv.setUint32(18, size, true); // comp size
+    lv.setUint32(22, size, true); // uncomp size
+    lv.setUint16(26, nameBytes.length, true);
+    lv.setUint16(28, 0, true); // extra len
+    lh.set(nameBytes, 30);
+    locals.push(lh, f.data);
+
+    const ch = new Uint8Array(46 + nameBytes.length);
+    const cv = new DataView(ch.buffer);
+    cv.setUint32(0, 0x02014b50, true);
+    cv.setUint16(4, 20, true); // version made by
+    cv.setUint16(6, 20, true); // version needed
+    cv.setUint16(8, 0, true); // flags
+    cv.setUint16(10, 0, true); // method
+    cv.setUint16(12, 0, true); // time
+    cv.setUint16(14, 0x21, true); // date
+    cv.setUint32(16, crc, true);
+    cv.setUint32(20, size, true); // comp
+    cv.setUint32(24, size, true); // uncomp
+    cv.setUint16(28, nameBytes.length, true);
+    cv.setUint16(30, 0, true); // extra
+    cv.setUint16(32, 0, true); // comment
+    cv.setUint16(34, 0, true); // disk
+    cv.setUint16(36, 0, true); // int attr
+    cv.setUint32(38, 0, true); // ext attr
+    cv.setUint32(42, offset, true); // local header offset
+    ch.set(nameBytes, 46);
+    centrals.push(ch);
+
+    offset += lh.length + f.data.length;
+  }
+
+  const cdSize = centrals.reduce((n, c) => n + c.length, 0);
+  const cdOffset = offset;
+  const eocd = new Uint8Array(22);
+  const ev = new DataView(eocd.buffer);
+  ev.setUint32(0, 0x06054b50, true);
+  ev.setUint16(8, files.length, true); // entries this disk
+  ev.setUint16(10, files.length, true); // entries total
+  ev.setUint32(12, cdSize, true);
+  ev.setUint32(16, cdOffset, true);
+
+  const total = offset + cdSize + eocd.length;
+  const out = new Uint8Array(total);
+  let pos = 0;
+  for (const part of [...locals, ...centrals, eocd]) {
+    out.set(part, pos);
+    pos += part.length;
+  }
+  return out;
+}
+
+/** Izgradi .docx (Uint8Array) iz specifikacije dokumenta. */
+export function buildDocx(spec: DocSpec): Uint8Array {
+  const enc = new TextEncoder();
+  return zipStore([
+    { name: '[Content_Types].xml', data: enc.encode(CONTENT_TYPES) },
+    { name: '_rels/.rels', data: enc.encode(RELS) },
+    { name: 'word/document.xml', data: enc.encode(documentXml(spec)) },
+    { name: 'word/styles.xml', data: enc.encode(STYLES_XML) },
+  ]);
+}
+
+/** Pomocno: .docx kao File objekt (analyzeDocx ocekuje file.arrayBuffer() i file.name). */
+export function buildDocxFile(spec: DocSpec, name = 'sinteticki.docx'): File {
+  const bytes = buildDocx(spec);
+  return new File([bytes], name, {
+    type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  });
+}
