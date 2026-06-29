@@ -148,3 +148,47 @@ export interface PackageDef {
   desc: string;
   features: string[];
 }
+
+// ---------------------------------------------------------------------------
+// Meta i pomocni oblici (data/** loaderi). Drze se oblika iz prototipa; dijelovi
+// koje engine cita dinamicki ostaju labavi (Record/tuple) dok traje split.
+// ---------------------------------------------------------------------------
+
+/** PROFILE_STATUS[status] (data/profiles/profile-status.json). */
+export interface ProfileStatusMeta {
+  label: string;
+  note: string;
+}
+
+/** PROFILE_AUTHORITY[key] (data/profiles/profile-authority.json). */
+export interface ProfileAuthorityMeta {
+  label: string;
+  className: string;
+  note: string;
+}
+
+/** COVERAGE_STATUS_META[key] (data/coverage/coverage-status-meta.json). */
+export interface CoverageStatusMeta {
+  label: string;
+  icon: string;
+}
+
+/** SOCIAL_METHOD_REGISTRY[key] (data/methodology/social-methods.json). */
+export interface SocialMethod {
+  id: string;
+  label: string;
+  shortLabel: string;
+  facts: string[];
+  signals: Array<[string, number]>;
+  negativeSignals?: Array<[string, number]>;
+  [extra: string]: unknown;
+}
+
+/** CHECK_ITEMS zapis (data/checks/check-items.json): [ikona, naslov, opis]. */
+export type CheckItem = [string, string, string];
+
+/** FPZG_SUBMISSION_CALENDAR (data/submission/fpzg-calendar.json). Cita se dinamicki. */
+export type SubmissionCalendar = Record<string, unknown>;
+
+/** Skupna pravila po obitelji studija (BASE_PROFILES) i FPZG_PARTIAL. */
+export type BaseProfiles = Record<string, Record<string, unknown>>;
