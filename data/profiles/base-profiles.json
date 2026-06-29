@@ -1,0 +1,107 @@
+{
+  "social": {
+    "font": [
+      "Times New Roman",
+      "Arial",
+      "Calibri"
+    ],
+    "size": [
+      12,
+      11
+    ],
+    "spacing": 1.5,
+    "margins": {
+      "top": 2.5,
+      "right": 2.5,
+      "bottom": 2.5,
+      "left": 2.5
+    },
+    "justify": true,
+    "requireToc": true,
+    "requirePageNumbers": true
+  },
+  "stem": {
+    "font": [
+      "Times New Roman",
+      "Arial",
+      "Calibri"
+    ],
+    "size": [
+      12,
+      11
+    ],
+    "spacing": 1.5,
+    "margins": {
+      "top": 2.5,
+      "right": 2.5,
+      "bottom": 2.5,
+      "left": 2.5
+    },
+    "justify": true,
+    "requireToc": true,
+    "requirePageNumbers": true
+  },
+  "biomed": {
+    "font": [
+      "Times New Roman",
+      "Arial",
+      "Calibri"
+    ],
+    "size": [
+      12,
+      11
+    ],
+    "spacing": 1.5,
+    "margins": {
+      "top": 2.5,
+      "right": 2.5,
+      "bottom": 2.5,
+      "left": 2.5
+    },
+    "justify": true,
+    "requireToc": true,
+    "requirePageNumbers": true
+  },
+  "arts": {
+    "font": [
+      "Times New Roman",
+      "Arial",
+      "Calibri"
+    ],
+    "size": [
+      12,
+      11
+    ],
+    "spacing": 1.5,
+    "margins": {
+      "top": 2.5,
+      "right": 2.5,
+      "bottom": 2.5,
+      "left": 2.5
+    },
+    "justify": true,
+    "requireToc": true,
+    "requirePageNumbers": true
+  },
+  "mixed": {
+    "font": [
+      "Times New Roman",
+      "Arial",
+      "Calibri"
+    ],
+    "size": [
+      12,
+      11
+    ],
+    "spacing": 1.5,
+    "margins": {
+      "top": 2.5,
+      "right": 2.5,
+      "bottom": 2.5,
+      "left": 2.5
+    },
+    "justify": true,
+    "requireToc": true,
+    "requirePageNumbers": true
+  }
+}

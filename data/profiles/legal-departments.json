@@ -1,0 +1,330 @@
+[
+  {
+    "id": "trgovacko-pravo",
+    "name": "Katedra za trgovačko pravo i pravo društava",
+    "status": "partial",
+    "programs": [
+      "Sveučilišni integrirani prijediplomski i diplomski studij Pravo"
+    ],
+    "workTypes": [
+      "seminar",
+      "graduate"
+    ],
+    "ruleAuthority": "official-source-with-currency-caveat",
+    "rules": {
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "checkTitlePage": true,
+      "titleMentorRequired": true,
+      "requiredSections": [
+        {
+          "key": "toc",
+          "label": "sadržaj",
+          "terms": [
+            "sadržaj"
+          ]
+        },
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zaključak",
+          "terms": [
+            "zaključak"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "popis literature i pravnih izvora",
+          "terms": [
+            "popis literature",
+            "izvori i literatura",
+            "literatura",
+            "bibliografija"
+          ]
+        },
+        {
+          "key": "abbr",
+          "label": "popis kratica",
+          "terms": [
+            "popis kratica",
+            "kratice"
+          ]
+        }
+      ],
+      "footnoteFont": [
+        "Times New Roman"
+      ],
+      "footnoteSize": [
+        10
+      ],
+      "footnoteSpacing": 1.15,
+      "pageNumberAlignment": "right",
+      "checkTitlePageNumberSuppression": true,
+      "requireElementSources": false,
+      "checkAlphabeticalRefs": true
+    },
+    "rulesByWorkType": {
+      "seminar": {
+        "charMin": 27000,
+        "charMax": 45000,
+        "charRangeAdvisory": true,
+        "charCountMode": "main-text-excluding-front-refs"
+      },
+      "graduate": {
+        "charMin": 36000,
+        "charMax": 72000,
+        "charRangeAdvisory": true,
+        "charCountMode": "main-text-excluding-front-refs"
+      }
+    },
+    "facts": [
+      "15–25 kartica seminarski",
+      "20–40 kartica diplomski",
+      "fusnote prored 1,15",
+      "popis kratica prije Uvoda"
+    ],
+    "note": "Katedarska uputa propisuje strukturu, popis kratica, podjelu završnog popisa po vrstama izvora i opseg u autorskim karticama. Mentor može dogovoriti drukčiji opseg.",
+    "manualChecks": [
+      "Završni popis treba biti podijeljen na pravnu književnost, pravne propise i sudsku praksu.",
+      "Svako poglavlje treba sadržavati osobnu analizu i stajalište autora.",
+      "Provjeriti aktualnost korištenih propisa, sudske prakse i literature."
+    ],
+    "sources": [
+      {
+        "title": "Upute za izradu diplomskog i seminarskog rada – Katedra za trgovačko pravo i pravo društava",
+        "url": "https://www.pravo.unizg.hr/wp-content/uploads/2023/02/UPUTE-za-izradu-diplomskih-i-seminarskih-radova-copy.pdf"
+      }
+    ],
+    "fieldValidation": {
+      "status": "official-guideline-parser-overlay",
+      "validatedAt": "2026-06-29",
+      "scope": "Katedarski profil testiran kao nadogradnja općeg pravnog profila; nema stvarnih DOCX uzoraka katedre.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Pravila opsega u karticama, popisa kratica, naslovnice i posebnog proreda fusnota ulaze samo kada je katedra izričito odabrana."
+      ],
+      "observedDeviations": [
+        "Uputa nije datirana na samom dokumentu i sadrži starije operativne predajne odredbe; administrativni postupak zato se preuzima s aktualne središnje stranice Fakulteta."
+      ],
+      "productDecision": "Katedarski profil nadopunjuje, ali ne zamjenjuje aktualni studijski profil i posebnu uputu mentora."
+    }
+  },
+  {
+    "id": "radno-socijalno-pravo",
+    "name": "Katedra za radno i socijalno pravo",
+    "status": "partial",
+    "programs": [
+      "Sveučilišni integrirani prijediplomski i diplomski studij Pravo",
+      "Stručni prijediplomski studij Javna uprava",
+      "Stručni diplomski studij Javna uprava",
+      "Stručni prijediplomski Porezni studij"
+    ],
+    "workTypes": [
+      "seminar",
+      "final",
+      "graduate"
+    ],
+    "ruleAuthority": "official-source-with-currency-caveat",
+    "rules": {
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "checkPageNumberStartAtIntro": true,
+      "pageNumberAlignment": "right",
+      "footnoteFont": [
+        "Times New Roman"
+      ],
+      "footnoteSize": [
+        10
+      ],
+      "footnoteSpacing": 1,
+      "footnoteEndPeriod": true,
+      "headingRules": {
+        "size": 12,
+        "align": "left",
+        "numberRequired": true,
+        "trailingDot": true,
+        "romanLevelOneAllowed": false,
+        "maxLevel": 3,
+        "levels": {
+          "1": {
+            "uppercase": true
+          },
+          "2": {},
+          "3": {}
+        }
+      }
+    },
+    "rulesByWorkType": {
+      "seminar": {
+        "pageMin": 10,
+        "pageMax": 15,
+        "pageRangeAdvisory": true
+      },
+      "final": {
+        "pageMin": 30,
+        "pageMax": 35,
+        "pageRangeAdvisory": true
+      },
+      "graduate": {
+        "pageMin": 30,
+        "pageMax": 35,
+        "pageRangeAdvisory": true
+      }
+    },
+    "facts": [
+      "10–15 stranica seminarski",
+      "30–35 stranica diplomski/završni",
+      "arapska numeracija od Uvoda",
+      "samo decimalne razine"
+    ],
+    "note": "Uputa Katedre iz 2021. detaljnije uređuje opseg, numeriranje od Uvoda, uvlake odlomaka, kratice te pravne i sudske izvore. Aktualni središnji postupak predaje ima prednost pred starim administrativnim dijelovima upute.",
+    "manualChecks": [
+      "Koristiti domaće i strane pravne izvore, sudsku praksu te stručnu i znanstvenu literaturu.",
+      "Odlomci unutar cjelina trebaju biti smisleni i uvučeni.",
+      "Kratice zakona koristiti dosljedno i samo kada se izvor ponavlja."
+    ],
+    "sources": [
+      {
+        "title": "Upute za izradu seminarskih i diplomskih radova – Katedra za radno i socijalno pravo (ažurirano 07/2021)",
+        "url": "https://www.pravo.unizg.hr/wp-content/uploads/2023/02/Diplomski-seminari_upute_za_izradu_i_citiranje_2014_sire_20210729.pdf"
+      }
+    ],
+    "fieldValidation": {
+      "status": "official-guideline-parser-overlay",
+      "validatedAt": "2026-06-29",
+      "scope": "Katedarski profil ugrađen prema službenoj uputi ažuriranoj 2021.; terenska provjera stvarnih DOCX radova nije provedena.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "metadataSpotChecks": 0,
+        "years": [
+          2021,
+          2026
+        ]
+      },
+      "confirmed": [
+        "Posebni raspon stranica, početak numeriranja od Uvoda i zabrana rimskih razina aktiviraju se samo uz odabir ove katedre."
+      ],
+      "observedDeviations": [
+        "Uputa sadržava starije poveznice i PlagScan; aktualni Fakultet koristi Turnitin i noviji postupak predaje."
+      ],
+      "productDecision": "Sadržajna i oblikovna pravila zadržana su kao katedarska nadogradnja, dok su zastarjele administrativne upute isključene."
+    }
+  },
+  {
+    "id": "sociologija",
+    "name": "Katedra za sociologiju",
+    "status": "partial",
+    "programs": [
+      "Sveučilišni integrirani prijediplomski i diplomski studij Pravo",
+      "Sveučilišni prijediplomski studij Socijalni rad",
+      "Sveučilišni diplomski studij Socijalni rad",
+      "Sveučilišni diplomski studij Socijalna politika",
+      "Stručni prijediplomski studij Javna uprava",
+      "Stručni diplomski studij Javna uprava",
+      "Stručni prijediplomski Porezni studij"
+    ],
+    "workTypes": [
+      "seminar",
+      "project",
+      "article"
+    ],
+    "ruleAuthority": "official-source-with-currency-caveat",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "checkJustify": true,
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "requireElementSources": true,
+      "requiredSections": [
+        {
+          "key": "toc",
+          "label": "kratak sadržaj",
+          "terms": [
+            "sadržaj",
+            "kratak sadržaj"
+          ]
+        },
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zaključak",
+          "terms": [
+            "zaključak"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "popis literature",
+          "terms": [
+            "literatura",
+            "popis literature"
+          ]
+        }
+      ],
+      "maxMainChapters": 6,
+      "maxSubheadingsPerMain": 2
+    },
+    "facts": [
+      "najviše 6 glavnih poglavlja",
+      "1–2 potpoglavlja po poglavlju",
+      "tablice i grafovi: broj + naslov + izvor",
+      "TNR 12 · prored 1,5"
+    ],
+    "note": "Službena stranica Katedre daje dodatna pravila za pisane radove, osobito strukturu, broj cjelina i označavanje tablica/grafova. Primjenjuje se samo kada je rad izrađen u okviru te Katedre ili kolegija.",
+    "manualChecks": [
+      "Iza svakog naslova treba slijediti dovoljno razvijen tekst.",
+      "Glavna poglavlja trebaju imati više teksta od potpoglavlja.",
+      "Popis priloga dodaje se kada rad sadržava priloge."
+    ],
+    "sources": [
+      {
+        "title": "Dodatne informacije za pisane radove – Katedra za sociologiju",
+        "url": "https://www.pravo.unizg.hr/katedre/katedra-za-sociologiju/dodatne-informacije/"
+      }
+    ],
+    "fieldValidation": {
+      "status": "official-web-guideline-overlay",
+      "validatedAt": "2026-06-29",
+      "scope": "Katedarski profil temelji se na aktivnoj službenoj mrežnoj stranici; nema zasebnog DOCX korpusa.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Struktura, maksimalan broj glavnih poglavlja i obvezni izvori tablica/grafova mogu se provjeravati bez mijenjanja studijskog citatnog profila."
+      ],
+      "observedDeviations": [
+        "Stranica ne navodi datum posljednjeg ažuriranja ni jedinstveni opseg rada."
+      ],
+      "productDecision": "Pravila se prikazuju kao katedarska nadogradnja uz obveznu provjeru posebne upute nastavnika."
+    }
+  }
+]

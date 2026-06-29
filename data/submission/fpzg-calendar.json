@@ -1,0 +1,110 @@
+{
+  "academicYear": "2025./2026.",
+  "sourceDate": "2026-06-29",
+  "sources": [
+    {
+      "title": "FPZG – Diplomski i završni radovi",
+      "url": "https://www.fpzg.unizg.hr/studenti/obrane_diplomskih_radova"
+    },
+    {
+      "title": "Odluka o završnim radovima 2025./2026.",
+      "url": "https://www.fpzg.unizg.hr/_download/repository/4.%20Odluka_rokovi%20prijave%20i%20obrane%20zavr%C5%A1nih%20radova%202025.pdf"
+    },
+    {
+      "title": "Odluka o diplomskim radovima 2025./2026.",
+      "url": "https://www.fpzg.unizg.hr/_download/repository/5.%20Odluka_rokovi%20prijave%20i%20obrane%20diplomskih%20radova%202025.pdf"
+    },
+    {
+      "title": "Akademski kalendar FPZG-a 2025./2026.",
+      "url": "https://www.fpzg.unizg.hr/_download/repository/Akademski%20kalendar%20za%202025_2026_16.10.2025.pdf"
+    }
+  ],
+  "final": {
+    "topicDeadline": "2026-01-23",
+    "windows": [
+      {
+        "id": "final-integrated-1",
+        "label": "1. dio integriranog ispitnog roka",
+        "start": "2026-01-26",
+        "end": "2026-02-20",
+        "cohorts": [
+          "carried"
+        ]
+      },
+      {
+        "id": "final-integrated-2",
+        "label": "2. dio integriranog ispitnog roka",
+        "start": "2026-06-08",
+        "end": "2026-06-26",
+        "cohorts": [
+          "current",
+          "carried"
+        ]
+      },
+      {
+        "id": "final-summer",
+        "label": "Ljetni ispitni rok",
+        "start": "2026-06-29",
+        "end": "2026-07-10",
+        "cohorts": [
+          "current",
+          "carried"
+        ]
+      },
+      {
+        "id": "final-autumn",
+        "label": "Jesenski ispitni rok",
+        "start": "2026-08-24",
+        "end": "2026-09-04",
+        "cohorts": [
+          "current",
+          "carried"
+        ]
+      },
+      {
+        "id": "final-special",
+        "label": "Posebno razdoblje za obrane završnih radova",
+        "start": "2026-09-07",
+        "end": "2026-09-17",
+        "cohorts": [
+          "current",
+          "carried"
+        ]
+      }
+    ]
+  },
+  "graduate": {
+    "topicDeadline": "2026-03-24",
+    "sessions": [
+      {
+        "id": "grad-february",
+        "label": "Veljača 2026.",
+        "cutoff": "2026-01-30T13:00:00+01:00",
+        "defenseStart": "2026-02-16",
+        "defenseEnd": "2026-02-20"
+      },
+      {
+        "id": "grad-june",
+        "label": "Lipanj 2026.",
+        "cutoff": "2026-05-22T13:00:00+02:00",
+        "defenseStart": "2026-06-08",
+        "defenseEnd": "2026-06-12"
+      },
+      {
+        "id": "grad-july",
+        "label": "Srpanj 2026.",
+        "cutoff": "2026-06-19T13:00:00+02:00",
+        "defenseStart": "2026-06-29",
+        "defenseEnd": "2026-07-03"
+      },
+      {
+        "id": "grad-september",
+        "label": "Rujan 2026.",
+        "mentorDraftDeadline": "2026-06-19T23:59:59+02:00",
+        "cutoff": "2026-09-01T13:00:00+02:00",
+        "defenseStart": "2026-09-07",
+        "defenseEnd": "2026-09-18"
+      }
+    ]
+  }
+}

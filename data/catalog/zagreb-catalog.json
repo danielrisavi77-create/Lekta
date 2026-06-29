@@ -1,0 +1,653 @@
+[
+  {
+    "id": "unizg",
+    "name": "Sveučilište u Zagrebu",
+    "units": [
+      {
+        "id": "agr",
+        "name": "Agronomski fakultet",
+        "family": "stem",
+        "programs": [
+          "Opći profil fakulteta"
+        ],
+        "status": "research"
+      },
+      {
+        "id": "arh",
+        "name": "Arhitektonski fakultet",
+        "family": "stem",
+        "programs": [
+          "Arhitektura i urbanizam",
+          "Dizajn",
+          "Opći profil fakulteta"
+        ],
+        "status": "generic"
+      },
+      {
+        "id": "erf",
+        "name": "Edukacijsko-rehabilitacijski fakultet",
+        "family": "social",
+        "programs": [
+          "Edukacijska rehabilitacija",
+          "Logopedija",
+          "Socijalna pedagogija",
+          "Opći profil fakulteta"
+        ],
+        "status": "research"
+      },
+      {
+        "id": "efzg",
+        "name": "Ekonomski fakultet",
+        "family": "social",
+        "programs": [
+          "Ekonomija",
+          "Poslovna ekonomija",
+          "Stručni studiji",
+          "Sveučilišni specijalistički studiji",
+          "Opći profil fakulteta"
+        ],
+        "status": "research"
+      },
+      {
+        "id": "fer",
+        "name": "Fakultet elektrotehnike i računarstva",
+        "family": "stem",
+        "programs": [
+          "Elektrotehnika i informacijska tehnologija",
+          "Računarstvo",
+          "Opći profil fakulteta"
+        ],
+        "status": "partial"
+      },
+      {
+        "id": "ffrz",
+        "name": "Fakultet filozofije i religijskih znanosti",
+        "family": "social",
+        "programs": [
+          "Filozofija",
+          "Religijske znanosti",
+          "Opći profil fakulteta"
+        ],
+        "status": "generic"
+      },
+      {
+        "id": "fhs",
+        "name": "Fakultet hrvatskih studija",
+        "family": "social",
+        "programs": [
+          "Povijest",
+          "Sociologija",
+          "Psihologija",
+          "Komunikologija",
+          "Kroatologija",
+          "Opći profil fakulteta"
+        ],
+        "status": "partial"
+      },
+      {
+        "id": "fkit",
+        "name": "Fakultet kemijskog inženjerstva i tehnologije",
+        "family": "stem",
+        "programs": [
+          "Kemijsko inženjerstvo",
+          "Primijenjena kemija",
+          "Ekoinženjerstvo",
+          "Opći profil fakulteta"
+        ],
+        "status": "generic"
+      },
+      {
+        "id": "fpzg",
+        "name": "Fakultet političkih znanosti",
+        "family": "social",
+        "programs": [
+          "Prijediplomski studij Politologija",
+          "Prijediplomski studij Novinarstvo",
+          "Sveučilišni prijediplomski studij Vojno vođenje i upravljanje",
+          "Diplomski studij Politologija",
+          "Diplomski studij Politologija – Nacionalna sigurnost",
+          "Diplomski studij Novinarstvo",
+          "Master of European Studies",
+          "Sveučilišni specijalistički studij Odnosi s javnošću",
+          "Sveučilišni specijalistički studij Prilagodba Europskoj uniji: upravljanje projektima i korištenje fondova i programa EU",
+          "Sveučilišni specijalistički studij Sigurnosna politika Republike Hrvatske",
+          "Sveučilišni specijalistički studij Vanjska politika i diplomacija",
+          "Doktorski studij Politologija",
+          "Združeni interdisciplinarni diplomski studij o jugoistočnoj Europi",
+          "Opći FPZG profil"
+        ],
+        "status": "partial"
+      },
+      {
+        "id": "fpz",
+        "name": "Fakultet prometnih znanosti",
+        "family": "stem",
+        "programs": [
+          "Promet",
+          "Aeronautika",
+          "Inteligentni transportni sustavi i logistika",
+          "Opći profil fakulteta"
+        ],
+        "status": "generic"
+      },
+      {
+        "id": "fsb",
+        "name": "Fakultet strojarstva i brodogradnje",
+        "family": "stem",
+        "programs": [
+          "Strojarstvo",
+          "Brodogradnja",
+          "Zrakoplovno inženjerstvo i svemirska tehnika",
+          "Opći profil fakulteta"
+        ],
+        "status": "partial"
+      },
+      {
+        "id": "sumfak",
+        "name": "Fakultet šumarstva i drvne tehnologije",
+        "family": "stem",
+        "programs": [
+          "Šumarstvo",
+          "Drvna tehnologija",
+          "Opći profil fakulteta"
+        ],
+        "status": "generic"
+      },
+      {
+        "id": "fbf",
+        "name": "Farmaceutsko-biokemijski fakultet",
+        "family": "biomed",
+        "programs": [
+          "Farmacija",
+          "Medicinska biokemija",
+          "Opći profil fakulteta"
+        ],
+        "status": "generic"
+      },
+      {
+        "id": "ffzg",
+        "name": "Filozofski fakultet",
+        "family": "social",
+        "programs": [
+          "Opći profil fakulteta",
+          "Arheologija",
+          "Etnologija i kulturna antropologija",
+          "Filozofija",
+          "Informacijske i komunikacijske znanosti",
+          "Komparativna književnost",
+          "Kroatistika",
+          "Lingvistika",
+          "Pedagogija",
+          "Povijest",
+          "Povijest umjetnosti",
+          "Psihologija",
+          "Sociologija",
+          "Jezici i književnosti"
+        ],
+        "status": "partial"
+      },
+      {
+        "id": "geof",
+        "name": "Geodetski fakultet",
+        "family": "stem",
+        "programs": [
+          "Geodezija i geoinformatika",
+          "Opći profil fakulteta"
+        ],
+        "status": "generic"
+      },
+      {
+        "id": "grad",
+        "name": "Građevinski fakultet",
+        "family": "stem",
+        "programs": [
+          "Građevinarstvo",
+          "Opći profil fakulteta"
+        ],
+        "status": "generic"
+      },
+      {
+        "id": "grf",
+        "name": "Grafički fakultet",
+        "family": "stem",
+        "programs": [
+          "Grafička tehnologija",
+          "Dizajn grafičkih proizvoda",
+          "Opći profil fakulteta"
+        ],
+        "status": "generic"
+      },
+      {
+        "id": "kbf",
+        "name": "Katolički bogoslovni fakultet",
+        "family": "social",
+        "programs": [
+          "Filozofsko-teološki studij",
+          "Religijska pedagogija i katehetika",
+          "Opći profil fakulteta"
+        ],
+        "status": "generic"
+      },
+      {
+        "id": "kif",
+        "name": "Kineziološki fakultet",
+        "family": "social",
+        "programs": [
+          "Kineziologija",
+          "Izobrazba trenera",
+          "Opći profil fakulteta"
+        ],
+        "status": "partial"
+      },
+      {
+        "id": "mef",
+        "name": "Medicinski fakultet",
+        "family": "biomed",
+        "programs": [
+          "Medicina",
+          "Sestrinstvo",
+          "Sveučilišni specijalistički studiji",
+          "Opći profil fakulteta"
+        ],
+        "status": "partial"
+      },
+      {
+        "id": "pravo",
+        "name": "Pravni fakultet",
+        "family": "social",
+        "programs": [
+          "Sveučilišni integrirani prijediplomski i diplomski studij Pravo",
+          "Sveučilišni prijediplomski studij Socijalni rad",
+          "Stručni prijediplomski studij Javna uprava",
+          "Stručni prijediplomski Porezni studij",
+          "Sveučilišni diplomski studij Socijalni rad",
+          "Sveučilišni diplomski studij Socijalna politika",
+          "Stručni diplomski studij Javna uprava",
+          "Sveučilišni specijalistički studij Europsko pravo",
+          "Sveučilišni specijalistički studij Građanskopravne i obiteljskopravne znanosti",
+          "Sveučilišni specijalistički studij Kaznenopravne znanosti",
+          "Sveučilišni specijalistički studij Fiskalni sustav i fiskalna politika",
+          "Sveučilišni specijalistički studij Javno pravo i javna uprava",
+          "Sveučilišni specijalistički studij Međunarodno javno i međunarodno privatno pravo",
+          "Sveučilišni specijalistički studij Pravo društava i trgovačko pravo",
+          "Sveučilišni specijalistički studij Obiteljska medijacija",
+          "Sveučilišni specijalistički studij Psihosocijalni pristup u socijalnom radu",
+          "Sveučilišni specijalistički studij Socijalna politika",
+          "Sveučilišni specijalistički studij Supervizija psihosocijalnog rada",
+          "Sveučilišni interdisciplinarni specijalistički studij Prava djece",
+          "Doktorski studij Pravne znanosti",
+          "Doktorski studij Socijalni rad i socijalna politika",
+          "Erasmus Mundus Joint Master – Redesigning the Post-Industrial City (MSc RePIC)",
+          "Opći profil Pravnog fakulteta"
+        ],
+        "status": "partial"
+      },
+      {
+        "id": "pbf",
+        "name": "Prehrambeno-biotehnološki fakultet",
+        "family": "stem",
+        "programs": [
+          "Prehrambena tehnologija",
+          "Biotehnologija",
+          "Nutricionizam",
+          "Opći profil fakulteta"
+        ],
+        "status": "generic"
+      },
+      {
+        "id": "pmf",
+        "name": "Prirodoslovno-matematički fakultet",
+        "family": "stem",
+        "programs": [
+          "Biologija",
+          "Fizika",
+          "Geofizika",
+          "Geografija",
+          "Geologija",
+          "Kemija",
+          "Matematika",
+          "Opći profil fakulteta"
+        ],
+        "status": "partial"
+      },
+      {
+        "id": "rgnf",
+        "name": "Rudarsko-geološko-naftni fakultet",
+        "family": "stem",
+        "programs": [
+          "Rudarstvo",
+          "Geološko inženjerstvo",
+          "Naftno rudarstvo",
+          "Opći profil fakulteta"
+        ],
+        "status": "generic"
+      },
+      {
+        "id": "sfzg",
+        "name": "Stomatološki fakultet",
+        "family": "biomed",
+        "programs": [
+          "Dentalna medicina",
+          "Opći profil fakulteta"
+        ],
+        "status": "generic"
+      },
+      {
+        "id": "ttf",
+        "name": "Tekstilno-tehnološki fakultet",
+        "family": "stem",
+        "programs": [
+          "Tekstilna tehnologija i inženjerstvo",
+          "Tekstilni i modni dizajn",
+          "Opći profil fakulteta"
+        ],
+        "status": "generic"
+      },
+      {
+        "id": "ufzg",
+        "name": "Učiteljski fakultet",
+        "family": "social",
+        "programs": [
+          "Učiteljski studij",
+          "Rani i predškolski odgoj i obrazovanje",
+          "Opći profil fakulteta"
+        ],
+        "status": "verified"
+      },
+      {
+        "id": "vef",
+        "name": "Veterinarski fakultet",
+        "family": "biomed",
+        "programs": [
+          "Veterinarska medicina",
+          "Opći profil fakulteta"
+        ],
+        "status": "generic"
+      },
+      {
+        "id": "adu",
+        "name": "Akademija dramske umjetnosti",
+        "family": "arts",
+        "programs": [
+          "Gluma",
+          "Režija",
+          "Dramaturgija",
+          "Produkcija",
+          "Snimanje",
+          "Montaža",
+          "Opći profil akademije"
+        ],
+        "status": "generic"
+      },
+      {
+        "id": "alu",
+        "name": "Akademija likovnih umjetnosti",
+        "family": "arts",
+        "programs": [
+          "Slikarstvo",
+          "Kiparstvo",
+          "Grafika",
+          "Nastavnički odsjek",
+          "Konzerviranje i restauriranje",
+          "Animirani film i novi mediji",
+          "Opći profil akademije"
+        ],
+        "status": "generic"
+      },
+      {
+        "id": "muza",
+        "name": "Muzička akademija",
+        "family": "arts",
+        "programs": [
+          "Kompozicija",
+          "Dirigiranje",
+          "Instrumentalni studiji",
+          "Pjevanje",
+          "Muzikologija",
+          "Glazbena pedagogija",
+          "Opći profil akademije"
+        ],
+        "status": "generic"
+      }
+    ]
+  },
+  {
+    "id": "hks",
+    "name": "Hrvatsko katoličko sveučilište",
+    "units": [
+      {
+        "id": "hks",
+        "name": "Hrvatsko katoličko sveučilište",
+        "family": "social",
+        "programs": [
+          "Povijest",
+          "Sociologija",
+          "Psihologija",
+          "Komunikologija",
+          "Sestrinstvo",
+          "Medicina",
+          "Opći profil ustanove"
+        ],
+        "status": "research"
+      }
+    ]
+  },
+  {
+    "id": "algebra",
+    "name": "Sveučilište Algebra Bernays",
+    "units": [
+      {
+        "id": "algebra",
+        "name": "Sveučilište Algebra Bernays",
+        "family": "mixed",
+        "programs": [
+          "Računarstvo i informatika",
+          "Dizajn",
+          "Ekonomija i poslovanje",
+          "Komunikacije i mediji",
+          "Opći profil ustanove"
+        ],
+        "status": "research"
+      }
+    ]
+  },
+  {
+    "id": "libertas",
+    "name": "Sveučilište Libertas",
+    "units": [
+      {
+        "id": "libertas",
+        "name": "Sveučilište Libertas",
+        "family": "social",
+        "programs": [
+          "Međunarodni odnosi i diplomacija",
+          "Poslovna ekonomija",
+          "Turizam i hotelijerstvo",
+          "Opći profil ustanove"
+        ],
+        "status": "research"
+      }
+    ]
+  },
+  {
+    "id": "vern",
+    "name": "Sveučilište VERN'",
+    "units": [
+      {
+        "id": "vern",
+        "name": "Sveučilište VERN'",
+        "family": "social",
+        "programs": [
+          "Ekonomija i poduzetništvo",
+          "Mediji i komunikacije",
+          "Turizam",
+          "IT i tehnologija",
+          "Opći profil ustanove"
+        ],
+        "status": "research"
+      }
+    ]
+  },
+  {
+    "id": "zsem",
+    "name": "Zagrebačka škola ekonomije i managementa",
+    "units": [
+      {
+        "id": "zsem",
+        "name": "Zagrebačka škola ekonomije i managementa",
+        "family": "social",
+        "programs": [
+          "Ekonomija i management",
+          "Poslovna matematika i ekonomija",
+          "MBA i diplomski studiji",
+          "Opći profil ustanove"
+        ],
+        "status": "research"
+      }
+    ]
+  },
+  {
+    "id": "tvz",
+    "name": "Tehničko veleučilište u Zagrebu",
+    "units": [
+      {
+        "id": "tvz",
+        "name": "Tehničko veleučilište u Zagrebu",
+        "family": "stem",
+        "programs": [
+          "Elektrotehnika",
+          "Graditeljstvo",
+          "Informatika",
+          "Mehatronika",
+          "Računarstvo",
+          "Strojarstvo",
+          "Opći profil ustanove"
+        ],
+        "status": "research"
+      }
+    ]
+  },
+  {
+    "id": "zvu",
+    "name": "Zdravstveno veleučilište",
+    "units": [
+      {
+        "id": "zvu",
+        "name": "Zdravstveno veleučilište",
+        "family": "biomed",
+        "programs": [
+          "Sestrinstvo",
+          "Fizioterapija",
+          "Radiološka tehnologija",
+          "Sanitarno inženjerstvo",
+          "Radna terapija",
+          "Medicinsko-laboratorijska dijagnostika",
+          "Opći profil ustanove"
+        ],
+        "status": "research"
+      }
+    ]
+  },
+  {
+    "id": "effectus",
+    "name": "EFFECTUS veleučilište",
+    "units": [
+      {
+        "id": "effectus",
+        "name": "EFFECTUS veleučilište",
+        "family": "social",
+        "programs": [
+          "Financije i pravo",
+          "Poslovno upravljanje",
+          "Opći profil ustanove"
+        ],
+        "status": "generic"
+      }
+    ]
+  },
+  {
+    "id": "pvzg",
+    "name": "Poslovno veleučilište Zagreb",
+    "units": [
+      {
+        "id": "pvzg",
+        "name": "Poslovno veleučilište Zagreb",
+        "family": "social",
+        "programs": [
+          "Marketing i komunikacije",
+          "Upravljanje i poslovanje",
+          "Opći profil ustanove"
+        ],
+        "status": "generic"
+      }
+    ]
+  },
+  {
+    "id": "rrif",
+    "name": "Veleučilište RRiF",
+    "units": [
+      {
+        "id": "rrif",
+        "name": "Veleučilište RRiF",
+        "family": "social",
+        "programs": [
+          "Računovodstvo i financije",
+          "Poduzetništvo",
+          "Opći profil ustanove"
+        ],
+        "status": "generic"
+      }
+    ]
+  },
+  {
+    "id": "vsite",
+    "name": "Veleučilište suvremenih informacijskih tehnologija",
+    "units": [
+      {
+        "id": "vsite",
+        "name": "Veleučilište suvremenih informacijskih tehnologija",
+        "family": "stem",
+        "programs": [
+          "Informacijske tehnologije",
+          "Opći profil ustanove"
+        ],
+        "status": "generic"
+      }
+    ]
+  },
+  {
+    "id": "rit",
+    "name": "RIT Croatia — Zagreb",
+    "units": [
+      {
+        "id": "rit",
+        "name": "RIT Croatia — Zagreb",
+        "family": "mixed",
+        "programs": [
+          "Global Business Management",
+          "Web and Mobile Computing",
+          "Service Leadership and Innovation",
+          "Opći profil ustanove"
+        ],
+        "status": "generic"
+      }
+    ]
+  },
+  {
+    "id": "vkjs",
+    "name": "Veleučilište kriminalistike i javne sigurnosti",
+    "units": [
+      {
+        "id": "vkjs",
+        "name": "Veleučilište kriminalistike i javne sigurnosti",
+        "family": "social",
+        "programs": [
+          "Kriminalistika",
+          "Javna sigurnost",
+          "Opći profil ustanove"
+        ],
+        "status": "generic"
+      }
+    ]
+  }
+]

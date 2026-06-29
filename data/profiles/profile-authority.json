@@ -1,0 +1,27 @@
+{
+  "official-sources-only": {
+    "label": "Službeni normativni izvori",
+    "className": "binding",
+    "note": "Bodovana pravila proizlaze iz navedenih službenih izvora."
+  },
+  "official-program-guidelines": {
+    "label": "Službene programske upute",
+    "className": "binding",
+    "note": "Primjenjuju se posebne službene upute odabranog studija i vrste rada."
+  },
+  "official-recommended-mentor-priority": {
+    "label": "Službeno preporučeni profil",
+    "className": "recommended",
+    "note": "Opće upute preporučuju se kada student nije dobio drukčije pisane upute mentora; uputa mentora ima prednost."
+  },
+  "official-source-with-currency-caveat": {
+    "label": "Službeni izvor uz provjeru aktualnosti",
+    "className": "partial",
+    "note": "Pravila potječu iz službenog izvora, ali prije predaje treba potvrditi postoji li novija posebna odluka."
+  },
+  "generic": {
+    "label": "Opća tehnička provjera",
+    "className": "generic",
+    "note": "Nema potpunog posebnog normativnog profila za odabranu kombinaciju."
+  }
+}

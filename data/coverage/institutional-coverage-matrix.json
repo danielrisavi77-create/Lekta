@@ -1,0 +1,606 @@
+{
+  "version": "2.2.2",
+  "verifiedAt": "2026-06-29",
+  "institutions": {
+    "fpzg": {
+      "name": "Fakultet političkih znanosti",
+      "source": "https://www.fpzg.unizg.hr/studiji"
+    },
+    "pravo": {
+      "name": "Pravni fakultet",
+      "source": "https://www.pravo.unizg.hr/studiji/"
+    }
+  },
+  "programs": [
+    {
+      "id": "fpzg-ba-politologija",
+      "unitId": "fpzg",
+      "name": "Prijediplomski studij Politologija",
+      "level": "prijediplomski",
+      "expectedWorkTypes": [
+        "final"
+      ],
+      "expectedProfileIds": [
+        "fpzg-politologija-zavrsni"
+      ],
+      "scope": "internal",
+      "deadlineExpectation": "annual",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.fpzg.unizg.hr/studiji",
+      "note": ""
+    },
+    {
+      "id": "fpzg-ba-novinarstvo",
+      "unitId": "fpzg",
+      "name": "Prijediplomski studij Novinarstvo",
+      "level": "prijediplomski",
+      "expectedWorkTypes": [
+        "final"
+      ],
+      "expectedProfileIds": [
+        "fpzg-novinarstvo-zavrsni-tekst",
+        "fpzg-novinarstvo-zavrsni-av"
+      ],
+      "scope": "internal",
+      "deadlineExpectation": "annual",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.fpzg.unizg.hr/studiji",
+      "note": "Za završni rad moraju ostati odvojene tekstualna i audiovizualna varijanta."
+    },
+    {
+      "id": "fpzg-ba-vvu",
+      "unitId": "fpzg",
+      "name": "Sveučilišni prijediplomski studij Vojno vođenje i upravljanje",
+      "level": "prijediplomski",
+      "expectedWorkTypes": [
+        "final"
+      ],
+      "expectedProfileIds": [],
+      "scope": "partner",
+      "deadlineExpectation": "external",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.fpzg.unizg.hr/studiji",
+      "note": "FPZG je izvoditelj, a studij se izvodi na Hrvatskom vojnom učilištu; pravila završetka treba razgraničiti između ustanova."
+    },
+    {
+      "id": "fpzg-ma-politologija",
+      "unitId": "fpzg",
+      "name": "Diplomski studij Politologija",
+      "level": "diplomski",
+      "expectedWorkTypes": [
+        "graduate"
+      ],
+      "expectedProfileIds": [
+        "fpzg-politologija-diplomski"
+      ],
+      "scope": "internal",
+      "deadlineExpectation": "annual",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.fpzg.unizg.hr/studiji",
+      "note": ""
+    },
+    {
+      "id": "fpzg-ma-nacionalna",
+      "unitId": "fpzg",
+      "name": "Diplomski studij Politologija – Nacionalna sigurnost",
+      "level": "diplomski",
+      "expectedWorkTypes": [
+        "graduate"
+      ],
+      "expectedProfileIds": [
+        "fpzg-nacionalna-sigurnost-diplomski"
+      ],
+      "scope": "internal",
+      "deadlineExpectation": "annual",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.fpzg.unizg.hr/studiji",
+      "note": ""
+    },
+    {
+      "id": "fpzg-ma-novinarstvo",
+      "unitId": "fpzg",
+      "name": "Diplomski studij Novinarstvo",
+      "level": "diplomski",
+      "expectedWorkTypes": [
+        "graduate"
+      ],
+      "expectedProfileIds": [
+        "fpzg-novinarstvo-diplomski"
+      ],
+      "scope": "internal",
+      "deadlineExpectation": "annual",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.fpzg.unizg.hr/studiji",
+      "note": ""
+    },
+    {
+      "id": "fpzg-ma-mes",
+      "unitId": "fpzg",
+      "name": "Master of European Studies",
+      "level": "diplomski",
+      "expectedWorkTypes": [
+        "graduate"
+      ],
+      "expectedProfileIds": [
+        "fpzg-mes-master-thesis"
+      ],
+      "scope": "internal",
+      "deadlineExpectation": "annual",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.fpzg.unizg.hr/studiji",
+      "note": ""
+    },
+    {
+      "id": "fpzg-spec-pr",
+      "unitId": "fpzg",
+      "name": "Sveučilišni specijalistički studij Odnosi s javnošću",
+      "level": "specijalistički",
+      "expectedWorkTypes": [
+        "specialist"
+      ],
+      "expectedProfileIds": [
+        "fpzg-specijalisticki-odnosi-s-javnoscu"
+      ],
+      "scope": "internal",
+      "deadlineExpectation": "relative",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.fpzg.unizg.hr/studiji",
+      "note": ""
+    },
+    {
+      "id": "fpzg-spec-eu",
+      "unitId": "fpzg",
+      "name": "Sveučilišni specijalistički studij Prilagodba Europskoj uniji: upravljanje projektima i korištenje fondova i programa EU",
+      "level": "specijalistički",
+      "expectedWorkTypes": [
+        "specialist"
+      ],
+      "expectedProfileIds": [
+        "fpzg-specijalisticki-prilagodba-eu"
+      ],
+      "scope": "internal",
+      "deadlineExpectation": "relative",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.fpzg.unizg.hr/studiji",
+      "note": ""
+    },
+    {
+      "id": "fpzg-spec-sigurnost",
+      "unitId": "fpzg",
+      "name": "Sveučilišni specijalistički studij Sigurnosna politika Republike Hrvatske",
+      "level": "specijalistički",
+      "expectedWorkTypes": [
+        "specialist"
+      ],
+      "expectedProfileIds": [
+        "fpzg-specijalisticki-sigurnosna-politika-rh"
+      ],
+      "scope": "internal",
+      "deadlineExpectation": "relative",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.fpzg.unizg.hr/studiji",
+      "note": ""
+    },
+    {
+      "id": "fpzg-spec-diplomacija",
+      "unitId": "fpzg",
+      "name": "Sveučilišni specijalistički studij Vanjska politika i diplomacija",
+      "level": "specijalistički",
+      "expectedWorkTypes": [
+        "specialist"
+      ],
+      "expectedProfileIds": [
+        "fpzg-specijalisticki-vanjska-politika-diplomacija"
+      ],
+      "scope": "internal",
+      "deadlineExpectation": "relative",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.fpzg.unizg.hr/studiji",
+      "note": ""
+    },
+    {
+      "id": "fpzg-phd-politologija",
+      "unitId": "fpzg",
+      "name": "Doktorski studij Politologija",
+      "level": "doktorski",
+      "expectedWorkTypes": [
+        "doctoral"
+      ],
+      "expectedProfileIds": [
+        "fpzg-doktorski-politologija"
+      ],
+      "scope": "internal",
+      "deadlineExpectation": "relative",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.fpzg.unizg.hr/studiji",
+      "note": ""
+    },
+    {
+      "id": "fpzg-joint-se",
+      "unitId": "fpzg",
+      "name": "Združeni interdisciplinarni diplomski studij o jugoistočnoj Europi",
+      "level": "združeni",
+      "expectedWorkTypes": [
+        "graduate"
+      ],
+      "expectedProfileIds": [],
+      "scope": "joint",
+      "deadlineExpectation": "external",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.fpzg.unizg.hr/novosti?%40=2flbl",
+      "note": "FPZG je partnerska ustanova; završni rad i predaja moraju slijediti pravila konzorcija i matičnog sveučilišta."
+    },
+    {
+      "id": "pravo-integrirani",
+      "unitId": "pravo",
+      "name": "Sveučilišni integrirani prijediplomski i diplomski studij Pravo",
+      "level": "integrirani",
+      "expectedWorkTypes": [
+        "graduate"
+      ],
+      "expectedProfileIds": [
+        "pravo-integrirani-diplomski"
+      ],
+      "scope": "internal",
+      "deadlineExpectation": "relative",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.pravo.unizg.hr/studiji/",
+      "note": ""
+    },
+    {
+      "id": "pravo-ba-socijalni",
+      "unitId": "pravo",
+      "name": "Sveučilišni prijediplomski studij Socijalni rad",
+      "level": "prijediplomski",
+      "expectedWorkTypes": [
+        "final"
+      ],
+      "expectedProfileIds": [
+        "pravo-socijalni-rad-zavrsni"
+      ],
+      "scope": "internal",
+      "deadlineExpectation": "relative",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.pravo.unizg.hr/studiji/",
+      "note": ""
+    },
+    {
+      "id": "pravo-ba-uprava",
+      "unitId": "pravo",
+      "name": "Stručni prijediplomski studij Javna uprava",
+      "level": "prijediplomski",
+      "expectedWorkTypes": [
+        "final"
+      ],
+      "expectedProfileIds": [
+        "pravo-javna-uprava-prijediplomski"
+      ],
+      "scope": "internal",
+      "deadlineExpectation": "relative",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.pravo.unizg.hr/studiji/",
+      "note": ""
+    },
+    {
+      "id": "pravo-ba-porezni",
+      "unitId": "pravo",
+      "name": "Stručni prijediplomski Porezni studij",
+      "level": "prijediplomski",
+      "expectedWorkTypes": [
+        "final"
+      ],
+      "expectedProfileIds": [
+        "pravo-porezni-prijediplomski"
+      ],
+      "scope": "internal",
+      "deadlineExpectation": "relative",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.pravo.unizg.hr/studiji/",
+      "note": ""
+    },
+    {
+      "id": "pravo-ma-socijalni",
+      "unitId": "pravo",
+      "name": "Sveučilišni diplomski studij Socijalni rad",
+      "level": "diplomski",
+      "expectedWorkTypes": [
+        "graduate"
+      ],
+      "expectedProfileIds": [
+        "pravo-socijalni-rad-diplomski"
+      ],
+      "scope": "internal",
+      "deadlineExpectation": "relative",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.pravo.unizg.hr/studiji/",
+      "note": ""
+    },
+    {
+      "id": "pravo-ma-politika",
+      "unitId": "pravo",
+      "name": "Sveučilišni diplomski studij Socijalna politika",
+      "level": "diplomski",
+      "expectedWorkTypes": [
+        "graduate"
+      ],
+      "expectedProfileIds": [
+        "pravo-socijalna-politika-diplomski"
+      ],
+      "scope": "internal",
+      "deadlineExpectation": "relative",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.pravo.unizg.hr/studiji/",
+      "note": ""
+    },
+    {
+      "id": "pravo-ma-uprava",
+      "unitId": "pravo",
+      "name": "Stručni diplomski studij Javna uprava",
+      "level": "diplomski",
+      "expectedWorkTypes": [
+        "graduate"
+      ],
+      "expectedProfileIds": [
+        "pravo-javna-uprava-diplomski"
+      ],
+      "scope": "internal",
+      "deadlineExpectation": "relative",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.pravo.unizg.hr/studiji/",
+      "note": ""
+    },
+    {
+      "id": "pravo-spec-europsko-pravo",
+      "unitId": "pravo",
+      "name": "Sveučilišni specijalistički studij Europsko pravo",
+      "level": "specijalistički",
+      "expectedWorkTypes": [
+        "specialist"
+      ],
+      "expectedProfileIds": [
+        "pravo-specijalisticki-europsko-pravo"
+      ],
+      "scope": "internal",
+      "deadlineExpectation": "relative",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.pravo.unizg.hr/studiji/sveucilisni-specijalisticki-studiji/",
+      "note": ""
+    },
+    {
+      "id": "pravo-spec-gradjansko-obiteljsko",
+      "unitId": "pravo",
+      "name": "Sveučilišni specijalistički studij Građanskopravne i obiteljskopravne znanosti",
+      "level": "specijalistički",
+      "expectedWorkTypes": [
+        "specialist"
+      ],
+      "expectedProfileIds": [
+        "pravo-specijalisticki-gradjansko-obiteljsko"
+      ],
+      "scope": "internal",
+      "deadlineExpectation": "relative",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.pravo.unizg.hr/studiji/sveucilisni-specijalisticki-studiji/",
+      "note": ""
+    },
+    {
+      "id": "pravo-spec-kaznenopravne",
+      "unitId": "pravo",
+      "name": "Sveučilišni specijalistički studij Kaznenopravne znanosti",
+      "level": "specijalistički",
+      "expectedWorkTypes": [
+        "specialist"
+      ],
+      "expectedProfileIds": [
+        "pravo-specijalisticki-kaznenopravne"
+      ],
+      "scope": "internal",
+      "deadlineExpectation": "relative",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.pravo.unizg.hr/studiji/sveucilisni-specijalisticki-studiji/",
+      "note": ""
+    },
+    {
+      "id": "pravo-spec-fiskalni",
+      "unitId": "pravo",
+      "name": "Sveučilišni specijalistički studij Fiskalni sustav i fiskalna politika",
+      "level": "specijalistički",
+      "expectedWorkTypes": [
+        "specialist"
+      ],
+      "expectedProfileIds": [
+        "pravo-specijalisticki-fiskalni"
+      ],
+      "scope": "internal",
+      "deadlineExpectation": "relative",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.pravo.unizg.hr/studiji/sveucilisni-specijalisticki-studiji/",
+      "note": ""
+    },
+    {
+      "id": "pravo-spec-javno-pravo-uprava",
+      "unitId": "pravo",
+      "name": "Sveučilišni specijalistički studij Javno pravo i javna uprava",
+      "level": "specijalistički",
+      "expectedWorkTypes": [
+        "specialist"
+      ],
+      "expectedProfileIds": [
+        "pravo-specijalisticki-javno-pravo-uprava"
+      ],
+      "scope": "internal",
+      "deadlineExpectation": "relative",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.pravo.unizg.hr/studiji/sveucilisni-specijalisticki-studiji/",
+      "note": ""
+    },
+    {
+      "id": "pravo-spec-medjunarodno",
+      "unitId": "pravo",
+      "name": "Sveučilišni specijalistički studij Međunarodno javno i međunarodno privatno pravo",
+      "level": "specijalistički",
+      "expectedWorkTypes": [
+        "specialist"
+      ],
+      "expectedProfileIds": [
+        "pravo-specijalisticki-medjunarodno"
+      ],
+      "scope": "internal",
+      "deadlineExpectation": "relative",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.pravo.unizg.hr/studiji/sveucilisni-specijalisticki-studiji/",
+      "note": ""
+    },
+    {
+      "id": "pravo-spec-drustva-trgovacko",
+      "unitId": "pravo",
+      "name": "Sveučilišni specijalistički studij Pravo društava i trgovačko pravo",
+      "level": "specijalistički",
+      "expectedWorkTypes": [
+        "specialist"
+      ],
+      "expectedProfileIds": [
+        "pravo-specijalisticki-drustva-trgovacko"
+      ],
+      "scope": "internal",
+      "deadlineExpectation": "relative",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.pravo.unizg.hr/studiji/sveucilisni-specijalisticki-studiji/",
+      "note": ""
+    },
+    {
+      "id": "pravo-spec-obiteljska-medijacija",
+      "unitId": "pravo",
+      "name": "Sveučilišni specijalistički studij Obiteljska medijacija",
+      "level": "specijalistički",
+      "expectedWorkTypes": [
+        "specialist"
+      ],
+      "expectedProfileIds": [
+        "pravo-specijalisticki-obiteljska-medijacija"
+      ],
+      "scope": "internal",
+      "deadlineExpectation": "relative",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.pravo.unizg.hr/studiji/sveucilisni-specijalisticki-studiji/",
+      "note": ""
+    },
+    {
+      "id": "pravo-spec-psihosocijalni",
+      "unitId": "pravo",
+      "name": "Sveučilišni specijalistički studij Psihosocijalni pristup u socijalnom radu",
+      "level": "specijalistički",
+      "expectedWorkTypes": [
+        "specialist"
+      ],
+      "expectedProfileIds": [
+        "pravo-specijalisticki-psihosocijalni"
+      ],
+      "scope": "internal",
+      "deadlineExpectation": "relative",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.pravo.unizg.hr/studiji/sveucilisni-specijalisticki-studiji/",
+      "note": ""
+    },
+    {
+      "id": "pravo-spec-socijalna-politika",
+      "unitId": "pravo",
+      "name": "Sveučilišni specijalistički studij Socijalna politika",
+      "level": "specijalistički",
+      "expectedWorkTypes": [
+        "specialist"
+      ],
+      "expectedProfileIds": [
+        "pravo-specijalisticki-socijalna-politika"
+      ],
+      "scope": "internal",
+      "deadlineExpectation": "relative",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.pravo.unizg.hr/studiji/sveucilisni-specijalisticki-studiji/",
+      "note": ""
+    },
+    {
+      "id": "pravo-spec-supervizija",
+      "unitId": "pravo",
+      "name": "Sveučilišni specijalistički studij Supervizija psihosocijalnog rada",
+      "level": "specijalistički",
+      "expectedWorkTypes": [
+        "specialist"
+      ],
+      "expectedProfileIds": [
+        "pravo-specijalisticki-supervizija"
+      ],
+      "scope": "internal",
+      "deadlineExpectation": "relative",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.pravo.unizg.hr/studiji/sveucilisni-specijalisticki-studiji/",
+      "note": ""
+    },
+    {
+      "id": "pravo-spec-prava-djece",
+      "unitId": "pravo",
+      "name": "Sveučilišni interdisciplinarni specijalistički studij Prava djece",
+      "level": "specijalistički",
+      "expectedWorkTypes": [
+        "specialist"
+      ],
+      "expectedProfileIds": [
+        "pravo-specijalisticki-prava-djece"
+      ],
+      "scope": "internal",
+      "deadlineExpectation": "relative",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.pravo.unizg.hr/studiji/sveucilisni-specijalisticki-studiji/",
+      "note": ""
+    },
+    {
+      "id": "pravo-phd-pravne",
+      "unitId": "pravo",
+      "name": "Doktorski studij Pravne znanosti",
+      "level": "doktorski",
+      "expectedWorkTypes": [
+        "doctoral"
+      ],
+      "expectedProfileIds": [
+        "pravo-doktorski-pravne-znanosti"
+      ],
+      "scope": "internal",
+      "deadlineExpectation": "relative",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.pravo.unizg.hr/studiji/doktorski-studiji/",
+      "note": ""
+    },
+    {
+      "id": "pravo-phd-socijalni",
+      "unitId": "pravo",
+      "name": "Doktorski studij Socijalni rad i socijalna politika",
+      "level": "doktorski",
+      "expectedWorkTypes": [
+        "doctoral"
+      ],
+      "expectedProfileIds": [
+        "pravo-doktorski-socijalni-rad-politika"
+      ],
+      "scope": "internal",
+      "deadlineExpectation": "relative",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.pravo.unizg.hr/studiji/doktorski-studiji/",
+      "note": ""
+    },
+    {
+      "id": "pravo-joint-repic",
+      "unitId": "pravo",
+      "name": "Erasmus Mundus Joint Master – Redesigning the Post-Industrial City (MSc RePIC)",
+      "level": "združeni",
+      "expectedWorkTypes": [
+        "graduate"
+      ],
+      "expectedProfileIds": [],
+      "scope": "joint",
+      "deadlineExpectation": "external",
+      "requiresSubmissionCoverage": true,
+      "source": "https://www.pravo.unizg.hr/studiji/zdruzeni-studiji/",
+      "note": "Združeni program; završni rad, matična ustanova i predaja uređuju se pravilima konzorcija."
+    }
+  ]
+}

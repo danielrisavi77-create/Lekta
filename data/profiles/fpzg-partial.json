@@ -1,0 +1,21 @@
+{
+  "font": [
+    "Times New Roman"
+  ],
+  "size": [
+    12
+  ],
+  "spacing": 1.5,
+  "margins": {
+    "top": 2.5,
+    "right": 2.5,
+    "bottom": 2.5,
+    "left": 2.5
+  },
+  "justify": true,
+  "requireToc": true,
+  "requirePageNumbers": true,
+  "checkMargins": false,
+  "checkJustify": true,
+  "requireA4": true
+}

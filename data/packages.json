@@ -1,0 +1,47 @@
+[
+  {
+    "id": "instant",
+    "name": "Instant audit",
+    "price": 9,
+    "desc": "Potpuni izvještaj i personalizirana checklista.",
+    "features": [
+      "Detaljan audit svih kategorija",
+      "Popis mogućih pogrešaka",
+      "Upute za samostalni ispravak"
+    ]
+  },
+  {
+    "id": "format",
+    "name": "Formatiranje rada",
+    "price": 39,
+    "desc": "Tehnički uređena Word datoteka.",
+    "features": [
+      "Stilovi naslova i sadržaj",
+      "Numeriranje, tablice i slike",
+      "Konzistentan izgled dokumenta"
+    ]
+  },
+  {
+    "id": "panic",
+    "name": "Predaja bez panike",
+    "price": 69,
+    "featured": true,
+    "desc": "Formatiranje, citatnice i jedna revizija.",
+    "features": [
+      "Sve iz paketa formatiranja",
+      "Provjera citatnica i literature",
+      "Prioritetna obrada i revizija"
+    ]
+  },
+  {
+    "id": "premium",
+    "name": "Premium audit",
+    "price": 99,
+    "desc": "Najdetaljniji pregled dokumenta.",
+    "features": [
+      "Tehničko oblikovanje",
+      "Struktura i citatna konzistentnost",
+      "Završni izvještaj usklađenosti"
+    ]
+  }
+]

@@ -1,0 +1,42 @@
+[
+  [
+    "Aa",
+    "Font i veličina",
+    "Dominantni font, veličina teksta i odstupanja u odlomcima."
+  ],
+  [
+    "↕",
+    "Prored i razmaci",
+    "Prored, razmak prije/poslije i nedosljedne postavke."
+  ],
+  [
+    "▣",
+    "Margine i stranica",
+    "Margine svih sekcija i osnovna postavka A4 dokumenta."
+  ],
+  [
+    "H",
+    "Hijerarhija naslova",
+    "Stilovi naslova, preskakanje razina i numeriranje."
+  ],
+  [
+    "≡",
+    "Sadržaj i stranice",
+    "Postoji li automatski sadržaj i broj stranice u zaglavlju/podnožju."
+  ],
+  [
+    "“”",
+    "Citatnice u tekstu",
+    "Prepoznavanje autor–godina citatnica i osnovna konzistentnost."
+  ],
+  [
+    "↔",
+    "Citatnice ↔ literatura",
+    "Citirani autori bez literature i izvori koji nisu pronađeni u tekstu."
+  ],
+  [
+    "▧",
+    "Slike i tablice",
+    "Broj elemenata i prepoznati naslovi tablica i slika."
+  ]
+]

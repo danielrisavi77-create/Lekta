@@ -1,0 +1,372 @@
+{
+  "theoretical": {
+    "id": "theoretical",
+    "label": "Teorijski rad",
+    "shortLabel": "Teorijski",
+    "facts": [
+      "usporedba teorijskih pristupa",
+      "analitička i kritička razrada",
+      "bez obvezne empirijske metode"
+    ],
+    "signals": [
+      [
+        "teorijski okvir",
+        3
+      ],
+      [
+        "teorijski pristup",
+        3
+      ],
+      [
+        "pregled literature",
+        2
+      ],
+      [
+        "modeli",
+        1
+      ],
+      [
+        "kritička analiza",
+        2
+      ]
+    ],
+    "negativeSignals": [
+      [
+        "hipotez",
+        2
+      ],
+      [
+        "uzorak",
+        2
+      ],
+      [
+        "mjerni instrument",
+        2
+      ],
+      [
+        "statističk",
+        2
+      ]
+    ],
+    "requirements": [
+      {
+        "key": "intro",
+        "label": "Uvod",
+        "terms": [
+          "uvod"
+        ]
+      },
+      {
+        "key": "development",
+        "label": "analitička razrada teme",
+        "terms": [
+          "razrada teme",
+          "teorijski okvir",
+          "teorijska analiza",
+          "pregled literature",
+          "analiza teorijskih pristupa"
+        ],
+        "advisory": true
+      },
+      {
+        "key": "conclusion",
+        "label": "Zaključak",
+        "terms": [
+          "zaključak"
+        ]
+      },
+      {
+        "key": "refs",
+        "label": "Literatura",
+        "terms": [
+          "literatura",
+          "popis literature",
+          "references"
+        ]
+      }
+    ],
+    "note": "Teorijski rad treba uspoređivati teorijske pristupe ili modele, povezivati domaće i strane izvore te biti analitički i kritički, a ne samo deskriptivan."
+  },
+  "qualitative": {
+    "id": "qualitative",
+    "label": "Empirijski rad — kvalitativno istraživanje",
+    "shortLabel": "Kvalitativni",
+    "facts": [
+      "cilj + istraživačka pitanja",
+      "uzorak i postupak",
+      "kvalitativna obrada i kategorije"
+    ],
+    "signals": [
+      [
+        "istraživačka pitanja",
+        4
+      ],
+      [
+        "intervju",
+        3
+      ],
+      [
+        "fokusna grupa",
+        3
+      ],
+      [
+        "tematska analiza",
+        3
+      ],
+      [
+        "kategorije",
+        2
+      ],
+      [
+        "kodiranje",
+        2
+      ],
+      [
+        "sudionici",
+        1
+      ]
+    ],
+    "negativeSignals": [
+      [
+        "statistički test",
+        2
+      ],
+      [
+        "regresijska analiza",
+        2
+      ],
+      [
+        "hipoteze",
+        1
+      ]
+    ],
+    "requirements": [
+      {
+        "key": "goal",
+        "label": "Cilj i istraživačka pitanja",
+        "terms": [
+          "cilj, problemi i hipoteze istraživanja",
+          "cilj i istraživačka pitanja",
+          "cilj istraživanja",
+          "istraživačka pitanja"
+        ]
+      },
+      {
+        "key": "method",
+        "label": "Metoda",
+        "terms": [
+          "metoda",
+          "metodologija"
+        ]
+      },
+      {
+        "key": "sample",
+        "label": "Uzorak / sudionici",
+        "terms": [
+          "uzorak",
+          "sudionici",
+          "ispitanici"
+        ]
+      },
+      {
+        "key": "procedure",
+        "label": "Postupak",
+        "terms": [
+          "postupak"
+        ]
+      },
+      {
+        "key": "instruments",
+        "label": "Mjerni instrumenti / uputa za intervju",
+        "terms": [
+          "mjerni instrumenti",
+          "instrumenti",
+          "uputa za intervju",
+          "protokol intervjua"
+        ]
+      },
+      {
+        "key": "analysis",
+        "label": "Obrada podataka",
+        "terms": [
+          "obrada podataka",
+          "analiza podataka",
+          "tematska analiza"
+        ]
+      },
+      {
+        "key": "results",
+        "label": "Rezultati",
+        "terms": [
+          "rezultati"
+        ]
+      },
+      {
+        "key": "discussion",
+        "label": "Rasprava",
+        "terms": [
+          "rasprava"
+        ]
+      },
+      {
+        "key": "conclusion",
+        "label": "Zaključak",
+        "terms": [
+          "zaključak"
+        ]
+      },
+      {
+        "key": "refs",
+        "label": "Literatura",
+        "terms": [
+          "literatura",
+          "popis literature",
+          "references"
+        ]
+      }
+    ],
+    "note": "Kvalitativni rad uz opći cilj navodi istraživačka pitanja, opisuje sudionike, postupak, instrument ili uputu, vrstu kvalitativne obrade te rezultate po istraživačkim pitanjima."
+  },
+  "quantitative": {
+    "id": "quantitative",
+    "label": "Empirijski rad — kvantitativno istraživanje",
+    "shortLabel": "Kvantitativni",
+    "facts": [
+      "cilj, problemi i hipoteze",
+      "mjerni instrumenti",
+      "statistička obrada i rezultati"
+    ],
+    "signals": [
+      [
+        "hipotez",
+        4
+      ],
+      [
+        "statističk",
+        3
+      ],
+      [
+        "upitnik",
+        2
+      ],
+      [
+        "skala",
+        2
+      ],
+      [
+        "regresij",
+        2
+      ],
+      [
+        "korelacij",
+        2
+      ],
+      [
+        "spss",
+        3
+      ],
+      [
+        "aritmetička sredina",
+        2
+      ]
+    ],
+    "negativeSignals": [
+      [
+        "istraživačka pitanja",
+        1
+      ],
+      [
+        "tematska analiza",
+        2
+      ],
+      [
+        "kodiranje",
+        2
+      ]
+    ],
+    "requirements": [
+      {
+        "key": "goal",
+        "label": "Cilj, problemi i hipoteze",
+        "terms": [
+          "cilj, problemi i hipoteze istraživanja",
+          "problemi i hipoteze",
+          "hipoteze istraživanja"
+        ]
+      },
+      {
+        "key": "method",
+        "label": "Metoda",
+        "terms": [
+          "metoda",
+          "metodologija"
+        ]
+      },
+      {
+        "key": "sample",
+        "label": "Uzorak",
+        "terms": [
+          "uzorak",
+          "ispitanici"
+        ]
+      },
+      {
+        "key": "procedure",
+        "label": "Postupak",
+        "terms": [
+          "postupak"
+        ]
+      },
+      {
+        "key": "instruments",
+        "label": "Mjerni instrumenti",
+        "terms": [
+          "mjerni instrumenti",
+          "instrumenti",
+          "upitnik",
+          "skale"
+        ]
+      },
+      {
+        "key": "analysis",
+        "label": "Obrada podataka",
+        "terms": [
+          "obrada podataka",
+          "statistička obrada",
+          "metode obrade podataka"
+        ]
+      },
+      {
+        "key": "results",
+        "label": "Rezultati",
+        "terms": [
+          "rezultati"
+        ]
+      },
+      {
+        "key": "discussion",
+        "label": "Rasprava",
+        "terms": [
+          "rasprava"
+        ]
+      },
+      {
+        "key": "conclusion",
+        "label": "Zaključak",
+        "terms": [
+          "zaključak"
+        ]
+      },
+      {
+        "key": "refs",
+        "label": "Literatura",
+        "terms": [
+          "literatura",
+          "popis literature",
+          "references"
+        ]
+      }
+    ],
+    "note": "Kvantitativni rad treba povezati specifične probleme i afirmativne hipoteze, opisati uzorak, instrumente i statističke postupke te prikazati i raspraviti rezultate."
+  }
+}

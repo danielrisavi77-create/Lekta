@@ -1,0 +1,77 @@
+[
+  {
+    "name": "VERIFIED_PROFILE_REGISTRY",
+    "file": "data/profiles/verified-profiles.json",
+    "entries": 26
+  },
+  {
+    "name": "LEGAL_DEPARTMENT_REGISTRY",
+    "file": "data/profiles/legal-departments.json",
+    "entries": 3
+  },
+  {
+    "name": "PROFILE_STATUS",
+    "file": "data/profiles/profile-status.json",
+    "entries": 4
+  },
+  {
+    "name": "PROFILE_AUTHORITY",
+    "file": "data/profiles/profile-authority.json",
+    "entries": 5
+  },
+  {
+    "name": "BASE_PROFILES",
+    "file": "data/profiles/base-profiles.json",
+    "entries": 5
+  },
+  {
+    "name": "FPZG_PARTIAL",
+    "file": "data/profiles/fpzg-partial.json",
+    "entries": 10
+  },
+  {
+    "name": "ZAGREB_CATALOG",
+    "file": "data/catalog/zagreb-catalog.json",
+    "entries": 14
+  },
+  {
+    "name": "INSTITUTIONAL_COVERAGE_MATRIX",
+    "file": "data/coverage/institutional-coverage-matrix.json",
+    "entries": 4
+  },
+  {
+    "name": "COVERAGE_STATUS_META",
+    "file": "data/coverage/coverage-status-meta.json",
+    "entries": 5
+  },
+  {
+    "name": "SOCIAL_METHOD_REGISTRY",
+    "file": "data/methodology/social-methods.json",
+    "entries": 3
+  },
+  {
+    "name": "SOCIAL_METHOD_SOURCE",
+    "file": "data/methodology/social-method-source.json",
+    "entries": 2
+  },
+  {
+    "name": "FPZG_SUBMISSION_CALENDAR",
+    "file": "data/submission/fpzg-calendar.json",
+    "entries": 5
+  },
+  {
+    "name": "PACKAGES",
+    "file": "data/packages.json",
+    "entries": 4
+  },
+  {
+    "name": "CHECK_ITEMS",
+    "file": "data/checks/check-items.json",
+    "entries": 8
+  },
+  {
+    "name": "WORK_TYPE_LABELS",
+    "file": "data/work-type-labels.json",
+    "entries": 7
+  }
+]

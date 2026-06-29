@@ -1,0 +1,18 @@
+{
+  "verified": {
+    "label": "Potvrđeni profil",
+    "note": "Pravila su povezana sa službenim izvorom i ručno provjerena."
+  },
+  "partial": {
+    "label": "Djelomično potvrđeni profil",
+    "note": "Dio pravila je poznat, ali profil još treba provjeriti prema aktualnim uputama studija i vrste rada."
+  },
+  "research": {
+    "label": "Profil u istraživanju",
+    "note": "Ustanova je u katalogu, a posebna pravila se još prikupljaju. Analiza koristi transparentni generički profil."
+  },
+  "generic": {
+    "label": "Generička provjera",
+    "note": "Za ovaj odabir još nema verificiranog posebnog profila. Provjeravaju se opći tehnički elementi i korisnički zahtjevi."
+  }
+}

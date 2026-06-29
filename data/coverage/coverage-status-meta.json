@@ -1,0 +1,22 @@
+{
+  "ready": {
+    "label": "Sva objavljena pravila pokrivena",
+    "icon": "✓"
+  },
+  "published": {
+    "label": "Profil postoji, predaja nije dovršena",
+    "icon": "i"
+  },
+  "partial": {
+    "label": "Djelomičan profil",
+    "icon": "△"
+  },
+  "missing": {
+    "label": "Nedostaje poseban profil",
+    "icon": "!"
+  },
+  "external": {
+    "label": "Partnerska / združena pravila",
+    "icon": "↗"
+  }
+}
