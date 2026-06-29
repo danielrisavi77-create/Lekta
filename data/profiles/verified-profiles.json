@@ -8,10 +8,10 @@
     "workTypes": [
       "final"
     ],
-    "status": "partial",
+    "status": "verified",
     "profileLabel": "FPZG · prijediplomska Politologija · završni rad",
     "verifiedAt": "2026-06-28",
-    "documentDate": "Odluka za akademsku godinu 2025./2026.; opće upute 2013./2015.",
+    "documentDate": "Opće FPZG upute za pisanje akademskih radova (studeni 2015.); Odluka o rokovima prijave i obrane završnih radova 2025./2026. za opseg, ECTS i postupak.",
     "rules": {
       "font": [
         "Times New Roman"
@@ -28,15 +28,68 @@
       },
       "checkMargins": false,
       "justify": true,
-      "checkJustify": false,
-      "requireToc": false,
-      "requirePageNumbers": false,
-      "requireA4": false,
+      "checkJustify": true,
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "requireA4": true,
       "recommendedCitation": "fpzg",
       "accessDate": true,
-      "requiredSections": [],
-      "requireElementSources": false,
-      "requireListsWhenElements": false,
+      "requiredSections": [
+        {
+          "key": "toc",
+          "label": "sadržaj",
+          "terms": [
+            "sadrzaj",
+            "contents",
+            "table of contents"
+          ]
+        },
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod",
+            "introduction"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zaključak",
+          "terms": [
+            "zakljucak",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "literatura",
+          "terms": [
+            "literatura",
+            "popis literature",
+            "izvori i literatura",
+            "bibliografija",
+            "references"
+          ]
+        },
+        {
+          "key": "abstract",
+          "label": "sažetak / abstract",
+          "terms": [
+            "sazetak",
+            "abstract"
+          ]
+        },
+        {
+          "key": "keywords",
+          "label": "ključne riječi / keywords",
+          "terms": [
+            "kljucne rijeci",
+            "keywords"
+          ]
+        }
+      ],
+      "requireElementSources": true,
+      "requireListsWhenElements": true,
       "manualChecks": [
         "Provjeriti vanjsku i unutarnju naslovnu stranicu prema službenom predlošku FPZG-a.",
         "Prednje stranice trebaju imati rimske brojeve, a glavni tekst arapske brojeve od prve stranice Uvoda.",
@@ -47,10 +100,10 @@
         "Minimalan broj i vrstu izvora potvrditi s mentorom jer aktualna odluka za završni rad ne propisuje jedinstveni minimum."
       ],
       "wordCountMode": "fpzg-main-plus-footnotes",
-      "checkPageNumberScheme": false,
-      "maxDecimalLevels": null,
-      "checkSectionShares": false,
-      "checkTitlePage": false,
+      "checkPageNumberScheme": true,
+      "maxDecimalLevels": 4,
+      "checkSectionShares": true,
+      "checkTitlePage": true,
       "quoteLocatorRequired": true,
       "checkAlphabeticalRefs": true,
       "checkDuplicateYears": true,
@@ -59,19 +112,18 @@
       ],
       "wordMin": 5000,
       "wordMax": 6000,
-      "checkFont": false,
-      "checkSize": false,
-      "checkSpacing": false,
-      "scoreStructure": false,
-      "scoreElements": false
+      "checkFont": true,
+      "checkSize": true,
+      "checkSpacing": true,
+      "scoreStructure": true,
+      "scoreElements": true
     },
     "facts": [
       "5.000–6.000 riječi",
       "5 ECTS",
-      "FPZG autor–godina",
-      "tehnički izgled informativno"
+      "FPZG autor–godina"
     ],
-    "note": "Djelomično potvrđeni profil: aktualna odluka pouzdano propisuje opseg, ECTS i postupak završnog rada. Starije opće upute izričito su nastale u razdoblju bez završnog rada na prijediplomskom studiju, pa njihove tehničke postavke ne ulaze u službenu ocjenu završnog rada bez novije posebne upute.",
+    "note": "Potvrđeni profil završnog rada: opseg, ECTS i postupak iz aktualne Odluke za 2025./2026., a tehničko oblikovanje, struktura i citiranje prema općim FPZG Uputama za pisanje akademskih radova (izmijenjeno i dopunjeno, studeni 2015.), koje vrijede za sve akademske radove fakulteta. Broj i vrstu izvora potvrditi s mentorom jer Odluka za završni rad ne propisuje jedinstveni minimum.",
     "sources": [
       {
         "title": "Odluka o rokovima prijave i obrane završnih radova 2025./2026.",
@@ -132,13 +184,16 @@
     "ruleAuthority": "official-sources-only",
     "repositoryRole": "Regresijsko testiranje parsera; repozitorijski radovi nisu izvor obveznih pravila.",
     "normativeScope": [
-      "5 ECTS bodova",
-      "tekstualni završni rad: 5.000–6.000 riječi / približno 20–25 kartica",
+      "tehničko oblikovanje (Times New Roman, obostrano poravnanje, A4, numeriranje stranica rimskim pa arapskim brojevima) prema općim FPZG uputama",
+      "struktura (uvod, tijelo, zaključak), sadržaj, popis ilustracija i popis literature prema općim FPZG uputama",
+      "tekstualni završni rad: 5.000 do 6.000 riječi, 5 ECTS",
       "aktualni postupak prijave i obrane",
       "FPZG pravila citiranja i povezivanja citatnica s literaturom"
     ],
     "advisoryScope": [
-      "font, veličina, prored, sadržaj, numeriranje, naslovnica i struktura prikazuju se informativno dok se ne objavi posebna aktualna tehnička uputa za završne radove"
+      "margine se prikazuju informativno jer ih opće upute ne navode brojčano",
+      "minimalan broj i vrsta izvora prema pisanoj uputi mentora",
+      "posebne iznimke mentora ostaju za ručnu provjeru"
     ]
   },
   {
@@ -150,10 +205,10 @@
     "workTypes": [
       "final"
     ],
-    "status": "partial",
+    "status": "verified",
     "profileLabel": "FPZG · prijediplomsko Novinarstvo · završni rad · tekstualni",
     "verifiedAt": "2026-06-28",
-    "documentDate": "Odluka za akademsku godinu 2025./2026.; opće upute 2013./2015.",
+    "documentDate": "Opće FPZG upute za pisanje akademskih radova (studeni 2015.); Odluka o rokovima prijave i obrane završnih radova 2025./2026. za opseg, ECTS i postupak.",
     "rules": {
       "font": [
         "Times New Roman"
@@ -170,15 +225,68 @@
       },
       "checkMargins": false,
       "justify": true,
-      "checkJustify": false,
-      "requireToc": false,
-      "requirePageNumbers": false,
-      "requireA4": false,
+      "checkJustify": true,
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "requireA4": true,
       "recommendedCitation": "fpzg",
       "accessDate": true,
-      "requiredSections": [],
-      "requireElementSources": false,
-      "requireListsWhenElements": false,
+      "requiredSections": [
+        {
+          "key": "toc",
+          "label": "sadržaj",
+          "terms": [
+            "sadrzaj",
+            "contents",
+            "table of contents"
+          ]
+        },
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod",
+            "introduction"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zaključak",
+          "terms": [
+            "zakljucak",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "literatura",
+          "terms": [
+            "literatura",
+            "popis literature",
+            "izvori i literatura",
+            "bibliografija",
+            "references"
+          ]
+        },
+        {
+          "key": "abstract",
+          "label": "sažetak / abstract",
+          "terms": [
+            "sazetak",
+            "abstract"
+          ]
+        },
+        {
+          "key": "keywords",
+          "label": "ključne riječi / keywords",
+          "terms": [
+            "kljucne rijeci",
+            "keywords"
+          ]
+        }
+      ],
+      "requireElementSources": true,
+      "requireListsWhenElements": true,
       "manualChecks": [
         "Provjeriti vanjsku i unutarnju naslovnu stranicu prema službenom predlošku FPZG-a.",
         "Prednje stranice trebaju imati rimske brojeve, a glavni tekst arapske brojeve od prve stranice Uvoda.",
@@ -189,10 +297,10 @@
         "Minimalan broj i vrstu izvora potvrditi s mentorom."
       ],
       "wordCountMode": "fpzg-main-plus-footnotes",
-      "checkPageNumberScheme": false,
-      "maxDecimalLevels": null,
-      "checkSectionShares": false,
-      "checkTitlePage": false,
+      "checkPageNumberScheme": true,
+      "maxDecimalLevels": 4,
+      "checkSectionShares": true,
+      "checkTitlePage": true,
       "quoteLocatorRequired": true,
       "checkAlphabeticalRefs": true,
       "checkDuplicateYears": true,
@@ -201,19 +309,18 @@
       ],
       "wordMin": 5000,
       "wordMax": 6000,
-      "checkFont": false,
-      "checkSize": false,
-      "checkSpacing": false,
-      "scoreStructure": false,
-      "scoreElements": false
+      "checkFont": true,
+      "checkSize": true,
+      "checkSpacing": true,
+      "scoreStructure": true,
+      "scoreElements": true
     },
     "facts": [
       "5.000–6.000 riječi",
       "5 ECTS",
-      "FPZG autor–godina",
-      "tehnički izgled informativno"
+      "FPZG autor–godina"
     ],
-    "note": "Djelomično potvrđeni profil: aktualna odluka pouzdano propisuje opseg, ECTS i postupak završnog rada. Starije opće upute izričito su nastale u razdoblju bez završnog rada na prijediplomskom studiju, pa njihove tehničke postavke ne ulaze u službenu ocjenu završnog rada bez novije posebne upute.",
+    "note": "Potvrđeni profil završnog rada: opseg, ECTS i postupak iz aktualne Odluke za 2025./2026., a tehničko oblikovanje, struktura i citiranje prema općim FPZG Uputama za pisanje akademskih radova (izmijenjeno i dopunjeno, studeni 2015.), koje vrijede za sve akademske radove fakulteta. Broj i vrstu izvora potvrditi s mentorom jer Odluka za završni rad ne propisuje jedinstveni minimum.",
     "sources": [
       {
         "title": "Odluka o rokovima prijave i obrane završnih radova 2025./2026.",
@@ -254,13 +361,16 @@
     "ruleAuthority": "official-sources-only",
     "repositoryRole": "Regresijsko testiranje parsera; repozitorijski radovi nisu izvor obveznih pravila.",
     "normativeScope": [
-      "5 ECTS bodova",
-      "tekstualni završni rad: 5.000–6.000 riječi / približno 20–25 kartica",
+      "tehničko oblikovanje (Times New Roman, obostrano poravnanje, A4, numeriranje stranica rimskim pa arapskim brojevima) prema općim FPZG uputama",
+      "struktura (uvod, tijelo, zaključak), sadržaj, popis ilustracija i popis literature prema općim FPZG uputama",
+      "tekstualni završni rad: 5.000 do 6.000 riječi, 5 ECTS",
       "aktualni postupak prijave i obrane",
       "FPZG pravila citiranja i povezivanja citatnica s literaturom"
     ],
     "advisoryScope": [
-      "font, veličina, prored, sadržaj, numeriranje, naslovnica i struktura prikazuju se informativno dok se ne objavi posebna aktualna tehnička uputa za završne radove"
+      "margine se prikazuju informativno jer ih opće upute ne navode brojčano",
+      "minimalan broj i vrsta izvora prema pisanoj uputi mentora",
+      "posebne iznimke mentora ostaju za ručnu provjeru"
     ]
   },
   {
@@ -1946,10 +2056,10 @@
       },
       "checkMargins": false,
       "justify": true,
-      "checkJustify": false,
+      "checkJustify": true,
       "requireToc": false,
-      "requirePageNumbers": false,
-      "requireA4": false,
+      "requirePageNumbers": true,
+      "requireA4": true,
       "recommendedCitation": "fpzg",
       "accessDate": true,
       "requiredSections": [],
@@ -1966,7 +2076,7 @@
         "Provjeriti minimalan broj i vrstu izvora u uputi nastavnika."
       ],
       "wordCountMode": "fpzg-main-plus-footnotes",
-      "checkPageNumberScheme": false,
+      "checkPageNumberScheme": true,
       "maxDecimalLevels": null,
       "checkSectionShares": false,
       "checkTitlePage": false,
@@ -1979,9 +2089,9 @@
         "akademski rad",
         "znanstveni clanak"
       ],
-      "checkFont": false,
-      "checkSize": false,
-      "checkSpacing": false,
+      "checkFont": true,
+      "checkSize": true,
+      "checkSpacing": true,
       "scoreStructure": false,
       "scoreElements": false
     },
@@ -1990,7 +2100,7 @@
       "opseg prema silabusu",
       "tehničke postavke prema zadatku"
     ],
-    "note": "Djelomično potvrđeni opći profil: citatna pravila mogu se provjeriti, ali tehnički izgled, opseg i struktura seminarskog, projektnog ili istraživačkog rada ovise o silabusu i pisanoj uputi nastavnika.",
+    "note": "Djelomično potvrđeni opći profil: tehničko oblikovanje (font Times New Roman, veličina, prored, obostrano poravnanje, A4, numeriranje stranica) i citiranje provjeravaju se prema općim FPZG Uputama za pisanje akademskih radova, dok opseg, struktura i sadržaj seminarskog, projektnog ili istraživačkog rada ovise o silabusu i pisanoj uputi nastavnika.",
     "sources": [
       {
         "title": "Upute za pisanje akademskih radova na Fakultetu političkih znanosti",
