@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lekta Â· UX wireflow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14161D; --ink-2:#565E72; --line:#D7DCE8;
+    --paper:#EEF1F7; --surface:#FFFFFF;
+    --brand:#5A47E0; --brand-soft:rgba(90,71,224,.10); --brand-line:rgba(90,71,224,.30);
+    --ready:#1F9D63; --warn:#C98A2B; --crit:#CE4E43;
+    --mark:#FFE45E;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:Inter,system-ui,sans-serif; line-height:1.55; padding:clamp(20px,4vw,56px)}
+  .wrap{max-width:1120px; margin:0 auto}
+  .eyebrow{font-family:"Space Grotesk",monospace; font-weight:500; text-transform:uppercase; letter-spacing:.18em; font-size:12px; color:var(--brand)}
+
+  .masthead{margin-bottom:clamp(28px,5vw,52px)}
+  .wordmark{display:flex; align-items:center; gap:12px; margin:14px 0 22px}
+  .chip{width:40px; height:40px; border-radius:11px; background:var(--ink); color:#fff; display:grid; place-items:center; font-family:Fraunces,serif; font-weight:600; font-size:24px; line-height:1}
+  .name{position:relative; font-family:Fraunces,serif; font-weight:600; font-size:30px; letter-spacing:-.01em}
+  .name::after{content:""; position:absolute; left:-2px; right:-2px; bottom:4px; height:9px; background:var(--mark); opacity:.85; z-index:-1; border-radius:2px}
+  h1.thesis{font-family:Fraunces,serif; font-weight:600; font-size:clamp(28px,5.2vw,50px); line-height:1.08; letter-spacing:-.015em; margin:0 0 16px; max-width:22ch}
+  .lede{font-size:clamp(15px,1.7vw,18px); color:var(--ink-2); max-width:62ch; margin:0}
+  .lede b{color:var(--ink); font-weight:600}
+
+  .block{margin-top:clamp(30px,5vw,52px)}
+  .block-head{display:flex; gap:16px; align-items:baseline; margin-bottom:16px}
+  .block-head .num{font-family:Fraunces,serif; font-weight:500; font-size:clamp(22px,3vw,30px); color:var(--brand-line); line-height:1}
+  .block-head h2{font-family:Fraunces,serif; font-weight:600; font-size:clamp(20px,2.6vw,27px); margin:0 0 2px; letter-spacing:-.01em}
+  .block-head p{margin:0; color:var(--ink-2); font-size:14px}
+
+  .canvas{background:var(--surface); border:1px solid var(--line); border-radius:20px; box-shadow:0 1px 0 rgba(20,22,29,.03), 0 18px 40px -28px rgba(20,22,29,.28); overflow:hidden}
+  .flow-wrap{overflow-x:auto; padding:20px}
+  .flow-wrap svg{display:block; width:100%; min-width:1040px; height:auto}
+
+  .footstrip{margin-top:clamp(28px,4vw,44px); display:grid; grid-template-columns:1fr 1fr; gap:18px}
+  .panel{background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:22px 24px}
+  .panel h3{font-family:"Space Grotesk",monospace; text-transform:uppercase; letter-spacing:.1em; font-size:12.5px; color:var(--ink-2); margin:0 0 14px; font-weight:600}
+  .plist{list-style:none; margin:0; padding:0; display:grid; gap:11px}
+  .plist li{display:flex; gap:11px; align-items:flex-start; font-size:14.5px}
+  .plist li .k{flex:0 0 auto; width:9px; height:9px; border-radius:50%; margin-top:6px; background:var(--brand)}
+  .checklist{list-style:none; margin:0; padding:0; display:grid; gap:10px}
+  .checklist li{display:flex; gap:11px; align-items:flex-start; font-size:14.5px}
+  .checklist li::before{content:"â"; color:var(--ready); font-weight:700; line-height:1.4}
+
+  .colophon{margin-top:30px; padding-top:18px; border-top:1px solid var(--line); font-family:"Space Grotesk",monospace; font-size:12px; letter-spacing:.04em; color:var(--ink-2); display:flex; flex-wrap:wrap; gap:6px 14px; justify-content:space-between}
+
+  .s-eye{font-family:"Space Grotesk",monospace; font-weight:600; fill:var(--brand); letter-spacing:.1em}
+  .s-act{font-family:Inter,sans-serif; font-weight:600; fill:var(--ink)}
+  .s-sub{font-family:"Space Grotesk",monospace; font-weight:400; fill:var(--ink-2)}
+  .s-cta{font-family:Inter,sans-serif; font-weight:600; fill:#fff}
+  .s-wire{font-family:Inter,sans-serif; font-weight:600; fill:var(--ink)}
+
+  @media (max-width:680px){ .footstrip{grid-template-columns:1fr} .name{font-size:26px} }
+  @media (prefers-reduced-motion:no-preference){
+    .reveal{opacity:0; transform:translateY(10px); animation:rise .6s cubic-bezier(.2,.7,.2,1) forwards}
+    .block:nth-of-type(2){animation-delay:.05s}
+    @keyframes rise{to{opacity:1; transform:none}}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead reveal">
+    <div class="eyebrow">UX wireflow Â· interni dokument</div>
+    <div class="wordmark"><div class="chip">L</div><div class="name">Lekta</div></div>
+    <h1 class="thesis">Score u par sekundi, bez logina. PlaÄaÅ¡ tek kad znaÅ¡ da vrijedi.</h1>
+    <p class="lede">Å est ekrana, jedan po jedan. Svaki ima <b>jednu glavnu akciju</b>. Re-check petlja je srce, i mora biti najlakÅ¡a radnja u aplikaciji. Mobitel je primaran.</p>
+  </header>
+
+  <section class="block reveal">
+    <div class="block-head">
+      <span class="num">â</span>
+      <div>
+        <h2>KorisniÄki tijek</h2>
+        <p>Landing, kontekst, teaser, paywall, popravci, spreman. Petlja vraÄa na rezultat.</p>
+      </div>
+    </div>
+
+    <div class="canvas flow-wrap">
+      <svg viewBox="0 0 1344 440" role="img" aria-label="Wireflow Å¡est ekrana: landing, kontekst, teaser rezultat, paywall, puna lista popravaka, spreman, s re-check petljom natrag na rezultat">
+        <defs>
+          <marker id="fa" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="var(--brand)"/>
+          </marker>
+        </defs>
+
+        <!-- forward arrows -->
+        <g stroke="var(--brand)" stroke-width="2" marker-end="url(#fa)" fill="none">
+          <line x1="204" y1="190" x2="240" y2="190"/>
+          <line x1="428" y1="190" x2="464" y2="190"/>
+          <line x1="652" y1="190" x2="688" y2="190"/>
+          <line x1="876" y1="190" x2="912" y2="190"/>
+          <line x1="1100" y1="190" x2="1136" y2="190"/>
+        </g>
+
+        <!-- ============ CARD 1 Â· LANDING ============ -->
+        <g>
+          <rect x="20" y="64" width="184" height="260" rx="16" fill="#fff" stroke="var(--line)"/>
+          <text x="34" y="86" class="s-eye" font-size="11">01 Â· LANDING</text>
+          <rect x="34" y="100" width="156" height="158" rx="10" fill="#FBFCFE" stroke="var(--line)"/>
+          <rect x="46" y="118" width="96" height="8" rx="4" fill="#E3E7F0"/>
+          <rect x="46" y="132" width="62" height="8" rx="4" fill="#E3E7F0"/>
+          <rect x="46" y="150" width="132" height="56" rx="10" fill="#fff" stroke="var(--brand-line)" stroke-dasharray="5 4"/>
+          <text x="112" y="182" text-anchor="middle" class="s-sub" font-size="10">tap ili drop</text>
+          <rect x="46" y="224" width="132" height="26" rx="9" fill="var(--brand)"/>
+          <text x="112" y="241" text-anchor="middle" class="s-cta" font-size="11">Ubaci rad</text>
+          <text x="34" y="280" class="s-act" font-size="11.5">Ubaci rad</text>
+          <text x="34" y="296" class="s-sub" font-size="10">bez logina, bez postavki</text>
+        </g>
+
+        <!-- ============ CARD 2 Â· KONTEKST ============ -->
+        <g>
+          <rect x="244" y="64" width="184" height="260" rx="16" fill="#fff" stroke="var(--line)"/>
+          <text x="258" y="86" class="s-eye" font-size="11">02 Â· KONTEKST</text>
+          <rect x="258" y="100" width="156" height="158" rx="10" fill="#FBFCFE" stroke="var(--line)"/>
+          <text x="270" y="124" class="s-sub" font-size="10">Provjeravam kao</text>
+          <rect x="270" y="132" width="132" height="32" rx="8" fill="#F2F3FA" stroke="var(--line)"/>
+          <text x="336" y="152" text-anchor="middle" class="s-wire" font-size="11">FPZG Â· Diplomski</text>
+          <text x="270" y="182" class="s-sub" font-size="10" fill="var(--brand)">promijeni</text>
+          <rect x="270" y="224" width="132" height="26" rx="9" fill="var(--brand)"/>
+          <text x="336" y="241" text-anchor="middle" class="s-cta" font-size="11">Potvrdi</text>
+          <text x="258" y="280" class="s-act" font-size="11.5">Potvrdi profil</text>
+          <text x="258" y="296" class="s-sub" font-size="10">default + autodetekcija</text>
+        </g>
+
+        <!-- ============ CARD 3 Â· TEASER ============ -->
+        <g>
+          <rect x="468" y="64" width="184" height="260" rx="16" fill="#fff" stroke="var(--brand-line)" stroke-width="1.5"/>
+          <text x="482" y="86" class="s-eye" font-size="11">03 Â· TEASER</text>
+          <rect x="482" y="100" width="156" height="158" rx="10" fill="#FBFCFE" stroke="var(--line)"/>
+          <!-- score ring -->
+          <circle cx="516" cy="140" r="20" fill="none" stroke="#E3E7F0" stroke-width="6"/>
+          <circle cx="516" cy="140" r="20" fill="none" stroke="var(--brand)" stroke-width="6" stroke-linecap="round" stroke-dasharray="90 126" transform="rotate(-90 516 140)"/>
+          <text x="516" y="145" text-anchor="middle" class="s-wire" font-size="14">72</text>
+          <!-- bars -->
+          <rect x="548" y="128" width="76" height="7" rx="3.5" fill="var(--brand)"/>
+          <rect x="548" y="140" width="76" height="7" rx="3.5" fill="#E3E7F0"/>
+          <rect x="548" y="152" width="54" height="7" rx="3.5" fill="#E3E7F0"/>
+          <text x="494" y="184" class="s-sub" font-size="9.5">3 kritiÄna Â· 5 upozorenja</text>
+          <rect x="494" y="192" width="132" height="7" rx="3.5" fill="#E3E7F0" opacity="0.45"/>
+          <rect x="494" y="204" width="100" height="7" rx="3.5" fill="#E3E7F0" opacity="0.3"/>
+          <rect x="494" y="224" width="132" height="26" rx="9" fill="var(--brand)"/>
+          <text x="560" y="241" text-anchor="middle" class="s-cta" font-size="11">OtkljuÄaj sve</text>
+          <text x="482" y="280" class="s-act" font-size="11.5">Vidi score</text>
+          <text x="482" y="296" class="s-sub" font-size="10">vrijednost prije plaÄanja</text>
+        </g>
+
+        <!-- ============ CARD 4 Â· PAYWALL ============ -->
+        <g>
+          <rect x="692" y="64" width="184" height="260" rx="16" fill="#fff" stroke="var(--line)"/>
+          <text x="706" y="86" class="s-eye" font-size="11">04 Â· PAYWALL</text>
+          <rect x="706" y="100" width="156" height="158" rx="10" fill="#FBFCFE" stroke="var(--line)"/>
+          <rect x="718" y="118" width="132" height="84" rx="10" fill="#fff" stroke="var(--brand-line)"/>
+          <text x="730" y="138" class="s-sub" font-size="10">Diplomski</text>
+          <text x="730" y="166" class="s-wire" font-size="22" fill="var(--brand)">10 EUR</text>
+          <text x="730" y="188" class="s-sub" font-size="9">7 dana Â· neograniÄeno</text>
+          <rect x="718" y="224" width="132" height="26" rx="9" fill="var(--brand)"/>
+          <text x="784" y="241" text-anchor="middle" class="s-cta" font-size="11">Plati</text>
+          <text x="706" y="280" class="s-act" font-size="11.5">Plati</text>
+          <text x="706" y="296" class="s-sub" font-size="10">jedna cijena, po vrsti rada</text>
+        </g>
+
+        <!-- ============ CARD 5 Â· LISTA ============ -->
+        <g>
+          <rect x="916" y="64" width="184" height="260" rx="16" fill="#fff" stroke="var(--line)"/>
+          <text x="930" y="86" class="s-eye" font-size="11">05 Â· POPRAVCI</text>
+          <rect x="930" y="100" width="156" height="158" rx="10" fill="#FBFCFE" stroke="var(--line)"/>
+          <circle cx="948" cy="126" r="4" fill="var(--crit)"/>
+          <rect x="960" y="122" width="110" height="8" rx="4" fill="#E3E7F0"/>
+          <circle cx="948" cy="146" r="4" fill="var(--warn)"/>
+          <rect x="960" y="142" width="96" height="8" rx="4" fill="#E3E7F0"/>
+          <circle cx="948" cy="166" r="4" fill="var(--brand)"/>
+          <rect x="960" y="162" width="80" height="8" rx="4" fill="#E3E7F0"/>
+          <rect x="942" y="224" width="132" height="26" rx="9" fill="var(--brand)"/>
+          <text x="1008" y="241" text-anchor="middle" class="s-cta" font-size="11">Ponovno provjeri</text>
+          <text x="930" y="280" class="s-act" font-size="11.5">Popravi po prioritetu</text>
+          <text x="930" y="296" class="s-sub" font-size="10">P0 do P3, svaki je zadatak</text>
+        </g>
+
+        <!-- ============ CARD 6 Â· SPREMAN ============ -->
+        <g>
+          <rect x="1140" y="64" width="184" height="260" rx="16" fill="#fff" stroke="var(--line)"/>
+          <text x="1154" y="86" class="s-eye" font-size="11">06 Â· SPREMAN</text>
+          <rect x="1154" y="100" width="156" height="158" rx="10" fill="#FBFCFE" stroke="var(--line)"/>
+          <circle cx="1232" cy="142" r="22" fill="rgba(31,157,99,.12)" stroke="var(--ready)" stroke-width="2"/>
+          <path d="M1222 142 l7 7 l13 -14" fill="none" stroke="var(--ready)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="1232" y="190" text-anchor="middle" class="s-act" font-size="12" fill="var(--ready)">Spreman</text>
+          <text x="1232" y="208" text-anchor="middle" class="s-sub" font-size="9">rok: sluÅ¾bena stranica</text>
+          <rect x="1166" y="224" width="132" height="26" rx="9" fill="var(--brand)"/>
+          <text x="1232" y="241" text-anchor="middle" class="s-cta" font-size="11">Izvezi izvjeÅ¡taj</text>
+          <text x="1154" y="280" class="s-act" font-size="11.5">Izvezi</text>
+          <text x="1154" y="296" class="s-sub" font-size="10">rok + izvjeÅ¡taj</text>
+        </g>
+
+        <!-- ============ RE-CHECK LOOP (hero) ============ -->
+        <path d="M 1008 324 C 1008 410, 600 410, 562 332" fill="none" stroke="var(--brand-soft)" stroke-width="9"/>
+        <path d="M 1008 324 C 1008 410, 600 410, 562 332" fill="none" stroke="var(--brand)" stroke-width="2.5" marker-end="url(#fa)"/>
+        <text x="785" y="402" text-anchor="middle" class="s-act" font-size="13" fill="var(--brand)">popravi â ponovno provjeri Â· srce proizvoda</text>
+        <text x="785" y="420" text-anchor="middle" class="s-sub" font-size="11">jedan tap, ista teza nova verzija, prati napredak</text>
+      </svg>
+    </div>
+  </section>
+
+  <div class="footstrip">
+    <div class="panel">
+      <h3>Tri naÄela</h3>
+      <ul class="plist">
+        <li><span class="k"></span><span><b style="font-weight:600">Manje odluka.</b> Jedan ekran, jedna glavna akcija, defaulti rade posao.</span></li>
+        <li><span class="k"></span><span><b style="font-weight:600">Vrijednost prije obveze.</b> Score prije logina i prije plaÄanja.</span></li>
+        <li><span class="k"></span><span><b style="font-weight:600">Uvijek oÄit sljedeÄi potez.</b> Bez mrtvih krajeva ni âi sad Å¡toâ.</span></li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>Kako znaÅ¡ da je jednostavno</h3>
+      <ul class="checklist">
+        <li>Od landinga do score-a u par sekundi, bez logina i postavki</li>
+        <li>Kontekst se potvrÄuje u nula do jedan tap</li>
+        <li>Novi korisnik bez uputa sam stigne do re-checka</li>
+        <li>Nula sistemskog Å¾argona u korisniÄkim stringovima</li>
+        <li>Cijeli tijek prolazi jednom rukom na mobitelu</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="colophon">
+    <span>Lekta Â· UX wireflow</span>
+    <span>uz UX_PRINCIPLES.md (pravila po ekranu)</span>
+  </div>
+
+</div>
+</body>
+</html>
