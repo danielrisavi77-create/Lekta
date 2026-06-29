@@ -1091,10 +1091,10 @@
     "workTypes": [
       "graduate"
     ],
-    "status": "partial",
+    "status": "verified",
     "profileLabel": "FPZG · Master of European Studies · Master's Thesis",
     "verifiedAt": "2026-06-28",
-    "documentDate": "aktivni službeni izvori provjereni 28. lipnja 2026.",
+    "documentDate": "Opće FPZG upute za pisanje akademskih radova (studeni 2015.); MES program: Master’s Thesis, 18 ECTS.",
     "rules": {
       "font": [
         "Times New Roman"
@@ -1111,15 +1111,68 @@
       },
       "checkMargins": false,
       "justify": true,
-      "checkJustify": false,
-      "requireToc": false,
-      "requirePageNumbers": false,
-      "requireA4": false,
+      "checkJustify": true,
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "requireA4": true,
       "recommendedCitation": "fpzg",
       "accessDate": true,
-      "requiredSections": [],
-      "requireElementSources": false,
-      "requireListsWhenElements": false,
+      "requiredSections": [
+        {
+          "key": "toc",
+          "label": "sadržaj",
+          "terms": [
+            "sadrzaj",
+            "contents",
+            "table of contents"
+          ]
+        },
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod",
+            "introduction"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zaključak",
+          "terms": [
+            "zakljucak",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "literatura",
+          "terms": [
+            "literatura",
+            "popis literature",
+            "izvori i literatura",
+            "bibliografija",
+            "references"
+          ]
+        },
+        {
+          "key": "abstract",
+          "label": "sažetak / abstract",
+          "terms": [
+            "sazetak",
+            "abstract"
+          ]
+        },
+        {
+          "key": "keywords",
+          "label": "ključne riječi / keywords",
+          "terms": [
+            "kljucne rijeci",
+            "keywords"
+          ]
+        }
+      ],
+      "requireElementSources": true,
+      "requireListsWhenElements": true,
       "manualChecks": [
         "Provjeriti vanjsku i unutarnju naslovnu stranicu prema službenom predlošku FPZG-a.",
         "Prednje stranice trebaju imati rimske brojeve, a glavni tekst arapske brojeve od prve stranice Uvoda.",
@@ -1130,10 +1183,10 @@
         "Potvrditi opseg, strukturu, jezik sažetka i eventualni posebni citation guide u aktualnom MES syllabusu."
       ],
       "wordCountMode": "fpzg-main-plus-footnotes",
-      "checkPageNumberScheme": false,
-      "maxDecimalLevels": null,
-      "checkSectionShares": false,
-      "checkTitlePage": false,
+      "checkPageNumberScheme": true,
+      "maxDecimalLevels": 4,
+      "checkSectionShares": true,
+      "checkTitlePage": true,
       "quoteLocatorRequired": true,
       "checkAlphabeticalRefs": true,
       "checkDuplicateYears": true,
@@ -1142,18 +1195,18 @@
         "master thesis",
         "diplomski rad"
       ],
-      "checkFont": false,
-      "checkSize": false,
-      "checkSpacing": false,
-      "scoreStructure": false,
-      "scoreElements": false
+      "checkFont": true,
+      "checkSize": true,
+      "checkSpacing": true,
+      "scoreStructure": true,
+      "scoreElements": true
     },
     "facts": [
       "18 ECTS",
       "program na engleskom",
       "tehničke postavke nisu javno potvrđene"
     ],
-    "note": "Djelomično potvrđeni profil: javna stranica programa potvrđuje Master’s Thesis i 18 ECTS, ali ne daje potpunu tehničku matricu. Zato se izgled dokumenta prikazuje samo informativno.",
+    "note": "Potvrđeni profil diplomskog (master) rada: tehničko oblikovanje, struktura, sadržaj i citiranje prema općim FPZG Uputama za pisanje akademskih radova, koje vrijede za sve akademske radove fakulteta, jednako kao i za ostale diplomske profile. Program potvrđuje Master’s Thesis i 18 ECTS. Točan opseg i jezik sažetka potvrditi u aktualnom MES syllabusu.",
     "sources": [
       {
         "title": "FPZG – Studijski programi i službeni dokumenti",
@@ -1191,11 +1244,16 @@
     "ruleAuthority": "official-sources-only",
     "repositoryRole": "Regresijsko testiranje parsera; repozitorijski radovi nisu izvor obveznih pravila.",
     "normativeScope": [
-      "Master’s Thesis nosi 18 ECTS bodova",
-      "program se izvodi na engleskom jeziku"
+      "tehničko oblikovanje (Times New Roman 12, prored 1,5, obostrano poravnanje, A4, numeriranje stranica) prema općim FPZG uputama",
+      "struktura, sadržaj, popis ilustracija i popis literature prema općim FPZG uputama",
+      "Master’s Thesis, 18 ECTS",
+      "FPZG pravila citiranja i povezivanja citatnica s literaturom"
     ],
     "advisoryScope": [
-      "tehničko oblikovanje, struktura, citatni stil i opseg moraju se potvrditi u aktualnoj programskoj uputi ili kod mentora"
+      "opseg (broj riječi) prema aktualnom MES syllabusu",
+      "jezik sažetka i eventualni posebni citation guide programa",
+      "margine se prikazuju informativno jer ih opće upute ne navode brojčano",
+      "posebne iznimke mentora ostaju za ručnu provjeru"
     ]
   },
   {
@@ -1915,10 +1973,10 @@
     "workTypes": [
       "doctoral"
     ],
-    "status": "partial",
+    "status": "verified",
     "profileLabel": "FPZG · doktorski studij Politologija · doktorski rad",
     "verifiedAt": "2026-06-28",
-    "documentDate": "aktivni službeni izvori provjereni 28. lipnja 2026.",
+    "documentDate": "DR.SC.-08 Formalno oblikovanje doktorskog rada (FPZG); zadnja izmjena 2021.",
     "rules": {
       "font": [
         "Times New Roman"
@@ -1933,26 +1991,88 @@
         "bottom": 2.5,
         "left": 2.5
       },
-      "checkMargins": false,
+      "checkMargins": true,
       "justify": true,
       "checkJustify": false,
-      "requireToc": false,
-      "requirePageNumbers": false,
-      "requireA4": false,
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "requireA4": true,
       "recommendedCitation": "fpzg",
       "accessDate": true,
-      "requiredSections": [],
-      "requireElementSources": false,
+      "requiredSections": [
+        {
+          "key": "abstract",
+          "label": "sažetak / abstract",
+          "terms": [
+            "sazetak",
+            "abstract"
+          ]
+        },
+        {
+          "key": "keywords",
+          "label": "ključne riječi / keywords",
+          "terms": [
+            "kljucne rijeci",
+            "keywords"
+          ]
+        },
+        {
+          "key": "toc",
+          "label": "sadržaj",
+          "terms": [
+            "sadrzaj",
+            "contents",
+            "table of contents"
+          ]
+        },
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod",
+            "introduction"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zaključak",
+          "terms": [
+            "zakljucak",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "literatura",
+          "terms": [
+            "literatura",
+            "popis literature",
+            "izvori i literatura",
+            "bibliografija",
+            "references"
+          ]
+        },
+        {
+          "key": "cv",
+          "label": "životopis",
+          "terms": [
+            "zivotopis",
+            "curriculum vitae",
+            "biografija"
+          ]
+        }
+      ],
+      "requireElementSources": true,
       "requireListsWhenElements": false,
       "manualChecks": [
-        "Provjeriti vanjsku i unutarnju naslovnu stranicu prema službenom predlošku FPZG-a.",
-        "Prednje stranice trebaju imati rimske brojeve, a glavni tekst arapske brojeve od prve stranice Uvoda.",
-        "Sažetak treba biti u jednom odlomku, bez citatnica, a ključne riječi navedene neposredno uz njega.",
-        "Najviše četiri razine decimalnog numeriranja naslova.",
-        "Svaka slika, grafikon i tablica trebaju imati naslov i izvor; kada postoje, potreban je i odgovarajući popis ilustracija.",
-        "Posebne upute mentora, nositelja kolegija ili studijskog programa imaju prednost kada su izričito zadane.",
-        "Provjeriti aktualni pravilnik doktorskog studija, sveučilišne upute za oblikovanje doktorskog rada i odluke nadležnih tijela.",
-        "Provjeriti obvezne izjave, sažetke, prošireni sažetak, životopis i metapodatke za repozitorij."
+        "DR.SC.-08: sve se stranice numeriraju od Uvoda, broj u donjem desnom kutu.",
+        "DR.SC.-08: naslovnice i korice imaju margine 3,0 cm; Naziv sastavnice i ime Arial 16, naslov rada Arial 22 bold, vrsta rada Arial 16, Zagreb i godina Arial 14.",
+        "DR.SC.-08: nazivi poglavlja velikim podebljanim slovima, potpoglavlja malim slovima.",
+        "DR.SC.-08: obvezan sažetak na jednoj kartici te prošireni strukturirani sažetak na hrvatskom i engleskom (do 10 stranica).",
+        "DR.SC.-08: tablice imaju broj i naslov iznad, slike broj i naslov ispod; izvor se navodi neposredno ispod ilustracije.",
+        "DR.SC.-08: životopis u trećem licu, najviše 1800 znakova, s popisom objavljenih radova.",
+        "Citatni stil prema dominantnoj literaturi struke (npr. harvardski ili oksfordski); za politologiju autor-godina.",
+        "Posebne upute mentora i aktualni pravilnik doktorskog studija imaju prednost kada su izričito zadani."
       ],
       "wordCountMode": "fpzg-main-plus-footnotes",
       "checkPageNumberScheme": false,
@@ -1966,19 +2086,23 @@
         "doktorski rad",
         "doktorska disertacija"
       ],
-      "checkFont": false,
-      "checkSize": false,
-      "checkSpacing": false,
+      "checkFont": true,
+      "checkSize": true,
+      "checkSpacing": true,
       "scoreStructure": false,
-      "scoreElements": false
+      "scoreElements": true
     },
     "facts": [
       "Doktorski rad",
       "PDF/A + Word nakon obrane",
       "DR.SC.-08 obvezno provjeriti"
     ],
-    "note": "Djelomično potvrđeni profil: službena stranica navodi poseban dokument DR.SC.-08 za formalno oblikovanje rada. Dok njegov sadržaj nije strukturirano ugrađen, opći tehnički parametri ne ulaze u službenu ocjenu.",
+    "note": "Potvrđeni profil doktorskog rada prema dokumentu DR.SC.-08 (Formalno oblikovanje doktorskog rada). Bodovano je ono što dokument izričito propisuje i što se pouzdano provjerava u Word datoteci: Times New Roman 12, prored 1,5, margine 2,5 cm, A4, obvezni sadržaj, numerirane stranice te naslovi i izvori ilustracija. Doktorske posebnosti (numeriranje svih stranica od Uvoda u donjem desnom kutu, naslovnice u Arialu s marginama 3,0 cm, prošireni sažetak na hrvatskom i engleskom, životopis do 1800 znakova) provjeravaju se ručno jer odstupaju od općeg obrasca. Citatni stil bira se prema dominantnoj literaturi struke.",
     "sources": [
+      {
+        "title": "DR.SC.-08 Formalno oblikovanje doktorskog rada (FPZG)",
+        "url": "https://www.fpzg.unizg.hr/_download/repository/DR.SC.-08_formalno_oblikovanje_rada__%282%29%5B1%5D%5B1%5D.doc"
+      },
       {
         "title": "FPZG – Studijski programi i službeni dokumenti",
         "url": "https://www.fpzg.unizg.hr/studiji"
@@ -2007,11 +2131,16 @@
     "ruleAuthority": "official-sources-only",
     "repositoryRole": "Regresijsko testiranje parsera; repozitorijski radovi nisu izvor obveznih pravila.",
     "normativeScope": [
-      "doktorski studij Politologija",
-      "nakon obrane predaju se PDF/A i Word datoteka te sažeci i ključne riječi na hrvatskom i engleskom"
+      "Times New Roman 12, prored 1,5, margine 2,5 cm, format A4 (DR.SC.-08)",
+      "obvezan sadržaj, numerirane stranice i propisana struktura rada (DR.SC.-08)",
+      "naslovi i izvori tablica i slika (DR.SC.-08)"
     ],
     "advisoryScope": [
-      "konačno oblikovanje mora slijediti službeni dokument DR.SC.-08 i aktualne doktorske/sveučilišne upute"
+      "numeriranje svih stranica od Uvoda u donjem desnom kutu (ručno)",
+      "naslovnice i korice u Arialu s marginama 3,0 cm (ručno)",
+      "prošireni sažetak HR i EN do 10 stranica te životopis do 1800 znakova (ručno)",
+      "citatni stil prema dominantnoj literaturi struke",
+      "aktualni pravilnik doktorskog studija i odluke nadležnih tijela imaju prednost"
     ]
   },
   {
