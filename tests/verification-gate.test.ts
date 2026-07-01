@@ -141,6 +141,16 @@ describe('runVerificationGate', () => {
     expect(c).toContain('source-hash-drift');
   });
 
+  it('volatilni primarni izvor ne rusi na drift (ocekivano, kao freshness)', () => {
+    const volatileSrc = (SOURCE_REGISTRY as SourceEntry[]).find((s) => s.validityClass === 'volatile' && s.snapshotHash);
+    expect(volatileSrc).toBeTruthy();
+    const profiles: ThesisProfile[] = [
+      { id: 'p1', rules: {}, ruleEntries: [scoredEntry({ sourceId: volatileSrc!.id, verifiedHash: 'stari-hash' })] },
+    ];
+    const c = codes(runVerificationGate(profiles, SOURCE_REGISTRY as SourceEntry[], { now: NOW }));
+    expect(c).not.toContain('source-hash-drift');
+  });
+
   it('podudaran verifiedHash prolazi', () => {
     const src = (SOURCE_REGISTRY as SourceEntry[]).find((s) => s.id === 'pravo-upute-oblikovanje-2024')!;
     const profiles: ThesisProfile[] = [

@@ -271,6 +271,17 @@
           ]
         },
         {
+          "key": "body",
+          "label": "razrada rada po poglavljima",
+          "terms": [
+            "razrada",
+            "sredisnji dio",
+            "poglavlje",
+            "glava",
+            "chapter"
+          ]
+        },
+        {
           "key": "conclusion",
           "label": "zaključak",
           "terms": [

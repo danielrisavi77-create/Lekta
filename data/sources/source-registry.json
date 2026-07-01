@@ -119,10 +119,11 @@
     "title": "Dodatne informacije za pisane radove, Katedra za sociologiju",
     "url": "https://www.pravo.unizg.hr/katedre/katedra-za-sociologiju/dodatne-informacije/",
     "publisher": "Pravni fakultet Sveucilista u Zagrebu, Katedra za sociologiju",
-    "fetchedAt": null,
-    "snapshotPath": null,
-    "snapshotHash": null,
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/pravo/pravo-katedra-sociologija-upute-20260702.html",
+    "snapshotHash": "98eb269b496a9de605ad1845da7b0276d6b70b711af54c6ae3a3dcad480d5bae",
     "validityClass": "volatile",
-    "lastChecked": null
+    "lastChecked": "2026-07-02",
+    "note": "Point-in-time HTML capture. Propisuje oblikovanje ('Stranice moraju biti numerirane, font Times New Roman, velicina 12, obostrano poravnanje, prored 1,5.') i strukturu ('Pisani rad mora imati - naslovnicu, kratak sadrzaj, uvod, razradu rada po poglavljima, zakljucak, popis literature i popis priloga'). Volatile - hash ce driftati (gate ne rusi na volatile drift)."
   }
 ]

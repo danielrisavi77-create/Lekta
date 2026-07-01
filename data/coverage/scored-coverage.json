@@ -114,11 +114,11 @@
     },
     {
       "profileId": "sociologija",
-      "scored": 0,
+      "scored": 6,
       "machineCheckable": 6,
-      "advisory": 6,
-      "ratio": 0,
-      "lastVerified": null
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
     },
     {
       "profileId": "trgovacko-pravo",
@@ -129,5 +129,5 @@
       "lastVerified": "2026-06-30"
     }
   ],
-  "totalScored": 70
+  "totalScored": 76
 }

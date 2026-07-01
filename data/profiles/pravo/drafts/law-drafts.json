@@ -3004,9 +3004,13 @@
         "machineCheckable": true,
         "authority": "general",
         "sourceId": "pravo-katedra-sociologija-upute",
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourcePage": "odjeljak 'Opcenita struktura rada', recenica o oblikovanju rada",
+        "quote": "Stranice moraju biti numerirane, font Times New Roman, velicina 12, obostrano poravnanje, prored 1,5.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "98eb269b496a9de605ad1845da7b0276d6b70b711af54c6ae3a3dcad480d5bae"
       },
       {
         "ruleId": "sociologija--font-size",
@@ -3019,9 +3023,13 @@
         "machineCheckable": true,
         "authority": "general",
         "sourceId": "pravo-katedra-sociologija-upute",
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourcePage": "odjeljak 'Opcenita struktura rada', recenica o oblikovanju rada",
+        "quote": "Stranice moraju biti numerirane, font Times New Roman, velicina 12, obostrano poravnanje, prored 1,5.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "98eb269b496a9de605ad1845da7b0276d6b70b711af54c6ae3a3dcad480d5bae"
       },
       {
         "ruleId": "sociologija--line-spacing",
@@ -3032,9 +3040,13 @@
         "machineCheckable": true,
         "authority": "general",
         "sourceId": "pravo-katedra-sociologija-upute",
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourcePage": "odjeljak 'Opcenita struktura rada', recenica o oblikovanju rada",
+        "quote": "Stranice moraju biti numerirane, font Times New Roman, velicina 12, obostrano poravnanje, prored 1,5.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "98eb269b496a9de605ad1845da7b0276d6b70b711af54c6ae3a3dcad480d5bae"
       },
       {
         "ruleId": "sociologija--required-sections",
@@ -3053,6 +3065,17 @@
             "label": "uvod",
             "terms": [
               "uvod"
+            ]
+          },
+          {
+            "key": "body",
+            "label": "razrada rada po poglavljima",
+            "terms": [
+              "razrada",
+              "sredisnji dio",
+              "poglavlje",
+              "glava",
+              "chapter"
             ]
           },
           {
@@ -3076,9 +3099,13 @@
         "machineCheckable": true,
         "authority": "general",
         "sourceId": "pravo-katedra-sociologija-upute",
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourcePage": "odjeljak 'Opcenita struktura rada' (obvezni dijelovi rada)",
+        "quote": "Pisani rad mora imati: naslovnicu, kratak sadrzaj, uvod, razradu rada po poglavljima, zakljucak, popis literature i popis priloga (ukoliko ih ima).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "98eb269b496a9de605ad1845da7b0276d6b70b711af54c6ae3a3dcad480d5bae"
       },
       {
         "ruleId": "sociologija--toc",
@@ -3089,9 +3116,13 @@
         "machineCheckable": true,
         "authority": "general",
         "sourceId": "pravo-katedra-sociologija-upute",
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourcePage": "odjeljak 'Opcenita struktura rada' (obvezni dijelovi rada)",
+        "quote": "Kratak sadrzaj mora imati popis svih naslova poglavlja i potpoglavlja s odgovarajucom stranicom na kojoj poglavlje/potpoglavlje pocinje.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "98eb269b496a9de605ad1845da7b0276d6b70b711af54c6ae3a3dcad480d5bae"
       },
       {
         "ruleId": "sociologija--page-numbers",
@@ -3102,9 +3133,13 @@
         "machineCheckable": true,
         "authority": "general",
         "sourceId": "pravo-katedra-sociologija-upute",
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourcePage": "odjeljak 'Opcenita struktura rada', recenica o oblikovanju rada",
+        "quote": "Stranice moraju biti numerirane, font Times New Roman, velicina 12, obostrano poravnanje, prored 1,5.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "98eb269b496a9de605ad1845da7b0276d6b70b711af54c6ae3a3dcad480d5bae"
       }
     ]
   }

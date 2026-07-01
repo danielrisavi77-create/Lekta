@@ -116,9 +116,11 @@ export function runVerificationGate(
         const src = sourceById.get(entry.sourceId)!;
         if (src.snapshotPath == null || src.snapshotHash == null) {
           push(profile.id, entry.ruleId, 'source-no-snapshot', `Izvor "${entry.sourceId}" nema snapshot plus hash.`);
-        } else if (entry.verifiedHash != null && entry.verifiedHash !== src.snapshotHash) {
-          // Snapshot izvora promijenjen nakon verifikacije: pravilo je verificirano protiv
-          // starog teksta i mora na reverifikaciju (sekcija 6, freshness / sekcija 5 degradacija).
+        } else if (src.validityClass === 'stable' && entry.verifiedHash != null && entry.verifiedHash !== src.snapshotHash) {
+          // Snapshot STABILNOG izvora promijenjen nakon verifikacije: pravilo je verificirano
+          // protiv starog teksta i mora na reverifikaciju (sekcija 6). Volatile izvori (npr.
+          // stranice studija) smiju driftati bez rusenja CI, isto kao kod freshness pravila
+          // nize; njihova promjena je ocekivana i prati se izvan vrata.
           push(
             profile.id,
             entry.ruleId,
