@@ -22,9 +22,20 @@ function verifiedEntry(over: Partial<RuleEntry> = {}): RuleEntry {
   };
 }
 
-const sources = SOURCE_REGISTRY as SourceEntry[];
-/** Registriran izvor bez snapshota (dinamicki, otporno na buduce snapshotanje). */
-const NO_SNAPSHOT_SOURCE_ID = sources.find((s) => !s.snapshotHash)!.id;
+/** Sinteticki izvor bez snapshota: testira politiku neovisno o stanju zivog registra. */
+const NO_SNAPSHOT_SOURCE: SourceEntry = {
+  id: 'test-no-snapshot',
+  kind: 'guidelines',
+  title: 'Test izvor bez snapshota',
+  url: 'https://example.test/no-snapshot',
+  fetchedAt: null,
+  snapshotPath: null,
+  snapshotHash: null,
+  validityClass: 'stable',
+  lastChecked: null,
+};
+const NO_SNAPSHOT_SOURCE_ID = NO_SNAPSHOT_SOURCE.id;
+const sources = [...(SOURCE_REGISTRY as SourceEntry[]), NO_SNAPSHOT_SOURCE];
 
 describe('computePublishedRules: boduje se samo scored:true', () => {
   it('verificirano pravilo sa snapshotiranim izvorom je bodovano i ulazi u effectiveScored', () => {

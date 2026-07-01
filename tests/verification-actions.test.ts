@@ -19,8 +19,19 @@ import type { ThesisProfile, RuleEntry, SourceEntry } from '../src/profiles/prof
 
 const NOW = '2026-06-30';
 const UPUTE = 'pravo-upute-oblikovanje-2024';
-/** Registriran izvor koji jos NEMA snapshot (dinamicki, otporno na buduce snapshotanje pojedinih izvora). */
-const NO_SNAPSHOT_SOURCE_ID = (SOURCE_REGISTRY as SourceEntry[]).find((s) => !s.snapshotHash)!.id;
+/** Sinteticki izvor bez snapshota: testira politiku neovisno o stanju zivog registra. */
+const NO_SNAPSHOT_SOURCE: SourceEntry = {
+  id: 'test-no-snapshot',
+  kind: 'guidelines',
+  title: 'Test izvor bez snapshota',
+  url: 'https://example.test/no-snapshot',
+  fetchedAt: null,
+  snapshotPath: null,
+  snapshotHash: null,
+  validityClass: 'stable',
+  lastChecked: null,
+};
+const NO_SNAPSHOT_SOURCE_ID = NO_SNAPSHOT_SOURCE.id;
 
 function draftEntry(over: Partial<RuleEntry> = {}): RuleEntry {
   return {
@@ -108,7 +119,7 @@ describe('confirmVerification: covjek proglasava verified', () => {
   });
 
   it('odbija izvor bez snapshota', () => {
-    const noSnap = findSource(NO_SNAPSHOT_SOURCE_ID);
+    const noSnap = NO_SNAPSHOT_SOURCE;
     const res = confirmVerification('p1', draftEntry({ sourceId: NO_SNAPSHOT_SOURCE_ID }), noSnap, {
       sourcePage: 'cl. 5',
       quote: 'x',
