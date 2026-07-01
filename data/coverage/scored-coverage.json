@@ -9,6 +9,14 @@
       "lastVerified": "2026-06-30"
     },
     {
+      "profileId": "fpzg-politologija-diplomski",
+      "scored": 8,
+      "machineCheckable": 8,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
       "profileId": "pravo-doktorski-pravne-znanosti",
       "scored": 4,
       "machineCheckable": 6,
@@ -137,5 +145,5 @@
       "lastVerified": "2026-06-30"
     }
   ],
-  "totalScored": 78
+  "totalScored": 86
 }

@@ -82,7 +82,7 @@
   {
     "name": "VERIFICATION_LEDGER",
     "file": "data/verification/ledger.json",
-    "entries": 317
+    "entries": 333
   },
   {
     "name": "LAW_DRAFTS",
@@ -92,6 +92,6 @@
   {
     "name": "SCORED_COVERAGE",
     "file": "data/coverage/scored-coverage.json",
-    "entries": 17
+    "entries": 18
   }
 ]
