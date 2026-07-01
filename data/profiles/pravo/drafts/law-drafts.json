@@ -98,6 +98,14 @@
         "checkId": "required-sections",
         "value": [
           {
+            "key": "declaration",
+            "label": "izjava o izvornosti",
+            "terms": [
+              "izjava o izvornosti",
+              "izjava autora o izvornosti"
+            ]
+          },
+          {
             "key": "toc",
             "label": "sadržaj",
             "terms": [
@@ -154,11 +162,20 @@
         "sourcePage": "odjeljak 4 (obvezni dijelovi rada) i odjeljak 2 (sadrzaj)",
         "quote": "Rad mora imati uvodni dio, sredisnji dio (s vise poglavlja i/ili potpoglavlja) te zakljucni dio. Na kraju rada treba biti popis koristenih izvora i literature (bibliografija). Nakon naslovne stranice treba biti stranica sa sadrzajem.",
         "status": "verified",
-        "note": "Izjavu o izvornosti potkrijepiti iz Pravilnika/postupka; nije navedena u ovim Uputama.",
+        "note": "Strukturni dijelovi (sadrzaj/uvod/sredisnji/zakljucak/literatura) iz Uputa; izjava o izvornosti iz snapshotirane stranice studijskog programa (additionalSources). Kompozitno pravilo.",
         "verifiedBy": "Daniel Risavi",
-        "confirmedVia": "ai-3pass-batch",
-        "lastVerified": "2026-06-30",
-        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "additionalSources": [
+          {
+            "sourceId": "pravo-studij-integrirani-pravo",
+            "sourcePage": "odjeljak o postupku prijave/obrane rada, pod 'Izjava o izvornosti' (sastavni dio rada)",
+            "quote": "Diplomski rad na pocetku mora sadrzavati izjavu autora o izvornosti. Unutar diplomskog/zavrsnog rada u pdf-u Student potpisuje Izjavu o izvornosti koja je sastavni dio diplomskog/zavrsnog rada.",
+            "covers": "izjava o izvornosti (declaration)",
+            "verifiedHash": "e3278f20d2e88136eaaae5a160d32723abde6e81845c3503cb8450cee9d361a8"
+          }
+        ]
       },
       {
         "ruleId": "pravo-integrirani-diplomski--toc",
@@ -395,6 +412,14 @@
         "checkId": "required-sections",
         "value": [
           {
+            "key": "declaration",
+            "label": "izjava o izvornosti",
+            "terms": [
+              "izjava o izvornosti",
+              "izjava autora o izvornosti"
+            ]
+          },
+          {
             "key": "toc",
             "label": "sadržaj",
             "terms": [
@@ -451,11 +476,20 @@
         "sourcePage": "odjeljak 4 (obvezni dijelovi rada) i odjeljak 2 (sadrzaj)",
         "quote": "Rad mora imati uvodni dio, sredisnji dio (s vise poglavlja i/ili potpoglavlja) te zakljucni dio. Na kraju rada treba biti popis koristenih izvora i literature (bibliografija). Nakon naslovne stranice treba biti stranica sa sadrzajem.",
         "status": "verified",
-        "note": "Izjavu o izvornosti potkrijepiti iz Pravilnika/postupka; nije navedena u ovim Uputama.",
+        "note": "Strukturni dijelovi (sadrzaj/uvod/sredisnji/zakljucak/literatura) iz Uputa; izjava o izvornosti iz snapshotirane stranice studijskog programa (additionalSources). Kompozitno pravilo.",
         "verifiedBy": "Daniel Risavi",
-        "confirmedVia": "ai-3pass-batch",
-        "lastVerified": "2026-06-30",
-        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "additionalSources": [
+          {
+            "sourceId": "pravo-studij-javna-uprava-prijediplomski",
+            "sourcePage": "odjeljak o postupku prijave/obrane rada, pod 'Izjava o izvornosti' (sastavni dio rada)",
+            "quote": "Unutar diplomskog/zavrsnog rada u pdf-u Student potpisuje Izjavu o izvornosti koja je sastavni dio diplomskog/zavrsnog rada.",
+            "covers": "izjava o izvornosti (declaration)",
+            "verifiedHash": "a245e189b28ac9da87ec2c95d419dd9ed6432db86bd9e325902d893a427b6e90"
+          }
+        ]
       },
       {
         "ruleId": "pravo-javna-uprava-prijediplomski--toc",
@@ -678,6 +712,14 @@
         "checkId": "required-sections",
         "value": [
           {
+            "key": "declaration",
+            "label": "izjava o izvornosti",
+            "terms": [
+              "izjava o izvornosti",
+              "izjava autora o izvornosti"
+            ]
+          },
+          {
             "key": "toc",
             "label": "sadržaj",
             "terms": [
@@ -734,11 +776,20 @@
         "sourcePage": "odjeljak 4 (obvezni dijelovi rada) i odjeljak 2 (sadrzaj)",
         "quote": "Rad mora imati uvodni dio, sredisnji dio (s vise poglavlja i/ili potpoglavlja) te zakljucni dio. Na kraju rada treba biti popis koristenih izvora i literature (bibliografija). Nakon naslovne stranice treba biti stranica sa sadrzajem.",
         "status": "verified",
-        "note": "Izjavu o izvornosti potkrijepiti iz Pravilnika/postupka; nije navedena u ovim Uputama.",
+        "note": "Strukturni dijelovi (sadrzaj/uvod/sredisnji/zakljucak/literatura) iz Uputa; izjava o izvornosti iz snapshotirane stranice studijskog programa (additionalSources). Kompozitno pravilo.",
         "verifiedBy": "Daniel Risavi",
-        "confirmedVia": "ai-3pass-batch",
-        "lastVerified": "2026-06-30",
-        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "additionalSources": [
+          {
+            "sourceId": "pravo-studij-javna-uprava-diplomski",
+            "sourcePage": "odjeljak o postupku prijave/obrane rada, pod 'Izjava o izvornosti' (sastavni dio rada)",
+            "quote": "Unutar diplomskog/zavrsnog rada u pdf-u Student potpisuje Izjavu o izvornosti koja je sastavni dio diplomskog/zavrsnog rada.",
+            "covers": "izjava o izvornosti (declaration)",
+            "verifiedHash": "d4e3d06da249a754cb684c6058221641c1810aebc7ca1ce8ee7e74455dd4eee6"
+          }
+        ]
       },
       {
         "ruleId": "pravo-javna-uprava-diplomski--toc",
@@ -961,6 +1012,14 @@
         "checkId": "required-sections",
         "value": [
           {
+            "key": "declaration",
+            "label": "izjava o izvornosti",
+            "terms": [
+              "izjava o izvornosti",
+              "izjava autora o izvornosti"
+            ]
+          },
+          {
             "key": "toc",
             "label": "sadržaj",
             "terms": [
@@ -1017,11 +1076,20 @@
         "sourcePage": "odjeljak 4 (obvezni dijelovi rada) i odjeljak 2 (sadrzaj)",
         "quote": "Rad mora imati uvodni dio, sredisnji dio (s vise poglavlja i/ili potpoglavlja) te zakljucni dio. Na kraju rada treba biti popis koristenih izvora i literature (bibliografija). Nakon naslovne stranice treba biti stranica sa sadrzajem.",
         "status": "verified",
-        "note": "Izjavu o izvornosti potkrijepiti iz Pravilnika/postupka; nije navedena u ovim Uputama.",
+        "note": "Strukturni dijelovi (sadrzaj/uvod/sredisnji/zakljucak/literatura) iz Uputa; izjava o izvornosti iz snapshotirane stranice studijskog programa (additionalSources). Kompozitno pravilo.",
         "verifiedBy": "Daniel Risavi",
-        "confirmedVia": "ai-3pass-batch",
-        "lastVerified": "2026-06-30",
-        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "additionalSources": [
+          {
+            "sourceId": "pravo-studij-porezni-prijediplomski",
+            "sourcePage": "odjeljak o postupku prijave/obrane rada, pod 'Izjava o izvornosti' (sastavni dio rada)",
+            "quote": "Unutar diplomskog/zavrsnog rada u pdf-u Student potpisuje Izjavu o izvornosti koja je sastavni dio diplomskog/zavrsnog rada.",
+            "covers": "izjava o izvornosti (declaration)",
+            "verifiedHash": "7b2c9dc6ef2b5d95f974d957aaef5fd93947a58adf51584255fe5ba8bc85dd59"
+          }
+        ]
       },
       {
         "ruleId": "pravo-porezni-prijediplomski--toc",

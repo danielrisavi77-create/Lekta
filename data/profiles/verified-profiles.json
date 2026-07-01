@@ -2303,6 +2303,14 @@
       "accessDate": false,
       "requiredSections": [
         {
+          "key": "declaration",
+          "label": "izjava o izvornosti",
+          "terms": [
+            "izjava o izvornosti",
+            "izjava autora o izvornosti"
+          ]
+        },
+        {
           "key": "toc",
           "label": "sadržaj",
           "terms": [
@@ -2546,10 +2554,7 @@
         "Javni PDF-ovi i metapodatci ne otkrivaju pouzdano naslijeđene Word stilove i polja."
       ],
       "productDecision": "Pravila su produkcijski ugrađena, ali oznaka terenske validacije jasno razlikuje sintetičke regresijske testove od stvarnih DOCX audita."
-    },
-    "manualChecks": [
-      "Izjava o izvornosti: snapshotirani Pravilnik o studijima i studiranju je NE propisuje (Cl. 51 st. 11 opremanje rada delegira na mreznu stranicu Fakulteta); provjeri na sluzbenoj stranici studija. Podsjetnik, ne boduje se automatski."
-    ]
+    }
   },
   {
     "id": "pravo-javna-uprava-prijediplomski",
@@ -2587,6 +2592,14 @@
       "recommendedCitation": "pravo-fusnote",
       "accessDate": false,
       "requiredSections": [
+        {
+          "key": "declaration",
+          "label": "izjava o izvornosti",
+          "terms": [
+            "izjava o izvornosti",
+            "izjava autora o izvornosti"
+          ]
+        },
         {
           "key": "toc",
           "label": "sadržaj",
@@ -2832,10 +2845,7 @@
       "status": "published-rules-covered",
       "label": "Objavljena pravila pokrivena",
       "note": "Profil pokriva aktualno javno objavljenu vrstu rada, postupak predaje i zajedničku tehničko-citatnu matricu. Jedinstveni programski opseg nije javno potvrđen pa se ne boduje."
-    },
-    "manualChecks": [
-      "Izjava o izvornosti: snapshotirani Pravilnik o studijima i studiranju je NE propisuje (Cl. 51 st. 11 opremanje rada delegira na mreznu stranicu Fakulteta); provjeri na sluzbenoj stranici studija. Podsjetnik, ne boduje se automatski."
-    ]
+    }
   },
   {
     "id": "pravo-javna-uprava-diplomski",
@@ -2873,6 +2883,14 @@
       "recommendedCitation": "pravo-fusnote",
       "accessDate": false,
       "requiredSections": [
+        {
+          "key": "declaration",
+          "label": "izjava o izvornosti",
+          "terms": [
+            "izjava o izvornosti",
+            "izjava autora o izvornosti"
+          ]
+        },
         {
           "key": "toc",
           "label": "sadržaj",
@@ -3118,10 +3136,7 @@
       "status": "published-rules-covered",
       "label": "Objavljena pravila pokrivena",
       "note": "Profil pokriva aktualno javno objavljenu vrstu rada, postupak predaje i zajedničku tehničko-citatnu matricu. Jedinstveni programski opseg nije javno potvrđen pa se ne boduje."
-    },
-    "manualChecks": [
-      "Izjava o izvornosti: snapshotirani Pravilnik o studijima i studiranju je NE propisuje (Cl. 51 st. 11 opremanje rada delegira na mreznu stranicu Fakulteta); provjeri na sluzbenoj stranici studija. Podsjetnik, ne boduje se automatski."
-    ]
+    }
   },
   {
     "id": "pravo-porezni-prijediplomski",
@@ -3159,6 +3174,14 @@
       "recommendedCitation": "pravo-fusnote",
       "accessDate": false,
       "requiredSections": [
+        {
+          "key": "declaration",
+          "label": "izjava o izvornosti",
+          "terms": [
+            "izjava o izvornosti",
+            "izjava autora o izvornosti"
+          ]
+        },
         {
           "key": "toc",
           "label": "sadržaj",
@@ -3405,10 +3428,7 @@
       "status": "published-rules-covered",
       "label": "Objavljena pravila pokrivena",
       "note": "Profil pokriva aktualno javno objavljenu vrstu rada, postupak predaje i zajedničku tehničko-citatnu matricu. Jedinstveni programski opseg nije javno potvrđen pa se ne boduje."
-    },
-    "manualChecks": [
-      "Izjava o izvornosti: snapshotirani Pravilnik o studijima i studiranju je NE propisuje (Cl. 51 st. 11 opremanje rada delegira na mreznu stranicu Fakulteta); provjeri na sluzbenoj stranici studija. Podsjetnik, ne boduje se automatski."
-    ]
+    }
   },
   {
     "id": "pravo-socijalni-rad-zavrsni",

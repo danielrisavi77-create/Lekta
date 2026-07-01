@@ -14,7 +14,7 @@
       "machineCheckable": 13,
       "advisory": 2,
       "ratio": 0.8461538461538461,
-      "lastVerified": "2026-06-30"
+      "lastVerified": "2026-07-02"
     },
     {
       "profileId": "pravo-javna-uprava-diplomski",
@@ -22,7 +22,7 @@
       "machineCheckable": 12,
       "advisory": 1,
       "ratio": 0.9166666666666666,
-      "lastVerified": "2026-06-30"
+      "lastVerified": "2026-07-02"
     },
     {
       "profileId": "pravo-javna-uprava-prijediplomski",
@@ -30,7 +30,7 @@
       "machineCheckable": 12,
       "advisory": 1,
       "ratio": 0.9166666666666666,
-      "lastVerified": "2026-06-30"
+      "lastVerified": "2026-07-02"
     },
     {
       "profileId": "pravo-opci-pravni-akademski-rad",
@@ -46,7 +46,7 @@
       "machineCheckable": 12,
       "advisory": 1,
       "ratio": 0.9166666666666666,
-      "lastVerified": "2026-06-30"
+      "lastVerified": "2026-07-02"
     },
     {
       "profileId": "pravo-socijalna-politika-diplomski",

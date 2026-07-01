@@ -3454,5 +3454,101 @@
     "sourcePage": "odjeljak 4 (obvezni dijelovi rada) i odjeljak 2 (sadrzaj)",
     "quote": "Rad mora imati uvodni dio, sredisnji dio (s vise poglavlja i/ili potpoglavlja) te zakljucni dio. Na kraju rada treba biti popis koristenih izvora i literature (bibliografija). Nakon naslovne stranice treba biti stranica sa sadrzajem.",
     "note": "Batch odobrenje ispravljenog required-sections; izjava o izvornosti ostaje advisory (Pravilnik)."
+  },
+  {
+    "id": "led-pravo-integrirani-diplomski--required-sections-declaration-ai-confirmed-2026-07-02",
+    "ruleId": "pravo-integrirani-diplomski--required-sections",
+    "profileId": "pravo-integrirani-diplomski",
+    "action": "ai-confirmed",
+    "actor": "ai-1pass",
+    "timestamp": "2026-07-02",
+    "sourceId": "pravo-studij-integrirani-pravo",
+    "sourcePage": "odjeljak o postupku prijave/obrane rada, pod 'Izjava o izvornosti' (sastavni dio rada)",
+    "quote": "Diplomski rad na pocetku mora sadrzavati izjavu autora o izvornosti. Unutar diplomskog/zavrsnog rada u pdf-u Student potpisuje Izjavu o izvornosti koja je sastavni dio diplomskog/zavrsnog rada.",
+    "note": "Izjava o izvornosti dodana u obvezne dijelove; izvor je snapshotirana stranica studijskog programa (ne Pravilnik). Direktno citanje sluzbenog izvora, doslovni citat potvrdjen."
+  },
+  {
+    "id": "led-pravo-integrirani-diplomski--required-sections-declaration-verified-2026-07-02",
+    "ruleId": "pravo-integrirani-diplomski--required-sections",
+    "profileId": "pravo-integrirani-diplomski",
+    "action": "verified",
+    "actor": "Daniel Risavi",
+    "timestamp": "2026-07-02",
+    "sourceId": "pravo-studij-integrirani-pravo",
+    "sourcePage": "odjeljak o postupku prijave/obrane rada, pod 'Izjava o izvornosti' (sastavni dio rada)",
+    "quote": "Diplomski rad na pocetku mora sadrzavati izjavu autora o izvornosti. Unutar diplomskog/zavrsnog rada u pdf-u Student potpisuje Izjavu o izvornosti koja je sastavni dio diplomskog/zavrsnog rada.",
+    "note": "Batch odobrenje: izjava o izvornosti postaje scored required-section (kompozitno pravilo, additionalSources = program-stranica)."
+  },
+  {
+    "id": "led-pravo-javna-uprava-prijediplomski--required-sections-declaration-ai-confirmed-2026-07-02",
+    "ruleId": "pravo-javna-uprava-prijediplomski--required-sections",
+    "profileId": "pravo-javna-uprava-prijediplomski",
+    "action": "ai-confirmed",
+    "actor": "ai-1pass",
+    "timestamp": "2026-07-02",
+    "sourceId": "pravo-studij-javna-uprava-prijediplomski",
+    "sourcePage": "odjeljak o postupku prijave/obrane rada, pod 'Izjava o izvornosti' (sastavni dio rada)",
+    "quote": "Unutar diplomskog/zavrsnog rada u pdf-u Student potpisuje Izjavu o izvornosti koja je sastavni dio diplomskog/zavrsnog rada.",
+    "note": "Izjava o izvornosti dodana u obvezne dijelove; izvor je snapshotirana stranica studijskog programa (ne Pravilnik). Direktno citanje sluzbenog izvora, doslovni citat potvrdjen."
+  },
+  {
+    "id": "led-pravo-javna-uprava-prijediplomski--required-sections-declaration-verified-2026-07-02",
+    "ruleId": "pravo-javna-uprava-prijediplomski--required-sections",
+    "profileId": "pravo-javna-uprava-prijediplomski",
+    "action": "verified",
+    "actor": "Daniel Risavi",
+    "timestamp": "2026-07-02",
+    "sourceId": "pravo-studij-javna-uprava-prijediplomski",
+    "sourcePage": "odjeljak o postupku prijave/obrane rada, pod 'Izjava o izvornosti' (sastavni dio rada)",
+    "quote": "Unutar diplomskog/zavrsnog rada u pdf-u Student potpisuje Izjavu o izvornosti koja je sastavni dio diplomskog/zavrsnog rada.",
+    "note": "Batch odobrenje: izjava o izvornosti postaje scored required-section (kompozitno pravilo, additionalSources = program-stranica)."
+  },
+  {
+    "id": "led-pravo-javna-uprava-diplomski--required-sections-declaration-ai-confirmed-2026-07-02",
+    "ruleId": "pravo-javna-uprava-diplomski--required-sections",
+    "profileId": "pravo-javna-uprava-diplomski",
+    "action": "ai-confirmed",
+    "actor": "ai-1pass",
+    "timestamp": "2026-07-02",
+    "sourceId": "pravo-studij-javna-uprava-diplomski",
+    "sourcePage": "odjeljak o postupku prijave/obrane rada, pod 'Izjava o izvornosti' (sastavni dio rada)",
+    "quote": "Unutar diplomskog/zavrsnog rada u pdf-u Student potpisuje Izjavu o izvornosti koja je sastavni dio diplomskog/zavrsnog rada.",
+    "note": "Izjava o izvornosti dodana u obvezne dijelove; izvor je snapshotirana stranica studijskog programa (ne Pravilnik). Direktno citanje sluzbenog izvora, doslovni citat potvrdjen."
+  },
+  {
+    "id": "led-pravo-javna-uprava-diplomski--required-sections-declaration-verified-2026-07-02",
+    "ruleId": "pravo-javna-uprava-diplomski--required-sections",
+    "profileId": "pravo-javna-uprava-diplomski",
+    "action": "verified",
+    "actor": "Daniel Risavi",
+    "timestamp": "2026-07-02",
+    "sourceId": "pravo-studij-javna-uprava-diplomski",
+    "sourcePage": "odjeljak o postupku prijave/obrane rada, pod 'Izjava o izvornosti' (sastavni dio rada)",
+    "quote": "Unutar diplomskog/zavrsnog rada u pdf-u Student potpisuje Izjavu o izvornosti koja je sastavni dio diplomskog/zavrsnog rada.",
+    "note": "Batch odobrenje: izjava o izvornosti postaje scored required-section (kompozitno pravilo, additionalSources = program-stranica)."
+  },
+  {
+    "id": "led-pravo-porezni-prijediplomski--required-sections-declaration-ai-confirmed-2026-07-02",
+    "ruleId": "pravo-porezni-prijediplomski--required-sections",
+    "profileId": "pravo-porezni-prijediplomski",
+    "action": "ai-confirmed",
+    "actor": "ai-1pass",
+    "timestamp": "2026-07-02",
+    "sourceId": "pravo-studij-porezni-prijediplomski",
+    "sourcePage": "odjeljak o postupku prijave/obrane rada, pod 'Izjava o izvornosti' (sastavni dio rada)",
+    "quote": "Unutar diplomskog/zavrsnog rada u pdf-u Student potpisuje Izjavu o izvornosti koja je sastavni dio diplomskog/zavrsnog rada.",
+    "note": "Izjava o izvornosti dodana u obvezne dijelove; izvor je snapshotirana stranica studijskog programa (ne Pravilnik). Direktno citanje sluzbenog izvora, doslovni citat potvrdjen."
+  },
+  {
+    "id": "led-pravo-porezni-prijediplomski--required-sections-declaration-verified-2026-07-02",
+    "ruleId": "pravo-porezni-prijediplomski--required-sections",
+    "profileId": "pravo-porezni-prijediplomski",
+    "action": "verified",
+    "actor": "Daniel Risavi",
+    "timestamp": "2026-07-02",
+    "sourceId": "pravo-studij-porezni-prijediplomski",
+    "sourcePage": "odjeljak o postupku prijave/obrane rada, pod 'Izjava o izvornosti' (sastavni dio rada)",
+    "quote": "Unutar diplomskog/zavrsnog rada u pdf-u Student potpisuje Izjavu o izvornosti koja je sastavni dio diplomskog/zavrsnog rada.",
+    "note": "Batch odobrenje: izjava o izvornosti postaje scored required-section (kompozitno pravilo, additionalSources = program-stranica)."
   }
 ]

@@ -59,6 +59,25 @@ export interface RuleEntry {
    * verifikacijska konzola pri potvrdi; null dok pravilo nije verificirano.
    */
   verifiedHash?: string | null;
+  /**
+   * Dopunski sluzbeni izvori za kompozitno pravilo (npr. required-sections gdje strukturu
+   * propisuju Upute, a izjavu o izvornosti stranica studijskog programa). Glavni izvor
+   * (sourceId/sourcePage/quote/verifiedHash) pokriva vecinu vrijednosti; svaki dopunski
+   * ovdje posteno biljezi izvor za dio koji glavni ne pokriva. Kod bodovanog pravila i
+   * dopunski moraju biti snapshotirani (vrata to provjeravaju). `covers` opisuje sto podupire.
+   */
+  additionalSources?: RuleSourceRef[] | null;
+}
+
+/** Referenca na jedan sluzbeni izvor koji podupire dio kompozitnog pravila. */
+export interface RuleSourceRef {
+  sourceId: string;
+  sourcePage: string | null;
+  quote: string | null;
+  /** Koji dio vrijednosti ovaj izvor potkrepljuje (npr. "izjava o izvornosti"). */
+  covers?: string;
+  /** snapshotHash izvora u trenutku verifikacije (drift trag, kao verifiedHash za glavni). */
+  verifiedHash?: string | null;
 }
 
 /** Vrsta sluzbenog izvora u source registryju (VERIFICATION_PIPELINE.md sekcija 7). */

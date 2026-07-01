@@ -77,12 +77,12 @@
   {
     "name": "SOURCE_REGISTRY",
     "file": "data/sources/source-registry.json",
-    "entries": 7
+    "entries": 10
   },
   {
     "name": "VERIFICATION_LEDGER",
     "file": "data/verification/ledger.json",
-    "entries": 146
+    "entries": 296
   },
   {
     "name": "LAW_DRAFTS",

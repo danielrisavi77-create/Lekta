@@ -133,6 +133,28 @@ export function runVerificationGate(
       if (entry.quote == null) {
         push(profile.id, entry.ruleId, 'scored-no-quote', 'Bodovano pravilo nema quote.');
       }
+      // Dopunski izvori kompozitnog pravila (npr. izjava o izvornosti iz stranice studija):
+      // i oni moraju biti registrirani, snapshotirani te imati stranicu i citat. Drift se
+      // provjerava samo za stabilne dopunske izvore (volatile stranice smiju driftati, kao i
+      // kod glavnog freshness pravila) da vanjska promjena stranice ne rusi CI.
+      for (const add of entry.additionalSources ?? []) {
+        if (!sourceById.has(add.sourceId)) {
+          push(profile.id, entry.ruleId, 'scored-addsrc-orphan', `Dopunski sourceId "${add.sourceId}" ne postoji u registru.`);
+          continue;
+        }
+        const addSrc = sourceById.get(add.sourceId)!;
+        if (addSrc.snapshotPath == null || addSrc.snapshotHash == null) {
+          push(profile.id, entry.ruleId, 'scored-addsrc-no-snapshot', `Dopunski izvor "${add.sourceId}" nema snapshot plus hash.`);
+        } else if (addSrc.validityClass === 'stable' && add.verifiedHash != null && add.verifiedHash !== addSrc.snapshotHash) {
+          push(profile.id, entry.ruleId, 'scored-addsrc-drift', `Dopunski izvor "${add.sourceId}" promijenjen nakon verifikacije.`);
+        }
+        if (add.sourcePage == null) {
+          push(profile.id, entry.ruleId, 'scored-addsrc-no-page', `Dopunski izvor "${add.sourceId}" nema sourcePage.`);
+        }
+        if (add.quote == null) {
+          push(profile.id, entry.ruleId, 'scored-addsrc-no-quote', `Dopunski izvor "${add.sourceId}" nema quote.`);
+        }
+      }
       if (entry.authority === 'binding' && !entry.reviewedBy) {
         push(profile.id, entry.ruleId, 'binding-no-review', 'Obvezujuce pravilo nema reviewedBy (drugi par ociju).');
       }

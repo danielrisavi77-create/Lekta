@@ -30,11 +30,12 @@
     "title": "Zavrsni/diplomski rad, postupak i dokumentacija",
     "url": "https://www.pravo.unizg.hr/studenti/zavrsni-diplomski-rad/",
     "publisher": "Pravni fakultet Sveucilista u Zagrebu",
-    "fetchedAt": null,
-    "snapshotPath": null,
-    "snapshotHash": null,
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/pravo/pravo-zavrsni-diplomski-postupak-20260702.html",
+    "snapshotHash": "fc0504acf6b907dca8840ff3cf968b9b5511982bc8ba7117a0d3a6e61bd802a3",
     "validityClass": "volatile",
-    "lastChecked": null
+    "lastChecked": "2026-07-02",
+    "note": "Point-in-time HTML capture. Ne propisuje izjavu o izvornosti; ECTS troskovi, rokovi obrane i delegacija: informacije i obrasci na stranicama studijskih programa. Volatile - hash ce driftati pri promjeni stranice (ocekivano)."
   },
   {
     "id": "pravo-studij-integrirani-pravo",
@@ -42,11 +43,51 @@
     "title": "Sveucilisni integrirani prijediplomski i diplomski studij Pravo",
     "url": "https://www.pravo.unizg.hr/studiji/sveucilisni-integrirani-prijediplomski-i-diplomski-studij-pravo/",
     "publisher": "Pravni fakultet Sveucilista u Zagrebu",
-    "fetchedAt": null,
-    "snapshotPath": null,
-    "snapshotHash": null,
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/pravo/pravo-studij-integrirani-pravo-20260702.html",
+    "snapshotHash": "e3278f20d2e88136eaaae5a160d32723abde6e81845c3503cb8450cee9d361a8",
     "validityClass": "volatile",
-    "lastChecked": null
+    "lastChecked": "2026-07-02",
+    "note": "Point-in-time HTML capture. IZRIJEKOM propisuje izjavu o izvornosti kao sastavni dio rada: 'Diplomski rad na pocetku mora sadrzavati izjavu autora o izvornosti' i 'Unutar diplomskog/zavrsnog rada u pdf-u Student potpisuje Izjavu o izvornosti koja je sastavni dio'. Autoritativan izvor za required-section izjava (samo integrirani studij Pravo). Volatile - hash ce driftati."
+  },
+  {
+    "id": "pravo-studij-javna-uprava-prijediplomski",
+    "kind": "program-page",
+    "title": "Strucni prijediplomski studij Javna uprava",
+    "url": "https://www.pravo.unizg.hr/studiji/prijediplomski-studiji/strucni-prijediplomski-studij-javna-uprava/",
+    "publisher": "Pravni fakultet Sveucilista u Zagrebu",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/pravo/pravo-studij-javna-uprava-prijediplomski-20260702.html",
+    "snapshotHash": "a245e189b28ac9da87ec2c95d419dd9ed6432db86bd9e325902d893a427b6e90",
+    "validityClass": "volatile",
+    "lastChecked": "2026-07-02",
+    "note": "Point-in-time HTML capture. Propisuje izjavu o izvornosti kao sastavni dio zavrsnog rada ('Unutar diplomskog/zavrsnog rada u pdf-u Student potpisuje Izjavu o izvornosti koja je sastavni dio'). Volatile - hash ce driftati."
+  },
+  {
+    "id": "pravo-studij-javna-uprava-diplomski",
+    "kind": "program-page",
+    "title": "Strucni diplomski studij Javna uprava",
+    "url": "https://www.pravo.unizg.hr/studiji/diplomski-studiji/strucni-diplomski-studij-javna-uprava/",
+    "publisher": "Pravni fakultet Sveucilista u Zagrebu",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/pravo/pravo-studij-javna-uprava-diplomski-20260702.html",
+    "snapshotHash": "d4e3d06da249a754cb684c6058221641c1810aebc7ca1ce8ee7e74455dd4eee6",
+    "validityClass": "volatile",
+    "lastChecked": "2026-07-02",
+    "note": "Point-in-time HTML capture. Propisuje izjavu o izvornosti kao sastavni dio diplomskog rada ('Unutar diplomskog/zavrsnog rada u pdf-u Student potpisuje Izjavu o izvornosti koja je sastavni dio'). Volatile - hash ce driftati."
+  },
+  {
+    "id": "pravo-studij-porezni-prijediplomski",
+    "kind": "program-page",
+    "title": "Strucni prijediplomski Porezni studij",
+    "url": "https://www.pravo.unizg.hr/studiji/prijediplomski-studiji/strucni-prijediplomski-porezni-studij/",
+    "publisher": "Pravni fakultet Sveucilista u Zagrebu",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/pravo/pravo-studij-porezni-prijediplomski-20260702.html",
+    "snapshotHash": "7b2c9dc6ef2b5d95f974d957aaef5fd93947a58adf51584255fe5ba8bc85dd59",
+    "validityClass": "volatile",
+    "lastChecked": "2026-07-02",
+    "note": "Point-in-time HTML capture. Propisuje izjavu o izvornosti kao sastavni dio zavrsnog rada ('Unutar diplomskog/zavrsnog rada u pdf-u Student potpisuje Izjavu o izvornosti koja je sastavni dio'). Volatile - hash ce driftati."
   },
   {
     "id": "pravo-katedra-trgovacko-upute",

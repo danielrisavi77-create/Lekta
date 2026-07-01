@@ -157,6 +157,48 @@ describe('runVerificationGate', () => {
     expect(c).toContain('source-no-snapshot');
   });
 
+  it('valjan dopunski izvor (snapshotiran, sa stranicom i citatom) prolazi', () => {
+    const profiles: ThesisProfile[] = [
+      {
+        id: 'p1',
+        rules: {},
+        ruleEntries: [
+          scoredEntry({
+            additionalSources: [
+              { sourceId: 'pravo-studij-integrirani-pravo', sourcePage: 'odjeljak Izjava o izvornosti', quote: 'sastavni dio', covers: 'izjava' },
+            ],
+          }),
+        ],
+      },
+    ];
+    expect(runVerificationGate(profiles, SOURCE_REGISTRY as SourceEntry[], { now: NOW })).toEqual([]);
+  });
+
+  it('dopunski izvor koji ne postoji pada (scored-addsrc-orphan)', () => {
+    const profiles: ThesisProfile[] = [
+      { id: 'p1', rules: {}, ruleEntries: [scoredEntry({ additionalSources: [{ sourceId: 'ne-postoji', sourcePage: 'x', quote: 'y' }] })] },
+    ];
+    const c = codes(runVerificationGate(profiles, SOURCE_REGISTRY as SourceEntry[], { now: NOW }));
+    expect(c).toContain('scored-addsrc-orphan');
+  });
+
+  it('dopunski izvor bez snapshota pada (scored-addsrc-no-snapshot)', () => {
+    const profiles: ThesisProfile[] = [
+      { id: 'p1', rules: {}, ruleEntries: [scoredEntry({ additionalSources: [{ sourceId: NO_SNAPSHOT_SOURCE_ID, sourcePage: 'x', quote: 'y' }] })] },
+    ];
+    const c = codes(runVerificationGate(profiles, SOURCES_WITH_NO_SNAP, { now: NOW }));
+    expect(c).toContain('scored-addsrc-no-snapshot');
+  });
+
+  it('dopunski izvor bez stranice/citata pada', () => {
+    const profiles: ThesisProfile[] = [
+      { id: 'p1', rules: {}, ruleEntries: [scoredEntry({ additionalSources: [{ sourceId: 'pravo-studij-integrirani-pravo', sourcePage: null, quote: null }] })] },
+    ];
+    const c = codes(runVerificationGate(profiles, SOURCE_REGISTRY as SourceEntry[], { now: NOW }));
+    expect(c).toContain('scored-addsrc-no-page');
+    expect(c).toContain('scored-addsrc-no-quote');
+  });
+
   it('obvezujuce pravilo bez reviewedBy pada', () => {
     const profiles: ThesisProfile[] = [
       { id: 'p1', rules: {}, ruleEntries: [scoredEntry({ authority: 'binding' })] },
