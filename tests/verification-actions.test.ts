@@ -19,6 +19,8 @@ import type { ThesisProfile, RuleEntry, SourceEntry } from '../src/profiles/prof
 
 const NOW = '2026-06-30';
 const UPUTE = 'pravo-upute-oblikovanje-2024';
+/** Registriran izvor koji jos NEMA snapshot (dinamicki, otporno na buduce snapshotanje pojedinih izvora). */
+const NO_SNAPSHOT_SOURCE_ID = (SOURCE_REGISTRY as SourceEntry[]).find((s) => !s.snapshotHash)!.id;
 
 function draftEntry(over: Partial<RuleEntry> = {}): RuleEntry {
   return {
@@ -106,8 +108,8 @@ describe('confirmVerification: covjek proglasava verified', () => {
   });
 
   it('odbija izvor bez snapshota', () => {
-    const noSnap = findSource('pravo-pravilnik-studiji-2026');
-    const res = confirmVerification('p1', draftEntry({ sourceId: 'pravo-pravilnik-studiji-2026' }), noSnap, {
+    const noSnap = findSource(NO_SNAPSHOT_SOURCE_ID);
+    const res = confirmVerification('p1', draftEntry({ sourceId: NO_SNAPSHOT_SOURCE_ID }), noSnap, {
       sourcePage: 'cl. 5',
       quote: 'x',
       verifiedBy: 'daniel',

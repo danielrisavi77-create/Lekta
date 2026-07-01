@@ -23,6 +23,8 @@ function verifiedEntry(over: Partial<RuleEntry> = {}): RuleEntry {
 }
 
 const sources = SOURCE_REGISTRY as SourceEntry[];
+/** Registriran izvor bez snapshota (dinamicki, otporno na buduce snapshotanje). */
+const NO_SNAPSHOT_SOURCE_ID = sources.find((s) => !s.snapshotHash)!.id;
 
 describe('computePublishedRules: boduje se samo scored:true', () => {
   it('verificirano pravilo sa snapshotiranim izvorom je bodovano i ulazi u effectiveScored', () => {
@@ -45,7 +47,7 @@ describe('computePublishedRules: boduje se samo scored:true', () => {
     const profile: ThesisProfile = {
       id: 'p1',
       rules: {},
-      ruleEntries: [verifiedEntry({ sourceId: 'pravo-pravilnik-studiji-2026' })], // nema snapshot
+      ruleEntries: [verifiedEntry({ sourceId: NO_SNAPSHOT_SOURCE_ID })], // nema snapshot
     };
     const r = computePublishedRules(profile, sources);
     expect(r.scored).toHaveLength(0);

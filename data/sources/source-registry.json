@@ -14,14 +14,15 @@
   {
     "id": "pravo-pravilnik-studiji-2026",
     "kind": "pravilnik",
-    "title": "Pravilnik o studijima i studiranju Pravnog fakulteta",
+    "title": "Pravilnik o studijima i studiranju Pravnog fakulteta (donesen 12.7.2024, na snazi od 1.10.2024)",
     "url": "https://www.pravo.unizg.hr/wp-content/uploads/2026/03/Pravilnik-o-studijima-i-studiranju.pdf",
     "publisher": "Pravni fakultet Sveucilista u Zagrebu",
-    "fetchedAt": null,
-    "snapshotPath": null,
-    "snapshotHash": null,
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/pravo/pravo-pravilnik-studiji-2026.pdf",
+    "snapshotHash": "d3402f986be0517dc4b3ffcbc1ab5feaa9d82419e13fb9a236a0d96d72df3125",
     "validityClass": "stable",
-    "lastChecked": null
+    "lastChecked": "2026-07-02",
+    "note": "Cl. 51 st. 11 delegira opremanje rada na mreznu stranicu Fakulteta; Pravilnik NE propisuje izjavu o izvornosti u radu (potvrdjeno citanjem cijelog teksta). Ne moze biti izvor za bodovanje izjave o izvornosti."
   },
   {
     "id": "pravo-zavrsni-diplomski-postupak",

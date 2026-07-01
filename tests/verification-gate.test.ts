@@ -20,6 +20,9 @@ import type { ThesisProfile, SourceEntry, RuleEntry } from '../src/profiles/prof
 
 const NOW = '2026-06-30';
 
+/** Neki registriran izvor koji jos NEMA snapshot (dinamicki, da snapshotanje pojedinog izvora ne lomi test). */
+const NO_SNAPSHOT_SOURCE_ID = (SOURCE_REGISTRY as SourceEntry[]).find((s) => !s.snapshotHash)!.id;
+
 function codes(errors: VerificationGateError[]): string[] {
   return errors.map((e) => e.code).sort();
 }
@@ -136,7 +139,7 @@ describe('runVerificationGate', () => {
 
   it('izvor bez snapshota ne moze potkrijepiti bodovano pravilo', () => {
     const profiles: ThesisProfile[] = [
-      { id: 'p1', rules: {}, ruleEntries: [scoredEntry({ sourceId: 'pravo-pravilnik-studiji-2026' })] },
+      { id: 'p1', rules: {}, ruleEntries: [scoredEntry({ sourceId: NO_SNAPSHOT_SOURCE_ID })] },
     ];
     const c = codes(runVerificationGate(profiles, SOURCE_REGISTRY as SourceEntry[], { now: NOW }));
     expect(c).toContain('source-no-snapshot');
