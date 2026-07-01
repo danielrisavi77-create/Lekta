@@ -73,5 +73,25 @@
     "name": "WORK_TYPE_LABELS",
     "file": "data/work-type-labels.json",
     "entries": 7
+  },
+  {
+    "name": "SOURCE_REGISTRY",
+    "file": "data/sources/source-registry.json",
+    "entries": 7
+  },
+  {
+    "name": "VERIFICATION_LEDGER",
+    "file": "data/verification/ledger.json",
+    "entries": 146
+  },
+  {
+    "name": "LAW_DRAFTS",
+    "file": "data/profiles/pravo/drafts/law-drafts.json",
+    "entries": 16
+  },
+  {
+    "name": "SCORED_COVERAGE",
+    "file": "data/coverage/scored-coverage.json",
+    "entries": 16
   }
 ]

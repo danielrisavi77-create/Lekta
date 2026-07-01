@@ -9,11 +9,126 @@
  * verifikacije) kako se registri sele iz src/main.ts u tipizirani data/**.
  */
 
-/** Granularno pravilo s identitetom; mapira se preko COMPILED_CHECK_IDS u rule-compiler.ts. */
+/**
+ * Status pravila u verifikacijskom toku (VERIFICATION_PIPELINE.md sekcija 2).
+ *
+ * `ai-confirmed` je medjukorak: AI je kroz 3-prolaznu adversarijalnu provjeru potvrdio da
+ * vrijednost odgovara izvoru, ali pravilo JOS NE boduje. Boduje tek kad ga covjek batch
+ * odobri u `verified` (covjek i dalje deklarira verified, AI je samo ubrzao citanje).
+ */
+export type RuleStatus = 'draft' | 'ai-confirmed' | 'verified' | 'needs-recheck' | 'advisory' | 'retired';
+
+/** Razina autoriteta izvora (VERIFICATION_PIPELINE.md sekcija 3, od najjaceg). */
+export type RuleAuthorityLevel = 'binding' | 'program-page' | 'general' | 'mentor-or-course';
+
+/**
+ * Granularno pravilo s identitetom; mapira se preko COMPILED_CHECK_IDS u rule-compiler.ts.
+ *
+ * Osnovna polja (ruleId, checkId, value) su povijesni minimum koji cita rule-compiler.
+ * Polja verifikacijskog ugovora (VERIFICATION_PIPELINE.md sekcija 2) su opcionalna dok
+ * se profili migriraju; ni engine ni rule-compiler ne ovise o njima, cita ih
+ * verification-gate i (buduca) verifikacijska konzola. `sourcePage` se nikad ne nagada
+ * (null dok nije rucno potvrden); `scored` je izveden, vidi isRuleScored u verification-gate.
+ */
 export interface RuleEntry {
   ruleId: string;
   checkId: string | null;
   value: unknown;
+  category?: string;
+  label?: string;
+  machineCheckable?: boolean;
+  authority?: RuleAuthorityLevel;
+  sourceId?: string | null;
+  sourcePage?: string | null;
+  quote?: string | null;
+  status?: RuleStatus;
+  scored?: boolean;
+  lastVerified?: string | null;
+  verifiedBy?: string | null;
+  reviewedBy?: string | null;
+  /**
+   * Kako je pravilo potvrdjeno: 'human' (covjek citao izvor) ili 'ai-3pass-batch' (AI
+   * 3-prolazna provjera, covjek batch odobrio). Honesty trag: nikad ne tvrdimo cisto
+   * ljudsku verifikaciju ako je AI radio citanje. Ne utjece na bodovanje (boduje status verified).
+   */
+  confirmedVia?: 'human' | 'ai-3pass-batch' | 'ai-1pass-batch' | null;
+  /**
+   * `snapshotHash` izvora protiv kojeg je covjek verificirao pravilo. Ako se trenutni
+   * snapshotHash izvora razlikuje od ovoga, izvor je promijenjen nakon verifikacije pa
+   * vrata javljaju drift (VERIFICATION_PIPELINE.md sekcija 6, freshness). Postavlja ga
+   * verifikacijska konzola pri potvrdi; null dok pravilo nije verificirano.
+   */
+  verifiedHash?: string | null;
+}
+
+/** Vrsta sluzbenog izvora u source registryju (VERIFICATION_PIPELINE.md sekcija 7). */
+export type SourceKind =
+  | 'pravilnik'
+  | 'program-page'
+  | 'guidelines'
+  | 'citation-style'
+  | 'template';
+
+/** Klasa valjanosti izvora: stabilno se boduje, promjenjivo ostaje advisory. */
+export type SourceValidityClass = 'stable' | 'volatile';
+
+/**
+ * Zapis u source registryju. Snapshot je NEPROMJENJIV (PDF plus hash); `sourcePage`
+ * u pravilima uvijek se odnosi na taj snapshot, ne na zivi URL. `fetchedAt`,
+ * `snapshotPath` i `snapshotHash` su null za kandidate koji jos nisu snapshotirani;
+ * takav izvor ne moze potkrijepiti bodovano pravilo.
+ */
+export interface SourceEntry {
+  id: string;
+  kind: SourceKind;
+  title: string;
+  url: string;
+  publisher?: string;
+  fetchedAt: string | null;
+  snapshotPath: string | null;
+  snapshotHash: string | null;
+  validityClass: SourceValidityClass;
+  lastChecked: string | null;
+}
+
+/** Radnja u verifikacijskom ledgeru (VERIFICATION_PIPELINE.md sekcija 8). */
+export type LedgerAction =
+  | 'drafted'
+  | 'ai-confirmed'
+  | 'verified'
+  | 'rechecked'
+  | 'degraded'
+  | 'advisory'
+  | 'retired';
+
+/**
+ * Append-only zapis revizijskog traga. Svaka promjena `status` pravila MORA upisati
+ * zapis. Ledger se ne mijenja, samo se dodaje (VERIFICATION_PIPELINE.md sekcija 8).
+ */
+export interface VerificationLedgerEntry {
+  id: string;
+  ruleId: string;
+  profileId: string;
+  action: LedgerAction;
+  actor: string;
+  timestamp: string;
+  sourceId: string | null;
+  sourcePage: string | null;
+  quote: string | null;
+  note?: string;
+}
+
+/**
+ * Staging datoteka nacrta po fakultetu (data/profiles/<faculty>/drafts/*.json).
+ * Jedan dom za nacrte koji jos cekaju ljudsku verifikaciju; verifikacijski moduli ih
+ * citaju preko profile-registry (WITH_DRAFTS pogled). Faza D fan-out pise u isti oblik.
+ */
+export interface DraftsStagingFile {
+  generatedAt: string;
+  source: string;
+  note?: string;
+  /** ruleEntries po profileId. */
+  profiles: Record<string, RuleEntry[]>;
 }
 
 /** Profil ucilista/studija/vrste rada. Minimalan oblik dovoljan za rule-compiler. */
@@ -71,6 +186,7 @@ export interface VerifiedProfile {
   verifiedAt?: string;
   documentDate?: string;
   rules: Record<string, unknown>;
+  ruleEntries?: RuleEntry[];
   facts?: string[];
   note?: string;
   sources?: SourceRef[];
@@ -97,6 +213,7 @@ export interface LegalDepartment {
   workTypes: WorkType[];
   ruleAuthority?: RuleAuthorityKey;
   rules?: Record<string, unknown>;
+  ruleEntries?: RuleEntry[];
   rulesByWorkType?: Record<string, Record<string, unknown>>;
   facts?: string[];
   note?: string;

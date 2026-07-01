@@ -2303,18 +2303,10 @@
       "accessDate": false,
       "requiredSections": [
         {
-          "key": "declaration",
-          "label": "izjava o izvornosti",
-          "terms": [
-            "izjava o izvornosti",
-            "izjava autora o izvornosti"
-          ]
-        },
-        {
           "key": "toc",
           "label": "sadržaj",
           "terms": [
-            "sadržaj",
+            "sadrzaj",
             "contents",
             "table of contents"
           ]
@@ -2328,10 +2320,21 @@
           ]
         },
         {
+          "key": "body",
+          "label": "središnji dio",
+          "terms": [
+            "sredisnji dio",
+            "razrada",
+            "poglavlje",
+            "glava",
+            "chapter"
+          ]
+        },
+        {
           "key": "conclusion",
           "label": "zaključak",
           "terms": [
-            "zaključak",
+            "zakljucak",
             "conclusion"
           ]
         },
@@ -2341,6 +2344,7 @@
           "terms": [
             "izvori i literatura",
             "popis izvora i literature",
+            "popis literature",
             "bibliografija",
             "literatura",
             "references"
@@ -2542,7 +2546,10 @@
         "Javni PDF-ovi i metapodatci ne otkrivaju pouzdano naslijeđene Word stilove i polja."
       ],
       "productDecision": "Pravila su produkcijski ugrađena, ali oznaka terenske validacije jasno razlikuje sintetičke regresijske testove od stvarnih DOCX audita."
-    }
+    },
+    "manualChecks": [
+      "Izjava o izvornosti: obvezna za predaju prema Pravilniku o studijima i studiranju; nije u formatnim Uputama pa se ne boduje automatski."
+    ]
   },
   {
     "id": "pravo-javna-uprava-prijediplomski",
@@ -2581,18 +2588,10 @@
       "accessDate": false,
       "requiredSections": [
         {
-          "key": "declaration",
-          "label": "izjava o izvornosti",
-          "terms": [
-            "izjava o izvornosti",
-            "izjava autora o izvornosti"
-          ]
-        },
-        {
           "key": "toc",
           "label": "sadržaj",
           "terms": [
-            "sadržaj",
+            "sadrzaj",
             "contents",
             "table of contents"
           ]
@@ -2606,10 +2605,21 @@
           ]
         },
         {
+          "key": "body",
+          "label": "središnji dio",
+          "terms": [
+            "sredisnji dio",
+            "razrada",
+            "poglavlje",
+            "glava",
+            "chapter"
+          ]
+        },
+        {
           "key": "conclusion",
           "label": "zaključak",
           "terms": [
-            "zaključak",
+            "zakljucak",
             "conclusion"
           ]
         },
@@ -2619,6 +2629,7 @@
           "terms": [
             "izvori i literatura",
             "popis izvora i literature",
+            "popis literature",
             "bibliografija",
             "literatura",
             "references"
@@ -2821,7 +2832,10 @@
       "status": "published-rules-covered",
       "label": "Objavljena pravila pokrivena",
       "note": "Profil pokriva aktualno javno objavljenu vrstu rada, postupak predaje i zajedničku tehničko-citatnu matricu. Jedinstveni programski opseg nije javno potvrđen pa se ne boduje."
-    }
+    },
+    "manualChecks": [
+      "Izjava o izvornosti: obvezna za predaju prema Pravilniku o studijima i studiranju; nije u formatnim Uputama pa se ne boduje automatski."
+    ]
   },
   {
     "id": "pravo-javna-uprava-diplomski",
@@ -2860,18 +2874,10 @@
       "accessDate": false,
       "requiredSections": [
         {
-          "key": "declaration",
-          "label": "izjava o izvornosti",
-          "terms": [
-            "izjava o izvornosti",
-            "izjava autora o izvornosti"
-          ]
-        },
-        {
           "key": "toc",
           "label": "sadržaj",
           "terms": [
-            "sadržaj",
+            "sadrzaj",
             "contents",
             "table of contents"
           ]
@@ -2885,10 +2891,21 @@
           ]
         },
         {
+          "key": "body",
+          "label": "središnji dio",
+          "terms": [
+            "sredisnji dio",
+            "razrada",
+            "poglavlje",
+            "glava",
+            "chapter"
+          ]
+        },
+        {
           "key": "conclusion",
           "label": "zaključak",
           "terms": [
-            "zaključak",
+            "zakljucak",
             "conclusion"
           ]
         },
@@ -2898,6 +2915,7 @@
           "terms": [
             "izvori i literatura",
             "popis izvora i literature",
+            "popis literature",
             "bibliografija",
             "literatura",
             "references"
@@ -3100,7 +3118,10 @@
       "status": "published-rules-covered",
       "label": "Objavljena pravila pokrivena",
       "note": "Profil pokriva aktualno javno objavljenu vrstu rada, postupak predaje i zajedničku tehničko-citatnu matricu. Jedinstveni programski opseg nije javno potvrđen pa se ne boduje."
-    }
+    },
+    "manualChecks": [
+      "Izjava o izvornosti: obvezna za predaju prema Pravilniku o studijima i studiranju; nije u formatnim Uputama pa se ne boduje automatski."
+    ]
   },
   {
     "id": "pravo-porezni-prijediplomski",
@@ -3139,18 +3160,10 @@
       "accessDate": false,
       "requiredSections": [
         {
-          "key": "declaration",
-          "label": "izjava o izvornosti",
-          "terms": [
-            "izjava o izvornosti",
-            "izjava autora o izvornosti"
-          ]
-        },
-        {
           "key": "toc",
           "label": "sadržaj",
           "terms": [
-            "sadržaj",
+            "sadrzaj",
             "contents",
             "table of contents"
           ]
@@ -3164,10 +3177,21 @@
           ]
         },
         {
+          "key": "body",
+          "label": "središnji dio",
+          "terms": [
+            "sredisnji dio",
+            "razrada",
+            "poglavlje",
+            "glava",
+            "chapter"
+          ]
+        },
+        {
           "key": "conclusion",
           "label": "zaključak",
           "terms": [
-            "zaključak",
+            "zakljucak",
             "conclusion"
           ]
         },
@@ -3177,6 +3201,7 @@
           "terms": [
             "izvori i literatura",
             "popis izvora i literature",
+            "popis literature",
             "bibliografija",
             "literatura",
             "references"
@@ -3380,7 +3405,10 @@
       "status": "published-rules-covered",
       "label": "Objavljena pravila pokrivena",
       "note": "Profil pokriva aktualno javno objavljenu vrstu rada, postupak predaje i zajedničku tehničko-citatnu matricu. Jedinstveni programski opseg nije javno potvrđen pa se ne boduje."
-    }
+    },
+    "manualChecks": [
+      "Izjava o izvornosti: obvezna za predaju prema Pravilniku o studijima i studiranju; nije u formatnim Uputama pa se ne boduje automatski."
+    ]
   },
   {
     "id": "pravo-socijalni-rad-zavrsni",

@@ -35,6 +35,25 @@ describe('rule-compiler faithfulness', () => {
     });
   });
 
+  it('mapira pravne checkId-jeve (fusnote i naslovi) u effectiveRules', () => {
+    const profile: ThesisProfile = {
+      id: 'pravo-demo',
+      rules: { footnoteFont: ['Arial'], footnoteSize: [9], footnoteSpacing: 1.5 },
+      ruleEntries: [
+        { ruleId: 'r-ff', checkId: 'footnote-font', value: ['Times New Roman'] },
+        { ruleId: 'r-fs', checkId: 'footnote-size', value: [10] },
+        { ruleId: 'r-fsp', checkId: 'footnote-spacing', value: 1 },
+        { ruleId: 'r-hr', checkId: 'heading-rules', value: { size: 12, maxLevel: 3 } },
+      ],
+    };
+    expect(compileEffectiveRules(profile)).toEqual({
+      footnoteFont: ['Times New Roman'],
+      footnoteSize: [10],
+      footnoteSpacing: 1,
+      headingRules: { size: 12, maxLevel: 3 },
+    });
+  });
+
   it('prijavljuje diagnostic za nepoznat checkId i ne mijenja rules', () => {
     const profile: ThesisProfile = {
       id: 'demo',

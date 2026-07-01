@@ -1,0 +1,86 @@
+[
+  {
+    "id": "pravo-upute-oblikovanje-2024",
+    "kind": "guidelines",
+    "title": "Upute za oblikovanje i uredenje teksta i navodenje izvora u diplomskim i zavrsnim radovima na Pravnom fakultetu Sveucilista u Zagrebu",
+    "url": "https://www.pravo.unizg.hr/wp-content/uploads/2024/05/Upute-za-oblikovanje-i-uredenje-teksta-i-navodenje-izvora_diplomski_zavrsni_rad.pdf",
+    "publisher": "Pravni fakultet Sveucilista u Zagrebu",
+    "fetchedAt": "2026-06-30",
+    "snapshotPath": "data/sources/pravo/pravo-upute-oblikovanje-diplomski-zavrsni-2024.pdf",
+    "snapshotHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+    "validityClass": "stable",
+    "lastChecked": "2026-06-30"
+  },
+  {
+    "id": "pravo-pravilnik-studiji-2026",
+    "kind": "pravilnik",
+    "title": "Pravilnik o studijima i studiranju Pravnog fakulteta",
+    "url": "https://www.pravo.unizg.hr/wp-content/uploads/2026/03/Pravilnik-o-studijima-i-studiranju.pdf",
+    "publisher": "Pravni fakultet Sveucilista u Zagrebu",
+    "fetchedAt": null,
+    "snapshotPath": null,
+    "snapshotHash": null,
+    "validityClass": "stable",
+    "lastChecked": null
+  },
+  {
+    "id": "pravo-zavrsni-diplomski-postupak",
+    "kind": "program-page",
+    "title": "Zavrsni/diplomski rad, postupak i dokumentacija",
+    "url": "https://www.pravo.unizg.hr/studenti/zavrsni-diplomski-rad/",
+    "publisher": "Pravni fakultet Sveucilista u Zagrebu",
+    "fetchedAt": null,
+    "snapshotPath": null,
+    "snapshotHash": null,
+    "validityClass": "volatile",
+    "lastChecked": null
+  },
+  {
+    "id": "pravo-studij-integrirani-pravo",
+    "kind": "program-page",
+    "title": "Sveucilisni integrirani prijediplomski i diplomski studij Pravo",
+    "url": "https://www.pravo.unizg.hr/studiji/sveucilisni-integrirani-prijediplomski-i-diplomski-studij-pravo/",
+    "publisher": "Pravni fakultet Sveucilista u Zagrebu",
+    "fetchedAt": null,
+    "snapshotPath": null,
+    "snapshotHash": null,
+    "validityClass": "volatile",
+    "lastChecked": null
+  },
+  {
+    "id": "pravo-katedra-trgovacko-upute",
+    "kind": "guidelines",
+    "title": "Upute za izradu diplomskog i seminarskog rada, Katedra za trgovacko pravo i pravo drustava",
+    "url": "https://www.pravo.unizg.hr/wp-content/uploads/2023/02/UPUTE-za-izradu-diplomskih-i-seminarskih-radova-copy.pdf",
+    "publisher": "Pravni fakultet Sveucilista u Zagrebu, Katedra za trgovacko pravo i pravo drustava",
+    "fetchedAt": "2026-06-30",
+    "snapshotPath": "data/sources/pravo/pravo-katedra-trgovacko-upute-2023.pdf",
+    "snapshotHash": "341a8e574ffba61c8ba49f79c89bb2162f29ff2903c77bd21d2a5d23b2fe8092",
+    "validityClass": "stable",
+    "lastChecked": "2026-06-30"
+  },
+  {
+    "id": "pravo-katedra-radno-socijalno-upute-2021",
+    "kind": "guidelines",
+    "title": "Upute za izradu seminarskih i diplomskih radova, Katedra za radno i socijalno pravo (azurirano 07/2021)",
+    "url": "https://www.pravo.unizg.hr/wp-content/uploads/2023/02/Diplomski-seminari_upute_za_izradu_i_citiranje_2014_sire_20210729.pdf",
+    "publisher": "Pravni fakultet Sveucilista u Zagrebu, Katedra za radno i socijalno pravo",
+    "fetchedAt": "2026-06-30",
+    "snapshotPath": "data/sources/pravo/pravo-katedra-radno-socijalno-upute-2021.pdf",
+    "snapshotHash": "c37e637935f230e0e47c213fe7147a32b845352ef3a22beb63f0e1a4036971c1",
+    "validityClass": "stable",
+    "lastChecked": "2026-06-30"
+  },
+  {
+    "id": "pravo-katedra-sociologija-upute",
+    "kind": "guidelines",
+    "title": "Dodatne informacije za pisane radove, Katedra za sociologiju",
+    "url": "https://www.pravo.unizg.hr/katedre/katedra-za-sociologiju/dodatne-informacije/",
+    "publisher": "Pravni fakultet Sveucilista u Zagrebu, Katedra za sociologiju",
+    "fetchedAt": null,
+    "snapshotPath": null,
+    "snapshotHash": null,
+    "validityClass": "volatile",
+    "lastChecked": null
+  }
+]

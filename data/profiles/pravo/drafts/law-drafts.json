@@ -1,0 +1,3043 @@
+{
+  "generatedAt": "2026-06-30",
+  "source": "seed-law-drafts (Faza C); staging od Faze C.5",
+  "note": "Staging nacrti pravnih profila. Svi su status draft/advisory i scored:false dok ih covjek ne verificira kroz verifikacijsku konzolu. Promocija u profil ide tek nakon verifikacije.",
+  "profiles": {
+    "pravo-integrirani-diplomski": [
+      {
+        "ruleId": "pravo-integrirani-diplomski--font",
+        "checkId": "font",
+        "value": [
+          "Times New Roman"
+        ],
+        "category": "format",
+        "label": "Font glavnog teksta",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Glavni tekst (...) font: Times New Roman",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-integrirani-diplomski--font-size",
+        "checkId": "font-size",
+        "value": [
+          12
+        ],
+        "category": "format",
+        "label": "Velicina fonta glavnog teksta",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Glavni tekst (...) velicina fonta: 12",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-integrirani-diplomski--line-spacing",
+        "checkId": "line-spacing",
+        "value": 1.5,
+        "category": "format",
+        "label": "Prored glavnog teksta",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Glavni tekst (...) prored: 1,5 (razmak 0 i prije i poslije)",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-integrirani-diplomski--margins",
+        "checkId": "margins",
+        "value": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "category": "format",
+        "label": "Margine",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "advisory"
+      },
+      {
+        "ruleId": "pravo-integrirani-diplomski--citation-style",
+        "checkId": "citation-style",
+        "value": "pravo-fusnote",
+        "category": "citation",
+        "label": "Stil citiranja",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 5. Navodenje bibliografskih podataka (citiranje)",
+        "quote": "Bibliografski podatci o koristenim izvorima navode se u biljeskama (fusnotama) koje moraju biti numerirane.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-integrirani-diplomski--required-sections",
+        "checkId": "required-sections",
+        "value": [
+          {
+            "key": "toc",
+            "label": "sadržaj",
+            "terms": [
+              "sadrzaj",
+              "contents",
+              "table of contents"
+            ]
+          },
+          {
+            "key": "intro",
+            "label": "uvod",
+            "terms": [
+              "uvod",
+              "introduction"
+            ]
+          },
+          {
+            "key": "body",
+            "label": "središnji dio",
+            "terms": [
+              "sredisnji dio",
+              "razrada",
+              "poglavlje",
+              "glava",
+              "chapter"
+            ]
+          },
+          {
+            "key": "conclusion",
+            "label": "zaključak",
+            "terms": [
+              "zakljucak",
+              "conclusion"
+            ]
+          },
+          {
+            "key": "refs",
+            "label": "izvori i literatura / bibliografija",
+            "terms": [
+              "izvori i literatura",
+              "popis izvora i literature",
+              "popis literature",
+              "bibliografija",
+              "literatura",
+              "references"
+            ]
+          }
+        ],
+        "category": "structure",
+        "label": "Obvezni dijelovi rada",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4 (obvezni dijelovi rada) i odjeljak 2 (sadrzaj)",
+        "quote": "Rad mora imati uvodni dio, sredisnji dio (s vise poglavlja i/ili potpoglavlja) te zakljucni dio. Na kraju rada treba biti popis koristenih izvora i literature (bibliografija). Nakon naslovne stranice treba biti stranica sa sadrzajem.",
+        "status": "verified",
+        "note": "Izjavu o izvornosti potkrijepiti iz Pravilnika/postupka; nije navedena u ovim Uputama.",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-integrirani-diplomski--toc",
+        "checkId": "toc",
+        "value": true,
+        "category": "structure",
+        "label": "Sadrzaj",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 2. Sadrzaj",
+        "quote": "Nakon naslovne stranice treba biti stranica sa sadrzajem.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-integrirani-diplomski--page-numbers",
+        "checkId": "page-numbers",
+        "value": true,
+        "category": "format",
+        "label": "Numeriranje stranica",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti automatski umetnut broj stranice.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-integrirani-diplomski--footnote-font",
+        "checkId": "footnote-font",
+        "value": [
+          "Times New Roman"
+        ],
+        "category": "format",
+        "label": "Font fusnota",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Biljeske (fusnote) (...) font: Times New Roman",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-integrirani-diplomski--footnote-size",
+        "checkId": "footnote-size",
+        "value": [
+          10
+        ],
+        "category": "format",
+        "label": "Velicina fusnota",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Biljeske (fusnote) (...) velicina fonta: 10",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-integrirani-diplomski--footnote-spacing",
+        "checkId": "footnote-spacing",
+        "value": 1,
+        "category": "format",
+        "label": "Prored fusnota",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Biljeske (fusnote) (...) prored: 1 (razmak 0 i prije i poslije)",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-integrirani-diplomski--heading-rules",
+        "checkId": "heading-rules",
+        "value": {
+          "size": 12,
+          "align": "left",
+          "numberRequired": true,
+          "trailingDot": true,
+          "romanLevelOneAllowed": true,
+          "maxLevel": 3,
+          "levels": {
+            "1": {
+              "uppercase": true
+            },
+            "2": {
+              "bold": true
+            },
+            "3": {
+              "bold": true,
+              "italic": true
+            }
+          }
+        },
+        "category": "structure",
+        "label": "Oblikovanje naslova po razinama",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 3. Naslovi",
+        "quote": "naslov 1. razine: font 12, TISKANA SLOVA; naslov 2. razine: font 12, podebljano (bold); naslov 3. razine: font 12, podebljano i kurzivirano (bold i italik). Naslovi se poravnavaju slijeva (left aligned).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-integrirani-diplomski--page-count",
+        "checkId": "page-count",
+        "value": {
+          "target": 30
+        },
+        "category": "scope",
+        "label": "Opseg (broj stranica)",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "advisory"
+      }
+    ],
+    "pravo-javna-uprava-prijediplomski": [
+      {
+        "ruleId": "pravo-javna-uprava-prijediplomski--font",
+        "checkId": "font",
+        "value": [
+          "Times New Roman"
+        ],
+        "category": "format",
+        "label": "Font glavnog teksta",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Glavni tekst (...) font: Times New Roman",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-javna-uprava-prijediplomski--font-size",
+        "checkId": "font-size",
+        "value": [
+          12
+        ],
+        "category": "format",
+        "label": "Velicina fonta glavnog teksta",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Glavni tekst (...) velicina fonta: 12",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-javna-uprava-prijediplomski--line-spacing",
+        "checkId": "line-spacing",
+        "value": 1.5,
+        "category": "format",
+        "label": "Prored glavnog teksta",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Glavni tekst (...) prored: 1,5 (razmak 0 i prije i poslije)",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-javna-uprava-prijediplomski--margins",
+        "checkId": "margins",
+        "value": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "category": "format",
+        "label": "Margine",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "advisory"
+      },
+      {
+        "ruleId": "pravo-javna-uprava-prijediplomski--citation-style",
+        "checkId": "citation-style",
+        "value": "pravo-fusnote",
+        "category": "citation",
+        "label": "Stil citiranja",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 5. Navodenje bibliografskih podataka (citiranje)",
+        "quote": "Bibliografski podatci o koristenim izvorima navode se u biljeskama (fusnotama) koje moraju biti numerirane.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-javna-uprava-prijediplomski--required-sections",
+        "checkId": "required-sections",
+        "value": [
+          {
+            "key": "toc",
+            "label": "sadržaj",
+            "terms": [
+              "sadrzaj",
+              "contents",
+              "table of contents"
+            ]
+          },
+          {
+            "key": "intro",
+            "label": "uvod",
+            "terms": [
+              "uvod",
+              "introduction"
+            ]
+          },
+          {
+            "key": "body",
+            "label": "središnji dio",
+            "terms": [
+              "sredisnji dio",
+              "razrada",
+              "poglavlje",
+              "glava",
+              "chapter"
+            ]
+          },
+          {
+            "key": "conclusion",
+            "label": "zaključak",
+            "terms": [
+              "zakljucak",
+              "conclusion"
+            ]
+          },
+          {
+            "key": "refs",
+            "label": "izvori i literatura / bibliografija",
+            "terms": [
+              "izvori i literatura",
+              "popis izvora i literature",
+              "popis literature",
+              "bibliografija",
+              "literatura",
+              "references"
+            ]
+          }
+        ],
+        "category": "structure",
+        "label": "Obvezni dijelovi rada",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4 (obvezni dijelovi rada) i odjeljak 2 (sadrzaj)",
+        "quote": "Rad mora imati uvodni dio, sredisnji dio (s vise poglavlja i/ili potpoglavlja) te zakljucni dio. Na kraju rada treba biti popis koristenih izvora i literature (bibliografija). Nakon naslovne stranice treba biti stranica sa sadrzajem.",
+        "status": "verified",
+        "note": "Izjavu o izvornosti potkrijepiti iz Pravilnika/postupka; nije navedena u ovim Uputama.",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-javna-uprava-prijediplomski--toc",
+        "checkId": "toc",
+        "value": true,
+        "category": "structure",
+        "label": "Sadrzaj",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 2. Sadrzaj",
+        "quote": "Nakon naslovne stranice treba biti stranica sa sadrzajem.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-javna-uprava-prijediplomski--page-numbers",
+        "checkId": "page-numbers",
+        "value": true,
+        "category": "format",
+        "label": "Numeriranje stranica",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti automatski umetnut broj stranice.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-javna-uprava-prijediplomski--footnote-font",
+        "checkId": "footnote-font",
+        "value": [
+          "Times New Roman"
+        ],
+        "category": "format",
+        "label": "Font fusnota",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Biljeske (fusnote) (...) font: Times New Roman",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-javna-uprava-prijediplomski--footnote-size",
+        "checkId": "footnote-size",
+        "value": [
+          10
+        ],
+        "category": "format",
+        "label": "Velicina fusnota",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Biljeske (fusnote) (...) velicina fonta: 10",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-javna-uprava-prijediplomski--footnote-spacing",
+        "checkId": "footnote-spacing",
+        "value": 1,
+        "category": "format",
+        "label": "Prored fusnota",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Biljeske (fusnote) (...) prored: 1 (razmak 0 i prije i poslije)",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-javna-uprava-prijediplomski--heading-rules",
+        "checkId": "heading-rules",
+        "value": {
+          "size": 12,
+          "align": "left",
+          "numberRequired": true,
+          "trailingDot": true,
+          "romanLevelOneAllowed": true,
+          "maxLevel": 3,
+          "levels": {
+            "1": {
+              "uppercase": true
+            },
+            "2": {
+              "bold": true
+            },
+            "3": {
+              "bold": true,
+              "italic": true
+            }
+          }
+        },
+        "category": "structure",
+        "label": "Oblikovanje naslova po razinama",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 3. Naslovi",
+        "quote": "naslov 1. razine: font 12, TISKANA SLOVA; naslov 2. razine: font 12, podebljano (bold); naslov 3. razine: font 12, podebljano i kurzivirano (bold i italik). Naslovi se poravnavaju slijeva (left aligned).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      }
+    ],
+    "pravo-javna-uprava-diplomski": [
+      {
+        "ruleId": "pravo-javna-uprava-diplomski--font",
+        "checkId": "font",
+        "value": [
+          "Times New Roman"
+        ],
+        "category": "format",
+        "label": "Font glavnog teksta",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Glavni tekst (...) font: Times New Roman",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-javna-uprava-diplomski--font-size",
+        "checkId": "font-size",
+        "value": [
+          12
+        ],
+        "category": "format",
+        "label": "Velicina fonta glavnog teksta",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Glavni tekst (...) velicina fonta: 12",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-javna-uprava-diplomski--line-spacing",
+        "checkId": "line-spacing",
+        "value": 1.5,
+        "category": "format",
+        "label": "Prored glavnog teksta",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Glavni tekst (...) prored: 1,5 (razmak 0 i prije i poslije)",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-javna-uprava-diplomski--margins",
+        "checkId": "margins",
+        "value": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "category": "format",
+        "label": "Margine",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "advisory"
+      },
+      {
+        "ruleId": "pravo-javna-uprava-diplomski--citation-style",
+        "checkId": "citation-style",
+        "value": "pravo-fusnote",
+        "category": "citation",
+        "label": "Stil citiranja",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 5. Navodenje bibliografskih podataka (citiranje)",
+        "quote": "Bibliografski podatci o koristenim izvorima navode se u biljeskama (fusnotama) koje moraju biti numerirane.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-javna-uprava-diplomski--required-sections",
+        "checkId": "required-sections",
+        "value": [
+          {
+            "key": "toc",
+            "label": "sadržaj",
+            "terms": [
+              "sadrzaj",
+              "contents",
+              "table of contents"
+            ]
+          },
+          {
+            "key": "intro",
+            "label": "uvod",
+            "terms": [
+              "uvod",
+              "introduction"
+            ]
+          },
+          {
+            "key": "body",
+            "label": "središnji dio",
+            "terms": [
+              "sredisnji dio",
+              "razrada",
+              "poglavlje",
+              "glava",
+              "chapter"
+            ]
+          },
+          {
+            "key": "conclusion",
+            "label": "zaključak",
+            "terms": [
+              "zakljucak",
+              "conclusion"
+            ]
+          },
+          {
+            "key": "refs",
+            "label": "izvori i literatura / bibliografija",
+            "terms": [
+              "izvori i literatura",
+              "popis izvora i literature",
+              "popis literature",
+              "bibliografija",
+              "literatura",
+              "references"
+            ]
+          }
+        ],
+        "category": "structure",
+        "label": "Obvezni dijelovi rada",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4 (obvezni dijelovi rada) i odjeljak 2 (sadrzaj)",
+        "quote": "Rad mora imati uvodni dio, sredisnji dio (s vise poglavlja i/ili potpoglavlja) te zakljucni dio. Na kraju rada treba biti popis koristenih izvora i literature (bibliografija). Nakon naslovne stranice treba biti stranica sa sadrzajem.",
+        "status": "verified",
+        "note": "Izjavu o izvornosti potkrijepiti iz Pravilnika/postupka; nije navedena u ovim Uputama.",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-javna-uprava-diplomski--toc",
+        "checkId": "toc",
+        "value": true,
+        "category": "structure",
+        "label": "Sadrzaj",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 2. Sadrzaj",
+        "quote": "Nakon naslovne stranice treba biti stranica sa sadrzajem.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-javna-uprava-diplomski--page-numbers",
+        "checkId": "page-numbers",
+        "value": true,
+        "category": "format",
+        "label": "Numeriranje stranica",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti automatski umetnut broj stranice.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-javna-uprava-diplomski--footnote-font",
+        "checkId": "footnote-font",
+        "value": [
+          "Times New Roman"
+        ],
+        "category": "format",
+        "label": "Font fusnota",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Biljeske (fusnote) (...) font: Times New Roman",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-javna-uprava-diplomski--footnote-size",
+        "checkId": "footnote-size",
+        "value": [
+          10
+        ],
+        "category": "format",
+        "label": "Velicina fusnota",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Biljeske (fusnote) (...) velicina fonta: 10",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-javna-uprava-diplomski--footnote-spacing",
+        "checkId": "footnote-spacing",
+        "value": 1,
+        "category": "format",
+        "label": "Prored fusnota",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Biljeske (fusnote) (...) prored: 1 (razmak 0 i prije i poslije)",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-javna-uprava-diplomski--heading-rules",
+        "checkId": "heading-rules",
+        "value": {
+          "size": 12,
+          "align": "left",
+          "numberRequired": true,
+          "trailingDot": true,
+          "romanLevelOneAllowed": true,
+          "maxLevel": 3,
+          "levels": {
+            "1": {
+              "uppercase": true
+            },
+            "2": {
+              "bold": true
+            },
+            "3": {
+              "bold": true,
+              "italic": true
+            }
+          }
+        },
+        "category": "structure",
+        "label": "Oblikovanje naslova po razinama",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 3. Naslovi",
+        "quote": "naslov 1. razine: font 12, TISKANA SLOVA; naslov 2. razine: font 12, podebljano (bold); naslov 3. razine: font 12, podebljano i kurzivirano (bold i italik). Naslovi se poravnavaju slijeva (left aligned).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      }
+    ],
+    "pravo-porezni-prijediplomski": [
+      {
+        "ruleId": "pravo-porezni-prijediplomski--font",
+        "checkId": "font",
+        "value": [
+          "Times New Roman"
+        ],
+        "category": "format",
+        "label": "Font glavnog teksta",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Glavni tekst (...) font: Times New Roman",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-porezni-prijediplomski--font-size",
+        "checkId": "font-size",
+        "value": [
+          12
+        ],
+        "category": "format",
+        "label": "Velicina fonta glavnog teksta",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Glavni tekst (...) velicina fonta: 12",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-porezni-prijediplomski--line-spacing",
+        "checkId": "line-spacing",
+        "value": 1.5,
+        "category": "format",
+        "label": "Prored glavnog teksta",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Glavni tekst (...) prored: 1,5 (razmak 0 i prije i poslije)",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-porezni-prijediplomski--margins",
+        "checkId": "margins",
+        "value": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "category": "format",
+        "label": "Margine",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "advisory"
+      },
+      {
+        "ruleId": "pravo-porezni-prijediplomski--citation-style",
+        "checkId": "citation-style",
+        "value": "pravo-fusnote",
+        "category": "citation",
+        "label": "Stil citiranja",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 5. Navodenje bibliografskih podataka (citiranje)",
+        "quote": "Bibliografski podatci o koristenim izvorima navode se u biljeskama (fusnotama) koje moraju biti numerirane.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-porezni-prijediplomski--required-sections",
+        "checkId": "required-sections",
+        "value": [
+          {
+            "key": "toc",
+            "label": "sadržaj",
+            "terms": [
+              "sadrzaj",
+              "contents",
+              "table of contents"
+            ]
+          },
+          {
+            "key": "intro",
+            "label": "uvod",
+            "terms": [
+              "uvod",
+              "introduction"
+            ]
+          },
+          {
+            "key": "body",
+            "label": "središnji dio",
+            "terms": [
+              "sredisnji dio",
+              "razrada",
+              "poglavlje",
+              "glava",
+              "chapter"
+            ]
+          },
+          {
+            "key": "conclusion",
+            "label": "zaključak",
+            "terms": [
+              "zakljucak",
+              "conclusion"
+            ]
+          },
+          {
+            "key": "refs",
+            "label": "izvori i literatura / bibliografija",
+            "terms": [
+              "izvori i literatura",
+              "popis izvora i literature",
+              "popis literature",
+              "bibliografija",
+              "literatura",
+              "references"
+            ]
+          }
+        ],
+        "category": "structure",
+        "label": "Obvezni dijelovi rada",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4 (obvezni dijelovi rada) i odjeljak 2 (sadrzaj)",
+        "quote": "Rad mora imati uvodni dio, sredisnji dio (s vise poglavlja i/ili potpoglavlja) te zakljucni dio. Na kraju rada treba biti popis koristenih izvora i literature (bibliografija). Nakon naslovne stranice treba biti stranica sa sadrzajem.",
+        "status": "verified",
+        "note": "Izjavu o izvornosti potkrijepiti iz Pravilnika/postupka; nije navedena u ovim Uputama.",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-porezni-prijediplomski--toc",
+        "checkId": "toc",
+        "value": true,
+        "category": "structure",
+        "label": "Sadrzaj",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 2. Sadrzaj",
+        "quote": "Nakon naslovne stranice treba biti stranica sa sadrzajem.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-porezni-prijediplomski--page-numbers",
+        "checkId": "page-numbers",
+        "value": true,
+        "category": "format",
+        "label": "Numeriranje stranica",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti automatski umetnut broj stranice.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-porezni-prijediplomski--footnote-font",
+        "checkId": "footnote-font",
+        "value": [
+          "Times New Roman"
+        ],
+        "category": "format",
+        "label": "Font fusnota",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Biljeske (fusnote) (...) font: Times New Roman",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-porezni-prijediplomski--footnote-size",
+        "checkId": "footnote-size",
+        "value": [
+          10
+        ],
+        "category": "format",
+        "label": "Velicina fusnota",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Biljeske (fusnote) (...) velicina fonta: 10",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-porezni-prijediplomski--footnote-spacing",
+        "checkId": "footnote-spacing",
+        "value": 1,
+        "category": "format",
+        "label": "Prored fusnota",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Biljeske (fusnote) (...) prored: 1 (razmak 0 i prije i poslije)",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-porezni-prijediplomski--heading-rules",
+        "checkId": "heading-rules",
+        "value": {
+          "size": 12,
+          "align": "left",
+          "numberRequired": true,
+          "trailingDot": true,
+          "romanLevelOneAllowed": true,
+          "maxLevel": 3,
+          "levels": {
+            "1": {
+              "uppercase": true
+            },
+            "2": {
+              "bold": true
+            },
+            "3": {
+              "bold": true,
+              "italic": true
+            }
+          }
+        },
+        "category": "structure",
+        "label": "Oblikovanje naslova po razinama",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 3. Naslovi",
+        "quote": "naslov 1. razine: font 12, TISKANA SLOVA; naslov 2. razine: font 12, podebljano (bold); naslov 3. razine: font 12, podebljano i kurzivirano (bold i italik). Naslovi se poravnavaju slijeva (left aligned).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      }
+    ],
+    "pravo-socijalni-rad-zavrsni": [
+      {
+        "ruleId": "pravo-socijalni-rad-zavrsni--font",
+        "checkId": "font",
+        "value": [
+          "Times New Roman"
+        ],
+        "category": "format",
+        "label": "Font glavnog teksta",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalni-rad-zavrsni--font-size",
+        "checkId": "font-size",
+        "value": [
+          12
+        ],
+        "category": "format",
+        "label": "Velicina fonta glavnog teksta",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalni-rad-zavrsni--line-spacing",
+        "checkId": "line-spacing",
+        "value": 1.5,
+        "category": "format",
+        "label": "Prored glavnog teksta",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalni-rad-zavrsni--margins",
+        "checkId": "margins",
+        "value": {
+          "top": 3,
+          "right": 3,
+          "bottom": 3,
+          "left": 3.5
+        },
+        "category": "format",
+        "label": "Margine",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "advisory"
+      },
+      {
+        "ruleId": "pravo-socijalni-rad-zavrsni--citation-style",
+        "checkId": "citation-style",
+        "value": "pravo-social-author",
+        "category": "citation",
+        "label": "Stil citiranja",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalni-rad-zavrsni--required-sections",
+        "checkId": "required-sections",
+        "value": [
+          {
+            "key": "declaration",
+            "label": "izjava o izvornosti",
+            "terms": [
+              "izjava o izvornosti"
+            ]
+          },
+          {
+            "key": "toc",
+            "label": "sadržaj",
+            "terms": [
+              "sadržaj",
+              "contents"
+            ]
+          },
+          {
+            "key": "abstractHr",
+            "label": "sažetak na hrvatskom",
+            "terms": [
+              "sažetak"
+            ]
+          },
+          {
+            "key": "abstractEn",
+            "label": "abstract na engleskom",
+            "terms": [
+              "abstract"
+            ]
+          },
+          {
+            "key": "keywordsHr",
+            "label": "ključne riječi",
+            "terms": [
+              "ključne riječi"
+            ]
+          },
+          {
+            "key": "keywordsEn",
+            "label": "keywords",
+            "terms": [
+              "keywords",
+              "key words"
+            ]
+          },
+          {
+            "key": "intro",
+            "label": "uvod",
+            "terms": [
+              "uvod"
+            ]
+          },
+          {
+            "key": "conclusion",
+            "label": "zaključak",
+            "terms": [
+              "zaključak"
+            ]
+          },
+          {
+            "key": "refs",
+            "label": "literatura",
+            "terms": [
+              "literatura",
+              "references"
+            ]
+          }
+        ],
+        "category": "structure",
+        "label": "Obvezni dijelovi rada",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalni-rad-zavrsni--toc",
+        "checkId": "toc",
+        "value": true,
+        "category": "structure",
+        "label": "Sadrzaj",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalni-rad-zavrsni--page-numbers",
+        "checkId": "page-numbers",
+        "value": true,
+        "category": "format",
+        "label": "Numeriranje stranica",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalni-rad-zavrsni--paper-size",
+        "checkId": "paper-size",
+        "value": true,
+        "category": "format",
+        "label": "A4 format",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalni-rad-zavrsni--heading-rules",
+        "checkId": "heading-rules",
+        "value": {
+          "size": 12,
+          "align": "left",
+          "numberRequired": true,
+          "trailingDot": true,
+          "romanLevelOneAllowed": false,
+          "maxLevel": 5,
+          "levels": {
+            "1": {
+              "bold": true
+            },
+            "2": {
+              "italic": true
+            },
+            "3": {
+              "italic": true
+            },
+            "4": {
+              "italic": true
+            },
+            "5": {
+              "italic": true
+            }
+          }
+        },
+        "category": "structure",
+        "label": "Oblikovanje naslova po razinama",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalni-rad-zavrsni--page-count",
+        "checkId": "page-count",
+        "value": {
+          "min": 20,
+          "max": 30
+        },
+        "category": "scope",
+        "label": "Opseg (broj stranica)",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "advisory"
+      }
+    ],
+    "pravo-socijalni-rad-diplomski": [
+      {
+        "ruleId": "pravo-socijalni-rad-diplomski--font",
+        "checkId": "font",
+        "value": [
+          "Times New Roman"
+        ],
+        "category": "format",
+        "label": "Font glavnog teksta",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalni-rad-diplomski--font-size",
+        "checkId": "font-size",
+        "value": [
+          12
+        ],
+        "category": "format",
+        "label": "Velicina fonta glavnog teksta",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalni-rad-diplomski--line-spacing",
+        "checkId": "line-spacing",
+        "value": 1.5,
+        "category": "format",
+        "label": "Prored glavnog teksta",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalni-rad-diplomski--margins",
+        "checkId": "margins",
+        "value": {
+          "top": 3,
+          "right": 3,
+          "bottom": 3,
+          "left": 3.5
+        },
+        "category": "format",
+        "label": "Margine",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "advisory"
+      },
+      {
+        "ruleId": "pravo-socijalni-rad-diplomski--citation-style",
+        "checkId": "citation-style",
+        "value": "pravo-social-author",
+        "category": "citation",
+        "label": "Stil citiranja",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalni-rad-diplomski--required-sections",
+        "checkId": "required-sections",
+        "value": [
+          {
+            "key": "declaration",
+            "label": "izjava o izvornosti",
+            "terms": [
+              "izjava o izvornosti"
+            ]
+          },
+          {
+            "key": "toc",
+            "label": "sadržaj",
+            "terms": [
+              "sadržaj",
+              "contents"
+            ]
+          },
+          {
+            "key": "abstractHr",
+            "label": "sažetak na hrvatskom",
+            "terms": [
+              "sažetak"
+            ]
+          },
+          {
+            "key": "abstractEn",
+            "label": "abstract na engleskom",
+            "terms": [
+              "abstract"
+            ]
+          },
+          {
+            "key": "keywordsHr",
+            "label": "ključne riječi",
+            "terms": [
+              "ključne riječi"
+            ]
+          },
+          {
+            "key": "keywordsEn",
+            "label": "keywords",
+            "terms": [
+              "keywords",
+              "key words"
+            ]
+          },
+          {
+            "key": "intro",
+            "label": "uvod",
+            "terms": [
+              "uvod"
+            ]
+          },
+          {
+            "key": "conclusion",
+            "label": "zaključak",
+            "terms": [
+              "zaključak"
+            ]
+          },
+          {
+            "key": "refs",
+            "label": "literatura",
+            "terms": [
+              "literatura",
+              "references"
+            ]
+          }
+        ],
+        "category": "structure",
+        "label": "Obvezni dijelovi rada",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalni-rad-diplomski--toc",
+        "checkId": "toc",
+        "value": true,
+        "category": "structure",
+        "label": "Sadrzaj",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalni-rad-diplomski--page-numbers",
+        "checkId": "page-numbers",
+        "value": true,
+        "category": "format",
+        "label": "Numeriranje stranica",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalni-rad-diplomski--paper-size",
+        "checkId": "paper-size",
+        "value": true,
+        "category": "format",
+        "label": "A4 format",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalni-rad-diplomski--heading-rules",
+        "checkId": "heading-rules",
+        "value": {
+          "size": 12,
+          "align": "left",
+          "numberRequired": true,
+          "trailingDot": true,
+          "romanLevelOneAllowed": false,
+          "maxLevel": 5,
+          "levels": {
+            "1": {
+              "bold": true
+            },
+            "2": {
+              "italic": true
+            },
+            "3": {
+              "italic": true
+            },
+            "4": {
+              "italic": true
+            },
+            "5": {
+              "italic": true
+            }
+          }
+        },
+        "category": "structure",
+        "label": "Oblikovanje naslova po razinama",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalni-rad-diplomski--page-count",
+        "checkId": "page-count",
+        "value": {
+          "min": 30,
+          "max": 60
+        },
+        "category": "scope",
+        "label": "Opseg (broj stranica)",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "advisory"
+      }
+    ],
+    "pravo-socijalna-politika-diplomski": [
+      {
+        "ruleId": "pravo-socijalna-politika-diplomski--font",
+        "checkId": "font",
+        "value": [
+          "Times New Roman"
+        ],
+        "category": "format",
+        "label": "Font glavnog teksta",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalna-politika-diplomski--font-size",
+        "checkId": "font-size",
+        "value": [
+          12
+        ],
+        "category": "format",
+        "label": "Velicina fonta glavnog teksta",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalna-politika-diplomski--line-spacing",
+        "checkId": "line-spacing",
+        "value": 1.5,
+        "category": "format",
+        "label": "Prored glavnog teksta",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalna-politika-diplomski--margins",
+        "checkId": "margins",
+        "value": {
+          "top": 3,
+          "right": 3,
+          "bottom": 3,
+          "left": 3.5
+        },
+        "category": "format",
+        "label": "Margine",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "advisory"
+      },
+      {
+        "ruleId": "pravo-socijalna-politika-diplomski--citation-style",
+        "checkId": "citation-style",
+        "value": "pravo-social-author",
+        "category": "citation",
+        "label": "Stil citiranja",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalna-politika-diplomski--required-sections",
+        "checkId": "required-sections",
+        "value": [
+          {
+            "key": "declaration",
+            "label": "izjava o izvornosti",
+            "terms": [
+              "izjava o izvornosti"
+            ]
+          },
+          {
+            "key": "toc",
+            "label": "sadržaj",
+            "terms": [
+              "sadržaj",
+              "contents"
+            ]
+          },
+          {
+            "key": "abstractHr",
+            "label": "sažetak na hrvatskom",
+            "terms": [
+              "sažetak"
+            ]
+          },
+          {
+            "key": "abstractEn",
+            "label": "abstract na engleskom",
+            "terms": [
+              "abstract"
+            ]
+          },
+          {
+            "key": "keywordsHr",
+            "label": "ključne riječi",
+            "terms": [
+              "ključne riječi"
+            ]
+          },
+          {
+            "key": "keywordsEn",
+            "label": "keywords",
+            "terms": [
+              "keywords",
+              "key words"
+            ]
+          },
+          {
+            "key": "intro",
+            "label": "uvod",
+            "terms": [
+              "uvod"
+            ]
+          },
+          {
+            "key": "conclusion",
+            "label": "zaključak",
+            "terms": [
+              "zaključak"
+            ]
+          },
+          {
+            "key": "refs",
+            "label": "literatura",
+            "terms": [
+              "literatura",
+              "references"
+            ]
+          }
+        ],
+        "category": "structure",
+        "label": "Obvezni dijelovi rada",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalna-politika-diplomski--toc",
+        "checkId": "toc",
+        "value": true,
+        "category": "structure",
+        "label": "Sadrzaj",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalna-politika-diplomski--page-numbers",
+        "checkId": "page-numbers",
+        "value": true,
+        "category": "format",
+        "label": "Numeriranje stranica",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalna-politika-diplomski--paper-size",
+        "checkId": "paper-size",
+        "value": true,
+        "category": "format",
+        "label": "A4 format",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalna-politika-diplomski--heading-rules",
+        "checkId": "heading-rules",
+        "value": {
+          "size": 12,
+          "align": "left",
+          "numberRequired": true,
+          "trailingDot": true,
+          "romanLevelOneAllowed": false,
+          "maxLevel": 5,
+          "levels": {
+            "1": {
+              "bold": true
+            },
+            "2": {
+              "italic": true
+            },
+            "3": {
+              "italic": true
+            },
+            "4": {
+              "italic": true
+            },
+            "5": {
+              "italic": true
+            }
+          }
+        },
+        "category": "structure",
+        "label": "Oblikovanje naslova po razinama",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalna-politika-diplomski--page-count",
+        "checkId": "page-count",
+        "value": {
+          "min": 30,
+          "max": 60
+        },
+        "category": "scope",
+        "label": "Opseg (broj stranica)",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "advisory"
+      }
+    ],
+    "pravo-opci-pravni-akademski-rad": [
+      {
+        "ruleId": "pravo-opci-pravni-akademski-rad--font",
+        "checkId": "font",
+        "value": [
+          "Times New Roman"
+        ],
+        "category": "format",
+        "label": "Font glavnog teksta",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Glavni tekst (...) font: Times New Roman",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-opci-pravni-akademski-rad--font-size",
+        "checkId": "font-size",
+        "value": [
+          12
+        ],
+        "category": "format",
+        "label": "Velicina fonta glavnog teksta",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Glavni tekst (...) velicina fonta: 12",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-opci-pravni-akademski-rad--line-spacing",
+        "checkId": "line-spacing",
+        "value": 1.5,
+        "category": "format",
+        "label": "Prored glavnog teksta",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Glavni tekst (...) prored: 1,5 (razmak 0 i prije i poslije)",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-opci-pravni-akademski-rad--margins",
+        "checkId": "margins",
+        "value": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "category": "format",
+        "label": "Margine",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "advisory"
+      },
+      {
+        "ruleId": "pravo-opci-pravni-akademski-rad--citation-style",
+        "checkId": "citation-style",
+        "value": "pravo-fusnote",
+        "category": "citation",
+        "label": "Stil citiranja",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 5. Navodenje bibliografskih podataka (citiranje)",
+        "quote": "Bibliografski podatci o koristenim izvorima navode se u biljeskama (fusnotama) koje moraju biti numerirane.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-opci-pravni-akademski-rad--required-sections",
+        "checkId": "required-sections",
+        "value": [],
+        "category": "structure",
+        "label": "Obvezni dijelovi rada",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Rad mora imati uvodni dio, sredisnji dio (s vise poglavlja i/ili potpoglavlja) te zakljucni dio. Na kraju rada treba biti popis koristenih izvora i literature (bibliografija).",
+        "status": "draft",
+        "note": "Izjavu o izvornosti potkrijepiti iz Pravilnika/postupka; nije navedena u ovim Uputama."
+      },
+      {
+        "ruleId": "pravo-opci-pravni-akademski-rad--footnote-font",
+        "checkId": "footnote-font",
+        "value": [
+          "Times New Roman"
+        ],
+        "category": "format",
+        "label": "Font fusnota",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Biljeske (fusnote) (...) font: Times New Roman",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-opci-pravni-akademski-rad--footnote-size",
+        "checkId": "footnote-size",
+        "value": [
+          10
+        ],
+        "category": "format",
+        "label": "Velicina fusnota",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Biljeske (fusnote) (...) velicina fonta: 10",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-opci-pravni-akademski-rad--footnote-spacing",
+        "checkId": "footnote-spacing",
+        "value": 1,
+        "category": "format",
+        "label": "Prored fusnota",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Biljeske (fusnote) (...) prored: 1 (razmak 0 i prije i poslije)",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      }
+    ],
+    "pravo-socijalni-opci-akademski-rad": [
+      {
+        "ruleId": "pravo-socijalni-opci-akademski-rad--font",
+        "checkId": "font",
+        "value": [
+          "Times New Roman"
+        ],
+        "category": "format",
+        "label": "Font glavnog teksta",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalni-opci-akademski-rad--font-size",
+        "checkId": "font-size",
+        "value": [
+          12
+        ],
+        "category": "format",
+        "label": "Velicina fonta glavnog teksta",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalni-opci-akademski-rad--line-spacing",
+        "checkId": "line-spacing",
+        "value": 1.5,
+        "category": "format",
+        "label": "Prored glavnog teksta",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalni-opci-akademski-rad--margins",
+        "checkId": "margins",
+        "value": {
+          "top": 3,
+          "right": 3,
+          "bottom": 3,
+          "left": 3.5
+        },
+        "category": "format",
+        "label": "Margine",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "advisory"
+      },
+      {
+        "ruleId": "pravo-socijalni-opci-akademski-rad--citation-style",
+        "checkId": "citation-style",
+        "value": "pravo-social-author",
+        "category": "citation",
+        "label": "Stil citiranja",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalni-opci-akademski-rad--required-sections",
+        "checkId": "required-sections",
+        "value": [],
+        "category": "structure",
+        "label": "Obvezni dijelovi rada",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalni-opci-akademski-rad--paper-size",
+        "checkId": "paper-size",
+        "value": true,
+        "category": "format",
+        "label": "A4 format",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      }
+    ],
+    "pravo-specijalisticki-pravni-opci": [
+      {
+        "ruleId": "pravo-specijalisticki-pravni-opci--font",
+        "checkId": "font",
+        "value": [
+          "Times New Roman"
+        ],
+        "category": "format",
+        "label": "Font glavnog teksta",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Glavni tekst (...) font: Times New Roman",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-specijalisticki-pravni-opci--font-size",
+        "checkId": "font-size",
+        "value": [
+          12
+        ],
+        "category": "format",
+        "label": "Velicina fonta glavnog teksta",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Glavni tekst (...) velicina fonta: 12",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-specijalisticki-pravni-opci--line-spacing",
+        "checkId": "line-spacing",
+        "value": 1.5,
+        "category": "format",
+        "label": "Prored glavnog teksta",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Glavni tekst (...) prored: 1,5 (razmak 0 i prije i poslije)",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-specijalisticki-pravni-opci--margins",
+        "checkId": "margins",
+        "value": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "category": "format",
+        "label": "Margine",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "advisory"
+      },
+      {
+        "ruleId": "pravo-specijalisticki-pravni-opci--citation-style",
+        "checkId": "citation-style",
+        "value": "pravo-fusnote",
+        "category": "citation",
+        "label": "Stil citiranja",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 5. Navodenje bibliografskih podataka (citiranje)",
+        "quote": "Bibliografski podatci o koristenim izvorima navode se u biljeskama (fusnotama) koje moraju biti numerirane.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-specijalisticki-pravni-opci--required-sections",
+        "checkId": "required-sections",
+        "value": [],
+        "category": "structure",
+        "label": "Obvezni dijelovi rada",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Rad mora imati uvodni dio, sredisnji dio (s vise poglavlja i/ili potpoglavlja) te zakljucni dio. Na kraju rada treba biti popis koristenih izvora i literature (bibliografija).",
+        "status": "draft",
+        "note": "Izjavu o izvornosti potkrijepiti iz Pravilnika/postupka; nije navedena u ovim Uputama."
+      }
+    ],
+    "pravo-doktorski-pravne-znanosti": [
+      {
+        "ruleId": "pravo-doktorski-pravne-znanosti--font",
+        "checkId": "font",
+        "value": [
+          "Times New Roman"
+        ],
+        "category": "format",
+        "label": "Font glavnog teksta",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Glavni tekst (...) font: Times New Roman",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-doktorski-pravne-znanosti--font-size",
+        "checkId": "font-size",
+        "value": [
+          12
+        ],
+        "category": "format",
+        "label": "Velicina fonta glavnog teksta",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Glavni tekst (...) velicina fonta: 12",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-doktorski-pravne-znanosti--line-spacing",
+        "checkId": "line-spacing",
+        "value": 1.5,
+        "category": "format",
+        "label": "Prored glavnog teksta",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Glavni tekst (...) prored: 1,5 (razmak 0 i prije i poslije)",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-doktorski-pravne-znanosti--margins",
+        "checkId": "margins",
+        "value": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "category": "format",
+        "label": "Margine",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "advisory"
+      },
+      {
+        "ruleId": "pravo-doktorski-pravne-znanosti--citation-style",
+        "checkId": "citation-style",
+        "value": "pravo-fusnote",
+        "category": "citation",
+        "label": "Stil citiranja",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 5. Navodenje bibliografskih podataka (citiranje)",
+        "quote": "Bibliografski podatci o koristenim izvorima navode se u biljeskama (fusnotama) koje moraju biti numerirane.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-3pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-doktorski-pravne-znanosti--required-sections",
+        "checkId": "required-sections",
+        "value": [],
+        "category": "structure",
+        "label": "Obvezni dijelovi rada",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Rad mora imati uvodni dio, sredisnji dio (s vise poglavlja i/ili potpoglavlja) te zakljucni dio. Na kraju rada treba biti popis koristenih izvora i literature (bibliografija).",
+        "status": "draft",
+        "note": "Izjavu o izvornosti potkrijepiti iz Pravilnika/postupka; nije navedena u ovim Uputama."
+      }
+    ],
+    "pravo-socijalne-djelatnosti-specijalisticki": [
+      {
+        "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--font",
+        "checkId": "font",
+        "value": [
+          "Times New Roman",
+          "Arial"
+        ],
+        "category": "format",
+        "label": "Font glavnog teksta",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--font-size",
+        "checkId": "font-size",
+        "value": [
+          12
+        ],
+        "category": "format",
+        "label": "Velicina fonta glavnog teksta",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--line-spacing",
+        "checkId": "line-spacing",
+        "value": 1.5,
+        "category": "format",
+        "label": "Prored glavnog teksta",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--margins",
+        "checkId": "margins",
+        "value": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "category": "format",
+        "label": "Margine",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "advisory"
+      },
+      {
+        "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--citation-style",
+        "checkId": "citation-style",
+        "value": "pravo-social-author",
+        "category": "citation",
+        "label": "Stil citiranja",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--required-sections",
+        "checkId": "required-sections",
+        "value": [
+          {
+            "key": "toc",
+            "label": "sadržaj",
+            "terms": [
+              "sadržaj",
+              "contents",
+              "table of contents"
+            ]
+          },
+          {
+            "key": "intro",
+            "label": "uvod",
+            "terms": [
+              "uvod",
+              "introduction"
+            ]
+          },
+          {
+            "key": "conclusion",
+            "label": "zaključak",
+            "terms": [
+              "zaključak",
+              "conclusion"
+            ]
+          },
+          {
+            "key": "refs",
+            "label": "literatura",
+            "terms": [
+              "literatura",
+              "popis literature",
+              "bibliografija",
+              "references"
+            ]
+          }
+        ],
+        "category": "structure",
+        "label": "Obvezni dijelovi rada",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--toc",
+        "checkId": "toc",
+        "value": true,
+        "category": "structure",
+        "label": "Sadrzaj",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--page-numbers",
+        "checkId": "page-numbers",
+        "value": true,
+        "category": "format",
+        "label": "Numeriranje stranica",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--word-count",
+        "checkId": "word-count",
+        "value": {
+          "min": 20000,
+          "max": 25000
+        },
+        "category": "scope",
+        "label": "Opseg (broj rijeci)",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "advisory"
+      }
+    ],
+    "pravo-socijalne-djelatnosti-doktorski": [
+      {
+        "ruleId": "pravo-socijalne-djelatnosti-doktorski--font",
+        "checkId": "font",
+        "value": [
+          "Times New Roman",
+          "Arial"
+        ],
+        "category": "format",
+        "label": "Font glavnog teksta",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalne-djelatnosti-doktorski--font-size",
+        "checkId": "font-size",
+        "value": [
+          12
+        ],
+        "category": "format",
+        "label": "Velicina fonta glavnog teksta",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalne-djelatnosti-doktorski--line-spacing",
+        "checkId": "line-spacing",
+        "value": 1.5,
+        "category": "format",
+        "label": "Prored glavnog teksta",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalne-djelatnosti-doktorski--margins",
+        "checkId": "margins",
+        "value": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "category": "format",
+        "label": "Margine",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "advisory"
+      },
+      {
+        "ruleId": "pravo-socijalne-djelatnosti-doktorski--citation-style",
+        "checkId": "citation-style",
+        "value": "pravo-social-author",
+        "category": "citation",
+        "label": "Stil citiranja",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalne-djelatnosti-doktorski--required-sections",
+        "checkId": "required-sections",
+        "value": [
+          {
+            "key": "abstractHr",
+            "label": "sažetak na hrvatskom",
+            "terms": [
+              "sažetak"
+            ]
+          },
+          {
+            "key": "abstractEn",
+            "label": "abstract na engleskom",
+            "terms": [
+              "abstract",
+              "summary"
+            ]
+          },
+          {
+            "key": "toc",
+            "label": "sadržaj",
+            "terms": [
+              "sadržaj",
+              "contents",
+              "table of contents"
+            ]
+          },
+          {
+            "key": "intro",
+            "label": "uvod",
+            "terms": [
+              "uvod",
+              "introduction"
+            ]
+          },
+          {
+            "key": "conclusion",
+            "label": "zaključak",
+            "terms": [
+              "zaključak",
+              "conclusion"
+            ]
+          },
+          {
+            "key": "refs",
+            "label": "literatura",
+            "terms": [
+              "literatura",
+              "popis literature",
+              "bibliografija",
+              "references"
+            ]
+          }
+        ],
+        "category": "structure",
+        "label": "Obvezni dijelovi rada",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalne-djelatnosti-doktorski--toc",
+        "checkId": "toc",
+        "value": true,
+        "category": "structure",
+        "label": "Sadrzaj",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalne-djelatnosti-doktorski--page-numbers",
+        "checkId": "page-numbers",
+        "value": true,
+        "category": "format",
+        "label": "Numeriranje stranica",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "pravo-socijalne-djelatnosti-doktorski--word-count",
+        "checkId": "word-count",
+        "value": {
+          "min": 45000,
+          "max": 60000
+        },
+        "category": "scope",
+        "label": "Opseg (broj rijeci)",
+        "machineCheckable": true,
+        "sourceId": null,
+        "sourcePage": null,
+        "quote": null,
+        "status": "advisory"
+      }
+    ],
+    "trgovacko-pravo": [
+      {
+        "ruleId": "trgovacko-pravo--required-sections",
+        "checkId": "required-sections",
+        "value": [
+          {
+            "key": "toc",
+            "label": "sadržaj",
+            "terms": [
+              "sadržaj"
+            ]
+          },
+          {
+            "key": "intro",
+            "label": "uvod",
+            "terms": [
+              "uvod"
+            ]
+          },
+          {
+            "key": "conclusion",
+            "label": "zaključak",
+            "terms": [
+              "zaključak"
+            ]
+          },
+          {
+            "key": "refs",
+            "label": "popis literature i pravnih izvora",
+            "terms": [
+              "popis literature",
+              "izvori i literatura",
+              "literatura",
+              "bibliografija"
+            ]
+          },
+          {
+            "key": "abbr",
+            "label": "popis kratica",
+            "terms": [
+              "popis kratica",
+              "kratice"
+            ]
+          }
+        ],
+        "category": "structure",
+        "label": "Obvezni dijelovi rada",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-katedra-trgovacko-upute",
+        "sourcePage": "str. 1, odjeljak STRUKTURA",
+        "quote": "Rad je nuzno strukturirati tako da sadrzi uvod, sredisnji dio rada, zakljucak te popis literature. Prije uvoda nalazi se sadrzaj rada. Prije uvoda potrebno je navesti popis koristenih kratica.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "341a8e574ffba61c8ba49f79c89bb2162f29ff2903c77bd21d2a5d23b2fe8092"
+      },
+      {
+        "ruleId": "trgovacko-pravo--toc",
+        "checkId": "toc",
+        "value": true,
+        "category": "structure",
+        "label": "Sadrzaj",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-katedra-trgovacko-upute",
+        "sourcePage": "str. 1, odjeljak STRUKTURA",
+        "quote": "Prije uvoda nalazi se sadrzaj rada sa svim poglavljima i oznacenim brojem stranica za svako poglavlje.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "341a8e574ffba61c8ba49f79c89bb2162f29ff2903c77bd21d2a5d23b2fe8092"
+      },
+      {
+        "ruleId": "trgovacko-pravo--page-numbers",
+        "checkId": "page-numbers",
+        "value": true,
+        "category": "format",
+        "label": "Numeriranje stranica",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-katedra-trgovacko-upute",
+        "sourcePage": "str. 2, odjeljak FONT, PRORED I DRUGE FORMALNOSTI",
+        "quote": "Stranice Rada moraju biti numerirane na doljnjem desnom rubu stranice (naslovna stranica se ne numerira).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "341a8e574ffba61c8ba49f79c89bb2162f29ff2903c77bd21d2a5d23b2fe8092"
+      },
+      {
+        "ruleId": "trgovacko-pravo--footnote-font",
+        "checkId": "footnote-font",
+        "value": [
+          "Times New Roman"
+        ],
+        "category": "format",
+        "label": "Font fusnota",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-katedra-trgovacko-upute",
+        "sourcePage": "str. 2, odjeljak FONT, PRORED (font fusnota implicitno)",
+        "quote": "Rad se pise upotrebom fonta Times New Roman velicine 12 s proredom 1,5; velicina fonta u biljeskama iznosi 10.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "341a8e574ffba61c8ba49f79c89bb2162f29ff2903c77bd21d2a5d23b2fe8092"
+      },
+      {
+        "ruleId": "trgovacko-pravo--footnote-size",
+        "checkId": "footnote-size",
+        "value": [
+          10
+        ],
+        "category": "format",
+        "label": "Velicina fusnota",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-katedra-trgovacko-upute",
+        "sourcePage": "str. 2, odjeljak FONT, PRORED",
+        "quote": "Velicina fonta u biljeskama iznosi 10 s proredom 1,15 izmedu redova teksta.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "341a8e574ffba61c8ba49f79c89bb2162f29ff2903c77bd21d2a5d23b2fe8092"
+      },
+      {
+        "ruleId": "trgovacko-pravo--footnote-spacing",
+        "checkId": "footnote-spacing",
+        "value": 1.15,
+        "category": "format",
+        "label": "Prored fusnota",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-katedra-trgovacko-upute",
+        "sourcePage": "str. 2, odjeljak FONT, PRORED",
+        "quote": "Velicina fonta u biljeskama iznosi 10 s proredom 1,15 izmedu redova teksta.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "341a8e574ffba61c8ba49f79c89bb2162f29ff2903c77bd21d2a5d23b2fe8092"
+      }
+    ],
+    "radno-socijalno-pravo": [
+      {
+        "ruleId": "radno-socijalno-pravo--toc",
+        "checkId": "toc",
+        "value": true,
+        "category": "structure",
+        "label": "Sadrzaj",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-katedra-radno-socijalno-upute-2021",
+        "sourcePage": "str. 2, odjeljak 1 (Opce napomene)",
+        "quote": "Svi radovi moraju imati sadrzaj, uvod, razradu teme po smislenim cjelinama i zakljucak.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "c37e637935f230e0e47c213fe7147a32b845352ef3a22beb63f0e1a4036971c1"
+      },
+      {
+        "ruleId": "radno-socijalno-pravo--page-numbers",
+        "checkId": "page-numbers",
+        "value": true,
+        "category": "format",
+        "label": "Numeriranje stranica",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-katedra-radno-socijalno-upute-2021",
+        "sourcePage": "str. 3, odjeljak 2",
+        "quote": "Stranice trebaju biti oznacene arapskim brojevima (dolje desno), pri cemu se prva brojcana oznaka stavlja na prvu stranicu uvoda.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "c37e637935f230e0e47c213fe7147a32b845352ef3a22beb63f0e1a4036971c1"
+      },
+      {
+        "ruleId": "radno-socijalno-pravo--footnote-font",
+        "checkId": "footnote-font",
+        "value": [
+          "Times New Roman"
+        ],
+        "category": "format",
+        "label": "Font fusnota",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-katedra-radno-socijalno-upute-2021",
+        "sourcePage": "str. 3, odjeljak 2 (font fusnota implicitno)",
+        "quote": "Tip slova Times New Roman; za tekst u biljeskama velicina slova 10.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "c37e637935f230e0e47c213fe7147a32b845352ef3a22beb63f0e1a4036971c1"
+      },
+      {
+        "ruleId": "radno-socijalno-pravo--footnote-size",
+        "checkId": "footnote-size",
+        "value": [
+          10
+        ],
+        "category": "format",
+        "label": "Velicina fusnota",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-katedra-radno-socijalno-upute-2021",
+        "sourcePage": "str. 3, odjeljak 2",
+        "quote": "Za tekst u biljeskama (fusnotama) potrebno je koristiti velicinu slova 10.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "c37e637935f230e0e47c213fe7147a32b845352ef3a22beb63f0e1a4036971c1"
+      },
+      {
+        "ruleId": "radno-socijalno-pravo--footnote-spacing",
+        "checkId": "footnote-spacing",
+        "value": 1,
+        "category": "format",
+        "label": "Prored fusnota",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-katedra-radno-socijalno-upute-2021",
+        "sourcePage": "str. 3, odjeljak 2 (bez proreda = jednostruki)",
+        "quote": "Za tekst u biljeskama potrebno je koristiti velicinu slova 10, bez proreda i razmaka nakon svake biljeske.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-06-30",
+        "verifiedHash": "c37e637935f230e0e47c213fe7147a32b845352ef3a22beb63f0e1a4036971c1"
+      },
+      {
+        "ruleId": "radno-socijalno-pravo--heading-rules",
+        "checkId": "heading-rules",
+        "value": {
+          "size": 12,
+          "align": "left",
+          "numberRequired": true,
+          "trailingDot": true,
+          "romanLevelOneAllowed": false,
+          "maxLevel": 3,
+          "levels": {
+            "1": {
+              "uppercase": true
+            },
+            "2": {},
+            "3": {}
+          }
+        },
+        "category": "structure",
+        "label": "Oblikovanje naslova po razinama",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-katedra-radno-socijalno-upute-2021",
+        "sourcePage": null,
+        "quote": null,
+        "status": "needs-recheck"
+      }
+    ],
+    "sociologija": [
+      {
+        "ruleId": "sociologija--font",
+        "checkId": "font",
+        "value": [
+          "Times New Roman"
+        ],
+        "category": "format",
+        "label": "Font glavnog teksta",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-katedra-sociologija-upute",
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "sociologija--font-size",
+        "checkId": "font-size",
+        "value": [
+          12
+        ],
+        "category": "format",
+        "label": "Velicina fonta glavnog teksta",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-katedra-sociologija-upute",
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "sociologija--line-spacing",
+        "checkId": "line-spacing",
+        "value": 1.5,
+        "category": "format",
+        "label": "Prored glavnog teksta",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-katedra-sociologija-upute",
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "sociologija--required-sections",
+        "checkId": "required-sections",
+        "value": [
+          {
+            "key": "toc",
+            "label": "kratak sadržaj",
+            "terms": [
+              "sadržaj",
+              "kratak sadržaj"
+            ]
+          },
+          {
+            "key": "intro",
+            "label": "uvod",
+            "terms": [
+              "uvod"
+            ]
+          },
+          {
+            "key": "conclusion",
+            "label": "zaključak",
+            "terms": [
+              "zaključak"
+            ]
+          },
+          {
+            "key": "refs",
+            "label": "popis literature",
+            "terms": [
+              "literatura",
+              "popis literature"
+            ]
+          }
+        ],
+        "category": "structure",
+        "label": "Obvezni dijelovi rada",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-katedra-sociologija-upute",
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "sociologija--toc",
+        "checkId": "toc",
+        "value": true,
+        "category": "structure",
+        "label": "Sadrzaj",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-katedra-sociologija-upute",
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      },
+      {
+        "ruleId": "sociologija--page-numbers",
+        "checkId": "page-numbers",
+        "value": true,
+        "category": "format",
+        "label": "Numeriranje stranica",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "pravo-katedra-sociologija-upute",
+        "sourcePage": null,
+        "quote": null,
+        "status": "draft"
+      }
+    ]
+  }
+}
