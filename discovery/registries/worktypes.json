@@ -1,0 +1,216 @@
+[
+  {
+    "id": "fpzg-ba-politologija-final",
+    "programId": "fpzg-ba-politologija",
+    "workType": "final",
+    "documentType": "final"
+  },
+  {
+    "id": "fpzg-ba-novinarstvo-final",
+    "programId": "fpzg-ba-novinarstvo",
+    "workType": "final",
+    "documentType": "final",
+    "note": "Za završni rad moraju ostati odvojene tekstualna i audiovizualna varijanta."
+  },
+  {
+    "id": "fpzg-ba-vvu-final",
+    "programId": "fpzg-ba-vvu",
+    "workType": "final",
+    "documentType": "final",
+    "note": "FPZG je izvoditelj, a studij se izvodi na Hrvatskom vojnom učilištu; pravila završetka treba razgraničiti između ustanova."
+  },
+  {
+    "id": "fpzg-ma-politologija-graduate",
+    "programId": "fpzg-ma-politologija",
+    "workType": "graduate",
+    "documentType": "graduate"
+  },
+  {
+    "id": "fpzg-ma-nacionalna-graduate",
+    "programId": "fpzg-ma-nacionalna",
+    "workType": "graduate",
+    "documentType": "graduate"
+  },
+  {
+    "id": "fpzg-ma-novinarstvo-graduate",
+    "programId": "fpzg-ma-novinarstvo",
+    "workType": "graduate",
+    "documentType": "graduate"
+  },
+  {
+    "id": "fpzg-ma-mes-graduate",
+    "programId": "fpzg-ma-mes",
+    "workType": "graduate",
+    "documentType": "graduate"
+  },
+  {
+    "id": "fpzg-spec-pr-specialist",
+    "programId": "fpzg-spec-pr",
+    "workType": "specialist",
+    "documentType": "specialist"
+  },
+  {
+    "id": "fpzg-spec-eu-specialist",
+    "programId": "fpzg-spec-eu",
+    "workType": "specialist",
+    "documentType": "specialist"
+  },
+  {
+    "id": "fpzg-spec-sigurnost-specialist",
+    "programId": "fpzg-spec-sigurnost",
+    "workType": "specialist",
+    "documentType": "specialist"
+  },
+  {
+    "id": "fpzg-spec-diplomacija-specialist",
+    "programId": "fpzg-spec-diplomacija",
+    "workType": "specialist",
+    "documentType": "specialist"
+  },
+  {
+    "id": "fpzg-phd-politologija-doctoral",
+    "programId": "fpzg-phd-politologija",
+    "workType": "doctoral",
+    "documentType": "doctoral"
+  },
+  {
+    "id": "fpzg-joint-se-graduate",
+    "programId": "fpzg-joint-se",
+    "workType": "graduate",
+    "documentType": "graduate",
+    "note": "FPZG je partnerska ustanova; završni rad i predaja moraju slijediti pravila konzorcija i matičnog sveučilišta."
+  },
+  {
+    "id": "pravo-integrirani-graduate",
+    "programId": "pravo-integrirani",
+    "workType": "graduate",
+    "documentType": "graduate"
+  },
+  {
+    "id": "pravo-ba-socijalni-final",
+    "programId": "pravo-ba-socijalni",
+    "workType": "final",
+    "documentType": "final"
+  },
+  {
+    "id": "pravo-ba-uprava-final",
+    "programId": "pravo-ba-uprava",
+    "workType": "final",
+    "documentType": "final"
+  },
+  {
+    "id": "pravo-ba-porezni-final",
+    "programId": "pravo-ba-porezni",
+    "workType": "final",
+    "documentType": "final"
+  },
+  {
+    "id": "pravo-ma-socijalni-graduate",
+    "programId": "pravo-ma-socijalni",
+    "workType": "graduate",
+    "documentType": "graduate"
+  },
+  {
+    "id": "pravo-ma-politika-graduate",
+    "programId": "pravo-ma-politika",
+    "workType": "graduate",
+    "documentType": "graduate"
+  },
+  {
+    "id": "pravo-ma-uprava-graduate",
+    "programId": "pravo-ma-uprava",
+    "workType": "graduate",
+    "documentType": "graduate"
+  },
+  {
+    "id": "pravo-spec-europsko-pravo-specialist",
+    "programId": "pravo-spec-europsko-pravo",
+    "workType": "specialist",
+    "documentType": "specialist"
+  },
+  {
+    "id": "pravo-spec-gradjansko-obiteljsko-specialist",
+    "programId": "pravo-spec-gradjansko-obiteljsko",
+    "workType": "specialist",
+    "documentType": "specialist"
+  },
+  {
+    "id": "pravo-spec-kaznenopravne-specialist",
+    "programId": "pravo-spec-kaznenopravne",
+    "workType": "specialist",
+    "documentType": "specialist"
+  },
+  {
+    "id": "pravo-spec-fiskalni-specialist",
+    "programId": "pravo-spec-fiskalni",
+    "workType": "specialist",
+    "documentType": "specialist"
+  },
+  {
+    "id": "pravo-spec-javno-pravo-uprava-specialist",
+    "programId": "pravo-spec-javno-pravo-uprava",
+    "workType": "specialist",
+    "documentType": "specialist"
+  },
+  {
+    "id": "pravo-spec-medjunarodno-specialist",
+    "programId": "pravo-spec-medjunarodno",
+    "workType": "specialist",
+    "documentType": "specialist"
+  },
+  {
+    "id": "pravo-spec-drustva-trgovacko-specialist",
+    "programId": "pravo-spec-drustva-trgovacko",
+    "workType": "specialist",
+    "documentType": "specialist"
+  },
+  {
+    "id": "pravo-spec-obiteljska-medijacija-specialist",
+    "programId": "pravo-spec-obiteljska-medijacija",
+    "workType": "specialist",
+    "documentType": "specialist"
+  },
+  {
+    "id": "pravo-spec-psihosocijalni-specialist",
+    "programId": "pravo-spec-psihosocijalni",
+    "workType": "specialist",
+    "documentType": "specialist"
+  },
+  {
+    "id": "pravo-spec-socijalna-politika-specialist",
+    "programId": "pravo-spec-socijalna-politika",
+    "workType": "specialist",
+    "documentType": "specialist"
+  },
+  {
+    "id": "pravo-spec-supervizija-specialist",
+    "programId": "pravo-spec-supervizija",
+    "workType": "specialist",
+    "documentType": "specialist"
+  },
+  {
+    "id": "pravo-spec-prava-djece-specialist",
+    "programId": "pravo-spec-prava-djece",
+    "workType": "specialist",
+    "documentType": "specialist"
+  },
+  {
+    "id": "pravo-phd-pravne-doctoral",
+    "programId": "pravo-phd-pravne",
+    "workType": "doctoral",
+    "documentType": "doctoral"
+  },
+  {
+    "id": "pravo-phd-socijalni-doctoral",
+    "programId": "pravo-phd-socijalni",
+    "workType": "doctoral",
+    "documentType": "doctoral"
+  },
+  {
+    "id": "pravo-joint-repic-graduate",
+    "programId": "pravo-joint-repic",
+    "workType": "graduate",
+    "documentType": "graduate",
+    "note": "Združeni program; završni rad, matična ustanova i predaja uređuju se pravilima konzorcija."
+  }
+]

@@ -1,0 +1,826 @@
+{
+  "meta": {
+    "generatedAt": "2026-06-30",
+    "scopeUniversities": [
+      "unizg"
+    ],
+    "batch": [
+      "pravo"
+    ],
+    "counts": {
+      "faculties": 31,
+      "confirmedFaculties": 2,
+      "programs": 35,
+      "cells": 35,
+      "sourcesCollected": 22,
+      "blocked": 13
+    }
+  },
+  "cells": [
+    {
+      "cellId": "fpzg-ba-novinarstvo-final",
+      "facultyId": "fpzg",
+      "programId": "fpzg-ba-novinarstvo",
+      "programName": "Prijediplomski studij Novinarstvo",
+      "level": "prijediplomski",
+      "workType": "final",
+      "scope": "internal",
+      "discoveryStatus": "blocked",
+      "sourceCandidateIds": [
+        "cand-fpzg-program-page",
+        "cand-fpzg-program-page"
+      ],
+      "confirmedSourceIds": []
+    },
+    {
+      "cellId": "fpzg-ba-politologija-final",
+      "facultyId": "fpzg",
+      "programId": "fpzg-ba-politologija",
+      "programName": "Prijediplomski studij Politologija",
+      "level": "prijediplomski",
+      "workType": "final",
+      "scope": "internal",
+      "discoveryStatus": "blocked",
+      "sourceCandidateIds": [
+        "cand-fpzg-program-page",
+        "cand-fpzg-program-page"
+      ],
+      "confirmedSourceIds": []
+    },
+    {
+      "cellId": "fpzg-ba-vvu-final",
+      "facultyId": "fpzg",
+      "programId": "fpzg-ba-vvu",
+      "programName": "Sveučilišni prijediplomski studij Vojno vođenje i upravljanje",
+      "level": "prijediplomski",
+      "workType": "final",
+      "scope": "partner",
+      "discoveryStatus": "blocked",
+      "sourceCandidateIds": [
+        "cand-fpzg-program-page",
+        "cand-fpzg-program-page"
+      ],
+      "confirmedSourceIds": []
+    },
+    {
+      "cellId": "fpzg-joint-se-graduate",
+      "facultyId": "fpzg",
+      "programId": "fpzg-joint-se",
+      "programName": "Združeni interdisciplinarni diplomski studij o jugoistočnoj Europi",
+      "level": "združeni",
+      "workType": "graduate",
+      "scope": "joint",
+      "discoveryStatus": "blocked",
+      "sourceCandidateIds": [
+        "cand-fpzg-program-page",
+        "cand-fpzg-program-page"
+      ],
+      "confirmedSourceIds": []
+    },
+    {
+      "cellId": "fpzg-ma-mes-graduate",
+      "facultyId": "fpzg",
+      "programId": "fpzg-ma-mes",
+      "programName": "Master of European Studies",
+      "level": "diplomski",
+      "workType": "graduate",
+      "scope": "internal",
+      "discoveryStatus": "blocked",
+      "sourceCandidateIds": [
+        "cand-fpzg-program-page",
+        "cand-fpzg-program-page"
+      ],
+      "confirmedSourceIds": []
+    },
+    {
+      "cellId": "fpzg-ma-nacionalna-graduate",
+      "facultyId": "fpzg",
+      "programId": "fpzg-ma-nacionalna",
+      "programName": "Diplomski studij Politologija – Nacionalna sigurnost",
+      "level": "diplomski",
+      "workType": "graduate",
+      "scope": "internal",
+      "discoveryStatus": "blocked",
+      "sourceCandidateIds": [
+        "cand-fpzg-program-page",
+        "cand-fpzg-program-page"
+      ],
+      "confirmedSourceIds": []
+    },
+    {
+      "cellId": "fpzg-ma-novinarstvo-graduate",
+      "facultyId": "fpzg",
+      "programId": "fpzg-ma-novinarstvo",
+      "programName": "Diplomski studij Novinarstvo",
+      "level": "diplomski",
+      "workType": "graduate",
+      "scope": "internal",
+      "discoveryStatus": "blocked",
+      "sourceCandidateIds": [
+        "cand-fpzg-program-page",
+        "cand-fpzg-program-page"
+      ],
+      "confirmedSourceIds": []
+    },
+    {
+      "cellId": "fpzg-ma-politologija-graduate",
+      "facultyId": "fpzg",
+      "programId": "fpzg-ma-politologija",
+      "programName": "Diplomski studij Politologija",
+      "level": "diplomski",
+      "workType": "graduate",
+      "scope": "internal",
+      "discoveryStatus": "blocked",
+      "sourceCandidateIds": [
+        "cand-fpzg-program-page",
+        "cand-fpzg-program-page"
+      ],
+      "confirmedSourceIds": []
+    },
+    {
+      "cellId": "fpzg-phd-politologija-doctoral",
+      "facultyId": "fpzg",
+      "programId": "fpzg-phd-politologija",
+      "programName": "Doktorski studij Politologija",
+      "level": "doktorski",
+      "workType": "doctoral",
+      "scope": "internal",
+      "discoveryStatus": "blocked",
+      "sourceCandidateIds": [
+        "cand-fpzg-program-page",
+        "cand-fpzg-program-page"
+      ],
+      "confirmedSourceIds": []
+    },
+    {
+      "cellId": "fpzg-spec-diplomacija-specialist",
+      "facultyId": "fpzg",
+      "programId": "fpzg-spec-diplomacija",
+      "programName": "Sveučilišni specijalistički studij Vanjska politika i diplomacija",
+      "level": "specijalistički",
+      "workType": "specialist",
+      "scope": "internal",
+      "discoveryStatus": "blocked",
+      "sourceCandidateIds": [
+        "cand-fpzg-program-page",
+        "cand-fpzg-program-page"
+      ],
+      "confirmedSourceIds": []
+    },
+    {
+      "cellId": "fpzg-spec-eu-specialist",
+      "facultyId": "fpzg",
+      "programId": "fpzg-spec-eu",
+      "programName": "Sveučilišni specijalistički studij Prilagodba Europskoj uniji: upravljanje projektima i korištenje fondova i programa EU",
+      "level": "specijalistički",
+      "workType": "specialist",
+      "scope": "internal",
+      "discoveryStatus": "blocked",
+      "sourceCandidateIds": [
+        "cand-fpzg-program-page",
+        "cand-fpzg-program-page"
+      ],
+      "confirmedSourceIds": []
+    },
+    {
+      "cellId": "fpzg-spec-pr-specialist",
+      "facultyId": "fpzg",
+      "programId": "fpzg-spec-pr",
+      "programName": "Sveučilišni specijalistički studij Odnosi s javnošću",
+      "level": "specijalistički",
+      "workType": "specialist",
+      "scope": "internal",
+      "discoveryStatus": "blocked",
+      "sourceCandidateIds": [
+        "cand-fpzg-program-page",
+        "cand-fpzg-program-page"
+      ],
+      "confirmedSourceIds": []
+    },
+    {
+      "cellId": "fpzg-spec-sigurnost-specialist",
+      "facultyId": "fpzg",
+      "programId": "fpzg-spec-sigurnost",
+      "programName": "Sveučilišni specijalistički studij Sigurnosna politika Republike Hrvatske",
+      "level": "specijalistički",
+      "workType": "specialist",
+      "scope": "internal",
+      "discoveryStatus": "blocked",
+      "sourceCandidateIds": [
+        "cand-fpzg-program-page",
+        "cand-fpzg-program-page"
+      ],
+      "confirmedSourceIds": []
+    },
+    {
+      "cellId": "pravo-ba-porezni-final",
+      "facultyId": "pravo",
+      "programId": "pravo-ba-porezni",
+      "programName": "Stručni prijediplomski Porezni studij",
+      "level": "prijediplomski",
+      "workType": "final",
+      "scope": "internal",
+      "discoveryStatus": "sources-collected",
+      "sourceCandidateIds": [
+        "pravo-upute-oblikovanje-2024",
+        "pravo-pravilnik-studiji-2026",
+        "pravo-zavrsni-diplomski-postupak",
+        "pravo-studij-integrirani-pravo",
+        "pravo-katedra-trgovacko-upute",
+        "pravo-katedra-radno-socijalno-upute-2021",
+        "pravo-katedra-sociologija-upute",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page"
+      ],
+      "confirmedSourceIds": [
+        "pravo-upute-oblikovanje-2024"
+      ]
+    },
+    {
+      "cellId": "pravo-ba-socijalni-final",
+      "facultyId": "pravo",
+      "programId": "pravo-ba-socijalni",
+      "programName": "Sveučilišni prijediplomski studij Socijalni rad",
+      "level": "prijediplomski",
+      "workType": "final",
+      "scope": "internal",
+      "discoveryStatus": "sources-collected",
+      "sourceCandidateIds": [
+        "pravo-upute-oblikovanje-2024",
+        "pravo-pravilnik-studiji-2026",
+        "pravo-zavrsni-diplomski-postupak",
+        "pravo-studij-integrirani-pravo",
+        "pravo-katedra-trgovacko-upute",
+        "pravo-katedra-radno-socijalno-upute-2021",
+        "pravo-katedra-sociologija-upute",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page"
+      ],
+      "confirmedSourceIds": [
+        "pravo-upute-oblikovanje-2024"
+      ]
+    },
+    {
+      "cellId": "pravo-ba-uprava-final",
+      "facultyId": "pravo",
+      "programId": "pravo-ba-uprava",
+      "programName": "Stručni prijediplomski studij Javna uprava",
+      "level": "prijediplomski",
+      "workType": "final",
+      "scope": "internal",
+      "discoveryStatus": "sources-collected",
+      "sourceCandidateIds": [
+        "pravo-upute-oblikovanje-2024",
+        "pravo-pravilnik-studiji-2026",
+        "pravo-zavrsni-diplomski-postupak",
+        "pravo-studij-integrirani-pravo",
+        "pravo-katedra-trgovacko-upute",
+        "pravo-katedra-radno-socijalno-upute-2021",
+        "pravo-katedra-sociologija-upute",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page"
+      ],
+      "confirmedSourceIds": [
+        "pravo-upute-oblikovanje-2024"
+      ]
+    },
+    {
+      "cellId": "pravo-integrirani-graduate",
+      "facultyId": "pravo",
+      "programId": "pravo-integrirani",
+      "programName": "Sveučilišni integrirani prijediplomski i diplomski studij Pravo",
+      "level": "integrirani",
+      "workType": "graduate",
+      "scope": "internal",
+      "discoveryStatus": "sources-collected",
+      "sourceCandidateIds": [
+        "pravo-upute-oblikovanje-2024",
+        "pravo-pravilnik-studiji-2026",
+        "pravo-zavrsni-diplomski-postupak",
+        "pravo-studij-integrirani-pravo",
+        "pravo-katedra-trgovacko-upute",
+        "pravo-katedra-radno-socijalno-upute-2021",
+        "pravo-katedra-sociologija-upute",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page"
+      ],
+      "confirmedSourceIds": [
+        "pravo-upute-oblikovanje-2024"
+      ]
+    },
+    {
+      "cellId": "pravo-joint-repic-graduate",
+      "facultyId": "pravo",
+      "programId": "pravo-joint-repic",
+      "programName": "Erasmus Mundus Joint Master – Redesigning the Post-Industrial City (MSc RePIC)",
+      "level": "združeni",
+      "workType": "graduate",
+      "scope": "joint",
+      "discoveryStatus": "sources-collected",
+      "sourceCandidateIds": [
+        "pravo-upute-oblikovanje-2024",
+        "pravo-pravilnik-studiji-2026",
+        "pravo-zavrsni-diplomski-postupak",
+        "pravo-studij-integrirani-pravo",
+        "pravo-katedra-trgovacko-upute",
+        "pravo-katedra-radno-socijalno-upute-2021",
+        "pravo-katedra-sociologija-upute",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page"
+      ],
+      "confirmedSourceIds": [
+        "pravo-upute-oblikovanje-2024"
+      ]
+    },
+    {
+      "cellId": "pravo-ma-politika-graduate",
+      "facultyId": "pravo",
+      "programId": "pravo-ma-politika",
+      "programName": "Sveučilišni diplomski studij Socijalna politika",
+      "level": "diplomski",
+      "workType": "graduate",
+      "scope": "internal",
+      "discoveryStatus": "sources-collected",
+      "sourceCandidateIds": [
+        "pravo-upute-oblikovanje-2024",
+        "pravo-pravilnik-studiji-2026",
+        "pravo-zavrsni-diplomski-postupak",
+        "pravo-studij-integrirani-pravo",
+        "pravo-katedra-trgovacko-upute",
+        "pravo-katedra-radno-socijalno-upute-2021",
+        "pravo-katedra-sociologija-upute",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page"
+      ],
+      "confirmedSourceIds": [
+        "pravo-upute-oblikovanje-2024"
+      ]
+    },
+    {
+      "cellId": "pravo-ma-socijalni-graduate",
+      "facultyId": "pravo",
+      "programId": "pravo-ma-socijalni",
+      "programName": "Sveučilišni diplomski studij Socijalni rad",
+      "level": "diplomski",
+      "workType": "graduate",
+      "scope": "internal",
+      "discoveryStatus": "sources-collected",
+      "sourceCandidateIds": [
+        "pravo-upute-oblikovanje-2024",
+        "pravo-pravilnik-studiji-2026",
+        "pravo-zavrsni-diplomski-postupak",
+        "pravo-studij-integrirani-pravo",
+        "pravo-katedra-trgovacko-upute",
+        "pravo-katedra-radno-socijalno-upute-2021",
+        "pravo-katedra-sociologija-upute",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page"
+      ],
+      "confirmedSourceIds": [
+        "pravo-upute-oblikovanje-2024"
+      ]
+    },
+    {
+      "cellId": "pravo-ma-uprava-graduate",
+      "facultyId": "pravo",
+      "programId": "pravo-ma-uprava",
+      "programName": "Stručni diplomski studij Javna uprava",
+      "level": "diplomski",
+      "workType": "graduate",
+      "scope": "internal",
+      "discoveryStatus": "sources-collected",
+      "sourceCandidateIds": [
+        "pravo-upute-oblikovanje-2024",
+        "pravo-pravilnik-studiji-2026",
+        "pravo-zavrsni-diplomski-postupak",
+        "pravo-studij-integrirani-pravo",
+        "pravo-katedra-trgovacko-upute",
+        "pravo-katedra-radno-socijalno-upute-2021",
+        "pravo-katedra-sociologija-upute",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page"
+      ],
+      "confirmedSourceIds": [
+        "pravo-upute-oblikovanje-2024"
+      ]
+    },
+    {
+      "cellId": "pravo-phd-pravne-doctoral",
+      "facultyId": "pravo",
+      "programId": "pravo-phd-pravne",
+      "programName": "Doktorski studij Pravne znanosti",
+      "level": "doktorski",
+      "workType": "doctoral",
+      "scope": "internal",
+      "discoveryStatus": "sources-collected",
+      "sourceCandidateIds": [
+        "pravo-upute-oblikovanje-2024",
+        "pravo-pravilnik-studiji-2026",
+        "pravo-zavrsni-diplomski-postupak",
+        "pravo-studij-integrirani-pravo",
+        "pravo-katedra-trgovacko-upute",
+        "pravo-katedra-radno-socijalno-upute-2021",
+        "pravo-katedra-sociologija-upute",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page"
+      ],
+      "confirmedSourceIds": [
+        "pravo-upute-oblikovanje-2024"
+      ]
+    },
+    {
+      "cellId": "pravo-phd-socijalni-doctoral",
+      "facultyId": "pravo",
+      "programId": "pravo-phd-socijalni",
+      "programName": "Doktorski studij Socijalni rad i socijalna politika",
+      "level": "doktorski",
+      "workType": "doctoral",
+      "scope": "internal",
+      "discoveryStatus": "sources-collected",
+      "sourceCandidateIds": [
+        "pravo-upute-oblikovanje-2024",
+        "pravo-pravilnik-studiji-2026",
+        "pravo-zavrsni-diplomski-postupak",
+        "pravo-studij-integrirani-pravo",
+        "pravo-katedra-trgovacko-upute",
+        "pravo-katedra-radno-socijalno-upute-2021",
+        "pravo-katedra-sociologija-upute",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page"
+      ],
+      "confirmedSourceIds": [
+        "pravo-upute-oblikovanje-2024"
+      ]
+    },
+    {
+      "cellId": "pravo-spec-drustva-trgovacko-specialist",
+      "facultyId": "pravo",
+      "programId": "pravo-spec-drustva-trgovacko",
+      "programName": "Sveučilišni specijalistički studij Pravo društava i trgovačko pravo",
+      "level": "specijalistički",
+      "workType": "specialist",
+      "scope": "internal",
+      "discoveryStatus": "sources-collected",
+      "sourceCandidateIds": [
+        "pravo-upute-oblikovanje-2024",
+        "pravo-pravilnik-studiji-2026",
+        "pravo-zavrsni-diplomski-postupak",
+        "pravo-studij-integrirani-pravo",
+        "pravo-katedra-trgovacko-upute",
+        "pravo-katedra-radno-socijalno-upute-2021",
+        "pravo-katedra-sociologija-upute",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page"
+      ],
+      "confirmedSourceIds": [
+        "pravo-upute-oblikovanje-2024"
+      ]
+    },
+    {
+      "cellId": "pravo-spec-europsko-pravo-specialist",
+      "facultyId": "pravo",
+      "programId": "pravo-spec-europsko-pravo",
+      "programName": "Sveučilišni specijalistički studij Europsko pravo",
+      "level": "specijalistički",
+      "workType": "specialist",
+      "scope": "internal",
+      "discoveryStatus": "sources-collected",
+      "sourceCandidateIds": [
+        "pravo-upute-oblikovanje-2024",
+        "pravo-pravilnik-studiji-2026",
+        "pravo-zavrsni-diplomski-postupak",
+        "pravo-studij-integrirani-pravo",
+        "pravo-katedra-trgovacko-upute",
+        "pravo-katedra-radno-socijalno-upute-2021",
+        "pravo-katedra-sociologija-upute",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page"
+      ],
+      "confirmedSourceIds": [
+        "pravo-upute-oblikovanje-2024"
+      ]
+    },
+    {
+      "cellId": "pravo-spec-fiskalni-specialist",
+      "facultyId": "pravo",
+      "programId": "pravo-spec-fiskalni",
+      "programName": "Sveučilišni specijalistički studij Fiskalni sustav i fiskalna politika",
+      "level": "specijalistički",
+      "workType": "specialist",
+      "scope": "internal",
+      "discoveryStatus": "sources-collected",
+      "sourceCandidateIds": [
+        "pravo-upute-oblikovanje-2024",
+        "pravo-pravilnik-studiji-2026",
+        "pravo-zavrsni-diplomski-postupak",
+        "pravo-studij-integrirani-pravo",
+        "pravo-katedra-trgovacko-upute",
+        "pravo-katedra-radno-socijalno-upute-2021",
+        "pravo-katedra-sociologija-upute",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page"
+      ],
+      "confirmedSourceIds": [
+        "pravo-upute-oblikovanje-2024"
+      ]
+    },
+    {
+      "cellId": "pravo-spec-gradjansko-obiteljsko-specialist",
+      "facultyId": "pravo",
+      "programId": "pravo-spec-gradjansko-obiteljsko",
+      "programName": "Sveučilišni specijalistički studij Građanskopravne i obiteljskopravne znanosti",
+      "level": "specijalistički",
+      "workType": "specialist",
+      "scope": "internal",
+      "discoveryStatus": "sources-collected",
+      "sourceCandidateIds": [
+        "pravo-upute-oblikovanje-2024",
+        "pravo-pravilnik-studiji-2026",
+        "pravo-zavrsni-diplomski-postupak",
+        "pravo-studij-integrirani-pravo",
+        "pravo-katedra-trgovacko-upute",
+        "pravo-katedra-radno-socijalno-upute-2021",
+        "pravo-katedra-sociologija-upute",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page"
+      ],
+      "confirmedSourceIds": [
+        "pravo-upute-oblikovanje-2024"
+      ]
+    },
+    {
+      "cellId": "pravo-spec-javno-pravo-uprava-specialist",
+      "facultyId": "pravo",
+      "programId": "pravo-spec-javno-pravo-uprava",
+      "programName": "Sveučilišni specijalistički studij Javno pravo i javna uprava",
+      "level": "specijalistički",
+      "workType": "specialist",
+      "scope": "internal",
+      "discoveryStatus": "sources-collected",
+      "sourceCandidateIds": [
+        "pravo-upute-oblikovanje-2024",
+        "pravo-pravilnik-studiji-2026",
+        "pravo-zavrsni-diplomski-postupak",
+        "pravo-studij-integrirani-pravo",
+        "pravo-katedra-trgovacko-upute",
+        "pravo-katedra-radno-socijalno-upute-2021",
+        "pravo-katedra-sociologija-upute",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page"
+      ],
+      "confirmedSourceIds": [
+        "pravo-upute-oblikovanje-2024"
+      ]
+    },
+    {
+      "cellId": "pravo-spec-kaznenopravne-specialist",
+      "facultyId": "pravo",
+      "programId": "pravo-spec-kaznenopravne",
+      "programName": "Sveučilišni specijalistički studij Kaznenopravne znanosti",
+      "level": "specijalistički",
+      "workType": "specialist",
+      "scope": "internal",
+      "discoveryStatus": "sources-collected",
+      "sourceCandidateIds": [
+        "pravo-upute-oblikovanje-2024",
+        "pravo-pravilnik-studiji-2026",
+        "pravo-zavrsni-diplomski-postupak",
+        "pravo-studij-integrirani-pravo",
+        "pravo-katedra-trgovacko-upute",
+        "pravo-katedra-radno-socijalno-upute-2021",
+        "pravo-katedra-sociologija-upute",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page"
+      ],
+      "confirmedSourceIds": [
+        "pravo-upute-oblikovanje-2024"
+      ]
+    },
+    {
+      "cellId": "pravo-spec-medjunarodno-specialist",
+      "facultyId": "pravo",
+      "programId": "pravo-spec-medjunarodno",
+      "programName": "Sveučilišni specijalistički studij Međunarodno javno i međunarodno privatno pravo",
+      "level": "specijalistički",
+      "workType": "specialist",
+      "scope": "internal",
+      "discoveryStatus": "sources-collected",
+      "sourceCandidateIds": [
+        "pravo-upute-oblikovanje-2024",
+        "pravo-pravilnik-studiji-2026",
+        "pravo-zavrsni-diplomski-postupak",
+        "pravo-studij-integrirani-pravo",
+        "pravo-katedra-trgovacko-upute",
+        "pravo-katedra-radno-socijalno-upute-2021",
+        "pravo-katedra-sociologija-upute",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page"
+      ],
+      "confirmedSourceIds": [
+        "pravo-upute-oblikovanje-2024"
+      ]
+    },
+    {
+      "cellId": "pravo-spec-obiteljska-medijacija-specialist",
+      "facultyId": "pravo",
+      "programId": "pravo-spec-obiteljska-medijacija",
+      "programName": "Sveučilišni specijalistički studij Obiteljska medijacija",
+      "level": "specijalistički",
+      "workType": "specialist",
+      "scope": "internal",
+      "discoveryStatus": "sources-collected",
+      "sourceCandidateIds": [
+        "pravo-upute-oblikovanje-2024",
+        "pravo-pravilnik-studiji-2026",
+        "pravo-zavrsni-diplomski-postupak",
+        "pravo-studij-integrirani-pravo",
+        "pravo-katedra-trgovacko-upute",
+        "pravo-katedra-radno-socijalno-upute-2021",
+        "pravo-katedra-sociologija-upute",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page"
+      ],
+      "confirmedSourceIds": [
+        "pravo-upute-oblikovanje-2024"
+      ]
+    },
+    {
+      "cellId": "pravo-spec-prava-djece-specialist",
+      "facultyId": "pravo",
+      "programId": "pravo-spec-prava-djece",
+      "programName": "Sveučilišni interdisciplinarni specijalistički studij Prava djece",
+      "level": "specijalistički",
+      "workType": "specialist",
+      "scope": "internal",
+      "discoveryStatus": "sources-collected",
+      "sourceCandidateIds": [
+        "pravo-upute-oblikovanje-2024",
+        "pravo-pravilnik-studiji-2026",
+        "pravo-zavrsni-diplomski-postupak",
+        "pravo-studij-integrirani-pravo",
+        "pravo-katedra-trgovacko-upute",
+        "pravo-katedra-radno-socijalno-upute-2021",
+        "pravo-katedra-sociologija-upute",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page"
+      ],
+      "confirmedSourceIds": [
+        "pravo-upute-oblikovanje-2024"
+      ]
+    },
+    {
+      "cellId": "pravo-spec-psihosocijalni-specialist",
+      "facultyId": "pravo",
+      "programId": "pravo-spec-psihosocijalni",
+      "programName": "Sveučilišni specijalistički studij Psihosocijalni pristup u socijalnom radu",
+      "level": "specijalistički",
+      "workType": "specialist",
+      "scope": "internal",
+      "discoveryStatus": "sources-collected",
+      "sourceCandidateIds": [
+        "pravo-upute-oblikovanje-2024",
+        "pravo-pravilnik-studiji-2026",
+        "pravo-zavrsni-diplomski-postupak",
+        "pravo-studij-integrirani-pravo",
+        "pravo-katedra-trgovacko-upute",
+        "pravo-katedra-radno-socijalno-upute-2021",
+        "pravo-katedra-sociologija-upute",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page"
+      ],
+      "confirmedSourceIds": [
+        "pravo-upute-oblikovanje-2024"
+      ]
+    },
+    {
+      "cellId": "pravo-spec-socijalna-politika-specialist",
+      "facultyId": "pravo",
+      "programId": "pravo-spec-socijalna-politika",
+      "programName": "Sveučilišni specijalistički studij Socijalna politika",
+      "level": "specijalistički",
+      "workType": "specialist",
+      "scope": "internal",
+      "discoveryStatus": "sources-collected",
+      "sourceCandidateIds": [
+        "pravo-upute-oblikovanje-2024",
+        "pravo-pravilnik-studiji-2026",
+        "pravo-zavrsni-diplomski-postupak",
+        "pravo-studij-integrirani-pravo",
+        "pravo-katedra-trgovacko-upute",
+        "pravo-katedra-radno-socijalno-upute-2021",
+        "pravo-katedra-sociologija-upute",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page"
+      ],
+      "confirmedSourceIds": [
+        "pravo-upute-oblikovanje-2024"
+      ]
+    },
+    {
+      "cellId": "pravo-spec-supervizija-specialist",
+      "facultyId": "pravo",
+      "programId": "pravo-spec-supervizija",
+      "programName": "Sveučilišni specijalistički studij Supervizija psihosocijalnog rada",
+      "level": "specijalistički",
+      "workType": "specialist",
+      "scope": "internal",
+      "discoveryStatus": "sources-collected",
+      "sourceCandidateIds": [
+        "pravo-upute-oblikovanje-2024",
+        "pravo-pravilnik-studiji-2026",
+        "pravo-zavrsni-diplomski-postupak",
+        "pravo-studij-integrirani-pravo",
+        "pravo-katedra-trgovacko-upute",
+        "pravo-katedra-radno-socijalno-upute-2021",
+        "pravo-katedra-sociologija-upute",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page",
+        "cand-pravo-program-page"
+      ],
+      "confirmedSourceIds": [
+        "pravo-upute-oblikovanje-2024"
+      ]
+    }
+  ],
+  "integrity": {
+    "orphanCells": [],
+    "orphanPrograms": [],
+    "orphanFaculties": [],
+    "duplicatePrograms": [],
+    "programsWithoutWorktypes": [],
+    "facultiesWithoutPrograms": [
+      "agr",
+      "arh",
+      "erf",
+      "efzg",
+      "fer",
+      "ffrz",
+      "fhs",
+      "fkit",
+      "fpz",
+      "fsb",
+      "sumfak",
+      "fbf",
+      "ffzg",
+      "geof",
+      "grad",
+      "grf",
+      "kbf",
+      "kif",
+      "mef",
+      "pbf",
+      "pmf",
+      "rgnf",
+      "sfzg",
+      "ttf",
+      "ufzg",
+      "vef",
+      "adu",
+      "alu",
+      "muza"
+    ]
+  }
+}

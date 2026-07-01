@@ -1,0 +1,16 @@
+{
+  "scopeUniversities": ["unizg"],
+  "freshnessMonths": 24,
+  "note": "Discovery opseg: Sveucilište u Zagrebu, enumerirani fakulteti FPZG i Pravo. Ostali unizg fakulteti su poznati iz kataloga, ali jos nisu enumerirani do razine programa (enumeration backlog).",
+  "defaultWorkTypesByLevel": {
+    "prijediplomski": ["final"],
+    "preddiplomski": ["final"],
+    "integrirani": ["graduate"],
+    "diplomski": ["graduate"],
+    "specijalistički": ["specialist"],
+    "specijalisticki": ["specialist"],
+    "doktorski": ["doctoral"],
+    "združeni": ["graduate"],
+    "zdruzeni": ["graduate"]
+  }
+}

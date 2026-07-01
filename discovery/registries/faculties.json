@@ -1,0 +1,281 @@
+[
+  {
+    "id": "agr",
+    "universityId": "unizg",
+    "name": "Agronomski fakultet",
+    "abbrev": "agr",
+    "url": null,
+    "confirmed": false,
+    "fetchedAt": null
+  },
+  {
+    "id": "arh",
+    "universityId": "unizg",
+    "name": "Arhitektonski fakultet",
+    "abbrev": "arh",
+    "url": null,
+    "confirmed": false,
+    "fetchedAt": null
+  },
+  {
+    "id": "erf",
+    "universityId": "unizg",
+    "name": "Edukacijsko-rehabilitacijski fakultet",
+    "abbrev": "erf",
+    "url": null,
+    "confirmed": false,
+    "fetchedAt": null
+  },
+  {
+    "id": "efzg",
+    "universityId": "unizg",
+    "name": "Ekonomski fakultet",
+    "abbrev": "efzg",
+    "url": null,
+    "confirmed": false,
+    "fetchedAt": null
+  },
+  {
+    "id": "fer",
+    "universityId": "unizg",
+    "name": "Fakultet elektrotehnike i računarstva",
+    "abbrev": "fer",
+    "url": null,
+    "confirmed": false,
+    "fetchedAt": null
+  },
+  {
+    "id": "ffrz",
+    "universityId": "unizg",
+    "name": "Fakultet filozofije i religijskih znanosti",
+    "abbrev": "ffrz",
+    "url": null,
+    "confirmed": false,
+    "fetchedAt": null
+  },
+  {
+    "id": "fhs",
+    "universityId": "unizg",
+    "name": "Fakultet hrvatskih studija",
+    "abbrev": "fhs",
+    "url": null,
+    "confirmed": false,
+    "fetchedAt": null
+  },
+  {
+    "id": "fkit",
+    "universityId": "unizg",
+    "name": "Fakultet kemijskog inženjerstva i tehnologije",
+    "abbrev": "fkit",
+    "url": null,
+    "confirmed": false,
+    "fetchedAt": null
+  },
+  {
+    "id": "fpzg",
+    "universityId": "unizg",
+    "name": "Fakultet političkih znanosti",
+    "abbrev": "fpzg",
+    "url": "https://www.fpzg.unizg.hr/studiji",
+    "confirmed": true,
+    "fetchedAt": "2026-06-29"
+  },
+  {
+    "id": "fpz",
+    "universityId": "unizg",
+    "name": "Fakultet prometnih znanosti",
+    "abbrev": "fpz",
+    "url": null,
+    "confirmed": false,
+    "fetchedAt": null
+  },
+  {
+    "id": "fsb",
+    "universityId": "unizg",
+    "name": "Fakultet strojarstva i brodogradnje",
+    "abbrev": "fsb",
+    "url": null,
+    "confirmed": false,
+    "fetchedAt": null
+  },
+  {
+    "id": "sumfak",
+    "universityId": "unizg",
+    "name": "Fakultet šumarstva i drvne tehnologije",
+    "abbrev": "sumfak",
+    "url": null,
+    "confirmed": false,
+    "fetchedAt": null
+  },
+  {
+    "id": "fbf",
+    "universityId": "unizg",
+    "name": "Farmaceutsko-biokemijski fakultet",
+    "abbrev": "fbf",
+    "url": null,
+    "confirmed": false,
+    "fetchedAt": null
+  },
+  {
+    "id": "ffzg",
+    "universityId": "unizg",
+    "name": "Filozofski fakultet",
+    "abbrev": "ffzg",
+    "url": null,
+    "confirmed": false,
+    "fetchedAt": null
+  },
+  {
+    "id": "geof",
+    "universityId": "unizg",
+    "name": "Geodetski fakultet",
+    "abbrev": "geof",
+    "url": null,
+    "confirmed": false,
+    "fetchedAt": null
+  },
+  {
+    "id": "grad",
+    "universityId": "unizg",
+    "name": "Građevinski fakultet",
+    "abbrev": "grad",
+    "url": null,
+    "confirmed": false,
+    "fetchedAt": null
+  },
+  {
+    "id": "grf",
+    "universityId": "unizg",
+    "name": "Grafički fakultet",
+    "abbrev": "grf",
+    "url": null,
+    "confirmed": false,
+    "fetchedAt": null
+  },
+  {
+    "id": "kbf",
+    "universityId": "unizg",
+    "name": "Katolički bogoslovni fakultet",
+    "abbrev": "kbf",
+    "url": null,
+    "confirmed": false,
+    "fetchedAt": null
+  },
+  {
+    "id": "kif",
+    "universityId": "unizg",
+    "name": "Kineziološki fakultet",
+    "abbrev": "kif",
+    "url": null,
+    "confirmed": false,
+    "fetchedAt": null
+  },
+  {
+    "id": "mef",
+    "universityId": "unizg",
+    "name": "Medicinski fakultet",
+    "abbrev": "mef",
+    "url": null,
+    "confirmed": false,
+    "fetchedAt": null
+  },
+  {
+    "id": "pravo",
+    "universityId": "unizg",
+    "name": "Pravni fakultet",
+    "abbrev": "pravo",
+    "url": "https://www.pravo.unizg.hr/studiji/",
+    "confirmed": true,
+    "fetchedAt": "2026-06-29"
+  },
+  {
+    "id": "pbf",
+    "universityId": "unizg",
+    "name": "Prehrambeno-biotehnološki fakultet",
+    "abbrev": "pbf",
+    "url": null,
+    "confirmed": false,
+    "fetchedAt": null
+  },
+  {
+    "id": "pmf",
+    "universityId": "unizg",
+    "name": "Prirodoslovno-matematički fakultet",
+    "abbrev": "pmf",
+    "url": null,
+    "confirmed": false,
+    "fetchedAt": null
+  },
+  {
+    "id": "rgnf",
+    "universityId": "unizg",
+    "name": "Rudarsko-geološko-naftni fakultet",
+    "abbrev": "rgnf",
+    "url": null,
+    "confirmed": false,
+    "fetchedAt": null
+  },
+  {
+    "id": "sfzg",
+    "universityId": "unizg",
+    "name": "Stomatološki fakultet",
+    "abbrev": "sfzg",
+    "url": null,
+    "confirmed": false,
+    "fetchedAt": null
+  },
+  {
+    "id": "ttf",
+    "universityId": "unizg",
+    "name": "Tekstilno-tehnološki fakultet",
+    "abbrev": "ttf",
+    "url": null,
+    "confirmed": false,
+    "fetchedAt": null
+  },
+  {
+    "id": "ufzg",
+    "universityId": "unizg",
+    "name": "Učiteljski fakultet",
+    "abbrev": "ufzg",
+    "url": null,
+    "confirmed": false,
+    "fetchedAt": null
+  },
+  {
+    "id": "vef",
+    "universityId": "unizg",
+    "name": "Veterinarski fakultet",
+    "abbrev": "vef",
+    "url": null,
+    "confirmed": false,
+    "fetchedAt": null
+  },
+  {
+    "id": "adu",
+    "universityId": "unizg",
+    "name": "Akademija dramske umjetnosti",
+    "abbrev": "adu",
+    "url": null,
+    "confirmed": false,
+    "fetchedAt": null
+  },
+  {
+    "id": "alu",
+    "universityId": "unizg",
+    "name": "Akademija likovnih umjetnosti",
+    "abbrev": "alu",
+    "url": null,
+    "confirmed": false,
+    "fetchedAt": null
+  },
+  {
+    "id": "muza",
+    "universityId": "unizg",
+    "name": "Muzička akademija",
+    "abbrev": "muza",
+    "url": null,
+    "confirmed": false,
+    "fetchedAt": null
+  }
+]
