@@ -177,5 +177,18 @@
     "validityClass": "stable",
     "lastChecked": "2026-07-02",
     "note": "Point-in-time PDF snapshot Uputa za diplomski rad (AGR, 2019). Tehnicko oblikovanje (font 12, prored 1,15, margine 2,5, A4) i opseg 20-50 str. formulirani kao Preporuke -> advisory; numeriranje stranica i obvezan Sadrzaj su imperativ -> scored."
+  },
+  {
+    "id": "fpzg-drsc08-doktorski",
+    "kind": "guidelines",
+    "title": "DR.SC.-08 Upute za oblikovanje doktorskog rada (Fakultet politickih znanosti)",
+    "url": "https://www.fpzg.unizg.hr/_download/repository/DR.SC.-08_formalno_oblikovanje_rada__%282%29%5B1%5D%5B1%5D.doc",
+    "publisher": "Fakultet politickih znanosti Sveucilista u Zagrebu",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/fpzg/fpzg-drsc08-doktorski-oblikovanje.doc",
+    "snapshotHash": "a38f06f9e72255ade0010197674965fae0715f1f476044ba29a53886151f069c",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-02",
+    "note": "DOC snapshot (6 str). Doktorski format izrijekom: A4 (210x297), Times New Roman, velicina 12, prored 1,5 redak, margine 2,5 cm sve strane (naslovnica drugacije), numeracija stranica od Uvoda u donjem desnom kutu. Jedini FPZG izvor s eksplicitnim marginama."
   }
 ]

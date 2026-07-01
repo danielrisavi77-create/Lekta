@@ -9,7 +9,63 @@
       "lastVerified": "2026-06-30"
     },
     {
+      "profileId": "fpzg-doktorski-politologija",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "fpzg-nacionalna-sigurnost-diplomski",
+      "scored": 8,
+      "machineCheckable": 8,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "fpzg-novinarstvo-diplomski",
+      "scored": 8,
+      "machineCheckable": 8,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
       "profileId": "fpzg-politologija-diplomski",
+      "scored": 8,
+      "machineCheckable": 8,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "fpzg-specijalisticki-odnosi-s-javnoscu",
+      "scored": 8,
+      "machineCheckable": 8,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "fpzg-specijalisticki-prilagodba-eu",
+      "scored": 8,
+      "machineCheckable": 8,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "fpzg-specijalisticki-sigurnosna-politika-rh",
+      "scored": 8,
+      "machineCheckable": 8,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "fpzg-specijalisticki-vanjska-politika-diplomacija",
       "scored": 8,
       "machineCheckable": 8,
       "advisory": 0,
@@ -145,5 +201,5 @@
       "lastVerified": "2026-06-30"
     }
   ],
-  "totalScored": 86
+  "totalScored": 140
 }

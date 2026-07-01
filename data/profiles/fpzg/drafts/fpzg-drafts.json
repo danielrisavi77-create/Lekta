@@ -207,6 +207,1361 @@
         "lastVerified": "2026-07-02",
         "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
       }
+    ],
+    "fpzg-nacionalna-sigurnost-diplomski": [
+      {
+        "ruleId": "fpzg-nacionalna-sigurnost-diplomski--font",
+        "checkId": "font",
+        "value": [
+          "Times New Roman"
+        ],
+        "category": "format",
+        "label": "Font",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-nacionalna-sigurnost-diplomski--font-size",
+        "checkId": "font-size",
+        "value": [
+          12
+        ],
+        "category": "format",
+        "label": "Velicina slova",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-nacionalna-sigurnost-diplomski--line-spacing",
+        "checkId": "line-spacing",
+        "value": 1.5,
+        "category": "format",
+        "label": "Prored",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-nacionalna-sigurnost-diplomski--paper-size",
+        "checkId": "paper-size",
+        "value": true,
+        "category": "format",
+        "label": "Format papira A4",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Diplomski ili zavrsni specijalisticki rad treba biti otisnut racunalnim pisacem na papiru formata A4 (21x29,7 cm), te ukoricen (meki ili tvrdi uvez).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-nacionalna-sigurnost-diplomski--page-numbers",
+        "checkId": "page-numbers",
+        "value": true,
+        "category": "format",
+        "label": "Brojevi stranica",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-nacionalna-sigurnost-diplomski--toc",
+        "checkId": "toc",
+        "value": true,
+        "category": "structure",
+        "label": "Sadrzaj",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "odjeljak 'STRUKTURA RADA' (str. 9) i 'FORMAT I OPREMA RADA' (izjava o autorstvu, str. 16)",
+        "quote": "U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj. Kratak sadrzaj daje pregled naslova poglavlja i potpoglavlja.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-nacionalna-sigurnost-diplomski--required-sections",
+        "checkId": "required-sections",
+        "value": [
+          {
+            "key": "declaration",
+            "label": "izjava o autorstvu",
+            "terms": [
+              "izjava o autorstvu",
+              "izjava o izvornosti",
+              "izjava o akademskoj cestitosti"
+            ]
+          },
+          {
+            "key": "toc",
+            "label": "sadržaj",
+            "terms": [
+              "sadrzaj",
+              "contents",
+              "table of contents"
+            ]
+          },
+          {
+            "key": "intro",
+            "label": "uvod",
+            "terms": [
+              "uvod",
+              "introduction"
+            ]
+          },
+          {
+            "key": "conclusion",
+            "label": "zaključak",
+            "terms": [
+              "zakljucak",
+              "conclusion"
+            ]
+          },
+          {
+            "key": "refs",
+            "label": "literatura",
+            "terms": [
+              "literatura",
+              "popis literature",
+              "izvori i literatura",
+              "bibliografija",
+              "references"
+            ]
+          },
+          {
+            "key": "abstract",
+            "label": "sažetak / abstract",
+            "terms": [
+              "sazetak",
+              "abstract"
+            ]
+          },
+          {
+            "key": "keywords",
+            "label": "ključne riječi / keywords",
+            "terms": [
+              "kljucne rijeci",
+              "keywords"
+            ]
+          }
+        ],
+        "category": "structure",
+        "label": "Obvezni dijelovi rada",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "odjeljak 'STRUKTURA RADA' (str. 9) i 'FORMAT I OPREMA RADA' (izjava o autorstvu, str. 16)",
+        "quote": "Akademski radovi sastoje se od tri cjeline: prethodnoga dijela, osnovnog teksta i zavrsnoga dijela. U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj, a u zavrsnome sazetak, kljucne rijeci i popis literature. Njih mora sadrzavati svaki diplomski i zavrsni specijalisticki rad. Na prvoj sljedecoj stranici treba stajati izjava o autorstvu.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-nacionalna-sigurnost-diplomski--word-count",
+        "checkId": "word-count",
+        "value": {
+          "min": 10000,
+          "max": 12000
+        },
+        "category": "scope",
+        "label": "Opseg rijeci",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Ne smije sadrzavati manje od 10.000 ni vise od 12.000 rijeci (diplomski rad na studiju politologije).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      }
+    ],
+    "fpzg-novinarstvo-diplomski": [
+      {
+        "ruleId": "fpzg-novinarstvo-diplomski--font",
+        "checkId": "font",
+        "value": [
+          "Times New Roman"
+        ],
+        "category": "format",
+        "label": "Font",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-novinarstvo-diplomski--font-size",
+        "checkId": "font-size",
+        "value": [
+          12
+        ],
+        "category": "format",
+        "label": "Velicina slova",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-novinarstvo-diplomski--line-spacing",
+        "checkId": "line-spacing",
+        "value": 1.5,
+        "category": "format",
+        "label": "Prored",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-novinarstvo-diplomski--paper-size",
+        "checkId": "paper-size",
+        "value": true,
+        "category": "format",
+        "label": "Format papira A4",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Diplomski ili zavrsni specijalisticki rad treba biti otisnut racunalnim pisacem na papiru formata A4 (21x29,7 cm), te ukoricen (meki ili tvrdi uvez).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-novinarstvo-diplomski--page-numbers",
+        "checkId": "page-numbers",
+        "value": true,
+        "category": "format",
+        "label": "Brojevi stranica",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-novinarstvo-diplomski--toc",
+        "checkId": "toc",
+        "value": true,
+        "category": "structure",
+        "label": "Sadrzaj",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "odjeljak 'STRUKTURA RADA' (str. 9) i 'FORMAT I OPREMA RADA' (izjava o autorstvu, str. 16)",
+        "quote": "U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj. Kratak sadrzaj daje pregled naslova poglavlja i potpoglavlja.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-novinarstvo-diplomski--required-sections",
+        "checkId": "required-sections",
+        "value": [
+          {
+            "key": "declaration",
+            "label": "izjava o autorstvu",
+            "terms": [
+              "izjava o autorstvu",
+              "izjava o izvornosti",
+              "izjava o akademskoj cestitosti"
+            ]
+          },
+          {
+            "key": "toc",
+            "label": "sadržaj",
+            "terms": [
+              "sadrzaj",
+              "contents",
+              "table of contents"
+            ]
+          },
+          {
+            "key": "intro",
+            "label": "uvod",
+            "terms": [
+              "uvod",
+              "introduction"
+            ]
+          },
+          {
+            "key": "conclusion",
+            "label": "zaključak",
+            "terms": [
+              "zakljucak",
+              "conclusion"
+            ]
+          },
+          {
+            "key": "refs",
+            "label": "literatura",
+            "terms": [
+              "literatura",
+              "popis literature",
+              "izvori i literatura",
+              "bibliografija",
+              "references"
+            ]
+          },
+          {
+            "key": "abstract",
+            "label": "sažetak / abstract",
+            "terms": [
+              "sazetak",
+              "abstract"
+            ]
+          },
+          {
+            "key": "keywords",
+            "label": "ključne riječi / keywords",
+            "terms": [
+              "kljucne rijeci",
+              "keywords"
+            ]
+          }
+        ],
+        "category": "structure",
+        "label": "Obvezni dijelovi rada",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "odjeljak 'STRUKTURA RADA' (str. 9) i 'FORMAT I OPREMA RADA' (izjava o autorstvu, str. 16)",
+        "quote": "Akademski radovi sastoje se od tri cjeline: prethodnoga dijela, osnovnog teksta i zavrsnoga dijela. U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj, a u zavrsnome sazetak, kljucne rijeci i popis literature. Njih mora sadrzavati svaki diplomski i zavrsni specijalisticki rad. Na prvoj sljedecoj stranici treba stajati izjava o autorstvu.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-novinarstvo-diplomski--word-count",
+        "checkId": "word-count",
+        "value": {
+          "min": 12000,
+          "max": 15000
+        },
+        "category": "scope",
+        "label": "Opseg rijeci",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Ne smije sadrzavati manje od 12.000 ni vise od 15.000 rijeci (diplomski rad na studiju novinarstva).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      }
+    ],
+    "fpzg-specijalisticki-odnosi-s-javnoscu": [
+      {
+        "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--font",
+        "checkId": "font",
+        "value": [
+          "Times New Roman"
+        ],
+        "category": "format",
+        "label": "Font",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--font-size",
+        "checkId": "font-size",
+        "value": [
+          12
+        ],
+        "category": "format",
+        "label": "Velicina slova",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--line-spacing",
+        "checkId": "line-spacing",
+        "value": 1.5,
+        "category": "format",
+        "label": "Prored",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--paper-size",
+        "checkId": "paper-size",
+        "value": true,
+        "category": "format",
+        "label": "Format papira A4",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Diplomski ili zavrsni specijalisticki rad treba biti otisnut racunalnim pisacem na papiru formata A4 (21x29,7 cm), te ukoricen (meki ili tvrdi uvez).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--page-numbers",
+        "checkId": "page-numbers",
+        "value": true,
+        "category": "format",
+        "label": "Brojevi stranica",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--toc",
+        "checkId": "toc",
+        "value": true,
+        "category": "structure",
+        "label": "Sadrzaj",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "odjeljak 'STRUKTURA RADA' (str. 9) i 'FORMAT I OPREMA RADA' (izjava o autorstvu, str. 16)",
+        "quote": "U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj. Kratak sadrzaj daje pregled naslova poglavlja i potpoglavlja.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--required-sections",
+        "checkId": "required-sections",
+        "value": [
+          {
+            "key": "declaration",
+            "label": "izjava o autorstvu",
+            "terms": [
+              "izjava o autorstvu",
+              "izjava o izvornosti",
+              "izjava o akademskoj cestitosti"
+            ]
+          },
+          {
+            "key": "toc",
+            "label": "sadržaj",
+            "terms": [
+              "sadrzaj",
+              "contents",
+              "table of contents"
+            ]
+          },
+          {
+            "key": "intro",
+            "label": "uvod",
+            "terms": [
+              "uvod",
+              "introduction"
+            ]
+          },
+          {
+            "key": "conclusion",
+            "label": "zaključak",
+            "terms": [
+              "zakljucak",
+              "conclusion"
+            ]
+          },
+          {
+            "key": "refs",
+            "label": "literatura",
+            "terms": [
+              "literatura",
+              "popis literature",
+              "izvori i literatura",
+              "bibliografija",
+              "references"
+            ]
+          },
+          {
+            "key": "abstract",
+            "label": "sažetak / abstract",
+            "terms": [
+              "sazetak",
+              "abstract"
+            ]
+          },
+          {
+            "key": "keywords",
+            "label": "ključne riječi / keywords",
+            "terms": [
+              "kljucne rijeci",
+              "keywords"
+            ]
+          }
+        ],
+        "category": "structure",
+        "label": "Obvezni dijelovi rada",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "odjeljak 'STRUKTURA RADA' (str. 9) i 'FORMAT I OPREMA RADA' (izjava o autorstvu, str. 16)",
+        "quote": "Akademski radovi sastoje se od tri cjeline: prethodnoga dijela, osnovnog teksta i zavrsnoga dijela. U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj, a u zavrsnome sazetak, kljucne rijeci i popis literature. Njih mora sadrzavati svaki diplomski i zavrsni specijalisticki rad. Na prvoj sljedecoj stranici treba stajati izjava o autorstvu.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--word-count",
+        "checkId": "word-count",
+        "value": {
+          "min": 8000,
+          "max": 12000
+        },
+        "category": "scope",
+        "label": "Opseg rijeci",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Ne smije sadrzavati manje od 8.000 ni vise od 12.000 rijeci (zavrsni specijalisticki rad).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      }
+    ],
+    "fpzg-specijalisticki-prilagodba-eu": [
+      {
+        "ruleId": "fpzg-specijalisticki-prilagodba-eu--font",
+        "checkId": "font",
+        "value": [
+          "Times New Roman"
+        ],
+        "category": "format",
+        "label": "Font",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-prilagodba-eu--font-size",
+        "checkId": "font-size",
+        "value": [
+          12
+        ],
+        "category": "format",
+        "label": "Velicina slova",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-prilagodba-eu--line-spacing",
+        "checkId": "line-spacing",
+        "value": 1.5,
+        "category": "format",
+        "label": "Prored",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-prilagodba-eu--paper-size",
+        "checkId": "paper-size",
+        "value": true,
+        "category": "format",
+        "label": "Format papira A4",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Diplomski ili zavrsni specijalisticki rad treba biti otisnut racunalnim pisacem na papiru formata A4 (21x29,7 cm), te ukoricen (meki ili tvrdi uvez).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-prilagodba-eu--page-numbers",
+        "checkId": "page-numbers",
+        "value": true,
+        "category": "format",
+        "label": "Brojevi stranica",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-prilagodba-eu--toc",
+        "checkId": "toc",
+        "value": true,
+        "category": "structure",
+        "label": "Sadrzaj",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "odjeljak 'STRUKTURA RADA' (str. 9) i 'FORMAT I OPREMA RADA' (izjava o autorstvu, str. 16)",
+        "quote": "U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj. Kratak sadrzaj daje pregled naslova poglavlja i potpoglavlja.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-prilagodba-eu--required-sections",
+        "checkId": "required-sections",
+        "value": [
+          {
+            "key": "declaration",
+            "label": "izjava o autorstvu",
+            "terms": [
+              "izjava o autorstvu",
+              "izjava o izvornosti",
+              "izjava o akademskoj cestitosti"
+            ]
+          },
+          {
+            "key": "toc",
+            "label": "sadržaj",
+            "terms": [
+              "sadrzaj",
+              "contents",
+              "table of contents"
+            ]
+          },
+          {
+            "key": "intro",
+            "label": "uvod",
+            "terms": [
+              "uvod",
+              "introduction"
+            ]
+          },
+          {
+            "key": "conclusion",
+            "label": "zaključak",
+            "terms": [
+              "zakljucak",
+              "conclusion"
+            ]
+          },
+          {
+            "key": "refs",
+            "label": "literatura",
+            "terms": [
+              "literatura",
+              "popis literature",
+              "izvori i literatura",
+              "bibliografija",
+              "references"
+            ]
+          },
+          {
+            "key": "abstract",
+            "label": "sažetak / abstract",
+            "terms": [
+              "sazetak",
+              "abstract"
+            ]
+          },
+          {
+            "key": "keywords",
+            "label": "ključne riječi / keywords",
+            "terms": [
+              "kljucne rijeci",
+              "keywords"
+            ]
+          }
+        ],
+        "category": "structure",
+        "label": "Obvezni dijelovi rada",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "odjeljak 'STRUKTURA RADA' (str. 9) i 'FORMAT I OPREMA RADA' (izjava o autorstvu, str. 16)",
+        "quote": "Akademski radovi sastoje se od tri cjeline: prethodnoga dijela, osnovnog teksta i zavrsnoga dijela. U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj, a u zavrsnome sazetak, kljucne rijeci i popis literature. Njih mora sadrzavati svaki diplomski i zavrsni specijalisticki rad. Na prvoj sljedecoj stranici treba stajati izjava o autorstvu.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-prilagodba-eu--word-count",
+        "checkId": "word-count",
+        "value": {
+          "min": 8000,
+          "max": 12000
+        },
+        "category": "scope",
+        "label": "Opseg rijeci",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Ne smije sadrzavati manje od 8.000 ni vise od 12.000 rijeci (zavrsni specijalisticki rad).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      }
+    ],
+    "fpzg-specijalisticki-sigurnosna-politika-rh": [
+      {
+        "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--font",
+        "checkId": "font",
+        "value": [
+          "Times New Roman"
+        ],
+        "category": "format",
+        "label": "Font",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--font-size",
+        "checkId": "font-size",
+        "value": [
+          12
+        ],
+        "category": "format",
+        "label": "Velicina slova",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--line-spacing",
+        "checkId": "line-spacing",
+        "value": 1.5,
+        "category": "format",
+        "label": "Prored",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--paper-size",
+        "checkId": "paper-size",
+        "value": true,
+        "category": "format",
+        "label": "Format papira A4",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Diplomski ili zavrsni specijalisticki rad treba biti otisnut racunalnim pisacem na papiru formata A4 (21x29,7 cm), te ukoricen (meki ili tvrdi uvez).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--page-numbers",
+        "checkId": "page-numbers",
+        "value": true,
+        "category": "format",
+        "label": "Brojevi stranica",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--toc",
+        "checkId": "toc",
+        "value": true,
+        "category": "structure",
+        "label": "Sadrzaj",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "odjeljak 'STRUKTURA RADA' (str. 9) i 'FORMAT I OPREMA RADA' (izjava o autorstvu, str. 16)",
+        "quote": "U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj. Kratak sadrzaj daje pregled naslova poglavlja i potpoglavlja.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--required-sections",
+        "checkId": "required-sections",
+        "value": [
+          {
+            "key": "declaration",
+            "label": "izjava o autorstvu",
+            "terms": [
+              "izjava o autorstvu",
+              "izjava o izvornosti",
+              "izjava o akademskoj cestitosti"
+            ]
+          },
+          {
+            "key": "toc",
+            "label": "sadržaj",
+            "terms": [
+              "sadrzaj",
+              "contents",
+              "table of contents"
+            ]
+          },
+          {
+            "key": "intro",
+            "label": "uvod",
+            "terms": [
+              "uvod",
+              "introduction"
+            ]
+          },
+          {
+            "key": "conclusion",
+            "label": "zaključak",
+            "terms": [
+              "zakljucak",
+              "conclusion"
+            ]
+          },
+          {
+            "key": "refs",
+            "label": "literatura",
+            "terms": [
+              "literatura",
+              "popis literature",
+              "izvori i literatura",
+              "bibliografija",
+              "references"
+            ]
+          },
+          {
+            "key": "abstract",
+            "label": "sažetak / abstract",
+            "terms": [
+              "sazetak",
+              "abstract"
+            ]
+          },
+          {
+            "key": "keywords",
+            "label": "ključne riječi / keywords",
+            "terms": [
+              "kljucne rijeci",
+              "keywords"
+            ]
+          }
+        ],
+        "category": "structure",
+        "label": "Obvezni dijelovi rada",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "odjeljak 'STRUKTURA RADA' (str. 9) i 'FORMAT I OPREMA RADA' (izjava o autorstvu, str. 16)",
+        "quote": "Akademski radovi sastoje se od tri cjeline: prethodnoga dijela, osnovnog teksta i zavrsnoga dijela. U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj, a u zavrsnome sazetak, kljucne rijeci i popis literature. Njih mora sadrzavati svaki diplomski i zavrsni specijalisticki rad. Na prvoj sljedecoj stranici treba stajati izjava o autorstvu.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--word-count",
+        "checkId": "word-count",
+        "value": {
+          "min": 8000,
+          "max": 12000
+        },
+        "category": "scope",
+        "label": "Opseg rijeci",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Ne smije sadrzavati manje od 8.000 ni vise od 12.000 rijeci (zavrsni specijalisticki rad).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      }
+    ],
+    "fpzg-specijalisticki-vanjska-politika-diplomacija": [
+      {
+        "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--font",
+        "checkId": "font",
+        "value": [
+          "Times New Roman"
+        ],
+        "category": "format",
+        "label": "Font",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--font-size",
+        "checkId": "font-size",
+        "value": [
+          12
+        ],
+        "category": "format",
+        "label": "Velicina slova",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--line-spacing",
+        "checkId": "line-spacing",
+        "value": 1.5,
+        "category": "format",
+        "label": "Prored",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--paper-size",
+        "checkId": "paper-size",
+        "value": true,
+        "category": "format",
+        "label": "Format papira A4",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Diplomski ili zavrsni specijalisticki rad treba biti otisnut racunalnim pisacem na papiru formata A4 (21x29,7 cm), te ukoricen (meki ili tvrdi uvez).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--page-numbers",
+        "checkId": "page-numbers",
+        "value": true,
+        "category": "format",
+        "label": "Brojevi stranica",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--toc",
+        "checkId": "toc",
+        "value": true,
+        "category": "structure",
+        "label": "Sadrzaj",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "odjeljak 'STRUKTURA RADA' (str. 9) i 'FORMAT I OPREMA RADA' (izjava o autorstvu, str. 16)",
+        "quote": "U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj. Kratak sadrzaj daje pregled naslova poglavlja i potpoglavlja.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--required-sections",
+        "checkId": "required-sections",
+        "value": [
+          {
+            "key": "declaration",
+            "label": "izjava o autorstvu",
+            "terms": [
+              "izjava o autorstvu",
+              "izjava o izvornosti",
+              "izjava o akademskoj cestitosti"
+            ]
+          },
+          {
+            "key": "toc",
+            "label": "sadržaj",
+            "terms": [
+              "sadrzaj",
+              "contents",
+              "table of contents"
+            ]
+          },
+          {
+            "key": "intro",
+            "label": "uvod",
+            "terms": [
+              "uvod",
+              "introduction"
+            ]
+          },
+          {
+            "key": "conclusion",
+            "label": "zaključak",
+            "terms": [
+              "zakljucak",
+              "conclusion"
+            ]
+          },
+          {
+            "key": "refs",
+            "label": "literatura",
+            "terms": [
+              "literatura",
+              "popis literature",
+              "izvori i literatura",
+              "bibliografija",
+              "references"
+            ]
+          },
+          {
+            "key": "abstract",
+            "label": "sažetak / abstract",
+            "terms": [
+              "sazetak",
+              "abstract"
+            ]
+          },
+          {
+            "key": "keywords",
+            "label": "ključne riječi / keywords",
+            "terms": [
+              "kljucne rijeci",
+              "keywords"
+            ]
+          }
+        ],
+        "category": "structure",
+        "label": "Obvezni dijelovi rada",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "odjeljak 'STRUKTURA RADA' (str. 9) i 'FORMAT I OPREMA RADA' (izjava o autorstvu, str. 16)",
+        "quote": "Akademski radovi sastoje se od tri cjeline: prethodnoga dijela, osnovnog teksta i zavrsnoga dijela. U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj, a u zavrsnome sazetak, kljucne rijeci i popis literature. Njih mora sadrzavati svaki diplomski i zavrsni specijalisticki rad. Na prvoj sljedecoj stranici treba stajati izjava o autorstvu.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--word-count",
+        "checkId": "word-count",
+        "value": {
+          "min": 8000,
+          "max": 12000
+        },
+        "category": "scope",
+        "label": "Opseg rijeci",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Ne smije sadrzavati manje od 8.000 ni vise od 12.000 rijeci (zavrsni specijalisticki rad).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      }
+    ],
+    "fpzg-doktorski-politologija": [
+      {
+        "ruleId": "fpzg-doktorski-politologija--font",
+        "checkId": "font",
+        "value": [
+          "Times New Roman"
+        ],
+        "category": "format",
+        "label": "Font",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-drsc08-doktorski",
+        "sourcePage": "odjeljak 'Postavke stranice' (DR.SC.-08, Upute za oblikovanje doktorskog rada)",
+        "quote": "Postavke stranice: Font (tip pisma): obavezna potpora svih hrvatskih znakova - Times New Roman. Velicina pisma: 12 tipografskih tocaka. Prored: 1,5 redak.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "a38f06f9e72255ade0010197674965fae0715f1f476044ba29a53886151f069c"
+      },
+      {
+        "ruleId": "fpzg-doktorski-politologija--font-size",
+        "checkId": "font-size",
+        "value": [
+          12
+        ],
+        "category": "format",
+        "label": "Velicina slova",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-drsc08-doktorski",
+        "sourcePage": "odjeljak 'Postavke stranice' (DR.SC.-08, Upute za oblikovanje doktorskog rada)",
+        "quote": "Postavke stranice: Font (tip pisma): obavezna potpora svih hrvatskih znakova - Times New Roman. Velicina pisma: 12 tipografskih tocaka. Prored: 1,5 redak.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "a38f06f9e72255ade0010197674965fae0715f1f476044ba29a53886151f069c"
+      },
+      {
+        "ruleId": "fpzg-doktorski-politologija--line-spacing",
+        "checkId": "line-spacing",
+        "value": 1.5,
+        "category": "format",
+        "label": "Prored",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-drsc08-doktorski",
+        "sourcePage": "odjeljak 'Postavke stranice' (DR.SC.-08, Upute za oblikovanje doktorskog rada)",
+        "quote": "Postavke stranice: Font (tip pisma): obavezna potpora svih hrvatskih znakova - Times New Roman. Velicina pisma: 12 tipografskih tocaka. Prored: 1,5 redak.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "a38f06f9e72255ade0010197674965fae0715f1f476044ba29a53886151f069c"
+      },
+      {
+        "ruleId": "fpzg-doktorski-politologija--margins",
+        "checkId": "margins",
+        "value": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "category": "format",
+        "label": "Margine",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-drsc08-doktorski",
+        "sourcePage": "odjeljak 'Postavke stranice' (DR.SC.-08, Upute za oblikovanje doktorskog rada)",
+        "quote": "Lijeva i desna margina: 2,5 cm. Gornja i donja margina: 2,5 cm. Naslovnica ima drugacije margine.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "a38f06f9e72255ade0010197674965fae0715f1f476044ba29a53886151f069c"
+      },
+      {
+        "ruleId": "fpzg-doktorski-politologija--paper-size",
+        "checkId": "paper-size",
+        "value": true,
+        "category": "format",
+        "label": "Format papira A4",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-drsc08-doktorski",
+        "sourcePage": "odjeljak 'Postavke stranice' (DR.SC.-08, Upute za oblikovanje doktorskog rada)",
+        "quote": "Rad treba biti ispisan na papiru formata A4 (210x297).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "a38f06f9e72255ade0010197674965fae0715f1f476044ba29a53886151f069c"
+      },
+      {
+        "ruleId": "fpzg-doktorski-politologija--page-numbers",
+        "checkId": "page-numbers",
+        "value": true,
+        "category": "format",
+        "label": "Brojevi stranica",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-drsc08-doktorski",
+        "sourcePage": "odjeljak 'Postavke stranice' (DR.SC.-08, Upute za oblikovanje doktorskog rada)",
+        "quote": "Stranice trebaju biti numerirane. Broje se sve stranice od Uvoda do kraja rada. Numeracija se pise u donjem desnom kutu.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "a38f06f9e72255ade0010197674965fae0715f1f476044ba29a53886151f069c"
+      }
     ]
   }
 }
