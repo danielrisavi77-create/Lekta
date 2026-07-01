@@ -4986,9 +4986,9 @@
   },
   {
     "id": "agr-diplomski",
-    "unitId": "unizg-agr",
+    "unitId": "agr",
     "programs": [
-      "diplomski studiji Agronomskog fakulteta Sveucilista u Zagrebu"
+      "Diplomski studiji Agronomskog fakulteta"
     ],
     "workTypes": [
       "graduate"
@@ -4997,7 +4997,18 @@
     "profileLabel": "Agronomski fakultet, diplomski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2019-04-10",
-    "rules": {},
+    "rules": {
+      "font": ["Times New Roman", "Arial", "Calibri"],
+      "size": [12],
+      "spacing": 1.15,
+      "margins": { "top": 2.5, "right": 2.5, "bottom": 2.5, "left": 2.5 },
+      "checkJustify": false,
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "requireA4": true,
+      "recommendedCitation": "harvard",
+      "accessDate": true
+    },
     "facts": [
       "Numeracija stranica ide od sazetka do kraja teksta, u donjem desnom kutu (imperativ).",
       "Sadrzaj je obvezna cjelina rada (imperativ).",

@@ -8,9 +8,10 @@
         "name": "Agronomski fakultet",
         "family": "stem",
         "programs": [
+          "Diplomski studiji Agronomskog fakulteta",
           "Opći profil fakulteta"
         ],
-        "status": "research"
+        "status": "partial"
       },
       {
         "id": "arh",
