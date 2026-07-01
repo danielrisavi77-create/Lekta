@@ -10,15 +10,50 @@
  *
  * Pokretanje: node scripts/recompute-coverage.mjs
  */
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
 
 const ROOT = new URL('..', import.meta.url);
 const p = (rel) => new URL(rel, ROOT);
 
 const verified = JSON.parse(readFileSync(p('data/profiles/verified-profiles.json'), 'utf8'));
 const legal = JSON.parse(readFileSync(p('data/profiles/legal-departments.json'), 'utf8'));
-const drafts = JSON.parse(readFileSync(p('data/profiles/pravo/drafts/law-drafts.json'), 'utf8'));
 const sources = JSON.parse(readFileSync(p('data/sources/source-registry.json'), 'utf8'));
+
+// Spoji SVE staging draftove pod data/profiles/<faculty>/drafts/*.json istom
+// gap-fill semantikom kao src/profiles/drafts-merge.ts (agregirani autoritativan,
+// fan-out popunjava samo profile bez staginga). Inace bi se coverage razisao s TS
+// modulom koji cita VERIFIED_PROFILES_WITH_DRAFTS (glob-merge).
+const aggregated = [];
+const fanout = [];
+for (const fac of readdirSync(p('data/profiles/'), { withFileTypes: true })) {
+  if (!fac.isDirectory()) continue;
+  let files;
+  try {
+    files = readdirSync(p(`data/profiles/${fac.name}/drafts/`));
+  } catch {
+    continue;
+  }
+  for (const f of files) {
+    if (!f.endsWith('.json')) continue;
+    const data = JSON.parse(readFileSync(p(`data/profiles/${fac.name}/drafts/${f}`), 'utf8'));
+    if (data && data.profiles) aggregated.push(data);
+    else if (data && data.profileId && data.entries) fanout.push(data);
+  }
+}
+const mergedDrafts = {};
+for (const agg of aggregated) {
+  for (const [id, entries] of Object.entries(agg.profiles ?? {})) mergedDrafts[id] = entries;
+}
+const fresh = {};
+for (const file of fanout) {
+  if (mergedDrafts[file.profileId]) continue; // agregirani staging pobjeduje
+  (fresh[file.profileId] ??= []).push(...(file.entries ?? []));
+}
+for (const [id, entries] of Object.entries(fresh)) {
+  const byId = new Map();
+  for (const e of entries) byId.set(e.ruleId, e); // dedup po ruleId, zadnji pobjeduje
+  mergedDrafts[id] = [...byId.values()];
+}
 
 const OFFICIAL = new Set(['binding', 'program-page', 'general']);
 const srcById = new Map(sources.map((s) => [s.id, s]));
@@ -48,7 +83,7 @@ function latest(dates) {
 
 const cells = [];
 for (const profile of [...verified, ...legal]) {
-  const entries = drafts.profiles[profile.id] ?? [];
+  const entries = mergedDrafts[profile.id] ?? [];
   if (!entries.length) continue;
   const scored = entries.filter(isScored);
   const machineCheckable = entries.filter((e) => e.machineCheckable).length;

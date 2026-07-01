@@ -4983,5 +4983,49 @@
     "advisoryScope": [
       "konačno oblikovanje mora se provjeriti prema aktualnim doktorskim i sveučilišnim pravilima"
     ]
+  },
+  {
+    "id": "agr-diplomski",
+    "unitId": "unizg-agr",
+    "programs": [
+      "diplomski studiji Agronomskog fakulteta Sveucilista u Zagrebu"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Agronomski fakultet, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2019-04-10",
+    "rules": {},
+    "facts": [
+      "Numeracija stranica ide od sazetka do kraja teksta, u donjem desnom kutu (imperativ).",
+      "Sadrzaj je obvezna cjelina rada (imperativ).",
+      "Font 12, prored 1,15, margine 2,5 cm, A4 i opseg 20-50 str. formulirani su kao Preporuke (advisory)."
+    ],
+    "note": "Tehnicko oblikovanje i opseg su u Uputama pod \"Preporuke za tehnicko oblikovanje rada\" pa su advisory; scored su samo imperativna pravila (numeracija stranica, obvezan Sadrzaj). Prijediplomski (zavrsni, 2017) i doktorski (DR.08, 2026) profili dolaze kasnije iz zasebnih Uputa.",
+    "sources": [
+      {
+        "title": "Upute za izradu diplomskog rada (AGR, 2019)",
+        "url": "https://www.agr.unizg.hr/upload/nastava/ms_dipl_rad_upute_20190410.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu diplomskog rada (Agronomski fakultet, 2019)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "numeracija stranica",
+      "sadrzaj (obvezna cjelina)"
+    ],
+    "advisoryScope": [
+      "velicina slova",
+      "prored",
+      "margine",
+      "format papira",
+      "opseg u stranicama",
+      "stil citiranja (autor-godina)",
+      "obvezne cjeline rada"
+    ]
   }
 ]

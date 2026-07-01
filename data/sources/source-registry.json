@@ -164,5 +164,18 @@
     "validityClass": "stable",
     "lastChecked": "2026-07-02",
     "note": "1 str. Smjernice za ocjenu kvalitete akademskog pisanja (rubrika). Vecinom advisory (kvalitativni kriteriji), ne strojno provjerljivo."
+  },
+  {
+    "id": "agr-upute-diplomski-2019",
+    "kind": "guidelines",
+    "title": "Upute za izradu diplomskog rada (Agronomski fakultet, 2019)",
+    "url": "https://www.agr.unizg.hr/upload/nastava/ms_dipl_rad_upute_20190410.pdf",
+    "publisher": "Agronomski fakultet Sveucilista u Zagrebu",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/agr/agr-upute-diplomski-2019.pdf",
+    "snapshotHash": "1d09e18e819b157f83479f5a035c1c3868fecc04a0144aa36c4dec091600c778",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-02",
+    "note": "Point-in-time PDF snapshot Uputa za diplomski rad (AGR, 2019). Tehnicko oblikovanje (font 12, prored 1,15, margine 2,5, A4) i opseg 20-50 str. formulirani kao Preporuke -> advisory; numeriranje stranica i obvezan Sadrzaj su imperativ -> scored."
   }
 ]

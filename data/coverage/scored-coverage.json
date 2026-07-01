@@ -1,6 +1,14 @@
 {
   "cells": [
     {
+      "profileId": "agr-diplomski",
+      "scored": 2,
+      "machineCheckable": 7,
+      "advisory": 7,
+      "ratio": 0.2857142857142857,
+      "lastVerified": "2026-06-30"
+    },
+    {
       "profileId": "pravo-doktorski-pravne-znanosti",
       "scored": 4,
       "machineCheckable": 6,
@@ -129,5 +137,5 @@
       "lastVerified": "2026-06-30"
     }
   ],
-  "totalScored": 76
+  "totalScored": 78
 }

@@ -3694,5 +3694,113 @@
     "sourcePage": "odjeljak 'Opcenita struktura rada', recenica o oblikovanju rada",
     "quote": "Stranice moraju biti numerirane, font Times New Roman, velicina 12, obostrano poravnanje, prored 1,5.",
     "note": "Batch odobrenje sociologija pravila."
+  },
+  {
+    "id": "led-agr-diplomski--font-size-advisory-2026-07-02",
+    "ruleId": "agr-diplomski--font-size",
+    "profileId": "agr-diplomski",
+    "action": "advisory",
+    "actor": "owner-bulk-approval",
+    "timestamp": "2026-07-02",
+    "sourceId": "agr-upute-diplomski-2019",
+    "sourcePage": "odjeljak 6. Tehnicko oblikovanje rada",
+    "quote": "Preporuke za tehnicko oblikovanje rada: rad se pise velicinom slova 12 pt, prored 1,15",
+    "note": "Port batch-4 AGR seed u produkciju."
+  },
+  {
+    "id": "led-agr-diplomski--line-spacing-advisory-2026-07-02",
+    "ruleId": "agr-diplomski--line-spacing",
+    "profileId": "agr-diplomski",
+    "action": "advisory",
+    "actor": "owner-bulk-approval",
+    "timestamp": "2026-07-02",
+    "sourceId": "agr-upute-diplomski-2019",
+    "sourcePage": "odjeljak 6. Tehnicko oblikovanje rada",
+    "quote": "Preporuke za tehnicko oblikovanje rada: rad se pise velicinom slova 12 pt, prored 1,15",
+    "note": "Port batch-4 AGR seed u produkciju."
+  },
+  {
+    "id": "led-agr-diplomski--margins-advisory-2026-07-02",
+    "ruleId": "agr-diplomski--margins",
+    "profileId": "agr-diplomski",
+    "action": "advisory",
+    "actor": "owner-bulk-approval",
+    "timestamp": "2026-07-02",
+    "sourceId": "agr-upute-diplomski-2019",
+    "sourcePage": "odjeljak 6. Tehnicko oblikovanje rada",
+    "quote": "margine rada trebaju iznositi 2,5 cm",
+    "note": "Port batch-4 AGR seed u produkciju."
+  },
+  {
+    "id": "led-agr-diplomski--paper-size-advisory-2026-07-02",
+    "ruleId": "agr-diplomski--paper-size",
+    "profileId": "agr-diplomski",
+    "action": "advisory",
+    "actor": "owner-bulk-approval",
+    "timestamp": "2026-07-02",
+    "sourceId": "agr-upute-diplomski-2019",
+    "sourcePage": "odjeljak 1. Diplomski rad",
+    "quote": "Preporuka je da diplomski rad bude opsega 20 - 50 stranica osnovnog teksta na papiru A4 formata",
+    "note": "Port batch-4 AGR seed u produkciju."
+  },
+  {
+    "id": "led-agr-diplomski--page-numbers-verified-2026-07-02",
+    "ruleId": "agr-diplomski--page-numbers",
+    "profileId": "agr-diplomski",
+    "action": "verified",
+    "actor": "owner-bulk-approval",
+    "timestamp": "2026-07-02",
+    "sourceId": "agr-upute-diplomski-2019",
+    "sourcePage": "odjeljak 6. Tehnicko oblikovanje rada",
+    "quote": "stranice se numeriraju od sazetka do kraja teksta, a numeracija se postavlja u donji desni kut",
+    "note": "Port batch-4 AGR seed u produkciju."
+  },
+  {
+    "id": "led-agr-diplomski--toc-verified-2026-07-02",
+    "ruleId": "agr-diplomski--toc",
+    "profileId": "agr-diplomski",
+    "action": "verified",
+    "actor": "owner-bulk-approval",
+    "timestamp": "2026-07-02",
+    "sourceId": "agr-upute-diplomski-2019",
+    "sourcePage": "odjeljak 2. Struktura i sadrzaj diplomskog rada",
+    "quote": "Sadrzaj je popis naslova poglavlja i potpoglavlja s brojem stranice na kojoj zapocinju",
+    "note": "Port batch-4 AGR seed u produkciju."
+  },
+  {
+    "id": "led-agr-diplomski--page-count-advisory-2026-07-02",
+    "ruleId": "agr-diplomski--page-count",
+    "profileId": "agr-diplomski",
+    "action": "advisory",
+    "actor": "owner-bulk-approval",
+    "timestamp": "2026-07-02",
+    "sourceId": "agr-upute-diplomski-2019",
+    "sourcePage": "odjeljak 1. Diplomski rad",
+    "quote": "Preporuka je da diplomski rad bude opsega 20 - 50 stranica osnovnog teksta na papiru A4 formata",
+    "note": "Port batch-4 AGR seed u produkciju."
+  },
+  {
+    "id": "led-agr-diplomski--citation-style-advisory-2026-07-02",
+    "ruleId": "agr-diplomski--citation-style",
+    "profileId": "agr-diplomski",
+    "action": "advisory",
+    "actor": "owner-bulk-approval",
+    "timestamp": "2026-07-02",
+    "sourceId": "agr-upute-diplomski-2019",
+    "sourcePage": "odjeljak 5. Pravila citiranja, a) Citiranje izvora u tekstu",
+    "quote": "prema Husnjaku (2014.) morfogenetska grada tla ... / prema morfogenetskoj gradi tla (Husnjak 2014.)",
+    "note": "Port batch-4 AGR seed u produkciju."
+  },
+  {
+    "id": "led-agr-diplomski--required-sections-advisory-2026-07-02",
+    "ruleId": "agr-diplomski--required-sections",
+    "profileId": "agr-diplomski",
+    "action": "advisory",
+    "actor": "owner-bulk-approval",
+    "timestamp": "2026-07-02",
+    "sourceId": "agr-upute-diplomski-2019",
+    "sourcePage": null,
+    "quote": "sazetak / sadrzaj / uvod / sredisnji dio / zakljucak / literatura",
+    "note": "Port batch-4 AGR seed u produkciju."
   }
 ]
