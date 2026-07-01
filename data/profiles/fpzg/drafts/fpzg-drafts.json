@@ -206,6 +206,23 @@
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
         "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-politologija-diplomski--citation-style",
+        "checkId": "citation-style",
+        "value": "fpzg",
+        "category": "citation",
+        "label": "Stil citiranja",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-pravila-navodenja-citiranja",
+        "sourcePage": "str. 1, naslov i primjeri unutartekstnih citatnica",
+        "quote": "Pravila navodenja bibliografskih jedinica i citatnica na Fakultetu politickih znanosti. Unutartekstna citatnica navodi se u obliku (prezime, godina), npr. (Becker, 2007), (Petak, 2001).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "56df35ca9ab16a3650f6599ca481928dfdc7a2d081321529ba3219a34fe9be9b"
       }
     ],
     "fpzg-nacionalna-sigurnost-diplomski": [
@@ -413,6 +430,23 @@
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
         "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-nacionalna-sigurnost-diplomski--citation-style",
+        "checkId": "citation-style",
+        "value": "fpzg",
+        "category": "citation",
+        "label": "Stil citiranja",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-pravila-navodenja-citiranja",
+        "sourcePage": "str. 1, naslov i primjeri unutartekstnih citatnica",
+        "quote": "Pravila navodenja bibliografskih jedinica i citatnica na Fakultetu politickih znanosti. Unutartekstna citatnica navodi se u obliku (prezime, godina), npr. (Becker, 2007), (Petak, 2001).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "56df35ca9ab16a3650f6599ca481928dfdc7a2d081321529ba3219a34fe9be9b"
       }
     ],
     "fpzg-novinarstvo-diplomski": [
@@ -620,6 +654,23 @@
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
         "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-novinarstvo-diplomski--citation-style",
+        "checkId": "citation-style",
+        "value": "fpzg",
+        "category": "citation",
+        "label": "Stil citiranja",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-pravila-navodenja-citiranja",
+        "sourcePage": "str. 1, naslov i primjeri unutartekstnih citatnica",
+        "quote": "Pravila navodenja bibliografskih jedinica i citatnica na Fakultetu politickih znanosti. Unutartekstna citatnica navodi se u obliku (prezime, godina), npr. (Becker, 2007), (Petak, 2001).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "56df35ca9ab16a3650f6599ca481928dfdc7a2d081321529ba3219a34fe9be9b"
       }
     ],
     "fpzg-specijalisticki-odnosi-s-javnoscu": [
@@ -827,6 +878,23 @@
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
         "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--citation-style",
+        "checkId": "citation-style",
+        "value": "fpzg",
+        "category": "citation",
+        "label": "Stil citiranja",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-pravila-navodenja-citiranja",
+        "sourcePage": "str. 1, naslov i primjeri unutartekstnih citatnica",
+        "quote": "Pravila navodenja bibliografskih jedinica i citatnica na Fakultetu politickih znanosti. Unutartekstna citatnica navodi se u obliku (prezime, godina), npr. (Becker, 2007), (Petak, 2001).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "56df35ca9ab16a3650f6599ca481928dfdc7a2d081321529ba3219a34fe9be9b"
       }
     ],
     "fpzg-specijalisticki-prilagodba-eu": [
@@ -1034,6 +1102,23 @@
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
         "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-prilagodba-eu--citation-style",
+        "checkId": "citation-style",
+        "value": "fpzg",
+        "category": "citation",
+        "label": "Stil citiranja",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-pravila-navodenja-citiranja",
+        "sourcePage": "str. 1, naslov i primjeri unutartekstnih citatnica",
+        "quote": "Pravila navodenja bibliografskih jedinica i citatnica na Fakultetu politickih znanosti. Unutartekstna citatnica navodi se u obliku (prezime, godina), npr. (Becker, 2007), (Petak, 2001).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "56df35ca9ab16a3650f6599ca481928dfdc7a2d081321529ba3219a34fe9be9b"
       }
     ],
     "fpzg-specijalisticki-sigurnosna-politika-rh": [
@@ -1241,6 +1326,23 @@
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
         "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--citation-style",
+        "checkId": "citation-style",
+        "value": "fpzg",
+        "category": "citation",
+        "label": "Stil citiranja",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-pravila-navodenja-citiranja",
+        "sourcePage": "str. 1, naslov i primjeri unutartekstnih citatnica",
+        "quote": "Pravila navodenja bibliografskih jedinica i citatnica na Fakultetu politickih znanosti. Unutartekstna citatnica navodi se u obliku (prezime, godina), npr. (Becker, 2007), (Petak, 2001).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "56df35ca9ab16a3650f6599ca481928dfdc7a2d081321529ba3219a34fe9be9b"
       }
     ],
     "fpzg-specijalisticki-vanjska-politika-diplomacija": [
@@ -1448,6 +1550,23 @@
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
         "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--citation-style",
+        "checkId": "citation-style",
+        "value": "fpzg",
+        "category": "citation",
+        "label": "Stil citiranja",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-pravila-navodenja-citiranja",
+        "sourcePage": "str. 1, naslov i primjeri unutartekstnih citatnica",
+        "quote": "Pravila navodenja bibliografskih jedinica i citatnica na Fakultetu politickih znanosti. Unutartekstna citatnica navodi se u obliku (prezime, godina), npr. (Becker, 2007), (Petak, 2001).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "56df35ca9ab16a3650f6599ca481928dfdc7a2d081321529ba3219a34fe9be9b"
       }
     ],
     "fpzg-doktorski-politologija": [
@@ -1561,6 +1680,294 @@
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
         "verifiedHash": "a38f06f9e72255ade0010197674965fae0715f1f476044ba29a53886151f069c"
+      },
+      {
+        "ruleId": "fpzg-doktorski-politologija--citation-style",
+        "checkId": "citation-style",
+        "value": "fpzg",
+        "category": "citation",
+        "label": "Stil citiranja",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-pravila-navodenja-citiranja",
+        "sourcePage": "str. 1, naslov i primjeri unutartekstnih citatnica",
+        "quote": "Pravila navodenja bibliografskih jedinica i citatnica na Fakultetu politickih znanosti. Unutartekstna citatnica navodi se u obliku (prezime, godina), npr. (Becker, 2007), (Petak, 2001).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "56df35ca9ab16a3650f6599ca481928dfdc7a2d081321529ba3219a34fe9be9b"
+      }
+    ],
+    "fpzg-politologija-zavrsni": [
+      {
+        "ruleId": "fpzg-politologija-zavrsni--citation-style",
+        "checkId": "citation-style",
+        "value": "fpzg",
+        "category": "citation",
+        "label": "Stil citiranja",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-pravila-navodenja-citiranja",
+        "sourcePage": "str. 1, naslov i primjeri unutartekstnih citatnica",
+        "quote": "Pravila navodenja bibliografskih jedinica i citatnica na Fakultetu politickih znanosti. Unutartekstna citatnica navodi se u obliku (prezime, godina), npr. (Becker, 2007), (Petak, 2001).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "56df35ca9ab16a3650f6599ca481928dfdc7a2d081321529ba3219a34fe9be9b"
+      }
+    ],
+    "fpzg-novinarstvo-zavrsni-tekst": [
+      {
+        "ruleId": "fpzg-novinarstvo-zavrsni-tekst--citation-style",
+        "checkId": "citation-style",
+        "value": "fpzg",
+        "category": "citation",
+        "label": "Stil citiranja",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-pravila-navodenja-citiranja",
+        "sourcePage": "str. 1, naslov i primjeri unutartekstnih citatnica",
+        "quote": "Pravila navodenja bibliografskih jedinica i citatnica na Fakultetu politickih znanosti. Unutartekstna citatnica navodi se u obliku (prezime, godina), npr. (Becker, 2007), (Petak, 2001).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "56df35ca9ab16a3650f6599ca481928dfdc7a2d081321529ba3219a34fe9be9b"
+      }
+    ],
+    "fpzg-novinarstvo-zavrsni-av": [
+      {
+        "ruleId": "fpzg-novinarstvo-zavrsni-av--citation-style",
+        "checkId": "citation-style",
+        "value": "fpzg",
+        "category": "citation",
+        "label": "Stil citiranja",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-pravila-navodenja-citiranja",
+        "sourcePage": "str. 1, naslov i primjeri unutartekstnih citatnica",
+        "quote": "Pravila navodenja bibliografskih jedinica i citatnica na Fakultetu politickih znanosti. Unutartekstna citatnica navodi se u obliku (prezime, godina), npr. (Becker, 2007), (Petak, 2001).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "56df35ca9ab16a3650f6599ca481928dfdc7a2d081321529ba3219a34fe9be9b"
+      }
+    ],
+    "fpzg-mes-master-thesis": [
+      {
+        "ruleId": "fpzg-mes-master-thesis--citation-style",
+        "checkId": "citation-style",
+        "value": "fpzg",
+        "category": "citation",
+        "label": "Stil citiranja",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-pravila-navodenja-citiranja",
+        "sourcePage": "str. 1, naslov i primjeri unutartekstnih citatnica",
+        "quote": "Pravila navodenja bibliografskih jedinica i citatnica na Fakultetu politickih znanosti. Unutartekstna citatnica navodi se u obliku (prezime, godina), npr. (Becker, 2007), (Petak, 2001).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "56df35ca9ab16a3650f6599ca481928dfdc7a2d081321529ba3219a34fe9be9b"
+      },
+      {
+        "ruleId": "fpzg-mes-master-thesis--font",
+        "checkId": "font",
+        "value": [
+          "Times New Roman"
+        ],
+        "category": "format",
+        "label": "Font",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-mes-master-thesis--font-size",
+        "checkId": "font-size",
+        "value": [
+          12
+        ],
+        "category": "format",
+        "label": "Velicina slova",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-mes-master-thesis--line-spacing",
+        "checkId": "line-spacing",
+        "value": 1.5,
+        "category": "format",
+        "label": "Prored",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-mes-master-thesis--paper-size",
+        "checkId": "paper-size",
+        "value": true,
+        "category": "format",
+        "label": "Format papira A4",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Diplomski ili zavrsni specijalisticki rad treba biti otisnut racunalnim pisacem na papiru formata A4 (21x29,7 cm), te ukoricen (meki ili tvrdi uvez).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-mes-master-thesis--page-numbers",
+        "checkId": "page-numbers",
+        "value": true,
+        "category": "format",
+        "label": "Brojevi stranica",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "quote": "Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-mes-master-thesis--toc",
+        "checkId": "toc",
+        "value": true,
+        "category": "structure",
+        "label": "Sadrzaj",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "odjeljak 'STRUKTURA RADA' (str. 9) i 'FORMAT I OPREMA RADA' (str. 16)",
+        "quote": "U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj. Kratak sadrzaj daje pregled naslova poglavlja i potpoglavlja.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-mes-master-thesis--required-sections",
+        "checkId": "required-sections",
+        "value": [
+          {
+            "key": "toc",
+            "label": "sadržaj",
+            "terms": [
+              "sadrzaj",
+              "contents",
+              "table of contents"
+            ]
+          },
+          {
+            "key": "intro",
+            "label": "uvod",
+            "terms": [
+              "uvod",
+              "introduction"
+            ]
+          },
+          {
+            "key": "conclusion",
+            "label": "zaključak",
+            "terms": [
+              "zakljucak",
+              "conclusion"
+            ]
+          },
+          {
+            "key": "refs",
+            "label": "literatura",
+            "terms": [
+              "literatura",
+              "popis literature",
+              "izvori i literatura",
+              "bibliografija",
+              "references"
+            ]
+          },
+          {
+            "key": "abstract",
+            "label": "sažetak / abstract",
+            "terms": [
+              "sazetak",
+              "abstract"
+            ]
+          },
+          {
+            "key": "keywords",
+            "label": "ključne riječi / keywords",
+            "terms": [
+              "kljucne rijeci",
+              "keywords"
+            ]
+          }
+        ],
+        "category": "structure",
+        "label": "Obvezni dijelovi rada",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "odjeljak 'STRUKTURA RADA' (str. 9) i 'FORMAT I OPREMA RADA' (str. 16)",
+        "quote": "Akademski radovi sastoje se od tri cjeline: prethodnoga dijela, osnovnog teksta i zavrsnoga dijela. U prethodnom dijelu obavezni su dijelovi rada naslov (naslovnica) i sadrzaj, a u zavrsnome sazetak, kljucne rijeci i popis literature.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      }
+    ],
+    "fpzg-opci-akademski-rad": [
+      {
+        "ruleId": "fpzg-opci-akademski-rad--citation-style",
+        "checkId": "citation-style",
+        "value": "fpzg",
+        "category": "citation",
+        "label": "Stil citiranja",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-pravila-navodenja-citiranja",
+        "sourcePage": "str. 1, naslov i primjeri unutartekstnih citatnica",
+        "quote": "Pravila navodenja bibliografskih jedinica i citatnica na Fakultetu politickih znanosti. Unutartekstna citatnica navodi se u obliku (prezime, godina), npr. (Becker, 2007), (Petak, 2001).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "56df35ca9ab16a3650f6599ca481928dfdc7a2d081321529ba3219a34fe9be9b"
       }
     ]
   }
