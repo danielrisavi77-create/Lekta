@@ -125,5 +125,44 @@
     "validityClass": "volatile",
     "lastChecked": "2026-07-02",
     "note": "Point-in-time HTML capture. Propisuje oblikovanje ('Stranice moraju biti numerirane, font Times New Roman, velicina 12, obostrano poravnanje, prored 1,5.') i strukturu ('Pisani rad mora imati - naslovnicu, kratak sadrzaj, uvod, razradu rada po poglavljima, zakljucak, popis literature i popis priloga'). Volatile - hash ce driftati (gate ne rusi na volatile drift)."
+  },
+  {
+    "id": "fpzg-upute-akademski-radovi",
+    "kind": "guidelines",
+    "title": "Upute za pisanje akademskih radova na Fakultetu politickih znanosti",
+    "url": "https://www.fpzg.unizg.hr/images/50442907/Upute_za_pisanje_akademskih_radova_na_Fakultetu_politickih_znanosti.pdf",
+    "publisher": "Fakultet politickih znanosti Sveucilista u Zagrebu",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/fpzg/fpzg-upute-akademski-radovi-2026.pdf",
+    "snapshotHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-02",
+    "note": "37 str. Glavni FPZG izvor za oblikovanje i strukturu: 'napisani fontom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify)', A4, brojevi stranica (rimski prednji dio, arapski od uvoda), opseg rijeci po studiju (politologija 10000-12000, novinarstvo 12000-15000, spec. zavrsni 8000-12000), struktura (uvod, razrada, zakljucak, sadrzaj, popis literature, sazetak i kljucne rijeci, naslovnica)."
+  },
+  {
+    "id": "fpzg-pravila-navodenja-citiranja",
+    "kind": "citation-style",
+    "title": "Pravila navodenja bibliografskih jedinica i citatnica na Fakultetu politickih znanosti",
+    "url": "https://www.fpzg.unizg.hr/images/50442907/Pravila_navodenja_bibliografskih_jedinica_i_citatnica_na_Fakultetu_politickih_znanosti.pdf",
+    "publisher": "Fakultet politickih znanosti Sveucilista u Zagrebu",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/fpzg/fpzg-pravila-navodenja-citiranja-2026.pdf",
+    "snapshotHash": "56df35ca9ab16a3650f6599ca481928dfdc7a2d081321529ba3219a34fe9be9b",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-02",
+    "note": "6 str. FPZG pravila citiranja (autor-godina model) i popisa bibliografskih jedinica. Izvor za citation-style i reference provjere."
+  },
+  {
+    "id": "fpzg-akademsko-pisanje-smjernice",
+    "kind": "guidelines",
+    "title": "Ocjena kvalitete akademskog pisanja - smjernice za nastavnike i studente (FPZG)",
+    "url": "https://www.fpzg.unizg.hr/images/50442907/Akademsko%20pisanje__smjernice%20za%20nastavnike%20i%20studente.pdf",
+    "publisher": "Fakultet politickih znanosti Sveucilista u Zagrebu",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/fpzg/fpzg-akademsko-pisanje-smjernice-2026.pdf",
+    "snapshotHash": "e72d17c61fc9b8b7f531ec89a63c4f087731062d8357a03bc2a34e796e6a18e0",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-02",
+    "note": "1 str. Smjernice za ocjenu kvalitete akademskog pisanja (rubrika). Vecinom advisory (kvalitativni kriteriji), ne strojno provjerljivo."
   }
 ]
