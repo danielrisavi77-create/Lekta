@@ -6,9 +6,14 @@ import rawSources from '../../data/sources/source-registry.json';
 import rawLedger from '../../data/verification/ledger.json';
 import type { SourceEntry, VerificationLedgerEntry } from '../profiles/profile-schema';
 
-export const SOURCE_REGISTRY = rawSources as unknown as SourceEntry[];
+// Nepromjenjivi singletoni: freeze pretvara slucajnu in-place mutaciju (push/sort/splice)
+// u glasan, deterministican throw umjesto rijetkog flake-a u faithfulness testovima.
+// Cast natrag na mutable tip cuva postojece potpise (funkcije primaju SourceEntry[]).
+export const SOURCE_REGISTRY = Object.freeze(rawSources as unknown as SourceEntry[]) as SourceEntry[];
 
-export const VERIFICATION_LEDGER = rawLedger as unknown as VerificationLedgerEntry[];
+export const VERIFICATION_LEDGER = Object.freeze(
+  rawLedger as unknown as VerificationLedgerEntry[],
+) as VerificationLedgerEntry[];
 
 /** Izvor po id-u, ili undefined. */
 export function findSource(id: string): SourceEntry | undefined {
