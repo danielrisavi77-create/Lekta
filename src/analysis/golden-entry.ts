@@ -6,15 +6,14 @@
  * analyzeDocx s fiksnim, deterministickim postavkama. Koristi ga tests/docx-golden
  * i tests/fpzg-synthetic. NE pokrece UI ni init() (init je ogradjen u src/main.ts).
  */
-// @ts-nocheck
-import { analyzeDocx } from '../main';
+import { analyzeDocx } from '../ui/app';
 import { VERIFIED_PROFILE_REGISTRY, PROFILE_STATUS } from '../profiles/profile-registry';
 
 /** Razrjesi profilni objekt koji analyzeDocx ocekuje (spljosteni rules + metapodaci). */
-export function resolveProfile(profileId) {
+export function resolveProfile(profileId: string) {
   const entry = VERIFIED_PROFILE_REGISTRY.find((p) => p.id === profileId);
   if (!entry) throw new Error(`Nepoznat profileId: ${profileId}`);
-  const base = structuredClone(entry.rules);
+  const base: any = structuredClone(entry.rules);
   // Normalizacija identicna currentProfile() u src/main.ts:
   base.checkFont = base.checkFont !== false;
   base.checkSize = base.checkSize !== false;
@@ -36,6 +35,22 @@ export function resolveProfile(profileId) {
   base.advisoryScope = entry.advisoryScope || [];
   base.sourceHierarchy = entry.sourceHierarchy || [];
   base.selection = { workType: (entry.workTypes || [])[0] || 'final' };
+  // citationMode kao u currentProfile() (citationMeta(...).mode): bez njega legal/author-year
+  // engine ne radi, pa golden korpus ne bi pokrivao pravne fusnote ni autor-godina citate.
+  const CITATION_MODE: Record<string, string> = {
+    fpzg: 'author-year',
+    'pravo-fusnote': 'legal-notes',
+    'pravo-social-author': 'author-year',
+    apa7: 'author-year',
+    harvard: 'author-year',
+    'chicago-author': 'author-year',
+    'chicago-notes': 'notes',
+    mla9: 'author-page',
+    vancouver: 'numeric',
+    ieee: 'numeric',
+    custom: 'custom',
+  };
+  base.citationMode = CITATION_MODE[base.recommendedCitation] || 'custom';
   return base;
 }
 
@@ -43,7 +58,7 @@ export function resolveProfile(profileId) {
  * Analiziraj jedan .docx (File) odabranim profilom. Ugovor koji harness ocekuje:
  * analyzeFixture(file, { profileId }) => Promise<Result>.
  */
-export async function analyzeFixture(file, opts = {}) {
+export async function analyzeFixture(file: File, opts: { profileId?: string; settings?: any } = {}) {
   const profileId = opts.profileId || VERIFIED_PROFILE_REGISTRY[0].id;
   const profile = resolveProfile(profileId);
   const settings = {

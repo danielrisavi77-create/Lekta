@@ -8,10 +8,20 @@ Harness: `tests/docx-golden.test.ts` + `tests/fixtures/docx/`.
 
 ## Stanje danas
 
-- Fixtura nema -> suite se sam preskace (`describe.skip`), `npm run check` zelen.
-- Pipeline (`analyzeDocx` u `src/main.ts`) jos NIJE izlozen kao uvozljiva funkcija
-  jer `src/main.ts` na dnu poziva `init()` koji dira DOM. Zato harness pipeline
-  ucitava lijeno iz `src/analysis/golden-entry.ts` (taj modul jos ne postoji).
+- Pipeline (`analyzeDocx`) JE izlozen kao uvozljiva funkcija: `src/main.ts` ograduje
+  trailing `init()` (`if (document.getElementById('analyzer')) init()`) i izvozi
+  `analyzeDocx`; `src/analysis/golden-entry.ts` je DOM-free adapter (`analyzeFixture`).
+- Golden net je AKTIVAN i trajno SINTETICKI: `tests/synthetic-golden.test.ts` gradi
+  deterministicki korpus (FPZG zavrsni/diplomski/doktorski + Pravo integrirani) u
+  memoriji preko `tests/helpers/docx-builder.ts`, provlaci ga kroz `analyzeFixture` i
+  snima stabilan projekt rezultata (`tests/helpers/golden-normalize.ts`) kao snapshot.
+- Zasto sinteticki, ne realni: projekt NEMA i nece imati prave studentske `.docx`.
+  Korpus je zato izvor istine golden zastite. Realni harness `tests/docx-golden.test.ts`
+  ostaje (cita `tests/fixtures/docx/`) ali se sam preskace jer fixtura nema; oba dijele
+  `golden-normalize`.
+- Granica: `docx-builder` zasad ne radi fusnote, pa Legal Citation Engine nije pokriven
+  sintetickim korpusom. Taj golden (uz prosirenje buildera za fusnote) dolazi kao PRVI
+  korak porta legal-citation enginea, baseline prije diranja.
 
 ## Aktivacija (kad ubacis prve .docx)
 

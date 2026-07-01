@@ -24,6 +24,7 @@ export interface DocSpec {
   paragraphs: ParaSpec[];
   pageCm?: { w: number; h: number }; // default A4 21 x 29,7
   marginsCm?: { top: number; right: number; bottom: number; left: number };
+  footnotes?: string[]; // tekstovi fusnota; emitira word/footnotes.xml (id 1..N)
 }
 
 function esc(s: string): string {
@@ -76,14 +77,34 @@ const STYLES_XML =
   `<w:style w:type="paragraph" w:styleId="Heading2"><w:name w:val="heading 2"/></w:style>` +
   `</w:styles>`;
 
-const CONTENT_TYPES =
-  `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
-  `<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">` +
-  `<Default Extension="xml" ContentType="application/xml"/>` +
-  `<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>` +
-  `<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>` +
-  `<Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>` +
-  `</Types>`;
+function contentTypesXml(hasFootnotes: boolean): string {
+  return (
+    `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
+    `<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">` +
+    `<Default Extension="xml" ContentType="application/xml"/>` +
+    `<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>` +
+    `<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>` +
+    `<Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>` +
+    (hasFootnotes
+      ? `<Override PartName="/word/footnotes.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml"/>`
+      : '') +
+    `</Types>`
+  );
+}
+
+/** word/footnotes.xml s fusnotama id 1..N (parser cita ovaj dio izravno). */
+function footnotesXml(texts: string[]): string {
+  const notes = texts
+    .map(
+      (t, i) =>
+        `<w:footnote w:id="${i + 1}"><w:p><w:r><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p></w:footnote>`,
+    )
+    .join('');
+  return (
+    `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
+    `<w:footnotes xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">${notes}</w:footnotes>`
+  );
+}
 
 const RELS =
   `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
@@ -185,12 +206,15 @@ function zipStore(files: ZipFile[]): Uint8Array {
 /** Izgradi .docx (Uint8Array) iz specifikacije dokumenta. */
 export function buildDocx(spec: DocSpec): Uint8Array {
   const enc = new TextEncoder();
-  return zipStore([
-    { name: '[Content_Types].xml', data: enc.encode(CONTENT_TYPES) },
+  const hasFootnotes = !!spec.footnotes?.length;
+  const files = [
+    { name: '[Content_Types].xml', data: enc.encode(contentTypesXml(hasFootnotes)) },
     { name: '_rels/.rels', data: enc.encode(RELS) },
     { name: 'word/document.xml', data: enc.encode(documentXml(spec)) },
     { name: 'word/styles.xml', data: enc.encode(STYLES_XML) },
-  ]);
+  ];
+  if (hasFootnotes) files.push({ name: 'word/footnotes.xml', data: enc.encode(footnotesXml(spec.footnotes!)) });
+  return zipStore(files);
 }
 
 /** Pomocno: .docx kao File objekt (analyzeDocx ocekuje file.arrayBuffer() i file.name). */
