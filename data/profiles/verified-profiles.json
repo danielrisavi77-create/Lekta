@@ -4997,6 +4997,25 @@
     "profileLabel": "Agronomski fakultet, diplomski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2019-04-10",
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden .docx (diplomski, prored 1,15); nije pravi rad.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Font, velicina, prored, A4, Sadrzaj i (doktorski) margine ispravno okidaju na uskladjenom sintetickom radu (tests/agr-synthetic.test.ts)."
+      ],
+      "observedDeviations": [],
+      "productDecision": "Sinteticki uzorci sluze samo regresijskoj provjeri parsera i audita; ne dokazuju sluzbeno pravilo ni ispravnost stvarnog rada."
+    },
     "rules": {
       "font": ["Times New Roman", "Arial", "Calibri"],
       "size": [12],
@@ -5052,6 +5071,25 @@
     "profileLabel": "Agronomski fakultet, zavrsni (prijediplomski) rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2017-06-12",
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden .docx (zavrsni, prored 1,15, Justify); nije pravi rad.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Font, velicina, prored, A4, Sadrzaj i (doktorski) margine ispravno okidaju na uskladjenom sintetickom radu (tests/agr-synthetic.test.ts)."
+      ],
+      "observedDeviations": [],
+      "productDecision": "Sinteticki uzorci sluze samo regresijskoj provjeri parsera i audita; ne dokazuju sluzbeno pravilo ni ispravnost stvarnog rada."
+    },
     "rules": {
       "font": [
         "Arial",
@@ -5121,6 +5159,25 @@
     "profileLabel": "Agronomski fakultet, doktorski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2026-05-12",
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden .docx (doktorski, prored 1,5, margine 2,5); nije pravi rad.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Font, velicina, prored, A4, Sadrzaj i (doktorski) margine ispravno okidaju na uskladjenom sintetickom radu (tests/agr-synthetic.test.ts)."
+      ],
+      "observedDeviations": [],
+      "productDecision": "Sinteticki uzorci sluze samo regresijskoj provjeri parsera i audita; ne dokazuju sluzbeno pravilo ni ispravnost stvarnog rada."
+    },
     "rules": {
       "font": [
         "Times New Roman"

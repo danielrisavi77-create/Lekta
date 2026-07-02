@@ -17,6 +17,7 @@ export interface ParaSpec {
   italic?: boolean;
   jc?: 'both' | 'left' | 'center' | 'right'; // poravnanje
   spacing15?: boolean; // true => prored 1,5 (w:line 360 auto)
+  spacingLine?: number; // w:line vrijednost (240-tine): 276 => 1,15; ima prednost pred spacing15
   styleId?: string; // npr. "Heading1" za naslov
 }
 
@@ -41,7 +42,8 @@ function paraXml(p: ParaSpec): string {
 
   const ppr: string[] = [];
   if (p.styleId) ppr.push(`<w:pStyle w:val="${esc(p.styleId)}"/>`);
-  if (p.spacing15) ppr.push('<w:spacing w:line="360" w:lineRule="auto"/>');
+  if (p.spacingLine) ppr.push(`<w:spacing w:line="${p.spacingLine}" w:lineRule="auto"/>`);
+  else if (p.spacing15) ppr.push('<w:spacing w:line="360" w:lineRule="auto"/>');
   if (p.jc) ppr.push(`<w:jc w:val="${p.jc}"/>`);
   const pPr = ppr.length ? `<w:pPr>${ppr.join('')}</w:pPr>` : '';
 
