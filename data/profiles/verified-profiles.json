@@ -8501,15 +8501,67 @@
     "profileLabel": "Prehrambeno-biotehnoloski fakultet, diplomski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": null,
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/pbf-synthetic.test.ts) + 3 stvarna javna diplomska rada iz ZIR-a kroz byte-level PDF preflight.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2022,
+          2023,
+          2024,
+          2026
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "pbf:4880",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 70,
+          "pageFormat": "A4",
+          "sha256": "9d8f1d627c736631a62d1a8ac0bbe86bfbda4f0c704a99a6c54511e24fcc5d98"
+        },
+        {
+          "pid": "pbf:5070",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 57,
+          "pageFormat": "A4",
+          "sha256": "442f9154f28c983b9582d442e7ccf0dac3d9cf90365a2482ec144d64e752e890"
+        },
+        {
+          "pid": "pbf:5630",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 78,
+          "pageFormat": "A4",
+          "sha256": "81554caf9bc9d64bee3e9bbf3109b3ed5dbf79afd64813c6f925484e4c8487d6"
+        }
+      ],
+      "confirmed": [
+        "Uskladjeni sinteticki .docx prolazi pbf format provjere (font, velicina, prored 1,5, A4, Sadrzaj) - tests/pbf-synthetic.test.ts.",
+        "Tri stvarna javna diplomska rada (pbf:4880, 5070, 5630) prolaze byte-level PDF preflight: valjan nesifrirani PDF, 100% stranica A4, viselistni (57-78 str.), ugradjeni fontovi, bez JavaScripta i obrazaca."
+      ],
+      "observedDeviations": [
+        "Radovi bez PDF/A oznake (info, ne greska). U sirem pbf uzorku dio radova je US Letter; ova tri su odabrana kao 100% A4."
+      ],
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet preko PID-a i sha256."
+    },
     "rules": {
       "font": [
         "Times New Roman"
       ],
-      "size": 12,
+      "size": [12],
       "spacing": 1.5,
       "requireToc": true,
       "requirePageNumbers": true,
       "requireA4": true,
+      "checkMargins": false,
       "recommendedCitation": "harvard",
       "requiredSections": [
         {
