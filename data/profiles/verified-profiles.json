@@ -5186,6 +5186,27 @@
     "profileLabel": "Pravni fakultet · doktorski studij Pravne znanosti · doktorski rad",
     "verifiedAt": "2026-06-28",
     "documentDate": "službene stranice studija provjerene 28. lipnja 2026.",
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/final-cluster-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Profil se ne rusi na stvarnom docx-u; format/font provjere ispravno se ponasaju (golden test)."
+      ],
+      "observedDeviations": [
+        "Otvorena pravna disertacija nije pribavljena u dohvacenom pravo uzorku (prevladavaju diplomski); pravila i legal-notes citiranje dokazani golden testom."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
@@ -5466,6 +5487,27 @@
     "profileLabel": "Pravni fakultet · poslijediplomski studiji socijalnih djelatnosti · doktorska disertacija",
     "verifiedAt": "2026-06-28",
     "documentDate": "službene upute dostupne u fakultetskoj zbirci; aktualnost treba potvrditi na studiju",
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/final-cluster-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Profil se ne rusi na stvarnom docx-u; format/font provjere ispravno se ponasaju (golden test)."
+      ],
+      "observedDeviations": [
+        "Otvorena doktorska disertacija Studijskog centra socijalnog rada nije pribavljena u dohvacenom uzorku; pravila i autor-godina citiranje dokazani golden testom."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman",
@@ -8117,6 +8159,55 @@
     "profileLabel": "Stomatoloski fakultet, diplomski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2024-01-01",
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/final-cluster-synthetic.test.ts) + 3 stvarnih javnih diplomski radova iz ZIR-a kroz byte-level PDF preflight.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2019,
+          2021
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "sfzg:600",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 54,
+          "pageFormat": "A4",
+          "sha256": "4ffd06e75a17a6d8f5ff8e8922e848e91e5d5b324ef4162a57a06ebb1d65b00c"
+        },
+        {
+          "pid": "sfzg:800",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 45,
+          "pageFormat": "A4",
+          "sha256": "2bba6fdfd0cf842f936c63275a13f2f727e83e6d0d3b6a80776c42dec68dacd0"
+        },
+        {
+          "pid": "sfzg:1400",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 67,
+          "pageFormat": "A4",
+          "sha256": "f119160f12d18b5bfa89f5abfe157a6a4352d0acccb9849d6188271667738112"
+        }
+      ],
+      "confirmed": [
+        "Uskladjeni sinteticki .docx prolazi scored format provjere; profil se ne rusi na stvarnom docx-u.",
+        "3 stvarnih javnih diplomski radova (sfzg:600, sfzg:800, sfzg:1400) prolaze byte-level PDF preflight: valjan nesifriran PDF, 100% stranica A4, viselistni, ugradjeni fontovi."
+      ],
+      "observedDeviations": [
+        "SFZG Naputak (2024) scored font/velicina/prored/margine/poravnanje/Sadrzaj; citiranje vancouver (strop). Recentni sfzg radovi ne serviraju fulltext (SPA-shell) pa su uzeti stariji 100% A4 radovi."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet). Stvarni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet preko PID-a i sha256."
+    },
     "rules": {
       "font": [
         "Times New Roman"
@@ -8636,6 +8727,27 @@
     "profileLabel": "Geodetski fakultet, doktorski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2000-01-01",
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/final-cluster-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Profil se ne rusi na stvarnom docx-u; format/font provjere ispravno se ponasaju (golden test)."
+      ],
+      "observedDeviations": [
+        "geof doktorske disertacije nisu pribavljene kao otvoreni fulltext; Opci naputak GEOF ne propisuje tehnicko oblikovanje (checkX:false) pa je i doktorski bez scored tipografije, harvard citiranje."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "checkFont": false,
       "checkSize": false,
@@ -8771,7 +8883,57 @@
     "profileLabel": "Edukacijsko-rehabilitacijski fakultet, diplomski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": null,
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/final-cluster-synthetic.test.ts) + 3 stvarnih javnih diplomski radova iz ZIR-a kroz byte-level PDF preflight.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2021,
+          2023
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "erf:1400",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 55,
+          "pageFormat": "A4",
+          "sha256": "ca5ad7489a708e138e11ead7706ea2aa0483e5340a9c5fac66398afc8cb1d12f"
+        },
+        {
+          "pid": "erf:1200",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 91,
+          "pageFormat": "A4",
+          "sha256": "10476d247346be631d955e10f2e9719077c731ab3a4ae0c5f77b5eda8049b4f9"
+        },
+        {
+          "pid": "erf:1600",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 52,
+          "pageFormat": "A4",
+          "sha256": "77445b0e4f54dcd53c4bba91f7e14f76270080c59149a1b4c69530d5c7bcca46"
+        }
+      ],
+      "confirmed": [
+        "Uskladjeni sinteticki .docx prolazi scored format provjere; profil se ne rusi na stvarnom docx-u.",
+        "3 stvarnih javnih diplomski radova (erf:1400, erf:1200, erf:1600) prolaze byte-level PDF preflight: valjan nesifriran PDF, 100% stranica A4, viselistni, ugradjeni fontovi."
+      ],
+      "observedDeviations": [
+        "ERF Upute scored font/velicina/prored/Sadrzaj; margine nisu propisane pa je checkMargins:false (gasi crash). Citiranje nije propisano (strop)."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet). Stvarni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet preko PID-a i sha256."
+    },
     "rules": {
+      "checkMargins": false,
       "font": [
         "Times New Roman"
       ],
@@ -11778,6 +11940,27 @@
     "profileLabel": "Fakultet elektrotehnike i racunarstva, doktorski rad / disertacija",
     "verifiedAt": "2026-07-02",
     "documentDate": "2025-01-10",
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/final-cluster-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Profil se ne rusi na stvarnom docx-u; format/font provjere ispravno se ponasaju (golden test)."
+      ],
+      "observedDeviations": [
+        "FER embargira fulltext na ZIR-u (vecina objekata closedAccess) pa otvorena disertacija nije pribavljena; DR.SC.-08 / FER doktorska pravila dokazana golden testom."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
@@ -12372,6 +12555,27 @@
     "profileLabel": "Edukacijsko-rehabilitacijski fakultet, doktorski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": null,
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/final-cluster-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Profil se ne rusi na stvarnom docx-u; format/font provjere ispravno se ponasaju (golden test)."
+      ],
+      "observedDeviations": [
+        "erf doktorske disertacije nisu pribavljene kao otvoreni fulltext; DR.SC.-08 pravila dokazana golden testom."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
@@ -12716,6 +12920,27 @@
     "profileLabel": "Fakultet strojarstva i brodogradnje, doktorski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": null,
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/final-cluster-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Profil se ne rusi na stvarnom docx-u; format/font provjere ispravno se ponasaju (golden test)."
+      ],
+      "observedDeviations": [
+        "fsb doktorske disertacije nisu pribavljene kao otvoreni fulltext; DR.SC.-08 pravila dokazana golden testom."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
@@ -12768,6 +12993,27 @@
     "profileLabel": "Gradevinski fakultet, doktorski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": null,
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/final-cluster-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Profil se ne rusi na stvarnom docx-u; format/font provjere ispravno se ponasaju (golden test)."
+      ],
+      "observedDeviations": [
+        "grad doktorske disertacije nisu pribavljene kao otvoreni fulltext; DR.SC.-08 pravila dokazana golden testom."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
@@ -13112,6 +13358,27 @@
     "profileLabel": "Stomatoloski fakultet, doktorski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": null,
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/final-cluster-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Profil se ne rusi na stvarnom docx-u; format/font provjere ispravno se ponasaju (golden test)."
+      ],
+      "observedDeviations": [
+        "sfzg doktorske disertacije nisu pribavljene kao otvoreni fulltext (SPA-shell); DR.SC.-08 pravila dokazana golden testom."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
@@ -13164,6 +13431,27 @@
     "profileLabel": "Tekstilno-tehnoloski fakultet, doktorski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": null,
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/final-cluster-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Profil se ne rusi na stvarnom docx-u; format/font provjere ispravno se ponasaju (golden test)."
+      ],
+      "observedDeviations": [
+        "ttf doktorske disertacije nisu pribavljene kao otvoreni fulltext; DR.SC.-08 pravila dokazana golden testom."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
@@ -13216,6 +13504,27 @@
     "profileLabel": "Uciteljski fakultet, doktorski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": null,
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/final-cluster-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Profil se ne rusi na stvarnom docx-u; format/font provjere ispravno se ponasaju (golden test)."
+      ],
+      "observedDeviations": [
+        "ufzg doktorske disertacije nisu pribavljene kao otvoreni fulltext; DR.SC.-08 pravila dokazana golden testom."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
@@ -13268,6 +13577,27 @@
     "profileLabel": "Veterinarski fakultet, doktorski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": null,
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/final-cluster-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Profil se ne rusi na stvarnom docx-u; format/font provjere ispravno se ponasaju (golden test)."
+      ],
+      "observedDeviations": [
+        "vef doktorske disertacije nisu pribavljene kao otvoreni fulltext; DR.SC.-08 pravila dokazana golden testom."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
