@@ -614,6 +614,8 @@
           "Sanitarno inženjerstvo",
           "Radna terapija",
           "Medicinsko-laboratorijska dijagnostika",
+          "Prijediplomski strucni studiji ZVU (zavrsni rad)",
+          "Specijalisticki diplomski strucni studiji ZVU",
           "Opći profil ustanove"
         ],
         "status": "research"
@@ -631,6 +633,8 @@
         "programs": [
           "Financije i pravo",
           "Poslovno upravljanje",
+          "Prijediplomski strucni studiji Effectus (zavrsni rad)",
+          "Diplomski strucni studiji Effectus",
           "Opći profil ustanove"
         ],
         "status": "generic"
@@ -648,6 +652,8 @@
         "programs": [
           "Marketing i komunikacije",
           "Upravljanje i poslovanje",
+          "Prijediplomski strucni studiji PVZG (zavrsni rad)",
+          "Specijalisticki diplomski strucni studiji PVZG",
           "Opći profil ustanove"
         ],
         "status": "generic"
@@ -665,6 +671,7 @@
         "programs": [
           "Računovodstvo i financije",
           "Poduzetništvo",
+          "Prijediplomski strucni studij RRiF (zavrsni rad)",
           "Opći profil ustanove"
         ],
         "status": "generic"

@@ -1165,5 +1165,57 @@
     "validityClass": "stable",
     "lastChecked": "2026-07-02",
     "note": "Institucija-wide Pravilnik; tehnicko uredenje rada citano izravno iz PDF-a."
+  },
+  {
+    "id": "effectus-pravilnik-2023",
+    "kind": "regulation",
+    "title": "Pravilnik o izradi i obrani zavrsnog i diplomskog rada s Uputama (Effectus, 2023)",
+    "url": "https://effectus.com.hr/wp-content/uploads/2023/03/Pravilnik-o-izradi-i-obrani-zavrsnog-i-diplomskog-rada_2023.pdf",
+    "publisher": "EFFECTUS veleuciliste",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/effectus/effectus-pravilnik-2023.pdf",
+    "snapshotHash": "52db197d9244f792219b5e46dc1eb9a35e98d92302a72b74c7d8020dcc3dfd6b",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-02",
+    "note": "Institucija-wide Pravilnik; Upute (Prilog 1) su izrijekom sastavni dio i obavezne. Tekstualni sloj, citano izravno."
+  },
+  {
+    "id": "rrif-upute-zavrsni",
+    "kind": "guidelines",
+    "title": "Upute za izradu zavrsnog rada (RRiF Visoka skola)",
+    "url": "https://rvs.hr/content/uploads/2014/07/UPUTE-NOVE1.pdf",
+    "publisher": "Veleuciliste RRiF",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/rrif/rrif-upute-zavrsni.pdf",
+    "snapshotHash": "c09e329fb42dcac3f135c625e472a6ded506c62fa5b73f85a3d46abeb1e5088f",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-02",
+    "note": "Sastavni dio Pravilnika o zavrsnom radu na RRiF Visokoj skoli; tehnicko oblikovanje citano izravno iz PDF-a. Detaljni fusnotni citatni format delegiran na zaseban dokument (Upute za citiranje literature)."
+  },
+  {
+    "id": "pvzg-pravilnik-zavrsni-2018",
+    "kind": "regulation",
+    "title": "Pravilnik o zavrsnom radu na preddiplomskim strucnim i specijalistickim diplomskim strucnim studijima (PVZG, 2018)",
+    "url": "https://pvzg.hr/wp-content/uploads/2022/09/Pravilnik-o-zavrsnom-radu-PVZG-2018-compressed.pdf",
+    "publisher": "Poslovno veleuciliste Zagreb",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/pvzg/pvzg-pravilnik-zavrsni-2018.pdf",
+    "snapshotHash": "c91b7f2873513a6bbdc1c53433fc72d1cb48ceedae154fd9409d10ac970b54e8",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-02",
+    "note": "Institucija-wide Pravilnik; skeniran, OCR-an (scripts/ocr_pdf.py). Sve tipografske stavke u Clanku 18, opseg u Clanku 10."
+  },
+  {
+    "id": "zvu-pravilnik-zavrsni-2015",
+    "kind": "regulation",
+    "title": "Pravilnik o zavrsnim radovima na strucnim i specijalistickim diplomskim studijima (ZVU, 2015)",
+    "url": "https://www.zvu.hr/wp-content/uploads/Pravilnik-o-zavrsnim-radovima1.pdf",
+    "publisher": "Zdravstveno veleuciliste",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/zvu/zvu-pravilnik-zavrsni-2015.pdf",
+    "snapshotHash": "4f171b8ed92a9f80fe5400ba81e1f5797aa494317fd635f25ce611243c29dcea",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-02",
+    "note": "Institucija-wide Pravilnik; Clanak 4 normativan (opseg, A4, prored, velicina, margine). Font je izrijekom PREPORUKA s izborom Arial/TNR/Calibri -> advisory (izostavljen iz scored). Vancouver citiranje samo za biomedicinu, \"najcesce se koristi\" -> advisory."
   }
 ]

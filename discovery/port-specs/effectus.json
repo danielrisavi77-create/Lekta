@@ -1,0 +1,301 @@
+{
+  "faculty": "effectus",
+  "institution": "effectus",
+  "catalogPrograms": [
+    "Prijediplomski strucni studiji Effectus (zavrsni rad)",
+    "Diplomski strucni studiji Effectus"
+  ],
+  "sources": [
+    {
+      "id": "effectus-pravilnik-2023",
+      "kind": "regulation",
+      "title": "Pravilnik o izradi i obrani zavrsnog i diplomskog rada s Uputama (Effectus, 2023)",
+      "url": "https://effectus.com.hr/wp-content/uploads/2023/03/Pravilnik-o-izradi-i-obrani-zavrsnog-i-diplomskog-rada_2023.pdf",
+      "publisher": "EFFECTUS veleuciliste",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/effectus/effectus-pravilnik-2023.pdf",
+      "snapshotHash": "52db197d9244f792219b5e46dc1eb9a35e98d92302a72b74c7d8020dcc3dfd6b",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Institucija-wide Pravilnik; Upute (Prilog 1) su izrijekom sastavni dio i obavezne. Tekstualni sloj, citano izravno."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "effectus-zavrsni",
+      "unitId": "effectus",
+      "programs": [
+        "Prijediplomski strucni studiji Effectus (zavrsni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Effectus, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.15,
+        "justify": true,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (EFFECTUS veleuciliste), citano izravno.",
+      "sources": [
+        {
+          "title": "Pravilnik o izradi i obrani zavrsnog i diplomskog rada s Uputama (Effectus, 2023)",
+          "url": "https://effectus.com.hr/wp-content/uploads/2023/03/Pravilnik-o-izradi-i-obrani-zavrsnog-i-diplomskog-rada_2023.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o izradi i obrani zavrsnog i diplomskog rada s Uputama (Effectus, 2023)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Margine",
+        "Vrsta slova",
+        "Velicina slova",
+        "Obostrano poravnanje",
+        "Prored",
+        "Opseg (35-50 str.)"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "effectus-diplomski",
+      "unitId": "effectus",
+      "programs": [
+        "Diplomski strucni studiji Effectus"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Effectus, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.15,
+        "justify": true,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (EFFECTUS veleuciliste), citano izravno.",
+      "sources": [
+        {
+          "title": "Pravilnik o izradi i obrani zavrsnog i diplomskog rada s Uputama (Effectus, 2023)",
+          "url": "https://effectus.com.hr/wp-content/uploads/2023/03/Pravilnik-o-izradi-i-obrani-zavrsnog-i-diplomskog-rada_2023.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o izradi i obrani zavrsnog i diplomskog rada s Uputama (Effectus, 2023)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Margine",
+        "Vrsta slova",
+        "Velicina slova",
+        "Obostrano poravnanje",
+        "Prored",
+        "Opseg (50-80 str.)"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-effectus-zavrsni--paper-size-verified-2026-07-02",
+      "ruleId": "effectus-zavrsni--paper-size",
+      "profileId": "effectus-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "effectus-pravilnik-2023",
+      "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+      "quote": "Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane.",
+      "note": "Cross-institution port (EFFECTUS veleuciliste): direktno citanje izvora."
+    },
+    {
+      "id": "led-effectus-zavrsni--margins-verified-2026-07-02",
+      "ruleId": "effectus-zavrsni--margins",
+      "profileId": "effectus-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "effectus-pravilnik-2023",
+      "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+      "quote": "Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane.",
+      "note": "Cross-institution port (EFFECTUS veleuciliste): direktno citanje izvora."
+    },
+    {
+      "id": "led-effectus-zavrsni--font-verified-2026-07-02",
+      "ruleId": "effectus-zavrsni--font",
+      "profileId": "effectus-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "effectus-pravilnik-2023",
+      "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+      "quote": "Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt.",
+      "note": "Cross-institution port (EFFECTUS veleuciliste): direktno citanje izvora."
+    },
+    {
+      "id": "led-effectus-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "effectus-zavrsni--font-size",
+      "profileId": "effectus-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "effectus-pravilnik-2023",
+      "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+      "quote": "Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt.",
+      "note": "Cross-institution port (EFFECTUS veleuciliste): direktno citanje izvora."
+    },
+    {
+      "id": "led-effectus-zavrsni--justify-verified-2026-07-02",
+      "ruleId": "effectus-zavrsni--justify",
+      "profileId": "effectus-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "effectus-pravilnik-2023",
+      "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+      "quote": "Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen.",
+      "note": "Cross-institution port (EFFECTUS veleuciliste): direktno citanje izvora."
+    },
+    {
+      "id": "led-effectus-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "effectus-zavrsni--line-spacing",
+      "profileId": "effectus-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "effectus-pravilnik-2023",
+      "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+      "quote": "Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen.",
+      "note": "Cross-institution port (EFFECTUS veleuciliste): direktno citanje izvora."
+    },
+    {
+      "id": "led-effectus-zavrsni--page-count-verified-2026-07-02",
+      "ruleId": "effectus-zavrsni--page-count",
+      "profileId": "effectus-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "effectus-pravilnik-2023",
+      "sourcePage": "Upute (Prilog 1), tč. 3 (str. 4-5)",
+      "quote": "Opseg završnog rada mora iznositi 35-50 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature).",
+      "note": "Cross-institution port (EFFECTUS veleuciliste): direktno citanje izvora."
+    },
+    {
+      "id": "led-effectus-diplomski--paper-size-verified-2026-07-02",
+      "ruleId": "effectus-diplomski--paper-size",
+      "profileId": "effectus-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "effectus-pravilnik-2023",
+      "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+      "quote": "Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane.",
+      "note": "Cross-institution port (EFFECTUS veleuciliste): direktno citanje izvora."
+    },
+    {
+      "id": "led-effectus-diplomski--margins-verified-2026-07-02",
+      "ruleId": "effectus-diplomski--margins",
+      "profileId": "effectus-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "effectus-pravilnik-2023",
+      "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+      "quote": "Rad se piše na formatu papira A4 (210x297 mm) s marginama 2,5 cm sa svake strane.",
+      "note": "Cross-institution port (EFFECTUS veleuciliste): direktno citanje izvora."
+    },
+    {
+      "id": "led-effectus-diplomski--font-verified-2026-07-02",
+      "ruleId": "effectus-diplomski--font",
+      "profileId": "effectus-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "effectus-pravilnik-2023",
+      "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+      "quote": "Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt.",
+      "note": "Cross-institution port (EFFECTUS veleuciliste): direktno citanje izvora."
+    },
+    {
+      "id": "led-effectus-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "effectus-diplomski--font-size",
+      "profileId": "effectus-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "effectus-pravilnik-2023",
+      "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+      "quote": "Službeni Font EFFECTUS-a koji se mora koristiti je Times New Roman veličine slova 12pt.",
+      "note": "Cross-institution port (EFFECTUS veleuciliste): direktno citanje izvora."
+    },
+    {
+      "id": "led-effectus-diplomski--justify-verified-2026-07-02",
+      "ruleId": "effectus-diplomski--justify",
+      "profileId": "effectus-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "effectus-pravilnik-2023",
+      "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+      "quote": "Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen.",
+      "note": "Cross-institution port (EFFECTUS veleuciliste): direktno citanje izvora."
+    },
+    {
+      "id": "led-effectus-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "effectus-diplomski--line-spacing",
+      "profileId": "effectus-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "effectus-pravilnik-2023",
+      "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+      "quote": "Tekst je potrebno poravnati s obje strane (General Alignement – Justify), razmak između redaka treba biti 1,15, a razmak iza svakog odlomka 6pt. Početak odlomka nije uvučen.",
+      "note": "Cross-institution port (EFFECTUS veleuciliste): direktno citanje izvora."
+    },
+    {
+      "id": "led-effectus-diplomski--page-count-verified-2026-07-02",
+      "ruleId": "effectus-diplomski--page-count",
+      "profileId": "effectus-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "effectus-pravilnik-2023",
+      "sourcePage": "Upute (Prilog 1), tč. 3 (str. 5)",
+      "quote": "Opseg diplomskog rada mora iznositi 50-80 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature).",
+      "note": "Cross-institution port (EFFECTUS veleuciliste): direktno citanje izvora."
+    }
+  ]
+}

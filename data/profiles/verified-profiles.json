@@ -14629,5 +14629,368 @@
       "Margine"
     ],
     "advisoryScope": []
+  },
+  {
+    "id": "effectus-zavrsni",
+    "unitId": "effectus",
+    "programs": [
+      "Prijediplomski strucni studiji Effectus (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Effectus, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.15,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (EFFECTUS veleuciliste), citano izravno.",
+    "sources": [
+      {
+        "title": "Pravilnik o izradi i obrani zavrsnog i diplomskog rada s Uputama (Effectus, 2023)",
+        "url": "https://effectus.com.hr/wp-content/uploads/2023/03/Pravilnik-o-izradi-i-obrani-zavrsnog-i-diplomskog-rada_2023.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o izradi i obrani zavrsnog i diplomskog rada s Uputama (Effectus, 2023)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Obostrano poravnanje",
+      "Prored",
+      "Opseg (35-50 str.)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "effectus-diplomski",
+    "unitId": "effectus",
+    "programs": [
+      "Diplomski strucni studiji Effectus"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Effectus, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.15,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (EFFECTUS veleuciliste), citano izravno.",
+    "sources": [
+      {
+        "title": "Pravilnik o izradi i obrani zavrsnog i diplomskog rada s Uputama (Effectus, 2023)",
+        "url": "https://effectus.com.hr/wp-content/uploads/2023/03/Pravilnik-o-izradi-i-obrani-zavrsnog-i-diplomskog-rada_2023.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o izradi i obrani zavrsnog i diplomskog rada s Uputama (Effectus, 2023)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Obostrano poravnanje",
+      "Prored",
+      "Opseg (50-80 str.)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "rrif-zavrsni",
+    "unitId": "rrif",
+    "programs": [
+      "Prijediplomski strucni studij RRiF (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "RRiF, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Veleuciliste RRiF), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za izradu zavrsnog rada (RRiF Visoka skola)",
+        "url": "https://rvs.hr/content/uploads/2014/07/UPUTE-NOVE1.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu zavrsnog rada (RRiF Visoka skola)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Opseg (30-50 str.)",
+      "Obostrano poravnanje",
+      "Prored",
+      "Vrsta slova",
+      "Velicina slova",
+      "Margine"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "pvzg-zavrsni",
+    "unitId": "pvzg",
+    "programs": [
+      "Prijediplomski strucni studiji PVZG (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "PVZG, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 3,
+        "right": 2,
+        "bottom": 3,
+        "left": 3
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Poslovno veleuciliste Zagreb), citano izravno.",
+    "sources": [
+      {
+        "title": "Pravilnik o zavrsnom radu na preddiplomskim strucnim i specijalistickim diplomskim strucnim studijima (PVZG, 2018)",
+        "url": "https://pvzg.hr/wp-content/uploads/2022/09/Pravilnik-o-zavrsnom-radu-PVZG-2018-compressed.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnom radu na preddiplomskim strucnim i specijalistickim diplomskim strucnim studijima (PVZG, 2018)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Margine",
+      "Opseg (najmanje 25 str.)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "pvzg-specijalisticki",
+    "unitId": "pvzg",
+    "programs": [
+      "Specijalisticki diplomski strucni studiji PVZG"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "PVZG, specijalisticki diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 3,
+        "right": 2,
+        "bottom": 3,
+        "left": 3
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Poslovno veleuciliste Zagreb), citano izravno.",
+    "sources": [
+      {
+        "title": "Pravilnik o zavrsnom radu na preddiplomskim strucnim i specijalistickim diplomskim strucnim studijima (PVZG, 2018)",
+        "url": "https://pvzg.hr/wp-content/uploads/2022/09/Pravilnik-o-zavrsnom-radu-PVZG-2018-compressed.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnom radu na preddiplomskim strucnim i specijalistickim diplomskim strucnim studijima (PVZG, 2018)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Margine",
+      "Opseg (najmanje 40 str.)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "zvu-zavrsni",
+    "unitId": "zvu",
+    "programs": [
+      "Prijediplomski strucni studiji ZVU (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "ZVU, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Zdravstveno veleuciliste), citano izravno. Font nije scored: Pravilnik ga navodi kao preporuku s izborom tri fonta (Arial, Times New Roman ili Calibri). Citatni stil Vancouver preporucen samo za biomedicinu.",
+    "sources": [
+      {
+        "title": "Pravilnik o zavrsnim radovima na strucnim i specijalistickim diplomskim studijima (ZVU, 2015)",
+        "url": "https://www.zvu.hr/wp-content/uploads/Pravilnik-o-zavrsnim-radovima1.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnim radovima na strucnim i specijalistickim diplomskim studijima (ZVU, 2015)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Velicina slova",
+      "Prored",
+      "Margine",
+      "Opseg (25-50 str.)"
+    ],
+    "advisoryScope": [
+      "Vrsta slova (preporuka)"
+    ]
+  },
+  {
+    "id": "zvu-specijalisticki",
+    "unitId": "zvu",
+    "programs": [
+      "Specijalisticki diplomski strucni studiji ZVU"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "ZVU, specijalisticki diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Zdravstveno veleuciliste), citano izravno. Font nije scored: Pravilnik ga navodi kao preporuku s izborom tri fonta (Arial, Times New Roman ili Calibri). Citatni stil Vancouver preporucen samo za biomedicinu.",
+    "sources": [
+      {
+        "title": "Pravilnik o zavrsnim radovima na strucnim i specijalistickim diplomskim studijima (ZVU, 2015)",
+        "url": "https://www.zvu.hr/wp-content/uploads/Pravilnik-o-zavrsnim-radovima1.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnim radovima na strucnim i specijalistickim diplomskim studijima (ZVU, 2015)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Velicina slova",
+      "Prored",
+      "Margine",
+      "Opseg (25-50 str.)"
+    ],
+    "advisoryScope": [
+      "Vrsta slova (preporuka)"
+    ]
   }
 ]

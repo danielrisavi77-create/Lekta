@@ -57,6 +57,22 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "effectus-diplomski",
+      "scored": 7,
+      "machineCheckable": 7,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "effectus-zavrsni",
+      "scored": 7,
+      "machineCheckable": 7,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
       "profileId": "efzg-diplomski",
       "scored": 0,
       "machineCheckable": 4,
@@ -745,6 +761,22 @@
       "lastVerified": "2026-06-30"
     },
     {
+      "profileId": "pvzg-specijalisticki",
+      "scored": 7,
+      "machineCheckable": 7,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "pvzg-zavrsni",
+      "scored": 7,
+      "machineCheckable": 7,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
       "profileId": "radno-socijalno-pravo",
       "scored": 6,
       "machineCheckable": 6,
@@ -766,6 +798,14 @@
       "machineCheckable": 5,
       "advisory": 1,
       "ratio": 1.2,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "rrif-zavrsni",
+      "scored": 7,
+      "machineCheckable": 7,
+      "advisory": 0,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
@@ -895,7 +935,23 @@
       "advisory": 0,
       "ratio": 1,
       "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "zvu-specijalisticki",
+      "scored": 5,
+      "machineCheckable": 5,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "zvu-zavrsni",
+      "scored": 5,
+      "machineCheckable": 5,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 630
+  "totalScored": 675
 }

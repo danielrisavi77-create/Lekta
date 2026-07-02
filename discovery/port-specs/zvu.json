@@ -1,0 +1,245 @@
+{
+  "faculty": "zvu",
+  "institution": "zvu",
+  "catalogPrograms": [
+    "Prijediplomski strucni studiji ZVU (zavrsni rad)",
+    "Specijalisticki diplomski strucni studiji ZVU"
+  ],
+  "sources": [
+    {
+      "id": "zvu-pravilnik-zavrsni-2015",
+      "kind": "regulation",
+      "title": "Pravilnik o zavrsnim radovima na strucnim i specijalistickim diplomskim studijima (ZVU, 2015)",
+      "url": "https://www.zvu.hr/wp-content/uploads/Pravilnik-o-zavrsnim-radovima1.pdf",
+      "publisher": "Zdravstveno veleuciliste",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/zvu/zvu-pravilnik-zavrsni-2015.pdf",
+      "snapshotHash": "4f171b8ed92a9f80fe5400ba81e1f5797aa494317fd635f25ce611243c29dcea",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Institucija-wide Pravilnik; Clanak 4 normativan (opseg, A4, prored, velicina, margine). Font je izrijekom PREPORUKA s izborom Arial/TNR/Calibri -> advisory (izostavljen iz scored). Vancouver citiranje samo za biomedicinu, \"najcesce se koristi\" -> advisory."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "zvu-zavrsni",
+      "unitId": "zvu",
+      "programs": [
+        "Prijediplomski strucni studiji ZVU (zavrsni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "ZVU, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Zdravstveno veleuciliste), citano izravno. Font nije scored: Pravilnik ga navodi kao preporuku s izborom tri fonta (Arial, Times New Roman ili Calibri). Citatni stil Vancouver preporucen samo za biomedicinu.",
+      "sources": [
+        {
+          "title": "Pravilnik o zavrsnim radovima na strucnim i specijalistickim diplomskim studijima (ZVU, 2015)",
+          "url": "https://www.zvu.hr/wp-content/uploads/Pravilnik-o-zavrsnim-radovima1.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o zavrsnim radovima na strucnim i specijalistickim diplomskim studijima (ZVU, 2015)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Velicina slova",
+        "Prored",
+        "Margine",
+        "Opseg (25-50 str.)"
+      ],
+      "advisoryScope": [
+        "Vrsta slova (preporuka)"
+      ]
+    },
+    {
+      "id": "zvu-specijalisticki",
+      "unitId": "zvu",
+      "programs": [
+        "Specijalisticki diplomski strucni studiji ZVU"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "ZVU, specijalisticki diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Zdravstveno veleuciliste), citano izravno. Font nije scored: Pravilnik ga navodi kao preporuku s izborom tri fonta (Arial, Times New Roman ili Calibri). Citatni stil Vancouver preporucen samo za biomedicinu.",
+      "sources": [
+        {
+          "title": "Pravilnik o zavrsnim radovima na strucnim i specijalistickim diplomskim studijima (ZVU, 2015)",
+          "url": "https://www.zvu.hr/wp-content/uploads/Pravilnik-o-zavrsnim-radovima1.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o zavrsnim radovima na strucnim i specijalistickim diplomskim studijima (ZVU, 2015)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Velicina slova",
+        "Prored",
+        "Margine",
+        "Opseg (25-50 str.)"
+      ],
+      "advisoryScope": [
+        "Vrsta slova (preporuka)"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-zvu-zavrsni--paper-size-verified-2026-07-02",
+      "ruleId": "zvu-zavrsni--paper-size",
+      "profileId": "zvu-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "zvu-pravilnik-zavrsni-2015",
+      "sourcePage": "Članak 4.",
+      "quote": "Opseg završnoga rada ovisi o vrsti i složenosti teme koja se obrađuje, a u pravilu iznosi između 25 i 50 stranica osnovnog teksta rada na papiru A4 formata (bez naslovnice, sadržaja, popisa literature i priloga), proreda 1,5, veličine slova 12 i margina od 2,5 cm sa svih strana.",
+      "note": "Cross-institution port (Zdravstveno veleuciliste): direktno citanje izvora."
+    },
+    {
+      "id": "led-zvu-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "zvu-zavrsni--font-size",
+      "profileId": "zvu-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "zvu-pravilnik-zavrsni-2015",
+      "sourcePage": "Članak 4.",
+      "quote": "Opseg završnoga rada ovisi o vrsti i složenosti teme koja se obrađuje, a u pravilu iznosi između 25 i 50 stranica osnovnog teksta rada na papiru A4 formata (bez naslovnice, sadržaja, popisa literature i priloga), proreda 1,5, veličine slova 12 i margina od 2,5 cm sa svih strana.",
+      "note": "Cross-institution port (Zdravstveno veleuciliste): direktno citanje izvora."
+    },
+    {
+      "id": "led-zvu-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "zvu-zavrsni--line-spacing",
+      "profileId": "zvu-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "zvu-pravilnik-zavrsni-2015",
+      "sourcePage": "Članak 4.",
+      "quote": "Opseg završnoga rada ovisi o vrsti i složenosti teme koja se obrađuje, a u pravilu iznosi između 25 i 50 stranica osnovnog teksta rada na papiru A4 formata (bez naslovnice, sadržaja, popisa literature i priloga), proreda 1,5, veličine slova 12 i margina od 2,5 cm sa svih strana.",
+      "note": "Cross-institution port (Zdravstveno veleuciliste): direktno citanje izvora."
+    },
+    {
+      "id": "led-zvu-zavrsni--margins-verified-2026-07-02",
+      "ruleId": "zvu-zavrsni--margins",
+      "profileId": "zvu-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "zvu-pravilnik-zavrsni-2015",
+      "sourcePage": "Članak 4.",
+      "quote": "Opseg završnoga rada ovisi o vrsti i složenosti teme koja se obrađuje, a u pravilu iznosi između 25 i 50 stranica osnovnog teksta rada na papiru A4 formata (bez naslovnice, sadržaja, popisa literature i priloga), proreda 1,5, veličine slova 12 i margina od 2,5 cm sa svih strana.",
+      "note": "Cross-institution port (Zdravstveno veleuciliste): direktno citanje izvora."
+    },
+    {
+      "id": "led-zvu-zavrsni--page-count-verified-2026-07-02",
+      "ruleId": "zvu-zavrsni--page-count",
+      "profileId": "zvu-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "zvu-pravilnik-zavrsni-2015",
+      "sourcePage": "Članak 4.",
+      "quote": "Opseg završnoga rada ovisi o vrsti i složenosti teme koja se obrađuje, a u pravilu iznosi između 25 i 50 stranica osnovnog teksta rada na papiru A4 formata (bez naslovnice, sadržaja, popisa literature i priloga), proreda 1,5, veličine slova 12 i margina od 2,5 cm sa svih strana.",
+      "note": "Cross-institution port (Zdravstveno veleuciliste): direktno citanje izvora."
+    },
+    {
+      "id": "led-zvu-specijalisticki--paper-size-verified-2026-07-02",
+      "ruleId": "zvu-specijalisticki--paper-size",
+      "profileId": "zvu-specijalisticki",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "zvu-pravilnik-zavrsni-2015",
+      "sourcePage": "Članak 4.",
+      "quote": "Opseg završnoga rada ovisi o vrsti i složenosti teme koja se obrađuje, a u pravilu iznosi između 25 i 50 stranica osnovnog teksta rada na papiru A4 formata (bez naslovnice, sadržaja, popisa literature i priloga), proreda 1,5, veličine slova 12 i margina od 2,5 cm sa svih strana.",
+      "note": "Cross-institution port (Zdravstveno veleuciliste): direktno citanje izvora."
+    },
+    {
+      "id": "led-zvu-specijalisticki--font-size-verified-2026-07-02",
+      "ruleId": "zvu-specijalisticki--font-size",
+      "profileId": "zvu-specijalisticki",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "zvu-pravilnik-zavrsni-2015",
+      "sourcePage": "Članak 4.",
+      "quote": "Opseg završnoga rada ovisi o vrsti i složenosti teme koja se obrađuje, a u pravilu iznosi između 25 i 50 stranica osnovnog teksta rada na papiru A4 formata (bez naslovnice, sadržaja, popisa literature i priloga), proreda 1,5, veličine slova 12 i margina od 2,5 cm sa svih strana.",
+      "note": "Cross-institution port (Zdravstveno veleuciliste): direktno citanje izvora."
+    },
+    {
+      "id": "led-zvu-specijalisticki--line-spacing-verified-2026-07-02",
+      "ruleId": "zvu-specijalisticki--line-spacing",
+      "profileId": "zvu-specijalisticki",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "zvu-pravilnik-zavrsni-2015",
+      "sourcePage": "Članak 4.",
+      "quote": "Opseg završnoga rada ovisi o vrsti i složenosti teme koja se obrađuje, a u pravilu iznosi između 25 i 50 stranica osnovnog teksta rada na papiru A4 formata (bez naslovnice, sadržaja, popisa literature i priloga), proreda 1,5, veličine slova 12 i margina od 2,5 cm sa svih strana.",
+      "note": "Cross-institution port (Zdravstveno veleuciliste): direktno citanje izvora."
+    },
+    {
+      "id": "led-zvu-specijalisticki--margins-verified-2026-07-02",
+      "ruleId": "zvu-specijalisticki--margins",
+      "profileId": "zvu-specijalisticki",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "zvu-pravilnik-zavrsni-2015",
+      "sourcePage": "Članak 4.",
+      "quote": "Opseg završnoga rada ovisi o vrsti i složenosti teme koja se obrađuje, a u pravilu iznosi između 25 i 50 stranica osnovnog teksta rada na papiru A4 formata (bez naslovnice, sadržaja, popisa literature i priloga), proreda 1,5, veličine slova 12 i margina od 2,5 cm sa svih strana.",
+      "note": "Cross-institution port (Zdravstveno veleuciliste): direktno citanje izvora."
+    },
+    {
+      "id": "led-zvu-specijalisticki--page-count-verified-2026-07-02",
+      "ruleId": "zvu-specijalisticki--page-count",
+      "profileId": "zvu-specijalisticki",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "zvu-pravilnik-zavrsni-2015",
+      "sourcePage": "Članak 4.",
+      "quote": "Opseg završnoga rada ovisi o vrsti i složenosti teme koja se obrađuje, a u pravilu iznosi između 25 i 50 stranica osnovnog teksta rada na papiru A4 formata (bez naslovnice, sadržaja, popisa literature i priloga), proreda 1,5, veličine slova 12 i margina od 2,5 cm sa svih strana.",
+      "note": "Cross-institution port (Zdravstveno veleuciliste): direktno citanje izvora."
+    }
+  ]
+}

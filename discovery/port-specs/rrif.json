@@ -1,0 +1,163 @@
+{
+  "faculty": "rrif",
+  "institution": "rrif",
+  "catalogPrograms": [
+    "Prijediplomski strucni studij RRiF (zavrsni rad)"
+  ],
+  "sources": [
+    {
+      "id": "rrif-upute-zavrsni",
+      "kind": "guidelines",
+      "title": "Upute za izradu zavrsnog rada (RRiF Visoka skola)",
+      "url": "https://rvs.hr/content/uploads/2014/07/UPUTE-NOVE1.pdf",
+      "publisher": "Veleuciliste RRiF",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/rrif/rrif-upute-zavrsni.pdf",
+      "snapshotHash": "c09e329fb42dcac3f135c625e472a6ded506c62fa5b73f85a3d46abeb1e5088f",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Sastavni dio Pravilnika o zavrsnom radu na RRiF Visokoj skoli; tehnicko oblikovanje citano izravno iz PDF-a. Detaljni fusnotni citatni format delegiran na zaseban dokument (Upute za citiranje literature)."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "rrif-zavrsni",
+      "unitId": "rrif",
+      "programs": [
+        "Prijediplomski strucni studij RRiF (zavrsni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "RRiF, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 3
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Veleuciliste RRiF), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za izradu zavrsnog rada (RRiF Visoka skola)",
+          "url": "https://rvs.hr/content/uploads/2014/07/UPUTE-NOVE1.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu zavrsnog rada (RRiF Visoka skola)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Opseg (30-50 str.)",
+        "Obostrano poravnanje",
+        "Prored",
+        "Vrsta slova",
+        "Velicina slova",
+        "Margine"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-rrif-zavrsni--paper-size-verified-2026-07-02",
+      "ruleId": "rrif-zavrsni--paper-size",
+      "profileId": "rrif-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "rrif-upute-zavrsni",
+      "sourcePage": "tč. 3.4 Oblikovanje zavrsnog rada (str. 9)",
+      "quote": "Završni rad piše se u Microsoft Word Windows programu. Opseg rada je najmanje 30, a najviše 50 tiskanih stranica A4 formata, jednostrano. Rad treba biti napisan u skladu s jezičnim i pravopisnim pravilima. Rad treba biti pisan u odlomcima (pasusima), razmak između odlomaka treba postaviti na 12 pt, a tekst obostrano poravnati. Veličina proreda: 1.5.",
+      "note": "Cross-institution port (Veleuciliste RRiF): direktno citanje izvora."
+    },
+    {
+      "id": "led-rrif-zavrsni--page-count-verified-2026-07-02",
+      "ruleId": "rrif-zavrsni--page-count",
+      "profileId": "rrif-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "rrif-upute-zavrsni",
+      "sourcePage": "tč. 3.4 Oblikovanje zavrsnog rada (str. 9)",
+      "quote": "Završni rad piše se u Microsoft Word Windows programu. Opseg rada je najmanje 30, a najviše 50 tiskanih stranica A4 formata, jednostrano. Rad treba biti napisan u skladu s jezičnim i pravopisnim pravilima. Rad treba biti pisan u odlomcima (pasusima), razmak između odlomaka treba postaviti na 12 pt, a tekst obostrano poravnati. Veličina proreda: 1.5.",
+      "note": "Cross-institution port (Veleuciliste RRiF): direktno citanje izvora."
+    },
+    {
+      "id": "led-rrif-zavrsni--justify-verified-2026-07-02",
+      "ruleId": "rrif-zavrsni--justify",
+      "profileId": "rrif-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "rrif-upute-zavrsni",
+      "sourcePage": "tč. 3.4 Oblikovanje zavrsnog rada (str. 9)",
+      "quote": "Završni rad piše se u Microsoft Word Windows programu. Opseg rada je najmanje 30, a najviše 50 tiskanih stranica A4 formata, jednostrano. Rad treba biti napisan u skladu s jezičnim i pravopisnim pravilima. Rad treba biti pisan u odlomcima (pasusima), razmak između odlomaka treba postaviti na 12 pt, a tekst obostrano poravnati. Veličina proreda: 1.5.",
+      "note": "Cross-institution port (Veleuciliste RRiF): direktno citanje izvora."
+    },
+    {
+      "id": "led-rrif-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "rrif-zavrsni--line-spacing",
+      "profileId": "rrif-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "rrif-upute-zavrsni",
+      "sourcePage": "tč. 3.4 Oblikovanje zavrsnog rada (str. 9)",
+      "quote": "Završni rad piše se u Microsoft Word Windows programu. Opseg rada je najmanje 30, a najviše 50 tiskanih stranica A4 formata, jednostrano. Rad treba biti napisan u skladu s jezičnim i pravopisnim pravilima. Rad treba biti pisan u odlomcima (pasusima), razmak između odlomaka treba postaviti na 12 pt, a tekst obostrano poravnati. Veličina proreda: 1.5.",
+      "note": "Cross-institution port (Veleuciliste RRiF): direktno citanje izvora."
+    },
+    {
+      "id": "led-rrif-zavrsni--font-verified-2026-07-02",
+      "ruleId": "rrif-zavrsni--font",
+      "profileId": "rrif-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "rrif-upute-zavrsni",
+      "sourcePage": "tč. 3.4.3 Font teksta (str. 10)",
+      "quote": "Font teksta treba biti Times New Roman, veličine 12. Veličina slova za pisanje fusnota treba biti 10.",
+      "note": "Cross-institution port (Veleuciliste RRiF): direktno citanje izvora."
+    },
+    {
+      "id": "led-rrif-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "rrif-zavrsni--font-size",
+      "profileId": "rrif-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "rrif-upute-zavrsni",
+      "sourcePage": "tč. 3.4.3 Font teksta (str. 10)",
+      "quote": "Font teksta treba biti Times New Roman, veličine 12. Veličina slova za pisanje fusnota treba biti 10.",
+      "note": "Cross-institution port (Veleuciliste RRiF): direktno citanje izvora."
+    },
+    {
+      "id": "led-rrif-zavrsni--margins-verified-2026-07-02",
+      "ruleId": "rrif-zavrsni--margins",
+      "profileId": "rrif-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "rrif-upute-zavrsni",
+      "sourcePage": "tč. 3.4.4 Margine (str. 10)",
+      "quote": "Margine su 3 cm sa lijeve i 2,5 cm sa desne strane, margine gore i dolje 2,5 cm.",
+      "note": "Cross-institution port (Veleuciliste RRiF): direktno citanje izvora."
+    }
+  ]
+}

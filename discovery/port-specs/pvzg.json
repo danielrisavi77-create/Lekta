@@ -1,0 +1,301 @@
+{
+  "faculty": "pvzg",
+  "institution": "pvzg",
+  "catalogPrograms": [
+    "Prijediplomski strucni studiji PVZG (zavrsni rad)",
+    "Specijalisticki diplomski strucni studiji PVZG"
+  ],
+  "sources": [
+    {
+      "id": "pvzg-pravilnik-zavrsni-2018",
+      "kind": "regulation",
+      "title": "Pravilnik o zavrsnom radu na preddiplomskim strucnim i specijalistickim diplomskim strucnim studijima (PVZG, 2018)",
+      "url": "https://pvzg.hr/wp-content/uploads/2022/09/Pravilnik-o-zavrsnom-radu-PVZG-2018-compressed.pdf",
+      "publisher": "Poslovno veleuciliste Zagreb",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/pvzg/pvzg-pravilnik-zavrsni-2018.pdf",
+      "snapshotHash": "c91b7f2873513a6bbdc1c53433fc72d1cb48ceedae154fd9409d10ac970b54e8",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Institucija-wide Pravilnik; skeniran, OCR-an (scripts/ocr_pdf.py). Sve tipografske stavke u Clanku 18, opseg u Clanku 10."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "pvzg-zavrsni",
+      "unitId": "pvzg",
+      "programs": [
+        "Prijediplomski strucni studiji PVZG (zavrsni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "PVZG, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "requireA4": true,
+        "margins": {
+          "top": 3,
+          "right": 2,
+          "bottom": 3,
+          "left": 3
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Poslovno veleuciliste Zagreb), citano izravno.",
+      "sources": [
+        {
+          "title": "Pravilnik o zavrsnom radu na preddiplomskim strucnim i specijalistickim diplomskim strucnim studijima (PVZG, 2018)",
+          "url": "https://pvzg.hr/wp-content/uploads/2022/09/Pravilnik-o-zavrsnom-radu-PVZG-2018-compressed.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o zavrsnom radu na preddiplomskim strucnim i specijalistickim diplomskim strucnim studijima (PVZG, 2018)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Obostrano poravnanje",
+        "Margine",
+        "Opseg (najmanje 25 str.)"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "pvzg-specijalisticki",
+      "unitId": "pvzg",
+      "programs": [
+        "Specijalisticki diplomski strucni studiji PVZG"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "PVZG, specijalisticki diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "requireA4": true,
+        "margins": {
+          "top": 3,
+          "right": 2,
+          "bottom": 3,
+          "left": 3
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Poslovno veleuciliste Zagreb), citano izravno.",
+      "sources": [
+        {
+          "title": "Pravilnik o zavrsnom radu na preddiplomskim strucnim i specijalistickim diplomskim strucnim studijima (PVZG, 2018)",
+          "url": "https://pvzg.hr/wp-content/uploads/2022/09/Pravilnik-o-zavrsnom-radu-PVZG-2018-compressed.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o zavrsnom radu na preddiplomskim strucnim i specijalistickim diplomskim strucnim studijima (PVZG, 2018)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Obostrano poravnanje",
+        "Margine",
+        "Opseg (najmanje 40 str.)"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-pvzg-zavrsni--paper-size-verified-2026-07-02",
+      "ruleId": "pvzg-zavrsni--paper-size",
+      "profileId": "pvzg-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pvzg-pravilnik-zavrsni-2018",
+      "sourcePage": "Članak 18. (Tehnicko uredivanje teksta)",
+      "quote": "Završni rad piše se na papiru A 4 formata, a tekst se piše u fontu Times New Roman, veličine 12 s jednim i pol (1,5) redom razmaka, poravnan s obje strane s marginama od 30 mm gore, dolje i lijevo te 20 mm desno, bez oblikovanja zaglavlja i podnožja rada.",
+      "note": "Cross-institution port (Poslovno veleuciliste Zagreb): direktno citanje izvora."
+    },
+    {
+      "id": "led-pvzg-zavrsni--font-verified-2026-07-02",
+      "ruleId": "pvzg-zavrsni--font",
+      "profileId": "pvzg-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pvzg-pravilnik-zavrsni-2018",
+      "sourcePage": "Članak 18. (Tehnicko uredivanje teksta)",
+      "quote": "Završni rad piše se na papiru A 4 formata, a tekst se piše u fontu Times New Roman, veličine 12 s jednim i pol (1,5) redom razmaka, poravnan s obje strane s marginama od 30 mm gore, dolje i lijevo te 20 mm desno, bez oblikovanja zaglavlja i podnožja rada.",
+      "note": "Cross-institution port (Poslovno veleuciliste Zagreb): direktno citanje izvora."
+    },
+    {
+      "id": "led-pvzg-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "pvzg-zavrsni--font-size",
+      "profileId": "pvzg-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pvzg-pravilnik-zavrsni-2018",
+      "sourcePage": "Članak 18. (Tehnicko uredivanje teksta)",
+      "quote": "Završni rad piše se na papiru A 4 formata, a tekst se piše u fontu Times New Roman, veličine 12 s jednim i pol (1,5) redom razmaka, poravnan s obje strane s marginama od 30 mm gore, dolje i lijevo te 20 mm desno, bez oblikovanja zaglavlja i podnožja rada.",
+      "note": "Cross-institution port (Poslovno veleuciliste Zagreb): direktno citanje izvora."
+    },
+    {
+      "id": "led-pvzg-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "pvzg-zavrsni--line-spacing",
+      "profileId": "pvzg-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pvzg-pravilnik-zavrsni-2018",
+      "sourcePage": "Članak 18. (Tehnicko uredivanje teksta)",
+      "quote": "Završni rad piše se na papiru A 4 formata, a tekst se piše u fontu Times New Roman, veličine 12 s jednim i pol (1,5) redom razmaka, poravnan s obje strane s marginama od 30 mm gore, dolje i lijevo te 20 mm desno, bez oblikovanja zaglavlja i podnožja rada.",
+      "note": "Cross-institution port (Poslovno veleuciliste Zagreb): direktno citanje izvora."
+    },
+    {
+      "id": "led-pvzg-zavrsni--justify-verified-2026-07-02",
+      "ruleId": "pvzg-zavrsni--justify",
+      "profileId": "pvzg-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pvzg-pravilnik-zavrsni-2018",
+      "sourcePage": "Članak 18. (Tehnicko uredivanje teksta)",
+      "quote": "Završni rad piše se na papiru A 4 formata, a tekst se piše u fontu Times New Roman, veličine 12 s jednim i pol (1,5) redom razmaka, poravnan s obje strane s marginama od 30 mm gore, dolje i lijevo te 20 mm desno, bez oblikovanja zaglavlja i podnožja rada.",
+      "note": "Cross-institution port (Poslovno veleuciliste Zagreb): direktno citanje izvora."
+    },
+    {
+      "id": "led-pvzg-zavrsni--margins-verified-2026-07-02",
+      "ruleId": "pvzg-zavrsni--margins",
+      "profileId": "pvzg-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pvzg-pravilnik-zavrsni-2018",
+      "sourcePage": "Članak 18. (Tehnicko uredivanje teksta)",
+      "quote": "Završni rad piše se na papiru A 4 formata, a tekst se piše u fontu Times New Roman, veličine 12 s jednim i pol (1,5) redom razmaka, poravnan s obje strane s marginama od 30 mm gore, dolje i lijevo te 20 mm desno, bez oblikovanja zaglavlja i podnožja rada.",
+      "note": "Cross-institution port (Poslovno veleuciliste Zagreb): direktno citanje izvora."
+    },
+    {
+      "id": "led-pvzg-zavrsni--page-count-verified-2026-07-02",
+      "ruleId": "pvzg-zavrsni--page-count",
+      "profileId": "pvzg-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pvzg-pravilnik-zavrsni-2018",
+      "sourcePage": "Članak 10. (Opseg)",
+      "quote": "Opseg završnog rada na stručnim preddiplomskim studijima treba imati najmanje dvadeset i pet (25) stranica u koje se ne ubrajaju naslovnica, sadržaj i popis literature.",
+      "note": "Cross-institution port (Poslovno veleuciliste Zagreb): direktno citanje izvora."
+    },
+    {
+      "id": "led-pvzg-specijalisticki--paper-size-verified-2026-07-02",
+      "ruleId": "pvzg-specijalisticki--paper-size",
+      "profileId": "pvzg-specijalisticki",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pvzg-pravilnik-zavrsni-2018",
+      "sourcePage": "Članak 18. (Tehnicko uredivanje teksta)",
+      "quote": "Završni rad piše se na papiru A 4 formata, a tekst se piše u fontu Times New Roman, veličine 12 s jednim i pol (1,5) redom razmaka, poravnan s obje strane s marginama od 30 mm gore, dolje i lijevo te 20 mm desno, bez oblikovanja zaglavlja i podnožja rada.",
+      "note": "Cross-institution port (Poslovno veleuciliste Zagreb): direktno citanje izvora."
+    },
+    {
+      "id": "led-pvzg-specijalisticki--font-verified-2026-07-02",
+      "ruleId": "pvzg-specijalisticki--font",
+      "profileId": "pvzg-specijalisticki",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pvzg-pravilnik-zavrsni-2018",
+      "sourcePage": "Članak 18. (Tehnicko uredivanje teksta)",
+      "quote": "Završni rad piše se na papiru A 4 formata, a tekst se piše u fontu Times New Roman, veličine 12 s jednim i pol (1,5) redom razmaka, poravnan s obje strane s marginama od 30 mm gore, dolje i lijevo te 20 mm desno, bez oblikovanja zaglavlja i podnožja rada.",
+      "note": "Cross-institution port (Poslovno veleuciliste Zagreb): direktno citanje izvora."
+    },
+    {
+      "id": "led-pvzg-specijalisticki--font-size-verified-2026-07-02",
+      "ruleId": "pvzg-specijalisticki--font-size",
+      "profileId": "pvzg-specijalisticki",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pvzg-pravilnik-zavrsni-2018",
+      "sourcePage": "Članak 18. (Tehnicko uredivanje teksta)",
+      "quote": "Završni rad piše se na papiru A 4 formata, a tekst se piše u fontu Times New Roman, veličine 12 s jednim i pol (1,5) redom razmaka, poravnan s obje strane s marginama od 30 mm gore, dolje i lijevo te 20 mm desno, bez oblikovanja zaglavlja i podnožja rada.",
+      "note": "Cross-institution port (Poslovno veleuciliste Zagreb): direktno citanje izvora."
+    },
+    {
+      "id": "led-pvzg-specijalisticki--line-spacing-verified-2026-07-02",
+      "ruleId": "pvzg-specijalisticki--line-spacing",
+      "profileId": "pvzg-specijalisticki",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pvzg-pravilnik-zavrsni-2018",
+      "sourcePage": "Članak 18. (Tehnicko uredivanje teksta)",
+      "quote": "Završni rad piše se na papiru A 4 formata, a tekst se piše u fontu Times New Roman, veličine 12 s jednim i pol (1,5) redom razmaka, poravnan s obje strane s marginama od 30 mm gore, dolje i lijevo te 20 mm desno, bez oblikovanja zaglavlja i podnožja rada.",
+      "note": "Cross-institution port (Poslovno veleuciliste Zagreb): direktno citanje izvora."
+    },
+    {
+      "id": "led-pvzg-specijalisticki--justify-verified-2026-07-02",
+      "ruleId": "pvzg-specijalisticki--justify",
+      "profileId": "pvzg-specijalisticki",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pvzg-pravilnik-zavrsni-2018",
+      "sourcePage": "Članak 18. (Tehnicko uredivanje teksta)",
+      "quote": "Završni rad piše se na papiru A 4 formata, a tekst se piše u fontu Times New Roman, veličine 12 s jednim i pol (1,5) redom razmaka, poravnan s obje strane s marginama od 30 mm gore, dolje i lijevo te 20 mm desno, bez oblikovanja zaglavlja i podnožja rada.",
+      "note": "Cross-institution port (Poslovno veleuciliste Zagreb): direktno citanje izvora."
+    },
+    {
+      "id": "led-pvzg-specijalisticki--margins-verified-2026-07-02",
+      "ruleId": "pvzg-specijalisticki--margins",
+      "profileId": "pvzg-specijalisticki",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pvzg-pravilnik-zavrsni-2018",
+      "sourcePage": "Članak 18. (Tehnicko uredivanje teksta)",
+      "quote": "Završni rad piše se na papiru A 4 formata, a tekst se piše u fontu Times New Roman, veličine 12 s jednim i pol (1,5) redom razmaka, poravnan s obje strane s marginama od 30 mm gore, dolje i lijevo te 20 mm desno, bez oblikovanja zaglavlja i podnožja rada.",
+      "note": "Cross-institution port (Poslovno veleuciliste Zagreb): direktno citanje izvora."
+    },
+    {
+      "id": "led-pvzg-specijalisticki--page-count-verified-2026-07-02",
+      "ruleId": "pvzg-specijalisticki--page-count",
+      "profileId": "pvzg-specijalisticki",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pvzg-pravilnik-zavrsni-2018",
+      "sourcePage": "Članak 10. (Opseg)",
+      "quote": "Opseg završnog rada na specijalističkim diplomskim stručnim studijima treba imati najmanje četrdeset (40) stranica u koje se ne ubrajaju naslovnica, sadržaj i popis literature.",
+      "note": "Cross-institution port (Poslovno veleuciliste Zagreb): direktno citanje izvora."
+    }
+  ]
+}
