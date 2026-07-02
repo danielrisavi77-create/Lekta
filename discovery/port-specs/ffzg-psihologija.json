@@ -1,0 +1,213 @@
+{
+  "faculty": "ffzg",
+  "unit": null,
+  "catalogPrograms": [
+    "Psihologija"
+  ],
+  "sources": [
+    {
+      "id": "ffzg-psihologija-diplomski-2024",
+      "kind": "guidelines",
+      "title": "Upute za pisanje i oblikovanje diplomskog rada na Odsjeku za psihologiju Filozofskog fakulteta Sveucilista u Zagrebu (2024)",
+      "url": "https://psihologija.ffzg.unizg.hr/wp-content/uploads/2024/10/Diplomski-rad_upute_2024.docx",
+      "publisher": "Filozofski fakultet Sveucilista u Zagrebu, Odsjek za psihologiju",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/ffzg/ffzg-psihologija-diplomski-2024.docx",
+      "snapshotHash": "ad885d20070f3349adae2f27ef0d08ea1223e7cf1322521e25a41f8b2d02fac4",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Sluzbene odsjecke Upute (docx, verzija 2024, objavljeno na stranicama Odsjeka za psihologiju psihologija.ffzg.unizg.hr, uploads/2024/10). Tehnicko oblikovanje je propisano imperativom (Formatiranje stranice teksta ... je sljedeca; stranice moraju biti oznacene rednim brojem; STROGO SE PRIDRZAVATI): font Times New Roman velicine 12, margine 2,54 cm, prored 1,5, numeracija stranica na dnu po sredini pocevsi od Uvoda, Sadrzaj kao 3. stranica -> scored. Opseg 20-30 stranica je mjeren u stranicama (engine racuna nepouzdan Word broj stranica) -> advisory. Citiranje je APA (apa7), poravnanje lijevo i osnovna struktura (Uvod, Cilj, Problem, Metoda, Rezultati, Rasprava, Zakljucak, Literatura) su preporuke/ne-strojno provjerljivo -> advisory."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "ffzg-psihologija-diplomski",
+      "unitId": "ffzg",
+      "programs": [
+        "Psihologija"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Filozofski fakultet (Odsjek za psihologiju), diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2024-10-01",
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": 12,
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.54,
+          "right": 2.54,
+          "bottom": 2.54,
+          "left": 2.54
+        },
+        "checkMargins": true,
+        "requireToc": true,
+        "requirePageNumbers": true,
+        "recommendedCitation": "apa7",
+        "pageMin": 20,
+        "pageMax": 30
+      },
+      "facts": [
+        "Tehnicko oblikovanje je propisano: Times New Roman velicine 12, margine 2,54 cm (sve), prored 1,5, numeracija stranica na dnu po sredini pocevsi od Uvoda (imperativ).",
+        "Sadrzaj je obvezan i nalazi se na trecoj stranici, opsega najvise jedne stranice (imperativ).",
+        "Opseg rada je 20 do 30 stranica teksta (prednje stranice, literatura i prilozi se ne racunaju); mjeri se u stranicama pa je u aplikaciji informativno (advisory).",
+        "Uredenje teksta i citiranje slijede APA standarde (apa7); tekst se pise lijevo poravnato; osnovni elementi su Uvod, Cilj, Problem, Metoda, Rezultati, Rasprava, Zakljucak, Literatura (advisory)."
+      ],
+      "note": "Diplomski rad iz sluzbenih Uputa Odsjeka za psihologiju (2024). FFZG nema jedinstvene fakultetske Upute pa je izvor odsjecki. Scored su samo strojno provjerljiva imperativna pravila koja engine stvarno boduje: font, velicina, prored, margine, numeracija stranica, sadrzaj. Opseg u stranicama (20-30) engine tretira informativno (0 bodova) pa je advisory. Stil citiranja APA i lijevo poravnanje engine ne boduje pouzdano (poravnanje se provjerava samo kad se trazi obostrano) pa su advisory. Osnovna struktura je formulirana kao uobicajena (uobicajeno sadrzi / Forma teksta uobicajena je) pa nije scored.",
+      "sources": [
+        {
+          "title": "Upute za pisanje i oblikovanje diplomskog rada na Odsjeku za psihologiju (FFZG, 2024)",
+          "url": "https://psihologija.ffzg.unizg.hr/wp-content/uploads/2024/10/Diplomski-rad_upute_2024.docx"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za pisanje i oblikovanje diplomskog rada na Odsjeku za psihologiju (FFZG, 2024)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "font",
+        "velicina slova",
+        "prored",
+        "margine",
+        "numeracija stranica",
+        "sadrzaj"
+      ],
+      "advisoryScope": [
+        "opseg (stranice)",
+        "stil citiranja (APA)",
+        "poravnanje teksta",
+        "osnovni elementi rada"
+      ],
+      "catalogPrograms": [
+        "Psihologija"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-ffzg-psihologija-diplomski--font-verified-2026-07-02",
+      "ruleId": "ffzg-psihologija-diplomski--font",
+      "profileId": "ffzg-psihologija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-psihologija-diplomski-2024",
+      "sourcePage": "odjeljak Formatiranje stranice teksta",
+      "quote": "font: velicina 12, Times New Roman",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-psihologija-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "ffzg-psihologija-diplomski--font-size",
+      "profileId": "ffzg-psihologija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-psihologija-diplomski-2024",
+      "sourcePage": "odjeljak Formatiranje stranice teksta",
+      "quote": "font: velicina 12, Times New Roman",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-psihologija-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "ffzg-psihologija-diplomski--line-spacing",
+      "profileId": "ffzg-psihologija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-psihologija-diplomski-2024",
+      "sourcePage": "odjeljak Formatiranje stranice teksta",
+      "quote": "prored: 1,5",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-psihologija-diplomski--margins-verified-2026-07-02",
+      "ruleId": "ffzg-psihologija-diplomski--margins",
+      "profileId": "ffzg-psihologija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-psihologija-diplomski-2024",
+      "sourcePage": "odjeljak Formatiranje stranice teksta",
+      "quote": "margine: sve 2,54 cm (lijevo, desno, gore, dolje)",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-psihologija-diplomski--page-numbers-verified-2026-07-02",
+      "ruleId": "ffzg-psihologija-diplomski--page-numbers",
+      "profileId": "ffzg-psihologija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-psihologija-diplomski-2024",
+      "sourcePage": "odjeljak Formatiranje stranice teksta",
+      "quote": "stranice moraju biti oznacene rednim brojem, na dnu po sredini stranice pocevsi od Uvoda",
+      "note": "Deepen workflow (odsjecki profil). Imperativ: stranice moraju biti oznacene."
+    },
+    {
+      "id": "led-ffzg-psihologija-diplomski--toc-verified-2026-07-02",
+      "ruleId": "ffzg-psihologija-diplomski--toc",
+      "profileId": "ffzg-psihologija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-psihologija-diplomski-2024",
+      "sourcePage": "odjeljak Izgled prve, naslovne stranice (3. stranica)",
+      "quote": "Treca stranica je Sadrzaj, takoder bez broja stranice.",
+      "note": "Deepen workflow (odsjecki profil). Sadrzaj je propisan kao 3. stranica."
+    },
+    {
+      "id": "led-ffzg-psihologija-diplomski--page-count-advisory-2026-07-02",
+      "ruleId": "ffzg-psihologija-diplomski--page-count",
+      "profileId": "ffzg-psihologija-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-psihologija-diplomski-2024",
+      "sourcePage": "uvodni odjeljak: Opseg rada",
+      "quote": "Opseg rada je minimalno 20 i maksimalno 30 stranica teksta.",
+      "note": "Deepen workflow (odsjecki profil). Opseg je u stranicama; engine ga tretira informativno (0 bodova) pa advisory."
+    },
+    {
+      "id": "led-ffzg-psihologija-diplomski--citation-style-advisory-2026-07-02",
+      "ruleId": "ffzg-psihologija-diplomski--citation-style",
+      "profileId": "ffzg-psihologija-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-psihologija-diplomski-2024",
+      "sourcePage": "odjeljak Specificne upute za oblikovanje teksta (APA standardi)",
+      "quote": "Uredenje teksta rada treba biti sukladno APA standardima",
+      "note": "Deepen workflow (odsjecki profil). APA (apa7); stil citiranja nije strojno provjerljiv pa advisory."
+    },
+    {
+      "id": "led-ffzg-psihologija-diplomski--justify-advisory-2026-07-02",
+      "ruleId": "ffzg-psihologija-diplomski--justify",
+      "profileId": "ffzg-psihologija-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-psihologija-diplomski-2024",
+      "sourcePage": "odjeljak Formatiranje stranice teksta",
+      "quote": "tekst se pise lijevo poravnato",
+      "note": "Deepen workflow (odsjecki profil). Engine provjerava samo obvezno obostrano poravnanje, ne moze bodovati zahtjev za lijevim poravnanjem pa advisory."
+    },
+    {
+      "id": "led-ffzg-psihologija-diplomski--required-sections-advisory-2026-07-02",
+      "ruleId": "ffzg-psihologija-diplomski--required-sections",
+      "profileId": "ffzg-psihologija-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-psihologija-diplomski-2024",
+      "sourcePage": "odjeljak Forma teksta",
+      "quote": "Forma teksta uobicajena je za pisanje znanstvenog rada, a sadrzi sljedece osnovne elemente: Uvod, Cilj, Problem, Metoda, Rezultati, Rasprava, Zakljucak, Literatura",
+      "note": "Deepen workflow (odsjecki profil). Struktura je formulirana kao uobicajena i nije strojno provjerljiva pa advisory."
+    }
+  ]
+}

@@ -1,0 +1,202 @@
+{
+  "faculty": "pmf",
+  "unit": null,
+  "catalogPrograms": [
+    "Biologija"
+  ],
+  "sources": [
+    {
+      "id": "pmf-biol-upute-diplomski-2026",
+      "kind": "guidelines",
+      "title": "Upute za prijavu i izradu diplomskog rada te diplomski ispit na Bioloskom odsjeku (2026)",
+      "url": "https://www.pmf.unizg.hr/_download/repository/Upute%20za%20prijavu%20i%20izradu%20diplomskog%20rada%5B2%5D.pdf",
+      "publisher": "Bioloski odsjek, Prirodoslovno-matematicki fakultet Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/pmf/pmf-biol-diplomski-2026.pdf",
+      "snapshotHash": "ee15276e21d30ee18c921eed75a144a111a51e913f411047b7d122ab67bbc641",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Upute Bioloskog odsjeka izraene na temelju Pravilnika o preddiplomskim i diplomskim studijima na PMF-u i odluka Vijea Bioloskog odsjeka; nose authority program-page. Sadrze konkretna imperativna pravila oblikovanja (A4, prored 1,5, margine 2,5 cm, velicina slova 11 ili 12 pt, numeracija stranica od Uvoda, opseg 30 do 80 stranica). Font (obitelj) nije propisan. Dokument je odsjecki (biologija, znanost o okolisu, IPDBK), ne faculty-wide; drugi odsjeci PMF-a imaju vlastite upute. Citati verbatim provjereni grepom nad ekstrahiranim tekstom (pdftotext -layout)."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "pmf-biologija-graduate",
+      "unitId": "pmf",
+      "programs": [
+        "Biologija"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Prirodoslovno-matematicki fakultet (Bioloski odsjek), diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2026",
+      "rules": {
+        "size": [
+          11,
+          12
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "requirePageNumbers": true,
+        "requireA4": true,
+        "pageMin": 30,
+        "pageMax": 80,
+        "recommendedCitation": "harvard"
+      },
+      "facts": [
+        "Format tiska je A4, prored 1,5 i margine 2,5 cm sa svake strane (imperativ, scored).",
+        "Velicina slova u tekstu treba biti 11 ili 12 pt (imperativ, scored).",
+        "Stranice se numeriraju, numeracija zapocinje na prvoj stranici Uvoda (imperativ, scored).",
+        "Diplomski rad treba sadrzavati najmanje 30 i najvise 80 numeriranih stranica (imperativ, scored).",
+        "Literaturni navodi u tekstu ne navode se numericki nego prezimenom autora i godinom, autor-godina sustav (advisory, machineCheckable false).",
+        "Decimalna numeracija poglavlja u Sadrzaju je preporuka (advisory).",
+        "Obvezni dijelovi rada (uvod, materijal i metode, rezultati, rasprava, zakljucak, literatura, zivotopis) su propisani ali nisu strojno provjerljivi (advisory)."
+      ],
+      "note": "Iz Uputa za prijavu i izradu diplomskog rada (PMF, Bioloski odsjek, 2026), izraenih na temelju Pravilnika o preddiplomskim i diplomskim studijima na PMF-u i odluka Vijea Bioloskog odsjeka, pa je authority program-page i imperativna, verbatim potvrdena pravila su scored. Font (obitelj) NIJE propisan pa nema font pravila. citation-style i required-sections nisu strojno provjerljivi pa su advisory (invarianta: scored mora biti machineCheckable true). VAZNO za ljudski pregled: izvor je Bioloskog odsjeka, ne faculty-wide; drugi odsjeci PMF-a (geografija, fizika, kemija, matematika, geologija) imaju vlastite upute i mogu propisati drugacije vrijednosti. Zavrsni (prijediplomski) i doktorski nisu pokriveni zasebnim dohvacenim formatnim uputama.",
+      "sources": [
+        {
+          "title": "Upute za prijavu i izradu diplomskog rada (PMF, Bioloski odsjek, 2026)",
+          "url": "https://www.pmf.unizg.hr/_download/repository/Upute%20za%20prijavu%20i%20izradu%20diplomskog%20rada%5B2%5D.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o preddiplomskim i diplomskim studijima na PMF-u",
+        "Upute za prijavu i izradu diplomskog rada (PMF, Bioloski odsjek, 2026)",
+        "Odluke Vijea Bioloskog odsjeka"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "format papira (A4)",
+        "prored",
+        "margine",
+        "velicina slova",
+        "numeracija stranica",
+        "opseg u stranicama"
+      ],
+      "advisoryScope": [
+        "stil citiranja (autor-godina)",
+        "decimalno oznacavanje sadrzaja (toc)",
+        "obvezni dijelovi strukture"
+      ],
+      "recommendedCitation": "harvard"
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-pmf-biologija-graduate--paper-size-verified-2026-07-02",
+      "ruleId": "pmf-biologija-graduate--paper-size",
+      "profileId": "pmf-biologija-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-biol-upute-diplomski-2026",
+      "sourcePage": "odjeljak Predaja i oblikovanje diplomskog rada",
+      "quote": "Format tiska diplomskih radova je A4 (210 X 297 mm), prored 1,5 i margine 2,5 cm sa svake strane.",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-pmf-biologija-graduate--line-spacing-verified-2026-07-02",
+      "ruleId": "pmf-biologija-graduate--line-spacing",
+      "profileId": "pmf-biologija-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-biol-upute-diplomski-2026",
+      "sourcePage": "odjeljak Predaja i oblikovanje diplomskog rada",
+      "quote": "Format tiska diplomskih radova je A4 (210 X 297 mm), prored 1,5 i margine 2,5 cm sa svake strane.",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-pmf-biologija-graduate--margins-verified-2026-07-02",
+      "ruleId": "pmf-biologija-graduate--margins",
+      "profileId": "pmf-biologija-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-biol-upute-diplomski-2026",
+      "sourcePage": "odjeljak Predaja i oblikovanje diplomskog rada",
+      "quote": "Format tiska diplomskih radova je A4 (210 X 297 mm), prored 1,5 i margine 2,5 cm sa svake strane.",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-pmf-biologija-graduate--font-size-verified-2026-07-02",
+      "ruleId": "pmf-biologija-graduate--font-size",
+      "profileId": "pmf-biologija-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-biol-upute-diplomski-2026",
+      "sourcePage": "odjeljak Predaja i oblikovanje diplomskog rada",
+      "quote": "Velicina slova u tekstu treba biti 11 ili 12 pt.",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-pmf-biologija-graduate--page-numbers-verified-2026-07-02",
+      "ruleId": "pmf-biologija-graduate--page-numbers",
+      "profileId": "pmf-biologija-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-biol-upute-diplomski-2026",
+      "sourcePage": "odjeljak Dijelovi diplomskog rada, 7) Sadrzaj",
+      "quote": "Numeriranje stranica zapocinje na prvoj stranici Uvoda diplomskog rada, a numeriraju se sve",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-pmf-biologija-graduate--page-count-verified-2026-07-02",
+      "ruleId": "pmf-biologija-graduate--page-count",
+      "profileId": "pmf-biologija-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-biol-upute-diplomski-2026",
+      "sourcePage": "odjeljak Predaja i oblikovanje diplomskog rada",
+      "quote": "Diplomski rad treba sadrzavati najmanje 30 i najvise 80 numeriranih stranica.",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-pmf-biologija-graduate--toc-advisory-2026-07-02",
+      "ruleId": "pmf-biologija-graduate--toc",
+      "profileId": "pmf-biologija-graduate",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-biol-upute-diplomski-2026",
+      "sourcePage": "odjeljak Dijelovi diplomskog rada, 7) Sadrzaj",
+      "quote": "Preporuca se decimalna numeracija poglavlja i odlomaka u poglavljima",
+      "note": "Deepen workflow (odsjecki profil). Formulacija 'Preporuca se', ostaje advisory."
+    },
+    {
+      "id": "led-pmf-biologija-graduate--citation-style-advisory-2026-07-02",
+      "ruleId": "pmf-biologija-graduate--citation-style",
+      "profileId": "pmf-biologija-graduate",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-biol-upute-diplomski-2026",
+      "sourcePage": "odjeljak Dijelovi diplomskog rada, 16) Literatura",
+      "quote": "ne navode numericki, ve prezimenom/prezimenima autora i godinom",
+      "note": "Deepen workflow (odsjecki profil). Autor-godina sustav, ali citation-style nije strojno provjerljiv pa advisory."
+    },
+    {
+      "id": "led-pmf-biologija-graduate--required-sections-advisory-2026-07-02",
+      "ruleId": "pmf-biologija-graduate--required-sections",
+      "profileId": "pmf-biologija-graduate",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-biol-upute-diplomski-2026",
+      "sourcePage": "odjeljak Dijelovi diplomskog rada",
+      "quote": "Diplomski rad mora sadrzavati sljedee dijelove:",
+      "note": "Deepen workflow (odsjecki profil). Imperativ 'mora sadrzavati' ali required-sections nije strojno provjerljiv pa advisory."
+    }
+  ]
+}

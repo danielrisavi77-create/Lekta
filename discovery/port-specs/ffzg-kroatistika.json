@@ -1,0 +1,241 @@
+{
+  "faculty": "ffzg",
+  "unit": null,
+  "catalogPrograms": [
+    "Kroatistika"
+  ],
+  "sources": [
+    {
+      "id": "ffzg-kroatistika-diplomski-2026",
+      "kind": "guidelines",
+      "title": "Opce upute za sastavljanje diplomskoga rada (Filozofski fakultet, Odsjek za kroatistiku)",
+      "url": "https://kroat.ffzg.unizg.hr/index.php/studij/diplomski-rad/153-opce-upute-za-sastavljanje-diplomskoga-rada",
+      "publisher": "Filozofski fakultet Sveucilista u Zagrebu, Odsjek za kroatistiku",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/ffzg/ffzg-kroatistika-diplomski-2026.html",
+      "snapshotHash": "bff2cedf29ff0ca3d65d3ddab8bf5e48ae193495a25c1094e1c0a681017e20de",
+      "validityClass": "volatile",
+      "lastChecked": "2026-07-02",
+      "note": "Odsjecke Opce upute za sastavljanje diplomskoga rada Odsjeka za kroatistiku (HTML stranica; snapshot spremljen kao .html, ekstrahirani ASCII tekst u istoimenom .txt). Odjeljak 6. Oblikovanje teksta daje jasnu normativnu specifikaciju oblikovanja (Osnovni tekst: Times New Roman, 12 p, sve margine 2,5 cm, prored 1,5; Desni je rub teksta poravnat; Stranice se numeriraju arapskim brojkama pocevsi od Uvoda) -> scored: font, velicina, margine, prored, obostrano poravnanje, numeracija stranica. Odjeljak 2. navodi Obavezni dijelovi rada (Naslovnica, Sadrzaj, Literatura, Sazetak i Kljucne rijeci) -> sadrzaj (toc) scored (strojno), required-sections advisory (nije strojno provjerivo). Opseg (40 kartica) je preporuka (preporuceni je opseg) -> advisory. Stil citiranja je autor-godina (Prezime godina: stranica, harvard) ali nije strojno provjeriv -> advisory."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "ffzg-kroatistika-graduate",
+      "unitId": "ffzg",
+      "programs": [
+        "Kroatistika"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Filozofski fakultet (Odsjek za kroatistiku), diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2026-06-01",
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": 12,
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "requireToc": true,
+        "requirePageNumbers": true,
+        "checkJustify": true,
+        "checkMargins": true,
+        "recommendedCitation": "harvard",
+        "requiredSections": [
+          {
+            "key": "naslovnica",
+            "label": "Naslovnica",
+            "terms": [
+              "naslovnica",
+              "naslovna stranica"
+            ]
+          },
+          {
+            "key": "sadrzaj",
+            "label": "Sadrzaj",
+            "terms": [
+              "sadrzaj"
+            ]
+          },
+          {
+            "key": "literatura",
+            "label": "Literatura",
+            "terms": [
+              "literatura",
+              "popis literature"
+            ]
+          },
+          {
+            "key": "sazetak",
+            "label": "Sazetak i kljucne rijeci",
+            "terms": [
+              "sazetak",
+              "kljucne rijeci"
+            ]
+          }
+        ]
+      },
+      "facts": [
+        "Osnovni tekst je Times New Roman 12 p, sve margine 2,5 cm, prored 1,5, desni rub poravnat, stranice numerirane arapskim brojkama od Uvoda (imperativ, odjeljak 6. Oblikovanje teksta).",
+        "Obavezni dijelovi rada jesu Naslovnica, Sadrzaj, Literatura te Sazetak i Kljucne rijeci na hrvatskome i engleskome (imperativ, odjeljak 2.).",
+        "Preporuceni opseg je 40 kartica za odsjecni, 80 kartica za meduodsjecni rad (1 kartica = 1 800 znakova s bjelinama); preporuka pa advisory. Stil citiranja je autor-godina (Prezime godina: stranica); nije strojno provjeriv pa advisory."
+      ],
+      "note": "Diplomski rad iz odsjeckih Opcih uputa za sastavljanje diplomskoga rada Odsjeka za kroatistiku. Tehnicko oblikovanje iz odjeljka 6. je normativna specifikacija pa je scored (font TNR, velicina 12, margine 2,5, prored 1,5, obostrano poravnanje, numeracija stranica). Sadrzaj (toc) je scored jer je strojno provjeriv i naveden kao obavezni dio. required-sections je advisory (machineCheckable:false). Opseg u karticama je preporuka pa advisory. Stil citiranja (harvard, autor-godina) je advisory jer nije strojno provjeriv. Autoritet je odsjecka razina (program-page). Izvor je HTML stranica pa je snapshot .html + ekstrahirani .txt.",
+      "sources": [
+        {
+          "title": "Opce upute za sastavljanje diplomskoga rada (FFZG, Odsjek za kroatistiku)",
+          "url": "https://kroat.ffzg.unizg.hr/index.php/studij/diplomski-rad/153-opce-upute-za-sastavljanje-diplomskoga-rada"
+        }
+      ],
+      "sourceHierarchy": [
+        "Opce upute za sastavljanje diplomskoga rada (FFZG, Odsjek za kroatistiku)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "font",
+        "velicina slova",
+        "margine",
+        "prored",
+        "obostrano poravnanje",
+        "numeracija stranica",
+        "sadrzaj"
+      ],
+      "advisoryScope": [
+        "obvezne cjeline rada",
+        "opseg (kartice)",
+        "stil citiranja"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-ffzg-kroatistika-graduate--font-verified-2026-07-02",
+      "ruleId": "ffzg-kroatistika-graduate--font",
+      "profileId": "ffzg-kroatistika-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-kroatistika-diplomski-2026",
+      "sourcePage": "odjeljak 6. Oblikovanje teksta",
+      "quote": "Osnovni tekst: Times New Roman, 12 p, sve margine 2,5 cm, prored 1,5.",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-kroatistika-graduate--font-size-verified-2026-07-02",
+      "ruleId": "ffzg-kroatistika-graduate--font-size",
+      "profileId": "ffzg-kroatistika-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-kroatistika-diplomski-2026",
+      "sourcePage": "odjeljak 6. Oblikovanje teksta",
+      "quote": "Osnovni tekst: Times New Roman, 12 p, sve margine 2,5 cm, prored 1,5.",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-kroatistika-graduate--margins-verified-2026-07-02",
+      "ruleId": "ffzg-kroatistika-graduate--margins",
+      "profileId": "ffzg-kroatistika-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-kroatistika-diplomski-2026",
+      "sourcePage": "odjeljak 6. Oblikovanje teksta",
+      "quote": "Osnovni tekst: Times New Roman, 12 p, sve margine 2,5 cm, prored 1,5.",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-kroatistika-graduate--line-spacing-verified-2026-07-02",
+      "ruleId": "ffzg-kroatistika-graduate--line-spacing",
+      "profileId": "ffzg-kroatistika-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-kroatistika-diplomski-2026",
+      "sourcePage": "odjeljak 6. Oblikovanje teksta",
+      "quote": "Osnovni tekst: Times New Roman, 12 p, sve margine 2,5 cm, prored 1,5.",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-kroatistika-graduate--justify-verified-2026-07-02",
+      "ruleId": "ffzg-kroatistika-graduate--justify",
+      "profileId": "ffzg-kroatistika-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-kroatistika-diplomski-2026",
+      "sourcePage": "odjeljak 6. Oblikovanje teksta",
+      "quote": "Desni je rub teksta poravnat.",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-kroatistika-graduate--page-numbers-verified-2026-07-02",
+      "ruleId": "ffzg-kroatistika-graduate--page-numbers",
+      "profileId": "ffzg-kroatistika-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-kroatistika-diplomski-2026",
+      "sourcePage": "odjeljak 6. Oblikovanje teksta",
+      "quote": "Stranice se numeriraju arapskim brojkama pocevsi od Uvoda.",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-kroatistika-graduate--toc-verified-2026-07-02",
+      "ruleId": "ffzg-kroatistika-graduate--toc",
+      "profileId": "ffzg-kroatistika-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-kroatistika-diplomski-2026",
+      "sourcePage": "odjeljak 2. Metodologija i kompozicija (Obavezni dijelovi rada)",
+      "quote": "Obavezni dijelovi rada jesu Naslovnica (v. uzorak u Prilogu), Sadrzaj",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-kroatistika-graduate--required-sections-advisory-2026-07-02",
+      "ruleId": "ffzg-kroatistika-graduate--required-sections",
+      "profileId": "ffzg-kroatistika-graduate",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-kroatistika-diplomski-2026",
+      "sourcePage": "odjeljak 2. Metodologija i kompozicija (Obavezni dijelovi rada)",
+      "quote": "Obavezni dijelovi rada jesu Naslovnica (v. uzorak u Prilogu), Sadrzaj",
+      "note": "Deepen workflow (odsjecki profil). Imperativ ali nije strojno provjeriv (machineCheckable:false) pa advisory."
+    },
+    {
+      "id": "led-ffzg-kroatistika-graduate--page-count-advisory-2026-07-02",
+      "ruleId": "ffzg-kroatistika-graduate--page-count",
+      "profileId": "ffzg-kroatistika-graduate",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-kroatistika-diplomski-2026",
+      "sourcePage": "odjeljak 3. Diskurz i opseg",
+      "quote": "preporuceni je opseg 40 kartica teksta za odsjecni, odnosno 80 kartica teksta za meduodsjecni rad",
+      "note": "Deepen workflow (odsjecki profil). Opseg je preporuka (preporuceni je opseg) pa advisory."
+    },
+    {
+      "id": "led-ffzg-kroatistika-graduate--citation-style-advisory-2026-07-02",
+      "ruleId": "ffzg-kroatistika-graduate--citation-style",
+      "profileId": "ffzg-kroatistika-graduate",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-kroatistika-diplomski-2026",
+      "sourcePage": "odjeljak 4. Sluzenje literaturom i njezino navodenje",
+      "quote": "Podatak o izvoru ima oblik Prezime godina: stranica",
+      "note": "Deepen workflow (odsjecki profil). Stil je autor-godina (harvard) ali nije strojno provjeriv pa advisory."
+    }
+  ]
+}

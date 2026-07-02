@@ -1,0 +1,184 @@
+{
+  "faculty": "pmf",
+  "unit": null,
+  "catalogPrograms": [
+    "Matematika"
+  ],
+  "sources": [
+    {
+      "id": "pmf-math-upute-diplomski-2024",
+      "kind": "guidelines",
+      "title": "Prilog 1: Upute za izradu diplomskog rada (Prilozi Pravilniku o diplomskom radu i diplomskom ispitu, Matematicki odsjek PMF-a, rujan 2024)",
+      "url": "https://www.pmf.unizg.hr/images/50022555/pravilnik-diplomski-prilozi(1).pdf",
+      "publisher": "Matematicki odsjek, Prirodoslovno-matematicki fakultet Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/pmf/pmf-math-pravilnik-prilozi-2024.pdf",
+      "snapshotHash": "d3109c012d242807de80c829ce2242a4e99a4bbdb82d3c6ba1caf06c66f96f6a",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Prilog 1 Pravilniku Matematickog odsjeka sadrzi tehnicka pravila izrade diplomskog rada (A4, font 12pt, prored 15pt, margine, osnovne cjeline, numericko citiranje). Imperativni verbatim citati provjereni grepom nad pmf-math-pravilnik-prilozi-2024.txt. Odsjecki dokument, nije faculty-wide; drugi odsjeci PMF-a imaju vlastite upute (geografija, biologija, fizika vec portani)."
+    },
+    {
+      "id": "pmf-math-pravilnik-diplomski-2024",
+      "kind": "pravilnik",
+      "title": "Pravilnik o diplomskom radu i diplomskom ispitu (Matematicki odsjek PMF-a, rujan 2024)",
+      "url": "https://www.pmf.unizg.hr/images/50022555/Pravilnik%20o%20diplomskom%20radu%20i%20diplomskom%20ispitu_rujan2024.pdf",
+      "publisher": "Matematicki odsjek, Prirodoslovno-matematicki fakultet Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/pmf/pmf-math-pravilnik-2024.pdf",
+      "snapshotHash": "2e2f151c4feafda2d87bef2a56aa8b19e0e2844686051561bd0ecbdad4587dce",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Obvezujuci pravilnik Matematickog odsjeka koji tehnicke detalje delegira na Prilog 1 (Upute za izradu diplomskog rada). Snapshot cuvan radi sljedivosti i autoriteta koji obvezuje Upute; sam ne daje zasebno scored formatno pravilo."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "pmf-matematika-graduate",
+      "unitId": "pmf",
+      "programs": [
+        "Matematika"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Prirodoslovno-matematicki fakultet (Matematicki odsjek), diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2024-09",
+      "rules": {
+        "size": [
+          12
+        ],
+        "requireA4": true,
+        "requireToc": true,
+        "recommendedCitation": "ieee"
+      },
+      "facts": [
+        "Diplomski rad mora biti otisnut na papiru formata A4 (imperativ, scored).",
+        "Rad se pise fontom velicine 12pt (imperativ, scored).",
+        "Rad mora sadrzavati sadrzaj (table of contents) medju osnovnim cjelinama (imperativ, scored).",
+        "Prored je 15pt (exact); zbog dvoznacnosti prikaza prored kao tocke vs. visekratnik u engineu ostaje advisory.",
+        "Margine za jednostrani tisak: lijeva 35, desna 23, gornja 35, donja 38 mm; dvostrani tisak koristi zrcalne margine, pa margine ostaju advisory.",
+        "Citiranje je numericko s uglatim zagradama ([1], [2, str. 138]); nije strojno provjerljivo pa je advisory.",
+        "Osnovne cjeline: sadrzaj, uvod, glavni dio, literatura, sazetak, summary, zivotopis (nije strojno provjerljivo pa advisory)."
+      ],
+      "note": "Iz Priloga 1 (Upute za izradu diplomskog rada) Pravilnika Matematickog odsjeka PMF-a (rujan 2024). Pravilnik tehnicke detalje delegira na Prilog 1 pa je authority program-page i imperativna, verbatim potvrdena strojno provjerljiva pravila su scored: A4, velicina slova 12pt i obvezni sadrzaj (toc). Advisory: prored 15pt (exact-pt vs. visekratnik dvoznacnost u engineu), margine (asimetricne i ovise o jednostranom/dvostranom tisku, zrcalne), numericko citiranje i osnovne cjeline (oboje machineCheckable:false). VAZNO za ljudski pregled: dokument je Matematickog odsjeka, ne faculty-wide; drugi odsjeci PMF-a imaju vlastite upute. Prijediplomski (zavrsni) i doktorski rad nisu pokriveni zasebno dohvacenim odsjeckim formatnim uputama.",
+      "sources": [
+        {
+          "title": "Prilog 1: Upute za izradu diplomskog rada (Matematicki odsjek PMF-a, 2024)",
+          "url": "https://www.pmf.unizg.hr/images/50022555/pravilnik-diplomski-prilozi(1).pdf"
+        },
+        {
+          "title": "Pravilnik o diplomskom radu i diplomskom ispitu (Matematicki odsjek PMF-a, rujan 2024)",
+          "url": "https://www.pmf.unizg.hr/images/50022555/Pravilnik%20o%20diplomskom%20radu%20i%20diplomskom%20ispitu_rujan2024.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o diplomskom radu i diplomskom ispitu (Matematicki odsjek PMF-a, rujan 2024)",
+        "Prilog 1: Upute za izradu diplomskog rada (Matematicki odsjek PMF-a, 2024)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "format papira (A4)",
+        "velicina slova",
+        "sadrzaj (toc)"
+      ],
+      "advisoryScope": [
+        "prored (15pt)",
+        "margine",
+        "stil citiranja (numericki, uglate zagrade)",
+        "osnovne cjeline (required-sections)"
+      ],
+      "catalogPrograms": [
+        "Matematika"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-pmf-matematika-graduate--paper-size-verified-2026-07-02",
+      "ruleId": "pmf-matematika-graduate--paper-size",
+      "profileId": "pmf-matematika-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-math-upute-diplomski-2024",
+      "sourcePage": "Prilog 1: Upute za izradu diplomskog rada, II. Izgled diplomskog rada",
+      "quote": "Diplomski rad mora biti otisnut racunalnim pisacem na papiru formata A4",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-pmf-matematika-graduate--font-size-verified-2026-07-02",
+      "ruleId": "pmf-matematika-graduate--font-size",
+      "profileId": "pmf-matematika-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-math-upute-diplomski-2024",
+      "sourcePage": "Prilog 1: Upute za izradu diplomskog rada, II. Izgled diplomskog rada",
+      "quote": "Rad treba biti otisnut fontom velicine 12pt s proredom od 15pt.",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-pmf-matematika-graduate--toc-verified-2026-07-02",
+      "ruleId": "pmf-matematika-graduate--toc",
+      "profileId": "pmf-matematika-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-math-upute-diplomski-2024",
+      "sourcePage": "Prilog 1: Upute za izradu diplomskog rada, I. Osnovne cjeline diplomskog rada",
+      "quote": "Diplomski rad treba sadrzavati sljedee cjeline: sadrzaj, uvod, glavni dio, literaturu, sazetak, summary i zivotopis, navedenim redoslijedom.",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-pmf-matematika-graduate--line-spacing-advisory-2026-07-02",
+      "ruleId": "pmf-matematika-graduate--line-spacing",
+      "profileId": "pmf-matematika-graduate",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-math-upute-diplomski-2024",
+      "sourcePage": "Prilog 1: Upute za izradu diplomskog rada, II. Izgled diplomskog rada",
+      "quote": "Rad treba biti otisnut fontom velicine 12pt s proredom od 15pt.",
+      "note": "Deepen workflow (odsjecki profil). Prored 15pt (exact-pt) dvoznacan u engineu (points vs. visekratnik), ostaje advisory da se izbjegnu lazna kaznjavanja."
+    },
+    {
+      "id": "led-pmf-matematika-graduate--margins-advisory-2026-07-02",
+      "ruleId": "pmf-matematika-graduate--margins",
+      "profileId": "pmf-matematika-graduate",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-math-upute-diplomski-2024",
+      "sourcePage": "Prilog 1: Upute za izradu diplomskog rada, II. Izgled diplomskog rada",
+      "quote": "lijeva 35 mm, desna 23 mm, gornja 35 mm i donja 38 mm.",
+      "note": "Deepen workflow (odsjecki profil). Margine asimetricne i ovise o jednostranom/dvostranom (zrcalnom) tisku, ostaje advisory."
+    },
+    {
+      "id": "led-pmf-matematika-graduate--citation-style-advisory-2026-07-02",
+      "ruleId": "pmf-matematika-graduate--citation-style",
+      "profileId": "pmf-matematika-graduate",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-math-upute-diplomski-2024",
+      "sourcePage": "Prilog 1: Upute za izradu diplomskog rada, II. Izgled diplomskog rada",
+      "quote": "Na literaturu se poziva stavljanjem rednog broja reference unutar uglatih zagrada",
+      "note": "Deepen workflow (odsjecki profil). Numericko citiranje (uglate zagrade); machineCheckable:false pa advisory."
+    },
+    {
+      "id": "led-pmf-matematika-graduate--required-sections-advisory-2026-07-02",
+      "ruleId": "pmf-matematika-graduate--required-sections",
+      "profileId": "pmf-matematika-graduate",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-math-upute-diplomski-2024",
+      "sourcePage": "Prilog 1: Upute za izradu diplomskog rada, I. Osnovne cjeline diplomskog rada",
+      "quote": "Diplomski rad treba sadrzavati sljedee cjeline: sadrzaj, uvod, glavni dio, literaturu, sazetak, summary i zivotopis, navedenim redoslijedom.",
+      "note": "Deepen workflow (odsjecki profil). Osnovne cjeline; machineCheckable:false pa advisory."
+    }
+  ]
+}

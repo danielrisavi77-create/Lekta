@@ -1,0 +1,282 @@
+{
+  "faculty": "ffzg",
+  "unit": null,
+  "catalogPrograms": [
+    "Sociologija"
+  ],
+  "sources": [
+    {
+      "id": "ffzg-socio-diplomski-2014",
+      "kind": "guidelines",
+      "title": "Upute za prijavu, izradu i obranu diplomskog rada (Filozofski fakultet, Odsjek za sociologiju)",
+      "url": "https://www.ffzg.unizg.hr/socio/wp-content/uploads/2014/02/Upute-za-diplomski.pdf",
+      "publisher": "Filozofski fakultet Sveucilista u Zagrebu, Odsjek za sociologiju",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/ffzg/ffzg-socio-diplomski-2014.pdf",
+      "snapshotHash": "59f3b59efebfface20a08fa63c380afc52834d0946c982d018720f96db614eb2",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Upute Odsjeka za sociologiju (dokument datiran sijecanj 2010., objavljen na odsjeckom webu). Odjeljak GRAFICKO FORMATIRANJE RADA daje imperativne direktive (koristiti ... Times New Roman velicine 12; margine desno 3,5 cm, ostalo 2,5 cm; prored 1,5; arapski brojevi u donjem desnom kutu; poravnati po obje margine) -> scored. Opseg (Ocekuje se ... 45 do 60 kartica; razlicito za jednopredmetni/dvopredmetni), stil citiranja (autor-godina, machineCheckable false) i struktura (pozeljna struktura) -> advisory."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "ffzg-sociologija-diplomski",
+      "unitId": "ffzg",
+      "programs": [
+        "Sociologija"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Filozofski fakultet (Odsjek za sociologiju), diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2010-01-01",
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": 12,
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 3.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "requirePageNumbers": true,
+        "checkJustify": true,
+        "checkMargins": true,
+        "recommendedCitation": "harvard",
+        "requiredSections": [
+          {
+            "key": "naslovna",
+            "label": "Naslovna stranica",
+            "terms": [
+              "naslovna stranica",
+              "naslovnica"
+            ]
+          },
+          {
+            "key": "sadrzaj",
+            "label": "Sadrzaj",
+            "terms": [
+              "sadrzaj"
+            ]
+          },
+          {
+            "key": "uvod",
+            "label": "Uvod",
+            "terms": [
+              "uvod"
+            ]
+          },
+          {
+            "key": "ciljevi",
+            "label": "Ciljevi i svrha",
+            "terms": [
+              "ciljevi i svrha",
+              "ciljevi"
+            ]
+          },
+          {
+            "key": "hipoteze",
+            "label": "Polazista i hipoteze",
+            "terms": [
+              "polazista i hipoteze",
+              "hipoteze"
+            ]
+          },
+          {
+            "key": "razrada",
+            "label": "Razrada teme i rasprava",
+            "terms": [
+              "razrada teme",
+              "rasprava"
+            ]
+          },
+          {
+            "key": "zakljucak",
+            "label": "Zakljucak",
+            "terms": [
+              "zakljucak"
+            ]
+          },
+          {
+            "key": "literatura",
+            "label": "Literatura",
+            "terms": [
+              "literatura",
+              "popis literature"
+            ]
+          },
+          {
+            "key": "sazetak",
+            "label": "Sazetak",
+            "terms": [
+              "sazetak",
+              "kljucne rijeci"
+            ]
+          }
+        ]
+      },
+      "facts": [
+        "Graficko formatiranje je imperativno: tijelo teksta Times New Roman velicine 12, margine desno 3,5 cm te lijevo, gore i dolje 2,5 cm, prored 1,5, arapski brojevi stranica u donjem desnom kutu, tekst poravnat po obje margine (scored).",
+        "Ocekivani opseg jednopredmetnog diplomskog rada je 45 do 60 kartica (dvopredmetni 25 do 40 kartica; kartica = 1800 znakova), formulirano kao ocekivanje pa advisory.",
+        "Popis literature pise se abecednim redom bez rednih brojeva u formatu autor-godina; Odsjek iskazuje nultu tolerantnost na plagiranje. Stil citiranja je advisory (machineCheckable false).",
+        "Pozeljna struktura ovisi o vrsti rada (teorijski vs teorijsko-empirijski) pa je struktura advisory."
+      ],
+      "note": "Diplomski rad iz Uputa za prijavu, izradu i obranu diplomskog rada Odsjeka za sociologiju (datirano sijecanj 2010.). FFZG nema jedinstvene fakultetske Upute pa je izvor odsjecki. Scored su imperativna pravila grafickog formatiranja (font, velicina, prored, margine, numeracija stranica, obostrano poravnanje). Opseg (ocekuje se 45 do 60 kartica), stil citiranja (autor-godina) i struktura (pozeljna) su advisory. Napomena: desna margina je 3,5 cm, sto odstupa od uobicajenih 2,5 cm na sve strane.",
+      "sources": [
+        {
+          "title": "Upute za prijavu, izradu i obranu diplomskog rada (FFZG, Odsjek za sociologiju)",
+          "url": "https://www.ffzg.unizg.hr/socio/wp-content/uploads/2014/02/Upute-za-diplomski.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za prijavu, izradu i obranu diplomskog rada (FFZG, Odsjek za sociologiju)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "font",
+        "velicina slova",
+        "prored",
+        "margine",
+        "numeracija stranica",
+        "obostrano poravnanje"
+      ],
+      "advisoryScope": [
+        "opseg (kartice)",
+        "stil citiranja",
+        "struktura (pozeljne cjeline)",
+        "sadrzaj"
+      ],
+      "catalogPrograms": [
+        "Sociologija"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-ffzg-sociologija-diplomski--font-verified-2026-07-02",
+      "ruleId": "ffzg-sociologija-diplomski--font",
+      "profileId": "ffzg-sociologija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-socio-diplomski-2014",
+      "sourcePage": "odjeljak GRAFICKO FORMATIRANJE RADA",
+      "quote": "za tijelo teksta koristiti pismo (\"font\") Times New Roman velicine 12 tocaka",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-sociologija-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "ffzg-sociologija-diplomski--font-size",
+      "profileId": "ffzg-sociologija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-socio-diplomski-2014",
+      "sourcePage": "odjeljak GRAFICKO FORMATIRANJE RADA",
+      "quote": "za tijelo teksta koristiti pismo (\"font\") Times New Roman velicine 12 tocaka",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-sociologija-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "ffzg-sociologija-diplomski--line-spacing",
+      "profileId": "ffzg-sociologija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-socio-diplomski-2014",
+      "sourcePage": "odjeljak GRAFICKO FORMATIRANJE RADA",
+      "quote": "prored: 1,5",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-sociologija-diplomski--margins-verified-2026-07-02",
+      "ruleId": "ffzg-sociologija-diplomski--margins",
+      "profileId": "ffzg-sociologija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-socio-diplomski-2014",
+      "sourcePage": "odjeljak GRAFICKO FORMATIRANJE RADA",
+      "quote": "margine: desno: 3,5 cm, lijevo, gore i dolje: 2,5 cm",
+      "note": "Deepen workflow (odsjecki profil). Desna margina 3,5 cm odstupa od uobicajenih 2,5 cm."
+    },
+    {
+      "id": "led-ffzg-sociologija-diplomski--page-numbers-verified-2026-07-02",
+      "ruleId": "ffzg-sociologija-diplomski--page-numbers",
+      "profileId": "ffzg-sociologija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-socio-diplomski-2014",
+      "sourcePage": "odjeljak GRAFICKO FORMATIRANJE RADA",
+      "quote": "za numeraciju stranica koristiti arapske brojeve smjestene u donji desni kut",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-sociologija-diplomski--justify-verified-2026-07-02",
+      "ruleId": "ffzg-sociologija-diplomski--justify",
+      "profileId": "ffzg-sociologija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-socio-diplomski-2014",
+      "sourcePage": "odjeljak GRAFICKO FORMATIRANJE RADA",
+      "quote": "tekst poravnati po obje margine (\"justified\")",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-sociologija-diplomski--word-count-advisory-2026-07-02",
+      "ruleId": "ffzg-sociologija-diplomski--word-count",
+      "profileId": "ffzg-sociologija-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-socio-diplomski-2014",
+      "sourcePage": "odjeljak OPSEG RADA",
+      "quote": "obaseze od 45 do 60 kartica",
+      "note": "Deepen workflow (odsjecki profil). Opseg je ocekivanje i razlikuje se za jednopredmetni (45-60) i dvopredmetni (25-40) studij pa advisory."
+    },
+    {
+      "id": "led-ffzg-sociologija-diplomski--citation-style-advisory-2026-07-02",
+      "ruleId": "ffzg-sociologija-diplomski--citation-style",
+      "profileId": "ffzg-sociologija-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-socio-diplomski-2014",
+      "sourcePage": "odjeljak POPIS LITERATURE",
+      "quote": "Knjige se u popisu literature navode na sljedei nacin",
+      "note": "Deepen workflow (odsjecki profil). Format autor-godina (Harvard); citation-style je machineCheckable false pa advisory."
+    },
+    {
+      "id": "led-ffzg-sociologija-diplomski--required-sections-advisory-2026-07-02",
+      "ruleId": "ffzg-sociologija-diplomski--required-sections",
+      "profileId": "ffzg-sociologija-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-socio-diplomski-2014",
+      "sourcePage": "odjeljak STRUKTURA RADA",
+      "quote": "pozeljna struktura diplomskog rada",
+      "note": "Deepen workflow (odsjecki profil). Struktura je pozeljna i ovisi o vrsti rada pa advisory."
+    },
+    {
+      "id": "led-ffzg-sociologija-diplomski--toc-advisory-2026-07-02",
+      "ruleId": "ffzg-sociologija-diplomski--toc",
+      "profileId": "ffzg-sociologija-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-socio-diplomski-2014",
+      "sourcePage": "odjeljak STRUKTURA RADA (Sadrzaj)",
+      "quote": "Sadrzi naslove i podnaslove pojedinih poglavlja diplomskog rada s brojevima stranica",
+      "note": "Deepen workflow (odsjecki profil). Sadrzaj je dio pozeljne strukture, nije eksplicitni imperativ pa advisory."
+    }
+  ]
+}

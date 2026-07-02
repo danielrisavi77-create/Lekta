@@ -9421,5 +9421,495 @@
     "catalogPrograms": [
       "Diplomski studiji Muzičke akademije"
     ]
+  },
+  {
+    "id": "ffzg-psihologija-diplomski",
+    "unitId": "ffzg",
+    "programs": [
+      "Psihologija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Filozofski fakultet (Odsjek za psihologiju), diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2024-10-01",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": 12,
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.54,
+        "right": 2.54,
+        "bottom": 2.54,
+        "left": 2.54
+      },
+      "checkMargins": true,
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "recommendedCitation": "apa7",
+      "pageMin": 20,
+      "pageMax": 30
+    },
+    "facts": [
+      "Tehnicko oblikovanje je propisano: Times New Roman velicine 12, margine 2,54 cm (sve), prored 1,5, numeracija stranica na dnu po sredini pocevsi od Uvoda (imperativ).",
+      "Sadrzaj je obvezan i nalazi se na trecoj stranici, opsega najvise jedne stranice (imperativ).",
+      "Opseg rada je 20 do 30 stranica teksta (prednje stranice, literatura i prilozi se ne racunaju); mjeri se u stranicama pa je u aplikaciji informativno (advisory).",
+      "Uredenje teksta i citiranje slijede APA standarde (apa7); tekst se pise lijevo poravnato; osnovni elementi su Uvod, Cilj, Problem, Metoda, Rezultati, Rasprava, Zakljucak, Literatura (advisory)."
+    ],
+    "note": "Diplomski rad iz sluzbenih Uputa Odsjeka za psihologiju (2024). FFZG nema jedinstvene fakultetske Upute pa je izvor odsjecki. Scored su samo strojno provjerljiva imperativna pravila koja engine stvarno boduje: font, velicina, prored, margine, numeracija stranica, sadrzaj. Opseg u stranicama (20-30) engine tretira informativno (0 bodova) pa je advisory. Stil citiranja APA i lijevo poravnanje engine ne boduje pouzdano (poravnanje se provjerava samo kad se trazi obostrano) pa su advisory. Osnovna struktura je formulirana kao uobicajena (uobicajeno sadrzi / Forma teksta uobicajena je) pa nije scored.",
+    "sources": [
+      {
+        "title": "Upute za pisanje i oblikovanje diplomskog rada na Odsjeku za psihologiju (FFZG, 2024)",
+        "url": "https://psihologija.ffzg.unizg.hr/wp-content/uploads/2024/10/Diplomski-rad_upute_2024.docx"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pisanje i oblikovanje diplomskog rada na Odsjeku za psihologiju (FFZG, 2024)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "numeracija stranica",
+      "sadrzaj"
+    ],
+    "advisoryScope": [
+      "opseg (stranice)",
+      "stil citiranja (APA)",
+      "poravnanje teksta",
+      "osnovni elementi rada"
+    ],
+    "catalogPrograms": [
+      "Psihologija"
+    ]
+  },
+  {
+    "id": "ffzg-sociologija-diplomski",
+    "unitId": "ffzg",
+    "programs": [
+      "Sociologija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Filozofski fakultet (Odsjek za sociologiju), diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2010-01-01",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": 12,
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 3.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requirePageNumbers": true,
+      "checkJustify": true,
+      "checkMargins": true,
+      "recommendedCitation": "harvard",
+      "requiredSections": [
+        {
+          "key": "naslovna",
+          "label": "Naslovna stranica",
+          "terms": [
+            "naslovna stranica",
+            "naslovnica"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadrzaj",
+          "terms": [
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "ciljevi",
+          "label": "Ciljevi i svrha",
+          "terms": [
+            "ciljevi i svrha",
+            "ciljevi"
+          ]
+        },
+        {
+          "key": "hipoteze",
+          "label": "Polazista i hipoteze",
+          "terms": [
+            "polazista i hipoteze",
+            "hipoteze"
+          ]
+        },
+        {
+          "key": "razrada",
+          "label": "Razrada teme i rasprava",
+          "terms": [
+            "razrada teme",
+            "rasprava"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zakljucak",
+          "terms": [
+            "zakljucak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "literatura",
+            "popis literature"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sazetak",
+          "terms": [
+            "sazetak",
+            "kljucne rijeci"
+          ]
+        }
+      ]
+    },
+    "facts": [
+      "Graficko formatiranje je imperativno: tijelo teksta Times New Roman velicine 12, margine desno 3,5 cm te lijevo, gore i dolje 2,5 cm, prored 1,5, arapski brojevi stranica u donjem desnom kutu, tekst poravnat po obje margine (scored).",
+      "Ocekivani opseg jednopredmetnog diplomskog rada je 45 do 60 kartica (dvopredmetni 25 do 40 kartica; kartica = 1800 znakova), formulirano kao ocekivanje pa advisory.",
+      "Popis literature pise se abecednim redom bez rednih brojeva u formatu autor-godina; Odsjek iskazuje nultu tolerantnost na plagiranje. Stil citiranja je advisory (machineCheckable false).",
+      "Pozeljna struktura ovisi o vrsti rada (teorijski vs teorijsko-empirijski) pa je struktura advisory."
+    ],
+    "note": "Diplomski rad iz Uputa za prijavu, izradu i obranu diplomskog rada Odsjeka za sociologiju (datirano sijecanj 2010.). FFZG nema jedinstvene fakultetske Upute pa je izvor odsjecki. Scored su imperativna pravila grafickog formatiranja (font, velicina, prored, margine, numeracija stranica, obostrano poravnanje). Opseg (ocekuje se 45 do 60 kartica), stil citiranja (autor-godina) i struktura (pozeljna) su advisory. Napomena: desna margina je 3,5 cm, sto odstupa od uobicajenih 2,5 cm na sve strane.",
+    "sources": [
+      {
+        "title": "Upute za prijavu, izradu i obranu diplomskog rada (FFZG, Odsjek za sociologiju)",
+        "url": "https://www.ffzg.unizg.hr/socio/wp-content/uploads/2014/02/Upute-za-diplomski.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za prijavu, izradu i obranu diplomskog rada (FFZG, Odsjek za sociologiju)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "numeracija stranica",
+      "obostrano poravnanje"
+    ],
+    "advisoryScope": [
+      "opseg (kartice)",
+      "stil citiranja",
+      "struktura (pozeljne cjeline)",
+      "sadrzaj"
+    ],
+    "catalogPrograms": [
+      "Sociologija"
+    ]
+  },
+  {
+    "id": "ffzg-kroatistika-graduate",
+    "unitId": "ffzg",
+    "programs": [
+      "Kroatistika"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Filozofski fakultet (Odsjek za kroatistiku), diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2026-06-01",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": 12,
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "checkJustify": true,
+      "checkMargins": true,
+      "recommendedCitation": "harvard",
+      "requiredSections": [
+        {
+          "key": "naslovnica",
+          "label": "Naslovnica",
+          "terms": [
+            "naslovnica",
+            "naslovna stranica"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadrzaj",
+          "terms": [
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "literatura",
+            "popis literature"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sazetak i kljucne rijeci",
+          "terms": [
+            "sazetak",
+            "kljucne rijeci"
+          ]
+        }
+      ]
+    },
+    "facts": [
+      "Osnovni tekst je Times New Roman 12 p, sve margine 2,5 cm, prored 1,5, desni rub poravnat, stranice numerirane arapskim brojkama od Uvoda (imperativ, odjeljak 6. Oblikovanje teksta).",
+      "Obavezni dijelovi rada jesu Naslovnica, Sadrzaj, Literatura te Sazetak i Kljucne rijeci na hrvatskome i engleskome (imperativ, odjeljak 2.).",
+      "Preporuceni opseg je 40 kartica za odsjecni, 80 kartica za meduodsjecni rad (1 kartica = 1 800 znakova s bjelinama); preporuka pa advisory. Stil citiranja je autor-godina (Prezime godina: stranica); nije strojno provjeriv pa advisory."
+    ],
+    "note": "Diplomski rad iz odsjeckih Opcih uputa za sastavljanje diplomskoga rada Odsjeka za kroatistiku. Tehnicko oblikovanje iz odjeljka 6. je normativna specifikacija pa je scored (font TNR, velicina 12, margine 2,5, prored 1,5, obostrano poravnanje, numeracija stranica). Sadrzaj (toc) je scored jer je strojno provjeriv i naveden kao obavezni dio. required-sections je advisory (machineCheckable:false). Opseg u karticama je preporuka pa advisory. Stil citiranja (harvard, autor-godina) je advisory jer nije strojno provjeriv. Autoritet je odsjecka razina (program-page). Izvor je HTML stranica pa je snapshot .html + ekstrahirani .txt.",
+    "sources": [
+      {
+        "title": "Opce upute za sastavljanje diplomskoga rada (FFZG, Odsjek za kroatistiku)",
+        "url": "https://kroat.ffzg.unizg.hr/index.php/studij/diplomski-rad/153-opce-upute-za-sastavljanje-diplomskoga-rada"
+      }
+    ],
+    "sourceHierarchy": [
+      "Opce upute za sastavljanje diplomskoga rada (FFZG, Odsjek za kroatistiku)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "margine",
+      "prored",
+      "obostrano poravnanje",
+      "numeracija stranica",
+      "sadrzaj"
+    ],
+    "advisoryScope": [
+      "obvezne cjeline rada",
+      "opseg (kartice)",
+      "stil citiranja"
+    ]
+  },
+  {
+    "id": "pmf-biologija-graduate",
+    "unitId": "pmf",
+    "programs": [
+      "Biologija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Prirodoslovno-matematicki fakultet (Bioloski odsjek), diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2026",
+    "rules": {
+      "size": [
+        11,
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requirePageNumbers": true,
+      "requireA4": true,
+      "pageMin": 30,
+      "pageMax": 80,
+      "recommendedCitation": "harvard"
+    },
+    "facts": [
+      "Format tiska je A4, prored 1,5 i margine 2,5 cm sa svake strane (imperativ, scored).",
+      "Velicina slova u tekstu treba biti 11 ili 12 pt (imperativ, scored).",
+      "Stranice se numeriraju, numeracija zapocinje na prvoj stranici Uvoda (imperativ, scored).",
+      "Diplomski rad treba sadrzavati najmanje 30 i najvise 80 numeriranih stranica (imperativ, scored).",
+      "Literaturni navodi u tekstu ne navode se numericki nego prezimenom autora i godinom, autor-godina sustav (advisory, machineCheckable false).",
+      "Decimalna numeracija poglavlja u Sadrzaju je preporuka (advisory).",
+      "Obvezni dijelovi rada (uvod, materijal i metode, rezultati, rasprava, zakljucak, literatura, zivotopis) su propisani ali nisu strojno provjerljivi (advisory)."
+    ],
+    "note": "Iz Uputa za prijavu i izradu diplomskog rada (PMF, Bioloski odsjek, 2026), izraenih na temelju Pravilnika o preddiplomskim i diplomskim studijima na PMF-u i odluka Vijea Bioloskog odsjeka, pa je authority program-page i imperativna, verbatim potvrdena pravila su scored. Font (obitelj) NIJE propisan pa nema font pravila. citation-style i required-sections nisu strojno provjerljivi pa su advisory (invarianta: scored mora biti machineCheckable true). VAZNO za ljudski pregled: izvor je Bioloskog odsjeka, ne faculty-wide; drugi odsjeci PMF-a (geografija, fizika, kemija, matematika, geologija) imaju vlastite upute i mogu propisati drugacije vrijednosti. Zavrsni (prijediplomski) i doktorski nisu pokriveni zasebnim dohvacenim formatnim uputama.",
+    "sources": [
+      {
+        "title": "Upute za prijavu i izradu diplomskog rada (PMF, Bioloski odsjek, 2026)",
+        "url": "https://www.pmf.unizg.hr/_download/repository/Upute%20za%20prijavu%20i%20izradu%20diplomskog%20rada%5B2%5D.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o preddiplomskim i diplomskim studijima na PMF-u",
+      "Upute za prijavu i izradu diplomskog rada (PMF, Bioloski odsjek, 2026)",
+      "Odluke Vijea Bioloskog odsjeka"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "format papira (A4)",
+      "prored",
+      "margine",
+      "velicina slova",
+      "numeracija stranica",
+      "opseg u stranicama"
+    ],
+    "advisoryScope": [
+      "stil citiranja (autor-godina)",
+      "decimalno oznacavanje sadrzaja (toc)",
+      "obvezni dijelovi strukture"
+    ],
+    "recommendedCitation": "harvard"
+  },
+  {
+    "id": "pmf-fizika-graduate",
+    "unitId": "pmf",
+    "programs": [
+      "Fizika"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Prirodoslovno-matematicki fakultet (Fizicki odsjek), diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2014",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3
+      },
+      "requirePageNumbers": true,
+      "justify": true,
+      "recommendedCitation": "custom"
+    },
+    "facts": [
+      "Rad se pise fontom Times New Roman, tijelo teksta velicine 12 pt, prored 1,5 (imperativ, scored).",
+      "Margine: lijevo 3,0 cm, gore, dolje i desno 2,5 cm (imperativ, scored).",
+      "Stranice se numeriraju arapskim brojevima na dnu, u sredini stranice; naslovna, sadrzaj i sazeci se ne numeriraju (imperativ, scored).",
+      "Tekst se pise obostranim poravnanjem (justified) (imperativ, scored).",
+      "Citiranje je numericko (Prilog br. 5): svaki citat mora biti u popisu literature i obrnuto (imperativ o dosljednosti, ali nije strojno provjerljivo pa advisory).",
+      "Osnovni dijelovi: sazetak, uvod, poglavlja (naslovi po dogovoru s mentorom), zakljucak, literatura (advisory jer nije strojno provjerljivo)."
+    ],
+    "note": "Iz sluzbenih Uputa za pisanje diplomskog rada Fizickog odsjeka PMF-a (Word .doc, 2014). Odsjecki izvor s vlastitim imperativnim pravilima oblikovanja, pa je authority program-page i imperativna strojno provjerljiva pravila su scored: font, velicina, prored, margine, numeracija stranica, obostrano poravnanje. Advisory: citiranje (numericki stil, nije strojno provjerljivo) i osnovni dijelovi strukture (naslovi poglavlja se dogovaraju s mentorom, nije strojno provjerljivo). Izvor ne spominje A4 pa paper-size nije postavljen. Pokriva samo diplomski (graduate); zavrsni i doktorski nemaju zaseban odsjecki formatni izvor. Aditivno; ne dira postojeci pmf.json (Geografski odsjek).",
+    "sources": [
+      {
+        "title": "Upute za pisanje diplomskog rada (PMF, Fizicki odsjek)",
+        "url": "https://www.pmf.unizg.hr/images/50005072/Fizicki%20odsjek-upute%20za%20pisanje%20diplomskog%20rada.doc"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pisanje diplomskog rada (PMF, Fizicki odsjek)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "numeracija stranica",
+      "obostrano poravnanje (justify)"
+    ],
+    "advisoryScope": [
+      "stil citiranja (numericki)",
+      "osnovni dijelovi strukture (required-sections)"
+    ]
+  },
+  {
+    "id": "pmf-matematika-graduate",
+    "unitId": "pmf",
+    "programs": [
+      "Matematika"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Prirodoslovno-matematicki fakultet (Matematicki odsjek), diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2024-09",
+    "rules": {
+      "size": [
+        12
+      ],
+      "requireA4": true,
+      "requireToc": true,
+      "recommendedCitation": "ieee"
+    },
+    "facts": [
+      "Diplomski rad mora biti otisnut na papiru formata A4 (imperativ, scored).",
+      "Rad se pise fontom velicine 12pt (imperativ, scored).",
+      "Rad mora sadrzavati sadrzaj (table of contents) medju osnovnim cjelinama (imperativ, scored).",
+      "Prored je 15pt (exact); zbog dvoznacnosti prikaza prored kao tocke vs. visekratnik u engineu ostaje advisory.",
+      "Margine za jednostrani tisak: lijeva 35, desna 23, gornja 35, donja 38 mm; dvostrani tisak koristi zrcalne margine, pa margine ostaju advisory.",
+      "Citiranje je numericko s uglatim zagradama ([1], [2, str. 138]); nije strojno provjerljivo pa je advisory.",
+      "Osnovne cjeline: sadrzaj, uvod, glavni dio, literatura, sazetak, summary, zivotopis (nije strojno provjerljivo pa advisory)."
+    ],
+    "note": "Iz Priloga 1 (Upute za izradu diplomskog rada) Pravilnika Matematickog odsjeka PMF-a (rujan 2024). Pravilnik tehnicke detalje delegira na Prilog 1 pa je authority program-page i imperativna, verbatim potvrdena strojno provjerljiva pravila su scored: A4, velicina slova 12pt i obvezni sadrzaj (toc). Advisory: prored 15pt (exact-pt vs. visekratnik dvoznacnost u engineu), margine (asimetricne i ovise o jednostranom/dvostranom tisku, zrcalne), numericko citiranje i osnovne cjeline (oboje machineCheckable:false). VAZNO za ljudski pregled: dokument je Matematickog odsjeka, ne faculty-wide; drugi odsjeci PMF-a imaju vlastite upute. Prijediplomski (zavrsni) i doktorski rad nisu pokriveni zasebno dohvacenim odsjeckim formatnim uputama.",
+    "sources": [
+      {
+        "title": "Prilog 1: Upute za izradu diplomskog rada (Matematicki odsjek PMF-a, 2024)",
+        "url": "https://www.pmf.unizg.hr/images/50022555/pravilnik-diplomski-prilozi(1).pdf"
+      },
+      {
+        "title": "Pravilnik o diplomskom radu i diplomskom ispitu (Matematicki odsjek PMF-a, rujan 2024)",
+        "url": "https://www.pmf.unizg.hr/images/50022555/Pravilnik%20o%20diplomskom%20radu%20i%20diplomskom%20ispitu_rujan2024.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o diplomskom radu i diplomskom ispitu (Matematicki odsjek PMF-a, rujan 2024)",
+      "Prilog 1: Upute za izradu diplomskog rada (Matematicki odsjek PMF-a, 2024)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "format papira (A4)",
+      "velicina slova",
+      "sadrzaj (toc)"
+    ],
+    "advisoryScope": [
+      "prored (15pt)",
+      "margine",
+      "stil citiranja (numericki, uglate zagrade)",
+      "osnovne cjeline (required-sections)"
+    ],
+    "catalogPrograms": [
+      "Matematika"
+    ]
   }
 ]

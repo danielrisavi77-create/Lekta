@@ -121,6 +121,30 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "ffzg-kroatistika-graduate",
+      "scored": 7,
+      "machineCheckable": 8,
+      "advisory": 3,
+      "ratio": 0.875,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "ffzg-psihologija-diplomski",
+      "scored": 6,
+      "machineCheckable": 7,
+      "advisory": 4,
+      "ratio": 0.8571428571428571,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "ffzg-sociologija-diplomski",
+      "scored": 6,
+      "machineCheckable": 8,
+      "advisory": 4,
+      "ratio": 0.75,
+      "lastVerified": "2026-07-02"
+    },
+    {
       "profileId": "fhs-diplomski",
       "scored": 8,
       "machineCheckable": 8,
@@ -377,11 +401,35 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "pmf-biologija-graduate",
+      "scored": 6,
+      "machineCheckable": 7,
+      "advisory": 3,
+      "ratio": 0.8571428571428571,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "pmf-fizika-graduate",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 2,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
       "profileId": "pmf-geografija-diplomski",
       "scored": 8,
       "machineCheckable": 8,
       "advisory": 2,
       "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "pmf-matematika-graduate",
+      "scored": 3,
+      "machineCheckable": 5,
+      "advisory": 4,
+      "ratio": 0.6,
       "lastVerified": "2026-07-02"
     },
     {
@@ -577,5 +625,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 401
+  "totalScored": 435
 }

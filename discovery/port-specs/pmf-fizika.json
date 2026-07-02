@@ -1,0 +1,185 @@
+{
+  "faculty": "pmf",
+  "unit": null,
+  "catalogPrograms": [
+    "Fizika"
+  ],
+  "sources": [
+    {
+      "id": "pmf-phy-upute-diplomski-2014",
+      "kind": "guidelines",
+      "title": "Upute za pisanje diplomskog rada (Prirodoslovno-matematicki fakultet, Fizicki odsjek)",
+      "url": "https://www.pmf.unizg.hr/images/50005072/Fizicki%20odsjek-upute%20za%20pisanje%20diplomskog%20rada.doc",
+      "publisher": "Fizicki odsjek, Prirodoslovno-matematicki fakultet Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/pmf/pmf-phy-diplomski-upute.doc",
+      "snapshotHash": "e7fc10240bac403404d760e3275708aaff546e123ef3625e4202bbc275e48683",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Sluzbene Upute Fizickog odsjeka (Word .doc, dokument iz 2014.). Sadrze konkretna imperativna pravila oblikovanja (Times New Roman, tijelo 12 pt, prored 1,5, margine lijevo 3,0 cm i ostalo 2,5 cm, arapska numeracija stranica na dnu sredine, obostrano poravnanje). Ekstrahirano antiwordom uz UTF-8 mapiranje u pmf-phy-diplomski-upute.txt; citati verbatim provjereni grepom. Pokriva samo diplomski rad (graduate). Odsjecki izvor, ne faculty-wide; ne dira postojeci pmf.json (Geografski odsjek)."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "pmf-fizika-graduate",
+      "unitId": "pmf",
+      "programs": [
+        "Fizika"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Prirodoslovno-matematicki fakultet (Fizicki odsjek), diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2014",
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 3.0
+        },
+        "requirePageNumbers": true,
+        "justify": true,
+        "recommendedCitation": "custom"
+      },
+      "facts": [
+        "Rad se pise fontom Times New Roman, tijelo teksta velicine 12 pt, prored 1,5 (imperativ, scored).",
+        "Margine: lijevo 3,0 cm, gore, dolje i desno 2,5 cm (imperativ, scored).",
+        "Stranice se numeriraju arapskim brojevima na dnu, u sredini stranice; naslovna, sadrzaj i sazeci se ne numeriraju (imperativ, scored).",
+        "Tekst se pise obostranim poravnanjem (justified) (imperativ, scored).",
+        "Citiranje je numericko (Prilog br. 5): svaki citat mora biti u popisu literature i obrnuto (imperativ o dosljednosti, ali nije strojno provjerljivo pa advisory).",
+        "Osnovni dijelovi: sazetak, uvod, poglavlja (naslovi po dogovoru s mentorom), zakljucak, literatura (advisory jer nije strojno provjerljivo)."
+      ],
+      "note": "Iz sluzbenih Uputa za pisanje diplomskog rada Fizickog odsjeka PMF-a (Word .doc, 2014). Odsjecki izvor s vlastitim imperativnim pravilima oblikovanja, pa je authority program-page i imperativna strojno provjerljiva pravila su scored: font, velicina, prored, margine, numeracija stranica, obostrano poravnanje. Advisory: citiranje (numericki stil, nije strojno provjerljivo) i osnovni dijelovi strukture (naslovi poglavlja se dogovaraju s mentorom, nije strojno provjerljivo). Izvor ne spominje A4 pa paper-size nije postavljen. Pokriva samo diplomski (graduate); zavrsni i doktorski nemaju zaseban odsjecki formatni izvor. Aditivno; ne dira postojeci pmf.json (Geografski odsjek).",
+      "sources": [
+        {
+          "title": "Upute za pisanje diplomskog rada (PMF, Fizicki odsjek)",
+          "url": "https://www.pmf.unizg.hr/images/50005072/Fizicki%20odsjek-upute%20za%20pisanje%20diplomskog%20rada.doc"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za pisanje diplomskog rada (PMF, Fizicki odsjek)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "font",
+        "velicina slova",
+        "prored",
+        "margine",
+        "numeracija stranica",
+        "obostrano poravnanje (justify)"
+      ],
+      "advisoryScope": [
+        "stil citiranja (numericki)",
+        "osnovni dijelovi strukture (required-sections)"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-pmf-fizika-graduate--font-verified-2026-07-02",
+      "ruleId": "pmf-fizika-graduate--font",
+      "profileId": "pmf-fizika-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-phy-upute-diplomski-2014",
+      "sourcePage": "odjeljak Formatiranje teksta",
+      "quote": "pismo: Times New Roman",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-pmf-fizika-graduate--font-size-verified-2026-07-02",
+      "ruleId": "pmf-fizika-graduate--font-size",
+      "profileId": "pmf-fizika-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-phy-upute-diplomski-2014",
+      "sourcePage": "odjeljak Formatiranje teksta",
+      "quote": "za tijelo teksta koristiti veličinu 12 pt",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-pmf-fizika-graduate--line-spacing-verified-2026-07-02",
+      "ruleId": "pmf-fizika-graduate--line-spacing",
+      "profileId": "pmf-fizika-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-phy-upute-diplomski-2014",
+      "sourcePage": "odjeljak Formatiranje teksta",
+      "quote": "prored: 1,5",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-pmf-fizika-graduate--margins-verified-2026-07-02",
+      "ruleId": "pmf-fizika-graduate--margins",
+      "profileId": "pmf-fizika-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-phy-upute-diplomski-2014",
+      "sourcePage": "odjeljak Formatiranje teksta",
+      "quote": "margine: lijevo: 3,0 cm,  gore, dolje i desno: 2,5 cm",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-pmf-fizika-graduate--page-numbers-verified-2026-07-02",
+      "ruleId": "pmf-fizika-graduate--page-numbers",
+      "profileId": "pmf-fizika-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-phy-upute-diplomski-2014",
+      "sourcePage": "odjeljak Formatiranje teksta",
+      "quote": "za numeraciju stranica koristiti arapske",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-pmf-fizika-graduate--justify-verified-2026-07-02",
+      "ruleId": "pmf-fizika-graduate--justify",
+      "profileId": "pmf-fizika-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-phy-upute-diplomski-2014",
+      "sourcePage": "odjeljak Formatiranje teksta",
+      "quote": "tekst pisati s obostranim poravnanjem (\"justified\")",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-pmf-fizika-graduate--citation-style-advisory-2026-07-02",
+      "ruleId": "pmf-fizika-graduate--citation-style",
+      "profileId": "pmf-fizika-graduate",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-phy-upute-diplomski-2014",
+      "sourcePage": "Prilog br. 5 Pravila za citiranje literature",
+      "quote": "Svaki citat u tekstu mora biti zastupljen u popisu literature i obrnuto.",
+      "note": "Deepen workflow (odsjecki profil). Numericki stil nije strojno provjerljiv, ostaje advisory."
+    },
+    {
+      "id": "led-pmf-fizika-graduate--required-sections-advisory-2026-07-02",
+      "ruleId": "pmf-fizika-graduate--required-sections",
+      "profileId": "pmf-fizika-graduate",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-phy-upute-diplomski-2014",
+      "sourcePage": "odjeljak Struktura diplomskog rada",
+      "quote": "Osnovni dijelovi diplomskog rada su",
+      "note": "Deepen workflow (odsjecki profil). Naslovi poglavlja se dogovaraju s mentorom, nije strojno provjerljivo, ostaje advisory."
+    }
+  ]
+}
