@@ -29,6 +29,10 @@ serverska odluka; klijent nikad nije izvor istine.
   (sada snima `profile_ref` + `coverage_tier` na slot). Ulazni gate: `src/report/guarantee.ts`.
 - `functions/file-guarantee-claim/` - ulazni gate garancijskog zahtjeva (tier>=2, <=30 dana, dokaz,
   rule_key); odluka o povratu je poslije, rucna (admin: status='approved' + manual_orders).
+- `migrations/0008_analytics_views.sql` - viewovi `v_weekly_revenue`, `v_weekly_slot_activity`,
+  `v_tier_share` (samo service role; interne nagrade iskljucene iz prihoda).
+- `kpi-weekly.sql` - tjedni KPI upiti (pokreni kao service role). Checkout->purchase konverzija
+  dolazi iz Lemon Squeezy dashboarda, ostalo je DB-izvedivo.
 
 ## Odnos prema testiranom jezgru
 
