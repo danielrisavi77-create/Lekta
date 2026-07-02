@@ -21,7 +21,7 @@ const VALID_WORK_TYPES=new Set(Object.keys(WORK_TYPE_LABELS));
 const VALID_CITATION_IDS=new Set(['fpzg','pravo-fusnote','pravo-social-author','apa7','harvard','chicago-author','chicago-notes','mla9','vancouver','ieee','custom']);
 const params=new URLSearchParams(location.search),qaMode=params.get('qa')==='1',setupMode=params.get('setup')==='1';
 const TERMS_VERSION='2026-06-29';
-const DEFAULT_PRODUCTION_CONFIG={enabled:false,submissionMode:'netlify-form',orderEndpoint:'/',paymentProvider:'stripe',paymentLinks:{instant:'',format:'',panic:'',premium:''},businessName:'Lekta',contactEmail:'',privacyController:'',retentionDays:30,uploadMaxBytes:8*1024*1024,analyticsEndpoint:'',serverAnalytics:'netlify-optional',reportEndpoint:'',reportToken:''};
+const DEFAULT_PRODUCTION_CONFIG={enabled:false,submissionMode:'netlify-form',orderEndpoint:'/',paymentProvider:'stripe',paymentLinks:{format:'',panic:'',premium:''},businessName:'Lekta',contactEmail:'',privacyController:'',retentionDays:30,uploadMaxBytes:8*1024*1024,analyticsEndpoint:'',serverAnalytics:'netlify-optional',reportEndpoint:'',reportToken:''};
 const FPZG_SUBMISSION_CALENDAR={
  academicYear:'2025./2026.',sourceDate:'2026-06-29',
  sources:[
@@ -55,11 +55,20 @@ const SOCIAL_METHOD_REGISTRY={
  quantitative:{id:'quantitative',label:'Empirijski rad — kvantitativno istraživanje',shortLabel:'Kvantitativni',facts:['cilj, problemi i hipoteze','mjerni instrumenti','statistička obrada i rezultati'],signals:[['hipotez',4],['statističk',3],['upitnik',2],['skala',2],['regresij',2],['korelacij',2],['spss',3],['aritmetička sredina',2]],negativeSignals:[['istraživačka pitanja',1],['tematska analiza',2],['kodiranje',2]],requirements:[{key:'goal',label:'Cilj, problemi i hipoteze',terms:['cilj, problemi i hipoteze istraživanja','problemi i hipoteze','hipoteze istraživanja']},{key:'method',label:'Metoda',terms:['metoda','metodologija']},{key:'sample',label:'Uzorak',terms:['uzorak','ispitanici']},{key:'procedure',label:'Postupak',terms:['postupak']},{key:'instruments',label:'Mjerni instrumenti',terms:['mjerni instrumenti','instrumenti','upitnik','skale']},{key:'analysis',label:'Obrada podataka',terms:['obrada podataka','statistička obrada','metode obrade podataka']},{key:'results',label:'Rezultati',terms:['rezultati']},{key:'discussion',label:'Rasprava',terms:['rasprava']},{key:'conclusion',label:'Zaključak',terms:['zaključak']},{key:'refs',label:'Literatura',terms:['literatura','popis literature','references']}],note:'Kvantitativni rad treba povezati specifične probleme i afirmativne hipoteze, opisati uzorak, instrumente i statističke postupke te prikazati i raspraviti rezultate.'}
 };
 const SOCIAL_METHOD_SOURCE={title:'Upute za izradu diplomskog rada 2024./2025. — Studijski centar socijalnog rada',url:'https://www.pravo.unizg.hr/wp-content/uploads/2025/01/Upute_za_izradu_diplomskog_rada_2024-25.pdf'};
+// Ponuda ima tri tiera: besplatna automatska provjera (teaser), puni izvjestaj po
+// vrsti rada (otkljucava se u rezultatu), i rucno uredivanje (ljudski servis preko
+// obrasca narudzbe). Ovo je izvor istine za landing sekciju Paketi.
+const PRICING_TIERS=[
+ {id:'free',name:'Besplatna provjera',price:'0 €',desc:'Automatski audit dokumenta, lokalno u pregledniku.',features:['Ocjena i pregled po kategorijama','Popis mogućih problema i napomena','Bez registracije, dokument ostaje na uređaju'],cta:{href:'#analyzer',label:'Provjeri besplatno'}},
+ {id:'perwork',name:'Provjera po radu',price:'od 3,99 €',featured:true,desc:'Puni izvještaj i plan ispravaka, cijena prema vrsti rada.',features:['Sve iz besplatne provjere','Puni izvještaj i plan ispravaka','Submission Gate i PDF preflight','Seminarski 3,99 · Završni 5,99 · Diplomski 9,99 · Doktorski 24,99 €'],cta:{href:'#analyzer',label:'Provjeri rad'}},
+ {id:'manual',name:'Ručno uređivanje',price:'od 39 €',desc:'Ljudska obrada dokumenta kad ti treba gotov rezultat.',features:['Tehničko oblikovanje Word dokumenta','Provjera citatnica i literature','Revizija i prioritetna obrada'],cta:{order:'format',label:'Naruči uređivanje'}}
+];
+// Rucni paketi za obrazac narudzbe (ljudska usluga). Automatizirana provjera je gore
+// u PRICING_TIERS i ne prolazi kroz ovaj obrazac.
 const PACKAGES=[
- {id:'instant',name:'Instant audit',price:9,desc:'Potpuni izvještaj i personalizirana checklista.',features:['Detaljan audit svih kategorija','Popis mogućih pogrešaka','Upute za samostalni ispravak']},
  {id:'format',name:'Formatiranje rada',price:39,desc:'Tehnički uređena Word datoteka.',features:['Stilovi naslova i sadržaj','Numeriranje, tablice i slike','Konzistentan izgled dokumenta']},
  {id:'panic',name:'Predaja bez panike',price:69,featured:true,desc:'Formatiranje, citatnice i jedna revizija.',features:['Sve iz paketa formatiranja','Provjera citatnica i literature','Prioritetna obrada i revizija']},
- {id:'premium',name:'Premium audit',price:99,desc:'Najdetaljniji pregled dokumenta.',features:['Tehničko oblikovanje','Struktura i citatna konzistentnost','Završni izvještaj usklađenosti']}
+ {id:'premium',name:'Premium obrada',price:99,desc:'Najdetaljnija ručna obrada dokumenta.',features:['Tehničko oblikovanje','Struktura i citatna konzistentnost','Završni izvještaj usklađenosti']}
 ];
 
 const COVERAGE_STATUS_META={ready:{label:'Sva objavljena pravila pokrivena',icon:'✓'},published:{label:'Profil postoji, predaja nije dovršena',icon:'i'},partial:{label:'Djelomičan profil',icon:'△'},missing:{label:'Nedostaje poseban profil',icon:'!'},external:{label:'Partnerska / združena pravila',icon:'↗'}};
@@ -89,7 +98,7 @@ function toast(msg){const n=document.createElement('div');n.className='toast';n.
 function init(){
  $('#checkGrid').innerHTML=CHECK_ITEMS.map(([i,t,d])=>`<article class="check-card"><div style="font-size:23px;color:var(--brand);font-weight:950">${i}</div><h3>${t}</h3><p>${d}</p></article>`).join('');
  productionConfig=loadProductionConfig();initCatalog();initCoverageMatrix();restorePreferences();syncProfileContext();
- $('#pricingGrid').innerHTML=PACKAGES.map(p=>`<article class="price-card ${p.featured?'featured':''}">${p.featured?'<span class="popular">NAJPOPULARNIJE</span>':''}<h3>${p.name}</h3><div class="price">${p.price} €</div><p>${p.desc}</p><ul class="features">${p.features.map(x=>`<li>${x}</li>`).join('')}</ul><button class="btn ${p.featured?'btn-primary':'btn-secondary'} order-btn" data-package="${p.id}">Odaberi paket</button></article>`).join('');
+ $('#pricingGrid').innerHTML=PRICING_TIERS.map(p=>`<article class="price-card ${p.featured?'featured':''}">${p.featured?'<span class="popular">PREPORUČENO</span>':''}<h3>${p.name}</h3><div class="price">${p.price}</div><p>${p.desc}</p><ul class="features">${p.features.map(x=>`<li>${x}</li>`).join('')}</ul>${p.cta.order?`<button class="btn btn-secondary order-btn" data-package="${p.cta.order}">${p.cta.label}</button>`:`<a class="btn ${p.featured?'btn-primary':'btn-secondary'}" href="${p.cta.href}">${p.cta.label}</a>`}</article>`).join('');
  $('#packagePicks').innerHTML=PACKAGES.map(p=>`<label class="package-pick"><span><input type="radio" name="package" value="${p.id}" ${p.id==='format'?'checked':''}><strong>${p.name} · ${p.price} €</strong><small>${p.desc}</small></span></label>`).join('');
  bind();updateProfile();updateHistoryBadge();updatePackageUi();$('#qaBtn').classList.toggle('hidden',!qaMode);renderConsentBanner();
  let theme=null;try{theme=localStorage.getItem('lekta.theme')}catch(e){}if(theme)document.documentElement.dataset.theme=theme;
