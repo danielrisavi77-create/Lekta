@@ -32,7 +32,13 @@ export interface SessionStore {
 }
 
 export type OtpResult = { ok: true } | { ok: false; message: string };
-export type SessionResult = { ok: true; session: Session } | { ok: false; message: string };
+/**
+ * `fatal` na neuspjehu znaci da je sam refresh token nevaljan/potrosen (400/401/403), pa se
+ * sesija smije obrisati. Bez `fatal` (mreza, 5xx) neuspjeh je tranzijentan i sesija ostaje.
+ */
+export type SessionResult =
+  | { ok: true; session: Session }
+  | { ok: false; message: string; fatal?: boolean };
 
 function trimUrl(url: string): string {
   return url.replace(/\/+$/, '');
@@ -136,7 +142,12 @@ export async function refreshSession(
       headers: authHeaders(cfg),
       body: JSON.stringify({ refresh_token: refreshToken }),
     });
-    if (!res.ok) return { ok: false, message: `obnova sesije nije uspjela (${res.status})` };
+    if (!res.ok) {
+      // 400 invalid_grant / 401 / 403 = refresh token je nevaljan ili rotiran (potrosen) -> fatalno.
+      // 5xx i ostalo je tranzijentno; sesiju ne diramo da ne izbacimo korisnika bez razloga.
+      const fatal = res.status === 400 || res.status === 401 || res.status === 403;
+      return { ok: false, message: `obnova sesije nije uspjela (${res.status})`, fatal };
+    }
     const session = parseTokenResponse(await res.json().catch(() => ({})), now);
     if (!session) return { ok: false, message: 'nevaljan odgovor poslužitelja' };
     return { ok: true, session };
@@ -147,7 +158,10 @@ export async function refreshSession(
 
 /**
  * Vrati valjan access token ili null. Ako je istekao, a ima refresh token, tiho obnovi i
- * spremi. Ako obnova padne, ocisti sesiju (korisnik se mora ponovno prijaviti).
+ * spremi. Sesiju brisemo SAMO kad je refresh token stvarno nevaljan (fatalno); na tranzijentnu
+ * gresku (mreza, 5xx) sesija ostaje pa korisnik moze ponoviti. Kod paralelnih poziva (rotacija
+ * refresh tokena) provjeravamo je li druga dretva u meduvremenu vec spremila valjanu sesiju,
+ * da je ne pregazimo s null.
  */
 export async function getValidAccessToken(
   cfg: AuthConfig,
@@ -166,6 +180,11 @@ export async function getValidAccessToken(
     store.save(refreshed.session);
     return refreshed.session.accessToken;
   }
-  store.save(null);
+  // Race: paralelni poziv je mozda vec obnovio i spremio valjanu sesiju s novim tokenom.
+  const latest = store.load();
+  if (latest && latest.refreshToken !== current.refreshToken && !isExpired(latest, now)) {
+    return latest.accessToken;
+  }
+  if (refreshed.fatal) store.save(null);
   return null;
 }

@@ -50,7 +50,7 @@ export function buildStatement(input: StatementInput): StatementModel {
   const date = clean(input.date);
 
   const wt = workType ? workType.toLowerCase() : 'rad';
-  const titlePart = title ? ` pod naslovom „${title}”` : '';
+  const titlePart = title ? ` pod naslovom „${title}“` : '';
   const body =
     `Izjavljujem da je ovaj ${wt}${titlePart} rezultat isključivo mojega vlastitog rada, ` +
     `koji se temelji na mojim istraživanjima i oslanja se na objavljenu literaturu, a što pokazuju ` +

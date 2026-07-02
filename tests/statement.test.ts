@@ -11,7 +11,7 @@ describe('buildStatement', () => {
 
   it('uvrštava vrstu rada malim slovom i naslov u navodnike', () => {
     const m = buildStatement({ workType: 'Diplomski rad', title: 'Uloga civilnog društva' });
-    expect(m.body).toContain('ovaj diplomski rad pod naslovom „Uloga civilnog društva”');
+    expect(m.body).toContain('ovaj diplomski rad pod naslovom „Uloga civilnog društva“');
   });
 
   it('bez naslova ne dodaje dio o naslovu', () => {

@@ -31,7 +31,9 @@ export function countText(input: string): TextMetrics {
 
   const karticeRaw = charsWithSpaces / ZNAKOVA_PO_KARTICI;
   const kartice = Math.round(karticeRaw * 100) / 100;
-  const pages = charsWithSpaces ? Math.max(1, Math.ceil(karticeRaw)) : 0;
+  // Stranice se vezu na stvarni sadrzaj (trimano), ne na same razmake, da prazan/whitespace
+  // dokument ne prijavi 1 stranicu dok su ostale metrike 0.
+  const pages = trimmed ? Math.max(1, Math.ceil(karticeRaw)) : 0;
 
   // Recenice: skupine zavrsnih interpunkcija; ako ima teksta bez terminatora, to je 1.
   const terminators = (trimmed.match(/[.!?…]+/g) || []).length;

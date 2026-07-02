@@ -92,10 +92,38 @@ describe('getValidAccessToken', () => {
     expect(token).toBeNull();
     expect(store.load()).toBeNull();
   });
-  it('neuspjela obnova -> null i čisti sesiju', async () => {
+  it('fatalna obnova (400) -> null i čisti sesiju', async () => {
     const store = memStore({ accessToken: 'old', refreshToken: 'r', expiresAt: 5_000, email: '', userId: '' });
     const token = await getValidAccessToken(CFG, store, fetchOnce(res(400)), 10_000);
     expect(token).toBeNull();
     expect(store.load()).toBeNull();
+  });
+  it('tranzijentna obnova (500) -> null ali sesija OSTAJE (offline/5xx ne izbacuje)', async () => {
+    const s: Session = { accessToken: 'old', refreshToken: 'r', expiresAt: 5_000, email: '', userId: '' };
+    const store = memStore({ ...s });
+    const token = await getValidAccessToken(CFG, store, fetchOnce(res(500)), 10_000);
+    expect(token).toBeNull();
+    expect(store.load()).toMatchObject({ refreshToken: 'r' }); // nije obrisano
+  });
+  it('mrežna greška (fetch reject) -> null ali sesija OSTAJE', async () => {
+    const store = memStore({ accessToken: 'old', refreshToken: 'r', expiresAt: 5_000, email: '', userId: '' });
+    const failing = (async () => { throw new Error('offline'); }) as unknown as typeof fetch;
+    const token = await getValidAccessToken(CFG, store, failing, 10_000);
+    expect(token).toBeNull();
+    expect(store.load()).not.toBeNull();
+  });
+  it('utrka rotacije: paralelni poziv već spremio novu sesiju -> ne gazi je s null', async () => {
+    const fresh: Session = { accessToken: 'new-other', refreshToken: 'rotated', expiresAt: 1_000_000, email: '', userId: '' };
+    let calls = 0, savedNull = false;
+    const store: SessionStore = {
+      load: () => (++calls === 1
+        ? { accessToken: 'old', refreshToken: 'old-r', expiresAt: 5_000, email: '', userId: '' }
+        : fresh),
+      save: (v) => { if (v === null) savedNull = true; },
+    };
+    // Naš poziv dobije fatalni 400 (token je već rotiran), ali store već ima valjanu sesiju.
+    const token = await getValidAccessToken(CFG, store, fetchOnce(res(400)), 10_000);
+    expect(token).toBe('new-other');
+    expect(savedNull).toBe(false);
   });
 });

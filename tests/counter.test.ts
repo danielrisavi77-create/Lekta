@@ -7,6 +7,11 @@ describe('countText', () => {
     expect(m).toMatchObject({ words: 0, charsWithSpaces: 0, charsWithoutSpaces: 0, kartice: 0, pages: 0, sentences: 0, paragraphs: 0, readingMinutes: 0 });
   });
 
+  it('sami razmaci: nema sadrzaja pa je i stranica 0 (bez laznog "1")', () => {
+    const m = countText('   ');
+    expect(m).toMatchObject({ words: 0, sentences: 0, paragraphs: 0, pages: 0, kartice: 0 });
+  });
+
   it('broji rijeci i znakove s razmacima i bez', () => {
     const m = countText('Ana ima macku.');
     expect(m.words).toBe(3);
