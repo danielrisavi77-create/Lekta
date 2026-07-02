@@ -6982,5 +6982,17 @@
     "sourcePage": "SADRZAJ",
     "quote": "1. Uvod / 2. Poglavlja rada / 3. Naputci o Oblikovanju rada / 4. Zakljucak / Literatura / Sazetak / Summary",
     "note": "Port pilot workflow."
+  },
+  {
+    "id": "led-efzg-zavrsni--justify-verified-2026-07-02",
+    "ruleId": "efzg-zavrsni--justify",
+    "profileId": "efzg-zavrsni",
+    "action": "verified",
+    "actor": "owner-bulk-approval",
+    "timestamp": "2026-07-02",
+    "sourceId": "efzg-postupak-zavrsni",
+    "sourcePage": "odjeljak POSTUPAK IZRADE ZAVRSNOG RADA",
+    "quote": "Tekst obostrano poravnati.",
+    "note": "Justify checkId dodan u kompajler; obostrano poravnanje imperativ."
   }
 ]

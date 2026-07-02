@@ -2,8 +2,8 @@
   "faculty": "fsb",
   "unit": null,
   "catalogPrograms": [
-    "Diplomski studiji Fakultet strojarstva i brodogradnje",
-    "Prijediplomski studiji Fakultet strojarstva i brodogradnje (zavrsni rad)"
+    "Diplomski studiji Fakulteta strojarstva i brodogradnje",
+    "Prijediplomski studiji Fakulteta strojarstva i brodogradnje (zavrsni rad)"
   ],
   "sources": [
     {
@@ -37,7 +37,7 @@
     {
       "id": "fsb-diplomski",
       "unitId": "fsb",
-      "programs": ["Diplomski studiji Fakultet strojarstva i brodogradnje"],
+      "programs": ["Diplomski studiji Fakulteta strojarstva i brodogradnje"],
       "workTypes": ["graduate"],
       "status": "partial",
       "profileLabel": "Fakultet strojarstva i brodogradnje, diplomski rad",
@@ -85,7 +85,7 @@
     {
       "id": "fsb-zavrsni",
       "unitId": "fsb",
-      "programs": ["Prijediplomski studiji Fakultet strojarstva i brodogradnje (zavrsni rad)"],
+      "programs": ["Prijediplomski studiji Fakulteta strojarstva i brodogradnje (zavrsni rad)"],
       "workTypes": ["final"],
       "status": "partial",
       "profileLabel": "Fakultet strojarstva i brodogradnje, zavrsni rad",

@@ -62,7 +62,7 @@ KORAK 2 - SNAPSHOT (Bash):
 
 KORAK 3 - CITAJ I KLASIFICIRAJ:
 - Procitaj .txt. Za svaku dimenziju koju izvor SPOMINJE odredi vrijednost + je li imperativ (scored) ili preporuka (advisory):
-  checkId-evi: font, font-size, line-spacing, margins, paper-size, page-numbers, toc, page-count (stranice) ILI word-count (rijeci), citation-style, required-sections.
+  checkId-evi: font, font-size, line-spacing, margins, paper-size, page-numbers, justify (obostrano poravnanje), toc, page-count (stranice) ILI word-count (rijeci), citation-style, required-sections.
 - Za svaku: exact quote (verbatim iz .txt), sourcePage (broj stranice ili naziv odjeljka iz teksta).
 - Odredi razine rada koje izvor pokriva (graduate=diplomski, final=zavrsni/prijediplomski, doctoral=doktorski) -> jedan profil po razini/izvoru.
 
@@ -81,7 +81,8 @@ KORAK 6 - UPISI PORT-SPEC (Write) na discovery/port-specs/${fac.id}.json:
   "faculty": "${fac.id}",
   "unit": null,  // katalog vec ima unit "${fac.id}"; stavi objekt SAMO ako ga nema
   "catalogPrograms": [ "<faculty-wide program string po razini>", ... ],
-     // npr "Diplomski studiji ${fac.name}", "Prijediplomski studiji ${fac.name} (zavrsni rad)", "Doktorski studij ${fac.name}"
+     // Koristi GENITIV naziva fakulteta: "Diplomski studiji <genitiv>", "Prijediplomski studiji <genitiv> (zavrsni rad)", "Doktorski studij <genitiv>".
+     // npr "${fac.name}" -> genitiv (Ekonomski fakultet -> Ekonomskog fakulteta; Fakultet strojarstva i brodogradnje -> Fakulteta strojarstva i brodogradnje).
      // OVI stringovi MORAJU biti IDENTICNI profil.programs (inace UI ne poklopi profil)
   "sources": [ { source-registry unos: id, kind("guidelines"|"regulation"), title, url, publisher, fetchedAt:"2026-07-02", snapshotPath:"data/sources/${fac.id}/<id>.pdf", snapshotHash, validityClass:"stable", lastChecked:"2026-07-02", note } ],
   "profiles": [ {

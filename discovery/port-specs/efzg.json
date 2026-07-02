@@ -2,8 +2,8 @@
   "faculty": "efzg",
   "unit": null,
   "catalogPrograms": [
-    "Prijediplomski studiji Ekonomski fakultet (zavrsni rad)",
-    "Diplomski studiji Ekonomski fakultet"
+    "Prijediplomski studiji Ekonomskog fakulteta (zavrsni rad)",
+    "Diplomski studiji Ekonomskog fakulteta"
   ],
   "sources": [
     {
@@ -37,17 +37,29 @@
     {
       "id": "efzg-zavrsni",
       "unitId": "efzg",
-      "programs": ["Prijediplomski studiji Ekonomski fakultet (zavrsni rad)"],
-      "workTypes": ["final"],
+      "programs": [
+        "Prijediplomski studiji Ekonomskog fakulteta (zavrsni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
       "status": "partial",
       "profileLabel": "Ekonomski fakultet, zavrsni rad",
       "verifiedAt": "2026-07-02",
       "documentDate": null,
       "rules": {
-        "font": ["Times New Roman", "Arial"],
+        "font": [
+          "Times New Roman",
+          "Arial"
+        ],
         "size": 12,
         "spacing": 1.5,
-        "margins": { "top": 2.5, "right": 2.5, "bottom": 2.5, "left": 2.5 },
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
         "requireToc": true,
         "requirePageNumbers": true,
         "requireA4": true,
@@ -57,12 +69,50 @@
         "pageMax": 40,
         "recommendedCitation": "harvard",
         "requiredSections": [
-          { "key": "naslovnica", "label": "Naslovnica", "terms": ["naslovnica"] },
-          { "key": "sadrzaj", "label": "Sadrzaj", "terms": ["sadrzaj"] },
-          { "key": "uvod", "label": "Uvod", "terms": ["uvod"] },
-          { "key": "sredisnji-dio", "label": "Sredisnji dio rada", "terms": ["sredisnji dio", "razrada"] },
-          { "key": "zakljucak", "label": "Zakljucak", "terms": ["zakljucak"] },
-          { "key": "literatura", "label": "Popis literature", "terms": ["popis literature", "literatura"] }
+          {
+            "key": "naslovnica",
+            "label": "Naslovnica",
+            "terms": [
+              "naslovnica"
+            ]
+          },
+          {
+            "key": "sadrzaj",
+            "label": "Sadrzaj",
+            "terms": [
+              "sadrzaj"
+            ]
+          },
+          {
+            "key": "uvod",
+            "label": "Uvod",
+            "terms": [
+              "uvod"
+            ]
+          },
+          {
+            "key": "sredisnji-dio",
+            "label": "Sredisnji dio rada",
+            "terms": [
+              "sredisnji dio",
+              "razrada"
+            ]
+          },
+          {
+            "key": "zakljucak",
+            "label": "Zakljucak",
+            "terms": [
+              "zakljucak"
+            ]
+          },
+          {
+            "key": "literatura",
+            "label": "Popis literature",
+            "terms": [
+              "popis literature",
+              "literatura"
+            ]
+          }
         ]
       },
       "facts": [
@@ -102,8 +152,12 @@
     {
       "id": "efzg-diplomski",
       "unitId": "efzg",
-      "programs": ["Diplomski studiji Ekonomski fakultet"],
-      "workTypes": ["graduate"],
+      "programs": [
+        "Diplomski studiji Ekonomskog fakulteta"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
       "status": "partial",
       "profileLabel": "Ekonomski fakultet, diplomski rad",
       "verifiedAt": "2026-07-02",
@@ -111,7 +165,12 @@
       "rules": {
         "size": 12,
         "spacing": 1.5,
-        "margins": { "top": 2.54, "right": 2.54, "bottom": 2.54, "left": 2.54 },
+        "margins": {
+          "top": 2.54,
+          "right": 2.54,
+          "bottom": 2.54,
+          "left": 2.54
+        },
         "pageMin": 30,
         "pageMax": 50
       },
@@ -290,6 +349,18 @@
       "sourcePage": "odjeljak 2.2. Svrha diplomskoga rada",
       "quote": "Preporucljiv opseg diplomskoga rada je 30 - 50 stranica.",
       "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-efzg-zavrsni--justify-verified-2026-07-02",
+      "ruleId": "efzg-zavrsni--justify",
+      "profileId": "efzg-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efzg-postupak-zavrsni",
+      "sourcePage": "odjeljak POSTUPAK IZRADE ZAVRSNOG RADA",
+      "quote": "Tekst obostrano poravnati.",
+      "note": "Justify checkId dodan u kompajler; obostrano poravnanje imperativ."
     }
   ]
 }

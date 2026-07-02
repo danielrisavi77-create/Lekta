@@ -54,6 +54,16 @@ describe('rule-compiler faithfulness', () => {
     });
   });
 
+  it('mapira justify (obostrano poravnanje) u effectiveRules.justify', () => {
+    const profile: ThesisProfile = {
+      id: 'efzg-zavrsni',
+      rules: { checkJustify: true },
+      ruleEntries: [{ ruleId: 'r-just', checkId: 'justify', value: true }],
+    };
+    expect(compileEffectiveRules(profile)).toEqual({ checkJustify: true, justify: true });
+    expect(collectCompileDiagnostics([profile])).toHaveLength(0);
+  });
+
   it('prijavljuje diagnostic za nepoznat checkId i ne mijenja rules', () => {
     const profile: ThesisProfile = {
       id: 'demo',

@@ -34,10 +34,10 @@
     },
     {
       "profileId": "efzg-zavrsni",
-      "scored": 7,
-      "machineCheckable": 8,
+      "scored": 8,
+      "machineCheckable": 9,
       "advisory": 3,
-      "ratio": 0.875,
+      "ratio": 0.8888888888888888,
       "lastVerified": "2026-07-02"
     },
     {
@@ -305,5 +305,5 @@
       "lastVerified": "2026-06-30"
     }
   ],
-  "totalScored": 195
+  "totalScored": 196
 }

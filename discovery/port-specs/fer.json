@@ -2,8 +2,8 @@
   "faculty": "fer",
   "unit": null,
   "catalogPrograms": [
-    "Diplomski studiji Fakultet elektrotehnike i racunarstva",
-    "Prijediplomski studiji Fakultet elektrotehnike i racunarstva (zavrsni rad)"
+    "Diplomski studiji Fakulteta elektrotehnike i racunarstva",
+    "Prijediplomski studiji Fakulteta elektrotehnike i racunarstva (zavrsni rad)"
   ],
   "sources": [
     {
@@ -25,7 +25,7 @@
       "id": "fer-diplomski",
       "unitId": "fer",
       "programs": [
-        "Diplomski studiji Fakultet elektrotehnike i racunarstva"
+        "Diplomski studiji Fakulteta elektrotehnike i racunarstva"
       ],
       "workTypes": [
         "graduate"
@@ -87,7 +87,7 @@
       "id": "fer-zavrsni",
       "unitId": "fer",
       "programs": [
-        "Prijediplomski studiji Fakultet elektrotehnike i racunarstva (zavrsni rad)"
+        "Prijediplomski studiji Fakulteta elektrotehnike i racunarstva (zavrsni rad)"
       ],
       "workTypes": [
         "final"

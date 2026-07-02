@@ -39,6 +39,7 @@ export const COMPILED_CHECK_IDS = [
   'toc',
   'page-numbers',
   'paper-size',
+  'justify',
   'footnote-font',
   'footnote-size',
   'footnote-spacing',
@@ -85,6 +86,7 @@ function applyEntry(eff: EffectiveRules, entry: RuleEntry): boolean {
     case 'toc': eff.requireToc = boolOf(value); return true;
     case 'page-numbers': eff.requirePageNumbers = boolOf(value); return true;
     case 'paper-size': eff.requireA4 = boolOf(value); return true;
+    case 'justify': eff.justify = boolOf(value); return true;
     case 'footnote-font': eff.footnoteFont = value; return true;
     case 'footnote-size': eff.footnoteSize = value; return true;
     case 'footnote-spacing': eff.footnoteSpacing = value; return true;

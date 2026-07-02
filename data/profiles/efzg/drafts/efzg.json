@@ -4,7 +4,12 @@
       {
         "ruleId": "efzg-zavrsni--margins",
         "checkId": "margins",
-        "value": { "top": 2.5, "bottom": 2.5, "left": 2.5, "right": 2.5 },
+        "value": {
+          "top": 2.5,
+          "bottom": 2.5,
+          "left": 2.5,
+          "right": 2.5
+        },
         "category": "format",
         "label": "Margine",
         "machineCheckable": true,
@@ -22,7 +27,10 @@
       {
         "ruleId": "efzg-zavrsni--font",
         "checkId": "font",
-        "value": ["Times New Roman", "Arial"],
+        "value": [
+          "Times New Roman",
+          "Arial"
+        ],
         "category": "format",
         "label": "Font",
         "machineCheckable": true,
@@ -94,7 +102,17 @@
       {
         "ruleId": "efzg-zavrsni--required-sections",
         "checkId": "required-sections",
-        "value": ["naslovnica", "sadrzaj", "uvod", "sredisnji dio rada", "zakljucak", "popis literature", "popis slika", "popis tablica", "prilozi"],
+        "value": [
+          "naslovnica",
+          "sadrzaj",
+          "uvod",
+          "sredisnji dio rada",
+          "zakljucak",
+          "popis literature",
+          "popis slika",
+          "popis tablica",
+          "prilozi"
+        ],
         "category": "structure",
         "label": "Obvezne cjeline zavrsnog rada",
         "machineCheckable": false,
@@ -130,7 +148,10 @@
       {
         "ruleId": "efzg-zavrsni--page-count",
         "checkId": "page-count",
-        "value": { "min": 30, "max": 40 },
+        "value": {
+          "min": 30,
+          "max": 40
+        },
         "category": "scope",
         "label": "Opseg teksta (stranice)",
         "machineCheckable": true,
@@ -174,6 +195,24 @@
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
         "reviewedBy": null
+      },
+      {
+        "ruleId": "efzg-zavrsni--justify",
+        "checkId": "justify",
+        "value": true,
+        "category": "format",
+        "label": "Obostrano poravnanje",
+        "machineCheckable": true,
+        "authority": "program-page",
+        "sourceId": "efzg-postupak-zavrsni",
+        "sourcePage": "odjeljak POSTUPAK IZRADE ZAVRSNOG RADA",
+        "quote": "Tekst obostrano poravnati.",
+        "status": "verified",
+        "scored": true,
+        "lastVerified": "2026-07-02",
+        "verifiedBy": "owner-bulk-approval",
+        "reviewedBy": null,
+        "verifiedHash": "0807863ff289516855c37afbc35be192a003cda41a641d633c0379b756533549"
       }
     ],
     "efzg-diplomski": [
@@ -212,7 +251,12 @@
       {
         "ruleId": "efzg-diplomski--margins",
         "checkId": "margins",
-        "value": { "top": 2.54, "bottom": 2.54, "left": 2.54, "right": 2.54 },
+        "value": {
+          "top": 2.54,
+          "bottom": 2.54,
+          "left": 2.54,
+          "right": 2.54
+        },
         "category": "format",
         "label": "Margine",
         "machineCheckable": true,
@@ -228,7 +272,10 @@
       {
         "ruleId": "efzg-diplomski--page-count",
         "checkId": "page-count",
-        "value": { "min": 30, "max": 50 },
+        "value": {
+          "min": 30,
+          "max": 50
+        },
         "category": "scope",
         "label": "Opseg teksta (stranice)",
         "machineCheckable": true,

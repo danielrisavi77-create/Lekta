@@ -5256,7 +5256,7 @@
     "id": "efzg-zavrsni",
     "unitId": "efzg",
     "programs": [
-      "Prijediplomski studiji Ekonomski fakultet (zavrsni rad)"
+      "Prijediplomski studiji Ekonomskog fakulteta (zavrsni rad)"
     ],
     "workTypes": [
       "final"
@@ -5281,6 +5281,7 @@
       "requireToc": true,
       "requirePageNumbers": true,
       "requireA4": true,
+      "justify": true,
       "checkJustify": true,
       "checkMargins": true,
       "pageMin": 30,
@@ -5371,7 +5372,7 @@
     "id": "efzg-diplomski",
     "unitId": "efzg",
     "programs": [
-      "Diplomski studiji Ekonomski fakultet"
+      "Diplomski studiji Ekonomskog fakulteta"
     ],
     "workTypes": [
       "graduate"
@@ -5402,7 +5403,7 @@
     "id": "fsb-diplomski",
     "unitId": "fsb",
     "programs": [
-      "Diplomski studiji Fakultet strojarstva i brodogradnje"
+      "Diplomski studiji Fakulteta strojarstva i brodogradnje"
     ],
     "workTypes": [
       "graduate"
@@ -5464,7 +5465,7 @@
     "id": "fsb-zavrsni",
     "unitId": "fsb",
     "programs": [
-      "Prijediplomski studiji Fakultet strojarstva i brodogradnje (zavrsni rad)"
+      "Prijediplomski studiji Fakulteta strojarstva i brodogradnje (zavrsni rad)"
     ],
     "workTypes": [
       "final"
@@ -5526,7 +5527,7 @@
     "id": "fer-diplomski",
     "unitId": "fer",
     "programs": [
-      "Diplomski studiji Fakultet elektrotehnike i racunarstva"
+      "Diplomski studiji Fakulteta elektrotehnike i racunarstva"
     ],
     "workTypes": [
       "graduate"
@@ -5588,7 +5589,7 @@
     "id": "fer-zavrsni",
     "unitId": "fer",
     "programs": [
-      "Prijediplomski studiji Fakultet elektrotehnike i racunarstva (zavrsni rad)"
+      "Prijediplomski studiji Fakulteta elektrotehnike i racunarstva (zavrsni rad)"
     ],
     "workTypes": [
       "final"
