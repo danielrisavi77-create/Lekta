@@ -18,9 +18,9 @@
       "scored": true,
       "verifiedHash": "1773255a260cb9605b38b69acbc64296411f95d298b11cc1adb957b01984bd35",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "confirmedVia": "ai-1pass-batch"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "rgnf-diplomski--font-size",
@@ -37,9 +37,9 @@
       "scored": true,
       "verifiedHash": "1773255a260cb9605b38b69acbc64296411f95d298b11cc1adb957b01984bd35",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "confirmedVia": "ai-1pass-batch"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "rgnf-diplomski--line-spacing",
@@ -56,9 +56,9 @@
       "scored": true,
       "verifiedHash": "1773255a260cb9605b38b69acbc64296411f95d298b11cc1adb957b01984bd35",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "confirmedVia": "ai-1pass-batch"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "rgnf-diplomski--margins",
@@ -80,9 +80,9 @@
       "scored": true,
       "verifiedHash": "1773255a260cb9605b38b69acbc64296411f95d298b11cc1adb957b01984bd35",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "confirmedVia": "ai-1pass-batch"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "rgnf-diplomski--toc",
@@ -99,9 +99,9 @@
       "scored": true,
       "verifiedHash": "1773255a260cb9605b38b69acbc64296411f95d298b11cc1adb957b01984bd35",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "confirmedVia": "ai-1pass-batch"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "rgnf-diplomski--citation-style",
@@ -118,9 +118,9 @@
       "scored": true,
       "verifiedHash": "1773255a260cb9605b38b69acbc64296411f95d298b11cc1adb957b01984bd35",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "confirmedVia": "ai-1pass-batch"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "rgnf-diplomski--required-sections",
