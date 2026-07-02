@@ -1,0 +1,150 @@
+{
+  "faculty": "grad",
+  "unit": null,
+  "catalogPrograms": [
+    "Doktorski studij Građevinskog fakulteta"
+  ],
+  "sources": [
+    {
+      "id": "unizg-drsc08-doktorski",
+      "kind": "guidelines",
+      "title": "Upute za oblikovanje doktorskog rada (Obrazac DR.SC.-08)",
+      "url": "https://www.unizg.hr/nc/vijest/article/obrasci-za-doktorski-studij/",
+      "publisher": "Sveuciliste u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/unizg/unizg-drsc08-doktorski-oblikovanje.doc",
+      "snapshotHash": "a38f06f9e72255ade0010197674965fae0715f1f476044ba29a53886151f069c",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Sveucilisni predlozak za oblikovanje doktorskog rada; fakulteti izrijekom delegiraju oblikovanje disertacije na njega (potvrdjeno deepen-3)."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "grad-doktorski",
+      "unitId": "grad",
+      "programs": [
+        "Doktorski studij Građevinskog fakulteta"
+      ],
+      "workTypes": [
+        "doctoral"
+      ],
+      "status": "partial",
+      "profileLabel": "Gradevinski fakultet, doktorski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "requireA4": true,
+        "requirePageNumbers": true
+      },
+      "facts": [],
+      "note": "Doktorsko oblikovanje delegirano na sveucilisni DR.SC.-08 predlozak; pravila preuzeta iz njega.",
+      "sources": [
+        {
+          "title": "Upute za oblikovanje doktorskog rada (Obrazac DR.SC.-08)",
+          "url": "https://www.unizg.hr/nc/vijest/article/obrasci-za-doktorski-studij/"
+        }
+      ],
+      "sourceHierarchy": [
+        "Sveucilisni DR.SC.-08 (unizg-drsc08-doktorski)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "font",
+        "velicina slova",
+        "prored",
+        "margine",
+        "format papira (A4)",
+        "numeracija stranica"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-grad-doktorski--font-verified-2026-07-02",
+      "ruleId": "grad-doktorski--font",
+      "profileId": "grad-doktorski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizg-drsc08-doktorski",
+      "sourcePage": "odjeljak 'Postavke stranice' (DR.SC.-08, Upute za oblikovanje doktorskog rada)",
+      "quote": "Postavke stranice: Font (tip pisma): obavezna potpora svih hrvatskih znakova - Times New Roman. Velicina pisma: 12 tipografskih tocaka. Prored: 1,5 redak.",
+      "note": "DR.SC.-08 sveucilisni doktorski redizajn (delegacija potvrdjena deepen-3)."
+    },
+    {
+      "id": "led-grad-doktorski--font-size-verified-2026-07-02",
+      "ruleId": "grad-doktorski--font-size",
+      "profileId": "grad-doktorski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizg-drsc08-doktorski",
+      "sourcePage": "odjeljak 'Postavke stranice' (DR.SC.-08, Upute za oblikovanje doktorskog rada)",
+      "quote": "Postavke stranice: Font (tip pisma): obavezna potpora svih hrvatskih znakova - Times New Roman. Velicina pisma: 12 tipografskih tocaka. Prored: 1,5 redak.",
+      "note": "DR.SC.-08 sveucilisni doktorski redizajn (delegacija potvrdjena deepen-3)."
+    },
+    {
+      "id": "led-grad-doktorski--line-spacing-verified-2026-07-02",
+      "ruleId": "grad-doktorski--line-spacing",
+      "profileId": "grad-doktorski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizg-drsc08-doktorski",
+      "sourcePage": "odjeljak 'Postavke stranice' (DR.SC.-08, Upute za oblikovanje doktorskog rada)",
+      "quote": "Postavke stranice: Font (tip pisma): obavezna potpora svih hrvatskih znakova - Times New Roman. Velicina pisma: 12 tipografskih tocaka. Prored: 1,5 redak.",
+      "note": "DR.SC.-08 sveucilisni doktorski redizajn (delegacija potvrdjena deepen-3)."
+    },
+    {
+      "id": "led-grad-doktorski--margins-verified-2026-07-02",
+      "ruleId": "grad-doktorski--margins",
+      "profileId": "grad-doktorski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizg-drsc08-doktorski",
+      "sourcePage": "odjeljak 'Postavke stranice' (DR.SC.-08, Upute za oblikovanje doktorskog rada)",
+      "quote": "Lijeva i desna margina: 2,5 cm. Gornja i donja margina: 2,5 cm. Naslovnica ima drugacije margine.",
+      "note": "DR.SC.-08 sveucilisni doktorski redizajn (delegacija potvrdjena deepen-3)."
+    },
+    {
+      "id": "led-grad-doktorski--paper-size-verified-2026-07-02",
+      "ruleId": "grad-doktorski--paper-size",
+      "profileId": "grad-doktorski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizg-drsc08-doktorski",
+      "sourcePage": "odjeljak 'Postavke stranice' (DR.SC.-08, Upute za oblikovanje doktorskog rada)",
+      "quote": "Rad treba biti ispisan na papiru formata A4 (210x297).",
+      "note": "DR.SC.-08 sveucilisni doktorski redizajn (delegacija potvrdjena deepen-3)."
+    },
+    {
+      "id": "led-grad-doktorski--page-numbers-verified-2026-07-02",
+      "ruleId": "grad-doktorski--page-numbers",
+      "profileId": "grad-doktorski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizg-drsc08-doktorski",
+      "sourcePage": "odjeljak 'Postavke stranice' (DR.SC.-08, Upute za oblikovanje doktorskog rada)",
+      "quote": "Stranice trebaju biti numerirane. Broje se sve stranice od Uvoda do kraja rada. Numeracija se pise u donjem desnom kutu.",
+      "note": "DR.SC.-08 sveucilisni doktorski redizajn (delegacija potvrdjena deepen-3)."
+    }
+  ]
+}

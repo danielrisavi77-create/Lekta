@@ -49,12 +49,28 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "arh-doktorski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
       "profileId": "efzg-diplomski",
       "scored": 0,
       "machineCheckable": 4,
       "advisory": 4,
       "ratio": 0,
       "lastVerified": null
+    },
+    {
+      "profileId": "efzg-doktorski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
     },
     {
       "profileId": "efzg-zavrsni",
@@ -69,6 +85,22 @@
       "scored": 5,
       "machineCheckable": 5,
       "advisory": 2,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "erf-doktorski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "fbf-doktorski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
       "ratio": 1,
       "lastVerified": "2026-07-02"
     },
@@ -118,6 +150,14 @@
       "machineCheckable": 8,
       "advisory": 0,
       "ratio": 1.25,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "ffrz-doktorski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
@@ -209,6 +249,14 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "fhs-doktorski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
       "profileId": "fhs-zavrsni",
       "scored": 8,
       "machineCheckable": 8,
@@ -220,6 +268,14 @@
       "profileId": "fkit-diplomski",
       "scored": 3,
       "machineCheckable": 3,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "fkit-doktorski",
+      "scored": 6,
+      "machineCheckable": 6,
       "advisory": 0,
       "ratio": 1,
       "lastVerified": "2026-07-02"
@@ -361,6 +417,14 @@
       "lastVerified": null
     },
     {
+      "profileId": "fsb-doktorski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
       "profileId": "fsb-zavrsni",
       "scored": 0,
       "machineCheckable": 5,
@@ -393,6 +457,14 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "grad-doktorski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
       "profileId": "grad-zavrsni",
       "scored": 6,
       "machineCheckable": 7,
@@ -405,6 +477,14 @@
       "scored": 7,
       "machineCheckable": 7,
       "advisory": 2,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "grf-doktorski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
       "ratio": 1,
       "lastVerified": "2026-07-02"
     },
@@ -422,6 +502,14 @@
       "machineCheckable": 8,
       "advisory": 1,
       "ratio": 1.125,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "kbf-doktorski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
@@ -473,11 +561,27 @@
       "lastVerified": null
     },
     {
+      "profileId": "muza-doktorski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
       "profileId": "pbf-diplomski",
       "scored": 8,
       "machineCheckable": 7,
       "advisory": 1,
       "ratio": 1.1428571428571428,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "pbf-doktorski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
@@ -641,6 +745,14 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "sfzg-doktorski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
       "profileId": "sociologija",
       "scored": 6,
       "machineCheckable": 6,
@@ -681,6 +793,14 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "ttf-doktorski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
       "profileId": "ttf-zavrsni",
       "scored": 8,
       "machineCheckable": 8,
@@ -694,6 +814,14 @@
       "machineCheckable": 9,
       "advisory": 0,
       "ratio": 1.3333333333333333,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "ufzg-doktorski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
@@ -711,7 +839,15 @@
       "advisory": 4,
       "ratio": 0.75,
       "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "vef-doktorski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 495
+  "totalScored": 597
 }

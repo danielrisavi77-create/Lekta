@@ -3919,6 +3919,55 @@
     "profileLabel": "Pravni fakultet · prijediplomski Socijalni rad · završni rad",
     "verifiedAt": "2026-06-28",
     "documentDate": "Upute 2024./2025. i aktualni Pravilnik",
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/pravo-socijalni-synthetic.test.ts) + 3 stvarnih javnih zavrsni radova Studijskog centra socijalnog rada iz ZIR-a kroz byte-level PDF preflight.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2024,
+          2025
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "pravo:7000",
+          "repository": "zir.nsk.hr",
+          "level": "zavrsni",
+          "pages": 39,
+          "pageFormat": "A4",
+          "sha256": "2a94c78ffe7e6ec31df71da652c0e60d797a075786fa631b660c73e57868a501"
+        },
+        {
+          "pid": "pravo:7100",
+          "repository": "zir.nsk.hr",
+          "level": "zavrsni",
+          "pages": 35,
+          "pageFormat": "A4",
+          "sha256": "4739646e2aba28f45575e082e0af87ad96160b1b5553da48277d335beffdb55c"
+        },
+        {
+          "pid": "pravo:6150",
+          "repository": "zir.nsk.hr",
+          "level": "zavrsni",
+          "pages": 36,
+          "pageFormat": "A4",
+          "sha256": "429456887c22f1b948fec1a3757287ee6b6ed2446bf2d9f3071d0e2af19ad894"
+        }
+      ],
+      "confirmed": [
+        "Uskladjeni sinteticki .docx prolazi format provjere profila (font TNR 12, prored 1,5, obostrano poravnanje, margine 3/3,5, A4, Sadrzaj) - tests/pravo-socijalni-synthetic.test.ts.",
+        "3 stvarnih javnih zavrsni radova (pravo:7000, pravo:7100, pravo:6150) prolaze byte-level PDF preflight: valjan nesifriran PDF 1.7, 100% stranica A4, viselistni, ugradjeni fontovi, bez JavaScripta i obrazaca."
+      ],
+      "observedDeviations": [
+        "Radovi bez PDF/A oznake (info, ne greska). U sirem pravo uzorku dio radova je US Letter; ovi su odabrani kao 100% A4."
+      ],
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi Studijskog centra socijalnog rada sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet preko PID-a i sha256."
+    },
     "rules": {
       "font": [
         "Times New Roman"
@@ -4175,6 +4224,56 @@
     "profileLabel": "Pravni fakultet · Sveučilišni diplomski studij Socijalni rad · diplomski rad",
     "verifiedAt": "2026-06-28",
     "documentDate": "Upute 2024./2025. i aktualni Pravilnik",
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/pravo-socijalni-synthetic.test.ts) + 3 stvarnih javnih diplomski radova Studijskog centra socijalnog rada iz ZIR-a kroz byte-level PDF preflight.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "pravo:5500",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 37,
+          "pageFormat": "A4",
+          "sha256": "4bfb7b0000b6d7a01082a8e706c396d9c44145160ee970ced466f34c66dad8d7"
+        },
+        {
+          "pid": "pravo:6250",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 57,
+          "pageFormat": "A4",
+          "sha256": "28bc5a6dd1c30fdb8d49ec48c18b6ff5cd4a539a7415f6285aec3b0bcab2dded"
+        },
+        {
+          "pid": "pravo:5600",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 57,
+          "pageFormat": "A4",
+          "sha256": "6097732133fc409d5667b91d2815eb08b4eb08fb42a88b320b8589303da3d674"
+        }
+      ],
+      "confirmed": [
+        "Uskladjeni sinteticki .docx prolazi format provjere profila (font TNR 12, prored 1,5, obostrano poravnanje, margine 3/3,5, A4, Sadrzaj) - tests/pravo-socijalni-synthetic.test.ts.",
+        "3 stvarnih javnih diplomski radova (pravo:5500, pravo:6250, pravo:5600) prolaze byte-level PDF preflight: valjan nesifriran PDF 1.7, 100% stranica A4, viselistni, ugradjeni fontovi, bez JavaScripta i obrazaca."
+      ],
+      "observedDeviations": [
+        "Radovi bez PDF/A oznake (info, ne greska). U sirem pravo uzorku dio radova je US Letter; ovi su odabrani kao 100% A4."
+      ],
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi Studijskog centra socijalnog rada sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet preko PID-a i sha256."
+    },
     "rules": {
       "font": [
         "Times New Roman"
@@ -4431,6 +4530,39 @@
     "profileLabel": "Pravni fakultet · Sveučilišni diplomski studij Socijalna politika · diplomski rad",
     "verifiedAt": "2026-06-28",
     "documentDate": "Upute 2024./2025. i aktualni Pravilnik",
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/pravo-socijalni-synthetic.test.ts) + 1 stvarnih javnih diplomski radova Studijskog centra socijalnog rada iz ZIR-a kroz byte-level PDF preflight.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 1,
+        "metadataSpotChecks": 0,
+        "years": [
+          2023
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "pravo:5900",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 72,
+          "pageFormat": "A4",
+          "sha256": "077c5eab18071838953fc1014a0400e9dd6f58e025ac2b9e2862a85697b464bc"
+        }
+      ],
+      "confirmed": [
+        "Uskladjeni sinteticki .docx prolazi format provjere profila (font TNR 12, prored 1,5, obostrano poravnanje, margine 3/3,5, A4, Sadrzaj) - tests/pravo-socijalni-synthetic.test.ts.",
+        "1 stvarnih javnih diplomski radova (pravo:5900) prolaze byte-level PDF preflight: valjan nesifriran PDF 1.7, 100% stranica A4, viselistni, ugradjeni fontovi, bez JavaScripta i obrazaca."
+      ],
+      "observedDeviations": [
+        "Radovi bez PDF/A oznake (info, ne greska). U sirem pravo uzorku dio radova je US Letter; ovi su odabrani kao 100% A4.",
+        "Socijalna politika je malen diplomski program; u dohvacenom ZIR uzorku nadjen 1 otvoreni javni rad tog programa, dodatni javni radovi nisu dostupni."
+      ],
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi Studijskog centra socijalnog rada sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet preko PID-a i sha256."
+    },
     "rules": {
       "font": [
         "Times New Roman"
@@ -5150,6 +5282,39 @@
     "profileLabel": "Pravni fakultet · poslijediplomski studiji socijalnih djelatnosti · specijalistički završni rad",
     "verifiedAt": "2026-06-28",
     "documentDate": "službene upute dostupne u fakultetskoj zbirci; aktualnost treba potvrditi na studiju",
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/pravo-socijalni-synthetic.test.ts) + 1 stvarnih javnih specijalisticki radova Studijskog centra socijalnog rada iz ZIR-a kroz byte-level PDF preflight.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 1,
+        "metadataSpotChecks": 0,
+        "years": [
+          2023
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "pravo:5800",
+          "repository": "zir.nsk.hr",
+          "level": "specijalisticki",
+          "pages": 64,
+          "pageFormat": "A4",
+          "sha256": "3f77627d207f68c4faf687568a1aa308667b17e59146565bc715f20b76e38757"
+        }
+      ],
+      "confirmed": [
+        "Uskladjeni sinteticki .docx prolazi format provjere profila (font TNR 12, prored 1,5, obostrano poravnanje, margine 3/3,5, A4, Sadrzaj) - tests/pravo-socijalni-synthetic.test.ts.",
+        "1 stvarnih javnih specijalisticki radova (pravo:5800) prolaze byte-level PDF preflight: valjan nesifriran PDF 1.7, 100% stranica A4, viselistni, ugradjeni fontovi, bez JavaScripta i obrazaca."
+      ],
+      "observedDeviations": [
+        "Radovi bez PDF/A oznake (info, ne greska). U sirem pravo uzorku dio radova je US Letter; ovi su odabrani kao 100% A4.",
+        "Uzorak je zavrsni specijalisticki rad programa Obiteljska medijacija (jedan od cetiri specijalisticka programa Centra); u otvorenom ZIR uzorku nadjen 1 javni specijalisticki rad."
+      ],
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi Studijskog centra socijalnog rada sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet preko PID-a i sha256."
+    },
     "rules": {
       "font": [
         "Times New Roman",
@@ -11386,5 +11551,889 @@
     "catalogPrograms": [
       "Diplomski studiji Grafičkog fakulteta"
     ]
+  },
+  {
+    "id": "arh-doktorski",
+    "unitId": "arh",
+    "programs": [
+      "Doktorski studij Arhitektonskog fakulteta"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "profileLabel": "Arhitektonski fakultet, doktorski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireA4": true,
+      "requirePageNumbers": true
+    },
+    "facts": [],
+    "note": "Doktorsko oblikovanje delegirano na sveucilisni DR.SC.-08 predlozak; pravila preuzeta iz njega.",
+    "sources": [
+      {
+        "title": "Upute za oblikovanje doktorskog rada (Obrazac DR.SC.-08)",
+        "url": "https://www.unizg.hr/nc/vijest/article/obrasci-za-doktorski-studij/"
+      }
+    ],
+    "sourceHierarchy": [
+      "Sveucilisni DR.SC.-08 (unizg-drsc08-doktorski)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "format papira (A4)",
+      "numeracija stranica"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "efzg-doktorski",
+    "unitId": "efzg",
+    "programs": [
+      "Doktorski studij Ekonomskog fakulteta"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "profileLabel": "Ekonomski fakultet, doktorski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireA4": true,
+      "requirePageNumbers": true
+    },
+    "facts": [],
+    "note": "Doktorsko oblikovanje delegirano na sveucilisni DR.SC.-08 predlozak; pravila preuzeta iz njega.",
+    "sources": [
+      {
+        "title": "Upute za oblikovanje doktorskog rada (Obrazac DR.SC.-08)",
+        "url": "https://www.unizg.hr/nc/vijest/article/obrasci-za-doktorski-studij/"
+      }
+    ],
+    "sourceHierarchy": [
+      "Sveucilisni DR.SC.-08 (unizg-drsc08-doktorski)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "format papira (A4)",
+      "numeracija stranica"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "erf-doktorski",
+    "unitId": "erf",
+    "programs": [
+      "Doktorski studij Edukacijsko-rehabilitacijskog fakulteta"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "profileLabel": "Edukacijsko-rehabilitacijski fakultet, doktorski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireA4": true,
+      "requirePageNumbers": true
+    },
+    "facts": [],
+    "note": "Doktorsko oblikovanje delegirano na sveucilisni DR.SC.-08 predlozak; pravila preuzeta iz njega.",
+    "sources": [
+      {
+        "title": "Upute za oblikovanje doktorskog rada (Obrazac DR.SC.-08)",
+        "url": "https://www.unizg.hr/nc/vijest/article/obrasci-za-doktorski-studij/"
+      }
+    ],
+    "sourceHierarchy": [
+      "Sveucilisni DR.SC.-08 (unizg-drsc08-doktorski)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "format papira (A4)",
+      "numeracija stranica"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "fbf-doktorski",
+    "unitId": "fbf",
+    "programs": [
+      "Doktorski studij Farmaceutsko-biokemijskog fakulteta"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "profileLabel": "Farmaceutsko-biokemijski fakultet, doktorski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireA4": true,
+      "requirePageNumbers": true
+    },
+    "facts": [],
+    "note": "Doktorsko oblikovanje delegirano na sveucilisni DR.SC.-08 predlozak; pravila preuzeta iz njega.",
+    "sources": [
+      {
+        "title": "Upute za oblikovanje doktorskog rada (Obrazac DR.SC.-08)",
+        "url": "https://www.unizg.hr/nc/vijest/article/obrasci-za-doktorski-studij/"
+      }
+    ],
+    "sourceHierarchy": [
+      "Sveucilisni DR.SC.-08 (unizg-drsc08-doktorski)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "format papira (A4)",
+      "numeracija stranica"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "ffrz-doktorski",
+    "unitId": "ffrz",
+    "programs": [
+      "Doktorski studij Fakulteta filozofije i religijskih znanosti"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "profileLabel": "Fakultet filozofije i religijskih znanosti, doktorski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireA4": true,
+      "requirePageNumbers": true
+    },
+    "facts": [],
+    "note": "Doktorsko oblikovanje delegirano na sveucilisni DR.SC.-08 predlozak; pravila preuzeta iz njega.",
+    "sources": [
+      {
+        "title": "Upute za oblikovanje doktorskog rada (Obrazac DR.SC.-08)",
+        "url": "https://www.unizg.hr/nc/vijest/article/obrasci-za-doktorski-studij/"
+      }
+    ],
+    "sourceHierarchy": [
+      "Sveucilisni DR.SC.-08 (unizg-drsc08-doktorski)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "format papira (A4)",
+      "numeracija stranica"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "fhs-doktorski",
+    "unitId": "fhs",
+    "programs": [
+      "Doktorski studij Fakulteta hrvatskih studija"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "profileLabel": "Fakultet hrvatskih studija, doktorski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireA4": true,
+      "requirePageNumbers": true
+    },
+    "facts": [],
+    "note": "Doktorsko oblikovanje delegirano na sveucilisni DR.SC.-08 predlozak; pravila preuzeta iz njega.",
+    "sources": [
+      {
+        "title": "Upute za oblikovanje doktorskog rada (Obrazac DR.SC.-08)",
+        "url": "https://www.unizg.hr/nc/vijest/article/obrasci-za-doktorski-studij/"
+      }
+    ],
+    "sourceHierarchy": [
+      "Sveucilisni DR.SC.-08 (unizg-drsc08-doktorski)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "format papira (A4)",
+      "numeracija stranica"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "fkit-doktorski",
+    "unitId": "fkit",
+    "programs": [
+      "Doktorski studij Fakulteta kemijskog inženjerstva i tehnologije"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "profileLabel": "Fakultet kemijskog inzenjerstva i tehnologije, doktorski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireA4": true,
+      "requirePageNumbers": true
+    },
+    "facts": [],
+    "note": "Doktorsko oblikovanje delegirano na sveucilisni DR.SC.-08 predlozak; pravila preuzeta iz njega.",
+    "sources": [
+      {
+        "title": "Upute za oblikovanje doktorskog rada (Obrazac DR.SC.-08)",
+        "url": "https://www.unizg.hr/nc/vijest/article/obrasci-za-doktorski-studij/"
+      }
+    ],
+    "sourceHierarchy": [
+      "Sveucilisni DR.SC.-08 (unizg-drsc08-doktorski)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "format papira (A4)",
+      "numeracija stranica"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "fsb-doktorski",
+    "unitId": "fsb",
+    "programs": [
+      "Doktorski studij Fakulteta strojarstva i brodogradnje"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "profileLabel": "Fakultet strojarstva i brodogradnje, doktorski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireA4": true,
+      "requirePageNumbers": true
+    },
+    "facts": [],
+    "note": "Doktorsko oblikovanje delegirano na sveucilisni DR.SC.-08 predlozak; pravila preuzeta iz njega.",
+    "sources": [
+      {
+        "title": "Upute za oblikovanje doktorskog rada (Obrazac DR.SC.-08)",
+        "url": "https://www.unizg.hr/nc/vijest/article/obrasci-za-doktorski-studij/"
+      }
+    ],
+    "sourceHierarchy": [
+      "Sveucilisni DR.SC.-08 (unizg-drsc08-doktorski)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "format papira (A4)",
+      "numeracija stranica"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "grad-doktorski",
+    "unitId": "grad",
+    "programs": [
+      "Doktorski studij Građevinskog fakulteta"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "profileLabel": "Gradevinski fakultet, doktorski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireA4": true,
+      "requirePageNumbers": true
+    },
+    "facts": [],
+    "note": "Doktorsko oblikovanje delegirano na sveucilisni DR.SC.-08 predlozak; pravila preuzeta iz njega.",
+    "sources": [
+      {
+        "title": "Upute za oblikovanje doktorskog rada (Obrazac DR.SC.-08)",
+        "url": "https://www.unizg.hr/nc/vijest/article/obrasci-za-doktorski-studij/"
+      }
+    ],
+    "sourceHierarchy": [
+      "Sveucilisni DR.SC.-08 (unizg-drsc08-doktorski)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "format papira (A4)",
+      "numeracija stranica"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "grf-doktorski",
+    "unitId": "grf",
+    "programs": [
+      "Doktorski studij Grafičkog fakulteta"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "profileLabel": "Graficki fakultet, doktorski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireA4": true,
+      "requirePageNumbers": true
+    },
+    "facts": [],
+    "note": "Doktorsko oblikovanje delegirano na sveucilisni DR.SC.-08 predlozak; pravila preuzeta iz njega.",
+    "sources": [
+      {
+        "title": "Upute za oblikovanje doktorskog rada (Obrazac DR.SC.-08)",
+        "url": "https://www.unizg.hr/nc/vijest/article/obrasci-za-doktorski-studij/"
+      }
+    ],
+    "sourceHierarchy": [
+      "Sveucilisni DR.SC.-08 (unizg-drsc08-doktorski)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "format papira (A4)",
+      "numeracija stranica"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "kbf-doktorski",
+    "unitId": "kbf",
+    "programs": [
+      "Doktorski studij Katolickog bogoslovnog fakulteta"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "profileLabel": "Katolicki bogoslovni fakultet, doktorski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireA4": true,
+      "requirePageNumbers": true
+    },
+    "facts": [],
+    "note": "Doktorsko oblikovanje delegirano na sveucilisni DR.SC.-08 predlozak; pravila preuzeta iz njega.",
+    "sources": [
+      {
+        "title": "Upute za oblikovanje doktorskog rada (Obrazac DR.SC.-08)",
+        "url": "https://www.unizg.hr/nc/vijest/article/obrasci-za-doktorski-studij/"
+      }
+    ],
+    "sourceHierarchy": [
+      "Sveucilisni DR.SC.-08 (unizg-drsc08-doktorski)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "format papira (A4)",
+      "numeracija stranica"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "muza-doktorski",
+    "unitId": "muza",
+    "programs": [
+      "Doktorski studij Muzičke akademije"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "profileLabel": "Muzicka akademija, doktorski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireA4": true,
+      "requirePageNumbers": true
+    },
+    "facts": [],
+    "note": "Doktorsko oblikovanje delegirano na sveucilisni DR.SC.-08 predlozak; pravila preuzeta iz njega.",
+    "sources": [
+      {
+        "title": "Upute za oblikovanje doktorskog rada (Obrazac DR.SC.-08)",
+        "url": "https://www.unizg.hr/nc/vijest/article/obrasci-za-doktorski-studij/"
+      }
+    ],
+    "sourceHierarchy": [
+      "Sveucilisni DR.SC.-08 (unizg-drsc08-doktorski)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "format papira (A4)",
+      "numeracija stranica"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "pbf-doktorski",
+    "unitId": "pbf",
+    "programs": [
+      "Doktorski studij Prehrambeno-biotehnološkog fakulteta"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "profileLabel": "Prehrambeno-biotehnoloski fakultet, doktorski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireA4": true,
+      "requirePageNumbers": true
+    },
+    "facts": [],
+    "note": "Doktorsko oblikovanje delegirano na sveucilisni DR.SC.-08 predlozak; pravila preuzeta iz njega.",
+    "sources": [
+      {
+        "title": "Upute za oblikovanje doktorskog rada (Obrazac DR.SC.-08)",
+        "url": "https://www.unizg.hr/nc/vijest/article/obrasci-za-doktorski-studij/"
+      }
+    ],
+    "sourceHierarchy": [
+      "Sveucilisni DR.SC.-08 (unizg-drsc08-doktorski)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "format papira (A4)",
+      "numeracija stranica"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "sfzg-doktorski",
+    "unitId": "sfzg",
+    "programs": [
+      "Doktorski studij Stomatološkog fakulteta"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "profileLabel": "Stomatoloski fakultet, doktorski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireA4": true,
+      "requirePageNumbers": true
+    },
+    "facts": [],
+    "note": "Doktorsko oblikovanje delegirano na sveucilisni DR.SC.-08 predlozak; pravila preuzeta iz njega.",
+    "sources": [
+      {
+        "title": "Upute za oblikovanje doktorskog rada (Obrazac DR.SC.-08)",
+        "url": "https://www.unizg.hr/nc/vijest/article/obrasci-za-doktorski-studij/"
+      }
+    ],
+    "sourceHierarchy": [
+      "Sveucilisni DR.SC.-08 (unizg-drsc08-doktorski)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "format papira (A4)",
+      "numeracija stranica"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "ttf-doktorski",
+    "unitId": "ttf",
+    "programs": [
+      "Doktorski studij Tekstilno-tehnološkog fakulteta"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "profileLabel": "Tekstilno-tehnoloski fakultet, doktorski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireA4": true,
+      "requirePageNumbers": true
+    },
+    "facts": [],
+    "note": "Doktorsko oblikovanje delegirano na sveucilisni DR.SC.-08 predlozak; pravila preuzeta iz njega.",
+    "sources": [
+      {
+        "title": "Upute za oblikovanje doktorskog rada (Obrazac DR.SC.-08)",
+        "url": "https://www.unizg.hr/nc/vijest/article/obrasci-za-doktorski-studij/"
+      }
+    ],
+    "sourceHierarchy": [
+      "Sveucilisni DR.SC.-08 (unizg-drsc08-doktorski)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "format papira (A4)",
+      "numeracija stranica"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "ufzg-doktorski",
+    "unitId": "ufzg",
+    "programs": [
+      "Doktorski studij Učiteljskog fakulteta"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "profileLabel": "Uciteljski fakultet, doktorski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireA4": true,
+      "requirePageNumbers": true
+    },
+    "facts": [],
+    "note": "Doktorsko oblikovanje delegirano na sveucilisni DR.SC.-08 predlozak; pravila preuzeta iz njega.",
+    "sources": [
+      {
+        "title": "Upute za oblikovanje doktorskog rada (Obrazac DR.SC.-08)",
+        "url": "https://www.unizg.hr/nc/vijest/article/obrasci-za-doktorski-studij/"
+      }
+    ],
+    "sourceHierarchy": [
+      "Sveucilisni DR.SC.-08 (unizg-drsc08-doktorski)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "format papira (A4)",
+      "numeracija stranica"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "vef-doktorski",
+    "unitId": "vef",
+    "programs": [
+      "Doktorski studij Veterinarskog fakulteta"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "profileLabel": "Veterinarski fakultet, doktorski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireA4": true,
+      "requirePageNumbers": true
+    },
+    "facts": [],
+    "note": "Doktorsko oblikovanje delegirano na sveucilisni DR.SC.-08 predlozak; pravila preuzeta iz njega.",
+    "sources": [
+      {
+        "title": "Upute za oblikovanje doktorskog rada (Obrazac DR.SC.-08)",
+        "url": "https://www.unizg.hr/nc/vijest/article/obrasci-za-doktorski-studij/"
+      }
+    ],
+    "sourceHierarchy": [
+      "Sveucilisni DR.SC.-08 (unizg-drsc08-doktorski)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "format papira (A4)",
+      "numeracija stranica"
+    ],
+    "advisoryScope": []
   }
 ]

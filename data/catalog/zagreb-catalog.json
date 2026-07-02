@@ -23,6 +23,7 @@
           "Arhitektura i urbanizam",
           "Dizajn",
           "Diplomski studiji Arhitektonskog fakulteta",
+          "Doktorski studij Arhitektonskog fakulteta",
           "Opći profil fakulteta"
         ],
         "status": "generic"
@@ -36,6 +37,7 @@
           "Logopedija",
           "Socijalna pedagogija",
           "Diplomski studiji Edukacijsko-rehabilitacijskog fakulteta",
+          "Doktorski studij Edukacijsko-rehabilitacijskog fakulteta",
           "Opći profil fakulteta"
         ],
         "status": "research"
@@ -51,6 +53,7 @@
           "Sveučilišni specijalistički studiji",
           "Prijediplomski studiji Ekonomskog fakulteta (zavrsni rad)",
           "Diplomski studiji Ekonomskog fakulteta",
+          "Doktorski studij Ekonomskog fakulteta",
           "Opći profil fakulteta"
         ],
         "status": "research"
@@ -78,6 +81,7 @@
           "Religijske znanosti",
           "Prijediplomski studiji Fakulteta filozofije i religijskih znanosti (zavrsni rad)",
           "Diplomski studiji Fakulteta filozofije i religijskih znanosti",
+          "Doktorski studij Fakulteta filozofije i religijskih znanosti",
           "Opći profil fakulteta"
         ],
         "status": "generic"
@@ -94,6 +98,7 @@
           "Kroatologija",
           "Prijediplomski studiji Fakulteta hrvatskih studija (zavrsni rad)",
           "Diplomski studiji Fakulteta hrvatskih studija",
+          "Doktorski studij Fakulteta hrvatskih studija",
           "Opći profil fakulteta"
         ],
         "status": "partial"
@@ -108,6 +113,7 @@
           "Ekoinženjerstvo",
           "Diplomski studiji Fakulteta kemijskog inženjerstva i tehnologije",
           "Prijediplomski studiji Fakulteta kemijskog inženjerstva i tehnologije (zavrsni rad)",
+          "Doktorski studij Fakulteta kemijskog inženjerstva i tehnologije",
           "Opći profil fakulteta"
         ],
         "status": "generic"
@@ -158,6 +164,7 @@
           "Zrakoplovno inženjerstvo i svemirska tehnika",
           "Diplomski studiji Fakulteta strojarstva i brodogradnje",
           "Prijediplomski studiji Fakulteta strojarstva i brodogradnje (zavrsni rad)",
+          "Doktorski studij Fakulteta strojarstva i brodogradnje",
           "Opći profil fakulteta"
         ],
         "status": "partial"
@@ -183,6 +190,7 @@
           "Farmacija",
           "Medicinska biokemija",
           "Poslijediplomski specijalisticki studiji Farmaceutsko-biokemijskog fakulteta",
+          "Doktorski studij Farmaceutsko-biokemijskog fakulteta",
           "Opći profil fakulteta"
         ],
         "status": "generic"
@@ -231,6 +239,7 @@
           "Građevinarstvo",
           "Diplomski studiji Građevinskog fakulteta",
           "Prijediplomski studiji Građevinskog fakulteta (zavrsni rad)",
+          "Doktorski studij Građevinskog fakulteta",
           "Opći profil fakulteta"
         ],
         "status": "generic"
@@ -244,6 +253,7 @@
           "Dizajn grafičkih proizvoda",
           "Prijediplomski studiji Grafičkog fakulteta (zavrsni rad)",
           "Diplomski studiji Grafičkog fakulteta",
+          "Doktorski studij Grafičkog fakulteta",
           "Opći profil fakulteta"
         ],
         "status": "generic"
@@ -257,6 +267,7 @@
           "Religijska pedagogija i katehetika",
           "Prijediplomski studiji Katolickog bogoslovnog fakulteta (zavrsni rad)",
           "Diplomski studiji Katolickog bogoslovnog fakulteta",
+          "Doktorski studij Katolickog bogoslovnog fakulteta",
           "Opći profil fakulteta"
         ],
         "status": "generic"
@@ -328,6 +339,7 @@
           "Biotehnologija",
           "Nutricionizam",
           "Diplomski studiji Prehrambeno-biotehnološkog fakulteta",
+          "Doktorski studij Prehrambeno-biotehnološkog fakulteta",
           "Opći profil fakulteta"
         ],
         "status": "generic"
@@ -368,6 +380,7 @@
         "programs": [
           "Dentalna medicina",
           "Diplomski studiji Stomatološkog fakulteta",
+          "Doktorski studij Stomatološkog fakulteta",
           "Opći profil fakulteta"
         ],
         "status": "generic"
@@ -381,6 +394,7 @@
           "Tekstilni i modni dizajn",
           "Diplomski studiji Tekstilno-tehnološkog fakulteta",
           "Prijediplomski studiji Tekstilno-tehnološkog fakulteta (zavrsni rad)",
+          "Doktorski studij Tekstilno-tehnološkog fakulteta",
           "Opći profil fakulteta"
         ],
         "status": "generic"
@@ -394,6 +408,7 @@
           "Rani i predškolski odgoj i obrazovanje",
           "Prijediplomski studiji Učiteljskog fakulteta (zavrsni rad)",
           "Diplomski studiji Učiteljskog fakulteta",
+          "Doktorski studij Učiteljskog fakulteta",
           "Opći profil fakulteta"
         ],
         "status": "verified"
@@ -405,6 +420,7 @@
         "programs": [
           "Veterinarska medicina",
           "Diplomski studiji Veterinarskog fakulteta Sveucilista u Zagrebu",
+          "Doktorski studij Veterinarskog fakulteta",
           "Opći profil fakulteta"
         ],
         "status": "generic"
@@ -453,6 +469,7 @@
           "Muzikologija",
           "Glazbena pedagogija",
           "Diplomski studiji Muzičke akademije",
+          "Doktorski studij Muzičke akademije",
           "Opći profil akademije"
         ],
         "status": "generic"

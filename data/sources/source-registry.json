@@ -1074,5 +1074,18 @@
     "validityClass": "stable",
     "lastChecked": "2026-07-02",
     "note": "Uputa za izradu diplomskog rada, Prilog 3 uz Pravilnik iz 2012. (Word .doc, spremljen 13.3.2012). Ovo je tekstualni izvor kojeg nije bilo pri prvom portu (Prilog 3 u PDF-u Pravilnika je skeniran); .doc verzija s obrasci stranice se cisto ekstrahira antiwordom (-m UTF-8, dijakritika ispravna). Sadrzi konkretna imperativna pravila oblikovanja u odjeljku Postavke stranice (Pismo Times New Roman ili Arial uz obveznu potporu hrvatskih znakova, velicina 12 tocaka, prored 1,5, margine lijeva/donja 3,5 cm i desna/gornja 2,5 cm) te A4 (treba), numeraciju svih stranica od uvoda (trebaju) i obvezni Sadrzaj (Rad mora sadrzavati). Svi scored citati verbatim grep-provjereni. Poravnanje je 'obostrano ili lijevo' (dopusta oboje) pa justify NIJE scored. Numericko citiranje po redoslijedu, uglate zagrade -> ieee, advisory (machineCheckable:false). Obvezne cjeline advisory (machineCheckable:false)."
+  },
+  {
+    "id": "unizg-drsc08-doktorski",
+    "kind": "guidelines",
+    "title": "Upute za oblikovanje doktorskog rada (Obrazac DR.SC.-08)",
+    "url": "https://www.unizg.hr/nc/vijest/article/obrasci-za-doktorski-studij/",
+    "publisher": "Sveuciliste u Zagrebu",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/unizg/unizg-drsc08-doktorski-oblikovanje.doc",
+    "snapshotHash": "a38f06f9e72255ade0010197674965fae0715f1f476044ba29a53886151f069c",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-02",
+    "note": "Sveucilisni predlozak za oblikovanje doktorskog rada; fakulteti izrijekom delegiraju oblikovanje disertacije na njega (potvrdjeno deepen-3)."
   }
 ]

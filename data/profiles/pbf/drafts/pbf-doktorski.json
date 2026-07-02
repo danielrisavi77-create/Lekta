@@ -1,0 +1,123 @@
+{
+  "profileId": "pbf-doktorski",
+  "entries": [
+    {
+      "ruleId": "pbf-doktorski--font",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Font",
+      "machineCheckable": true,
+      "authority": "general",
+      "sourceId": "unizg-drsc08-doktorski",
+      "sourcePage": "odjeljak 'Postavke stranice' (DR.SC.-08, Upute za oblikovanje doktorskog rada)",
+      "quote": "Postavke stranice: Font (tip pisma): obavezna potpora svih hrvatskih znakova - Times New Roman. Velicina pisma: 12 tipografskih tocaka. Prored: 1,5 redak.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "a38f06f9e72255ade0010197674965fae0715f1f476044ba29a53886151f069c",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "pbf-doktorski--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova",
+      "machineCheckable": true,
+      "authority": "general",
+      "sourceId": "unizg-drsc08-doktorski",
+      "sourcePage": "odjeljak 'Postavke stranice' (DR.SC.-08, Upute za oblikovanje doktorskog rada)",
+      "quote": "Postavke stranice: Font (tip pisma): obavezna potpora svih hrvatskih znakova - Times New Roman. Velicina pisma: 12 tipografskih tocaka. Prored: 1,5 redak.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "a38f06f9e72255ade0010197674965fae0715f1f476044ba29a53886151f069c",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "pbf-doktorski--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored",
+      "machineCheckable": true,
+      "authority": "general",
+      "sourceId": "unizg-drsc08-doktorski",
+      "sourcePage": "odjeljak 'Postavke stranice' (DR.SC.-08, Upute za oblikovanje doktorskog rada)",
+      "quote": "Postavke stranice: Font (tip pisma): obavezna potpora svih hrvatskih znakova - Times New Roman. Velicina pisma: 12 tipografskih tocaka. Prored: 1,5 redak.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "a38f06f9e72255ade0010197674965fae0715f1f476044ba29a53886151f069c",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "pbf-doktorski--margins",
+      "checkId": "margins",
+      "value": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "category": "format",
+      "label": "Margine",
+      "machineCheckable": true,
+      "authority": "general",
+      "sourceId": "unizg-drsc08-doktorski",
+      "sourcePage": "odjeljak 'Postavke stranice' (DR.SC.-08, Upute za oblikovanje doktorskog rada)",
+      "quote": "Lijeva i desna margina: 2,5 cm. Gornja i donja margina: 2,5 cm. Naslovnica ima drugacije margine.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "a38f06f9e72255ade0010197674965fae0715f1f476044ba29a53886151f069c",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "pbf-doktorski--paper-size",
+      "checkId": "paper-size",
+      "value": true,
+      "category": "format",
+      "label": "Format papira A4",
+      "machineCheckable": true,
+      "authority": "general",
+      "sourceId": "unizg-drsc08-doktorski",
+      "sourcePage": "odjeljak 'Postavke stranice' (DR.SC.-08, Upute za oblikovanje doktorskog rada)",
+      "quote": "Rad treba biti ispisan na papiru formata A4 (210x297).",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "a38f06f9e72255ade0010197674965fae0715f1f476044ba29a53886151f069c",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "pbf-doktorski--page-numbers",
+      "checkId": "page-numbers",
+      "value": true,
+      "category": "format",
+      "label": "Brojevi stranica",
+      "machineCheckable": true,
+      "authority": "general",
+      "sourceId": "unizg-drsc08-doktorski",
+      "sourcePage": "odjeljak 'Postavke stranice' (DR.SC.-08, Upute za oblikovanje doktorskog rada)",
+      "quote": "Stranice trebaju biti numerirane. Broje se sve stranice od Uvoda do kraja rada. Numeracija se pise u donjem desnom kutu.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "a38f06f9e72255ade0010197674965fae0715f1f476044ba29a53886151f069c",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null
+    }
+  ],
+  "generatedAt": "2026-07-02"
+}
