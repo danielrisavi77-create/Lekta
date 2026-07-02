@@ -8682,11 +8682,32 @@
     "profileLabel": "Grafički fakultet, zavrsni rad",
     "verifiedAt": "2026-07-02",
     "documentDate": null,
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/cluster5-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Format-provjere / no-crash ispravno se ponasaju na uskladjenom docx-u."
+      ],
+      "observedDeviations": [
+        "Otvoreni zavrsni (prijediplomski) rad nije nadjen u grf ZIR uzorku (prevladavaju diplomski); pravila identicna diplomskom, scalar size:12 -> [12]."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
       ],
-      "size": 12,
+      "size": [12],
       "spacing": 1.5,
       "margins": {
         "top": 2,
@@ -10279,11 +10300,32 @@
     "profileLabel": "Katolicki bogoslovni fakultet, zavrsni rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2017-06-01",
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/cluster5-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Format-provjere / no-crash ispravno se ponasaju na uskladjenom docx-u."
+      ],
+      "observedDeviations": [
+        "KBF radovi su na ZIR-u vrlo rijetki / restringirani; pravila identicna diplomskom, scalar size:12 -> [12]."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
       ],
-      "size": 12,
+      "size": [12],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -10399,11 +10441,32 @@
     "profileLabel": "Katolicki bogoslovni fakultet, diplomski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2017-06-01",
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/cluster5-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Format-provjere / no-crash ispravno se ponasaju na uskladjenom docx-u."
+      ],
+      "observedDeviations": [
+        "KBF radovi su na ZIR-u vrlo rijetki / restringirani (otvoreni fulltext nije pribavljen); pravila (TNR 12, prored 1,5, margine, chicago-notes) dokazana golden testom, scalar size:12 -> [12]."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
       ],
-      "size": 12,
+      "size": [12],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -10585,7 +10648,32 @@
     "profileLabel": "Muzička akademija, diplomski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2025-09-24",
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/cluster5-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Format-provjere / no-crash ispravno se ponasaju na uskladjenom docx-u."
+      ],
+      "observedDeviations": [
+        "Muzicka akademija: diplomski rad je pretezno umjetnicki/izvedbeni; sluzbeni izvor ne propisuje faculty-wide tipografiju (prazna pravila -> checkX:false, crash-fix). PDF-A4 validacija nije smislena."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
+      "checkFont": false,
+      "checkSize": false,
+      "checkSpacing": false,
+      "checkMargins": false,
       "recommendedCitation": "custom"
     },
     "facts": [
@@ -11763,6 +11851,27 @@
     "profileLabel": "Kinezioloski fakultet, doktorski rad / disertacija",
     "verifiedAt": "2026-07-02",
     "documentDate": "2025-02-07",
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/cluster5-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Format-provjere / no-crash ispravno se ponasaju na uskladjenom docx-u."
+      ],
+      "observedDeviations": [
+        "kif recentni radovi ne serviraju fulltext na ZIR-u (SPA-shell) pa otvorena disertacija nije pribavljena; harvard + puna pravila dokazana golden testom."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
@@ -11842,7 +11951,32 @@
     "profileLabel": "Medicinski fakultet, doktorski rad / disertacija",
     "verifiedAt": "2026-07-02",
     "documentDate": "2022-06-03",
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/cluster5-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Format-provjere / no-crash ispravno se ponasaju na uskladjenom docx-u."
+      ],
+      "observedDeviations": [
+        "mef-doktorski je tanak profil (scored samo A4/Sadrzaj/numeracija; font/margine nisu propisani -> checkX:false, crash-fix). Otvorena disertacija nije pribavljena; vancouver citation strop."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
+      "checkFont": false,
+      "checkSize": false,
+      "checkSpacing": false,
+      "checkMargins": false,
       "requireA4": true,
       "requirePageNumbers": true,
       "requireToc": true,
@@ -11974,12 +12108,61 @@
     "profileLabel": "Grafički fakultet, diplomski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2012-03-13",
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/cluster5-synthetic.test.ts) + 3 stvarna javna diplomska rada iz ZIR-a kroz byte-level PDF preflight.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2018,
+          2019
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "grf:3200",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 47,
+          "pageFormat": "A4",
+          "sha256": "030804f5ec30041ca8ab47c42ceda3c02f5c8970b612f5dfdd4ed765f6a8336f"
+        },
+        {
+          "pid": "grf:2900",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 73,
+          "pageFormat": "A4",
+          "sha256": "7a16d22fbe2c7faeb4950728c09e9481855faa780ff03ec4f257516635336842"
+        },
+        {
+          "pid": "grf:2800",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 62,
+          "pageFormat": "A4",
+          "sha256": "fceb42307199979e38b52a0e254c97e0b4cb99e2bfa1e328918ee467403c6447"
+        }
+      ],
+      "confirmed": [
+        "Uskladjeni sinteticki .docx prolazi grf format provjere (font, velicina, prored 1,5, margine, A4, Sadrzaj); scalar size:12 ispravljen na [12].",
+        "3 stvarna javna diplomska rada (grf:3200/2900/2800) prolaze byte-level PDF preflight: valjan nesifriran PDF, 100% stranica A4, viselistni, ugradjeni fontovi."
+      ],
+      "observedDeviations": [
+        "Citiranje ieee (numericko) je citation strop. U grf namespaceu prevladavaju diplomski radovi; otvoreni zavrsni (prijediplomski) rad nije nadjen."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet). Stvarni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet preko PID-a i sha256."
+    },
     "rules": {
       "font": [
         "Times New Roman",
         "Arial"
       ],
-      "size": 12,
+      "size": [12],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -12637,6 +12820,27 @@
     "profileLabel": "Graficki fakultet, doktorski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": null,
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/cluster5-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Format-provjere / no-crash ispravno se ponasaju na uskladjenom docx-u."
+      ],
+      "observedDeviations": [
+        "grf doktorske disertacije nisu nadjene kao otvoreni fulltext; DR.SC.-08 pravila dokazana golden testom."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
@@ -12689,6 +12893,27 @@
     "profileLabel": "Katolicki bogoslovni fakultet, doktorski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": null,
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/cluster5-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Format-provjere / no-crash ispravno se ponasaju na uskladjenom docx-u."
+      ],
+      "observedDeviations": [
+        "KBF doktorske disertacije nisu pribavljene kao otvoreni fulltext; DR.SC.-08 pravila dokazana golden testom."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
@@ -12741,6 +12966,27 @@
     "profileLabel": "Muzicka akademija, doktorski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": null,
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/cluster5-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Format-provjere / no-crash ispravno se ponasaju na uskladjenom docx-u."
+      ],
+      "observedDeviations": [
+        "Muzicka akademija doktorski: otvorena disertacija nije pribavljena kao standardni A4 tekst; DR.SC.-08 pravila dokazana golden testom."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
@@ -12793,6 +13039,27 @@
     "profileLabel": "Prehrambeno-biotehnoloski fakultet, doktorski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": null,
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/cluster5-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Format-provjere / no-crash ispravno se ponasaju na uskladjenom docx-u."
+      ],
+      "observedDeviations": [
+        "pbf doktorske disertacije nisu pribavljene kao otvoreni fulltext; DR.SC.-08 pravila dokazana golden testom."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
