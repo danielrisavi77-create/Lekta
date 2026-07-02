@@ -1,0 +1,295 @@
+{
+  "faculty": "ffri",
+  "institution": "uniri",
+  "institutionName": "Sveuciliste u Rijeci",
+  "unit": {
+    "id": "ffri",
+    "name": "Filozofski fakultet u Rijeci",
+    "family": "social",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Prijediplomski studiji FFRI (zavrsni rad)",
+    "Diplomski studiji FFRI"
+  ],
+  "sources": [
+    {
+      "id": "ffri-pravilnik-zavrsni-2023",
+      "kind": "regulation",
+      "title": "Pravilnik o zavrsnom radu (FFRI, 2023)",
+      "url": "https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2023.pdf",
+      "publisher": "Filozofski fakultet u Rijeci, Sveuciliste u Rijeci",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/ffri/ffri-pravilnik-zavrsni-2023.pdf",
+      "snapshotHash": "2d71ac3835d49f3108e477cc56adc062b0cf454b4522fefb0dd13e764d1cb277",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Tekstualni PDF; cl. 8 oblikovanje. Re-OCR za cist citat (glyph glitch na brojkama). Opseg u pravilu -> advisory."
+    },
+    {
+      "id": "ffri-pravilnik-diplomski-2023",
+      "kind": "regulation",
+      "title": "Pravilnik o diplomskom radu (FFRI, 2023)",
+      "url": "https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_diplomskom_radu-2023.pdf",
+      "publisher": "Filozofski fakultet u Rijeci, Sveuciliste u Rijeci",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/ffri/ffri-pravilnik-diplomski-2023.pdf",
+      "snapshotHash": "14a2c4b3bb48541e9573ca87532bfee262cf46ebb567891f39d9f4b9dc77bd24",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Tekstualni PDF; cl. 11 oblikovanje. Re-OCR za cist citat. Opseg u pravilu -> advisory."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "ffri-zavrsni",
+      "unitId": "ffri",
+      "programs": [
+        "Prijediplomski studiji FFRI (zavrsni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "FFRI, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Filozofski fakultet u Rijeci, Sveuciliste u Rijeci), citano izravno.",
+      "sources": [
+        {
+          "title": "Pravilnik o zavrsnom radu (FFRI, 2023)",
+          "url": "https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2023.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o zavrsnom radu (FFRI, 2023)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Margine",
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Obostrano poravnanje"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "ffri-diplomski",
+      "unitId": "ffri",
+      "programs": [
+        "Diplomski studiji FFRI"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "FFRI, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Filozofski fakultet u Rijeci, Sveuciliste u Rijeci), citano izravno.",
+      "sources": [
+        {
+          "title": "Pravilnik o diplomskom radu (FFRI, 2023)",
+          "url": "https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_diplomskom_radu-2023.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o diplomskom radu (FFRI, 2023)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Margine",
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Obostrano poravnanje"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-ffri-zavrsni--paper-size-verified-2026-07-02",
+      "ruleId": "ffri-zavrsni--paper-size",
+      "profileId": "ffri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffri-pravilnik-zavrsni-2023",
+      "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
+      "quote": "Završni rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanje: obostrano.",
+      "note": "Cross-institution port (Filozofski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-ffri-zavrsni--margins-verified-2026-07-02",
+      "ruleId": "ffri-zavrsni--margins",
+      "profileId": "ffri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffri-pravilnik-zavrsni-2023",
+      "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
+      "quote": "Završni rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanje: obostrano.",
+      "note": "Cross-institution port (Filozofski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-ffri-zavrsni--font-verified-2026-07-02",
+      "ruleId": "ffri-zavrsni--font",
+      "profileId": "ffri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffri-pravilnik-zavrsni-2023",
+      "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
+      "quote": "Završni rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanje: obostrano.",
+      "note": "Cross-institution port (Filozofski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-ffri-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "ffri-zavrsni--font-size",
+      "profileId": "ffri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffri-pravilnik-zavrsni-2023",
+      "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
+      "quote": "Završni rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanje: obostrano.",
+      "note": "Cross-institution port (Filozofski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-ffri-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "ffri-zavrsni--line-spacing",
+      "profileId": "ffri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffri-pravilnik-zavrsni-2023",
+      "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
+      "quote": "Završni rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanje: obostrano.",
+      "note": "Cross-institution port (Filozofski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-ffri-zavrsni--justify-verified-2026-07-02",
+      "ruleId": "ffri-zavrsni--justify",
+      "profileId": "ffri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffri-pravilnik-zavrsni-2023",
+      "sourcePage": "Članak 8. (oblikovanje zavrsnoga rada)",
+      "quote": "Završni rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanje: obostrano.",
+      "note": "Cross-institution port (Filozofski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-ffri-diplomski--paper-size-verified-2026-07-02",
+      "ruleId": "ffri-diplomski--paper-size",
+      "profileId": "ffri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffri-pravilnik-diplomski-2023",
+      "sourcePage": "Članak 11. (oblikovanje diplomskoga rada)",
+      "quote": "Diplomski rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanje: obostrano.",
+      "note": "Cross-institution port (Filozofski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-ffri-diplomski--margins-verified-2026-07-02",
+      "ruleId": "ffri-diplomski--margins",
+      "profileId": "ffri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffri-pravilnik-diplomski-2023",
+      "sourcePage": "Članak 11. (oblikovanje diplomskoga rada)",
+      "quote": "Diplomski rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanje: obostrano.",
+      "note": "Cross-institution port (Filozofski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-ffri-diplomski--font-verified-2026-07-02",
+      "ruleId": "ffri-diplomski--font",
+      "profileId": "ffri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffri-pravilnik-diplomski-2023",
+      "sourcePage": "Članak 11. (oblikovanje diplomskoga rada)",
+      "quote": "Diplomski rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanje: obostrano.",
+      "note": "Cross-institution port (Filozofski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-ffri-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "ffri-diplomski--font-size",
+      "profileId": "ffri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffri-pravilnik-diplomski-2023",
+      "sourcePage": "Članak 11. (oblikovanje diplomskoga rada)",
+      "quote": "Diplomski rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanje: obostrano.",
+      "note": "Cross-institution port (Filozofski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-ffri-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "ffri-diplomski--line-spacing",
+      "profileId": "ffri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffri-pravilnik-diplomski-2023",
+      "sourcePage": "Članak 11. (oblikovanje diplomskoga rada)",
+      "quote": "Diplomski rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanje: obostrano.",
+      "note": "Cross-institution port (Filozofski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-ffri-diplomski--justify-verified-2026-07-02",
+      "ruleId": "ffri-diplomski--justify",
+      "profileId": "ffri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffri-pravilnik-diplomski-2023",
+      "sourcePage": "Članak 11. (oblikovanje diplomskoga rada)",
+      "quote": "Diplomski rad otisnut je na papiru A4 formata (210 x 297 mm). Oblikovanje teksta mora biti kako slijedi: Margine: 2,5 cm; Font: Times New Roman; Veličina: 12pt, za fusnote 10pt; Prored: 1,5; Poravnanje: obostrano.",
+      "note": "Cross-institution port (Filozofski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    }
+  ]
+}

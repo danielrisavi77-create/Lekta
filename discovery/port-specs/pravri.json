@@ -1,0 +1,254 @@
+{
+  "faculty": "pravri",
+  "institution": "uniri",
+  "institutionName": "Sveuciliste u Rijeci",
+  "unit": {
+    "id": "pravri",
+    "name": "Pravni fakultet u Rijeci",
+    "family": "social",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Prijediplomski studij PRAVRI (zavrsni rad)",
+    "Diplomski studij PRAVRI"
+  ],
+  "sources": [
+    {
+      "id": "pravri-upute-radovi-2023",
+      "kind": "guidelines",
+      "title": "Upute za izradu studentskih pisanih radova (PRAVRI, rev. 2023)",
+      "url": "https://pravri.uniri.hr/files/Dokumenti/Pravilnici/uputeradovi.pdf",
+      "publisher": "Pravni fakultet u Rijeci, Sveuciliste u Rijeci",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/pravri/pravri-upute-radovi-2023.pdf",
+      "snapshotHash": "1943a0cbb283419c152c8d42da42080384c73297d2f69ea643ce1251d74b1e08",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Tekstualni PDF; Normativ stranice citano izravno. Citiranje fusnote -> advisory."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "pravri-zavrsni",
+      "unitId": "pravri",
+      "programs": [
+        "Prijediplomski studij PRAVRI (zavrsni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "PRAVRI, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Pravni fakultet u Rijeci, Sveuciliste u Rijeci), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za izradu studentskih pisanih radova (PRAVRI, rev. 2023)",
+          "url": "https://pravri.uniri.hr/files/Dokumenti/Pravilnici/uputeradovi.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu studentskih pisanih radova (PRAVRI, rev. 2023)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Margine",
+        "Prored",
+        "Vrsta slova",
+        "Velicina slova"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "pravri-diplomski",
+      "unitId": "pravri",
+      "programs": [
+        "Diplomski studij PRAVRI"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "PRAVRI, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Pravni fakultet u Rijeci, Sveuciliste u Rijeci), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za izradu studentskih pisanih radova (PRAVRI, rev. 2023)",
+          "url": "https://pravri.uniri.hr/files/Dokumenti/Pravilnici/uputeradovi.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu studentskih pisanih radova (PRAVRI, rev. 2023)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Margine",
+        "Prored",
+        "Vrsta slova",
+        "Velicina slova"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-pravri-zavrsni--paper-size-verified-2026-07-02",
+      "ruleId": "pravri-zavrsni--paper-size",
+      "profileId": "pravri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pravri-upute-radovi-2023",
+      "sourcePage": "poglavlje 2.1 Normativ stranice (str. 7)",
+      "quote": "Format papira: A4 (21,0 cm × 29,7 cm) Margine (praznine od tekstualnog sloga do ruba papira): 2,5 cm sa svih strana (gore, dolje, lijevo, desno) Prored teksta: 1,5 redak Vrsta slova: Times New Roman Veličina slova: 12 (tipografskih točaka).",
+      "note": "Cross-institution port (Pravni fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-pravri-zavrsni--margins-verified-2026-07-02",
+      "ruleId": "pravri-zavrsni--margins",
+      "profileId": "pravri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pravri-upute-radovi-2023",
+      "sourcePage": "poglavlje 2.1 Normativ stranice (str. 7)",
+      "quote": "Format papira: A4 (21,0 cm × 29,7 cm) Margine (praznine od tekstualnog sloga do ruba papira): 2,5 cm sa svih strana (gore, dolje, lijevo, desno) Prored teksta: 1,5 redak Vrsta slova: Times New Roman Veličina slova: 12 (tipografskih točaka).",
+      "note": "Cross-institution port (Pravni fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-pravri-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "pravri-zavrsni--line-spacing",
+      "profileId": "pravri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pravri-upute-radovi-2023",
+      "sourcePage": "poglavlje 2.1 Normativ stranice (str. 7)",
+      "quote": "Format papira: A4 (21,0 cm × 29,7 cm) Margine (praznine od tekstualnog sloga do ruba papira): 2,5 cm sa svih strana (gore, dolje, lijevo, desno) Prored teksta: 1,5 redak Vrsta slova: Times New Roman Veličina slova: 12 (tipografskih točaka).",
+      "note": "Cross-institution port (Pravni fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-pravri-zavrsni--font-verified-2026-07-02",
+      "ruleId": "pravri-zavrsni--font",
+      "profileId": "pravri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pravri-upute-radovi-2023",
+      "sourcePage": "poglavlje 2.1 Normativ stranice (str. 7)",
+      "quote": "Format papira: A4 (21,0 cm × 29,7 cm) Margine (praznine od tekstualnog sloga do ruba papira): 2,5 cm sa svih strana (gore, dolje, lijevo, desno) Prored teksta: 1,5 redak Vrsta slova: Times New Roman Veličina slova: 12 (tipografskih točaka).",
+      "note": "Cross-institution port (Pravni fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-pravri-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "pravri-zavrsni--font-size",
+      "profileId": "pravri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pravri-upute-radovi-2023",
+      "sourcePage": "poglavlje 2.1 Normativ stranice (str. 7)",
+      "quote": "Format papira: A4 (21,0 cm × 29,7 cm) Margine (praznine od tekstualnog sloga do ruba papira): 2,5 cm sa svih strana (gore, dolje, lijevo, desno) Prored teksta: 1,5 redak Vrsta slova: Times New Roman Veličina slova: 12 (tipografskih točaka).",
+      "note": "Cross-institution port (Pravni fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-pravri-diplomski--paper-size-verified-2026-07-02",
+      "ruleId": "pravri-diplomski--paper-size",
+      "profileId": "pravri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pravri-upute-radovi-2023",
+      "sourcePage": "poglavlje 2.1 Normativ stranice (str. 7)",
+      "quote": "Format papira: A4 (21,0 cm × 29,7 cm) Margine (praznine od tekstualnog sloga do ruba papira): 2,5 cm sa svih strana (gore, dolje, lijevo, desno) Prored teksta: 1,5 redak Vrsta slova: Times New Roman Veličina slova: 12 (tipografskih točaka).",
+      "note": "Cross-institution port (Pravni fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-pravri-diplomski--margins-verified-2026-07-02",
+      "ruleId": "pravri-diplomski--margins",
+      "profileId": "pravri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pravri-upute-radovi-2023",
+      "sourcePage": "poglavlje 2.1 Normativ stranice (str. 7)",
+      "quote": "Format papira: A4 (21,0 cm × 29,7 cm) Margine (praznine od tekstualnog sloga do ruba papira): 2,5 cm sa svih strana (gore, dolje, lijevo, desno) Prored teksta: 1,5 redak Vrsta slova: Times New Roman Veličina slova: 12 (tipografskih točaka).",
+      "note": "Cross-institution port (Pravni fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-pravri-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "pravri-diplomski--line-spacing",
+      "profileId": "pravri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pravri-upute-radovi-2023",
+      "sourcePage": "poglavlje 2.1 Normativ stranice (str. 7)",
+      "quote": "Format papira: A4 (21,0 cm × 29,7 cm) Margine (praznine od tekstualnog sloga do ruba papira): 2,5 cm sa svih strana (gore, dolje, lijevo, desno) Prored teksta: 1,5 redak Vrsta slova: Times New Roman Veličina slova: 12 (tipografskih točaka).",
+      "note": "Cross-institution port (Pravni fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-pravri-diplomski--font-verified-2026-07-02",
+      "ruleId": "pravri-diplomski--font",
+      "profileId": "pravri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pravri-upute-radovi-2023",
+      "sourcePage": "poglavlje 2.1 Normativ stranice (str. 7)",
+      "quote": "Format papira: A4 (21,0 cm × 29,7 cm) Margine (praznine od tekstualnog sloga do ruba papira): 2,5 cm sa svih strana (gore, dolje, lijevo, desno) Prored teksta: 1,5 redak Vrsta slova: Times New Roman Veličina slova: 12 (tipografskih točaka).",
+      "note": "Cross-institution port (Pravni fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-pravri-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "pravri-diplomski--font-size",
+      "profileId": "pravri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pravri-upute-radovi-2023",
+      "sourcePage": "poglavlje 2.1 Normativ stranice (str. 7)",
+      "quote": "Format papira: A4 (21,0 cm × 29,7 cm) Margine (praznine od tekstualnog sloga do ruba papira): 2,5 cm sa svih strana (gore, dolje, lijevo, desno) Prored teksta: 1,5 redak Vrsta slova: Times New Roman Veličina slova: 12 (tipografskih točaka).",
+      "note": "Cross-institution port (Pravni fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    }
+  ]
+}

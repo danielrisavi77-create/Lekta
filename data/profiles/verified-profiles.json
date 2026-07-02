@@ -15624,5 +15624,644 @@
       "Opseg (odjelno)",
       "Stil citiranja (odjelno)"
     ]
+  },
+  {
+    "id": "efri-zavrsni",
+    "unitId": "efri",
+    "programs": [
+      "Prijediplomski sveucilisni studij EFRI (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "EFRI, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 3,
+        "right": 3,
+        "bottom": 3,
+        "left": 3
+      },
+      "recommendedCitation": "harvard"
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Ekonomski fakultet u Rijeci, Sveuciliste u Rijeci), citano izravno.",
+    "sources": [
+      {
+        "title": "Pravilnik o zavrsnom radu na sveucilisnom prijediplomskom studiju (EFRI)",
+        "url": "https://arhiva.efri.uniri.hr/upload/Pravilnik_o_zavr%C5%A1nom_radu_na_sveucili%C5%A1nom_prjediplomskom_studiju_Ekonomskog_fakulteta_Sveucili%C5%A1ta_u_Rijeci.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnom radu na sveucilisnom prijediplomskom studiju (EFRI)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Margine",
+      "Opseg (najmanje 25 str.)",
+      "Stil citiranja (Harvard, autor-godina)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "efri-diplomski",
+    "unitId": "efri",
+    "programs": [
+      "Diplomski i integrirani studij EFRI"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "EFRI, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 3,
+        "right": 3,
+        "bottom": 3,
+        "left": 3
+      },
+      "recommendedCitation": "harvard"
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Ekonomski fakultet u Rijeci, Sveuciliste u Rijeci), citano izravno.",
+    "sources": [
+      {
+        "title": "Pravilnik o diplomskom radu na sveucilisnom diplomskom i integriranom studiju (EFRI)",
+        "url": "https://arhiva.efri.uniri.hr/upload/Pravilnik_o_diplomskom_radu_na_sveucili%C5%A1nom_diplomskom_i_integriranom_studiju_Ekonomskog_fakulteta_Sveucili%C5%A1ta_u_Rijeci.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o diplomskom radu na sveucilisnom diplomskom i integriranom studiju (EFRI)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Margine",
+      "Opseg (najmanje 40 str.)",
+      "Stil citiranja (Harvard, autor-godina)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "pravri-zavrsni",
+    "unitId": "pravri",
+    "programs": [
+      "Prijediplomski studij PRAVRI (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "PRAVRI, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Pravni fakultet u Rijeci, Sveuciliste u Rijeci), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za izradu studentskih pisanih radova (PRAVRI, rev. 2023)",
+        "url": "https://pravri.uniri.hr/files/Dokumenti/Pravilnici/uputeradovi.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu studentskih pisanih radova (PRAVRI, rev. 2023)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Prored",
+      "Vrsta slova",
+      "Velicina slova"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "pravri-diplomski",
+    "unitId": "pravri",
+    "programs": [
+      "Diplomski studij PRAVRI"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "PRAVRI, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Pravni fakultet u Rijeci, Sveuciliste u Rijeci), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za izradu studentskih pisanih radova (PRAVRI, rev. 2023)",
+        "url": "https://pravri.uniri.hr/files/Dokumenti/Pravilnici/uputeradovi.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu studentskih pisanih radova (PRAVRI, rev. 2023)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Prored",
+      "Vrsta slova",
+      "Velicina slova"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "ffri-zavrsni",
+    "unitId": "ffri",
+    "programs": [
+      "Prijediplomski studiji FFRI (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "FFRI, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Filozofski fakultet u Rijeci, Sveuciliste u Rijeci), citano izravno.",
+    "sources": [
+      {
+        "title": "Pravilnik o zavrsnom radu (FFRI, 2023)",
+        "url": "https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2023.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnom radu (FFRI, 2023)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "ffri-diplomski",
+    "unitId": "ffri",
+    "programs": [
+      "Diplomski studiji FFRI"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "FFRI, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Filozofski fakultet u Rijeci, Sveuciliste u Rijeci), citano izravno.",
+    "sources": [
+      {
+        "title": "Pravilnik o diplomskom radu (FFRI, 2023)",
+        "url": "https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_diplomskom_radu-2023.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o diplomskom radu (FFRI, 2023)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "pfri-zavrsni",
+    "unitId": "pfri",
+    "programs": [
+      "Prijediplomski studiji PFRI (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "PFRI, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Pomorski fakultet u Rijeci, Sveuciliste u Rijeci), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za izradu zavrsnog rada (PFRI, 26.3.2025)",
+        "url": "https://www.pfri.uniri.hr/web/hr/dokumenti/Upute.za.izradu.zavrsnog.rada.PFRI.26.3.2025.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu zavrsnog rada (PFRI, 26.3.2025)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Margine",
+      "Opseg (najmanje 30 str.)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "pfri-diplomski",
+    "unitId": "pfri",
+    "programs": [
+      "Diplomski studiji PFRI"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "PFRI, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Pomorski fakultet u Rijeci, Sveuciliste u Rijeci), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za izradu diplomskog rada (PFRI, 26.3.2025)",
+        "url": "https://www.pfri.uniri.hr/web/hr/dokumenti/Upute.za.izradu.diplomskoga.rada.PFRI.26.3.2025.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu diplomskog rada (PFRI, 26.3.2025)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Margine",
+      "Opseg (najmanje 50 str.)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "medri-farmacija-diplomski",
+    "unitId": "medri",
+    "programs": [
+      "Integrirani studij Farmacija (MEDRI, diplomski rad)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "MEDRI Farmacija, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "size": [
+        12
+      ],
+      "spacing": 2,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Medicinski fakultet u Rijeci, Sveuciliste u Rijeci), citano izravno.",
+    "sources": [
+      {
+        "title": "Naputak za prijavu, oblikovanje i izradu diplomskog rada - Farmacija (MEDRI, 2025)",
+        "url": "https://medri.uniri.hr/wp-content/uploads/2025/07/NAPUTAK-za-prijavu-i-izradu-diplomskog-rada_24.6.25-002.docx"
+      }
+    ],
+    "sourceHierarchy": [
+      "Naputak za prijavu, oblikovanje i izradu diplomskog rada - Farmacija (MEDRI, 2025)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Prored (dvostruki)",
+      "Velicina slova",
+      "Opseg (15-50 str.)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "fmtu-zavrsni",
+    "unitId": "fmtu",
+    "programs": [
+      "Prijediplomski studiji FMTU (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "FMTU, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet za menadzment u turizmu i ugostiteljstvu, Opatija, Sveuciliste u Rijeci), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za izradu zavrsnog rada (FMTU, 2025)",
+        "url": "https://fthm.uniri.hr/wp-content/uploads/2025/11/3-Upute-za-zavrsni-rad-2025-2.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu zavrsnog rada (FMTU, 2025)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Obostrano poravnanje",
+      "Prored"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "fmtu-diplomski",
+    "unitId": "fmtu",
+    "programs": [
+      "Diplomski studiji FMTU"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "FMTU, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet za menadzment u turizmu i ugostiteljstvu, Opatija, Sveuciliste u Rijeci), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za izradu diplomskog rada (FMTU, 2025)",
+        "url": "https://fthm.uniri.hr/wp-content/uploads/2025/11/5-Upute-za-diplomski-rad-2025-1.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu diplomskog rada (FMTU, 2025)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Obostrano poravnanje",
+      "Prored"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "inf-zavrsni",
+    "unitId": "inf",
+    "programs": [
+      "Prijediplomski studij INF (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "INF, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "requireA4": true
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet informatike i digitalnih tehnologija, Rijeka, Sveuciliste u Rijeci), citano izravno. Font/velicina/prored/margine/citiranje su u predlosku i Uputama iza Merlin logina -> nedostupni javno, izostavljeni.",
+    "sources": [
+      {
+        "title": "Pravilnik o zavrsnom radu (INF, 2024)",
+        "url": "https://www.inf.uniri.hr/images/dokumenti/pravilnici/Pravilnik_o_zavrsnom_radu_INF_2024.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnom radu (INF, 2024)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Opseg (najmanje 30 str.)"
+    ],
+    "advisoryScope": [
+      "Tipografija (iza logina)"
+    ]
+  },
+  {
+    "id": "inf-diplomski",
+    "unitId": "inf",
+    "programs": [
+      "Diplomski studij INF"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "INF, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "requireA4": true
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet informatike i digitalnih tehnologija, Rijeka, Sveuciliste u Rijeci), citano izravno. Font/velicina/prored/margine/citiranje su u predlosku i Uputama iza Merlin logina -> nedostupni javno, izostavljeni.",
+    "sources": [
+      {
+        "title": "Pravilnik o diplomskom radu (INF, 2024)",
+        "url": "https://www.inf.uniri.hr/images/dokumenti/pravilnici/Pravilnik_o_diplomskom_radu_INF_2024.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o diplomskom radu (INF, 2024)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Opseg (najmanje 40 str.)"
+    ],
+    "advisoryScope": [
+      "Tipografija (iza logina)"
+    ]
   }
 ]

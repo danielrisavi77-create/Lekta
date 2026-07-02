@@ -1,0 +1,349 @@
+{
+  "faculty": "efri",
+  "institution": "uniri",
+  "institutionName": "Sveuciliste u Rijeci",
+  "unit": {
+    "id": "efri",
+    "name": "Ekonomski fakultet u Rijeci",
+    "family": "social",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Prijediplomski sveucilisni studij EFRI (zavrsni rad)",
+    "Diplomski i integrirani studij EFRI"
+  ],
+  "sources": [
+    {
+      "id": "efri-pravilnik-zavrsni-2014",
+      "kind": "regulation",
+      "title": "Pravilnik o zavrsnom radu na sveucilisnom prijediplomskom studiju (EFRI)",
+      "url": "https://arhiva.efri.uniri.hr/upload/Pravilnik_o_zavr%C5%A1nom_radu_na_sveucili%C5%A1nom_prjediplomskom_studiju_Ekonomskog_fakulteta_Sveucili%C5%A1ta_u_Rijeci.pdf",
+      "publisher": "Ekonomski fakultet u Rijeci, Sveuciliste u Rijeci",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/efri/efri-pravilnik-zavrsni-2014.pdf",
+      "snapshotHash": "76d4b8d90d66a37b14e646251e7817fdfe622eb7b5314df24069c72e7ee683d2",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Skeniran, re-OCR nasim tesseractom (scripts/ocr_pdf.py) za cist citat."
+    },
+    {
+      "id": "efri-pravilnik-diplomski-2014",
+      "kind": "regulation",
+      "title": "Pravilnik o diplomskom radu na sveucilisnom diplomskom i integriranom studiju (EFRI)",
+      "url": "https://arhiva.efri.uniri.hr/upload/Pravilnik_o_diplomskom_radu_na_sveucili%C5%A1nom_diplomskom_i_integriranom_studiju_Ekonomskog_fakulteta_Sveucili%C5%A1ta_u_Rijeci.pdf",
+      "publisher": "Ekonomski fakultet u Rijeci, Sveuciliste u Rijeci",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/efri/efri-pravilnik-diplomski-2014.pdf",
+      "snapshotHash": "192ca2724fb11f1fd4778b27f1245883fc74ded0dae2e0887a35b921688f4825",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Skeniran, re-OCR nasim tesseractom."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "efri-zavrsni",
+      "unitId": "efri",
+      "programs": [
+        "Prijediplomski sveucilisni studij EFRI (zavrsni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "EFRI, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "requireA4": true,
+        "margins": {
+          "top": 3,
+          "right": 3,
+          "bottom": 3,
+          "left": 3
+        },
+        "recommendedCitation": "harvard"
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Ekonomski fakultet u Rijeci, Sveuciliste u Rijeci), citano izravno.",
+      "sources": [
+        {
+          "title": "Pravilnik o zavrsnom radu na sveucilisnom prijediplomskom studiju (EFRI)",
+          "url": "https://arhiva.efri.uniri.hr/upload/Pravilnik_o_zavr%C5%A1nom_radu_na_sveucili%C5%A1nom_prjediplomskom_studiju_Ekonomskog_fakulteta_Sveucili%C5%A1ta_u_Rijeci.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o zavrsnom radu na sveucilisnom prijediplomskom studiju (EFRI)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Obostrano poravnanje",
+        "Margine",
+        "Opseg (najmanje 25 str.)",
+        "Stil citiranja (Harvard, autor-godina)"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "efri-diplomski",
+      "unitId": "efri",
+      "programs": [
+        "Diplomski i integrirani studij EFRI"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "EFRI, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "requireA4": true,
+        "margins": {
+          "top": 3,
+          "right": 3,
+          "bottom": 3,
+          "left": 3
+        },
+        "recommendedCitation": "harvard"
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Ekonomski fakultet u Rijeci, Sveuciliste u Rijeci), citano izravno.",
+      "sources": [
+        {
+          "title": "Pravilnik o diplomskom radu na sveucilisnom diplomskom i integriranom studiju (EFRI)",
+          "url": "https://arhiva.efri.uniri.hr/upload/Pravilnik_o_diplomskom_radu_na_sveucili%C5%A1nom_diplomskom_i_integriranom_studiju_Ekonomskog_fakulteta_Sveucili%C5%A1ta_u_Rijeci.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o diplomskom radu na sveucilisnom diplomskom i integriranom studiju (EFRI)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Obostrano poravnanje",
+        "Margine",
+        "Opseg (najmanje 40 str.)",
+        "Stil citiranja (Harvard, autor-godina)"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-efri-zavrsni--paper-size-verified-2026-07-02",
+      "ruleId": "efri-zavrsni--paper-size",
+      "profileId": "efri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efri-pravilnik-zavrsni-2014",
+      "sourcePage": "Članak 6. st. 1",
+      "quote": "Opseg rada je minimalno 25 stranica A4 formata (bez naslovnice, sadržaja, literature, priloga i privitaka), a tekst je pisan u Times New Roman CE fontu, veličine 12, s jednim i pol (1,5) redom razmaka, poravnan s obje strane, pisan od početka reda (bez uvlačenja prvog retka odlomka), s marginama od 3 cm.",
+      "note": "Cross-institution port (Ekonomski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-efri-zavrsni--font-verified-2026-07-02",
+      "ruleId": "efri-zavrsni--font",
+      "profileId": "efri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efri-pravilnik-zavrsni-2014",
+      "sourcePage": "Članak 6. st. 1",
+      "quote": "Opseg rada je minimalno 25 stranica A4 formata (bez naslovnice, sadržaja, literature, priloga i privitaka), a tekst je pisan u Times New Roman CE fontu, veličine 12, s jednim i pol (1,5) redom razmaka, poravnan s obje strane, pisan od početka reda (bez uvlačenja prvog retka odlomka), s marginama od 3 cm.",
+      "note": "Cross-institution port (Ekonomski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-efri-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "efri-zavrsni--font-size",
+      "profileId": "efri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efri-pravilnik-zavrsni-2014",
+      "sourcePage": "Članak 6. st. 1",
+      "quote": "Opseg rada je minimalno 25 stranica A4 formata (bez naslovnice, sadržaja, literature, priloga i privitaka), a tekst je pisan u Times New Roman CE fontu, veličine 12, s jednim i pol (1,5) redom razmaka, poravnan s obje strane, pisan od početka reda (bez uvlačenja prvog retka odlomka), s marginama od 3 cm.",
+      "note": "Cross-institution port (Ekonomski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-efri-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "efri-zavrsni--line-spacing",
+      "profileId": "efri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efri-pravilnik-zavrsni-2014",
+      "sourcePage": "Članak 6. st. 1",
+      "quote": "Opseg rada je minimalno 25 stranica A4 formata (bez naslovnice, sadržaja, literature, priloga i privitaka), a tekst je pisan u Times New Roman CE fontu, veličine 12, s jednim i pol (1,5) redom razmaka, poravnan s obje strane, pisan od početka reda (bez uvlačenja prvog retka odlomka), s marginama od 3 cm.",
+      "note": "Cross-institution port (Ekonomski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-efri-zavrsni--justify-verified-2026-07-02",
+      "ruleId": "efri-zavrsni--justify",
+      "profileId": "efri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efri-pravilnik-zavrsni-2014",
+      "sourcePage": "Članak 6. st. 1",
+      "quote": "Opseg rada je minimalno 25 stranica A4 formata (bez naslovnice, sadržaja, literature, priloga i privitaka), a tekst je pisan u Times New Roman CE fontu, veličine 12, s jednim i pol (1,5) redom razmaka, poravnan s obje strane, pisan od početka reda (bez uvlačenja prvog retka odlomka), s marginama od 3 cm.",
+      "note": "Cross-institution port (Ekonomski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-efri-zavrsni--margins-verified-2026-07-02",
+      "ruleId": "efri-zavrsni--margins",
+      "profileId": "efri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efri-pravilnik-zavrsni-2014",
+      "sourcePage": "Članak 6. st. 1",
+      "quote": "Opseg rada je minimalno 25 stranica A4 formata (bez naslovnice, sadržaja, literature, priloga i privitaka), a tekst je pisan u Times New Roman CE fontu, veličine 12, s jednim i pol (1,5) redom razmaka, poravnan s obje strane, pisan od početka reda (bez uvlačenja prvog retka odlomka), s marginama od 3 cm.",
+      "note": "Cross-institution port (Ekonomski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-efri-zavrsni--page-count-verified-2026-07-02",
+      "ruleId": "efri-zavrsni--page-count",
+      "profileId": "efri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efri-pravilnik-zavrsni-2014",
+      "sourcePage": "Članak 6. st. 1",
+      "quote": "Opseg rada je minimalno 25 stranica A4 formata (bez naslovnice, sadržaja, literature, priloga i privitaka), a tekst je pisan u Times New Roman CE fontu, veličine 12, s jednim i pol (1,5) redom razmaka, poravnan s obje strane, pisan od početka reda (bez uvlačenja prvog retka odlomka), s marginama od 3 cm.",
+      "note": "Cross-institution port (Ekonomski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-efri-zavrsni--citation-style-verified-2026-07-02",
+      "ruleId": "efri-zavrsni--citation-style",
+      "profileId": "efri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efri-pravilnik-zavrsni-2014",
+      "sourcePage": "Članak 5.",
+      "quote": "Za citiranje doslovno preuzetih dijelova i parafraziranih dijelova teksta koristi se Harvardski sustav citiranja.",
+      "note": "Cross-institution port (Ekonomski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-efri-diplomski--paper-size-verified-2026-07-02",
+      "ruleId": "efri-diplomski--paper-size",
+      "profileId": "efri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efri-pravilnik-diplomski-2014",
+      "sourcePage": "Članak 6. st. 1",
+      "quote": "Opseg rada je minimalno 40 stranica A4 formata (bez naslovnice, sadržaja, literature, priloga i privitaka), a tekst je pisan u Times New Roman CE fontu, veličine 12, s jednim i pol (1,5) redom razmaka, poravnan s obje strane, pisan od početka reda (bez uvlačenja prvog retka odlomka), s marginama od 3 cm.",
+      "note": "Cross-institution port (Ekonomski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-efri-diplomski--font-verified-2026-07-02",
+      "ruleId": "efri-diplomski--font",
+      "profileId": "efri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efri-pravilnik-diplomski-2014",
+      "sourcePage": "Članak 6. st. 1",
+      "quote": "Opseg rada je minimalno 40 stranica A4 formata (bez naslovnice, sadržaja, literature, priloga i privitaka), a tekst je pisan u Times New Roman CE fontu, veličine 12, s jednim i pol (1,5) redom razmaka, poravnan s obje strane, pisan od početka reda (bez uvlačenja prvog retka odlomka), s marginama od 3 cm.",
+      "note": "Cross-institution port (Ekonomski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-efri-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "efri-diplomski--font-size",
+      "profileId": "efri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efri-pravilnik-diplomski-2014",
+      "sourcePage": "Članak 6. st. 1",
+      "quote": "Opseg rada je minimalno 40 stranica A4 formata (bez naslovnice, sadržaja, literature, priloga i privitaka), a tekst je pisan u Times New Roman CE fontu, veličine 12, s jednim i pol (1,5) redom razmaka, poravnan s obje strane, pisan od početka reda (bez uvlačenja prvog retka odlomka), s marginama od 3 cm.",
+      "note": "Cross-institution port (Ekonomski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-efri-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "efri-diplomski--line-spacing",
+      "profileId": "efri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efri-pravilnik-diplomski-2014",
+      "sourcePage": "Članak 6. st. 1",
+      "quote": "Opseg rada je minimalno 40 stranica A4 formata (bez naslovnice, sadržaja, literature, priloga i privitaka), a tekst je pisan u Times New Roman CE fontu, veličine 12, s jednim i pol (1,5) redom razmaka, poravnan s obje strane, pisan od početka reda (bez uvlačenja prvog retka odlomka), s marginama od 3 cm.",
+      "note": "Cross-institution port (Ekonomski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-efri-diplomski--justify-verified-2026-07-02",
+      "ruleId": "efri-diplomski--justify",
+      "profileId": "efri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efri-pravilnik-diplomski-2014",
+      "sourcePage": "Članak 6. st. 1",
+      "quote": "Opseg rada je minimalno 40 stranica A4 formata (bez naslovnice, sadržaja, literature, priloga i privitaka), a tekst je pisan u Times New Roman CE fontu, veličine 12, s jednim i pol (1,5) redom razmaka, poravnan s obje strane, pisan od početka reda (bez uvlačenja prvog retka odlomka), s marginama od 3 cm.",
+      "note": "Cross-institution port (Ekonomski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-efri-diplomski--margins-verified-2026-07-02",
+      "ruleId": "efri-diplomski--margins",
+      "profileId": "efri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efri-pravilnik-diplomski-2014",
+      "sourcePage": "Članak 6. st. 1",
+      "quote": "Opseg rada je minimalno 40 stranica A4 formata (bez naslovnice, sadržaja, literature, priloga i privitaka), a tekst je pisan u Times New Roman CE fontu, veličine 12, s jednim i pol (1,5) redom razmaka, poravnan s obje strane, pisan od početka reda (bez uvlačenja prvog retka odlomka), s marginama od 3 cm.",
+      "note": "Cross-institution port (Ekonomski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-efri-diplomski--page-count-verified-2026-07-02",
+      "ruleId": "efri-diplomski--page-count",
+      "profileId": "efri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efri-pravilnik-diplomski-2014",
+      "sourcePage": "Članak 6. st. 1",
+      "quote": "Opseg rada je minimalno 40 stranica A4 formata (bez naslovnice, sadržaja, literature, priloga i privitaka), a tekst je pisan u Times New Roman CE fontu, veličine 12, s jednim i pol (1,5) redom razmaka, poravnan s obje strane, pisan od početka reda (bez uvlačenja prvog retka odlomka), s marginama od 3 cm.",
+      "note": "Cross-institution port (Ekonomski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-efri-diplomski--citation-style-verified-2026-07-02",
+      "ruleId": "efri-diplomski--citation-style",
+      "profileId": "efri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efri-pravilnik-diplomski-2014",
+      "sourcePage": "Članak 5.",
+      "quote": "Za citiranje doslovno preuzetih dijelova i parafraziranih dijelova teksta koristi se Harvardski sustav citiranja.",
+      "note": "Cross-institution port (Ekonomski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    }
+  ]
+}

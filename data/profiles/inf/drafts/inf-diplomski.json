@@ -1,0 +1,46 @@
+{
+  "profileId": "inf-diplomski",
+  "entries": [
+    {
+      "ruleId": "inf-diplomski--paper-size",
+      "checkId": "paper-size",
+      "value": "A4",
+      "category": "format",
+      "label": "Format papira",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "inf-pravilnik-diplomski-2024",
+      "sourcePage": "Članak 11. (izgled i opremanje diplomskog rada)",
+      "quote": "Diplomski rad mora biti otisnut računalnim pisačem na papiru formata A4 (21 x 29,7 cm) i mora imati najmanje 40 stranica teksta bez priloga.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "4b95064c1ebf2c84ac7dc06168db83866d43e9ee280f02c7245808a6730097f2",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "inf-diplomski--page-count",
+      "checkId": "page-count",
+      "value": {
+        "min": 40
+      },
+      "category": "scope",
+      "label": "Opseg (najmanje 40 str.)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "inf-pravilnik-diplomski-2024",
+      "sourcePage": "Članak 11. (izgled i opremanje diplomskog rada)",
+      "quote": "Diplomski rad mora biti otisnut računalnim pisačem na papiru formata A4 (21 x 29,7 cm) i mora imati najmanje 40 stranica teksta bez priloga.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "4b95064c1ebf2c84ac7dc06168db83866d43e9ee280f02c7245808a6730097f2",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
+    }
+  ],
+  "generatedAt": "2026-07-02"
+}

@@ -1,0 +1,293 @@
+{
+  "faculty": "pfri",
+  "institution": "uniri",
+  "institutionName": "Sveuciliste u Rijeci",
+  "unit": {
+    "id": "pfri",
+    "name": "Pomorski fakultet u Rijeci",
+    "family": "stem",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Prijediplomski studiji PFRI (zavrsni rad)",
+    "Diplomski studiji PFRI"
+  ],
+  "sources": [
+    {
+      "id": "pfri-upute-zavrsni-2025",
+      "kind": "guidelines",
+      "title": "Upute za izradu zavrsnog rada (PFRI, 26.3.2025)",
+      "url": "https://www.pfri.uniri.hr/web/hr/dokumenti/Upute.za.izradu.zavrsnog.rada.PFRI.26.3.2025.pdf",
+      "publisher": "Pomorski fakultet u Rijeci, Sveuciliste u Rijeci",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/pfri/pfri-upute-zavrsni-2025.pdf",
+      "snapshotHash": "2b6ab8d65a527cce5338a9bdc26ab6b7c104027d74ffb86dedafafccdef25859",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Tekstualni PDF; pogl. 3 Tehnicke upute. Citiranje dvoopcijsko -> advisory."
+    },
+    {
+      "id": "pfri-upute-diplomski-2025",
+      "kind": "guidelines",
+      "title": "Upute za izradu diplomskog rada (PFRI, 26.3.2025)",
+      "url": "https://www.pfri.uniri.hr/web/hr/dokumenti/Upute.za.izradu.diplomskoga.rada.PFRI.26.3.2025.pdf",
+      "publisher": "Pomorski fakultet u Rijeci, Sveuciliste u Rijeci",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/pfri/pfri-upute-diplomski-2025.pdf",
+      "snapshotHash": "0af17e66e8e94799e830ab2583936afb4a5fa88da1fd4db51479616c2f2b8a1c",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Tekstualni PDF; pogl. 3 Tehnicke upute. Citiranje dvoopcijsko -> advisory."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "pfri-zavrsni",
+      "unitId": "pfri",
+      "programs": [
+        "Prijediplomski studiji PFRI (zavrsni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "PFRI, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 3
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Pomorski fakultet u Rijeci, Sveuciliste u Rijeci), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za izradu zavrsnog rada (PFRI, 26.3.2025)",
+          "url": "https://www.pfri.uniri.hr/web/hr/dokumenti/Upute.za.izradu.zavrsnog.rada.PFRI.26.3.2025.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu zavrsnog rada (PFRI, 26.3.2025)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Obostrano poravnanje",
+        "Margine",
+        "Opseg (najmanje 30 str.)"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "pfri-diplomski",
+      "unitId": "pfri",
+      "programs": [
+        "Diplomski studiji PFRI"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "PFRI, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 3
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Pomorski fakultet u Rijeci, Sveuciliste u Rijeci), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za izradu diplomskog rada (PFRI, 26.3.2025)",
+          "url": "https://www.pfri.uniri.hr/web/hr/dokumenti/Upute.za.izradu.diplomskoga.rada.PFRI.26.3.2025.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu diplomskog rada (PFRI, 26.3.2025)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Obostrano poravnanje",
+        "Margine",
+        "Opseg (najmanje 50 str.)"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-pfri-zavrsni--font-verified-2026-07-02",
+      "ruleId": "pfri-zavrsni--font",
+      "profileId": "pfri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pfri-upute-zavrsni-2025",
+      "sourcePage": "poglavlje 3. Tehnicke upute (str. 3)",
+      "quote": "Opseg završnog rada minimalno bi trebao iznositi 30 stranica. Tekst rada piše se u Times New Roman fontu, veličine 12, s proredom od 1,5 (jednim i pol redom razmaka), poravnan s obje strane, te s uvlačenjem prvog retka pasusa na 1,0 cm. Lijeva margina se podešava na 3,0 cm, a ostale margine na 2,5 cm.",
+      "note": "Cross-institution port (Pomorski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-pfri-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "pfri-zavrsni--font-size",
+      "profileId": "pfri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pfri-upute-zavrsni-2025",
+      "sourcePage": "poglavlje 3. Tehnicke upute (str. 3)",
+      "quote": "Opseg završnog rada minimalno bi trebao iznositi 30 stranica. Tekst rada piše se u Times New Roman fontu, veličine 12, s proredom od 1,5 (jednim i pol redom razmaka), poravnan s obje strane, te s uvlačenjem prvog retka pasusa na 1,0 cm. Lijeva margina se podešava na 3,0 cm, a ostale margine na 2,5 cm.",
+      "note": "Cross-institution port (Pomorski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-pfri-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "pfri-zavrsni--line-spacing",
+      "profileId": "pfri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pfri-upute-zavrsni-2025",
+      "sourcePage": "poglavlje 3. Tehnicke upute (str. 3)",
+      "quote": "Opseg završnog rada minimalno bi trebao iznositi 30 stranica. Tekst rada piše se u Times New Roman fontu, veličine 12, s proredom od 1,5 (jednim i pol redom razmaka), poravnan s obje strane, te s uvlačenjem prvog retka pasusa na 1,0 cm. Lijeva margina se podešava na 3,0 cm, a ostale margine na 2,5 cm.",
+      "note": "Cross-institution port (Pomorski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-pfri-zavrsni--justify-verified-2026-07-02",
+      "ruleId": "pfri-zavrsni--justify",
+      "profileId": "pfri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pfri-upute-zavrsni-2025",
+      "sourcePage": "poglavlje 3. Tehnicke upute (str. 3)",
+      "quote": "Opseg završnog rada minimalno bi trebao iznositi 30 stranica. Tekst rada piše se u Times New Roman fontu, veličine 12, s proredom od 1,5 (jednim i pol redom razmaka), poravnan s obje strane, te s uvlačenjem prvog retka pasusa na 1,0 cm. Lijeva margina se podešava na 3,0 cm, a ostale margine na 2,5 cm.",
+      "note": "Cross-institution port (Pomorski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-pfri-zavrsni--margins-verified-2026-07-02",
+      "ruleId": "pfri-zavrsni--margins",
+      "profileId": "pfri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pfri-upute-zavrsni-2025",
+      "sourcePage": "poglavlje 3. Tehnicke upute (str. 3)",
+      "quote": "Opseg završnog rada minimalno bi trebao iznositi 30 stranica. Tekst rada piše se u Times New Roman fontu, veličine 12, s proredom od 1,5 (jednim i pol redom razmaka), poravnan s obje strane, te s uvlačenjem prvog retka pasusa na 1,0 cm. Lijeva margina se podešava na 3,0 cm, a ostale margine na 2,5 cm.",
+      "note": "Cross-institution port (Pomorski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-pfri-zavrsni--page-count-verified-2026-07-02",
+      "ruleId": "pfri-zavrsni--page-count",
+      "profileId": "pfri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pfri-upute-zavrsni-2025",
+      "sourcePage": "poglavlje 3. Tehnicke upute (str. 3)",
+      "quote": "Opseg završnog rada minimalno bi trebao iznositi 30 stranica. Tekst rada piše se u Times New Roman fontu, veličine 12, s proredom od 1,5 (jednim i pol redom razmaka), poravnan s obje strane, te s uvlačenjem prvog retka pasusa na 1,0 cm. Lijeva margina se podešava na 3,0 cm, a ostale margine na 2,5 cm.",
+      "note": "Cross-institution port (Pomorski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-pfri-diplomski--font-verified-2026-07-02",
+      "ruleId": "pfri-diplomski--font",
+      "profileId": "pfri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pfri-upute-diplomski-2025",
+      "sourcePage": "poglavlje 3. Tehnicke upute (str. 3)",
+      "quote": "Opseg diplomskog rada minimalno bi trebao iznositi 50 stranica. Tekst rada piše se u Times New Roman fontu, veličine 12, s proredom od 1,5 (jednim i pol redom razmaka), poravnan s obje strane, te s uvlačenjem prvog retka pasusa na 1,0 cm. Lijeva margina se podešavana 3,0 cm, a ostale margine na 2,5 cm.",
+      "note": "Cross-institution port (Pomorski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-pfri-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "pfri-diplomski--font-size",
+      "profileId": "pfri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pfri-upute-diplomski-2025",
+      "sourcePage": "poglavlje 3. Tehnicke upute (str. 3)",
+      "quote": "Opseg diplomskog rada minimalno bi trebao iznositi 50 stranica. Tekst rada piše se u Times New Roman fontu, veličine 12, s proredom od 1,5 (jednim i pol redom razmaka), poravnan s obje strane, te s uvlačenjem prvog retka pasusa na 1,0 cm. Lijeva margina se podešavana 3,0 cm, a ostale margine na 2,5 cm.",
+      "note": "Cross-institution port (Pomorski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-pfri-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "pfri-diplomski--line-spacing",
+      "profileId": "pfri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pfri-upute-diplomski-2025",
+      "sourcePage": "poglavlje 3. Tehnicke upute (str. 3)",
+      "quote": "Opseg diplomskog rada minimalno bi trebao iznositi 50 stranica. Tekst rada piše se u Times New Roman fontu, veličine 12, s proredom od 1,5 (jednim i pol redom razmaka), poravnan s obje strane, te s uvlačenjem prvog retka pasusa na 1,0 cm. Lijeva margina se podešavana 3,0 cm, a ostale margine na 2,5 cm.",
+      "note": "Cross-institution port (Pomorski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-pfri-diplomski--justify-verified-2026-07-02",
+      "ruleId": "pfri-diplomski--justify",
+      "profileId": "pfri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pfri-upute-diplomski-2025",
+      "sourcePage": "poglavlje 3. Tehnicke upute (str. 3)",
+      "quote": "Opseg diplomskog rada minimalno bi trebao iznositi 50 stranica. Tekst rada piše se u Times New Roman fontu, veličine 12, s proredom od 1,5 (jednim i pol redom razmaka), poravnan s obje strane, te s uvlačenjem prvog retka pasusa na 1,0 cm. Lijeva margina se podešavana 3,0 cm, a ostale margine na 2,5 cm.",
+      "note": "Cross-institution port (Pomorski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-pfri-diplomski--margins-verified-2026-07-02",
+      "ruleId": "pfri-diplomski--margins",
+      "profileId": "pfri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pfri-upute-diplomski-2025",
+      "sourcePage": "poglavlje 3. Tehnicke upute (str. 3)",
+      "quote": "Opseg diplomskog rada minimalno bi trebao iznositi 50 stranica. Tekst rada piše se u Times New Roman fontu, veličine 12, s proredom od 1,5 (jednim i pol redom razmaka), poravnan s obje strane, te s uvlačenjem prvog retka pasusa na 1,0 cm. Lijeva margina se podešavana 3,0 cm, a ostale margine na 2,5 cm.",
+      "note": "Cross-institution port (Pomorski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-pfri-diplomski--page-count-verified-2026-07-02",
+      "ruleId": "pfri-diplomski--page-count",
+      "profileId": "pfri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pfri-upute-diplomski-2025",
+      "sourcePage": "poglavlje 3. Tehnicke upute (str. 3)",
+      "quote": "Opseg diplomskog rada minimalno bi trebao iznositi 50 stranica. Tekst rada piše se u Times New Roman fontu, veličine 12, s proredom od 1,5 (jednim i pol redom razmaka), poravnan s obje strane, te s uvlačenjem prvog retka pasusa na 1,0 cm. Lijeva margina se podešavana 3,0 cm, a ostale margine na 2,5 cm.",
+      "note": "Cross-institution port (Pomorski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    }
+  ]
+}

@@ -733,5 +733,80 @@
         "status": "generic"
       }
     ]
+  },
+  {
+    "id": "uniri",
+    "name": "Sveuciliste u Rijeci",
+    "units": [
+      {
+        "id": "efri",
+        "name": "Ekonomski fakultet u Rijeci",
+        "family": "social",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski sveucilisni studij EFRI (zavrsni rad)",
+          "Diplomski i integrirani studij EFRI"
+        ]
+      },
+      {
+        "id": "ffri",
+        "name": "Filozofski fakultet u Rijeci",
+        "family": "social",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski studiji FFRI (zavrsni rad)",
+          "Diplomski studiji FFRI"
+        ]
+      },
+      {
+        "id": "fmtu",
+        "name": "Fakultet za menadzment u turizmu i ugostiteljstvu, Opatija",
+        "family": "social",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski studiji FMTU (zavrsni rad)",
+          "Diplomski studiji FMTU"
+        ]
+      },
+      {
+        "id": "inf",
+        "name": "Fakultet informatike i digitalnih tehnologija, Rijeka",
+        "family": "stem",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski studij INF (zavrsni rad)",
+          "Diplomski studij INF"
+        ]
+      },
+      {
+        "id": "medri",
+        "name": "Medicinski fakultet u Rijeci",
+        "family": "biomed",
+        "status": "partial",
+        "programs": [
+          "Integrirani studij Farmacija (MEDRI, diplomski rad)"
+        ]
+      },
+      {
+        "id": "pfri",
+        "name": "Pomorski fakultet u Rijeci",
+        "family": "stem",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski studiji PFRI (zavrsni rad)",
+          "Diplomski studiji PFRI"
+        ]
+      },
+      {
+        "id": "pravri",
+        "name": "Pravni fakultet u Rijeci",
+        "family": "social",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski studij PRAVRI (zavrsni rad)",
+          "Diplomski studij PRAVRI"
+        ]
+      }
+    ]
   }
 ]

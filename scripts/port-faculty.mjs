@@ -21,6 +21,8 @@
  * Port-spec oblik:
  *   {
  *     "faculty": "fer",
+ *     "institution": "uniri",                 // opcionalno, default 'unizg'
+ *     "institutionName": "Sveuciliste u Rijeci", // obavezno SAMO ako grupa jos ne postoji u katalogu
  *     "unit": { "id": "fer", "name": "...", "family": "stem", "status": "partial" },  // opcionalno, samo ako unit ne postoji
  *     "catalogPrograms": ["Diplomski studiji ...", ...],  // faculty-wide program stringovi za union u unit.programs
  *     "sources":  [ { source-registry unos } ],
@@ -78,8 +80,16 @@ for (const path of specPaths) {
 
   // --- katalog: institucija (default unizg) + unit + programi (union) ---
   const instId = spec.institution || 'unizg';
-  const inst = catalog.find((i) => i.id === instId);
-  if (!inst) throw new Error(`katalog nema instituciju ${instId}`);
+  let inst = catalog.find((i) => i.id === instId);
+  if (!inst) {
+    // Nova institucijska grupa (npr. javno sveuciliste izvan unizg): kreiraj je iz
+    // spec.institutionName i dopuni na kraj kataloga (bez presortiranja, minimalan diff).
+    if (!spec.institutionName) {
+      throw new Error(`katalog nema instituciju ${instId}; dodaj spec.institutionName za kreiranje nove grupe`);
+    }
+    inst = { id: instId, name: spec.institutionName, units: [] };
+    catalog.push(inst);
+  }
   inst.units ??= [];
   let unit = inst.units.find((u) => u.id === (spec.unit?.id || spec.faculty));
   if (!unit && spec.unit) {
@@ -131,6 +141,7 @@ const setCount = (name, value) => {
   if (!row) throw new Error(`manifest nema ${name}`);
   row.entries = value;
 };
+setCount('ZAGREB_CATALOG', catalog.length);
 setCount('SOURCE_REGISTRY', readJson('data/sources/source-registry.json').length);
 setCount('VERIFIED_PROFILE_REGISTRY', readJson('data/profiles/verified-profiles.json').length);
 setCount('VERIFICATION_LEDGER', readJson('data/verification/ledger.json').length);

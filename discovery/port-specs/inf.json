@@ -1,0 +1,167 @@
+{
+  "faculty": "inf",
+  "institution": "uniri",
+  "institutionName": "Sveuciliste u Rijeci",
+  "unit": {
+    "id": "inf",
+    "name": "Fakultet informatike i digitalnih tehnologija, Rijeka",
+    "family": "stem",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Prijediplomski studij INF (zavrsni rad)",
+    "Diplomski studij INF"
+  ],
+  "sources": [
+    {
+      "id": "inf-pravilnik-zavrsni-2024",
+      "kind": "regulation",
+      "title": "Pravilnik o zavrsnom radu (INF, 2024)",
+      "url": "https://www.inf.uniri.hr/images/dokumenti/pravilnici/Pravilnik_o_zavrsnom_radu_INF_2024.pdf",
+      "publisher": "Fakultet informatike i digitalnih tehnologija, Rijeka, Sveuciliste u Rijeci",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/inf/inf-pravilnik-zavrsni-2024.pdf",
+      "snapshotHash": "e0c27537c7257f2bc818b3cf144f7874f029404ddae3c078f4ba81b7c221f4c5",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Skeniran, OCR. Javno samo A4 + min. stranica; tipografija delegirana na predlozak/Upute iza Merlin logina -> izostavljena."
+    },
+    {
+      "id": "inf-pravilnik-diplomski-2024",
+      "kind": "regulation",
+      "title": "Pravilnik o diplomskom radu (INF, 2024)",
+      "url": "https://www.inf.uniri.hr/images/dokumenti/pravilnici/Pravilnik_o_diplomskom_radu_INF_2024.pdf",
+      "publisher": "Fakultet informatike i digitalnih tehnologija, Rijeka, Sveuciliste u Rijeci",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/inf/inf-pravilnik-diplomski-2024.pdf",
+      "snapshotHash": "4b95064c1ebf2c84ac7dc06168db83866d43e9ee280f02c7245808a6730097f2",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Skeniran, OCR. Javno samo A4 + min. stranica; tipografija iza Merlin logina -> izostavljena."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "inf-zavrsni",
+      "unitId": "inf",
+      "programs": [
+        "Prijediplomski studij INF (zavrsni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "INF, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "requireA4": true
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet informatike i digitalnih tehnologija, Rijeka, Sveuciliste u Rijeci), citano izravno. Font/velicina/prored/margine/citiranje su u predlosku i Uputama iza Merlin logina -> nedostupni javno, izostavljeni.",
+      "sources": [
+        {
+          "title": "Pravilnik o zavrsnom radu (INF, 2024)",
+          "url": "https://www.inf.uniri.hr/images/dokumenti/pravilnici/Pravilnik_o_zavrsnom_radu_INF_2024.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o zavrsnom radu (INF, 2024)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Opseg (najmanje 30 str.)"
+      ],
+      "advisoryScope": [
+        "Tipografija (iza logina)"
+      ]
+    },
+    {
+      "id": "inf-diplomski",
+      "unitId": "inf",
+      "programs": [
+        "Diplomski studij INF"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "INF, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "requireA4": true
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet informatike i digitalnih tehnologija, Rijeka, Sveuciliste u Rijeci), citano izravno. Font/velicina/prored/margine/citiranje su u predlosku i Uputama iza Merlin logina -> nedostupni javno, izostavljeni.",
+      "sources": [
+        {
+          "title": "Pravilnik o diplomskom radu (INF, 2024)",
+          "url": "https://www.inf.uniri.hr/images/dokumenti/pravilnici/Pravilnik_o_diplomskom_radu_INF_2024.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o diplomskom radu (INF, 2024)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Opseg (najmanje 40 str.)"
+      ],
+      "advisoryScope": [
+        "Tipografija (iza logina)"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-inf-zavrsni--paper-size-verified-2026-07-02",
+      "ruleId": "inf-zavrsni--paper-size",
+      "profileId": "inf-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "inf-pravilnik-zavrsni-2024",
+      "sourcePage": "Članak o izgledu i opremanju zavrsnog rada",
+      "quote": "Završni rad mora biti otisnut računalnim pisačem na papiru formata A4 (21 x 29,7 cm) i mora imati najmanje 30 stranica teksta bez priloga.",
+      "note": "Cross-institution port (Fakultet informatike i digitalnih tehnologija, Rijeka, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-inf-zavrsni--page-count-verified-2026-07-02",
+      "ruleId": "inf-zavrsni--page-count",
+      "profileId": "inf-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "inf-pravilnik-zavrsni-2024",
+      "sourcePage": "Članak o izgledu i opremanju zavrsnog rada",
+      "quote": "Završni rad mora biti otisnut računalnim pisačem na papiru formata A4 (21 x 29,7 cm) i mora imati najmanje 30 stranica teksta bez priloga.",
+      "note": "Cross-institution port (Fakultet informatike i digitalnih tehnologija, Rijeka, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-inf-diplomski--paper-size-verified-2026-07-02",
+      "ruleId": "inf-diplomski--paper-size",
+      "profileId": "inf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "inf-pravilnik-diplomski-2024",
+      "sourcePage": "Članak 11. (izgled i opremanje diplomskog rada)",
+      "quote": "Diplomski rad mora biti otisnut računalnim pisačem na papiru formata A4 (21 x 29,7 cm) i mora imati najmanje 40 stranica teksta bez priloga.",
+      "note": "Cross-institution port (Fakultet informatike i digitalnih tehnologija, Rijeka, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-inf-diplomski--page-count-verified-2026-07-02",
+      "ruleId": "inf-diplomski--page-count",
+      "profileId": "inf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "inf-pravilnik-diplomski-2024",
+      "sourcePage": "Članak 11. (izgled i opremanje diplomskog rada)",
+      "quote": "Diplomski rad mora biti otisnut računalnim pisačem na papiru formata A4 (21 x 29,7 cm) i mora imati najmanje 40 stranica teksta bez priloga.",
+      "note": "Cross-institution port (Fakultet informatike i digitalnih tehnologija, Rijeka, Sveuciliste u Rijeci): direktno citanje izvora."
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "profileId": "inf-zavrsni",
+  "entries": [
+    {
+      "ruleId": "inf-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "value": "A4",
+      "category": "format",
+      "label": "Format papira",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "inf-pravilnik-zavrsni-2024",
+      "sourcePage": "Članak o izgledu i opremanju zavrsnog rada",
+      "quote": "Završni rad mora biti otisnut računalnim pisačem na papiru formata A4 (21 x 29,7 cm) i mora imati najmanje 30 stranica teksta bez priloga.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "e0c27537c7257f2bc818b3cf144f7874f029404ddae3c078f4ba81b7c221f4c5",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "inf-zavrsni--page-count",
+      "checkId": "page-count",
+      "value": {
+        "min": 30
+      },
+      "category": "scope",
+      "label": "Opseg (najmanje 30 str.)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "inf-pravilnik-zavrsni-2024",
+      "sourcePage": "Članak o izgledu i opremanju zavrsnog rada",
+      "quote": "Završni rad mora biti otisnut računalnim pisačem na papiru formata A4 (21 x 29,7 cm) i mora imati najmanje 30 stranica teksta bez priloga.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "e0c27537c7257f2bc818b3cf144f7874f029404ddae3c078f4ba81b7c221f4c5",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
+    }
+  ],
+  "generatedAt": "2026-07-02"
+}

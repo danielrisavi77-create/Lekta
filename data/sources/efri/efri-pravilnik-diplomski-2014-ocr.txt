@@ -1,0 +1,572 @@
+===== PAGE 1/12 =====
+Na temelju članka 32. Pravilnika o studijima i studiranju na Sveučilištu u Rijeci (tekst iz srpnja
+2023. godine), Fakultetsko vijeće Ekonomskog fakulteta Sveučilišta u Rijeci na 294. sjednici 22.
+siječnja 2024. godine donosi sljedeći
+
+(1)
+(2)
+
+(1)
+
+(2)
+
+PRAVILNIK
+o diplomskom radu na sveučilišnom diplomskom studiju i sveučilišnom
+integriranom studiju Ekonomskog fakulteta Sveučilišta u Rijeci
+
+I. OPĆE ODREDBE
+
+Članak 1.
+Sveučilišni diplomski i sveučilišni integrirani studij (dalje: studij) završava izradom i
+obranom diplomskog rada u skladu s ovim Pravilnikom.
+
+Clanak 2.
+Diplomski rad predstavlja samostalnu stručnu obradu određenog problema.
+Diplomskim radom student dokazuje da je na temelju znanja stečenog tijekom studija
+ovladao zadanom temom, da poznaje korištenu znanstvenu i stručnu literaturu i
+terminologiju te da je ispravno primjenjuje.
+
+II. SADRŽAJ DIPLOMSKOG RADA
+
+Članak 3.
+Obavezni dijelovi diplomskog rada su: korica diplomskog rada, naslovna stranica
+diplomskog rada, sažetak s ključnim riječima, sadržaj, uvod, glavna poglavlja, zaključak,
+popis korištene literature, popis tablica, shema, grafikona (i ostalih ilustracija), popis
+priloga (ako postoji) i izjava, a navedeni dijelovi rada moraju se navesti tim
+redoslijedom.
+Izgled korice i naslovne stranice dani su u Obrascima Prilogu 3. i 4. ovog Pravilnika.
+
+II. STIL I ORGANIZACIJA TEKSTA DIPLOMSKOG RADA
+
+(1)
+(2)
+
+(3)
+(4)
+
+(5)
+
+Clanak 4.
+NASLOV mora odražavati sadržaj i svrhu rada (maksimalno 15 riječi).
+SAŽETAK je kratki prikaz rezultata i zaključaka istraživanja. Sažetak mora imati
+minimalno 1000, a maksimalno 1800 znakova te minimalno pet ključnih riječi. Sažetak
+se u pravilu piše u jednom odlomku u pasivu i u trećem licu jednine. Ključne riječi su
+riječi koje opisuju kojim se područjem neki rad bavi. Navode se nakon sažetka, pod
+podnaslovom Ključne riječi.
+Numeracija SADRŽAJA započinje arapskim brojevima od Uvoda do Zaključka.
+UVOD kreće od općeg prema specifičnom, tj. student kratkim pregledom općih
+obilježja uvodi u problematiku koju istražuje u radu.
+GLAVNI TEKST je raspoređen u više dijelova (poglavlja i podpoglavlja), treba
+sadržavati teorijski i analitički dio te podatke o rezultatima istraživanja zadane
+teme. Tekst rada se piše znanstvenim jezikom i stilom, u pasivu i u trećem licu
+jednine, gramatički i pravopisno ispravno. Diplomski rad se, u pravilu, piše na
+jeziku studija, osim uz prethodnu suglasnost Povjerenstva za nastavu Ekonomskog
+
+===== PAGE 2/12 =====
+fakulteta Sveučilišta u Rijeci (dalje: Fakultet).
+
+(6) ZAKLJUČAK predstavlja sintezu rezultata istraživanja.
+
+(7) IZJAVA o samostalnoj izradi rada i dozvoli za objavljivanje na Internetu (Obrazac u
+Prilogu 5. ovog Pravilnika).
+
+IV. TEHNIČKO UREĐIVANJE TEKSTA DIPLOMSKOG RADA
+
+Članak 5.
+
+(1) REFERENCE U TEKSTU. Citirane dijelove teksta navodi se u tekstu, a ne u
+bilješkama. Za citiranje doslovno preuzetih dijelova i parafraziranih dijelova teksta
+koristi se Harvardski sustav citiranja.
+
+(2) FUSNOTE (reference u podnožju teksta) mogu se koristiti samo za detaljnije
+objašnjavanje pojmova i kratica, odnosno za dodatna pojašnjenja osnovnoga
+teksta. One se ne koriste kao poziv na Literaturu. Označavaju se na dnu stranice, u
+kontinuitetu, kroz cijeli rad, arapskim brojevima počevši od 1.
+
+(3) LITERATURA obuhvaća sve korištene izvore i potpune podatke o djelima koja se
+obvezno spominju u referencama. Popis literature piše se bez broja poglavlja i
+dolazi na kraju rada (poslije Zaključka). Uređuje se abecednim redom autora te
+kronološki za radove istog autora. Za popis korištene literature treba koristiti Harvard
+style. Može se oblikovati i tako da se zasebno za svaku vrstu publikacije izrađuje
+abecedni popis (npr. knjige, članci, internetski izvori, zakoni...).
+
+(4) Tekst diplomskog rada može sadržavati ILUSTRACIJE: tablice, grafikone, sheme,
+zemljovide, fotografije i ostalo. Tablice, grafikoni, sheme i ostale ilustracije dolaze
+unutar teksta. Ilustracije se numeriraju arapskim brojevima prema redoslijedu
+pojavljivanja u tekstu (npr. Tablica 1., Tablica 2., Shema 1., Shema 2., itd.), a pored broja
+mora stajati i naslov. Ispod ilustracije treba navesti i izvor podataka.
+
+Članak 6.
+(1) Opseg rada je minimalno 40 stranica A4 formata (bez naslovnice, sadržaja, literature,
+priloga i privitaka), a tekst je pisan u Times New Roman CE fontu, veličine 12, s jednim
+i pol (1,5) redom razmaka, poravnan s obje strane, pisan od početka reda (bez
+uvlačenja prvog retka odlomka), s marginama od 3 cm. Za odvajanje odlomka koristi
+se dvostruki razmak.
+
+(2) Naslovi poglavlja (od Uvoda do Zaključka) moraju biti kratki i jasni, te redom
+numerirani arapskim jednoznamenkastim brojevima. Glavna poglavlja moraju
+započeti na novoj stranici. Poglavlja mogu imati i podpoglavlja koja se obavezno
+numeriraju s dvoznamenkastim odnosno troznamenkastim brojevima (primjer 2., 2.1.,
+2.2., 2.2.1., 2.2.2. itd.), ali ne više od toga.
+
+V. PROCEDURA IZBORA MENTORA TE PRIJAVE, IZRADE I OCJENE DIPLOMSKOG RADA
+
+Članak 7.
+(1) Mentor studentu na diplomskom radu može biti predmetni nastavnik koji je (su)nositelj
+predmeta kojeg je student položio tijekom studija kojeg student završava.
+(2) U akademskoj godini nastavnik može preuzeti mentorstvo onoliko diplomskih radova
+(kvota) koliko mu to odobri Fakultetsko vijeće.
+
+===== PAGE 3/12 =====
+(3) Na početku akademske godine Fakultetsko vijeće donosi odluku o kvotama.
+(4) Na početku ljetnog semestra Fakultetsko vijeće donosi odluku o utvrđivanju rokova za
+predaju diplomskih radova.
+
+Članak 8.
+
+(1) Student se prijavljuje predmetnom nastavniku kod kojeg želi izraditi diplomski rad.
+Ukoliko nastavnik prihvati biti mentor, potpisuje studentu Prijavu mentora na
+diplomskom radu (Obrazac u Prilogu 1. ovog Pravilnika).
+
+(2) Potpisanu Prijavu mentora nastavnik dostavlja Referadi za preddiplomske i diplomske
+studije (u nastavku Evidenciji studija) e-mailom ili fizički, koja prijavu evidentira kroz
+ISVU sustav (Prijava mentora ne mora biti potpisana ako se šalje službenim e-mailom
+ime.prezime(&efri.uniri.hr)
+
+Članak 9.
+Nakon što je student prijavio mentora kod kojeg piše diplomski rad promjenu je moguće
+napraviti samo jednom, na obrascu za prijavu mentora uz supotpis starog i novog
+mentora. (Obrazac u Prilogu 1. ovog Pravilnika).
+
+Članak 10.
+(1) Izbor teme diplomskog rada student dogovara s mentorom. Teme diplomskog rada
+izabiru se sukladno nastavnom programu predmeta iz kojeg student piše diplomski rad.
+(2) Student može sam predložiti temu diplomskog rada, no u tom je slučaju dužan savjetovati
+se o njenom naslovu i sadržaju s mentorom.
+
+Članak 11.
+
+(1) Nakon što odobri temu, mentor potpisuje Prijavu teme diplomskog rada (Obrazac u
+Prilogu 2. ovog Pravilnika) i dostavlja Evidenciji studija e-mailom ili fizički (Prijava teme
+ne mora biti potpisana ako se šalje službenim e-mailom ime.prezime@efri.uniri.hr).
+
+(2) Tema diplomskog rada prijavljuje se na izvornom i drugom jeziku rada (za smjerove koji
+se izvode na hrvatskom jeziku, izvorni jezik je hrvatski jezik, a drugi je engleski jezik, a
+za smjer koji se izvodi na engleskom jeziku izvorni jezik je engleski jezik, a drugi je
+hrvatski jezik).
+
+(3) U slučaju promjene naslova rada nastavnik je obvezan prilikom predaje Izvješća o
+diplomskom radu u Evidenciju studija dostaviti novu potpisanu Prijavu teme
+diplomskog rada (nova Prijava teme ne mora biti potpisana ako se šalje službenim e-
+mailom ime.prezime@efri.uniri.hr).
+
+Članak 12.
+Postupak prijave mentora i teme diplomskog rada te izrade i završetka rada student je
+dužan izvršiti sukladno terminskom planu donesenom u odluci Fakultetskog vijeća o
+utvrđivanju rokova za predaju diplomskih radova.
+
+Članak 13.
+(1) Diplomski rad student izrađuje samostalno.
+(2) Mentor je obavezan pratiti rad studenta, pomagati mu savjetima i upućivati u
+odgovarajuću literaturu.
+
+===== PAGE 4/12 =====
+(1)
+
+(2)
+
+(3)
+
+(1)
+
+(2)
+
+(3)
+
+(1)
+
+(2)
+
+(1)
+
+Članak 14.
+Koncept rada student daje na uvid mentoru. Student je dužan postupiti prema uputama
+i primjedbama mentora. Ukoliko student nije postupio prema uputama i primjedbama
+mentora, rad mu se vraća na doradu.
+Nakon što je zaprimio diplomski rad na pregled, mentor je dužan pregledati rad i vratiti
+ga studentu s primjedbama najkasnije u roku od 30 dana.
+U rokove za pregled diplomskih radova kao i rokove za obranu diplomskih radova ne
+uzima se razdoblje od 20. srpnja do 30. kolovoza tekuće godine.
+
+Članak 15.
+Nakon prihvaćanja završne verzije diplomskog rada, mentor pregledava rad softverom
+za provjeru izvornosti (Turnitin). Student mentoru dostavlja rad za provjeru izvornosti
+u PDF/A formatu.
+Ukoliko je rad zadovoljio provjeru izvornosti, a nakon što je student položio sve ispite
+i izvršio sve ostale obaveze predviđene nastavnim planom i programom studija i stekao
+minimalno 90, 105 ili 285 ECTS bodova ovisno o studijskom programu na kojem
+studira, mentor potpisuje Izvješće o diplomskom radu (Obrazac u Prilogu 6. ovog
+Pravilnika).
+Mentor je dužan konačnu verziju diplomskog rada pohraniti u repozitorij softvera za
+provjeru izvornosti (Turnitin-a).
+
+Članak 16.
+Nakon što je studentu potpisano Izvješće o diplomskom radu mentor e-mailom
+dostavlja Evidenciji studija:
+a. Odobrenu verziju rada u PDF/A formatu (cijeli rad u jednoj datoteci za potrebe
+provjere knjižnice i dostavljanja članovima Povjerenstva)
+
+b. Izjavu u mailu da je ,Suglasan - odobreno za obranu“
+
+c. Prijavu teme diplomskog rada (ukoliko mentor ranije nije potpisao Prijavu teme, s
+tim da Prijava teme ne mora biti potpisana i skenirana ako se šalje službenim mailom
+ime.prezime &efri.uniri.hr)
+
+d. Izvješće o diplomskom radu
+
+Nakon što je studentu potpisano Izvješće o diplomskom radu student dostavlja:
+
+- u Evidenciju studija dodatnu potpisanu Izjavu iz diplomskog rada (radi odlaganja u
+dosje studenta),
+
+- ostale dokumente koje zatraži Evidencija studija (npr. potvrdu knjižnice Fakulteta
+da su vraćene sve knjige, ispunjeni obrazac s kontakt podacima, itd.).
+
+Članak 17.
+Evidencija studija, nakon dobivanja maila od mentora sa svom popratnom
+dokumentacijom, provjerava predanu dokumentaciju, provjera je li student/ica
+položio/la sve propisane uvjete i ostvario minimalno 90, 105 ili 285 ECTS-a ovisno o
+studijskom programu na kojem studira. Ukoliko nije, obavještava mentora/mentoricu
+i studenta/studenticu da se obrana ne može održati dok student/ica ne ispuni sve
+uvjete. Evidencija studija dostavlja knjižnici rad radi provjere.
+
+===== PAGE 5/12 =====
+(2)
+
+(3)
+(4)
+(5)
+(6)
+
+(7)
+
+(8)
+
+Knjižnica obavještava mentora/mentoricu i Evidenciju studija o postupku provjere i je
+li rad adekvatno pripremljen za upis u digitalni repozitorij (ukoliko rad nije dobro
+pripremljen, obavještava i studenta o potrebnim izmjenama, npr. nedostaje Izjava na
+kraju rada, sažetak, ključne rijeci...).
+
+Ujedno provjerava i obavještava Evidenciju jesu li vraćene sve knjige.
+
+Na temelju povratne informacije od Knjižnice u vezi provjere rada, Evidencija studija u
+
+dogovoru s mentorom, utvrđuje Povjerenstvo za obranu diplomskog rada i datum
+
+obrane.
+
+Evidencija studija primjerke diplomskog rada u PDF/A formatu dostavlja članovima
+
+Povjerenstva za obranu diplomskog rada.
+
+Rok za zakazivanje obrane je u pravilu, 15 dana od potpisivanja Završnog izvješća
+
+diplomskog rada.
+
+Obrana diplomskoga rada je javna. Rad se brani pred Povjerenstvom koje se sastoji od
+
+predsjednika i dva člana. Predsjednik Povjerenstva je uvijek mentor.
+
+Postupak obrane diplomskoga rada se odvija ovim slijedom:
+
+- predsjednik Povjerenstva otvara postupak obrane,
+
+- kandidat desetak minuta izlaže temeljnu problematiku rada, metode koje je
+primijenio i najvažnije rezultate do kojih je došao tijekom izrade rada,
+
+- članovi Povjerenstva postavljaju usmena pitanja kandidatu;
+
+- kandidat odgovara na pitanja,
+
+- kada kandidat odgovori na sva postavljena pitanja povlači se, a u odsutnosti
+kandidata povjerenstvo razmatra vrsnoću diplomskog rada, usmeno izlaganje
+kandidata o radu, uspješnost odgovaranja na postavljena pitanja i odlučuje o ocjeni
+kandidata.
+
+Ocjena diplomskog rada je opisna, upisuje se ,zadovoljio/la“ ili ,nije zadovoljio/la“.
+
+Ocjena se upisuje u Knjigu obrana diplomskih radova Fakulteta i na obrazac Zapisnik
+
+o obrani i ocjeni diplomskog rada (kojeg je prethodno pripremila Evidencija studija).
+
+Ocjena diplomskog rada ne ulazi u prosjek ocjena.
+
+Ukoliko je konačna ocjena Povjerenstva ,nije zadovoljio/la“, Zapisnik o obrani i ocjeni
+
+diplomskog rada (s napomenom o nezadovoljavanju pisanog rada ili usmenog dijela
+
+obrane) predaje se u Evidenciju studija, a rad se ne upisuje u digitalni repozitorij
+
+Ekonomskog fakulteta dok nije uspješno obranjen. Povjerenstvo novu obranu može
+
+zakazati u roku od minimalno 15 dana, a najkasnije u istoj akademskoj godini do 30.9.
+
+U protivnom, kandidat mora upisati novu akademsku godinu.
+
+Članak 18.
+Nakon obrane, Evidencija studija evidentira ocjenu diplomskog rada kroz sustav ISVU,
+dostavlja knjižnici primjerak rada u PDF formatu i obavijest o obrani diplomskog rada
+za upis u digitalni repozitorij Ekonomskog fakulteta u Rijeci.
+
+Članak 19.
+Primjerak diplomskog rada mentor ima obavezu pohraniti jednu (narednu)
+akademsku godinu u PDF/A formatu.
+
+Članak 20.
+Postupak oduzimanja akademskog naziva urediti će se posebnim pravilnikom.
+
+===== PAGE 6/12 =====
+(1)
+(2)
+(3)
+
+Članak 21.
+Riječi i pojmovni sklopovi koji imaju rodno značenje korišteni u ovom pravilniku
+odnose se jednako na oba roda (muški i ženski) i na oba broja (jedninu i množinu), bez
+obzira na to jesu li korišteni u muškom ili ženskom rodu, odnosno u jednini ili množini.
+
+Članak 21.
+Sva pitanja koja nisu regulirana Pravilnikom rješava Povjerenstvo za nastavu
+Fakulteta.
+Ovaj Pravilnik stupa na snagu osmog dana od dana objave na mrežnoj stranici Fakulteta
+i primjenjuje se ljetnog semestra akademske godine 2023./2024.
+Stupanjem na snagu ovog Pravilnika prestaje važiti Pravilnik o diplomskom radu na
+diplomskom sveučilišnom studiju Ekonomskog fakulteta Sveučilišta u Rijeci, osnovni
+tekst Pravilnika usvojen dana 18. travnja 2016. godine te njegove izmjene i dopune
+usvojene 14. rujna 2020. godine.
+
+U Prilogu:
+
+1. Diplomski rad - Prijava mentora
+
+2. Diplomski rad - Prijava teme
+
+3. Diplomski rad - korica diplomskog rada
+
+4. Diplomski rad - naslovnica diplomskog rada
+5. Diplomski rad - Izjava
+
+6. Diplomski rad - Izvješće
+
+Ovaj Pravilnik objavljen je na oglasnoj stranici i na Internet stranicama Fakulteta dana
+24. siječnja 2024. godine.
+
+KLASA: 602-02/24-04/02
+
+URBROJ: 141-02-24- oo
+
+===== PAGE 7/12 =====
+Prilog 1: Prijava mentora
+
+SVEUČILIŠTE U RIJECI
+
+EKONOMSKI FAKULTET
+
+"Ww
+
+Ime i prezime nastavnika / Mentor's name and surname
+
+Predmet / Course
+EKONOMSKI FAKULTET U RIJECI
+FACULTY OF ECONOMICS AND BUSINESS RIJEKA
+Ivana Filipovića 4
+51000 R ijeka
+
+PRIJAVA MENTORA NA DIPLOMSKOM RADU
+MASTER THESIS MENTOR APPLICATION
+
+pristajem da kod izrade diplomskog rada budem mentor studentu:
+
+I hereby agree to mentor the applicant in his/her master thesis:
+
+Ime i prezime studenta / Student's name and surname
+
+JMBAG Smjer / Field of study
+
+Status / Student status (zaokružiti / to circle): redoviti / full izvanredni / part-time
+
+Datum / Date
+
+Potpis nastavnika / Mentor's signature
+
+Napomena / Note: Prihvaćenu Prijavu mentora na završnom radu mentor predaje u sandučić 23
+ili dostavlja e-mailom u Evidenciju studija / Signed Application to be submitted to the Student Registry
+in mailbox 23 or via e-mail
+
+===== PAGE 8/12 =====
+Prilog 2: Prijava teme
+
+SVEUČILIŠTE U RIJECI
+EKONOMSKI FAKULTET
+
+Ww
+
+Ime i prezime nastavnika / Mentor's name and surname
+
+Predmet / Course
+
+EKONOMSKI FAKULTET U RIJECI
+
+FACULTY OF ECONOMICS AND BUSINESS RIJEKA
+Ivana Filipovića 4
+
+51000 Rijeka
+
+PRIJAVA TEME ZAVRŠNOG RADA
+
+MASTER THESIS TOPIC APPLICATION
+
+potvrđujem da sam prihvatio-la temu diplomskog rada s naslovom:
+I hereby accept the proposed masterthesis topic:
+
+na izvornom jeziku rada / in the original language of paper
+
+na engleskom'/hrvatskom? jeziku rada / in English! / in Croatian’
+
+koju je prijavio student: / proposed by the student:
+
+Ime i prezime studenta / Student's name and surname
+
+JMBAG Smjer / Field of study
+Status / Student status (zaokružiti / to circle): redoviti / full izvanredni / part-time
+
+Datum / Date
+
+Potpis nastavnika / Mentor's signature
+
+Napomena / Note: Prihvaćenu Prijavu teme završnog rada mentor predaje u sandučić 23 ili dostavlja e-
+mailom u Evidenciju studija / Signed Application to be submitted to the Student Registry in mailbox 23 or
+via e-mail
+
+1 Za smjerove koji se izvode na hrvatskom jeziku / For courses taught in Croatian language
+2 Za smjer koji se izvodi na engleskom jeziku / For courses taught in English language
+
+===== PAGE 9/12 =====
+Prilog 3: Korica diplomskog rada
+
+SVEUČILIŠTE U RIJECI
+EKONOMSKI FAKULTET
+
+Ime i prezime
+
+NASLOV DIPLOMSKOG RADA
+
+DIPLOMSKI RAD
+
+Rijeka, godina
+
+===== PAGE 10/12 =====
+Prilog 4: Naslovnica diplomskog rada
+
+SVEUČILIŠTE U RIJECI
+EKONOMSKI FAKULTET
+
+NASLOV DIPLOMSKOG RADA
+
+DIPLOMSKI RAD
+
+Predmet:
+
+Mentor:
+
+Komentor: (ukoliko ga ima)
+
+Student: Ime i prezime
+Studijski smjer:
+JMBAG:
+
+Rijeka, datum (mjesec i godina)
+
+10
+
+===== PAGE 11/12 =====
+Prilog 5: Izjava
+
+IZJAVA
+
+kojom ja, ime i prezime, JMBAG: xxxxx student/ica Ekonomskog fakulteta Sveučilišta u Rijeci,
+kao autor/ica diplomskog rada s naslovom: naslov rada:
+
+1. Izjavljujem da sam diplomski rad izradio/la samostalno pod mentorstvom prof. dr. sc. ................ ;
+a pri izradi diplomskog rada pomagao/la mi je 1 .................... U radu sam primijenio/la
+metodologiju znanstvenoistraživačkog rada i koristio/la literaturu koja je navedena na kraju rada.
+Tuđe spoznaje, stavove, zaključke, teorije i zakonitosti koje sam izravno ili parafrazirajući
+naveo/la u radu citirao/la sam i povezao/la s korištenim bibliografskim jedinicama sukladno
+odredbama Pravilnika o diplomskom radu Ekonomskog fakulteta u Rijeci. Rad je pisan u duhu
+hrvatskog jezika.
+
+2. Dajem odobrenje da se, bez naknade, objavi moj diplomski rad u roku od 30 dana od dana
+obrane na nacionalnom repozitoriju odnosno repozitoriju visokog učilišta, sukladno obvezi iz
+odredbe članka 59. stavka 4. Zakona o visokom obrazovanju i znanstvenoj djelatnosti (NN
+
+119/22).
+
+Potvrđujem da je za pohranu dostavljena završna verzija obranjenog i dovršenog diplomskog rada.
+Ovom izjavom, kao autor/ica dajem odobrenje i da se moj rad, bez naknade, trajno javno objavi i
+
+besplatno učini dostupnim studentima i djelatnicima ustanove.
+
+Student/ica
+
+Ime i prezime studenta/ice
+
+11
+
+===== PAGE 12/12 =====
+Prilog 6: Izvješće
+
+T NEC (
+EKONOMSKI FAKULTET U
+
+= SVEUČNIŠTE U 7
+
+Izvješće o provedenoj provjeri izvornosti studentskog rada
+
+Opći podatci o studentu:
+
+Sastavnica Ekonomski fakultet u Rijeci - EFRI
+Studij (zaokružiti ili  Prijediplomski / Diplomski / Poslijediplomski
+podebljati)
+
+Vrsta = studentskog = rada Završni / Diplomski / Završni specijalistički / Doktorski
+(zaokružiti ili podebljati)
+
+Ime i prezime studenta
+
+JMBAG
+Podaci o radu studenta
+Identifikacijski br. podneska
+Podudarnost studentskog rada:
+
+PODUDARNOST
+Ukupno
+
+Izvori s interneta
+Publikacije
+
+Studentski radovi
+Izjava mentora o izvornosti studentskog rada
+
+Mišljenje mentora
+Datum izdavanja mišljenja
+
+Rad zadovoljava uvjete
+
+. . NE
+izvornosti DA/
+
+Obrazloženje mentora
+
+(po potrebi dodati zasebno)
+
+Datum Potpis mentora

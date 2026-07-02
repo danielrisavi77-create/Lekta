@@ -1,0 +1,140 @@
+{
+  "faculty": "medri",
+  "institution": "uniri",
+  "institutionName": "Sveuciliste u Rijeci",
+  "unit": {
+    "id": "medri",
+    "name": "Medicinski fakultet u Rijeci",
+    "family": "biomed",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Integrirani studij Farmacija (MEDRI, diplomski rad)"
+  ],
+  "sources": [
+    {
+      "id": "medri-naputak-diplomski-farmacija-2025",
+      "kind": "guidelines",
+      "title": "Naputak za prijavu, oblikovanje i izradu diplomskog rada - Farmacija (MEDRI, 2025)",
+      "url": "https://medri.uniri.hr/wp-content/uploads/2025/07/NAPUTAK-za-prijavu-i-izradu-diplomskog-rada_24.6.25-002.docx",
+      "publisher": "Medicinski fakultet u Rijeci, Sveuciliste u Rijeci",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/medri/medri-naputak-diplomski-farmacija-2025.docx",
+      "snapshotHash": "ea0173f92c1e687c8ce60f8867784639145672ba1b73050904f905a163b28801",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "DOCX (citano iz XML-a). Vrijedi SAMO za integrirani studij Farmacija. Prored dvostruki (2,0). Font nije propisan -> izostavljen."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "medri-farmacija-diplomski",
+      "unitId": "medri",
+      "programs": [
+        "Integrirani studij Farmacija (MEDRI, diplomski rad)"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "MEDRI Farmacija, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "size": [
+          12
+        ],
+        "spacing": 2,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Medicinski fakultet u Rijeci, Sveuciliste u Rijeci), citano izravno.",
+      "sources": [
+        {
+          "title": "Naputak za prijavu, oblikovanje i izradu diplomskog rada - Farmacija (MEDRI, 2025)",
+          "url": "https://medri.uniri.hr/wp-content/uploads/2025/07/NAPUTAK-za-prijavu-i-izradu-diplomskog-rada_24.6.25-002.docx"
+        }
+      ],
+      "sourceHierarchy": [
+        "Naputak za prijavu, oblikovanje i izradu diplomskog rada - Farmacija (MEDRI, 2025)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Margine",
+        "Prored (dvostruki)",
+        "Velicina slova",
+        "Opseg (15-50 str.)"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-medri-farmacija-diplomski--paper-size-verified-2026-07-02",
+      "ruleId": "medri-farmacija-diplomski--paper-size",
+      "profileId": "medri-farmacija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "medri-naputak-diplomski-farmacija-2025",
+      "sourcePage": "Tehnicke upute o izradi diplomskog rada",
+      "quote": "Diplomski rad treba biti pripremljen u pisanom obliku na računalu, sukladno Uputama, na stranici standardne veličine (A4, 210x297 mm), sa slobodnim rubnicima od 2,5 cm i u dvostrukom proredu. Potrebno je rabiti pismo veličine 12 tipografskih točaka, čitljive vrste, s obvezatnom potporom svih hrvatskih znakova.",
+      "note": "Cross-institution port (Medicinski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-medri-farmacija-diplomski--margins-verified-2026-07-02",
+      "ruleId": "medri-farmacija-diplomski--margins",
+      "profileId": "medri-farmacija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "medri-naputak-diplomski-farmacija-2025",
+      "sourcePage": "Tehnicke upute o izradi diplomskog rada",
+      "quote": "Diplomski rad treba biti pripremljen u pisanom obliku na računalu, sukladno Uputama, na stranici standardne veličine (A4, 210x297 mm), sa slobodnim rubnicima od 2,5 cm i u dvostrukom proredu. Potrebno je rabiti pismo veličine 12 tipografskih točaka, čitljive vrste, s obvezatnom potporom svih hrvatskih znakova.",
+      "note": "Cross-institution port (Medicinski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-medri-farmacija-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "medri-farmacija-diplomski--line-spacing",
+      "profileId": "medri-farmacija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "medri-naputak-diplomski-farmacija-2025",
+      "sourcePage": "Tehnicke upute o izradi diplomskog rada",
+      "quote": "Diplomski rad treba biti pripremljen u pisanom obliku na računalu, sukladno Uputama, na stranici standardne veličine (A4, 210x297 mm), sa slobodnim rubnicima od 2,5 cm i u dvostrukom proredu. Potrebno je rabiti pismo veličine 12 tipografskih točaka, čitljive vrste, s obvezatnom potporom svih hrvatskih znakova.",
+      "note": "Cross-institution port (Medicinski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-medri-farmacija-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "medri-farmacija-diplomski--font-size",
+      "profileId": "medri-farmacija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "medri-naputak-diplomski-farmacija-2025",
+      "sourcePage": "Tehnicke upute o izradi diplomskog rada",
+      "quote": "Diplomski rad treba biti pripremljen u pisanom obliku na računalu, sukladno Uputama, na stranici standardne veličine (A4, 210x297 mm), sa slobodnim rubnicima od 2,5 cm i u dvostrukom proredu. Potrebno je rabiti pismo veličine 12 tipografskih točaka, čitljive vrste, s obvezatnom potporom svih hrvatskih znakova.",
+      "note": "Cross-institution port (Medicinski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-medri-farmacija-diplomski--page-count-verified-2026-07-02",
+      "ruleId": "medri-farmacija-diplomski--page-count",
+      "profileId": "medri-farmacija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "medri-naputak-diplomski-farmacija-2025",
+      "sourcePage": "Tehnicke upute o izradi diplomskog rada",
+      "quote": "Diplomski rad ne može sadržavati manje od 15 niti više od 50 stranica. Broje se sve stranice počevši od Uvoda, a broj se ispisuje u donjem desnom kutu.",
+      "note": "Cross-institution port (Medicinski fakultet u Rijeci, Sveuciliste u Rijeci): direktno citanje izvora."
+    }
+  ]
+}
