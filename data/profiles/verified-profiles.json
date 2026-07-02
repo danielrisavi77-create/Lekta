@@ -8965,7 +8965,33 @@
     "profileLabel": "Arhitektonski fakultet, diplomski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2013-02-05",
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/art-faculties-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Profil se analizira bez pucanja na stvarnom docx-u i informativne format-provjere ispravno se ponasaju (tests/art-faculties-synthetic.test.ts)."
+      ],
+      "observedDeviations": [
+        "Arhitektonski diplomski rad je PROJEKT (ne standardni tekstualni rad); izvor propisuje samo obvezne cjeline pisanog dijela, bez tehnickog oblikovanja. Arhitektonski fakultet nema radova pod ovim ZIR namespaceom."
+      ],
+      "productDecision": "Umjetnicki/projektni rad: sluzbeni izvor ne propisuje faculty-wide tehnicko oblikovanje pa su format-provjere iskljucene (informativne). PDF-A4 preflight nije smislen jer radovi nisu standardni A4 tekst (portfolio/projekt); ne izmisljam PDF-audit brojace ni pravila (CLAUDE.md)."
+    },
     "rules": {
+      "checkFont": false,
+      "checkSize": false,
+      "checkSpacing": false,
+      "checkMargins": false,
+      "checkJustify": false,
       "requireToc": true,
       "requiredSections": [
         {
@@ -10094,7 +10120,34 @@
     "profileLabel": "Akademija likovnih umjetnosti, diplomski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2014-05-23",
-    "rules": {},
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/art-faculties-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Profil se analizira bez pucanja na stvarnom docx-u i informativne format-provjere ispravno se ponasaju (tests/art-faculties-synthetic.test.ts)."
+      ],
+      "observedDeviations": [
+        "ALU diplomski (likovna umjetnost) je umjetnicki rad; formatne vrijednosti su odsjecke Posebne odredbe koje se razlikuju medju odsjecima, nema faculty-wide tehnickog pravila. ALU radovi na ZIR-u su pretezno ne-A4 (portfolio format)."
+      ],
+      "productDecision": "Umjetnicki/projektni rad: sluzbeni izvor ne propisuje faculty-wide tehnicko oblikovanje pa su format-provjere iskljucene (informativne). PDF-A4 preflight nije smislen jer radovi nisu standardni A4 tekst (portfolio/projekt); ne izmisljam PDF-audit brojace ni pravila (CLAUDE.md)."
+    },
+    "rules": {
+      "checkFont": false,
+      "checkSize": false,
+      "checkSpacing": false,
+      "checkMargins": false,
+      "checkJustify": false
+    },
     "facts": [
       "Diplomski rad se faculty-wide sastoji od likovnog dijela i pisanog obrazlozenja (Cl. 3, imperativ).",
       "Tehnicko oblikovanje pisanog obrazlozenja propisuju Posebne odredbe pojedinih odsjeka i vrijednosti se razlikuju: Slikarski 5-15 kartica, velicina slova 12 tocaka, klasicni prored (Cl. 32); Kiparski 10-20 kartica, 12 tocaka, polozeni format A4 (Cl. 39); Graficki 15-25 kartica, format A4 (Cl. 49); Novi mediji 18000-30000 znakova, do 7000 rijeci, 10-17 kartica (Cl. 77).",
@@ -11446,7 +11499,33 @@
     "profileLabel": "Akademija likovnih umjetnosti, doktorski rad / disertacija",
     "verifiedAt": "2026-07-02",
     "documentDate": "2026-05-08",
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/art-faculties-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Profil se analizira bez pucanja na stvarnom docx-u i informativne format-provjere ispravno se ponasaju (tests/art-faculties-synthetic.test.ts)."
+      ],
+      "observedDeviations": [
+        "ALU doktorski (umjetnicki) - jedini umjetnicki doktorat u RH; disertacija je umjetnicki projekt, bez faculty-wide tipografije osim minimuma kartica. Otvoreni standardni A4 tekstualni uzorak nije primjenjiv."
+      ],
+      "productDecision": "Umjetnicki/projektni rad: sluzbeni izvor ne propisuje faculty-wide tehnicko oblikovanje pa su format-provjere iskljucene (informativne). PDF-A4 preflight nije smislen jer radovi nisu standardni A4 tekst (portfolio/projekt); ne izmisljam PDF-audit brojace ni pravila (CLAUDE.md)."
+    },
     "rules": {
+      "checkFont": false,
+      "checkSize": false,
+      "checkSpacing": false,
+      "checkMargins": false,
+      "checkJustify": false,
       "pageMin": 30,
       "recommendedCitation": "custom"
     },
@@ -11565,6 +11644,27 @@
     "profileLabel": "Arhitektonski fakultet, doktorski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": null,
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/art-faculties-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Profil se analizira bez pucanja na stvarnom docx-u i informativne format-provjere ispravno se ponasaju (tests/art-faculties-synthetic.test.ts)."
+      ],
+      "observedDeviations": [
+        "Arhitektonski fakultet nema dostupnih radova pod dohvacenim ZIR namespaceom pa stvarni javni uzorak disertacije nije pribavljen; oblikovanje je delegirano na sveucilisni DR.SC.-08 predlozak (font/velicina/prored/A4 scored, dokazano sintetickim golden testom)."
+      ],
+      "productDecision": "Umjetnicki/projektni rad: sluzbeni izvor ne propisuje faculty-wide tehnicko oblikovanje pa su format-provjere iskljucene (informativne). PDF-A4 preflight nije smislen jer radovi nisu standardni A4 tekst (portfolio/projekt); ne izmisljam PDF-audit brojace ni pravila (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
