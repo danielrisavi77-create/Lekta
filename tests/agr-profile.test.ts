@@ -73,3 +73,57 @@ describe('AGR UI ozicenje: profil je vidljiv u odabiru i engine ima pravila', ()
     });
   });
 });
+
+describe('AGR zavrsni i doktorski: produkcijski profili (faculty kompletan)', () => {
+  const zavrsni = VERIFIED_PROFILES_WITH_DRAFTS.find((p) => p.id === 'agr-zavrsni');
+  const doktorski = VERIFIED_PROFILES_WITH_DRAFTS.find((p) => p.id === 'agr-doktorski');
+  const asProfile = (p: unknown) => p as unknown as ThesisProfile;
+
+  it('oba profila registrirana s ruleEntries', () => {
+    expect(zavrsni?.ruleEntries).toHaveLength(9);
+    expect(doktorski?.ruleEntries).toHaveLength(8);
+  });
+
+  it('izvori (2017, 2026) su snapshotirani', () => {
+    const srcs = SOURCE_REGISTRY as SourceEntry[];
+    expect(srcs.find((s) => s.id === 'agr-upute-zavrsni-2017')?.snapshotHash).toMatch(/^[a-f0-9]{64}$/);
+    expect(srcs.find((s) => s.id === 'agr-upute-doktorski-2026')?.snapshotHash).toMatch(/^[a-f0-9]{64}$/);
+  });
+
+  it('oba prolaze verifikacijski gate', () => {
+    expect(
+      runVerificationGate([asProfile(zavrsni), asProfile(doktorski)], SOURCE_REGISTRY as SourceEntry[], { now: NOW }),
+    ).toEqual([]);
+  });
+
+  it('zavrsni: 2 scored (numeracija, sadrzaj), ostalo advisory (Preporuke)', () => {
+    const { scored } = computePublishedRules(asProfile(zavrsni), SOURCE_REGISTRY as SourceEntry[]);
+    expect(scored.map((e) => e.checkId).sort()).toEqual(['page-numbers', 'toc']);
+  });
+
+  it('doktorski: 6 scored (imperativna Postavke stranice), 2 advisory', () => {
+    const { scored, advisory } = computePublishedRules(asProfile(doktorski), SOURCE_REGISTRY as SourceEntry[]);
+    expect(scored.map((e) => e.checkId).sort()).toEqual([
+      'font-size',
+      'line-spacing',
+      'margins',
+      'page-numbers',
+      'paper-size',
+      'toc',
+    ]);
+    expect(advisory.map((e) => e.checkId).sort()).toEqual(['citation-style', 'required-sections']);
+  });
+
+  it('UI: oba profila vezana na katalog agr uz vrste rada final/doctoral', () => {
+    const unit = allUnits().find((u) => u.id === 'agr')!;
+    expect(zavrsni!.programs.some((p) => unit.programs.includes(p))).toBe(true);
+    expect(doktorski!.programs.some((p) => unit.programs.includes(p))).toBe(true);
+    expect(zavrsni!.workTypes).toContain('final');
+    expect(doktorski!.workTypes).toContain('doctoral');
+  });
+
+  it('zivi rules popunjeni: doktorski tvrdo provjerava oblikovanje (prored 1,5)', () => {
+    expect(doktorski!.rules).toMatchObject({ requireToc: true, requirePageNumbers: true, requireA4: true, size: [12], spacing: 1.5 });
+    expect(zavrsni!.rules).toMatchObject({ size: [12], spacing: 1.15, checkJustify: true });
+  });
+});

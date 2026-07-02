@@ -5038,5 +5038,140 @@
       "stil citiranja (autor-godina)",
       "obvezne cjeline rada"
     ]
+  },
+  {
+    "id": "agr-zavrsni",
+    "unitId": "agr",
+    "programs": [
+      "Prijediplomski studiji Agronomskog fakulteta (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Agronomski fakultet, zavrsni (prijediplomski) rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2017-06-12",
+    "rules": {
+      "font": [
+        "Arial",
+        "Times New Roman",
+        "Calibri"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.15,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "justify": true,
+      "checkJustify": true,
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "requireA4": true,
+      "recommendedCitation": "harvard",
+      "accessDate": true
+    },
+    "facts": [
+      "Numeracija stranica od sazetka, u donjem desnom kutu (imperativ).",
+      "Sadrzaj je obvezna cjelina rada (imperativ).",
+      "Obostrano poravnanje (Justify) je propisano.",
+      "Font 12, prored 1,15, margine 2,5, A4 i opseg 20-30 str. formulirani kao Preporuke (advisory)."
+    ],
+    "note": "Tehnicko oblikovanje pod \"Preporuke za tehnicko oblikovanje rada\" -> advisory; scored samo imperativi (numeracija, Sadrzaj). Isti okvir kao diplomski, opseg 20-30.",
+    "sources": [
+      {
+        "title": "Upute za izradu zavrsnog rada (AGR, 2017)",
+        "url": "https://www.agr.unizg.hr/upload/nastava/bs_zavrsni_rad_uputa_20170612.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu zavrsnog rada (Agronomski fakultet, 2017)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "numeracija stranica",
+      "sadrzaj (obvezna cjelina)",
+      "obostrano poravnanje"
+    ],
+    "advisoryScope": [
+      "velicina slova",
+      "prored",
+      "margine",
+      "format papira",
+      "opseg u stranicama",
+      "stil citiranja (autor-godina)",
+      "obvezne cjeline rada"
+    ]
+  },
+  {
+    "id": "agr-doktorski",
+    "unitId": "agr",
+    "programs": [
+      "Doktorski studij Agronomskog fakulteta"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "profileLabel": "Agronomski fakultet, doktorski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2026-05-12",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "checkFont": false,
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "checkJustify": false,
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "requireA4": true,
+      "recommendedCitation": "harvard",
+      "accessDate": true
+    },
+    "facts": [
+      "Postavke stranice su imperativne: font 12, prored 1,5, margine 2,5 cm, A4.",
+      "Stranice numerirane od Uvoda do kraja rada.",
+      "Rad mora sadrzavati Sadrzaj.",
+      "Font-ime nije propisano (obavezna potpora HR znakova, npr. Times New Roman); citiranje po struci (npr. harvardski / casopis Agriculturae Conspectus Scientificus)."
+    ],
+    "note": "DR.08 Upute su imperativne za oblikovanje pa je 6 pravila scored (font-size, prored, margine, A4, numeracija, Sadrzaj). Font-ime i citiranje advisory. Naslovnica ima margine 3,0 cm (izuzeto iz scored margina tijela). Rasprava min 36000 znakova izostavljena (nema check-id).",
+    "sources": [
+      {
+        "title": "Upute za oblikovanje doktorskoga rada (DR.08, AGR, 2026)",
+        "url": "https://www.agr.unizg.hr/upload/nastava/dr_08_upute_za_oblikovanje_doktorskog_rada_20260512.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za oblikovanje doktorskoga rada (DR.08, Agronomski fakultet, 2026)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "velicina slova",
+      "prored",
+      "margine",
+      "format papira",
+      "numeracija stranica",
+      "sadrzaj (obvezna cjelina)"
+    ],
+    "advisoryScope": [
+      "naziv fonta",
+      "stil citiranja (struka/harvard)",
+      "obvezne cjeline rada"
+    ]
   }
 ]

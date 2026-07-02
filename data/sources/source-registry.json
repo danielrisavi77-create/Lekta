@@ -190,5 +190,31 @@
     "validityClass": "stable",
     "lastChecked": "2026-07-02",
     "note": "DOC snapshot (6 str). Doktorski format izrijekom: A4 (210x297), Times New Roman, velicina 12, prored 1,5 redak, margine 2,5 cm sve strane (naslovnica drugacije), numeracija stranica od Uvoda u donjem desnom kutu. Jedini FPZG izvor s eksplicitnim marginama."
+  },
+  {
+    "id": "agr-upute-zavrsni-2017",
+    "kind": "guidelines",
+    "title": "Upute za izradu zavrsnog rada (Agronomski fakultet, prijediplomski, 2017)",
+    "url": "https://www.agr.unizg.hr/upload/nastava/bs_zavrsni_rad_uputa_20170612.pdf",
+    "publisher": "Agronomski fakultet Sveucilista u Zagrebu",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/agr/agr-upute-zavrsni-2017.pdf",
+    "snapshotHash": "b3ec76035faeedb729c41a046bb522e2b86dbe9f7ebdebee3ecfe7640a323781",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-02",
+    "note": "PDF snapshot Uputa za zavrsni (prijediplomski) rad. Tehnicko oblikovanje pod \"Preporuke za tehnicko oblikovanje rada\" -> advisory; numeracija stranica i obvezan Sadrzaj -> scored. Opseg 20-30 str."
+  },
+  {
+    "id": "agr-upute-doktorski-2026",
+    "kind": "guidelines",
+    "title": "Upute za oblikovanje doktorskoga rada (DR.08, Agronomski fakultet, 2026)",
+    "url": "https://www.agr.unizg.hr/upload/nastava/dr_08_upute_za_oblikovanje_doktorskog_rada_20260512.pdf",
+    "publisher": "Agronomski fakultet Sveucilista u Zagrebu",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/agr/agr-upute-doktorski-2026.pdf",
+    "snapshotHash": "7d88702516094d932f4eac67a91bf49d8119c214cc6aa56f03954b4e9bcd0f4c",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-02",
+    "note": "PDF snapshot DR.08 Uputa za doktorski rad. Imperativna \"Postavke stranice\" (font 12, prored 1,5, margine 2,5, A4) + numeracija i Sadrzaj -> scored. Font-ime \"npr. Times New Roman\" i citiranje (struka/harvard) -> advisory. Naslovnica ima margine 3,0 (izuzeto)."
   }
 ]

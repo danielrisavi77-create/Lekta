@@ -9,6 +9,22 @@
       "lastVerified": "2026-06-30"
     },
     {
+      "profileId": "agr-doktorski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 2,
+      "ratio": 1,
+      "lastVerified": "2026-06-30"
+    },
+    {
+      "profileId": "agr-zavrsni",
+      "scored": 2,
+      "machineCheckable": 7,
+      "advisory": 7,
+      "ratio": 0.2857142857142857,
+      "lastVerified": "2026-06-30"
+    },
+    {
       "profileId": "fpzg-doktorski-politologija",
       "scored": 7,
       "machineCheckable": 7,
@@ -241,5 +257,5 @@
       "lastVerified": "2026-06-30"
     }
   ],
-  "totalScored": 160
+  "totalScored": 168
 }
