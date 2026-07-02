@@ -91,6 +91,22 @@ engine bez golden-file testa koji PRVO dokazuje zateÄeno ponaÅ¡anje.
 - `data/**` â autorski podaci (profili, izvori, rokovi, katalog, coverage).
 - `tests/**` â vitest: registar, regresija, UI smoke, rule-compiler, docx-golden.
 
+## Provenijencija fieldValidation (PID je identitet, ne sha256)
+
+Javni PDF uzorci u `fieldValidation.publicSources` identificiraju se PID-om
+(npr. `fkit:1301`), nikada preko sha256. nsk.hr repozitoriji (zir.nsk.hr,
+dr.nsk.hr, repozitorij.<fak>.unizg.hr) utiskuju jedinstveni watermark (~63 bajta
+u repu PDF-a) pri svakom preuzimanju, pa ponovni dohvat istog PID-a daje drugaciji
+sha. Zabiljezeni sha256 je otisak konkretne preuzete kopije u trenutku harvesta,
+ne reproducibilan integritetski hash. PDF-ovi se ne commitaju.
+
+Doktorska razina: jedini pouzdan izvor je dr.nsk.hr driver (openAccess) set
+(100% dc:type=Doktorski rad) ili dc.type/naslovnica po objektu. Institucijski
+`repozitorij.<fak>.unizg.hr` namespace je mijesan po razini (diplomski, zavrsni,
+doktorski) pa PID sam po sebi ne jamci doktorsku razinu; provjeri je iz PDF-a.
+Dohvat trazi pune browser headere (Accept, Accept-Language, Sec-Fetch-*), inace
+ModSecurity vraca HTTP 418.
+
 ## Konvencije
 
 - Hrvatski je default jezik sadrÅ¾aja i komentara u domenskim datotekama.
