@@ -38,9 +38,10 @@
       "sourcePage": "5. Doktorski rad",
       "quote": "prakticnog rad (umjetnicko ostvarenje) i teorijskog rada",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "alu-doktorski--citation-style",
@@ -54,9 +55,10 @@
       "sourcePage": "Smjernice - disertacija",
       "quote": "korektna upotreba citata",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     }
   ]
 }

@@ -156,9 +156,10 @@
       "sourcePage": "odjeljak 7.2. Opseg i graficko oblikovanje",
       "quote": "Diplomski rad treba sadrzavati oko 50 kartica teksta",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-povijest-umjetnosti-diplomski--citation-style",
@@ -172,9 +173,10 @@
       "sourcePage": "odjeljak 7.3. Navoenje i citiranje literature",
       "quote": "u radu se koristi jedan od dva nacina citiranja u biljeskama",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-povijest-umjetnosti-diplomski--required-sections",
@@ -200,9 +202,10 @@
       "sourcePage": "odjeljak 7.1. Struktura rada",
       "quote": "nacelno sadrzi sljedee dijelove",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-povijest-umjetnosti-diplomski--toc",
@@ -216,9 +219,10 @@
       "sourcePage": "odjeljak 7.1. Struktura rada",
       "quote": "SADRZAJ obuhvaa popis poglavlja i potpoglavlja",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     }
   ],
   "generatedAt": "2026-07-02"

@@ -64,9 +64,9 @@
       "ruleId": "mef-doktorski--required-sections",
       "checkId": "required-sections",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
       "authority": "program-page",
       "sourceId": "mef-naputci-tehnicka-obrada-doktorski-2022",
       "value": [
@@ -155,15 +155,16 @@
       "label": "Obvezne cjeline doktorskog rada",
       "machineCheckable": false,
       "sourcePage": "tocka 5) Rad mora sadrzavati (Sadrzaj, Popis oznaka i kratica te poglavlja 1-11)",
-      "quote": "Rad mora sadržavati:"
+      "quote": "Rad mora sadržavati:",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "mef-doktorski--word-count",
       "checkId": "word-count",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
       "authority": "program-page",
       "sourceId": "mef-naputci-tehnicka-obrada-doktorski-2022",
       "value": {
@@ -173,15 +174,16 @@
       "label": "Opseg kratkog sadrzaja i biografije (rijeci)",
       "machineCheckable": false,
       "sourcePage": "tocka 5) stavke 9 (kratki sadrzaj EN) i 11 (kratka biografija)",
-      "quote": "Kratka biografija (do 200 riječi)"
+      "quote": "Kratka biografija (do 200 riječi)",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "mef-doktorski--citation-style",
       "checkId": "citation-style",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
       "authority": "program-page",
       "sourceId": "mef-naputci-tehnicka-obrada-doktorski-2022",
       "value": "vancouver",
@@ -189,7 +191,8 @@
       "label": "Stil citiranja (numericki, Lijecnicki vjesnik / Vancouver)",
       "machineCheckable": false,
       "sourcePage": "tocka 5) stavka 10 Popis literature",
-      "quote": "Popis literature (prema naputcima Liječničkog vjesnika)"
+      "quote": "Popis literature (prema naputcima Liječničkog vjesnika)",
+      "confirmedVia": "human-audit"
     }
   ]
 }

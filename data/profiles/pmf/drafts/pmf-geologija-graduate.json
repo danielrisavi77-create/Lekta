@@ -118,9 +118,10 @@
       "sourcePage": "odjeljak 1. Uvod",
       "quote": "Kompozicija diplomskog rada (navedena poglavlja i njihov naziv) preporucena u",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "pmf-geologija-graduate--citation-style",
@@ -134,9 +135,10 @@
       "sourcePage": "odjeljak 1. Uvod (Reference)",
       "quote": "Reference u tekstu se pisu na jedan od dva nacina",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     }
   ],
   "generatedAt": "2026-07-02"

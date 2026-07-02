@@ -70,9 +70,10 @@
       "sourcePage": "Prilog 1: Upute za izradu diplomskog rada, II. Izgled diplomskog rada",
       "quote": "Rad treba biti otisnut fontom velicine 12pt s proredom od 15pt.",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "pmf-matematika-graduate--margins",
@@ -91,9 +92,10 @@
       "sourcePage": "Prilog 1: Upute za izradu diplomskog rada, II. Izgled diplomskog rada",
       "quote": "lijeva 35 mm, desna 23 mm, gornja 35 mm i donja 38 mm.",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "pmf-matematika-graduate--citation-style",
@@ -107,9 +109,10 @@
       "sourcePage": "Prilog 1: Upute za izradu diplomskog rada, II. Izgled diplomskog rada",
       "quote": "Na literaturu se poziva stavljanjem rednog broja reference unutar uglatih zagrada",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "pmf-matematika-graduate--required-sections",
@@ -131,9 +134,10 @@
       "sourcePage": "Prilog 1: Upute za izradu diplomskog rada, I. Osnovne cjeline diplomskog rada",
       "quote": "Diplomski rad treba sadrzavati sljedee cjeline: sadrzaj, uvod, glavni dio, literaturu, sazetak, summary i zivotopis, navedenim redoslijedom.",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     }
   ],
   "generatedAt": "2026-07-02"

@@ -141,9 +141,10 @@
       "sourcePage": "odjeljak 2.1 Tekst rada i postavke stranica (Predlozak)",
       "quote": "Na kraju rada obavezan je popis literature. Stavke popisa moraju odgovarati citatima iz teksta rada (sve što se nalazi u popisu literature mora imati referencu u tekstu i obratno).",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     }
   ],
   "generatedAt": "2026-07-02"

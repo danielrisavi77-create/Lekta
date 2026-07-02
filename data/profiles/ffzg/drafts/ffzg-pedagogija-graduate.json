@@ -175,9 +175,10 @@
       "sourcePage": "odjeljak Navoenje literature (APA stil)",
       "quote": "Navoenje literature i oblikovanje tablicnoga i grafickoga prikazivanja potrebno je uskladiti s",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-pedagogija-graduate--required-sections",
@@ -197,9 +198,10 @@
       "sourcePage": "uvodni odjeljak: prve cetiri stranice",
       "quote": "naslovnica, sadrzaj, stranica sa sazecima i Izjava o akademskoj cestitosti",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     }
   ],
   "generatedAt": "2026-07-02"

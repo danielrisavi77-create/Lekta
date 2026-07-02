@@ -137,9 +137,10 @@
       "sourcePage": "odjeljak Opseg rada",
       "quote": "od 25 do 40 kartica teksta",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-etnologija-graduate--citation-style",
@@ -153,9 +154,10 @@
       "sourcePage": "odjeljak Citiranje / Pravila o oblikovanju popisa literature",
       "quote": "Ostalo navoditi prema The Chicago Manual of Style",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-etnologija-graduate--required-sections",
@@ -179,9 +181,10 @@
       "sourcePage": "odjeljak Elementi diplomskog rada",
       "quote": "Elementi diplomskog rada",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-etnologija-graduate--toc",
@@ -195,9 +198,10 @@
       "sourcePage": "odjeljak Sadrzaj",
       "quote": "Sadrzaj diplomskog rada sastoji se od",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     }
   ],
   "generatedAt": "2026-07-02"

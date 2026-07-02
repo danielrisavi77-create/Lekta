@@ -134,9 +134,10 @@
       "sourcePage": "Prilog br. 5 Pravila za citiranje literature",
       "quote": "Svaki citat u tekstu mora biti zastupljen u popisu literature i obrnuto.",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "pmf-fizika-graduate--required-sections",
@@ -155,9 +156,10 @@
       "sourcePage": "odjeljak Struktura diplomskog rada",
       "quote": "Osnovni dijelovi diplomskog rada su",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     }
   ],
   "generatedAt": "2026-07-02"

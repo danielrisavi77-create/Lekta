@@ -136,9 +136,10 @@
       "sourcePage": "odjeljak OPSEG RADA",
       "quote": "obaseze od 45 do 60 kartica",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-sociologija-diplomski--citation-style",
@@ -152,9 +153,10 @@
       "sourcePage": "odjeljak POPIS LITERATURE",
       "quote": "Knjige se u popisu literature navode na sljedei nacin",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-sociologija-diplomski--required-sections",
@@ -178,9 +180,10 @@
       "sourcePage": "odjeljak STRUKTURA RADA",
       "quote": "pozeljna struktura diplomskog rada",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-sociologija-diplomski--toc",
@@ -194,9 +197,10 @@
       "sourcePage": "odjeljak STRUKTURA RADA (Sadrzaj)",
       "quote": "Sadrzi naslove i podnaslove pojedinih poglavlja diplomskog rada s brojevima stranica",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     }
   ],
   "generatedAt": "2026-07-02"

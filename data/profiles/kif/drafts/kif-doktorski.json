@@ -136,9 +136,10 @@
       "sourcePage": "odjeljak Postavke stranice",
       "quote": "Font (tip pisma): obavezna potpora svih hrvatskih znakova (npr. Times",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "kif-doktorski--citation-style",
@@ -152,9 +153,10 @@
       "sourcePage": "odjeljak Ilustracije (tablice i slike)",
       "quote": "dominantna u pojedinoj struci (harvardski stil,",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "kif-doktorski--required-sections",
@@ -178,9 +180,10 @@
       "sourcePage": "odjeljak Rad mora sadržavati",
       "quote": "Rad mora sadržavati:",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     }
   ]
 }

@@ -159,9 +159,10 @@
       "sourcePage": "odjeljak 2. Metodologija i kompozicija (Obavezni dijelovi rada)",
       "quote": "Obavezni dijelovi rada jesu Naslovnica (v. uzorak u Prilogu), Sadrzaj",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-kroatistika-graduate--page-count",
@@ -177,9 +178,10 @@
       "sourcePage": "odjeljak 3. Diskurz i opseg",
       "quote": "preporuceni je opseg 40 kartica teksta za odsjecni, odnosno 80 kartica teksta za meduodsjecni rad",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-kroatistika-graduate--citation-style",
@@ -193,9 +195,10 @@
       "sourcePage": "odjeljak 4. Sluzenje literaturom i njezino navodenje",
       "quote": "Podatak o izvoru ima oblik Prezime godina: stranica",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     }
   ],
   "generatedAt": "2026-07-02"

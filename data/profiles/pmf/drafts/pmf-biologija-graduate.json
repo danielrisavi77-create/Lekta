@@ -138,9 +138,10 @@
       "sourcePage": "odjeljak Dijelovi diplomskog rada, 7) Sadrzaj",
       "quote": "Preporuca se decimalna numeracija poglavlja i odlomaka u poglavljima",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "pmf-biologija-graduate--citation-style",
@@ -154,9 +155,10 @@
       "sourcePage": "odjeljak Dijelovi diplomskog rada, 16) Literatura",
       "quote": "ne navode numericki, ve prezimenom/prezimenima autora i godinom",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "pmf-biologija-graduate--required-sections",
@@ -178,9 +180,10 @@
       "sourcePage": "odjeljak Dijelovi diplomskog rada",
       "quote": "Diplomski rad mora sadrzavati sljedee dijelove:",
       "status": "advisory",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     }
   ],
   "generatedAt": "2026-07-02"
