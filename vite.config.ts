@@ -42,6 +42,7 @@ export default defineConfig({
         kartice: resolve(__dirname, 'kartice.html'),
         naslovnica: resolve(__dirname, 'naslovnica.html'),
         literatura: resolve(__dirname, 'literatura.html'),
+        izjava: resolve(__dirname, 'izjava.html'),
       },
     },
   },
