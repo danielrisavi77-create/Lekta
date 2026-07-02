@@ -33,6 +33,9 @@ serverska odluka; klijent nikad nije izvor istine.
   `v_tier_share` (samo service role; interne nagrade iskljucene iz prihoda).
 - `kpi-weekly.sql` - tjedni KPI upiti (pokreni kao service role). Checkout->purchase konverzija
   dolazi iz Lemon Squeezy dashboarda, ostalo je DB-izvedivo.
+- `migrations/0009_set_product_price.sql` - `set_product_price` (atomski products + pricing_changelog,
+  kriterij 14.12). Rucni UPDATE cijene bez changeloga je prekrsaj procesa.
+- `ACCEPTANCE.md` - mapiranje svih 14 kriterija (sekcija 14) na unit testove vs integraciju.
 
 ## Odnos prema testiranom jezgru
 

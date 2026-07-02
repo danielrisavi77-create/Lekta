@@ -8,6 +8,7 @@ import {
   isPassProduct,
   makePassCouponCode,
   PASS_COUPON_VALID_DAYS,
+  buildEntitlementInsert,
   type LemonWebhookPayload,
 } from '../src/report/webhook';
 
@@ -67,6 +68,37 @@ describe('verifyLemonSignature (HMAC-SHA256)', () => {
   });
   it('velika/mala slova potpisa ne mijenjaju rezultat', async () => {
     expect(await verifyLemonSignature(raw, validSig.toUpperCase(), secret)).toBe(true);
+  });
+});
+
+describe('buildEntitlementInsert (kriteriji 14.3/14.4)', () => {
+  const now = Date.UTC(2026, 0, 1);
+  it('slot proizvod: tocan product_id/work_type/slots_total + rok = now + purchase_window_days', () => {
+    const row = buildEntitlementInsert(
+      { id: 'slot_diplomski', workType: 'diplomski', slotsTotal: 1, purchaseWindowDays: 90 },
+      { userId: 'u1', orderId: 'o1' },
+      'lemonsqueezy',
+      now,
+    );
+    expect(row).toEqual({
+      user_id: 'u1',
+      work_type: 'diplomski',
+      slots_total: 1,
+      product_id: 'slot_diplomski',
+      order_id: 'o1',
+      provider: 'lemonsqueezy',
+      purchase_expires_at: new Date(now + 90 * 86400000).toISOString(),
+    });
+  });
+  it('pass proizvod nosi 6 seminarskih slotova', () => {
+    const row = buildEntitlementInsert(
+      { id: 'pass_semestralni', workType: 'seminarski', slotsTotal: 6, purchaseWindowDays: 180 },
+      { userId: 'u1', orderId: 'o2' },
+      'lemonsqueezy',
+      now,
+    );
+    expect(row.slots_total).toBe(6);
+    expect(row.work_type).toBe('seminarski');
   });
 });
 

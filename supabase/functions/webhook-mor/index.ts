@@ -17,6 +17,7 @@ import {
   isPassProduct,
   makePassCouponCode,
   PASS_COUPON_VALID_DAYS,
+  buildEntitlementInsert,
   type LemonEvent,
 } from '../../../src/report/webhook.ts';
 import { mapProductRow } from '../../../src/catalog/products-catalog.ts';
@@ -171,16 +172,9 @@ Deno.serve(async (req: Request) => {
   }
 
   // entitlement (6.4); idempotentno preko unique (provider, order_id)
-  const purchaseExpiresAt = isoAfterDays(Date.now(), product.purchaseWindowDays);
-  const { error } = await admin.from('entitlements').insert({
-    user_id: ev.userId,
-    work_type: product.workType,
-    slots_total: product.slotsTotal,
-    product_id: product.id,
-    order_id: ev.orderId,
-    provider: PROVIDER,
-    purchase_expires_at: purchaseExpiresAt,
-  });
+  const { error } = await admin
+    .from('entitlements')
+    .insert(buildEntitlementInsert(product, ev, PROVIDER, Date.now()));
   if (error && (error as any).code === '23505') return json({ ok: true, action: 'duplicate_ignored' });
   if (error) return json({ error: 'insert_failed', detail: error.message }, 500);
 

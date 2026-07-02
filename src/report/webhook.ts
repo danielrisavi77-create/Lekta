@@ -88,6 +88,45 @@ export function isoAfterDays(nowMs: number, days: number): string {
   return new Date(nowMs + days * 24 * 3600 * 1000).toISOString();
 }
 
+/** Podskup proizvoda koji webhook treba za entitlement (izbjegava vezanje na cijeli Product). */
+export interface EntitlementProduct {
+  id: string;
+  workType: string | null;
+  slotsTotal: number;
+  purchaseWindowDays: number;
+}
+
+export interface EntitlementInsert {
+  user_id: string;
+  work_type: string;
+  slots_total: number;
+  product_id: string;
+  order_id: string;
+  provider: string;
+  purchase_expires_at: string;
+}
+
+/**
+ * Redak entitlementa iz proizvoda + eventa (kriteriji 14.3/14.4): tocni product_id, work_type,
+ * slots_total (npr. pass -> 6) i purchase_expires_at = now + purchase_window_days.
+ */
+export function buildEntitlementInsert(
+  product: EntitlementProduct,
+  ev: { userId: string; orderId: string },
+  provider: string,
+  nowMs: number,
+): EntitlementInsert {
+  return {
+    user_id: ev.userId,
+    work_type: product.workType ?? '',
+    slots_total: product.slotsTotal,
+    product_id: product.id,
+    order_id: ev.orderId,
+    provider,
+    purchase_expires_at: isoAfterDays(nowMs, product.purchaseWindowDays),
+  };
+}
+
 // Pass bonus kupon (sekcija 6.5): jednokratni -20%, vrijedi na slot_zavrsni i slot_diplomski.
 export const PASS_COUPON_DISCOUNT = 20;
 export const PASS_COUPON_VALID_DAYS = 120;
