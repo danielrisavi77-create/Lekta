@@ -7728,7 +7728,31 @@
     "profileLabel": "Filozofski fakultet (Odsjek za informacijske i komunikacijske znanosti), zavrsni rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2024-12-03",
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/ffzg-pmf-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Profil se analizira bez pucanja i scored/informativne provjere ispravno se ponasaju (golden test)."
+      ],
+      "observedDeviations": [
+        "ffzg-informacijske-zavrsni: font propisan, ali velicina/prored/margine nisu pa su checkSize/Spacing/Margins:false (crash-fix). Mijesani ZIR namespace; validacija golden-test."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
+      "checkSize": false,
+      "checkSpacing": false,
+      "checkMargins": false,
       "font": [
         "Arial",
         "Times New Roman"
@@ -7848,11 +7872,32 @@
     "profileLabel": "Filozofski fakultet (Odsjek za filozofiju), diplomski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2019-06-01",
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/ffzg-pmf-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Profil se analizira bez pucanja i scored/informativne provjere ispravno se ponasaju (golden test)."
+      ],
+      "observedDeviations": [
+        "Filozofski fakultet je jedan mijesani ZIR namespace preko mnogo odsjeka; per-odsjecko stvarno uzorkovanje nije radjeno (nepraktcno bez rucnog raspoznavanja programa) pa je validacija golden-test. Scalar size:12 ispravljen na [12]."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
       ],
-      "size": 12,
+      "size": [12],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -10942,11 +10987,32 @@
     "profileLabel": "Filozofski fakultet (Odsjek za psihologiju), diplomski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2024-10-01",
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/ffzg-pmf-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Profil se analizira bez pucanja i scored/informativne provjere ispravno se ponasaju (golden test)."
+      ],
+      "observedDeviations": [
+        "Filozofski fakultet je jedan mijesani ZIR namespace preko mnogo odsjeka; per-odsjecko stvarno uzorkovanje nije radjeno (nepraktcno bez rucnog raspoznavanja programa) pa je validacija golden-test. Scalar size:12 ispravljen na [12]."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
       ],
-      "size": 12,
+      "size": [12],
       "spacing": 1.5,
       "margins": {
         "top": 2.54,
@@ -11009,11 +11075,32 @@
     "profileLabel": "Filozofski fakultet (Odsjek za sociologiju), diplomski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2010-01-01",
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/ffzg-pmf-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Profil se analizira bez pucanja i scored/informativne provjere ispravno se ponasaju (golden test)."
+      ],
+      "observedDeviations": [
+        "Filozofski fakultet je jedan mijesani ZIR namespace preko mnogo odsjeka; per-odsjecko stvarno uzorkovanje nije radjeno (nepraktcno bez rucnog raspoznavanja programa) pa je validacija golden-test. Scalar size:12 ispravljen na [12]."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
       ],
-      "size": 12,
+      "size": [12],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -11145,11 +11232,32 @@
     "profileLabel": "Filozofski fakultet (Odsjek za kroatistiku), diplomski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2026-06-01",
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/ffzg-pmf-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Profil se analizira bez pucanja i scored/informativne provjere ispravno se ponasaju (golden test)."
+      ],
+      "observedDeviations": [
+        "Filozofski fakultet je jedan mijesani ZIR namespace preko mnogo odsjeka; per-odsjecko stvarno uzorkovanje nije radjeno (nepraktcno bez rucnog raspoznavanja programa) pa je validacija golden-test. Scalar size:12 ispravljen na [12]."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
       ],
-      "size": 12,
+      "size": [12],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -11240,7 +11348,29 @@
     "profileLabel": "Prirodoslovno-matematicki fakultet (Bioloski odsjek), diplomski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2026",
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/ffzg-pmf-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Profil se analizira bez pucanja i scored/informativne provjere ispravno se ponasaju (golden test)."
+      ],
+      "observedDeviations": [
+        "PMF Biologija: font nije propisan -> checkFont:false (crash-fix). Mijesani pmf namespace; per-odsjecko stvarno uzorkovanje nije radjeno."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
+      "checkFont": false,
       "size": [
         11,
         12
@@ -11308,6 +11438,27 @@
     "profileLabel": "Prirodoslovno-matematicki fakultet (Fizicki odsjek), diplomski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2014",
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/ffzg-pmf-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Profil se analizira bez pucanja i scored/informativne provjere ispravno se ponasaju (golden test)."
+      ],
+      "observedDeviations": [
+        "PMF Fizika: puna pravila (custom citiranje strop). Mijesani pmf namespace; validacija golden-test."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
@@ -11371,7 +11522,31 @@
     "profileLabel": "Prirodoslovno-matematicki fakultet (Matematicki odsjek), diplomski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2024-09",
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/ffzg-pmf-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Profil se analizira bez pucanja i scored/informativne provjere ispravno se ponasaju (golden test)."
+      ],
+      "observedDeviations": [
+        "PMF Matematika: font/prored/margine nisu propisani -> checkFont/Spacing/Margins:false (crash-fix). ieee citiranje strop; validacija golden-test."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
+      "checkFont": false,
+      "checkSpacing": false,
+      "checkMargins": false,
       "size": [
         12
       ],
@@ -11432,11 +11607,32 @@
     "profileLabel": "Filozofski fakultet (Odsjek za pedagogiju), diplomski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2024-03-05",
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/ffzg-pmf-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Profil se analizira bez pucanja i scored/informativne provjere ispravno se ponasaju (golden test)."
+      ],
+      "observedDeviations": [
+        "Filozofski fakultet je jedan mijesani ZIR namespace preko mnogo odsjeka; per-odsjecko stvarno uzorkovanje nije radjeno (nepraktcno bez rucnog raspoznavanja programa) pa je validacija golden-test. Scalar size:12 ispravljen na [12]."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
       ],
-      "size": 12,
+      "size": [12],
       "spacing": 1.5,
       "margins": {
         "top": 3,
@@ -11542,11 +11738,32 @@
     "profileLabel": "Filozofski fakultet (Odsjek za lingvistiku), diplomski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2024-04-01",
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/ffzg-pmf-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Profil se analizira bez pucanja i scored/informativne provjere ispravno se ponasaju (golden test)."
+      ],
+      "observedDeviations": [
+        "Filozofski fakultet je jedan mijesani ZIR namespace preko mnogo odsjeka; per-odsjecko stvarno uzorkovanje nije radjeno (nepraktcno bez rucnog raspoznavanja programa) pa je validacija golden-test. Scalar size:12 ispravljen na [12]."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
       ],
-      "size": 12,
+      "size": [12],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -11604,11 +11821,32 @@
     "profileLabel": "Filozofski fakultet (Odsjek za povijest umjetnosti), diplomski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2016-10-18",
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/ffzg-pmf-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Profil se analizira bez pucanja i scored/informativne provjere ispravno se ponasaju (golden test)."
+      ],
+      "observedDeviations": [
+        "Filozofski fakultet je jedan mijesani ZIR namespace preko mnogo odsjeka; per-odsjecko stvarno uzorkovanje nije radjeno (nepraktcno bez rucnog raspoznavanja programa) pa je validacija golden-test. Scalar size:12 ispravljen na [12]."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
       ],
-      "size": 12,
+      "size": [12],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -11751,11 +11989,32 @@
     "profileLabel": "Filozofski fakultet (Odsjek za arheologiju), diplomski (magistarski) rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2014-04-01",
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/ffzg-pmf-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Profil se analizira bez pucanja i scored/informativne provjere ispravno se ponasaju (golden test)."
+      ],
+      "observedDeviations": [
+        "Filozofski fakultet je jedan mijesani ZIR namespace preko mnogo odsjeka; per-odsjecko stvarno uzorkovanje nije radjeno (nepraktcno bez rucnog raspoznavanja programa) pa je validacija golden-test. Scalar size:12 ispravljen na [12]."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
       ],
-      "size": 12,
+      "size": [12],
       "spacing": 1.5,
       "margins": {
         "top": 3,
@@ -11875,11 +12134,32 @@
     "profileLabel": "Filozofski fakultet (Odsjek za etnologiju i kulturnu antropologiju), diplomski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2019-08-01",
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/ffzg-pmf-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Profil se analizira bez pucanja i scored/informativne provjere ispravno se ponasaju (golden test)."
+      ],
+      "observedDeviations": [
+        "Filozofski fakultet je jedan mijesani ZIR namespace preko mnogo odsjeka; per-odsjecko stvarno uzorkovanje nije radjeno (nepraktcno bez rucnog raspoznavanja programa) pa je validacija golden-test. Scalar size:12 ispravljen na [12]."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
       ],
-      "size": 12,
+      "size": [12],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -11939,7 +12219,29 @@
     "profileLabel": "Prirodoslovno-matematicki fakultet (Geoloski odsjek), diplomski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2024-02-01",
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/ffzg-pmf-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Profil se analizira bez pucanja i scored/informativne provjere ispravno se ponasaju (golden test)."
+      ],
+      "observedDeviations": [
+        "PMF Geologija: margine nisu propisane -> checkMargins:false (crash-fix). Mijesani pmf namespace; validacija golden-test."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
+      "checkMargins": false,
       "font": [
         "Times New Roman"
       ],
