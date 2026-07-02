@@ -113,7 +113,37 @@ function bind(){
 function setFile(file){
  if(file&&(!file.name.toLowerCase().endsWith('.docx')||file.size>50*1024*1024)){toast(file.size>50*1024*1024?'Dokument je veći od 50 MB.':'Odaberi Word dokument u .docx formatu.');return}
  selectedDocx=file||null;$('#dropEmpty').classList.toggle('hidden',!!file);$('#selectedFile').classList.toggle('hidden',!file);$('#dropzone').classList.toggle('has-file',!!file);$('#analyzeBtn').disabled=!file;
- if(file){$('#selectedName').textContent=file.name;$('#selectedMeta').textContent=`${(file.size/1024/1024).toFixed(2)} MB · spremno za lokalnu analizu`}else $('#fileInput').value='';
+ if(file){$('#selectedName').textContent=file.name;$('#selectedMeta').textContent=`${(file.size/1024/1024).toFixed(2)} MB · spremno za lokalnu analizu`;applyDetectedContext(file)}else $('#fileInput').value='';
+}
+// Feature 4: auto-detekcija fakulteta/studija/razine s uploada. Cisto citanje parsera (bez izmjene
+// enginea): iz naslovnice + core naslova heuristicki pogadja kombinaciju i prretpopuni izbornike.
+// Nikad ne blokira analizu; ako nista ne prepozna, ostavlja postojeci odabir. Korisnik moze ispraviti.
+let _detectToken=0;
+async function detectDocxContext(file){
+ try{
+  const zip=new ZipReader(await file.arrayBuffer());const xml=await zip.text('word/document.xml');if(!xml)return null;
+  const doc=parseXml(xml,'Detekcija konteksta'),paras=els(doc,'w:p').map(paragraphText).map(x=>x.trim()).filter(Boolean).slice(0,80);
+  let coreTitle='';try{const c=await zip.text('docProps/core.xml');if(c)coreTitle=textOf(first(parseXml(c,'DOCX core'),'dc:title'))||''}catch(e){}
+  const n=normalize(paras.join(' ')+' '+coreTitle);if(!n)return null;
+  const units=(ZAGREB_CATALOG.find(g=>g.id==='unizg')||{units:[]}).units;
+  let unit=null,best=0;for(const u of units){const key=normalize(u.name);if(key.length>=6&&key.length>best&&n.includes(key)){unit=u;best=key.length}}
+  if(!unit)return null;
+  const wtRules=[['doctoral',/doktorsk|disertacij/],['specialist',/specijalisticki/],['graduate',/diplomskirad/],['final',/zavrsnirad/],['seminar',/seminarskirad/]];
+  let workType=null;for(const[wt,re]of wtRules)if(re.test(n)){workType=wt;break}
+  let program=null,pbest=0;for(const p of(unit.programs||[])){if(/^Opći/.test(p)||/studij/i.test(p))continue;const key=normalize(p);if(key.length>=5&&key.length>pbest&&n.includes(key)){program=p;pbest=key.length}}
+  return{unitId:unit.id,unitName:unit.name,program,workType};
+ }catch(e){return null}
+}
+async function applyDetectedContext(file){
+ const token=++_detectToken,ctx=await detectDocxContext(file);
+ if(token!==_detectToken||!ctx)return;
+ setOptionIfExists($('#institutionSelect'),'unizg');populateUnits();
+ setOptionIfExists($('#unitSelect'),ctx.unitId);populatePrograms();
+ if(ctx.program)setOptionIfExists($('#programSelect'),ctx.program);
+ autoSelectWorkType();if(ctx.workType)setOptionIfExists($('#workType'),ctx.workType);
+ syncProfileContext();savePreferences();
+ const parts=[ctx.unitName];if(ctx.program)parts.push(ctx.program);if(ctx.workType)parts.push(WORK_TYPE_LABELS[ctx.workType]||ctx.workType);
+ toast('Prepoznato iz dokumenta: '+parts.join(' · ')+'. Provjeri i po potrebi ispravi.');
 }
 function setAuxFile(kind,file){
  const isPdf=kind==='pdf',isAv=kind==='av',max=isPdf?100*1024*1024:isAv?8*1024*1024*1024:25*1024*1024,ext=isPdf?'.pdf':isAv?null:'.docx';
