@@ -16,9 +16,9 @@
       "scored": true,
       "verifiedHash": "0c254d268e6ce707d176f8e0aa871d95a2d98df86d6773c292879aeb96a2167b",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "confirmedVia": "ai-1pass-batch"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "zsem-zavrsni--font",
@@ -37,9 +37,9 @@
       "scored": true,
       "verifiedHash": "0c254d268e6ce707d176f8e0aa871d95a2d98df86d6773c292879aeb96a2167b",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "confirmedVia": "ai-1pass-batch"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "zsem-zavrsni--font-size",
@@ -56,9 +56,9 @@
       "scored": true,
       "verifiedHash": "0c254d268e6ce707d176f8e0aa871d95a2d98df86d6773c292879aeb96a2167b",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "confirmedVia": "ai-1pass-batch"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "zsem-zavrsni--line-spacing",
@@ -75,9 +75,9 @@
       "scored": true,
       "verifiedHash": "0c254d268e6ce707d176f8e0aa871d95a2d98df86d6773c292879aeb96a2167b",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "confirmedVia": "ai-1pass-batch"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "zsem-zavrsni--justify",
@@ -94,9 +94,9 @@
       "scored": true,
       "verifiedHash": "0c254d268e6ce707d176f8e0aa871d95a2d98df86d6773c292879aeb96a2167b",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "confirmedVia": "ai-1pass-batch"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "zsem-zavrsni--page-count",
@@ -115,9 +115,9 @@
       "scored": true,
       "verifiedHash": "0c254d268e6ce707d176f8e0aa871d95a2d98df86d6773c292879aeb96a2167b",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "confirmedVia": "ai-1pass-batch"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     }
   ],
   "generatedAt": "2026-07-02"

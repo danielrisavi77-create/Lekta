@@ -18,9 +18,9 @@
       "scored": true,
       "verifiedHash": "14cbc4cdbbffae19d900bb8cc806a69bb20c8615b005b9e29ec040554108e7f0",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "confirmedVia": "ai-1pass-batch"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "zsem-diplomski--font-size",
@@ -37,9 +37,9 @@
       "scored": true,
       "verifiedHash": "14cbc4cdbbffae19d900bb8cc806a69bb20c8615b005b9e29ec040554108e7f0",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "confirmedVia": "ai-1pass-batch"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "zsem-diplomski--line-spacing",
@@ -56,9 +56,9 @@
       "scored": true,
       "verifiedHash": "14cbc4cdbbffae19d900bb8cc806a69bb20c8615b005b9e29ec040554108e7f0",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "confirmedVia": "ai-1pass-batch"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "zsem-diplomski--justify",
@@ -75,9 +75,9 @@
       "scored": true,
       "verifiedHash": "14cbc4cdbbffae19d900bb8cc806a69bb20c8615b005b9e29ec040554108e7f0",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "confirmedVia": "ai-1pass-batch"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "zsem-diplomski--heading-rules",
@@ -108,9 +108,9 @@
       "scored": true,
       "verifiedHash": "14cbc4cdbbffae19d900bb8cc806a69bb20c8615b005b9e29ec040554108e7f0",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "confirmedVia": "ai-1pass-batch"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     }
   ],
   "generatedAt": "2026-07-02"

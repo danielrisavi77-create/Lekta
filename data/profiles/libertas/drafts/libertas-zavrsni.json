@@ -16,9 +16,9 @@
       "scored": true,
       "verifiedHash": "1b8c091a324dcd8befc501a94d3c565cd819cd80665a7c288d69c40989d9d94e",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "confirmedVia": "ai-1pass-batch"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "libertas-zavrsni--font",
@@ -37,9 +37,9 @@
       "scored": true,
       "verifiedHash": "1b8c091a324dcd8befc501a94d3c565cd819cd80665a7c288d69c40989d9d94e",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "confirmedVia": "ai-1pass-batch"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "libertas-zavrsni--font-size",
@@ -56,9 +56,9 @@
       "scored": true,
       "verifiedHash": "1b8c091a324dcd8befc501a94d3c565cd819cd80665a7c288d69c40989d9d94e",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "confirmedVia": "ai-1pass-batch"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "libertas-zavrsni--line-spacing",
@@ -75,9 +75,9 @@
       "scored": true,
       "verifiedHash": "1b8c091a324dcd8befc501a94d3c565cd819cd80665a7c288d69c40989d9d94e",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "confirmedVia": "ai-1pass-batch"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     }
   ],
   "generatedAt": "2026-07-02"
