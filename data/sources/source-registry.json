@@ -1087,5 +1087,31 @@
     "validityClass": "stable",
     "lastChecked": "2026-07-02",
     "note": "Sveucilisni predlozak za oblikovanje doktorskog rada; fakulteti izrijekom delegiraju oblikovanje disertacije na njega (potvrdjeno deepen-3)."
+  },
+  {
+    "id": "rgnf-predlozak-2022",
+    "kind": "template",
+    "title": "Predlozak zavrsnog ili diplomskog rada (RGNF)",
+    "url": "https://www.rgn.unizg.hr/images/studentska_referada/2022/Predlo%C5%BEak_zavr%C5%A1nog_ili_diplomskog_rada.docx",
+    "publisher": "Sveuciliste u Zagrebu, Rudarsko-geolosko-naftni fakultet",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/rgnf/rgnf-predlozak-2022.docx",
+    "snapshotHash": "1773255a260cb9605b38b69acbc64296411f95d298b11cc1adb957b01984bd35",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-02",
+    "note": "Predlozak istovremeno sluzi kao template i sadrzi pisane upute za oblikovanje; \"sastavni dio\" Uputa 2025 (cl. 10 Pravilnika). Faculty-wide, vrijedi za zavrsni i diplomski."
+  },
+  {
+    "id": "rgnf-uputa-zavrsni-diplomski-2025",
+    "kind": "guidelines",
+    "title": "Upute za izradu i obranu zavrsnog i diplomskog rada (RGNF, 2025)",
+    "url": "https://www.rgn.unizg.hr/hr/studiji/preddiplomski-studij/zavrsni-radovi/upute-i-predlosci",
+    "publisher": "Sveuciliste u Zagrebu, Rudarsko-geolosko-naftni fakultet",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/rgnf/rgnf-uputa-zavrsni-diplomski-2025.pdf",
+    "snapshotHash": "cac42903e6449b0ebfc21c30dc351d66092118672d28fe5bf2d28954741191e6",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-02",
+    "note": "Skenirana, OCR-ana (scripts/ocr_pdf.py). Proceduralna (prijava teme, obrana, povjerenstva); oblikovanje IZRIJEKOM delegira na Predlozak koji je sastavni dio uputa."
   }
 ]

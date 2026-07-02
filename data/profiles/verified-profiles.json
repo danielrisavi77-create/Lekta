@@ -14001,5 +14001,139 @@
       "numeracija stranica"
     ],
     "advisoryScope": []
+  },
+  {
+    "id": "rgnf-zavrsni",
+    "unitId": "rgnf",
+    "programs": [
+      "Prijediplomski studiji Rudarsko-geolosko-naftnog fakulteta (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Rudarsko-geolosko-naftni fakultet, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3
+      },
+      "requireToc": true,
+      "recommendedCitation": "harvard"
+    },
+    "facts": [
+      "Predlozak (RGNF) izrijekom vrijedi za zavrsni i diplomski rad; sastavni dio Uputa 2025.",
+      "Font Times New Roman 12 pt, prored 1,5 (imperativ \"koristi se\") -> scored.",
+      "Margine lijeva 3 cm, ostale 2,5 cm (\"moraju biti\") -> scored.",
+      "Sadrzaj (popis poglavlja s numeracijom) -> scored; harvardski citatni sustav (imperativ \"treba slijediti\") -> scored.",
+      "Struktura rada nije iskazana jedinstvenim imperativom \"mora sadrzavati\" -> required-sections advisory.",
+      "Format papira (A4) i numeracija stranica nisu tekstualno propisani u predlosku -> izostavljeni."
+    ],
+    "note": "Pisana pravila iz Predloska (RGNF, 2022) koji je sastavni dio Uputa 2025 (skenirana Uputa OCR-ana; delegira oblikovanje na Predlozak). Scored: font, velicina, prored, margine, sadrzaj, citatni stil. Advisory: obvezne cjeline.",
+    "sources": [
+      {
+        "title": "Predlozak zavrsnog ili diplomskog rada (RGNF)",
+        "url": "https://www.rgn.unizg.hr/images/studentska_referada/2022/Predlo%C5%BEak_zavr%C5%A1nog_ili_diplomskog_rada.docx"
+      },
+      {
+        "title": "Upute za izradu i obranu zavrsnog i diplomskog rada (RGNF, 2025)",
+        "url": "https://www.rgn.unizg.hr/hr/studiji/preddiplomski-studij/zavrsni-radovi/upute-i-predlosci"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o izradi i obrani zavrsnog i diplomskog rada (RGNF)",
+      "Upute za izradu i obranu zavrsnog i diplomskog rada (RGNF, 2025)",
+      "Predlozak zavrsnog ili diplomskog rada (RGNF, 2022)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "sadrzaj",
+      "stil citiranja"
+    ],
+    "advisoryScope": [
+      "obvezne cjeline rada"
+    ]
+  },
+  {
+    "id": "rgnf-diplomski",
+    "unitId": "rgnf",
+    "programs": [
+      "Diplomski studiji Rudarsko-geolosko-naftnog fakulteta"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Rudarsko-geolosko-naftni fakultet, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3
+      },
+      "requireToc": true,
+      "recommendedCitation": "harvard"
+    },
+    "facts": [
+      "Predlozak (RGNF) izrijekom vrijedi za zavrsni i diplomski rad; sastavni dio Uputa 2025.",
+      "Font Times New Roman 12 pt, prored 1,5 (imperativ \"koristi se\") -> scored.",
+      "Margine lijeva 3 cm, ostale 2,5 cm (\"moraju biti\") -> scored.",
+      "Sadrzaj (popis poglavlja s numeracijom) -> scored; harvardski citatni sustav (imperativ \"treba slijediti\") -> scored.",
+      "Struktura rada nije iskazana jedinstvenim imperativom \"mora sadrzavati\" -> required-sections advisory.",
+      "Format papira (A4) i numeracija stranica nisu tekstualno propisani u predlosku -> izostavljeni."
+    ],
+    "note": "Pisana pravila iz Predloska (RGNF, 2022) koji je sastavni dio Uputa 2025 (skenirana Uputa OCR-ana; delegira oblikovanje na Predlozak). Scored: font, velicina, prored, margine, sadrzaj, citatni stil. Advisory: obvezne cjeline.",
+    "sources": [
+      {
+        "title": "Predlozak zavrsnog ili diplomskog rada (RGNF)",
+        "url": "https://www.rgn.unizg.hr/images/studentska_referada/2022/Predlo%C5%BEak_zavr%C5%A1nog_ili_diplomskog_rada.docx"
+      },
+      {
+        "title": "Upute za izradu i obranu zavrsnog i diplomskog rada (RGNF, 2025)",
+        "url": "https://www.rgn.unizg.hr/hr/studiji/preddiplomski-studij/zavrsni-radovi/upute-i-predlosci"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o izradi i obrani zavrsnog i diplomskog rada (RGNF)",
+      "Upute za izradu i obranu zavrsnog i diplomskog rada (RGNF, 2025)",
+      "Predlozak zavrsnog ili diplomskog rada (RGNF, 2022)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "sadrzaj",
+      "stil citiranja"
+    ],
+    "advisoryScope": [
+      "obvezne cjeline rada"
+    ]
   }
 ]

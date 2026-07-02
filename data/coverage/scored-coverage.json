@@ -737,6 +737,22 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "rgnf-diplomski",
+      "scored": 6,
+      "machineCheckable": 5,
+      "advisory": 1,
+      "ratio": 1.2,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "rgnf-zavrsni",
+      "scored": 6,
+      "machineCheckable": 5,
+      "advisory": 1,
+      "ratio": 1.2,
+      "lastVerified": "2026-07-02"
+    },
+    {
       "profileId": "sfzg-diplomski",
       "scored": 9,
       "machineCheckable": 8,
@@ -849,5 +865,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 598
+  "totalScored": 610
 }

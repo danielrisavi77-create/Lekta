@@ -1,0 +1,324 @@
+{
+  "faculty": "rgnf",
+  "unit": {
+    "id": "rgnf",
+    "name": "Rudarsko-geolosko-naftni fakultet",
+    "family": "stem",
+    "status": "generic"
+  },
+  "catalogPrograms": [
+    "Prijediplomski studiji Rudarsko-geolosko-naftnog fakulteta (zavrsni rad)",
+    "Diplomski studiji Rudarsko-geolosko-naftnog fakulteta",
+    "Opci profil fakulteta"
+  ],
+  "sources": [
+    {
+      "id": "rgnf-predlozak-2022",
+      "kind": "template",
+      "title": "Predlozak zavrsnog ili diplomskog rada (RGNF)",
+      "url": "https://www.rgn.unizg.hr/images/studentska_referada/2022/Predlo%C5%BEak_zavr%C5%A1nog_ili_diplomskog_rada.docx",
+      "publisher": "Sveuciliste u Zagrebu, Rudarsko-geolosko-naftni fakultet",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/rgnf/rgnf-predlozak-2022.docx",
+      "snapshotHash": "1773255a260cb9605b38b69acbc64296411f95d298b11cc1adb957b01984bd35",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Predlozak istovremeno sluzi kao template i sadrzi pisane upute za oblikovanje; \"sastavni dio\" Uputa 2025 (cl. 10 Pravilnika). Faculty-wide, vrijedi za zavrsni i diplomski."
+    },
+    {
+      "id": "rgnf-uputa-zavrsni-diplomski-2025",
+      "kind": "guidelines",
+      "title": "Upute za izradu i obranu zavrsnog i diplomskog rada (RGNF, 2025)",
+      "url": "https://www.rgn.unizg.hr/hr/studiji/preddiplomski-studij/zavrsni-radovi/upute-i-predlosci",
+      "publisher": "Sveuciliste u Zagrebu, Rudarsko-geolosko-naftni fakultet",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/rgnf/rgnf-uputa-zavrsni-diplomski-2025.pdf",
+      "snapshotHash": "cac42903e6449b0ebfc21c30dc351d66092118672d28fe5bf2d28954741191e6",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Skenirana, OCR-ana (scripts/ocr_pdf.py). Proceduralna (prijava teme, obrana, povjerenstva); oblikovanje IZRIJEKOM delegira na Predlozak koji je sastavni dio uputa."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "rgnf-zavrsni",
+      "unitId": "rgnf",
+      "programs": [
+        "Prijediplomski studiji Rudarsko-geolosko-naftnog fakulteta (zavrsni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Rudarsko-geolosko-naftni fakultet, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 3
+        },
+        "requireToc": true,
+        "recommendedCitation": "harvard"
+      },
+      "facts": [
+        "Predlozak (RGNF) izrijekom vrijedi za zavrsni i diplomski rad; sastavni dio Uputa 2025.",
+        "Font Times New Roman 12 pt, prored 1,5 (imperativ \"koristi se\") -> scored.",
+        "Margine lijeva 3 cm, ostale 2,5 cm (\"moraju biti\") -> scored.",
+        "Sadrzaj (popis poglavlja s numeracijom) -> scored; harvardski citatni sustav (imperativ \"treba slijediti\") -> scored.",
+        "Struktura rada nije iskazana jedinstvenim imperativom \"mora sadrzavati\" -> required-sections advisory.",
+        "Format papira (A4) i numeracija stranica nisu tekstualno propisani u predlosku -> izostavljeni."
+      ],
+      "note": "Pisana pravila iz Predloska (RGNF, 2022) koji je sastavni dio Uputa 2025 (skenirana Uputa OCR-ana; delegira oblikovanje na Predlozak). Scored: font, velicina, prored, margine, sadrzaj, citatni stil. Advisory: obvezne cjeline.",
+      "sources": [
+        {
+          "title": "Predlozak zavrsnog ili diplomskog rada (RGNF)",
+          "url": "https://www.rgn.unizg.hr/images/studentska_referada/2022/Predlo%C5%BEak_zavr%C5%A1nog_ili_diplomskog_rada.docx"
+        },
+        {
+          "title": "Upute za izradu i obranu zavrsnog i diplomskog rada (RGNF, 2025)",
+          "url": "https://www.rgn.unizg.hr/hr/studiji/preddiplomski-studij/zavrsni-radovi/upute-i-predlosci"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o izradi i obrani zavrsnog i diplomskog rada (RGNF)",
+        "Upute za izradu i obranu zavrsnog i diplomskog rada (RGNF, 2025)",
+        "Predlozak zavrsnog ili diplomskog rada (RGNF, 2022)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "font",
+        "velicina slova",
+        "prored",
+        "margine",
+        "sadrzaj",
+        "stil citiranja"
+      ],
+      "advisoryScope": [
+        "obvezne cjeline rada"
+      ]
+    },
+    {
+      "id": "rgnf-diplomski",
+      "unitId": "rgnf",
+      "programs": [
+        "Diplomski studiji Rudarsko-geolosko-naftnog fakulteta"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Rudarsko-geolosko-naftni fakultet, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 3
+        },
+        "requireToc": true,
+        "recommendedCitation": "harvard"
+      },
+      "facts": [
+        "Predlozak (RGNF) izrijekom vrijedi za zavrsni i diplomski rad; sastavni dio Uputa 2025.",
+        "Font Times New Roman 12 pt, prored 1,5 (imperativ \"koristi se\") -> scored.",
+        "Margine lijeva 3 cm, ostale 2,5 cm (\"moraju biti\") -> scored.",
+        "Sadrzaj (popis poglavlja s numeracijom) -> scored; harvardski citatni sustav (imperativ \"treba slijediti\") -> scored.",
+        "Struktura rada nije iskazana jedinstvenim imperativom \"mora sadrzavati\" -> required-sections advisory.",
+        "Format papira (A4) i numeracija stranica nisu tekstualno propisani u predlosku -> izostavljeni."
+      ],
+      "note": "Pisana pravila iz Predloska (RGNF, 2022) koji je sastavni dio Uputa 2025 (skenirana Uputa OCR-ana; delegira oblikovanje na Predlozak). Scored: font, velicina, prored, margine, sadrzaj, citatni stil. Advisory: obvezne cjeline.",
+      "sources": [
+        {
+          "title": "Predlozak zavrsnog ili diplomskog rada (RGNF)",
+          "url": "https://www.rgn.unizg.hr/images/studentska_referada/2022/Predlo%C5%BEak_zavr%C5%A1nog_ili_diplomskog_rada.docx"
+        },
+        {
+          "title": "Upute za izradu i obranu zavrsnog i diplomskog rada (RGNF, 2025)",
+          "url": "https://www.rgn.unizg.hr/hr/studiji/preddiplomski-studij/zavrsni-radovi/upute-i-predlosci"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o izradi i obrani zavrsnog i diplomskog rada (RGNF)",
+        "Upute za izradu i obranu zavrsnog i diplomskog rada (RGNF, 2025)",
+        "Predlozak zavrsnog ili diplomskog rada (RGNF, 2022)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "font",
+        "velicina slova",
+        "prored",
+        "margine",
+        "sadrzaj",
+        "stil citiranja"
+      ],
+      "advisoryScope": [
+        "obvezne cjeline rada"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-rgnf-zavrsni--font-verified-2026-07-02",
+      "ruleId": "rgnf-zavrsni--font",
+      "profileId": "rgnf-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "rgnf-predlozak-2022",
+      "sourcePage": "odjeljak 2.1 Tekst rada i postavke stranica (Predlozak)",
+      "quote": "Za pisanje teksta koristi se font Times New Roman, veličine slova 12 pt i proreda 1,5.",
+      "note": "Port RGNF: direktno citanje Predloska (sastavni dio Uputa 2025)."
+    },
+    {
+      "id": "led-rgnf-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "rgnf-zavrsni--font-size",
+      "profileId": "rgnf-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "rgnf-predlozak-2022",
+      "sourcePage": "odjeljak 2.1 Tekst rada i postavke stranica (Predlozak)",
+      "quote": "Za pisanje teksta koristi se font Times New Roman, veličine slova 12 pt i proreda 1,5.",
+      "note": "Port RGNF: direktno citanje Predloska (sastavni dio Uputa 2025)."
+    },
+    {
+      "id": "led-rgnf-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "rgnf-zavrsni--line-spacing",
+      "profileId": "rgnf-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "rgnf-predlozak-2022",
+      "sourcePage": "odjeljak 2.1 Tekst rada i postavke stranica (Predlozak)",
+      "quote": "Za pisanje teksta koristi se font Times New Roman, veličine slova 12 pt i proreda 1,5.",
+      "note": "Port RGNF: direktno citanje Predloska (sastavni dio Uputa 2025)."
+    },
+    {
+      "id": "led-rgnf-zavrsni--margins-verified-2026-07-02",
+      "ruleId": "rgnf-zavrsni--margins",
+      "profileId": "rgnf-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "rgnf-predlozak-2022",
+      "sourcePage": "odjeljak 2.1 Tekst rada i postavke stranica (Predlozak)",
+      "quote": "Margine stranica kroz cijeli rad moraju biti iduće: lijeva 3 cm, ostale 2,5 cm (postavljeno u predlošku).",
+      "note": "Port RGNF: direktno citanje Predloska (sastavni dio Uputa 2025)."
+    },
+    {
+      "id": "led-rgnf-zavrsni--toc-verified-2026-07-02",
+      "ruleId": "rgnf-zavrsni--toc",
+      "profileId": "rgnf-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "rgnf-predlozak-2022",
+      "sourcePage": "odjeljak 2.1 Tekst rada i postavke stranica (Predlozak)",
+      "quote": "Popis poglavlja s numeracijom stranica (sadržaj) te popis slika i tablica, mogu se upisivati ručno ili automatski.",
+      "note": "Port RGNF: direktno citanje Predloska (sastavni dio Uputa 2025)."
+    },
+    {
+      "id": "led-rgnf-zavrsni--citation-style-verified-2026-07-02",
+      "ruleId": "rgnf-zavrsni--citation-style",
+      "profileId": "rgnf-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "rgnf-predlozak-2022",
+      "sourcePage": "odjeljak 2.1 Tekst rada i postavke stranica (Predlozak)",
+      "quote": "Pri izradi diplomskog/završnog rada treba slijediti harvardski sustav citiranja.",
+      "note": "Port RGNF: direktno citanje Predloska (sastavni dio Uputa 2025)."
+    },
+    {
+      "id": "led-rgnf-diplomski--font-verified-2026-07-02",
+      "ruleId": "rgnf-diplomski--font",
+      "profileId": "rgnf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "rgnf-predlozak-2022",
+      "sourcePage": "odjeljak 2.1 Tekst rada i postavke stranica (Predlozak)",
+      "quote": "Za pisanje teksta koristi se font Times New Roman, veličine slova 12 pt i proreda 1,5.",
+      "note": "Port RGNF: direktno citanje Predloska (sastavni dio Uputa 2025)."
+    },
+    {
+      "id": "led-rgnf-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "rgnf-diplomski--font-size",
+      "profileId": "rgnf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "rgnf-predlozak-2022",
+      "sourcePage": "odjeljak 2.1 Tekst rada i postavke stranica (Predlozak)",
+      "quote": "Za pisanje teksta koristi se font Times New Roman, veličine slova 12 pt i proreda 1,5.",
+      "note": "Port RGNF: direktno citanje Predloska (sastavni dio Uputa 2025)."
+    },
+    {
+      "id": "led-rgnf-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "rgnf-diplomski--line-spacing",
+      "profileId": "rgnf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "rgnf-predlozak-2022",
+      "sourcePage": "odjeljak 2.1 Tekst rada i postavke stranica (Predlozak)",
+      "quote": "Za pisanje teksta koristi se font Times New Roman, veličine slova 12 pt i proreda 1,5.",
+      "note": "Port RGNF: direktno citanje Predloska (sastavni dio Uputa 2025)."
+    },
+    {
+      "id": "led-rgnf-diplomski--margins-verified-2026-07-02",
+      "ruleId": "rgnf-diplomski--margins",
+      "profileId": "rgnf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "rgnf-predlozak-2022",
+      "sourcePage": "odjeljak 2.1 Tekst rada i postavke stranica (Predlozak)",
+      "quote": "Margine stranica kroz cijeli rad moraju biti iduće: lijeva 3 cm, ostale 2,5 cm (postavljeno u predlošku).",
+      "note": "Port RGNF: direktno citanje Predloska (sastavni dio Uputa 2025)."
+    },
+    {
+      "id": "led-rgnf-diplomski--toc-verified-2026-07-02",
+      "ruleId": "rgnf-diplomski--toc",
+      "profileId": "rgnf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "rgnf-predlozak-2022",
+      "sourcePage": "odjeljak 2.1 Tekst rada i postavke stranica (Predlozak)",
+      "quote": "Popis poglavlja s numeracijom stranica (sadržaj) te popis slika i tablica, mogu se upisivati ručno ili automatski.",
+      "note": "Port RGNF: direktno citanje Predloska (sastavni dio Uputa 2025)."
+    },
+    {
+      "id": "led-rgnf-diplomski--citation-style-verified-2026-07-02",
+      "ruleId": "rgnf-diplomski--citation-style",
+      "profileId": "rgnf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "rgnf-predlozak-2022",
+      "sourcePage": "odjeljak 2.1 Tekst rada i postavke stranica (Predlozak)",
+      "quote": "Pri izradi diplomskog/završnog rada treba slijediti harvardski sustav citiranja.",
+      "note": "Port RGNF: direktno citanje Predloska (sastavni dio Uputa 2025)."
+    }
+  ]
+}
