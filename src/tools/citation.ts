@@ -121,7 +121,7 @@ function formatAutorGodina(inp: CitationInput): string {
     case 'zavrsni': {
       parts.push(withDot(t));
       if (inp.type === 'zavrsni') {
-        const kind = inp.institution ? `Neobjavljeni zavrsni rad. ${inp.institution}` : 'Neobjavljeni zavrsni rad';
+        const kind = inp.institution ? `Neobjavljeni završni rad. ${inp.institution}` : 'Neobjavljeni završni rad';
         parts.push(withDot(kind));
       } else {
         const pub = [inp.place, inp.publisher].filter(Boolean).join(': ');
@@ -176,7 +176,7 @@ function formatFusnota(inp: CitationInput): string {
     case 'zavrsni': {
       parts.push(withDot(`${title}`));
       if (inp.type === 'zavrsni') {
-        parts.push(withDot(inp.institution ? `Zavrsni rad, ${inp.institution}` : 'Zavrsni rad'));
+        parts.push(withDot(inp.institution ? `Završni rad, ${inp.institution}` : 'Završni rad'));
         if (inp.year) parts.push(withDot(inp.year));
       } else {
         const pub = [inp.place, inp.publisher].filter(Boolean).join(': ');
@@ -240,9 +240,9 @@ const RECOMMENDED: Record<SourceType, Array<keyof CitationInput>> = {
 const FIELD_LABEL: Partial<Record<keyof CitationInput, string>> = {
   authors: 'autor',
   title: 'naslov',
-  container: 'izvor (casopis/zbornik/sluzbeni list)',
+  container: 'izvor (časopis/zbornik/službeni list)',
   year: 'godina',
-  publisher: 'izdavac',
+  publisher: 'izdavač',
   url: 'poveznica',
   institution: 'ustanova',
 };

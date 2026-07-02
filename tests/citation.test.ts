@@ -75,7 +75,7 @@ describe('formatCitation autor-godina', () => {
     const r = formatCitation({ type: 'knjiga', title: 'Bezimeno' }, 'autor-godina');
     expect(r.missing).toContain('autor');
     expect(r.missing).toContain('godina');
-    expect(r.missing).toContain('izdavac');
+    expect(r.missing).toContain('izdavač');
     expect(r.missing).not.toContain('naslov');
   });
 });

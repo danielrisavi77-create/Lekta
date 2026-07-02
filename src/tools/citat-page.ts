@@ -49,7 +49,7 @@ function render() {
   out.textContent = citation;
   out.classList.remove('empty');
   $('#copyBtn').disabled = false;
-  hint.textContent = missing.length ? 'Preporuceno dodati: ' + missing.join(', ') + '.' : 'Sva preporucena polja su ispunjena.';
+  hint.textContent = missing.length ? 'Preporučeno dodati: ' + missing.join(', ') + '.' : 'Sva preporučena polja su ispunjena.';
   hint.className = missing.length ? 'out-hint warn' : 'out-hint ok';
 }
 

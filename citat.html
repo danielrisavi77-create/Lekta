@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Besplatni hrvatski generator citata: knjiga, poglavlje, clanak, mrezni izvor, zavrsni rad i propis, u stilu autor-godina ili fusnota. Sve lokalno u pregledniku.">
+<meta name="description" content="Besplatni hrvatski generator citata: knjiga, poglavlje, članak, mrežni izvor, završni rad i propis, u stilu autor-godina ili fusnota. Sve lokalno u pregledniku.">
 <meta name="color-scheme" content="light dark">
 <title>Besplatni hrvatski citat generator - Lekta</title>
 <script>try{var _t=localStorage.getItem('lekta.theme');if(_t)document.documentElement.dataset.theme=_t;}catch(e){}</script>
@@ -62,7 +62,7 @@ a{color:inherit}:focus-visible{outline:none;box-shadow:var(--focus);border-radiu
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
 .out-panel{position:sticky;top:88px}
-/* izlaz kao bibliografski redak na papiru s marginom i visecom uvlakom */
+/* izlaz kao bibliografski redak na papiru s marginom i visećom uvlakom */
 .out-doc{position:relative;background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:20px 20px 20px 34px;min-height:96px}
 .out-doc:before{content:"";position:absolute;left:16px;top:16px;bottom:16px;width:1.5px;background:color-mix(in srgb,var(--danger) 55%,transparent);opacity:.45}
 .out{font-family:var(--ink-serif);font-size:16.5px;line-height:1.65;word-break:break-word;padding-left:20px;text-indent:-20px}
@@ -108,7 +108,7 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
     <div style="height:10px"></div>
     <span class="eyebrow">Besplatan alat, bez registracije</span>
     <h1>Hrvatski <span class="ink">citat generator</span></h1>
-    <p class="lead">Sloguj citat za knjigu, poglavlje, clanak, mrezni izvor, zavrsni rad ili propis. Sve se racuna lokalno u tvom pregledniku, nista se ne salje na posluzitelj.</p>
+    <p class="lead">Sloguj citat za knjigu, poglavlje, članak, mrežni izvor, završni rad ili propis. Sve se računa lokalno u tvom pregledniku, ništa se ne šalje na poslužitelj.</p>
   </div>
 </section>
 
@@ -116,7 +116,7 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
   <div class="shell grid">
     <div class="card">
       <h2>Podaci o izvoru</h2>
-      <p class="sub">Ispuni sto imas. Preporucena polja koja fale prikazuju se ispod citata.</p>
+      <p class="sub">Ispuni što imaš. Preporučena polja koja fale prikazuju se ispod citata.</p>
 
       <div class="row2">
         <div class="field">
@@ -124,36 +124,36 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
           <select id="f-type">
             <option value="knjiga">Knjiga</option>
             <option value="poglavlje">Poglavlje u knjizi / zborniku</option>
-            <option value="clanak">Clanak u casopisu</option>
-            <option value="mrezni">Mrezni izvor</option>
-            <option value="zavrsni">Zavrsni / diplomski rad</option>
+            <option value="clanak">Članak u časopisu</option>
+            <option value="mrezni">Mrežni izvor</option>
+            <option value="zavrsni">Završni / diplomski rad</option>
             <option value="propis">Propis / zakon</option>
           </select>
         </div>
         <div class="field">
           <label for="f-style">Stil</label>
           <select id="f-style">
-            <option value="autor-godina">Autor-godina (drustvene znanosti)</option>
-            <option value="fusnota">Fusnota / bibliografija (pravno, humanisticko)</option>
+            <option value="autor-godina">Autor-godina (društvene znanosti)</option>
+            <option value="fusnota">Fusnota / bibliografija (pravno, humanističko)</option>
           </select>
         </div>
       </div>
 
       <div class="field" data-field="authors">
         <label for="f-authors">Autor(i)</label>
-        <textarea id="f-authors" placeholder="Ivic, Ivan; Horvat, Ana (jedan po retku ili odvojeno ;)"></textarea>
+        <textarea id="f-authors" placeholder="Ivić, Ivan; Horvat, Ana (jedan po retku ili odvojeno ;)"></textarea>
       </div>
       <div class="field" data-field="title">
         <label for="f-title">Naslov</label>
         <input id="f-title" type="text" placeholder="Naslov rada ili djela">
       </div>
       <div class="field" data-field="container">
-        <label for="f-container">Izvor (casopis / zbornik / sluzbeni list)</label>
+        <label for="f-container">Izvor (časopis / zbornik / službeni list)</label>
         <input id="f-container" type="text" placeholder="npr. Zbornik PFZ ili Narodne novine">
       </div>
       <div class="row2">
         <div class="field" data-field="volume">
-          <label for="f-volume">Godiste / volumen</label>
+          <label for="f-volume">Godište / volumen</label>
           <input id="f-volume" type="text" placeholder="70">
         </div>
         <div class="field" data-field="issue">
@@ -177,13 +177,13 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
           <input id="f-place" type="text" placeholder="Zagreb">
         </div>
         <div class="field" data-field="publisher">
-          <label for="f-publisher">Izdavac</label>
+          <label for="f-publisher">Izdavač</label>
           <input id="f-publisher" type="text" placeholder="Narodne novine">
         </div>
       </div>
       <div class="field" data-field="institution">
-        <label for="f-institution">Ustanova (za zavrsni rad)</label>
-        <input id="f-institution" type="text" placeholder="Fakultet politickih znanosti, Zagreb">
+        <label for="f-institution">Ustanova (za završni rad)</label>
+        <input id="f-institution" type="text" placeholder="Fakultet političkih znanosti, Zagreb">
       </div>
       <div class="field" data-field="url">
         <label for="f-url">Poveznica</label>
@@ -198,13 +198,13 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
     <div class="out-panel">
       <div class="card">
         <h2>Tvoj citat</h2>
-        <p class="sub">Azurira se dok tipkas.</p>
+        <p class="sub">Ažurira se dok tipkaš.</p>
         <div class="out-doc"><div class="out empty" id="out">Ispuni polja lijevo pa se citat pojavljuje ovdje.</div></div>
         <div class="out-bar">
           <button class="btn btn-primary" id="copyBtn" type="button" disabled>Kopiraj citat</button>
         </div>
         <p class="out-hint" id="out-hint"></p>
-        <div class="note"><b>Napomena:</b> generator daje okvirni oblik citata prema uobicajenim hrvatskim akademskim stilovima. Tocan stil i interpunkciju uvijek provjeri prema uputama svog fakulteta, studija ili mentora.</div>
+        <div class="note"><b>Napomena:</b> generator daje okvirni oblik citata prema uobičajenim hrvatskim akademskim stilovima. Točan stil i interpunkciju uvijek provjeri prema uputama svog fakulteta, studija ili mentora.</div>
       </div>
     </div>
   </div>
@@ -214,10 +214,10 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
   <div class="shell">
     <div class="cta">
       <h2>Citat je sitni dio. Provjeri cijeli rad.</h2>
-      <p>Lekta mjeri margine, stilove, numeraciju, sadrzaj i literaturu prema verificiranom profilu tvog fakulteta. Besplatan teaser, dokument ostaje na tvom uredaju.</p>
+      <p>Lekta mjeri margine, stilove, numeraciju, sadržaj i literaturu prema verificiranom profilu tvog fakulteta. Besplatan teaser, dokument ostaje na tvom uređaju.</p>
       <a class="btn" href="index.html#analyzer">Besplatno provjeri rad &rarr;</a>
     </div>
-    <p class="disclaimer">Lekta radi pomocnu tehnicku provjeru i ne zamjenjuje sluzbene upute ustanove, studija, kolegija ni mentora.</p>
+    <p class="disclaimer">Lekta radi pomoćnu tehničku provjeru i ne zamjenjuje službene upute ustanove, studija, kolegija ni mentora.</p>
   </div>
 </section>
 </main>
