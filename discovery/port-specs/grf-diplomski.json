@@ -1,0 +1,195 @@
+{
+  "faculty": "grf",
+  "unit": null,
+  "catalogPrograms": [
+    "Diplomski studiji Grafičkog fakulteta"
+  ],
+  "sources": [
+    {
+      "id": "grf-uputa-diplomski-prilog3",
+      "kind": "guidelines",
+      "title": "Uputa za izradu diplomskog rada (Prilog 3 Pravilnika o izradi i obrani diplomskog rada, Graficki fakultet Sveucilista u Zagrebu)",
+      "url": "https://www.grf.unizg.hr/images/stories/SBG/Propisi/DIPLRAD-prilog3.doc",
+      "publisher": "Graficki fakultet Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/grf/grf-uputa-diplomski-prilog3.doc",
+      "snapshotHash": "275351f46e96ad1ae5190a43cf12c6a06f6dc4f5f106ab3cea847a5bad456caa",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Uputa za izradu diplomskog rada, Prilog 3 uz Pravilnik iz 2012. (Word .doc, spremljen 13.3.2012). Ovo je tekstualni izvor kojeg nije bilo pri prvom portu (Prilog 3 u PDF-u Pravilnika je skeniran); .doc verzija s obrasci stranice se cisto ekstrahira antiwordom (-m UTF-8, dijakritika ispravna). Sadrzi konkretna imperativna pravila oblikovanja u odjeljku Postavke stranice (Pismo Times New Roman ili Arial uz obveznu potporu hrvatskih znakova, velicina 12 tocaka, prored 1,5, margine lijeva/donja 3,5 cm i desna/gornja 2,5 cm) te A4 (treba), numeraciju svih stranica od uvoda (trebaju) i obvezni Sadrzaj (Rad mora sadrzavati). Svi scored citati verbatim grep-provjereni. Poravnanje je 'obostrano ili lijevo' (dopusta oboje) pa justify NIJE scored. Numericko citiranje po redoslijedu, uglate zagrade -> ieee, advisory (machineCheckable:false). Obvezne cjeline advisory (machineCheckable:false)."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "grf-diplomski",
+      "unitId": "grf",
+      "programs": [
+        "Diplomski studiji Grafičkog fakulteta"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Grafički fakultet, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2012-03-13",
+      "rules": {
+        "font": ["Times New Roman", "Arial"],
+        "size": 12,
+        "spacing": 1.5,
+        "margins": { "top": 2.5, "right": 2.5, "bottom": 3.5, "left": 3.5 },
+        "requireToc": true,
+        "requirePageNumbers": true,
+        "requireA4": true,
+        "recommendedCitation": "ieee"
+      },
+      "facts": [
+        "Odjeljak Postavke stranice propisuje pismo (Times New Roman ili Arial uz obveznu potporu hrvatskih znakova), velicinu 12 tipografskih tocaka i prored 1,5 (scored).",
+        "Margine su navedene po stranama: lijeva 3,5 cm, desna 2,5 cm, gornja 2,5 cm, donja 3,5 cm (scored). Za jednostrani ispis mapirano izravno na top/right/bottom/left.",
+        "Rad treba biti napisan na papiru formata A4 (210 x 297) (scored); sve stranice od uvoda do kraja rada trebaju biti numerirane, u donjem desnom kutu (scored).",
+        "Rad mora sadrzavati Sadrzaj (scored kao toc); popis obveznih cjelina je imperativan ali strukturno (machineCheckable:false) pa je advisory.",
+        "Poravnanje teksta je 'obostrano ili lijevo' (dokument dopusta oboje) pa justify NIJE bodovan.",
+        "Literatura se obiljezava rednim brojem po redoslijedu citiranja, u tekstu uglate zagrade (numericki stil, mapiran na ieee); machineCheckable:false pa advisory.",
+        "Naslovnica i prva stranica koriste prilozene forme i Unizg fontove; sazetak 1000-1500 znakova nema odgovarajuci checkId pa je izostavljen."
+      ],
+      "note": "Diplomski (graduate) rad iz Upute za izradu diplomskog rada (Prilog 3 uz Pravilnik iz 2012). Prvi port grf-a nije nasao upotrebljiv diplomski izvor jer je Prilog 3 unutar PDF-a Pravilnika skeniran; ovaj deepen-levels port dohvaca .doc verziju Priloga 3 s fakultetske obrasci stranice, koja se cisto ekstrahira i sadrzi konkretne format-vrijednosti pa je authority program-page i imperativna, verbatim potvrdena pravila su scored. Scored (7): font, velicina, prored, margine, A4, numeracija stranica, obvezni Sadrzaj (toc). Advisory (2): obvezne cjeline (strukturne, machineCheckable:false) i stil citiranja (numericki, ieee, machineCheckable:false). Justify nije bodovan jer dokument izrijekom dopusta obostrano ILI lijevo poravnanje. NB za ljudski pregled: dokument je iste predloske obitelji kao sveucilisni DR.SC.-08 (odjeljci Postavke stranice / Rad mora sadrzavati); GRF-ove margine su lijeva/donja 3,5 i desna/gornja 2,5 (nije 2,5 na svim stranama).",
+      "sources": [
+        {
+          "title": "Uputa za izradu diplomskog rada (Prilog 3, Graficki fakultet Sveucilista u Zagrebu)",
+          "url": "https://www.grf.unizg.hr/images/stories/SBG/Propisi/DIPLRAD-prilog3.doc"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o izradi i obrani diplomskog rada (Graficki fakultet, 2012) (oblikovanje delegira na Uputu, Prilog 3)",
+        "Uputa za izradu diplomskog rada (Prilog 3, Graficki fakultet Sveucilista u Zagrebu)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "font",
+        "velicina slova",
+        "prored",
+        "margine",
+        "format papira (A4)",
+        "numeracija stranica",
+        "sadrzaj (toc)"
+      ],
+      "advisoryScope": [
+        "obvezne cjeline rada",
+        "stil citiranja"
+      ],
+      "catalogPrograms": [
+        "Diplomski studiji Grafičkog fakulteta"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-grf-diplomski--font-verified-2026-07-02",
+      "ruleId": "grf-diplomski--font",
+      "profileId": "grf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grf-uputa-diplomski-prilog3",
+      "sourcePage": "odjeljak Postavke stranice",
+      "quote": "Pismo: obavezna je upotreba svih hrvatskih znakova",
+      "note": "Deepen-levels workflow. Times New Roman ili Arial uz obveznu potporu hrvatskih znakova."
+    },
+    {
+      "id": "led-grf-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "grf-diplomski--font-size",
+      "profileId": "grf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grf-uputa-diplomski-prilog3",
+      "sourcePage": "odjeljak Postavke stranice",
+      "quote": "Veličina pisma: 12 tipografskih točaka",
+      "note": "Deepen-levels workflow."
+    },
+    {
+      "id": "led-grf-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "grf-diplomski--line-spacing",
+      "profileId": "grf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grf-uputa-diplomski-prilog3",
+      "sourcePage": "odjeljak Postavke stranice",
+      "quote": "Prored: 1,5 redak",
+      "note": "Deepen-levels workflow."
+    },
+    {
+      "id": "led-grf-diplomski--margins-verified-2026-07-02",
+      "ruleId": "grf-diplomski--margins",
+      "profileId": "grf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grf-uputa-diplomski-prilog3",
+      "sourcePage": "odjeljak Postavke stranice",
+      "quote": "Lijeva bjelina (margina) 3,5 cm; desna bjelina (margina) 2,5 cm; gornja",
+      "note": "Deepen-levels workflow. Lijeva/donja 3,5 cm; desna/gornja 2,5 cm. Za jednostrani ispis mapirano izravno na top/right/bottom/left."
+    },
+    {
+      "id": "led-grf-diplomski--paper-size-verified-2026-07-02",
+      "ruleId": "grf-diplomski--paper-size",
+      "profileId": "grf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grf-uputa-diplomski-prilog3",
+      "sourcePage": "uvodni odjeljak Uputa",
+      "quote": "Rad treba biti napisan na papiru formata A4 (210 x 297)",
+      "note": "Deepen-levels workflow."
+    },
+    {
+      "id": "led-grf-diplomski--page-numbers-verified-2026-07-02",
+      "ruleId": "grf-diplomski--page-numbers",
+      "profileId": "grf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grf-uputa-diplomski-prilog3",
+      "sourcePage": "uvodni odjeljak Uputa",
+      "quote": "stranice trebaju biti numerirane. Broje se sve",
+      "note": "Deepen-levels workflow. Broje se sve stranice od uvoda do kraja rada, numeracija u donjem desnom kutu."
+    },
+    {
+      "id": "led-grf-diplomski--toc-verified-2026-07-02",
+      "ruleId": "grf-diplomski--toc",
+      "profileId": "grf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grf-uputa-diplomski-prilog3",
+      "sourcePage": "odjeljak Rad mora sadržavati",
+      "quote": "Rad mora sadržavati:",
+      "note": "Deepen-levels workflow. Sadrzaj izrijekom naveden kao obvezan dio (tocka 5)."
+    },
+    {
+      "id": "led-grf-diplomski--required-sections-advisory-2026-07-02",
+      "ruleId": "grf-diplomski--required-sections",
+      "profileId": "grf-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grf-uputa-diplomski-prilog3",
+      "sourcePage": "odjeljak Rad mora sadržavati",
+      "quote": "Rad mora sadržavati:",
+      "note": "Deepen-levels workflow. Imperativ 'mora sadrzavati', ali required-sections je machineCheckable:false pa ostaje advisory."
+    },
+    {
+      "id": "led-grf-diplomski--citation-style-advisory-2026-07-02",
+      "ruleId": "grf-diplomski--citation-style",
+      "profileId": "grf-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grf-uputa-diplomski-prilog3",
+      "sourcePage": "odjeljak Literatura",
+      "quote": "Literatura se obilježava rednim brojem po redoslijedu citiranja",
+      "note": "Deepen-levels workflow. Numericki stil po redoslijedu citiranja, uglate zagrade; izvor ne imenuje stil pa mapirano na ieee, advisory."
+    }
+  ]
+}

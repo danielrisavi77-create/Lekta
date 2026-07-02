@@ -1,0 +1,138 @@
+{
+  "faculty": "alu",
+  "unit": null,
+  "catalogPrograms": [
+    "Doktorski studij Akademije likovnih umjetnosti"
+  ],
+  "sources": [
+    {
+      "id": "alu-vodic-doktorski-2026",
+      "kind": "guidelines",
+      "title": "Vodic kroz doktorski studij likovne umjetnosti (Akademija likovnih umjetnosti, 2026)",
+      "url": "https://www.alu.unizg.hr/alu/cms/upload/dokumenti/pds/programi/vodic_kroz_doktorski_studij_likovne_umjetnosti_08052026.pdf",
+      "publisher": "Akademija likovnih umjetnosti Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/alu/alu-vodic-doktorski-2026.pdf",
+      "snapshotHash": "7633072e3d6f875a0e35f6ee0a95be3388aeb92eefd952e3cd56f2103e3274d9",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Faculty-wide vodic jedinog doktorskog (poslijediplomskog) studija likovne umjetnosti ALU. Poglavlje 5 (Doktorski rad) propisuje dva modela: A) praksa - teorijski rad (disertacija) minimalno 30 kartica; B) praksa i teorija - disertacija minimalno 90 kartica (1 kartica = 1800 slovnih mjesta). Univerzalni faculty-wide minimum za bilo koji model je 30 kartica pa je to jedina scored dimenzija (page-count, minimum). Stroziji minimum od 90 kartica vrijedi samo za model B i drzi se kao advisory napomena. Font, velicina slova, prored, margine, format papira, numeracija i sadrzaj nisu propisani ovim izvorom. Svi citati verbatim grep-provjereni nad alu-vodic-doktorski-2026.txt."
+    },
+    {
+      "id": "alu-pravila-smjernice-doktorandi",
+      "kind": "guidelines",
+      "title": "Pravila i smjernice za mentore i doktorande na Akademiji likovnih umjetnosti Sveucilista u Zagrebu",
+      "url": "https://www.alu.unizg.hr/alu/cms/upload/dokumenti/pds/pravilnici/PRAVILA_I_SMJERNICE_za_mentore_i_doktorande_na_ALU_u_Zagrebu.pdf",
+      "publisher": "Akademija likovnih umjetnosti Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/alu/alu-pravila-smjernice-doktorandi.pdf",
+      "snapshotHash": "ace48ae2a9a29e243d78703232fc48a1fa0ae150a1083ece44793958dd1cc79b",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Pravila i smjernice za mentore i doktorande. Odjeljak 'Smjernice - disertacija' izrijekom DELEGIRA oblikovanje na sveuciliste: 'Format, maksimalna duljina i drugi atributi teze trebaju biti specificirani sveucilisnim smjernicama'. Ne daje nijednu konkretnu format-vrijednost pa ne proizvodi nijedno scored pravilo; sluzi kao advisory izvor za citiranje (korektna upotreba citata) i za hijerarhiju autoriteta. Tekst ekstrahiran pdftotext -layout; scored citata nema."
+    },
+    {
+      "id": "alu-pravilnik-doktorski-2025",
+      "kind": "regulation",
+      "title": "Pravilnik o doktorskom studiju na Akademiji likovnih umjetnosti Sveucilista u Zagrebu (2025)",
+      "url": "https://www.alu.unizg.hr/alu/cms/upload/dokumenti/pds/pravilnici/pravilnik_o_doktorskom_studiju_alu_2025.pdf",
+      "publisher": "Akademija likovnih umjetnosti Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/alu/alu-pravilnik-doktorski-2025.pdf",
+      "snapshotHash": "7baf3aae76f8c9b19d1430a36dda4d87d5f9ab9d195e240e002bf38d54661e2a",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Faculty-wide obvezujuci Pravilnik o doktorskom studiju ALU (svibanj 2025). Skenirani PDF (pdftotext vraca prazan tekst) pa se ne moze grep-verificirati i ne daje nijedno pravilo. Snapshot cuvan iskljucivo radi hijerarhije autoriteta; format se ionako delegira na sveucilisne smjernice."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "alu-doktorski",
+      "unitId": "alu",
+      "programs": [
+        "Doktorski studij Akademije likovnih umjetnosti"
+      ],
+      "workTypes": [
+        "doctoral"
+      ],
+      "status": "partial",
+      "profileLabel": "Akademija likovnih umjetnosti, doktorski rad / disertacija",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2026-05-08",
+      "rules": {
+        "pageMin": 30,
+        "recommendedCitation": "custom"
+      },
+      "facts": [
+        "Doktorski rad je sinteza dva dijela: prakticni rad (umjetnicko ostvarenje) i teorijski rad (disertacija) u pisanom obliku (Vodic, pogl. 5, imperativ; strukturno, machineCheckable:false pa advisory).",
+        "Opseg disertacije ovisi o modelu: model A (praksa) minimalno 30 kartica, model B (praksa i teorija) minimalno 90 kartica; 1 kartica = 1800 slovnih mjesta. Univerzalni faculty-wide minimum je 30 kartica pa je page-count scored s minimumom 30; stroziji minimum od 90 kartica (samo model B) drzi se kao advisory jer se model ne moze strojno utvrditi.",
+        "Font, velicina slova, prored, margine, format papira, numeracija stranica i sadrzaj (toc) nisu propisani nijednim citljivim izvorom za ovu razinu.",
+        "Pravila i smjernice izrijekom delegiraju format i maksimalnu duljinu na sveucilisne smjernice, a stil citiranja nije konkretno imenovan (advisory)."
+      ],
+      "note": "Iz Vodica kroz doktorski studij likovne umjetnosti (ALU, 2026), jedinog umjetnickog doktorskog studija u RH. Scored (1): page-count minimum 30 kartica - univerzalni faculty-wide minimum disertacije (verbatim 'minimalno 30 kartica'), machineCheckable. Advisory (2): obvezni dijelovi rada (prakticni + teorijski dio, strukturno pa machineCheckable:false) i stil citiranja (delegiran, bez konkretnog stila). Pravila i smjernice za mentore i doktorande izrijekom delegiraju format na sveucilisne smjernice (bez konkretnih vrijednosti). Pravilnik o doktorskom studiju ALU 2025 je skenirani PDF (nije ekstraktibilan) pa ne daje pravila, cuvan radi hijerarhije. Model B (min 90 kartica) je stroziji, ali se model ne moze strojno utvrditi pa scored ostaje na univerzalnom minimumu 30. VAZNO za ljudski pregled: potvrditi mapiranje kartica -> page-count i eventualno razmotriti word-count (30 kartica x 1800 znakova).",
+      "sources": [
+        {
+          "title": "Vodic kroz doktorski studij likovne umjetnosti (ALU, 2026)",
+          "url": "https://www.alu.unizg.hr/alu/cms/upload/dokumenti/pds/programi/vodic_kroz_doktorski_studij_likovne_umjetnosti_08052026.pdf"
+        },
+        {
+          "title": "Pravila i smjernice za mentore i doktorande na ALU",
+          "url": "https://www.alu.unizg.hr/alu/cms/upload/dokumenti/pds/pravilnici/PRAVILA_I_SMJERNICE_za_mentore_i_doktorande_na_ALU_u_Zagrebu.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o doktorskim studijima na Sveucilistu u Zagrebu (2024) (format delegiran na sveucilisne smjernice)",
+        "Pravilnik o doktorskom studiju na Akademiji likovnih umjetnosti (2025) (skeniran, ne daje format-pravila)",
+        "Vodic kroz doktorski studij likovne umjetnosti (ALU, 2026)",
+        "Pravila i smjernice za mentore i doktorande na ALU"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "opseg disertacije (minimum kartica)"
+      ],
+      "advisoryScope": [
+        "obvezni dijelovi rada (prakticni i teorijski dio)",
+        "stroziji opseg za model B (min 90 kartica)",
+        "stil citiranja"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-alu-doktorski--page-count-verified-2026-07-02",
+      "ruleId": "alu-doktorski--page-count",
+      "profileId": "alu-doktorski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "alu-vodic-doktorski-2026",
+      "sourcePage": "5. Doktorski rad (model A, teorijski rad manjeg opsega)",
+      "quote": "teorijskog rada (disertacije) manjeg opsega u pisanom obliku od minimalno 30 kartica",
+      "note": "Deepen-levels workflow. Univerzalni faculty-wide minimum 30 kartica (model A); model B trazi min 90 kartica ali se model ne moze strojno utvrditi pa scored ostaje na 30."
+    },
+    {
+      "id": "led-alu-doktorski--required-sections-advisory-2026-07-02",
+      "ruleId": "alu-doktorski--required-sections",
+      "profileId": "alu-doktorski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "alu-vodic-doktorski-2026",
+      "sourcePage": "5. Doktorski rad",
+      "quote": "prakticnog rad (umjetnicko ostvarenje) i teorijskog rada",
+      "note": "Deepen-levels workflow. Imperativna struktura (prakticni + teorijski dio), ali required-sections je machineCheckable:false pa ostaje advisory."
+    },
+    {
+      "id": "led-alu-doktorski--citation-style-advisory-2026-07-02",
+      "ruleId": "alu-doktorski--citation-style",
+      "profileId": "alu-doktorski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "alu-pravila-smjernice-doktorandi",
+      "sourcePage": "Smjernice - disertacija",
+      "quote": "korektna upotreba citata",
+      "note": "Deepen-levels workflow. Format i citiranje delegirani na sveucilisne smjernice, konkretan stil nije imenovan pa ostaje advisory."
+    }
+  ]
+}

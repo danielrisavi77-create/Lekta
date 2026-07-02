@@ -1,0 +1,239 @@
+{
+  "faculty": "kif",
+  "unit": null,
+  "catalogPrograms": [
+    "Doktorski studij Kineziološkog fakulteta"
+  ],
+  "sources": [
+    {
+      "id": "kif-drsc08-oblikovanje-doktorski-2025",
+      "kind": "guidelines",
+      "title": "Upute za oblikovanje doktorskoga rada (obrazac DR.SC.-08, Sveuciliste u Zagrebu)",
+      "url": "https://www.kif.unizg.hr/_download/repository/DR.SC.-08_formalno_oblikovanje_rada%5B3%5D.doc",
+      "publisher": "Sveuciliste u Zagrebu (objavio Kinezioloski fakultet na stranici doktorskog studija)",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/kif/kif-drsc08-oblikovanje-doktorski-2025.doc",
+      "snapshotHash": "fceee5de0245a45ee633e7fa918cbef6c968a83f5458fd78c45026d9b877694b",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Sveucilisni obrazac DR.SC.-08 (formalno oblikovanje doktorskoga rada), objavljen na sluzbenoj stranici doktorskog studija KIF-a (Dokumenti). Sadrzi konkretna imperativna pravila oblikovanja (velicina 12 tocaka, prored 1,5, margine 2,5 cm za tijelo rada, A4, numeracija od Uvoda, obvezan Sadrzaj). Tekst ekstrahiran antiwordom (-m UTF-8, dijakritika ispravna); svi scored citati verbatim grep-provjereni. Authority program-page. Sadrzajno identican DR.SC. predlosku koriscenom kod FER-a. Naslovnica/korice imaju drugacije margine (3,0 cm), izuzete iz provjere tijela rada."
+    },
+    {
+      "id": "kif-struktura-doktorski",
+      "kind": "guidelines",
+      "title": "Upute Odbora za doktorski studij - struktura doktorskog rada (drugi dio)",
+      "url": "https://www.kif.unizg.hr/_download/repository/Upute_-_Struktura_doktorskog_rada_drugi_dio.pdf",
+      "publisher": "Odbor za doktorski studij, Kinezioloski fakultet Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/kif/kif-struktura-doktorski.pdf",
+      "snapshotHash": "5059a00badb3840a27ee135eb16fd50536762240baa40497e783f1e650c94d2a",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Upute Odbora za doktorski studij KIF-a o strukturi (imenovanje poglavlja: Uvod u problem, Ciljevi i hipoteze, Metode rada, Rezultati, Rasprava, Zakljucak, Popis literature i Prilozi). Izrijekom delegira formalno oblikovanje na sveucilisni obrazac DR.SC.-08 ('Sukladno Uputama za oblikovanje doktorskog rada koje je propisalo Sveuciliste u Zagrebu (obrazac DR.SC. 08)'). Ne daje nijedno strojno provjerljivo format-pravilo; strukturne smjernice su advisory. Snapshot cuvan radi sljedivosti."
+    },
+    {
+      "id": "kif-pravilnik-doktorski-2024",
+      "kind": "regulation",
+      "title": "Pravilnik o doktorskim studijima na Sveucilistu u Zagrebu (2024)",
+      "url": "https://www.kif.unizg.hr/_download/repository/2024-09-24_Pravilnik_o_doktorskim_studijima_2024.pdf",
+      "publisher": "Sveuciliste u Zagrebu (objavio Kinezioloski fakultet na stranici doktorskog studija)",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/kif/kif-pravilnik-doktorski-2024.pdf",
+      "snapshotHash": "32ae2f391ef26b34195cd2cbbef14c3dc9b9a6f1963ff906dc052a051a191001",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Obvezujuci sveucilisni Pravilnik o doktorskim studijima (2024). Procesni (upis, mentorstvo, ocjena i obrana rada, dostupnost javnosti); NE sadrzi tehnicka pravila oblikovanja nego oblik delegira na obrazac DR.SC.-08. Snapshot cuvan radi hijerarhije autoriteta; sam ne daje nijedno scored pravilo."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "kif-doktorski",
+      "unitId": "kif",
+      "programs": [
+        "Doktorski studij Kineziološkog fakulteta"
+      ],
+      "workTypes": [
+        "doctoral"
+      ],
+      "status": "partial",
+      "profileLabel": "Kinezioloski fakultet, doktorski rad / disertacija",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2025-02-07",
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "requireToc": true,
+        "requirePageNumbers": true,
+        "requireA4": true,
+        "recommendedCitation": "harvard"
+      },
+      "facts": [
+        "Velicina pisma 12 tocaka, prored 1,5 i margine 2,5 cm (sve strane, tijelo rada) propisani su u odjeljku Postavke stranice (imperativ, scored).",
+        "Rad treba biti ispisan na A4 formatu (210 x 297 mm), a sve stranice od Uvoda do kraja rada numerirane (imperativ, scored).",
+        "Rad mora sadrzavati Sadrzaj (scored kao toc); ostale obvezne cjeline (naslovnica, sazetak HR/EN, uvod, zakljucak, popis literature, zivotopis) navedene su imperativno ali su strukturne (machineCheckable:false) pa ostaju advisory.",
+        "Font nije fiksiran: obavezna je samo potpora hrvatskih znakova, Times New Roman naveden je kao primjer (advisory).",
+        "Citiranje se delegira na dominantni stil struke (harvardski, oksfordski, cikaski) pa je advisory.",
+        "Naslovnica i korice imaju drugacije margine (3,0 cm), izuzete iz provjere tijela rada.",
+        "Sazetak na jednoj kartici i zivotopis do 1800 znakova nemaju odgovarajuci checkId pa su izostavljeni."
+      ],
+      "note": "Iz sveucilisnog obrasca DR.SC.-08 'Upute za oblikovanje doktorskoga rada', objavljenog na sluzbenoj stranici doktorskog studija KIF-a (Dokumenti). Dokument je konkretan predlozak s vrijednostima (nije puka delegacija) pa je authority program-page i imperativna, verbatim potvrdena pravila su scored. Scored (6): velicina 12, prored 1,5, margine 2,5 cm (tijelo), A4, numeracija stranica, obvezni Sadrzaj (toc). Advisory (3): font (samo primjer TNR, fiksna je potpora hrvatskih znakova), stil citiranja (delegiran na struku), obvezne cjeline (strukturne, machineCheckable:false). Upute Odbora za doktorski studij daju strukturu poglavlja (advisory) i izrijekom delegiraju oblikovanje na DR.SC.-08. Sveucilisni Pravilnik o doktorskim studijima (2024) je procesni i ne sadrzi format-pravila (snapshot cuvan radi hijerarhije). VAZNO za ljudski pregled: DR.SC.-08 je sveucilisni predlozak zajednicki svim sastavnicama; KIF ga hosta kao svoj obrazac za doktorski rad.",
+      "sources": [
+        {
+          "title": "Upute za oblikovanje doktorskoga rada (obrazac DR.SC.-08, SuZ)",
+          "url": "https://www.kif.unizg.hr/_download/repository/DR.SC.-08_formalno_oblikovanje_rada%5B3%5D.doc"
+        },
+        {
+          "title": "Upute Odbora za doktorski studij - struktura doktorskog rada (KIF)",
+          "url": "https://www.kif.unizg.hr/_download/repository/Upute_-_Struktura_doktorskog_rada_drugi_dio.pdf"
+        },
+        {
+          "title": "Pravilnik o doktorskim studijima na Sveucilistu u Zagrebu (2024)",
+          "url": "https://www.kif.unizg.hr/_download/repository/2024-09-24_Pravilnik_o_doktorskim_studijima_2024.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o doktorskim studijima na Sveucilistu u Zagrebu (2024) (oblik delegira na obrazac DR.SC.-08)",
+        "Upute za oblikovanje doktorskoga rada (obrazac DR.SC.-08, SuZ)",
+        "Upute Odbora za doktorski studij - struktura doktorskog rada (KIF)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "velicina slova",
+        "prored",
+        "margine",
+        "format papira (A4)",
+        "numeracija stranica",
+        "sadrzaj (toc)"
+      ],
+      "advisoryScope": [
+        "font",
+        "stil citiranja",
+        "obvezne cjeline rada"
+      ],
+      "catalogPrograms": [
+        "Doktorski studij Kineziološkog fakulteta"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-kif-doktorski--font-size-verified-2026-07-02",
+      "ruleId": "kif-doktorski--font-size",
+      "profileId": "kif-doktorski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "kif-drsc08-oblikovanje-doktorski-2025",
+      "sourcePage": "odjeljak Postavke stranice",
+      "quote": "Veličina pisma: 12 tipografskih točaka",
+      "note": "Deepen-levels workflow."
+    },
+    {
+      "id": "led-kif-doktorski--line-spacing-verified-2026-07-02",
+      "ruleId": "kif-doktorski--line-spacing",
+      "profileId": "kif-doktorski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "kif-drsc08-oblikovanje-doktorski-2025",
+      "sourcePage": "odjeljak Postavke stranice",
+      "quote": "Prored: 1,5 redak",
+      "note": "Deepen-levels workflow."
+    },
+    {
+      "id": "led-kif-doktorski--margins-verified-2026-07-02",
+      "ruleId": "kif-doktorski--margins",
+      "profileId": "kif-doktorski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "kif-drsc08-oblikovanje-doktorski-2025",
+      "sourcePage": "odjeljak Postavke stranice",
+      "quote": "Lijeva i desna margina: 2,5 cm",
+      "note": "Deepen-levels workflow. Gornja i donja margina takodjer 2,5 cm (odjeljak Postavke stranice); naslovnica/korice 3,0 cm izuzete."
+    },
+    {
+      "id": "led-kif-doktorski--paper-size-verified-2026-07-02",
+      "ruleId": "kif-doktorski--paper-size",
+      "profileId": "kif-doktorski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "kif-drsc08-oblikovanje-doktorski-2025",
+      "sourcePage": "odjeljak Upute za oblikovanje doktorskoga rada",
+      "quote": "Rad treba biti ispisan na papiru formata A4 (210 mm x 297 mm).",
+      "note": "Deepen-levels workflow."
+    },
+    {
+      "id": "led-kif-doktorski--page-numbers-verified-2026-07-02",
+      "ruleId": "kif-doktorski--page-numbers",
+      "profileId": "kif-doktorski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "kif-drsc08-oblikovanje-doktorski-2025",
+      "sourcePage": "odjeljak Upute za oblikovanje doktorskoga rada",
+      "quote": "Stranice trebaju biti numerirane. Broje se sve stranice od Uvoda do",
+      "note": "Deepen-levels workflow."
+    },
+    {
+      "id": "led-kif-doktorski--toc-verified-2026-07-02",
+      "ruleId": "kif-doktorski--toc",
+      "profileId": "kif-doktorski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "kif-drsc08-oblikovanje-doktorski-2025",
+      "sourcePage": "odjeljak Rad mora sadržavati",
+      "quote": "Rad mora sadržavati:",
+      "note": "Deepen-levels workflow. Sadrzaj izrijekom naveden kao obvezan dio."
+    },
+    {
+      "id": "led-kif-doktorski--font-advisory-2026-07-02",
+      "ruleId": "kif-doktorski--font",
+      "profileId": "kif-doktorski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "kif-drsc08-oblikovanje-doktorski-2025",
+      "sourcePage": "odjeljak Postavke stranice",
+      "quote": "Font (tip pisma): obavezna potpora svih hrvatskih znakova (npr. Times",
+      "note": "Deepen-levels workflow. TNR je samo primjer; fiksna je potpora hrvatskih znakova, ne konkretan font -> advisory."
+    },
+    {
+      "id": "led-kif-doktorski--citation-style-advisory-2026-07-02",
+      "ruleId": "kif-doktorski--citation-style",
+      "profileId": "kif-doktorski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "kif-drsc08-oblikovanje-doktorski-2025",
+      "sourcePage": "odjeljak Ilustracije (tablice i slike)",
+      "quote": "dominantna u pojedinoj struci (harvardski stil,",
+      "note": "Deepen-levels workflow. Stil delegiran na struku (harvardski/oksfordski/cikaski) -> advisory."
+    },
+    {
+      "id": "led-kif-doktorski--required-sections-advisory-2026-07-02",
+      "ruleId": "kif-doktorski--required-sections",
+      "profileId": "kif-doktorski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "kif-drsc08-oblikovanje-doktorski-2025",
+      "sourcePage": "odjeljak Rad mora sadržavati",
+      "quote": "Rad mora sadržavati:",
+      "note": "Deepen-levels workflow. Imperativ 'mora sadrzavati', ali required-sections je machineCheckable:false pa ostaje advisory."
+    }
+  ]
+}

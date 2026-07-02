@@ -64,6 +64,7 @@
           "Računarstvo",
           "Diplomski studiji Fakulteta elektrotehnike i racunarstva",
           "Prijediplomski studiji Fakulteta elektrotehnike i racunarstva (zavrsni rad)",
+          "Doktorski studij Fakulteta elektrotehnike i racunarstva",
           "Opći profil fakulteta"
         ],
         "status": "partial"
@@ -242,6 +243,7 @@
           "Grafička tehnologija",
           "Dizajn grafičkih proizvoda",
           "Prijediplomski studiji Grafičkog fakulteta (zavrsni rad)",
+          "Diplomski studiji Grafičkog fakulteta",
           "Opći profil fakulteta"
         ],
         "status": "generic"
@@ -267,6 +269,7 @@
           "Kineziologija",
           "Izobrazba trenera",
           "Diplomski studiji Kineziološkog fakulteta",
+          "Doktorski studij Kineziološkog fakulteta",
           "Opći profil fakulteta"
         ],
         "status": "partial"
@@ -280,6 +283,7 @@
           "Sestrinstvo",
           "Sveučilišni specijalistički studiji",
           "Diplomski studiji Medicinskog fakulteta",
+          "Doktorski studij Medicinskog fakulteta",
           "Opći profil fakulteta"
         ],
         "status": "partial"
@@ -432,6 +436,7 @@
           "Konzerviranje i restauriranje",
           "Animirani film i novi mediji",
           "Diplomski studiji Akademije likovnih umjetnosti",
+          "Doktorski studij Akademije likovnih umjetnosti",
           "Opći profil akademije"
         ],
         "status": "generic"

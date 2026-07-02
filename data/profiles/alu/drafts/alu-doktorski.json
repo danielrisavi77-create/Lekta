@@ -1,0 +1,56 @@
+{
+  "profileId": "alu-doktorski",
+  "generatedAt": "2026-07-02",
+  "entries": [
+    {
+      "ruleId": "alu-doktorski--page-count",
+      "checkId": "page-count",
+      "value": { "min": 30 },
+      "category": "scope",
+      "label": "Opseg disertacije (kartice, minimum)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "alu-vodic-doktorski-2026",
+      "sourcePage": "5. Doktorski rad (model A, teorijski rad manjeg opsega)",
+      "quote": "teorijskog rada (disertacije) manjeg opsega u pisanom obliku od minimalno 30 kartica",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "7633072e3d6f875a0e35f6ee0a95be3388aeb92eefd952e3cd56f2103e3274d9",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "alu-doktorski--required-sections",
+      "checkId": "required-sections",
+      "value": ["prakticni rad (umjetnicko ostvarenje)", "teorijski rad (disertacija)"],
+      "category": "structure",
+      "label": "Obvezni dijelovi doktorskog rada",
+      "machineCheckable": false,
+      "authority": "program-page",
+      "sourceId": "alu-vodic-doktorski-2026",
+      "sourcePage": "5. Doktorski rad",
+      "quote": "prakticnog rad (umjetnicko ostvarenje) i teorijskog rada",
+      "status": "advisory",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "alu-doktorski--citation-style",
+      "checkId": "citation-style",
+      "value": null,
+      "category": "citation",
+      "label": "Stil citiranja (delegiran na sveucilisne smjernice)",
+      "machineCheckable": false,
+      "authority": "program-page",
+      "sourceId": "alu-pravila-smjernice-doktorandi",
+      "sourcePage": "Smjernice - disertacija",
+      "quote": "korektna upotreba citata",
+      "status": "advisory",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null
+    }
+  ]
+}

@@ -1,0 +1,233 @@
+{
+  "faculty": "fer",
+  "unit": null,
+  "catalogPrograms": [
+    "Doktorski studij Fakulteta elektrotehnike i racunarstva"
+  ],
+  "sources": [
+    {
+      "id": "fer-formalno-oblikovanje-doktorski-2012",
+      "kind": "guidelines",
+      "title": "Upute za oblikovanje doktorskoga rada (FER, predlozak brosure doktora znanosti)",
+      "url": "https://www.fer.unizg.hr/_download/repository/Formalno_oblikovanje_doktorskog_rada_-_FER_-_2012.doc",
+      "publisher": "Fakultet elektrotehnike i racunarstva Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/fer/fer-formalno-oblikovanje-doktorski-2012.doc",
+      "snapshotHash": "490c4db42fa5b93ffbdf6d9167e585de73f9f646aeef602d6209586bbba58a28",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Faculty-wide FER predlozak/upute za oblikovanje doktorskoga rada (brosura doktora znanosti), dohvacen s sluzbene stranice doktorskog studija (obrasci_i_upute), zadnja izmjena 2025. Sadrzajno se poklapa sa sveucilisnim DR.SC. predloskom. Tekst ekstrahiran antiwordom (-m UTF-8, dijakritika ispravna); svi scored citati verbatim grep-provjereni. Authority program-page."
+    },
+    {
+      "id": "fer-pravilnik-doktorski-2017",
+      "kind": "regulation",
+      "title": "Pravilnik o doktorskom studiju na FER-u (2017)",
+      "url": "https://fer.unizg.hr/_download/repository/Pravilnik_o_doktorskom_studiju_na_FER-u_2017[1].pdf",
+      "publisher": "Fakultetsko vijece, Fakultet elektrotehnike i racunarstva Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/fer/fer-pravilnik-doktorski-2017.pdf",
+      "snapshotHash": "177caf8f019c1d838b3c34be0dcb388d84339b07c4467ee962a99f30b3fb908f",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Faculty-wide obvezujuci pravilnik (FER, 2017). Procesni (upis, mentorstvo, kvalifikacijski ispit, ocjena i obrana rada); NE sadrzi tehnicka pravila oblikovanja nego oblik delegira na sveucilisni/fakultetski predlozak. Snapshot cuvan radi hijerarhije autoriteta, ne daje nijedno scored pravilo."
+    },
+    {
+      "id": "fer-preporuke-doktorski-2012",
+      "kind": "guidelines",
+      "title": "Preporuke pri pisanju doktorskog rada (FER, 2012)",
+      "url": "https://www.fer.unizg.hr/_download/repository/Preporuke_za_izradu_doktorskog_rada_-_FER_-_2012.doc",
+      "publisher": "Fakultet elektrotehnike i racunarstva Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/fer/fer-preporuke-doktorski-2012.doc",
+      "snapshotHash": "62e301ab5a1b9f7ee3e49334323fde681e63f02c6cd8152aaa22f27063cc9eea",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Preporuke pri pisanju doktorskog rada (FER, 2012). Tipografski i pravopisni mikro-savjeti te numericko navodjenje literature u uglatim zagradama [1]. Po naravi preporuke, machineCheckable dimenzije nema; ne daje scored pravila (advisory dopuna, npr. citiranje)."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "fer-doktorski",
+      "unitId": "fer",
+      "programs": [
+        "Doktorski studij Fakulteta elektrotehnike i racunarstva"
+      ],
+      "workTypes": [
+        "doctoral"
+      ],
+      "status": "partial",
+      "profileLabel": "Fakultet elektrotehnike i racunarstva, doktorski rad / disertacija",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2025-01-10",
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "requireToc": true,
+        "requirePageNumbers": true,
+        "requireA4": true,
+        "recommendedCitation": "harvard"
+      },
+      "facts": [
+        "Velicina pisma 12 tocaka, prored 1,5 i margine 2,5 cm (sve strane, tijelo rada) propisani su u odjeljku Postavke stranice (imperativ, scored).",
+        "Rad mora biti na A4 formatu (210 x 297 mm), a sve stranice od Uvoda do kraja rada numerirane (imperativ, scored).",
+        "Rad mora sadrzavati Sadrzaj (scored kao toc); ostale obvezne cjeline (naslovnica, sazetak HR/EN, uvod, zakljucak, popis literature, zivotopis) navedene su imperativno ali su strukturne (machineCheckable:false) pa ostaju advisory.",
+        "Font nije fiksiran: obavezna je samo potpora hrvatskih znakova, Times New Roman naveden je kao primjer (advisory).",
+        "Citiranje se delegira na dominantni stil struke (harvardski, oksfordski, cikaski) pa je advisory; Preporuke FER-a spominju i numericko navodjenje [1].",
+        "Naslovnica i korice imaju drugacije margine (3,0 cm), izuzete iz provjere tijela rada.",
+        "Sazetak na jednoj kartici i zivotopis do 1800 znakova nemaju odgovarajuci checkId pa su izostavljeni."
+      ],
+      "note": "Iz 'Upute za oblikovanje doktorskoga rada' (FER, predlozak brosure doktora znanosti; sadrzajno identicno sveucilisnom DR.SC. predlosku, zadnja izmjena 2025), dohvaceno sa sluzbene stranice doktorskog studija. Dokument je faculty-wide FER predlozak/upute pa je authority program-page. Scored (6): velicina 12, prored 1,5, margine 2,5 cm (tijelo), A4, numeracija stranica, obvezni Sadrzaj (toc) - imperativna Postavke stranice + opce upute. Advisory (3): font (samo primjer TNR, fiksna je potpora hrvatskih znakova), stil citiranja (delegiran na struku), obvezne cjeline (strukturne). Pravilnik o doktorskom studiju na FER-u (2017) je procesni i ne sadrzi format-pravila (snapshot cuvan radi hijerarhije). Preporuke pri pisanju (2012) daju tipografske/pravopisne savjete i numericko citiranje (advisory).",
+      "sources": [
+        {
+          "title": "Upute za oblikovanje doktorskoga rada (FER, predlozak brosure doktora znanosti)",
+          "url": "https://www.fer.unizg.hr/_download/repository/Formalno_oblikovanje_doktorskog_rada_-_FER_-_2012.doc"
+        },
+        {
+          "title": "Pravilnik o doktorskom studiju na FER-u (2017)",
+          "url": "https://fer.unizg.hr/_download/repository/Pravilnik_o_doktorskom_studiju_na_FER-u_2017[1].pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o doktorskom studiju na Sveucilistu u Zagrebu (oblik delegira na predlozak)",
+        "Pravilnik o doktorskom studiju na FER-u (2017)",
+        "Upute za oblikovanje doktorskoga rada (FER, predlozak brosure doktora znanosti)",
+        "Preporuke pri pisanju doktorskog rada (FER, 2012)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "velicina slova",
+        "prored",
+        "margine",
+        "format papira (A4)",
+        "numeracija stranica",
+        "sadrzaj (toc)"
+      ],
+      "advisoryScope": [
+        "font",
+        "stil citiranja",
+        "obvezne cjeline rada"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-fer-doktorski--font-size-verified-2026-07-02",
+      "ruleId": "fer-doktorski--font-size",
+      "profileId": "fer-doktorski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fer-formalno-oblikovanje-doktorski-2012",
+      "sourcePage": "odjeljak Postavke stranice",
+      "quote": "Veličina pisma: 12 tipografskih točaka",
+      "note": "Deepen-levels workflow."
+    },
+    {
+      "id": "led-fer-doktorski--line-spacing-verified-2026-07-02",
+      "ruleId": "fer-doktorski--line-spacing",
+      "profileId": "fer-doktorski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fer-formalno-oblikovanje-doktorski-2012",
+      "sourcePage": "odjeljak Postavke stranice",
+      "quote": "Prored: 1,5 redak",
+      "note": "Deepen-levels workflow."
+    },
+    {
+      "id": "led-fer-doktorski--margins-verified-2026-07-02",
+      "ruleId": "fer-doktorski--margins",
+      "profileId": "fer-doktorski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fer-formalno-oblikovanje-doktorski-2012",
+      "sourcePage": "odjeljak Postavke stranice",
+      "quote": "Lijeva i desna margina: 2,5 cm",
+      "note": "Deepen-levels workflow. Gornja i donja margina takodjer 2,5 cm (odjeljak Postavke stranice); naslovnica/korice 3,0 cm izuzete."
+    },
+    {
+      "id": "led-fer-doktorski--paper-size-verified-2026-07-02",
+      "ruleId": "fer-doktorski--paper-size",
+      "profileId": "fer-doktorski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fer-formalno-oblikovanje-doktorski-2012",
+      "sourcePage": "odjeljak Upute za oblikovanje doktorskoga rada",
+      "quote": "Rad treba biti ispisan na papiru formata A4 (210 mm x 297 mm).",
+      "note": "Deepen-levels workflow."
+    },
+    {
+      "id": "led-fer-doktorski--page-numbers-verified-2026-07-02",
+      "ruleId": "fer-doktorski--page-numbers",
+      "profileId": "fer-doktorski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fer-formalno-oblikovanje-doktorski-2012",
+      "sourcePage": "odjeljak Upute za oblikovanje doktorskoga rada",
+      "quote": "Stranice trebaju biti numerirane. Broje se sve stranice od Uvoda do",
+      "note": "Deepen-levels workflow."
+    },
+    {
+      "id": "led-fer-doktorski--toc-verified-2026-07-02",
+      "ruleId": "fer-doktorski--toc",
+      "profileId": "fer-doktorski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fer-formalno-oblikovanje-doktorski-2012",
+      "sourcePage": "odjeljak Rad mora sadržavati",
+      "quote": "Rad mora sadržavati:",
+      "note": "Deepen-levels workflow. Sadrzaj izrijekom naveden kao obvezan dio."
+    },
+    {
+      "id": "led-fer-doktorski--font-advisory-2026-07-02",
+      "ruleId": "fer-doktorski--font",
+      "profileId": "fer-doktorski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fer-formalno-oblikovanje-doktorski-2012",
+      "sourcePage": "odjeljak Postavke stranice",
+      "quote": "Font (tip pisma): obavezna potpora svih hrvatskih znakova (npr. Times",
+      "note": "Deepen-levels workflow. TNR je samo primjer; fiksna je potpora hrvatskih znakova, ne konkretan font -> advisory."
+    },
+    {
+      "id": "led-fer-doktorski--citation-style-advisory-2026-07-02",
+      "ruleId": "fer-doktorski--citation-style",
+      "profileId": "fer-doktorski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fer-formalno-oblikovanje-doktorski-2012",
+      "sourcePage": "odjeljak Ilustracije (tablice i slike)",
+      "quote": "dominantna u pojedinoj struci (harvardski stil,",
+      "note": "Deepen-levels workflow. Stil delegiran na struku (harvardski/oksfordski/cikaski) -> advisory."
+    },
+    {
+      "id": "led-fer-doktorski--required-sections-advisory-2026-07-02",
+      "ruleId": "fer-doktorski--required-sections",
+      "profileId": "fer-doktorski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fer-formalno-oblikovanje-doktorski-2012",
+      "sourcePage": "odjeljak Rad mora sadržavati",
+      "quote": "Rad mora sadržavati:",
+      "note": "Deepen-levels workflow. Imperativ 'mora sadrzavati', ali required-sections je machineCheckable:false pa ostaje advisory."
+    }
+  ]
+}

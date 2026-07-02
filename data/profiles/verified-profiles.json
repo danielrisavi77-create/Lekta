@@ -11059,5 +11059,332 @@
     "catalogPrograms": [
       "Geologija"
     ]
+  },
+  {
+    "id": "fer-doktorski",
+    "unitId": "fer",
+    "programs": [
+      "Doktorski studij Fakulteta elektrotehnike i racunarstva"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "profileLabel": "Fakultet elektrotehnike i racunarstva, doktorski rad / disertacija",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2025-01-10",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "requireA4": true,
+      "recommendedCitation": "harvard"
+    },
+    "facts": [
+      "Velicina pisma 12 tocaka, prored 1,5 i margine 2,5 cm (sve strane, tijelo rada) propisani su u odjeljku Postavke stranice (imperativ, scored).",
+      "Rad mora biti na A4 formatu (210 x 297 mm), a sve stranice od Uvoda do kraja rada numerirane (imperativ, scored).",
+      "Rad mora sadrzavati Sadrzaj (scored kao toc); ostale obvezne cjeline (naslovnica, sazetak HR/EN, uvod, zakljucak, popis literature, zivotopis) navedene su imperativno ali su strukturne (machineCheckable:false) pa ostaju advisory.",
+      "Font nije fiksiran: obavezna je samo potpora hrvatskih znakova, Times New Roman naveden je kao primjer (advisory).",
+      "Citiranje se delegira na dominantni stil struke (harvardski, oksfordski, cikaski) pa je advisory; Preporuke FER-a spominju i numericko navodjenje [1].",
+      "Naslovnica i korice imaju drugacije margine (3,0 cm), izuzete iz provjere tijela rada.",
+      "Sazetak na jednoj kartici i zivotopis do 1800 znakova nemaju odgovarajuci checkId pa su izostavljeni."
+    ],
+    "note": "Iz 'Upute za oblikovanje doktorskoga rada' (FER, predlozak brosure doktora znanosti; sadrzajno identicno sveucilisnom DR.SC. predlosku, zadnja izmjena 2025), dohvaceno sa sluzbene stranice doktorskog studija. Dokument je faculty-wide FER predlozak/upute pa je authority program-page. Scored (6): velicina 12, prored 1,5, margine 2,5 cm (tijelo), A4, numeracija stranica, obvezni Sadrzaj (toc) - imperativna Postavke stranice + opce upute. Advisory (3): font (samo primjer TNR, fiksna je potpora hrvatskih znakova), stil citiranja (delegiran na struku), obvezne cjeline (strukturne). Pravilnik o doktorskom studiju na FER-u (2017) je procesni i ne sadrzi format-pravila (snapshot cuvan radi hijerarhije). Preporuke pri pisanju (2012) daju tipografske/pravopisne savjete i numericko citiranje (advisory).",
+    "sources": [
+      {
+        "title": "Upute za oblikovanje doktorskoga rada (FER, predlozak brosure doktora znanosti)",
+        "url": "https://www.fer.unizg.hr/_download/repository/Formalno_oblikovanje_doktorskog_rada_-_FER_-_2012.doc"
+      },
+      {
+        "title": "Pravilnik o doktorskom studiju na FER-u (2017)",
+        "url": "https://fer.unizg.hr/_download/repository/Pravilnik_o_doktorskom_studiju_na_FER-u_2017[1].pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o doktorskom studiju na Sveucilistu u Zagrebu (oblik delegira na predlozak)",
+      "Pravilnik o doktorskom studiju na FER-u (2017)",
+      "Upute za oblikovanje doktorskoga rada (FER, predlozak brosure doktora znanosti)",
+      "Preporuke pri pisanju doktorskog rada (FER, 2012)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "velicina slova",
+      "prored",
+      "margine",
+      "format papira (A4)",
+      "numeracija stranica",
+      "sadrzaj (toc)"
+    ],
+    "advisoryScope": [
+      "font",
+      "stil citiranja",
+      "obvezne cjeline rada"
+    ]
+  },
+  {
+    "id": "kif-doktorski",
+    "unitId": "kif",
+    "programs": [
+      "Doktorski studij Kineziološkog fakulteta"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "profileLabel": "Kinezioloski fakultet, doktorski rad / disertacija",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2025-02-07",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "requireA4": true,
+      "recommendedCitation": "harvard"
+    },
+    "facts": [
+      "Velicina pisma 12 tocaka, prored 1,5 i margine 2,5 cm (sve strane, tijelo rada) propisani su u odjeljku Postavke stranice (imperativ, scored).",
+      "Rad treba biti ispisan na A4 formatu (210 x 297 mm), a sve stranice od Uvoda do kraja rada numerirane (imperativ, scored).",
+      "Rad mora sadrzavati Sadrzaj (scored kao toc); ostale obvezne cjeline (naslovnica, sazetak HR/EN, uvod, zakljucak, popis literature, zivotopis) navedene su imperativno ali su strukturne (machineCheckable:false) pa ostaju advisory.",
+      "Font nije fiksiran: obavezna je samo potpora hrvatskih znakova, Times New Roman naveden je kao primjer (advisory).",
+      "Citiranje se delegira na dominantni stil struke (harvardski, oksfordski, cikaski) pa je advisory.",
+      "Naslovnica i korice imaju drugacije margine (3,0 cm), izuzete iz provjere tijela rada.",
+      "Sazetak na jednoj kartici i zivotopis do 1800 znakova nemaju odgovarajuci checkId pa su izostavljeni."
+    ],
+    "note": "Iz sveucilisnog obrasca DR.SC.-08 'Upute za oblikovanje doktorskoga rada', objavljenog na sluzbenoj stranici doktorskog studija KIF-a (Dokumenti). Dokument je konkretan predlozak s vrijednostima (nije puka delegacija) pa je authority program-page i imperativna, verbatim potvrdena pravila su scored. Scored (6): velicina 12, prored 1,5, margine 2,5 cm (tijelo), A4, numeracija stranica, obvezni Sadrzaj (toc). Advisory (3): font (samo primjer TNR, fiksna je potpora hrvatskih znakova), stil citiranja (delegiran na struku), obvezne cjeline (strukturne, machineCheckable:false). Upute Odbora za doktorski studij daju strukturu poglavlja (advisory) i izrijekom delegiraju oblikovanje na DR.SC.-08. Sveucilisni Pravilnik o doktorskim studijima (2024) je procesni i ne sadrzi format-pravila (snapshot cuvan radi hijerarhije). VAZNO za ljudski pregled: DR.SC.-08 je sveucilisni predlozak zajednicki svim sastavnicama; KIF ga hosta kao svoj obrazac za doktorski rad.",
+    "sources": [
+      {
+        "title": "Upute za oblikovanje doktorskoga rada (obrazac DR.SC.-08, SuZ)",
+        "url": "https://www.kif.unizg.hr/_download/repository/DR.SC.-08_formalno_oblikovanje_rada%5B3%5D.doc"
+      },
+      {
+        "title": "Upute Odbora za doktorski studij - struktura doktorskog rada (KIF)",
+        "url": "https://www.kif.unizg.hr/_download/repository/Upute_-_Struktura_doktorskog_rada_drugi_dio.pdf"
+      },
+      {
+        "title": "Pravilnik o doktorskim studijima na Sveucilistu u Zagrebu (2024)",
+        "url": "https://www.kif.unizg.hr/_download/repository/2024-09-24_Pravilnik_o_doktorskim_studijima_2024.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o doktorskim studijima na Sveucilistu u Zagrebu (2024) (oblik delegira na obrazac DR.SC.-08)",
+      "Upute za oblikovanje doktorskoga rada (obrazac DR.SC.-08, SuZ)",
+      "Upute Odbora za doktorski studij - struktura doktorskog rada (KIF)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "velicina slova",
+      "prored",
+      "margine",
+      "format papira (A4)",
+      "numeracija stranica",
+      "sadrzaj (toc)"
+    ],
+    "advisoryScope": [
+      "font",
+      "stil citiranja",
+      "obvezne cjeline rada"
+    ],
+    "catalogPrograms": [
+      "Doktorski studij Kineziološkog fakulteta"
+    ]
+  },
+  {
+    "id": "mef-doktorski",
+    "unitId": "mef",
+    "programs": [
+      "Doktorski studij Medicinskog fakulteta"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "profileLabel": "Medicinski fakultet, doktorski rad / disertacija",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2022-06-03",
+    "rules": {
+      "requireA4": true,
+      "requirePageNumbers": true,
+      "requireToc": true,
+      "recommendedCitation": "vancouver"
+    },
+    "facts": [
+      "Format rada je A4 (imperativna tehnicka uputa, scored).",
+      "Sve stranice moraju biti oznacene brojevima, prva numerirana je Uvod (imperativ 'obavezno', scored kao page-numbers).",
+      "Rad mora sadrzavati Sadrzaj prema poglavljima (scored kao toc).",
+      "Font, velicina slova, prored i margine nisu propisani ovim Naputcima pa nema odgovarajucih scored pravila (ne izmisljaju se).",
+      "Obvezne cjeline rada (Sadrzaj, Popis oznaka i kratica te poglavlja 1-11: Uvod i svrha, Hipoteza, Ciljevi, Materijali i metode, Rezultati, Rasprava, Zakljucak, kratki sadrzaj HR, kratki sadrzaj i naslov EN, Popis literature, Kratka biografija) navedene su imperativom 'mora sadrzavati' ali su strukturne (machineCheckable:false) pa ostaju advisory.",
+      "Kratki sadrzaj na engleskom i kratka biografija do 200 rijeci; opseg je advisory (odnosi se samo na te dijelove, machineCheckable:false).",
+      "Stil citiranja delegiran je na naputke Lijecnickog vjesnika (numericki, vancouver) pa je advisory."
+    ],
+    "note": "Iz 'Naputci za tehnicku obradu doktorskog rada' (Medicinski fakultet, 3.6.2022), dohvaceno sa sluzbene stranice Obrasci i upute (Odbor za doktorske radove i znanstvena zvanja). Dokument je faculty-wide MEF uputa pa je authority program-page. Scored (3): format A4, numeracija stranica (obavezno), obvezni Sadrzaj (toc). Advisory (3): obvezne cjeline (strukturne, machineCheckable:false), opseg kratkog sadrzaja/biografije (200 rijeci, samo ti dijelovi), stil citiranja (delegiran na Lijecnicki vjesnik = vancouver). Font, velicina, prored i margine nisu propisani pa su izostavljeni. Pravilnik o doktorskim studijima (procisceni tekst) je procesni i oblik delegira na ove Naputke (snapshot cuvan radi hijerarhije autoriteta).",
+    "sources": [
+      {
+        "title": "Naputci za tehnicku obradu doktorskog rada (Medicinski fakultet)",
+        "url": "https://mef.unizg.hr/app/uploads/2022/06/NAPUTCI-ZA-TEHNICKU-OBRADU-DOKTORSKOG-RADA-3-6-2022-korekcije.docx"
+      },
+      {
+        "title": "Pravilnik o doktorskim studijima na Medicinskom fakultetu (procisceni tekst)",
+        "url": "https://mef.unizg.hr/app/uploads/2021/03/Pravilnik-o-doktorskim-studijima_procisceni-tekst.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o doktorskim studijima na Sveucilistu u Zagrebu (oblik delegira na fakultetske naputke)",
+      "Pravilnik o doktorskim studijima na Medicinskom fakultetu (procisceni tekst)",
+      "Naputci za tehnicku obradu doktorskog rada (Medicinski fakultet, 2022)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "format papira (A4)",
+      "numeracija stranica",
+      "sadrzaj (toc)"
+    ],
+    "advisoryScope": [
+      "obvezne cjeline rada",
+      "opseg kratkog sadrzaja i biografije",
+      "stil citiranja"
+    ]
+  },
+  {
+    "id": "alu-doktorski",
+    "unitId": "alu",
+    "programs": [
+      "Doktorski studij Akademije likovnih umjetnosti"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "profileLabel": "Akademija likovnih umjetnosti, doktorski rad / disertacija",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2026-05-08",
+    "rules": {
+      "pageMin": 30,
+      "recommendedCitation": "custom"
+    },
+    "facts": [
+      "Doktorski rad je sinteza dva dijela: prakticni rad (umjetnicko ostvarenje) i teorijski rad (disertacija) u pisanom obliku (Vodic, pogl. 5, imperativ; strukturno, machineCheckable:false pa advisory).",
+      "Opseg disertacije ovisi o modelu: model A (praksa) minimalno 30 kartica, model B (praksa i teorija) minimalno 90 kartica; 1 kartica = 1800 slovnih mjesta. Univerzalni faculty-wide minimum je 30 kartica pa je page-count scored s minimumom 30; stroziji minimum od 90 kartica (samo model B) drzi se kao advisory jer se model ne moze strojno utvrditi.",
+      "Font, velicina slova, prored, margine, format papira, numeracija stranica i sadrzaj (toc) nisu propisani nijednim citljivim izvorom za ovu razinu.",
+      "Pravila i smjernice izrijekom delegiraju format i maksimalnu duljinu na sveucilisne smjernice, a stil citiranja nije konkretno imenovan (advisory)."
+    ],
+    "note": "Iz Vodica kroz doktorski studij likovne umjetnosti (ALU, 2026), jedinog umjetnickog doktorskog studija u RH. Scored (1): page-count minimum 30 kartica - univerzalni faculty-wide minimum disertacije (verbatim 'minimalno 30 kartica'), machineCheckable. Advisory (2): obvezni dijelovi rada (prakticni + teorijski dio, strukturno pa machineCheckable:false) i stil citiranja (delegiran, bez konkretnog stila). Pravila i smjernice za mentore i doktorande izrijekom delegiraju format na sveucilisne smjernice (bez konkretnih vrijednosti). Pravilnik o doktorskom studiju ALU 2025 je skenirani PDF (nije ekstraktibilan) pa ne daje pravila, cuvan radi hijerarhije. Model B (min 90 kartica) je stroziji, ali se model ne moze strojno utvrditi pa scored ostaje na univerzalnom minimumu 30. VAZNO za ljudski pregled: potvrditi mapiranje kartica -> page-count i eventualno razmotriti word-count (30 kartica x 1800 znakova).",
+    "sources": [
+      {
+        "title": "Vodic kroz doktorski studij likovne umjetnosti (ALU, 2026)",
+        "url": "https://www.alu.unizg.hr/alu/cms/upload/dokumenti/pds/programi/vodic_kroz_doktorski_studij_likovne_umjetnosti_08052026.pdf"
+      },
+      {
+        "title": "Pravila i smjernice za mentore i doktorande na ALU",
+        "url": "https://www.alu.unizg.hr/alu/cms/upload/dokumenti/pds/pravilnici/PRAVILA_I_SMJERNICE_za_mentore_i_doktorande_na_ALU_u_Zagrebu.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o doktorskim studijima na Sveucilistu u Zagrebu (2024) (format delegiran na sveucilisne smjernice)",
+      "Pravilnik o doktorskom studiju na Akademiji likovnih umjetnosti (2025) (skeniran, ne daje format-pravila)",
+      "Vodic kroz doktorski studij likovne umjetnosti (ALU, 2026)",
+      "Pravila i smjernice za mentore i doktorande na ALU"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "opseg disertacije (minimum kartica)"
+    ],
+    "advisoryScope": [
+      "obvezni dijelovi rada (prakticni i teorijski dio)",
+      "stroziji opseg za model B (min 90 kartica)",
+      "stil citiranja"
+    ]
+  },
+  {
+    "id": "grf-diplomski",
+    "unitId": "grf",
+    "programs": [
+      "Diplomski studiji Grafičkog fakulteta"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Grafički fakultet, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2012-03-13",
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Arial"
+      ],
+      "size": 12,
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 3.5,
+        "left": 3.5
+      },
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "requireA4": true,
+      "recommendedCitation": "ieee"
+    },
+    "facts": [
+      "Odjeljak Postavke stranice propisuje pismo (Times New Roman ili Arial uz obveznu potporu hrvatskih znakova), velicinu 12 tipografskih tocaka i prored 1,5 (scored).",
+      "Margine su navedene po stranama: lijeva 3,5 cm, desna 2,5 cm, gornja 2,5 cm, donja 3,5 cm (scored). Za jednostrani ispis mapirano izravno na top/right/bottom/left.",
+      "Rad treba biti napisan na papiru formata A4 (210 x 297) (scored); sve stranice od uvoda do kraja rada trebaju biti numerirane, u donjem desnom kutu (scored).",
+      "Rad mora sadrzavati Sadrzaj (scored kao toc); popis obveznih cjelina je imperativan ali strukturno (machineCheckable:false) pa je advisory.",
+      "Poravnanje teksta je 'obostrano ili lijevo' (dokument dopusta oboje) pa justify NIJE bodovan.",
+      "Literatura se obiljezava rednim brojem po redoslijedu citiranja, u tekstu uglate zagrade (numericki stil, mapiran na ieee); machineCheckable:false pa advisory.",
+      "Naslovnica i prva stranica koriste prilozene forme i Unizg fontove; sazetak 1000-1500 znakova nema odgovarajuci checkId pa je izostavljen."
+    ],
+    "note": "Diplomski (graduate) rad iz Upute za izradu diplomskog rada (Prilog 3 uz Pravilnik iz 2012). Prvi port grf-a nije nasao upotrebljiv diplomski izvor jer je Prilog 3 unutar PDF-a Pravilnika skeniran; ovaj deepen-levels port dohvaca .doc verziju Priloga 3 s fakultetske obrasci stranice, koja se cisto ekstrahira i sadrzi konkretne format-vrijednosti pa je authority program-page i imperativna, verbatim potvrdena pravila su scored. Scored (7): font, velicina, prored, margine, A4, numeracija stranica, obvezni Sadrzaj (toc). Advisory (2): obvezne cjeline (strukturne, machineCheckable:false) i stil citiranja (numericki, ieee, machineCheckable:false). Justify nije bodovan jer dokument izrijekom dopusta obostrano ILI lijevo poravnanje. NB za ljudski pregled: dokument je iste predloske obitelji kao sveucilisni DR.SC.-08 (odjeljci Postavke stranice / Rad mora sadrzavati); GRF-ove margine su lijeva/donja 3,5 i desna/gornja 2,5 (nije 2,5 na svim stranama).",
+    "sources": [
+      {
+        "title": "Uputa za izradu diplomskog rada (Prilog 3, Graficki fakultet Sveucilista u Zagrebu)",
+        "url": "https://www.grf.unizg.hr/images/stories/SBG/Propisi/DIPLRAD-prilog3.doc"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o izradi i obrani diplomskog rada (Graficki fakultet, 2012) (oblikovanje delegira na Uputu, Prilog 3)",
+      "Uputa za izradu diplomskog rada (Prilog 3, Graficki fakultet Sveucilista u Zagrebu)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "format papira (A4)",
+      "numeracija stranica",
+      "sadrzaj (toc)"
+    ],
+    "advisoryScope": [
+      "obvezne cjeline rada",
+      "stil citiranja"
+    ],
+    "catalogPrograms": [
+      "Diplomski studiji Grafičkog fakulteta"
+    ]
   }
 ]

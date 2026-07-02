@@ -1,0 +1,167 @@
+{
+  "faculty": "mef",
+  "unit": null,
+  "catalogPrograms": [
+    "Doktorski studij Medicinskog fakulteta"
+  ],
+  "sources": [
+    {
+      "id": "mef-naputci-tehnicka-obrada-doktorski-2022",
+      "kind": "guidelines",
+      "title": "Naputci za tehnicku obradu doktorskog rada (Medicinski fakultet Sveucilista u Zagrebu)",
+      "url": "https://mef.unizg.hr/app/uploads/2022/06/NAPUTCI-ZA-TEHNICKU-OBRADU-DOKTORSKOG-RADA-3-6-2022-korekcije.docx",
+      "publisher": "Medicinski fakultet Sveucilista u Zagrebu, Odbor za doktorske radove i znanstvena zvanja",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/mef/mef-naputci-tehnicka-obrada-doktorski-2022.docx",
+      "snapshotHash": "8cad70ffeb947004dab365200762be290a065d2d4b3337226f745b6bbd056303",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Faculty-wide tehnicke upute za oblikovanje doktorskog rada, dohvacene sa sluzbene stranice Obrasci i upute (Odbor za doktorske radove). Tekst ekstrahiran iz docx (word/document.xml), dijakritika ispravna; svi scored citati verbatim grep-provjereni. Daje samo dio strojno-provjerljivih dimenzija (A4, numeracija stranica, obvezni Sadrzaj); font, velicina slova, prored i margine nisu propisani. Authority program-page."
+    },
+    {
+      "id": "mef-pravilnik-doktorski-studiji",
+      "kind": "regulation",
+      "title": "Pravilnik o doktorskim studijima na Medicinskom fakultetu (procisceni tekst)",
+      "url": "https://mef.unizg.hr/app/uploads/2021/03/Pravilnik-o-doktorskim-studijima_procisceni-tekst.pdf",
+      "publisher": "Fakultetsko vijece, Medicinski fakultet Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/mef/mef-pravilnik-doktorski-studiji.pdf",
+      "snapshotHash": "9e0b65d82d134ef22fedc5340618eeb6e866d3d7a72aa763a5570767f58b04d1",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Obvezujuci procesni pravilnik doktorskih studija (upis, mentorstvo, ocjena i obrana). Ne sadrzi tehnicka pravila oblikovanja nego oblik delegira na Naputke za tehnicku obradu; snapshot cuvan radi hijerarhije autoriteta, ne daje nijedno scored pravilo."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "mef-doktorski",
+      "unitId": "mef",
+      "programs": [
+        "Doktorski studij Medicinskog fakulteta"
+      ],
+      "workTypes": [
+        "doctoral"
+      ],
+      "status": "partial",
+      "profileLabel": "Medicinski fakultet, doktorski rad / disertacija",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2022-06-03",
+      "rules": {
+        "requireA4": true,
+        "requirePageNumbers": true,
+        "requireToc": true,
+        "recommendedCitation": "vancouver"
+      },
+      "facts": [
+        "Format rada je A4 (imperativna tehnicka uputa, scored).",
+        "Sve stranice moraju biti oznacene brojevima, prva numerirana je Uvod (imperativ 'obavezno', scored kao page-numbers).",
+        "Rad mora sadrzavati Sadrzaj prema poglavljima (scored kao toc).",
+        "Font, velicina slova, prored i margine nisu propisani ovim Naputcima pa nema odgovarajucih scored pravila (ne izmisljaju se).",
+        "Obvezne cjeline rada (Sadrzaj, Popis oznaka i kratica te poglavlja 1-11: Uvod i svrha, Hipoteza, Ciljevi, Materijali i metode, Rezultati, Rasprava, Zakljucak, kratki sadrzaj HR, kratki sadrzaj i naslov EN, Popis literature, Kratka biografija) navedene su imperativom 'mora sadrzavati' ali su strukturne (machineCheckable:false) pa ostaju advisory.",
+        "Kratki sadrzaj na engleskom i kratka biografija do 200 rijeci; opseg je advisory (odnosi se samo na te dijelove, machineCheckable:false).",
+        "Stil citiranja delegiran je na naputke Lijecnickog vjesnika (numericki, vancouver) pa je advisory."
+      ],
+      "note": "Iz 'Naputci za tehnicku obradu doktorskog rada' (Medicinski fakultet, 3.6.2022), dohvaceno sa sluzbene stranice Obrasci i upute (Odbor za doktorske radove i znanstvena zvanja). Dokument je faculty-wide MEF uputa pa je authority program-page. Scored (3): format A4, numeracija stranica (obavezno), obvezni Sadrzaj (toc). Advisory (3): obvezne cjeline (strukturne, machineCheckable:false), opseg kratkog sadrzaja/biografije (200 rijeci, samo ti dijelovi), stil citiranja (delegiran na Lijecnicki vjesnik = vancouver). Font, velicina, prored i margine nisu propisani pa su izostavljeni. Pravilnik o doktorskim studijima (procisceni tekst) je procesni i oblik delegira na ove Naputke (snapshot cuvan radi hijerarhije autoriteta).",
+      "sources": [
+        {
+          "title": "Naputci za tehnicku obradu doktorskog rada (Medicinski fakultet)",
+          "url": "https://mef.unizg.hr/app/uploads/2022/06/NAPUTCI-ZA-TEHNICKU-OBRADU-DOKTORSKOG-RADA-3-6-2022-korekcije.docx"
+        },
+        {
+          "title": "Pravilnik o doktorskim studijima na Medicinskom fakultetu (procisceni tekst)",
+          "url": "https://mef.unizg.hr/app/uploads/2021/03/Pravilnik-o-doktorskim-studijima_procisceni-tekst.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o doktorskim studijima na Sveucilistu u Zagrebu (oblik delegira na fakultetske naputke)",
+        "Pravilnik o doktorskim studijima na Medicinskom fakultetu (procisceni tekst)",
+        "Naputci za tehnicku obradu doktorskog rada (Medicinski fakultet, 2022)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "format papira (A4)",
+        "numeracija stranica",
+        "sadrzaj (toc)"
+      ],
+      "advisoryScope": [
+        "obvezne cjeline rada",
+        "opseg kratkog sadrzaja i biografije",
+        "stil citiranja"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-mef-doktorski--paper-size-verified-2026-07-02",
+      "ruleId": "mef-doktorski--paper-size",
+      "profileId": "mef-doktorski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "mef-naputci-tehnicka-obrada-doktorski-2022",
+      "sourcePage": "tocka 1) Format radova",
+      "quote": "Format radova je A 4 (21x29,7 cm)",
+      "note": "Deepen-levels workflow."
+    },
+    {
+      "id": "led-mef-doktorski--page-numbers-verified-2026-07-02",
+      "ruleId": "mef-doktorski--page-numbers",
+      "profileId": "mef-doktorski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "mef-naputci-tehnicka-obrada-doktorski-2022",
+      "sourcePage": "tocka 6) Stranice obavezno oznaciti brojevima",
+      "quote": "Stranice obavezno označiti brojevima",
+      "note": "Deepen-levels workflow. Prva numerirana stranica je Uvod."
+    },
+    {
+      "id": "led-mef-doktorski--toc-verified-2026-07-02",
+      "ruleId": "mef-doktorski--toc",
+      "profileId": "mef-doktorski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "mef-naputci-tehnicka-obrada-doktorski-2022",
+      "sourcePage": "tocka 5) Rad mora sadrzavati, stavka Sadrzaj prema poglavljima",
+      "quote": "Sadržaj prema poglavljima",
+      "note": "Deepen-levels workflow. Imperativ 'Rad mora sadrzavati' + stavka Sadrzaj prema poglavljima."
+    },
+    {
+      "id": "led-mef-doktorski--required-sections-advisory-2026-07-02",
+      "ruleId": "mef-doktorski--required-sections",
+      "profileId": "mef-doktorski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "mef-naputci-tehnicka-obrada-doktorski-2022",
+      "sourcePage": "tocka 5) Rad mora sadrzavati",
+      "quote": "Rad mora sadržavati:",
+      "note": "Deepen-levels workflow. Imperativ 'mora sadrzavati', ali required-sections je machineCheckable:false pa ostaje advisory."
+    },
+    {
+      "id": "led-mef-doktorski--word-count-advisory-2026-07-02",
+      "ruleId": "mef-doktorski--word-count",
+      "profileId": "mef-doktorski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "mef-naputci-tehnicka-obrada-doktorski-2022",
+      "sourcePage": "tocka 5) stavke 9 i 11",
+      "quote": "Kratka biografija (do 200 riječi)",
+      "note": "Deepen-levels workflow. Opseg 200 rijeci odnosi se samo na kratki sadrzaj EN i biografiju; machineCheckable:false -> advisory."
+    },
+    {
+      "id": "led-mef-doktorski--citation-style-advisory-2026-07-02",
+      "ruleId": "mef-doktorski--citation-style",
+      "profileId": "mef-doktorski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "mef-naputci-tehnicka-obrada-doktorski-2022",
+      "sourcePage": "tocka 5) stavka 10 Popis literature",
+      "quote": "Popis literature (prema naputcima Liječničkog vjesnika)",
+      "note": "Deepen-levels workflow. Stil delegiran na naputke Lijecnickog vjesnika (numericki, vancouver) -> advisory."
+    }
+  ]
+}
