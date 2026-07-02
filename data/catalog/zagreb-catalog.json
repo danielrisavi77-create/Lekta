@@ -808,5 +808,70 @@
         ]
       }
     ]
+  },
+  {
+    "id": "unist",
+    "name": "Sveuciliste u Splitu",
+    "units": [
+      {
+        "id": "efst",
+        "name": "Ekonomski fakultet u Splitu",
+        "family": "social",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski studiji EFST (zavrsni rad)",
+          "Diplomski studiji EFST"
+        ]
+      },
+      {
+        "id": "fgag",
+        "name": "Fakultet gradevinarstva, arhitekture i geodezije u Splitu",
+        "family": "stem",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski studiji FGAG (zavrsni rad)",
+          "Diplomski studiji FGAG"
+        ]
+      },
+      {
+        "id": "ktfst",
+        "name": "Kemijsko-tehnoloski fakultet u Splitu",
+        "family": "stem",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski studiji KTF Split (zavrsni rad)",
+          "Diplomski studiji KTF Split"
+        ]
+      },
+      {
+        "id": "mefst",
+        "name": "Medicinski fakultet u Splitu",
+        "family": "biomed",
+        "status": "partial",
+        "programs": [
+          "Integrirani studij medicine (MEFST, diplomski rad)"
+        ]
+      },
+      {
+        "id": "pfst",
+        "name": "Pomorski fakultet u Splitu",
+        "family": "stem",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski/ocjenski radovi PFST (zavrsni rad)",
+          "Diplomski studiji PFST"
+        ]
+      },
+      {
+        "id": "pmfst",
+        "name": "Prirodoslovno-matematicki fakultet u Splitu",
+        "family": "stem",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski studiji PMFST bio/kem (zavrsni rad)",
+          "Diplomski studiji PMFST bio/kem"
+        ]
+      }
+    ]
   }
 ]

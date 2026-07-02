@@ -1,0 +1,297 @@
+{
+  "faculty": "ktfst",
+  "institution": "unist",
+  "institutionName": "Sveuciliste u Splitu",
+  "unit": {
+    "id": "ktfst",
+    "name": "Kemijsko-tehnoloski fakultet u Splitu",
+    "family": "stem",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Prijediplomski studiji KTF Split (zavrsni rad)",
+    "Diplomski studiji KTF Split"
+  ],
+  "sources": [
+    {
+      "id": "ktf-prilog3-zavrsni",
+      "kind": "template",
+      "title": "Prilog 3 - Izgled obveznih stranica zavrsnog rada (KTF Split)",
+      "url": "https://www.ktf.unist.hr/images/stories/repozitorij/Dekanat/Prilog_3_Izgled_obveznih_stranica_zavrsnog_rada.docx",
+      "publisher": "Kemijsko-tehnoloski fakultet u Splitu, Sveuciliste u Splitu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/ktfst/ktf-prilog3-zavrsni.docx",
+      "snapshotHash": "b08e0561fb2dfa8c1337fa15a20a2df281f62f8de3232b67c23a486cfdcd0bde",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Predlozak (Prilog 3 Pravilnika); pisani format-blok \"od Zadatka do Priloga\". Font TNR ili Arial."
+    },
+    {
+      "id": "ktf-prilog4-diplomski",
+      "kind": "template",
+      "title": "Prilog 4 - Izgled obveznih stranica diplomskog rada (KTF Split)",
+      "url": "https://www.ktf.unist.hr/images/stories/repozitorij/Dekanat/Prilog_4_Izgled_obveznih_stranica_diplomskog_rada.docx",
+      "publisher": "Kemijsko-tehnoloski fakultet u Splitu, Sveuciliste u Splitu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/ktfst/ktf-prilog4-diplomski.docx",
+      "snapshotHash": "356334c6e4a9d935e7ae6980d1d0a4976751061fff597f02bb8aa9bdd257e4fa",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Predlozak (Prilog 4 Pravilnika); pisani format-blok \"od Zadatka do Priloga\". Font TNR ili Arial."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "ktfst-zavrsni",
+      "unitId": "ktfst",
+      "programs": [
+        "Prijediplomski studiji KTF Split (zavrsni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "KTF Split, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman",
+          "Arial"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 3.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Kemijsko-tehnoloski fakultet u Splitu, Sveuciliste u Splitu), citano izravno.",
+      "sources": [
+        {
+          "title": "Prilog 3 - Izgled obveznih stranica zavrsnog rada (KTF Split)",
+          "url": "https://www.ktf.unist.hr/images/stories/repozitorij/Dekanat/Prilog_3_Izgled_obveznih_stranica_zavrsnog_rada.docx"
+        }
+      ],
+      "sourceHierarchy": [
+        "Prilog 3 - Izgled obveznih stranica zavrsnog rada (KTF Split)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Margine",
+        "Vrsta slova (TNR ili Arial)",
+        "Velicina slova",
+        "Prored",
+        "Obostrano poravnanje"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "ktfst-diplomski",
+      "unitId": "ktfst",
+      "programs": [
+        "Diplomski studiji KTF Split"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "KTF Split, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman",
+          "Arial"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 3.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Kemijsko-tehnoloski fakultet u Splitu, Sveuciliste u Splitu), citano izravno.",
+      "sources": [
+        {
+          "title": "Prilog 4 - Izgled obveznih stranica diplomskog rada (KTF Split)",
+          "url": "https://www.ktf.unist.hr/images/stories/repozitorij/Dekanat/Prilog_4_Izgled_obveznih_stranica_diplomskog_rada.docx"
+        }
+      ],
+      "sourceHierarchy": [
+        "Prilog 4 - Izgled obveznih stranica diplomskog rada (KTF Split)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Margine",
+        "Vrsta slova (TNR ili Arial)",
+        "Velicina slova",
+        "Prored",
+        "Obostrano poravnanje"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-ktfst-zavrsni--paper-size-verified-2026-07-02",
+      "ruleId": "ktfst-zavrsni--paper-size",
+      "profileId": "ktfst-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ktf-prilog3-zavrsni",
+      "sourcePage": "Prilog (format-blok: od Zadatka rada do Priloga)",
+      "quote": "Tekst od Zadatka rada do Priloga piše: na papiru formata A4, margine: gornja 2,5 cm, donja 2,5 cm, lijeva 3,5 cm i desna 2,5 cm, slova naslova: Times New Roman ili Arial veličine 14 pt (točaka), prored 1,5, slova teksta: Times New Roman ili Arial veličine 12 pt (točaka), prored 1,5, poravnanje reda: obostrano.",
+      "note": "Cross-institution port (Kemijsko-tehnoloski fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-ktfst-zavrsni--margins-verified-2026-07-02",
+      "ruleId": "ktfst-zavrsni--margins",
+      "profileId": "ktfst-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ktf-prilog3-zavrsni",
+      "sourcePage": "Prilog (format-blok: od Zadatka rada do Priloga)",
+      "quote": "Tekst od Zadatka rada do Priloga piše: na papiru formata A4, margine: gornja 2,5 cm, donja 2,5 cm, lijeva 3,5 cm i desna 2,5 cm, slova naslova: Times New Roman ili Arial veličine 14 pt (točaka), prored 1,5, slova teksta: Times New Roman ili Arial veličine 12 pt (točaka), prored 1,5, poravnanje reda: obostrano.",
+      "note": "Cross-institution port (Kemijsko-tehnoloski fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-ktfst-zavrsni--font-verified-2026-07-02",
+      "ruleId": "ktfst-zavrsni--font",
+      "profileId": "ktfst-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ktf-prilog3-zavrsni",
+      "sourcePage": "Prilog (format-blok: od Zadatka rada do Priloga)",
+      "quote": "Tekst od Zadatka rada do Priloga piše: na papiru formata A4, margine: gornja 2,5 cm, donja 2,5 cm, lijeva 3,5 cm i desna 2,5 cm, slova naslova: Times New Roman ili Arial veličine 14 pt (točaka), prored 1,5, slova teksta: Times New Roman ili Arial veličine 12 pt (točaka), prored 1,5, poravnanje reda: obostrano.",
+      "note": "Cross-institution port (Kemijsko-tehnoloski fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-ktfst-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "ktfst-zavrsni--font-size",
+      "profileId": "ktfst-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ktf-prilog3-zavrsni",
+      "sourcePage": "Prilog (format-blok: od Zadatka rada do Priloga)",
+      "quote": "Tekst od Zadatka rada do Priloga piše: na papiru formata A4, margine: gornja 2,5 cm, donja 2,5 cm, lijeva 3,5 cm i desna 2,5 cm, slova naslova: Times New Roman ili Arial veličine 14 pt (točaka), prored 1,5, slova teksta: Times New Roman ili Arial veličine 12 pt (točaka), prored 1,5, poravnanje reda: obostrano.",
+      "note": "Cross-institution port (Kemijsko-tehnoloski fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-ktfst-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "ktfst-zavrsni--line-spacing",
+      "profileId": "ktfst-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ktf-prilog3-zavrsni",
+      "sourcePage": "Prilog (format-blok: od Zadatka rada do Priloga)",
+      "quote": "Tekst od Zadatka rada do Priloga piše: na papiru formata A4, margine: gornja 2,5 cm, donja 2,5 cm, lijeva 3,5 cm i desna 2,5 cm, slova naslova: Times New Roman ili Arial veličine 14 pt (točaka), prored 1,5, slova teksta: Times New Roman ili Arial veličine 12 pt (točaka), prored 1,5, poravnanje reda: obostrano.",
+      "note": "Cross-institution port (Kemijsko-tehnoloski fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-ktfst-zavrsni--justify-verified-2026-07-02",
+      "ruleId": "ktfst-zavrsni--justify",
+      "profileId": "ktfst-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ktf-prilog3-zavrsni",
+      "sourcePage": "Prilog (format-blok: od Zadatka rada do Priloga)",
+      "quote": "Tekst od Zadatka rada do Priloga piše: na papiru formata A4, margine: gornja 2,5 cm, donja 2,5 cm, lijeva 3,5 cm i desna 2,5 cm, slova naslova: Times New Roman ili Arial veličine 14 pt (točaka), prored 1,5, slova teksta: Times New Roman ili Arial veličine 12 pt (točaka), prored 1,5, poravnanje reda: obostrano.",
+      "note": "Cross-institution port (Kemijsko-tehnoloski fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-ktfst-diplomski--paper-size-verified-2026-07-02",
+      "ruleId": "ktfst-diplomski--paper-size",
+      "profileId": "ktfst-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ktf-prilog4-diplomski",
+      "sourcePage": "Prilog (format-blok: od Zadatka rada do Priloga)",
+      "quote": "Tekst od Zadatka rada do Priloga piše: na papiru formata A4, margine: gornja 2,5 cm, donja 2,5 cm, lijeva 3,5 cm i desna 2,5 cm, slova naslova: Times New Roman ili Arial veličine 14 pt (točaka), prored 1,5, slova teksta: Times New Roman ili Arial veličine 12 pt (točaka), prored 1,5, poravnanje reda: obostrano.",
+      "note": "Cross-institution port (Kemijsko-tehnoloski fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-ktfst-diplomski--margins-verified-2026-07-02",
+      "ruleId": "ktfst-diplomski--margins",
+      "profileId": "ktfst-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ktf-prilog4-diplomski",
+      "sourcePage": "Prilog (format-blok: od Zadatka rada do Priloga)",
+      "quote": "Tekst od Zadatka rada do Priloga piše: na papiru formata A4, margine: gornja 2,5 cm, donja 2,5 cm, lijeva 3,5 cm i desna 2,5 cm, slova naslova: Times New Roman ili Arial veličine 14 pt (točaka), prored 1,5, slova teksta: Times New Roman ili Arial veličine 12 pt (točaka), prored 1,5, poravnanje reda: obostrano.",
+      "note": "Cross-institution port (Kemijsko-tehnoloski fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-ktfst-diplomski--font-verified-2026-07-02",
+      "ruleId": "ktfst-diplomski--font",
+      "profileId": "ktfst-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ktf-prilog4-diplomski",
+      "sourcePage": "Prilog (format-blok: od Zadatka rada do Priloga)",
+      "quote": "Tekst od Zadatka rada do Priloga piše: na papiru formata A4, margine: gornja 2,5 cm, donja 2,5 cm, lijeva 3,5 cm i desna 2,5 cm, slova naslova: Times New Roman ili Arial veličine 14 pt (točaka), prored 1,5, slova teksta: Times New Roman ili Arial veličine 12 pt (točaka), prored 1,5, poravnanje reda: obostrano.",
+      "note": "Cross-institution port (Kemijsko-tehnoloski fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-ktfst-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "ktfst-diplomski--font-size",
+      "profileId": "ktfst-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ktf-prilog4-diplomski",
+      "sourcePage": "Prilog (format-blok: od Zadatka rada do Priloga)",
+      "quote": "Tekst od Zadatka rada do Priloga piše: na papiru formata A4, margine: gornja 2,5 cm, donja 2,5 cm, lijeva 3,5 cm i desna 2,5 cm, slova naslova: Times New Roman ili Arial veličine 14 pt (točaka), prored 1,5, slova teksta: Times New Roman ili Arial veličine 12 pt (točaka), prored 1,5, poravnanje reda: obostrano.",
+      "note": "Cross-institution port (Kemijsko-tehnoloski fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-ktfst-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "ktfst-diplomski--line-spacing",
+      "profileId": "ktfst-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ktf-prilog4-diplomski",
+      "sourcePage": "Prilog (format-blok: od Zadatka rada do Priloga)",
+      "quote": "Tekst od Zadatka rada do Priloga piše: na papiru formata A4, margine: gornja 2,5 cm, donja 2,5 cm, lijeva 3,5 cm i desna 2,5 cm, slova naslova: Times New Roman ili Arial veličine 14 pt (točaka), prored 1,5, slova teksta: Times New Roman ili Arial veličine 12 pt (točaka), prored 1,5, poravnanje reda: obostrano.",
+      "note": "Cross-institution port (Kemijsko-tehnoloski fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-ktfst-diplomski--justify-verified-2026-07-02",
+      "ruleId": "ktfst-diplomski--justify",
+      "profileId": "ktfst-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ktf-prilog4-diplomski",
+      "sourcePage": "Prilog (format-blok: od Zadatka rada do Priloga)",
+      "quote": "Tekst od Zadatka rada do Priloga piše: na papiru formata A4, margine: gornja 2,5 cm, donja 2,5 cm, lijeva 3,5 cm i desna 2,5 cm, slova naslova: Times New Roman ili Arial veličine 14 pt (točaka), prored 1,5, slova teksta: Times New Roman ili Arial veličine 12 pt (točaka), prored 1,5, poravnanje reda: obostrano.",
+      "note": "Cross-institution port (Kemijsko-tehnoloski fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    }
+  ]
+}

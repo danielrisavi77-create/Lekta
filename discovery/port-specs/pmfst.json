@@ -1,0 +1,280 @@
+{
+  "faculty": "pmfst",
+  "institution": "unist",
+  "institutionName": "Sveuciliste u Splitu",
+  "unit": {
+    "id": "pmfst",
+    "name": "Prirodoslovno-matematicki fakultet u Splitu",
+    "family": "stem",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Prijediplomski studiji PMFST bio/kem (zavrsni rad)",
+    "Diplomski studiji PMFST bio/kem"
+  ],
+  "sources": [
+    {
+      "id": "pmfst-upute-zavrsni",
+      "kind": "guidelines",
+      "title": "Upute za pisanje zavrsnog rada (PMFST, odjel bio/kem)",
+      "url": "https://www.pmfst.unist.hr/wp-content/uploads/2014/06/UPUTE-ZA-PISANJE-ZAVRSNOG-RADA.pdf",
+      "publisher": "Prirodoslovno-matematicki fakultet u Splitu, Sveuciliste u Splitu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/pmfst/pmfst-upute-zavrsni.pdf",
+      "snapshotHash": "cb10791e4870d567ac32565c5ec4a0b2c600f538b34064ae1a3fcdc1e6d5a8a1",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Vrijede za Odjel za biologiju/kemiju (ne cijeli PMF). Tekstualni PDF."
+    },
+    {
+      "id": "pmfst-upute-diplomski",
+      "kind": "guidelines",
+      "title": "Upute za pisanje diplomskog rada (PMFST, odjel bio/kem)",
+      "url": "https://www.pmfst.unist.hr/wp-content/uploads/2014/06/UPUTE-ZA-PISANJE-DIPLOMSKOG-RADA.pdf",
+      "publisher": "Prirodoslovno-matematicki fakultet u Splitu, Sveuciliste u Splitu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/pmfst/pmfst-upute-diplomski.pdf",
+      "snapshotHash": "85445a5da9944d5e6dfbd3a988b8465b29630bbea97ed02d1395539b21911957",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Vrijede za Odjel za biologiju/kemiju (ne cijeli PMF). Tekstualni PDF."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "pmfst-zavrsni",
+      "unitId": "pmfst",
+      "programs": [
+        "Prijediplomski studiji PMFST bio/kem (zavrsni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "PMF Split (bio/kem), zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Prirodoslovno-matematicki fakultet u Splitu, Sveuciliste u Splitu), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za pisanje zavrsnog rada (PMFST, odjel bio/kem)",
+          "url": "https://www.pmfst.unist.hr/wp-content/uploads/2014/06/UPUTE-ZA-PISANJE-ZAVRSNOG-RADA.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za pisanje zavrsnog rada (PMFST, odjel bio/kem)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Prored",
+        "Velicina slova",
+        "Vrsta slova",
+        "Margine",
+        "Opseg (20-40 str.)"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "pmfst-diplomski",
+      "unitId": "pmfst",
+      "programs": [
+        "Diplomski studiji PMFST bio/kem"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "PMF Split (bio/kem), diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Prirodoslovno-matematicki fakultet u Splitu, Sveuciliste u Splitu), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za pisanje diplomskog rada (PMFST, odjel bio/kem)",
+          "url": "https://www.pmfst.unist.hr/wp-content/uploads/2014/06/UPUTE-ZA-PISANJE-DIPLOMSKOG-RADA.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za pisanje diplomskog rada (PMFST, odjel bio/kem)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Prored",
+        "Velicina slova",
+        "Vrsta slova",
+        "Margine"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-pmfst-zavrsni--paper-size-verified-2026-07-02",
+      "ruleId": "pmfst-zavrsni--paper-size",
+      "profileId": "pmfst-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmfst-upute-zavrsni",
+      "sourcePage": "Upute, Format",
+      "quote": "Format: A4 (210x297 mm), tekst s 1,5 proredom, veličina slova 12 pt, pisano u Times New Roman, poravnanje teksta s marginama sa svih strana od 2.5 cm.",
+      "note": "Cross-institution port (Prirodoslovno-matematicki fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-pmfst-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "pmfst-zavrsni--line-spacing",
+      "profileId": "pmfst-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmfst-upute-zavrsni",
+      "sourcePage": "Upute, Format",
+      "quote": "Format: A4 (210x297 mm), tekst s 1,5 proredom, veličina slova 12 pt, pisano u Times New Roman, poravnanje teksta s marginama sa svih strana od 2.5 cm.",
+      "note": "Cross-institution port (Prirodoslovno-matematicki fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-pmfst-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "pmfst-zavrsni--font-size",
+      "profileId": "pmfst-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmfst-upute-zavrsni",
+      "sourcePage": "Upute, Format",
+      "quote": "Format: A4 (210x297 mm), tekst s 1,5 proredom, veličina slova 12 pt, pisano u Times New Roman, poravnanje teksta s marginama sa svih strana od 2.5 cm.",
+      "note": "Cross-institution port (Prirodoslovno-matematicki fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-pmfst-zavrsni--font-verified-2026-07-02",
+      "ruleId": "pmfst-zavrsni--font",
+      "profileId": "pmfst-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmfst-upute-zavrsni",
+      "sourcePage": "Upute, Format",
+      "quote": "Format: A4 (210x297 mm), tekst s 1,5 proredom, veličina slova 12 pt, pisano u Times New Roman, poravnanje teksta s marginama sa svih strana od 2.5 cm.",
+      "note": "Cross-institution port (Prirodoslovno-matematicki fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-pmfst-zavrsni--margins-verified-2026-07-02",
+      "ruleId": "pmfst-zavrsni--margins",
+      "profileId": "pmfst-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmfst-upute-zavrsni",
+      "sourcePage": "Upute, Format",
+      "quote": "Format: A4 (210x297 mm), tekst s 1,5 proredom, veličina slova 12 pt, pisano u Times New Roman, poravnanje teksta s marginama sa svih strana od 2.5 cm.",
+      "note": "Cross-institution port (Prirodoslovno-matematicki fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-pmfst-zavrsni--page-count-verified-2026-07-02",
+      "ruleId": "pmfst-zavrsni--page-count",
+      "profileId": "pmfst-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmfst-upute-zavrsni",
+      "sourcePage": "Upute, opseg",
+      "quote": "Minimalan broj stranica od uvoda do kraja literature je 20, a maksimalan broj je 40 stranica.",
+      "note": "Cross-institution port (Prirodoslovno-matematicki fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-pmfst-diplomski--paper-size-verified-2026-07-02",
+      "ruleId": "pmfst-diplomski--paper-size",
+      "profileId": "pmfst-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmfst-upute-diplomski",
+      "sourcePage": "Upute, Format",
+      "quote": "Format: A4 (210x297 mm), tekst s 1,5 proredom, veličina slova 12 pt, pisano u Times New Roman, poravnanje teksta s marginama sa svih strana od 2.5 cm.",
+      "note": "Cross-institution port (Prirodoslovno-matematicki fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-pmfst-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "pmfst-diplomski--line-spacing",
+      "profileId": "pmfst-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmfst-upute-diplomski",
+      "sourcePage": "Upute, Format",
+      "quote": "Format: A4 (210x297 mm), tekst s 1,5 proredom, veličina slova 12 pt, pisano u Times New Roman, poravnanje teksta s marginama sa svih strana od 2.5 cm.",
+      "note": "Cross-institution port (Prirodoslovno-matematicki fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-pmfst-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "pmfst-diplomski--font-size",
+      "profileId": "pmfst-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmfst-upute-diplomski",
+      "sourcePage": "Upute, Format",
+      "quote": "Format: A4 (210x297 mm), tekst s 1,5 proredom, veličina slova 12 pt, pisano u Times New Roman, poravnanje teksta s marginama sa svih strana od 2.5 cm.",
+      "note": "Cross-institution port (Prirodoslovno-matematicki fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-pmfst-diplomski--font-verified-2026-07-02",
+      "ruleId": "pmfst-diplomski--font",
+      "profileId": "pmfst-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmfst-upute-diplomski",
+      "sourcePage": "Upute, Format",
+      "quote": "Format: A4 (210x297 mm), tekst s 1,5 proredom, veličina slova 12 pt, pisano u Times New Roman, poravnanje teksta s marginama sa svih strana od 2.5 cm.",
+      "note": "Cross-institution port (Prirodoslovno-matematicki fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-pmfst-diplomski--margins-verified-2026-07-02",
+      "ruleId": "pmfst-diplomski--margins",
+      "profileId": "pmfst-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmfst-upute-diplomski",
+      "sourcePage": "Upute, Format",
+      "quote": "Format: A4 (210x297 mm), tekst s 1,5 proredom, veličina slova 12 pt, pisano u Times New Roman, poravnanje teksta s marginama sa svih strana od 2.5 cm.",
+      "note": "Cross-institution port (Prirodoslovno-matematicki fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    }
+  ]
+}

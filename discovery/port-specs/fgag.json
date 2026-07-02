@@ -1,0 +1,233 @@
+{
+  "faculty": "fgag",
+  "institution": "unist",
+  "institutionName": "Sveuciliste u Splitu",
+  "unit": {
+    "id": "fgag",
+    "name": "Fakultet gradevinarstva, arhitekture i geodezije u Splitu",
+    "family": "stem",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Prijediplomski studiji FGAG (zavrsni rad)",
+    "Diplomski studiji FGAG"
+  ],
+  "sources": [
+    {
+      "id": "fgag-predlozak-zavrsni-2026",
+      "kind": "template",
+      "title": "Predlozak zavrsnog rada (FGAG, 2026)",
+      "url": "https://gradst.unist.hr/Portals/9/docs/Referada/Obavijesti/Predlozak%20zavrsnog%20rada%20NOVO%202026.docx",
+      "publisher": "Fakultet gradevinarstva, arhitekture i geodezije u Splitu, Sveuciliste u Splitu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/fgag/fgag-predlozak-zavrsni-2026.docx",
+      "snapshotHash": "ab55c9116d742eaf882edaff3cd79c7182e67fc0365da425d17417d79c94d669",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Pravila su u tijelu .docx predloska (pisani imperativ). A4/margine samo u page-setup XML-u -> izostavljeni."
+    },
+    {
+      "id": "fgag-predlozak-diplomski-2026",
+      "kind": "template",
+      "title": "Predlozak diplomskog rada (FGAG, 2026)",
+      "url": "https://gradst.unist.hr/Portals/9/docs/Referada/Obavijesti/Predlozak%20diplomskog%20rada%20NOVO%20SP%202026.docx",
+      "publisher": "Fakultet gradevinarstva, arhitekture i geodezije u Splitu, Sveuciliste u Splitu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/fgag/fgag-predlozak-diplomski-2026.docx",
+      "snapshotHash": "848e2c85abc382be29a2da19f1af0a796acc75ee84a3781e11007fcdda9155a7",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Pravila su u tijelu .docx predloska (pisani imperativ). A4/margine samo u page-setup XML-u -> izostavljeni."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "fgag-zavrsni",
+      "unitId": "fgag",
+      "programs": [
+        "Prijediplomski studiji FGAG (zavrsni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "FGAG, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet gradevinarstva, arhitekture i geodezije u Splitu, Sveuciliste u Splitu), citano izravno. A4 i margine su u postavkama stranice predloska (bez pisanog pravila) -> izostavljeni iz scored.",
+      "sources": [
+        {
+          "title": "Predlozak zavrsnog rada (FGAG, 2026)",
+          "url": "https://gradst.unist.hr/Portals/9/docs/Referada/Obavijesti/Predlozak%20zavrsnog%20rada%20NOVO%202026.docx"
+        }
+      ],
+      "sourceHierarchy": [
+        "Predlozak zavrsnog rada (FGAG, 2026)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Obostrano poravnanje",
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored"
+      ],
+      "advisoryScope": [
+        "Format papira / margine (predlozak)"
+      ]
+    },
+    {
+      "id": "fgag-diplomski",
+      "unitId": "fgag",
+      "programs": [
+        "Diplomski studiji FGAG"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "FGAG, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet gradevinarstva, arhitekture i geodezije u Splitu, Sveuciliste u Splitu), citano izravno. A4 i margine su u postavkama stranice predloska (bez pisanog pravila) -> izostavljeni iz scored.",
+      "sources": [
+        {
+          "title": "Predlozak diplomskog rada (FGAG, 2026)",
+          "url": "https://gradst.unist.hr/Portals/9/docs/Referada/Obavijesti/Predlozak%20diplomskog%20rada%20NOVO%20SP%202026.docx"
+        }
+      ],
+      "sourceHierarchy": [
+        "Predlozak diplomskog rada (FGAG, 2026)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Obostrano poravnanje",
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored"
+      ],
+      "advisoryScope": [
+        "Format papira / margine (predlozak)"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-fgag-zavrsni--justify-verified-2026-07-02",
+      "ruleId": "fgag-zavrsni--justify",
+      "profileId": "fgag-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fgag-predlozak-zavrsni-2026",
+      "sourcePage": "tijelo predloska (stil Normal)",
+      "quote": "Običan tekst pisati s obostranim ravnanjem, font Times New Roman, veličina slova 12, prored 1.5 redaka, razmak prije pasusa 6 točaka, (stil Normal), s eventualnim isticanjem važnih podataka boldom, italicom ili italic boldom po osobnoj procjeni.",
+      "note": "Cross-institution port (Fakultet gradevinarstva, arhitekture i geodezije u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-fgag-zavrsni--font-verified-2026-07-02",
+      "ruleId": "fgag-zavrsni--font",
+      "profileId": "fgag-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fgag-predlozak-zavrsni-2026",
+      "sourcePage": "tijelo predloska (stil Normal)",
+      "quote": "Običan tekst pisati s obostranim ravnanjem, font Times New Roman, veličina slova 12, prored 1.5 redaka, razmak prije pasusa 6 točaka, (stil Normal), s eventualnim isticanjem važnih podataka boldom, italicom ili italic boldom po osobnoj procjeni.",
+      "note": "Cross-institution port (Fakultet gradevinarstva, arhitekture i geodezije u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-fgag-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "fgag-zavrsni--font-size",
+      "profileId": "fgag-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fgag-predlozak-zavrsni-2026",
+      "sourcePage": "tijelo predloska (stil Normal)",
+      "quote": "Običan tekst pisati s obostranim ravnanjem, font Times New Roman, veličina slova 12, prored 1.5 redaka, razmak prije pasusa 6 točaka, (stil Normal), s eventualnim isticanjem važnih podataka boldom, italicom ili italic boldom po osobnoj procjeni.",
+      "note": "Cross-institution port (Fakultet gradevinarstva, arhitekture i geodezije u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-fgag-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "fgag-zavrsni--line-spacing",
+      "profileId": "fgag-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fgag-predlozak-zavrsni-2026",
+      "sourcePage": "tijelo predloska (stil Normal)",
+      "quote": "Običan tekst pisati s obostranim ravnanjem, font Times New Roman, veličina slova 12, prored 1.5 redaka, razmak prije pasusa 6 točaka, (stil Normal), s eventualnim isticanjem važnih podataka boldom, italicom ili italic boldom po osobnoj procjeni.",
+      "note": "Cross-institution port (Fakultet gradevinarstva, arhitekture i geodezije u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-fgag-diplomski--justify-verified-2026-07-02",
+      "ruleId": "fgag-diplomski--justify",
+      "profileId": "fgag-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fgag-predlozak-diplomski-2026",
+      "sourcePage": "tijelo predloska (stil Normal)",
+      "quote": "Običan tekst pisati s obostranim ravnanjem, font Times New Roman, veličina slova 12, prored 1.5 redaka, razmak prije pasusa 6 točaka, (stil Normal), s eventualnim isticanjem važnih podataka boldom, italicom ili italic boldom po osobnoj procjeni.",
+      "note": "Cross-institution port (Fakultet gradevinarstva, arhitekture i geodezije u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-fgag-diplomski--font-verified-2026-07-02",
+      "ruleId": "fgag-diplomski--font",
+      "profileId": "fgag-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fgag-predlozak-diplomski-2026",
+      "sourcePage": "tijelo predloska (stil Normal)",
+      "quote": "Običan tekst pisati s obostranim ravnanjem, font Times New Roman, veličina slova 12, prored 1.5 redaka, razmak prije pasusa 6 točaka, (stil Normal), s eventualnim isticanjem važnih podataka boldom, italicom ili italic boldom po osobnoj procjeni.",
+      "note": "Cross-institution port (Fakultet gradevinarstva, arhitekture i geodezije u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-fgag-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "fgag-diplomski--font-size",
+      "profileId": "fgag-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fgag-predlozak-diplomski-2026",
+      "sourcePage": "tijelo predloska (stil Normal)",
+      "quote": "Običan tekst pisati s obostranim ravnanjem, font Times New Roman, veličina slova 12, prored 1.5 redaka, razmak prije pasusa 6 točaka, (stil Normal), s eventualnim isticanjem važnih podataka boldom, italicom ili italic boldom po osobnoj procjeni.",
+      "note": "Cross-institution port (Fakultet gradevinarstva, arhitekture i geodezije u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-fgag-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "fgag-diplomski--line-spacing",
+      "profileId": "fgag-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fgag-predlozak-diplomski-2026",
+      "sourcePage": "tijelo predloska (stil Normal)",
+      "quote": "Običan tekst pisati s obostranim ravnanjem, font Times New Roman, veličina slova 12, prored 1.5 redaka, razmak prije pasusa 6 točaka, (stil Normal), s eventualnim isticanjem važnih podataka boldom, italicom ili italic boldom po osobnoj procjeni.",
+      "note": "Cross-institution port (Fakultet gradevinarstva, arhitekture i geodezije u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    }
+  ]
+}

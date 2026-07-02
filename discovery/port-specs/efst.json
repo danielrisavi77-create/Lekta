@@ -1,0 +1,280 @@
+{
+  "faculty": "efst",
+  "institution": "unist",
+  "institutionName": "Sveuciliste u Splitu",
+  "unit": {
+    "id": "efst",
+    "name": "Ekonomski fakultet u Splitu",
+    "family": "social",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Prijediplomski studiji EFST (zavrsni rad)",
+    "Diplomski studiji EFST"
+  ],
+  "sources": [
+    {
+      "id": "efst-upute-studentski-radovi-2013",
+      "kind": "guidelines",
+      "title": "Uputa za izradu studentskih radova (EFST, 2013)",
+      "url": "http://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf",
+      "publisher": "Ekonomski fakultet u Splitu, Sveuciliste u Splitu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/efst/efst-upute-studentski-radovi-2013.pdf",
+      "snapshotHash": "04a74df6eab084c41f547b6a46ed5b8e26dcac5df4aceb296e82610fed983fbe",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Tekstualni PDF; pogl. 4-5. A4 nije naveden -> izostavljen. Citiranje slobodan izbor stila -> advisory."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "efst-zavrsni",
+      "unitId": "efst",
+      "programs": [
+        "Prijediplomski studiji EFST (zavrsni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "EFST, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Ekonomski fakultet u Splitu, Sveuciliste u Splitu), citano izravno.",
+      "sources": [
+        {
+          "title": "Uputa za izradu studentskih radova (EFST, 2013)",
+          "url": "http://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Uputa za izradu studentskih radova (EFST, 2013)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Obostrano poravnanje",
+        "Margine",
+        "Opseg (30-40 str.)"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "efst-diplomski",
+      "unitId": "efst",
+      "programs": [
+        "Diplomski studiji EFST"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "EFST, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Ekonomski fakultet u Splitu, Sveuciliste u Splitu), citano izravno.",
+      "sources": [
+        {
+          "title": "Uputa za izradu studentskih radova (EFST, 2013)",
+          "url": "http://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Uputa za izradu studentskih radova (EFST, 2013)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Obostrano poravnanje",
+        "Margine",
+        "Opseg (50-80 str.)"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-efst-zavrsni--font-verified-2026-07-02",
+      "ruleId": "efst-zavrsni--font",
+      "profileId": "efst-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efst-upute-studentski-radovi-2013",
+      "sourcePage": "poglavlje 4. Oblikovanje teksta (str. 7-8)",
+      "quote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
+      "note": "Cross-institution port (Ekonomski fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-efst-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "efst-zavrsni--font-size",
+      "profileId": "efst-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efst-upute-studentski-radovi-2013",
+      "sourcePage": "poglavlje 4. Oblikovanje teksta (str. 7-8)",
+      "quote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
+      "note": "Cross-institution port (Ekonomski fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-efst-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "efst-zavrsni--line-spacing",
+      "profileId": "efst-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efst-upute-studentski-radovi-2013",
+      "sourcePage": "poglavlje 4. Oblikovanje teksta (str. 7-8)",
+      "quote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
+      "note": "Cross-institution port (Ekonomski fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-efst-zavrsni--justify-verified-2026-07-02",
+      "ruleId": "efst-zavrsni--justify",
+      "profileId": "efst-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efst-upute-studentski-radovi-2013",
+      "sourcePage": "poglavlje 4. Oblikovanje teksta (str. 7-8)",
+      "quote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
+      "note": "Cross-institution port (Ekonomski fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-efst-zavrsni--margins-verified-2026-07-02",
+      "ruleId": "efst-zavrsni--margins",
+      "profileId": "efst-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efst-upute-studentski-radovi-2013",
+      "sourcePage": "poglavlje 4. Oblikovanje teksta (str. 7-8)",
+      "quote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
+      "note": "Cross-institution port (Ekonomski fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-efst-zavrsni--page-count-verified-2026-07-02",
+      "ruleId": "efst-zavrsni--page-count",
+      "profileId": "efst-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efst-upute-studentski-radovi-2013",
+      "sourcePage": "poglavlje 5. (opseg radova)",
+      "quote": "Završni rad ima opseg između 30 i 40 stranica,",
+      "note": "Cross-institution port (Ekonomski fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-efst-diplomski--font-verified-2026-07-02",
+      "ruleId": "efst-diplomski--font",
+      "profileId": "efst-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efst-upute-studentski-radovi-2013",
+      "sourcePage": "poglavlje 4. Oblikovanje teksta (str. 7-8)",
+      "quote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
+      "note": "Cross-institution port (Ekonomski fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-efst-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "efst-diplomski--font-size",
+      "profileId": "efst-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efst-upute-studentski-radovi-2013",
+      "sourcePage": "poglavlje 4. Oblikovanje teksta (str. 7-8)",
+      "quote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
+      "note": "Cross-institution port (Ekonomski fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-efst-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "efst-diplomski--line-spacing",
+      "profileId": "efst-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efst-upute-studentski-radovi-2013",
+      "sourcePage": "poglavlje 4. Oblikovanje teksta (str. 7-8)",
+      "quote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
+      "note": "Cross-institution port (Ekonomski fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-efst-diplomski--justify-verified-2026-07-02",
+      "ruleId": "efst-diplomski--justify",
+      "profileId": "efst-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efst-upute-studentski-radovi-2013",
+      "sourcePage": "poglavlje 4. Oblikovanje teksta (str. 7-8)",
+      "quote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
+      "note": "Cross-institution port (Ekonomski fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-efst-diplomski--margins-verified-2026-07-02",
+      "ruleId": "efst-diplomski--margins",
+      "profileId": "efst-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efst-upute-studentski-radovi-2013",
+      "sourcePage": "poglavlje 4. Oblikovanje teksta (str. 7-8)",
+      "quote": "Za oblikovanje teksta koristi se font Times New Roman, veličina 12, uz prored od 1,5. Tekst treba biti poravnat uz lijevi i desni rub stranice. Margine trebaju biti udaljene 2,5 cm od gornjeg, donjeg, lijevog i desnog ruba stranice.",
+      "note": "Cross-institution port (Ekonomski fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-efst-diplomski--page-count-verified-2026-07-02",
+      "ruleId": "efst-diplomski--page-count",
+      "profileId": "efst-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efst-upute-studentski-radovi-2013",
+      "sourcePage": "poglavlje 5. (opseg radova)",
+      "quote": "Diplomski rad ima opseg između 50 i 80 stranica.",
+      "note": "Cross-institution port (Ekonomski fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    }
+  ]
+}

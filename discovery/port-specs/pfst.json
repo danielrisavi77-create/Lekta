@@ -1,0 +1,218 @@
+{
+  "faculty": "pfst",
+  "institution": "unist",
+  "institutionName": "Sveuciliste u Splitu",
+  "unit": {
+    "id": "pfst",
+    "name": "Pomorski fakultet u Splitu",
+    "family": "stem",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Prijediplomski/ocjenski radovi PFST (zavrsni rad)",
+    "Diplomski studiji PFST"
+  ],
+  "sources": [
+    {
+      "id": "pfst-upute-ocjenski-2022",
+      "kind": "guidelines",
+      "title": "Upute za izradu diplomskih i drugih ocjenskih radova (PFST, 2022)",
+      "url": "https://www.pfst.unist.hr/dokumenti/zavrsetak/PFST%20-%20Upute%20za%20izradu%20diplomskih%20i%20drugih%20ocjenskih%20radova.pdf",
+      "publisher": "Pomorski fakultet u Splitu, Sveuciliste u Splitu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/pfst/pfst-upute-ocjenski-2022.pdf",
+      "snapshotHash": "a0cff8bd6cc0b1c4e29ec151e56f61f4bc18841b69dc67698c8774421eeb4afd",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Tekstualni PDF; odj. 3.1. NEMA margina ni A4 u izvoru -> izostavljeni (null). Opseg preporuka; vlastiti numericki citat -> advisory."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "pfst-zavrsni",
+      "unitId": "pfst",
+      "programs": [
+        "Prijediplomski/ocjenski radovi PFST (zavrsni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "PFST, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman",
+          "Arial"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Pomorski fakultet u Splitu, Sveuciliste u Splitu), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za izradu diplomskih i drugih ocjenskih radova (PFST, 2022)",
+          "url": "https://www.pfst.unist.hr/dokumenti/zavrsetak/PFST%20-%20Upute%20za%20izradu%20diplomskih%20i%20drugih%20ocjenskih%20radova.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu diplomskih i drugih ocjenskih radova (PFST, 2022)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Vrsta slova (TNR ili Arial)",
+        "Velicina slova",
+        "Prored",
+        "Obostrano poravnanje"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "pfst-diplomski",
+      "unitId": "pfst",
+      "programs": [
+        "Diplomski studiji PFST"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "PFST, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman",
+          "Arial"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Pomorski fakultet u Splitu, Sveuciliste u Splitu), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za izradu diplomskih i drugih ocjenskih radova (PFST, 2022)",
+          "url": "https://www.pfst.unist.hr/dokumenti/zavrsetak/PFST%20-%20Upute%20za%20izradu%20diplomskih%20i%20drugih%20ocjenskih%20radova.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu diplomskih i drugih ocjenskih radova (PFST, 2022)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Vrsta slova (TNR ili Arial)",
+        "Velicina slova",
+        "Prored",
+        "Obostrano poravnanje"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-pfst-zavrsni--font-verified-2026-07-02",
+      "ruleId": "pfst-zavrsni--font",
+      "profileId": "pfst-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pfst-upute-ocjenski-2022",
+      "sourcePage": "odj. 3.1 Postavke stranice (str. 10-11)",
+      "quote": "Cijeli tekst rada treba biti napisan jednim (istim) fontom (Times New Roman ili Arial) veličine 12 točaka (pt). Prored među redcima mora biti 1,5 redak, a razmak iznad/ispod (space before/after) je 0.",
+      "note": "Cross-institution port (Pomorski fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-pfst-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "pfst-zavrsni--font-size",
+      "profileId": "pfst-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pfst-upute-ocjenski-2022",
+      "sourcePage": "odj. 3.1 Postavke stranice (str. 10-11)",
+      "quote": "Cijeli tekst rada treba biti napisan jednim (istim) fontom (Times New Roman ili Arial) veličine 12 točaka (pt). Prored među redcima mora biti 1,5 redak, a razmak iznad/ispod (space before/after) je 0.",
+      "note": "Cross-institution port (Pomorski fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-pfst-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "pfst-zavrsni--line-spacing",
+      "profileId": "pfst-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pfst-upute-ocjenski-2022",
+      "sourcePage": "odj. 3.1 Postavke stranice (str. 10-11)",
+      "quote": "Cijeli tekst rada treba biti napisan jednim (istim) fontom (Times New Roman ili Arial) veličine 12 točaka (pt). Prored među redcima mora biti 1,5 redak, a razmak iznad/ispod (space before/after) je 0.",
+      "note": "Cross-institution port (Pomorski fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-pfst-zavrsni--justify-verified-2026-07-02",
+      "ruleId": "pfst-zavrsni--justify",
+      "profileId": "pfst-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pfst-upute-ocjenski-2022",
+      "sourcePage": "odj. 3.1 Postavke stranice (str. 10-11)",
+      "quote": "Tekst treba pisati s obostranim poravnanjem (\"justify\").",
+      "note": "Cross-institution port (Pomorski fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-pfst-diplomski--font-verified-2026-07-02",
+      "ruleId": "pfst-diplomski--font",
+      "profileId": "pfst-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pfst-upute-ocjenski-2022",
+      "sourcePage": "odj. 3.1 Postavke stranice (str. 10-11)",
+      "quote": "Cijeli tekst rada treba biti napisan jednim (istim) fontom (Times New Roman ili Arial) veličine 12 točaka (pt). Prored među redcima mora biti 1,5 redak, a razmak iznad/ispod (space before/after) je 0.",
+      "note": "Cross-institution port (Pomorski fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-pfst-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "pfst-diplomski--font-size",
+      "profileId": "pfst-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pfst-upute-ocjenski-2022",
+      "sourcePage": "odj. 3.1 Postavke stranice (str. 10-11)",
+      "quote": "Cijeli tekst rada treba biti napisan jednim (istim) fontom (Times New Roman ili Arial) veličine 12 točaka (pt). Prored među redcima mora biti 1,5 redak, a razmak iznad/ispod (space before/after) je 0.",
+      "note": "Cross-institution port (Pomorski fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-pfst-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "pfst-diplomski--line-spacing",
+      "profileId": "pfst-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pfst-upute-ocjenski-2022",
+      "sourcePage": "odj. 3.1 Postavke stranice (str. 10-11)",
+      "quote": "Cijeli tekst rada treba biti napisan jednim (istim) fontom (Times New Roman ili Arial) veličine 12 točaka (pt). Prored među redcima mora biti 1,5 redak, a razmak iznad/ispod (space before/after) je 0.",
+      "note": "Cross-institution port (Pomorski fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-pfst-diplomski--justify-verified-2026-07-02",
+      "ruleId": "pfst-diplomski--justify",
+      "profileId": "pfst-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pfst-upute-ocjenski-2022",
+      "sourcePage": "odj. 3.1 Postavke stranice (str. 10-11)",
+      "quote": "Tekst treba pisati s obostranim poravnanjem (\"justify\").",
+      "note": "Cross-institution port (Pomorski fakultet u Splitu, Sveuciliste u Splitu): direktno citanje izvora."
+    }
+  ]
+}

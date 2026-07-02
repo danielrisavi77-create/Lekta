@@ -58,7 +58,7 @@ describe('data loaderi: brojevi se slazu s manifestom', () => {
   it('pravne katedre (3)', () => {
     expect(LEGAL_DEPARTMENT_REGISTRY).toHaveLength(manifestEntries('LEGAL_DEPARTMENT_REGISTRY'));
   });
-  it('katalog (15)', () => {
+  it('katalog (16)', () => {
     expect(ZAGREB_CATALOG).toHaveLength(manifestEntries('ZAGREB_CATALOG'));
   });
   it('paketi (4)', () => {

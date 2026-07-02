@@ -89,6 +89,22 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "efst-diplomski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "efst-zavrsni",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
       "profileId": "efzg-diplomski",
       "scored": 0,
       "machineCheckable": 4,
@@ -286,6 +302,22 @@
       "machineCheckable": 8,
       "advisory": 4,
       "ratio": 0.75,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "fgag-diplomski",
+      "scored": 4,
+      "machineCheckable": 4,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "fgag-zavrsni",
+      "scored": 4,
+      "machineCheckable": 4,
+      "advisory": 0,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
@@ -625,6 +657,22 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "ktfst-diplomski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "ktfst-zavrsni",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
       "profileId": "libertas-diplomski",
       "scored": 5,
       "machineCheckable": 5,
@@ -661,6 +709,14 @@
       "scored": 3,
       "machineCheckable": 3,
       "advisory": 3,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "mefst-diplomski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
       "ratio": 1,
       "lastVerified": "2026-07-02"
     },
@@ -713,6 +769,22 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "pfst-diplomski",
+      "scored": 4,
+      "machineCheckable": 4,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "pfst-zavrsni",
+      "scored": 4,
+      "machineCheckable": 4,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
       "profileId": "pmf-biologija-graduate",
       "scored": 6,
       "machineCheckable": 7,
@@ -750,6 +822,22 @@
       "machineCheckable": 5,
       "advisory": 4,
       "ratio": 0.6,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "pmfst-diplomski",
+      "scored": 5,
+      "machineCheckable": 5,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "pmfst-zavrsni",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
@@ -1097,5 +1185,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 770
+  "totalScored": 827
 }
