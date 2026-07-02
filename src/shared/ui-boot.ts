@@ -5,6 +5,7 @@
 // Bez mreze prema trecim stranama; font se bundla lokalno (unicode-range skida
 // samo latin i latin-ext za hrvatski sadrzaj).
 import '@fontsource-variable/source-serif-4';
+import 'open-props/easings'; // samo easing krivulje (bez boja/sjena, da topla paleta ostane netaknuta)
 import { createIcons, SunMoon, Menu, Lock, Upload } from 'lucide';
 
 function renderIcons() {

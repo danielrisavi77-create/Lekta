@@ -37,6 +37,10 @@ a{color:inherit}:focus-visible{outline:none;box-shadow:var(--focus);border-radiu
 .icon-btn{border:1px solid var(--line);background:var(--panel);width:40px;height:40px;border-radius:11px;display:grid;place-items:center;cursor:pointer;font-size:16px;color:var(--text)}
 .mobile-menu{display:none}.mobile-nav{display:none}
 .icon-btn svg{width:19px;height:19px;display:block}
+.btn{transition-timing-function:var(--ease-out-3)}
+.card{transition:transform .22s var(--ease-out-3),box-shadow .22s var(--ease-out-3)}
+.card:hover{transform:translateY(-3px);box-shadow:var(--shadow-sm)}
+@media(prefers-reduced-motion:reduce){.card,.btn{transition:none}.card:hover{transform:none}}
 .btn{border:0;border-radius:12px;padding:11px 16px;font-weight:750;display:inline-flex;align-items:center;gap:8px;text-decoration:none;cursor:pointer;transition:.18s transform}
 .btn:hover{transform:translateY(-1px)}.btn:disabled{opacity:.45;cursor:default;transform:none}
 .btn-primary{background:linear-gradient(140deg,var(--brand),var(--brand-2));color:#fff;box-shadow:0 10px 22px rgba(51,64,126,.26)}
