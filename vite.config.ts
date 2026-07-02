@@ -12,6 +12,7 @@ export default defineConfig({
         index: resolve(__dirname, 'index.html'),
         verification: resolve(__dirname, 'verification.html'),
         usporedba: resolve(__dirname, 'landing_usporedba.html'),
+        citat: resolve(__dirname, 'citat.html'),
       },
     },
   },

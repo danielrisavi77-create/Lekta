@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Besplatni hrvatski generator citata: knjiga, poglavlje, clanak, mrezni izvor, zavrsni rad i propis, u stilu autor-godina ili fusnota. Sve lokalno u pregledniku.">
+<meta name="color-scheme" content="light dark">
+<title>Besplatni citat generator (hrvatski) - Lekta</title>
+<style>
+:root{
+  --bg:#f6f7fb;--panel:#ffffff;--panel-2:#f0f2f8;--text:#172033;--muted:#697386;
+  --line:#dfe4ee;--line-strong:#cbd3e2;--brand:#5b4df6;--brand-2:#8b5cf6;--brand-soft:#eeecff;
+  --ok:#11845b;--ok-soft:#e8f8f1;--warn:#b36500;--warn-soft:#fff4df;--danger:#c9364f;--danger-soft:#fff0f3;
+  --shadow:0 22px 60px rgba(38,45,77,.12);--shadow-sm:0 8px 24px rgba(38,45,77,.08);--radius:22px;--max:1080px
+}
+[data-theme="dark"]{
+  --bg:#10131c;--panel:#171b27;--panel-2:#202636;--text:#f5f7ff;--muted:#aab2c4;--line:#2d3548;--line-strong:#414b62;
+  --brand:#8d82ff;--brand-2:#b084ff;--brand-soft:#28254f;--ok:#4fd0a1;--ok-soft:#163b31;--warn:#ffbe5d;--warn-soft:#45331c;
+  --danger:#ff7588;--danger-soft:#47242c;--shadow:0 24px 70px rgba(0,0,0,.35);--shadow-sm:0 8px 24px rgba(0,0,0,.25)
+}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;min-width:320px}
+a{color:inherit}.shell{width:min(var(--max),calc(100% - 36px));margin:auto}
+.topbar{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(18px);border-bottom:1px solid color-mix(in srgb,var(--line) 75%,transparent)}
+.nav{height:70px;display:flex;align-items:center;gap:12px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:900;font-size:18px}
+.logo-mark{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,var(--brand),var(--brand-2));box-shadow:0 10px 22px rgba(91,77,246,.25)}
+.btn{border:0;border-radius:12px;padding:11px 16px;font-weight:850;display:inline-flex;align-items:center;gap:8px;text-decoration:none;cursor:pointer;transition:.18s transform}
+.btn:hover{transform:translateY(-1px)}.btn:disabled{opacity:.5;cursor:default;transform:none}
+.btn-primary{background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff;box-shadow:0 11px 25px rgba(91,77,246,.28)}
+.btn-secondary{background:var(--panel);border:1px solid var(--line);color:var(--text)}
+.nav .spacer{margin-left:auto}
+.icon-btn{width:40px;height:40px;border-radius:11px;border:1px solid var(--line);background:var(--panel);color:var(--text);display:grid;place-items:center;cursor:pointer;font-size:16px}
+.hero{padding:48px 0 8px;text-align:center}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--panel);padding:7px 12px;border-radius:999px;color:var(--muted);font-size:12px;font-weight:800;box-shadow:var(--shadow-sm)}
+h1{font-size:clamp(28px,4.4vw,44px);line-height:1.06;letter-spacing:-.035em;margin:16px auto 12px;max-width:720px}
+.gradient-text{background:linear-gradient(100deg,var(--brand),var(--brand-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{font-size:17px;color:var(--muted);max-width:620px;margin:0 auto}
+.section{padding:24px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px}
+.card h2{margin:0 0 4px;font-size:18px}.card .sub{color:var(--muted);font-size:13px;margin:0 0 16px}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:12px;font-weight:800;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em}
+.field input,.field select,.field textarea{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:12px;background:var(--panel-2);color:var(--text);font:inherit}
+.field input:focus,.field select:focus,.field textarea:focus{outline:2px solid var(--brand);outline-offset:1px;background:var(--panel)}
+.field textarea{resize:vertical;min-height:44px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.out-panel{position:sticky;top:90px}
+.out{background:var(--panel-2);border:1px solid var(--line);border-radius:14px;padding:18px;font-size:16px;line-height:1.6;min-height:96px;word-break:break-word}
+.out.empty{color:var(--muted)}
+.out-bar{display:flex;gap:10px;align-items:center;margin-top:14px}
+.out-hint{font-size:13px;margin:12px 0 0}
+.out-hint.warn{color:var(--warn)}.out-hint.ok{color:var(--ok)}
+.note{margin-top:16px;background:var(--brand-soft);border-radius:12px;padding:12px 14px;font-size:13px;color:var(--text)}
+.note b{color:var(--brand)}
+.cta{background:linear-gradient(135deg,#191d31,#332a73);color:#fff;border-radius:24px;padding:34px;text-align:center;margin:14px 0 34px}
+.cta h2{font-size:26px;letter-spacing:-.03em;margin:0 0 8px;color:#fff}.cta p{color:#cfd3e2;margin:0 0 16px}
+.cta .btn{background:#fff;color:#171b27}
+.disclaimer{text-align:center;color:var(--muted);font-size:12px;margin:18px auto 0;max-width:760px}
+footer{padding:26px 0;border-top:1px solid var(--line);color:var(--muted);font-size:12px;text-align:center}
+@media(max-width:820px){.grid{grid-template-columns:1fr}.out-panel{position:static}.hero{padding:34px 0 4px}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <nav class="shell nav">
+    <a class="logo" href="index.html#top"><span class="logo-mark">L</span><span>Lekta</span></a>
+    <span class="spacer"></span>
+    <button class="icon-btn" id="themeBtn" type="button" aria-label="Promijeni temu">&#9681;</button>
+    <a class="btn btn-primary" href="index.html#analyzer">Provjeri cijeli rad</a>
+  </nav>
+</header>
+
+<main>
+<section class="hero">
+  <div class="shell">
+    <span class="eyebrow">Besplatan alat, bez registracije</span>
+    <h1>Hrvatski <span class="gradient-text">citat generator</span></h1>
+    <p>Sloguj citat za knjigu, poglavlje, clanak, mrezni izvor, zavrsni rad ili propis. Sve se racuna lokalno u tvom pregledniku, nista se ne salje na posluzitelj.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="shell grid">
+    <div class="card">
+      <h2>Podaci o izvoru</h2>
+      <p class="sub">Ispuni sto imas. Preporucena polja koja fale prikazuju se ispod citata.</p>
+
+      <div class="row2">
+        <div class="field">
+          <label for="f-type">Vrsta izvora</label>
+          <select id="f-type">
+            <option value="knjiga">Knjiga</option>
+            <option value="poglavlje">Poglavlje u knjizi / zborniku</option>
+            <option value="clanak">Clanak u casopisu</option>
+            <option value="mrezni">Mrezni izvor</option>
+            <option value="zavrsni">Zavrsni / diplomski rad</option>
+            <option value="propis">Propis / zakon</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-style">Stil</label>
+          <select id="f-style">
+            <option value="autor-godina">Autor-godina (drustvene znanosti)</option>
+            <option value="fusnota">Fusnota / bibliografija (pravno, humanisticko)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field" data-field="authors">
+        <label for="f-authors">Autor(i)</label>
+        <textarea id="f-authors" placeholder="Ivic, Ivan; Horvat, Ana (jedan po retku ili odvojeno ;)"></textarea>
+      </div>
+      <div class="field" data-field="title">
+        <label for="f-title">Naslov</label>
+        <input id="f-title" type="text" placeholder="Naslov rada ili djela">
+      </div>
+      <div class="field" data-field="container">
+        <label for="f-container">Izvor (casopis / zbornik / sluzbeni list)</label>
+        <input id="f-container" type="text" placeholder="npr. Zbornik PFZ ili Narodne novine">
+      </div>
+      <div class="row2">
+        <div class="field" data-field="volume">
+          <label for="f-volume">Godiste / volumen</label>
+          <input id="f-volume" type="text" placeholder="70">
+        </div>
+        <div class="field" data-field="issue">
+          <label for="f-issue">Broj</label>
+          <input id="f-issue" type="text" placeholder="2 ili 93/14">
+        </div>
+      </div>
+      <div class="row2">
+        <div class="field" data-field="year">
+          <label for="f-year">Godina</label>
+          <input id="f-year" type="text" placeholder="2024">
+        </div>
+        <div class="field" data-field="pages">
+          <label for="f-pages">Stranice</label>
+          <input id="f-pages" type="text" placeholder="145-170">
+        </div>
+      </div>
+      <div class="row2">
+        <div class="field" data-field="place">
+          <label for="f-place">Mjesto izdanja</label>
+          <input id="f-place" type="text" placeholder="Zagreb">
+        </div>
+        <div class="field" data-field="publisher">
+          <label for="f-publisher">Izdavac</label>
+          <input id="f-publisher" type="text" placeholder="Narodne novine">
+        </div>
+      </div>
+      <div class="field" data-field="institution">
+        <label for="f-institution">Ustanova (za zavrsni rad)</label>
+        <input id="f-institution" type="text" placeholder="Fakultet politickih znanosti, Zagreb">
+      </div>
+      <div class="field" data-field="url">
+        <label for="f-url">Poveznica</label>
+        <input id="f-url" type="text" placeholder="https://...">
+      </div>
+      <div class="field" data-field="accessed">
+        <label for="f-accessed">Datum pristupa</label>
+        <input id="f-accessed" type="text" placeholder="2.7.2026.">
+      </div>
+    </div>
+
+    <div class="out-panel">
+      <div class="card">
+        <h2>Tvoj citat</h2>
+        <p class="sub">Azurira se dok tipkas.</p>
+        <div class="out empty" id="out">Ispuni polja lijevo pa se citat pojavljuje ovdje.</div>
+        <div class="out-bar">
+          <button class="btn btn-primary" id="copyBtn" type="button" disabled>Kopiraj citat</button>
+        </div>
+        <p class="out-hint" id="out-hint"></p>
+        <div class="note"><b>Napomena:</b> generator daje okvirni oblik citata prema uobicajenim hrvatskim akademskim stilovima. Tocan stil i interpunkciju uvijek provjeri prema uputama svog fakulteta, studija ili mentora.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="shell">
+    <div class="cta">
+      <h2>Citat je sitni dio. Provjeri cijeli rad.</h2>
+      <p>Lekta mjeri margine, stilove, numeraciju, sadrzaj i literaturu prema verificiranom profilu tvog fakulteta. Besplatan teaser, dokument ostaje na tvom uredaju.</p>
+      <a class="btn" href="index.html#analyzer">Besplatno provjeri rad &rarr;</a>
+    </div>
+    <p class="disclaimer">Lekta radi pomocnu tehnicku provjeru i ne zamjenjuje sluzbene upute ustanove, studija, kolegija ni mentora.</p>
+  </div>
+</section>
+</main>
+
+<footer><div class="shell">&copy; 2026 Lekta &middot; Zagreb &middot; <a href="landing_usporedba.html">Usporedba</a> &middot; <a href="index.html#top">Natrag na provjeru</a></div></footer>
+
+<script type="module" src="/src/tools/citat-page.ts"></script>
+</body>
+</html>
