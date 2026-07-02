@@ -1,0 +1,267 @@
+{
+  "faculty": "ferit",
+  "institution": "unios",
+  "institutionName": "Sveuciliste Josipa Jurja Strossmayera u Osijeku",
+  "unit": {
+    "id": "ferit",
+    "name": "Fakultet elektrotehnike, racunarstva i informacijskih tehnologija Osijek",
+    "family": "stem",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Prijediplomski studiji FERIT (zavrsni rad)",
+    "Diplomski studiji FERIT"
+  ],
+  "sources": [
+    {
+      "id": "ferit-upute-zavrsni-2010",
+      "kind": "guidelines",
+      "title": "Upute za izradu zavrsnog rada (FERIT)",
+      "url": "https://www.ferit.unios.hr/preuzmi/1350/upute_za_izradu_zavr%C5%A1nog_rada_26-01-2010.pdf",
+      "publisher": "Fakultet elektrotehnike, racunarstva i informacijskih tehnologija Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/ferit/ferit-upute-zavrsni-2010.pdf",
+      "snapshotHash": "e0d591463e3e452f77ddec8d9f66c25a834acc573f7b4ca72fb2bb397390e9ca",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Tekstualni PDF; pogl. 2 Obrada teksta."
+    },
+    {
+      "id": "ferit-upute-diplomski",
+      "kind": "guidelines",
+      "title": "Upute za izradu diplomskog rada (FERIT)",
+      "url": "https://www.ferit.unios.hr/dokumenti/dodiplomski/upute_za_izradu_diplomskog_rada.pdf",
+      "publisher": "Fakultet elektrotehnike, racunarstva i informacijskih tehnologija Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/ferit/ferit-upute-diplomski.pdf",
+      "snapshotHash": "d596eb1f8605be080f3e722738852da5c059a780f2eaa1632242521894202dfb",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Tekstualni PDF; pogl. 2 Obrada teksta. Ista pravila kao zavrsni."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "ferit-zavrsni",
+      "unitId": "ferit",
+      "programs": [
+        "Prijediplomski studiji FERIT (zavrsni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "FERIT, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet elektrotehnike, racunarstva i informacijskih tehnologija Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za izradu zavrsnog rada (FERIT)",
+          "url": "https://www.ferit.unios.hr/preuzmi/1350/upute_za_izradu_zavr%C5%A1nog_rada_26-01-2010.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu zavrsnog rada (FERIT)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Prored",
+        "Vrsta slova",
+        "Velicina slova",
+        "Margine"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "ferit-diplomski",
+      "unitId": "ferit",
+      "programs": [
+        "Diplomski studiji FERIT"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "FERIT, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet elektrotehnike, racunarstva i informacijskih tehnologija Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za izradu diplomskog rada (FERIT)",
+          "url": "https://www.ferit.unios.hr/dokumenti/dodiplomski/upute_za_izradu_diplomskog_rada.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu diplomskog rada (FERIT)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Prored",
+        "Vrsta slova",
+        "Velicina slova",
+        "Margine"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-ferit-zavrsni--paper-size-verified-2026-07-02",
+      "ruleId": "ferit-zavrsni--paper-size",
+      "profileId": "ferit-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ferit-upute-zavrsni-2010",
+      "sourcePage": "t. 2.1",
+      "quote": "Format rada je A4 (210 x 297 mm).",
+      "note": "Cross-institution port (Fakultet elektrotehnike, racunarstva i informacijskih tehnologija Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-ferit-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "ferit-zavrsni--line-spacing",
+      "profileId": "ferit-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ferit-upute-zavrsni-2010",
+      "sourcePage": "t. 2.4",
+      "quote": "Rad se piše na računalu (preporuča se MS Word) uz prored od 1,5. Pri obradi teksta potrebno je koristiti font Times Roman 12 pt (ili 10opi).",
+      "note": "Cross-institution port (Fakultet elektrotehnike, racunarstva i informacijskih tehnologija Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-ferit-zavrsni--font-verified-2026-07-02",
+      "ruleId": "ferit-zavrsni--font",
+      "profileId": "ferit-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ferit-upute-zavrsni-2010",
+      "sourcePage": "t. 2.4",
+      "quote": "Rad se piše na računalu (preporuča se MS Word) uz prored od 1,5. Pri obradi teksta potrebno je koristiti font Times Roman 12 pt (ili 10opi).",
+      "note": "Cross-institution port (Fakultet elektrotehnike, racunarstva i informacijskih tehnologija Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-ferit-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "ferit-zavrsni--font-size",
+      "profileId": "ferit-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ferit-upute-zavrsni-2010",
+      "sourcePage": "t. 2.4",
+      "quote": "Rad se piše na računalu (preporuča se MS Word) uz prored od 1,5. Pri obradi teksta potrebno je koristiti font Times Roman 12 pt (ili 10opi).",
+      "note": "Cross-institution port (Fakultet elektrotehnike, racunarstva i informacijskih tehnologija Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-ferit-zavrsni--margins-verified-2026-07-02",
+      "ruleId": "ferit-zavrsni--margins",
+      "profileId": "ferit-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ferit-upute-zavrsni-2010",
+      "sourcePage": "t. 2.4",
+      "quote": "Margine teksta trebaju biti: lijeva 25 mm, desna 20 mm, gornja i donja 25 mm.",
+      "note": "Cross-institution port (Fakultet elektrotehnike, racunarstva i informacijskih tehnologija Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-ferit-diplomski--paper-size-verified-2026-07-02",
+      "ruleId": "ferit-diplomski--paper-size",
+      "profileId": "ferit-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ferit-upute-diplomski",
+      "sourcePage": "t. 2.1",
+      "quote": "Format rada je A4 (210 x 297 mm).",
+      "note": "Cross-institution port (Fakultet elektrotehnike, racunarstva i informacijskih tehnologija Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-ferit-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "ferit-diplomski--line-spacing",
+      "profileId": "ferit-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ferit-upute-diplomski",
+      "sourcePage": "t. 2.4",
+      "quote": "Rad se piše na računalu (preporuča se MS Word) uz prored od 1,5. Pri obradi teksta potrebno je koristiti font Times Roman 12 pt (ili 10opi).",
+      "note": "Cross-institution port (Fakultet elektrotehnike, racunarstva i informacijskih tehnologija Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-ferit-diplomski--font-verified-2026-07-02",
+      "ruleId": "ferit-diplomski--font",
+      "profileId": "ferit-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ferit-upute-diplomski",
+      "sourcePage": "t. 2.4",
+      "quote": "Rad se piše na računalu (preporuča se MS Word) uz prored od 1,5. Pri obradi teksta potrebno je koristiti font Times Roman 12 pt (ili 10opi).",
+      "note": "Cross-institution port (Fakultet elektrotehnike, racunarstva i informacijskih tehnologija Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-ferit-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "ferit-diplomski--font-size",
+      "profileId": "ferit-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ferit-upute-diplomski",
+      "sourcePage": "t. 2.4",
+      "quote": "Rad se piše na računalu (preporuča se MS Word) uz prored od 1,5. Pri obradi teksta potrebno je koristiti font Times Roman 12 pt (ili 10opi).",
+      "note": "Cross-institution port (Fakultet elektrotehnike, racunarstva i informacijskih tehnologija Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-ferit-diplomski--margins-verified-2026-07-02",
+      "ruleId": "ferit-diplomski--margins",
+      "profileId": "ferit-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ferit-upute-diplomski",
+      "sourcePage": "t. 2.4",
+      "quote": "Margine teksta trebaju biti: lijeva 25 mm, desna 20 mm, gornja i donja 25 mm.",
+      "note": "Cross-institution port (Fakultet elektrotehnike, racunarstva i informacijskih tehnologija Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    }
+  ]
+}

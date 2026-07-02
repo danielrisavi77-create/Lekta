@@ -1,0 +1,254 @@
+{
+  "faculty": "kemos",
+  "institution": "unios",
+  "institutionName": "Sveuciliste Josipa Jurja Strossmayera u Osijeku",
+  "unit": {
+    "id": "kemos",
+    "name": "Odjel za kemiju, Sveuciliste u Osijeku",
+    "family": "stem",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Prijediplomski studij Kemija (zavrsni rad, Osijek)",
+    "Diplomski studij Kemija (Osijek)"
+  ],
+  "sources": [
+    {
+      "id": "kemos-upute-radovi-2024",
+      "kind": "guidelines",
+      "title": "Upute za pisanje zavrsnog/diplomskog rada (Odjel za kemiju Osijek, 2024)",
+      "url": "https://www.kemija.unios.hr/wp-content/uploads/2025/01/PRILOG-4-UPUTE-ZA-PISANJE-ZAVRSNOG-DIPLOMSKOG-RADA.pdf",
+      "publisher": "Odjel za kemiju, Sveuciliste u Osijeku, Sveuciliste Josipa Jurja Strossmayera u Osijeku",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/kemos/kemos-upute-radovi-2024.pdf",
+      "snapshotHash": "c4e0f565e1303f7beeae1e5ec75a0c787045071266716209a109288368baeddf",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Tekstualni PDF; faculty-wide. Numericki citat -> advisory."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "kemos-zavrsni",
+      "unitId": "kemos",
+      "programs": [
+        "Prijediplomski studij Kemija (zavrsni rad, Osijek)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Odjel za kemiju Osijek, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Odjel za kemiju, Sveuciliste u Osijeku, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za pisanje zavrsnog/diplomskog rada (Odjel za kemiju Osijek, 2024)",
+          "url": "https://www.kemija.unios.hr/wp-content/uploads/2025/01/PRILOG-4-UPUTE-ZA-PISANJE-ZAVRSNOG-DIPLOMSKOG-RADA.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za pisanje zavrsnog/diplomskog rada (Odjel za kemiju Osijek, 2024)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Prored",
+        "Vrsta slova",
+        "Velicina slova",
+        "Margine"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "kemos-diplomski",
+      "unitId": "kemos",
+      "programs": [
+        "Diplomski studij Kemija (Osijek)"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Odjel za kemiju Osijek, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Odjel za kemiju, Sveuciliste u Osijeku, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za pisanje zavrsnog/diplomskog rada (Odjel za kemiju Osijek, 2024)",
+          "url": "https://www.kemija.unios.hr/wp-content/uploads/2025/01/PRILOG-4-UPUTE-ZA-PISANJE-ZAVRSNOG-DIPLOMSKOG-RADA.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za pisanje zavrsnog/diplomskog rada (Odjel za kemiju Osijek, 2024)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Prored",
+        "Vrsta slova",
+        "Velicina slova",
+        "Margine"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-kemos-zavrsni--paper-size-verified-2026-07-02",
+      "ruleId": "kemos-zavrsni--paper-size",
+      "profileId": "kemos-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "kemos-upute-radovi-2024",
+      "sourcePage": "Upute, oblikovanje teksta",
+      "quote": "Cjelokupni se tekst piše na A4 papiru (210x297 mm) s 1,5 proredom. Svi dijelovi teksta pišu se slovima Times New Roman, veličina slova 12 pt. Poravnanje teksta s marginama sa svih strana od 2.5 cm.",
+      "note": "Cross-institution port (Odjel za kemiju, Sveuciliste u Osijeku, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-kemos-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "kemos-zavrsni--line-spacing",
+      "profileId": "kemos-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "kemos-upute-radovi-2024",
+      "sourcePage": "Upute, oblikovanje teksta",
+      "quote": "Cjelokupni se tekst piše na A4 papiru (210x297 mm) s 1,5 proredom. Svi dijelovi teksta pišu se slovima Times New Roman, veličina slova 12 pt. Poravnanje teksta s marginama sa svih strana od 2.5 cm.",
+      "note": "Cross-institution port (Odjel za kemiju, Sveuciliste u Osijeku, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-kemos-zavrsni--font-verified-2026-07-02",
+      "ruleId": "kemos-zavrsni--font",
+      "profileId": "kemos-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "kemos-upute-radovi-2024",
+      "sourcePage": "Upute, oblikovanje teksta",
+      "quote": "Cjelokupni se tekst piše na A4 papiru (210x297 mm) s 1,5 proredom. Svi dijelovi teksta pišu se slovima Times New Roman, veličina slova 12 pt. Poravnanje teksta s marginama sa svih strana od 2.5 cm.",
+      "note": "Cross-institution port (Odjel za kemiju, Sveuciliste u Osijeku, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-kemos-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "kemos-zavrsni--font-size",
+      "profileId": "kemos-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "kemos-upute-radovi-2024",
+      "sourcePage": "Upute, oblikovanje teksta",
+      "quote": "Cjelokupni se tekst piše na A4 papiru (210x297 mm) s 1,5 proredom. Svi dijelovi teksta pišu se slovima Times New Roman, veličina slova 12 pt. Poravnanje teksta s marginama sa svih strana od 2.5 cm.",
+      "note": "Cross-institution port (Odjel za kemiju, Sveuciliste u Osijeku, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-kemos-zavrsni--margins-verified-2026-07-02",
+      "ruleId": "kemos-zavrsni--margins",
+      "profileId": "kemos-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "kemos-upute-radovi-2024",
+      "sourcePage": "Upute, oblikovanje teksta",
+      "quote": "Cjelokupni se tekst piše na A4 papiru (210x297 mm) s 1,5 proredom. Svi dijelovi teksta pišu se slovima Times New Roman, veličina slova 12 pt. Poravnanje teksta s marginama sa svih strana od 2.5 cm.",
+      "note": "Cross-institution port (Odjel za kemiju, Sveuciliste u Osijeku, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-kemos-diplomski--paper-size-verified-2026-07-02",
+      "ruleId": "kemos-diplomski--paper-size",
+      "profileId": "kemos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "kemos-upute-radovi-2024",
+      "sourcePage": "Upute, oblikovanje teksta",
+      "quote": "Cjelokupni se tekst piše na A4 papiru (210x297 mm) s 1,5 proredom. Svi dijelovi teksta pišu se slovima Times New Roman, veličina slova 12 pt. Poravnanje teksta s marginama sa svih strana od 2.5 cm.",
+      "note": "Cross-institution port (Odjel za kemiju, Sveuciliste u Osijeku, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-kemos-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "kemos-diplomski--line-spacing",
+      "profileId": "kemos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "kemos-upute-radovi-2024",
+      "sourcePage": "Upute, oblikovanje teksta",
+      "quote": "Cjelokupni se tekst piše na A4 papiru (210x297 mm) s 1,5 proredom. Svi dijelovi teksta pišu se slovima Times New Roman, veličina slova 12 pt. Poravnanje teksta s marginama sa svih strana od 2.5 cm.",
+      "note": "Cross-institution port (Odjel za kemiju, Sveuciliste u Osijeku, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-kemos-diplomski--font-verified-2026-07-02",
+      "ruleId": "kemos-diplomski--font",
+      "profileId": "kemos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "kemos-upute-radovi-2024",
+      "sourcePage": "Upute, oblikovanje teksta",
+      "quote": "Cjelokupni se tekst piše na A4 papiru (210x297 mm) s 1,5 proredom. Svi dijelovi teksta pišu se slovima Times New Roman, veličina slova 12 pt. Poravnanje teksta s marginama sa svih strana od 2.5 cm.",
+      "note": "Cross-institution port (Odjel za kemiju, Sveuciliste u Osijeku, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-kemos-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "kemos-diplomski--font-size",
+      "profileId": "kemos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "kemos-upute-radovi-2024",
+      "sourcePage": "Upute, oblikovanje teksta",
+      "quote": "Cjelokupni se tekst piše na A4 papiru (210x297 mm) s 1,5 proredom. Svi dijelovi teksta pišu se slovima Times New Roman, veličina slova 12 pt. Poravnanje teksta s marginama sa svih strana od 2.5 cm.",
+      "note": "Cross-institution port (Odjel za kemiju, Sveuciliste u Osijeku, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-kemos-diplomski--margins-verified-2026-07-02",
+      "ruleId": "kemos-diplomski--margins",
+      "profileId": "kemos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "kemos-upute-radovi-2024",
+      "sourcePage": "Upute, oblikovanje teksta",
+      "quote": "Cjelokupni se tekst piše na A4 papiru (210x297 mm) s 1,5 proredom. Svi dijelovi teksta pišu se slovima Times New Roman, veličina slova 12 pt. Poravnanje teksta s marginama sa svih strana od 2.5 cm.",
+      "note": "Cross-institution port (Odjel za kemiju, Sveuciliste u Osijeku, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    }
+  ]
+}

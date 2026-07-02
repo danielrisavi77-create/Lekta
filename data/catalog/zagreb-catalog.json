@@ -873,5 +873,100 @@
         ]
       }
     ]
+  },
+  {
+    "id": "unios",
+    "name": "Sveuciliste Josipa Jurja Strossmayera u Osijeku",
+    "units": [
+      {
+        "id": "efos",
+        "name": "Ekonomski fakultet u Osijeku",
+        "family": "social",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski/strucni studiji EFOS (zavrsni rad)",
+          "Diplomski studiji EFOS"
+        ]
+      },
+      {
+        "id": "fazos",
+        "name": "Fakultet agrobiotehnickih znanosti Osijek",
+        "family": "stem",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski studiji FAZOS (zavrsni rad)",
+          "Diplomski studiji FAZOS"
+        ]
+      },
+      {
+        "id": "ferit",
+        "name": "Fakultet elektrotehnike, racunarstva i informacijskih tehnologija Osijek",
+        "family": "stem",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski studiji FERIT (zavrsni rad)",
+          "Diplomski studiji FERIT"
+        ]
+      },
+      {
+        "id": "ffos",
+        "name": "Filozofski fakultet Osijek",
+        "family": "social",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski studiji FFOS (zavrsni rad)",
+          "Diplomski studiji FFOS"
+        ]
+      },
+      {
+        "id": "grafos",
+        "name": "Gradevinski i arhitektonski fakultet Osijek",
+        "family": "stem",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski/strucni studiji GFOS (zavrsni rad)",
+          "Diplomski studiji GFOS"
+        ]
+      },
+      {
+        "id": "kemos",
+        "name": "Odjel za kemiju, Sveuciliste u Osijeku",
+        "family": "stem",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski studij Kemija (zavrsni rad, Osijek)",
+          "Diplomski studij Kemija (Osijek)"
+        ]
+      },
+      {
+        "id": "mefos",
+        "name": "Medicinski fakultet Osijek",
+        "family": "biomed",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski/strucni studiji MEFOS (zavrsni rad)",
+          "Diplomski/integrirani studiji MEFOS"
+        ]
+      },
+      {
+        "id": "pravos",
+        "name": "Pravni fakultet Osijek",
+        "family": "social",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski studij Pravo/Socijalni rad (zavrsni rad, Osijek)",
+          "Diplomski/integrirani studij Pravo (Osijek)"
+        ]
+      },
+      {
+        "id": "ptfos",
+        "name": "Prehrambeno-tehnoloski fakultet Osijek",
+        "family": "stem",
+        "status": "partial",
+        "programs": [
+          "Diplomski studiji PTFOS"
+        ]
+      }
+    ]
   }
 ]

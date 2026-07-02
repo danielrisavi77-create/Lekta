@@ -73,6 +73,22 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "efos-diplomski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "efos-zavrsni",
+      "scored": 5,
+      "machineCheckable": 5,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
       "profileId": "efri-diplomski",
       "scored": 8,
       "machineCheckable": 7,
@@ -145,6 +161,22 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "fazos-diplomski",
+      "scored": 8,
+      "machineCheckable": 7,
+      "advisory": 0,
+      "ratio": 1.1428571428571428,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "fazos-zavrsni",
+      "scored": 8,
+      "machineCheckable": 7,
+      "advisory": 0,
+      "ratio": 1.1428571428571428,
+      "lastVerified": "2026-07-02"
+    },
+    {
       "profileId": "fbf-doktorski",
       "scored": 6,
       "machineCheckable": 6,
@@ -183,6 +215,38 @@
       "advisory": 8,
       "ratio": 0,
       "lastVerified": null
+    },
+    {
+      "profileId": "ferit-diplomski",
+      "scored": 5,
+      "machineCheckable": 5,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "ferit-zavrsni",
+      "scored": 5,
+      "machineCheckable": 5,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "ffos-diplomski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "ffos-zavrsni",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
     },
     {
       "profileId": "ffri-diplomski",
@@ -569,6 +633,22 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "grafos-diplomski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "grafos-zavrsni",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
       "profileId": "grf-diplomski",
       "scored": 7,
       "machineCheckable": 7,
@@ -641,6 +721,22 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "kemos-diplomski",
+      "scored": 5,
+      "machineCheckable": 5,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "kemos-zavrsni",
+      "scored": 5,
+      "machineCheckable": 5,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
       "profileId": "kif-diplomski",
       "scored": 8,
       "machineCheckable": 7,
@@ -709,6 +805,22 @@
       "scored": 3,
       "machineCheckable": 3,
       "advisory": 3,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "mefos-diplomski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "mefos-zavrsni",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
       "ratio": 1,
       "lastVerified": "2026-07-02"
     },
@@ -945,6 +1057,22 @@
       "lastVerified": "2026-06-30"
     },
     {
+      "profileId": "pravos-diplomski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "pravos-zavrsni",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
       "profileId": "pravri-diplomski",
       "scored": 5,
       "machineCheckable": 5,
@@ -956,6 +1084,14 @@
       "profileId": "pravri-zavrsni",
       "scored": 5,
       "machineCheckable": 5,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "ptfos-diplomski",
+      "scored": 6,
+      "machineCheckable": 6,
       "advisory": 0,
       "ratio": 1,
       "lastVerified": "2026-07-02"
@@ -1185,5 +1321,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 827
+  "totalScored": 928
 }

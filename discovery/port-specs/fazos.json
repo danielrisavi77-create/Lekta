@@ -1,0 +1,349 @@
+{
+  "faculty": "fazos",
+  "institution": "unios",
+  "institutionName": "Sveuciliste Josipa Jurja Strossmayera u Osijeku",
+  "unit": {
+    "id": "fazos",
+    "name": "Fakultet agrobiotehnickih znanosti Osijek",
+    "family": "stem",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Prijediplomski studiji FAZOS (zavrsni rad)",
+    "Diplomski studiji FAZOS"
+  ],
+  "sources": [
+    {
+      "id": "fazos-upute-zavrsni-2024",
+      "kind": "guidelines",
+      "title": "Upute za izradu zavrsnog rada (FAZOS, 2024)",
+      "url": "https://www.fazos.unios.hr/storage/Dokumenti/upute/Upute%20za%20izradu%20zavr%C5%A1nog%20rada_4.8.2024.pdf",
+      "publisher": "Fakultet agrobiotehnickih znanosti Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/fazos/fazos-upute-zavrsni-2024.pdf",
+      "snapshotHash": "eb5b2331f173ba14ea3ca5472200945cdd8a38d503e15669048ea7e3d41b9779",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Tekstualni PDF; pogl. 3. APA imperativ. Margine lijeva 3/ostale 2,5."
+    },
+    {
+      "id": "fazos-upute-diplomski-2024",
+      "kind": "guidelines",
+      "title": "Upute za izradu diplomskog rada (FAZOS, 2024)",
+      "url": "https://www.fazos.unios.hr/storage/Dokumenti/upute/Upute%20za%20izradu%20diplomskog%20rada_4.8.2024.pdf",
+      "publisher": "Fakultet agrobiotehnickih znanosti Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/fazos/fazos-upute-diplomski-2024.pdf",
+      "snapshotHash": "1cbdae23100b323e1ced2ce71724d3d26c276ad4d2a7a1bb558ab550686b668d",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Tekstualni PDF; pogl. 3. APA imperativ. Margine lijeva 3/ostale 2,5."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "fazos-zavrsni",
+      "unitId": "fazos",
+      "programs": [
+        "Prijediplomski studiji FAZOS (zavrsni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "FAZOS, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 3
+        },
+        "recommendedCitation": "apa"
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet agrobiotehnickih znanosti Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za izradu zavrsnog rada (FAZOS, 2024)",
+          "url": "https://www.fazos.unios.hr/storage/Dokumenti/upute/Upute%20za%20izradu%20zavr%C5%A1nog%20rada_4.8.2024.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu zavrsnog rada (FAZOS, 2024)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Margine",
+        "Obostrano poravnanje",
+        "Vrsta slova",
+        "Prored",
+        "Velicina slova",
+        "Opseg (najmanje 20 str.)",
+        "Stil citiranja (APA, autor-godina)"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "fazos-diplomski",
+      "unitId": "fazos",
+      "programs": [
+        "Diplomski studiji FAZOS"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "FAZOS, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 3
+        },
+        "recommendedCitation": "apa"
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet agrobiotehnickih znanosti Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za izradu diplomskog rada (FAZOS, 2024)",
+          "url": "https://www.fazos.unios.hr/storage/Dokumenti/upute/Upute%20za%20izradu%20diplomskog%20rada_4.8.2024.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu diplomskog rada (FAZOS, 2024)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Margine",
+        "Obostrano poravnanje",
+        "Vrsta slova",
+        "Prored",
+        "Velicina slova",
+        "Opseg (najmanje 30 str.)",
+        "Stil citiranja (APA, autor-godina)"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-fazos-zavrsni--paper-size-verified-2026-07-02",
+      "ruleId": "fazos-zavrsni--paper-size",
+      "profileId": "fazos-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fazos-upute-zavrsni-2024",
+      "sourcePage": "pogl. 3 Izgled rada i obrada teksta",
+      "quote": "Rad treba pisati na papiru formata A4 (210*297 mm), s marginama 3 cm lijevo te 2,5 cm desno, gore i dolje, s obostranim poravnavanjem. Tekst se mora pisati samo s jedne strane lista, fontom Times New Roman uz razmak redova 1,5 i razmakom između odlomaka 6 pt.",
+      "note": "Cross-institution port (Fakultet agrobiotehnickih znanosti Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-fazos-zavrsni--margins-verified-2026-07-02",
+      "ruleId": "fazos-zavrsni--margins",
+      "profileId": "fazos-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fazos-upute-zavrsni-2024",
+      "sourcePage": "pogl. 3 Izgled rada i obrada teksta",
+      "quote": "Rad treba pisati na papiru formata A4 (210*297 mm), s marginama 3 cm lijevo te 2,5 cm desno, gore i dolje, s obostranim poravnavanjem. Tekst se mora pisati samo s jedne strane lista, fontom Times New Roman uz razmak redova 1,5 i razmakom između odlomaka 6 pt.",
+      "note": "Cross-institution port (Fakultet agrobiotehnickih znanosti Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-fazos-zavrsni--justify-verified-2026-07-02",
+      "ruleId": "fazos-zavrsni--justify",
+      "profileId": "fazos-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fazos-upute-zavrsni-2024",
+      "sourcePage": "pogl. 3 Izgled rada i obrada teksta",
+      "quote": "Rad treba pisati na papiru formata A4 (210*297 mm), s marginama 3 cm lijevo te 2,5 cm desno, gore i dolje, s obostranim poravnavanjem. Tekst se mora pisati samo s jedne strane lista, fontom Times New Roman uz razmak redova 1,5 i razmakom između odlomaka 6 pt.",
+      "note": "Cross-institution port (Fakultet agrobiotehnickih znanosti Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-fazos-zavrsni--font-verified-2026-07-02",
+      "ruleId": "fazos-zavrsni--font",
+      "profileId": "fazos-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fazos-upute-zavrsni-2024",
+      "sourcePage": "pogl. 3 Izgled rada i obrada teksta",
+      "quote": "Rad treba pisati na papiru formata A4 (210*297 mm), s marginama 3 cm lijevo te 2,5 cm desno, gore i dolje, s obostranim poravnavanjem. Tekst se mora pisati samo s jedne strane lista, fontom Times New Roman uz razmak redova 1,5 i razmakom između odlomaka 6 pt.",
+      "note": "Cross-institution port (Fakultet agrobiotehnickih znanosti Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-fazos-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "fazos-zavrsni--line-spacing",
+      "profileId": "fazos-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fazos-upute-zavrsni-2024",
+      "sourcePage": "pogl. 3 Izgled rada i obrada teksta",
+      "quote": "Rad treba pisati na papiru formata A4 (210*297 mm), s marginama 3 cm lijevo te 2,5 cm desno, gore i dolje, s obostranim poravnavanjem. Tekst se mora pisati samo s jedne strane lista, fontom Times New Roman uz razmak redova 1,5 i razmakom između odlomaka 6 pt.",
+      "note": "Cross-institution port (Fakultet agrobiotehnickih znanosti Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-fazos-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "fazos-zavrsni--font-size",
+      "profileId": "fazos-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fazos-upute-zavrsni-2024",
+      "sourcePage": "pogl. 3 Izgled rada i obrada teksta",
+      "quote": "Tekst cijelog rada treba pisati fontom veličine 12 pt.",
+      "note": "Cross-institution port (Fakultet agrobiotehnickih znanosti Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-fazos-zavrsni--page-count-verified-2026-07-02",
+      "ruleId": "fazos-zavrsni--page-count",
+      "profileId": "fazos-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fazos-upute-zavrsni-2024",
+      "sourcePage": "pogl. opseg rada",
+      "quote": "Završni rad mora imati minimalno 20 stranica.",
+      "note": "Cross-institution port (Fakultet agrobiotehnickih znanosti Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-fazos-zavrsni--citation-style-verified-2026-07-02",
+      "ruleId": "fazos-zavrsni--citation-style",
+      "profileId": "fazos-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fazos-upute-zavrsni-2024",
+      "sourcePage": "pogl. citiranje",
+      "quote": "Za citiranje u tekstu rada treba koristiti APA stil citiranja.",
+      "note": "Cross-institution port (Fakultet agrobiotehnickih znanosti Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-fazos-diplomski--paper-size-verified-2026-07-02",
+      "ruleId": "fazos-diplomski--paper-size",
+      "profileId": "fazos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fazos-upute-diplomski-2024",
+      "sourcePage": "pogl. 3 Izgled rada i obrada teksta",
+      "quote": "Rad treba pisati na papiru formata A4 (210*297 mm), s marginama 3 cm lijevo te 2,5 cm desno, gore i dolje, s obostranim poravnavanjem. Tekst se mora pisati samo s jedne strane lista, fontom Times New Roman uz razmak redova 1,5 i razmakom između odlomaka 6 pt.",
+      "note": "Cross-institution port (Fakultet agrobiotehnickih znanosti Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-fazos-diplomski--margins-verified-2026-07-02",
+      "ruleId": "fazos-diplomski--margins",
+      "profileId": "fazos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fazos-upute-diplomski-2024",
+      "sourcePage": "pogl. 3 Izgled rada i obrada teksta",
+      "quote": "Rad treba pisati na papiru formata A4 (210*297 mm), s marginama 3 cm lijevo te 2,5 cm desno, gore i dolje, s obostranim poravnavanjem. Tekst se mora pisati samo s jedne strane lista, fontom Times New Roman uz razmak redova 1,5 i razmakom između odlomaka 6 pt.",
+      "note": "Cross-institution port (Fakultet agrobiotehnickih znanosti Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-fazos-diplomski--justify-verified-2026-07-02",
+      "ruleId": "fazos-diplomski--justify",
+      "profileId": "fazos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fazos-upute-diplomski-2024",
+      "sourcePage": "pogl. 3 Izgled rada i obrada teksta",
+      "quote": "Rad treba pisati na papiru formata A4 (210*297 mm), s marginama 3 cm lijevo te 2,5 cm desno, gore i dolje, s obostranim poravnavanjem. Tekst se mora pisati samo s jedne strane lista, fontom Times New Roman uz razmak redova 1,5 i razmakom između odlomaka 6 pt.",
+      "note": "Cross-institution port (Fakultet agrobiotehnickih znanosti Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-fazos-diplomski--font-verified-2026-07-02",
+      "ruleId": "fazos-diplomski--font",
+      "profileId": "fazos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fazos-upute-diplomski-2024",
+      "sourcePage": "pogl. 3 Izgled rada i obrada teksta",
+      "quote": "Rad treba pisati na papiru formata A4 (210*297 mm), s marginama 3 cm lijevo te 2,5 cm desno, gore i dolje, s obostranim poravnavanjem. Tekst se mora pisati samo s jedne strane lista, fontom Times New Roman uz razmak redova 1,5 i razmakom između odlomaka 6 pt.",
+      "note": "Cross-institution port (Fakultet agrobiotehnickih znanosti Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-fazos-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "fazos-diplomski--line-spacing",
+      "profileId": "fazos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fazos-upute-diplomski-2024",
+      "sourcePage": "pogl. 3 Izgled rada i obrada teksta",
+      "quote": "Rad treba pisati na papiru formata A4 (210*297 mm), s marginama 3 cm lijevo te 2,5 cm desno, gore i dolje, s obostranim poravnavanjem. Tekst se mora pisati samo s jedne strane lista, fontom Times New Roman uz razmak redova 1,5 i razmakom između odlomaka 6 pt.",
+      "note": "Cross-institution port (Fakultet agrobiotehnickih znanosti Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-fazos-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "fazos-diplomski--font-size",
+      "profileId": "fazos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fazos-upute-diplomski-2024",
+      "sourcePage": "pogl. 3 Izgled rada i obrada teksta",
+      "quote": "Tekst cijelog rada treba pisati fontom veličine 12 pt.",
+      "note": "Cross-institution port (Fakultet agrobiotehnickih znanosti Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-fazos-diplomski--page-count-verified-2026-07-02",
+      "ruleId": "fazos-diplomski--page-count",
+      "profileId": "fazos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fazos-upute-diplomski-2024",
+      "sourcePage": "pogl. opseg rada",
+      "quote": "Diplomski rad mora imati minimalno 30 stranica.",
+      "note": "Cross-institution port (Fakultet agrobiotehnickih znanosti Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-fazos-diplomski--citation-style-verified-2026-07-02",
+      "ruleId": "fazos-diplomski--citation-style",
+      "profileId": "fazos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fazos-upute-diplomski-2024",
+      "sourcePage": "pogl. citiranje",
+      "quote": "Za citiranje u tekstu rada treba koristiti APA stil citiranja.",
+      "note": "Cross-institution port (Fakultet agrobiotehnickih znanosti Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    }
+  ]
+}

@@ -1,0 +1,286 @@
+{
+  "faculty": "grafos",
+  "institution": "unios",
+  "institutionName": "Sveuciliste Josipa Jurja Strossmayera u Osijeku",
+  "unit": {
+    "id": "grafos",
+    "name": "Gradevinski i arhitektonski fakultet Osijek",
+    "family": "stem",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Prijediplomski/strucni studiji GFOS (zavrsni rad)",
+    "Diplomski studiji GFOS"
+  ],
+  "sources": [
+    {
+      "id": "grafos-smjernice-2022",
+      "kind": "guidelines",
+      "title": "Smjernice za izradu i oblikovanje zavrsnih i diplomskih radova (GFOS, 2022)",
+      "url": "https://www.gfos.unios.hr/download/smjernice-za-izradu-zavrsnih-i-diplomskih-radova-01-10-2022.docx",
+      "publisher": "Gradevinski i arhitektonski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/grafos/grafos-smjernice-2022.docx",
+      "snapshotHash": "6916e4f1620c6187e79db4a06c9ba23d49fa35e330481e26bbe94282fdf307b3",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": ".docx; t. 3.1 \"Tekst mora biti oblikovan\". Vrijedi za zavrsni i diplomski."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "grafos-zavrsni",
+      "unitId": "grafos",
+      "programs": [
+        "Prijediplomski/strucni studiji GFOS (zavrsni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "GFOS, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman",
+          "Arial",
+          "Arial Narrow"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2,
+          "bottom": 2,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Gradevinski i arhitektonski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+      "sources": [
+        {
+          "title": "Smjernice za izradu i oblikovanje zavrsnih i diplomskih radova (GFOS, 2022)",
+          "url": "https://www.gfos.unios.hr/download/smjernice-za-izradu-zavrsnih-i-diplomskih-radova-01-10-2022.docx"
+        }
+      ],
+      "sourceHierarchy": [
+        "Smjernice za izradu i oblikovanje zavrsnih i diplomskih radova (GFOS, 2022)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Vrsta slova",
+        "Velicina slova",
+        "Obostrano poravnanje",
+        "Prored",
+        "Margine"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "grafos-diplomski",
+      "unitId": "grafos",
+      "programs": [
+        "Diplomski studiji GFOS"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "GFOS, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman",
+          "Arial",
+          "Arial Narrow"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2,
+          "bottom": 2,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Gradevinski i arhitektonski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+      "sources": [
+        {
+          "title": "Smjernice za izradu i oblikovanje zavrsnih i diplomskih radova (GFOS, 2022)",
+          "url": "https://www.gfos.unios.hr/download/smjernice-za-izradu-zavrsnih-i-diplomskih-radova-01-10-2022.docx"
+        }
+      ],
+      "sourceHierarchy": [
+        "Smjernice za izradu i oblikovanje zavrsnih i diplomskih radova (GFOS, 2022)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Vrsta slova",
+        "Velicina slova",
+        "Obostrano poravnanje",
+        "Prored",
+        "Margine"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-grafos-zavrsni--paper-size-verified-2026-07-02",
+      "ruleId": "grafos-zavrsni--paper-size",
+      "profileId": "grafos-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grafos-smjernice-2022",
+      "sourcePage": "t. 3.1 Oblikovanje teksta",
+      "quote": "Tekst rada mora biti oblikovan na sljedeći način: rad se ispisuje jednostrano na papiru formata A4 (210x297 mm), naslovi i podnaslovi trebaju biti 14 ili 16 pt, podebljano (bold), poravnati uz lijevi rub, veličina slova u tekstu (font size) treba biti 12 pt, vrsta slova (font) može biti Times New Roman, Arial ili Arial Narrow, poravnanje teksta treba biti obostrano (justify), prored (line spacing) treba biti 1,5, margine teksta moraju biti: lijeva i gornja 25 mm, desna i donja 20 mm.",
+      "note": "Cross-institution port (Gradevinski i arhitektonski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-grafos-zavrsni--font-verified-2026-07-02",
+      "ruleId": "grafos-zavrsni--font",
+      "profileId": "grafos-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grafos-smjernice-2022",
+      "sourcePage": "t. 3.1",
+      "quote": "Tekst rada mora biti oblikovan na sljedeći način: rad se ispisuje jednostrano na papiru formata A4 (210x297 mm), naslovi i podnaslovi trebaju biti 14 ili 16 pt, podebljano (bold), poravnati uz lijevi rub, veličina slova u tekstu (font size) treba biti 12 pt, vrsta slova (font) može biti Times New Roman, Arial ili Arial Narrow, poravnanje teksta treba biti obostrano (justify), prored (line spacing) treba biti 1,5, margine teksta moraju biti: lijeva i gornja 25 mm, desna i donja 20 mm.",
+      "note": "Cross-institution port (Gradevinski i arhitektonski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-grafos-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "grafos-zavrsni--font-size",
+      "profileId": "grafos-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grafos-smjernice-2022",
+      "sourcePage": "t. 3.1",
+      "quote": "Tekst rada mora biti oblikovan na sljedeći način: rad se ispisuje jednostrano na papiru formata A4 (210x297 mm), naslovi i podnaslovi trebaju biti 14 ili 16 pt, podebljano (bold), poravnati uz lijevi rub, veličina slova u tekstu (font size) treba biti 12 pt, vrsta slova (font) može biti Times New Roman, Arial ili Arial Narrow, poravnanje teksta treba biti obostrano (justify), prored (line spacing) treba biti 1,5, margine teksta moraju biti: lijeva i gornja 25 mm, desna i donja 20 mm.",
+      "note": "Cross-institution port (Gradevinski i arhitektonski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-grafos-zavrsni--justify-verified-2026-07-02",
+      "ruleId": "grafos-zavrsni--justify",
+      "profileId": "grafos-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grafos-smjernice-2022",
+      "sourcePage": "t. 3.1",
+      "quote": "Tekst rada mora biti oblikovan na sljedeći način: rad se ispisuje jednostrano na papiru formata A4 (210x297 mm), naslovi i podnaslovi trebaju biti 14 ili 16 pt, podebljano (bold), poravnati uz lijevi rub, veličina slova u tekstu (font size) treba biti 12 pt, vrsta slova (font) može biti Times New Roman, Arial ili Arial Narrow, poravnanje teksta treba biti obostrano (justify), prored (line spacing) treba biti 1,5, margine teksta moraju biti: lijeva i gornja 25 mm, desna i donja 20 mm.",
+      "note": "Cross-institution port (Gradevinski i arhitektonski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-grafos-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "grafos-zavrsni--line-spacing",
+      "profileId": "grafos-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grafos-smjernice-2022",
+      "sourcePage": "t. 3.1",
+      "quote": "Tekst rada mora biti oblikovan na sljedeći način: rad se ispisuje jednostrano na papiru formata A4 (210x297 mm), naslovi i podnaslovi trebaju biti 14 ili 16 pt, podebljano (bold), poravnati uz lijevi rub, veličina slova u tekstu (font size) treba biti 12 pt, vrsta slova (font) može biti Times New Roman, Arial ili Arial Narrow, poravnanje teksta treba biti obostrano (justify), prored (line spacing) treba biti 1,5, margine teksta moraju biti: lijeva i gornja 25 mm, desna i donja 20 mm.",
+      "note": "Cross-institution port (Gradevinski i arhitektonski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-grafos-zavrsni--margins-verified-2026-07-02",
+      "ruleId": "grafos-zavrsni--margins",
+      "profileId": "grafos-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grafos-smjernice-2022",
+      "sourcePage": "t. 3.1",
+      "quote": "Tekst rada mora biti oblikovan na sljedeći način: rad se ispisuje jednostrano na papiru formata A4 (210x297 mm), naslovi i podnaslovi trebaju biti 14 ili 16 pt, podebljano (bold), poravnati uz lijevi rub, veličina slova u tekstu (font size) treba biti 12 pt, vrsta slova (font) može biti Times New Roman, Arial ili Arial Narrow, poravnanje teksta treba biti obostrano (justify), prored (line spacing) treba biti 1,5, margine teksta moraju biti: lijeva i gornja 25 mm, desna i donja 20 mm.",
+      "note": "Cross-institution port (Gradevinski i arhitektonski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-grafos-diplomski--paper-size-verified-2026-07-02",
+      "ruleId": "grafos-diplomski--paper-size",
+      "profileId": "grafos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grafos-smjernice-2022",
+      "sourcePage": "t. 3.1 Oblikovanje teksta",
+      "quote": "Tekst rada mora biti oblikovan na sljedeći način: rad se ispisuje jednostrano na papiru formata A4 (210x297 mm), naslovi i podnaslovi trebaju biti 14 ili 16 pt, podebljano (bold), poravnati uz lijevi rub, veličina slova u tekstu (font size) treba biti 12 pt, vrsta slova (font) može biti Times New Roman, Arial ili Arial Narrow, poravnanje teksta treba biti obostrano (justify), prored (line spacing) treba biti 1,5, margine teksta moraju biti: lijeva i gornja 25 mm, desna i donja 20 mm.",
+      "note": "Cross-institution port (Gradevinski i arhitektonski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-grafos-diplomski--font-verified-2026-07-02",
+      "ruleId": "grafos-diplomski--font",
+      "profileId": "grafos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grafos-smjernice-2022",
+      "sourcePage": "t. 3.1",
+      "quote": "Tekst rada mora biti oblikovan na sljedeći način: rad se ispisuje jednostrano na papiru formata A4 (210x297 mm), naslovi i podnaslovi trebaju biti 14 ili 16 pt, podebljano (bold), poravnati uz lijevi rub, veličina slova u tekstu (font size) treba biti 12 pt, vrsta slova (font) može biti Times New Roman, Arial ili Arial Narrow, poravnanje teksta treba biti obostrano (justify), prored (line spacing) treba biti 1,5, margine teksta moraju biti: lijeva i gornja 25 mm, desna i donja 20 mm.",
+      "note": "Cross-institution port (Gradevinski i arhitektonski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-grafos-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "grafos-diplomski--font-size",
+      "profileId": "grafos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grafos-smjernice-2022",
+      "sourcePage": "t. 3.1",
+      "quote": "Tekst rada mora biti oblikovan na sljedeći način: rad se ispisuje jednostrano na papiru formata A4 (210x297 mm), naslovi i podnaslovi trebaju biti 14 ili 16 pt, podebljano (bold), poravnati uz lijevi rub, veličina slova u tekstu (font size) treba biti 12 pt, vrsta slova (font) može biti Times New Roman, Arial ili Arial Narrow, poravnanje teksta treba biti obostrano (justify), prored (line spacing) treba biti 1,5, margine teksta moraju biti: lijeva i gornja 25 mm, desna i donja 20 mm.",
+      "note": "Cross-institution port (Gradevinski i arhitektonski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-grafos-diplomski--justify-verified-2026-07-02",
+      "ruleId": "grafos-diplomski--justify",
+      "profileId": "grafos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grafos-smjernice-2022",
+      "sourcePage": "t. 3.1",
+      "quote": "Tekst rada mora biti oblikovan na sljedeći način: rad se ispisuje jednostrano na papiru formata A4 (210x297 mm), naslovi i podnaslovi trebaju biti 14 ili 16 pt, podebljano (bold), poravnati uz lijevi rub, veličina slova u tekstu (font size) treba biti 12 pt, vrsta slova (font) može biti Times New Roman, Arial ili Arial Narrow, poravnanje teksta treba biti obostrano (justify), prored (line spacing) treba biti 1,5, margine teksta moraju biti: lijeva i gornja 25 mm, desna i donja 20 mm.",
+      "note": "Cross-institution port (Gradevinski i arhitektonski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-grafos-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "grafos-diplomski--line-spacing",
+      "profileId": "grafos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grafos-smjernice-2022",
+      "sourcePage": "t. 3.1",
+      "quote": "Tekst rada mora biti oblikovan na sljedeći način: rad se ispisuje jednostrano na papiru formata A4 (210x297 mm), naslovi i podnaslovi trebaju biti 14 ili 16 pt, podebljano (bold), poravnati uz lijevi rub, veličina slova u tekstu (font size) treba biti 12 pt, vrsta slova (font) može biti Times New Roman, Arial ili Arial Narrow, poravnanje teksta treba biti obostrano (justify), prored (line spacing) treba biti 1,5, margine teksta moraju biti: lijeva i gornja 25 mm, desna i donja 20 mm.",
+      "note": "Cross-institution port (Gradevinski i arhitektonski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-grafos-diplomski--margins-verified-2026-07-02",
+      "ruleId": "grafos-diplomski--margins",
+      "profileId": "grafos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grafos-smjernice-2022",
+      "sourcePage": "t. 3.1",
+      "quote": "Tekst rada mora biti oblikovan na sljedeći način: rad se ispisuje jednostrano na papiru formata A4 (210x297 mm), naslovi i podnaslovi trebaju biti 14 ili 16 pt, podebljano (bold), poravnati uz lijevi rub, veličina slova u tekstu (font size) treba biti 12 pt, vrsta slova (font) može biti Times New Roman, Arial ili Arial Narrow, poravnanje teksta treba biti obostrano (justify), prored (line spacing) treba biti 1,5, margine teksta moraju biti: lijeva i gornja 25 mm, desna i donja 20 mm.",
+      "note": "Cross-institution port (Gradevinski i arhitektonski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    }
+  ]
+}

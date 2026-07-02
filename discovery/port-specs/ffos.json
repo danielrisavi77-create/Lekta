@@ -1,0 +1,293 @@
+{
+  "faculty": "ffos",
+  "institution": "unios",
+  "institutionName": "Sveuciliste Josipa Jurja Strossmayera u Osijeku",
+  "unit": {
+    "id": "ffos",
+    "name": "Filozofski fakultet Osijek",
+    "family": "social",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Prijediplomski studiji FFOS (zavrsni rad)",
+    "Diplomski studiji FFOS"
+  ],
+  "sources": [
+    {
+      "id": "ffos-upute-diplomski",
+      "kind": "guidelines",
+      "title": "Upute za izradu diplomskoga rada (FFOS)",
+      "url": "https://www.ffos.unios.hr/download/upute-za-izradu-diplomskoga-rada.docx",
+      "publisher": "Filozofski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/ffos/ffos-upute-diplomski.docx",
+      "snapshotHash": "20939c9037f0aed0bf4db1a6540ffc807973d1cf48b02b3e637e5c071fb8187b",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": ".docx; dio II Izgled diplomskoga rada. Citiranje delegirano -> advisory."
+    },
+    {
+      "id": "ffos-pravilnik-radovi",
+      "kind": "regulation",
+      "title": "Pravilnik o zavrsnim i diplomskim radovima i ispitu (FFOS)",
+      "url": "https://www.ffos.unios.hr/wp-content/uploads/2022/03/Pravilnik-o-zavrsnim-i-diplomskim-radovima-i-ispitu.pdf",
+      "publisher": "Filozofski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/ffos/ffos-pravilnik-radovi.pdf",
+      "snapshotHash": "a90110ee6f7882e7f0cd75b60fb40a85365eb53a5029c2f4a3fe11d34deeffc3",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Tekstualni PDF; sadrzi Upute za zavrsni rad (isti format, opseg 15-20)."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "ffos-zavrsni",
+      "unitId": "ffos",
+      "programs": [
+        "Prijediplomski studiji FFOS (zavrsni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "FFOS, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Filozofski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+      "sources": [
+        {
+          "title": "Pravilnik o zavrsnim i diplomskim radovima i ispitu (FFOS)",
+          "url": "https://www.ffos.unios.hr/wp-content/uploads/2022/03/Pravilnik-o-zavrsnim-i-diplomskim-radovima-i-ispitu.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o zavrsnim i diplomskim radovima i ispitu (FFOS)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Margine",
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Opseg (15-20 str.)"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "ffos-diplomski",
+      "unitId": "ffos",
+      "programs": [
+        "Diplomski studiji FFOS"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "FFOS, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Filozofski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za izradu diplomskoga rada (FFOS)",
+          "url": "https://www.ffos.unios.hr/download/upute-za-izradu-diplomskoga-rada.docx"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu diplomskoga rada (FFOS)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Margine",
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Opseg (30-50 str.)"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-ffos-zavrsni--paper-size-verified-2026-07-02",
+      "ruleId": "ffos-zavrsni--paper-size",
+      "profileId": "ffos-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffos-pravilnik-radovi",
+      "sourcePage": "Upute za zavrsni rad (dio II)",
+      "quote": "Veličina je stranice A4 (210x297 mm). Rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 20 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
+      "note": "Cross-institution port (Filozofski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-ffos-zavrsni--margins-verified-2026-07-02",
+      "ruleId": "ffos-zavrsni--margins",
+      "profileId": "ffos-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffos-pravilnik-radovi",
+      "sourcePage": "Upute za zavrsni rad (dio II)",
+      "quote": "Veličina je stranice A4 (210x297 mm). Rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 20 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
+      "note": "Cross-institution port (Filozofski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-ffos-zavrsni--font-verified-2026-07-02",
+      "ruleId": "ffos-zavrsni--font",
+      "profileId": "ffos-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffos-pravilnik-radovi",
+      "sourcePage": "Upute za zavrsni rad (dio II)",
+      "quote": "Veličina je stranice A4 (210x297 mm). Rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 20 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
+      "note": "Cross-institution port (Filozofski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-ffos-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "ffos-zavrsni--font-size",
+      "profileId": "ffos-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffos-pravilnik-radovi",
+      "sourcePage": "Upute za zavrsni rad (dio II)",
+      "quote": "Veličina je stranice A4 (210x297 mm). Rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 20 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
+      "note": "Cross-institution port (Filozofski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-ffos-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "ffos-zavrsni--line-spacing",
+      "profileId": "ffos-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffos-pravilnik-radovi",
+      "sourcePage": "Upute za zavrsni rad (dio II)",
+      "quote": "Veličina je stranice A4 (210x297 mm). Rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 20 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
+      "note": "Cross-institution port (Filozofski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-ffos-zavrsni--page-count-verified-2026-07-02",
+      "ruleId": "ffos-zavrsni--page-count",
+      "profileId": "ffos-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffos-pravilnik-radovi",
+      "sourcePage": "Upute za zavrsni rad",
+      "quote": "Završni rad treba imati između 15 i 20 stranica ne računajući sažetak, sadržaj, popis literature i priloge.",
+      "note": "Cross-institution port (Filozofski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-ffos-diplomski--paper-size-verified-2026-07-02",
+      "ruleId": "ffos-diplomski--paper-size",
+      "profileId": "ffos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffos-upute-diplomski",
+      "sourcePage": "dio II Izgled diplomskoga rada",
+      "quote": "Veličina je stranice A4 (210x297 mm). Rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 20 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
+      "note": "Cross-institution port (Filozofski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-ffos-diplomski--margins-verified-2026-07-02",
+      "ruleId": "ffos-diplomski--margins",
+      "profileId": "ffos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffos-upute-diplomski",
+      "sourcePage": "dio II Izgled diplomskoga rada",
+      "quote": "Veličina je stranice A4 (210x297 mm). Rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 20 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
+      "note": "Cross-institution port (Filozofski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-ffos-diplomski--font-verified-2026-07-02",
+      "ruleId": "ffos-diplomski--font",
+      "profileId": "ffos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffos-upute-diplomski",
+      "sourcePage": "dio II Izgled diplomskoga rada",
+      "quote": "Veličina je stranice A4 (210x297 mm). Rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 20 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
+      "note": "Cross-institution port (Filozofski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-ffos-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "ffos-diplomski--font-size",
+      "profileId": "ffos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffos-upute-diplomski",
+      "sourcePage": "dio II Izgled diplomskoga rada",
+      "quote": "Veličina je stranice A4 (210x297 mm). Rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 20 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
+      "note": "Cross-institution port (Filozofski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-ffos-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "ffos-diplomski--line-spacing",
+      "profileId": "ffos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffos-upute-diplomski",
+      "sourcePage": "dio II Izgled diplomskoga rada",
+      "quote": "Veličina je stranice A4 (210x297 mm). Rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 20 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
+      "note": "Cross-institution port (Filozofski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-ffos-diplomski--page-count-verified-2026-07-02",
+      "ruleId": "ffos-diplomski--page-count",
+      "profileId": "ffos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffos-upute-diplomski",
+      "sourcePage": "dio II Izgled diplomskoga rada",
+      "quote": "Diplomski rad treba imati između 30 i 50 stranica ne računajući sažetak, sadržaj, popis literature i priloge.",
+      "note": "Cross-institution port (Filozofski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    }
+  ]
+}

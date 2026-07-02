@@ -17175,5 +17175,886 @@
       "Obostrano poravnanje"
     ],
     "advisoryScope": []
+  },
+  {
+    "id": "ferit-zavrsni",
+    "unitId": "ferit",
+    "programs": [
+      "Prijediplomski studiji FERIT (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "FERIT, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet elektrotehnike, racunarstva i informacijskih tehnologija Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za izradu zavrsnog rada (FERIT)",
+        "url": "https://www.ferit.unios.hr/preuzmi/1350/upute_za_izradu_zavr%C5%A1nog_rada_26-01-2010.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu zavrsnog rada (FERIT)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Prored",
+      "Vrsta slova",
+      "Velicina slova",
+      "Margine"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "ferit-diplomski",
+    "unitId": "ferit",
+    "programs": [
+      "Diplomski studiji FERIT"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "FERIT, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet elektrotehnike, racunarstva i informacijskih tehnologija Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za izradu diplomskog rada (FERIT)",
+        "url": "https://www.ferit.unios.hr/dokumenti/dodiplomski/upute_za_izradu_diplomskog_rada.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu diplomskog rada (FERIT)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Prored",
+      "Vrsta slova",
+      "Velicina slova",
+      "Margine"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "grafos-zavrsni",
+    "unitId": "grafos",
+    "programs": [
+      "Prijediplomski/strucni studiji GFOS (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "GFOS, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Arial",
+        "Arial Narrow"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2,
+        "bottom": 2,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Gradevinski i arhitektonski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+    "sources": [
+      {
+        "title": "Smjernice za izradu i oblikovanje zavrsnih i diplomskih radova (GFOS, 2022)",
+        "url": "https://www.gfos.unios.hr/download/smjernice-za-izradu-zavrsnih-i-diplomskih-radova-01-10-2022.docx"
+      }
+    ],
+    "sourceHierarchy": [
+      "Smjernice za izradu i oblikovanje zavrsnih i diplomskih radova (GFOS, 2022)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Velicina slova",
+      "Obostrano poravnanje",
+      "Prored",
+      "Margine"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "grafos-diplomski",
+    "unitId": "grafos",
+    "programs": [
+      "Diplomski studiji GFOS"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "GFOS, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Arial",
+        "Arial Narrow"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2,
+        "bottom": 2,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Gradevinski i arhitektonski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+    "sources": [
+      {
+        "title": "Smjernice za izradu i oblikovanje zavrsnih i diplomskih radova (GFOS, 2022)",
+        "url": "https://www.gfos.unios.hr/download/smjernice-za-izradu-zavrsnih-i-diplomskih-radova-01-10-2022.docx"
+      }
+    ],
+    "sourceHierarchy": [
+      "Smjernice za izradu i oblikovanje zavrsnih i diplomskih radova (GFOS, 2022)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Velicina slova",
+      "Obostrano poravnanje",
+      "Prored",
+      "Margine"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "ptfos-diplomski",
+    "unitId": "ptfos",
+    "programs": [
+      "Diplomski studiji PTFOS"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "PTFOS, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Arial",
+        "Calibri"
+      ],
+      "size": [
+        11,
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2,
+        "bottom": 2.5,
+        "left": 3
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Prehrambeno-tehnoloski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za pisanje, ocjenu i obranu diplomskog rada (PTFOS, 2020)",
+        "url": "https://www.ptfos.unios.hr/images/dokumenti/studenti/Odluke-pravilnici-upute/Upute/ptf_upute_za_diplomske_radove_07-2020.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pisanje, ocjenu i obranu diplomskog rada (PTFOS, 2020)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova (Arial ili Calibri)",
+      "Velicina slova (Arial 11 / Calibri 12)",
+      "Obostrano poravnanje",
+      "Prored"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "efos-zavrsni",
+    "unitId": "efos",
+    "programs": [
+      "Prijediplomski/strucni studiji EFOS (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "EFOS, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Ekonomski fakultet u Osijeku, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za pisanje studentskih radova (EFOS, 2023)",
+        "url": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pisanje studentskih radova (EFOS, 2023)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "efos-diplomski",
+    "unitId": "efos",
+    "programs": [
+      "Diplomski studiji EFOS"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "EFOS, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Ekonomski fakultet u Osijeku, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za pisanje studentskih radova (EFOS, 2023)",
+        "url": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pisanje studentskih radova (EFOS, 2023)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Opseg (30-50 str.)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "pravos-zavrsni",
+    "unitId": "pravos",
+    "programs": [
+      "Prijediplomski studij Pravo/Socijalni rad (zavrsni rad, Osijek)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Pravni fakultet Osijek, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Pravni fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za pisanje i predaju zavrsnog/diplomskog rada (Pravni fakultet Osijek)",
+        "url": "https://www.pravos.unios.hr/pravo-arhiva/download/upute-za-izradu-zavsnih-radova.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pisanje i predaju zavrsnog/diplomskog rada (Pravni fakultet Osijek)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Opseg (najmanje 20 str.)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "pravos-diplomski",
+    "unitId": "pravos",
+    "programs": [
+      "Diplomski/integrirani studij Pravo (Osijek)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Pravni fakultet Osijek, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Pravni fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za pisanje i predaju zavrsnog/diplomskog rada (Pravni fakultet Osijek)",
+        "url": "https://www.pravos.unios.hr/pravo-arhiva/download/upute-za-izradu-zavsnih-radova.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pisanje i predaju zavrsnog/diplomskog rada (Pravni fakultet Osijek)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Opseg (najmanje 20 str.)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "ffos-zavrsni",
+    "unitId": "ffos",
+    "programs": [
+      "Prijediplomski studiji FFOS (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "FFOS, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Filozofski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+    "sources": [
+      {
+        "title": "Pravilnik o zavrsnim i diplomskim radovima i ispitu (FFOS)",
+        "url": "https://www.ffos.unios.hr/wp-content/uploads/2022/03/Pravilnik-o-zavrsnim-i-diplomskim-radovima-i-ispitu.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnim i diplomskim radovima i ispitu (FFOS)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Opseg (15-20 str.)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "ffos-diplomski",
+    "unitId": "ffos",
+    "programs": [
+      "Diplomski studiji FFOS"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "FFOS, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Filozofski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za izradu diplomskoga rada (FFOS)",
+        "url": "https://www.ffos.unios.hr/download/upute-za-izradu-diplomskoga-rada.docx"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu diplomskoga rada (FFOS)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Opseg (30-50 str.)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "fazos-zavrsni",
+    "unitId": "fazos",
+    "programs": [
+      "Prijediplomski studiji FAZOS (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "FAZOS, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3
+      },
+      "recommendedCitation": "apa"
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet agrobiotehnickih znanosti Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za izradu zavrsnog rada (FAZOS, 2024)",
+        "url": "https://www.fazos.unios.hr/storage/Dokumenti/upute/Upute%20za%20izradu%20zavr%C5%A1nog%20rada_4.8.2024.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu zavrsnog rada (FAZOS, 2024)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Obostrano poravnanje",
+      "Vrsta slova",
+      "Prored",
+      "Velicina slova",
+      "Opseg (najmanje 20 str.)",
+      "Stil citiranja (APA, autor-godina)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "fazos-diplomski",
+    "unitId": "fazos",
+    "programs": [
+      "Diplomski studiji FAZOS"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "FAZOS, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3
+      },
+      "recommendedCitation": "apa"
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet agrobiotehnickih znanosti Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za izradu diplomskog rada (FAZOS, 2024)",
+        "url": "https://www.fazos.unios.hr/storage/Dokumenti/upute/Upute%20za%20izradu%20diplomskog%20rada_4.8.2024.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu diplomskog rada (FAZOS, 2024)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Obostrano poravnanje",
+      "Vrsta slova",
+      "Prored",
+      "Velicina slova",
+      "Opseg (najmanje 30 str.)",
+      "Stil citiranja (APA, autor-godina)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "mefos-zavrsni",
+    "unitId": "mefos",
+    "programs": [
+      "Prijediplomski/strucni studiji MEFOS (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "MEFOS, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Medicinski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za izradu i oblikovanje zavrsnog i diplomskog rada (MEFOS, 2025)",
+        "url": "https://www.mefos.unios.hr/images/studenti/zavrsetak-studija/upute-ozzid-2025-nove_.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu i oblikovanje zavrsnog i diplomskog rada (MEFOS, 2025)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Prored",
+      "Vrsta slova",
+      "Velicina slova",
+      "Obostrano poravnanje"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "mefos-diplomski",
+    "unitId": "mefos",
+    "programs": [
+      "Diplomski/integrirani studiji MEFOS"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "MEFOS, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Medicinski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za izradu i oblikovanje zavrsnog i diplomskog rada (MEFOS, 2025)",
+        "url": "https://www.mefos.unios.hr/images/studenti/zavrsetak-studija/upute-ozzid-2025-nove_.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu i oblikovanje zavrsnog i diplomskog rada (MEFOS, 2025)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Prored",
+      "Vrsta slova",
+      "Velicina slova",
+      "Obostrano poravnanje"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "kemos-zavrsni",
+    "unitId": "kemos",
+    "programs": [
+      "Prijediplomski studij Kemija (zavrsni rad, Osijek)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Odjel za kemiju Osijek, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Odjel za kemiju, Sveuciliste u Osijeku, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za pisanje zavrsnog/diplomskog rada (Odjel za kemiju Osijek, 2024)",
+        "url": "https://www.kemija.unios.hr/wp-content/uploads/2025/01/PRILOG-4-UPUTE-ZA-PISANJE-ZAVRSNOG-DIPLOMSKOG-RADA.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pisanje zavrsnog/diplomskog rada (Odjel za kemiju Osijek, 2024)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Prored",
+      "Vrsta slova",
+      "Velicina slova",
+      "Margine"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "kemos-diplomski",
+    "unitId": "kemos",
+    "programs": [
+      "Diplomski studij Kemija (Osijek)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Odjel za kemiju Osijek, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Odjel za kemiju, Sveuciliste u Osijeku, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za pisanje zavrsnog/diplomskog rada (Odjel za kemiju Osijek, 2024)",
+        "url": "https://www.kemija.unios.hr/wp-content/uploads/2025/01/PRILOG-4-UPUTE-ZA-PISANJE-ZAVRSNOG-DIPLOMSKOG-RADA.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pisanje zavrsnog/diplomskog rada (Odjel za kemiju Osijek, 2024)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Prored",
+      "Vrsta slova",
+      "Velicina slova",
+      "Margine"
+    ],
+    "advisoryScope": []
   }
 ]

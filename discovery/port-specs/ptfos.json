@@ -1,0 +1,159 @@
+{
+  "faculty": "ptfos",
+  "institution": "unios",
+  "institutionName": "Sveuciliste Josipa Jurja Strossmayera u Osijeku",
+  "unit": {
+    "id": "ptfos",
+    "name": "Prehrambeno-tehnoloski fakultet Osijek",
+    "family": "stem",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Diplomski studiji PTFOS"
+  ],
+  "sources": [
+    {
+      "id": "ptfos-upute-diplomski-2020",
+      "kind": "guidelines",
+      "title": "Upute za pisanje, ocjenu i obranu diplomskog rada (PTFOS, 2020)",
+      "url": "https://www.ptfos.unios.hr/images/dokumenti/studenti/Odluke-pravilnici-upute/Upute/ptf_upute_za_diplomske_radove_07-2020.pdf",
+      "publisher": "Prehrambeno-tehnoloski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/ptfos/ptfos-upute-diplomski-2020.pdf",
+      "snapshotHash": "7f31be75164ca9ded88b432fabbc6e2fb639a4766875ac7698159cccbceca94d",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Tekstualni PDF; samo diplomski. Font Arial 11 ili Calibri 12. Opseg 30-50 preporucljiv -> advisory."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "ptfos-diplomski",
+      "unitId": "ptfos",
+      "programs": [
+        "Diplomski studiji PTFOS"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "PTFOS, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Arial",
+          "Calibri"
+        ],
+        "size": [
+          11,
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2,
+          "bottom": 2.5,
+          "left": 3
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Prehrambeno-tehnoloski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za pisanje, ocjenu i obranu diplomskog rada (PTFOS, 2020)",
+          "url": "https://www.ptfos.unios.hr/images/dokumenti/studenti/Odluke-pravilnici-upute/Upute/ptf_upute_za_diplomske_radove_07-2020.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za pisanje, ocjenu i obranu diplomskog rada (PTFOS, 2020)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Margine",
+        "Vrsta slova (Arial ili Calibri)",
+        "Velicina slova (Arial 11 / Calibri 12)",
+        "Obostrano poravnanje",
+        "Prored"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-ptfos-diplomski--paper-size-verified-2026-07-02",
+      "ruleId": "ptfos-diplomski--paper-size",
+      "profileId": "ptfos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ptfos-upute-diplomski-2020",
+      "sourcePage": "pogl. Izgled rada",
+      "quote": "Rad treba pisati na papiru formata A4, s marginama 3 cm lijevo, 2 cm desno, 2,5 cm gore i dolje) i zaglavljem i podnožjem 1,5 cm od ruba stranice.",
+      "note": "Cross-institution port (Prehrambeno-tehnoloski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-ptfos-diplomski--margins-verified-2026-07-02",
+      "ruleId": "ptfos-diplomski--margins",
+      "profileId": "ptfos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ptfos-upute-diplomski-2020",
+      "sourcePage": "pogl. Izgled rada",
+      "quote": "Rad treba pisati na papiru formata A4, s marginama 3 cm lijevo, 2 cm desno, 2,5 cm gore i dolje) i zaglavljem i podnožjem 1,5 cm od ruba stranice.",
+      "note": "Cross-institution port (Prehrambeno-tehnoloski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-ptfos-diplomski--font-verified-2026-07-02",
+      "ruleId": "ptfos-diplomski--font",
+      "profileId": "ptfos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ptfos-upute-diplomski-2020",
+      "sourcePage": "pogl. Oblikovanje teksta",
+      "quote": "Za unos teksta koristi se font Arial, veličine 11 pt ili Calibri, veličine 12 pt, s obostranim poravnanjem, proreda 1,5 i razmakom između odlomaka 6 pt.",
+      "note": "Cross-institution port (Prehrambeno-tehnoloski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-ptfos-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "ptfos-diplomski--font-size",
+      "profileId": "ptfos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ptfos-upute-diplomski-2020",
+      "sourcePage": "pogl. Oblikovanje teksta",
+      "quote": "Za unos teksta koristi se font Arial, veličine 11 pt ili Calibri, veličine 12 pt, s obostranim poravnanjem, proreda 1,5 i razmakom između odlomaka 6 pt.",
+      "note": "Cross-institution port (Prehrambeno-tehnoloski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-ptfos-diplomski--justify-verified-2026-07-02",
+      "ruleId": "ptfos-diplomski--justify",
+      "profileId": "ptfos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ptfos-upute-diplomski-2020",
+      "sourcePage": "pogl. Oblikovanje teksta",
+      "quote": "Za unos teksta koristi se font Arial, veličine 11 pt ili Calibri, veličine 12 pt, s obostranim poravnanjem, proreda 1,5 i razmakom između odlomaka 6 pt.",
+      "note": "Cross-institution port (Prehrambeno-tehnoloski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-ptfos-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "ptfos-diplomski--line-spacing",
+      "profileId": "ptfos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ptfos-upute-diplomski-2020",
+      "sourcePage": "pogl. Oblikovanje teksta",
+      "quote": "Za unos teksta koristi se font Arial, veličine 11 pt ili Calibri, veličine 12 pt, s obostranim poravnanjem, proreda 1,5 i razmakom između odlomaka 6 pt.",
+      "note": "Cross-institution port (Prehrambeno-tehnoloski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    }
+  ]
+}

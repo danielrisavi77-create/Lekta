@@ -1,0 +1,280 @@
+{
+  "faculty": "pravos",
+  "institution": "unios",
+  "institutionName": "Sveuciliste Josipa Jurja Strossmayera u Osijeku",
+  "unit": {
+    "id": "pravos",
+    "name": "Pravni fakultet Osijek",
+    "family": "social",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Prijediplomski studij Pravo/Socijalni rad (zavrsni rad, Osijek)",
+    "Diplomski/integrirani studij Pravo (Osijek)"
+  ],
+  "sources": [
+    {
+      "id": "pravos-upute-radovi",
+      "kind": "guidelines",
+      "title": "Upute za pisanje i predaju zavrsnog/diplomskog rada (Pravni fakultet Osijek)",
+      "url": "https://www.pravos.unios.hr/pravo-arhiva/download/upute-za-izradu-zavsnih-radova.pdf",
+      "publisher": "Pravni fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/pravos/pravos-upute-radovi.pdf",
+      "snapshotHash": "dd87604c56a2b15c0565167bd0213b7d383d44f6ebda3afe431915b514029f89",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Tekstualni PDF; dio II Tekst rada. Citiranje delegirano na stil u struci/mentor -> advisory."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "pravos-zavrsni",
+      "unitId": "pravos",
+      "programs": [
+        "Prijediplomski studij Pravo/Socijalni rad (zavrsni rad, Osijek)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Pravni fakultet Osijek, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Pravni fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za pisanje i predaju zavrsnog/diplomskog rada (Pravni fakultet Osijek)",
+          "url": "https://www.pravos.unios.hr/pravo-arhiva/download/upute-za-izradu-zavsnih-radova.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za pisanje i predaju zavrsnog/diplomskog rada (Pravni fakultet Osijek)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Margine",
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Opseg (najmanje 20 str.)"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "pravos-diplomski",
+      "unitId": "pravos",
+      "programs": [
+        "Diplomski/integrirani studij Pravo (Osijek)"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Pravni fakultet Osijek, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Pravni fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za pisanje i predaju zavrsnog/diplomskog rada (Pravni fakultet Osijek)",
+          "url": "https://www.pravos.unios.hr/pravo-arhiva/download/upute-za-izradu-zavsnih-radova.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za pisanje i predaju zavrsnog/diplomskog rada (Pravni fakultet Osijek)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Margine",
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Opseg (najmanje 20 str.)"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-pravos-zavrsni--paper-size-verified-2026-07-02",
+      "ruleId": "pravos-zavrsni--paper-size",
+      "profileId": "pravos-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pravos-upute-radovi",
+      "sourcePage": "dio II Tekst rada",
+      "quote": "Veličina stranice A4 (210x297 mm). Rubnice (margine) trebaju biti sljedeće veličine: lijeva 25 mm, desna 20 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
+      "note": "Cross-institution port (Pravni fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-pravos-zavrsni--margins-verified-2026-07-02",
+      "ruleId": "pravos-zavrsni--margins",
+      "profileId": "pravos-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pravos-upute-radovi",
+      "sourcePage": "dio II Tekst rada",
+      "quote": "Veličina stranice A4 (210x297 mm). Rubnice (margine) trebaju biti sljedeće veličine: lijeva 25 mm, desna 20 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
+      "note": "Cross-institution port (Pravni fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-pravos-zavrsni--font-verified-2026-07-02",
+      "ruleId": "pravos-zavrsni--font",
+      "profileId": "pravos-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pravos-upute-radovi",
+      "sourcePage": "dio II Tekst rada",
+      "quote": "Veličina stranice A4 (210x297 mm). Rubnice (margine) trebaju biti sljedeće veličine: lijeva 25 mm, desna 20 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
+      "note": "Cross-institution port (Pravni fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-pravos-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "pravos-zavrsni--font-size",
+      "profileId": "pravos-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pravos-upute-radovi",
+      "sourcePage": "dio II Tekst rada",
+      "quote": "Veličina stranice A4 (210x297 mm). Rubnice (margine) trebaju biti sljedeće veličine: lijeva 25 mm, desna 20 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
+      "note": "Cross-institution port (Pravni fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-pravos-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "pravos-zavrsni--line-spacing",
+      "profileId": "pravos-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pravos-upute-radovi",
+      "sourcePage": "dio II Tekst rada",
+      "quote": "Veličina stranice A4 (210x297 mm). Rubnice (margine) trebaju biti sljedeće veličine: lijeva 25 mm, desna 20 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
+      "note": "Cross-institution port (Pravni fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-pravos-zavrsni--page-count-verified-2026-07-02",
+      "ruleId": "pravos-zavrsni--page-count",
+      "profileId": "pravos-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pravos-upute-radovi",
+      "sourcePage": "dio II Tekst rada",
+      "quote": "Diplomski/završni rad treba imati najmanje 20 stranica ne računajući naslovnu stranicu, sažetak, sadržaj, popis literature i priloge.",
+      "note": "Cross-institution port (Pravni fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-pravos-diplomski--paper-size-verified-2026-07-02",
+      "ruleId": "pravos-diplomski--paper-size",
+      "profileId": "pravos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pravos-upute-radovi",
+      "sourcePage": "dio II Tekst rada",
+      "quote": "Veličina stranice A4 (210x297 mm). Rubnice (margine) trebaju biti sljedeće veličine: lijeva 25 mm, desna 20 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
+      "note": "Cross-institution port (Pravni fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-pravos-diplomski--margins-verified-2026-07-02",
+      "ruleId": "pravos-diplomski--margins",
+      "profileId": "pravos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pravos-upute-radovi",
+      "sourcePage": "dio II Tekst rada",
+      "quote": "Veličina stranice A4 (210x297 mm). Rubnice (margine) trebaju biti sljedeće veličine: lijeva 25 mm, desna 20 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
+      "note": "Cross-institution port (Pravni fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-pravos-diplomski--font-verified-2026-07-02",
+      "ruleId": "pravos-diplomski--font",
+      "profileId": "pravos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pravos-upute-radovi",
+      "sourcePage": "dio II Tekst rada",
+      "quote": "Veličina stranice A4 (210x297 mm). Rubnice (margine) trebaju biti sljedeće veličine: lijeva 25 mm, desna 20 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
+      "note": "Cross-institution port (Pravni fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-pravos-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "pravos-diplomski--font-size",
+      "profileId": "pravos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pravos-upute-radovi",
+      "sourcePage": "dio II Tekst rada",
+      "quote": "Veličina stranice A4 (210x297 mm). Rubnice (margine) trebaju biti sljedeće veličine: lijeva 25 mm, desna 20 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
+      "note": "Cross-institution port (Pravni fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-pravos-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "pravos-diplomski--line-spacing",
+      "profileId": "pravos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pravos-upute-radovi",
+      "sourcePage": "dio II Tekst rada",
+      "quote": "Veličina stranice A4 (210x297 mm). Rubnice (margine) trebaju biti sljedeće veličine: lijeva 25 mm, desna 20 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
+      "note": "Cross-institution port (Pravni fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    },
+    {
+      "id": "led-pravos-diplomski--page-count-verified-2026-07-02",
+      "ruleId": "pravos-diplomski--page-count",
+      "profileId": "pravos-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pravos-upute-radovi",
+      "sourcePage": "dio II Tekst rada",
+      "quote": "Diplomski/završni rad treba imati najmanje 20 stranica ne računajući naslovnu stranicu, sažetak, sadržaj, popis literature i priloge.",
+      "note": "Cross-institution port (Pravni fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku): direktno citanje izvora."
+    }
+  ]
+}
