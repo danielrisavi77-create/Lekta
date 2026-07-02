@@ -11,6 +11,10 @@ serverska odluka; klijent nikad nije izvor istine.
 - `functions/generate-report/` - Edge Function za placeni izvjestaj (tijek iz sekcije 5).
 - `functions/webhook-mor/` - webhook Merchant of Record providera (idempotentno kreira
   entitlement; refund postavlja status).
+- `functions/create-checkout/` - kreira Lemon Squeezy checkout iz `productId` (MONETIZATION_PLAN.md
+  sekcija 5); cijena je serverska (cita `products`), auth JWT obavezan. Core: `src/report/checkout.ts`.
+- `migrations/0002_products_catalog.sql` - katalog `products` (jedina istina o cijenama),
+  `pricing_changelog`, delte na `entitlements`/`document_slots`, RLS (MONETIZATION_PLAN.md).
 
 ## Odnos prema testiranom jezgru
 
@@ -39,6 +43,12 @@ supabase functions deploy generate-report
 supabase functions deploy webhook-mor
 ```
 
-Env varijable: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `DAILY_CAP`,
-`MOR_WEBHOOK_SECRET`. Webhook potpis (`verifySignature`) zamijeni stvarnom HMAC provjerom
-providera prije produkcije.
+Env varijable: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_ANON_KEY`, `DAILY_CAP`,
+`MOR_WEBHOOK_SECRET`, te za create-checkout `LEMONSQUEEZY_API_KEY`, `LEMONSQUEEZY_STORE_ID`,
+`CHECKOUT_REDIRECT_URL`. Webhook potpis (`verifySignature`) zamijeni stvarnom HMAC provjerom
+providera prije produkcije. Nakon `db push` popuni `products.mor_product_id` stvarnim Lemon
+Squeezy variant id-jevima (checkout vraca 409 `product_not_mapped` dok je `null`).
+
+Klijentski paywall cita katalog iz `products` preko PostgREST-a (`src/catalog/products-catalog.ts`,
+`fetchRetailCatalog`) pa promjena `price_eur` u bazi mijenja prikaz bez deploya. Za to klijentu
+trebaju `supabaseUrl` i anon kljuc u konfiguraciji (jos nije spojeno na DOM paywall, vidi nize).
