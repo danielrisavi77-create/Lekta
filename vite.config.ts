@@ -41,6 +41,7 @@ export default defineConfig({
         citat: resolve(__dirname, 'citat.html'),
         kartice: resolve(__dirname, 'kartice.html'),
         naslovnica: resolve(__dirname, 'naslovnica.html'),
+        literatura: resolve(__dirname, 'literatura.html'),
       },
     },
   },
