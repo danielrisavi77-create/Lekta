@@ -1,0 +1,377 @@
+{
+  "faculty": "grad",
+  "unit": null,
+  "catalogPrograms": [
+    "Diplomski studiji Građevinskog fakulteta",
+    "Prijediplomski studiji Građevinskog fakulteta (zavrsni rad)"
+  ],
+  "sources": [
+    {
+      "id": "grad-predlozak-2024",
+      "kind": "guidelines",
+      "title": "Predlozak za formalno oblikovanje zavrsnog/diplomskog rada (Gradevinski fakultet, 2024)",
+      "url": "https://www.grad.unizg.hr/_download/repository/Predlo%C5%BEak%20za%20formalno%20oblikovanje%20zavr%C5%A1nog%20-%20diplomskog%20rada%20na%20Sveu%C4%8Dili%C5%A1tu%20u%20Zagrebu%2C%20Gra%C4%91evinskom%20fakultetu_2024_05_22%5B3%5D.docx",
+      "publisher": "Gradevinski fakultet Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/grad/grad-predlozak-2024.docx",
+      "snapshotHash": "6a9db283e1b68d00783f503268532ed98a05ec9ccae4fe9fe11fc3aec822127c",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Sluzbeni faculty-wide DOCX predlozak (grad.unizg.hr, 22.5.2024) koji vrijedi jednako za zavrsni i diplomski rad. Tekst ekstrahiran iz word/document.xml (dijakritika ispravna, verbatim citati provjereni grepom nad grad-predlozak-2024.txt). Poglavlje 'Tehnicke upute / Upute za oblikovanje izgleda rada' daje imperativne postavke: font Titillium, velicina 12 pt, prored 1,15, numeracija stranica te 'Rad mora sadrzavati' obvezne cjeline -> scored. Margine 2,5 cm i A4 navedeni kao bare specifikacija bez imperativa (uz drugacije margine 3,0 cm za naslovnice i korice) -> advisory. Citatni stil je odabrani (student bira), primjer numericki [1] -> advisory. Justify se ne spominje."
+    },
+    {
+      "id": "grad-upute-radovi-2024",
+      "kind": "guidelines",
+      "title": "Upute za pisanje i obranu studentskih radova na GF (Gradevinski fakultet, 2024)",
+      "url": "https://www.grad.unizg.hr/_download/repository/Upute%20za%20pisanje%20i%20obranu%20radova%20na%20GF_26.3.2024%5B3%5D.pdf",
+      "publisher": "Gradevinski fakultet Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/grad/grad-upute-radovi-2024.pdf",
+      "snapshotHash": "08e598eab25a83148241d90a56b5a44969c1bcca57e8cb2154db3b5fba0e619f",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Sluzbene Upute za pisanje i obranu studentskih radova (Ceric, Ivic; GF, 2024). PDF je skeniran (image-only, pdftotext vraca prazan/smece tekst, OCR nije dostupan) pa ne daje nijedan verbatim citat. Snapshot cuvan radi sljedivosti; sva scored pravila dolaze iz strojno-citljivog Predloska (grad-predlozak-2024), koji te Upute i referencira kao izvor [1]."
+    },
+    {
+      "id": "grad-pravilnik-zavrsni-diplomski",
+      "kind": "regulation",
+      "title": "Pravilnik o zavrsnom ispitu i diplomskom radu (Gradevinski fakultet, procisceni tekst)",
+      "url": "https://www.grad.unizg.hr/_download/repository/Pravilnik_o_zavrsnom_ispitu_i_diplomskom_radu-Procisceni_tekst%5B3%5D.pdf",
+      "publisher": "Gradevinski fakultet Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/grad/grad-pravilnik-zavrsni-diplomski.pdf",
+      "snapshotHash": "5ac5d6cf964493df59d4942cd9e6860b8cae76ee56ddf09b32f138a28db5e8f6",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Faculty-wide obvezujuci pravilnik (procisceni tekst). PDF je skeniran (image-only, nema ekstraktabilnog teksta, OCR nije dostupan) i ureduje proceduru zavrsnog ispita i diplomskog rada, a tehnicko oblikovanje delegira na Predlozak. Snapshot cuvan radi sljedivosti; ne daje nijedno scored pravilo."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "grad-diplomski",
+      "unitId": "grad",
+      "programs": ["Diplomski studiji Građevinskog fakulteta"],
+      "workTypes": ["graduate"],
+      "status": "partial",
+      "profileLabel": "Gradevinski fakultet, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2024-05-22",
+      "rules": {
+        "font": ["Titillium"],
+        "size": [12],
+        "spacing": 1.15,
+        "margins": { "top": 2.5, "right": 2.5, "bottom": 2.5, "left": 2.5 },
+        "requireToc": true,
+        "requirePageNumbers": true,
+        "requireA4": true,
+        "recommendedCitation": "ieee"
+      },
+      "facts": [
+        "Font Titillium je obavezan (obavezna potpora svih hrvatskih znakova), velicina 12 pt, prored 1,15 (imperativ: 'koristite font Titillium 12 pt, s proredom 1,15') -> scored.",
+        "Numeracija stranica je obvezna: naslovne stranice se ne numeriraju, zatim rimski pa arapski brojevi, broj stranice desno na dnu -> scored.",
+        "Sadrzaj i obvezne cjeline rada su imperativ ('Rad mora sadrzavati') -> scored.",
+        "Margine 2,5 cm i format A4 navedeni su kao bare specifikacija bez imperativa (uz drugacije margine 3,0 cm za naslovnice i korice) -> advisory.",
+        "Citatni stil bira student ('odabrani stil'), primjer je numericki [1] (IEEE-slicno) -> advisory.",
+        "Obostrano poravnanje (justify) se u izvoru ne spominje pa nije ukljuceno."
+      ],
+      "note": "Iz sluzbenog Predloska za formalno oblikovanje zavrsnog/diplomskog rada (GF, 2024), faculty-wide DOCX. Scored: font, velicina, prored, numeracija stranica, sadrzaj i obvezne cjeline. Advisory: margine, A4 i citatni stil. Upute (2024) i Pravilnik su skenirani PDF-ovi bez ekstraktabilnog teksta pa ne daju scored pravila; drze se radi sljedivosti. Doktorski nije pokriven nijednim dohvacenim izvorom.",
+      "sources": [
+        {
+          "title": "Predlozak za formalno oblikovanje zavrsnog/diplomskog rada (GF, 2024)",
+          "url": "https://www.grad.unizg.hr/_download/repository/Predlo%C5%BEak%20za%20formalno%20oblikovanje%20zavr%C5%A1nog%20-%20diplomskog%20rada%20na%20Sveu%C4%8Dili%C5%A1tu%20u%20Zagrebu%2C%20Gra%C4%91evinskom%20fakultetu_2024_05_22%5B3%5D.docx"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o zavrsnom ispitu i diplomskom radu (Gradevinski fakultet, procisceni tekst)",
+        "Predlozak za formalno oblikovanje zavrsnog/diplomskog rada (Gradevinski fakultet, 2024)",
+        "Upute za pisanje i obranu studentskih radova na GF (Gradevinski fakultet, 2024)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "font",
+        "velicina slova",
+        "prored",
+        "numeracija stranica",
+        "sadrzaj (obvezna cjelina)",
+        "obvezne cjeline rada"
+      ],
+      "advisoryScope": [
+        "margine",
+        "format papira",
+        "stil citiranja"
+      ]
+    },
+    {
+      "id": "grad-zavrsni",
+      "unitId": "grad",
+      "programs": ["Prijediplomski studiji Građevinskog fakulteta (zavrsni rad)"],
+      "workTypes": ["final"],
+      "status": "partial",
+      "profileLabel": "Gradevinski fakultet, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2024-05-22",
+      "rules": {
+        "font": ["Titillium"],
+        "size": [12],
+        "spacing": 1.15,
+        "margins": { "top": 2.5, "right": 2.5, "bottom": 2.5, "left": 2.5 },
+        "requireToc": true,
+        "requirePageNumbers": true,
+        "requireA4": true,
+        "recommendedCitation": "ieee"
+      },
+      "facts": [
+        "Isti faculty-wide Predlozak izrijekom vrijedi za zavrsni i diplomski rad.",
+        "Font Titillium je obavezan, velicina 12 pt, prored 1,15 (imperativ 'koristite') -> scored.",
+        "Numeracija stranica je obvezna (naslovne se ne numeriraju, zatim rimski pa arapski) -> scored.",
+        "Sadrzaj i obvezne cjeline rada su imperativ ('Rad mora sadrzavati') -> scored.",
+        "Margine 2,5 cm i A4 navedeni kao bare specifikacija -> advisory; citatni stil bira student -> advisory.",
+        "Obostrano poravnanje (justify) se u izvoru ne spominje."
+      ],
+      "note": "Iste sluzbene postavke iz Predloska (GF, 2024) vrijede za zavrsni rad kao i za diplomski. Scored: font, velicina, prored, numeracija stranica, sadrzaj i obvezne cjeline. Advisory: margine, A4, citatni stil.",
+      "sources": [
+        {
+          "title": "Predlozak za formalno oblikovanje zavrsnog/diplomskog rada (GF, 2024)",
+          "url": "https://www.grad.unizg.hr/_download/repository/Predlo%C5%BEak%20za%20formalno%20oblikovanje%20zavr%C5%A1nog%20-%20diplomskog%20rada%20na%20Sveu%C4%8Dili%C5%A1tu%20u%20Zagrebu%2C%20Gra%C4%91evinskom%20fakultetu_2024_05_22%5B3%5D.docx"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o zavrsnom ispitu i diplomskom radu (Gradevinski fakultet, procisceni tekst)",
+        "Predlozak za formalno oblikovanje zavrsnog/diplomskog rada (Gradevinski fakultet, 2024)",
+        "Upute za pisanje i obranu studentskih radova na GF (Gradevinski fakultet, 2024)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "font",
+        "velicina slova",
+        "prored",
+        "numeracija stranica",
+        "sadrzaj (obvezna cjelina)",
+        "obvezne cjeline rada"
+      ],
+      "advisoryScope": [
+        "margine",
+        "format papira",
+        "stil citiranja"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-grad-diplomski--font-verified-2026-07-02",
+      "ruleId": "grad-diplomski--font",
+      "profileId": "grad-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grad-predlozak-2024",
+      "sourcePage": "poglavlje 4.1. Upute za oblikovanje izgleda rada, Postavke stranice",
+      "quote": "Font (tip pisma): obavezna potpora svih hrvatskih znakova – Titillium",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-grad-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "grad-diplomski--font-size",
+      "profileId": "grad-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grad-predlozak-2024",
+      "sourcePage": "poglavlje 4.1. Upute za oblikovanje izgleda rada",
+      "quote": "U pisanju teksta koristite font Titillium 12 pt, s proredom 1,15 te razmakom 0 pt prije i razmakom 6 pt poslije odlomka.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-grad-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "grad-diplomski--line-spacing",
+      "profileId": "grad-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grad-predlozak-2024",
+      "sourcePage": "poglavlje 4.1. Upute za oblikovanje izgleda rada",
+      "quote": "U pisanju teksta koristite font Titillium 12 pt, s proredom 1,15 te razmakom 0 pt prije i razmakom 6 pt poslije odlomka.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-grad-diplomski--page-numbers-verified-2026-07-02",
+      "ruleId": "grad-diplomski--page-numbers",
+      "profileId": "grad-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grad-predlozak-2024",
+      "sourcePage": "poglavlje 4.1. Upute za oblikovanje izgleda rada, Postavke stranice",
+      "quote": "Broj stranice treba pozicionirati desno na dnu stranice prema predlošku, font Titillium 9.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-grad-diplomski--toc-verified-2026-07-02",
+      "ruleId": "grad-diplomski--toc",
+      "profileId": "grad-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grad-predlozak-2024",
+      "sourcePage": "poglavlje Rad mora sadrzavati",
+      "quote": "Rad mora sadržavati:",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-grad-diplomski--required-sections-verified-2026-07-02",
+      "ruleId": "grad-diplomski--required-sections",
+      "profileId": "grad-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grad-predlozak-2024",
+      "sourcePage": "poglavlje Rad mora sadrzavati",
+      "quote": "Rad mora sadržavati: Naslovnicu. ... Sažetak na hrvatskom i engleskom jeziku ... Ključne riječi ... Sadržaj ... Tekst rada (počevši s Uvodom) ... Zaključak ... Popis literature",
+      "note": "Port pilot workflow. Imperativ 'mora sadrzavati'."
+    },
+    {
+      "id": "led-grad-diplomski--margins-advisory-2026-07-02",
+      "ruleId": "grad-diplomski--margins",
+      "profileId": "grad-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grad-predlozak-2024",
+      "sourcePage": "poglavlje 4.1. Upute za oblikovanje izgleda rada, Postavke stranice",
+      "quote": "Lijeva i desna margina: 2,5 cm",
+      "note": "Port pilot workflow. Bare specifikacija bez imperativa i drugacije margine za naslovnice/korice -> advisory."
+    },
+    {
+      "id": "led-grad-diplomski--paper-size-advisory-2026-07-02",
+      "ruleId": "grad-diplomski--paper-size",
+      "profileId": "grad-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grad-predlozak-2024",
+      "sourcePage": "poglavlje 4.1. Upute za oblikovanje izgleda rada, Postavke stranice",
+      "quote": "Veličina i oblik papira je A4",
+      "note": "Port pilot workflow. Deklarativno, bez imperativa -> advisory."
+    },
+    {
+      "id": "led-grad-diplomski--citation-style-advisory-2026-07-02",
+      "ruleId": "grad-diplomski--citation-style",
+      "profileId": "grad-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grad-predlozak-2024",
+      "sourcePage": "poglavlje Popis literature / Tehnicke upute",
+      "quote": "Popis literature treba izraditi u skladu s odabranim stilom navođenja prema [1].",
+      "note": "Port pilot workflow. Student bira stil, primjer numericki [1] -> advisory."
+    },
+    {
+      "id": "led-grad-zavrsni--font-verified-2026-07-02",
+      "ruleId": "grad-zavrsni--font",
+      "profileId": "grad-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grad-predlozak-2024",
+      "sourcePage": "poglavlje 4.1. Upute za oblikovanje izgleda rada, Postavke stranice",
+      "quote": "Font (tip pisma): obavezna potpora svih hrvatskih znakova – Titillium",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-grad-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "grad-zavrsni--font-size",
+      "profileId": "grad-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grad-predlozak-2024",
+      "sourcePage": "poglavlje 4.1. Upute za oblikovanje izgleda rada",
+      "quote": "U pisanju teksta koristite font Titillium 12 pt, s proredom 1,15 te razmakom 0 pt prije i razmakom 6 pt poslije odlomka.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-grad-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "grad-zavrsni--line-spacing",
+      "profileId": "grad-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grad-predlozak-2024",
+      "sourcePage": "poglavlje 4.1. Upute za oblikovanje izgleda rada",
+      "quote": "U pisanju teksta koristite font Titillium 12 pt, s proredom 1,15 te razmakom 0 pt prije i razmakom 6 pt poslije odlomka.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-grad-zavrsni--page-numbers-verified-2026-07-02",
+      "ruleId": "grad-zavrsni--page-numbers",
+      "profileId": "grad-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grad-predlozak-2024",
+      "sourcePage": "poglavlje 4.1. Upute za oblikovanje izgleda rada, Postavke stranice",
+      "quote": "Broj stranice treba pozicionirati desno na dnu stranice prema predlošku, font Titillium 9.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-grad-zavrsni--toc-verified-2026-07-02",
+      "ruleId": "grad-zavrsni--toc",
+      "profileId": "grad-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grad-predlozak-2024",
+      "sourcePage": "poglavlje Rad mora sadrzavati",
+      "quote": "Rad mora sadržavati:",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-grad-zavrsni--required-sections-verified-2026-07-02",
+      "ruleId": "grad-zavrsni--required-sections",
+      "profileId": "grad-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grad-predlozak-2024",
+      "sourcePage": "poglavlje Rad mora sadrzavati",
+      "quote": "Rad mora sadržavati: Naslovnicu. ... Sažetak na hrvatskom i engleskom jeziku ... Ključne riječi ... Sadržaj ... Tekst rada (počevši s Uvodom) ... Zaključak ... Popis literature",
+      "note": "Port pilot workflow. Imperativ 'mora sadrzavati'."
+    },
+    {
+      "id": "led-grad-zavrsni--margins-advisory-2026-07-02",
+      "ruleId": "grad-zavrsni--margins",
+      "profileId": "grad-zavrsni",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grad-predlozak-2024",
+      "sourcePage": "poglavlje 4.1. Upute za oblikovanje izgleda rada, Postavke stranice",
+      "quote": "Lijeva i desna margina: 2,5 cm",
+      "note": "Port pilot workflow. Bare specifikacija -> advisory."
+    },
+    {
+      "id": "led-grad-zavrsni--paper-size-advisory-2026-07-02",
+      "ruleId": "grad-zavrsni--paper-size",
+      "profileId": "grad-zavrsni",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grad-predlozak-2024",
+      "sourcePage": "poglavlje 4.1. Upute za oblikovanje izgleda rada, Postavke stranice",
+      "quote": "Veličina i oblik papira je A4",
+      "note": "Port pilot workflow. Deklarativno -> advisory."
+    },
+    {
+      "id": "led-grad-zavrsni--citation-style-advisory-2026-07-02",
+      "ruleId": "grad-zavrsni--citation-style",
+      "profileId": "grad-zavrsni",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grad-predlozak-2024",
+      "sourcePage": "poglavlje Popis literature / Tehnicke upute",
+      "quote": "Popis literature treba izraditi u skladu s odabranim stilom navođenja prema [1].",
+      "note": "Port pilot workflow. Student bira stil -> advisory."
+    }
+  ]
+}

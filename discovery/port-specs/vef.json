@@ -1,0 +1,200 @@
+{
+  "faculty": "vef",
+  "unit": null,
+  "catalogPrograms": [
+    "Diplomski studiji Veterinarskog fakulteta Sveucilista u Zagrebu"
+  ],
+  "sources": [
+    {
+      "id": "vef-naputak-diplomski-2024",
+      "kind": "guidelines",
+      "title": "Naputak za prijavu, pisanje i oblikovanje diplomskog rada (Veterinarski fakultet, 2024)",
+      "url": "https://www.vef.unizg.hr/wp-content/uploads/2024/01/N-A-P-U-T-A-K-za-prijavu-pisanje-i-oblikovanje-diplomskig-rada-odobren-Fakultetsko-vijece-24.1.2024.pdf",
+      "publisher": "Povjerenstvo za integrirani preddiplomski i diplomski studij, Veterinarski fakultet Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/vef/vef-naputak-diplomski-2024.pdf",
+      "snapshotHash": "de34916f3ddac1bb5b6140b957a8ad9ca27662650d6498c0c1e2bfbf3a8f4ece",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Faculty-wide obvezujuci dokument, odobren na Fakultetskom vijecu 24.1.2024. (azuriran 17.12.2023.), za integrirani prijediplomski i diplomski studij Veterinarska medicina. Tehnicke upute (odjeljak 4) formulirane su imperativno ('treba biti pisan', 'potrebno koristiti font') pa daju scored pravila: font Times New Roman 12, prored 1,5, A4, numeracija stranica i obvezan Sadrzaj. Opseg 'u pravilu minimalno 25 stranica' -> advisory; margine izvor daje samo za lijevo i desno (2,5 cm), gornja i donja nisu navedene pa margine ostaju advisory (ne nagadamo). PDF ima izoblicenu dijakritiku u ekstraktu (npr. 'OPE' = 'OPCE'); citati su verbatim single-line podstringovi provjereni grepom nad vef-naputak-diplomski-2024.txt."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "vef-diplomski",
+      "unitId": "vef",
+      "programs": ["Diplomski studiji Veterinarskog fakulteta Sveucilista u Zagrebu"],
+      "workTypes": ["graduate"],
+      "status": "partial",
+      "profileLabel": "Veterinarski fakultet, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2024-01-24",
+      "rules": {
+        "font": ["Times New Roman"],
+        "size": [12],
+        "spacing": 1.5,
+        "requireToc": true,
+        "requirePageNumbers": true,
+        "requireA4": true,
+        "recommendedCitation": "harvard"
+      },
+      "facts": [
+        "Font Times New Roman velicine 12, prored 1,5 i format A4 propisani su imperativno u odjeljku 4 (Tehnicke upute) -> boduje se.",
+        "Sve stranice teksta (pocevsi od Uvoda) trebaju biti numerirane u donjem desnom kutu -> boduje se.",
+        "Sadrzaj je obvezna cjelina rada -> boduje se.",
+        "Margine: izvor navodi 2,5 cm samo za lijevo i desno, a gornju i donju ne spominje, pa margine ostaju advisory (vrijednosti se ne nagadaju).",
+        "Opseg 'u pravilu minimalno 25 stranica' formuliran je kao preporuka -> advisory.",
+        "Citiranje je autor-godina (velikim slovima prezime, godina s tockom za HR radove) prema Uputstvu za pisanje clanka u Veterinarskom arhivu -> mapirano na harvard, advisory.",
+        "Sazetak i Summary sadrzavaju 150-300 rijeci i 3-5 kljucnih rijeci (odnosi se na sazetak, ne na cijeli rad) -> advisory."
+      ],
+      "note": "Iz Naputka za prijavu, pisanje i oblikovanje diplomskog rada (Veterinarski fakultet, Fakultetsko vijece 24.1.2024.). Studij je integrirani prijediplomski i diplomski (Veterinarska medicina) pa postoji samo jedna vrsta zavrsnog rada, diplomski (graduate). Dokument je faculty-wide i obvezujuci (authority binding), pa su imperativna tehnicka pravila scored: font, velicina slova, prored, A4, numeracija stranica, Sadrzaj. Margine, opseg, stil citiranja, obvezne cjeline i opseg sazetka ostaju advisory. Doktorski studij (veterinarske znanosti) nije pokriven dohvacenim izvorom (dostupan je samo program studija, ne uputa za oblikovanje disertacije).",
+      "sources": [
+        {
+          "title": "Naputak za prijavu, pisanje i oblikovanje diplomskog rada (VEF, 2024)",
+          "url": "https://www.vef.unizg.hr/wp-content/uploads/2024/01/N-A-P-U-T-A-K-za-prijavu-pisanje-i-oblikovanje-diplomskig-rada-odobren-Fakultetsko-vijece-24.1.2024.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Naputak za prijavu, pisanje i oblikovanje diplomskog rada (Veterinarski fakultet, 2024)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "font",
+        "velicina slova",
+        "prored",
+        "format papira",
+        "numeracija stranica",
+        "sadrzaj (obvezna cjelina)"
+      ],
+      "advisoryScope": [
+        "margine",
+        "opseg u stranicama",
+        "stil citiranja (autor-godina)",
+        "obvezne cjeline rada",
+        "opseg sazetka (rijeci)"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-vef-diplomski--font-verified-2026-07-02",
+      "ruleId": "vef-diplomski--font",
+      "profileId": "vef-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "vef-naputak-diplomski-2024",
+      "sourcePage": "odjeljak 4. Tehnicke upute za izradu diplomskog rada",
+      "quote": "potrebno koristiti font Times New Roman, velicine 12",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-vef-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "vef-diplomski--font-size",
+      "profileId": "vef-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "vef-naputak-diplomski-2024",
+      "sourcePage": "odjeljak 4. Tehnicke upute za izradu diplomskog rada",
+      "quote": "potrebno koristiti font Times New Roman, velicine 12",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-vef-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "vef-diplomski--line-spacing",
+      "profileId": "vef-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "vef-naputak-diplomski-2024",
+      "sourcePage": "odjeljak 4. Tehnicke upute za izradu diplomskog rada",
+      "quote": "A4, 210 x 297 mm), s marginama od 2,5 cm (lijevo i desno) i proredom 1,5",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-vef-diplomski--paper-size-verified-2026-07-02",
+      "ruleId": "vef-diplomski--paper-size",
+      "profileId": "vef-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "vef-naputak-diplomski-2024",
+      "sourcePage": "odjeljak 4. Tehnicke upute za izradu diplomskog rada",
+      "quote": "A4, 210 x 297 mm), s marginama od 2,5 cm (lijevo i desno) i proredom 1,5",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-vef-diplomski--page-numbers-verified-2026-07-02",
+      "ruleId": "vef-diplomski--page-numbers",
+      "profileId": "vef-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "vef-naputak-diplomski-2024",
+      "sourcePage": "odjeljak 4. Tehnicke upute za izradu diplomskog rada",
+      "quote": "Sve stranice teksta (pocevsi od Uvoda) trebaju biti numerirane u",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-vef-diplomski--toc-verified-2026-07-02",
+      "ruleId": "vef-diplomski--toc",
+      "profileId": "vef-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "vef-naputak-diplomski-2024",
+      "sourcePage": "odjeljak 10. Sadrzaj / odjeljak 11. Poglavlja diplomskog rada",
+      "quote": "Na sljedeoj stranici slijedi sadrzaj, prema primjeru",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-vef-diplomski--margins-advisory-2026-07-02",
+      "ruleId": "vef-diplomski--margins",
+      "profileId": "vef-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "vef-naputak-diplomski-2024",
+      "sourcePage": "odjeljak 4. Tehnicke upute za izradu diplomskog rada",
+      "quote": "A4, 210 x 297 mm), s marginama od 2,5 cm (lijevo i desno) i proredom 1,5",
+      "note": "Port pilot workflow. Izvor daje samo lijevu i desnu marginu (2,5 cm); gornja i donja nisu navedene pa ostaje advisory."
+    },
+    {
+      "id": "led-vef-diplomski--page-count-advisory-2026-07-02",
+      "ruleId": "vef-diplomski--page-count",
+      "profileId": "vef-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "vef-naputak-diplomski-2024",
+      "sourcePage": "odjeljak 4. Tehnicke upute za izradu diplomskog rada",
+      "quote": "minimalno 25 stranica",
+      "note": "Port pilot workflow. 'u pravilu' -> preporuka, advisory."
+    },
+    {
+      "id": "led-vef-diplomski--citation-style-advisory-2026-07-02",
+      "ruleId": "vef-diplomski--citation-style",
+      "profileId": "vef-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "vef-naputak-diplomski-2024",
+      "sourcePage": "odjeljak 20. Nacin pisanja literature",
+      "quote": "Opazeno je da s porastom tjelesne mase raste i rizik za pojavu bolesti krvozilnog sustava (BLACK,",
+      "note": "Port pilot workflow. Autor-godina prema Veterinarskom arhivu, mapirano na harvard, nije strojno bodovano."
+    },
+    {
+      "id": "led-vef-diplomski--required-sections-advisory-2026-07-02",
+      "ruleId": "vef-diplomski--required-sections",
+      "profileId": "vef-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "vef-naputak-diplomski-2024",
+      "sourcePage": "odjeljak 11. Poglavlja diplomskog rada / odjeljak 12. Znanstveni diplomski rad",
+      "quote": "Znanstveni diplomski rad treba sadrzavati:",
+      "note": "Port pilot workflow. Popis poglavlja ovisi o vrsti rada (znanstveni/pregledni/strucni) pa ostaje advisory."
+    }
+  ]
+}

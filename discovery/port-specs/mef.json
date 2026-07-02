@@ -1,0 +1,200 @@
+{
+  "faculty": "mef",
+  "unit": null,
+  "catalogPrograms": [
+    "Diplomski studiji Medicinskog fakulteta"
+  ],
+  "sources": [
+    {
+      "id": "mef-pravilnik-diplomski-2023",
+      "kind": "regulation",
+      "title": "Pravilnik o izradi diplomskog rada s prilogom Upute za pisanje i tehnicko opremanje diplomskog rada (Medicinski fakultet Sveucilista u Zagrebu)",
+      "url": "https://mef.unizg.hr/app/uploads/2023/07/Pravilnik-o-izradi-diplomskog-rada.pdf",
+      "publisher": "Medicinski fakultet Sveucilista u Zagrebu (Fakultetsko vijee)",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/mef/mef-pravilnik-diplomski-2023.pdf",
+      "snapshotHash": "2f1e177187c7871d78abba9d73b7827f92641587702269f83b44fea0d4792ec0",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Obvezujuci Pravilnik (Fakultetsko vijee, 18.6.2013., snapshot objavljen 2023) s Prilogom (Obrazac DR-14) 'Upute za pisanje i tehnicko opremanje diplomskog rada' koji cini sastavni dio Pravilnika (cl. 9. st. 2.). Tehnicka pravila su u Prilogu i imperativna su: A4, font Times New Roman ili Arial, numeracija od Uvoda, autor-godina citiranje, obvezni zajednicki dijelovi strukture -> scored. Prored (izbor 1,5 ili 2) i margine (najmanje 2,5 cm, u kontekstu uvezanog rada oblikovanog kao clanak) te opseg sazetka (200-400 rijeci) su spusteni u advisory. Svi citati verbatim provjereni grepom nad mef-pravilnik-diplomski-2023.txt. Pokriva integrirane preddiplomske i diplomske studije te Sveucilisni diplomski studij sestrinstva (workType graduate). Zavrsni/prijediplomski (samostalni zavrsni rad) i doktorski nisu pokriveni ovim izvorom."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "mef-diplomski",
+      "unitId": "mef",
+      "programs": [
+        "Diplomski studiji Medicinskog fakulteta"
+      ],
+      "workTypes": ["graduate"],
+      "status": "partial",
+      "profileLabel": "Medicinski fakultet, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2013-06-18",
+      "rules": {
+        "font": ["Times New Roman", "Arial"],
+        "size": [11, 12],
+        "requirePageNumbers": true,
+        "requireA4": true,
+        "requireToc": true,
+        "recommendedCitation": "harvard"
+      },
+      "facts": [
+        "Rad se tiska na papiru A4 formata, fontom Times New Roman ili Arial (imperativ, scored).",
+        "Velicina fonta je 11 ili 12 (imperativ, scored).",
+        "Numeriranje stranica zapocinje s poglavljem Uvod (imperativ, scored).",
+        "Sadrzaj je obvezan dio rada i upisuje se na cetvrtoj stranici (imperativ, scored).",
+        "Publikacije se u tekstu citiraju autor-godina, sto odgovara harvardskom sustavu (imperativ, scored).",
+        "Obvezni zajednicki dijelovi strukture: sazetak i kljucne rijeci (HR), summary i key words (EN), sadrzaj, literatura, zivotopis (imperativ, scored).",
+        "Prored (1,5 ili 2), margine (najmanje 2,5 cm za uvezani rad oblikovan kao clanak) i opseg sazetka (200-400 rijeci) formulirani su kao izbor ili u posebnom kontekstu pa su advisory."
+      ],
+      "note": "Iz Pravilnika o izradi diplomskog rada (MEF, 2013/2023) i njegova obvezujuceg Priloga (Upute za pisanje i tehnicko opremanje diplomskog rada, Obrazac DR-14, cine sastavni dio Pravilnika po cl. 9. st. 2.), pa je authority binding. Scored su imperativna, verbatim potvrdena pravila. VAZNO za ljudski pregled: (1) prored dopusta 1,5 ILI 2, pa je advisory jer se ne moze izraziti jednom scored vrijednoscu; (2) margine 'najmanje 2,5 cm' navedene su u odjeljku o UVEZANOM radu oblikovanom kao dvostupcani clanak, ne kao opce pravilo, pa su advisory; (3) opseg 200-400 rijeci odnosi se samo na sazetak, ne na cijeli rad; (4) required-sections koristi zajednicke obvezne dijelove (podnaslovi sadrzaja razlikuju se za znanstveni vs pregledni/strucni rad); (5) izvor pokriva diplomski (graduate), ukljucujuci Sveucilisni diplomski studij sestrinstva; zavrsni/prijediplomski i doktorski nisu pokriveni ovim izvorom. binding pravila trebaju reviewedBy (drugi par ociju) prije objave kao verified.",
+      "sources": [
+        {
+          "title": "Pravilnik o izradi diplomskog rada (MEF, 2013/2023) s prilogom Upute za pisanje i tehnicko opremanje diplomskog rada",
+          "url": "https://mef.unizg.hr/app/uploads/2023/07/Pravilnik-o-izradi-diplomskog-rada.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o izradi diplomskog rada te Prilog Upute za pisanje i tehnicko opremanje diplomskog rada (Medicinski fakultet Sveucilista u Zagrebu, 2013/2023)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "font",
+        "velicina slova",
+        "format papira (A4)",
+        "numeracija stranica",
+        "sadrzaj (obvezan)",
+        "stil citiranja (autor-godina, harvard)",
+        "obvezni dijelovi strukture"
+      ],
+      "advisoryScope": [
+        "prored",
+        "margine",
+        "opseg sazetka (rijeci)"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-mef-diplomski--font-verified-2026-07-02",
+      "ruleId": "mef-diplomski--font",
+      "profileId": "mef-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "mef-pravilnik-diplomski-2023",
+      "sourcePage": "Prilog: Upute za pisanje i tehnicko opremanje diplomskog rada, odjeljak Oblik neuvezanog primjerka rada",
+      "quote": "tiskan na papiru formata A4, pisan fontom Times New Roman ili Arial (velic ina fonta: 11 ili 12; prored: 1.5 ili 2, to jest 1,5 redaka ili dvostruki prored)",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-mef-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "mef-diplomski--font-size",
+      "profileId": "mef-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "mef-pravilnik-diplomski-2023",
+      "sourcePage": "Prilog: Upute za pisanje i tehnicko opremanje diplomskog rada, odjeljak Oblik neuvezanog primjerka rada",
+      "quote": "ili Arial (velic ina fonta: 11 ili 12; prored: 1.5 ili 2, to jest 1,5 redaka ili dvostruki prored)",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-mef-diplomski--paper-size-verified-2026-07-02",
+      "ruleId": "mef-diplomski--paper-size",
+      "profileId": "mef-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "mef-pravilnik-diplomski-2023",
+      "sourcePage": "Prilog: Upute za pisanje i tehnicko opremanje diplomskog rada, odjeljak Oblik neuvezanog primjerka rada",
+      "quote": "tiskan na papiru formata A4, pisan fontom Times New Roman ili Arial",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-mef-diplomski--page-numbers-verified-2026-07-02",
+      "ruleId": "mef-diplomski--page-numbers",
+      "profileId": "mef-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "mef-pravilnik-diplomski-2023",
+      "sourcePage": "Prilog: Upute za pisanje i tehnicko opremanje diplomskog rada, odjeljak Numeriranje stranica",
+      "quote": "Numeriranje stranica zapoc inje s poglavljem Uvod, tako da je prva stranica Uvoda ujedno i prva numerirana stranica rada.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-mef-diplomski--toc-verified-2026-07-02",
+      "ruleId": "mef-diplomski--toc",
+      "profileId": "mef-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "mef-pravilnik-diplomski-2023",
+      "sourcePage": "Prilog: Upute za pisanje i tehnicko opremanje diplomskog rada, odjeljak Struktura rada",
+      "quote": "Na c etvrtoj stranici se upisuje Sadrzaj.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-mef-diplomski--citation-style-verified-2026-07-02",
+      "ruleId": "mef-diplomski--citation-style",
+      "profileId": "mef-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "mef-pravilnik-diplomski-2023",
+      "sourcePage": "Prilog: Upute za pisanje i tehnicko opremanje diplomskog rada, odjeljak Citiranje literature u tekstu i nacin pisanja u popisu literature",
+      "quote": "Publikacije se u tekstu citiraju tako da se navede autor-godina (za rad jednog autora) ili autor-autor-godina (za rad dva autora) ili autor et al.-godina (za rad tri i vise autora).",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-mef-diplomski--required-sections-verified-2026-07-02",
+      "ruleId": "mef-diplomski--required-sections",
+      "profileId": "mef-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "mef-pravilnik-diplomski-2023",
+      "sourcePage": "Prilog: Upute za pisanje i tehnicko opremanje diplomskog rada, odjeljak Sadrzaj (podnaslovi)",
+      "quote": "neki elementi ostaju zajednic ki (nac in uveza, naslovna stranica, napomena o mjestu izrade rada i mentoru, sadrzaj, popis skra enica, sazetak i kljuc ne rijec i na hrvatskom jeziku, title, summary & key words na engleskom jeziku, zivotopis)",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-mef-diplomski--line-spacing-advisory-2026-07-02",
+      "ruleId": "mef-diplomski--line-spacing",
+      "profileId": "mef-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "mef-pravilnik-diplomski-2023",
+      "sourcePage": "Prilog: Upute za pisanje i tehnicko opremanje diplomskog rada, odjeljak Oblik neuvezanog primjerka rada",
+      "quote": "prored: 1.5 ili 2, to jest 1,5 redaka ili dvostruki prored",
+      "note": "Port pilot workflow. Izvor dopusta izbor 1,5 ili 2, ne moze se izraziti jednom scored vrijednoscu, ostaje advisory."
+    },
+    {
+      "id": "led-mef-diplomski--margins-advisory-2026-07-02",
+      "ruleId": "mef-diplomski--margins",
+      "profileId": "mef-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "mef-pravilnik-diplomski-2023",
+      "sourcePage": "Prilog: Upute za pisanje i tehnicko opremanje diplomskog rada, odjeljak Oblik uvezanog rada",
+      "quote": "margine su najmanje 2,5 cm gore, dolje, lijevo i desno",
+      "note": "Port pilot workflow. Navedeno u kontekstu uvezanog rada oblikovanog kao dvostupcani clanak, ne kao opce pravilo, ostaje advisory."
+    },
+    {
+      "id": "led-mef-diplomski--word-count-advisory-2026-07-02",
+      "ruleId": "mef-diplomski--word-count",
+      "profileId": "mef-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "mef-pravilnik-diplomski-2023",
+      "sourcePage": "Prilog: Upute za pisanje i tehnicko opremanje diplomskog rada, odjeljak Napomena o sazetku",
+      "quote": "Sazetak ima 200 do 400 rijec i",
+      "note": "Port pilot workflow. Odnosi se samo na sazetak, ne na opseg cijelog rada, ostaje advisory."
+    }
+  ]
+}

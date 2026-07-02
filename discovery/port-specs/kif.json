@@ -1,0 +1,210 @@
+{
+  "faculty": "kif",
+  "unit": null,
+  "catalogPrograms": [
+    "Diplomski studiji Kineziološkog fakulteta"
+  ],
+  "sources": [
+    {
+      "id": "kif-upute-diplomski-2023",
+      "kind": "guidelines",
+      "title": "Upute za izradu diplomskog/specijalistickog diplomskog rada (Kinezioloski fakultet Sveucilista u Zagrebu, 2023)",
+      "url": "https://www.kif.unizg.hr/_download/repository/Kinezioloski-upute-diplomskizavrsni-rad.pdf",
+      "publisher": "Sveuciliste u Zagrebu Kinezioloski fakultet",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/kif/kif-upute-diplomski-zavrsni.pdf",
+      "snapshotHash": "aa87190f7f1f28ff1aabcff1e92858edbe044e9bc2298f5cf7c90bf2c0383982",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Sluzbeni prirucnik Centra za bibliotecno-informacijsku djelatnost KIF-a (Zagreb, 2023) za diplomski i specijalisticki diplomski rad. Tehnicko oblikovanje ('radi se oblikovanje prema sljedeim uputama': Times New Roman 12 pt, prored 1,5, margine 2,5 cm, obostrano poravnanje) je imperativ -> scored. Numeracija stranica ('se mora nai napisana numeracija'), APA stil citiranja ('koristi se APA stil citiranja') i minimalni opseg ('Opseg ne smije biti manji od 4000 rijeci' za znanstveni, 6000 za strucni) su imperativi -> scored. Upuuje na Odluku o postupku izrade diplomskog rada (nije snapshotirana)."
+    },
+    {
+      "id": "kif-upute-oblikovanje-diplomski",
+      "kind": "guidelines",
+      "title": "Prilog 1. Upute za oblikovanje diplomskog rada (Kinezioloski fakultet Sveucilista u Zagrebu)",
+      "url": "https://www.kif.unizg.hr/_download/repository/Upute_-_diplomski_rad%5B1%5D.pdf",
+      "publisher": "Sveuciliste u Zagrebu Kinezioloski fakultet",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/kif/kif-upute-oblikovanje-diplomski.pdf",
+      "snapshotHash": "12d97e98cfdf78455d0b67d48f272f8d74c108e8c4d444498fa948eb3e84e583",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Prilog 1 s cistim jednoretcanim popisom oblikovanja (Jezik, Font Times New Roman, Velicina fonta 12, Margine 2,5 cm sa svake strane, Prored 1,5 redak, Poravnano obostrano) i strukturom (eksperimentalni vs teorijski diplomski rad). Iz njega su verbatim uzeti font, velicina, prored, margine, obvezan Sadrzaj i required-sections."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "kif-diplomski",
+      "unitId": "kif",
+      "programs": [
+        "Diplomski studiji Kineziološkog fakulteta"
+      ],
+      "workTypes": ["graduate"],
+      "status": "partial",
+      "profileLabel": "Kineziološki fakultet, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2023-01-01",
+      "rules": {
+        "font": ["Times New Roman"],
+        "size": 12,
+        "spacing": 1.5,
+        "margins": { "top": 2.5, "right": 2.5, "bottom": 2.5, "left": 2.5 },
+        "requireToc": true,
+        "requirePageNumbers": true,
+        "checkJustify": true,
+        "checkMargins": true,
+        "recommendedCitation": "apa7"
+      },
+      "facts": [
+        "Font Times New Roman, velicina 12 pt, prored 1,5, margine 2,5 cm sa svake strane, tekst obostrano poravnat (imperativ).",
+        "Uvod je prva stranica na kojoj se mora nalaziti napisana numeracija; stranice se broje od naslovne, ali se prve stranice ne oznacavaju (imperativ).",
+        "Na Kinezioloskom fakultetu koristi se APA stil citiranja (imperativ).",
+        "Opseg znanstveno-istrazivackog diplomskog rada ne smije biti manji od 4000 rijeci (15 kartica), a strucnog od 6000 rijeci (25 kartica) (imperativ).",
+        "Struktura se granata: eksperimentalni diplomski rad (Uvod, Ciljevi i hipoteze, Metode, Rezultati, Rasprava, Zakljucak, Literatura, Prilozi) i teorijski/strucni (Uvod, Razrada teme, Zakljucak, Literatura, Prilozi)."
+      ],
+      "note": "Sveucilisni integrirani prijediplomski i diplomski studij Kineziologija te strucni diplomski studij Izobrazba trenera; diplomski i specijalisticki diplomski rad. Tehnicko oblikovanje je u Uputama imperativno ('radi se oblikovanje prema sljedeim uputama') pa je scored. Obostrano poravnanje potvreno izvorom i vozi se kroz rules.checkJustify (checkId 'justify' nije u COMPILED_CHECK_IDS pa nije zaseban scored ruleEntry). word-count postavljen na univerzalni minimum 4000 rijeci (znanstveni diplomski); strucni ima visi prag 6000 rijeci pa je varijanta za ljudski pregled. Required-sections su advisory zbog granate strukture. A4 i opseg u stranicama izvor ne navodi pa su izostavljeni."
+    }
+  ],
+  "sourceHierarchy": [
+    "Odluka o postupku izrade diplomskog rada i polaganju diplomskog ispita na sveucilisnom integriranom prijediplomskom i diplomskom studiju Kineziologija (referencirana u Uputama, nije snapshotirana)",
+    "Upute za izradu diplomskog/specijalistickog diplomskog rada (KIF, 2023)",
+    "Prilog 1. Upute za oblikovanje diplomskog rada (KIF)"
+  ],
+  "ruleAuthority": "official-program-guidelines",
+  "normativeScope": [
+    "font",
+    "velicina slova",
+    "prored",
+    "margine",
+    "obostrano poravnanje",
+    "numeracija stranica",
+    "sadrzaj (obvezna cjelina)",
+    "stil citiranja (APA)",
+    "opseg u rijecima"
+  ],
+  "advisoryScope": [
+    "obvezne cjeline rada (granata struktura)"
+  ],
+  "ledger": [
+    {
+      "id": "led-kif-diplomski--font-verified-2026-07-02",
+      "ruleId": "kif-diplomski--font",
+      "profileId": "kif-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "kif-upute-oblikovanje-diplomski",
+      "sourcePage": "Prilog 1. Upute za oblikovanje diplomskog rada, Openito - oblikovanje",
+      "quote": "Times New Roman",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-kif-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "kif-diplomski--font-size",
+      "profileId": "kif-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "kif-upute-diplomski-2023",
+      "sourcePage": "str. 14, Upute za izradu i opremanje rada, openito - oblikovanje",
+      "quote": "velicina fonta",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-kif-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "kif-diplomski--line-spacing",
+      "profileId": "kif-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "kif-upute-oblikovanje-diplomski",
+      "sourcePage": "Prilog 1. Upute za oblikovanje diplomskog rada, Openito - oblikovanje",
+      "quote": "1,5 redak",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-kif-diplomski--margins-verified-2026-07-02",
+      "ruleId": "kif-diplomski--margins",
+      "profileId": "kif-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "kif-upute-oblikovanje-diplomski",
+      "sourcePage": "Prilog 1. Upute za oblikovanje diplomskog rada, Openito - oblikovanje",
+      "quote": "margina 2,5 cm sa svake strane",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-kif-diplomski--page-numbers-verified-2026-07-02",
+      "ruleId": "kif-diplomski--page-numbers",
+      "profileId": "kif-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "kif-upute-diplomski-2023",
+      "sourcePage": "str. 26, odjeljak 7 sadrzaj, UVOD",
+      "quote": "se mora nai napisana numeracija",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-kif-diplomski--toc-verified-2026-07-02",
+      "ruleId": "kif-diplomski--toc",
+      "profileId": "kif-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "kif-upute-oblikovanje-diplomski",
+      "sourcePage": "Prilog 1. Upute za oblikovanje diplomskog rada, struktura diplomskog rada",
+      "quote": "Nakon ove stranice, slijedi sadrzaj diplomskog rada",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-kif-diplomski--citation-style-verified-2026-07-02",
+      "ruleId": "kif-diplomski--citation-style",
+      "profileId": "kif-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "kif-upute-diplomski-2023",
+      "sourcePage": "str. 28, Kako navoditi izvore, Sto je plagiranje",
+      "quote": "Kinezioloskom fakultetu koristi se American Psychological Association APA stil ci",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-kif-diplomski--word-count-verified-2026-07-02",
+      "ruleId": "kif-diplomski--word-count",
+      "profileId": "kif-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "kif-upute-diplomski-2023",
+      "sourcePage": "str. 27, odjeljak 7 sadrzaj, OPSEG",
+      "quote": "Opseg ne smije biti manji od 4000 rijeci, odnosno",
+      "note": "Port pilot workflow. Strucni diplomski rad ima visi prag (6000 rijeci); varijanta za ljudski pregled."
+    },
+    {
+      "id": "led-kif-diplomski--required-sections-advisory-2026-07-02",
+      "ruleId": "kif-diplomski--required-sections",
+      "profileId": "kif-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "kif-upute-oblikovanje-diplomski",
+      "sourcePage": "Prilog 1. Upute za oblikovanje diplomskog rada, struktura diplomskog rada",
+      "quote": "diplomski rad treba sadrzavati sljedea poglavlja",
+      "note": "Port pilot workflow. Struktura se granata (eksperimentalni vs teorijski vs strucni) pa je advisory."
+    },
+    {
+      "id": "led-kif-diplomski--justify-verified-2026-07-02",
+      "ruleId": "kif-diplomski--justify",
+      "profileId": "kif-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "kif-upute-oblikovanje-diplomski",
+      "sourcePage": "Prilog 1. Upute za oblikovanje diplomskog rada, Openito - oblikovanje",
+      "quote": "Poravnano obostrano",
+      "note": "Justify vozi se kroz rules.checkJustify; obostrano poravnanje imperativ."
+    }
+  ]
+}

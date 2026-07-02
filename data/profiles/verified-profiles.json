@@ -5645,5 +5645,640 @@
       "format papira (A4)",
       "numeracija stranica"
     ]
+  },
+  {
+    "id": "mef-diplomski",
+    "unitId": "mef",
+    "programs": [
+      "Diplomski studiji Medicinskog fakulteta"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Medicinski fakultet, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2013-06-18",
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Arial"
+      ],
+      "size": [
+        11,
+        12
+      ],
+      "requirePageNumbers": true,
+      "requireA4": true,
+      "requireToc": true,
+      "recommendedCitation": "harvard"
+    },
+    "facts": [
+      "Rad se tiska na papiru A4 formata, fontom Times New Roman ili Arial (imperativ, scored).",
+      "Velicina fonta je 11 ili 12 (imperativ, scored).",
+      "Numeriranje stranica zapocinje s poglavljem Uvod (imperativ, scored).",
+      "Sadrzaj je obvezan dio rada i upisuje se na cetvrtoj stranici (imperativ, scored).",
+      "Publikacije se u tekstu citiraju autor-godina, sto odgovara harvardskom sustavu (imperativ, scored).",
+      "Obvezni zajednicki dijelovi strukture: sazetak i kljucne rijeci (HR), summary i key words (EN), sadrzaj, literatura, zivotopis (imperativ, scored).",
+      "Prored (1,5 ili 2), margine (najmanje 2,5 cm za uvezani rad oblikovan kao clanak) i opseg sazetka (200-400 rijeci) formulirani su kao izbor ili u posebnom kontekstu pa su advisory."
+    ],
+    "note": "Iz Pravilnika o izradi diplomskog rada (MEF, 2013/2023) i njegova obvezujuceg Priloga (Upute za pisanje i tehnicko opremanje diplomskog rada, Obrazac DR-14, cine sastavni dio Pravilnika po cl. 9. st. 2.), pa je authority binding. Scored su imperativna, verbatim potvrdena pravila. VAZNO za ljudski pregled: (1) prored dopusta 1,5 ILI 2, pa je advisory jer se ne moze izraziti jednom scored vrijednoscu; (2) margine 'najmanje 2,5 cm' navedene su u odjeljku o UVEZANOM radu oblikovanom kao dvostupcani clanak, ne kao opce pravilo, pa su advisory; (3) opseg 200-400 rijeci odnosi se samo na sazetak, ne na cijeli rad; (4) required-sections koristi zajednicke obvezne dijelove (podnaslovi sadrzaja razlikuju se za znanstveni vs pregledni/strucni rad); (5) izvor pokriva diplomski (graduate), ukljucujuci Sveucilisni diplomski studij sestrinstva; zavrsni/prijediplomski i doktorski nisu pokriveni ovim izvorom. binding pravila trebaju reviewedBy (drugi par ociju) prije objave kao verified.",
+    "sources": [
+      {
+        "title": "Pravilnik o izradi diplomskog rada (MEF, 2013/2023) s prilogom Upute za pisanje i tehnicko opremanje diplomskog rada",
+        "url": "https://mef.unizg.hr/app/uploads/2023/07/Pravilnik-o-izradi-diplomskog-rada.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o izradi diplomskog rada te Prilog Upute za pisanje i tehnicko opremanje diplomskog rada (Medicinski fakultet Sveucilista u Zagrebu, 2013/2023)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "format papira (A4)",
+      "numeracija stranica",
+      "sadrzaj (obvezan)",
+      "stil citiranja (autor-godina, harvard)",
+      "obvezni dijelovi strukture"
+    ],
+    "advisoryScope": [
+      "prored",
+      "margine",
+      "opseg sazetka (rijeci)"
+    ]
+  },
+  {
+    "id": "vef-diplomski",
+    "unitId": "vef",
+    "programs": [
+      "Diplomski studiji Veterinarskog fakulteta Sveucilista u Zagrebu"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Veterinarski fakultet, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2024-01-24",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "requireA4": true,
+      "recommendedCitation": "harvard"
+    },
+    "facts": [
+      "Font Times New Roman velicine 12, prored 1,5 i format A4 propisani su imperativno u odjeljku 4 (Tehnicke upute) -> boduje se.",
+      "Sve stranice teksta (pocevsi od Uvoda) trebaju biti numerirane u donjem desnom kutu -> boduje se.",
+      "Sadrzaj je obvezna cjelina rada -> boduje se.",
+      "Margine: izvor navodi 2,5 cm samo za lijevo i desno, a gornju i donju ne spominje, pa margine ostaju advisory (vrijednosti se ne nagadaju).",
+      "Opseg 'u pravilu minimalno 25 stranica' formuliran je kao preporuka -> advisory.",
+      "Citiranje je autor-godina (velikim slovima prezime, godina s tockom za HR radove) prema Uputstvu za pisanje clanka u Veterinarskom arhivu -> mapirano na harvard, advisory.",
+      "Sazetak i Summary sadrzavaju 150-300 rijeci i 3-5 kljucnih rijeci (odnosi se na sazetak, ne na cijeli rad) -> advisory."
+    ],
+    "note": "Iz Naputka za prijavu, pisanje i oblikovanje diplomskog rada (Veterinarski fakultet, Fakultetsko vijece 24.1.2024.). Studij je integrirani prijediplomski i diplomski (Veterinarska medicina) pa postoji samo jedna vrsta zavrsnog rada, diplomski (graduate). Dokument je faculty-wide i obvezujuci (authority binding), pa su imperativna tehnicka pravila scored: font, velicina slova, prored, A4, numeracija stranica, Sadrzaj. Margine, opseg, stil citiranja, obvezne cjeline i opseg sazetka ostaju advisory. Doktorski studij (veterinarske znanosti) nije pokriven dohvacenim izvorom (dostupan je samo program studija, ne uputa za oblikovanje disertacije).",
+    "sources": [
+      {
+        "title": "Naputak za prijavu, pisanje i oblikovanje diplomskog rada (VEF, 2024)",
+        "url": "https://www.vef.unizg.hr/wp-content/uploads/2024/01/N-A-P-U-T-A-K-za-prijavu-pisanje-i-oblikovanje-diplomskig-rada-odobren-Fakultetsko-vijece-24.1.2024.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Naputak za prijavu, pisanje i oblikovanje diplomskog rada (Veterinarski fakultet, 2024)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "format papira",
+      "numeracija stranica",
+      "sadrzaj (obvezna cjelina)"
+    ],
+    "advisoryScope": [
+      "margine",
+      "opseg u stranicama",
+      "stil citiranja (autor-godina)",
+      "obvezne cjeline rada",
+      "opseg sazetka (rijeci)"
+    ]
+  },
+  {
+    "id": "kif-diplomski",
+    "unitId": "kif",
+    "programs": [
+      "Diplomski studiji Kineziološkog fakulteta"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Kineziološki fakultet, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2023-01-01",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": 12,
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "checkJustify": true,
+      "checkMargins": true,
+      "recommendedCitation": "apa7"
+    },
+    "facts": [
+      "Font Times New Roman, velicina 12 pt, prored 1,5, margine 2,5 cm sa svake strane, tekst obostrano poravnat (imperativ).",
+      "Uvod je prva stranica na kojoj se mora nalaziti napisana numeracija; stranice se broje od naslovne, ali se prve stranice ne oznacavaju (imperativ).",
+      "Na Kinezioloskom fakultetu koristi se APA stil citiranja (imperativ).",
+      "Opseg znanstveno-istrazivackog diplomskog rada ne smije biti manji od 4000 rijeci (15 kartica), a strucnog od 6000 rijeci (25 kartica) (imperativ).",
+      "Struktura se granata: eksperimentalni diplomski rad (Uvod, Ciljevi i hipoteze, Metode, Rezultati, Rasprava, Zakljucak, Literatura, Prilozi) i teorijski/strucni (Uvod, Razrada teme, Zakljucak, Literatura, Prilozi)."
+    ],
+    "note": "Sveucilisni integrirani prijediplomski i diplomski studij Kineziologija te strucni diplomski studij Izobrazba trenera; diplomski i specijalisticki diplomski rad. Tehnicko oblikovanje je u Uputama imperativno ('radi se oblikovanje prema sljedeim uputama') pa je scored. Obostrano poravnanje potvreno izvorom i vozi se kroz rules.checkJustify (checkId 'justify' nije u COMPILED_CHECK_IDS pa nije zaseban scored ruleEntry). word-count postavljen na univerzalni minimum 4000 rijeci (znanstveni diplomski); strucni ima visi prag 6000 rijeci pa je varijanta za ljudski pregled. Required-sections su advisory zbog granate strukture. A4 i opseg u stranicama izvor ne navodi pa su izostavljeni."
+  },
+  {
+    "id": "sumfak-diplomski",
+    "unitId": "sumfak",
+    "programs": [
+      "Diplomski studiji Fakulteta šumarstva i drvne tehnologije"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Fakultet sumarstva i drvne tehnologije, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2024-01-01",
+    "rules": {
+      "font": [
+        "Arial",
+        "Times New Roman",
+        "Calibri"
+      ],
+      "size": [
+        11,
+        12
+      ],
+      "spacing": 1.15,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "requireA4": true,
+      "checkJustify": true,
+      "recommendedCitation": "harvard"
+    },
+    "facts": [
+      "Numeracija stranica ide od sazetka do kraja teksta, u donji desni kut (imperativ -> scored).",
+      "Sadrzaj je obvezna cjelina rada (imperativ -> scored).",
+      "Font (Arial, Times New Roman, Calibri), velicina 11 ili 12 pt, prored 1,15, margine 2,5 cm i obostrano poravnanje navedeni su pod 'Preporuke za tehnicko oblikovanje rada' (advisory).",
+      "Opseg diplomskoga rada najmanje 30 stranica osnovnoga teksta na papiru A4 formuliran je kao 'Preporuka je da...' (advisory).",
+      "Citiranje je autor-godina uz izrijek 'Preporucuje se neizravno citiranje' (advisory, mapirano na harvard)."
+    ],
+    "note": "Iz sluzbenih Uputa za izradu zavrsnoga i diplomskoga rada (FSDT, 2024). Tehnicko oblikovanje i opseg su formulirani kao Preporuke pa su advisory; scored su samo imperativna pravila (numeracija stranica, obvezan Sadrzaj). Doktorski nije pokriven ovim izvorom (poseban pravilnik doktorskoga studija nije dohvacen kao dostupan tekst).",
+    "sources": [
+      {
+        "title": "Upute za izradu zavrsnoga i diplomskoga rada (FSDT, 2024)",
+        "url": "https://www.sumfak.unizg.hr/site/assets/files/3498/upute_za_izradu_zavrsnoga_i_diplomskoga_rada.docx"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu zavrsnoga i diplomskoga rada (Fakultet sumarstva i drvne tehnologije, 2024)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "numeracija stranica",
+      "sadrzaj (obvezna cjelina)"
+    ],
+    "advisoryScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "poravnanje (justify)",
+      "format papira",
+      "opseg u stranicama",
+      "stil citiranja (autor-godina)",
+      "obvezne cjeline rada"
+    ]
+  },
+  {
+    "id": "sumfak-zavrsni",
+    "unitId": "sumfak",
+    "programs": [
+      "Prijediplomski studiji Fakulteta šumarstva i drvne tehnologije (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Fakultet sumarstva i drvne tehnologije, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2024-01-01",
+    "rules": {
+      "font": [
+        "Arial",
+        "Times New Roman",
+        "Calibri"
+      ],
+      "size": [
+        11,
+        12
+      ],
+      "spacing": 1.15,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "checkJustify": true,
+      "recommendedCitation": "harvard"
+    },
+    "facts": [
+      "Iste Upute (FSDT, 2024) izrijekom vrijede i za zavrsni (prijediplomski) rad.",
+      "Numeracija stranica ide od sazetka do kraja teksta, u donji desni kut (imperativ -> scored).",
+      "Sadrzaj je obvezna cjelina rada (imperativ -> scored).",
+      "Font (Arial, Times New Roman, Calibri), velicina 11 ili 12 pt, prored 1,15, margine 2,5 cm i obostrano poravnanje navedeni su pod 'Preporuke za tehnicko oblikovanje rada' (advisory).",
+      "Citiranje je autor-godina uz izrijek 'Preporucuje se neizravno citiranje' (advisory, mapirano na harvard)."
+    ],
+    "note": "Iste sluzbene Upute (FSDT, 2024) vrijede za zavrsni i diplomski rad. Tehnicko oblikovanje je pod Preporukama pa je advisory; scored su samo numeracija stranica i obvezan Sadrzaj. Opseg (>=30 str) vrijedi samo za diplomski pa nije u ovom profilu.",
+    "sources": [
+      {
+        "title": "Upute za izradu zavrsnoga i diplomskoga rada (FSDT, 2024)",
+        "url": "https://www.sumfak.unizg.hr/site/assets/files/3498/upute_za_izradu_zavrsnoga_i_diplomskoga_rada.docx"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu zavrsnoga i diplomskoga rada (Fakultet sumarstva i drvne tehnologije, 2024)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "numeracija stranica",
+      "sadrzaj (obvezna cjelina)"
+    ],
+    "advisoryScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "poravnanje (justify)",
+      "stil citiranja (autor-godina)",
+      "obvezne cjeline rada"
+    ]
+  },
+  {
+    "id": "ttf-diplomski",
+    "unitId": "ttf",
+    "programs": [
+      "Diplomski studiji Tekstilno-tehnološkog fakulteta"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Tekstilno-tehnološki fakultet, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Arial"
+      ],
+      "size": 12,
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "checkJustify": true,
+      "checkMargins": true,
+      "recommendedCitation": "vancouver",
+      "requiredSections": [
+        {
+          "key": "toc",
+          "label": "sadrzaj",
+          "terms": [
+            "sadrzaj",
+            "contents",
+            "table of contents"
+          ]
+        },
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod",
+            "introduction"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zakljucak",
+          "terms": [
+            "zakljucak",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "popis literature",
+          "terms": [
+            "literatura",
+            "popis literature",
+            "references",
+            "bibliography"
+          ]
+        }
+      ]
+    },
+    "facts": [
+      "Font Arial (obavezna potpora svih hrvatskih znakova), velicina 12 pt, prored 1,5, margine 2,5 cm sa svih strana, tekst obostrano poravnat (imperativ).",
+      "Stranice moraju biti numerirane; prva numerirana stranica je ona koja zapocinje s poglavljem UVOD, numeracija u donjem desnom kutu (imperativ).",
+      "Rad mora imati sadrzaj s cjelokupnom strukturom poglavlja i potpoglavlja (imperativ).",
+      "Rad mora zapoceti poglavljem UVOD i zavrsiti poglavljem ZAKLJUCAK, a nakon zakljucka mora sadrzavati popis koristene literature (imperativ).",
+      "Stil citiranja se granata: u tehnickom podrucju Vancouver, u drustvenom/humanistickom/umjetnickom podrucju APA (7. izdanje) (advisory zbog granatosti)."
+    ],
+    "note": "Diplomski rad TTF. Sva pravila iz jedinstvenih Uputa za oblikovanje zavrsnog i diplomskog rada. Tehnicko oblikovanje i obvezne cjeline su imperativni pa scored; citation-style je advisory jer ovisi o znanstvenom podrucju studija (tehnicki Vancouver vs drustveni/humanisticki/umjetnicki APA 7). recommendedCitation postavljen na 'vancouver' kao pretezno tehnicki default; za dizajnerske/umjetnicke smjerove ljudski pregled treba potvrditi APA 7. Format papira i opseg izvor ne propisuje pa su izostavljeni.",
+    "sources": [
+      {
+        "title": "Upute za oblikovanje zavrsnog i diplomskog rada (TTF)",
+        "url": "https://api.ttf.hr/documents/2jkTqCAb3q90sHtmCP6YSBKg40rbo1mHCTrqdwwWKt9Y4aYZMqpiLuOVdsdi/upute-za-oblikovanje-zavrsnog-i-diplomskog-rada-ttf.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za oblikovanje zavrsnog i diplomskog rada na Sveucilistu u Zagrebu Tekstilno-tehnoloskom fakultetu"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "obostrano poravnanje",
+      "numeracija stranica",
+      "sadrzaj (obvezna cjelina)",
+      "obvezne cjeline rada (uvod, zakljucak, popis literature)"
+    ],
+    "advisoryScope": [
+      "stil citiranja (Vancouver / APA 7 po podrucju)"
+    ]
+  },
+  {
+    "id": "ttf-zavrsni",
+    "unitId": "ttf",
+    "programs": [
+      "Prijediplomski studiji Tekstilno-tehnološkog fakulteta (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Tekstilno-tehnološki fakultet, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Arial"
+      ],
+      "size": 12,
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "checkJustify": true,
+      "checkMargins": true,
+      "recommendedCitation": "vancouver",
+      "requiredSections": [
+        {
+          "key": "toc",
+          "label": "sadrzaj",
+          "terms": [
+            "sadrzaj",
+            "contents",
+            "table of contents"
+          ]
+        },
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod",
+            "introduction"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zakljucak",
+          "terms": [
+            "zakljucak",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "popis literature",
+          "terms": [
+            "literatura",
+            "popis literature",
+            "references",
+            "bibliography"
+          ]
+        }
+      ]
+    },
+    "facts": [
+      "Font Arial (obavezna potpora svih hrvatskih znakova), velicina 12 pt, prored 1,5, margine 2,5 cm sa svih strana, tekst obostrano poravnat (imperativ).",
+      "Stranice moraju biti numerirane; prva numerirana stranica je ona koja zapocinje s poglavljem UVOD, numeracija u donjem desnom kutu (imperativ).",
+      "Rad mora imati sadrzaj s cjelokupnom strukturom poglavlja i potpoglavlja (imperativ).",
+      "Rad mora zapoceti poglavljem UVOD i zavrsiti poglavljem ZAKLJUCAK, a nakon zakljucka mora sadrzavati popis koristene literature (imperativ).",
+      "Stil citiranja se granata: u tehnickom podrucju Vancouver, u drustvenom/humanistickom/umjetnickom podrucju APA (7. izdanje) (advisory zbog granatosti)."
+    ],
+    "note": "Zavrsni (prijediplomski) rad TTF. Isti sluzbeni izvor kao i diplomski rad (Upute pokrivaju 'zavrsni/diplomski rad' zajedno), pa su pravila identicna. Citation-style advisory zbog granatosti po podrucju; recommendedCitation 'vancouver' kao tehnicki default uz ljudski pregled za dizajnerske/umjetnicke smjerove. Format papira i opseg izvor ne propisuje pa su izostavljeni.",
+    "sources": [
+      {
+        "title": "Upute za oblikovanje zavrsnog i diplomskog rada (TTF)",
+        "url": "https://api.ttf.hr/documents/2jkTqCAb3q90sHtmCP6YSBKg40rbo1mHCTrqdwwWKt9Y4aYZMqpiLuOVdsdi/upute-za-oblikovanje-zavrsnog-i-diplomskog-rada-ttf.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za oblikovanje zavrsnog i diplomskog rada na Sveucilistu u Zagrebu Tekstilno-tehnoloskom fakultetu"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "obostrano poravnanje",
+      "numeracija stranica",
+      "sadrzaj (obvezna cjelina)",
+      "obvezne cjeline rada (uvod, zakljucak, popis literature)"
+    ],
+    "advisoryScope": [
+      "stil citiranja (Vancouver / APA 7 po podrucju)"
+    ]
+  },
+  {
+    "id": "grad-diplomski",
+    "unitId": "grad",
+    "programs": [
+      "Diplomski studiji Građevinskog fakulteta"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Gradevinski fakultet, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2024-05-22",
+    "rules": {
+      "font": [
+        "Titillium"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.15,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "requireA4": true,
+      "recommendedCitation": "ieee"
+    },
+    "facts": [
+      "Font Titillium je obavezan (obavezna potpora svih hrvatskih znakova), velicina 12 pt, prored 1,15 (imperativ: 'koristite font Titillium 12 pt, s proredom 1,15') -> scored.",
+      "Numeracija stranica je obvezna: naslovne stranice se ne numeriraju, zatim rimski pa arapski brojevi, broj stranice desno na dnu -> scored.",
+      "Sadrzaj i obvezne cjeline rada su imperativ ('Rad mora sadrzavati') -> scored.",
+      "Margine 2,5 cm i format A4 navedeni su kao bare specifikacija bez imperativa (uz drugacije margine 3,0 cm za naslovnice i korice) -> advisory.",
+      "Citatni stil bira student ('odabrani stil'), primjer je numericki [1] (IEEE-slicno) -> advisory.",
+      "Obostrano poravnanje (justify) se u izvoru ne spominje pa nije ukljuceno."
+    ],
+    "note": "Iz sluzbenog Predloska za formalno oblikovanje zavrsnog/diplomskog rada (GF, 2024), faculty-wide DOCX. Scored: font, velicina, prored, numeracija stranica, sadrzaj i obvezne cjeline. Advisory: margine, A4 i citatni stil. Upute (2024) i Pravilnik su skenirani PDF-ovi bez ekstraktabilnog teksta pa ne daju scored pravila; drze se radi sljedivosti. Doktorski nije pokriven nijednim dohvacenim izvorom.",
+    "sources": [
+      {
+        "title": "Predlozak za formalno oblikovanje zavrsnog/diplomskog rada (GF, 2024)",
+        "url": "https://www.grad.unizg.hr/_download/repository/Predlo%C5%BEak%20za%20formalno%20oblikovanje%20zavr%C5%A1nog%20-%20diplomskog%20rada%20na%20Sveu%C4%8Dili%C5%A1tu%20u%20Zagrebu%2C%20Gra%C4%91evinskom%20fakultetu_2024_05_22%5B3%5D.docx"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnom ispitu i diplomskom radu (Gradevinski fakultet, procisceni tekst)",
+      "Predlozak za formalno oblikovanje zavrsnog/diplomskog rada (Gradevinski fakultet, 2024)",
+      "Upute za pisanje i obranu studentskih radova na GF (Gradevinski fakultet, 2024)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "numeracija stranica",
+      "sadrzaj (obvezna cjelina)",
+      "obvezne cjeline rada"
+    ],
+    "advisoryScope": [
+      "margine",
+      "format papira",
+      "stil citiranja"
+    ]
+  },
+  {
+    "id": "grad-zavrsni",
+    "unitId": "grad",
+    "programs": [
+      "Prijediplomski studiji Građevinskog fakulteta (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Gradevinski fakultet, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2024-05-22",
+    "rules": {
+      "font": [
+        "Titillium"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.15,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "requireA4": true,
+      "recommendedCitation": "ieee"
+    },
+    "facts": [
+      "Isti faculty-wide Predlozak izrijekom vrijedi za zavrsni i diplomski rad.",
+      "Font Titillium je obavezan, velicina 12 pt, prored 1,15 (imperativ 'koristite') -> scored.",
+      "Numeracija stranica je obvezna (naslovne se ne numeriraju, zatim rimski pa arapski) -> scored.",
+      "Sadrzaj i obvezne cjeline rada su imperativ ('Rad mora sadrzavati') -> scored.",
+      "Margine 2,5 cm i A4 navedeni kao bare specifikacija -> advisory; citatni stil bira student -> advisory.",
+      "Obostrano poravnanje (justify) se u izvoru ne spominje."
+    ],
+    "note": "Iste sluzbene postavke iz Predloska (GF, 2024) vrijede za zavrsni rad kao i za diplomski. Scored: font, velicina, prored, numeracija stranica, sadrzaj i obvezne cjeline. Advisory: margine, A4, citatni stil.",
+    "sources": [
+      {
+        "title": "Predlozak za formalno oblikovanje zavrsnog/diplomskog rada (GF, 2024)",
+        "url": "https://www.grad.unizg.hr/_download/repository/Predlo%C5%BEak%20za%20formalno%20oblikovanje%20zavr%C5%A1nog%20-%20diplomskog%20rada%20na%20Sveu%C4%8Dili%C5%A1tu%20u%20Zagrebu%2C%20Gra%C4%91evinskom%20fakultetu_2024_05_22%5B3%5D.docx"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnom ispitu i diplomskom radu (Gradevinski fakultet, procisceni tekst)",
+      "Predlozak za formalno oblikovanje zavrsnog/diplomskog rada (Gradevinski fakultet, 2024)",
+      "Upute za pisanje i obranu studentskih radova na GF (Gradevinski fakultet, 2024)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "numeracija stranica",
+      "sadrzaj (obvezna cjelina)",
+      "obvezne cjeline rada"
+    ],
+    "advisoryScope": [
+      "margine",
+      "format papira",
+      "stil citiranja"
+    ]
   }
 ]

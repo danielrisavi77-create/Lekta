@@ -1,0 +1,366 @@
+{
+  "faculty": "sumfak",
+  "unit": null,
+  "catalogPrograms": [
+    "Diplomski studiji Fakulteta šumarstva i drvne tehnologije",
+    "Prijediplomski studiji Fakulteta šumarstva i drvne tehnologije (zavrsni rad)"
+  ],
+  "sources": [
+    {
+      "id": "sumfak-upute-zavrsni-diplomski-2024",
+      "kind": "guidelines",
+      "title": "Upute za izradu zavrsnoga i diplomskoga rada (Fakultet sumarstva i drvne tehnologije, 2024)",
+      "url": "https://www.sumfak.unizg.hr/site/assets/files/3498/upute_za_izradu_zavrsnoga_i_diplomskoga_rada.docx",
+      "publisher": "Fakultet sumarstva i drvne tehnologije Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/sumfak/sumfak-upute-zavrsni-diplomski-2024.docx",
+      "snapshotHash": "16c870fde070cb045db02d4a961605251ce89608ae994c58c23f1a90147c36de",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Sluzbene faculty-wide Upute (2024) sa sluzbene domene sumfak.unizg.hr. Pokrivaju i zavrsni (prijediplomski) i diplomski rad. Tehnicko oblikovanje je pod naslovom 'Preporuke za tehnicko oblikovanje rada' (font, velicina, prored, margine, obostrano poravnanje) -> advisory; opseg (>=30 str diplomski) i A4 su 'Preporuka je da...' -> advisory; citiranje autor-godina uz 'Preporucuje se neizravno citiranje' -> advisory (harvard). Scored (imperativ): numeracija stranica (od sazetka, donji desni kut) i obvezan Sadrzaj. Snapshot je .docx; tekst ekstrahiran iz word/document.xml, svi citati verbatim provjereni grepom nad sumfak-upute-zavrsni-diplomski-2024.txt."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "sumfak-diplomski",
+      "unitId": "sumfak",
+      "programs": ["Diplomski studiji Fakulteta šumarstva i drvne tehnologije"],
+      "workTypes": ["graduate"],
+      "status": "partial",
+      "profileLabel": "Fakultet sumarstva i drvne tehnologije, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2024-01-01",
+      "rules": {
+        "font": ["Arial", "Times New Roman", "Calibri"],
+        "size": [11, 12],
+        "spacing": 1.15,
+        "margins": { "top": 2.5, "right": 2.5, "bottom": 2.5, "left": 2.5 },
+        "requireToc": true,
+        "requirePageNumbers": true,
+        "requireA4": true,
+        "checkJustify": true,
+        "recommendedCitation": "harvard"
+      },
+      "facts": [
+        "Numeracija stranica ide od sazetka do kraja teksta, u donji desni kut (imperativ -> scored).",
+        "Sadrzaj je obvezna cjelina rada (imperativ -> scored).",
+        "Font (Arial, Times New Roman, Calibri), velicina 11 ili 12 pt, prored 1,15, margine 2,5 cm i obostrano poravnanje navedeni su pod 'Preporuke za tehnicko oblikovanje rada' (advisory).",
+        "Opseg diplomskoga rada najmanje 30 stranica osnovnoga teksta na papiru A4 formuliran je kao 'Preporuka je da...' (advisory).",
+        "Citiranje je autor-godina uz izrijek 'Preporucuje se neizravno citiranje' (advisory, mapirano na harvard)."
+      ],
+      "note": "Iz sluzbenih Uputa za izradu zavrsnoga i diplomskoga rada (FSDT, 2024). Tehnicko oblikovanje i opseg su formulirani kao Preporuke pa su advisory; scored su samo imperativna pravila (numeracija stranica, obvezan Sadrzaj). Doktorski nije pokriven ovim izvorom (poseban pravilnik doktorskoga studija nije dohvacen kao dostupan tekst).",
+      "sources": [
+        {
+          "title": "Upute za izradu zavrsnoga i diplomskoga rada (FSDT, 2024)",
+          "url": "https://www.sumfak.unizg.hr/site/assets/files/3498/upute_za_izradu_zavrsnoga_i_diplomskoga_rada.docx"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu zavrsnoga i diplomskoga rada (Fakultet sumarstva i drvne tehnologije, 2024)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": ["numeracija stranica", "sadrzaj (obvezna cjelina)"],
+      "advisoryScope": [
+        "font",
+        "velicina slova",
+        "prored",
+        "margine",
+        "poravnanje (justify)",
+        "format papira",
+        "opseg u stranicama",
+        "stil citiranja (autor-godina)",
+        "obvezne cjeline rada"
+      ]
+    },
+    {
+      "id": "sumfak-zavrsni",
+      "unitId": "sumfak",
+      "programs": ["Prijediplomski studiji Fakulteta šumarstva i drvne tehnologije (zavrsni rad)"],
+      "workTypes": ["final"],
+      "status": "partial",
+      "profileLabel": "Fakultet sumarstva i drvne tehnologije, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2024-01-01",
+      "rules": {
+        "font": ["Arial", "Times New Roman", "Calibri"],
+        "size": [11, 12],
+        "spacing": 1.15,
+        "margins": { "top": 2.5, "right": 2.5, "bottom": 2.5, "left": 2.5 },
+        "requireToc": true,
+        "requirePageNumbers": true,
+        "checkJustify": true,
+        "recommendedCitation": "harvard"
+      },
+      "facts": [
+        "Iste Upute (FSDT, 2024) izrijekom vrijede i za zavrsni (prijediplomski) rad.",
+        "Numeracija stranica ide od sazetka do kraja teksta, u donji desni kut (imperativ -> scored).",
+        "Sadrzaj je obvezna cjelina rada (imperativ -> scored).",
+        "Font (Arial, Times New Roman, Calibri), velicina 11 ili 12 pt, prored 1,15, margine 2,5 cm i obostrano poravnanje navedeni su pod 'Preporuke za tehnicko oblikovanje rada' (advisory).",
+        "Citiranje je autor-godina uz izrijek 'Preporucuje se neizravno citiranje' (advisory, mapirano na harvard)."
+      ],
+      "note": "Iste sluzbene Upute (FSDT, 2024) vrijede za zavrsni i diplomski rad. Tehnicko oblikovanje je pod Preporukama pa je advisory; scored su samo numeracija stranica i obvezan Sadrzaj. Opseg (>=30 str) vrijedi samo za diplomski pa nije u ovom profilu.",
+      "sources": [
+        {
+          "title": "Upute za izradu zavrsnoga i diplomskoga rada (FSDT, 2024)",
+          "url": "https://www.sumfak.unizg.hr/site/assets/files/3498/upute_za_izradu_zavrsnoga_i_diplomskoga_rada.docx"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu zavrsnoga i diplomskoga rada (Fakultet sumarstva i drvne tehnologije, 2024)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": ["numeracija stranica", "sadrzaj (obvezna cjelina)"],
+      "advisoryScope": [
+        "font",
+        "velicina slova",
+        "prored",
+        "margine",
+        "poravnanje (justify)",
+        "stil citiranja (autor-godina)",
+        "obvezne cjeline rada"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-sumfak-diplomski--page-numbers-verified-2026-07-02",
+      "ruleId": "sumfak-diplomski--page-numbers",
+      "profileId": "sumfak-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+      "sourcePage": "odjeljak Tehnicko oblikovanje rada",
+      "quote": "stranice se numeriraju od sažetka do kraja teksta, a numeracija se postavlja u donji desni kut",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-sumfak-diplomski--toc-verified-2026-07-02",
+      "ruleId": "sumfak-diplomski--toc",
+      "profileId": "sumfak-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+      "sourcePage": "odjeljak Struktura i sadrzaj zavrsnoga i diplomskoga rada",
+      "quote": "Sadržaj je popis naslova poglavlja i potpoglavlja s brojem stranice na kojoj započinju.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-sumfak-diplomski--font-advisory-2026-07-02",
+      "ruleId": "sumfak-diplomski--font",
+      "profileId": "sumfak-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+      "sourcePage": "odjeljak Preporuke za tehnicko oblikovanje rada",
+      "quote": "preporučuju se fontovi Arial, Times New Roman, Calibri",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-sumfak-diplomski--font-size-advisory-2026-07-02",
+      "ruleId": "sumfak-diplomski--font-size",
+      "profileId": "sumfak-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+      "sourcePage": "odjeljak Preporuke za tehnicko oblikovanje rada",
+      "quote": "rad se piše veličinom slova 11 ili 12 pt, prored 1,15",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-sumfak-diplomski--line-spacing-advisory-2026-07-02",
+      "ruleId": "sumfak-diplomski--line-spacing",
+      "profileId": "sumfak-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+      "sourcePage": "odjeljak Preporuke za tehnicko oblikovanje rada",
+      "quote": "rad se piše veličinom slova 11 ili 12 pt, prored 1,15",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-sumfak-diplomski--margins-advisory-2026-07-02",
+      "ruleId": "sumfak-diplomski--margins",
+      "profileId": "sumfak-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+      "sourcePage": "odjeljak Preporuke za tehnicko oblikovanje rada",
+      "quote": "margine rada trebaju iznositi 2,5 cm",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-sumfak-diplomski--justify-advisory-2026-07-02",
+      "ruleId": "sumfak-diplomski--justify",
+      "profileId": "sumfak-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+      "sourcePage": "odjeljak Preporuke za tehnicko oblikovanje rada",
+      "quote": "treba obostrano poravnati tekst (justify)",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-sumfak-diplomski--paper-size-advisory-2026-07-02",
+      "ruleId": "sumfak-diplomski--paper-size",
+      "profileId": "sumfak-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+      "sourcePage": "odjeljak Diplomski rad",
+      "quote": "Preporuka je da diplomski rad bude opsega najmanje 30 stranica osnovnoga teksta na papiru formata A4 bez naslovnice, sadržaja, popisa literature i priloga.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-sumfak-diplomski--page-count-advisory-2026-07-02",
+      "ruleId": "sumfak-diplomski--page-count",
+      "profileId": "sumfak-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+      "sourcePage": "odjeljak Diplomski rad",
+      "quote": "Preporuka je da diplomski rad bude opsega najmanje 30 stranica osnovnoga teksta na papiru formata A4 bez naslovnice, sadržaja, popisa literature i priloga.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-sumfak-diplomski--citation-style-advisory-2026-07-02",
+      "ruleId": "sumfak-diplomski--citation-style",
+      "profileId": "sumfak-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+      "sourcePage": "odjeljak Pravila citiranja i izrada popisa literature",
+      "quote": "Citirati se može izravno – koristeći navodnike, i neizravno – prepričavanjem, sažimanjem. Preporučuje se neizravno citiranje.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-sumfak-diplomski--required-sections-advisory-2026-07-02",
+      "ruleId": "sumfak-diplomski--required-sections",
+      "profileId": "sumfak-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+      "sourcePage": "odjeljak Struktura i sadrzaj zavrsnoga i diplomskoga rada",
+      "quote": "Dijelovi rada su sljedeći:",
+      "note": "Port pilot workflow. Struktura navedena imperativno, ali sadrzi i neobvezne dijelove (zahvala, prilog) pa ostaje advisory."
+    },
+    {
+      "id": "led-sumfak-zavrsni--page-numbers-verified-2026-07-02",
+      "ruleId": "sumfak-zavrsni--page-numbers",
+      "profileId": "sumfak-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+      "sourcePage": "odjeljak Tehnicko oblikovanje rada",
+      "quote": "stranice se numeriraju od sažetka do kraja teksta, a numeracija se postavlja u donji desni kut",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-sumfak-zavrsni--toc-verified-2026-07-02",
+      "ruleId": "sumfak-zavrsni--toc",
+      "profileId": "sumfak-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+      "sourcePage": "odjeljak Struktura i sadrzaj zavrsnoga i diplomskoga rada",
+      "quote": "Sadržaj je popis naslova poglavlja i potpoglavlja s brojem stranice na kojoj započinju.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-sumfak-zavrsni--font-advisory-2026-07-02",
+      "ruleId": "sumfak-zavrsni--font",
+      "profileId": "sumfak-zavrsni",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+      "sourcePage": "odjeljak Preporuke za tehnicko oblikovanje rada",
+      "quote": "preporučuju se fontovi Arial, Times New Roman, Calibri",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-sumfak-zavrsni--font-size-advisory-2026-07-02",
+      "ruleId": "sumfak-zavrsni--font-size",
+      "profileId": "sumfak-zavrsni",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+      "sourcePage": "odjeljak Preporuke za tehnicko oblikovanje rada",
+      "quote": "rad se piše veličinom slova 11 ili 12 pt, prored 1,15",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-sumfak-zavrsni--line-spacing-advisory-2026-07-02",
+      "ruleId": "sumfak-zavrsni--line-spacing",
+      "profileId": "sumfak-zavrsni",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+      "sourcePage": "odjeljak Preporuke za tehnicko oblikovanje rada",
+      "quote": "rad se piše veličinom slova 11 ili 12 pt, prored 1,15",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-sumfak-zavrsni--margins-advisory-2026-07-02",
+      "ruleId": "sumfak-zavrsni--margins",
+      "profileId": "sumfak-zavrsni",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+      "sourcePage": "odjeljak Preporuke za tehnicko oblikovanje rada",
+      "quote": "margine rada trebaju iznositi 2,5 cm",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-sumfak-zavrsni--justify-advisory-2026-07-02",
+      "ruleId": "sumfak-zavrsni--justify",
+      "profileId": "sumfak-zavrsni",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+      "sourcePage": "odjeljak Preporuke za tehnicko oblikovanje rada",
+      "quote": "treba obostrano poravnati tekst (justify)",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-sumfak-zavrsni--citation-style-advisory-2026-07-02",
+      "ruleId": "sumfak-zavrsni--citation-style",
+      "profileId": "sumfak-zavrsni",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+      "sourcePage": "odjeljak Pravila citiranja i izrada popisa literature",
+      "quote": "Citirati se može izravno – koristeći navodnike, i neizravno – prepričavanjem, sažimanjem. Preporučuje se neizravno citiranje.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-sumfak-zavrsni--required-sections-advisory-2026-07-02",
+      "ruleId": "sumfak-zavrsni--required-sections",
+      "profileId": "sumfak-zavrsni",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+      "sourcePage": "odjeljak Struktura i sadrzaj zavrsnoga i diplomskoga rada",
+      "quote": "Dijelovi rada su sljedeći:",
+      "note": "Port pilot workflow. Struktura navedena imperativno, ali sadrzi i neobvezne dijelove (zahvala, prilog) pa ostaje advisory."
+    }
+  ]
+}

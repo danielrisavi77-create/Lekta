@@ -158,6 +158,8 @@
         "programs": [
           "Šumarstvo",
           "Drvna tehnologija",
+          "Diplomski studiji Fakulteta šumarstva i drvne tehnologije",
+          "Prijediplomski studiji Fakulteta šumarstva i drvne tehnologije (zavrsni rad)",
           "Opći profil fakulteta"
         ],
         "status": "generic"
@@ -211,6 +213,8 @@
         "family": "stem",
         "programs": [
           "Građevinarstvo",
+          "Diplomski studiji Građevinskog fakulteta",
+          "Prijediplomski studiji Građevinskog fakulteta (zavrsni rad)",
           "Opći profil fakulteta"
         ],
         "status": "generic"
@@ -244,6 +248,7 @@
         "programs": [
           "Kineziologija",
           "Izobrazba trenera",
+          "Diplomski studiji Kineziološkog fakulteta",
           "Opći profil fakulteta"
         ],
         "status": "partial"
@@ -256,6 +261,7 @@
           "Medicina",
           "Sestrinstvo",
           "Sveučilišni specijalistički studiji",
+          "Diplomski studiji Medicinskog fakulteta",
           "Opći profil fakulteta"
         ],
         "status": "partial"
@@ -348,6 +354,8 @@
         "programs": [
           "Tekstilna tehnologija i inženjerstvo",
           "Tekstilni i modni dizajn",
+          "Diplomski studiji Tekstilno-tehnološkog fakulteta",
+          "Prijediplomski studiji Tekstilno-tehnološkog fakulteta (zavrsni rad)",
           "Opći profil fakulteta"
         ],
         "status": "generic"
@@ -369,6 +377,7 @@
         "family": "biomed",
         "programs": [
           "Veterinarska medicina",
+          "Diplomski studiji Veterinarskog fakulteta Sveucilista u Zagrebu",
           "Opći profil fakulteta"
         ],
         "status": "generic"

@@ -1,0 +1,363 @@
+{
+  "faculty": "ttf",
+  "unit": null,
+  "catalogPrograms": [
+    "Diplomski studiji Tekstilno-tehnološkog fakulteta",
+    "Prijediplomski studiji Tekstilno-tehnološkog fakulteta (zavrsni rad)"
+  ],
+  "sources": [
+    {
+      "id": "ttf-upute-zavrsni-diplomski",
+      "kind": "guidelines",
+      "title": "Upute za oblikovanje zavrsnog i diplomskog rada na Sveucilistu u Zagrebu Tekstilno-tehnoloskom fakultetu",
+      "url": "https://api.ttf.hr/documents/2jkTqCAb3q90sHtmCP6YSBKg40rbo1mHCTrqdwwWKt9Y4aYZMqpiLuOVdsdi/upute-za-oblikovanje-zavrsnog-i-diplomskog-rada-ttf.pdf",
+      "publisher": "Sveuciliste u Zagrebu Tekstilno-tehnoloski fakultet",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/ttf/ttf-upute-zavrsni-diplomski.pdf",
+      "snapshotHash": "a56354fe4ac7435f101d47bd4259a5ea3a6d81a0e7d180b8032c6c774c6e3500",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Sluzbene Upute za oblikovanje zavrsnog i diplomskog rada TTF-a (sluzbena domena api.ttf.hr). Jedan dokument pokriva i zavrsni i diplomski rad. Tehnicko oblikovanje pod 'Postavke stranice' je imperativno (font Arial, 12 pt, prored 1,5, margine 2,5 cm, obostrano poravnanje) -> scored. Numeracija stranica ('Stranice moraju biti numerirane'), obvezan Sadrzaj ('rad mora imati sadrzaj') te okvirne obvezne cjeline (UVOD/ZAKLJUCAK/popis literature s 'mora') su imperativi -> scored. Citation-style se granata po podrucju (tehnicko: Vancouver; drustveno/humanisticko/umjetnicko: APA 7) pa je advisory. A4/format papira i opseg (stranice/rijeci) izvor ne propisuje za tijelo rada pa su izostavljeni."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "ttf-diplomski",
+      "unitId": "ttf",
+      "programs": [
+        "Diplomski studiji Tekstilno-tehnološkog fakulteta"
+      ],
+      "workTypes": ["graduate"],
+      "status": "partial",
+      "profileLabel": "Tekstilno-tehnološki fakultet, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": ["Arial"],
+        "size": 12,
+        "spacing": 1.5,
+        "margins": { "top": 2.5, "right": 2.5, "bottom": 2.5, "left": 2.5 },
+        "requireToc": true,
+        "requirePageNumbers": true,
+        "checkJustify": true,
+        "checkMargins": true,
+        "recommendedCitation": "vancouver",
+        "requiredSections": [
+          { "key": "toc", "label": "sadrzaj", "terms": ["sadrzaj", "contents", "table of contents"] },
+          { "key": "intro", "label": "uvod", "terms": ["uvod", "introduction"] },
+          { "key": "conclusion", "label": "zakljucak", "terms": ["zakljucak", "conclusion"] },
+          { "key": "refs", "label": "popis literature", "terms": ["literatura", "popis literature", "references", "bibliography"] }
+        ]
+      },
+      "facts": [
+        "Font Arial (obavezna potpora svih hrvatskih znakova), velicina 12 pt, prored 1,5, margine 2,5 cm sa svih strana, tekst obostrano poravnat (imperativ).",
+        "Stranice moraju biti numerirane; prva numerirana stranica je ona koja zapocinje s poglavljem UVOD, numeracija u donjem desnom kutu (imperativ).",
+        "Rad mora imati sadrzaj s cjelokupnom strukturom poglavlja i potpoglavlja (imperativ).",
+        "Rad mora zapoceti poglavljem UVOD i zavrsiti poglavljem ZAKLJUCAK, a nakon zakljucka mora sadrzavati popis koristene literature (imperativ).",
+        "Stil citiranja se granata: u tehnickom podrucju Vancouver, u drustvenom/humanistickom/umjetnickom podrucju APA (7. izdanje) (advisory zbog granatosti)."
+      ],
+      "note": "Diplomski rad TTF. Sva pravila iz jedinstvenih Uputa za oblikovanje zavrsnog i diplomskog rada. Tehnicko oblikovanje i obvezne cjeline su imperativni pa scored; citation-style je advisory jer ovisi o znanstvenom podrucju studija (tehnicki Vancouver vs drustveni/humanisticki/umjetnicki APA 7). recommendedCitation postavljen na 'vancouver' kao pretezno tehnicki default; za dizajnerske/umjetnicke smjerove ljudski pregled treba potvrditi APA 7. Format papira i opseg izvor ne propisuje pa su izostavljeni.",
+      "sources": [
+        {
+          "title": "Upute za oblikovanje zavrsnog i diplomskog rada (TTF)",
+          "url": "https://api.ttf.hr/documents/2jkTqCAb3q90sHtmCP6YSBKg40rbo1mHCTrqdwwWKt9Y4aYZMqpiLuOVdsdi/upute-za-oblikovanje-zavrsnog-i-diplomskog-rada-ttf.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za oblikovanje zavrsnog i diplomskog rada na Sveucilistu u Zagrebu Tekstilno-tehnoloskom fakultetu"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "font",
+        "velicina slova",
+        "prored",
+        "margine",
+        "obostrano poravnanje",
+        "numeracija stranica",
+        "sadrzaj (obvezna cjelina)",
+        "obvezne cjeline rada (uvod, zakljucak, popis literature)"
+      ],
+      "advisoryScope": [
+        "stil citiranja (Vancouver / APA 7 po podrucju)"
+      ]
+    },
+    {
+      "id": "ttf-zavrsni",
+      "unitId": "ttf",
+      "programs": [
+        "Prijediplomski studiji Tekstilno-tehnološkog fakulteta (zavrsni rad)"
+      ],
+      "workTypes": ["final"],
+      "status": "partial",
+      "profileLabel": "Tekstilno-tehnološki fakultet, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": ["Arial"],
+        "size": 12,
+        "spacing": 1.5,
+        "margins": { "top": 2.5, "right": 2.5, "bottom": 2.5, "left": 2.5 },
+        "requireToc": true,
+        "requirePageNumbers": true,
+        "checkJustify": true,
+        "checkMargins": true,
+        "recommendedCitation": "vancouver",
+        "requiredSections": [
+          { "key": "toc", "label": "sadrzaj", "terms": ["sadrzaj", "contents", "table of contents"] },
+          { "key": "intro", "label": "uvod", "terms": ["uvod", "introduction"] },
+          { "key": "conclusion", "label": "zakljucak", "terms": ["zakljucak", "conclusion"] },
+          { "key": "refs", "label": "popis literature", "terms": ["literatura", "popis literature", "references", "bibliography"] }
+        ]
+      },
+      "facts": [
+        "Font Arial (obavezna potpora svih hrvatskih znakova), velicina 12 pt, prored 1,5, margine 2,5 cm sa svih strana, tekst obostrano poravnat (imperativ).",
+        "Stranice moraju biti numerirane; prva numerirana stranica je ona koja zapocinje s poglavljem UVOD, numeracija u donjem desnom kutu (imperativ).",
+        "Rad mora imati sadrzaj s cjelokupnom strukturom poglavlja i potpoglavlja (imperativ).",
+        "Rad mora zapoceti poglavljem UVOD i zavrsiti poglavljem ZAKLJUCAK, a nakon zakljucka mora sadrzavati popis koristene literature (imperativ).",
+        "Stil citiranja se granata: u tehnickom podrucju Vancouver, u drustvenom/humanistickom/umjetnickom podrucju APA (7. izdanje) (advisory zbog granatosti)."
+      ],
+      "note": "Zavrsni (prijediplomski) rad TTF. Isti sluzbeni izvor kao i diplomski rad (Upute pokrivaju 'zavrsni/diplomski rad' zajedno), pa su pravila identicna. Citation-style advisory zbog granatosti po podrucju; recommendedCitation 'vancouver' kao tehnicki default uz ljudski pregled za dizajnerske/umjetnicke smjerove. Format papira i opseg izvor ne propisuje pa su izostavljeni.",
+      "sources": [
+        {
+          "title": "Upute za oblikovanje zavrsnog i diplomskog rada (TTF)",
+          "url": "https://api.ttf.hr/documents/2jkTqCAb3q90sHtmCP6YSBKg40rbo1mHCTrqdwwWKt9Y4aYZMqpiLuOVdsdi/upute-za-oblikovanje-zavrsnog-i-diplomskog-rada-ttf.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za oblikovanje zavrsnog i diplomskog rada na Sveucilistu u Zagrebu Tekstilno-tehnoloskom fakultetu"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "font",
+        "velicina slova",
+        "prored",
+        "margine",
+        "obostrano poravnanje",
+        "numeracija stranica",
+        "sadrzaj (obvezna cjelina)",
+        "obvezne cjeline rada (uvod, zakljucak, popis literature)"
+      ],
+      "advisoryScope": [
+        "stil citiranja (Vancouver / APA 7 po podrucju)"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-ttf-diplomski--font-verified-2026-07-02",
+      "ruleId": "ttf-diplomski--font",
+      "profileId": "ttf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ttf-upute-zavrsni-diplomski",
+      "sourcePage": "Postavke stranice",
+      "quote": "Tip pisma (Font): obavezna potpora svih hrvatskih znakova",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ttf-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "ttf-diplomski--font-size",
+      "profileId": "ttf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ttf-upute-zavrsni-diplomski",
+      "sourcePage": "Postavke stranice",
+      "quote": "Velicina slova (Font size): 12 tipografskih tocaka",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ttf-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "ttf-diplomski--line-spacing",
+      "profileId": "ttf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ttf-upute-zavrsni-diplomski",
+      "sourcePage": "Postavke stranice",
+      "quote": "Prored (Line spacing): 1,5 redak",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ttf-diplomski--margins-verified-2026-07-02",
+      "ruleId": "ttf-diplomski--margins",
+      "profileId": "ttf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ttf-upute-zavrsni-diplomski",
+      "sourcePage": "Postavke stranice",
+      "quote": "Lijeva i desna margina: 2,5 cm",
+      "note": "Port pilot workflow. Gornja i donja margina 2,5 cm potvrdeno istim odjeljkom."
+    },
+    {
+      "id": "led-ttf-diplomski--justify-verified-2026-07-02",
+      "ruleId": "ttf-diplomski--justify",
+      "profileId": "ttf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ttf-upute-zavrsni-diplomski",
+      "sourcePage": "Postavke stranice",
+      "quote": "Poravnanje (Alignment): Obostrano (Justified)",
+      "note": "Port pilot workflow. Justify vozi se i kroz rules.checkJustify."
+    },
+    {
+      "id": "led-ttf-diplomski--page-numbers-verified-2026-07-02",
+      "ruleId": "ttf-diplomski--page-numbers",
+      "profileId": "ttf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ttf-upute-zavrsni-diplomski",
+      "sourcePage": "Opce upute o oblikovanju",
+      "quote": "Stranice moraju biti numerirane.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ttf-diplomski--toc-verified-2026-07-02",
+      "ruleId": "ttf-diplomski--toc",
+      "profileId": "ttf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ttf-upute-zavrsni-diplomski",
+      "sourcePage": "Struktura zavrsnog/diplomskog rada",
+      "quote": "rad mora imati sadrzaj sa cjelokupnom strukturom poglavlja i potpoglavlja",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ttf-diplomski--required-sections-verified-2026-07-02",
+      "ruleId": "ttf-diplomski--required-sections",
+      "profileId": "ttf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ttf-upute-zavrsni-diplomski",
+      "sourcePage": "Struktura zavrsnog/diplomskog rada",
+      "quote": "tekst rada mora zapoceti s poglavljem ,,UVOD\"",
+      "note": "Port pilot workflow. Sadrzaj, UVOD, ZAKLJUCAK i popis literature izneseni imperativno ('mora'); srednji dio (Materijali i metode; Rezultati i diskusija) 'moze i ne mora' pa nije ukljucen u obvezne cjeline."
+    },
+    {
+      "id": "led-ttf-diplomski--citation-style-advisory-2026-07-02",
+      "ruleId": "ttf-diplomski--citation-style",
+      "profileId": "ttf-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ttf-upute-zavrsni-diplomski",
+      "sourcePage": "Citiranje i referenciranje",
+      "quote": "U podrucju tehnickih znanosti treba koristiti Vancouver stil referenciranja, a u drustvenom,",
+      "note": "Port pilot workflow. Stil se granata po znanstvenom podrucju pa je advisory. Nastavak citata: '...humanistickom i umjetnickom podrucju APA (7. izdanje) stil referenciranja.'"
+    },
+    {
+      "id": "led-ttf-zavrsni--font-verified-2026-07-02",
+      "ruleId": "ttf-zavrsni--font",
+      "profileId": "ttf-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ttf-upute-zavrsni-diplomski",
+      "sourcePage": "Postavke stranice",
+      "quote": "Tip pisma (Font): obavezna potpora svih hrvatskih znakova",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ttf-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "ttf-zavrsni--font-size",
+      "profileId": "ttf-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ttf-upute-zavrsni-diplomski",
+      "sourcePage": "Postavke stranice",
+      "quote": "Velicina slova (Font size): 12 tipografskih tocaka",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ttf-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "ttf-zavrsni--line-spacing",
+      "profileId": "ttf-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ttf-upute-zavrsni-diplomski",
+      "sourcePage": "Postavke stranice",
+      "quote": "Prored (Line spacing): 1,5 redak",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ttf-zavrsni--margins-verified-2026-07-02",
+      "ruleId": "ttf-zavrsni--margins",
+      "profileId": "ttf-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ttf-upute-zavrsni-diplomski",
+      "sourcePage": "Postavke stranice",
+      "quote": "Lijeva i desna margina: 2,5 cm",
+      "note": "Port pilot workflow. Gornja i donja margina 2,5 cm potvrdeno istim odjeljkom."
+    },
+    {
+      "id": "led-ttf-zavrsni--justify-verified-2026-07-02",
+      "ruleId": "ttf-zavrsni--justify",
+      "profileId": "ttf-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ttf-upute-zavrsni-diplomski",
+      "sourcePage": "Postavke stranice",
+      "quote": "Poravnanje (Alignment): Obostrano (Justified)",
+      "note": "Port pilot workflow. Justify vozi se i kroz rules.checkJustify."
+    },
+    {
+      "id": "led-ttf-zavrsni--page-numbers-verified-2026-07-02",
+      "ruleId": "ttf-zavrsni--page-numbers",
+      "profileId": "ttf-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ttf-upute-zavrsni-diplomski",
+      "sourcePage": "Opce upute o oblikovanju",
+      "quote": "Stranice moraju biti numerirane.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ttf-zavrsni--toc-verified-2026-07-02",
+      "ruleId": "ttf-zavrsni--toc",
+      "profileId": "ttf-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ttf-upute-zavrsni-diplomski",
+      "sourcePage": "Struktura zavrsnog/diplomskog rada",
+      "quote": "rad mora imati sadrzaj sa cjelokupnom strukturom poglavlja i potpoglavlja",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ttf-zavrsni--required-sections-verified-2026-07-02",
+      "ruleId": "ttf-zavrsni--required-sections",
+      "profileId": "ttf-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ttf-upute-zavrsni-diplomski",
+      "sourcePage": "Struktura zavrsnog/diplomskog rada",
+      "quote": "tekst rada mora zapoceti s poglavljem ,,UVOD\"",
+      "note": "Port pilot workflow. Sadrzaj, UVOD, ZAKLJUCAK i popis literature izneseni imperativno ('mora'); srednji dio 'moze i ne mora'."
+    },
+    {
+      "id": "led-ttf-zavrsni--citation-style-advisory-2026-07-02",
+      "ruleId": "ttf-zavrsni--citation-style",
+      "profileId": "ttf-zavrsni",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ttf-upute-zavrsni-diplomski",
+      "sourcePage": "Citiranje i referenciranje",
+      "quote": "U podrucju tehnickih znanosti treba koristiti Vancouver stil referenciranja, a u drustvenom,",
+      "note": "Port pilot workflow. Stil se granata po znanstvenom podrucju pa je advisory. Nastavak citata: '...humanistickom i umjetnickom podrucju APA (7. izdanje) stil referenciranja.'"
+    }
+  ]
+}
