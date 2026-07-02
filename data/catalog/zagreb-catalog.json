@@ -47,6 +47,8 @@
           "Poslovna ekonomija",
           "Stručni studiji",
           "Sveučilišni specijalistički studiji",
+          "Prijediplomski studiji Ekonomski fakultet (zavrsni rad)",
+          "Diplomski studiji Ekonomski fakultet",
           "Opći profil fakulteta"
         ],
         "status": "research"
@@ -58,6 +60,8 @@
         "programs": [
           "Elektrotehnika i informacijska tehnologija",
           "Računarstvo",
+          "Diplomski studiji Fakultet elektrotehnike i racunarstva",
+          "Prijediplomski studiji Fakultet elektrotehnike i racunarstva (zavrsni rad)",
           "Opći profil fakulteta"
         ],
         "status": "partial"
@@ -141,6 +145,8 @@
           "Strojarstvo",
           "Brodogradnja",
           "Zrakoplovno inženjerstvo i svemirska tehnika",
+          "Diplomski studiji Fakultet strojarstva i brodogradnje",
+          "Prijediplomski studiji Fakultet strojarstva i brodogradnje (zavrsni rad)",
           "Opći profil fakulteta"
         ],
         "status": "partial"

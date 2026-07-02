@@ -1,0 +1,295 @@
+{
+  "faculty": "efzg",
+  "unit": null,
+  "catalogPrograms": [
+    "Prijediplomski studiji Ekonomski fakultet (zavrsni rad)",
+    "Diplomski studiji Ekonomski fakultet"
+  ],
+  "sources": [
+    {
+      "id": "efzg-postupak-zavrsni",
+      "kind": "guidelines",
+      "title": "Postupak prijave, izrade i obrane zavrsnog rada na preddiplomskom sveucilisnom studiju (Ekonomski fakultet u Zagrebu)",
+      "url": "https://www.efzg.unizg.hr/userdocsimages/trg/izupanic/POSTUPAK%20PRIJAVE,%20IZRADE%20I%20OBRANE%20ZAVR%C5%A0NOG%20RADA.pdf",
+      "publisher": "Ekonomski fakultet Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/efzg/efzg-postupak-zavrsni.pdf",
+      "snapshotHash": "0807863ff289516855c37afbc35be192a003cda41a641d633c0379b756533549",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Sluzbeni postupak za zavrsni rad na preddiplomskom studiju (kolegij Meunarodno poslovanje, Katedra za trgovinu). Tehnicko oblikovanje formulirano imperativno (postaviti, koristiti, numerirati) -> scored: margine 2,5, font Times New Roman/Arial 12, prored 1,5, numeracija stranica, obvezne cjeline i sadrzaj. Opseg (u pravilu 30-40 str.), A4 i harvardski stil (Preporucuje se) -> advisory. Dokument bez vidljivog datuma; upuuje na Pravilnik o zavrsnim i seminarskim radovima."
+    },
+    {
+      "id": "efzg-upute-diplomski-seminarski",
+      "kind": "guidelines",
+      "title": "Upute za pisanje seminarskoga i diplomskoga rada (Ekonomski fakultet u Zagrebu, 2003)",
+      "url": "https://www.efzg.unizg.hr/UserDocsImages/dokumenti/efzg_diplomski_seminarski_upute.pdf?vel=216027",
+      "publisher": "Ekonomski fakultet Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/efzg/efzg-upute-diplomski-seminarski.pdf",
+      "snapshotHash": "a9144962b6935e040a6138550d51e606917884f8f1b3c216bef6fc212e3f5eda",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Opce fakultetske Upute za seminarski i diplomski rad (Zagreb, veljaca 2003). Odjeljak 7.1. Izgled (layout) rada je uveden s 'preporucuje se sljedee' (font 12, prored 1.5, margine 2,54), a opseg diplomskog rada je 'Preporucljiv opseg ... 30 - 50 stranica' -> sve advisory. Nema imperativnog tehnickog oblikovanja pa nema scored pravila iz ovog izvora."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "efzg-zavrsni",
+      "unitId": "efzg",
+      "programs": ["Prijediplomski studiji Ekonomski fakultet (zavrsni rad)"],
+      "workTypes": ["final"],
+      "status": "partial",
+      "profileLabel": "Ekonomski fakultet, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": ["Times New Roman", "Arial"],
+        "size": 12,
+        "spacing": 1.5,
+        "margins": { "top": 2.5, "right": 2.5, "bottom": 2.5, "left": 2.5 },
+        "requireToc": true,
+        "requirePageNumbers": true,
+        "requireA4": true,
+        "checkJustify": true,
+        "checkMargins": true,
+        "pageMin": 30,
+        "pageMax": 40,
+        "recommendedCitation": "harvard",
+        "requiredSections": [
+          { "key": "naslovnica", "label": "Naslovnica", "terms": ["naslovnica"] },
+          { "key": "sadrzaj", "label": "Sadrzaj", "terms": ["sadrzaj"] },
+          { "key": "uvod", "label": "Uvod", "terms": ["uvod"] },
+          { "key": "sredisnji-dio", "label": "Sredisnji dio rada", "terms": ["sredisnji dio", "razrada"] },
+          { "key": "zakljucak", "label": "Zakljucak", "terms": ["zakljucak"] },
+          { "key": "literatura", "label": "Popis literature", "terms": ["popis literature", "literatura"] }
+        ]
+      },
+      "facts": [
+        "Sve margine 2,5 cm, font Times New Roman ili Arial velicine 12, prored 1,5 (imperativ).",
+        "Stranice se numeriraju, naslovna se ne numerira; tekst je obostrano poravnat (imperativ).",
+        "Rad se sastoji od: naslovnica, sadrzaj, uvod, sredisnji dio, zakljucak, popis literature, popis slika, popis tablica, prilozi (imperativ).",
+        "Opseg u pravilu 30 do 40 stranica A4 i harvardski stil citiranja formulirani su kao preporuka (advisory)."
+      ],
+      "note": "Zavrsni rad na preddiplomskom studiju (kolegij Meunarodno poslovanje). Tehnicko oblikovanje je u dokumentu imperativno pa je scored; opseg, A4 i harvardski stil su preporuke (advisory). Obostrano poravnanje potvreno izvorom i vozi se kroz rules.checkJustify (checkId 'justify' nije u COMPILED_CHECK_IDS pa nije zaseban scored ruleEntry).",
+      "sources": [
+        {
+          "title": "Postupak prijave, izrade i obrane zavrsnog rada (Ekonomski fakultet u Zagrebu)",
+          "url": "https://www.efzg.unizg.hr/userdocsimages/trg/izupanic/POSTUPAK%20PRIJAVE,%20IZRADE%20I%20OBRANE%20ZAVR%C5%A0NOG%20RADA.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Postupak prijave, izrade i obrane zavrsnog rada (Ekonomski fakultet u Zagrebu)",
+        "Pravilnik o zavrsnim i seminarskim radovima na preddiplomskim sveucilisnim studijima Poslovna ekonomija i Ekonomija (referenciran, nije snapshotiran)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "margine",
+        "font",
+        "velicina slova",
+        "prored",
+        "numeracija stranica",
+        "obostrano poravnanje",
+        "obvezne cjeline rada",
+        "sadrzaj"
+      ],
+      "advisoryScope": [
+        "opseg u stranicama",
+        "format papira",
+        "stil citiranja (harvardski)"
+      ]
+    },
+    {
+      "id": "efzg-diplomski",
+      "unitId": "efzg",
+      "programs": ["Diplomski studiji Ekonomski fakultet"],
+      "workTypes": ["graduate"],
+      "status": "partial",
+      "profileLabel": "Ekonomski fakultet, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2003-02-01",
+      "rules": {
+        "size": 12,
+        "spacing": 1.5,
+        "margins": { "top": 2.54, "right": 2.54, "bottom": 2.54, "left": 2.54 },
+        "pageMin": 30,
+        "pageMax": 50
+      },
+      "facts": [
+        "Odjeljak 7.1. Izgled (layout) rada uveden je s 'preporucuje se sljedee': font 12, prored 1.5, margine 2,54 cm (advisory).",
+        "Preporucljiv opseg diplomskoga rada je 30 do 50 stranica (advisory)."
+      ],
+      "note": "Opce Upute (2003) sve tehnicko oblikovanje daju kao preporuku ('preporucuje se sljedee') pa nema scored pravila. Profil je partial i drzi izvor radi prikaza savjeta. Numeracija stranica u Uputama je opisana kroz shemu (naslovnica bez broja, uvod arapskim 1) ali bez cistog imperativa 'numerirati stranice' pa ostaje advisory/izostavljena; za scored pravila diplomskog rada treba noviji sluzbeni Pravilnik o izradi pisanih radova na diplomskim studijima."
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-efzg-zavrsni--margins-verified-2026-07-02",
+      "ruleId": "efzg-zavrsni--margins",
+      "profileId": "efzg-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efzg-postupak-zavrsni",
+      "sourcePage": "odjeljak POSTUPAK IZRADE ZAVRSNOG RADA",
+      "quote": "Sve margine stranica postaviti na 2,5 cm.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-efzg-zavrsni--font-verified-2026-07-02",
+      "ruleId": "efzg-zavrsni--font",
+      "profileId": "efzg-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efzg-postupak-zavrsni",
+      "sourcePage": "odjeljak POSTUPAK IZRADE ZAVRSNOG RADA",
+      "quote": "Koristiti font Times New Roman ili Arial, velicina slova 12.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-efzg-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "efzg-zavrsni--font-size",
+      "profileId": "efzg-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efzg-postupak-zavrsni",
+      "sourcePage": "odjeljak POSTUPAK IZRADE ZAVRSNOG RADA",
+      "quote": "Koristiti font Times New Roman ili Arial, velicina slova 12.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-efzg-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "efzg-zavrsni--line-spacing",
+      "profileId": "efzg-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efzg-postupak-zavrsni",
+      "sourcePage": "odjeljak POSTUPAK IZRADE ZAVRSNOG RADA",
+      "quote": "redaka postaviti na 1,5. Numerirati stranice rada. Naslovna stranica se ne numerira.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-efzg-zavrsni--page-numbers-verified-2026-07-02",
+      "ruleId": "efzg-zavrsni--page-numbers",
+      "profileId": "efzg-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efzg-postupak-zavrsni",
+      "sourcePage": "odjeljak POSTUPAK IZRADE ZAVRSNOG RADA",
+      "quote": "redaka postaviti na 1,5. Numerirati stranice rada. Naslovna stranica se ne numerira.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-efzg-zavrsni--required-sections-verified-2026-07-02",
+      "ruleId": "efzg-zavrsni--required-sections",
+      "profileId": "efzg-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efzg-postupak-zavrsni",
+      "sourcePage": "odjeljak POSTUPAK IZRADE ZAVRSNOG RADA",
+      "quote": "Zavrsni rad se sastoji od sljedeih dijelova: naslovnica, sadrzaj, uvod, sredisnji dio rada, zakljucak,",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-efzg-zavrsni--toc-verified-2026-07-02",
+      "ruleId": "efzg-zavrsni--toc",
+      "profileId": "efzg-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efzg-postupak-zavrsni",
+      "sourcePage": "odjeljak POSTUPAK IZRADE ZAVRSNOG RADA",
+      "quote": "Zavrsni rad se sastoji od sljedeih dijelova: naslovnica, sadrzaj, uvod, sredisnji dio rada, zakljucak,",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-efzg-zavrsni--page-count-advisory-2026-07-02",
+      "ruleId": "efzg-zavrsni--page-count",
+      "profileId": "efzg-zavrsni",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efzg-postupak-zavrsni",
+      "sourcePage": "odjeljak POSTUPAK IZRADE ZAVRSNOG RADA",
+      "quote": "u pravilu iznosi od 30 do 40 stranica teksta A4 formata",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-efzg-zavrsni--paper-size-advisory-2026-07-02",
+      "ruleId": "efzg-zavrsni--paper-size",
+      "profileId": "efzg-zavrsni",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efzg-postupak-zavrsni",
+      "sourcePage": "odjeljak POSTUPAK IZRADE ZAVRSNOG RADA",
+      "quote": "u pravilu iznosi od 30 do 40 stranica teksta A4 formata",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-efzg-zavrsni--citation-style-advisory-2026-07-02",
+      "ruleId": "efzg-zavrsni--citation-style",
+      "profileId": "efzg-zavrsni",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efzg-postupak-zavrsni",
+      "sourcePage": "odjeljak POSTUPAK IZRADE ZAVRSNOG RADA",
+      "quote": "Preporucuje se na tue radove upuivati harvardskim stilom navoenja literature.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-efzg-diplomski--font-size-advisory-2026-07-02",
+      "ruleId": "efzg-diplomski--font-size",
+      "profileId": "efzg-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efzg-upute-diplomski-seminarski",
+      "sourcePage": "odjeljak 7.1. Izgled (layout) rada",
+      "quote": "odabrati velicinu slova 12 i prored 1.5,",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-efzg-diplomski--line-spacing-advisory-2026-07-02",
+      "ruleId": "efzg-diplomski--line-spacing",
+      "profileId": "efzg-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efzg-upute-diplomski-seminarski",
+      "sourcePage": "odjeljak 7.1. Izgled (layout) rada",
+      "quote": "odabrati velicinu slova 12 i prored 1.5,",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-efzg-diplomski--margins-advisory-2026-07-02",
+      "ruleId": "efzg-diplomski--margins",
+      "profileId": "efzg-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efzg-upute-diplomski-seminarski",
+      "sourcePage": "odjeljak 7.1. Izgled (layout) rada",
+      "quote": "koristiti standardne margine",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-efzg-diplomski--page-count-advisory-2026-07-02",
+      "ruleId": "efzg-diplomski--page-count",
+      "profileId": "efzg-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "efzg-upute-diplomski-seminarski",
+      "sourcePage": "odjeljak 2.2. Svrha diplomskoga rada",
+      "quote": "Preporucljiv opseg diplomskoga rada je 30 - 50 stranica.",
+      "note": "Port pilot workflow."
+    }
+  ]
+}

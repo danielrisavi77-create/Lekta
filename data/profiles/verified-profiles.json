@@ -5230,5 +5230,398 @@
       "stil citiranja (struka/harvard)",
       "obvezne cjeline rada"
     ]
+  },
+  {
+    "id": "efzg-zavrsni",
+    "unitId": "efzg",
+    "programs": [
+      "Prijediplomski studiji Ekonomski fakultet (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Ekonomski fakultet, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Arial"
+      ],
+      "size": 12,
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "requireA4": true,
+      "checkJustify": true,
+      "checkMargins": true,
+      "pageMin": 30,
+      "pageMax": 40,
+      "recommendedCitation": "harvard",
+      "requiredSections": [
+        {
+          "key": "naslovnica",
+          "label": "Naslovnica",
+          "terms": [
+            "naslovnica"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadrzaj",
+          "terms": [
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "sredisnji-dio",
+          "label": "Sredisnji dio rada",
+          "terms": [
+            "sredisnji dio",
+            "razrada"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zakljucak",
+          "terms": [
+            "zakljucak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Popis literature",
+          "terms": [
+            "popis literature",
+            "literatura"
+          ]
+        }
+      ]
+    },
+    "facts": [
+      "Sve margine 2,5 cm, font Times New Roman ili Arial velicine 12, prored 1,5 (imperativ).",
+      "Stranice se numeriraju, naslovna se ne numerira; tekst je obostrano poravnat (imperativ).",
+      "Rad se sastoji od: naslovnica, sadrzaj, uvod, sredisnji dio, zakljucak, popis literature, popis slika, popis tablica, prilozi (imperativ).",
+      "Opseg u pravilu 30 do 40 stranica A4 i harvardski stil citiranja formulirani su kao preporuka (advisory)."
+    ],
+    "note": "Zavrsni rad na preddiplomskom studiju (kolegij Meunarodno poslovanje). Tehnicko oblikovanje je u dokumentu imperativno pa je scored; opseg, A4 i harvardski stil su preporuke (advisory). Obostrano poravnanje potvreno izvorom i vozi se kroz rules.checkJustify (checkId 'justify' nije u COMPILED_CHECK_IDS pa nije zaseban scored ruleEntry).",
+    "sources": [
+      {
+        "title": "Postupak prijave, izrade i obrane zavrsnog rada (Ekonomski fakultet u Zagrebu)",
+        "url": "https://www.efzg.unizg.hr/userdocsimages/trg/izupanic/POSTUPAK%20PRIJAVE,%20IZRADE%20I%20OBRANE%20ZAVR%C5%A0NOG%20RADA.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Postupak prijave, izrade i obrane zavrsnog rada (Ekonomski fakultet u Zagrebu)",
+      "Pravilnik o zavrsnim i seminarskim radovima na preddiplomskim sveucilisnim studijima Poslovna ekonomija i Ekonomija (referenciran, nije snapshotiran)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "margine",
+      "font",
+      "velicina slova",
+      "prored",
+      "numeracija stranica",
+      "obostrano poravnanje",
+      "obvezne cjeline rada",
+      "sadrzaj"
+    ],
+    "advisoryScope": [
+      "opseg u stranicama",
+      "format papira",
+      "stil citiranja (harvardski)"
+    ]
+  },
+  {
+    "id": "efzg-diplomski",
+    "unitId": "efzg",
+    "programs": [
+      "Diplomski studiji Ekonomski fakultet"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Ekonomski fakultet, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2003-02-01",
+    "rules": {
+      "size": 12,
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.54,
+        "right": 2.54,
+        "bottom": 2.54,
+        "left": 2.54
+      },
+      "pageMin": 30,
+      "pageMax": 50
+    },
+    "facts": [
+      "Odjeljak 7.1. Izgled (layout) rada uveden je s 'preporucuje se sljedee': font 12, prored 1.5, margine 2,54 cm (advisory).",
+      "Preporucljiv opseg diplomskoga rada je 30 do 50 stranica (advisory)."
+    ],
+    "note": "Opce Upute (2003) sve tehnicko oblikovanje daju kao preporuku ('preporucuje se sljedee') pa nema scored pravila. Profil je partial i drzi izvor radi prikaza savjeta. Numeracija stranica u Uputama je opisana kroz shemu (naslovnica bez broja, uvod arapskim 1) ali bez cistog imperativa 'numerirati stranice' pa ostaje advisory/izostavljena; za scored pravila diplomskog rada treba noviji sluzbeni Pravilnik o izradi pisanih radova na diplomskim studijima."
+  },
+  {
+    "id": "fsb-diplomski",
+    "unitId": "fsb",
+    "programs": [
+      "Diplomski studiji Fakultet strojarstva i brodogradnje"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Fakultet strojarstva i brodogradnje, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2020-07-15",
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Arial"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2,
+        "right": 2,
+        "bottom": 2,
+        "left": 2.5
+      },
+      "checkJustify": true,
+      "recommendedCitation": "ieee"
+    },
+    "facts": [
+      "Font Times New Roman ili Arial velicine 12, prored 1,5 i poravnanje justified navedeni su kao specifikacija oblikovanja (advisory).",
+      "Margine: lijeva 2,5 cm, ostale 2 cm (advisory).",
+      "Numeracija stranica je izrijekom neobavezna ('Stranice se mogu obrojcavati prema zelji').",
+      "Obavezne cjeline: sazetak, kljucne rijeci, uvod, zakljucak, popis literature (imperativno u izvoru, ali izvor je autorski od jedne Katedre pa ostaje advisory).",
+      "Citiranje je numericko u uglatim zagradama [1] (IEEE-slicno, advisory)."
+    ],
+    "note": "Iz Uputa za pisanje seminarskog, zavrsnog i diplomskog rada (FSB, Katedra za preradu polimera, 2020). Dokument je autorski od jedne Katedre, ne faculty-wide pravilnik, pa je authority general i NIJEDNO pravilo se ne boduje (sve advisory). Faculty-wide Pravilnik (2018) je skeniran (OCR) i nema tehnickih pravila oblikovanja. Doktorski nije pokriven nijednim dohvacenim izvorom.",
+    "sources": [
+      {
+        "title": "Upute za pisanje seminarskog, zavrsnog i diplomskog rada (FSB, 2020)",
+        "url": "https://www.fsb.unizg.hr/atlantis/upload/newsboard/15_07_2020__15271_Upute_za_pisanje_radova.doc"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnim i diplomskim radovima te zavrsnim i diplomskim ispitima (FSB, 2018)",
+      "Upute za pisanje seminarskog, zavrsnog i diplomskog rada (FSB, Katedra za preradu polimera, 2020)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [],
+    "advisoryScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "poravnanje (justify)",
+      "numeracija stranica",
+      "stil citiranja",
+      "obvezne cjeline rada"
+    ]
+  },
+  {
+    "id": "fsb-zavrsni",
+    "unitId": "fsb",
+    "programs": [
+      "Prijediplomski studiji Fakultet strojarstva i brodogradnje (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Fakultet strojarstva i brodogradnje, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2020-07-15",
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Arial"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2,
+        "right": 2,
+        "bottom": 2,
+        "left": 2.5
+      },
+      "checkJustify": true,
+      "recommendedCitation": "ieee"
+    },
+    "facts": [
+      "Font Times New Roman ili Arial velicine 12, prored 1,5 i poravnanje justified navedeni su kao specifikacija oblikovanja (advisory).",
+      "Margine: lijeva 2,5 cm, ostale 2 cm (advisory).",
+      "Numeracija stranica je izrijekom neobavezna ('Stranice se mogu obrojcavati prema zelji').",
+      "Iste Upute izrijekom vrijede i za zavrsni (i seminarski) rad.",
+      "Citiranje je numericko u uglatim zagradama [1] (IEEE-slicno, advisory)."
+    ],
+    "note": "Iste Upute (FSB, Katedra za preradu polimera, 2020) izrijekom vrijede za seminarski, zavrsni i diplomski rad. Dokument je autorski od jedne Katedre, ne faculty-wide pravilnik, pa je authority general i sve ostaje advisory (0 scored).",
+    "sources": [
+      {
+        "title": "Upute za pisanje seminarskog, zavrsnog i diplomskog rada (FSB, 2020)",
+        "url": "https://www.fsb.unizg.hr/atlantis/upload/newsboard/15_07_2020__15271_Upute_za_pisanje_radova.doc"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnim i diplomskim radovima te zavrsnim i diplomskim ispitima (FSB, 2018)",
+      "Upute za pisanje seminarskog, zavrsnog i diplomskog rada (FSB, Katedra za preradu polimera, 2020)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [],
+    "advisoryScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "poravnanje (justify)",
+      "numeracija stranica",
+      "stil citiranja",
+      "obvezne cjeline rada"
+    ]
+  },
+  {
+    "id": "fer-diplomski",
+    "unitId": "fer",
+    "programs": [
+      "Diplomski studiji Fakultet elektrotehnike i racunarstva"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Fakultet elektrotehnike i racunarstva, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2013-10-09",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.2,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3
+      },
+      "requirePageNumbers": true,
+      "requireA4": true,
+      "checkJustify": true,
+      "recommendedCitation": "ieee"
+    },
+    "facts": [
+      "Stranica mora biti A4 formata (imperativ, scored).",
+      "Sve stranice osim iznimki moraju biti numerirane, a stranica s uvodom pocinje brojem 1 (imperativ, scored).",
+      "Font Times New Roman velicine 12, prored 1 do 1,4 i margine 2,5 do 3 cm formulirani su kao preporuke (advisory).",
+      "Tekst se poravnava obostrano (justify).",
+      "Citiranje je numericko, u uglatim zagradama [x] (advisory, IEEE-slicno)."
+    ],
+    "note": "Iz Uputa za izradu diplomskog rada (FER ZEMRIS, 2013). Dokument je autorski (nastavnik/zavod) pa je authority general, ne faculty-wide pravilnik. Scored su samo imperativna, verbatim potvrdena pravila: A4 i numeracija stranica. Font, velicina, prored, margine, citiranje i cjeline su preporuke ili rasponi -> advisory. Doktorski nije pokriven (dokument izrijekom iskljucuje disertaciju). Izvor je osobna stranica nastavnika (ZEMRIS), ispod katedra-razine; sva pravila advisory dok se ne nadje faculty-wide izvor.",
+    "sources": [
+      {
+        "title": "Upute za izradu diplomskog rada (FER, ZEMRIS, 2013)",
+        "url": "https://www.zemris.fer.hr/~leonardo/studenti/Upute_za_izradu_rada.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu diplomskog rada (FER, ZEMRIS, Leonardo Jelenkovic, 2013)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [],
+    "advisoryScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "stil citiranja",
+      "uobicajene cjeline rada",
+      "format papira (A4)",
+      "numeracija stranica"
+    ]
+  },
+  {
+    "id": "fer-zavrsni",
+    "unitId": "fer",
+    "programs": [
+      "Prijediplomski studiji Fakultet elektrotehnike i racunarstva (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Fakultet elektrotehnike i racunarstva, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2013-10-09",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.2,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3
+      },
+      "requirePageNumbers": true,
+      "requireA4": true,
+      "checkJustify": true,
+      "recommendedCitation": "ieee"
+    },
+    "facts": [
+      "Stranica mora biti A4 formata (imperativ, scored).",
+      "Sve stranice osim iznimki moraju biti numerirane, a stranica s uvodom pocinje brojem 1 (imperativ, scored).",
+      "Font Times New Roman velicine 12, prored 1 do 1,4 i margine 2,5 do 3 cm formulirani su kao preporuke (advisory).",
+      "Dokument izrijekom vrijedi i za zavrsne radove uz manje razlike."
+    ],
+    "note": "Iste Upute (FER ZEMRIS, 2013) izrijekom vrijede i za zavrsne radove i seminare (uz neke razlike), ne i za disertaciju. Scored samo A4 i numeracija stranica; ostalo advisory. Authority general (autorski dokument nastavnika/zavoda, ne faculty-wide pravilnik). Izvor je osobna stranica nastavnika (ZEMRIS), ispod katedra-razine; sva pravila advisory dok se ne nadje faculty-wide izvor.",
+    "sources": [
+      {
+        "title": "Upute za izradu diplomskog rada (FER, ZEMRIS, 2013)",
+        "url": "https://www.zemris.fer.hr/~leonardo/studenti/Upute_za_izradu_rada.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu diplomskog rada (FER, ZEMRIS, Leonardo Jelenkovic, 2013)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [],
+    "advisoryScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "stil citiranja",
+      "uobicajene cjeline rada",
+      "format papira (A4)",
+      "numeracija stranica"
+    ]
   }
 ]

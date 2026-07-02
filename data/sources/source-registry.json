@@ -229,5 +229,70 @@
     "validityClass": "stable",
     "lastChecked": "2026-07-02",
     "note": "2 str. Izvor za OPSEG prijediplomskog zavrsnog rada: 'Zavrsni rad ukljucuje 5 ECTS bodova, sto se odnosi na 20 do 25 kartica teksta odnosno 5000 do 6000 rijeci.' Novinarstvo zavrsni moze biti i AV (~150 sati). Ne navodi format (font/margine) - format prijediplomskog ide iz opce klauzule Uputa."
+  },
+  {
+    "id": "efzg-postupak-zavrsni",
+    "kind": "guidelines",
+    "title": "Postupak prijave, izrade i obrane zavrsnog rada na preddiplomskom sveucilisnom studiju (Ekonomski fakultet u Zagrebu)",
+    "url": "https://www.efzg.unizg.hr/userdocsimages/trg/izupanic/POSTUPAK%20PRIJAVE,%20IZRADE%20I%20OBRANE%20ZAVR%C5%A0NOG%20RADA.pdf",
+    "publisher": "Ekonomski fakultet Sveucilista u Zagrebu",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/efzg/efzg-postupak-zavrsni.pdf",
+    "snapshotHash": "0807863ff289516855c37afbc35be192a003cda41a641d633c0379b756533549",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-02",
+    "note": "Sluzbeni postupak za zavrsni rad na preddiplomskom studiju (kolegij Meunarodno poslovanje, Katedra za trgovinu). Tehnicko oblikovanje formulirano imperativno (postaviti, koristiti, numerirati) -> scored: margine 2,5, font Times New Roman/Arial 12, prored 1,5, numeracija stranica, obvezne cjeline i sadrzaj. Opseg (u pravilu 30-40 str.), A4 i harvardski stil (Preporucuje se) -> advisory. Dokument bez vidljivog datuma; upuuje na Pravilnik o zavrsnim i seminarskim radovima."
+  },
+  {
+    "id": "efzg-upute-diplomski-seminarski",
+    "kind": "guidelines",
+    "title": "Upute za pisanje seminarskoga i diplomskoga rada (Ekonomski fakultet u Zagrebu, 2003)",
+    "url": "https://www.efzg.unizg.hr/UserDocsImages/dokumenti/efzg_diplomski_seminarski_upute.pdf?vel=216027",
+    "publisher": "Ekonomski fakultet Sveucilista u Zagrebu",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/efzg/efzg-upute-diplomski-seminarski.pdf",
+    "snapshotHash": "a9144962b6935e040a6138550d51e606917884f8f1b3c216bef6fc212e3f5eda",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-02",
+    "note": "Opce fakultetske Upute za seminarski i diplomski rad (Zagreb, veljaca 2003). Odjeljak 7.1. Izgled (layout) rada je uveden s 'preporucuje se sljedee' (font 12, prored 1.5, margine 2,54), a opseg diplomskog rada je 'Preporucljiv opseg ... 30 - 50 stranica' -> sve advisory. Nema imperativnog tehnickog oblikovanja pa nema scored pravila iz ovog izvora."
+  },
+  {
+    "id": "fsb-upute-radovi-2020",
+    "kind": "guidelines",
+    "title": "Upute za pisanje seminarskog, zavrsnog i diplomskog rada (FSB, Katedra za preradu polimera, 2020)",
+    "url": "https://www.fsb.unizg.hr/atlantis/upload/newsboard/15_07_2020__15271_Upute_za_pisanje_radova.doc",
+    "publisher": "Katedra za preradu polimera, Fakultet strojarstva i brodogradnje Sveucilista u Zagrebu",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/fsb/fsb-upute-radovi-2020.doc",
+    "snapshotHash": "4f819abbde5b58cb7d1bec3dc7bded339c406ee93bb83bdbf8aafb2a4937f31e",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-02",
+    "note": "Autorski dokument jedne Katedre (preradu polimera), ne faculty-wide pravilnik, pa je authority general i nista se ne boduje (sve advisory). Pokriva seminarski, zavrsni i diplomski rad. Numeracija stranica je izrijekom neobavezna. Tekst ekstrahiran antiwordom s -m UTF-8 (dijakritika ispravna); citati verbatim provjereni grepom nad fsb-upute-radovi-2020.txt."
+  },
+  {
+    "id": "fsb-pravilnik-radovi-2018",
+    "kind": "regulation",
+    "title": "Pravilnik o zavrsnim i diplomskim radovima te zavrsnim i diplomskim ispitima (FSB, 2018)",
+    "url": "https://www.fsb.unizg.hr/atlantis/web/sites/fsbonline/content/362/596/Ispitni_rokovi_2019-2020/Pravilnik_zavrsni_i_diplomski_radovi.pdf",
+    "publisher": "Fakultetsko vijece, Fakultet strojarstva i brodogradnje Sveucilista u Zagrebu",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/fsb/fsb-pravilnik-radovi-2018.pdf",
+    "snapshotHash": "d8dc556c614135f1f347ed2c705b3b8202ce67cbe3404b9ec81de4e256b9f758",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-02",
+    "note": "Faculty-wide obvezujuci pravilnik (Fakultetsko vijece, 17.4.2018). PDF je skeniran (OCR sum, nema pouzdanih verbatim citata) i ne sadrzi tehnicka pravila oblikovanja nego ih delegira na predlozak s uputama koji nije javno dohvatljiv. Snapshot cuvan radi sljedivosti, ali ne daje nijedno scored pravilo."
+  },
+  {
+    "id": "fer-upute-diplomski-zemris",
+    "kind": "guidelines",
+    "title": "Upute za izradu diplomskog rada (FER, ZEMRIS, Leonardo Jelenkovic, 2013)",
+    "url": "https://www.zemris.fer.hr/~leonardo/studenti/Upute_za_izradu_rada.pdf",
+    "publisher": "Zavod za elektroniku, mikroelektroniku, racunalne i inteligentne sustave (ZEMRIS), Fakultet elektrotehnike i racunarstva Sveucilista u Zagrebu",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/fer/fer-upute-diplomski-zemris.pdf",
+    "snapshotHash": "853f096a6496ccb2a838f46bbf26a78bd57c0ca841cc7702261f2e4acfa4a188",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-02",
+    "note": "Autorski dokument nastavnika/zavoda (ZEMRIS). Izrijekom vrijedi i za zavrsne radove i seminare, ne i za doktorsku disertaciju. Nije faculty-wide pravilnik pa je authority general. Centralne FER stranice (predmet/diprad, predmet/zavrad) vracaju 403 pa nisu snapshotane."
   }
 ]

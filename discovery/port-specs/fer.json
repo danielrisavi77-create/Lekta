@@ -1,0 +1,342 @@
+{
+  "faculty": "fer",
+  "unit": null,
+  "catalogPrograms": [
+    "Diplomski studiji Fakultet elektrotehnike i racunarstva",
+    "Prijediplomski studiji Fakultet elektrotehnike i racunarstva (zavrsni rad)"
+  ],
+  "sources": [
+    {
+      "id": "fer-upute-diplomski-zemris",
+      "kind": "guidelines",
+      "title": "Upute za izradu diplomskog rada (FER, ZEMRIS, Leonardo Jelenkovic, 2013)",
+      "url": "https://www.zemris.fer.hr/~leonardo/studenti/Upute_za_izradu_rada.pdf",
+      "publisher": "Zavod za elektroniku, mikroelektroniku, racunalne i inteligentne sustave (ZEMRIS), Fakultet elektrotehnike i racunarstva Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/fer/fer-upute-diplomski-zemris.pdf",
+      "snapshotHash": "853f096a6496ccb2a838f46bbf26a78bd57c0ca841cc7702261f2e4acfa4a188",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Autorski dokument nastavnika/zavoda (ZEMRIS). Izrijekom vrijedi i za zavrsne radove i seminare, ne i za doktorsku disertaciju. Nije faculty-wide pravilnik pa je authority general. Centralne FER stranice (predmet/diprad, predmet/zavrad) vracaju 403 pa nisu snapshotane."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "fer-diplomski",
+      "unitId": "fer",
+      "programs": [
+        "Diplomski studiji Fakultet elektrotehnike i racunarstva"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Fakultet elektrotehnike i racunarstva, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2013-10-09",
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.2,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 3
+        },
+        "requirePageNumbers": true,
+        "requireA4": true,
+        "checkJustify": true,
+        "recommendedCitation": "ieee"
+      },
+      "facts": [
+        "Stranica mora biti A4 formata (imperativ, scored).",
+        "Sve stranice osim iznimki moraju biti numerirane, a stranica s uvodom pocinje brojem 1 (imperativ, scored).",
+        "Font Times New Roman velicine 12, prored 1 do 1,4 i margine 2,5 do 3 cm formulirani su kao preporuke (advisory).",
+        "Tekst se poravnava obostrano (justify).",
+        "Citiranje je numericko, u uglatim zagradama [x] (advisory, IEEE-slicno)."
+      ],
+      "note": "Iz Uputa za izradu diplomskog rada (FER ZEMRIS, 2013). Dokument je autorski (nastavnik/zavod) pa je authority general, ne faculty-wide pravilnik. Scored su samo imperativna, verbatim potvrdena pravila: A4 i numeracija stranica. Font, velicina, prored, margine, citiranje i cjeline su preporuke ili rasponi -> advisory. Doktorski nije pokriven (dokument izrijekom iskljucuje disertaciju). Izvor je osobna stranica nastavnika (ZEMRIS), ispod katedra-razine; sva pravila advisory dok se ne nadje faculty-wide izvor.",
+      "sources": [
+        {
+          "title": "Upute za izradu diplomskog rada (FER, ZEMRIS, 2013)",
+          "url": "https://www.zemris.fer.hr/~leonardo/studenti/Upute_za_izradu_rada.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu diplomskog rada (FER, ZEMRIS, Leonardo Jelenkovic, 2013)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [],
+      "advisoryScope": [
+        "font",
+        "velicina slova",
+        "prored",
+        "margine",
+        "stil citiranja",
+        "uobicajene cjeline rada",
+        "format papira (A4)",
+        "numeracija stranica"
+      ]
+    },
+    {
+      "id": "fer-zavrsni",
+      "unitId": "fer",
+      "programs": [
+        "Prijediplomski studiji Fakultet elektrotehnike i racunarstva (zavrsni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Fakultet elektrotehnike i racunarstva, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2013-10-09",
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.2,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 3
+        },
+        "requirePageNumbers": true,
+        "requireA4": true,
+        "checkJustify": true,
+        "recommendedCitation": "ieee"
+      },
+      "facts": [
+        "Stranica mora biti A4 formata (imperativ, scored).",
+        "Sve stranice osim iznimki moraju biti numerirane, a stranica s uvodom pocinje brojem 1 (imperativ, scored).",
+        "Font Times New Roman velicine 12, prored 1 do 1,4 i margine 2,5 do 3 cm formulirani su kao preporuke (advisory).",
+        "Dokument izrijekom vrijedi i za zavrsne radove uz manje razlike."
+      ],
+      "note": "Iste Upute (FER ZEMRIS, 2013) izrijekom vrijede i za zavrsne radove i seminare (uz neke razlike), ne i za disertaciju. Scored samo A4 i numeracija stranica; ostalo advisory. Authority general (autorski dokument nastavnika/zavoda, ne faculty-wide pravilnik). Izvor je osobna stranica nastavnika (ZEMRIS), ispod katedra-razine; sva pravila advisory dok se ne nadje faculty-wide izvor.",
+      "sources": [
+        {
+          "title": "Upute za izradu diplomskog rada (FER, ZEMRIS, 2013)",
+          "url": "https://www.zemris.fer.hr/~leonardo/studenti/Upute_za_izradu_rada.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu diplomskog rada (FER, ZEMRIS, Leonardo Jelenkovic, 2013)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [],
+      "advisoryScope": [
+        "font",
+        "velicina slova",
+        "prored",
+        "margine",
+        "stil citiranja",
+        "uobicajene cjeline rada",
+        "format papira (A4)",
+        "numeracija stranica"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-fer-diplomski--paper-size-verified-2026-07-02",
+      "ruleId": "fer-diplomski--paper-size",
+      "profileId": "fer-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fer-upute-diplomski-zemris",
+      "sourcePage": "odjeljak 3.1. Format stranice",
+      "quote": "Stranica treba biti A4 formata.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fer-diplomski--page-numbers-verified-2026-07-02",
+      "ruleId": "fer-diplomski--page-numbers",
+      "profileId": "fer-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fer-upute-diplomski-zemris",
+      "sourcePage": "odjeljak 3.1. Format stranice",
+      "quote": "sve ostale stranice trebaju biti numerirane. Pocetak rada, tj. stranica s uvodom treba poceti s brojem 1.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fer-diplomski--font-advisory-2026-07-02",
+      "ruleId": "fer-diplomski--font",
+      "profileId": "fer-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fer-upute-diplomski-zemris",
+      "sourcePage": "odjeljak 3.3. Tekst poglavlja",
+      "quote": "Preporuceni font ,,Times New Roman\" (ili slican) velicine 12.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fer-diplomski--font-size-advisory-2026-07-02",
+      "ruleId": "fer-diplomski--font-size",
+      "profileId": "fer-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fer-upute-diplomski-zemris",
+      "sourcePage": "odjeljak 3.3. Tekst poglavlja",
+      "quote": "Preporuceni font ,,Times New Roman\" (ili slican) velicine 12.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fer-diplomski--line-spacing-advisory-2026-07-02",
+      "ruleId": "fer-diplomski--line-spacing",
+      "profileId": "fer-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fer-upute-diplomski-zemris",
+      "sourcePage": "odjeljak 3.3. Tekst poglavlja",
+      "quote": "Razmak meu recima neka bude od 1 do 1,4 (1,2 je koristeno u ovom tekstu).",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fer-diplomski--margins-advisory-2026-07-02",
+      "ruleId": "fer-diplomski--margins",
+      "profileId": "fer-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fer-upute-diplomski-zemris",
+      "sourcePage": "odjeljak 3.1. Format stranice",
+      "quote": "Tekst treba od ruba biti udaljen barem 2.5 cm (do 3 cm).",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fer-diplomski--citation-style-advisory-2026-07-02",
+      "ruleId": "fer-diplomski--citation-style",
+      "profileId": "fer-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fer-upute-diplomski-zemris",
+      "sourcePage": "odjeljak 3.8. Pozivanje na literaturu",
+      "quote": "referenca na neku literaturu (ne samo preko broja u literaturi, kao ,,[x]\"",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fer-diplomski--required-sections-advisory-2026-07-02",
+      "ruleId": "fer-diplomski--required-sections",
+      "profileId": "fer-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fer-upute-diplomski-zemris",
+      "sourcePage": "SADRZAJ",
+      "quote": "1. Uvod / 2. Poglavlja rada / 3. Naputci o Oblikovanju rada / 4. Zakljucak / Literatura / Sazetak / Summary",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fer-zavrsni--paper-size-verified-2026-07-02",
+      "ruleId": "fer-zavrsni--paper-size",
+      "profileId": "fer-zavrsni",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fer-upute-diplomski-zemris",
+      "sourcePage": "odjeljak 3.1. Format stranice",
+      "quote": "Stranica treba biti A4 formata.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fer-zavrsni--page-numbers-verified-2026-07-02",
+      "ruleId": "fer-zavrsni--page-numbers",
+      "profileId": "fer-zavrsni",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fer-upute-diplomski-zemris",
+      "sourcePage": "odjeljak 3.1. Format stranice",
+      "quote": "sve ostale stranice trebaju biti numerirane. Pocetak rada, tj. stranica s uvodom treba poceti s brojem 1.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fer-zavrsni--font-advisory-2026-07-02",
+      "ruleId": "fer-zavrsni--font",
+      "profileId": "fer-zavrsni",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fer-upute-diplomski-zemris",
+      "sourcePage": "odjeljak 3.3. Tekst poglavlja",
+      "quote": "Preporuceni font ,,Times New Roman\" (ili slican) velicine 12.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fer-zavrsni--font-size-advisory-2026-07-02",
+      "ruleId": "fer-zavrsni--font-size",
+      "profileId": "fer-zavrsni",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fer-upute-diplomski-zemris",
+      "sourcePage": "odjeljak 3.3. Tekst poglavlja",
+      "quote": "Preporuceni font ,,Times New Roman\" (ili slican) velicine 12.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fer-zavrsni--line-spacing-advisory-2026-07-02",
+      "ruleId": "fer-zavrsni--line-spacing",
+      "profileId": "fer-zavrsni",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fer-upute-diplomski-zemris",
+      "sourcePage": "odjeljak 3.3. Tekst poglavlja",
+      "quote": "Razmak meu recima neka bude od 1 do 1,4 (1,2 je koristeno u ovom tekstu).",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fer-zavrsni--margins-advisory-2026-07-02",
+      "ruleId": "fer-zavrsni--margins",
+      "profileId": "fer-zavrsni",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fer-upute-diplomski-zemris",
+      "sourcePage": "odjeljak 3.1. Format stranice",
+      "quote": "Tekst treba od ruba biti udaljen barem 2.5 cm (do 3 cm).",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fer-zavrsni--citation-style-advisory-2026-07-02",
+      "ruleId": "fer-zavrsni--citation-style",
+      "profileId": "fer-zavrsni",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fer-upute-diplomski-zemris",
+      "sourcePage": "odjeljak 3.8. Pozivanje na literaturu",
+      "quote": "referenca na neku literaturu (ne samo preko broja u literaturi, kao ,,[x]\"",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fer-zavrsni--required-sections-advisory-2026-07-02",
+      "ruleId": "fer-zavrsni--required-sections",
+      "profileId": "fer-zavrsni",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fer-upute-diplomski-zemris",
+      "sourcePage": "SADRZAJ",
+      "quote": "1. Uvod / 2. Poglavlja rada / 3. Naputci o Oblikovanju rada / 4. Zakljucak / Literatura / Sazetak / Summary",
+      "note": "Port pilot workflow."
+    }
+  ]
+}
