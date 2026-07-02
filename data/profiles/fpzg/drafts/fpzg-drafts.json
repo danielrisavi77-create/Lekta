@@ -2360,6 +2360,78 @@
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
         "verifiedHash": "56df35ca9ab16a3650f6599ca481928dfdc7a2d081321529ba3219a34fe9be9b"
+      },
+      {
+        "ruleId": "fpzg-opci-akademski-rad--font",
+        "checkId": "font",
+        "value": [
+          "Times New Roman"
+        ],
+        "category": "format",
+        "label": "Font",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 14 (FORMAT I OPREMA RADA)",
+        "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+        "status": "verified",
+        "verifiedBy": "Daniel",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-opci-akademski-rad--font-size",
+        "checkId": "font-size",
+        "value": [
+          12
+        ],
+        "category": "format",
+        "label": "Velicina slova",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 14 (FORMAT I OPREMA RADA)",
+        "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+        "status": "verified",
+        "verifiedBy": "Daniel",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-opci-akademski-rad--line-spacing",
+        "checkId": "line-spacing",
+        "value": 1.5,
+        "category": "format",
+        "label": "Prored",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 14 (FORMAT I OPREMA RADA)",
+        "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+        "status": "verified",
+        "verifiedBy": "Daniel",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-opci-akademski-rad--page-numbers",
+        "checkId": "page-numbers",
+        "value": true,
+        "category": "format",
+        "label": "Brojevi stranica",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 14 (FORMAT I OPREMA RADA)",
+        "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi rimskim, osnovni tekst arapskim brojkama.",
+        "status": "verified",
+        "verifiedBy": "Daniel",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
       }
     ]
   }

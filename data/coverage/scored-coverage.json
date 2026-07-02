@@ -74,8 +74,8 @@
     },
     {
       "profileId": "fpzg-opci-akademski-rad",
-      "scored": 1,
-      "machineCheckable": 1,
+      "scored": 5,
+      "machineCheckable": 5,
       "advisory": 0,
       "ratio": 1,
       "lastVerified": "2026-07-02"
@@ -257,5 +257,5 @@
       "lastVerified": "2026-06-30"
     }
   ],
-  "totalScored": 184
+  "totalScored": 188
 }

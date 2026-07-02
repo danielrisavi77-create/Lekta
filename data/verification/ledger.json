@@ -6358,5 +6358,101 @@
     "sourcePage": "str. 1 (opseg zavrsnog rada: 5 ECTS, 20-25 kartica, 5000-6000 rijeci)",
     "quote": "Zavrsni rad ukljucuje 5 ECTS bodova, sto se odnosi na 20 do 25 kartica teksta odnosno 5000 do 6000 rijeci.",
     "note": "Batch odobrenje prijediplomski zavrsni (tekst)."
+  },
+  {
+    "id": "led-fpzg-opci-akademski-rad--font-ai-confirmed-2026-07-02",
+    "ruleId": "fpzg-opci-akademski-rad--font",
+    "profileId": "fpzg-opci-akademski-rad",
+    "action": "ai-confirmed",
+    "actor": "ai-1pass",
+    "timestamp": "2026-07-02",
+    "sourceId": "fpzg-upute-akademski-radovi",
+    "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 14 (FORMAT I OPREMA RADA)",
+    "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+    "note": "Format seminara/projektnog/clanka preko opce klauzule Uputa (svih vrsta proze); domenski odobrio approver."
+  },
+  {
+    "id": "led-fpzg-opci-akademski-rad--font-verified-2026-07-02",
+    "ruleId": "fpzg-opci-akademski-rad--font",
+    "profileId": "fpzg-opci-akademski-rad",
+    "action": "verified",
+    "actor": "Daniel",
+    "timestamp": "2026-07-02",
+    "sourceId": "fpzg-upute-akademski-radovi",
+    "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 14 (FORMAT I OPREMA RADA)",
+    "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+    "note": "Batch odobrenje opci FPZG rad (format, bez A4/opsega)."
+  },
+  {
+    "id": "led-fpzg-opci-akademski-rad--font-size-ai-confirmed-2026-07-02",
+    "ruleId": "fpzg-opci-akademski-rad--font-size",
+    "profileId": "fpzg-opci-akademski-rad",
+    "action": "ai-confirmed",
+    "actor": "ai-1pass",
+    "timestamp": "2026-07-02",
+    "sourceId": "fpzg-upute-akademski-radovi",
+    "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 14 (FORMAT I OPREMA RADA)",
+    "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+    "note": "Format seminara/projektnog/clanka preko opce klauzule Uputa (svih vrsta proze); domenski odobrio approver."
+  },
+  {
+    "id": "led-fpzg-opci-akademski-rad--font-size-verified-2026-07-02",
+    "ruleId": "fpzg-opci-akademski-rad--font-size",
+    "profileId": "fpzg-opci-akademski-rad",
+    "action": "verified",
+    "actor": "Daniel",
+    "timestamp": "2026-07-02",
+    "sourceId": "fpzg-upute-akademski-radovi",
+    "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 14 (FORMAT I OPREMA RADA)",
+    "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+    "note": "Batch odobrenje opci FPZG rad (format, bez A4/opsega)."
+  },
+  {
+    "id": "led-fpzg-opci-akademski-rad--line-spacing-ai-confirmed-2026-07-02",
+    "ruleId": "fpzg-opci-akademski-rad--line-spacing",
+    "profileId": "fpzg-opci-akademski-rad",
+    "action": "ai-confirmed",
+    "actor": "ai-1pass",
+    "timestamp": "2026-07-02",
+    "sourceId": "fpzg-upute-akademski-radovi",
+    "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 14 (FORMAT I OPREMA RADA)",
+    "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+    "note": "Format seminara/projektnog/clanka preko opce klauzule Uputa (svih vrsta proze); domenski odobrio approver."
+  },
+  {
+    "id": "led-fpzg-opci-akademski-rad--line-spacing-verified-2026-07-02",
+    "ruleId": "fpzg-opci-akademski-rad--line-spacing",
+    "profileId": "fpzg-opci-akademski-rad",
+    "action": "verified",
+    "actor": "Daniel",
+    "timestamp": "2026-07-02",
+    "sourceId": "fpzg-upute-akademski-radovi",
+    "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 14 (FORMAT I OPREMA RADA)",
+    "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+    "note": "Batch odobrenje opci FPZG rad (format, bez A4/opsega)."
+  },
+  {
+    "id": "led-fpzg-opci-akademski-rad--page-numbers-ai-confirmed-2026-07-02",
+    "ruleId": "fpzg-opci-akademski-rad--page-numbers",
+    "profileId": "fpzg-opci-akademski-rad",
+    "action": "ai-confirmed",
+    "actor": "ai-1pass",
+    "timestamp": "2026-07-02",
+    "sourceId": "fpzg-upute-akademski-radovi",
+    "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 14 (FORMAT I OPREMA RADA)",
+    "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi rimskim, osnovni tekst arapskim brojkama.",
+    "note": "Format seminara/projektnog/clanka preko opce klauzule Uputa (svih vrsta proze); domenski odobrio approver."
+  },
+  {
+    "id": "led-fpzg-opci-akademski-rad--page-numbers-verified-2026-07-02",
+    "ruleId": "fpzg-opci-akademski-rad--page-numbers",
+    "profileId": "fpzg-opci-akademski-rad",
+    "action": "verified",
+    "actor": "Daniel",
+    "timestamp": "2026-07-02",
+    "sourceId": "fpzg-upute-akademski-radovi",
+    "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 14 (FORMAT I OPREMA RADA)",
+    "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi rimskim, osnovni tekst arapskim brojkama.",
+    "note": "Batch odobrenje opci FPZG rad (format, bez A4/opsega)."
   }
 ]
