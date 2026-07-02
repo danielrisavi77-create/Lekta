@@ -2653,25 +2653,53 @@
     "verifiedAt": "2026-06-28",
     "documentDate": "aktivni službeni izvori provjereni 28. lipnja 2026.",
     "fieldValidation": {
-      "status": "synthetic-golden-validated",
+      "status": "field-sampled",
       "validatedAt": "2026-07-02",
-      "scope": "Sinteticki golden (tests/fpzg-synthetic.test.ts). Opci akademski rad je genericki fallback, ne konkretan studijski program, pa nema pripadajucih stvarnih radova za uzorkovanje.",
+      "scope": "Sinteticki golden + 3 stvarna javna rada Fakulteta politickih znanosti iz ZIR-a kao format-uzorak za opci akademski rad.",
       "sample": {
         "syntheticDocxAudits": 1,
         "docxAudits": 0,
-        "publicPdfAudits": 0,
+        "publicPdfAudits": 3,
         "metadataSpotChecks": 0,
-        "years": [
-          2026
-        ]
+        "years": []
       },
+      "publicSources": [
+        {
+          "pid": "fpzg:1",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 47,
+          "pageFormat": "A4",
+          "sha256": "781cfa304f07f85e470594620de3e315d0838bf4fdb952b94b32bd8d375b892d"
+        },
+        {
+          "pid": "fpzg:2",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 55,
+          "pageFormat": "A4",
+          "sha256": "6ddf62f4d7b367c0e84460ec62e786ee2e10395771a685a89dd2a3ff7dc1d29e"
+        },
+        {
+          "pid": "fpzg:3",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 58,
+          "pageFormat": "A4",
+          "sha256": "d35ee365aa712dcc0a11fb556eaaf9c0cc7b857b8bdac231978cd28e0096f838"
+        }
+      ],
       "confirmed": [
-        "Uskladjeni sinteticki .docx prolazi FPZG format provjere (tests/fpzg-synthetic.test.ts)."
+        "Profil se analizira bez pucanja; scored/format-provjere ispravno se ponasaju (golden test).",
+        "3 stvarna javna rada FPZG-a (fpzg:1, fpzg:2, fpzg:3) prolaze A4 preflight."
       ],
       "observedDeviations": [
-        "Opci akademski rad je genericki fallback, ne konkretan studijski program, pa nema pripadajucih stvarnih radova za uzorkovanje."
+        "NADOGRADNJA (2026-07-02): profil je bio synthetic-golden-validated; sada field-sampled sa 3 stvarna javna rada.",
+        "sha256 NIJE reproducibilan: nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa ponovni dohvat istog PID-a daje drukciji hash. Zabiljezeni sha256 je otisak konkretne preuzete kopije; stabilni identitet izvora je PID.",
+        "Godine izrade nisu biljezene po uzorku.",
+        "Profil je opci (bilo koji akademski rad FPZG-a); kao format-uzorak koriste se stvarni FPZG diplomski radovi, ne kao program-potvrda specificnog studija."
       ],
-      "productDecision": "Sinteticki uzorci sluze samo regresijskoj provjeri parsera i audita; ne dokazuju stvarni rad. Necu izmisljati PDF-audit brojace za smjer bez dostupnog stvarnog javnog uzorka."
+      "productDecision": "PDF preflight je plitak (A4 + razina iz naslovnice + dc:type). Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju. sha256 NIJE reproducibilan: nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa ponovni dohvat istog PID-a daje drukciji hash. Zabiljezeni sha256 je otisak konkretne preuzete kopije; stabilni identitet izvora je PID."
     },
     "rules": {
       "font": [
@@ -7812,25 +7840,53 @@
     "verifiedAt": "2026-07-02",
     "documentDate": "2024-12-03",
     "fieldValidation": {
-      "status": "synthetic-golden-validated",
+      "status": "field-sampled",
       "validatedAt": "2026-07-02",
-      "scope": "Sinteticki golden (tests/ffzg-pmf-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "scope": "Sinteticki golden + 3 stvarna javna zavrsna rada Odsjeka za informacijske i komunikacijske znanosti (ffzg) iz ZIR-a.",
       "sample": {
         "syntheticDocxAudits": 1,
         "docxAudits": 0,
-        "publicPdfAudits": 0,
+        "publicPdfAudits": 3,
         "metadataSpotChecks": 0,
-        "years": [
-          2026
-        ]
+        "years": []
       },
+      "publicSources": [
+        {
+          "pid": "ffzg:4007",
+          "repository": "zir.nsk.hr",
+          "level": "zavrsni",
+          "pages": 46,
+          "pageFormat": "A4",
+          "sha256": "6433b14a4b4fb84e7d48b965292d96481421b3ea428bec8e69e47cbcdac94d68"
+        },
+        {
+          "pid": "ffzg:4246",
+          "repository": "zir.nsk.hr",
+          "level": "zavrsni",
+          "pages": 27,
+          "pageFormat": "A4",
+          "sha256": "36acac9f9d6de51e067837182c16acf53fc4ce388da31184d58759365ea8a3cf"
+        },
+        {
+          "pid": "ffzg:4252",
+          "repository": "zir.nsk.hr",
+          "level": "zavrsni",
+          "pages": 33,
+          "pageFormat": "A4",
+          "sha256": "f83d03b827a711d107a1714cbe15658cf8a8c1e9fdddde5785e8515ce5d30363"
+        }
+      ],
       "confirmed": [
-        "Profil se analizira bez pucanja i scored/informativne provjere ispravno se ponasaju (golden test)."
+        "Profil se analizira bez pucanja; scored/format-provjere ispravno se ponasaju (golden test).",
+        "3 stvarna javna zavrsna rada (ffzg:4007, ffzg:4246, ffzg:4252) prolaze A4 preflight; naslovnica potvrdjuje ZAVRSNI RAD i Odsjek za informacijske znanosti."
       ],
       "observedDeviations": [
-        "ffzg-informacijske-zavrsni: font propisan, ali velicina/prored/margine nisu pa su checkSize/Spacing/Margins:false (crash-fix). Mijesani ZIR namespace; validacija golden-test."
+        "NADOGRADNJA (2026-07-02): profil je bio synthetic-golden-validated; sada field-sampled sa 3 stvarna javna rada.",
+        "sha256 NIJE reproducibilan: nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa ponovni dohvat istog PID-a daje drukciji hash. Zabiljezeni sha256 je otisak konkretne preuzete kopije; stabilni identitet izvora je PID.",
+        "Godine izrade nisu biljezene po uzorku.",
+        "Odsjek za informacijske i komunikacijske znanosti (Department of Information Sciences)."
       ],
-      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+      "productDecision": "PDF preflight je plitak (A4 + razina iz naslovnice + dc:type). Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju. sha256 NIJE reproducibilan: nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa ponovni dohvat istog PID-a daje drukciji hash. Zabiljezeni sha256 je otisak konkretne preuzete kopije; stabilni identitet izvora je PID."
     },
     "rules": {
       "checkSize": false,
@@ -12515,25 +12571,53 @@
     "verifiedAt": "2026-07-02",
     "documentDate": "2019-08-01",
     "fieldValidation": {
-      "status": "synthetic-golden-validated",
+      "status": "field-sampled",
       "validatedAt": "2026-07-02",
-      "scope": "Sinteticki golden (tests/ffzg-pmf-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "scope": "Sinteticki golden + 3 stvarna javna diplomska rada Odsjeka za etnologiju (ffzg) iz ZIR-a, potvrdjena po razini i odsjeku.",
       "sample": {
         "syntheticDocxAudits": 1,
         "docxAudits": 0,
-        "publicPdfAudits": 0,
+        "publicPdfAudits": 3,
         "metadataSpotChecks": 0,
-        "years": [
-          2026
-        ]
+        "years": []
       },
+      "publicSources": [
+        {
+          "pid": "ffzg:5290",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 67,
+          "pageFormat": "A4",
+          "sha256": "2ad7fc525ee941c47c8d531cf8c081ea56a289b4550968b2b97b0a46341df306"
+        },
+        {
+          "pid": "ffzg:5640",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 70,
+          "pageFormat": "A4",
+          "sha256": "38df29bc4adea7e2aa03d19a7e48443b247d1e386ac2c7bd907017a1f2e4c1b3"
+        },
+        {
+          "pid": "ffzg:5663",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 81,
+          "pageFormat": "A4",
+          "sha256": "8f7aaddbfcc6992dc36127f3b018c0b9c7db4797e1555a87b552c2f383c15946"
+        }
+      ],
       "confirmed": [
-        "Profil se analizira bez pucanja i scored/informativne provjere ispravno se ponasaju (golden test)."
+        "Profil se analizira bez pucanja; scored/format-provjere ispravno se ponasaju (golden test).",
+        "3 stvarna javna diplomska rada (ffzg:5290, ffzg:5640, ffzg:5663) prolaze A4 preflight; naslovnica potvrdjuje Odsjek za etnologiju."
       ],
       "observedDeviations": [
-        "Filozofski fakultet je jedan mijesani ZIR namespace preko mnogo odsjeka; per-odsjecko stvarno uzorkovanje nije radjeno (nepraktcno bez rucnog raspoznavanja programa) pa je validacija golden-test. Scalar size:12 ispravljen na [12]."
+        "NADOGRADNJA (2026-07-02): profil je bio synthetic-golden-validated; sada field-sampled sa 3 stvarna javna rada.",
+        "sha256 NIJE reproducibilan: nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa ponovni dohvat istog PID-a daje drukciji hash. Zabiljezeni sha256 je otisak konkretne preuzete kopije; stabilni identitet izvora je PID.",
+        "Godine izrade nisu biljezene po uzorku.",
+        "Odsjek za etnologiju (Department of Ethnology)."
       ],
-      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+      "productDecision": "PDF preflight je plitak (A4 + razina iz naslovnice + dc:type). Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju. sha256 NIJE reproducibilan: nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa ponovni dohvat istog PID-a daje drukciji hash. Zabiljezeni sha256 je otisak konkretne preuzete kopije; stabilni identitet izvora je PID."
     },
     "rules": {
       "font": [
