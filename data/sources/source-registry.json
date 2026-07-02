@@ -411,5 +411,57 @@
     "validityClass": "stable",
     "lastChecked": "2026-07-02",
     "note": "Faculty-wide obvezujuci pravilnik (procisceni tekst). PDF je skeniran (image-only, nema ekstraktabilnog teksta, OCR nije dostupan) i ureduje proceduru zavrsnog ispita i diplomskog rada, a tehnicko oblikovanje delegira na Predlozak. Snapshot cuvan radi sljedivosti; ne daje nijedno scored pravilo."
+  },
+  {
+    "id": "ffzg-inf-diplomski-2024",
+    "kind": "guidelines",
+    "title": "Upute i pravila za prijavu, pisanje i obranu rada na redovitom studiju (Filozofski fakultet, Odsjek za informacijske i komunikacijske znanosti, 2024)",
+    "url": "https://inf.ffzg.unizg.hr/images/korisno/upute2018/Upute_i_pravila_za_prijavu_pisanje_i_obranu_rada_-_v8.pdf",
+    "publisher": "Filozofski fakultet Sveucilista u Zagrebu, Odsjek za informacijske i komunikacijske znanosti",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/ffzg/ffzg-inf-diplomski-2024.pdf",
+    "snapshotHash": "569ef74171db53273efeada5532f0d0b0a520335f725f66f2136c0aad190486e",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-02",
+    "note": "Upute Odsjeka za informacijske i komunikacijske znanosti (v8, usvojeno na sjednici Odsjeka 3.12.2024). Pokriva zavrsni (preddiplomski) i diplomski rad. Struktura (Cjeline se u radu moraju pisati prema navedenom redoslijedu) i numeracija stranica (numeracija stranica pocinje od Uvoda) su imperativ -> scored. Font (moze biti Arial ili Times New Roman), opseg (25 kartica / 45.000 znakova, mjeri se u karticama a ne rijecima) i stil citiranja (Harvardski, APA ili drugi, odreuje ga mentor) formulirani su nedeterministicki -> advisory. Margine, prored i velicina slova nisu u tekstu nego u zasebnom Predlosku pa nisu preuzeti."
+  },
+  {
+    "id": "ffzg-filoz-diplomski-2019",
+    "kind": "guidelines",
+    "title": "Upute za oblikovanje diplomskoga rada na studiju filozofije (Filozofski fakultet, Odsjek za filozofiju, 2019)",
+    "url": "https://filoz.ffzg.unizg.hr/wp-content/uploads/2019/06/Upute-za-oblikovanje-diplomskoga-rada.pdf",
+    "publisher": "Filozofski fakultet Sveucilista u Zagrebu, Odsjek za filozofiju",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/ffzg/ffzg-filoz-diplomski-2019.pdf",
+    "snapshotHash": "ba222ed21e3a1a4685dbd507e47c822583826cac6a0f6ce53cae669ec149a80f",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-02",
+    "note": "Upute Odsjeka za filozofiju (URL sadrzi 2019/06). Cijelo tehnicko oblikovanje je imperativno (Diplomski rad ... mora sadrzavati; Tekst treba oblikovati na sljedei nacin) -> scored: font Times New Roman 12, margine 2,5 cm, prored 1,5, numeracija stranica arapskim brojkama u donjem desnom kutu, obostrano poravnanje, obvezne cjeline, sadrzaj. Citiranje je u fusnotama (chicago-notes). Nema navedenog opsega u stranicama/rijecima."
+  },
+  {
+    "id": "pmf-geog-upute-diplomski-2026",
+    "kind": "guidelines",
+    "title": "Upute za izradu diplomskog rada na Sveucilistu u Zagrebu Prirodoslovno-matematickom fakultetu, Geografskom odsjeku (2026)",
+    "url": "https://www.pmf.unizg.hr/_download/repository/Diplomski%20rad%20-%20upute%202026%5B1%5D.pdf",
+    "publisher": "Geografski odsjek, Prirodoslovno-matematicki fakultet Sveucilista u Zagrebu",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/pmf/pmf-geog-diplomski-2026.pdf",
+    "snapshotHash": "bef096b5167bde781d833fa92d850022e8bc7abcf63168f798810a1afac941b1",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-02",
+    "note": "Upute Geografskog odsjeka koje Pravilnik (cl. 13.) obvezuje pa nose authority program-page. Sadrze konkretna imperativna pravila oblikovanja (font TNR 12, prored 1,5, margine 2,5 cm, A4, numeracija od Uvoda, harvardsko citiranje, obvezni dijelovi strukture). VAZNO: dokument je Geografskog odsjeka, ne faculty-wide; drugi odsjeci PMF-a imaju vlastite upute. Citati verbatim provjereni grepom nad pmf-geog-diplomski-2026.txt."
+  },
+  {
+    "id": "pmf-geog-pravilnik-2026",
+    "kind": "regulation",
+    "title": "Pravilnik o zavrsnom i diplomskom radu te zavrsnom i diplomskom ispitu na Sveucilistu u Zagrebu Prirodoslovno-matematickom fakultetu, Geografskom odsjeku (2026)",
+    "url": "https://www.pmf.unizg.hr/images/50024379/Pravilnik%20o%20zavrsnom%20i%20diplomskom%20radu%20i%20zavrsnom%20i%20diplomskom%20ispitu%202026.pdf",
+    "publisher": "Fakultetsko vijece, Prirodoslovno-matematicki fakultet Sveucilista u Zagrebu (Geografski odsjek)",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/pmf/pmf-pravilnik-2026.pdf",
+    "snapshotHash": "6fea81833d4426ffaf4196d3f12c7fdfbe582a670d35d536ea6b6cb9300374ec",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-02",
+    "note": "Obvezujuci pravilnik (Fakultetsko vijece, 29.1.2026), ali Geografskog odsjeka, ne faculty-wide. Ne sadrzi tehnicka pravila oblikovanja nego ih delegira (cl. 13.) na Upute za izradu. Snapshot cuvan radi sljedivosti i kao izvor autoriteta koji obvezuje Upute; sam ne daje nijedno scored formatno pravilo."
   }
 ]

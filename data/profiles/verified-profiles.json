@@ -6280,5 +6280,316 @@
       "format papira",
       "stil citiranja"
     ]
+  },
+  {
+    "id": "ffzg-informacijske-zavrsni",
+    "unitId": "ffzg",
+    "programs": [
+      "Informacijske i komunikacijske znanosti"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Filozofski fakultet (Odsjek za informacijske i komunikacijske znanosti), zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2024-12-03",
+    "rules": {
+      "font": [
+        "Arial",
+        "Times New Roman"
+      ],
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "recommendedCitation": "harvard",
+      "requiredSections": [
+        {
+          "key": "naslovnica",
+          "label": "Naslovnica",
+          "terms": [
+            "naslovnica"
+          ]
+        },
+        {
+          "key": "izjava",
+          "label": "Izjava o akademskoj cestitosti",
+          "terms": [
+            "izjava o akademskoj cestitosti",
+            "akademska cestitost"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadrzaj",
+          "terms": [
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "glavni-dio",
+          "label": "Glavni dio",
+          "terms": [
+            "glavni dio",
+            "razrada"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zakljucak",
+          "terms": [
+            "zakljucak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "literatura",
+            "popis literature"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sazetak",
+          "terms": [
+            "sazetak"
+          ]
+        },
+        {
+          "key": "summary",
+          "label": "Summary",
+          "terms": [
+            "summary"
+          ]
+        }
+      ]
+    },
+    "facts": [
+      "Cjeline rada moraju se pisati propisanim redoslijedom: Naslovnica, Izjava o akademskoj cestitosti, Sadrzaj, Uvod, Glavni dio, Zakljucak, Literatura, Sazetak i Summary (imperativ).",
+      "Numeracija stranica i numeracija poglavlja pocinju od Uvoda (imperativ).",
+      "Font moze biti Arial ili Times New Roman uz zaseban Predlozak; opseg je najmanje 25 kartica (45.000 znakova); stil citiranja (Harvard, APA ili drugi) odreuje mentor (sve advisory)."
+    ],
+    "note": "Zavrsni rad na preddiplomskom studiju iz Uputa Odsjeka za informacijske i komunikacijske znanosti (v8, 2024). FFZG nema jedinstvene fakultetske Upute pa je izvor odsjecki, ali sadrzajno reprezentativan. Scored su samo imperativna pravila (struktura, sadrzaj, numeracija stranica). Font, opseg (u karticama) i stil citiranja su advisory. Margine, prored i velicina slova su u zasebnom Predlosku i nisu preuzeti (nema doslovnog citata u tekstu Uputa).",
+    "sources": [
+      {
+        "title": "Upute i pravila za prijavu, pisanje i obranu rada (FFZG, Odsjek za informacijske i komunikacijske znanosti, 2024)",
+        "url": "https://inf.ffzg.unizg.hr/images/korisno/upute2018/Upute_i_pravila_za_prijavu_pisanje_i_obranu_rada_-_v8.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute i pravila za prijavu, pisanje i obranu rada (FFZG, Odsjek za informacijske i komunikacijske znanosti, 2024)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "obvezne cjeline rada",
+      "sadrzaj",
+      "numeracija stranica"
+    ],
+    "advisoryScope": [
+      "font",
+      "opseg (kartice)",
+      "stil citiranja"
+    ],
+    "catalogPrograms": [
+      "Informacijske i komunikacijske znanosti"
+    ]
+  },
+  {
+    "id": "ffzg-filozofija-diplomski",
+    "unitId": "ffzg",
+    "programs": [
+      "Filozofija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Filozofski fakultet (Odsjek za filozofiju), diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2019-06-01",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": 12,
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "checkJustify": true,
+      "checkMargins": true,
+      "recommendedCitation": "chicago-notes",
+      "requiredSections": [
+        {
+          "key": "naslovna",
+          "label": "Naslovna stranica",
+          "terms": [
+            "naslovna stranica",
+            "naslovnica"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadrzaj",
+          "terms": [
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sazetak i kljucne rijeci",
+          "terms": [
+            "sazetak",
+            "kljucne rijeci"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "razrada",
+          "label": "Razrada teme",
+          "terms": [
+            "razrada teme",
+            "razrada"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zakljucak",
+          "terms": [
+            "zakljucak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Popis literature",
+          "terms": [
+            "popis literature",
+            "literatura"
+          ]
+        }
+      ]
+    },
+    "facts": [
+      "Diplomski rad mora sadrzavati naslovnu stranicu, sadrzaj, sazetke i kljucne rijeci, uvod, razradu teme, zakljucak i popis literature (imperativ).",
+      "Tekst treba oblikovati: Times New Roman velicine 12, margine 2,5 cm, prored 1,5, obostrano poravnanje, numeracija arapskim brojkama u donjem desnom kutu (imperativ).",
+      "Izvori se navode u fusnotama na dnu stranice (citatni stil fusnote, chicago-notes; imperativ)."
+    ],
+    "note": "Diplomski rad iz Uputa za oblikovanje diplomskoga rada Odsjeka za filozofiju (2019). Cijelo tehnicko oblikovanje je imperativno pa je scored. Citiranje je iskljucivo u fusnotama pa je stil chicago-notes. FFZG nema jedinstvene fakultetske Upute; ovaj odsjecki dokument je najpotpuniji imperativni izvor za oblikovanje diplomskog rada. Obostrano poravnanje vozi se kroz rules.checkJustify i zaseban ruleEntry (checkId justify).",
+    "sources": [
+      {
+        "title": "Upute za oblikovanje diplomskoga rada na studiju filozofije (FFZG, Odsjek za filozofiju, 2019)",
+        "url": "https://filoz.ffzg.unizg.hr/wp-content/uploads/2019/06/Upute-za-oblikovanje-diplomskoga-rada.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za oblikovanje diplomskoga rada na studiju filozofije (FFZG, Odsjek za filozofiju, 2019)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "obvezne cjeline rada",
+      "sadrzaj",
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "numeracija stranica",
+      "obostrano poravnanje",
+      "stil citiranja (fusnote)"
+    ],
+    "advisoryScope": [],
+    "catalogPrograms": [
+      "Filozofija"
+    ]
+  },
+  {
+    "id": "pmf-geografija-diplomski",
+    "unitId": "pmf",
+    "programs": [
+      "Geografija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Prirodoslovno-matematicki fakultet (Geografski odsjek), diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2026-01-29",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requirePageNumbers": true,
+      "requireA4": true,
+      "recommendedCitation": "harvard"
+    },
+    "facts": [
+      "Rad se pise fontom Times New Roman velicine 12, prored 1,5 (imperativ, scored).",
+      "Rad je A4 formata, margine 2,5 cm (imperativ, scored).",
+      "Pocetne stranice do Sadrzaja se ne numeriraju, numeracija zapocinje od Uvoda koji nosi broj 1 (imperativ, scored).",
+      "Literatura se citira prema harvardskom sustavu (imperativ, scored).",
+      "Obvezni dijelovi strukture: uvod, pregled dosadasnjih istrazivanja, teorijski pristup, metode, rezultati, rasprava, zakljucak, literatura i izvori (imperativ, scored).",
+      "Optimalni opseg oko 50 stranica i decimalno oznacavanje Sadrzaja su preporuke (advisory)."
+    ],
+    "note": "Iz Uputa za izradu diplomskog rada (PMF, Geografski odsjek, 2026) koje Pravilnik (cl. 13.) obvezuje, pa je authority program-page i imperativna, verbatim potvrdena pravila su scored. VAZNO za ljudski pregled: izvor je Geografskog odsjeka, ne faculty-wide; drugi odsjeci PMF-a (biologija, fizika, kemija, matematika, geologija) imaju vlastite upute i mogu propisati drugacije vrijednosti. catalogPrograms je namjerno faculty-wide string radi UI poklapanja. Zavrsni (prijediplomski) i doktorski nisu pokriveni zasebnim dohvacenim formatnim uputama.",
+    "sources": [
+      {
+        "title": "Upute za izradu diplomskog rada (PMF, Geografski odsjek, 2026)",
+        "url": "https://www.pmf.unizg.hr/_download/repository/Diplomski%20rad%20-%20upute%202026%5B1%5D.pdf"
+      },
+      {
+        "title": "Pravilnik o zavrsnom i diplomskom radu (PMF, Geografski odsjek, 2026)",
+        "url": "https://www.pmf.unizg.hr/images/50024379/Pravilnik%20o%20zavrsnom%20i%20diplomskom%20radu%20i%20zavrsnom%20i%20diplomskom%20ispitu%202026.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnom i diplomskom radu te zavrsnom i diplomskom ispitu (PMF, Geografski odsjek, 2026)",
+      "Upute za izradu diplomskog rada (PMF, Geografski odsjek, 2026)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "format papira (A4)",
+      "numeracija stranica",
+      "stil citiranja (harvard)",
+      "obvezni dijelovi strukture"
+    ],
+    "advisoryScope": [
+      "opseg u stranicama",
+      "decimalno oznacavanje sadrzaja (toc)"
+    ],
+    "catalogPrograms": [
+      "Geografija"
+    ]
   }
 ]

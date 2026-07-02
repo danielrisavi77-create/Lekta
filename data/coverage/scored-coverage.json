@@ -57,6 +57,22 @@
       "lastVerified": null
     },
     {
+      "profileId": "ffzg-filozofija-diplomski",
+      "scored": 9,
+      "machineCheckable": 7,
+      "advisory": 0,
+      "ratio": 1.2857142857142858,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "ffzg-informacijske-zavrsni",
+      "scored": 3,
+      "machineCheckable": 4,
+      "advisory": 3,
+      "ratio": 0.75,
+      "lastVerified": "2026-07-02"
+    },
+    {
       "profileId": "fpzg-doktorski-politologija",
       "scored": 7,
       "machineCheckable": 7,
@@ -205,6 +221,14 @@
       "scored": 7,
       "machineCheckable": 7,
       "advisory": 3,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "pmf-geografija-diplomski",
+      "scored": 8,
+      "machineCheckable": 8,
+      "advisory": 2,
       "ratio": 1,
       "lastVerified": "2026-07-02"
     },
@@ -377,5 +401,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 249
+  "totalScored": 269
 }

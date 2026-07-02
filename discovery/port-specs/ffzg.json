@@ -1,0 +1,458 @@
+{
+  "faculty": "ffzg",
+  "unit": null,
+  "catalogPrograms": [
+    "Prijediplomski studiji Filozofskog fakulteta (zavrsni rad)",
+    "Diplomski studiji Filozofskog fakulteta"
+  ],
+  "sources": [
+    {
+      "id": "ffzg-inf-diplomski-2024",
+      "kind": "guidelines",
+      "title": "Upute i pravila za prijavu, pisanje i obranu rada na redovitom studiju (Filozofski fakultet, Odsjek za informacijske i komunikacijske znanosti, 2024)",
+      "url": "https://inf.ffzg.unizg.hr/images/korisno/upute2018/Upute_i_pravila_za_prijavu_pisanje_i_obranu_rada_-_v8.pdf",
+      "publisher": "Filozofski fakultet Sveucilista u Zagrebu, Odsjek za informacijske i komunikacijske znanosti",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/ffzg/ffzg-inf-diplomski-2024.pdf",
+      "snapshotHash": "569ef74171db53273efeada5532f0d0b0a520335f725f66f2136c0aad190486e",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Upute Odsjeka za informacijske i komunikacijske znanosti (v8, usvojeno na sjednici Odsjeka 3.12.2024). Pokriva zavrsni (preddiplomski) i diplomski rad. Struktura (Cjeline se u radu moraju pisati prema navedenom redoslijedu) i numeracija stranica (numeracija stranica pocinje od Uvoda) su imperativ -> scored. Font (moze biti Arial ili Times New Roman), opseg (25 kartica / 45.000 znakova, mjeri se u karticama a ne rijecima) i stil citiranja (Harvardski, APA ili drugi, odreuje ga mentor) formulirani su nedeterministicki -> advisory. Margine, prored i velicina slova nisu u tekstu nego u zasebnom Predlosku pa nisu preuzeti."
+    },
+    {
+      "id": "ffzg-filoz-diplomski-2019",
+      "kind": "guidelines",
+      "title": "Upute za oblikovanje diplomskoga rada na studiju filozofije (Filozofski fakultet, Odsjek za filozofiju, 2019)",
+      "url": "https://filoz.ffzg.unizg.hr/wp-content/uploads/2019/06/Upute-za-oblikovanje-diplomskoga-rada.pdf",
+      "publisher": "Filozofski fakultet Sveucilista u Zagrebu, Odsjek za filozofiju",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/ffzg/ffzg-filoz-diplomski-2019.pdf",
+      "snapshotHash": "ba222ed21e3a1a4685dbd507e47c822583826cac6a0f6ce53cae669ec149a80f",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Upute Odsjeka za filozofiju (URL sadrzi 2019/06). Cijelo tehnicko oblikovanje je imperativno (Diplomski rad ... mora sadrzavati; Tekst treba oblikovati na sljedei nacin) -> scored: font Times New Roman 12, margine 2,5 cm, prored 1,5, numeracija stranica arapskim brojkama u donjem desnom kutu, obostrano poravnanje, obvezne cjeline, sadrzaj. Citiranje je u fusnotama (chicago-notes). Nema navedenog opsega u stranicama/rijecima."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "ffzg-informacijske-zavrsni",
+      "unitId": "ffzg",
+      "programs": [
+        "Informacijske i komunikacijske znanosti"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Filozofski fakultet (Odsjek za informacijske i komunikacijske znanosti), zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2024-12-03",
+      "rules": {
+        "font": [
+          "Arial",
+          "Times New Roman"
+        ],
+        "requireToc": true,
+        "requirePageNumbers": true,
+        "recommendedCitation": "harvard",
+        "requiredSections": [
+          {
+            "key": "naslovnica",
+            "label": "Naslovnica",
+            "terms": [
+              "naslovnica"
+            ]
+          },
+          {
+            "key": "izjava",
+            "label": "Izjava o akademskoj cestitosti",
+            "terms": [
+              "izjava o akademskoj cestitosti",
+              "akademska cestitost"
+            ]
+          },
+          {
+            "key": "sadrzaj",
+            "label": "Sadrzaj",
+            "terms": [
+              "sadrzaj"
+            ]
+          },
+          {
+            "key": "uvod",
+            "label": "Uvod",
+            "terms": [
+              "uvod"
+            ]
+          },
+          {
+            "key": "glavni-dio",
+            "label": "Glavni dio",
+            "terms": [
+              "glavni dio",
+              "razrada"
+            ]
+          },
+          {
+            "key": "zakljucak",
+            "label": "Zakljucak",
+            "terms": [
+              "zakljucak"
+            ]
+          },
+          {
+            "key": "literatura",
+            "label": "Literatura",
+            "terms": [
+              "literatura",
+              "popis literature"
+            ]
+          },
+          {
+            "key": "sazetak",
+            "label": "Sazetak",
+            "terms": [
+              "sazetak"
+            ]
+          },
+          {
+            "key": "summary",
+            "label": "Summary",
+            "terms": [
+              "summary"
+            ]
+          }
+        ]
+      },
+      "facts": [
+        "Cjeline rada moraju se pisati propisanim redoslijedom: Naslovnica, Izjava o akademskoj cestitosti, Sadrzaj, Uvod, Glavni dio, Zakljucak, Literatura, Sazetak i Summary (imperativ).",
+        "Numeracija stranica i numeracija poglavlja pocinju od Uvoda (imperativ).",
+        "Font moze biti Arial ili Times New Roman uz zaseban Predlozak; opseg je najmanje 25 kartica (45.000 znakova); stil citiranja (Harvard, APA ili drugi) odreuje mentor (sve advisory)."
+      ],
+      "note": "Zavrsni rad na preddiplomskom studiju iz Uputa Odsjeka za informacijske i komunikacijske znanosti (v8, 2024). FFZG nema jedinstvene fakultetske Upute pa je izvor odsjecki, ali sadrzajno reprezentativan. Scored su samo imperativna pravila (struktura, sadrzaj, numeracija stranica). Font, opseg (u karticama) i stil citiranja su advisory. Margine, prored i velicina slova su u zasebnom Predlosku i nisu preuzeti (nema doslovnog citata u tekstu Uputa).",
+      "sources": [
+        {
+          "title": "Upute i pravila za prijavu, pisanje i obranu rada (FFZG, Odsjek za informacijske i komunikacijske znanosti, 2024)",
+          "url": "https://inf.ffzg.unizg.hr/images/korisno/upute2018/Upute_i_pravila_za_prijavu_pisanje_i_obranu_rada_-_v8.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute i pravila za prijavu, pisanje i obranu rada (FFZG, Odsjek za informacijske i komunikacijske znanosti, 2024)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "obvezne cjeline rada",
+        "sadrzaj",
+        "numeracija stranica"
+      ],
+      "advisoryScope": [
+        "font",
+        "opseg (kartice)",
+        "stil citiranja"
+      ],
+      "catalogPrograms": [
+        "Informacijske i komunikacijske znanosti"
+      ]
+    },
+    {
+      "id": "ffzg-filozofija-diplomski",
+      "unitId": "ffzg",
+      "programs": [
+        "Filozofija"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Filozofski fakultet (Odsjek za filozofiju), diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2019-06-01",
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": 12,
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "requireToc": true,
+        "requirePageNumbers": true,
+        "checkJustify": true,
+        "checkMargins": true,
+        "recommendedCitation": "chicago-notes",
+        "requiredSections": [
+          {
+            "key": "naslovna",
+            "label": "Naslovna stranica",
+            "terms": [
+              "naslovna stranica",
+              "naslovnica"
+            ]
+          },
+          {
+            "key": "sadrzaj",
+            "label": "Sadrzaj",
+            "terms": [
+              "sadrzaj"
+            ]
+          },
+          {
+            "key": "sazetak",
+            "label": "Sazetak i kljucne rijeci",
+            "terms": [
+              "sazetak",
+              "kljucne rijeci"
+            ]
+          },
+          {
+            "key": "uvod",
+            "label": "Uvod",
+            "terms": [
+              "uvod"
+            ]
+          },
+          {
+            "key": "razrada",
+            "label": "Razrada teme",
+            "terms": [
+              "razrada teme",
+              "razrada"
+            ]
+          },
+          {
+            "key": "zakljucak",
+            "label": "Zakljucak",
+            "terms": [
+              "zakljucak"
+            ]
+          },
+          {
+            "key": "literatura",
+            "label": "Popis literature",
+            "terms": [
+              "popis literature",
+              "literatura"
+            ]
+          }
+        ]
+      },
+      "facts": [
+        "Diplomski rad mora sadrzavati naslovnu stranicu, sadrzaj, sazetke i kljucne rijeci, uvod, razradu teme, zakljucak i popis literature (imperativ).",
+        "Tekst treba oblikovati: Times New Roman velicine 12, margine 2,5 cm, prored 1,5, obostrano poravnanje, numeracija arapskim brojkama u donjem desnom kutu (imperativ).",
+        "Izvori se navode u fusnotama na dnu stranice (citatni stil fusnote, chicago-notes; imperativ)."
+      ],
+      "note": "Diplomski rad iz Uputa za oblikovanje diplomskoga rada Odsjeka za filozofiju (2019). Cijelo tehnicko oblikovanje je imperativno pa je scored. Citiranje je iskljucivo u fusnotama pa je stil chicago-notes. FFZG nema jedinstvene fakultetske Upute; ovaj odsjecki dokument je najpotpuniji imperativni izvor za oblikovanje diplomskog rada. Obostrano poravnanje vozi se kroz rules.checkJustify i zaseban ruleEntry (checkId justify).",
+      "sources": [
+        {
+          "title": "Upute za oblikovanje diplomskoga rada na studiju filozofije (FFZG, Odsjek za filozofiju, 2019)",
+          "url": "https://filoz.ffzg.unizg.hr/wp-content/uploads/2019/06/Upute-za-oblikovanje-diplomskoga-rada.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za oblikovanje diplomskoga rada na studiju filozofije (FFZG, Odsjek za filozofiju, 2019)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "obvezne cjeline rada",
+        "sadrzaj",
+        "font",
+        "velicina slova",
+        "prored",
+        "margine",
+        "numeracija stranica",
+        "obostrano poravnanje",
+        "stil citiranja (fusnote)"
+      ],
+      "advisoryScope": [],
+      "catalogPrograms": [
+        "Filozofija"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-ffzg-informacijske-zavrsni--required-sections-verified-2026-07-02",
+      "ruleId": "ffzg-informacijske-zavrsni--required-sections",
+      "profileId": "ffzg-informacijske-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-inf-diplomski-2024",
+      "sourcePage": "odjeljak 3.1. Struktura rada",
+      "quote": "Rad se sastoji od sljedeih cjelina: Naslovnica, Izjava o akademskoj cestitosti, Sadrzaj, Uvod,",
+      "note": "Port pilot workflow. Imperativ: Cjeline se u radu moraju pisati prema navedenom redoslijedu."
+    },
+    {
+      "id": "led-ffzg-informacijske-zavrsni--toc-verified-2026-07-02",
+      "ruleId": "ffzg-informacijske-zavrsni--toc",
+      "profileId": "ffzg-informacijske-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-inf-diplomski-2024",
+      "sourcePage": "odjeljak 3.1. Struktura rada",
+      "quote": "Rad se sastoji od sljedeih cjelina: Naslovnica, Izjava o akademskoj cestitosti, Sadrzaj, Uvod,",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ffzg-informacijske-zavrsni--page-numbers-verified-2026-07-02",
+      "ruleId": "ffzg-informacijske-zavrsni--page-numbers",
+      "profileId": "ffzg-informacijske-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-inf-diplomski-2024",
+      "sourcePage": "odjeljak 3.1. Struktura rada",
+      "quote": "poglavlje od kojeg pocinje numeracija poglavlja i numeracija stranica",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ffzg-informacijske-zavrsni--font-advisory-2026-07-02",
+      "ruleId": "ffzg-informacijske-zavrsni--font",
+      "profileId": "ffzg-informacijske-zavrsni",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-inf-diplomski-2024",
+      "sourcePage": "odjeljak 3.8. Izgled i stilovi",
+      "quote": "Font moze biti Arial ili Times New Roman, a predlosci su dostupni na web stranicama Odsjeka.",
+      "note": "Port pilot workflow. Font je permisivan (moze biti) pa advisory."
+    },
+    {
+      "id": "led-ffzg-informacijske-zavrsni--word-count-advisory-2026-07-02",
+      "ruleId": "ffzg-informacijske-zavrsni--word-count",
+      "profileId": "ffzg-informacijske-zavrsni",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-inf-diplomski-2024",
+      "sourcePage": "odjeljak 3.2. Opseg rada",
+      "quote": "Zavrsni rad mora imati najmanje 25 kartica teksta (45.000 znakova s razmacima), a diplomski",
+      "note": "Port pilot workflow. Opseg je zadan u karticama/znakovima, ne u rijecima; procjena 7500 rijeci nije doslovna pa advisory."
+    },
+    {
+      "id": "led-ffzg-informacijske-zavrsni--citation-style-advisory-2026-07-02",
+      "ruleId": "ffzg-informacijske-zavrsni--citation-style",
+      "profileId": "ffzg-informacijske-zavrsni",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-inf-diplomski-2024",
+      "sourcePage": "odjeljak 3.6. Literatura",
+      "quote": "U radu je potrebno koristiti Harvardski, APA ili neki drugi stil citiranja, a odreuje ga mentor.",
+      "note": "Port pilot workflow. Stil odreuje mentor pa advisory."
+    },
+    {
+      "id": "led-ffzg-filozofija-diplomski--required-sections-verified-2026-07-02",
+      "ruleId": "ffzg-filozofija-diplomski--required-sections",
+      "profileId": "ffzg-filozofija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-filoz-diplomski-2019",
+      "sourcePage": "uvodni popis: Diplomski rad mora sadrzavati",
+      "quote": "Diplomski rad koji se prijavljuje i brani na Odsjeku za filozofiju mora sadrzavati:",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ffzg-filozofija-diplomski--toc-verified-2026-07-02",
+      "ruleId": "ffzg-filozofija-diplomski--toc",
+      "profileId": "ffzg-filozofija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-filoz-diplomski-2019",
+      "sourcePage": "uvodni popis: Diplomski rad mora sadrzavati",
+      "quote": "Diplomski rad koji se prijavljuje i brani na Odsjeku za filozofiju mora sadrzavati:",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ffzg-filozofija-diplomski--font-verified-2026-07-02",
+      "ruleId": "ffzg-filozofija-diplomski--font",
+      "profileId": "ffzg-filozofija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-filoz-diplomski-2019",
+      "sourcePage": "odjeljak Tekst treba oblikovati na sljedei nacin",
+      "quote": "pismo (font): Times New Roman, velicina 12",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ffzg-filozofija-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "ffzg-filozofija-diplomski--font-size",
+      "profileId": "ffzg-filozofija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-filoz-diplomski-2019",
+      "sourcePage": "odjeljak Tekst treba oblikovati na sljedei nacin",
+      "quote": "pismo (font): Times New Roman, velicina 12",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ffzg-filozofija-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "ffzg-filozofija-diplomski--line-spacing",
+      "profileId": "ffzg-filozofija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-filoz-diplomski-2019",
+      "sourcePage": "odjeljak Tekst treba oblikovati na sljedei nacin",
+      "quote": "prored: 1,5;",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ffzg-filozofija-diplomski--margins-verified-2026-07-02",
+      "ruleId": "ffzg-filozofija-diplomski--margins",
+      "profileId": "ffzg-filozofija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-filoz-diplomski-2019",
+      "sourcePage": "odjeljak Tekst treba oblikovati na sljedei nacin",
+      "quote": "margine: lijevo i desno 2,5 cm, gore i dolje 2,5 cm;",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ffzg-filozofija-diplomski--page-numbers-verified-2026-07-02",
+      "ruleId": "ffzg-filozofija-diplomski--page-numbers",
+      "profileId": "ffzg-filozofija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-filoz-diplomski-2019",
+      "sourcePage": "odjeljak Tekst treba oblikovati na sljedei nacin",
+      "quote": "stranice numerirati arapskim brojkama u donjem desnom kutu;",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ffzg-filozofija-diplomski--justify-verified-2026-07-02",
+      "ruleId": "ffzg-filozofija-diplomski--justify",
+      "profileId": "ffzg-filozofija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-filoz-diplomski-2019",
+      "sourcePage": "odjeljak Tekst treba oblikovati na sljedei nacin",
+      "quote": "tekst pisati s obostranim poravnanjem;",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ffzg-filozofija-diplomski--citation-style-verified-2026-07-02",
+      "ruleId": "ffzg-filozofija-diplomski--citation-style",
+      "profileId": "ffzg-filozofija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-filoz-diplomski-2019",
+      "sourcePage": "odjeljak Upute o navoenju literature i citiranju",
+      "quote": "Izvori za citirane, sazete ili parafrazirane misli nekog drugog autora navode se u fusnotama na",
+      "note": "Port pilot workflow. Citiranje iskljucivo u fusnotama pa chicago-notes."
+    }
+  ]
+}

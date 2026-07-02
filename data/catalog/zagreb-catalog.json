@@ -180,6 +180,8 @@
         "name": "Filozofski fakultet",
         "family": "social",
         "programs": [
+          "Prijediplomski studiji Filozofskog fakulteta (zavrsni rad)",
+          "Diplomski studiji Filozofskog fakulteta",
           "Opći profil fakulteta",
           "Arheologija",
           "Etnologija i kulturna antropologija",
@@ -321,6 +323,7 @@
           "Geologija",
           "Kemija",
           "Matematika",
+          "Diplomski studiji Prirodoslovno-matematičkog fakulteta",
           "Opći profil fakulteta"
         ],
         "status": "partial"

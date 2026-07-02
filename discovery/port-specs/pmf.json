@@ -1,0 +1,232 @@
+{
+  "faculty": "pmf",
+  "unit": null,
+  "catalogPrograms": [
+    "Diplomski studiji Prirodoslovno-matematičkog fakulteta"
+  ],
+  "sources": [
+    {
+      "id": "pmf-geog-upute-diplomski-2026",
+      "kind": "guidelines",
+      "title": "Upute za izradu diplomskog rada na Sveucilistu u Zagrebu Prirodoslovno-matematickom fakultetu, Geografskom odsjeku (2026)",
+      "url": "https://www.pmf.unizg.hr/_download/repository/Diplomski%20rad%20-%20upute%202026%5B1%5D.pdf",
+      "publisher": "Geografski odsjek, Prirodoslovno-matematicki fakultet Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/pmf/pmf-geog-diplomski-2026.pdf",
+      "snapshotHash": "bef096b5167bde781d833fa92d850022e8bc7abcf63168f798810a1afac941b1",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Upute Geografskog odsjeka koje Pravilnik (cl. 13.) obvezuje pa nose authority program-page. Sadrze konkretna imperativna pravila oblikovanja (font TNR 12, prored 1,5, margine 2,5 cm, A4, numeracija od Uvoda, harvardsko citiranje, obvezni dijelovi strukture). VAZNO: dokument je Geografskog odsjeka, ne faculty-wide; drugi odsjeci PMF-a imaju vlastite upute. Citati verbatim provjereni grepom nad pmf-geog-diplomski-2026.txt."
+    },
+    {
+      "id": "pmf-geog-pravilnik-2026",
+      "kind": "regulation",
+      "title": "Pravilnik o zavrsnom i diplomskom radu te zavrsnom i diplomskom ispitu na Sveucilistu u Zagrebu Prirodoslovno-matematickom fakultetu, Geografskom odsjeku (2026)",
+      "url": "https://www.pmf.unizg.hr/images/50024379/Pravilnik%20o%20zavrsnom%20i%20diplomskom%20radu%20i%20zavrsnom%20i%20diplomskom%20ispitu%202026.pdf",
+      "publisher": "Fakultetsko vijece, Prirodoslovno-matematicki fakultet Sveucilista u Zagrebu (Geografski odsjek)",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/pmf/pmf-pravilnik-2026.pdf",
+      "snapshotHash": "6fea81833d4426ffaf4196d3f12c7fdfbe582a670d35d536ea6b6cb9300374ec",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Obvezujuci pravilnik (Fakultetsko vijece, 29.1.2026), ali Geografskog odsjeka, ne faculty-wide. Ne sadrzi tehnicka pravila oblikovanja nego ih delegira (cl. 13.) na Upute za izradu. Snapshot cuvan radi sljedivosti i kao izvor autoriteta koji obvezuje Upute; sam ne daje nijedno scored formatno pravilo."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "pmf-geografija-diplomski",
+      "unitId": "pmf",
+      "programs": [
+        "Geografija"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Prirodoslovno-matematicki fakultet (Geografski odsjek), diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2026-01-29",
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "requirePageNumbers": true,
+        "requireA4": true,
+        "recommendedCitation": "harvard"
+      },
+      "facts": [
+        "Rad se pise fontom Times New Roman velicine 12, prored 1,5 (imperativ, scored).",
+        "Rad je A4 formata, margine 2,5 cm (imperativ, scored).",
+        "Pocetne stranice do Sadrzaja se ne numeriraju, numeracija zapocinje od Uvoda koji nosi broj 1 (imperativ, scored).",
+        "Literatura se citira prema harvardskom sustavu (imperativ, scored).",
+        "Obvezni dijelovi strukture: uvod, pregled dosadasnjih istrazivanja, teorijski pristup, metode, rezultati, rasprava, zakljucak, literatura i izvori (imperativ, scored).",
+        "Optimalni opseg oko 50 stranica i decimalno oznacavanje Sadrzaja su preporuke (advisory)."
+      ],
+      "note": "Iz Uputa za izradu diplomskog rada (PMF, Geografski odsjek, 2026) koje Pravilnik (cl. 13.) obvezuje, pa je authority program-page i imperativna, verbatim potvrdena pravila su scored. VAZNO za ljudski pregled: izvor je Geografskog odsjeka, ne faculty-wide; drugi odsjeci PMF-a (biologija, fizika, kemija, matematika, geologija) imaju vlastite upute i mogu propisati drugacije vrijednosti. catalogPrograms je namjerno faculty-wide string radi UI poklapanja. Zavrsni (prijediplomski) i doktorski nisu pokriveni zasebnim dohvacenim formatnim uputama.",
+      "sources": [
+        {
+          "title": "Upute za izradu diplomskog rada (PMF, Geografski odsjek, 2026)",
+          "url": "https://www.pmf.unizg.hr/_download/repository/Diplomski%20rad%20-%20upute%202026%5B1%5D.pdf"
+        },
+        {
+          "title": "Pravilnik o zavrsnom i diplomskom radu (PMF, Geografski odsjek, 2026)",
+          "url": "https://www.pmf.unizg.hr/images/50024379/Pravilnik%20o%20zavrsnom%20i%20diplomskom%20radu%20i%20zavrsnom%20i%20diplomskom%20ispitu%202026.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o zavrsnom i diplomskom radu te zavrsnom i diplomskom ispitu (PMF, Geografski odsjek, 2026)",
+        "Upute za izradu diplomskog rada (PMF, Geografski odsjek, 2026)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "font",
+        "velicina slova",
+        "prored",
+        "margine",
+        "format papira (A4)",
+        "numeracija stranica",
+        "stil citiranja (harvard)",
+        "obvezni dijelovi strukture"
+      ],
+      "advisoryScope": [
+        "opseg u stranicama",
+        "decimalno oznacavanje sadrzaja (toc)"
+      ],
+      "catalogPrograms": [
+        "Geografija"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-pmf-geografija-diplomski--font-verified-2026-07-02",
+      "ruleId": "pmf-geografija-diplomski--font",
+      "profileId": "pmf-geografija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-geog-upute-diplomski-2026",
+      "sourcePage": "odjeljak Opseg i forma rada",
+      "quote": "Rad se pise fontom Times New Roman, velicina 12 tocaka, s proredom od 1,5 redaka",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-pmf-geografija-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "pmf-geografija-diplomski--font-size",
+      "profileId": "pmf-geografija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-geog-upute-diplomski-2026",
+      "sourcePage": "odjeljak Opseg i forma rada",
+      "quote": "Rad se pise fontom Times New Roman, velicina 12 tocaka, s proredom od 1,5 redaka",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-pmf-geografija-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "pmf-geografija-diplomski--line-spacing",
+      "profileId": "pmf-geografija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-geog-upute-diplomski-2026",
+      "sourcePage": "odjeljak Opseg i forma rada",
+      "quote": "Rad se pise fontom Times New Roman, velicina 12 tocaka, s proredom od 1,5 redaka",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-pmf-geografija-diplomski--margins-verified-2026-07-02",
+      "ruleId": "pmf-geografija-diplomski--margins",
+      "profileId": "pmf-geografija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-geog-upute-diplomski-2026",
+      "sourcePage": "odjeljak Opseg i forma rada",
+      "quote": "Rad treba oblikovati kao dokument formata A4. Margine trebaju biti 2,5 cm.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-pmf-geografija-diplomski--paper-size-verified-2026-07-02",
+      "ruleId": "pmf-geografija-diplomski--paper-size",
+      "profileId": "pmf-geografija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-geog-upute-diplomski-2026",
+      "sourcePage": "odjeljak Opseg i forma rada",
+      "quote": "Rad treba oblikovati kao dokument formata A4. Margine trebaju biti 2,5 cm.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-pmf-geografija-diplomski--page-numbers-verified-2026-07-02",
+      "ruleId": "pmf-geografija-diplomski--page-numbers",
+      "profileId": "pmf-geografija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-geog-upute-diplomski-2026",
+      "sourcePage": "odjeljak Struktura i oblikovanje teksta, a) Pocetne stranice",
+      "quote": "Pocetne stranice do ukljucivo Sadrzaja (ili Predgovora) ne numeriraju se.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-pmf-geografija-diplomski--citation-style-verified-2026-07-02",
+      "ruleId": "pmf-geografija-diplomski--citation-style",
+      "profileId": "pmf-geografija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-geog-upute-diplomski-2026",
+      "sourcePage": "odjeljak Citiranje",
+      "quote": "Literatura se citira prema harvardskom sustavu.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-pmf-geografija-diplomski--required-sections-verified-2026-07-02",
+      "ruleId": "pmf-geografija-diplomski--required-sections",
+      "profileId": "pmf-geografija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-geog-upute-diplomski-2026",
+      "sourcePage": "odjeljak Struktura i oblikovanje teksta, b) Struktura rada",
+      "quote": "Navedeni dijelovi koji slijede su obvezni dijelovi strukture diplomskog rada, a ne naslovi",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-pmf-geografija-diplomski--page-count-advisory-2026-07-02",
+      "ruleId": "pmf-geografija-diplomski--page-count",
+      "profileId": "pmf-geografija-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-geog-upute-diplomski-2026",
+      "sourcePage": "odjeljak Opseg i forma rada",
+      "quote": "Optimalni opseg diplomskog rada je oko 50 stranica.",
+      "note": "Port pilot workflow. Preporuka ('optimalni ... oko'), ostaje advisory."
+    },
+    {
+      "id": "led-pmf-geografija-diplomski--toc-advisory-2026-07-02",
+      "ruleId": "pmf-geografija-diplomski--toc",
+      "profileId": "pmf-geografija-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-geog-upute-diplomski-2026",
+      "sourcePage": "odjeljak Struktura i oblikovanje teksta, a) Pocetne stranice",
+      "quote": "Sadrzaj: Preporucuje se decimalno oznacavanje poglavlja i potpoglavlja.",
+      "note": "Port pilot workflow. Formulacija 'Preporucuje se', ostaje advisory."
+    }
+  ]
+}
