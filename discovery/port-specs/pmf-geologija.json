@@ -1,0 +1,187 @@
+{
+  "faculty": "pmf",
+  "unit": null,
+  "catalogPrograms": [
+    "Geologija"
+  ],
+  "sources": [
+    {
+      "id": "pmf-geol-upute-diplomski-2024",
+      "kind": "guidelines",
+      "title": "Upute i predlozak za izradu diplomskog rada (PMF-GO2021) na Sveucilistu u Zagrebu Prirodoslovno-matematickom fakultetu, Geoloskom odsjeku (2024)",
+      "url": "https://www.pmf.unizg.hr/_download/repository/PMF-GO2021_Upute_i_predlozak-Diplomski_rad.pdf",
+      "publisher": "Geoloski odsjek, Prirodoslovno-matematicki fakultet Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/pmf/pmf-geol-diplomski-2024.pdf",
+      "snapshotHash": "5ca42167f80ca3f7f1a02468152774efa4000a6565870ad6798f478c995a9dfa",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Predlozak i upute Geoloskog odsjeka (PMF-GO2021, azurirano 02.2024), objavljeni na stranicama posvecenim zavrsetku diplomskog studija. Sadrze imperativna pravila oblikovanja (font TNR 12 i prored 1,5, numeracija stranica, obvezno stvaranje sadrzaja). Kompozicija poglavlja izrijekom je preporuka od koje se moze odstupiti (advisory), a stil citiranja je autor-godina (harvardski, advisory). Nema navedenih margina, formata papira ni opsega u stranicama. Citati verbatim provjereni grepom nad pmf-geol-diplomski-2024.txt. VAZNO: dokument je Geoloskog odsjeka, ne faculty-wide; drugi odsjeci PMF-a imaju vlastite upute."
+    },
+    {
+      "id": "pmf-geol-pravilnik-2021",
+      "kind": "pravilnik",
+      "title": "Pravilnik o zavrsnom i diplomskom radu i zavrsnom i diplomskom ispitu na Geoloskom odsjeku Prirodoslovno-matematickog fakulteta Sveucilista u Zagrebu (2021)",
+      "url": "https://www.pmf.unizg.hr/_download/repository/Pravilnik_o_zavrsnom_i_diplomskom_radu_GO.pdf",
+      "publisher": "Vijece Geoloskog odsjeka, Prirodoslovno-matematicki fakultet Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/pmf/pmf-geol-pravilnik-2021.pdf",
+      "snapshotHash": "3858b18401659d68c3c22e3f75bf346882fa7a745f9986b9eb6eebb92b6a660e",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Obvezujuci pravilnik Geoloskog odsjeka (na snazi od 22.10.2021). Uredjuje prijavu teme i tijek diplomskog ispita, a tehnicko oblikovanje delegira na Upute i predlozak. Snapshot cuvan radi sljedivosti i kao izvor autoriteta koji obvezuje Upute; sam ne daje nijedno scored formatno pravilo."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "pmf-geologija-graduate",
+      "unitId": "pmf",
+      "programs": [
+        "Geologija"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Prirodoslovno-matematicki fakultet (Geoloski odsjek), diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2024-02-01",
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "requirePageNumbers": true,
+        "requireToc": true,
+        "recommendedCitation": "harvard"
+      },
+      "facts": [
+        "Rad se pise fontom Times New Roman velicine 12, prored 1,5 (imperativ, scored).",
+        "Pocetne stranice do Uvoda numeriraju se rimskim brojevima, a prva stranica Uvoda arapskim brojem 1 (imperativ, scored).",
+        "Po zavrsetku rada treba automatski stvoriti sadrzaj (imperativ, scored).",
+        "Kompozicija poglavlja (Uvod, Pregled dosadasnjih istrazivanja, Materijali i metode, Rezultati, Rasprava, Zakljucci, Literatura) je preporucena i moze se od nje odstupiti (advisory).",
+        "Reference u tekstu su autor-godina, harvardskog tipa (advisory).",
+        "Upute ne navode margine, format papira ni opseg u stranicama."
+      ],
+      "note": "Iz Uputa i predloska za izradu diplomskog rada (PMF, Geoloski odsjek, PMF-GO2021, 02.2024) koje Pravilnik Geoloskog odsjeka (2021) obvezuje, pa je authority program-page i imperativna, verbatim potvrdena pravila su scored: font TNR, velicina 12, prored 1,5, numeracija stranica i obvezno stvaranje sadrzaja. Advisory: preporucena kompozicija poglavlja (izrijekom 'moze od nje odstupiti', machineCheckable:false) i stil citiranja autor-godina (harvardski, machineCheckable:false). Izvor ne navodi margine, A4 ni opseg u stranicama pa ta pravila nisu preuzeta. VAZNO za ljudski pregled: dokument je Geoloskog odsjeka, ne faculty-wide; drugi odsjeci PMF-a (geografija, biologija, fizika, kemija, matematika) imaju vlastite upute. Studij nudi smjerove Geologija i Geologija zastite okolisa; profil pokriva program Geologija. Zavrsni (prijediplomski) i doktorski nisu pokriveni zasebnim dohvacenim formatnim uputama.",
+      "sources": [
+        {
+          "title": "Upute i predlozak za izradu diplomskog rada (PMF, Geoloski odsjek, PMF-GO2021, 2024)",
+          "url": "https://www.pmf.unizg.hr/_download/repository/PMF-GO2021_Upute_i_predlozak-Diplomski_rad.pdf"
+        },
+        {
+          "title": "Pravilnik o zavrsnom i diplomskom radu i zavrsnom i diplomskom ispitu (PMF, Geoloski odsjek, 2021)",
+          "url": "https://www.pmf.unizg.hr/_download/repository/Pravilnik_o_zavrsnom_i_diplomskom_radu_GO.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o zavrsnom i diplomskom radu i zavrsnom i diplomskom ispitu (PMF, Geoloski odsjek, 2021)",
+        "Upute i predlozak za izradu diplomskog rada (PMF, Geoloski odsjek, PMF-GO2021, 2024)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "font",
+        "velicina slova",
+        "prored",
+        "numeracija stranica",
+        "sadrzaj (toc)"
+      ],
+      "advisoryScope": [
+        "preporucena kompozicija poglavlja",
+        "stil citiranja (autor-godina, harvard)"
+      ],
+      "catalogPrograms": [
+        "Geologija"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-pmf-geologija-graduate--font-verified-2026-07-02",
+      "ruleId": "pmf-geologija-graduate--font",
+      "profileId": "pmf-geologija-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-geol-upute-diplomski-2024",
+      "sourcePage": "odjeljak 1. Uvod",
+      "quote": "Pri pisanju teksta koristite font Times New Roman, velicine 12 te prored 1,5.",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-pmf-geologija-graduate--font-size-verified-2026-07-02",
+      "ruleId": "pmf-geologija-graduate--font-size",
+      "profileId": "pmf-geologija-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-geol-upute-diplomski-2024",
+      "sourcePage": "odjeljak 1. Uvod",
+      "quote": "Pri pisanju teksta koristite font Times New Roman, velicine 12 te prored 1,5.",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-pmf-geologija-graduate--line-spacing-verified-2026-07-02",
+      "ruleId": "pmf-geologija-graduate--line-spacing",
+      "profileId": "pmf-geologija-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-geol-upute-diplomski-2024",
+      "sourcePage": "odjeljak 1. Uvod",
+      "quote": "Pri pisanju teksta koristite font Times New Roman, velicine 12 te prored 1,5.",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-pmf-geologija-graduate--page-numbers-verified-2026-07-02",
+      "ruleId": "pmf-geologija-graduate--page-numbers",
+      "profileId": "pmf-geologija-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-geol-upute-diplomski-2024",
+      "sourcePage": "odjeljak Sadrzaj (Pocetne stranice)",
+      "quote": "Sve stranice do Uvoda, osim korica, numeriraju se rimskim brojevima",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-pmf-geologija-graduate--toc-verified-2026-07-02",
+      "ruleId": "pmf-geologija-graduate--toc",
+      "profileId": "pmf-geologija-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-geol-upute-diplomski-2024",
+      "sourcePage": "odjeljak Sadrzaj",
+      "quote": "Po zavrsetku rada treba (automatski) stvoriti sadrzaj.",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-pmf-geologija-graduate--required-sections-advisory-2026-07-02",
+      "ruleId": "pmf-geologija-graduate--required-sections",
+      "profileId": "pmf-geologija-graduate",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-geol-upute-diplomski-2024",
+      "sourcePage": "odjeljak 1. Uvod",
+      "quote": "Kompozicija diplomskog rada (navedena poglavlja i njihov naziv) preporucena u",
+      "note": "Deepen workflow (odsjecki profil). Kompozicija je izrijekom preporuka ('moze od nje odstupiti') i machineCheckable:false, ostaje advisory."
+    },
+    {
+      "id": "led-pmf-geologija-graduate--citation-style-advisory-2026-07-02",
+      "ruleId": "pmf-geologija-graduate--citation-style",
+      "profileId": "pmf-geologija-graduate",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pmf-geol-upute-diplomski-2024",
+      "sourcePage": "odjeljak 1. Uvod (Reference)",
+      "quote": "Reference u tekstu se pisu na jedan od dva nacina",
+      "note": "Deepen workflow (odsjecki profil). Autor-godina (harvardski) stil, machineCheckable:false, ostaje advisory."
+    }
+  ]
+}

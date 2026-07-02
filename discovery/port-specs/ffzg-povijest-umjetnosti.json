@@ -1,0 +1,305 @@
+{
+  "faculty": "ffzg",
+  "unit": null,
+  "catalogPrograms": [
+    "Povijest umjetnosti"
+  ],
+  "sources": [
+    {
+      "id": "ffzg-povum-diplomski-2016",
+      "kind": "guidelines",
+      "title": "Upute za prijavu, izradu i obranu diplomskog rada na Odsjeku za povijest umjetnosti (Filozofski fakultet Sveucilista u Zagrebu, 2016)",
+      "url": "https://povum.ffzg.unizg.hr/wp-content/uploads/2011/02/PUM-Upute_za_izradu_diplomskog_rada2016.pdf",
+      "publisher": "Filozofski fakultet Sveucilista u Zagrebu, Odsjek za povijest umjetnosti",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/ffzg/ffzg-povum-diplomski-2016.pdf",
+      "snapshotHash": "aa59df02973b7a79000ab2c19f0720ab26dbc463990b57cd54c0d7cdc52c2382",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Upute Odsjeka za povijest umjetnosti, prihvacene na sjednici Vijea Odsjeka 18. listopada 2016. Odjeljak 7.2. daje imperativno graficko oblikovanje (Tekst se pise ... fontu Times New Roman velicine slova 12 i s proredom 1,5; Tekst se poravnava po oba ruba (Justified); ima margine 2,5 cm ... i 2 cm (desno); Stranice teksta numeriraju se arapskim brojkama u donjem desnom kutu; Rad se otiskuje ... na papiru A4 formata) -> scored. Opseg (oko 50 kartica) je aproksimativan (oko) -> advisory. Struktura (odjeljak 7.1. nacelno sadrzi) i citiranje (7.3. jedan od dva nacina u biljeskama, sukladno uputama mentora) -> advisory."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "ffzg-povijest-umjetnosti-diplomski",
+      "unitId": "ffzg",
+      "programs": [
+        "Povijest umjetnosti"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Filozofski fakultet (Odsjek za povijest umjetnosti), diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2016-10-18",
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": 12,
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "paperSize": "A4",
+        "requirePageNumbers": true,
+        "checkJustify": true,
+        "checkMargins": true,
+        "recommendedCitation": "chicago-notes",
+        "requiredSections": [
+          {
+            "key": "naslovna",
+            "label": "Naslovna stranica",
+            "terms": [
+              "naslovna stranica",
+              "naslovnica"
+            ]
+          },
+          {
+            "key": "tdk",
+            "label": "Temeljna dokumentacijska kartica",
+            "terms": [
+              "temeljna dokumentacijska kartica"
+            ]
+          },
+          {
+            "key": "izjava",
+            "label": "Izjava o autenticnosti rada",
+            "terms": [
+              "izjava o autenticnosti"
+            ]
+          },
+          {
+            "key": "sadrzaj",
+            "label": "Sadrzaj",
+            "terms": [
+              "sadrzaj"
+            ]
+          },
+          {
+            "key": "uvod",
+            "label": "Uvod",
+            "terms": [
+              "uvod"
+            ]
+          },
+          {
+            "key": "teorijski-dio",
+            "label": "Teorijski dio rada",
+            "terms": [
+              "teorijski dio",
+              "razrada"
+            ]
+          },
+          {
+            "key": "zakljucak",
+            "label": "Zakljucak",
+            "terms": [
+              "zakljucak"
+            ]
+          },
+          {
+            "key": "prilozi",
+            "label": "Prilozi",
+            "terms": [
+              "prilozi"
+            ]
+          },
+          {
+            "key": "literatura",
+            "label": "Popis arhivskih izvora i literature",
+            "terms": [
+              "popis literature",
+              "literatura",
+              "popis arhivskih izvora"
+            ]
+          },
+          {
+            "key": "popis-slikovnih-priloga",
+            "label": "Popis slikovnih priloga",
+            "terms": [
+              "popis slikovnih priloga"
+            ]
+          },
+          {
+            "key": "summary",
+            "label": "Summary",
+            "terms": [
+              "summary"
+            ]
+          }
+        ]
+      },
+      "facts": [
+        "Tekst se pise fontom Times New Roman velicine 12 s proredom 1,5, poravnava se po oba ruba (Justified), ima margine 2,5 cm (gore, dolje, lijevo) i 2 cm (desno), a stranice se numeriraju arapskim brojkama u donjem desnom kutu (imperativ).",
+        "Rad se otiskuje jednostrano na papiru A4 formata (imperativ).",
+        "Rad treba sadrzavati oko 50 kartica teksta (1 kartica = 1800 znakova s razmacima); opseg je aproksimativan (oko) pa advisory.",
+        "Struktura rada (odjeljak 7.1.) navedena je nacelno; citiranje se provodi u biljeskama na dnu stranice kroz jedan od dva nacina (puni bibliografski podaci ili autor-godina-stranica), sukladno uputama mentora (advisory)."
+      ],
+      "note": "Diplomski rad iz Uputa Odsjeka za povijest umjetnosti (prihvacene 18.10.2016.). Odsjecki dokument s vlastitim tehnickim pravilima (FFZG nema jedinstvene fakultetske Upute). Scored su imperativna pravila grafickog oblikovanja iz odjeljka 7.2.: font TNR, velicina 12, prored 1,5, margine (2,5/2,5/2,5/2), obostrano poravnanje, numeracija stranica, format papira A4. Opseg (oko 50 kartica) je aproksimativan -> advisory. Struktura (nacelno sadrzi) i stil citiranja (u biljeskama, sukladno mentoru) -> advisory. Citiranje u biljeskama je najblize chicago-notes.",
+      "sources": [
+        {
+          "title": "Upute za prijavu, izradu i obranu diplomskog rada na Odsjeku za povijest umjetnosti (FFZG, 2016)",
+          "url": "https://povum.ffzg.unizg.hr/wp-content/uploads/2011/02/PUM-Upute_za_izradu_diplomskog_rada2016.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za prijavu, izradu i obranu diplomskog rada na Odsjeku za povijest umjetnosti (FFZG, 2016)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "font",
+        "velicina slova",
+        "prored",
+        "margine",
+        "obostrano poravnanje",
+        "numeracija stranica",
+        "format papira"
+      ],
+      "advisoryScope": [
+        "opseg (kartice)",
+        "stil citiranja",
+        "obvezne cjeline",
+        "sadrzaj"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-ffzg-povijest-umjetnosti-diplomski--font-verified-2026-07-02",
+      "ruleId": "ffzg-povijest-umjetnosti-diplomski--font",
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-povum-diplomski-2016",
+      "sourcePage": "odjeljak 7.2. Opseg i graficko oblikovanje",
+      "quote": "fontu Times New Roman velicine slova 12",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-povijest-umjetnosti-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "ffzg-povijest-umjetnosti-diplomski--font-size",
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-povum-diplomski-2016",
+      "sourcePage": "odjeljak 7.2. Opseg i graficko oblikovanje",
+      "quote": "fontu Times New Roman velicine slova 12",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-povijest-umjetnosti-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "ffzg-povijest-umjetnosti-diplomski--line-spacing",
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-povum-diplomski-2016",
+      "sourcePage": "odjeljak 7.2. Opseg i graficko oblikovanje",
+      "quote": "proredom 1,5",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-povijest-umjetnosti-diplomski--margins-verified-2026-07-02",
+      "ruleId": "ffzg-povijest-umjetnosti-diplomski--margins",
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-povum-diplomski-2016",
+      "sourcePage": "odjeljak 7.2. Opseg i graficko oblikovanje",
+      "quote": "ima margine 2,5 cm (gore, dolje,",
+      "note": "Deepen workflow (odsjecki profil). Puni tekst: ima margine 2,5 cm (gore, dolje, lijevo) i 2 cm (desno)."
+    },
+    {
+      "id": "led-ffzg-povijest-umjetnosti-diplomski--justify-verified-2026-07-02",
+      "ruleId": "ffzg-povijest-umjetnosti-diplomski--justify",
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-povum-diplomski-2016",
+      "sourcePage": "odjeljak 7.2. Opseg i graficko oblikovanje",
+      "quote": "Tekst se poravnava po oba ruba (Justified)",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-povijest-umjetnosti-diplomski--page-numbers-verified-2026-07-02",
+      "ruleId": "ffzg-povijest-umjetnosti-diplomski--page-numbers",
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-povum-diplomski-2016",
+      "sourcePage": "odjeljak 7.2. Opseg i graficko oblikovanje",
+      "quote": "Stranice teksta numeriraju se arapskim brojkama u donjem desnom kutu",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-povijest-umjetnosti-diplomski--paper-size-verified-2026-07-02",
+      "ruleId": "ffzg-povijest-umjetnosti-diplomski--paper-size",
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-povum-diplomski-2016",
+      "sourcePage": "odjeljak 7.2. Opseg i graficko oblikovanje",
+      "quote": "Rad se otiskuje jednostrano, na papiru A4 formata te uvezuje",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-povijest-umjetnosti-diplomski--page-count-advisory-2026-07-02",
+      "ruleId": "ffzg-povijest-umjetnosti-diplomski--page-count",
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-povum-diplomski-2016",
+      "sourcePage": "odjeljak 7.2. Opseg i graficko oblikovanje",
+      "quote": "Diplomski rad treba sadrzavati oko 50 kartica teksta",
+      "note": "Deepen workflow (odsjecki profil). Opseg je aproksimativan (oko 50 kartica) pa advisory."
+    },
+    {
+      "id": "led-ffzg-povijest-umjetnosti-diplomski--citation-style-advisory-2026-07-02",
+      "ruleId": "ffzg-povijest-umjetnosti-diplomski--citation-style",
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-povum-diplomski-2016",
+      "sourcePage": "odjeljak 7.3. Navoenje i citiranje literature",
+      "quote": "u radu se koristi jedan od dva nacina citiranja u biljeskama",
+      "note": "Deepen workflow (odsjecki profil). Citiranje u biljeskama, dva dopustena nacina, sukladno uputama mentora pa advisory (najblize chicago-notes)."
+    },
+    {
+      "id": "led-ffzg-povijest-umjetnosti-diplomski--required-sections-advisory-2026-07-02",
+      "ruleId": "ffzg-povijest-umjetnosti-diplomski--required-sections",
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-povum-diplomski-2016",
+      "sourcePage": "odjeljak 7.1. Struktura rada",
+      "quote": "nacelno sadrzi sljedee dijelove",
+      "note": "Deepen workflow (odsjecki profil). Struktura je navedena nacelno (ovisi o temi) i nije strojno provjerljiva pa advisory."
+    },
+    {
+      "id": "led-ffzg-povijest-umjetnosti-diplomski--toc-advisory-2026-07-02",
+      "ruleId": "ffzg-povijest-umjetnosti-diplomski--toc",
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-povum-diplomski-2016",
+      "sourcePage": "odjeljak 7.1. Struktura rada",
+      "quote": "SADRZAJ obuhvaa popis poglavlja i potpoglavlja",
+      "note": "Deepen workflow (odsjecki profil). Sadrzaj je dio nacelne strukture pa advisory."
+    }
+  ]
+}

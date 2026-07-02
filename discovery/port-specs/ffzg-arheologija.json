@@ -1,0 +1,246 @@
+{
+  "faculty": "ffzg",
+  "unit": null,
+  "catalogPrograms": [
+    "Arheologija"
+  ],
+  "sources": [
+    {
+      "id": "ffzg-arheologija-pisani-radovi-2014",
+      "kind": "guidelines",
+      "title": "Upute za izradu pisanih radova (Filozofski fakultet, Odsjek za arheologiju, Katedra za anticku provincijalnu i ranokrsansku arheologiju)",
+      "url": "https://arheo.ffzg.unizg.hr/provincijalna/wp-content/uploads/2014/04/Upute-za-izradu-pisanih-radova.pdf",
+      "publisher": "Filozofski fakultet Sveucilista u Zagrebu, Odsjek za arheologiju",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/ffzg/ffzg-arheologija-pisani-radovi-2014.pdf",
+      "snapshotHash": "007ac625ba065042ecbb3b1f2c1b40b0f20a00b9f23e139f6340e1eb9ddef32e",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Sluzbene Upute Odsjeka za arheologiju (Katedra za anticku provincijalnu i ranokrsansku arheologiju), objavljene na odsjeckoj poddomeni arheo.ffzg.unizg.hr. Pokrivaju proseminarski, seminarski i magistarski (diplomski) rad. Izgled sloga je imperativan (Pismeni rad pise se ... Times New Roman 12; Prored ... treba biti 1.5; rub na svim stranama 3 cm) -> scored: font, velicina, prored, margine. Sadrzaj mora sadrzavati naslove svih poglavlja -> scored (toc). Opseg magistarskog rada je preporucen (Preporuca se ... 70-100 stranica) -> advisory. Obavezni dijelovi rada su strukturno pravilo (required-sections, machineCheckable:false) -> advisory. Citiranje je iskljucivo u fusnotama (chicago-notes) -> advisory (nije strojno provjerljivo)."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "ffzg-arheologija-graduate",
+      "unitId": "ffzg",
+      "programs": [
+        "Arheologija"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Filozofski fakultet (Odsjek za arheologiju), diplomski (magistarski) rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2014-04-01",
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": 12,
+        "spacing": 1.5,
+        "margins": {
+          "top": 3,
+          "right": 3,
+          "bottom": 3,
+          "left": 3
+        },
+        "requireToc": true,
+        "checkMargins": true,
+        "recommendedCitation": "chicago-notes",
+        "requiredSections": [
+          {
+            "key": "naslovna",
+            "label": "Naslovna stranica",
+            "terms": [
+              "naslovna stranica",
+              "naslovnica"
+            ]
+          },
+          {
+            "key": "sadrzaj",
+            "label": "Sadrzaj",
+            "terms": [
+              "sadrzaj"
+            ]
+          },
+          {
+            "key": "uvod",
+            "label": "Uvod",
+            "terms": [
+              "uvod"
+            ]
+          },
+          {
+            "key": "zakljucak",
+            "label": "Zakljucak",
+            "terms": [
+              "zakljucak"
+            ]
+          },
+          {
+            "key": "popis-slika",
+            "label": "Popis slika",
+            "terms": [
+              "popis slika"
+            ]
+          },
+          {
+            "key": "popis-literature",
+            "label": "Popis literature",
+            "terms": [
+              "popis literature",
+              "literatura"
+            ]
+          },
+          {
+            "key": "sazetak",
+            "label": "Sazetak i kljucne rijeci",
+            "terms": [
+              "sazetak",
+              "kljucne rijeci"
+            ]
+          },
+          {
+            "key": "abstract",
+            "label": "Abstract and key words",
+            "terms": [
+              "abstract",
+              "key words"
+            ]
+          }
+        ]
+      },
+      "facts": [
+        "Izgled sloga je imperativan: Times New Roman 12 za tekst (10 za biljeske), prored 1,5, rub na svim stranama 3 cm (scored).",
+        "Sadrzaj mora sadrzavati naslove svih poglavlja i stranice na kojima poglavlje pocinje (scored, toc).",
+        "Preporuceni opseg magistarskog rada je 70-100 stranica teksta (preporuka -> advisory).",
+        "Obavezni dijelovi rada i citiranje u fusnotama (chicago-notes) su navedeni, ali kao nestrojna pravila ostaju advisory."
+      ],
+      "note": "Diplomski (magistarski) rad Odsjeka za arheologiju iz Uputa za izradu pisanih radova (Katedra za anticku provincijalnu i ranokrsansku arheologiju). Dokument je objavljen na odsjeckoj poddomeni i pokriva magistarski rad koji studenti diplomskoga studija arheologije pisu u 4. semestru. Izgled sloga (font, velicina, prored, margine) je formuliran imperativno pa je scored; sadrzaj je scored (toc). Opseg (70-100 str.) je izrijekom preporuka -> advisory. Required-sections i citation-style su nestrojna pravila (machineCheckable:false) -> advisory. Dvojba: dokument je razina katedre (antika smjer), a ne cijeli odsjek; kako je to jedini sluzbeni odsjecki izvor s tehnickim pravilima za arheologiju, tretira se kao program-page autoritet.",
+      "sources": [
+        {
+          "title": "Upute za izradu pisanih radova (FFZG, Odsjek za arheologiju)",
+          "url": "https://arheo.ffzg.unizg.hr/provincijalna/wp-content/uploads/2014/04/Upute-za-izradu-pisanih-radova.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu pisanih radova (FFZG, Odsjek za arheologiju, Katedra za anticku provincijalnu i ranokrsansku arheologiju)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "font",
+        "velicina slova",
+        "prored",
+        "margine",
+        "sadrzaj"
+      ],
+      "advisoryScope": [
+        "opseg (stranice)",
+        "obvezne cjeline rada",
+        "stil citiranja (fusnote)"
+      ],
+      "catalogPrograms": [
+        "Arheologija"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-ffzg-arheologija-graduate--font-verified-2026-07-02",
+      "ruleId": "ffzg-arheologija-graduate--font",
+      "profileId": "ffzg-arheologija-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-arheologija-pisani-radovi-2014",
+      "sourcePage": "odjeljak 1. Izgled sloga",
+      "quote": "Pismeni rad pise se racunalnim slogom Times New Roman 12 za tekst i 10 za biljeske.",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-arheologija-graduate--font-size-verified-2026-07-02",
+      "ruleId": "ffzg-arheologija-graduate--font-size",
+      "profileId": "ffzg-arheologija-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-arheologija-pisani-radovi-2014",
+      "sourcePage": "odjeljak 1. Izgled sloga",
+      "quote": "Pismeni rad pise se racunalnim slogom Times New Roman 12 za tekst i 10 za biljeske.",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-arheologija-graduate--line-spacing-verified-2026-07-02",
+      "ruleId": "ffzg-arheologija-graduate--line-spacing",
+      "profileId": "ffzg-arheologija-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-arheologija-pisani-radovi-2014",
+      "sourcePage": "odjeljak 1. Izgled sloga",
+      "quote": "Prored teksta i biljeski treba biti 1.5, a rub na svim stranama 3 cm.",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-arheologija-graduate--margins-verified-2026-07-02",
+      "ruleId": "ffzg-arheologija-graduate--margins",
+      "profileId": "ffzg-arheologija-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-arheologija-pisani-radovi-2014",
+      "sourcePage": "odjeljak 1. Izgled sloga",
+      "quote": "Prored teksta i biljeski treba biti 1.5, a rub na svim stranama 3 cm.",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-arheologija-graduate--toc-verified-2026-07-02",
+      "ruleId": "ffzg-arheologija-graduate--toc",
+      "profileId": "ffzg-arheologija-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-arheologija-pisani-radovi-2014",
+      "sourcePage": "odjeljak 3. Sadrzaj",
+      "quote": "sadrzaj mora sadrzavati naslove svih poglavlja u seminarskom radu i stranice na kojima",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-arheologija-graduate--required-sections-advisory-2026-07-02",
+      "ruleId": "ffzg-arheologija-graduate--required-sections",
+      "profileId": "ffzg-arheologija-graduate",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-arheologija-pisani-radovi-2014",
+      "sourcePage": "odjeljak Obavezni dijelovi svakog pisanog rada",
+      "quote": "Obavezni dijelovi svakog pisanog rada",
+      "note": "Deepen workflow (odsjecki profil). Strukturno pravilo (machineCheckable:false) pa advisory."
+    },
+    {
+      "id": "led-ffzg-arheologija-graduate--citation-style-advisory-2026-07-02",
+      "ruleId": "ffzg-arheologija-graduate--citation-style",
+      "profileId": "ffzg-arheologija-graduate",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-arheologija-pisani-radovi-2014",
+      "sourcePage": "odjeljak 4. Biljeske",
+      "quote": "Biljeske se pisu kao fusnote na dnu stranice na kojoj se javljaju i oznacene su rednim",
+      "note": "Deepen workflow (odsjecki profil). Citiranje u fusnotama (chicago-notes), nije strojno provjerljivo pa advisory."
+    },
+    {
+      "id": "led-ffzg-arheologija-graduate--page-count-advisory-2026-07-02",
+      "ruleId": "ffzg-arheologija-graduate--page-count",
+      "profileId": "ffzg-arheologija-graduate",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-arheologija-pisani-radovi-2014",
+      "sourcePage": "opseg magistarskog rada",
+      "quote": "Preporuca se da opseg magistarskog rada iznosi 70-100 stranica teksta",
+      "note": "Deepen workflow (odsjecki profil). Opseg je izrijekom preporuka pa advisory."
+    }
+  ]
+}

@@ -6659,7 +6659,9 @@
       "font": [
         "Arial"
       ],
-      "size": 12,
+      "size": [
+        12
+      ],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -6759,7 +6761,9 @@
       "font": [
         "Arial"
       ],
-      "size": 12,
+      "size": [
+        12
+      ],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -10013,6 +10017,577 @@
     ],
     "catalogPrograms": [
       "Matematika"
+    ]
+  },
+  {
+    "id": "ffzg-pedagogija-graduate",
+    "unitId": "ffzg",
+    "programs": [
+      "Pedagogija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Filozofski fakultet (Odsjek za pedagogiju), diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2024-03-05",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": 12,
+      "spacing": 1.5,
+      "margins": {
+        "top": 3,
+        "right": 3,
+        "bottom": 3,
+        "left": 3
+      },
+      "pageMin": 40,
+      "pageMax": 80,
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "checkJustify": true,
+      "checkMargins": true,
+      "justify": true,
+      "recommendedCitation": "apa7",
+      "requiredSections": [
+        {
+          "key": "naslovnica",
+          "label": "Naslovnica",
+          "terms": [
+            "naslovnica",
+            "naslovna stranica"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadrzaj",
+          "terms": [
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Stranica sa sazecima i kljucnim rijecima",
+          "terms": [
+            "sazetak",
+            "kljucne rijeci",
+            "abstract"
+          ]
+        },
+        {
+          "key": "izjava",
+          "label": "Izjava o akademskoj cestitosti",
+          "terms": [
+            "izjava o akademskoj cestitosti",
+            "akademska cestitost"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Popis literature",
+          "terms": [
+            "popis literature",
+            "literatura"
+          ]
+        }
+      ]
+    },
+    "facts": [
+      "Tekst diplomskoga rada valja oblikovati imperativno: margine 3 cm sa sve cetiri strane, obostrano poravnanje, Times New Roman velicine 12 (10 t za fusnote), prored 1,5, stranice numerirane na dnu centrirano.",
+      "Opseg rada ogranicen je na minimalno 40 i maksimalno 80 stranica (prve cetiri stranice, popis literature i prilozi ne ulaze u taj opseg).",
+      "Navoenje literature i prikaza treba uskladiti s posljednjom verzijom APA stila; sazetak je 200 do 300 rijeci s 3 do 5 kljucnih rijeci."
+    ],
+    "note": "Diplomski rad iz Uputa za oblikovanje diplomskoga rada Odsjeka za pedagogiju (2024). Odsjecki dokument je najpotpuniji imperativni izvor za oblikovanje diplomskog rada iz pedagogije; FFZG nema jedinstvene fakultetske Upute. Scored (machineCheckable, imperativ): margine, obostrano poravnanje, font, velicina slova, prored, numeracija stranica, opseg u stranicama (page-count), sadrzaj (toc). APA stil citiranja i popis obveznih cjelina jesu imperativni, ali njihovi checkId-evi nisu strojno provjerljivi pa su advisory.",
+    "sources": [
+      {
+        "title": "Upute za oblikovanje diplomskoga rada Odsjeka za pedagogiju (FFZG, Odsjek za pedagogiju, 2024)",
+        "url": "https://pedagogija.ffzg.unizg.hr/wp-content/uploads/2024/03/Upute-za-oblikovanje-diplomskoga-rada-Odsjeka-za-pedagogiju_2024.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za oblikovanje diplomskoga rada Odsjeka za pedagogiju (FFZG, Odsjek za pedagogiju, 2024)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "margine",
+      "obostrano poravnanje",
+      "font",
+      "velicina slova",
+      "prored",
+      "numeracija stranica",
+      "opseg (stranice)",
+      "sadrzaj"
+    ],
+    "advisoryScope": [
+      "stil citiranja (APA)",
+      "obvezne cjeline rada"
+    ],
+    "catalogPrograms": [
+      "Pedagogija"
+    ]
+  },
+  {
+    "id": "ffzg-lingvistika-diplomski",
+    "unitId": "ffzg",
+    "programs": [
+      "Lingvistika"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Filozofski fakultet (Odsjek za lingvistiku), diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2024-04-01",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": 12,
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requirePageNumbers": true,
+      "checkJustify": true,
+      "checkMargins": true,
+      "recommendedCitation": "harvard"
+    },
+    "facts": [
+      "Tekst treba oblikovati: Times New Roman velicine 12, prored 1,5, obostrano poravnanje, margine 25 mm (2,5 cm) sa sve cetiri strane, sve stranice numerirane pri dnu desno (imperativ, prema smjernicama casopisa Suvremena lingvistika).",
+      "Preporuceni minimalni opseg rada je 40 kartica teksta (1 kartica = 1800 znakova s prazninama), moze varirati u dogovoru s mentorom (preporuka, advisory).",
+      "Navodi izvora u tekstu su autor-godina uz broj stranice nakon dvotocke, npr. (Labov 1973: 30); u dogovoru s mentorom mogu se koristiti i druge smjernice za citiranje (advisory)."
+    ],
+    "note": "Diplomski rad na studiju lingvistike iz odsjeckih Smjernica za izradu i obranu diplomskog rada (2024). Tehnicko oblikovanje preuzima smjernice casopisa Suvremena lingvistika i formulirano je imperativno (treba/mora) pa je scored. Opseg (preporuceni, moze varirati) i stil citiranja (u dogovoru s mentorom, moze koristiti druge smjernice) su advisory. Studij pokriva smjerove Opca, Primijenjena, Racunalna, Poredbena, Kognitivna lingvistika. FFZG nema jedinstvene fakultetske Upute; ovo je odsjecki dokument razine studijskog programa.",
+    "sources": [
+      {
+        "title": "Smjernice za izradu i obranu diplomskog rada (FFZG, Odsjek za lingvistiku, 2024)",
+        "url": "https://www.ffzg.unizg.hr/oling/wp-content/uploads/2024/04/Smjernice-za-izradu-diplomskoga-rada-Lingvistika-1.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Smjernice za izradu i obranu diplomskog rada (FFZG, Odsjek za lingvistiku, 2024)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "obostrano poravnanje",
+      "numeracija stranica"
+    ],
+    "advisoryScope": [
+      "opseg (kartice)",
+      "stil citiranja"
+    ],
+    "catalogPrograms": [
+      "Lingvistika"
+    ]
+  },
+  {
+    "id": "ffzg-povijest-umjetnosti-diplomski",
+    "unitId": "ffzg",
+    "programs": [
+      "Povijest umjetnosti"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Filozofski fakultet (Odsjek za povijest umjetnosti), diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2016-10-18",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": 12,
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "paperSize": "A4",
+      "requirePageNumbers": true,
+      "checkJustify": true,
+      "checkMargins": true,
+      "recommendedCitation": "chicago-notes",
+      "requiredSections": [
+        {
+          "key": "naslovna",
+          "label": "Naslovna stranica",
+          "terms": [
+            "naslovna stranica",
+            "naslovnica"
+          ]
+        },
+        {
+          "key": "tdk",
+          "label": "Temeljna dokumentacijska kartica",
+          "terms": [
+            "temeljna dokumentacijska kartica"
+          ]
+        },
+        {
+          "key": "izjava",
+          "label": "Izjava o autenticnosti rada",
+          "terms": [
+            "izjava o autenticnosti"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadrzaj",
+          "terms": [
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "teorijski-dio",
+          "label": "Teorijski dio rada",
+          "terms": [
+            "teorijski dio",
+            "razrada"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zakljucak",
+          "terms": [
+            "zakljucak"
+          ]
+        },
+        {
+          "key": "prilozi",
+          "label": "Prilozi",
+          "terms": [
+            "prilozi"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Popis arhivskih izvora i literature",
+          "terms": [
+            "popis literature",
+            "literatura",
+            "popis arhivskih izvora"
+          ]
+        },
+        {
+          "key": "popis-slikovnih-priloga",
+          "label": "Popis slikovnih priloga",
+          "terms": [
+            "popis slikovnih priloga"
+          ]
+        },
+        {
+          "key": "summary",
+          "label": "Summary",
+          "terms": [
+            "summary"
+          ]
+        }
+      ]
+    },
+    "facts": [
+      "Tekst se pise fontom Times New Roman velicine 12 s proredom 1,5, poravnava se po oba ruba (Justified), ima margine 2,5 cm (gore, dolje, lijevo) i 2 cm (desno), a stranice se numeriraju arapskim brojkama u donjem desnom kutu (imperativ).",
+      "Rad se otiskuje jednostrano na papiru A4 formata (imperativ).",
+      "Rad treba sadrzavati oko 50 kartica teksta (1 kartica = 1800 znakova s razmacima); opseg je aproksimativan (oko) pa advisory.",
+      "Struktura rada (odjeljak 7.1.) navedena je nacelno; citiranje se provodi u biljeskama na dnu stranice kroz jedan od dva nacina (puni bibliografski podaci ili autor-godina-stranica), sukladno uputama mentora (advisory)."
+    ],
+    "note": "Diplomski rad iz Uputa Odsjeka za povijest umjetnosti (prihvacene 18.10.2016.). Odsjecki dokument s vlastitim tehnickim pravilima (FFZG nema jedinstvene fakultetske Upute). Scored su imperativna pravila grafickog oblikovanja iz odjeljka 7.2.: font TNR, velicina 12, prored 1,5, margine (2,5/2,5/2,5/2), obostrano poravnanje, numeracija stranica, format papira A4. Opseg (oko 50 kartica) je aproksimativan -> advisory. Struktura (nacelno sadrzi) i stil citiranja (u biljeskama, sukladno mentoru) -> advisory. Citiranje u biljeskama je najblize chicago-notes.",
+    "sources": [
+      {
+        "title": "Upute za prijavu, izradu i obranu diplomskog rada na Odsjeku za povijest umjetnosti (FFZG, 2016)",
+        "url": "https://povum.ffzg.unizg.hr/wp-content/uploads/2011/02/PUM-Upute_za_izradu_diplomskog_rada2016.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za prijavu, izradu i obranu diplomskog rada na Odsjeku za povijest umjetnosti (FFZG, 2016)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "obostrano poravnanje",
+      "numeracija stranica",
+      "format papira"
+    ],
+    "advisoryScope": [
+      "opseg (kartice)",
+      "stil citiranja",
+      "obvezne cjeline",
+      "sadrzaj"
+    ]
+  },
+  {
+    "id": "ffzg-arheologija-graduate",
+    "unitId": "ffzg",
+    "programs": [
+      "Arheologija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Filozofski fakultet (Odsjek za arheologiju), diplomski (magistarski) rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2014-04-01",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": 12,
+      "spacing": 1.5,
+      "margins": {
+        "top": 3,
+        "right": 3,
+        "bottom": 3,
+        "left": 3
+      },
+      "requireToc": true,
+      "checkMargins": true,
+      "recommendedCitation": "chicago-notes",
+      "requiredSections": [
+        {
+          "key": "naslovna",
+          "label": "Naslovna stranica",
+          "terms": [
+            "naslovna stranica",
+            "naslovnica"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadrzaj",
+          "terms": [
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zakljucak",
+          "terms": [
+            "zakljucak"
+          ]
+        },
+        {
+          "key": "popis-slika",
+          "label": "Popis slika",
+          "terms": [
+            "popis slika"
+          ]
+        },
+        {
+          "key": "popis-literature",
+          "label": "Popis literature",
+          "terms": [
+            "popis literature",
+            "literatura"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sazetak i kljucne rijeci",
+          "terms": [
+            "sazetak",
+            "kljucne rijeci"
+          ]
+        },
+        {
+          "key": "abstract",
+          "label": "Abstract and key words",
+          "terms": [
+            "abstract",
+            "key words"
+          ]
+        }
+      ]
+    },
+    "facts": [
+      "Izgled sloga je imperativan: Times New Roman 12 za tekst (10 za biljeske), prored 1,5, rub na svim stranama 3 cm (scored).",
+      "Sadrzaj mora sadrzavati naslove svih poglavlja i stranice na kojima poglavlje pocinje (scored, toc).",
+      "Preporuceni opseg magistarskog rada je 70-100 stranica teksta (preporuka -> advisory).",
+      "Obavezni dijelovi rada i citiranje u fusnotama (chicago-notes) su navedeni, ali kao nestrojna pravila ostaju advisory."
+    ],
+    "note": "Diplomski (magistarski) rad Odsjeka za arheologiju iz Uputa za izradu pisanih radova (Katedra za anticku provincijalnu i ranokrsansku arheologiju). Dokument je objavljen na odsjeckoj poddomeni i pokriva magistarski rad koji studenti diplomskoga studija arheologije pisu u 4. semestru. Izgled sloga (font, velicina, prored, margine) je formuliran imperativno pa je scored; sadrzaj je scored (toc). Opseg (70-100 str.) je izrijekom preporuka -> advisory. Required-sections i citation-style su nestrojna pravila (machineCheckable:false) -> advisory. Dvojba: dokument je razina katedre (antika smjer), a ne cijeli odsjek; kako je to jedini sluzbeni odsjecki izvor s tehnickim pravilima za arheologiju, tretira se kao program-page autoritet.",
+    "sources": [
+      {
+        "title": "Upute za izradu pisanih radova (FFZG, Odsjek za arheologiju)",
+        "url": "https://arheo.ffzg.unizg.hr/provincijalna/wp-content/uploads/2014/04/Upute-za-izradu-pisanih-radova.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu pisanih radova (FFZG, Odsjek za arheologiju, Katedra za anticku provincijalnu i ranokrsansku arheologiju)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "sadrzaj"
+    ],
+    "advisoryScope": [
+      "opseg (stranice)",
+      "obvezne cjeline rada",
+      "stil citiranja (fusnote)"
+    ],
+    "catalogPrograms": [
+      "Arheologija"
+    ]
+  },
+  {
+    "id": "ffzg-etnologija-graduate",
+    "unitId": "ffzg",
+    "programs": [
+      "Etnologija i kulturna antropologija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Filozofski fakultet (Odsjek za etnologiju i kulturnu antropologiju), diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2019-08-01",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": 12,
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requirePageNumbers": true,
+      "checkJustify": true,
+      "checkMargins": true,
+      "recommendedCitation": "chicago-author"
+    },
+    "facts": [
+      "Graficko oblikovanje je imperativno: font Times New Roman velicine 12, prored 1,5, margine 2,5 cm, obostrano poravnanje, paginirane stranice (naslovna stranica se ne paginira).",
+      "Predvieno je da diplomski rad obuhvaca od 25 do 40 kartica teksta (integrirani ili interdisciplinarni od 50 do 70 kartica); jedna kartica je 1800 znakova s razmacima ili oko 300 rijeci (preporuka, advisory).",
+      "Citiranje je autor-godina-stranica u tekstu, a popis literature i ostalo prema The Chicago Manual of Style (author-date style); citate dulje od 35 rijeci navesti u zasebnom uvucenom odlomku (advisory)."
+    ],
+    "note": "Diplomski rad na diplomskom studiju etnologije i kulturne antropologije iz odsjeckih Uputa za prijavu, izradu i obranu diplomskog rada (2019). Odjeljak Graficko oblikovanje teksta je imperativan pa je tehnicko oblikovanje scored. Opseg je zadan u karticama i nedeterministicki (Predvieno je ... 25 do 40 kartica) pa je advisory. Stil citiranja (Chicago author-date) je machineCheckable:false pa advisory. Elementi rada i Sadrzaj su navedeni kao struktura bez eksplicitnog imperativa pa advisory. FFZG nema jedinstvene fakultetske Upute; ovo je odsjecki dokument razine studijskog programa. Prilozeni akti (Odluka o diplomskim radovima) su proceduralni i nisu preuzeti kao pravila oblikovanja.",
+    "sources": [
+      {
+        "title": "Upute za prijavu, izradu i obranu diplomskog rada (FFZG, Odsjek za etnologiju i kulturnu antropologiju)",
+        "url": "https://etno.ffzg.unizg.hr/wp-content/uploads/2019/08/UPUTE-DIPLOMSKI-RAD-EKA.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za prijavu, izradu i obranu diplomskog rada (FFZG, Odsjek za etnologiju i kulturnu antropologiju, 2019)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "obostrano poravnanje",
+      "numeracija stranica"
+    ],
+    "advisoryScope": [
+      "opseg (kartice)",
+      "stil citiranja",
+      "elementi rada (struktura)",
+      "sadrzaj"
+    ],
+    "catalogPrograms": [
+      "Etnologija i kulturna antropologija"
+    ]
+  },
+  {
+    "id": "pmf-geologija-graduate",
+    "unitId": "pmf",
+    "programs": [
+      "Geologija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Prirodoslovno-matematicki fakultet (Geoloski odsjek), diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2024-02-01",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requirePageNumbers": true,
+      "requireToc": true,
+      "recommendedCitation": "harvard"
+    },
+    "facts": [
+      "Rad se pise fontom Times New Roman velicine 12, prored 1,5 (imperativ, scored).",
+      "Pocetne stranice do Uvoda numeriraju se rimskim brojevima, a prva stranica Uvoda arapskim brojem 1 (imperativ, scored).",
+      "Po zavrsetku rada treba automatski stvoriti sadrzaj (imperativ, scored).",
+      "Kompozicija poglavlja (Uvod, Pregled dosadasnjih istrazivanja, Materijali i metode, Rezultati, Rasprava, Zakljucci, Literatura) je preporucena i moze se od nje odstupiti (advisory).",
+      "Reference u tekstu su autor-godina, harvardskog tipa (advisory).",
+      "Upute ne navode margine, format papira ni opseg u stranicama."
+    ],
+    "note": "Iz Uputa i predloska za izradu diplomskog rada (PMF, Geoloski odsjek, PMF-GO2021, 02.2024) koje Pravilnik Geoloskog odsjeka (2021) obvezuje, pa je authority program-page i imperativna, verbatim potvrdena pravila su scored: font TNR, velicina 12, prored 1,5, numeracija stranica i obvezno stvaranje sadrzaja. Advisory: preporucena kompozicija poglavlja (izrijekom 'moze od nje odstupiti', machineCheckable:false) i stil citiranja autor-godina (harvardski, machineCheckable:false). Izvor ne navodi margine, A4 ni opseg u stranicama pa ta pravila nisu preuzeta. VAZNO za ljudski pregled: dokument je Geoloskog odsjeka, ne faculty-wide; drugi odsjeci PMF-a (geografija, biologija, fizika, kemija, matematika) imaju vlastite upute. Studij nudi smjerove Geologija i Geologija zastite okolisa; profil pokriva program Geologija. Zavrsni (prijediplomski) i doktorski nisu pokriveni zasebnim dohvacenim formatnim uputama.",
+    "sources": [
+      {
+        "title": "Upute i predlozak za izradu diplomskog rada (PMF, Geoloski odsjek, PMF-GO2021, 2024)",
+        "url": "https://www.pmf.unizg.hr/_download/repository/PMF-GO2021_Upute_i_predlozak-Diplomski_rad.pdf"
+      },
+      {
+        "title": "Pravilnik o zavrsnom i diplomskom radu i zavrsnom i diplomskom ispitu (PMF, Geoloski odsjek, 2021)",
+        "url": "https://www.pmf.unizg.hr/_download/repository/Pravilnik_o_zavrsnom_i_diplomskom_radu_GO.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnom i diplomskom radu i zavrsnom i diplomskom ispitu (PMF, Geoloski odsjek, 2021)",
+      "Upute i predlozak za izradu diplomskog rada (PMF, Geoloski odsjek, PMF-GO2021, 2024)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "numeracija stranica",
+      "sadrzaj (toc)"
+    ],
+    "advisoryScope": [
+      "preporucena kompozicija poglavlja",
+      "stil citiranja (autor-godina, harvard)"
+    ],
+    "catalogPrograms": [
+      "Geologija"
     ]
   }
 ]

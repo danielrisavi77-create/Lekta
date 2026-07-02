@@ -1,0 +1,256 @@
+{
+  "faculty": "ffzg",
+  "unit": null,
+  "catalogPrograms": [
+    "Pedagogija"
+  ],
+  "sources": [
+    {
+      "id": "ffzg-pedagogija-diplomski-2024",
+      "kind": "guidelines",
+      "title": "Upute za oblikovanje diplomskoga rada Odsjeka za pedagogiju (Filozofski fakultet, Odsjek za pedagogiju, 2024)",
+      "url": "https://pedagogija.ffzg.unizg.hr/wp-content/uploads/2024/03/Upute-za-oblikovanje-diplomskoga-rada-Odsjeka-za-pedagogiju_2024.pdf",
+      "publisher": "Filozofski fakultet Sveucilista u Zagrebu, Odsjek za pedagogiju",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/ffzg/ffzg-pedagogija-diplomski-2024.pdf",
+      "snapshotHash": "114a1c5c742c686e23a24f1c5029bad79a598f8cccacb37f98037bbd9b853543",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Upute Odsjeka za pedagogiju (Zagreb, 5. ozujka 2024.). Cijelo tehnicko oblikovanje uvedeno imperativom Tekst diplomskoga rada valja oblikovati na sljedei nacin -> scored: margine 3 cm sa sve cetiri strane, obostrano poravnanje, Times New Roman 12, prored 1,5, numeracija stranica na dnu centrirano. Opseg je imperativno ogranicen (ogranicen je na minimalno 40 i maksimalno 80 stranica) -> page-count scored; sadrzaj je dio prve cetiri stranice -> toc scored. Citiranje po APA stilu i popis obveznih cjelina jesu imperativni, ali checkId citation-style i required-sections nisu strojno provjerljivi (machineCheckable:false) pa ostaju advisory. Velicina fusnota (10 t) je u tekstu ali nije preuzeta kao zasebno scored pravilo."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "ffzg-pedagogija-graduate",
+      "unitId": "ffzg",
+      "programs": [
+        "Pedagogija"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Filozofski fakultet (Odsjek za pedagogiju), diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2024-03-05",
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": 12,
+        "spacing": 1.5,
+        "margins": {
+          "top": 3,
+          "right": 3,
+          "bottom": 3,
+          "left": 3
+        },
+        "pageMin": 40,
+        "pageMax": 80,
+        "requireToc": true,
+        "requirePageNumbers": true,
+        "checkJustify": true,
+        "checkMargins": true,
+        "justify": true,
+        "recommendedCitation": "apa7",
+        "requiredSections": [
+          {
+            "key": "naslovnica",
+            "label": "Naslovnica",
+            "terms": [
+              "naslovnica",
+              "naslovna stranica"
+            ]
+          },
+          {
+            "key": "sadrzaj",
+            "label": "Sadrzaj",
+            "terms": [
+              "sadrzaj"
+            ]
+          },
+          {
+            "key": "sazetak",
+            "label": "Stranica sa sazecima i kljucnim rijecima",
+            "terms": [
+              "sazetak",
+              "kljucne rijeci",
+              "abstract"
+            ]
+          },
+          {
+            "key": "izjava",
+            "label": "Izjava o akademskoj cestitosti",
+            "terms": [
+              "izjava o akademskoj cestitosti",
+              "akademska cestitost"
+            ]
+          },
+          {
+            "key": "literatura",
+            "label": "Popis literature",
+            "terms": [
+              "popis literature",
+              "literatura"
+            ]
+          }
+        ]
+      },
+      "facts": [
+        "Tekst diplomskoga rada valja oblikovati imperativno: margine 3 cm sa sve cetiri strane, obostrano poravnanje, Times New Roman velicine 12 (10 t za fusnote), prored 1,5, stranice numerirane na dnu centrirano.",
+        "Opseg rada ogranicen je na minimalno 40 i maksimalno 80 stranica (prve cetiri stranice, popis literature i prilozi ne ulaze u taj opseg).",
+        "Navoenje literature i prikaza treba uskladiti s posljednjom verzijom APA stila; sazetak je 200 do 300 rijeci s 3 do 5 kljucnih rijeci."
+      ],
+      "note": "Diplomski rad iz Uputa za oblikovanje diplomskoga rada Odsjeka za pedagogiju (2024). Odsjecki dokument je najpotpuniji imperativni izvor za oblikovanje diplomskog rada iz pedagogije; FFZG nema jedinstvene fakultetske Upute. Scored (machineCheckable, imperativ): margine, obostrano poravnanje, font, velicina slova, prored, numeracija stranica, opseg u stranicama (page-count), sadrzaj (toc). APA stil citiranja i popis obveznih cjelina jesu imperativni, ali njihovi checkId-evi nisu strojno provjerljivi pa su advisory.",
+      "sources": [
+        {
+          "title": "Upute za oblikovanje diplomskoga rada Odsjeka za pedagogiju (FFZG, Odsjek za pedagogiju, 2024)",
+          "url": "https://pedagogija.ffzg.unizg.hr/wp-content/uploads/2024/03/Upute-za-oblikovanje-diplomskoga-rada-Odsjeka-za-pedagogiju_2024.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za oblikovanje diplomskoga rada Odsjeka za pedagogiju (FFZG, Odsjek za pedagogiju, 2024)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "margine",
+        "obostrano poravnanje",
+        "font",
+        "velicina slova",
+        "prored",
+        "numeracija stranica",
+        "opseg (stranice)",
+        "sadrzaj"
+      ],
+      "advisoryScope": [
+        "stil citiranja (APA)",
+        "obvezne cjeline rada"
+      ],
+      "catalogPrograms": [
+        "Pedagogija"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-ffzg-pedagogija-graduate--margins-verified-2026-07-02",
+      "ruleId": "ffzg-pedagogija-graduate--margins",
+      "profileId": "ffzg-pedagogija-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-pedagogija-diplomski-2024",
+      "sourcePage": "odjeljak Tekst diplomskoga rada valja oblikovati na sljedei nacin",
+      "quote": "margine: 3 cm (lijevo, desno, gore, dolje), obostrano poravnanje;",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-pedagogija-graduate--justify-verified-2026-07-02",
+      "ruleId": "ffzg-pedagogija-graduate--justify",
+      "profileId": "ffzg-pedagogija-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-pedagogija-diplomski-2024",
+      "sourcePage": "odjeljak Tekst diplomskoga rada valja oblikovati na sljedei nacin",
+      "quote": "margine: 3 cm (lijevo, desno, gore, dolje), obostrano poravnanje;",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-pedagogija-graduate--font-verified-2026-07-02",
+      "ruleId": "ffzg-pedagogija-graduate--font",
+      "profileId": "ffzg-pedagogija-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-pedagogija-diplomski-2024",
+      "sourcePage": "odjeljak Tekst diplomskoga rada valja oblikovati na sljedei nacin",
+      "quote": "font: Times New Roman velicine 12 tocaka za naslove i tekst, a 10 tocaka za fusnote;",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-pedagogija-graduate--font-size-verified-2026-07-02",
+      "ruleId": "ffzg-pedagogija-graduate--font-size",
+      "profileId": "ffzg-pedagogija-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-pedagogija-diplomski-2024",
+      "sourcePage": "odjeljak Tekst diplomskoga rada valja oblikovati na sljedei nacin",
+      "quote": "font: Times New Roman velicine 12 tocaka za naslove i tekst, a 10 tocaka za fusnote;",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-pedagogija-graduate--line-spacing-verified-2026-07-02",
+      "ruleId": "ffzg-pedagogija-graduate--line-spacing",
+      "profileId": "ffzg-pedagogija-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-pedagogija-diplomski-2024",
+      "sourcePage": "odjeljak Tekst diplomskoga rada valja oblikovati na sljedei nacin",
+      "quote": "prored: 1,5;",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-pedagogija-graduate--page-numbers-verified-2026-07-02",
+      "ruleId": "ffzg-pedagogija-graduate--page-numbers",
+      "profileId": "ffzg-pedagogija-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-pedagogija-diplomski-2024",
+      "sourcePage": "odjeljak Tekst diplomskoga rada valja oblikovati na sljedei nacin",
+      "quote": "stranice numerirane (na dnu, centrirano);",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-pedagogija-graduate--page-count-verified-2026-07-02",
+      "ruleId": "ffzg-pedagogija-graduate--page-count",
+      "profileId": "ffzg-pedagogija-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-pedagogija-diplomski-2024",
+      "sourcePage": "uvodni odjeljak: Opseg rada",
+      "quote": "Opseg rada ogranicen je na minimalno 40 i maksimalno 80 stranica",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-pedagogija-graduate--toc-verified-2026-07-02",
+      "ruleId": "ffzg-pedagogija-graduate--toc",
+      "profileId": "ffzg-pedagogija-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-pedagogija-diplomski-2024",
+      "sourcePage": "uvodni odjeljak: prve cetiri stranice",
+      "quote": "naslovnica, sadrzaj, stranica sa sazecima i Izjava o akademskoj cestitosti",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-pedagogija-graduate--citation-style-advisory-2026-07-02",
+      "ruleId": "ffzg-pedagogija-graduate--citation-style",
+      "profileId": "ffzg-pedagogija-graduate",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-pedagogija-diplomski-2024",
+      "sourcePage": "odjeljak Navoenje literature (APA stil)",
+      "quote": "Navoenje literature i oblikovanje tablicnoga i grafickoga prikazivanja potrebno je uskladiti s",
+      "note": "Deepen workflow (odsjecki profil). APA je imperativan, ali checkId citation-style nije strojno provjerljiv pa advisory."
+    },
+    {
+      "id": "led-ffzg-pedagogija-graduate--required-sections-advisory-2026-07-02",
+      "ruleId": "ffzg-pedagogija-graduate--required-sections",
+      "profileId": "ffzg-pedagogija-graduate",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-pedagogija-diplomski-2024",
+      "sourcePage": "uvodni odjeljak: prve cetiri stranice",
+      "quote": "naslovnica, sadrzaj, stranica sa sazecima i Izjava o akademskoj cestitosti",
+      "note": "Deepen workflow (odsjecki profil). Popis cjelina je imperativan, ali required-sections nije strojno provjerljiv pa advisory."
+    }
+  ]
+}

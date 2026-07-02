@@ -1,0 +1,184 @@
+{
+  "faculty": "ffzg",
+  "unit": null,
+  "catalogPrograms": [
+    "Lingvistika"
+  ],
+  "sources": [
+    {
+      "id": "ffzg-lingvistika-diplomski-2024",
+      "kind": "guidelines",
+      "title": "Smjernice za izradu i obranu diplomskog rada (Filozofski fakultet, Odsjek za lingvistiku, 2024)",
+      "url": "https://www.ffzg.unizg.hr/oling/wp-content/uploads/2024/04/Smjernice-za-izradu-diplomskoga-rada-Lingvistika-1.pdf",
+      "publisher": "Filozofski fakultet Sveucilista u Zagrebu, Odsjek za lingvistiku",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/ffzg/ffzg-lingvistika-diplomski-2024.pdf",
+      "snapshotHash": "9c6e95ab738afce19518872a512c3a45565e3f64657ab41e5cd90c98fc51cd87",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Odsjecke Smjernice (URL sadrzi 2024/04). Tehnicko oblikovanje preuzima smjernice casopisa Suvremena lingvistika prilagoene diplomskom radu i formulirano je imperativno (Rad treba predati ... prored 1,5; font Times New Roman; velicina fonta 12; poravnato s obje strane; Margine treba postaviti na 25 mm; Sve stranice trebaju biti numerirane) -> scored: font TNR, velicina 12, prored 1,5, obostrano poravnanje, margine 2,5 cm, numeracija stranica dolje desno. Opseg (Preporuceni je minimalni opseg 40 kartica, moze varirati) i stil citiranja (u dogovoru s mentorom moze koristiti i druge smjernice) formulirani su nedeterministicki -> advisory. Nema doslovno enumeriranog obveznog popisa cjelina (spominje se hijerarhija poglavlja i sto ulazi u 40 kartica) pa required-sections i toc nisu preuzeti."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "ffzg-lingvistika-diplomski",
+      "unitId": "ffzg",
+      "programs": [
+        "Lingvistika"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Filozofski fakultet (Odsjek za lingvistiku), diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2024-04-01",
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": 12,
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "requirePageNumbers": true,
+        "checkJustify": true,
+        "checkMargins": true,
+        "recommendedCitation": "harvard"
+      },
+      "facts": [
+        "Tekst treba oblikovati: Times New Roman velicine 12, prored 1,5, obostrano poravnanje, margine 25 mm (2,5 cm) sa sve cetiri strane, sve stranice numerirane pri dnu desno (imperativ, prema smjernicama casopisa Suvremena lingvistika).",
+        "Preporuceni minimalni opseg rada je 40 kartica teksta (1 kartica = 1800 znakova s prazninama), moze varirati u dogovoru s mentorom (preporuka, advisory).",
+        "Navodi izvora u tekstu su autor-godina uz broj stranice nakon dvotocke, npr. (Labov 1973: 30); u dogovoru s mentorom mogu se koristiti i druge smjernice za citiranje (advisory)."
+      ],
+      "note": "Diplomski rad na studiju lingvistike iz odsjeckih Smjernica za izradu i obranu diplomskog rada (2024). Tehnicko oblikovanje preuzima smjernice casopisa Suvremena lingvistika i formulirano je imperativno (treba/mora) pa je scored. Opseg (preporuceni, moze varirati) i stil citiranja (u dogovoru s mentorom, moze koristiti druge smjernice) su advisory. Studij pokriva smjerove Opca, Primijenjena, Racunalna, Poredbena, Kognitivna lingvistika. FFZG nema jedinstvene fakultetske Upute; ovo je odsjecki dokument razine studijskog programa.",
+      "sources": [
+        {
+          "title": "Smjernice za izradu i obranu diplomskog rada (FFZG, Odsjek za lingvistiku, 2024)",
+          "url": "https://www.ffzg.unizg.hr/oling/wp-content/uploads/2024/04/Smjernice-za-izradu-diplomskoga-rada-Lingvistika-1.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Smjernice za izradu i obranu diplomskog rada (FFZG, Odsjek za lingvistiku, 2024)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "font",
+        "velicina slova",
+        "prored",
+        "margine",
+        "obostrano poravnanje",
+        "numeracija stranica"
+      ],
+      "advisoryScope": [
+        "opseg (kartice)",
+        "stil citiranja"
+      ],
+      "catalogPrograms": [
+        "Lingvistika"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-ffzg-lingvistika-diplomski--font-verified-2026-07-02",
+      "ruleId": "ffzg-lingvistika-diplomski--font",
+      "profileId": "ffzg-lingvistika-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-lingvistika-diplomski-2024",
+      "sourcePage": "odjeljak Oblikovanje teksta, tocka 1",
+      "quote": "font Times New Roman; velicina fonta 12; poravnato s obje strane.",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-lingvistika-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "ffzg-lingvistika-diplomski--font-size",
+      "profileId": "ffzg-lingvistika-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-lingvistika-diplomski-2024",
+      "sourcePage": "odjeljak Oblikovanje teksta, tocka 1",
+      "quote": "velicina fonta 12; poravnato s obje strane.",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-lingvistika-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "ffzg-lingvistika-diplomski--line-spacing",
+      "profileId": "ffzg-lingvistika-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-lingvistika-diplomski-2024",
+      "sourcePage": "odjeljak Oblikovanje teksta, tocka 1",
+      "quote": "prored 1,5;",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-lingvistika-diplomski--justify-verified-2026-07-02",
+      "ruleId": "ffzg-lingvistika-diplomski--justify",
+      "profileId": "ffzg-lingvistika-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-lingvistika-diplomski-2024",
+      "sourcePage": "odjeljak Oblikovanje teksta, tocka 1",
+      "quote": "poravnato s obje strane.",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-lingvistika-diplomski--margins-verified-2026-07-02",
+      "ruleId": "ffzg-lingvistika-diplomski--margins",
+      "profileId": "ffzg-lingvistika-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-lingvistika-diplomski-2024",
+      "sourcePage": "odjeljak Oblikovanje teksta, tocka 2",
+      "quote": "Margine treba postaviti na 25 mm sa sve cetiri strane",
+      "note": "Deepen workflow (odsjecki profil). 25 mm = 2,5 cm."
+    },
+    {
+      "id": "led-ffzg-lingvistika-diplomski--page-numbers-verified-2026-07-02",
+      "ruleId": "ffzg-lingvistika-diplomski--page-numbers",
+      "profileId": "ffzg-lingvistika-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-lingvistika-diplomski-2024",
+      "sourcePage": "odjeljak Oblikovanje teksta, tocka 4",
+      "quote": "Sve stranice trebaju biti numerirane pri dnu stranice desno.",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-lingvistika-diplomski--word-count-advisory-2026-07-02",
+      "ruleId": "ffzg-lingvistika-diplomski--word-count",
+      "profileId": "ffzg-lingvistika-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-lingvistika-diplomski-2024",
+      "sourcePage": "odjeljak Smjernice za oblikovanje rada i citiranje",
+      "quote": "Preporuceni je minimalni opseg rada 40 kartica teksta",
+      "note": "Deepen workflow (odsjecki profil). Opseg je preporuceni i moze varirati; procjena rijeci nije doslovna pa advisory."
+    },
+    {
+      "id": "led-ffzg-lingvistika-diplomski--citation-style-advisory-2026-07-02",
+      "ruleId": "ffzg-lingvistika-diplomski--citation-style",
+      "profileId": "ffzg-lingvistika-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-lingvistika-diplomski-2024",
+      "sourcePage": "odjeljak Navoenje izvora u tekstu, tocka 1",
+      "quote": "Navodi izvora u tekstu sastoje se od prezimena autora i godine objavljivanja rada",
+      "note": "Deepen workflow (odsjecki profil). Autor-godina stil; u dogovoru s mentorom mogu se koristiti druge smjernice pa advisory."
+    }
+  ]
+}

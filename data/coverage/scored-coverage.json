@@ -105,6 +105,22 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "ffzg-arheologija-graduate",
+      "scored": 5,
+      "machineCheckable": 6,
+      "advisory": 3,
+      "ratio": 0.8333333333333334,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "ffzg-etnologija-graduate",
+      "scored": 6,
+      "machineCheckable": 8,
+      "advisory": 4,
+      "ratio": 0.75,
+      "lastVerified": "2026-07-02"
+    },
+    {
       "profileId": "ffzg-filozofija-diplomski",
       "scored": 9,
       "machineCheckable": 7,
@@ -125,6 +141,30 @@
       "scored": 7,
       "machineCheckable": 8,
       "advisory": 3,
+      "ratio": 0.875,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "ffzg-lingvistika-diplomski",
+      "scored": 6,
+      "machineCheckable": 7,
+      "advisory": 2,
+      "ratio": 0.8571428571428571,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "ffzg-pedagogija-graduate",
+      "scored": 8,
+      "machineCheckable": 8,
+      "advisory": 2,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "ffzg-povijest-umjetnosti-diplomski",
+      "scored": 7,
+      "machineCheckable": 8,
+      "advisory": 4,
       "ratio": 0.875,
       "lastVerified": "2026-07-02"
     },
@@ -425,6 +465,14 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "pmf-geologija-graduate",
+      "scored": 5,
+      "machineCheckable": 5,
+      "advisory": 2,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
       "profileId": "pmf-matematika-graduate",
       "scored": 3,
       "machineCheckable": 5,
@@ -625,5 +673,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 435
+  "totalScored": 472
 }

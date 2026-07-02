@@ -1,0 +1,210 @@
+{
+  "faculty": "ffzg",
+  "unit": null,
+  "catalogPrograms": [
+    "Etnologija i kulturna antropologija"
+  ],
+  "sources": [
+    {
+      "id": "ffzg-etnologija-diplomski-2019",
+      "kind": "guidelines",
+      "title": "Upute za prijavu, izradu i obranu diplomskog rada (Filozofski fakultet, Odsjek za etnologiju i kulturnu antropologiju)",
+      "url": "https://etno.ffzg.unizg.hr/wp-content/uploads/2019/08/UPUTE-DIPLOMSKI-RAD-EKA.pdf",
+      "publisher": "Filozofski fakultet Sveucilista u Zagrebu, Odsjek za etnologiju i kulturnu antropologiju",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/ffzg/ffzg-etnologija-diplomski-2019.pdf",
+      "snapshotHash": "4091f84371e8e6b7587280917c1b9069bbecc11d039d8547e5553e8e59708808",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Odsjecke Upute (URL sadrzi 2019/08), objavljene na stranici Obrasci i upute Odsjeka za etnologiju i kulturnu antropologiju. Odjeljak Graficko oblikovanje teksta je imperativan (Rad mora biti napisan u programu Word; tekst rada treba biti u fontu Times New Roman ...) -> scored: font Times New Roman, velicina 12, prored 1,5, margine 2,5 cm, obostrano poravnanje, paginacija (naslovnica se ne paginira). Opseg (Predvieno je da diplomski rad obuhvaca od 25 do 40 kartica) je nedeterministicki i zadan u karticama -> advisory (procjena rijeci nije doslovna). Stil citiranja je Chicago author-date (Ostalo navoditi prema The Chicago Manual of Style, author-date style) ali odabir/nedeterministicka primjena -> advisory i machineCheckable:false. Elementi diplomskog rada i Sadrzaj su navedeni kao struktura ali bez eksplicitnog imperativa (Elementi diplomskog rada) -> advisory. Diacritike su u ekstrakciji ostecene (0xFE) pa su citati birani kao ASCII podnizovi; velicina fonta ima ASCII fragment ine 12 to iz velicine 12 tocaka. Dokument ne pokriva paper-size. Prilozi obuhvacaju i Odluku Fakultetskog vijeca o diplomskim radovima (proceduralno, ne oblikovanje)."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "ffzg-etnologija-graduate",
+      "unitId": "ffzg",
+      "programs": [
+        "Etnologija i kulturna antropologija"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Filozofski fakultet (Odsjek za etnologiju i kulturnu antropologiju), diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2019-08-01",
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": 12,
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "requirePageNumbers": true,
+        "checkJustify": true,
+        "checkMargins": true,
+        "recommendedCitation": "chicago-author"
+      },
+      "facts": [
+        "Graficko oblikovanje je imperativno: font Times New Roman velicine 12, prored 1,5, margine 2,5 cm, obostrano poravnanje, paginirane stranice (naslovna stranica se ne paginira).",
+        "Predvieno je da diplomski rad obuhvaca od 25 do 40 kartica teksta (integrirani ili interdisciplinarni od 50 do 70 kartica); jedna kartica je 1800 znakova s razmacima ili oko 300 rijeci (preporuka, advisory).",
+        "Citiranje je autor-godina-stranica u tekstu, a popis literature i ostalo prema The Chicago Manual of Style (author-date style); citate dulje od 35 rijeci navesti u zasebnom uvucenom odlomku (advisory)."
+      ],
+      "note": "Diplomski rad na diplomskom studiju etnologije i kulturne antropologije iz odsjeckih Uputa za prijavu, izradu i obranu diplomskog rada (2019). Odjeljak Graficko oblikovanje teksta je imperativan pa je tehnicko oblikovanje scored. Opseg je zadan u karticama i nedeterministicki (Predvieno je ... 25 do 40 kartica) pa je advisory. Stil citiranja (Chicago author-date) je machineCheckable:false pa advisory. Elementi rada i Sadrzaj su navedeni kao struktura bez eksplicitnog imperativa pa advisory. FFZG nema jedinstvene fakultetske Upute; ovo je odsjecki dokument razine studijskog programa. Prilozeni akti (Odluka o diplomskim radovima) su proceduralni i nisu preuzeti kao pravila oblikovanja.",
+      "sources": [
+        {
+          "title": "Upute za prijavu, izradu i obranu diplomskog rada (FFZG, Odsjek za etnologiju i kulturnu antropologiju)",
+          "url": "https://etno.ffzg.unizg.hr/wp-content/uploads/2019/08/UPUTE-DIPLOMSKI-RAD-EKA.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za prijavu, izradu i obranu diplomskog rada (FFZG, Odsjek za etnologiju i kulturnu antropologiju, 2019)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "font",
+        "velicina slova",
+        "prored",
+        "margine",
+        "obostrano poravnanje",
+        "numeracija stranica"
+      ],
+      "advisoryScope": [
+        "opseg (kartice)",
+        "stil citiranja",
+        "elementi rada (struktura)",
+        "sadrzaj"
+      ],
+      "catalogPrograms": [
+        "Etnologija i kulturna antropologija"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-ffzg-etnologija-graduate--font-verified-2026-07-02",
+      "ruleId": "ffzg-etnologija-graduate--font",
+      "profileId": "ffzg-etnologija-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-etnologija-diplomski-2019",
+      "sourcePage": "odjeljak Graficko oblikovanje teksta",
+      "quote": "tekst rada treba biti u fontu Times New Roman",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-etnologija-graduate--font-size-verified-2026-07-02",
+      "ruleId": "ffzg-etnologija-graduate--font-size",
+      "profileId": "ffzg-etnologija-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-etnologija-diplomski-2019",
+      "sourcePage": "odjeljak Graficko oblikovanje teksta",
+      "quote": "ine 12 to",
+      "note": "Deepen workflow (odsjecki profil). ASCII fragment iz velicine 12 tocaka (diacritike ostecene u ekstrakciji)."
+    },
+    {
+      "id": "led-ffzg-etnologija-graduate--line-spacing-verified-2026-07-02",
+      "ruleId": "ffzg-etnologija-graduate--line-spacing",
+      "profileId": "ffzg-etnologija-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-etnologija-diplomski-2019",
+      "sourcePage": "odjeljak Graficko oblikovanje teksta",
+      "quote": "1,5 linija",
+      "note": "Deepen workflow (odsjecki profil). Prored 1,5 linija."
+    },
+    {
+      "id": "led-ffzg-etnologija-graduate--margins-verified-2026-07-02",
+      "ruleId": "ffzg-etnologija-graduate--margins",
+      "profileId": "ffzg-etnologija-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-etnologija-diplomski-2019",
+      "sourcePage": "odjeljak Graficko oblikovanje teksta",
+      "quote": "margine 2,5 cm",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-etnologija-graduate--justify-verified-2026-07-02",
+      "ruleId": "ffzg-etnologija-graduate--justify",
+      "profileId": "ffzg-etnologija-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-etnologija-diplomski-2019",
+      "sourcePage": "odjeljak Graficko oblikovanje teksta",
+      "quote": "obostrano poravnatim tekstualnim blokom",
+      "note": "Deepen workflow (odsjecki profil)."
+    },
+    {
+      "id": "led-ffzg-etnologija-graduate--page-numbers-verified-2026-07-02",
+      "ruleId": "ffzg-etnologija-graduate--page-numbers",
+      "profileId": "ffzg-etnologija-graduate",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-etnologija-diplomski-2019",
+      "sourcePage": "odjeljak Graficko oblikovanje teksta",
+      "quote": "paginiranim stranicama",
+      "note": "Deepen workflow (odsjecki profil). Naslovna stranica se ne paginira."
+    },
+    {
+      "id": "led-ffzg-etnologija-graduate--word-count-advisory-2026-07-02",
+      "ruleId": "ffzg-etnologija-graduate--word-count",
+      "profileId": "ffzg-etnologija-graduate",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-etnologija-diplomski-2019",
+      "sourcePage": "odjeljak Opseg rada",
+      "quote": "od 25 do 40 kartica teksta",
+      "note": "Deepen workflow (odsjecki profil). Opseg je predvien i zadan u karticama; procjena rijeci nije doslovna pa advisory."
+    },
+    {
+      "id": "led-ffzg-etnologija-graduate--citation-style-advisory-2026-07-02",
+      "ruleId": "ffzg-etnologija-graduate--citation-style",
+      "profileId": "ffzg-etnologija-graduate",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-etnologija-diplomski-2019",
+      "sourcePage": "odjeljak Citiranje / Pravila o oblikovanju popisa literature",
+      "quote": "Ostalo navoditi prema The Chicago Manual of Style",
+      "note": "Deepen workflow (odsjecki profil). Chicago author-date; machineCheckable:false pa advisory."
+    },
+    {
+      "id": "led-ffzg-etnologija-graduate--required-sections-advisory-2026-07-02",
+      "ruleId": "ffzg-etnologija-graduate--required-sections",
+      "profileId": "ffzg-etnologija-graduate",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-etnologija-diplomski-2019",
+      "sourcePage": "odjeljak Elementi diplomskog rada",
+      "quote": "Elementi diplomskog rada",
+      "note": "Deepen workflow (odsjecki profil). Struktura navedena bez eksplicitnog imperativa; machineCheckable:false pa advisory."
+    },
+    {
+      "id": "led-ffzg-etnologija-graduate--toc-advisory-2026-07-02",
+      "ruleId": "ffzg-etnologija-graduate--toc",
+      "profileId": "ffzg-etnologija-graduate",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffzg-etnologija-diplomski-2019",
+      "sourcePage": "odjeljak Sadrzaj",
+      "quote": "Sadrzaj diplomskog rada sastoji se od",
+      "note": "Deepen workflow (odsjecki profil). Sadrzaj naveden kao element bez eksplicitnog imperativa pa advisory."
+    }
+  ]
+}

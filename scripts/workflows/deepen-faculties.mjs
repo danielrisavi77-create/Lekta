@@ -8,14 +8,14 @@ export const meta = {
 // Mete za ovaj deepen-batch. Svaka: fakultet + obitelj + TOCAN katalogski program (mora vec
 // postojati u data/catalog za odsjeke) + slug za profileId. workType odreduje agent iz izvora.
 const DEFAULT = [
-  { fac: 'ffzg', facName: 'Filozofski fakultet', family: 'social', program: 'Psihologija', slug: 'psihologija', dept: 'Odsjek za psihologiju' },
-  { fac: 'ffzg', facName: 'Filozofski fakultet', family: 'social', program: 'Sociologija', slug: 'sociologija', dept: 'Odsjek za sociologiju' },
-  { fac: 'ffzg', facName: 'Filozofski fakultet', family: 'social', program: 'Povijest', slug: 'povijest', dept: 'Odsjek za povijest' },
-  { fac: 'ffzg', facName: 'Filozofski fakultet', family: 'social', program: 'Kroatistika', slug: 'kroatistika', dept: 'Odsjek za kroatistiku' },
-  { fac: 'pmf', facName: 'Prirodoslovno-matematicki fakultet', family: 'stem', program: 'Biologija', slug: 'biologija', dept: 'Bioloski odsjek' },
-  { fac: 'pmf', facName: 'Prirodoslovno-matematicki fakultet', family: 'stem', program: 'Kemija', slug: 'kemija', dept: 'Kemijski odsjek' },
-  { fac: 'pmf', facName: 'Prirodoslovno-matematicki fakultet', family: 'stem', program: 'Fizika', slug: 'fizika', dept: 'Fizicki odsjek' },
-  { fac: 'pmf', facName: 'Prirodoslovno-matematicki fakultet', family: 'stem', program: 'Matematika', slug: 'matematika', dept: 'Matematicki odsjek' },
+  { fac: 'ffzg', facName: 'Filozofski fakultet', family: 'social', program: 'Pedagogija', slug: 'pedagogija', dept: 'Odsjek za pedagogiju' },
+  { fac: 'ffzg', facName: 'Filozofski fakultet', family: 'social', program: 'Lingvistika', slug: 'lingvistika', dept: 'Odsjek za lingvistiku' },
+  { fac: 'ffzg', facName: 'Filozofski fakultet', family: 'social', program: 'Komparativna književnost', slug: 'komparativna', dept: 'Odsjek za komparativnu knjizevnost' },
+  { fac: 'ffzg', facName: 'Filozofski fakultet', family: 'social', program: 'Povijest umjetnosti', slug: 'povijest-umjetnosti', dept: 'Odsjek za povijest umjetnosti' },
+  { fac: 'ffzg', facName: 'Filozofski fakultet', family: 'social', program: 'Arheologija', slug: 'arheologija', dept: 'Odsjek za arheologiju' },
+  { fac: 'ffzg', facName: 'Filozofski fakultet', family: 'social', program: 'Etnologija i kulturna antropologija', slug: 'etnologija', dept: 'Odsjek za etnologiju i kulturnu antropologiju' },
+  { fac: 'pmf', facName: 'Prirodoslovno-matematicki fakultet', family: 'stem', program: 'Geologija', slug: 'geologija', dept: 'Geoloski odsjek' },
+  { fac: 'pmf', facName: 'Prirodoslovno-matematicki fakultet', family: 'stem', program: 'Geofizika', slug: 'geofizika', dept: 'Geofizicki odsjek' },
 ]
 let requested = args
 if (typeof requested === 'string') { try { requested = JSON.parse(requested) } catch { requested = null } }
