@@ -4825,6 +4825,27 @@
     "profileLabel": "Pravni fakultet · opći pravni akademski rad",
     "verifiedAt": "2026-06-28",
     "documentDate": "opće službene upute i katedarski izvori provjereni 28. lipnja 2026.",
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/pravo-opci-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Scored format-provjere (font/velicina/prored/margine/Sadrzaj) ispravno se okidaju; profil se ne rusi (golden test)."
+      ],
+      "observedDeviations": [
+        "Genericki opci pravni akademski/seminarski rad (fallback za sve pravne studije); puna pravila i legal-notes citiranje dokazani golden testom."
+      ],
+      "productDecision": "Genericki catch-all profil (ne jedan konkretan program) pa nema pripadajucih stvarnih radova za ciljano uzorkovanje; ne izmisljam PDF-audit brojace (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
@@ -4957,6 +4978,27 @@
     "profileLabel": "Pravni fakultet · Socijalni rad/Socijalna politika · opći akademski rad",
     "verifiedAt": "2026-06-28",
     "documentDate": "profil izveden iz službenih uputa završnih i diplomskih radova",
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/pravo-opci-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Scored format-provjere (font/velicina/prored/margine/Sadrzaj) ispravno se okidaju; profil se ne rusi (golden test)."
+      ],
+      "observedDeviations": [
+        "Genericki opci akademski/seminarski rad socijalnog rada (fallback); puna pravila i autor-godina citiranje dokazani golden testom."
+      ],
+      "productDecision": "Genericki catch-all profil (ne jedan konkretan program) pa nema pripadajucih stvarnih radova za ciljano uzorkovanje; ne izmisljam PDF-audit brojace (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
@@ -5090,6 +5132,27 @@
     "profileLabel": "Pravni fakultet · sveučilišni specijalistički studiji prava · završni specijalistički rad",
     "verifiedAt": "2026-06-28",
     "documentDate": "javno dostupni postupovni izvori provjereni 28. lipnja 2026.",
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/pravo-opci-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Scored format-provjere (font/velicina/prored/margine/Sadrzaj) ispravno se okidaju; profil se ne rusi (golden test)."
+      ],
+      "observedDeviations": [
+        "Genericki specijalisticki pravni profil (Europsko pravo i dr.); puna pravila i legal-notes citiranje dokazani golden testom."
+      ],
+      "productDecision": "Genericki catch-all profil (ne jedan konkretan program) pa nema pripadajucih stvarnih radova za ciljano uzorkovanje; ne izmisljam PDF-audit brojace (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
