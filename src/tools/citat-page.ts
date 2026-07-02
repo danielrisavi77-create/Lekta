@@ -1,6 +1,7 @@
 // @ts-nocheck
 // DOM glue za besplatni citat generator (citat.html). Sva logika formatiranja je u
 // citation.ts (tipizirana, testabilna); ovdje samo vezanje na formu i ispis. Bez mreze.
+import '../shared/ui-boot';
 import { formatCitation } from './citation';
 
 const $ = (s) => document.querySelector(s);

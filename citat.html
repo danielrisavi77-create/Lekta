@@ -14,7 +14,7 @@
   --brand-soft:#e8e8f4;--ok:#1a7a54;--ok-soft:#e6f4ec;--warn:#9a5b12;--warn-soft:#f6ecda;
   --danger:#b23a4e;--danger-soft:#f7e9ec;
   --shadow:0 22px 60px rgba(41,36,26,.13);--shadow-sm:0 8px 24px rgba(41,36,26,.09);
-  --ink-serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  --ink-serif:"Source Serif 4 Variable","Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
   --radius:20px;--max:1060px;--focus:0 0 0 4px rgba(51,64,126,.22)
 }
 [data-theme="dark"]{
@@ -36,6 +36,7 @@ a{color:inherit}:focus-visible{outline:none;box-shadow:var(--focus);border-radiu
 .nav-links a:hover{color:var(--text)}.nav-links a.active{color:var(--brand);font-weight:800}
 .icon-btn{border:1px solid var(--line);background:var(--panel);width:40px;height:40px;border-radius:11px;display:grid;place-items:center;cursor:pointer;font-size:16px;color:var(--text)}
 .mobile-menu{display:none}.mobile-nav{display:none}
+.icon-btn svg{width:19px;height:19px;display:block}
 .btn{border:0;border-radius:12px;padding:11px 16px;font-weight:750;display:inline-flex;align-items:center;gap:8px;text-decoration:none;cursor:pointer;transition:.18s transform}
 .btn:hover{transform:translateY(-1px)}.btn:disabled{opacity:.45;cursor:default;transform:none}
 .btn-primary{background:linear-gradient(140deg,var(--brand),var(--brand-2));color:#fff;box-shadow:0 10px 22px rgba(51,64,126,.26)}
@@ -99,8 +100,8 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
       <a href="citat.html" class="active" aria-current="page">Citat generator</a>
       <a href="index.html#pricing">Paketi</a>
     </div>
-    <button class="icon-btn mobile-menu" id="mobileMenuBtn" type="button" aria-label="Otvori izbornik" aria-expanded="false">&#9776;</button>
-    <button class="icon-btn" id="themeBtn" type="button" aria-label="Promijeni temu" title="Promijeni temu">&#9680;</button>
+    <button class="icon-btn mobile-menu" id="mobileMenuBtn" type="button" aria-label="Otvori izbornik" aria-expanded="false"><i data-lucide="menu"></i></button>
+    <button class="icon-btn" id="themeBtn" type="button" aria-label="Promijeni temu" title="Promijeni temu"><i data-lucide="sun-moon"></i></button>
     <a class="btn btn-primary btn-sm" href="index.html#analyzer">Provjeri rad</a>
   </nav>
   <div class="mobile-nav" id="mobileNav">
