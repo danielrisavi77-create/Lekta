@@ -5000,40 +5000,31 @@
     "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-02",
-      "scope": "Sinteticki golden .docx (prored 1,15) + 2 stvarna javna diplomska rada iz ZIR-a kroz byte-level PDF preflight.",
+      "scope": "Sinteticki golden .docx (prored 1,15) + 4 stvarna javna diplomska rada iz ZIR-a kroz byte-level PDF preflight.",
       "sample": {
         "syntheticDocxAudits": 1,
         "docxAudits": 0,
-        "publicPdfAudits": 2,
+        "publicPdfAudits": 4,
         "metadataSpotChecks": 0,
         "years": [
           2021,
           2022,
+          2023,
           2026
         ]
       },
       "publicSources": [
-        {
-          "pid": "agr:2075",
-          "repository": "zir.nsk.hr",
-          "level": "diplomski",
-          "pages": 44,
-          "sha256": "7f08ac7e6eb529c6e87727b246237942e5693c56468d8c494ce77e209fe07b1e"
-        },
-        {
-          "pid": "agr:2678",
-          "repository": "zir.nsk.hr",
-          "level": "diplomski",
-          "pages": 45,
-          "sha256": "d5c49f8ea824a0900b167841921122138feaabcadda35a6fd3dff0aa04ee5328"
-        }
+        { "pid": "agr:2075", "repository": "zir.nsk.hr", "level": "diplomski", "pages": 44, "pageFormat": "A4", "sha256": "7f08ac7e6eb529c6e87727b246237942e5693c56468d8c494ce77e209fe07b1e" },
+        { "pid": "agr:2678", "repository": "zir.nsk.hr", "level": "diplomski", "pages": 45, "pageFormat": "A4", "sha256": "d5c49f8ea824a0900b167841921122138feaabcadda35a6fd3dff0aa04ee5328" },
+        { "pid": "agr:2900", "repository": "zir.nsk.hr", "level": "diplomski", "pages": 43, "pageFormat": "A4", "sha256": "d2e915886e68f929ed7832e010b852da5fe05e00d2077bf0202639f3fe9e208e" },
+        { "pid": "agr:3900", "repository": "zir.nsk.hr", "level": "diplomski", "pages": 62, "pageFormat": "A4", "sha256": "8a2cac7b7d14fdd27918a7d8e8f8c0b2c833e7f394a18cdf98e08e76f78603d8" }
       ],
       "confirmed": [
         "Font, velicina, prored, A4, Sadrzaj i margine ispravno okidaju na uskladjenom sintetickom radu (tests/agr-synthetic.test.ts).",
-        "Dva stvarna javna diplomska rada (agr:2075, agr:2678) prolaze byte-level PDF preflight: valjan PDF 1.7, nesifriran, 100% stranica priblizan A4, viselistni (44 i 45 str.), ugradjeni fontovi, bez JavaScripta i obrazaca."
+        "Cetiri stvarna javna diplomska rada (agr:2075, agr:2678, agr:2900, agr:3900) prolaze byte-level PDF preflight: valjan nesifrirani PDF 1.7, 100% stranica A4, viselistni (43-62 str.), ugradjeni fontovi, bez JavaScripta i obrazaca."
       ],
       "observedDeviations": [
-        "Oba stvarna rada nemaju PDF/A oznaku (pdfaid:part); preflight to javlja kao info, ne kao gresku."
+        "Nijedan od cetiri rada nema PDF/A oznaku (pdfaid:part); preflight to javlja kao info, ne kao gresku."
       ],
       "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet se cuva preko PID-a i sha256."
     },
@@ -5093,23 +5084,36 @@
     "verifiedAt": "2026-07-02",
     "documentDate": "2017-06-12",
     "fieldValidation": {
-      "status": "synthetic-golden-validated",
+      "status": "field-sampled",
       "validatedAt": "2026-07-02",
-      "scope": "Sinteticki golden .docx (zavrsni, prored 1,15, Justify); nije pravi rad.",
+      "scope": "Sinteticki golden .docx (prored 1,15, Justify) + 4 stvarna javna zavrsna rada iz ZIR-a kroz byte-level PDF preflight.",
       "sample": {
         "syntheticDocxAudits": 1,
         "docxAudits": 0,
-        "publicPdfAudits": 0,
+        "publicPdfAudits": 4,
         "metadataSpotChecks": 0,
         "years": [
+          2022,
+          2023,
+          2025,
           2026
         ]
       },
-      "confirmed": [
-        "Font, velicina, prored, A4, Sadrzaj i (doktorski) margine ispravno okidaju na uskladjenom sintetickom radu (tests/agr-synthetic.test.ts)."
+      "publicSources": [
+        { "pid": "agr:3600", "repository": "zir.nsk.hr", "level": "zavrsni", "pages": 76, "pageFormat": "A4", "sha256": "13fcea7eaf363c6818667cb10554671aca4d452871e275c9a476f631e6b61498" },
+        { "pid": "agr:4520", "repository": "zir.nsk.hr", "level": "zavrsni", "pages": 33, "pageFormat": "A4", "sha256": "964b90e9c8bf800d14d44d756a19f7c9c96555104e02f9e3af943d4067888d76" },
+        { "pid": "agr:4300", "repository": "zir.nsk.hr", "level": "zavrsni", "pages": 59, "pageFormat": "US Letter (612x792) + A3 umeci", "sha256": "98c1b49bf2be5e2b2cba079561ce6bac6f84c03fe6eeb145db70479cb2a30f30" },
+        { "pid": "agr:4550", "repository": "zir.nsk.hr", "level": "zavrsni", "pages": 36, "pageFormat": "US Letter (612x792)", "sha256": "5f46508016b52f516c4f9f1cf589c14b83a70d4ae9efc010a17f2e9e62f78128" }
       ],
-      "observedDeviations": [],
-      "productDecision": "Sinteticki uzorci sluze samo regresijskoj provjeri parsera i audita; ne dokazuju sluzbeno pravilo ni ispravnost stvarnog rada."
+      "confirmed": [
+        "Font, velicina, prored, A4, Sadrzaj i margine ispravno okidaju na uskladjenom sintetickom radu (tests/agr-synthetic.test.ts).",
+        "Cetiri stvarna javna zavrsna rada prolaze PDF preflight kao valjani, nesifrirani, viselistni PDF 1.7 s ugradjenim fontovima, bez JavaScripta i obrazaca. agr:3600 i agr:4520 su 100% A4."
+      ],
+      "observedDeviations": [
+        "agr:4300 i agr:4550 su predani u US Letter formatu (612x792pt), ne A4 - preflight ih tocno oznaci ispod A4 praga. Stvaran nalaz: dio zavrsnih radova nije u A4.",
+        "Nijedan od cetiri rada nema PDF/A oznaku (preflight to javlja kao info)."
+      ],
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4 vs Letter) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet se cuva preko PID-a i sha256."
     },
     "rules": {
       "font": [
@@ -5183,7 +5187,7 @@
     "fieldValidation": {
       "status": "synthetic-golden-validated",
       "validatedAt": "2026-07-02",
-      "scope": "Sinteticki golden .docx (doktorski, prored 1,5, margine 2,5); nije pravi rad.",
+      "scope": "Sinteticki golden .docx (doktorski, prored 1,5, margine 2,5); nije pravi rad. Stvarni javni uzorak jos nije pribavljen.",
       "sample": {
         "syntheticDocxAudits": 1,
         "docxAudits": 0,
@@ -5194,10 +5198,12 @@
         ]
       },
       "confirmed": [
-        "Font, velicina, prored, A4, Sadrzaj i (doktorski) margine ispravno okidaju na uskladjenom sintetickom radu (tests/agr-synthetic.test.ts)."
+        "Font, velicina, prored, A4, Sadrzaj i margine ispravno okidaju na uskladjenom sintetickom radu (tests/agr-synthetic.test.ts)."
       ],
-      "observedDeviations": [],
-      "productDecision": "Sinteticki uzorci sluze samo regresijskoj provjeri parsera i audita; ne dokazuju sluzbeno pravilo ni ispravnost stvarnog rada."
+      "observedDeviations": [
+        "Za razliku od diplomskih i zavrsnih razina, stvarni doktorski radovi (disertacije) u repozitoriju agr su dosljedno restringiranog/embargiranog pristupa (OAI dc:rights closed/restricted ili fulltext nije posluzen); otvoreni javni PDF uzorak nije bilo moguce pribaviti. Razina ostaje na sintetickom razredu dok se ne pribavi stvarni javni rad."
+      ],
+      "productDecision": "Sinteticki uzorci sluze samo regresijskoj provjeri parsera i audita; ne dokazuju sluzbeno pravilo ni ispravnost stvarnog rada. Necu izmisljati PDF-audit brojace za razinu za koju nema stvarnog javnog uzorka."
     },
     "rules": {
       "font": [
