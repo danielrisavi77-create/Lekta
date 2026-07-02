@@ -843,15 +843,16 @@
     "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-02",
-      "scope": "Sinteticki golden (tests/fpzg-synthetic.test.ts) + 1 stvarnih javnih diplomski radova tog smjera iz ZIR-a kroz PDF preflight.",
+      "scope": "Sinteticki golden (tests/fpzg-synthetic.test.ts) + 3 stvarnih javnih diplomski radova tog smjera iz ZIR-a kroz PDF preflight.",
       "sample": {
         "syntheticDocxAudits": 1,
         "docxAudits": 0,
-        "publicPdfAudits": 1,
+        "publicPdfAudits": 3,
         "metadataSpotChecks": 0,
         "years": [
           2023,
           2024,
+          2025,
           2026
         ]
       },
@@ -863,14 +864,30 @@
           "pages": 46,
           "sha256": "d7886b47e7118a7fdb4f57ac80455c0e05d22726054b4e487d16e34eea617655",
           "level": "diplomski"
+        },
+        {
+          "pid": "fpzg:2160",
+          "repository": "zir.nsk.hr",
+          "pageFormat": "A4",
+          "pages": 43,
+          "sha256": "c518618e9ef81299866d9bcf076377fcab5b78a922cd614ef12d4e4d0afb8527",
+          "level": "diplomski"
+        },
+        {
+          "pid": "fpzg:2320",
+          "repository": "zir.nsk.hr",
+          "pageFormat": "A4",
+          "pages": 17,
+          "sha256": "8f8b910f855511ad2c8fa99e37964ada57d8ccee1f61781ca4bf2c142361e051",
+          "level": "diplomski"
         }
       ],
       "confirmed": [
         "Uskladjeni sinteticki .docx prolazi FPZG format provjere (tests/fpzg-synthetic.test.ts).",
-        "1 stvarnih javnih diplomski radova tog smjera (fpzg:2290) prolaze byte-level PDF preflight (valjan nesifrirani PDF, viselistni, ugradjeni fontovi)."
+        "3 stvarnih javnih diplomski radova tog smjera (fpzg:2290, fpzg:2160, fpzg:2320) prolaze byte-level PDF preflight (valjan nesifrirani PDF, viselistni, ugradjeni fontovi)."
       ],
       "observedDeviations": [
-        "Za smjer nacionalna sigurnost dohvacen 1 stvarni javni rad; za punu validaciju (3) treba jos 2."
+        "Radovi bez PDF/A oznake (info, ne greska)."
       ],
       "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4 vs Letter) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). FPZG oblikovanje je faculty-wide isto za smjerove; uzorci su iz programa tog smjera. PDF-ovi se ne commitaju; identitet preko PID-a i sha256."
     },
@@ -1315,7 +1332,7 @@
       ],
       "observedDeviations": [
         "fpzg:1840 su u US Letter formatu (612x792), ne A4 - preflight ih tocno oznaci ispod A4 praga. Dio FPZG radova nije u A4.",
-        "MES (Master of European Studies) je manji program na engleskom; dohvacen 1 stvarni rad, za punu validaciju treba jos 2."
+        "MES (Master of European Studies) je malen program na engleskom; nadjen 1 otvoreni javni rad u ZIR uzorku, dodatni nisu dostupni."
       ],
       "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4 vs Letter) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). FPZG oblikovanje je faculty-wide isto za smjerove; uzorci su iz programa tog smjera. PDF-ovi se ne commitaju; identitet preko PID-a i sha256."
     },
@@ -1496,14 +1513,15 @@
     "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-02",
-      "scope": "Sinteticki golden (tests/fpzg-synthetic.test.ts) + 1 stvarnih javnih specijalisticki radova tog smjera iz ZIR-a kroz PDF preflight.",
+      "scope": "Sinteticki golden (tests/fpzg-synthetic.test.ts) + 3 stvarnih javnih specijalisticki radova tog smjera iz ZIR-a kroz PDF preflight.",
       "sample": {
         "syntheticDocxAudits": 1,
         "docxAudits": 0,
-        "publicPdfAudits": 1,
+        "publicPdfAudits": 3,
         "metadataSpotChecks": 0,
         "years": [
           2023,
+          2024,
           2026
         ]
       },
@@ -1515,14 +1533,30 @@
           "pages": 71,
           "sha256": "6410b8291211c4d20f6e09d72ff062ea1fcc13fa255e983a80ea07eec9ebea32",
           "level": "specijalisticki"
+        },
+        {
+          "pid": "fpzg:2630",
+          "repository": "zir.nsk.hr",
+          "pageFormat": "A4",
+          "pages": 47,
+          "sha256": "02f46098e9b4456f282d0e6fefffff67c58457520eef54682c81a2fad66ca242",
+          "level": "specijalisticki"
+        },
+        {
+          "pid": "fpzg:2990",
+          "repository": "zir.nsk.hr",
+          "pageFormat": "A4",
+          "pages": 35,
+          "sha256": "d7c3c079a4bc11983af223640062150b0b29706890bf7cf94ae75afb98e7b663",
+          "level": "specijalisticki"
         }
       ],
       "confirmed": [
         "Uskladjeni sinteticki .docx prolazi FPZG format provjere (tests/fpzg-synthetic.test.ts).",
-        "1 stvarnih javnih specijalisticki radova tog smjera (fpzg:3050) prolaze byte-level PDF preflight (valjan nesifrirani PDF, viselistni, ugradjeni fontovi)."
+        "3 stvarnih javnih specijalisticki radova tog smjera (fpzg:3050, fpzg:2630, fpzg:2990) prolaze byte-level PDF preflight (valjan nesifrirani PDF, viselistni, ugradjeni fontovi)."
       ],
       "observedDeviations": [
-        "Dohvacen 1 stvarni specijalisticki rad tog programa; za punu validaciju treba jos 2."
+        "Radovi bez PDF/A oznake (info, ne greska)."
       ],
       "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4 vs Letter) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). FPZG oblikovanje je faculty-wide isto za smjerove; uzorci su iz programa tog smjera. PDF-ovi se ne commitaju; identitet preko PID-a i sha256."
     },
@@ -1706,14 +1740,15 @@
     "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-02",
-      "scope": "Sinteticki golden (tests/fpzg-synthetic.test.ts) + 1 stvarnih javnih specijalisticki radova tog smjera iz ZIR-a kroz PDF preflight.",
+      "scope": "Sinteticki golden (tests/fpzg-synthetic.test.ts) + 2 stvarnih javnih specijalisticki radova tog smjera iz ZIR-a kroz PDF preflight.",
       "sample": {
         "syntheticDocxAudits": 1,
         "docxAudits": 0,
-        "publicPdfAudits": 1,
+        "publicPdfAudits": 2,
         "metadataSpotChecks": 0,
         "years": [
           2023,
+          2024,
           2026
         ]
       },
@@ -1725,14 +1760,22 @@
           "pages": 48,
           "sha256": "96679474e9195e066719bee76cd2acfb2ab1d4901d55242572ca8aa6d606b59b",
           "level": "specijalisticki"
+        },
+        {
+          "pid": "fpzg:1900",
+          "repository": "zir.nsk.hr",
+          "pageFormat": "A4",
+          "pages": 146,
+          "sha256": "e2600cfc943ccaa6cb3f0a41ea91fb48c754ff5f7f7f4d6959d73acdf71e63a4",
+          "level": "specijalisticki"
         }
       ],
       "confirmed": [
         "Uskladjeni sinteticki .docx prolazi FPZG format provjere (tests/fpzg-synthetic.test.ts).",
-        "1 stvarnih javnih specijalisticki radova tog smjera (fpzg:2610) prolaze byte-level PDF preflight (valjan nesifrirani PDF, viselistni, ugradjeni fontovi)."
+        "2 stvarnih javnih specijalisticki radova tog smjera (fpzg:2610, fpzg:1900) prolaze byte-level PDF preflight (valjan nesifrirani PDF, viselistni, ugradjeni fontovi)."
       ],
       "observedDeviations": [
-        "Dohvacen 1 stvarni specijalisticki rad tog programa; za punu validaciju treba jos 2."
+        "Dohvacena 2 stvarna rada tog programa; program je malen pa treci otvoreni javni rad nije nadjen u ZIR uzorku."
       ],
       "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4 vs Letter) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). FPZG oblikovanje je faculty-wide isto za smjerove; uzorci su iz programa tog smjera. PDF-ovi se ne commitaju; identitet preko PID-a i sha256."
     },
@@ -1914,25 +1957,55 @@
     "verifiedAt": "2026-06-28",
     "documentDate": "aktivni službeni izvori provjereni 28. lipnja 2026.",
     "fieldValidation": {
-      "status": "synthetic-golden-validated",
+      "status": "field-sampled",
       "validatedAt": "2026-07-02",
-      "scope": "Sinteticki golden (tests/fpzg-synthetic.test.ts). Za taj specijalisticki program nije pronadjen otvoreni javni rad u dohvacenom ZIR uzorku.",
+      "scope": "Sinteticki golden (tests/fpzg-synthetic.test.ts) + 3 stvarnih javnih specijalisticki radova tog smjera iz ZIR-a kroz PDF preflight.",
       "sample": {
         "syntheticDocxAudits": 1,
         "docxAudits": 0,
-        "publicPdfAudits": 0,
+        "publicPdfAudits": 3,
         "metadataSpotChecks": 0,
         "years": [
+          2023,
+          2024,
+          2025,
           2026
         ]
       },
+      "publicSources": [
+        {
+          "pid": "fpzg:2350",
+          "repository": "zir.nsk.hr",
+          "pageFormat": "A4",
+          "pages": 54,
+          "sha256": "b8a91f0632abec96229e82a82922dca81a9b30fa51feb8e906c95999e2a9dd87",
+          "level": "specijalisticki"
+        },
+        {
+          "pid": "fpzg:3040",
+          "repository": "zir.nsk.hr",
+          "pageFormat": "A4",
+          "pages": 60,
+          "sha256": "3e136dfded3830c28880afec61afd5a9c54da82426391f914add7878e4350620",
+          "level": "specijalisticki"
+        },
+        {
+          "pid": "fpzg:3060",
+          "repository": "zir.nsk.hr",
+          "pageFormat": "A4",
+          "pages": 39,
+          "sha256": "36e56d31ea9d0d5ef4e59fc460d55cfbe2aa81222341027037f3e466666a0062",
+          "level": "specijalisticki"
+        }
+      ],
       "confirmed": [
-        "Uskladjeni sinteticki .docx prolazi FPZG format provjere (tests/fpzg-synthetic.test.ts)."
+        "Uskladjeni sinteticki .docx prolazi FPZG format provjere (tests/fpzg-synthetic.test.ts).",
+        "3 stvarnih javnih specijalisticki radova tog smjera (fpzg:2350, fpzg:3040, fpzg:3060) prolaze byte-level PDF preflight (valjan nesifrirani PDF, viselistni, ugradjeni fontovi)."
       ],
       "observedDeviations": [
-        "Za taj specijalisticki program nije pronadjen otvoreni javni rad u dohvacenom ZIR uzorku."
+        "Radovi bez PDF/A oznake (info, ne greska)."
       ],
-      "productDecision": "Sinteticki uzorci sluze samo regresijskoj provjeri parsera i audita; ne dokazuju stvarni rad. Necu izmisljati PDF-audit brojace za smjer bez dostupnog stvarnog javnog uzorka."
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4 vs Letter) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). FPZG oblikovanje je faculty-wide isto za smjerove; uzorci su iz programa tog smjera. PDF-ovi se ne commitaju; identitet preko PID-a i sha256."
     },
     "rules": {
       "font": [
@@ -2114,34 +2187,50 @@
     "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-02",
-      "scope": "Sinteticki golden (tests/fpzg-synthetic.test.ts) + 1 stvarnih javnih specijalisticki radova tog smjera iz ZIR-a kroz PDF preflight.",
+      "scope": "Sinteticki golden (tests/fpzg-synthetic.test.ts) + 3 stvarnih javnih specijalisticki radova tog smjera iz ZIR-a kroz PDF preflight.",
       "sample": {
         "syntheticDocxAudits": 1,
         "docxAudits": 0,
-        "publicPdfAudits": 1,
+        "publicPdfAudits": 3,
         "metadataSpotChecks": 0,
         "years": [
           2023,
+          2024,
           2026
         ]
       },
       "publicSources": [
         {
-          "pid": "fpzg:2170",
+          "pid": "fpzg:2150",
           "repository": "zir.nsk.hr",
-          "pageFormat": "US Letter",
-          "pages": 47,
-          "sha256": "27affe0ed64795b58ebcff17dd681149cd35ef39201c0ad99862eb4c9c858de6",
+          "pageFormat": "A4",
+          "pages": 54,
+          "sha256": "abb1ea1739f8f79010d1d52f62cc97e83fbea5be6562c5d244facb21220145d5",
+          "level": "specijalisticki"
+        },
+        {
+          "pid": "fpzg:2190",
+          "repository": "zir.nsk.hr",
+          "pageFormat": "A4",
+          "pages": 55,
+          "sha256": "15b7762d4671ba2af2b40d01ebb0018ccca8d7b2a5642baa9ef3e33ef58a26b8",
+          "level": "specijalisticki"
+        },
+        {
+          "pid": "fpzg:2550",
+          "repository": "zir.nsk.hr",
+          "pageFormat": "A4",
+          "pages": 48,
+          "sha256": "196d2634fcbc810f39a7d01367a4ac469115255c3d74a5dd78e0d6ab74c45cc5",
           "level": "specijalisticki"
         }
       ],
       "confirmed": [
         "Uskladjeni sinteticki .docx prolazi FPZG format provjere (tests/fpzg-synthetic.test.ts).",
-        "1 stvarnih javnih specijalisticki radova tog smjera (fpzg:2170) prolaze byte-level PDF preflight (valjan nesifrirani PDF, viselistni, ugradjeni fontovi)."
+        "3 stvarnih javnih specijalisticki radova tog smjera (fpzg:2150, fpzg:2190, fpzg:2550) prolaze byte-level PDF preflight (valjan nesifrirani PDF, viselistni, ugradjeni fontovi)."
       ],
       "observedDeviations": [
-        "fpzg:2170 su u US Letter formatu (612x792), ne A4 - preflight ih tocno oznaci ispod A4 praga. Dio FPZG radova nije u A4.",
-        "Dohvacen 1 stvarni specijalisticki rad tog programa; za punu validaciju treba jos 2."
+        "Radovi bez PDF/A oznake (info, ne greska)."
       ],
       "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4 vs Letter) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). FPZG oblikovanje je faculty-wide isto za smjerove; uzorci su iz programa tog smjera. PDF-ovi se ne commitaju; identitet preko PID-a i sha256."
     },
