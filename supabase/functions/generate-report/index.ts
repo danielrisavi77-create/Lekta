@@ -15,6 +15,7 @@ import { isReportWorkType } from '../../../src/report/pricing.ts';
 import { buildFullReport } from '../../../src/report/report.ts';
 import { decideReportAccess } from '../../../src/report/slot-logic.ts';
 import { resolveDailyCap } from '../../../src/report/partner.ts';
+import { coverageTierForStatus } from '../../../src/report/guarantee.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -143,6 +144,9 @@ Deno.serve(async (req: Request) => {
   } else {
     // new_slot: atomsko trosenje entitlementa + bind slota (zastita od racea)
     const label = (fingerprint.titleNorm || 'rad').slice(0, 60);
+    // tier snapshot na slotu (sekcija 10): iz statusa profila u trenutku vezivanja
+    const coverageTier = coverageTierForStatus(body.analysisResult?.profileStatus);
+    const profileRef = body.analysisResult?.details?.profileDefinitionId ?? body.analysisResult?.profile ?? null;
     const { data: slot, error } = await admin.rpc('consume_slot_and_bind', {
       p_entitlement_id: decision.entitlementId,
       p_user_id: user.id,
@@ -150,6 +154,8 @@ Deno.serve(async (req: Request) => {
       p_fingerprint: fingerprint,
       p_label: label,
       p_slot_expires_at: decision.newSlot.slotExpiresAt,
+      p_profile_ref: profileRef,
+      p_coverage_tier: coverageTier,
     });
     if (error || !slot) {
       await log('denied', null);

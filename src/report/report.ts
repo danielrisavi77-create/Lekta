@@ -2,6 +2,7 @@ import type { Check, Issue } from '../scoring/checks';
 import { scoreMeta } from '../scoring/checks';
 import type { FingerprintInput } from '../fingerprint/fingerprint';
 import type { ReportWorkType } from './pricing';
+import { coverageTierForStatus } from './guarantee';
 
 /**
  * Granica teaser (klijent) i puni izvjestaj (server) kao cista podatkovna granica
@@ -70,6 +71,8 @@ export interface FullReport {
   checks: Check[];
   issues: Issue[];
   watermark: false;
+  /** Coverage tier profila (0..3). T2/T3 nose garanciju i verificirana pravila (sekcija 3). */
+  coverageTier: number;
   /** Diskretan per-purchase token (traceability); ubacuje ga server. */
   traceToken?: string;
 }
@@ -152,6 +155,7 @@ export function buildFullReport(
     checks,
     issues: result.issues ?? [],
     watermark: false,
+    coverageTier: coverageTierForStatus(result.profileStatus),
     traceToken: options.traceToken,
   };
 }

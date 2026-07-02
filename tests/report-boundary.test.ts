@@ -70,6 +70,7 @@ describe('puni izvjestaj (serverski, iza entitlementa)', () => {
     expect(full.issues).toHaveLength(4);
     expect(full.watermark).toBe(false);
     expect(full.traceToken).toBe('tok-123');
+    expect(full.coverageTier).toBe(2); // profileStatus 'verified' -> T2
   });
 
   it('scoredCheckTitles hook filtrira na bodovana pravila (boduje se samo scored:true)', () => {

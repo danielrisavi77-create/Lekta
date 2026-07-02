@@ -25,6 +25,10 @@ serverska odluka; klijent nikad nije izvor istine.
   (atomska dodjela, mirrors `src/report/rulebook.ts`). Admin verifikacija je CLI/SQL:
   `update rulebook_submissions set status='verified', reviewed_at=now() where id='...';`
   pa `select grant_rulebook_reward('...');` (vraca true ako je nagrada dodijeljena).
+- `migrations/0007_guarantee_claims.sql` - `guarantee_claims` + RLS; azuriran `consume_slot_and_bind`
+  (sada snima `profile_ref` + `coverage_tier` na slot). Ulazni gate: `src/report/guarantee.ts`.
+- `functions/file-guarantee-claim/` - ulazni gate garancijskog zahtjeva (tier>=2, <=30 dana, dokaz,
+  rule_key); odluka o povratu je poslije, rucna (admin: status='approved' + manual_orders).
 
 ## Odnos prema testiranom jezgru
 
