@@ -8923,11 +8923,62 @@
     "profileLabel": "Fakultet hrvatskih studija, diplomski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": null,
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/fhs-synthetic.test.ts) + 3 stvarna javna diplomska rada iz ZIR-a (namespace hrstud) kroz byte-level PDF preflight.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2020,
+          2021,
+          2022,
+          2026
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "hrstud:2220",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 43,
+          "pageFormat": "A4",
+          "sha256": "ca88344b5ab3721b1dca853e242fb36af04d3d8a39bcc55d8c967ceae8e2fe7b"
+        },
+        {
+          "pid": "hrstud:2340",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 64,
+          "pageFormat": "A4",
+          "sha256": "f59eb5b32110a2fee25da524faa6b14593fa2d949aa3620041563c9df8df7479"
+        },
+        {
+          "pid": "hrstud:2580",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 51,
+          "pageFormat": "A4",
+          "sha256": "5c40b131ab27521ca79edc4134f86203a93e9ebe763ba0b43fb1e7399416b6e5"
+        }
+      ],
+      "confirmed": [
+        "Uskladjeni sinteticki .docx prolazi fhs format provjere (font, velicina, prored 1,5, poravnanje, margine, Sadrzaj) - tests/fhs-synthetic.test.ts.",
+        "Tri stvarna javna diplomska rada (hrstud:2220,2340,2580; Hrvatski studiji objavljuju pod ZIR namespace hrstud) prolaze byte-level PDF preflight: valjan nesifrirani PDF, 100% stranica A4, viselistni (43-64 str.), ugradjeni fontovi."
+      ],
+      "observedDeviations": [
+        "Radovi bez PDF/A oznake (info). U sirem hrstud uzorku dio radova je US Letter; ova tri su 100% A4."
+      ],
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet preko PID-a i sha256."
+    },
     "rules": {
       "font": [
         "Times New Roman"
       ],
-      "size": 12,
+      "size": [12],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -9048,7 +9099,7 @@
       "font": [
         "Times New Roman"
       ],
-      "size": 12,
+      "size": [12],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
