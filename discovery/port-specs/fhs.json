@@ -1,0 +1,411 @@
+{
+  "faculty": "fhs",
+  "unit": null,
+  "catalogPrograms": [
+    "Prijediplomski studiji Fakulteta hrvatskih studija (zavrsni rad)",
+    "Diplomski studiji Fakulteta hrvatskih studija"
+  ],
+  "sources": [
+    {
+      "id": "fhs-upute-diplomski-2026",
+      "kind": "guidelines",
+      "title": "Upute za izradu i obranu diplomskoga rada i za zavrsetak diplomskoga studija (Fakultet hrvatskih studija, ak. god. 2025./2026.)",
+      "url": "https://www.fhs.hr/images/50014269/Upute%20za%20izradu%20i%20obranu%20diplomskoga%20rada%202025-2026%20(3).pdf",
+      "publisher": "Fakultet hrvatskih studija Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/fhs/fhs-upute-diplomski-2026.pdf",
+      "snapshotHash": "8807628d8863819448f91e61efff4d58e41747bc3d2d5db98e0a5521b748e2a6",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Sluzbene Upute za diplomski rad (FHS, ak. 2025./2026.). Zajednicki odjeljak OPE TEHNICKE UPUTE daje imperativno tehnicko oblikovanje: font Times New Roman (obavezna potpora hrvatskih znakova), velicina 12, prored 1,5, margine 2,5 cm, numeriranje stranica, obostrano poravnanje te Rad mora sadrzavati (Sadrzaj i obvezne cjeline) -> scored. Opseg je zadan u karticama (50 do 60 kartica) i permisivan pa je advisory; stil citiranja APA je psiholoski dodatak, nije jedinstven fakultetski standard pa je advisory."
+    },
+    {
+      "id": "fhs-upute-zavrsni-diplomski-2023",
+      "kind": "guidelines",
+      "title": "Upute za pisanje zavrsnoga i diplomskoga rada (Fakultet hrvatskih studija)",
+      "url": "https://www.fhs.hr/_download/repository/2021_2023__Nove_upute_za_prijavu_i_pisanje_zavrsnoga_i_diplomskoga_rada.doc.pdf",
+      "publisher": "Fakultet hrvatskih studija Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/fhs/fhs-upute-zavrsni-diplomski-2023.pdf",
+      "snapshotHash": "91726744ca26a6363a89cb6c18057a63fb3677ccbc4ca1d95d3ace4bea0cf5bc",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Sluzbene Upute za pisanje zavrsnoga i diplomskoga rada (FHS; sadrzaj referira ak. 2020./2021., potpisao prodekan za nastavu i studente). Koristi se za razinu zavrsnoga (prijediplomskoga) rada. Sadrzi isti odjeljak OPE TEHNICKE UPUTE kao i diplomske upute (font TNR, 12, prored 1,5, margine 2,5, numeriranje stranica, obostrano poravnanje, Rad mora sadrzavati) -> scored. Opseg zavrsnoga rada 28.000 do 45.000 znakova (16 do 20 kartica) je permisivan (moze imati) -> advisory; citiranje se prepusta odsjeckim uputama -> advisory."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "fhs-diplomski",
+      "unitId": "fhs",
+      "programs": [
+        "Diplomski studiji Fakulteta hrvatskih studija"
+      ],
+      "workTypes": ["graduate"],
+      "status": "partial",
+      "profileLabel": "Fakultet hrvatskih studija, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": ["Times New Roman"],
+        "size": 12,
+        "spacing": 1.5,
+        "margins": { "top": 2.5, "right": 2.5, "bottom": 2.5, "left": 2.5 },
+        "requireToc": true,
+        "requirePageNumbers": true,
+        "checkJustify": true,
+        "checkMargins": true,
+        "recommendedCitation": "apa7",
+        "requiredSections": [
+          { "key": "naslovnica", "label": "Naslovnica", "terms": ["naslovnica", "naslovnicu", "naslovna stranica"] },
+          { "key": "sazetak", "label": "Sazetak", "terms": ["sazetak"] },
+          { "key": "kljucne-rijeci", "label": "Kljucne rijeci", "terms": ["kljucne rijeci"] },
+          { "key": "sadrzaj", "label": "Sadrzaj", "terms": ["sadrzaj"] },
+          { "key": "tekst", "label": "Tekst rada", "terms": ["tekst rada", "uvod"] },
+          { "key": "zakljucak", "label": "Zakljucak", "terms": ["zakljucak"] },
+          { "key": "literatura", "label": "Popis literature", "terms": ["popis literature", "literatura"] }
+        ]
+      },
+      "facts": [
+        "OPE TEHNICKE UPUTE su imperativne: treba postivati tehnicke karakteristike, a font je obvezan (obavezna potpora svih hrvatskih znakova, Times New Roman).",
+        "Tehnicko oblikovanje: Times New Roman 12, prored 1,5, margine 2,5 cm sa svih strana, numeriranje stranica (pocinje od sadrzaja) i obostrano poravnanje (imperativ).",
+        "Rad mora sadrzavati naslovnicu, sazetak, kljucne rijeci, sadrzaj, tekst rada, zakljucak i popis literature (imperativ).",
+        "Opseg (50 do 60 kartica) i stil citiranja (APA) su advisory: opseg je u karticama i nije determinantan, a APA je psiholoski dodatak, ne jedinstven fakultetski standard."
+      ],
+      "note": "Diplomski rad iz Uputa za izradu i obranu diplomskoga rada (FHS, ak. 2025./2026.). Scored su imperativna tehnicka pravila iz odjeljka OPE TEHNICKE UPUTE (font, velicina, prored, margine, numeracija stranica, obostrano poravnanje, sadrzaj, obvezne cjeline). Opseg (kartice) i stil citiranja (APA) su advisory. word-count value (15000-18000) je izvedena procjena iz 50-60 kartica (1 kartica = 1800 znakova) i nije doslovna pa je advisory; napominjemo interni nesklad u izvoru (drugdje se navodi 50-70 kartica / 90.000-130.000 znakova).",
+      "sources": [
+        {
+          "title": "Upute za izradu i obranu diplomskoga rada (FHS, ak. 2025./2026.)",
+          "url": "https://www.fhs.hr/images/50014269/Upute%20za%20izradu%20i%20obranu%20diplomskoga%20rada%202025-2026%20(3).pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu i obranu diplomskoga rada (Fakultet hrvatskih studija, ak. 2025./2026.)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "font",
+        "velicina slova",
+        "prored",
+        "margine",
+        "numeracija stranica",
+        "obostrano poravnanje",
+        "sadrzaj",
+        "obvezne cjeline rada"
+      ],
+      "advisoryScope": [
+        "opseg (kartice)",
+        "stil citiranja (APA)"
+      ],
+      "catalogPrograms": [
+        "Diplomski studiji Fakulteta hrvatskih studija"
+      ]
+    },
+    {
+      "id": "fhs-zavrsni",
+      "unitId": "fhs",
+      "programs": [
+        "Prijediplomski studiji Fakulteta hrvatskih studija (zavrsni rad)"
+      ],
+      "workTypes": ["final"],
+      "status": "partial",
+      "profileLabel": "Fakultet hrvatskih studija, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": ["Times New Roman"],
+        "size": 12,
+        "spacing": 1.5,
+        "margins": { "top": 2.5, "right": 2.5, "bottom": 2.5, "left": 2.5 },
+        "requireToc": true,
+        "requirePageNumbers": true,
+        "checkJustify": true,
+        "checkMargins": true,
+        "requiredSections": [
+          { "key": "naslovnica", "label": "Naslovnica", "terms": ["naslovnica", "naslovnicu", "naslovna stranica"] },
+          { "key": "sazetak", "label": "Sazetak", "terms": ["sazetak"] },
+          { "key": "kljucne-rijeci", "label": "Kljucne rijeci", "terms": ["kljucne rijeci"] },
+          { "key": "sadrzaj", "label": "Sadrzaj", "terms": ["sadrzaj"] },
+          { "key": "tekst", "label": "Tekst rada", "terms": ["tekst rada", "uvod"] },
+          { "key": "zakljucak", "label": "Zakljucak", "terms": ["zakljucak"] },
+          { "key": "literatura", "label": "Popis literature", "terms": ["popis literature", "literatura"] }
+        ]
+      },
+      "facts": [
+        "Zavrsni rad se oblikuje prema istom odjeljku OPE TEHNICKE UPUTE kao i diplomski rad (font Times New Roman, obavezna potpora hrvatskih znakova).",
+        "Tehnicko oblikovanje: Times New Roman 12, prored 1,5, margine 2,5 cm, numeriranje stranica (pocinje od sadrzaja) i obostrano poravnanje (imperativ).",
+        "Rad mora sadrzavati naslovnicu, sazetak, kljucne rijeci, sadrzaj, tekst rada, zakljucak i popis literature (imperativ).",
+        "Opseg (16 do 20 kartica) je permisivan (zavrsni rad moze imati), a citiranje se prepusta odsjeckim uputama, pa su oboje advisory."
+      ],
+      "note": "Zavrsni (prijediplomski) rad iz Uputa za pisanje zavrsnoga i diplomskoga rada (FHS). Scored su imperativna tehnicka pravila iz odjeljka OPE TEHNICKE UPUTE. DVOJBA ZA LJUDSKI PREGLED: odjeljak OPE TEHNICKE UPUTE u tekstu opseg formulira za diplomski rad (Po svom opsegu diplomski rad treba imati...), a formatna pravila (font, prored, margine, numeracija, poravnanje) navodi opcenito; primjena tih formatnih pravila na zavrsni rad je razumna jer je dokument zajednicki za zavrsni i diplomski, ali nije eksplicitno vezana uz zavrsni. Opseg zavrsnoga (word-count value 4800-6000) je izvedena procjena iz 16-20 kartica i advisory.",
+      "sources": [
+        {
+          "title": "Upute za pisanje zavrsnoga i diplomskoga rada (FHS)",
+          "url": "https://www.fhs.hr/_download/repository/2021_2023__Nove_upute_za_prijavu_i_pisanje_zavrsnoga_i_diplomskoga_rada.doc.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za pisanje zavrsnoga i diplomskoga rada (Fakultet hrvatskih studija)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "font",
+        "velicina slova",
+        "prored",
+        "margine",
+        "numeracija stranica",
+        "obostrano poravnanje",
+        "sadrzaj",
+        "obvezne cjeline rada"
+      ],
+      "advisoryScope": [
+        "opseg (kartice)",
+        "stil citiranja (odsjecke upute)"
+      ],
+      "catalogPrograms": [
+        "Prijediplomski studiji Fakulteta hrvatskih studija (zavrsni rad)"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-fhs-diplomski--font-verified-2026-07-02",
+      "ruleId": "fhs-diplomski--font",
+      "profileId": "fhs-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fhs-upute-diplomski-2026",
+      "sourcePage": "odjeljak OPE TEHNICKE UPUTE",
+      "quote": "Font (tip pisma): obavezna potpora svih hrvatskih znakova",
+      "note": "Port pilot workflow. Imperativ: obavezna potpora; font Times New Roman."
+    },
+    {
+      "id": "led-fhs-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "fhs-diplomski--font-size",
+      "profileId": "fhs-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fhs-upute-diplomski-2026",
+      "sourcePage": "odjeljak OPE TEHNICKE UPUTE",
+      "quote": "Velicina pisma: 12 tipografskih tocaka",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fhs-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "fhs-diplomski--line-spacing",
+      "profileId": "fhs-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fhs-upute-diplomski-2026",
+      "sourcePage": "odjeljak OPE TEHNICKE UPUTE",
+      "quote": "Prored: 1,5 redak (sazetak ima jednostruki prored)",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fhs-diplomski--margins-verified-2026-07-02",
+      "ruleId": "fhs-diplomski--margins",
+      "profileId": "fhs-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fhs-upute-diplomski-2026",
+      "sourcePage": "odjeljak OPE TEHNICKE UPUTE",
+      "quote": "Lijeva i desna margina: 2,5 cm",
+      "note": "Port pilot workflow. Gornja i donja margina: 2,5 cm (isti odjeljak)."
+    },
+    {
+      "id": "led-fhs-diplomski--page-numbers-verified-2026-07-02",
+      "ruleId": "fhs-diplomski--page-numbers",
+      "profileId": "fhs-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fhs-upute-diplomski-2026",
+      "sourcePage": "odjeljak OPE TEHNICKE UPUTE",
+      "quote": "Numeriranje stranica (pocinje od sadrzaja): centrirano, dolje",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fhs-diplomski--justify-verified-2026-07-02",
+      "ruleId": "fhs-diplomski--justify",
+      "profileId": "fhs-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fhs-upute-diplomski-2026",
+      "sourcePage": "odjeljak OPE TEHNICKE UPUTE",
+      "quote": "Tekst je obostrano poravnat",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fhs-diplomski--toc-verified-2026-07-02",
+      "ruleId": "fhs-diplomski--toc",
+      "profileId": "fhs-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fhs-upute-diplomski-2026",
+      "sourcePage": "odjeljak OPE TEHNICKE UPUTE",
+      "quote": "Rad mora sadrzavati:",
+      "note": "Port pilot workflow. Sadrzaj je clan obveznoga popisa Rad mora sadrzavati."
+    },
+    {
+      "id": "led-fhs-diplomski--required-sections-verified-2026-07-02",
+      "ruleId": "fhs-diplomski--required-sections",
+      "profileId": "fhs-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fhs-upute-diplomski-2026",
+      "sourcePage": "odjeljak OPE TEHNICKE UPUTE",
+      "quote": "Rad mora sadrzavati:",
+      "note": "Port pilot workflow. Popis: naslovnica, sazetak, kljucne rijeci, sadrzaj, tekst rada, zakljucak, popis literature (prilozi neobavezno)."
+    },
+    {
+      "id": "led-fhs-diplomski--word-count-advisory-2026-07-02",
+      "ruleId": "fhs-diplomski--word-count",
+      "profileId": "fhs-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fhs-upute-diplomski-2026",
+      "sourcePage": "odjeljak OPE TEHNICKE UPUTE",
+      "quote": "Po svom opsegu diplomski rad treba imati od 50 do 60 kartica teksta",
+      "note": "Port pilot workflow. Opseg u karticama, izvedena procjena rijeci nije doslovna pa advisory."
+    },
+    {
+      "id": "led-fhs-diplomski--citation-style-advisory-2026-07-02",
+      "ruleId": "fhs-diplomski--citation-style",
+      "profileId": "fhs-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fhs-upute-diplomski-2026",
+      "sourcePage": "odjeljak OPE TEHNICKE UPUTE (APA standardi)",
+      "quote": "u skladu s APA standardima",
+      "note": "Port pilot workflow. APA je u psiholoskom dodatku, nije jedinstven fakultetski standard pa advisory."
+    },
+    {
+      "id": "led-fhs-zavrsni--font-verified-2026-07-02",
+      "ruleId": "fhs-zavrsni--font",
+      "profileId": "fhs-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fhs-upute-zavrsni-diplomski-2023",
+      "sourcePage": "odjeljak OPE TEHNICKE UPUTE",
+      "quote": "Font (tip pisma): obavezna potpora svih hrvatskih znakova",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fhs-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "fhs-zavrsni--font-size",
+      "profileId": "fhs-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fhs-upute-zavrsni-diplomski-2023",
+      "sourcePage": "odjeljak OPE TEHNICKE UPUTE",
+      "quote": "Velicina pisma: 12 tipografskih tocaka",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fhs-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "fhs-zavrsni--line-spacing",
+      "profileId": "fhs-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fhs-upute-zavrsni-diplomski-2023",
+      "sourcePage": "odjeljak OPE TEHNICKE UPUTE",
+      "quote": "Prored: 1,5 redak (sazetak ima jednostruki prored)",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fhs-zavrsni--margins-verified-2026-07-02",
+      "ruleId": "fhs-zavrsni--margins",
+      "profileId": "fhs-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fhs-upute-zavrsni-diplomski-2023",
+      "sourcePage": "odjeljak OPE TEHNICKE UPUTE",
+      "quote": "Lijeva i desna margina: 2,5 cm",
+      "note": "Port pilot workflow. Gornja i donja margina: 2,5 cm (isti odjeljak)."
+    },
+    {
+      "id": "led-fhs-zavrsni--page-numbers-verified-2026-07-02",
+      "ruleId": "fhs-zavrsni--page-numbers",
+      "profileId": "fhs-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fhs-upute-zavrsni-diplomski-2023",
+      "sourcePage": "odjeljak OPE TEHNICKE UPUTE",
+      "quote": "Numeriranje stranica (pocinje od sadrzaja): centrirano, dolje",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fhs-zavrsni--justify-verified-2026-07-02",
+      "ruleId": "fhs-zavrsni--justify",
+      "profileId": "fhs-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fhs-upute-zavrsni-diplomski-2023",
+      "sourcePage": "odjeljak OPE TEHNICKE UPUTE",
+      "quote": "Tekst je obostrano poravnat",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fhs-zavrsni--toc-verified-2026-07-02",
+      "ruleId": "fhs-zavrsni--toc",
+      "profileId": "fhs-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fhs-upute-zavrsni-diplomski-2023",
+      "sourcePage": "odjeljak OPE TEHNICKE UPUTE",
+      "quote": "Rad mora sadrzavati:",
+      "note": "Port pilot workflow. Sadrzaj je clan obveznoga popisa."
+    },
+    {
+      "id": "led-fhs-zavrsni--required-sections-verified-2026-07-02",
+      "ruleId": "fhs-zavrsni--required-sections",
+      "profileId": "fhs-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fhs-upute-zavrsni-diplomski-2023",
+      "sourcePage": "odjeljak OPE TEHNICKE UPUTE",
+      "quote": "Rad mora sadrzavati:",
+      "note": "Port pilot workflow. Isti obvezni popis cjelina kao diplomski."
+    },
+    {
+      "id": "led-fhs-zavrsni--word-count-advisory-2026-07-02",
+      "ruleId": "fhs-zavrsni--word-count",
+      "profileId": "fhs-zavrsni",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fhs-upute-zavrsni-diplomski-2023",
+      "sourcePage": "odjeljak 7. Mentor i tema zavrsnoga rada",
+      "quote": "Zavrsni rad moze imati od 28.000 do 45.000 znakova s",
+      "note": "Port pilot workflow. Permisivno (moze imati), u karticama; advisory."
+    },
+    {
+      "id": "led-fhs-zavrsni--citation-style-advisory-2026-07-02",
+      "ruleId": "fhs-zavrsni--citation-style",
+      "profileId": "fhs-zavrsni",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fhs-upute-zavrsni-diplomski-2023",
+      "sourcePage": "odjeljak Literatura (OPE TEHNICKE UPUTE)",
+      "quote": "pogledati zasebne upute koje se nalaze u folderima",
+      "note": "Port pilot workflow. Citiranje se prepusta odsjeckim uputama pa advisory."
+    }
+  ]
+}

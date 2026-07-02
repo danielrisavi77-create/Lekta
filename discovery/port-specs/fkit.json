@@ -1,0 +1,208 @@
+{
+  "faculty": "fkit",
+  "unit": null,
+  "catalogPrograms": [
+    "Diplomski studiji Fakulteta kemijskog inženjerstva i tehnologije",
+    "Prijediplomski studiji Fakulteta kemijskog inženjerstva i tehnologije (zavrsni rad)"
+  ],
+  "sources": [
+    {
+      "id": "fkit-pravilnik-2023",
+      "kind": "regulation",
+      "title": "Pravilnik o izradi zavrsnog/diplomskog rada i polaganju zavrsnog/diplomskog ispita na sveucilisnim prijediplomskim i diplomskim studijima (FKIT, 2023)",
+      "url": "https://www.fkit.unizg.hr/_download/repository/Pravilnik_o_izradi_zavrsnog-diplomskog_rada_i_polaganju_zavrsnog-diplomskog_ispita.pdf",
+      "publisher": "Fakultetsko vijece, Fakultet kemijskog inzenjerstva i tehnologije Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/fkit/fkit-pravilnik-2023.pdf",
+      "snapshotHash": "9b26902c83bfa669b3cb723dc93fcd42a71ea08d4c9c3ef1eea859ed532d097b",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Skeniran PDF bez tekstualnog sloja (pdftotext vraca 0 znakova); OCR nedostupan. Cuvan kao izvor autoriteta i provenijencije (maticni Pravilnik koji Izmjena iz 2025. mijenja); nijedno bodovano pravilo se ne izvodi iz njega. Operativna formatna pravila dolaze iz Izmjene i dopune (2025)."
+    },
+    {
+      "id": "fkit-izmjene-2025",
+      "kind": "regulation",
+      "title": "Izmjena i dopuna Pravilnika o izradi zavrsnog/diplomskog rada i polaganju zavrsnog/diplomskog ispita (FKIT, 2025)",
+      "url": "https://www.fkit.unizg.hr/_download/repository/Izmjene%20i%20dopune%20Pravilnika%20o%20izradi%20zavr%C5%A1nog%20diplomskog%20rada.pdf",
+      "publisher": "Fakultetsko vijece, Fakultet kemijskog inzenjerstva i tehnologije Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/fkit/fkit-izmjene-2025.pdf",
+      "snapshotHash": "07bd744a3101ea851da5bfa3d49d38bb53ac6fa2b77a52dacb6dad0ff5c8d193",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Izmjena clanka 9. Pravilnika (Fakultetsko vijece, 22.9.2025, objavljeno 25.9.2025, na snazi 3.10.2025). Daje imperativna faculty-wide formatna pravila za zavrsni i diplomski rad: A4, velicina slova 12 pt, prored 1,5. Tekstualni sloj ima artefakte kodiranja dijakritike (raeunalu=racunalu, velieina=velicina); vrijednosti A4/12 pt/1,5 su citljive i tocne. Citat verbatim provjeren grepom nad fkit-izmjene-2025.txt."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "fkit-diplomski",
+      "unitId": "fkit",
+      "programs": [
+        "Diplomski studiji Fakulteta kemijskog inženjerstva i tehnologije"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Fakultet kemijskog inženjerstva i tehnologije, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2025-09-22",
+      "rules": {
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "requireA4": true
+      },
+      "facts": [
+        "Diplomski rad mora biti napisan na listu formata A4 (imperativ iz Pravilnika, scored).",
+        "Velicina slova je 12 pt, prored 1,5 (imperativ iz Pravilnika, scored).",
+        "Glavni Pravilnik iz 2023. je skeniran bez tekstualnog sloja pa font, margine, numeracija, sadrzaj i citiranje nisu portani; portane vrijednosti dolaze iz Izmjene i dopune Pravilnika (2025)."
+      ],
+      "note": "Iz Izmjene i dopune Pravilnika o izradi zavrsnog/diplomskog rada (FKIT, 2025), clanak 1., koji mijenja clanak 9. stavak 1. maticnog Pravilnika. Imperativna, verbatim potvrdena formatna pravila (A4, velicina slova 12 pt, prored 1,5) su scored. VAZNO za ljudski pregled: (1) maticni Pravilnik 2023 je skeniran bez tekstualnog sloja, OCR nedostupan, pa nedostaju font, margine, numeracija, sadrzaj, citiranje i struktura; (2) tekstualni sloj Izmjene ima artefakte kodiranja dijakritike (citat sadrzi 'raeunalu' i 'velieina'), ali su vrijednosti citljive i tocne; (3) authority je binding pravilnik, demotan na program-page zbog owner-bulk-approval jer gate trazi reviewedBy za binding; (4) doktorski (DR.SC.-08) je iza AAI logina i nije portan.",
+      "sources": [
+        {
+          "title": "Izmjena i dopuna Pravilnika o izradi zavrsnog/diplomskog rada (FKIT, 2025)",
+          "url": "https://www.fkit.unizg.hr/_download/repository/Izmjene%20i%20dopune%20Pravilnika%20o%20izradi%20zavr%C5%A1nog%20diplomskog%20rada.pdf"
+        },
+        {
+          "title": "Pravilnik o izradi zavrsnog/diplomskog rada (FKIT, 2023)",
+          "url": "https://www.fkit.unizg.hr/_download/repository/Pravilnik_o_izradi_zavrsnog-diplomskog_rada_i_polaganju_zavrsnog-diplomskog_ispita.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o izradi zavrsnog/diplomskog rada (FKIT, 2023)",
+        "Izmjena i dopuna Pravilnika o izradi zavrsnog/diplomskog rada (FKIT, 2025)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "format papira (A4)",
+        "velicina slova",
+        "prored"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "fkit-zavrsni",
+      "unitId": "fkit",
+      "programs": [
+        "Prijediplomski studiji Fakulteta kemijskog inženjerstva i tehnologije (zavrsni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Fakultet kemijskog inženjerstva i tehnologije, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2025-09-22",
+      "rules": {
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "requireA4": true
+      },
+      "facts": [
+        "Zavrsni rad mora biti napisan na listu formata A4 (imperativ iz Pravilnika, scored).",
+        "Velicina slova je 12 pt, prored 1,5 (imperativ iz Pravilnika, scored).",
+        "Glavni Pravilnik iz 2023. je skeniran bez tekstualnog sloja pa font, margine, numeracija, sadrzaj i citiranje nisu portani; portane vrijednosti dolaze iz Izmjene i dopune Pravilnika (2025)."
+      ],
+      "note": "Iz Izmjene i dopune Pravilnika o izradi zavrsnog/diplomskog rada (FKIT, 2025), clanak 1., koji mijenja clanak 9. stavak 1. maticnog Pravilnika. Isto pravilo izrijekom pokriva i zavrsni (prijediplomski) i diplomski rad. Imperativna, verbatim potvrdena formatna pravila (A4, velicina slova 12 pt, prored 1,5) su scored. VAZNO za ljudski pregled: (1) maticni Pravilnik 2023 je skeniran bez tekstualnog sloja, OCR nedostupan, pa nedostaju font, margine, numeracija, sadrzaj, citiranje i struktura; (2) tekstualni sloj Izmjene ima artefakte kodiranja dijakritike (citat sadrzi 'raeunalu' i 'velieina'), ali su vrijednosti citljive i tocne; (3) authority je binding pravilnik, demotan na program-page zbog owner-bulk-approval jer gate trazi reviewedBy za binding.",
+      "sources": [
+        {
+          "title": "Izmjena i dopuna Pravilnika o izradi zavrsnog/diplomskog rada (FKIT, 2025)",
+          "url": "https://www.fkit.unizg.hr/_download/repository/Izmjene%20i%20dopune%20Pravilnika%20o%20izradi%20zavr%C5%A1nog%20diplomskog%20rada.pdf"
+        },
+        {
+          "title": "Pravilnik o izradi zavrsnog/diplomskog rada (FKIT, 2023)",
+          "url": "https://www.fkit.unizg.hr/_download/repository/Pravilnik_o_izradi_zavrsnog-diplomskog_rada_i_polaganju_zavrsnog-diplomskog_ispita.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o izradi zavrsnog/diplomskog rada (FKIT, 2023)",
+        "Izmjena i dopuna Pravilnika o izradi zavrsnog/diplomskog rada (FKIT, 2025)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "format papira (A4)",
+        "velicina slova",
+        "prored"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-fkit-diplomski--paper-size-verified-2026-07-02",
+      "ruleId": "fkit-diplomski--paper-size",
+      "profileId": "fkit-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fkit-izmjene-2025",
+      "sourcePage": "Clanak 1. (izmjena clanka 9. stavka 1. Pravilnika)",
+      "quote": "diplomski rad mora biti napisan na raeunalu, na listu formata A4 (velieina slova 12 pt), prored 1,5.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fkit-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "fkit-diplomski--font-size",
+      "profileId": "fkit-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fkit-izmjene-2025",
+      "sourcePage": "Clanak 1. (izmjena clanka 9. stavka 1. Pravilnika)",
+      "quote": "diplomski rad mora biti napisan na raeunalu, na listu formata A4 (velieina slova 12 pt), prored 1,5.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fkit-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "fkit-diplomski--line-spacing",
+      "profileId": "fkit-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fkit-izmjene-2025",
+      "sourcePage": "Clanak 1. (izmjena clanka 9. stavka 1. Pravilnika)",
+      "quote": "diplomski rad mora biti napisan na raeunalu, na listu formata A4 (velieina slova 12 pt), prored 1,5.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fkit-zavrsni--paper-size-verified-2026-07-02",
+      "ruleId": "fkit-zavrsni--paper-size",
+      "profileId": "fkit-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fkit-izmjene-2025",
+      "sourcePage": "Clanak 1. (izmjena clanka 9. stavka 1. Pravilnika)",
+      "quote": "diplomski rad mora biti napisan na raeunalu, na listu formata A4 (velieina slova 12 pt), prored 1,5.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fkit-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "fkit-zavrsni--font-size",
+      "profileId": "fkit-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fkit-izmjene-2025",
+      "sourcePage": "Clanak 1. (izmjena clanka 9. stavka 1. Pravilnika)",
+      "quote": "diplomski rad mora biti napisan na raeunalu, na listu formata A4 (velieina slova 12 pt), prored 1,5.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fkit-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "fkit-zavrsni--line-spacing",
+      "profileId": "fkit-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fkit-izmjene-2025",
+      "sourcePage": "Clanak 1. (izmjena clanka 9. stavka 1. Pravilnika)",
+      "quote": "diplomski rad mora biti napisan na raeunalu, na listu formata A4 (velieina slova 12 pt), prored 1,5.",
+      "note": "Port pilot workflow."
+    }
+  ]
+}

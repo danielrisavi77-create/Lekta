@@ -1,0 +1,125 @@
+{
+  "faculty": "alu",
+  "unit": null,
+  "catalogPrograms": [
+    "Diplomski studiji Akademije likovnih umjetnosti"
+  ],
+  "sources": [
+    {
+      "id": "alu-pravilnik-diplomski-2014",
+      "kind": "regulation",
+      "title": "Pravilnik o diplomskom radu i diplomskom ispitu (Akademija likovnih umjetnosti, 2014)",
+      "url": "https://www.alu.unizg.hr//alu/cms/upload/dokumenti/PRAVILNIK_O_DIPLOMSKOM_RADU_I_DIPLOMSKOM_ISPITU_lipanj_2014.pdf",
+      "publisher": "Akademija likovnih umjetnosti Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/alu/alu-pravilnik-diplomski-2014.pdf",
+      "snapshotHash": "add03721e40b03cc2d3b688a5dd7fb4f7b714a0eff47d786396bd891a550892b",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Faculty-wide obvezujuci Pravilnik ALU (Akademijsko vijece, 23.5.2014). Opce odredbe reguliraju postupak (prijava, obrana, povjerenstvo, ocjena, pohrana) i faculty-wide propisuju samo da se diplomski rad sastoji od likovnog dijela i pisanog obrazlozenja (Cl. 3). Tehnicko oblikovanje pisanog obrazlozenja (velicina slova 12 tocaka, klasicni prored, format A4, opseg u karticama) propisano je iskljucivo u Posebnim odredbama pojedinih odsjeka i vrijednosti se razlikuju medju odsjecima, pa nema faculty-wide imperativnog formatnog pravila. Svi citati verbatim provjereni grepom nad alu-pravilnik-diplomski-2014.txt. Pravilnik o studiranju ALU dohvacen je zasebno, ali ne sadrzi nijedno formatno pravilo (samo ECTS/postupak) pa nije ukljucen kao izvor."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "alu-diplomski",
+      "unitId": "alu",
+      "programs": [
+        "Diplomski studiji Akademije likovnih umjetnosti"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Akademija likovnih umjetnosti, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2014-05-23",
+      "rules": {},
+      "facts": [
+        "Diplomski rad se faculty-wide sastoji od likovnog dijela i pisanog obrazlozenja (Cl. 3, imperativ).",
+        "Tehnicko oblikovanje pisanog obrazlozenja propisuju Posebne odredbe pojedinih odsjeka i vrijednosti se razlikuju: Slikarski 5-15 kartica, velicina slova 12 tocaka, klasicni prored (Cl. 32); Kiparski 10-20 kartica, 12 tocaka, polozeni format A4 (Cl. 39); Graficki 15-25 kartica, format A4 (Cl. 49); Novi mediji 18000-30000 znakova, do 7000 rijeci, 10-17 kartica (Cl. 77).",
+        "Nema faculty-wide imperativnog pravila za font, margine, numeraciju stranica, sadrzaj (toc), obostrano poravnanje ni stil citiranja, pa se nijedna dimenzija ne boduje (scored=0); sve je advisory uz napomenu o razlici po odsjeku."
+      ],
+      "note": "Iz faculty-wide Pravilnika o diplomskom radu i diplomskom ispitu (ALU, 2014). VAZNO za ljudski pregled: sve formatne vrijednosti (12 tocaka, klasicni prored, A4, opseg u karticama) su odsjecke Posebne odredbe koje se razlikuju medju odsjecima (Slikarski, Kiparski, Graficki, Nastavnicki, Odsjek za animirani film i nove medije, Odsjek za konzerviranje i restauriranje), pa nijedno formatno pravilo nije univerzalno faculty-wide i nista se ne boduje. Ako se zeli scored pokrivenost, treba raditi zasebne profile po odsjeku iz odsjeckih Posebnih odredbi. Zavrsni (prijediplomski) i doktorski nisu pokriveni ovim izvorom.",
+      "sources": [
+        {
+          "title": "Pravilnik o diplomskom radu i diplomskom ispitu (ALU, 2014)",
+          "url": "https://www.alu.unizg.hr//alu/cms/upload/dokumenti/PRAVILNIK_O_DIPLOMSKOM_RADU_I_DIPLOMSKOM_ISPITU_lipanj_2014.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o diplomskom radu i diplomskom ispitu (Akademija likovnih umjetnosti, 2014)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [],
+      "advisoryScope": [
+        "velicina slova (12 tocaka, odsjecko)",
+        "prored (klasicni, odsjecko)",
+        "format papira (A4, odsjecko)",
+        "opseg pisanog obrazlozenja u karticama (odsjecko)",
+        "obvezni dijelovi diplomskog rada (likovni dio i pisano obrazlozenje)"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-alu-diplomski--font-size-advisory-2026-07-02",
+      "ruleId": "alu-diplomski--font-size",
+      "profileId": "alu-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "alu-pravilnik-diplomski-2014",
+      "sourcePage": "Clanak 32. (Slikarski odsjek)",
+      "quote": "najmanje 5 a najvise 15 kartica pisanog teksta pisanih velicinom slova od 12 tocaka, klasicnim proredom",
+      "note": "Port pilot workflow. Odsjecka odredba (Slikarski), nije faculty-wide, ostaje advisory."
+    },
+    {
+      "id": "led-alu-diplomski--line-spacing-advisory-2026-07-02",
+      "ruleId": "alu-diplomski--line-spacing",
+      "profileId": "alu-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "alu-pravilnik-diplomski-2014",
+      "sourcePage": "Clanak 32. (Slikarski odsjek)",
+      "quote": "najmanje 5 a najvise 15 kartica pisanog teksta pisanih velicinom slova od 12 tocaka, klasicnim proredom",
+      "note": "Port pilot workflow. 'Klasicni prored' nije numericki i odsjecko je, ostaje advisory."
+    },
+    {
+      "id": "led-alu-diplomski--paper-size-advisory-2026-07-02",
+      "ruleId": "alu-diplomski--paper-size",
+      "profileId": "alu-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "alu-pravilnik-diplomski-2014",
+      "sourcePage": "Clanak 39. (Kiparski odsjek)",
+      "quote": "Pisano obrazlozenje ispisuje se u polozenom formatu A4, tvrdi uvez.",
+      "note": "Port pilot workflow. Odsjecka odredba (Kiparski/Graficki), nije faculty-wide, ostaje advisory."
+    },
+    {
+      "id": "led-alu-diplomski--page-count-advisory-2026-07-02",
+      "ruleId": "alu-diplomski--page-count",
+      "profileId": "alu-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "alu-pravilnik-diplomski-2014",
+      "sourcePage": "Clanak 32. (Slikarski odsjek)",
+      "quote": "najmanje 5 a najvise 15 kartica pisanog teksta pisanih velicinom slova od 12 tocaka, klasicnim proredom",
+      "note": "Port pilot workflow. Raspon kartica razlikuje se po odsjeku (5-15, 10-20, 15-25); value je faculty envelope, ostaje advisory."
+    },
+    {
+      "id": "led-alu-diplomski--required-sections-advisory-2026-07-02",
+      "ruleId": "alu-diplomski--required-sections",
+      "profileId": "alu-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "alu-pravilnik-diplomski-2014",
+      "sourcePage": "Clanak 3.",
+      "quote": "koji se sastoji od likovnog dijela i pisanog obrazlozenja",
+      "note": "Port pilot workflow. Faculty-wide imperativ, ali nije strojno provjerljiva dokumentna struktura (likovni dio + pisano obrazlozenje), ostaje advisory."
+    }
+  ]
+}

@@ -7836,5 +7836,1114 @@
       "stil citiranja (APA)"
     ],
     "advisoryScope": []
+  },
+  {
+    "id": "arh-diplomski",
+    "unitId": "arh",
+    "programs": [
+      "Diplomski studiji Arhitektonskog fakulteta"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Arhitektonski fakultet, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2013-02-05",
+    "rules": {
+      "requireToc": true,
+      "requiredSections": [
+        {
+          "key": "naslovnica",
+          "label": "Naslovna stranica",
+          "terms": [
+            "naslovna stranica",
+            "naslovnica"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadrzaj",
+          "terms": [
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "pisani-dio",
+          "label": "Pisani dio (obrazlozenje projekta)",
+          "terms": [
+            "obrazlozenje projekta",
+            "pisani dio",
+            "obrazlozenje"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura / izvori",
+          "terms": [
+            "literatura",
+            "popis literature",
+            "izvori"
+          ]
+        }
+      ]
+    },
+    "facts": [
+      "Diplomski rad obvezno sadrzi uvodni istrazivacki dio (knjizica A4 ili A3), diplomski projekt (izlozbeni poster A0 i cetiri primjerka knjizice A3) i digitalni medij (imperativ).",
+      "Knjizica A3 obvezno sadrzi naslovnu stranicu, sadrzaj, pisani dio s obrazlozenjem projekta, tehnickim pokazateljima i literaturom/izvorima te nacrte i graficke priloge (imperativ, scored: sadrzaj i obvezne cjeline).",
+      "Rad je projektantski/planerski (poster A0, knjizice A3), a ne klasicni tekstualni dokument, pa Pravilnik ne propisuje font, velicinu slova, prored, margine, numeraciju stranica ni stil citiranja.",
+      "Format je A3/A0 (ne A4) pa se ne boduje standardnom A4 provjerom (advisory)."
+    ],
+    "note": "Iz obvezujuceg Pravilnika o diplomskom radu (AF, 2013). Diplomski rad na studiju arhitekture i urbanizma je projekt, pa su scored samo imperativna sadrzajna pravila iz cl. 16.: obvezan Sadrzaj i obvezne cjeline pisanog dijela. Nema fakultetski propisanog fonta, margina, prореda, numeracije ni citatnog stila. VAZNO za ljudski pregled: (1) authority je binding jer je izvor Pravilnik, pa obvezujuca pravila prije objave trebaju drugog odobravatelja (reviewedBy je zasad null); (2) required-sections su prilagodjene projektnoj knjizici (naslovnica, sadrzaj, pisani dio, literatura) pa mogu davati false-negative na klasicnom tekstualnom .docx; (3) program Dizajn (isti fakultet) moze imati vlastite upute za zavrsni/diplomski rad koje nisu pronadjene kao sluzbeni PDF.",
+    "sources": [
+      {
+        "title": "Pravilnik o diplomskom radu (Arhitektonski fakultet, 2013)",
+        "url": "https://www.arhitekt.hr/files/file/javni-dokumenti/Pravilnik%20o%20diplomskom%20radu.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o diplomskom radu Arhitektonskog fakulteta Sveucilista u Zagrebu (2013)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "sadrzaj",
+      "obvezne cjeline rada"
+    ],
+    "advisoryScope": [
+      "format papira (A3/A0)"
+    ],
+    "catalogPrograms": [
+      "Diplomski studiji Arhitektonskog fakulteta"
+    ]
+  },
+  {
+    "id": "fkit-diplomski",
+    "unitId": "fkit",
+    "programs": [
+      "Diplomski studiji Fakulteta kemijskog inženjerstva i tehnologije"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Fakultet kemijskog inženjerstva i tehnologije, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2025-09-22",
+    "rules": {
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true
+    },
+    "facts": [
+      "Diplomski rad mora biti napisan na listu formata A4 (imperativ iz Pravilnika, scored).",
+      "Velicina slova je 12 pt, prored 1,5 (imperativ iz Pravilnika, scored).",
+      "Glavni Pravilnik iz 2023. je skeniran bez tekstualnog sloja pa font, margine, numeracija, sadrzaj i citiranje nisu portani; portane vrijednosti dolaze iz Izmjene i dopune Pravilnika (2025)."
+    ],
+    "note": "Iz Izmjene i dopune Pravilnika o izradi zavrsnog/diplomskog rada (FKIT, 2025), clanak 1., koji mijenja clanak 9. stavak 1. maticnog Pravilnika. Imperativna, verbatim potvrdena formatna pravila (A4, velicina slova 12 pt, prored 1,5) su scored. VAZNO za ljudski pregled: (1) maticni Pravilnik 2023 je skeniran bez tekstualnog sloja, OCR nedostupan, pa nedostaju font, margine, numeracija, sadrzaj, citiranje i struktura; (2) tekstualni sloj Izmjene ima artefakte kodiranja dijakritike (citat sadrzi 'raeunalu' i 'velieina'), ali su vrijednosti citljive i tocne; (3) authority je binding pravilnik, demotan na program-page zbog owner-bulk-approval jer gate trazi reviewedBy za binding; (4) doktorski (DR.SC.-08) je iza AAI logina i nije portan.",
+    "sources": [
+      {
+        "title": "Izmjena i dopuna Pravilnika o izradi zavrsnog/diplomskog rada (FKIT, 2025)",
+        "url": "https://www.fkit.unizg.hr/_download/repository/Izmjene%20i%20dopune%20Pravilnika%20o%20izradi%20zavr%C5%A1nog%20diplomskog%20rada.pdf"
+      },
+      {
+        "title": "Pravilnik o izradi zavrsnog/diplomskog rada (FKIT, 2023)",
+        "url": "https://www.fkit.unizg.hr/_download/repository/Pravilnik_o_izradi_zavrsnog-diplomskog_rada_i_polaganju_zavrsnog-diplomskog_ispita.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o izradi zavrsnog/diplomskog rada (FKIT, 2023)",
+      "Izmjena i dopuna Pravilnika o izradi zavrsnog/diplomskog rada (FKIT, 2025)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "format papira (A4)",
+      "velicina slova",
+      "prored"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "fkit-zavrsni",
+    "unitId": "fkit",
+    "programs": [
+      "Prijediplomski studiji Fakulteta kemijskog inženjerstva i tehnologije (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Fakultet kemijskog inženjerstva i tehnologije, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2025-09-22",
+    "rules": {
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true
+    },
+    "facts": [
+      "Zavrsni rad mora biti napisan na listu formata A4 (imperativ iz Pravilnika, scored).",
+      "Velicina slova je 12 pt, prored 1,5 (imperativ iz Pravilnika, scored).",
+      "Glavni Pravilnik iz 2023. je skeniran bez tekstualnog sloja pa font, margine, numeracija, sadrzaj i citiranje nisu portani; portane vrijednosti dolaze iz Izmjene i dopune Pravilnika (2025)."
+    ],
+    "note": "Iz Izmjene i dopune Pravilnika o izradi zavrsnog/diplomskog rada (FKIT, 2025), clanak 1., koji mijenja clanak 9. stavak 1. maticnog Pravilnika. Isto pravilo izrijekom pokriva i zavrsni (prijediplomski) i diplomski rad. Imperativna, verbatim potvrdena formatna pravila (A4, velicina slova 12 pt, prored 1,5) su scored. VAZNO za ljudski pregled: (1) maticni Pravilnik 2023 je skeniran bez tekstualnog sloja, OCR nedostupan, pa nedostaju font, margine, numeracija, sadrzaj, citiranje i struktura; (2) tekstualni sloj Izmjene ima artefakte kodiranja dijakritike (citat sadrzi 'raeunalu' i 'velieina'), ali su vrijednosti citljive i tocne; (3) authority je binding pravilnik, demotan na program-page zbog owner-bulk-approval jer gate trazi reviewedBy za binding.",
+    "sources": [
+      {
+        "title": "Izmjena i dopuna Pravilnika o izradi zavrsnog/diplomskog rada (FKIT, 2025)",
+        "url": "https://www.fkit.unizg.hr/_download/repository/Izmjene%20i%20dopune%20Pravilnika%20o%20izradi%20zavr%C5%A1nog%20diplomskog%20rada.pdf"
+      },
+      {
+        "title": "Pravilnik o izradi zavrsnog/diplomskog rada (FKIT, 2023)",
+        "url": "https://www.fkit.unizg.hr/_download/repository/Pravilnik_o_izradi_zavrsnog-diplomskog_rada_i_polaganju_zavrsnog-diplomskog_ispita.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o izradi zavrsnog/diplomskog rada (FKIT, 2023)",
+      "Izmjena i dopuna Pravilnika o izradi zavrsnog/diplomskog rada (FKIT, 2025)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "format papira (A4)",
+      "velicina slova",
+      "prored"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "pbf-diplomski",
+    "unitId": "pbf",
+    "programs": [
+      "Diplomski studiji Prehrambeno-biotehnološkog fakulteta"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Prehrambeno-biotehnoloski fakultet, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": 12,
+      "spacing": 1.5,
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "requireA4": true,
+      "recommendedCitation": "harvard",
+      "requiredSections": [
+        {
+          "key": "naslovnica",
+          "label": "Naslovnica (korice)",
+          "terms": [
+            "naslovnica",
+            "korice",
+            "diplomski rad"
+          ]
+        },
+        {
+          "key": "kartica",
+          "label": "Temeljna dokumentacijska kartica (sazetak)",
+          "terms": [
+            "temeljna dokumentacijska kartica",
+            "sazetak",
+            "kljucne rijeci"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadrzaj",
+          "terms": [
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "teorijski",
+          "label": "Teorijski dio",
+          "terms": [
+            "teorijski dio",
+            "pregled literature"
+          ]
+        },
+        {
+          "key": "eksperimentalni",
+          "label": "Eksperimentalni dio",
+          "terms": [
+            "eksperimentalni dio",
+            "materijali i metode"
+          ]
+        },
+        {
+          "key": "rezultati",
+          "label": "Rezultati i rasprava",
+          "terms": [
+            "rezultati i rasprava",
+            "rezultati",
+            "rasprava"
+          ]
+        },
+        {
+          "key": "zakljucci",
+          "label": "Zakljucci",
+          "terms": [
+            "zakljucci",
+            "zakljucak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "literatura",
+            "popis literature"
+          ]
+        }
+      ]
+    },
+    "facts": [
+      "Diplomski rad mora sadrzavati propisane uvodne stranice (naslovnica, temeljna dokumentacijska kartica sa sazetkom, sadrzaj) te glavna poglavlja Uvod, Teorijski dio, Eksperimentalni dio, Rezultati i Rasprava, Zakljucci i Literatura (imperativ).",
+      "Tekst se pise u formatu Times New Roman 12 s proredom 1,5 na papiru A4; opseg je najmanje 40 i najvise 80 stranica bez Priloga; numeracija stranica pocinje u poglavlju Uvod, a zavrsava u poglavlju Literatura (imperativ).",
+      "Literaturni navodi svrstavaju se prema harvardskom ILI numerickom sustavu; buduci da je izbor prepusten, stil citiranja je advisory (preporuceni prikaz je harvard)."
+    ],
+    "note": "Diplomski rad iz sluzbenih Uputa za izradu diplomskog rada PBF-a (odjeljak 5. Pisanje diplomskog rada). Scored su imperativna pravila oblikovanja, opsega, numeracije stranica i strukture; stil citiranja je advisory jer izvor dopusta izbor izmedu harvardskog i numerickog sustava. Izvor je dohvacen preko Wayback Machine (live CMS migriran); aktualni 2021 Prilog 2 nije bio dostupan pa je za produkciju potrebna ljudska reverifikacija prema aktualnom izdanju. Zavrsni (prijediplomski) i doktorski profili nisu izradeni jer njihovi PBF izvori nisu bili dohvatljivi.",
+    "sources": [
+      {
+        "title": "Upute za izradu diplomskog rada (Prehrambeno-biotehnoloski fakultet)",
+        "url": "http://www.pbf.unizg.hr/content/download/793/9738/file/Upute%20za%20izradu%20diplomskog%20rada.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu diplomskog rada (Prehrambeno-biotehnoloski fakultet)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "format papira",
+      "numeracija stranica",
+      "sadrzaj",
+      "obvezne cjeline rada",
+      "opseg (stranice)"
+    ],
+    "advisoryScope": [
+      "stil citiranja (harvardski ili numericki)"
+    ],
+    "catalogPrograms": [
+      "Diplomski studiji Prehrambeno-biotehnološkog fakulteta"
+    ]
+  },
+  {
+    "id": "ffrz-diplomski",
+    "unitId": "ffrz",
+    "programs": [
+      "Diplomski studiji Fakulteta filozofije i religijskih znanosti"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Fakultet filozofije i religijskih znanosti, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2021-12-01",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": 12,
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "requireA4": true,
+      "checkMargins": true,
+      "recommendedCitation": "harvard",
+      "requiredSections": [
+        {
+          "key": "naslovnica",
+          "label": "Naslovnica",
+          "terms": [
+            "naslovnica"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sazetak i kljucne rijeci",
+          "terms": [
+            "sazetak",
+            "kljucne rijeci"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadrzaj",
+          "terms": [
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod (tekst rada)",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zakljucak",
+          "terms": [
+            "zakljucak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Popis literature",
+          "terms": [
+            "popis literature",
+            "literatura"
+          ]
+        },
+        {
+          "key": "zivotopis",
+          "label": "Zivotopis",
+          "terms": [
+            "zivotopis"
+          ]
+        }
+      ]
+    },
+    "facts": [
+      "Rad treba biti ispisan na papiru A4 i sadrzavati najmanje 50 stranica teksta (imperativ).",
+      "Postavke stranice: Times New Roman 12, prored 1,5, margine 2,5 cm (imperativ).",
+      "Numeriraju se sve stranice od uvoda do kraja rada, broj u donjem desnom uglu (imperativ).",
+      "Rad mora sadrzavati naslovnicu, sazetak s kljucnim rijecima, sadrzaj, tekst (uvod), zakljucak, popis literature i zivotopis (imperativ).",
+      "Citira se prema pravilima casopisa Obnovljeni zivot, harvardski nacin po standardu APA (imperativ)."
+    ],
+    "note": "Diplomski rad iz sluzbenih fakultetskih Uputa za formalno oblikovanje diplomskoga rada (FFRZ, 2021). Cijelo tehnicko oblikovanje je imperativno pa je scored. Citiranje je autor-godina (Obnovljeni zivot / harvardski po APA) -> harvard. Obostrano poravnanje nije spomenuto pa nema justify pravila.",
+    "sources": [
+      {
+        "title": "Upute za formalno oblikovanje diplomskoga rada (FFRZ, 2021)",
+        "url": "https://www.ffrz.unizg.hr/wp-content/uploads/2021/12/Upute-za-formalno-oblikovanje-diplomskog-rada.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za formalno oblikovanje diplomskoga rada (Fakultet filozofije i religijskih znanosti, 2021)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "format papira",
+      "numeracija stranica",
+      "opseg (stranice)",
+      "sadrzaj",
+      "obvezne cjeline rada",
+      "stil citiranja"
+    ],
+    "advisoryScope": [],
+    "catalogPrograms": [
+      "Diplomski studiji Fakulteta filozofije i religijskih znanosti"
+    ]
+  },
+  {
+    "id": "ffrz-bakalaureatski",
+    "unitId": "ffrz",
+    "programs": [
+      "Prijediplomski studiji Fakulteta filozofije i religijskih znanosti (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Fakultet filozofije i religijskih znanosti, bakalaureatski (zavrsni) rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2021-12-01",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": 12,
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "requireA4": true,
+      "checkMargins": true,
+      "recommendedCitation": "harvard",
+      "requiredSections": [
+        {
+          "key": "naslovnica",
+          "label": "Naslovnica",
+          "terms": [
+            "naslovnica"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sazetak i kljucne rijeci",
+          "terms": [
+            "sazetak",
+            "kljucne rijeci"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadrzaj",
+          "terms": [
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod (tekst rada)",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zakljucak",
+          "terms": [
+            "zakljucak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Popis literature",
+          "terms": [
+            "popis literature",
+            "literatura"
+          ]
+        },
+        {
+          "key": "zivotopis",
+          "label": "Zivotopis",
+          "terms": [
+            "zivotopis"
+          ]
+        }
+      ]
+    },
+    "facts": [
+      "Rad treba biti ispisan na papiru A4 i sadrzavati najmanje 30 stranica teksta (imperativ).",
+      "Postavke stranice: Times New Roman 12, prored 1,5, margine 2,5 cm (imperativ).",
+      "Numeriraju se sve stranice od uvoda do kraja rada, broj u donjem desnom uglu (imperativ).",
+      "Rad mora sadrzavati naslovnicu, sazetak s kljucnim rijecima, sadrzaj, tekst (uvod), zakljucak, popis literature i zivotopis (imperativ).",
+      "Citira se prema pravilima casopisa Obnovljeni zivot, harvardski nacin po standardu APA (imperativ)."
+    ],
+    "note": "Bakalaureatski (zavrsni) rad preddiplomskog studija iz sluzbenih fakultetskih Uputa za formalno oblikovanje bakalaureatskog rada (FFRZ, 2021). Identicno diplomskima osim opsega (najmanje 30 stranica). Cijelo tehnicko oblikovanje je imperativno pa je scored. Obostrano poravnanje nije spomenuto pa nema justify pravila.",
+    "sources": [
+      {
+        "title": "Upute za formalno oblikovanje bakalaureatskog rada (FFRZ, 2021)",
+        "url": "https://www.ffrz.unizg.hr/wp-content/uploads/2021/12/Upute-za-formalno-oblikovanje-bakalaureatskog-rada.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za formalno oblikovanje bakalaureatskog rada (zavrsnog rada preddiplomskog studija) (Fakultet filozofije i religijskih znanosti, 2021)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "format papira",
+      "numeracija stranica",
+      "opseg (stranice)",
+      "sadrzaj",
+      "obvezne cjeline rada",
+      "stil citiranja"
+    ],
+    "advisoryScope": [],
+    "catalogPrograms": [
+      "Prijediplomski studiji Fakulteta filozofije i religijskih znanosti (zavrsni rad)"
+    ]
+  },
+  {
+    "id": "fhs-diplomski",
+    "unitId": "fhs",
+    "programs": [
+      "Diplomski studiji Fakulteta hrvatskih studija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Fakultet hrvatskih studija, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": 12,
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "checkJustify": true,
+      "checkMargins": true,
+      "recommendedCitation": "apa7",
+      "requiredSections": [
+        {
+          "key": "naslovnica",
+          "label": "Naslovnica",
+          "terms": [
+            "naslovnica",
+            "naslovnicu",
+            "naslovna stranica"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sazetak",
+          "terms": [
+            "sazetak"
+          ]
+        },
+        {
+          "key": "kljucne-rijeci",
+          "label": "Kljucne rijeci",
+          "terms": [
+            "kljucne rijeci"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadrzaj",
+          "terms": [
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "tekst",
+          "label": "Tekst rada",
+          "terms": [
+            "tekst rada",
+            "uvod"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zakljucak",
+          "terms": [
+            "zakljucak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Popis literature",
+          "terms": [
+            "popis literature",
+            "literatura"
+          ]
+        }
+      ]
+    },
+    "facts": [
+      "OPE TEHNICKE UPUTE su imperativne: treba postivati tehnicke karakteristike, a font je obvezan (obavezna potpora svih hrvatskih znakova, Times New Roman).",
+      "Tehnicko oblikovanje: Times New Roman 12, prored 1,5, margine 2,5 cm sa svih strana, numeriranje stranica (pocinje od sadrzaja) i obostrano poravnanje (imperativ).",
+      "Rad mora sadrzavati naslovnicu, sazetak, kljucne rijeci, sadrzaj, tekst rada, zakljucak i popis literature (imperativ).",
+      "Opseg (50 do 60 kartica) i stil citiranja (APA) su advisory: opseg je u karticama i nije determinantan, a APA je psiholoski dodatak, ne jedinstven fakultetski standard."
+    ],
+    "note": "Diplomski rad iz Uputa za izradu i obranu diplomskoga rada (FHS, ak. 2025./2026.). Scored su imperativna tehnicka pravila iz odjeljka OPE TEHNICKE UPUTE (font, velicina, prored, margine, numeracija stranica, obostrano poravnanje, sadrzaj, obvezne cjeline). Opseg (kartice) i stil citiranja (APA) su advisory. word-count value (15000-18000) je izvedena procjena iz 50-60 kartica (1 kartica = 1800 znakova) i nije doslovna pa je advisory; napominjemo interni nesklad u izvoru (drugdje se navodi 50-70 kartica / 90.000-130.000 znakova).",
+    "sources": [
+      {
+        "title": "Upute za izradu i obranu diplomskoga rada (FHS, ak. 2025./2026.)",
+        "url": "https://www.fhs.hr/images/50014269/Upute%20za%20izradu%20i%20obranu%20diplomskoga%20rada%202025-2026%20(3).pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu i obranu diplomskoga rada (Fakultet hrvatskih studija, ak. 2025./2026.)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "numeracija stranica",
+      "obostrano poravnanje",
+      "sadrzaj",
+      "obvezne cjeline rada"
+    ],
+    "advisoryScope": [
+      "opseg (kartice)",
+      "stil citiranja (APA)"
+    ],
+    "catalogPrograms": [
+      "Diplomski studiji Fakulteta hrvatskih studija"
+    ]
+  },
+  {
+    "id": "fhs-zavrsni",
+    "unitId": "fhs",
+    "programs": [
+      "Prijediplomski studiji Fakulteta hrvatskih studija (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Fakultet hrvatskih studija, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": 12,
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "checkJustify": true,
+      "checkMargins": true,
+      "requiredSections": [
+        {
+          "key": "naslovnica",
+          "label": "Naslovnica",
+          "terms": [
+            "naslovnica",
+            "naslovnicu",
+            "naslovna stranica"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sazetak",
+          "terms": [
+            "sazetak"
+          ]
+        },
+        {
+          "key": "kljucne-rijeci",
+          "label": "Kljucne rijeci",
+          "terms": [
+            "kljucne rijeci"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadrzaj",
+          "terms": [
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "tekst",
+          "label": "Tekst rada",
+          "terms": [
+            "tekst rada",
+            "uvod"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zakljucak",
+          "terms": [
+            "zakljucak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Popis literature",
+          "terms": [
+            "popis literature",
+            "literatura"
+          ]
+        }
+      ]
+    },
+    "facts": [
+      "Zavrsni rad se oblikuje prema istom odjeljku OPE TEHNICKE UPUTE kao i diplomski rad (font Times New Roman, obavezna potpora hrvatskih znakova).",
+      "Tehnicko oblikovanje: Times New Roman 12, prored 1,5, margine 2,5 cm, numeriranje stranica (pocinje od sadrzaja) i obostrano poravnanje (imperativ).",
+      "Rad mora sadrzavati naslovnicu, sazetak, kljucne rijeci, sadrzaj, tekst rada, zakljucak i popis literature (imperativ).",
+      "Opseg (16 do 20 kartica) je permisivan (zavrsni rad moze imati), a citiranje se prepusta odsjeckim uputama, pa su oboje advisory."
+    ],
+    "note": "Zavrsni (prijediplomski) rad iz Uputa za pisanje zavrsnoga i diplomskoga rada (FHS). Scored su imperativna tehnicka pravila iz odjeljka OPE TEHNICKE UPUTE. DVOJBA ZA LJUDSKI PREGLED: odjeljak OPE TEHNICKE UPUTE u tekstu opseg formulira za diplomski rad (Po svom opsegu diplomski rad treba imati...), a formatna pravila (font, prored, margine, numeracija, poravnanje) navodi opcenito; primjena tih formatnih pravila na zavrsni rad je razumna jer je dokument zajednicki za zavrsni i diplomski, ali nije eksplicitno vezana uz zavrsni. Opseg zavrsnoga (word-count value 4800-6000) je izvedena procjena iz 16-20 kartica i advisory.",
+    "sources": [
+      {
+        "title": "Upute za pisanje zavrsnoga i diplomskoga rada (FHS)",
+        "url": "https://www.fhs.hr/_download/repository/2021_2023__Nove_upute_za_prijavu_i_pisanje_zavrsnoga_i_diplomskoga_rada.doc.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pisanje zavrsnoga i diplomskoga rada (Fakultet hrvatskih studija)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "numeracija stranica",
+      "obostrano poravnanje",
+      "sadrzaj",
+      "obvezne cjeline rada"
+    ],
+    "advisoryScope": [
+      "opseg (kartice)",
+      "stil citiranja (odsjecke upute)"
+    ],
+    "catalogPrograms": [
+      "Prijediplomski studiji Fakulteta hrvatskih studija (zavrsni rad)"
+    ]
+  },
+  {
+    "id": "kbf-zavrsni",
+    "unitId": "kbf",
+    "programs": [
+      "Prijediplomski studiji Katolickog bogoslovnog fakulteta (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Katolicki bogoslovni fakultet, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2017-06-01",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": 12,
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3.5
+      },
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "checkJustify": true,
+      "checkMargins": true,
+      "recommendedCitation": "chicago-notes",
+      "requiredSections": [
+        {
+          "key": "naslovnica",
+          "label": "Naslovnica",
+          "terms": [
+            "naslovnica",
+            "naslovna stranica"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sazetak i kljucne rijeci",
+          "terms": [
+            "sazetak",
+            "kljucne rijeci"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadrzaj",
+          "terms": [
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "razrada",
+          "label": "Razrada teme",
+          "terms": [
+            "razrada teme",
+            "razrada"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zakljucak",
+          "terms": [
+            "zakljucak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "literatura",
+            "izvori i literatura",
+            "popis literature"
+          ]
+        }
+      ]
+    },
+    "facts": [
+      "Tehnicko oblikovanje je imperativno: Times New Roman, velicina 12, prored 1,5, margine 3,5 cm lijevo te 2,5 cm desno, gore i dolje (odjeljak 4.5).",
+      "Stranice se numeriraju rednim brojem u donjem desnom kutu, a numeracija zapocinje na prvoj stranici Uvoda; tekst se pise s obostranim poravnanjem (imperativ).",
+      "Osnovni dio cine uvod, razrada teme i zakljucak, uz sadrzaj, sazetak, kljucne rijeci i literaturu; Sadrzaj je obvezan (imperativ).",
+      "Citiranje se provodi u biljeskama na dnu stranice prema uputama casopisa Bogoslovska smotra (footnote stil).",
+      "Opseg zavrsnog rada je najmanje 25 kartica (1 kartica = 1800 znakova s prazninama); zadano u karticama, ne u rijecima/stranicama (advisory)."
+    ],
+    "note": "Zavrsni (preddiplomski) rad iz jedinstvenih Uputa KBF-a (2017). Cijelo tehnicko oblikovanje je imperativno pa je scored. Citiranje je iskljucivo u biljeskama na dnu stranice (stil casopisa Bogoslovska smotra) pa je mapirano na chicago-notes; naziv stila nije eksplicitan u izvoru (footnote forma je) - za ljudski pregled. Opseg je u karticama pa je word-count advisory. Format papira (A4) nije naveden.",
+    "sources": [
+      {
+        "title": "Prijedlog uputa za pisanje zavrsnoga i diplomskoga rada (KBF, 2017)",
+        "url": "https://www.kbf.unizg.hr/wp-content/uploads/2017/06/Upute-za-pisanje-zavr%C5%A1noga-i-diplomskoga-rada-KONA%C4%8CNA-VERZIJA.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Prijedlog uputa za pisanje zavrsnoga i diplomskoga rada (Katolicki bogoslovni fakultet, 2017)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "numeracija stranica",
+      "obostrano poravnanje",
+      "sadrzaj",
+      "obvezne cjeline rada",
+      "stil citiranja (biljeske)"
+    ],
+    "advisoryScope": [
+      "opseg (kartice)"
+    ]
+  },
+  {
+    "id": "kbf-diplomski",
+    "unitId": "kbf",
+    "programs": [
+      "Diplomski studiji Katolickog bogoslovnog fakulteta"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Katolicki bogoslovni fakultet, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2017-06-01",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": 12,
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3.5
+      },
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "checkJustify": true,
+      "checkMargins": true,
+      "recommendedCitation": "chicago-notes",
+      "requiredSections": [
+        {
+          "key": "naslovnica",
+          "label": "Naslovnica",
+          "terms": [
+            "naslovnica",
+            "naslovna stranica"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sazetak i kljucne rijeci",
+          "terms": [
+            "sazetak",
+            "kljucne rijeci"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadrzaj",
+          "terms": [
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "razrada",
+          "label": "Razrada teme",
+          "terms": [
+            "razrada teme",
+            "razrada"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zakljucak",
+          "terms": [
+            "zakljucak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "literatura",
+            "izvori i literatura",
+            "popis literature"
+          ]
+        }
+      ]
+    },
+    "facts": [
+      "Tehnicko oblikovanje je imperativno: Times New Roman, velicina 12, prored 1,5, margine 3,5 cm lijevo te 2,5 cm desno, gore i dolje (odjeljak 4.5).",
+      "Stranice se numeriraju rednim brojem u donjem desnom kutu, a numeracija zapocinje na prvoj stranici Uvoda; tekst se pise s obostranim poravnanjem (imperativ).",
+      "Osnovni dio cine uvod, razrada teme i zakljucak, uz sadrzaj, sazetak, kljucne rijeci i literaturu; Sadrzaj je obvezan (imperativ).",
+      "Citiranje se provodi u biljeskama na dnu stranice prema uputama casopisa Bogoslovska smotra (footnote stil).",
+      "Opseg diplomskog rada je najmanje 40 kartica (1 kartica = 1800 znakova s prazninama); zadano u karticama, ne u rijecima/stranicama (advisory)."
+    ],
+    "note": "Diplomski rad iz jedinstvenih Uputa KBF-a (2017); isti izvor kao zavrsni, razlikuje se samo opseg (40 kartica). Cijelo tehnicko oblikovanje je imperativno pa je scored. Citiranje u biljeskama na dnu stranice (stil casopisa Bogoslovska smotra) mapirano je na chicago-notes; naziv stila nije eksplicitan u izvoru - za ljudski pregled. Opseg je u karticama pa je word-count advisory. Format papira (A4) nije naveden. Doktorski rad nije pokriven ovim izvorom.",
+    "sources": [
+      {
+        "title": "Prijedlog uputa za pisanje zavrsnoga i diplomskoga rada (KBF, 2017)",
+        "url": "https://www.kbf.unizg.hr/wp-content/uploads/2017/06/Upute-za-pisanje-zavr%C5%A1noga-i-diplomskoga-rada-KONA%C4%8CNA-VERZIJA.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Prijedlog uputa za pisanje zavrsnoga i diplomskoga rada (Katolicki bogoslovni fakultet, 2017)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "numeracija stranica",
+      "obostrano poravnanje",
+      "sadrzaj",
+      "obvezne cjeline rada",
+      "stil citiranja (biljeske)"
+    ],
+    "advisoryScope": [
+      "opseg (kartice)"
+    ]
+  },
+  {
+    "id": "alu-diplomski",
+    "unitId": "alu",
+    "programs": [
+      "Diplomski studiji Akademije likovnih umjetnosti"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Akademija likovnih umjetnosti, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2014-05-23",
+    "rules": {},
+    "facts": [
+      "Diplomski rad se faculty-wide sastoji od likovnog dijela i pisanog obrazlozenja (Cl. 3, imperativ).",
+      "Tehnicko oblikovanje pisanog obrazlozenja propisuju Posebne odredbe pojedinih odsjeka i vrijednosti se razlikuju: Slikarski 5-15 kartica, velicina slova 12 tocaka, klasicni prored (Cl. 32); Kiparski 10-20 kartica, 12 tocaka, polozeni format A4 (Cl. 39); Graficki 15-25 kartica, format A4 (Cl. 49); Novi mediji 18000-30000 znakova, do 7000 rijeci, 10-17 kartica (Cl. 77).",
+      "Nema faculty-wide imperativnog pravila za font, margine, numeraciju stranica, sadrzaj (toc), obostrano poravnanje ni stil citiranja, pa se nijedna dimenzija ne boduje (scored=0); sve je advisory uz napomenu o razlici po odsjeku."
+    ],
+    "note": "Iz faculty-wide Pravilnika o diplomskom radu i diplomskom ispitu (ALU, 2014). VAZNO za ljudski pregled: sve formatne vrijednosti (12 tocaka, klasicni prored, A4, opseg u karticama) su odsjecke Posebne odredbe koje se razlikuju medju odsjecima (Slikarski, Kiparski, Graficki, Nastavnicki, Odsjek za animirani film i nove medije, Odsjek za konzerviranje i restauriranje), pa nijedno formatno pravilo nije univerzalno faculty-wide i nista se ne boduje. Ako se zeli scored pokrivenost, treba raditi zasebne profile po odsjeku iz odsjeckih Posebnih odredbi. Zavrsni (prijediplomski) i doktorski nisu pokriveni ovim izvorom.",
+    "sources": [
+      {
+        "title": "Pravilnik o diplomskom radu i diplomskom ispitu (ALU, 2014)",
+        "url": "https://www.alu.unizg.hr//alu/cms/upload/dokumenti/PRAVILNIK_O_DIPLOMSKOM_RADU_I_DIPLOMSKOM_ISPITU_lipanj_2014.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o diplomskom radu i diplomskom ispitu (Akademija likovnih umjetnosti, 2014)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [],
+    "advisoryScope": [
+      "velicina slova (12 tocaka, odsjecko)",
+      "prored (klasicni, odsjecko)",
+      "format papira (A4, odsjecko)",
+      "opseg pisanog obrazlozenja u karticama (odsjecko)",
+      "obvezni dijelovi diplomskog rada (likovni dio i pisano obrazlozenje)"
+    ]
+  },
+  {
+    "id": "muza-diplomski",
+    "unitId": "muza",
+    "programs": [
+      "Diplomski studiji Muzičke akademije"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Muzička akademija, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2025-09-24",
+    "rules": {
+      "recommendedCitation": "custom"
+    },
+    "facts": [
+      "Tehnicko oblikovanje (font, velicina i vrsta slova, margine, prored, opca struktura, numeracija stranica) propisano je obaveznim predloskom za pisanje diplomskog rada, ali konkretne vrijednosti nisu u tekstu Pravilnika pa se ne boduju.",
+      "Format stranice u pravilu je A4, osim ako karakter grade iznimno ne zahtijeva drugi format (advisory).",
+      "Opseg se racuna u karticama (1 kartica = 1800 znakova s razmacima) i razlikuje se po odsjecima (teorija glazbe 40, muzikologija 60/30, glazbena pedagogija 45/30, instrumentalisti 10-20 kartica); nije zadan u rijecima ni stranicama pa je advisory.",
+      "Nacin navodenja izvora (stil citiranja) odreuje mentor u skladu s pravilima struke (advisory)."
+    ],
+    "note": "Integrirani prijediplomski i diplomski studiji Muzicke akademije zavrsavaju izradom i obranom diplomskog rada (ili diplomskim ispitom koji ukljucuje obranu diplomskog rada) pa postoji jedan graduate profil. Jedini sluzbeni izvor s tehnickim propozicijama je Pravilnik (rujan 2025.) s Prilogom 1 (Upute), ali sve oblikovanje delegira obaveznom .dot predlosku ciji vrijednosti nisu u tekstu. Bez doslovne vrijednosti i imperativa nijedno pravilo nije scored. Tri advisory pravila (A4, opseg u karticama, stil citiranja) drze izvor radi prikaza. Za scored oblikovanje potreban je ljudski pregled predloska (font/velicina/margine/prored/numeracija).",
+    "sources": [
+      {
+        "title": "Pravilnik o zavrsetku studija Muzicke akademije s Prilogom 1: Upute za izradu diplomskog rada (2025)",
+        "url": "http://www.muza.unizg.hr/wp-content/uploads/2020/07/Pravilnik-o-zavrsetku-studija-MUZA_2025-S-prilozima.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsetku studija Muzicke akademije s Prilogom 1: Upute za izradu diplomskog rada (2025)",
+      "Predlozak za pisanje diplomskog rada (.dot, obavezan; vrijednosti nisu u tekstu, ceka ljudski pregled)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [],
+    "advisoryScope": [
+      "format papira (A4)",
+      "opseg u karticama",
+      "stil citiranja (odreuje mentor)"
+    ],
+    "catalogPrograms": [
+      "Diplomski studiji Muzičke akademije"
+    ]
   }
 ]

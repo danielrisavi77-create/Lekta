@@ -1,0 +1,106 @@
+{
+  "faculty": "muza",
+  "unit": null,
+  "catalogPrograms": [
+    "Diplomski studiji Muzičke akademije"
+  ],
+  "sources": [
+    {
+      "id": "muza-pravilnik-zavrsetak-2025",
+      "kind": "regulation",
+      "title": "Pravilnik o zavrsetku sveucilisnih integriranih prijediplomskih i diplomskih studija na Sveucilistu u Zagrebu Muzickoj akademiji, s Prilogom 1: Upute za izradu diplomskog rada (2025)",
+      "url": "http://www.muza.unizg.hr/wp-content/uploads/2020/07/Pravilnik-o-zavrsetku-studija-MUZA_2025-S-prilozima.pdf",
+      "publisher": "Sveuciliste u Zagrebu Muzicka akademija",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/muza/muza-pravilnik-zavrsetak-2025.pdf",
+      "snapshotHash": "bb9b2dbbf90e2c4d8d1127c3b05e1d5ab1288a180d2d505193cf8d9b1a04d433",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Pravilnik donesen na Akademijskom vijecu 24. rujna 2025., stupa na snagu 1. listopada 2025. Sadrzi Prilog 1 (Upute za izradu diplomskog rada, zajednicke za sve studije) i posebne upute po odsjecima. Sve tehnicko oblikovanje (font, velicina i vrsta slova, margine, prored, opca struktura, numeracija stranica) delegirano je obaveznom predlosku za pisanje diplomskog rada (.dot) ciji konkretne vrijednosti NISU u tekstu Pravilnika pa se ne mogu bodovati bez doslovnog citata. Format A4 naveden je s ogradom (u pravilu je A4, osim ako karakter grade zahtijeva drugi format) -> advisory. Opseg se racuna u karticama (1 kartica = 1800 znakova) i razlikuje se po odsjecima (10-60 kartica) -> advisory. Nacin navodenja izvora odreuje mentor -> advisory. Scored: 0."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "muza-diplomski",
+      "unitId": "muza",
+      "programs": [
+        "Diplomski studiji Muzičke akademije"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Muzička akademija, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2025-09-24",
+      "rules": {
+        "recommendedCitation": "custom"
+      },
+      "facts": [
+        "Tehnicko oblikovanje (font, velicina i vrsta slova, margine, prored, opca struktura, numeracija stranica) propisano je obaveznim predloskom za pisanje diplomskog rada, ali konkretne vrijednosti nisu u tekstu Pravilnika pa se ne boduju.",
+        "Format stranice u pravilu je A4, osim ako karakter grade iznimno ne zahtijeva drugi format (advisory).",
+        "Opseg se racuna u karticama (1 kartica = 1800 znakova s razmacima) i razlikuje se po odsjecima (teorija glazbe 40, muzikologija 60/30, glazbena pedagogija 45/30, instrumentalisti 10-20 kartica); nije zadan u rijecima ni stranicama pa je advisory.",
+        "Nacin navodenja izvora (stil citiranja) odreuje mentor u skladu s pravilima struke (advisory)."
+      ],
+      "note": "Integrirani prijediplomski i diplomski studiji Muzicke akademije zavrsavaju izradom i obranom diplomskog rada (ili diplomskim ispitom koji ukljucuje obranu diplomskog rada) pa postoji jedan graduate profil. Jedini sluzbeni izvor s tehnickim propozicijama je Pravilnik (rujan 2025.) s Prilogom 1 (Upute), ali sve oblikovanje delegira obaveznom .dot predlosku ciji vrijednosti nisu u tekstu. Bez doslovne vrijednosti i imperativa nijedno pravilo nije scored. Tri advisory pravila (A4, opseg u karticama, stil citiranja) drze izvor radi prikaza. Za scored oblikovanje potreban je ljudski pregled predloska (font/velicina/margine/prored/numeracija).",
+      "sources": [
+        {
+          "title": "Pravilnik o zavrsetku studija Muzicke akademije s Prilogom 1: Upute za izradu diplomskog rada (2025)",
+          "url": "http://www.muza.unizg.hr/wp-content/uploads/2020/07/Pravilnik-o-zavrsetku-studija-MUZA_2025-S-prilozima.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o zavrsetku studija Muzicke akademije s Prilogom 1: Upute za izradu diplomskog rada (2025)",
+        "Predlozak za pisanje diplomskog rada (.dot, obavezan; vrijednosti nisu u tekstu, ceka ljudski pregled)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [],
+      "advisoryScope": [
+        "format papira (A4)",
+        "opseg u karticama",
+        "stil citiranja (odreuje mentor)"
+      ],
+      "catalogPrograms": [
+        "Diplomski studiji Muzičke akademije"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-muza-diplomski--paper-size-advisory-2026-07-02",
+      "ruleId": "muza-diplomski--paper-size",
+      "profileId": "muza-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "muza-pravilnik-zavrsetak-2025",
+      "sourcePage": "Prilog 1: Upute za izradu diplomskog rada (zajednicke za sve studije)",
+      "quote": "Format stranice diplomskoga rada u pravilu je A4 (210 x 297 mm)",
+      "note": "Port pilot workflow. A4 naveden s ogradom (u pravilu, uz iznimku) pa advisory."
+    },
+    {
+      "id": "led-muza-diplomski--word-count-advisory-2026-07-02",
+      "ruleId": "muza-diplomski--word-count",
+      "profileId": "muza-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "muza-pravilnik-zavrsetak-2025",
+      "sourcePage": "Prilog 1: Upute za izradu diplomskog rada (zajednicke za sve studije)",
+      "quote": "Opseg teksta diplomskog rada racuna se u karticama, pri cemu jedna kartica teksta obuhvaa",
+      "note": "Port pilot workflow. Opseg je u karticama i po odsjeku, nije u rijecima/stranicama pa advisory."
+    },
+    {
+      "id": "led-muza-diplomski--citation-style-advisory-2026-07-02",
+      "ruleId": "muza-diplomski--citation-style",
+      "profileId": "muza-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "muza-pravilnik-zavrsetak-2025",
+      "sourcePage": "Prilog 1: Upute za izradu diplomskog rada (zajednicke za sve studije)",
+      "quote": "Specificne znacajke rada poput nacina navoenja izvora i sl. odreuje mentor u skladu s pravilima",
+      "note": "Port pilot workflow. Stil citiranja odreuje mentor pa advisory."
+    }
+  ]
+}

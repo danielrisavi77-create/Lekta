@@ -1,0 +1,198 @@
+{
+  "faculty": "pbf",
+  "unit": null,
+  "catalogPrograms": [
+    "Diplomski studiji Prehrambeno-biotehnološkog fakulteta"
+  ],
+  "sources": [
+    {
+      "id": "pbf-upute-diplomski-2018",
+      "kind": "guidelines",
+      "title": "Upute za izradu diplomskog rada (Prehrambeno-biotehnoloski fakultet Sveucilista u Zagrebu)",
+      "url": "http://www.pbf.unizg.hr/content/download/793/9738/file/Upute%20za%20izradu%20diplomskog%20rada.pdf",
+      "publisher": "Prehrambeno-biotehnoloski fakultet Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/pbf/pbf-upute-diplomski-2018.pdf",
+      "snapshotHash": "86cfde9d825c1f68330a1a24c213b74e24f408e3d2d845329ef7433582510860",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Sluzbene fakultetske Upute za izradu diplomskog rada PBF-a (36 str., odjeljak 5. Pisanje diplomskog rada). Snapshot dohvacen preko Wayback Machine (web.archive.org, capture 2018-10-24) jer je live PBF CMS migriran pa originalna /content/download ruta vraca 404, a dokumenti se sada ucitavaju preko potpisanog jsxr AJAX poziva. Tehnicko oblikovanje (Times New Roman 12, prored 1,5, A4), opseg 40-80 str., numeracija stranica od Uvoda te obvezna struktura formulirani su imperativno (treba biti napisan, mora sadrzavati) -> scored. Stil citiranja je izbor (harvardski ILI numericki) -> advisory. Margine i obostrano poravnanje NISU u izvoru (spominje se samo tiskan obostrano = dvostrani tisak, ne poravnanje teksta) pa nisu preuzeti. Za ljudski pregled: aktualni 2021 Prilog 2 nije bio dostupan; potvrditi vrijednosti prije objave."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "pbf-diplomski",
+      "unitId": "pbf",
+      "programs": [
+        "Diplomski studiji Prehrambeno-biotehnološkog fakulteta"
+      ],
+      "workTypes": ["graduate"],
+      "status": "partial",
+      "profileLabel": "Prehrambeno-biotehnoloski fakultet, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": ["Times New Roman"],
+        "size": 12,
+        "spacing": 1.5,
+        "requireToc": true,
+        "requirePageNumbers": true,
+        "requireA4": true,
+        "recommendedCitation": "harvard",
+        "requiredSections": [
+          { "key": "naslovnica", "label": "Naslovnica (korice)", "terms": ["naslovnica", "korice", "diplomski rad"] },
+          { "key": "kartica", "label": "Temeljna dokumentacijska kartica (sazetak)", "terms": ["temeljna dokumentacijska kartica", "sazetak", "kljucne rijeci"] },
+          { "key": "sadrzaj", "label": "Sadrzaj", "terms": ["sadrzaj"] },
+          { "key": "uvod", "label": "Uvod", "terms": ["uvod"] },
+          { "key": "teorijski", "label": "Teorijski dio", "terms": ["teorijski dio", "pregled literature"] },
+          { "key": "eksperimentalni", "label": "Eksperimentalni dio", "terms": ["eksperimentalni dio", "materijali i metode"] },
+          { "key": "rezultati", "label": "Rezultati i rasprava", "terms": ["rezultati i rasprava", "rezultati", "rasprava"] },
+          { "key": "zakljucci", "label": "Zakljucci", "terms": ["zakljucci", "zakljucak"] },
+          { "key": "literatura", "label": "Literatura", "terms": ["literatura", "popis literature"] }
+        ]
+      },
+      "facts": [
+        "Diplomski rad mora sadrzavati propisane uvodne stranice (naslovnica, temeljna dokumentacijska kartica sa sazetkom, sadrzaj) te glavna poglavlja Uvod, Teorijski dio, Eksperimentalni dio, Rezultati i Rasprava, Zakljucci i Literatura (imperativ).",
+        "Tekst se pise u formatu Times New Roman 12 s proredom 1,5 na papiru A4; opseg je najmanje 40 i najvise 80 stranica bez Priloga; numeracija stranica pocinje u poglavlju Uvod, a zavrsava u poglavlju Literatura (imperativ).",
+        "Literaturni navodi svrstavaju se prema harvardskom ILI numerickom sustavu; buduci da je izbor prepusten, stil citiranja je advisory (preporuceni prikaz je harvard)."
+      ],
+      "note": "Diplomski rad iz sluzbenih Uputa za izradu diplomskog rada PBF-a (odjeljak 5. Pisanje diplomskog rada). Scored su imperativna pravila oblikovanja, opsega, numeracije stranica i strukture; stil citiranja je advisory jer izvor dopusta izbor izmedu harvardskog i numerickog sustava. Izvor je dohvacen preko Wayback Machine (live CMS migriran); aktualni 2021 Prilog 2 nije bio dostupan pa je za produkciju potrebna ljudska reverifikacija prema aktualnom izdanju. Zavrsni (prijediplomski) i doktorski profili nisu izradeni jer njihovi PBF izvori nisu bili dohvatljivi.",
+      "sources": [
+        {
+          "title": "Upute za izradu diplomskog rada (Prehrambeno-biotehnoloski fakultet)",
+          "url": "http://www.pbf.unizg.hr/content/download/793/9738/file/Upute%20za%20izradu%20diplomskog%20rada.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu diplomskog rada (Prehrambeno-biotehnoloski fakultet)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "font",
+        "velicina slova",
+        "prored",
+        "format papira",
+        "numeracija stranica",
+        "sadrzaj",
+        "obvezne cjeline rada",
+        "opseg (stranice)"
+      ],
+      "advisoryScope": [
+        "stil citiranja (harvardski ili numericki)"
+      ],
+      "catalogPrograms": [
+        "Diplomski studiji Prehrambeno-biotehnološkog fakulteta"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-pbf-diplomski--font-verified-2026-07-02",
+      "ruleId": "pbf-diplomski--font",
+      "profileId": "pbf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pbf-upute-diplomski-2018",
+      "sourcePage": "odjeljak 5.1. Jezik i obrada teksta",
+      "quote": "razmakom od 1,5 (1,5 Lines), u formatu Times New Roman 12, na papiru formata A4, tiskan obostrano",
+      "note": "Port pilot workflow. Imperativ: treba biti napisan u formatu Times New Roman 12."
+    },
+    {
+      "id": "led-pbf-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "pbf-diplomski--font-size",
+      "profileId": "pbf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pbf-upute-diplomski-2018",
+      "sourcePage": "odjeljak 5.1. Jezik i obrada teksta",
+      "quote": "razmakom od 1,5 (1,5 Lines), u formatu Times New Roman 12, na papiru formata A4, tiskan obostrano",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-pbf-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "pbf-diplomski--line-spacing",
+      "profileId": "pbf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pbf-upute-diplomski-2018",
+      "sourcePage": "odjeljak 5.1. Jezik i obrada teksta",
+      "quote": "razmakom od 1,5 (1,5 Lines), u formatu Times New Roman 12, na papiru formata A4, tiskan obostrano",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-pbf-diplomski--paper-size-verified-2026-07-02",
+      "ruleId": "pbf-diplomski--paper-size",
+      "profileId": "pbf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pbf-upute-diplomski-2018",
+      "sourcePage": "odjeljak 5.1. Jezik i obrada teksta",
+      "quote": "razmakom od 1,5 (1,5 Lines), u formatu Times New Roman 12, na papiru formata A4, tiskan obostrano",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-pbf-diplomski--page-numbers-verified-2026-07-02",
+      "ruleId": "pbf-diplomski--page-numbers",
+      "profileId": "pbf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pbf-upute-diplomski-2018",
+      "sourcePage": "odjeljak 5.3. Numeracija stranica i oznacavanje poglavlja",
+      "quote": "Numeracija diplomskog rada zapocinje tekstom u poglavlju Uvod, a zavrsava zadnjom stranicom",
+      "note": "Port pilot workflow. Imperativ: numeracija pocinje u Uvodu."
+    },
+    {
+      "id": "led-pbf-diplomski--toc-verified-2026-07-02",
+      "ruleId": "pbf-diplomski--toc",
+      "profileId": "pbf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pbf-upute-diplomski-2018",
+      "sourcePage": "odjeljak 5.2. Uvodne stranice",
+      "quote": "Diplomski rad mora sadrzavati uvodne stranice napisane i navedene redom",
+      "note": "Port pilot workflow. Sadrzaj je naveden medju obveznim uvodnim stranicama."
+    },
+    {
+      "id": "led-pbf-diplomski--required-sections-verified-2026-07-02",
+      "ruleId": "pbf-diplomski--required-sections",
+      "profileId": "pbf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pbf-upute-diplomski-2018",
+      "sourcePage": "odjeljak 5.4. Glavni dijelovi diplomskog rada",
+      "quote": "Diplomski rad mora sadrzavati sljedea poglavlja ili dijelove",
+      "note": "Port pilot workflow. Prilozi su navedeni kao nisu nuzni pa nisu ukljuceni u obvezne cjeline."
+    },
+    {
+      "id": "led-pbf-diplomski--page-count-verified-2026-07-02",
+      "ruleId": "pbf-diplomski--page-count",
+      "profileId": "pbf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pbf-upute-diplomski-2018",
+      "sourcePage": "odjeljak 5.1. Jezik i obrada teksta",
+      "quote": "Diplomski rad ima najmanje 40 stranica, a ne vise od 80 stranica teksta bez Priloga",
+      "note": "Port pilot workflow. Definitivan raspon opsega (najmanje 40, najvise 80 str.)."
+    },
+    {
+      "id": "led-pbf-diplomski--citation-style-advisory-2026-07-02",
+      "ruleId": "pbf-diplomski--citation-style",
+      "profileId": "pbf-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "pbf-upute-diplomski-2018",
+      "sourcePage": "odjeljak 5.7. Citiranje literaturnih navoda",
+      "quote": "Literaturni navodi svrstavaju se prema harvardskom sustavu ili numerickom sustavu u poglavlju",
+      "note": "Port pilot workflow. Izvor dopusta izbor (harvardski ILI numericki) pa je stil citiranja advisory."
+    }
+  ]
+}

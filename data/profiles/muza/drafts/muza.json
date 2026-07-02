@@ -1,0 +1,57 @@
+{
+  "profiles": {
+    "muza-diplomski": [
+      {
+        "ruleId": "muza-diplomski--paper-size",
+        "checkId": "paper-size",
+        "value": "A4",
+        "category": "format",
+        "label": "Format papira",
+        "machineCheckable": true,
+        "authority": "program-page",
+        "sourceId": "muza-pravilnik-zavrsetak-2025",
+        "sourcePage": "Prilog 1: Upute za izradu diplomskog rada (zajednicke za sve studije)",
+        "quote": "Format stranice diplomskoga rada u pravilu je A4 (210 x 297 mm)",
+        "status": "advisory",
+        "lastVerified": "2026-07-02",
+        "verifiedBy": "owner-bulk-approval",
+        "reviewedBy": null
+      },
+      {
+        "ruleId": "muza-diplomski--word-count",
+        "checkId": "word-count",
+        "value": "min. 10 do 60 kartica ovisno o odsjeku (1 kartica = 1800 znakova s razmacima)",
+        "category": "scope",
+        "label": "Opseg glavnog teksta (kartice)",
+        "machineCheckable": false,
+        "authority": "program-page",
+        "sourceId": "muza-pravilnik-zavrsetak-2025",
+        "sourcePage": "Prilog 1: Upute za izradu diplomskog rada (zajednicke za sve studije)",
+        "quote": "Opseg teksta diplomskog rada racuna se u karticama, pri cemu jedna kartica teksta obuhvaa",
+        "status": "advisory",
+        "lastVerified": "2026-07-02",
+        "verifiedBy": "owner-bulk-approval",
+        "reviewedBy": null
+      },
+      {
+        "ruleId": "muza-diplomski--citation-style",
+        "checkId": "citation-style",
+        "value": "prema uputama mentora",
+        "category": "citation",
+        "label": "Stil citiranja (odreuje mentor)",
+        "machineCheckable": false,
+        "authority": "program-page",
+        "sourceId": "muza-pravilnik-zavrsetak-2025",
+        "sourcePage": "Prilog 1: Upute za izradu diplomskog rada (zajednicke za sve studije)",
+        "quote": "Specificne znacajke rada poput nacina navoenja izvora i sl. odreuje mentor u skladu s pravilima",
+        "status": "advisory",
+        "lastVerified": "2026-07-02",
+        "verifiedBy": "owner-bulk-approval",
+        "reviewedBy": null
+      }
+    ]
+  },
+  "generatedAt": "2026-07-02",
+  "source": "Port muza (Pravilnik o zavrsetku studija MUZA, rujan 2025., s Prilogom 1: Upute za izradu diplomskog rada). Sve tehnicko oblikovanje (font, velicina slova, margine, prored, struktura, numeracija) delegirano je obaveznom predlosku ciji konkretne vrijednosti NISU u tekstu pa se ne boduju. A4 je naveden s ogradom (u pravilu), opseg je u karticama i po odsjeku, stil citiranja odreuje mentor -> sve advisory. Scored: 0.",
+  "note": "Nema imperativnog pravila s doslovnom vrijednosti u ekstrahiranom tekstu: font/velicina/margine/prored/numeracija/struktura su u .dot predlosku (obavezni su, ali bez vrijednosti u tekstu). Tri advisory pravila drze izvor radi prikaza, ne boduju se."
+}

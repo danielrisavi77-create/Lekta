@@ -1,0 +1,89 @@
+{
+  "generatedAt": "2026-07-02",
+  "source": "Port pilot workflow (alu, Pravilnik o diplomskom radu i diplomskom ispitu 2014).",
+  "note": "Izvor je faculty-wide Pravilnik ALU (2014), ali tehnicko oblikovanje pisanog obrazlozenja propisano je iskljucivo u Posebnim odredbama pojedinih odsjeka i vrijednosti se razlikuju (Slikarski 5-15 kartica / 12 tocaka, Kiparski 10-20 kartica / 12 tocaka / A4, Graficki 15-25 kartica / A4, Novi mediji 18000-30000 znakova). Nijedno formatno pravilo nije faculty-wide imperativ pa je SVE advisory (scored=0); vrijednosti drze izvor radi prikaza uz napomenu o razlici po odsjeku. Opce odredbe (Cl. 3) faculty-wide propisuju samo da se rad sastoji od likovnog dijela i pisanog obrazlozenja. Svi citati verbatim provjereni grepom nad alu-pravilnik-diplomski-2014.txt.",
+  "profiles": {
+    "alu-diplomski": [
+      {
+        "ruleId": "alu-diplomski--font-size",
+        "checkId": "font-size",
+        "value": 12,
+        "category": "format",
+        "label": "Velicina slova (pisano obrazlozenje)",
+        "machineCheckable": true,
+        "authority": "binding",
+        "sourceId": "alu-pravilnik-diplomski-2014",
+        "sourcePage": "Clanak 32. (Slikarski odsjek)",
+        "quote": "najmanje 5 a najvise 15 kartica pisanog teksta pisanih velicinom slova od 12 tocaka, klasicnim proredom",
+        "status": "advisory",
+        "lastVerified": "2026-07-02",
+        "verifiedBy": "owner-bulk-approval",
+        "reviewedBy": null
+      },
+      {
+        "ruleId": "alu-diplomski--line-spacing",
+        "checkId": "line-spacing",
+        "value": "klasicni prored",
+        "category": "format",
+        "label": "Prored (pisano obrazlozenje)",
+        "machineCheckable": false,
+        "authority": "binding",
+        "sourceId": "alu-pravilnik-diplomski-2014",
+        "sourcePage": "Clanak 32. (Slikarski odsjek)",
+        "quote": "najmanje 5 a najvise 15 kartica pisanog teksta pisanih velicinom slova od 12 tocaka, klasicnim proredom",
+        "status": "advisory",
+        "lastVerified": "2026-07-02",
+        "verifiedBy": "owner-bulk-approval",
+        "reviewedBy": null
+      },
+      {
+        "ruleId": "alu-diplomski--paper-size",
+        "checkId": "paper-size",
+        "value": "A4",
+        "category": "format",
+        "label": "Format papira (pisano obrazlozenje)",
+        "machineCheckable": true,
+        "authority": "binding",
+        "sourceId": "alu-pravilnik-diplomski-2014",
+        "sourcePage": "Clanak 39. (Kiparski odsjek)",
+        "quote": "Pisano obrazlozenje ispisuje se u polozenom formatu A4, tvrdi uvez.",
+        "status": "advisory",
+        "lastVerified": "2026-07-02",
+        "verifiedBy": "owner-bulk-approval",
+        "reviewedBy": null
+      },
+      {
+        "ruleId": "alu-diplomski--page-count",
+        "checkId": "page-count",
+        "value": { "min": 5, "max": 25 },
+        "category": "scope",
+        "label": "Opseg pisanog obrazlozenja (kartice)",
+        "machineCheckable": true,
+        "authority": "binding",
+        "sourceId": "alu-pravilnik-diplomski-2014",
+        "sourcePage": "Clanak 32. (Slikarski odsjek)",
+        "quote": "najmanje 5 a najvise 15 kartica pisanog teksta pisanih velicinom slova od 12 tocaka, klasicnim proredom",
+        "status": "advisory",
+        "lastVerified": "2026-07-02",
+        "verifiedBy": "owner-bulk-approval",
+        "reviewedBy": null
+      },
+      {
+        "ruleId": "alu-diplomski--required-sections",
+        "checkId": "required-sections",
+        "value": ["likovni dio", "pisano obrazlozenje"],
+        "category": "structure",
+        "label": "Obvezni dijelovi diplomskog rada",
+        "machineCheckable": false,
+        "authority": "binding",
+        "sourceId": "alu-pravilnik-diplomski-2014",
+        "sourcePage": "Clanak 3.",
+        "quote": "koji se sastoji od likovnog dijela i pisanog obrazlozenja",
+        "status": "advisory",
+        "lastVerified": "2026-07-02",
+        "verifiedBy": "owner-bulk-approval",
+        "reviewedBy": null
+      }
+    ]
+  }
+}

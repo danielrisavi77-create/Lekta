@@ -22,6 +22,7 @@
         "programs": [
           "Arhitektura i urbanizam",
           "Dizajn",
+          "Diplomski studiji Arhitektonskog fakulteta",
           "Opći profil fakulteta"
         ],
         "status": "generic"
@@ -74,6 +75,8 @@
         "programs": [
           "Filozofija",
           "Religijske znanosti",
+          "Prijediplomski studiji Fakulteta filozofije i religijskih znanosti (zavrsni rad)",
+          "Diplomski studiji Fakulteta filozofije i religijskih znanosti",
           "Opći profil fakulteta"
         ],
         "status": "generic"
@@ -88,6 +91,8 @@
           "Psihologija",
           "Komunikologija",
           "Kroatologija",
+          "Prijediplomski studiji Fakulteta hrvatskih studija (zavrsni rad)",
+          "Diplomski studiji Fakulteta hrvatskih studija",
           "Opći profil fakulteta"
         ],
         "status": "partial"
@@ -100,6 +105,8 @@
           "Kemijsko inženjerstvo",
           "Primijenjena kemija",
           "Ekoinženjerstvo",
+          "Diplomski studiji Fakulteta kemijskog inženjerstva i tehnologije",
+          "Prijediplomski studiji Fakulteta kemijskog inženjerstva i tehnologije (zavrsni rad)",
           "Opći profil fakulteta"
         ],
         "status": "generic"
@@ -246,6 +253,8 @@
         "programs": [
           "Filozofsko-teološki studij",
           "Religijska pedagogija i katehetika",
+          "Prijediplomski studiji Katolickog bogoslovnog fakulteta (zavrsni rad)",
+          "Diplomski studiji Katolickog bogoslovnog fakulteta",
           "Opći profil fakulteta"
         ],
         "status": "generic"
@@ -314,6 +323,7 @@
           "Prehrambena tehnologija",
           "Biotehnologija",
           "Nutricionizam",
+          "Diplomski studiji Prehrambeno-biotehnološkog fakulteta",
           "Opći profil fakulteta"
         ],
         "status": "generic"
@@ -421,6 +431,7 @@
           "Nastavnički odsjek",
           "Konzerviranje i restauriranje",
           "Animirani film i novi mediji",
+          "Diplomski studiji Akademije likovnih umjetnosti",
           "Opći profil akademije"
         ],
         "status": "generic"
@@ -436,6 +447,7 @@
           "Pjevanje",
           "Muzikologija",
           "Glazbena pedagogija",
+          "Diplomski studiji Muzičke akademije",
           "Opći profil akademije"
         ],
         "status": "generic"

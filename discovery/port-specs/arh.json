@@ -1,0 +1,154 @@
+{
+  "faculty": "arh",
+  "unit": null,
+  "catalogPrograms": [
+    "Diplomski studiji Arhitektonskog fakulteta"
+  ],
+  "sources": [
+    {
+      "id": "arh-pravilnik-diplomski-2013",
+      "kind": "regulation",
+      "title": "Pravilnik o diplomskom radu Arhitektonskog fakulteta Sveucilista u Zagrebu na diplomskom studiju arhitekture i urbanizma (ak.god. 2012./2013.)",
+      "url": "https://www.arhitekt.hr/files/file/javni-dokumenti/Pravilnik%20o%20diplomskom%20radu.pdf",
+      "publisher": "Arhitektonski fakultet Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/arh/arh-pravilnik-diplomski-2013.pdf",
+      "snapshotHash": "d4986c4a74fce8686ad0766d61d7fb00dec7897af1b479e8fc941ce82781da09",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Obvezujuci Pravilnik o diplomskom radu (Fakultetsko vijee, 468. sjednica, 05.02.2013). Diplomski rad je projektantski/planerski rad (izlozbeni poster A0 + knjizice A3), a ne klasicni tekstualni dokument, pa Pravilnik ne propisuje font, velicinu slova, prored, margine, numeraciju stranica ni stil citiranja. Imperativ (cl. 16. 'Diplomski rad obvezno sadrzi') daje obvezan Sadrzaj i obvezne cjeline pisanog dijela (scored). Format je A3/A0 (ne A4) pa se ne boduje standardnom A4 provjerom (advisory). Citati verbatim provjereni grepom nad arh-pravilnik-diplomski-2013.txt."
+    },
+    {
+      "id": "arh-pravilnik-doktorski-2025",
+      "kind": "regulation",
+      "title": "Pravilnik o doktorskom studiju Arhitektura i urbanizam na Arhitektonskom fakultetu Sveucilista u Zagrebu (2025)",
+      "url": "https://www.arhitekt.hr/files/file/javni-dokumenti/2025/9/pravilnik-o-doktorskom-studiju-23092025.pdf",
+      "publisher": "Arhitektonski fakultet Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/arh/arh-pravilnik-doktorski-2025.pdf",
+      "snapshotHash": "03a704d4a29692b364c01b177d06400bca181edd9201c1ef575964583491ab0b",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Obvezujuci Pravilnik o doktorskom studiju (Fakultetsko vijee, 09.06.2025, stupa na snagu 01.06.2025). Graficki izgled doktorskoga rada izrijekom delegira Sveucilistu (cl. 18. st. 3. 'Graficki izgled doktorskoga rada propisuje Sveuciliste.' i cl. 24. st. 2. 'Doktorski se rad oblikuje prema uputama Sveucilista') pa Pravilnik ne daje nijedno fakultetsko formatno pravilo. Scored je jedino imperativno sadrzajno pravilo iz cl. 18. st. 2. (obvezni naslov, sazetak i kljucne rijeci na HR i ENG). Citat je uzet kao verbatim podniz jedne linije jer se recenica u izvoru prelama preko dva retka."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "arh-diplomski",
+      "unitId": "arh",
+      "programs": [
+        "Diplomski studiji Arhitektonskog fakulteta"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Arhitektonski fakultet, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2013-02-05",
+      "rules": {
+        "requireToc": true,
+        "requiredSections": [
+          {
+            "key": "naslovnica",
+            "label": "Naslovna stranica",
+            "terms": [
+              "naslovna stranica",
+              "naslovnica"
+            ]
+          },
+          {
+            "key": "sadrzaj",
+            "label": "Sadrzaj",
+            "terms": [
+              "sadrzaj"
+            ]
+          },
+          {
+            "key": "pisani-dio",
+            "label": "Pisani dio (obrazlozenje projekta)",
+            "terms": [
+              "obrazlozenje projekta",
+              "pisani dio",
+              "obrazlozenje"
+            ]
+          },
+          {
+            "key": "literatura",
+            "label": "Literatura / izvori",
+            "terms": [
+              "literatura",
+              "popis literature",
+              "izvori"
+            ]
+          }
+        ]
+      },
+      "facts": [
+        "Diplomski rad obvezno sadrzi uvodni istrazivacki dio (knjizica A4 ili A3), diplomski projekt (izlozbeni poster A0 i cetiri primjerka knjizice A3) i digitalni medij (imperativ).",
+        "Knjizica A3 obvezno sadrzi naslovnu stranicu, sadrzaj, pisani dio s obrazlozenjem projekta, tehnickim pokazateljima i literaturom/izvorima te nacrte i graficke priloge (imperativ, scored: sadrzaj i obvezne cjeline).",
+        "Rad je projektantski/planerski (poster A0, knjizice A3), a ne klasicni tekstualni dokument, pa Pravilnik ne propisuje font, velicinu slova, prored, margine, numeraciju stranica ni stil citiranja.",
+        "Format je A3/A0 (ne A4) pa se ne boduje standardnom A4 provjerom (advisory)."
+      ],
+      "note": "Iz obvezujuceg Pravilnika o diplomskom radu (AF, 2013). Diplomski rad na studiju arhitekture i urbanizma je projekt, pa su scored samo imperativna sadrzajna pravila iz cl. 16.: obvezan Sadrzaj i obvezne cjeline pisanog dijela. Nema fakultetski propisanog fonta, margina, prореda, numeracije ni citatnog stila. VAZNO za ljudski pregled: (1) authority je binding jer je izvor Pravilnik, pa obvezujuca pravila prije objave trebaju drugog odobravatelja (reviewedBy je zasad null); (2) required-sections su prilagodjene projektnoj knjizici (naslovnica, sadrzaj, pisani dio, literatura) pa mogu davati false-negative na klasicnom tekstualnom .docx; (3) program Dizajn (isti fakultet) moze imati vlastite upute za zavrsni/diplomski rad koje nisu pronadjene kao sluzbeni PDF.",
+      "sources": [
+        {
+          "title": "Pravilnik o diplomskom radu (Arhitektonski fakultet, 2013)",
+          "url": "https://www.arhitekt.hr/files/file/javni-dokumenti/Pravilnik%20o%20diplomskom%20radu.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o diplomskom radu Arhitektonskog fakulteta Sveucilista u Zagrebu (2013)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "sadrzaj",
+        "obvezne cjeline rada"
+      ],
+      "advisoryScope": [
+        "format papira (A3/A0)"
+      ],
+      "catalogPrograms": [
+        "Diplomski studiji Arhitektonskog fakulteta"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-arh-diplomski--toc-verified-2026-07-02",
+      "ruleId": "arh-diplomski--toc",
+      "profileId": "arh-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "arh-pravilnik-diplomski-2013",
+      "sourcePage": "clanak 16.",
+      "quote": "naslovnu stranicu, sadrzaj",
+      "note": "Port pilot workflow. Imperativ: Diplomski rad obvezno sadrzi (cl. 16.)."
+    },
+    {
+      "id": "led-arh-diplomski--required-sections-verified-2026-07-02",
+      "ruleId": "arh-diplomski--required-sections",
+      "profileId": "arh-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "arh-pravilnik-diplomski-2013",
+      "sourcePage": "clanak 16.",
+      "quote": "pisani dio s obrazlozenjem projekta, tehnickim pokazateljima i literaturom/izvorima",
+      "note": "Port pilot workflow. Imperativ: Diplomski rad obvezno sadrzi (cl. 16.)."
+    },
+    {
+      "id": "led-arh-diplomski--paper-size-advisory-2026-07-02",
+      "ruleId": "arh-diplomski--paper-size",
+      "profileId": "arh-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "arh-pravilnik-diplomski-2013",
+      "sourcePage": "clanak 16.",
+      "quote": "Cetiri primjerka knjizice velicine A3 koja sadrzi:",
+      "note": "Port pilot workflow. Format je A3/A0 (ne A4) pa se ne boduje standardnom A4 provjerom, ostaje advisory."
+    }
+  ]
+}

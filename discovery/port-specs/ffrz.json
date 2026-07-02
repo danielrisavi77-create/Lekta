@@ -1,0 +1,412 @@
+{
+  "faculty": "ffrz",
+  "unit": null,
+  "catalogPrograms": [
+    "Prijediplomski studiji Fakulteta filozofije i religijskih znanosti (zavrsni rad)",
+    "Diplomski studiji Fakulteta filozofije i religijskih znanosti"
+  ],
+  "sources": [
+    {
+      "id": "ffrz-oblikovanje-diplomski-2021",
+      "kind": "guidelines",
+      "title": "Upute za formalno oblikovanje diplomskoga rada (Fakultet filozofije i religijskih znanosti, 2021)",
+      "url": "https://www.ffrz.unizg.hr/wp-content/uploads/2021/12/Upute-za-formalno-oblikovanje-diplomskog-rada.pdf",
+      "publisher": "Fakultet filozofije i religijskih znanosti Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/ffrz/ffrz-oblikovanje-diplomski-2021.pdf",
+      "snapshotHash": "224b21163df97c8c9c5a11f9c39a3131f6809ffac2104c9014200bd6aa70d00d",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Sluzbene fakultetske Upute za formalno oblikovanje diplomskoga rada (objavljene 2021/12). Cijelo tehnicko oblikovanje je imperativno (Rad treba biti ispisan; Postavke stranice; Rad mora sadrzavati) -> scored: font Times New Roman, velicina 12, prored 1,5, margine 2,5 cm, A4, numeracija stranica u donjem desnom uglu od uvoda, opseg najmanje 50 stranica, obvezan Sadrzaj i obvezne cjeline. Citiranje prema pravilima casopisa Obnovljeni zivot (harvardski nacin po standardu APA). Obostrano poravnanje nije navedeno."
+    },
+    {
+      "id": "ffrz-oblikovanje-bakalaureatski-2021",
+      "kind": "guidelines",
+      "title": "Upute za formalno oblikovanje bakalaureatskog rada (zavrsnog rada preddiplomskog studija) (Fakultet filozofije i religijskih znanosti, 2021)",
+      "url": "https://www.ffrz.unizg.hr/wp-content/uploads/2021/12/Upute-za-formalno-oblikovanje-bakalaureatskog-rada.pdf",
+      "publisher": "Fakultet filozofije i religijskih znanosti Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/ffrz/ffrz-oblikovanje-bakalaureatski-2021.pdf",
+      "snapshotHash": "4e0e81a72bdadd5bb0e216c423e3183f98c1b3c7b1fed921f85ed84d669786ea",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Sluzbene fakultetske Upute za formalno oblikovanje bakalaureatskog (zavrsnog) rada preddiplomskog studija (objavljene 2021/12). Sadrzajno identicne diplomskima osim opsega (najmanje 30 stranica umjesto 50). Sve dimenzije imperativne -> scored: font TNR, velicina 12, prored 1,5, margine 2,5 cm, A4, numeracija stranica, obvezan Sadrzaj i obvezne cjeline, citiranje prema casopisu Obnovljeni zivot (harvardski / APA)."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "ffrz-diplomski",
+      "unitId": "ffrz",
+      "programs": [
+        "Diplomski studiji Fakulteta filozofije i religijskih znanosti"
+      ],
+      "workTypes": ["graduate"],
+      "status": "partial",
+      "profileLabel": "Fakultet filozofije i religijskih znanosti, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2021-12-01",
+      "rules": {
+        "font": ["Times New Roman"],
+        "size": 12,
+        "spacing": 1.5,
+        "margins": { "top": 2.5, "right": 2.5, "bottom": 2.5, "left": 2.5 },
+        "requireToc": true,
+        "requirePageNumbers": true,
+        "requireA4": true,
+        "checkMargins": true,
+        "recommendedCitation": "harvard",
+        "requiredSections": [
+          { "key": "naslovnica", "label": "Naslovnica", "terms": ["naslovnica"] },
+          { "key": "sazetak", "label": "Sazetak i kljucne rijeci", "terms": ["sazetak", "kljucne rijeci"] },
+          { "key": "sadrzaj", "label": "Sadrzaj", "terms": ["sadrzaj"] },
+          { "key": "uvod", "label": "Uvod (tekst rada)", "terms": ["uvod"] },
+          { "key": "zakljucak", "label": "Zakljucak", "terms": ["zakljucak"] },
+          { "key": "literatura", "label": "Popis literature", "terms": ["popis literature", "literatura"] },
+          { "key": "zivotopis", "label": "Zivotopis", "terms": ["zivotopis"] }
+        ]
+      },
+      "facts": [
+        "Rad treba biti ispisan na papiru A4 i sadrzavati najmanje 50 stranica teksta (imperativ).",
+        "Postavke stranice: Times New Roman 12, prored 1,5, margine 2,5 cm (imperativ).",
+        "Numeriraju se sve stranice od uvoda do kraja rada, broj u donjem desnom uglu (imperativ).",
+        "Rad mora sadrzavati naslovnicu, sazetak s kljucnim rijecima, sadrzaj, tekst (uvod), zakljucak, popis literature i zivotopis (imperativ).",
+        "Citira se prema pravilima casopisa Obnovljeni zivot, harvardski nacin po standardu APA (imperativ)."
+      ],
+      "note": "Diplomski rad iz sluzbenih fakultetskih Uputa za formalno oblikovanje diplomskoga rada (FFRZ, 2021). Cijelo tehnicko oblikovanje je imperativno pa je scored. Citiranje je autor-godina (Obnovljeni zivot / harvardski po APA) -> harvard. Obostrano poravnanje nije spomenuto pa nema justify pravila.",
+      "sources": [
+        {
+          "title": "Upute za formalno oblikovanje diplomskoga rada (FFRZ, 2021)",
+          "url": "https://www.ffrz.unizg.hr/wp-content/uploads/2021/12/Upute-za-formalno-oblikovanje-diplomskog-rada.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za formalno oblikovanje diplomskoga rada (Fakultet filozofije i religijskih znanosti, 2021)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "font",
+        "velicina slova",
+        "prored",
+        "margine",
+        "format papira",
+        "numeracija stranica",
+        "opseg (stranice)",
+        "sadrzaj",
+        "obvezne cjeline rada",
+        "stil citiranja"
+      ],
+      "advisoryScope": [],
+      "catalogPrograms": [
+        "Diplomski studiji Fakulteta filozofije i religijskih znanosti"
+      ]
+    },
+    {
+      "id": "ffrz-bakalaureatski",
+      "unitId": "ffrz",
+      "programs": [
+        "Prijediplomski studiji Fakulteta filozofije i religijskih znanosti (zavrsni rad)"
+      ],
+      "workTypes": ["final"],
+      "status": "partial",
+      "profileLabel": "Fakultet filozofije i religijskih znanosti, bakalaureatski (zavrsni) rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2021-12-01",
+      "rules": {
+        "font": ["Times New Roman"],
+        "size": 12,
+        "spacing": 1.5,
+        "margins": { "top": 2.5, "right": 2.5, "bottom": 2.5, "left": 2.5 },
+        "requireToc": true,
+        "requirePageNumbers": true,
+        "requireA4": true,
+        "checkMargins": true,
+        "recommendedCitation": "harvard",
+        "requiredSections": [
+          { "key": "naslovnica", "label": "Naslovnica", "terms": ["naslovnica"] },
+          { "key": "sazetak", "label": "Sazetak i kljucne rijeci", "terms": ["sazetak", "kljucne rijeci"] },
+          { "key": "sadrzaj", "label": "Sadrzaj", "terms": ["sadrzaj"] },
+          { "key": "uvod", "label": "Uvod (tekst rada)", "terms": ["uvod"] },
+          { "key": "zakljucak", "label": "Zakljucak", "terms": ["zakljucak"] },
+          { "key": "literatura", "label": "Popis literature", "terms": ["popis literature", "literatura"] },
+          { "key": "zivotopis", "label": "Zivotopis", "terms": ["zivotopis"] }
+        ]
+      },
+      "facts": [
+        "Rad treba biti ispisan na papiru A4 i sadrzavati najmanje 30 stranica teksta (imperativ).",
+        "Postavke stranice: Times New Roman 12, prored 1,5, margine 2,5 cm (imperativ).",
+        "Numeriraju se sve stranice od uvoda do kraja rada, broj u donjem desnom uglu (imperativ).",
+        "Rad mora sadrzavati naslovnicu, sazetak s kljucnim rijecima, sadrzaj, tekst (uvod), zakljucak, popis literature i zivotopis (imperativ).",
+        "Citira se prema pravilima casopisa Obnovljeni zivot, harvardski nacin po standardu APA (imperativ)."
+      ],
+      "note": "Bakalaureatski (zavrsni) rad preddiplomskog studija iz sluzbenih fakultetskih Uputa za formalno oblikovanje bakalaureatskog rada (FFRZ, 2021). Identicno diplomskima osim opsega (najmanje 30 stranica). Cijelo tehnicko oblikovanje je imperativno pa je scored. Obostrano poravnanje nije spomenuto pa nema justify pravila.",
+      "sources": [
+        {
+          "title": "Upute za formalno oblikovanje bakalaureatskog rada (FFRZ, 2021)",
+          "url": "https://www.ffrz.unizg.hr/wp-content/uploads/2021/12/Upute-za-formalno-oblikovanje-bakalaureatskog-rada.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za formalno oblikovanje bakalaureatskog rada (zavrsnog rada preddiplomskog studija) (Fakultet filozofije i religijskih znanosti, 2021)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "font",
+        "velicina slova",
+        "prored",
+        "margine",
+        "format papira",
+        "numeracija stranica",
+        "opseg (stranice)",
+        "sadrzaj",
+        "obvezne cjeline rada",
+        "stil citiranja"
+      ],
+      "advisoryScope": [],
+      "catalogPrograms": [
+        "Prijediplomski studiji Fakulteta filozofije i religijskih znanosti (zavrsni rad)"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-ffrz-diplomski--font-verified-2026-07-02",
+      "ruleId": "ffrz-diplomski--font",
+      "profileId": "ffrz-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffrz-oblikovanje-diplomski-2021",
+      "sourcePage": "odjeljak Postavke stranice",
+      "quote": "Font: Times New Roman.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ffrz-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "ffrz-diplomski--font-size",
+      "profileId": "ffrz-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffrz-oblikovanje-diplomski-2021",
+      "sourcePage": "odjeljak Postavke stranice",
+      "quote": "Velicina slova: 12 tipografskih tocaka.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ffrz-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "ffrz-diplomski--line-spacing",
+      "profileId": "ffrz-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffrz-oblikovanje-diplomski-2021",
+      "sourcePage": "odjeljak Postavke stranice",
+      "quote": "Prored: 1,5 redak.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ffrz-diplomski--margins-verified-2026-07-02",
+      "ruleId": "ffrz-diplomski--margins",
+      "profileId": "ffrz-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffrz-oblikovanje-diplomski-2021",
+      "sourcePage": "odjeljak Postavke stranice",
+      "quote": "Lijeva i desna margina: 2,5 cm.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ffrz-diplomski--paper-size-verified-2026-07-02",
+      "ruleId": "ffrz-diplomski--paper-size",
+      "profileId": "ffrz-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffrz-oblikovanje-diplomski-2021",
+      "sourcePage": "uvodni odlomak: papir A4 i opseg",
+      "quote": "Rad treba biti ispisan na papiru formata A4 (210x297)",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ffrz-diplomski--page-numbers-verified-2026-07-02",
+      "ruleId": "ffrz-diplomski--page-numbers",
+      "profileId": "ffrz-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffrz-oblikovanje-diplomski-2021",
+      "sourcePage": "uvodni odlomak: numeracija stranica",
+      "quote": "Numeriraju se sve stranice od uvoda od kraja rada.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ffrz-diplomski--page-count-verified-2026-07-02",
+      "ruleId": "ffrz-diplomski--page-count",
+      "profileId": "ffrz-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffrz-oblikovanje-diplomski-2021",
+      "sourcePage": "uvodni odlomak: papir A4 i opseg",
+      "quote": "Rad treba biti ispisan na papiru formata A4 (210x297) te sadrzavati najmanje 50 stranica teksta.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ffrz-diplomski--toc-verified-2026-07-02",
+      "ruleId": "ffrz-diplomski--toc",
+      "profileId": "ffrz-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffrz-oblikovanje-diplomski-2021",
+      "sourcePage": "popis: Rad mora sadrzavati",
+      "quote": "Rad mora sadrzavati:",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ffrz-diplomski--required-sections-verified-2026-07-02",
+      "ruleId": "ffrz-diplomski--required-sections",
+      "profileId": "ffrz-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffrz-oblikovanje-diplomski-2021",
+      "sourcePage": "popis: Rad mora sadrzavati",
+      "quote": "Rad mora sadrzavati:",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ffrz-diplomski--citation-style-verified-2026-07-02",
+      "ruleId": "ffrz-diplomski--citation-style",
+      "profileId": "ffrz-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffrz-oblikovanje-diplomski-2021",
+      "sourcePage": "odjeljak Pravila navoenja unutartekstnih citatnica i bibliografskih jedinica",
+      "quote": "Obnovljeni zivot za citiranje i referiranje koristi sustav unutartekstnih citatnica (In-Text",
+      "note": "Port pilot workflow. Citiranje autor-godina (Obnovljeni zivot, harvardski po APA) -> harvard."
+    },
+    {
+      "id": "led-ffrz-bakalaureatski--font-verified-2026-07-02",
+      "ruleId": "ffrz-bakalaureatski--font",
+      "profileId": "ffrz-bakalaureatski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffrz-oblikovanje-bakalaureatski-2021",
+      "sourcePage": "odjeljak Postavke stranice",
+      "quote": "Font: Times New Roman.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ffrz-bakalaureatski--font-size-verified-2026-07-02",
+      "ruleId": "ffrz-bakalaureatski--font-size",
+      "profileId": "ffrz-bakalaureatski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffrz-oblikovanje-bakalaureatski-2021",
+      "sourcePage": "odjeljak Postavke stranice",
+      "quote": "Velicina slova: 12 tipografskih tocaka.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ffrz-bakalaureatski--line-spacing-verified-2026-07-02",
+      "ruleId": "ffrz-bakalaureatski--line-spacing",
+      "profileId": "ffrz-bakalaureatski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffrz-oblikovanje-bakalaureatski-2021",
+      "sourcePage": "odjeljak Postavke stranice",
+      "quote": "Prored: 1,5 redak.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ffrz-bakalaureatski--margins-verified-2026-07-02",
+      "ruleId": "ffrz-bakalaureatski--margins",
+      "profileId": "ffrz-bakalaureatski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffrz-oblikovanje-bakalaureatski-2021",
+      "sourcePage": "odjeljak Postavke stranice",
+      "quote": "Lijeva i desna margina: 2,5 cm.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ffrz-bakalaureatski--paper-size-verified-2026-07-02",
+      "ruleId": "ffrz-bakalaureatski--paper-size",
+      "profileId": "ffrz-bakalaureatski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffrz-oblikovanje-bakalaureatski-2021",
+      "sourcePage": "uvodni odlomak: papir A4 i opseg",
+      "quote": "Rad treba biti ispisan na papiru formata A4 (210x297)",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ffrz-bakalaureatski--page-numbers-verified-2026-07-02",
+      "ruleId": "ffrz-bakalaureatski--page-numbers",
+      "profileId": "ffrz-bakalaureatski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffrz-oblikovanje-bakalaureatski-2021",
+      "sourcePage": "uvodni odlomak: numeracija stranica",
+      "quote": "Brojevi stranica stavljaju se u donji desni ugao stranice.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ffrz-bakalaureatski--page-count-verified-2026-07-02",
+      "ruleId": "ffrz-bakalaureatski--page-count",
+      "profileId": "ffrz-bakalaureatski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffrz-oblikovanje-bakalaureatski-2021",
+      "sourcePage": "uvodni odlomak: papir A4 i opseg",
+      "quote": "Rad treba biti ispisan na papiru formata A4 (210x297) te sadrzavati najmanje 30",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ffrz-bakalaureatski--toc-verified-2026-07-02",
+      "ruleId": "ffrz-bakalaureatski--toc",
+      "profileId": "ffrz-bakalaureatski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffrz-oblikovanje-bakalaureatski-2021",
+      "sourcePage": "popis: Rad mora sadrzavati",
+      "quote": "Rad mora sadrzavati:",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ffrz-bakalaureatski--required-sections-verified-2026-07-02",
+      "ruleId": "ffrz-bakalaureatski--required-sections",
+      "profileId": "ffrz-bakalaureatski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffrz-oblikovanje-bakalaureatski-2021",
+      "sourcePage": "popis: Rad mora sadrzavati",
+      "quote": "Rad mora sadrzavati:",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-ffrz-bakalaureatski--citation-style-verified-2026-07-02",
+      "ruleId": "ffrz-bakalaureatski--citation-style",
+      "profileId": "ffrz-bakalaureatski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "ffrz-oblikovanje-bakalaureatski-2021",
+      "sourcePage": "odjeljak Pravila navoenja unutartekstnih citatnica i bibliografskih jedinica",
+      "quote": "Obnovljeni zivot za citiranje i referiranje koristi sustav unutartekstnih citatnica (In-Text",
+      "note": "Port pilot workflow. Citiranje autor-godina (Obnovljeni zivot, harvardski po APA) -> harvard."
+    }
+  ]
+}
