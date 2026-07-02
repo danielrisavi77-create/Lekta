@@ -1,0 +1,80 @@
+{
+  "faculty": "fkit",
+  "catalogPrograms": [],
+  "sources": [],
+  "profiles": [],
+  "ledger": [
+    {
+      "id": "led-fkit-diplomski--paper-size-resourced-2026-07-02",
+      "ruleId": "fkit-diplomski--paper-size",
+      "profileId": "fkit-diplomski",
+      "action": "re-sourced",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fkit-pravilnik-2023",
+      "sourcePage": "Članak 9. (str. 3)",
+      "quote": "Diplomski rad mora biti napisan na računalu, tiskan na papiru formata A4 (veličina slova 12 pt), prored 1,5, tiskan obostrano i uvezan.",
+      "note": "Maticni Pravilnik 2023 OCR-an (scripts/ocr_pdf.py); repoint s Izmjene 2025 na cist verbatim citat clanka 9. Vrijednost nepromijenjena."
+    },
+    {
+      "id": "led-fkit-diplomski--font-size-resourced-2026-07-02",
+      "ruleId": "fkit-diplomski--font-size",
+      "profileId": "fkit-diplomski",
+      "action": "re-sourced",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fkit-pravilnik-2023",
+      "sourcePage": "Članak 9. (str. 3)",
+      "quote": "Diplomski rad mora biti napisan na računalu, tiskan na papiru formata A4 (veličina slova 12 pt), prored 1,5, tiskan obostrano i uvezan.",
+      "note": "Maticni Pravilnik 2023 OCR-an; repoint s Izmjene 2025 na cist verbatim citat clanka 9. Vrijednost nepromijenjena."
+    },
+    {
+      "id": "led-fkit-diplomski--line-spacing-resourced-2026-07-02",
+      "ruleId": "fkit-diplomski--line-spacing",
+      "profileId": "fkit-diplomski",
+      "action": "re-sourced",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fkit-pravilnik-2023",
+      "sourcePage": "Članak 9. (str. 3)",
+      "quote": "Diplomski rad mora biti napisan na računalu, tiskan na papiru formata A4 (veličina slova 12 pt), prored 1,5, tiskan obostrano i uvezan.",
+      "note": "Maticni Pravilnik 2023 OCR-an; repoint s Izmjene 2025 na cist verbatim citat clanka 9. Vrijednost nepromijenjena."
+    },
+    {
+      "id": "led-fkit-zavrsni--paper-size-resourced-2026-07-02",
+      "ruleId": "fkit-zavrsni--paper-size",
+      "profileId": "fkit-zavrsni",
+      "action": "re-sourced",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fkit-pravilnik-2023",
+      "sourcePage": "Članak 9. (str. 3)",
+      "quote": "Završni rad mora biti napisan na računalu, na listu formata A4 (veličina slova 12 pt), prored 1,5.",
+      "note": "Maticni Pravilnik 2023 OCR-an; repoint s Izmjene 2025 na cist verbatim citat clanka 9 (raniji citat je bio diplomski). Vrijednost nepromijenjena."
+    },
+    {
+      "id": "led-fkit-zavrsni--font-size-resourced-2026-07-02",
+      "ruleId": "fkit-zavrsni--font-size",
+      "profileId": "fkit-zavrsni",
+      "action": "re-sourced",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fkit-pravilnik-2023",
+      "sourcePage": "Članak 9. (str. 3)",
+      "quote": "Završni rad mora biti napisan na računalu, na listu formata A4 (veličina slova 12 pt), prored 1,5.",
+      "note": "Maticni Pravilnik 2023 OCR-an; repoint s Izmjene 2025 na cist verbatim citat clanka 9 (raniji citat je bio diplomski). Vrijednost nepromijenjena."
+    },
+    {
+      "id": "led-fkit-zavrsni--line-spacing-resourced-2026-07-02",
+      "ruleId": "fkit-zavrsni--line-spacing",
+      "profileId": "fkit-zavrsni",
+      "action": "re-sourced",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fkit-pravilnik-2023",
+      "sourcePage": "Članak 9. (str. 3)",
+      "quote": "Završni rad mora biti napisan na računalu, na listu formata A4 (veličina slova 12 pt), prored 1,5.",
+      "note": "Maticni Pravilnik 2023 OCR-an; repoint s Izmjene 2025 na cist verbatim citat clanka 9 (raniji citat je bio diplomski). Vrijednost nepromijenjena."
+    }
+  ]
+}

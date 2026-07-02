@@ -5,23 +5,27 @@ Preostali izvori su blokirani ISKLJUCIVO okolinom, ne nedostatkom truda. Nista n
 skenirani PDF-ovi bez tekstualnog sloja ne mogu proci adversarijalnu grep-provjeru citata, pa su
 izvori preskoceni (found:false) umjesto da se nagadaju vrijednosti.
 
-## A. Skenirani izvori - trebaju OCR
+## A. Skenirani izvori u repozitoriju - RIJESENO (OCR odradjen 2026-07-02)
 
-Lokalno nema tesseract binarija (samo pytesseract wrapper). Nakon instalacije alata (vidi dno):
+OCR lanac je instaliran i skenirani in-repo izvori su OCR-ani skriptom
+`python scripts/ocr_pdf.py <pdf>` (PyMuPDF rasterizacija 300 DPI + tesseract hrv+eng;
+ne treba ocrmypdf ni Ghostscript). Kvaliteta hrvatskog OCR-a je vrlo visoka (cista
+dijakritika). VAZAN nalaz: vecina ovih PDF-ova NIJE bila skenirana - imali su tekstualni
+sloj, a prosla ih je sesija krivo oznacila skeniranima jer `pdftotext` uopce nije mogao
+pokrenuti (greska putanje), ne zbog nedostatka teksta.
 
-```
-node scripts/ocr-source.mjs <put/do/skeniranog.pdf>
-# -> <ime>-ocr.pdf (+ .txt); provjeri .txt pa portaj kroz port-faculty spec kao ostale
-```
-
-Poznato skenirani (iz izvjestaja workflow agenata), vec u repozitoriju kao provenance:
-
-| Izvor | Fakultet | Sto bi otkljucao |
+| Izvor | Stvarno stanje | Ishod nakon OCR/pdftotext |
 |---|---|---|
-| `data/sources/fsb/fsb-pravilnik-radovi-2018.pdf` | FSB | faculty-wide binding pravila (FSB je sad 0 scored, sve advisory) |
-| `data/sources/grad/grad-pravilnik-zavrsni-diplomski.pdf` + `grad-upute-radovi-2024.pdf` | GRAD | dodatna binding pravila uz vec portani DOCX predlozak |
-| `data/sources/grf/grf-pravilnik-diplomski-2012.pdf` + `grf-pravilnik-poslijediplomski.pdf` | GRF | diplomski Prilog 3 (diplomski razina; sad pokrivena preko .doc) i doktorski |
-| `data/sources/fkit/fkit-pravilnik-2023.pdf` | FKIT | maticni Pravilnik (sad samo 3 scored iz Izmjene 2025) |
+| `fsb/fsb-pravilnik-radovi-2018.pdf` | tekstualni sloj | proceduralni Pravilnik, NEMA pravila oblikovanja; FSB ostaje advisory (format dolazi iz jedne katedre, ne faculty-wide) |
+| `grad/grad-pravilnik-zavrsni-diplomski.pdf` | skeniran (OCR) | proceduralni, bez format pravila |
+| `grad/grad-upute-radovi-2024.pdf` (89 str.) | skeniran (OCR) | izrijekom DELEGIRA tehnicko oblikovanje na Predlozak (grad-predlozak-2024, vec izvor); stil citiranja je studentov izbor -> margine/paper-size ostaju advisory |
+| `grf/grf-pravilnik-diplomski-2012.pdf` | skeniran (OCR) | sadrzi punu format-spec IDENTICNU prilogu 3 (.doc) koji grf-diplomski vec koristi -> redundantna potvrda |
+| `grf/grf-pravilnik-poslijediplomski.pdf` | tekstualni sloj | doktorski/proceduralni; doktorski pokriven DR.SC.-08 |
+| `fkit/fkit-pravilnik-2023.pdf` | skeniran (OCR) | maticni cl. 9: A4, 12 pt, prored 1,5 (zavrsni i diplomski); 3 scored pravila po vrsti REPOINTANA s garbled Izmjene 2025 na cist verbatim citat (vrijednosti nepromijenjene) |
+
+Neto: jedino stvarno poboljsanje je FKIT (cisci izvor/citat, ista pokrivenost). Za FSB/GRAD/GRF
+OCR je DOKAZAO da nema dodatnih scored pravila (delegiraju ili su proceduralni). OCR tekst je
+spremljen kao provenance uz izvore: `<izvor>.ocr.txt`.
 
 Nije u repozitoriju (treba re-harvest PA OCR):
 
@@ -40,18 +44,24 @@ Nije u repozitoriju (treba re-harvest PA OCR):
 | fbf diplomski upute | iza Merlin (moodle.srce.hr) logina | dohvat s AAI prijavom; fbf trenutno ima samo specijalisticki profil |
 | fer sredisnje stranice (predmet/diprad, predmet/zavrad) | HTTP 403 | drukciji User-Agent/mreza; fer diplomski/zavrsni pokriveni iz drugih izvora |
 
-## Instalacija OCR alata (Windows)
+## Instalacija OCR alata (Windows) - INSTALIRANO 2026-07-02
 
-1. Tesseract: https://github.com/UB-Mannheim/tesseract/wiki  (ili `scoop install tesseract`)
-   - dodaj hrvatski: `hrv.traineddata` u `tessdata/` (provjera: `tesseract --list-langs` sadrzi `hrv`)
-2. Ghostscript: `choco install ghostscript`
-3. ocrmypdf: `pip install ocrmypdf`  (provjera: `ocrmypdf --version`)
+Instalirano u ovoj sesiji:
+1. Tesseract 5.4.0: `winget install --id UB-Mannheim.TesseractOCR --source winget` (user-vidljivo na `C:\Program Files\Tesseract-OCR`).
+2. `hrv.traineddata` + `eng.traineddata` (tessdata_best) u `%LOCALAPPDATA%\tessdata` (postavi `TESSDATA_PREFIX` ili ostavi da skripta sama nadje).
+3. PyMuPDF: `pip install --user pymupdf` (rasterizator; zamjenjuje Ghostscript+ocrmypdf).
 
-Nakon toga `scripts/ocr-source.mjs` radi automatski.
+Preporuceni put (bez ocrmypdf/Ghostscript):
+
+```
+python scripts/ocr_pdf.py data/sources/<fac>/<izvor>.pdf    # -> <izvor>-ocr.txt (hrv+eng, 300 DPI)
+```
+
+`scripts/ocr-source.mjs` (ocrmypdf varijanta) ostaje kao alternativa ako se instalira ocrmypdf+Ghostscript.
 
 ## Postupak porta nakon OCR-a
 
-1. OCR skeniranog PDF-a -> `-ocr.pdf` + `-ocr.txt`.
-2. Procitaj `.txt`, izvuci imperativna pravila s DOSLOVNIM citatom + lokatorom (isti standard kao workflow).
-3. Napravi `discovery/port-specs/<fac>.json` (izvor s `snapshotPath` na `-ocr.pdf` + njegov sha256) i fan-out draft.
+1. OCR skeniranog PDF-a: `python scripts/ocr_pdf.py <izvor>.pdf` -> `<izvor>-ocr.txt`.
+2. Procitaj `.txt`, izvuci IMPERATIVNA pravila s DOSLOVNIM citatom + lokatorom (isti standard kao workflow). Ako izvor delegira/procedura je - `found:false`, ne izmisljaj.
+3. Izvor je najcesce vec registriran (snapshotPath = originalni PDF + hash); spremi i `<izvor>.ocr.txt` kao provenance. Dodaj scored ruleEntries u agregirani draft `data/profiles/<fac>/drafts/<fac>.json` (glavne vrste) ili fan-out draft, s ledger unosima u port-specu.
 4. `node scripts/port-faculty.mjs discovery/port-specs/<fac>.json` -> `npm run check` -> commit.
