@@ -14,6 +14,7 @@ import { computeFingerprint } from '../../../src/fingerprint/fingerprint.ts';
 import { isReportWorkType } from '../../../src/report/pricing.ts';
 import { buildFullReport } from '../../../src/report/report.ts';
 import { decideReportAccess } from '../../../src/report/slot-logic.ts';
+import { resolveDailyCap } from '../../../src/report/partner.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -59,6 +60,17 @@ Deno.serve(async (req: Request) => {
   // 3. otisak iz payloada (serverski)
   const fingerprint = computeFingerprint(body.parsedStructure);
 
+  // partner cap (sekcija 7): aktivan partner dobiva svoj daily_cap, inace retail DAILY_CAP
+  const { data: partner } = await admin
+    .from('partner_accounts')
+    .select('status, daily_cap')
+    .eq('user_id', user.id)
+    .maybeSingle();
+  const dailyCap = resolveDailyCap(
+    partner ? { status: (partner as any).status, dailyCap: (partner as any).daily_cap } : null,
+    DAILY_CAP,
+  );
+
   // dohvat konteksta za odluku
   const [{ data: slots }, { data: entitlements }, { count: recent }] = await Promise.all([
     admin
@@ -101,7 +113,7 @@ Deno.serve(async (req: Request) => {
       })),
       recentGenerationCount: recent ?? 0,
     },
-    { dailyCap: DAILY_CAP },
+    { dailyCap },
   );
 
   const ipHash = await sha256Hex(req.headers.get('x-forwarded-for') ?? '');

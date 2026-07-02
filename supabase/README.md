@@ -15,6 +15,10 @@ serverska odluka; klijent nikad nije izvor istine.
   sekcija 5); cijena je serverska (cita `products`), auth JWT obavezan. Core: `src/report/checkout.ts`.
 - `migrations/0002_products_catalog.sql` - katalog `products` (jedina istina o cijenama),
   `pricing_changelog`, delte na `entitlements`/`document_slots`, RLS (MONETIZATION_PLAN.md).
+- `migrations/0003_coupons_manual_orders.sql` - `coupon_grants` (pass bonus) + `manual_orders`
+  (premium_human) + RLS.
+- `migrations/0004_partner_accounts.sql` - `partner_accounts` (rucno odobrenje, daily_cap);
+  aktivan partner dobiva podignut cap u generate-report (`src/report/partner.ts`).
 
 ## Odnos prema testiranom jezgru
 
