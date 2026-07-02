@@ -6237,7 +6237,7 @@
       "checkSize": false,
       "checkSpacing": false,
       "checkMargins": false,
-      "size": 12,
+      "size": [12],
       "spacing": 1.5,
       "margins": {
         "top": 2.54,
