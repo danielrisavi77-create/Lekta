@@ -6078,7 +6078,60 @@
     "profileLabel": "Ekonomski fakultet, diplomski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2003-02-01",
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/efzg-synthetic.test.ts) + 3 stvarna javna diplomska rada iz ZIR-a kroz byte-level PDF preflight.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2021,
+          2022
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "efzg:9500",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 56,
+          "pageFormat": "A4",
+          "sha256": "2b2e167ceaac7109c635d25be6072c73f161fd071683f2e5bc6670729587b937"
+        },
+        {
+          "pid": "efzg:8800",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 57,
+          "pageFormat": "A4",
+          "sha256": "12c9f4abde65353c662b936bc091b916cf91132e5c0060cf0e8074c85c38b84e"
+        },
+        {
+          "pid": "efzg:8700",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 65,
+          "pageFormat": "A4",
+          "sha256": "8ef233a8a19c5a189a34361c66186f73dd5bc92cb4918cf61893aa5bdd439284"
+        }
+      ],
+      "confirmed": [
+        "efzg-diplomski se analizira bez pucanja (ranije scalar size:12 + nedostatak fonta); format-provjere su informativne (tests/efzg-synthetic.test.ts).",
+        "3 stvarna javna diplomska rada (efzg:9500/8800/8700) prolaze byte-level PDF preflight: valjan nesifriran PDF, 100% stranica A4, viselistni, ugradjeni fontovi."
+      ],
+      "observedDeviations": [
+        "EFZG faculty-wide Upute (7.1 \"preporucuje se\", 6.1 \"preporucljivo\") sve tehnicko oblikovanje I citiranje daju kao PREPORUKU pa nema scored tehnickih pravila; radovi potvrdjuju A4 i integritet, ne oblikovanje. Za scored pravila trebao bi noviji imperativni Pravilnik (nije nadjen medju dohvacenim EFZG dokumentima). U sirem uzorku dio radova je US Letter; ova tri su 100% A4."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet, ne oblikovanje sadrzaja). Stvarni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet preko PID-a i sha256."
+    },
     "rules": {
+      "checkFont": false,
+      "checkSize": false,
+      "checkSpacing": false,
+      "checkMargins": false,
       "size": 12,
       "spacing": 1.5,
       "margins": {
@@ -11717,6 +11770,27 @@
     "profileLabel": "Ekonomski fakultet, doktorski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": null,
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/efzg-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "DR.SC.-08 format-provjere (font TNR 12, prored 1,5, A4) ispravno se okidaju na uskladjenom docx-u (tests/efzg-synthetic.test.ts)."
+      ],
+      "observedDeviations": [
+        "EFZG doktorske disertacije nisu dostupne kao otvoreni fulltext u dohvacenom ZIR uzorku (vecina objekata ne servira fulltext / SPA-shell), pa stvarni javni uzorak nije pribavljen."
+      ],
+      "productDecision": "Oblikovanje delegirano na sveucilisni DR.SC.-08 predlozak; scored pravila dokazana sintetickim golden testom. Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
