@@ -1716,6 +1716,202 @@
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
         "verifiedHash": "56df35ca9ab16a3650f6599ca481928dfdc7a2d081321529ba3219a34fe9be9b"
+      },
+      {
+        "ruleId": "fpzg-politologija-zavrsni--font",
+        "checkId": "font",
+        "value": [
+          "Times New Roman"
+        ],
+        "category": "format",
+        "label": "Font",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 14 (FORMAT I OPREMA RADA)",
+        "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-politologija-zavrsni--font-size",
+        "checkId": "font-size",
+        "value": [
+          12
+        ],
+        "category": "format",
+        "label": "Velicina slova",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 14 (FORMAT I OPREMA RADA)",
+        "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-politologija-zavrsni--line-spacing",
+        "checkId": "line-spacing",
+        "value": 1.5,
+        "category": "format",
+        "label": "Prored",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 14 (FORMAT I OPREMA RADA)",
+        "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-politologija-zavrsni--paper-size",
+        "checkId": "paper-size",
+        "value": true,
+        "category": "format",
+        "label": "Format papira A4",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 14 (FORMAT I OPREMA RADA)",
+        "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Rad treba biti otisnut na papiru formata A4 (21x29,7 cm), te ukoricen.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-politologija-zavrsni--page-numbers",
+        "checkId": "page-numbers",
+        "value": true,
+        "category": "format",
+        "label": "Brojevi stranica",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 14 (FORMAT I OPREMA RADA)",
+        "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi rimskim, osnovni tekst arapskim brojkama.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-politologija-zavrsni--toc",
+        "checkId": "toc",
+        "value": true,
+        "category": "structure",
+        "label": "Sadrzaj",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 6 (opca klauzula) i str. 9 (STRUKTURA RADA)",
+        "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Akademski radovi sastoje se od prethodnoga dijela, osnovnog teksta i zavrsnoga dijela; obavezni su sadrzaj, uvod, tijelo teksta, zakljucak, sazetak, kljucne rijeci i popis literature.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-politologija-zavrsni--required-sections",
+        "checkId": "required-sections",
+        "value": [
+          {
+            "key": "toc",
+            "label": "sadržaj",
+            "terms": [
+              "sadrzaj",
+              "contents",
+              "table of contents"
+            ]
+          },
+          {
+            "key": "intro",
+            "label": "uvod",
+            "terms": [
+              "uvod",
+              "introduction"
+            ]
+          },
+          {
+            "key": "conclusion",
+            "label": "zaključak",
+            "terms": [
+              "zakljucak",
+              "conclusion"
+            ]
+          },
+          {
+            "key": "refs",
+            "label": "literatura",
+            "terms": [
+              "literatura",
+              "popis literature",
+              "izvori i literatura",
+              "bibliografija",
+              "references"
+            ]
+          },
+          {
+            "key": "abstract",
+            "label": "sažetak / abstract",
+            "terms": [
+              "sazetak",
+              "abstract"
+            ]
+          },
+          {
+            "key": "keywords",
+            "label": "ključne riječi / keywords",
+            "terms": [
+              "kljucne rijeci",
+              "keywords"
+            ]
+          }
+        ],
+        "category": "structure",
+        "label": "Obvezni dijelovi rada",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 6 (opca klauzula) i str. 9 (STRUKTURA RADA)",
+        "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Akademski radovi sastoje se od prethodnoga dijela, osnovnog teksta i zavrsnoga dijela; obavezni su sadrzaj, uvod, tijelo teksta, zakljucak, sazetak, kljucne rijeci i popis literature.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-politologija-zavrsni--word-count",
+        "checkId": "word-count",
+        "value": {
+          "min": 5000,
+          "max": 6000
+        },
+        "category": "scope",
+        "label": "Opseg rijeci",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-odluka-zavrsni-opseg-2025",
+        "sourcePage": "str. 1 (opseg zavrsnog rada: 5 ECTS, 20-25 kartica, 5000-6000 rijeci)",
+        "quote": "Zavrsni rad ukljucuje 5 ECTS bodova, sto se odnosi na 20 do 25 kartica teksta odnosno 5000 do 6000 rijeci.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "70cfc36aa789d1533f44d43c5790a5d4627575898a6a98e3096e2327c22d320c"
       }
     ],
     "fpzg-novinarstvo-zavrsni-tekst": [
@@ -1735,6 +1931,202 @@
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
         "verifiedHash": "56df35ca9ab16a3650f6599ca481928dfdc7a2d081321529ba3219a34fe9be9b"
+      },
+      {
+        "ruleId": "fpzg-novinarstvo-zavrsni-tekst--font",
+        "checkId": "font",
+        "value": [
+          "Times New Roman"
+        ],
+        "category": "format",
+        "label": "Font",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 14 (FORMAT I OPREMA RADA)",
+        "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-novinarstvo-zavrsni-tekst--font-size",
+        "checkId": "font-size",
+        "value": [
+          12
+        ],
+        "category": "format",
+        "label": "Velicina slova",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 14 (FORMAT I OPREMA RADA)",
+        "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-novinarstvo-zavrsni-tekst--line-spacing",
+        "checkId": "line-spacing",
+        "value": 1.5,
+        "category": "format",
+        "label": "Prored",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 14 (FORMAT I OPREMA RADA)",
+        "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify).",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-novinarstvo-zavrsni-tekst--paper-size",
+        "checkId": "paper-size",
+        "value": true,
+        "category": "format",
+        "label": "Format papira A4",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 14 (FORMAT I OPREMA RADA)",
+        "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Rad treba biti otisnut na papiru formata A4 (21x29,7 cm), te ukoricen.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-novinarstvo-zavrsni-tekst--page-numbers",
+        "checkId": "page-numbers",
+        "value": true,
+        "category": "format",
+        "label": "Brojevi stranica",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 6 (opca klauzula: svih vrsta proze, sve razine studija) i str. 14 (FORMAT I OPREMA RADA)",
+        "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi rimskim, osnovni tekst arapskim brojkama.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-novinarstvo-zavrsni-tekst--toc",
+        "checkId": "toc",
+        "value": true,
+        "category": "structure",
+        "label": "Sadrzaj",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 6 (opca klauzula) i str. 9 (STRUKTURA RADA)",
+        "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Akademski radovi sastoje se od prethodnoga dijela, osnovnog teksta i zavrsnoga dijela; obavezni su sadrzaj, uvod, tijelo teksta, zakljucak, sazetak, kljucne rijeci i popis literature.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-novinarstvo-zavrsni-tekst--required-sections",
+        "checkId": "required-sections",
+        "value": [
+          {
+            "key": "toc",
+            "label": "sadržaj",
+            "terms": [
+              "sadrzaj",
+              "contents",
+              "table of contents"
+            ]
+          },
+          {
+            "key": "intro",
+            "label": "uvod",
+            "terms": [
+              "uvod",
+              "introduction"
+            ]
+          },
+          {
+            "key": "conclusion",
+            "label": "zaključak",
+            "terms": [
+              "zakljucak",
+              "conclusion"
+            ]
+          },
+          {
+            "key": "refs",
+            "label": "literatura",
+            "terms": [
+              "literatura",
+              "popis literature",
+              "izvori i literatura",
+              "bibliografija",
+              "references"
+            ]
+          },
+          {
+            "key": "abstract",
+            "label": "sažetak / abstract",
+            "terms": [
+              "sazetak",
+              "abstract"
+            ]
+          },
+          {
+            "key": "keywords",
+            "label": "ključne riječi / keywords",
+            "terms": [
+              "kljucne rijeci",
+              "keywords"
+            ]
+          }
+        ],
+        "category": "structure",
+        "label": "Obvezni dijelovi rada",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 6 (opca klauzula) i str. 9 (STRUKTURA RADA)",
+        "quote": "Upute donose temeljne naputke za izradu svih vrsta akademske proze; studente svih razina studija upucuju se da ih prouce. Akademski radovi sastoje se od prethodnoga dijela, osnovnog teksta i zavrsnoga dijela; obavezni su sadrzaj, uvod, tijelo teksta, zakljucak, sazetak, kljucne rijeci i popis literature.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-novinarstvo-zavrsni-tekst--word-count",
+        "checkId": "word-count",
+        "value": {
+          "min": 5000,
+          "max": 6000
+        },
+        "category": "scope",
+        "label": "Opseg rijeci",
+        "machineCheckable": true,
+        "authority": "general",
+        "sourceId": "fpzg-odluka-zavrsni-opseg-2025",
+        "sourcePage": "str. 1 (opseg zavrsnog rada: 5 ECTS, 20-25 kartica, 5000-6000 rijeci)",
+        "quote": "Zavrsni rad ukljucuje 5 ECTS bodova, sto se odnosi na 20 do 25 kartica teksta odnosno 5000 do 6000 rijeci.",
+        "status": "verified",
+        "verifiedBy": "Daniel Risavi",
+        "confirmedVia": "ai-1pass-batch",
+        "lastVerified": "2026-07-02",
+        "verifiedHash": "70cfc36aa789d1533f44d43c5790a5d4627575898a6a98e3096e2327c22d320c"
       }
     ],
     "fpzg-novinarstvo-zavrsni-av": [

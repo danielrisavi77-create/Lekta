@@ -66,8 +66,8 @@
     },
     {
       "profileId": "fpzg-novinarstvo-zavrsni-tekst",
-      "scored": 1,
-      "machineCheckable": 1,
+      "scored": 9,
+      "machineCheckable": 9,
       "advisory": 0,
       "ratio": 1,
       "lastVerified": "2026-07-02"
@@ -90,8 +90,8 @@
     },
     {
       "profileId": "fpzg-politologija-zavrsni",
-      "scored": 1,
-      "machineCheckable": 1,
+      "scored": 9,
+      "machineCheckable": 9,
       "advisory": 0,
       "ratio": 1,
       "lastVerified": "2026-07-02"
@@ -257,5 +257,5 @@
       "lastVerified": "2026-06-30"
     }
   ],
-  "totalScored": 168
+  "totalScored": 184
 }

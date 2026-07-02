@@ -216,5 +216,18 @@
     "validityClass": "stable",
     "lastChecked": "2026-07-02",
     "note": "PDF snapshot DR.08 Uputa za doktorski rad. Imperativna \"Postavke stranice\" (font 12, prored 1,5, margine 2,5, A4) + numeracija i Sadrzaj -> scored. Font-ime \"npr. Times New Roman\" i citiranje (struka/harvard) -> advisory. Naslovnica ima margine 3,0 (izuzeto)."
+  },
+  {
+    "id": "fpzg-odluka-zavrsni-opseg-2025",
+    "kind": "guidelines",
+    "title": "Odluka o rokovima prijave i obrane zavrsnih radova (FPZG, 2025./2026.)",
+    "url": "https://www.fpzg.unizg.hr/_download/repository/4.%20Odluka_rokovi%20prijave%20i%20obrane%20zavr%C5%A1nih%20radova%202025.pdf",
+    "publisher": "Fakultet politickih znanosti Sveucilista u Zagrebu",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/fpzg/fpzg-odluka-zavrsni-rokovi-opseg-2025.pdf",
+    "snapshotHash": "70cfc36aa789d1533f44d43c5790a5d4627575898a6a98e3096e2327c22d320c",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-02",
+    "note": "2 str. Izvor za OPSEG prijediplomskog zavrsnog rada: 'Zavrsni rad ukljucuje 5 ECTS bodova, sto se odnosi na 20 do 25 kartica teksta odnosno 5000 do 6000 rijeci.' Novinarstvo zavrsni moze biti i AV (~150 sati). Ne navodi format (font/margine) - format prijediplomskog ide iz opce klauzule Uputa."
   }
 ]
