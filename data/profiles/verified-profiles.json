@@ -9403,11 +9403,43 @@
     "profileLabel": "Fakultet filozofije i religijskih znanosti, diplomski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2021-12-01",
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/ffrz-synthetic.test.ts) + 1 stvarni javni diplomski rad iz ZIR-a kroz byte-level PDF preflight.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 1,
+        "metadataSpotChecks": 0,
+        "years": [
+          2024
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "ffrz:240",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 58,
+          "pageFormat": "A4",
+          "sha256": "2a496f13a0e9bfd31b9c3d26f968c03d2b0664f69d139e5c5033c31145be739b"
+        }
+      ],
+      "confirmed": [
+        "Uskladjeni sinteticki .docx prolazi ffrz format provjere (font TNR 12, prored 1,5, margine 2,5, A4, Sadrzaj) - tests/ffrz-synthetic.test.ts.",
+        "1 stvarni javni diplomski rad (ffrz:240) prolazi byte-level PDF preflight: valjan nesifriran PDF, 100% stranica A4, viselistni (58 str.), ugradjeni fontovi."
+      ],
+      "observedDeviations": [
+        "FFRZ je malen fakultet; u dohvacenom otvorenom ZIR uzorku nadjen 1 A4 diplomski rad (drugi su US Letter ili ne serviraju fulltext). Scalar size:12 ispravljen na [12] (ranije bi pucao na profile.size.some)."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet). Stvarni rad sluzi samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF se ne commita; identitet preko PID-a i sha256."
+    },
     "rules": {
       "font": [
         "Times New Roman"
       ],
-      "size": 12,
+      "size": [12],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -9522,11 +9554,32 @@
     "profileLabel": "Fakultet filozofije i religijskih znanosti, bakalaureatski (zavrsni) rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2021-12-01",
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/ffrz-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Format-provjere ispravno se okidaju na uskladjenom docx-u (tests/ffrz-synthetic.test.ts)."
+      ],
+      "observedDeviations": [
+        "FFRZ je malen fakultet; otvoreni javni bakalaureatski (zavrsni) rad nije nadjen u dohvacenom ZIR uzorku. Pravila identicna diplomskom (Upute FFRZ 2021); scalar size:12 ispravljen na [12]."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
       ],
-      "size": 12,
+      "size": [12],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -11947,6 +12000,27 @@
     "profileLabel": "Fakultet filozofije i religijskih znanosti, doktorski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": null,
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/ffrz-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Format-provjere ispravno se okidaju na uskladjenom docx-u (tests/ffrz-synthetic.test.ts)."
+      ],
+      "observedDeviations": [
+        "Oblikovanje delegirano na sveucilisni DR.SC.-08; otvorena disertacija nije nadjena u dohvacenom ZIR uzorku."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
