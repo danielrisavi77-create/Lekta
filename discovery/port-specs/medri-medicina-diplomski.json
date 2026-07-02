@@ -1,0 +1,133 @@
+{
+  "faculty": "medri",
+  "institution": "uniri",
+  "catalogPrograms": [
+    "Integrirani preddiplomski i diplomski sveučilišni studij Medicina (diplomski rad, Rijeka)"
+  ],
+  "sources": [
+    {
+      "id": "medri-naputak-diplomski-2026",
+      "kind": "guidelines",
+      "title": "Naputak za prijavu, oblikovanje i opremu diplomskog rada i polaganje diplomskog ispita 2025./2026. (integrirani studij Medicina, MEDRI)",
+      "url": "https://medri.uniri.hr/wp-content/uploads/2026/01/NAPUTAK_ZA_PRIJAVU_OBLIKOVANJE_I_OPREMU_DIPLOMSKOG_RADA_I_POLAGANJE_DIPLOMSKOG_ISPITA_2025_2026.pdf",
+      "publisher": "Medicinski fakultet u Rijeci",
+      "fetchedAt": "2026-07-03",
+      "snapshotPath": "data/sources/medri/medri-medicina.pdf",
+      "snapshotHash": "418832f0b0e6e2d976a5f6b13f667654e2a920617acd77cb21af92ad4f097590",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-03",
+      "note": "Tekstualni PDF; integrirani studij Medicina. Font \"citljive vrste\" nenaveden->izostavljen. Vancouver \"najcesci ... koji se koristi\"->advisory."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "medri-medicina-diplomski",
+      "unitId": "medri",
+      "programs": [
+        "Integrirani preddiplomski i diplomski sveučilišni studij Medicina (diplomski rad, Rijeka)"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Rijeka - Medicina (integrirani), diplomski rad",
+      "verifiedAt": "2026-07-03",
+      "documentDate": null,
+      "rules": {
+        "size": [
+          12
+        ],
+        "spacing": 2,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Medicinski fakultet u Rijeci), citano izravno.",
+      "sources": [
+        {
+          "title": "Naputak za prijavu, oblikovanje i opremu diplomskog rada i polaganje diplomskog ispita 2025./2026. (integrirani studij Medicina, MEDRI)",
+          "url": "https://medri.uniri.hr/wp-content/uploads/2026/01/NAPUTAK_ZA_PRIJAVU_OBLIKOVANJE_I_OPREMU_DIPLOMSKOG_RADA_I_POLAGANJE_DIPLOMSKOG_ISPITA_2025_2026.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Naputak za prijavu, oblikovanje i opremu diplomskog rada i polaganje diplomskog ispita 2025./2026. (integrirani studij Medicina, MEDRI)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Margine",
+        "Prored (dvostruki)",
+        "Velicina slova",
+        "Opseg (15-50 str.)"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-medri-medicina-diplomski--paper-size-verified-2026-07-03",
+      "ruleId": "medri-medicina-diplomski--paper-size",
+      "profileId": "medri-medicina-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "medri-naputak-diplomski-2026",
+      "sourcePage": "Naputak, oprema rada",
+      "quote": "Diplomski rad treba biti pripremljen u pisanom obliku na računalu, sukladno uputama na stranici standardne veličine (A4, 210x297 mm), sa slobodnim rubnicima od 2,5 cm i u dvostrukom proredu. Potrebno je rabiti pismo veličine 12 tipografskih točaka čitljive vrste s obvezatnom potporom svih hrvatskih znakova. Sve stranice moraju biti numerirane.",
+      "note": "Produbljivanje uniri (Medicinski fakultet u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-medri-medicina-diplomski--margins-verified-2026-07-03",
+      "ruleId": "medri-medicina-diplomski--margins",
+      "profileId": "medri-medicina-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "medri-naputak-diplomski-2026",
+      "sourcePage": "Naputak, oprema rada",
+      "quote": "Diplomski rad treba biti pripremljen u pisanom obliku na računalu, sukladno uputama na stranici standardne veličine (A4, 210x297 mm), sa slobodnim rubnicima od 2,5 cm i u dvostrukom proredu. Potrebno je rabiti pismo veličine 12 tipografskih točaka čitljive vrste s obvezatnom potporom svih hrvatskih znakova. Sve stranice moraju biti numerirane.",
+      "note": "Produbljivanje uniri (Medicinski fakultet u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-medri-medicina-diplomski--line-spacing-verified-2026-07-03",
+      "ruleId": "medri-medicina-diplomski--line-spacing",
+      "profileId": "medri-medicina-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "medri-naputak-diplomski-2026",
+      "sourcePage": "Naputak, oprema rada",
+      "quote": "Diplomski rad treba biti pripremljen u pisanom obliku na računalu, sukladno uputama na stranici standardne veličine (A4, 210x297 mm), sa slobodnim rubnicima od 2,5 cm i u dvostrukom proredu. Potrebno je rabiti pismo veličine 12 tipografskih točaka čitljive vrste s obvezatnom potporom svih hrvatskih znakova. Sve stranice moraju biti numerirane.",
+      "note": "Produbljivanje uniri (Medicinski fakultet u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-medri-medicina-diplomski--font-size-verified-2026-07-03",
+      "ruleId": "medri-medicina-diplomski--font-size",
+      "profileId": "medri-medicina-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "medri-naputak-diplomski-2026",
+      "sourcePage": "Naputak, oprema rada",
+      "quote": "Diplomski rad treba biti pripremljen u pisanom obliku na računalu, sukladno uputama na stranici standardne veličine (A4, 210x297 mm), sa slobodnim rubnicima od 2,5 cm i u dvostrukom proredu. Potrebno je rabiti pismo veličine 12 tipografskih točaka čitljive vrste s obvezatnom potporom svih hrvatskih znakova. Sve stranice moraju biti numerirane.",
+      "note": "Produbljivanje uniri (Medicinski fakultet u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-medri-medicina-diplomski--page-count-verified-2026-07-03",
+      "ruleId": "medri-medicina-diplomski--page-count",
+      "profileId": "medri-medicina-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "medri-naputak-diplomski-2026",
+      "sourcePage": "Naputak, opseg",
+      "quote": "Diplomski rad ne može sadržavati manje od 15 niti više od 50 stranica. Broje se sve stranice počevši od Uvoda.",
+      "note": "Produbljivanje uniri (Medicinski fakultet u Rijeci): direktno citanje izvora."
+    }
+  ]
+}

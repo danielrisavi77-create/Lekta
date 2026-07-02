@@ -2,7 +2,7 @@
   {
     "name": "VERIFIED_PROFILE_REGISTRY",
     "file": "data/profiles/verified-profiles.json",
-    "entries": 178
+    "entries": 190
   },
   {
     "name": "LEGAL_DEPARTMENT_REGISTRY",
@@ -77,12 +77,12 @@
   {
     "name": "SOURCE_REGISTRY",
     "file": "data/sources/source-registry.json",
-    "entries": 141
+    "entries": 149
   },
   {
     "name": "VERIFICATION_LEDGER",
     "file": "data/verification/ledger.json",
-    "entries": 2383
+    "entries": 2485
   },
   {
     "name": "LAW_DRAFTS",
@@ -92,6 +92,6 @@
   {
     "name": "SCORED_COVERAGE",
     "file": "data/coverage/scored-coverage.json",
-    "entries": 181
+    "entries": 193
   }
 ]

@@ -1,0 +1,142 @@
+{
+  "faculty": "kbfst",
+  "institution": "unist",
+  "unit": {
+    "id": "kbfst",
+    "name": "Katolički bogoslovni fakultet u Splitu",
+    "family": "mixed",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Diplomski studij (Katolički bogoslovni fakultet, Split)"
+  ],
+  "sources": [
+    {
+      "id": "kbfst-tehnicke-postavke",
+      "kind": "guidelines",
+      "title": "Pojedinosti o tehničkim postavkama diplomskoga rada (KBF Split)",
+      "url": "https://www.kbf.unist.hr/images/dok/pravilnici/Izgled_diplomskog_rada_napomene.pdf",
+      "publisher": "Katolički bogoslovni fakultet u Splitu",
+      "fetchedAt": "2026-07-03",
+      "snapshotPath": "data/sources/kbfst/kbfst.pdf",
+      "snapshotHash": "f26ab82db48de3e7a94b580f4321ec163963bf9783cba2d6f41721df4f567f2d",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-03",
+      "note": "Skenirani PDF citan OCR-om (tesseract hrv). Margine s korica (dijagram)->izostavljene; bez A4/justify; citat neimenovan->advisory."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "kbfst-diplomski",
+      "unitId": "kbfst",
+      "programs": [
+        "Diplomski studij (Katolički bogoslovni fakultet, Split)"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Split - Katolicki bogoslovni fakultet, diplomski rad",
+      "verifiedAt": "2026-07-03",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12,
+          13
+        ],
+        "spacing": 1.5,
+        "footnoteFont": [
+          "Times New Roman"
+        ],
+        "footnoteSize": [
+          10
+        ]
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Katolički bogoslovni fakultet u Splitu), citano izravno.",
+      "sources": [
+        {
+          "title": "Pojedinosti o tehničkim postavkama diplomskoga rada (KBF Split)",
+          "url": "https://www.kbf.unist.hr/images/dok/pravilnici/Izgled_diplomskog_rada_napomene.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pojedinosti o tehničkim postavkama diplomskoga rada (KBF Split)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Vrsta slova",
+        "Velicina slova (12 ili 13)",
+        "Prored",
+        "Vrsta slova biljeske",
+        "Velicina slova biljeske"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-kbfst-diplomski--font-verified-2026-07-03",
+      "ruleId": "kbfst-diplomski--font",
+      "profileId": "kbfst-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "kbfst-tehnicke-postavke",
+      "sourcePage": "Pojedinosti, tehnicke postavke",
+      "quote": "POJEDINOSTI O TEHNIČKIM POSTAVKAMA DIPLOMSKOGA RADA. Vrsta i veličina slova u tekstu: Times New Roman, 12 ili 13. Vrsta i veličina slova u bilješkama: Times New Roman, 10. Prored: 1,5. Uvlaka prvoga retka u odlomku: 1,25 cm.",
+      "note": "Produbljivanje unist (Katolički bogoslovni fakultet u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-kbfst-diplomski--font-size-verified-2026-07-03",
+      "ruleId": "kbfst-diplomski--font-size",
+      "profileId": "kbfst-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "kbfst-tehnicke-postavke",
+      "sourcePage": "Pojedinosti, tehnicke postavke",
+      "quote": "POJEDINOSTI O TEHNIČKIM POSTAVKAMA DIPLOMSKOGA RADA. Vrsta i veličina slova u tekstu: Times New Roman, 12 ili 13. Vrsta i veličina slova u bilješkama: Times New Roman, 10. Prored: 1,5. Uvlaka prvoga retka u odlomku: 1,25 cm.",
+      "note": "Produbljivanje unist (Katolički bogoslovni fakultet u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-kbfst-diplomski--line-spacing-verified-2026-07-03",
+      "ruleId": "kbfst-diplomski--line-spacing",
+      "profileId": "kbfst-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "kbfst-tehnicke-postavke",
+      "sourcePage": "Pojedinosti, tehnicke postavke",
+      "quote": "POJEDINOSTI O TEHNIČKIM POSTAVKAMA DIPLOMSKOGA RADA. Vrsta i veličina slova u tekstu: Times New Roman, 12 ili 13. Vrsta i veličina slova u bilješkama: Times New Roman, 10. Prored: 1,5. Uvlaka prvoga retka u odlomku: 1,25 cm.",
+      "note": "Produbljivanje unist (Katolički bogoslovni fakultet u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-kbfst-diplomski--footnote-font-verified-2026-07-03",
+      "ruleId": "kbfst-diplomski--footnote-font",
+      "profileId": "kbfst-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "kbfst-tehnicke-postavke",
+      "sourcePage": "Pojedinosti, tehnicke postavke",
+      "quote": "POJEDINOSTI O TEHNIČKIM POSTAVKAMA DIPLOMSKOGA RADA. Vrsta i veličina slova u tekstu: Times New Roman, 12 ili 13. Vrsta i veličina slova u bilješkama: Times New Roman, 10. Prored: 1,5. Uvlaka prvoga retka u odlomku: 1,25 cm.",
+      "note": "Produbljivanje unist (Katolički bogoslovni fakultet u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-kbfst-diplomski--footnote-size-verified-2026-07-03",
+      "ruleId": "kbfst-diplomski--footnote-size",
+      "profileId": "kbfst-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "kbfst-tehnicke-postavke",
+      "sourcePage": "Pojedinosti, tehnicke postavke",
+      "quote": "POJEDINOSTI O TEHNIČKIM POSTAVKAMA DIPLOMSKOGA RADA. Vrsta i veličina slova u tekstu: Times New Roman, 12 ili 13. Vrsta i veličina slova u bilješkama: Times New Roman, 10. Prored: 1,5. Uvlaka prvoga retka u odlomku: 1,25 cm.",
+      "note": "Produbljivanje unist (Katolički bogoslovni fakultet u Splitu): direktno citanje izvora."
+    }
+  ]
+}

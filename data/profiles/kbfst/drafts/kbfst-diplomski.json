@@ -1,0 +1,110 @@
+{
+  "profileId": "kbfst-diplomski",
+  "entries": [
+    {
+      "ruleId": "kbfst-diplomski--font",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Vrsta slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "kbfst-tehnicke-postavke",
+      "sourcePage": "Pojedinosti, tehnicke postavke",
+      "quote": "POJEDINOSTI O TEHNIČKIM POSTAVKAMA DIPLOMSKOGA RADA. Vrsta i veličina slova u tekstu: Times New Roman, 12 ili 13. Vrsta i veličina slova u bilješkama: Times New Roman, 10. Prored: 1,5. Uvlaka prvoga retka u odlomku: 1,25 cm.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "f26ab82db48de3e7a94b580f4321ec163963bf9783cba2d6f41721df4f567f2d",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "kbfst-diplomski--font-size",
+      "checkId": "font-size",
+      "value": [
+        12,
+        13
+      ],
+      "category": "format",
+      "label": "Velicina slova (12 ili 13)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "kbfst-tehnicke-postavke",
+      "sourcePage": "Pojedinosti, tehnicke postavke",
+      "quote": "POJEDINOSTI O TEHNIČKIM POSTAVKAMA DIPLOMSKOGA RADA. Vrsta i veličina slova u tekstu: Times New Roman, 12 ili 13. Vrsta i veličina slova u bilješkama: Times New Roman, 10. Prored: 1,5. Uvlaka prvoga retka u odlomku: 1,25 cm.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "f26ab82db48de3e7a94b580f4321ec163963bf9783cba2d6f41721df4f567f2d",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "kbfst-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "kbfst-tehnicke-postavke",
+      "sourcePage": "Pojedinosti, tehnicke postavke",
+      "quote": "POJEDINOSTI O TEHNIČKIM POSTAVKAMA DIPLOMSKOGA RADA. Vrsta i veličina slova u tekstu: Times New Roman, 12 ili 13. Vrsta i veličina slova u bilješkama: Times New Roman, 10. Prored: 1,5. Uvlaka prvoga retka u odlomku: 1,25 cm.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "f26ab82db48de3e7a94b580f4321ec163963bf9783cba2d6f41721df4f567f2d",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "kbfst-diplomski--footnote-font",
+      "checkId": "footnote-font",
+      "value": [
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Vrsta slova biljeske",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "kbfst-tehnicke-postavke",
+      "sourcePage": "Pojedinosti, tehnicke postavke",
+      "quote": "POJEDINOSTI O TEHNIČKIM POSTAVKAMA DIPLOMSKOGA RADA. Vrsta i veličina slova u tekstu: Times New Roman, 12 ili 13. Vrsta i veličina slova u bilješkama: Times New Roman, 10. Prored: 1,5. Uvlaka prvoga retka u odlomku: 1,25 cm.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "f26ab82db48de3e7a94b580f4321ec163963bf9783cba2d6f41721df4f567f2d",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "kbfst-diplomski--footnote-size",
+      "checkId": "footnote-size",
+      "value": [
+        10
+      ],
+      "category": "format",
+      "label": "Velicina slova biljeske",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "kbfst-tehnicke-postavke",
+      "sourcePage": "Pojedinosti, tehnicke postavke",
+      "quote": "POJEDINOSTI O TEHNIČKIM POSTAVKAMA DIPLOMSKOGA RADA. Vrsta i veličina slova u tekstu: Times New Roman, 12 ili 13. Vrsta i veličina slova u bilješkama: Times New Roman, 10. Prored: 1,5. Uvlaka prvoga retka u odlomku: 1,25 cm.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "f26ab82db48de3e7a94b580f4321ec163963bf9783cba2d6f41721df4f567f2d",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
+    }
+  ],
+  "generatedAt": "2026-07-03"
+}

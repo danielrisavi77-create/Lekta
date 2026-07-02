@@ -1,0 +1,169 @@
+{
+  "faculty": "riteh",
+  "institution": "uniri",
+  "unit": {
+    "id": "riteh",
+    "name": "Tehnički fakultet u Rijeci",
+    "family": "stem",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Prijediplomski/strucni studiji RITEH (zavrsni rad)",
+    "Diplomski studiji RITEH"
+  ],
+  "sources": [
+    {
+      "id": "riteh-upute-radovi-2025",
+      "kind": "guidelines",
+      "title": "Upute za izradu i samoarhiviranje završnog / diplomskog rada (RITEH, 2025)",
+      "url": "https://riteh.uniri.hr/wp-content/uploads/Upute_za_izradu-i-samoarhiviranje_zavrsnog-i-diplomskog-rada-2025.pdf",
+      "publisher": "Tehnički fakultet u Rijeci",
+      "fetchedAt": "2026-07-03",
+      "snapshotPath": "data/sources/riteh/riteh.pdf",
+      "snapshotHash": "017dda8a9896c3a7e61d4d44b00c9a209640e79eb5716742590b3a6167f8f2db",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-03",
+      "note": "Tekstualni PDF. Tipografija (font/margine/prored/justify) izrijekom PREPORUKA->advisory. Scored: numericki citat [1] + mandatorna pravila naslova."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "riteh-zavrsni",
+      "unitId": "riteh",
+      "programs": [
+        "Prijediplomski/strucni studiji RITEH (zavrsni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Rijeka - Tehnicki fakultet, zavrsni rad",
+      "verifiedAt": "2026-07-03",
+      "documentDate": null,
+      "rules": {
+        "headingRules": {
+          "numberRequired": true,
+          "romanLevelOneAllowed": false,
+          "maxLevel": 3,
+          "levels": {
+            "1": {
+              "uppercase": true
+            }
+          }
+        },
+        "recommendedCitation": "ieee"
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Tehnički fakultet u Rijeci), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za izradu i samoarhiviranje završnog / diplomskog rada (RITEH, 2025)",
+          "url": "https://riteh.uniri.hr/wp-content/uploads/Upute_za_izradu-i-samoarhiviranje_zavrsnog-i-diplomskog-rada-2025.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu i samoarhiviranje završnog / diplomskog rada (RITEH, 2025)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Pravila naslova (numerirano, razina 1 velika slova)",
+        "Stil citiranja (numericki, uglate zagrade)"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "riteh-diplomski",
+      "unitId": "riteh",
+      "programs": [
+        "Diplomski studiji RITEH"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Rijeka - Tehnicki fakultet, diplomski rad",
+      "verifiedAt": "2026-07-03",
+      "documentDate": null,
+      "rules": {
+        "headingRules": {
+          "numberRequired": true,
+          "romanLevelOneAllowed": false,
+          "maxLevel": 3,
+          "levels": {
+            "1": {
+              "uppercase": true
+            }
+          }
+        },
+        "recommendedCitation": "ieee"
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Tehnički fakultet u Rijeci), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za izradu i samoarhiviranje završnog / diplomskog rada (RITEH, 2025)",
+          "url": "https://riteh.uniri.hr/wp-content/uploads/Upute_za_izradu-i-samoarhiviranje_zavrsnog-i-diplomskog-rada-2025.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu i samoarhiviranje završnog / diplomskog rada (RITEH, 2025)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Pravila naslova (numerirano, razina 1 velika slova)",
+        "Stil citiranja (numericki, uglate zagrade)"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-riteh-zavrsni--heading-rules-verified-2026-07-03",
+      "ruleId": "riteh-zavrsni--heading-rules",
+      "profileId": "riteh-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "riteh-upute-radovi-2025",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Poglavlja moraju biti numerirana i svakom poglavlju treba pridijeliti odgovarajući naslov. Naslov poglavlja piše se velikim slovima veličine 14 pt. bold. Prva razina potpoglavlja piše se malim slovima veličine 12 pt. bold, a druga razina potpoglavlja veličinom slova 12 pt.",
+      "note": "Produbljivanje uniri (Tehnički fakultet u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-riteh-zavrsni--citation-style-verified-2026-07-03",
+      "ruleId": "riteh-zavrsni--citation-style",
+      "profileId": "riteh-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "riteh-upute-radovi-2025",
+      "sourcePage": "Upute, literatura",
+      "quote": "U tekstu se literatura navodi unutar pravokutnih zagrada [1]. Reference se navode pod rednim brojem pod kojim se pojavljuju u popisu, u uglatim zagradama (npr. [1] ili [1, 2, 3, 5]).",
+      "note": "Produbljivanje uniri (Tehnički fakultet u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-riteh-diplomski--heading-rules-verified-2026-07-03",
+      "ruleId": "riteh-diplomski--heading-rules",
+      "profileId": "riteh-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "riteh-upute-radovi-2025",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Poglavlja moraju biti numerirana i svakom poglavlju treba pridijeliti odgovarajući naslov. Naslov poglavlja piše se velikim slovima veličine 14 pt. bold. Prva razina potpoglavlja piše se malim slovima veličine 12 pt. bold, a druga razina potpoglavlja veličinom slova 12 pt.",
+      "note": "Produbljivanje uniri (Tehnički fakultet u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-riteh-diplomski--citation-style-verified-2026-07-03",
+      "ruleId": "riteh-diplomski--citation-style",
+      "profileId": "riteh-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "riteh-upute-radovi-2025",
+      "sourcePage": "Upute, literatura",
+      "quote": "U tekstu se literatura navodi unutar pravokutnih zagrada [1]. Reference se navode pod rednim brojem pod kojim se pojavljuju u popisu, u uglatim zagradama (npr. [1] ili [1, 2, 3, 5]).",
+      "note": "Produbljivanje uniri (Tehnički fakultet u Rijeci): direktno citanje izvora."
+    }
+  ]
+}

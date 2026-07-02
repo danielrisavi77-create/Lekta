@@ -739,6 +739,16 @@
     "name": "Sveuciliste u Rijeci",
     "units": [
       {
+        "id": "biotech",
+        "name": "Fakultet biotehnologije i razvoja lijekova, Rijeka",
+        "family": "stem",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski studiji Biotehnologije (zavrsni rad, Rijeka)",
+          "Diplomski studiji Biotehnologije (Rijeka)"
+        ]
+      },
+      {
         "id": "efri",
         "name": "Ekonomski fakultet u Rijeci",
         "family": "social",
@@ -759,6 +769,16 @@
         ]
       },
       {
+        "id": "fizri",
+        "name": "Fakultet za fiziku u Rijeci",
+        "family": "stem",
+        "status": "partial",
+        "programs": [
+          "Sveučilišni prijediplomski studiji fizike (završni rad, Rijeka)",
+          "Sveučilišni diplomski studiji fizike (Rijeka)"
+        ]
+      },
+      {
         "id": "fmtu",
         "name": "Fakultet za menadzment u turizmu i ugostiteljstvu, Opatija",
         "family": "social",
@@ -766,6 +786,16 @@
         "programs": [
           "Prijediplomski studiji FMTU (zavrsni rad)",
           "Diplomski studiji FMTU"
+        ]
+      },
+      {
+        "id": "fzsri",
+        "name": "Fakultet zdravstvenih studija u Rijeci",
+        "family": "biomed",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski studiji FZSRI (zavrsni rad)",
+          "Diplomski studiji FZSRI"
         ]
       },
       {
@@ -784,7 +814,8 @@
         "family": "biomed",
         "status": "partial",
         "programs": [
-          "Integrirani studij Farmacija (MEDRI, diplomski rad)"
+          "Integrirani studij Farmacija (MEDRI, diplomski rad)",
+          "Integrirani preddiplomski i diplomski sveučilišni studij Medicina (diplomski rad, Rijeka)"
         ]
       },
       {
@@ -805,6 +836,25 @@
         "programs": [
           "Prijediplomski studij PRAVRI (zavrsni rad)",
           "Diplomski studij PRAVRI"
+        ]
+      },
+      {
+        "id": "riteh",
+        "name": "Tehnički fakultet u Rijeci",
+        "family": "stem",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski/strucni studiji RITEH (zavrsni rad)",
+          "Diplomski studiji RITEH"
+        ]
+      },
+      {
+        "id": "ufri",
+        "name": "Učiteljski fakultet u Rijeci",
+        "family": "social",
+        "status": "partial",
+        "programs": [
+          "Diplomski studiji Učiteljskog fakulteta (Rijeka)"
         ]
       }
     ]
@@ -831,6 +881,24 @@
         "programs": [
           "Prijediplomski studiji FGAG (zavrsni rad)",
           "Diplomski studiji FGAG"
+        ]
+      },
+      {
+        "id": "kbfst",
+        "name": "Katolički bogoslovni fakultet u Splitu",
+        "family": "mixed",
+        "status": "partial",
+        "programs": [
+          "Diplomski studij (Katolički bogoslovni fakultet, Split)"
+        ]
+      },
+      {
+        "id": "kifst",
+        "name": "Kineziološki fakultet u Splitu",
+        "family": "social",
+        "status": "partial",
+        "programs": [
+          "Diplomski studiji Kineziološkog fakulteta (Split)"
         ]
       },
       {

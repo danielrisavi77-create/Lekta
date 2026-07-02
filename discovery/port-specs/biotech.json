@@ -1,0 +1,187 @@
+{
+  "faculty": "biotech",
+  "institution": "uniri",
+  "unit": {
+    "id": "biotech",
+    "name": "Fakultet biotehnologije i razvoja lijekova, Rijeka",
+    "family": "stem",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Prijediplomski studiji Biotehnologije (zavrsni rad, Rijeka)",
+    "Diplomski studiji Biotehnologije (Rijeka)"
+  ],
+  "sources": [
+    {
+      "id": "biotech-upute-radovi",
+      "kind": "guidelines",
+      "title": "Postupak za prijavu, oblikovanje i obranu završnog i diplomskog rada (Biotehnologija, Rijeka)",
+      "url": "https://biotech.uniri.hr/files/Studenti/Upute_Zavrsni_Diplomski_10_04.pdf",
+      "publisher": "Fakultet biotehnologije i razvoja lijekova, Rijeka",
+      "fetchedAt": "2026-07-03",
+      "snapshotPath": "data/sources/biotech/biotech.pdf",
+      "snapshotHash": "e5182e75a4ad34c462456a25dac9548348a75793ca2feeb7d7202736c7d23dd1",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-03",
+      "note": "Tekstualni PDF. \"normalnu marginu\"->bez margina; bez A4/justify. Nature numericki citat->advisory (izvan VALID_CITATION_IDS)."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "biotech-zavrsni",
+      "unitId": "biotech",
+      "programs": [
+        "Prijediplomski studiji Biotehnologije (zavrsni rad, Rijeka)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Rijeka - Biotehnologija, zavrsni rad",
+      "verifiedAt": "2026-07-03",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Verdana"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet biotehnologije i razvoja lijekova, Rijeka), citano izravno.",
+      "sources": [
+        {
+          "title": "Postupak za prijavu, oblikovanje i obranu završnog i diplomskog rada (Biotehnologija, Rijeka)",
+          "url": "https://biotech.uniri.hr/files/Studenti/Upute_Zavrsni_Diplomski_10_04.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Postupak za prijavu, oblikovanje i obranu završnog i diplomskog rada (Biotehnologija, Rijeka)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "biotech-diplomski",
+      "unitId": "biotech",
+      "programs": [
+        "Diplomski studiji Biotehnologije (Rijeka)"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Rijeka - Biotehnologija, diplomski rad",
+      "verifiedAt": "2026-07-03",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Verdana"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet biotehnologije i razvoja lijekova, Rijeka), citano izravno.",
+      "sources": [
+        {
+          "title": "Postupak za prijavu, oblikovanje i obranu završnog i diplomskog rada (Biotehnologija, Rijeka)",
+          "url": "https://biotech.uniri.hr/files/Studenti/Upute_Zavrsni_Diplomski_10_04.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Postupak za prijavu, oblikovanje i obranu završnog i diplomskog rada (Biotehnologija, Rijeka)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-biotech-zavrsni--font-verified-2026-07-03",
+      "ruleId": "biotech-zavrsni--font",
+      "profileId": "biotech-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "biotech-upute-radovi",
+      "sourcePage": "Postupak, 3.4 Jezik i graficki elementi",
+      "quote": "Za ispis rada treba koristiti pismo Verdana, veličine 12 tipografskih točaka, prored od 1,5, normalnu marginu s obaveznom potporom svih hrvatskih znakova. Stranice se numeriraju od prve stranice uvoda.",
+      "note": "Produbljivanje uniri (Fakultet biotehnologije i razvoja lijekova, Rijeka): direktno citanje izvora."
+    },
+    {
+      "id": "led-biotech-zavrsni--font-size-verified-2026-07-03",
+      "ruleId": "biotech-zavrsni--font-size",
+      "profileId": "biotech-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "biotech-upute-radovi",
+      "sourcePage": "Postupak, 3.4 Jezik i graficki elementi",
+      "quote": "Za ispis rada treba koristiti pismo Verdana, veličine 12 tipografskih točaka, prored od 1,5, normalnu marginu s obaveznom potporom svih hrvatskih znakova. Stranice se numeriraju od prve stranice uvoda.",
+      "note": "Produbljivanje uniri (Fakultet biotehnologije i razvoja lijekova, Rijeka): direktno citanje izvora."
+    },
+    {
+      "id": "led-biotech-zavrsni--line-spacing-verified-2026-07-03",
+      "ruleId": "biotech-zavrsni--line-spacing",
+      "profileId": "biotech-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "biotech-upute-radovi",
+      "sourcePage": "Postupak, 3.4 Jezik i graficki elementi",
+      "quote": "Za ispis rada treba koristiti pismo Verdana, veličine 12 tipografskih točaka, prored od 1,5, normalnu marginu s obaveznom potporom svih hrvatskih znakova. Stranice se numeriraju od prve stranice uvoda.",
+      "note": "Produbljivanje uniri (Fakultet biotehnologije i razvoja lijekova, Rijeka): direktno citanje izvora."
+    },
+    {
+      "id": "led-biotech-diplomski--font-verified-2026-07-03",
+      "ruleId": "biotech-diplomski--font",
+      "profileId": "biotech-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "biotech-upute-radovi",
+      "sourcePage": "Postupak, 3.4 Jezik i graficki elementi",
+      "quote": "Za ispis rada treba koristiti pismo Verdana, veličine 12 tipografskih točaka, prored od 1,5, normalnu marginu s obaveznom potporom svih hrvatskih znakova. Stranice se numeriraju od prve stranice uvoda.",
+      "note": "Produbljivanje uniri (Fakultet biotehnologije i razvoja lijekova, Rijeka): direktno citanje izvora."
+    },
+    {
+      "id": "led-biotech-diplomski--font-size-verified-2026-07-03",
+      "ruleId": "biotech-diplomski--font-size",
+      "profileId": "biotech-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "biotech-upute-radovi",
+      "sourcePage": "Postupak, 3.4 Jezik i graficki elementi",
+      "quote": "Za ispis rada treba koristiti pismo Verdana, veličine 12 tipografskih točaka, prored od 1,5, normalnu marginu s obaveznom potporom svih hrvatskih znakova. Stranice se numeriraju od prve stranice uvoda.",
+      "note": "Produbljivanje uniri (Fakultet biotehnologije i razvoja lijekova, Rijeka): direktno citanje izvora."
+    },
+    {
+      "id": "led-biotech-diplomski--line-spacing-verified-2026-07-03",
+      "ruleId": "biotech-diplomski--line-spacing",
+      "profileId": "biotech-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "biotech-upute-radovi",
+      "sourcePage": "Postupak, 3.4 Jezik i graficki elementi",
+      "quote": "Za ispis rada treba koristiti pismo Verdana, veličine 12 tipografskih točaka, prored od 1,5, normalnu marginu s obaveznom potporom svih hrvatskih znakova. Stranice se numeriraju od prve stranice uvoda.",
+      "note": "Produbljivanje uniri (Fakultet biotehnologije i razvoja lijekova, Rijeka): direktno citanje izvora."
+    }
+  ]
+}

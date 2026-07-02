@@ -1,0 +1,209 @@
+{
+  "faculty": "fizri",
+  "institution": "uniri",
+  "unit": {
+    "id": "fizri",
+    "name": "Fakultet za fiziku u Rijeci",
+    "family": "stem",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Sveučilišni prijediplomski studiji fizike (završni rad, Rijeka)",
+    "Sveučilišni diplomski studiji fizike (Rijeka)"
+  ],
+  "sources": [
+    {
+      "id": "fizri-pravilnik-radovi-2023",
+      "kind": "regulation",
+      "title": "Pravilnik o diplomskom i završnom radu (Fakultet za fiziku, Rijeka, procisceni tekst 2023)",
+      "url": "https://phy.uniri.hr/files/nastava/zavrsni_i_diplomski_radovi/Pravilnik_o_diplomskom_i_zavrsnom_radu_FIZRI_procisceni_tekst_2023.pdf",
+      "publisher": "Fakultet za fiziku u Rijeci",
+      "fetchedAt": "2026-07-03",
+      "snapshotPath": "data/sources/fizri/fizri.pdf",
+      "snapshotHash": "ef5ebc353a6db86a8770f32975e599cda1bb219aaf9103c183e68fcbc66c94bb",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-03",
+      "note": "Tekstualni PDF. Bez margina/fonta/justify/citata. Max 100 str (dipl) je \"Preporuca se\"->samo min scored."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "fizri-zavrsni",
+      "unitId": "fizri",
+      "programs": [
+        "Sveučilišni prijediplomski studiji fizike (završni rad, Rijeka)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Rijeka - Fizika, zavrsni rad",
+      "verifiedAt": "2026-07-03",
+      "documentDate": null,
+      "rules": {
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "requireA4": true
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet za fiziku u Rijeci), citano izravno.",
+      "sources": [
+        {
+          "title": "Pravilnik o diplomskom i završnom radu (Fakultet za fiziku, Rijeka, procisceni tekst 2023)",
+          "url": "https://phy.uniri.hr/files/nastava/zavrsni_i_diplomski_radovi/Pravilnik_o_diplomskom_i_zavrsnom_radu_FIZRI_procisceni_tekst_2023.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o diplomskom i završnom radu (Fakultet za fiziku, Rijeka, procisceni tekst 2023)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Velicina slova",
+        "Prored",
+        "Opseg (15-30 str.)"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "fizri-diplomski",
+      "unitId": "fizri",
+      "programs": [
+        "Sveučilišni diplomski studiji fizike (Rijeka)"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Rijeka - Fizika, diplomski rad",
+      "verifiedAt": "2026-07-03",
+      "documentDate": null,
+      "rules": {
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "requireA4": true
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet za fiziku u Rijeci), citano izravno.",
+      "sources": [
+        {
+          "title": "Pravilnik o diplomskom i završnom radu (Fakultet za fiziku, Rijeka, procisceni tekst 2023)",
+          "url": "https://phy.uniri.hr/files/nastava/zavrsni_i_diplomski_radovi/Pravilnik_o_diplomskom_i_zavrsnom_radu_FIZRI_procisceni_tekst_2023.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o diplomskom i završnom radu (Fakultet za fiziku, Rijeka, procisceni tekst 2023)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Velicina slova",
+        "Prored",
+        "Opseg (najmanje 30 str.)"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-fizri-zavrsni--paper-size-verified-2026-07-03",
+      "ruleId": "fizri-zavrsni--paper-size",
+      "profileId": "fizri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "fizri-pravilnik-radovi-2023",
+      "sourcePage": "Pravilnik, cl. 12",
+      "quote": "Završni rad mora biti otisnut računalnim pisačem na papiru formata A4 (21 x 29,7 cm) i mora imati najmanje 15, a najviše 30 stranica teksta. Glavni tekst mora imati veličinu slova 12 i širinu proreda 1,5 normalnih proreda.",
+      "note": "Produbljivanje uniri (Fakultet za fiziku u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-fizri-zavrsni--font-size-verified-2026-07-03",
+      "ruleId": "fizri-zavrsni--font-size",
+      "profileId": "fizri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "fizri-pravilnik-radovi-2023",
+      "sourcePage": "Pravilnik, cl. 12",
+      "quote": "Završni rad mora biti otisnut računalnim pisačem na papiru formata A4 (21 x 29,7 cm) i mora imati najmanje 15, a najviše 30 stranica teksta. Glavni tekst mora imati veličinu slova 12 i širinu proreda 1,5 normalnih proreda.",
+      "note": "Produbljivanje uniri (Fakultet za fiziku u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-fizri-zavrsni--line-spacing-verified-2026-07-03",
+      "ruleId": "fizri-zavrsni--line-spacing",
+      "profileId": "fizri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "fizri-pravilnik-radovi-2023",
+      "sourcePage": "Pravilnik, cl. 12",
+      "quote": "Završni rad mora biti otisnut računalnim pisačem na papiru formata A4 (21 x 29,7 cm) i mora imati najmanje 15, a najviše 30 stranica teksta. Glavni tekst mora imati veličinu slova 12 i širinu proreda 1,5 normalnih proreda.",
+      "note": "Produbljivanje uniri (Fakultet za fiziku u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-fizri-zavrsni--page-count-verified-2026-07-03",
+      "ruleId": "fizri-zavrsni--page-count",
+      "profileId": "fizri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "fizri-pravilnik-radovi-2023",
+      "sourcePage": "Pravilnik, cl. 12",
+      "quote": "Završni rad mora biti otisnut računalnim pisačem na papiru formata A4 (21 x 29,7 cm) i mora imati najmanje 15, a najviše 30 stranica teksta. Glavni tekst mora imati veličinu slova 12 i širinu proreda 1,5 normalnih proreda.",
+      "note": "Produbljivanje uniri (Fakultet za fiziku u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-fizri-diplomski--paper-size-verified-2026-07-03",
+      "ruleId": "fizri-diplomski--paper-size",
+      "profileId": "fizri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "fizri-pravilnik-radovi-2023",
+      "sourcePage": "Pravilnik, cl. 8",
+      "quote": "Diplomski rad mora biti otisnut računalnim pisačem na papiru formata A4 (21 x 29,7 cm) i mora imati najmanje 30 stranica. Preporuča se da diplomski rad ima najviše 100 stranica. Glavni tekst mora imati veličinu slova 12 i širinu proreda 1,5 normalnih proreda.",
+      "note": "Produbljivanje uniri (Fakultet za fiziku u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-fizri-diplomski--font-size-verified-2026-07-03",
+      "ruleId": "fizri-diplomski--font-size",
+      "profileId": "fizri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "fizri-pravilnik-radovi-2023",
+      "sourcePage": "Pravilnik, cl. 8",
+      "quote": "Diplomski rad mora biti otisnut računalnim pisačem na papiru formata A4 (21 x 29,7 cm) i mora imati najmanje 30 stranica. Preporuča se da diplomski rad ima najviše 100 stranica. Glavni tekst mora imati veličinu slova 12 i širinu proreda 1,5 normalnih proreda.",
+      "note": "Produbljivanje uniri (Fakultet za fiziku u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-fizri-diplomski--line-spacing-verified-2026-07-03",
+      "ruleId": "fizri-diplomski--line-spacing",
+      "profileId": "fizri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "fizri-pravilnik-radovi-2023",
+      "sourcePage": "Pravilnik, cl. 8",
+      "quote": "Diplomski rad mora biti otisnut računalnim pisačem na papiru formata A4 (21 x 29,7 cm) i mora imati najmanje 30 stranica. Preporuča se da diplomski rad ima najviše 100 stranica. Glavni tekst mora imati veličinu slova 12 i širinu proreda 1,5 normalnih proreda.",
+      "note": "Produbljivanje uniri (Fakultet za fiziku u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-fizri-diplomski--page-count-verified-2026-07-03",
+      "ruleId": "fizri-diplomski--page-count",
+      "profileId": "fizri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "fizri-pravilnik-radovi-2023",
+      "sourcePage": "Pravilnik, cl. 8",
+      "quote": "Diplomski rad mora biti otisnut računalnim pisačem na papiru formata A4 (21 x 29,7 cm) i mora imati najmanje 30 stranica. Preporuča se da diplomski rad ima najviše 100 stranica. Glavni tekst mora imati veličinu slova 12 i širinu proreda 1,5 normalnih proreda.",
+      "note": "Produbljivanje uniri (Fakultet za fiziku u Rijeci): direktno citanje izvora."
+    }
+  ]
+}

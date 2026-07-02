@@ -1,0 +1,65 @@
+{
+  "profileId": "biotech-zavrsni",
+  "entries": [
+    {
+      "ruleId": "biotech-zavrsni--font",
+      "checkId": "font",
+      "value": [
+        "Verdana"
+      ],
+      "category": "format",
+      "label": "Vrsta slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "biotech-upute-radovi",
+      "sourcePage": "Postupak, 3.4 Jezik i graficki elementi",
+      "quote": "Za ispis rada treba koristiti pismo Verdana, veličine 12 tipografskih točaka, prored od 1,5, normalnu marginu s obaveznom potporom svih hrvatskih znakova. Stranice se numeriraju od prve stranice uvoda.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "e5182e75a4ad34c462456a25dac9548348a75793ca2feeb7d7202736c7d23dd1",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "biotech-zavrsni--font-size",
+      "checkId": "font-size",
+      "value": 12,
+      "category": "format",
+      "label": "Velicina slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "biotech-upute-radovi",
+      "sourcePage": "Postupak, 3.4 Jezik i graficki elementi",
+      "quote": "Za ispis rada treba koristiti pismo Verdana, veličine 12 tipografskih točaka, prored od 1,5, normalnu marginu s obaveznom potporom svih hrvatskih znakova. Stranice se numeriraju od prve stranice uvoda.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "e5182e75a4ad34c462456a25dac9548348a75793ca2feeb7d7202736c7d23dd1",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "biotech-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "biotech-upute-radovi",
+      "sourcePage": "Postupak, 3.4 Jezik i graficki elementi",
+      "quote": "Za ispis rada treba koristiti pismo Verdana, veličine 12 tipografskih točaka, prored od 1,5, normalnu marginu s obaveznom potporom svih hrvatskih znakova. Stranice se numeriraju od prve stranice uvoda.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "e5182e75a4ad34c462456a25dac9548348a75793ca2feeb7d7202736c7d23dd1",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
+    }
+  ],
+  "generatedAt": "2026-07-03"
+}

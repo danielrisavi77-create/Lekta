@@ -1,0 +1,137 @@
+{
+  "faculty": "ufri",
+  "institution": "uniri",
+  "unit": {
+    "id": "ufri",
+    "name": "Učiteljski fakultet u Rijeci",
+    "family": "social",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Diplomski studiji Učiteljskog fakulteta (Rijeka)"
+  ],
+  "sources": [
+    {
+      "id": "ufri-upute-diplomski-2024",
+      "kind": "guidelines",
+      "title": "Upute za izradu diplomskog rada (Učiteljski fakultet u Rijeci, 2024)",
+      "url": "https://www.ufri.uniri.hr/files/nastava/Upute_za_izradu_rada/240417_Upute_za_izradu_dipl_rada.pdf",
+      "publisher": "Učiteljski fakultet u Rijeci",
+      "fetchedAt": "2026-07-03",
+      "snapshotPath": "data/sources/ufri/ufri.pdf",
+      "snapshotHash": "197d276efb3a25664922b84926d371776fb2619882b1ee8f4a9992347e145145",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-03",
+      "note": "Tekstualni PDF. Citiranje autor-godina bez imenovanog stila->advisory. Opseg \"Preporuca se\"->advisory."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "ufri-diplomski",
+      "unitId": "ufri",
+      "programs": [
+        "Diplomski studiji Učiteljskog fakulteta (Rijeka)"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Rijeka - Uciteljski fakultet, diplomski rad",
+      "verifiedAt": "2026-07-03",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "requireA4": true
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Učiteljski fakultet u Rijeci), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za izradu diplomskog rada (Učiteljski fakultet u Rijeci, 2024)",
+          "url": "https://www.ufri.uniri.hr/files/nastava/Upute_za_izradu_rada/240417_Upute_za_izradu_dipl_rada.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu diplomskog rada (Učiteljski fakultet u Rijeci, 2024)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Obostrano poravnanje"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-ufri-diplomski--paper-size-verified-2026-07-03",
+      "ruleId": "ufri-diplomski--paper-size",
+      "profileId": "ufri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "ufri-upute-diplomski-2024",
+      "sourcePage": "Upute, oblikovanje rada",
+      "quote": "Format rada je A4. Tekst se piše računalom u fontu «Times New Roman», stil fonta «običan», veličine 12., proreda 1,5 retka, poravnanje «obostrano». Naslovi poglavlja pišu se u veličini 14, a podnaslovi 12, «podebljano».",
+      "note": "Produbljivanje uniri (Učiteljski fakultet u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-ufri-diplomski--font-verified-2026-07-03",
+      "ruleId": "ufri-diplomski--font",
+      "profileId": "ufri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "ufri-upute-diplomski-2024",
+      "sourcePage": "Upute, oblikovanje rada",
+      "quote": "Format rada je A4. Tekst se piše računalom u fontu «Times New Roman», stil fonta «običan», veličine 12., proreda 1,5 retka, poravnanje «obostrano». Naslovi poglavlja pišu se u veličini 14, a podnaslovi 12, «podebljano».",
+      "note": "Produbljivanje uniri (Učiteljski fakultet u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-ufri-diplomski--font-size-verified-2026-07-03",
+      "ruleId": "ufri-diplomski--font-size",
+      "profileId": "ufri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "ufri-upute-diplomski-2024",
+      "sourcePage": "Upute, oblikovanje rada",
+      "quote": "Format rada je A4. Tekst se piše računalom u fontu «Times New Roman», stil fonta «običan», veličine 12., proreda 1,5 retka, poravnanje «obostrano». Naslovi poglavlja pišu se u veličini 14, a podnaslovi 12, «podebljano».",
+      "note": "Produbljivanje uniri (Učiteljski fakultet u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-ufri-diplomski--line-spacing-verified-2026-07-03",
+      "ruleId": "ufri-diplomski--line-spacing",
+      "profileId": "ufri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "ufri-upute-diplomski-2024",
+      "sourcePage": "Upute, oblikovanje rada",
+      "quote": "Format rada je A4. Tekst se piše računalom u fontu «Times New Roman», stil fonta «običan», veličine 12., proreda 1,5 retka, poravnanje «obostrano». Naslovi poglavlja pišu se u veličini 14, a podnaslovi 12, «podebljano».",
+      "note": "Produbljivanje uniri (Učiteljski fakultet u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-ufri-diplomski--justify-verified-2026-07-03",
+      "ruleId": "ufri-diplomski--justify",
+      "profileId": "ufri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "ufri-upute-diplomski-2024",
+      "sourcePage": "Upute, oblikovanje rada",
+      "quote": "Format rada je A4. Tekst se piše računalom u fontu «Times New Roman», stil fonta «običan», veličine 12., proreda 1,5 retka, poravnanje «obostrano». Naslovi poglavlja pišu se u veličini 14, a podnaslovi 12, «podebljano».",
+      "note": "Produbljivanje uniri (Učiteljski fakultet u Rijeci): direktno citanje izvora."
+    }
+  ]
+}

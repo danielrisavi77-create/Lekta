@@ -1,0 +1,156 @@
+{
+  "faculty": "kifst",
+  "institution": "unist",
+  "unit": {
+    "id": "kifst",
+    "name": "Kineziološki fakultet u Splitu",
+    "family": "social",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Diplomski studiji Kineziološkog fakulteta (Split)"
+  ],
+  "sources": [
+    {
+      "id": "kifst-upute-diplomski-2022",
+      "kind": "guidelines",
+      "title": "Upute za izradu diplomskog rada - strucna tema (KIFST, 2022)",
+      "url": "https://web.kifst.unist.hr/wp-content/uploads/2022/02/UPUTE-ZA-IZRADU-DIPLOMSKOG-RADA-STRUCNA-TEMA.pdf",
+      "publisher": "Kineziološki fakultet u Splitu",
+      "fetchedAt": "2026-07-03",
+      "snapshotPath": "data/sources/kifst/kifst.pdf",
+      "snapshotHash": "3e8c1c64d65d5427dade6c25e0bf4a7df0535a56309f5270afff7d4d52533a0a",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-03",
+      "note": "Tekstualni PDF. A4 nenaveden->izostavljen. Citiranje PO APA STANDARDU (imenovano)->scored."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "kifst-diplomski",
+      "unitId": "kifst",
+      "programs": [
+        "Diplomski studiji Kineziološkog fakulteta (Split)"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Split - Kinezioloski fakultet, diplomski rad",
+      "verifiedAt": "2026-07-03",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 3.5
+        },
+        "recommendedCitation": "apa"
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Kineziološki fakultet u Splitu), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za izradu diplomskog rada - strucna tema (KIFST, 2022)",
+          "url": "https://web.kifst.unist.hr/wp-content/uploads/2022/02/UPUTE-ZA-IZRADU-DIPLOMSKOG-RADA-STRUCNA-TEMA.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu diplomskog rada - strucna tema (KIFST, 2022)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Margine",
+        "Obostrano poravnanje",
+        "Stil citiranja (APA)"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-kifst-diplomski--font-verified-2026-07-03",
+      "ruleId": "kifst-diplomski--font",
+      "profileId": "kifst-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "kifst-upute-diplomski-2022",
+      "sourcePage": "Upute, oblikovanje teksta",
+      "quote": "Rad treba biti poravnan od ruba do ruba. Oblikovanje teksta - koristiti prored 1,5. Font- tekst : Times New Roman 12 pt. Font – naslovi: Times New Roman 14pt BOLD. Font – podnaslovi: Times New Roman 14pt. Margine stranice postaviti na 2,5 cm, osim lijeve strane na 3,5 cm.",
+      "note": "Produbljivanje unist (Kineziološki fakultet u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-kifst-diplomski--font-size-verified-2026-07-03",
+      "ruleId": "kifst-diplomski--font-size",
+      "profileId": "kifst-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "kifst-upute-diplomski-2022",
+      "sourcePage": "Upute, oblikovanje teksta",
+      "quote": "Rad treba biti poravnan od ruba do ruba. Oblikovanje teksta - koristiti prored 1,5. Font- tekst : Times New Roman 12 pt. Font – naslovi: Times New Roman 14pt BOLD. Font – podnaslovi: Times New Roman 14pt. Margine stranice postaviti na 2,5 cm, osim lijeve strane na 3,5 cm.",
+      "note": "Produbljivanje unist (Kineziološki fakultet u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-kifst-diplomski--line-spacing-verified-2026-07-03",
+      "ruleId": "kifst-diplomski--line-spacing",
+      "profileId": "kifst-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "kifst-upute-diplomski-2022",
+      "sourcePage": "Upute, oblikovanje teksta",
+      "quote": "Rad treba biti poravnan od ruba do ruba. Oblikovanje teksta - koristiti prored 1,5. Font- tekst : Times New Roman 12 pt. Font – naslovi: Times New Roman 14pt BOLD. Font – podnaslovi: Times New Roman 14pt. Margine stranice postaviti na 2,5 cm, osim lijeve strane na 3,5 cm.",
+      "note": "Produbljivanje unist (Kineziološki fakultet u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-kifst-diplomski--margins-verified-2026-07-03",
+      "ruleId": "kifst-diplomski--margins",
+      "profileId": "kifst-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "kifst-upute-diplomski-2022",
+      "sourcePage": "Upute, oblikovanje teksta",
+      "quote": "Rad treba biti poravnan od ruba do ruba. Oblikovanje teksta - koristiti prored 1,5. Font- tekst : Times New Roman 12 pt. Font – naslovi: Times New Roman 14pt BOLD. Font – podnaslovi: Times New Roman 14pt. Margine stranice postaviti na 2,5 cm, osim lijeve strane na 3,5 cm.",
+      "note": "Produbljivanje unist (Kineziološki fakultet u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-kifst-diplomski--justify-verified-2026-07-03",
+      "ruleId": "kifst-diplomski--justify",
+      "profileId": "kifst-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "kifst-upute-diplomski-2022",
+      "sourcePage": "Upute, oblikovanje teksta",
+      "quote": "Rad treba biti poravnan od ruba do ruba. Oblikovanje teksta - koristiti prored 1,5. Font- tekst : Times New Roman 12 pt. Font – naslovi: Times New Roman 14pt BOLD. Font – podnaslovi: Times New Roman 14pt. Margine stranice postaviti na 2,5 cm, osim lijeve strane na 3,5 cm.",
+      "note": "Produbljivanje unist (Kineziološki fakultet u Splitu): direktno citanje izvora."
+    },
+    {
+      "id": "led-kifst-diplomski--citation-style-verified-2026-07-03",
+      "ruleId": "kifst-diplomski--citation-style",
+      "profileId": "kifst-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "kifst-upute-diplomski-2022",
+      "sourcePage": "Upute, citiranje",
+      "quote": "CITIRANJE I NAVOĐENJE IZVORA PO APA STANDARDU. U tekstu je moguće citirati autora na način da se i autor i godina stave u zagradu (Prezime, godina).",
+      "note": "Produbljivanje unist (Kineziološki fakultet u Splitu): direktno citanje izvora."
+    }
+  ]
+}

@@ -18882,5 +18882,557 @@
       "Obostrano poravnanje"
     ],
     "advisoryScope": []
+  },
+  {
+    "id": "medri-medicina-diplomski",
+    "unitId": "medri",
+    "programs": [
+      "Integrirani preddiplomski i diplomski sveučilišni studij Medicina (diplomski rad, Rijeka)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Rijeka - Medicina (integrirani), diplomski rad",
+    "verifiedAt": "2026-07-03",
+    "documentDate": null,
+    "rules": {
+      "size": [
+        12
+      ],
+      "spacing": 2,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Medicinski fakultet u Rijeci), citano izravno.",
+    "sources": [
+      {
+        "title": "Naputak za prijavu, oblikovanje i opremu diplomskog rada i polaganje diplomskog ispita 2025./2026. (integrirani studij Medicina, MEDRI)",
+        "url": "https://medri.uniri.hr/wp-content/uploads/2026/01/NAPUTAK_ZA_PRIJAVU_OBLIKOVANJE_I_OPREMU_DIPLOMSKOG_RADA_I_POLAGANJE_DIPLOMSKOG_ISPITA_2025_2026.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Naputak za prijavu, oblikovanje i opremu diplomskog rada i polaganje diplomskog ispita 2025./2026. (integrirani studij Medicina, MEDRI)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Prored (dvostruki)",
+      "Velicina slova",
+      "Opseg (15-50 str.)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "fzsri-zavrsni",
+    "unitId": "fzsri",
+    "programs": [
+      "Prijediplomski studiji FZSRI (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Rijeka - Zdravstveni studiji, zavrsni rad",
+    "verifiedAt": "2026-07-03",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Calibri",
+        "Times New Roman",
+        "Arial"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet zdravstvenih studija u Rijeci), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za izradu završnog ili diplomskog rada (FZSRI, 2022)",
+        "url": "https://www.fzsri.uniri.hr/files/DOKUMENTI-I-OBRASCI/zavrsni_diplomski/Upute%20za%20izradu%20zavrsnog%20ili%20diplomskog%20rada.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu završnog ili diplomskog rada (FZSRI, 2022)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Obostrano poravnanje",
+      "Prored",
+      "Velicina slova",
+      "Vrsta slova (Calibri/TNR/Arial)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "fzsri-diplomski",
+    "unitId": "fzsri",
+    "programs": [
+      "Diplomski studiji FZSRI"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Rijeka - Zdravstveni studiji, diplomski rad",
+    "verifiedAt": "2026-07-03",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Calibri",
+        "Times New Roman",
+        "Arial"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet zdravstvenih studija u Rijeci), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za izradu završnog ili diplomskog rada (FZSRI, 2022)",
+        "url": "https://www.fzsri.uniri.hr/files/DOKUMENTI-I-OBRASCI/zavrsni_diplomski/Upute%20za%20izradu%20zavrsnog%20ili%20diplomskog%20rada.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu završnog ili diplomskog rada (FZSRI, 2022)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Obostrano poravnanje",
+      "Prored",
+      "Velicina slova",
+      "Vrsta slova (Calibri/TNR/Arial)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "biotech-zavrsni",
+    "unitId": "biotech",
+    "programs": [
+      "Prijediplomski studiji Biotehnologije (zavrsni rad, Rijeka)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Rijeka - Biotehnologija, zavrsni rad",
+    "verifiedAt": "2026-07-03",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Verdana"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet biotehnologije i razvoja lijekova, Rijeka), citano izravno.",
+    "sources": [
+      {
+        "title": "Postupak za prijavu, oblikovanje i obranu završnog i diplomskog rada (Biotehnologija, Rijeka)",
+        "url": "https://biotech.uniri.hr/files/Studenti/Upute_Zavrsni_Diplomski_10_04.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Postupak za prijavu, oblikovanje i obranu završnog i diplomskog rada (Biotehnologija, Rijeka)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "biotech-diplomski",
+    "unitId": "biotech",
+    "programs": [
+      "Diplomski studiji Biotehnologije (Rijeka)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Rijeka - Biotehnologija, diplomski rad",
+    "verifiedAt": "2026-07-03",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Verdana"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet biotehnologije i razvoja lijekova, Rijeka), citano izravno.",
+    "sources": [
+      {
+        "title": "Postupak za prijavu, oblikovanje i obranu završnog i diplomskog rada (Biotehnologija, Rijeka)",
+        "url": "https://biotech.uniri.hr/files/Studenti/Upute_Zavrsni_Diplomski_10_04.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Postupak za prijavu, oblikovanje i obranu završnog i diplomskog rada (Biotehnologija, Rijeka)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "fizri-zavrsni",
+    "unitId": "fizri",
+    "programs": [
+      "Sveučilišni prijediplomski studiji fizike (završni rad, Rijeka)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Rijeka - Fizika, zavrsni rad",
+    "verifiedAt": "2026-07-03",
+    "documentDate": null,
+    "rules": {
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet za fiziku u Rijeci), citano izravno.",
+    "sources": [
+      {
+        "title": "Pravilnik o diplomskom i završnom radu (Fakultet za fiziku, Rijeka, procisceni tekst 2023)",
+        "url": "https://phy.uniri.hr/files/nastava/zavrsni_i_diplomski_radovi/Pravilnik_o_diplomskom_i_zavrsnom_radu_FIZRI_procisceni_tekst_2023.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o diplomskom i završnom radu (Fakultet za fiziku, Rijeka, procisceni tekst 2023)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Velicina slova",
+      "Prored",
+      "Opseg (15-30 str.)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "fizri-diplomski",
+    "unitId": "fizri",
+    "programs": [
+      "Sveučilišni diplomski studiji fizike (Rijeka)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Rijeka - Fizika, diplomski rad",
+    "verifiedAt": "2026-07-03",
+    "documentDate": null,
+    "rules": {
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet za fiziku u Rijeci), citano izravno.",
+    "sources": [
+      {
+        "title": "Pravilnik o diplomskom i završnom radu (Fakultet za fiziku, Rijeka, procisceni tekst 2023)",
+        "url": "https://phy.uniri.hr/files/nastava/zavrsni_i_diplomski_radovi/Pravilnik_o_diplomskom_i_zavrsnom_radu_FIZRI_procisceni_tekst_2023.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o diplomskom i završnom radu (Fakultet za fiziku, Rijeka, procisceni tekst 2023)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Velicina slova",
+      "Prored",
+      "Opseg (najmanje 30 str.)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "ufri-diplomski",
+    "unitId": "ufri",
+    "programs": [
+      "Diplomski studiji Učiteljskog fakulteta (Rijeka)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Rijeka - Uciteljski fakultet, diplomski rad",
+    "verifiedAt": "2026-07-03",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Učiteljski fakultet u Rijeci), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za izradu diplomskog rada (Učiteljski fakultet u Rijeci, 2024)",
+        "url": "https://www.ufri.uniri.hr/files/nastava/Upute_za_izradu_rada/240417_Upute_za_izradu_dipl_rada.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu diplomskog rada (Učiteljski fakultet u Rijeci, 2024)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "riteh-zavrsni",
+    "unitId": "riteh",
+    "programs": [
+      "Prijediplomski/strucni studiji RITEH (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Rijeka - Tehnicki fakultet, zavrsni rad",
+    "verifiedAt": "2026-07-03",
+    "documentDate": null,
+    "rules": {
+      "headingRules": {
+        "numberRequired": true,
+        "romanLevelOneAllowed": false,
+        "maxLevel": 3,
+        "levels": {
+          "1": {
+            "uppercase": true
+          }
+        }
+      },
+      "recommendedCitation": "ieee"
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Tehnički fakultet u Rijeci), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za izradu i samoarhiviranje završnog / diplomskog rada (RITEH, 2025)",
+        "url": "https://riteh.uniri.hr/wp-content/uploads/Upute_za_izradu-i-samoarhiviranje_zavrsnog-i-diplomskog-rada-2025.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu i samoarhiviranje završnog / diplomskog rada (RITEH, 2025)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Pravila naslova (numerirano, razina 1 velika slova)",
+      "Stil citiranja (numericki, uglate zagrade)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "riteh-diplomski",
+    "unitId": "riteh",
+    "programs": [
+      "Diplomski studiji RITEH"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Rijeka - Tehnicki fakultet, diplomski rad",
+    "verifiedAt": "2026-07-03",
+    "documentDate": null,
+    "rules": {
+      "headingRules": {
+        "numberRequired": true,
+        "romanLevelOneAllowed": false,
+        "maxLevel": 3,
+        "levels": {
+          "1": {
+            "uppercase": true
+          }
+        }
+      },
+      "recommendedCitation": "ieee"
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Tehnički fakultet u Rijeci), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za izradu i samoarhiviranje završnog / diplomskog rada (RITEH, 2025)",
+        "url": "https://riteh.uniri.hr/wp-content/uploads/Upute_za_izradu-i-samoarhiviranje_zavrsnog-i-diplomskog-rada-2025.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu i samoarhiviranje završnog / diplomskog rada (RITEH, 2025)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Pravila naslova (numerirano, razina 1 velika slova)",
+      "Stil citiranja (numericki, uglate zagrade)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "kifst-diplomski",
+    "unitId": "kifst",
+    "programs": [
+      "Diplomski studiji Kineziološkog fakulteta (Split)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Split - Kinezioloski fakultet, diplomski rad",
+    "verifiedAt": "2026-07-03",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3.5
+      },
+      "recommendedCitation": "apa"
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Kineziološki fakultet u Splitu), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za izradu diplomskog rada - strucna tema (KIFST, 2022)",
+        "url": "https://web.kifst.unist.hr/wp-content/uploads/2022/02/UPUTE-ZA-IZRADU-DIPLOMSKOG-RADA-STRUCNA-TEMA.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu diplomskog rada - strucna tema (KIFST, 2022)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Margine",
+      "Obostrano poravnanje",
+      "Stil citiranja (APA)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "kbfst-diplomski",
+    "unitId": "kbfst",
+    "programs": [
+      "Diplomski studij (Katolički bogoslovni fakultet, Split)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Split - Katolicki bogoslovni fakultet, diplomski rad",
+    "verifiedAt": "2026-07-03",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12,
+        13
+      ],
+      "spacing": 1.5,
+      "footnoteFont": [
+        "Times New Roman"
+      ],
+      "footnoteSize": [
+        10
+      ]
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Katolički bogoslovni fakultet u Splitu), citano izravno.",
+    "sources": [
+      {
+        "title": "Pojedinosti o tehničkim postavkama diplomskoga rada (KBF Split)",
+        "url": "https://www.kbf.unist.hr/images/dok/pravilnici/Izgled_diplomskog_rada_napomene.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pojedinosti o tehničkim postavkama diplomskoga rada (KBF Split)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova (12 ili 13)",
+      "Prored",
+      "Vrsta slova biljeske",
+      "Velicina slova biljeske"
+    ],
+    "advisoryScope": []
   }
 ]

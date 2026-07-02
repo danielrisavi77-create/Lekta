@@ -1,0 +1,53 @@
+{
+  "profileId": "riteh-zavrsni",
+  "entries": [
+    {
+      "ruleId": "riteh-zavrsni--heading-rules",
+      "checkId": "heading-rules",
+      "value": {
+        "numberRequired": true,
+        "romanLevelOneAllowed": false,
+        "maxLevel": 3,
+        "levels": {
+          "1": {
+            "uppercase": true
+          }
+        }
+      },
+      "category": "structure",
+      "label": "Pravila naslova (numerirano, razina 1 velika slova)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "riteh-upute-radovi-2025",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Poglavlja moraju biti numerirana i svakom poglavlju treba pridijeliti odgovarajući naslov. Naslov poglavlja piše se velikim slovima veličine 14 pt. bold. Prva razina potpoglavlja piše se malim slovima veličine 12 pt. bold, a druga razina potpoglavlja veličinom slova 12 pt.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "017dda8a9896c3a7e61d4d44b00c9a209640e79eb5716742590b3a6167f8f2db",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "riteh-zavrsni--citation-style",
+      "checkId": "citation-style",
+      "value": "ieee",
+      "category": "citation",
+      "label": "Stil citiranja (numericki, uglate zagrade)",
+      "machineCheckable": false,
+      "authority": "program-page",
+      "sourceId": "riteh-upute-radovi-2025",
+      "sourcePage": "Upute, literatura",
+      "quote": "U tekstu se literatura navodi unutar pravokutnih zagrada [1]. Reference se navode pod rednim brojem pod kojim se pojavljuju u popisu, u uglatim zagradama (npr. [1] ili [1, 2, 3, 5]).",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "017dda8a9896c3a7e61d4d44b00c9a209640e79eb5716742590b3a6167f8f2db",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
+    }
+  ],
+  "generatedAt": "2026-07-03"
+}

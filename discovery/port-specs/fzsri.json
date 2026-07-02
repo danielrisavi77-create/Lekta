@@ -1,0 +1,285 @@
+{
+  "faculty": "fzsri",
+  "institution": "uniri",
+  "unit": {
+    "id": "fzsri",
+    "name": "Fakultet zdravstvenih studija u Rijeci",
+    "family": "biomed",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Prijediplomski studiji FZSRI (zavrsni rad)",
+    "Diplomski studiji FZSRI"
+  ],
+  "sources": [
+    {
+      "id": "fzsri-upute-radovi-2022",
+      "kind": "guidelines",
+      "title": "Upute za izradu završnog ili diplomskog rada (FZSRI, 2022)",
+      "url": "https://www.fzsri.uniri.hr/files/DOKUMENTI-I-OBRASCI/zavrsni_diplomski/Upute%20za%20izradu%20zavrsnog%20ili%20diplomskog%20rada.pdf",
+      "publisher": "Fakultet zdravstvenih studija u Rijeci",
+      "fetchedAt": "2026-07-03",
+      "snapshotPath": "data/sources/fzsri/fzsri.pdf",
+      "snapshotHash": "2bd0bf7a29cecd9496e461f0b8f4fcd08190d82fae90bdbc787bf8cfc9a20f1d",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-03",
+      "note": "Tekstualni PDF. Opseg \"Preporuceni\"->advisory. Citiranje delegirano na Pravila citiranja->advisory."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "fzsri-zavrsni",
+      "unitId": "fzsri",
+      "programs": [
+        "Prijediplomski studiji FZSRI (zavrsni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Rijeka - Zdravstveni studiji, zavrsni rad",
+      "verifiedAt": "2026-07-03",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Calibri",
+          "Times New Roman",
+          "Arial"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet zdravstvenih studija u Rijeci), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za izradu završnog ili diplomskog rada (FZSRI, 2022)",
+          "url": "https://www.fzsri.uniri.hr/files/DOKUMENTI-I-OBRASCI/zavrsni_diplomski/Upute%20za%20izradu%20zavrsnog%20ili%20diplomskog%20rada.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu završnog ili diplomskog rada (FZSRI, 2022)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Margine",
+        "Obostrano poravnanje",
+        "Prored",
+        "Velicina slova",
+        "Vrsta slova (Calibri/TNR/Arial)"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "fzsri-diplomski",
+      "unitId": "fzsri",
+      "programs": [
+        "Diplomski studiji FZSRI"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Rijeka - Zdravstveni studiji, diplomski rad",
+      "verifiedAt": "2026-07-03",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Calibri",
+          "Times New Roman",
+          "Arial"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet zdravstvenih studija u Rijeci), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za izradu završnog ili diplomskog rada (FZSRI, 2022)",
+          "url": "https://www.fzsri.uniri.hr/files/DOKUMENTI-I-OBRASCI/zavrsni_diplomski/Upute%20za%20izradu%20zavrsnog%20ili%20diplomskog%20rada.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu završnog ili diplomskog rada (FZSRI, 2022)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Margine",
+        "Obostrano poravnanje",
+        "Prored",
+        "Velicina slova",
+        "Vrsta slova (Calibri/TNR/Arial)"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-fzsri-zavrsni--paper-size-verified-2026-07-03",
+      "ruleId": "fzsri-zavrsni--paper-size",
+      "profileId": "fzsri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "fzsri-upute-radovi-2022",
+      "sourcePage": "Upute, 2.13 Oblikovanje rada",
+      "quote": "- završni ili diplomski rad treba biti oblikovan na papiru standardne veličine (A4, 210×297 mm), sa slobodnim rubnicima od 2,5 cm; - tekst je potrebno pisati s obostranim poravnanjem, prored 1,5; - za ispis treba rabiti pismo veličine 12 tipografskih točaka, slova Calibri, Times New Roman ili Arial, s obvezatnom potporom svih hrvatskih znakova.",
+      "note": "Produbljivanje uniri (Fakultet zdravstvenih studija u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-fzsri-zavrsni--margins-verified-2026-07-03",
+      "ruleId": "fzsri-zavrsni--margins",
+      "profileId": "fzsri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "fzsri-upute-radovi-2022",
+      "sourcePage": "Upute, 2.13 Oblikovanje rada",
+      "quote": "- završni ili diplomski rad treba biti oblikovan na papiru standardne veličine (A4, 210×297 mm), sa slobodnim rubnicima od 2,5 cm; - tekst je potrebno pisati s obostranim poravnanjem, prored 1,5; - za ispis treba rabiti pismo veličine 12 tipografskih točaka, slova Calibri, Times New Roman ili Arial, s obvezatnom potporom svih hrvatskih znakova.",
+      "note": "Produbljivanje uniri (Fakultet zdravstvenih studija u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-fzsri-zavrsni--justify-verified-2026-07-03",
+      "ruleId": "fzsri-zavrsni--justify",
+      "profileId": "fzsri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "fzsri-upute-radovi-2022",
+      "sourcePage": "Upute, 2.13 Oblikovanje rada",
+      "quote": "- završni ili diplomski rad treba biti oblikovan na papiru standardne veličine (A4, 210×297 mm), sa slobodnim rubnicima od 2,5 cm; - tekst je potrebno pisati s obostranim poravnanjem, prored 1,5; - za ispis treba rabiti pismo veličine 12 tipografskih točaka, slova Calibri, Times New Roman ili Arial, s obvezatnom potporom svih hrvatskih znakova.",
+      "note": "Produbljivanje uniri (Fakultet zdravstvenih studija u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-fzsri-zavrsni--line-spacing-verified-2026-07-03",
+      "ruleId": "fzsri-zavrsni--line-spacing",
+      "profileId": "fzsri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "fzsri-upute-radovi-2022",
+      "sourcePage": "Upute, 2.13 Oblikovanje rada",
+      "quote": "- završni ili diplomski rad treba biti oblikovan na papiru standardne veličine (A4, 210×297 mm), sa slobodnim rubnicima od 2,5 cm; - tekst je potrebno pisati s obostranim poravnanjem, prored 1,5; - za ispis treba rabiti pismo veličine 12 tipografskih točaka, slova Calibri, Times New Roman ili Arial, s obvezatnom potporom svih hrvatskih znakova.",
+      "note": "Produbljivanje uniri (Fakultet zdravstvenih studija u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-fzsri-zavrsni--font-size-verified-2026-07-03",
+      "ruleId": "fzsri-zavrsni--font-size",
+      "profileId": "fzsri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "fzsri-upute-radovi-2022",
+      "sourcePage": "Upute, 2.13 Oblikovanje rada",
+      "quote": "- završni ili diplomski rad treba biti oblikovan na papiru standardne veličine (A4, 210×297 mm), sa slobodnim rubnicima od 2,5 cm; - tekst je potrebno pisati s obostranim poravnanjem, prored 1,5; - za ispis treba rabiti pismo veličine 12 tipografskih točaka, slova Calibri, Times New Roman ili Arial, s obvezatnom potporom svih hrvatskih znakova.",
+      "note": "Produbljivanje uniri (Fakultet zdravstvenih studija u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-fzsri-zavrsni--font-verified-2026-07-03",
+      "ruleId": "fzsri-zavrsni--font",
+      "profileId": "fzsri-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "fzsri-upute-radovi-2022",
+      "sourcePage": "Upute, 2.13 Oblikovanje rada",
+      "quote": "- završni ili diplomski rad treba biti oblikovan na papiru standardne veličine (A4, 210×297 mm), sa slobodnim rubnicima od 2,5 cm; - tekst je potrebno pisati s obostranim poravnanjem, prored 1,5; - za ispis treba rabiti pismo veličine 12 tipografskih točaka, slova Calibri, Times New Roman ili Arial, s obvezatnom potporom svih hrvatskih znakova.",
+      "note": "Produbljivanje uniri (Fakultet zdravstvenih studija u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-fzsri-diplomski--paper-size-verified-2026-07-03",
+      "ruleId": "fzsri-diplomski--paper-size",
+      "profileId": "fzsri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "fzsri-upute-radovi-2022",
+      "sourcePage": "Upute, 2.13 Oblikovanje rada",
+      "quote": "- završni ili diplomski rad treba biti oblikovan na papiru standardne veličine (A4, 210×297 mm), sa slobodnim rubnicima od 2,5 cm; - tekst je potrebno pisati s obostranim poravnanjem, prored 1,5; - za ispis treba rabiti pismo veličine 12 tipografskih točaka, slova Calibri, Times New Roman ili Arial, s obvezatnom potporom svih hrvatskih znakova.",
+      "note": "Produbljivanje uniri (Fakultet zdravstvenih studija u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-fzsri-diplomski--margins-verified-2026-07-03",
+      "ruleId": "fzsri-diplomski--margins",
+      "profileId": "fzsri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "fzsri-upute-radovi-2022",
+      "sourcePage": "Upute, 2.13 Oblikovanje rada",
+      "quote": "- završni ili diplomski rad treba biti oblikovan na papiru standardne veličine (A4, 210×297 mm), sa slobodnim rubnicima od 2,5 cm; - tekst je potrebno pisati s obostranim poravnanjem, prored 1,5; - za ispis treba rabiti pismo veličine 12 tipografskih točaka, slova Calibri, Times New Roman ili Arial, s obvezatnom potporom svih hrvatskih znakova.",
+      "note": "Produbljivanje uniri (Fakultet zdravstvenih studija u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-fzsri-diplomski--justify-verified-2026-07-03",
+      "ruleId": "fzsri-diplomski--justify",
+      "profileId": "fzsri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "fzsri-upute-radovi-2022",
+      "sourcePage": "Upute, 2.13 Oblikovanje rada",
+      "quote": "- završni ili diplomski rad treba biti oblikovan na papiru standardne veličine (A4, 210×297 mm), sa slobodnim rubnicima od 2,5 cm; - tekst je potrebno pisati s obostranim poravnanjem, prored 1,5; - za ispis treba rabiti pismo veličine 12 tipografskih točaka, slova Calibri, Times New Roman ili Arial, s obvezatnom potporom svih hrvatskih znakova.",
+      "note": "Produbljivanje uniri (Fakultet zdravstvenih studija u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-fzsri-diplomski--line-spacing-verified-2026-07-03",
+      "ruleId": "fzsri-diplomski--line-spacing",
+      "profileId": "fzsri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "fzsri-upute-radovi-2022",
+      "sourcePage": "Upute, 2.13 Oblikovanje rada",
+      "quote": "- završni ili diplomski rad treba biti oblikovan na papiru standardne veličine (A4, 210×297 mm), sa slobodnim rubnicima od 2,5 cm; - tekst je potrebno pisati s obostranim poravnanjem, prored 1,5; - za ispis treba rabiti pismo veličine 12 tipografskih točaka, slova Calibri, Times New Roman ili Arial, s obvezatnom potporom svih hrvatskih znakova.",
+      "note": "Produbljivanje uniri (Fakultet zdravstvenih studija u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-fzsri-diplomski--font-size-verified-2026-07-03",
+      "ruleId": "fzsri-diplomski--font-size",
+      "profileId": "fzsri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "fzsri-upute-radovi-2022",
+      "sourcePage": "Upute, 2.13 Oblikovanje rada",
+      "quote": "- završni ili diplomski rad treba biti oblikovan na papiru standardne veličine (A4, 210×297 mm), sa slobodnim rubnicima od 2,5 cm; - tekst je potrebno pisati s obostranim poravnanjem, prored 1,5; - za ispis treba rabiti pismo veličine 12 tipografskih točaka, slova Calibri, Times New Roman ili Arial, s obvezatnom potporom svih hrvatskih znakova.",
+      "note": "Produbljivanje uniri (Fakultet zdravstvenih studija u Rijeci): direktno citanje izvora."
+    },
+    {
+      "id": "led-fzsri-diplomski--font-verified-2026-07-03",
+      "ruleId": "fzsri-diplomski--font",
+      "profileId": "fzsri-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "fzsri-upute-radovi-2022",
+      "sourcePage": "Upute, 2.13 Oblikovanje rada",
+      "quote": "- završni ili diplomski rad treba biti oblikovan na papiru standardne veličine (A4, 210×297 mm), sa slobodnim rubnicima od 2,5 cm; - tekst je potrebno pisati s obostranim poravnanjem, prored 1,5; - za ispis treba rabiti pismo veličine 12 tipografskih točaka, slova Calibri, Times New Roman ili Arial, s obvezatnom potporom svih hrvatskih znakova.",
+      "note": "Produbljivanje uniri (Fakultet zdravstvenih studija u Rijeci): direktno citanje izvora."
+    }
+  ]
+}
