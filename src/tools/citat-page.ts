@@ -66,12 +66,6 @@ function copyOut() {
   }
 }
 
-function toggleTheme() {
-  const root = document.documentElement;
-  const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-  root.setAttribute('data-theme', next);
-}
-
 function init() {
   $('#f-type').addEventListener('change', () => {
     syncVisibleFields();
@@ -82,8 +76,7 @@ function init() {
     el.addEventListener('change', render);
   });
   $('#copyBtn').addEventListener('click', copyOut);
-  const t = $('#themeBtn');
-  if (t) t.addEventListener('click', toggleTheme);
+  // Tema se sinkronizira preko lekta.theme (inline skripta u citat.html), ne ovdje.
   syncVisibleFields();
   render();
 }
