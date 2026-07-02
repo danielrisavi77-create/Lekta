@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Kako se Lekta razlikuje od AI savjeta, alata gdje uploadas svoje upute i ljudskog lektoriranja: verificirana pravila po instituciji, mjerenje stvarnog dokumenta, hrvatski i admin sloj.">
+<meta name="color-scheme" content="light dark">
+<title>Lekta - usporedba: zasto mjerenje i verificirana pravila</title>
+<style>
+:root{
+  --bg:#f6f7fb;--panel:#ffffff;--panel-2:#f0f2f8;--text:#172033;--muted:#697386;
+  --line:#dfe4ee;--line-strong:#cbd3e2;--brand:#5b4df6;--brand-2:#8b5cf6;--brand-soft:#eeecff;
+  --ok:#11845b;--ok-soft:#e8f8f1;--warn:#b36500;--warn-soft:#fff4df;--danger:#c9364f;--danger-soft:#fff0f3;
+  --shadow:0 22px 60px rgba(38,45,77,.12);--shadow-sm:0 8px 24px rgba(38,45,77,.08);--radius:22px;--max:1080px
+}
+[data-theme="dark"]{
+  --bg:#10131c;--panel:#171b27;--panel-2:#202636;--text:#f5f7ff;--muted:#aab2c4;--line:#2d3548;--line-strong:#414b62;
+  --brand:#8d82ff;--brand-2:#b084ff;--brand-soft:#28254f;--ok:#4fd0a1;--ok-soft:#163b31;--warn:#ffbe5d;--warn-soft:#45331c;
+  --danger:#ff7588;--danger-soft:#47242c;--shadow:0 24px 70px rgba(0,0,0,.35);--shadow-sm:0 8px 24px rgba(0,0,0,.25)
+}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;min-width:320px}
+a{color:inherit}.shell{width:min(var(--max),calc(100% - 36px));margin:auto}
+.topbar{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(18px);border-bottom:1px solid color-mix(in srgb,var(--line) 75%,transparent)}
+.nav{height:70px;display:flex;align-items:center;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:900;font-size:18px}
+.logo-mark{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,var(--brand),var(--brand-2));box-shadow:0 10px 22px rgba(91,77,246,.25)}
+.btn{border:0;border-radius:12px;padding:11px 16px;font-weight:850;display:inline-flex;align-items:center;gap:8px;text-decoration:none;transition:.18s transform}
+.btn:hover{transform:translateY(-1px)}.btn-primary{background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff;box-shadow:0 11px 25px rgba(91,77,246,.28)}
+.btn-secondary{background:var(--panel);border:1px solid var(--line);color:var(--text)}
+.nav .btn{margin-left:auto}
+.hero{padding:64px 0 32px;text-align:center}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--panel);padding:7px 12px;border-radius:999px;color:var(--muted);font-size:12px;font-weight:800;box-shadow:var(--shadow-sm)}
+h1{font-size:clamp(32px,5vw,52px);line-height:1.05;letter-spacing:-.04em;margin:18px auto 14px;max-width:820px}
+.gradient-text{background:linear-gradient(100deg,var(--brand),var(--brand-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{font-size:18px;color:var(--muted);max-width:640px;margin:0 auto 22px}
+.section{padding:34px 0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.tbl-wrap{overflow:auto}
+table.cmp{width:100%;border-collapse:collapse;min-width:720px}
+table.cmp th,table.cmp td{padding:14px 16px;border-top:1px solid var(--line);text-align:left;vertical-align:top;font-size:14px}
+table.cmp thead th{position:sticky;top:0;background:var(--panel-2);border-top:0;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+table.cmp thead th.lekta{color:var(--brand)}
+table.cmp td.dim{font-weight:800;color:var(--text);width:230px}
+table.cmp td.lekta{background:color-mix(in srgb,var(--brand-soft) 40%,var(--panel));font-weight:700}
+.yes{color:var(--ok);font-weight:900}.no{color:var(--danger);font-weight:900}.mid{color:var(--warn);font-weight:900}
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.pillar{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow-sm)}
+.pillar .n{width:38px;height:38px;border-radius:11px;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;font-weight:950}
+.pillar h3{margin:14px 0 7px;font-size:17px}.pillar p{margin:0;color:var(--muted);font-size:13px}
+.quotes{display:grid;gap:10px;max-width:820px;margin:0 auto}
+.quote{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--brand);border-radius:12px;padding:14px 16px;font-size:15px}
+.quote b{color:var(--brand)}
+.price-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+.price-pill{border:1px solid var(--line);background:var(--panel);border-radius:14px;padding:12px 16px;font-weight:800}
+.price-pill b{font-size:20px}.price-pill span{display:block;color:var(--muted);font-size:12px;font-weight:700}
+.bench{margin:16px auto 0;max-width:640px;text-align:center;color:var(--muted);font-size:13px;background:var(--warn-soft);border-radius:12px;padding:11px 14px}
+.section-head{text-align:center;max-width:720px;margin:0 auto 22px}
+.section-head .kicker{color:var(--brand);font-weight:900;text-transform:uppercase;letter-spacing:.12em;font-size:12px}
+.section-head h2{font-size:clamp(26px,4vw,40px);letter-spacing:-.03em;margin:10px 0 8px}
+.section-head p{color:var(--muted);margin:0}
+.cta{background:linear-gradient(135deg,#191d31,#332a73);color:#fff;border-radius:26px;padding:40px;text-align:center;margin:10px 0 40px}
+.cta h2{font-size:30px;letter-spacing:-.03em;margin:0 0 8px}.cta p{color:#cfd3e2;margin:0 0 18px}
+.cta .btn{background:#fff;color:#171b27}
+.disclaimer{text-align:center;color:var(--muted);font-size:12px;margin:22px auto 0;max-width:760px}
+footer{padding:26px 0;border-top:1px solid var(--line);color:var(--muted);font-size:12px;text-align:center}
+@media(max-width:820px){.pillars{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <nav class="shell nav">
+    <a class="logo" href="index.html#top"><span class="logo-mark">L</span><span>Lekta</span></a>
+    <a class="btn btn-primary" href="index.html#analyzer">Besplatno provjeri rad</a>
+  </nav>
+</header>
+
+<main>
+<section class="hero">
+  <div class="shell">
+    <span class="eyebrow">Usporedba pristupa</span>
+    <h1>Drugi ti kazu <span class="gradient-text">kako bi rad trebao izgledati.</span> Lekta izmjeri kako stvarno izgleda.</h1>
+    <p>AI savjet i alati u koje uploadas svoje upute oslanjaju se na to da ce netko dobro procitati pravila tvog fakulteta. Lekta ih vec zna: verificirana, s izvorom, stranicom i datumom.</p>
+    <a class="btn btn-primary" href="index.html#analyzer">Provjeri svoj rad &rarr;</a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="shell card tbl-wrap">
+    <table class="cmp">
+      <thead>
+        <tr>
+          <th>Sto zapravo dobivas</th>
+          <th>AI chat i savjet</th>
+          <th>Alati "uploadaj svoje upute"</th>
+          <th>Ljudsko lektoriranje</th>
+          <th class="lekta">Lekta</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="dim">Verificirana pravila po instituciji (izvor, stranica, datum, akademska godina)</td>
+          <td><span class="no">Ne</span></td>
+          <td><span class="no">Ne</span> (pravila nosi student pri svakom uploadu)</td>
+          <td><span class="no">Ne</span> (znanje lektora, nedokumentirano)</td>
+          <td class="lekta"><span class="yes">Da</span>, kurirana i verzionirana baza</td>
+        </tr>
+        <tr>
+          <td class="dim">Mjeri stvarni dokument (margine, stilovi, numeracija) umjesto savjeta</td>
+          <td><span class="no">Ne</span>, samo tekstualni savjet</td>
+          <td><span class="mid">Djelomicno</span>, ovisi o AI ekstrakciji</td>
+          <td><span class="yes">Da</span>, rucno</td>
+          <td class="lekta"><span class="yes">Da</span>, deterministicki DOCX sloj</td>
+        </tr>
+        <tr>
+          <td class="dim">Hrvatski kontekst + admin sloj (rokovi, obrasci, koraci predaje)</td>
+          <td><span class="no">Ne</span></td>
+          <td><span class="no">Ne</span></td>
+          <td><span class="mid">Djelomicno</span></td>
+          <td class="lekta"><span class="yes">Da</span>, FPZG fusnote, pravno citiranje, rokovi</td>
+        </tr>
+        <tr>
+          <td class="dim">Brzina</td>
+          <td>Sekunde (ali nepouzdano)</td>
+          <td>Minute</td>
+          <td>12 h do nekoliko dana</td>
+          <td class="lekta"><span class="yes">Sekunde</span>, lokalno</td>
+        </tr>
+        <tr>
+          <td class="dim">Cijena provjere</td>
+          <td>Besplatno / pretplata</td>
+          <td>Placeno po radu</td>
+          <td>100+ EUR po radu</td>
+          <td class="lekta">Od 3,99 EUR po radu</td>
+        </tr>
+        <tr>
+          <td class="dim">Garancija vezana na tocnost pravila</td>
+          <td><span class="no">Ne</span></td>
+          <td><span class="mid">Money-back na osjecaj</span></td>
+          <td><span class="mid">Happiness garancija</span></td>
+          <td class="lekta"><span class="yes">Da</span>, na verificiranim (T2/T3) profilima</td>
+        </tr>
+        <tr>
+          <td class="dim">Podatak ostaje na tvom uredaju</td>
+          <td><span class="no">Ne</span></td>
+          <td><span class="mid">Upload na server</span></td>
+          <td><span class="mid">Upload na server</span></td>
+          <td class="lekta"><span class="yes">Da</span>, analiza je lokalna</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="section">
+  <div class="shell">
+    <div class="section-head"><span class="kicker">Tri stupa</span><h2>Zasto je to obrana, a ne marketing</h2></div>
+    <div class="pillars">
+      <article class="pillar"><div class="n">1</div><h3>Verificirana baza</h3><p>Svako bodovano pravilo ima izvor, stranicu, datum i akademsku godinu. Kad pravilo nije javno objavljeno, aplikacija to izricito kaze umjesto da nagada.</p></article>
+      <article class="pillar"><div class="n">2</div><h3>Deterministicki DOCX sloj</h3><p>Mjerimo stvarni dokument, ne dajemo savjet o njemu: font, velicina, prored, margine, stilovi naslova, numeracija, sadrzaj, citatnice i literatura.</p></article>
+      <article class="pillar"><div class="n">3</div><h3>Hrvatski + admin sloj</h3><p>FPZG fusnote, pravno citiranje, rokovi, obrasci i koraci predaje. Preskupo za globalne igrace na trzistu od oko 31 tisuce radova godisnje.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="shell quotes">
+    <div class="quote"><b>vs AI chat:</b> ChatGPT ti kaze kako bi rad trebao izgledati. Lekta izmjeri kako tvoj rad stvarno izgleda.</div>
+    <div class="quote"><b>vs upload-alati:</b> oni se nadaju da ce AI dobro procitati tvoja pravila. Mi smo ih procitali, provjerili i potpisali izvor.</div>
+    <div class="quote"><b>vs lektor:</b> lektor sreduje jezik. Lekta sreduje sve zbog cega te referada vraca. Zajedno, ne umjesto.</div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="shell">
+    <div class="section-head"><span class="kicker">Cijena</span><h2>Red velicine jeftinije od ljudskog formatiranja</h2></div>
+    <div class="price-row">
+      <div class="price-pill"><b>3,99 EUR</b><span>Seminarski rad</span></div>
+      <div class="price-pill"><b>5,99 EUR</b><span>Zavrsni rad</span></div>
+      <div class="price-pill"><b>9,99 EUR</b><span>Diplomski rad</span></div>
+      <div class="price-pill"><b>24,99 EUR</b><span>Doktorski rad</span></div>
+    </div>
+    <p class="bench">Za usporedbu: ljudsko formatiranje i lektura obicno kostaju 100+ EUR po radu i traju danima. Cijene provjere su okvirne i sinkroniziraju se s aktualnim katalogom.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="shell">
+    <div class="cta">
+      <h2>Provjeri prije nego rad ode mentoru.</h2>
+      <p>Besplatan teaser, bez registracije, dokument ostaje na tvom uredaju.</p>
+      <a class="btn" href="index.html#analyzer">Besplatno provjeri rad &rarr;</a>
+    </div>
+    <p class="disclaimer">Lekta radi pomocnu tehnicku provjeru prema odabranom profilu i ne zamjenjuje sluzbene upute ustanove, studija, kolegija ni mentora. Tvrdnje o drugim pristupima su opisi kategorija, ne imenovanje pojedinih proizvoda.</p>
+  </div>
+</section>
+</main>
+
+<footer><div class="shell">&copy; 2026 Lekta &middot; Zagreb &middot; <a href="index.html#top">Natrag na provjeru</a></div></footer>
+</body>
+</html>
