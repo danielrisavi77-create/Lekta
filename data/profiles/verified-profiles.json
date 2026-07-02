@@ -4998,23 +4998,44 @@
     "verifiedAt": "2026-07-02",
     "documentDate": "2019-04-10",
     "fieldValidation": {
-      "status": "synthetic-golden-validated",
+      "status": "field-sampled",
       "validatedAt": "2026-07-02",
-      "scope": "Sinteticki golden .docx (diplomski, prored 1,15); nije pravi rad.",
+      "scope": "Sinteticki golden .docx (prored 1,15) + 2 stvarna javna diplomska rada iz ZIR-a kroz byte-level PDF preflight.",
       "sample": {
         "syntheticDocxAudits": 1,
         "docxAudits": 0,
-        "publicPdfAudits": 0,
+        "publicPdfAudits": 2,
         "metadataSpotChecks": 0,
         "years": [
+          2021,
+          2022,
           2026
         ]
       },
-      "confirmed": [
-        "Font, velicina, prored, A4, Sadrzaj i (doktorski) margine ispravno okidaju na uskladjenom sintetickom radu (tests/agr-synthetic.test.ts)."
+      "publicSources": [
+        {
+          "pid": "agr:2075",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 44,
+          "sha256": "7f08ac7e6eb529c6e87727b246237942e5693c56468d8c494ce77e209fe07b1e"
+        },
+        {
+          "pid": "agr:2678",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 45,
+          "sha256": "d5c49f8ea824a0900b167841921122138feaabcadda35a6fd3dff0aa04ee5328"
+        }
       ],
-      "observedDeviations": [],
-      "productDecision": "Sinteticki uzorci sluze samo regresijskoj provjeri parsera i audita; ne dokazuju sluzbeno pravilo ni ispravnost stvarnog rada."
+      "confirmed": [
+        "Font, velicina, prored, A4, Sadrzaj i margine ispravno okidaju na uskladjenom sintetickom radu (tests/agr-synthetic.test.ts).",
+        "Dva stvarna javna diplomska rada (agr:2075, agr:2678) prolaze byte-level PDF preflight: valjan PDF 1.7, nesifriran, 100% stranica priblizan A4, viselistni (44 i 45 str.), ugradjeni fontovi, bez JavaScripta i obrazaca."
+      ],
+      "observedDeviations": [
+        "Oba stvarna rada nemaju PDF/A oznaku (pdfaid:part); preflight to javlja kao info, ne kao gresku."
+      ],
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet se cuva preko PID-a i sha256."
     },
     "rules": {
       "font": ["Times New Roman", "Arial", "Calibri"],
