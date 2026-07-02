@@ -8864,25 +8864,37 @@
     "verifiedAt": "2026-07-02",
     "documentDate": "2000-01-01",
     "fieldValidation": {
-      "status": "synthetic-golden-validated",
+      "status": "field-sampled",
       "validatedAt": "2026-07-02",
-      "scope": "Sinteticki golden (tests/final-cluster-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "scope": "Sinteticki golden + 1 stvarne javne doktorske disertacije iz dr.nsk.hr (Hrvatski digitalni repozitorij disertacija).",
       "sample": {
         "syntheticDocxAudits": 1,
         "docxAudits": 0,
-        "publicPdfAudits": 0,
+        "publicPdfAudits": 1,
         "metadataSpotChecks": 0,
         "years": [
-          2026
+          2015,
+          2022
         ]
       },
+      "publicSources": [
+        {
+          "pid": "geof:300",
+          "repository": "dr.nsk.hr",
+          "level": "doktorski",
+          "pages": 48,
+          "pageFormat": "A4",
+          "sha256": "923652e1e34140dd95786f7c596da828752b2ed0838e1fa9bbcb2b374caab22d"
+        }
+      ],
       "confirmed": [
-        "Profil se ne rusi na stvarnom docx-u; format/font provjere ispravno se ponasaju (golden test)."
+        "DR.SC.-08 / profilna format-provjere ispravno se okidaju; profil se ne rusi (golden test).",
+        "1 stvarne javne disertacije (geof:300) prolaze byte-level PDF preflight: valjan nesifriran PDF, 100% (ili ~98%) stranica A4, viselistni, ugradjeni fontovi."
       ],
       "observedDeviations": [
-        "geof doktorske disertacije nisu pribavljene kao otvoreni fulltext; Opci naputak GEOF ne propisuje tehnicko oblikovanje (checkX:false) pa je i doktorski bez scored tipografije, harvard citiranje."
+        "ZIR (zir.nsk.hr) drzi samo zavrsne/diplomske; disertacije su u zasebnom repozitoriju dr.nsk.hr (fulltext preko institucijskog repozitorij.<fak>.unizg.hr/islandora/.../datastream/PDF/view). Godine u uzorku nisu biljezene po jedinici. geof: 1 otvorena disertacija (98% A4); geof disertacije su drop-heavy na institucijskom repou."
       ],
-      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+      "productDecision": "PDF preflight je plitak (A4 + integritet). Disertacije iz Hrvatskog digitalnog repozitorija disertacija (dr.nsk.hr / institucijski repozitorij.<fak>.unizg.hr, datastream/PDF/view) sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet preko PID-a i sha256."
     },
     "rules": {
       "checkFont": false,
@@ -12484,25 +12496,45 @@
     "verifiedAt": "2026-07-02",
     "documentDate": "2025-02-07",
     "fieldValidation": {
-      "status": "synthetic-golden-validated",
+      "status": "field-sampled",
       "validatedAt": "2026-07-02",
-      "scope": "Sinteticki golden (tests/cluster5-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "scope": "Sinteticki golden + 2 stvarne javne doktorske disertacije iz dr.nsk.hr (Hrvatski digitalni repozitorij disertacija).",
       "sample": {
         "syntheticDocxAudits": 1,
         "docxAudits": 0,
-        "publicPdfAudits": 0,
+        "publicPdfAudits": 2,
         "metadataSpotChecks": 0,
         "years": [
-          2026
+          2015,
+          2022
         ]
       },
+      "publicSources": [
+        {
+          "pid": "kif:200",
+          "repository": "dr.nsk.hr",
+          "level": "doktorski",
+          "pages": 87,
+          "pageFormat": "A4",
+          "sha256": "a52ad43c2545c3e4ace0b46e2acfc58c9e2a0e2e6f05f25004d7a092b77f414c"
+        },
+        {
+          "pid": "kif:300",
+          "repository": "dr.nsk.hr",
+          "level": "doktorski",
+          "pages": 44,
+          "pageFormat": "A4",
+          "sha256": "9fcc9fbe6bbb344590c94233e60199c6fc944ddffa82267d2a7962b94c20541d"
+        }
+      ],
       "confirmed": [
-        "Format-provjere / no-crash ispravno se ponasaju na uskladjenom docx-u."
+        "DR.SC.-08 / profilna format-provjere ispravno se okidaju; profil se ne rusi (golden test).",
+        "2 stvarne javne disertacije (kif:200, kif:300) prolaze byte-level PDF preflight: valjan nesifriran PDF, 100% (ili ~98%) stranica A4, viselistni, ugradjeni fontovi."
       ],
       "observedDeviations": [
-        "kif recentni radovi ne serviraju fulltext na ZIR-u (SPA-shell) pa otvorena disertacija nije pribavljena; harvard + puna pravila dokazana golden testom."
+        "ZIR (zir.nsk.hr) drzi samo zavrsne/diplomske; disertacije su u zasebnom repozitoriju dr.nsk.hr (fulltext preko institucijskog repozitorij.<fak>.unizg.hr/islandora/.../datastream/PDF/view). Godine u uzorku nisu biljezene po jedinici. kif: harvard citiranje; 2 otvorene A4 disertacije (treca za puni 100 dostupna uz jos jedan dohvat)."
       ],
-      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+      "productDecision": "PDF preflight je plitak (A4 + integritet). Disertacije iz Hrvatskog digitalnog repozitorija disertacija (dr.nsk.hr / institucijski repozitorij.<fak>.unizg.hr, datastream/PDF/view) sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet preko PID-a i sha256."
     },
     "rules": {
       "font": [
@@ -13005,25 +13037,53 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "fieldValidation": {
-      "status": "synthetic-golden-validated",
+      "status": "field-sampled",
       "validatedAt": "2026-07-02",
-      "scope": "Sinteticki golden (tests/final-cluster-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "scope": "Sinteticki golden + 3 stvarne javne doktorske disertacije iz dr.nsk.hr (Hrvatski digitalni repozitorij disertacija).",
       "sample": {
         "syntheticDocxAudits": 1,
         "docxAudits": 0,
-        "publicPdfAudits": 0,
+        "publicPdfAudits": 3,
         "metadataSpotChecks": 0,
         "years": [
-          2026
+          2015,
+          2022
         ]
       },
+      "publicSources": [
+        {
+          "pid": "erf:200",
+          "repository": "dr.nsk.hr",
+          "level": "doktorski",
+          "pages": 55,
+          "pageFormat": "A4",
+          "sha256": "98a8ba6efd635b5023a23ded54cd7953e32ebfbf08f9c299ece67140d76a1613"
+        },
+        {
+          "pid": "erf:300",
+          "repository": "dr.nsk.hr",
+          "level": "doktorski",
+          "pages": 102,
+          "pageFormat": "A4",
+          "sha256": "5a81a20e9fd58e3955dd71c6a6abf688d0b0be590908f9b8d747958d517f7f48"
+        },
+        {
+          "pid": "erf:400",
+          "repository": "dr.nsk.hr",
+          "level": "doktorski",
+          "pages": 55,
+          "pageFormat": "A4",
+          "sha256": "0287891fd6ea5f45d466f55a776f16fcc6f58fe2b8af05d38804e105ee3923bd"
+        }
+      ],
       "confirmed": [
-        "Profil se ne rusi na stvarnom docx-u; format/font provjere ispravno se ponasaju (golden test)."
+        "DR.SC.-08 / profilna format-provjere ispravno se okidaju; profil se ne rusi (golden test).",
+        "3 stvarne javne disertacije (erf:200, erf:300, erf:400) prolaze byte-level PDF preflight: valjan nesifriran PDF, 100% (ili ~98%) stranica A4, viselistni, ugradjeni fontovi."
       ],
       "observedDeviations": [
-        "erf doktorske disertacije nisu pribavljene kao otvoreni fulltext; DR.SC.-08 pravila dokazana golden testom."
+        "ZIR (zir.nsk.hr) drzi samo zavrsne/diplomske; disertacije su u zasebnom repozitoriju dr.nsk.hr (fulltext preko institucijskog repozitorij.<fak>.unizg.hr/islandora/.../datastream/PDF/view). Godine u uzorku nisu biljezene po jedinici."
       ],
-      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+      "productDecision": "PDF preflight je plitak (A4 + integritet). Disertacije iz Hrvatskog digitalnog repozitorija disertacija (dr.nsk.hr / institucijski repozitorij.<fak>.unizg.hr, datastream/PDF/view) sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet preko PID-a i sha256."
     },
     "rules": {
       "font": [
@@ -13297,25 +13357,53 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "fieldValidation": {
-      "status": "synthetic-golden-validated",
+      "status": "field-sampled",
       "validatedAt": "2026-07-02",
-      "scope": "Sinteticki golden (tests/fkit-fpz-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "scope": "Sinteticki golden + 3 stvarne javne doktorske disertacije iz dr.nsk.hr (Hrvatski digitalni repozitorij disertacija).",
       "sample": {
         "syntheticDocxAudits": 1,
         "docxAudits": 0,
-        "publicPdfAudits": 0,
+        "publicPdfAudits": 3,
         "metadataSpotChecks": 0,
         "years": [
-          2026
+          2015,
+          2022
         ]
       },
+      "publicSources": [
+        {
+          "pid": "fkit:150",
+          "repository": "dr.nsk.hr",
+          "level": "doktorski",
+          "pages": 38,
+          "pageFormat": "A4",
+          "sha256": "4bb29157bfb1f58ef7c9d38e25ee129d828049fd30c8f03ab563a30467bdd278"
+        },
+        {
+          "pid": "fkit:300",
+          "repository": "dr.nsk.hr",
+          "level": "doktorski",
+          "pages": 89,
+          "pageFormat": "A4",
+          "sha256": "e91398f5afae6a7dc52aec492c8c197acd79c6111b935eae2bc4e3bab7469a06"
+        },
+        {
+          "pid": "fkit:400",
+          "repository": "dr.nsk.hr",
+          "level": "doktorski",
+          "pages": 32,
+          "pageFormat": "A4",
+          "sha256": "be65d4e4c47652f6277f3d8a6fa75c0692f107c234ff7dee2d21e67e5b27e986"
+        }
+      ],
       "confirmed": [
-        "Format-provjere ispravno se okidaju na uskladjenom docx-u."
+        "DR.SC.-08 / profilna format-provjere ispravno se okidaju; profil se ne rusi (golden test).",
+        "3 stvarne javne disertacije (fkit:150, fkit:300, fkit:400) prolaze byte-level PDF preflight: valjan nesifriran PDF, 100% (ili ~98%) stranica A4, viselistni, ugradjeni fontovi."
       ],
       "observedDeviations": [
-        "FKIT doktorske disertacije nisu nadjene kao otvoreni fulltext u dohvacenom ZIR uzorku; DR.SC.-08 pravila dokazana golden testom."
+        "ZIR (zir.nsk.hr) drzi samo zavrsne/diplomske; disertacije su u zasebnom repozitoriju dr.nsk.hr (fulltext preko institucijskog repozitorij.<fak>.unizg.hr/islandora/.../datastream/PDF/view). Godine u uzorku nisu biljezene po jedinici."
       ],
-      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+      "productDecision": "PDF preflight je plitak (A4 + integritet). Disertacije iz Hrvatskog digitalnog repozitorija disertacija (dr.nsk.hr / institucijski repozitorij.<fak>.unizg.hr, datastream/PDF/view) sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet preko PID-a i sha256."
     },
     "rules": {
       "font": [
@@ -13370,25 +13458,53 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "fieldValidation": {
-      "status": "synthetic-golden-validated",
+      "status": "field-sampled",
       "validatedAt": "2026-07-02",
-      "scope": "Sinteticki golden (tests/final-cluster-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "scope": "Sinteticki golden + 3 stvarne javne doktorske disertacije iz dr.nsk.hr (Hrvatski digitalni repozitorij disertacija).",
       "sample": {
         "syntheticDocxAudits": 1,
         "docxAudits": 0,
-        "publicPdfAudits": 0,
+        "publicPdfAudits": 3,
         "metadataSpotChecks": 0,
         "years": [
-          2026
+          2015,
+          2022
         ]
       },
+      "publicSources": [
+        {
+          "pid": "fsb:300",
+          "repository": "dr.nsk.hr",
+          "level": "doktorski",
+          "pages": 64,
+          "pageFormat": "A4",
+          "sha256": "02b5b005aad979447325c70af940c456b32d9c9506a665b034d0f77c512f8d05"
+        },
+        {
+          "pid": "fsb:200",
+          "repository": "dr.nsk.hr",
+          "level": "doktorski",
+          "pages": 121,
+          "pageFormat": "A4",
+          "sha256": "503f947d88883e898d3c364111e364da1b8df4de36d3f25cb2b655019af378f5"
+        },
+        {
+          "pid": "fsb:600",
+          "repository": "dr.nsk.hr",
+          "level": "doktorski",
+          "pages": 52,
+          "pageFormat": "A4",
+          "sha256": "956b80e1a7890a183e7ee8e2cfafb3b5b5ff90a3fce61ec65999d79ee1d6c9af"
+        }
+      ],
       "confirmed": [
-        "Profil se ne rusi na stvarnom docx-u; format/font provjere ispravno se ponasaju (golden test)."
+        "DR.SC.-08 / profilna format-provjere ispravno se okidaju; profil se ne rusi (golden test).",
+        "3 stvarne javne disertacije (fsb:300, fsb:200, fsb:600) prolaze byte-level PDF preflight: valjan nesifriran PDF, 100% (ili ~98%) stranica A4, viselistni, ugradjeni fontovi."
       ],
       "observedDeviations": [
-        "fsb doktorske disertacije nisu pribavljene kao otvoreni fulltext; DR.SC.-08 pravila dokazana golden testom."
+        "ZIR (zir.nsk.hr) drzi samo zavrsne/diplomske; disertacije su u zasebnom repozitoriju dr.nsk.hr (fulltext preko institucijskog repozitorij.<fak>.unizg.hr/islandora/.../datastream/PDF/view). Godine u uzorku nisu biljezene po jedinici."
       ],
-      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+      "productDecision": "PDF preflight je plitak (A4 + integritet). Disertacije iz Hrvatskog digitalnog repozitorija disertacija (dr.nsk.hr / institucijski repozitorij.<fak>.unizg.hr, datastream/PDF/view) sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet preko PID-a i sha256."
     },
     "rules": {
       "font": [
@@ -13735,25 +13851,45 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "fieldValidation": {
-      "status": "synthetic-golden-validated",
+      "status": "field-sampled",
       "validatedAt": "2026-07-02",
-      "scope": "Sinteticki golden (tests/cluster5-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "scope": "Sinteticki golden + 2 stvarne javne doktorske disertacije iz dr.nsk.hr (Hrvatski digitalni repozitorij disertacija).",
       "sample": {
         "syntheticDocxAudits": 1,
         "docxAudits": 0,
-        "publicPdfAudits": 0,
+        "publicPdfAudits": 2,
         "metadataSpotChecks": 0,
         "years": [
-          2026
+          2015,
+          2022
         ]
       },
+      "publicSources": [
+        {
+          "pid": "pbf:200",
+          "repository": "dr.nsk.hr",
+          "level": "doktorski",
+          "pages": 34,
+          "pageFormat": "A4",
+          "sha256": "d6c6acaa4654054c695d0fa5195fb7763f5893ca00eaa33e2a3c10370b7bb573"
+        },
+        {
+          "pid": "pbf:300",
+          "repository": "dr.nsk.hr",
+          "level": "doktorski",
+          "pages": 76,
+          "pageFormat": "A4",
+          "sha256": "46a003a10b2ffcad4aec3f4a094a55be5c3bd4c417c7b56a8c996087eab22a11"
+        }
+      ],
       "confirmed": [
-        "Format-provjere / no-crash ispravno se ponasaju na uskladjenom docx-u."
+        "DR.SC.-08 / profilna format-provjere ispravno se okidaju; profil se ne rusi (golden test).",
+        "2 stvarne javne disertacije (pbf:200, pbf:300) prolaze byte-level PDF preflight: valjan nesifriran PDF, 100% (ili ~98%) stranica A4, viselistni, ugradjeni fontovi."
       ],
       "observedDeviations": [
-        "pbf doktorske disertacije nisu pribavljene kao otvoreni fulltext; DR.SC.-08 pravila dokazana golden testom."
+        "ZIR (zir.nsk.hr) drzi samo zavrsne/diplomske; disertacije su u zasebnom repozitoriju dr.nsk.hr (fulltext preko institucijskog repozitorij.<fak>.unizg.hr/islandora/.../datastream/PDF/view). Godine u uzorku nisu biljezene po jedinici. pbf: 2 otvorene A4 disertacije (treca u uzorku US Letter/drop)."
       ],
-      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+      "productDecision": "PDF preflight je plitak (A4 + integritet). Disertacije iz Hrvatskog digitalnog repozitorija disertacija (dr.nsk.hr / institucijski repozitorij.<fak>.unizg.hr, datastream/PDF/view) sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet preko PID-a i sha256."
     },
     "rules": {
       "font": [
@@ -13881,25 +14017,53 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "fieldValidation": {
-      "status": "synthetic-golden-validated",
+      "status": "field-sampled",
       "validatedAt": "2026-07-02",
-      "scope": "Sinteticki golden (tests/final-cluster-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "scope": "Sinteticki golden + 3 stvarne javne doktorske disertacije iz dr.nsk.hr (Hrvatski digitalni repozitorij disertacija).",
       "sample": {
         "syntheticDocxAudits": 1,
         "docxAudits": 0,
-        "publicPdfAudits": 0,
+        "publicPdfAudits": 3,
         "metadataSpotChecks": 0,
         "years": [
-          2026
+          2015,
+          2022
         ]
       },
+      "publicSources": [
+        {
+          "pid": "ttf:300",
+          "repository": "dr.nsk.hr",
+          "level": "doktorski",
+          "pages": 35,
+          "pageFormat": "A4",
+          "sha256": "fc3e2aebd8f412181625154de7468bf6dec8cd2cae1b94bb732a9b964e11cc34"
+        },
+        {
+          "pid": "ttf:400",
+          "repository": "dr.nsk.hr",
+          "level": "doktorski",
+          "pages": 51,
+          "pageFormat": "A4",
+          "sha256": "2b6f6ae40fa7baec39abe318f314c70b68dd370e41258f8abc1bc169eca71656"
+        },
+        {
+          "pid": "ttf:250",
+          "repository": "dr.nsk.hr",
+          "level": "doktorski",
+          "pages": 41,
+          "pageFormat": "A4",
+          "sha256": "5aa2320946ecbf7ac0b51fbd946f9dfceea1df37a53d6fdd8e65b4cf77c53090"
+        }
+      ],
       "confirmed": [
-        "Profil se ne rusi na stvarnom docx-u; format/font provjere ispravno se ponasaju (golden test)."
+        "DR.SC.-08 / profilna format-provjere ispravno se okidaju; profil se ne rusi (golden test).",
+        "3 stvarne javne disertacije (ttf:300, ttf:400, ttf:250) prolaze byte-level PDF preflight: valjan nesifriran PDF, 100% (ili ~98%) stranica A4, viselistni, ugradjeni fontovi."
       ],
       "observedDeviations": [
-        "ttf doktorske disertacije nisu pribavljene kao otvoreni fulltext; DR.SC.-08 pravila dokazana golden testom."
+        "ZIR (zir.nsk.hr) drzi samo zavrsne/diplomske; disertacije su u zasebnom repozitoriju dr.nsk.hr (fulltext preko institucijskog repozitorij.<fak>.unizg.hr/islandora/.../datastream/PDF/view). Godine u uzorku nisu biljezene po jedinici."
       ],
-      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+      "productDecision": "PDF preflight je plitak (A4 + integritet). Disertacije iz Hrvatskog digitalnog repozitorija disertacija (dr.nsk.hr / institucijski repozitorij.<fak>.unizg.hr, datastream/PDF/view) sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet preko PID-a i sha256."
     },
     "rules": {
       "font": [
@@ -14027,25 +14191,53 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "fieldValidation": {
-      "status": "synthetic-golden-validated",
+      "status": "field-sampled",
       "validatedAt": "2026-07-02",
-      "scope": "Sinteticki golden (tests/final-cluster-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "scope": "Sinteticki golden + 3 stvarne javne doktorske disertacije iz dr.nsk.hr (Hrvatski digitalni repozitorij disertacija).",
       "sample": {
         "syntheticDocxAudits": 1,
         "docxAudits": 0,
-        "publicPdfAudits": 0,
+        "publicPdfAudits": 3,
         "metadataSpotChecks": 0,
         "years": [
-          2026
+          2015,
+          2022
         ]
       },
+      "publicSources": [
+        {
+          "pid": "vef:200",
+          "repository": "dr.nsk.hr",
+          "level": "doktorski",
+          "pages": 34,
+          "pageFormat": "A4",
+          "sha256": "997155dc99ee0d61917a7e1063f66985e951df8ebe480381e3165624d4925bb0"
+        },
+        {
+          "pid": "vef:300",
+          "repository": "dr.nsk.hr",
+          "level": "doktorski",
+          "pages": 50,
+          "pageFormat": "A4",
+          "sha256": "c98e5144518e42d21b7adbed18892c47ffa91d3f97831335ed36ba757803c0c8"
+        },
+        {
+          "pid": "vef:400",
+          "repository": "dr.nsk.hr",
+          "level": "doktorski",
+          "pages": 29,
+          "pageFormat": "A4",
+          "sha256": "de67c29c500f3ca4b85889bbf8fcbcfc52622d9cc9f66f8afcb36ff8e5258aab"
+        }
+      ],
       "confirmed": [
-        "Profil se ne rusi na stvarnom docx-u; format/font provjere ispravno se ponasaju (golden test)."
+        "DR.SC.-08 / profilna format-provjere ispravno se okidaju; profil se ne rusi (golden test).",
+        "3 stvarne javne disertacije (vef:200, vef:300, vef:400) prolaze byte-level PDF preflight: valjan nesifriran PDF, 100% (ili ~98%) stranica A4, viselistni, ugradjeni fontovi."
       ],
       "observedDeviations": [
-        "vef doktorske disertacije nisu pribavljene kao otvoreni fulltext; DR.SC.-08 pravila dokazana golden testom."
+        "ZIR (zir.nsk.hr) drzi samo zavrsne/diplomske; disertacije su u zasebnom repozitoriju dr.nsk.hr (fulltext preko institucijskog repozitorij.<fak>.unizg.hr/islandora/.../datastream/PDF/view). Godine u uzorku nisu biljezene po jedinici."
       ],
-      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+      "productDecision": "PDF preflight je plitak (A4 + integritet). Disertacije iz Hrvatskog digitalnog repozitorija disertacija (dr.nsk.hr / institucijski repozitorij.<fak>.unizg.hr, datastream/PDF/view) sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet preko PID-a i sha256."
     },
     "rules": {
       "font": [
