@@ -8143,7 +8143,61 @@
     "profileLabel": "Fakultet prometnih znanosti, zavrsni rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2018-01-01",
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/fkit-fpz-synthetic.test.ts) + 3 stvarnih javnih zavrsni radova iz ZIR-a kroz byte-level PDF preflight.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2023,
+          2024
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "fpz:3300",
+          "repository": "zir.nsk.hr",
+          "level": "zavrsni",
+          "pages": 54,
+          "pageFormat": "A4",
+          "sha256": "899ebae7c62864741bd0da91a39d528377b254face3d3be7c32e3cc16be160f2"
+        },
+        {
+          "pid": "fpz:3200",
+          "repository": "zir.nsk.hr",
+          "level": "zavrsni",
+          "pages": 44,
+          "pageFormat": "A4",
+          "sha256": "b5c415e6a764f731854f71bbd77b68205c9fc9b5c7bb60315f236d1f7135e122"
+        },
+        {
+          "pid": "fpz:2800",
+          "repository": "zir.nsk.hr",
+          "level": "zavrsni",
+          "pages": 64,
+          "pageFormat": "A4",
+          "sha256": "d12a3fa6cfb5dc034240df2bdff557a7eca0ca7138463a82aff8cb9b8c34d43f"
+        }
+      ],
+      "confirmed": [
+        "Uskladjeni sinteticki .docx prolazi scored format provjere profila; profil se ne rusi na stvarnom docx-u (tests/fkit-fpz-synthetic.test.ts).",
+        "3 stvarnih javnih zavrsni radova (fpz:3300, fpz:3200, fpz:2800) prolaze byte-level PDF preflight: valjan nesifriran PDF, 100% stranica A4, viselistni, ugradjeni fontovi.",
+        "FPZ Upute (2018) tehnicko oblikovanje ne propisuju imperativno; scored su obvezne cjeline, Sadrzaj i numeracija. Citiranje custom."
+      ],
+      "observedDeviations": [
+        "Radovi bez PDF/A oznake (info, ne greska). U sirem uzorku dio radova je US Letter; ovi su 100% A4."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet PDF-a, ne oblikovanje sadrzaja). Stvarni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet preko PID-a i sha256."
+    },
     "rules": {
+      "checkFont": false,
+      "checkSize": false,
+      "checkSpacing": false,
+      "checkMargins": false,
       "requireToc": true,
       "requirePageNumbers": true,
       "recommendedCitation": "custom",
@@ -8271,7 +8325,52 @@
     "profileLabel": "Fakultet prometnih znanosti, diplomski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2018-01-01",
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/fkit-fpz-synthetic.test.ts) + 2 stvarnih javnih diplomski radova iz ZIR-a kroz byte-level PDF preflight.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 2,
+        "metadataSpotChecks": 0,
+        "years": [
+          2023
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "fpz:3000",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 30,
+          "pageFormat": "A4",
+          "sha256": "f6d353e46e4f25d425f821ad30b80356654319167a4ae6c2dcd1521eeb78fe10"
+        },
+        {
+          "pid": "fpz:3100",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 52,
+          "pageFormat": "A4",
+          "sha256": "ac67394318cf8dac5ca821cb724a25642b9b6584a65cc8e460c75d5b91b6cd57"
+        }
+      ],
+      "confirmed": [
+        "Uskladjeni sinteticki .docx prolazi scored format provjere profila; profil se ne rusi na stvarnom docx-u (tests/fkit-fpz-synthetic.test.ts).",
+        "2 stvarnih javnih diplomski radova (fpz:3000, fpz:3100) prolaze byte-level PDF preflight: valjan nesifriran PDF, 100% stranica A4, viselistni, ugradjeni fontovi.",
+        "FPZ Upute (2018) tehnicko oblikovanje ne propisuju imperativno pa su format-provjere iskljucene (checkFont/Size/Spacing/Margins:false); citiranje je \"prema posebnim uputama\" (custom). U dohvacenom uzorku diplomski radovi su rjedji; nadjena 2 A4 rada."
+      ],
+      "observedDeviations": [
+        "Radovi bez PDF/A oznake (info, ne greska). U sirem uzorku dio radova je US Letter; ovi su 100% A4."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet PDF-a, ne oblikovanje sadrzaja). Stvarni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet preko PID-a i sha256."
+    },
     "rules": {
+      "checkFont": false,
+      "checkSize": false,
+      "checkSpacing": false,
+      "checkMargins": false,
       "requireToc": true,
       "requirePageNumbers": true,
       "recommendedCitation": "custom",
@@ -9123,7 +9222,59 @@
     "profileLabel": "Fakultet kemijskog inženjerstva i tehnologije, diplomski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2025-09-22",
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/fkit-fpz-synthetic.test.ts) + 3 stvarnih javnih diplomski radova iz ZIR-a kroz byte-level PDF preflight.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2021,
+          2025
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "fkit:3000",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 63,
+          "pageFormat": "A4",
+          "sha256": "621c2721164b162d10bfb9b422713c88286d9b35a47d84901a6711bde50495c5"
+        },
+        {
+          "pid": "fkit:2900",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 77,
+          "pageFormat": "A4",
+          "sha256": "343accf33c703de09cb2fddeaa7e00871c5b2f8c606ae5a45b6f8a66aa6365d6"
+        },
+        {
+          "pid": "fkit:1800",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 55,
+          "pageFormat": "A4",
+          "sha256": "4a5f6ef6e3e2bfa7321a9f35fa36728334e6a953a75aa02ca97da8b288daffb7"
+        }
+      ],
+      "confirmed": [
+        "Uskladjeni sinteticki .docx prolazi scored format provjere profila; profil se ne rusi na stvarnom docx-u (tests/fkit-fpz-synthetic.test.ts).",
+        "3 stvarnih javnih diplomski radova (fkit:3000, fkit:2900, fkit:1800) prolaze byte-level PDF preflight: valjan nesifriran PDF, 100% stranica A4, viselistni, ugradjeni fontovi.",
+        "FKIT Izmjene Pravilnika (2025) propisuju imperativno velicinu 12, prored 1,5 i A4 (scored); font i margine nisu propisani pa su checkFont/checkMargins:false."
+      ],
+      "observedDeviations": [
+        "Radovi bez PDF/A oznake (info, ne greska). U sirem uzorku dio radova je US Letter; ovi su 100% A4."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet PDF-a, ne oblikovanje sadrzaja). Stvarni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet preko PID-a i sha256."
+    },
     "rules": {
+      "checkFont": false,
+      "checkMargins": false,
       "size": [
         12
       ],
@@ -9171,7 +9322,58 @@
     "profileLabel": "Fakultet kemijskog inženjerstva i tehnologije, zavrsni rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2025-09-22",
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/fkit-fpz-synthetic.test.ts) + 3 stvarnih javnih zavrsni radova iz ZIR-a kroz byte-level PDF preflight.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2019,
+          2021
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "fkit:2200",
+          "repository": "zir.nsk.hr",
+          "level": "zavrsni",
+          "pages": 45,
+          "pageFormat": "A4",
+          "sha256": "f1b21c7fb03f3bfe30016793d366d723200d7f9c6a4512870eef7a86b2bdcb71"
+        },
+        {
+          "pid": "fkit:2800",
+          "repository": "zir.nsk.hr",
+          "level": "zavrsni",
+          "pages": 61,
+          "pageFormat": "A4",
+          "sha256": "b0550a5d798122315257e31fe6759e9173c914560274cc147fa265ca42810835"
+        },
+        {
+          "pid": "fkit:2400",
+          "repository": "zir.nsk.hr",
+          "level": "zavrsni",
+          "pages": 32,
+          "pageFormat": "A4",
+          "sha256": "3fe90fdc9986923c25f4c4461109e72191543a013e88bf37b77e81b6092db8e9"
+        }
+      ],
+      "confirmed": [
+        "Uskladjeni sinteticki .docx prolazi scored format provjere profila; profil se ne rusi na stvarnom docx-u (tests/fkit-fpz-synthetic.test.ts).",
+        "3 stvarnih javnih zavrsni radova (fkit:2200, fkit:2800, fkit:2400) prolaze byte-level PDF preflight: valjan nesifriran PDF, 100% stranica A4, viselistni, ugradjeni fontovi."
+      ],
+      "observedDeviations": [
+        "Radovi bez PDF/A oznake (info, ne greska). U sirem uzorku dio radova je US Letter; ovi su 100% A4."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet PDF-a, ne oblikovanje sadrzaja). Stvarni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet preko PID-a i sha256."
+    },
     "rules": {
+      "checkFont": false,
+      "checkMargins": false,
       "size": [
         12
       ],
@@ -12125,6 +12327,27 @@
     "profileLabel": "Fakultet kemijskog inzenjerstva i tehnologije, doktorski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": null,
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/fkit-fpz-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Format-provjere ispravno se okidaju na uskladjenom docx-u."
+      ],
+      "observedDeviations": [
+        "FKIT doktorske disertacije nisu nadjene kao otvoreni fulltext u dohvacenom ZIR uzorku; DR.SC.-08 pravila dokazana golden testom."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
