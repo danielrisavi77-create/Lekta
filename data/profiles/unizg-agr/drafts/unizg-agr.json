@@ -16,9 +16,10 @@
       "sourcePage": "odjeljak 6. Tehnicko oblikovanje rada",
       "quote": "Preporuke za tehnicko oblikovanje rada: rad se pise velicinom slova 12 pt, prored 1,15",
       "status": "advisory",
-      "lastVerified": "2026-06-30",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "agr-diplomski--line-spacing",
@@ -32,9 +33,10 @@
       "sourcePage": "odjeljak 6. Tehnicko oblikovanje rada",
       "quote": "Preporuke za tehnicko oblikovanje rada: rad se pise velicinom slova 12 pt, prored 1,15",
       "status": "advisory",
-      "lastVerified": "2026-06-30",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "agr-diplomski--margins",
@@ -53,9 +55,10 @@
       "sourcePage": "odjeljak 6. Tehnicko oblikovanje rada",
       "quote": "margine rada trebaju iznositi 2,5 cm",
       "status": "advisory",
-      "lastVerified": "2026-06-30",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "agr-diplomski--paper-size",
@@ -69,9 +72,10 @@
       "sourcePage": "odjeljak 1. Diplomski rad",
       "quote": "Preporuka je da diplomski rad bude opsega 20 - 50 stranica osnovnog teksta na papiru A4 formata",
       "status": "advisory",
-      "lastVerified": "2026-06-30",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "agr-diplomski--page-numbers",
@@ -126,9 +130,10 @@
       "sourcePage": "odjeljak 1. Diplomski rad",
       "quote": "Preporuka je da diplomski rad bude opsega 20 - 50 stranica osnovnog teksta na papiru A4 formata - bez naslovnice, sadrzaja, popisa literature i priloga",
       "status": "advisory",
-      "lastVerified": "2026-06-30",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "agr-diplomski--citation-style",
@@ -142,9 +147,10 @@
       "sourcePage": "odjeljak 5. Pravila citiranja, a) Citiranje izvora u tekstu",
       "quote": "prema Husnjaku (2014.) morfogenetska grada tla ... / prema morfogenetskoj gradi tla (Husnjak 2014.)",
       "status": "advisory",
-      "lastVerified": "2026-06-30",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "agr-diplomski--required-sections",
@@ -165,9 +171,10 @@
       "sourcePage": "odjeljak 2. Struktura i sadrzaj diplomskog rada (str. 4)",
       "quote": "sazetak s kljucnim rijecima (na HR i ENGL.) / sadrzaj / uvod / sredisnji dio rada / zakljucak ili zakljucna razmatranja / literatura",
       "status": "advisory",
-      "lastVerified": "2026-06-30",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     }
   ]
 }

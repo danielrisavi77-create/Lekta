@@ -8,9 +8,9 @@
       "ruleId": "agr-zavrsni--font-size",
       "checkId": "font-size",
       "status": "advisory",
-      "lastVerified": "2026-06-30",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
       "authority": "program-page",
       "sourceId": "agr-upute-zavrsni-2017",
       "value": 12,
@@ -18,15 +18,16 @@
       "label": "Velicina slova",
       "machineCheckable": true,
       "sourcePage": "5. Tehnicko oblikovanje rada (Preporuke)",
-      "quote": "rad se pise velicinom slova 12 pt, prored 1,15"
+      "quote": "rad se pise velicinom slova 12 pt, prored 1,15",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "agr-zavrsni--line-spacing",
       "checkId": "line-spacing",
       "status": "advisory",
-      "lastVerified": "2026-06-30",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
       "authority": "program-page",
       "sourceId": "agr-upute-zavrsni-2017",
       "value": 1.15,
@@ -34,15 +35,16 @@
       "label": "Prored",
       "machineCheckable": true,
       "sourcePage": "5. Tehnicko oblikovanje rada (Preporuke)",
-      "quote": "rad se pise velicinom slova 12 pt, prored 1,15"
+      "quote": "rad se pise velicinom slova 12 pt, prored 1,15",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "agr-zavrsni--margins",
       "checkId": "margins",
       "status": "advisory",
-      "lastVerified": "2026-06-30",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
       "authority": "program-page",
       "sourceId": "agr-upute-zavrsni-2017",
       "value": {
@@ -55,15 +57,16 @@
       "label": "Margine",
       "machineCheckable": true,
       "sourcePage": "5. Tehnicko oblikovanje rada (Preporuke)",
-      "quote": "margine rada trebaju iznositi 2,5 cm"
+      "quote": "margine rada trebaju iznositi 2,5 cm",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "agr-zavrsni--paper-size",
       "checkId": "paper-size",
       "status": "advisory",
-      "lastVerified": "2026-06-30",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
       "authority": "program-page",
       "sourceId": "agr-upute-zavrsni-2017",
       "value": "A4",
@@ -71,7 +74,8 @@
       "label": "Format papira",
       "machineCheckable": true,
       "sourcePage": "1. Uvodne odrednice",
-      "quote": "Zavrsni rad je pisani tekst opsega 20 - 30 stranica osnovnog teksta na papiru A4 formata"
+      "quote": "Zavrsni rad je pisani tekst opsega 20 - 30 stranica osnovnog teksta na papiru A4 formata",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "agr-zavrsni--page-numbers",
@@ -115,9 +119,9 @@
       "ruleId": "agr-zavrsni--page-count",
       "checkId": "page-count",
       "status": "advisory",
-      "lastVerified": "2026-06-30",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
       "authority": "program-page",
       "sourceId": "agr-upute-zavrsni-2017",
       "value": {
@@ -128,15 +132,16 @@
       "label": "Opseg osnovnog teksta (stranice)",
       "machineCheckable": true,
       "sourcePage": "1. Uvodne odrednice",
-      "quote": "Zavrsni rad je pisani tekst opsega 20 - 30 stranica osnovnog teksta na papiru A4 formata"
+      "quote": "Zavrsni rad je pisani tekst opsega 20 - 30 stranica osnovnog teksta na papiru A4 formata",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "agr-zavrsni--citation-style",
       "checkId": "citation-style",
       "status": "advisory",
-      "lastVerified": "2026-06-30",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
       "authority": "program-page",
       "sourceId": "agr-upute-zavrsni-2017",
       "value": "autor-godina",
@@ -144,15 +149,16 @@
       "label": "Stil citiranja (autor-godina)",
       "machineCheckable": false,
       "sourcePage": "4. Pravila citiranja i izrada popisa literature",
-      "quote": "Citiranje izvora - jedan autor / dva autora / vise autora (autor, godina)"
+      "quote": "Citiranje izvora - jedan autor / dva autora / vise autora (autor, godina)",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "agr-zavrsni--required-sections",
       "checkId": "required-sections",
       "status": "advisory",
-      "lastVerified": "2026-06-30",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
+      "lastVerified": "2026-07-03",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
       "authority": "program-page",
       "sourceId": "agr-upute-zavrsni-2017",
       "value": [
@@ -167,7 +173,8 @@
       "label": "Obvezne cjeline zavrsnog rada",
       "machineCheckable": false,
       "sourcePage": "odjeljak 2. Struktura i sadrzaj zavrsnog rada (str. 4)",
-      "quote": "naslov / sazetak (do 1000 znakova, 3-5 kljucnih rijeci) / sadrzaj / uvod / ... / zakljucak / popis literature"
+      "quote": "naslov / sazetak (do 1000 znakova, 3-5 kljucnih rijeci) / sadrzaj / uvod / ... / zakljucak / popis literature",
+      "confirmedVia": "human-audit"
     }
   ]
 }
