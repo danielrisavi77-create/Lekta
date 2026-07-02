@@ -8,7 +8,7 @@
 
 /** Lemon Squeezy webhook payload (labava granica; citamo samo sto trebamo). */
 export interface LemonWebhookPayload {
-  meta?: { event_name?: string; custom_data?: { user_id?: string; product_id?: string } };
+  meta?: { event_name?: string; custom_data?: { user_id?: string; product_id?: string; referral_code?: string } };
   data?: {
     id?: string | number;
     attributes?: {
@@ -27,6 +27,8 @@ export interface LemonEvent {
   userId: string;
   /** LS variant id = products.mor_product_id (mapiranje proizvoda, sekcija 6.2). */
   variantId: string;
+  /** Referral kod iz checkout custom_data (atribucija, sekcija 8); prazno ako ga nema. */
+  referralCode: string;
   refunded: boolean;
 }
 
@@ -39,8 +41,9 @@ export function parseLemonEvent(payload: LemonWebhookPayload): LemonEvent {
   const orderId = String(data.id ?? attr.order_id ?? '');
   const userId = String(meta.custom_data?.user_id ?? '');
   const variantId = String(attr.first_order_item?.variant_id ?? attr.variant_id ?? '');
+  const referralCode = String(meta.custom_data?.referral_code ?? '');
   const refunded = eventName === 'order_refunded' || attr.status === 'refunded' || attr.refunded === true;
-  return { eventName, orderId, userId, variantId, refunded };
+  return { eventName, orderId, userId, variantId, referralCode, refunded };
 }
 
 const enc = new TextEncoder();

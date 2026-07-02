@@ -22,8 +22,16 @@ describe('parseLemonEvent', () => {
       orderId: '999',
       userId: 'u1',
       variantId: '555',
+      referralCode: '',
       refunded: false,
     });
+  });
+  it('izvlaci referral_code iz custom_data', () => {
+    const payload: LemonWebhookPayload = {
+      meta: { event_name: 'order_created', custom_data: { user_id: 'u1', referral_code: 'PART-9' } },
+      data: { id: 1, attributes: { first_order_item: { variant_id: 5 } } },
+    };
+    expect(parseLemonEvent(payload).referralCode).toBe('PART-9');
   });
   it('order_refunded -> refunded true', () => {
     const payload: LemonWebhookPayload = {

@@ -17,8 +17,16 @@ import {
   isPassProduct,
   makePassCouponCode,
   PASS_COUPON_VALID_DAYS,
+  type LemonEvent,
 } from '../../../src/report/webhook.ts';
 import { mapProductRow } from '../../../src/catalog/products-catalog.ts';
+import {
+  validateReferral,
+  referralRewardEntitlement,
+  rewardIsPullable,
+  semesterStart,
+  REFERRAL_WELCOME_DISCOUNT,
+} from '../../../src/report/referral.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -27,6 +35,96 @@ const PROVIDER = 'lemonsqueezy';
 
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
+}
+
+// Razrijesi referrer iz koda. Partner kodovi u partner_accounts.referral_code.
+// TODO(integracija): registar retail korisnickih kodova (zasad samo partnerski).
+async function resolveReferrer(admin: any, code: string): Promise<string | null> {
+  const { data } = await admin.from('partner_accounts').select('user_id').eq('referral_code', code).maybeSingle();
+  return data?.user_id ?? null;
+}
+
+// Atribucija referala (sekcija 8): tek uz TEK kreiran entitlement (pozivatelj to jamci).
+async function attributeReferral(admin: any, ev: LemonEvent): Promise<void> {
+  const referrerUserId = await resolveReferrer(admin, ev.referralCode);
+  if (!referrerUserId) return; // nepoznat kod
+
+  // referred smije imati referral samo na PRVU kupnju (bez ranijeg entitlementa osim ovog ordera)
+  const { count: prior } = await admin
+    .from('entitlements')
+    .select('id', { count: 'exact', head: true })
+    .eq('user_id', ev.userId)
+    .neq('order_id', ev.orderId);
+
+  // krediti referrera u tekucem semestru (cap 5)
+  const { count: credits } = await admin
+    .from('referrals')
+    .select('id', { count: 'exact', head: true })
+    .eq('referrer_user_id', referrerUserId)
+    .eq('status', 'credited')
+    .gte('credited_at', semesterStart(Date.now()));
+
+  const decision = validateReferral({
+    referrerUserId,
+    referredUserId: ev.userId,
+    referredHasPriorEntitlement: (prior ?? 0) > 0,
+    referrerCreditsThisSemester: credits ?? 0,
+  });
+  if (!decision.ok) {
+    console.warn('webhook-mor referral rejected', { reason: decision.reason, orderId: ev.orderId });
+    return;
+  }
+
+  const { data: ref } = await admin
+    .from('referrals')
+    .insert({
+      referrer_user_id: referrerUserId,
+      referred_user_id: ev.userId,
+      code: ev.referralCode,
+      status: 'credited',
+      converted_order_id: ev.orderId,
+      credited_at: new Date().toISOString(),
+    })
+    .select('id')
+    .single();
+
+  // nagrada referreru: interni entitlement (1 seminarski slot); unique(provider,order_id) stiti od duplog
+  const reward = referralRewardEntitlement(ref.id);
+  await admin.from('entitlements').insert({
+    user_id: referrerUserId,
+    work_type: reward.workType,
+    slots_total: reward.slotsTotal,
+    product_id: reward.productId,
+    order_id: reward.orderId,
+    provider: reward.provider,
+    purchase_expires_at: isoAfterDays(Date.now(), 90),
+  });
+
+  // welcome kupon za referred (zapis; primjena -20% na LS checkoutu je integracija)
+  await admin.from('coupon_grants').insert({
+    user_id: ev.userId,
+    code: `WELCOME-${ev.referralCode}`,
+    reason: 'referral_welcome',
+    source_order_id: ev.orderId,
+    expires_at: isoAfterDays(Date.now(), 120),
+  });
+  void REFERRAL_WELCOME_DISCOUNT; // -20% se postavlja u LS discount konfiguraciji (TODO)
+}
+
+// Refund izvorne kupnje povlaci NEPOTROSENU referral nagradu (potrosenu pusti, false-allow).
+async function pullReferralReward(admin: any, orderId: string): Promise<void> {
+  const { data: refs } = await admin.from('referrals').select('id').eq('converted_order_id', orderId);
+  for (const r of refs ?? []) {
+    const { data: ent } = await admin
+      .from('entitlements')
+      .select('id, slots_used')
+      .eq('provider', 'internal')
+      .eq('order_id', `reward:referral:${r.id}`)
+      .maybeSingle();
+    if (ent && rewardIsPullable(ent.slots_used)) {
+      await admin.from('entitlements').update({ status: 'void' }).eq('id', ent.id);
+    }
+  }
 }
 
 Deno.serve(async (req: Request) => {
@@ -44,6 +142,7 @@ Deno.serve(async (req: Request) => {
   // refund: blokiraj daljnje vezivanje slotova iz tog entitlementa (sekcija 6.7)
   if (ev.refunded) {
     await admin.from('entitlements').update({ status: 'refunded' }).eq('provider', PROVIDER).eq('order_id', ev.orderId);
+    await pullReferralReward(admin, ev.orderId); // povuci nepotrosenu referral nagradu (6.7)
     return json({ ok: true, action: 'refunded' });
   }
 
@@ -97,6 +196,9 @@ Deno.serve(async (req: Request) => {
     // TODO(integracija): kreiraj -20% Lemon Squeezy discount (vrijedi na slot_zavrsni/slot_diplomski)
     // i posalji kod korisniku mailom. Zakljucaj da ne vrijedi na partner proizvode (sekcija 7).
   }
+
+  // referral atribucija (sekcija 6.6 / 8): samo uz tek kreiran entitlement (duplikat je vec izasao gore)
+  if (ev.referralCode) await attributeReferral(admin, ev);
 
   return json({ ok: true, action: 'entitlement_created' });
 });

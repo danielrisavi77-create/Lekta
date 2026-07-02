@@ -19,6 +19,8 @@ serverska odluka; klijent nikad nije izvor istine.
   (premium_human) + RLS.
 - `migrations/0004_partner_accounts.sql` - `partner_accounts` (rucno odobrenje, daily_cap);
   aktivan partner dobiva podignut cap u generate-report (`src/report/partner.ts`).
+- `migrations/0005_referrals.sql` - `referrals` + RLS; atribucija i povlacenje nagrade na refund
+  su u webhook-mor, odluke u `src/report/referral.ts`.
 
 ## Odnos prema testiranom jezgru
 
