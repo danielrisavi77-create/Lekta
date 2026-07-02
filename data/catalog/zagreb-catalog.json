@@ -968,5 +968,79 @@
         ]
       }
     ]
+  },
+  {
+    "id": "unizd",
+    "name": "Sveuciliste u Zadru",
+    "units": [
+      {
+        "id": "unizd",
+        "name": "Sveuciliste u Zadru",
+        "family": "mixed",
+        "status": "partial",
+        "programs": [
+          "Odjel za turizam i komunikacijske znanosti (zavrsni rad, Zadar)",
+          "Odjel za turizam i komunikacijske znanosti (diplomski rad, Zadar)",
+          "Odjel za psihologiju (zavrsni rad, Zadar)",
+          "Odjel za pedagogiju (diplomski rad, Zadar)",
+          "Odjel za povijest umjetnosti (zavrsni rad, Zadar)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unipu",
+    "name": "Sveuciliste Jurja Dobrile u Puli",
+    "units": [
+      {
+        "id": "fetpu",
+        "name": "Fakultet ekonomije i turizma Dr. Mijo Mirkovic, Pula",
+        "family": "social",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski studiji FET Pula (zavrsni rad)",
+          "Diplomski studiji FET Pula"
+        ]
+      },
+      {
+        "id": "foozpu",
+        "name": "Fakultet za odgojne i obrazovne znanosti, Pula",
+        "family": "social",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski studiji FOOZ Pula (zavrsni rad)",
+          "Diplomski studiji FOOZ Pula"
+        ]
+      },
+      {
+        "id": "tfpu",
+        "name": "Tehnicki fakultet u Puli",
+        "family": "stem",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski/strucni studiji TFPU (zavrsni rad)",
+          "Diplomski studiji TFPU"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unidu",
+    "name": "Sveuciliste u Dubrovniku",
+    "units": [
+      {
+        "id": "unidu",
+        "name": "Sveuciliste u Dubrovniku",
+        "family": "mixed",
+        "status": "partial",
+        "programs": [
+          "Povijest Jadrana i Mediterana (zavrsni rad, Dubrovnik)",
+          "Odjel za komunikologiju (diplomski rad, Dubrovnik)",
+          "Odjel za ekonomiju i poslovnu ekonomiju (zavrsni rad, Dubrovnik)",
+          "Odjel za ekonomiju i poslovnu ekonomiju (diplomski rad, Dubrovnik)",
+          "Odjel za umjetnost i restauraciju (diplomski rad, Dubrovnik)"
+        ]
+      }
+    ]
   }
 ]

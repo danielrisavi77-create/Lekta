@@ -1,0 +1,280 @@
+{
+  "faculty": "foozpu",
+  "institution": "unipu",
+  "institutionName": "Sveuciliste Jurja Dobrile u Puli",
+  "unit": {
+    "id": "foozpu",
+    "name": "Fakultet za odgojne i obrazovne znanosti, Pula",
+    "family": "social",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Prijediplomski studiji FOOZ Pula (zavrsni rad)",
+    "Diplomski studiji FOOZ Pula"
+  ],
+  "sources": [
+    {
+      "id": "fooz-upute-radovi",
+      "kind": "guidelines",
+      "title": "Upute za pisanje zavrsnih i diplomskih radova (FOOZ, Pula)",
+      "url": "https://fooz.unipu.hr/_download/repository/Upute_za_pisanje_zavrsnih_i_diplomskih_radova_FOOZ.doc",
+      "publisher": "Fakultet za odgojne i obrazovne znanosti, Pula, Sveuciliste Jurja Dobrile u Puli",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/unipu/fooz-upute-radovi.doc",
+      "snapshotHash": "0a592d1f58fcbf2a34f05584f81b095e01536b477af5aed410c18abb899e4430",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": ".doc (antiword); font Arial. Citat dijakritika restaurirana iz istovjetnog UNIPU boilerplatea. Citiranje izbor -> advisory."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "foozpu-zavrsni",
+      "unitId": "foozpu",
+      "programs": [
+        "Prijediplomski studiji FOOZ Pula (zavrsni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "FOOZ Pula, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Arial"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet za odgojne i obrazovne znanosti, Pula, Sveuciliste Jurja Dobrile u Puli), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za pisanje zavrsnih i diplomskih radova (FOOZ, Pula)",
+          "url": "https://fooz.unipu.hr/_download/repository/Upute_za_pisanje_zavrsnih_i_diplomskih_radova_FOOZ.doc"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za pisanje zavrsnih i diplomskih radova (FOOZ, Pula)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Margine",
+        "Opseg (najmanje 30 str.)"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "foozpu-diplomski",
+      "unitId": "foozpu",
+      "programs": [
+        "Diplomski studiji FOOZ Pula"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "FOOZ Pula, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Arial"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet za odgojne i obrazovne znanosti, Pula, Sveuciliste Jurja Dobrile u Puli), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za pisanje zavrsnih i diplomskih radova (FOOZ, Pula)",
+          "url": "https://fooz.unipu.hr/_download/repository/Upute_za_pisanje_zavrsnih_i_diplomskih_radova_FOOZ.doc"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za pisanje zavrsnih i diplomskih radova (FOOZ, Pula)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Margine",
+        "Opseg (najmanje 50 str.)"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-foozpu-zavrsni--paper-size-verified-2026-07-02",
+      "ruleId": "foozpu-zavrsni--paper-size",
+      "profileId": "foozpu-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fooz-upute-radovi",
+      "sourcePage": "Naputak, tehnicko uredenje",
+      "quote": "Opseg završnog rada je minimalno 30 stranica. Završni rad treba biti napisan u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm.",
+      "note": "Cross-institution port (Fakultet za odgojne i obrazovne znanosti, Pula, Sveuciliste Jurja Dobrile u Puli): direktno citanje izvora."
+    },
+    {
+      "id": "led-foozpu-zavrsni--font-verified-2026-07-02",
+      "ruleId": "foozpu-zavrsni--font",
+      "profileId": "foozpu-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fooz-upute-radovi",
+      "sourcePage": "Naputak, tehnicko uredenje",
+      "quote": "Opseg završnog rada je minimalno 30 stranica. Završni rad treba biti napisan u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm.",
+      "note": "Cross-institution port (Fakultet za odgojne i obrazovne znanosti, Pula, Sveuciliste Jurja Dobrile u Puli): direktno citanje izvora."
+    },
+    {
+      "id": "led-foozpu-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "foozpu-zavrsni--font-size",
+      "profileId": "foozpu-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fooz-upute-radovi",
+      "sourcePage": "Naputak, tehnicko uredenje",
+      "quote": "Opseg završnog rada je minimalno 30 stranica. Završni rad treba biti napisan u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm.",
+      "note": "Cross-institution port (Fakultet za odgojne i obrazovne znanosti, Pula, Sveuciliste Jurja Dobrile u Puli): direktno citanje izvora."
+    },
+    {
+      "id": "led-foozpu-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "foozpu-zavrsni--line-spacing",
+      "profileId": "foozpu-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fooz-upute-radovi",
+      "sourcePage": "Naputak, tehnicko uredenje",
+      "quote": "Opseg završnog rada je minimalno 30 stranica. Završni rad treba biti napisan u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm.",
+      "note": "Cross-institution port (Fakultet za odgojne i obrazovne znanosti, Pula, Sveuciliste Jurja Dobrile u Puli): direktno citanje izvora."
+    },
+    {
+      "id": "led-foozpu-zavrsni--margins-verified-2026-07-02",
+      "ruleId": "foozpu-zavrsni--margins",
+      "profileId": "foozpu-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fooz-upute-radovi",
+      "sourcePage": "Naputak, tehnicko uredenje",
+      "quote": "Opseg završnog rada je minimalno 30 stranica. Završni rad treba biti napisan u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm.",
+      "note": "Cross-institution port (Fakultet za odgojne i obrazovne znanosti, Pula, Sveuciliste Jurja Dobrile u Puli): direktno citanje izvora."
+    },
+    {
+      "id": "led-foozpu-zavrsni--page-count-verified-2026-07-02",
+      "ruleId": "foozpu-zavrsni--page-count",
+      "profileId": "foozpu-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fooz-upute-radovi",
+      "sourcePage": "Naputak, opseg",
+      "quote": "Opseg završnog rada je minimalno 30 stranica. Završni rad treba biti napisan u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm.",
+      "note": "Cross-institution port (Fakultet za odgojne i obrazovne znanosti, Pula, Sveuciliste Jurja Dobrile u Puli): direktno citanje izvora."
+    },
+    {
+      "id": "led-foozpu-diplomski--paper-size-verified-2026-07-02",
+      "ruleId": "foozpu-diplomski--paper-size",
+      "profileId": "foozpu-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fooz-upute-radovi",
+      "sourcePage": "Naputak, tehnicko uredenje",
+      "quote": "Opseg diplomskoga rada je minimalno 50 stranica. Diplomski rad treba biti napisan u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm.",
+      "note": "Cross-institution port (Fakultet za odgojne i obrazovne znanosti, Pula, Sveuciliste Jurja Dobrile u Puli): direktno citanje izvora."
+    },
+    {
+      "id": "led-foozpu-diplomski--font-verified-2026-07-02",
+      "ruleId": "foozpu-diplomski--font",
+      "profileId": "foozpu-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fooz-upute-radovi",
+      "sourcePage": "Naputak, tehnicko uredenje",
+      "quote": "Opseg diplomskoga rada je minimalno 50 stranica. Diplomski rad treba biti napisan u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm.",
+      "note": "Cross-institution port (Fakultet za odgojne i obrazovne znanosti, Pula, Sveuciliste Jurja Dobrile u Puli): direktno citanje izvora."
+    },
+    {
+      "id": "led-foozpu-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "foozpu-diplomski--font-size",
+      "profileId": "foozpu-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fooz-upute-radovi",
+      "sourcePage": "Naputak, tehnicko uredenje",
+      "quote": "Opseg diplomskoga rada je minimalno 50 stranica. Diplomski rad treba biti napisan u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm.",
+      "note": "Cross-institution port (Fakultet za odgojne i obrazovne znanosti, Pula, Sveuciliste Jurja Dobrile u Puli): direktno citanje izvora."
+    },
+    {
+      "id": "led-foozpu-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "foozpu-diplomski--line-spacing",
+      "profileId": "foozpu-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fooz-upute-radovi",
+      "sourcePage": "Naputak, tehnicko uredenje",
+      "quote": "Opseg diplomskoga rada je minimalno 50 stranica. Diplomski rad treba biti napisan u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm.",
+      "note": "Cross-institution port (Fakultet za odgojne i obrazovne znanosti, Pula, Sveuciliste Jurja Dobrile u Puli): direktno citanje izvora."
+    },
+    {
+      "id": "led-foozpu-diplomski--margins-verified-2026-07-02",
+      "ruleId": "foozpu-diplomski--margins",
+      "profileId": "foozpu-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fooz-upute-radovi",
+      "sourcePage": "Naputak, tehnicko uredenje",
+      "quote": "Opseg diplomskoga rada je minimalno 50 stranica. Diplomski rad treba biti napisan u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm.",
+      "note": "Cross-institution port (Fakultet za odgojne i obrazovne znanosti, Pula, Sveuciliste Jurja Dobrile u Puli): direktno citanje izvora."
+    },
+    {
+      "id": "led-foozpu-diplomski--page-count-verified-2026-07-02",
+      "ruleId": "foozpu-diplomski--page-count",
+      "profileId": "foozpu-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fooz-upute-radovi",
+      "sourcePage": "Naputak, opseg",
+      "quote": "Opseg diplomskoga rada je minimalno 50 stranica. Diplomski rad treba biti napisan u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm.",
+      "note": "Cross-institution port (Fakultet za odgojne i obrazovne znanosti, Pula, Sveuciliste Jurja Dobrile u Puli): direktno citanje izvora."
+    }
+  ]
+}

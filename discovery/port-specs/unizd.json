@@ -1,0 +1,722 @@
+{
+  "faculty": "unizd",
+  "institution": "unizd",
+  "institutionName": "Sveuciliste u Zadru",
+  "unit": {
+    "id": "unizd",
+    "name": "Sveuciliste u Zadru",
+    "family": "mixed",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Odjel za turizam i komunikacijske znanosti (zavrsni rad, Zadar)",
+    "Odjel za turizam i komunikacijske znanosti (diplomski rad, Zadar)",
+    "Odjel za psihologiju (zavrsni rad, Zadar)",
+    "Odjel za pedagogiju (diplomski rad, Zadar)",
+    "Odjel za povijest umjetnosti (zavrsni rad, Zadar)"
+  ],
+  "sources": [
+    {
+      "id": "unizd-turizam-upute",
+      "kind": "guidelines",
+      "title": "Upute za izradu zavrsnoga i diplomskog rada (Odjel za turizam i komunikacijske znanosti, Zadar)",
+      "url": "https://www.unizd.hr/Portals/46/DIPLOMSKI%2C%20ZAVRSNI%20I%20SEMINARSKI%20RADOVI/Zavrsni%20radovi/Upute%20za%20izradu%20zavrsnoga%20i%20diplomskog%20rada.pdf",
+      "publisher": "Sveuciliste u Zadru, Sveuciliste u Zadru",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/unizd/unizd-turizam-upute.pdf",
+      "snapshotHash": "96d4895ec69f1dd6648ca946f324eb7032cc25ed6a3184e55ef7b5e64c7b5728",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Tekstualni PDF. Citiranje izbor (Harvard/fusnote) -> advisory."
+    },
+    {
+      "id": "unizd-psihologija-upute",
+      "kind": "guidelines",
+      "title": "Upute za izradu zavrsnog rada (Odjel za psihologiju, Zadar)",
+      "url": "https://www.unizd.hr/Portals/12/Studenti%20PDF/Upute%20za%20izradu%20zavr%C5%A1nog%20rada.pdf",
+      "publisher": "Sveuciliste u Zadru, Sveuciliste u Zadru",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/unizd/unizd-psihologija-upute.pdf",
+      "snapshotHash": "e5303b61dcbb0307882e1e33981b096cd6c843b8b9b713eaba6d614d6c16d53a",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Tekstualni PDF. APA fiksno."
+    },
+    {
+      "id": "unizd-pedagogija-upute-2019",
+      "kind": "guidelines",
+      "title": "Upute za pisanje diplomskog rada (Odjel za pedagogiju, Zadar, 2019)",
+      "url": "https://www.unizd.hr/Portals/10/pdf/Upute%20za%20pisanje%20DIPLOMSKOG%20RADA_2019.pdf",
+      "publisher": "Sveuciliste u Zadru, Sveuciliste u Zadru",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/unizd/unizd-pedagogija-upute-2019.pdf",
+      "snapshotHash": "380e2f937442f9fd06470b6f03f23b28dbd957b32df38405e0681d3647903ac1",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Tekstualni PDF. Harvard fiksno. Margine lijeva 3,5. A4 nije eksplicitno -> izostavljen."
+    },
+    {
+      "id": "unizd-povijest-umj-upute-2019",
+      "kind": "guidelines",
+      "title": "Upute za prijavu i izradu zavrsnoga rada (Odjel za povijest umjetnosti, Zadar, 2019)",
+      "url": "https://www.unizd.hr/Portals/11/Odjel/Upute_za_prijavu_i_izradu_zavrsnoga_rada.pdf",
+      "publisher": "Sveuciliste u Zadru, Sveuciliste u Zadru",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/unizd/unizd-povijest-umj-upute-2019.pdf",
+      "snapshotHash": "27ff705e1b96ca518f15bf0cdb2b19c87b585a23788efb157415b7dc1c9c8ac6",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Tekstualni PDF. Fusnotni citat -> advisory. Margine lijeva 3,5."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "unizd-turizam-zavrsni",
+      "unitId": "unizd",
+      "programs": [
+        "Odjel za turizam i komunikacijske znanosti (zavrsni rad, Zadar)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Zadar - Turizam i komunikacije, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Sveuciliste u Zadru, Sveuciliste u Zadru), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za izradu zavrsnoga i diplomskog rada (Odjel za turizam i komunikacijske znanosti, Zadar)",
+          "url": "https://www.unizd.hr/Portals/46/DIPLOMSKI%2C%20ZAVRSNI%20I%20SEMINARSKI%20RADOVI/Zavrsni%20radovi/Upute%20za%20izradu%20zavrsnoga%20i%20diplomskog%20rada.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu zavrsnoga i diplomskog rada (Odjel za turizam i komunikacijske znanosti, Zadar)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Obostrano poravnanje",
+        "Margine"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "unizd-turizam-diplomski",
+      "unitId": "unizd",
+      "programs": [
+        "Odjel za turizam i komunikacijske znanosti (diplomski rad, Zadar)"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Zadar - Turizam i komunikacije, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Sveuciliste u Zadru, Sveuciliste u Zadru), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za izradu zavrsnoga i diplomskog rada (Odjel za turizam i komunikacijske znanosti, Zadar)",
+          "url": "https://www.unizd.hr/Portals/46/DIPLOMSKI%2C%20ZAVRSNI%20I%20SEMINARSKI%20RADOVI/Zavrsni%20radovi/Upute%20za%20izradu%20zavrsnoga%20i%20diplomskog%20rada.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu zavrsnoga i diplomskog rada (Odjel za turizam i komunikacijske znanosti, Zadar)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Obostrano poravnanje",
+        "Margine",
+        "Opseg (najmanje 70 str.)"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "unizd-psihologija-zavrsni",
+      "unitId": "unizd",
+      "programs": [
+        "Odjel za psihologiju (zavrsni rad, Zadar)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Zadar - Psihologija, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 3
+        },
+        "recommendedCitation": "apa"
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Sveuciliste u Zadru, Sveuciliste u Zadru), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za izradu zavrsnog rada (Odjel za psihologiju, Zadar)",
+          "url": "https://www.unizd.hr/Portals/12/Studenti%20PDF/Upute%20za%20izradu%20zavr%C5%A1nog%20rada.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu zavrsnog rada (Odjel za psihologiju, Zadar)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Margine",
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Opseg (20-30 str.)",
+        "Stil citiranja (APA)"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "unizd-pedagogija-diplomski",
+      "unitId": "unizd",
+      "programs": [
+        "Odjel za pedagogiju (diplomski rad, Zadar)"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Zadar - Pedagogija, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 3.5
+        },
+        "recommendedCitation": "harvard"
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Sveuciliste u Zadru, Sveuciliste u Zadru), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za pisanje diplomskog rada (Odjel za pedagogiju, Zadar, 2019)",
+          "url": "https://www.unizd.hr/Portals/10/pdf/Upute%20za%20pisanje%20DIPLOMSKOG%20RADA_2019.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za pisanje diplomskog rada (Odjel za pedagogiju, Zadar, 2019)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Margine",
+        "Obostrano poravnanje",
+        "Stil citiranja (Harvard)"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "unizd-povijest-umj-zavrsni",
+      "unitId": "unizd",
+      "programs": [
+        "Odjel za povijest umjetnosti (zavrsni rad, Zadar)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Zadar - Povijest umjetnosti, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 3.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Sveuciliste u Zadru, Sveuciliste u Zadru), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za prijavu i izradu zavrsnoga rada (Odjel za povijest umjetnosti, Zadar, 2019)",
+          "url": "https://www.unizd.hr/Portals/11/Odjel/Upute_za_prijavu_i_izradu_zavrsnoga_rada.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za prijavu i izradu zavrsnoga rada (Odjel za povijest umjetnosti, Zadar, 2019)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Vrsta slova",
+        "Velicina slova",
+        "Margine",
+        "Prored",
+        "Obostrano poravnanje"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-unizd-turizam-zavrsni--paper-size-verified-2026-07-02",
+      "ruleId": "unizd-turizam-zavrsni--paper-size",
+      "profileId": "unizd-turizam-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizd-turizam-upute",
+      "sourcePage": "Upute, oblikovanje",
+      "quote": "Format rada je A4 (210 x 297 mm). Rad treba pisati fontom Times New Roman, veličine 12 pt, uz prored 1,5. Rad treba pisati s obostranim poravnanjem („justify“). Margine rada uglavnom su već zadane u standardnim postavkama računalnog programa u kojem se piše, a trebaju biti 2,5 cm sa svake strane.",
+      "note": "Cross-institution port (Sveuciliste u Zadru, Sveuciliste u Zadru): direktno citanje izvora."
+    },
+    {
+      "id": "led-unizd-turizam-zavrsni--font-verified-2026-07-02",
+      "ruleId": "unizd-turizam-zavrsni--font",
+      "profileId": "unizd-turizam-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizd-turizam-upute",
+      "sourcePage": "Upute, oblikovanje",
+      "quote": "Format rada je A4 (210 x 297 mm). Rad treba pisati fontom Times New Roman, veličine 12 pt, uz prored 1,5. Rad treba pisati s obostranim poravnanjem („justify“). Margine rada uglavnom su već zadane u standardnim postavkama računalnog programa u kojem se piše, a trebaju biti 2,5 cm sa svake strane.",
+      "note": "Cross-institution port (Sveuciliste u Zadru, Sveuciliste u Zadru): direktno citanje izvora."
+    },
+    {
+      "id": "led-unizd-turizam-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "unizd-turizam-zavrsni--font-size",
+      "profileId": "unizd-turizam-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizd-turizam-upute",
+      "sourcePage": "Upute, oblikovanje",
+      "quote": "Format rada je A4 (210 x 297 mm). Rad treba pisati fontom Times New Roman, veličine 12 pt, uz prored 1,5. Rad treba pisati s obostranim poravnanjem („justify“). Margine rada uglavnom su već zadane u standardnim postavkama računalnog programa u kojem se piše, a trebaju biti 2,5 cm sa svake strane.",
+      "note": "Cross-institution port (Sveuciliste u Zadru, Sveuciliste u Zadru): direktno citanje izvora."
+    },
+    {
+      "id": "led-unizd-turizam-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "unizd-turizam-zavrsni--line-spacing",
+      "profileId": "unizd-turizam-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizd-turizam-upute",
+      "sourcePage": "Upute, oblikovanje",
+      "quote": "Format rada je A4 (210 x 297 mm). Rad treba pisati fontom Times New Roman, veličine 12 pt, uz prored 1,5. Rad treba pisati s obostranim poravnanjem („justify“). Margine rada uglavnom su već zadane u standardnim postavkama računalnog programa u kojem se piše, a trebaju biti 2,5 cm sa svake strane.",
+      "note": "Cross-institution port (Sveuciliste u Zadru, Sveuciliste u Zadru): direktno citanje izvora."
+    },
+    {
+      "id": "led-unizd-turizam-zavrsni--justify-verified-2026-07-02",
+      "ruleId": "unizd-turizam-zavrsni--justify",
+      "profileId": "unizd-turizam-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizd-turizam-upute",
+      "sourcePage": "Upute, oblikovanje",
+      "quote": "Format rada je A4 (210 x 297 mm). Rad treba pisati fontom Times New Roman, veličine 12 pt, uz prored 1,5. Rad treba pisati s obostranim poravnanjem („justify“). Margine rada uglavnom su već zadane u standardnim postavkama računalnog programa u kojem se piše, a trebaju biti 2,5 cm sa svake strane.",
+      "note": "Cross-institution port (Sveuciliste u Zadru, Sveuciliste u Zadru): direktno citanje izvora."
+    },
+    {
+      "id": "led-unizd-turizam-zavrsni--margins-verified-2026-07-02",
+      "ruleId": "unizd-turizam-zavrsni--margins",
+      "profileId": "unizd-turizam-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizd-turizam-upute",
+      "sourcePage": "Upute, oblikovanje",
+      "quote": "Format rada je A4 (210 x 297 mm). Rad treba pisati fontom Times New Roman, veličine 12 pt, uz prored 1,5. Rad treba pisati s obostranim poravnanjem („justify“). Margine rada uglavnom su već zadane u standardnim postavkama računalnog programa u kojem se piše, a trebaju biti 2,5 cm sa svake strane.",
+      "note": "Cross-institution port (Sveuciliste u Zadru, Sveuciliste u Zadru): direktno citanje izvora."
+    },
+    {
+      "id": "led-unizd-turizam-diplomski--paper-size-verified-2026-07-02",
+      "ruleId": "unizd-turizam-diplomski--paper-size",
+      "profileId": "unizd-turizam-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizd-turizam-upute",
+      "sourcePage": "Upute, oblikovanje",
+      "quote": "Format rada je A4 (210 x 297 mm). Rad treba pisati fontom Times New Roman, veličine 12 pt, uz prored 1,5. Rad treba pisati s obostranim poravnanjem („justify“). Margine rada uglavnom su već zadane u standardnim postavkama računalnog programa u kojem se piše, a trebaju biti 2,5 cm sa svake strane.",
+      "note": "Cross-institution port (Sveuciliste u Zadru, Sveuciliste u Zadru): direktno citanje izvora."
+    },
+    {
+      "id": "led-unizd-turizam-diplomski--font-verified-2026-07-02",
+      "ruleId": "unizd-turizam-diplomski--font",
+      "profileId": "unizd-turizam-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizd-turizam-upute",
+      "sourcePage": "Upute, oblikovanje",
+      "quote": "Format rada je A4 (210 x 297 mm). Rad treba pisati fontom Times New Roman, veličine 12 pt, uz prored 1,5. Rad treba pisati s obostranim poravnanjem („justify“). Margine rada uglavnom su već zadane u standardnim postavkama računalnog programa u kojem se piše, a trebaju biti 2,5 cm sa svake strane.",
+      "note": "Cross-institution port (Sveuciliste u Zadru, Sveuciliste u Zadru): direktno citanje izvora."
+    },
+    {
+      "id": "led-unizd-turizam-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "unizd-turizam-diplomski--font-size",
+      "profileId": "unizd-turizam-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizd-turizam-upute",
+      "sourcePage": "Upute, oblikovanje",
+      "quote": "Format rada je A4 (210 x 297 mm). Rad treba pisati fontom Times New Roman, veličine 12 pt, uz prored 1,5. Rad treba pisati s obostranim poravnanjem („justify“). Margine rada uglavnom su već zadane u standardnim postavkama računalnog programa u kojem se piše, a trebaju biti 2,5 cm sa svake strane.",
+      "note": "Cross-institution port (Sveuciliste u Zadru, Sveuciliste u Zadru): direktno citanje izvora."
+    },
+    {
+      "id": "led-unizd-turizam-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "unizd-turizam-diplomski--line-spacing",
+      "profileId": "unizd-turizam-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizd-turizam-upute",
+      "sourcePage": "Upute, oblikovanje",
+      "quote": "Format rada je A4 (210 x 297 mm). Rad treba pisati fontom Times New Roman, veličine 12 pt, uz prored 1,5. Rad treba pisati s obostranim poravnanjem („justify“). Margine rada uglavnom su već zadane u standardnim postavkama računalnog programa u kojem se piše, a trebaju biti 2,5 cm sa svake strane.",
+      "note": "Cross-institution port (Sveuciliste u Zadru, Sveuciliste u Zadru): direktno citanje izvora."
+    },
+    {
+      "id": "led-unizd-turizam-diplomski--justify-verified-2026-07-02",
+      "ruleId": "unizd-turizam-diplomski--justify",
+      "profileId": "unizd-turizam-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizd-turizam-upute",
+      "sourcePage": "Upute, oblikovanje",
+      "quote": "Format rada je A4 (210 x 297 mm). Rad treba pisati fontom Times New Roman, veličine 12 pt, uz prored 1,5. Rad treba pisati s obostranim poravnanjem („justify“). Margine rada uglavnom su već zadane u standardnim postavkama računalnog programa u kojem se piše, a trebaju biti 2,5 cm sa svake strane.",
+      "note": "Cross-institution port (Sveuciliste u Zadru, Sveuciliste u Zadru): direktno citanje izvora."
+    },
+    {
+      "id": "led-unizd-turizam-diplomski--margins-verified-2026-07-02",
+      "ruleId": "unizd-turizam-diplomski--margins",
+      "profileId": "unizd-turizam-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizd-turizam-upute",
+      "sourcePage": "Upute, oblikovanje",
+      "quote": "Format rada je A4 (210 x 297 mm). Rad treba pisati fontom Times New Roman, veličine 12 pt, uz prored 1,5. Rad treba pisati s obostranim poravnanjem („justify“). Margine rada uglavnom su već zadane u standardnim postavkama računalnog programa u kojem se piše, a trebaju biti 2,5 cm sa svake strane.",
+      "note": "Cross-institution port (Sveuciliste u Zadru, Sveuciliste u Zadru): direktno citanje izvora."
+    },
+    {
+      "id": "led-unizd-turizam-diplomski--page-count-verified-2026-07-02",
+      "ruleId": "unizd-turizam-diplomski--page-count",
+      "profileId": "unizd-turizam-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizd-turizam-upute",
+      "sourcePage": "Upute, opseg",
+      "quote": "Diplomski rad mora imati najmanje 70 stranica.",
+      "note": "Cross-institution port (Sveuciliste u Zadru, Sveuciliste u Zadru): direktno citanje izvora."
+    },
+    {
+      "id": "led-unizd-psihologija-zavrsni--paper-size-verified-2026-07-02",
+      "ruleId": "unizd-psihologija-zavrsni--paper-size",
+      "profileId": "unizd-psihologija-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizd-psihologija-upute",
+      "sourcePage": "Upute, oblikovanje",
+      "quote": "Veličina stranice je A4 (210x297 mm). Rubnice (margine) trebaju biti sljedeće veličine: lijeva 30 mm, desna 25 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman, veličine 12pt uz prored 1,5.",
+      "note": "Cross-institution port (Sveuciliste u Zadru, Sveuciliste u Zadru): direktno citanje izvora."
+    },
+    {
+      "id": "led-unizd-psihologija-zavrsni--margins-verified-2026-07-02",
+      "ruleId": "unizd-psihologija-zavrsni--margins",
+      "profileId": "unizd-psihologija-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizd-psihologija-upute",
+      "sourcePage": "Upute, oblikovanje",
+      "quote": "Veličina stranice je A4 (210x297 mm). Rubnice (margine) trebaju biti sljedeće veličine: lijeva 30 mm, desna 25 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman, veličine 12pt uz prored 1,5.",
+      "note": "Cross-institution port (Sveuciliste u Zadru, Sveuciliste u Zadru): direktno citanje izvora."
+    },
+    {
+      "id": "led-unizd-psihologija-zavrsni--font-verified-2026-07-02",
+      "ruleId": "unizd-psihologija-zavrsni--font",
+      "profileId": "unizd-psihologija-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizd-psihologija-upute",
+      "sourcePage": "Upute, oblikovanje",
+      "quote": "Veličina stranice je A4 (210x297 mm). Rubnice (margine) trebaju biti sljedeće veličine: lijeva 30 mm, desna 25 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman, veličine 12pt uz prored 1,5.",
+      "note": "Cross-institution port (Sveuciliste u Zadru, Sveuciliste u Zadru): direktno citanje izvora."
+    },
+    {
+      "id": "led-unizd-psihologija-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "unizd-psihologija-zavrsni--font-size",
+      "profileId": "unizd-psihologija-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizd-psihologija-upute",
+      "sourcePage": "Upute, oblikovanje",
+      "quote": "Veličina stranice je A4 (210x297 mm). Rubnice (margine) trebaju biti sljedeće veličine: lijeva 30 mm, desna 25 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman, veličine 12pt uz prored 1,5.",
+      "note": "Cross-institution port (Sveuciliste u Zadru, Sveuciliste u Zadru): direktno citanje izvora."
+    },
+    {
+      "id": "led-unizd-psihologija-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "unizd-psihologija-zavrsni--line-spacing",
+      "profileId": "unizd-psihologija-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizd-psihologija-upute",
+      "sourcePage": "Upute, oblikovanje",
+      "quote": "Veličina stranice je A4 (210x297 mm). Rubnice (margine) trebaju biti sljedeće veličine: lijeva 30 mm, desna 25 mm, gornja i donja po 25 mm. Rad treba pisati fontom Times New Roman, veličine 12pt uz prored 1,5.",
+      "note": "Cross-institution port (Sveuciliste u Zadru, Sveuciliste u Zadru): direktno citanje izvora."
+    },
+    {
+      "id": "led-unizd-psihologija-zavrsni--page-count-verified-2026-07-02",
+      "ruleId": "unizd-psihologija-zavrsni--page-count",
+      "profileId": "unizd-psihologija-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizd-psihologija-upute",
+      "sourcePage": "Upute, opseg",
+      "quote": "Završni rad treba imati najmanje 20 i najviše 30 stranica.",
+      "note": "Cross-institution port (Sveuciliste u Zadru, Sveuciliste u Zadru): direktno citanje izvora."
+    },
+    {
+      "id": "led-unizd-psihologija-zavrsni--citation-style-verified-2026-07-02",
+      "ruleId": "unizd-psihologija-zavrsni--citation-style",
+      "profileId": "unizd-psihologija-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizd-psihologija-upute",
+      "sourcePage": "Upute, citiranje",
+      "quote": "Formalno uređenje teksta treba biti sukladno APA standardima (standardi za pisanje znanstvenih radova American Psychological Association).",
+      "note": "Cross-institution port (Sveuciliste u Zadru, Sveuciliste u Zadru): direktno citanje izvora."
+    },
+    {
+      "id": "led-unizd-pedagogija-diplomski--font-verified-2026-07-02",
+      "ruleId": "unizd-pedagogija-diplomski--font",
+      "profileId": "unizd-pedagogija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizd-pedagogija-upute-2019",
+      "sourcePage": "Upute, oblikovanje",
+      "quote": "Prilikom pisanja, potrebno je pridržavati se sljedećih smjernica za oblikovanje diplomskog rada: profesionalni font Times New Roman, veličina slova 12, prored 1,5 (s razmakom prije 0pt i razmakom poslije 0pt), standardne margine (2,5cm gornje, donje i desne margine te 3,5cm lijeve margine), obostrano poravnanje teksta te pisanje u odlomcima.",
+      "note": "Cross-institution port (Sveuciliste u Zadru, Sveuciliste u Zadru): direktno citanje izvora."
+    },
+    {
+      "id": "led-unizd-pedagogija-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "unizd-pedagogija-diplomski--font-size",
+      "profileId": "unizd-pedagogija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizd-pedagogija-upute-2019",
+      "sourcePage": "Upute, oblikovanje",
+      "quote": "Prilikom pisanja, potrebno je pridržavati se sljedećih smjernica za oblikovanje diplomskog rada: profesionalni font Times New Roman, veličina slova 12, prored 1,5 (s razmakom prije 0pt i razmakom poslije 0pt), standardne margine (2,5cm gornje, donje i desne margine te 3,5cm lijeve margine), obostrano poravnanje teksta te pisanje u odlomcima.",
+      "note": "Cross-institution port (Sveuciliste u Zadru, Sveuciliste u Zadru): direktno citanje izvora."
+    },
+    {
+      "id": "led-unizd-pedagogija-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "unizd-pedagogija-diplomski--line-spacing",
+      "profileId": "unizd-pedagogija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizd-pedagogija-upute-2019",
+      "sourcePage": "Upute, oblikovanje",
+      "quote": "Prilikom pisanja, potrebno je pridržavati se sljedećih smjernica za oblikovanje diplomskog rada: profesionalni font Times New Roman, veličina slova 12, prored 1,5 (s razmakom prije 0pt i razmakom poslije 0pt), standardne margine (2,5cm gornje, donje i desne margine te 3,5cm lijeve margine), obostrano poravnanje teksta te pisanje u odlomcima.",
+      "note": "Cross-institution port (Sveuciliste u Zadru, Sveuciliste u Zadru): direktno citanje izvora."
+    },
+    {
+      "id": "led-unizd-pedagogija-diplomski--margins-verified-2026-07-02",
+      "ruleId": "unizd-pedagogija-diplomski--margins",
+      "profileId": "unizd-pedagogija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizd-pedagogija-upute-2019",
+      "sourcePage": "Upute, oblikovanje",
+      "quote": "Prilikom pisanja, potrebno je pridržavati se sljedećih smjernica za oblikovanje diplomskog rada: profesionalni font Times New Roman, veličina slova 12, prored 1,5 (s razmakom prije 0pt i razmakom poslije 0pt), standardne margine (2,5cm gornje, donje i desne margine te 3,5cm lijeve margine), obostrano poravnanje teksta te pisanje u odlomcima.",
+      "note": "Cross-institution port (Sveuciliste u Zadru, Sveuciliste u Zadru): direktno citanje izvora."
+    },
+    {
+      "id": "led-unizd-pedagogija-diplomski--justify-verified-2026-07-02",
+      "ruleId": "unizd-pedagogija-diplomski--justify",
+      "profileId": "unizd-pedagogija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizd-pedagogija-upute-2019",
+      "sourcePage": "Upute, oblikovanje",
+      "quote": "Prilikom pisanja, potrebno je pridržavati se sljedećih smjernica za oblikovanje diplomskog rada: profesionalni font Times New Roman, veličina slova 12, prored 1,5 (s razmakom prije 0pt i razmakom poslije 0pt), standardne margine (2,5cm gornje, donje i desne margine te 3,5cm lijeve margine), obostrano poravnanje teksta te pisanje u odlomcima.",
+      "note": "Cross-institution port (Sveuciliste u Zadru, Sveuciliste u Zadru): direktno citanje izvora."
+    },
+    {
+      "id": "led-unizd-pedagogija-diplomski--citation-style-verified-2026-07-02",
+      "ruleId": "unizd-pedagogija-diplomski--citation-style",
+      "profileId": "unizd-pedagogija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizd-pedagogija-upute-2019",
+      "sourcePage": "Upute, citiranje",
+      "quote": "Bibliografske jedinice navode se prema harvardskom sustavu referiranja.",
+      "note": "Cross-institution port (Sveuciliste u Zadru, Sveuciliste u Zadru): direktno citanje izvora."
+    },
+    {
+      "id": "led-unizd-povijest-umj-zavrsni--paper-size-verified-2026-07-02",
+      "ruleId": "unizd-povijest-umj-zavrsni--paper-size",
+      "profileId": "unizd-povijest-umj-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizd-povijest-umj-upute-2019",
+      "sourcePage": "Upute, oblikovanje",
+      "quote": "Tekst treba formatirati na sljedeći način: pismo (font): Times New Roman, veličina 12; margine: lijevo 3,5 i desno 2,5 cm, gore i dolje 2,5 cm (to su automatski podešene vrijednosti u MS Word aplikaciji kod veličine papira A4); prored: 1,5; tekst pisati s obostranim poravnanjem („justify“).",
+      "note": "Cross-institution port (Sveuciliste u Zadru, Sveuciliste u Zadru): direktno citanje izvora."
+    },
+    {
+      "id": "led-unizd-povijest-umj-zavrsni--font-verified-2026-07-02",
+      "ruleId": "unizd-povijest-umj-zavrsni--font",
+      "profileId": "unizd-povijest-umj-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizd-povijest-umj-upute-2019",
+      "sourcePage": "Upute, oblikovanje",
+      "quote": "Tekst treba formatirati na sljedeći način: pismo (font): Times New Roman, veličina 12; margine: lijevo 3,5 i desno 2,5 cm, gore i dolje 2,5 cm (to su automatski podešene vrijednosti u MS Word aplikaciji kod veličine papira A4); prored: 1,5; tekst pisati s obostranim poravnanjem („justify“).",
+      "note": "Cross-institution port (Sveuciliste u Zadru, Sveuciliste u Zadru): direktno citanje izvora."
+    },
+    {
+      "id": "led-unizd-povijest-umj-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "unizd-povijest-umj-zavrsni--font-size",
+      "profileId": "unizd-povijest-umj-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizd-povijest-umj-upute-2019",
+      "sourcePage": "Upute, oblikovanje",
+      "quote": "Tekst treba formatirati na sljedeći način: pismo (font): Times New Roman, veličina 12; margine: lijevo 3,5 i desno 2,5 cm, gore i dolje 2,5 cm (to su automatski podešene vrijednosti u MS Word aplikaciji kod veličine papira A4); prored: 1,5; tekst pisati s obostranim poravnanjem („justify“).",
+      "note": "Cross-institution port (Sveuciliste u Zadru, Sveuciliste u Zadru): direktno citanje izvora."
+    },
+    {
+      "id": "led-unizd-povijest-umj-zavrsni--margins-verified-2026-07-02",
+      "ruleId": "unizd-povijest-umj-zavrsni--margins",
+      "profileId": "unizd-povijest-umj-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizd-povijest-umj-upute-2019",
+      "sourcePage": "Upute, oblikovanje",
+      "quote": "Tekst treba formatirati na sljedeći način: pismo (font): Times New Roman, veličina 12; margine: lijevo 3,5 i desno 2,5 cm, gore i dolje 2,5 cm (to su automatski podešene vrijednosti u MS Word aplikaciji kod veličine papira A4); prored: 1,5; tekst pisati s obostranim poravnanjem („justify“).",
+      "note": "Cross-institution port (Sveuciliste u Zadru, Sveuciliste u Zadru): direktno citanje izvora."
+    },
+    {
+      "id": "led-unizd-povijest-umj-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "unizd-povijest-umj-zavrsni--line-spacing",
+      "profileId": "unizd-povijest-umj-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizd-povijest-umj-upute-2019",
+      "sourcePage": "Upute, oblikovanje",
+      "quote": "Tekst treba formatirati na sljedeći način: pismo (font): Times New Roman, veličina 12; margine: lijevo 3,5 i desno 2,5 cm, gore i dolje 2,5 cm (to su automatski podešene vrijednosti u MS Word aplikaciji kod veličine papira A4); prored: 1,5; tekst pisati s obostranim poravnanjem („justify“).",
+      "note": "Cross-institution port (Sveuciliste u Zadru, Sveuciliste u Zadru): direktno citanje izvora."
+    },
+    {
+      "id": "led-unizd-povijest-umj-zavrsni--justify-verified-2026-07-02",
+      "ruleId": "unizd-povijest-umj-zavrsni--justify",
+      "profileId": "unizd-povijest-umj-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unizd-povijest-umj-upute-2019",
+      "sourcePage": "Upute, oblikovanje",
+      "quote": "Tekst treba formatirati na sljedeći način: pismo (font): Times New Roman, veličina 12; margine: lijevo 3,5 i desno 2,5 cm, gore i dolje 2,5 cm (to su automatski podešene vrijednosti u MS Word aplikaciji kod veličine papira A4); prored: 1,5; tekst pisati s obostranim poravnanjem („justify“).",
+      "note": "Cross-institution port (Sveuciliste u Zadru, Sveuciliste u Zadru): direktno citanje izvora."
+    }
+  ]
+}

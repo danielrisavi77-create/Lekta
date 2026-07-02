@@ -1,0 +1,670 @@
+{
+  "faculty": "unidu",
+  "institution": "unidu",
+  "institutionName": "Sveuciliste u Dubrovniku",
+  "unit": {
+    "id": "unidu",
+    "name": "Sveuciliste u Dubrovniku",
+    "family": "mixed",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Povijest Jadrana i Mediterana (zavrsni rad, Dubrovnik)",
+    "Odjel za komunikologiju (diplomski rad, Dubrovnik)",
+    "Odjel za ekonomiju i poslovnu ekonomiju (zavrsni rad, Dubrovnik)",
+    "Odjel za ekonomiju i poslovnu ekonomiju (diplomski rad, Dubrovnik)",
+    "Odjel za umjetnost i restauraciju (diplomski rad, Dubrovnik)"
+  ],
+  "sources": [
+    {
+      "id": "unidu-povijest-upute",
+      "kind": "guidelines",
+      "title": "Upute za izradu zavrsnog rada - Povijest Jadrana i Mediterana (Odjel za humanisticke studije, Dubrovnik)",
+      "url": "https://www.unidu.hr/wp-content/plugins/quarascope/download.php?file=7709",
+      "publisher": "Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/unidu/unidu-povijest-upute.pdf",
+      "snapshotHash": "be4bc778e16ba824881220957514f48b3566b7b90c9f9a2c0adc149b5c786a5a",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Tekstualni PDF; obvezujuce (Prilog Pravilnika). Opseg u karticama -> advisory. Fusnotni citat -> advisory. A4 nije eksplicitno -> izostavljen."
+    },
+    {
+      "id": "unidu-komunikologija-upute-2025",
+      "kind": "guidelines",
+      "title": "Upute za izradu diplomskog rada (Odjel za komunikologiju / mediji, Dubrovnik, 2025)",
+      "url": "https://www.unidu.hr/wp-content/plugins/quarascope/download.php?file=45903",
+      "publisher": "Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/unidu/unidu-komunikologija-upute-2025.pdf",
+      "snapshotHash": "0ffa9c114e9d56c4a5b0063abcd2062de919c69de1101787e3cfe9a245c396d7",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Tekstualni PDF; usvojeno na Fakultetskom vijecu 2025. Harvard imperativ -> scored."
+    },
+    {
+      "id": "unidu-ekonomija-prirucnik-2024",
+      "kind": "guidelines",
+      "title": "Prirucnik za izradu i obranu zavrsnog/diplomskog rada (Odjel za ekonomiju, Dubrovnik, 2024)",
+      "url": "https://www.unidu.hr/wp-content/plugins/quarascope/download.php?file=26922",
+      "publisher": "Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/unidu/unidu-ekonomija-prirucnik-2024.pdf",
+      "snapshotHash": "42164f5e762c1c0a5a404fe30cbd9c02e2fd763d5755fb3b1cae7da0bb2f93fb",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Tekstualni PDF; font Calibri. Prored 17pt-exact ne mapira -> izostavljen. \"Smjernice\" + Harvard -> citiranje advisory."
+    },
+    {
+      "id": "unidu-umjetnost-naputak",
+      "kind": "guidelines",
+      "title": "Naputak za oblikovanje i opremu diplomskog rada (Odjel za umjetnost i restauraciju, Dubrovnik)",
+      "url": "https://www.unidu.hr/wp-content/plugins/quarascope/download.php?file=2333",
+      "publisher": "Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/unidu/unidu-umjetnost-naputak.pdf",
+      "snapshotHash": "b32d0ccdbeee0feee481322968511f37442c5a1caec3df968cb568ffbf1ef138",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Tekstualni PDF; obvezujuce (Pravilnik cl.9). Margine lijeva 3, prored 1,15. Fusnotni citat -> advisory."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "unidu-povijest-zavrsni",
+      "unitId": "unidu",
+      "programs": [
+        "Povijest Jadrana i Mediterana (zavrsni rad, Dubrovnik)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Dubrovnik - Povijest, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za izradu zavrsnog rada - Povijest Jadrana i Mediterana (Odjel za humanisticke studije, Dubrovnik)",
+          "url": "https://www.unidu.hr/wp-content/plugins/quarascope/download.php?file=7709"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu zavrsnog rada - Povijest Jadrana i Mediterana (Odjel za humanisticke studije, Dubrovnik)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Obostrano poravnanje",
+        "Margine"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "unidu-komunikologija-diplomski",
+      "unitId": "unidu",
+      "programs": [
+        "Odjel za komunikologiju (diplomski rad, Dubrovnik)"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Dubrovnik - Komunikologija, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman",
+          "Arial"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "recommendedCitation": "harvard"
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za izradu diplomskog rada (Odjel za komunikologiju / mediji, Dubrovnik, 2025)",
+          "url": "https://www.unidu.hr/wp-content/plugins/quarascope/download.php?file=45903"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu diplomskog rada (Odjel za komunikologiju / mediji, Dubrovnik, 2025)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Vrsta slova (TNR ili Arial)",
+        "Velicina slova",
+        "Prored",
+        "Obostrano poravnanje",
+        "Margine",
+        "Stil citiranja (Harvard)"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "unidu-ekonomija-zavrsni",
+      "unitId": "unidu",
+      "programs": [
+        "Odjel za ekonomiju i poslovnu ekonomiju (zavrsni rad, Dubrovnik)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Dubrovnik - Ekonomija, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Calibri"
+        ],
+        "size": [
+          12
+        ],
+        "justify": true,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku), citano izravno.",
+      "sources": [
+        {
+          "title": "Prirucnik za izradu i obranu zavrsnog/diplomskog rada (Odjel za ekonomiju, Dubrovnik, 2024)",
+          "url": "https://www.unidu.hr/wp-content/plugins/quarascope/download.php?file=26922"
+        }
+      ],
+      "sourceHierarchy": [
+        "Prirucnik za izradu i obranu zavrsnog/diplomskog rada (Odjel za ekonomiju, Dubrovnik, 2024)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Margine",
+        "Vrsta slova",
+        "Velicina slova",
+        "Obostrano poravnanje"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "unidu-ekonomija-diplomski",
+      "unitId": "unidu",
+      "programs": [
+        "Odjel za ekonomiju i poslovnu ekonomiju (diplomski rad, Dubrovnik)"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Dubrovnik - Ekonomija, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Calibri"
+        ],
+        "size": [
+          12
+        ],
+        "justify": true,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku), citano izravno.",
+      "sources": [
+        {
+          "title": "Prirucnik za izradu i obranu zavrsnog/diplomskog rada (Odjel za ekonomiju, Dubrovnik, 2024)",
+          "url": "https://www.unidu.hr/wp-content/plugins/quarascope/download.php?file=26922"
+        }
+      ],
+      "sourceHierarchy": [
+        "Prirucnik za izradu i obranu zavrsnog/diplomskog rada (Odjel za ekonomiju, Dubrovnik, 2024)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Margine",
+        "Vrsta slova",
+        "Velicina slova",
+        "Obostrano poravnanje"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "unidu-umjetnost-diplomski",
+      "unitId": "unidu",
+      "programs": [
+        "Odjel za umjetnost i restauraciju (diplomski rad, Dubrovnik)"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Dubrovnik - Umjetnost i restauracija, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman",
+          "Arial"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.15,
+        "justify": true,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 3
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku), citano izravno.",
+      "sources": [
+        {
+          "title": "Naputak za oblikovanje i opremu diplomskog rada (Odjel za umjetnost i restauraciju, Dubrovnik)",
+          "url": "https://www.unidu.hr/wp-content/plugins/quarascope/download.php?file=2333"
+        }
+      ],
+      "sourceHierarchy": [
+        "Naputak za oblikovanje i opremu diplomskog rada (Odjel za umjetnost i restauraciju, Dubrovnik)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Margine",
+        "Prored",
+        "Vrsta slova (TNR ili Arial)",
+        "Velicina slova",
+        "Obostrano poravnanje"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-unidu-povijest-zavrsni--font-verified-2026-07-02",
+      "ruleId": "unidu-povijest-zavrsni--font",
+      "profileId": "unidu-povijest-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unidu-povijest-upute",
+      "sourcePage": "Opce upute, t. 2",
+      "quote": "Završni rad treba imati minimalno 30 kartica teksta (kartica sadrži 1.800 znakova s prazninama). Piše se koristeći font Times New Roman, veličinu znakova 12 i prored 1,5. Tekst mora biti obostrano poravnan, a margine sa sve četiri strane 2,5 cm.",
+      "note": "Cross-institution port (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku): direktno citanje izvora."
+    },
+    {
+      "id": "led-unidu-povijest-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "unidu-povijest-zavrsni--font-size",
+      "profileId": "unidu-povijest-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unidu-povijest-upute",
+      "sourcePage": "Opce upute, t. 2",
+      "quote": "Završni rad treba imati minimalno 30 kartica teksta (kartica sadrži 1.800 znakova s prazninama). Piše se koristeći font Times New Roman, veličinu znakova 12 i prored 1,5. Tekst mora biti obostrano poravnan, a margine sa sve četiri strane 2,5 cm.",
+      "note": "Cross-institution port (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku): direktno citanje izvora."
+    },
+    {
+      "id": "led-unidu-povijest-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "unidu-povijest-zavrsni--line-spacing",
+      "profileId": "unidu-povijest-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unidu-povijest-upute",
+      "sourcePage": "Opce upute, t. 2",
+      "quote": "Završni rad treba imati minimalno 30 kartica teksta (kartica sadrži 1.800 znakova s prazninama). Piše se koristeći font Times New Roman, veličinu znakova 12 i prored 1,5. Tekst mora biti obostrano poravnan, a margine sa sve četiri strane 2,5 cm.",
+      "note": "Cross-institution port (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku): direktno citanje izvora."
+    },
+    {
+      "id": "led-unidu-povijest-zavrsni--justify-verified-2026-07-02",
+      "ruleId": "unidu-povijest-zavrsni--justify",
+      "profileId": "unidu-povijest-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unidu-povijest-upute",
+      "sourcePage": "Opce upute, t. 2",
+      "quote": "Završni rad treba imati minimalno 30 kartica teksta (kartica sadrži 1.800 znakova s prazninama). Piše se koristeći font Times New Roman, veličinu znakova 12 i prored 1,5. Tekst mora biti obostrano poravnan, a margine sa sve četiri strane 2,5 cm.",
+      "note": "Cross-institution port (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku): direktno citanje izvora."
+    },
+    {
+      "id": "led-unidu-povijest-zavrsni--margins-verified-2026-07-02",
+      "ruleId": "unidu-povijest-zavrsni--margins",
+      "profileId": "unidu-povijest-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unidu-povijest-upute",
+      "sourcePage": "Opce upute, t. 2",
+      "quote": "Završni rad treba imati minimalno 30 kartica teksta (kartica sadrži 1.800 znakova s prazninama). Piše se koristeći font Times New Roman, veličinu znakova 12 i prored 1,5. Tekst mora biti obostrano poravnan, a margine sa sve četiri strane 2,5 cm.",
+      "note": "Cross-institution port (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku): direktno citanje izvora."
+    },
+    {
+      "id": "led-unidu-komunikologija-diplomski--paper-size-verified-2026-07-02",
+      "ruleId": "unidu-komunikologija-diplomski--paper-size",
+      "profileId": "unidu-komunikologija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unidu-komunikologija-upute-2025",
+      "sourcePage": "Upute, §5",
+      "quote": "Tekst diplomskog rada treba biti ispisan na standardnom bijelom papiru A4 formata (kopirni papir) i tvrdo ukoričen.",
+      "note": "Cross-institution port (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku): direktno citanje izvora."
+    },
+    {
+      "id": "led-unidu-komunikologija-diplomski--font-verified-2026-07-02",
+      "ruleId": "unidu-komunikologija-diplomski--font",
+      "profileId": "unidu-komunikologija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unidu-komunikologija-upute-2025",
+      "sourcePage": "Upute, §5",
+      "quote": "veličina slova u tekstu (font size) treba biti 12 točaka, dok naslovi i podnaslovi trebaju biti nešto veći (14 ili 16 točaka), prored (line spacing) treba biti 1,5 u glavnom tekstu rada, jednostruki (1) u bilješkama (fusnotama), vrsta slova (font) može biti Times New Roman ili Arial, tekst treba biti formatiran u blok (justify) s uvučenim prvim retkom odlomka, margine trebaju biti po 2,5 centimetara sa svake strane.",
+      "note": "Cross-institution port (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku): direktno citanje izvora."
+    },
+    {
+      "id": "led-unidu-komunikologija-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "unidu-komunikologija-diplomski--font-size",
+      "profileId": "unidu-komunikologija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unidu-komunikologija-upute-2025",
+      "sourcePage": "Upute, §5",
+      "quote": "veličina slova u tekstu (font size) treba biti 12 točaka, dok naslovi i podnaslovi trebaju biti nešto veći (14 ili 16 točaka), prored (line spacing) treba biti 1,5 u glavnom tekstu rada, jednostruki (1) u bilješkama (fusnotama), vrsta slova (font) može biti Times New Roman ili Arial, tekst treba biti formatiran u blok (justify) s uvučenim prvim retkom odlomka, margine trebaju biti po 2,5 centimetara sa svake strane.",
+      "note": "Cross-institution port (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku): direktno citanje izvora."
+    },
+    {
+      "id": "led-unidu-komunikologija-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "unidu-komunikologija-diplomski--line-spacing",
+      "profileId": "unidu-komunikologija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unidu-komunikologija-upute-2025",
+      "sourcePage": "Upute, §5",
+      "quote": "veličina slova u tekstu (font size) treba biti 12 točaka, dok naslovi i podnaslovi trebaju biti nešto veći (14 ili 16 točaka), prored (line spacing) treba biti 1,5 u glavnom tekstu rada, jednostruki (1) u bilješkama (fusnotama), vrsta slova (font) može biti Times New Roman ili Arial, tekst treba biti formatiran u blok (justify) s uvučenim prvim retkom odlomka, margine trebaju biti po 2,5 centimetara sa svake strane.",
+      "note": "Cross-institution port (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku): direktno citanje izvora."
+    },
+    {
+      "id": "led-unidu-komunikologija-diplomski--justify-verified-2026-07-02",
+      "ruleId": "unidu-komunikologija-diplomski--justify",
+      "profileId": "unidu-komunikologija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unidu-komunikologija-upute-2025",
+      "sourcePage": "Upute, §5",
+      "quote": "veličina slova u tekstu (font size) treba biti 12 točaka, dok naslovi i podnaslovi trebaju biti nešto veći (14 ili 16 točaka), prored (line spacing) treba biti 1,5 u glavnom tekstu rada, jednostruki (1) u bilješkama (fusnotama), vrsta slova (font) može biti Times New Roman ili Arial, tekst treba biti formatiran u blok (justify) s uvučenim prvim retkom odlomka, margine trebaju biti po 2,5 centimetara sa svake strane.",
+      "note": "Cross-institution port (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku): direktno citanje izvora."
+    },
+    {
+      "id": "led-unidu-komunikologija-diplomski--margins-verified-2026-07-02",
+      "ruleId": "unidu-komunikologija-diplomski--margins",
+      "profileId": "unidu-komunikologija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unidu-komunikologija-upute-2025",
+      "sourcePage": "Upute, §5",
+      "quote": "veličina slova u tekstu (font size) treba biti 12 točaka, dok naslovi i podnaslovi trebaju biti nešto veći (14 ili 16 točaka), prored (line spacing) treba biti 1,5 u glavnom tekstu rada, jednostruki (1) u bilješkama (fusnotama), vrsta slova (font) može biti Times New Roman ili Arial, tekst treba biti formatiran u blok (justify) s uvučenim prvim retkom odlomka, margine trebaju biti po 2,5 centimetara sa svake strane.",
+      "note": "Cross-institution port (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku): direktno citanje izvora."
+    },
+    {
+      "id": "led-unidu-komunikologija-diplomski--citation-style-verified-2026-07-02",
+      "ruleId": "unidu-komunikologija-diplomski--citation-style",
+      "profileId": "unidu-komunikologija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unidu-komunikologija-upute-2025",
+      "sourcePage": "Upute, §6",
+      "quote": "Studenti trebaju koristiti harvardski stil citiranja literature.",
+      "note": "Cross-institution port (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku): direktno citanje izvora."
+    },
+    {
+      "id": "led-unidu-ekonomija-zavrsni--paper-size-verified-2026-07-02",
+      "ruleId": "unidu-ekonomija-zavrsni--paper-size",
+      "profileId": "unidu-ekonomija-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unidu-ekonomija-prirucnik-2024",
+      "sourcePage": "Prirucnik, oblikovanje teksta (str. 13)",
+      "quote": "Pri oblikovanju teksta pratite sljedeće smjernice: veličina stranice: A4 (210 x 297 mm); margine (sve): 2,5 cm; font slova: Calibri, 12pt; tekst: obostrano poravnano.",
+      "note": "Cross-institution port (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku): direktno citanje izvora."
+    },
+    {
+      "id": "led-unidu-ekonomija-zavrsni--margins-verified-2026-07-02",
+      "ruleId": "unidu-ekonomija-zavrsni--margins",
+      "profileId": "unidu-ekonomija-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unidu-ekonomija-prirucnik-2024",
+      "sourcePage": "Prirucnik, oblikovanje teksta (str. 13)",
+      "quote": "Pri oblikovanju teksta pratite sljedeće smjernice: veličina stranice: A4 (210 x 297 mm); margine (sve): 2,5 cm; font slova: Calibri, 12pt; tekst: obostrano poravnano.",
+      "note": "Cross-institution port (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku): direktno citanje izvora."
+    },
+    {
+      "id": "led-unidu-ekonomija-zavrsni--font-verified-2026-07-02",
+      "ruleId": "unidu-ekonomija-zavrsni--font",
+      "profileId": "unidu-ekonomija-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unidu-ekonomija-prirucnik-2024",
+      "sourcePage": "Prirucnik, oblikovanje teksta (str. 13)",
+      "quote": "Pri oblikovanju teksta pratite sljedeće smjernice: veličina stranice: A4 (210 x 297 mm); margine (sve): 2,5 cm; font slova: Calibri, 12pt; tekst: obostrano poravnano.",
+      "note": "Cross-institution port (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku): direktno citanje izvora."
+    },
+    {
+      "id": "led-unidu-ekonomija-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "unidu-ekonomija-zavrsni--font-size",
+      "profileId": "unidu-ekonomija-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unidu-ekonomija-prirucnik-2024",
+      "sourcePage": "Prirucnik, oblikovanje teksta (str. 13)",
+      "quote": "Pri oblikovanju teksta pratite sljedeće smjernice: veličina stranice: A4 (210 x 297 mm); margine (sve): 2,5 cm; font slova: Calibri, 12pt; tekst: obostrano poravnano.",
+      "note": "Cross-institution port (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku): direktno citanje izvora."
+    },
+    {
+      "id": "led-unidu-ekonomija-zavrsni--justify-verified-2026-07-02",
+      "ruleId": "unidu-ekonomija-zavrsni--justify",
+      "profileId": "unidu-ekonomija-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unidu-ekonomija-prirucnik-2024",
+      "sourcePage": "Prirucnik, oblikovanje teksta (str. 13)",
+      "quote": "Pri oblikovanju teksta pratite sljedeće smjernice: veličina stranice: A4 (210 x 297 mm); margine (sve): 2,5 cm; font slova: Calibri, 12pt; tekst: obostrano poravnano.",
+      "note": "Cross-institution port (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku): direktno citanje izvora."
+    },
+    {
+      "id": "led-unidu-ekonomija-diplomski--paper-size-verified-2026-07-02",
+      "ruleId": "unidu-ekonomija-diplomski--paper-size",
+      "profileId": "unidu-ekonomija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unidu-ekonomija-prirucnik-2024",
+      "sourcePage": "Prirucnik, oblikovanje teksta (str. 13)",
+      "quote": "Pri oblikovanju teksta pratite sljedeće smjernice: veličina stranice: A4 (210 x 297 mm); margine (sve): 2,5 cm; font slova: Calibri, 12pt; tekst: obostrano poravnano.",
+      "note": "Cross-institution port (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku): direktno citanje izvora."
+    },
+    {
+      "id": "led-unidu-ekonomija-diplomski--margins-verified-2026-07-02",
+      "ruleId": "unidu-ekonomija-diplomski--margins",
+      "profileId": "unidu-ekonomija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unidu-ekonomija-prirucnik-2024",
+      "sourcePage": "Prirucnik, oblikovanje teksta (str. 13)",
+      "quote": "Pri oblikovanju teksta pratite sljedeće smjernice: veličina stranice: A4 (210 x 297 mm); margine (sve): 2,5 cm; font slova: Calibri, 12pt; tekst: obostrano poravnano.",
+      "note": "Cross-institution port (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku): direktno citanje izvora."
+    },
+    {
+      "id": "led-unidu-ekonomija-diplomski--font-verified-2026-07-02",
+      "ruleId": "unidu-ekonomija-diplomski--font",
+      "profileId": "unidu-ekonomija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unidu-ekonomija-prirucnik-2024",
+      "sourcePage": "Prirucnik, oblikovanje teksta (str. 13)",
+      "quote": "Pri oblikovanju teksta pratite sljedeće smjernice: veličina stranice: A4 (210 x 297 mm); margine (sve): 2,5 cm; font slova: Calibri, 12pt; tekst: obostrano poravnano.",
+      "note": "Cross-institution port (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku): direktno citanje izvora."
+    },
+    {
+      "id": "led-unidu-ekonomija-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "unidu-ekonomija-diplomski--font-size",
+      "profileId": "unidu-ekonomija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unidu-ekonomija-prirucnik-2024",
+      "sourcePage": "Prirucnik, oblikovanje teksta (str. 13)",
+      "quote": "Pri oblikovanju teksta pratite sljedeće smjernice: veličina stranice: A4 (210 x 297 mm); margine (sve): 2,5 cm; font slova: Calibri, 12pt; tekst: obostrano poravnano.",
+      "note": "Cross-institution port (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku): direktno citanje izvora."
+    },
+    {
+      "id": "led-unidu-ekonomija-diplomski--justify-verified-2026-07-02",
+      "ruleId": "unidu-ekonomija-diplomski--justify",
+      "profileId": "unidu-ekonomija-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unidu-ekonomija-prirucnik-2024",
+      "sourcePage": "Prirucnik, oblikovanje teksta (str. 13)",
+      "quote": "Pri oblikovanju teksta pratite sljedeće smjernice: veličina stranice: A4 (210 x 297 mm); margine (sve): 2,5 cm; font slova: Calibri, 12pt; tekst: obostrano poravnano.",
+      "note": "Cross-institution port (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku): direktno citanje izvora."
+    },
+    {
+      "id": "led-unidu-umjetnost-diplomski--paper-size-verified-2026-07-02",
+      "ruleId": "unidu-umjetnost-diplomski--paper-size",
+      "profileId": "unidu-umjetnost-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unidu-umjetnost-naputak",
+      "sourcePage": "Naputak, §II.II",
+      "quote": "Rad pisati u formatu dokumenta A4. Margine: lijeva 3 cm, desna 2,5 cm, gornja 2,5 cm, donja 2,5 cm. Prored (Line spacing) 1,15 (osim za bilješke). Za pisanje rada koristiti font slova Times New Roman ili Arial. Glavni tekst pisati veličinom slova 12 pt, poravnanje obostrano.",
+      "note": "Cross-institution port (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku): direktno citanje izvora."
+    },
+    {
+      "id": "led-unidu-umjetnost-diplomski--margins-verified-2026-07-02",
+      "ruleId": "unidu-umjetnost-diplomski--margins",
+      "profileId": "unidu-umjetnost-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unidu-umjetnost-naputak",
+      "sourcePage": "Naputak, §II.II",
+      "quote": "Rad pisati u formatu dokumenta A4. Margine: lijeva 3 cm, desna 2,5 cm, gornja 2,5 cm, donja 2,5 cm. Prored (Line spacing) 1,15 (osim za bilješke). Za pisanje rada koristiti font slova Times New Roman ili Arial. Glavni tekst pisati veličinom slova 12 pt, poravnanje obostrano.",
+      "note": "Cross-institution port (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku): direktno citanje izvora."
+    },
+    {
+      "id": "led-unidu-umjetnost-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "unidu-umjetnost-diplomski--line-spacing",
+      "profileId": "unidu-umjetnost-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unidu-umjetnost-naputak",
+      "sourcePage": "Naputak, §II.II",
+      "quote": "Rad pisati u formatu dokumenta A4. Margine: lijeva 3 cm, desna 2,5 cm, gornja 2,5 cm, donja 2,5 cm. Prored (Line spacing) 1,15 (osim za bilješke). Za pisanje rada koristiti font slova Times New Roman ili Arial. Glavni tekst pisati veličinom slova 12 pt, poravnanje obostrano.",
+      "note": "Cross-institution port (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku): direktno citanje izvora."
+    },
+    {
+      "id": "led-unidu-umjetnost-diplomski--font-verified-2026-07-02",
+      "ruleId": "unidu-umjetnost-diplomski--font",
+      "profileId": "unidu-umjetnost-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unidu-umjetnost-naputak",
+      "sourcePage": "Naputak, §II.II",
+      "quote": "Rad pisati u formatu dokumenta A4. Margine: lijeva 3 cm, desna 2,5 cm, gornja 2,5 cm, donja 2,5 cm. Prored (Line spacing) 1,15 (osim za bilješke). Za pisanje rada koristiti font slova Times New Roman ili Arial. Glavni tekst pisati veličinom slova 12 pt, poravnanje obostrano.",
+      "note": "Cross-institution port (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku): direktno citanje izvora."
+    },
+    {
+      "id": "led-unidu-umjetnost-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "unidu-umjetnost-diplomski--font-size",
+      "profileId": "unidu-umjetnost-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unidu-umjetnost-naputak",
+      "sourcePage": "Naputak, §II.II",
+      "quote": "Rad pisati u formatu dokumenta A4. Margine: lijeva 3 cm, desna 2,5 cm, gornja 2,5 cm, donja 2,5 cm. Prored (Line spacing) 1,15 (osim za bilješke). Za pisanje rada koristiti font slova Times New Roman ili Arial. Glavni tekst pisati veličinom slova 12 pt, poravnanje obostrano.",
+      "note": "Cross-institution port (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku): direktno citanje izvora."
+    },
+    {
+      "id": "led-unidu-umjetnost-diplomski--justify-verified-2026-07-02",
+      "ruleId": "unidu-umjetnost-diplomski--justify",
+      "profileId": "unidu-umjetnost-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "unidu-umjetnost-naputak",
+      "sourcePage": "Naputak, §II.II",
+      "quote": "Rad pisati u formatu dokumenta A4. Margine: lijeva 3 cm, desna 2,5 cm, gornja 2,5 cm, donja 2,5 cm. Prored (Line spacing) 1,15 (osim za bilješke). Za pisanje rada koristiti font slova Times New Roman ili Arial. Glavni tekst pisati veličinom slova 12 pt, poravnanje obostrano.",
+      "note": "Cross-institution port (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku): direktno citanje izvora."
+    }
+  ]
+}

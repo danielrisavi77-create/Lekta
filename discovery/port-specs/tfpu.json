@@ -1,0 +1,280 @@
+{
+  "faculty": "tfpu",
+  "institution": "unipu",
+  "institutionName": "Sveuciliste Jurja Dobrile u Puli",
+  "unit": {
+    "id": "tfpu",
+    "name": "Tehnicki fakultet u Puli",
+    "family": "stem",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Prijediplomski/strucni studiji TFPU (zavrsni rad)",
+    "Diplomski studiji TFPU"
+  ],
+  "sources": [
+    {
+      "id": "tfpu-naputak-radovi-2025",
+      "kind": "guidelines",
+      "title": "Naputak o zavrsnom/diplomskom radu (Tehnicki fakultet Pula, 2025)",
+      "url": "https://tfpu.unipu.hr/_download/repository/4_naputak_o_zavrsno_diplomskom_radu.pdf",
+      "publisher": "Tehnicki fakultet u Puli, Sveuciliste Jurja Dobrile u Puli",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/unipu/tfpu-naputak-radovi-2025.pdf",
+      "snapshotHash": "8ac08d9904c0ce59f6c662116333d31aabe2ff6d7906c384af1c18fb263d2e87",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Tekstualni PDF; font Arial. Citiranje izbor -> advisory."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "tfpu-zavrsni",
+      "unitId": "tfpu",
+      "programs": [
+        "Prijediplomski/strucni studiji TFPU (zavrsni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Tehnicki fakultet Pula, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Arial"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Tehnicki fakultet u Puli, Sveuciliste Jurja Dobrile u Puli), citano izravno.",
+      "sources": [
+        {
+          "title": "Naputak o zavrsnom/diplomskom radu (Tehnicki fakultet Pula, 2025)",
+          "url": "https://tfpu.unipu.hr/_download/repository/4_naputak_o_zavrsno_diplomskom_radu.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Naputak o zavrsnom/diplomskom radu (Tehnicki fakultet Pula, 2025)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Margine",
+        "Opseg (najmanje 35 str.)"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "tfpu-diplomski",
+      "unitId": "tfpu",
+      "programs": [
+        "Diplomski studiji TFPU"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Tehnicki fakultet Pula, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Arial"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Tehnicki fakultet u Puli, Sveuciliste Jurja Dobrile u Puli), citano izravno.",
+      "sources": [
+        {
+          "title": "Naputak o zavrsnom/diplomskom radu (Tehnicki fakultet Pula, 2025)",
+          "url": "https://tfpu.unipu.hr/_download/repository/4_naputak_o_zavrsno_diplomskom_radu.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Naputak o zavrsnom/diplomskom radu (Tehnicki fakultet Pula, 2025)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Margine",
+        "Opseg (najmanje 60 str.)"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-tfpu-zavrsni--paper-size-verified-2026-07-02",
+      "ruleId": "tfpu-zavrsni--paper-size",
+      "profileId": "tfpu-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "tfpu-naputak-radovi-2025",
+      "sourcePage": "Naputak, tehnicko uredenje",
+      "quote": "Završni rad/diplomski rad treba biti otisnut računalnim pisačem na papiru formata A4; font: Arial; veličina slova teksta 12; podrubne bilješke (fusnote) 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm.",
+      "note": "Cross-institution port (Tehnicki fakultet u Puli, Sveuciliste Jurja Dobrile u Puli): direktno citanje izvora."
+    },
+    {
+      "id": "led-tfpu-zavrsni--font-verified-2026-07-02",
+      "ruleId": "tfpu-zavrsni--font",
+      "profileId": "tfpu-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "tfpu-naputak-radovi-2025",
+      "sourcePage": "Naputak, tehnicko uredenje",
+      "quote": "Završni rad/diplomski rad treba biti otisnut računalnim pisačem na papiru formata A4; font: Arial; veličina slova teksta 12; podrubne bilješke (fusnote) 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm.",
+      "note": "Cross-institution port (Tehnicki fakultet u Puli, Sveuciliste Jurja Dobrile u Puli): direktno citanje izvora."
+    },
+    {
+      "id": "led-tfpu-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "tfpu-zavrsni--font-size",
+      "profileId": "tfpu-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "tfpu-naputak-radovi-2025",
+      "sourcePage": "Naputak, tehnicko uredenje",
+      "quote": "Završni rad/diplomski rad treba biti otisnut računalnim pisačem na papiru formata A4; font: Arial; veličina slova teksta 12; podrubne bilješke (fusnote) 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm.",
+      "note": "Cross-institution port (Tehnicki fakultet u Puli, Sveuciliste Jurja Dobrile u Puli): direktno citanje izvora."
+    },
+    {
+      "id": "led-tfpu-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "tfpu-zavrsni--line-spacing",
+      "profileId": "tfpu-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "tfpu-naputak-radovi-2025",
+      "sourcePage": "Naputak, tehnicko uredenje",
+      "quote": "Završni rad/diplomski rad treba biti otisnut računalnim pisačem na papiru formata A4; font: Arial; veličina slova teksta 12; podrubne bilješke (fusnote) 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm.",
+      "note": "Cross-institution port (Tehnicki fakultet u Puli, Sveuciliste Jurja Dobrile u Puli): direktno citanje izvora."
+    },
+    {
+      "id": "led-tfpu-zavrsni--margins-verified-2026-07-02",
+      "ruleId": "tfpu-zavrsni--margins",
+      "profileId": "tfpu-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "tfpu-naputak-radovi-2025",
+      "sourcePage": "Naputak, tehnicko uredenje",
+      "quote": "Završni rad/diplomski rad treba biti otisnut računalnim pisačem na papiru formata A4; font: Arial; veličina slova teksta 12; podrubne bilješke (fusnote) 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm.",
+      "note": "Cross-institution port (Tehnicki fakultet u Puli, Sveuciliste Jurja Dobrile u Puli): direktno citanje izvora."
+    },
+    {
+      "id": "led-tfpu-zavrsni--page-count-verified-2026-07-02",
+      "ruleId": "tfpu-zavrsni--page-count",
+      "profileId": "tfpu-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "tfpu-naputak-radovi-2025",
+      "sourcePage": "Naputak, opseg",
+      "quote": "Opseg završnog rada je minimalno 35 stranica dok je opseg diplomskog minimalno 60 stranica.",
+      "note": "Cross-institution port (Tehnicki fakultet u Puli, Sveuciliste Jurja Dobrile u Puli): direktno citanje izvora."
+    },
+    {
+      "id": "led-tfpu-diplomski--paper-size-verified-2026-07-02",
+      "ruleId": "tfpu-diplomski--paper-size",
+      "profileId": "tfpu-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "tfpu-naputak-radovi-2025",
+      "sourcePage": "Naputak, tehnicko uredenje",
+      "quote": "Završni rad/diplomski rad treba biti otisnut računalnim pisačem na papiru formata A4; font: Arial; veličina slova teksta 12; podrubne bilješke (fusnote) 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm.",
+      "note": "Cross-institution port (Tehnicki fakultet u Puli, Sveuciliste Jurja Dobrile u Puli): direktno citanje izvora."
+    },
+    {
+      "id": "led-tfpu-diplomski--font-verified-2026-07-02",
+      "ruleId": "tfpu-diplomski--font",
+      "profileId": "tfpu-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "tfpu-naputak-radovi-2025",
+      "sourcePage": "Naputak, tehnicko uredenje",
+      "quote": "Završni rad/diplomski rad treba biti otisnut računalnim pisačem na papiru formata A4; font: Arial; veličina slova teksta 12; podrubne bilješke (fusnote) 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm.",
+      "note": "Cross-institution port (Tehnicki fakultet u Puli, Sveuciliste Jurja Dobrile u Puli): direktno citanje izvora."
+    },
+    {
+      "id": "led-tfpu-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "tfpu-diplomski--font-size",
+      "profileId": "tfpu-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "tfpu-naputak-radovi-2025",
+      "sourcePage": "Naputak, tehnicko uredenje",
+      "quote": "Završni rad/diplomski rad treba biti otisnut računalnim pisačem na papiru formata A4; font: Arial; veličina slova teksta 12; podrubne bilješke (fusnote) 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm.",
+      "note": "Cross-institution port (Tehnicki fakultet u Puli, Sveuciliste Jurja Dobrile u Puli): direktno citanje izvora."
+    },
+    {
+      "id": "led-tfpu-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "tfpu-diplomski--line-spacing",
+      "profileId": "tfpu-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "tfpu-naputak-radovi-2025",
+      "sourcePage": "Naputak, tehnicko uredenje",
+      "quote": "Završni rad/diplomski rad treba biti otisnut računalnim pisačem na papiru formata A4; font: Arial; veličina slova teksta 12; podrubne bilješke (fusnote) 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm.",
+      "note": "Cross-institution port (Tehnicki fakultet u Puli, Sveuciliste Jurja Dobrile u Puli): direktno citanje izvora."
+    },
+    {
+      "id": "led-tfpu-diplomski--margins-verified-2026-07-02",
+      "ruleId": "tfpu-diplomski--margins",
+      "profileId": "tfpu-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "tfpu-naputak-radovi-2025",
+      "sourcePage": "Naputak, tehnicko uredenje",
+      "quote": "Završni rad/diplomski rad treba biti otisnut računalnim pisačem na papiru formata A4; font: Arial; veličina slova teksta 12; podrubne bilješke (fusnote) 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm.",
+      "note": "Cross-institution port (Tehnicki fakultet u Puli, Sveuciliste Jurja Dobrile u Puli): direktno citanje izvora."
+    },
+    {
+      "id": "led-tfpu-diplomski--page-count-verified-2026-07-02",
+      "ruleId": "tfpu-diplomski--page-count",
+      "profileId": "tfpu-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "tfpu-naputak-radovi-2025",
+      "sourcePage": "Naputak, opseg",
+      "quote": "Opseg završnog rada je minimalno 35 stranica dok je opseg diplomskog minimalno 60 stranica.",
+      "note": "Cross-institution port (Tehnicki fakultet u Puli, Sveuciliste Jurja Dobrile u Puli): direktno citanje izvora."
+    }
+  ]
+}

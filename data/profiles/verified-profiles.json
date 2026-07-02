@@ -18056,5 +18056,831 @@
       "Margine"
     ],
     "advisoryScope": []
+  },
+  {
+    "id": "unizd-turizam-zavrsni",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za turizam i komunikacijske znanosti (zavrsni rad, Zadar)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Turizam i komunikacije, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Sveuciliste u Zadru, Sveuciliste u Zadru), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za izradu zavrsnoga i diplomskog rada (Odjel za turizam i komunikacijske znanosti, Zadar)",
+        "url": "https://www.unizd.hr/Portals/46/DIPLOMSKI%2C%20ZAVRSNI%20I%20SEMINARSKI%20RADOVI/Zavrsni%20radovi/Upute%20za%20izradu%20zavrsnoga%20i%20diplomskog%20rada.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu zavrsnoga i diplomskog rada (Odjel za turizam i komunikacijske znanosti, Zadar)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Margine"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "unizd-turizam-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za turizam i komunikacijske znanosti (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Turizam i komunikacije, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Sveuciliste u Zadru, Sveuciliste u Zadru), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za izradu zavrsnoga i diplomskog rada (Odjel za turizam i komunikacijske znanosti, Zadar)",
+        "url": "https://www.unizd.hr/Portals/46/DIPLOMSKI%2C%20ZAVRSNI%20I%20SEMINARSKI%20RADOVI/Zavrsni%20radovi/Upute%20za%20izradu%20zavrsnoga%20i%20diplomskog%20rada.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu zavrsnoga i diplomskog rada (Odjel za turizam i komunikacijske znanosti, Zadar)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Margine",
+      "Opseg (najmanje 70 str.)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "unizd-psihologija-zavrsni",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za psihologiju (zavrsni rad, Zadar)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Psihologija, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3
+      },
+      "recommendedCitation": "apa"
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Sveuciliste u Zadru, Sveuciliste u Zadru), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za izradu zavrsnog rada (Odjel za psihologiju, Zadar)",
+        "url": "https://www.unizd.hr/Portals/12/Studenti%20PDF/Upute%20za%20izradu%20zavr%C5%A1nog%20rada.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu zavrsnog rada (Odjel za psihologiju, Zadar)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Opseg (20-30 str.)",
+      "Stil citiranja (APA)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "unizd-pedagogija-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za pedagogiju (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Pedagogija, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3.5
+      },
+      "recommendedCitation": "harvard"
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Sveuciliste u Zadru, Sveuciliste u Zadru), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za pisanje diplomskog rada (Odjel za pedagogiju, Zadar, 2019)",
+        "url": "https://www.unizd.hr/Portals/10/pdf/Upute%20za%20pisanje%20DIPLOMSKOG%20RADA_2019.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pisanje diplomskog rada (Odjel za pedagogiju, Zadar, 2019)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Margine",
+      "Obostrano poravnanje",
+      "Stil citiranja (Harvard)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "unizd-povijest-umj-zavrsni",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za povijest umjetnosti (zavrsni rad, Zadar)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Povijest umjetnosti, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Sveuciliste u Zadru, Sveuciliste u Zadru), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za prijavu i izradu zavrsnoga rada (Odjel za povijest umjetnosti, Zadar, 2019)",
+        "url": "https://www.unizd.hr/Portals/11/Odjel/Upute_za_prijavu_i_izradu_zavrsnoga_rada.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za prijavu i izradu zavrsnoga rada (Odjel za povijest umjetnosti, Zadar, 2019)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Velicina slova",
+      "Margine",
+      "Prored",
+      "Obostrano poravnanje"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "fetpu-zavrsni",
+    "unitId": "fetpu",
+    "programs": [
+      "Prijediplomski studiji FET Pula (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "FET Pula, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Arial"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet ekonomije i turizma Dr. Mijo Mirkovic, Pula, Sveuciliste Jurja Dobrile u Puli), citano izravno.",
+    "sources": [
+      {
+        "title": "Naputak o zavrsnom i diplomskom radu (FET, Pula)",
+        "url": "https://fet.unipu.hr/_download/repository/Naputak_o_zavrsnom_i_diplomskom_radu.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Naputak o zavrsnom i diplomskom radu (FET, Pula)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Margine",
+      "Opseg (najmanje 25 str.)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "fetpu-diplomski",
+    "unitId": "fetpu",
+    "programs": [
+      "Diplomski studiji FET Pula"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "FET Pula, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Arial"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet ekonomije i turizma Dr. Mijo Mirkovic, Pula, Sveuciliste Jurja Dobrile u Puli), citano izravno.",
+    "sources": [
+      {
+        "title": "Naputak o zavrsnom i diplomskom radu (FET, Pula)",
+        "url": "https://fet.unipu.hr/_download/repository/Naputak_o_zavrsnom_i_diplomskom_radu.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Naputak o zavrsnom i diplomskom radu (FET, Pula)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Margine",
+      "Opseg (najmanje 60 str.)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "tfpu-zavrsni",
+    "unitId": "tfpu",
+    "programs": [
+      "Prijediplomski/strucni studiji TFPU (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Tehnicki fakultet Pula, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Arial"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Tehnicki fakultet u Puli, Sveuciliste Jurja Dobrile u Puli), citano izravno.",
+    "sources": [
+      {
+        "title": "Naputak o zavrsnom/diplomskom radu (Tehnicki fakultet Pula, 2025)",
+        "url": "https://tfpu.unipu.hr/_download/repository/4_naputak_o_zavrsno_diplomskom_radu.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Naputak o zavrsnom/diplomskom radu (Tehnicki fakultet Pula, 2025)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Margine",
+      "Opseg (najmanje 35 str.)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "tfpu-diplomski",
+    "unitId": "tfpu",
+    "programs": [
+      "Diplomski studiji TFPU"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Tehnicki fakultet Pula, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Arial"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Tehnicki fakultet u Puli, Sveuciliste Jurja Dobrile u Puli), citano izravno.",
+    "sources": [
+      {
+        "title": "Naputak o zavrsnom/diplomskom radu (Tehnicki fakultet Pula, 2025)",
+        "url": "https://tfpu.unipu.hr/_download/repository/4_naputak_o_zavrsno_diplomskom_radu.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Naputak o zavrsnom/diplomskom radu (Tehnicki fakultet Pula, 2025)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Margine",
+      "Opseg (najmanje 60 str.)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "foozpu-zavrsni",
+    "unitId": "foozpu",
+    "programs": [
+      "Prijediplomski studiji FOOZ Pula (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "FOOZ Pula, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Arial"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet za odgojne i obrazovne znanosti, Pula, Sveuciliste Jurja Dobrile u Puli), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za pisanje zavrsnih i diplomskih radova (FOOZ, Pula)",
+        "url": "https://fooz.unipu.hr/_download/repository/Upute_za_pisanje_zavrsnih_i_diplomskih_radova_FOOZ.doc"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pisanje zavrsnih i diplomskih radova (FOOZ, Pula)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Margine",
+      "Opseg (najmanje 30 str.)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "foozpu-diplomski",
+    "unitId": "foozpu",
+    "programs": [
+      "Diplomski studiji FOOZ Pula"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "FOOZ Pula, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Arial"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet za odgojne i obrazovne znanosti, Pula, Sveuciliste Jurja Dobrile u Puli), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za pisanje zavrsnih i diplomskih radova (FOOZ, Pula)",
+        "url": "https://fooz.unipu.hr/_download/repository/Upute_za_pisanje_zavrsnih_i_diplomskih_radova_FOOZ.doc"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pisanje zavrsnih i diplomskih radova (FOOZ, Pula)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Margine",
+      "Opseg (najmanje 50 str.)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "unidu-povijest-zavrsni",
+    "unitId": "unidu",
+    "programs": [
+      "Povijest Jadrana i Mediterana (zavrsni rad, Dubrovnik)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Dubrovnik - Povijest, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za izradu zavrsnog rada - Povijest Jadrana i Mediterana (Odjel za humanisticke studije, Dubrovnik)",
+        "url": "https://www.unidu.hr/wp-content/plugins/quarascope/download.php?file=7709"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu zavrsnog rada - Povijest Jadrana i Mediterana (Odjel za humanisticke studije, Dubrovnik)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Margine"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "unidu-komunikologija-diplomski",
+    "unitId": "unidu",
+    "programs": [
+      "Odjel za komunikologiju (diplomski rad, Dubrovnik)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Dubrovnik - Komunikologija, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Arial"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "recommendedCitation": "harvard"
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za izradu diplomskog rada (Odjel za komunikologiju / mediji, Dubrovnik, 2025)",
+        "url": "https://www.unidu.hr/wp-content/plugins/quarascope/download.php?file=45903"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu diplomskog rada (Odjel za komunikologiju / mediji, Dubrovnik, 2025)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova (TNR ili Arial)",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Margine",
+      "Stil citiranja (Harvard)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "unidu-ekonomija-zavrsni",
+    "unitId": "unidu",
+    "programs": [
+      "Odjel za ekonomiju i poslovnu ekonomiju (zavrsni rad, Dubrovnik)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Dubrovnik - Ekonomija, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Calibri"
+      ],
+      "size": [
+        12
+      ],
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku), citano izravno.",
+    "sources": [
+      {
+        "title": "Prirucnik za izradu i obranu zavrsnog/diplomskog rada (Odjel za ekonomiju, Dubrovnik, 2024)",
+        "url": "https://www.unidu.hr/wp-content/plugins/quarascope/download.php?file=26922"
+      }
+    ],
+    "sourceHierarchy": [
+      "Prirucnik za izradu i obranu zavrsnog/diplomskog rada (Odjel za ekonomiju, Dubrovnik, 2024)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Obostrano poravnanje"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "unidu-ekonomija-diplomski",
+    "unitId": "unidu",
+    "programs": [
+      "Odjel za ekonomiju i poslovnu ekonomiju (diplomski rad, Dubrovnik)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Dubrovnik - Ekonomija, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Calibri"
+      ],
+      "size": [
+        12
+      ],
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku), citano izravno.",
+    "sources": [
+      {
+        "title": "Prirucnik za izradu i obranu zavrsnog/diplomskog rada (Odjel za ekonomiju, Dubrovnik, 2024)",
+        "url": "https://www.unidu.hr/wp-content/plugins/quarascope/download.php?file=26922"
+      }
+    ],
+    "sourceHierarchy": [
+      "Prirucnik za izradu i obranu zavrsnog/diplomskog rada (Odjel za ekonomiju, Dubrovnik, 2024)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Obostrano poravnanje"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "unidu-umjetnost-diplomski",
+    "unitId": "unidu",
+    "programs": [
+      "Odjel za umjetnost i restauraciju (diplomski rad, Dubrovnik)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Dubrovnik - Umjetnost i restauracija, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Arial"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.15,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku), citano izravno.",
+    "sources": [
+      {
+        "title": "Naputak za oblikovanje i opremu diplomskog rada (Odjel za umjetnost i restauraciju, Dubrovnik)",
+        "url": "https://www.unidu.hr/wp-content/plugins/quarascope/download.php?file=2333"
+      }
+    ],
+    "sourceHierarchy": [
+      "Naputak za oblikovanje i opremu diplomskog rada (Odjel za umjetnost i restauraciju, Dubrovnik)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Prored",
+      "Vrsta slova (TNR ili Arial)",
+      "Velicina slova",
+      "Obostrano poravnanje"
+    ],
+    "advisoryScope": []
   }
 ]
