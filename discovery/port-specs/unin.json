@@ -1,0 +1,974 @@
+{
+  "faculty": "unin",
+  "institution": "unin",
+  "institutionName": "Sveuciliste Sjever",
+  "unit": {
+    "id": "unin",
+    "name": "Sveuciliste Sjever",
+    "family": "mixed",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Odjel za tehničke i gospodarske studije (završni rad, Sveučilište Sjever)",
+    "Odjel za tehničke i gospodarske studije (diplomski rad, Sveučilište Sjever)",
+    "Odjel za biomedicinske znanosti (završni rad, Sveučilište Sjever)",
+    "Odjel za biomedicinske znanosti (diplomski rad, Sveučilište Sjever)",
+    "Odjeli društvenih znanosti - ekonomija, novinarstvo, komunikologija (završni rad, Sveučilište Sjever)",
+    "Odjeli društvenih znanosti - ekonomija, novinarstvo, komunikologija (diplomski rad, Sveučilište Sjever)"
+  ],
+  "sources": [
+    {
+      "id": "unin-upute-radovi-2026",
+      "kind": "guidelines",
+      "title": "Upute za oblikovanje završnog i diplomskog rada (Sveučilište Sjever, sijecanj 2026)",
+      "url": "https://www.unin.hr/wp-content/uploads/Upute-za-oblikovanje-zavr%C5%A1nog-i-diplomskog-rada_22.1.1.docx",
+      "publisher": "Sveuciliste Sjever, Sveuciliste Sjever",
+      "fetchedAt": "2026-07-03",
+      "snapshotPath": "data/sources/unin/unin-upute.docx",
+      "snapshotHash": "53d0ff0b8b1859985329170db1eddc29d77a616a4ba5e63a86c987e920678c6d",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-03",
+      "note": ".docx (word/document.xml). Sveucilisni, cross-odjelni. A4 nije u obveznom popisu->izostavljen. Citiranje po podrucju: APA biomed, Harvard drustvene, Vancouver tehnika."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "unin-tehnicki-zavrsni",
+      "unitId": "unin",
+      "programs": [
+        "Odjel za tehničke i gospodarske studije (završni rad, Sveučilište Sjever)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Sjever - Tehnicki i gospodarski studiji, zavrsni rad",
+      "verifiedAt": "2026-07-03",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "margins": {
+          "top": 2,
+          "right": 2.25,
+          "bottom": 2,
+          "left": 2.25
+        },
+        "headingRules": {
+          "numberRequired": true,
+          "romanLevelOneAllowed": false,
+          "maxLevel": 4,
+          "levels": {
+            "1": {
+              "uppercase": false
+            },
+            "2": {
+              "uppercase": false
+            },
+            "3": {
+              "uppercase": false
+            },
+            "4": {
+              "uppercase": false
+            }
+          }
+        },
+        "recommendedCitation": "vancouver"
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Sveuciliste Sjever, Sveuciliste Sjever), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za oblikovanje završnog i diplomskog rada (Sveučilište Sjever, sijecanj 2026)",
+          "url": "https://www.unin.hr/wp-content/uploads/Upute-za-oblikovanje-zavr%C5%A1nog-i-diplomskog-rada_22.1.1.docx"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za oblikovanje završnog i diplomskog rada (Sveučilište Sjever, sijecanj 2026)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Obostrano poravnanje",
+        "Margine",
+        "Pravila naslova (numerirano, mala tiskana, 4 razine)",
+        "Stil citiranja (vancouver)"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "unin-tehnicki-diplomski",
+      "unitId": "unin",
+      "programs": [
+        "Odjel za tehničke i gospodarske studije (diplomski rad, Sveučilište Sjever)"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Sjever - Tehnicki i gospodarski studiji, diplomski rad",
+      "verifiedAt": "2026-07-03",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "margins": {
+          "top": 2,
+          "right": 2.25,
+          "bottom": 2,
+          "left": 2.25
+        },
+        "headingRules": {
+          "numberRequired": true,
+          "romanLevelOneAllowed": false,
+          "maxLevel": 4,
+          "levels": {
+            "1": {
+              "uppercase": false
+            },
+            "2": {
+              "uppercase": false
+            },
+            "3": {
+              "uppercase": false
+            },
+            "4": {
+              "uppercase": false
+            }
+          }
+        },
+        "recommendedCitation": "vancouver"
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Sveuciliste Sjever, Sveuciliste Sjever), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za oblikovanje završnog i diplomskog rada (Sveučilište Sjever, sijecanj 2026)",
+          "url": "https://www.unin.hr/wp-content/uploads/Upute-za-oblikovanje-zavr%C5%A1nog-i-diplomskog-rada_22.1.1.docx"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za oblikovanje završnog i diplomskog rada (Sveučilište Sjever, sijecanj 2026)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Obostrano poravnanje",
+        "Margine",
+        "Pravila naslova (numerirano, mala tiskana, 4 razine)",
+        "Stil citiranja (vancouver)"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "unin-biomedicina-zavrsni",
+      "unitId": "unin",
+      "programs": [
+        "Odjel za biomedicinske znanosti (završni rad, Sveučilište Sjever)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Sjever - Biomedicinske znanosti, zavrsni rad",
+      "verifiedAt": "2026-07-03",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "margins": {
+          "top": 2,
+          "right": 2.25,
+          "bottom": 2,
+          "left": 2.25
+        },
+        "headingRules": {
+          "numberRequired": true,
+          "romanLevelOneAllowed": false,
+          "maxLevel": 4,
+          "levels": {
+            "1": {
+              "uppercase": false
+            },
+            "2": {
+              "uppercase": false
+            },
+            "3": {
+              "uppercase": false
+            },
+            "4": {
+              "uppercase": false
+            }
+          }
+        },
+        "recommendedCitation": "apa"
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Sveuciliste Sjever, Sveuciliste Sjever), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za oblikovanje završnog i diplomskog rada (Sveučilište Sjever, sijecanj 2026)",
+          "url": "https://www.unin.hr/wp-content/uploads/Upute-za-oblikovanje-zavr%C5%A1nog-i-diplomskog-rada_22.1.1.docx"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za oblikovanje završnog i diplomskog rada (Sveučilište Sjever, sijecanj 2026)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Obostrano poravnanje",
+        "Margine",
+        "Pravila naslova (numerirano, mala tiskana, 4 razine)",
+        "Stil citiranja (apa)"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "unin-biomedicina-diplomski",
+      "unitId": "unin",
+      "programs": [
+        "Odjel za biomedicinske znanosti (diplomski rad, Sveučilište Sjever)"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Sjever - Biomedicinske znanosti, diplomski rad",
+      "verifiedAt": "2026-07-03",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "margins": {
+          "top": 2,
+          "right": 2.25,
+          "bottom": 2,
+          "left": 2.25
+        },
+        "headingRules": {
+          "numberRequired": true,
+          "romanLevelOneAllowed": false,
+          "maxLevel": 4,
+          "levels": {
+            "1": {
+              "uppercase": false
+            },
+            "2": {
+              "uppercase": false
+            },
+            "3": {
+              "uppercase": false
+            },
+            "4": {
+              "uppercase": false
+            }
+          }
+        },
+        "recommendedCitation": "apa"
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Sveuciliste Sjever, Sveuciliste Sjever), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za oblikovanje završnog i diplomskog rada (Sveučilište Sjever, sijecanj 2026)",
+          "url": "https://www.unin.hr/wp-content/uploads/Upute-za-oblikovanje-zavr%C5%A1nog-i-diplomskog-rada_22.1.1.docx"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za oblikovanje završnog i diplomskog rada (Sveučilište Sjever, sijecanj 2026)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Obostrano poravnanje",
+        "Margine",
+        "Pravila naslova (numerirano, mala tiskana, 4 razine)",
+        "Stil citiranja (apa)"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "unin-drustveni-zavrsni",
+      "unitId": "unin",
+      "programs": [
+        "Odjeli društvenih znanosti - ekonomija, novinarstvo, komunikologija (završni rad, Sveučilište Sjever)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Sjever - Drustvene znanosti, zavrsni rad",
+      "verifiedAt": "2026-07-03",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "margins": {
+          "top": 2,
+          "right": 2.25,
+          "bottom": 2,
+          "left": 2.25
+        },
+        "headingRules": {
+          "numberRequired": true,
+          "romanLevelOneAllowed": false,
+          "maxLevel": 4,
+          "levels": {
+            "1": {
+              "uppercase": false
+            },
+            "2": {
+              "uppercase": false
+            },
+            "3": {
+              "uppercase": false
+            },
+            "4": {
+              "uppercase": false
+            }
+          }
+        },
+        "recommendedCitation": "harvard"
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Sveuciliste Sjever, Sveuciliste Sjever), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za oblikovanje završnog i diplomskog rada (Sveučilište Sjever, sijecanj 2026)",
+          "url": "https://www.unin.hr/wp-content/uploads/Upute-za-oblikovanje-zavr%C5%A1nog-i-diplomskog-rada_22.1.1.docx"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za oblikovanje završnog i diplomskog rada (Sveučilište Sjever, sijecanj 2026)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Obostrano poravnanje",
+        "Margine",
+        "Pravila naslova (numerirano, mala tiskana, 4 razine)",
+        "Stil citiranja (harvard)"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "unin-drustveni-diplomski",
+      "unitId": "unin",
+      "programs": [
+        "Odjeli društvenih znanosti - ekonomija, novinarstvo, komunikologija (diplomski rad, Sveučilište Sjever)"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Sjever - Drustvene znanosti, diplomski rad",
+      "verifiedAt": "2026-07-03",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "margins": {
+          "top": 2,
+          "right": 2.25,
+          "bottom": 2,
+          "left": 2.25
+        },
+        "headingRules": {
+          "numberRequired": true,
+          "romanLevelOneAllowed": false,
+          "maxLevel": 4,
+          "levels": {
+            "1": {
+              "uppercase": false
+            },
+            "2": {
+              "uppercase": false
+            },
+            "3": {
+              "uppercase": false
+            },
+            "4": {
+              "uppercase": false
+            }
+          }
+        },
+        "recommendedCitation": "harvard"
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Sveuciliste Sjever, Sveuciliste Sjever), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za oblikovanje završnog i diplomskog rada (Sveučilište Sjever, sijecanj 2026)",
+          "url": "https://www.unin.hr/wp-content/uploads/Upute-za-oblikovanje-zavr%C5%A1nog-i-diplomskog-rada_22.1.1.docx"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za oblikovanje završnog i diplomskog rada (Sveučilište Sjever, sijecanj 2026)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Obostrano poravnanje",
+        "Margine",
+        "Pravila naslova (numerirano, mala tiskana, 4 razine)",
+        "Stil citiranja (harvard)"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-unin-tehnicki-zavrsni--font-verified-2026-07-03",
+      "ruleId": "unin-tehnicki-zavrsni--font",
+      "profileId": "unin-tehnicki-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-tehnicki-zavrsni--font-size-verified-2026-07-03",
+      "ruleId": "unin-tehnicki-zavrsni--font-size",
+      "profileId": "unin-tehnicki-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-tehnicki-zavrsni--line-spacing-verified-2026-07-03",
+      "ruleId": "unin-tehnicki-zavrsni--line-spacing",
+      "profileId": "unin-tehnicki-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-tehnicki-zavrsni--justify-verified-2026-07-03",
+      "ruleId": "unin-tehnicki-zavrsni--justify",
+      "profileId": "unin-tehnicki-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-tehnicki-zavrsni--margins-verified-2026-07-03",
+      "ruleId": "unin-tehnicki-zavrsni--margins",
+      "profileId": "unin-tehnicki-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-tehnicki-zavrsni--heading-rules-verified-2026-07-03",
+      "ruleId": "unin-tehnicki-zavrsni--heading-rules",
+      "profileId": "unin-tehnicki-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, naslovi i podnaslovi",
+      "quote": "Naslovi i podnaslovi: prvi nivo – mala tiskana slova, podebljano, veličina 16 pt (npr. 1. Uvod); drugi nivo – mala tiskana slova, podebljano, veličina 14 pt; treći nivo – mala tiskana slova, podebljano, veličina 12 pt; četvrti nivo – mala tiskana slova, bez podebljanja, veličina 12 pt; naslove treba poravnati uz lijevi rub teksta.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-tehnicki-zavrsni--citation-style-verified-2026-07-03",
+      "ruleId": "unin-tehnicki-zavrsni--citation-style",
+      "profileId": "unin-tehnicki-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, stilovi citiranja",
+      "quote": "Vancouver stil citiranja u području tehničkih znanosti. Vancouver stil je tzv. numerički stil citiranja koji se najčešće primjenjuje u području tehničkih znanosti.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-tehnicki-diplomski--font-verified-2026-07-03",
+      "ruleId": "unin-tehnicki-diplomski--font",
+      "profileId": "unin-tehnicki-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-tehnicki-diplomski--font-size-verified-2026-07-03",
+      "ruleId": "unin-tehnicki-diplomski--font-size",
+      "profileId": "unin-tehnicki-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-tehnicki-diplomski--line-spacing-verified-2026-07-03",
+      "ruleId": "unin-tehnicki-diplomski--line-spacing",
+      "profileId": "unin-tehnicki-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-tehnicki-diplomski--justify-verified-2026-07-03",
+      "ruleId": "unin-tehnicki-diplomski--justify",
+      "profileId": "unin-tehnicki-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-tehnicki-diplomski--margins-verified-2026-07-03",
+      "ruleId": "unin-tehnicki-diplomski--margins",
+      "profileId": "unin-tehnicki-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-tehnicki-diplomski--heading-rules-verified-2026-07-03",
+      "ruleId": "unin-tehnicki-diplomski--heading-rules",
+      "profileId": "unin-tehnicki-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, naslovi i podnaslovi",
+      "quote": "Naslovi i podnaslovi: prvi nivo – mala tiskana slova, podebljano, veličina 16 pt (npr. 1. Uvod); drugi nivo – mala tiskana slova, podebljano, veličina 14 pt; treći nivo – mala tiskana slova, podebljano, veličina 12 pt; četvrti nivo – mala tiskana slova, bez podebljanja, veličina 12 pt; naslove treba poravnati uz lijevi rub teksta.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-tehnicki-diplomski--citation-style-verified-2026-07-03",
+      "ruleId": "unin-tehnicki-diplomski--citation-style",
+      "profileId": "unin-tehnicki-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, stilovi citiranja",
+      "quote": "Vancouver stil citiranja u području tehničkih znanosti. Vancouver stil je tzv. numerički stil citiranja koji se najčešće primjenjuje u području tehničkih znanosti.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-biomedicina-zavrsni--font-verified-2026-07-03",
+      "ruleId": "unin-biomedicina-zavrsni--font",
+      "profileId": "unin-biomedicina-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-biomedicina-zavrsni--font-size-verified-2026-07-03",
+      "ruleId": "unin-biomedicina-zavrsni--font-size",
+      "profileId": "unin-biomedicina-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-biomedicina-zavrsni--line-spacing-verified-2026-07-03",
+      "ruleId": "unin-biomedicina-zavrsni--line-spacing",
+      "profileId": "unin-biomedicina-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-biomedicina-zavrsni--justify-verified-2026-07-03",
+      "ruleId": "unin-biomedicina-zavrsni--justify",
+      "profileId": "unin-biomedicina-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-biomedicina-zavrsni--margins-verified-2026-07-03",
+      "ruleId": "unin-biomedicina-zavrsni--margins",
+      "profileId": "unin-biomedicina-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-biomedicina-zavrsni--heading-rules-verified-2026-07-03",
+      "ruleId": "unin-biomedicina-zavrsni--heading-rules",
+      "profileId": "unin-biomedicina-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, naslovi i podnaslovi",
+      "quote": "Naslovi i podnaslovi: prvi nivo – mala tiskana slova, podebljano, veličina 16 pt (npr. 1. Uvod); drugi nivo – mala tiskana slova, podebljano, veličina 14 pt; treći nivo – mala tiskana slova, podebljano, veličina 12 pt; četvrti nivo – mala tiskana slova, bez podebljanja, veličina 12 pt; naslove treba poravnati uz lijevi rub teksta.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-biomedicina-zavrsni--citation-style-verified-2026-07-03",
+      "ruleId": "unin-biomedicina-zavrsni--citation-style",
+      "profileId": "unin-biomedicina-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, stilovi citiranja",
+      "quote": "American Psychological Association (tzv. APA) stil citiranja u području biomedicine. Popis literature navodi se prema APA 7 stilu.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-biomedicina-diplomski--font-verified-2026-07-03",
+      "ruleId": "unin-biomedicina-diplomski--font",
+      "profileId": "unin-biomedicina-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-biomedicina-diplomski--font-size-verified-2026-07-03",
+      "ruleId": "unin-biomedicina-diplomski--font-size",
+      "profileId": "unin-biomedicina-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-biomedicina-diplomski--line-spacing-verified-2026-07-03",
+      "ruleId": "unin-biomedicina-diplomski--line-spacing",
+      "profileId": "unin-biomedicina-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-biomedicina-diplomski--justify-verified-2026-07-03",
+      "ruleId": "unin-biomedicina-diplomski--justify",
+      "profileId": "unin-biomedicina-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-biomedicina-diplomski--margins-verified-2026-07-03",
+      "ruleId": "unin-biomedicina-diplomski--margins",
+      "profileId": "unin-biomedicina-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-biomedicina-diplomski--heading-rules-verified-2026-07-03",
+      "ruleId": "unin-biomedicina-diplomski--heading-rules",
+      "profileId": "unin-biomedicina-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, naslovi i podnaslovi",
+      "quote": "Naslovi i podnaslovi: prvi nivo – mala tiskana slova, podebljano, veličina 16 pt (npr. 1. Uvod); drugi nivo – mala tiskana slova, podebljano, veličina 14 pt; treći nivo – mala tiskana slova, podebljano, veličina 12 pt; četvrti nivo – mala tiskana slova, bez podebljanja, veličina 12 pt; naslove treba poravnati uz lijevi rub teksta.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-biomedicina-diplomski--citation-style-verified-2026-07-03",
+      "ruleId": "unin-biomedicina-diplomski--citation-style",
+      "profileId": "unin-biomedicina-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, stilovi citiranja",
+      "quote": "American Psychological Association (tzv. APA) stil citiranja u području biomedicine. Popis literature navodi se prema APA 7 stilu.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-drustveni-zavrsni--font-verified-2026-07-03",
+      "ruleId": "unin-drustveni-zavrsni--font",
+      "profileId": "unin-drustveni-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-drustveni-zavrsni--font-size-verified-2026-07-03",
+      "ruleId": "unin-drustveni-zavrsni--font-size",
+      "profileId": "unin-drustveni-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-drustveni-zavrsni--line-spacing-verified-2026-07-03",
+      "ruleId": "unin-drustveni-zavrsni--line-spacing",
+      "profileId": "unin-drustveni-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-drustveni-zavrsni--justify-verified-2026-07-03",
+      "ruleId": "unin-drustveni-zavrsni--justify",
+      "profileId": "unin-drustveni-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-drustveni-zavrsni--margins-verified-2026-07-03",
+      "ruleId": "unin-drustveni-zavrsni--margins",
+      "profileId": "unin-drustveni-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-drustveni-zavrsni--heading-rules-verified-2026-07-03",
+      "ruleId": "unin-drustveni-zavrsni--heading-rules",
+      "profileId": "unin-drustveni-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, naslovi i podnaslovi",
+      "quote": "Naslovi i podnaslovi: prvi nivo – mala tiskana slova, podebljano, veličina 16 pt (npr. 1. Uvod); drugi nivo – mala tiskana slova, podebljano, veličina 14 pt; treći nivo – mala tiskana slova, podebljano, veličina 12 pt; četvrti nivo – mala tiskana slova, bez podebljanja, veličina 12 pt; naslove treba poravnati uz lijevi rub teksta.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-drustveni-zavrsni--citation-style-verified-2026-07-03",
+      "ruleId": "unin-drustveni-zavrsni--citation-style",
+      "profileId": "unin-drustveni-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, stilovi citiranja",
+      "quote": "Harvard stil citiranja u području društvenih znanosti. Citiranje prema Harvardskom stilu koristi se za područje društvenih znanosti.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-drustveni-diplomski--font-verified-2026-07-03",
+      "ruleId": "unin-drustveni-diplomski--font",
+      "profileId": "unin-drustveni-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-drustveni-diplomski--font-size-verified-2026-07-03",
+      "ruleId": "unin-drustveni-diplomski--font-size",
+      "profileId": "unin-drustveni-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-drustveni-diplomski--line-spacing-verified-2026-07-03",
+      "ruleId": "unin-drustveni-diplomski--line-spacing",
+      "profileId": "unin-drustveni-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-drustveni-diplomski--justify-verified-2026-07-03",
+      "ruleId": "unin-drustveni-diplomski--justify",
+      "profileId": "unin-drustveni-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-drustveni-diplomski--margins-verified-2026-07-03",
+      "ruleId": "unin-drustveni-diplomski--margins",
+      "profileId": "unin-drustveni-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-drustveni-diplomski--heading-rules-verified-2026-07-03",
+      "ruleId": "unin-drustveni-diplomski--heading-rules",
+      "profileId": "unin-drustveni-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, naslovi i podnaslovi",
+      "quote": "Naslovi i podnaslovi: prvi nivo – mala tiskana slova, podebljano, veličina 16 pt (npr. 1. Uvod); drugi nivo – mala tiskana slova, podebljano, veličina 14 pt; treći nivo – mala tiskana slova, podebljano, veličina 12 pt; četvrti nivo – mala tiskana slova, bez podebljanja, veličina 12 pt; naslove treba poravnati uz lijevi rub teksta.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    },
+    {
+      "id": "led-unin-drustveni-diplomski--citation-style-verified-2026-07-03",
+      "ruleId": "unin-drustveni-diplomski--citation-style",
+      "profileId": "unin-drustveni-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, stilovi citiranja",
+      "quote": "Harvard stil citiranja u području društvenih znanosti. Citiranje prema Harvardskom stilu koristi se za područje društvenih znanosti.",
+      "note": "Cross-institution port (Sveuciliste Sjever, Sveuciliste Sjever): direktno citanje izvora."
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "profileId": "vvg-zavrsni",
+  "entries": [
+    {
+      "ruleId": "vvg-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "value": "A4",
+      "category": "format",
+      "label": "Format papira",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "vvg-upute-radovi-2013",
+      "sourcePage": "Upute, oblikovanje rada",
+      "quote": "Rad treba ispisati na papiru formata A4, s marginama 3 cm lijevo, 2 cm desno, 2,5 cm gore i dolje) i zaglavljem i podnožjem 1,5 cm od ruba stranice.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "5d7e28333d8ccc8b497387ef98b0f340f9e862d58dd65142042d240e78f41a6d",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "vvg-zavrsni--margins",
+      "checkId": "margins",
+      "value": {
+        "top": 2.5,
+        "right": 2,
+        "bottom": 2.5,
+        "left": 3
+      },
+      "category": "format",
+      "label": "Margine",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "vvg-upute-radovi-2013",
+      "sourcePage": "Upute, oblikovanje rada",
+      "quote": "Rad treba ispisati na papiru formata A4, s marginama 3 cm lijevo, 2 cm desno, 2,5 cm gore i dolje) i zaglavljem i podnožjem 1,5 cm od ruba stranice.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "5d7e28333d8ccc8b497387ef98b0f340f9e862d58dd65142042d240e78f41a6d",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "vvg-zavrsni--citation-style",
+      "checkId": "citation-style",
+      "value": "ieee",
+      "category": "citation",
+      "label": "Stil citiranja (numericki, uglate zagrade)",
+      "machineCheckable": false,
+      "authority": "program-page",
+      "sourceId": "vvg-upute-radovi-2013",
+      "sourcePage": "Upute, citiranje",
+      "quote": "Citiranje dijela teksta iz literature u popisu, označava se na kraju citata rednim brojem literature iz popisa u uglatim zagradama.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "5d7e28333d8ccc8b497387ef98b0f340f9e862d58dd65142042d240e78f41a6d",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
+    }
+  ],
+  "generatedAt": "2026-07-03"
+}

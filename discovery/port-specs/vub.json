@@ -1,0 +1,171 @@
+{
+  "faculty": "vub",
+  "institution": "vub",
+  "institutionName": "Veleuciliste u Bjelovaru",
+  "unit": {
+    "id": "vub",
+    "name": "Veleuciliste u Bjelovaru",
+    "family": "biomed",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Specijalistički diplomski stručni studiji (Veleučilište u Bjelovaru)"
+  ],
+  "sources": [
+    {
+      "id": "vub-upute-diplomski-2025",
+      "kind": "guidelines",
+      "title": "Upute za izradu i oblikovanje diplomskog rada (Veleučilište u Bjelovaru, 2025)",
+      "url": "https://vub.hr/wp-content/uploads/2025/11/UPUTE-ZA-IZRADU-I-OBLIKOVANJE-DIPLOMSKOG-RADA-3.pdf",
+      "publisher": "Veleuciliste u Bjelovaru, Veleuciliste u Bjelovaru",
+      "fetchedAt": "2026-07-03",
+      "snapshotPath": "data/sources/vub/vub.pdf",
+      "snapshotHash": "bd6702cb3ca775fb6f967f0a684f99cea9f48b15c05b1b82993ce0f95ad10773",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-03",
+      "note": "Tekstualni PDF, institucijski, diplomski. Opseg \"dogovoriti s mentorom\"->advisory."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "vub-diplomski",
+      "unitId": "vub",
+      "programs": [
+        "Specijalistički diplomski stručni studiji (Veleučilište u Bjelovaru)"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Veleuciliste Bjelovar, diplomski rad",
+      "verifiedAt": "2026-07-03",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 3
+        },
+        "recommendedCitation": "vancouver"
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Veleuciliste u Bjelovaru, Veleuciliste u Bjelovaru), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za izradu i oblikovanje diplomskog rada (Veleučilište u Bjelovaru, 2025)",
+          "url": "https://vub.hr/wp-content/uploads/2025/11/UPUTE-ZA-IZRADU-I-OBLIKOVANJE-DIPLOMSKOG-RADA-3.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu i oblikovanje diplomskog rada (Veleučilište u Bjelovaru, 2025)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Vrsta slova",
+        "Velicina slova",
+        "Obostrano poravnanje",
+        "Prored",
+        "Margine",
+        "Stil citiranja (Vancouver)"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-vub-diplomski--paper-size-verified-2026-07-03",
+      "ruleId": "vub-diplomski--paper-size",
+      "profileId": "vub-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "vub-upute-diplomski-2025",
+      "sourcePage": "Upute, Opce upute",
+      "quote": "Rad treba pisati na papiru formata A4 (21 x 29,7 cm), a ispisivanje je jednostrano. Pri pisanju koristiti font Times New Roman (12 pt). Poravnanje treba biti obostrano, prored 1,5. Veličine margina: gornja, donja i desna su 25 mm, lijeva (za uvez) 30 mm.",
+      "note": "Cross-institution port (Veleuciliste u Bjelovaru, Veleuciliste u Bjelovaru): direktno citanje izvora."
+    },
+    {
+      "id": "led-vub-diplomski--font-verified-2026-07-03",
+      "ruleId": "vub-diplomski--font",
+      "profileId": "vub-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "vub-upute-diplomski-2025",
+      "sourcePage": "Upute, Opce upute",
+      "quote": "Rad treba pisati na papiru formata A4 (21 x 29,7 cm), a ispisivanje je jednostrano. Pri pisanju koristiti font Times New Roman (12 pt). Poravnanje treba biti obostrano, prored 1,5. Veličine margina: gornja, donja i desna su 25 mm, lijeva (za uvez) 30 mm.",
+      "note": "Cross-institution port (Veleuciliste u Bjelovaru, Veleuciliste u Bjelovaru): direktno citanje izvora."
+    },
+    {
+      "id": "led-vub-diplomski--font-size-verified-2026-07-03",
+      "ruleId": "vub-diplomski--font-size",
+      "profileId": "vub-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "vub-upute-diplomski-2025",
+      "sourcePage": "Upute, Opce upute",
+      "quote": "Rad treba pisati na papiru formata A4 (21 x 29,7 cm), a ispisivanje je jednostrano. Pri pisanju koristiti font Times New Roman (12 pt). Poravnanje treba biti obostrano, prored 1,5. Veličine margina: gornja, donja i desna su 25 mm, lijeva (za uvez) 30 mm.",
+      "note": "Cross-institution port (Veleuciliste u Bjelovaru, Veleuciliste u Bjelovaru): direktno citanje izvora."
+    },
+    {
+      "id": "led-vub-diplomski--justify-verified-2026-07-03",
+      "ruleId": "vub-diplomski--justify",
+      "profileId": "vub-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "vub-upute-diplomski-2025",
+      "sourcePage": "Upute, Opce upute",
+      "quote": "Rad treba pisati na papiru formata A4 (21 x 29,7 cm), a ispisivanje je jednostrano. Pri pisanju koristiti font Times New Roman (12 pt). Poravnanje treba biti obostrano, prored 1,5. Veličine margina: gornja, donja i desna su 25 mm, lijeva (za uvez) 30 mm.",
+      "note": "Cross-institution port (Veleuciliste u Bjelovaru, Veleuciliste u Bjelovaru): direktno citanje izvora."
+    },
+    {
+      "id": "led-vub-diplomski--line-spacing-verified-2026-07-03",
+      "ruleId": "vub-diplomski--line-spacing",
+      "profileId": "vub-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "vub-upute-diplomski-2025",
+      "sourcePage": "Upute, Opce upute",
+      "quote": "Rad treba pisati na papiru formata A4 (21 x 29,7 cm), a ispisivanje je jednostrano. Pri pisanju koristiti font Times New Roman (12 pt). Poravnanje treba biti obostrano, prored 1,5. Veličine margina: gornja, donja i desna su 25 mm, lijeva (za uvez) 30 mm.",
+      "note": "Cross-institution port (Veleuciliste u Bjelovaru, Veleuciliste u Bjelovaru): direktno citanje izvora."
+    },
+    {
+      "id": "led-vub-diplomski--margins-verified-2026-07-03",
+      "ruleId": "vub-diplomski--margins",
+      "profileId": "vub-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "vub-upute-diplomski-2025",
+      "sourcePage": "Upute, Opce upute",
+      "quote": "Rad treba pisati na papiru formata A4 (21 x 29,7 cm), a ispisivanje je jednostrano. Pri pisanju koristiti font Times New Roman (12 pt). Poravnanje treba biti obostrano, prored 1,5. Veličine margina: gornja, donja i desna su 25 mm, lijeva (za uvez) 30 mm.",
+      "note": "Cross-institution port (Veleuciliste u Bjelovaru, Veleuciliste u Bjelovaru): direktno citanje izvora."
+    },
+    {
+      "id": "led-vub-diplomski--citation-style-verified-2026-07-03",
+      "ruleId": "vub-diplomski--citation-style",
+      "profileId": "vub-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "vub-upute-diplomski-2025",
+      "sourcePage": "Upute, citiranje",
+      "quote": "Literatura se navodi Vancouverskim stilom citiranja. Na literaturu se u tekstu poziva tako da se u okrugloj zagradi navede redni broj pod kojim je referenca u popisu literature.",
+      "note": "Cross-institution port (Veleuciliste u Bjelovaru, Veleuciliste u Bjelovaru): direktno citanje izvora."
+    }
+  ]
+}

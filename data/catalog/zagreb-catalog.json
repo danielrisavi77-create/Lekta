@@ -1110,5 +1110,87 @@
         ]
       }
     ]
+  },
+  {
+    "id": "unin",
+    "name": "Sveuciliste Sjever",
+    "units": [
+      {
+        "id": "unin",
+        "name": "Sveuciliste Sjever",
+        "family": "mixed",
+        "status": "partial",
+        "programs": [
+          "Odjel za tehničke i gospodarske studije (završni rad, Sveučilište Sjever)",
+          "Odjel za tehničke i gospodarske studije (diplomski rad, Sveučilište Sjever)",
+          "Odjel za biomedicinske znanosti (završni rad, Sveučilište Sjever)",
+          "Odjel za biomedicinske znanosti (diplomski rad, Sveučilište Sjever)",
+          "Odjeli društvenih znanosti - ekonomija, novinarstvo, komunikologija (završni rad, Sveučilište Sjever)",
+          "Odjeli društvenih znanosti - ekonomija, novinarstvo, komunikologija (diplomski rad, Sveučilište Sjever)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "veleri",
+    "name": "Veleuciliste u Rijeci",
+    "units": [
+      {
+        "id": "veleri",
+        "name": "Veleuciliste u Rijeci",
+        "family": "mixed",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski stručni studiji (završni rad, Veleučilište u Rijeci)",
+          "Specijalistički diplomski stručni studiji (Veleučilište u Rijeci)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "vub",
+    "name": "Veleuciliste u Bjelovaru",
+    "units": [
+      {
+        "id": "vub",
+        "name": "Veleuciliste u Bjelovaru",
+        "family": "biomed",
+        "status": "partial",
+        "programs": [
+          "Specijalistički diplomski stručni studiji (Veleučilište u Bjelovaru)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mev",
+    "name": "Medimursko veleuciliste u Cakovcu",
+    "units": [
+      {
+        "id": "mev",
+        "name": "Medimursko veleuciliste u Cakovcu",
+        "family": "mixed",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski stručni studiji (završni rad, Međimursko veleučilište)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "vvg",
+    "name": "Veleuciliste Velika Gorica",
+    "units": [
+      {
+        "id": "vvg",
+        "name": "Veleuciliste Velika Gorica",
+        "family": "mixed",
+        "status": "partial",
+        "programs": [
+          "Stručni prijediplomski studiji (završni rad, Veleučilište Velika Gorica)",
+          "Stručni diplomski studiji (Veleučilište Velika Gorica)"
+        ]
+      }
+    ]
   }
 ]

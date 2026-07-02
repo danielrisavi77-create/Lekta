@@ -1,0 +1,164 @@
+{
+  "profileId": "unin-tehnicki-zavrsni",
+  "entries": [
+    {
+      "ruleId": "unin-tehnicki-zavrsni--font",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Vrsta slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "53d0ff0b8b1859985329170db1eddc29d77a616a4ba5e63a86c987e920678c6d",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "unin-tehnicki-zavrsni--font-size",
+      "checkId": "font-size",
+      "value": 12,
+      "category": "format",
+      "label": "Velicina slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "53d0ff0b8b1859985329170db1eddc29d77a616a4ba5e63a86c987e920678c6d",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "unin-tehnicki-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "53d0ff0b8b1859985329170db1eddc29d77a616a4ba5e63a86c987e920678c6d",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "unin-tehnicki-zavrsni--justify",
+      "checkId": "justify",
+      "value": true,
+      "category": "format",
+      "label": "Obostrano poravnanje",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "53d0ff0b8b1859985329170db1eddc29d77a616a4ba5e63a86c987e920678c6d",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "unin-tehnicki-zavrsni--margins",
+      "checkId": "margins",
+      "value": {
+        "top": 2,
+        "right": 2.25,
+        "bottom": 2,
+        "left": 2.25
+      },
+      "category": "format",
+      "label": "Margine",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, tehnicko oblikovanje",
+      "quote": "Prilikom pisanja završnog/diplomskog rada potrebno je slijediti ove upute: Margine: gore 2 cm, dolje 2 cm, desno 2,25 cm, lijevo 2,25 cm. Font: Times New Roman, veličina 12 pt. Prored: 1,5. Poravnanje teksta: obostrano.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "53d0ff0b8b1859985329170db1eddc29d77a616a4ba5e63a86c987e920678c6d",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "unin-tehnicki-zavrsni--heading-rules",
+      "checkId": "heading-rules",
+      "value": {
+        "numberRequired": true,
+        "romanLevelOneAllowed": false,
+        "maxLevel": 4,
+        "levels": {
+          "1": {
+            "uppercase": false
+          },
+          "2": {
+            "uppercase": false
+          },
+          "3": {
+            "uppercase": false
+          },
+          "4": {
+            "uppercase": false
+          }
+        }
+      },
+      "category": "structure",
+      "label": "Pravila naslova (numerirano, mala tiskana, 4 razine)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, naslovi i podnaslovi",
+      "quote": "Naslovi i podnaslovi: prvi nivo – mala tiskana slova, podebljano, veličina 16 pt (npr. 1. Uvod); drugi nivo – mala tiskana slova, podebljano, veličina 14 pt; treći nivo – mala tiskana slova, podebljano, veličina 12 pt; četvrti nivo – mala tiskana slova, bez podebljanja, veličina 12 pt; naslove treba poravnati uz lijevi rub teksta.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "53d0ff0b8b1859985329170db1eddc29d77a616a4ba5e63a86c987e920678c6d",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "unin-tehnicki-zavrsni--citation-style",
+      "checkId": "citation-style",
+      "value": "vancouver",
+      "category": "citation",
+      "label": "Stil citiranja (vancouver)",
+      "machineCheckable": false,
+      "authority": "program-page",
+      "sourceId": "unin-upute-radovi-2026",
+      "sourcePage": "Upute, stilovi citiranja",
+      "quote": "Vancouver stil citiranja u području tehničkih znanosti. Vancouver stil je tzv. numerički stil citiranja koji se najčešće primjenjuje u području tehničkih znanosti.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "53d0ff0b8b1859985329170db1eddc29d77a616a4ba5e63a86c987e920678c6d",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
+    }
+  ],
+  "generatedAt": "2026-07-03"
+}

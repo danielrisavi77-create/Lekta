@@ -1932,5 +1932,70 @@
     "validityClass": "stable",
     "lastChecked": "2026-07-03",
     "note": "Skenirani PDF citan OCR-om (tesseract hrv). Margine s korica (dijagram)->izostavljene; bez A4/justify; citat neimenovan->advisory."
+  },
+  {
+    "id": "unin-upute-radovi-2026",
+    "kind": "guidelines",
+    "title": "Upute za oblikovanje završnog i diplomskog rada (Sveučilište Sjever, sijecanj 2026)",
+    "url": "https://www.unin.hr/wp-content/uploads/Upute-za-oblikovanje-zavr%C5%A1nog-i-diplomskog-rada_22.1.1.docx",
+    "publisher": "Sveuciliste Sjever, Sveuciliste Sjever",
+    "fetchedAt": "2026-07-03",
+    "snapshotPath": "data/sources/unin/unin-upute.docx",
+    "snapshotHash": "53d0ff0b8b1859985329170db1eddc29d77a616a4ba5e63a86c987e920678c6d",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-03",
+    "note": ".docx (word/document.xml). Sveucilisni, cross-odjelni. A4 nije u obveznom popisu->izostavljen. Citiranje po podrucju: APA biomed, Harvard drustvene, Vancouver tehnika."
+  },
+  {
+    "id": "veleri-upute-formalni-izgled",
+    "kind": "guidelines",
+    "title": "Upute za formalni izgled završnog i diplomskog rada Veleučilišta u Rijeci",
+    "url": "https://www.veleri.hr/sites/default/files/2023-01/upute-za-formalni-izgled-zavrsnog-i-diplomskog-rada-veleucilista-u-rijeci_0_0.pdf",
+    "publisher": "Veleuciliste u Rijeci, Veleuciliste u Rijeci",
+    "fetchedAt": "2026-07-03",
+    "snapshotPath": "data/sources/veleri/veleri.pdf",
+    "snapshotHash": "bcd508baf14574b8955a1d06dc4179f79bfa509903b543e30ccad6894a0959fb",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-03",
+    "note": "Tekstualni PDF, institucijski. Citat autor-godina + opcija APA6->advisory."
+  },
+  {
+    "id": "vub-upute-diplomski-2025",
+    "kind": "guidelines",
+    "title": "Upute za izradu i oblikovanje diplomskog rada (Veleučilište u Bjelovaru, 2025)",
+    "url": "https://vub.hr/wp-content/uploads/2025/11/UPUTE-ZA-IZRADU-I-OBLIKOVANJE-DIPLOMSKOG-RADA-3.pdf",
+    "publisher": "Veleuciliste u Bjelovaru, Veleuciliste u Bjelovaru",
+    "fetchedAt": "2026-07-03",
+    "snapshotPath": "data/sources/vub/vub.pdf",
+    "snapshotHash": "bd6702cb3ca775fb6f967f0a684f99cea9f48b15c05b1b82993ce0f95ad10773",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-03",
+    "note": "Tekstualni PDF, institucijski, diplomski. Opseg \"dogovoriti s mentorom\"->advisory."
+  },
+  {
+    "id": "mev-upute-zavrsni",
+    "kind": "guidelines",
+    "title": "Upute za izradu završnog rada (Međimursko veleučilište u Čakovcu, Prilog 3)",
+    "url": "https://www.mev.hr/wp-content/uploads/2013/12/Prilog-3-Upute-za-izradu-zavr%C5%A1nog-rada.pdf",
+    "publisher": "Medimursko veleuciliste u Cakovcu, Medimursko veleuciliste u Cakovcu",
+    "fetchedAt": "2026-07-03",
+    "snapshotPath": "data/sources/mev/mev.pdf",
+    "snapshotHash": "422c25447635bea9a9ad696a0e5d4aac688d7161ecf573780ff25aa153b07adc",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-03",
+    "note": "Tekstualni PDF, institucijski. Font \"najcesce TNR ili druga\"->advisory; citiranje \"u dogovoru s mentorom\"->advisory."
+  },
+  {
+    "id": "vvg-upute-radovi-2013",
+    "kind": "guidelines",
+    "title": "Upute za izradu i obranu završnog i diplomskog rada (Veleučilište Velika Gorica, 2013)",
+    "url": "https://vvg.hr/app/uploads/2020/02/Upute-za-izradu-i-obranu-zavrs%CC%8Cnog-i-diplomskog-rada-2013.pdf",
+    "publisher": "Veleuciliste Velika Gorica, Veleuciliste Velika Gorica",
+    "fetchedAt": "2026-07-03",
+    "snapshotPath": "data/sources/vvg/vvg.pdf",
+    "snapshotHash": "5d7e28333d8ccc8b497387ef98b0f340f9e862d58dd65142042d240e78f41a6d",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-03",
+    "note": "Tekstualni PDF (novije verzije skenirane). Body font/velicina spregnut izbor (Arial 11 ILI Times 12)->neodrediv, izostavljen. Opseg u karticama+preporuka->adv."
   }
 ]
