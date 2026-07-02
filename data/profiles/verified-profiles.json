@@ -7873,25 +7873,53 @@
     "verifiedAt": "2026-07-02",
     "documentDate": "2019-06-01",
     "fieldValidation": {
-      "status": "synthetic-golden-validated",
+      "status": "field-sampled",
       "validatedAt": "2026-07-02",
-      "scope": "Sinteticki golden (tests/ffzg-pmf-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "scope": "Sinteticki golden (tests/ffzg-pmf-synthetic.test.ts) + 3 stvarna javna diplomski rada odsjeka filozofija iz ZIR-a kroz byte-level PDF preflight.",
       "sample": {
         "syntheticDocxAudits": 1,
         "docxAudits": 0,
-        "publicPdfAudits": 0,
+        "publicPdfAudits": 3,
         "metadataSpotChecks": 0,
         "years": [
-          2026
+          2016,
+          2017
         ]
       },
+      "publicSources": [
+        {
+          "pid": "ffzg:6500",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 67,
+          "pageFormat": "A4",
+          "sha256": "7ca23d971c21eccce29bd2d275134cc1d4a0dbac5fc567601609a020b78a5ab8"
+        },
+        {
+          "pid": "ffzg:7500",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 47,
+          "pageFormat": "A4",
+          "sha256": "cfa8b0dbdc86d3356c20e6fa639d7ccc46902c4ed792ae53af9a3e613cc1892b"
+        },
+        {
+          "pid": "ffzg:7200",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 51,
+          "pageFormat": "A4",
+          "sha256": "7a256b3ab7478c1d2c7e5b2cfb1cf1bf027d4bd0222cb12501431c0bb7cf3bf3"
+        }
+      ],
       "confirmed": [
-        "Profil se analizira bez pucanja i scored/informativne provjere ispravno se ponasaju (golden test)."
+        "Profil se analizira bez pucanja; format-provjere ispravno se ponasaju (golden test).",
+        "3 stvarna javna diplomski rada odsjeka filozofija (ffzg:6500, ffzg:7500, ffzg:7200) prolaze byte-level PDF preflight: valjan nesifriran PDF, 100% stranica A4, viselistni, ugradjeni fontovi."
       ],
       "observedDeviations": [
-        "Filozofski fakultet je jedan mijesani ZIR namespace preko mnogo odsjeka; per-odsjecko stvarno uzorkovanje nije radjeno (nepraktcno bez rucnog raspoznavanja programa) pa je validacija golden-test. Scalar size:12 ispravljen na [12]."
+        "ffzg mijesani namespace; radovi odabrani rucnim raspoznavanjem odsjeka filozofije. chicago-notes citiranje (strop). scalar size:12 -> [12]."
       ],
-      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+      "productDecision": "PDF preflight je plitak (A4 + integritet). Stvarni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet preko PID-a i sha256."
     },
     "rules": {
       "font": [
@@ -11076,25 +11104,53 @@
     "verifiedAt": "2026-07-02",
     "documentDate": "2010-01-01",
     "fieldValidation": {
-      "status": "synthetic-golden-validated",
+      "status": "field-sampled",
       "validatedAt": "2026-07-02",
-      "scope": "Sinteticki golden (tests/ffzg-pmf-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "scope": "Sinteticki golden (tests/ffzg-pmf-synthetic.test.ts) + 3 stvarna javna diplomski rada odsjeka sociologija iz ZIR-a kroz byte-level PDF preflight.",
       "sample": {
         "syntheticDocxAudits": 1,
         "docxAudits": 0,
-        "publicPdfAudits": 0,
+        "publicPdfAudits": 3,
         "metadataSpotChecks": 0,
         "years": [
-          2026
+          2016,
+          2024
         ]
       },
+      "publicSources": [
+        {
+          "pid": "ffzg:5000",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 57,
+          "pageFormat": "A4",
+          "sha256": "21c63507885d12fce3e52661e0cdf6d961806993fe4493bfd7cd65eda9173132"
+        },
+        {
+          "pid": "ffzg:6700",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 84,
+          "pageFormat": "A4",
+          "sha256": "d9ff962d28b5052a2c5440da4f07de9b683b8b5d96d9b2daae3d54f9834180f1"
+        },
+        {
+          "pid": "ffzg:11100",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 69,
+          "pageFormat": "A4",
+          "sha256": "b622bc499860408b793a017d19c5071bb197e27f75be95814650890e28e70aa1"
+        }
+      ],
       "confirmed": [
-        "Profil se analizira bez pucanja i scored/informativne provjere ispravno se ponasaju (golden test)."
+        "Profil se analizira bez pucanja; format-provjere ispravno se ponasaju (golden test).",
+        "3 stvarna javna diplomski rada odsjeka sociologija (ffzg:5000, ffzg:6700, ffzg:11100) prolaze byte-level PDF preflight: valjan nesifriran PDF, 100% stranica A4, viselistni, ugradjeni fontovi."
       ],
       "observedDeviations": [
-        "Filozofski fakultet je jedan mijesani ZIR namespace preko mnogo odsjeka; per-odsjecko stvarno uzorkovanje nije radjeno (nepraktcno bez rucnog raspoznavanja programa) pa je validacija golden-test. Scalar size:12 ispravljen na [12]."
+        "ffzg je mijesani ZIR namespace; radovi odabrani rucnim raspoznavanjem odsjeka sociologije na naslovnici. harvard citiranje. scalar size:12 ranije ispravljen na [12]."
       ],
-      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+      "productDecision": "PDF preflight je plitak (A4 + integritet). Stvarni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet preko PID-a i sha256."
     },
     "rules": {
       "font": [
@@ -11523,25 +11579,53 @@
     "verifiedAt": "2026-07-02",
     "documentDate": "2024-09",
     "fieldValidation": {
-      "status": "synthetic-golden-validated",
+      "status": "field-sampled",
       "validatedAt": "2026-07-02",
-      "scope": "Sinteticki golden (tests/ffzg-pmf-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "scope": "Sinteticki golden (tests/ffzg-pmf-synthetic.test.ts) + 3 stvarna javna diplomski rada odsjeka matematika iz ZIR-a kroz byte-level PDF preflight.",
       "sample": {
         "syntheticDocxAudits": 1,
         "docxAudits": 0,
-        "publicPdfAudits": 0,
+        "publicPdfAudits": 3,
         "metadataSpotChecks": 0,
         "years": [
-          2026
+          2018,
+          2020
         ]
       },
+      "publicSources": [
+        {
+          "pid": "pmf:9500",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 61,
+          "pageFormat": "A4",
+          "sha256": "436edf07f3a8fae034af98b4cf57ba885989643abe2270dfa49ea36d0204d659"
+        },
+        {
+          "pid": "pmf:8800",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 43,
+          "pageFormat": "A4",
+          "sha256": "aeddd2c94b17c558ca0d188d08629894374cd1c54e80fd2c4de1ee67274cabf1"
+        },
+        {
+          "pid": "pmf:7800",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 97,
+          "pageFormat": "A4",
+          "sha256": "617a4b5b09a2e7d67e0a05241fd7361bbe32553284a3ecfbebe7e3999e11f541"
+        }
+      ],
       "confirmed": [
-        "Profil se analizira bez pucanja i scored/informativne provjere ispravno se ponasaju (golden test)."
+        "Profil se analizira bez pucanja; format-provjere ispravno se ponasaju (golden test).",
+        "3 stvarna javna diplomski rada odsjeka matematika (pmf:9500, pmf:8800, pmf:7800) prolaze byte-level PDF preflight: valjan nesifriran PDF, 100% stranica A4, viselistni, ugradjeni fontovi."
       ],
       "observedDeviations": [
-        "PMF Matematika: font/prored/margine nisu propisani -> checkFont/Spacing/Margins:false (crash-fix). ieee citiranje strop; validacija golden-test."
+        "pmf mijesani namespace; radovi odabrani rucnim raspoznavanjem odsjeka matematike. ieee citiranje (strop). font/prored/margine nisu propisani (checkFont/Spacing/Margins:false, crash-fix)."
       ],
-      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+      "productDecision": "PDF preflight je plitak (A4 + integritet). Stvarni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet preko PID-a i sha256."
     },
     "rules": {
       "checkFont": false,
