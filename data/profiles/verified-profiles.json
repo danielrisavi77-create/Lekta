@@ -7955,7 +7955,49 @@
     "profileLabel": "Farmaceutsko-biokemijski fakultet, zavrsni specijalisticki rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2014-02-19",
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/fbf-fhs-synthetic.test.ts) + 2 stvarnih javnih zavrsni specijalisticki radova iz ZIR-a kroz byte-level PDF preflight.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 2,
+        "metadataSpotChecks": 0,
+        "years": [
+          2022,
+          2023
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "pharma:2300",
+          "repository": "zir.nsk.hr",
+          "level": "specijalisticki",
+          "pages": 86,
+          "pageFormat": "A4",
+          "sha256": "142e91fcad8017039cd2acbf8b27072a1d8143299279c6b99e72807980adf526"
+        },
+        {
+          "pid": "pharma:2900",
+          "repository": "zir.nsk.hr",
+          "level": "specijalisticki",
+          "pages": 120,
+          "pageFormat": "A4",
+          "sha256": "568cf4b9b00d8c37d30089f62964c939a6889644cf5fcc61a331b03a55502878"
+        }
+      ],
+      "confirmed": [
+        "Uskladjeni sinteticki .docx prolazi scored format provjere; profil se ne rusi na stvarnom docx-u.",
+        "2 stvarnih javnih zavrsni specijalisticki radova (pharma:2300, pharma:2900) prolaze byte-level PDF preflight: valjan nesifriran PDF, 100% stranica A4, viselistni, ugradjeni fontovi."
+      ],
+      "observedDeviations": [
+        "FBF radovi su na ZIR-u pod namespaceom \"pharma\". Upute (2014) scored velicinu/prored/margine/A4; font nije propisan pa je checkFont:false. Zavrsni specijalisticki rad je postdiplomski i rjedak; nadjena 2 otvorena A4 rada."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet PDF-a). Stvarni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet preko PID-a i sha256."
+    },
     "rules": {
+      "checkFont": false,
       "size": [
         10,
         11,
@@ -10068,6 +10110,55 @@
     "profileLabel": "Fakultet hrvatskih studija, zavrsni rad",
     "verifiedAt": "2026-07-02",
     "documentDate": null,
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/fbf-fhs-synthetic.test.ts) + 3 stvarnih javnih zavrsni radova iz ZIR-a kroz byte-level PDF preflight.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2024,
+          2025
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "hrstud:3000",
+          "repository": "zir.nsk.hr",
+          "level": "zavrsni",
+          "pages": 22,
+          "pageFormat": "A4",
+          "sha256": "1ea630eb3e154302f18e08eca9616774c8404d262a6b400e6c804fb746db4214"
+        },
+        {
+          "pid": "hrstud:3050",
+          "repository": "zir.nsk.hr",
+          "level": "zavrsni",
+          "pages": 37,
+          "pageFormat": "A4",
+          "sha256": "e7581c3f4b7e657ba8328e05cc27c94d0da1384ff9d2a82dc1a58697c7e0024e"
+        },
+        {
+          "pid": "hrstud:3080",
+          "repository": "zir.nsk.hr",
+          "level": "zavrsni",
+          "pages": 19,
+          "pageFormat": "A4",
+          "sha256": "f756c1676d95ea907c6b2914d464d453499178e1cfbde2a9159ca177d4d09d91"
+        }
+      ],
+      "confirmed": [
+        "Uskladjeni sinteticki .docx prolazi scored format provjere; profil se ne rusi na stvarnom docx-u.",
+        "3 stvarnih javnih zavrsni radova (hrstud:3000, hrstud:3050, hrstud:3080) prolaze byte-level PDF preflight: valjan nesifriran PDF, 100% stranica A4, viselistni, ugradjeni fontovi."
+      ],
+      "observedDeviations": [
+        "FHS radovi su na ZIR-u pod namespaceom \"hrstud\". OPCE TEHNICKE UPUTE scored font/velicina/prored/margine/poravnanje/Sadrzaj; citiranje nije jednoznacno propisano za zavrsni pa ostaje custom (citation strop). U sirem uzorku dio radova je US Letter; ova tri su 100% A4."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet PDF-a). Stvarni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet preko PID-a i sha256."
+    },
     "rules": {
       "font": [
         "Times New Roman"
@@ -12150,6 +12241,27 @@
     "profileLabel": "Farmaceutsko-biokemijski fakultet, doktorski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": null,
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/fbf-fhs-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Format-provjere ispravno se okidaju na uskladjenom docx-u."
+      ],
+      "observedDeviations": [
+        "FBF doktorske disertacije nisu nadjene kao otvoreni fulltext u dohvacenom pharma uzorku; DR.SC.-08 pravila dokazana golden testom."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
@@ -12275,6 +12387,27 @@
     "profileLabel": "Fakultet hrvatskih studija, doktorski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": null,
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden (tests/fbf-fhs-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Format-provjere ispravno se okidaju na uskladjenom docx-u."
+      ],
+      "observedDeviations": [
+        "FHS doktorske disertacije nisu nadjene kao otvoreni fulltext u dohvacenom hrstud uzorku; DR.SC.-08 pravila dokazana golden testom."
+      ],
+      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+    },
     "rules": {
       "font": [
         "Times New Roman"
