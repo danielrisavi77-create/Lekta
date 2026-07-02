@@ -7,13 +7,21 @@ export const meta = {
   ],
 }
 
-// Pilot fakulteti (args nadjaca). Svaki: katalog id + puno ime + obitelj.
+// Fakulteti za ovaj batch (args nadjaca; DEFAULT je trenutni batch). Svaki: katalog id + puno ime + obitelj.
 const DEFAULT = [
-  { id: 'fer', name: 'Fakultet elektrotehnike i računarstva', family: 'stem' },
-  { id: 'efzg', name: 'Ekonomski fakultet', family: 'social' },
-  { id: 'fsb', name: 'Fakultet strojarstva i brodogradnje', family: 'stem' },
+  { id: 'ffzg', name: 'Filozofski fakultet', family: 'social' },
+  { id: 'pmf', name: 'Prirodoslovno-matematički fakultet', family: 'stem' },
+  { id: 'mef', name: 'Medicinski fakultet', family: 'biomed' },
+  { id: 'vef', name: 'Veterinarski fakultet', family: 'biomed' },
+  { id: 'kif', name: 'Kineziološki fakultet', family: 'social' },
+  { id: 'sumfak', name: 'Fakultet šumarstva i drvne tehnologije', family: 'stem' },
+  { id: 'ttf', name: 'Tekstilno-tehnološki fakultet', family: 'stem' },
+  { id: 'grad', name: 'Građevinski fakultet', family: 'stem' },
 ]
-const faculties = Array.isArray(args) && args.length ? args : DEFAULT
+// args moze stici kao array ILI kao JSON-string (ovisno o harnessu); parsiraj oboje.
+let requested = args
+if (typeof requested === 'string') { try { requested = JSON.parse(requested) } catch { requested = null } }
+const faculties = Array.isArray(requested) && requested.length ? requested : DEFAULT
 
 const SUMMARY = {
   type: 'object',
@@ -103,6 +111,7 @@ Vrati JSON sazetak (faculty, found, sourceIds, profileIds, scoredCount, advisory
 }
 
 phase('Port')
+log(`Batch: ${faculties.map((f) => f.id).join(', ')}`)
 const results = await parallel(
   faculties.map((fac) => () =>
     agent(prompt(fac), { label: `port:${fac.id}`, phase: 'Port', schema: SUMMARY, agentType: 'general-purpose' })
