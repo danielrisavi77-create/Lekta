@@ -35,6 +35,7 @@ a{color:inherit}:focus-visible{outline:none;box-shadow:var(--focus);border-radiu
 .nav-links a{text-decoration:none;color:var(--muted);font-weight:650;font-size:14px}
 .nav-links a:hover{color:var(--text)}.nav-links a.active{color:var(--brand);font-weight:800}
 .icon-btn{border:1px solid var(--line);background:var(--panel);width:40px;height:40px;border-radius:11px;display:grid;place-items:center;cursor:pointer;font-size:16px;color:var(--text)}
+.mobile-menu{display:none}.mobile-nav{display:none}
 .btn{border:0;border-radius:12px;padding:11px 16px;font-weight:750;display:inline-flex;align-items:center;gap:8px;text-decoration:none;cursor:pointer;transition:.18s transform}
 .btn:hover{transform:translateY(-1px)}.btn:disabled{opacity:.45;cursor:default;transform:none}
 .btn-primary{background:linear-gradient(140deg,var(--brand),var(--brand-2));color:#fff;box-shadow:0 10px 22px rgba(51,64,126,.26)}
@@ -84,6 +85,7 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
 .footer-inner a{text-decoration:none}.footer-inner a:hover{color:var(--brand)}
 
 @media(max-width:820px){.grid{grid-template-columns:1fr}.out-panel{position:static}.nav-links{display:none}.hero{padding:32px 0 2px}}
+@media(max-width:820px){.mobile-menu{display:grid;margin-left:auto}.mobile-nav.open{display:flex;flex-direction:column;gap:2px;position:absolute;left:0;right:0;top:100%;background:var(--panel);border-bottom:1px solid var(--line);box-shadow:var(--shadow);padding:10px 20px 16px;z-index:29}.mobile-nav a:not(.btn){padding:13px 6px;color:var(--text);text-decoration:none;font-weight:700;border-bottom:1px solid var(--line)}.mobile-nav .btn{margin-top:10px;width:100%;justify-content:center}}
 </style>
 </head>
 <body>
@@ -96,9 +98,17 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
       <a href="citat.html" class="active" aria-current="page">Citat generator</a>
       <a href="index.html#pricing">Paketi</a>
     </div>
+    <button class="icon-btn mobile-menu" id="mobileMenuBtn" type="button" aria-label="Otvori izbornik" aria-expanded="false">&#9776;</button>
     <button class="icon-btn" id="themeBtn" type="button" aria-label="Promijeni temu" title="Promijeni temu">&#9680;</button>
     <a class="btn btn-primary btn-sm" href="index.html#analyzer">Provjeri rad</a>
   </nav>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="index.html#how">Kako radi</a>
+    <a href="landing_usporedba.html">Usporedba</a>
+    <a href="citat.html">Citat generator</a>
+    <a href="index.html#pricing">Paketi</a>
+    <a class="btn btn-primary" href="index.html#analyzer">Provjeri rad</a>
+  </div>
 </header>
 
 <main>
@@ -233,7 +243,7 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
   </div>
 </div></footer>
 
-<script>(function(){var b=document.getElementById('themeBtn');if(!b)return;b.addEventListener('click',function(){var d=document.documentElement.dataset.theme==='dark';document.documentElement.dataset.theme=d?'light':'dark';try{localStorage.setItem('lekta.theme',d?'light':'dark')}catch(e){}});})();</script>
+<script>(function(){var t=document.getElementById('themeBtn');if(t)t.addEventListener('click',function(){var d=document.documentElement.dataset.theme==='dark';document.documentElement.dataset.theme=d?'light':'dark';try{localStorage.setItem('lekta.theme',d?'light':'dark')}catch(e){}});var m=document.getElementById('mobileMenuBtn'),n=document.getElementById('mobileNav');if(m&&n){m.addEventListener('click',function(){var o=n.classList.toggle('open');m.setAttribute('aria-expanded',o?'true':'false')});n.addEventListener('click',function(e){if(e.target.closest('a')){n.classList.remove('open');m.setAttribute('aria-expanded','false')}});}})();</script>
 <script type="module" src="/src/tools/citat-page.ts"></script>
 </body>
 </html>

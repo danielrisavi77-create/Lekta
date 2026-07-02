@@ -35,6 +35,7 @@ a{color:inherit}:focus-visible{outline:none;box-shadow:var(--focus);border-radiu
 .nav-links a{text-decoration:none;color:var(--muted);font-weight:650;font-size:14px}
 .nav-links a:hover{color:var(--text)}.nav-links a.active{color:var(--brand);font-weight:800}
 .icon-btn{border:1px solid var(--line);background:var(--panel);width:40px;height:40px;border-radius:11px;display:grid;place-items:center;cursor:pointer;font-size:16px;color:var(--text)}
+.mobile-menu{display:none}.mobile-nav{display:none}
 .btn{border:0;border-radius:12px;padding:11px 16px;font-weight:750;display:inline-flex;align-items:center;gap:8px;text-decoration:none;cursor:pointer;transition:.18s transform}
 .btn:hover{transform:translateY(-1px)}
 .btn-primary{background:linear-gradient(140deg,var(--brand),var(--brand-2));color:#fff;box-shadow:0 10px 22px rgba(51,64,126,.26)}
@@ -105,6 +106,22 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
 .footer-inner a{text-decoration:none}.footer-inner a:hover{color:var(--brand)}
 
 @media(max-width:860px){.pillars{grid-template-columns:1fr}.nav-links{display:none}.paper{padding:32px 24px 30px 40px}.paper:before{left:22px}}
+@media(max-width:860px){.mobile-menu{display:grid;margin-left:auto}.mobile-nav.open{display:flex;flex-direction:column;gap:2px;position:absolute;left:0;right:0;top:100%;background:var(--panel);border-bottom:1px solid var(--line);box-shadow:var(--shadow);padding:10px 20px 16px;z-index:29}.mobile-nav a:not(.btn){padding:13px 6px;color:var(--text);text-decoration:none;font-weight:700;border-bottom:1px solid var(--line)}.mobile-nav .btn{margin-top:10px;width:100%;justify-content:center}}
+@media(max-width:720px){
+  table.cmp{min-width:0}
+  table.cmp thead{display:none}
+  table.cmp,table.cmp tbody,table.cmp tr,table.cmp td{display:block;width:100%}
+  table.cmp tr{border-top:1px solid var(--line);padding:14px 2px}
+  table.cmp td.dim{width:auto;font-size:15px;font-weight:800;padding:0 0 8px}
+  table.cmp td:not(.dim){display:flex;justify-content:space-between;gap:14px;border:0;padding:6px 0;font-size:13px}
+  table.cmp td:not(.dim):before{color:var(--muted);font-weight:700;flex:0 0 44%}
+  table.cmp td:nth-child(2):before{content:"AI chat i savjet"}
+  table.cmp td:nth-child(3):before{content:"Upload-alati"}
+  table.cmp td:nth-child(4):before{content:"Ljudsko lektoriranje"}
+  table.cmp td:nth-child(5):before{content:"Lekta"}
+  table.cmp td.lekta{background:transparent;font-weight:700}
+  table.cmp td.lekta:before{color:var(--brand)}
+}
 </style>
 </head>
 <body>
@@ -117,9 +134,17 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
       <a href="citat.html">Citat generator</a>
       <a href="index.html#pricing">Paketi</a>
     </div>
+    <button class="icon-btn mobile-menu" id="mobileMenuBtn" type="button" aria-label="Otvori izbornik" aria-expanded="false">&#9776;</button>
     <button class="icon-btn" id="themeBtn" type="button" aria-label="Promijeni temu" title="Promijeni temu">&#9680;</button>
     <a class="btn btn-primary btn-sm" href="index.html#analyzer">Provjeri rad</a>
   </nav>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="index.html#how">Kako radi</a>
+    <a href="landing_usporedba.html">Usporedba</a>
+    <a href="citat.html">Citat generator</a>
+    <a href="index.html#pricing">Paketi</a>
+    <a class="btn btn-primary" href="index.html#analyzer">Provjeri rad</a>
+  </div>
 </header>
 
 <main>
@@ -261,6 +286,6 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
   </div>
 </div></footer>
 
-<script>(function(){var b=document.getElementById('themeBtn');if(!b)return;b.addEventListener('click',function(){var d=document.documentElement.dataset.theme==='dark';document.documentElement.dataset.theme=d?'light':'dark';try{localStorage.setItem('lekta.theme',d?'light':'dark')}catch(e){}});})();</script>
+<script>(function(){var t=document.getElementById('themeBtn');if(t)t.addEventListener('click',function(){var d=document.documentElement.dataset.theme==='dark';document.documentElement.dataset.theme=d?'light':'dark';try{localStorage.setItem('lekta.theme',d?'light':'dark')}catch(e){}});var m=document.getElementById('mobileMenuBtn'),n=document.getElementById('mobileNav');if(m&&n){m.addEventListener('click',function(){var o=n.classList.toggle('open');m.setAttribute('aria-expanded',o?'true':'false')});n.addEventListener('click',function(e){if(e.target.closest('a')){n.classList.remove('open');m.setAttribute('aria-expanded','false')}});}})();</script>
 </body>
 </html>
