@@ -5,7 +5,9 @@
     {
       "ruleId": "alu-doktorski--page-count",
       "checkId": "page-count",
-      "value": { "min": 30 },
+      "value": {
+        "min": 30
+      },
       "category": "scope",
       "label": "Opseg disertacije (kartice, minimum)",
       "machineCheckable": true,
@@ -17,13 +19,17 @@
       "scored": true,
       "verifiedHash": "7633072e3d6f875a0e35f6ee0a95be3388aeb92eefd952e3cd56f2103e3274d9",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "alu-doktorski--required-sections",
       "checkId": "required-sections",
-      "value": ["prakticni rad (umjetnicko ostvarenje)", "teorijski rad (disertacija)"],
+      "value": [
+        "prakticni rad (umjetnicko ostvarenje)",
+        "teorijski rad (disertacija)"
+      ],
       "category": "structure",
       "label": "Obvezni dijelovi doktorskog rada",
       "machineCheckable": false,

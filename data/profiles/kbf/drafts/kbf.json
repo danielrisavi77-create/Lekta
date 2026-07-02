@@ -7,7 +7,9 @@
       {
         "ruleId": "kbf-zavrsni--font",
         "checkId": "font",
-        "value": ["Times New Roman"],
+        "value": [
+          "Times New Roman"
+        ],
         "category": "format",
         "label": "Font",
         "machineCheckable": true,
@@ -18,9 +20,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "kbf-zavrsni--font-size",
@@ -36,9 +39,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "kbf-zavrsni--line-spacing",
@@ -54,14 +58,20 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "kbf-zavrsni--margins",
         "checkId": "margins",
-        "value": { "top": 2.5, "right": 2.5, "bottom": 2.5, "left": 3.5 },
+        "value": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 3.5
+        },
         "category": "format",
         "label": "Margine",
         "machineCheckable": true,
@@ -72,9 +82,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "kbf-zavrsni--page-numbers",
@@ -90,9 +101,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "kbf-zavrsni--justify",
@@ -108,9 +120,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "kbf-zavrsni--toc",
@@ -126,14 +139,23 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "kbf-zavrsni--required-sections",
         "checkId": "required-sections",
-        "value": ["naslovnica", "sazetak", "sadrzaj", "uvod", "razrada", "zakljucak", "literatura"],
+        "value": [
+          "naslovnica",
+          "sazetak",
+          "sadrzaj",
+          "uvod",
+          "razrada",
+          "zakljucak",
+          "literatura"
+        ],
         "category": "structure",
         "label": "Obvezne cjeline rada",
         "machineCheckable": false,
@@ -144,9 +166,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "kbf-zavrsni--citation-style",
@@ -162,14 +185,18 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "kbf-zavrsni--word-count",
         "checkId": "word-count",
-        "value": { "min": 25, "unit": "kartica" },
+        "value": {
+          "min": 25,
+          "unit": "kartica"
+        },
         "category": "scope",
         "label": "Opseg (kartice)",
         "machineCheckable": true,
@@ -187,7 +214,9 @@
       {
         "ruleId": "kbf-diplomski--font",
         "checkId": "font",
-        "value": ["Times New Roman"],
+        "value": [
+          "Times New Roman"
+        ],
         "category": "format",
         "label": "Font",
         "machineCheckable": true,
@@ -198,9 +227,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "kbf-diplomski--font-size",
@@ -216,9 +246,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "kbf-diplomski--line-spacing",
@@ -234,14 +265,20 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "kbf-diplomski--margins",
         "checkId": "margins",
-        "value": { "top": 2.5, "right": 2.5, "bottom": 2.5, "left": 3.5 },
+        "value": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 3.5
+        },
         "category": "format",
         "label": "Margine",
         "machineCheckable": true,
@@ -252,9 +289,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "kbf-diplomski--page-numbers",
@@ -270,9 +308,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "kbf-diplomski--justify",
@@ -288,9 +327,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "kbf-diplomski--toc",
@@ -306,14 +346,23 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "kbf-diplomski--required-sections",
         "checkId": "required-sections",
-        "value": ["naslovnica", "sazetak", "sadrzaj", "uvod", "razrada", "zakljucak", "literatura"],
+        "value": [
+          "naslovnica",
+          "sazetak",
+          "sadrzaj",
+          "uvod",
+          "razrada",
+          "zakljucak",
+          "literatura"
+        ],
         "category": "structure",
         "label": "Obvezne cjeline rada",
         "machineCheckable": false,
@@ -324,9 +373,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "kbf-diplomski--citation-style",
@@ -342,14 +392,18 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "be1213970cdbb242734dce46e9402e90c4ca24218a60730db004ce23201e5173",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "kbf-diplomski--word-count",
         "checkId": "word-count",
-        "value": { "min": 40, "unit": "kartica" },
+        "value": {
+          "min": 40,
+          "unit": "kartica"
+        },
         "category": "scope",
         "label": "Opseg (kartice)",
         "machineCheckable": true,

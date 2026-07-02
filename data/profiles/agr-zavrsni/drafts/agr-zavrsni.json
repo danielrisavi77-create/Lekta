@@ -86,10 +86,11 @@
       "quote": "stranice se numeriraju od sazetka do kraja teksta, a numeracija se postavlja u donji desni kut",
       "status": "verified",
       "scored": true,
-      "lastVerified": "2026-06-30",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "b3ec76035faeedb729c41a046bb522e2b86dbe9f7ebdebee3ecfe7640a323781"
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "b3ec76035faeedb729c41a046bb522e2b86dbe9f7ebdebee3ecfe7640a323781",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "agr-zavrsni--toc",
@@ -104,10 +105,11 @@
       "quote": "Sadrzaj je popis naslova poglavlja i potpoglavlja s brojem stranice na kojoj zapocinju",
       "status": "verified",
       "scored": true,
-      "lastVerified": "2026-06-30",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "b3ec76035faeedb729c41a046bb522e2b86dbe9f7ebdebee3ecfe7640a323781"
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "b3ec76035faeedb729c41a046bb522e2b86dbe9f7ebdebee3ecfe7640a323781",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "agr-zavrsni--page-count",

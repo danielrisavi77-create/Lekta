@@ -18,14 +18,20 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "f9442b886142e2ea476ec4588e87ae6ce47c14659bc9c0d4632eb0b0874a4f93"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "f9442b886142e2ea476ec4588e87ae6ce47c14659bc9c0d4632eb0b0874a4f93",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "fbf-specijalisticki--margins",
         "checkId": "margins",
-        "value": { "top": 2.5, "right": 2.5, "bottom": 2.5, "left": 2.5 },
+        "value": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
         "category": "format",
         "label": "Margine",
         "machineCheckable": true,
@@ -36,14 +42,15 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "f9442b886142e2ea476ec4588e87ae6ce47c14659bc9c0d4632eb0b0874a4f93"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "f9442b886142e2ea476ec4588e87ae6ce47c14659bc9c0d4632eb0b0874a4f93",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "fbf-specijalisticki--line-spacing",
         "checkId": "line-spacing",
-        "value": 2.0,
+        "value": 2,
         "category": "format",
         "label": "Prored",
         "machineCheckable": true,
@@ -54,14 +61,18 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "f9442b886142e2ea476ec4588e87ae6ce47c14659bc9c0d4632eb0b0874a4f93"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "f9442b886142e2ea476ec4588e87ae6ce47c14659bc9c0d4632eb0b0874a4f93",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "fbf-specijalisticki--font-size",
         "checkId": "font-size",
-        "value": { "min": 10, "max": 12 },
+        "value": {
+          "min": 10,
+          "max": 12
+        },
         "category": "format",
         "label": "Velicina slova",
         "machineCheckable": true,
@@ -72,9 +83,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "f9442b886142e2ea476ec4588e87ae6ce47c14659bc9c0d4632eb0b0874a4f93"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "f9442b886142e2ea476ec4588e87ae6ce47c14659bc9c0d4632eb0b0874a4f93",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "fbf-specijalisticki--page-numbers",
@@ -90,9 +102,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "f9442b886142e2ea476ec4588e87ae6ce47c14659bc9c0d4632eb0b0874a4f93"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "f9442b886142e2ea476ec4588e87ae6ce47c14659bc9c0d4632eb0b0874a4f93",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "fbf-specijalisticki--citation-style",
@@ -108,14 +121,23 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "f9442b886142e2ea476ec4588e87ae6ce47c14659bc9c0d4632eb0b0874a4f93"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "f9442b886142e2ea476ec4588e87ae6ce47c14659bc9c0d4632eb0b0874a4f93",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "fbf-specijalisticki--required-sections",
         "checkId": "required-sections",
-        "value": ["uvod", "cilj istrazivanja", "materijal i metode", "rasprava", "zakljucak", "literatura", "zivotopis"],
+        "value": [
+          "uvod",
+          "cilj istrazivanja",
+          "materijal i metode",
+          "rasprava",
+          "zakljucak",
+          "literatura",
+          "zivotopis"
+        ],
         "category": "structure",
         "label": "Obvezni dijelovi rada",
         "machineCheckable": false,
@@ -126,9 +148,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "f9442b886142e2ea476ec4588e87ae6ce47c14659bc9c0d4632eb0b0874a4f93"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "f9442b886142e2ea476ec4588e87ae6ce47c14659bc9c0d4632eb0b0874a4f93",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "fbf-specijalisticki--toc",

@@ -4,7 +4,9 @@
       {
         "ruleId": "grf-zavrsni--font",
         "checkId": "font",
-        "value": ["Times New Roman"],
+        "value": [
+          "Times New Roman"
+        ],
         "category": "format",
         "label": "Pismo (font)",
         "machineCheckable": true,
@@ -16,8 +18,9 @@
         "scored": true,
         "verifiedHash": "fb5934de22d9f912d0c57fbc3de5fb589a4514eba2bec3bdbd46e70e2186d551",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "grf-zavrsni--font-size",
@@ -34,8 +37,9 @@
         "scored": true,
         "verifiedHash": "fb5934de22d9f912d0c57fbc3de5fb589a4514eba2bec3bdbd46e70e2186d551",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "grf-zavrsni--line-spacing",
@@ -52,13 +56,19 @@
         "scored": true,
         "verifiedHash": "fb5934de22d9f912d0c57fbc3de5fb589a4514eba2bec3bdbd46e70e2186d551",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "grf-zavrsni--margins",
         "checkId": "margins",
-        "value": { "top": 2, "right": 2.5, "bottom": 2, "left": 3.5 },
+        "value": {
+          "top": 2,
+          "right": 2.5,
+          "bottom": 2,
+          "left": 3.5
+        },
         "category": "format",
         "label": "Margine",
         "machineCheckable": true,
@@ -70,8 +80,9 @@
         "scored": true,
         "verifiedHash": "fb5934de22d9f912d0c57fbc3de5fb589a4514eba2bec3bdbd46e70e2186d551",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "grf-zavrsni--paper-size",
@@ -88,8 +99,9 @@
         "scored": true,
         "verifiedHash": "fb5934de22d9f912d0c57fbc3de5fb589a4514eba2bec3bdbd46e70e2186d551",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "grf-zavrsni--page-numbers",
@@ -106,8 +118,9 @@
         "scored": true,
         "verifiedHash": "fb5934de22d9f912d0c57fbc3de5fb589a4514eba2bec3bdbd46e70e2186d551",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "grf-zavrsni--justify",
@@ -124,8 +137,9 @@
         "scored": true,
         "verifiedHash": "fb5934de22d9f912d0c57fbc3de5fb589a4514eba2bec3bdbd46e70e2186d551",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "grf-zavrsni--toc",
@@ -142,13 +156,22 @@
         "scored": true,
         "verifiedHash": "fb5934de22d9f912d0c57fbc3de5fb589a4514eba2bec3bdbd46e70e2186d551",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "grf-zavrsni--required-sections",
         "checkId": "required-sections",
-        "value": ["uvod", "teorijski dio", "prakticni dio", "rezultati i rasprava", "zakljucci", "literatura", "prilozi"],
+        "value": [
+          "uvod",
+          "teorijski dio",
+          "prakticni dio",
+          "rezultati i rasprava",
+          "zakljucci",
+          "literatura",
+          "prilozi"
+        ],
         "category": "structure",
         "label": "Obvezne cjeline zavrsnog rada",
         "machineCheckable": false,

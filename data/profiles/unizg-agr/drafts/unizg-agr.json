@@ -39,7 +39,12 @@
     {
       "ruleId": "agr-diplomski--margins",
       "checkId": "margins",
-      "value": { "top": 2.5, "bottom": 2.5, "left": 2.5, "right": 2.5 },
+      "value": {
+        "top": 2.5,
+        "bottom": 2.5,
+        "left": 2.5,
+        "right": 2.5
+      },
       "category": "format",
       "label": "Margine",
       "machineCheckable": true,
@@ -81,10 +86,11 @@
       "quote": "stranice se numeriraju od sazetka do kraja teksta, a numeracija se postavlja u donji desni kut",
       "status": "verified",
       "scored": true,
-      "lastVerified": "2026-06-30",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "1d09e18e819b157f83479f5a035c1c3868fecc04a0144aa36c4dec091600c778"
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "1d09e18e819b157f83479f5a035c1c3868fecc04a0144aa36c4dec091600c778",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "agr-diplomski--toc",
@@ -99,15 +105,19 @@
       "quote": "Sadrzaj je popis naslova poglavlja i potpoglavlja s brojem stranice na kojoj zapocinju",
       "status": "verified",
       "scored": true,
-      "lastVerified": "2026-06-30",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "1d09e18e819b157f83479f5a035c1c3868fecc04a0144aa36c4dec091600c778"
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "1d09e18e819b157f83479f5a035c1c3868fecc04a0144aa36c4dec091600c778",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "agr-diplomski--page-count",
       "checkId": "page-count",
-      "value": { "min": 20, "max": 50 },
+      "value": {
+        "min": 20,
+        "max": 50
+      },
       "category": "scope",
       "label": "Opseg osnovnog teksta (stranice)",
       "machineCheckable": true,
@@ -139,7 +149,14 @@
     {
       "ruleId": "agr-diplomski--required-sections",
       "checkId": "required-sections",
-      "value": ["naslov", "sazetak", "sadrzaj", "uvod", "zakljucak", "popis literature"],
+      "value": [
+        "naslov",
+        "sazetak",
+        "sadrzaj",
+        "uvod",
+        "zakljucak",
+        "popis literature"
+      ],
       "category": "structure",
       "label": "Obvezne cjeline diplomskog rada",
       "machineCheckable": false,

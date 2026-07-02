@@ -4,7 +4,9 @@
       {
         "ruleId": "sfzg-diplomski--font",
         "checkId": "font",
-        "value": ["Times New Roman"],
+        "value": [
+          "Times New Roman"
+        ],
         "category": "format",
         "label": "Tip pisma",
         "machineCheckable": true,
@@ -15,9 +17,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "830c7620b5aa595225f90ee90a18df64455bf39ff840824bba423d68d7f5bd6f"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "830c7620b5aa595225f90ee90a18df64455bf39ff840824bba423d68d7f5bd6f",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "sfzg-diplomski--font-size",
@@ -33,9 +36,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "830c7620b5aa595225f90ee90a18df64455bf39ff840824bba423d68d7f5bd6f"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "830c7620b5aa595225f90ee90a18df64455bf39ff840824bba423d68d7f5bd6f",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "sfzg-diplomski--line-spacing",
@@ -51,9 +55,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "830c7620b5aa595225f90ee90a18df64455bf39ff840824bba423d68d7f5bd6f"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "830c7620b5aa595225f90ee90a18df64455bf39ff840824bba423d68d7f5bd6f",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "sfzg-diplomski--justify",
@@ -69,14 +74,20 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "830c7620b5aa595225f90ee90a18df64455bf39ff840824bba423d68d7f5bd6f"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "830c7620b5aa595225f90ee90a18df64455bf39ff840824bba423d68d7f5bd6f",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "sfzg-diplomski--margins",
         "checkId": "margins",
-        "value": { "top": 2.5, "right": 2.5, "bottom": 2.5, "left": 2.5 },
+        "value": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
         "category": "format",
         "label": "Margine",
         "machineCheckable": true,
@@ -87,9 +98,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "830c7620b5aa595225f90ee90a18df64455bf39ff840824bba423d68d7f5bd6f"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "830c7620b5aa595225f90ee90a18df64455bf39ff840824bba423d68d7f5bd6f",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "sfzg-diplomski--page-numbers",
@@ -105,9 +117,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "830c7620b5aa595225f90ee90a18df64455bf39ff840824bba423d68d7f5bd6f"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "830c7620b5aa595225f90ee90a18df64455bf39ff840824bba423d68d7f5bd6f",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "sfzg-diplomski--toc",
@@ -123,14 +136,18 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "830c7620b5aa595225f90ee90a18df64455bf39ff840824bba423d68d7f5bd6f"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "830c7620b5aa595225f90ee90a18df64455bf39ff840824bba423d68d7f5bd6f",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "sfzg-diplomski--page-count",
         "checkId": "page-count",
-        "value": { "min": 25, "max": 50 },
+        "value": {
+          "min": 25,
+          "max": 50
+        },
         "category": "scope",
         "label": "Opseg rada (stranice)",
         "machineCheckable": true,
@@ -141,9 +158,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "830c7620b5aa595225f90ee90a18df64455bf39ff840824bba423d68d7f5bd6f"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "830c7620b5aa595225f90ee90a18df64455bf39ff840824bba423d68d7f5bd6f",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "sfzg-diplomski--citation-style",
@@ -159,14 +177,21 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "830c7620b5aa595225f90ee90a18df64455bf39ff840824bba423d68d7f5bd6f"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "830c7620b5aa595225f90ee90a18df64455bf39ff840824bba423d68d7f5bd6f",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "sfzg-diplomski--required-sections",
         "checkId": "required-sections",
-        "value": ["uvod", "rasprava", "zakljucak", "literatura", "zivotopis autora"],
+        "value": [
+          "uvod",
+          "rasprava",
+          "zakljucak",
+          "literatura",
+          "zivotopis autora"
+        ],
         "category": "structure",
         "label": "Obvezne cjeline rada (ovise o vrsti rada)",
         "machineCheckable": false,

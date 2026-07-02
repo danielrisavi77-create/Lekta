@@ -15,9 +15,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "c68ba17ed2595d7b6686e66d9be59d4c576d01c9012f41bf1316df398c4f0be6"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "c68ba17ed2595d7b6686e66d9be59d4c576d01c9012f41bf1316df398c4f0be6",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "geof-diplomski--citation-style",
@@ -33,14 +34,28 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "c68ba17ed2595d7b6686e66d9be59d4c576d01c9012f41bf1316df398c4f0be6"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "c68ba17ed2595d7b6686e66d9be59d4c576d01c9012f41bf1316df398c4f0be6",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "geof-diplomski--required-sections",
         "checkId": "required-sections",
-        "value": ["naslovna stranica", "predgovor", "sadrzaj", "sazetak", "abstract", "uvod", "pregled dosadasnjih radova", "rezultati", "rasprava", "zakljucak", "literatura", "zivotopis"],
+        "value": [
+          "naslovna stranica",
+          "predgovor",
+          "sadrzaj",
+          "sazetak",
+          "abstract",
+          "uvod",
+          "pregled dosadasnjih radova",
+          "rezultati",
+          "rasprava",
+          "zakljucak",
+          "literatura",
+          "zivotopis"
+        ],
         "category": "structure",
         "label": "Obvezatne cjeline ocjenskog rada",
         "machineCheckable": false,
@@ -69,9 +84,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "c68ba17ed2595d7b6686e66d9be59d4c576d01c9012f41bf1316df398c4f0be6"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "c68ba17ed2595d7b6686e66d9be59d4c576d01c9012f41bf1316df398c4f0be6",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "geof-doktorski--citation-style",
@@ -87,14 +103,29 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "c68ba17ed2595d7b6686e66d9be59d4c576d01c9012f41bf1316df398c4f0be6"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "c68ba17ed2595d7b6686e66d9be59d4c576d01c9012f41bf1316df398c4f0be6",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "geof-doktorski--required-sections",
         "checkId": "required-sections",
-        "value": ["naslovna stranica", "predgovor", "sadrzaj", "sazetak", "abstract", "prosireni sazetak", "uvod", "pregled dosadasnjih radova", "rezultati", "rasprava", "zakljucak", "literatura", "zivotopis"],
+        "value": [
+          "naslovna stranica",
+          "predgovor",
+          "sadrzaj",
+          "sazetak",
+          "abstract",
+          "prosireni sazetak",
+          "uvod",
+          "pregled dosadasnjih radova",
+          "rezultati",
+          "rasprava",
+          "zakljucak",
+          "literatura",
+          "zivotopis"
+        ],
         "category": "structure",
         "label": "Obvezatne cjeline ocjenskog rada",
         "machineCheckable": false,

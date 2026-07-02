@@ -4,7 +4,9 @@
       {
         "ruleId": "vef-diplomski--font",
         "checkId": "font",
-        "value": ["Times New Roman"],
+        "value": [
+          "Times New Roman"
+        ],
         "category": "format",
         "label": "Font",
         "machineCheckable": true,
@@ -15,9 +17,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "de34916f3ddac1bb5b6140b957a8ad9ca27662650d6498c0c1e2bfbf3a8f4ece"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "de34916f3ddac1bb5b6140b957a8ad9ca27662650d6498c0c1e2bfbf3a8f4ece",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "vef-diplomski--font-size",
@@ -33,9 +36,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "de34916f3ddac1bb5b6140b957a8ad9ca27662650d6498c0c1e2bfbf3a8f4ece"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "de34916f3ddac1bb5b6140b957a8ad9ca27662650d6498c0c1e2bfbf3a8f4ece",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "vef-diplomski--line-spacing",
@@ -51,9 +55,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "de34916f3ddac1bb5b6140b957a8ad9ca27662650d6498c0c1e2bfbf3a8f4ece"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "de34916f3ddac1bb5b6140b957a8ad9ca27662650d6498c0c1e2bfbf3a8f4ece",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "vef-diplomski--paper-size",
@@ -69,9 +74,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "de34916f3ddac1bb5b6140b957a8ad9ca27662650d6498c0c1e2bfbf3a8f4ece"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "de34916f3ddac1bb5b6140b957a8ad9ca27662650d6498c0c1e2bfbf3a8f4ece",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "vef-diplomski--page-numbers",
@@ -87,9 +93,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "de34916f3ddac1bb5b6140b957a8ad9ca27662650d6498c0c1e2bfbf3a8f4ece"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "de34916f3ddac1bb5b6140b957a8ad9ca27662650d6498c0c1e2bfbf3a8f4ece",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "vef-diplomski--toc",
@@ -105,14 +112,18 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "de34916f3ddac1bb5b6140b957a8ad9ca27662650d6498c0c1e2bfbf3a8f4ece"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "de34916f3ddac1bb5b6140b957a8ad9ca27662650d6498c0c1e2bfbf3a8f4ece",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "vef-diplomski--margins",
         "checkId": "margins",
-        "value": { "left": 2.5, "right": 2.5 },
+        "value": {
+          "left": 2.5,
+          "right": 2.5
+        },
         "category": "format",
         "label": "Margine (lijevo i desno)",
         "machineCheckable": true,
@@ -128,7 +139,9 @@
       {
         "ruleId": "vef-diplomski--page-count",
         "checkId": "page-count",
-        "value": { "min": 25 },
+        "value": {
+          "min": 25
+        },
         "category": "scope",
         "label": "Opseg (stranice)",
         "machineCheckable": true,
@@ -160,7 +173,18 @@
       {
         "ruleId": "vef-diplomski--required-sections",
         "checkId": "required-sections",
-        "value": ["uvod", "pregled rezultata dosadasnjih istrazivanja", "materijal i metode", "rezultati", "rasprava", "zakljucci", "literatura", "sazetak", "summary", "zivotopis"],
+        "value": [
+          "uvod",
+          "pregled rezultata dosadasnjih istrazivanja",
+          "materijal i metode",
+          "rezultati",
+          "rasprava",
+          "zakljucci",
+          "literatura",
+          "sazetak",
+          "summary",
+          "zivotopis"
+        ],
         "category": "structure",
         "label": "Obvezne cjeline znanstvenog diplomskog rada",
         "machineCheckable": false,

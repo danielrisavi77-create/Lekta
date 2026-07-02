@@ -18,9 +18,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "d4986c4a74fce8686ad0766d61d7fb00dec7897af1b479e8fc941ce82781da09"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "d4986c4a74fce8686ad0766d61d7fb00dec7897af1b479e8fc941ce82781da09",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "arh-diplomski--required-sections",
@@ -41,9 +42,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "d4986c4a74fce8686ad0766d61d7fb00dec7897af1b479e8fc941ce82781da09"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "d4986c4a74fce8686ad0766d61d7fb00dec7897af1b479e8fc941ce82781da09",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "arh-diplomski--paper-size",

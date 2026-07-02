@@ -17,9 +17,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "007ac625ba065042ecbb3b1f2c1b40b0f20a00b9f23e139f6340e1eb9ddef32e"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "007ac625ba065042ecbb3b1f2c1b40b0f20a00b9f23e139f6340e1eb9ddef32e",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-arheologija-graduate--font-size",
@@ -35,9 +36,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "007ac625ba065042ecbb3b1f2c1b40b0f20a00b9f23e139f6340e1eb9ddef32e"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "007ac625ba065042ecbb3b1f2c1b40b0f20a00b9f23e139f6340e1eb9ddef32e",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-arheologija-graduate--line-spacing",
@@ -53,9 +55,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "007ac625ba065042ecbb3b1f2c1b40b0f20a00b9f23e139f6340e1eb9ddef32e"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "007ac625ba065042ecbb3b1f2c1b40b0f20a00b9f23e139f6340e1eb9ddef32e",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-arheologija-graduate--margins",
@@ -76,9 +79,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "007ac625ba065042ecbb3b1f2c1b40b0f20a00b9f23e139f6340e1eb9ddef32e"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "007ac625ba065042ecbb3b1f2c1b40b0f20a00b9f23e139f6340e1eb9ddef32e",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-arheologija-graduate--toc",
@@ -94,9 +98,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "007ac625ba065042ecbb3b1f2c1b40b0f20a00b9f23e139f6340e1eb9ddef32e"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "007ac625ba065042ecbb3b1f2c1b40b0f20a00b9f23e139f6340e1eb9ddef32e",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-arheologija-graduate--required-sections",

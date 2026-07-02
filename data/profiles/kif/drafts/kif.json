@@ -4,7 +4,9 @@
       {
         "ruleId": "kif-diplomski--font",
         "checkId": "font",
-        "value": ["Times New Roman"],
+        "value": [
+          "Times New Roman"
+        ],
         "category": "format",
         "label": "Font",
         "machineCheckable": true,
@@ -15,9 +17,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "12d97e98cfdf78455d0b67d48f272f8d74c108e8c4d444498fa948eb3e84e583"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "12d97e98cfdf78455d0b67d48f272f8d74c108e8c4d444498fa948eb3e84e583",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "kif-diplomski--font-size",
@@ -33,9 +36,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "aa87190f7f1f28ff1aabcff1e92858edbe044e9bc2298f5cf7c90bf2c0383982"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "aa87190f7f1f28ff1aabcff1e92858edbe044e9bc2298f5cf7c90bf2c0383982",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "kif-diplomski--line-spacing",
@@ -51,14 +55,20 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "12d97e98cfdf78455d0b67d48f272f8d74c108e8c4d444498fa948eb3e84e583"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "12d97e98cfdf78455d0b67d48f272f8d74c108e8c4d444498fa948eb3e84e583",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "kif-diplomski--margins",
         "checkId": "margins",
-        "value": { "top": 2.5, "bottom": 2.5, "left": 2.5, "right": 2.5 },
+        "value": {
+          "top": 2.5,
+          "bottom": 2.5,
+          "left": 2.5,
+          "right": 2.5
+        },
         "category": "format",
         "label": "Margine",
         "machineCheckable": true,
@@ -69,9 +79,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "12d97e98cfdf78455d0b67d48f272f8d74c108e8c4d444498fa948eb3e84e583"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "12d97e98cfdf78455d0b67d48f272f8d74c108e8c4d444498fa948eb3e84e583",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "kif-diplomski--page-numbers",
@@ -87,9 +98,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "aa87190f7f1f28ff1aabcff1e92858edbe044e9bc2298f5cf7c90bf2c0383982"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "aa87190f7f1f28ff1aabcff1e92858edbe044e9bc2298f5cf7c90bf2c0383982",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "kif-diplomski--toc",
@@ -105,9 +117,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "12d97e98cfdf78455d0b67d48f272f8d74c108e8c4d444498fa948eb3e84e583"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "12d97e98cfdf78455d0b67d48f272f8d74c108e8c4d444498fa948eb3e84e583",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "kif-diplomski--citation-style",
@@ -123,14 +136,17 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "aa87190f7f1f28ff1aabcff1e92858edbe044e9bc2298f5cf7c90bf2c0383982"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "aa87190f7f1f28ff1aabcff1e92858edbe044e9bc2298f5cf7c90bf2c0383982",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "kif-diplomski--word-count",
         "checkId": "word-count",
-        "value": { "min": 4000 },
+        "value": {
+          "min": 4000
+        },
         "category": "scope",
         "label": "Opseg (rijeci, znanstveno-istrazivacki diplomski rad)",
         "machineCheckable": true,
@@ -141,14 +157,21 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "aa87190f7f1f28ff1aabcff1e92858edbe044e9bc2298f5cf7c90bf2c0383982"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "aa87190f7f1f28ff1aabcff1e92858edbe044e9bc2298f5cf7c90bf2c0383982",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "kif-diplomski--required-sections",
         "checkId": "required-sections",
-        "value": ["sazetak", "sadrzaj", "uvod", "zakljucak", "literatura"],
+        "value": [
+          "sazetak",
+          "sadrzaj",
+          "uvod",
+          "zakljucak",
+          "literatura"
+        ],
         "category": "structure",
         "label": "Obvezne cjeline diplomskog rada",
         "machineCheckable": false,

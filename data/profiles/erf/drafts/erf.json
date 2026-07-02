@@ -4,7 +4,9 @@
       {
         "ruleId": "erf-diplomski--font",
         "checkId": "font",
-        "value": ["Times New Roman"],
+        "value": [
+          "Times New Roman"
+        ],
         "category": "format",
         "label": "Font",
         "machineCheckable": true,
@@ -15,9 +17,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "ba5b786114e83db3df96ae9994c4a00bce4ff2197f6ac43e1a68821d64402896"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "ba5b786114e83db3df96ae9994c4a00bce4ff2197f6ac43e1a68821d64402896",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "erf-diplomski--font-size",
@@ -33,9 +36,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "ba5b786114e83db3df96ae9994c4a00bce4ff2197f6ac43e1a68821d64402896"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "ba5b786114e83db3df96ae9994c4a00bce4ff2197f6ac43e1a68821d64402896",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "erf-diplomski--line-spacing",
@@ -51,9 +55,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "ba5b786114e83db3df96ae9994c4a00bce4ff2197f6ac43e1a68821d64402896"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "ba5b786114e83db3df96ae9994c4a00bce4ff2197f6ac43e1a68821d64402896",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "erf-diplomski--toc",
@@ -69,14 +74,22 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "ba5b786114e83db3df96ae9994c4a00bce4ff2197f6ac43e1a68821d64402896"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "ba5b786114e83db3df96ae9994c4a00bce4ff2197f6ac43e1a68821d64402896",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "erf-diplomski--required-sections",
         "checkId": "required-sections",
-        "value": ["sazetak", "sadrzaj", "uvod", "zakljucak", "literatura", "prilozi"],
+        "value": [
+          "sazetak",
+          "sadrzaj",
+          "uvod",
+          "zakljucak",
+          "literatura",
+          "prilozi"
+        ],
         "category": "structure",
         "label": "Obvezne cjeline diplomskog rada",
         "machineCheckable": false,
@@ -87,14 +100,18 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "ba5b786114e83db3df96ae9994c4a00bce4ff2197f6ac43e1a68821d64402896"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "ba5b786114e83db3df96ae9994c4a00bce4ff2197f6ac43e1a68821d64402896",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "erf-diplomski--page-count",
         "checkId": "page-count",
-        "value": { "min": 40, "max": 50 },
+        "value": {
+          "min": 40,
+          "max": 50
+        },
         "category": "scope",
         "label": "Opseg (stranice)",
         "machineCheckable": true,

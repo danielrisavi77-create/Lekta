@@ -4,7 +4,9 @@
       {
         "ruleId": "ffrz-diplomski--font",
         "checkId": "font",
-        "value": ["Times New Roman"],
+        "value": [
+          "Times New Roman"
+        ],
         "category": "format",
         "label": "Font",
         "machineCheckable": true,
@@ -15,9 +17,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "224b21163df97c8c9c5a11f9c39a3131f6809ffac2104c9014200bd6aa70d00d"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "224b21163df97c8c9c5a11f9c39a3131f6809ffac2104c9014200bd6aa70d00d",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ffrz-diplomski--font-size",
@@ -33,9 +36,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "224b21163df97c8c9c5a11f9c39a3131f6809ffac2104c9014200bd6aa70d00d"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "224b21163df97c8c9c5a11f9c39a3131f6809ffac2104c9014200bd6aa70d00d",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ffrz-diplomski--line-spacing",
@@ -51,14 +55,20 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "224b21163df97c8c9c5a11f9c39a3131f6809ffac2104c9014200bd6aa70d00d"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "224b21163df97c8c9c5a11f9c39a3131f6809ffac2104c9014200bd6aa70d00d",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ffrz-diplomski--margins",
         "checkId": "margins",
-        "value": { "top": 2.5, "bottom": 2.5, "left": 2.5, "right": 2.5 },
+        "value": {
+          "top": 2.5,
+          "bottom": 2.5,
+          "left": 2.5,
+          "right": 2.5
+        },
         "category": "format",
         "label": "Margine",
         "machineCheckable": true,
@@ -69,9 +79,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "224b21163df97c8c9c5a11f9c39a3131f6809ffac2104c9014200bd6aa70d00d"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "224b21163df97c8c9c5a11f9c39a3131f6809ffac2104c9014200bd6aa70d00d",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ffrz-diplomski--paper-size",
@@ -87,9 +98,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "224b21163df97c8c9c5a11f9c39a3131f6809ffac2104c9014200bd6aa70d00d"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "224b21163df97c8c9c5a11f9c39a3131f6809ffac2104c9014200bd6aa70d00d",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ffrz-diplomski--page-numbers",
@@ -105,14 +117,17 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "224b21163df97c8c9c5a11f9c39a3131f6809ffac2104c9014200bd6aa70d00d"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "224b21163df97c8c9c5a11f9c39a3131f6809ffac2104c9014200bd6aa70d00d",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ffrz-diplomski--page-count",
         "checkId": "page-count",
-        "value": { "min": 50 },
+        "value": {
+          "min": 50
+        },
         "category": "scope",
         "label": "Opseg teksta (najmanje 50 stranica)",
         "machineCheckable": true,
@@ -123,9 +138,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "224b21163df97c8c9c5a11f9c39a3131f6809ffac2104c9014200bd6aa70d00d"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "224b21163df97c8c9c5a11f9c39a3131f6809ffac2104c9014200bd6aa70d00d",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ffrz-diplomski--toc",
@@ -141,14 +157,23 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "224b21163df97c8c9c5a11f9c39a3131f6809ffac2104c9014200bd6aa70d00d"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "224b21163df97c8c9c5a11f9c39a3131f6809ffac2104c9014200bd6aa70d00d",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ffrz-diplomski--required-sections",
         "checkId": "required-sections",
-        "value": ["naslovnica", "sazetak", "sadrzaj", "uvod", "zakljucak", "popis literature", "zivotopis"],
+        "value": [
+          "naslovnica",
+          "sazetak",
+          "sadrzaj",
+          "uvod",
+          "zakljucak",
+          "popis literature",
+          "zivotopis"
+        ],
         "category": "structure",
         "label": "Obvezne cjeline diplomskog rada",
         "machineCheckable": false,
@@ -159,9 +184,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "224b21163df97c8c9c5a11f9c39a3131f6809ffac2104c9014200bd6aa70d00d"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "224b21163df97c8c9c5a11f9c39a3131f6809ffac2104c9014200bd6aa70d00d",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ffrz-diplomski--citation-style",
@@ -177,16 +203,19 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "224b21163df97c8c9c5a11f9c39a3131f6809ffac2104c9014200bd6aa70d00d"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "224b21163df97c8c9c5a11f9c39a3131f6809ffac2104c9014200bd6aa70d00d",
+        "confirmedVia": "human-audit"
       }
     ],
     "ffrz-bakalaureatski": [
       {
         "ruleId": "ffrz-bakalaureatski--font",
         "checkId": "font",
-        "value": ["Times New Roman"],
+        "value": [
+          "Times New Roman"
+        ],
         "category": "format",
         "label": "Font",
         "machineCheckable": true,
@@ -197,9 +226,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "4e0e81a72bdadd5bb0e216c423e3183f98c1b3c7b1fed921f85ed84d669786ea"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "4e0e81a72bdadd5bb0e216c423e3183f98c1b3c7b1fed921f85ed84d669786ea",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ffrz-bakalaureatski--font-size",
@@ -215,9 +245,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "4e0e81a72bdadd5bb0e216c423e3183f98c1b3c7b1fed921f85ed84d669786ea"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "4e0e81a72bdadd5bb0e216c423e3183f98c1b3c7b1fed921f85ed84d669786ea",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ffrz-bakalaureatski--line-spacing",
@@ -233,14 +264,20 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "4e0e81a72bdadd5bb0e216c423e3183f98c1b3c7b1fed921f85ed84d669786ea"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "4e0e81a72bdadd5bb0e216c423e3183f98c1b3c7b1fed921f85ed84d669786ea",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ffrz-bakalaureatski--margins",
         "checkId": "margins",
-        "value": { "top": 2.5, "bottom": 2.5, "left": 2.5, "right": 2.5 },
+        "value": {
+          "top": 2.5,
+          "bottom": 2.5,
+          "left": 2.5,
+          "right": 2.5
+        },
         "category": "format",
         "label": "Margine",
         "machineCheckable": true,
@@ -251,9 +288,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "4e0e81a72bdadd5bb0e216c423e3183f98c1b3c7b1fed921f85ed84d669786ea"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "4e0e81a72bdadd5bb0e216c423e3183f98c1b3c7b1fed921f85ed84d669786ea",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ffrz-bakalaureatski--paper-size",
@@ -269,9 +307,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "4e0e81a72bdadd5bb0e216c423e3183f98c1b3c7b1fed921f85ed84d669786ea"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "4e0e81a72bdadd5bb0e216c423e3183f98c1b3c7b1fed921f85ed84d669786ea",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ffrz-bakalaureatski--page-numbers",
@@ -287,14 +326,17 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "4e0e81a72bdadd5bb0e216c423e3183f98c1b3c7b1fed921f85ed84d669786ea"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "4e0e81a72bdadd5bb0e216c423e3183f98c1b3c7b1fed921f85ed84d669786ea",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ffrz-bakalaureatski--page-count",
         "checkId": "page-count",
-        "value": { "min": 30 },
+        "value": {
+          "min": 30
+        },
         "category": "scope",
         "label": "Opseg teksta (najmanje 30 stranica)",
         "machineCheckable": true,
@@ -305,9 +347,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "4e0e81a72bdadd5bb0e216c423e3183f98c1b3c7b1fed921f85ed84d669786ea"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "4e0e81a72bdadd5bb0e216c423e3183f98c1b3c7b1fed921f85ed84d669786ea",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ffrz-bakalaureatski--toc",
@@ -323,14 +366,23 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "4e0e81a72bdadd5bb0e216c423e3183f98c1b3c7b1fed921f85ed84d669786ea"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "4e0e81a72bdadd5bb0e216c423e3183f98c1b3c7b1fed921f85ed84d669786ea",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ffrz-bakalaureatski--required-sections",
         "checkId": "required-sections",
-        "value": ["naslovnica", "sazetak", "sadrzaj", "uvod", "zakljucak", "popis literature", "zivotopis"],
+        "value": [
+          "naslovnica",
+          "sazetak",
+          "sadrzaj",
+          "uvod",
+          "zakljucak",
+          "popis literature",
+          "zivotopis"
+        ],
         "category": "structure",
         "label": "Obvezne cjeline bakalaureatskog rada",
         "machineCheckable": false,
@@ -341,9 +393,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "4e0e81a72bdadd5bb0e216c423e3183f98c1b3c7b1fed921f85ed84d669786ea"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "4e0e81a72bdadd5bb0e216c423e3183f98c1b3c7b1fed921f85ed84d669786ea",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ffrz-bakalaureatski--citation-style",
@@ -359,9 +412,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "4e0e81a72bdadd5bb0e216c423e3183f98c1b3c7b1fed921f85ed84d669786ea"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "4e0e81a72bdadd5bb0e216c423e3183f98c1b3c7b1fed921f85ed84d669786ea",
+        "confirmedVia": "human-audit"
       }
     ]
   },

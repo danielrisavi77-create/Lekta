@@ -20,9 +20,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "114a1c5c742c686e23a24f1c5029bad79a598f8cccacb37f98037bbd9b853543"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "114a1c5c742c686e23a24f1c5029bad79a598f8cccacb37f98037bbd9b853543",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-pedagogija-graduate--justify",
@@ -38,9 +39,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "114a1c5c742c686e23a24f1c5029bad79a598f8cccacb37f98037bbd9b853543"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "114a1c5c742c686e23a24f1c5029bad79a598f8cccacb37f98037bbd9b853543",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-pedagogija-graduate--font",
@@ -58,9 +60,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "114a1c5c742c686e23a24f1c5029bad79a598f8cccacb37f98037bbd9b853543"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "114a1c5c742c686e23a24f1c5029bad79a598f8cccacb37f98037bbd9b853543",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-pedagogija-graduate--font-size",
@@ -76,9 +79,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "114a1c5c742c686e23a24f1c5029bad79a598f8cccacb37f98037bbd9b853543"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "114a1c5c742c686e23a24f1c5029bad79a598f8cccacb37f98037bbd9b853543",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-pedagogija-graduate--line-spacing",
@@ -94,9 +98,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "114a1c5c742c686e23a24f1c5029bad79a598f8cccacb37f98037bbd9b853543"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "114a1c5c742c686e23a24f1c5029bad79a598f8cccacb37f98037bbd9b853543",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-pedagogija-graduate--page-numbers",
@@ -112,9 +117,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "114a1c5c742c686e23a24f1c5029bad79a598f8cccacb37f98037bbd9b853543"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "114a1c5c742c686e23a24f1c5029bad79a598f8cccacb37f98037bbd9b853543",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-pedagogija-graduate--page-count",
@@ -133,9 +139,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "114a1c5c742c686e23a24f1c5029bad79a598f8cccacb37f98037bbd9b853543"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "114a1c5c742c686e23a24f1c5029bad79a598f8cccacb37f98037bbd9b853543",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-pedagogija-graduate--toc",
@@ -151,9 +158,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "114a1c5c742c686e23a24f1c5029bad79a598f8cccacb37f98037bbd9b853543"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "114a1c5c742c686e23a24f1c5029bad79a598f8cccacb37f98037bbd9b853543",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-pedagogija-graduate--citation-style",

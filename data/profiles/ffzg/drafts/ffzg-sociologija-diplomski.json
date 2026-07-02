@@ -17,9 +17,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "59f3b59efebfface20a08fa63c380afc52834d0946c982d018720f96db614eb2"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "59f3b59efebfface20a08fa63c380afc52834d0946c982d018720f96db614eb2",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-sociologija-diplomski--font-size",
@@ -35,9 +36,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "59f3b59efebfface20a08fa63c380afc52834d0946c982d018720f96db614eb2"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "59f3b59efebfface20a08fa63c380afc52834d0946c982d018720f96db614eb2",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-sociologija-diplomski--line-spacing",
@@ -53,9 +55,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "59f3b59efebfface20a08fa63c380afc52834d0946c982d018720f96db614eb2"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "59f3b59efebfface20a08fa63c380afc52834d0946c982d018720f96db614eb2",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-sociologija-diplomski--margins",
@@ -76,9 +79,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "59f3b59efebfface20a08fa63c380afc52834d0946c982d018720f96db614eb2"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "59f3b59efebfface20a08fa63c380afc52834d0946c982d018720f96db614eb2",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-sociologija-diplomski--page-numbers",
@@ -94,9 +98,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "59f3b59efebfface20a08fa63c380afc52834d0946c982d018720f96db614eb2"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "59f3b59efebfface20a08fa63c380afc52834d0946c982d018720f96db614eb2",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-sociologija-diplomski--justify",
@@ -112,9 +117,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "59f3b59efebfface20a08fa63c380afc52834d0946c982d018720f96db614eb2"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "59f3b59efebfface20a08fa63c380afc52834d0946c982d018720f96db614eb2",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-sociologija-diplomski--word-count",

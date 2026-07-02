@@ -16,8 +16,9 @@
         "scored": true,
         "verifiedHash": "9b26902c83bfa669b3cb723dc93fcd42a71ea08d4c9c3ef1eea859ed532d097b",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "fkit-diplomski--font-size",
@@ -34,8 +35,9 @@
         "scored": true,
         "verifiedHash": "9b26902c83bfa669b3cb723dc93fcd42a71ea08d4c9c3ef1eea859ed532d097b",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "fkit-diplomski--line-spacing",
@@ -52,8 +54,9 @@
         "scored": true,
         "verifiedHash": "9b26902c83bfa669b3cb723dc93fcd42a71ea08d4c9c3ef1eea859ed532d097b",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       }
     ],
     "fkit-zavrsni": [
@@ -72,8 +75,9 @@
         "scored": true,
         "verifiedHash": "9b26902c83bfa669b3cb723dc93fcd42a71ea08d4c9c3ef1eea859ed532d097b",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "fkit-zavrsni--font-size",
@@ -90,8 +94,9 @@
         "scored": true,
         "verifiedHash": "9b26902c83bfa669b3cb723dc93fcd42a71ea08d4c9c3ef1eea859ed532d097b",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "fkit-zavrsni--line-spacing",
@@ -108,8 +113,9 @@
         "scored": true,
         "verifiedHash": "9b26902c83bfa669b3cb723dc93fcd42a71ea08d4c9c3ef1eea859ed532d097b",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       }
     ]
   },

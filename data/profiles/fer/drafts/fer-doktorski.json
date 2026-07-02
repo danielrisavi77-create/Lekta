@@ -9,8 +9,8 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
       "authority": "program-page",
       "sourceId": "fer-formalno-oblikovanje-doktorski-2012",
       "verifiedHash": "490c4db42fa5b93ffbdf6d9167e585de73f9f646aeef602d6209586bbba58a28",
@@ -19,7 +19,8 @@
       "label": "Velicina slova",
       "machineCheckable": true,
       "sourcePage": "odjeljak Postavke stranice",
-      "quote": "Veličina pisma: 12 tipografskih točaka"
+      "quote": "Veličina pisma: 12 tipografskih točaka",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "fer-doktorski--line-spacing",
@@ -27,8 +28,8 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
       "authority": "program-page",
       "sourceId": "fer-formalno-oblikovanje-doktorski-2012",
       "verifiedHash": "490c4db42fa5b93ffbdf6d9167e585de73f9f646aeef602d6209586bbba58a28",
@@ -37,7 +38,8 @@
       "label": "Prored",
       "machineCheckable": true,
       "sourcePage": "odjeljak Postavke stranice",
-      "quote": "Prored: 1,5 redak"
+      "quote": "Prored: 1,5 redak",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "fer-doktorski--margins",
@@ -45,8 +47,8 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
       "authority": "program-page",
       "sourceId": "fer-formalno-oblikovanje-doktorski-2012",
       "verifiedHash": "490c4db42fa5b93ffbdf6d9167e585de73f9f646aeef602d6209586bbba58a28",
@@ -60,7 +62,8 @@
       "label": "Margine (tijelo rada)",
       "machineCheckable": true,
       "sourcePage": "odjeljak Postavke stranice",
-      "quote": "Lijeva i desna margina: 2,5 cm"
+      "quote": "Lijeva i desna margina: 2,5 cm",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "fer-doktorski--paper-size",
@@ -68,8 +71,8 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
       "authority": "program-page",
       "sourceId": "fer-formalno-oblikovanje-doktorski-2012",
       "verifiedHash": "490c4db42fa5b93ffbdf6d9167e585de73f9f646aeef602d6209586bbba58a28",
@@ -78,7 +81,8 @@
       "label": "Format papira",
       "machineCheckable": true,
       "sourcePage": "odjeljak Upute za oblikovanje doktorskoga rada",
-      "quote": "Rad treba biti ispisan na papiru formata A4 (210 mm x 297 mm)."
+      "quote": "Rad treba biti ispisan na papiru formata A4 (210 mm x 297 mm).",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "fer-doktorski--page-numbers",
@@ -86,8 +90,8 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
       "authority": "program-page",
       "sourceId": "fer-formalno-oblikovanje-doktorski-2012",
       "verifiedHash": "490c4db42fa5b93ffbdf6d9167e585de73f9f646aeef602d6209586bbba58a28",
@@ -96,7 +100,8 @@
       "label": "Numeracija stranica",
       "machineCheckable": true,
       "sourcePage": "odjeljak Upute za oblikovanje doktorskoga rada",
-      "quote": "Stranice trebaju biti numerirane. Broje se sve stranice od Uvoda do"
+      "quote": "Stranice trebaju biti numerirane. Broje se sve stranice od Uvoda do",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "fer-doktorski--toc",
@@ -104,8 +109,8 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
       "authority": "program-page",
       "sourceId": "fer-formalno-oblikovanje-doktorski-2012",
       "verifiedHash": "490c4db42fa5b93ffbdf6d9167e585de73f9f646aeef602d6209586bbba58a28",
@@ -114,7 +119,8 @@
       "label": "Sadrzaj (obvezan dio)",
       "machineCheckable": true,
       "sourcePage": "odjeljak Rad mora sadržavati",
-      "quote": "Rad mora sadržavati:"
+      "quote": "Rad mora sadržavati:",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "fer-doktorski--font",

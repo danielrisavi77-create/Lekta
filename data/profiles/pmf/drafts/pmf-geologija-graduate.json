@@ -17,9 +17,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "5ca42167f80ca3f7f1a02468152774efa4000a6565870ad6798f478c995a9dfa"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "5ca42167f80ca3f7f1a02468152774efa4000a6565870ad6798f478c995a9dfa",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "pmf-geologija-graduate--font-size",
@@ -35,9 +36,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "5ca42167f80ca3f7f1a02468152774efa4000a6565870ad6798f478c995a9dfa"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "5ca42167f80ca3f7f1a02468152774efa4000a6565870ad6798f478c995a9dfa",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "pmf-geologija-graduate--line-spacing",
@@ -53,9 +55,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "5ca42167f80ca3f7f1a02468152774efa4000a6565870ad6798f478c995a9dfa"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "5ca42167f80ca3f7f1a02468152774efa4000a6565870ad6798f478c995a9dfa",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "pmf-geologija-graduate--page-numbers",
@@ -71,9 +74,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "5ca42167f80ca3f7f1a02468152774efa4000a6565870ad6798f478c995a9dfa"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "5ca42167f80ca3f7f1a02468152774efa4000a6565870ad6798f478c995a9dfa",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "pmf-geologija-graduate--toc",
@@ -89,9 +93,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "5ca42167f80ca3f7f1a02468152774efa4000a6565870ad6798f478c995a9dfa"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "5ca42167f80ca3f7f1a02468152774efa4000a6565870ad6798f478c995a9dfa",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "pmf-geologija-graduate--required-sections",

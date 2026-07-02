@@ -20,9 +20,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "0807863ff289516855c37afbc35be192a003cda41a641d633c0379b756533549"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "0807863ff289516855c37afbc35be192a003cda41a641d633c0379b756533549",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "efzg-zavrsni--font",
@@ -41,9 +42,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "0807863ff289516855c37afbc35be192a003cda41a641d633c0379b756533549"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "0807863ff289516855c37afbc35be192a003cda41a641d633c0379b756533549",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "efzg-zavrsni--font-size",
@@ -59,9 +61,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "0807863ff289516855c37afbc35be192a003cda41a641d633c0379b756533549"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "0807863ff289516855c37afbc35be192a003cda41a641d633c0379b756533549",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "efzg-zavrsni--line-spacing",
@@ -77,9 +80,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "0807863ff289516855c37afbc35be192a003cda41a641d633c0379b756533549"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "0807863ff289516855c37afbc35be192a003cda41a641d633c0379b756533549",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "efzg-zavrsni--page-numbers",
@@ -95,9 +99,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "0807863ff289516855c37afbc35be192a003cda41a641d633c0379b756533549"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "0807863ff289516855c37afbc35be192a003cda41a641d633c0379b756533549",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "efzg-zavrsni--required-sections",
@@ -123,9 +128,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "0807863ff289516855c37afbc35be192a003cda41a641d633c0379b756533549"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "0807863ff289516855c37afbc35be192a003cda41a641d633c0379b756533549",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "efzg-zavrsni--toc",
@@ -141,9 +147,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "0807863ff289516855c37afbc35be192a003cda41a641d633c0379b756533549"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "0807863ff289516855c37afbc35be192a003cda41a641d633c0379b756533549",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "efzg-zavrsni--page-count",
@@ -210,9 +217,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "0807863ff289516855c37afbc35be192a003cda41a641d633c0379b756533549"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "0807863ff289516855c37afbc35be192a003cda41a641d633c0379b756533549",
+        "confirmedVia": "human-audit"
       }
     ],
     "efzg-diplomski": [

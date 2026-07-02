@@ -6,7 +6,7 @@
       "machineCheckable": 7,
       "advisory": 7,
       "ratio": 0.2857142857142857,
-      "lastVerified": "2026-06-30"
+      "lastVerified": "2026-07-02"
     },
     {
       "profileId": "agr-doktorski",
@@ -14,7 +14,7 @@
       "machineCheckable": 6,
       "advisory": 2,
       "ratio": 1,
-      "lastVerified": "2026-06-30"
+      "lastVerified": "2026-07-02"
     },
     {
       "profileId": "agr-zavrsni",
@@ -22,7 +22,7 @@
       "machineCheckable": 7,
       "advisory": 7,
       "ratio": 0.2857142857142857,
-      "lastVerified": "2026-06-30"
+      "lastVerified": "2026-07-02"
     },
     {
       "profileId": "alu-diplomski",

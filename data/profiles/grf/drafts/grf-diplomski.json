@@ -4,7 +4,10 @@
     {
       "ruleId": "grf-diplomski--font",
       "checkId": "font",
-      "value": ["Times New Roman", "Arial"],
+      "value": [
+        "Times New Roman",
+        "Arial"
+      ],
       "category": "format",
       "label": "Pismo (font)",
       "machineCheckable": true,
@@ -16,8 +19,9 @@
       "scored": true,
       "verifiedHash": "275351f46e96ad1ae5190a43cf12c6a06f6dc4f5f106ab3cea847a5bad456caa",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "grf-diplomski--font-size",
@@ -34,8 +38,9 @@
       "scored": true,
       "verifiedHash": "275351f46e96ad1ae5190a43cf12c6a06f6dc4f5f106ab3cea847a5bad456caa",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "grf-diplomski--line-spacing",
@@ -52,13 +57,19 @@
       "scored": true,
       "verifiedHash": "275351f46e96ad1ae5190a43cf12c6a06f6dc4f5f106ab3cea847a5bad456caa",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "grf-diplomski--margins",
       "checkId": "margins",
-      "value": { "top": 2.5, "right": 2.5, "bottom": 3.5, "left": 3.5 },
+      "value": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 3.5,
+        "left": 3.5
+      },
       "category": "format",
       "label": "Margine",
       "machineCheckable": true,
@@ -70,8 +81,9 @@
       "scored": true,
       "verifiedHash": "275351f46e96ad1ae5190a43cf12c6a06f6dc4f5f106ab3cea847a5bad456caa",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "grf-diplomski--paper-size",
@@ -88,8 +100,9 @@
       "scored": true,
       "verifiedHash": "275351f46e96ad1ae5190a43cf12c6a06f6dc4f5f106ab3cea847a5bad456caa",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "grf-diplomski--page-numbers",
@@ -106,8 +119,9 @@
       "scored": true,
       "verifiedHash": "275351f46e96ad1ae5190a43cf12c6a06f6dc4f5f106ab3cea847a5bad456caa",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "grf-diplomski--toc",
@@ -124,13 +138,25 @@
       "scored": true,
       "verifiedHash": "275351f46e96ad1ae5190a43cf12c6a06f6dc4f5f106ab3cea847a5bad456caa",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "grf-diplomski--required-sections",
       "checkId": "required-sections",
-      "value": ["naslovnica", "sazetak", "sadrzaj", "uvod", "teorijski dio", "eksperimentalni dio", "rezultati i rasprava", "zakljucci", "literatura", "prilozi"],
+      "value": [
+        "naslovnica",
+        "sazetak",
+        "sadrzaj",
+        "uvod",
+        "teorijski dio",
+        "eksperimentalni dio",
+        "rezultati i rasprava",
+        "zakljucci",
+        "literatura",
+        "prilozi"
+      ],
       "category": "structure",
       "label": "Obvezne cjeline diplomskog rada",
       "machineCheckable": false,

@@ -17,9 +17,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "4091f84371e8e6b7587280917c1b9069bbecc11d039d8547e5553e8e59708808"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "4091f84371e8e6b7587280917c1b9069bbecc11d039d8547e5553e8e59708808",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-etnologija-graduate--font-size",
@@ -35,9 +36,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "4091f84371e8e6b7587280917c1b9069bbecc11d039d8547e5553e8e59708808"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "4091f84371e8e6b7587280917c1b9069bbecc11d039d8547e5553e8e59708808",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-etnologija-graduate--line-spacing",
@@ -53,9 +55,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "4091f84371e8e6b7587280917c1b9069bbecc11d039d8547e5553e8e59708808"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "4091f84371e8e6b7587280917c1b9069bbecc11d039d8547e5553e8e59708808",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-etnologija-graduate--margins",
@@ -76,9 +79,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "4091f84371e8e6b7587280917c1b9069bbecc11d039d8547e5553e8e59708808"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "4091f84371e8e6b7587280917c1b9069bbecc11d039d8547e5553e8e59708808",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-etnologija-graduate--justify",
@@ -94,9 +98,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "4091f84371e8e6b7587280917c1b9069bbecc11d039d8547e5553e8e59708808"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "4091f84371e8e6b7587280917c1b9069bbecc11d039d8547e5553e8e59708808",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-etnologija-graduate--page-numbers",
@@ -112,9 +117,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "4091f84371e8e6b7587280917c1b9069bbecc11d039d8547e5553e8e59708808"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "4091f84371e8e6b7587280917c1b9069bbecc11d039d8547e5553e8e59708808",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-etnologija-graduate--word-count",

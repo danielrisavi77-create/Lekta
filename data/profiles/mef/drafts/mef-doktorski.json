@@ -9,8 +9,8 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
       "authority": "program-page",
       "sourceId": "mef-naputci-tehnicka-obrada-doktorski-2022",
       "verifiedHash": "8cad70ffeb947004dab365200762be290a065d2d4b3337226f745b6bbd056303",
@@ -19,7 +19,8 @@
       "label": "Format papira",
       "machineCheckable": true,
       "sourcePage": "tocka 1) Format radova",
-      "quote": "Format radova je A 4 (21x29,7 cm)"
+      "quote": "Format radova je A 4 (21x29,7 cm)",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "mef-doktorski--page-numbers",
@@ -27,8 +28,8 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
       "authority": "program-page",
       "sourceId": "mef-naputci-tehnicka-obrada-doktorski-2022",
       "verifiedHash": "8cad70ffeb947004dab365200762be290a065d2d4b3337226f745b6bbd056303",
@@ -37,7 +38,8 @@
       "label": "Numeracija stranica",
       "machineCheckable": true,
       "sourcePage": "tocka 6) Stranice obavezno oznaciti brojevima",
-      "quote": "Stranice obavezno označiti brojevima"
+      "quote": "Stranice obavezno označiti brojevima",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "mef-doktorski--toc",
@@ -45,8 +47,8 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
       "authority": "program-page",
       "sourceId": "mef-naputci-tehnicka-obrada-doktorski-2022",
       "verifiedHash": "8cad70ffeb947004dab365200762be290a065d2d4b3337226f745b6bbd056303",
@@ -55,7 +57,8 @@
       "label": "Sadrzaj",
       "machineCheckable": true,
       "sourcePage": "tocka 5) Rad mora sadrzavati, stavka Sadrzaj prema poglavljima",
-      "quote": "Sadržaj prema poglavljima"
+      "quote": "Sadržaj prema poglavljima",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "mef-doktorski--required-sections",
@@ -67,17 +70,86 @@
       "authority": "program-page",
       "sourceId": "mef-naputci-tehnicka-obrada-doktorski-2022",
       "value": [
-        { "key": "uvod", "label": "Uvod i svrha rada", "terms": ["uvod"] },
-        { "key": "hipoteza", "label": "Hipoteza", "terms": ["hipoteza"] },
-        { "key": "ciljevi", "label": "Ciljevi rada", "terms": ["ciljevi"] },
-        { "key": "metode", "label": "Materijali i metode", "terms": ["materijali i metode", "metode"] },
-        { "key": "rezultati", "label": "Rezultati", "terms": ["rezultati"] },
-        { "key": "rasprava", "label": "Rasprava", "terms": ["rasprava"] },
-        { "key": "zakljucak", "label": "Zakljucak", "terms": ["zakljucak"] },
-        { "key": "sazetak", "label": "Kratki sadrzaj na hrvatskom", "terms": ["kratki sadrzaj", "sazetak"] },
-        { "key": "summary", "label": "Summary", "terms": ["summary"] },
-        { "key": "literatura", "label": "Popis literature", "terms": ["literatura"] },
-        { "key": "biografija", "label": "Kratka biografija", "terms": ["biografija", "zivotopis"] }
+        {
+          "key": "uvod",
+          "label": "Uvod i svrha rada",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "hipoteza",
+          "label": "Hipoteza",
+          "terms": [
+            "hipoteza"
+          ]
+        },
+        {
+          "key": "ciljevi",
+          "label": "Ciljevi rada",
+          "terms": [
+            "ciljevi"
+          ]
+        },
+        {
+          "key": "metode",
+          "label": "Materijali i metode",
+          "terms": [
+            "materijali i metode",
+            "metode"
+          ]
+        },
+        {
+          "key": "rezultati",
+          "label": "Rezultati",
+          "terms": [
+            "rezultati"
+          ]
+        },
+        {
+          "key": "rasprava",
+          "label": "Rasprava",
+          "terms": [
+            "rasprava"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zakljucak",
+          "terms": [
+            "zakljucak"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Kratki sadrzaj na hrvatskom",
+          "terms": [
+            "kratki sadrzaj",
+            "sazetak"
+          ]
+        },
+        {
+          "key": "summary",
+          "label": "Summary",
+          "terms": [
+            "summary"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Popis literature",
+          "terms": [
+            "literatura"
+          ]
+        },
+        {
+          "key": "biografija",
+          "label": "Kratka biografija",
+          "terms": [
+            "biografija",
+            "zivotopis"
+          ]
+        }
       ],
       "category": "structure",
       "label": "Obvezne cjeline doktorskog rada",
@@ -94,7 +166,9 @@
       "reviewedBy": null,
       "authority": "program-page",
       "sourceId": "mef-naputci-tehnicka-obrada-doktorski-2022",
-      "value": { "max": 200 },
+      "value": {
+        "max": 200
+      },
       "category": "scope",
       "label": "Opseg kratkog sadrzaja i biografije (rijeci)",
       "machineCheckable": false,

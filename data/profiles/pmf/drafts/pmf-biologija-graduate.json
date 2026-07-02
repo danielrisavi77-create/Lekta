@@ -15,9 +15,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "ee15276e21d30ee18c921eed75a144a111a51e913f411047b7d122ab67bbc641"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "ee15276e21d30ee18c921eed75a144a111a51e913f411047b7d122ab67bbc641",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "pmf-biologija-graduate--line-spacing",
@@ -33,9 +34,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "ee15276e21d30ee18c921eed75a144a111a51e913f411047b7d122ab67bbc641"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "ee15276e21d30ee18c921eed75a144a111a51e913f411047b7d122ab67bbc641",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "pmf-biologija-graduate--margins",
@@ -56,9 +58,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "ee15276e21d30ee18c921eed75a144a111a51e913f411047b7d122ab67bbc641"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "ee15276e21d30ee18c921eed75a144a111a51e913f411047b7d122ab67bbc641",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "pmf-biologija-graduate--font-size",
@@ -77,9 +80,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "ee15276e21d30ee18c921eed75a144a111a51e913f411047b7d122ab67bbc641"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "ee15276e21d30ee18c921eed75a144a111a51e913f411047b7d122ab67bbc641",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "pmf-biologija-graduate--page-numbers",
@@ -95,9 +99,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "ee15276e21d30ee18c921eed75a144a111a51e913f411047b7d122ab67bbc641"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "ee15276e21d30ee18c921eed75a144a111a51e913f411047b7d122ab67bbc641",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "pmf-biologija-graduate--page-count",
@@ -116,9 +121,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "ee15276e21d30ee18c921eed75a144a111a51e913f411047b7d122ab67bbc641"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "ee15276e21d30ee18c921eed75a144a111a51e913f411047b7d122ab67bbc641",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "pmf-biologija-graduate--toc",

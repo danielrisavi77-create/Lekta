@@ -25,9 +25,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "569ef74171db53273efeada5532f0d0b0a520335f725f66f2136c0aad190486e"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "569ef74171db53273efeada5532f0d0b0a520335f725f66f2136c0aad190486e",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ffzg-informacijske-zavrsni--toc",
@@ -43,9 +44,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "569ef74171db53273efeada5532f0d0b0a520335f725f66f2136c0aad190486e"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "569ef74171db53273efeada5532f0d0b0a520335f725f66f2136c0aad190486e",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ffzg-informacijske-zavrsni--page-numbers",
@@ -61,9 +63,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "569ef74171db53273efeada5532f0d0b0a520335f725f66f2136c0aad190486e"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "569ef74171db53273efeada5532f0d0b0a520335f725f66f2136c0aad190486e",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ffzg-informacijske-zavrsni--font",
@@ -142,9 +145,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "ba222ed21e3a1a4685dbd507e47c822583826cac6a0f6ce53cae669ec149a80f"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "ba222ed21e3a1a4685dbd507e47c822583826cac6a0f6ce53cae669ec149a80f",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ffzg-filozofija-diplomski--toc",
@@ -160,9 +164,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "ba222ed21e3a1a4685dbd507e47c822583826cac6a0f6ce53cae669ec149a80f"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "ba222ed21e3a1a4685dbd507e47c822583826cac6a0f6ce53cae669ec149a80f",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ffzg-filozofija-diplomski--font",
@@ -180,9 +185,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "ba222ed21e3a1a4685dbd507e47c822583826cac6a0f6ce53cae669ec149a80f"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "ba222ed21e3a1a4685dbd507e47c822583826cac6a0f6ce53cae669ec149a80f",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ffzg-filozofija-diplomski--font-size",
@@ -198,9 +204,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "ba222ed21e3a1a4685dbd507e47c822583826cac6a0f6ce53cae669ec149a80f"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "ba222ed21e3a1a4685dbd507e47c822583826cac6a0f6ce53cae669ec149a80f",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ffzg-filozofija-diplomski--line-spacing",
@@ -216,9 +223,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "ba222ed21e3a1a4685dbd507e47c822583826cac6a0f6ce53cae669ec149a80f"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "ba222ed21e3a1a4685dbd507e47c822583826cac6a0f6ce53cae669ec149a80f",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ffzg-filozofija-diplomski--margins",
@@ -239,9 +247,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "ba222ed21e3a1a4685dbd507e47c822583826cac6a0f6ce53cae669ec149a80f"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "ba222ed21e3a1a4685dbd507e47c822583826cac6a0f6ce53cae669ec149a80f",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ffzg-filozofija-diplomski--page-numbers",
@@ -257,9 +266,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "ba222ed21e3a1a4685dbd507e47c822583826cac6a0f6ce53cae669ec149a80f"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "ba222ed21e3a1a4685dbd507e47c822583826cac6a0f6ce53cae669ec149a80f",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ffzg-filozofija-diplomski--justify",
@@ -275,9 +285,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "ba222ed21e3a1a4685dbd507e47c822583826cac6a0f6ce53cae669ec149a80f"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "ba222ed21e3a1a4685dbd507e47c822583826cac6a0f6ce53cae669ec149a80f",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ffzg-filozofija-diplomski--citation-style",
@@ -293,9 +304,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "ba222ed21e3a1a4685dbd507e47c822583826cac6a0f6ce53cae669ec149a80f"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "ba222ed21e3a1a4685dbd507e47c822583826cac6a0f6ce53cae669ec149a80f",
+        "confirmedVia": "human-audit"
       }
     ]
   },

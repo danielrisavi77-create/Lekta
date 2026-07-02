@@ -17,9 +17,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "aa59df02973b7a79000ab2c19f0720ab26dbc463990b57cd54c0d7cdc52c2382"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "aa59df02973b7a79000ab2c19f0720ab26dbc463990b57cd54c0d7cdc52c2382",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-povijest-umjetnosti-diplomski--font-size",
@@ -35,9 +36,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "aa59df02973b7a79000ab2c19f0720ab26dbc463990b57cd54c0d7cdc52c2382"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "aa59df02973b7a79000ab2c19f0720ab26dbc463990b57cd54c0d7cdc52c2382",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-povijest-umjetnosti-diplomski--line-spacing",
@@ -53,9 +55,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "aa59df02973b7a79000ab2c19f0720ab26dbc463990b57cd54c0d7cdc52c2382"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "aa59df02973b7a79000ab2c19f0720ab26dbc463990b57cd54c0d7cdc52c2382",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-povijest-umjetnosti-diplomski--margins",
@@ -76,9 +79,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "aa59df02973b7a79000ab2c19f0720ab26dbc463990b57cd54c0d7cdc52c2382"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "aa59df02973b7a79000ab2c19f0720ab26dbc463990b57cd54c0d7cdc52c2382",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-povijest-umjetnosti-diplomski--justify",
@@ -94,9 +98,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "aa59df02973b7a79000ab2c19f0720ab26dbc463990b57cd54c0d7cdc52c2382"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "aa59df02973b7a79000ab2c19f0720ab26dbc463990b57cd54c0d7cdc52c2382",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-povijest-umjetnosti-diplomski--page-numbers",
@@ -112,9 +117,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "aa59df02973b7a79000ab2c19f0720ab26dbc463990b57cd54c0d7cdc52c2382"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "aa59df02973b7a79000ab2c19f0720ab26dbc463990b57cd54c0d7cdc52c2382",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-povijest-umjetnosti-diplomski--paper-size",
@@ -130,9 +136,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "aa59df02973b7a79000ab2c19f0720ab26dbc463990b57cd54c0d7cdc52c2382"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "aa59df02973b7a79000ab2c19f0720ab26dbc463990b57cd54c0d7cdc52c2382",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-povijest-umjetnosti-diplomski--page-count",

@@ -4,7 +4,9 @@
       {
         "ruleId": "ufzg-zavrsni--font",
         "checkId": "font",
-        "value": ["Times New Roman"],
+        "value": [
+          "Times New Roman"
+        ],
         "category": "format",
         "label": "Font",
         "machineCheckable": true,
@@ -15,9 +17,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ufzg-zavrsni--font-size",
@@ -33,9 +36,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ufzg-zavrsni--line-spacing",
@@ -51,14 +55,20 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ufzg-zavrsni--margins",
         "checkId": "margins",
-        "value": { "top": 2.5, "bottom": 2.5, "left": 2.5, "right": 2.5 },
+        "value": {
+          "top": 2.5,
+          "bottom": 2.5,
+          "left": 2.5,
+          "right": 2.5
+        },
         "category": "format",
         "label": "Margine",
         "machineCheckable": true,
@@ -69,9 +79,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ufzg-zavrsni--paper-size",
@@ -87,9 +98,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ufzg-zavrsni--justify",
@@ -105,9 +117,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ufzg-zavrsni--page-numbers",
@@ -123,9 +136,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ufzg-zavrsni--toc",
@@ -141,20 +155,62 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ufzg-zavrsni--required-sections",
         "checkId": "required-sections",
         "value": [
-          { "key": "naslovnica", "label": "Naslovna stranica", "terms": ["naslovna", "naslovnica"] },
-          { "key": "sazetak", "label": "Sazetak s kljucnim rijecima", "terms": ["sazetak", "sažetak"] },
-          { "key": "sadrzaj", "label": "Sadrzaj", "terms": ["sadrzaj", "sadržaj"] },
-          { "key": "uvod", "label": "Uvod", "terms": ["uvod"] },
-          { "key": "zakljucak", "label": "Zakljucak", "terms": ["zakljucak", "zaključak"] },
-          { "key": "literatura", "label": "Literatura", "terms": ["literatura", "popis literature"] }
+          {
+            "key": "naslovnica",
+            "label": "Naslovna stranica",
+            "terms": [
+              "naslovna",
+              "naslovnica"
+            ]
+          },
+          {
+            "key": "sazetak",
+            "label": "Sazetak s kljucnim rijecima",
+            "terms": [
+              "sazetak",
+              "sažetak"
+            ]
+          },
+          {
+            "key": "sadrzaj",
+            "label": "Sadrzaj",
+            "terms": [
+              "sadrzaj",
+              "sadržaj"
+            ]
+          },
+          {
+            "key": "uvod",
+            "label": "Uvod",
+            "terms": [
+              "uvod"
+            ]
+          },
+          {
+            "key": "zakljucak",
+            "label": "Zakljucak",
+            "terms": [
+              "zakljucak",
+              "zaključak"
+            ]
+          },
+          {
+            "key": "literatura",
+            "label": "Literatura",
+            "terms": [
+              "literatura",
+              "popis literature"
+            ]
+          }
         ],
         "category": "structure",
         "label": "Obvezne cjeline rada",
@@ -166,14 +222,18 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ufzg-zavrsni--page-count",
         "checkId": "page-count",
-        "value": { "min": 20, "max": 40 },
+        "value": {
+          "min": 20,
+          "max": 40
+        },
         "category": "scope",
         "label": "Opseg (stranice)",
         "machineCheckable": true,
@@ -184,9 +244,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ufzg-zavrsni--citation-style",
@@ -202,9 +263,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ufzg-zavrsni--reference-count",
@@ -227,7 +289,9 @@
       {
         "ruleId": "ufzg-diplomski--font",
         "checkId": "font",
-        "value": ["Times New Roman"],
+        "value": [
+          "Times New Roman"
+        ],
         "category": "format",
         "label": "Font",
         "machineCheckable": true,
@@ -238,9 +302,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ufzg-diplomski--font-size",
@@ -256,9 +321,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ufzg-diplomski--line-spacing",
@@ -274,14 +340,20 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ufzg-diplomski--margins",
         "checkId": "margins",
-        "value": { "top": 2.5, "bottom": 2.5, "left": 2.5, "right": 2.5 },
+        "value": {
+          "top": 2.5,
+          "bottom": 2.5,
+          "left": 2.5,
+          "right": 2.5
+        },
         "category": "format",
         "label": "Margine",
         "machineCheckable": true,
@@ -292,9 +364,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ufzg-diplomski--paper-size",
@@ -310,9 +383,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ufzg-diplomski--justify",
@@ -328,9 +402,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ufzg-diplomski--page-numbers",
@@ -346,9 +421,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ufzg-diplomski--toc",
@@ -364,23 +440,83 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ufzg-diplomski--required-sections",
         "checkId": "required-sections",
         "value": [
-          { "key": "naslovnica", "label": "Naslovna stranica", "terms": ["naslovna", "naslovnica"] },
-          { "key": "sazetak", "label": "Sazetak s kljucnim rijecima", "terms": ["sazetak", "sažetak"] },
-          { "key": "sadrzaj", "label": "Sadrzaj", "terms": ["sadrzaj", "sadržaj"] },
-          { "key": "uvod", "label": "Uvod", "terms": ["uvod"] },
-          { "key": "metoda", "label": "Metoda", "terms": ["metoda"] },
-          { "key": "rezultati", "label": "Rezultati", "terms": ["rezultati"] },
-          { "key": "rasprava", "label": "Rasprava", "terms": ["rasprava"] },
-          { "key": "zakljucak", "label": "Zakljucak", "terms": ["zakljucak", "zaključak"] },
-          { "key": "literatura", "label": "Literatura", "terms": ["literatura", "popis literature"] }
+          {
+            "key": "naslovnica",
+            "label": "Naslovna stranica",
+            "terms": [
+              "naslovna",
+              "naslovnica"
+            ]
+          },
+          {
+            "key": "sazetak",
+            "label": "Sazetak s kljucnim rijecima",
+            "terms": [
+              "sazetak",
+              "sažetak"
+            ]
+          },
+          {
+            "key": "sadrzaj",
+            "label": "Sadrzaj",
+            "terms": [
+              "sadrzaj",
+              "sadržaj"
+            ]
+          },
+          {
+            "key": "uvod",
+            "label": "Uvod",
+            "terms": [
+              "uvod"
+            ]
+          },
+          {
+            "key": "metoda",
+            "label": "Metoda",
+            "terms": [
+              "metoda"
+            ]
+          },
+          {
+            "key": "rezultati",
+            "label": "Rezultati",
+            "terms": [
+              "rezultati"
+            ]
+          },
+          {
+            "key": "rasprava",
+            "label": "Rasprava",
+            "terms": [
+              "rasprava"
+            ]
+          },
+          {
+            "key": "zakljucak",
+            "label": "Zakljucak",
+            "terms": [
+              "zakljucak",
+              "zaključak"
+            ]
+          },
+          {
+            "key": "literatura",
+            "label": "Literatura",
+            "terms": [
+              "literatura",
+              "popis literature"
+            ]
+          }
         ],
         "category": "structure",
         "label": "Obvezne cjeline rada",
@@ -392,14 +528,18 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ufzg-diplomski--page-count",
         "checkId": "page-count",
-        "value": { "min": 25, "max": 50 },
+        "value": {
+          "min": 25,
+          "max": 50
+        },
         "category": "scope",
         "label": "Opseg (stranice)",
         "machineCheckable": true,
@@ -410,9 +550,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ufzg-diplomski--reference-count",
@@ -428,9 +569,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "ufzg-diplomski--citation-style",
@@ -446,9 +588,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d",
+        "confirmedVia": "human-audit"
       }
     ]
   },

@@ -7,7 +7,9 @@
       {
         "ruleId": "pbf-diplomski--font",
         "checkId": "font",
-        "value": ["Times New Roman"],
+        "value": [
+          "Times New Roman"
+        ],
         "category": "format",
         "label": "Font (pismo)",
         "machineCheckable": true,
@@ -18,9 +20,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "86cfde9d825c1f68330a1a24c213b74e24f408e3d2d845329ef7433582510860"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "86cfde9d825c1f68330a1a24c213b74e24f408e3d2d845329ef7433582510860",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "pbf-diplomski--font-size",
@@ -36,9 +39,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "86cfde9d825c1f68330a1a24c213b74e24f408e3d2d845329ef7433582510860"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "86cfde9d825c1f68330a1a24c213b74e24f408e3d2d845329ef7433582510860",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "pbf-diplomski--line-spacing",
@@ -54,9 +58,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "86cfde9d825c1f68330a1a24c213b74e24f408e3d2d845329ef7433582510860"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "86cfde9d825c1f68330a1a24c213b74e24f408e3d2d845329ef7433582510860",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "pbf-diplomski--paper-size",
@@ -72,9 +77,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "86cfde9d825c1f68330a1a24c213b74e24f408e3d2d845329ef7433582510860"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "86cfde9d825c1f68330a1a24c213b74e24f408e3d2d845329ef7433582510860",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "pbf-diplomski--page-numbers",
@@ -90,9 +96,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "86cfde9d825c1f68330a1a24c213b74e24f408e3d2d845329ef7433582510860"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "86cfde9d825c1f68330a1a24c213b74e24f408e3d2d845329ef7433582510860",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "pbf-diplomski--toc",
@@ -108,14 +115,25 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "86cfde9d825c1f68330a1a24c213b74e24f408e3d2d845329ef7433582510860"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "86cfde9d825c1f68330a1a24c213b74e24f408e3d2d845329ef7433582510860",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "pbf-diplomski--required-sections",
         "checkId": "required-sections",
-        "value": ["naslovnica", "temeljna dokumentacijska kartica (sazetak)", "sadrzaj", "uvod", "teorijski dio", "eksperimentalni dio", "rezultati i rasprava", "zakljucci", "literatura"],
+        "value": [
+          "naslovnica",
+          "temeljna dokumentacijska kartica (sazetak)",
+          "sadrzaj",
+          "uvod",
+          "teorijski dio",
+          "eksperimentalni dio",
+          "rezultati i rasprava",
+          "zakljucci",
+          "literatura"
+        ],
         "category": "structure",
         "label": "Obvezne cjeline diplomskog rada",
         "machineCheckable": false,
@@ -126,14 +144,18 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "86cfde9d825c1f68330a1a24c213b74e24f408e3d2d845329ef7433582510860"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "86cfde9d825c1f68330a1a24c213b74e24f408e3d2d845329ef7433582510860",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "pbf-diplomski--page-count",
         "checkId": "page-count",
-        "value": { "min": 40, "max": 80 },
+        "value": {
+          "min": 40,
+          "max": 80
+        },
         "category": "scope",
         "label": "Opseg teksta (stranice, bez Priloga)",
         "machineCheckable": true,
@@ -144,9 +166,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "86cfde9d825c1f68330a1a24c213b74e24f408e3d2d845329ef7433582510860"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "86cfde9d825c1f68330a1a24c213b74e24f408e3d2d845329ef7433582510860",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "pbf-diplomski--citation-style",

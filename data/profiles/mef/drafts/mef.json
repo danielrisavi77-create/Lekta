@@ -4,7 +4,10 @@
       {
         "ruleId": "mef-diplomski--font",
         "checkId": "font",
-        "value": ["Times New Roman", "Arial"],
+        "value": [
+          "Times New Roman",
+          "Arial"
+        ],
         "category": "format",
         "label": "Font",
         "machineCheckable": true,
@@ -16,13 +19,17 @@
         "scored": true,
         "verifiedHash": "2f1e177187c7871d78abba9d73b7827f92641587702269f83b44fea0d4792ec0",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "mef-diplomski--font-size",
         "checkId": "font-size",
-        "value": [11, 12],
+        "value": [
+          11,
+          12
+        ],
         "category": "format",
         "label": "Velicina slova",
         "machineCheckable": true,
@@ -34,8 +41,9 @@
         "scored": true,
         "verifiedHash": "2f1e177187c7871d78abba9d73b7827f92641587702269f83b44fea0d4792ec0",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "mef-diplomski--line-spacing",
@@ -56,7 +64,12 @@
       {
         "ruleId": "mef-diplomski--margins",
         "checkId": "margins",
-        "value": { "top": 2.5, "right": 2.5, "bottom": 2.5, "left": 2.5 },
+        "value": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
         "category": "format",
         "label": "Margine",
         "machineCheckable": true,
@@ -84,8 +97,9 @@
         "scored": true,
         "verifiedHash": "2f1e177187c7871d78abba9d73b7827f92641587702269f83b44fea0d4792ec0",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "mef-diplomski--page-numbers",
@@ -102,8 +116,9 @@
         "scored": true,
         "verifiedHash": "2f1e177187c7871d78abba9d73b7827f92641587702269f83b44fea0d4792ec0",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "mef-diplomski--toc",
@@ -120,8 +135,9 @@
         "scored": true,
         "verifiedHash": "2f1e177187c7871d78abba9d73b7827f92641587702269f83b44fea0d4792ec0",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "mef-diplomski--citation-style",
@@ -138,18 +154,49 @@
         "scored": true,
         "verifiedHash": "2f1e177187c7871d78abba9d73b7827f92641587702269f83b44fea0d4792ec0",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "mef-diplomski--required-sections",
         "checkId": "required-sections",
         "value": [
-          { "key": "sazetak", "label": "Sazetak", "terms": ["sazetak"] },
-          { "key": "summary", "label": "Summary", "terms": ["summary"] },
-          { "key": "uvod", "label": "Uvod", "terms": ["uvod"] },
-          { "key": "literatura", "label": "Literatura", "terms": ["literatura"] },
-          { "key": "zivotopis", "label": "Zivotopis", "terms": ["zivotopis"] }
+          {
+            "key": "sazetak",
+            "label": "Sazetak",
+            "terms": [
+              "sazetak"
+            ]
+          },
+          {
+            "key": "summary",
+            "label": "Summary",
+            "terms": [
+              "summary"
+            ]
+          },
+          {
+            "key": "uvod",
+            "label": "Uvod",
+            "terms": [
+              "uvod"
+            ]
+          },
+          {
+            "key": "literatura",
+            "label": "Literatura",
+            "terms": [
+              "literatura"
+            ]
+          },
+          {
+            "key": "zivotopis",
+            "label": "Zivotopis",
+            "terms": [
+              "zivotopis"
+            ]
+          }
         ],
         "category": "structure",
         "label": "Obvezne cjeline diplomskog rada",
@@ -162,13 +209,17 @@
         "scored": true,
         "verifiedHash": "2f1e177187c7871d78abba9d73b7827f92641587702269f83b44fea0d4792ec0",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "mef-diplomski--word-count",
         "checkId": "word-count",
-        "value": { "min": 200, "max": 400 },
+        "value": {
+          "min": 200,
+          "max": 400
+        },
         "category": "scope",
         "label": "Opseg sazetka (rijeci)",
         "machineCheckable": false,

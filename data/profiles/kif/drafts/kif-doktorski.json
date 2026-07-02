@@ -9,8 +9,8 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
       "authority": "program-page",
       "sourceId": "kif-drsc08-oblikovanje-doktorski-2025",
       "verifiedHash": "fceee5de0245a45ee633e7fa918cbef6c968a83f5458fd78c45026d9b877694b",
@@ -19,7 +19,8 @@
       "label": "Velicina slova",
       "machineCheckable": true,
       "sourcePage": "odjeljak Postavke stranice",
-      "quote": "Veličina pisma: 12 tipografskih točaka"
+      "quote": "Veličina pisma: 12 tipografskih točaka",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "kif-doktorski--line-spacing",
@@ -27,8 +28,8 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
       "authority": "program-page",
       "sourceId": "kif-drsc08-oblikovanje-doktorski-2025",
       "verifiedHash": "fceee5de0245a45ee633e7fa918cbef6c968a83f5458fd78c45026d9b877694b",
@@ -37,7 +38,8 @@
       "label": "Prored",
       "machineCheckable": true,
       "sourcePage": "odjeljak Postavke stranice",
-      "quote": "Prored: 1,5 redak"
+      "quote": "Prored: 1,5 redak",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "kif-doktorski--margins",
@@ -45,8 +47,8 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
       "authority": "program-page",
       "sourceId": "kif-drsc08-oblikovanje-doktorski-2025",
       "verifiedHash": "fceee5de0245a45ee633e7fa918cbef6c968a83f5458fd78c45026d9b877694b",
@@ -60,7 +62,8 @@
       "label": "Margine (tijelo rada)",
       "machineCheckable": true,
       "sourcePage": "odjeljak Postavke stranice",
-      "quote": "Lijeva i desna margina: 2,5 cm"
+      "quote": "Lijeva i desna margina: 2,5 cm",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "kif-doktorski--paper-size",
@@ -68,8 +71,8 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
       "authority": "program-page",
       "sourceId": "kif-drsc08-oblikovanje-doktorski-2025",
       "verifiedHash": "fceee5de0245a45ee633e7fa918cbef6c968a83f5458fd78c45026d9b877694b",
@@ -78,7 +81,8 @@
       "label": "Format papira",
       "machineCheckable": true,
       "sourcePage": "odjeljak Upute za oblikovanje doktorskoga rada",
-      "quote": "Rad treba biti ispisan na papiru formata A4 (210 mm x 297 mm)."
+      "quote": "Rad treba biti ispisan na papiru formata A4 (210 mm x 297 mm).",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "kif-doktorski--page-numbers",
@@ -86,8 +90,8 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
       "authority": "program-page",
       "sourceId": "kif-drsc08-oblikovanje-doktorski-2025",
       "verifiedHash": "fceee5de0245a45ee633e7fa918cbef6c968a83f5458fd78c45026d9b877694b",
@@ -96,7 +100,8 @@
       "label": "Numeracija stranica",
       "machineCheckable": true,
       "sourcePage": "odjeljak Upute za oblikovanje doktorskoga rada",
-      "quote": "Stranice trebaju biti numerirane. Broje se sve stranice od Uvoda do"
+      "quote": "Stranice trebaju biti numerirane. Broje se sve stranice od Uvoda do",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "kif-doktorski--toc",
@@ -104,8 +109,8 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
       "authority": "program-page",
       "sourceId": "kif-drsc08-oblikovanje-doktorski-2025",
       "verifiedHash": "fceee5de0245a45ee633e7fa918cbef6c968a83f5458fd78c45026d9b877694b",
@@ -114,7 +119,8 @@
       "label": "Sadrzaj (obvezan dio)",
       "machineCheckable": true,
       "sourcePage": "odjeljak Rad mora sadržavati",
-      "quote": "Rad mora sadržavati:"
+      "quote": "Rad mora sadržavati:",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "kif-doktorski--font",

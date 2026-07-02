@@ -17,9 +17,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "bef096b5167bde781d833fa92d850022e8bc7abcf63168f798810a1afac941b1"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "bef096b5167bde781d833fa92d850022e8bc7abcf63168f798810a1afac941b1",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "pmf-geografija-diplomski--font-size",
@@ -35,9 +36,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "bef096b5167bde781d833fa92d850022e8bc7abcf63168f798810a1afac941b1"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "bef096b5167bde781d833fa92d850022e8bc7abcf63168f798810a1afac941b1",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "pmf-geografija-diplomski--line-spacing",
@@ -53,9 +55,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "bef096b5167bde781d833fa92d850022e8bc7abcf63168f798810a1afac941b1"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "bef096b5167bde781d833fa92d850022e8bc7abcf63168f798810a1afac941b1",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "pmf-geografija-diplomski--margins",
@@ -76,9 +79,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "bef096b5167bde781d833fa92d850022e8bc7abcf63168f798810a1afac941b1"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "bef096b5167bde781d833fa92d850022e8bc7abcf63168f798810a1afac941b1",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "pmf-geografija-diplomski--paper-size",
@@ -94,9 +98,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "bef096b5167bde781d833fa92d850022e8bc7abcf63168f798810a1afac941b1"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "bef096b5167bde781d833fa92d850022e8bc7abcf63168f798810a1afac941b1",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "pmf-geografija-diplomski--page-numbers",
@@ -112,9 +117,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "bef096b5167bde781d833fa92d850022e8bc7abcf63168f798810a1afac941b1"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "bef096b5167bde781d833fa92d850022e8bc7abcf63168f798810a1afac941b1",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "pmf-geografija-diplomski--citation-style",
@@ -130,9 +136,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "bef096b5167bde781d833fa92d850022e8bc7abcf63168f798810a1afac941b1"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "bef096b5167bde781d833fa92d850022e8bc7abcf63168f798810a1afac941b1",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "pmf-geografija-diplomski--required-sections",
@@ -157,9 +164,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "bef096b5167bde781d833fa92d850022e8bc7abcf63168f798810a1afac941b1"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "bef096b5167bde781d833fa92d850022e8bc7abcf63168f798810a1afac941b1",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "pmf-geografija-diplomski--page-count",

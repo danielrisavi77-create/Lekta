@@ -17,9 +17,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "e7fc10240bac403404d760e3275708aaff546e123ef3625e4202bbc275e48683"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "e7fc10240bac403404d760e3275708aaff546e123ef3625e4202bbc275e48683",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "pmf-fizika-graduate--font-size",
@@ -35,9 +36,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "e7fc10240bac403404d760e3275708aaff546e123ef3625e4202bbc275e48683"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "e7fc10240bac403404d760e3275708aaff546e123ef3625e4202bbc275e48683",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "pmf-fizika-graduate--line-spacing",
@@ -53,9 +55,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "e7fc10240bac403404d760e3275708aaff546e123ef3625e4202bbc275e48683"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "e7fc10240bac403404d760e3275708aaff546e123ef3625e4202bbc275e48683",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "pmf-fizika-graduate--margins",
@@ -63,7 +66,7 @@
       "value": {
         "top": 2.5,
         "bottom": 2.5,
-        "left": 3.0,
+        "left": 3,
         "right": 2.5
       },
       "category": "format",
@@ -76,9 +79,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "e7fc10240bac403404d760e3275708aaff546e123ef3625e4202bbc275e48683"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "e7fc10240bac403404d760e3275708aaff546e123ef3625e4202bbc275e48683",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "pmf-fizika-graduate--page-numbers",
@@ -94,9 +98,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "e7fc10240bac403404d760e3275708aaff546e123ef3625e4202bbc275e48683"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "e7fc10240bac403404d760e3275708aaff546e123ef3625e4202bbc275e48683",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "pmf-fizika-graduate--justify",
@@ -112,9 +117,10 @@
       "status": "verified",
       "scored": true,
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null,
-      "verifiedHash": "e7fc10240bac403404d760e3275708aaff546e123ef3625e4202bbc275e48683"
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "verifiedHash": "e7fc10240bac403404d760e3275708aaff546e123ef3625e4202bbc275e48683",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "pmf-fizika-graduate--citation-style",

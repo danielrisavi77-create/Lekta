@@ -7,7 +7,11 @@
       {
         "ruleId": "sumfak-diplomski--font",
         "checkId": "font",
-        "value": ["Arial", "Times New Roman", "Calibri"],
+        "value": [
+          "Arial",
+          "Times New Roman",
+          "Calibri"
+        ],
         "category": "format",
         "label": "Font",
         "machineCheckable": true,
@@ -55,7 +59,12 @@
       {
         "ruleId": "sumfak-diplomski--margins",
         "checkId": "margins",
-        "value": { "top": 2.5, "bottom": 2.5, "left": 2.5, "right": 2.5 },
+        "value": {
+          "top": 2.5,
+          "bottom": 2.5,
+          "left": 2.5,
+          "right": 2.5
+        },
         "category": "format",
         "label": "Margine",
         "machineCheckable": true,
@@ -103,7 +112,9 @@
       {
         "ruleId": "sumfak-diplomski--page-count",
         "checkId": "page-count",
-        "value": { "min": 30 },
+        "value": {
+          "min": 30
+        },
         "category": "scope",
         "label": "Opseg osnovnog teksta (stranice)",
         "machineCheckable": true,
@@ -135,7 +146,17 @@
       {
         "ruleId": "sumfak-diplomski--required-sections",
         "checkId": "required-sections",
-        "value": ["naslov", "sazetak", "sadrzaj", "uvod", "materijal i metode", "rezultati", "rasprava", "zakljucak", "popis literature"],
+        "value": [
+          "naslov",
+          "sazetak",
+          "sadrzaj",
+          "uvod",
+          "materijal i metode",
+          "rezultati",
+          "rasprava",
+          "zakljucak",
+          "popis literature"
+        ],
         "category": "structure",
         "label": "Obvezne cjeline diplomskog rada",
         "machineCheckable": false,
@@ -162,9 +183,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "16c870fde070cb045db02d4a961605251ce89608ae994c58c23f1a90147c36de"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "16c870fde070cb045db02d4a961605251ce89608ae994c58c23f1a90147c36de",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "sumfak-diplomski--toc",
@@ -180,16 +202,21 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "16c870fde070cb045db02d4a961605251ce89608ae994c58c23f1a90147c36de"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "16c870fde070cb045db02d4a961605251ce89608ae994c58c23f1a90147c36de",
+        "confirmedVia": "human-audit"
       }
     ],
     "sumfak-zavrsni": [
       {
         "ruleId": "sumfak-zavrsni--font",
         "checkId": "font",
-        "value": ["Arial", "Times New Roman", "Calibri"],
+        "value": [
+          "Arial",
+          "Times New Roman",
+          "Calibri"
+        ],
         "category": "format",
         "label": "Font",
         "machineCheckable": true,
@@ -237,7 +264,12 @@
       {
         "ruleId": "sumfak-zavrsni--margins",
         "checkId": "margins",
-        "value": { "top": 2.5, "bottom": 2.5, "left": 2.5, "right": 2.5 },
+        "value": {
+          "top": 2.5,
+          "bottom": 2.5,
+          "left": 2.5,
+          "right": 2.5
+        },
         "category": "format",
         "label": "Margine",
         "machineCheckable": true,
@@ -285,7 +317,17 @@
       {
         "ruleId": "sumfak-zavrsni--required-sections",
         "checkId": "required-sections",
-        "value": ["naslov", "sazetak", "sadrzaj", "uvod", "materijal i metode", "rezultati", "rasprava", "zakljucak", "popis literature"],
+        "value": [
+          "naslov",
+          "sazetak",
+          "sadrzaj",
+          "uvod",
+          "materijal i metode",
+          "rezultati",
+          "rasprava",
+          "zakljucak",
+          "popis literature"
+        ],
         "category": "structure",
         "label": "Obvezne cjeline zavrsnog rada",
         "machineCheckable": false,
@@ -312,9 +354,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "16c870fde070cb045db02d4a961605251ce89608ae994c58c23f1a90147c36de"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "16c870fde070cb045db02d4a961605251ce89608ae994c58c23f1a90147c36de",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "sumfak-zavrsni--toc",
@@ -330,9 +373,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "16c870fde070cb045db02d4a961605251ce89608ae994c58c23f1a90147c36de"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "16c870fde070cb045db02d4a961605251ce89608ae994c58c23f1a90147c36de",
+        "confirmedVia": "human-audit"
       }
     ]
   }

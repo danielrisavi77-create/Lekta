@@ -18,8 +18,9 @@
       "scored": true,
       "verifiedHash": "ad885d20070f3349adae2f27ef0d08ea1223e7cf1322521e25a41f8b2d02fac4",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-psihologija-diplomski--font-size",
@@ -36,8 +37,9 @@
       "scored": true,
       "verifiedHash": "ad885d20070f3349adae2f27ef0d08ea1223e7cf1322521e25a41f8b2d02fac4",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-psihologija-diplomski--line-spacing",
@@ -54,8 +56,9 @@
       "scored": true,
       "verifiedHash": "ad885d20070f3349adae2f27ef0d08ea1223e7cf1322521e25a41f8b2d02fac4",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-psihologija-diplomski--margins",
@@ -77,8 +80,9 @@
       "scored": true,
       "verifiedHash": "ad885d20070f3349adae2f27ef0d08ea1223e7cf1322521e25a41f8b2d02fac4",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-psihologija-diplomski--page-numbers",
@@ -95,8 +99,9 @@
       "scored": true,
       "verifiedHash": "ad885d20070f3349adae2f27ef0d08ea1223e7cf1322521e25a41f8b2d02fac4",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-psihologija-diplomski--toc",
@@ -113,8 +118,9 @@
       "scored": true,
       "verifiedHash": "ad885d20070f3349adae2f27ef0d08ea1223e7cf1322521e25a41f8b2d02fac4",
       "lastVerified": "2026-07-02",
-      "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
     },
     {
       "ruleId": "ffzg-psihologija-diplomski--page-count",

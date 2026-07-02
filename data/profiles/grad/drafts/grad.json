@@ -4,7 +4,9 @@
       {
         "ruleId": "grad-diplomski--font",
         "checkId": "font",
-        "value": ["Titillium"],
+        "value": [
+          "Titillium"
+        ],
         "category": "format",
         "label": "Font (tip pisma)",
         "machineCheckable": true,
@@ -15,9 +17,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "6a9db283e1b68d00783f503268532ed98a05ec9ccae4fe9fe11fc3aec822127c"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "6a9db283e1b68d00783f503268532ed98a05ec9ccae4fe9fe11fc3aec822127c",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "grad-diplomski--font-size",
@@ -33,9 +36,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "6a9db283e1b68d00783f503268532ed98a05ec9ccae4fe9fe11fc3aec822127c"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "6a9db283e1b68d00783f503268532ed98a05ec9ccae4fe9fe11fc3aec822127c",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "grad-diplomski--line-spacing",
@@ -51,9 +55,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "6a9db283e1b68d00783f503268532ed98a05ec9ccae4fe9fe11fc3aec822127c"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "6a9db283e1b68d00783f503268532ed98a05ec9ccae4fe9fe11fc3aec822127c",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "grad-diplomski--page-numbers",
@@ -69,9 +74,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "6a9db283e1b68d00783f503268532ed98a05ec9ccae4fe9fe11fc3aec822127c"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "6a9db283e1b68d00783f503268532ed98a05ec9ccae4fe9fe11fc3aec822127c",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "grad-diplomski--toc",
@@ -87,14 +93,23 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "6a9db283e1b68d00783f503268532ed98a05ec9ccae4fe9fe11fc3aec822127c"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "6a9db283e1b68d00783f503268532ed98a05ec9ccae4fe9fe11fc3aec822127c",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "grad-diplomski--required-sections",
         "checkId": "required-sections",
-        "value": ["naslovnica", "sazetak", "kljucne rijeci", "sadrzaj", "uvod", "zakljucak", "popis literature"],
+        "value": [
+          "naslovnica",
+          "sazetak",
+          "kljucne rijeci",
+          "sadrzaj",
+          "uvod",
+          "zakljucak",
+          "popis literature"
+        ],
         "category": "structure",
         "label": "Obvezne cjeline diplomskog rada",
         "machineCheckable": false,
@@ -105,14 +120,20 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "6a9db283e1b68d00783f503268532ed98a05ec9ccae4fe9fe11fc3aec822127c"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "6a9db283e1b68d00783f503268532ed98a05ec9ccae4fe9fe11fc3aec822127c",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "grad-diplomski--margins",
         "checkId": "margins",
-        "value": { "top": 2.5, "bottom": 2.5, "left": 2.5, "right": 2.5 },
+        "value": {
+          "top": 2.5,
+          "bottom": 2.5,
+          "left": 2.5,
+          "right": 2.5
+        },
         "category": "format",
         "label": "Margine",
         "machineCheckable": true,
@@ -162,7 +183,9 @@
       {
         "ruleId": "grad-zavrsni--font",
         "checkId": "font",
-        "value": ["Titillium"],
+        "value": [
+          "Titillium"
+        ],
         "category": "format",
         "label": "Font (tip pisma)",
         "machineCheckable": true,
@@ -173,9 +196,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "6a9db283e1b68d00783f503268532ed98a05ec9ccae4fe9fe11fc3aec822127c"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "6a9db283e1b68d00783f503268532ed98a05ec9ccae4fe9fe11fc3aec822127c",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "grad-zavrsni--font-size",
@@ -191,9 +215,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "6a9db283e1b68d00783f503268532ed98a05ec9ccae4fe9fe11fc3aec822127c"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "6a9db283e1b68d00783f503268532ed98a05ec9ccae4fe9fe11fc3aec822127c",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "grad-zavrsni--line-spacing",
@@ -209,9 +234,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "6a9db283e1b68d00783f503268532ed98a05ec9ccae4fe9fe11fc3aec822127c"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "6a9db283e1b68d00783f503268532ed98a05ec9ccae4fe9fe11fc3aec822127c",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "grad-zavrsni--page-numbers",
@@ -227,9 +253,10 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "6a9db283e1b68d00783f503268532ed98a05ec9ccae4fe9fe11fc3aec822127c"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "6a9db283e1b68d00783f503268532ed98a05ec9ccae4fe9fe11fc3aec822127c",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "grad-zavrsni--toc",
@@ -245,14 +272,23 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "6a9db283e1b68d00783f503268532ed98a05ec9ccae4fe9fe11fc3aec822127c"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "6a9db283e1b68d00783f503268532ed98a05ec9ccae4fe9fe11fc3aec822127c",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "grad-zavrsni--required-sections",
         "checkId": "required-sections",
-        "value": ["naslovnica", "sazetak", "kljucne rijeci", "sadrzaj", "uvod", "zakljucak", "popis literature"],
+        "value": [
+          "naslovnica",
+          "sazetak",
+          "kljucne rijeci",
+          "sadrzaj",
+          "uvod",
+          "zakljucak",
+          "popis literature"
+        ],
         "category": "structure",
         "label": "Obvezne cjeline zavrsnog rada",
         "machineCheckable": false,
@@ -263,14 +299,20 @@
         "status": "verified",
         "scored": true,
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null,
-        "verifiedHash": "6a9db283e1b68d00783f503268532ed98a05ec9ccae4fe9fe11fc3aec822127c"
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "verifiedHash": "6a9db283e1b68d00783f503268532ed98a05ec9ccae4fe9fe11fc3aec822127c",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "grad-zavrsni--margins",
         "checkId": "margins",
-        "value": { "top": 2.5, "bottom": 2.5, "left": 2.5, "right": 2.5 },
+        "value": {
+          "top": 2.5,
+          "bottom": 2.5,
+          "left": 2.5,
+          "right": 2.5
+        },
         "category": "format",
         "label": "Margine",
         "machineCheckable": true,

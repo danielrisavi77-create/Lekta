@@ -7,7 +7,9 @@
       {
         "ruleId": "fhs-diplomski--font",
         "checkId": "font",
-        "value": ["Times New Roman"],
+        "value": [
+          "Times New Roman"
+        ],
         "category": "format",
         "label": "Font (pismo)",
         "machineCheckable": true,
@@ -19,8 +21,9 @@
         "scored": true,
         "verifiedHash": "8807628d8863819448f91e61efff4d58e41747bc3d2d5db98e0a5521b748e2a6",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "fhs-diplomski--font-size",
@@ -37,8 +40,9 @@
         "scored": true,
         "verifiedHash": "8807628d8863819448f91e61efff4d58e41747bc3d2d5db98e0a5521b748e2a6",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "fhs-diplomski--line-spacing",
@@ -55,13 +59,19 @@
         "scored": true,
         "verifiedHash": "8807628d8863819448f91e61efff4d58e41747bc3d2d5db98e0a5521b748e2a6",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "fhs-diplomski--margins",
         "checkId": "margins",
-        "value": { "top": 2.5, "right": 2.5, "bottom": 2.5, "left": 2.5 },
+        "value": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
         "category": "format",
         "label": "Margine",
         "machineCheckable": true,
@@ -73,8 +83,9 @@
         "scored": true,
         "verifiedHash": "8807628d8863819448f91e61efff4d58e41747bc3d2d5db98e0a5521b748e2a6",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "fhs-diplomski--page-numbers",
@@ -91,8 +102,9 @@
         "scored": true,
         "verifiedHash": "8807628d8863819448f91e61efff4d58e41747bc3d2d5db98e0a5521b748e2a6",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "fhs-diplomski--justify",
@@ -109,8 +121,9 @@
         "scored": true,
         "verifiedHash": "8807628d8863819448f91e61efff4d58e41747bc3d2d5db98e0a5521b748e2a6",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "fhs-diplomski--toc",
@@ -127,13 +140,22 @@
         "scored": true,
         "verifiedHash": "8807628d8863819448f91e61efff4d58e41747bc3d2d5db98e0a5521b748e2a6",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "fhs-diplomski--required-sections",
         "checkId": "required-sections",
-        "value": ["naslovnica", "sazetak", "kljucne rijeci", "sadrzaj", "tekst rada", "zakljucak", "popis literature"],
+        "value": [
+          "naslovnica",
+          "sazetak",
+          "kljucne rijeci",
+          "sadrzaj",
+          "tekst rada",
+          "zakljucak",
+          "popis literature"
+        ],
         "category": "structure",
         "label": "Obvezne cjeline diplomskoga rada",
         "machineCheckable": false,
@@ -145,13 +167,17 @@
         "scored": true,
         "verifiedHash": "8807628d8863819448f91e61efff4d58e41747bc3d2d5db98e0a5521b748e2a6",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "fhs-diplomski--word-count",
         "checkId": "word-count",
-        "value": { "min": 15000, "max": 18000 },
+        "value": {
+          "min": 15000,
+          "max": 18000
+        },
         "category": "scope",
         "label": "Opseg teksta (kartice)",
         "machineCheckable": true,
@@ -185,7 +211,9 @@
       {
         "ruleId": "fhs-zavrsni--font",
         "checkId": "font",
-        "value": ["Times New Roman"],
+        "value": [
+          "Times New Roman"
+        ],
         "category": "format",
         "label": "Font (pismo)",
         "machineCheckable": true,
@@ -197,8 +225,9 @@
         "scored": true,
         "verifiedHash": "91726744ca26a6363a89cb6c18057a63fb3677ccbc4ca1d95d3ace4bea0cf5bc",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "fhs-zavrsni--font-size",
@@ -215,8 +244,9 @@
         "scored": true,
         "verifiedHash": "91726744ca26a6363a89cb6c18057a63fb3677ccbc4ca1d95d3ace4bea0cf5bc",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "fhs-zavrsni--line-spacing",
@@ -233,13 +263,19 @@
         "scored": true,
         "verifiedHash": "91726744ca26a6363a89cb6c18057a63fb3677ccbc4ca1d95d3ace4bea0cf5bc",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "fhs-zavrsni--margins",
         "checkId": "margins",
-        "value": { "top": 2.5, "right": 2.5, "bottom": 2.5, "left": 2.5 },
+        "value": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
         "category": "format",
         "label": "Margine",
         "machineCheckable": true,
@@ -251,8 +287,9 @@
         "scored": true,
         "verifiedHash": "91726744ca26a6363a89cb6c18057a63fb3677ccbc4ca1d95d3ace4bea0cf5bc",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "fhs-zavrsni--page-numbers",
@@ -269,8 +306,9 @@
         "scored": true,
         "verifiedHash": "91726744ca26a6363a89cb6c18057a63fb3677ccbc4ca1d95d3ace4bea0cf5bc",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "fhs-zavrsni--justify",
@@ -287,8 +325,9 @@
         "scored": true,
         "verifiedHash": "91726744ca26a6363a89cb6c18057a63fb3677ccbc4ca1d95d3ace4bea0cf5bc",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "fhs-zavrsni--toc",
@@ -305,13 +344,22 @@
         "scored": true,
         "verifiedHash": "91726744ca26a6363a89cb6c18057a63fb3677ccbc4ca1d95d3ace4bea0cf5bc",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "fhs-zavrsni--required-sections",
         "checkId": "required-sections",
-        "value": ["naslovnica", "sazetak", "kljucne rijeci", "sadrzaj", "tekst rada", "zakljucak", "popis literature"],
+        "value": [
+          "naslovnica",
+          "sazetak",
+          "kljucne rijeci",
+          "sadrzaj",
+          "tekst rada",
+          "zakljucak",
+          "popis literature"
+        ],
         "category": "structure",
         "label": "Obvezne cjeline zavrsnoga rada",
         "machineCheckable": false,
@@ -323,13 +371,17 @@
         "scored": true,
         "verifiedHash": "91726744ca26a6363a89cb6c18057a63fb3677ccbc4ca1d95d3ace4bea0cf5bc",
         "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       },
       {
         "ruleId": "fhs-zavrsni--word-count",
         "checkId": "word-count",
-        "value": { "min": 4800, "max": 6000 },
+        "value": {
+          "min": 4800,
+          "max": 6000
+        },
         "category": "scope",
         "label": "Opseg teksta (kartice)",
         "machineCheckable": true,
