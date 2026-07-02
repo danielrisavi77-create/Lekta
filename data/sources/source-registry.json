@@ -1217,5 +1217,44 @@
     "validityClass": "stable",
     "lastChecked": "2026-07-02",
     "note": "Institucija-wide Pravilnik; Clanak 4 normativan (opseg, A4, prored, velicina, margine). Font je izrijekom PREPORUKA s izborom Arial/TNR/Calibri -> advisory (izostavljen iz scored). Vancouver citiranje samo za biomedicinu, \"najcesce se koristi\" -> advisory."
+  },
+  {
+    "id": "vsite-pravilnik-2014",
+    "kind": "regulation",
+    "title": "Pravilnik o izradi i obrani zavrsnog i diplomskog rada (VSITE, 2014)",
+    "url": "https://www.vsite.hr/sites/default/files/Vsite-Pravilnik_za_zavrsni_rad140923-reg.pdf",
+    "publisher": "Veleuciliste suvremenih informacijskih tehnologija",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/vsite/vsite-pravilnik-2014.pdf",
+    "snapshotHash": "aef4be0c09dbc8046fea31e2b76ea8c4a6c2435dc5a6c3b918aa96edcd3540a5",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-02",
+    "note": "Institucija-wide Pravilnik; Clanak 7 daje opseg i strukturu. Tipografija izrijekom delegirana na Predlozak (cl. 7 st. 5) koji nije javno dohvatljiv -> izostavljena. Numeracija poglavlja i numeriran popis literature su mandatorni ali advisory (bez tipografije)."
+  },
+  {
+    "id": "vkjs-upute-zavrsni-diplomski-2024",
+    "kind": "guidelines",
+    "title": "Upute za izradu zavrsnog/diplomskog rada (VKJS, 2024)",
+    "url": "https://kriminalistika.gov.hr/UserDocsImages/04_vps/2024/Upute%20za%20izradu%20zavr%C5%A1nog_diplomskog%20rada.pdf",
+    "publisher": "Veleuciliste kriminalistike i javne sigurnosti",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/vkjs/vkjs-upute-zavrsni-diplomski-2024.pdf",
+    "snapshotHash": "630384c031ccfc966e1afbd18d7002314571e689140c6ef87e36d5fddf440082",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-02",
+    "note": "Institucija-wide Upute (Policijska akademija / MUP RH); izrijekom \"propisuje se izgled rada\". Tekstualni PDF, citano izravno. Vrijedi za zavrsni i diplomski rad. Nema page-count pravila. Citatni stil APA jedinstven i mandatoran."
+  },
+  {
+    "id": "hks-opce-upute-diplomski-2023",
+    "kind": "guidelines",
+    "title": "Opce upute za izradu diplomskog rada (HKS, izmjene prosinac 2023)",
+    "url": "https://www.unicath.hr/sites/default/files/2024-10/Opc%CC%81e-upute-za-izradu-diplomskog-rada-izmjene-prosinac-2023.pdf",
+    "publisher": "Hrvatsko katolicko sveuciliste",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/hks/hks-opce-upute-diplomski-2023.pdf",
+    "snapshotHash": "c3a0193ffb9b03ce3d04e79ff0a6f7827e50121326d3050b90a51783b3858f88",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-02",
+    "note": "Institucija-wide Opce upute (dio I. \"Diplomski rad pise se\"); mandatorna tipografija. HKS regulira samo diplomski rad. Odjelne Posebne upute dodaju opseg u karticama (1800 znakova, ne stranice) i citatni stil koji varira po odjelu (sestrinstvo Vancouver, psihologija APA, povijest Chicago) -> advisory, izvan institucijskog scored skupa."
   }
 ]

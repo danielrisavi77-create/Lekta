@@ -1,0 +1,47 @@
+{
+  "profileId": "vsite-zavrsni",
+  "entries": [
+    {
+      "ruleId": "vsite-zavrsni--page-count",
+      "checkId": "page-count",
+      "value": {
+        "min": 30,
+        "max": 40
+      },
+      "category": "scope",
+      "label": "Opseg (30-40 str.)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "vsite-pravilnik-2014",
+      "sourcePage": "Članak 7. st. 2",
+      "quote": "Završni rad studenta u pravilu ima 30-40 stranica, a diplomski rad 50-60 stranica. Rad je opremljen naslovnom stranicom, stranicom zadatka, sadržajem, zaključkom, popisom literature, sažetkom na hrvatskom i engleskom jeziku, te ključnim riječima na hrvatskom i engleskom jeziku.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "aef4be0c09dbc8046fea31e2b76ea8c4a6c2435dc5a6c3b918aa96edcd3540a5",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "vsite-zavrsni--toc",
+      "checkId": "toc",
+      "value": true,
+      "category": "structure",
+      "label": "Sadrzaj",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "vsite-pravilnik-2014",
+      "sourcePage": "Članak 7. st. 2",
+      "quote": "Završni rad studenta u pravilu ima 30-40 stranica, a diplomski rad 50-60 stranica. Rad je opremljen naslovnom stranicom, stranicom zadatka, sadržajem, zaključkom, popisom literature, sažetkom na hrvatskom i engleskom jeziku, te ključnim riječima na hrvatskom i engleskom jeziku.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "aef4be0c09dbc8046fea31e2b76ea8c4a6c2435dc5a6c3b918aa96edcd3540a5",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "confirmedVia": "human-audit"
+    }
+  ],
+  "generatedAt": "2026-07-02"
+}

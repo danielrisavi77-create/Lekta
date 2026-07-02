@@ -513,6 +513,14 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "hks-diplomski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
       "profileId": "kbf-diplomski",
       "scored": 9,
       "machineCheckable": 8,
@@ -921,6 +929,38 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "vkjs-diplomski",
+      "scored": 7,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1.1666666666666667,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "vkjs-zavrsni",
+      "scored": 7,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1.1666666666666667,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "vsite-diplomski",
+      "scored": 2,
+      "machineCheckable": 2,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "vsite-zavrsni",
+      "scored": 2,
+      "machineCheckable": 2,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
       "profileId": "zsem-diplomski",
       "scored": 5,
       "machineCheckable": 5,
@@ -953,5 +993,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 675
+  "totalScored": 699
 }

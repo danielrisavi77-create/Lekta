@@ -494,6 +494,7 @@
           "Komunikologija",
           "Sestrinstvo",
           "Medicina",
+          "Diplomski sveucilisni studiji HKS",
           "Opći profil ustanove"
         ],
         "status": "research"
@@ -688,6 +689,8 @@
         "family": "stem",
         "programs": [
           "Informacijske tehnologije",
+          "Prijediplomski strucni studiji VSITE (zavrsni rad)",
+          "Diplomski strucni studiji VSITE",
           "Opći profil ustanove"
         ],
         "status": "generic"
@@ -723,6 +726,8 @@
         "programs": [
           "Kriminalistika",
           "Javna sigurnost",
+          "Prijediplomski strucni studij VKJS (zavrsni rad)",
+          "Specijalisticki diplomski strucni studij VKJS (diplomski rad)",
           "Opći profil ustanove"
         ],
         "status": "generic"

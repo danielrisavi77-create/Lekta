@@ -1,0 +1,153 @@
+{
+  "faculty": "hks",
+  "institution": "hks",
+  "catalogPrograms": [
+    "Diplomski sveucilisni studiji HKS"
+  ],
+  "sources": [
+    {
+      "id": "hks-opce-upute-diplomski-2023",
+      "kind": "guidelines",
+      "title": "Opce upute za izradu diplomskog rada (HKS, izmjene prosinac 2023)",
+      "url": "https://www.unicath.hr/sites/default/files/2024-10/Opc%CC%81e-upute-za-izradu-diplomskog-rada-izmjene-prosinac-2023.pdf",
+      "publisher": "Hrvatsko katolicko sveuciliste",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/hks/hks-opce-upute-diplomski-2023.pdf",
+      "snapshotHash": "c3a0193ffb9b03ce3d04e79ff0a6f7827e50121326d3050b90a51783b3858f88",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Institucija-wide Opce upute (dio I. \"Diplomski rad pise se\"); mandatorna tipografija. HKS regulira samo diplomski rad. Odjelne Posebne upute dodaju opseg u karticama (1800 znakova, ne stranice) i citatni stil koji varira po odjelu (sestrinstvo Vancouver, psihologija APA, povijest Chicago) -> advisory, izvan institucijskog scored skupa."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "hks-diplomski",
+      "unitId": "hks",
+      "programs": [
+        "Diplomski sveucilisni studiji HKS"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "HKS, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Book Antiqua"
+        ],
+        "size": [
+          11
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Hrvatsko katolicko sveuciliste), citano izravno. Opseg (u karticama) i citatni stil odreduju se odjelnim Posebnim uputama i razlikuju se po odjelu -> nisu u institucijskom scored skupu.",
+      "sources": [
+        {
+          "title": "Opce upute za izradu diplomskog rada (HKS, izmjene prosinac 2023)",
+          "url": "https://www.unicath.hr/sites/default/files/2024-10/Opc%CC%81e-upute-za-izradu-diplomskog-rada-izmjene-prosinac-2023.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Opce upute za izradu diplomskog rada (HKS, izmjene prosinac 2023)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Vrsta slova",
+        "Velicina slova",
+        "Margine",
+        "Prored",
+        "Obostrano poravnanje"
+      ],
+      "advisoryScope": [
+        "Opseg (odjelno)",
+        "Stil citiranja (odjelno)"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-hks-diplomski--paper-size-verified-2026-07-02",
+      "ruleId": "hks-diplomski--paper-size",
+      "profileId": "hks-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "hks-opce-upute-diplomski-2023",
+      "sourcePage": "Opce upute, dio I. (Diplomski rad pise se), str. 1",
+      "quote": "Diplomski rad piše se: na računalu u formatu A4",
+      "note": "Cross-institution port (Hrvatsko katolicko sveuciliste): direktno citanje izvora."
+    },
+    {
+      "id": "led-hks-diplomski--font-verified-2026-07-02",
+      "ruleId": "hks-diplomski--font",
+      "profileId": "hks-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "hks-opce-upute-diplomski-2023",
+      "sourcePage": "Opce upute, dio I. (Diplomski rad pise se), str. 1",
+      "quote": "pismo (font): Book Antiqua, veličina slova 11",
+      "note": "Cross-institution port (Hrvatsko katolicko sveuciliste): direktno citanje izvora."
+    },
+    {
+      "id": "led-hks-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "hks-diplomski--font-size",
+      "profileId": "hks-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "hks-opce-upute-diplomski-2023",
+      "sourcePage": "Opce upute, dio I. (Diplomski rad pise se), str. 1",
+      "quote": "pismo (font): Book Antiqua, veličina slova 11",
+      "note": "Cross-institution port (Hrvatsko katolicko sveuciliste): direktno citanje izvora."
+    },
+    {
+      "id": "led-hks-diplomski--margins-verified-2026-07-02",
+      "ruleId": "hks-diplomski--margins",
+      "profileId": "hks-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "hks-opce-upute-diplomski-2023",
+      "sourcePage": "Opce upute, dio I. (Diplomski rad pise se), str. 1",
+      "quote": "margine: lijevo i desno 2,5 cm, gore i dolje 2,5 cm",
+      "note": "Cross-institution port (Hrvatsko katolicko sveuciliste): direktno citanje izvora."
+    },
+    {
+      "id": "led-hks-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "hks-diplomski--line-spacing",
+      "profileId": "hks-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "hks-opce-upute-diplomski-2023",
+      "sourcePage": "Opce upute, dio I. (Diplomski rad pise se), str. 1",
+      "quote": "prored: 1,5",
+      "note": "Cross-institution port (Hrvatsko katolicko sveuciliste): direktno citanje izvora."
+    },
+    {
+      "id": "led-hks-diplomski--justify-verified-2026-07-02",
+      "ruleId": "hks-diplomski--justify",
+      "profileId": "hks-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "hks-opce-upute-diplomski-2023",
+      "sourcePage": "Opce upute, dio I. (Diplomski rad pise se), str. 1",
+      "quote": "tekst mora biti obostrano poravnan (Paragraph, Justify)",
+      "note": "Cross-institution port (Hrvatsko katolicko sveuciliste): direktno citanje izvora."
+    }
+  ]
+}

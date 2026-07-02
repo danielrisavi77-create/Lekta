@@ -14988,5 +14988,236 @@
     "advisoryScope": [
       "Vrsta slova (preporuka)"
     ]
+  },
+  {
+    "id": "vsite-zavrsni",
+    "unitId": "vsite",
+    "programs": [
+      "Prijediplomski strucni studiji VSITE (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "VSITE, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "requireToc": true
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Veleuciliste suvremenih informacijskih tehnologija), citano izravno.",
+    "sources": [
+      {
+        "title": "Pravilnik o izradi i obrani zavrsnog i diplomskog rada (VSITE, 2014)",
+        "url": "https://www.vsite.hr/sites/default/files/Vsite-Pravilnik_za_zavrsni_rad140923-reg.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o izradi i obrani zavrsnog i diplomskog rada (VSITE, 2014)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Opseg (30-40 str.)",
+      "Sadrzaj"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "vsite-diplomski",
+    "unitId": "vsite",
+    "programs": [
+      "Diplomski strucni studiji VSITE"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "VSITE, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "requireToc": true
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Veleuciliste suvremenih informacijskih tehnologija), citano izravno.",
+    "sources": [
+      {
+        "title": "Pravilnik o izradi i obrani zavrsnog i diplomskog rada (VSITE, 2014)",
+        "url": "https://www.vsite.hr/sites/default/files/Vsite-Pravilnik_za_zavrsni_rad140923-reg.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o izradi i obrani zavrsnog i diplomskog rada (VSITE, 2014)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Opseg (50-60 str.)",
+      "Sadrzaj"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "vkjs-zavrsni",
+    "unitId": "vkjs",
+    "programs": [
+      "Prijediplomski strucni studij VKJS (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "VKJS, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "recommendedCitation": "apa"
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Veleuciliste kriminalistike i javne sigurnosti), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za izradu zavrsnog/diplomskog rada (VKJS, 2024)",
+        "url": "https://kriminalistika.gov.hr/UserDocsImages/04_vps/2024/Upute%20za%20izradu%20zavr%C5%A1nog_diplomskog%20rada.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu zavrsnog/diplomskog rada (VKJS, 2024)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Stil citiranja (APA, autor-godina)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "vkjs-diplomski",
+    "unitId": "vkjs",
+    "programs": [
+      "Specijalisticki diplomski strucni studij VKJS (diplomski rad)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "VKJS, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "recommendedCitation": "apa"
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Veleuciliste kriminalistike i javne sigurnosti), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za izradu zavrsnog/diplomskog rada (VKJS, 2024)",
+        "url": "https://kriminalistika.gov.hr/UserDocsImages/04_vps/2024/Upute%20za%20izradu%20zavr%C5%A1nog_diplomskog%20rada.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu zavrsnog/diplomskog rada (VKJS, 2024)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Stil citiranja (APA, autor-godina)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "hks-diplomski",
+    "unitId": "hks",
+    "programs": [
+      "Diplomski sveucilisni studiji HKS"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "HKS, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Book Antiqua"
+      ],
+      "size": [
+        11
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Hrvatsko katolicko sveuciliste), citano izravno. Opseg (u karticama) i citatni stil odreduju se odjelnim Posebnim uputama i razlikuju se po odjelu -> nisu u institucijskom scored skupu.",
+    "sources": [
+      {
+        "title": "Opce upute za izradu diplomskog rada (HKS, izmjene prosinac 2023)",
+        "url": "https://www.unicath.hr/sites/default/files/2024-10/Opc%CC%81e-upute-za-izradu-diplomskog-rada-izmjene-prosinac-2023.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Opce upute za izradu diplomskog rada (HKS, izmjene prosinac 2023)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Velicina slova",
+      "Margine",
+      "Prored",
+      "Obostrano poravnanje"
+    ],
+    "advisoryScope": [
+      "Opseg (odjelno)",
+      "Stil citiranja (odjelno)"
+    ]
   }
 ]

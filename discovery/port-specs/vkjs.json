@@ -1,0 +1,303 @@
+{
+  "faculty": "vkjs",
+  "institution": "vkjs",
+  "catalogPrograms": [
+    "Prijediplomski strucni studij VKJS (zavrsni rad)",
+    "Specijalisticki diplomski strucni studij VKJS (diplomski rad)"
+  ],
+  "sources": [
+    {
+      "id": "vkjs-upute-zavrsni-diplomski-2024",
+      "kind": "guidelines",
+      "title": "Upute za izradu zavrsnog/diplomskog rada (VKJS, 2024)",
+      "url": "https://kriminalistika.gov.hr/UserDocsImages/04_vps/2024/Upute%20za%20izradu%20zavr%C5%A1nog_diplomskog%20rada.pdf",
+      "publisher": "Veleuciliste kriminalistike i javne sigurnosti",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/vkjs/vkjs-upute-zavrsni-diplomski-2024.pdf",
+      "snapshotHash": "630384c031ccfc966e1afbd18d7002314571e689140c6ef87e36d5fddf440082",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Institucija-wide Upute (Policijska akademija / MUP RH); izrijekom \"propisuje se izgled rada\". Tekstualni PDF, citano izravno. Vrijedi za zavrsni i diplomski rad. Nema page-count pravila. Citatni stil APA jedinstven i mandatoran."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "vkjs-zavrsni",
+      "unitId": "vkjs",
+      "programs": [
+        "Prijediplomski strucni studij VKJS (zavrsni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "VKJS, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "recommendedCitation": "apa"
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Veleuciliste kriminalistike i javne sigurnosti), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za izradu zavrsnog/diplomskog rada (VKJS, 2024)",
+          "url": "https://kriminalistika.gov.hr/UserDocsImages/04_vps/2024/Upute%20za%20izradu%20zavr%C5%A1nog_diplomskog%20rada.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu zavrsnog/diplomskog rada (VKJS, 2024)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Margine",
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Obostrano poravnanje",
+        "Stil citiranja (APA, autor-godina)"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "vkjs-diplomski",
+      "unitId": "vkjs",
+      "programs": [
+        "Specijalisticki diplomski strucni studij VKJS (diplomski rad)"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "VKJS, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "recommendedCitation": "apa"
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Veleuciliste kriminalistike i javne sigurnosti), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za izradu zavrsnog/diplomskog rada (VKJS, 2024)",
+          "url": "https://kriminalistika.gov.hr/UserDocsImages/04_vps/2024/Upute%20za%20izradu%20zavr%C5%A1nog_diplomskog%20rada.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu zavrsnog/diplomskog rada (VKJS, 2024)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Margine",
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Obostrano poravnanje",
+        "Stil citiranja (APA, autor-godina)"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-vkjs-zavrsni--paper-size-verified-2026-07-02",
+      "ruleId": "vkjs-zavrsni--paper-size",
+      "profileId": "vkjs-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "vkjs-upute-zavrsni-diplomski-2024",
+      "sourcePage": "t. 1.2.",
+      "quote": "Rad treba biti računalno napisan u formatu docx (kompatibilan s programom Microsoft Word), u formatu A4 (21 x 29,7 cm).",
+      "note": "Cross-institution port (Veleuciliste kriminalistike i javne sigurnosti): direktno citanje izvora."
+    },
+    {
+      "id": "led-vkjs-zavrsni--margins-verified-2026-07-02",
+      "ruleId": "vkjs-zavrsni--margins",
+      "profileId": "vkjs-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "vkjs-upute-zavrsni-diplomski-2024",
+      "sourcePage": "t. 1.3.",
+      "quote": "Margine trebaju biti: lijeva 2,5 cm, desna 2,0 cm, gornja i donja po 2,5 cm.",
+      "note": "Cross-institution port (Veleuciliste kriminalistike i javne sigurnosti): direktno citanje izvora."
+    },
+    {
+      "id": "led-vkjs-zavrsni--font-verified-2026-07-02",
+      "ruleId": "vkjs-zavrsni--font",
+      "profileId": "vkjs-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "vkjs-upute-zavrsni-diplomski-2024",
+      "sourcePage": "t. 1.4.",
+      "quote": "Oblik i veličina slova (veličina: 12 točaka, font: Times New Roman) su jednaki u cijelom tekstu, osim u naslovima, podnaslovima i fusnotama, a prored je 1,5 redak u cijelom tekstu.",
+      "note": "Cross-institution port (Veleuciliste kriminalistike i javne sigurnosti): direktno citanje izvora."
+    },
+    {
+      "id": "led-vkjs-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "vkjs-zavrsni--font-size",
+      "profileId": "vkjs-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "vkjs-upute-zavrsni-diplomski-2024",
+      "sourcePage": "t. 1.4.",
+      "quote": "Oblik i veličina slova (veličina: 12 točaka, font: Times New Roman) su jednaki u cijelom tekstu, osim u naslovima, podnaslovima i fusnotama, a prored je 1,5 redak u cijelom tekstu.",
+      "note": "Cross-institution port (Veleuciliste kriminalistike i javne sigurnosti): direktno citanje izvora."
+    },
+    {
+      "id": "led-vkjs-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "vkjs-zavrsni--line-spacing",
+      "profileId": "vkjs-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "vkjs-upute-zavrsni-diplomski-2024",
+      "sourcePage": "t. 1.4.",
+      "quote": "Oblik i veličina slova (veličina: 12 točaka, font: Times New Roman) su jednaki u cijelom tekstu, osim u naslovima, podnaslovima i fusnotama, a prored je 1,5 redak u cijelom tekstu.",
+      "note": "Cross-institution port (Veleuciliste kriminalistike i javne sigurnosti): direktno citanje izvora."
+    },
+    {
+      "id": "led-vkjs-zavrsni--justify-verified-2026-07-02",
+      "ruleId": "vkjs-zavrsni--justify",
+      "profileId": "vkjs-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "vkjs-upute-zavrsni-diplomski-2024",
+      "sourcePage": "t. 1.8.",
+      "quote": "Tekst se piše s obostranim poravnanjem.",
+      "note": "Cross-institution port (Veleuciliste kriminalistike i javne sigurnosti): direktno citanje izvora."
+    },
+    {
+      "id": "led-vkjs-zavrsni--citation-style-verified-2026-07-02",
+      "ruleId": "vkjs-zavrsni--citation-style",
+      "profileId": "vkjs-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "vkjs-upute-zavrsni-diplomski-2024",
+      "sourcePage": "t. 3.",
+      "quote": "Za izradu završnih/diplomskih radova na Veleučilištu kriminalistike i javne sigurnosti koristi se APA stil.",
+      "note": "Cross-institution port (Veleuciliste kriminalistike i javne sigurnosti): direktno citanje izvora."
+    },
+    {
+      "id": "led-vkjs-diplomski--paper-size-verified-2026-07-02",
+      "ruleId": "vkjs-diplomski--paper-size",
+      "profileId": "vkjs-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "vkjs-upute-zavrsni-diplomski-2024",
+      "sourcePage": "t. 1.2.",
+      "quote": "Rad treba biti računalno napisan u formatu docx (kompatibilan s programom Microsoft Word), u formatu A4 (21 x 29,7 cm).",
+      "note": "Cross-institution port (Veleuciliste kriminalistike i javne sigurnosti): direktno citanje izvora."
+    },
+    {
+      "id": "led-vkjs-diplomski--margins-verified-2026-07-02",
+      "ruleId": "vkjs-diplomski--margins",
+      "profileId": "vkjs-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "vkjs-upute-zavrsni-diplomski-2024",
+      "sourcePage": "t. 1.3.",
+      "quote": "Margine trebaju biti: lijeva 2,5 cm, desna 2,0 cm, gornja i donja po 2,5 cm.",
+      "note": "Cross-institution port (Veleuciliste kriminalistike i javne sigurnosti): direktno citanje izvora."
+    },
+    {
+      "id": "led-vkjs-diplomski--font-verified-2026-07-02",
+      "ruleId": "vkjs-diplomski--font",
+      "profileId": "vkjs-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "vkjs-upute-zavrsni-diplomski-2024",
+      "sourcePage": "t. 1.4.",
+      "quote": "Oblik i veličina slova (veličina: 12 točaka, font: Times New Roman) su jednaki u cijelom tekstu, osim u naslovima, podnaslovima i fusnotama, a prored je 1,5 redak u cijelom tekstu.",
+      "note": "Cross-institution port (Veleuciliste kriminalistike i javne sigurnosti): direktno citanje izvora."
+    },
+    {
+      "id": "led-vkjs-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "vkjs-diplomski--font-size",
+      "profileId": "vkjs-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "vkjs-upute-zavrsni-diplomski-2024",
+      "sourcePage": "t. 1.4.",
+      "quote": "Oblik i veličina slova (veličina: 12 točaka, font: Times New Roman) su jednaki u cijelom tekstu, osim u naslovima, podnaslovima i fusnotama, a prored je 1,5 redak u cijelom tekstu.",
+      "note": "Cross-institution port (Veleuciliste kriminalistike i javne sigurnosti): direktno citanje izvora."
+    },
+    {
+      "id": "led-vkjs-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "vkjs-diplomski--line-spacing",
+      "profileId": "vkjs-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "vkjs-upute-zavrsni-diplomski-2024",
+      "sourcePage": "t. 1.4.",
+      "quote": "Oblik i veličina slova (veličina: 12 točaka, font: Times New Roman) su jednaki u cijelom tekstu, osim u naslovima, podnaslovima i fusnotama, a prored je 1,5 redak u cijelom tekstu.",
+      "note": "Cross-institution port (Veleuciliste kriminalistike i javne sigurnosti): direktno citanje izvora."
+    },
+    {
+      "id": "led-vkjs-diplomski--justify-verified-2026-07-02",
+      "ruleId": "vkjs-diplomski--justify",
+      "profileId": "vkjs-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "vkjs-upute-zavrsni-diplomski-2024",
+      "sourcePage": "t. 1.8.",
+      "quote": "Tekst se piše s obostranim poravnanjem.",
+      "note": "Cross-institution port (Veleuciliste kriminalistike i javne sigurnosti): direktno citanje izvora."
+    },
+    {
+      "id": "led-vkjs-diplomski--citation-style-verified-2026-07-02",
+      "ruleId": "vkjs-diplomski--citation-style",
+      "profileId": "vkjs-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "vkjs-upute-zavrsni-diplomski-2024",
+      "sourcePage": "t. 3.",
+      "quote": "Za izradu završnih/diplomskih radova na Veleučilištu kriminalistike i javne sigurnosti koristi se APA stil.",
+      "note": "Cross-institution port (Veleuciliste kriminalistike i javne sigurnosti): direktno citanje izvora."
+    }
+  ]
+}

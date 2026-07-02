@@ -1,0 +1,143 @@
+{
+  "faculty": "vsite",
+  "institution": "vsite",
+  "catalogPrograms": [
+    "Prijediplomski strucni studiji VSITE (zavrsni rad)",
+    "Diplomski strucni studiji VSITE"
+  ],
+  "sources": [
+    {
+      "id": "vsite-pravilnik-2014",
+      "kind": "regulation",
+      "title": "Pravilnik o izradi i obrani zavrsnog i diplomskog rada (VSITE, 2014)",
+      "url": "https://www.vsite.hr/sites/default/files/Vsite-Pravilnik_za_zavrsni_rad140923-reg.pdf",
+      "publisher": "Veleuciliste suvremenih informacijskih tehnologija",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/vsite/vsite-pravilnik-2014.pdf",
+      "snapshotHash": "aef4be0c09dbc8046fea31e2b76ea8c4a6c2435dc5a6c3b918aa96edcd3540a5",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Institucija-wide Pravilnik; Clanak 7 daje opseg i strukturu. Tipografija izrijekom delegirana na Predlozak (cl. 7 st. 5) koji nije javno dohvatljiv -> izostavljena. Numeracija poglavlja i numeriran popis literature su mandatorni ali advisory (bez tipografije)."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "vsite-zavrsni",
+      "unitId": "vsite",
+      "programs": [
+        "Prijediplomski strucni studiji VSITE (zavrsni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "VSITE, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "requireToc": true
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Veleuciliste suvremenih informacijskih tehnologija), citano izravno.",
+      "sources": [
+        {
+          "title": "Pravilnik o izradi i obrani zavrsnog i diplomskog rada (VSITE, 2014)",
+          "url": "https://www.vsite.hr/sites/default/files/Vsite-Pravilnik_za_zavrsni_rad140923-reg.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o izradi i obrani zavrsnog i diplomskog rada (VSITE, 2014)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Opseg (30-40 str.)",
+        "Sadrzaj"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "vsite-diplomski",
+      "unitId": "vsite",
+      "programs": [
+        "Diplomski strucni studiji VSITE"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "VSITE, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "requireToc": true
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Veleuciliste suvremenih informacijskih tehnologija), citano izravno.",
+      "sources": [
+        {
+          "title": "Pravilnik o izradi i obrani zavrsnog i diplomskog rada (VSITE, 2014)",
+          "url": "https://www.vsite.hr/sites/default/files/Vsite-Pravilnik_za_zavrsni_rad140923-reg.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o izradi i obrani zavrsnog i diplomskog rada (VSITE, 2014)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Opseg (50-60 str.)",
+        "Sadrzaj"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-vsite-zavrsni--page-count-verified-2026-07-02",
+      "ruleId": "vsite-zavrsni--page-count",
+      "profileId": "vsite-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "vsite-pravilnik-2014",
+      "sourcePage": "Članak 7. st. 2",
+      "quote": "Završni rad studenta u pravilu ima 30-40 stranica, a diplomski rad 50-60 stranica. Rad je opremljen naslovnom stranicom, stranicom zadatka, sadržajem, zaključkom, popisom literature, sažetkom na hrvatskom i engleskom jeziku, te ključnim riječima na hrvatskom i engleskom jeziku.",
+      "note": "Cross-institution port (Veleuciliste suvremenih informacijskih tehnologija): direktno citanje izvora."
+    },
+    {
+      "id": "led-vsite-zavrsni--toc-verified-2026-07-02",
+      "ruleId": "vsite-zavrsni--toc",
+      "profileId": "vsite-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "vsite-pravilnik-2014",
+      "sourcePage": "Članak 7. st. 2",
+      "quote": "Završni rad studenta u pravilu ima 30-40 stranica, a diplomski rad 50-60 stranica. Rad je opremljen naslovnom stranicom, stranicom zadatka, sadržajem, zaključkom, popisom literature, sažetkom na hrvatskom i engleskom jeziku, te ključnim riječima na hrvatskom i engleskom jeziku.",
+      "note": "Cross-institution port (Veleuciliste suvremenih informacijskih tehnologija): direktno citanje izvora."
+    },
+    {
+      "id": "led-vsite-diplomski--page-count-verified-2026-07-02",
+      "ruleId": "vsite-diplomski--page-count",
+      "profileId": "vsite-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "vsite-pravilnik-2014",
+      "sourcePage": "Članak 7. st. 2",
+      "quote": "Završni rad studenta u pravilu ima 30-40 stranica, a diplomski rad 50-60 stranica. Rad je opremljen naslovnom stranicom, stranicom zadatka, sadržajem, zaključkom, popisom literature, sažetkom na hrvatskom i engleskom jeziku, te ključnim riječima na hrvatskom i engleskom jeziku.",
+      "note": "Cross-institution port (Veleuciliste suvremenih informacijskih tehnologija): direktno citanje izvora."
+    },
+    {
+      "id": "led-vsite-diplomski--toc-verified-2026-07-02",
+      "ruleId": "vsite-diplomski--toc",
+      "profileId": "vsite-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "vsite-pravilnik-2014",
+      "sourcePage": "Članak 7. st. 2",
+      "quote": "Završni rad studenta u pravilu ima 30-40 stranica, a diplomski rad 50-60 stranica. Rad je opremljen naslovnom stranicom, stranicom zadatka, sadržajem, zaključkom, popisom literature, sažetkom na hrvatskom i engleskom jeziku, te ključnim riječima na hrvatskom i engleskom jeziku.",
+      "note": "Cross-institution port (Veleuciliste suvremenih informacijskih tehnologija): direktno citanje izvora."
+    }
+  ]
+}
