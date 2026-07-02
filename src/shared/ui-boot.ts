@@ -6,18 +6,22 @@
 // samo latin i latin-ext za hrvatski sadrzaj).
 import '@fontsource-variable/source-serif-4';
 import 'open-props/easings'; // samo easing krivulje (bez boja/sjena, da topla paleta ostane netaknuta)
-import { createIcons, SunMoon, Menu, Lock, Upload } from 'lucide';
+import { createIcons, SunMoon, Menu, Lock, Upload, CheckCircle, AlertTriangle, AlertCircle, Info } from 'lucide';
 
 function renderIcons() {
   try {
     createIcons({
-      icons: { SunMoon, Menu, Lock, Upload },
+      icons: { SunMoon, Menu, Lock, Upload, CheckCircle, AlertTriangle, AlertCircle, Info },
       attrs: { 'aria-hidden': 'true', 'stroke-width': 2 },
     });
   } catch (e) {
     // Ikona koja fali ne smije srusiti stranicu; glif fallback ostaje u markupu.
   }
 }
+
+// Dinamicki renderan sadrzaj (rezultat analize, QA konzola) ubacuje <i data-lucide>
+// nakon prvog prolaza, pa app.ts poziva ovaj refresh da ih pretvori u SVG.
+(window as any).__lektaIcons = renderIcons;
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', renderIcons);

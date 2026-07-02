@@ -40,6 +40,7 @@ export default defineConfig({
         usporedba: resolve(__dirname, 'landing_usporedba.html'),
         citat: resolve(__dirname, 'citat.html'),
         kartice: resolve(__dirname, 'kartice.html'),
+        naslovnica: resolve(__dirname, 'naslovnica.html'),
       },
     },
   },
