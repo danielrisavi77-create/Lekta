@@ -67,9 +67,6 @@ const ledIds = new Set(readJson('data/verification/ledger.json').map((l) => l.id
 
 const catalog = readJson('data/catalog/zagreb-catalog.json');
 const manifest = readJson('data/manifest.json');
-const unizg = catalog.find((i) => i.id === 'unizg');
-if (!unizg) throw new Error('katalog nema instituciju unizg');
-unizg.units ??= [];
 
 const newSources = [], newProfiles = [], newLedger = [];
 let addedProg = 0;
@@ -79,12 +76,16 @@ for (const path of specPaths) {
   const spec = JSON.parse(readFileSync(path, 'utf8'));
   const fs = { faculty: spec.faculty, sources: 0, profiles: 0, ledger: 0, programs: 0 };
 
-  // --- katalog unit + programi (union, in-memory; upis strukturno na kraju) ---
-  let unit = unizg.units.find((u) => u.id === (spec.unit?.id || spec.faculty));
+  // --- katalog: institucija (default unizg) + unit + programi (union) ---
+  const instId = spec.institution || 'unizg';
+  const inst = catalog.find((i) => i.id === instId);
+  if (!inst) throw new Error(`katalog nema instituciju ${instId}`);
+  inst.units ??= [];
+  let unit = inst.units.find((u) => u.id === (spec.unit?.id || spec.faculty));
   if (!unit && spec.unit) {
     unit = { ...spec.unit, programs: [] };
-    unizg.units.push(unit);
-    unizg.units.sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
+    inst.units.push(unit);
+    inst.units.sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
   }
   if (unit) {
     unit.programs ??= [];

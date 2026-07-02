@@ -1,0 +1,117 @@
+{
+  "profileId": "zsem-diplomski",
+  "entries": [
+    {
+      "ruleId": "zsem-diplomski--font",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Vrsta slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "zsem-pravilnik-diplomski-2023",
+      "sourcePage": "Clanak 28. (Tehnicko uredenje rada)",
+      "quote": "Tehnicko ureenje rada. Pismo: Times New Roman. Font: 12. Poravnanje teksta: obostrano. Razmak izmeu redova: 1,5.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "14cbc4cdbbffae19d900bb8cc806a69bb20c8615b005b9e29ec040554108e7f0",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "confirmedVia": "ai-1pass-batch"
+    },
+    {
+      "ruleId": "zsem-diplomski--font-size",
+      "checkId": "font-size",
+      "value": 12,
+      "category": "format",
+      "label": "Velicina slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "zsem-pravilnik-diplomski-2023",
+      "sourcePage": "Clanak 28. (Tehnicko uredenje rada)",
+      "quote": "Tehnicko ureenje rada. Pismo: Times New Roman. Font: 12. Poravnanje teksta: obostrano. Razmak izmeu redova: 1,5.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "14cbc4cdbbffae19d900bb8cc806a69bb20c8615b005b9e29ec040554108e7f0",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "confirmedVia": "ai-1pass-batch"
+    },
+    {
+      "ruleId": "zsem-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "zsem-pravilnik-diplomski-2023",
+      "sourcePage": "Clanak 28. (Tehnicko uredenje rada)",
+      "quote": "Tehnicko ureenje rada. Pismo: Times New Roman. Font: 12. Poravnanje teksta: obostrano. Razmak izmeu redova: 1,5.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "14cbc4cdbbffae19d900bb8cc806a69bb20c8615b005b9e29ec040554108e7f0",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "confirmedVia": "ai-1pass-batch"
+    },
+    {
+      "ruleId": "zsem-diplomski--justify",
+      "checkId": "justify",
+      "value": true,
+      "category": "format",
+      "label": "Obostrano poravnanje",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "zsem-pravilnik-diplomski-2023",
+      "sourcePage": "Clanak 28. (Tehnicko uredenje rada)",
+      "quote": "Tehnicko ureenje rada. Pismo: Times New Roman. Font: 12. Poravnanje teksta: obostrano. Razmak izmeu redova: 1,5.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "14cbc4cdbbffae19d900bb8cc806a69bb20c8615b005b9e29ec040554108e7f0",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "confirmedVia": "ai-1pass-batch"
+    },
+    {
+      "ruleId": "zsem-diplomski--heading-rules",
+      "checkId": "heading-rules",
+      "value": {
+        "numberRequired": true,
+        "romanLevelOneAllowed": false,
+        "maxLevel": 3,
+        "trailingDot": true,
+        "levels": {
+          "1": {
+            "uppercase": true
+          },
+          "2": {
+            "uppercase": true
+          },
+          "3": {}
+        }
+      },
+      "category": "structure",
+      "label": "Oblikovanje naslova po razinama",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "zsem-pravilnik-diplomski-2023",
+      "sourcePage": "Clanak 28. (Tehnicko uredenje rada)",
+      "quote": "Naslovi poglavlja i potpoglavlja moraju biti kratki i jasni, te redom numerirani arapskim brojevima, najvise do tri (3) razine, ali ne vise od toga (Primjer 1., 1.1., 1.1.1.).",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "14cbc4cdbbffae19d900bb8cc806a69bb20c8615b005b9e29ec040554108e7f0",
+      "lastVerified": "2026-07-02",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "confirmedVia": "ai-1pass-batch"
+    }
+  ],
+  "generatedAt": "2026-07-02"
+}

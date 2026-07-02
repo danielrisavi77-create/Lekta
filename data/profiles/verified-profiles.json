@@ -14411,5 +14411,223 @@
     "advisoryScope": [
       "obvezne cjeline rada"
     ]
+  },
+  {
+    "id": "zsem-zavrsni",
+    "unitId": "zsem",
+    "programs": [
+      "Prijediplomski strucni studiji ZSEM (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "ZSEM, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog Pravilnika (Zagrebacka skola ekonomije i managementa), citano izravno.",
+    "sources": [
+      {
+        "title": "Pravilnik o izradi i obrani zavrsnog rada na prijediplomskim strucnim studijima (ZSEM, 2023)",
+        "url": "https://zsem.hr/wp-content/uploads/2024/11/Pravilnik-o-izradi-i-obrani-zavrsnog-rada-na-prijediplomskim-strucnim-studijima-2023.docx.pdf"
+      },
+      {
+        "title": "Pravilnik o diplomskom radu (ZSEM, svibanj 2023)",
+        "url": "https://zsem.hr/wp-content/uploads/2024/11/PRAVILNIK-O-DIPLOMSKOM-RADU-svibanj-2023-1.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o izradi i obrani zavrsnog rada na prijediplomskim strucnim studijima (ZSEM, 2023)",
+      "Pravilnik o diplomskom radu (ZSEM, svibanj 2023)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Opseg (najmanje 30 str.)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "zsem-diplomski",
+    "unitId": "zsem",
+    "programs": [
+      "Diplomski studiji ZSEM"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "ZSEM, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "headingRules": {
+        "numberRequired": true,
+        "romanLevelOneAllowed": false,
+        "maxLevel": 3,
+        "trailingDot": true,
+        "levels": {
+          "1": {
+            "uppercase": true
+          },
+          "2": {
+            "uppercase": true
+          },
+          "3": {}
+        }
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog Pravilnika (Zagrebacka skola ekonomije i managementa), citano izravno.",
+    "sources": [
+      {
+        "title": "Pravilnik o izradi i obrani zavrsnog rada na prijediplomskim strucnim studijima (ZSEM, 2023)",
+        "url": "https://zsem.hr/wp-content/uploads/2024/11/Pravilnik-o-izradi-i-obrani-zavrsnog-rada-na-prijediplomskim-strucnim-studijima-2023.docx.pdf"
+      },
+      {
+        "title": "Pravilnik o diplomskom radu (ZSEM, svibanj 2023)",
+        "url": "https://zsem.hr/wp-content/uploads/2024/11/PRAVILNIK-O-DIPLOMSKOM-RADU-svibanj-2023-1.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o izradi i obrani zavrsnog rada na prijediplomskim strucnim studijima (ZSEM, 2023)",
+      "Pravilnik o diplomskom radu (ZSEM, svibanj 2023)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Oblikovanje naslova po razinama"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "libertas-zavrsni",
+    "unitId": "libertas",
+    "programs": [
+      "Prijediplomski studiji Libertas (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Libertas, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog Pravilnika (Sveuciliste Libertas), citano izravno.",
+    "sources": [
+      {
+        "title": "Pravilnik o zavrsnom radu (Libertas, srpanj 2024)",
+        "url": "https://www.libertas.hr/wp-content/uploads/2025/01/Pravilnik-o-zavrsnom-radu.pdf"
+      },
+      {
+        "title": "Pravilnik o diplomskom radu (Libertas, srpanj 2024)",
+        "url": "https://www.libertas.hr/wp-content/uploads/2025/01/Pravilnik-o-diplomskom-radu.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnom radu (Libertas, srpanj 2024)",
+      "Pravilnik o diplomskom radu (Libertas, srpanj 2024)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "libertas-diplomski",
+    "unitId": "libertas",
+    "programs": [
+      "Diplomski studiji Libertas"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Libertas, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireA4": true
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog Pravilnika (Sveuciliste Libertas), citano izravno.",
+    "sources": [
+      {
+        "title": "Pravilnik o zavrsnom radu (Libertas, srpanj 2024)",
+        "url": "https://www.libertas.hr/wp-content/uploads/2025/01/Pravilnik-o-zavrsnom-radu.pdf"
+      },
+      {
+        "title": "Pravilnik o diplomskom radu (Libertas, srpanj 2024)",
+        "url": "https://www.libertas.hr/wp-content/uploads/2025/01/Pravilnik-o-diplomskom-radu.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnom radu (Libertas, srpanj 2024)",
+      "Pravilnik o diplomskom radu (Libertas, srpanj 2024)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Margine"
+    ],
+    "advisoryScope": []
   }
 ]

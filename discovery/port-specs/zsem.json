@@ -1,0 +1,287 @@
+{
+  "faculty": "zsem",
+  "institution": "zsem",
+  "catalogPrograms": [
+    "Prijediplomski strucni studiji ZSEM (zavrsni rad)",
+    "Diplomski studiji ZSEM"
+  ],
+  "sources": [
+    {
+      "id": "zsem-pravilnik-zavrsni-2023",
+      "kind": "regulation",
+      "title": "Pravilnik o izradi i obrani zavrsnog rada na prijediplomskim strucnim studijima (ZSEM, 2023)",
+      "url": "https://zsem.hr/wp-content/uploads/2024/11/Pravilnik-o-izradi-i-obrani-zavrsnog-rada-na-prijediplomskim-strucnim-studijima-2023.docx.pdf",
+      "publisher": "Zagrebacka skola ekonomije i managementa",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/zsem/zsem-pravilnik-zavrsni-2023.pdf",
+      "snapshotHash": "0c254d268e6ce707d176f8e0aa871d95a2d98df86d6773c292879aeb96a2167b",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Institucija-wide Pravilnik; tehnicko uredenje rada citano izravno iz PDF-a."
+    },
+    {
+      "id": "zsem-pravilnik-diplomski-2023",
+      "kind": "regulation",
+      "title": "Pravilnik o diplomskom radu (ZSEM, svibanj 2023)",
+      "url": "https://zsem.hr/wp-content/uploads/2024/11/PRAVILNIK-O-DIPLOMSKOM-RADU-svibanj-2023-1.pdf",
+      "publisher": "Zagrebacka skola ekonomije i managementa",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/zsem/zsem-pravilnik-diplomski-2023.pdf",
+      "snapshotHash": "14cbc4cdbbffae19d900bb8cc806a69bb20c8615b005b9e29ec040554108e7f0",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Institucija-wide Pravilnik; tehnicko uredenje rada citano izravno iz PDF-a."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "zsem-zavrsni",
+      "unitId": "zsem",
+      "programs": [
+        "Prijediplomski strucni studiji ZSEM (zavrsni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "ZSEM, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "requireA4": true
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog Pravilnika (Zagrebacka skola ekonomije i managementa), citano izravno.",
+      "sources": [
+        {
+          "title": "Pravilnik o izradi i obrani zavrsnog rada na prijediplomskim strucnim studijima (ZSEM, 2023)",
+          "url": "https://zsem.hr/wp-content/uploads/2024/11/Pravilnik-o-izradi-i-obrani-zavrsnog-rada-na-prijediplomskim-strucnim-studijima-2023.docx.pdf"
+        },
+        {
+          "title": "Pravilnik o diplomskom radu (ZSEM, svibanj 2023)",
+          "url": "https://zsem.hr/wp-content/uploads/2024/11/PRAVILNIK-O-DIPLOMSKOM-RADU-svibanj-2023-1.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o izradi i obrani zavrsnog rada na prijediplomskim strucnim studijima (ZSEM, 2023)",
+        "Pravilnik o diplomskom radu (ZSEM, svibanj 2023)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Obostrano poravnanje",
+        "Opseg (najmanje 30 str.)"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "zsem-diplomski",
+      "unitId": "zsem",
+      "programs": [
+        "Diplomski studiji ZSEM"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "ZSEM, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "headingRules": {
+          "numberRequired": true,
+          "romanLevelOneAllowed": false,
+          "maxLevel": 3,
+          "trailingDot": true,
+          "levels": {
+            "1": {
+              "uppercase": true
+            },
+            "2": {
+              "uppercase": true
+            },
+            "3": {}
+          }
+        }
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog Pravilnika (Zagrebacka skola ekonomije i managementa), citano izravno.",
+      "sources": [
+        {
+          "title": "Pravilnik o izradi i obrani zavrsnog rada na prijediplomskim strucnim studijima (ZSEM, 2023)",
+          "url": "https://zsem.hr/wp-content/uploads/2024/11/Pravilnik-o-izradi-i-obrani-zavrsnog-rada-na-prijediplomskim-strucnim-studijima-2023.docx.pdf"
+        },
+        {
+          "title": "Pravilnik o diplomskom radu (ZSEM, svibanj 2023)",
+          "url": "https://zsem.hr/wp-content/uploads/2024/11/PRAVILNIK-O-DIPLOMSKOM-RADU-svibanj-2023-1.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o izradi i obrani zavrsnog rada na prijediplomskim strucnim studijima (ZSEM, 2023)",
+        "Pravilnik o diplomskom radu (ZSEM, svibanj 2023)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Obostrano poravnanje",
+        "Oblikovanje naslova po razinama"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-zsem-zavrsni--paper-size-verified-2026-07-02",
+      "ruleId": "zsem-zavrsni--paper-size",
+      "profileId": "zsem-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "zsem-pravilnik-zavrsni-2023",
+      "sourcePage": "poglavlje Tehnicko uredenje zavrsnog rada (str. 3)",
+      "quote": "Zavrsni rad treba biti napisan na racunalu u formatu A4 u pravilu na ne manje od 30 stranica sadrzaja. Prilikom pisanja koristi se font Times New Roman, size 12, obostrano poravnavanje teksta, razmak izmeu redova 1,5pt, uvlaka za prvi red odlomka 1,27pt, razmak izmeu pojedinog odlomka 6pt.",
+      "note": "Cross-institution port (Zagrebacka skola ekonomije i managementa): direktno citanje Pravilnika."
+    },
+    {
+      "id": "led-zsem-zavrsni--font-verified-2026-07-02",
+      "ruleId": "zsem-zavrsni--font",
+      "profileId": "zsem-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "zsem-pravilnik-zavrsni-2023",
+      "sourcePage": "poglavlje Tehnicko uredenje zavrsnog rada (str. 3)",
+      "quote": "Zavrsni rad treba biti napisan na racunalu u formatu A4 u pravilu na ne manje od 30 stranica sadrzaja. Prilikom pisanja koristi se font Times New Roman, size 12, obostrano poravnavanje teksta, razmak izmeu redova 1,5pt, uvlaka za prvi red odlomka 1,27pt, razmak izmeu pojedinog odlomka 6pt.",
+      "note": "Cross-institution port (Zagrebacka skola ekonomije i managementa): direktno citanje Pravilnika."
+    },
+    {
+      "id": "led-zsem-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "zsem-zavrsni--font-size",
+      "profileId": "zsem-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "zsem-pravilnik-zavrsni-2023",
+      "sourcePage": "poglavlje Tehnicko uredenje zavrsnog rada (str. 3)",
+      "quote": "Zavrsni rad treba biti napisan na racunalu u formatu A4 u pravilu na ne manje od 30 stranica sadrzaja. Prilikom pisanja koristi se font Times New Roman, size 12, obostrano poravnavanje teksta, razmak izmeu redova 1,5pt, uvlaka za prvi red odlomka 1,27pt, razmak izmeu pojedinog odlomka 6pt.",
+      "note": "Cross-institution port (Zagrebacka skola ekonomije i managementa): direktno citanje Pravilnika."
+    },
+    {
+      "id": "led-zsem-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "zsem-zavrsni--line-spacing",
+      "profileId": "zsem-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "zsem-pravilnik-zavrsni-2023",
+      "sourcePage": "poglavlje Tehnicko uredenje zavrsnog rada (str. 3)",
+      "quote": "Zavrsni rad treba biti napisan na racunalu u formatu A4 u pravilu na ne manje od 30 stranica sadrzaja. Prilikom pisanja koristi se font Times New Roman, size 12, obostrano poravnavanje teksta, razmak izmeu redova 1,5pt, uvlaka za prvi red odlomka 1,27pt, razmak izmeu pojedinog odlomka 6pt.",
+      "note": "Cross-institution port (Zagrebacka skola ekonomije i managementa): direktno citanje Pravilnika."
+    },
+    {
+      "id": "led-zsem-zavrsni--justify-verified-2026-07-02",
+      "ruleId": "zsem-zavrsni--justify",
+      "profileId": "zsem-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "zsem-pravilnik-zavrsni-2023",
+      "sourcePage": "poglavlje Tehnicko uredenje zavrsnog rada (str. 3)",
+      "quote": "Zavrsni rad treba biti napisan na racunalu u formatu A4 u pravilu na ne manje od 30 stranica sadrzaja. Prilikom pisanja koristi se font Times New Roman, size 12, obostrano poravnavanje teksta, razmak izmeu redova 1,5pt, uvlaka za prvi red odlomka 1,27pt, razmak izmeu pojedinog odlomka 6pt.",
+      "note": "Cross-institution port (Zagrebacka skola ekonomije i managementa): direktno citanje Pravilnika."
+    },
+    {
+      "id": "led-zsem-zavrsni--page-count-verified-2026-07-02",
+      "ruleId": "zsem-zavrsni--page-count",
+      "profileId": "zsem-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "zsem-pravilnik-zavrsni-2023",
+      "sourcePage": "poglavlje Tehnicko uredenje zavrsnog rada (str. 3)",
+      "quote": "Zavrsni rad treba biti napisan na racunalu u formatu A4 u pravilu na ne manje od 30 stranica sadrzaja. Prilikom pisanja koristi se font Times New Roman, size 12, obostrano poravnavanje teksta, razmak izmeu redova 1,5pt, uvlaka za prvi red odlomka 1,27pt, razmak izmeu pojedinog odlomka 6pt.",
+      "note": "Cross-institution port (Zagrebacka skola ekonomije i managementa): direktno citanje Pravilnika."
+    },
+    {
+      "id": "led-zsem-diplomski--font-verified-2026-07-02",
+      "ruleId": "zsem-diplomski--font",
+      "profileId": "zsem-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "zsem-pravilnik-diplomski-2023",
+      "sourcePage": "Clanak 28. (Tehnicko uredenje rada)",
+      "quote": "Tehnicko ureenje rada. Pismo: Times New Roman. Font: 12. Poravnanje teksta: obostrano. Razmak izmeu redova: 1,5.",
+      "note": "Cross-institution port (Zagrebacka skola ekonomije i managementa): direktno citanje Pravilnika."
+    },
+    {
+      "id": "led-zsem-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "zsem-diplomski--font-size",
+      "profileId": "zsem-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "zsem-pravilnik-diplomski-2023",
+      "sourcePage": "Clanak 28. (Tehnicko uredenje rada)",
+      "quote": "Tehnicko ureenje rada. Pismo: Times New Roman. Font: 12. Poravnanje teksta: obostrano. Razmak izmeu redova: 1,5.",
+      "note": "Cross-institution port (Zagrebacka skola ekonomije i managementa): direktno citanje Pravilnika."
+    },
+    {
+      "id": "led-zsem-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "zsem-diplomski--line-spacing",
+      "profileId": "zsem-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "zsem-pravilnik-diplomski-2023",
+      "sourcePage": "Clanak 28. (Tehnicko uredenje rada)",
+      "quote": "Tehnicko ureenje rada. Pismo: Times New Roman. Font: 12. Poravnanje teksta: obostrano. Razmak izmeu redova: 1,5.",
+      "note": "Cross-institution port (Zagrebacka skola ekonomije i managementa): direktno citanje Pravilnika."
+    },
+    {
+      "id": "led-zsem-diplomski--justify-verified-2026-07-02",
+      "ruleId": "zsem-diplomski--justify",
+      "profileId": "zsem-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "zsem-pravilnik-diplomski-2023",
+      "sourcePage": "Clanak 28. (Tehnicko uredenje rada)",
+      "quote": "Tehnicko ureenje rada. Pismo: Times New Roman. Font: 12. Poravnanje teksta: obostrano. Razmak izmeu redova: 1,5.",
+      "note": "Cross-institution port (Zagrebacka skola ekonomije i managementa): direktno citanje Pravilnika."
+    },
+    {
+      "id": "led-zsem-diplomski--heading-rules-verified-2026-07-02",
+      "ruleId": "zsem-diplomski--heading-rules",
+      "profileId": "zsem-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "zsem-pravilnik-diplomski-2023",
+      "sourcePage": "Clanak 28. (Tehnicko uredenje rada)",
+      "quote": "Naslovi poglavlja i potpoglavlja moraju biti kratki i jasni, te redom numerirani arapskim brojevima, najvise do tri (3) razine, ali ne vise od toga (Primjer 1., 1.1., 1.1.1.).",
+      "note": "Cross-institution port (Zagrebacka skola ekonomije i managementa): direktno citanje Pravilnika."
+    }
+  ]
+}

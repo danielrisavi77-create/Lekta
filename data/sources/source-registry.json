@@ -1113,5 +1113,57 @@
     "validityClass": "stable",
     "lastChecked": "2026-07-02",
     "note": "Skenirana, OCR-ana (scripts/ocr_pdf.py). Proceduralna (prijava teme, obrana, povjerenstva); oblikovanje IZRIJEKOM delegira na Predlozak koji je sastavni dio uputa."
+  },
+  {
+    "id": "zsem-pravilnik-zavrsni-2023",
+    "kind": "regulation",
+    "title": "Pravilnik o izradi i obrani zavrsnog rada na prijediplomskim strucnim studijima (ZSEM, 2023)",
+    "url": "https://zsem.hr/wp-content/uploads/2024/11/Pravilnik-o-izradi-i-obrani-zavrsnog-rada-na-prijediplomskim-strucnim-studijima-2023.docx.pdf",
+    "publisher": "Zagrebacka skola ekonomije i managementa",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/zsem/zsem-pravilnik-zavrsni-2023.pdf",
+    "snapshotHash": "0c254d268e6ce707d176f8e0aa871d95a2d98df86d6773c292879aeb96a2167b",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-02",
+    "note": "Institucija-wide Pravilnik; tehnicko uredenje rada citano izravno iz PDF-a."
+  },
+  {
+    "id": "zsem-pravilnik-diplomski-2023",
+    "kind": "regulation",
+    "title": "Pravilnik o diplomskom radu (ZSEM, svibanj 2023)",
+    "url": "https://zsem.hr/wp-content/uploads/2024/11/PRAVILNIK-O-DIPLOMSKOM-RADU-svibanj-2023-1.pdf",
+    "publisher": "Zagrebacka skola ekonomije i managementa",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/zsem/zsem-pravilnik-diplomski-2023.pdf",
+    "snapshotHash": "14cbc4cdbbffae19d900bb8cc806a69bb20c8615b005b9e29ec040554108e7f0",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-02",
+    "note": "Institucija-wide Pravilnik; tehnicko uredenje rada citano izravno iz PDF-a."
+  },
+  {
+    "id": "libertas-pravilnik-zavrsni-2024",
+    "kind": "regulation",
+    "title": "Pravilnik o zavrsnom radu (Libertas, srpanj 2024)",
+    "url": "https://www.libertas.hr/wp-content/uploads/2025/01/Pravilnik-o-zavrsnom-radu.pdf",
+    "publisher": "Sveuciliste Libertas",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/libertas/libertas-pravilnik-zavrsni-2024.pdf",
+    "snapshotHash": "1b8c091a324dcd8befc501a94d3c565cd819cd80665a7c288d69c40989d9d94e",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-02",
+    "note": "Institucija-wide Pravilnik; tehnicko uredenje rada citano izravno iz PDF-a."
+  },
+  {
+    "id": "libertas-pravilnik-diplomski-2024",
+    "kind": "regulation",
+    "title": "Pravilnik o diplomskom radu (Libertas, srpanj 2024)",
+    "url": "https://www.libertas.hr/wp-content/uploads/2025/01/Pravilnik-o-diplomskom-radu.pdf",
+    "publisher": "Sveuciliste Libertas",
+    "fetchedAt": "2026-07-02",
+    "snapshotPath": "data/sources/libertas/libertas-pravilnik-diplomski-2024.pdf",
+    "snapshotHash": "38cd29c599d7b5e9d25fe96350bcbe142a2049530c668d4839d3e95bb3d37dab",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-02",
+    "note": "Institucija-wide Pravilnik; tehnicko uredenje rada citano izravno iz PDF-a."
   }
 ]

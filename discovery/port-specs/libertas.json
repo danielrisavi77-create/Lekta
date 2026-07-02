@@ -1,0 +1,251 @@
+{
+  "faculty": "libertas",
+  "institution": "libertas",
+  "catalogPrograms": [
+    "Prijediplomski studiji Libertas (zavrsni rad)",
+    "Diplomski studiji Libertas"
+  ],
+  "sources": [
+    {
+      "id": "libertas-pravilnik-zavrsni-2024",
+      "kind": "regulation",
+      "title": "Pravilnik o zavrsnom radu (Libertas, srpanj 2024)",
+      "url": "https://www.libertas.hr/wp-content/uploads/2025/01/Pravilnik-o-zavrsnom-radu.pdf",
+      "publisher": "Sveuciliste Libertas",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/libertas/libertas-pravilnik-zavrsni-2024.pdf",
+      "snapshotHash": "1b8c091a324dcd8befc501a94d3c565cd819cd80665a7c288d69c40989d9d94e",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Institucija-wide Pravilnik; tehnicko uredenje rada citano izravno iz PDF-a."
+    },
+    {
+      "id": "libertas-pravilnik-diplomski-2024",
+      "kind": "regulation",
+      "title": "Pravilnik o diplomskom radu (Libertas, srpanj 2024)",
+      "url": "https://www.libertas.hr/wp-content/uploads/2025/01/Pravilnik-o-diplomskom-radu.pdf",
+      "publisher": "Sveuciliste Libertas",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/libertas/libertas-pravilnik-diplomski-2024.pdf",
+      "snapshotHash": "38cd29c599d7b5e9d25fe96350bcbe142a2049530c668d4839d3e95bb3d37dab",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Institucija-wide Pravilnik; tehnicko uredenje rada citano izravno iz PDF-a."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "libertas-zavrsni",
+      "unitId": "libertas",
+      "programs": [
+        "Prijediplomski studiji Libertas (zavrsni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Libertas, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "requireA4": true
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog Pravilnika (Sveuciliste Libertas), citano izravno.",
+      "sources": [
+        {
+          "title": "Pravilnik o zavrsnom radu (Libertas, srpanj 2024)",
+          "url": "https://www.libertas.hr/wp-content/uploads/2025/01/Pravilnik-o-zavrsnom-radu.pdf"
+        },
+        {
+          "title": "Pravilnik o diplomskom radu (Libertas, srpanj 2024)",
+          "url": "https://www.libertas.hr/wp-content/uploads/2025/01/Pravilnik-o-diplomskom-radu.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o zavrsnom radu (Libertas, srpanj 2024)",
+        "Pravilnik o diplomskom radu (Libertas, srpanj 2024)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "libertas-diplomski",
+      "unitId": "libertas",
+      "programs": [
+        "Diplomski studiji Libertas"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Libertas, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "requireA4": true
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog Pravilnika (Sveuciliste Libertas), citano izravno.",
+      "sources": [
+        {
+          "title": "Pravilnik o zavrsnom radu (Libertas, srpanj 2024)",
+          "url": "https://www.libertas.hr/wp-content/uploads/2025/01/Pravilnik-o-zavrsnom-radu.pdf"
+        },
+        {
+          "title": "Pravilnik o diplomskom radu (Libertas, srpanj 2024)",
+          "url": "https://www.libertas.hr/wp-content/uploads/2025/01/Pravilnik-o-diplomskom-radu.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o zavrsnom radu (Libertas, srpanj 2024)",
+        "Pravilnik o diplomskom radu (Libertas, srpanj 2024)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Margine"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-libertas-zavrsni--paper-size-verified-2026-07-02",
+      "ruleId": "libertas-zavrsni--paper-size",
+      "profileId": "libertas-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "libertas-pravilnik-zavrsni-2024",
+      "sourcePage": "clanak o oblikovanju zavrsnog rada",
+      "quote": "Zavrsni rad pise se na racunalu na papiru velicine A4. Velicina slova je font 12, s proredom 1,5, a stil u kojem se pise je Times New Roman.",
+      "note": "Cross-institution port (Sveuciliste Libertas): direktno citanje Pravilnika."
+    },
+    {
+      "id": "led-libertas-zavrsni--font-verified-2026-07-02",
+      "ruleId": "libertas-zavrsni--font",
+      "profileId": "libertas-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "libertas-pravilnik-zavrsni-2024",
+      "sourcePage": "clanak o oblikovanju zavrsnog rada",
+      "quote": "Zavrsni rad pise se na racunalu na papiru velicine A4. Velicina slova je font 12, s proredom 1,5, a stil u kojem se pise je Times New Roman.",
+      "note": "Cross-institution port (Sveuciliste Libertas): direktno citanje Pravilnika."
+    },
+    {
+      "id": "led-libertas-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "libertas-zavrsni--font-size",
+      "profileId": "libertas-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "libertas-pravilnik-zavrsni-2024",
+      "sourcePage": "clanak o oblikovanju zavrsnog rada",
+      "quote": "Zavrsni rad pise se na racunalu na papiru velicine A4. Velicina slova je font 12, s proredom 1,5, a stil u kojem se pise je Times New Roman.",
+      "note": "Cross-institution port (Sveuciliste Libertas): direktno citanje Pravilnika."
+    },
+    {
+      "id": "led-libertas-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "libertas-zavrsni--line-spacing",
+      "profileId": "libertas-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "libertas-pravilnik-zavrsni-2024",
+      "sourcePage": "clanak o oblikovanju zavrsnog rada",
+      "quote": "Zavrsni rad pise se na racunalu na papiru velicine A4. Velicina slova je font 12, s proredom 1,5, a stil u kojem se pise je Times New Roman.",
+      "note": "Cross-institution port (Sveuciliste Libertas): direktno citanje Pravilnika."
+    },
+    {
+      "id": "led-libertas-diplomski--paper-size-verified-2026-07-02",
+      "ruleId": "libertas-diplomski--paper-size",
+      "profileId": "libertas-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "libertas-pravilnik-diplomski-2024",
+      "sourcePage": "clanak o oblikovanju diplomskog rada",
+      "quote": "Rad se pise na racunalu na papiru velicine A4, velicina slova font 12, stil kojim se pise Times New Roman s proredom 1,5 a margine stranica su 2,5 cm sa svih strana.",
+      "note": "Cross-institution port (Sveuciliste Libertas): direktno citanje Pravilnika."
+    },
+    {
+      "id": "led-libertas-diplomski--font-verified-2026-07-02",
+      "ruleId": "libertas-diplomski--font",
+      "profileId": "libertas-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "libertas-pravilnik-diplomski-2024",
+      "sourcePage": "clanak o oblikovanju diplomskog rada",
+      "quote": "Rad se pise na racunalu na papiru velicine A4, velicina slova font 12, stil kojim se pise Times New Roman s proredom 1,5 a margine stranica su 2,5 cm sa svih strana.",
+      "note": "Cross-institution port (Sveuciliste Libertas): direktno citanje Pravilnika."
+    },
+    {
+      "id": "led-libertas-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "libertas-diplomski--font-size",
+      "profileId": "libertas-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "libertas-pravilnik-diplomski-2024",
+      "sourcePage": "clanak o oblikovanju diplomskog rada",
+      "quote": "Rad se pise na racunalu na papiru velicine A4, velicina slova font 12, stil kojim se pise Times New Roman s proredom 1,5 a margine stranica su 2,5 cm sa svih strana.",
+      "note": "Cross-institution port (Sveuciliste Libertas): direktno citanje Pravilnika."
+    },
+    {
+      "id": "led-libertas-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "libertas-diplomski--line-spacing",
+      "profileId": "libertas-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "libertas-pravilnik-diplomski-2024",
+      "sourcePage": "clanak o oblikovanju diplomskog rada",
+      "quote": "Rad se pise na racunalu na papiru velicine A4, velicina slova font 12, stil kojim se pise Times New Roman s proredom 1,5 a margine stranica su 2,5 cm sa svih strana.",
+      "note": "Cross-institution port (Sveuciliste Libertas): direktno citanje Pravilnika."
+    },
+    {
+      "id": "led-libertas-diplomski--margins-verified-2026-07-02",
+      "ruleId": "libertas-diplomski--margins",
+      "profileId": "libertas-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "libertas-pravilnik-diplomski-2024",
+      "sourcePage": "clanak o oblikovanju diplomskog rada",
+      "quote": "Rad se pise na racunalu na papiru velicine A4, velicina slova font 12, stil kojim se pise Times New Roman s proredom 1,5 a margine stranica su 2,5 cm sa svih strana.",
+      "note": "Cross-institution port (Sveuciliste Libertas): direktno citanje Pravilnika."
+    }
+  ]
+}
