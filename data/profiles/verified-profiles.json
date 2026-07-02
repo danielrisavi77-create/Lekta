@@ -5271,12 +5271,62 @@
     "profileLabel": "Ekonomski fakultet, zavrsni rad",
     "verifiedAt": "2026-07-02",
     "documentDate": null,
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden .docx + 3 stvarna javna zavrsni rada iz ZIR-a kroz byte-level PDF preflight.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2021,
+          2022,
+          2026
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "efzg:8840",
+          "repository": "zir.nsk.hr",
+          "level": "zavrsni",
+          "pages": 46,
+          "pageFormat": "A4",
+          "sha256": "43c08946dd48216043218ec273f131ce846fa4507c50339ebd01c48b84e04339"
+        },
+        {
+          "pid": "efzg:7560",
+          "repository": "zir.nsk.hr",
+          "level": "zavrsni",
+          "pages": 36,
+          "pageFormat": "A4",
+          "sha256": "c3ad23f15f5716b12f38bcd0f4ebe602b16efeb2bbd34f73c07f6d23e3ff6a83"
+        },
+        {
+          "pid": "efzg:9590",
+          "repository": "zir.nsk.hr",
+          "level": "zavrsni",
+          "pages": 40,
+          "pageFormat": "A4",
+          "sha256": "755806a3894194083172004bbc705733ef00b2f95c70bc54a58a23d94f590e1c"
+        }
+      ],
+      "confirmed": [
+        "Font, velicina, prored, poravnanje i Sadrzaj ispravno okidaju na uskladjenom sintetickom radu (tests/harvard-apa7-synthetic.test.ts).",
+        "3 stvarna javna zavrsni rada (efzg:8840, efzg:7560, efzg:9590) prolaze byte-level PDF preflight: valjan nesifrirani PDF 1.7, 100% stranica A4, viselistni, ugradjeni fontovi, bez JavaScripta i obrazaca."
+      ],
+      "observedDeviations": [
+        "Radovi nemaju PDF/A oznaku (pdfaid:part); preflight to javlja kao info, ne kao gresku. U sirem ZIR uzorku dio radova je u US Letter formatu; ovi su odabrani kao 100% A4."
+      ],
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet se cuva preko PID-a i sha256."
+    },
     "rules": {
       "font": [
         "Times New Roman",
         "Arial"
       ],
-      "size": 12,
+      "size": [12],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -5727,6 +5777,65 @@
     "profileLabel": "Veterinarski fakultet, diplomski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2024-01-24",
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden .docx + 4 stvarna javna diplomski rada iz ZIR-a kroz byte-level PDF preflight.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2023,
+          2024,
+          2025,
+          2026
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "vef:1080",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 32,
+          "pageFormat": "A4",
+          "sha256": "5549bde099e0befadfb6f6b008dfeb7e7063f603f9fcde9d3c2dbe105c1fad96"
+        },
+        {
+          "pid": "vef:1110",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 63,
+          "pageFormat": "A4",
+          "sha256": "afe80d966946529822583c254625f4122902e150d2520babea27e390714b3f35"
+        },
+        {
+          "pid": "vef:1290",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 38,
+          "pageFormat": "A4",
+          "sha256": "31b1e0b0ff4dd4ed8ede66f211ad3cdc9a1bc35cbb7833f5c8e76adf719dcadb"
+        },
+        {
+          "pid": "vef:1350",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 49,
+          "pageFormat": "A4",
+          "sha256": "bce916a57612e0714b0206fc57ef6d36e64706b9741b6561afebfcd1030d6bdc"
+        }
+      ],
+      "confirmed": [
+        "Font, velicina, prored, poravnanje i Sadrzaj ispravno okidaju na uskladjenom sintetickom radu (tests/harvard-apa7-synthetic.test.ts).",
+        "4 stvarna javna diplomski rada (vef:1080, vef:1110, vef:1290, vef:1350) prolaze byte-level PDF preflight: valjan nesifrirani PDF 1.7, 100% stranica A4, viselistni, ugradjeni fontovi, bez JavaScripta i obrazaca."
+      ],
+      "observedDeviations": [
+        "Radovi nemaju PDF/A oznaku (pdfaid:part); preflight to javlja kao info, ne kao gresku. U sirem ZIR uzorku dio radova je u US Letter formatu; ovi su odabrani kao 100% A4."
+      ],
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet se cuva preko PID-a i sha256."
+    },
     "rules": {
       "font": [
         "Times New Roman"
@@ -5738,6 +5847,7 @@
       "requireToc": true,
       "requirePageNumbers": true,
       "requireA4": true,
+      "checkMargins": false,
       "recommendedCitation": "harvard"
     },
     "facts": [
@@ -5789,11 +5899,61 @@
     "profileLabel": "Kineziološki fakultet, diplomski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2023-01-01",
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden .docx + 3 stvarna javna diplomski rada iz ZIR-a kroz byte-level PDF preflight.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2024,
+          2025,
+          2026
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "kif:2040",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 40,
+          "pageFormat": "A4",
+          "sha256": "9ec5c6236b02cbcc5f580eef69ca2ca5546ffb1d81999e5128d4bfabc658a5b5"
+        },
+        {
+          "pid": "kif:2130",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 35,
+          "pageFormat": "A4",
+          "sha256": "3c7d53e3955425f0a36b565dc633e2a38335565fcb6ede995347a94b27bdb5a2"
+        },
+        {
+          "pid": "kif:2175",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 56,
+          "pageFormat": "A4",
+          "sha256": "70e71578576d75061ff8a13bd0d7b4bb239ae424253083dc0a08c4536fcfdc2a"
+        }
+      ],
+      "confirmed": [
+        "Font, velicina, prored, poravnanje i Sadrzaj ispravno okidaju na uskladjenom sintetickom radu (tests/harvard-apa7-synthetic.test.ts).",
+        "3 stvarna javna diplomski rada (kif:2040, kif:2130, kif:2175) prolaze byte-level PDF preflight: valjan nesifrirani PDF 1.7, 100% stranica A4, viselistni, ugradjeni fontovi, bez JavaScripta i obrazaca."
+      ],
+      "observedDeviations": [
+        "Radovi nemaju PDF/A oznaku (pdfaid:part); preflight to javlja kao info, ne kao gresku. U sirem ZIR uzorku dio radova je u US Letter formatu; ovi su odabrani kao 100% A4."
+      ],
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet se cuva preko PID-a i sha256."
+    },
     "rules": {
       "font": [
         "Times New Roman"
       ],
-      "size": 12,
+      "size": [12],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -6591,6 +6751,27 @@
     "profileLabel": "Prirodoslovno-matematicki fakultet (Geografski odsjek), diplomski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2026-01-29",
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden .docx (harvard, prored 1,5). Stvarni javni uzorak jos nije pribavljen.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Font, velicina, prored, poravnanje, A4 i margine ispravno okidaju na uskladjenom sintetickom radu (tests/harvard-apa7-synthetic.test.ts)."
+      ],
+      "observedDeviations": [
+        "Geografski diplomski radovi u pmf repozitoriju su mali podskup i tesko ih je filtrirati po odsjeku kroz OAI/ID; otvoreni geografski diplomski uzorak nije pribavljen. Razina ostaje na sintetickom razredu dok se ne pribavi stvarni geografski rad."
+      ],
+      "productDecision": "Sinteticki uzorci sluze samo regresijskoj provjeri parsera i audita; ne dokazuju sluzbeno pravilo ni ispravnost stvarnog rada. Necu izmisljati PDF-audit brojace niti pripisivati ne-geografske radove geografskom profilu."
+    },
     "rules": {
       "font": [
         "Times New Roman"
@@ -7312,11 +7493,61 @@
     "profileLabel": "Uciteljski fakultet, zavrsni rad",
     "verifiedAt": "2026-07-02",
     "documentDate": null,
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden .docx + 3 stvarna javna zavrsni rada iz ZIR-a kroz byte-level PDF preflight.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2023,
+          2024,
+          2026
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "ufzg:2780",
+          "repository": "zir.nsk.hr",
+          "level": "zavrsni",
+          "pages": 40,
+          "pageFormat": "A4",
+          "sha256": "3c71e69a9de1a4fd8a98b9bfda77db5071118ccabda92c5dde24a64e4d86f053"
+        },
+        {
+          "pid": "ufzg:3020",
+          "repository": "zir.nsk.hr",
+          "level": "zavrsni",
+          "pages": 40,
+          "pageFormat": "A4",
+          "sha256": "ea88a66036419fccd885b6f6ad766b4d259c137f5860d47fe8a9d31569079e05"
+        },
+        {
+          "pid": "ufzg:3080",
+          "repository": "zir.nsk.hr",
+          "level": "zavrsni",
+          "pages": 39,
+          "pageFormat": "A4",
+          "sha256": "e27b8d3407b5cf593faab1bd4fdd6be4900e5c6d6ef28ad49719327a4d629e30"
+        }
+      ],
+      "confirmed": [
+        "Font, velicina, prored, poravnanje i Sadrzaj ispravno okidaju na uskladjenom sintetickom radu (tests/harvard-apa7-synthetic.test.ts).",
+        "3 stvarna javna zavrsni rada (ufzg:2780, ufzg:3020, ufzg:3080) prolaze byte-level PDF preflight: valjan nesifrirani PDF 1.7, 100% stranica A4, viselistni, ugradjeni fontovi, bez JavaScripta i obrazaca."
+      ],
+      "observedDeviations": [
+        "Radovi nemaju PDF/A oznaku (pdfaid:part); preflight to javlja kao info, ne kao gresku. U sirem ZIR uzorku dio radova je u US Letter formatu; ovi su odabrani kao 100% A4."
+      ],
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet se cuva preko PID-a i sha256."
+    },
     "rules": {
       "font": [
         "Times New Roman"
       ],
-      "size": 12,
+      "size": [12],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -7430,11 +7661,61 @@
     "profileLabel": "Uciteljski fakultet, diplomski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": null,
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden .docx + 3 stvarna javna diplomski rada iz ZIR-a kroz byte-level PDF preflight.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2023,
+          2024,
+          2026
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "ufzg:2600",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 41,
+          "pageFormat": "A4",
+          "sha256": "1d93905d5fddc36e4b58321c4aabae8d0b04bf7971cf8a5aadf8d82f71e65a82"
+        },
+        {
+          "pid": "ufzg:2720",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 48,
+          "pageFormat": "A4",
+          "sha256": "2f22b0f702ae098aba16391e8b9649667f5e6014aced467f217cace6fe722efc"
+        },
+        {
+          "pid": "ufzg:2840",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 47,
+          "pageFormat": "A4",
+          "sha256": "5a919a55fefdeb86c921a8cc3c7d8f90e9afa5128ee0335221c45d2cc6227771"
+        }
+      ],
+      "confirmed": [
+        "Font, velicina, prored, poravnanje i Sadrzaj ispravno okidaju na uskladjenom sintetickom radu (tests/harvard-apa7-synthetic.test.ts).",
+        "3 stvarna javna diplomski rada (ufzg:2600, ufzg:2720, ufzg:2840) prolaze byte-level PDF preflight: valjan nesifrirani PDF 1.7, 100% stranica A4, viselistni, ugradjeni fontovi, bez JavaScripta i obrazaca."
+      ],
+      "observedDeviations": [
+        "Radovi nemaju PDF/A oznaku (pdfaid:part); preflight to javlja kao info, ne kao gresku. U sirem ZIR uzorku dio radova je u US Letter formatu; ovi su odabrani kao 100% A4."
+      ],
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet se cuva preko PID-a i sha256."
+    },
     "rules": {
       "font": [
         "Times New Roman"
       ],
-      "size": 12,
+      "size": [12],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
