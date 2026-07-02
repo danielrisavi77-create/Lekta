@@ -21,6 +21,10 @@ serverska odluka; klijent nikad nije izvor istine.
   aktivan partner dobiva podignut cap u generate-report (`src/report/partner.ts`).
 - `migrations/0005_referrals.sql` - `referrals` + RLS; atribucija i povlacenje nagrade na refund
   su u webhook-mor, odluke u `src/report/referral.ts`.
+- `migrations/0006_rulebook_submissions.sql` - `rulebook_submissions` + RLS + `grant_rulebook_reward`
+  (atomska dodjela, mirrors `src/report/rulebook.ts`). Admin verifikacija je CLI/SQL:
+  `update rulebook_submissions set status='verified', reviewed_at=now() where id='...';`
+  pa `select grant_rulebook_reward('...');` (vraca true ako je nagrada dodijeljena).
 
 ## Odnos prema testiranom jezgru
 
