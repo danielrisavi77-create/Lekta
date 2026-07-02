@@ -95,17 +95,17 @@ describe('zahtjev prema serveru', () => {
 
 describe('cjenovni tierovi i prozori', () => {
   it('tierovi prate spec (2)', () => {
-    expect(WORK_TYPE_TIERS.seminarski.priceEur).toBe(3);
-    expect(WORK_TYPE_TIERS.zavrsni.priceEur).toBe(5);
-    expect(WORK_TYPE_TIERS.diplomski.priceEur).toBe(10);
+    expect(WORK_TYPE_TIERS.seminarski.priceEur).toBe(3.99);
+    expect(WORK_TYPE_TIERS.zavrsni.priceEur).toBe(5.99);
+    expect(WORK_TYPE_TIERS.diplomski.priceEur).toBe(9.99);
+    expect(WORK_TYPE_TIERS.doktorski.priceEur).toBe(24.99);
     expect(WORK_TYPE_TIERS.doktorski.windowDays).toBe(14);
-    expect(WORK_TYPE_TIERS.doktorski.onRequest).toBe(true);
   });
   it('windowDaysFor i tierFor', () => {
     expect(windowDaysFor('diplomski')).toBe(7);
     expect(windowDaysFor('doktorski')).toBe(14);
     expect(windowDaysFor('nepoznato')).toBe(7);
-    expect(tierFor('zavrsni')?.priceEur).toBe(5);
+    expect(tierFor('zavrsni')?.priceEur).toBe(5.99);
     expect(isReportWorkType('diplomski')).toBe(true);
     expect(isReportWorkType('final')).toBe(false);
   });

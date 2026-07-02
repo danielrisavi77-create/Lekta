@@ -3,8 +3,8 @@
  *
  * work_type je dio identiteta slota: slot je vezan na (otisak, work_type). Cijenu i
  * dubinu kontrolira server; ovo je dijeljena konfiguracija koju citaju i klijent (paywall)
- * i Edge Function (window i validacija). Iznosi su u EUR (cijeli broj, bez decimala koje
- * MoR provider ionako preracunava po valuti).
+ * i Edge Function (window i validacija). Iznosi su u EUR (retail cijene s decimalama,
+ * uskladene s landing/usporedba/citat stranicama; MoR provider preracunava po valuti).
  */
 
 /** Naplatne vrste rada (cjenovni tierovi). Razliciti od profilskih WorkType oznaka. */
@@ -21,10 +21,10 @@ export interface WorkTypeTier {
 }
 
 export const WORK_TYPE_TIERS: Record<ReportWorkType, WorkTypeTier> = {
-  seminarski: { workType: 'seminarski', label: 'Seminarski rad', priceEur: 3, windowDays: 7 },
-  zavrsni: { workType: 'zavrsni', label: 'Zavrsni rad', priceEur: 5, windowDays: 7 },
-  diplomski: { workType: 'diplomski', label: 'Diplomski rad', priceEur: 10, windowDays: 7 },
-  doktorski: { workType: 'doktorski', label: 'Doktorski rad', priceEur: 19, windowDays: 14, onRequest: true },
+  seminarski: { workType: 'seminarski', label: 'Seminarski rad', priceEur: 3.99, windowDays: 7 },
+  zavrsni: { workType: 'zavrsni', label: 'Zavrsni rad', priceEur: 5.99, windowDays: 7 },
+  diplomski: { workType: 'diplomski', label: 'Diplomski rad', priceEur: 9.99, windowDays: 7 },
+  doktorski: { workType: 'doktorski', label: 'Doktorski rad', priceEur: 24.99, windowDays: 14 },
 };
 
 export function isReportWorkType(value: unknown): value is ReportWorkType {
