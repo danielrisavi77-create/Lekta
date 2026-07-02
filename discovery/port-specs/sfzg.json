@@ -1,0 +1,205 @@
+{
+  "faculty": "sfzg",
+  "unit": null,
+  "catalogPrograms": [
+    "Diplomski studiji Stomatološkog fakulteta"
+  ],
+  "sources": [
+    {
+      "id": "sfzg-naputak-diplomski-2024",
+      "kind": "guidelines",
+      "title": "Naputak za tehnicko oblikovanje i izradu diplomskog rada (Stomatoloski fakultet Sveucilista u Zagrebu, 2024)",
+      "url": "https://www.sfzg.unizg.hr/_download/repository/Naputak%20za%20oblikovanje%20diplomskog%202024.pdf",
+      "publisher": "Stomatoloski fakultet Sveucilista u Zagrebu (Povjerenstvo za diplomske radove)",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/sfzg/sfzg-naputak-diplomski-2024.pdf",
+      "snapshotHash": "830c7620b5aa595225f90ee90a18df64455bf39ff840824bba423d68d7f5bd6f",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Sluzbeni Naputak koji je odobrilo Povjerenstvo za diplomske radove Stomatoloskog fakulteta; vrijedi za integrirani prijediplomski i diplomski studij Dentalne medicine (zavrsni rad je diplomski rad). Sadrzi imperativna pravila oblikovanja (Times New Roman 12, prored 1,5, obostrano poravnanje, margine 2,5 cm), numeraciju stranica od Uvoda, obvezan Sadrzaj, opseg 25-50 str. i obveznu primjenu ICMJE/Vancouver citiranja. Citati verbatim provjereni grepom nad sfzg-naputak-diplomski-2024.txt. Nema spomena formata papira (A4) pa paper-size/requireA4 nije uneseno. Obvezne cjeline tijela rada ovise o vrsti rada pa su advisory."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "sfzg-diplomski",
+      "unitId": "sfzg",
+      "programs": [
+        "Diplomski studiji Stomatološkog fakulteta"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Stomatoloski fakultet, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2024-01-01",
+      "rules": {
+        "font": ["Times New Roman"],
+        "size": [12],
+        "spacing": 1.5,
+        "margins": { "top": 2.5, "right": 2.5, "bottom": 2.5, "left": 2.5 },
+        "requireToc": true,
+        "requirePageNumbers": true,
+        "checkJustify": true,
+        "checkMargins": true,
+        "recommendedCitation": "vancouver"
+      },
+      "facts": [
+        "Rad se pise fontom Times New Roman, velicina 12, prored 1,5 retka, obostrano poravnanje (imperativ, scored).",
+        "Margine su 2,5 cm sa svih strana; zaglavlje unutar gornjih 2,5 cm (imperativ, scored).",
+        "Numeriraju se sve stranice pocevsi od Uvoda do kraja rada, broj u donjem desnom kutu (imperativ, scored).",
+        "Sesta uvodna stranica je Sadrzaj koji je obvezan (imperativ, scored).",
+        "Rad moze imati najmanje 25, a najvise 50 stranica (imperativ, scored).",
+        "Obvezna je primjena ICMJE (ranije Vancouverski) stila citiranja, brojka u zagradi na kraju recenice (imperativ, scored).",
+        "Obvezne cjeline tijela rada ovise o vrsti rada (znanstveni, strucni, pregledni ili prikaz slucaja) pa su required-sections advisory."
+      ],
+      "note": "Iz Naputka za tehnicko oblikovanje i izradu diplomskog rada (SFZG, 2024) koji je odobrilo Povjerenstvo za diplomske radove; authority program-page. Sva imperativna i verbatim potvrdena pravila su scored. VAZNO za ljudski pregled: (1) profil pokriva integrirani studij Dentalne medicine (jedini studij fakulteta), diplomski rad = zavrsni rad studija; (2) format papira (A4) nije spomenut u izvoru pa requireA4/paper-size nije uneseno; (3) required-sections je advisory jer se obvezna poglavlja razlikuju po vrsti rada; (4) sazetak (max 250 rijeci) i zivotopis (max 200 rijeci) su specificni pod-limiti, ne opci word-count, pa nisu maprani na engine; (5) documentDate je postavljen na 2024 (izvor navodi samo godinu 2024, bez punog datuma).",
+      "sources": [
+        {
+          "title": "Naputak za tehnicko oblikovanje i izradu diplomskog rada (SFZG, 2024)",
+          "url": "https://www.sfzg.unizg.hr/_download/repository/Naputak%20za%20oblikovanje%20diplomskog%202024.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Naputak za tehnicko oblikovanje i izradu diplomskog rada (Stomatoloski fakultet Sveucilista u Zagrebu, 2024)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "font",
+        "velicina slova",
+        "prored",
+        "obostrano poravnanje",
+        "margine",
+        "numeracija stranica",
+        "sadrzaj (toc)",
+        "opseg u stranicama",
+        "stil citiranja (ICMJE/Vancouver)"
+      ],
+      "advisoryScope": [
+        "obvezne cjeline rada (ovise o vrsti rada)"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-sfzg-diplomski--font-verified-2026-07-02",
+      "ruleId": "sfzg-diplomski--font",
+      "profileId": "sfzg-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "sfzg-naputak-diplomski-2024",
+      "sourcePage": "odjeljak Postavke stranice i pisma",
+      "quote": "Times New Roman",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-sfzg-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "sfzg-diplomski--font-size",
+      "profileId": "sfzg-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "sfzg-naputak-diplomski-2024",
+      "sourcePage": "odjeljak Postavke stranice i pisma",
+      "quote": "Velicina pisma (Font size):   12",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-sfzg-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "sfzg-diplomski--line-spacing",
+      "profileId": "sfzg-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "sfzg-naputak-diplomski-2024",
+      "sourcePage": "odjeljak Postavke stranice i pisma",
+      "quote": "Prored (Line spacing):        1,5 redak (1,5 lines)",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-sfzg-diplomski--justify-verified-2026-07-02",
+      "ruleId": "sfzg-diplomski--justify",
+      "profileId": "sfzg-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "sfzg-naputak-diplomski-2024",
+      "sourcePage": "odjeljak Postavke stranice i pisma",
+      "quote": "Poravnanje (Alignment):       obostrano (Justified)",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-sfzg-diplomski--margins-verified-2026-07-02",
+      "ruleId": "sfzg-diplomski--margins",
+      "profileId": "sfzg-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "sfzg-naputak-diplomski-2024",
+      "sourcePage": "odjeljak Postavke stranice i pisma",
+      "quote": "2.5 cm (do teksta, zaglavlje unutar 2,5 cm)",
+      "note": "Port pilot workflow. Lijevi, desni, gornji i donji rub svi 2,5 cm."
+    },
+    {
+      "id": "led-sfzg-diplomski--page-numbers-verified-2026-07-02",
+      "ruleId": "sfzg-diplomski--page-numbers",
+      "profileId": "sfzg-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "sfzg-naputak-diplomski-2024",
+      "sourcePage": "odjeljak Numeriranje stranica",
+      "quote": "U radu se broje (numeriraju) sve stranice pocevsi od Uvoda do kraja rada. Broj stranice pise se u donjem desnom",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-sfzg-diplomski--toc-verified-2026-07-02",
+      "ruleId": "sfzg-diplomski--toc",
+      "profileId": "sfzg-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "sfzg-naputak-diplomski-2024",
+      "sourcePage": "odjeljak Uvodne stranice, tocka VI.",
+      "quote": "Sesta stranica je Sadrzaj.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-sfzg-diplomski--page-count-verified-2026-07-02",
+      "ruleId": "sfzg-diplomski--page-count",
+      "profileId": "sfzg-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "sfzg-naputak-diplomski-2024",
+      "sourcePage": "odjeljak Postavke stranice i pisma",
+      "quote": "Diplomski rad moze imati najmanje 25, a najvise 50 stranica.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-sfzg-diplomski--citation-style-verified-2026-07-02",
+      "ruleId": "sfzg-diplomski--citation-style",
+      "profileId": "sfzg-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "sfzg-naputak-diplomski-2024",
+      "sourcePage": "odjeljak Citiranje i literatura",
+      "quote": "Obvezna je primjena pravila citiranja",
+      "note": "Port pilot workflow. Izvor: primjena ICMJE (ranije Vancouverski) stila."
+    },
+    {
+      "id": "led-sfzg-diplomski--required-sections-advisory-2026-07-02",
+      "ruleId": "sfzg-diplomski--required-sections",
+      "profileId": "sfzg-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "sfzg-naputak-diplomski-2024",
+      "sourcePage": "odjeljak Tijelo rada",
+      "quote": "mora imati sljedea poglavlja",
+      "note": "Port pilot workflow. Obvezna poglavlja ovise o vrsti rada pa ostaje advisory."
+    }
+  ]
+}

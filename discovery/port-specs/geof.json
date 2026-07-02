@@ -1,0 +1,183 @@
+{
+  "faculty": "geof",
+  "unit": null,
+  "catalogPrograms": [
+    "Diplomski studiji Geodetskog fakulteta",
+    "Doktorski studij Geodetskog fakulteta"
+  ],
+  "sources": [
+    {
+      "id": "geof-naputak-ocjenski-2000",
+      "kind": "guidelines",
+      "title": "Opci naputak za pisanje ocjenskih radova na Geodetskom fakultetu",
+      "url": "https://www.geof.unizg.hr/wp-content/uploads/2020/02/Naputak_za_pisanje_ocjenskih_radova.pdf",
+      "publisher": "Geodetski fakultet Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/geof/geof-naputak-ocjenski-2000.pdf",
+      "snapshotHash": "c68ba17ed2595d7b6686e66d9be59d4c576d01c9012f41bf1316df398c4f0be6",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Faculty-wide naputak za sve ocjenske radove (diplomski, magistarski, doktorska disertacija). Kompozicija je 'Preporucena' i 'rad ne mora nuzno sadrzavati sve nabrojene dijelove' -> required-sections advisory. Sadrzaj je oznacen zvjezdicom kao obvezatan -> toc scored. In-text citiranje autor-godina (Lovri 1988) -> harvard, scored. Nema odredbi o fontu, velicini slova, proredu, marginama, formatu papira, numeraciji stranica ni obostranom poravnanju."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "geof-diplomski",
+      "unitId": "geof",
+      "programs": [
+        "Diplomski studiji Geodetskog fakulteta"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Geodetski fakultet, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2000-01-01",
+      "rules": {
+        "requireToc": true,
+        "recommendedCitation": "harvard"
+      },
+      "facts": [
+        "Sadrzaj je izrijekom oznacen zvjezdicom kao obvezatan dio ocjenskog rada (imperativ).",
+        "Literatura se u tekstu citira autor-godina u zagradi, npr. (Lovri 1988) (imperativ) -> harvard.",
+        "Kompozicija rada je preporucena i rad ne mora nuzno sadrzavati sve nabrojene dijelove pa je popis obveznih cjelina advisory.",
+        "Naputak ne propisuje font, velicinu slova, prored, margine, format papira, numeraciju stranica ni obostrano poravnanje."
+      ],
+      "note": "Diplomski rad iz Opceg naputka za pisanje ocjenskih radova (Geodetski fakultet). Scored: obvezan Sadrzaj i autor-godina citiranje (harvard). Required-sections je advisory jer je kompozicija izrijekom preporucena. Tehnicko oblikovanje nije u izvoru pa nije preuzeto.",
+      "sources": [
+        {
+          "title": "Opci naputak za pisanje ocjenskih radova na Geodetskom fakultetu",
+          "url": "https://www.geof.unizg.hr/wp-content/uploads/2020/02/Naputak_za_pisanje_ocjenskih_radova.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Opci naputak za pisanje ocjenskih radova na Geodetskom fakultetu"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "sadrzaj",
+        "stil citiranja (autor-godina)"
+      ],
+      "advisoryScope": [
+        "obvezne cjeline rada"
+      ]
+    },
+    {
+      "id": "geof-doktorski",
+      "unitId": "geof",
+      "programs": [
+        "Doktorski studij Geodetskog fakulteta"
+      ],
+      "workTypes": [
+        "doctoral"
+      ],
+      "status": "partial",
+      "profileLabel": "Geodetski fakultet, doktorski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2000-01-01",
+      "rules": {
+        "requireToc": true,
+        "recommendedCitation": "harvard"
+      },
+      "facts": [
+        "Sadrzaj je izrijekom oznacen zvjezdicom kao obvezatan dio ocjenskog rada (imperativ).",
+        "Literatura se u tekstu citira autor-godina u zagradi, npr. (Lovri 1988) (imperativ) -> harvard.",
+        "Kompozicija rada je preporucena i rad ne mora nuzno sadrzavati sve nabrojene dijelove pa je popis obveznih cjelina advisory.",
+        "Prosireni sazetak na hrvatskom pise se kada je disertacija napisana na engleskom jeziku."
+      ],
+      "note": "Doktorska disertacija iz Opceg naputka za pisanje ocjenskih radova (Geodetski fakultet); Naputak izrijekom pokriva doktorsku disertaciju. Scored: obvezan Sadrzaj i autor-godina citiranje (harvard). Required-sections je advisory. Za doktorski postoji i zaseban Pravilnik o poslijediplomskom doktorskom studiju (visi autoritet) koji nije ingestiran u ovom portu.",
+      "sources": [
+        {
+          "title": "Opci naputak za pisanje ocjenskih radova na Geodetskom fakultetu",
+          "url": "https://www.geof.unizg.hr/wp-content/uploads/2020/02/Naputak_za_pisanje_ocjenskih_radova.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Opci naputak za pisanje ocjenskih radova na Geodetskom fakultetu"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "sadrzaj",
+        "stil citiranja (autor-godina)"
+      ],
+      "advisoryScope": [
+        "obvezne cjeline rada"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-geof-diplomski--toc-verified-2026-07-02",
+      "ruleId": "geof-diplomski--toc",
+      "profileId": "geof-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "geof-naputak-ocjenski-2000",
+      "sourcePage": "odjeljak 1. Ustroj (kompozicija)",
+      "quote": "Obvezatni dijelovi oznaceni su zvjezdicom ( * )",
+      "note": "Port pilot workflow. Sadrzaj je medu obvezatnim (*) dijelovima."
+    },
+    {
+      "id": "led-geof-diplomski--citation-style-verified-2026-07-02",
+      "ruleId": "geof-diplomski--citation-style",
+      "profileId": "geof-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "geof-naputak-ocjenski-2000",
+      "sourcePage": "odjeljak 1. Ustroj (kompozicija), Literatura",
+      "quote": "Literatura se u tekstu citira navodenjem u zagradi prezimena autora i godine",
+      "note": "Port pilot workflow. Autor-godina -> harvard."
+    },
+    {
+      "id": "led-geof-diplomski--required-sections-advisory-2026-07-02",
+      "ruleId": "geof-diplomski--required-sections",
+      "profileId": "geof-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "geof-naputak-ocjenski-2000",
+      "sourcePage": "odjeljak 1. Ustroj (kompozicija)",
+      "quote": "Rad ne mora nuzno",
+      "note": "Port pilot workflow. Kompozicija je preporucena; rad ne mora nuzno sadrzavati sve dijelove pa advisory."
+    },
+    {
+      "id": "led-geof-doktorski--toc-verified-2026-07-02",
+      "ruleId": "geof-doktorski--toc",
+      "profileId": "geof-doktorski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "geof-naputak-ocjenski-2000",
+      "sourcePage": "odjeljak 1. Ustroj (kompozicija)",
+      "quote": "Obvezatni dijelovi oznaceni su zvjezdicom ( * )",
+      "note": "Port pilot workflow. Sadrzaj je medu obvezatnim (*) dijelovima."
+    },
+    {
+      "id": "led-geof-doktorski--citation-style-verified-2026-07-02",
+      "ruleId": "geof-doktorski--citation-style",
+      "profileId": "geof-doktorski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "geof-naputak-ocjenski-2000",
+      "sourcePage": "odjeljak 1. Ustroj (kompozicija), Literatura",
+      "quote": "Literatura se u tekstu citira navodenjem u zagradi prezimena autora i godine",
+      "note": "Port pilot workflow. Autor-godina -> harvard."
+    },
+    {
+      "id": "led-geof-doktorski--required-sections-advisory-2026-07-02",
+      "ruleId": "geof-doktorski--required-sections",
+      "profileId": "geof-doktorski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "geof-naputak-ocjenski-2000",
+      "sourcePage": "odjeljak 1. Ustroj (kompozicija)",
+      "quote": "Rad ne mora nuzno",
+      "note": "Port pilot workflow. Kompozicija je preporucena; rad ne mora nuzno sadrzavati sve dijelove pa advisory."
+    }
+  ]
+}

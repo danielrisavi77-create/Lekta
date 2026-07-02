@@ -34,6 +34,7 @@
           "Edukacijska rehabilitacija",
           "Logopedija",
           "Socijalna pedagogija",
+          "Diplomski studiji Edukacijsko-rehabilitacijskog fakulteta",
           "Opći profil fakulteta"
         ],
         "status": "research"
@@ -133,6 +134,8 @@
           "Promet",
           "Aeronautika",
           "Inteligentni transportni sustavi i logistika",
+          "Prijediplomski studiji Fakulteta prometnih znanosti (zavrsni rad)",
+          "Diplomski studiji Fakulteta prometnih znanosti",
           "Opći profil fakulteta"
         ],
         "status": "generic"
@@ -171,6 +174,7 @@
         "programs": [
           "Farmacija",
           "Medicinska biokemija",
+          "Poslijediplomski specijalisticki studiji Farmaceutsko-biokemijskog fakulteta",
           "Opći profil fakulteta"
         ],
         "status": "generic"
@@ -205,6 +209,8 @@
         "family": "stem",
         "programs": [
           "Geodezija i geoinformatika",
+          "Diplomski studiji Geodetskog fakulteta",
+          "Doktorski studij Geodetskog fakulteta",
           "Opći profil fakulteta"
         ],
         "status": "generic"
@@ -228,6 +234,7 @@
         "programs": [
           "Grafička tehnologija",
           "Dizajn grafičkih proizvoda",
+          "Prijediplomski studiji Grafičkog fakulteta (zavrsni rad)",
           "Opći profil fakulteta"
         ],
         "status": "generic"
@@ -346,6 +353,7 @@
         "family": "biomed",
         "programs": [
           "Dentalna medicina",
+          "Diplomski studiji Stomatološkog fakulteta",
           "Opći profil fakulteta"
         ],
         "status": "generic"
@@ -370,6 +378,8 @@
         "programs": [
           "Učiteljski studij",
           "Rani i predškolski odgoj i obrazovanje",
+          "Prijediplomski studiji Učiteljskog fakulteta (zavrsni rad)",
+          "Diplomski studiji Učiteljskog fakulteta",
           "Opći profil fakulteta"
         ],
         "status": "verified"

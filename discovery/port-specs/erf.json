@@ -1,0 +1,156 @@
+{
+  "faculty": "erf",
+  "unit": null,
+  "catalogPrograms": [
+    "Diplomski studiji Edukacijsko-rehabilitacijskog fakulteta"
+  ],
+  "sources": [
+    {
+      "id": "erf-upute-diplomski",
+      "kind": "guidelines",
+      "title": "Upute za pisanje diplomskog rada (Edukacijsko-rehabilitacijski fakultet)",
+      "url": "https://www.erf.unizg.hr/_download/repository/erfunizg_upute_za_pisanje_diplomskog_rada.pdf",
+      "publisher": "Edukacijsko-rehabilitacijski fakultet Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/erf/erf-upute-diplomski.pdf",
+      "snapshotHash": "ba5b786114e83db3df96ae9994c4a00bce4ff2197f6ac43e1a68821d64402896",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Sluzbene Upute za pisanje diplomskog rada s mrezne stranice ERF-a (diplomski_rad). Kratki dokument (3 str.) bez datuma u tekstu ili metapodacima. Daje obvezne poglavlja (dva tipa rada: istrazivacki i pregledni) kroz 'treba sadrzavati sljedea poglavlja' -> scored strukture; font 12/Times New Roman/prored 1.5 kao gola specifikacija bez 'preporuca' -> scored oblikovanje. Broj stranica 40-50 i broj referenci su izrijekom 'Preporucen' -> advisory. Citiranje delegirano na propozicije casopisa (Hrvatska revija za rehabilitacijska istrazivanja / Kriminologija i socijalna integracija), stil nije imenovan -> advisory custom. Margine, format papira, numeracija stranica i poravnanje NISU spomenuti. Citati verbatim potvrdeni grepom nad erf-upute-diplomski.txt."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "erf-diplomski",
+      "unitId": "erf",
+      "programs": [
+        "Diplomski studiji Edukacijsko-rehabilitacijskog fakulteta"
+      ],
+      "workTypes": ["graduate"],
+      "status": "partial",
+      "profileLabel": "Edukacijsko-rehabilitacijski fakultet, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": ["Times New Roman"],
+        "size": [12],
+        "spacing": 1.5,
+        "requireToc": true
+      },
+      "facts": [
+        "Rad se pise fontom Times New Roman, velicina 12 pt, prored 1,5 (gola obvezna specifikacija, scored).",
+        "Rad (istrazivacki ili pregledni) treba sadrzavati propisana poglavlja ukljucujuci Sadrzaj (imperativ, scored).",
+        "Preporucen broj stranica je 40-50, a broj referenci 20-40, sto su preporuke (advisory).",
+        "Citiranje literature ide po propozicijama casopisa Hrvatska revija za rehabilitacijska istrazivanja ili Kriminologija i socijalna integracija; stil nije imenovan (advisory)."
+      ],
+      "note": "Iz sluzbenih Uputa za pisanje diplomskog rada (ERF, mrezna stranica). Scored su samo verbatim potvrdene imperativne/gole specifikacije (font, velicina, prored, Sadrzaj, obvezne cjeline). VAZNO za ljudski pregled: (1) font/velicina/prored dani su kao gola specifikacija 'Font: 12 pt, Times New Roman, prored 1.5' bez rijeci 'preporuca' pa su tretirani kao imperativ; provjeriti slaze li se s namjerom fakulteta. (2) Dokument nema datum u tekstu ni PDF metapodacima -> documentDate je null. (3) Postoje dva tipa rada (istrazivacki A i pregledni B) s razlicitim poglavljima; required-sections drzi presjek zajednickih obveznih cjelina. (4) Citatni stil je delegiran na propozicije dvaju casopisa i nije imenovan standard -> advisory 'custom', bez recommendedCitation u rules. (5) Margine, A4, numeracija stranica i obostrano poravnanje nisu spomenuti pa nema pravila. Zavrsni (prijediplomski) i doktorski nisu pokriveni ovim izvorom.",
+      "sources": [
+        {
+          "title": "Upute za pisanje diplomskog rada (ERF)",
+          "url": "https://www.erf.unizg.hr/_download/repository/erfunizg_upute_za_pisanje_diplomskog_rada.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za pisanje diplomskog rada (Edukacijsko-rehabilitacijski fakultet)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "font",
+        "velicina slova",
+        "prored",
+        "sadrzaj (toc)",
+        "obvezne cjeline strukture"
+      ],
+      "advisoryScope": [
+        "opseg u stranicama",
+        "stil citiranja"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-erf-diplomski--font-verified-2026-07-02",
+      "ruleId": "erf-diplomski--font",
+      "profileId": "erf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "erf-upute-diplomski",
+      "sourcePage": "str. 3, redak 'Font: 12 pt, Times New Roman, prored 1.5'",
+      "quote": "Font: 12 pt, Times New Roman, prored 1.5",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-erf-diplomski--font-size-verified-2026-07-02",
+      "ruleId": "erf-diplomski--font-size",
+      "profileId": "erf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "erf-upute-diplomski",
+      "sourcePage": "str. 3, redak 'Font: 12 pt, Times New Roman, prored 1.5'",
+      "quote": "Font: 12 pt, Times New Roman, prored 1.5",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-erf-diplomski--line-spacing-verified-2026-07-02",
+      "ruleId": "erf-diplomski--line-spacing",
+      "profileId": "erf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "erf-upute-diplomski",
+      "sourcePage": "str. 3, redak 'Font: 12 pt, Times New Roman, prored 1.5'",
+      "quote": "Font: 12 pt, Times New Roman, prored 1.5",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-erf-diplomski--toc-verified-2026-07-02",
+      "ruleId": "erf-diplomski--toc",
+      "profileId": "erf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "erf-upute-diplomski",
+      "sourcePage": "str. 1-2, A) Istrazivacki rad / B) Pregledni rad (poglavlje Sadrzaj)",
+      "quote": "treba sadrzavati sljedea poglavlja",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-erf-diplomski--required-sections-verified-2026-07-02",
+      "ruleId": "erf-diplomski--required-sections",
+      "profileId": "erf-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "erf-upute-diplomski",
+      "sourcePage": "str. 1-2, A) Istrazivacki rad / B) Pregledni rad",
+      "quote": "treba sadrzavati sljedea poglavlja",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-erf-diplomski--page-count-advisory-2026-07-02",
+      "ruleId": "erf-diplomski--page-count",
+      "profileId": "erf-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "erf-upute-diplomski",
+      "sourcePage": "str. 3, redak 'Preporucen broj stranica: 40-50'",
+      "quote": "Preporucen broj stranica: 40-50",
+      "note": "Port pilot workflow. Formulacija 'Preporucen', ostaje advisory."
+    },
+    {
+      "id": "led-erf-diplomski--citation-style-advisory-2026-07-02",
+      "ruleId": "erf-diplomski--citation-style",
+      "profileId": "erf-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "erf-upute-diplomski",
+      "sourcePage": "str. 3, redak 'Citiranje literature'",
+      "quote": "Citiranje literature: po propozicijama casopisa Hrvatska revija za rehabilitacijska istrazivanja ili",
+      "note": "Port pilot workflow. Stil delegiran na propozicije casopisa, nije imenovan standard -> advisory custom."
+    }
+  ]
+}

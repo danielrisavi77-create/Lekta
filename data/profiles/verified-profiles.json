@@ -5829,6 +5829,33 @@
     "profileLabel": "Fakultet sumarstva i drvne tehnologije, diplomski rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2024-01-01",
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden .docx (prored 1,15) + 4 stvarna javna diplomska rada iz ZIR-a kroz byte-level PDF preflight.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [2022, 2023, 2025, 2026]
+      },
+      "publicSources": [
+        { "pid": "sumfak:3400", "repository": "zir.nsk.hr", "level": "diplomski", "pages": 72, "pageFormat": "A4", "sha256": "76b62369841ba2746807bf66c82c257844bd381b4307db2f3bfdc370cb38ef3d" },
+        { "pid": "sumfak:3500", "repository": "zir.nsk.hr", "level": "diplomski", "pages": 82, "pageFormat": "A4", "sha256": "565d49bee5989f89665432fa796bb097b256e0c36eaae340ea40a3cf74e35c57" },
+        { "pid": "sumfak:3250", "repository": "zir.nsk.hr", "level": "diplomski", "pages": 35, "pageFormat": "A4", "sha256": "2970378f66cdaf6d3576fa8cac4bf5c15ca116acab43824d1feac2158c4a4109" },
+        { "pid": "sumfak:3850", "repository": "zir.nsk.hr", "level": "diplomski", "pages": 37, "pageFormat": "A4", "sha256": "7b651b4759a1dc53e25a09118b5a334d6e2b15bd4a58e8f44b64b064ab643b6a" }
+      ],
+      "confirmed": [
+        "Font, velicina, prored, poravnanje, margine, A4 i Sadrzaj ispravno okidaju na uskladjenom sintetickom radu (tests/sumfak-synthetic.test.ts).",
+        "Cetiri stvarna javna diplomska rada (sumfak:3400, 3500, 3250, 3850) prolaze byte-level PDF preflight: valjan nesifrirani PDF 1.7, 100% stranica A4, viselistni (35-82 str.), ugradjeni fontovi, bez JavaScripta i obrazaca."
+      ],
+      "observedDeviations": [
+        "Nijedan od cetiri rada nema PDF/A oznaku (pdfaid:part); preflight to javlja kao info, ne kao gresku.",
+        "U sirem uzorku sumfak radova dio ih je predan u US Letter formatu (612x792), ne A4; ova cetiri su odabrana kao 100% A4."
+      ],
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet se cuva preko PID-a i sha256."
+    },
     "rules": {
       "font": [
         "Arial",
@@ -5899,6 +5926,32 @@
     "profileLabel": "Fakultet sumarstva i drvne tehnologije, zavrsni rad",
     "verifiedAt": "2026-07-02",
     "documentDate": "2024-01-01",
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-02",
+      "scope": "Sinteticki golden .docx (prored 1,15, poravnanje) + 4 stvarna javna zavrsna rada iz ZIR-a kroz byte-level PDF preflight.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [2023, 2024, 2026]
+      },
+      "publicSources": [
+        { "pid": "sumfak:3350", "repository": "zir.nsk.hr", "level": "zavrsni", "pages": 29, "pageFormat": "A4", "sha256": "8839c62c773eb19b932c3ddb06b683258e90e03d499d210674dfa51dbb38a771" },
+        { "pid": "sumfak:3450", "repository": "zir.nsk.hr", "level": "zavrsni", "pages": 25, "pageFormat": "A4", "sha256": "eead12fb6d386c24d9ebaeb47357b3850005a5c8482b8f09f06f2d22855c4f73" },
+        { "pid": "sumfak:3480", "repository": "zir.nsk.hr", "level": "zavrsni", "pages": 29, "pageFormat": "A4", "sha256": "77b3ebad32ba5405b96b1c6247b440aaf61e6676480aef3aff574339a8763b96" },
+        { "pid": "sumfak:3680", "repository": "zir.nsk.hr", "level": "zavrsni", "pages": 43, "pageFormat": "A4", "sha256": "d28e3dacba992adab73545ee5780dce023ed800533bb4fd0a30c18a739c417ad" }
+      ],
+      "confirmed": [
+        "Font, velicina, prored, poravnanje, margine i Sadrzaj ispravno okidaju na uskladjenom sintetickom radu (tests/sumfak-synthetic.test.ts).",
+        "Cetiri stvarna javna zavrsna rada (sumfak:3350, 3450, 3480, 3680) prolaze byte-level PDF preflight: valjan nesifrirani PDF 1.7, 100% stranica A4, viselistni (25-43 str.), ugradjeni fontovi, bez JavaScripta i obrazaca."
+      ],
+      "observedDeviations": [
+        "Nijedan od cetiri rada nema PDF/A oznaku (pdfaid:part); preflight to javlja kao info, ne kao gresku."
+      ],
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet se cuva preko PID-a i sha256."
+    },
     "rules": {
       "font": [
         "Arial",
@@ -6597,5 +6650,910 @@
     "catalogPrograms": [
       "Geografija"
     ]
+  },
+  {
+    "id": "fbf-specijalisticki",
+    "unitId": "fbf",
+    "programs": [
+      "Poslijediplomski specijalisticki studiji Farmaceutsko-biokemijskog fakulteta"
+    ],
+    "workTypes": [
+      "specialist"
+    ],
+    "status": "partial",
+    "profileLabel": "Farmaceutsko-biokemijski fakultet, zavrsni specijalisticki rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2014-02-19",
+    "rules": {
+      "size": [
+        10,
+        11,
+        12
+      ],
+      "spacing": 2,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requirePageNumbers": true,
+      "requireA4": true,
+      "checkMargins": true,
+      "recommendedCitation": "vancouver",
+      "requiredSections": [
+        {
+          "key": "uvod",
+          "label": "Uvod i pregled podrucja istrazivanja",
+          "terms": [
+            "uvod",
+            "pregled podrucja"
+          ]
+        },
+        {
+          "key": "cilj",
+          "label": "Cilj istrazivanja",
+          "terms": [
+            "cilj istrazivanja",
+            "cilj"
+          ]
+        },
+        {
+          "key": "materijal-metode",
+          "label": "Materijal i metode",
+          "terms": [
+            "materijal i metode",
+            "ispitanici i metode",
+            "metode"
+          ]
+        },
+        {
+          "key": "rasprava",
+          "label": "Rasprava",
+          "terms": [
+            "rasprava"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zakljucak",
+          "terms": [
+            "zakljucak",
+            "zakljucci"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Referencije (Literatura)",
+          "terms": [
+            "literatura",
+            "referencije"
+          ]
+        },
+        {
+          "key": "zivotopis",
+          "label": "Zivotopis",
+          "terms": [
+            "zivotopis"
+          ]
+        }
+      ]
+    },
+    "facts": [
+      "Rad se tiska na papiru A4 (210x297 mm), s rubnicima 2,5 cm i dvostrukim proredom (imperativ, scored).",
+      "Pismo je velicine 10 do 12 tipografskih tocaka citljive vrste (imperativ, scored).",
+      "Sve stranice moraju biti numerirane (imperativ, scored).",
+      "Literatura se citira Vancouverskim stilom, prema redoslijedu pojavljivanja (imperativ, scored).",
+      "Obvezni dijelovi rada: Uvod i pregled podrucja, Cilj istrazivanja, Materijal i metode, Rasprava, Zakljucak, Referencije/Literatura, Zivotopis (imperativ, scored). Rezultati su obvezni samo za eksperimentalni rad.",
+      "Sadrzaj navodi poglavlja i brojeve stranica; opisan deskriptivno pa ostaje advisory."
+    ],
+    "note": "Iz Upute za prijavu teme i oblikovanje zavrsnog specijalistickog rada (FBF, 2014). Authority program-page (upute fakultetskih povjerenstava). VAZNO za ljudski pregled: profil pokriva ZAVRSNI SPECIJALISTICKI rad (poslijediplomski specijalisticki studij), ne diplomski rad integriranog studija (upute samo na Merlinu, login) ni doktorski rad (oblikovanje po UNIZG-wide obrascu DR.08). requiredSections izostavlja Rezultati jer su obvezni samo za eksperimentalni, ne i teorijski rad.",
+    "sources": [
+      {
+        "title": "Uputa za prijavu teme i oblikovanje zavrsnog specijalistickog rada (FBF, 2014)",
+        "url": "https://fbf.pharma.hr/UserDocsImages/Dokumenti/Studiji/PSS/Dokumenti-i-upute/Upute-spec_2014_v20140219.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Uputa za prijavu teme i oblikovanje zavrsnog specijalistickog rada (Farmaceutsko-biokemijski fakultet, 2014)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "format papira (A4)",
+      "margine",
+      "prored",
+      "velicina slova",
+      "numeracija stranica",
+      "stil citiranja (vancouver)",
+      "obvezni dijelovi rada"
+    ],
+    "advisoryScope": [
+      "sadrzaj (toc)"
+    ]
+  },
+  {
+    "id": "sfzg-diplomski",
+    "unitId": "sfzg",
+    "programs": [
+      "Diplomski studiji Stomatološkog fakulteta"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Stomatoloski fakultet, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2024-01-01",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "checkJustify": true,
+      "checkMargins": true,
+      "recommendedCitation": "vancouver"
+    },
+    "facts": [
+      "Rad se pise fontom Times New Roman, velicina 12, prored 1,5 retka, obostrano poravnanje (imperativ, scored).",
+      "Margine su 2,5 cm sa svih strana; zaglavlje unutar gornjih 2,5 cm (imperativ, scored).",
+      "Numeriraju se sve stranice pocevsi od Uvoda do kraja rada, broj u donjem desnom kutu (imperativ, scored).",
+      "Sesta uvodna stranica je Sadrzaj koji je obvezan (imperativ, scored).",
+      "Rad moze imati najmanje 25, a najvise 50 stranica (imperativ, scored).",
+      "Obvezna je primjena ICMJE (ranije Vancouverski) stila citiranja, brojka u zagradi na kraju recenice (imperativ, scored).",
+      "Obvezne cjeline tijela rada ovise o vrsti rada (znanstveni, strucni, pregledni ili prikaz slucaja) pa su required-sections advisory."
+    ],
+    "note": "Iz Naputka za tehnicko oblikovanje i izradu diplomskog rada (SFZG, 2024) koji je odobrilo Povjerenstvo za diplomske radove; authority program-page. Sva imperativna i verbatim potvrdena pravila su scored. VAZNO za ljudski pregled: (1) profil pokriva integrirani studij Dentalne medicine (jedini studij fakulteta), diplomski rad = zavrsni rad studija; (2) format papira (A4) nije spomenut u izvoru pa requireA4/paper-size nije uneseno; (3) required-sections je advisory jer se obvezna poglavlja razlikuju po vrsti rada; (4) sazetak (max 250 rijeci) i zivotopis (max 200 rijeci) su specificni pod-limiti, ne opci word-count, pa nisu maprani na engine; (5) documentDate je postavljen na 2024 (izvor navodi samo godinu 2024, bez punog datuma).",
+    "sources": [
+      {
+        "title": "Naputak za tehnicko oblikovanje i izradu diplomskog rada (SFZG, 2024)",
+        "url": "https://www.sfzg.unizg.hr/_download/repository/Naputak%20za%20oblikovanje%20diplomskog%202024.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Naputak za tehnicko oblikovanje i izradu diplomskog rada (Stomatoloski fakultet Sveucilista u Zagrebu, 2024)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "obostrano poravnanje",
+      "margine",
+      "numeracija stranica",
+      "sadrzaj (toc)",
+      "opseg u stranicama",
+      "stil citiranja (ICMJE/Vancouver)"
+    ],
+    "advisoryScope": [
+      "obvezne cjeline rada (ovise o vrsti rada)"
+    ]
+  },
+  {
+    "id": "fpz-zavrsni",
+    "unitId": "fpz",
+    "programs": [
+      "Prijediplomski studiji Fakulteta prometnih znanosti (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Fakultet prometnih znanosti, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2018-01-01",
+    "rules": {
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "recommendedCitation": "custom",
+      "requiredSections": [
+        {
+          "key": "zadatak",
+          "label": "Zadatak zavrsnog rada",
+          "terms": [
+            "zadatak"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sazetak i kljucne rijeci",
+          "terms": [
+            "sazetak",
+            "kljucne rijeci"
+          ]
+        },
+        {
+          "key": "summary",
+          "label": "Summary i Keywords",
+          "terms": [
+            "summary",
+            "keywords"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadrzaj",
+          "terms": [
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "izlaganje",
+          "label": "Izlaganje tematike",
+          "terms": [
+            "izlaganje tematike",
+            "razrada"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zakljucak",
+          "terms": [
+            "zakljucak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Popis literature",
+          "terms": [
+            "popis literature",
+            "literatura"
+          ]
+        },
+        {
+          "key": "ilustracije",
+          "label": "Popis ilustracija",
+          "terms": [
+            "popis ilustracija"
+          ]
+        },
+        {
+          "key": "izjava",
+          "label": "Izjava o akademskoj cestitosti",
+          "terms": [
+            "izjava o akademskoj cestitosti",
+            "akademska cestitost"
+          ]
+        }
+      ]
+    },
+    "facts": [
+      "Zavrsni rad mora imati propisane elemente slozene zadanim redoslijedom (imperativ).",
+      "Sadrzaj je obvezan (imperativ).",
+      "Numeracija stranica pocinje od Uvoda arapskim brojevima; stranice sadrzaja se ne numeriraju (imperativ).",
+      "Velicina slova 12, prored 1,15 ili 1,5 i margine 2,5 cm navedeni su pod 'preporucuje se' (advisory).",
+      "Izvori se navode fusnotama ili uglatim zagradama s brojem iz popisa literature (dva ravnopravna nacina, advisory)."
+    ],
+    "note": "Zavrsni (prijediplomski) rad iz jedinstvenih fakultetskih Uputa (2018). Scored su samo imperativna pravila: obvezni elementi rada, obvezan Sadrzaj i numeracija stranica. Tehnicko oblikovanje je preporuka pa je advisory. Citiranje dopusta dva nacina (fusnote ili numerirane uglate zagrade) pa je advisory i recommendedCitation je 'custom'. Nema fonta, A4, obostranog poravnanja ni opsega rada.",
+    "sources": [
+      {
+        "title": "Upute za prijavu, izradbu i obranu zavrsnog i diplomskog rada (FPZ, 2018)",
+        "url": "http://static.fpz.hr/assets/datoteke/Upute-za-izradu-zavrsnog-i-diplomskog-rada.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za prijavu, izradbu i obranu zavrsnog i diplomskog rada (Fakultet prometnih znanosti, 2018)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "obvezni elementi rada",
+      "sadrzaj",
+      "numeracija stranica"
+    ],
+    "advisoryScope": [
+      "velicina slova",
+      "prored",
+      "margine",
+      "stil citiranja"
+    ],
+    "catalogPrograms": [
+      "Prijediplomski studiji Fakulteta prometnih znanosti (zavrsni rad)"
+    ]
+  },
+  {
+    "id": "fpz-diplomski",
+    "unitId": "fpz",
+    "programs": [
+      "Diplomski studiji Fakulteta prometnih znanosti"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Fakultet prometnih znanosti, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2018-01-01",
+    "rules": {
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "recommendedCitation": "custom",
+      "requiredSections": [
+        {
+          "key": "zadatak",
+          "label": "Zadatak diplomskog rada",
+          "terms": [
+            "zadatak"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sazetak i kljucne rijeci",
+          "terms": [
+            "sazetak",
+            "kljucne rijeci"
+          ]
+        },
+        {
+          "key": "summary",
+          "label": "Summary i Keywords",
+          "terms": [
+            "summary",
+            "keywords"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadrzaj",
+          "terms": [
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "izlaganje",
+          "label": "Izlaganje tematike",
+          "terms": [
+            "izlaganje tematike",
+            "razrada"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zakljucak",
+          "terms": [
+            "zakljucak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Popis literature",
+          "terms": [
+            "popis literature",
+            "literatura"
+          ]
+        },
+        {
+          "key": "ilustracije",
+          "label": "Popis ilustracija",
+          "terms": [
+            "popis ilustracija"
+          ]
+        },
+        {
+          "key": "izjava",
+          "label": "Izjava o akademskoj cestitosti",
+          "terms": [
+            "izjava o akademskoj cestitosti",
+            "akademska cestitost"
+          ]
+        }
+      ]
+    },
+    "facts": [
+      "Diplomski rad mora sadrzavati propisane elemente slozene zadanim redoslijedom (imperativ).",
+      "Sadrzaj je obvezan (imperativ).",
+      "Numeracija stranica pocinje od Uvoda arapskim brojevima; stranice sadrzaja se ne numeriraju (imperativ).",
+      "Velicina slova 12, prored 1,15 ili 1,5 i margine 2,5 cm navedeni su pod 'preporucuje se' (advisory).",
+      "Izvori se navode fusnotama ili uglatim zagradama s brojem iz popisa literature (dva ravnopravna nacina, advisory)."
+    ],
+    "note": "Diplomski rad iz jedinstvenih fakultetskih Uputa (2018); tehnicke upute i struktura identicni su zavrsnom radu. Scored su samo imperativna pravila: obvezni elementi rada, obvezan Sadrzaj i numeracija stranica. Tehnicko oblikovanje je preporuka pa je advisory. Citiranje dopusta dva nacina pa je advisory i recommendedCitation je 'custom'. Nema fonta, A4, obostranog poravnanja ni opsega rada.",
+    "sources": [
+      {
+        "title": "Upute za prijavu, izradbu i obranu zavrsnog i diplomskog rada (FPZ, 2018)",
+        "url": "http://static.fpz.hr/assets/datoteke/Upute-za-izradu-zavrsnog-i-diplomskog-rada.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za prijavu, izradbu i obranu zavrsnog i diplomskog rada (Fakultet prometnih znanosti, 2018)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "obvezni elementi rada",
+      "sadrzaj",
+      "numeracija stranica"
+    ],
+    "advisoryScope": [
+      "velicina slova",
+      "prored",
+      "margine",
+      "stil citiranja"
+    ],
+    "catalogPrograms": [
+      "Diplomski studiji Fakulteta prometnih znanosti"
+    ]
+  },
+  {
+    "id": "geof-diplomski",
+    "unitId": "geof",
+    "programs": [
+      "Diplomski studiji Geodetskog fakulteta"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Geodetski fakultet, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2000-01-01",
+    "rules": {
+      "requireToc": true,
+      "recommendedCitation": "harvard"
+    },
+    "facts": [
+      "Sadrzaj je izrijekom oznacen zvjezdicom kao obvezatan dio ocjenskog rada (imperativ).",
+      "Literatura se u tekstu citira autor-godina u zagradi, npr. (Lovri 1988) (imperativ) -> harvard.",
+      "Kompozicija rada je preporucena i rad ne mora nuzno sadrzavati sve nabrojene dijelove pa je popis obveznih cjelina advisory.",
+      "Naputak ne propisuje font, velicinu slova, prored, margine, format papira, numeraciju stranica ni obostrano poravnanje."
+    ],
+    "note": "Diplomski rad iz Opceg naputka za pisanje ocjenskih radova (Geodetski fakultet). Scored: obvezan Sadrzaj i autor-godina citiranje (harvard). Required-sections je advisory jer je kompozicija izrijekom preporucena. Tehnicko oblikovanje nije u izvoru pa nije preuzeto.",
+    "sources": [
+      {
+        "title": "Opci naputak za pisanje ocjenskih radova na Geodetskom fakultetu",
+        "url": "https://www.geof.unizg.hr/wp-content/uploads/2020/02/Naputak_za_pisanje_ocjenskih_radova.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Opci naputak za pisanje ocjenskih radova na Geodetskom fakultetu"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "sadrzaj",
+      "stil citiranja (autor-godina)"
+    ],
+    "advisoryScope": [
+      "obvezne cjeline rada"
+    ]
+  },
+  {
+    "id": "geof-doktorski",
+    "unitId": "geof",
+    "programs": [
+      "Doktorski studij Geodetskog fakulteta"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "profileLabel": "Geodetski fakultet, doktorski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": "2000-01-01",
+    "rules": {
+      "requireToc": true,
+      "recommendedCitation": "harvard"
+    },
+    "facts": [
+      "Sadrzaj je izrijekom oznacen zvjezdicom kao obvezatan dio ocjenskog rada (imperativ).",
+      "Literatura se u tekstu citira autor-godina u zagradi, npr. (Lovri 1988) (imperativ) -> harvard.",
+      "Kompozicija rada je preporucena i rad ne mora nuzno sadrzavati sve nabrojene dijelove pa je popis obveznih cjelina advisory.",
+      "Prosireni sazetak na hrvatskom pise se kada je disertacija napisana na engleskom jeziku."
+    ],
+    "note": "Doktorska disertacija iz Opceg naputka za pisanje ocjenskih radova (Geodetski fakultet); Naputak izrijekom pokriva doktorsku disertaciju. Scored: obvezan Sadrzaj i autor-godina citiranje (harvard). Required-sections je advisory. Za doktorski postoji i zaseban Pravilnik o poslijediplomskom doktorskom studiju (visi autoritet) koji nije ingestiran u ovom portu.",
+    "sources": [
+      {
+        "title": "Opci naputak za pisanje ocjenskih radova na Geodetskom fakultetu",
+        "url": "https://www.geof.unizg.hr/wp-content/uploads/2020/02/Naputak_za_pisanje_ocjenskih_radova.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Opci naputak za pisanje ocjenskih radova na Geodetskom fakultetu"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "sadrzaj",
+      "stil citiranja (autor-godina)"
+    ],
+    "advisoryScope": [
+      "obvezne cjeline rada"
+    ]
+  },
+  {
+    "id": "grf-zavrsni",
+    "unitId": "grf",
+    "programs": [
+      "Prijediplomski studiji Grafičkog fakulteta (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Grafički fakultet, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": 12,
+      "spacing": 1.5,
+      "margins": {
+        "top": 2,
+        "right": 2.5,
+        "bottom": 2,
+        "left": 3.5
+      },
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "requireA4": true,
+      "checkJustify": true,
+      "checkMargins": true,
+      "recommendedCitation": "ieee"
+    },
+    "facts": [
+      "Format A-4, pismo Times New Roman 12 pt, prored 1,5 i iskljucivanje na puni format navedeni su kao cvrsta specifikacija oblikovanja (scored).",
+      "Numeriranje stranica ide od prve stranice uvoda arapskim brojkama; prva stranica uvoda je paginirana ali se ne prikazuje (scored).",
+      "Margine su knjigoveske: vez 3,5 cm, vanjski rub 2,5 cm, glava i noge 2 cm; rad se pise jednostrano pa je vez mapiran na lijevu marginu (scored, uz napomenu za ljudski pregled).",
+      "Sadrzaj dolazi na pocetak rada iza sazetka (scored); popis poglavlja u sadrzaju je pod formulacijom 'po mogunosti' pa su obvezne cjeline advisory.",
+      "Literatura se obiljezava rednim brojem po redoslijedu citiranja (numericki stil, mapiran na ieee jer izvor ne imenuje stil; advisory)."
+    ],
+    "note": "Zavrsni (preddiplomski) rad iz Uputa za izradu zavrsnog rada Grafickog fakulteta. Tehnicko oblikovanje je navedeno kao specifikacija (ne kao 'preporuka') pa je scored: font, velicina, prored, margine, format papira, numeracija stranica, obostrano poravnanje i sadrzaj. Advisory su obvezne cjeline (SADRZAJ 'po mogunosti') i stil citiranja (numericki, ieee). Margine su knjigoveske; mapiranje vez->lijevo (3,5) i vanjski rub->desno (2,5) vrijedi za jednostrani ispis koji Upute izricito propisuju. Diplomski i doktorski profili nisu izradeni jer diplomski Prilog 3 (Uputa) je skenirani PDF bez izvucenog teksta, a doktorski pravilnik je procesni bez formatnih pravila.",
+    "sources": [
+      {
+        "title": "Upute za izradu zavrsnog rada (Graficki fakultet Sveucilista u Zagrebu)",
+        "url": "https://www.grf.unizg.hr/images/stories/SMP/upute-za-izradu-zavrsnog-rada.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu zavrsnog rada (Graficki fakultet Sveucilista u Zagrebu)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "margine",
+      "format papira",
+      "numeracija stranica",
+      "obostrano poravnanje",
+      "sadrzaj"
+    ],
+    "advisoryScope": [
+      "obvezne cjeline rada",
+      "stil citiranja"
+    ],
+    "catalogPrograms": [
+      "Prijediplomski studiji Grafičkog fakulteta (zavrsni rad)"
+    ]
+  },
+  {
+    "id": "erf-diplomski",
+    "unitId": "erf",
+    "programs": [
+      "Diplomski studiji Edukacijsko-rehabilitacijskog fakulteta"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Edukacijsko-rehabilitacijski fakultet, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireToc": true
+    },
+    "facts": [
+      "Rad se pise fontom Times New Roman, velicina 12 pt, prored 1,5 (gola obvezna specifikacija, scored).",
+      "Rad (istrazivacki ili pregledni) treba sadrzavati propisana poglavlja ukljucujuci Sadrzaj (imperativ, scored).",
+      "Preporucen broj stranica je 40-50, a broj referenci 20-40, sto su preporuke (advisory).",
+      "Citiranje literature ide po propozicijama casopisa Hrvatska revija za rehabilitacijska istrazivanja ili Kriminologija i socijalna integracija; stil nije imenovan (advisory)."
+    ],
+    "note": "Iz sluzbenih Uputa za pisanje diplomskog rada (ERF, mrezna stranica). Scored su samo verbatim potvrdene imperativne/gole specifikacije (font, velicina, prored, Sadrzaj, obvezne cjeline). VAZNO za ljudski pregled: (1) font/velicina/prored dani su kao gola specifikacija 'Font: 12 pt, Times New Roman, prored 1.5' bez rijeci 'preporuca' pa su tretirani kao imperativ; provjeriti slaze li se s namjerom fakulteta. (2) Dokument nema datum u tekstu ni PDF metapodacima -> documentDate je null. (3) Postoje dva tipa rada (istrazivacki A i pregledni B) s razlicitim poglavljima; required-sections drzi presjek zajednickih obveznih cjelina. (4) Citatni stil je delegiran na propozicije dvaju casopisa i nije imenovan standard -> advisory 'custom', bez recommendedCitation u rules. (5) Margine, A4, numeracija stranica i obostrano poravnanje nisu spomenuti pa nema pravila. Zavrsni (prijediplomski) i doktorski nisu pokriveni ovim izvorom.",
+    "sources": [
+      {
+        "title": "Upute za pisanje diplomskog rada (ERF)",
+        "url": "https://www.erf.unizg.hr/_download/repository/erfunizg_upute_za_pisanje_diplomskog_rada.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pisanje diplomskog rada (Edukacijsko-rehabilitacijski fakultet)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "velicina slova",
+      "prored",
+      "sadrzaj (toc)",
+      "obvezne cjeline strukture"
+    ],
+    "advisoryScope": [
+      "opseg u stranicama",
+      "stil citiranja"
+    ]
+  },
+  {
+    "id": "ufzg-zavrsni",
+    "unitId": "ufzg",
+    "programs": [
+      "Prijediplomski studiji Učiteljskog fakulteta (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Uciteljski fakultet, zavrsni rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": 12,
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "requireA4": true,
+      "checkJustify": true,
+      "checkMargins": true,
+      "pageMin": 20,
+      "pageMax": 40,
+      "recommendedCitation": "apa7",
+      "requiredSections": [
+        {
+          "key": "naslovnica",
+          "label": "Naslovna stranica",
+          "terms": [
+            "naslovna",
+            "naslovnica"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sazetak s kljucnim rijecima",
+          "terms": [
+            "sazetak",
+            "sažetak"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadrzaj",
+          "terms": [
+            "sadrzaj",
+            "sadržaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zakljucak",
+          "terms": [
+            "zakljucak",
+            "zaključak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "literatura",
+            "popis literature"
+          ]
+        }
+      ]
+    },
+    "facts": [
+      "Format je imperativan: A4, sve margine 2,5 cm, Times New Roman 12, prored 1,5, tekst obostrano poravnan, numeriranje na dnu po sredini (prva stranica uvoda nosi broj 1).",
+      "Zavrsni rad treba imati izmeu 20 i 40 stranica, ne racunajui priloge.",
+      "Navoenje literature i oblikovanje tablica/grafickih prikaza treba biti usklaeno s APA stilom.",
+      "Broj izvora ovisi o vrsti rada (strucni minimalno 20, empirijski minimalno 30) pa je za zavrsni advisory."
+    ],
+    "note": "Zavrsni rad (prijediplomski) prema Uputama 2026. Cijelo tehnicko oblikovanje, opseg, obvezne cjeline, sadrzaj i APA stil formulirani su imperativno pa su scored. Obostrano poravnanje vozi se kroz rules.checkJustify i zaseban justify ruleEntry (checkId 'justify' je u COMPILED_CHECK_IDS). Reference-count je advisory jer minimum ovisi o vrsti rada (strucni/empirijski).",
+    "sources": [
+      {
+        "title": "Upute za izradu zavrsnog odnosno diplomskog rada (Uciteljski fakultet Sveucilista u Zagrebu)",
+        "url": "https://www.ufzg.unizg.hr/wp-content/uploads/2026/05/Upute-za-izradu-zavrsnog-odnosno-diplomskog-rada.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu zavrsnog odnosno diplomskog rada (Uciteljski fakultet Sveucilista u Zagrebu, 2026)",
+      "Pravilnik o zavrsnim i diplomskim radovima te zavrsnim i diplomskim ispitima (Uciteljski fakultet, travanj 2020) - binding, nije snapshotiran (sluzbeni PDF 404)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "format papira",
+      "margine",
+      "font",
+      "velicina slova",
+      "prored",
+      "obostrano poravnanje",
+      "numeracija stranica",
+      "sadrzaj",
+      "obvezne cjeline rada",
+      "opseg u stranicama",
+      "stil citiranja (APA)"
+    ],
+    "advisoryScope": [
+      "broj izvora u literaturi"
+    ]
+  },
+  {
+    "id": "ufzg-diplomski",
+    "unitId": "ufzg",
+    "programs": [
+      "Diplomski studiji Učiteljskog fakulteta"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Uciteljski fakultet, diplomski rad",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": 12,
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "requireA4": true,
+      "checkJustify": true,
+      "checkMargins": true,
+      "pageMin": 25,
+      "pageMax": 50,
+      "minReferences": 30,
+      "recommendedCitation": "apa7",
+      "requiredSections": [
+        {
+          "key": "naslovnica",
+          "label": "Naslovna stranica",
+          "terms": [
+            "naslovna",
+            "naslovnica"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sazetak s kljucnim rijecima",
+          "terms": [
+            "sazetak",
+            "sažetak"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadrzaj",
+          "terms": [
+            "sadrzaj",
+            "sadržaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "metoda",
+          "label": "Metoda",
+          "terms": [
+            "metoda"
+          ]
+        },
+        {
+          "key": "rezultati",
+          "label": "Rezultati",
+          "terms": [
+            "rezultati"
+          ]
+        },
+        {
+          "key": "rasprava",
+          "label": "Rasprava",
+          "terms": [
+            "rasprava"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zakljucak",
+          "terms": [
+            "zakljucak",
+            "zaključak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "literatura",
+            "popis literature"
+          ]
+        }
+      ]
+    },
+    "facts": [
+      "Diplomski rad je znanstveni (empirijski) rad; format je identican zavrsnom: A4, margine 2,5 cm, Times New Roman 12, prored 1,5, obostrano poravnanje, numeriranje na dnu po sredini.",
+      "Diplomski rad treba imati izmeu 25 i 50 stranica, ne racunajui priloge.",
+      "Literatura treba sadrzavati minimalno 30 izvora.",
+      "Navoenje literature i oblikovanje tablica/grafickih prikaza treba biti usklaeno s APA stilom."
+    ],
+    "note": "Diplomski rad prema Uputama 2026. Diplomski je uvijek znanstveni/empirijski pa su obvezne cjeline empirijskog rada (metoda, rezultati, rasprava) i minimalan broj izvora (30) scored. Sve ostalo (format, opseg, sadrzaj, APA) imperativno i scored.",
+    "sources": [
+      {
+        "title": "Upute za izradu zavrsnog odnosno diplomskog rada (Uciteljski fakultet Sveucilista u Zagrebu)",
+        "url": "https://www.ufzg.unizg.hr/wp-content/uploads/2026/05/Upute-za-izradu-zavrsnog-odnosno-diplomskog-rada.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu zavrsnog odnosno diplomskog rada (Uciteljski fakultet Sveucilista u Zagrebu, 2026)",
+      "Pravilnik o zavrsnim i diplomskim radovima te zavrsnim i diplomskim ispitima (Uciteljski fakultet, travanj 2020) - binding, nije snapshotiran (sluzbeni PDF 404)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "format papira",
+      "margine",
+      "font",
+      "velicina slova",
+      "prored",
+      "obostrano poravnanje",
+      "numeracija stranica",
+      "sadrzaj",
+      "obvezne cjeline rada",
+      "opseg u stranicama",
+      "broj izvora u literaturi",
+      "stil citiranja (APA)"
+    ],
+    "advisoryScope": []
   }
 ]

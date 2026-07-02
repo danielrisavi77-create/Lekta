@@ -41,6 +41,22 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "erf-diplomski",
+      "scored": 5,
+      "machineCheckable": 5,
+      "advisory": 2,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "fbf-specijalisticki",
+      "scored": 7,
+      "machineCheckable": 6,
+      "advisory": 1,
+      "ratio": 1.1666666666666667,
+      "lastVerified": "2026-07-02"
+    },
+    {
       "profileId": "fer-diplomski",
       "scored": 0,
       "machineCheckable": 6,
@@ -70,6 +86,22 @@
       "machineCheckable": 4,
       "advisory": 3,
       "ratio": 0.75,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "fpz-diplomski",
+      "scored": 3,
+      "machineCheckable": 5,
+      "advisory": 4,
+      "ratio": 0.6,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "fpz-zavrsni",
+      "scored": 3,
+      "machineCheckable": 5,
+      "advisory": 4,
+      "ratio": 0.6,
       "lastVerified": "2026-07-02"
     },
     {
@@ -193,6 +225,22 @@
       "lastVerified": null
     },
     {
+      "profileId": "geof-diplomski",
+      "scored": 2,
+      "machineCheckable": 1,
+      "advisory": 1,
+      "ratio": 2,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "geof-doktorski",
+      "scored": 2,
+      "machineCheckable": 1,
+      "advisory": 1,
+      "ratio": 2,
+      "lastVerified": "2026-07-02"
+    },
+    {
       "profileId": "grad-diplomski",
       "scored": 6,
       "machineCheckable": 7,
@@ -206,6 +254,14 @@
       "machineCheckable": 7,
       "advisory": 3,
       "ratio": 0.8571428571428571,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "grf-zavrsni",
+      "scored": 8,
+      "machineCheckable": 8,
+      "advisory": 2,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
@@ -345,6 +401,14 @@
       "lastVerified": "2026-06-30"
     },
     {
+      "profileId": "sfzg-diplomski",
+      "scored": 9,
+      "machineCheckable": 8,
+      "advisory": 1,
+      "ratio": 1.125,
+      "lastVerified": "2026-07-02"
+    },
+    {
       "profileId": "sociologija",
       "scored": 6,
       "machineCheckable": 6,
@@ -393,6 +457,22 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "ufzg-diplomski",
+      "scored": 12,
+      "machineCheckable": 9,
+      "advisory": 0,
+      "ratio": 1.3333333333333333,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "ufzg-zavrsni",
+      "scored": 11,
+      "machineCheckable": 9,
+      "advisory": 1,
+      "ratio": 1.2222222222222223,
+      "lastVerified": "2026-07-02"
+    },
+    {
       "profileId": "vef-diplomski",
       "scored": 6,
       "machineCheckable": 8,
@@ -401,5 +481,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 269
+  "totalScored": 331
 }

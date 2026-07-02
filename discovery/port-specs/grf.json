@@ -1,0 +1,233 @@
+{
+  "faculty": "grf",
+  "unit": null,
+  "catalogPrograms": [
+    "Prijediplomski studiji Grafičkog fakulteta (zavrsni rad)"
+  ],
+  "sources": [
+    {
+      "id": "grf-upute-zavrsni",
+      "kind": "guidelines",
+      "title": "Upute za izradu zavrsnog rada (Graficki fakultet Sveucilista u Zagrebu)",
+      "url": "https://www.grf.unizg.hr/images/stories/SMP/upute-za-izradu-zavrsnog-rada.pdf",
+      "publisher": "Graficki fakultet Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/grf/grf-upute-zavrsni.pdf",
+      "snapshotHash": "fb5934de22d9f912d0c57fbc3de5fb589a4514eba2bec3bdbd46e70e2186d551",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Point-in-time snapshot Uputa za izradu zavrsnog rada (preddiplomski studij). Tehnicko oblikovanje navedeno kao cvrsta specifikacija (Format A-4, Margine vez/vanjski rub/glava-noge, Pismo Times New Roman, Prored 1,5, osnovno pismo 12 pt, numeriranje stranica od uvoda, iskljucivanje na puni format, Sadrzaj) -> scored. Obvezne cjeline (SADRZAJ 'po mogunosti') -> advisory; numericko citiranje po redoslijedu -> advisory (ieee). Citati verbatim provjereni grepom nad grf-upute-zavrsni.txt."
+    },
+    {
+      "id": "grf-pravilnik-diplomski-2012",
+      "kind": "regulation",
+      "title": "Pravilnik o izradi i obrani diplomskog rada (Graficki fakultet Sveucilista u Zagrebu, 2012)",
+      "url": "https://www.grf.unizg.hr/wp-content/uploads/2018/12/Pravilnik-o-izradi-i-obrani-diplomskog-rada-13.-velja%C4%8De-2012-2.pdf",
+      "publisher": "Fakultetsko vijece, Graficki fakultet Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/grf/grf-pravilnik-diplomski-2012.pdf",
+      "snapshotHash": "58711ba6d44c50cde82677eea60c55b1e7893bcd270e77fb7b81efa4653c3f57",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Snapshot cuvan radi sljedivosti. Pravilnik (13.2.2012) upucuje na Uputu za izradu diplomskog rada kao Prilog 3, ali je taj prilog u PDF-u skeniran (pdftotext ne izvlaci tekst formatnih pravila). Ne daje nijedno scored ili advisory pravilo pa nema diplomski profil dok se ne dobije tekstualni izvor Uputa."
+    },
+    {
+      "id": "grf-pravilnik-poslijediplomski-2008",
+      "kind": "regulation",
+      "title": "Pravilnik o poslijediplomskom doktorskom studiju (Graficki fakultet Sveucilista u Zagrebu, 2008)",
+      "url": "https://www.grf.unizg.hr/images/stories/dokumenti/studiji/poslijediplomski/odluke/pravilnik.pdf",
+      "publisher": "Fakultetsko vijece, Graficki fakultet Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/grf/grf-pravilnik-poslijediplomski.pdf",
+      "snapshotHash": "9f19fb118cedb557426b7e67f9d8e1108df754da3f03b5e7bc0799862f513644",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Snapshot cuvan radi sljedivosti. Pravilnik je iskljucivo procesni (upis, ECTS, povjerenstva, ocjena i obrana disertacije). Cl. 37. st. 3. delegira oblikovanje disertacije na 'javno objavljeni naputak kojeg propisuje Povjerenstvo' pa nema nijednog formatnog pravila -> nema doktorskog profila."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "grf-zavrsni",
+      "unitId": "grf",
+      "programs": [
+        "Prijediplomski studiji Grafičkog fakulteta (zavrsni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Grafički fakultet, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": ["Times New Roman"],
+        "size": 12,
+        "spacing": 1.5,
+        "margins": { "top": 2, "right": 2.5, "bottom": 2, "left": 3.5 },
+        "requireToc": true,
+        "requirePageNumbers": true,
+        "requireA4": true,
+        "checkJustify": true,
+        "checkMargins": true,
+        "recommendedCitation": "ieee"
+      },
+      "facts": [
+        "Format A-4, pismo Times New Roman 12 pt, prored 1,5 i iskljucivanje na puni format navedeni su kao cvrsta specifikacija oblikovanja (scored).",
+        "Numeriranje stranica ide od prve stranice uvoda arapskim brojkama; prva stranica uvoda je paginirana ali se ne prikazuje (scored).",
+        "Margine su knjigoveske: vez 3,5 cm, vanjski rub 2,5 cm, glava i noge 2 cm; rad se pise jednostrano pa je vez mapiran na lijevu marginu (scored, uz napomenu za ljudski pregled).",
+        "Sadrzaj dolazi na pocetak rada iza sazetka (scored); popis poglavlja u sadrzaju je pod formulacijom 'po mogunosti' pa su obvezne cjeline advisory.",
+        "Literatura se obiljezava rednim brojem po redoslijedu citiranja (numericki stil, mapiran na ieee jer izvor ne imenuje stil; advisory)."
+      ],
+      "note": "Zavrsni (preddiplomski) rad iz Uputa za izradu zavrsnog rada Grafickog fakulteta. Tehnicko oblikovanje je navedeno kao specifikacija (ne kao 'preporuka') pa je scored: font, velicina, prored, margine, format papira, numeracija stranica, obostrano poravnanje i sadrzaj. Advisory su obvezne cjeline (SADRZAJ 'po mogunosti') i stil citiranja (numericki, ieee). Margine su knjigoveske; mapiranje vez->lijevo (3,5) i vanjski rub->desno (2,5) vrijedi za jednostrani ispis koji Upute izricito propisuju. Diplomski i doktorski profili nisu izradeni jer diplomski Prilog 3 (Uputa) je skenirani PDF bez izvucenog teksta, a doktorski pravilnik je procesni bez formatnih pravila.",
+      "sources": [
+        {
+          "title": "Upute za izradu zavrsnog rada (Graficki fakultet Sveucilista u Zagrebu)",
+          "url": "https://www.grf.unizg.hr/images/stories/SMP/upute-za-izradu-zavrsnog-rada.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu zavrsnog rada (Graficki fakultet Sveucilista u Zagrebu)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "font",
+        "velicina slova",
+        "prored",
+        "margine",
+        "format papira",
+        "numeracija stranica",
+        "obostrano poravnanje",
+        "sadrzaj"
+      ],
+      "advisoryScope": [
+        "obvezne cjeline rada",
+        "stil citiranja"
+      ],
+      "catalogPrograms": [
+        "Prijediplomski studiji Grafičkog fakulteta (zavrsni rad)"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-grf-zavrsni--font-verified-2026-07-02",
+      "ruleId": "grf-zavrsni--font",
+      "profileId": "grf-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grf-upute-zavrsni",
+      "sourcePage": "odjeljak 1. Oblikovanje zavrsnog rada",
+      "quote": "Pismo: Times New Roman",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-grf-zavrsni--font-size-verified-2026-07-02",
+      "ruleId": "grf-zavrsni--font-size",
+      "profileId": "grf-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grf-upute-zavrsni",
+      "sourcePage": "odjeljak 2. Sastavljanje zavrsnog rada (prijelom teksta)",
+      "quote": "U prijelomu teksta osnovno pismo je Times New Roman 12 pt",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-grf-zavrsni--line-spacing-verified-2026-07-02",
+      "ruleId": "grf-zavrsni--line-spacing",
+      "profileId": "grf-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grf-upute-zavrsni",
+      "sourcePage": "odjeljak 1. Oblikovanje zavrsnog rada",
+      "quote": "Prored: 1,5 redak",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-grf-zavrsni--margins-verified-2026-07-02",
+      "ruleId": "grf-zavrsni--margins",
+      "profileId": "grf-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grf-upute-zavrsni",
+      "sourcePage": "odjeljak 1. Oblikovanje zavrsnog rada",
+      "quote": "Margine: vez 3,5 cm, vanjski rub 2,5 cm, glava i noge 2 cm",
+      "note": "Port pilot workflow. Knjigoveske margine; vez->lijevo, vanjski rub->desno za jednostrani ispis. Za ljudski pregled."
+    },
+    {
+      "id": "led-grf-zavrsni--paper-size-verified-2026-07-02",
+      "ruleId": "grf-zavrsni--paper-size",
+      "profileId": "grf-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grf-upute-zavrsni",
+      "sourcePage": "odjeljak 1. Oblikovanje zavrsnog rada",
+      "quote": "Format zavrsnog rada: A-4 (21 x 29,7 cm), tvrdi uvez",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-grf-zavrsni--page-numbers-verified-2026-07-02",
+      "ruleId": "grf-zavrsni--page-numbers",
+      "profileId": "grf-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grf-upute-zavrsni",
+      "sourcePage": "odjeljak 2. Sastavljanje zavrsnog rada (numeriranje stranica)",
+      "quote": "Numeriranje stranica ide od prve stranice uvoda do zadnje u tekuem nizu.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-grf-zavrsni--justify-verified-2026-07-02",
+      "ruleId": "grf-zavrsni--justify",
+      "profileId": "grf-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grf-upute-zavrsni",
+      "sourcePage": "odjeljak 2. Sastavljanje zavrsnog rada (prijelom teksta)",
+      "quote": "Iskljucivanje na puni format s",
+      "note": "Port pilot workflow. Iskljucivanje na puni format = obostrano poravnanje."
+    },
+    {
+      "id": "led-grf-zavrsni--toc-verified-2026-07-02",
+      "ruleId": "grf-zavrsni--toc",
+      "profileId": "grf-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grf-upute-zavrsni",
+      "sourcePage": "odjeljak 2. Sastavljanje zavrsnog rada (Sadrzaj)",
+      "quote": "Sadrzaj zavrsnog rada dolazi na pocetak rada, odmah iza sazetka.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-grf-zavrsni--required-sections-advisory-2026-07-02",
+      "ruleId": "grf-zavrsni--required-sections",
+      "profileId": "grf-zavrsni",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grf-upute-zavrsni",
+      "sourcePage": "odjeljak 2. Sastavljanje zavrsnog rada (SADRZAJ)",
+      "quote": "Sadrzaj obuhvaa (po mogunosti)",
+      "note": "Port pilot workflow. Popis poglavlja je 'po mogunosti' pa advisory."
+    },
+    {
+      "id": "led-grf-zavrsni--citation-style-advisory-2026-07-02",
+      "ruleId": "grf-zavrsni--citation-style",
+      "profileId": "grf-zavrsni",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "grf-upute-zavrsni",
+      "sourcePage": "odjeljak 2. Sastavljanje zavrsnog rada (6. Literatura)",
+      "quote": "Literatura se obiljezava rednim brojem",
+      "note": "Port pilot workflow. Numericki stil po redoslijedu citiranja; izvor ne imenuje stil pa mapirano na ieee, advisory."
+    }
+  ]
+}

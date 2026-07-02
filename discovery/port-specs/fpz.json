@@ -1,0 +1,321 @@
+{
+  "faculty": "fpz",
+  "unit": null,
+  "catalogPrograms": [
+    "Prijediplomski studiji Fakulteta prometnih znanosti (zavrsni rad)",
+    "Diplomski studiji Fakulteta prometnih znanosti"
+  ],
+  "sources": [
+    {
+      "id": "fpz-upute-zavrsni-diplomski-2018",
+      "kind": "guidelines",
+      "title": "Upute za prijavu, izradbu i obranu zavrsnog i diplomskog rada (Fakultet prometnih znanosti, 2018)",
+      "url": "http://static.fpz.hr/assets/datoteke/Upute-za-izradu-zavrsnog-i-diplomskog-rada.pdf",
+      "publisher": "Fakultet prometnih znanosti Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/fpz/fpz-upute-zavrsni-diplomski-2018.pdf",
+      "snapshotHash": "b5040734e60a8238520b526c1511b288a92172718388bb5bfeda110c897a7c5b",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Sluzbene Upute Odbora za zavrsne i diplomske radove (2018), jedinstvene za cijeli fakultet i za obje razine (zavrsni + diplomski). Struktura (Zavrsni rad mora imati ove elemente / Diplomski rad mora sadrzavati ove elemente), obvezan Sadrzaj (Sadrzaj je obvezan.) i numeracija stranica od Uvoda su imperativ -> scored. Cijelo tehnicko oblikovanje (velicina slova 12, prored 1,15 ili 1,5, margine 2,5 cm) je pod 'preporucuje se' -> advisory. Citiranje nudi dva ravnopravna nacina (fusnote ili uglate zagrade s brojem [5]) -> advisory. Nema navedenog fonta, formata papira (A4), obostranog poravnanja ni opsega rada u stranicama/rijecima. URL na www.fpz.unizg.hr vraca gresku (datoteka nije pronadena); dohvaceno s fakultetskog static.fpz.hr mirrora."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "fpz-zavrsni",
+      "unitId": "fpz",
+      "programs": [
+        "Prijediplomski studiji Fakulteta prometnih znanosti (zavrsni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Fakultet prometnih znanosti, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2018-01-01",
+      "rules": {
+        "requireToc": true,
+        "requirePageNumbers": true,
+        "recommendedCitation": "custom",
+        "requiredSections": [
+          { "key": "zadatak", "label": "Zadatak zavrsnog rada", "terms": ["zadatak"] },
+          { "key": "sazetak", "label": "Sazetak i kljucne rijeci", "terms": ["sazetak", "kljucne rijeci"] },
+          { "key": "summary", "label": "Summary i Keywords", "terms": ["summary", "keywords"] },
+          { "key": "sadrzaj", "label": "Sadrzaj", "terms": ["sadrzaj"] },
+          { "key": "uvod", "label": "Uvod", "terms": ["uvod"] },
+          { "key": "izlaganje", "label": "Izlaganje tematike", "terms": ["izlaganje tematike", "razrada"] },
+          { "key": "zakljucak", "label": "Zakljucak", "terms": ["zakljucak"] },
+          { "key": "literatura", "label": "Popis literature", "terms": ["popis literature", "literatura"] },
+          { "key": "ilustracije", "label": "Popis ilustracija", "terms": ["popis ilustracija"] },
+          { "key": "izjava", "label": "Izjava o akademskoj cestitosti", "terms": ["izjava o akademskoj cestitosti", "akademska cestitost"] }
+        ]
+      },
+      "facts": [
+        "Zavrsni rad mora imati propisane elemente slozene zadanim redoslijedom (imperativ).",
+        "Sadrzaj je obvezan (imperativ).",
+        "Numeracija stranica pocinje od Uvoda arapskim brojevima; stranice sadrzaja se ne numeriraju (imperativ).",
+        "Velicina slova 12, prored 1,15 ili 1,5 i margine 2,5 cm navedeni su pod 'preporucuje se' (advisory).",
+        "Izvori se navode fusnotama ili uglatim zagradama s brojem iz popisa literature (dva ravnopravna nacina, advisory)."
+      ],
+      "note": "Zavrsni (prijediplomski) rad iz jedinstvenih fakultetskih Uputa (2018). Scored su samo imperativna pravila: obvezni elementi rada, obvezan Sadrzaj i numeracija stranica. Tehnicko oblikovanje je preporuka pa je advisory. Citiranje dopusta dva nacina (fusnote ili numerirane uglate zagrade) pa je advisory i recommendedCitation je 'custom'. Nema fonta, A4, obostranog poravnanja ni opsega rada.",
+      "sources": [
+        {
+          "title": "Upute za prijavu, izradbu i obranu zavrsnog i diplomskog rada (FPZ, 2018)",
+          "url": "http://static.fpz.hr/assets/datoteke/Upute-za-izradu-zavrsnog-i-diplomskog-rada.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za prijavu, izradbu i obranu zavrsnog i diplomskog rada (Fakultet prometnih znanosti, 2018)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "obvezni elementi rada",
+        "sadrzaj",
+        "numeracija stranica"
+      ],
+      "advisoryScope": [
+        "velicina slova",
+        "prored",
+        "margine",
+        "stil citiranja"
+      ],
+      "catalogPrograms": [
+        "Prijediplomski studiji Fakulteta prometnih znanosti (zavrsni rad)"
+      ]
+    },
+    {
+      "id": "fpz-diplomski",
+      "unitId": "fpz",
+      "programs": [
+        "Diplomski studiji Fakulteta prometnih znanosti"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Fakultet prometnih znanosti, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2018-01-01",
+      "rules": {
+        "requireToc": true,
+        "requirePageNumbers": true,
+        "recommendedCitation": "custom",
+        "requiredSections": [
+          { "key": "zadatak", "label": "Zadatak diplomskog rada", "terms": ["zadatak"] },
+          { "key": "sazetak", "label": "Sazetak i kljucne rijeci", "terms": ["sazetak", "kljucne rijeci"] },
+          { "key": "summary", "label": "Summary i Keywords", "terms": ["summary", "keywords"] },
+          { "key": "sadrzaj", "label": "Sadrzaj", "terms": ["sadrzaj"] },
+          { "key": "uvod", "label": "Uvod", "terms": ["uvod"] },
+          { "key": "izlaganje", "label": "Izlaganje tematike", "terms": ["izlaganje tematike", "razrada"] },
+          { "key": "zakljucak", "label": "Zakljucak", "terms": ["zakljucak"] },
+          { "key": "literatura", "label": "Popis literature", "terms": ["popis literature", "literatura"] },
+          { "key": "ilustracije", "label": "Popis ilustracija", "terms": ["popis ilustracija"] },
+          { "key": "izjava", "label": "Izjava o akademskoj cestitosti", "terms": ["izjava o akademskoj cestitosti", "akademska cestitost"] }
+        ]
+      },
+      "facts": [
+        "Diplomski rad mora sadrzavati propisane elemente slozene zadanim redoslijedom (imperativ).",
+        "Sadrzaj je obvezan (imperativ).",
+        "Numeracija stranica pocinje od Uvoda arapskim brojevima; stranice sadrzaja se ne numeriraju (imperativ).",
+        "Velicina slova 12, prored 1,15 ili 1,5 i margine 2,5 cm navedeni su pod 'preporucuje se' (advisory).",
+        "Izvori se navode fusnotama ili uglatim zagradama s brojem iz popisa literature (dva ravnopravna nacina, advisory)."
+      ],
+      "note": "Diplomski rad iz jedinstvenih fakultetskih Uputa (2018); tehnicke upute i struktura identicni su zavrsnom radu. Scored su samo imperativna pravila: obvezni elementi rada, obvezan Sadrzaj i numeracija stranica. Tehnicko oblikovanje je preporuka pa je advisory. Citiranje dopusta dva nacina pa je advisory i recommendedCitation je 'custom'. Nema fonta, A4, obostranog poravnanja ni opsega rada.",
+      "sources": [
+        {
+          "title": "Upute za prijavu, izradbu i obranu zavrsnog i diplomskog rada (FPZ, 2018)",
+          "url": "http://static.fpz.hr/assets/datoteke/Upute-za-izradu-zavrsnog-i-diplomskog-rada.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za prijavu, izradbu i obranu zavrsnog i diplomskog rada (Fakultet prometnih znanosti, 2018)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "obvezni elementi rada",
+        "sadrzaj",
+        "numeracija stranica"
+      ],
+      "advisoryScope": [
+        "velicina slova",
+        "prored",
+        "margine",
+        "stil citiranja"
+      ],
+      "catalogPrograms": [
+        "Diplomski studiji Fakulteta prometnih znanosti"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-fpz-zavrsni--required-sections-verified-2026-07-02",
+      "ruleId": "fpz-zavrsni--required-sections",
+      "profileId": "fpz-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fpz-upute-zavrsni-diplomski-2018",
+      "sourcePage": "odjeljak 2.2. Elementi zavrsnog rada",
+      "quote": "Zavrsni rad mora imati ove elemente, slozene redoslijedom prikazanim na slici 1:",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fpz-zavrsni--toc-verified-2026-07-02",
+      "ruleId": "fpz-zavrsni--toc",
+      "profileId": "fpz-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fpz-upute-zavrsni-diplomski-2018",
+      "sourcePage": "odjeljak 6.3. Sadrzaj",
+      "quote": "Sadrzaj je obvezan.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fpz-zavrsni--page-numbers-verified-2026-07-02",
+      "ruleId": "fpz-zavrsni--page-numbers",
+      "profileId": "fpz-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fpz-upute-zavrsni-diplomski-2018",
+      "sourcePage": "odjeljak 6.4. Uvod",
+      "quote": "ujedno i prva stranica rada, tj. stranica kojom zapocinje numeriranje (za numeraciju se",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fpz-zavrsni--font-size-advisory-2026-07-02",
+      "ruleId": "fpz-zavrsni--font-size",
+      "profileId": "fpz-zavrsni",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fpz-upute-zavrsni-diplomski-2018",
+      "sourcePage": "odjeljak 7. Tehnicke upute za izradu zavrsnog i diplomskog rada",
+      "quote": "odabrati velicinu slova 12 i prored 1,15 ili 1,5,",
+      "note": "Port pilot workflow. Pod 'preporucuje se' pa advisory."
+    },
+    {
+      "id": "led-fpz-zavrsni--line-spacing-advisory-2026-07-02",
+      "ruleId": "fpz-zavrsni--line-spacing",
+      "profileId": "fpz-zavrsni",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fpz-upute-zavrsni-diplomski-2018",
+      "sourcePage": "odjeljak 7. Tehnicke upute za izradu zavrsnog i diplomskog rada",
+      "quote": "odabrati velicinu slova 12 i prored 1,15 ili 1,5,",
+      "note": "Port pilot workflow. Preporuka i k tome raspon (1,15 ili 1,5) pa advisory."
+    },
+    {
+      "id": "led-fpz-zavrsni--margins-advisory-2026-07-02",
+      "ruleId": "fpz-zavrsni--margins",
+      "profileId": "fpz-zavrsni",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fpz-upute-zavrsni-diplomski-2018",
+      "sourcePage": "odjeljak 7. Tehnicke upute za izradu zavrsnog i diplomskog rada",
+      "quote": "upotrebljavati standardne margine (gore, dolje, lijevo, desno po 2,5 cm),",
+      "note": "Port pilot workflow. Pod 'preporucuje se' pa advisory."
+    },
+    {
+      "id": "led-fpz-zavrsni--citation-style-advisory-2026-07-02",
+      "ruleId": "fpz-zavrsni--citation-style",
+      "profileId": "fpz-zavrsni",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fpz-upute-zavrsni-diplomski-2018",
+      "sourcePage": "odjeljak 6.5.2. Oznake izvora podataka",
+      "quote": "tue spoznaje i formulacije, odnosno navodi upotrijebljenu literaturu (izvor) i to moze ciniti",
+      "note": "Port pilot workflow. Dopustena dva ravnopravna nacina (fusnote ili uglate zagrade) pa advisory."
+    },
+    {
+      "id": "led-fpz-diplomski--required-sections-verified-2026-07-02",
+      "ruleId": "fpz-diplomski--required-sections",
+      "profileId": "fpz-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fpz-upute-zavrsni-diplomski-2018",
+      "sourcePage": "odjeljak 3.2. Elementi diplomskog rada",
+      "quote": "Diplomski rad mora sadrzavati ove elemente, slozene redoslijedom prikazanim na slici",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fpz-diplomski--toc-verified-2026-07-02",
+      "ruleId": "fpz-diplomski--toc",
+      "profileId": "fpz-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fpz-upute-zavrsni-diplomski-2018",
+      "sourcePage": "odjeljak 6.3. Sadrzaj",
+      "quote": "Sadrzaj je obvezan.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fpz-diplomski--page-numbers-verified-2026-07-02",
+      "ruleId": "fpz-diplomski--page-numbers",
+      "profileId": "fpz-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fpz-upute-zavrsni-diplomski-2018",
+      "sourcePage": "odjeljak 6.4. Uvod",
+      "quote": "ujedno i prva stranica rada, tj. stranica kojom zapocinje numeriranje (za numeraciju se",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fpz-diplomski--font-size-advisory-2026-07-02",
+      "ruleId": "fpz-diplomski--font-size",
+      "profileId": "fpz-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fpz-upute-zavrsni-diplomski-2018",
+      "sourcePage": "odjeljak 7. Tehnicke upute za izradu zavrsnog i diplomskog rada",
+      "quote": "odabrati velicinu slova 12 i prored 1,15 ili 1,5,",
+      "note": "Port pilot workflow. Pod 'preporucuje se' pa advisory."
+    },
+    {
+      "id": "led-fpz-diplomski--line-spacing-advisory-2026-07-02",
+      "ruleId": "fpz-diplomski--line-spacing",
+      "profileId": "fpz-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fpz-upute-zavrsni-diplomski-2018",
+      "sourcePage": "odjeljak 7. Tehnicke upute za izradu zavrsnog i diplomskog rada",
+      "quote": "odabrati velicinu slova 12 i prored 1,15 ili 1,5,",
+      "note": "Port pilot workflow. Preporuka i k tome raspon (1,15 ili 1,5) pa advisory."
+    },
+    {
+      "id": "led-fpz-diplomski--margins-advisory-2026-07-02",
+      "ruleId": "fpz-diplomski--margins",
+      "profileId": "fpz-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fpz-upute-zavrsni-diplomski-2018",
+      "sourcePage": "odjeljak 7. Tehnicke upute za izradu zavrsnog i diplomskog rada",
+      "quote": "upotrebljavati standardne margine (gore, dolje, lijevo, desno po 2,5 cm),",
+      "note": "Port pilot workflow. Pod 'preporucuje se' pa advisory."
+    },
+    {
+      "id": "led-fpz-diplomski--citation-style-advisory-2026-07-02",
+      "ruleId": "fpz-diplomski--citation-style",
+      "profileId": "fpz-diplomski",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fpz-upute-zavrsni-diplomski-2018",
+      "sourcePage": "odjeljak 6.5.2. Oznake izvora podataka",
+      "quote": "tue spoznaje i formulacije, odnosno navodi upotrijebljenu literaturu (izvor) i to moze ciniti",
+      "note": "Port pilot workflow. Dopustena dva ravnopravna nacina (fusnote ili uglate zagrade) pa advisory."
+    }
+  ]
+}

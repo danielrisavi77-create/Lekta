@@ -1,0 +1,183 @@
+{
+  "faculty": "fbf",
+  "unit": null,
+  "catalogPrograms": [
+    "Poslijediplomski specijalisticki studiji Farmaceutsko-biokemijskog fakulteta"
+  ],
+  "sources": [
+    {
+      "id": "fbf-upute-spec-2014",
+      "kind": "guidelines",
+      "title": "Uputa za prijavu teme i oblikovanje zavrsnog specijalistickog rada (Farmaceutsko-biokemijski fakultet, 2014)",
+      "url": "https://fbf.pharma.hr/UserDocsImages/Dokumenti/Studiji/PSS/Dokumenti-i-upute/Upute-spec_2014_v20140219.pdf",
+      "publisher": "Povjerenstvo za poslijediplomske studije i Znanstveno povjerenstvo, Farmaceutsko-biokemijski fakultet Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/fbf/fbf-upute-spec-2014.pdf",
+      "snapshotHash": "f9442b886142e2ea476ec4588e87ae6ce47c14659bc9c0d4632eb0b0874a4f93",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Jedini javno dostupan FBF-specifican formatni izvor s imperativima. Odjeljak B (Oblikovanje) propisuje A4, rubnike 2,5 cm, dvostruki prored, pismo 10-12 tocaka, numeraciju svih stranica; literatura se citira Vancouverskim stilom; obvezni dijelovi rada nabrojeni. Citati verbatim provjereni grepom nad fbf-upute-spec-2014.txt. Vrijedi za zavrsni specijalisticki rad (poslijediplomski specijalisticki studij), ne za diplomski (integrirani studij, upute na Merlinu) ni doktorski (UNIZG-wide DR.08)."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "fbf-specijalisticki",
+      "unitId": "fbf",
+      "programs": [
+        "Poslijediplomski specijalisticki studiji Farmaceutsko-biokemijskog fakulteta"
+      ],
+      "workTypes": ["specialist"],
+      "status": "partial",
+      "profileLabel": "Farmaceutsko-biokemijski fakultet, zavrsni specijalisticki rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": "2014-02-19",
+      "rules": {
+        "size": [10, 11, 12],
+        "spacing": 2.0,
+        "margins": { "top": 2.5, "right": 2.5, "bottom": 2.5, "left": 2.5 },
+        "requirePageNumbers": true,
+        "requireA4": true,
+        "checkMargins": true,
+        "recommendedCitation": "vancouver",
+        "requiredSections": [
+          { "key": "uvod", "label": "Uvod i pregled podrucja istrazivanja", "terms": ["uvod", "pregled podrucja"] },
+          { "key": "cilj", "label": "Cilj istrazivanja", "terms": ["cilj istrazivanja", "cilj"] },
+          { "key": "materijal-metode", "label": "Materijal i metode", "terms": ["materijal i metode", "ispitanici i metode", "metode"] },
+          { "key": "rasprava", "label": "Rasprava", "terms": ["rasprava"] },
+          { "key": "zakljucak", "label": "Zakljucak", "terms": ["zakljucak", "zakljucci"] },
+          { "key": "literatura", "label": "Referencije (Literatura)", "terms": ["literatura", "referencije"] },
+          { "key": "zivotopis", "label": "Zivotopis", "terms": ["zivotopis"] }
+        ]
+      },
+      "facts": [
+        "Rad se tiska na papiru A4 (210x297 mm), s rubnicima 2,5 cm i dvostrukim proredom (imperativ, scored).",
+        "Pismo je velicine 10 do 12 tipografskih tocaka citljive vrste (imperativ, scored).",
+        "Sve stranice moraju biti numerirane (imperativ, scored).",
+        "Literatura se citira Vancouverskim stilom, prema redoslijedu pojavljivanja (imperativ, scored).",
+        "Obvezni dijelovi rada: Uvod i pregled podrucja, Cilj istrazivanja, Materijal i metode, Rasprava, Zakljucak, Referencije/Literatura, Zivotopis (imperativ, scored). Rezultati su obvezni samo za eksperimentalni rad.",
+        "Sadrzaj navodi poglavlja i brojeve stranica; opisan deskriptivno pa ostaje advisory."
+      ],
+      "note": "Iz Upute za prijavu teme i oblikovanje zavrsnog specijalistickog rada (FBF, 2014). Authority program-page (upute fakultetskih povjerenstava). VAZNO za ljudski pregled: profil pokriva ZAVRSNI SPECIJALISTICKI rad (poslijediplomski specijalisticki studij), ne diplomski rad integriranog studija (upute samo na Merlinu, login) ni doktorski rad (oblikovanje po UNIZG-wide obrascu DR.08). requiredSections izostavlja Rezultati jer su obvezni samo za eksperimentalni, ne i teorijski rad.",
+      "sources": [
+        {
+          "title": "Uputa za prijavu teme i oblikovanje zavrsnog specijalistickog rada (FBF, 2014)",
+          "url": "https://fbf.pharma.hr/UserDocsImages/Dokumenti/Studiji/PSS/Dokumenti-i-upute/Upute-spec_2014_v20140219.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Uputa za prijavu teme i oblikovanje zavrsnog specijalistickog rada (Farmaceutsko-biokemijski fakultet, 2014)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "format papira (A4)",
+        "margine",
+        "prored",
+        "velicina slova",
+        "numeracija stranica",
+        "stil citiranja (vancouver)",
+        "obvezni dijelovi rada"
+      ],
+      "advisoryScope": [
+        "sadrzaj (toc)"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-fbf-specijalisticki--paper-size-verified-2026-07-02",
+      "ruleId": "fbf-specijalisticki--paper-size",
+      "profileId": "fbf-specijalisticki",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fbf-upute-spec-2014",
+      "sourcePage": "odjeljak B. Oblikovanje zavrsnog specijalistickog rada",
+      "quote": "velicine (A4, 210x297 mm), sa slobodnim rubnicima od 2,5 cm i u dvostrukom proredu",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fbf-specijalisticki--margins-verified-2026-07-02",
+      "ruleId": "fbf-specijalisticki--margins",
+      "profileId": "fbf-specijalisticki",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fbf-upute-spec-2014",
+      "sourcePage": "odjeljak B. Oblikovanje zavrsnog specijalistickog rada",
+      "quote": "velicine (A4, 210x297 mm), sa slobodnim rubnicima od 2,5 cm i u dvostrukom proredu",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fbf-specijalisticki--line-spacing-verified-2026-07-02",
+      "ruleId": "fbf-specijalisticki--line-spacing",
+      "profileId": "fbf-specijalisticki",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fbf-upute-spec-2014",
+      "sourcePage": "odjeljak B. Oblikovanje zavrsnog specijalistickog rada",
+      "quote": "velicine (A4, 210x297 mm), sa slobodnim rubnicima od 2,5 cm i u dvostrukom proredu",
+      "note": "Port pilot workflow. Dvostruki prored = 2,0."
+    },
+    {
+      "id": "led-fbf-specijalisticki--font-size-verified-2026-07-02",
+      "ruleId": "fbf-specijalisticki--font-size",
+      "profileId": "fbf-specijalisticki",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fbf-upute-spec-2014",
+      "sourcePage": "odjeljak B. Oblikovanje zavrsnog specijalistickog rada",
+      "quote": "(28-32 retka po stranici; pismo velicine 10 do 12 tipografskih tocaka citljive vrste s",
+      "note": "Port pilot workflow. Imperativan raspon 10-12 pt."
+    },
+    {
+      "id": "led-fbf-specijalisticki--page-numbers-verified-2026-07-02",
+      "ruleId": "fbf-specijalisticki--page-numbers",
+      "profileId": "fbf-specijalisticki",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fbf-upute-spec-2014",
+      "sourcePage": "odjeljak B. Oblikovanje zavrsnog specijalistickog rada",
+      "quote": "obvezatnom potporom svih hrvatskih znakova). Sve stranice moraju biti numerirane, tj.",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fbf-specijalisticki--citation-style-verified-2026-07-02",
+      "ruleId": "fbf-specijalisticki--citation-style",
+      "profileId": "fbf-specijalisticki",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fbf-upute-spec-2014",
+      "sourcePage": "odjeljak 6. Referencije/literatura",
+      "quote": "Literatura se navodi Vancouverskim stilom",
+      "note": "Port pilot workflow."
+    },
+    {
+      "id": "led-fbf-specijalisticki--required-sections-verified-2026-07-02",
+      "ruleId": "fbf-specijalisticki--required-sections",
+      "profileId": "fbf-specijalisticki",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fbf-upute-spec-2014",
+      "sourcePage": "odjeljak B.4. Sadrzaj specijalistickog rada",
+      "quote": "Obvezatni dijelovi rada koji slijede su:",
+      "note": "Port pilot workflow. Rezultati izostavljeni jer su obvezni samo za eksperimentalni rad."
+    },
+    {
+      "id": "led-fbf-specijalisticki--toc-advisory-2026-07-02",
+      "ruleId": "fbf-specijalisticki--toc",
+      "profileId": "fbf-specijalisticki",
+      "action": "advisory",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-02",
+      "sourceId": "fbf-upute-spec-2014",
+      "sourcePage": "odjeljak B.4. Sadrzaj specijalistickog rada",
+      "quote": "Sadrzaj specijalistickog rada navodi poglavlja i brojeve stranica na kojima poglavlja",
+      "note": "Port pilot workflow. Deskriptivna formulacija ('navodi'), ostaje advisory."
+    }
+  ]
+}

@@ -9,14 +9,14 @@ export const meta = {
 
 // Fakulteti za ovaj batch (args nadjaca; DEFAULT je trenutni batch). Svaki: katalog id + puno ime + obitelj.
 const DEFAULT = [
-  { id: 'ffzg', name: 'Filozofski fakultet', family: 'social' },
-  { id: 'pmf', name: 'Prirodoslovno-matematički fakultet', family: 'stem' },
-  { id: 'mef', name: 'Medicinski fakultet', family: 'biomed' },
-  { id: 'vef', name: 'Veterinarski fakultet', family: 'biomed' },
-  { id: 'kif', name: 'Kineziološki fakultet', family: 'social' },
-  { id: 'sumfak', name: 'Fakultet šumarstva i drvne tehnologije', family: 'stem' },
-  { id: 'ttf', name: 'Tekstilno-tehnološki fakultet', family: 'stem' },
-  { id: 'grad', name: 'Građevinski fakultet', family: 'stem' },
+  { id: 'fbf', name: 'Farmaceutsko-biokemijski fakultet', family: 'biomed' },
+  { id: 'sfzg', name: 'Stomatološki fakultet', family: 'biomed' },
+  { id: 'fpz', name: 'Fakultet prometnih znanosti', family: 'stem' },
+  { id: 'geof', name: 'Geodetski fakultet', family: 'stem' },
+  { id: 'grf', name: 'Grafički fakultet', family: 'stem' },
+  { id: 'rgnf', name: 'Rudarsko-geološko-naftni fakultet', family: 'stem' },
+  { id: 'erf', name: 'Edukacijsko-rehabilitacijski fakultet', family: 'social' },
+  { id: 'ufzg', name: 'Učiteljski fakultet', family: 'social' },
 ]
 // args moze stici kao array ILI kao JSON-string (ovisno o harnessu); parsiraj oboje.
 let requested = args

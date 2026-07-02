@@ -1,0 +1,190 @@
+{
+  "faculty": "ufzg",
+  "unit": null,
+  "catalogPrograms": [
+    "Prijediplomski studiji Učiteljskog fakulteta (zavrsni rad)",
+    "Diplomski studiji Učiteljskog fakulteta"
+  ],
+  "sources": [
+    {
+      "id": "ufzg-upute-zavrsni-diplomski-2026",
+      "kind": "guidelines",
+      "title": "Upute za izradu zavrsnog odnosno diplomskog rada (Uciteljski fakultet Sveucilista u Zagrebu)",
+      "url": "https://www.ufzg.unizg.hr/wp-content/uploads/2026/05/Upute-za-izradu-zavrsnog-odnosno-diplomskog-rada.pdf",
+      "publisher": "Uciteljski fakultet Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-02",
+      "snapshotPath": "data/sources/ufzg/ufzg-upute-zavrsni-diplomski-2026.pdf",
+      "snapshotHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-02",
+      "note": "Sluzbene Upute (dokument objavljen 2026) pokrivaju i zavrsni (final) i diplomski (graduate) rad. Odjeljak 2. Opseg i oblikovanje dan je kao imperativna spec-lista (A4, margine 2,5, Times New Roman 12, prored 1,5, obostrano poravnanje, numeriranje) i 'treba imati' za opseg -> scored. Odjeljak 1. strukturu daje s 'treba sadrzavati sljedee dijelove' i APA stil s 'treba biti usklaeno s APA stilom' -> scored. Broj izvora za zavrsni ovisi o vrsti rada (20 strucni / 30 empirijski) pa je za zavrsni advisory. Pravilnik o zavrsnim i diplomskim radovima (TRAVANJ 2020) referenciran je kao binding izvor, ali sluzbeni PDF trenutno vraca 404 pa nije snapshotiran."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "ufzg-zavrsni",
+      "unitId": "ufzg",
+      "programs": [
+        "Prijediplomski studiji Učiteljskog fakulteta (zavrsni rad)"
+      ],
+      "workTypes": ["final"],
+      "status": "partial",
+      "profileLabel": "Uciteljski fakultet, zavrsni rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": ["Times New Roman"],
+        "size": 12,
+        "spacing": 1.5,
+        "margins": { "top": 2.5, "right": 2.5, "bottom": 2.5, "left": 2.5 },
+        "requireToc": true,
+        "requirePageNumbers": true,
+        "requireA4": true,
+        "checkJustify": true,
+        "checkMargins": true,
+        "pageMin": 20,
+        "pageMax": 40,
+        "recommendedCitation": "apa7",
+        "requiredSections": [
+          { "key": "naslovnica", "label": "Naslovna stranica", "terms": ["naslovna", "naslovnica"] },
+          { "key": "sazetak", "label": "Sazetak s kljucnim rijecima", "terms": ["sazetak", "sažetak"] },
+          { "key": "sadrzaj", "label": "Sadrzaj", "terms": ["sadrzaj", "sadržaj"] },
+          { "key": "uvod", "label": "Uvod", "terms": ["uvod"] },
+          { "key": "zakljucak", "label": "Zakljucak", "terms": ["zakljucak", "zaključak"] },
+          { "key": "literatura", "label": "Literatura", "terms": ["literatura", "popis literature"] }
+        ]
+      },
+      "facts": [
+        "Format je imperativan: A4, sve margine 2,5 cm, Times New Roman 12, prored 1,5, tekst obostrano poravnan, numeriranje na dnu po sredini (prva stranica uvoda nosi broj 1).",
+        "Zavrsni rad treba imati izmeu 20 i 40 stranica, ne racunajui priloge.",
+        "Navoenje literature i oblikovanje tablica/grafickih prikaza treba biti usklaeno s APA stilom.",
+        "Broj izvora ovisi o vrsti rada (strucni minimalno 20, empirijski minimalno 30) pa je za zavrsni advisory."
+      ],
+      "note": "Zavrsni rad (prijediplomski) prema Uputama 2026. Cijelo tehnicko oblikovanje, opseg, obvezne cjeline, sadrzaj i APA stil formulirani su imperativno pa su scored. Obostrano poravnanje vozi se kroz rules.checkJustify i zaseban justify ruleEntry (checkId 'justify' je u COMPILED_CHECK_IDS). Reference-count je advisory jer minimum ovisi o vrsti rada (strucni/empirijski).",
+      "sources": [
+        {
+          "title": "Upute za izradu zavrsnog odnosno diplomskog rada (Uciteljski fakultet Sveucilista u Zagrebu)",
+          "url": "https://www.ufzg.unizg.hr/wp-content/uploads/2026/05/Upute-za-izradu-zavrsnog-odnosno-diplomskog-rada.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu zavrsnog odnosno diplomskog rada (Uciteljski fakultet Sveucilista u Zagrebu, 2026)",
+        "Pravilnik o zavrsnim i diplomskim radovima te zavrsnim i diplomskim ispitima (Uciteljski fakultet, travanj 2020) - binding, nije snapshotiran (sluzbeni PDF 404)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "format papira",
+        "margine",
+        "font",
+        "velicina slova",
+        "prored",
+        "obostrano poravnanje",
+        "numeracija stranica",
+        "sadrzaj",
+        "obvezne cjeline rada",
+        "opseg u stranicama",
+        "stil citiranja (APA)"
+      ],
+      "advisoryScope": [
+        "broj izvora u literaturi"
+      ]
+    },
+    {
+      "id": "ufzg-diplomski",
+      "unitId": "ufzg",
+      "programs": [
+        "Diplomski studiji Učiteljskog fakulteta"
+      ],
+      "workTypes": ["graduate"],
+      "status": "partial",
+      "profileLabel": "Uciteljski fakultet, diplomski rad",
+      "verifiedAt": "2026-07-02",
+      "documentDate": null,
+      "rules": {
+        "font": ["Times New Roman"],
+        "size": 12,
+        "spacing": 1.5,
+        "margins": { "top": 2.5, "right": 2.5, "bottom": 2.5, "left": 2.5 },
+        "requireToc": true,
+        "requirePageNumbers": true,
+        "requireA4": true,
+        "checkJustify": true,
+        "checkMargins": true,
+        "pageMin": 25,
+        "pageMax": 50,
+        "minReferences": 30,
+        "recommendedCitation": "apa7",
+        "requiredSections": [
+          { "key": "naslovnica", "label": "Naslovna stranica", "terms": ["naslovna", "naslovnica"] },
+          { "key": "sazetak", "label": "Sazetak s kljucnim rijecima", "terms": ["sazetak", "sažetak"] },
+          { "key": "sadrzaj", "label": "Sadrzaj", "terms": ["sadrzaj", "sadržaj"] },
+          { "key": "uvod", "label": "Uvod", "terms": ["uvod"] },
+          { "key": "metoda", "label": "Metoda", "terms": ["metoda"] },
+          { "key": "rezultati", "label": "Rezultati", "terms": ["rezultati"] },
+          { "key": "rasprava", "label": "Rasprava", "terms": ["rasprava"] },
+          { "key": "zakljucak", "label": "Zakljucak", "terms": ["zakljucak", "zaključak"] },
+          { "key": "literatura", "label": "Literatura", "terms": ["literatura", "popis literature"] }
+        ]
+      },
+      "facts": [
+        "Diplomski rad je znanstveni (empirijski) rad; format je identican zavrsnom: A4, margine 2,5 cm, Times New Roman 12, prored 1,5, obostrano poravnanje, numeriranje na dnu po sredini.",
+        "Diplomski rad treba imati izmeu 25 i 50 stranica, ne racunajui priloge.",
+        "Literatura treba sadrzavati minimalno 30 izvora.",
+        "Navoenje literature i oblikovanje tablica/grafickih prikaza treba biti usklaeno s APA stilom."
+      ],
+      "note": "Diplomski rad prema Uputama 2026. Diplomski je uvijek znanstveni/empirijski pa su obvezne cjeline empirijskog rada (metoda, rezultati, rasprava) i minimalan broj izvora (30) scored. Sve ostalo (format, opseg, sadrzaj, APA) imperativno i scored.",
+      "sources": [
+        {
+          "title": "Upute za izradu zavrsnog odnosno diplomskog rada (Uciteljski fakultet Sveucilista u Zagrebu)",
+          "url": "https://www.ufzg.unizg.hr/wp-content/uploads/2026/05/Upute-za-izradu-zavrsnog-odnosno-diplomskog-rada.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu zavrsnog odnosno diplomskog rada (Uciteljski fakultet Sveucilista u Zagrebu, 2026)",
+        "Pravilnik o zavrsnim i diplomskim radovima te zavrsnim i diplomskim ispitima (Uciteljski fakultet, travanj 2020) - binding, nije snapshotiran (sluzbeni PDF 404)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "format papira",
+        "margine",
+        "font",
+        "velicina slova",
+        "prored",
+        "obostrano poravnanje",
+        "numeracija stranica",
+        "sadrzaj",
+        "obvezne cjeline rada",
+        "opseg u stranicama",
+        "broj izvora u literaturi",
+        "stil citiranja (APA)"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    { "id": "led-ufzg-zavrsni--font-verified-2026-07-02", "ruleId": "ufzg-zavrsni--font", "profileId": "ufzg-zavrsni", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-07-02", "sourceId": "ufzg-upute-zavrsni-diplomski-2026", "sourcePage": "odjeljak 2. Opseg i oblikovanje zavrsnog odnosno diplomskog rada", "quote": "Font slova: Times New Roman, velicine 12 tocaka", "note": "Port pilot workflow." },
+    { "id": "led-ufzg-zavrsni--font-size-verified-2026-07-02", "ruleId": "ufzg-zavrsni--font-size", "profileId": "ufzg-zavrsni", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-07-02", "sourceId": "ufzg-upute-zavrsni-diplomski-2026", "sourcePage": "odjeljak 2. Opseg i oblikovanje zavrsnog odnosno diplomskog rada", "quote": "Font slova: Times New Roman, velicine 12 tocaka", "note": "Port pilot workflow." },
+    { "id": "led-ufzg-zavrsni--line-spacing-verified-2026-07-02", "ruleId": "ufzg-zavrsni--line-spacing", "profileId": "ufzg-zavrsni", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-07-02", "sourceId": "ufzg-upute-zavrsni-diplomski-2026", "sourcePage": "odjeljak 2. Opseg i oblikovanje zavrsnog odnosno diplomskog rada", "quote": "Razmak meu redovima: 1,5", "note": "Port pilot workflow." },
+    { "id": "led-ufzg-zavrsni--margins-verified-2026-07-02", "ruleId": "ufzg-zavrsni--margins", "profileId": "ufzg-zavrsni", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-07-02", "sourceId": "ufzg-upute-zavrsni-diplomski-2026", "sourcePage": "odjeljak 2. Opseg i oblikovanje zavrsnog odnosno diplomskog rada", "quote": "Margine: 2,5 cm", "note": "Port pilot workflow." },
+    { "id": "led-ufzg-zavrsni--paper-size-verified-2026-07-02", "ruleId": "ufzg-zavrsni--paper-size", "profileId": "ufzg-zavrsni", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-07-02", "sourceId": "ufzg-upute-zavrsni-diplomski-2026", "sourcePage": "odjeljak 2. Opseg i oblikovanje zavrsnog odnosno diplomskog rada", "quote": "Velicina stranice: A4 (210 x 297 mm)", "note": "Port pilot workflow." },
+    { "id": "led-ufzg-zavrsni--justify-verified-2026-07-02", "ruleId": "ufzg-zavrsni--justify", "profileId": "ufzg-zavrsni", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-07-02", "sourceId": "ufzg-upute-zavrsni-diplomski-2026", "sourcePage": "odjeljak 2. Opseg i oblikovanje zavrsnog odnosno diplomskog rada", "quote": "Tekst: obostrano poravnano", "note": "Port pilot workflow." },
+    { "id": "led-ufzg-zavrsni--page-numbers-verified-2026-07-02", "ruleId": "ufzg-zavrsni--page-numbers", "profileId": "ufzg-zavrsni", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-07-02", "sourceId": "ufzg-upute-zavrsni-diplomski-2026", "sourcePage": "odjeljak 2. Opseg i oblikovanje zavrsnog odnosno diplomskog rada", "quote": "Numeriranje: redni broj na dnu po sredini stranice, prva stranica uvoda nosi broj 1", "note": "Port pilot workflow." },
+    { "id": "led-ufzg-zavrsni--toc-verified-2026-07-02", "ruleId": "ufzg-zavrsni--toc", "profileId": "ufzg-zavrsni", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-07-02", "sourceId": "ufzg-upute-zavrsni-diplomski-2026", "sourcePage": "odjeljak 1.1. Struktura strucnog rada", "quote": "sadrzaj (popis svih poglavlja i potpoglavlja s pripadajuim rednim brojevima stranica)", "note": "Port pilot workflow." },
+    { "id": "led-ufzg-zavrsni--required-sections-verified-2026-07-02", "ruleId": "ufzg-zavrsni--required-sections", "profileId": "ufzg-zavrsni", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-07-02", "sourceId": "ufzg-upute-zavrsni-diplomski-2026", "sourcePage": "odjeljak 1.1. Struktura strucnog rada", "quote": "Strucni rad treba sadrzavati sljedee dijelove:", "note": "Port pilot workflow." },
+    { "id": "led-ufzg-zavrsni--page-count-verified-2026-07-02", "ruleId": "ufzg-zavrsni--page-count", "profileId": "ufzg-zavrsni", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-07-02", "sourceId": "ufzg-upute-zavrsni-diplomski-2026", "sourcePage": "odjeljak 2. Opseg i oblikovanje zavrsnog odnosno diplomskog rada", "quote": "Zavrsni rad treba imati izmeu 20 i 40 stranica, a diplomski rad izmeu 25 i 50 stranica", "note": "Port pilot workflow." },
+    { "id": "led-ufzg-zavrsni--citation-style-verified-2026-07-02", "ruleId": "ufzg-zavrsni--citation-style", "profileId": "ufzg-zavrsni", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-07-02", "sourceId": "ufzg-upute-zavrsni-diplomski-2026", "sourcePage": "odjeljak 2. Opseg i oblikovanje zavrsnog odnosno diplomskog rada", "quote": "usklaeno s APA stilom. Detaljnije upute za citiranje literature", "note": "Port pilot workflow." },
+    { "id": "led-ufzg-zavrsni--reference-count-advisory-2026-07-02", "ruleId": "ufzg-zavrsni--reference-count", "profileId": "ufzg-zavrsni", "action": "advisory", "actor": "owner-bulk-approval", "timestamp": "2026-07-02", "sourceId": "ufzg-upute-zavrsni-diplomski-2026", "sourcePage": "odjeljak 1.1. Struktura strucnog rada", "quote": "Literatura treba sadrzavati minimalno 20 izvora.", "note": "Port pilot workflow. Advisory: minimum ovisi o vrsti rada (strucni 20 / empirijski 30)." },
+    { "id": "led-ufzg-diplomski--font-verified-2026-07-02", "ruleId": "ufzg-diplomski--font", "profileId": "ufzg-diplomski", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-07-02", "sourceId": "ufzg-upute-zavrsni-diplomski-2026", "sourcePage": "odjeljak 2. Opseg i oblikovanje zavrsnog odnosno diplomskog rada", "quote": "Font slova: Times New Roman, velicine 12 tocaka", "note": "Port pilot workflow." },
+    { "id": "led-ufzg-diplomski--font-size-verified-2026-07-02", "ruleId": "ufzg-diplomski--font-size", "profileId": "ufzg-diplomski", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-07-02", "sourceId": "ufzg-upute-zavrsni-diplomski-2026", "sourcePage": "odjeljak 2. Opseg i oblikovanje zavrsnog odnosno diplomskog rada", "quote": "Font slova: Times New Roman, velicine 12 tocaka", "note": "Port pilot workflow." },
+    { "id": "led-ufzg-diplomski--line-spacing-verified-2026-07-02", "ruleId": "ufzg-diplomski--line-spacing", "profileId": "ufzg-diplomski", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-07-02", "sourceId": "ufzg-upute-zavrsni-diplomski-2026", "sourcePage": "odjeljak 2. Opseg i oblikovanje zavrsnog odnosno diplomskog rada", "quote": "Razmak meu redovima: 1,5", "note": "Port pilot workflow." },
+    { "id": "led-ufzg-diplomski--margins-verified-2026-07-02", "ruleId": "ufzg-diplomski--margins", "profileId": "ufzg-diplomski", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-07-02", "sourceId": "ufzg-upute-zavrsni-diplomski-2026", "sourcePage": "odjeljak 2. Opseg i oblikovanje zavrsnog odnosno diplomskog rada", "quote": "Margine: 2,5 cm", "note": "Port pilot workflow." },
+    { "id": "led-ufzg-diplomski--paper-size-verified-2026-07-02", "ruleId": "ufzg-diplomski--paper-size", "profileId": "ufzg-diplomski", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-07-02", "sourceId": "ufzg-upute-zavrsni-diplomski-2026", "sourcePage": "odjeljak 2. Opseg i oblikovanje zavrsnog odnosno diplomskog rada", "quote": "Velicina stranice: A4 (210 x 297 mm)", "note": "Port pilot workflow." },
+    { "id": "led-ufzg-diplomski--justify-verified-2026-07-02", "ruleId": "ufzg-diplomski--justify", "profileId": "ufzg-diplomski", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-07-02", "sourceId": "ufzg-upute-zavrsni-diplomski-2026", "sourcePage": "odjeljak 2. Opseg i oblikovanje zavrsnog odnosno diplomskog rada", "quote": "Tekst: obostrano poravnano", "note": "Port pilot workflow." },
+    { "id": "led-ufzg-diplomski--page-numbers-verified-2026-07-02", "ruleId": "ufzg-diplomski--page-numbers", "profileId": "ufzg-diplomski", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-07-02", "sourceId": "ufzg-upute-zavrsni-diplomski-2026", "sourcePage": "odjeljak 2. Opseg i oblikovanje zavrsnog odnosno diplomskog rada", "quote": "Numeriranje: redni broj na dnu po sredini stranice, prva stranica uvoda nosi broj 1", "note": "Port pilot workflow." },
+    { "id": "led-ufzg-diplomski--toc-verified-2026-07-02", "ruleId": "ufzg-diplomski--toc", "profileId": "ufzg-diplomski", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-07-02", "sourceId": "ufzg-upute-zavrsni-diplomski-2026", "sourcePage": "odjeljak 1.2. Struktura empirijskog rada", "quote": "sadrzaj (popis svih poglavlja i potpoglavlja s pripadajuim rednim brojevima stranica)", "note": "Port pilot workflow." },
+    { "id": "led-ufzg-diplomski--required-sections-verified-2026-07-02", "ruleId": "ufzg-diplomski--required-sections", "profileId": "ufzg-diplomski", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-07-02", "sourceId": "ufzg-upute-zavrsni-diplomski-2026", "sourcePage": "odjeljak 1.2. Struktura empirijskog rada", "quote": "Empirijski rad treba sadrzavati sljedee dijelove:", "note": "Port pilot workflow." },
+    { "id": "led-ufzg-diplomski--page-count-verified-2026-07-02", "ruleId": "ufzg-diplomski--page-count", "profileId": "ufzg-diplomski", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-07-02", "sourceId": "ufzg-upute-zavrsni-diplomski-2026", "sourcePage": "odjeljak 2. Opseg i oblikovanje zavrsnog odnosno diplomskog rada", "quote": "Zavrsni rad treba imati izmeu 20 i 40 stranica, a diplomski rad izmeu 25 i 50 stranica", "note": "Port pilot workflow." },
+    { "id": "led-ufzg-diplomski--reference-count-verified-2026-07-02", "ruleId": "ufzg-diplomski--reference-count", "profileId": "ufzg-diplomski", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-07-02", "sourceId": "ufzg-upute-zavrsni-diplomski-2026", "sourcePage": "odjeljak 1.2. Struktura empirijskog rada", "quote": "Literatura treba sadrzavati minimalno 30 izvora.", "note": "Port pilot workflow." },
+    { "id": "led-ufzg-diplomski--citation-style-verified-2026-07-02", "ruleId": "ufzg-diplomski--citation-style", "profileId": "ufzg-diplomski", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-07-02", "sourceId": "ufzg-upute-zavrsni-diplomski-2026", "sourcePage": "odjeljak 2. Opseg i oblikovanje zavrsnog odnosno diplomskog rada", "quote": "usklaeno s APA stilom. Detaljnije upute za citiranje literature", "note": "Port pilot workflow." }
+  ]
+}
