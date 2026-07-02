@@ -151,8 +151,6 @@
       "footnoteSpacing": 1,
       "footnoteEndPeriod": true,
       "headingRules": {
-        "size": 12,
-        "align": "left",
         "numberRequired": true,
         "trailingDot": true,
         "romanLevelOneAllowed": false,

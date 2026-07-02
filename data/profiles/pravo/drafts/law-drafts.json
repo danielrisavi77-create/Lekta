@@ -2968,8 +2968,6 @@
         "ruleId": "radno-socijalno-pravo--heading-rules",
         "checkId": "heading-rules",
         "value": {
-          "size": 12,
-          "align": "left",
           "numberRequired": true,
           "trailingDot": true,
           "romanLevelOneAllowed": false,
@@ -2987,9 +2985,15 @@
         "machineCheckable": true,
         "authority": "general",
         "sourceId": "pravo-katedra-radno-socijalno-upute-2021",
-        "sourcePage": null,
-        "quote": null,
-        "status": "needs-recheck"
+        "sourcePage": "str. 3, odjeljak 5 (Oznacavanje cjelina i sadrzaj)",
+        "quote": "Cjeline unutar pojedinog rada (glave, odjeljke i pododjeljke) oznacavajte samo arapskim brojevima i njihovom decimalnom kombinacijom, a nikako ne slovima ili rimskim brojevima.",
+        "status": "verified",
+        "scored": true,
+        "verifiedHash": "c37e637935f230e0e47c213fe7147a32b845352ef3a22beb63f0e1a4036971c1",
+        "lastVerified": "2026-07-02",
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       }
     ],
     "sociologija": [

@@ -730,11 +730,11 @@
     },
     {
       "profileId": "radno-socijalno-pravo",
-      "scored": 5,
+      "scored": 6,
       "machineCheckable": 6,
-      "advisory": 1,
-      "ratio": 0.8333333333333334,
-      "lastVerified": "2026-06-30"
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
     },
     {
       "profileId": "sfzg-diplomski",
@@ -849,5 +849,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 597
+  "totalScored": 598
 }

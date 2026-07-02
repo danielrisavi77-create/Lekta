@@ -18358,5 +18358,17 @@
     "sourcePage": "odjeljak 'Postavke stranice' (DR.SC.-08, Upute za oblikovanje doktorskog rada)",
     "quote": "Stranice trebaju biti numerirane. Broje se sve stranice od Uvoda do kraja rada. Numeracija se pise u donjem desnom kutu.",
     "note": "Ljudski audit: potvrdjena vrijednost protiv izvora na lokatoru (bio owner-bulk-approval)."
+  },
+  {
+    "id": "led-radno-socijalno-pravo--heading-rules-human-verified-2026-07-02",
+    "ruleId": "radno-socijalno-pravo--heading-rules",
+    "profileId": "radno-socijalno-pravo",
+    "action": "human-verified",
+    "actor": "Daniel Risavi",
+    "timestamp": "2026-07-02",
+    "sourceId": "pravo-katedra-radno-socijalno-upute-2021",
+    "sourcePage": "str. 3, odjeljak 5 (Oznacavanje cjelina i sadrzaj)",
+    "quote": "Cjeline unutar pojedinog rada (glave, odjeljke i pododjeljke) oznacavajte samo arapskim brojevima i njihovom decimalnom kombinacijom, a nikako ne slovima ili rimskim brojevima.",
+    "note": "Recheck rijesen: izvor (odjeljak 5) propisuje numeraciju naslova arapski/decimalno, bez rimskih, 3 razine (glave/odjeljke/pododjeljke); normativni primjer \"ispravno oznacavanje\" daje verzal razine 1 i tocku iza broja. Uklonjeni size (izvor propisuje 12 za body, ne za naslove) i align (izvor trazi obostrano poravnanje teksta, ne lijevo za naslove; k tome checker align ne cita iz pravila)."
   }
 ]
