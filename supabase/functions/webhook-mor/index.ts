@@ -1,80 +1,102 @@
-// Lekta Edge Function: webhook-mor (Deno, Supabase).
-// Spec: docs/MONETIZATION_AND_ANTI_ABUSE.md sekcija 7. Merchant of Record (Paddle ili
-// Lemon Squeezy) rjesava EU PDV. Na uspjesnu kupnju kreira entitlement; idempotentno
-// preko unique (provider, order_id) u bazi (migracija 0001). Ponovljena dostava ne
-// udvostrucuje slotove (kriterij 11.10). Na refund postavlja status 'refunded'.
+// Lekta Edge Function: webhook-mor (Deno, Supabase). Merchant of Record: Lemon Squeezy.
+// Spec: docs/MONETIZATION_PLAN.md sekcija 6 (webhook delte) + MONETIZATION_AND_ANTI_ABUSE.md 7.
 //
-// Mapiranje proizvod -> (work_type, slots_total) drzi se u jednoj konfiguraciji ispod.
-// Potpis webhooka MORA se provjeriti prije obrade (placeholder verifySignature).
+// Na uspjesnu kupnju kreira entitlement; idempotentno preko unique (provider, order_id)
+// (migracija 0001). Proizvod se mapira iz baze `products` po mor_product_id (LS variant),
+// ne vise iz hardkodirane liste. Rok potrosnje je po proizvodu (purchase_window_days).
+// manual_fulfillment (premium_human) -> manual_orders. Pass -> izdaje -20% kupon (coupon_grants).
+// Nepoznat proizvod -> log + 200 (bez entitlementa) da provider ne retry-a beskonacno (6.2).
+// Odluke (potpis, parsiranje, rok, kupon) su u testiranom coreu src/report/webhook.ts.
 //
 // deno-lint-ignore-file no-explicit-any
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import { isReportWorkType } from '../../../src/report/pricing.ts';
+import {
+  verifyLemonSignature,
+  parseLemonEvent,
+  isoAfterDays,
+  isPassProduct,
+  makePassCouponCode,
+  PASS_COUPON_VALID_DAYS,
+} from '../../../src/report/webhook.ts';
+import { mapProductRow } from '../../../src/catalog/products-catalog.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const WEBHOOK_SECRET = Deno.env.get('MOR_WEBHOOK_SECRET') ?? '';
-
-// proizvod (MoR) -> naplatni profil. Drzi na jednom mjestu (sekcija 7).
-const PRODUCT_MAP: Record<string, { workType: string; slotsTotal: number }> = {
-  'lekta-seminarski-1': { workType: 'seminarski', slotsTotal: 1 },
-  'lekta-zavrsni-1': { workType: 'zavrsni', slotsTotal: 1 },
-  'lekta-diplomski-1': { workType: 'diplomski', slotsTotal: 1 },
-  'lekta-diplomski-3': { workType: 'diplomski', slotsTotal: 3 },
-  'lekta-doktorski-1': { workType: 'doktorski', slotsTotal: 1 },
-};
-
-const PURCHASE_WINDOW_DAYS = 90; // rok da se slotovi POTROSE
+const PROVIDER = 'lemonsqueezy';
 
 function json(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
-}
-
-// Placeholder: zamijeni stvarnom HMAC provjerom potpisa providera prije produkcije.
-function verifySignature(_raw: string, _signature: string | null): boolean {
-  return WEBHOOK_SECRET.length > 0;
 }
 
 Deno.serve(async (req: Request) => {
   if (req.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
 
   const raw = await req.text();
-  if (!verifySignature(raw, req.headers.get('x-signature'))) {
+  if (!(await verifyLemonSignature(raw, req.headers.get('X-Signature'), WEBHOOK_SECRET))) {
     return json({ error: 'invalid_signature' }, 401);
   }
-  const event = JSON.parse(raw);
+  const ev = parseLemonEvent(JSON.parse(raw));
+  if (!ev.orderId || !ev.userId) return json({ error: 'bad_request' }, 400);
+
   const admin = createClient(SUPABASE_URL, SERVICE_ROLE, { auth: { persistSession: false } });
 
-  const provider = event.provider ?? 'paddle';
-  const orderId = String(event.order_id ?? event.id ?? '');
-  const userId = String(event.user_id ?? event.custom_data?.user_id ?? '');
-  if (!orderId || !userId) return json({ error: 'bad_request' }, 400);
-
-  // refund: blokiraj daljnje vezivanje slotova iz tog entitlementa
-  if (event.type === 'refund' || event.event_type === 'refund') {
-    await admin.from('entitlements').update({ status: 'refunded' }).eq('provider', provider).eq('order_id', orderId);
+  // refund: blokiraj daljnje vezivanje slotova iz tog entitlementa (sekcija 6.7)
+  if (ev.refunded) {
+    await admin.from('entitlements').update({ status: 'refunded' }).eq('provider', PROVIDER).eq('order_id', ev.orderId);
     return json({ ok: true, action: 'refunded' });
   }
 
-  const map = PRODUCT_MAP[String(event.product_id ?? event.product ?? '')];
-  if (!map || !isReportWorkType(map.workType)) return json({ error: 'unknown_product' }, 400);
+  // proizvod iz kataloga po mor_product_id (sekcija 6.2)
+  const { data: prow } = await admin.from('products').select('*').eq('mor_product_id', ev.variantId).maybeSingle();
+  const product = prow ? mapProductRow(prow as Record<string, unknown>) : null;
+  if (!product) {
+    // Nepoznat id -> log ERROR + alert; 200 bez entitlementa da provider ne retry-a (6.2).
+    console.error('webhook-mor unknown_product', { variantId: ev.variantId, orderId: ev.orderId });
+    return json({ ok: true, action: 'unknown_product_logged' }, 200);
+  }
 
-  const purchaseExpiresAt = new Date(Date.now() + PURCHASE_WINDOW_DAYS * 24 * 3600 * 1000).toISOString();
+  // rucni fulfillment (premium_human): otvori manual_orders, bez entitlementa (6.3)
+  if (product.manualFulfillment) {
+    const { error } = await admin
+      .from('manual_orders')
+      .insert({ user_id: ev.userId, product_id: product.id, order_id: ev.orderId, provider: PROVIDER });
+    if (error && (error as any).code === '23505') return json({ ok: true, action: 'duplicate_ignored' });
+    if (error) return json({ error: 'insert_failed', detail: error.message }, 500);
+    return json({ ok: true, action: 'manual_order_created' });
+  }
 
-  // Idempotentno: unique (provider, order_id) u bazi. Ponovljena dostava -> 23505 -> ok.
+  if (!product.workType) {
+    console.error('webhook-mor product_without_work_type', { productId: product.id });
+    return json({ error: 'product_misconfigured' }, 500);
+  }
+
+  // entitlement (6.4); idempotentno preko unique (provider, order_id)
+  const purchaseExpiresAt = isoAfterDays(Date.now(), product.purchaseWindowDays);
   const { error } = await admin.from('entitlements').insert({
-    user_id: userId,
-    work_type: map.workType,
-    slots_total: map.slotsTotal,
-    order_id: orderId,
-    provider,
+    user_id: ev.userId,
+    work_type: product.workType,
+    slots_total: product.slotsTotal,
+    product_id: product.id,
+    order_id: ev.orderId,
+    provider: PROVIDER,
     purchase_expires_at: purchaseExpiresAt,
   });
-
-  if (error && (error as any).code === '23505') {
-    return json({ ok: true, action: 'duplicate_ignored' }); // idempotencija
-  }
+  if (error && (error as any).code === '23505') return json({ ok: true, action: 'duplicate_ignored' });
   if (error) return json({ error: 'insert_failed', detail: error.message }, 500);
+
+  // pass bonus kupon (6.5): samo uz tek kreiran entitlement (ne na duplikat)
+  if (isPassProduct(product.kind)) {
+    await admin.from('coupon_grants').insert({
+      user_id: ev.userId,
+      code: makePassCouponCode(ev.orderId),
+      reason: 'pass_bonus',
+      source_order_id: ev.orderId,
+      expires_at: isoAfterDays(Date.now(), PASS_COUPON_VALID_DAYS),
+    });
+    // TODO(integracija): kreiraj -20% Lemon Squeezy discount (vrijedi na slot_zavrsni/slot_diplomski)
+    // i posalji kod korisniku mailom. Zakljucaj da ne vrijedi na partner proizvode (sekcija 7).
+  }
 
   return json({ ok: true, action: 'entitlement_created' });
 });
