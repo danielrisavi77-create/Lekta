@@ -18160,7 +18160,56 @@
       "Opseg (najmanje 20 str.)",
       "Stil citiranja (APA, autor-godina)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation":     {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna zavrsna rada (Fakultet agrobiotehnickih znanosti Osijek) iz sluzbenog repozitorija (repozitorij.fazos.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "pfos:124",
+          "repository": "repozitorij.fazos.hr",
+          "pageFormat": "A4",
+          "pages": 30,
+          "sha256": "fd8573487d7af49a80973e530929e2a14e3674f481c8836b63caef616bf96d12",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "pfos:125",
+          "repository": "repozitorij.fazos.hr",
+          "pageFormat": "A4",
+          "pages": 44,
+          "sha256": "53aaf7a64346ee0b88ec4f3341cc80a97efc6589b318b24ad840aba9859967eb",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "pfos:126",
+          "repository": "repozitorij.fazos.hr",
+          "pageFormat": "A4",
+          "pages": 39,
+          "sha256": "92f2a29b6a7e2c1c2ea0376c5de8de2fc80878ae42d4d8c2288cb726884eac77",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "pfos:127",
+          "repository": "repozitorij.fazos.hr",
+          "pageFormat": "A4",
+          "pages": 34,
+          "sha256": "c1516f0121623f649d1c206291d19cdfbf95f2b323183a43241e16c734ff92a2",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (pfos:124, pfos:125, pfos:126, pfos:127) prolaze PDF preflight: valjan nesifriran PDF, viselistni (30-44 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "fazos-diplomski",
@@ -18215,7 +18264,56 @@
       "Opseg (najmanje 30 str.)",
       "Stil citiranja (APA, autor-godina)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation":     {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna diplomska rada (Fakultet agrobiotehnickih znanosti Osijek) iz sluzbenog repozitorija (repozitorij.fazos.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "pfos:19",
+          "repository": "repozitorij.fazos.hr",
+          "pageFormat": "A4",
+          "pages": 63,
+          "sha256": "ac0690f87d02fa1d3a0f7acd3966831574ff124c402f484d08a1e36051623d53",
+          "level": "diplomski"
+        },
+        {
+          "pid": "pfos:20",
+          "repository": "repozitorij.fazos.hr",
+          "pageFormat": "A4",
+          "pages": 59,
+          "sha256": "c3010c6801da0785d0efdb989ce5db4ea3631eac0b5824b18724911c62071a08",
+          "level": "diplomski"
+        },
+        {
+          "pid": "pfos:22",
+          "repository": "repozitorij.fazos.hr",
+          "pageFormat": "A4",
+          "pages": 47,
+          "sha256": "5a1acfe9183aed351f69f5423450689afe26e0c69c12dff4b10769256d5fe865",
+          "level": "diplomski"
+        },
+        {
+          "pid": "pfos:24",
+          "repository": "repozitorij.fazos.hr",
+          "pageFormat": "A4",
+          "pages": 46,
+          "sha256": "6b84b27dca09940dea673d2c06b3d84135631b22ecffe62b35ad949ab7204f0a",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (pfos:19, pfos:20, pfos:22, pfos:24) prolaze PDF preflight: valjan nesifriran PDF, viselistni (46-63 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "mefos-zavrsni",
@@ -18577,7 +18675,56 @@
       "Opseg (20-30 str.)",
       "Stil citiranja (APA)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation":     {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna zavrsna rada psihologije (Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:331",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 35,
+          "sha256": "a3e9294de2bd66a77070ed7e408ee05c2de50bb5a9732ef072697e5a4dd58a79",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:536",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 32,
+          "sha256": "6cfb9254d3b72c4d77ae93b8e1257261af202993e57fbb1dea0c95abcc55e02a",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:614",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 37,
+          "sha256": "f89966469fdc4d216cdf65e1d6973998220232f33c2a51f2322e0fb21aee544d",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:615",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 43,
+          "sha256": "a014722e405ff3237e5ed13f83d0efa7ec7106e78b5c66f0cba84c5e84c0e767",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (unizd:331, unizd:536, unizd:614, unizd:615) prolaze PDF preflight: valjan nesifriran PDF, viselistni (32-43 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "unizd-pedagogija-diplomski",
@@ -18629,7 +18776,56 @@
       "Obostrano poravnanje",
       "Stil citiranja (Harvard)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation":     {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna diplomska rada pedagogije (Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:103",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 63,
+          "sha256": "8938057ee27150b296195de648fad887f3794c5c38d68419df07f7a9cd148600",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:104",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 72,
+          "sha256": "777cffc4b0c8938d401fc68f61c1173781d90f6fba7d35d0ab8c2a0b0549c3c8",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:145",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 95,
+          "sha256": "70ca02c2a74548456429cb44a96f14b4279646822be8603ec7067f47794097ac",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:164",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 80,
+          "sha256": "af22ebe6af4da36fae669976504574834546ce01da77c853b78027daf70224a6",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (unizd:103, unizd:104, unizd:145, unizd:164) prolaze PDF preflight: valjan nesifriran PDF, viselistni (63-95 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "unizd-povijest-umj-zavrsni",
@@ -19747,7 +19943,56 @@
       "Obostrano poravnanje",
       "Stil citiranja (APA)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation":     {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna diplomska rada (Kemijsko-tehnoloski fakultet u Splitu) iz sluzbenog repozitorija (repozitorij.ktf-split.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "ktfst:5",
+          "repository": "repozitorij.ktf-split.hr",
+          "pageFormat": "A4",
+          "pages": 101,
+          "sha256": "6a0a7866573b7234f70bd08b5fbaf02289831f6be2624abd0553b82ae328b10d",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ktfst:9",
+          "repository": "repozitorij.ktf-split.hr",
+          "pageFormat": "A4",
+          "pages": 83,
+          "sha256": "f94f6de728bd63a111192596cee5f2624cf8d2cb238a6a7ddb7712c26c23d373",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ktfst:10",
+          "repository": "repozitorij.ktf-split.hr",
+          "pageFormat": "A4",
+          "pages": 61,
+          "sha256": "b43b34dbab664f141faf854159dcf875bb5c3dbad28ca2121c4f48d9b28859df",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ktfst:11",
+          "repository": "repozitorij.ktf-split.hr",
+          "pageFormat": "A4",
+          "pages": 98,
+          "sha256": "e38f97ea6aa17713be6fd8bd300c71b80004b7d532eb898db28783d06a6281f2",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (ktfst:5, ktfst:9, ktfst:10, ktfst:11) prolaze PDF preflight: valjan nesifriran PDF, viselistni (61-101 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "kbfst-diplomski",
