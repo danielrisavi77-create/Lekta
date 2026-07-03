@@ -30,7 +30,7 @@ function doc(): ParaSpec[] {
 const M25 = { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 };
 
 describe('alu/arh: profili ne pucaju na stvarnom docx-u (crash-fix)', () => {
-  for (const id of ['alu-diplomski', 'alu-doktorski', 'arh-diplomski']) {
+  for (const id of ['alu-diplomski', 'alu-doktorski', 'arh-diplomski', 'dizajn-diplomski']) {
     it(`${id} se analizira bez pucanja i format je informativan`, async () => {
       const file = buildDocxFile({ paragraphs: doc(), marginsCm: M25 }, `${id}-ok.docx`);
       const r: any = await analyzeFixture(file, { profileId: id });

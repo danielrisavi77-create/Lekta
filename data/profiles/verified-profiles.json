@@ -20451,5 +20451,97 @@
       "Stil citiranja (Harvard)"
     ],
     "advisoryScope": []
+  },
+  {
+    "id": "dizajn-diplomski",
+    "unitId": "arh",
+    "programs": [
+      "Dizajn"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Studij dizajna (Arhitektonski fakultet), diplomski rad",
+    "verifiedAt": "2026-07-03",
+    "documentDate": "2016-02-17",
+    "fieldValidation": {
+      "status": "synthetic-golden-validated",
+      "validatedAt": "2026-07-03",
+      "scope": "Sinteticki golden (tests/art-faculties-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      },
+      "confirmed": [
+        "Profil se analizira bez pucanja na stvarnom docx-u i informativne format-provjere ispravno se ponasaju (tests/art-faculties-synthetic.test.ts)."
+      ],
+      "observedDeviations": [
+        "Diplomski rad Studija dizajna je projektantski (istrazivacko-teorijski dio + projektni dio); Pravilnik ne propisuje faculty-wide tehnicko oblikovanje ni citatni stil. Studij dizajna nema radova pod dohvacenim ZIR namespaceom (ct=dissertation prazan)."
+      ],
+      "productDecision": "Projektni rad: sluzbeni izvor (Pravilnik o izradi i obrani diplomskog rada, 2016) ureduje postupak (tema, povjerenstvo, obrana, ocjena, autorska prava) i navodi obvezne dijelove rada, ali NE propisuje font, velicinu, prored, margine ni citatni stil, pa su format-provjere iskljucene (informativne). Ne izmisljam pravila (CLAUDE.md); scored je samo imperativna sadrzajna struktura iz cl. 3."
+    },
+    "rules": {
+      "checkFont": false,
+      "checkSize": false,
+      "checkSpacing": false,
+      "checkMargins": false,
+      "checkJustify": false,
+      "requiredSections": [
+        {
+          "key": "istrazivacko-teorijski",
+          "label": "Istrazivacko-teorijski dio",
+          "terms": [
+            "istrazivacko-teorijski",
+            "istraživačko-teorijski",
+            "teorijski dio",
+            "istrazivacki dio",
+            "istraživački dio"
+          ]
+        },
+        {
+          "key": "projektni",
+          "label": "Projektni dio",
+          "terms": [
+            "projektni dio",
+            "projektni",
+            "projekt"
+          ]
+        }
+      ]
+    },
+    "facts": [
+      "Diplomski rad je cjelovita obrada utvrdene teme i sastoji se od dva dijela: istrazivacko-teorijskog dijela i projektnog dijela (imperativ, cl. 3; scored: obvezne cjeline).",
+      "Studij zavrsava izradom diplomskog rada tijekom 4. semestra i njegovom uspjesnom obranom te stjecanjem 120 ECTS bodova.",
+      "Obrana diplomskog rada je javna; sastoji se od usmenog prikaza rada i provjere kompetencija.",
+      "Pravilnik ne propisuje font, velicinu slova, prored, margine, numeraciju ni stil citiranja (advisory)."
+    ],
+    "note": "Iz obvezujuceg Pravilnika o izradi i obrani diplomskog rada na diplomskom sveucilisnom studiju dizajna (Vijece Studija dizajna AF, usvojeno 17.02.2016). Rad je projektantski (istrazivacko-teorijski + projektni dio), pa su scored samo imperativna sadrzajna pravila iz cl. 3.: dva obvezna dijela rada. Nema fakultetski propisanog fonta, margina, prореda, numeracije ni citatnog stila. VAZNO za ljudski pregled: (1) authority je binding (izvor je Pravilnik), pa obvezujuca pravila prije objave trebaju drugog odobravatelja (reviewedBy je zasad null); (2) required-sections su nazivi projektnih dijelova pa mogu davati false-negative na klasicnom tekstualnom .docx ako student ne koristi te nazive naslova; (3) preddiplomski (prijediplomski) studij dizajna i preddiplomski arhitekture nemaju zaseban pronaden pravilnik o zavrsnom radu (Pravilnik o preddipl. i dipl. studiju AF 2012-13 je kurikulumski, bez formalnih pravila zavrsnog rada).",
+    "sources": [
+      {
+        "title": "Pravilnik o izradi i obrani diplomskog rada na diplomskom sveucilisnom studiju dizajna (Arhitektonski fakultet, 2016)",
+        "url": "https://www.studijdizajna.com/sites/default/files/objave/2016_pravilnik_o_izradi_i_obrani_diplomskog_rada_diplomski_studij.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o izradi i obrani diplomskog rada na diplomskom sveucilisnom studiju dizajna Arhitektonskog fakulteta Sveucilista u Zagrebu (2016)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "obvezni dijelovi rada (istrazivacko-teorijski i projektni dio)"
+    ],
+    "advisoryScope": [
+      "tipografija",
+      "format papira",
+      "citatni stil"
+    ],
+    "catalogPrograms": [
+      "Dizajn"
+    ]
   }
 ]
