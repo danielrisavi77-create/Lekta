@@ -21154,7 +21154,56 @@
       "Vrsta slova biljeske",
       "Velicina slova biljeske"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation":     {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna diplomska rada (Katolicki bogoslovni fakultet u Splitu) iz sluzbenog repozitorija (repozitorij.kbf.unist.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "kbfst:14",
+          "repository": "repozitorij.kbf.unist.hr",
+          "pageFormat": "A4",
+          "pages": 49,
+          "sha256": "2b21cb711a3d16b8a9f9261bbe8fee16714c8f040f3f0f4e45c022c34b37b388",
+          "level": "diplomski"
+        },
+        {
+          "pid": "kbfst:15",
+          "repository": "repozitorij.kbf.unist.hr",
+          "pageFormat": "A4",
+          "pages": 45,
+          "sha256": "598a3de87ee80ce166f060db065941e3b9ac0861099f93f888f4fd5a5cd0d2cb",
+          "level": "diplomski"
+        },
+        {
+          "pid": "kbfst:17",
+          "repository": "repozitorij.kbf.unist.hr",
+          "pageFormat": "A4",
+          "pages": 37,
+          "sha256": "2fb2f1119ca46b94c5ab9ea430d756bc0371ab9fb6b4e065f2f235906ce65c65",
+          "level": "diplomski"
+        },
+        {
+          "pid": "kbfst:18",
+          "repository": "repozitorij.kbf.unist.hr",
+          "pageFormat": "A4",
+          "pages": 43,
+          "sha256": "ae12042817dd23943ce8655de4843665565b5f374b77ff94e709271d02d4f8e9",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (kbfst:14, kbfst:15, kbfst:17, kbfst:18) prolaze PDF preflight: valjan nesifriran PDF, viselistni (37-49 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "unin-tehnicki-zavrsni",
