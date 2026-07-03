@@ -77,16 +77,22 @@ function fixtureProfileId(fileName: string): string | undefined {
 const fixtures = discoverFixtures();
 const suite = fixtures.length ? describe : describe.skip;
 
+// Jedan snapshot cijele mape (fixture -> normaliziran rezultat), NE 6 zasebnih
+// auto-brojanih snapshota. Auto-brojac (`... 1`, `... 2`) zna povremeno zapisati suvisni
+// `... 2` kljuc kod async testova (setTimeout u analyzeDocx perturbira vitest brojac),
+// sto je davalo kozmeticki "1 obsolete" u reporteru (bez pada, exit 0). Jedan imenovani
+// snapshot uklanja brojac i time i taj sum; rezultati su deterministicki (dokazano).
 suite('DOCX golden snapshots', () => {
-  for (const fileName of fixtures) {
-    it(`stabilan rezultat: ${fileName}`, async () => {
-      const analyzeFixture = await loadEntry();
+  it('stabilni rezultati svih fixtura', async () => {
+    const analyzeFixture = await loadEntry();
+    const out: Record<string, unknown> = {};
+    for (const fileName of fixtures) {
       const bytes = readFileSync(join(FIXTURE_DIR, fileName));
       const file = new File([bytes], fileName, {
         type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
       });
-      const result = await analyzeFixture(file, { profileId: fixtureProfileId(fileName) });
-      expect(normalizeResult(result)).toMatchSnapshot();
-    });
-  }
+      out[fileName] = normalizeResult(await analyzeFixture(file, { profileId: fixtureProfileId(fileName) }));
+    }
+    expect(out).toMatchSnapshot();
+  }, 30000); // svih 6 fixtura + setTimeout(250) po analizi u jednom testu -> podigni s 5s defaulta
 });
