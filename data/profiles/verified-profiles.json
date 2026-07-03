@@ -19869,7 +19869,56 @@
       "Pravila naslova (numerirano, mala tiskana, 4 razine)",
       "Stil citiranja (vancouver)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation":     {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna zavrsna rada tehnickog podrucja (Sveuciliste Sjever) iz sluzbenog repozitorija (repozitorij.unin.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unin:1719",
+          "repository": "repozitorij.unin.hr",
+          "pageFormat": "A4",
+          "pages": 53,
+          "sha256": "bfbf2066246e9de028a2a154bb14bd854d7e872ffb57af6ecc967cd85df7a766",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unin:2790",
+          "repository": "repozitorij.unin.hr",
+          "pageFormat": "A4",
+          "pages": 36,
+          "sha256": "99dee6701ab548b2e48a66d4b1ebfedee0527d9a78d52b9dd9c6377416548bb5",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unin:3145",
+          "repository": "repozitorij.unin.hr",
+          "pageFormat": "A4",
+          "pages": 59,
+          "sha256": "7970129b7b35e0029e1fba60b755af384e3157c2c80e4917589cd2233a9698c8",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unin:3146",
+          "repository": "repozitorij.unin.hr",
+          "pageFormat": "A4",
+          "pages": 50,
+          "sha256": "e9b4b531922cddf0ba126c6f265e14fac50d225b1e94182e431bec316e733243",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (unin:1719, unin:2790, unin:3145, unin:3146) prolaze PDF preflight: valjan nesifriran PDF, viselistni (36-59 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "unin-tehnicki-diplomski",
@@ -19941,7 +19990,56 @@
       "Pravila naslova (numerirano, mala tiskana, 4 razine)",
       "Stil citiranja (vancouver)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation":     {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna diplomska rada tehnickog podrucja (Sveuciliste Sjever) iz sluzbenog repozitorija (repozitorij.unin.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unin:1818",
+          "repository": "repozitorij.unin.hr",
+          "pageFormat": "A4",
+          "pages": 48,
+          "sha256": "d75d232deae9516899c7313fad7e374d8bec4d5436a3c17a2989ff8f24ef8bbb",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unin:2477",
+          "repository": "repozitorij.unin.hr",
+          "pageFormat": "A4",
+          "pages": 56,
+          "sha256": "73dd73caf31efe6f142a91a54e23df4057a2a51551e15a3d55e00ce57711e2b0",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unin:2478",
+          "repository": "repozitorij.unin.hr",
+          "pageFormat": "A4",
+          "pages": 64,
+          "sha256": "e56642182fca9b919775b73e089ecefe54dc947d944163d8843c7b98bfde41d1",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unin:2479",
+          "repository": "repozitorij.unin.hr",
+          "pageFormat": "A4",
+          "pages": 68,
+          "sha256": "a78658ac36e42fd10c23efc21afc594429102f2f3d0a8385054c3e04eb93572d",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (unin:1818, unin:2477, unin:2478, unin:2479) prolaze PDF preflight: valjan nesifriran PDF, viselistni (48-68 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "unin-biomedicina-zavrsni",
@@ -20013,7 +20111,56 @@
       "Pravila naslova (numerirano, mala tiskana, 4 razine)",
       "Stil citiranja (apa)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation":     {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna zavrsna rada biomedicinskog podrucja (Sveuciliste Sjever) iz sluzbenog repozitorija (repozitorij.unin.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unin:3147",
+          "repository": "repozitorij.unin.hr",
+          "pageFormat": "A4",
+          "pages": 47,
+          "sha256": "41c7496f23f4a198dea22d8772b9a864bab843a199ee7bab00580d6c1cf7ac22",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unin:3148",
+          "repository": "repozitorij.unin.hr",
+          "pageFormat": "A4",
+          "pages": 45,
+          "sha256": "57ca91569a70e7feb1fb8d592142d114fa30a677b7aea4fb2d7eee2668ba2180",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unin:3149",
+          "repository": "repozitorij.unin.hr",
+          "pageFormat": "A4",
+          "pages": 53,
+          "sha256": "babb5c98a1ced3f28a54ae38c8a770b7786e26a9ad6d6492c49f0d830550b168",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unin:3150",
+          "repository": "repozitorij.unin.hr",
+          "pageFormat": "A4",
+          "pages": 44,
+          "sha256": "bf74f548fa57185017d5a73997ca3fc6a08f6783910b3ddae3adc58c9d72bffc",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (unin:3147, unin:3148, unin:3149, unin:3150) prolaze PDF preflight: valjan nesifriran PDF, viselistni (44-53 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "unin-biomedicina-diplomski",
@@ -20085,7 +20232,56 @@
       "Pravila naslova (numerirano, mala tiskana, 4 razine)",
       "Stil citiranja (apa)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation":     {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna diplomska rada biomedicinskog podrucja (Sveuciliste Sjever) iz sluzbenog repozitorija (repozitorij.unin.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unin:3183",
+          "repository": "repozitorij.unin.hr",
+          "pageFormat": "A4",
+          "pages": 91,
+          "sha256": "a0393d3eaa3871370a6b6cf8c7ad3e3a8634244247605498dc55dd4c86b930b4",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unin:3185",
+          "repository": "repozitorij.unin.hr",
+          "pageFormat": "A4",
+          "pages": 75,
+          "sha256": "57062fb0df320f7109692e341ba2c9a2eca1766bf91d4ef5c8afde68722242e5",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unin:3186",
+          "repository": "repozitorij.unin.hr",
+          "pageFormat": "A4",
+          "pages": 81,
+          "sha256": "c80da3af331563f736eb501ea57bc34c7833ccd4709f60ed0a73e5891f627197",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unin:3187",
+          "repository": "repozitorij.unin.hr",
+          "pageFormat": "A4",
+          "pages": 98,
+          "sha256": "d9490dd9ec80746c4a5209be9a646a3d5c37c255361e7b430862c43946f3c6ca",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (unin:3183, unin:3185, unin:3186, unin:3187) prolaze PDF preflight: valjan nesifriran PDF, viselistni (75-98 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "unin-drustveni-zavrsni",
