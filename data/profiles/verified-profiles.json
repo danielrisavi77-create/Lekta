@@ -9356,25 +9356,53 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "fieldValidation": {
-      "status": "synthetic-golden-validated",
-      "validatedAt": "2026-07-02",
-      "scope": "Sinteticki golden (tests/cluster5-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna zavrsna rada (Graficki fakultet u Zagrebu) iz sluzbenog repozitorija (repozitorij.grf.unizg.hr, Dabar, open access) kroz PDF preflight (A4).",
       "sample": {
-        "syntheticDocxAudits": 1,
+        "syntheticDocxAudits": 0,
         "docxAudits": 0,
-        "publicPdfAudits": 0,
+        "publicPdfAudits": 4,
         "metadataSpotChecks": 0,
-        "years": [
-          2026
-        ]
+        "years": []
       },
+      "publicSources": [
+        {
+          "pid": "grf:11",
+          "repository": "repozitorij.grf.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 48,
+          "sha256": "07d249ef7faaae0840f06cc50688dfc38fa547c13196f55056c673064103e2c3",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "grf:15",
+          "repository": "repozitorij.grf.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 40,
+          "sha256": "ebfa051bf96f9abc5c6a6a09410b7aba146ccf519d7dd1109f2a8d33a7bbe3f9",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "grf:19",
+          "repository": "repozitorij.grf.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 39,
+          "sha256": "31419af89bea8ce72b6c1b5982a05a90469b56c14bcc915079858d3ceec70d0c",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "grf:20",
+          "repository": "repozitorij.grf.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 34,
+          "sha256": "9c8ad80fa414683aaf60024c914761924c9dc74b817e0daa43b5beaca56b67be",
+          "level": "zavrsni"
+        }
+      ],
       "confirmed": [
-        "Format-provjere / no-crash ispravno se ponasaju na uskladjenom docx-u."
-      ],
-      "observedDeviations": [
-        "Otvoreni zavrsni (prijediplomski) rad nije nadjen u grf ZIR uzorku (prevladavaju diplomski); pravila identicna diplomskom, scalar size:12 -> [12]."
-      ],
-      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+        "4 stvarna javna zavrsna rada (grf:11, grf:15, grf:19, grf:20) prolaze PDF preflight: valjan nesifriran PDF, viselistni (34-48 str.), A4 (595x842 pt)."
+      ]
     },
     "rules": {
       "font": [
@@ -11062,25 +11090,53 @@
     "verifiedAt": "2026-07-02",
     "documentDate": "2017-06-01",
     "fieldValidation": {
-      "status": "synthetic-golden-validated",
-      "validatedAt": "2026-07-02",
-      "scope": "Sinteticki golden (tests/cluster5-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna zavrsna rada (Katolicki bogoslovni fakultet) iz sluzbenog repozitorija (repozitorij.kbf.unizg.hr, Dabar, open access) kroz PDF preflight (A4).",
       "sample": {
-        "syntheticDocxAudits": 1,
+        "syntheticDocxAudits": 0,
         "docxAudits": 0,
-        "publicPdfAudits": 0,
+        "publicPdfAudits": 4,
         "metadataSpotChecks": 0,
-        "years": [
-          2026
-        ]
+        "years": []
       },
+      "publicSources": [
+        {
+          "pid": "kbf:228",
+          "repository": "repozitorij.kbf.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 33,
+          "sha256": "abf6894a9673ce46dd1d201eb2218b1f604c5178bef4ead3d6f18b3e0796b73f",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "kbf:229",
+          "repository": "repozitorij.kbf.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 30,
+          "sha256": "66e8addeff40ebc9efa12f93e5d60dc1ff361f4c833b3bc990c108abb4085b62",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "kbf:252",
+          "repository": "repozitorij.kbf.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 30,
+          "sha256": "ba7599fa1edf6bba60460117376b33dcd4916fa1f43362981d4c5566fa63a883",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "kbf:299",
+          "repository": "repozitorij.kbf.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 28,
+          "sha256": "052361a36581b2efbed225ce42a60e0ac4f47c13c0113f72cb56c9ce25d9273f",
+          "level": "zavrsni"
+        }
+      ],
       "confirmed": [
-        "Format-provjere / no-crash ispravno se ponasaju na uskladjenom docx-u."
-      ],
-      "observedDeviations": [
-        "KBF radovi su na ZIR-u vrlo rijetki / restringirani; pravila identicna diplomskom, scalar size:12 -> [12]."
-      ],
-      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+        "4 stvarna javna zavrsna rada (kbf:228, kbf:229, kbf:252, kbf:299) prolaze PDF preflight: valjan nesifriran PDF, viselistni (28-33 str.), A4 (595x842 pt)."
+      ]
     },
     "rules": {
       "font": [
@@ -11203,25 +11259,53 @@
     "verifiedAt": "2026-07-02",
     "documentDate": "2017-06-01",
     "fieldValidation": {
-      "status": "synthetic-golden-validated",
-      "validatedAt": "2026-07-02",
-      "scope": "Sinteticki golden (tests/cluster5-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna diplomska rada (Katolicki bogoslovni fakultet) iz sluzbenog repozitorija (repozitorij.kbf.unizg.hr, Dabar, open access) kroz PDF preflight (A4).",
       "sample": {
-        "syntheticDocxAudits": 1,
+        "syntheticDocxAudits": 0,
         "docxAudits": 0,
-        "publicPdfAudits": 0,
+        "publicPdfAudits": 4,
         "metadataSpotChecks": 0,
-        "years": [
-          2026
-        ]
+        "years": []
       },
+      "publicSources": [
+        {
+          "pid": "kbf:178",
+          "repository": "repozitorij.kbf.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 46,
+          "sha256": "88ea65bb77dceeaa6f3e6c81a3735b7c28865e88681aeb4ac72f7076b9087b72",
+          "level": "diplomski"
+        },
+        {
+          "pid": "kbf:179",
+          "repository": "repozitorij.kbf.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 64,
+          "sha256": "71124cdffc54f3f8d72d2c4841340465b8dec23d3627f329569002d4de6df5c2",
+          "level": "diplomski"
+        },
+        {
+          "pid": "kbf:181",
+          "repository": "repozitorij.kbf.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 49,
+          "sha256": "54ea1005a242d9dc4356dd85293f1ac04e7f2e4b86964d02379f269c43d56f9a",
+          "level": "diplomski"
+        },
+        {
+          "pid": "kbf:186",
+          "repository": "repozitorij.kbf.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 42,
+          "sha256": "3dec5240539aa773e8db708c33641f28d0f9087fb13eeb3b8fa5a626305aef42",
+          "level": "diplomski"
+        }
+      ],
       "confirmed": [
-        "Format-provjere / no-crash ispravno se ponasaju na uskladjenom docx-u."
-      ],
-      "observedDeviations": [
-        "KBF radovi su na ZIR-u vrlo rijetki / restringirani (otvoreni fulltext nije pribavljen); pravila (TNR 12, prored 1,5, margine, chicago-notes) dokazana golden testom, scalar size:12 -> [12]."
-      ],
-      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+        "4 stvarna javna diplomska rada (kbf:178, kbf:179, kbf:181, kbf:186) prolaze PDF preflight: valjan nesifriran PDF, viselistni (42-64 str.), A4 (595x842 pt)."
+      ]
     },
     "rules": {
       "font": [
@@ -15320,7 +15404,56 @@
     ],
     "advisoryScope": [
       "obvezne cjeline rada"
-    ]
+    ],
+    "fieldValidation":     {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna zavrsna rada (Rudarsko-geolosko-naftni fakultet) iz sluzbenog repozitorija (repozitorij.rgn.unizg.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "rgn:444",
+          "repository": "repozitorij.rgn.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 42,
+          "sha256": "f430dccbc5b3a3c1cc432dd1b13f78774c1dbfea2cc27837465dd4170c1f9f7b",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "rgn:445",
+          "repository": "repozitorij.rgn.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 38,
+          "sha256": "02ce2c0f07b1205133e5642ddb9ba80a093efea2f11bb9a3d9bdee64f2e4239f",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "rgn:1043",
+          "repository": "repozitorij.rgn.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 65,
+          "sha256": "9dd21aca8f1b10864518d6d7a7ee3dab7549bbc42ba709271ccf8e20bec80415",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "rgn:1181",
+          "repository": "repozitorij.rgn.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 57,
+          "sha256": "25dd90db09bf5f9ae5b1b2dca2317c37100bd77e2060b5a9423d939f7a654470",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (rgn:444, rgn:445, rgn:1043, rgn:1181) prolaze PDF preflight: valjan nesifriran PDF, viselistni (38-65 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "rgnf-diplomski",
