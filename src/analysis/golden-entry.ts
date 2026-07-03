@@ -51,6 +51,10 @@ export function resolveProfile(profileId: string) {
     custom: 'custom',
   };
   base.citationMode = CITATION_MODE[base.recommendedCitation] || 'custom';
+  // Napomena: golden/sinteticki korpus NAMJERNO testira SIROVI engine (sve dimenzije bodovane)
+  // radi zastite detekcije parsera/audita. Scored/advisory demotion je PRODUKTNA politika koja
+  // se primjenjuje samo u zivom currentProfile() (src/ui/app.ts) i pokrivena je jedinicnim
+  // testom (tests/scored-advisory.test.ts), da korpus ne bi maskirao regresije detekcije.
   return base;
 }
 
