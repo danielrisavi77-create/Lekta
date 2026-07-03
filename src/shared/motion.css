@@ -47,6 +47,8 @@ body::after {
   mix-blend-mode: multiply;
 }
 [data-theme="dark"] body::after { opacity: .06; mix-blend-mode: overlay }
+/* Tekstura se ne printa (inace bi sum prekrio A4 naslovnicu/izjavu pri ispisu/PDF-u). */
+@media print { body::after { display: none } }
 
 /*
  * View Transitions: glatki cross-fade pri navigaciji medu stranicama (index <-> alati).

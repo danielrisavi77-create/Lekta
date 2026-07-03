@@ -68,6 +68,7 @@ function copyOut() {
 }
 
 function init() {
+  if (!$('#f-type')) return; // stranica nije citat-alat; ne rusi se (kao ostali tool page-ovi)
   $('#f-type').addEventListener('change', () => {
     syncVisibleFields();
     render();

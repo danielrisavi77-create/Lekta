@@ -140,7 +140,7 @@ function formatAutorGodina(inp: CitationInput): string {
     }
     case 'clanak': {
       parts.push(withDot(t));
-      const vol = inp.volume ? `${inp.container}, ${inp.volume}` : inp.container || '';
+      const vol = [inp.container, inp.volume].filter(Boolean).join(', ');
       const iss = inp.issue ? `(${inp.issue})` : '';
       const pg = inp.pages ? `, ${inp.pages}` : '';
       parts.push(withDot(`${vol}${iss}${pg}`));
@@ -196,7 +196,7 @@ function formatFusnota(inp: CitationInput): string {
     }
     case 'clanak': {
       parts.push(quoted(title));
-      const loc = inp.volume ? `${inp.container} ${inp.volume}` : inp.container || '';
+      const loc = [inp.container, inp.volume].filter(Boolean).join(' ');
       const iss = inp.issue ? `, br. ${inp.issue}` : '';
       const yr = inp.year ? ` (${inp.year})` : '';
       const pg = inp.pages ? `: ${inp.pages}` : '';

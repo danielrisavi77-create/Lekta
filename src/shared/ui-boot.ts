@@ -103,7 +103,22 @@ function setupTilt() {
   });
 }
 
-function boot() { renderIcons(); setupReveal(); animateHero(); setupTilt(); }
+// "Alati" padajuci izbornik je CSS-only (hover + focus-within). Sinkroniziramo aria-expanded
+// da citaci ekrana najavljuju otvoreno/zatvoreno stanje (inace samo aria-haspopup, bez stanja).
+function setupNavTools() {
+  document.querySelectorAll<HTMLElement>('.nav-tools').forEach((nav) => {
+    const btn = nav.querySelector<HTMLElement>('.nav-tools-btn');
+    if (!btn) return;
+    btn.setAttribute('aria-expanded', 'false');
+    const set = (v: boolean) => btn.setAttribute('aria-expanded', String(v));
+    nav.addEventListener('mouseenter', () => set(true));
+    nav.addEventListener('mouseleave', () => set(false));
+    nav.addEventListener('focusin', () => set(true));
+    nav.addEventListener('focusout', (e) => { if (!nav.contains(e.relatedTarget as Node)) set(false); });
+  });
+}
+
+function boot() { renderIcons(); setupReveal(); animateHero(); setupTilt(); setupNavTools(); }
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', boot);
 } else {
