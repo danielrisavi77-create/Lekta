@@ -257,6 +257,19 @@
     "note": "Opce fakultetske Upute za seminarski i diplomski rad (Zagreb, veljaca 2003). Odjeljak 7.1. Izgled (layout) rada je uveden s 'preporucuje se sljedee' (font 12, prored 1.5, margine 2,54), a opseg diplomskog rada je 'Preporucljiv opseg ... 30 - 50 stranica' -> sve advisory. Nema imperativnog tehnickog oblikovanja pa nema scored pravila iz ovog izvora."
   },
   {
+    "id": "efzg-pravilnik-diplomski-2012",
+    "kind": "guidelines",
+    "title": "Pravilnik o izradi pisanih radova na diplomskim studijima (Ekonomski fakultet u Zagrebu, 2012, procisceni tekst)",
+    "url": "https://www.efzg.unizg.hr/UserDocsImages//pravni_okvir/pravlinki_diplomski2012.pdf",
+    "publisher": "Ekonomski fakultet Sveucilista u Zagrebu",
+    "fetchedAt": "2026-07-03",
+    "snapshotPath": "data/sources/efzg/efzg-pravilnik-diplomski-2012.pdf",
+    "snapshotHash": "36fc3fbd25ce0f3c8a7abac5460eebeb47f7ed848cf07773459ef47c7b618509",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-03",
+    "note": "Pravilnik (procisceni tekst, Zagreb ozujak 2012) o izradi pisanih radova na diplomskim studijima. Tehnicko oblikovanje je IMPERATIVNO: 'Margine stranica trebaju biti 2,5 cm sa svih strana (gore, dolje, lijevo, desno). Prored teksta treba biti 1,5, poravnanje na obje strane, tipografija Times New Roman ili Arial, velicina slova 12.' Struktura ('treba imati sljedece dijelove') je scored; opseg '40 do 60 stranica' ('u pravilu') i citatni stil ('Preporucuje se ... prema sustavu autor-godina, harvardskim ili APA stilom') su advisory. Skenirani PDF bez tekstualnog sloja; doslovni citati izvuceni OCR-om (scripts/ocr_pdf.py). Noviji imperativni izvor za diplomski koji zamjenjuje advisory Upute iz 2003 (efzg-upute-diplomski-seminarski)."
+  },
+  {
     "id": "fsb-upute-radovi-2020",
     "kind": "guidelines",
     "title": "Upute za pisanje seminarskog, zavrsnog i diplomskog rada (FSB, Katedra za preradu polimera, 2020)",

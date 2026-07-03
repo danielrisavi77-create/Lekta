@@ -1,10 +1,9 @@
 /**
  * Sinteticki golden za efzg (Ekonomski fakultet Zagreb).
  *
- * efzg-diplomski: faculty-wide Upute (7.1 "preporucuje se sljedee", 6.1 "preporucljivo")
- * daju SVE tehnicko oblikovanje I citiranje kao preporuku, pa nema scored tehnickih pravila
- * (checkFont/Size/Spacing/Margins:false). Test dokazuje da profil ne puca (ranije scalar
- * size:12 + nedostatak fonta) i da su format-provjere informativne.
+ * efzg-diplomski: NADOGRADJEN na imperativni Pravilnik o izradi pisanih radova na diplomskim
+ * studijima (2012). Tehnicko oblikovanje je scored: margine 2,5 cm, Times New Roman ili Arial 12,
+ * prored 1,5, obostrano poravnanje. Test dokazuje da uskladjeni rad prolazi font/margine/Sadrzaj.
  *
  * efzg-doktorski: oblikovanje delegirano na sveucilisni DR.SC.-08 (font TNR 12, prored 1,5,
  * margine, A4 scored). Test provjerava da se te provjere ispravno okidaju.
@@ -30,9 +29,9 @@ function doc(): ParaSpec[] {
     { text: 'Prezime, I. (2021). Naslov. Zagreb.', font: TNR, sizePt: 12 }];
 }
 
-describe('efzg-diplomski: advisory oblikovanje (crash-fix), ne puca', () => {
-  it('analizira se bez pucanja i format je informativan', async () => {
-    const file = buildDocxFile({ paragraphs: doc(), marginsCm: { top: 2.54, right: 2.54, bottom: 2.54, left: 2.54 } }, 'efzg-dipl-ok.docx');
+describe('efzg-diplomski: imperativno oblikovanje (Pravilnik 2012, scored)', () => {
+  it('uskladjeni rad prolazi font/margine/Sadrzaj', async () => {
+    const file = buildDocxFile({ paragraphs: doc(), marginsCm: { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 } }, 'efzg-dipl-ok.docx');
     const r: any = await analyzeFixture(file, { profileId: 'efzg-diplomski' });
     expect(Array.isArray(r.checks)).toBe(true);
     expect(check(r, 'Dominantni font').status).toBe('pass');

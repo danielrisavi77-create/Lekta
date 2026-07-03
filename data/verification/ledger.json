@@ -32602,5 +32602,89 @@
     "sourcePage": "Upute, 3.2 Citiranje",
     "quote": "Radove u završnom radu treba citirati i referencirati Harvardskim stilom (Panjkota, 2010). Osnovna je karakteristika: u tekstu se navodi u okruglim zagradama prezime (prvog) autora i godina izdavanja citiranog/referenciranog rada.",
     "note": "Ljudski audit: potvrdjena vrijednost protiv izvora na lokatoru (bio owner-bulk-approval)."
+  },
+  {
+    "id": "led-efzg-diplomski--margins-human-verified-2026-07-02",
+    "ruleId": "efzg-diplomski--margins",
+    "profileId": "efzg-diplomski",
+    "action": "human-verified",
+    "actor": "Daniel Risavi",
+    "timestamp": "2026-07-02",
+    "sourceId": "efzg-pravilnik-diplomski-2012",
+    "sourcePage": "tehnicke upute za oblikovanje (margine, prored, tipografija, velicina)",
+    "quote": "Margine stranica trebaju biti 2,5 cm sa svih strana (gore, dolje, lijevo, desno).",
+    "note": "Ljudski audit: potvrdjena vrijednost protiv izvora na lokatoru (bio owner-bulk-approval)."
+  },
+  {
+    "id": "led-efzg-diplomski--font-human-verified-2026-07-02",
+    "ruleId": "efzg-diplomski--font",
+    "profileId": "efzg-diplomski",
+    "action": "human-verified",
+    "actor": "Daniel Risavi",
+    "timestamp": "2026-07-02",
+    "sourceId": "efzg-pravilnik-diplomski-2012",
+    "sourcePage": "tehnicke upute za oblikovanje (margine, prored, tipografija, velicina)",
+    "quote": "Prored teksta treba biti 1,5, poravnanje na obje strane, tipografija Times New Roman ili Arial, velicina slova 12.",
+    "note": "Ljudski audit: potvrdjena vrijednost protiv izvora na lokatoru (bio owner-bulk-approval)."
+  },
+  {
+    "id": "led-efzg-diplomski--font-size-human-verified-2026-07-02",
+    "ruleId": "efzg-diplomski--font-size",
+    "profileId": "efzg-diplomski",
+    "action": "human-verified",
+    "actor": "Daniel Risavi",
+    "timestamp": "2026-07-02",
+    "sourceId": "efzg-pravilnik-diplomski-2012",
+    "sourcePage": "tehnicke upute za oblikovanje (margine, prored, tipografija, velicina)",
+    "quote": "Prored teksta treba biti 1,5, poravnanje na obje strane, tipografija Times New Roman ili Arial, velicina slova 12.",
+    "note": "Ljudski audit: potvrdjena vrijednost protiv izvora na lokatoru (bio owner-bulk-approval)."
+  },
+  {
+    "id": "led-efzg-diplomski--line-spacing-human-verified-2026-07-02",
+    "ruleId": "efzg-diplomski--line-spacing",
+    "profileId": "efzg-diplomski",
+    "action": "human-verified",
+    "actor": "Daniel Risavi",
+    "timestamp": "2026-07-02",
+    "sourceId": "efzg-pravilnik-diplomski-2012",
+    "sourcePage": "tehnicke upute za oblikovanje (margine, prored, tipografija, velicina)",
+    "quote": "Prored teksta treba biti 1,5, poravnanje na obje strane, tipografija Times New Roman ili Arial, velicina slova 12.",
+    "note": "Ljudski audit: potvrdjena vrijednost protiv izvora na lokatoru (bio owner-bulk-approval)."
+  },
+  {
+    "id": "led-efzg-diplomski--justify-human-verified-2026-07-02",
+    "ruleId": "efzg-diplomski--justify",
+    "profileId": "efzg-diplomski",
+    "action": "human-verified",
+    "actor": "Daniel Risavi",
+    "timestamp": "2026-07-02",
+    "sourceId": "efzg-pravilnik-diplomski-2012",
+    "sourcePage": "tehnicke upute za oblikovanje (margine, prored, tipografija, velicina)",
+    "quote": "Prored teksta treba biti 1,5, poravnanje na obje strane, tipografija Times New Roman ili Arial, velicina slova 12.",
+    "note": "Ljudski audit: potvrdjena vrijednost protiv izvora na lokatoru (bio owner-bulk-approval)."
+  },
+  {
+    "id": "led-efzg-diplomski--required-sections-human-verified-2026-07-02",
+    "ruleId": "efzg-diplomski--required-sections",
+    "profileId": "efzg-diplomski",
+    "action": "human-verified",
+    "actor": "Daniel Risavi",
+    "timestamp": "2026-07-02",
+    "sourceId": "efzg-pravilnik-diplomski-2012",
+    "sourcePage": "odjeljak 1.2. Struktura diplomskog rada",
+    "quote": "Diplomski rad ... treba imati sljedece dijelove: Korice, Naslovnica, Naslov, Sazetak i kljucne rijeci, Sadrzaj, Uvod, Poglavlja sredisnjeg dijela, Zakljucak, Popis literature, Popis slika, Popis tablica, Prilozi, Zivotopis studenta.",
+    "note": "Ljudski audit: potvrdjena vrijednost protiv izvora na lokatoru (bio owner-bulk-approval)."
+  },
+  {
+    "id": "led-efzg-diplomski--toc-human-verified-2026-07-02",
+    "ruleId": "efzg-diplomski--toc",
+    "profileId": "efzg-diplomski",
+    "action": "human-verified",
+    "actor": "Daniel Risavi",
+    "timestamp": "2026-07-02",
+    "sourceId": "efzg-pravilnik-diplomski-2012",
+    "sourcePage": "odjeljak 1.2. Struktura diplomskog rada",
+    "quote": "Diplomski rad ... treba imati sljedece dijelove: Korice, Naslovnica, Naslov, Sazetak i kljucne rijeci, Sadrzaj, Uvod, Poglavlja sredisnjeg dijela, Zakljucak, Popis literature, Popis slika, Popis tablica, Prilozi, Zivotopis studenta.",
+    "note": "Ljudski audit: potvrdjena vrijednost protiv izvora na lokatoru (bio owner-bulk-approval)."
   }
 ]
