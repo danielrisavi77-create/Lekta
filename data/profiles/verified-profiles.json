@@ -20337,7 +20337,59 @@
       "Margine",
       "Stil citiranja (numericki, uglate zagrade)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation":     {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna zavrsna rada Veleucilista Velika Gorica iz sluzbenog repozitorija (repozitorij.vvg.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2023,
+          2024
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "vvg:29",
+          "repository": "repozitorij.vvg.hr",
+          "pageFormat": "A4",
+          "pages": 48,
+          "sha256": "e916c10baa8dfbd7d2d148a7e6dce50f0c82f2d34a37c44c817bb811fc382737",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "vvg:35",
+          "repository": "repozitorij.vvg.hr",
+          "pageFormat": "A4",
+          "pages": 60,
+          "sha256": "855272643ef916fae7c90fa54bb0d8e785a7ea3b40aa7735a506e3a98ae1243f",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "vvg:37",
+          "repository": "repozitorij.vvg.hr",
+          "pageFormat": "A4",
+          "pages": 55,
+          "sha256": "70aa1ded087c5088f4c825fd82bbe54f7c5d753fd0a01eb60fdc9ea4fe53a916",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "vvg:39",
+          "repository": "repozitorij.vvg.hr",
+          "pageFormat": "A4",
+          "pages": 51,
+          "sha256": "da779e5f0057b5f51b2ba257493ab38774ec1e8cd5edef090a3cf44f92fabd08",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (vvg:29, vvg:35, vvg:37, vvg:39) prolaze PDF preflight: valjan nesifriran PDF, viselistni (48-60 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "vvg-diplomski",
@@ -20379,7 +20431,58 @@
       "Margine",
       "Stil citiranja (numericki, uglate zagrade)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation":     {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna diplomska rada Veleucilista Velika Gorica iz sluzbenog repozitorija (repozitorij.vvg.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2024
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "vvg:43",
+          "repository": "repozitorij.vvg.hr",
+          "pageFormat": "A4",
+          "pages": 67,
+          "sha256": "45da731dea19f356a759a6a66017e4dad556e8749cc4edd68f60b99b3f995771",
+          "level": "diplomski"
+        },
+        {
+          "pid": "vvg:58",
+          "repository": "repozitorij.vvg.hr",
+          "pageFormat": "A4",
+          "pages": 63,
+          "sha256": "a5dde42541df7ccecda3fbb9e794150d43478fb6888e0649ebc4210d67c3d732",
+          "level": "diplomski"
+        },
+        {
+          "pid": "vvg:72",
+          "repository": "repozitorij.vvg.hr",
+          "pageFormat": "A4",
+          "pages": 69,
+          "sha256": "6b01b4c5d8b3deec867b295068ec24ab720ca3cc81cc540446fa3c7b171deaf0",
+          "level": "diplomski"
+        },
+        {
+          "pid": "vvg:74",
+          "repository": "repozitorij.vvg.hr",
+          "pageFormat": "A4",
+          "pages": 57,
+          "sha256": "c7e1071134552265d9293d26403673159b07f1be769e8967b74b6515306b6c7c",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (vvg:43, vvg:58, vvg:72, vvg:74) prolaze PDF preflight: valjan nesifriran PDF, viselistni (57-69 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "vevu-zavrsni",
