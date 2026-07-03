@@ -77,7 +77,7 @@
   {
     "name": "SOURCE_REGISTRY",
     "file": "data/sources/source-registry.json",
-    "entries": 158
+    "entries": 159
   },
   {
     "name": "VERIFICATION_LEDGER",

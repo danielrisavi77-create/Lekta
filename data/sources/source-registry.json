@@ -566,7 +566,20 @@
     "snapshotHash": "ba5b786114e83db3df96ae9994c4a00bce4ff2197f6ac43e1a68821d64402896",
     "validityClass": "stable",
     "lastChecked": "2026-07-02",
-    "note": "Sluzbene Upute za pisanje diplomskog rada s mrezne stranice ERF-a (diplomski_rad). Kratki dokument (3 str.) bez datuma u tekstu ili metapodacima. Daje obvezne poglavlja (dva tipa rada: istrazivacki i pregledni) kroz 'treba sadrzavati sljedea poglavlja' -> scored strukture; font 12/Times New Roman/prored 1.5 kao gola specifikacija bez 'preporuca' -> scored oblikovanje. Broj stranica 40-50 i broj referenci su izrijekom 'Preporucen' -> advisory. Citiranje delegirano na propozicije casopisa (Hrvatska revija za rehabilitacijska istrazivanja / Kriminologija i socijalna integracija), stil nije imenovan -> advisory custom. Margine, format papira, numeracija stranica i poravnanje NISU spomenuti. Citati verbatim potvrdeni grepom nad erf-upute-diplomski.txt."
+    "note": "Sluzbene Upute za pisanje diplomskog rada s mrezne stranice ERF-a (diplomski_rad). Kratki dokument (3 str.) bez datuma u tekstu ili metapodacima. Daje obvezne poglavlja (dva tipa rada: istrazivacki i pregledni) kroz 'treba sadrzavati sljedea poglavlja' -> scored strukture; font 12/Times New Roman/prored 1.5 kao gola specifikacija bez 'preporuca' -> scored oblikovanje. Broj stranica 40-50 i broj referenci su izrijekom 'Preporucen' -> advisory. Citiranje delegirano na propozicije casopisa (Hrvatska revija za rehabilitacijska istrazivanja / Kriminologija i socijalna integracija); stil nije imenovan U OVOM dokumentu, ali delegirani HRRI (erf-hrri-upute-autorima) ga imenuje kao APA 7 -> apa7. Margine, format papira, numeracija stranica i poravnanje NISU spomenuti. Citati verbatim potvrdeni grepom nad erf-upute-diplomski.txt."
+  },
+  {
+    "id": "erf-hrri-upute-autorima",
+    "kind": "guidelines",
+    "title": "Upute autorima - Hrvatska revija za rehabilitacijska istrazivanja (HRRI)",
+    "url": "https://hrri.erf.unizg.hr/?page_id=17",
+    "publisher": "Edukacijsko-rehabilitacijski fakultet Sveucilista u Zagrebu (HRRI)",
+    "fetchedAt": "2026-07-03",
+    "snapshotPath": "data/sources/erf/erf-hrri-upute-autorima.html",
+    "snapshotHash": "0fca0d605fc1204c7a79b2ab200c8510792aa31f52fb3b67aa0aebb1e5e5a982",
+    "validityClass": "volatile",
+    "lastChecked": "2026-07-03",
+    "note": "Dopunski (delegirani) izvor citatnog stila za erf-diplomski. ERF Upute za diplomski delegiraju citiranje na propozicije casopisa HRRI ili KiSI; ove HRRI upute autorima izrijekom kazu 'The journal uses the APA 7th edition referencing style (see http://www.apastyle.org/)'. Volatile HTML stranica -> hash ce driftati; snapshotHash je otisak preuzete kopije 2026-07-03. Citat verbatim potvrden grepom nad snapshotom."
   },
   {
     "id": "ufzg-upute-zavrsni-diplomski-2026",

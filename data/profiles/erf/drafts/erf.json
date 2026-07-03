@@ -127,18 +127,26 @@
       {
         "ruleId": "erf-diplomski--citation-style",
         "checkId": "citation-style",
-        "value": "custom",
+        "value": "apa7",
         "category": "citation",
-        "label": "Stil citiranja (po propozicijama casopisa)",
+        "label": "Stil citiranja (APA 7, delegirano na propozicije casopisa HRRI)",
         "machineCheckable": false,
         "authority": "program-page",
         "sourceId": "erf-upute-diplomski",
         "sourcePage": "str. 3, redak 'Citiranje literature'",
         "quote": "Citiranje literature: po propozicijama casopisa Hrvatska revija za rehabilitacijska istrazivanja ili",
+        "additionalSources": [
+          {
+            "sourceId": "erf-hrri-upute-autorima",
+            "sourcePage": "odjeljak 'Referencing (APA 7)'",
+            "quote": "The journal uses the APA 7th edition referencing style (see http://www.apastyle.org/)"
+          }
+        ],
         "status": "advisory",
-        "lastVerified": "2026-07-02",
-        "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "lastVerified": "2026-07-03",
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "confirmedVia": "human-audit"
       }
     ]
   },

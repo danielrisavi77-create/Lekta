@@ -9272,15 +9272,16 @@
         12
       ],
       "spacing": 1.5,
-      "requireToc": true
+      "requireToc": true,
+      "recommendedCitation": "apa7"
     },
     "facts": [
       "Rad se pise fontom Times New Roman, velicina 12 pt, prored 1,5 (gola obvezna specifikacija, scored).",
       "Rad (istrazivacki ili pregledni) treba sadrzavati propisana poglavlja ukljucujuci Sadrzaj (imperativ, scored).",
       "Preporucen broj stranica je 40-50, a broj referenci 20-40, sto su preporuke (advisory).",
-      "Citiranje literature ide po propozicijama casopisa Hrvatska revija za rehabilitacijska istrazivanja ili Kriminologija i socijalna integracija; stil nije imenovan (advisory)."
+      "Citiranje literature ide po propozicijama casopisa Hrvatska revija za rehabilitacijska istrazivanja ili Kriminologija i socijalna integracija; HRRI upute autorima imenuju APA 7 pa je efektivni stil apa7 (autor-godina)."
     ],
-    "note": "Iz sluzbenih Uputa za pisanje diplomskog rada (ERF, mrezna stranica). Scored su samo verbatim potvrdene imperativne/gole specifikacije (font, velicina, prored, Sadrzaj, obvezne cjeline). VAZNO za ljudski pregled: (1) font/velicina/prored dani su kao gola specifikacija 'Font: 12 pt, Times New Roman, prored 1.5' bez rijeci 'preporuca' pa su tretirani kao imperativ; provjeriti slaze li se s namjerom fakulteta. (2) Dokument nema datum u tekstu ni PDF metapodacima -> documentDate je null. (3) Postoje dva tipa rada (istrazivacki A i pregledni B) s razlicitim poglavljima; required-sections drzi presjek zajednickih obveznih cjelina. (4) Citatni stil je delegiran na propozicije dvaju casopisa i nije imenovan standard -> advisory 'custom', bez recommendedCitation u rules. (5) Margine, A4, numeracija stranica i obostrano poravnanje nisu spomenuti pa nema pravila. Zavrsni (prijediplomski) i doktorski nisu pokriveni ovim izvorom.",
+    "note": "Iz sluzbenih Uputa za pisanje diplomskog rada (ERF, mrezna stranica). Scored su samo verbatim potvrdene imperativne/gole specifikacije (font, velicina, prored, Sadrzaj, obvezne cjeline). VAZNO za ljudski pregled: (1) font/velicina/prored dani su kao gola specifikacija 'Font: 12 pt, Times New Roman, prored 1.5' bez rijeci 'preporuca' pa su tretirani kao imperativ; provjeriti slaze li se s namjerom fakulteta. (2) Dokument nema datum u tekstu ni PDF metapodacima -> documentDate je null. (3) Postoje dva tipa rada (istrazivacki A i pregledni B) s razlicitim poglavljima; required-sections drzi presjek zajednickih obveznih cjelina. (4) Citatni stil je delegiran (lanac kao kod prava): ERF upute delegiraju citiranje na propozicije casopisa HRRI ili KiSI; HRRI upute autorima izrijekom kazu 'The journal uses the APA 7th edition referencing style' pa je efektivni obvezujuci stil APA 7 -> recommendedCitation 'apa7' (autor-godina). Dopunski izvor snapshotiran (erf-hrri-upute-autorima, volatile HTML). (5) Margine, A4, numeracija stranica i obostrano poravnanje nisu spomenuti pa nema pravila. Zavrsni (prijediplomski) i doktorski nisu pokriveni ovim izvorom (doktorski koristi DR.SC.-08 koji ne imenuje citatni stil).",
     "sources": [
       {
         "title": "Upute za pisanje diplomskog rada (ERF)",
