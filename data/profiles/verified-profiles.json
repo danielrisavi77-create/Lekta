@@ -9205,7 +9205,10 @@
     "id": "erf-diplomski",
     "unitId": "erf",
     "programs": [
-      "Diplomski studiji Edukacijsko-rehabilitacijskog fakulteta"
+      "Diplomski studiji Edukacijsko-rehabilitacijskog fakulteta",
+      "Edukacijska rehabilitacija",
+      "Logopedija",
+      "Socijalna pedagogija"
     ],
     "workTypes": [
       "graduate"
