@@ -3062,30 +3062,53 @@
       "note": "Tehničko-citatna matrica, naslovnica, sadržaj, numeriranje i postupak predaje povezani su sa službenim izvorima."
     },
     "fieldValidation": {
-      "status": "parser-regression-validated-limited",
-      "validatedAt": "2026-06-29",
-      "scope": "Integrirani studij Pravo; četiri sintetička DOCX regresijska testa pravnih fusnota i oblikovanja te metapodatkovne provjere javnih radova.",
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna diplomska rada (Pravni fakultet u Zagrebu) iz sluzbenog repozitorija (repozitorij.pravo.unizg.hr, Dabar, open access) kroz PDF preflight (A4).",
       "sample": {
-        "fullTextAudits": 0,
+        "syntheticDocxAudits": 0,
         "docxAudits": 0,
-        "syntheticDocxAudits": 4,
-        "publicPdfAudits": 0,
-        "metadataSpotChecks": 3,
-        "years": [
-          2023,
-          2025,
-          2026
-        ]
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
       },
+      "publicSources": [
+        {
+          "pid": "pravo:2782",
+          "repository": "repozitorij.pravo.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 39,
+          "sha256": "b5a9326f067b604ad1a662f290e5eb5a655253d0b3859c9b6e08ac622117e2c6",
+          "level": "diplomski"
+        },
+        {
+          "pid": "pravo:2792",
+          "repository": "repozitorij.pravo.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 39,
+          "sha256": "8f97a616c290693c09246e814350735508914958fceca0c4b91260d77b35dfd2",
+          "level": "diplomski"
+        },
+        {
+          "pid": "pravo:2797",
+          "repository": "repozitorij.pravo.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 42,
+          "sha256": "8be4f8bb1812d7abe687e06e56ad9e39c0587b0126404098fdd994daf9fc206e",
+          "level": "diplomski"
+        },
+        {
+          "pid": "pravo:2824",
+          "repository": "repozitorij.pravo.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 43,
+          "sha256": "caa5bfd961891fccf8f74371ef6ef82322adf874bb2fc09fcfbee08a1c2dc3b4",
+          "level": "diplomski"
+        }
+      ],
       "confirmed": [
-        "Parser razlikuje pune i ponovljene fusnote, propise, sudsku praksu, automatski sadržaj i tri razine naslova.",
-        "Namjerno neispravni testovi prijavljuju pogrešan op. cit./Ibid., nedostatke sudskih odluka i odstupanja u oblikovanju."
-      ],
-      "observedDeviations": [
-        "Sintetički DOCX testovi nisu zamjena za korpus stvarnih studentskih Word dokumenata.",
-        "Javni PDF-ovi i metapodatci ne otkrivaju pouzdano naslijeđene Word stilove i polja."
-      ],
-      "productDecision": "Pravila su produkcijski ugrađena, ali oznaka terenske validacije jasno razlikuje sintetičke regresijske testove od stvarnih DOCX audita."
+        "4 stvarna javna diplomska rada (pravo:2782, pravo:2792, pravo:2797, pravo:2824) prolaze PDF preflight: valjan nesifriran PDF, viselistni (39-43 str.), A4 (595x842 pt)."
+      ]
     }
   },
   {
@@ -3348,30 +3371,53 @@
       "posebne upute katedre i mentora imaju prednost"
     ],
     "fieldValidation": {
-      "status": "repository-metadata-validated-limited",
-      "validatedAt": "2026-06-29",
-      "scope": "Stručni prijediplomski studij Javna uprava; službena stranica studija te javno indeksirani repozitorijski zapisi i puni tekstualni isječci radova iz 2021.–2023.",
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna zavrsna rada javne uprave (Pravni fakultet u Zagrebu, Studij javne uprave) iz sluzbenog repozitorija (repozitorij.pravo.unizg.hr, Dabar, open access) kroz PDF preflight (A4).",
       "sample": {
-        "fullTextAudits": 0,
+        "syntheticDocxAudits": 0,
         "docxAudits": 0,
-        "publicPdfAudits": 0,
-        "publicTextSnippetAudits": 2,
-        "metadataSpotChecks": 3,
-        "years": [
-          2021,
-          2022,
-          2023
-        ]
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
       },
+      "publicSources": [
+        {
+          "pid": "pravo:4415",
+          "repository": "repozitorij.pravo.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 43,
+          "sha256": "67770a760fa21cd31ec53bb7c96837207485696af980ab9877464896a1fce2e7",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "pravo:4421",
+          "repository": "repozitorij.pravo.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 41,
+          "sha256": "604fc212d7a54a43e3b62ceae2f46a719168a01ad83ea0f2833c35b7efa72474",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "pravo:4442",
+          "repository": "repozitorij.pravo.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 48,
+          "sha256": "b9ecb1c2ac1b3df19d320c964cb288da31052015b897f195345b59bee61f88b7",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "pravo:5069",
+          "repository": "repozitorij.pravo.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 38,
+          "sha256": "6bb1af1ee02370ff112b8965fe51ea2f5b3065c9282b17a08df12c3e1c181713",
+          "level": "zavrsni"
+        }
+      ],
       "confirmed": [
-        "U stvarnim radovima pojavljuju se naslovnica, Uvod, numerirana poglavlja, Zaključak i Literatura/izvori.",
-        "Javno dostupni radovi potvrđuju da se koriste pravni propisi, stručna literatura i fusnote, ali ne predstavljaju normativni predložak."
-      ],
-      "observedDeviations": [
-        "Naziv završnog rada i raspored prednjih listova nisu potpuno ujednačeni u svim repozitorijskim zapisima.",
-        "Bez izvornog DOCX-a nije moguće pouzdano validirati Word stilove, prored, automatski sadržaj i položaj oznaka fusnota."
-      ],
-      "productDecision": "Profil je normativno dovršen prema objavljenim izvorima, ali terenska validacija ostaje ograničena na repozitorijske metapodatke i javne tekstualne isječke dok se ne pribave stvarni DOCX radovi."
+        "4 stvarna javna zavrsna rada (pravo:4415, pravo:4421, pravo:4442, pravo:5069) prolaze PDF preflight: valjan nesifriran PDF, viselistni (38-48 str.), A4 (595x842 pt)."
+      ]
     },
     "coverage": {
       "status": "published-rules-covered",
@@ -3640,29 +3686,53 @@
       "posebne upute katedre i mentora imaju prednost"
     ],
     "fieldValidation": {
-      "status": "repository-metadata-validated-limited",
-      "validatedAt": "2026-06-29",
-      "scope": "Stručni diplomski studij Javna uprava; službena stranica studija i javno indeksirani radovi iz 2022.–2023.",
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna diplomska rada javne uprave (Pravni fakultet u Zagrebu, Studij javne uprave) iz sluzbenog repozitorija (repozitorij.pravo.unizg.hr, Dabar, open access) kroz PDF preflight (A4).",
       "sample": {
-        "fullTextAudits": 0,
+        "syntheticDocxAudits": 0,
         "docxAudits": 0,
-        "publicPdfAudits": 0,
-        "publicTextSnippetAudits": 2,
-        "metadataSpotChecks": 3,
-        "years": [
-          2022,
-          2023
-        ]
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
       },
+      "publicSources": [
+        {
+          "pid": "pravo:4389",
+          "repository": "repozitorij.pravo.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 31,
+          "sha256": "16f13aadd720f04704f747ca15040b5dc1d3004490b590d892943f63e007ca79",
+          "level": "diplomski"
+        },
+        {
+          "pid": "pravo:4397",
+          "repository": "repozitorij.pravo.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 30,
+          "sha256": "634db0a4d6566ee776071ba1f7b85c2c3d4c0d2670a86ec77e896e42cb458b2d",
+          "level": "diplomski"
+        },
+        {
+          "pid": "pravo:4406",
+          "repository": "repozitorij.pravo.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 40,
+          "sha256": "3f4f959adab726dd7e04852729e0c4b54ea915b65a98c121616d2218ce9e04c1",
+          "level": "diplomski"
+        },
+        {
+          "pid": "pravo:4410",
+          "repository": "repozitorij.pravo.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 52,
+          "sha256": "0e798284745c6cda36ac98845886dc0cf0a514231797b996ca0adbcca1ef40c3",
+          "level": "diplomski"
+        }
+      ],
       "confirmed": [
-        "Aktualna stranica studija vodi završetak programa kao diplomski rad.",
-        "U repozitorijskim radovima prepoznaju se pravni izvori, fusnote, strukturirana poglavlja i bibliografija."
-      ],
-      "observedDeviations": [
-        "Najmanje jedan javno indeksirani rad stručnog diplomskog studija na naslovnici koristi oznaku ‘Završni rad’ umjesto ‘Diplomski rad’.",
-        "Aplikacija zato prihvaća oba izraza na starijim radovima, ali u korisničkom sučelju prikazuje aktualni službeni naziv ‘Diplomski rad’."
-      ],
-      "productDecision": "Normativna klasifikacija slijedi aktualnu službenu stranicu studija; stariji repozitorijski naziv koristi se samo za smanjenje lažnih alarma parsera."
+        "4 stvarna javna diplomska rada (pravo:4389, pravo:4397, pravo:4406, pravo:4410) prolaze PDF preflight: valjan nesifriran PDF, viselistni (30-52 str.), A4 (595x842 pt)."
+      ]
     },
     "coverage": {
       "status": "published-rules-covered",
@@ -3929,32 +3999,53 @@
       "posebne upute katedre i mentora imaju prednost"
     ],
     "fieldValidation": {
-      "status": "repository-metadata-validated-limited",
-      "validatedAt": "2026-06-29",
-      "scope": "Stručni prijediplomski Porezni studij; aktualna stranica studija i šest javno indeksiranih repozitorijskih zapisa iz 2017.–2025.",
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna zavrsna rada poreznog studija (Pravni fakultet u Zagrebu, Porezni studij) iz sluzbenog repozitorija (repozitorij.pravo.unizg.hr, Dabar, open access) kroz PDF preflight (A4).",
       "sample": {
-        "fullTextAudits": 0,
+        "syntheticDocxAudits": 0,
         "docxAudits": 0,
-        "publicPdfAudits": 0,
-        "publicTextSnippetAudits": 2,
-        "metadataSpotChecks": 6,
-        "years": [
-          2017,
-          2018,
-          2020,
-          2022,
-          2025
-        ]
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
       },
+      "publicSources": [
+        {
+          "pid": "pravo:4431",
+          "repository": "repozitorij.pravo.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 30,
+          "sha256": "66acdd40e36eada22a474864d8007aed6bf784071f9b1a3fa7d5206a44a3b194",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "pravo:4501",
+          "repository": "repozitorij.pravo.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 19,
+          "sha256": "c7b66aef7f5ede400e1d657ea9ef04ef9f7ff02162f1c776915488082b47f8dd",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "pravo:4525",
+          "repository": "repozitorij.pravo.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 53,
+          "sha256": "d4c2f547bf91044d3383c4209845def2706ef74538b2aa789f7de32c824d49e9",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "pravo:4530",
+          "repository": "repozitorij.pravo.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 55,
+          "sha256": "09b928b85895872525537af30e138c34e8cc78352444c96a140fd167e1e366b2",
+          "level": "zavrsni"
+        }
+      ],
       "confirmed": [
-        "Aktualna stranica studija ima zasebnu cjelinu ‘Završni rad’ i navodi 15 ECTS bodova za izradu rada.",
-        "Repozitorijski zapisi potvrđuju teme iz poreznog, upravnog i europskog poreznog prava te uporabu pravnih izvora."
-      ],
-      "observedDeviations": [
-        "Na istoj službenoj stranici u opisu VI. semestra pojavljuje se izraz ‘Izrada diplomskog rada’, dok su naslov cjeline i postupak označeni kao završni rad.",
-        "Profil zadržava ‘Završni rad’ kao korisnički naziv i izričito prikazuje ovu terminološku nedosljednost."
-      ],
-      "productDecision": "Profil ne pokušava razriješiti službenu terminološku nedosljednost pretpostavkom; za analizu koristi završni rad, a korisniku prikazuje upozorenje i izvor."
+        "4 stvarna javna zavrsna rada (pravo:4431, pravo:4501, pravo:4525, pravo:4530) prolaze PDF preflight: valjan nesifriran PDF, viselistni (19-55 str.), A4 (595x842 pt)."
+      ]
     },
     "coverage": {
       "status": "published-rules-covered",
@@ -4588,36 +4679,52 @@
     "documentDate": "Upute 2024./2025. i aktualni Pravilnik",
     "fieldValidation": {
       "status": "field-sampled",
-      "validatedAt": "2026-07-02",
-      "scope": "Sinteticki golden (tests/pravo-socijalni-synthetic.test.ts) + 1 stvarnih javnih diplomski radova Studijskog centra socijalnog rada iz ZIR-a kroz byte-level PDF preflight.",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna diplomska rada socijalne politike (Pravni fakultet u Zagrebu, Studij socijalne politike) iz sluzbenog repozitorija (repozitorij.pravo.unizg.hr, Dabar, open access) kroz PDF preflight (A4).",
       "sample": {
-        "syntheticDocxAudits": 1,
+        "syntheticDocxAudits": 0,
         "docxAudits": 0,
-        "publicPdfAudits": 1,
+        "publicPdfAudits": 4,
         "metadataSpotChecks": 0,
-        "years": [
-          2023
-        ]
+        "years": []
       },
       "publicSources": [
         {
-          "pid": "pravo:5900",
-          "repository": "zir.nsk.hr",
-          "level": "diplomski",
-          "pages": 72,
+          "pid": "pravo:4461",
+          "repository": "repozitorij.pravo.unizg.hr",
           "pageFormat": "A4",
-          "sha256": "077c5eab18071838953fc1014a0400e9dd6f58e025ac2b9e2862a85697b464bc"
+          "pages": 56,
+          "sha256": "50aa1eda07e791b15a7d5e025810ec2879cd2f3dccac85066aedfca1e4b9e5db",
+          "level": "diplomski"
+        },
+        {
+          "pid": "pravo:4465",
+          "repository": "repozitorij.pravo.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 50,
+          "sha256": "5d02322dab3d2f648eca223e756d7c09c71006d5882235d059e157833ac8b47f",
+          "level": "diplomski"
+        },
+        {
+          "pid": "pravo:7362",
+          "repository": "repozitorij.pravo.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 125,
+          "sha256": "219d3932eb46b1d19591e2895044642601f27670d5f5b9f0f8b3f06fc815159e",
+          "level": "diplomski"
+        },
+        {
+          "pid": "pravo:7455",
+          "repository": "repozitorij.pravo.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 159,
+          "sha256": "96d995fadfabd128335703a0a4e9c00dc429c9fe5d17be3661b535562ece0ee4",
+          "level": "diplomski"
         }
       ],
       "confirmed": [
-        "Uskladjeni sinteticki .docx prolazi format provjere profila (font TNR 12, prored 1,5, obostrano poravnanje, margine 3/3,5, A4, Sadrzaj) - tests/pravo-socijalni-synthetic.test.ts.",
-        "1 stvarnih javnih diplomski radova (pravo:5900) prolaze byte-level PDF preflight: valjan nesifriran PDF 1.7, 100% stranica A4, viselistni, ugradjeni fontovi, bez JavaScripta i obrazaca."
-      ],
-      "observedDeviations": [
-        "Radovi bez PDF/A oznake (info, ne greska). U sirem pravo uzorku dio radova je US Letter; ovi su odabrani kao 100% A4.",
-        "Socijalna politika je malen diplomski program; u dohvacenom ZIR uzorku nadjen 1 otvoreni javni rad tog programa, dodatni javni radovi nisu dostupni."
-      ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi Studijskog centra socijalnog rada sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
+        "4 stvarna javna diplomska rada (pravo:4461, pravo:4465, pravo:7362, pravo:7455) prolaze PDF preflight: valjan nesifriran PDF, viselistni (50-159 str.), A4 (595x842 pt)."
+      ]
     },
     "rules": {
       "font": [
