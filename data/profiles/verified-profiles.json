@@ -9738,7 +9738,24 @@
             "popis literature",
             "izvori"
           ]
+        },
+        {
+          "key": "nacrti-graficki-prilozi",
+          "label": "Nacrti i graficki prilozi",
+          "terms": [
+            "nacrti",
+            "graficki prilozi",
+            "graficki dio",
+            "tehnicki prikazi"
+          ]
         }
+      ],
+      "manualChecks": [
+        "Uvodni istrazivacki dio: knjizica velicine A4 ili A3, jedan primjerak (cl. 16, t. 1).",
+        "Diplomski projekt: izlozbeni poster formata A0 (841x1188 mm) (cl. 16, t. 2.1).",
+        "Cetiri primjerka knjizice velicine A3 s obveznim sadrzajem: naslovnica, sadrzaj, pisani dio s obrazlozenjem projekta, tehnickim pokazateljima i literaturom, te nacrti i graficki prilozi (cl. 16, t. 2.2).",
+        "Digitalni medij CD/DVD u dva primjerka koji sadrzi sve priloge iz tocaka 1 i 2 (cl. 16, t. 3).",
+        "Format knjizice je A3/A0 (ne A4), pa se standardna A4 provjera ne primjenjuje (advisory)."
       ]
     },
     "facts": [
@@ -20516,6 +20533,11 @@
             "projekt"
           ]
         }
+      ],
+      "manualChecks": [
+        "Cjeloviti diplomski rad (istrazivacko-teorijski i projektni dio) predaje se tajniku diplomskog Povjerenstva u elektronickom obliku (Pravilnik 2016).",
+        "Pri objavljivanju diplomskog rada u javnosti obavezno se navode imena autora, koautora i Studija dizajna (Pravilnik 2016).",
+        "Diplomski rad ne moze se javno prezentirati ni objavljivati prije obrane (Pravilnik 2016)."
       ]
     },
     "facts": [
