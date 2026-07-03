@@ -20485,7 +20485,7 @@
         "Profil se analizira bez pucanja na stvarnom docx-u i informativne format-provjere ispravno se ponasaju (tests/art-faculties-synthetic.test.ts)."
       ],
       "observedDeviations": [
-        "Diplomski rad Studija dizajna je projektantski (istrazivacko-teorijski dio + projektni dio); Pravilnik ne propisuje faculty-wide tehnicko oblikovanje ni citatni stil. Studij dizajna nema radova pod dohvacenim ZIR namespaceom (ct=dissertation prazan)."
+        "Diplomski rad Studija dizajna je projektantski (istrazivacko-teorijski dio + projektni dio); Pravilnik ne propisuje faculty-wide tehnicko oblikovanje ni citatni stil. Empirijska provjera 2026-07-03: pregledano 8 stvarnih javnih diplomskih radova Studija dizajna (repozitorij.arhitekt.unizg.hr, npr. arhitekt:12/15/16/22). Svi su 2-str vizualni posteri ili slikovni portfelji (do 94 MB slika, ~2000 znakova teksta) BEZ tekstualnog citatnog aparata (0 autor-godina, 0 numericko, bez popisa literature) - potvrduje projektnu narav rada i ispravnost iskljucenja format/citation provjera. NE broje se kao terenski audit (publicPdfAudits ostaje 0, validation sinteticka) jer vizualni posteri ne vjezbaju scored required-sections pravilo; napuhivanje validacije na temelju njih bilo bi lazno."
       ],
       "productDecision": "Projektni rad: sluzbeni izvor (Pravilnik o izradi i obrani diplomskog rada, 2016) ureduje postupak (tema, povjerenstvo, obrana, ocjena, autorska prava) i navodi obvezne dijelove rada, ali NE propisuje font, velicinu, prored, margine ni citatni stil, pa su format-provjere iskljucene (informativne). Ne izmisljam pravila (CLAUDE.md); scored je samo imperativna sadrzajna struktura iz cl. 3."
     },
