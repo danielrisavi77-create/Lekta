@@ -2,6 +2,9 @@ import { describe, it, expect } from 'vitest';
 import { compileEffectiveRules, collectCompileDiagnostics } from '../src/profiles/rule-compiler';
 import type { ThesisProfile } from '../src/profiles/profile-schema';
 
+import rawVerified from '../data/profiles/verified-profiles.json';
+import rawLegal from '../data/profiles/legal-departments.json';
+
 describe('rule-compiler faithfulness', () => {
   it('effectiveRules deep-equals rules kada nema ruleEntries', () => {
     const profile: ThesisProfile = {
@@ -74,5 +77,32 @@ describe('rule-compiler faithfulness', () => {
     expect(diagnostics).toHaveLength(1);
     expect(diagnostics[0]?.ruleId).toBe('r-x');
     expect(compileEffectiveRules(profile)).toEqual({ font: ['Arial'] });
+  });
+});
+
+/**
+ * Option A invarijanta na STVARNIM podacima (CLAUDE.md: "za trenutne podatke effectiveRules
+ * deep-equal rules"). Fan-out arhitektura: ruleEntries zive u zasebnim draft fileovima koje
+ * ENGINE ne overlaya (idu samo u verifikacijske/coverage poglede), pa registrirani profili
+ * nemaju inline ruleEntries i compile mora biti vjeran prolaz kroz rules. Ovaj test to zakljucava
+ * za svih 200+ profila: uhvatio bi slucajno uneseni inline ruleEntry koji tiho promijeni ponasanje
+ * enginea vs sirovi rules passthrough. Kad zapocne migracija (inline ruleEntry -> brisanje iz rules),
+ * ovaj se test prilagodava po CLAUDE.md backlogu 2.
+ */
+describe('rule-compiler faithfulness na stvarnim registrima', () => {
+  const allProfiles = [...rawVerified, ...rawLegal] as unknown as ThesisProfile[];
+
+  it('registar je netrivijalan (guard protiv vacuous-pass)', () => {
+    expect(allProfiles.length).toBeGreaterThan(100);
+  });
+
+  it('svaki registrirani profil: effectiveRules deep-equals rules', () => {
+    for (const profile of allProfiles) {
+      expect(compileEffectiveRules(profile), `profil ${profile.id}`).toEqual(profile.rules ?? {});
+    }
+  });
+
+  it('nijedan registrirani profil ne proizvodi compile-diagnostic (svi checkId-jevi prepoznati)', () => {
+    expect(collectCompileDiagnostics(allProfiles)).toHaveLength(0);
   });
 });
