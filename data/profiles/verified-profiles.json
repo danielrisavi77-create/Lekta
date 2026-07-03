@@ -19994,7 +19994,58 @@
       "Pravila naslova (numerirano, mala tiskana, 4 razine)",
       "Stil citiranja (harvard)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation":     {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna zavrsna rada drustvenog podrucja Sveucilista Sjever iz sluzbenog repozitorija (repozitorij.unin.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "unin:5",
+          "repository": "repozitorij.unin.hr",
+          "pageFormat": "A4",
+          "pages": 64,
+          "sha256": "1acc35c145602179a7385d357848fd8396fa196a4d2b7e42a9120e7d43a350c6",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unin:21",
+          "repository": "repozitorij.unin.hr",
+          "pageFormat": "A4",
+          "pages": 42,
+          "sha256": "94b1aa6cea191134c7c4804fb70673385fe3811e9184489648514157f7df3c55",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unin:37",
+          "repository": "repozitorij.unin.hr",
+          "pageFormat": "A4",
+          "pages": 47,
+          "sha256": "a73fa01aea03418c89aeb5ed0b4e7cfbe8a9d7820caba73724a9b6647cbaba4f",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unin:53",
+          "repository": "repozitorij.unin.hr",
+          "pageFormat": "A4",
+          "pages": 36,
+          "sha256": "2ab250b0d7dca8daaf0adefa012f796d84e638e352a67b7447fbf5b0cbab6651",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (unin:5, unin:21, unin:37, unin:53) prolaze PDF preflight: valjan nesifriran PDF, viselistni (36-64 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "unin-drustveni-diplomski",
@@ -20066,7 +20117,58 @@
       "Pravila naslova (numerirano, mala tiskana, 4 razine)",
       "Stil citiranja (harvard)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation":     {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna diplomska rada drustvenog podrucja Sveucilista Sjever iz sluzbenog repozitorija (repozitorij.unin.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "unin:135",
+          "repository": "repozitorij.unin.hr",
+          "pageFormat": "A4",
+          "pages": 74,
+          "sha256": "14a05783e278a75b7b6ce097e0c8a12c408e01da662364672dae343420edcf12",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unin:136",
+          "repository": "repozitorij.unin.hr",
+          "pageFormat": "A4",
+          "pages": 63,
+          "sha256": "70b0d79ef176eb791d4309ba100f1fb8c099bde915534f89627ae91098650d1a",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unin:139",
+          "repository": "repozitorij.unin.hr",
+          "pageFormat": "A4",
+          "pages": 68,
+          "sha256": "edbcf61c7a148a49643c15efb2fabfd05ed4d4321a1a13c9c92e8ab4f09366bd",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unin:222",
+          "repository": "repozitorij.unin.hr",
+          "pageFormat": "A4",
+          "pages": 57,
+          "sha256": "849b802b84aecf1f8c24d0af8fef0e8488723da13b4f6df740e18e9c372504f6",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (unin:135, unin:136, unin:139, unin:222) prolaze PDF preflight: valjan nesifriran PDF, viselistni (57-74 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "veleri-zavrsni",
