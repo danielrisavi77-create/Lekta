@@ -6284,6 +6284,169 @@
     ]
   },
   {
+    "id": "efzg-specijalisticki",
+    "unitId": "efzg",
+    "programs": [
+      "Sveučilišni specijalistički studiji"
+    ],
+    "workTypes": [
+      "specialist"
+    ],
+    "status": "partial",
+    "profileLabel": "Ekonomski fakultet, sveucilisni specijalisticki rad",
+    "verifiedAt": "2026-07-03",
+    "documentDate": "2021-03-30",
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "3 stvarna javna sveucilisna specijalisticka rada iz EFZG repozitorija (dc:type Zavrsni specijalisticki, openAccess) kroz byte-level PDF preflight.",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "efzg:2571",
+          "repository": "repozitorij.efzg.unizg.hr",
+          "level": "specijalisticki",
+          "pages": 109,
+          "pageFormat": "A4",
+          "sha256": "0e329e767bb233d5afa865cd0df57173dc8108084b5b2d81a94b0ed517660185"
+        },
+        {
+          "pid": "efzg:2636",
+          "repository": "repozitorij.efzg.unizg.hr",
+          "level": "specijalisticki",
+          "pages": 93,
+          "pageFormat": "A4",
+          "sha256": "5098333a5fdac6ecd8a9d83dbc3ba9a7a23fcaecfd69be675b032ebe6701fbdb"
+        },
+        {
+          "pid": "efzg:2665",
+          "repository": "repozitorij.efzg.unizg.hr",
+          "level": "specijalisticki",
+          "pages": 97,
+          "pageFormat": "A4",
+          "sha256": "b5a2815f1128f7c5b4bb408cf193c56e6c93166e42d68ce5a32f6cb8f19eb910"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna specijalisticka rada (efzg:2571, efzg:2636, efzg:2665) prolaze byte-level PDF preflight: valjan nesifriran PDF, 100% stranica A4, viselistni.",
+        "Oblikovanje (A4, TNR/Calibri 12, prored 1,5, margine 2,5, obostrano poravnanje) i citiranje (autor-godina APA/Harvard) preuzeti iz sluzbenih Uputa 2021 (imperativ)."
+      ],
+      "observedDeviations": [
+        "Uzorci imaju 93-109 str; naputak propisuje 70-90 str teksta bez priloga, a stvarni radovi ukljucuju priloge pa su duzi. Sve stranice A4."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet, ne oblikovanje sadrzaja). Stvarni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer DABAR repozitoriji utiskuju watermark po preuzimanju pa sha nije reproducibilan."
+    },
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Calibri"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireToc": true,
+      "requireA4": true,
+      "justify": true,
+      "checkJustify": true,
+      "checkMargins": true,
+      "pageMin": 70,
+      "pageMax": 90,
+      "recommendedCitation": "harvard",
+      "requiredSections": [
+        {
+          "key": "naslovnica",
+          "label": "Naslovna stranica",
+          "terms": [
+            "naslovnica",
+            "naslovna"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sazetak s kljucnim rijecima",
+          "terms": [
+            "sazetak",
+            "sažetak"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadrzaj",
+          "terms": [
+            "sadrzaj",
+            "sadržaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zakljucak",
+          "terms": [
+            "zakljucak",
+            "zaključak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Popis literature",
+          "terms": [
+            "popis literature",
+            "literatura"
+          ]
+        }
+      ]
+    },
+    "facts": [
+      "Rad ima 7 poglavlja (ukljucujuci Uvod i Zakljucak), opsega 70 do 90 stranica teksta A4, font 12, Calibri ili Times New Roman, margine 2,5 cm, obostrano poravnanje, prored 1,5 (imperativ Uputa 2021).",
+      "Sveucilisni specijalisticki rad se sastoji od propisanih dijelova: korice, naslovna, sazetak i kljucne rijeci, izjava o cestitosti, sadrzaj, poglavlja, zakljucak, popis literature, popis slika, popis tablica, zivotopis, prilozi (imperativ).",
+      "Izvori se navode abecedno prema prezimenu prvog autora, APA ili harvardskim stilom (autor-godina)."
+    ],
+    "note": "Novi profil (2026-07-03) iz sluzbenih 'Upute za izradu pisanih radova na sveucilisnom specijalistickom studiju' (EFZG, 30. ozujak 2021, tekstualni PDF). Tehnicko oblikovanje i struktura formulirani imperativno pa su scored; opseg 70-90 str, A4 i citatni stil (autor-godina APA/Harvard) advisory; efektivni stil autor-godina (harvard) pa je citation 100. Field-validacija: 3 stvarna javna specijalisticka rada iz EFZG repozitorija (openAccess).",
+    "sources": [
+      {
+        "title": "Upute za izradu pisanih radova na sveucilisnom specijalistickom studiju (Ekonomski fakultet u Zagrebu, 2021)",
+        "url": "https://www.efzg.unizg.hr/userdocsimages/PDS/Upute_za_izradu_pisanih_radova_na_SS%20studiju.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu pisanih radova na sveucilisnom specijalistickom studiju (Ekonomski fakultet u Zagrebu, 2021)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "margine",
+      "font",
+      "velicina slova",
+      "prored",
+      "obostrano poravnanje",
+      "obvezne cjeline rada",
+      "sadrzaj"
+    ],
+    "advisoryScope": [
+      "opseg u stranicama",
+      "format papira",
+      "stil citiranja (autor-godina APA/Harvard)"
+    ]
+  },
+  {
     "id": "efzg-diplomski",
     "unitId": "efzg",
     "programs": [

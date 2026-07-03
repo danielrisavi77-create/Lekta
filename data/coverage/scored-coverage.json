@@ -153,6 +153,14 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "efzg-specijalisticki",
+      "scored": 7,
+      "machineCheckable": 8,
+      "advisory": 3,
+      "ratio": 0.875,
+      "lastVerified": "2026-07-02"
+    },
+    {
       "profileId": "efzg-zavrsni",
       "scored": 8,
       "machineCheckable": 9,
@@ -1681,5 +1689,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 1200
+  "totalScored": 1207
 }

@@ -32686,5 +32686,89 @@
     "sourcePage": "odjeljak 1.2. Struktura diplomskog rada",
     "quote": "Diplomski rad ... treba imati sljedece dijelove: Korice, Naslovnica, Naslov, Sazetak i kljucne rijeci, Sadrzaj, Uvod, Poglavlja sredisnjeg dijela, Zakljucak, Popis literature, Popis slika, Popis tablica, Prilozi, Zivotopis studenta.",
     "note": "Ljudski audit: potvrdjena vrijednost protiv izvora na lokatoru (bio owner-bulk-approval)."
+  },
+  {
+    "id": "led-efzg-specijalisticki--margins-human-verified-2026-07-02",
+    "ruleId": "efzg-specijalisticki--margins",
+    "profileId": "efzg-specijalisticki",
+    "action": "human-verified",
+    "actor": "Daniel Risavi",
+    "timestamp": "2026-07-02",
+    "sourceId": "efzg-upute-specijalisticki-2021",
+    "sourcePage": "odjeljak o tehnickom oblikovanju (format, font, margine, prored)",
+    "quote": "opsega od 70 do 90 stranica teksta formata A4, velicine fonta 12, vrste fonta Calibri ili Times New Roman, margina 2,5 cm sa svih strana, poravnanje s obje strane te proreda 1,5.",
+    "note": "Ljudski audit: potvrdjena vrijednost protiv izvora na lokatoru (bio owner-bulk-approval)."
+  },
+  {
+    "id": "led-efzg-specijalisticki--font-human-verified-2026-07-02",
+    "ruleId": "efzg-specijalisticki--font",
+    "profileId": "efzg-specijalisticki",
+    "action": "human-verified",
+    "actor": "Daniel Risavi",
+    "timestamp": "2026-07-02",
+    "sourceId": "efzg-upute-specijalisticki-2021",
+    "sourcePage": "odjeljak o tehnickom oblikovanju (format, font, margine, prored)",
+    "quote": "opsega od 70 do 90 stranica teksta formata A4, velicine fonta 12, vrste fonta Calibri ili Times New Roman, margina 2,5 cm sa svih strana, poravnanje s obje strane te proreda 1,5.",
+    "note": "Ljudski audit: potvrdjena vrijednost protiv izvora na lokatoru (bio owner-bulk-approval)."
+  },
+  {
+    "id": "led-efzg-specijalisticki--font-size-human-verified-2026-07-02",
+    "ruleId": "efzg-specijalisticki--font-size",
+    "profileId": "efzg-specijalisticki",
+    "action": "human-verified",
+    "actor": "Daniel Risavi",
+    "timestamp": "2026-07-02",
+    "sourceId": "efzg-upute-specijalisticki-2021",
+    "sourcePage": "odjeljak o tehnickom oblikovanju (format, font, margine, prored)",
+    "quote": "opsega od 70 do 90 stranica teksta formata A4, velicine fonta 12, vrste fonta Calibri ili Times New Roman, margina 2,5 cm sa svih strana, poravnanje s obje strane te proreda 1,5.",
+    "note": "Ljudski audit: potvrdjena vrijednost protiv izvora na lokatoru (bio owner-bulk-approval)."
+  },
+  {
+    "id": "led-efzg-specijalisticki--line-spacing-human-verified-2026-07-02",
+    "ruleId": "efzg-specijalisticki--line-spacing",
+    "profileId": "efzg-specijalisticki",
+    "action": "human-verified",
+    "actor": "Daniel Risavi",
+    "timestamp": "2026-07-02",
+    "sourceId": "efzg-upute-specijalisticki-2021",
+    "sourcePage": "odjeljak o tehnickom oblikovanju (format, font, margine, prored)",
+    "quote": "opsega od 70 do 90 stranica teksta formata A4, velicine fonta 12, vrste fonta Calibri ili Times New Roman, margina 2,5 cm sa svih strana, poravnanje s obje strane te proreda 1,5.",
+    "note": "Ljudski audit: potvrdjena vrijednost protiv izvora na lokatoru (bio owner-bulk-approval)."
+  },
+  {
+    "id": "led-efzg-specijalisticki--justify-human-verified-2026-07-02",
+    "ruleId": "efzg-specijalisticki--justify",
+    "profileId": "efzg-specijalisticki",
+    "action": "human-verified",
+    "actor": "Daniel Risavi",
+    "timestamp": "2026-07-02",
+    "sourceId": "efzg-upute-specijalisticki-2021",
+    "sourcePage": "odjeljak o tehnickom oblikovanju (format, font, margine, prored)",
+    "quote": "opsega od 70 do 90 stranica teksta formata A4, velicine fonta 12, vrste fonta Calibri ili Times New Roman, margina 2,5 cm sa svih strana, poravnanje s obje strane te proreda 1,5.",
+    "note": "Ljudski audit: potvrdjena vrijednost protiv izvora na lokatoru (bio owner-bulk-approval)."
+  },
+  {
+    "id": "led-efzg-specijalisticki--required-sections-human-verified-2026-07-02",
+    "ruleId": "efzg-specijalisticki--required-sections",
+    "profileId": "efzg-specijalisticki",
+    "action": "human-verified",
+    "actor": "Daniel Risavi",
+    "timestamp": "2026-07-02",
+    "sourceId": "efzg-upute-specijalisticki-2021",
+    "sourcePage": "odjeljak 1.2. Izrada i struktura sveucilisnog specijalistickog rada",
+    "quote": "Sveucilisni specijalisticki rad se sastoji od sljedecih dijelova: korice, naslovna stranica, sazetak i kljucne rijeci, izjava o akademskoj cestitosti, sadrzaj, poglavlja, zakljucak, popis literature, popis slika, popis tablica, zivotopis, prilozi.",
+    "note": "Ljudski audit: potvrdjena vrijednost protiv izvora na lokatoru (bio owner-bulk-approval)."
+  },
+  {
+    "id": "led-efzg-specijalisticki--toc-human-verified-2026-07-02",
+    "ruleId": "efzg-specijalisticki--toc",
+    "profileId": "efzg-specijalisticki",
+    "action": "human-verified",
+    "actor": "Daniel Risavi",
+    "timestamp": "2026-07-02",
+    "sourceId": "efzg-upute-specijalisticki-2021",
+    "sourcePage": "odjeljak 1.2. Izrada i struktura sveucilisnog specijalistickog rada",
+    "quote": "Sveucilisni specijalisticki rad se sastoji od sljedecih dijelova: korice, naslovna stranica, sazetak i kljucne rijeci, izjava o akademskoj cestitosti, sadrzaj, poglavlja, zakljucak, popis literature, popis slika, popis tablica, zivotopis, prilozi.",
+    "note": "Ljudski audit: potvrdjena vrijednost protiv izvora na lokatoru (bio owner-bulk-approval)."
   }
 ]
