@@ -19847,7 +19847,56 @@
       "Pravila naslova (numerirano, razina 1 velika slova)",
       "Stil citiranja (numericki, uglate zagrade)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation":     {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna zavrsna rada (Tehnicki fakultet u Rijeci) iz sluzbenog repozitorija (repository.riteh.uniri.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "riteh:1019",
+          "repository": "repository.riteh.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 44,
+          "sha256": "b6507127c94a8935b02adbc612abd5ab54cbd9ae23328f798040c0d30c6410e3",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "riteh:1627",
+          "repository": "repository.riteh.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 53,
+          "sha256": "92d8b459ee3e55754d76189c8ea3bd51d3b03647a65be9e4a66551209a4d3f30",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "riteh:2086",
+          "repository": "repository.riteh.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 91,
+          "sha256": "ebdf6b048f1a0af62efcd81a50f4a48795184d27f56b9359c211c0dc2e24e0aa",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "riteh:2258",
+          "repository": "repository.riteh.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 42,
+          "sha256": "cec07cbe76710d96b17107e376d49dfc362a0c8fafb488ffc8819c938f9bd753",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (riteh:1019, riteh:1627, riteh:2086, riteh:2258) prolaze PDF preflight: valjan nesifriran PDF, viselistni (42-91 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "riteh-diplomski",
@@ -19891,7 +19940,56 @@
       "Pravila naslova (numerirano, razina 1 velika slova)",
       "Stil citiranja (numericki, uglate zagrade)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation":     {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna diplomska rada (Tehnicki fakultet u Rijeci) iz sluzbenog repozitorija (repository.riteh.uniri.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "riteh:27",
+          "repository": "repository.riteh.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 44,
+          "sha256": "3f3f603fd00c02a16256b06e93006d33a2315e55c706bb504ecda519f4249d8e",
+          "level": "diplomski"
+        },
+        {
+          "pid": "riteh:764",
+          "repository": "repository.riteh.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 71,
+          "sha256": "0e413cc5fa0b344e84fd9e1e535362c2220777afcf7248ba1350bb090b4dca2d",
+          "level": "diplomski"
+        },
+        {
+          "pid": "riteh:2125",
+          "repository": "repository.riteh.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 49,
+          "sha256": "de7bf54d5f652375aadf3cda32ebe1e915e11b92db6ca750d1224a4bc0b6170c",
+          "level": "diplomski"
+        },
+        {
+          "pid": "riteh:2652",
+          "repository": "repository.riteh.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 178,
+          "sha256": "41f7d99f07ad73f81a4c63e88b4eb14809db976f92653f28ed1a950eb0be0204",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (riteh:27, riteh:764, riteh:2125, riteh:2652) prolaze PDF preflight: valjan nesifriran PDF, viselistni (44-178 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "kifst-diplomski",
