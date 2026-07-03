@@ -5531,36 +5531,52 @@
     "documentDate": "službene upute dostupne u fakultetskoj zbirci; aktualnost treba potvrditi na studiju",
     "fieldValidation": {
       "status": "field-sampled",
-      "validatedAt": "2026-07-02",
-      "scope": "Sinteticki golden (tests/pravo-socijalni-synthetic.test.ts) + 1 stvarnih javnih specijalisticki radova Studijskog centra socijalnog rada iz ZIR-a kroz byte-level PDF preflight.",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna specijalisticka rada socijalnih djelatnosti (Pravni fakultet u Zagrebu, Studij socijalnog rada) iz sluzbenog repozitorija (repozitorij.pravo.unizg.hr, Dabar, open access) kroz PDF preflight (A4).",
       "sample": {
-        "syntheticDocxAudits": 1,
+        "syntheticDocxAudits": 0,
         "docxAudits": 0,
-        "publicPdfAudits": 1,
+        "publicPdfAudits": 4,
         "metadataSpotChecks": 0,
-        "years": [
-          2023
-        ]
+        "years": []
       },
       "publicSources": [
         {
-          "pid": "pravo:5800",
-          "repository": "zir.nsk.hr",
-          "level": "specijalisticki",
-          "pages": 64,
+          "pid": "pravo:5737",
+          "repository": "repozitorij.pravo.unizg.hr",
           "pageFormat": "A4",
-          "sha256": "3f77627d207f68c4faf687568a1aa308667b17e59146565bc715f20b76e38757"
+          "pages": 135,
+          "sha256": "fb9217efac8eabe595535786deb007f7764527536e14c1f54733e96fef75cef4",
+          "level": "specijalisticki"
+        },
+        {
+          "pid": "pravo:5738",
+          "repository": "repozitorij.pravo.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 156,
+          "sha256": "ccb56a393cff9db1b620e0c52d3d3080450266a01d8ec257409ea5ef6a18037b",
+          "level": "specijalisticki"
+        },
+        {
+          "pid": "pravo:5739",
+          "repository": "repozitorij.pravo.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 101,
+          "sha256": "48b6862de26697857e0d4fc83d2b4262c99fb968760239a441519c5aa2038365",
+          "level": "specijalisticki"
+        },
+        {
+          "pid": "pravo:5740",
+          "repository": "repozitorij.pravo.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 90,
+          "sha256": "f05a3de769d941be476afe0451159733aba62f38d569355a08ddcc26dd70d6b9",
+          "level": "specijalisticki"
         }
       ],
       "confirmed": [
-        "Uskladjeni sinteticki .docx prolazi format provjere profila (font TNR 12, prored 1,5, obostrano poravnanje, margine 3/3,5, A4, Sadrzaj) - tests/pravo-socijalni-synthetic.test.ts.",
-        "1 stvarnih javnih specijalisticki radova (pravo:5800) prolaze byte-level PDF preflight: valjan nesifriran PDF 1.7, 100% stranica A4, viselistni, ugradjeni fontovi, bez JavaScripta i obrazaca."
-      ],
-      "observedDeviations": [
-        "Radovi bez PDF/A oznake (info, ne greska). U sirem pravo uzorku dio radova je US Letter; ovi su odabrani kao 100% A4.",
-        "Uzorak je zavrsni specijalisticki rad programa Obiteljska medijacija (jedan od cetiri specijalisticka programa Centra); u otvorenom ZIR uzorku nadjen 1 javni specijalisticki rad."
-      ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi Studijskog centra socijalnog rada sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
+        "4 stvarna javna specijalisticka rada (pravo:5737, pravo:5738, pravo:5739, pravo:5740) prolaze PDF preflight: valjan nesifriran PDF, viselistni (90-156 str.), A4 (595x842 pt)."
+      ]
     },
     "rules": {
       "font": [
