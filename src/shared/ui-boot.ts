@@ -79,7 +79,31 @@ function animateHero() {
   });
 }
 
-function boot() { renderIcons(); setupReveal(); animateHero(); }
+// Blagi 3D tilt hero preview kartice prema pokazivacu (bez ovisnosti: realtime transform,
+// spring povratak preko CSS prijelaza). Preskace se na reduced-motion i na touch uredajima;
+// preview-card nema CSS hover pa nema sukoba stilova.
+function setupTilt() {
+  if (prefersReduced()) return;
+  if (typeof window.matchMedia === 'function' && window.matchMedia('(hover: none)').matches) return;
+  const card = document.querySelector<HTMLElement>('.preview-card');
+  if (!card) return;
+  const MAX = 6;
+  const rest = 'perspective(900px) rotateX(0deg) rotateY(0deg) translateY(0)';
+  card.style.willChange = 'transform';
+  card.addEventListener('pointermove', (e) => {
+    const r = card.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width - 0.5;
+    const py = (e.clientY - r.top) / r.height - 0.5;
+    card.style.transition = 'transform 0s';
+    card.style.transform = `perspective(900px) rotateX(${(-py * MAX).toFixed(2)}deg) rotateY(${(px * MAX).toFixed(2)}deg) translateY(-4px)`;
+  });
+  card.addEventListener('pointerleave', () => {
+    card.style.transition = 'transform .5s var(--ease-spring, ease)';
+    card.style.transform = rest;
+  });
+}
+
+function boot() { renderIcons(); setupReveal(); animateHero(); setupTilt(); }
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', boot);
 } else {
