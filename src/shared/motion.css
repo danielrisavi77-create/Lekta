@@ -22,26 +22,6 @@
 
 @keyframes lekta-fade-up { from { opacity: 0; transform: translateY(16px) } to { opacity: 1; transform: none } }
 
-/*
- * Sheen preko primarnog CTA: sjaj klizne pri hoveru. Clip-path je na pseudo-elementu (ne na
- * gumbu) pa fokus prsten (box-shadow) ostaje nezaklonjen. pointer-events:none.
- */
-.btn-primary { position: relative }
-.btn-primary::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  clip-path: inset(0 round 12px);
-  pointer-events: none;
-  background: linear-gradient(105deg, transparent 38%, rgba(255,255,255,.42) 50%, transparent 62%);
-  transform: translateX(-130%);
-  transition: transform .6s var(--ease-spring);
-}
-@media (prefers-reduced-motion: no-preference) {
-  .btn-primary:hover::after { transform: translateX(130%) }
-}
-
 /* Tipografija: uravnotezeni naslovi, uredniji zavrseci odlomaka. */
 h1, h2, h3, .section-head h2 { text-wrap: balance }
 p { text-wrap: pretty }
