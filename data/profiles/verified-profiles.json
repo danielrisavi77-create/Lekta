@@ -17907,7 +17907,56 @@
       "Prored",
       "Obostrano poravnanje"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation":     {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna diplomska rada (Medicinski fakultet u Splitu) iz sluzbenog repozitorija (repozitorij.mefst.unist.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "mefst:1",
+          "repository": "repozitorij.mefst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 58,
+          "sha256": "b9ee19dc0a1442f430e03494847616c33beb74766305b4571072e1e6f77829e0",
+          "level": "diplomski"
+        },
+        {
+          "pid": "mefst:2",
+          "repository": "repozitorij.mefst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 55,
+          "sha256": "7fb0f535e9f9012cb9c76dacdecccad9f31879d715261fd5904de505b04b6004",
+          "level": "diplomski"
+        },
+        {
+          "pid": "mefst:6",
+          "repository": "repozitorij.mefst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 90,
+          "sha256": "e5c3d06b2cc83bde61cf999092cd3aa047309051634d3748bd51823216089e16",
+          "level": "diplomski"
+        },
+        {
+          "pid": "mefst:7",
+          "repository": "repozitorij.mefst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 45,
+          "sha256": "621c554bd97b73fb7c4395bc08d79bc861c63286e15fb46b90ae2793e075cef5",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (mefst:1, mefst:2, mefst:6, mefst:7) prolaze PDF preflight: valjan nesifriran PDF, viselistni (45-90 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "ferit-zavrsni",
@@ -19247,7 +19296,56 @@
       "Prored",
       "Obostrano poravnanje"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation":     {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna zavrsna rada povijesti umjetnosti (Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:341",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 30,
+          "sha256": "2298d1665a02b5a29ff08271092ef4a826643ec5881c5e4fc82c2657a0e00b05",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:347",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 30,
+          "sha256": "3a383b3b619a8fb91b85c31dec79ebfa9884ab39af871377319f941ee9b8b41b",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:441",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 26,
+          "sha256": "5bfbf8d1c0d44a52afe5d790cfd5437eb975eb85caff910bcd1da6b472c8ef29",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:829",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 44,
+          "sha256": "48b951f30247b7e0986e5fd713e74206574ef608ba5b0d0a6e89673a263fe8b9",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (unizd:341, unizd:347, unizd:441, unizd:829) prolaze PDF preflight: valjan nesifriran PDF, viselistni (26-44 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "fetpu-zavrsni",
@@ -21766,7 +21864,56 @@
       "Velicina slova fusnote",
       "Opseg (20-35 str.)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation":     {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna zavrsna rada (Veleuciliste u Virovitici) iz sluzbenog repozitorija (repozitorij.vuv.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "vsmti:622",
+          "repository": "repozitorij.vuv.hr",
+          "pageFormat": "A4",
+          "pages": 36,
+          "sha256": "c9ed755c719592d65edd64b3ab9ef1e48bfe22ead936116817a6c085eb197b75",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "vsmti:623",
+          "repository": "repozitorij.vuv.hr",
+          "pageFormat": "A4",
+          "pages": 38,
+          "sha256": "b0747a762db3d6a02148725a1b2c24ec63d40a7a87fe8d660058605308ca73a9",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "vsmti:624",
+          "repository": "repozitorij.vuv.hr",
+          "pageFormat": "A4",
+          "pages": 37,
+          "sha256": "1484a3283d73e1fbe1ac942582223527b3b4db232a01984ee8f50a9fbd00eee5",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "vsmti:627",
+          "repository": "repozitorij.vuv.hr",
+          "pageFormat": "A4",
+          "pages": 37,
+          "sha256": "e881c10072c258ed0addcd2bfab7a86f823cb587830c8479335c2a2f2b0afb93",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (vsmti:622, vsmti:623, vsmti:624, vsmti:627) prolaze PDF preflight: valjan nesifriran PDF, viselistni (36-38 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "vuv-diplomski",
@@ -21824,7 +21971,56 @@
       "Velicina slova fusnote",
       "Opseg (35-60 str.)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation":     {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna diplomska rada (Veleuciliste u Virovitici) iz sluzbenog repozitorija (repozitorij.vuv.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "vsmti:456",
+          "repository": "repozitorij.vuv.hr",
+          "pageFormat": "A4",
+          "pages": 67,
+          "sha256": "62f73b860274b046122ada8defdc66fc85aca29a08be9520ddf0ba1fe6bb132f",
+          "level": "diplomski"
+        },
+        {
+          "pid": "vsmti:651",
+          "repository": "repozitorij.vuv.hr",
+          "pageFormat": "A4",
+          "pages": 96,
+          "sha256": "487e55f0404f43f10adc9fc90e928780f70ffb244b74130c709f68fb183fb430",
+          "level": "diplomski"
+        },
+        {
+          "pid": "vsmti:652",
+          "repository": "repozitorij.vuv.hr",
+          "pageFormat": "A4",
+          "pages": 52,
+          "sha256": "c43edde5ecd2085079b8204ea360e454c4426e0bed70f3070cfebc6799b12039",
+          "level": "diplomski"
+        },
+        {
+          "pid": "vsmti:654",
+          "repository": "repozitorij.vuv.hr",
+          "pageFormat": "A4",
+          "pages": 60,
+          "sha256": "987c5bb094d7957bc452f116e80fd95abf132da5d2a7447b3a978c9102cfcffc",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (vsmti:456, vsmti:651, vsmti:652, vsmti:654) prolaze PDF preflight: valjan nesifriran PDF, viselistni (52-96 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "veleknin-zavrsni",
