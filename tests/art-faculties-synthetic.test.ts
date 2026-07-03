@@ -57,3 +57,16 @@ describe('arh-doktorski: nasljeduje DR.SC.-08 (font/velicina/prored/A4 scored)',
     expect(check(r, 'Format stranice A4').status).toBe('pass');
   });
 });
+
+describe('arh-diplomski: paperSizes A3/A0 (projektni format iz Pravilnika 2013 cl. 16)', () => {
+  it('A3 knjizica prolazi provjeru formata', async () => {
+    const file = buildDocxFile({ paragraphs: doc(), marginsCm: M25, pageCm: { w: 29.7, h: 42 } }, 'arh-a3.docx');
+    const r: any = await analyzeFixture(file, { profileId: 'arh-diplomski' });
+    expect(check(r, 'Format stranice (A3/A0)').status).toBe('pass');
+  });
+  it('A4 dokument daje upozorenje (nije u dopustenom skupu A3/A0)', async () => {
+    const file = buildDocxFile({ paragraphs: doc(), marginsCm: M25, pageCm: { w: 21, h: 29.7 } }, 'arh-a4.docx');
+    const r: any = await analyzeFixture(file, { profileId: 'arh-diplomski' });
+    expect(check(r, 'Format stranice (A3/A0)').status).toBe('warn');
+  });
+});
