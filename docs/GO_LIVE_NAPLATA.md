@@ -45,8 +45,9 @@ Cijene su ISKLJUČIVO u tablici `products` (jedina istina, kriterij 14.2). Nakon
 2. Za svaki naplatni proizvod kreiraj LS **product/variant**; njegov **variant id** upiši u
    `products.mor_product_id` odgovarajućeg retka.
 3. **Webhook**: u LS postavi webhook na `…/functions/v1/webhook-mor`, zabilježi **signing secret**.
-   U `functions/webhook-mor` zamijeni `verifySignature` stvarnom HMAC provjerom LS potpisa prije
-   produkcije (README to izričito traži).
+   HMAC provjera potpisa je već implementirana (`verifyLemonSignature` u `src/report/webhook.ts`,
+   timing-safe, spojena u `functions/webhook-mor`); dovoljno je postaviti env `MOR_WEBHOOK_SECRET`
+   na taj signing secret. Ne treba mijenjati kod.
 
 ## 5. Deploy Edge Functiona
 

@@ -66,8 +66,9 @@ supabase functions deploy webhook-mor
 
 Env varijable: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_ANON_KEY`, `DAILY_CAP`,
 `MOR_WEBHOOK_SECRET`, te za create-checkout `LEMONSQUEEZY_API_KEY`, `LEMONSQUEEZY_STORE_ID`,
-`CHECKOUT_REDIRECT_URL`. Webhook potpis (`verifySignature`) zamijeni stvarnom HMAC provjerom
-providera prije produkcije. Nakon `db push` popuni `products.mor_product_id` stvarnim Lemon
+`CHECKOUT_REDIRECT_URL`. Webhook HMAC provjera potpisa je već implementirana
+(`verifyLemonSignature`, timing-safe); dovoljno je postaviti `MOR_WEBHOOK_SECRET`. Nakon
+`db push` popuni `products.mor_product_id` stvarnim Lemon
 Squeezy variant id-jevima (checkout vraca 409 `product_not_mapped` dok je `null`).
 
 Klijentski paywall cita katalog iz `products` preko PostgREST-a (`src/catalog/products-catalog.ts`,

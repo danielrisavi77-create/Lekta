@@ -18,11 +18,18 @@ const LS_API_KEY = Deno.env.get('LEMONSQUEEZY_API_KEY') ?? '';
 const LS_STORE_ID = Deno.env.get('LEMONSQUEEZY_STORE_ID') ?? '';
 const REDIRECT_URL = Deno.env.get('CHECKOUT_REDIRECT_URL') ?? '';
 
+const CORS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+};
+
 function json(body: unknown, status = 200): Response {
-  return new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } });
+  return new Response(JSON.stringify(body), { status, headers: { ...CORS, 'content-type': 'application/json' } });
 }
 
 Deno.serve(async (req: Request) => {
+  if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS });
   if (req.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
 
   // auth: Supabase JWT obavezan (sekcija 5, korak 1)
