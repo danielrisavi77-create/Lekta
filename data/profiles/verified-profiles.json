@@ -12828,25 +12828,51 @@
     "verifiedAt": "2026-07-02",
     "documentDate": "2016-10-18",
     "fieldValidation": {
-      "status": "synthetic-golden-validated",
-      "validatedAt": "2026-07-02",
-      "scope": "Sinteticki golden (tests/ffzg-pmf-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "Sinteticki golden + 3 stvarna javna diplomska rada Odsjeka za povijest umjetnosti (ffzg) iz ZIR-a, potvrdjena po razini (Diplomski rad sveucilisni) i odsjeku (Department of History of Art) kroz OAI dc:type/dc:publisher.",
       "sample": {
         "syntheticDocxAudits": 1,
         "docxAudits": 0,
-        "publicPdfAudits": 0,
+        "publicPdfAudits": 3,
         "metadataSpotChecks": 0,
-        "years": [
-          2026
-        ]
+        "years": []
       },
+      "publicSources": [
+        {
+          "pid": "ffzg:9393",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 159,
+          "pageFormat": "A4",
+          "sha256": "9792fad6b93379263989140d555575f29344fb700c3a3d58d1df5ebe6538e1d1"
+        },
+        {
+          "pid": "ffzg:7828",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 67,
+          "pageFormat": "A4",
+          "sha256": "d19e4f17be736fc8427aa8c30daa9d09d2114962cacaab6587fdca8e3a8b224f"
+        },
+        {
+          "pid": "ffzg:7821",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 145,
+          "pageFormat": "A4",
+          "sha256": "5ce2d50ef05499c8812870efa5229ced8fd1549a0309a36e77bde937a1a5ce68"
+        }
+      ],
       "confirmed": [
-        "Profil se analizira bez pucanja i scored/informativne provjere ispravno se ponasaju (golden test)."
+        "Profil se analizira bez pucanja; scored/format-provjere ispravno se ponasaju (golden test).",
+        "3 stvarna javna diplomska rada (ffzg:9393, ffzg:7828, ffzg:7821) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno); OAI potvrdjuje Odsjek za povijest umjetnosti i razinu Diplomski rad (sveucilisni)."
       ],
       "observedDeviations": [
-        "Filozofski fakultet je jedan mijesani ZIR namespace preko mnogo odsjeka; per-odsjecko stvarno uzorkovanje nije radjeno (nepraktcno bez rucnog raspoznavanja programa) pa je validacija golden-test. Scalar size:12 ispravljen na [12]."
+        "NADOGRADNJA (2026-07-03): profil je bio synthetic-golden-validated; sada field-sampled sa 3 stvarna javna rada.",
+        "Radovi povijesti umjetnosti nose opsezne slikovne priloge pa su dulji (67-159 str); uzorkovani su primjerci sa 100% A4 stranica (dio primjeraka odsjeka ima neA4 karte/table pa nisu uzeti). sha256 NIJE reproducibilan: nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa ponovni dohvat istog PID-a daje drukciji hash. Zabiljezeni sha256 je otisak konkretne preuzete kopije; stabilni identitet izvora je PID."
       ],
-      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja (to je DOCX audit). Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije."
     },
     "rules": {
       "font": [
@@ -12996,25 +13022,51 @@
     "verifiedAt": "2026-07-02",
     "documentDate": "2014-04-01",
     "fieldValidation": {
-      "status": "synthetic-golden-validated",
-      "validatedAt": "2026-07-02",
-      "scope": "Sinteticki golden (tests/ffzg-pmf-synthetic.test.ts). Bez stvarnih PDF audita.",
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "Sinteticki golden + 3 stvarna javna diplomska rada Odsjeka za arheologiju (ffzg) iz ZIR-a, potvrdjena po razini (Diplomski rad sveucilisni) i odsjeku (Department of Archaeology) kroz OAI dc:type/dc:publisher.",
       "sample": {
         "syntheticDocxAudits": 1,
         "docxAudits": 0,
-        "publicPdfAudits": 0,
+        "publicPdfAudits": 3,
         "metadataSpotChecks": 0,
-        "years": [
-          2026
-        ]
+        "years": []
       },
+      "publicSources": [
+        {
+          "pid": "ffzg:9395",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 165,
+          "pageFormat": "A4",
+          "sha256": "4c5ae2e64d2112905277e0d4ad9f557b3ca820ce62e66d3889706b31cebef3b9"
+        },
+        {
+          "pid": "ffzg:9397",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 194,
+          "pageFormat": "A4",
+          "sha256": "50130e36a80bb0301ad1756ce458109e6992513a717e35acf4866440989d834b"
+        },
+        {
+          "pid": "ffzg:9293",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 107,
+          "pageFormat": "A4",
+          "sha256": "4142934bbe2c04607fe13f806de97646c305a3cf50eb6af9c94e93ef9b913ffc"
+        }
+      ],
       "confirmed": [
-        "Profil se analizira bez pucanja i scored/informativne provjere ispravno se ponasaju (golden test)."
+        "Profil se analizira bez pucanja; scored/format-provjere ispravno se ponasaju (golden test).",
+        "3 stvarna javna diplomska rada (ffzg:9395, ffzg:9397, ffzg:9293) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno); OAI potvrdjuje Odsjek za arheologiju i razinu Diplomski rad (sveucilisni)."
       ],
       "observedDeviations": [
-        "Filozofski fakultet je jedan mijesani ZIR namespace preko mnogo odsjeka; per-odsjecko stvarno uzorkovanje nije radjeno (nepraktcno bez rucnog raspoznavanja programa) pa je validacija golden-test. Scalar size:12 ispravljen na [12]."
+        "NADOGRADNJA (2026-07-03): profil je bio synthetic-golden-validated; sada field-sampled sa 3 stvarna javna rada.",
+        "Magistarski radovi arheologije nose opsezne kataloge/table pa su dulji (107-194 str); uzorkovani su primjerci sa 100% A4 stranica. sha256 NIJE reproducibilan: nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa ponovni dohvat istog PID-a daje drukciji hash. Zabiljezeni sha256 je otisak konkretne preuzete kopije; stabilni identitet izvora je PID."
       ],
-      "productDecision": "Ne izmisljam PDF-audit brojace bez stvarnog uzorka (CLAUDE.md)."
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja (to je DOCX audit). Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije."
     },
     "rules": {
       "font": [
@@ -17383,6 +17435,7 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "rules": {
+      "recommendedCitation": "harvard",
       "font": [
         "Times New Roman"
       ],
@@ -17418,7 +17471,56 @@
       "Margine",
       "Opseg (20-40 str.)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation":     {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna zavrsna rada (Prirodoslovno-matematicki fakultet u Splitu) iz sluzbenog repozitorija (repozitorij.pmfst.unist.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "pmfst:6",
+          "repository": "repozitorij.pmfst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 43,
+          "sha256": "b1c61b168d8f440ea92c36600aa95bc8fe46aec7b49dbae48eeabb1da50c1933",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "pmfst:23",
+          "repository": "repozitorij.pmfst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 34,
+          "sha256": "c443eac29f5bd850a524553404743c23af35645cb75e12c76cc58aae7e185aac",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "pmfst:27",
+          "repository": "repozitorij.pmfst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 35,
+          "sha256": "8694f9b7b20469ccc092ce5a8ccc69bf9d2260068fda8411921a6cae74ba9e64",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "pmfst:32",
+          "repository": "repozitorij.pmfst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 34,
+          "sha256": "2f5013349131d98cbe270bd1bf218113cd0875e772920a703125635d535cbab3",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (pmfst:6, pmfst:23, pmfst:27, pmfst:32) prolaze PDF preflight: valjan nesifriran PDF, viselistni (34-43 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "pmfst-diplomski",
@@ -17434,6 +17536,7 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "rules": {
+      "recommendedCitation": "harvard",
       "font": [
         "Times New Roman"
       ],
@@ -17468,7 +17571,56 @@
       "Vrsta slova",
       "Margine"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation":     {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna diplomska rada (Prirodoslovno-matematicki fakultet u Splitu) iz sluzbenog repozitorija (repozitorij.pmfst.unist.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "pmfst:9",
+          "repository": "repozitorij.pmfst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 56,
+          "sha256": "549988a4626e547589c52c699b67b643183e6eb7d10621d248dbe0f997b3779a",
+          "level": "diplomski"
+        },
+        {
+          "pid": "pmfst:12",
+          "repository": "repozitorij.pmfst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 57,
+          "sha256": "15c65b0bb23815b5f68d6cc5405c7a1972b30184ea6bde82ca43a7aa8972fe05",
+          "level": "diplomski"
+        },
+        {
+          "pid": "pmfst:14",
+          "repository": "repozitorij.pmfst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 63,
+          "sha256": "f6eedab38330385033445f871680be95fc60094e46841bbbdecbe1296adb041d",
+          "level": "diplomski"
+        },
+        {
+          "pid": "pmfst:53",
+          "repository": "repozitorij.pmfst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 41,
+          "sha256": "67b0036be256c20f51655a03f4ee6cdb017ffe156a5e9c892e9da933f7a5fa93",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (pmfst:9, pmfst:12, pmfst:14, pmfst:53) prolaze PDF preflight: valjan nesifriran PDF, viselistni (41-63 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "fgag-zavrsni",
@@ -17513,7 +17665,56 @@
     ],
     "advisoryScope": [
       "Format papira / margine (predlozak)"
-    ]
+    ],
+    "fieldValidation":     {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna zavrsna rada (Fakultet gradevinarstva, arhitekture i geodezije u Splitu) iz sluzbenog repozitorija (repozitorij.gradst.unist.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "gradst:54",
+          "repository": "repozitorij.gradst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 103,
+          "sha256": "c12874ce787c4f309366fd491e613eb4411f44e083e4eef85693e526d9f4b048",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "gradst:57",
+          "repository": "repozitorij.gradst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 28,
+          "sha256": "66cea012f36de666986d52630f4dad9ae4e5a69ca4c0a29bafc5049f5640952b",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "gradst:77",
+          "repository": "repozitorij.gradst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 51,
+          "sha256": "5b36d43879151af5a689a7fd1c2e3b4d61bf760e905dcddec11728e496065ac6",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "gradst:79",
+          "repository": "repozitorij.gradst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 73,
+          "sha256": "274cc95c534109c28f4cbefb1ceeaf2982442d545cac481ea509fed4cdbfa436",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (gradst:54, gradst:57, gradst:77, gradst:79) prolaze PDF preflight: valjan nesifriran PDF, viselistni (28-103 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "fgag-diplomski",
@@ -17558,7 +17759,56 @@
     ],
     "advisoryScope": [
       "Format papira / margine (predlozak)"
-    ]
+    ],
+    "fieldValidation":     {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna diplomska rada (Fakultet gradevinarstva, arhitekture i geodezije u Splitu) iz sluzbenog repozitorija (repozitorij.gradst.unist.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "gradst:1",
+          "repository": "repozitorij.gradst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 46,
+          "sha256": "6cf92b22a881eef256c77a2fed0d14c796d6293f8b706252a8b5e1648f017d7d",
+          "level": "diplomski"
+        },
+        {
+          "pid": "gradst:2",
+          "repository": "repozitorij.gradst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 64,
+          "sha256": "56cd5c3f925fbb228a3346a4e9c36195097d1406e62feca66d9e9d45f22a0bac",
+          "level": "diplomski"
+        },
+        {
+          "pid": "gradst:3",
+          "repository": "repozitorij.gradst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 64,
+          "sha256": "07f235f5b0e3e906c023d273db9e4a92efb538c2d29ce774a51676752ea320e0",
+          "level": "diplomski"
+        },
+        {
+          "pid": "gradst:8",
+          "repository": "repozitorij.gradst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 71,
+          "sha256": "99d5ea0a0373b12d71b4b476e6c0d2e1487e162a8d250cf375beac224bdab337",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (gradst:1, gradst:2, gradst:3, gradst:8) prolaze PDF preflight: valjan nesifriran PDF, viselistni (46-71 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "efst-zavrsni",
@@ -17609,7 +17859,56 @@
       "Margine",
       "Opseg (30-40 str.)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation":     {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna zavrsna rada (Ekonomski fakultet u Splitu) iz sluzbenog repozitorija (repozitorij.efst.unist.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "efst:95",
+          "repository": "repozitorij.efst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 56,
+          "sha256": "93fd7f48a3691017dc843fda16d26e33930cf9cc83135473255882ac0061444d",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "efst:111",
+          "repository": "repozitorij.efst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 48,
+          "sha256": "ca046326a96623f5ad2f16e154e67c1bc374f2fb75723397ebe0ef88d9ccce0e",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "efst:119",
+          "repository": "repozitorij.efst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 45,
+          "sha256": "bae65fd56b2b56b7afd6b8be5fa15c5ce843a6471f3abc262ffbc977288e0d38",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "efst:137",
+          "repository": "repozitorij.efst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 47,
+          "sha256": "3963b873acf4448b6cc09968a7bcaebbde8c1d84c3653bfdb50d117cd3a15130",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (efst:95, efst:111, efst:119, efst:137) prolaze PDF preflight: valjan nesifriran PDF, viselistni (45-56 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "efst-diplomski",
@@ -17660,7 +17959,56 @@
       "Margine",
       "Opseg (50-80 str.)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation":     {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna diplomska rada (Ekonomski fakultet u Splitu) iz sluzbenog repozitorija (repozitorij.efst.unist.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "efst:2",
+          "repository": "repozitorij.efst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 90,
+          "sha256": "1d333c20289124c3913013d4a2a48eae8617804e47ab6a2d29e20b069ddab947",
+          "level": "diplomski"
+        },
+        {
+          "pid": "efst:3",
+          "repository": "repozitorij.efst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 87,
+          "sha256": "aa78e8a08b5694b3c8d216d6874c209c6ab9d7384047fddc4be1d3afb9db1d3f",
+          "level": "diplomski"
+        },
+        {
+          "pid": "efst:8",
+          "repository": "repozitorij.efst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 89,
+          "sha256": "987ce8744b0ebd4742f13be8aa9c0ef5dff004d08b8a6f276f990c6560894105",
+          "level": "diplomski"
+        },
+        {
+          "pid": "efst:10",
+          "repository": "repozitorij.efst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 64,
+          "sha256": "e46e2fd1e73b7c2ea83c6a632b690e20ac1f64cd7eff835bace9005caafd8f43",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (efst:2, efst:3, efst:8, efst:10) prolaze PDF preflight: valjan nesifriran PDF, viselistni (64-90 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "ktfst-zavrsni",
@@ -17713,7 +18061,56 @@
       "Prored",
       "Obostrano poravnanje"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation":     {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna zavrsna rada (Kemijsko-tehnoloski fakultet u Splitu) iz sluzbenog repozitorija (repozitorij.ktf-split.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "ktfst:51",
+          "repository": "repozitorij.ktf-split.hr",
+          "pageFormat": "A4",
+          "pages": 99,
+          "sha256": "c361e249765e55ed057e290e16b55a73495e5954d1d96ed3218960a384cdd4dd",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "ktfst:94",
+          "repository": "repozitorij.ktf-split.hr",
+          "pageFormat": "A4",
+          "pages": 51,
+          "sha256": "96e45e14453ae2f113703297e5fd35bc6809d9c2e810e9b004e83e6d2ebee086",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "ktfst:95",
+          "repository": "repozitorij.ktf-split.hr",
+          "pageFormat": "A4",
+          "pages": 48,
+          "sha256": "6533685e0f0e181421397c3a5eedc107efcd8327fe2d4fecf825d87c2e01b191",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "ktfst:96",
+          "repository": "repozitorij.ktf-split.hr",
+          "pageFormat": "A4",
+          "pages": 36,
+          "sha256": "a429acf23ba11e2bcfb572e7712426c088bb591d86e52f9f76d34d828a72e207",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (ktfst:51, ktfst:94, ktfst:95, ktfst:96) prolaze PDF preflight: valjan nesifriran PDF, viselistni (36-99 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "ktfst-diplomski",
@@ -17766,7 +18163,56 @@
       "Prored",
       "Obostrano poravnanje"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation":     {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna diplomska rada (Kemijsko-tehnoloski fakultet u Splitu) iz sluzbenog repozitorija (repozitorij.ktf-split.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "ktfst:5",
+          "repository": "repozitorij.ktf-split.hr",
+          "pageFormat": "A4",
+          "pages": 101,
+          "sha256": "4b92e07c4736e5d715e26315842f9a46ae437f0b37dc178da094971d042ea0a9",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ktfst:9",
+          "repository": "repozitorij.ktf-split.hr",
+          "pageFormat": "A4",
+          "pages": 83,
+          "sha256": "33e8888bf8e54a04d467c95d64a0087bd286996483f95ad874a30b1d33fe8c8f",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ktfst:10",
+          "repository": "repozitorij.ktf-split.hr",
+          "pageFormat": "A4",
+          "pages": 61,
+          "sha256": "fe69b67cf723a10198522a4e735a66af3133d850f5d67f55d32469819c4ba23a",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ktfst:11",
+          "repository": "repozitorij.ktf-split.hr",
+          "pageFormat": "A4",
+          "pages": 98,
+          "sha256": "92388f2fe6b2127f2eb96346dffcfa404711aee425bca92aa8e6857c2ed50414",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (ktfst:5, ktfst:9, ktfst:10, ktfst:11) prolaze PDF preflight: valjan nesifriran PDF, viselistni (61-101 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "pfst-zavrsni",
@@ -17782,6 +18228,7 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "rules": {
+      "recommendedCitation": "ieee",
       "font": [
         "Times New Roman",
         "Arial"
@@ -17810,7 +18257,56 @@
       "Prored",
       "Obostrano poravnanje"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation":     {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna zavrsna rada (Pomorski fakultet u Splitu) iz sluzbenog repozitorija (repozitorij.pfst.unist.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "pfst:10",
+          "repository": "repozitorij.pfst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 56,
+          "sha256": "f9f1051809c3c825ab897082249e28351f3edbd4746de9fd4f34d516fac4b8ac",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "pfst:35",
+          "repository": "repozitorij.pfst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 42,
+          "sha256": "3e7f4b5f669676ac4da4ba540135d7a265ead59c1cd4fd20c026ab7c030d469c",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "pfst:40",
+          "repository": "repozitorij.pfst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 45,
+          "sha256": "9c9e54c697ef695063a8c642c78c0c29391c77650e935d71035cd5d8a2598441",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "pfst:42",
+          "repository": "repozitorij.pfst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 38,
+          "sha256": "98764604f92dd2e5d2162bab82ea5045c5e094ea68e2a7ee92f0cb047bf17570",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (pfst:10, pfst:35, pfst:40, pfst:42) prolaze PDF preflight: valjan nesifriran PDF, viselistni (38-56 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "pfst-diplomski",
@@ -17826,6 +18322,7 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "rules": {
+      "recommendedCitation": "ieee",
       "font": [
         "Times New Roman",
         "Arial"
@@ -17854,7 +18351,56 @@
       "Prored",
       "Obostrano poravnanje"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation":     {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna diplomska rada (Pomorski fakultet u Splitu) iz sluzbenog repozitorija (repozitorij.pfst.unist.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "pfst:5",
+          "repository": "repozitorij.pfst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 92,
+          "sha256": "52d7af0ccedd868ae8b7207a22f5e71cca0fce125dc67c0421f81381193ce078",
+          "level": "diplomski"
+        },
+        {
+          "pid": "pfst:8",
+          "repository": "repozitorij.pfst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 51,
+          "sha256": "74df6d484bf7363baadc05365009a45141ea218a816e1b06e1fc6c587dbd5d95",
+          "level": "diplomski"
+        },
+        {
+          "pid": "pfst:11",
+          "repository": "repozitorij.pfst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 79,
+          "sha256": "884752977cf027cc9145128fbfd439e1116086d29dfd8aa315354b787557f467",
+          "level": "diplomski"
+        },
+        {
+          "pid": "pfst:16",
+          "repository": "repozitorij.pfst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 49,
+          "sha256": "dae1c549ce9264dc72096ec92eeb04fbce4034bac29d51a84f6e023483372fb2",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (pfst:5, pfst:8, pfst:11, pfst:16) prolaze PDF preflight: valjan nesifriran PDF, viselistni (49-92 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "mefst-diplomski",
@@ -20513,7 +21059,7 @@
     "fieldValidation":     {
       "status": "field-sampled",
       "validatedAt": "2026-07-03",
-      "scope": "4 stvarna javna diplomska rada (Kemijsko-tehnoloski fakultet u Splitu) iz sluzbenog repozitorija (repozitorij.ktf-split.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "scope": "4 stvarna javna diplomska rada (Kinezioloski fakultet u Splitu) iz sluzbenog repozitorija (repozitorij.kifst.unist.hr, Dabar, open access) kroz PDF preflight (A4).",
       "sample": {
         "syntheticDocxAudits": 0,
         "docxAudits": 0,
@@ -20523,40 +21069,40 @@
       },
       "publicSources": [
         {
-          "pid": "ktfst:5",
-          "repository": "repozitorij.ktf-split.hr",
+          "pid": "kifst:120",
+          "repository": "repozitorij.kifst.unist.hr",
           "pageFormat": "A4",
-          "pages": 101,
-          "sha256": "6a0a7866573b7234f70bd08b5fbaf02289831f6be2624abd0553b82ae328b10d",
+          "pages": 34,
+          "sha256": "f328d76846cba4fcceb7ec9087470e93211cf20ae147154a68966ec1ecbdde68",
           "level": "diplomski"
         },
         {
-          "pid": "ktfst:9",
-          "repository": "repozitorij.ktf-split.hr",
+          "pid": "kifst:121",
+          "repository": "repozitorij.kifst.unist.hr",
           "pageFormat": "A4",
-          "pages": 83,
-          "sha256": "f94f6de728bd63a111192596cee5f2624cf8d2cb238a6a7ddb7712c26c23d373",
+          "pages": 32,
+          "sha256": "5353ba94614ea495bfd58a573e0eae323672282ed15481d9ae9335de9af97514",
           "level": "diplomski"
         },
         {
-          "pid": "ktfst:10",
-          "repository": "repozitorij.ktf-split.hr",
+          "pid": "kifst:125",
+          "repository": "repozitorij.kifst.unist.hr",
           "pageFormat": "A4",
-          "pages": 61,
-          "sha256": "b43b34dbab664f141faf854159dcf875bb5c3dbad28ca2121c4f48d9b28859df",
+          "pages": 27,
+          "sha256": "6c33c18c1ab4450c7866838ed7be1472061e451951ae9350216786af3ab425d1",
           "level": "diplomski"
         },
         {
-          "pid": "ktfst:11",
-          "repository": "repozitorij.ktf-split.hr",
+          "pid": "kifst:129",
+          "repository": "repozitorij.kifst.unist.hr",
           "pageFormat": "A4",
-          "pages": 98,
-          "sha256": "e38f97ea6aa17713be6fd8bd300c71b80004b7d532eb898db28783d06a6281f2",
+          "pages": 33,
+          "sha256": "5f5f2151276aae01ca7daef73c9e4a574ed896448e2e7aeffab1dbd74f3f189a",
           "level": "diplomski"
         }
       ],
       "confirmed": [
-        "4 stvarna javna diplomska rada (ktfst:5, ktfst:9, ktfst:10, ktfst:11) prolaze PDF preflight: valjan nesifriran PDF, viselistni (61-101 str.), A4 (595x842 pt)."
+        "4 stvarna javna diplomska rada (kifst:120, kifst:121, kifst:125, kifst:129) prolaze PDF preflight: valjan nesifriran PDF, viselistni (27-34 str.), A4 (595x842 pt)."
       ]
     }
   },
