@@ -85,7 +85,12 @@ function applyEntry(eff: EffectiveRules, entry: RuleEntry): boolean {
       return true;
     case 'toc': eff.requireToc = boolOf(value); return true;
     case 'page-numbers': eff.requirePageNumbers = boolOf(value); return true;
-    case 'paper-size': eff.requireA4 = boolOf(value); return true;
+    case 'paper-size':
+      // Naziv formata ('A3') ili lista naziva (['A3','A0']) -> eff.paperSizes (projektni radovi).
+      // Boolean zadrzava naslijedeno ponasanje: true -> eff.requireA4 (standardni A4 tekst).
+      if (typeof value === 'string') { eff.paperSizes = [value]; return true; }
+      if (Array.isArray(value)) { eff.paperSizes = value; return true; }
+      eff.requireA4 = boolOf(value); return true;
     case 'justify': eff.justify = boolOf(value); return true;
     case 'footnote-font': eff.footnoteFont = value; return true;
     case 'footnote-size': eff.footnoteSize = value; return true;

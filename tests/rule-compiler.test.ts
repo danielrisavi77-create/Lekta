@@ -67,6 +67,30 @@ describe('rule-compiler faithfulness', () => {
     expect(collectCompileDiagnostics([profile])).toHaveLength(0);
   });
 
+  it('mapira paper-size: lista/naziv formata -> paperSizes, boolean -> requireA4', () => {
+    const projektni: ThesisProfile = {
+      id: 'arh-projekt',
+      rules: {},
+      ruleEntries: [{ ruleId: 'r-ps', checkId: 'paper-size', value: ['A3', 'A0'] }],
+    };
+    expect(compileEffectiveRules(projektni)).toEqual({ paperSizes: ['A3', 'A0'] });
+
+    const jedan: ThesisProfile = {
+      id: 'arh-a3',
+      rules: {},
+      ruleEntries: [{ ruleId: 'r-ps1', checkId: 'paper-size', value: 'A3' }],
+    };
+    expect(compileEffectiveRules(jedan)).toEqual({ paperSizes: ['A3'] });
+
+    const standard: ThesisProfile = {
+      id: 'tekst-a4',
+      rules: {},
+      ruleEntries: [{ ruleId: 'r-ps2', checkId: 'paper-size', value: true }],
+    };
+    expect(compileEffectiveRules(standard)).toEqual({ requireA4: true });
+    expect(collectCompileDiagnostics([projektni, jedan, standard])).toHaveLength(0);
+  });
+
   it('prijavljuje diagnostic za nepoznat checkId i ne mijenja rules', () => {
     const profile: ThesisProfile = {
       id: 'demo',
