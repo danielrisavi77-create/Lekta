@@ -23,8 +23,37 @@ function renderIcons() {
 // nakon prvog prolaza, pa app.ts poziva ovaj refresh da ih pretvori u SVG.
 (window as any).__lektaIcons = renderIcons;
 
+// Reveal-on-scroll uz progresivno pobojlsanje: klasu `reveal-ready` postavljamo cim se
+// modul izvrsi, pa je bez JS-a sadrzaj odmah vidljiv (nema skrivenih [data-reveal] elemenata).
+// S JS-om se kartice pojavljuju kad udu u vidokrug; stagger je po stupcu (setTimeout, ne CSS
+// delay, da hover kasnije nema zaostatak). Postuje prefers-reduced-motion.
+document.documentElement.classList.add('reveal-ready');
+function setupReveal() {
+  const els = document.querySelectorAll<HTMLElement>('[data-reveal]:not(.reveal-in)');
+  const reduce = typeof window.matchMedia === 'function'
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce || typeof IntersectionObserver === 'undefined') {
+    els.forEach((el) => el.classList.add('reveal-in'));
+    return;
+  }
+  const io = new IntersectionObserver((entries, obs) => {
+    for (const e of entries) {
+      if (!e.isIntersecting) continue;
+      const el = e.target as HTMLElement;
+      const delay = Number(el.dataset.revealDelay || 0);
+      if (delay) window.setTimeout(() => el.classList.add('reveal-in'), delay);
+      else el.classList.add('reveal-in');
+      obs.unobserve(el);
+    }
+  }, { threshold: 0.14, rootMargin: '0px 0px -6% 0px' });
+  els.forEach((el, i) => { el.dataset.revealDelay = String((i % 4) * 70); io.observe(el); });
+}
+// app.ts injektira check-kartice nakon boota pa ponovno skenira nove [data-reveal] elemente.
+(window as any).__lektaReveal = setupReveal;
+
+function boot() { renderIcons(); setupReveal(); }
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', renderIcons);
+  document.addEventListener('DOMContentLoaded', boot);
 } else {
-  renderIcons();
+  boot();
 }

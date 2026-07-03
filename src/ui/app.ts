@@ -97,7 +97,7 @@ function coverageSnapshot(){const rows=INSTITUTIONAL_COVERAGE_MATRIX.programs.ma
 
 function toast(msg){const n=document.createElement('div');n.className='toast';n.textContent=msg;$('#toastWrap').append(n);setTimeout(()=>n.remove(),3500)}
 function init(){
- $('#checkGrid').innerHTML=CHECK_ITEMS.map(([i,t,d])=>`<article class="check-card"><div style="font-size:23px;color:var(--brand);font-weight:950">${i}</div><h3>${t}</h3><p>${d}</p></article>`).join('');
+ $('#checkGrid').innerHTML=CHECK_ITEMS.map(([i,t,d])=>`<article class="check-card" data-reveal><span class="check-icon">${i}</span><h3>${t}</h3><p>${d}</p></article>`).join('');window.__lektaReveal?.();
  productionConfig=loadProductionConfig();initCatalog();restorePreferences();syncProfileContext();
  $('#pricingGrid').innerHTML=PRICING_TIERS.map(p=>`<article class="price-card ${p.featured?'featured':''}">${p.featured?'<span class="popular">PREPORUČENO</span>':''}<h3>${p.name}</h3><div class="price">${p.price}</div><p>${p.desc}</p><ul class="features">${p.features.map(x=>`<li>${x}</li>`).join('')}</ul>${p.cta.order?`<button class="btn btn-secondary order-btn" data-package="${p.cta.order}">${p.cta.label}</button>`:`<a class="btn ${p.featured?'btn-primary':'btn-secondary'}" href="${p.cta.href}">${p.cta.label}</a>`}</article>`).join('');
  $('#packagePicks').innerHTML=PACKAGES.map(p=>`<label class="package-pick"><span><input type="radio" name="package" value="${p.id}" ${p.id==='format'?'checked':''}><strong>${p.name} · ${p.price} €</strong><small>${p.desc}</small></span></label>`).join('');
