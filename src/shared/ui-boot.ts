@@ -5,6 +5,7 @@
 // Bez mreze prema trecim stranama; font se bundla lokalno (unicode-range skida
 // samo latin i latin-ext za hrvatski sadrzaj).
 import '@fontsource-variable/source-serif-4';
+import '@fontsource-variable/inter'; // self-hostan body sans (latin + latin-ext za hrvatski)
 import 'open-props/easings'; // samo easing krivulje (bez boja/sjena, da topla paleta ostane netaknuta)
 import './motion.css'; // dijeljeni sloj gibanja: tokeni, tekstura papira, View Transitions, tipografija
 import { createIcons, SunMoon, Menu, Lock, Upload, CheckCircle, AlertTriangle, AlertCircle, Info, SlidersHorizontal, ClipboardCheck } from 'lucide';
