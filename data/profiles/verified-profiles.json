@@ -6569,6 +6569,114 @@
       "stil citiranja (autor-godina APA/Harvard)"
     ]
   },
+{
+    "id": "efzg-strucni-racunovodstvo",
+    "unitId": "efzg",
+    "programs": [
+      "Stručni diplomski studij Računovodstvo, financijsko izvještavanje i revizija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Ekonomski fakultet, strucni diplomski rad (Racunovodstvo)",
+    "verifiedAt": "2026-07-03",
+    "documentDate": null,
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "3 stvarna javna strucna diplomska rada iz EFZG repozitorija (dc:type Diplomski rad (strucni), openAccess) kroz byte-level PDF preflight; parser-regresija (nisu nuzno smjer Racunovodstvo).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "efzg:2853",
+          "repository": "repozitorij.efzg.unizg.hr",
+          "level": "strucni-diplomski",
+          "pages": 69,
+          "pageFormat": "A4",
+          "sha256": "aa8af4e8380bd7317d0cf5ccc75e82df8d6509186d4b44eb4f35f07f28cc1223"
+        },
+        {
+          "pid": "efzg:2907",
+          "repository": "repozitorij.efzg.unizg.hr",
+          "level": "strucni-diplomski",
+          "pages": 41,
+          "pageFormat": "A4",
+          "sha256": "62d174c4b42d4faa33cd6b554b61aeb1e652cfdc5ab72377ecae254f82be903f"
+        },
+        {
+          "pid": "efzg:2952",
+          "repository": "repozitorij.efzg.unizg.hr",
+          "level": "strucni-diplomski",
+          "pages": 36,
+          "pageFormat": "A4",
+          "sha256": "9ec8cc272be51ac719c2f34bedd4999a219585a34fb7c16b42a88ff517f49c5a"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna strucna diplomska rada (efzg:2853, efzg:2907, efzg:2952) prolaze byte-level PDF preflight: valjan nesifriran PDF, >=99% stranica A4, viselistni."
+      ],
+      "observedDeviations": [
+        "Uzorci su strucni diplomski radovi EFZG-a opcenito (parser-regresija), ne nuzno smjer Racunovodstvo; oblikovna pravila su iz Racunovodstvo naputka."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet). Stvarni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID; sha256 nije reproducibilan (DABAR watermark)."
+    },
+    "rules": {
+      "font": [
+        "Calibri"
+      ],
+      "size": [
+        11
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireA4": true,
+      "justify": true,
+      "checkJustify": true,
+      "checkMargins": true,
+      "pageMin": 40,
+      "pageMax": 60,
+      "recommendedCitation": "harvard"
+    },
+    "facts": [
+      "Opseg 40 do 60 stranica A4, font Calibri velicine 11, margine 2,5 cm, obostrano poravnanje, prored 1,5 (imperativ naputka strucnog diplomskog studija Racunovodstvo).",
+      "Izvori se navode abecedno prema prezimenu prvog autora, APA ili harvardskim stilom (autor-godina)."
+    ],
+    "note": "Novi profil (2026-07-03) iz 'Upute za izradu diplomskog rada na strucnom diplomskom studiju Racunovodstvo, financijsko izvjestavanje i revizija' (EFZG). Strucni diplomski koristi Calibri 11 (razlicito od sveucilisnog TNR/Arial 12) pa je zaseban profil. Oblikovanje scored; opseg 40-60, A4 i citatni stil (autor-godina APA/Harvard) advisory; efektivni stil autor-godina (harvard) -> citation 100. Vrijedi za smjer Racunovodstvo; ostali strucni diplomski smjerovi (Digitalni marketing, Menadzment i marketing maloprodaje) imaju projektni zavrsetak i nisu pokriveni ovim profilom.",
+    "sources": [
+      {
+        "title": "Upute za izradu diplomskog rada na strucnom diplomskom studiju Racunovodstvo, financijsko izvjestavanje i revizija (Ekonomski fakultet u Zagrebu)",
+        "url": "https://www.efzg.unizg.hr/userdocsimages/RAC/Stru%C4%8Dni%20diplomski%20studij/Upute%20za%20izradu%20diplomskog%20rada%20na%20stru%C4%8Dnom%20diplomskom%20studiju%20Ra%C4%8Dunovodstvo,%20financijsko%20izvje%C5%A1tavanje%20i%20revizija.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu diplomskog rada na strucnom diplomskom studiju Racunovodstvo (Ekonomski fakultet u Zagrebu)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "margine",
+      "font",
+      "velicina slova",
+      "prored",
+      "obostrano poravnanje"
+    ],
+    "advisoryScope": [
+      "opseg u stranicama",
+      "format papira",
+      "stil citiranja (autor-godina APA/Harvard)"
+    ]
+  },
   {
     "id": "efzg-diplomski",
     "unitId": "efzg",

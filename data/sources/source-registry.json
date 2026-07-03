@@ -283,6 +283,19 @@
     "note": "Sluzbene Upute (Zagreb, 30. ozujak 2021) za sveucilisni specijalisticki rad. Imperativno oblikovanje: 'opsega od 70 do 90 stranica teksta formata A4, velicine fonta 12, vrste fonta Calibri ili Times New Roman, margina 2,5 cm sa svih strana, poravnanje s obje strane te proreda 1,5.' Citiranje: 'Izvori se navode abecednim redom prema prezimenu prvog autora rada koristeci APA ili Harvardski stil' (autor-godina). Tekstualni PDF; citati potvrdjeni grepom nad tekstom."
   },
   {
+    "id": "efzg-upute-strucni-diplomski-racunovodstvo",
+    "kind": "guidelines",
+    "title": "Upute za izradu diplomskog rada na strucnom diplomskom studiju Racunovodstvo, financijsko izvjestavanje i revizija (Ekonomski fakultet u Zagrebu)",
+    "url": "https://www.efzg.unizg.hr/userdocsimages/RAC/Stru%C4%8Dni%20diplomski%20studij/Upute%20za%20izradu%20diplomskog%20rada%20na%20stru%C4%8Dnom%20diplomskom%20studiju%20Ra%C4%8Dunovodstvo,%20financijsko%20izvje%C5%A1tavanje%20i%20revizija.pdf",
+    "publisher": "Ekonomski fakultet Sveucilista u Zagrebu",
+    "fetchedAt": "2026-07-03",
+    "snapshotPath": "data/sources/efzg/efzg-upute-strucni-diplomski-racunovodstvo.pdf",
+    "snapshotHash": "14954929343ea328c5960f658f788148f10de65783dadc8cbbc25408984913ff",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-03",
+    "note": "Sluzbene Upute za strucni diplomski studij Racunovodstvo. Imperativno oblikovanje: 'velicine fonta 11, vrste fonta Calibri, margina 2,5 cm sa svih strana, poravnanje na obje strane te proreda 1,5', opseg 40-60 str A4. Citiranje autor-godina (APA/Harvard). Tekstualni PDF; citati grepom potvrdjeni. Strucni diplomski koristi Calibri 11 (razlicito od sveucilisnog 12)."
+  },
+  {
     "id": "fsb-upute-radovi-2020",
     "kind": "guidelines",
     "title": "Upute za pisanje seminarskog, zavrsnog i diplomskog rada (FSB, Katedra za preradu polimera, 2020)",
