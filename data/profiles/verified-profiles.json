@@ -21103,6 +21103,44 @@
         "sha256 NIJE reproducibilan: nsk.hr/Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
       ],
       "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    },
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "2 stvarna javna rada Odjela za komunikologiju / medije (Sveuciliste u Dubrovniku) iz sluzbenog repozitorija (repozitorij.unidu.hr, Dabar, open access), potvrdjena po razini i odsjeku (OAI dc:type/dc:publisher Faculty of Media and Public Relations) kroz byte-level PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 2,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unidu:241",
+          "repository": "repozitorij.unidu.hr",
+          "pageFormat": "A4",
+          "pages": 126,
+          "sha256": "61c2eceb084af0d81997d1a951c656220d39282395157d13448a50a9ee4ca697",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unidu:519",
+          "repository": "repozitorij.unidu.hr",
+          "pageFormat": "A4",
+          "pages": 74,
+          "sha256": "b4c741d0d9d98ae8f07b2cfde73ee8d8e0d5a53bdc3187b72e913751a3a806b1",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "2 stvarna javna rada (unidu:241, unidu:519) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno); OAI potvrdjuje Faculty of Media and Public Relations i razinu."
+      ],
+      "observedDeviations": [
+        "Odjel za komunikologiju/medije (Dubrovnik) ima samo 2 otvorena diplomska rada u repozitoriju (Faculty of Media and Public Relations); uzorkovana su oba pa je validation=75 (data-thin, ne data-block).",
+        "sha256 NIJE reproducibilan: nsk.hr/Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
     }
   },
   {
@@ -21199,6 +21237,51 @@
         "sha256 NIJE reproducibilan: nsk.hr/Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
       ],
       "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    },
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "3 stvarna javna rada Odjela za ekonomiju i poslovnu ekonomiju (Sveuciliste u Dubrovniku) iz sluzbenog repozitorija (repozitorij.unidu.hr, Dabar, open access), potvrdjena po razini i odsjeku (OAI dc:type/dc:publisher Faculty of Economics and Business) kroz byte-level PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unidu:413",
+          "repository": "repozitorij.unidu.hr",
+          "pageFormat": "A4",
+          "pages": 39,
+          "sha256": "e3b4f92b17096053f4c21469abb4a53325c7e6034d0ede75c5ccaa6633014226",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unidu:421",
+          "repository": "repozitorij.unidu.hr",
+          "pageFormat": "A4",
+          "pages": 47,
+          "sha256": "f10ff067c711fc13a6b8719071b76fa7be38c7e617286b371c7d8964f96c4220",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unidu:423",
+          "repository": "repozitorij.unidu.hr",
+          "pageFormat": "A4",
+          "pages": 36,
+          "sha256": "c71f4820e15c7b79f0510a4ee17e43a49dd55304f9f333571724c3154e32915e",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unidu:413, unidu:421, unidu:423) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno); OAI potvrdjuje Faculty of Economics and Business i razinu."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: nsk.hr/Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
     }
   },
   {
@@ -21251,6 +21334,51 @@
       "Obostrano poravnanje"
     ],
     "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "3 stvarna javna rada Odjela za ekonomiju i poslovnu ekonomiju (Sveuciliste u Dubrovniku) iz sluzbenog repozitorija (repozitorij.unidu.hr, Dabar, open access), potvrdjena po razini i odsjeku (OAI dc:type/dc:publisher Faculty of Economics and Business) kroz byte-level PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unidu:426",
+          "repository": "repozitorij.unidu.hr",
+          "pageFormat": "A4",
+          "pages": 81,
+          "sha256": "ead4c30479317bd7c09c6ce2d499e297a4e72cb5260e6f81ae3ec3b7ac7f2264",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unidu:444",
+          "repository": "repozitorij.unidu.hr",
+          "pageFormat": "A4",
+          "pages": 75,
+          "sha256": "1d9ec172d1441bd2268c070a92b595fd4ddd683dbd3590bdf8c10e7031478141",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unidu:454",
+          "repository": "repozitorij.unidu.hr",
+          "pageFormat": "A4",
+          "pages": 68,
+          "sha256": "c4964b12945f218dee122da758bdf25134b7e50ef58e18409f025eaa39a1bab0",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unidu:426, unidu:444, unidu:454) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno); OAI potvrdjuje Faculty of Economics and Business i razinu."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: nsk.hr/Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    },
     "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-03",
