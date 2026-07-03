@@ -2,8 +2,13 @@
   "faculty": "effectus",
   "institution": "effectus",
   "catalogPrograms": [
-    "Prijediplomski strucni studiji Effectus (zavrsni rad)",
-    "Diplomski strucni studiji Effectus"
+    "Financije i poslovno pravo",
+    "Poslovno upravljanje",
+    "Poslovno upravljanje - Financijski menadžment",
+    "Poslovno upravljanje - Menadžment ljudskih potencijala i znanja",
+    "Poslovno upravljanje - Porezi i poslovno pravo",
+    "Poslovno upravljanje - Analitički menadžment",
+    "Poslovno upravljanje - Bihevioralna ekonomija"
   ],
   "sources": [
     {
@@ -25,16 +30,17 @@
       "id": "effectus-zavrsni",
       "unitId": "effectus",
       "programs": [
-        "Prijediplomski strucni studiji Effectus (zavrsni rad)"
+        "Financije i poslovno pravo"
       ],
       "workTypes": [
         "final"
       ],
       "status": "partial",
       "profileLabel": "Effectus, zavrsni rad",
-      "verifiedAt": "2026-07-02",
+      "verifiedAt": "2026-07-03",
       "documentDate": null,
       "rules": {
+        "recommendedCitation": "chicago-notes",
         "font": [
           "Times New Roman"
         ],
@@ -70,24 +76,83 @@
         "Velicina slova",
         "Obostrano poravnanje",
         "Prored",
+        "Nacin citiranja (brojcane fusnote)",
         "Opseg (35-50 str.)"
       ],
-      "advisoryScope": []
+      "advisoryScope": [],
+      "fieldValidation": {
+        "status": "field-sampled",
+        "validatedAt": "2026-07-03",
+        "scope": "4 stvarna javna zavrsna rada Effectusa iz sluzbenog repozitorija (repozitorij.effectus.com.hr, Dabar, open access) kroz PDF tipografski preflight.",
+        "sample": {
+          "syntheticDocxAudits": 0,
+          "docxAudits": 0,
+          "publicPdfAudits": 4,
+          "metadataSpotChecks": 0,
+          "years": [
+            2023
+          ]
+        },
+        "publicSources": [
+          {
+            "pid": "effectus:14",
+            "repository": "repozitorij.effectus.com.hr",
+            "pageFormat": "A4",
+            "pages": 45,
+            "sha256": "cb6aa76923a2d74b1bede70b3349f5c721a7566815b9ae644b1a7a57b1614b8b",
+            "level": "zavrsni"
+          },
+          {
+            "pid": "effectus:16",
+            "repository": "repozitorij.effectus.com.hr",
+            "pageFormat": "A4",
+            "pages": 49,
+            "sha256": "6fe7734429b1971e85bfbab92222c45ccbaf7157007adaaaac7646ad9581a1c4",
+            "level": "zavrsni"
+          },
+          {
+            "pid": "effectus:18",
+            "repository": "repozitorij.effectus.com.hr",
+            "pageFormat": "A4",
+            "pages": 71,
+            "sha256": "72fd62e6c8a76293e0689fc3c7f4f325ff7a38b48b66d39ee6cb08f8810d7643",
+            "level": "zavrsni"
+          },
+          {
+            "pid": "effectus:19",
+            "repository": "repozitorij.effectus.com.hr",
+            "pageFormat": "A4",
+            "pages": 44,
+            "sha256": "0a1b281213e8c4d396b1f36d725d98c15592d4e125e9cc906ce5c3cbe1c83b66",
+            "level": "zavrsni"
+          }
+        ],
+        "confirmed": [
+          "4 stvarna javna zavrsna rada (effectus:14, effectus:16, effectus:18, effectus:19) prolaze PDF preflight: valjan nesifriran PDF, viselistni (44-71 str.), A4 (595x842 pt).",
+          "Tipografski uzorak sredisnje stranice potvrduje Times New Roman 12pt sukladno Pravilniku (Sluzbeni Font EFFECTUS-a je Times New Roman velicine 12pt)."
+        ]
+      }
     },
     {
       "id": "effectus-diplomski",
       "unitId": "effectus",
       "programs": [
-        "Diplomski strucni studiji Effectus"
+        "Poslovno upravljanje",
+        "Poslovno upravljanje - Financijski menadžment",
+        "Poslovno upravljanje - Menadžment ljudskih potencijala i znanja",
+        "Poslovno upravljanje - Porezi i poslovno pravo",
+        "Poslovno upravljanje - Analitički menadžment",
+        "Poslovno upravljanje - Bihevioralna ekonomija"
       ],
       "workTypes": [
         "graduate"
       ],
       "status": "partial",
       "profileLabel": "Effectus, diplomski rad",
-      "verifiedAt": "2026-07-02",
+      "verifiedAt": "2026-07-03",
       "documentDate": null,
       "rules": {
+        "recommendedCitation": "chicago-notes",
         "font": [
           "Times New Roman"
         ],
@@ -123,9 +188,62 @@
         "Velicina slova",
         "Obostrano poravnanje",
         "Prored",
+        "Nacin citiranja (brojcane fusnote)",
         "Opseg (50-80 str.)"
       ],
-      "advisoryScope": []
+      "advisoryScope": [],
+      "fieldValidation": {
+        "status": "field-sampled",
+        "validatedAt": "2026-07-03",
+        "scope": "4 stvarna javna diplomska rada Effectusa iz sluzbenog repozitorija (repozitorij.effectus.com.hr, Dabar, open access) kroz PDF tipografski preflight.",
+        "sample": {
+          "syntheticDocxAudits": 0,
+          "docxAudits": 0,
+          "publicPdfAudits": 4,
+          "metadataSpotChecks": 0,
+          "years": [
+            2023
+          ]
+        },
+        "publicSources": [
+          {
+            "pid": "effectus:10",
+            "repository": "repozitorij.effectus.com.hr",
+            "pageFormat": "A4",
+            "pages": 67,
+            "sha256": "4aa588ab9f2ded67fe46e8bf7b8149af0cc0014f1a153c87eead16ac355a6d41",
+            "level": "diplomski"
+          },
+          {
+            "pid": "effectus:13",
+            "repository": "repozitorij.effectus.com.hr",
+            "pageFormat": "A4",
+            "pages": 62,
+            "sha256": "c2739438562946704b3d5255881b115db4d8bad651b9f2f4531bfb7b0cdcd5ae",
+            "level": "diplomski"
+          },
+          {
+            "pid": "effectus:23",
+            "repository": "repozitorij.effectus.com.hr",
+            "pageFormat": "A4",
+            "pages": 67,
+            "sha256": "b913857c444842a2170d6821cc74426b671cf51a71f0a9d9f639333e59eb994c",
+            "level": "diplomski"
+          },
+          {
+            "pid": "effectus:25",
+            "repository": "repozitorij.effectus.com.hr",
+            "pageFormat": "A4",
+            "pages": 84,
+            "sha256": "ac90f3a39e91bd733e0c42d9b58eb86a12743d47ffed7c95ad47d4bdf0e7f697",
+            "level": "diplomski"
+          }
+        ],
+        "confirmed": [
+          "4 stvarna javna diplomska rada (effectus:10, effectus:13, effectus:23, effectus:25) prolaze PDF preflight: valjan nesifriran PDF, viselistni (62-84 str.), A4 (595x842 pt).",
+          "Tipografski uzorak sredisnje stranice potvrduje Times New Roman 12pt sukladno Pravilniku (Sluzbeni Font EFFECTUS-a je Times New Roman velicine 12pt)."
+        ]
+      }
     }
   ],
   "ledger": [
@@ -295,6 +413,30 @@
       "sourceId": "effectus-pravilnik-2023",
       "sourcePage": "Upute (Prilog 1), tč. 3 (str. 5)",
       "quote": "Opseg diplomskog rada mora iznositi 50-80 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature).",
+      "note": "Cross-institution port (EFFECTUS veleuciliste): direktno citanje izvora."
+    },
+    {
+      "id": "led-effectus-zavrsni--citation-style-verified-2026-07-03",
+      "ruleId": "effectus-zavrsni--citation-style",
+      "profileId": "effectus-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "effectus-pravilnik-2023",
+      "sourcePage": "Upute (Prilog 1), tč. 5.8.1 Citiranje literature (str. 9-10)",
+      "quote": "Korišteni izvori podataka, tj. citati se pišu u „fusnoti“, odnosno u dnu stranice. U MS Word dokumentu to se radi na način da se u izborniku odabere segment „References“, zatim „Insert Footnote“, nakon čega se upisuju informacije o citatu. U tekstu rada “fusnote“ se označavaju brojčanim redoslijedom.",
+      "note": "Cross-institution port (EFFECTUS veleuciliste): direktno citanje izvora."
+    },
+    {
+      "id": "led-effectus-diplomski--citation-style-verified-2026-07-03",
+      "ruleId": "effectus-diplomski--citation-style",
+      "profileId": "effectus-diplomski",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "effectus-pravilnik-2023",
+      "sourcePage": "Upute (Prilog 1), tč. 5.8.1 Citiranje literature (str. 9-10)",
+      "quote": "Korišteni izvori podataka, tj. citati se pišu u „fusnoti“, odnosno u dnu stranice. U MS Word dokumentu to se radi na način da se u izborniku odabere segment „References“, zatim „Insert Footnote“, nakon čega se upisuju informacije o citatu. U tekstu rada “fusnote“ se označavaju brojčanim redoslijedom.",
       "note": "Cross-institution port (EFFECTUS veleuciliste): direktno citanje izvora."
     }
   ]
