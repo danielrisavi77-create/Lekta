@@ -5967,10 +5967,38 @@
         ]
       },
       "publicSources": [
-        { "pid": "agr:2075", "repository": "zir.nsk.hr", "level": "diplomski", "pages": 44, "pageFormat": "A4", "sha256": "7f08ac7e6eb529c6e87727b246237942e5693c56468d8c494ce77e209fe07b1e" },
-        { "pid": "agr:2678", "repository": "zir.nsk.hr", "level": "diplomski", "pages": 45, "pageFormat": "A4", "sha256": "d5c49f8ea824a0900b167841921122138feaabcadda35a6fd3dff0aa04ee5328" },
-        { "pid": "agr:2900", "repository": "zir.nsk.hr", "level": "diplomski", "pages": 43, "pageFormat": "A4", "sha256": "d2e915886e68f929ed7832e010b852da5fe05e00d2077bf0202639f3fe9e208e" },
-        { "pid": "agr:3900", "repository": "zir.nsk.hr", "level": "diplomski", "pages": 62, "pageFormat": "A4", "sha256": "8a2cac7b7d14fdd27918a7d8e8f8c0b2c833e7f394a18cdf98e08e76f78603d8" }
+        {
+          "pid": "agr:2075",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 44,
+          "pageFormat": "A4",
+          "sha256": "7f08ac7e6eb529c6e87727b246237942e5693c56468d8c494ce77e209fe07b1e"
+        },
+        {
+          "pid": "agr:2678",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 45,
+          "pageFormat": "A4",
+          "sha256": "d5c49f8ea824a0900b167841921122138feaabcadda35a6fd3dff0aa04ee5328"
+        },
+        {
+          "pid": "agr:2900",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 43,
+          "pageFormat": "A4",
+          "sha256": "d2e915886e68f929ed7832e010b852da5fe05e00d2077bf0202639f3fe9e208e"
+        },
+        {
+          "pid": "agr:3900",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 62,
+          "pageFormat": "A4",
+          "sha256": "8a2cac7b7d14fdd27918a7d8e8f8c0b2c833e7f394a18cdf98e08e76f78603d8"
+        }
       ],
       "confirmed": [
         "Font, velicina, prored, A4, Sadrzaj i margine ispravno okidaju na uskladjenom sintetickom radu (tests/agr-synthetic.test.ts).",
@@ -5982,10 +6010,21 @@
       "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
     },
     "rules": {
-      "font": ["Times New Roman", "Arial", "Calibri"],
-      "size": [12],
+      "font": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "size": [
+        12
+      ],
       "spacing": 1.15,
-      "margins": { "top": 2.5, "right": 2.5, "bottom": 2.5, "left": 2.5 },
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
       "checkJustify": false,
       "requireToc": true,
       "requirePageNumbers": true,
@@ -6053,10 +6092,38 @@
         ]
       },
       "publicSources": [
-        { "pid": "agr:3600", "repository": "zir.nsk.hr", "level": "zavrsni", "pages": 76, "pageFormat": "A4", "sha256": "13fcea7eaf363c6818667cb10554671aca4d452871e275c9a476f631e6b61498" },
-        { "pid": "agr:4520", "repository": "zir.nsk.hr", "level": "zavrsni", "pages": 33, "pageFormat": "A4", "sha256": "964b90e9c8bf800d14d44d756a19f7c9c96555104e02f9e3af943d4067888d76" },
-        { "pid": "agr:4300", "repository": "zir.nsk.hr", "level": "zavrsni", "pages": 59, "pageFormat": "US Letter (612x792) + A3 umeci", "sha256": "98c1b49bf2be5e2b2cba079561ce6bac6f84c03fe6eeb145db70479cb2a30f30" },
-        { "pid": "agr:4550", "repository": "zir.nsk.hr", "level": "zavrsni", "pages": 36, "pageFormat": "US Letter (612x792)", "sha256": "5f46508016b52f516c4f9f1cf589c14b83a70d4ae9efc010a17f2e9e62f78128" }
+        {
+          "pid": "agr:3600",
+          "repository": "zir.nsk.hr",
+          "level": "zavrsni",
+          "pages": 76,
+          "pageFormat": "A4",
+          "sha256": "13fcea7eaf363c6818667cb10554671aca4d452871e275c9a476f631e6b61498"
+        },
+        {
+          "pid": "agr:4520",
+          "repository": "zir.nsk.hr",
+          "level": "zavrsni",
+          "pages": 33,
+          "pageFormat": "A4",
+          "sha256": "964b90e9c8bf800d14d44d756a19f7c9c96555104e02f9e3af943d4067888d76"
+        },
+        {
+          "pid": "agr:4300",
+          "repository": "zir.nsk.hr",
+          "level": "zavrsni",
+          "pages": 59,
+          "pageFormat": "US Letter (612x792) + A3 umeci",
+          "sha256": "98c1b49bf2be5e2b2cba079561ce6bac6f84c03fe6eeb145db70479cb2a30f30"
+        },
+        {
+          "pid": "agr:4550",
+          "repository": "zir.nsk.hr",
+          "level": "zavrsni",
+          "pages": 36,
+          "pageFormat": "US Letter (612x792)",
+          "sha256": "5f46508016b52f516c4f9f1cf589c14b83a70d4ae9efc010a17f2e9e62f78128"
+        }
       ],
       "confirmed": [
         "Font, velicina, prored, A4, Sadrzaj i margine ispravno okidaju na uskladjenom sintetickom radu (tests/agr-synthetic.test.ts).",
@@ -6308,7 +6375,9 @@
         "Times New Roman",
         "Arial"
       ],
-      "size": [12],
+      "size": [
+        12
+      ],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -6569,7 +6638,7 @@
       "stil citiranja (autor-godina APA/Harvard)"
     ]
   },
-{
+  {
     "id": "efzg-strucni-racunovodstvo",
     "unitId": "efzg",
     "programs": [
@@ -6746,7 +6815,9 @@
         "Times New Roman",
         "Arial"
       ],
-      "size": [12],
+      "size": [
+        12
+      ],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -7539,7 +7610,9 @@
       "font": [
         "Times New Roman"
       ],
-      "size": [12],
+      "size": [
+        12
+      ],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -7584,13 +7657,46 @@
         "docxAudits": 0,
         "publicPdfAudits": 4,
         "metadataSpotChecks": 0,
-        "years": [2022, 2023, 2025, 2026]
+        "years": [
+          2022,
+          2023,
+          2025,
+          2026
+        ]
       },
       "publicSources": [
-        { "pid": "sumfak:3400", "repository": "zir.nsk.hr", "level": "diplomski", "pages": 72, "pageFormat": "A4", "sha256": "76b62369841ba2746807bf66c82c257844bd381b4307db2f3bfdc370cb38ef3d" },
-        { "pid": "sumfak:3500", "repository": "zir.nsk.hr", "level": "diplomski", "pages": 82, "pageFormat": "A4", "sha256": "565d49bee5989f89665432fa796bb097b256e0c36eaae340ea40a3cf74e35c57" },
-        { "pid": "sumfak:3250", "repository": "zir.nsk.hr", "level": "diplomski", "pages": 35, "pageFormat": "A4", "sha256": "2970378f66cdaf6d3576fa8cac4bf5c15ca116acab43824d1feac2158c4a4109" },
-        { "pid": "sumfak:3850", "repository": "zir.nsk.hr", "level": "diplomski", "pages": 37, "pageFormat": "A4", "sha256": "7b651b4759a1dc53e25a09118b5a334d6e2b15bd4a58e8f44b64b064ab643b6a" }
+        {
+          "pid": "sumfak:3400",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 72,
+          "pageFormat": "A4",
+          "sha256": "76b62369841ba2746807bf66c82c257844bd381b4307db2f3bfdc370cb38ef3d"
+        },
+        {
+          "pid": "sumfak:3500",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 82,
+          "pageFormat": "A4",
+          "sha256": "565d49bee5989f89665432fa796bb097b256e0c36eaae340ea40a3cf74e35c57"
+        },
+        {
+          "pid": "sumfak:3250",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 35,
+          "pageFormat": "A4",
+          "sha256": "2970378f66cdaf6d3576fa8cac4bf5c15ca116acab43824d1feac2158c4a4109"
+        },
+        {
+          "pid": "sumfak:3850",
+          "repository": "zir.nsk.hr",
+          "level": "diplomski",
+          "pages": 37,
+          "pageFormat": "A4",
+          "sha256": "7b651b4759a1dc53e25a09118b5a334d6e2b15bd4a58e8f44b64b064ab643b6a"
+        }
       ],
       "confirmed": [
         "Font, velicina, prored, poravnanje, margine, A4 i Sadrzaj ispravno okidaju na uskladjenom sintetickom radu (tests/sumfak-synthetic.test.ts).",
@@ -7681,13 +7787,45 @@
         "docxAudits": 0,
         "publicPdfAudits": 4,
         "metadataSpotChecks": 0,
-        "years": [2023, 2024, 2026]
+        "years": [
+          2023,
+          2024,
+          2026
+        ]
       },
       "publicSources": [
-        { "pid": "sumfak:3350", "repository": "zir.nsk.hr", "level": "zavrsni", "pages": 29, "pageFormat": "A4", "sha256": "8839c62c773eb19b932c3ddb06b683258e90e03d499d210674dfa51dbb38a771" },
-        { "pid": "sumfak:3450", "repository": "zir.nsk.hr", "level": "zavrsni", "pages": 25, "pageFormat": "A4", "sha256": "eead12fb6d386c24d9ebaeb47357b3850005a5c8482b8f09f06f2d22855c4f73" },
-        { "pid": "sumfak:3480", "repository": "zir.nsk.hr", "level": "zavrsni", "pages": 29, "pageFormat": "A4", "sha256": "77b3ebad32ba5405b96b1c6247b440aaf61e6676480aef3aff574339a8763b96" },
-        { "pid": "sumfak:3680", "repository": "zir.nsk.hr", "level": "zavrsni", "pages": 43, "pageFormat": "A4", "sha256": "d28e3dacba992adab73545ee5780dce023ed800533bb4fd0a30c18a739c417ad" }
+        {
+          "pid": "sumfak:3350",
+          "repository": "zir.nsk.hr",
+          "level": "zavrsni",
+          "pages": 29,
+          "pageFormat": "A4",
+          "sha256": "8839c62c773eb19b932c3ddb06b683258e90e03d499d210674dfa51dbb38a771"
+        },
+        {
+          "pid": "sumfak:3450",
+          "repository": "zir.nsk.hr",
+          "level": "zavrsni",
+          "pages": 25,
+          "pageFormat": "A4",
+          "sha256": "eead12fb6d386c24d9ebaeb47357b3850005a5c8482b8f09f06f2d22855c4f73"
+        },
+        {
+          "pid": "sumfak:3480",
+          "repository": "zir.nsk.hr",
+          "level": "zavrsni",
+          "pages": 29,
+          "pageFormat": "A4",
+          "sha256": "77b3ebad32ba5405b96b1c6247b440aaf61e6676480aef3aff574339a8763b96"
+        },
+        {
+          "pid": "sumfak:3680",
+          "repository": "zir.nsk.hr",
+          "level": "zavrsni",
+          "pages": 43,
+          "pageFormat": "A4",
+          "sha256": "d28e3dacba992adab73545ee5780dce023ed800533bb4fd0a30c18a739c417ad"
+        }
       ],
       "confirmed": [
         "Font, velicina, prored, poravnanje, margine i Sadrzaj ispravno okidaju na uskladjenom sintetickom radu (tests/sumfak-synthetic.test.ts).",
@@ -8525,7 +8663,9 @@
       "font": [
         "Times New Roman"
       ],
-      "size": [12],
+      "size": [
+        12
+      ],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -9639,7 +9779,9 @@
       "font": [
         "Times New Roman"
       ],
-      "size": [12],
+      "size": [
+        12
+      ],
       "spacing": 1.5,
       "margins": {
         "top": 2,
@@ -9863,7 +10005,9 @@
       "font": [
         "Times New Roman"
       ],
-      "size": [12],
+      "size": [
+        12
+      ],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -10031,7 +10175,9 @@
       "font": [
         "Times New Roman"
       ],
-      "size": [12],
+      "size": [
+        12
+      ],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -10546,7 +10692,9 @@
       "font": [
         "Times New Roman"
       ],
-      "size": [12],
+      "size": [
+        12
+      ],
       "spacing": 1.5,
       "requireToc": true,
       "requirePageNumbers": true,
@@ -10728,7 +10876,9 @@
       "font": [
         "Times New Roman"
       ],
-      "size": [12],
+      "size": [
+        12
+      ],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -10868,7 +11018,9 @@
       "font": [
         "Times New Roman"
       ],
-      "size": [12],
+      "size": [
+        12
+      ],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -11038,7 +11190,9 @@
       "font": [
         "Times New Roman"
       ],
-      "size": [12],
+      "size": [
+        12
+      ],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -11208,7 +11362,9 @@
       "font": [
         "Times New Roman"
       ],
-      "size": [12],
+      "size": [
+        12
+      ],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -11377,7 +11533,9 @@
       "font": [
         "Times New Roman"
       ],
-      "size": [12],
+      "size": [
+        12
+      ],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -11546,7 +11704,9 @@
       "font": [
         "Times New Roman"
       ],
-      "size": [12],
+      "size": [
+        12
+      ],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -11850,7 +12010,9 @@
       "font": [
         "Times New Roman"
       ],
-      "size": [12],
+      "size": [
+        12
+      ],
       "spacing": 1.5,
       "margins": {
         "top": 2.54,
@@ -11966,7 +12128,9 @@
       "font": [
         "Times New Roman"
       ],
-      "size": [12],
+      "size": [
+        12
+      ],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -12151,7 +12315,9 @@
       "font": [
         "Times New Roman"
       ],
-      "size": [12],
+      "size": [
+        12
+      ],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -12610,7 +12776,9 @@
       "font": [
         "Times New Roman"
       ],
-      "size": [12],
+      "size": [
+        12
+      ],
       "spacing": 1.5,
       "margins": {
         "top": 3,
@@ -12769,7 +12937,9 @@
       "font": [
         "Times New Roman"
       ],
-      "size": [12],
+      "size": [
+        12
+      ],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -12878,7 +13048,9 @@
       "font": [
         "Times New Roman"
       ],
-      "size": [12],
+      "size": [
+        12
+      ],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -13072,7 +13244,9 @@
       "font": [
         "Times New Roman"
       ],
-      "size": [12],
+      "size": [
+        12
+      ],
       "spacing": 1.5,
       "margins": {
         "top": 3,
@@ -13245,7 +13419,9 @@
       "font": [
         "Times New Roman"
       ],
-      "size": [12],
+      "size": [
+        12
+      ],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -13934,7 +14110,9 @@
         "Times New Roman",
         "Arial"
       ],
-      "size": [12],
+      "size": [
+        12
+      ],
       "spacing": 1.5,
       "margins": {
         "top": 2.5,
@@ -15692,7 +15870,7 @@
     "advisoryScope": [
       "obvezne cjeline rada"
     ],
-    "fieldValidation":     {
+    "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-03",
       "scope": "4 stvarna javna zavrsna rada (Rudarsko-geolosko-naftni fakultet) iz sluzbenog repozitorija (repozitorij.rgn.unizg.hr, Dabar, open access) kroz PDF preflight (A4).",
@@ -16919,7 +17097,8 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "recommendedCitation": "pravo-fusnote"
     },
     "facts": [],
     "note": "Tehnicko uredenje rada iz sluzbenog izvora (Pravni fakultet u Rijeci, Sveuciliste u Rijeci), citano izravno.",
@@ -16940,7 +17119,59 @@
       "Vrsta slova",
       "Velicina slova"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna zavrsna rada (Pravni fakultet u Rijeci) iz sluzbenog repozitorija (repository.pravri.uniri.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015,
+          2021
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "pravri:68",
+          "repository": "repository.pravri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 44,
+          "sha256": "4822df822a1a311bb8df68f652d72827300f5643bdfc1e70b27cb189300a7cd3",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "pravri:1580",
+          "repository": "repository.pravri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 44,
+          "sha256": "726e63af1c2ffc074d586385f60c438d68dd75c1a7c383440215486af4a9b07e",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "pravri:1592",
+          "repository": "repository.pravri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 54,
+          "sha256": "da8913430f5fb5908beb545792f6fd49e459585038a109fe5eacc1d52d59d7e7",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "pravri:1599",
+          "repository": "repository.pravri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 43,
+          "sha256": "d1153fcbd086c7e368a807231f3f32e5cd100c02c06e62ebfe5b23e511edf9cd",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (pravri:68, pravri:1580, pravri:1592, pravri:1599) prolaze PDF preflight: valjan nesifriran PDF, viselistni (43-54 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "pravri-diplomski",
@@ -16969,7 +17200,8 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "recommendedCitation": "pravo-fusnote"
     },
     "facts": [],
     "note": "Tehnicko uredenje rada iz sluzbenog izvora (Pravni fakultet u Rijeci, Sveuciliste u Rijeci), citano izravno.",
@@ -16990,7 +17222,59 @@
       "Vrsta slova",
       "Velicina slova"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna diplomska rada (Pravni fakultet u Rijeci) iz sluzbenog repozitorija (repository.pravri.uniri.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015,
+          2016
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "pravri:49",
+          "repository": "repository.pravri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 56,
+          "sha256": "428010676f8e646e79cf2a820c315db6a21b111481f6b0995afbd932b26b71f0",
+          "level": "diplomski"
+        },
+        {
+          "pid": "pravri:66",
+          "repository": "repository.pravri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 65,
+          "sha256": "ecdfe6d6777eca5986867cc406c448e5551e49f09ff40a061e5c2d0de4e09bbe",
+          "level": "diplomski"
+        },
+        {
+          "pid": "pravri:176",
+          "repository": "repository.pravri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 52,
+          "sha256": "e57e863025a9ae02104aa65799e3b73b7fab40738e2356cb3fc69b1b8a37f8cb",
+          "level": "diplomski"
+        },
+        {
+          "pid": "pravri:212",
+          "repository": "repository.pravri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 70,
+          "sha256": "b42476833e4f5126e0e88fb1d323fcc295692df71c58fd560a3a981b8d324428",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (pravri:49, pravri:66, pravri:176, pravri:212) prolaze PDF preflight: valjan nesifriran PDF, viselistni (52-70 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "ffri-zavrsni",
@@ -17042,7 +17326,59 @@
       "Prored",
       "Obostrano poravnanje"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna zavrsna rada (Filozofski fakultet u Rijeci) iz sluzbenog repozitorija (repository.ffri.uniri.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2014,
+          2015
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "ffri:8",
+          "repository": "repository.ffri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 33,
+          "sha256": "336b7abfd3ac15fd25a1a1fd6ccde5e616eaa32512a235469ce48c71e8693b48",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "ffri:10",
+          "repository": "repository.ffri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 39,
+          "sha256": "41e1d51a731355002b94f3bfd6ae003674fd852516c0a5aa4d0c345598418470",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "ffri:11",
+          "repository": "repository.ffri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 29,
+          "sha256": "8e7947e03a0b63677cc548bac0c585b55b61b22b1147094a631ab19be8d7e677",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "ffri:193",
+          "repository": "repository.ffri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 32,
+          "sha256": "5a6b3662718b8ace26d5aade17b0c83b09cc7ac6247bad8be01103033732a51b",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (ffri:8, ffri:10, ffri:11, ffri:193) prolaze PDF preflight: valjan nesifriran PDF, viselistni (29-39 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "ffri-diplomski",
@@ -17094,7 +17430,58 @@
       "Prored",
       "Obostrano poravnanje"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna diplomska rada (Filozofski fakultet u Rijeci) iz sluzbenog repozitorija (repository.ffri.uniri.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "ffri:1",
+          "repository": "repository.ffri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 89,
+          "sha256": "827dbc3cc0b9643b48074a46b794ec1b0a6388df17287643a3baaca5de9a8cd1",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ffri:12",
+          "repository": "repository.ffri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 69,
+          "sha256": "e31a52fc971370bd7af8fb2fd25517307ac6d626e2bd028c3fa38952adeef2a4",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ffri:13",
+          "repository": "repository.ffri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 107,
+          "sha256": "d8b453dd1d3f061aa29103182c06bc7c096a6029d402d1d70cad97902a78894a",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ffri:21",
+          "repository": "repository.ffri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 84,
+          "sha256": "bdddd2ab786aba9cced067e3b540fd08f47030b54c751b7f6b7a94d54b359888",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (ffri:1, ffri:12, ffri:13, ffri:21) prolaze PDF preflight: valjan nesifriran PDF, viselistni (69-107 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "pfri-zavrsni",
@@ -17145,7 +17532,59 @@
       "Margine",
       "Opseg (najmanje 30 str.)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna zavrsna rada (Pomorski fakultet u Rijeci) iz sluzbenog repozitorija (repository.pfri.uniri.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2018,
+          2020
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "pfri:1229",
+          "repository": "repository.pfri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 36,
+          "sha256": "9b81a0b9a17f4cd15870cfcd1f4c98ac0a663eefe6359ed4768e8cccf0cee892",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "pfri:1827",
+          "repository": "repository.pfri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 46,
+          "sha256": "056dda1c329f8f9aa75977f1600158439dde8f6c94d1ffd933598f3c8ab62472",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "pfri:1830",
+          "repository": "repository.pfri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 45,
+          "sha256": "2cd79b9846a19f1ab8e459a47149624115695bc24be09faa5ee5a453fbdd3193",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "pfri:1840",
+          "repository": "repository.pfri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 39,
+          "sha256": "6a09ba232d9a9b947653a2c2868bbcd0d62de51321b3db87e064acc8b7098d81",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (pfri:1229, pfri:1827, pfri:1830, pfri:1840) prolaze PDF preflight: valjan nesifriran PDF, viselistni (36-46 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "pfri-diplomski",
@@ -17196,7 +17635,58 @@
       "Margine",
       "Opseg (najmanje 50 str.)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna diplomska rada (Pomorski fakultet u Rijeci) iz sluzbenog repozitorija (repository.pfri.uniri.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2020
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "pfri:1810",
+          "repository": "repository.pfri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 55,
+          "sha256": "7843b47e13fdab6bb0595e2981d8c2e93849e3cb7242481c4cd1f1ea5371a523",
+          "level": "diplomski"
+        },
+        {
+          "pid": "pfri:1811",
+          "repository": "repository.pfri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 60,
+          "sha256": "c12e0d4a4f37f70b4aedfd7d7d4b5f45c557a235c32cd312ac99a40bd4788fed",
+          "level": "diplomski"
+        },
+        {
+          "pid": "pfri:1812",
+          "repository": "repository.pfri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 75,
+          "sha256": "818917fd34075deb164c1ccc966be1d21e769e6775b18ad17f9d9ac67295cd50",
+          "level": "diplomski"
+        },
+        {
+          "pid": "pfri:1815",
+          "repository": "repository.pfri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 71,
+          "sha256": "9f03a222ddf1ad5f85bc7a6aa9008b48c2c868731af484a6712c9b8e0cb4c96e",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (pfri:1810, pfri:1811, pfri:1812, pfri:1815) prolaze PDF preflight: valjan nesifriran PDF, viselistni (55-75 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "medri-farmacija-diplomski",
@@ -17222,7 +17712,9 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "recommendedCitation": "vancouver",
+      "checkFont": false
     },
     "facts": [],
     "note": "Tehnicko uredenje rada iz sluzbenog izvora (Medicinski fakultet u Rijeci, Sveuciliste u Rijeci), citano izravno.",
@@ -17243,7 +17735,59 @@
       "Velicina slova",
       "Opseg (15-50 str.)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna diplomska rada integriranog studija Farmacija (Medicinski fakultet u Rijeci, studij Farmacija) iz sluzbenog repozitorija (repository.medri.uniri.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015,
+          2016
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "medri:141",
+          "repository": "repository.medri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 37,
+          "sha256": "8f7ec365fa40f13ff5f88931ef0525e91dc4332053b72b53c4eef6cbab4f0c99",
+          "level": "diplomski"
+        },
+        {
+          "pid": "medri:148",
+          "repository": "repository.medri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 58,
+          "sha256": "553377847bf50e2de154fa5e0860df0caae2572f18ac15923a3c6bc774a69b06",
+          "level": "diplomski"
+        },
+        {
+          "pid": "medri:228",
+          "repository": "repository.medri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 45,
+          "sha256": "fd95ddaf7471fe80839f075c9c8b66c4f57562856fdf17e5faa243b253854a01",
+          "level": "diplomski"
+        },
+        {
+          "pid": "medri:461",
+          "repository": "repository.medri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 51,
+          "sha256": "47415f973f9747f125376333b132651ec6d87cb90194d9207e9d4e7faf42f32e",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (medri:141, medri:148, medri:228, medri:461) prolaze PDF preflight: valjan nesifriran PDF, viselistni (37-58 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "fmtu-zavrsni",
@@ -17273,7 +17817,8 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "recommendedCitation": "chicago-author"
     },
     "facts": [],
     "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet za menadzment u turizmu i ugostiteljstvu, Opatija, Sveuciliste u Rijeci), citano izravno.",
@@ -17295,7 +17840,59 @@
       "Obostrano poravnanje",
       "Prored"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna zavrsna rada (Fakultet za menadzment u turizmu i ugostiteljstvu, Opatija) iz sluzbenog repozitorija (repository.fthm.uniri.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2011,
+          2022
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "fthm:2218",
+          "repository": "repository.fthm.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 77,
+          "sha256": "108ce88a403a8cfec70358e947fb24f39f6109762acfed9a597d1a8e433af71e",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "fthm:3099",
+          "repository": "repository.fthm.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 39,
+          "sha256": "a57e22c66a14d15ce2a561323bba0a759ab6c95bbf30cc53601b45461bd642c1",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "fthm:3467",
+          "repository": "repository.fthm.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 43,
+          "sha256": "3845a0a6bdd1c763c71f94105695d2c0852de3e2e337c2d7c2d94da4d4714399",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "fthm:3468",
+          "repository": "repository.fthm.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 53,
+          "sha256": "c711b6d6c190ab7e28b8af3708305bb3bb6053ed6c5415fc41f043a78c234707",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (fthm:2218, fthm:3099, fthm:3467, fthm:3468) prolaze PDF preflight: valjan nesifriran PDF, viselistni (39-77 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "fmtu-diplomski",
@@ -17325,7 +17922,8 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "recommendedCitation": "chicago-author"
     },
     "facts": [],
     "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet za menadzment u turizmu i ugostiteljstvu, Opatija, Sveuciliste u Rijeci), citano izravno.",
@@ -17347,7 +17945,59 @@
       "Obostrano poravnanje",
       "Prored"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna diplomska rada (Fakultet za menadzment u turizmu i ugostiteljstvu, Opatija) iz sluzbenog repozitorija (repository.fthm.uniri.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016,
+          2017
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "fthm:727",
+          "repository": "repository.fthm.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 99,
+          "sha256": "cbb302fa013e9abb05ca7819d1a6ef6457e34f5b1c2b46382c7fa96c31d645d5",
+          "level": "diplomski"
+        },
+        {
+          "pid": "fthm:728",
+          "repository": "repository.fthm.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 106,
+          "sha256": "89b810e651497398bdeb1013aafcd37a7f93a44edc30d2524cc52bfe48ac81c6",
+          "level": "diplomski"
+        },
+        {
+          "pid": "fthm:731",
+          "repository": "repository.fthm.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 117,
+          "sha256": "ff7b06943252d85a4c4a8451a7a701ad68659f288197ed6de2fc3ad874985cc7",
+          "level": "diplomski"
+        },
+        {
+          "pid": "fthm:732",
+          "repository": "repository.fthm.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 90,
+          "sha256": "284ab97cc3236db2517e410cab21e5233179cd2b02cc39edc8d19f18d29b1025",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (fthm:727, fthm:728, fthm:731, fthm:732) prolaze PDF preflight: valjan nesifriran PDF, viselistni (90-117 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "inf-zavrsni",
@@ -17363,7 +18013,12 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "rules": {
-      "requireA4": true
+      "requireA4": true,
+      "checkFont": false,
+      "checkSize": false,
+      "checkSpacing": false,
+      "checkMargins": false,
+      "checkJustify": false
     },
     "facts": [],
     "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet informatike i digitalnih tehnologija, Rijeka, Sveuciliste u Rijeci), citano izravno. Font/velicina/prored/margine/citiranje su u predlosku i Uputama iza Merlin logina -> nedostupni javno, izostavljeni.",
@@ -17383,7 +18038,58 @@
     ],
     "advisoryScope": [
       "Tipografija (iza logina)"
-    ]
+    ],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna zavrsna rada (Fakultet informatike i digitalnih tehnologija, Rijeka) iz sluzbenog repozitorija (repository.inf.uniri.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2018
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "infri:179",
+          "repository": "repository.inf.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 43,
+          "sha256": "7a5caabf8b79abe3c364855c6aaba578f1df6d23d24e29d03620666172631381",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "infri:204",
+          "repository": "repository.inf.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 33,
+          "sha256": "46ccba2b3fe175fe88b43589fdb3a828d96c9ea70f13c3d23ca7418e5c7494d3",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "infri:205",
+          "repository": "repository.inf.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 31,
+          "sha256": "259c261d6c15705630b18aabe5e18fe9a9788ebd000ba44917edffb43f80de88",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "infri:206",
+          "repository": "repository.inf.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 37,
+          "sha256": "4240d62e2f3a2a9f7d5f110dfe4ac008c594bd43c4a245dbb90287fa5cb70347",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (infri:179, infri:204, infri:205, infri:206) prolaze PDF preflight: valjan nesifriran PDF, viselistni (31-43 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "inf-diplomski",
@@ -17399,7 +18105,12 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "rules": {
-      "requireA4": true
+      "requireA4": true,
+      "checkFont": false,
+      "checkSize": false,
+      "checkSpacing": false,
+      "checkMargins": false,
+      "checkJustify": false
     },
     "facts": [],
     "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet informatike i digitalnih tehnologija, Rijeka, Sveuciliste u Rijeci), citano izravno. Font/velicina/prored/margine/citiranje su u predlosku i Uputama iza Merlin logina -> nedostupni javno, izostavljeni.",
@@ -17419,7 +18130,58 @@
     ],
     "advisoryScope": [
       "Tipografija (iza logina)"
-    ]
+    ],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna diplomska rada (Fakultet informatike i digitalnih tehnologija, Rijeka) iz sluzbenog repozitorija (repository.inf.uniri.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2018
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "infri:189",
+          "repository": "repository.inf.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 46,
+          "sha256": "1f41ba2cd64e80cb18c29ce45fce9667314498e2d4c5ee64be25266c5de03e89",
+          "level": "diplomski"
+        },
+        {
+          "pid": "infri:192",
+          "repository": "repository.inf.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 51,
+          "sha256": "cb4468fe0a0557b578ddfd48b119e4320a2357099a1830e4a4d360dd1ba7ad36",
+          "level": "diplomski"
+        },
+        {
+          "pid": "infri:215",
+          "repository": "repository.inf.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 47,
+          "sha256": "86702b74ee3b58d65c45b59a2affa19b93a1c08f0c40816ae2aa88395e806fc4",
+          "level": "diplomski"
+        },
+        {
+          "pid": "infri:220",
+          "repository": "repository.inf.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 61,
+          "sha256": "a7c079fab2cb7311724fb59c629ccc05b5ba388c8f31876db8f7b06b9c9ef6fa",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (infri:189, infri:192, infri:215, infri:220) prolaze PDF preflight: valjan nesifriran PDF, viselistni (46-61 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "pmfst-zavrsni",
@@ -17472,7 +18234,7 @@
       "Opseg (20-40 str.)"
     ],
     "advisoryScope": [],
-    "fieldValidation":     {
+    "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-03",
       "scope": "4 stvarna javna zavrsna rada (Prirodoslovno-matematicki fakultet u Splitu) iz sluzbenog repozitorija (repozitorij.pmfst.unist.hr, Dabar, open access) kroz PDF preflight (A4).",
@@ -17572,7 +18334,7 @@
       "Margine"
     ],
     "advisoryScope": [],
-    "fieldValidation":     {
+    "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-03",
       "scope": "4 stvarna javna diplomska rada (Prirodoslovno-matematicki fakultet u Splitu) iz sluzbenog repozitorija (repozitorij.pmfst.unist.hr, Dabar, open access) kroz PDF preflight (A4).",
@@ -17666,7 +18428,7 @@
     "advisoryScope": [
       "Format papira / margine (predlozak)"
     ],
-    "fieldValidation":     {
+    "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-03",
       "scope": "4 stvarna javna zavrsna rada (Fakultet gradevinarstva, arhitekture i geodezije u Splitu) iz sluzbenog repozitorija (repozitorij.gradst.unist.hr, Dabar, open access) kroz PDF preflight (A4).",
@@ -17760,7 +18522,7 @@
     "advisoryScope": [
       "Format papira / margine (predlozak)"
     ],
-    "fieldValidation":     {
+    "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-03",
       "scope": "4 stvarna javna diplomska rada (Fakultet gradevinarstva, arhitekture i geodezije u Splitu) iz sluzbenog repozitorija (repozitorij.gradst.unist.hr, Dabar, open access) kroz PDF preflight (A4).",
@@ -17860,7 +18622,7 @@
       "Opseg (30-40 str.)"
     ],
     "advisoryScope": [],
-    "fieldValidation":     {
+    "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-03",
       "scope": "4 stvarna javna zavrsna rada (Ekonomski fakultet u Splitu) iz sluzbenog repozitorija (repozitorij.efst.unist.hr, Dabar, open access) kroz PDF preflight (A4).",
@@ -17960,7 +18722,7 @@
       "Opseg (50-80 str.)"
     ],
     "advisoryScope": [],
-    "fieldValidation":     {
+    "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-03",
       "scope": "4 stvarna javna diplomska rada (Ekonomski fakultet u Splitu) iz sluzbenog repozitorija (repozitorij.efst.unist.hr, Dabar, open access) kroz PDF preflight (A4).",
@@ -18062,7 +18824,7 @@
       "Obostrano poravnanje"
     ],
     "advisoryScope": [],
-    "fieldValidation":     {
+    "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-03",
       "scope": "4 stvarna javna zavrsna rada (Kemijsko-tehnoloski fakultet u Splitu) iz sluzbenog repozitorija (repozitorij.ktf-split.hr, Dabar, open access) kroz PDF preflight (A4).",
@@ -18164,7 +18926,7 @@
       "Obostrano poravnanje"
     ],
     "advisoryScope": [],
-    "fieldValidation":     {
+    "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-03",
       "scope": "4 stvarna javna diplomska rada (Kemijsko-tehnoloski fakultet u Splitu) iz sluzbenog repozitorija (repozitorij.ktf-split.hr, Dabar, open access) kroz PDF preflight (A4).",
@@ -18258,7 +19020,7 @@
       "Obostrano poravnanje"
     ],
     "advisoryScope": [],
-    "fieldValidation":     {
+    "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-03",
       "scope": "4 stvarna javna zavrsna rada (Pomorski fakultet u Splitu) iz sluzbenog repozitorija (repozitorij.pfst.unist.hr, Dabar, open access) kroz PDF preflight (A4).",
@@ -18352,7 +19114,7 @@
       "Obostrano poravnanje"
     ],
     "advisoryScope": [],
-    "fieldValidation":     {
+    "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-03",
       "scope": "4 stvarna javna diplomska rada (Pomorski fakultet u Splitu) iz sluzbenog repozitorija (repozitorij.pfst.unist.hr, Dabar, open access) kroz PDF preflight (A4).",
@@ -18454,7 +19216,7 @@
       "Obostrano poravnanje"
     ],
     "advisoryScope": [],
-    "fieldValidation":     {
+    "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-03",
       "scope": "4 stvarna javna diplomska rada (Medicinski fakultet u Splitu) iz sluzbenog repozitorija (repozitorij.mefst.unist.hr, Dabar, open access) kroz PDF preflight (A4).",
@@ -19125,7 +19887,7 @@
       "Stil citiranja (APA, autor-godina)"
     ],
     "advisoryScope": [],
-    "fieldValidation":     {
+    "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-03",
       "scope": "4 stvarna javna zavrsna rada (Fakultet agrobiotehnickih znanosti Osijek) iz sluzbenog repozitorija (repozitorij.fazos.hr, Dabar, open access) kroz PDF preflight (A4).",
@@ -19229,7 +19991,7 @@
       "Stil citiranja (APA, autor-godina)"
     ],
     "advisoryScope": [],
-    "fieldValidation":     {
+    "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-03",
       "scope": "4 stvarna javna diplomska rada (Fakultet agrobiotehnickih znanosti Osijek) iz sluzbenog repozitorija (repozitorij.fazos.hr, Dabar, open access) kroz PDF preflight (A4).",
@@ -19640,7 +20402,7 @@
       "Stil citiranja (APA)"
     ],
     "advisoryScope": [],
-    "fieldValidation":     {
+    "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-03",
       "scope": "4 stvarna javna zavrsna rada psihologije (Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access) kroz PDF preflight (A4).",
@@ -19741,7 +20503,7 @@
       "Stil citiranja (Harvard)"
     ],
     "advisoryScope": [],
-    "fieldValidation":     {
+    "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-03",
       "scope": "4 stvarna javna diplomska rada pedagogije (Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access) kroz PDF preflight (A4).",
@@ -19843,7 +20605,7 @@
       "Obostrano poravnanje"
     ],
     "advisoryScope": [],
-    "fieldValidation":     {
+    "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-03",
       "scope": "4 stvarna javna zavrsna rada povijesti umjetnosti (Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access) kroz PDF preflight (A4).",
@@ -20213,6 +20975,7 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "rules": {
+      "recommendedCitation": "chicago-notes",
       "font": [
         "Times New Roman"
       ],
@@ -20229,7 +20992,7 @@
       }
     },
     "facts": [],
-    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku), citano izravno.",
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku), citano izravno. Citatni stil (fusnote -> chicago-notes) preuzet iz sluzbenih Uputa. Terenska validacija podatkovno blokirana: repozitorij.unidu.hr nema otvorenih ZAVRSNIH radova povijesti (3 povijesna objekta su doktorske disertacije).",
     "sources": [
       {
         "title": "Upute za izradu zavrsnog rada - Povijest Jadrana i Mediterana (Odjel za humanisticke studije, Dubrovnik)",
@@ -20302,7 +21065,45 @@
       "Margine",
       "Stil citiranja (Harvard)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "2 stvarna javna rada Odjela za komunikologiju / medije (Sveuciliste u Dubrovniku) iz sluzbenog repozitorija (repozitorij.unidu.hr, Dabar, open access), potvrdjena po razini i odsjeku (OAI dc:type/dc:publisher Faculty of Media and Public Relations) kroz byte-level PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 2,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unidu:241",
+          "repository": "repozitorij.unidu.hr",
+          "pageFormat": "A4",
+          "pages": 126,
+          "sha256": "61c2eceb084af0d81997d1a951c656220d39282395157d13448a50a9ee4ca697",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unidu:519",
+          "repository": "repozitorij.unidu.hr",
+          "pageFormat": "A4",
+          "pages": 74,
+          "sha256": "b4c741d0d9d98ae8f07b2cfde73ee8d8e0d5a53bdc3187b72e913751a3a806b1",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "2 stvarna javna rada (unidu:241, unidu:519) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno); OAI potvrdjuje Faculty of Media and Public Relations i razinu."
+      ],
+      "observedDeviations": [
+        "Odjel za komunikologiju/medije (Dubrovnik) ima samo 2 otvorena diplomska rada u repozitoriju (Faculty of Media and Public Relations); uzorkovana su oba pa je validation=75 (data-thin, ne data-block).",
+        "sha256 NIJE reproducibilan: nsk.hr/Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
   },
   {
     "id": "unidu-ekonomija-zavrsni",
@@ -20318,6 +21119,7 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "rules": {
+      "recommendedCitation": "harvard",
       "font": [
         "Calibri"
       ],
@@ -20352,7 +21154,52 @@
       "Velicina slova",
       "Obostrano poravnanje"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "3 stvarna javna rada Odjela za ekonomiju i poslovnu ekonomiju (Sveuciliste u Dubrovniku) iz sluzbenog repozitorija (repozitorij.unidu.hr, Dabar, open access), potvrdjena po razini i odsjeku (OAI dc:type/dc:publisher Faculty of Economics and Business) kroz byte-level PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unidu:413",
+          "repository": "repozitorij.unidu.hr",
+          "pageFormat": "A4",
+          "pages": 39,
+          "sha256": "e3b4f92b17096053f4c21469abb4a53325c7e6034d0ede75c5ccaa6633014226",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unidu:421",
+          "repository": "repozitorij.unidu.hr",
+          "pageFormat": "A4",
+          "pages": 47,
+          "sha256": "f10ff067c711fc13a6b8719071b76fa7be38c7e617286b371c7d8964f96c4220",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unidu:423",
+          "repository": "repozitorij.unidu.hr",
+          "pageFormat": "A4",
+          "pages": 36,
+          "sha256": "c71f4820e15c7b79f0510a4ee17e43a49dd55304f9f333571724c3154e32915e",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unidu:413, unidu:421, unidu:423) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno); OAI potvrdjuje Faculty of Economics and Business i razinu."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: nsk.hr/Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
   },
   {
     "id": "unidu-ekonomija-diplomski",
@@ -20368,6 +21215,7 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "rules": {
+      "recommendedCitation": "harvard",
       "font": [
         "Calibri"
       ],
@@ -20402,7 +21250,52 @@
       "Velicina slova",
       "Obostrano poravnanje"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "3 stvarna javna rada Odjela za ekonomiju i poslovnu ekonomiju (Sveuciliste u Dubrovniku) iz sluzbenog repozitorija (repozitorij.unidu.hr, Dabar, open access), potvrdjena po razini i odsjeku (OAI dc:type/dc:publisher Faculty of Economics and Business) kroz byte-level PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unidu:426",
+          "repository": "repozitorij.unidu.hr",
+          "pageFormat": "A4",
+          "pages": 81,
+          "sha256": "ead4c30479317bd7c09c6ce2d499e297a4e72cb5260e6f81ae3ec3b7ac7f2264",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unidu:444",
+          "repository": "repozitorij.unidu.hr",
+          "pageFormat": "A4",
+          "pages": 75,
+          "sha256": "1d9ec172d1441bd2268c070a92b595fd4ddd683dbd3590bdf8c10e7031478141",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unidu:454",
+          "repository": "repozitorij.unidu.hr",
+          "pageFormat": "A4",
+          "pages": 68,
+          "sha256": "c4964b12945f218dee122da758bdf25134b7e50ef58e18409f025eaa39a1bab0",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unidu:426, unidu:444, unidu:454) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno); OAI potvrdjuje Faculty of Economics and Business i razinu."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: nsk.hr/Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
   },
   {
     "id": "unidu-umjetnost-diplomski",
@@ -20418,6 +21311,7 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "rules": {
+      "recommendedCitation": "chicago-notes",
       "font": [
         "Times New Roman",
         "Arial"
@@ -20436,7 +21330,7 @@
       }
     },
     "facts": [],
-    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku), citano izravno.",
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Sveuciliste u Dubrovniku, Sveuciliste u Dubrovniku), citano izravno. Citatni stil (fusnotni -> chicago-notes) preuzet iz sluzbenog Naputka. Terenska validacija podatkovno blokirana: repozitorij.unidu.hr nema atribuiranih otvorenih radova Odjela za umjetnost i restauraciju.",
     "sources": [
       {
         "title": "Naputak za oblikovanje i opremu diplomskog rada (Odjel za umjetnost i restauraciju, Dubrovnik)",
@@ -20481,7 +21375,9 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "recommendedCitation": "vancouver",
+      "checkFont": false
     },
     "facts": [],
     "note": "Tehnicko uredenje rada iz sluzbenog izvora (Medicinski fakultet u Rijeci), citano izravno.",
@@ -20502,7 +21398,58 @@
       "Velicina slova",
       "Opseg (15-50 str.)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna diplomska rada integriranog studija Medicina (Medicinski fakultet u Rijeci, studij Medicina) iz sluzbenog repozitorija (repository.medri.uniri.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "medri:15",
+          "repository": "repository.medri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 57,
+          "sha256": "cef54afb778997f82c41d26ffcd1a9ddbf8d93a8ae82d6d97d564f54fb5f9bd3",
+          "level": "diplomski"
+        },
+        {
+          "pid": "medri:18",
+          "repository": "repository.medri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 59,
+          "sha256": "92543cf01762ecf8af1896e1ae90936c36d9011d09e318c2ddef7bcdbe1a463d",
+          "level": "diplomski"
+        },
+        {
+          "pid": "medri:22",
+          "repository": "repository.medri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 29,
+          "sha256": "d3ca0b6e7936e628fba88019d8df2593a55586b6e55472a4b95b94c7a5f9b633",
+          "level": "diplomski"
+        },
+        {
+          "pid": "medri:28",
+          "repository": "repository.medri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 37,
+          "sha256": "876c9fa26f2b80511306aba43ee3ea2015a7dd473d0c9addd0ac57109cf93baf",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (medri:15, medri:18, medri:22, medri:28) prolaze PDF preflight: valjan nesifriran PDF, viselistni (29-59 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "fzsri-zavrsni",
@@ -20556,7 +21503,60 @@
       "Velicina slova",
       "Vrsta slova (Calibri/TNR/Arial)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna zavrsna rada (Fakultet zdravstvenih studija u Rijeci) iz sluzbenog repozitorija (repository.fzsri.uniri.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2018,
+          2019,
+          2020
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "fzsri:311",
+          "repository": "repository.fzsri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 37,
+          "sha256": "44189e399e88905268c22e8223398058b5b48e423b7b25318fd95bf15e092cf9",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "fzsri:677",
+          "repository": "repository.fzsri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 54,
+          "sha256": "b7d43545a155500501696f00dbfedb900b99ce28ff17943c843c458d038800e7",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "fzsri:847",
+          "repository": "repository.fzsri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 41,
+          "sha256": "2756e941849774e2d68cad89d46cdb6be9765c71c4c03e0b0e5411585328f6cd",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "fzsri:876",
+          "repository": "repository.fzsri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 63,
+          "sha256": "500d3c3acca73ae08c9ab7ec54ab21dfad4dfa13458d283cac6c9944234ab093",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (fzsri:311, fzsri:677, fzsri:847, fzsri:876) prolaze PDF preflight: valjan nesifriran PDF, viselistni (37-63 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "fzsri-diplomski",
@@ -20610,13 +21610,66 @@
       "Velicina slova",
       "Vrsta slova (Calibri/TNR/Arial)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna diplomska rada (Fakultet zdravstvenih studija u Rijeci) iz sluzbenog repozitorija (repository.fzsri.uniri.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2018,
+          2019,
+          2020
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "fzsri:284",
+          "repository": "repository.fzsri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 58,
+          "sha256": "f3da5019aa60bd74398d6baa97c04e3d664333da8cf9b8feeab3bcd9c3338cb7",
+          "level": "diplomski"
+        },
+        {
+          "pid": "fzsri:600",
+          "repository": "repository.fzsri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 63,
+          "sha256": "f8ec55952f80f580e61dde6d1acd329aaa864e0d6d058add07a31bec43d2c429",
+          "level": "diplomski"
+        },
+        {
+          "pid": "fzsri:623",
+          "repository": "repository.fzsri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 51,
+          "sha256": "90ddfddca930b6bd4ae82ac81b1cd6d6023df18ac90b655ffc3f546376ef1d13",
+          "level": "diplomski"
+        },
+        {
+          "pid": "fzsri:776",
+          "repository": "repository.fzsri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 59,
+          "sha256": "1ec7d2608d1b3ad87523f0678c8b310183861d15877682b03ddec3731077e523",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (fzsri:284, fzsri:600, fzsri:623, fzsri:776) prolaze PDF preflight: valjan nesifriran PDF, viselistni (51-63 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "biotech-zavrsni",
     "unitId": "biotech",
     "programs": [
-      "Prijediplomski studiji Biotehnologije (zavrsni rad, Rijeka)"
+      "Prijediplomski sveučilišni studij Biotehnologija i istraživanje lijekova"
     ],
     "workTypes": [
       "final"
@@ -20632,7 +21685,9 @@
       "size": [
         12
       ],
-      "spacing": 1.5
+      "spacing": 1.5,
+      "recommendedCitation": "vancouver",
+      "checkMargins": false
     },
     "facts": [],
     "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet biotehnologije i razvoja lijekova, Rijeka), citano izravno.",
@@ -20651,13 +21706,67 @@
       "Velicina slova",
       "Prored"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna zavrsna rada (Fakultet biotehnologije i razvoja lijekova, Rijeka) iz sluzbenog repozitorija (repository.biotech.uniri.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2018
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "biotechri:231",
+          "repository": "repository.biotech.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 53,
+          "sha256": "4b9219c6d479871f8a15d3253c24878a66444daad4aba22f1b419866088831e3",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "biotechri:263",
+          "repository": "repository.biotech.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 50,
+          "sha256": "45017c668d946b35dfc6525aa2a15e055648907867b12da3f6cba4141d9948a4",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "biotechri:266",
+          "repository": "repository.biotech.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 43,
+          "sha256": "e74c1e0f586ca66c8312cbbf90ba22a91ee2c7b1844ddeb8f9a6e6bb0fc1d8b7",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "biotechri:272",
+          "repository": "repository.biotech.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 37,
+          "sha256": "6c1be0ef1da0847f33980e14a44b63209a4c05a3c713697f410d10e633f569f1",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (biotechri:231, biotechri:263, biotechri:266, biotechri:272) prolaze PDF preflight: valjan nesifriran PDF, viselistni (37-53 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "biotech-diplomski",
     "unitId": "biotech",
     "programs": [
-      "Diplomski studiji Biotehnologije (Rijeka)"
+      "Diplomski sveučilišni studij Istraživanje i razvoj lijekova",
+      "Diplomski sveučilišni studij Biotehnologija u medicini",
+      "Diplomski sveučilišni studij Medicinska kemija",
+      "Diplomski sveučilišni studij Biotehnološka istraživanja znanosti o životu"
     ],
     "workTypes": [
       "graduate"
@@ -20673,7 +21782,9 @@
       "size": [
         12
       ],
-      "spacing": 1.5
+      "spacing": 1.5,
+      "recommendedCitation": "vancouver",
+      "checkMargins": false
     },
     "facts": [],
     "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet biotehnologije i razvoja lijekova, Rijeka), citano izravno.",
@@ -20692,7 +21803,58 @@
       "Velicina slova",
       "Prored"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna diplomska rada (Fakultet biotehnologije i razvoja lijekova, Rijeka) iz sluzbenog repozitorija (repository.biotech.uniri.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2018
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "biotechri:235",
+          "repository": "repository.biotech.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 71,
+          "sha256": "a4ab0cd2304c45f7dfdb7cf9489b5c9237fca985e2d195e9b0523432352b2f39",
+          "level": "diplomski"
+        },
+        {
+          "pid": "biotechri:246",
+          "repository": "repository.biotech.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 54,
+          "sha256": "f89f5f3f378158fc72e4575300ac125ab9f96037b5d6568aacde351cea84807c",
+          "level": "diplomski"
+        },
+        {
+          "pid": "biotechri:247",
+          "repository": "repository.biotech.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 60,
+          "sha256": "f4aea593f373b5e9419d7787814fa6ea72ba85a07faf06ae2ea5cf4d1c82b4a6",
+          "level": "diplomski"
+        },
+        {
+          "pid": "biotechri:253",
+          "repository": "repository.biotech.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 56,
+          "sha256": "c46c65f042bc56cf68b7fe88e4a3a30707ba6fb5b7113aca733191df50a6c8c3",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (biotechri:235, biotechri:246, biotechri:247, biotechri:253) prolaze PDF preflight: valjan nesifriran PDF, viselistni (54-71 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "fizri-zavrsni",
@@ -20778,7 +21940,8 @@
     "id": "ufri-diplomski",
     "unitId": "ufri",
     "programs": [
-      "Diplomski studiji Učiteljskog fakulteta (Rijeka)"
+      "Sveučilišni integrirani prijediplomski i diplomski Učiteljski studij",
+      "Sveučilišni diplomski studij Rani i predškolski odgoj i obrazovanje"
     ],
     "workTypes": [
       "graduate"
@@ -20796,7 +21959,8 @@
       ],
       "spacing": 1.5,
       "justify": true,
-      "requireA4": true
+      "requireA4": true,
+      "checkMargins": false
     },
     "facts": [],
     "note": "Tehnicko uredenje rada iz sluzbenog izvora (Učiteljski fakultet u Rijeci), citano izravno.",
@@ -20817,7 +21981,59 @@
       "Prored",
       "Obostrano poravnanje"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna diplomska rada (Uciteljski fakultet u Rijeci) iz sluzbenog repozitorija (repository.ufri.uniri.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2017,
+          2018
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "ufri:191",
+          "repository": "repository.ufri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 80,
+          "sha256": "dd8fc74cfb4bc3929790f59efaa58896c74b4cfa354232a2e3798d722841fb26",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ufri:223",
+          "repository": "repository.ufri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 73,
+          "sha256": "32e3b590b93204ae246746310e39313e7f97664439c72d3b2e6196c842b2a0f2",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ufri:238",
+          "repository": "repository.ufri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 61,
+          "sha256": "f7cdf1d8a33e7bdde583e10878344b8400cd02ad02ca262c4842089436869114",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ufri:239",
+          "repository": "repository.ufri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 63,
+          "sha256": "c3c509c5e5a085edad4172cc403118ac945ab96011fc649fd79ff9d293238874",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (ufri:191, ufri:223, ufri:238, ufri:239) prolaze PDF preflight: valjan nesifriran PDF, viselistni (61-80 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "riteh-zavrsni",
@@ -20862,7 +22078,7 @@
       "Stil citiranja (numericki, uglate zagrade)"
     ],
     "advisoryScope": [],
-    "fieldValidation":     {
+    "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-03",
       "scope": "4 stvarna javna zavrsna rada (Tehnicki fakultet u Rijeci) iz sluzbenog repozitorija (repository.riteh.uniri.hr, Dabar, open access) kroz PDF preflight (A4).",
@@ -20955,7 +22171,7 @@
       "Stil citiranja (numericki, uglate zagrade)"
     ],
     "advisoryScope": [],
-    "fieldValidation":     {
+    "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-03",
       "scope": "4 stvarna javna diplomska rada (Tehnicki fakultet u Rijeci) iz sluzbenog repozitorija (repository.riteh.uniri.hr, Dabar, open access) kroz PDF preflight (A4).",
@@ -21056,7 +22272,7 @@
       "Stil citiranja (APA)"
     ],
     "advisoryScope": [],
-    "fieldValidation":     {
+    "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-03",
       "scope": "4 stvarna javna diplomska rada (Kinezioloski fakultet u Splitu) iz sluzbenog repozitorija (repozitorij.kifst.unist.hr, Dabar, open access) kroz PDF preflight (A4).",
@@ -21155,7 +22371,7 @@
       "Velicina slova biljeske"
     ],
     "advisoryScope": [],
-    "fieldValidation":     {
+    "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-03",
       "scope": "4 stvarna javna diplomska rada (Katolicki bogoslovni fakultet u Splitu) iz sluzbenog repozitorija (repozitorij.kbf.unist.hr, Dabar, open access) kroz PDF preflight (A4).",
@@ -21276,7 +22492,7 @@
       "Stil citiranja (vancouver)"
     ],
     "advisoryScope": [],
-    "fieldValidation":     {
+    "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-03",
       "scope": "4 stvarna javna zavrsna rada tehnickog podrucja (Sveuciliste Sjever) iz sluzbenog repozitorija (repozitorij.unin.hr, Dabar, open access) kroz PDF preflight (A4).",
@@ -21397,7 +22613,7 @@
       "Stil citiranja (vancouver)"
     ],
     "advisoryScope": [],
-    "fieldValidation":     {
+    "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-03",
       "scope": "4 stvarna javna diplomska rada tehnickog podrucja (Sveuciliste Sjever) iz sluzbenog repozitorija (repozitorij.unin.hr, Dabar, open access) kroz PDF preflight (A4).",
@@ -21518,7 +22734,7 @@
       "Stil citiranja (apa)"
     ],
     "advisoryScope": [],
-    "fieldValidation":     {
+    "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-03",
       "scope": "4 stvarna javna zavrsna rada biomedicinskog podrucja (Sveuciliste Sjever) iz sluzbenog repozitorija (repozitorij.unin.hr, Dabar, open access) kroz PDF preflight (A4).",
@@ -21639,7 +22855,7 @@
       "Stil citiranja (apa)"
     ],
     "advisoryScope": [],
-    "fieldValidation":     {
+    "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-03",
       "scope": "4 stvarna javna diplomska rada biomedicinskog podrucja (Sveuciliste Sjever) iz sluzbenog repozitorija (repozitorij.unin.hr, Dabar, open access) kroz PDF preflight (A4).",
@@ -21760,7 +22976,7 @@
       "Stil citiranja (harvard)"
     ],
     "advisoryScope": [],
-    "fieldValidation":     {
+    "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-03",
       "scope": "4 stvarna javna zavrsna rada drustvenog podrucja Sveucilista Sjever iz sluzbenog repozitorija (repozitorij.unin.hr, Dabar, open access) kroz PDF preflight (A4).",
@@ -21883,7 +23099,7 @@
       "Stil citiranja (harvard)"
     ],
     "advisoryScope": [],
-    "fieldValidation":     {
+    "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-03",
       "scope": "4 stvarna javna diplomska rada drustvenog podrucja Sveucilista Sjever iz sluzbenog repozitorija (repozitorij.unin.hr, Dabar, open access) kroz PDF preflight (A4).",
@@ -22205,7 +23421,7 @@
       "Stil citiranja (numericki, uglate zagrade)"
     ],
     "advisoryScope": [],
-    "fieldValidation":     {
+    "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-03",
       "scope": "4 stvarna javna zavrsna rada Veleucilista Velika Gorica iz sluzbenog repozitorija (repozitorij.vvg.hr, Dabar, open access) kroz PDF preflight (A4).",
@@ -22299,7 +23515,7 @@
       "Stil citiranja (numericki, uglate zagrade)"
     ],
     "advisoryScope": [],
-    "fieldValidation":     {
+    "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-03",
       "scope": "4 stvarna javna diplomska rada Veleucilista Velika Gorica iz sluzbenog repozitorija (repozitorij.vvg.hr, Dabar, open access) kroz PDF preflight (A4).",
@@ -22460,7 +23676,7 @@
       "Opseg (20-35 str.)"
     ],
     "advisoryScope": [],
-    "fieldValidation":     {
+    "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-03",
       "scope": "4 stvarna javna zavrsna rada (Veleuciliste u Virovitici) iz sluzbenog repozitorija (repozitorij.vuv.hr, Dabar, open access) kroz PDF preflight (A4).",
@@ -22567,7 +23783,7 @@
       "Opseg (35-60 str.)"
     ],
     "advisoryScope": [],
-    "fieldValidation":     {
+    "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-03",
       "scope": "4 stvarna javna diplomska rada (Veleuciliste u Virovitici) iz sluzbenog repozitorija (repozitorij.vuv.hr, Dabar, open access) kroz PDF preflight (A4).",
@@ -22818,5 +24034,209 @@
     "catalogPrograms": [
       "Dizajn"
     ]
+  },
+  {
+    "id": "gradri-zavrsni",
+    "unitId": "gradri",
+    "programs": [
+      "Sveučilišni prijediplomski studij Građevinarstvo",
+      "Stručni prijediplomski studij Građevinarstvo"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Rijeka - Gradjevinski fakultet, zavrsni rad",
+    "verifiedAt": "2026-07-03",
+    "documentDate": "2022-06-01",
+    "rules": {
+      "checkFont": false,
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Gradjevinski fakultet u Rijeci, Sveuciliste u Rijeci), citano izravno. Velicina 12, prored 1,5, obostrano poravnanje, A4, margine 2,5 cm (lijeva 3 cm). Font se preporuca (TNR/Cambria/Arial), nije obvezan, pa se ne boduje. Nacin citiranja je dvoopcijski (tekuce biljeske / Vancouver / Harvard) pa nije pinan.",
+    "sources": [
+      {
+        "title": "Upute za pisanje, prezentaciju i obranu zavrsnog i diplomskog rada (Gradjevinski fakultet u Rijeci, lipanj 2022.)",
+        "url": "https://gradri.uniri.hr/wp-content/uploads/2022/06/GF-Zavrsni-i-Diplomski-rad-upute-2022.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pisanje, prezentaciju i obranu zavrsnog i diplomskog rada (Gradjevinski fakultet u Rijeci, lipanj 2022.)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Format papira",
+      "Margine (lijeva 3 cm)",
+      "Opseg (30-50 str.)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna zavrsna rada (Gradjevinski fakultet u Rijeci) iz sluzbenog repozitorija (repository.gradri.uniri.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2019
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "gradri:800",
+          "repository": "repository.gradri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 21,
+          "sha256": "69863976754476240474a323b33ff849ab362a5797ce9ba4dc8a0686c1c75ab3",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "gradri:857",
+          "repository": "repository.gradri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 36,
+          "sha256": "162dbd0a917d05ccbe3da31932f0102412493132cb4844d92c47c937c736ba22",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "gradri:858",
+          "repository": "repository.gradri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 71,
+          "sha256": "c851112df95ee29a2e689e7a741ea6db87a56caa0213d2961be449690869a8bd",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "gradri:859",
+          "repository": "repository.gradri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 33,
+          "sha256": "f2114d98134347b26ebc80113e49b3013f80a3a32459753be907588344820ecb",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (gradri:800, gradri:857, gradri:858, gradri:859) prolaze PDF preflight: valjan nesifriran PDF, viselistni (21-71 str.), A4 (595x842 pt)."
+      ]
+    }
+  },
+  {
+    "id": "gradri-diplomski",
+    "unitId": "gradri",
+    "programs": [
+      "Sveučilišni diplomski studij Građevinarstvo",
+      "Stručni diplomski studij Građevinarstvo"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Rijeka - Gradjevinski fakultet, diplomski rad",
+    "verifiedAt": "2026-07-03",
+    "documentDate": "2022-06-01",
+    "rules": {
+      "checkFont": false,
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Gradjevinski fakultet u Rijeci, Sveuciliste u Rijeci), citano izravno. Velicina 12, prored 1,5, obostrano poravnanje, A4, margine 2,5 cm (lijeva 3 cm). Font se preporuca (TNR/Cambria/Arial), nije obvezan, pa se ne boduje. Nacin citiranja je dvoopcijski (tekuce biljeske / Vancouver / Harvard) pa nije pinan.",
+    "sources": [
+      {
+        "title": "Upute za pisanje, prezentaciju i obranu zavrsnog i diplomskog rada (Gradjevinski fakultet u Rijeci, lipanj 2022.)",
+        "url": "https://gradri.uniri.hr/wp-content/uploads/2022/06/GF-Zavrsni-i-Diplomski-rad-upute-2022.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pisanje, prezentaciju i obranu zavrsnog i diplomskog rada (Gradjevinski fakultet u Rijeci, lipanj 2022.)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Format papira",
+      "Margine (lijeva 3 cm)",
+      "Opseg (50-80 str.)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-03",
+      "scope": "4 stvarna javna diplomska rada (Gradjevinski fakultet u Rijeci) iz sluzbenog repozitorija (repository.gradri.uniri.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2019
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "gradri:782",
+          "repository": "repository.gradri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 108,
+          "sha256": "5aadaa8a6bda0111e8737a73da66f1d587594aa43ef4ae57ba6a41455090176f",
+          "level": "diplomski"
+        },
+        {
+          "pid": "gradri:783",
+          "repository": "repository.gradri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 67,
+          "sha256": "01f60b07f0f4acdf2ee55f00d83da8b7cefe67586d706904da667315a02f7035",
+          "level": "diplomski"
+        },
+        {
+          "pid": "gradri:784",
+          "repository": "repository.gradri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 84,
+          "sha256": "b80d6849c3aa443d57f2e579601b861de296fdd7071c1c3acea8e2810780e564",
+          "level": "diplomski"
+        },
+        {
+          "pid": "gradri:785",
+          "repository": "repository.gradri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 77,
+          "sha256": "ce9ee5ad3ed76bae846954059d2fa9dcc086fc862e6976c2cb779538f19b3b17",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (gradri:782, gradri:783, gradri:784, gradri:785) prolaze PDF preflight: valjan nesifriran PDF, viselistni (67-108 str.), A4 (595x842 pt)."
+      ]
+    }
   }
 ]
