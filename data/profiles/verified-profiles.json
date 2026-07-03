@@ -17870,6 +17870,7 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "rules": {
+      "recommendedCitation": "vancouver",
       "font": [
         "Times New Roman"
       ],
@@ -19209,6 +19210,7 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "rules": {
+      "recommendedCitation": "harvard",
       "font": [
         "Times New Roman"
       ],
@@ -21722,6 +21724,7 @@
     "verifiedAt": "2026-07-03",
     "documentDate": null,
     "rules": {
+      "recommendedCitation": "apa7",
       "font": [
         "Times New Roman"
       ],
@@ -21779,6 +21782,7 @@
     "verifiedAt": "2026-07-03",
     "documentDate": null,
     "rules": {
+      "recommendedCitation": "apa7",
       "font": [
         "Times New Roman"
       ],
