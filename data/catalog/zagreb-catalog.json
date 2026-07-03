@@ -632,10 +632,13 @@
         "name": "EFFECTUS veleučilište",
         "family": "social",
         "programs": [
-          "Financije i pravo",
+          "Financije i poslovno pravo",
           "Poslovno upravljanje",
-          "Prijediplomski strucni studiji Effectus (zavrsni rad)",
-          "Diplomski strucni studiji Effectus",
+          "Poslovno upravljanje - Financijski menadžment",
+          "Poslovno upravljanje - Menadžment ljudskih potencijala i znanja",
+          "Poslovno upravljanje - Porezi i poslovno pravo",
+          "Poslovno upravljanje - Analitički menadžment",
+          "Poslovno upravljanje - Bihevioralna ekonomija",
           "Opći profil ustanove"
         ],
         "status": "generic"

@@ -74,19 +74,19 @@
     },
     {
       "profileId": "effectus-diplomski",
-      "scored": 7,
+      "scored": 8,
       "machineCheckable": 7,
       "advisory": 0,
-      "ratio": 1,
-      "lastVerified": "2026-07-02"
+      "ratio": 1.1428571428571428,
+      "lastVerified": "2026-07-03"
     },
     {
       "profileId": "effectus-zavrsni",
-      "scored": 7,
+      "scored": 8,
       "machineCheckable": 7,
       "advisory": 0,
-      "ratio": 1,
-      "lastVerified": "2026-07-02"
+      "ratio": 1.1428571428571428,
+      "lastVerified": "2026-07-03"
     },
     {
       "profileId": "efos-diplomski",
@@ -138,11 +138,11 @@
     },
     {
       "profileId": "efzg-diplomski",
-      "scored": 0,
-      "machineCheckable": 4,
-      "advisory": 4,
-      "ratio": 0,
-      "lastVerified": null
+      "scored": 7,
+      "machineCheckable": 8,
+      "advisory": 3,
+      "ratio": 0.875,
+      "lastVerified": "2026-07-03"
     },
     {
       "profileId": "efzg-doktorski",
@@ -1681,5 +1681,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 1191
+  "totalScored": 1200
 }
