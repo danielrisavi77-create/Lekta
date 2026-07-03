@@ -6,12 +6,12 @@
 // samo latin i latin-ext za hrvatski sadrzaj).
 import '@fontsource-variable/source-serif-4';
 import 'open-props/easings'; // samo easing krivulje (bez boja/sjena, da topla paleta ostane netaknuta)
-import { createIcons, SunMoon, Menu, Lock, Upload, CheckCircle, AlertTriangle, AlertCircle, Info } from 'lucide';
+import { createIcons, SunMoon, Menu, Lock, Upload, CheckCircle, AlertTriangle, AlertCircle, Info, SlidersHorizontal, ClipboardCheck } from 'lucide';
 
 function renderIcons() {
   try {
     createIcons({
-      icons: { SunMoon, Menu, Lock, Upload, CheckCircle, AlertTriangle, AlertCircle, Info },
+      icons: { SunMoon, Menu, Lock, Upload, CheckCircle, AlertTriangle, AlertCircle, Info, SlidersHorizontal, ClipboardCheck },
       attrs: { 'aria-hidden': 'true', 'stroke-width': 2 },
     });
   } catch (e) {
