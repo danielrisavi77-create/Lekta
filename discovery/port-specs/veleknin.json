@@ -1,0 +1,184 @@
+{
+  "faculty": "veleknin",
+  "institution": "veleknin",
+  "institutionName": "Veleuciliste Marko Marulic u Kninu",
+  "unit": {
+    "id": "veleknin",
+    "name": "Veleuciliste Marko Marulic u Kninu",
+    "family": "mixed",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Stručni prijediplomski studiji (završni rad, Veleučilište u Kninu)"
+  ],
+  "sources": [
+    {
+      "id": "veleknin-upute-zavrsni-2020",
+      "kind": "guidelines",
+      "title": "Upute za izradu i obranu završnog rada (Veleučilište Marko Marulić u Kninu, 2020)",
+      "url": "https://www.veleknin.hr/wp-content/uploads/2023/12/uputezaizraduiobranuzavrnograda.pdf",
+      "publisher": "Veleuciliste Marko Marulic u Kninu",
+      "fetchedAt": "2026-07-03",
+      "snapshotPath": "data/sources/veleknin/veleknin.pdf",
+      "snapshotHash": "e383dfbd3d6a65ad512f50db2d54a281a47fefc60e8c1b71c6dc6ff951837448",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-03",
+      "note": "Tekstualni PDF. Citat autor-godina neimenovan->advisory. reference-count min 15."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "veleknin-zavrsni",
+      "unitId": "veleknin",
+      "programs": [
+        "Stručni prijediplomski studiji (završni rad, Veleučilište u Kninu)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Veleuciliste Knin, zavrsni rad",
+      "verifiedAt": "2026-07-03",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "minReferences": 15
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Veleuciliste Marko Marulic u Kninu), citano izravno.",
+      "sources": [
+        {
+          "title": "Upute za izradu i obranu završnog rada (Veleučilište Marko Marulić u Kninu, 2020)",
+          "url": "https://www.veleknin.hr/wp-content/uploads/2023/12/uputezaizraduiobranuzavrnograda.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu i obranu završnog rada (Veleučilište Marko Marulić u Kninu, 2020)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Margine",
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Obostrano poravnanje",
+        "Opseg (najmanje 20 str.)",
+        "Najmanji broj izvora literature (15)"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-veleknin-zavrsni--paper-size-verified-2026-07-03",
+      "ruleId": "veleknin-zavrsni--paper-size",
+      "profileId": "veleknin-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "veleknin-upute-zavrsni-2020",
+      "sourcePage": "Upute, 3. Tehnicki izgled",
+      "quote": "Opseg rada iznosi najmanje 20 stranica osnovnog teksta rada bez uvodnih stranica završnog rada, popisa literature i priloga. Format rada je A4. Margine rada trebaju iznositi 2,5 cm. Rad se piše fontom Times New Roman, veličine 12 pt, uz prored 1,5 i obostrano poravnanje (Justify) bez uvlačenja prvog retka odlomka.",
+      "note": "Cross-institution port (Veleuciliste Marko Marulic u Kninu): direktno citanje izvora."
+    },
+    {
+      "id": "led-veleknin-zavrsni--margins-verified-2026-07-03",
+      "ruleId": "veleknin-zavrsni--margins",
+      "profileId": "veleknin-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "veleknin-upute-zavrsni-2020",
+      "sourcePage": "Upute, 3. Tehnicki izgled",
+      "quote": "Opseg rada iznosi najmanje 20 stranica osnovnog teksta rada bez uvodnih stranica završnog rada, popisa literature i priloga. Format rada je A4. Margine rada trebaju iznositi 2,5 cm. Rad se piše fontom Times New Roman, veličine 12 pt, uz prored 1,5 i obostrano poravnanje (Justify) bez uvlačenja prvog retka odlomka.",
+      "note": "Cross-institution port (Veleuciliste Marko Marulic u Kninu): direktno citanje izvora."
+    },
+    {
+      "id": "led-veleknin-zavrsni--font-verified-2026-07-03",
+      "ruleId": "veleknin-zavrsni--font",
+      "profileId": "veleknin-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "veleknin-upute-zavrsni-2020",
+      "sourcePage": "Upute, 3. Tehnicki izgled",
+      "quote": "Opseg rada iznosi najmanje 20 stranica osnovnog teksta rada bez uvodnih stranica završnog rada, popisa literature i priloga. Format rada je A4. Margine rada trebaju iznositi 2,5 cm. Rad se piše fontom Times New Roman, veličine 12 pt, uz prored 1,5 i obostrano poravnanje (Justify) bez uvlačenja prvog retka odlomka.",
+      "note": "Cross-institution port (Veleuciliste Marko Marulic u Kninu): direktno citanje izvora."
+    },
+    {
+      "id": "led-veleknin-zavrsni--font-size-verified-2026-07-03",
+      "ruleId": "veleknin-zavrsni--font-size",
+      "profileId": "veleknin-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "veleknin-upute-zavrsni-2020",
+      "sourcePage": "Upute, 3. Tehnicki izgled",
+      "quote": "Opseg rada iznosi najmanje 20 stranica osnovnog teksta rada bez uvodnih stranica završnog rada, popisa literature i priloga. Format rada je A4. Margine rada trebaju iznositi 2,5 cm. Rad se piše fontom Times New Roman, veličine 12 pt, uz prored 1,5 i obostrano poravnanje (Justify) bez uvlačenja prvog retka odlomka.",
+      "note": "Cross-institution port (Veleuciliste Marko Marulic u Kninu): direktno citanje izvora."
+    },
+    {
+      "id": "led-veleknin-zavrsni--line-spacing-verified-2026-07-03",
+      "ruleId": "veleknin-zavrsni--line-spacing",
+      "profileId": "veleknin-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "veleknin-upute-zavrsni-2020",
+      "sourcePage": "Upute, 3. Tehnicki izgled",
+      "quote": "Opseg rada iznosi najmanje 20 stranica osnovnog teksta rada bez uvodnih stranica završnog rada, popisa literature i priloga. Format rada je A4. Margine rada trebaju iznositi 2,5 cm. Rad se piše fontom Times New Roman, veličine 12 pt, uz prored 1,5 i obostrano poravnanje (Justify) bez uvlačenja prvog retka odlomka.",
+      "note": "Cross-institution port (Veleuciliste Marko Marulic u Kninu): direktno citanje izvora."
+    },
+    {
+      "id": "led-veleknin-zavrsni--justify-verified-2026-07-03",
+      "ruleId": "veleknin-zavrsni--justify",
+      "profileId": "veleknin-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "veleknin-upute-zavrsni-2020",
+      "sourcePage": "Upute, 3. Tehnicki izgled",
+      "quote": "Opseg rada iznosi najmanje 20 stranica osnovnog teksta rada bez uvodnih stranica završnog rada, popisa literature i priloga. Format rada je A4. Margine rada trebaju iznositi 2,5 cm. Rad se piše fontom Times New Roman, veličine 12 pt, uz prored 1,5 i obostrano poravnanje (Justify) bez uvlačenja prvog retka odlomka.",
+      "note": "Cross-institution port (Veleuciliste Marko Marulic u Kninu): direktno citanje izvora."
+    },
+    {
+      "id": "led-veleknin-zavrsni--page-count-verified-2026-07-03",
+      "ruleId": "veleknin-zavrsni--page-count",
+      "profileId": "veleknin-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "veleknin-upute-zavrsni-2020",
+      "sourcePage": "Upute, 3. Tehnicki izgled",
+      "quote": "Opseg rada iznosi najmanje 20 stranica osnovnog teksta rada bez uvodnih stranica završnog rada, popisa literature i priloga. Format rada je A4. Margine rada trebaju iznositi 2,5 cm. Rad se piše fontom Times New Roman, veličine 12 pt, uz prored 1,5 i obostrano poravnanje (Justify) bez uvlačenja prvog retka odlomka.",
+      "note": "Cross-institution port (Veleuciliste Marko Marulic u Kninu): direktno citanje izvora."
+    },
+    {
+      "id": "led-veleknin-zavrsni--reference-count-verified-2026-07-03",
+      "ruleId": "veleknin-zavrsni--reference-count",
+      "profileId": "veleknin-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "veleknin-upute-zavrsni-2020",
+      "sourcePage": "Upute, 6.2 Popis literature",
+      "quote": "Student tijekom istraživanja i pisanja treba koristiti najmanje 15 literaturnih izvora.",
+      "note": "Cross-institution port (Veleuciliste Marko Marulic u Kninu): direktno citanje izvora."
+    }
+  ]
+}

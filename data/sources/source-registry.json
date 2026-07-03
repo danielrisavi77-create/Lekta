@@ -1997,5 +1997,57 @@
     "validityClass": "stable",
     "lastChecked": "2026-07-03",
     "note": "Tekstualni PDF (novije verzije skenirane). Body font/velicina spregnut izbor (Arial 11 ILI Times 12)->neodrediv, izostavljen. Opseg u karticama+preporuka->adv."
+  },
+  {
+    "id": "vevu-upute-zavrsni",
+    "kind": "guidelines",
+    "title": "Prilog 4 - Upute za izradu završnog rada (Veleučilište Lavoslav Ružička u Vukovaru)",
+    "url": "http://www.vevu.hr/uploads/50Prilog-4-Upute-za-izradu-zavrsnog-rada.pdf",
+    "publisher": "Veleuciliste Lavoslav Ruzicka u Vukovaru",
+    "fetchedAt": "2026-07-03",
+    "snapshotPath": "data/sources/vevu/vevu.pdf",
+    "snapshotHash": "66d1e460151a2f32399d0019e0393ed8d78232bfed1cfb8718907307c70f6c0c",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-03",
+    "note": "Tekstualni PDF. Citat autor-godina neimenovan->advisory."
+  },
+  {
+    "id": "vuv-upute-radovi-2025",
+    "kind": "guidelines",
+    "title": "Upute za pripremu i pisanje završnog i diplomskog rada (Veleučilište u Virovitici, 2025)",
+    "url": "https://vuv.hr/wp-content/uploads/2025/04/UPUTE-ZA-PRIPREMU-I-PISANJE-ZAVR%C5%A0NOG-RADA-2025-final-korekcija.pdf",
+    "publisher": "Veleuciliste u Virovitici",
+    "fetchedAt": "2026-07-03",
+    "snapshotPath": "data/sources/vuv/vuv.pdf",
+    "snapshotHash": "82e65a3cb997f8c89e5451ec7f81b55a84a8f8990c394e0fdc110c1bb9c55a88",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-03",
+    "note": "Tekstualni PDF. Citat autor-godina:str + APA fallback->advisory."
+  },
+  {
+    "id": "veleknin-upute-zavrsni-2020",
+    "kind": "guidelines",
+    "title": "Upute za izradu i obranu završnog rada (Veleučilište Marko Marulić u Kninu, 2020)",
+    "url": "https://www.veleknin.hr/wp-content/uploads/2023/12/uputezaizraduiobranuzavrnograda.pdf",
+    "publisher": "Veleuciliste Marko Marulic u Kninu",
+    "fetchedAt": "2026-07-03",
+    "snapshotPath": "data/sources/veleknin/veleknin.pdf",
+    "snapshotHash": "e383dfbd3d6a65ad512f50db2d54a281a47fefc60e8c1b71c6dc6ff951837448",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-03",
+    "note": "Tekstualni PDF. Citat autor-godina neimenovan->advisory. reference-count min 15."
+  },
+  {
+    "id": "vhzk-pravilnik-zavrsni-2022",
+    "kind": "regulation",
+    "title": "Privremeni pravilnik o završnom radu s Prilogom 7 (Veleučilište Hrvatsko zagorje Krapina, 2022)",
+    "url": "https://www.vhzk.hr/Uploads/Documents/Privremeni%20pravilnik%20o%20zavr%C5%A1nom%20radu%202022%20web.pdf",
+    "publisher": "Veleuciliste Hrvatsko zagorje Krapina",
+    "fetchedAt": "2026-07-03",
+    "snapshotPath": "data/sources/vhzk/vhzk.pdf",
+    "snapshotHash": "2c3b183451b75d6f1e977ca4ed78b4605821c4ca83e6cf4afc314e0110442d7e",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-03",
+    "note": "Tekstualni PDF. Font 3-opcijski preporuka->adv; opseg u karticama->adv. Harvard imenovan->scored."
   }
 ]

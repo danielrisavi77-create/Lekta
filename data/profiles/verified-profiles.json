@@ -20179,5 +20179,276 @@
       "Stil citiranja (numericki, uglate zagrade)"
     ],
     "advisoryScope": []
+  },
+  {
+    "id": "vevu-zavrsni",
+    "unitId": "vevu",
+    "programs": [
+      "Stručni prijediplomski studiji (završni rad, Veleučilište u Vukovaru)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Veleuciliste Vukovar, zavrsni rad",
+    "verifiedAt": "2026-07-03",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Veleuciliste Lavoslav Ruzicka u Vukovaru), citano izravno.",
+    "sources": [
+      {
+        "title": "Prilog 4 - Upute za izradu završnog rada (Veleučilište Lavoslav Ružička u Vukovaru)",
+        "url": "http://www.vevu.hr/uploads/50Prilog-4-Upute-za-izradu-zavrsnog-rada.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Prilog 4 - Upute za izradu završnog rada (Veleučilište Lavoslav Ružička u Vukovaru)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "vuv-zavrsni",
+    "unitId": "vuv",
+    "programs": [
+      "Prijediplomski stručni studiji (završni rad, Veleučilište u Virovitici)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Veleuciliste Virovitica, zavrsni rad",
+    "verifiedAt": "2026-07-03",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2,
+        "bottom": 2.5,
+        "left": 3
+      },
+      "footnoteSize": [
+        10
+      ]
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Veleuciliste u Virovitici), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za pripremu i pisanje završnog i diplomskog rada (Veleučilište u Virovitici, 2025)",
+        "url": "https://vuv.hr/wp-content/uploads/2025/04/UPUTE-ZA-PRIPREMU-I-PISANJE-ZAVR%C5%A0NOG-RADA-2025-final-korekcija.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pripremu i pisanje završnog i diplomskog rada (Veleučilište u Virovitici, 2025)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Prored",
+      "Vrsta slova",
+      "Velicina slova",
+      "Obostrano poravnanje",
+      "Velicina slova fusnote",
+      "Opseg (20-35 str.)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "vuv-diplomski",
+    "unitId": "vuv",
+    "programs": [
+      "Diplomski stručni studiji (Veleučilište u Virovitici)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Veleuciliste Virovitica, diplomski rad",
+    "verifiedAt": "2026-07-03",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2,
+        "bottom": 2.5,
+        "left": 3
+      },
+      "footnoteSize": [
+        10
+      ]
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Veleuciliste u Virovitici), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za pripremu i pisanje završnog i diplomskog rada (Veleučilište u Virovitici, 2025)",
+        "url": "https://vuv.hr/wp-content/uploads/2025/04/UPUTE-ZA-PRIPREMU-I-PISANJE-ZAVR%C5%A0NOG-RADA-2025-final-korekcija.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pripremu i pisanje završnog i diplomskog rada (Veleučilište u Virovitici, 2025)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Prored",
+      "Vrsta slova",
+      "Velicina slova",
+      "Obostrano poravnanje",
+      "Velicina slova fusnote",
+      "Opseg (35-60 str.)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "veleknin-zavrsni",
+    "unitId": "veleknin",
+    "programs": [
+      "Stručni prijediplomski studiji (završni rad, Veleučilište u Kninu)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Veleuciliste Knin, zavrsni rad",
+    "verifiedAt": "2026-07-03",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "minReferences": 15
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Veleuciliste Marko Marulic u Kninu), citano izravno.",
+    "sources": [
+      {
+        "title": "Upute za izradu i obranu završnog rada (Veleučilište Marko Marulić u Kninu, 2020)",
+        "url": "https://www.veleknin.hr/wp-content/uploads/2023/12/uputezaizraduiobranuzavrnograda.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu i obranu završnog rada (Veleučilište Marko Marulić u Kninu, 2020)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Opseg (najmanje 20 str.)",
+      "Najmanji broj izvora literature (15)"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "vhzk-zavrsni",
+    "unitId": "vhzk",
+    "programs": [
+      "Stručni prijediplomski studiji (završni rad, Veleučilište Hrvatsko zagorje Krapina)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Veleuciliste Krapina, zavrsni rad",
+    "verifiedAt": "2026-07-03",
+    "documentDate": null,
+    "rules": {
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "minReferences": 15,
+      "recommendedCitation": "harvard"
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Veleuciliste Hrvatsko zagorje Krapina), citano izravno.",
+    "sources": [
+      {
+        "title": "Privremeni pravilnik o završnom radu s Prilogom 7 (Veleučilište Hrvatsko zagorje Krapina, 2022)",
+        "url": "https://www.vhzk.hr/Uploads/Documents/Privremeni%20pravilnik%20o%20zavr%C5%A1nom%20radu%202022%20web.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Privremeni pravilnik o završnom radu s Prilogom 7 (Veleučilište Hrvatsko zagorje Krapina, 2022)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Velicina slova",
+      "Prored",
+      "Margine",
+      "Obostrano poravnanje",
+      "Najmanji broj izvora literature (15)",
+      "Stil citiranja (Harvard)"
+    ],
+    "advisoryScope": []
   }
 ]

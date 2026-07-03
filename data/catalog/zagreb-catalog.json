@@ -1192,5 +1192,66 @@
         ]
       }
     ]
+  },
+  {
+    "id": "vevu",
+    "name": "Veleuciliste Lavoslav Ruzicka u Vukovaru",
+    "units": [
+      {
+        "id": "vevu",
+        "name": "Veleuciliste Lavoslav Ruzicka u Vukovaru",
+        "family": "mixed",
+        "status": "partial",
+        "programs": [
+          "Stručni prijediplomski studiji (završni rad, Veleučilište u Vukovaru)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "vuv",
+    "name": "Veleuciliste u Virovitici",
+    "units": [
+      {
+        "id": "vuv",
+        "name": "Veleuciliste u Virovitici",
+        "family": "mixed",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski stručni studiji (završni rad, Veleučilište u Virovitici)",
+          "Diplomski stručni studiji (Veleučilište u Virovitici)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "veleknin",
+    "name": "Veleuciliste Marko Marulic u Kninu",
+    "units": [
+      {
+        "id": "veleknin",
+        "name": "Veleuciliste Marko Marulic u Kninu",
+        "family": "mixed",
+        "status": "partial",
+        "programs": [
+          "Stručni prijediplomski studiji (završni rad, Veleučilište u Kninu)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "vhzk",
+    "name": "Veleuciliste Hrvatsko zagorje Krapina",
+    "units": [
+      {
+        "id": "vhzk",
+        "name": "Veleuciliste Hrvatsko zagorje Krapina",
+        "family": "mixed",
+        "status": "partial",
+        "programs": [
+          "Stručni prijediplomski studiji (završni rad, Veleučilište Hrvatsko zagorje Krapina)"
+        ]
+      }
+    ]
   }
 ]

@@ -1537,6 +1537,14 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "veleknin-zavrsni",
+      "scored": 8,
+      "machineCheckable": 8,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
       "profileId": "veleri-diplomski",
       "scored": 9,
       "machineCheckable": 9,
@@ -1550,6 +1558,22 @@
       "machineCheckable": 9,
       "advisory": 0,
       "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "vevu-zavrsni",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "vhzk-zavrsni",
+      "scored": 6,
+      "machineCheckable": 5,
+      "advisory": 0,
+      "ratio": 1.2,
       "lastVerified": "2026-07-02"
     },
     {
@@ -1590,6 +1614,22 @@
       "machineCheckable": 6,
       "advisory": 0,
       "ratio": 1.1666666666666667,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "vuv-diplomski",
+      "scored": 8,
+      "machineCheckable": 8,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "vuv-zavrsni",
+      "scored": 8,
+      "machineCheckable": 8,
+      "advisory": 0,
+      "ratio": 1,
       "lastVerified": "2026-07-02"
     },
     {
@@ -1641,5 +1681,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 1155
+  "totalScored": 1191
 }

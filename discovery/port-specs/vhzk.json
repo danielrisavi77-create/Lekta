@@ -1,0 +1,155 @@
+{
+  "faculty": "vhzk",
+  "institution": "vhzk",
+  "institutionName": "Veleuciliste Hrvatsko zagorje Krapina",
+  "unit": {
+    "id": "vhzk",
+    "name": "Veleuciliste Hrvatsko zagorje Krapina",
+    "family": "mixed",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Stručni prijediplomski studiji (završni rad, Veleučilište Hrvatsko zagorje Krapina)"
+  ],
+  "sources": [
+    {
+      "id": "vhzk-pravilnik-zavrsni-2022",
+      "kind": "regulation",
+      "title": "Privremeni pravilnik o završnom radu s Prilogom 7 (Veleučilište Hrvatsko zagorje Krapina, 2022)",
+      "url": "https://www.vhzk.hr/Uploads/Documents/Privremeni%20pravilnik%20o%20zavr%C5%A1nom%20radu%202022%20web.pdf",
+      "publisher": "Veleuciliste Hrvatsko zagorje Krapina",
+      "fetchedAt": "2026-07-03",
+      "snapshotPath": "data/sources/vhzk/vhzk.pdf",
+      "snapshotHash": "2c3b183451b75d6f1e977ca4ed78b4605821c4ca83e6cf4afc314e0110442d7e",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-03",
+      "note": "Tekstualni PDF. Font 3-opcijski preporuka->adv; opseg u karticama->adv. Harvard imenovan->scored."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "vhzk-zavrsni",
+      "unitId": "vhzk",
+      "programs": [
+        "Stručni prijediplomski studiji (završni rad, Veleučilište Hrvatsko zagorje Krapina)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Veleuciliste Krapina, zavrsni rad",
+      "verifiedAt": "2026-07-03",
+      "documentDate": null,
+      "rules": {
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "justify": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "minReferences": 15,
+        "recommendedCitation": "harvard"
+      },
+      "facts": [],
+      "note": "Tehnicko uredenje rada iz sluzbenog izvora (Veleuciliste Hrvatsko zagorje Krapina), citano izravno.",
+      "sources": [
+        {
+          "title": "Privremeni pravilnik o završnom radu s Prilogom 7 (Veleučilište Hrvatsko zagorje Krapina, 2022)",
+          "url": "https://www.vhzk.hr/Uploads/Documents/Privremeni%20pravilnik%20o%20zavr%C5%A1nom%20radu%202022%20web.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Privremeni pravilnik o završnom radu s Prilogom 7 (Veleučilište Hrvatsko zagorje Krapina, 2022)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Velicina slova",
+        "Prored",
+        "Margine",
+        "Obostrano poravnanje",
+        "Najmanji broj izvora literature (15)",
+        "Stil citiranja (Harvard)"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-vhzk-zavrsni--font-size-verified-2026-07-03",
+      "ruleId": "vhzk-zavrsni--font-size",
+      "profileId": "vhzk-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "vhzk-pravilnik-zavrsni-2022",
+      "sourcePage": "Prilog 7, tehnicko oblikovanje",
+      "quote": "rad se piše veličinom slova 12 pt, prored 1,5 (preporučeni oblici fonta su Arial, Time News Roman ili Calibri); sve margine rada trebaju iznositi 2,5 cm; naslovi poglavlja pišu se velikim slovima veličine 14 pt, podebljano (Bold), a naslovi potpoglavlja malim slovima veličine 12 pt podebljano (Bold); potrebno je koristiti obostrano poravnanje teksta.",
+      "note": "Cross-institution port (Veleuciliste Hrvatsko zagorje Krapina): direktno citanje izvora."
+    },
+    {
+      "id": "led-vhzk-zavrsni--line-spacing-verified-2026-07-03",
+      "ruleId": "vhzk-zavrsni--line-spacing",
+      "profileId": "vhzk-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "vhzk-pravilnik-zavrsni-2022",
+      "sourcePage": "Prilog 7, tehnicko oblikovanje",
+      "quote": "rad se piše veličinom slova 12 pt, prored 1,5 (preporučeni oblici fonta su Arial, Time News Roman ili Calibri); sve margine rada trebaju iznositi 2,5 cm; naslovi poglavlja pišu se velikim slovima veličine 14 pt, podebljano (Bold), a naslovi potpoglavlja malim slovima veličine 12 pt podebljano (Bold); potrebno je koristiti obostrano poravnanje teksta.",
+      "note": "Cross-institution port (Veleuciliste Hrvatsko zagorje Krapina): direktno citanje izvora."
+    },
+    {
+      "id": "led-vhzk-zavrsni--margins-verified-2026-07-03",
+      "ruleId": "vhzk-zavrsni--margins",
+      "profileId": "vhzk-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "vhzk-pravilnik-zavrsni-2022",
+      "sourcePage": "Prilog 7, tehnicko oblikovanje",
+      "quote": "rad se piše veličinom slova 12 pt, prored 1,5 (preporučeni oblici fonta su Arial, Time News Roman ili Calibri); sve margine rada trebaju iznositi 2,5 cm; naslovi poglavlja pišu se velikim slovima veličine 14 pt, podebljano (Bold), a naslovi potpoglavlja malim slovima veličine 12 pt podebljano (Bold); potrebno je koristiti obostrano poravnanje teksta.",
+      "note": "Cross-institution port (Veleuciliste Hrvatsko zagorje Krapina): direktno citanje izvora."
+    },
+    {
+      "id": "led-vhzk-zavrsni--justify-verified-2026-07-03",
+      "ruleId": "vhzk-zavrsni--justify",
+      "profileId": "vhzk-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "vhzk-pravilnik-zavrsni-2022",
+      "sourcePage": "Prilog 7, tehnicko oblikovanje",
+      "quote": "rad se piše veličinom slova 12 pt, prored 1,5 (preporučeni oblici fonta su Arial, Time News Roman ili Calibri); sve margine rada trebaju iznositi 2,5 cm; naslovi poglavlja pišu se velikim slovima veličine 14 pt, podebljano (Bold), a naslovi potpoglavlja malim slovima veličine 12 pt podebljano (Bold); potrebno je koristiti obostrano poravnanje teksta.",
+      "note": "Cross-institution port (Veleuciliste Hrvatsko zagorje Krapina): direktno citanje izvora."
+    },
+    {
+      "id": "led-vhzk-zavrsni--reference-count-verified-2026-07-03",
+      "ruleId": "vhzk-zavrsni--reference-count",
+      "profileId": "vhzk-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "vhzk-pravilnik-zavrsni-2022",
+      "sourcePage": "Prilog 7 / 3. Citiranje",
+      "quote": "Prilikom izrade završnog rada potrebno je koristiti najmanje 15 izvora literature značajnih za dogovorenu temu rada.",
+      "note": "Cross-institution port (Veleuciliste Hrvatsko zagorje Krapina): direktno citanje izvora."
+    },
+    {
+      "id": "led-vhzk-zavrsni--citation-style-verified-2026-07-03",
+      "ruleId": "vhzk-zavrsni--citation-style",
+      "profileId": "vhzk-zavrsni",
+      "action": "verified",
+      "actor": "owner-bulk-approval",
+      "timestamp": "2026-07-03",
+      "sourceId": "vhzk-pravilnik-zavrsni-2022",
+      "sourcePage": "Upute, 3.2 Citiranje",
+      "quote": "Radove u završnom radu treba citirati i referencirati Harvardskim stilom (Panjkota, 2010). Osnovna je karakteristika: u tekstu se navodi u okruglim zagradama prezime (prvog) autora i godina izdavanja citiranog/referenciranog rada.",
+      "note": "Cross-institution port (Veleuciliste Hrvatsko zagorje Krapina): direktno citanje izvora."
+    }
+  ]
+}
