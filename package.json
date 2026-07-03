@@ -28,6 +28,7 @@
     "@fontsource-variable/source-serif-4": "^5.2.9",
     "canvas-confetti": "^1.9.4",
     "lucide": "^1.23.0",
+    "motion": "^12.42.2",
     "open-props": "^1.7.23"
   }
 }

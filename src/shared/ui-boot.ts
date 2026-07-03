@@ -6,7 +6,20 @@
 // samo latin i latin-ext za hrvatski sadrzaj).
 import '@fontsource-variable/source-serif-4';
 import 'open-props/easings'; // samo easing krivulje (bez boja/sjena, da topla paleta ostane netaknuta)
+import './motion.css'; // dijeljeni sloj gibanja: tokeni, tekstura papira, View Transitions, tipografija
 import { createIcons, SunMoon, Menu, Lock, Upload, CheckCircle, AlertTriangle, AlertCircle, Info, SlidersHorizontal, ClipboardCheck } from 'lucide';
+
+const EASE_OUT = [0.22, 1, 0.36, 1];
+function prefersReduced() {
+  return typeof window.matchMedia === 'function'
+    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+// Motion se ucitava lijeno (zaseban chunk, ne blokira prvi paint); animacije su cisto
+// progresivno pobojlsanje. app.ts (rezultati) koristi window.__lektaAnimate kad je spreman.
+const motionReady: Promise<any> = prefersReduced()
+  ? Promise.resolve(null)
+  : import('motion').then((m) => { (window as any).__lektaAnimate = m.animate; return m; }).catch(() => null);
 
 function renderIcons() {
   try {
@@ -28,11 +41,12 @@ function renderIcons() {
 // S JS-om se kartice pojavljuju kad udu u vidokrug; stagger je po stupcu (setTimeout, ne CSS
 // delay, da hover kasnije nema zaostatak). Postuje prefers-reduced-motion.
 document.documentElement.classList.add('reveal-ready');
+// Reveal preko native IntersectionObservera (bez ovisnosti): klasa .reveal-in je idempotentna,
+// CSS prijelaz na karticama odraduje animaciju; stagger po stupcu setTimeoutom (ne CSS delay,
+// da kasniji hover nema zaostatak). .reveal-ready gejtira skriveno stanje pa je bez JS-a vidljivo.
 function setupReveal() {
   const els = document.querySelectorAll<HTMLElement>('[data-reveal]:not(.reveal-in)');
-  const reduce = typeof window.matchMedia === 'function'
-    && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduce || typeof IntersectionObserver === 'undefined') {
+  if (prefersReduced() || typeof IntersectionObserver === 'undefined') {
     els.forEach((el) => el.classList.add('reveal-in'));
     return;
   }
@@ -51,7 +65,21 @@ function setupReveal() {
 // app.ts injektira check-kartice nakon boota pa ponovno skenira nove [data-reveal] elemente.
 (window as any).__lektaReveal = setupReveal;
 
-function boot() { renderIcons(); setupReveal(); }
+// Hero: fina ulazna kaskada na load (ease-out, stagger). Progresivno: elementi su vidljivi po
+// defaultu, Motion samo poboljsava ulaz. Djeca .hero-copy nemaju hover pa nema sukoba stilova.
+function animateHero() {
+  if (prefersReduced()) return;
+  motionReady.then((m) => {
+    if (!m) return;
+    const copy = Array.from(document.querySelectorAll<HTMLElement>('.hero-copy > *'));
+    const preview = document.querySelector<HTMLElement>('.preview-card');
+    const items = preview ? [...copy, preview] : copy;
+    if (!items.length) return;
+    m.animate(items, { opacity: [0, 1], y: [22, 0] }, { duration: 0.62, delay: m.stagger(0.07), ease: EASE_OUT });
+  });
+}
+
+function boot() { renderIcons(); setupReveal(); animateHero(); }
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', boot);
 } else {
