@@ -147,7 +147,9 @@ export function paragraphText(p: any): string {
 /** Odredi razinu naslova iz imena stila ili outline razine. */
 export function headingLevel(styleName: any, pProps: any): number | null {
   const n = String(styleName || '');
-  let m = n.match(/(?:heading|naslov)\s*([1-9])/i);
+  // [1-9] uz negativni lookahead: "Heading 10" (viseznamenkasti custom stil) se NE cita kao
+  // razina 1, nego pada na pouzdaniji outlineLvl. Word ugradjeni naslovi su 1-9.
+  let m = n.match(/(?:heading|naslov)\s*([1-9])(?![0-9])/i);
   if (m) return Number(m[1]);
   if (Number.isFinite(pProps.outline)) return pProps.outline + 1;
   return null;

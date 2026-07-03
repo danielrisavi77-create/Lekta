@@ -22,7 +22,11 @@ function citationAuthorFromPrefix(raw: any){
 }
 function extractCitations(paragraphs: any){
  const found: any[]=[];const yearRe=/\b(?:18|19|20)\d{2}[a-z]?\b/giu;
- paragraphs.forEach((p: any,idx: any)=>{const t=p.text;if(!t)return;const par=/\(([^()]{0,360}\b(?:18|19|20)\d{2}[a-z]?[^()]{0,220})\)/giu;let m;
+ paragraphs.forEach((p: any,idx: any)=>{const t=p.text;if(!t)return;
+  // Dopusti jednu razinu ugnijezdenih zagrada (npr. "(Markovic, 2019 (vidi tablicu 3))") tako da
+  // trailing/umetnuta zagrada ne obori citat; godina mora ostati na vrhu. Determinizam po prvom
+  // znaku (`[^()]` ILI `\(...\)`) drzi match linearnim (bez katastrofalnog backtrackinga).
+  const par=/\(((?:[^()]|\([^()]*\)){0,360}\b(?:18|19|20)\d{2}[a-z]?(?:[^()]|\([^()]*\)){0,220})\)/giu;let m;
   while((m=par.exec(t))){let inner: any=m[1];if(/\bprema\b/i.test(inner))inner=inner.split(/\bprema\b/i).pop();let inherited='';
    for(const rawPart of inner.split(';')){const part=rawPart.trim();const years=[...part.matchAll(yearRe)].map((x: any)=>({value:x[0].toLowerCase(),index:x.index||0,length:x[0].length}));if(!years.length)continue;let prevEnd=0;
     for(const y of years){const prefix=part.slice(prevEnd,y.index);const a=citationAuthorFromPrefix(prefix);if(a&&/^\p{Lu}/u.test(a))inherited=a;else if(/[\p{L}]/u.test(prefix)&&!a){prevEnd=y.index+y.length;continue}
