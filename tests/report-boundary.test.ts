@@ -6,6 +6,7 @@ import {
   buildReportRequest,
   categoryScores,
   issueCounts,
+  ruleConfidence,
   type AnalysisResultLike,
 } from '../src/report/report';
 import { WORK_TYPE_TIERS, windowDaysFor, tierFor, isReportWorkType } from '../src/report/pricing';
@@ -77,6 +78,30 @@ describe('puni izvjestaj (serverski, iza entitlementa)', () => {
     const full = buildFullReport(result, { scoredCheckTitles: new Set(['format-10']) });
     expect(full.checks).toHaveLength(1);
     expect(full.checks[0].title).toBe('format-10');
+  });
+});
+
+describe('per-rule confidence u punom izvjestaju (kriterij 10)', () => {
+  it('scored pravila pod verified profilom su high; informativno je informational', () => {
+    const full = buildFullReport(result, { traceToken: 't' });
+    expect(full.checks.map((c) => c.confidence)).toEqual(['high', 'high', 'high', 'informational']);
+    expect(full.scoredCount).toBe(3);
+    expect(full.unverifiedCount).toBe(1);
+  });
+
+  it('nescored (max 0) pravilo je uvijek informational ("nepotvrdjeno")', () => {
+    expect(ruleConfidence(result.checks![3], { profileStatus: 'verified' })).toBe('informational');
+  });
+
+  it('currency-caveat spusta scored pravilo na medium', () => {
+    expect(
+      ruleConfidence(result.checks![0], { profileStatus: 'verified', ruleAuthority: 'official-source-with-currency-caveat' }),
+    ).toBe('medium');
+  });
+
+  it('partial profil daje medium; nepoznat status low (nikad ne precjenjuje)', () => {
+    expect(ruleConfidence(result.checks![0], { profileStatus: 'partial' })).toBe('medium');
+    expect(ruleConfidence(result.checks![0], { profileStatus: 'nepoznato' })).toBe('low');
   });
 });
 

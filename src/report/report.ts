@@ -60,6 +60,11 @@ export interface Teaser {
   watermark: true;
 }
 
+/** Pouzdanost pravila u punom izvjestaju (kriterij 10). informational = nescored (max 0)
+ *  pravilo koje se prikazuje ali NE boduje ("nepotvrdjeno"). */
+export type RuleConfidence = 'high' | 'medium' | 'low' | 'informational';
+export type AnnotatedCheck = Check & { confidence: RuleConfidence };
+
 /** Puni izvjestaj: kompletan anotirani sadrzaj, vraca ga server uz vazeci entitlement. */
 export interface FullReport {
   score: number;
@@ -68,13 +73,16 @@ export interface FullReport {
   profileStatus?: string;
   stats: Record<string, number | undefined>;
   categoryScores: CategoryScore[];
-  checks: Check[];
+  checks: AnnotatedCheck[];
   issues: Issue[];
   watermark: false;
   /** Coverage tier profila (0..3). T2/T3 nose garanciju i verificirana pravila (sekcija 3). */
   coverageTier: number;
   /** Diskretan per-purchase token (traceability); ubacuje ga server. */
   traceToken?: string;
+  /** Broj bodovanih (scored) i informativnih/nepotvrdjenih provjera (kriterij 10). */
+  scoredCount: number;
+  unverifiedCount: number;
 }
 
 /** Zahtjev koji klijent salje Edge Functionu za placeni izvjestaj. */
@@ -106,6 +114,24 @@ export function issueCounts(issues: Issue[] = []): IssueCounts {
     else if (i.severity === 'info') counts.info += 1;
   }
   return counts;
+}
+
+/**
+ * Pouzdanost pravila za puni izvjestaj: nescored (max 0) je uvijek 'informational'
+ * (prikazuje se, ne boduje = "nepotvrdjeno"); scored pravilo nasljeduje pouzdanost iz
+ * statusa profila (coverageTier) uz spust na 'medium' kad izvor nosi currency-caveat.
+ * Nikad ne precjenjuje: nepoznat status daje 'low', ne 'high'.
+ */
+export function ruleConfidence(
+  check: Check,
+  opts: { profileStatus?: string; ruleAuthority?: string } = {},
+): RuleConfidence {
+  if (!check.scored || check.max <= 0) return 'informational';
+  const caveat = opts.ruleAuthority === 'official-source-with-currency-caveat';
+  const tier = coverageTierForStatus(opts.profileStatus);
+  if (tier >= 2 && !caveat) return 'high';
+  if (tier >= 1 || caveat) return 'medium';
+  return 'low';
 }
 
 export interface TeaserOptions {
@@ -145,6 +171,8 @@ export function buildFullReport(
   const checks = options.scoredCheckTitles
     ? allChecks.filter((c) => options.scoredCheckTitles!.has(c.title))
     : allChecks;
+  const authority = { profileStatus: result.profileStatus, ruleAuthority: result.details?.ruleAuthority };
+  const annotated: AnnotatedCheck[] = checks.map((c) => ({ ...c, confidence: ruleConfidence(c, authority) }));
   return {
     score: result.score,
     scoreLabel: scoreMeta(result.score).label,
@@ -152,11 +180,13 @@ export function buildFullReport(
     profileStatus: result.profileStatus,
     stats: result.stats ?? {},
     categoryScores: categoryScores(checks),
-    checks,
+    checks: annotated,
     issues: result.issues ?? [],
     watermark: false,
     coverageTier: coverageTierForStatus(result.profileStatus),
     traceToken: options.traceToken,
+    scoredCount: annotated.filter((c) => c.confidence !== 'informational').length,
+    unverifiedCount: annotated.filter((c) => c.confidence === 'informational').length,
   };
 }
 
