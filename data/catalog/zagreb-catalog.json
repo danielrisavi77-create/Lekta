@@ -761,8 +761,18 @@
         "family": "social",
         "status": "partial",
         "programs": [
-          "Prijediplomski sveucilisni studij EFRI (zavrsni rad)",
-          "Diplomski i integrirani studij EFRI"
+          "Sveučilišni prijediplomski studij Poslovna ekonomija",
+          "Sveučilišni diplomski studij Poslovna ekonomija",
+          "Sveučilišni prijediplomski studij Poslovna ekonomija (smjer Poduzetništvo)",
+          "Sveučilišni prijediplomski studij Poslovna ekonomija (smjer Menadžment)",
+          "Sveučilišni prijediplomski studij Poslovna ekonomija (smjer Financije)",
+          "Sveučilišni prijediplomski studij Poslovna ekonomija (smjer Marketing)",
+          "Sveučilišni prijediplomski studij Poslovna ekonomija (smjer Međunarodno poslovanje)",
+          "Sveučilišni diplomski studij Poslovna ekonomija (smjer Poduzetništvo)",
+          "Sveučilišni diplomski studij Poslovna ekonomija (smjer Menadžment)",
+          "Sveučilišni diplomski studij Poslovna ekonomija (smjer Financije)",
+          "Sveučilišni diplomski studij Poslovna ekonomija (smjer Marketing)",
+          "Sveučilišni diplomski studij Poslovna ekonomija (smjer Međunarodno poslovanje)"
         ]
       },
       {
@@ -771,8 +781,28 @@
         "family": "social",
         "status": "partial",
         "programs": [
-          "Prijediplomski studiji FFRI (zavrsni rad)",
-          "Diplomski studiji FFRI"
+          "Prijediplomski studij Hrvatski jezik i književnost",
+          "Prijediplomski studij Engleski jezik i književnost",
+          "Prijediplomski studij Njemački jezik i književnost",
+          "Prijediplomski studij Talijanski jezik i književnost",
+          "Prijediplomski studij Filozofija",
+          "Prijediplomski studij Povijest",
+          "Prijediplomski studij Povijest umjetnosti",
+          "Prijediplomski studij Pedagogija",
+          "Prijediplomski studij Psihologija",
+          "Prijediplomski studij Kulturalni studiji",
+          "Diplomski studij Hrvatski jezik i književnost",
+          "Diplomski studij Engleski jezik i književnost",
+          "Diplomski studij Njemački jezik i književnost",
+          "Diplomski studij Talijanski jezik i književnost",
+          "Diplomski studij Filozofija",
+          "Diplomski studij Povijest",
+          "Diplomski studij Povijest umjetnosti",
+          "Diplomski studij Povijest i interpretacija baštine",
+          "Diplomski studij Pedagogija",
+          "Diplomski studij Psihologija",
+          "Diplomski studij Kulturalni studiji",
+          "Diplomski studij Prevoditeljski studij"
         ]
       },
       {
@@ -781,8 +811,12 @@
         "family": "stem",
         "status": "partial",
         "programs": [
-          "Sveučilišni prijediplomski studiji fizike (završni rad, Rijeka)",
-          "Sveučilišni diplomski studiji fizike (Rijeka)"
+          "Prijediplomski studij Fizika",
+          "Diplomski studij Fizika",
+          "Diplomski studij Fizika i matematika",
+          "Diplomski studij Fizika i informatika",
+          "Diplomski studij Fizika i filozofija",
+          "Diplomski studij Inženjerstvo i fizika materijala"
         ]
       },
       {
@@ -791,8 +825,12 @@
         "family": "social",
         "status": "partial",
         "programs": [
-          "Prijediplomski studiji FMTU (zavrsni rad)",
-          "Diplomski studiji FMTU"
+          "Prijediplomski studij Poslovna ekonomija u turizmu i ugostiteljstvu",
+          "Prijediplomski studij Menadžment održivog razvoja",
+          "Diplomski studij Marketing u turizmu",
+          "Diplomski studij Menadžment u turizmu",
+          "Diplomski studij Menadžment u hotelijerstvu",
+          "Diplomski studij Održivi razvoj turizma"
         ]
       },
       {
@@ -801,8 +839,18 @@
         "family": "biomed",
         "status": "partial",
         "programs": [
-          "Prijediplomski studiji FZSRI (zavrsni rad)",
-          "Diplomski studiji FZSRI"
+          "Prijediplomski studij Sestrinstvo",
+          "Prijediplomski studij Fizioterapija",
+          "Prijediplomski studij Primaljstvo",
+          "Prijediplomski stručni studij Radiološka tehnologija",
+          "Diplomski studij Sestrinstvo",
+          "Diplomski studij Fizioterapija",
+          "Diplomski studij Primaljstvo",
+          "Diplomski studij Klinički nutricionizam",
+          "Diplomski studij Sestrinstvo (izborni smjer Promicanje i zaštita mentalnog zdravlja)",
+          "Diplomski studij Sestrinstvo (izborni smjer Menadžment u sestrinstvu)",
+          "Diplomski studij Sestrinstvo (izborni smjer Javno zdravstvo)",
+          "Diplomski studij Sestrinstvo (izborni smjer Gerontologija i palijativna skrb starijih)"
         ]
       },
       {
@@ -811,8 +859,12 @@
         "family": "stem",
         "status": "partial",
         "programs": [
-          "Prijediplomski studij INF (zavrsni rad)",
-          "Diplomski studij INF"
+          "Sveučilišni prijediplomski studij Informatika",
+          "Sveučilišni diplomski studij Informatika",
+          "Sveučilišni diplomski studij Informatika (nastavnički smjer)",
+          "Sveučilišni prijediplomski studij Informatika (modul Razvoj programske potpore)",
+          "Sveučilišni prijediplomski studij Informatika (modul Multimedijski sustavi)",
+          "Sveučilišni prijediplomski studij Informatika (modul Informacijski sustavi)"
         ]
       },
       {
@@ -821,8 +873,8 @@
         "family": "biomed",
         "status": "partial",
         "programs": [
-          "Integrirani studij Farmacija (MEDRI, diplomski rad)",
-          "Integrirani preddiplomski i diplomski sveučilišni studij Medicina (diplomski rad, Rijeka)"
+          "Sveučilišni integrirani prijediplomski i diplomski studij Medicina",
+          "Sveučilišni integrirani prijediplomski i diplomski studij Farmacija"
         ]
       },
       {
@@ -831,8 +883,16 @@
         "family": "stem",
         "status": "partial",
         "programs": [
-          "Prijediplomski studiji PFRI (zavrsni rad)",
-          "Diplomski studiji PFRI"
+          "Prijediplomski studij Nautika i tehnologija pomorskog prometa",
+          "Prijediplomski studij Brodostrojarstvo",
+          "Prijediplomski studij Elektroničke i informatičke tehnologije u pomorstvu",
+          "Prijediplomski studij Logistika i menadžment u pomorstvu i prometu",
+          "Prijediplomski studij Promet i mobilnost",
+          "Diplomski studij Nautika i tehnologija pomorskog prometa",
+          "Diplomski studij Brodostrojarstvo i tehnologija pomorskog prometa",
+          "Diplomski studij Elektroničke i informatičke tehnologije u pomorstvu",
+          "Diplomski studij Logistika i menadžment u pomorstvu i prometu",
+          "Diplomski studij Promet i mobilnost"
         ]
       },
       {
@@ -841,8 +901,9 @@
         "family": "social",
         "status": "partial",
         "programs": [
-          "Prijediplomski studij PRAVRI (zavrsni rad)",
-          "Diplomski studij PRAVRI"
+          "Stručni prijediplomski studij Upravni studij",
+          "Integrirani prijediplomski i diplomski sveučilišni studij Pravo",
+          "Stručni diplomski studij Javna uprava"
         ]
       },
       {
@@ -851,8 +912,27 @@
         "family": "stem",
         "status": "partial",
         "programs": [
-          "Prijediplomski/strucni studiji RITEH (zavrsni rad)",
-          "Diplomski studiji RITEH"
+          "Sveučilišni prijediplomski studij Strojarstvo",
+          "Sveučilišni prijediplomski studij Brodogradnja",
+          "Sveučilišni prijediplomski studij Elektrotehnika",
+          "Sveučilišni prijediplomski studij Računarstvo",
+          "Sveučilišni prijediplomski studij Mehatronika i robotika",
+          "Stručni prijediplomski studij Strojarstvo",
+          "Stručni prijediplomski studij Brodogradnja",
+          "Stručni prijediplomski studij Elektrotehnika",
+          "Sveučilišni diplomski studij Strojarstvo (smjer Konstruiranje i mehatronika)",
+          "Sveučilišni diplomski studij Strojarstvo (smjer Računarska mehanika i inženjerstvo)",
+          "Sveučilišni diplomski studij Strojarstvo (smjer Industrijsko i proizvodno inženjerstvo)",
+          "Sveučilišni diplomski studij Strojarstvo (smjer Termotehnika)",
+          "Sveučilišni diplomski studij Strojarstvo (smjer Procesno i energetsko strojarstvo)",
+          "Sveučilišni diplomski studij Strojarstvo (smjer Brodostrojarstvo)",
+          "Sveučilišni diplomski studij Strojarstvo (smjer Inženjerstvo materijala)",
+          "Sveučilišni diplomski studij Elektrotehnika (smjer Automatika)",
+          "Sveučilišni diplomski studij Elektrotehnika (smjer Elektroenergetika)",
+          "Sveučilišni diplomski studij Računarstvo (smjer Programsko inženjerstvo)",
+          "Sveučilišni diplomski studij Računarstvo (smjer Računalni sustavi)",
+          "Sveučilišni diplomski studij Brodogradnja (smjer Projektiranje i konstrukcija plovnih objekata)",
+          "Sveučilišni diplomski studij Brodogradnja (smjer Tehnologija i organizacija brodogradnje)"
         ]
       },
       {
@@ -875,7 +955,11 @@
           "Sveučilišni prijediplomski studij Građevinarstvo",
           "Stručni prijediplomski studij Građevinarstvo",
           "Sveučilišni diplomski studij Građevinarstvo",
-          "Stručni diplomski studij Građevinarstvo"
+          "Stručni diplomski studij Građevinarstvo",
+          "Sveučilišni diplomski studij Građevinarstvo (smjer Konstrukcije)",
+          "Sveučilišni diplomski studij Građevinarstvo (smjer Hidrotehnika)",
+          "Sveučilišni diplomski studij Građevinarstvo (smjer Geotehnika)",
+          "Sveučilišni diplomski studij Građevinarstvo (smjer Urbano inženjerstvo)"
         ]
       },
       {
