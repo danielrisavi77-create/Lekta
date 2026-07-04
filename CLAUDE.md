@@ -27,12 +27,14 @@ Ako `check` pada, promjena nije gotova. Ne commitaj crveno.
 
 - `data/` je tipiziran i modularan: profili, izvori, rokovi, katalog, coverage,
   metodologija, svaki u svom JSON-u. Loaderi u `src/*` ih hidriraju i tipiziraju.
-- `src/ui/app.ts` je UI orkestrator (~535 redaka, jos `@ts-nocheck`): UI, narudzbe,
-  placanje i QA. Analiticka jezgra je izvucena: `analyzeDocx` + auditni helperi zive u
-  `src/analysis/analyze-docx.ts` (tipizirano, bez `@ts-nocheck`), a analiza u pregledniku
-  radi u Web Workeru (`analyze-docx.worker.ts` + most `analyze-docx-client.ts` s inline
+- `src/ui/app.ts` je UI orkestrator (~517 redaka, tipiziran, VISE NIJE `@ts-nocheck`):
+  UI, narudzbe, placanje i QA. Analiticka jezgra je izvucena: `analyzeDocx` + auditni
+  helperi zive u `src/analysis/analyze-docx.ts` (tipizirano), a analiza u pregledniku radi
+  u Web Workeru (`analyze-docx.worker.ts` + most `analyze-docx-client.ts` s inline
   fallbackom; worker koristi isti @xmldom/xmldom DOMParser kao testovi, pa golden pokriva
-  worker putanju). Preostalo za split: UI dijelovi i skidanje `@ts-nocheck` s app.ts.
+  worker putanju). Tipizacija app.ts je pragmaticna: `$`/`$$` i uvezene lookup-mape su `any`
+  na granici prema DOM-u/podacima, tijelo je vecinom `any`. Preostali `@ts-nocheck`: 5
+  generator-alata `src/tools/*-page.ts` i `src/shared/ui-boot.ts`.
   Ulaz je `src/main.ts` (tanki bootstrap koji uvozi ui-boot i ui/app), NE monolit.
 
 ## Option A: ruleEntries su izvor istine
@@ -128,9 +130,11 @@ ModSecurity vraca HTTP 418.
 2. (GOTOVO) Option A kompajler i `effectiveRules` wiring. SljedeÄi korak unutar ovoga:
    ukloni iz `rules` kljuÄeve koji su veÄ u `ruleEntries`, profil po profil, i prilagodi
    faithfulness test. DoD: nema dvostrukog voÄenja za migrirane kljuÄeve, check zelen.
-3. Razbijanje `src/ui/app.ts`: izvuci redom parser (`ZipReader`, `parseStyles`, OOXML
-   helperi), pa audite, pa author-year i legal citation engine, pa UI, pa ordering.
-   Makni `@ts-nocheck` modul po modul. DoD: golden snapshoti se ne mijenjaju, check zelen.
+3. (GOTOVO) Razbijanje `src/ui/app.ts`: parser i citation engine su vec u
+   `src/{docx,audits,citations,scoring}`, `analyzeDocx` + auditni helperi u
+   `src/analysis/analyze-docx.ts`, a `@ts-nocheck` je skinut sa samog app.ts (monolit
+   sada prolazi tsc strict). Golden netaknut, check zelen. Preostalo (zaseban task):
+   skinuti `@ts-nocheck` s 5 generator-alata `src/tools/*-page.ts` i `src/shared/ui-boot.ts`.
 4. Popuni `sourcePage` za sve `ruleEntries` iz `source-registry` (ruÄno potvrÄeno;
    nepotvrÄeno ostaje `null`). DoD: validator bez novih greÅ¡aka, check zelen.
 5. DovrÅ¡i preostale profile iz jednog tipiziranog izvora (ruleEntries). DoD: coverage
