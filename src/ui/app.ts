@@ -23,7 +23,9 @@ import { SOURCE_REGISTRY } from '../verification/verification-registry';
 import { applyScoredAdvisory } from '../profiles/advisory-demotion';
 import { ZAGREB_CATALOG } from '../catalog/catalog-loader';
 import { workTypesForSelection, pickWorkType, isWorkTypeLocked, citationForDefinition, isCitationLocked } from './work-selection';
+// (R3) zajednicka normalizacija check* zastavica, dijeli se s golden resolveProfile
 import { analyzeDocx } from '../analysis/analyze-docx';
+import { normalizeCheckFlags } from '../profiles/profile-baseline';
 import { citationMeta } from '../citations/citation-meta';
 import { APP_VERSION } from '../config/app-version';
 import { SOCIAL_METHOD_REGISTRY, SOCIAL_METHOD_SOURCE } from '../methodology/methodology-loader';
@@ -280,7 +282,7 @@ function currentProfile(){
  const g=selectedInstitution(),u=selectedUnit(),definition=findVerifiedDefinition(),department=findDepartmentDefinition(),cit=citationMeta($('#citationStyle').value),workType=$('#workType').value,methodologyId=selectedMethodology(),methodology=SOCIAL_METHOD_REGISTRY[methodologyId]||null;
  let base=definition?structuredClone(definition.rules):structuredClone(u.id==='fpzg'?FPZG_PARTIAL:(BASE_PROFILES[u.family]||BASE_PROFILES.mixed));
  if(department){const overlay=deepMerge(structuredClone(department.rules||{}),department.rulesByWorkType?.[workType]||{});base=deepMerge(base,overlay)}
- base.checkFont=base.checkFont!==false;base.checkSize=base.checkSize!==false;base.checkSpacing=base.checkSpacing!==false;base.checkMargins=base.checkMargins!==false;base.checkJustify=base.checkJustify!==false;base.requireA4=!!base.requireA4;
+ normalizeCheckFlags(base);
  const override=$('#mentorOverride').checked;
  if(override){base.font=[$('#customFont').value.trim()||'Times New Roman'];base.size=[Number($('#customSize').value)||12];base.spacing=Number($('#customSpacing').value)||1.5;const m=Number($('#customMargin').value)||2.5;base.margins={top:m,right:m,bottom:m,left:m};base.checkMargins=true;base.checkJustify=true}
  const fallbackStatus=PROFILE_STATUS[u.status]||PROFILE_STATUS.generic;

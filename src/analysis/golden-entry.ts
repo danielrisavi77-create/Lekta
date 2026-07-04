@@ -2,25 +2,22 @@
  * Golden/sinteticka ulazna tocka za DOCX pipeline (CLAUDE.md golden harness).
  *
  * Izlaze analyzeDocx iz monolita kroz tanak, DOM-free adapter: razrjesava profil iz
- * tipiziranog registra (kao currentProfile() u src/main.ts, ali bez DOM-a) i poziva
+ * tipiziranog registra (kao currentProfile() u src/ui/app.ts, ali bez DOM-a) i poziva
  * analyzeDocx s fiksnim, deterministickim postavkama. Koristi ga tests/docx-golden
  * i tests/fpzg-synthetic. NE pokrece UI ni init() (init je ogradjen u src/main.ts).
  */
 import { analyzeDocx } from './analyze-docx';
 import { VERIFIED_PROFILE_REGISTRY, PROFILE_STATUS } from '../profiles/profile-registry';
+import { normalizeCheckFlags } from '../profiles/profile-baseline';
+import { citationMeta } from '../citations/citation-meta';
 
 /** Razrjesi profilni objekt koji analyzeDocx ocekuje (spljosteni rules + metapodaci). */
 export function resolveProfile(profileId: string) {
   const entry = VERIFIED_PROFILE_REGISTRY.find((p) => p.id === profileId);
   if (!entry) throw new Error(`Nepoznat profileId: ${profileId}`);
   const base: any = structuredClone(entry.rules);
-  // Normalizacija identicna currentProfile() u src/main.ts:
-  base.checkFont = base.checkFont !== false;
-  base.checkSize = base.checkSize !== false;
-  base.checkSpacing = base.checkSpacing !== false;
-  base.checkMargins = base.checkMargins !== false;
-  base.checkJustify = base.checkJustify !== false;
-  base.requireA4 = !!base.requireA4;
+  // Ista normalizacija kao zivi currentProfile() (src/ui/app.ts), sada iz zajednickog modula:
+  normalizeCheckFlags(base);
   base.name = entry.profileLabel;
   base.statusKey = entry.status;
   base.status = (PROFILE_STATUS[entry.status] || {}).label || entry.status;
@@ -37,20 +34,7 @@ export function resolveProfile(profileId: string) {
   base.selection = { workType: (entry.workTypes || [])[0] || 'final' };
   // citationMode kao u currentProfile() (citationMeta(...).mode): bez njega legal/author-year
   // engine ne radi, pa golden korpus ne bi pokrivao pravne fusnote ni autor-godina citate.
-  const CITATION_MODE: Record<string, string> = {
-    fpzg: 'author-year',
-    'pravo-fusnote': 'legal-notes',
-    'pravo-social-author': 'author-year',
-    apa7: 'author-year',
-    harvard: 'author-year',
-    'chicago-author': 'author-year',
-    'chicago-notes': 'notes',
-    mla9: 'author-page',
-    vancouver: 'numeric',
-    ieee: 'numeric',
-    custom: 'custom',
-  };
-  base.citationMode = CITATION_MODE[base.recommendedCitation] || 'custom';
+  base.citationMode = citationMeta(String(base.recommendedCitation || '')).mode;
   // Napomena: golden/sinteticki korpus NAMJERNO testira SIROVI engine (sve dimenzije bodovane)
   // radi zastite detekcije parsera/audita. Scored/advisory demotion je PRODUKTNA politika koja
   // se primjenjuje samo u zivom currentProfile() (src/ui/app.ts) i pokrivena je jedinicnim

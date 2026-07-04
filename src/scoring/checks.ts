@@ -44,6 +44,22 @@ export function makeCheck(
   return { category, title, status, earned: clamp(earned, 0, max), max, detail, issue, scored: max > 0 };
 }
 
+/**
+ * Zbroji earned/max po kategoriji za bodovane provjere (max > 0, scored). Jedini izvor
+ * istine za `result.categories` (analyzeDocx) i placeni `categoryScores` (report.ts);
+ * redoslijed kljuceva prati redoslijed provjera (insertion order), kao povijesno.
+ */
+export function categoryTotals(checks: Check[] = []): Record<string, { earned: number; max: number }> {
+  const categories: Record<string, { earned: number; max: number }> = {};
+  for (const c of checks) {
+    if (!c.scored || c.max <= 0) continue;
+    categories[c.category] ??= { earned: 0, max: 0 };
+    categories[c.category].earned += c.earned;
+    categories[c.category].max += c.max;
+  }
+  return categories;
+}
+
 /** Zapis problema (greska/upozorenje/info) s lokacijom. */
 export function issue(severity: string, category: string, title: string, detail: string, where = ''): Issue {
   return { severity, category, title, detail, where };

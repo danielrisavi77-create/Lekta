@@ -1,5 +1,5 @@
 import type { Check, Issue } from '../scoring/checks';
-import { scoreMeta } from '../scoring/checks';
+import { scoreMeta, categoryTotals } from '../scoring/checks';
 import type { FingerprintInput } from '../fingerprint/fingerprint';
 import type { ReportWorkType } from './pricing';
 import { coverageTierForStatus } from './guarantee';
@@ -92,17 +92,10 @@ export interface ReportRequest {
   workType: ReportWorkType;
 }
 
-/** Zbroji bodovane provjere (max > 0) po kategoriji. Informativne (max 0) se izostavljaju. */
+/** Zbroji bodovane provjere (max > 0) po kategoriji. Informativne (max 0) se izostavljaju.
+ *  Zbrajanje dijeli s result.categories (scoring/checks.ts categoryTotals). */
 export function categoryScores(checks: Check[] = []): CategoryScore[] {
-  const byCat = new Map<string, CategoryScore>();
-  for (const c of checks) {
-    if (!c.scored || c.max <= 0) continue;
-    const cur = byCat.get(c.category) ?? { category: c.category, earned: 0, max: 0 };
-    cur.earned += c.earned;
-    cur.max += c.max;
-    byCat.set(c.category, cur);
-  }
-  return [...byCat.values()];
+  return Object.entries(categoryTotals(checks)).map(([category, t]) => ({ category, earned: t.earned, max: t.max }));
 }
 
 /** Prebroji probleme po ozbiljnosti. */
