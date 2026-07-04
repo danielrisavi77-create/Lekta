@@ -14,6 +14,22 @@ export const escapeHtml = (s: unknown): string =>
   String(s ?? '').replace(/[&<>"']/g, (c) => ENTITIES[c]);
 
 /**
+ * Ukloni vodecu samoreferentnu "Djelomicno potvrdjeni [...] profil:" klauzulu iz per-profil
+ * note. Status labela to sada nosi pozitivno (opseg jamstva), pa je eho u noti suvisan i
+ * odbojan pred kupnju. Skida SAMO cisti eho (profil neposredno pracen s ":" ili "."), pa
+ * prvo slovo ostatka podigne na veliko. Integrirane oblike ("...profil za seminarske
+ * radove. ...") NAMJERNO ostavlja netaknute da se ne izgubi sadrzaj ni ne stvori fragment,
+ * i ne dira nista sto ne pocinje tim ehom. Praznu vrijednost vraca nepromijenjenu.
+ */
+export const reframeStatusNote = (note: unknown): string => {
+  const s = String(note ?? '');
+  if (!s) return s;
+  const stripped = s.replace(/^Djelomično\s+potvrđen[iao]\s+(?:\S+\s+)?profil\s*[:.]\s+/i, '');
+  if (stripped === s || !stripped) return s;
+  return stripped.charAt(0).toUpperCase() + stripped.slice(1);
+};
+
+/**
  * Sigurna href vrijednost: dopusta samo http(s), mailto i relativne/sidrene putanje.
  * Sve ostalo (npr. `javascript:`) svede na `#`, da otrovana konfiguracija ili buduci
  * podatkovni izvor ne mogu ubaciti izvrsivu shemu. NIJE zamjena za escapeHtml u atributu.
