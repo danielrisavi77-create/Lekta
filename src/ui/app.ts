@@ -11,6 +11,7 @@ import { unlockFullReport as unlockReportRequest } from '../report/report-client
 import { suggestTool } from './tool-suggestions';
 import { tierFor } from '../report/pricing';
 import { fetchRetailCatalog } from '../catalog/products-catalog';
+import { docxQuickStats } from '../docx/quick-stats';
 import { createCheckout } from '../report/checkout';
 import { slotProductForWorkType } from '../report/rulebook';
 import { getValidAccessToken, requestEmailOtp, verifyEmailOtp } from '../auth/session';
@@ -128,12 +129,14 @@ function setFile(file){
  if(file&&(!file.name.toLowerCase().endsWith('.docx')||file.size>50*1024*1024)){const tooBig=file.size>50*1024*1024,isDoc=/\.doc$/i.test(file.name),msg=tooBig?'Dokument je veći od 50 MB.':isDoc?'Stariji .doc format nije podržan. U Wordu odaberi Datoteka pa Spremi kao i odaberi .docx.':'Odaberi Word dokument u .docx formatu.';$('#fileInput').value='';if(err){err.textContent=msg;err.classList.remove('hidden')}$('#dropzone').classList.add('has-error');toast(msg);return}
  clearErr();$('#detectBadge')?.classList.add('hidden');
  selectedDocx=file||null;$('#dropEmpty').classList.toggle('hidden',!!file);$('#selectedFile').classList.toggle('hidden',!file);$('#dropzone').classList.toggle('has-file',!!file);$('#analyzeBtn').disabled=!file;$('#demoBtn')?.classList.toggle('hidden',!!file);
- if(file){$('#selectedName').textContent=file.name;$('#selectedMeta').textContent=`${(file.size/1024/1024).toFixed(2)} MB · spremno za lokalnu analizu`;applyDetectedContext(file)}else $('#fileInput').value='';
+ if(file){$('#selectedName').textContent=file.name;$('#selectedMeta').textContent=`${(file.size/1024/1024).toFixed(2)} MB · spremno za lokalnu analizu`;applyDetectedContext(file);updateQuickStats(file)}else $('#fileInput').value='';
 }
 // Feature 4: auto-detekcija fakulteta/studija/razine s uploada. Cisto citanje parsera (bez izmjene
 // enginea): iz naslovnice + core naslova heuristicki pogadja kombinaciju i prretpopuni izbornike.
 // Nikad ne blokira analizu; ako nista ne prepozna, ostavlja postojeci odabir. Korisnik moze ispraviti.
-let _detectToken=0;
+let _detectToken=0,_statsToken=0;
+// Brzi peek rijeci/stranica iz app.xml (ne dira analyzeDocx); token guard protiv zastarjelog updatea.
+async function updateQuickStats(file){const token=++_statsToken,s=await docxQuickStats(file);if(token!==_statsToken||selectedDocx!==file||!s)return;const bits=[];if(s.words)bits.push(`${fmt(s.words)} riječi`);if(s.pages)bits.push(`${s.pages} str.`);if(bits.length&&$('#selectedMeta'))$('#selectedMeta').textContent=`${(file.size/1024/1024).toFixed(2)} MB · ${bits.join(' · ')}`}
 async function detectDocxContext(file){
  try{
   const zip=new ZipReader(await file.arrayBuffer());const xml=await zip.text('word/document.xml');if(!xml)return null;
