@@ -1273,6 +1273,16 @@
           "Prijediplomski studiji AUK Osijek (zavrsni rad)",
           "Diplomski studiji AUK Osijek"
         ]
+      },
+      {
+        "id": "ftrr",
+        "name": "Fakultet turizma i ruralnog razvoja u Pozegi",
+        "family": "social",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski studiji FTRR (zavrsni rad, Pozega)",
+          "Diplomski studiji FTRR (diplomski rad, Pozega)"
+        ]
       }
     ]
   },
@@ -1619,6 +1629,170 @@
         "status": "partial",
         "programs": [
           "Stručni prijediplomski studiji (završni rad, Veleučilište Hrvatsko zagorje Krapina)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "vus",
+    "name": "Veleuciliste u Sibeniku",
+    "units": [
+      {
+        "id": "vus",
+        "name": "Veleuciliste u Sibeniku",
+        "family": "social",
+        "status": "partial",
+        "programs": [
+          "Strucni prijediplomski studiji (Veleuciliste u Sibeniku)",
+          "Strucni diplomski studiji (Veleuciliste u Sibeniku)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "vuka",
+    "name": "Veleuciliste u Karlovcu",
+    "units": [
+      {
+        "id": "vuka",
+        "name": "Veleuciliste u Karlovcu",
+        "family": "mixed",
+        "status": "partial",
+        "programs": [
+          "Poslovni odjel (zavrsni rad, Karlovac)",
+          "Poslovni odjel (diplomski rad, Karlovac)",
+          "Strojarski odjel (zavrsni rad, Karlovac)",
+          "Strojarski odjel (diplomski rad, Karlovac)",
+          "Odjel sigurnosti i zastite (zavrsni rad, Karlovac)",
+          "Odjel sigurnosti i zastite (diplomski rad, Karlovac)",
+          "Odjel prehrambene tehnologije (zavrsni rad, Karlovac)",
+          "Odjel lovstva i zastite prirode (zavrsni rad, Karlovac)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "bak",
+    "name": "Veleuciliste Baltazar Zapresic",
+    "units": [
+      {
+        "id": "bak",
+        "name": "Veleuciliste Baltazar Zapresic",
+        "family": "social",
+        "status": "partial",
+        "programs": [
+          "Strucni prijediplomski studiji (Veleuciliste Baltazar Zapresic)",
+          "Strucni diplomski studiji (Veleuciliste Baltazar Zapresic)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "vguk",
+    "name": "Veleuciliste u Krizevcima",
+    "units": [
+      {
+        "id": "vguk",
+        "name": "Veleuciliste u Krizevcima",
+        "family": "stem",
+        "status": "partial",
+        "programs": [
+          "Strucni prijediplomski studij Poljoprivreda (Veleuciliste u Krizevcima)",
+          "Strucni diplomski studiji (Veleuciliste u Krizevcima)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "aspira",
+    "name": "Veleuciliste Aspira",
+    "units": [
+      {
+        "id": "aspira",
+        "name": "Veleuciliste Aspira",
+        "family": "social",
+        "status": "partial",
+        "programs": [
+          "Strucni prijediplomski studiji (Veleuciliste Aspira)",
+          "Strucni diplomski studiji (Veleuciliste Aspira)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "par",
+    "name": "Veleuciliste PAR",
+    "units": [
+      {
+        "id": "par",
+        "name": "Veleuciliste PAR",
+        "family": "social",
+        "status": "partial",
+        "programs": [
+          "Strucni prijediplomski studiji (Veleuciliste PAR)",
+          "Strucni diplomski studij Poslovno upravljanje (Veleuciliste PAR)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "vss",
+    "name": "Veleuciliste studija sigurnosti",
+    "units": [
+      {
+        "id": "vss",
+        "name": "Veleuciliste studija sigurnosti",
+        "family": "mixed",
+        "status": "partial",
+        "programs": [
+          "Strucni prijediplomski studij sigurnosti (Veleuciliste studija sigurnosti)",
+          "Strucni diplomski studij sigurnosti (Veleuciliste studija sigurnosti)"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unisb",
+    "name": "Sveuciliste u Slavonskom Brodu",
+    "units": [
+      {
+        "id": "sfsb",
+        "name": "Strojarski fakultet u Slavonskom Brodu",
+        "family": "stem",
+        "status": "partial",
+        "programs": [
+          "Strojarski fakultet u Slavonskom Brodu (zavrsni rad, Slavonski Brod)",
+          "Strojarski fakultet u Slavonskom Brodu (diplomski rad, Slavonski Brod)"
+        ]
+      },
+      {
+        "id": "teho",
+        "name": "Tehnicki odjel (UNISB)",
+        "family": "stem",
+        "status": "partial",
+        "programs": [
+          "Tehnicki odjel (zavrsni rad, Slavonski Brod)",
+          "Tehnicki odjel (diplomski rad, Slavonski Brod)"
+        ]
+      },
+      {
+        "id": "btho",
+        "name": "Biotehnicki odjel (UNISB)",
+        "family": "stem",
+        "status": "partial",
+        "programs": [
+          "Biotehnicki odjel (zavrsni rad, Slavonski Brod)",
+          "Biotehnicki odjel (diplomski rad, Slavonski Brod)"
+        ]
+      },
+      {
+        "id": "odhz",
+        "name": "Odjel drustveno-humanistickih znanosti (UNISB)",
+        "family": "social",
+        "status": "partial",
+        "programs": [
+          "Odjel drustveno-humanistickih znanosti (zavrsni rad, Slavonski Brod)",
+          "Odjel drustveno-humanistickih znanosti (diplomski rad, Slavonski Brod)"
         ]
       }
     ]

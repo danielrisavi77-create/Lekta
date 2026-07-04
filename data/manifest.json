@@ -2,7 +2,7 @@
   {
     "name": "VERIFIED_PROFILE_REGISTRY",
     "file": "data/profiles/verified-profiles.json",
-    "entries": 285
+    "entries": 315
   },
   {
     "name": "LEGAL_DEPARTMENT_REGISTRY",
@@ -32,7 +32,7 @@
   {
     "name": "ZAGREB_CATALOG",
     "file": "data/catalog/zagreb-catalog.json",
-    "entries": 29
+    "entries": 37
   },
   {
     "name": "INSTITUTIONAL_COVERAGE_MATRIX",
