@@ -118,7 +118,39 @@ function setupNavTools() {
   });
 }
 
-function boot() { renderIcons(); setupReveal(); animateHero(); setupTilt(); setupNavTools(); }
+// Prebacivanje teme (svijetla/tamna) + sprema u lekta.theme. Pre-paint restore ostaje inline
+// u <head> svake stranice (izbjegava bljesak); ovdje je samo klik-ponasanje, jedan izvor za sve
+// stranice (prije duplicirano inline u svakom tool HTML-u i u app.ts za index).
+function setupThemeToggle() {
+  const btn = document.getElementById('themeBtn');
+  if (!btn) return;
+  btn.addEventListener('click', () => {
+    const dark = document.documentElement.dataset.theme === 'dark';
+    document.documentElement.dataset.theme = dark ? 'light' : 'dark';
+    try { localStorage.setItem('lekta.theme', dark ? 'light' : 'dark'); } catch { /* storage odbijen */ }
+  });
+}
+
+// Mobilni hamburger izbornik: #mobileMenuBtn otvara/zatvara #mobileNav, klik na link zatvara.
+function setupMobileNav() {
+  const btn = document.getElementById('mobileMenuBtn');
+  const nav = document.getElementById('mobileNav');
+  if (!btn || !nav) return;
+  btn.addEventListener('click', () => {
+    const open = nav.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  nav.addEventListener('click', (e) => {
+    if ((e.target as HTMLElement).closest('a')) {
+      nav.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+    }
+  });
+}
+
+function boot() {
+  renderIcons(); setupReveal(); animateHero(); setupTilt(); setupNavTools(); setupThemeToggle(); setupMobileNav();
+}
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', boot);
 } else {

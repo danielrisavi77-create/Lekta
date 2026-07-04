@@ -102,8 +102,7 @@ function init(){
  if(location.search.includes('demo=1'))setTimeout(runDemo,300);
 }
 function bind(){
- $('#themeBtn').onclick=()=>{const dark=document.documentElement.dataset.theme==='dark';document.documentElement.dataset.theme=dark?'light':'dark';try{localStorage.setItem('lekta.theme',dark?'light':'dark')}catch(e: any){}};
- $('#mobileMenuBtn').onclick=()=>{const p=$('#mobileNav'),open=p.classList.toggle('open');$('#mobileMenuBtn').setAttribute('aria-expanded',open?'true':'false')};$('#mobileNav').onclick=(e: any)=>{if((e.target as any).closest('a')){$('#mobileNav').classList.remove('open');$('#mobileMenuBtn').setAttribute('aria-expanded','false')}};
+ /* Tema i mobilni izbornik su sada u shared/ui-boot (jedan izvor za sve stranice). */
  $('#browseBtn').onclick=(e: any)=>{e.stopPropagation();$('#fileInput').click()};$('#dropzone').onclick=(e: any)=>{if(!e.target.closest('button'))$('#fileInput').click()};$('#dropzone').onkeydown=(e: any)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();$('#fileInput').click()}};
  $('#fileInput').onchange=(e: any)=>setFile(e.target.files[0]);$('#browsePdf').onclick=()=>$('#pdfInput').click();$('#pdfInput').onchange=(e: any)=>setAuxFile('pdf',e.target.files[0]);$('#removePdf').onclick=()=>setAuxFile('pdf',null);$('#browseMetadata').onclick=()=>$('#metadataInput').click();$('#metadataInput').onchange=(e: any)=>setAuxFile('metadata',e.target.files[0]);$('#removeMetadata').onclick=()=>setAuxFile('metadata',null);$('#browseAv').onclick=()=>$('#avInput').click();$('#avInput').onchange=(e: any)=>setAuxFile('av',e.target.files[0]);$('#removeAv').onclick=()=>setAuxFile('av',null);
  for(const ev of ['dragenter','dragover'])$('#dropzone').addEventListener(ev,(e: any)=>{e.preventDefault();$('#dropzone').classList.add('drag')});
