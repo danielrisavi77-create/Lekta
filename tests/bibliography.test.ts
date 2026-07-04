@@ -45,6 +45,15 @@ describe('organizeBibliography', () => {
     const anic = r.entries.find(e => e.text.startsWith('Anić'));
     expect(anic?.text).toContain('https://primjer.hr/clanak');
   });
+
+  it('uzastopni goli URL-ovi (webografija) ostaju zasebni zapisi', () => {
+    // Regresija: bezuvjetno spajanje URL-nastavka progutalo bi drugi URL u prvi.
+    const r = organizeBibliography(
+      'https://www.nn.hr/clanci/sluzbeni/2020_01_1.html\nhttps://www.zakon.hr/z/307/Zakon-o-radu',
+    );
+    expect(r.inputCount).toBe(2);
+    expect(r.entries).toHaveLength(2);
+  });
 });
 
 describe('detectIssues', () => {
@@ -56,6 +65,11 @@ describe('detectIssues', () => {
   it('označava mrežni izvor bez datuma pristupa', () => {
     expect(detectIssues('Portal (2021). https://primjer.hr/clanak')).toContain('mrežni izvor bez datuma pristupa');
     expect(detectIssues('Portal (2021). https://primjer.hr (pristup 2.7.2026.)')).not.toContain('mrežni izvor bez datuma pristupa');
+  });
+
+  it('prihvaća "citirano" kao marker datuma pristupa (hrvatski Vancouver/IEEE)', () => {
+    expect(detectIssues('SZO. (2020). Izvještaj. https://who.int [citirano: 2.7.2026.]'))
+      .not.toContain('mrežni izvor bez datuma pristupa');
   });
 
   it('goli datum objave nije datum pristupa; hvata i bare www URL', () => {

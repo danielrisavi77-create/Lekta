@@ -34,8 +34,10 @@ export function detectIssues(text: string): string[] {
   }
   const hasUrl = /(https?:\/\/|www\.)/i.test(text);
   // Datum pristupa mora biti oznacen kljucnom rijeci; goli datum je najcesce datum objave,
-  // pa ga ne prihvacamo kao dokaz datuma pristupa (inace lazni negativ).
-  const hasAccess = /(pristup|preuzeto|posjeć|posjec|accessed|retrieved)/i.test(text);
+  // pa ga ne prihvacamo kao dokaz datuma pristupa (inace lazni negativ). "citirano" je
+  // standardni hrvatski Vancouver/IEEE marker (STEM/medicina). Poznato ogranicenje: rijec se
+  // trazi bilo gdje u zapisu, pa naslov koji sadrzi "pristup" moze ugasiti upozorenje.
+  const hasAccess = /(pristup|preuzeto|posjeć|posjec|accessed|retrieved|citirano|cited)/i.test(text);
   if (hasUrl && !hasAccess) {
     issues.push('mrežni izvor bez datuma pristupa');
   }
@@ -49,11 +51,14 @@ export function organizeBibliography(raw: string): BibResult {
   const rawLines = (raw || '').split(/\r?\n/).map(s => s.trim()).filter(Boolean);
   // Spoji prelomljene retke: redak koji pocinje GOLIM URL-om je nastavak prethodne jedinice
   // (cesto pri kopiranju iz PDF-a gdje se referenca prelama), ne nova referenca. Namjerno
-  // konzervativno: samo URL-nastavak je siguran signal (nova referenca nikad ne pocinje URL-om);
-  // ostale prelomljene retke ostavljamo jer bi ih heuristika mogla krivo spojiti.
+  // konzervativno: samo URL-nastavak je siguran signal; ostale prelome ostavljamo. ALI ne
+  // spajamo ako je i sam prethodni redak goli URL, inace bi webografija/popis mreznih izvora
+  // (vise zasebnih URL-ova, jedan po retku) kolabirao u jednu jedinicu.
+  const isBareUrl = (s: string): boolean => /^(https?:\/\/|www\.)/i.test(s);
   const lines: string[] = [];
   for (const line of rawLines) {
-    if (lines.length && /^(https?:\/\/|www\.)/i.test(line)) {
+    const prev = lines[lines.length - 1];
+    if (lines.length && isBareUrl(line) && !isBareUrl(prev)) {
       lines[lines.length - 1] += ' ' + line;
     } else {
       lines.push(line);
