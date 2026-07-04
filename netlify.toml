@@ -1,0 +1,17 @@
+# Netlify / Cloudflare Pages deploy konfiguracija za Lekta (ThesisReady).
+# Javni statični build: klijentska aplikacija, bez backenda. Sva analiza je lokalna u pregledniku.
+#
+# DEPLOY=1 iskljucuje internu verifikacijsku konzolu (verification.html) iz builda, pa se ne
+# objavljuje admin alat ni ~163MB source PDF-ova; javni bundle je ~3MB. Sigurnosna zaglavlja
+# (CSP itd.) dolaze iz public/_headers koji Vite kopira u dist/.
+#
+# Cloudflare Pages: isti build command i output dir postave se u dashboardu (Pages projekt),
+# _headers se jednako primjenjuje.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+  DEPLOY = "1"
