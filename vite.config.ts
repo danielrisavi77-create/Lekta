@@ -37,6 +37,7 @@ const isDeploy = process.env.DEPLOY === '1';
 const input: Record<string, string> = {
   index: resolve(__dirname, 'index.html'),
   usporedba: resolve(__dirname, 'landing_usporedba.html'),
+  alati: resolve(__dirname, 'alati.html'),
   citat: resolve(__dirname, 'citat.html'),
   kartice: resolve(__dirname, 'kartice.html'),
   naslovnica: resolve(__dirname, 'naslovnica.html'),
