@@ -1109,6 +1109,16 @@
     "name": "Sveuciliste Josipa Jurja Strossmayera u Osijeku",
     "units": [
       {
+        "id": "biolos",
+        "name": "Odjel za biologiju, Sveuciliste u Osijeku",
+        "family": "stem",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski studij Biologija (zavrsni rad, Osijek)",
+          "Diplomski studiji Odjela za biologiju (Osijek)"
+        ]
+      },
+      {
         "id": "efos",
         "name": "Ekonomski fakultet u Osijeku",
         "family": "social",
@@ -1126,6 +1136,15 @@
         "programs": [
           "Prijediplomski studiji FAZOS (zavrsni rad)",
           "Diplomski studiji FAZOS"
+        ]
+      },
+      {
+        "id": "fdmz",
+        "name": "Fakultet za dentalnu medicinu i zdravstvo Osijek",
+        "family": "biomed",
+        "status": "partial",
+        "programs": [
+          "Diplomski/integrirani studiji FDMZ"
         ]
       },
       {
@@ -1157,6 +1176,24 @@
         ]
       },
       {
+        "id": "fizos",
+        "name": "Odjel za fiziku, Sveuciliste u Osijeku",
+        "family": "stem",
+        "status": "partial",
+        "programs": [
+          "Diplomski studij Fizika i informatika (Osijek)"
+        ]
+      },
+      {
+        "id": "foozos",
+        "name": "Fakultet za odgojne i obrazovne znanosti Osijek",
+        "family": "social",
+        "status": "partial",
+        "programs": [
+          "Diplomski/integrirani studiji FOOZOS"
+        ]
+      },
+      {
         "id": "grafos",
         "name": "Gradevinski i arhitektonski fakultet Osijek",
         "family": "stem",
@@ -1167,6 +1204,15 @@
         ]
       },
       {
+        "id": "kbfdj",
+        "name": "Katolicki bogoslovni fakultet u Djakovu",
+        "family": "social",
+        "status": "partial",
+        "programs": [
+          "Integrirani filozofsko-teoloski studij (KBF Djakovo)"
+        ]
+      },
+      {
         "id": "kemos",
         "name": "Odjel za kemiju, Sveuciliste u Osijeku",
         "family": "stem",
@@ -1174,6 +1220,19 @@
         "programs": [
           "Prijediplomski studij Kemija (zavrsni rad, Osijek)",
           "Diplomski studij Kemija (Osijek)"
+        ]
+      },
+      {
+        "id": "mathos",
+        "name": "Fakultet primijenjene matematike i informatike (Osijek)",
+        "family": "stem",
+        "status": "partial",
+        "programs": [
+          "Sveučilišni prijediplomski studij Matematika",
+          "Sveučilišni prijediplomski studij Matematika i računarstvo",
+          "Sveučilišni diplomski studij Matematika i računarstvo",
+          "Sveučilišni diplomski studij Financijska matematika i statistika",
+          "Sveučilišni diplomski nastavnički studij matematike i informatike"
         ]
       },
       {
@@ -1203,6 +1262,16 @@
         "status": "partial",
         "programs": [
           "Diplomski studiji PTFOS"
+        ]
+      },
+      {
+        "id": "uaos",
+        "name": "Akademija za umjetnost i kulturu u Osijeku",
+        "family": "arts",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski studiji AUK Osijek (zavrsni rad)",
+          "Diplomski studiji AUK Osijek"
         ]
       }
     ]

@@ -27533,5 +27533,861 @@
       ],
       "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
     }
+  },
+  {
+    "id": "uaos-zavrsni",
+    "unitId": "uaos",
+    "programs": [
+      "Prijediplomski studiji AUK Osijek (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Akademija za umjetnost i kulturu Osijek, zavrsni rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje iz Pravilnika 2024 (jedinstveno za sve odsjeke): TNR, tekst 12 (naslovi 14, fusnote 10), prored 1,5, sve margine 2,5 cm, A4. Citatni stil NIJE pinan: harvardski je imenovan za glazbenu umjetnost i KMM, ali izvedbeni studiji imaju 'nacin citiranja odreduje mentor' pa na razini ustanove nema jednog imperativa (posten strop).",
+    "sources": [
+      {
+        "title": "Pravilnik o zavrsnim i diplomskim radovima i ispitima (Akademija za umjetnost i kulturu u Osijeku, veljaca 2024)",
+        "url": "http://www.uaos.unios.hr/wp-content/uploads/2024/04/Pravilnik-o-zavr%C5%A1nim-i-diplomskim-radovima-i-ispitima-2024.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnim i diplomskim radovima i ispitima (Akademija za umjetnost i kulturu u Osijeku, veljaca 2024)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna zavrsna rada (Akademija za umjetnost i kulturu u Osijeku) iz sluzbenog repozitorija (repozitorij.uaos.unios.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "uaos:155",
+          "repository": "repozitorij.uaos.unios.hr",
+          "pageFormat": "A4",
+          "pages": 18,
+          "sha256": "a9b4d9e6226482d1797ffcbb7005f07874d1d4956b7a8c62c89149b51242e35a",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "uaos:156",
+          "repository": "repozitorij.uaos.unios.hr",
+          "pageFormat": "A4",
+          "pages": 18,
+          "sha256": "55dcab3a7698e2a57f8d6bf9ecb87fd4664d53c752a24b55124ceb99abdc74d6",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "uaos:159",
+          "repository": "repozitorij.uaos.unios.hr",
+          "pageFormat": "A4",
+          "pages": 25,
+          "sha256": "e348c04f714670f282c0f03e79738efe7a536f09cb4630f5dbe6a3fb4ba4483b",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "uaos:200",
+          "repository": "repozitorij.uaos.unios.hr",
+          "pageFormat": "A4",
+          "pages": 20,
+          "sha256": "1d6505da3acbea2ab4c282a1cb003fab52f41224c06557e824eff3863a71461d",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (uaos:155, uaos:156, uaos:159, uaos:200) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (18-25 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "uaos-diplomski",
+    "unitId": "uaos",
+    "programs": [
+      "Diplomski studiji AUK Osijek"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Akademija za umjetnost i kulturu Osijek, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje iz Pravilnika 2024 (jedinstveno za sve odsjeke): TNR, tekst 12 (naslovi 14, fusnote 10), prored 1,5, sve margine 2,5 cm, A4. Citatni stil NIJE pinan: harvardski je imenovan za glazbenu umjetnost i KMM, ali izvedbeni studiji imaju 'nacin citiranja odreduje mentor' pa na razini ustanove nema jednog imperativa (posten strop).",
+    "sources": [
+      {
+        "title": "Pravilnik o zavrsnim i diplomskim radovima i ispitima (Akademija za umjetnost i kulturu u Osijeku, veljaca 2024)",
+        "url": "http://www.uaos.unios.hr/wp-content/uploads/2024/04/Pravilnik-o-zavr%C5%A1nim-i-diplomskim-radovima-i-ispitima-2024.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnim i diplomskim radovima i ispitima (Akademija za umjetnost i kulturu u Osijeku, veljaca 2024)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna diplomska rada (Akademija za umjetnost i kulturu u Osijeku) iz sluzbenog repozitorija (repozitorij.uaos.unios.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2014,
+          2015
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "uaos:13",
+          "repository": "repozitorij.uaos.unios.hr",
+          "pageFormat": "A4",
+          "pages": 31,
+          "sha256": "bd9b4a3bfdcf81abe9623a5693aceb4a7577dfba843dd6540c53cff5ed3d999b",
+          "level": "diplomski"
+        },
+        {
+          "pid": "uaos:24",
+          "repository": "repozitorij.uaos.unios.hr",
+          "pageFormat": "A4",
+          "pages": 43,
+          "sha256": "464d87023a93b845094bdf8a6c3531f830240fa9eadc8419a12780b65687820d",
+          "level": "diplomski"
+        },
+        {
+          "pid": "uaos:86",
+          "repository": "repozitorij.uaos.unios.hr",
+          "pageFormat": "A4",
+          "pages": 53,
+          "sha256": "31aa183e48d1d6120c8ca33cc6b984a4e60e4ccfaa8ef188de7dd1d3def5ad1e",
+          "level": "diplomski"
+        },
+        {
+          "pid": "uaos:93",
+          "repository": "repozitorij.uaos.unios.hr",
+          "pageFormat": "A4",
+          "pages": 63,
+          "sha256": "967276f1038f2a69cfcecaf25440bf476880b696279c12d0f7dcffd9fa2c8218",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (uaos:13, uaos:24, uaos:86, uaos:93) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (31-63 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "fdmz-diplomski",
+    "unitId": "fdmz",
+    "programs": [
+      "Diplomski/integrirani studiji FDMZ"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Fakultet za dentalnu medicinu i zdravstvo Osijek, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "recommendedCitation": "vancouver",
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Upute 2025 (Odbor za diplomske radove): A4 sa slobodnim rubnicima 2,5 cm, prored 1,5, TNR 12, obostrano poravnanje (reference lijevo). Citiranje obvezno vankuverskim stilom ('Literatura se obvezno navodi vankuverskim stilom', reference redoslijedom pojavljivanja, brojevi u zagradi) -> vancouver.",
+    "sources": [
+      {
+        "title": "Upute za izradu i oblikovanje diplomskoga rada (FDMZ, rujan 2025)",
+        "url": "https://www.fdmz.hr/images/studenti/zavrsni_i_diplomski_radovi/2025/upute_za_izradu_i_oblikovanje_2025.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu i oblikovanje diplomskoga rada (FDMZ, rujan 2025)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Stil citiranja (Vancouver, numericki)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna diplomska rada (Fakultet za dentalnu medicinu i zdravstvo Osijek) iz sluzbenog repozitorija (repozitorij.fdmz.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2018,
+          2019,
+          2020
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "fdmz:13",
+          "repository": "repozitorij.fdmz.hr",
+          "pageFormat": "A4",
+          "pages": 45,
+          "sha256": "5ca412d320b1a478a0a966bc60ea466a9d356b8ac626db0e6844339557d9930f",
+          "level": "diplomski"
+        },
+        {
+          "pid": "fdmz:32",
+          "repository": "repozitorij.fdmz.hr",
+          "pageFormat": "A4",
+          "pages": 40,
+          "sha256": "09b7748ce0a938e83fe6ad3a6d13a10dc2332632cc55906e52de9be8e2d462f0",
+          "level": "diplomski"
+        },
+        {
+          "pid": "fdmz:34",
+          "repository": "repozitorij.fdmz.hr",
+          "pageFormat": "A4",
+          "pages": 46,
+          "sha256": "7bdea1c6cc7519d6a84932dd844daceccea571ac0709dc1854a0526b890d3cfd",
+          "level": "diplomski"
+        },
+        {
+          "pid": "fdmz:35",
+          "repository": "repozitorij.fdmz.hr",
+          "pageFormat": "A4",
+          "pages": 41,
+          "sha256": "ac899091d1b61a88579814233fe063bc6e1809110477c1334f26ba852dc686cb",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (fdmz:13, fdmz:32, fdmz:34, fdmz:35) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (40-46 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "foozos-diplomski",
+    "unitId": "foozos",
+    "programs": [
+      "Diplomski/integrirani studiji FOOZOS"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Fakultet za odgojne i obrazovne znanosti Osijek, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "recommendedCitation": "apa7",
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "checkMargins": false
+    },
+    "facts": [],
+    "note": "Upute (Tehnicka obrada teksta): A4, TNR 12 obican, prored 1,5, poravnanje obostrano; naslovi 14, podnaslovi 12 podebljano. Margine u cm NISU propisane pa se ne provjeravaju (checkMargins false, ne izmisljam). Citiranje: 'Literatura se navodi koristeci se APA stilom' (apastyle.apa.org = 7. izd.) -> apa7. Ista uputa vrijedi i za rad bez empirijskog istrazivanja.",
+    "sources": [
+      {
+        "title": "Upute za pisanje diplomskoga rada koji ima empirijsko istrazivanje (FOOZOS, 2023)",
+        "url": "https://www.foozos.hr/wp-content/uploads/2023/11/Upute-za-pisanje-diplomskoga-rada-koji-ima-empirijsko-istrazivanje.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pisanje diplomskoga rada koji ima empirijsko istrazivanje (FOOZOS, 2023)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Stil citiranja (APA)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna diplomska rada (Fakultet za odgojne i obrazovne znanosti Osijek) iz sluzbenog repozitorija (repozitorij.foozos.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "foozos:3",
+          "repository": "repozitorij.foozos.hr",
+          "pageFormat": "A4",
+          "pages": 45,
+          "sha256": "6ad6e0a84dbc0cbb7e450bfc15f3954f9af9838a361159165e9a04f082114c65",
+          "level": "diplomski"
+        },
+        {
+          "pid": "foozos:4",
+          "repository": "repozitorij.foozos.hr",
+          "pageFormat": "A4",
+          "pages": 36,
+          "sha256": "35f1695f5440c947ddac91388c850a1e844384e1f7bbcb523f3a8ad928a5a7f5",
+          "level": "diplomski"
+        },
+        {
+          "pid": "foozos:5",
+          "repository": "repozitorij.foozos.hr",
+          "pageFormat": "A4",
+          "pages": 43,
+          "sha256": "a0e2705b0f0b28780aa88fbf20b167d6daba9c593d15e28b90624c9f1b8ab714",
+          "level": "diplomski"
+        },
+        {
+          "pid": "foozos:8",
+          "repository": "repozitorij.foozos.hr",
+          "pageFormat": "A4",
+          "pages": 38,
+          "sha256": "1fb211ba4d8eeb85a92198ab07e83aef42f2bef3968a72474a6398aa59ef3198",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (foozos:3, foozos:4, foozos:5, foozos:8) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (36-45 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "kbfdj-diplomski",
+    "unitId": "kbfdj",
+    "programs": [
+      "Integrirani filozofsko-teoloski studij (KBF Djakovo)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Katolicki bogoslovni fakultet u Djakovu, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3.5
+      }
+    },
+    "facts": [],
+    "note": "Pravilnik 7.4.2025, Upute za izradu diplomskog rada: 'Rad treba pisati fontom Times New Roman, velicine 12pt uz prored 1,5', A4, rubnice lijeva 35 mm, desna/gornja/donja 25 mm. Citatni stil NIJE pinan: 'u skladu s pravilima odgovarajuceg stila citiranja u struci odnosno prema uputama mentora' (posten strop).",
+    "sources": [
+      {
+        "title": "Pravilnik o diplomskom radu i diplomskom ispitu s Uputama za izradu diplomskog rada (KBF Djakovo, 7.4.2025)",
+        "url": "https://www.djkbf.unios.hr/wp-content/uploads/2025/07/Pravilnik_o_diplomskim_ispitima__tezarij_i_obrasci.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o diplomskom radu i diplomskom ispitu s Uputama za izradu diplomskog rada (KBF Djakovo, 7.4.2025)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Opseg (30-60 kartica)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna diplomska rada (Katolicki bogoslovni fakultet u Djakovu) iz sluzbenog repozitorija (repozitorij.djkbf.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "djkbf:1",
+          "repository": "repozitorij.djkbf.hr",
+          "pageFormat": "A4",
+          "pages": 77,
+          "sha256": "7eefd41551e0edee7b3568d6cfe917e3410a9560b460799f8f8a5f8013daf233",
+          "level": "diplomski"
+        },
+        {
+          "pid": "djkbf:3",
+          "repository": "repozitorij.djkbf.hr",
+          "pageFormat": "A4",
+          "pages": 56,
+          "sha256": "7d2ee38d42b569de2bc5de376cbc8601982c595b4623a288d4c627a4e456f9f7",
+          "level": "diplomski"
+        },
+        {
+          "pid": "djkbf:4",
+          "repository": "repozitorij.djkbf.hr",
+          "pageFormat": "A4",
+          "pages": 49,
+          "sha256": "2e4896289ec5a7c78bcc3dc0d481d26e7757203fad2808c314a5dab4edc327e1",
+          "level": "diplomski"
+        },
+        {
+          "pid": "djkbf:5",
+          "repository": "repozitorij.djkbf.hr",
+          "pageFormat": "A4",
+          "pages": 48,
+          "sha256": "70e3e95f97b981d60b6e0a8ba761fc7d641809a40fa3babb2396ad68858d0e4d",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (djkbf:1, djkbf:3, djkbf:4, djkbf:5) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (48-77 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "biolos-zavrsni",
+    "unitId": "biolos",
+    "programs": [
+      "Prijediplomski studij Biologija (zavrsni rad, Osijek)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Odjel za biologiju Osijek, zavrsni rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "recommendedCitation": "harvard",
+      "font": [
+        "Times New Roman",
+        "Arial"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3
+      }
+    },
+    "facts": [],
+    "note": "Pravilnik o zavrsnom radu (8.9.2023): A4, margine 3 cm lijevo te 2,5 cm desno/gore/dolje, poravnanje po objema marginama, TNR ili Arial 12 (odabrani font kroz cijeli tekst), prored 1,5. Citiranje: 'navodi se prezime autora i godina' + Harvard Educational Review stil (Zotero) -> harvard.",
+    "sources": [
+      {
+        "title": "Pravilnik o zavrsnom radu (Odjel za biologiju, Sveuciliste u Osijeku, 8.9.2023)",
+        "url": "https://www.biologija.unios.hr/wp-content/uploads/2023/09/pravilnik-o-zavrsnom-radu-08092023.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnom radu (Odjel za biologiju, Sveuciliste u Osijeku, 8.9.2023)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Stil citiranja (autor-godina/Harvard)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna zavrsna rada (Odjel za biologiju, Sveuciliste u Osijeku) iz sluzbenog repozitorija (repozitorij.biologija.unios.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "bioos:129",
+          "repository": "repozitorij.biologija.unios.hr",
+          "pageFormat": "A4",
+          "pages": 21,
+          "sha256": "48b53cf7d2708b0a018914ebeea95a62103ddc144b90701c0b7c0618700bc052",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "bioos:131",
+          "repository": "repozitorij.biologija.unios.hr",
+          "pageFormat": "A4",
+          "pages": 21,
+          "sha256": "93e830dc0f5689c00f6ebb16d499eb3842ac994d444574ae5292765d780dda5f",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "bioos:132",
+          "repository": "repozitorij.biologija.unios.hr",
+          "pageFormat": "A4",
+          "pages": 23,
+          "sha256": "4e3bfcb33f4e140fd5131c2f5481b36c4223f13dfaec4830eb79b6a7e5609171",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "bioos:133",
+          "repository": "repozitorij.biologija.unios.hr",
+          "pageFormat": "A4",
+          "pages": 27,
+          "sha256": "d7d4cdd8d7b26e087a3a1e05ec41ae3e41373df1fc197c2f17ad66b1d3a4b54a",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (bioos:129, bioos:131, bioos:132, bioos:133) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (21-27 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "biolos-diplomski",
+    "unitId": "biolos",
+    "programs": [
+      "Diplomski studiji Odjela za biologiju (Osijek)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Odjel za biologiju Osijek, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "recommendedCitation": "harvard",
+      "font": [
+        "Times New Roman",
+        "Arial"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3
+      }
+    },
+    "facts": [],
+    "note": "Pravilnik o diplomskom radu (6.10.2023): A4, margine 3 cm lijevo te 2,5 cm desno/gore/dolje, poravnanje po objema marginama, TNR ili Arial 12 (odabrani font kroz cijeli tekst), prored 1,5. Citiranje: 'navodi se prezime autora i godina' + Harvard Educational Review stil (Zotero) -> harvard.",
+    "sources": [
+      {
+        "title": "Pravilnik o diplomskom radu i diplomskim ispitima (Odjel za biologiju, Sveuciliste u Osijeku, 6.10.2023)",
+        "url": "https://www.biologija.unios.hr/wp-content/uploads/2023/10/pravilnik-o-dipl-radu-i-dipl-ispitima102023.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o diplomskom radu i diplomskim ispitima (Odjel za biologiju, Sveuciliste u Osijeku, 6.10.2023)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Stil citiranja (autor-godina/Harvard)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna diplomska rada (Odjel za biologiju, Sveuciliste u Osijeku) iz sluzbenog repozitorija (repozitorij.biologija.unios.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "bioos:8",
+          "repository": "repozitorij.biologija.unios.hr",
+          "pageFormat": "A4",
+          "pages": 70,
+          "sha256": "5c9117d2fb9fa697fcf251911c67ebf94b9a70500936892aa410f90ba9baa91e",
+          "level": "diplomski"
+        },
+        {
+          "pid": "bioos:9",
+          "repository": "repozitorij.biologija.unios.hr",
+          "pageFormat": "A4",
+          "pages": 50,
+          "sha256": "93304b430722c25fe912c1071ce92785a2c82b9caabfe470f070b606c32d9f36",
+          "level": "diplomski"
+        },
+        {
+          "pid": "bioos:10",
+          "repository": "repozitorij.biologija.unios.hr",
+          "pageFormat": "A4",
+          "pages": 47,
+          "sha256": "a63a10058437911222e1dcee49ebd703ffc3bb124ba8b990bae45a16199206f1",
+          "level": "diplomski"
+        },
+        {
+          "pid": "bioos:11",
+          "repository": "repozitorij.biologija.unios.hr",
+          "pageFormat": "A4",
+          "pages": 72,
+          "sha256": "3bc569b6e20922aa2d4cbd7b7d44001f7da7f58f3d3eabf0e5b07bff0c308daf",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (bioos:8, bioos:9, bioos:10, bioos:11) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (47-72 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "fizos-diplomski",
+    "unitId": "fizos",
+    "programs": [
+      "Diplomski studij Fizika i informatika (Osijek)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Odjel za fiziku Osijek, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Upute 2023: 'Format: A4 (210x297 mm), tekst s 1,5 proredom, velicina slova 12 pt, pisano u Times New Roman, margine sa svih strana od 2,5 cm'. Citatni stil NIJE pinan: novije Upute daju autor-godina primjere bez imena stila, a starije Opce upute propisuju CROSBI/HZB format; kontradikcija bez imenovanog stila = bez pina (posten strop).",
+    "sources": [
+      {
+        "title": "Upute za pisanje diplomskog rada (Odjel za fiziku, Sveuciliste u Osijeku, 2023)",
+        "url": "https://www.fizika.unios.hr/wp-content/uploads/2023/06/Opce_Upute_za_pisanje_diplomskog_rada.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pisanje diplomskog rada (Odjel za fiziku, Sveuciliste u Osijeku, 2023)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna diplomska rada (Odjel za fiziku, Sveuciliste u Osijeku) iz sluzbenog repozitorija (repozitorij.fizika.unios.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "fizos:1",
+          "repository": "repozitorij.fizika.unios.hr",
+          "pageFormat": "A4",
+          "pages": 42,
+          "sha256": "5edce19639cf4e1f1163ce9c16210f70ab4ed0e98fc11e15330d5042d7bb4ead",
+          "level": "diplomski"
+        },
+        {
+          "pid": "fizos:3",
+          "repository": "repozitorij.fizika.unios.hr",
+          "pageFormat": "A4",
+          "pages": 67,
+          "sha256": "d4c58c28e6f717ad00e354599520fd2ed3e3d65c72ca2e2509e8038cff123879",
+          "level": "diplomski"
+        },
+        {
+          "pid": "fizos:4",
+          "repository": "repozitorij.fizika.unios.hr",
+          "pageFormat": "A4",
+          "pages": 73,
+          "sha256": "f2cc08a8f52ca408a50f8e4a3163f77b9e46c565c721049afdd788b2fc35b6a6",
+          "level": "diplomski"
+        },
+        {
+          "pid": "fizos:5",
+          "repository": "repozitorij.fizika.unios.hr",
+          "pageFormat": "A4",
+          "pages": 61,
+          "sha256": "4e646c55e1c2059ce12986e10ce4050458ba98842bf6dac58980cdf2562a1c42",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (fizos:1, fizos:3, fizos:4, fizos:5) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (42-73 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
   }
 ]
