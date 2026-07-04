@@ -27,9 +27,13 @@ Ako `check` pada, promjena nije gotova. Ne commitaj crveno.
 
 - `data/` je tipiziran i modularan: profili, izvori, rokovi, katalog, coverage,
   metodologija, svaki u svom JSON-u. Loaderi u `src/*` ih hidriraju i tipiziraju.
-- `src/ui/app.ts` je joÅ¡ monolit (~615 redaka, `@ts-nocheck`): DOCX parser, svi auditi,
-  Legal Citation Engine, UI, narudÅ¾be i plaÄanje su u toj jednoj datoteci. Cilj je
-  postupno ga razbiti u tipizirane module bez promjene ponaÅ¡anja (vidi backlog). Ulaz je `src/main.ts` (tanki bootstrap koji uvozi ui-boot i ui/app), NE monolit.
+- `src/ui/app.ts` je UI orkestrator (~535 redaka, jos `@ts-nocheck`): UI, narudzbe,
+  placanje i QA. Analiticka jezgra je izvucena: `analyzeDocx` + auditni helperi zive u
+  `src/analysis/analyze-docx.ts` (tipizirano, bez `@ts-nocheck`), a analiza u pregledniku
+  radi u Web Workeru (`analyze-docx.worker.ts` + most `analyze-docx-client.ts` s inline
+  fallbackom; worker koristi isti @xmldom/xmldom DOMParser kao testovi, pa golden pokriva
+  worker putanju). Preostalo za split: UI dijelovi i skidanje `@ts-nocheck` s app.ts.
+  Ulaz je `src/main.ts` (tanki bootstrap koji uvozi ui-boot i ui/app), NE monolit.
 
 ## Option A: ruleEntries su izvor istine
 
@@ -82,7 +86,9 @@ engine bez golden-file testa koji PRVO dokazuje zateÄeno ponaÅ¡anje.
 
 ## Mapa datoteka
 
-- `src/ui/app.ts` â monolitni runtime (parser, auditi, UI, narudÅ¾be). Meta: razbiti.
+- `src/ui/app.ts` â UI orkestrator (UI, narudzbe, placanje, QA). Meta: dovrsiti split.
+- `src/analysis/analyze-docx.ts` â analyzeDocx + auditni helperi (jezgra analize).
+- `src/analysis/analyze-docx-client.ts` â most prema Web Workeru, inline fallback. Meta: razbiti.
 - `src/profiles/profile-loader.ts` â registar profila, hidracija izvora, kompilacija.
 - `src/profiles/rule-compiler.ts` â Option A: ruleEntries -> effectiveRules.
 - `src/profiles/profile-schema.ts` â tipovi profila i pravila.
