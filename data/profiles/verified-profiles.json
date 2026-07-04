@@ -19323,6 +19323,7 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "rules": {
+      "recommendedCitation": "ieee",
       "font": [
         "Times New Roman"
       ],
@@ -19339,7 +19340,7 @@
       }
     },
     "facts": [],
-    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet elektrotehnike, racunarstva i informacijskih tehnologija Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet elektrotehnike, racunarstva i informacijskih tehnologija Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno. Citat IEEE iz Uputa (brojcano [1] uglate zagrade). Validacija podatkovno blokirana: FERIT (etfos) objavljuje samo produzeni sazetak, puni rad embargiran.",
     "sources": [
       {
         "title": "Upute za izradu zavrsnog rada (FERIT)",
@@ -19373,6 +19374,7 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "rules": {
+      "recommendedCitation": "ieee",
       "font": [
         "Times New Roman"
       ],
@@ -19389,7 +19391,7 @@
       }
     },
     "facts": [],
-    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet elektrotehnike, racunarstva i informacijskih tehnologija Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet elektrotehnike, racunarstva i informacijskih tehnologija Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno. Citat IEEE iz Uputa. Validacija blokirana: FERIT objavljuje samo produzeni sazetak (puni rad embargiran).",
     "sources": [
       {
         "title": "Upute za izradu diplomskog rada (FERIT)",
@@ -19423,6 +19425,7 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "rules": {
+      "recommendedCitation": "ieee",
       "font": [
         "Times New Roman",
         "Arial",
@@ -19442,7 +19445,7 @@
       }
     },
     "facts": [],
-    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Gradevinski i arhitektonski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Gradevinski i arhitektonski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno. Citat IEEE iz Smjernica 2022 (numerira arapskim brojevima u uglatim zagradama). Validacija blokirana: GFOS repozitorij nema otvorenih radova (embargo).",
     "sources": [
       {
         "title": "Smjernice za izradu i oblikovanje zavrsnih i diplomskih radova (GFOS, 2022)",
@@ -19477,6 +19480,7 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "rules": {
+      "recommendedCitation": "ieee",
       "font": [
         "Times New Roman",
         "Arial",
@@ -19496,7 +19500,7 @@
       }
     },
     "facts": [],
-    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Gradevinski i arhitektonski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Gradevinski i arhitektonski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno. Citat IEEE iz Smjernica 2022. Validacija blokirana: GFOS nema otvorenih radova (embargo).",
     "sources": [
       {
         "title": "Smjernice za izradu i oblikovanje zavrsnih i diplomskih radova (GFOS, 2022)",
@@ -19531,6 +19535,7 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "rules": {
+      "recommendedCitation": "harvard",
       "font": [
         "Arial",
         "Calibri"
@@ -19550,7 +19555,7 @@
       }
     },
     "facts": [],
-    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Prehrambeno-tehnoloski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Prehrambeno-tehnoloski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno. Citat autor-godina/Harvard iz Uputa 2020 ('uz prezime autora godina u zagradi', abecedni popis). Field-sampled 3 rada.",
     "sources": [
       {
         "title": "Upute za pisanje, ocjenu i obranu diplomskog rada (PTFOS, 2020)",
@@ -19569,7 +19574,52 @@
       "Obostrano poravnanje",
       "Prored"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Prehrambeno-tehnoloski fakultet Osijek, Sveuciliste J.J. Strossmayera u Osijeku) iz sluzbenog repozitorija (repozitorij.ptfos.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) kroz byte-level PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "ptfos:85",
+          "repository": "repozitorij.ptfos.hr",
+          "pageFormat": "A4",
+          "pages": 57,
+          "sha256": "ee0adbe607a30068b57d4aa243afaef4525a8f7f9c123c6411c8c3591269bf8f",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ptfos:86",
+          "repository": "repozitorij.ptfos.hr",
+          "pageFormat": "A4",
+          "pages": 34,
+          "sha256": "34027016fa8159541ad0c7c42406a2cb75b4403c93c75706a61402c0893bfcec",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ptfos:88",
+          "repository": "repozitorij.ptfos.hr",
+          "pageFormat": "A4",
+          "pages": 53,
+          "sha256": "4cc1bf9e8cc341858150e32ec15ff76fae6deb56a103711531191206dccd0e77",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (ptfos:85, ptfos:86, ptfos:88) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
   },
   {
     "id": "efos-zavrsni",
@@ -19602,7 +19652,7 @@
       }
     },
     "facts": [],
-    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Ekonomski fakultet u Osijeku, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno. Citatni stil (Harvard) preuzet iz sluzbenih Uputa za pisanje studentskih radova (EFOS, 2023, imperativ 'koristiti harvardski stil'). Field-sampled 1 stvarnim javnim zavrsnim radom (vecina EFOS radova restrictedAccess).",
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Ekonomski fakultet u Osijeku, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno. Citatni stil (Harvard) preuzet iz sluzbenih Uputa za pisanje studentskih radova (EFOS, 2023, imperativ 'koristiti harvardski stil'). Field-sampled 1 stvarnim javnim zavrsnim radom (vecina EFOS radova restrictedAccess). Citat Harvard iz Uputa 2023 (imperativ). Field-sampled 1 rad; vecina EFOS radova restrictedAccess (embargo).",
     "sources": [
       {
         "title": "Upute za pisanje studentskih radova (EFOS, 2023)",
@@ -19621,6 +19671,35 @@
       "Prored"
     ],
     "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "1 stvarna javna rada (Ekonomski fakultet Osijek, Sveuciliste J.J. Strossmayera u Osijeku) iz sluzbenog repozitorija (repozitorij.efos.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) kroz byte-level PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 1,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "efos:2134",
+          "repository": "repozitorij.efos.hr",
+          "pageFormat": "A4",
+          "pages": 76,
+          "sha256": "acf5f7cd039f9423237bc5d242fb1ceb399f643763619332fb1f5841a9ba5fec",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "1 stvarna javna rada (efos:2134) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    },
     "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-04",
@@ -19683,7 +19762,7 @@
       }
     },
     "facts": [],
-    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Ekonomski fakultet u Osijeku, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno. Citatni stil (Harvard) preuzet iz sluzbenih Uputa (EFOS, 2023). Terenska validacija podatkovno blokirana: EFOS repozitorij nema otvorenih diplomskih radova (svi restrictedAccess/embargo).",
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Ekonomski fakultet u Osijeku, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno. Citatni stil (Harvard) preuzet iz sluzbenih Uputa (EFOS, 2023). Terenska validacija podatkovno blokirana: EFOS repozitorij nema otvorenih diplomskih radova (svi restrictedAccess/embargo). Citat Harvard iz Uputa 2023. Validacija podatkovno blokirana: EFOS repozitorij nema otvorenih diplomskih (embargo).",
     "sources": [
       {
         "title": "Upute za pisanje studentskih radova (EFOS, 2023)",
@@ -19734,7 +19813,7 @@
       }
     },
     "facts": [],
-    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Pravni fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno. Field-sampled 3 stvarna javna rada iz Pravnog fakulteta Osijek. Citatni stil nije imenovan u Uputama (biljeske/fusnote spominju se opisno) pa ostaje neodredjen (posten strop).",
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Pravni fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno. Field-sampled 3 stvarna javna rada iz Pravnog fakulteta Osijek. Citatni stil nije imenovan u Uputama (biljeske/fusnote spominju se opisno) pa ostaje neodredjen (posten strop). Field-sampled 3 rada. Citatni stil nije imenovan u Uputama pa ostaje neodredjen.",
     "sources": [
       {
         "title": "Upute za pisanje i predaju zavrsnog/diplomskog rada (Pravni fakultet Osijek)",
@@ -19754,6 +19833,51 @@
       "Opseg (najmanje 20 str.)"
     ],
     "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Pravni fakultet Osijek, Sveuciliste J.J. Strossmayera u Osijeku) iz sluzbenog repozitorija (repozitorij.pravos.unios.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) kroz byte-level PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "pravos:1640",
+          "repository": "repozitorij.pravos.unios.hr",
+          "pageFormat": "A4",
+          "pages": 30,
+          "sha256": "46042654646f04ce359ec4cdd74e6b4a5877da968ab0e32230088d23b64e3428",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "pravos:1641",
+          "repository": "repozitorij.pravos.unios.hr",
+          "pageFormat": "A4",
+          "pages": 36,
+          "sha256": "0aaa2de17caa706d66fdc4ed33ea45a54bd64273447b1788e0d725f415736f9f",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "pravos:1644",
+          "repository": "repozitorij.pravos.unios.hr",
+          "pageFormat": "A4",
+          "pages": 52,
+          "sha256": "1de0890b19ef34df00582c7be912f67fe103be36954f586ea842bb7e6d7a9415",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (pravos:1640, pravos:1641, pravos:1644) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    },
     "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-04",
@@ -19830,7 +19954,7 @@
       }
     },
     "facts": [],
-    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Pravni fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno. Field-sampled 3 stvarna javna diplomska rada iz Pravnog fakulteta Osijek. Citatni stil nije imenovan u Uputama pa ostaje neodredjen.",
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Pravni fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno. Field-sampled 3 stvarna javna diplomska rada iz Pravnog fakulteta Osijek. Citatni stil nije imenovan u Uputama pa ostaje neodredjen. Field-sampled 3 rada. Citatni stil nije imenovan u Uputama.",
     "sources": [
       {
         "title": "Upute za pisanje i predaju zavrsnog/diplomskog rada (Pravni fakultet Osijek)",
@@ -19850,6 +19974,51 @@
       "Opseg (najmanje 20 str.)"
     ],
     "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Pravni fakultet Osijek, Sveuciliste J.J. Strossmayera u Osijeku) iz sluzbenog repozitorija (repozitorij.pravos.unios.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) kroz byte-level PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "pravos:1250",
+          "repository": "repozitorij.pravos.unios.hr",
+          "pageFormat": "A4",
+          "pages": 53,
+          "sha256": "bfe9ae8b92ef08f216737308f3ac930e4527cbb32b6951a7d98e26b51ef4d56e",
+          "level": "diplomski"
+        },
+        {
+          "pid": "pravos:1251",
+          "repository": "repozitorij.pravos.unios.hr",
+          "pageFormat": "A4",
+          "pages": 47,
+          "sha256": "8f62323360477155818be8acb0447554d9566a7027f5bf0df9bf14292f9daf5e",
+          "level": "diplomski"
+        },
+        {
+          "pid": "pravos:1252",
+          "repository": "repozitorij.pravos.unios.hr",
+          "pageFormat": "A4",
+          "pages": 36,
+          "sha256": "88850c7f4c41e4e45802a7c75c61c381e6f670ab32606483d941aa723ad2041f",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (pravos:1250, pravos:1251, pravos:1252) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    },
     "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-04",
@@ -19926,7 +20095,7 @@
       }
     },
     "facts": [],
-    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Filozofski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno. Field-sampled 3 stvarna javna zavrsna rada iz FFOS repozitorija. Citatni stil NIJE fiksiran: Pravilnik propisuje 'stil citiranja u struci, odnosno prema uputama mentora' (bez imenovanog stila) pa ostaje neodredjen (posten strop, ne izmisljam stil).",
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Filozofski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno. Field-sampled 3 stvarna javna zavrsna rada iz FFOS repozitorija. Citatni stil NIJE fiksiran: Pravilnik propisuje 'stil citiranja u struci, odnosno prema uputama mentora' (bez imenovanog stila) pa ostaje neodredjen (posten strop, ne izmisljam stil). Field-sampled 3 rada. Citatni stil NEODREDJEN: Pravilnik deferira na 'stil u struci / prema uputama mentora' (bez imenovanog stila).",
     "sources": [
       {
         "title": "Pravilnik o zavrsnim i diplomskim radovima i ispitu (FFOS)",
@@ -19946,6 +20115,51 @@
       "Opseg (15-20 str.)"
     ],
     "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Filozofski fakultet Osijek, Sveuciliste J.J. Strossmayera u Osijeku) iz sluzbenog repozitorija (repozitorij.ffos.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) kroz byte-level PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "ffos:1",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 23,
+          "sha256": "1895c4915a617cd3c150b10384b7dbc6262cb7251c4eb27de3920e960256859b",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "ffos:2",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 23,
+          "sha256": "db7bed419ed8bf92e6874daf856877846938aa7064f078ffa629b126eba624cb",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "ffos:9",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 25,
+          "sha256": "1cd5e1031fd7daadc6b274980988a367f397932ecbd0851bd6540a3b8c7e6df5",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (ffos:1, ffos:2, ffos:9) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    },
     "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-04",
@@ -20022,7 +20236,7 @@
       }
     },
     "facts": [],
-    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Filozofski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno. Field-sampled 3 stvarna javna diplomska rada iz FFOS repozitorija. Citatni stil nije imenovan u izvoru (Pravilnik deferira na struku/mentora) pa ostaje neodredjen.",
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Filozofski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno. Field-sampled 3 stvarna javna diplomska rada iz FFOS repozitorija. Citatni stil nije imenovan u izvoru (Pravilnik deferira na struku/mentora) pa ostaje neodredjen. Field-sampled 3 rada. Citatni stil neodredjen (Pravilnik deferira na struku/mentora).",
     "sources": [
       {
         "title": "Upute za izradu diplomskoga rada (FFOS)",
@@ -20042,6 +20256,51 @@
       "Opseg (30-50 str.)"
     ],
     "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Filozofski fakultet Osijek, Sveuciliste J.J. Strossmayera u Osijeku) iz sluzbenog repozitorija (repozitorij.ffos.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) kroz byte-level PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "ffos:5",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 37,
+          "sha256": "875ebb1a94e57db83b07ba60446356783a5a10998e8d3e95e941362d306bd315",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ffos:14",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 41,
+          "sha256": "de8a5e87b1e065c82b7586b77d53ac33e190ec92a0d18ec6b3415cc41ceedcb8",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ffos:102",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 43,
+          "sha256": "68657eba3be4a7c54c82b013d3325b90b16c8ead8e0c8869a6050f6f22a76fd1",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (ffos:5, ffos:14, ffos:102) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    },
     "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-04",
@@ -20310,6 +20569,7 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "rules": {
+      "recommendedCitation": "vancouver",
       "font": [
         "Times New Roman"
       ],
@@ -20327,7 +20587,7 @@
       }
     },
     "facts": [],
-    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Medicinski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Medicinski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno. Citat Vancouver iz Uputa 2025 ('Vancouverskim stilom, prema redoslijedu pojavljivanja'). Field-sampled 3 rada.",
     "sources": [
       {
         "title": "Upute za izradu i oblikovanje zavrsnog i diplomskog rada (MEFOS, 2025)",
@@ -20346,7 +20606,52 @@
       "Velicina slova",
       "Obostrano poravnanje"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Medicinski fakultet Osijek, Sveuciliste J.J. Strossmayera u Osijeku) iz sluzbenog repozitorija (repozitorij.mefos.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) kroz byte-level PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "mefos:55",
+          "repository": "repozitorij.mefos.hr",
+          "pageFormat": "A4",
+          "pages": 51,
+          "sha256": "4a21e8036293649dc359489bed39377f61768ab903542ea971b5c8d0cb836548",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "mefos:59",
+          "repository": "repozitorij.mefos.hr",
+          "pageFormat": "A4",
+          "pages": 45,
+          "sha256": "3736ef5e5ce5bb5acfd53d1bba2925c09536f7313a8d4b4f4b748734f8cca59f",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "mefos:62",
+          "repository": "repozitorij.mefos.hr",
+          "pageFormat": "A4",
+          "pages": 74,
+          "sha256": "11c710bdb07f72370e531706880c18c96c84af40a5a2d712b6943bc7f5b53b0a",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (mefos:55, mefos:59, mefos:62) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
   },
   {
     "id": "mefos-diplomski",
@@ -20362,6 +20667,7 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "rules": {
+      "recommendedCitation": "vancouver",
       "font": [
         "Times New Roman"
       ],
@@ -20379,7 +20685,7 @@
       }
     },
     "facts": [],
-    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Medicinski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Medicinski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno. Citat Vancouver iz Uputa 2025. Field-sampled 3 rada.",
     "sources": [
       {
         "title": "Upute za izradu i oblikovanje zavrsnog i diplomskog rada (MEFOS, 2025)",
@@ -20398,7 +20704,52 @@
       "Velicina slova",
       "Obostrano poravnanje"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Medicinski fakultet Osijek, Sveuciliste J.J. Strossmayera u Osijeku) iz sluzbenog repozitorija (repozitorij.mefos.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) kroz byte-level PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "mefos:3",
+          "repository": "repozitorij.mefos.hr",
+          "pageFormat": "A4",
+          "pages": 30,
+          "sha256": "188b86a0881680b317747af23d99cf19e4f2128aa7070c56a01eb29da75edc70",
+          "level": "diplomski"
+        },
+        {
+          "pid": "mefos:6",
+          "repository": "repozitorij.mefos.hr",
+          "pageFormat": "A4",
+          "pages": 31,
+          "sha256": "2e990929aa80a0d4a8ca67d1ad927a8429135cb71f1eef20f4cd74983718b272",
+          "level": "diplomski"
+        },
+        {
+          "pid": "mefos:36",
+          "repository": "repozitorij.mefos.hr",
+          "pageFormat": "A4",
+          "pages": 30,
+          "sha256": "0f4b7fe2e0515e593bb7ed8a52c92165eb0c178bc7afef0e06c84825a1b26848",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (mefos:3, mefos:6, mefos:36) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
   },
   {
     "id": "kemos-zavrsni",
@@ -20414,6 +20765,7 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "rules": {
+      "recommendedCitation": "ieee",
       "font": [
         "Times New Roman"
       ],
@@ -20430,7 +20782,7 @@
       }
     },
     "facts": [],
-    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Odjel za kemiju, Sveuciliste u Osijeku, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Odjel za kemiju, Sveuciliste u Osijeku, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno. Citat numericki/IEEE iz Uputa 2024 (brojevi u uglatim zagradama [1], po redoslijedu). Field-sampled 3 rada.",
     "sources": [
       {
         "title": "Upute za pisanje zavrsnog/diplomskog rada (Odjel za kemiju Osijek, 2024)",
@@ -20448,7 +20800,52 @@
       "Velicina slova",
       "Margine"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za kemiju Osijek, Sveuciliste J.J. Strossmayera u Osijeku) iz sluzbenog repozitorija (repozitorij.kemija.unios.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) kroz byte-level PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "kemos:1",
+          "repository": "repozitorij.kemija.unios.hr",
+          "pageFormat": "A4",
+          "pages": 30,
+          "sha256": "2595c8d0bc28d88528dae722e87e16361074cc74ba0be32940213c213ccb9057",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "kemos:2",
+          "repository": "repozitorij.kemija.unios.hr",
+          "pageFormat": "A4",
+          "pages": 20,
+          "sha256": "efd3485d46313dab6ee06466d07840ebe83368258dd61cc6a62154db19979e71",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "kemos:4",
+          "repository": "repozitorij.kemija.unios.hr",
+          "pageFormat": "A4",
+          "pages": 24,
+          "sha256": "15b98804e1ca1134815f98a57e3578afdccbf6632c0eac0c92639333dcb9f8d4",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (kemos:1, kemos:2, kemos:4) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
   },
   {
     "id": "kemos-diplomski",
@@ -20464,6 +20861,7 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "rules": {
+      "recommendedCitation": "ieee",
       "font": [
         "Times New Roman"
       ],
@@ -20480,7 +20878,7 @@
       }
     },
     "facts": [],
-    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Odjel za kemiju, Sveuciliste u Osijeku, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Odjel za kemiju, Sveuciliste u Osijeku, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno. Citat numericki/IEEE iz Uputa 2024. Field-sampled 3 rada.",
     "sources": [
       {
         "title": "Upute za pisanje zavrsnog/diplomskog rada (Odjel za kemiju Osijek, 2024)",
@@ -20498,7 +20896,52 @@
       "Velicina slova",
       "Margine"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za kemiju Osijek, Sveuciliste J.J. Strossmayera u Osijeku) iz sluzbenog repozitorija (repozitorij.kemija.unios.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) kroz byte-level PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "kemos:82",
+          "repository": "repozitorij.kemija.unios.hr",
+          "pageFormat": "A4",
+          "pages": 77,
+          "sha256": "0e67cbdb0fc50dcc1b77379c6274a3adb05cec9968c72e223b73b22c4074bb32",
+          "level": "diplomski"
+        },
+        {
+          "pid": "kemos:84",
+          "repository": "repozitorij.kemija.unios.hr",
+          "pageFormat": "A4",
+          "pages": 65,
+          "sha256": "ffb17d38404c8c0645fc7a3b67dcc2a603d04a4df64c5ae9c3ce169585306d76",
+          "level": "diplomski"
+        },
+        {
+          "pid": "kemos:85",
+          "repository": "repozitorij.kemija.unios.hr",
+          "pageFormat": "A4",
+          "pages": 59,
+          "sha256": "725cead055bc58038f7cf5239985dbe5984b12efa5bb4ce24cf61735e694c102",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (kemos:82, kemos:84, kemos:85) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
   },
   {
     "id": "unizd-turizam-zavrsni",
