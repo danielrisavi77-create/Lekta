@@ -22082,7 +22082,8 @@
       "Obostrano poravnanje",
       "Margine"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "validationNote": "Validacija podatkovno blokirana: svih 62 zavrsna rada studija Povijest Jadrana i Mediterana u repozitorij.unidu.hr su restrictedAccess (provjereno u punom OAI setu 2026-07-04)."
   },
   {
     "id": "unidu-komunikologija-diplomski",
@@ -22175,7 +22176,8 @@
         "sha256 NIJE reproducibilan: nsk.hr/Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
       ],
       "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
-    }
+    },
+    "validationNote": "Repozitorij ima samo 1-2 otvorena diplomska rada komunikologije (unidu:241, unidu:519 vec u uzorku); ostalih 198 je restrictedAccess (provjereno 2026-07-04). Posten podatkovni strop."
   },
   {
     "id": "unidu-ekonomija-zavrsni",
@@ -22421,7 +22423,8 @@
       "Velicina slova",
       "Obostrano poravnanje"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "validationNote": "Validacija podatkovno blokirana: radovi Odjela za umjetnost i restauraciju u repozitorij.unidu.hr su restricted/closed (152+33), 0 otvorenih (provjereno u punom OAI setu 2026-07-04)."
   },
   {
     "id": "medri-medicina-diplomski",
@@ -32010,6 +32013,519 @@
       ],
       "confirmed": [
         "4 stvarna javna diplomska rada (unizd:832, unizd:833, unizd:834, unizd:1261) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (80-188 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "unidu-marikultura-diplomski",
+    "programs": [
+      "Diplomski studij Marikultura (Dubrovnik)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "profileLabel": "Dubrovnik - Marikultura, diplomski rad",
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Arial"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "checkMargins": false,
+      "recommendedCitation": "harvard"
+    },
+    "note": "Upute za pisanje diplomskog rada na diplomskom studiju Marikultura (Odjel za akvakulturu), obvezujuce preko Pravilnika o diplomskom radu (28.10.2013, cl. 4(1)): 'proredom 1,5, velicinom znakova 12, koristeci font Times New Roman ili Arial. Tekst mora biti obostrano poravnan.' Margine i A4 nisu propisani (checkMargins false, ne izmisljam). Citiranje: Prilog 5 propisuje jedan nacin, autor-godina u tekstu (Skaramuca i sur., 1998), neimenovan -> harvard.",
+    "sources": [
+      {
+        "title": "Upute za pisanje diplomskog rada na diplomskom studiju Marikultura (Odjel za akvakulturu, Dubrovnik)",
+        "url": "https://www.unidu.hr/wp-content/plugins/quarascope/download.php?file=2123"
+      }
+    ],
+    "normativeScope": [
+      "Vrsta slova (TNR ili Arial)",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Opseg (33 retka/str.)",
+      "Stil citiranja (autor-godina)"
+    ],
+    "unitId": "unidu",
+    "status": "partial",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "facts": [],
+    "sourceHierarchy": [
+      "Upute za pisanje diplomskog rada na diplomskom studiju Marikultura (Odjel za akvakulturu, Dubrovnik)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna diplomska rada marikulture/akvakulture (Sveuciliste u Dubrovniku) iz sluzbenog repozitorija (repozitorij.unidu.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2017
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "unidu:280",
+          "repository": "repozitorij.unidu.hr",
+          "pageFormat": "A4",
+          "pages": 58,
+          "sha256": "fbd1ce8f05afe44e070ee1d2d91f841951920dffa64d423302189ffa252c344f",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unidu:296",
+          "repository": "repozitorij.unidu.hr",
+          "pageFormat": "A4",
+          "pages": 50,
+          "sha256": "1cbd88d1a7c2e08f667565a6c079ecb785d78d88d591165cd627f394f7531a0b",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unidu:298",
+          "repository": "repozitorij.unidu.hr",
+          "pageFormat": "A4",
+          "pages": 56,
+          "sha256": "dd3400c468301dca6a297f8c46c768a1e8837bb91f681891c99dc933e3036cb7",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unidu:299",
+          "repository": "repozitorij.unidu.hr",
+          "pageFormat": "A4",
+          "pages": 55,
+          "sha256": "a59d68f0d6984e251bcce7396f0131303b38ea651d11a8cae4d44e934f3abc0f",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (unidu:280, unidu:296, unidu:298, unidu:299) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (50-58 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "unidu-sestrinstvo-zavrsni",
+    "programs": [
+      "Strucni prijediplomski studij Sestrinstvo (zavrsni rad, Dubrovnik)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "profileLabel": "Dubrovnik - Sestrinstvo, zavrsni rad",
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Arial"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "note": "Upute za pisanje zavrsnog rada na strucnom prijediplomskom studiju Sestrinstvo (Odjel za zdravstvene studije): 'rad se pise velicinom slova 12, prored 1,5, margine rada trebaju iznositi 2,5 cm, vrsta slova moze biti Times New Roman ili Arial, tekst treba biti formatiran u blok (justify)'. Odjeljak nosi naslov 'Preporuke za tehnicko oblikovanje' ali su formulacije direktivne (se pise/trebaju/treba). A4 nije izrijekom naveden. Citiranje NIJE pinano: 'Student sam odabire (ili u dogovoru sa svojim mentorom) koji ce nacin citiranja koristiti' (opisani Harvard i Vancouver) - posten strop.",
+    "sources": [
+      {
+        "title": "Upute za pisanje zavrsnog rada na strucnom prijediplomskom studiju Sestrinstvo (Odjel za zdravstvene studije, Dubrovnik)",
+        "url": "https://www.unidu.hr/wp-content/plugins/quarascope/download.php?file=7407"
+      }
+    ],
+    "normativeScope": [
+      "Margine",
+      "Vrsta slova (TNR ili Arial)",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje"
+    ],
+    "unitId": "unidu",
+    "status": "partial",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "facts": [],
+    "sourceHierarchy": [
+      "Upute za pisanje zavrsnog rada na strucnom prijediplomskom studiju Sestrinstvo (Odjel za zdravstvene studije, Dubrovnik)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna zavrsna rada sestrinstva (Sveuciliste u Dubrovniku) iz sluzbenog repozitorija (repozitorij.unidu.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2017
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "unidu:159",
+          "repository": "repozitorij.unidu.hr",
+          "pageFormat": "A4",
+          "pages": 42,
+          "sha256": "d6266998a4815398496dc3059eca7b271eeae34e191a97b3ff66777eccaa0dbe",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unidu:182",
+          "repository": "repozitorij.unidu.hr",
+          "pageFormat": "A4",
+          "pages": 46,
+          "sha256": "c27836dba5daed16146300ff923c3d2d7fdd2918c0750b747365a3c063c8fc12",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unidu:219",
+          "repository": "repozitorij.unidu.hr",
+          "pageFormat": "A4",
+          "pages": 73,
+          "sha256": "3a86b066e29df3601d496e17afadfbabbc37ef9b8c3715eeefaa4fa44c6cca6d",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unidu:222",
+          "repository": "repozitorij.unidu.hr",
+          "pageFormat": "A4",
+          "pages": 72,
+          "sha256": "93ce7a9baf651f0034b5a24e1529e2f85a2caa49e93bbeee102092bc88265bce",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (unidu:159, unidu:182, unidu:219, unidu:222) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (42-73 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "unidu-komunikologija-zavrsni",
+    "programs": [
+      "Odjel za komunikologiju (zavrsni rad, Dubrovnik)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "profileLabel": "Dubrovnik - Komunikologija (Mediji i kultura drustva), zavrsni rad",
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Arial"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "recommendedCitation": "harvard"
+    },
+    "note": "Upute za izradu projekta prijediplomskog studija (Fakultet za medije i odnose s javnoscu, bivsi Odjel za komunikologiju, veljaca 2025): velicina 12, prored 1,5, TNR ili Arial, blok (justify), margine 2,5 cm, A4. Citiranje: 'Studenti trebaju koristiti harvardski stil citiranja literature' -> harvard. Zavrsni oblik je projekt prijediplomskog studija (Mediji i kultura drustva). Validacija podatkovno blokirana: repozitorij nema otvorenih zavrsnih radova komunikologije (provjereno u punom OAI setu).",
+    "sources": [
+      {
+        "title": "Upute za izradu projekta prijediplomskog studija (Fakultet za medije i odnose s javnoscu, Dubrovnik, 2025)",
+        "url": "https://www.unidu.hr/wp-content/uploads/2026/02/Upute_za_izradu_projekata_prijediplomskog_rada-Fakulteta-za-medije-i-odnose-s-javnoscu.pdf"
+      }
+    ],
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova (TNR ili Arial)",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Stil citiranja (Harvard)"
+    ],
+    "unitId": "unidu",
+    "status": "partial",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "facts": [],
+    "sourceHierarchy": [
+      "Upute za izradu projekta prijediplomskog studija (Fakultet za medije i odnose s javnoscu, Dubrovnik, 2025)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "advisoryScope": []
+  },
+  {
+    "id": "unidu-umjetnost-zavrsni",
+    "programs": [
+      "Odjel za umjetnost i restauraciju (zavrsni rad, Dubrovnik)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "profileLabel": "Dubrovnik - Konzervacija-restauracija, zavrsni rad",
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Arial"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.15,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3
+      },
+      "recommendedCitation": "chicago-notes"
+    },
+    "note": "Pravilnik o zavrsnom radu na prijediplomskom studiju Konzervacija-restauracija (25.9.2025) + sastavni Naputak za oblikovanje i opremu zavrsnog rada: A4, margine lijeva 3 / ostale 2,5 cm, prored 1,15, TNR ili Arial 12, obostrano. Citiranje: 'temelji se na fusnotnom stilu citiranja' -> fusnotni mod = chicago-notes (konzistentno s diplomskim profilom odjela). Validacija podatkovno blokirana: radovi odjela u repozitoriju su restricted/closed (provjereno u punom OAI setu).",
+    "sources": [
+      {
+        "title": "Pravilnik o zavrsnom radu na prijediplomskom studiju (Odjel za umjetnost i restauraciju, Dubrovnik, 25.9.2025)",
+        "url": "https://www.unidu.hr/wp-content/plugins/quarascope/download.php?file=55543"
+      },
+      {
+        "title": "Naputak za oblikovanje i opremu zavrsnog rada (Odjel za umjetnost i restauraciju, Dubrovnik)",
+        "url": "https://www.unidu.hr/wp-content/plugins/quarascope/download.php?file=55544"
+      }
+    ],
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Prored",
+      "Vrsta slova (TNR ili Arial)",
+      "Velicina slova",
+      "Obostrano poravnanje",
+      "Opseg (25-35 kartica)",
+      "Stil citiranja (fusnote)"
+    ],
+    "unitId": "unidu",
+    "status": "partial",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "facts": [],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnom radu na prijediplomskom studiju (Odjel za umjetnost i restauraciju, Dubrovnik, 25.9.2025)",
+      "Naputak za oblikovanje i opremu zavrsnog rada (Odjel za umjetnost i restauraciju, Dubrovnik)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "advisoryScope": []
+  },
+  {
+    "id": "unidu-elektro-zavrsni",
+    "programs": [
+      "Fakultet elektrotehnike i primijenjenog racunarstva (zavrsni rad, Dubrovnik)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "profileLabel": "Dubrovnik - Elektrotehnika i primijenjeno racunarstvo, zavrsni rad",
+    "rules": {
+      "recommendedCitation": "ieee",
+      "checkFont": false,
+      "checkSize": false,
+      "checkSpacing": false,
+      "checkMargins": false,
+      "checkJustify": false
+    },
+    "note": "Predlozak za ocjenske radove (FEPR, vrijedi za seminarski/zavrsni/diplomski): 'Biljeske u radu trebate oznacavati sustavom brojcanih biljeski koristenjem IEEE sustava referenciranja' -> ieee. Tipografija NIJE prozno propisana (utjelovljena u Word predlosku, necitabilan imperativ) pa se ne boduje (posten strop bez teh. pravila).",
+    "sources": [
+      {
+        "title": "Predlozak za ocjenske radove (Fakultet elektrotehnike i primijenjenog racunarstva, Dubrovnik)",
+        "url": "https://www.unidu.hr/wp-content/plugins/quarascope/download.php?file=25910"
+      }
+    ],
+    "normativeScope": [
+      "Stil citiranja (IEEE, numericki)"
+    ],
+    "unitId": "unidu",
+    "status": "partial",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "facts": [],
+    "sourceHierarchy": [
+      "Predlozak za ocjenske radove (Fakultet elektrotehnike i primijenjenog racunarstva, Dubrovnik)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna zavrsna rada elektrotehnike i racunarstva (Sveuciliste u Dubrovniku) iz sluzbenog repozitorija (repozitorij.unidu.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2017,
+          2019
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "unidu:311",
+          "repository": "repozitorij.unidu.hr",
+          "pageFormat": "A4",
+          "pages": 29,
+          "sha256": "5fe7938c90f5f2d578f23d54831bc98127a7835721182f44650eb3eab7c244fd",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unidu:1060",
+          "repository": "repozitorij.unidu.hr",
+          "pageFormat": "A4",
+          "pages": 40,
+          "sha256": "3fe20d0acea92df0efae83a7fa85dd36956a9ef377494db8e06e8700145b0d95",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unidu:1061",
+          "repository": "repozitorij.unidu.hr",
+          "pageFormat": "A4",
+          "pages": 47,
+          "sha256": "1fa56a40d71eeb5f82c2c42f38cc863d679d5ce194b2b64a9d5048a860fd2cef",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unidu:1106",
+          "repository": "repozitorij.unidu.hr",
+          "pageFormat": "A4",
+          "pages": 39,
+          "sha256": "70dda742b893446988e792b1f521357605470aad8be76206046bbe96005a8302",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (unidu:311, unidu:1060, unidu:1061, unidu:1106) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (29-47 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "unidu-elektro-diplomski",
+    "programs": [
+      "Fakultet elektrotehnike i primijenjenog racunarstva (diplomski rad, Dubrovnik)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "profileLabel": "Dubrovnik - Elektrotehnika i primijenjeno racunarstvo, diplomski rad",
+    "rules": {
+      "recommendedCitation": "ieee",
+      "checkFont": false,
+      "checkSize": false,
+      "checkSpacing": false,
+      "checkMargins": false,
+      "checkJustify": false
+    },
+    "note": "Predlozak za ocjenske radove (FEPR, vrijedi za seminarski/zavrsni/diplomski): IEEE sustav referenciranja obvezan -> ieee. Tipografija nije prozno propisana (Word predlozak) pa se ne boduje (posten strop bez teh. pravila).",
+    "sources": [
+      {
+        "title": "Predlozak za ocjenske radove (Fakultet elektrotehnike i primijenjenog racunarstva, Dubrovnik)",
+        "url": "https://www.unidu.hr/wp-content/plugins/quarascope/download.php?file=25910"
+      }
+    ],
+    "normativeScope": [
+      "Stil citiranja (IEEE, numericki)"
+    ],
+    "unitId": "unidu",
+    "status": "partial",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "facts": [],
+    "sourceHierarchy": [
+      "Predlozak za ocjenske radove (Fakultet elektrotehnike i primijenjenog racunarstva, Dubrovnik)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna diplomska rada elektrotehnike i racunarstva (Sveuciliste u Dubrovniku) iz sluzbenog repozitorija (repozitorij.unidu.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2018,
+          2020
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "unidu:555",
+          "repository": "repozitorij.unidu.hr",
+          "pageFormat": "A4",
+          "pages": 57,
+          "sha256": "c7da268eada8fafdbcdea61684d88cfb16e2e24b2390b1adb37bfabd6d9ad66e",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unidu:605",
+          "repository": "repozitorij.unidu.hr",
+          "pageFormat": "A4",
+          "pages": 54,
+          "sha256": "6c89432aa30e7ec3f67722c106d7c88ab945668fc8f2eb557f8038478e3236e2",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unidu:717",
+          "repository": "repozitorij.unidu.hr",
+          "pageFormat": "A4",
+          "pages": 81,
+          "sha256": "773ca2b5407e19042c51cee8f0b48d09d6faf8c47c282cd02a708e72d075caa2",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unidu:1435",
+          "repository": "repozitorij.unidu.hr",
+          "pageFormat": "A4",
+          "pages": 84,
+          "sha256": "eaba03372626029a10898b479f26986701e2983ca4b94f2709c09950b88ae806",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (unidu:555, unidu:605, unidu:717, unidu:1435) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (54-84 str.), A4 (595x842 pt)."
       ],
       "observedDeviations": [
         "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
