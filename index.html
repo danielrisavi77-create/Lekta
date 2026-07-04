@@ -152,6 +152,15 @@ h1,.section-head h2,.cta h2,.result-main h2,.analyzer-header h2{font-family:var(
 .result-view{position:relative}
 .result-view::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:color-mix(in srgb,var(--danger) 62%,transparent);opacity:.34;pointer-events:none}
 .full-report-banner{margin:16px 28px 0;padding:14px 16px;border:1px solid var(--ok);background:var(--ok-soft);border-radius:15px;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px}
+/* Teaser/full granica: zakljucani dio rezultata (aktivno samo uz konfiguriran paywall) */
+.lock-panel{display:flex;gap:12px;align-items:flex-start;margin:14px 0;padding:14px 16px;border:1px dashed var(--line-strong,#c9cede);border-radius:14px;background:var(--panel-soft,rgba(75,80,164,.05))}
+.lock-panel>svg{width:20px;height:20px;flex:none;margin-top:2px;color:var(--accent,#4b50a4)}
+.lock-panel strong{display:block;margin-bottom:4px}
+.lock-panel p{margin:0 0 10px;font-size:13px;color:var(--muted)}
+.teaser-check-summary{display:flex;flex-wrap:wrap;gap:8px 14px;margin:4px 0 10px}
+.teaser-check-summary .status{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700}
+.teaser-check-summary .status svg{width:15px;height:15px}
+@media print{.lock-panel button{display:none}}
 .full-report-banner .frb-title{display:inline-flex;align-items:center;gap:8px;font-weight:900;color:var(--ok)}
 .full-report-banner .frb-title svg{width:18px;height:18px}
 .frb-tier{font-size:11px;font-weight:900;padding:5px 9px;border-radius:999px;background:var(--panel);border:1px solid var(--ok);color:var(--ok)}
