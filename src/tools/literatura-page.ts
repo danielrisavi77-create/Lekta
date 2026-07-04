@@ -3,6 +3,8 @@
 import '../shared/ui-boot';
 import { organizeBibliography, bibliographyText } from './bibliography';
 import { bibliographyDoc, docxBlob } from '../docx/docx-writer';
+import { escapeHtml } from '../utils/helpers';
+import { bindCopyButton, downloadBlob } from './tool-ui';
 
 const $ = (s: string): any => document.querySelector(s);
 const nf = new Intl.NumberFormat('hr-HR');
@@ -13,10 +15,6 @@ anić, a. (2019). Civilno društvo i demokracija. Zagreb: Školska knjiga.
 Marić, M. Uvod u politologiju. Zagreb.
 Državni zavod za statistiku (2021). Popis stanovništva. https://dzs.hr/popis
 Čović, Č. (2018). Metodologija. Split: Redak.`;
-
-function escapeHtml(s: any) {
-  return String(s).replace(/[&<>"']/g, (c: string) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' } as Record<string, string>)[c]);
-}
 
 function render() {
   const input = $('#lit-input');
@@ -42,7 +40,6 @@ function render() {
   if (copy) copy.disabled = r.entries.length === 0;
   const docx = $('#lit-docx');
   if (docx) docx.disabled = r.entries.length === 0;
-  window.__lektaIcons?.();
   return r;
 }
 
@@ -55,26 +52,20 @@ function init() {
   $('#lit-sample')?.addEventListener('click', () => { input.value = SAMPLE; render(); input.focus(); });
   $('#lit-clear')?.addEventListener('click', () => { input.value = ''; render(); input.focus(); });
 
-  $('#lit-copy')?.addEventListener('click', async () => {
+  bindCopyButton($('#lit-copy'), () => {
     const r = organizeBibliography(input.value || '');
-    if (!r.entries.length) return;
-    const btn = $('#lit-copy');
-    try {
-      await navigator.clipboard.writeText(bibliographyText(r));
-      const prev = btn.textContent; btn.textContent = 'Kopirano ✓';
-      setTimeout(() => { btn.textContent = prev; }, 1600);
-    } catch (e) { /* clipboard nedostupan: sredjeni popis je i dalje vidljiv */ }
+    return r.entries.length ? bibliographyText(r) : '';
   });
 
   // Preuzmi gotov .docx (docx-writer): jedinice s visecim uvlacenjem, stil ostaje autorov.
   $('#lit-docx')?.addEventListener('click', () => {
     const r = organizeBibliography(input.value || '');
     if (!r.entries.length) return;
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(docxBlob(bibliographyDoc(r.entries.map(e => e.text))));
-    a.download = 'literatura.docx';
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    try {
+      downloadBlob(docxBlob(bibliographyDoc(r.entries.map(e => e.text))), 'literatura.docx');
+    } catch {
+      // .docx nije uspio (rijetko): sredjeni popis je i dalje vidljiv za kopiranje.
+    }
   });
 }
 

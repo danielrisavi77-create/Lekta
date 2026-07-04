@@ -3,6 +3,8 @@
 import '../shared/ui-boot';
 import { buildTitlePage, titlePageText } from './title-page';
 import { titlePageDoc, docxBlob } from '../docx/docx-writer';
+import { escapeHtml } from '../utils/helpers';
+import { bindCopyButton, downloadBlob } from './tool-ui';
 
 const $ = (s: string): any => document.querySelector(s);
 
@@ -63,19 +65,6 @@ function render() {
   return model;
 }
 
-// Preuzmi gotov .docx (docx-writer): raspored je genericki, konacni oblik po uputama studija.
-function downloadDocx(blob: any, name: any) {
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = name;
-  a.click();
-  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-}
-
-function escapeHtml(s: any) {
-  return String(s).replace(/[&<>"']/g, (c: string) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' } as Record<string, string>)[c]);
-}
-
 function init() {
   if (!$('#tp-sheet')) return;
   for (const sel of Object.values(FIELDS)) {
@@ -100,23 +89,22 @@ function init() {
     $('#tp-university')?.focus();
   });
 
-  $('#tp-copy')?.addEventListener('click', async () => {
+  bindCopyButton($('#tp-copy'), () => {
     const model = buildTitlePage(readInput());
-    if (!model.lines.length) return;
-    const btn = $('#tp-copy');
-    try {
-      await navigator.clipboard.writeText(titlePageText(model));
-      const prev = btn.textContent; btn.textContent = 'Kopirano ✓';
-      setTimeout(() => { btn.textContent = prev; }, 1600);
-    } catch (e) { /* clipboard nedostupan: pregled i ispis su i dalje tu */ }
+    return model.lines.length ? titlePageText(model) : '';
   });
 
   $('#tp-print')?.addEventListener('click', () => window.print());
 
+  // Preuzmi gotov .docx (docx-writer): raspored je genericki, konacni oblik po uputama studija.
   $('#tp-docx')?.addEventListener('click', () => {
     const model = buildTitlePage(readInput());
     if (!model.lines.length) return;
-    downloadDocx(docxBlob(titlePageDoc(model)), 'naslovnica.docx');
+    try {
+      downloadBlob(docxBlob(titlePageDoc(model)), 'naslovnica.docx');
+    } catch {
+      // .docx nije uspio (rijetko): pregled i ispis su i dalje tu.
+    }
   });
 }
 

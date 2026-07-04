@@ -2,6 +2,7 @@
 // (tipizirano, testabilno); ovdje samo vezanje textarea -> ispis. Bez mreze.
 import '../shared/ui-boot';
 import { countText, ZNAKOVA_PO_KARTICI } from './counter';
+import { bindCopyButton } from './tool-ui';
 
 const $ = (s: string): any => document.querySelector(s);
 const nf = new Intl.NumberFormat('hr-HR');
@@ -62,18 +63,9 @@ function init() {
     input.focus();
   });
 
-  $('#kt-copy')?.addEventListener('click', async () => {
+  bindCopyButton($('#kt-copy'), () => {
     const m = countText(input.value || '');
-    if (!m.charsWithSpaces) return;
-    const btn = $('#kt-copy');
-    try {
-      await navigator.clipboard.writeText(summaryText(m));
-      const prev = btn.textContent;
-      btn.textContent = 'Kopirano ✓';
-      setTimeout(() => { btn.textContent = prev; }, 1600);
-    } catch (e) {
-      // Clipboard nedostupan (npr. bez HTTPS-a): tiho ignoriramo, brojevi su i dalje vidljivi.
-    }
+    return m.charsWithSpaces ? summaryText(m) : '';
   });
 }
 

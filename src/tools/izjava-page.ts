@@ -3,6 +3,8 @@
 import '../shared/ui-boot';
 import { buildStatement, statementText } from './statement';
 import { statementDoc, docxBlob } from '../docx/docx-writer';
+import { escapeHtml } from '../utils/helpers';
+import { bindCopyButton, downloadBlob } from './tool-ui';
 
 const $ = (s: string): any => document.querySelector(s);
 
@@ -20,18 +22,25 @@ const SAMPLE: any = {
   date: '3. srpnja 2026.',
 };
 
-function escapeHtml(s: any) {
-  return String(s).replace(/[&<>"']/g, (c: string) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' } as Record<string, string>)[c]);
-}
-
 function readInput() {
   const out: any = {};
   for (const [key, sel] of Object.entries(FIELDS)) out[key] = $(sel)?.value || '';
   return out;
 }
 
+// Izjava je "spremna" za izvoz kad je unesen bar neki osobni podatak; sam predlozak
+// (bez imena/naslova/mjesta/datuma) ne izvozimo (C3, uskladeno s naslovnicom).
+function hasContent(input: any): boolean {
+  return !!(String(input.author || '').trim() || String(input.title || '').trim()
+    || String(input.place || '').trim() || String(input.date || '').trim());
+}
+
 function render() {
-  const model = buildStatement(readInput());
+  const input = readInput();
+  const model = buildStatement(input);
+  for (const id of ['#st-copy', '#st-docx', '#st-print']) {
+    const b = $(id); if (b) b.disabled = !hasContent(input);
+  }
   const sheet = $('#st-sheet');
   if (sheet) {
     const foot = (model.placeDate || model.signatureName)
@@ -72,26 +81,22 @@ function init() {
     $('#st-author')?.focus();
   });
 
-  $('#st-copy')?.addEventListener('click', async () => {
-    const model = buildStatement(readInput());
-    const btn = $('#st-copy');
-    try {
-      await navigator.clipboard.writeText(statementText(model));
-      const prev = btn.textContent; btn.textContent = 'Kopirano ✓';
-      setTimeout(() => { btn.textContent = prev; }, 1600);
-    } catch (e) { /* clipboard nedostupan: pregled i ispis su i dalje tu */ }
+  bindCopyButton($('#st-copy'), () => {
+    const input = readInput();
+    return hasContent(input) ? statementText(buildStatement(input)) : '';
   });
 
   $('#st-print')?.addEventListener('click', () => window.print());
 
   // Preuzmi gotov .docx (docx-writer): formulacija je uobicajena, obvezni obrazac faksa ima prednost.
   $('#st-docx')?.addEventListener('click', () => {
-    const model = buildStatement(readInput());
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(docxBlob(statementDoc(model)));
-    a.download = 'izjava-o-izvornosti.docx';
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    const input = readInput();
+    if (!hasContent(input)) return;
+    try {
+      downloadBlob(docxBlob(statementDoc(buildStatement(input))), 'izjava-o-izvornosti.docx');
+    } catch {
+      // .docx nije uspio (rijetko): pregled i ispis su i dalje tu.
+    }
   });
 }
 

@@ -2,6 +2,7 @@
 // citation.ts (tipizirana, testabilna); ovdje samo vezanje na formu i ispis. Bez mreze.
 import '../shared/ui-boot';
 import { formatCitation } from './citation';
+import { bindCopyButton } from './tool-ui';
 
 const $ = (s: string): any => document.querySelector(s);
 
@@ -53,30 +54,17 @@ function render() {
   hint.className = missing.length ? 'out-hint warn' : 'out-hint ok';
 }
 
-function copyOut() {
-  const text = $('#out').textContent || '';
-  const done = () => {
-    const b = $('#copyBtn');
-    const old = b.textContent;
-    b.textContent = 'Kopirano';
-    setTimeout(() => (b.textContent = old), 1400);
-  };
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(text).then(done).catch(() => {});
-  }
-}
-
 function init() {
   if (!$('#f-type')) return; // stranica nije citat-alat; ne rusi se (kao ostali tool page-ovi)
-  $('#f-type').addEventListener('change', () => {
-    syncVisibleFields();
-    render();
-  });
-  document.querySelectorAll('input, select, textarea').forEach((el) => {
+  // Promjena tipa samo prilagodi vidljiva polja; render okida opci change/input listener nize
+  // (izbjegava dvostruki render na promjenu tipa).
+  $('#f-type').addEventListener('change', syncVisibleFields);
+  document.querySelectorAll('input, select, textarea').forEach((el: any) => {
     el.addEventListener('input', render);
     el.addEventListener('change', render);
   });
-  $('#copyBtn').addEventListener('click', copyOut);
+  // Kopira samo kad citat postoji (gumb je inace onemogucen); getText cita gotovi ispis.
+  bindCopyButton($('#copyBtn'), () => ($('#copyBtn').disabled ? '' : ($('#out').textContent || '')));
   // Tema se sinkronizira preko lekta.theme (inline skripta u citat.html), ne ovdje.
   syncVisibleFields();
   render();
