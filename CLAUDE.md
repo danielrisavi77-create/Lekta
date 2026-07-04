@@ -27,9 +27,9 @@ Ako `check` pada, promjena nije gotova. Ne commitaj crveno.
 
 - `data/` je tipiziran i modularan: profili, izvori, rokovi, katalog, coverage,
   metodologija, svaki u svom JSON-u. Loaderi u `src/*` ih hidriraju i tipiziraju.
-- `src/main.ts` je joÅ¡ monolit (~540 redaka, `@ts-nocheck`): DOCX parser, svi auditi,
+- `src/ui/app.ts` je joÅ¡ monolit (~615 redaka, `@ts-nocheck`): DOCX parser, svi auditi,
   Legal Citation Engine, UI, narudÅ¾be i plaÄanje su u toj jednoj datoteci. Cilj je
-  postupno ga razbiti u tipizirane module bez promjene ponaÅ¡anja (vidi backlog).
+  postupno ga razbiti u tipizirane module bez promjene ponaÅ¡anja (vidi backlog). Ulaz je `src/main.ts` (tanki bootstrap koji uvozi ui-boot i ui/app), NE monolit.
 
 ## Option A: ruleEntries su izvor istine
 
@@ -45,7 +45,7 @@ Pravila profila postoje u dva oblika:
 effectiveRules = clone(rules baseline) + svaki prepoznati ruleEntry preko njega
 ```
 
-Engine (`currentProfile` u `src/main.ts`) Äita `definition.effectiveRules`, uz fallback
+Engine (`currentProfile` u `src/ui/app.ts`) Äita `definition.effectiveRules`, uz fallback
 na `definition.rules`. Test `tests/rule-compiler.test.ts` dokazuje da je za trenutne
 podatke `effectiveRules` deep-equal `rules`, dakle ukljuÄenje kompajlera ne mijenja
 ponaÅ¡anje.
@@ -78,11 +78,11 @@ engine bez golden-file testa koji PRVO dokazuje zateÄeno ponaÅ¡anje.
 
 - Golden harness: `tests/docx-golden.test.ts` + `tests/fixtures/docx/`.
 - Ubaci realne `.docx`, snimi baseline s `npm test -- -u`, pa refaktoriraj.
-- Suite se sam preskaÄe dok nema fixtura, da build ostane zelen.
+- Suite se sam preskaÄe bez fixtura; sada je AKTIVAN sa 6 realnih fixtura u tests/fixtures/docx/ (snapshoti commitani), izlozen kroz src/analysis/golden-entry.ts.
 
 ## Mapa datoteka
 
-- `src/main.ts` â monolitni runtime (parser, auditi, UI, narudÅ¾be). Meta: razbiti.
+- `src/ui/app.ts` â monolitni runtime (parser, auditi, UI, narudÅ¾be). Meta: razbiti.
 - `src/profiles/profile-loader.ts` â registar profila, hidracija izvora, kompilacija.
 - `src/profiles/rule-compiler.ts` â Option A: ruleEntries -> effectiveRules.
 - `src/profiles/profile-schema.ts` â tipovi profila i pravila.
@@ -122,7 +122,7 @@ ModSecurity vraca HTTP 418.
 2. (GOTOVO) Option A kompajler i `effectiveRules` wiring. SljedeÄi korak unutar ovoga:
    ukloni iz `rules` kljuÄeve koji su veÄ u `ruleEntries`, profil po profil, i prilagodi
    faithfulness test. DoD: nema dvostrukog voÄenja za migrirane kljuÄeve, check zelen.
-3. Razbijanje `src/main.ts`: izvuci redom parser (`ZipReader`, `parseStyles`, OOXML
+3. Razbijanje `src/ui/app.ts`: izvuci redom parser (`ZipReader`, `parseStyles`, OOXML
    helperi), pa audite, pa author-year i legal citation engine, pa UI, pa ordering.
    Makni `@ts-nocheck` modul po modul. DoD: golden snapshoti se ne mijenjaju, check zelen.
 4. Popuni `sourcePage` za sve `ruleEntries` iz `source-registry` (ruÄno potvrÄeno;
