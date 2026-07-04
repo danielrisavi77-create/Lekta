@@ -6,7 +6,7 @@
  * analyzeDocx s fiksnim, deterministickim postavkama. Koristi ga tests/docx-golden
  * i tests/fpzg-synthetic. NE pokrece UI ni init() (init je ogradjen u src/main.ts).
  */
-import { analyzeDocx } from '../ui/app';
+import { analyzeDocx } from './analyze-docx';
 import { VERIFIED_PROFILE_REGISTRY, PROFILE_STATUS } from '../profiles/profile-registry';
 
 /** Razrjesi profilni objekt koji analyzeDocx ocekuje (spljosteni rules + metapodaci). */

@@ -89,7 +89,7 @@
   },
   "qualitative": {
     "id": "qualitative",
-    "label": "Empirijski rad — kvalitativno istraživanje",
+    "label": "Empirijski rad, kvalitativno istraživanje",
     "shortLabel": "Kvalitativni",
     "facts": [
       "cilj + istraživačka pitanja",
@@ -229,7 +229,7 @@
   },
   "quantitative": {
     "id": "quantitative",
-    "label": "Empirijski rad — kvantitativno istraživanje",
+    "label": "Empirijski rad, kvantitativno istraživanje",
     "shortLabel": "Kvantitativni",
     "facts": [
       "cilj, problemi i hipoteze",
