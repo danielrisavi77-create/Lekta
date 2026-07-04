@@ -19358,7 +19358,58 @@
       "Velicina slova",
       "Margine"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna zavrsna rada (Fakultet elektrotehnike, racunarstva i informacijskih tehnologija Osijek) iz sluzbenog repozitorija (repozitorij.etfos.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "etfos:837",
+          "repository": "repozitorij.etfos.hr",
+          "pageFormat": "A4",
+          "pages": 50,
+          "sha256": "cc455adfa81c0a476ededac0de6f64b415b3338ca04dcacc06120569a7f18087",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "etfos:838",
+          "repository": "repozitorij.etfos.hr",
+          "pageFormat": "A4",
+          "pages": 22,
+          "sha256": "18ad723b93f00b420baa16b2a0659574991d9d77ea18625677bdc6de3aecb336",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "etfos:839",
+          "repository": "repozitorij.etfos.hr",
+          "pageFormat": "A4",
+          "pages": 34,
+          "sha256": "6810a83f91dd8b156fad289f80d74019b8eeef0deed948e0bed1118b64039799",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "etfos:841",
+          "repository": "repozitorij.etfos.hr",
+          "pageFormat": "A4",
+          "pages": 30,
+          "sha256": "04b7fd12596b4bc4ac57f87e34c92b9a7370dacd217cf0729a8bcfdb6fb8801b",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (etfos:837, etfos:838, etfos:839, etfos:841) prolaze PDF preflight: valjan nesifriran PDF, viselistni (22-50 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "ferit-diplomski",
@@ -19674,32 +19725,54 @@
     "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-04",
-      "scope": "1 stvarni javni rad (Ekonomski fakultet Osijek, Sveuciliste J.J. Strossmayera u Osijeku) iz sluzbenog repozitorija (Dabar, open access), potvrdjen po razini (OAI dc:type) kroz byte-level PDF preflight (A4).",
+      "scope": "4 stvarna javna zavrsna rada (Ekonomski fakultet u Osijeku) iz sluzbenog repozitorija (repozitorij.efos.hr, Dabar, open access) kroz PDF preflight (A4).",
       "sample": {
         "syntheticDocxAudits": 0,
         "docxAudits": 0,
-        "publicPdfAudits": 1,
+        "publicPdfAudits": 4,
         "metadataSpotChecks": 0,
-        "years": []
+        "years": [
+          2019,
+          2020
+        ]
       },
       "publicSources": [
         {
-          "pid": "efos:2134",
+          "pid": "efos:3393",
           "repository": "repozitorij.efos.hr",
           "pageFormat": "A4",
-          "pages": 76,
-          "sha256": "acf5f7cd039f9423237bc5d242fb1ceb399f643763619332fb1f5841a9ba5fec",
+          "pages": 32,
+          "sha256": "4101b07b3fbf42d02298d9822dde91bd30a2082bc191b3755236e708a9e78d61",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "efos:3408",
+          "repository": "repozitorij.efos.hr",
+          "pageFormat": "A4",
+          "pages": 51,
+          "sha256": "b2e92e3a21ade725089cb5451512043294fad09b720f1ab2921915281abcfcea",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "efos:3605",
+          "repository": "repozitorij.efos.hr",
+          "pageFormat": "A4",
+          "pages": 29,
+          "sha256": "a112844674d8958c5ab290c7213148aea8606b78d6e714b51e0fd37d902d55da",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "efos:3659",
+          "repository": "repozitorij.efos.hr",
+          "pageFormat": "A4",
+          "pages": 30,
+          "sha256": "f1fbcb4f31d78635e84b4e7adcd86768a2ba483f945e7f3a7d0bc719f313f789",
           "level": "zavrsni"
         }
       ],
       "confirmed": [
-        "1 stvarni javni rad (efos:2134) prolazi byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
-      ],
-      "observedDeviations": [
-        "Vecina EFOS studentskih radova je restrictedAccess (embargo) pa je otvoren uzorak ogranicen na 1 (validation=75).",
-        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
-      ],
-      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+        "4 stvarna javna zavrsna rada (efos:3393, efos:3408, efos:3605, efos:3659) prolaze PDF preflight: valjan nesifriran PDF, viselistni (29-51 str.), A4 (595x842 pt)."
+      ]
     }
   },
   {
@@ -19752,7 +19825,60 @@
       "Prored",
       "Opseg (30-50 str.)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna diplomska rada (Ekonomski fakultet u Osijeku) iz sluzbenog repozitorija (repozitorij.efos.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2018,
+          2020,
+          2021
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "efos:2134",
+          "repository": "repozitorij.efos.hr",
+          "pageFormat": "A4",
+          "pages": 76,
+          "sha256": "a4eba703bdf74eb6410cd13158197d0ee35521bf323c346f69938ff9e82b7b4b",
+          "level": "diplomski"
+        },
+        {
+          "pid": "efos:3457",
+          "repository": "repozitorij.efos.hr",
+          "pageFormat": "A4",
+          "pages": 56,
+          "sha256": "c9dabaf68daaf89d1b6e54f6de537d906583d84412b0ee3740c71dd6af7bec75",
+          "level": "diplomski"
+        },
+        {
+          "pid": "efos:3640",
+          "repository": "repozitorij.efos.hr",
+          "pageFormat": "A4",
+          "pages": 55,
+          "sha256": "4943452d01f97f857eda02ecc65c40c1d30c19e8f97216e99e0a8a6085e6b7de",
+          "level": "diplomski"
+        },
+        {
+          "pid": "efos:3642",
+          "repository": "repozitorij.efos.hr",
+          "pageFormat": "A4",
+          "pages": 116,
+          "sha256": "fbc07ebe41ce6a8b23e001d44cbbb2671ad0f21588f49de5274c3978871c1a85",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (efos:2134, efos:3457, efos:3640, efos:3642) prolaze PDF preflight: valjan nesifriran PDF, viselistni (55-116 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "pravos-zavrsni",
