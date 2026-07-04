@@ -26631,5 +26631,907 @@
       ],
       "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
     }
+  },
+  {
+    "id": "ffos-povijest-zavrsni",
+    "unitId": "ffos",
+    "programs": [
+      "Prijediplomski studij Povijest"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "FFOS Povijest, zavrsni rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "recommendedCitation": "chicago-notes"
+    },
+    "facts": [],
+    "note": "Fakultetska tipografija (FFOS: Times New Roman 12, prored 1,5, margine 2,5/2/2,5/2,5 cm) uz odsjecki citatni stil: fusnote/podrubne biljeske po uputama Hrvatskog instituta za povijest (cikaski stil prilagoden hrvatskom; 'Navedenih se uputa trebaju pridrzavati svi studenti Odsjeka za povijest') -> chicago-notes. Odsjecke upute citane izravno.",
+    "sources": [
+      {
+        "title": "Upute za oblikovanje biljezaka te popisa izvora i literature u studentskim radovima (Odsjek za povijest FFOS, po uputama Hrvatskog instituta za povijest, odluka 8.2.2019)",
+        "url": "https://www.ffos.unios.hr/odsjek-za-povijest/studenti/upute-za-navodenje-izvora-i-literature-pri-izradi-studentskih-radova/"
+      },
+      {
+        "title": "Pravilnik o zavrsnim i diplomskim radovima i ispitu (FFOS)",
+        "url": "https://www.ffos.unios.hr/wp-content/uploads/2022/03/Pravilnik-o-zavrsnim-i-diplomskim-radovima-i-ispitu.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za oblikovanje biljezaka te popisa izvora i literature u studentskim radovima (Odsjek za povijest FFOS, po uputama Hrvatskog instituta za povijest, odluka 8.2.2019)",
+      "Pravilnik o zavrsnim i diplomskim radovima i ispitu (FFOS)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Format papira",
+      "Margine",
+      "Stil citiranja (odsjecke upute)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna zavrsna rada (Filozofski fakultet Osijek, po odsjeku filtrirano dc:subject) iz sluzbenog repozitorija (repozitorij.ffos.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2014,
+          2015
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "ffos:132",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 27,
+          "sha256": "27a0cc19d772ad47855aa4e7ecf17996c143ff8e13ec7a736d251c80963cc6fd",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "ffos:134",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 24,
+          "sha256": "9e43212302b3420e87c61791022c61923b782f63ef263aa04359a7b34fdc2a46",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "ffos:207",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 23,
+          "sha256": "b2ccb829f577c61634a99f379f93c9df55ee9456f4b8b0a897f1282d364a710d",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "ffos:221",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 33,
+          "sha256": "5cf72a3f6f4d8bb67df14726dca92457af4ab523c8dd2d54603d3884ec97e2fc",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (ffos:132, ffos:134, ffos:207, ffos:221) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (23-33 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "ffos-povijest-diplomski",
+    "unitId": "ffos",
+    "programs": [
+      "Diplomski studij Povijest"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "FFOS Povijest, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "recommendedCitation": "chicago-notes"
+    },
+    "facts": [],
+    "note": "Fakultetska tipografija (FFOS: Times New Roman 12, prored 1,5, margine 2,5/2/2,5/2,5 cm) uz odsjecki citatni stil: fusnote/podrubne biljeske po uputama Hrvatskog instituta za povijest (cikaski stil prilagoden hrvatskom; 'Navedenih se uputa trebaju pridrzavati svi studenti Odsjeka za povijest') -> chicago-notes. Odsjecke upute citane izravno.",
+    "sources": [
+      {
+        "title": "Upute za oblikovanje biljezaka te popisa izvora i literature u studentskim radovima (Odsjek za povijest FFOS, po uputama Hrvatskog instituta za povijest, odluka 8.2.2019)",
+        "url": "https://www.ffos.unios.hr/odsjek-za-povijest/studenti/upute-za-navodenje-izvora-i-literature-pri-izradi-studentskih-radova/"
+      },
+      {
+        "title": "Upute za izradu diplomskoga rada (FFOS)",
+        "url": "https://www.ffos.unios.hr/download/upute-za-izradu-diplomskoga-rada.docx"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za oblikovanje biljezaka te popisa izvora i literature u studentskim radovima (Odsjek za povijest FFOS, po uputama Hrvatskog instituta za povijest, odluka 8.2.2019)",
+      "Upute za izradu diplomskoga rada (FFOS)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Format papira",
+      "Margine",
+      "Stil citiranja (odsjecke upute)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna diplomska rada (Filozofski fakultet Osijek, po odsjeku filtrirano dc:subject) iz sluzbenog repozitorija (repozitorij.ffos.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015,
+          2016
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "ffos:14",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 41,
+          "sha256": "ed2ef46553fdfa435ad3528234834d056a1fdd43770ed0fb7fe1806913ff06a0",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ffos:270",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 48,
+          "sha256": "629ac41cebff10bcc58f2c34f07453edd01392bcfea8c0dfb08195c0b796a865",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ffos:278",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 41,
+          "sha256": "8f6410735d3140db04a89552ea5516154104ace6ca041daf0062df93bbe5cc7a",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ffos:279",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 39,
+          "sha256": "87ee911c31a8521f5a9b9976b63c8f974a809f46ff433053a56a2d92683a3344",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (ffos:14, ffos:270, ffos:278, ffos:279) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (39-48 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "ffos-psihologija-zavrsni",
+    "unitId": "ffos",
+    "programs": [
+      "Prijediplomski studij Psihologija"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "FFOS Psihologija, zavrsni rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "recommendedCitation": "apa7"
+    },
+    "facts": [],
+    "note": "Fakultetska tipografija (FFOS: Times New Roman 12, prored 1,5, margine 2,5/2/2,5/2,5 cm) uz odsjecki citatni stil: APA standard obvezan ('Formalno uredenje teksta treba biti sukladno APA standardima'); izvor formalno navodi 6. izdanje, mod je isti autor-godina pa je kanonski token apa7. Odsjecke upute citane izravno.",
+    "sources": [
+      {
+        "title": "Upute za izradu zavrsnog rada (Odsjek za psihologiju FFOS, 2014)",
+        "url": "https://www.ffos.unios.hr/wp-content/uploads/2021/03/Psihologija_upute-za-izradu-zavrsnog-rada-2014.pdf"
+      },
+      {
+        "title": "Pravilnik o zavrsnim i diplomskim radovima i ispitu (FFOS)",
+        "url": "https://www.ffos.unios.hr/wp-content/uploads/2022/03/Pravilnik-o-zavrsnim-i-diplomskim-radovima-i-ispitu.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu zavrsnog rada (Odsjek za psihologiju FFOS, 2014)",
+      "Pravilnik o zavrsnim i diplomskim radovima i ispitu (FFOS)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Format papira",
+      "Margine",
+      "Stil citiranja (odsjecke upute)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna zavrsna rada (Filozofski fakultet Osijek, po odsjeku filtrirano dc:subject) iz sluzbenog repozitorija (repozitorij.ffos.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "ffos:1",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 23,
+          "sha256": "693abc51ec47cab88db92c667b88fa369066ccc0dcee0cd4d1c7e4484d1da848",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "ffos:9",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 25,
+          "sha256": "cc39e014165acfed4db2f759b4388e6d2f1c77ac6444f70a4277f65d949032d9",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "ffos:11",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 24,
+          "sha256": "821a3e3a19137a8d51601cb78ed95f91db58c8a8bc99b95f7b02c15044fda51e",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "ffos:15",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 25,
+          "sha256": "1204ac4482f8ce59bcc768b901675179f9cbac16013c3bd5519962fa81f88ed5",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (ffos:1, ffos:9, ffos:11, ffos:15) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (23-25 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "ffos-psihologija-diplomski",
+    "unitId": "ffos",
+    "programs": [
+      "Diplomski studij Psihologija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "FFOS Psihologija, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "recommendedCitation": "apa7"
+    },
+    "facts": [],
+    "note": "Fakultetska tipografija (FFOS: Times New Roman 12, prored 1,5, margine 2,5/2/2,5/2,5 cm) uz odsjecki citatni stil: APA standard obvezan ('Formalno uredenje teksta treba biti sukladno APA standardima'); izvor formalno navodi 6. izdanje, mod je isti autor-godina pa je kanonski token apa7. Odsjecke upute citane izravno.",
+    "sources": [
+      {
+        "title": "Upute za oblikovanje diplomskog rada (Odsjek za psihologiju FFOS, 2015)",
+        "url": "https://www.ffos.unios.hr/wp-content/uploads/2021/03/Psihologija_upute-za-oblikovanje-diplomskog-rada-2015.pdf"
+      },
+      {
+        "title": "Upute za izradu diplomskoga rada (FFOS)",
+        "url": "https://www.ffos.unios.hr/download/upute-za-izradu-diplomskoga-rada.docx"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za oblikovanje diplomskog rada (Odsjek za psihologiju FFOS, 2015)",
+      "Upute za izradu diplomskoga rada (FFOS)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Format papira",
+      "Margine",
+      "Stil citiranja (odsjecke upute)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna diplomska rada (Filozofski fakultet Osijek, po odsjeku filtrirano dc:subject) iz sluzbenog repozitorija (repozitorij.ffos.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015,
+          2016
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "ffos:5",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 37,
+          "sha256": "b2e0b56a99b8b2d8d23b0e0c9322120313d3e9c895850eec12f9b9764dfbe619",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ffos:104",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 31,
+          "sha256": "5281ca9c9cbc5132b15f065b885a7edd5ffb93abc93c11dbd5cb28eff13c0278",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ffos:110",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 36,
+          "sha256": "416a3ad0514ac4cf227c3dbd6ba6ba562a4e600c3616c086a18bc43be6549d40",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ffos:272",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 35,
+          "sha256": "627b6740575408440cbfcd198ef8f644cfb9180c899054b0b6b86ff9582ff181",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (ffos:5, ffos:104, ffos:110, ffos:272) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (31-37 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "ffos-informatologija-zavrsni",
+    "unitId": "ffos",
+    "programs": [
+      "Prijediplomski studij Informatologija"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "FFOS Informatologija, zavrsni rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "recommendedCitation": "apa7"
+    },
+    "facts": [],
+    "note": "Fakultetska tipografija (FFOS: Times New Roman 12, prored 1,5, margine 2,5/2/2,5/2,5 cm) uz odsjecki citatni stil: APA stil (7. izd.), 'Sve reference se navode u tekstu, a ne u fusnotama' (odsjecke Upute za citiranje, II. dio; vrijedi za zavrsne i diplomske radove). Odsjecke upute citane izravno.",
+    "sources": [
+      {
+        "title": "Upute za pisanje seminarskih radova, II. dio: Upute za citiranje (Odsjek za informacijske znanosti FFOS)",
+        "url": "https://www.ffos.unios.hr/odsjek-za-informacijske-znanosti/studenti/upute-za-pisanje-seminarskih-radova/"
+      },
+      {
+        "title": "Pravilnik o zavrsnim i diplomskim radovima i ispitu (FFOS)",
+        "url": "https://www.ffos.unios.hr/wp-content/uploads/2022/03/Pravilnik-o-zavrsnim-i-diplomskim-radovima-i-ispitu.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pisanje seminarskih radova, II. dio: Upute za citiranje (Odsjek za informacijske znanosti FFOS)",
+      "Pravilnik o zavrsnim i diplomskim radovima i ispitu (FFOS)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Format papira",
+      "Margine",
+      "Stil citiranja (odsjecke upute)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna zavrsna rada (Filozofski fakultet Osijek, po odsjeku filtrirano dc:subject) iz sluzbenog repozitorija (repozitorij.ffos.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2013,
+          2015
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "ffos:2",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 23,
+          "sha256": "8ddee52171b30275c11e6883f3d9cc9e3d99bcb9bdb9358fe579febdfbacdc35",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "ffos:12",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 26,
+          "sha256": "1f303a549e6444c31d138f07d71c6150bed738fe986ecafa7e94a0c3e22a3780",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "ffos:16",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 22,
+          "sha256": "3d26ca4d8302f3560efdc021a161a571994a186e0142b8cc34d9a47475c0d212",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "ffos:22",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 19,
+          "sha256": "8cfc69f4ef21929c6482359377e469f264ae8da0ba83268293e2ae6e6ba14e85",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (ffos:2, ffos:12, ffos:16, ffos:22) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (19-26 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "ffos-informatologija-diplomski",
+    "unitId": "ffos",
+    "programs": [
+      "Diplomski studij Informatologija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "FFOS Informatologija, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "recommendedCitation": "apa7"
+    },
+    "facts": [],
+    "note": "Fakultetska tipografija (FFOS: Times New Roman 12, prored 1,5, margine 2,5/2/2,5/2,5 cm) uz odsjecki citatni stil: APA stil (7. izd.), 'Sve reference se navode u tekstu, a ne u fusnotama' (odsjecke Upute za citiranje, II. dio; vrijedi za zavrsne i diplomske radove). Odsjecke upute citane izravno.",
+    "sources": [
+      {
+        "title": "Upute za pisanje seminarskih radova, II. dio: Upute za citiranje (Odsjek za informacijske znanosti FFOS)",
+        "url": "https://www.ffos.unios.hr/odsjek-za-informacijske-znanosti/studenti/upute-za-pisanje-seminarskih-radova/"
+      },
+      {
+        "title": "Upute za izradu diplomskoga rada (FFOS)",
+        "url": "https://www.ffos.unios.hr/download/upute-za-izradu-diplomskoga-rada.docx"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pisanje seminarskih radova, II. dio: Upute za citiranje (Odsjek za informacijske znanosti FFOS)",
+      "Upute za izradu diplomskoga rada (FFOS)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Format papira",
+      "Margine",
+      "Stil citiranja (odsjecke upute)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna diplomska rada (Filozofski fakultet Osijek, po odsjeku filtrirano dc:subject) iz sluzbenog repozitorija (repozitorij.ffos.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015,
+          2016
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "ffos:102",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 43,
+          "sha256": "b9135c73bd1e915ec797f6f97f8ae563bdf9460e31a12f7144ffd1264bff144f",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ffos:376",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 47,
+          "sha256": "3f67f78aa1d1784962aa4c4341e124ff06ed3e7e4b900f7bda630d586fc717f6",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ffos:377",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 39,
+          "sha256": "c520a19f8085986c7d9a7c1b5b32ee4a25f1f633974ecc66ef81bd712b090bf9",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ffos:671",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 60,
+          "sha256": "24d05614db3f3b1855280d18d315a8d222bd07f9e3371476e0348c2ea61ef881",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (ffos:102, ffos:376, ffos:377, ffos:671) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (39-60 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "ffos-germanistika-zavrsni",
+    "unitId": "ffos",
+    "programs": [
+      "Prijediplomski studij Njemački jezik i književnost"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "FFOS Germanistika, zavrsni rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "recommendedCitation": "harvard"
+    },
+    "facts": [],
+    "note": "Fakultetska tipografija (FFOS: Times New Roman 12, prored 1,5, margine 2,5/2/2,5/2,5 cm) uz odsjecki citatni stil: autor-godina u tekstu (Nachname Jahr: Seite, npr. (Heyd 1997: 28)), stil nije imenovan -> harvard mod (Anleitung, srpanj 2025). Odsjecke upute citane izravno.",
+    "sources": [
+      {
+        "title": "Anleitung zum Verfassen von Abschlussarbeiten (Odsjek za njemacki jezik i knjizevnost FFOS, srpanj 2025)",
+        "url": "https://www.ffos.unios.hr/wp-content/uploads/2025/07/upute-za-izradu-zavrsnih-radova-germanistika_srpanj-2025.pdf"
+      },
+      {
+        "title": "Pravilnik o zavrsnim i diplomskim radovima i ispitu (FFOS)",
+        "url": "https://www.ffos.unios.hr/wp-content/uploads/2022/03/Pravilnik-o-zavrsnim-i-diplomskim-radovima-i-ispitu.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Anleitung zum Verfassen von Abschlussarbeiten (Odsjek za njemacki jezik i knjizevnost FFOS, srpanj 2025)",
+      "Pravilnik o zavrsnim i diplomskim radovima i ispitu (FFOS)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Format papira",
+      "Margine",
+      "Stil citiranja (odsjecke upute)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna zavrsna rada (Filozofski fakultet Osijek, po odsjeku filtrirano dc:subject) iz sluzbenog repozitorija (repozitorij.ffos.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "ffos:163",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 23,
+          "sha256": "ed1e6e94def9858b5777c17b2e53453166279c8fe9fef268812c8bce1d86a6ff",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "ffos:168",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 26,
+          "sha256": "b82967046b2c9389c1acb5b016beade563de87084c869782d9b9125a00c8cc0e",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "ffos:169",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 21,
+          "sha256": "ae04709b57b8802eb3edfecd3c21909ae979aab22a629f13de209b3369dbd317",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "ffos:171",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 29,
+          "sha256": "545ca9af4ddedbccb18170363d3280bf760d3e1f208d2475b777e62082ff688c",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (ffos:163, ffos:168, ffos:169, ffos:171) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (21-29 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "ffos-germanistika-diplomski",
+    "unitId": "ffos",
+    "programs": [
+      "Diplomski studij Njemački jezik i književnost"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "FFOS Germanistika, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "recommendedCitation": "harvard"
+    },
+    "facts": [],
+    "note": "Fakultetska tipografija (FFOS: Times New Roman 12, prored 1,5, margine 2,5/2/2,5/2,5 cm) uz odsjecki citatni stil: autor-godina u tekstu (Nachname Jahr: Seite, npr. (Heyd 1997: 28)), stil nije imenovan -> harvard mod (Anleitung, srpanj 2025). Odsjecke upute citane izravno.",
+    "sources": [
+      {
+        "title": "Anleitung zum Verfassen von Diplomarbeiten (Odsjek za njemacki jezik i knjizevnost FFOS, srpanj 2025)",
+        "url": "https://www.ffos.unios.hr/wp-content/uploads/2025/07/upute-za-izradu-diplomskih-radova-germanistika_srpanj-2025.pdf"
+      },
+      {
+        "title": "Upute za izradu diplomskoga rada (FFOS)",
+        "url": "https://www.ffos.unios.hr/download/upute-za-izradu-diplomskoga-rada.docx"
+      }
+    ],
+    "sourceHierarchy": [
+      "Anleitung zum Verfassen von Diplomarbeiten (Odsjek za njemacki jezik i knjizevnost FFOS, srpanj 2025)",
+      "Upute za izradu diplomskoga rada (FFOS)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Format papira",
+      "Margine",
+      "Stil citiranja (odsjecke upute)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna diplomska rada (Filozofski fakultet Osijek, po odsjeku filtrirano dc:subject) iz sluzbenog repozitorija (repozitorij.ffos.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2014,
+          2015
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "ffos:153",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 57,
+          "sha256": "6ded798864bd2b3112a4b578ffae9a2486e30682432e544cd4ce3f11e9580e1e",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ffos:154",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 43,
+          "sha256": "fb9694046fbb94dc07d99bd2f8b996450964c7a25428f32ac53a120c6d15e5cf",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ffos:157",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 52,
+          "sha256": "40cfa021c1447516db924ea0fd3505aca6a6c32a18b9c8600ff4b5113d0dc8de",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ffos:158",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 39,
+          "sha256": "6181d5586e9996448e80715a84e61e61ca4def9b61ec0a53401e10eff4a77115",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (ffos:153, ffos:154, ffos:157, ffos:158) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (39-57 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
   }
 ]
