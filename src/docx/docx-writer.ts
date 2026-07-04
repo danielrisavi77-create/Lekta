@@ -152,13 +152,14 @@ function crc32(bytes: Uint8Array): number {
   return (c ^ 0xffffffff) >>> 0;
 }
 
-interface ZipFile {
+export interface ZipFile {
   name: string;
   data: Uint8Array;
 }
 
-/** Sastavi ZIP s pohranjenim (metoda 0) zapisima; ZipReader ih cita bez raspakiravanja. */
-function zipStore(files: ZipFile[]): Uint8Array<ArrayBuffer> {
+/** Sastavi ZIP s pohranjenim (metoda 0) zapisima; ZipReader ih cita bez raspakiravanja.
+ *  Izvezen i za docx-rewriter (ponovno slaganje postojece arhive nakon izmjene). */
+export function zipStore(files: ZipFile[]): Uint8Array<ArrayBuffer> {
   const enc = new TextEncoder();
   const locals: Uint8Array[] = [];
   const centrals: Uint8Array[] = [];
