@@ -20947,7 +20947,7 @@
       }
     },
     "facts": [],
-    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Sveuciliste u Zadru, Sveuciliste u Zadru), citano izravno.",
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Sveuciliste u Zadru, Sveuciliste u Zadru), citano izravno. Citat CUSTOM byte-verificirano: Upute nude DVA sustava (Harvardski ILI europski fusnotni) uz izbor 'u dogovoru s mentorom' pa se stil ne pina. Field-sampled 3 rada (2026-07-04).",
     "sources": [
       {
         "title": "Upute za izradu zavrsnoga i diplomskog rada (Odjel za turizam i komunikacijske znanosti, Zadar)",
@@ -20966,7 +20966,52 @@
       "Obostrano poravnanje",
       "Margine"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za turizam i komunikacijske znanosti, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:351",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 35,
+          "sha256": "b356962a8817957488bfa3dc2149de91eb82025e3791932830419d7d13e554fd",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:433",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 38,
+          "sha256": "4613091a9830d8cd67cfb3d15b79db1c042abcc8766e30c5488271bcf47cc785",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:434",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 51,
+          "sha256": "e5a8d09e9bdd482e2c9b9ce6158cb22f624a51ff29200fde345dfa75532c3015",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:351, unizd:433, unizd:434) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
   },
   {
     "id": "unizd-turizam-diplomski",
@@ -20999,7 +21044,7 @@
       }
     },
     "facts": [],
-    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Sveuciliste u Zadru, Sveuciliste u Zadru), citano izravno.",
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Sveuciliste u Zadru, Sveuciliste u Zadru), citano izravno. Citat CUSTOM byte-verificirano: Upute nude DVA sustava (Harvardski ILI europski fusnotni) uz izbor 'u dogovoru s mentorom' pa se stil ne pina. Field-sampled 3 rada (2026-07-04).",
     "sources": [
       {
         "title": "Upute za izradu zavrsnoga i diplomskog rada (Odjel za turizam i komunikacijske znanosti, Zadar)",
@@ -21019,7 +21064,52 @@
       "Margine",
       "Opseg (najmanje 70 str.)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za turizam i komunikacijske znanosti, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:34",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 120,
+          "sha256": "0ec99d0135291b2c87b7577f28e2db405bb2efdd25eda9206dc21414b1039a1d",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:171",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 85,
+          "sha256": "8ba60e4160e4d2b72f8f8504509e7fa3ae716c8131fa96dd880093b7a1dd3bb8",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:222",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 76,
+          "sha256": "a89b49a2fc54806a52c65a922292e56f340734cb6ec812f9fc30cb148d968e57",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:34, unizd:171, unizd:222) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
   },
   {
     "id": "unizd-psihologija-zavrsni",
@@ -28388,6 +28478,3325 @@
         "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
       ],
       "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "unizd-kroatistika-zavrsni",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za kroatistiku (zavrsni rad, Zadar)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Kroatistika, zavrsni rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "recommendedCitation": "harvard",
+      "font": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "size": [
+        12,
+        11
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Citat HARVARD MANDIRAN: Pravilnik Cl.9 doslovno 'pri navodjenju izvora koristi Harvardski citatni stil' (OCR verificirano byte-level). Format nije brojkama propisan u Pravilniku pa su format-pravila opci baseline (nisu odjelni propis).",
+    "sources": [
+      {
+        "title": "Pravilnik o izradi, obrani i ocjeni zavrsnog rada (Odjel za kroatistiku, 2023)",
+        "url": "https://www.unizd.hr/Portals/8/Pravilnik%20o%20izradi%2C%20obrani%20i%20ocjeni%20zavrsnog%20rada%20-%20web.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o izradi, obrani i ocjeni zavrsnog rada (Odjel za kroatistiku, 2023)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Stil citiranja (Harvard, Cl.9)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za kroatistiku, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:3340",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 28,
+          "sha256": "c11dbc8bfbf46893f8d4927a4fdd09bbd305ea5b4223cc8b6027eaac430242a9",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:3354",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 38,
+          "sha256": "22377ea886a98b2654dfa7a8ef47558eb93deeb3f6b702422dfa75ffcb23a794",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:3413",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 36,
+          "sha256": "8475ececefdc5265cf92de00e4405f742c7827d2c242abaafddc2a71245580bf",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:3340, unizd:3354, unizd:3413) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-kroatistika-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za kroatistiku (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Kroatistika, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "recommendedCitation": "harvard",
+      "font": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "size": [
+        12,
+        11
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Citat HARVARD MANDIRAN: Pravilnik Cl.9 doslovno 'pri navodjenju izvora koristi Harvardski citatni stil' (OCR verificirano byte-level). Format nije brojkama propisan u Pravilniku pa su format-pravila opci baseline (nisu odjelni propis).",
+    "sources": [
+      {
+        "title": "Pravilnik o izradi, obrani i ocjeni diplomskog rada (Odjel za kroatistiku)",
+        "url": "https://www.unizd.hr/Portals/8/scan0010.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o izradi, obrani i ocjeni diplomskog rada (Odjel za kroatistiku)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Stil citiranja (Harvard, Cl.9)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za kroatistiku, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:2620",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 53,
+          "sha256": "9b05b3e0e25537859e4a9a003ecbca1d35f9938b76935a211bb3ca59a667290f",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:2731",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 107,
+          "sha256": "96a67a26d8bc488197516975e31691e922798828bd814046c28e95638dacb04f",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:2770",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 131,
+          "sha256": "5bb366c50eb717acf959bbb221cd5960fd3938db2966e7263df3ea312c2587e1",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:2620, unizd:2731, unizd:2770) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-ekonomija-zavrsni",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za ekonomiju (zavrsni rad, Zadar)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Ekonomija, zavrsni rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "recommendedCitation": "harvard",
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Citat HARVARD MANDIRAN na odjelnoj razini: odjelne Upute imperativno 'koristi se Harvardski sustav citiranja' + odjelni Harvard vodic (Panjkota 2010) linkan sa stranice Izrada diplomskog rada (snapshot). Oblikovanje (TNR 12, prored 1,5, margine 2,5, justify) iz odjelnih Uputa.",
+    "sources": [
+      {
+        "title": "Upute za izradu seminarskog rada (Odjel za ekonomiju, Zadar)",
+        "url": "https://ekonomija.unizd.hr/Portals/4/Upute%20za%20izradu%20seminarskog%20rada%20DEUNIZD.pdf"
+      },
+      {
+        "title": "Kratki vodic kroz citiranje i referenciranje (Odjel za ekonomiju, Panjkota, 2010)",
+        "url": "https://www.unizd.hr/Portals/45/Citiranje%20i%20referenciranje.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu seminarskog rada (Odjel za ekonomiju, Zadar)",
+      "Kratki vodic kroz citiranje i referenciranje (Odjel za ekonomiju, Panjkota, 2010)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Margine",
+      "Obostrano poravnanje",
+      "Stil citiranja (Harvard)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za ekonomiju, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:86",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 69,
+          "sha256": "f762c03f3359ae00402d198c2db8fd705a90c8e5b0e23cb67d79494d8c1e84d2",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:960",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 52,
+          "sha256": "b7908868d558e5da4a24a7c58504f53ec26f2262d396c38831ca6bb05d08b963",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:1057",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 58,
+          "sha256": "6d052f507f0a91df0ffb2d74911ac25af1f1989c094999188e9d6696dcdb0d1e",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:86, unizd:960, unizd:1057) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-ekonomija-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za ekonomiju (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Ekonomija, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "recommendedCitation": "harvard",
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Citat HARVARD MANDIRAN na odjelnoj razini: odjelne Upute imperativno 'koristi se Harvardski sustav citiranja' + odjelni Harvard vodic (Panjkota 2010) linkan sa stranice Izrada diplomskog rada (snapshot). Oblikovanje (TNR 12, prored 1,5, margine 2,5, justify) iz odjelnih Uputa.",
+    "sources": [
+      {
+        "title": "Upute za izradu seminarskog rada (Odjel za ekonomiju, Zadar)",
+        "url": "https://ekonomija.unizd.hr/Portals/4/Upute%20za%20izradu%20seminarskog%20rada%20DEUNIZD.pdf"
+      },
+      {
+        "title": "Kratki vodic kroz citiranje i referenciranje (Odjel za ekonomiju, Panjkota, 2010)",
+        "url": "https://www.unizd.hr/Portals/45/Citiranje%20i%20referenciranje.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu seminarskog rada (Odjel za ekonomiju, Zadar)",
+      "Kratki vodic kroz citiranje i referenciranje (Odjel za ekonomiju, Panjkota, 2010)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Margine",
+      "Obostrano poravnanje",
+      "Stil citiranja (Harvard)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za ekonomiju, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:41",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 71,
+          "sha256": "07e59c1753e4dc0cb71cfa89aef14ca2eab8b0d101930ec17ac9e51adb436e4b",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:226",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 150,
+          "sha256": "d6c1b32efdec5f81a083347d0919e11a7aa60d2a46ba55a84530bcd080ad8cd3",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:227",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 107,
+          "sha256": "37776b899793ceeed5a71868ee1b79b039fb9167dd5326f61e62caf92d4fc276",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:41, unizd:226, unizd:227) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-ekologija-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za ekologiju, agronomiju i akvakulturu (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Ekologija, agronomija i akvakultura, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "recommendedCitation": "harvard",
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "justify": true
+    },
+    "facts": [],
+    "note": "Citat HARVARD MANDIRAN: Upute doslovno 'Literatura se navodi sazeto abecedno (modificirani harvardski stil)' + delegacija na odjelni Harvard vodic (byte-level verificirano). Format imperativno: A4, TNR 12 pt, prored 1,5, justify; margine 'standardne' (bez brojke) pa se ne boduju.",
+    "sources": [
+      {
+        "title": "Prilog 2: Upute za pisanje diplomskog rada (Odjel za ekologiju, agronomiju i akvakulturu)",
+        "url": "https://www.unizd.hr/Portals/1/upute%20diplomski_1.pdf"
+      },
+      {
+        "title": "Kratki vodic kroz citiranje i referenciranje (Harvard; delegirano iz Uputa EAA)",
+        "url": "https://www.unizd.hr/Portals/45/Citiranje%20i%20referenciranje.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Prilog 2: Upute za pisanje diplomskog rada (Odjel za ekologiju, agronomiju i akvakulturu)",
+      "Kratki vodic kroz citiranje i referenciranje (Harvard; delegirano iz Uputa EAA)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Stil citiranja (modificirani Harvard)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za ekologiju, agronomiju i akvakulturu, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:3651",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 36,
+          "sha256": "403133addf73fbd13e4a002ef5c5caaa353e986e4d1e10fb0711e57b120764b0",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:3825",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 35,
+          "sha256": "2ef6823e8d1fa619907ad46d4cf07081c622034ad550d507d2249365464fb025",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:4114",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 37,
+          "sha256": "6b3cc41b635af8fd32218e846e9923fd2b5bce72004806f88cb5ecddcba9f802",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:3651, unizd:3825, unizd:4114) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-ekologija-zavrsni",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za ekologiju, agronomiju i akvakulturu (zavrsni rad, Zadar)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Ekologija, agronomija i akvakultura, zavrsni rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "size": [
+        12,
+        11
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Odjelne Upute (Prilog 2) izrijekom pokrivaju DIPLOMSKI rad; za zavrsni rad odjel nema javnu uputu o oblikovanju/citiranju pa je citat custom. Format-pravila su OPCI hrvatski akademski baseline, NISU odjelni propis (odjel ne objavljuje javnu uputu o oblikovanju); koristi upute mentora/odjela.",
+    "sources": [
+      {
+        "title": "Prilog 2: Upute za pisanje diplomskog rada (Odjel za ekologiju, agronomiju i akvakulturu)",
+        "url": "https://www.unizd.hr/Portals/1/upute%20diplomski_1.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Prilog 2: Upute za pisanje diplomskog rada (Odjel za ekologiju, agronomiju i akvakulturu)"
+    ],
+    "ruleAuthority": "generic",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Format papira (opci baseline, nije odjelni propis)",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za ekologiju, agronomiju i akvakulturu, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:25",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 32,
+          "sha256": "945d81111b626bfd0ad0fee6133ae7f8b357dbf2b1ce5cd666a9779f4d2fc745",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:78",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 31,
+          "sha256": "9da17c2b920a38004ecdeb1a0f4ab89a657750c65082430fb221056ca8f59478",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:162",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 33,
+          "sha256": "77eab46072221aa763aa1a1aab38ccb92a5b1482277d98654c2d8cf4b3fac17c",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:25, unizd:78, unizd:162) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-etnologija-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za etnologiju i antropologiju (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Etnologija i antropologija, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "recommendedCitation": "chicago-author",
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Citat MANDIRAN (autor-datum): odjelne upute propisuju citiranje 'podatci o autoru, godini nastanka djela i stranicama... u zagradama', primjeri '(Marcus i Fischer 2003: 15)' = Chicago autor-datum konvencija (byte-level verificirano). Format iz Uputa 2021: A4, margine 2,5, TNR 12, prored 1,5, justify.",
+    "sources": [
+      {
+        "title": "Upute za pisanje diplomskoga rada (Odjel za etnologiju i antropologiju, 2021)",
+        "url": "https://etnologijaiantropologija.unizd.hr/Portals/5/Upute%20za%20pisanje%20diplomskoga%20rada%202021.doc"
+      },
+      {
+        "title": "Upute za pisanje seminarskoga rada (Odjel za etnologiju i antropologiju, 2023)",
+        "url": "https://etnologijaiantropologija.unizd.hr/Portals/5/UPUTE%20ZA%20PISANJE%20SEMINARSKOGA%20studeni%202023_final_1.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pisanje diplomskoga rada (Odjel za etnologiju i antropologiju, 2021)",
+      "Upute za pisanje seminarskoga rada (Odjel za etnologiju i antropologiju, 2023)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Stil citiranja (autor-godina u zagradama)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za etnologiju i antropologiju, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:737",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 85,
+          "sha256": "4608f49c1890e9a53a01b8a0370253349c85627ba8096cfebf13836d7408980f",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:973",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 47,
+          "sha256": "ac5a95d537432c11e6ece25ed3358f13986ec62c6d748acba3043029975d30a0",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:2224",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 60,
+          "sha256": "1ec8368dd6dfa1be6de2bf2118b389e2c63635ccf32f35adf0b9550507268e80",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:737, unizd:973, unizd:2224) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-geografija-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za geografiju (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Geografija, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "recommendedCitation": "harvard",
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true
+    },
+    "facts": [],
+    "note": "Citat HARVARD MANDIRAN: Upute doslovno 'U tekstu se koristi harvardski sustav referiranja' (byte-level verificirano). Format preko definicije kartice: TNR (CE) 12, prored 1,5, A4.",
+    "sources": [
+      {
+        "title": "Upute za pisanje diplomskih radova (Odjel za geografiju, Zadar)",
+        "url": "https://www.unizd.hr/Portals/6/Upute%20za%20pisanje%20diplomskih%20radova.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pisanje diplomskih radova (Odjel za geografiju, Zadar)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Stil citiranja (harvardski sustav referiranja)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za geografiju, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:38",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 74,
+          "sha256": "430c639b8b419b9efca32fa1a0f2f1ebab86002058057701aec42c67b06a427a",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:199",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 89,
+          "sha256": "b5ae4b2a0ebf878d91dc506673db209fe00466bc47f60135c055b624b51feb58",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:523",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 74,
+          "sha256": "6c40743a74c087f7e7a81331ce62863e9fe90cc16a872d84c8289de5ba0e60d3",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:38, unizd:199, unizd:523) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-zdravstvo-zavrsni",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za zdravstvene studije (zavrsni rad, Zadar)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Zdravstveni studiji (Sestrinstvo), zavrsni rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "recommendedCitation": "vancouver",
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "requireA4": true
+    },
+    "facts": [],
+    "note": "Citat VANCOUVER MANDIRAN: Pravilnik propisuje popis literature 'rednim brojem pod kojim se nalaze u tekstu' s NLM/Vancouver primjerima (Soter NA... N Engl J Med 1976; 'i sur.'/'et al.') - numericki sustav po redoslijedu pojavljivanja (byte-level verificirano). Format: TNR 12 pt (Cl.8), A4; prored/margine nisu brojkama propisani.",
+    "sources": [
+      {
+        "title": "Pravilnik o izradi i obrani zavrsnog rada, preddiplomski studij Sestrinstvo (Odjel za zdravstvene studije, 2022)",
+        "url": "https://www.unizd.hr/Portals/23/doc/aaaa2022-23/2022_Pravilnik%20o%20izradi%20%20i%20obrani%20zavrsnog%20rada.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o izradi i obrani zavrsnog rada, preddiplomski studij Sestrinstvo (Odjel za zdravstvene studije, 2022)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Stil citiranja (Vancouver/numericki)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za zdravstvene studije, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:750",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 47,
+          "sha256": "3be39339ae7095ff73af00680ab1939655a0d4d3640102d944f50961f97aec54",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:751",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 31,
+          "sha256": "62d877a006f0858376a196fcdd9d965d5c119c34ab86f57507c2f2bbd3b8b7a5",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:754",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 59,
+          "sha256": "3b8e52ab79e64f60ad7d8c4ade83659a79bf02338f038469a6325e47fe908138",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:750, unizd:751, unizd:754) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-zdravstvo-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za zdravstvene studije (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Zdravstveni studiji (Sestrinstvo), diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "recommendedCitation": "vancouver",
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "requireA4": true
+    },
+    "facts": [],
+    "note": "Citat VANCOUVER MANDIRAN: Pravilnik propisuje popis literature 'rednim brojem pod kojim se nalaze u tekstu' s NLM/Vancouver primjerima (Soter NA... N Engl J Med 1976; 'i sur.'/'et al.') - numericki sustav po redoslijedu pojavljivanja (byte-level verificirano). Format: TNR 12 pt (Cl.8), A4; prored/margine nisu brojkama propisani.",
+    "sources": [
+      {
+        "title": "Pravilnik o izradi i obrani diplomskog rada, diplomski studij Sestrinstvo (Odjel za zdravstvene studije, 2022)",
+        "url": "https://www.unizd.hr/Portals/23/doc/aaaa2022-23/2022_Pravilnik%20o%20izradi%20i%20obrani%20diplomskog%20rada.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o izradi i obrani diplomskog rada, diplomski studij Sestrinstvo (Odjel za zdravstvene studije, 2022)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Stil citiranja (Vancouver/numericki)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za zdravstvene studije, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:2996",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 42,
+          "sha256": "a711dfb002cf1880fa99cb90ae708656b5adfe67a44f0065a0984e3efa9e808f",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:3035",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 60,
+          "sha256": "0c3c838b4a80f23fffdb2e6c266606c48b2be876e186559af2049f5f8d5a4a25",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:3061",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 44,
+          "sha256": "b3a2a3897f2e83ff895934db9697a6085fc357e7ab0173202347167ecfebec51",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:2996, unizd:3035, unizd:3061) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-informacijske-zavrsni",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za informacijske znanosti (zavrsni rad, Zadar)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Informacijske znanosti, zavrsni rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "recommendedCitation": "chicago-author",
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true
+    },
+    "facts": [],
+    "note": "Citat MANDIRAN (Chicago autor-datum): odjelne Upute za citiranje propisuju autor-godina sustav (byte-level verificirano u oba dokumenta). Format iz Uputa: TNR 12, prored 1,5, A4.",
+    "sources": [
+      {
+        "title": "Upute za izradu i obranu diplomskog rada (Odjel za informacijske znanosti, 2020)",
+        "url": "https://iz.unizd.hr/Portals/70/docs_novi_web_1/Upute_izrada_obrana_diplomskog_rada_24012020.pdf"
+      },
+      {
+        "title": "Upute za citiranje (Odjel za informacijske znanosti)",
+        "url": "https://iz.unizd.hr/Portals/70/docs_novi_web_1/2_docs/citiranje/Upute_za_Citiranje_FINAL_za_objavu_na_webu.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu i obranu diplomskog rada (Odjel za informacijske znanosti, 2020)",
+      "Upute za citiranje (Odjel za informacijske znanosti)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Stil citiranja (autor-datum)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za informacijske znanosti, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:121",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 28,
+          "sha256": "f1a421f822dcede7e877a14a04a2fa259eadadc704a444d0de6b4fa7be329509",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:152",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 26,
+          "sha256": "cba4ffc099dd3178e0ede0f19372f17f3b2d165e0be0114d1bac9d51f1b905b0",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:290",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 32,
+          "sha256": "c681ae42bd882f32bf442270f389b64b289e52f1148d4e6787c7992c64ab77d3",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:121, unizd:152, unizd:290) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-informacijske-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za informacijske znanosti (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Informacijske znanosti, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "recommendedCitation": "chicago-author",
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true
+    },
+    "facts": [],
+    "note": "Citat MANDIRAN (Chicago autor-datum): odjelne Upute za citiranje propisuju autor-godina sustav (byte-level verificirano u oba dokumenta). Format iz Uputa: TNR 12, prored 1,5, A4.",
+    "sources": [
+      {
+        "title": "Upute za izradu i obranu diplomskog rada (Odjel za informacijske znanosti, 2020)",
+        "url": "https://iz.unizd.hr/Portals/70/docs_novi_web_1/Upute_izrada_obrana_diplomskog_rada_24012020.pdf"
+      },
+      {
+        "title": "Upute za citiranje (Odjel za informacijske znanosti)",
+        "url": "https://iz.unizd.hr/Portals/70/docs_novi_web_1/2_docs/citiranje/Upute_za_Citiranje_FINAL_za_objavu_na_webu.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu i obranu diplomskog rada (Odjel za informacijske znanosti, 2020)",
+      "Upute za citiranje (Odjel za informacijske znanosti)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Stil citiranja (autor-datum)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za informacijske znanosti, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:151",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 100,
+          "sha256": "f682ec2fe0386da152591c58ca2d13c817e22a448f17bbaec77ff535e2e5f110",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:153",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 65,
+          "sha256": "71fa8f76d628556da14baa478e79303b9c04111b940ba2bf6f8f781b545b052f",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:154",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 61,
+          "sha256": "c2a3a9c4f3f76e6c4262e51e4c3ac24c52842a2f455b9f4d70f7784899d7e1d8",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:151, unizd:153, unizd:154) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-arheologija-zavrsni",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za arheologiju (zavrsni rad, Zadar)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Arheologija, zavrsni rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Format iz Pravilnika Cl.7 (byte-level): A4, margine 2,5 (propisano), TNR 12 i prored 1,5 ('preporucuje se'), justify. Citat CUSTOM: odjel propisuje vlastiti humanisticki fusnotni sustav (B. MARIJANOVIC, 2010, 12-33) bez imenovanog standarda, fusnote 'preporucljivo'.",
+    "sources": [
+      {
+        "title": "Pravilnik o zavrsnom radu na preddiplomskom studiju arheologije (2016)",
+        "url": "https://www.unizd.hr/Portals/2/doc/PRAVILNIK_O_ZAVRSNOM_RADU_Arheologija.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnom radu na preddiplomskom studiju arheologije (2016)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Obostrano poravnanje"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za arheologiju, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:358",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 57,
+          "sha256": "61934916a0f6e6a977691d72b3f0bda8c48386334a830e27bf1cfa8a7c05d1c1",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:482",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 46,
+          "sha256": "93eadffff58aa6e87528e759c7f2f4eec03c73102a1acd7f9327e99d538b2b00",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:489",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 48,
+          "sha256": "74c2de7f2dd77d7c9a5770753b50b3e88c20428c1659c677e3a6ab1c3ba4900d",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:358, unizd:482, unizd:489) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-arheologija-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za arheologiju (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Arheologija, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "size": [
+        12,
+        11
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Odjelni Pravilnik s brojkama vrijedi izrijekom za PREDDIPLOMSKI zavrsni rad; za diplomski odjel nema zaseban brojcani dokument (sveucilisna Odluka 2023 delegira odjelima). Citat custom (odjelni fusnotni sustav bez imenovanog standarda). Format-pravila su OPCI hrvatski akademski baseline, NISU odjelni propis (odjel ne objavljuje javnu uputu o oblikovanju); koristi upute mentora/odjela.",
+    "sources": [
+      {
+        "title": "Pravilnik o zavrsnom radu na preddiplomskom studiju arheologije (2016)",
+        "url": "https://www.unizd.hr/Portals/2/doc/PRAVILNIK_O_ZAVRSNOM_RADU_Arheologija.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnom radu na preddiplomskom studiju arheologije (2016)"
+    ],
+    "ruleAuthority": "generic",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Format papira (opci baseline, nije odjelni propis)",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za arheologiju, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:736",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 102,
+          "sha256": "95274d2a5808f940ad8bf417573825920f3fa58b5fab69e2597a9da7ccd65140",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:871",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 91,
+          "sha256": "7886da0756216fbc9a135e560a02c9739d6a63e004699b0ffde6aae70da2c335",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:944",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 100,
+          "sha256": "93e1a36829ce8aa9e1a151dda0d4de2d29ce671515758fb3ee177382aa83ae8a",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:736, unizd:871, unizd:944) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-klasicna-filologija-zavrsni",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za klasicnu filologiju (zavrsni rad, Zadar)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Klasicna filologija, zavrsni rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Format iz odjelnih Uputa (byte-level): TNR 12, prored 1,5, margine 2,5, justify, A4. Citat CUSTOM: odjel propisuje vlastiti hibridni sustav (fusnote s 'Kombol, 1961: 72') koji nije imenovani standard.",
+    "sources": [
+      {
+        "title": "Upute za oblikovanje seminarskih, zavrsnih i diplomskih radova (Odjel za klasicnu filologiju, 2021)",
+        "url": "https://klfil.unizd.hr/Portals/7/doc/Upute%20za%20oblikovanje%20seminarskih%2003-2021.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za oblikovanje seminarskih, zavrsnih i diplomskih radova (Odjel za klasicnu filologiju, 2021)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za klasicnu filologiju, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:511",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 37,
+          "sha256": "0252b324705b04adbe5bf9ce0d5f385154840034c889854cdeb7a7836411a705",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:515",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 26,
+          "sha256": "6990dfe2f9e21a499374c49180cca0863542cb6aa42fab5489dc17103c01ef83",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:518",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 24,
+          "sha256": "31cf36482da6d8c39ded75ddb6e656e4ad2e610ace68e495bda8108f492665f9",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:511, unizd:515, unizd:518) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-klasicna-filologija-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za klasicnu filologiju (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Klasicna filologija, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Format iz odjelnih Uputa (byte-level): TNR 12, prored 1,5, margine 2,5, justify, A4. Citat CUSTOM: odjel propisuje vlastiti hibridni sustav (fusnote s 'Kombol, 1961: 72') koji nije imenovani standard.",
+    "sources": [
+      {
+        "title": "Upute za oblikovanje seminarskih, zavrsnih i diplomskih radova (Odjel za klasicnu filologiju, 2021)",
+        "url": "https://klfil.unizd.hr/Portals/7/doc/Upute%20za%20oblikovanje%20seminarskih%2003-2021.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za oblikovanje seminarskih, zavrsnih i diplomskih radova (Odjel za klasicnu filologiju, 2021)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za klasicnu filologiju, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:1029",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 77,
+          "sha256": "637ef560fffea0b0e9a4b521337295bdf64db8a416b24e38947ae777f0d584a9",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:1506",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 58,
+          "sha256": "ee1e1cd2ddb55604a7ffc831e638e2229f9f2dedca7b98c2ce2cdb0bb53ed3ea",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:1600",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 39,
+          "sha256": "5c97d11be1a345353bd558e5ca2deb7622a5e92beb8eee762c8ce7ec206e0fef",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:1029, unizd:1506, unizd:1600) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-filozofija-zavrsni",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za filozofiju (zavrsni rad, Zadar)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Filozofija, zavrsni rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true
+    },
+    "facts": [],
+    "note": "Format iz odjelnih uputa (byte-level): TNR 12 (sazeci/biljeske 10), prored 1,5, A4. Citat CUSTOM: upute ne mandiraju imenovani standard.",
+    "sources": [
+      {
+        "title": "Upute za izradu zavrsnog rada (Odjel za filozofiju, Zadar)",
+        "url": "https://filozofija.unizd.hr/novosti/upute-za-izradu-zavrsnog-rada"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu zavrsnog rada (Odjel za filozofiju, Zadar)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za filozofiju, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:1239",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 31,
+          "sha256": "71fe74d31980215a97835a984abbe0fce501338d4df87fd33dbc382e5fcc80c8",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:1513",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 34,
+          "sha256": "cbd8981674ceea54bd3454ef5dccc02fe84053a03583984eb0de6e4f85f72c40",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:1517",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 27,
+          "sha256": "58036ca375ec24e6f8b95a48c95dcf1697103fe2521b00fd66c389c1c3ad915e",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:1239, unizd:1513, unizd:1517) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-filozofija-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za filozofiju (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Filozofija, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true
+    },
+    "facts": [],
+    "note": "Format iz odjelnih uputa (byte-level): TNR 12 (sazeci/biljeske 10), prored 1,5, A4. Citat CUSTOM: upute ne mandiraju imenovani standard.",
+    "sources": [
+      {
+        "title": "Upute za izradu zavrsnog rada (Odjel za filozofiju, Zadar)",
+        "url": "https://filozofija.unizd.hr/novosti/upute-za-izradu-zavrsnog-rada"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu zavrsnog rada (Odjel za filozofiju, Zadar)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za filozofiju, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:1102",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 47,
+          "sha256": "6855e3422578ed7dc48a48440ea2b5b5e819a9cbb32cb90e6c8f0911b7e0d720",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:1865",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 50,
+          "sha256": "2332f7c376e849d5a81f3a6411c019f61766c2d1daf845c592e5382398a3200c",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:2124",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 38,
+          "sha256": "c15d847e288685c0e69131007968bcecd903c68d9196f3458891bbef9d4b7315",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:1102, unizd:1865, unizd:2124) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-anglistika-zavrsni",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za anglistiku (zavrsni rad, Zadar)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Anglistika, zavrsni rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "size": [
+        12,
+        11
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Odjelni Pravilnik je proceduralan, ne propisuje oblikovanje brojkama ni imenovani citatni stil (byte-level provjereno) pa je citat custom. Format-pravila su OPCI hrvatski akademski baseline, NISU odjelni propis (odjel ne objavljuje javnu uputu o oblikovanju); koristi upute mentora/odjela.",
+    "sources": [
+      {
+        "title": "Pravilnik o diplomskom radu (Odjel za anglistiku, Zadar)",
+        "url": "https://anglistika.unizd.hr/Portals/36/PRAVILNIK%20O%20DIPLOMSKOM%20RADU_1.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o diplomskom radu (Odjel za anglistiku, Zadar)"
+    ],
+    "ruleAuthority": "generic",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Format papira (opci baseline, nije odjelni propis)",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za anglistiku, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:348",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 40,
+          "sha256": "3e2a50ac29baf809e71467ce717f58a3587b1a4f9d549363157b97a1badef1f7",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:362",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 35,
+          "sha256": "c7cbfa308b4f40489aca71bd3b21cc291e255d759f829f5811011dfbd0314ec4",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:367",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 43,
+          "sha256": "16015c8b8b9c5bb8da163d75f5de07a200e74cdfcf25a500976a6cd5fee924c0",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:348, unizd:362, unizd:367) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-anglistika-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za anglistiku (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Anglistika, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "size": [
+        12,
+        11
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Odjelni Pravilnik je proceduralan, ne propisuje oblikovanje brojkama ni imenovani citatni stil (byte-level provjereno) pa je citat custom. Format-pravila su OPCI hrvatski akademski baseline, NISU odjelni propis (odjel ne objavljuje javnu uputu o oblikovanju); koristi upute mentora/odjela.",
+    "sources": [
+      {
+        "title": "Pravilnik o diplomskom radu (Odjel za anglistiku, Zadar)",
+        "url": "https://anglistika.unizd.hr/Portals/36/PRAVILNIK%20O%20DIPLOMSKOM%20RADU_1.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o diplomskom radu (Odjel za anglistiku, Zadar)"
+    ],
+    "ruleAuthority": "generic",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Format papira (opci baseline, nije odjelni propis)",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za anglistiku, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:244",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 54,
+          "sha256": "d2ec3c4ae30d4711a5d9239a403087202c757fb366e1dcb83548d2f80c4e0d88",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:422",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 56,
+          "sha256": "dcbd04ec101e5d3a7faba8d464b2d1f46707d6ac710c64d41a07aca5cd2fa2df",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:438",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 40,
+          "sha256": "78f3a59a22800f8a2a1e6a655b0b9af34dbe7d1e5c3e46c490366a6e609e353d",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:244, unizd:422, unizd:438) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-germanistika-zavrsni",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za germanistiku (zavrsni rad, Zadar)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Germanistika, zavrsni rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "size": [
+        12,
+        11
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Odjelni Pravilnik s brojkama pokriva DIPLOMSKI rad; za zavrsni nema javne brojcane upute. Citat custom (Pravilnik ne imenuje standard). Format-pravila su OPCI hrvatski akademski baseline, NISU odjelni propis (odjel ne objavljuje javnu uputu o oblikovanju); koristi upute mentora/odjela.",
+    "sources": [
+      {
+        "title": "Pravilnik o izradi diplomskog rada (Odjel za germanistiku, 2017)",
+        "url": "https://germanistika.unizd.hr/Portals/9/zdoc/Diplomski%20rad%20Pravilnik-%202017.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o izradi diplomskog rada (Odjel za germanistiku, 2017)"
+    ],
+    "ruleAuthority": "generic",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Format papira (opci baseline, nije odjelni propis)",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za germanistiku, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:346",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 32,
+          "sha256": "901832b91561e52d143dc0e4637fd809062aae36e4032c40b41da96fa479f985",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:350",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 33,
+          "sha256": "82bb896a7aa15a352afa374f333e1dc81efa25caa5539854fd34f32a2355243d",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:366",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 38,
+          "sha256": "fe09abe737dca374aceedf820c4c0615467334fe3a3c47e6bbbb4c8e6aa2c2c8",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:346, unizd:350, unizd:366) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-germanistika-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za germanistiku (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Germanistika, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 3,
+        "right": 3,
+        "bottom": 3,
+        "left": 3
+      }
+    },
+    "facts": [],
+    "note": "Format iz Pravilnika 2017 (byte-level): TNR 12, prored 1,5, sve margine 3 cm, A4. Citat CUSTOM: Pravilnik ne mandira imenovani standard.",
+    "sources": [
+      {
+        "title": "Pravilnik o izradi diplomskog rada (Odjel za germanistiku, 2017)",
+        "url": "https://germanistika.unizd.hr/Portals/9/zdoc/Diplomski%20rad%20Pravilnik-%202017.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o izradi diplomskog rada (Odjel za germanistiku, 2017)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine (3 cm)",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za germanistiku, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:143",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 60,
+          "sha256": "052240d7dd285ad38a41da7b330d019fc8813a7e0548da37588cfa08269c83b0",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:450",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 62,
+          "sha256": "8df1f83c216237c3dcf6d73bcf4ef93cd8b8052a4b8483781d2d8d3e2a862ba2",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:475",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 64,
+          "sha256": "fadd84b8305f9c5920062d50f1f3edf86c4a0a371ee14dc96aa1b99e8fb5de16",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:143, unizd:450, unizd:475) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-hispanistika-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za hispanistiku i iberske studije (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Hispanistika i iberski studiji, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Format iz odjelnih Uputa (byte-level): TNR 12, prored 1,5, margine 2,5, A4. Citat CUSTOM: upute ne mandiraju jedan imenovani standard.",
+    "sources": [
+      {
+        "title": "Upute za izradu diplomskog rada, Diplomski studij hispanistike (2022/23)",
+        "url": "https://www.unizd.hr/Portals/72/ZAVR%C5%A0NI%20I%20DIPLOMSKI/Upute_za_izradu_diplomskog_rada_2022-23-izmjena.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu diplomskog rada, Diplomski studij hispanistike (2022/23)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "2 stvarna javna rada (Odjel za hispanistiku i iberske studije, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 2,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:3609",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 74,
+          "sha256": "52382588087dd8f144045923769b060a3b015c1bad13144630d74ed46bf93dd8",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:4256",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 64,
+          "sha256": "0fd8cf0a1aec0c6d3cccc701d10b00c13f22ffcc36af4fcc7b824b3464ea1f78",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "2 stvarna javna rada (unizd:3609, unizd:4256) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-francuski-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za francuske i frankofonske studije (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Francuski i frankofonski studiji, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true
+    },
+    "facts": [],
+    "note": "Format iz odjelnih Uputa (byte-level): TNR 12 (biljeske 10), prored 1,5, A4. Citat CUSTOM: APA se spominje ali NIJE mandiran kao jedini (upute nude okvir, izbor uz mentora).",
+    "sources": [
+      {
+        "title": "Upute za izradu diplomskog rada, nastavnicki smjer (Odjel za francuske i frankofonske studije)",
+        "url": "https://ffs.unizd.hr/Portals/16/francuski/Upute.diplomski%20rad.nastavnicki.pdf"
+      },
+      {
+        "title": "Upute za izradu diplomskog rada, prevoditeljstvo (Odjel za francuske i frankofonske studije)",
+        "url": "https://ffs.unizd.hr/Portals/16/francuski/UPUTE_ZA_IZRADU_DIPLOMSKOG_RADA_-__prevoditeljstvo_NOVI.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu diplomskog rada, nastavnicki smjer (Odjel za francuske i frankofonske studije)",
+      "Upute za izradu diplomskog rada, prevoditeljstvo (Odjel za francuske i frankofonske studije)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za francuske i frankofonske studije, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:2435",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 54,
+          "sha256": "9b248da35756771a12d9bce2ea7a5ac40fb27863e043295ef2e38cd063565926",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:3295",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 57,
+          "sha256": "a4f02869b3ecac74bd52d4093c868959a4fd5bc22b76a14d3ec1427823157edc",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:3460",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 93,
+          "sha256": "6e56f80a33a15706ffa043eee22f1c00e3d624994653e641c8e0e11072300df5",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:2435, unizd:3295, unizd:3460) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-povijest-zavrsni",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za povijest (zavrsni rad, Zadar)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Povijest, zavrsni rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "size": [
+        12,
+        11
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Odjelne Upute s brojkama pokrivaju DIPLOMSKI rad; za zavrsni nema javne brojcane upute. Citat custom (fusnotni sustav bez imenovanog standarda). Format-pravila su OPCI hrvatski akademski baseline, NISU odjelni propis (odjel ne objavljuje javnu uputu o oblikovanju); koristi upute mentora/odjela.",
+    "sources": [
+      {
+        "title": "Upute za pisanje diplomskog rada (Odjel za povijest, 2012)",
+        "url": "https://povijest.unizd.hr/Portals/3/Dokumenti/10_DIPLOMSKI_Diplomski_rad_Upute_za_pisanje_2012__1_.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pisanje diplomskog rada (Odjel za povijest, 2012)"
+    ],
+    "ruleAuthority": "generic",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Format papira (opci baseline, nije odjelni propis)",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za povijest, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:334",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 38,
+          "sha256": "3182603bae83ff7071ef6079a7e2367f57f9d3505d27fb59e0ae157d3d69ed7c",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:462",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 34,
+          "sha256": "7bdd75ad8ac3e4fec3873242fd921473d11e200d0e71401f2eb108fb2937e5b1",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:580",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 34,
+          "sha256": "c69279c5c741a654409ead1cf4ad7d918b52cba8153af3a03f11818c93edaa14",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:334, unizd:462, unizd:580) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-povijest-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za povijest (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Povijest, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "size": [
+        12
+      ],
+      "spacing": 2.0,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3.5
+      }
+    },
+    "facts": [],
+    "note": "Format iz Uputa 2012 (byte-level): velicina 12 (biljeske 10), DVOSTRUKI prored (2,0), margine 2,5 uz lijevu 3,5, A4; vrsta fonta nije propisana. Citat CUSTOM: fusnotni sustav bez imenovanog standarda.",
+    "sources": [
+      {
+        "title": "Upute za pisanje diplomskog rada (Odjel za povijest, 2012)",
+        "url": "https://povijest.unizd.hr/Portals/3/Dokumenti/10_DIPLOMSKI_Diplomski_rad_Upute_za_pisanje_2012__1_.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pisanje diplomskog rada (Odjel za povijest, 2012)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine (lijeva 3,5)",
+      "Velicina slova",
+      "Prored (dvostruki)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za povijest, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:76",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 107,
+          "sha256": "cddf9db8192c5a0f2b9d48fab643941a771c3fc345ce8edb2d9faba053d44010",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:314",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 74,
+          "sha256": "9a1f31fbf2f5b843e3e6ce42e2e9f5c7e8e3aad79b32273002349c8f6407e2b1",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:970",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 57,
+          "sha256": "f268bd2793ec8316b4c6dff0580f4e4b4c31a610c95e317c4d7e50c98dad94d5",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:76, unizd:314, unizd:970) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-talijanistika-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za talijanistiku (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Talijanistika, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true
+    },
+    "facts": [],
+    "note": "Format s odjelne stranice (byte-level): TNR 12, prored 1,5 (dugi citati/biljeske prored 1, vel. 10), A4; margine parcijalne (lijeva 4) pa se ne boduju. Citat CUSTOM: nema imenovanog standarda.",
+    "sources": [
+      {
+        "title": "Diplomski rad, upute (Odjel za talijanistiku, stranica studija)",
+        "url": "https://talijanistika.unizd.hr/studij/diplomski-rad"
+      }
+    ],
+    "sourceHierarchy": [
+      "Diplomski rad, upute (Odjel za talijanistiku, stranica studija)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za talijanistiku, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:245",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 53,
+          "sha256": "6b44b1f0155675b8e863914cb1efefbd99d3bad554cc8aff82700f667427241e",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:279",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 37,
+          "sha256": "3f2fe64170a767dfabe2df7b34e80d91d936b5297dc55d00f382a815fc120896",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:566",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 41,
+          "sha256": "b19d44f7b6f5cced9374918ea5e3c983b8d533327376ec73b99690fcf1cf54fa",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:245, unizd:279, unizd:566) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-sociologija-zavrsni",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za sociologiju (zavrsni rad, Zadar)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Sociologija, zavrsni rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "size": [
+        12,
+        11
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Odjelni javni dokumenti su administrativni (prijava teme/mentorstvo) i NE propisuju oblikovanje ni citatni stil (byte-level provjereno). Format-pravila su OPCI hrvatski akademski baseline, NISU odjelni propis (odjel ne objavljuje javnu uputu o oblikovanju); koristi upute mentora/odjela.",
+    "sources": [
+      {
+        "title": "Upute za prijavu zavrsnog rada (Odjel za sociologiju, administrativne)",
+        "url": "https://sociologija.unizd.hr/Portals/13/Zavrsni%2020%2021%20VBarada_1.docx"
+      },
+      {
+        "title": "Upute za prijavu diplomskog rada (Odjel za sociologiju, administrativne)",
+        "url": "https://sociologija.unizd.hr/Portals/13/Diplomski%2020%2021%20VBarada_1.docx"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za prijavu zavrsnog rada (Odjel za sociologiju, administrativne)",
+      "Upute za prijavu diplomskog rada (Odjel za sociologiju, administrativne)"
+    ],
+    "ruleAuthority": "generic",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Format papira (opci baseline, nije odjelni propis)",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za sociologiju, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:344",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 27,
+          "sha256": "ecd5611761230fa6b277ae12574cbebd6c6fb8e7c3c9074442a8d6d8bf372b9c",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:432",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 36,
+          "sha256": "579b954a11a27d76fdd8e0b71e87d595dfb18f132dc0fef52c1afab09839a3e2",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:442",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 48,
+          "sha256": "c884e2ec8f31d60bba1119fca8af0dae072d3e6e2777677c4c71b11b4ffcf7df",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:344, unizd:432, unizd:442) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-sociologija-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za sociologiju (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Sociologija, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "size": [
+        12,
+        11
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Odjelni javni dokumenti su administrativni (prijava teme/mentorstvo) i NE propisuju oblikovanje ni citatni stil (byte-level provjereno). Format-pravila su OPCI hrvatski akademski baseline, NISU odjelni propis (odjel ne objavljuje javnu uputu o oblikovanju); koristi upute mentora/odjela.",
+    "sources": [
+      {
+        "title": "Upute za prijavu zavrsnog rada (Odjel za sociologiju, administrativne)",
+        "url": "https://sociologija.unizd.hr/Portals/13/Zavrsni%2020%2021%20VBarada_1.docx"
+      },
+      {
+        "title": "Upute za prijavu diplomskog rada (Odjel za sociologiju, administrativne)",
+        "url": "https://sociologija.unizd.hr/Portals/13/Diplomski%2020%2021%20VBarada_1.docx"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za prijavu zavrsnog rada (Odjel za sociologiju, administrativne)",
+      "Upute za prijavu diplomskog rada (Odjel za sociologiju, administrativne)"
+    ],
+    "ruleAuthority": "generic",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Format papira (opci baseline, nije odjelni propis)",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za sociologiju, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:382",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 75,
+          "sha256": "9ad8303050ef8f8009b6ab400769ffd396fca977a225d086b93362594cdea98a",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:436",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 64,
+          "sha256": "84ab5510e62d838363ae8eeafc1f2e9a5f5de15eeb0605082fe8163828dfb870",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:437",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 37,
+          "sha256": "e9aeb6b03aba0fedea4654467f1280167e2eddf2be89e57b0914f2ba154c4269",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:382, unizd:436, unizd:437) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-lingvistika-zavrsni",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za lingvistiku (zavrsni rad, Zadar)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Lingvistika, zavrsni rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "size": [
+        12,
+        11
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Odjel ne objavljuje javnu uputu o oblikovanju/citiranju (provjereno na odjelnim stranicama). Format-pravila su OPCI hrvatski akademski baseline, NISU odjelni propis (odjel ne objavljuje javnu uputu o oblikovanju); koristi upute mentora/odjela.",
+    "sources": [],
+    "sourceHierarchy": [],
+    "ruleAuthority": "generic",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Format papira (opci baseline, nije odjelni propis)",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za lingvistiku, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:7500",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 51,
+          "sha256": "ddf5761a33f0dea831e668880263727663f5cb4de896524f723ae096997688dd",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:7602",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 90,
+          "sha256": "9defd5247f8e0fb0c0767aef73adbb19eafda59e6efa3bb9832b347fd96bcae9",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:7624",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 46,
+          "sha256": "bff3acc27ff2a72f2722148522d116447bf91937c83c652871a4e26035dcad25",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:7500, unizd:7602, unizd:7624) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-lingvistika-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za lingvistiku (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Lingvistika, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "size": [
+        12,
+        11
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Odjel ne objavljuje javnu uputu o oblikovanju/citiranju (provjereno na odjelnim stranicama). Format-pravila su OPCI hrvatski akademski baseline, NISU odjelni propis (odjel ne objavljuje javnu uputu o oblikovanju); koristi upute mentora/odjela.",
+    "sources": [],
+    "sourceHierarchy": [],
+    "ruleAuthority": "generic",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Format papira (opci baseline, nije odjelni propis)",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za lingvistiku, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:4918",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 80,
+          "sha256": "146b037d8263a9a2dde2ff5b163de3d2c608c2567b8b8b84b8601d29bf0faae4",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:5083",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 62,
+          "sha256": "b550de1171e966ee274e355458eb6c2e3b303f1cfb201152ead074f480bab71b",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:6744",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 103,
+          "sha256": "fed881c36db36fbf47dc1db99f757de8bb13f281a40ba85c2ce4ac2df30eec2e",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:4918, unizd:5083, unizd:6744) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-rusistika-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za rusistiku (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Rusistika, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "size": [
+        12,
+        11
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Odjel ne objavljuje javnu uputu o oblikovanju/citiranju (provjereno na odjelnim stranicama). Format-pravila su OPCI hrvatski akademski baseline, NISU odjelni propis (odjel ne objavljuje javnu uputu o oblikovanju); koristi upute mentora/odjela.",
+    "sources": [],
+    "sourceHierarchy": [],
+    "ruleAuthority": "generic",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Format papira (opci baseline, nije odjelni propis)",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za rusistiku, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:3787",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 64,
+          "sha256": "cc5d9a24c1be8d31ac566221c0c181dbf8fcd9b68fb2c40107e994c19f444649",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:3794",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 41,
+          "sha256": "1a66708e8f67701ce9ee8d337c24e1bce08557d2501daf32f5d10033a7126cde",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:3903",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 31,
+          "sha256": "ca34cfe2b2238a124f2e0f50d99b4b1b3a707028cac10c0b5039a64d54f2da4e",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:3787, unizd:3794, unizd:3903) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-pomorski-zavrsni",
+    "unitId": "unizd",
+    "programs": [
+      "Pomorski odjel (zavrsni rad, Zadar)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Pomorstvo, zavrsni rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "size": [
+        12,
+        11
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Odjel ne objavljuje javnu uputu o oblikovanju/citiranju (provjereno na odjelnim stranicama). Format-pravila su OPCI hrvatski akademski baseline, NISU odjelni propis (odjel ne objavljuje javnu uputu o oblikovanju); koristi upute mentora/odjela.",
+    "sources": [],
+    "sourceHierarchy": [],
+    "ruleAuthority": "generic",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Format papira (opci baseline, nije odjelni propis)",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Pomorski odjel, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:3111",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 39,
+          "sha256": "a37d1968ce29bf9773cafc15747fbe626ab5fd21f0f52e7d12617ee59ae61218",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:7600",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 29,
+          "sha256": "6310c2cbfb209a93c3af7f182a2ae227ac8b767519f1122dbb430632e961171a",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unizd:7700",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 31,
+          "sha256": "a5ad583454273812bbf691ca34dfa469af02c9a702177f78105214e2804ec1e0",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:3111, unizd:7600, unizd:7700) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-pomorski-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Pomorski odjel (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Pomorstvo, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "size": [
+        12,
+        11
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Odjel ne objavljuje javnu uputu o oblikovanju/citiranju (provjereno na odjelnim stranicama). Format-pravila su OPCI hrvatski akademski baseline, NISU odjelni propis (odjel ne objavljuje javnu uputu o oblikovanju); koristi upute mentora/odjela.",
+    "sources": [],
+    "sourceHierarchy": [],
+    "ruleAuthority": "generic",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Format papira (opci baseline, nije odjelni propis)",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Pomorski odjel, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:8378",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 69,
+          "sha256": "295a3ecc55c4beafe4c37664a53d03e677aa7f514a835f052021f299bcf4fed1",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:8458",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 75,
+          "sha256": "afadcd05690422039b3493a96227414024100e5c4b321cfac9402dcebd56bef2",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:8678",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 31,
+          "sha256": "8be536f428d59edab86e303332c5fe3b98a84865ddfd5da17c003ae33b84779c",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:8378, unizd:8458, unizd:8678) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-ucitelji-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za izobrazbu ucitelja i odgojitelja (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Izobrazba ucitelja i odgojitelja, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "size": [
+        12,
+        11
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Odjel ne objavljuje javnu uputu o oblikovanju/citiranju (provjereno na odjelnim stranicama). Format-pravila su OPCI hrvatski akademski baseline, NISU odjelni propis (odjel ne objavljuje javnu uputu o oblikovanju); koristi upute mentora/odjela.",
+    "sources": [],
+    "sourceHierarchy": [],
+    "ruleAuthority": "generic",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Format papira (opci baseline, nije odjelni propis)",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Odjel za izobrazbu ucitelja i odgojitelja, Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access), potvrdjena po razini (OAI dc:type) i odjelu (OAI dc:publisher) kroz byte-level PDF preflight (A4, >=20 str).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:7416",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 68,
+          "sha256": "5a175c83b0dd6e03134ff32884c1a1212c43958ce498895f613c8203f1d4b11f",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:7744",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 84,
+          "sha256": "9238a8de77a188d9f75a7a15b158467529523bee671770690aff2795ea845d3c",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:7944",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 76,
+          "sha256": "271d5c21d2b5f917352297ad10995b2b660fa02cdcde5fb247e0bb7c02fd1151",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (unizd:7416, unizd:7744, unizd:7944) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
     }
   }
 ]
