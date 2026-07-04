@@ -233,8 +233,23 @@ function formatFusnota(inp: CitationInput): string {
 
 export interface CitationResult {
   citation: string;
+  /** Oblik za citiranje U TEKSTU (autor-godina), npr. "(Ivic, 2020)". Prazno za fusnotu
+   *  (tamo se u tekstu koristi broj fusnote, koji generator ne moze znati). */
+  inText: string;
   /** Polja koja nedostaju a preporucena su za dani tip izvora. */
   missing: string[];
+}
+
+/** In-text oblik autor-godina: 1 autor (Prezime, god.), 2 (A i B, god.), 3+ (A i sur., god.). */
+function inTextAuthorYear(list: ParsedAuthor[], year: string): string {
+  if (!list.length) return '';
+  const yr = year || 'bez dat.';
+  const sur = (a: ParsedAuthor) => a.last; // institucija ima cijeli naziv u "last"
+  let who: string;
+  if (list.length === 1) who = sur(list[0]);
+  else if (list.length === 2) who = `${sur(list[0])} i ${sur(list[1])}`;
+  else who = `${sur(list[0])} i sur.`;
+  return `(${who}, ${yr})`;
 }
 
 const RECOMMENDED: Record<SourceType, Array<keyof CitationInput>> = {
@@ -258,8 +273,11 @@ const FIELD_LABEL: Partial<Record<keyof CitationInput, string>> = {
 
 export function formatCitation(inp: CitationInput, style: CitationStyle): CitationResult {
   const citation = style === 'autor-godina' ? formatAutorGodina(inp) : formatFusnota(inp);
+  const inText = style === 'autor-godina'
+    ? inTextAuthorYear(parseAuthors(inp.authors), (inp.year || '').trim())
+    : '';
   const missing = (RECOMMENDED[inp.type] || [])
     .filter((f) => !(inp[f] && String(inp[f]).trim()))
     .map((f) => FIELD_LABEL[f] || String(f));
-  return { citation, missing };
+  return { citation, inText, missing };
 }

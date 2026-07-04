@@ -94,6 +94,16 @@ describe('formatCitation autor-godina', () => {
     const r = formatCitation({ type: 'knjiga', authors: 'Ivic', title: 'Ustavno pravo' }, 'autor-godina');
     expect(r.citation).toBe('Ivic. Ustavno pravo.');
   });
+
+  it('in-text oblik: 1, 2 i 3+ autora, institucija, bez godine', () => {
+    expect(formatCitation({ type: 'knjiga', authors: 'Ivic, Ivan', year: '2020' }, 'autor-godina').inText).toBe('(Ivic, 2020)');
+    expect(formatCitation({ type: 'knjiga', authors: 'Ivic, Ivan; Horvat, Ana', year: '2019' }, 'autor-godina').inText).toBe('(Ivic i Horvat, 2019)');
+    expect(formatCitation({ type: 'knjiga', authors: 'Ivic, I; Horvat, A; Kovac, M', year: '2018' }, 'autor-godina').inText).toBe('(Ivic i sur., 2018)');
+    expect(formatCitation({ type: 'mrezni', authors: 'Državni zavod za statistiku', year: '2021' }, 'autor-godina').inText).toBe('(Državni zavod za statistiku, 2021)');
+    expect(formatCitation({ type: 'knjiga', authors: 'Ivic, Ivan' }, 'autor-godina').inText).toBe('(Ivic, bez dat.)');
+    // fusnota nema in-text (u tekstu je broj biljeske)
+    expect(formatCitation({ type: 'knjiga', authors: 'Ivic, Ivan', year: '2020' }, 'fusnota').inText).toBe('');
+  });
 });
 
 describe('formatCitation fusnota', () => {

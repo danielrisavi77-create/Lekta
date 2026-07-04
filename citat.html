@@ -87,6 +87,9 @@ a{color:inherit}:focus-visible{outline:none;box-shadow:var(--focus);border-radiu
 .out-bar{display:flex;gap:10px;align-items:center;margin-top:14px}
 .out-hint{font-size:13px;margin:12px 0 0}
 .out-hint.warn{color:var(--warn)}.out-hint.ok{color:var(--ok)}
+.out-intext{margin:12px 0 0;font-size:14px;color:var(--text)}
+.out-intext-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-right:6px}
+.out-intext code{font-family:var(--ink-serif);background:var(--brand-soft);color:var(--brand);padding:2px 8px;border-radius:6px;font-size:15px}
 .note{margin-top:16px;background:var(--brand-soft);border-left:3px solid var(--brand);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--text)}
 .note b{color:var(--brand)}
 
@@ -244,8 +247,10 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
         <h2>Tvoj citat</h2>
         <p class="sub">Ažurira se dok tipkaš.</p>
         <div class="out-doc"><div class="out empty" id="out" role="status" aria-live="polite" aria-label="Generirani citat">Ispuni polja lijevo pa se citat pojavljuje ovdje.</div></div>
+        <p class="out-intext" id="out-intext" hidden><span class="out-intext-label">U tekstu:</span> <code id="intextValue"></code></p>
         <div class="out-bar">
           <button class="btn btn-primary" id="copyBtn" type="button" disabled>Kopiraj citat</button>
+          <button class="btn btn-secondary" id="copyIntextBtn" type="button" disabled>Kopiraj (u tekstu)</button>
         </div>
         <p class="out-hint" id="out-hint" aria-live="polite"></p>
         <div class="note"><b>Napomena:</b> generator daje okvirni oblik citata prema uobičajenim hrvatskim akademskim stilovima. Točan stil i interpunkciju uvijek provjeri prema uputama svog fakulteta, studija ili mentora.</div>

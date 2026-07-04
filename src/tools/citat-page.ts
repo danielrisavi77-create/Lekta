@@ -35,9 +35,17 @@ function syncVisibleFields() {
   });
 }
 
+// Prikazi/sakrij in-text oblik (autor-godina); vrati ga za copy handler.
+function renderInText(inText: string): void {
+  const box = $('#out-intext'), val = $('#intextValue'), btn = $('#copyIntextBtn');
+  if (val) val.textContent = inText || '';
+  if (box) box.hidden = !inText;
+  if (btn) btn.disabled = !inText;
+}
+
 function render() {
   const { inp, style } = readForm();
-  const { citation, missing } = formatCitation(inp, style);
+  const { citation, inText, missing } = formatCitation(inp, style);
   const out = $('#out');
   const hint = $('#out-hint');
   if (!citation) {
@@ -45,11 +53,13 @@ function render() {
     out.classList.add('empty');
     hint.textContent = '';
     $('#copyBtn').disabled = true;
+    renderInText('');
     return;
   }
   out.textContent = citation;
   out.classList.remove('empty');
   $('#copyBtn').disabled = false;
+  renderInText(inText);
   hint.textContent = missing.length ? 'Preporučeno dodati: ' + missing.join(', ') + '.' : 'Sva preporučena polja su ispunjena.';
   hint.className = missing.length ? 'out-hint warn' : 'out-hint ok';
 }
@@ -65,6 +75,7 @@ function init() {
   });
   // Kopira samo kad citat postoji (gumb je inace onemogucen); getText cita gotovi ispis.
   bindCopyButton($('#copyBtn'), () => ($('#copyBtn').disabled ? '' : ($('#out').textContent || '')));
+  bindCopyButton($('#copyIntextBtn'), () => ($('#copyIntextBtn').disabled ? '' : ($('#intextValue').textContent || '')));
 
   $('#c-sample')?.addEventListener('click', () => {
     const set = (id: string, v: string) => { const el = $(id); if (el) el.value = v; };
