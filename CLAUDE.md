@@ -33,8 +33,9 @@ Ako `check` pada, promjena nije gotova. Ne commitaj crveno.
   u Web Workeru (`analyze-docx.worker.ts` + most `analyze-docx-client.ts` s inline
   fallbackom; worker koristi isti @xmldom/xmldom DOMParser kao testovi, pa golden pokriva
   worker putanju). Tipizacija app.ts je pragmaticna: `$`/`$$` i uvezene lookup-mape su `any`
-  na granici prema DOM-u/podacima, tijelo je vecinom `any`. Preostali `@ts-nocheck`: 5
-  generator-alata `src/tools/*-page.ts` i `src/shared/ui-boot.ts`.
+  na granici prema DOM-u/podacima, tijelo je vecinom `any`. CIJELI `src/` je sada bez ijedne
+  `@ts-nocheck` direktive (i generator-alati `src/tools/*-page.ts` i `src/shared/ui-boot.ts`
+  su tipizirani); tsc strict prolazi bez supresije.
   Ulaz je `src/main.ts` (tanki bootstrap koji uvozi ui-boot i ui/app), NE monolit.
 
 ## Option A: ruleEntries su izvor istine
@@ -90,7 +91,7 @@ engine bez golden-file testa koji PRVO dokazuje zateÄeno ponaÅ¡anje.
 
 - `src/ui/app.ts` â UI orkestrator (UI, narudzbe, placanje, QA). Meta: dovrsiti split.
 - `src/analysis/analyze-docx.ts` â analyzeDocx + auditni helperi (jezgra analize).
-- `src/analysis/analyze-docx-client.ts` â most prema Web Workeru, inline fallback. Meta: razbiti.
+- `src/analysis/analyze-docx-client.ts` â most prema Web Workeru, inline fallback.
 - `src/profiles/profile-loader.ts` â registar profila, hidracija izvora, kompilacija.
 - `src/profiles/rule-compiler.ts` â Option A: ruleEntries -> effectiveRules.
 - `src/profiles/profile-schema.ts` â tipovi profila i pravila.
@@ -119,7 +120,8 @@ ModSecurity vraca HTTP 418.
 
 - Hrvatski je default jezik sadrÅ¾aja i komentara u domenskim datotekama.
 - Bez em i en crtica u tekstu; koristi zarez, dvotoÄku, zagrade ili zasebne reÄenice.
-- TypeScript strict. Ne uvodi `any` osim na granici prema monolitu dok traje split.
+- TypeScript strict, cijeli `src/` bez `@ts-nocheck`. `any` je dopusten na granici prema
+  DOM-u i labavim podacima (UI glue: `$`/`$$`, lookup-mape); u novom logickom kodu izbjegavaj.
 - Bez localStorage hackova u novim modulima; postojeÄi `safeStorageGet/Set` ostaje.
 - Produkcijski kod, ne primjeri. Male, fokusirane promjene, svaki korak zelen.
 
@@ -132,9 +134,9 @@ ModSecurity vraca HTTP 418.
    faithfulness test. DoD: nema dvostrukog voÄenja za migrirane kljuÄeve, check zelen.
 3. (GOTOVO) Razbijanje `src/ui/app.ts`: parser i citation engine su vec u
    `src/{docx,audits,citations,scoring}`, `analyzeDocx` + auditni helperi u
-   `src/analysis/analyze-docx.ts`, a `@ts-nocheck` je skinut sa samog app.ts (monolit
-   sada prolazi tsc strict). Golden netaknut, check zelen. Preostalo (zaseban task):
-   skinuti `@ts-nocheck` s 5 generator-alata `src/tools/*-page.ts` i `src/shared/ui-boot.ts`.
+   `src/analysis/analyze-docx.ts`, a `@ts-nocheck` je skinut sa samog app.ts I sa svih
+   preostalih modula (5 generator-alata `src/tools/*-page.ts` + `src/shared/ui-boot.ts`);
+   CIJELI `src/` prolazi tsc strict bez supresije. Golden netaknut, check zelen.
 4. Popuni `sourcePage` za sve `ruleEntries` iz `source-registry` (ruÄno potvrÄeno;
    nepotvrÄeno ostaje `null`). DoD: validator bez novih greÅ¡aka, check zelen.
 5. DovrÅ¡i preostale profile iz jednog tipiziranog izvora (ruleEntries). DoD: coverage
