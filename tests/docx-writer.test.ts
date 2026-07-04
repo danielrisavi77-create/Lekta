@@ -52,7 +52,28 @@ describe('buildDocxBytes: OOXML plumbing', () => {
     expect(names).toContain('[Content_Types].xml');
     expect(names).toContain('_rels/.rels');
     expect(names).toContain('word/document.xml');
+    expect(names).toContain('word/_rels/document.xml.rels');
     expect(names).toContain('word/styles.xml');
+  });
+
+  it('document.xml.rels povezuje styles.xml (bez relacije Word ignorira docDefaults)', async () => {
+    const zip = openZip(buildDocxBytes(simple));
+    const relsText = await zip.text('word/_rels/document.xml.rels');
+    expect(relsText).toBeTruthy();
+    const rels = parseXml(relsText, 'word/_rels/document.xml.rels');
+    const styles = els(rels, 'Relationship').find(
+      (r) => attr(r, 'Type') === 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles',
+    );
+    expect(styles).toBeTruthy();
+    expect(attr(styles!, 'Target')).toBe('styles.xml');
+  });
+
+  it('styles.xml deklarira Times New Roman 12 (sz 24 pola-tocke) kao docDefault', async () => {
+    const zip = openZip(buildDocxBytes(simple));
+    const styles = parseXml(await zip.text('word/styles.xml'), 'word/styles.xml');
+    const rFonts = first(styles, 'w:rFonts');
+    expect(attr(rFonts, 'w:ascii')).toBe('Times New Roman');
+    expect(attr(first(styles, 'w:sz'), 'w:val')).toBe('24');
   });
 
   it('document.xml se parsira i sadrzi tekst svih odlomaka', async () => {
@@ -77,6 +98,14 @@ describe('buildDocxBytes: OOXML plumbing', () => {
       buildDocxBytes({ paragraphs: [{ text: 'A & B < C > "D"' }] }),
     );
     expect(paraText(els(doc, 'w:p')[0])).toBe('A & B < C > "D"');
+  });
+
+  it('kontrolni znakovi (nevaljani u XML 1.0) se uklanjaju, dokument ostaje valjan', async () => {
+    // \x00 i \x0C iz paste-a; tab/LF su valjani pa se cuvaju.
+    const doc = await readDocument(
+      buildDocxBytes({ paragraphs: [{ text: 'Ivic\x00 Ana\x0C Horvat' }] }),
+    );
+    expect(paraText(els(doc, 'w:p')[0])).toBe('Ivic Ana Horvat');
   });
 
   it('spacingBeforePt i spacingAfterPt postaju w:before i w:after u twipima (1 pt = 20)', async () => {

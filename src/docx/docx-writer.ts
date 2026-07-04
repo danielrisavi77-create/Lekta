@@ -44,7 +44,11 @@ export const DOCX_MIME =
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
 function esc(s: string): string {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  // Ukloni znakove nevaljane u XML 1.0 (kontrolni, osim taba/LF/CR); cesti su pri
+  // copy/paste iz PDF-a i inace bi dali neispravan .docx koji Word odbija otvoriti.
+  return s
+    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '')
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
 function twipsFromCm(cm: number): number {
@@ -132,6 +136,15 @@ const RELS_XML =
   `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
   `<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">` +
   `<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>` +
+  `</Relationships>`;
+
+// Relacija document.xml -> styles.xml. BEZ nje Word i LibreOffice tiho ignoriraju
+// styles.xml, pa docDefaults (Times New Roman 12) ne vrijede i tekst se otvara u
+// programskom defaultu (Calibri 11). Mora postojati zaseban dio word/_rels/document.xml.rels.
+const DOCUMENT_RELS_XML =
+  `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
+  `<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">` +
+  `<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>` +
   `</Relationships>`;
 
 // --- ZIP (stored, bez kompresije) ---
@@ -238,6 +251,7 @@ export function buildDocxBytes(spec: DocSpec): Uint8Array<ArrayBuffer> {
     { name: '[Content_Types].xml', data: enc.encode(CONTENT_TYPES_XML) },
     { name: '_rels/.rels', data: enc.encode(RELS_XML) },
     { name: 'word/document.xml', data: enc.encode(documentXml(spec)) },
+    { name: 'word/_rels/document.xml.rels', data: enc.encode(DOCUMENT_RELS_XML) },
     { name: 'word/styles.xml', data: enc.encode(STYLES_XML) },
   ];
   return zipStore(files);
