@@ -1740,11 +1740,11 @@
     "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-02",
-      "scope": "Sinteticki golden (tests/fpzg-synthetic.test.ts) + 2 stvarnih javnih specijalisticki radova tog smjera iz ZIR-a kroz PDF preflight.",
+      "scope": "Sinteticki golden (tests/fpzg-synthetic.test.ts) + 3 stvarnih javnih specijalisticki radova tog smjera iz ZIR-a kroz PDF preflight.",
       "sample": {
         "syntheticDocxAudits": 1,
         "docxAudits": 0,
-        "publicPdfAudits": 2,
+        "publicPdfAudits": 3,
         "metadataSpotChecks": 0,
         "years": [
           2023,
@@ -1767,6 +1767,14 @@
           "pageFormat": "A4",
           "pages": 146,
           "sha256": "e2600cfc943ccaa6cb3f0a41ea91fb48c754ff5f7f7f4d6959d73acdf71e63a4",
+          "level": "specijalisticki"
+        },
+        {
+          "pid": "fpzg:1323",
+          "repository": "zir.nsk.hr",
+          "pageFormat": "A4",
+          "pages": 36,
+          "sha256": "5b1f30e5cca2678c139adfd2ca05500a2b008fc2599a7f215e8f99a9119e47f5",
           "level": "specijalisticki"
         }
       ],
@@ -8904,11 +8912,11 @@
     "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-02",
-      "scope": "Sinteticki golden (tests/fbf-fhs-synthetic.test.ts) + 2 stvarnih javnih zavrsni specijalisticki radova iz ZIR-a kroz byte-level PDF preflight.",
+      "scope": "Sinteticki golden (tests/fbf-fhs-synthetic.test.ts) + 3 stvarnih javnih zavrsni specijalisticki radova iz ZIR-a kroz byte-level PDF preflight.",
       "sample": {
         "syntheticDocxAudits": 1,
         "docxAudits": 0,
-        "publicPdfAudits": 2,
+        "publicPdfAudits": 3,
         "metadataSpotChecks": 0,
         "years": [
           2022,
@@ -8931,14 +8939,22 @@
           "pages": 120,
           "pageFormat": "A4",
           "sha256": "568cf4b9b00d8c37d30089f62964c939a6889644cf5fcc61a331b03a55502878"
+        },
+        {
+          "pid": "pharma:210",
+          "repository": "zir.nsk.hr",
+          "level": "specijalisticki",
+          "pages": 92,
+          "pageFormat": "A4",
+          "sha256": "8f8efed5347fc82d0353702e383c97e36c252b9e4406148e17b03ee16f24b4e6"
         }
       ],
       "confirmed": [
         "Uskladjeni sinteticki .docx prolazi scored format provjere; profil se ne rusi na stvarnom docx-u.",
-        "2 stvarnih javnih zavrsni specijalisticki radova (pharma:2300, pharma:2900) prolaze byte-level PDF preflight: valjan nesifriran PDF, 100% stranica A4, viselistni, ugradjeni fontovi."
+        "3 stvarnih javnih zavrsni specijalisticki radova (pharma:2300, pharma:2900, pharma:210) prolaze byte-level PDF preflight: valjan nesifriran PDF, 100% stranica A4, viselistni, ugradjeni fontovi."
       ],
       "observedDeviations": [
-        "FBF radovi su na ZIR-u pod namespaceom \"pharma\". Upute (2014) scored velicinu/prored/margine/A4; font nije propisan pa je checkFont:false. Zavrsni specijalisticki rad je postdiplomski i rjedak; nadjena 2 otvorena A4 rada."
+        "FBF radovi su na ZIR-u pod namespaceom \"pharma\". Upute (2014) scored velicinu/prored/margine/A4; font nije propisan pa je checkFont:false. Zavrsni specijalisticki rad je postdiplomski i rjedak; nadjena 3 otvorena A4 rada (pharma:2300, pharma:2900, pharma:210)."
       ],
       "productDecision": "PDF preflight je plitak (A4 + integritet PDF-a). Stvarni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
     },
