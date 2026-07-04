@@ -62,7 +62,24 @@ hashiran, ne sirovi IP.
 - Rucno pokretanje po potrebi: `select purge_old_report_generations(90);`
 - Provjera zakazanog joba: `select * from cron.job where jobname = 'purge-report-generations';`
 
-## 4. Prije objave (smoke, vidi i docs/GO_LIVE_NAPLATA.md)
+## 4. Uptime monitor (P1 8-3)
+
+Klijentska analiza (upload -> analiza -> rezultat) je cisto u pregledniku i nema serverski put.
+Serverski putovi su Edge Functioni. Za pracenje dostupnosti:
+
+1. Deploy health rute: `supabase functions deploy health`. Odgovara 200 + `{status:"ok",...}`.
+2. Postavi vanjski uptime monitor (npr. UptimeRobot, BetterStack, Cronitor) na:
+   - `GET …/functions/v1/health` -> ocekuj HTTP 200 (glavni signal zivosti).
+   - (opcionalno, dublje) `POST …/functions/v1/create-checkout` bez Authorization -> ocekuj 401
+     (potvrda da checkout put odgovara i odbija neautorizirane).
+3. Alert na e-mail/SMS/Slack kad glavni put padne. U spici (sezona predaje) drzi pripremljen
+   kratki status-tekst za korisnike (npr. objava na naslovnoj: "privremeni zastoj punog izvjestaja,
+   besplatna analiza radi normalno").
+
+Napomena: besplatna analiza radi i kad su Edge Functioni nedostupni; tada je nedostupna samo
+kupnja/puni izvjestaj. To razdvojiti u komunikaciji statusa.
+
+## 5. Prije objave (smoke, vidi i docs/GO_LIVE_NAPLATA.md)
 
 - Falsificiran webhook bez potpisa -> ocekivano 401, bez novog entitlementa.
 - Korisnik A ne moze citati retke korisnika B (RLS): upit kao A nad B redom vraca prazno.
