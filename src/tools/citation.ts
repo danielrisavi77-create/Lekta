@@ -47,8 +47,30 @@ export interface ParsedAuthor {
 
 // Organizacijske rijeci: kad se pojave (a nema zareza), autor je ustanova/tijelo, ne osoba,
 // pa se NE razbija na prezime/ime (inace "Vlada Republike Hrvatske" -> "Hrvatske, V. R.").
-const ORG_KEYWORDS =
-  /\b(vlada|ministarstvo|zavod|institut|sveučiliš|sveucilis|fakultet|društvo|drustvo|ured|agencija|komisija|odbor|centar|zaklada|udruga|udruženj|udruzenj|savez|republik|akademij|knjižnic|knjiznic|muzej|škola|skola|nakladni)\b/i;
+//
+// Granica se NE oslanja na \b: u JS-u je \b ASCII pa pada i ispred dijakritika ("škola" -> \b
+// prije š ne postoji) i ispred sklonidbenog nastavka ("Republik" + "a" -> \b izmedu dva slova
+// ne postoji), zbog cega su korijeni tiho bili mrtvi. Umjesto toga konzumiramo ne-slovnu
+// granicu (?:^|[^\p{L}\p{N}]) uz 'u' flag. Dvije skupine:
+//  - ORG_STEM: korijen dovoljno distinktivan da hvata i sklonjene oblike (dopusten nastavak
+//    slova): "akademij" -> Akademija/Akademije, "republik" -> Republika/Republike.
+//  - ORG_FULL: pune rijeci gdje bi korijen lazno hvatao OSOBE, pa traze trailing granicu
+//    (?![\p{L}]): "ured" (ne "urednik"), "vladi" (ne "Vladimir"), "vlada" (ne "vladar").
+// Poznato ogranicenje: "Vlada" je i musko ime, pa "Vlada Gotovac" (osoba) i dalje ispada kao
+// ustanova; institucionalno znacenje je u citatima daleko cesce, pa svjesno ostaje default.
+const ORG_STEM = [
+  'ministarstv', 'sveučiliš', 'sveucilis', 'fakultet', 'institut', 'akademij',
+  'republik', 'udruženj', 'udruzenj', 'knjižnic', 'knjiznic', 'društv', 'drustv',
+  'agencij', 'komisij', 'zaklad', 'muzej', 'nakladn', 'škol', 'skol',
+];
+const ORG_FULL = [
+  'vlada', 'vlade', 'vladi', 'vladu', 'zavod', 'ured', 'odbor', 'centar',
+  'savez', 'udruga', 'udruge', 'komora', 'komore',
+];
+const ORG_KEYWORDS = new RegExp(
+  '(?:^|[^\\p{L}\\p{N}])(?:(?:' + ORG_STEM.join('|') + ')|(?:(?:' + ORG_FULL.join('|') + ')(?![\\p{L}])))',
+  'iu',
+);
 
 /** Razbije slobodan unos autora u strukturu prezime/ime. Prazni unosi se odbacuju.
  *  Ustanova/tijelo (bez zareza, s organizacijskom rijeci) ostaje doslovno, bez inicijala. */

@@ -27,6 +27,29 @@ describe('parseAuthors', () => {
     expect(parseAuthors('Vlada Republike Hrvatske')).toEqual([{ last: 'Vlada Republike Hrvatske', first: '' }]);
     expect(parseAuthors('Državni zavod za statistiku')).toEqual([{ last: 'Državni zavod za statistiku', first: '' }]);
   });
+
+  it('sklonjeni/dijakriticki nazivi ustanova ostaju doslovni (korijen hvata nastavak)', () => {
+    // Prije popravka su svi ovi tiho ispadali kao osobe (trailing \b ubija korijen; leading
+    // \b ubija dijakriticki pocetak). Nominativ i genitiv moraju ostati doslovni.
+    for (const org of [
+      'Akademija dramske umjetnosti',
+      'Republika Hrvatska',
+      'Sveučilište u Zagrebu',
+      'Sveuciliste u Zagrebu',
+      'Udruženje obrtnika Zagreb',
+      'Knjižnica grada Zagreba',
+      'Škola narodnog zdravlja',
+      'Ministarstvo znanosti i obrazovanja',
+    ]) {
+      expect(parseAuthors(org)).toEqual([{ last: org, first: '' }]);
+    }
+  });
+
+  it('osobe s rijecju nalik ustanovi ostaju osobe (trailing granica)', () => {
+    // "Urednik"/"Vladimir" sadrze "ured"/"vladi" ali su osobe: trailing granica ih cuva.
+    expect(parseAuthors('Vladimir Nazor')).toEqual([{ last: 'Nazor', first: 'Vladimir' }]);
+    expect(parseAuthors('Ivan Uredski')).toEqual([{ last: 'Uredski', first: 'Ivan' }]);
+  });
 });
 
 describe('formatCitation autor-godina', () => {
