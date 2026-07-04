@@ -65,6 +65,30 @@ function init() {
   });
   // Kopira samo kad citat postoji (gumb je inace onemogucen); getText cita gotovi ispis.
   bindCopyButton($('#copyBtn'), () => ($('#copyBtn').disabled ? '' : ($('#out').textContent || '')));
+
+  $('#c-sample')?.addEventListener('click', () => {
+    const set = (id: string, v: string) => { const el = $(id); if (el) el.value = v; };
+    set('#f-type', 'knjiga'); set('#f-style', 'autor-godina');
+    set('#f-authors', 'Ivić, Ivan; Horvat, Ana');
+    set('#f-title', 'Ustavno pravo Republike Hrvatske');
+    set('#f-year', '2020'); set('#f-place', 'Zagreb'); set('#f-publisher', 'Narodne novine');
+    for (const key of ['container', 'volume', 'issue', 'pages', 'url', 'accessed', 'institution']) set('#f-' + key, '');
+    syncVisibleFields();
+    render();
+    $('#f-authors')?.focus();
+  });
+
+  $('#c-clear')?.addEventListener('click', () => {
+    $('#f-type').selectedIndex = 0;
+    $('#f-style').selectedIndex = 0;
+    for (const key of ['authors', 'title', 'container', 'year', 'publisher', 'place', 'volume', 'issue', 'pages', 'url', 'accessed', 'institution']) {
+      const el = $('#f-' + key); if (el) el.value = '';
+    }
+    syncVisibleFields();
+    render();
+    $('#f-authors')?.focus();
+  });
+
   // Tema se sinkronizira preko lekta.theme (inline skripta u citat.html), ne ovdje.
   syncVisibleFields();
   render();
