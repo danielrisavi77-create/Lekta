@@ -154,7 +154,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "category": "structure",
         "detail": null,
         "severity": "info",
-        "title": "Djelomično potvrđeni profil",
+        "title": "Službene tehničke provjere",
         "where": "Odabrani profil",
       },
       {
@@ -367,7 +367,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "category": "structure",
         "detail": null,
         "severity": "info",
-        "title": "Djelomično potvrđeni profil",
+        "title": "Službene tehničke provjere",
         "where": "Odabrani profil",
       },
       {
@@ -573,7 +573,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "category": "structure",
         "detail": null,
         "severity": "info",
-        "title": "Djelomično potvrđeni profil",
+        "title": "Službene tehničke provjere",
         "where": "Odabrani profil",
       },
       {
@@ -814,7 +814,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "category": "structure",
         "detail": null,
         "severity": "info",
-        "title": "Djelomično potvrđeni profil",
+        "title": "Službene tehničke provjere",
         "where": "Odabrani profil",
       },
       {
@@ -1013,7 +1013,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "category": "structure",
         "detail": null,
         "severity": "info",
-        "title": "Djelomično potvrđeni profil",
+        "title": "Službene tehničke provjere",
         "where": "Odabrani profil",
       },
       {
@@ -1205,7 +1205,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "category": "structure",
         "detail": null,
         "severity": "info",
-        "title": "Djelomično potvrđeni profil",
+        "title": "Službene tehničke provjere",
         "where": "Odabrani profil",
       },
       {

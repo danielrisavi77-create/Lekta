@@ -294,6 +294,9 @@ export interface PackageDef {
 export interface ProfileStatusMeta {
   label: string;
   note: string;
+  /** Pozitivni "opseg jamstva" red za nepotvrdjene profile: sto se sluzbeno provjerava i
+   *  kako puni izvjestaj pomaze. Prikazuje se istaknuto u kartici profila (konverzija). */
+  guarantee?: string;
 }
 
 /** PROFILE_AUTHORITY[key] (data/profiles/profile-authority.json). */

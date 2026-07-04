@@ -4,15 +4,18 @@
     "note": "Pravila su povezana sa službenim izvorom i ručno provjerena."
   },
   "partial": {
-    "label": "Djelomično potvrđeni profil",
-    "note": "Dio pravila je poznat, ali profil još treba provjeriti prema aktualnim uputama studija i vrste rada."
+    "label": "Službene tehničke provjere",
+    "note": "Tehničko oblikovanje i citiranje provjeravamo prema službenim općim uputama fakulteta. Opseg i strukturu rada određuje kolegij ili mentor, pa ih ne bodujemo bez njihove upute.",
+    "guarantee": "Puni izvještaj pokazuje što je od tehničkih pravila provjereno i daje popis onoga što još treba uskladiti s uputama kolegija ili mentora."
   },
   "research": {
     "label": "Profil u istraživanju",
-    "note": "Ustanova je u katalogu, a posebna pravila se još prikupljaju. Analiza koristi transparentni generički profil."
+    "note": "Ustanova je u katalogu, a posebna pravila se još prikupljaju. Analiza koristi transparentni generički profil.",
+    "guarantee": "Već sada provjeravamo opće tehničke elemente i tvoje zahtjeve. Puni izvještaj jasno označava što je provjereno, a što još ovisi o posebnim uputama studija."
   },
   "generic": {
     "label": "Generička provjera",
-    "note": "Za ovaj odabir još nema verificiranog posebnog profila. Provjeravaju se opći tehnički elementi i korisnički zahtjevi."
+    "note": "Za ovaj odabir još nema verificiranog posebnog profila. Provjeravaju se opći tehnički elementi i korisnički zahtjevi.",
+    "guarantee": "Provjeravamo opće tehničke elemente i tvoje korisničke zahtjeve. Puni izvještaj pokazuje što je provjereno i gdje unijeti posebna pravila mentora."
   }
 }
