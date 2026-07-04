@@ -64,6 +64,20 @@ describe('checkoutRequestPayload (kriterij 14.1)', () => {
     expect('priceEur' in payload).toBe(false);
     expect('discount' in payload).toBe(false);
   });
+  it('prenosi pristanak na trenutnu isporuku i odricanje kad je dan (P0 1-1)', () => {
+    const consent = {
+      immediateDelivery: true as const,
+      withdrawalWaived: true as const,
+      text: 'Pristajem na trenutnu isporuku i odricem se prava na odustanak.',
+      timestamp: '2026-07-04T10:00:00.000Z',
+      termsVersion: '2026-07-03',
+    };
+    const payload = checkoutRequestPayload('slot_diplomski', null, consent);
+    expect(payload).toEqual({ productId: 'slot_diplomski', consent });
+  });
+  it('bez pristanka payload ne sadrzi consent polje', () => {
+    expect('consent' in checkoutRequestPayload('slot_diplomski')).toBe(false);
+  });
 });
 
 describe('buildLemonSqueezyCheckout', () => {

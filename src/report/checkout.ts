@@ -69,6 +69,24 @@ export interface CheckoutClientConfig {
   endpoint: string;
 }
 
+/**
+ * Pristanak na trenutnu isporuku digitalnog sadrzaja i odricanje od 14-dnevnog prava na
+ * odustanak (Zakon o zastiti potrosaca, cl. 86; EU Direktiva 2011/83). Klijent ga skuplja
+ * prije checkouta i salje serveru koji ga trajno biljezi uz narudzbu/entitlement (P0 1-1).
+ */
+export interface CheckoutConsent {
+  /** Pristanak na trenutni pocetak isporuke digitalnog sadrzaja. */
+  immediateDelivery: true;
+  /** Odricanje od prava na jednostrani raskid u roku od 14 dana. */
+  withdrawalWaived: true;
+  /** Tocan tekst pristanka koji je korisnik vidio i oznacio. */
+  text: string;
+  /** ISO 8601 timestamp trenutka pristanka. */
+  timestamp: string;
+  /** Verzija Uvjeta na snazi u trenutku pristanka. */
+  termsVersion: string;
+}
+
 export type CreateCheckoutOutcome =
   | { kind: 'ok'; checkoutUrl: string }
   | { kind: 'unauthorized' }
@@ -83,8 +101,12 @@ export type CreateCheckoutOutcome =
 export function checkoutRequestPayload(
   productId: string,
   referralCode?: string | null,
-): { productId: string; referralCode?: string } {
-  return referralCode ? { productId, referralCode } : { productId };
+  consent?: CheckoutConsent | null,
+): { productId: string; referralCode?: string; consent?: CheckoutConsent } {
+  const payload: { productId: string; referralCode?: string; consent?: CheckoutConsent } = { productId };
+  if (referralCode) payload.referralCode = referralCode;
+  if (consent) payload.consent = consent;
+  return payload;
 }
 
 /** Pozovi create-checkout i mapiraj HTTP odgovor u ishod za UI. */
@@ -94,6 +116,7 @@ export async function createCheckout(
   productId: string,
   referralCode: string | null = null,
   fetchImpl: typeof fetch = fetch,
+  consent: CheckoutConsent | null = null,
 ): Promise<CreateCheckoutOutcome> {
   if (!config.endpoint) return { kind: 'error', message: 'checkout endpoint nije konfiguriran' };
   let res: Response;
@@ -104,7 +127,7 @@ export async function createCheckout(
         'content-type': 'application/json',
         ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
       },
-      body: JSON.stringify(checkoutRequestPayload(productId, referralCode)),
+      body: JSON.stringify(checkoutRequestPayload(productId, referralCode, consent)),
     });
   } catch (e) {
     return { kind: 'error', message: e instanceof Error ? e.message : 'mrezna greska' };
