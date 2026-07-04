@@ -21148,7 +21148,14 @@
     "id": "fetpu-zavrsni",
     "unitId": "fetpu",
     "programs": [
-      "Prijediplomski studiji FET Pula (zavrsni rad)"
+      "Sveučilišni prijediplomski studij Primijenjena ekonomija",
+      "Sveučilišni prijediplomski studij Kultura i turizam",
+      "Sveučilišni prijediplomski studij Poslovna ekonomija (smjer Financije i računovodstvo)",
+      "Sveučilišni prijediplomski studij Poslovna ekonomija (smjer Financijski management)",
+      "Sveučilišni prijediplomski studij Poslovna ekonomija (smjer Management i poduzetništvo)",
+      "Sveučilišni prijediplomski studij Poslovna ekonomija (smjer Marketinško upravljanje)",
+      "Sveučilišni prijediplomski studij Poslovna ekonomija (smjer Informatički menadžment)",
+      "Sveučilišni prijediplomski studij Poslovna ekonomija (smjer Turizam)"
     ],
     "workTypes": [
       "final"
@@ -21193,13 +21200,71 @@
       "Margine",
       "Opseg (najmanje 25 str.)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna zavrsna rada (Fakultet ekonomije i turizma Dr. Mijo Mirkovic, Pula) iz sluzbenog repozitorija (repozitorij.unipu.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "unipu:3",
+          "repository": "repozitorij.unipu.hr",
+          "pageFormat": "A4",
+          "pages": 88,
+          "sha256": "99fa0b241c66b6edfa2bd7b1b18f04580c0b3c42a34ac277f811cd408d295c5e",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unipu:8",
+          "repository": "repozitorij.unipu.hr",
+          "pageFormat": "A4",
+          "pages": 66,
+          "sha256": "7b9ba67e576083bd4df9ca6c48337b19cb4ccf6303728075dc8a12d7d1666f98",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unipu:94",
+          "repository": "repozitorij.unipu.hr",
+          "pageFormat": "A4",
+          "pages": 38,
+          "sha256": "ac81243808a36bcfa860e672e698a8270989ab9fb3b25e2232444a0bf0655645",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unipu:100",
+          "repository": "repozitorij.unipu.hr",
+          "pageFormat": "A4",
+          "pages": 135,
+          "sha256": "c0f2ac55482e6b9d9590e04d29db9cafbe2595d535b4ca409f3d2b180abbc378",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (unipu:3, unipu:8, unipu:94, unipu:100) prolaze PDF preflight: valjan nesifriran PDF, viselistni (38-135 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "fetpu-diplomski",
     "unitId": "fetpu",
     "programs": [
-      "Diplomski studiji FET Pula"
+      "Sveučilišni diplomski studij Primijenjena ekonomija",
+      "Sveučilišni diplomski studij Kultura i turizam",
+      "Sveučilišni diplomski studij Poslovna ekonomija (smjer Financije i računovodstvo)",
+      "Sveučilišni diplomski studij Poslovna ekonomija (smjer Financijski management)",
+      "Sveučilišni diplomski studij Poslovna ekonomija (smjer Management i poduzetništvo)",
+      "Sveučilišni diplomski studij Poslovna ekonomija (smjer Marketinško upravljanje)",
+      "Sveučilišni diplomski studij Poslovna ekonomija (smjer Informatički menadžment)",
+      "Sveučilišni diplomski studij Poslovna ekonomija (smjer Turizam i razvoj)"
     ],
     "workTypes": [
       "graduate"
@@ -21244,13 +21309,65 @@
       "Margine",
       "Opseg (najmanje 60 str.)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna diplomska rada (Fakultet ekonomije i turizma Dr. Mijo Mirkovic, Pula) iz sluzbenog repozitorija (repozitorij.unipu.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "unipu:120",
+          "repository": "repozitorij.unipu.hr",
+          "pageFormat": "A4",
+          "pages": 76,
+          "sha256": "d067cfa3d532135e0749a0a66ab6b74dfaff82de973d86b09831398644fc3e32",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unipu:123",
+          "repository": "repozitorij.unipu.hr",
+          "pageFormat": "A4",
+          "pages": 67,
+          "sha256": "783fce1bc4ca9ed62e7b8b3a7f6a982c5589cc7e653030736ec39e4e2e327b03",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unipu:130",
+          "repository": "repozitorij.unipu.hr",
+          "pageFormat": "A4",
+          "pages": 57,
+          "sha256": "540831e6565c0ecf952bed13f814df6fcd02479398e612ce9b999296b165c5ff",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unipu:131",
+          "repository": "repozitorij.unipu.hr",
+          "pageFormat": "A4",
+          "pages": 117,
+          "sha256": "599f50271e09f5415c1fb71ce7847cc8a0890aaa11ee98f8a562cc84bcc413f6",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (unipu:120, unipu:123, unipu:130, unipu:131) prolaze PDF preflight: valjan nesifriran PDF, viselistni (57-117 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "tfpu-zavrsni",
     "unitId": "tfpu",
     "programs": [
-      "Prijediplomski/strucni studiji TFPU (zavrsni rad)"
+      "Prijediplomski sveučilišni studij Računarstvo",
+      "Prijediplomski stručni studij Proizvodno strojarstvo"
     ],
     "workTypes": [
       "final"
@@ -21295,13 +21412,65 @@
       "Margine",
       "Opseg (najmanje 35 str.)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna zavrsna rada (Tehnicki fakultet u Puli) iz sluzbenog repozitorija (repozitorij.unipu.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2019
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "unipu:3983",
+          "repository": "repozitorij.unipu.hr",
+          "pageFormat": "A4",
+          "pages": 77,
+          "sha256": "8b1b8441a6ffe4136634c90dbdad004791c706295cf98f53443f9078d956b1e1",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unipu:3990",
+          "repository": "repozitorij.unipu.hr",
+          "pageFormat": "A4",
+          "pages": 55,
+          "sha256": "04bf5a4a7ac9eb288fb044e9ec6a0be2949f820868e2b30b1dc38e6d90489f57",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unipu:3994",
+          "repository": "repozitorij.unipu.hr",
+          "pageFormat": "A4",
+          "pages": 75,
+          "sha256": "0d9a3c319a9db295d2afd6242887e2fa1471a5f8c030a2fd44962589832105a3",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unipu:3995",
+          "repository": "repozitorij.unipu.hr",
+          "pageFormat": "A4",
+          "pages": 52,
+          "sha256": "5341ef0b709c7768db221ffbff210c317576ef698e3747e48aff3f476eb5f85a",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (unipu:3983, unipu:3990, unipu:3994, unipu:3995) prolaze PDF preflight: valjan nesifriran PDF, viselistni (52-77 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "tfpu-diplomski",
     "unitId": "tfpu",
     "programs": [
-      "Diplomski studiji TFPU"
+      "Diplomski sveučilišni studij Računarstvo",
+      "Diplomski sveučilišni studij Strojarstvo"
     ],
     "workTypes": [
       "graduate"
@@ -21346,13 +21515,50 @@
       "Margine",
       "Opseg (najmanje 60 str.)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "2 stvarna javna diplomska rada (Tehnicki fakultet u Puli) iz sluzbenog repozitorija (repozitorij.unipu.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 2,
+        "metadataSpotChecks": 0,
+        "years": [
+          2018,
+          2019
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "unipu:2943",
+          "repository": "repozitorij.unipu.hr",
+          "pageFormat": "A4",
+          "pages": 66,
+          "sha256": "8f74634cd341117922a175941237f5324fe70685cb84c8dd90dc3a49364caf34",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unipu:3543",
+          "repository": "repozitorij.unipu.hr",
+          "pageFormat": "A4",
+          "pages": 85,
+          "sha256": "8171408814082f775e142ac82f2e4da8700106314fc758e002202cabf4469bc2",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "2 stvarna javna diplomska rada (unipu:2943, unipu:3543) prolaze PDF preflight: valjan nesifriran PDF, viselistni (66-85 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "foozpu-zavrsni",
     "unitId": "foozpu",
     "programs": [
-      "Prijediplomski studiji FOOZ Pula (zavrsni rad)"
+      "Sveučilišni prijediplomski studij Rani i predškolski odgoj i obrazovanje (na hrvatskom jeziku)",
+      "Sveučilišni prijediplomski studij Rani i predškolski odgoj i obrazovanje (na talijanskom jeziku)"
     ],
     "workTypes": [
       "final"
@@ -21397,13 +21603,67 @@
       "Margine",
       "Opseg (najmanje 30 str.)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna zavrsna rada (Fakultet za odgojne i obrazovne znanosti, Pula) iz sluzbenog repozitorija (repozitorij.unipu.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "unipu:4",
+          "repository": "repozitorij.unipu.hr",
+          "pageFormat": "A4",
+          "pages": 49,
+          "sha256": "d5b2e72e082b0f460c798b520b46c5f4d081eaf4b87904270c2b1e2c43a87961",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unipu:7",
+          "repository": "repozitorij.unipu.hr",
+          "pageFormat": "A4",
+          "pages": 55,
+          "sha256": "21274748ac987a45da79207d9fa21f72a7e3961c0afd841b83d4ab5b8bc3734e",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unipu:10",
+          "repository": "repozitorij.unipu.hr",
+          "pageFormat": "A4",
+          "pages": 49,
+          "sha256": "6836581c358e2261e14799a62cb72640a43cd8f624bbca301bd975eb0c9d26f7",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unipu:12",
+          "repository": "repozitorij.unipu.hr",
+          "pageFormat": "A4",
+          "pages": 68,
+          "sha256": "89819ddfc73cfcaacb9e4b1584528894984ab990fa32553143a54c50c02f9281",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (unipu:4, unipu:7, unipu:10, unipu:12) prolaze PDF preflight: valjan nesifriran PDF, viselistni (49-68 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "foozpu-diplomski",
     "unitId": "foozpu",
     "programs": [
-      "Diplomski studiji FOOZ Pula"
+      "Sveučilišni integrirani prijediplomski i diplomski Učiteljski studij (na hrvatskom jeziku)",
+      "Sveučilišni integrirani prijediplomski i diplomski Učiteljski studij (na talijanskom jeziku)",
+      "Sveučilišni diplomski studij Rani i predškolski odgoj i obrazovanje (na hrvatskom jeziku)",
+      "Sveučilišni diplomski studij Rani i predškolski odgoj i obrazovanje (na talijanskom jeziku)"
     ],
     "workTypes": [
       "graduate"
@@ -21448,7 +21708,58 @@
       "Margine",
       "Opseg (najmanje 50 str.)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna diplomska rada (Fakultet za odgojne i obrazovne znanosti, Pula) iz sluzbenog repozitorija (repozitorij.unipu.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "unipu:2",
+          "repository": "repozitorij.unipu.hr",
+          "pageFormat": "A4",
+          "pages": 54,
+          "sha256": "7a70c2a8530960c76dc224bceeeb8f366a6ba6fde731ebbe2de4e77afea2360a",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unipu:24",
+          "repository": "repozitorij.unipu.hr",
+          "pageFormat": "A4",
+          "pages": 114,
+          "sha256": "0d8d840fb4117f68b6f4e91e3f6995a838aac72e018d4847b3470bb8f5845fa5",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unipu:49",
+          "repository": "repozitorij.unipu.hr",
+          "pageFormat": "A4",
+          "pages": 65,
+          "sha256": "14debdd552360c36ff42bddb47e947b5357a473613ddbee20b5abbf75bbb27aa",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unipu:50",
+          "repository": "repozitorij.unipu.hr",
+          "pageFormat": "A4",
+          "pages": 56,
+          "sha256": "f53c31b510346958823c56803dce20bf99c1873787fd218f9e94e44fa7312ce1",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (unipu:2, unipu:24, unipu:49, unipu:50) prolaze PDF preflight: valjan nesifriran PDF, viselistni (54-114 str.), A4 (595x842 pt)."
+      ]
+    }
   },
   {
     "id": "unidu-povijest-zavrsni",
@@ -25436,6 +25747,212 @@
       ],
       "confirmed": [
         "4 stvarna javna diplomska rada (ffri:515, ffri:516, ffri:517, ffri:519) prolaze PDF preflight: valjan nesifriran PDF, viselistni (50-81 str.), A4 (595x842 pt)."
+      ]
+    }
+  },
+  {
+    "id": "fpzpu-zavrsni",
+    "unitId": "fpzpu",
+    "programs": [
+      "Sveučilišni prijediplomski studij Znanost o moru"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "FPZ Pula - Znanost o moru, zavrsni rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "checkSpacing": false,
+      "requireA4": true,
+      "margins": {
+        "top": 3.5,
+        "right": 2.5,
+        "bottom": 3,
+        "left": 3
+      },
+      "recommendedCitation": "harvard"
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet prirodnih znanosti u Puli, studij Znanost o moru), citano izravno. Times New Roman 12, margine gore 3,5 / dolje 3,0 / lijevo 3,0 / desno 2,5 cm, autor-godina citiranje. Prored nije brojcano propisan pa se ne boduje.",
+    "sources": [
+      {
+        "title": "Upute za pisanje zavrsnih i diplomskih radova (Znanost o moru, Fakultet prirodnih znanosti u Puli)",
+        "url": "https://www.unipu.hr/fileadmin/datoteke/Znanost_o_moru/Vazni_dokumenti/Upute_za_pisanje_zavrsnih_i_diplomskih_radova_ZOM.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pisanje zavrsnih i diplomskih radova (Znanost o moru, FPZ Pula)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova (Times New Roman)",
+      "Velicina slova",
+      "Format papira",
+      "Margine (gore 3,5; dolje 3,0; lijevo 3,0; desno 2,5 cm)",
+      "Stil citiranja (autor-godina)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna zavrsna rada (Fakultet prirodnih znanosti u Puli, studij Znanost o moru) iz sluzbenog repozitorija (repozitorij.unipu.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015,
+          2016
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "unipu:10",
+          "repository": "repozitorij.unipu.hr",
+          "pageFormat": "A4",
+          "pages": 49,
+          "sha256": "f291ee4233d99366d6577ea5b5d88bd97cb0daf5c8228b52548fdd8dc441fe88",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unipu:74",
+          "repository": "repozitorij.unipu.hr",
+          "pageFormat": "A4",
+          "pages": 51,
+          "sha256": "aac3bd777021fa92a0093b6f07932c09945b2a1f30581ff4c18ff0dc48d3f379",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unipu:411",
+          "repository": "repozitorij.unipu.hr",
+          "pageFormat": "A4",
+          "pages": 36,
+          "sha256": "5a22ed2bc356feb3d06985c24ce4082a24145a465a060faced332872ac4027fe",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "unipu:475",
+          "repository": "repozitorij.unipu.hr",
+          "pageFormat": "A4",
+          "pages": 43,
+          "sha256": "fe5abd4ccee4e4ed1ec353f024c267aa394f9aaf187317a611234091574c94ed",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (unipu:10, unipu:74, unipu:411, unipu:475) prolaze PDF preflight: valjan nesifriran PDF, viselistni (36-51 str.), A4 (595x842 pt)."
+      ]
+    }
+  },
+  {
+    "id": "fpzpu-diplomski",
+    "unitId": "fpzpu",
+    "programs": [
+      "Sveučilišni diplomski studij Znanost o moru"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "FPZ Pula - Znanost o moru, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "checkSpacing": false,
+      "requireA4": true,
+      "margins": {
+        "top": 3.5,
+        "right": 2.5,
+        "bottom": 3,
+        "left": 3
+      },
+      "recommendedCitation": "harvard"
+    },
+    "facts": [],
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet prirodnih znanosti u Puli, studij Znanost o moru), citano izravno. Times New Roman 12, margine gore 3,5 / dolje 3,0 / lijevo 3,0 / desno 2,5 cm, autor-godina citiranje. Prored nije brojcano propisan pa se ne boduje.",
+    "sources": [
+      {
+        "title": "Upute za pisanje zavrsnih i diplomskih radova (Znanost o moru, Fakultet prirodnih znanosti u Puli)",
+        "url": "https://www.unipu.hr/fileadmin/datoteke/Znanost_o_moru/Vazni_dokumenti/Upute_za_pisanje_zavrsnih_i_diplomskih_radova_ZOM.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pisanje zavrsnih i diplomskih radova (Znanost o moru, FPZ Pula)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova (Times New Roman)",
+      "Velicina slova",
+      "Format papira",
+      "Margine (gore 3,5; dolje 3,0; lijevo 3,0; desno 2,5 cm)",
+      "Stil citiranja (autor-godina)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna diplomska rada (Fakultet prirodnih znanosti u Puli, studij Znanost o moru) iz sluzbenog repozitorija (repozitorij.unipu.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015,
+          2016
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "unipu:24",
+          "repository": "repozitorij.unipu.hr",
+          "pageFormat": "A4",
+          "pages": 114,
+          "sha256": "66abd92e120c1ee0b9a0199b0973f34d8c937becceeb379bdbd74be6fb5f294f",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unipu:115",
+          "repository": "repozitorij.unipu.hr",
+          "pageFormat": "A4",
+          "pages": 58,
+          "sha256": "5ccd0ba3ee2f1c95a19a19df24dc71268ef9792dae8360b8bc106347d3a64acb",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unipu:659",
+          "repository": "repozitorij.unipu.hr",
+          "pageFormat": "A4",
+          "pages": 61,
+          "sha256": "b816fc2743be22981e1edd9e021f5c70c7278f4b8b543a8337455198004382c0",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unipu:660",
+          "repository": "repozitorij.unipu.hr",
+          "pageFormat": "A4",
+          "pages": 87,
+          "sha256": "796c03ba39198007570c4d3875332db325db4e24b49748343fc9b253f49c8ee7",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (unipu:24, unipu:115, unipu:659, unipu:660) prolaze PDF preflight: valjan nesifriran PDF, viselistni (58-114 str.), A4 (595x842 pt)."
       ]
     }
   }

@@ -1198,8 +1198,22 @@
         "family": "social",
         "status": "partial",
         "programs": [
-          "Prijediplomski studiji FET Pula (zavrsni rad)",
-          "Diplomski studiji FET Pula"
+          "Sveučilišni prijediplomski studij Primijenjena ekonomija",
+          "Sveučilišni prijediplomski studij Kultura i turizam",
+          "Sveučilišni prijediplomski studij Poslovna ekonomija (smjer Financije i računovodstvo)",
+          "Sveučilišni prijediplomski studij Poslovna ekonomija (smjer Financijski management)",
+          "Sveučilišni prijediplomski studij Poslovna ekonomija (smjer Management i poduzetništvo)",
+          "Sveučilišni prijediplomski studij Poslovna ekonomija (smjer Marketinško upravljanje)",
+          "Sveučilišni prijediplomski studij Poslovna ekonomija (smjer Informatički menadžment)",
+          "Sveučilišni prijediplomski studij Poslovna ekonomija (smjer Turizam)",
+          "Sveučilišni diplomski studij Primijenjena ekonomija",
+          "Sveučilišni diplomski studij Kultura i turizam",
+          "Sveučilišni diplomski studij Poslovna ekonomija (smjer Financije i računovodstvo)",
+          "Sveučilišni diplomski studij Poslovna ekonomija (smjer Financijski management)",
+          "Sveučilišni diplomski studij Poslovna ekonomija (smjer Management i poduzetništvo)",
+          "Sveučilišni diplomski studij Poslovna ekonomija (smjer Marketinško upravljanje)",
+          "Sveučilišni diplomski studij Poslovna ekonomija (smjer Informatički menadžment)",
+          "Sveučilišni diplomski studij Poslovna ekonomija (smjer Turizam i razvoj)"
         ]
       },
       {
@@ -1208,8 +1222,12 @@
         "family": "social",
         "status": "partial",
         "programs": [
-          "Prijediplomski studiji FOOZ Pula (zavrsni rad)",
-          "Diplomski studiji FOOZ Pula"
+          "Sveučilišni prijediplomski studij Rani i predškolski odgoj i obrazovanje (na hrvatskom jeziku)",
+          "Sveučilišni prijediplomski studij Rani i predškolski odgoj i obrazovanje (na talijanskom jeziku)",
+          "Sveučilišni integrirani prijediplomski i diplomski Učiteljski studij (na hrvatskom jeziku)",
+          "Sveučilišni integrirani prijediplomski i diplomski Učiteljski studij (na talijanskom jeziku)",
+          "Sveučilišni diplomski studij Rani i predškolski odgoj i obrazovanje (na hrvatskom jeziku)",
+          "Sveučilišni diplomski studij Rani i predškolski odgoj i obrazovanje (na talijanskom jeziku)"
         ]
       },
       {
@@ -1218,8 +1236,71 @@
         "family": "stem",
         "status": "partial",
         "programs": [
-          "Prijediplomski/strucni studiji TFPU (zavrsni rad)",
-          "Diplomski studiji TFPU"
+          "Prijediplomski sveučilišni studij Računarstvo",
+          "Prijediplomski stručni studij Proizvodno strojarstvo",
+          "Diplomski sveučilišni studij Računarstvo",
+          "Diplomski sveučilišni studij Strojarstvo"
+        ]
+      },
+      {
+        "id": "fpzpu",
+        "name": "Fakultet prirodnih znanosti u Puli",
+        "family": "stem",
+        "status": "partial",
+        "programs": [
+          "Sveučilišni prijediplomski studij Znanost o moru",
+          "Sveučilišni diplomski studij Znanost o moru"
+        ]
+      },
+      {
+        "id": "ffpu",
+        "name": "Filozofski fakultet u Puli",
+        "family": "social",
+        "status": "partial",
+        "programs": [
+          "Sveučilišni prijediplomski studij Hrvatski jezik i književnost",
+          "Sveučilišni prijediplomski studij Engleski jezik i književnost",
+          "Sveučilišni prijediplomski studij Talijanski jezik i književnost",
+          "Sveučilišni prijediplomski studij Japanski jezik i kultura",
+          "Sveučilišni prijediplomski studij Povijest",
+          "Sveučilišni prijediplomski studij Arheologija",
+          "Sveučilišni prijediplomski studij Latinski jezik i rimska književnost",
+          "Sveučilišni prijediplomski studij Jezik i interkulturalno posredovanje",
+          "Sveučilišni diplomski studij Hrvatski jezik i književnost",
+          "Sveučilišni diplomski studij Talijanski jezik i književnost",
+          "Sveučilišni diplomski studij Povijest",
+          "Sveučilišni diplomski studij Japanologija"
+        ]
+      },
+      {
+        "id": "mapu",
+        "name": "Muzička akademija u Puli",
+        "family": "arts",
+        "status": "partial",
+        "programs": [
+          "Sveučilišni diplomski studij Glazbena pedagogija",
+          "Sveučilišni diplomski studij Klavir",
+          "Sveučilišni diplomski studij Klasična harmonika",
+          "Sveučilišni diplomski studij Solo pjevanje"
+        ]
+      },
+      {
+        "id": "fipu",
+        "name": "Fakultet informatike u Puli",
+        "family": "stem",
+        "status": "partial",
+        "programs": [
+          "Sveučilišni prijediplomski studij Informatika",
+          "Sveučilišni prijediplomski studij Primijenjena ekonomija"
+        ]
+      },
+      {
+        "id": "mfpu",
+        "name": "Medicinski fakultet u Puli",
+        "family": "biomed",
+        "status": "partial",
+        "programs": [
+          "Sveučilišni integrirani prijediplomski i diplomski studij Medicina"
         ]
       }
     ]
