@@ -5,6 +5,7 @@ import { buildStatement, statementText } from './statement';
 import { statementDoc, docxBlob } from '../docx/docx-writer';
 import { escapeHtml } from '../utils/helpers';
 import { bindCopyButton, downloadBlob } from './tool-ui';
+import { formatCroatianDate } from './hr-date';
 
 const $ = (s: string): any => document.querySelector(s);
 
@@ -65,6 +66,13 @@ function render() {
 function init() {
   if (!$('#st-sheet')) return;
   for (const sel of Object.values(FIELDS)) { const el = $(sel); if (el) el.addEventListener('input', render); }
+
+  // Date picker puni tekstualni datum hrvatskim oblikom (3. srpnja 2026.); tekst ostaje uredljiv.
+  $('#st-date-picker')?.addEventListener('change', () => {
+    const formatted = formatCroatianDate($('#st-date-picker').value || '');
+    if (formatted) { $('#st-date').value = formatted; render(); }
+  });
+
   render();
 
   $('#st-sample')?.addEventListener('click', () => {
