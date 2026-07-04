@@ -33,6 +33,16 @@ function clean(v?: string): string {
   return (v || '').replace(/\s+/g, ' ').trim();
 }
 
+// Pokazna zamjenica prema rodu vrste rada (heuristika po zavrsetku glave imenice, tj.
+// zadnje rijeci): -a -> ova (radnja, disertacija, teza), -o/-e -> ovo (izvjesce, djelo),
+// inace -> ovaj (rad, seminar, clanak, projekt). Bez ovoga "ovaj disertacija" je negramatican.
+function demonstrative(workType: string): string {
+  const head = workType.trim().split(/\s+/).pop() || '';
+  if (/a$/.test(head)) return 'ova';
+  if (/[oe]$/.test(head)) return 'ovo';
+  return 'ovaj';
+}
+
 function joinPlaceDate(place: string, date: string): string {
   if (place && date) return `${place}, ${date}`;
   return place || date;
@@ -50,9 +60,10 @@ export function buildStatement(input: StatementInput): StatementModel {
   const date = clean(input.date);
 
   const wt = workType ? workType.toLowerCase() : 'rad';
+  const dem = demonstrative(wt);
   const titlePart = title ? ` pod naslovom „${title}“` : '';
   const body =
-    `Izjavljujem da je ovaj ${wt}${titlePart} rezultat isključivo mojega vlastitog rada, ` +
+    `Izjavljujem da je ${dem} ${wt}${titlePart} rezultat isključivo mojega vlastitog rada, ` +
     `koji se temelji na mojim istraživanjima i oslanja se na objavljenu literaturu, a što pokazuju ` +
     `korištene bilješke i bibliografija. Izjavljujem da nijedan dio rada nije napisan na nedopušten način, ` +
     `odnosno da nije prepisan iz necitiranoga rada te da nijedan dio rada ne krši bilo čija autorska prava. ` +

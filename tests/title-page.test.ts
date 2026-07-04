@@ -32,6 +32,12 @@ describe('buildTitlePage', () => {
     expect(m.lines.find(l => l.role === 'comentor')?.text).toBe('Komentor: Horvat');
   });
 
+  it('titula mentora/komentora se moze postaviti (Mentorica/Komentorica)', () => {
+    const m = buildTitlePage({ mentor: 'Ana Anić', mentorLabel: 'Mentorica', comentor: 'Iva Ivić', comentorLabel: 'Komentorica' });
+    expect(m.lines.find(l => l.role === 'mentor')?.text).toBe('Mentorica: Ana Anić');
+    expect(m.lines.find(l => l.role === 'comentor')?.text).toBe('Komentorica: Iva Ivić');
+  });
+
   it('mjesto i godina se spajaju, godina dobiva tocku', () => {
     expect(buildTitlePage({ place: 'Zagreb', year: '2026' }).lines[0].text).toBe('Zagreb, 2026.');
     expect(buildTitlePage({ year: '2026' }).lines[0].text).toBe('2026.');

@@ -12,7 +12,9 @@ export interface TitlePageInput {
   subtitle?: string;
   workType?: string;   // npr. Diplomski rad
   mentor?: string;
+  mentorLabel?: string;   // titula: 'Mentor' (zadano) ili 'Mentorica'
   comentor?: string;
+  comentorLabel?: string; // 'Komentor' (zadano) ili 'Komentorica'
   place?: string;      // npr. Zagreb
   year?: string;       // npr. 2026
 }
@@ -80,11 +82,11 @@ export function buildTitlePage(input: TitlePageInput): TitlePageModel {
   push('title', f.title);
   push('subtitle', f.subtitle);
   push('worktype', f.workType);
-  if (f.mentor) push('mentor', `Mentor: ${f.mentor}`);
-  if (f.comentor) push('comentor', `Komentor: ${f.comentor}`);
+  if (f.mentor) push('mentor', `${clean(input.mentorLabel) || 'Mentor'}: ${f.mentor}`);
+  if (f.comentor) push('comentor', `${clean(input.comentorLabel) || 'Komentor'}: ${f.comentor}`);
   push('placeyear', placeYear(f.place, f.year));
 
-  const missing = RECOMMENDED.filter(([key]) => !f[key]).map(([, label]) => label);
+  const missing = RECOMMENDED.filter(([key]) => !(f as Record<string, string>)[key]).map(([, label]) => label);
 
   return { lines, missing };
 }

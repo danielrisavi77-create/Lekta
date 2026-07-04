@@ -20,6 +20,13 @@ describe('buildStatement', () => {
     expect(m.body).not.toContain('pod naslovom');
   });
 
+  it('pokazna zamjenica se slaže s rodom vrste rada', () => {
+    expect(buildStatement({ workType: 'Diplomska radnja' }).body).toContain('ova diplomska radnja');
+    expect(buildStatement({ workType: 'disertacija' }).body).toContain('ova disertacija');
+    expect(buildStatement({ workType: 'izvješće' }).body).toContain('ovo izvješće');
+    expect(buildStatement({ workType: 'Seminarski rad' }).body).toContain('ovaj seminarski rad');
+  });
+
   it('spaja mjesto i datum', () => {
     expect(buildStatement({ place: 'Zagreb', date: '3. srpnja 2026.' }).placeDate).toBe('Zagreb, 3. srpnja 2026.');
     expect(buildStatement({ date: '2026.' }).placeDate).toBe('2026.');

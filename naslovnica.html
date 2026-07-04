@@ -214,8 +214,18 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
         </select>
       </div>
       <div class="row2">
-        <div class="field"><label for="tp-mentor">Mentor</label><input id="tp-mentor" type="text" placeholder="npr. dr. sc. Ivan Ivić"></div>
-        <div class="field"><label for="tp-comentor">Komentor (opcionalno)</label><input id="tp-comentor" type="text" placeholder="ime komentora"></div>
+        <div class="field"><label for="tp-mentor">Mentor / mentorica</label>
+          <div class="row2" style="grid-template-columns:auto 1fr;gap:8px">
+            <select id="tp-mentor-label" aria-label="Titula mentora"><option>Mentor</option><option>Mentorica</option></select>
+            <input id="tp-mentor" type="text" placeholder="npr. dr. sc. Ivan Ivić">
+          </div>
+        </div>
+        <div class="field"><label for="tp-comentor">Komentor / komentorica (opcionalno)</label>
+          <div class="row2" style="grid-template-columns:auto 1fr;gap:8px">
+            <select id="tp-comentor-label" aria-label="Titula komentora"><option>Komentor</option><option>Komentorica</option></select>
+            <input id="tp-comentor" type="text" placeholder="ime komentora">
+          </div>
+        </div>
       </div>
       <div class="row2">
         <div class="field"><label for="tp-place">Mjesto</label><input id="tp-place" type="text" placeholder="Zagreb"></div>

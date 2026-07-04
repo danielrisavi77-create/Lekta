@@ -32,6 +32,8 @@ const SAMPLE: any = {
 function readInput() {
   const out: any = {};
   for (const [key, sel] of Object.entries(FIELDS)) out[key] = $(sel)?.value || '';
+  out.mentorLabel = $('#tp-mentor-label')?.value || '';
+  out.comentorLabel = $('#tp-comentor-label')?.value || '';
   return out;
 }
 
@@ -65,12 +67,16 @@ function render() {
   return model;
 }
 
+// Titula mentora/komentora (izvan FIELDS jer se ne kopira u model kao tekstualna vrijednost).
+const LABEL_SELECTS = ['#tp-mentor-label', '#tp-comentor-label'];
+
 function init() {
   if (!$('#tp-sheet')) return;
   for (const sel of Object.values(FIELDS)) {
     const el = $(sel);
     if (el) el.addEventListener('input', render);
   }
+  for (const sel of LABEL_SELECTS) { const el = $(sel); if (el) el.addEventListener('change', render); }
   render();
 
   $('#tp-sample')?.addEventListener('click', () => {
@@ -85,6 +91,7 @@ function init() {
       const el = $(sel); if (!el) continue;
       if (el.tagName === 'SELECT') el.selectedIndex = 0; else el.value = '';
     }
+    for (const sel of LABEL_SELECTS) { const el = $(sel); if (el) el.selectedIndex = 0; }
     render();
     $('#tp-university')?.focus();
   });
