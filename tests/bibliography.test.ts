@@ -36,6 +36,15 @@ describe('organizeBibliography', () => {
     const r = organizeBibliography('Barić, B. (2020). Drugi.\nAnić, A. (2019). Prvi.');
     expect(bibliographyText(r)).toBe('Anić, A. (2019). Prvi.\nBarić, B. (2020). Drugi.');
   });
+
+  it('spaja prelomljeni URL-nastavak u prethodnu jedinicu (PDF paste)', () => {
+    const r = organizeBibliography(
+      'Anić, A. (2019). Članak na portalu.\nhttps://primjer.hr/clanak\nBarić, B. (2020). Rad.',
+    );
+    expect(r.entries).toHaveLength(2);
+    const anic = r.entries.find(e => e.text.startsWith('Anić'));
+    expect(anic?.text).toContain('https://primjer.hr/clanak');
+  });
 });
 
 describe('detectIssues', () => {
@@ -47,6 +56,13 @@ describe('detectIssues', () => {
   it('označava mrežni izvor bez datuma pristupa', () => {
     expect(detectIssues('Portal (2021). https://primjer.hr/clanak')).toContain('mrežni izvor bez datuma pristupa');
     expect(detectIssues('Portal (2021). https://primjer.hr (pristup 2.7.2026.)')).not.toContain('mrežni izvor bez datuma pristupa');
+  });
+
+  it('goli datum objave nije datum pristupa; hvata i bare www URL', () => {
+    // Datum je datum objave, nema kljucne rijeci pristupa -> i dalje se oznacava.
+    expect(detectIssues('Novosti (12.3.2021). https://x.hr/a')).toContain('mrežni izvor bez datuma pristupa');
+    // Bare www URL bez sheme se sada prepoznaje kao mrežni izvor.
+    expect(detectIssues('Zavod (2021). Podaci. www.primjer.hr/podaci')).toContain('mrežni izvor bez datuma pristupa');
   });
 
   it('označava prekratak zapis', () => {

@@ -32,8 +32,10 @@ export function detectIssues(text: string): string[] {
   if (!/\b(1[89]\d{2}|20\d{2})\b/.test(text)) {
     issues.push('nema godine');
   }
-  const hasUrl = /https?:\/\//i.test(text);
-  const hasAccess = /(pristup|preuzeto|accessed|\d{1,2}\.\s?\d{1,2}\.\s?\d{2,4})/i.test(text);
+  const hasUrl = /(https?:\/\/|www\.)/i.test(text);
+  // Datum pristupa mora biti oznacen kljucnom rijeci; goli datum je najcesce datum objave,
+  // pa ga ne prihvacamo kao dokaz datuma pristupa (inace lazni negativ).
+  const hasAccess = /(pristup|preuzeto|posjeć|posjec|accessed|retrieved)/i.test(text);
   if (hasUrl && !hasAccess) {
     issues.push('mrežni izvor bez datuma pristupa');
   }
@@ -44,7 +46,19 @@ export function detectIssues(text: string): string[] {
 }
 
 export function organizeBibliography(raw: string): BibResult {
-  const lines = (raw || '').split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+  const rawLines = (raw || '').split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+  // Spoji prelomljene retke: redak koji pocinje GOLIM URL-om je nastavak prethodne jedinice
+  // (cesto pri kopiranju iz PDF-a gdje se referenca prelama), ne nova referenca. Namjerno
+  // konzervativno: samo URL-nastavak je siguran signal (nova referenca nikad ne pocinje URL-om);
+  // ostale prelomljene retke ostavljamo jer bi ih heuristika mogla krivo spojiti.
+  const lines: string[] = [];
+  for (const line of rawLines) {
+    if (lines.length && /^(https?:\/\/|www\.)/i.test(line)) {
+      lines[lines.length - 1] += ' ' + line;
+    } else {
+      lines.push(line);
+    }
+  }
   const inputCount = lines.length;
 
   const seen = new Set<string>();
