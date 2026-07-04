@@ -29,6 +29,7 @@ function json(body: unknown, status = 200): Response {
 }
 
 Deno.serve(async (req: Request) => {
+ try {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS });
   if (req.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
 
@@ -126,4 +127,8 @@ Deno.serve(async (req: Request) => {
   if (!checkoutUrl) return json({ error: 'no_checkout_url' }, 502);
 
   return json({ checkoutUrl });
+ } catch (e) {
+  console.error('[create-checkout]', e); // Supabase Edge Function logovi = error tracking (P0 8-1)
+  return json({ error: 'internal' }, 500);
+ }
 });

@@ -41,6 +41,7 @@ async function sha256Hex(input: string): Promise<string> {
 }
 
 Deno.serve(async (req: Request) => {
+ try {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS });
   if (req.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
 
@@ -189,4 +190,8 @@ Deno.serve(async (req: Request) => {
   const traceToken = await sha256Hex(`${slotId}.${now}.${user.id}`);
   const report = buildFullReport(body.analysisResult, { traceToken });
   return json({ report, slotId, fingerprint }, 200);
+ } catch (e) {
+  console.error('[generate-report]', e); // Supabase Edge Function logovi = error tracking (P0 8-1)
+  return json({ error: 'internal' }, 500);
+ }
 });
