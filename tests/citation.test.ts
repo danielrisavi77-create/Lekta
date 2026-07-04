@@ -90,9 +90,26 @@ describe('formatCitation autor-godina', () => {
     expect(r.citation).not.toContain('statistiku, S.');
   });
 
-  it('tocka iza autora i kad nema inicijala ni godine', () => {
+  it('bez godine uz autora daje (bez dat.)', () => {
     const r = formatCitation({ type: 'knjiga', authors: 'Ivic', title: 'Ustavno pravo' }, 'autor-godina');
-    expect(r.citation).toBe('Ivic. Ustavno pravo.');
+    expect(r.citation).toBe('Ivic (bez dat.). Ustavno pravo.');
+  });
+
+  it('poglavlje ima urednika (ur.), a clanak/mrezni DOI', () => {
+    const pog = formatCitation(
+      { type: 'poglavlje', authors: 'Ivic, Ivan', title: 'Poglavlje', container: 'Zbornik', editor: 'A. Uredni', year: '2020', publisher: 'X' },
+      'autor-godina',
+    );
+    expect(pog.citation).toContain('U: A. Uredni (ur.), Zbornik');
+    const cl = formatCitation(
+      { type: 'clanak', authors: 'Kovac, M', title: 'Rad', container: 'Casopis', volume: '5', year: '2021', doi: '10.1/xyz' },
+      'autor-godina',
+    );
+    expect(cl.citation).toContain('https://doi.org/10.1/xyz');
+    // puni DOI URL se normalizira, ne udvostrucuje
+    const mr = formatCitation({ type: 'mrezni', title: 'T', doi: 'https://doi.org/10.2/abc' }, 'autor-godina');
+    expect(mr.citation).toContain('https://doi.org/10.2/abc');
+    expect(mr.citation).not.toContain('doi.org/https');
   });
 
   it('in-text oblik: 1, 2 i 3+ autora, institucija, bez godine', () => {

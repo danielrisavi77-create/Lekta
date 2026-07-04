@@ -18,6 +18,8 @@ export interface CitationInput {
   title?: string;
   /** Naslov sireg djela: casopis, zbornik/knjiga za poglavlje, sluzbeni list za propis. */
   container?: string;
+  /** Urednik zbornika/knjige (za poglavlje): "I. Urednik" -> "U: I. Urednik (ur.), ...". */
+  editor?: string;
   year?: string;
   publisher?: string;
   place?: string;
@@ -25,9 +27,17 @@ export interface CitationInput {
   issue?: string;
   pages?: string;
   url?: string;
+  /** DOI (npr. "10.1234/abc" ili puni URL); normalizira se u https://doi.org/... */
+  doi?: string;
   /** Datum pristupa mreznom izvoru, slobodan format (npr. "2.7.2026."). */
   accessed?: string;
   institution?: string;
+}
+
+/** Normaliziran DOI kao https://doi.org/... ili prazno. Prihvaca goli DOI i puni URL. */
+function doiUrl(doi?: string): string {
+  const d = (doi || '').trim().replace(/^https?:\/\/(dx\.)?doi\.org\//i, '').replace(/^doi:\s*/i, '');
+  return d ? `https://doi.org/${d}` : '';
 }
 
 export interface ParsedAuthor {
@@ -119,7 +129,8 @@ function withDot(s: string | undefined): string {
 
 function formatAutorGodina(inp: CitationInput): string {
   const A = authorsAuthorYear(parseAuthors(inp.authors));
-  const year = inp.year ? `(${inp.year}).` : '';
+  // (bez dat.) kad autor postoji a godine nema (APA-slicno "n.d."); bez autora ne dodajemo.
+  const year = inp.year ? `(${inp.year}).` : (A ? '(bez dat.).' : '');
   const t = inp.title || '';
   const parts: string[] = [];
   const lead = [A, year].filter(Boolean).join(' ');
@@ -140,7 +151,8 @@ function formatAutorGodina(inp: CitationInput): string {
     }
     case 'poglavlje': {
       parts.push(withDot(t));
-      const inWork = inp.container ? `U: ${inp.container}` : '';
+      const ed = inp.editor ? `${inp.editor} (ur.), ` : '';
+      const inWork = inp.container ? `U: ${ed}${inp.container}` : '';
       const pg = inp.pages ? `(str. ${inp.pages})` : '';
       const pub = [inp.place, inp.publisher].filter(Boolean).join(': ');
       parts.push(withDot([inWork, pg].filter(Boolean).join(' ')));
@@ -153,14 +165,17 @@ function formatAutorGodina(inp: CitationInput): string {
       const iss = inp.issue ? `(${inp.issue})` : '';
       const pg = inp.pages ? `, ${inp.pages}` : '';
       parts.push(withDot(`${vol}${iss}${pg}`));
+      const doi = doiUrl(inp.doi);
+      if (doi) parts.push(doi);
       break;
     }
     case 'mrezni': {
       parts.push(withDot(t));
       if (inp.publisher) parts.push(withDot(inp.publisher));
-      if (inp.url) {
+      const doi = doiUrl(inp.doi);
+      if (doi || inp.url) {
         const acc = inp.accessed ? `Pristupljeno ${inp.accessed} ` : '';
-        parts.push(`${acc}${inp.url}`);
+        parts.push(`${acc}${doi || inp.url}`);
       }
       break;
     }
@@ -196,7 +211,8 @@ function formatFusnota(inp: CitationInput): string {
     }
     case 'poglavlje': {
       parts.push(quoted(title));
-      const inWork = inp.container ? `u: ${inp.container}` : '';
+      const ed = inp.editor ? `${inp.editor} (ur.), ` : '';
+      const inWork = inp.container ? `u: ${ed}${inp.container}` : '';
       const pub = [inp.place, inp.publisher].filter(Boolean).join(': ');
       const tail = [pub, inp.year].filter(Boolean).join(', ');
       parts.push(withDot([inWork, tail].filter(Boolean).join(', ')));
@@ -210,14 +226,18 @@ function formatFusnota(inp: CitationInput): string {
       const yr = inp.year ? ` (${inp.year})` : '';
       const pg = inp.pages ? `: ${inp.pages}` : '';
       parts.push(withDot(`${loc}${iss}${yr}${pg}`));
+      const doi = doiUrl(inp.doi);
+      if (doi) parts.push(withDot(doi));
       break;
     }
     case 'mrezni': {
       parts.push(quoted(title));
       if (inp.publisher) parts.push(withDot(inp.publisher));
-      if (inp.url) {
+      const doi = doiUrl(inp.doi);
+      const link = doi || inp.url;
+      if (link) {
         const acc = inp.accessed ? ` (pristupljeno ${inp.accessed})` : '';
-        parts.push(withDot(`${inp.url}${acc}`));
+        parts.push(withDot(`${link}${acc}`));
       }
       break;
     }
@@ -254,7 +274,7 @@ function inTextAuthorYear(list: ParsedAuthor[], year: string): string {
 
 const RECOMMENDED: Record<SourceType, Array<keyof CitationInput>> = {
   knjiga: ['authors', 'title', 'year', 'publisher'],
-  poglavlje: ['authors', 'title', 'container', 'year', 'publisher'],
+  poglavlje: ['authors', 'title', 'container', 'editor', 'year', 'publisher'],
   clanak: ['authors', 'title', 'container', 'year'],
   mrezni: ['title', 'url'],
   zavrsni: ['authors', 'title', 'year', 'institution'],
@@ -265,6 +285,7 @@ const FIELD_LABEL: Partial<Record<keyof CitationInput, string>> = {
   authors: 'autor',
   title: 'naslov',
   container: 'izvor (časopis/zbornik/službeni list)',
+  editor: 'urednik',
   year: 'godina',
   publisher: 'izdavač',
   url: 'poveznica',

@@ -9,18 +9,21 @@ const $ = (s: string): any => document.querySelector(s);
 // Koja polja su relevantna za koji tip izvora (ostala se sakriju da forma ostane cista).
 const FIELDS_BY_TYPE: any = {
   knjiga: ['authors', 'title', 'year', 'place', 'publisher'],
-  poglavlje: ['authors', 'title', 'container', 'pages', 'year', 'place', 'publisher'],
-  clanak: ['authors', 'title', 'container', 'volume', 'issue', 'year', 'pages'],
-  mrezni: ['authors', 'title', 'publisher', 'url', 'accessed'],
+  poglavlje: ['authors', 'title', 'container', 'editor', 'pages', 'year', 'place', 'publisher'],
+  clanak: ['authors', 'title', 'container', 'volume', 'issue', 'year', 'pages', 'doi'],
+  mrezni: ['authors', 'title', 'publisher', 'url', 'doi', 'accessed'],
   zavrsni: ['authors', 'title', 'year', 'institution'],
   propis: ['title', 'container', 'issue'],
 };
+
+// Sva opcionalna tekstualna polja (za readForm/clear/sample petlje).
+const TEXT_FIELDS = ['authors', 'title', 'container', 'editor', 'year', 'publisher', 'place', 'volume', 'issue', 'pages', 'url', 'doi', 'accessed', 'institution'];
 
 function readForm() {
   const type = $('#f-type').value;
   const style = $('#f-style').value;
   const inp: any = { type };
-  for (const key of ['authors', 'title', 'container', 'year', 'publisher', 'place', 'volume', 'issue', 'pages', 'url', 'accessed', 'institution']) {
+  for (const key of TEXT_FIELDS) {
     const el = $('#f-' + key);
     if (el) inp[key] = el.value.trim();
   }
@@ -83,7 +86,7 @@ function init() {
     set('#f-authors', 'Ivić, Ivan; Horvat, Ana');
     set('#f-title', 'Ustavno pravo Republike Hrvatske');
     set('#f-year', '2020'); set('#f-place', 'Zagreb'); set('#f-publisher', 'Narodne novine');
-    for (const key of ['container', 'volume', 'issue', 'pages', 'url', 'accessed', 'institution']) set('#f-' + key, '');
+    for (const key of ['container', 'editor', 'volume', 'issue', 'pages', 'url', 'doi', 'accessed', 'institution']) set('#f-' + key, '');
     syncVisibleFields();
     render();
     $('#f-authors')?.focus();
@@ -92,7 +95,7 @@ function init() {
   $('#c-clear')?.addEventListener('click', () => {
     $('#f-type').selectedIndex = 0;
     $('#f-style').selectedIndex = 0;
-    for (const key of ['authors', 'title', 'container', 'year', 'publisher', 'place', 'volume', 'issue', 'pages', 'url', 'accessed', 'institution']) {
+    for (const key of TEXT_FIELDS) {
       const el = $('#f-' + key); if (el) el.value = '';
     }
     syncVisibleFields();
