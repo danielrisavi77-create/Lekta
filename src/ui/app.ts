@@ -126,7 +126,7 @@ function bind(){
 function setFile(file){
  const err=$('#dropError'),clearErr=()=>{if(err){err.textContent='';err.classList.add('hidden')}$('#dropzone').classList.remove('has-error')};
  if(file&&(!file.name.toLowerCase().endsWith('.docx')||file.size>50*1024*1024)){const tooBig=file.size>50*1024*1024,isDoc=/\.doc$/i.test(file.name),msg=tooBig?'Dokument je veći od 50 MB.':isDoc?'Stariji .doc format nije podržan. U Wordu odaberi Datoteka pa Spremi kao i odaberi .docx.':'Odaberi Word dokument u .docx formatu.';$('#fileInput').value='';if(err){err.textContent=msg;err.classList.remove('hidden')}$('#dropzone').classList.add('has-error');toast(msg);return}
- clearErr();
+ clearErr();$('#detectBadge')?.classList.add('hidden');
  selectedDocx=file||null;$('#dropEmpty').classList.toggle('hidden',!!file);$('#selectedFile').classList.toggle('hidden',!file);$('#dropzone').classList.toggle('has-file',!!file);$('#analyzeBtn').disabled=!file;$('#demoBtn')?.classList.toggle('hidden',!!file);
  if(file){$('#selectedName').textContent=file.name;$('#selectedMeta').textContent=`${(file.size/1024/1024).toFixed(2)} MB · spremno za lokalnu analizu`;applyDetectedContext(file)}else $('#fileInput').value='';
 }
@@ -158,7 +158,8 @@ async function applyDetectedContext(file){
  autoSelectWorkType();if(ctx.workType)setOptionIfExists($('#workType'),ctx.workType);
  syncProfileContext();savePreferences();
  const parts=[ctx.unitName];if(ctx.program)parts.push(ctx.program);if(ctx.workType)parts.push(WORK_TYPE_LABELS[ctx.workType]||ctx.workType);
- toast('Prepoznato iz dokumenta: '+parts.join(' · ')+'. Provjeri i po potrebi ispravi.');
+ const badge=$('#detectBadge');if(badge){badge.innerHTML=`<i data-lucide="info"></i> Prepoznato iz dokumenta: ${escapeHtml(parts.join(' · '))}. Provjeri i ispravi po potrebi.`;badge.classList.remove('hidden');window.__lektaIcons?.()}
+ toast('Prepoznato iz dokumenta: '+parts.join(' · ')+'.');
 }
 function setAuxFile(kind,file){
  const isPdf=kind==='pdf',isAv=kind==='av',max=isPdf?100*1024*1024:isAv?8*1024*1024*1024:25*1024*1024,ext=isPdf?'.pdf':isAv?null:'.docx';
