@@ -21,22 +21,39 @@ function normalize(text: string): string {
 }
 
 // Kratice koje zavrsavaju tockom a nisu kraj recenice (uobicajene u akademskom hrvatskom).
-const ABBREVIATIONS = [
-  'dr', 'sc', 'mr', 'prof', 'doc', 'akad', 'npr', 'itd', 'tj', 'tzv', 'god', 'st', 'br',
-  'sv', 'čl', 'op', 'cit', 'odn', 'ur', 'izv', 'usp', 'vidi', 'str', 'tab', 'sl',
+// Dvije skupine, jer se razlicito ponasaju na kraju recenice:
+//  - ALWAYS: titule/prefiksi i oznake koje UVIJEK prethode imenu/broju i nikad ne zavrsavaju
+//    recenicu ("dr. sc. Ivic", "čl. 5", "tab. 3"), pa im tocku uvijek brisemo.
+//  - LEX: leksicke kratice koje MOGU biti na kraju recenice ("...i sl. Zatim...", "...itd.
+//    Nakon..."), pa tocku brisemo samo kad NE slijedi granica recenice (razmak + veliko slovo).
+// Granica NIJE \b: u JS-u je \b ASCII pa pada ispred dijakritika ("čl" -> \b prije č ne postoji),
+// zbog cega se "čl." nikad nije neutralizirao. Umjesto toga konzumiramo ne-slovnu granicu
+// (^|[^\p{L}]) uz 'u' flag i vracamo je kroz $1 ($2 je sama kratica, bez tocke).
+const ALWAYS_ABBR = [
+  'dr', 'sc', 'mr', 'prof', 'doc', 'akad', 'ur', 'izv', 'čl', 'br', 'god', 'str', 'tab',
+  'op', 'cit', 'odn', 'npr', 'tj', 'tzv', 'usp', 'vidi',
 ];
-const ABBREV_RE = new RegExp('\\b(' + ABBREVIATIONS.join('|') + ')\\.', 'gi');
+const LEX_ABBR = ['itd', 'st', 'sv', 'sl'];
+const ALWAYS_RE = new RegExp('(^|[^\\p{L}])(' + ALWAYS_ABBR.join('|') + ')\\.', 'giu');
+// LEX_RE NAMJERNO bez 'i' flaga: uz 'i' se \p{Lu} case-folda i poklapa i mala slova, pa bi
+// lookahead "razmak + veliko slovo" lazno okidao. Kratice su ionako mala slova u tekstu.
+const LEX_RE = new RegExp('(^|[^\\p{L}])(' + LEX_ABBR.join('|') + ')\\.(?!\\s+\\p{Lu})', 'gu');
+// Mrezni izvori: tocke unutar domene/putanje nisu kraj recenice; uklanjamo cijeli URL prije
+// brojanja, ali cuvamo zavrsnu recenicnu interpunkciju iza URL-a (lazy do granice + lookahead).
+const URL_RE = /(?:https?:\/\/|www\.)\S+?(?=[.,;:!?]*(?:\s|$))/giu;
 
 /**
- * Broj recenica bez laznog napuhavanja na kraticama, decimalama i rednim brojevima.
- * Prvo neutralizira tocke unutar brojeva (3.5, 1.000), poznate kratice (dr. sc. -> dr sc)
- * i redne brojeve ispred malog slova (2. svibnja), pa broji skupine zavrsne interpunkcije.
+ * Broj recenica bez laznog napuhavanja na URL-ovima, kraticama, decimalama i rednim brojevima.
+ * Redom: makni URL-ove, spoji decimale/tisucnice, neutraliziraj kratice (ALWAYS uvijek, LEX
+ * osim pred novom recenicom) i redne brojeve pred malim slovom, pa broji zavrsnu interpunkciju.
  */
 function countSentences(trimmed: string): number {
   if (!trimmed) return 0;
   const s = trimmed
+    .replace(URL_RE, ' ') // mrezni izvori (tocke u domeni nisu kraj recenice)
     .replace(/(\d)[.,](?=\d)/g, '$1') // decimalni/tisucni separator unutar broja
-    .replace(ABBREV_RE, '$1') // poznate kratice
+    .replace(ALWAYS_RE, '$1$2') // titule/prefiksne kratice (uvijek)
+    .replace(LEX_RE, '$1$2') // leksicke kratice (osim pred velikim slovom = nova recenica)
     .replace(/(\d)\.(?=\s*\p{Ll})/gu, '$1'); // redni broj ispred malog slova ("2. svibnja")
   const terminators = (s.match(/[.!?…]+/g) || []).length;
   return Math.max(1, terminators);

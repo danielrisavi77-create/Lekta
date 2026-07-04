@@ -61,6 +61,27 @@ describe('countText', () => {
     expect(countText('Cijena je 1.250,00 eura.').sentences).toBe(1);
   });
 
+  it('dijakriticka kratica "čl." se neutralizira (pravna domena)', () => {
+    // Prije popravka je ASCII \b padao ispred č pa se "čl." brojao kao kraj recenice.
+    expect(countText('U čl. 5 stoji zabrana.').sentences).toBe(1);
+    expect(countText('Prema čl. 3 i čl. 4 ovoga Zakona vrijedi pravilo.').sentences).toBe(1);
+  });
+
+  it('leksicka kratica na kraju recenice broji granicu (ne podbraja)', () => {
+    // "itd."/"sl." iza kojih slijedi veliko slovo su stvarni kraj recenice.
+    expect(countText('Kupili smo jabuke, kruške itd. Vratili smo se kući.').sentences).toBe(2);
+    expect(countText('Ima voća, povrća i sl. Zatim smo otišli.').sentences).toBe(2);
+    // ali ista kratica usred recenice (malo slovo iza) ne broji granicu.
+    expect(countText('Ima jabuka, krušaka itd. u kolicama.').sentences).toBe(1);
+  });
+
+  it('tocke unutar URL-a se ne broje kao recenice', () => {
+    expect(countText('Posjeti www.example.com za više.').sentences).toBe(1);
+    expect(countText('Izvor: https://hrcak.srce.hr/12345 dostupan je.').sentences).toBe(1);
+    // URL neposredno prije kraja recenice: zavrsna tocka ostaje terminator.
+    expect(countText('Idi na www.x.com. Zatim se vrati.').sentences).toBe(2);
+  });
+
   it('procjena vremena citanja raste s brojem rijeci', () => {
     const m = countText(Array.from({ length: 400 }, () => 'rijec').join(' '));
     expect(m.words).toBe(400);
