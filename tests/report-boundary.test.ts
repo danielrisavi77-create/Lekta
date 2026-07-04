@@ -127,7 +127,8 @@ describe('cjenovni tierovi i prozori', () => {
     expect(WORK_TYPE_TIERS.doktorski.windowDays).toBe(14);
   });
   it('windowDaysFor i tierFor', () => {
-    expect(windowDaysFor('diplomski')).toBe(7);
+    // diplomski 14: usklađeno s products katalogom (0002 slot_diplomski slot_window_days=14)
+    expect(windowDaysFor('diplomski')).toBe(14);
     expect(windowDaysFor('doktorski')).toBe(14);
     expect(windowDaysFor('nepoznato')).toBe(7);
     expect(tierFor('zavrsni')?.priceEur).toBe(5.99);

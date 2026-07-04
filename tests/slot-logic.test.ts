@@ -69,7 +69,7 @@ describe('decideReportAccess (kriteriji 11.1-11.6)', () => {
     expect(d.decision).toBe('new_slot');
     if (d.decision !== 'new_slot') return;
     expect(d.entitlementId).toBe('ent-1');
-    expect(d.newSlot.slotExpiresAt).toBe('2026-07-07T12:00:00.000Z'); // +7 dana za diplomski
+    expect(d.newSlot.slotExpiresAt).toBe('2026-07-14T12:00:00.000Z'); // +14 dana za diplomski (products 0002)
   });
 
   it('11.2 tesko uredjen isti rad unutar prozora -> re-check na ISTOM slotu, bez naplate', () => {

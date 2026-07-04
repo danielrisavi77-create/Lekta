@@ -23,7 +23,7 @@ export interface WorkTypeTier {
 export const WORK_TYPE_TIERS: Record<ReportWorkType, WorkTypeTier> = {
   seminarski: { workType: 'seminarski', label: 'Seminarski rad', priceEur: 3.99, windowDays: 7 },
   zavrsni: { workType: 'zavrsni', label: 'Zavrsni rad', priceEur: 5.99, windowDays: 7 },
-  diplomski: { workType: 'diplomski', label: 'Diplomski rad', priceEur: 9.99, windowDays: 7 },
+  diplomski: { workType: 'diplomski', label: 'Diplomski rad', priceEur: 9.99, windowDays: 14 },
   doktorski: { workType: 'doktorski', label: 'Doktorski rad', priceEur: 24.99, windowDays: 14 },
 };
 
