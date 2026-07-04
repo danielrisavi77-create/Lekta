@@ -1,11 +1,10 @@
-// @ts-nocheck
 // DOM glue za besplatni generator naslovnice (naslovnica.html). Logika slaganja je u
 // title-page.ts (tipizirano, testabilno); ovdje samo vezanje forme, pregled i ispis. Bez mreze.
 import '../shared/ui-boot';
 import { buildTitlePage, titlePageText } from './title-page';
 import { titlePageDoc, docxBlob } from '../docx/docx-writer';
 
-const $ = (s) => document.querySelector(s);
+const $ = (s: string): any => document.querySelector(s);
 
 const FIELDS = {
   university: '#tp-university', faculty: '#tp-faculty', study: '#tp-study',
@@ -14,7 +13,7 @@ const FIELDS = {
   place: '#tp-place', year: '#tp-year',
 };
 
-const SAMPLE = {
+const SAMPLE: any = {
   university: 'Sveučilište u Zagrebu',
   faculty: 'Fakultet političkih znanosti',
   study: 'Diplomski studij Politologije',
@@ -29,7 +28,7 @@ const SAMPLE = {
 };
 
 function readInput() {
-  const out = {};
+  const out: any = {};
   for (const [key, sel] of Object.entries(FIELDS)) out[key] = $(sel)?.value || '';
   return out;
 }
@@ -65,7 +64,7 @@ function render() {
 }
 
 // Preuzmi gotov .docx (docx-writer): raspored je genericki, konacni oblik po uputama studija.
-function downloadDocx(blob, name) {
+function downloadDocx(blob: any, name: any) {
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = name;
@@ -73,8 +72,8 @@ function downloadDocx(blob, name) {
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 }
 
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+function escapeHtml(s: any) {
+  return String(s).replace(/[&<>"']/g, (c: string) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' } as Record<string, string>)[c]);
 }
 
 function init() {

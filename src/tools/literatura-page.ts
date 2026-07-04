@@ -1,11 +1,10 @@
-// @ts-nocheck
 // DOM glue za besplatno sredjivanje literature (literatura.html). Logika je u
 // bibliography.ts (tipizirano, testabilno); ovdje samo vezanje forme i ispis. Bez mreze.
 import '../shared/ui-boot';
 import { organizeBibliography, bibliographyText } from './bibliography';
 import { bibliographyDoc, docxBlob } from '../docx/docx-writer';
 
-const $ = (s) => document.querySelector(s);
+const $ = (s: string): any => document.querySelector(s);
 const nf = new Intl.NumberFormat('hr-HR');
 
 const SAMPLE = `Zorić, Z. (2020). Lokalna samouprava u Hrvatskoj. Zagreb: Naklada.
@@ -15,15 +14,15 @@ Marić, M. Uvod u politologiju. Zagreb.
 Državni zavod za statistiku (2021). Popis stanovništva. https://dzs.hr/popis
 Čović, Č. (2018). Metodologija. Split: Redak.`;
 
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+function escapeHtml(s: any) {
+  return String(s).replace(/[&<>"']/g, (c: string) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' } as Record<string, string>)[c]);
 }
 
 function render() {
   const input = $('#lit-input');
   const r = organizeBibliography(input?.value || '');
 
-  const set = (id, v) => { const el = $(id); if (el) el.textContent = v; };
+  const set = (id: any, v: any) => { const el = $(id); if (el) el.textContent = v; };
   set('#lit-total', nf.format(r.inputCount));
   set('#lit-unique', nf.format(r.entries.length));
   set('#lit-dupes', nf.format(r.duplicatesRemoved));

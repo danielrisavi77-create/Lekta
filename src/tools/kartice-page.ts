@@ -1,10 +1,9 @@
-// @ts-nocheck
 // DOM glue za besplatni brojac kartica (kartice.html). Sva logika je u counter.ts
 // (tipizirano, testabilno); ovdje samo vezanje textarea -> ispis. Bez mreze.
 import '../shared/ui-boot';
 import { countText, ZNAKOVA_PO_KARTICI } from './counter';
 
-const $ = (s) => document.querySelector(s);
+const $ = (s: string): any => document.querySelector(s);
 const nf = new Intl.NumberFormat('hr-HR');
 const nf1 = new Intl.NumberFormat('hr-HR', { minimumFractionDigits: 0, maximumFractionDigits: 1 });
 const nf2 = new Intl.NumberFormat('hr-HR', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
@@ -13,9 +12,9 @@ const SAMPLE = `Ovo je primjer teksta koji možeš zamijeniti svojim radom. Zali
 
 Jedna autorska kartica u hrvatskoj lekturi i prijevodu iznosi 1800 znakova s razmacima. Cijena lekture obično se računa upravo po kartici, pa je ovaj broj koristan kad procjenjuješ trošak i opseg.`;
 
-function render(text) {
+function render(text: any) {
   const m = countText(text);
-  const set = (id, v) => { const el = $(id); if (el) el.textContent = v; };
+  const set = (id: any, v: any) => { const el = $(id); if (el) el.textContent = v; };
 
   set('#m-kartice', nf2.format(m.kartice));
   set('#m-words', nf.format(m.words));
@@ -31,7 +30,7 @@ function render(text) {
   return m;
 }
 
-function summaryText(m) {
+function summaryText(m: any) {
   return [
     `Kartice (${ZNAKOVA_PO_KARTICI} znakova): ${nf2.format(m.kartice)}`,
     `Riječi: ${nf.format(m.words)}`,

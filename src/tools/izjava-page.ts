@@ -1,18 +1,17 @@
-// @ts-nocheck
 // DOM glue za besplatni generator Izjave o izvornosti (izjava.html). Logika je u
 // statement.ts (tipizirano, testabilno); ovdje samo vezanje forme, pregled i ispis. Bez mreze.
 import '../shared/ui-boot';
 import { buildStatement, statementText } from './statement';
 import { statementDoc, docxBlob } from '../docx/docx-writer';
 
-const $ = (s) => document.querySelector(s);
+const $ = (s: string): any => document.querySelector(s);
 
 const FIELDS = {
   heading: '#st-heading', author: '#st-author', workType: '#st-worktype',
   title: '#st-title', place: '#st-place', date: '#st-date',
 };
 
-const SAMPLE = {
+const SAMPLE: any = {
   heading: 'Izjava o izvornosti',
   author: 'Ana Anić',
   workType: 'Diplomski rad',
@@ -21,12 +20,12 @@ const SAMPLE = {
   date: '3. srpnja 2026.',
 };
 
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+function escapeHtml(s: any) {
+  return String(s).replace(/[&<>"']/g, (c: string) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' } as Record<string, string>)[c]);
 }
 
 function readInput() {
-  const out = {};
+  const out: any = {};
   for (const [key, sel] of Object.entries(FIELDS)) out[key] = $(sel)?.value || '';
   return out;
 }

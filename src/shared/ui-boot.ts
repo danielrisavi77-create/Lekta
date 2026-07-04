@@ -1,4 +1,3 @@
-// @ts-nocheck
 // Zajednicki boot za sve stranice (index, citat, usporedba):
 //  1. self-hostani akademski serif (Source Serif 4, latin + latin-ext za hrvatski),
 //  2. Lucide ikone: zamjenjuje <i data-lucide="..."> jedinstvenim stroke setom.
