@@ -3,6 +3,7 @@
 // statement.ts (tipizirano, testabilno); ovdje samo vezanje forme, pregled i ispis. Bez mreze.
 import '../shared/ui-boot';
 import { buildStatement, statementText } from './statement';
+import { statementDoc, docxBlob } from '../docx/docx-writer';
 
 const $ = (s) => document.querySelector(s);
 
@@ -83,6 +84,16 @@ function init() {
   });
 
   $('#st-print')?.addEventListener('click', () => window.print());
+
+  // Preuzmi gotov .docx (docx-writer): formulacija je uobicajena, obvezni obrazac faksa ima prednost.
+  $('#st-docx')?.addEventListener('click', () => {
+    const model = buildStatement(readInput());
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(docxBlob(statementDoc(model)));
+    a.download = 'izjava-o-izvornosti.docx';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  });
 }
 
 if (document.readyState === 'loading') {

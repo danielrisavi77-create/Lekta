@@ -3,6 +3,7 @@
 // title-page.ts (tipizirano, testabilno); ovdje samo vezanje forme, pregled i ispis. Bez mreze.
 import '../shared/ui-boot';
 import { buildTitlePage, titlePageText } from './title-page';
+import { titlePageDoc, docxBlob } from '../docx/docx-writer';
 
 const $ = (s) => document.querySelector(s);
 
@@ -56,10 +57,20 @@ function render() {
   }
 
   const hasContent = model.lines.length > 0;
-  const copy = $('#tp-copy'), print = $('#tp-print');
+  const copy = $('#tp-copy'), print = $('#tp-print'), docx = $('#tp-docx');
   if (copy) copy.disabled = !hasContent;
   if (print) print.disabled = !hasContent;
+  if (docx) docx.disabled = !hasContent;
   return model;
+}
+
+// Preuzmi gotov .docx (docx-writer): raspored je genericki, konacni oblik po uputama studija.
+function downloadDocx(blob, name) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 }
 
 function escapeHtml(s) {
@@ -97,6 +108,12 @@ function init() {
   });
 
   $('#tp-print')?.addEventListener('click', () => window.print());
+
+  $('#tp-docx')?.addEventListener('click', () => {
+    const model = buildTitlePage(readInput());
+    if (!model.lines.length) return;
+    downloadDocx(docxBlob(titlePageDoc(model)), 'naslovnica.docx');
+  });
 }
 
 if (document.readyState === 'loading') {

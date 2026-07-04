@@ -3,6 +3,7 @@
 // bibliography.ts (tipizirano, testabilno); ovdje samo vezanje forme i ispis. Bez mreze.
 import '../shared/ui-boot';
 import { organizeBibliography, bibliographyText } from './bibliography';
+import { bibliographyDoc, docxBlob } from '../docx/docx-writer';
 
 const $ = (s) => document.querySelector(s);
 const nf = new Intl.NumberFormat('hr-HR');
@@ -40,6 +41,8 @@ function render() {
 
   const copy = $('#lit-copy');
   if (copy) copy.disabled = r.entries.length === 0;
+  const docx = $('#lit-docx');
+  if (docx) docx.disabled = r.entries.length === 0;
   window.__lektaIcons?.();
   return r;
 }
@@ -62,6 +65,17 @@ function init() {
       const prev = btn.textContent; btn.textContent = 'Kopirano ✓';
       setTimeout(() => { btn.textContent = prev; }, 1600);
     } catch (e) { /* clipboard nedostupan: sredjeni popis je i dalje vidljiv */ }
+  });
+
+  // Preuzmi gotov .docx (docx-writer): jedinice s visecim uvlacenjem, stil ostaje autorov.
+  $('#lit-docx')?.addEventListener('click', () => {
+    const r = organizeBibliography(input.value || '');
+    if (!r.entries.length) return;
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(docxBlob(bibliographyDoc(r.entries.map(e => e.text))));
+    a.download = 'literatura.docx';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   });
 }
 
