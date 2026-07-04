@@ -3,11 +3,17 @@
 # Ako hosting nije Netlify, postavi ekvivalentna zaglavlja na razini posluzitelja/CDN-a.
 #
 # CSP je defense-in-depth: sav korisnicki unos vec ide kroz escapeHtml, a ovdje se blokira
-# ucitavanje vanjskih skripti/resursa i slanje podataka izvan self/https. `unsafe-inline` je
-# nuzan jer app koristi inline <style> i mali FOUC inline <script> za temu; connect-src dopusta
-# 'self' i https (korisnicki konfiguriran Supabase + Lemon Squeezy su https).
+# ucitavanje vanjskih skripti/resursa i slanje podataka izvan self/https.
+# script-src NE koristi 'unsafe-inline': jedina inline skripta (FOUC prekidac teme u index.html)
+# dopustena je preko sha256 hasha, pa bi svaka INJEKTIRANA inline skripta bila blokirana.
+#   VAZNO: ako se sadrzaj te inline skripte promijeni, ponovno izracunaj hash i azuriraj ga
+#   (node: crypto.createHash('sha256').update(<tekst skripte>).digest('base64')).
+# style-src zadrzava 'unsafe-inline' jer app postavlja inline stilove dinamicki iz JS-a
+# (npr. element.style.width, setProperty) sto hash ne moze pokriti; CSS injection je nizak rizik
+# (ne izvrsava JS, a img/font/connect su ograniceni). connect-src dopusta self + https
+# (korisnicki konfiguriran Supabase + Lemon Squeezy su https).
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' https:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' https:
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-ws2+tIofKe8Oi9MB7J4qYjlxZsGRTkubfdubL9tzznQ='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' https:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' https:
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY
