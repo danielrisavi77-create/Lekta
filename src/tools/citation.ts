@@ -35,7 +35,13 @@ export interface ParsedAuthor {
   first: string;
 }
 
-/** Razbije slobodan unos autora u strukturu prezime/ime. Prazni unosi se odbacuju. */
+// Organizacijske rijeci: kad se pojave (a nema zareza), autor je ustanova/tijelo, ne osoba,
+// pa se NE razbija na prezime/ime (inace "Vlada Republike Hrvatske" -> "Hrvatske, V. R.").
+const ORG_KEYWORDS =
+  /\b(vlada|ministarstvo|zavod|institut|sveučiliš|sveucilis|fakultet|društvo|drustvo|ured|agencija|komisija|odbor|centar|zaklada|udruga|udruženj|udruzenj|savez|republik|akademij|knjižnic|knjiznic|muzej|škola|skola|nakladni)\b/i;
+
+/** Razbije slobodan unos autora u strukturu prezime/ime. Prazni unosi se odbacuju.
+ *  Ustanova/tijelo (bez zareza, s organizacijskom rijeci) ostaje doslovno, bez inicijala. */
 export function parseAuthors(raw: string | undefined): ParsedAuthor[] {
   if (!raw) return [];
   return raw
@@ -43,6 +49,9 @@ export function parseAuthors(raw: string | undefined): ParsedAuthor[] {
     .map((s) => s.trim())
     .filter(Boolean)
     .map((chunk) => {
+      if (!chunk.includes(',') && ORG_KEYWORDS.test(chunk)) {
+        return { last: chunk, first: '' };
+      }
       if (chunk.includes(',')) {
         const [last, first] = chunk.split(',');
         return { last: last.trim(), first: (first || '').trim() };
@@ -114,7 +123,7 @@ function formatAutorGodina(inp: CitationInput): string {
   const t = inp.title || '';
   const parts: string[] = [];
   const lead = [A, year].filter(Boolean).join(' ');
-  if (lead) parts.push(lead);
+  if (lead) parts.push(withDot(lead)); // tocka iza autora i kad nema inicijala/godine (kao fusnota)
 
   switch (inp.type) {
     case 'knjiga':

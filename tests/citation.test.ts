@@ -23,8 +23,9 @@ describe('parseAuthors', () => {
     expect(parseAuthors(undefined)).toEqual([]);
   });
 
-  it('prezime bez imena', () => {
-    expect(parseAuthors('Vlada Republike Hrvatske')).toEqual([{ last: 'Hrvatske', first: 'Vlada Republike' }]);
+  it('institucionalni autor ostaje doslovno (ne mrvi se u inicijale)', () => {
+    expect(parseAuthors('Vlada Republike Hrvatske')).toEqual([{ last: 'Vlada Republike Hrvatske', first: '' }]);
+    expect(parseAuthors('Državni zavod za statistiku')).toEqual([{ last: 'Državni zavod za statistiku', first: '' }]);
   });
 });
 
@@ -77,6 +78,21 @@ describe('formatCitation autor-godina', () => {
     expect(r.missing).toContain('godina');
     expect(r.missing).toContain('izdavač');
     expect(r.missing).not.toContain('naslov');
+  });
+
+  it('institucionalni autor bez inicijala u citatu', () => {
+    const r = formatCitation(
+      { type: 'mrezni', authors: 'Državni zavod za statistiku', title: 'Popis stanovništva', year: '2021', url: 'https://dzs.hr/popis' },
+      'autor-godina',
+    );
+    expect(r.citation).toContain('Državni zavod za statistiku');
+    expect(r.citation).not.toContain('V. R.');
+    expect(r.citation).not.toContain('statistiku, S.');
+  });
+
+  it('tocka iza autora i kad nema inicijala ni godine', () => {
+    const r = formatCitation({ type: 'knjiga', authors: 'Ivic', title: 'Ustavno pravo' }, 'autor-godina');
+    expect(r.citation).toBe('Ivic. Ustavno pravo.');
   });
 });
 
