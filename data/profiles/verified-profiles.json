@@ -25955,5 +25955,499 @@
         "4 stvarna javna diplomska rada (unipu:24, unipu:115, unipu:659, unipu:660) prolaze PDF preflight: valjan nesifriran PDF, viselistni (58-114 str.), A4 (595x842 pt)."
       ]
     }
+  },
+  {
+    "id": "ffst-zavrsni",
+    "unitId": "ffst",
+    "programs": [
+      "Prijediplomski studiji FFST (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "FFST, zavrsni rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "size": [
+        12,
+        11
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Filozofski fakultet u Splitu u javnim sluzbenim izvorima NE propisuje strojno-provjerljivo oblikovanje: font, margine i prored delegirani su na predlozak (Upute ga cak ne linkaju), a opseg 'Pravilnikom nije propisan'. Prikazana format-pravila su OPCI hrvatski akademski baseline, NISU fakultetski propis; koristi sluzbeni predlozak. Citatni stil je CUSTOM: Pravilnik 2024 (Cl.9) nudi vise stilova (APA, MLA, Chicago, Harvard 'ovisno o polju'), Upute izbor prepustaju mentoru.",
+    "sources": [
+      {
+        "title": "Pravilnik o zavrsnom i diplomskom radu (Filozofski fakultet u Splitu, 2024)",
+        "url": "https://www.ffst.unist.hr/_download/repository/Pravilnik%20o%20zavr%C5%A1nom%20i%20diplomskom%20radu%202024..pdf"
+      },
+      {
+        "title": "Upute za pisanje zavrsnoga/diplomskoga rada (Filozofski fakultet u Splitu)",
+        "url": "https://www.ffst.unist.hr/_download/repository/UPUTE%20ZA%20PISANJE%20ZAVRSNOGA-DIPLOMSKOGA%20RADA%20-%20final.docx"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnom i diplomskom radu (Filozofski fakultet u Splitu, 2024)",
+      "Upute za pisanje zavrsnoga/diplomskoga rada (Filozofski fakultet u Splitu)"
+    ],
+    "ruleAuthority": "generic",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Format papira (opci hrvatski akademski baseline, nije fakultetski propis)",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvaran/stvarnih javni/-h rad/-ova (Filozofski fakultet u Splitu, Sveuciliste u Splitu) iz sluzbenog repozitorija (repozitorij.ffst.unist.hr, Dabar, open access), potvrdjen/-i po razini (OAI dc:type) kroz byte-level PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "ffst:582",
+          "repository": "repozitorij.ffst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 28,
+          "sha256": "2048b095e2054de6a1d273f8759b947e06d0bbe793582f18da64ad547c38afc4",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "ffst:585",
+          "repository": "repozitorij.ffst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 41,
+          "sha256": "fb87af6c42f503cae76ebc0837ab07dad8b1ffe49a1f6180a9705d637c1d2602",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "ffst:640",
+          "repository": "repozitorij.ffst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 38,
+          "sha256": "bf803c89e396e246fa08ad97a5432454d81f1e7cda916ee21bca06d6431dad5a",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "3 rad/-ova (ffst:582, ffst:585, ffst:640) prolazi/-e byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "ffst-diplomski",
+    "unitId": "ffst",
+    "programs": [
+      "Diplomski studiji FFST"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "FFST, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "size": [
+        12,
+        11
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Filozofski fakultet u Splitu u javnim sluzbenim izvorima NE propisuje strojno-provjerljivo oblikovanje: font, margine i prored delegirani su na predlozak (Upute ga cak ne linkaju), a opseg 'Pravilnikom nije propisan'. Prikazana format-pravila su OPCI hrvatski akademski baseline, NISU fakultetski propis; koristi sluzbeni predlozak. Citatni stil je CUSTOM: Pravilnik 2024 (Cl.9) nudi vise stilova (APA, MLA, Chicago, Harvard 'ovisno o polju'), Upute izbor prepustaju mentoru.",
+    "sources": [
+      {
+        "title": "Pravilnik o zavrsnom i diplomskom radu (Filozofski fakultet u Splitu, 2024)",
+        "url": "https://www.ffst.unist.hr/_download/repository/Pravilnik%20o%20zavr%C5%A1nom%20i%20diplomskom%20radu%202024..pdf"
+      },
+      {
+        "title": "Upute za pisanje zavrsnoga/diplomskoga rada (Filozofski fakultet u Splitu)",
+        "url": "https://www.ffst.unist.hr/_download/repository/UPUTE%20ZA%20PISANJE%20ZAVRSNOGA-DIPLOMSKOGA%20RADA%20-%20final.docx"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnom i diplomskom radu (Filozofski fakultet u Splitu, 2024)",
+      "Upute za pisanje zavrsnoga/diplomskoga rada (Filozofski fakultet u Splitu)"
+    ],
+    "ruleAuthority": "generic",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Format papira (opci hrvatski akademski baseline, nije fakultetski propis)",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvaran/stvarnih javni/-h rad/-ova (Filozofski fakultet u Splitu, Sveuciliste u Splitu) iz sluzbenog repozitorija (repozitorij.ffst.unist.hr, Dabar, open access), potvrdjen/-i po razini (OAI dc:type) kroz byte-level PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "ffst:239",
+          "repository": "repozitorij.ffst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 50,
+          "sha256": "f64d609b3252afdf8b2c6ce18993ba042f49af85d1a458dff29f20b3d9d198e5",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ffst:240",
+          "repository": "repozitorij.ffst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 43,
+          "sha256": "ce38a11f3ad22167b5fdcb057474e010d16d0de71e51139445618237c27ca2b7",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ffst:280",
+          "repository": "repozitorij.ffst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 126,
+          "sha256": "c801eb651fb646612440de48b7e0ab551cb52f80fa06aabd932eb08e15e363c2",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 rad/-ova (ffst:239, ffst:240, ffst:280) prolazi/-e byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "fesb-zavrsni",
+    "unitId": "fesb",
+    "programs": [
+      "Prijediplomski studiji FESB (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "FESB, zavrsni rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "size": [
+        12,
+        11
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "FESB u javnim sluzbenim pravilnicima (zavrsni 2019, diplomski 2013) NE propisuje ni citatni stil ni oblikovanje (oba su cisto proceduralna; konkretno oblikovanje je u neobjavljenom 'obrascu za pisanje rada', Cl.17). Prikazana format-pravila su OPCI baseline, NISU fakultetski propis. Citatni stil CUSTOM (IEEE bi bio tipican ali nije u nijednom sluzbenom FESB dokumentu). Validacija podatkovno blokirana: repozitorij nema otvorenih zavrsnih radova (embargo).",
+    "sources": [
+      {
+        "title": "Pravilnik o izradi i obrani zavrsnog rada na prediplomskim studijima (FESB, 2019)",
+        "url": "https://data.fesb.unist.hr/public/documents/general_curriculum/1_Pravilnik%20o%20izradi%20i%20obrani%20zavr%C5%A1nog%20rada%20na%20prediplomskim%20studijama_2019-04-17.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o izradi i obrani zavrsnog rada na prediplomskim studijima (FESB, 2019)"
+    ],
+    "ruleAuthority": "generic",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Format papira (opci hrvatski akademski baseline, nije fakultetski propis)",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "fieldValidation": null
+  },
+  {
+    "id": "fesb-diplomski",
+    "unitId": "fesb",
+    "programs": [
+      "Diplomski studiji FESB"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "FESB, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "size": [
+        12,
+        11
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "FESB u javnim sluzbenim pravilnicima (zavrsni 2019, diplomski 2013) NE propisuje ni citatni stil ni oblikovanje (oba su cisto proceduralna; konkretno oblikovanje je u neobjavljenom 'obrascu za pisanje rada', Cl.17). Prikazana format-pravila su OPCI baseline, NISU fakultetski propis. Citatni stil CUSTOM (IEEE bi bio tipican ali nije u nijednom sluzbenom FESB dokumentu).",
+    "sources": [
+      {
+        "title": "Pravilnik o izradi i obrani diplomskog rada (FESB, 2013)",
+        "url": "https://data.fesb.unist.hr/public/documents/general_curriculum/4_Pravilnik%20o%20izradi%20i%20obrani%20diplomskog%20rad_2013-03-29.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o izradi i obrani diplomskog rada (FESB, 2013)"
+    ],
+    "ruleAuthority": "generic",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Format papira (opci hrvatski akademski baseline, nije fakultetski propis)",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "1 stvaran/stvarnih javni/-h rad/-ova (FESB, Sveuciliste u Splitu) iz sluzbenog repozitorija (repozitorij.fesb.unist.hr, Dabar, open access), potvrdjen/-i po razini (OAI dc:type) kroz byte-level PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 1,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "fesb:1377",
+          "repository": "repozitorij.fesb.unist.hr",
+          "pageFormat": "A4",
+          "pages": 67,
+          "sha256": "35491dfde2a09112c37686b3bf4f44d1cf3eb2ef0e684f92ff18571a7f4f8e4c",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "1 rad/-ova (fesb:1377) prolazi/-e byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "pravst-zavrsni",
+    "unitId": "pravst",
+    "programs": [
+      "Prijediplomski/integrirani studij (zavrsni rad), Pravni fakultet u Splitu"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Pravni Split, zavrsni rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "size": [
+        12,
+        11
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Pravni fakultet u Splitu javno NE objavljuje uputu koja propisuje citatni stil ni oblikovanje (detaljne upute su iza intranet logina; javni Pravilnik o pohrani i Vodic ne diraju citiranje/format). Prikazana format-pravila su OPCI baseline, NISU fakultetski propis. Citatni stil CUSTOM. Validacija podatkovno blokirana: repozitorij nema otvorenih zavrsnih radova (embargo).",
+    "sources": [
+      {
+        "title": "Pravilnik o pohrani i objavi ocjenskih radova (Pravni fakultet u Splitu, 2026)",
+        "url": "https://www.pravst.unist.hr/wp-content/uploads/2026/05/Pravilnik-o-pohrani-i-objavi-ocjenskih-radova-PFS.pdf"
+      },
+      {
+        "title": "Vodic za studente (Pravni fakultet u Splitu, 2025)",
+        "url": "https://www.pravst.unist.hr/wp-content/uploads/2025/10/Vodic-za-studente-2025.docx"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o pohrani i objavi ocjenskih radova (Pravni fakultet u Splitu, 2026)",
+      "Vodic za studente (Pravni fakultet u Splitu, 2025)"
+    ],
+    "ruleAuthority": "generic",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Format papira (opci hrvatski akademski baseline, nije fakultetski propis)",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "fieldValidation": null
+  },
+  {
+    "id": "pravst-diplomski",
+    "unitId": "pravst",
+    "programs": [
+      "Diplomski/integrirani studij, Pravni fakultet u Splitu"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Pravni Split, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Arial",
+        "Calibri"
+      ],
+      "size": [
+        12,
+        11
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "justify": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Pravni fakultet u Splitu javno NE objavljuje uputu koja propisuje citatni stil ni oblikovanje (detaljne upute su iza intranet logina; javni Pravilnik o pohrani i Vodic ne diraju citiranje/format). Prikazana format-pravila su OPCI baseline, NISU fakultetski propis. Citatni stil CUSTOM.",
+    "sources": [
+      {
+        "title": "Pravilnik o pohrani i objavi ocjenskih radova (Pravni fakultet u Splitu, 2026)",
+        "url": "https://www.pravst.unist.hr/wp-content/uploads/2026/05/Pravilnik-o-pohrani-i-objavi-ocjenskih-radova-PFS.pdf"
+      },
+      {
+        "title": "Vodic za studente (Pravni fakultet u Splitu, 2025)",
+        "url": "https://www.pravst.unist.hr/wp-content/uploads/2025/10/Vodic-za-studente-2025.docx"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o pohrani i objavi ocjenskih radova (Pravni fakultet u Splitu, 2026)",
+      "Vodic za studente (Pravni fakultet u Splitu, 2025)"
+    ],
+    "ruleAuthority": "generic",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Format papira (opci hrvatski akademski baseline, nije fakultetski propis)",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "1 stvaran/stvarnih javni/-h rad/-ova (Pravni fakultet u Splitu, Sveuciliste u Splitu) iz sluzbenog repozitorija (repozitorij.pravst.unist.hr, Dabar, open access), potvrdjen/-i po razini (OAI dc:type) kroz byte-level PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 1,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "pravst:1490",
+          "repository": "repozitorij.pravst.unist.hr",
+          "pageFormat": "A4",
+          "pages": 75,
+          "sha256": "06342012868df0f850a57338b7d752ce79dd3866476fde56c5513127772c020a",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "1 rad/-ova (pravst:1490) prolazi/-e byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
   }
 ]
