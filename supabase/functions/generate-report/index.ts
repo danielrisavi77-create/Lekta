@@ -51,9 +51,28 @@ Deno.serve(async (req: Request) => {
   const user = userData?.user;
   if (!user) return json({ error: 'unauthorized' }, 401);
 
-  const body = await req.json().catch(() => null);
+  // input guard (P0 5.4): odbij predimenzioniran ili maliciozno napuhan payload prije obrade
+  const MAX_BODY = 512 * 1024;
+  const clen = Number(req.headers.get('content-length') ?? '0');
+  if (clen && clen > MAX_BODY) return json({ error: 'payload_too_large' }, 413);
+  const raw = await req.text();
+  if (raw.length > MAX_BODY) return json({ error: 'payload_too_large' }, 413);
+  let body: any = null;
+  try { body = JSON.parse(raw); } catch { body = null; }
   if (!body || !isReportWorkType(body.workType) || !body.parsedStructure || !body.analysisResult) {
     return json({ error: 'bad_request' }, 400);
+  }
+  // kapiraj velicinu nizova (predimenzioniran payload -> 413, ne rusi funkciju)
+  const withinCap = (a: unknown, n: number) => !Array.isArray(a) || a.length <= n;
+  const ps = body.parsedStructure ?? {}, ar = body.analysisResult ?? {};
+  if (
+    !withinCap(ps.headings, 5000) ||
+    !withinCap(ps.paragraphs, 20000) ||
+    !withinCap(ar.checks, 4000) ||
+    !withinCap(ar.details?.checks, 4000) ||
+    !withinCap(ar.issues, 6000)
+  ) {
+    return json({ error: 'payload_too_large' }, 413);
   }
   const workType = body.workType;
   const now = new Date().toISOString();
