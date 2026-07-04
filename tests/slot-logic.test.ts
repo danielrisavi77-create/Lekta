@@ -72,6 +72,42 @@ describe('decideReportAccess (kriteriji 11.1-11.6)', () => {
     expect(d.newSlot.slotExpiresAt).toBe('2026-07-14T12:00:00.000Z'); // +14 dana za diplomski (products 0002)
   });
 
+  it('Do obrane SKU: slotWindowDays s entitlementa nadjacava standardni prozor', () => {
+    const d = decideReportAccess(ctx({ entitlements: [entitlement({ slotWindowDays: 120 })] }));
+    expect(d.decision).toBe('new_slot');
+    if (d.decision !== 'new_slot') return;
+    expect(d.newSlot.slotExpiresAt).toBe('2026-10-28T12:00:00.000Z'); // +120 dana
+  });
+
+  it('mijesani entitlementi: najveci prozor ima prednost, bez obzira na redoslijed', () => {
+    const d = decideReportAccess(
+      ctx({
+        entitlements: [
+          entitlement({ id: 'ent-std' }),
+          entitlement({ id: 'ent-obrana', slotWindowDays: 120 }),
+        ],
+      }),
+    );
+    expect(d.decision).toBe('new_slot');
+    if (d.decision !== 'new_slot') return;
+    expect(d.entitlementId).toBe('ent-obrana');
+    expect(d.newSlot.slotExpiresAt).toBe('2026-10-28T12:00:00.000Z');
+  });
+
+  it('izjednacen prozor: trosi se entitlement koji prije istice', () => {
+    const d = decideReportAccess(
+      ctx({
+        entitlements: [
+          entitlement({ id: 'ent-kasniji', purchaseExpiresAt: '2026-12-01T00:00:00.000Z' }),
+          entitlement({ id: 'ent-raniji', purchaseExpiresAt: '2026-08-01T00:00:00.000Z' }),
+        ],
+      }),
+    );
+    expect(d.decision).toBe('new_slot');
+    if (d.decision !== 'new_slot') return;
+    expect(d.entitlementId).toBe('ent-raniji');
+  });
+
   it('11.2 tesko uredjen isti rad unutar prozora -> re-check na ISTOM slotu, bez naplate', () => {
     const editedX = computeFingerprint({
       title: 'Ucinak digitalizacije na javnu upravu, zavrsna verzija', // promijenjen naslov

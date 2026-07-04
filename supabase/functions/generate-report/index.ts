@@ -82,7 +82,8 @@ Deno.serve(async (req: Request) => {
       .gt('slot_expires_at', now),
     admin
       .from('entitlements')
-      .select('id, work_type, status, slots_used, slots_total, purchase_expires_at')
+      // products join preko product_id: slot_window_days s proizvoda (npr. Do obrane SKU 120d)
+      .select('id, work_type, status, slots_used, slots_total, purchase_expires_at, products(slot_window_days)')
       .eq('user_id', user.id)
       .eq('work_type', workType)
       .eq('status', 'active'),
@@ -111,6 +112,7 @@ Deno.serve(async (req: Request) => {
         slotsUsed: e.slots_used,
         slotsTotal: e.slots_total,
         purchaseExpiresAt: e.purchase_expires_at,
+        slotWindowDays: e.products?.slot_window_days ?? undefined,
       })),
       recentGenerationCount: recent ?? 0,
     },

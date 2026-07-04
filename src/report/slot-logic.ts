@@ -25,6 +25,11 @@ export interface EntitlementRow {
   slotsUsed: number;
   slotsTotal: number;
   purchaseExpiresAt: string; // ISO
+  /**
+   * Prozor slota s proizvoda (products.slot_window_days preko product_id joina),
+   * npr. Do obrane SKU nosi 120. Izostavljeno pada na windowDaysFor(workType).
+   */
+  slotWindowDays?: number;
 }
 
 export interface AccessContext {
@@ -89,14 +94,24 @@ export function decideReportAccess(ctx: AccessContext, options: AccessOptions = 
   );
   if (slot) return { decision: 'recheck', http: 200, slotId: slot.id };
 
-  // 5. potrosi entitlement -> novi slot
-  const ent = ctx.entitlements.find(
-    (e) =>
-      e.workType === ctx.workType &&
-      e.status === 'active' &&
-      notExpired(e.purchaseExpiresAt, ctx.now) &&
-      e.slotsUsed < e.slotsTotal,
-  );
+  // 5. potrosi entitlement -> novi slot. Kandidati se biraju deterministicki: najprije
+  // najveci prozor slota (Do obrane SKU se primijeni na rad koji korisnik sada otkljucava),
+  // kod izjednacenja onaj koji prije istice. Prozor slota dolazi s proizvoda entitlementa
+  // (slotWindowDays); bez njega vrijedi standardni prozor vrste rada.
+  const windowOf = (e: EntitlementRow) => e.slotWindowDays ?? windowDaysFor(ctx.workType);
+  const ent = ctx.entitlements
+    .filter(
+      (e) =>
+        e.workType === ctx.workType &&
+        e.status === 'active' &&
+        notExpired(e.purchaseExpiresAt, ctx.now) &&
+        e.slotsUsed < e.slotsTotal,
+    )
+    .sort(
+      (a, b) =>
+        windowOf(b) - windowOf(a) ||
+        new Date(a.purchaseExpiresAt).getTime() - new Date(b.purchaseExpiresAt).getTime(),
+    )[0];
   if (ent) {
     return {
       decision: 'new_slot',
@@ -106,7 +121,7 @@ export function decideReportAccess(ctx: AccessContext, options: AccessOptions = 
         workType: ctx.workType,
         fingerprint: ctx.fingerprint,
         boundAt: ctx.now,
-        slotExpiresAt: addDays(ctx.now, windowDaysFor(ctx.workType)),
+        slotExpiresAt: addDays(ctx.now, windowOf(ent)),
       },
     };
   }
