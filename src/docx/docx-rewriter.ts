@@ -13,7 +13,7 @@
  *    ne izmisljamo strukturu i nikad ne prepakiravamo bez potrebe.
  *  - Izlaz se slaze kao stored ZIP (metoda 0) preko zipStore iz docx-writer.
  */
-import { ZipReader } from './parser';
+import { ZipReader, MAX_DECOMPRESSED_BYTES } from './parser';
 import { zipStore, type ZipFile } from './docx-writer';
 
 const TWIPS_PER_CM = 567; // konzistentno s parserom (readPPr/sectPr dijeli s 567)
@@ -104,11 +104,19 @@ export async function rewritePageGeometry(
   if (!names.includes('word/document.xml')) return { bytes: original, changed: [] };
 
   // Svi zapisi se dekomprimiraju odmah: izlaz je stored ZIP s identicnim sadrzajem
-  // svih dijelova osim document.xml.
+  // svih dijelova osim document.xml. ZipReader vec kapira svaki zapis; ovdje uz to
+  // pazimo na UKUPNU dekomprimiranu velicinu jer citamo cijelu arhivu (obrana od bombe
+  // rasporedjene na mnogo zapisa).
   const files: ZipFile[] = [];
+  let totalBytes = 0;
   for (const name of names) {
     const data = await zip.data(name);
-    if (data) files.push({ name, data });
+    if (!data) continue;
+    totalBytes += data.byteLength;
+    if (totalBytes > MAX_DECOMPRESSED_BYTES) {
+      throw new Error('Ukupan dekomprimirani sadrzaj premasuje sigurnosnu granicu; datoteka je odbijena.');
+    }
+    files.push({ name, data });
   }
 
   const doc = files.find((f) => f.name === 'word/document.xml');

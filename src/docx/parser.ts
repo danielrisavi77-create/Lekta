@@ -21,16 +21,62 @@ interface ZipEntry {
   local: number;
 }
 
+/**
+ * Gornja granica dekomprimiranog sadrzaja PO ZAPISU (obrana od dekompresijske bombe).
+ * Realan diplomski `document.xml` je nekoliko MB, pa 200 MB daje velik zazor bez laznih
+ * odbijanja, a zaustavlja mali .docx koji deflate omjerom (~1000:1) cilja gigabajte.
+ */
+export const MAX_DECOMPRESSED_BYTES = 200 * 1024 * 1024;
+
+/** Greska kad zapis premasi sigurnosnu granicu dekompresije (razlikovanje od korupcije). */
+export class ZipLimitError extends Error {}
+
+/** DecompressionStream iz globalnog opsega (preglednik ili Node 18+); null izvan oba. */
+function getDecompressionStream(): any {
+  const g: any = typeof globalThis !== 'undefined' ? globalThis : undefined;
+  return g && g.DecompressionStream ? g.DecompressionStream : null;
+}
+
+/**
+ * Raspakiraj deflate-raw uz TVRDI cap na izlaz: cita stream u komadima i prekida cim
+ * ukupno premasi `maxBytes`, pa lazljiva bomba (mala deklarirana velicina, golem stvarni
+ * izlaz) ne moze alocirati vise od granice. Vraca spojene bajtove.
+ */
+async function inflateWithCap(compressed: Uint8Array, maxBytes: number, ds: any): Promise<Uint8Array> {
+  const reader = new Blob([compressed as any]).stream().pipeThrough(ds).getReader();
+  const chunks: Uint8Array[] = [];
+  let total = 0;
+  for (;;) {
+    const res = await reader.read();
+    if (res.done) break;
+    const chunk = res.value as Uint8Array;
+    total += chunk.byteLength;
+    if (total > maxBytes) {
+      try { await reader.cancel(); } catch { /* prekid nakon prekoracenja */ }
+      throw new ZipLimitError(
+        `Dekomprimirani sadrzaj premasuje sigurnosnu granicu (${Math.round(maxBytes / 1024 / 1024)} MB). Datoteka je odbijena kao moguca dekompresijska bomba.`,
+      );
+    }
+    chunks.push(chunk);
+  }
+  const out = new Uint8Array(total);
+  let pos = 0;
+  for (const c of chunks) { out.set(c, pos); pos += c.byteLength; }
+  return out;
+}
+
 /** Cita ZIP/DOCX arhivu iz ArrayBuffera; vraca pojedine dijelove kao bajtove ili tekst. */
 export class ZipReader {
   view: DataView;
   bytes: Uint8Array;
   entries: Map<string, ZipEntry>;
+  maxBytes: number;
 
-  constructor(buffer: ArrayBuffer) {
+  constructor(buffer: ArrayBuffer, opts: { maxDecompressedBytes?: number } = {}) {
     this.view = new DataView(buffer);
     this.bytes = new Uint8Array(buffer);
     this.entries = new Map();
+    this.maxBytes = opts.maxDecompressedBytes ?? MAX_DECOMPRESSED_BYTES;
     this.parse();
   }
 
@@ -58,14 +104,24 @@ export class ZipReader {
     if (!e) return null;
     const p = e.local;
     if (this.view.getUint32(p, true) !== 0x04034b50) throw new Error('Oštećen lokalni zapis u DOCX datoteci.');
+    // Jeftin pred-filtar: deklarirana nekomprimirana velicina iznad granice = odbij odmah.
+    // Lazljivu bombu (mali uncomp, golem stvarni izlaz) hvata streaming cap ispod.
+    if (e.uncomp > this.maxBytes) {
+      throw new ZipLimitError(
+        `Deklarirana velicina zapisa premasuje sigurnosnu granicu (${Math.round(this.maxBytes / 1024 / 1024)} MB). Datoteka je odbijena kao moguca dekompresijska bomba.`,
+      );
+    }
     const nameLen = this.view.getUint16(p + 26, true), extraLen = this.view.getUint16(p + 28, true), start = p + 30 + nameLen + extraLen, compressed = this.bytes.slice(start, start + e.comp);
-    if (e.method === 0) return compressed;
+    if (e.method === 0) {
+      if (compressed.byteLength > this.maxBytes) throw new ZipLimitError('Zapis premasuje sigurnosnu granicu.');
+      return compressed;
+    }
     if (e.method === 8) {
-      if (!('DecompressionStream' in window)) throw new Error('Ovaj preglednik ne podržava lokalno raspakiravanje DOCX datoteka. Otvori aplikaciju u novijem Chromeu, Edgeu ili Firefoxu.');
+      const DS = getDecompressionStream();
+      if (!DS) throw new Error('Ovaj preglednik ne podržava lokalno raspakiravanje DOCX datoteka. Otvori aplikaciju u novijem Chromeu, Edgeu ili Firefoxu.');
       let ds;
-      try { ds = new (window as any).DecompressionStream('deflate-raw'); } catch (err) { throw new Error('Preglednik ne podržava deflate-raw raspakiravanje. Upotrijebi noviji Chrome ili Edge.'); }
-      const out = await new Response(new Blob([compressed]).stream().pipeThrough(ds)).arrayBuffer();
-      return new Uint8Array(out);
+      try { ds = new DS('deflate-raw'); } catch (err) { throw new Error('Preglednik ne podržava deflate-raw raspakiravanje. Upotrijebi noviji Chrome ili Edge.'); }
+      return await inflateWithCap(compressed, this.maxBytes, ds);
     }
     throw new Error(`Nepodržana ZIP kompresija (${e.method}).`);
   }
@@ -76,8 +132,12 @@ export class ZipReader {
   }
 }
 
-/** Parsiraj XML string u dokument; baci gresku ako ima parsererror cvor. */
+/** Parsiraj XML string u dokument; baci gresku ako ima parsererror cvor.
+ *  Odbija dokumente s DTD-om (`<!DOCTYPE`): preglednicki DOMParser ne siri vanjske entitete,
+ *  ali interni ugnijezdeni entiteti (billion laughs) su nepotreban rizik u .docx dijelovima
+ *  koje Word nikad ne pise, pa ih odbacujemo prije parsiranja (defense-in-depth). */
 export function parseXml(s: string, label = 'XML'): Document {
+  if (/<!DOCTYPE/i.test(s)) throw new Error(`${label} sadrži DTD deklaraciju i odbijen je iz sigurnosnih razloga.`);
   const x = new DOMParser().parseFromString(s, 'application/xml');
   if (first(x as any, 'parsererror')) throw new Error(`${label} nije moguće pročitati.`);
   return x;
@@ -155,5 +215,40 @@ export function headingLevel(styleName: any, pProps: any): number | null {
   return null;
 }
 
-/** Inspekcija oznaka fusnota (w:footnoteReference) u tijelu dokumenta. */
-export function inspectFootnoteMarkers(doc: any, styleData: any): any[] {const out=[];for(const [pi,p] of els(doc,'w:p').entries()){const runs=els(p,'w:r');for(let i=0;i<runs.length;i++){const ref=first(runs[i],'w:footnoteReference');if(!ref)continue;const id=Number(attr(ref,'w:id'));if(id<1)continue;const prev=runs.slice(0,i).map(paragraphText).join('').replace(/\s+$/,''),next=runs.slice(i+1).map(paragraphText).join('').replace(/^\s+/,'');const rPr=direct(runs[i],'w:rPr'),rStyleId=attr(direct(rPr,'w:rStyle'),'w:val'),rs=styleData.resolve(rStyleId),rp=merge(styleData.defaultR,rs.r,readRPr(rPr));out.push({id,paragraph:pi+1,before:prev.slice(-1),after:next.slice(0,1),italic:rp.italic===true})}}return out}
+/** Inspekcija oznaka fusnota (w:footnoteReference) u tijelu dokumenta.
+ *  Granicni znakovi (znak prije/poslije markera) racunaju se u O(n) po odlomku: tekst po
+ *  runu se predizracuna jednom, "znak prije" iz akumulatora zadnjeg ne-praznog znaka, a
+ *  "znak poslije" iz unaprijed izracunatog polja prvog ne-praznog znaka. Prije je svaki
+ *  marker re-serijalizirao SVE ostale runove (O(n^2), meta za freeze na dokumentu s mnogo
+ *  fusnota u jednom odlomku). Ponasanje je identicno (golden to dokazuje). */
+export function inspectFootnoteMarkers(doc: any, styleData: any): any[] {
+  const out: any[] = [];
+  for (const [pi, p] of els(doc, 'w:p').entries()) {
+    const runs = els(p, 'w:r');
+    const runText = runs.map((r) => paragraphText(r));
+    // firstNonWsFrom[j] = prvi ne-prazni znak u spoju runova j..kraj (ekvivalent ltrim + prvi znak)
+    const firstNonWsFrom: string[] = new Array(runs.length + 1);
+    firstNonWsFrom[runs.length] = '';
+    for (let j = runs.length - 1; j >= 0; j--) {
+      const m = runText[j].match(/\S/);
+      firstNonWsFrom[j] = m ? m[0] : firstNonWsFrom[j + 1];
+    }
+    let lastNonWsBefore = ''; // zadnji ne-prazni znak u runovima prije trenutnog (ekvivalent rtrim + zadnji znak)
+    for (let i = 0; i < runs.length; i++) {
+      const ref = first(runs[i], 'w:footnoteReference');
+      if (ref) {
+        const id = Number(attr(ref, 'w:id'));
+        if (id >= 1) {
+          const rPr = direct(runs[i], 'w:rPr'),
+            rStyleId = attr(direct(rPr, 'w:rStyle'), 'w:val'),
+            rs = styleData.resolve(rStyleId),
+            rp = merge(styleData.defaultR, rs.r, readRPr(rPr));
+          out.push({ id, paragraph: pi + 1, before: lastNonWsBefore, after: firstNonWsFrom[i + 1], italic: rp.italic === true });
+        }
+      }
+      const trimmed = runText[i].replace(/\s+$/, '');
+      if (trimmed) lastNonWsBefore = trimmed.slice(-1);
+    }
+  }
+  return out;
+}

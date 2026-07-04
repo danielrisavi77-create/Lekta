@@ -7,11 +7,24 @@
  * pozivatelj preda (u pregledniku DOM, u testu @xmldom/xmldom), bez globalnih ovisnosti.
  */
 
-const ENTITIES: Record<string, string> = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' };
+const ENTITIES: Record<string, string> = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
 
-/** HTML-escape za sigurno umetanje u markup. */
+/** HTML-escape za sigurno umetanje u markup (pokriva i jednostruki navodnik radi atributa). */
 export const escapeHtml = (s: unknown): string =>
-  String(s ?? '').replace(/[&<>"]/g, (c) => ENTITIES[c]);
+  String(s ?? '').replace(/[&<>"']/g, (c) => ENTITIES[c]);
+
+/**
+ * Sigurna href vrijednost: dopusta samo http(s), mailto i relativne/sidrene putanje.
+ * Sve ostalo (npr. `javascript:`) svede na `#`, da otrovana konfiguracija ili buduci
+ * podatkovni izvor ne mogu ubaciti izvrsivu shemu. NIJE zamjena za escapeHtml u atributu.
+ */
+export const safeHref = (url: unknown): string => {
+  const s = String(url ?? '').trim();
+  if (!s) return '#';
+  if (/^(?:https?:|mailto:)/i.test(s)) return s;
+  if (/^[/#?]/.test(s) || /^[\w.\-]+(?:[/?#]|$)/.test(s)) return s; // relativno/sidro/upit
+  return '#';
+};
 
 /** Ogranici broj na [a, b]. */
 export const clamp = (n: number, a: number, b: number): number => Math.max(a, Math.min(b, n));
