@@ -17293,11 +17293,9 @@
     "programs": [
       "Prijediplomski studij Hrvatski jezik i književnost",
       "Prijediplomski studij Engleski jezik i književnost",
-      "Prijediplomski studij Njemački jezik i književnost",
       "Prijediplomski studij Talijanski jezik i književnost",
       "Prijediplomski studij Filozofija",
       "Prijediplomski studij Povijest",
-      "Prijediplomski studij Povijest umjetnosti",
       "Prijediplomski studij Pedagogija",
       "Prijediplomski studij Psihologija",
       "Prijediplomski studij Kulturalni studiji"
@@ -17406,15 +17404,11 @@
     "programs": [
       "Diplomski studij Hrvatski jezik i književnost",
       "Diplomski studij Engleski jezik i književnost",
-      "Diplomski studij Njemački jezik i književnost",
       "Diplomski studij Talijanski jezik i književnost",
       "Diplomski studij Filozofija",
       "Diplomski studij Povijest",
-      "Diplomski studij Povijest umjetnosti",
       "Diplomski studij Povijest i interpretacija baštine",
       "Diplomski studij Pedagogija",
-      "Diplomski studij Psihologija",
-      "Diplomski studij Kulturalni studiji",
       "Diplomski studij Prevoditeljski studij"
     ],
     "workTypes": [
@@ -19591,6 +19585,7 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "rules": {
+      "recommendedCitation": "harvard",
       "font": [
         "Times New Roman"
       ],
@@ -19607,7 +19602,7 @@
       }
     },
     "facts": [],
-    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Ekonomski fakultet u Osijeku, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Ekonomski fakultet u Osijeku, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno. Citatni stil (Harvard) preuzet iz sluzbenih Uputa za pisanje studentskih radova (EFOS, 2023, imperativ 'koristiti harvardski stil'). Field-sampled 1 stvarnim javnim zavrsnim radom (vecina EFOS radova restrictedAccess).",
     "sources": [
       {
         "title": "Upute za pisanje studentskih radova (EFOS, 2023)",
@@ -19625,7 +19620,37 @@
       "Velicina slova",
       "Prored"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "1 stvarni javni rad (Ekonomski fakultet Osijek, Sveuciliste J.J. Strossmayera u Osijeku) iz sluzbenog repozitorija (Dabar, open access), potvrdjen po razini (OAI dc:type) kroz byte-level PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 1,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "efos:2134",
+          "repository": "repozitorij.efos.hr",
+          "pageFormat": "A4",
+          "pages": 76,
+          "sha256": "acf5f7cd039f9423237bc5d242fb1ceb399f643763619332fb1f5841a9ba5fec",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "1 stvarni javni rad (efos:2134) prolazi byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "Vecina EFOS studentskih radova je restrictedAccess (embargo) pa je otvoren uzorak ogranicen na 1 (validation=75).",
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
   },
   {
     "id": "efos-diplomski",
@@ -19641,6 +19666,7 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "rules": {
+      "recommendedCitation": "harvard",
       "font": [
         "Times New Roman"
       ],
@@ -19657,7 +19683,7 @@
       }
     },
     "facts": [],
-    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Ekonomski fakultet u Osijeku, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Ekonomski fakultet u Osijeku, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno. Citatni stil (Harvard) preuzet iz sluzbenih Uputa (EFOS, 2023). Terenska validacija podatkovno blokirana: EFOS repozitorij nema otvorenih diplomskih radova (svi restrictedAccess/embargo).",
     "sources": [
       {
         "title": "Upute za pisanje studentskih radova (EFOS, 2023)",
@@ -19708,7 +19734,7 @@
       }
     },
     "facts": [],
-    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Pravni fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Pravni fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno. Field-sampled 3 stvarna javna rada iz Pravnog fakulteta Osijek. Citatni stil nije imenovan u Uputama (biljeske/fusnote spominju se opisno) pa ostaje neodredjen (posten strop).",
     "sources": [
       {
         "title": "Upute za pisanje i predaju zavrsnog/diplomskog rada (Pravni fakultet Osijek)",
@@ -19727,7 +19753,52 @@
       "Prored",
       "Opseg (najmanje 20 str.)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Pravni fakultet Osijek, Sveuciliste J.J. Strossmayera u Osijeku) iz sluzbenog repozitorija (Dabar, open access), potvrdjena po razini (OAI dc:type) kroz byte-level PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "pravos:1640",
+          "repository": "repozitorij.pravos.unios.hr",
+          "pageFormat": "A4",
+          "pages": 30,
+          "sha256": "46042654646f04ce359ec4cdd74e6b4a5877da968ab0e32230088d23b64e3428",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "pravos:1641",
+          "repository": "repozitorij.pravos.unios.hr",
+          "pageFormat": "A4",
+          "pages": 36,
+          "sha256": "0aaa2de17caa706d66fdc4ed33ea45a54bd64273447b1788e0d725f415736f9f",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "pravos:1644",
+          "repository": "repozitorij.pravos.unios.hr",
+          "pageFormat": "A4",
+          "pages": 52,
+          "sha256": "1de0890b19ef34df00582c7be912f67fe103be36954f586ea842bb7e6d7a9415",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (pravos:1640, pravos:1641, pravos:1644) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
   },
   {
     "id": "pravos-diplomski",
@@ -19759,7 +19830,7 @@
       }
     },
     "facts": [],
-    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Pravni fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Pravni fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno. Field-sampled 3 stvarna javna diplomska rada iz Pravnog fakulteta Osijek. Citatni stil nije imenovan u Uputama pa ostaje neodredjen.",
     "sources": [
       {
         "title": "Upute za pisanje i predaju zavrsnog/diplomskog rada (Pravni fakultet Osijek)",
@@ -19778,7 +19849,52 @@
       "Prored",
       "Opseg (najmanje 20 str.)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Pravni fakultet Osijek, Sveuciliste J.J. Strossmayera u Osijeku) iz sluzbenog repozitorija (Dabar, open access), potvrdjena po razini (OAI dc:type) kroz byte-level PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "pravos:1250",
+          "repository": "repozitorij.pravos.unios.hr",
+          "pageFormat": "A4",
+          "pages": 53,
+          "sha256": "bfe9ae8b92ef08f216737308f3ac930e4527cbb32b6951a7d98e26b51ef4d56e",
+          "level": "diplomski"
+        },
+        {
+          "pid": "pravos:1251",
+          "repository": "repozitorij.pravos.unios.hr",
+          "pageFormat": "A4",
+          "pages": 47,
+          "sha256": "8f62323360477155818be8acb0447554d9566a7027f5bf0df9bf14292f9daf5e",
+          "level": "diplomski"
+        },
+        {
+          "pid": "pravos:1252",
+          "repository": "repozitorij.pravos.unios.hr",
+          "pageFormat": "A4",
+          "pages": 36,
+          "sha256": "88850c7f4c41e4e45802a7c75c61c381e6f670ab32606483d941aa723ad2041f",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (pravos:1250, pravos:1251, pravos:1252) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
   },
   {
     "id": "ffos-zavrsni",
@@ -19810,7 +19926,7 @@
       }
     },
     "facts": [],
-    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Filozofski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Filozofski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno. Field-sampled 3 stvarna javna zavrsna rada iz FFOS repozitorija. Citatni stil NIJE fiksiran: Pravilnik propisuje 'stil citiranja u struci, odnosno prema uputama mentora' (bez imenovanog stila) pa ostaje neodredjen (posten strop, ne izmisljam stil).",
     "sources": [
       {
         "title": "Pravilnik o zavrsnim i diplomskim radovima i ispitu (FFOS)",
@@ -19829,7 +19945,52 @@
       "Prored",
       "Opseg (15-20 str.)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Filozofski fakultet Osijek, Sveuciliste J.J. Strossmayera u Osijeku) iz sluzbenog repozitorija (Dabar, open access), potvrdjena po razini (OAI dc:type) kroz byte-level PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "ffos:1",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 23,
+          "sha256": "1895c4915a617cd3c150b10384b7dbc6262cb7251c4eb27de3920e960256859b",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "ffos:2",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 23,
+          "sha256": "db7bed419ed8bf92e6874daf856877846938aa7064f078ffa629b126eba624cb",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "ffos:9",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 25,
+          "sha256": "1cd5e1031fd7daadc6b274980988a367f397932ecbd0851bd6540a3b8c7e6df5",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (ffos:1, ffos:2, ffos:9) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
   },
   {
     "id": "ffos-diplomski",
@@ -19861,7 +20022,7 @@
       }
     },
     "facts": [],
-    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Filozofski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno.",
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Filozofski fakultet Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno. Field-sampled 3 stvarna javna diplomska rada iz FFOS repozitorija. Citatni stil nije imenovan u izvoru (Pravilnik deferira na struku/mentora) pa ostaje neodredjen.",
     "sources": [
       {
         "title": "Upute za izradu diplomskoga rada (FFOS)",
@@ -19880,7 +20041,52 @@
       "Prored",
       "Opseg (30-50 str.)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "3 stvarna javna rada (Filozofski fakultet Osijek, Sveuciliste J.J. Strossmayera u Osijeku) iz sluzbenog repozitorija (Dabar, open access), potvrdjena po razini (OAI dc:type) kroz byte-level PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      },
+      "publicSources": [
+        {
+          "pid": "ffos:5",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 37,
+          "sha256": "875ebb1a94e57db83b07ba60446356783a5a10998e8d3e95e941362d306bd315",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ffos:14",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 41,
+          "sha256": "de8a5e87b1e065c82b7586b77d53ac33e190ec92a0d18ec6b3415cc41ceedcb8",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ffos:102",
+          "repository": "repozitorij.ffos.hr",
+          "pageFormat": "A4",
+          "pages": 43,
+          "sha256": "68657eba3be4a7c54c82b013d3325b90b16c8ead8e0c8869a6050f6f22a76fd1",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (ffos:5, ffos:14, ffos:102) prolaze byte-level A4 preflight (valjan nesifriran PDF, 100% stranica A4, viselistno)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
   },
   {
     "id": "fazos-zavrsni",
@@ -24319,6 +24525,669 @@
       ],
       "confirmed": [
         "4 stvarna javna diplomska rada (gradri:782, gradri:783, gradri:784, gradri:785) prolaze PDF preflight: valjan nesifriran PDF, viselistni (67-108 str.), A4 (595x842 pt)."
+      ]
+    }
+  },
+  {
+    "id": "ffri-germanistika-zavrsni",
+    "unitId": "ffri",
+    "programs": [
+      "Prijediplomski studij Njemački jezik i književnost"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "FFRI Germanistika, zavrsni rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "recommendedCitation": "harvard"
+    },
+    "facts": [],
+    "note": "Fakultetska tipografija (FFRI Pravilnik 2023: Times New Roman 12, prored 1,5, margine 2,5 cm, obostrano) uz odsjecki citatni stil: autor-godina u tekstu, (Familienname Jahr: Seite), bez fusnota (Leitfaden 2018). Odsjecke upute citane izravno.",
+    "sources": [
+      {
+        "title": "Leitfaden - Standards des wissenschaftlichen Arbeitens (Odsjek za germanistiku FFRI, 2018)",
+        "url": "https://www.ffri.uniri.hr/files/dokumentiodsjeka/GER/Leitfaden-November_2018.pdf"
+      },
+      {
+        "title": "Pravilnik o zavrsnom radu (FFRI, 2023)",
+        "url": "https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2023.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Leitfaden - Standards des wissenschaftlichen Arbeitens (Odsjek za germanistiku FFRI, 2018)",
+      "Pravilnik o zavrsnom radu (FFRI, 2023)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Format papira",
+      "Margine",
+      "Stil citiranja (odsjecke upute)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna zavrsna rada (Odsjek za germanistiku FFRI) iz sluzbenog repozitorija (repository.ffri.uniri.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015,
+          2024,
+          2025
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "ffri:279",
+          "repository": "repository.ffri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 27,
+          "sha256": "9c67d8bc4b304410842ade3beb07976e96cfa5d4d1b975d382b250438d27fa34",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "ffri:4286",
+          "repository": "repository.ffri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 46,
+          "sha256": "debb17907d95d953cdd33850d0a645d7d286920101b03f27196018c6559416da",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "ffri:4540",
+          "repository": "repository.ffri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 30,
+          "sha256": "649a8674df0e8e4d7c3d2bf3afd69e8497d48f8672af7f6c5b9b2614f2b75568",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "ffri:4909",
+          "repository": "repository.ffri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 42,
+          "sha256": "39f3a8a54da4c9cf8917f8cebe1c4056a5882208faae75ef3dd44e32df6ae5b6",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (ffri:279, ffri:4286, ffri:4540, ffri:4909) prolaze PDF preflight: valjan nesifriran PDF, viselistni (27-46 str.), A4 (595x842 pt)."
+      ]
+    }
+  },
+  {
+    "id": "ffri-germanistika-diplomski",
+    "unitId": "ffri",
+    "programs": [
+      "Diplomski studij Njemački jezik i književnost"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "FFRI Germanistika, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "recommendedCitation": "harvard"
+    },
+    "facts": [],
+    "note": "Fakultetska tipografija (FFRI Pravilnik 2023: Times New Roman 12, prored 1,5, margine 2,5 cm, obostrano) uz odsjecki citatni stil: autor-godina u tekstu (Leitfaden 2018). Odsjecke upute citane izravno.",
+    "sources": [
+      {
+        "title": "Leitfaden - Standards des wissenschaftlichen Arbeitens (Odsjek za germanistiku FFRI, 2018)",
+        "url": "https://www.ffri.uniri.hr/files/dokumentiodsjeka/GER/Leitfaden-November_2018.pdf"
+      },
+      {
+        "title": "Pravilnik o diplomskom radu (FFRI, 2023)",
+        "url": "https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_diplomskom_radu-2023.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Leitfaden - Standards des wissenschaftlichen Arbeitens (Odsjek za germanistiku FFRI, 2018)",
+      "Pravilnik o diplomskom radu (FFRI, 2023)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Format papira",
+      "Margine",
+      "Stil citiranja (odsjecke upute)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna diplomska rada (Odsjek za germanistiku FFRI) iz sluzbenog repozitorija (repository.ffri.uniri.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "ffri:119",
+          "repository": "repository.ffri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 65,
+          "sha256": "5b3d57c759407a1d3937978a9ed58606b5bbf00530d34164e7f91644db6d0009",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ffri:120",
+          "repository": "repository.ffri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 53,
+          "sha256": "770f683edc59ac1e41b4d01c1c1a1c42c687aa57aba53717cacb9855199574fc",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ffri:124",
+          "repository": "repository.ffri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 39,
+          "sha256": "485505d8be86ecca94b6e2112454db9f6ae14d0f25858a0d668f518cb0895d85",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ffri:127",
+          "repository": "repository.ffri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 44,
+          "sha256": "7d712d92d72ddce65dcab731a75b4ff02aa81756af866a4a90df03fe6ce40fe8",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (ffri:119, ffri:120, ffri:124, ffri:127) prolaze PDF preflight: valjan nesifriran PDF, viselistni (39-65 str.), A4 (595x842 pt)."
+      ]
+    }
+  },
+  {
+    "id": "ffri-psihologija-diplomski",
+    "unitId": "ffri",
+    "programs": [
+      "Diplomski studij Psihologija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "FFRI Psihologija, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "recommendedCitation": "apa7"
+    },
+    "facts": [],
+    "note": "Fakultetska tipografija (FFRI Pravilnik 2023: Times New Roman 12, prored 1,5, margine 2,5 cm, obostrano) uz odsjecki citatni stil: APA (brosura 2022, cl. 6.3.5). Odsjecke upute citane izravno.",
+    "sources": [
+      {
+        "title": "Brosura za diplomski rad (Odsjek za psihologiju FFRI, 2022)",
+        "url": "https://ffri.uniri.hr/wp-content/uploads/Brosura-diplomski_rad-PSIH-2022.pdf"
+      },
+      {
+        "title": "Pravilnik o diplomskom radu (FFRI, 2023)",
+        "url": "https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_diplomskom_radu-2023.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Brosura za diplomski rad (Odsjek za psihologiju FFRI, 2022)",
+      "Pravilnik o diplomskom radu (FFRI, 2023)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Format papira",
+      "Margine",
+      "Stil citiranja (odsjecke upute)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna diplomska rada (Odsjek za psihologiju FFRI) iz sluzbenog repozitorija (repository.ffri.uniri.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015,
+          2016
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "ffri:155",
+          "repository": "repository.ffri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 69,
+          "sha256": "2b63ef595a8557f44f4141e48596b7415df97c8c875d571c551fd774a280edb2",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ffri:567",
+          "repository": "repository.ffri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 70,
+          "sha256": "d057c5b937c81275dfe1bd81139b05d522edaa42d9bfeb56a85c10f97d367df4",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ffri:568",
+          "repository": "repository.ffri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 79,
+          "sha256": "2e79c172f83c383c9195807a2baeb7a30f8fd3985b9286c1097cdbaa51fa2853",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ffri:569",
+          "repository": "repository.ffri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 66,
+          "sha256": "3e8c7735e57c2663c11cf79d68aea841ccf4769b1abbe45d82587e6c3cd71fd8",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (ffri:155, ffri:567, ffri:568, ffri:569) prolaze PDF preflight: valjan nesifriran PDF, viselistni (66-79 str.), A4 (595x842 pt)."
+      ]
+    }
+  },
+  {
+    "id": "ffri-povum-zavrsni",
+    "unitId": "ffri",
+    "programs": [
+      "Prijediplomski studij Povijest umjetnosti"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "FFRI Povijest umjetnosti, zavrsni rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "recommendedCitation": "chicago-notes"
+    },
+    "facts": [],
+    "note": "Fakultetska tipografija (FFRI Pravilnik 2023: Times New Roman 12, prored 1,5, margine 2,5 cm, obostrano) uz odsjecki citatni stil: fusnote/podrubne biljeske, numericki slijed (odsjecke Upute). Odsjecke upute citane izravno.",
+    "sources": [
+      {
+        "title": "Upute za izradu zavrsnog rada (Odsjek za povijest umjetnosti FFRI)",
+        "url": "https://ffri.uniri.hr/files/dokumentiodsjeka/PU/Upute-zavrsni.pdf"
+      },
+      {
+        "title": "Pravilnik o zavrsnom radu (FFRI, 2023)",
+        "url": "https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_zavrsnom_radu-2023.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu zavrsnog rada (Odsjek za povijest umjetnosti FFRI)",
+      "Pravilnik o zavrsnom radu (FFRI, 2023)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Format papira",
+      "Margine",
+      "Stil citiranja (odsjecke upute)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna zavrsna rada (Odsjek za povijest umjetnosti FFRI) iz sluzbenog repozitorija (repository.ffri.uniri.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "ffri:11",
+          "repository": "repository.ffri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 29,
+          "sha256": "43f0a8b460b218015c4ce6c4cfbad4c1315dadf0ca8e8d827b3f22619b2b789f",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "ffri:195",
+          "repository": "repository.ffri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 43,
+          "sha256": "45639b68f2f83347db6863cabe317a620f2ab085a3b00f11d629d5dfabfdff6a",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "ffri:196",
+          "repository": "repository.ffri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 105,
+          "sha256": "de9cc3153e397d9de6a8e96e55edf31b849fff0335b199802f20d1bfed180513",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "ffri:197",
+          "repository": "repository.ffri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 37,
+          "sha256": "85ada22b6ec3c55500a6ccbd01216be37ce9b6580cf85f5225d0bf90fe98ae49",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (ffri:11, ffri:195, ffri:196, ffri:197) prolaze PDF preflight: valjan nesifriran PDF, viselistni (29-105 str.), A4 (595x842 pt)."
+      ]
+    }
+  },
+  {
+    "id": "ffri-povum-diplomski",
+    "unitId": "ffri",
+    "programs": [
+      "Diplomski studij Povijest umjetnosti"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "FFRI Povijest umjetnosti, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "recommendedCitation": "chicago-notes"
+    },
+    "facts": [],
+    "note": "Fakultetska tipografija (FFRI Pravilnik 2023: Times New Roman 12, prored 1,5, margine 2,5 cm, obostrano) uz odsjecki citatni stil: fusnote/podrubne biljeske, numericki slijed (odsjecke Upute). Odsjecke upute citane izravno.",
+    "sources": [
+      {
+        "title": "Upute za izradu diplomskog rada (Odsjek za povijest umjetnosti FFRI)",
+        "url": "https://ffri.uniri.hr/files/dokumentiodsjeka/PU/Upute-diplomski.pdf"
+      },
+      {
+        "title": "Pravilnik o diplomskom radu (FFRI, 2023)",
+        "url": "https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_diplomskom_radu-2023.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu diplomskog rada (Odsjek za povijest umjetnosti FFRI)",
+      "Pravilnik o diplomskom radu (FFRI, 2023)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Format papira",
+      "Margine",
+      "Stil citiranja (odsjecke upute)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna diplomska rada (Odsjek za povijest umjetnosti FFRI) iz sluzbenog repozitorija (repository.ffri.uniri.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "ffri:51",
+          "repository": "repository.ffri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 60,
+          "sha256": "5c641d66c7cc73463bf208136376d2ddd7f98253486b8c09cb52639b9e2ebf34",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ffri:53",
+          "repository": "repository.ffri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 78,
+          "sha256": "0248c3e4923a502abb172093f0cc6f888aad95908a61c3ad49ec1021cb1260dd",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ffri:56",
+          "repository": "repository.ffri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 68,
+          "sha256": "b36aa3d69c0037ab628ed79dca2a035171eff8e504d9dfb1739605beadd6410b",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ffri:57",
+          "repository": "repository.ffri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 101,
+          "sha256": "c431159b4bea7c73cd1495e71d12521a84efea7003fc2e8dc108a1adca95f396",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (ffri:51, ffri:53, ffri:56, ffri:57) prolaze PDF preflight: valjan nesifriran PDF, viselistni (60-101 str.), A4 (595x842 pt)."
+      ]
+    }
+  },
+  {
+    "id": "ffri-kulturalni-diplomski",
+    "unitId": "ffri",
+    "programs": [
+      "Diplomski studij Kulturalni studiji"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "FFRI Kulturalni studiji, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "recommendedCitation": "harvard"
+    },
+    "facts": [],
+    "note": "Fakultetska tipografija (FFRI Pravilnik 2023: Times New Roman 12, prored 1,5, margine 2,5 cm, obostrano) uz odsjecki citatni stil: iskljucivo unutartekstne citatnice, prezime-godina (Upute 2021). Odsjecke upute citane izravno.",
+    "sources": [
+      {
+        "title": "Upute za izradu diplomskoga rada (Odsjek za kulturalne studije FFRI, 2021)",
+        "url": "https://www.ffri.uniri.hr/files/dokumentiodsjeka/KULT/Upute_za_izradu_dipl_rada.pdf"
+      },
+      {
+        "title": "Pravilnik o diplomskom radu (FFRI, 2023)",
+        "url": "https://ffri.uniri.hr/wp-content/uploads/Pravilnik_o_diplomskom_radu-2023.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu diplomskoga rada (Odsjek za kulturalne studije FFRI, 2021)",
+      "Pravilnik o diplomskom radu (FFRI, 2023)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Format papira",
+      "Margine",
+      "Stil citiranja (odsjecke upute)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna diplomska rada (Odsjek za kulturalne studije FFRI (interdisciplinarne humanistike)) iz sluzbenog repozitorija (repository.ffri.uniri.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "ffri:515",
+          "repository": "repository.ffri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 81,
+          "sha256": "570535efaa8ee58c10f43dca28167fdc4df02934e8f48dea943366758093aa3c",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ffri:516",
+          "repository": "repository.ffri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 50,
+          "sha256": "1f76de38036e82cf75b971ba4fd49d94958e0eed9aa73a9a4f04249053bb05eb",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ffri:517",
+          "repository": "repository.ffri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 53,
+          "sha256": "548177f96186d4c08cfd6ae7a0b002eeb480fc7cf778f072f909289e0f9e0694",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ffri:519",
+          "repository": "repository.ffri.uniri.hr",
+          "pageFormat": "A4",
+          "pages": 52,
+          "sha256": "b96e6c9cf84bb1e711240904479d038646a23ad4cb2a8d38d9fde51d6e9df6ea",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (ffri:515, ffri:516, ffri:517, ffri:519) prolaze PDF preflight: valjan nesifriran PDF, viselistni (50-81 str.), A4 (595x842 pt)."
       ]
     }
   }
