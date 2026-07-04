@@ -30878,7 +30878,7 @@
       "size": [
         12
       ],
-      "spacing": 2.0,
+      "spacing": 2,
       "requireA4": true,
       "margins": {
         "top": 2.5,
@@ -31797,6 +31797,224 @@
         "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
       ],
       "productDecision": "PDF preflight je plitak (A4 + integritet + razina/odjel iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
+  },
+  {
+    "id": "unizd-psihologija-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za psihologiju (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Psihologija, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3
+      },
+      "recommendedCitation": "apa7"
+    },
+    "facts": [],
+    "note": "Odjelne Upute za izradu diplomskog rada (10.9.2021): 'Rad treba pisati fontom Times New Roman, velicine 12pt uz prored 1,5', A4, rubnice lijeva 30 mm, ostale 25 mm. Citiranje: 'Formalno uredenje teksta treba biti sukladno APA standardima' uz Prirucnik APA 2020 (7. izdanje) -> apa7. Obostrano poravnanje nije propisano.",
+    "sources": [
+      {
+        "title": "Upute za izradu diplomskog rada (Odjel za psihologiju, Zadar, 2021)",
+        "url": "https://psihologija.unizd.hr/Portals/12/Upute%20za%20izradu%20diplomskog%20rada.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu diplomskog rada (Odjel za psihologiju, Zadar, 2021)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Stil citiranja (APA)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna diplomska rada psihologije (Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:150",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 72,
+          "sha256": "b3461f3efd9037b0affb26bcbc58635b4ed90d9fd9c34fd515a8ee3f6d9c2dba",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:230",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 87,
+          "sha256": "b9585171edc8bdbcdf452dea246092818ae3f18b83d0bbe1ccb7b63721335927",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:332",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 64,
+          "sha256": "4abfe54582f8302bcbcdffa7c07509e9518bfa5645e4a616a41a79a6be1bd5e1",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:606",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 65,
+          "sha256": "f62804f45c0d368e8ac9c9f0dcc39aad9fe4c8911a1f45940aa599ee648722af",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (unizd:150, unizd:230, unizd:332, unizd:606) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (64-87 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "unizd-povijest-umj-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za povijest umjetnosti (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Povijest umjetnosti, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3.5
+      },
+      "recommendedCitation": "harvard"
+    },
+    "facts": [],
+    "note": "Odjelne Upute za prijavu i izradu diplomskoga rada (ozujak 2019, KLASA 602-04/19-08/03): TNR 12, prored 1,5, margine lijevo 3,5 / ostale 2,5 cm, A4, obostrano poravnanje. Citiranje: 'Oblikovanje popisa koristene literature i izvora prema tzv. Harvardskom stilu (AUTOR, GODINA, str.) ali s podnoznim biljeskama' -> harvard (isti hibrid kao zavrsni pin).",
+    "sources": [
+      {
+        "title": "Upute za prijavu i izradu diplomskoga rada (Odjel za povijest umjetnosti, Zadar, 2019)",
+        "url": "https://pum.unizd.hr/Portals/11/Odjel/Upute_za_prijavu_i_izradu_diplomskoga_rada.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za prijavu i izradu diplomskoga rada (Odjel za povijest umjetnosti, Zadar, 2019)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Opseg (30/45 kartica)",
+      "Stil citiranja (Harvard autor-godina)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna diplomska rada povijesti umjetnosti (Sveuciliste u Zadru) iz sluzbenog repozitorija (repozitorij.unizd.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016,
+          2017
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "unizd:832",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 80,
+          "sha256": "4eb51a65ed0c8e6dcbb29fbe2f91ed455a0518aa3a7fa820b3a4b868546480fe",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:833",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 188,
+          "sha256": "15a92a3c71b913dd0d17f1d2711c7939ee3864bdd87846cb18197d98552ec9e0",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:834",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 90,
+          "sha256": "fc1a3237745a9352a0854306b1e16a171d929391841b46dbcdaff0bd488e9ffc",
+          "level": "diplomski"
+        },
+        {
+          "pid": "unizd:1261",
+          "repository": "repozitorij.unizd.hr",
+          "pageFormat": "A4",
+          "pages": 89,
+          "sha256": "b52d08e1fa1202f8b069fa39c7a21f9ee603e4c0eabce79af560f4349ccdd927",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (unizd:832, unizd:833, unizd:834, unizd:1261) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (80-188 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
     }
   }
 ]
