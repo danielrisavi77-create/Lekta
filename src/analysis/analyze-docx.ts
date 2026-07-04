@@ -15,7 +15,7 @@ import { buildLegalCitationEngine } from '../citations/legal-citation';
 import { extractCitations, extractReferences } from '../citations/author-year';
 import { typoLint, typoLintSummary } from '../tools/typo-lint';
 import { citationMeta } from '../citations/citation-meta';
-import { PROFILE_STATUS as PROFILE_STATUS_SRC } from '../profiles/profile-registry';
+import { PROFILE_STATUS as PROFILE_STATUS_SRC } from '../profiles/profile-status-loader';
 const PROFILE_STATUS: any = PROFILE_STATUS_SRC;
 import { SOCIAL_METHOD_REGISTRY } from '../methodology/methodology-loader';
 import { APP_VERSION } from '../config/app-version';

@@ -24,7 +24,7 @@ import { applyScoredAdvisory } from '../profiles/advisory-demotion';
 import { ZAGREB_CATALOG } from '../catalog/catalog-loader';
 import { workTypesForSelection, pickWorkType, isWorkTypeLocked, citationForDefinition, isCitationLocked } from './work-selection';
 // (R3) zajednicka normalizacija check* zastavica, dijeli se s golden resolveProfile
-import { analyzeDocx } from '../analysis/analyze-docx';
+import { analyzeDocxOffThread } from '../analysis/analyze-docx-client';
 import { normalizeCheckFlags } from '../profiles/profile-baseline';
 import { citationMeta } from '../citations/citation-meta';
 import { APP_VERSION } from '../config/app-version';
@@ -415,7 +415,7 @@ async function runAnalysis(){if(!selectedDocx)return;const {id,p}=currentProfile
  currentPdfAudit=selectedPdf?await safeAux(()=>analyzePdfFile(selectedPdf),'PDF preflight'):null;
  currentMetadataAudit=selectedMetadataDocx?await safeAux(()=>analyzeMetadataDocx(selectedMetadataDocx),'zasebni Word'):null;
  const core=await safeAux(()=>docxCoreMetadata(selectedDocx),'metapodaci')||{};
- const result=await analyzeDocx(docxFile,p,settings,progress);
+ const result=await analyzeDocxOffThread(docxFile,p,settings,progress);
  if(token!==_analyzeToken||selectedDocx!==docxFile)return; // pokrenuta je novija analiza; odbaci zastarjeli rezultat
  result.details=result.details||{};result.details.docxCore=core;result.details.pdfPreflight=currentPdfAudit;result.details.metadataDocument=currentMetadataAudit;result.details.avFile=selectedAvFile?{name:selectedAvFile.name,size:selectedAvFile.size,type:selectedAvFile.type}:null;result.details.submissionPhase=settings.submissionPhase;currentResult=result;renderResult(currentResult);saveAnalysisHistory(currentResult)}catch(e){if(token!==_analyzeToken)return;console.error(e);currentResult=null;currentPdfAudit=null;currentMetadataAudit=null;toast(analysisErrorMessage(e));$('#progressView').classList.add('hidden');$('#wizardView').classList.remove('hidden')}finally{if(token===_analyzeToken&&analyzeBtn)analyzeBtn.disabled=false}}
 // Izvrsi pomocnu analizu (aux datoteka); nikad ne baca - neuspjeh vrati null i zabiljezi u konzolu.

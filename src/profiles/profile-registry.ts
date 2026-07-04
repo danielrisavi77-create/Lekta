@@ -6,7 +6,6 @@
  */
 import rawVerified from '../../data/profiles/verified-profiles.json';
 import rawLegal from '../../data/profiles/legal-departments.json';
-import rawStatus from '../../data/profiles/profile-status.json';
 import rawAuthority from '../../data/profiles/profile-authority.json';
 import rawBase from '../../data/profiles/base-profiles.json';
 import rawFpzgPartial from '../../data/profiles/fpzg-partial.json';
@@ -84,8 +83,7 @@ export const VERIFIED_PROFILES_WITH_DRAFTS: VerifiedProfile[] =
 export const LEGAL_DEPARTMENTS_WITH_DRAFTS: LegalDepartment[] =
   LEGAL_DEPARTMENT_REGISTRY.map(withDrafts);
 
-export const PROFILE_STATUS =
-  rawStatus as unknown as Record<ProfileStatusKey, ProfileStatusMeta>;
+export { PROFILE_STATUS } from './profile-status-loader';
 
 export const PROFILE_AUTHORITY =
   rawAuthority as unknown as Record<RuleAuthorityKey, ProfileAuthorityMeta>;
