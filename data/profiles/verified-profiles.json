@@ -19442,7 +19442,7 @@
       }
     },
     "facts": [],
-    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet elektrotehnike, racunarstva i informacijskih tehnologija Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno. Citat IEEE iz Uputa. Validacija blokirana: FERIT objavljuje samo produzeni sazetak (puni rad embargiran).",
+    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Fakultet elektrotehnike, racunarstva i informacijskih tehnologija Osijek, Sveuciliste Josipa Jurja Strossmayera u Osijeku), citano izravno. Citat IEEE iz Uputa. Field-sampled 4 stvarna javna diplomska rada iz FERIT repozitorija (repozitorij.etfos.hr).",
     "sources": [
       {
         "title": "Upute za izradu diplomskog rada (FERIT)",
@@ -19460,7 +19460,63 @@
       "Velicina slova",
       "Margine"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna diplomska rada (Fakultet elektrotehnike, racunarstva i informacijskih tehnologija Osijek) iz sluzbenog repozitorija (repozitorij.etfos.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015,
+          2016
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "etfos:136",
+          "repository": "repozitorij.etfos.hr",
+          "pageFormat": "A4",
+          "pages": 102,
+          "sha256": "544a131f9349f61761294978f40283e0f3fbe2421b065f9ebfa7486d5efbe2b5",
+          "level": "diplomski"
+        },
+        {
+          "pid": "etfos:407",
+          "repository": "repozitorij.etfos.hr",
+          "pageFormat": "A4",
+          "pages": 55,
+          "sha256": "16d012782a880e92f924a212b7c425da2c4f24c2d52f5b85e4a39cf91eca26ee",
+          "level": "diplomski"
+        },
+        {
+          "pid": "etfos:469",
+          "repository": "repozitorij.etfos.hr",
+          "pageFormat": "A4",
+          "pages": 55,
+          "sha256": "e4710ca9b5dcd688e7c0fadc81108ea3d3510bc794958c773b1454e3dbbe29ca",
+          "level": "diplomski"
+        },
+        {
+          "pid": "etfos:470",
+          "repository": "repozitorij.etfos.hr",
+          "pageFormat": "A4",
+          "pages": 81,
+          "sha256": "5b5bbc7cdcdf69325240e847d5bb66d17716358c3eaf85f99098a4738ae610c2",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (etfos:136, etfos:407, etfos:469, etfos:470) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (55-102 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
+    }
   },
   {
     "id": "grafos-zavrsni",
