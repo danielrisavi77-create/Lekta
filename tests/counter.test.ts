@@ -49,6 +49,18 @@ describe('countText', () => {
     expect(countText('Bez tocke na kraju').sentences).toBe(1);
   });
 
+  it('kratice ne napuhavaju broj recenica', () => {
+    expect(countText('Rad je napisao dr. sc. Ivan Ivić.').sentences).toBe(1);
+    expect(countText('Vidi npr. tab. 3 i sl.').sentences).toBe(1);
+    expect(countText('Prva rečenica. Druga rečenica.').sentences).toBe(2);
+  });
+
+  it('decimale i redni brojevi ne broje se kao kraj recenice', () => {
+    expect(countText('Uzorak iznosi 3.5 kg.').sentences).toBe(1);
+    expect(countText('Obranjeno 2. svibnja 2020. godine.').sentences).toBe(1);
+    expect(countText('Cijena je 1.250,00 eura.').sentences).toBe(1);
+  });
+
   it('procjena vremena citanja raste s brojem rijeci', () => {
     const m = countText(Array.from({ length: 400 }, () => 'rijec').join(' '));
     expect(m.words).toBe(400);

@@ -90,7 +90,12 @@ function init() {
   });
 
   $('#tp-clear')?.addEventListener('click', () => {
-    for (const sel of Object.values(FIELDS)) { const el = $(sel); if (el) el.value = ''; }
+    // Select (#tp-worktype) nema value= na opcijama, pa el.value='' daje selectedIndex=-1
+    // i prazan prikaz; zato select vracamo na prvu opciju, ostalo praznimo (kao izjava).
+    for (const sel of Object.values(FIELDS)) {
+      const el = $(sel); if (!el) continue;
+      if (el.tagName === 'SELECT') el.selectedIndex = 0; else el.value = '';
+    }
     render();
     $('#tp-university')?.focus();
   });

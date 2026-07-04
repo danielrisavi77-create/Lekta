@@ -20,6 +20,28 @@ function normalize(text: string): string {
   return text.replace(/\r\n?/g, '\n');
 }
 
+// Kratice koje zavrsavaju tockom a nisu kraj recenice (uobicajene u akademskom hrvatskom).
+const ABBREVIATIONS = [
+  'dr', 'sc', 'mr', 'prof', 'doc', 'akad', 'npr', 'itd', 'tj', 'tzv', 'god', 'st', 'br',
+  'sv', 'čl', 'op', 'cit', 'odn', 'ur', 'izv', 'usp', 'vidi', 'str', 'tab', 'sl',
+];
+const ABBREV_RE = new RegExp('\\b(' + ABBREVIATIONS.join('|') + ')\\.', 'gi');
+
+/**
+ * Broj recenica bez laznog napuhavanja na kraticama, decimalama i rednim brojevima.
+ * Prvo neutralizira tocke unutar brojeva (3.5, 1.000), poznate kratice (dr. sc. -> dr sc)
+ * i redne brojeve ispred malog slova (2. svibnja), pa broji skupine zavrsne interpunkcije.
+ */
+function countSentences(trimmed: string): number {
+  if (!trimmed) return 0;
+  const s = trimmed
+    .replace(/(\d)[.,](?=\d)/g, '$1') // decimalni/tisucni separator unutar broja
+    .replace(ABBREV_RE, '$1') // poznate kratice
+    .replace(/(\d)\.(?=\s*\p{Ll})/gu, '$1'); // redni broj ispred malog slova ("2. svibnja")
+  const terminators = (s.match(/[.!?…]+/g) || []).length;
+  return Math.max(1, terminators);
+}
+
 export function countText(input: string): TextMetrics {
   const text = normalize(input || '');
   const trimmed = text.trim();
@@ -35,9 +57,8 @@ export function countText(input: string): TextMetrics {
   // dokument ne prijavi 1 stranicu dok su ostale metrike 0.
   const pages = trimmed ? Math.max(1, Math.ceil(karticeRaw)) : 0;
 
-  // Recenice: skupine zavrsnih interpunkcija; ako ima teksta bez terminatora, to je 1.
-  const terminators = (trimmed.match(/[.!?…]+/g) || []).length;
-  const sentences = trimmed ? Math.max(1, terminators) : 0;
+  // Recenice: skupine zavrsnih interpunkcija, uz preskakanje kratica/decimala/rednih brojeva.
+  const sentences = countSentences(trimmed);
 
   // Odlomci: blokovi teksta odvojeni prijelomom retka.
   const paragraphs = trimmed
