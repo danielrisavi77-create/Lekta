@@ -1071,6 +1071,36 @@
           "Prijediplomski studiji PMFST bio/kem (zavrsni rad)",
           "Diplomski studiji PMFST bio/kem"
         ]
+      },
+      {
+        "id": "ffst",
+        "name": "Filozofski fakultet u Splitu",
+        "family": "social",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski studiji FFST (zavrsni rad)",
+          "Diplomski studiji FFST"
+        ]
+      },
+      {
+        "id": "fesb",
+        "name": "Fakultet elektrotehnike, strojarstva i brodogradnje (FESB)",
+        "family": "stem",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski studiji FESB (zavrsni rad)",
+          "Diplomski studiji FESB"
+        ]
+      },
+      {
+        "id": "pravst",
+        "name": "Pravni fakultet u Splitu",
+        "family": "social",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski/integrirani studij (zavrsni rad), Pravni fakultet u Splitu",
+          "Diplomski/integrirani studij, Pravni fakultet u Splitu"
+        ]
       }
     ]
   },
