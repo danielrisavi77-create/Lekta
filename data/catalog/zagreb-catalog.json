@@ -1536,7 +1536,9 @@
         "family": "biomed",
         "status": "partial",
         "programs": [
-          "Specijalistički diplomski stručni studiji (Veleučilište u Bjelovaru)"
+          "Specijalistički diplomski stručni studiji (Veleučilište u Bjelovaru)",
+          "Stručni prijediplomski studiji Mehatronika i Računarstvo (završni rad, Veleučilište u Bjelovaru)",
+          "Stručni prijediplomski studij Sestrinstvo (završni rad, Veleučilište u Bjelovaru)"
         ]
       }
     ]
@@ -1551,7 +1553,9 @@
         "family": "mixed",
         "status": "partial",
         "programs": [
-          "Prijediplomski stručni studiji (završni rad, Međimursko veleučilište)"
+          "Stručni prijediplomski studiji Računarstvo i Održivi razvoj (završni rad, Međimursko veleučilište)",
+          "Stručni prijediplomski studij Menadžment turizma i sporta (završni rad, Međimursko veleučilište)",
+          "Specijalistički diplomski stručni studij Menadžment turizma i sporta (Međimursko veleučilište)"
         ]
       }
     ]
@@ -1582,7 +1586,8 @@
         "family": "mixed",
         "status": "partial",
         "programs": [
-          "Stručni prijediplomski studiji (završni rad, Veleučilište u Vukovaru)"
+          "Stručni prijediplomski studiji (završni rad, Veleučilište u Vukovaru)",
+          "Stručni diplomski studiji (Veleučilište u Vukovaru)"
         ]
       }
     ]
@@ -1613,7 +1618,8 @@
         "family": "mixed",
         "status": "partial",
         "programs": [
-          "Stručni prijediplomski studiji (završni rad, Veleučilište u Kninu)"
+          "Stručni prijediplomski studiji (završni rad, Veleučilište u Kninu)",
+          "Stručni diplomski studiji (Veleučilište u Kninu)"
         ]
       }
     ]

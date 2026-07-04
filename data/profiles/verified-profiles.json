@@ -24281,7 +24281,7 @@
     ],
     "status": "partial",
     "profileLabel": "Veleuciliste Rijeka, zavrsni rad",
-    "verifiedAt": "2026-07-03",
+    "verifiedAt": "2026-07-04",
     "documentDate": null,
     "rules": {
       "font": [
@@ -24304,18 +24304,24 @@
       ],
       "footnoteSize": [
         10
-      ]
+      ],
+      "recommendedCitation": "harvard"
     },
     "facts": [],
-    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Veleuciliste u Rijeci, Veleuciliste u Rijeci), citano izravno.",
+    "note": "Tehnicko uredenje iz Uputa za formalni izgled rada (aktualna verzija 2025-11; TNR 12, prored 1,5, obostrano, margine 30 mm gore/dolje/lijevo i 20 mm desno, A4). Citiranje: autor-godina u zagradama u tekstu ('Izvori citata ili parafraza u samom tekstu navode se u zagradi, npr. (Dujanic, 2020, 55)'), fusnote izricito samo objasnidbene, stil neimenovan -> harvard. Opseg po Pravilniku 4.3.2025 cl. 13 (min 30/40 str.).",
     "sources": [
       {
-        "title": "Upute za formalni izgled završnog i diplomskog rada Veleučilišta u Rijeci",
-        "url": "https://www.veleri.hr/sites/default/files/2023-01/upute-za-formalni-izgled-zavrsnog-i-diplomskog-rada-veleucilista-u-rijeci_0_0.pdf"
+        "title": "Upute za formalni izgled zavrsnog i diplomskog rada (Veleuciliste u Rijeci, 2025)",
+        "url": "https://www.veleri.hr/sites/default/files/2025-11/3._Upute_za_formalni_izgled_rada.pdf"
+      },
+      {
+        "title": "Pravilnik o zavrsnom i diplomskom radu (Veleuciliste u Rijeci, 4.3.2025)",
+        "url": "https://www.veleri.hr/sites/default/files/2025-11/1._Pravilnik_o_zavrsnom_i_diplomskom_radu.pdf"
       }
     ],
     "sourceHierarchy": [
-      "Upute za formalni izgled završnog i diplomskog rada Veleučilišta u Rijeci"
+      "Upute za formalni izgled zavrsnog i diplomskog rada (Veleuciliste u Rijeci, 2025)",
+      "Pravilnik o zavrsnom i diplomskom radu (Veleuciliste u Rijeci, 4.3.2025)"
     ],
     "ruleAuthority": "official-program-guidelines",
     "normativeScope": [
@@ -24327,9 +24333,66 @@
       "Margine",
       "Vrsta slova biljeske",
       "Velicina slova biljeske",
-      "Opseg (min 30 str.)"
+      "Opseg (min 30 str.)",
+      "Stil citiranja (autor-godina)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna zavrsna rada (Veleuciliste u Rijeci) iz sluzbenog repozitorija (repozitorij.veleri.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2017,
+          2020
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "veleri:718",
+          "repository": "repozitorij.veleri.hr",
+          "pageFormat": "A4",
+          "pages": 49,
+          "sha256": "5fe521f70d85765619018d9c22c25f6a6360184f44334062b587ebbf48579499",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "veleri:1971",
+          "repository": "repozitorij.veleri.hr",
+          "pageFormat": "A4",
+          "pages": 56,
+          "sha256": "70cf7793cfff59ef9542360a46b8bbab875399b3f85524184dc0d3ac14bf241f",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "veleri:1974",
+          "repository": "repozitorij.veleri.hr",
+          "pageFormat": "A4",
+          "pages": 49,
+          "sha256": "241700313dbada80fdefdffff3ee9bc4375aafe91db745eb47f4d1a564243181",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "veleri:1975",
+          "repository": "repozitorij.veleri.hr",
+          "pageFormat": "A4",
+          "pages": 47,
+          "sha256": "432ff1dc3b7d93ce2cec01be8c09406168f2496d09cf7d0630c895f7e5ea9d14",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (veleri:718, veleri:1971, veleri:1974, veleri:1975) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (47-56 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
   },
   {
     "id": "veleri-diplomski",
@@ -24342,7 +24405,7 @@
     ],
     "status": "partial",
     "profileLabel": "Veleuciliste Rijeka, diplomski rad",
-    "verifiedAt": "2026-07-03",
+    "verifiedAt": "2026-07-04",
     "documentDate": null,
     "rules": {
       "font": [
@@ -24365,18 +24428,24 @@
       ],
       "footnoteSize": [
         10
-      ]
+      ],
+      "recommendedCitation": "harvard"
     },
     "facts": [],
-    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Veleuciliste u Rijeci, Veleuciliste u Rijeci), citano izravno.",
+    "note": "Tehnicko uredenje iz Uputa za formalni izgled rada (aktualna verzija 2025-11; TNR 12, prored 1,5, obostrano, margine 30 mm gore/dolje/lijevo i 20 mm desno, A4). Citiranje: autor-godina u zagradama u tekstu ('Izvori citata ili parafraza u samom tekstu navode se u zagradi, npr. (Dujanic, 2020, 55)'), fusnote izricito samo objasnidbene, stil neimenovan -> harvard. Opseg po Pravilniku 4.3.2025 cl. 13 (min 30/40 str.).",
     "sources": [
       {
-        "title": "Upute za formalni izgled završnog i diplomskog rada Veleučilišta u Rijeci",
-        "url": "https://www.veleri.hr/sites/default/files/2023-01/upute-za-formalni-izgled-zavrsnog-i-diplomskog-rada-veleucilista-u-rijeci_0_0.pdf"
+        "title": "Upute za formalni izgled zavrsnog i diplomskog rada (Veleuciliste u Rijeci, 2025)",
+        "url": "https://www.veleri.hr/sites/default/files/2025-11/3._Upute_za_formalni_izgled_rada.pdf"
+      },
+      {
+        "title": "Pravilnik o zavrsnom i diplomskom radu (Veleuciliste u Rijeci, 4.3.2025)",
+        "url": "https://www.veleri.hr/sites/default/files/2025-11/1._Pravilnik_o_zavrsnom_i_diplomskom_radu.pdf"
       }
     ],
     "sourceHierarchy": [
-      "Upute za formalni izgled završnog i diplomskog rada Veleučilišta u Rijeci"
+      "Upute za formalni izgled zavrsnog i diplomskog rada (Veleuciliste u Rijeci, 2025)",
+      "Pravilnik o zavrsnom i diplomskom radu (Veleuciliste u Rijeci, 4.3.2025)"
     ],
     "ruleAuthority": "official-program-guidelines",
     "normativeScope": [
@@ -24388,9 +24457,67 @@
       "Margine",
       "Vrsta slova biljeske",
       "Velicina slova biljeske",
-      "Opseg (min 40 str.)"
+      "Opseg (min 40 str.)",
+      "Stil citiranja (autor-godina)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna diplomska rada (Veleuciliste u Rijeci, strucni diplomski) iz sluzbenog repozitorija (repozitorij.veleri.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016,
+          2017,
+          2018
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "veleri:174",
+          "repository": "repozitorij.veleri.hr",
+          "pageFormat": "A4",
+          "pages": 123,
+          "sha256": "8dfe366224499ce43b274b86f13db7f94ea083c0f866c397cd1da4bd86d33803",
+          "level": "diplomski"
+        },
+        {
+          "pid": "veleri:931",
+          "repository": "repozitorij.veleri.hr",
+          "pageFormat": "A4",
+          "pages": 84,
+          "sha256": "5518a342be0feadc1d6d063712c07fba31199742e24b7b1e1391ba0ea8da81e6",
+          "level": "diplomski"
+        },
+        {
+          "pid": "veleri:1140",
+          "repository": "repozitorij.veleri.hr",
+          "pageFormat": "A4",
+          "pages": 67,
+          "sha256": "8b5830e5ca62babec9e5adf9e71694fd012293644bd0ad7332370ad539be7054",
+          "level": "diplomski"
+        },
+        {
+          "pid": "veleri:1141",
+          "repository": "repozitorij.veleri.hr",
+          "pageFormat": "A4",
+          "pages": 82,
+          "sha256": "10b0d7263a39cb4455a77ac8151892919934bfdf7ea663cfb4870aabaf6b1b01",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (veleri:174, veleri:931, veleri:1140, veleri:1141) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (67-123 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
   },
   {
     "id": "vub-diplomski",
@@ -24444,22 +24571,26 @@
       "Margine",
       "Stil citiranja (Vancouver)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "validationNote": "Validacija podatkovno blokirana: repozitorij.vub.hr (1437 zapisa, puni OAI set) nema NIJEDAN diplomski rad ni pod embargom; strucni diplomski studij Sestrinstvo je nov pa radovi jos nisu deponirani (provjereno 2026-07-04)."
   },
   {
     "id": "mev-zavrsni",
     "unitId": "mev",
     "programs": [
-      "Prijediplomski stručni studiji (završni rad, Međimursko veleučilište)"
+      "Stručni prijediplomski studiji Računarstvo i Održivi razvoj (završni rad, Međimursko veleučilište)"
     ],
     "workTypes": [
       "final"
     ],
     "status": "partial",
-    "profileLabel": "Medimursko veleuciliste, zavrsni rad",
-    "verifiedAt": "2026-07-03",
+    "profileLabel": "MEV tehnicki studiji, zavrsni rad",
+    "verifiedAt": "2026-07-04",
     "documentDate": null,
     "rules": {
+      "font": [
+        "Times New Roman"
+      ],
       "size": [
         12
       ],
@@ -24467,37 +24598,99 @@
       "justify": true,
       "requireA4": true,
       "margins": {
-        "top": 3,
-        "right": 3,
-        "bottom": 3,
-        "left": 3
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
       },
       "footnoteSize": [
         10
-      ]
+      ],
+      "recommendedCitation": "vancouver"
     },
     "facts": [],
-    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Medimursko veleuciliste u Cakovcu, Medimursko veleuciliste u Cakovcu), citano izravno.",
+    "note": "Pravilnik 19.9.2024 cl. 10 st. 2 cini Prilog 2 obvezujucim. Tehnicki predlozak: A4, margine 2,5 cm, TNR 12 (fusnote 10), prored 1,5, obostrano. Citiranje: 'Literatura se navodi vancouverskim stilom citiranja' (uglata zagrada) -> vancouver. Zamjenjuje stariju tipografiju (margine 3 cm) iz starog Priloga 3.",
     "sources": [
       {
-        "title": "Upute za izradu završnog rada (Međimursko veleučilište u Čakovcu, Prilog 3)",
-        "url": "https://www.mev.hr/wp-content/uploads/2013/12/Prilog-3-Upute-za-izradu-zavr%C5%A1nog-rada.pdf"
+        "title": "Pravilnik o zavrsnom i diplomskom radu (Medimursko veleuciliste u Cakovcu, 19.9.2024)",
+        "url": "https://www.mev.hr/wp-content/uploads/2024/09/Pravilnik-o-zavrsnom-i-diplomskom-radu.pdf"
+      },
+      {
+        "title": "Prilog 2 - Predlozak za pisanje zavrsnog rada, tehnicki i interdisciplinarni tehnicki studiji (MEV)",
+        "url": "https://www.mev.hr/wp-content/uploads/2025/06/Predlozak-za-pisanje-zavrsnog-rada-tehnicki-interdisciplinarni-tehnicki-studiji.dotx"
       }
     ],
     "sourceHierarchy": [
-      "Upute za izradu završnog rada (Međimursko veleučilište u Čakovcu, Prilog 3)"
+      "Pravilnik o zavrsnom i diplomskom radu (Medimursko veleuciliste u Cakovcu, 19.9.2024)",
+      "Prilog 2 - Predlozak za pisanje zavrsnog rada, tehnicki i interdisciplinarni tehnicki studiji (MEV)"
     ],
     "ruleAuthority": "official-program-guidelines",
     "normativeScope": [
       "Format papira",
-      "Velicina slova",
-      "Obostrano poravnanje",
       "Margine",
+      "Vrsta slova",
+      "Velicina slova",
       "Prored",
-      "Velicina slova fusnote",
-      "Opseg (najmanje 30 str.)"
+      "Obostrano poravnanje",
+      "Opseg (min 30 str.)",
+      "Stil citiranja (Vancouver)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna zavrsna rada (MEV, tehnicki studiji) iz sluzbenog repozitorija (repozitorij.mev.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2022
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "mev:1367",
+          "repository": "repozitorij.mev.hr",
+          "pageFormat": "A4",
+          "pages": 75,
+          "sha256": "2cf0578fa3ea8f6c017bb0c64e7727790f16359695143ccd75d105369534fbea",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "mev:1368",
+          "repository": "repozitorij.mev.hr",
+          "pageFormat": "A4",
+          "pages": 59,
+          "sha256": "352841aef6150f73ffdaf90461e8d7e19597511b37d393fda5d109d048e8afdc",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "mev:1369",
+          "repository": "repozitorij.mev.hr",
+          "pageFormat": "A4",
+          "pages": 53,
+          "sha256": "e4cebd009f00063bb953c6c1d50c07d8ffabb4faa5d70c79263df40610474475",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "mev:1370",
+          "repository": "repozitorij.mev.hr",
+          "pageFormat": "A4",
+          "pages": 52,
+          "sha256": "3b03b2f8de152d349e1fbb7089723a4bc639130cf063df0695c3d2f871eb55ec",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (mev:1367, mev:1368, mev:1369, mev:1370) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (52-75 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
   },
   {
     "id": "vvg-zavrsni",
@@ -24697,7 +24890,7 @@
     ],
     "status": "partial",
     "profileLabel": "Veleuciliste Vukovar, zavrsni rad",
-    "verifiedAt": "2026-07-03",
+    "verifiedAt": "2026-07-04",
     "documentDate": null,
     "rules": {
       "font": [
@@ -24714,18 +24907,19 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "recommendedCitation": "harvard"
     },
     "facts": [],
-    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Veleuciliste Lavoslav Ruzicka u Vukovaru), citano izravno.",
+    "note": "Prilog 4 Upute (isti dokument za zavrsni i diplomski): A4, sve margine 25 mm, TNR 12 (poglavlja 14 bold), prored 1,5, obostrano. Citiranje: 'u zagradi se upisuje prezime autora, godina izdanja izvora' (autor-godina, neimenovan) -> harvard; fusnote samo za pojasnjenja i pravne propise.",
     "sources": [
       {
-        "title": "Prilog 4 - Upute za izradu završnog rada (Veleučilište Lavoslav Ružička u Vukovaru)",
-        "url": "http://www.vevu.hr/uploads/50Prilog-4-Upute-za-izradu-zavrsnog-rada.pdf"
+        "title": "Prilog 4 - Upute za izradu zavrsnog/diplomskog rada (Veleuciliste Lavoslav Ruzicka u Vukovaru)",
+        "url": "https://www.vevu.hr/wp-content/uploads/2023/02/P-r-i-l-o-g-4-UPUTE.docx"
       }
     ],
     "sourceHierarchy": [
-      "Prilog 4 - Upute za izradu završnog rada (Veleučilište Lavoslav Ružička u Vukovaru)"
+      "Prilog 4 - Upute za izradu zavrsnog/diplomskog rada (Veleuciliste Lavoslav Ruzicka u Vukovaru)"
     ],
     "ruleAuthority": "official-program-guidelines",
     "normativeScope": [
@@ -24734,9 +24928,66 @@
       "Vrsta slova",
       "Velicina slova",
       "Prored",
-      "Obostrano poravnanje"
+      "Obostrano poravnanje",
+      "Stil citiranja (autor-godina)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna zavrsna rada (VEVU) iz sluzbenog repozitorija (repozitorij.vevu.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2023,
+          2024
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "vevu:1496",
+          "repository": "repozitorij.vevu.hr",
+          "pageFormat": "A4",
+          "pages": 48,
+          "sha256": "13797cdc1217efcd14aaf7e8d6bcb04a8cb9a7e2a6725c724d39eeef2dbc52dc",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "vevu:1764",
+          "repository": "repozitorij.vevu.hr",
+          "pageFormat": "A4",
+          "pages": 35,
+          "sha256": "888112a0260c80c8b5767358cd344a89670e08a7fa9795928d6082e6ea009ac8",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "vevu:1803",
+          "repository": "repozitorij.vevu.hr",
+          "pageFormat": "A4",
+          "pages": 29,
+          "sha256": "22eb6be172dc1cb266d0baaec61ac65f8205cad27f1e50bc9f9fc2e08befba30",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "vevu:1820",
+          "repository": "repozitorij.vevu.hr",
+          "pageFormat": "A4",
+          "pages": 52,
+          "sha256": "38fe5ab8910a22abf5dc749ffaaceb25a867ebf4949afec6d540529824b942d0",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (vevu:1496, vevu:1764, vevu:1803, vevu:1820) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (29-52 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
   },
   {
     "id": "vuv-zavrsni",
@@ -24963,7 +25214,7 @@
     ],
     "status": "partial",
     "profileLabel": "Veleuciliste Knin, zavrsni rad",
-    "verifiedAt": "2026-07-03",
+    "verifiedAt": "2026-07-04",
     "documentDate": null,
     "rules": {
       "font": [
@@ -24984,15 +25235,15 @@
       "minReferences": 15
     },
     "facts": [],
-    "note": "Tehnicko uredenje rada iz sluzbenog izvora (Veleuciliste Marko Marulic u Kninu), citano izravno.",
+    "note": "Upute 2024 (pokrivaju zavrsni i diplomski): A4, TNR 12, prored 1,5, margine 2,5 cm, obostrano bez uvlacenja prvog retka, najmanje 15 bibliografskih jedinica, opseg 20-50 str. Citiranje NIJE pinano: 'literaturni izvori navodit ce se prema najnovijoj verziji APA, Vancouverskog i Harvardskog stila' = tri stila na izbor (razliciti modovi) - posten strop.",
     "sources": [
       {
-        "title": "Upute za izradu i obranu završnog rada (Veleučilište Marko Marulić u Kninu, 2020)",
-        "url": "https://www.veleknin.hr/wp-content/uploads/2023/12/uputezaizraduiobranuzavrnograda.pdf"
+        "title": "Upute za izradu zavrsnog/diplomskog rada (Veleuciliste Marko Marulic u Kninu, sijecanj 2024)",
+        "url": "https://www.veleknin.hr/wp-content/uploads/2024/02/Upute-za-za-izradu-zavrsnog-ili-diplomskog-rada.doc"
       }
     ],
     "sourceHierarchy": [
-      "Upute za izradu i obranu završnog rada (Veleučilište Marko Marulić u Kninu, 2020)"
+      "Upute za izradu zavrsnog/diplomskog rada (Veleuciliste Marko Marulic u Kninu, sijecanj 2024)"
     ],
     "ruleAuthority": "official-program-guidelines",
     "normativeScope": [
@@ -25005,7 +25256,63 @@
       "Opseg (najmanje 20 str.)",
       "Najmanji broj izvora literature (15)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna zavrsna rada (Veleuciliste Marko Marulic u Kninu) iz sluzbenog repozitorija (repozitorij.veleknin.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2020,
+          2025
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "veleknin:739",
+          "repository": "repozitorij.veleknin.hr",
+          "pageFormat": "A4",
+          "pages": 30,
+          "sha256": "b1975cda82dab32955673e16c25b7e3a8ac868d4389051d56f3abac54513ae6e",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "veleknin:1026",
+          "repository": "repozitorij.veleknin.hr",
+          "pageFormat": "A4",
+          "pages": 51,
+          "sha256": "61bc44b61a9e28696e93b36b5a0ba531a33219b540e25b043f147efe5382255a",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "veleknin:1083",
+          "repository": "repozitorij.veleknin.hr",
+          "pageFormat": "A4",
+          "pages": 45,
+          "sha256": "67fc86147bf53bf03f9d17bd5c5e6569697cd15293f7f7ab183e4e59cdedfe3c",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "veleknin:1084",
+          "repository": "repozitorij.veleknin.hr",
+          "pageFormat": "A4",
+          "pages": 49,
+          "sha256": "149f6da3b6e63ee51c9e74f5b51beb325ac658806728aa9f9fed0df4178ef4c0",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (veleknin:739, veleknin:1026, veleknin:1083, veleknin:1084) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (30-51 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
   },
   {
     "id": "vhzk-zavrsni",
@@ -25055,7 +25362,8 @@
       "Najmanji broj izvora literature (15)",
       "Stil citiranja (Harvard)"
     ],
-    "advisoryScope": []
+    "advisoryScope": [],
+    "validationNote": "Validacija podatkovno blokirana: VHZK nema vlastiti Dabar repozitorij, a ZIR nema javno dostupnih VHZK radova iako Privremeni pravilnik 2022 (cl. 3 st. 5) nalaze pohranu u ZIR (provjereno 2026-07-04). Napomena: odlukom iz ozujka 2026 VHZK se pripaja Tehnickom veleucilistu u Zagrebu (TVZ)."
   },
   {
     "id": "dizajn-diplomski",
@@ -32526,6 +32834,672 @@
       ],
       "confirmed": [
         "4 stvarna javna diplomska rada (unidu:555, unidu:605, unidu:717, unidu:1435) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (54-84 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "vub-zavrsni-tehnicki",
+    "unitId": "vub",
+    "programs": [
+      "Stručni prijediplomski studiji Mehatronika i Računarstvo (završni rad, Veleučilište u Bjelovaru)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "VUB Mehatronika/Racunarstvo, zavrsni rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "recommendedCitation": "vancouver"
+    },
+    "facts": [],
+    "note": "Upute za pisanje zavrsnog rada Mehatronika i Racunarstvo (srpanj 2025): A4, TNR 12, obostrano, prored 1,5, sve cetiri margine 25 mm. Citiranje: 'Literatura se navodi vancouverskim stilom citiranja' (uglata zagrada [1]) -> vancouver.",
+    "sources": [
+      {
+        "title": "Upute za pisanje zavrsnog rada, Mehatronika i Racunarstvo (Veleuciliste u Bjelovaru, srpanj 2025)",
+        "url": "https://vub.hr/wp-content/uploads/2025/07/upute_za_pisanje_zavrsnog_rada-meh_rac_072025.docx"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pisanje zavrsnog rada, Mehatronika i Racunarstvo (Veleuciliste u Bjelovaru, srpanj 2025)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Stil citiranja (Vancouver)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna zavrsna rada (VUB, tehnicki studiji) iz sluzbenog repozitorija (repozitorij.vub.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016,
+          2020
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "vtsbj:61",
+          "repository": "repozitorij.vub.hr",
+          "pageFormat": "A4",
+          "pages": 57,
+          "sha256": "a2b24f89f761d2fbe078dc07540889b57cdea050aca4577c982ba53ce03f1a30",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "vtsbj:518",
+          "repository": "repozitorij.vub.hr",
+          "pageFormat": "A4",
+          "pages": 129,
+          "sha256": "d5ae7d844a493e559340557e8dafdf0fed3fd183cd01391ffca6c2bd4f07431e",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "vtsbj:521",
+          "repository": "repozitorij.vub.hr",
+          "pageFormat": "A4",
+          "pages": 110,
+          "sha256": "68d3f8a372c8ee449d45524f2a5a4212040201fb6961813c87f8a7065b178a90",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "vtsbj:522",
+          "repository": "repozitorij.vub.hr",
+          "pageFormat": "A4",
+          "pages": 58,
+          "sha256": "f39569319de5d413f7a781799cbf39abe727a173c2bc57769b9e525a057b6dcb",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (vtsbj:61, vtsbj:518, vtsbj:521, vtsbj:522) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (57-129 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "vub-zavrsni-sestrinstvo",
+    "unitId": "vub",
+    "programs": [
+      "Stručni prijediplomski studij Sestrinstvo (završni rad, Veleučilište u Bjelovaru)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "VUB Sestrinstvo, zavrsni rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3
+      },
+      "minReferences": 20,
+      "recommendedCitation": "vancouver"
+    },
+    "facts": [],
+    "note": "Upute za pisanje zavrsnog rada SES (srpanj 2025): A4, TNR 12, obostrano, prored 1,5, lijeva margina 30 mm (uvez) a ostale 25 mm, najmanje 20 referenci. Citiranje: 'Literatura se navodi Vancouverskim stilom citiranja' (okrugla zagrada (1)) -> vancouver.",
+    "sources": [
+      {
+        "title": "Upute za pisanje zavrsnog rada, Sestrinstvo (Veleuciliste u Bjelovaru, srpanj 2025)",
+        "url": "https://vub.hr/wp-content/uploads/2025/07/Upute_za_pisanje_zavrsnog_rada-ses_072025.doc"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pisanje zavrsnog rada, Sestrinstvo (Veleuciliste u Bjelovaru, srpanj 2025)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Najmanje 20 referenci",
+      "Stil citiranja (Vancouver)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna zavrsna rada (VUB, Sestrinstvo) iz sluzbenog repozitorija (repozitorij.vub.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "vtsbj:1",
+          "repository": "repozitorij.vub.hr",
+          "pageFormat": "A4",
+          "pages": 142,
+          "sha256": "f53e8992e9bbb8ab793b5f341c54f2fbcf9e52b893a1effdffa2f35392092e06",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "vtsbj:2",
+          "repository": "repozitorij.vub.hr",
+          "pageFormat": "A4",
+          "pages": 67,
+          "sha256": "499f1c8759d99f5287d0488fa631dd9dd36520657e7883ed1d3ef8af029eb61e",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "vtsbj:3",
+          "repository": "repozitorij.vub.hr",
+          "pageFormat": "A4",
+          "pages": 70,
+          "sha256": "317d9d6ddab19a6cd420b3df7ac8e52cb726e20f2f3f5d6bfb5970f3e59005ee",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "vtsbj:5",
+          "repository": "repozitorij.vub.hr",
+          "pageFormat": "A4",
+          "pages": 49,
+          "sha256": "0e9084659613f710be9abc29798e4f81dceb67c3f0d8c49b4fc38349e503d5f4",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (vtsbj:1, vtsbj:2, vtsbj:3, vtsbj:5) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (49-142 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "mev-zavrsni-drustveni",
+    "unitId": "mev",
+    "programs": [
+      "Stručni prijediplomski studij Menadžment turizma i sporta (završni rad, Međimursko veleučilište)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "MEV Menadzment turizma i sporta, zavrsni rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "footnoteSize": [
+        10
+      ]
+    },
+    "facts": [],
+    "note": "Pravilnik 19.9.2024 + Prilog 2 (drustveni studiji MTS): A4, margine 2,5 cm, TNR 12 (naslov 18, poglavlja 14, fusnote 10), prored 1,5 (fusnote 1), obostrano, uvlaka 0,5 cm, min 30 str. Citiranje NIJE pinano: 'predlaze se' autor-godina (preporuka, ne imperativ) - posten strop.",
+    "sources": [
+      {
+        "title": "Pravilnik o zavrsnom i diplomskom radu (Medimursko veleuciliste u Cakovcu, 19.9.2024)",
+        "url": "https://www.mev.hr/wp-content/uploads/2024/09/Pravilnik-o-zavrsnom-i-diplomskom-radu.pdf"
+      },
+      {
+        "title": "Prilog 2 - Predlozak za pisanje zavrsnog/diplomskog rada, drustveni studiji MTS (MEV)",
+        "url": "https://www.mev.hr/wp-content/uploads/2025/06/Predlozak-za-pisanje-zavrsnog-diplomskog-rada-drustveni-studiji-MTS.dotx"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnom i diplomskom radu (Medimursko veleuciliste u Cakovcu, 19.9.2024)",
+      "Prilog 2 - Predlozak za pisanje zavrsnog/diplomskog rada, drustveni studiji MTS (MEV)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Opseg (min 30 str.)"
+    ],
+    "advisoryScope": [
+      "Stil citiranja (autor-godina predlozen, nije imperativ)"
+    ],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna zavrsna rada (MEV, drustveni studiji) iz sluzbenog repozitorija (repozitorij.mev.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2022
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "mev:1381",
+          "repository": "repozitorij.mev.hr",
+          "pageFormat": "A4",
+          "pages": 65,
+          "sha256": "349f9d58eb446f0da5af32fe47c612655a2e7b29e37ac0327babf686faf5526d",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "mev:1382",
+          "repository": "repozitorij.mev.hr",
+          "pageFormat": "A4",
+          "pages": 47,
+          "sha256": "96f1c37c10a255b10e957294ea52c3ad40948a0f4c47eb5c26cb2d3a720ebec3",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "mev:1383",
+          "repository": "repozitorij.mev.hr",
+          "pageFormat": "A4",
+          "pages": 48,
+          "sha256": "a23addfd2f5eff02d99963116d049e5d4fd55fb96ab7d5f0a6b8a80e1df9a31d",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "mev:1384",
+          "repository": "repozitorij.mev.hr",
+          "pageFormat": "A4",
+          "pages": 47,
+          "sha256": "7c76990efa7fef939bb751d1cba021bb7209565e783d110773ed1eac325556af",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna zavrsna rada (mev:1381, mev:1382, mev:1383, mev:1384) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (47-65 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "mev-diplomski",
+    "unitId": "mev",
+    "programs": [
+      "Specijalistički diplomski stručni studij Menadžment turizma i sporta (Međimursko veleučilište)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "MEV Menadzment turizma i sporta, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "footnoteSize": [
+        10
+      ]
+    },
+    "facts": [],
+    "note": "Pravilnik 19.9.2024 pokriva obje razine (cl. 1); Prilog 2 (drustveni studiji MTS) vrijedi za zavrsni/diplomski rad: A4, margine 2,5 cm, TNR 12, prored 1,5, obostrano, min 30 str. Citiranje nije pinano ('predlaze se' autor-godina).",
+    "sources": [
+      {
+        "title": "Pravilnik o zavrsnom i diplomskom radu (Medimursko veleuciliste u Cakovcu, 19.9.2024)",
+        "url": "https://www.mev.hr/wp-content/uploads/2024/09/Pravilnik-o-zavrsnom-i-diplomskom-radu.pdf"
+      },
+      {
+        "title": "Prilog 2 - Predlozak za pisanje zavrsnog/diplomskog rada, drustveni studiji MTS (MEV)",
+        "url": "https://www.mev.hr/wp-content/uploads/2025/06/Predlozak-za-pisanje-zavrsnog-diplomskog-rada-drustveni-studiji-MTS.dotx"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnom i diplomskom radu (Medimursko veleuciliste u Cakovcu, 19.9.2024)",
+      "Prilog 2 - Predlozak za pisanje zavrsnog/diplomskog rada, drustveni studiji MTS (MEV)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Opseg (min 30 str.)"
+    ],
+    "advisoryScope": [
+      "Stil citiranja (autor-godina predlozen, nije imperativ)"
+    ],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna diplomska rada (MEV, specijalisticki diplomski MTS) iz sluzbenog repozitorija (repozitorij.mev.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2022
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "mev:1341",
+          "repository": "repozitorij.mev.hr",
+          "pageFormat": "A4",
+          "pages": 61,
+          "sha256": "95081006048ca3ed0fad32139368415ce75f7ccac815c35c7ccd47b71f732c7a",
+          "level": "diplomski"
+        },
+        {
+          "pid": "mev:1342",
+          "repository": "repozitorij.mev.hr",
+          "pageFormat": "A4",
+          "pages": 48,
+          "sha256": "ea6cbe8bdd1185761e90663a55f55bdeb85997432fc304f16e2ac09814007559",
+          "level": "diplomski"
+        },
+        {
+          "pid": "mev:1343",
+          "repository": "repozitorij.mev.hr",
+          "pageFormat": "A4",
+          "pages": 52,
+          "sha256": "0b1e2938062712e9e23ee5b826f5856b519b20ebaf014f3f6369900b6f533531",
+          "level": "diplomski"
+        },
+        {
+          "pid": "mev:1344",
+          "repository": "repozitorij.mev.hr",
+          "pageFormat": "A4",
+          "pages": 57,
+          "sha256": "e13cd12e300d038b9fc73f5eef037a1278607d733b6b8147928e64dc8377b5f6",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (mev:1341, mev:1342, mev:1343, mev:1344) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (48-61 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "vevu-diplomski",
+    "unitId": "vevu",
+    "programs": [
+      "Stručni diplomski studiji (Veleučilište u Vukovaru)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "VEVU, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "recommendedCitation": "harvard"
+    },
+    "facts": [],
+    "note": "Prilog 4 Upute pokriva obje razine (naslovnica predloska izrijekom navodi strucne diplomske studije): A4, margine 25 mm, TNR 12, prored 1,5, obostrano. Citiranje autor-godina -> harvard.",
+    "sources": [
+      {
+        "title": "Prilog 4 - Upute za izradu zavrsnog/diplomskog rada (Veleuciliste Lavoslav Ruzicka u Vukovaru)",
+        "url": "https://www.vevu.hr/wp-content/uploads/2023/02/P-r-i-l-o-g-4-UPUTE.docx"
+      }
+    ],
+    "sourceHierarchy": [
+      "Prilog 4 - Upute za izradu zavrsnog/diplomskog rada (Veleuciliste Lavoslav Ruzicka u Vukovaru)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Stil citiranja (autor-godina)"
+    ],
+    "advisoryScope": [],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "2 stvarna javna diplomska rada (VEVU, strucni diplomski) iz sluzbenog repozitorija (repozitorij.vevu.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 2,
+        "metadataSpotChecks": 0,
+        "years": [
+          2023,
+          2024
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "vevu:1455",
+          "repository": "repozitorij.vevu.hr",
+          "pageFormat": "A4",
+          "pages": 46,
+          "sha256": "5bb9046aeab20602b1865dc23de2c633037950b8445991732bd61d65ba7ef70b",
+          "level": "diplomski"
+        },
+        {
+          "pid": "vevu:1710",
+          "repository": "repozitorij.vevu.hr",
+          "pageFormat": "A4",
+          "pages": 49,
+          "sha256": "627941e4af454da0a3a8409e02ba8c1a53f1c55c374a5fdace8c5532d5629fef",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "2 stvarna javna diplomska rada (vevu:1455, vevu:1710) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (46-49 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    },
+    "validationNote": "Repozitorij ima samo 2 otvorena diplomska rada (ostali noviji/restricted); posten podatkovni strop (provjereno 2026-07-04)."
+  },
+  {
+    "id": "veleknin-diplomski",
+    "unitId": "veleknin",
+    "programs": [
+      "Stručni diplomski studiji (Veleučilište u Kninu)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Veleuciliste Marko Marulic Knin, diplomski rad",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "minReferences": 15
+    },
+    "facts": [],
+    "note": "Upute 2024 pokrivaju obje razine: A4, TNR 12, prored 1,5, margine 2,5 cm, obostrano, min 15 referenci, 20-50 str. Citiranje nije pinano (APA/Vancouver/Harvard na izbor = razliciti modovi).",
+    "sources": [
+      {
+        "title": "Upute za izradu zavrsnog/diplomskog rada (Veleuciliste Marko Marulic u Kninu, sijecanj 2024)",
+        "url": "https://www.veleknin.hr/wp-content/uploads/2024/02/Upute-za-za-izradu-zavrsnog-ili-diplomskog-rada.doc"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu zavrsnog/diplomskog rada (Veleuciliste Marko Marulic u Kninu, sijecanj 2024)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Najmanje 15 referenci",
+      "Opseg (20-50 str.)"
+    ],
+    "advisoryScope": [
+      "Stil citiranja (APA/Vancouver/Harvard na izbor)"
+    ],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-04",
+      "scope": "4 stvarna javna diplomska rada (Veleuciliste Marko Marulic u Kninu, strucni diplomski) iz sluzbenog repozitorija (repozitorij.veleknin.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2021,
+          2022,
+          2025
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "veleknin:696",
+          "repository": "repozitorij.veleknin.hr",
+          "pageFormat": "A4",
+          "pages": 50,
+          "sha256": "c89c9962392df73f346e7b5796e7f8faa088ea6fe1e4230d14f175bd6fc8486b",
+          "level": "diplomski"
+        },
+        {
+          "pid": "veleknin:758",
+          "repository": "repozitorij.veleknin.hr",
+          "pageFormat": "A4",
+          "pages": 48,
+          "sha256": "000b47964570034e86a8d6268b246a01de5f40083a5c0a2b336ce1fe248b3cd1",
+          "level": "diplomski"
+        },
+        {
+          "pid": "veleknin:1025",
+          "repository": "repozitorij.veleknin.hr",
+          "pageFormat": "A4",
+          "pages": 47,
+          "sha256": "7068093b38101931ac9578c37ba147850aed7817343837afdd9e18a8713b6a47",
+          "level": "diplomski"
+        },
+        {
+          "pid": "veleknin:1157",
+          "repository": "repozitorij.veleknin.hr",
+          "pageFormat": "A4",
+          "pages": 52,
+          "sha256": "23b7ac3f6faf29f5cb51db6c107b0304d5bae90b1a1e07197cb95b63e8b78965",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "4 stvarna javna diplomska rada (veleknin:696, veleknin:758, veleknin:1025, veleknin:1157) prolaze byte-level A4 preflight: valjan nesifriran PDF, viselistni (47-52 str.), A4 (595x842 pt)."
       ],
       "observedDeviations": [
         "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
