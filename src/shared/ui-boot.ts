@@ -103,19 +103,29 @@ function setupTilt() {
   });
 }
 
-// "Alati" padajuci izbornik je CSS-only (hover + focus-within). Sinkroniziramo aria-expanded
-// da citaci ekrana najavljuju otvoreno/zatvoreno stanje (inace samo aria-haspopup, bez stanja).
+// "Alati" padajuci izbornik kao disclosure: gumb otvara/zatvara klikom i tipkovnicom
+// (Enter/Space okidaju click na <button>), sto radi na touchu gdje hover ne postoji.
+// Na tool stranicama CSS otvara popis preko [aria-expanded="true"]; :hover ostaje za misa.
 function setupNavTools() {
-  document.querySelectorAll<HTMLElement>('.nav-tools').forEach((nav) => {
+  const navs = [...document.querySelectorAll<HTMLElement>('.nav-tools')];
+  navs.forEach((nav) => {
     const btn = nav.querySelector<HTMLElement>('.nav-tools-btn');
     if (!btn) return;
     btn.setAttribute('aria-expanded', 'false');
-    const set = (v: boolean) => btn.setAttribute('aria-expanded', String(v));
-    nav.addEventListener('mouseenter', () => set(true));
-    nav.addEventListener('mouseleave', () => set(false));
-    nav.addEventListener('focusin', () => set(true));
-    nav.addEventListener('focusout', (e) => { if (!nav.contains(e.relatedTarget as Node)) set(false); });
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation(); // ne daj document-klik listeneru da odmah zatvori
+      btn.setAttribute('aria-expanded', btn.getAttribute('aria-expanded') === 'true' ? 'false' : 'true');
+    });
+    nav.addEventListener('keydown', (e) => {
+      if ((e as KeyboardEvent).key === 'Escape') { btn.setAttribute('aria-expanded', 'false'); btn.focus(); }
+    });
   });
+  // Klik izvan zatvara sve otvorene izbornike.
+  if (navs.length) {
+    document.addEventListener('click', () => {
+      navs.forEach((nav) => nav.querySelector('.nav-tools-btn')?.setAttribute('aria-expanded', 'false'));
+    });
+  }
 }
 
 // Prebacivanje teme (svijetla/tamna) + sprema u lekta.theme. Pre-paint restore ostaje inline

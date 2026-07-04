@@ -9,7 +9,7 @@
 <script>try{var _t=localStorage.getItem('lekta.theme');if(_t)document.documentElement.dataset.theme=_t;}catch(e){}</script>
 <style>
 :root{
-  --bg:#f5f2ea;--panel:#fffdf8;--panel-2:#efeade;--text:#1e2333;--muted:#6a6d7e;
+  --bg:#f5f2ea;--panel:#fffdf8;--panel-2:#efeade;--text:#1e2333;--muted:#5c5f70;
   --line:#e5ddcc;--line-strong:#cfc6b2;--brand:#33407e;--brand-2:#4b50a4;
   --brand-soft:#e8e8f4;--ok:#1a7a54;--ok-soft:#e6f4ec;--warn:#9a5b12;--warn-soft:#f6ecda;
   --danger:#b23a4e;--danger-soft:#f7e9ec;
@@ -36,7 +36,7 @@ a{color:inherit}:focus-visible{outline:none;box-shadow:var(--focus);border-radiu
 .icon-btn{border:1px solid var(--line);background:var(--panel);width:40px;height:40px;border-radius:11px;display:grid;place-items:center;cursor:pointer;font-size:16px;color:var(--text)}
 .mobile-menu{display:none}.mobile-nav{display:none}
 .icon-btn svg{width:19px;height:19px;display:block}
-.nav-tools{position:relative;display:flex;align-items:center}.nav-tools-btn{border:0;background:transparent;color:var(--muted);font:inherit;font-weight:700;font-size:14px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;padding:0}.nav-tools:hover .nav-tools-btn,.nav-tools:focus-within .nav-tools-btn{color:var(--text)}.nav-tools-btn.active{color:var(--brand);font-weight:800}.nav-tools .caret{font-size:11px;transition:transform .18s var(--ease-out-3)}.nav-tools:hover .caret,.nav-tools:focus-within .caret{transform:rotate(180deg)}.nav-tools-menu{position:absolute;top:100%;left:50%;transform:translateX(-50%) translateY(-6px);min-width:214px;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:8px;margin-top:12px;display:grid;gap:2px;opacity:0;visibility:hidden;transition:opacity .16s,transform .16s;z-index:40}.nav-tools-menu::before{content:"";position:absolute;top:-12px;left:0;right:0;height:12px}.nav-tools:hover .nav-tools-menu,.nav-tools:focus-within .nav-tools-menu{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}.nav-tools-menu a{padding:9px 11px;border-radius:9px;font-size:14px;font-weight:650;color:var(--text);text-decoration:none;white-space:nowrap}.nav-tools-menu a:hover{background:var(--brand-soft);color:var(--brand)}.nav-tools-menu a.active{color:var(--brand);font-weight:800;background:var(--brand-soft)}@media(prefers-reduced-motion:reduce){.nav-tools .caret,.nav-tools-menu{transition:none}}
+.nav-tools{position:relative;display:flex;align-items:center}.nav-tools-btn{border:0;background:transparent;color:var(--muted);font:inherit;font-weight:700;font-size:14px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;padding:0}.nav-tools:hover .nav-tools-btn,.nav-tools:focus-within .nav-tools-btn{color:var(--text)}.nav-tools-btn.active{color:var(--brand);font-weight:800}.nav-tools .caret{font-size:11px;transition:transform .18s var(--ease-out-3)}.nav-tools:hover .caret,.nav-tools-btn[aria-expanded="true"] .caret{transform:rotate(180deg)}.nav-tools-menu{position:absolute;top:100%;left:50%;transform:translateX(-50%) translateY(-6px);min-width:214px;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:8px;margin-top:12px;display:grid;gap:2px;opacity:0;visibility:hidden;transition:opacity .16s,transform .16s;z-index:40}.nav-tools-menu::before{content:"";position:absolute;top:-12px;left:0;right:0;height:12px}.nav-tools:hover .nav-tools-menu,.nav-tools-btn[aria-expanded="true"]~.nav-tools-menu{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}.nav-tools-menu a{padding:9px 11px;border-radius:9px;font-size:14px;font-weight:650;color:var(--text);text-decoration:none;white-space:nowrap}.nav-tools-menu a:hover{background:var(--brand-soft);color:var(--brand)}.nav-tools-menu a.active{color:var(--brand);font-weight:800;background:var(--brand-soft)}@media(prefers-reduced-motion:reduce){.nav-tools .caret,.nav-tools-menu{transition:none}}
 .btn{border:0;border-radius:12px;padding:11px 16px;font-weight:750;display:inline-flex;align-items:center;gap:8px;text-decoration:none;cursor:pointer;transition:.18s transform;transition-timing-function:var(--ease-out-3)}
 .btn:hover{transform:translateY(-1px)}.btn:disabled{opacity:.45;cursor:default;transform:none}
 .btn-primary{background:linear-gradient(140deg,var(--brand),var(--brand-2));color:#fff;box-shadow:0 10px 22px rgba(51,64,126,.26)}
@@ -119,13 +119,13 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
       <a href="index.html#how">Kako radi</a>
       <a href="landing_usporedba.html">Usporedba</a>
       <div class="nav-tools">
-        <button class="nav-tools-btn active" type="button" aria-haspopup="true">Alati <span class="caret" aria-hidden="true">▾</span></button>
-        <div class="nav-tools-menu" role="menu">
-          <a role="menuitem" href="citat.html">Citat generator</a>
-          <a role="menuitem" href="kartice.html">Brojač kartica</a>
-          <a role="menuitem" href="naslovnica.html">Naslovnica</a>
-          <a role="menuitem" href="literatura.html">Sređivanje literature</a>
-          <a role="menuitem" class="active" aria-current="page" href="izjava.html">Izjava o izvornosti</a>
+        <button class="nav-tools-btn active" type="button" aria-expanded="false">Alati <span class="caret" aria-hidden="true">▾</span></button>
+        <div class="nav-tools-menu">
+          <a href="citat.html">Citat generator</a>
+          <a href="kartice.html">Brojač kartica</a>
+          <a href="naslovnica.html">Naslovnica</a>
+          <a href="literatura.html">Sređivanje literature</a>
+          <a class="active" aria-current="page" href="izjava.html">Izjava o izvornosti</a>
         </div>
       </div>
       <a href="index.html#pricing">Paketi</a>
@@ -204,14 +204,14 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
         <h2>Pregled izjave</h2>
         <p class="sub">Ažurira se dok tipkaš. Spremi kao PDF ispisom u datoteku.</p>
         <div class="tp-sheet-wrap">
-          <div id="st-sheet"></div>
+          <div id="st-sheet" aria-label="Pregled izjave o izvornosti"></div>
         </div>
         <div class="out-bar">
           <button class="btn btn-primary" id="st-print" type="button" disabled>Spremi kao PDF</button>
           <button class="btn btn-secondary" id="st-docx" type="button" disabled>Preuzmi .docx</button>
           <button class="btn btn-secondary" id="st-copy" type="button" disabled>Kopiraj tekst</button>
         </div>
-        <p class="out-hint" id="st-hint"></p>
+        <p class="out-hint" id="st-hint" aria-live="polite"></p>
         <div class="note"><b>Napomena:</b> ovo je uobičajena formulacija izjave o izvornosti. Mnogi fakulteti propisuju vlastiti, obvezni tekst i obrazac (ponekad s OIB-om, JMBAG-om ili dodatnom suglasnošću). Konačnu izjavu uvijek uskladi sa službenim obrascem svog studija.</div>
       </div>
     </div>
