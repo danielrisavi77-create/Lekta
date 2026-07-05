@@ -36853,5 +36853,557 @@
       ],
       "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), ne prored/font sadržaja. Radovi služe samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
     }
+  },
+  {
+    "id": "alu-slikarstvo-diplomski",
+    "unitId": "alu",
+    "programs": [
+      "Slikarstvo"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Akademija likovnih umjetnosti, Slikarski odsjek, diplomski rad",
+    "verifiedAt": "2026-07-05",
+    "documentDate": null,
+    "rules": {
+      "checkFont": false,
+      "checkSize": false,
+      "checkSpacing": false,
+      "checkMargins": false,
+      "checkJustify": false
+    },
+    "facts": [
+      "Pisano obrazloženje: 5 do 15 kartica teksta, veličina slova 12 točaka, klasični prored, tvrdi uvez (čl. 32).",
+      "Uz obrazloženje se prilaže cjelokupna dokumentacija na CD-u ili DVD-u."
+    ],
+    "note": "Slikarski odsjek ALU: diplomski rad je umjetnički rad uz pisano obrazloženje, uređen Posebnim odredbama tog odsjeka u Pravilniku o diplomskom radu i diplomskom ispitu (ALU, 2014). Opseg pisanog dijela: 5 do 15 kartica. Citatni stil NIJE propisan jednim imenovanim standardom (custom); tipografija (osim veličine 12 točaka i klasičnog proreda kod slikarstva i kiparstva) nije jedinstveno propisana pa se ne nameće. Uzorci su 3 stvarna javna diplomska rada tog odsjeka iz repozitorija ALU (Dabar), A4 preflight.",
+    "sources": [
+      {
+        "title": "Pravilnik o diplomskom radu i diplomskom ispitu (Akademija likovnih umjetnosti, lipanj 2014)",
+        "url": "https://www.alu.unizg.hr/alu/cms/upload/dokumenti/PRAVILNIK_O_DIPLOMSKOM_RADU_I_DIPLOMSKOM_ISPITU_lipanj_2014.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o diplomskom radu i diplomskom ispitu (Akademija likovnih umjetnosti, lipanj 2014)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Opseg pisanog obrazloženja (po odsjeku)",
+      "Tipografija",
+      "Citatni stil"
+    ],
+    "coverage": null,
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-05",
+      "scope": "3 stvarna javna diplomska rada (Slikarski odsjek) iz službenog repozitorija ALU (repozitorij.alu.unizg.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2018,
+          2019
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "alu:195",
+          "repository": "repozitorij.alu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 25,
+          "sha256": "5fea687d96aa72b1230dfb9071007da3d1de0abbec1d5cdbad3ef2a809df5950",
+          "level": "diplomski"
+        },
+        {
+          "pid": "alu:209",
+          "repository": "repozitorij.alu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 27,
+          "sha256": "9c38e271a49221d8f7e3714822f99e05bacf2d1bab649fea62837d5f4bb2183d",
+          "level": "diplomski"
+        },
+        {
+          "pid": "alu:228",
+          "repository": "repozitorij.alu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 31,
+          "sha256": "bdaf1cdf8cedf2e1f1348fd6e4a86480550f66782fdea6aa70c439eef6bb61d0",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna diplomska rada (alu:195, alu:209, alu:228) prolaze byte-level A4 preflight: valjan nešifriran PDF, višelistni (25-31 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID.",
+        "Umjetnički diplomski radovi sadrže i slikovne priloge izvan A4; uzeti su samo radovi s dominantno A4 pisanim dijelom."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), ne prored/font sadržaja. Radovi služe samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "alu-kiparstvo-diplomski",
+    "unitId": "alu",
+    "programs": [
+      "Kiparstvo"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Akademija likovnih umjetnosti, Kiparski odsjek, diplomski rad",
+    "verifiedAt": "2026-07-05",
+    "documentDate": null,
+    "rules": {
+      "checkFont": false,
+      "checkSize": false,
+      "checkSpacing": false,
+      "checkMargins": false,
+      "checkJustify": false
+    },
+    "facts": [
+      "Pisano obrazloženje likovnog koncepta: 10 do 20 kartica teksta, veličina slova 12 točaka, klasični prored (čl. 39).",
+      "Odabir 20 do 50 crteža i fotografija radova u ¼ formata A4."
+    ],
+    "note": "Kiparski odsjek ALU: diplomski rad je umjetnički rad uz pisano obrazloženje, uređen Posebnim odredbama tog odsjeka u Pravilniku o diplomskom radu i diplomskom ispitu (ALU, 2014). Opseg pisanog dijela: 10 do 20 kartica. Citatni stil NIJE propisan jednim imenovanim standardom (custom); tipografija (osim veličine 12 točaka i klasičnog proreda kod slikarstva i kiparstva) nije jedinstveno propisana pa se ne nameće. Uzorci su 3 stvarna javna diplomska rada tog odsjeka iz repozitorija ALU (Dabar), A4 preflight.",
+    "sources": [
+      {
+        "title": "Pravilnik o diplomskom radu i diplomskom ispitu (Akademija likovnih umjetnosti, lipanj 2014)",
+        "url": "https://www.alu.unizg.hr/alu/cms/upload/dokumenti/PRAVILNIK_O_DIPLOMSKOM_RADU_I_DIPLOMSKOM_ISPITU_lipanj_2014.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o diplomskom radu i diplomskom ispitu (Akademija likovnih umjetnosti, lipanj 2014)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Opseg pisanog obrazloženja (po odsjeku)",
+      "Tipografija",
+      "Citatni stil"
+    ],
+    "coverage": null,
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-05",
+      "scope": "3 stvarna javna diplomska rada (Kiparski odsjek) iz službenog repozitorija ALU (repozitorij.alu.unizg.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2018,
+          2019
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "alu:199",
+          "repository": "repozitorij.alu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 30,
+          "sha256": "470f492c2524121913c38bfce17918743fbff9d696973da9ec24fdad14f1dd91",
+          "level": "diplomski"
+        },
+        {
+          "pid": "alu:208",
+          "repository": "repozitorij.alu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 29,
+          "sha256": "d70e7872c5e9beb8f8a6ab34357dbd1037eef62d36aae519195307ffc8bc5f60",
+          "level": "diplomski"
+        },
+        {
+          "pid": "alu:220",
+          "repository": "repozitorij.alu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 24,
+          "sha256": "be43e2c0ad038dda3462402fa4da176f5980fd56bb66388d7e71838b1981e42c",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna diplomska rada (alu:199, alu:208, alu:220) prolaze byte-level A4 preflight: valjan nešifriran PDF, višelistni (24-30 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID.",
+        "Umjetnički diplomski radovi sadrže i slikovne priloge izvan A4; uzeti su samo radovi s dominantno A4 pisanim dijelom."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), ne prored/font sadržaja. Radovi služe samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "alu-grafika-diplomski",
+    "unitId": "alu",
+    "programs": [
+      "Grafika"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Akademija likovnih umjetnosti, Grafički odsjek, diplomski rad",
+    "verifiedAt": "2026-07-05",
+    "documentDate": null,
+    "rules": {
+      "checkFont": false,
+      "checkSize": false,
+      "checkSpacing": false,
+      "checkMargins": false,
+      "checkJustify": false
+    },
+    "facts": [
+      "Pisano obrazloženje: 15 do 25 kartica teksta uz slikovni materijal (čl. 50).",
+      "Ispisano u maksimalnoj veličini formata A4 i tvrdo uvezano."
+    ],
+    "note": "Grafički odsjek ALU: diplomski rad je umjetnički rad uz pisano obrazloženje, uređen Posebnim odredbama tog odsjeka u Pravilniku o diplomskom radu i diplomskom ispitu (ALU, 2014). Opseg pisanog dijela: 15 do 25 kartica. Citatni stil NIJE propisan jednim imenovanim standardom (custom); tipografija (osim veličine 12 točaka i klasičnog proreda kod slikarstva i kiparstva) nije jedinstveno propisana pa se ne nameće. Uzorci su 3 stvarna javna diplomska rada tog odsjeka iz repozitorija ALU (Dabar), A4 preflight.",
+    "sources": [
+      {
+        "title": "Pravilnik o diplomskom radu i diplomskom ispitu (Akademija likovnih umjetnosti, lipanj 2014)",
+        "url": "https://www.alu.unizg.hr/alu/cms/upload/dokumenti/PRAVILNIK_O_DIPLOMSKOM_RADU_I_DIPLOMSKOM_ISPITU_lipanj_2014.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o diplomskom radu i diplomskom ispitu (Akademija likovnih umjetnosti, lipanj 2014)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Opseg pisanog obrazloženja (po odsjeku)",
+      "Tipografija",
+      "Citatni stil"
+    ],
+    "coverage": null,
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-05",
+      "scope": "3 stvarna javna diplomska rada (Grafički odsjek) iz službenog repozitorija ALU (repozitorij.alu.unizg.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2018,
+          2019,
+          2020
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "alu:227",
+          "repository": "repozitorij.alu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 46,
+          "sha256": "7fd5375671227806bd34ab62c3f43dd445f761df09a4d5e228057fd09c188881",
+          "level": "diplomski"
+        },
+        {
+          "pid": "alu:360",
+          "repository": "repozitorij.alu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 53,
+          "sha256": "6df4ea435f2c21087b2f0d3393d7118811be581cee6771f18a61b3ed78d03941",
+          "level": "diplomski"
+        },
+        {
+          "pid": "alu:611",
+          "repository": "repozitorij.alu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 43,
+          "sha256": "ee296a9411107ad8ab55fe66754447cdd6e7cafa57ac781ee51ffab70b5f4bb2",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna diplomska rada (alu:227, alu:360, alu:611) prolaze byte-level A4 preflight: valjan nešifriran PDF, višelistni (43-53 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID.",
+        "Umjetnički diplomski radovi sadrže i slikovne priloge izvan A4; uzeti su samo radovi s dominantno A4 pisanim dijelom."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), ne prored/font sadržaja. Radovi služe samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "alu-novi-mediji-diplomski",
+    "unitId": "alu",
+    "programs": [
+      "Animirani film i novi mediji"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Akademija likovnih umjetnosti, Odsjek za animirani film i nove medije, diplomski rad",
+    "verifiedAt": "2026-07-05",
+    "documentDate": null,
+    "rules": {
+      "checkFont": false,
+      "checkSize": false,
+      "checkSpacing": false,
+      "checkMargins": false,
+      "checkJustify": false
+    },
+    "facts": [
+      "Pismeni dio (smjer Novi mediji): 18.000 do 30.000 slovnih znakova (do 7.000 riječi, 10 do 17 kartica) (čl. 77).",
+      "Diplomski rad ima praktični i pismeni dio; smjer Animirani film je filmski rad (bez propisanog opsega u karticama)."
+    ],
+    "note": "Odsjek za animirani film i nove medije ALU: diplomski rad je umjetnički rad uz pisano obrazloženje, uređen Posebnim odredbama tog odsjeka u Pravilniku o diplomskom radu i diplomskom ispitu (ALU, 2014). Opseg pisanog dijela: 18.000 do 30.000 znakova (Novi mediji). Citatni stil NIJE propisan jednim imenovanim standardom (custom); tipografija (osim veličine 12 točaka i klasičnog proreda kod slikarstva i kiparstva) nije jedinstveno propisana pa se ne nameće. Uzorci su 3 stvarna javna diplomska rada tog odsjeka iz repozitorija ALU (Dabar), A4 preflight.",
+    "sources": [
+      {
+        "title": "Pravilnik o diplomskom radu i diplomskom ispitu (Akademija likovnih umjetnosti, lipanj 2014)",
+        "url": "https://www.alu.unizg.hr/alu/cms/upload/dokumenti/PRAVILNIK_O_DIPLOMSKOM_RADU_I_DIPLOMSKOM_ISPITU_lipanj_2014.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o diplomskom radu i diplomskom ispitu (Akademija likovnih umjetnosti, lipanj 2014)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Opseg pisanog obrazloženja (po odsjeku)",
+      "Tipografija",
+      "Citatni stil"
+    ],
+    "coverage": null,
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-05",
+      "scope": "3 stvarna javna diplomska rada (Odsjek za animirani film i nove medije) iz službenog repozitorija ALU (repozitorij.alu.unizg.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2019,
+          2020
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "alu:222",
+          "repository": "repozitorij.alu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 37,
+          "sha256": "dc03520098c4169724b5532827a0612eb9eed8541030bcb6122a52187a506cc8",
+          "level": "diplomski"
+        },
+        {
+          "pid": "alu:429",
+          "repository": "repozitorij.alu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 66,
+          "sha256": "ee3fdb2f57bcdbdfc8d9ee330b1b67f1f5af6891d1ccaad9d11c37e8112d5905",
+          "level": "diplomski"
+        },
+        {
+          "pid": "alu:581",
+          "repository": "repozitorij.alu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 48,
+          "sha256": "fa2cc469ed0d507f8d180e8997f50d8512cd4e28c8b12c656d9c335cc4789f05",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna diplomska rada (alu:222, alu:429, alu:581) prolaze byte-level A4 preflight: valjan nešifriran PDF, višelistni (37-66 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID.",
+        "Umjetnički diplomski radovi sadrže i slikovne priloge izvan A4; uzeti su samo radovi s dominantno A4 pisanim dijelom."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), ne prored/font sadržaja. Radovi služe samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "alu-nastavnicki-diplomski",
+    "unitId": "alu",
+    "programs": [
+      "Nastavnički odsjek"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Akademija likovnih umjetnosti, Nastavnički odsjek, diplomski rad",
+    "verifiedAt": "2026-07-05",
+    "documentDate": null,
+    "rules": {
+      "checkFont": false,
+      "checkSize": false,
+      "checkSpacing": false,
+      "checkMargins": false,
+      "checkJustify": false
+    },
+    "facts": [
+      "Diplomski rad je dvodijelan: likovni rad i rad iz Metodike nastave, svaki zaseban samostalan rad (čl. 62)."
+    ],
+    "note": "Nastavnički odsjek ALU: diplomski rad je umjetnički rad uz pisano obrazloženje, uređen Posebnim odredbama tog odsjeka u Pravilniku o diplomskom radu i diplomskom ispitu (ALU, 2014). Opseg pisanog dijela: dvodijelni rad (likovni + Metodika nastave). Citatni stil NIJE propisan jednim imenovanim standardom (custom); tipografija (osim veličine 12 točaka i klasičnog proreda kod slikarstva i kiparstva) nije jedinstveno propisana pa se ne nameće. Uzorci su 3 stvarna javna diplomska rada tog odsjeka iz repozitorija ALU (Dabar), A4 preflight.",
+    "sources": [
+      {
+        "title": "Pravilnik o diplomskom radu i diplomskom ispitu (Akademija likovnih umjetnosti, lipanj 2014)",
+        "url": "https://www.alu.unizg.hr/alu/cms/upload/dokumenti/PRAVILNIK_O_DIPLOMSKOM_RADU_I_DIPLOMSKOM_ISPITU_lipanj_2014.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o diplomskom radu i diplomskom ispitu (Akademija likovnih umjetnosti, lipanj 2014)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Opseg pisanog obrazloženja (po odsjeku)",
+      "Tipografija",
+      "Citatni stil"
+    ],
+    "coverage": null,
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-05",
+      "scope": "3 stvarna javna diplomska rada (Nastavnički odsjek) iz službenog repozitorija ALU (repozitorij.alu.unizg.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2017
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "alu:2",
+          "repository": "repozitorij.alu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 116,
+          "sha256": "9cdafb231740abbb98d0a90aff8abf7378968035dfe443fd83b42421345fff01",
+          "level": "diplomski"
+        },
+        {
+          "pid": "alu:5",
+          "repository": "repozitorij.alu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 127,
+          "sha256": "f852041cf9d5c0a7a60d34f3acdfef92ff96424ab56eeb5717060f1a2d31f548",
+          "level": "diplomski"
+        },
+        {
+          "pid": "alu:6",
+          "repository": "repozitorij.alu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 90,
+          "sha256": "8a2dbc4ada29c4a2f9a865e61bc92d7404e965ee84276848a600f49b576f2882",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna diplomska rada (alu:2, alu:5, alu:6) prolaze byte-level A4 preflight: valjan nešifriran PDF, višelistni (90-127 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID.",
+        "Umjetnički diplomski radovi sadrže i slikovne priloge izvan A4; uzeti su samo radovi s dominantno A4 pisanim dijelom."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), ne prored/font sadržaja. Radovi služe samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "alu-konzerviranje-diplomski",
+    "unitId": "alu",
+    "programs": [
+      "Konzerviranje i restauriranje"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Akademija likovnih umjetnosti, Odsjek za konzerviranje i restauriranje umjetnina, diplomski rad",
+    "verifiedAt": "2026-07-05",
+    "documentDate": null,
+    "rules": {
+      "checkFont": false,
+      "checkSize": false,
+      "checkSpacing": false,
+      "checkMargins": false,
+      "checkJustify": false
+    },
+    "facts": [
+      "Diplomski rad ima praktični dio (uključuje pisanu dokumentaciju konzervatorsko-restauratorskog rada) i teorijski dio (čl. 92).",
+      "Integralni konzervatorsko-restauratorski rad prema pravilima struke i Zakonu o zaštiti spomenika kulture."
+    ],
+    "note": "Odsjek za konzerviranje i restauriranje umjetnina ALU: diplomski rad je umjetnički rad uz pisano obrazloženje, uređen Posebnim odredbama tog odsjeka u Pravilniku o diplomskom radu i diplomskom ispitu (ALU, 2014). Opseg pisanog dijela: praktični (s pisanom dokumentacijom) + teorijski dio. Citatni stil NIJE propisan jednim imenovanim standardom (custom); tipografija (osim veličine 12 točaka i klasičnog proreda kod slikarstva i kiparstva) nije jedinstveno propisana pa se ne nameće. Uzorci su 3 stvarna javna diplomska rada tog odsjeka iz repozitorija ALU (Dabar), A4 preflight.",
+    "sources": [
+      {
+        "title": "Pravilnik o diplomskom radu i diplomskom ispitu (Akademija likovnih umjetnosti, lipanj 2014)",
+        "url": "https://www.alu.unizg.hr/alu/cms/upload/dokumenti/PRAVILNIK_O_DIPLOMSKOM_RADU_I_DIPLOMSKOM_ISPITU_lipanj_2014.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o diplomskom radu i diplomskom ispitu (Akademija likovnih umjetnosti, lipanj 2014)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Opseg pisanog obrazloženja (po odsjeku)",
+      "Tipografija",
+      "Citatni stil"
+    ],
+    "coverage": null,
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-05",
+      "scope": "3 stvarna javna diplomska rada (Odsjek za konzerviranje i restauriranje umjetnina) iz službenog repozitorija ALU (repozitorij.alu.unizg.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2017,
+          2018,
+          2019
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "alu:29",
+          "repository": "repozitorij.alu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 113,
+          "sha256": "849807647f8aa54c16845942064902ca20de502f08735d663697f96ad1a02243",
+          "level": "diplomski"
+        },
+        {
+          "pid": "alu:47",
+          "repository": "repozitorij.alu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 235,
+          "sha256": "1beae7406b5b81f88dab7b853329a5990ad80b016c68209c9681815be2c0a902",
+          "level": "diplomski"
+        },
+        {
+          "pid": "alu:378",
+          "repository": "repozitorij.alu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 167,
+          "sha256": "5b7621bf553ed3df5136f211e920b1739c5e0b326e68cebafe417928ec65426a",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna diplomska rada (alu:29, alu:47, alu:378) prolaze byte-level A4 preflight: valjan nešifriran PDF, višelistni (113-235 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID.",
+        "Umjetnički diplomski radovi sadrže i slikovne priloge izvan A4; uzeti su samo radovi s dominantno A4 pisanim dijelom."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), ne prored/font sadržaja. Radovi služe samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
   }
 ]
