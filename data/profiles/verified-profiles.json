@@ -37405,5 +37405,302 @@
       ],
       "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), ne prored/font sadržaja. Radovi služe samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
     }
+  },
+  {
+    "id": "ttf-dizajn-diplomski",
+    "unitId": "ttf",
+    "programs": [
+      "Tekstilni i modni dizajn"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Tekstilno-tehnološki fakultet, Tekstilni i modni dizajn, diplomski rad",
+    "verifiedAt": "2026-07-05",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Arial"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "checkJustify": true,
+      "checkMargins": true,
+      "recommendedCitation": "apa7",
+      "requiredSections": [
+        {
+          "key": "toc",
+          "label": "sadrzaj",
+          "terms": [
+            "sadrzaj",
+            "contents",
+            "table of contents"
+          ]
+        },
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod",
+            "introduction"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zakljucak",
+          "terms": [
+            "zakljucak",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "popis literature",
+          "terms": [
+            "literatura",
+            "popis literature",
+            "references",
+            "bibliography"
+          ]
+        }
+      ]
+    },
+    "facts": [
+      "Font Arial, veličina 12 pt, prored 1,5, margine 2,5 cm sa svih strana, tekst obostrano poravnat (imperativ, jedinstvene Upute TTF).",
+      "Stranice numerirane; prva numerirana je stranica s poglavljem UVOD, numeracija u donjem desnom kutu.",
+      "Rad mora imati sadržaj, započeti poglavljem UVOD, završiti ZAKLJUČKOM, a nakon zaključka popis korištene literature (imperativ).",
+      "Umjetničko područje (Tekstilni i modni dizajn): stil citiranja je APA (7. izdanje) prema Uputama (u tehničkom području Vancouver)."
+    ],
+    "note": "Tekstilni i modni dizajn TTF (umjetničko područje). Tehničko oblikovanje iz jedinstvenih Uputa za oblikovanje završnog i diplomskog rada (Arial 12, prored 1,5, margine 2,5 cm, obostrano; obvezne cjeline uvod/zaključak/popis literature). Citatni stil je APA (7. izdanje): Upute izrijekom propisuju APA 7 za društveno, humanističko i umjetničko područje (Vancouver za tehničko), pa je za ovaj studij stil imenovan i mandiran. Uzorci su 3 stvarna javna rada Odsjeka za modni dizajn (Department of Fashion Design) iz repozitorija TTF (Dabar), A4 preflight.",
+    "sources": [
+      {
+        "title": "Upute za oblikovanje zavrsnog i diplomskog rada (TTF)",
+        "url": "https://api.ttf.hr/documents/2jkTqCAb3q90sHtmCP6YSBKg40rbo1mHCTrqdwwWKt9Y4aYZMqpiLuOVdsdi/upute-za-oblikovanje-zavrsnog-i-diplomskog-rada-ttf.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za oblikovanje zavrsnog i diplomskog rada (TTF)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "veličina slova",
+      "prored",
+      "margine",
+      "obostrano poravnanje",
+      "numeracija stranica",
+      "sadržaj (obvezna cjelina)",
+      "obvezne cjeline rada (uvod, zaključak, popis literature)",
+      "stil citiranja (APA 7, umjetničko područje)"
+    ],
+    "advisoryScope": [],
+    "coverage": null,
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-05",
+      "scope": "3 stvarna javna diplomska rada (Odsjek za modni dizajn) iz službenog repozitorija TTF (repozitorij.ttf.unizg.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "ttf:11",
+          "repository": "repozitorij.ttf.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 53,
+          "sha256": "84c95f675329383f8fb2d76396fd31417ce78a94fcd73d45930cedfd5a73111b",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ttf:15",
+          "repository": "repozitorij.ttf.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 93,
+          "sha256": "e9cb09fd0aab15988b4fae888bdc25ebda2da0b38ecf46b6daeff5fe4c3ecfc8",
+          "level": "diplomski"
+        },
+        {
+          "pid": "ttf:16",
+          "repository": "repozitorij.ttf.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 49,
+          "sha256": "116e1e81c0ad96a3587283a3fff587201a917a843e298f60dc4c49aa2896a975",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (ttf:11, ttf:15, ttf:16) prolaze byte-level A4 preflight: valjan nešifriran PDF, višelistni (49-93 str.), A4."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan (Dabar watermark po preuzimanju); identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI). Radovi služe samo provjeri parsera i formata (CLAUDE.md). PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "ttf-dizajn-zavrsni",
+    "unitId": "ttf",
+    "programs": [
+      "Tekstilni i modni dizajn"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Tekstilno-tehnološki fakultet, Tekstilni i modni dizajn, završni rad",
+    "verifiedAt": "2026-07-05",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Arial"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireToc": true,
+      "requirePageNumbers": true,
+      "checkJustify": true,
+      "checkMargins": true,
+      "recommendedCitation": "apa7",
+      "requiredSections": [
+        {
+          "key": "toc",
+          "label": "sadrzaj",
+          "terms": [
+            "sadrzaj",
+            "contents",
+            "table of contents"
+          ]
+        },
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod",
+            "introduction"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zakljucak",
+          "terms": [
+            "zakljucak",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "popis literature",
+          "terms": [
+            "literatura",
+            "popis literature",
+            "references",
+            "bibliography"
+          ]
+        }
+      ]
+    },
+    "facts": [
+      "Font Arial, veličina 12 pt, prored 1,5, margine 2,5 cm sa svih strana, tekst obostrano poravnat (imperativ, jedinstvene Upute TTF).",
+      "Stranice numerirane; prva numerirana je stranica s poglavljem UVOD, numeracija u donjem desnom kutu.",
+      "Rad mora imati sadržaj, započeti poglavljem UVOD, završiti ZAKLJUČKOM, a nakon zaključka popis korištene literature (imperativ).",
+      "Umjetničko područje (Tekstilni i modni dizajn): stil citiranja je APA (7. izdanje) prema Uputama (u tehničkom području Vancouver)."
+    ],
+    "note": "Tekstilni i modni dizajn TTF (umjetničko područje). Tehničko oblikovanje iz jedinstvenih Uputa za oblikovanje završnog i diplomskog rada (Arial 12, prored 1,5, margine 2,5 cm, obostrano; obvezne cjeline uvod/zaključak/popis literature). Citatni stil je APA (7. izdanje): Upute izrijekom propisuju APA 7 za društveno, humanističko i umjetničko područje (Vancouver za tehničko), pa je za ovaj studij stil imenovan i mandiran. Uzorci su 3 stvarna javna rada Odsjeka za modni dizajn (Department of Fashion Design) iz repozitorija TTF (Dabar), A4 preflight.",
+    "sources": [
+      {
+        "title": "Upute za oblikovanje zavrsnog i diplomskog rada (TTF)",
+        "url": "https://api.ttf.hr/documents/2jkTqCAb3q90sHtmCP6YSBKg40rbo1mHCTrqdwwWKt9Y4aYZMqpiLuOVdsdi/upute-za-oblikovanje-zavrsnog-i-diplomskog-rada-ttf.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za oblikovanje zavrsnog i diplomskog rada (TTF)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "font",
+      "veličina slova",
+      "prored",
+      "margine",
+      "obostrano poravnanje",
+      "numeracija stranica",
+      "sadržaj (obvezna cjelina)",
+      "obvezne cjeline rada (uvod, zaključak, popis literature)",
+      "stil citiranja (APA 7, umjetničko područje)"
+    ],
+    "advisoryScope": [],
+    "coverage": null,
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-05",
+      "scope": "3 stvarna javna završna rada (Odsjek za modni dizajn) iz službenog repozitorija TTF (repozitorij.ttf.unizg.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016,
+          2017
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "ttf:18",
+          "repository": "repozitorij.ttf.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 43,
+          "sha256": "5479e02f20966fb10918b461ef16f4912629b64a7f6a9422a606970238c86c5e",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "ttf:66",
+          "repository": "repozitorij.ttf.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 56,
+          "sha256": "fe6f198c43ca825a4e3b86ed3eb596e400cf036aebd8c23302ec3aed32e0bfc5",
+          "level": "zavrsni"
+        },
+        {
+          "pid": "ttf:77",
+          "repository": "repozitorij.ttf.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 40,
+          "sha256": "db4bb4c3cbdd7109ed047b530fce6c5c401bfcf8df83840c809274ba8682e1f2",
+          "level": "zavrsni"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna rada (ttf:18, ttf:66, ttf:77) prolaze byte-level A4 preflight: valjan nešifriran PDF, višelistni (40-56 str.), A4."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan (Dabar watermark po preuzimanju); identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI). Radovi služe samo provjeri parsera i formata (CLAUDE.md). PDF-ovi se ne commitaju."
+    }
   }
 ]
