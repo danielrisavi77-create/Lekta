@@ -62,7 +62,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "structure",
-        "detail": "Informativno — ne ulazi u službenu ocjenu. Sadržaj ili TOC polje je pronađeno",
+        "detail": "Informativno: ne ulazi u službenu ocjenu. Sadržaj ili TOC polje je pronađeno",
         "earned": 0,
         "max": 0,
         "status": "pass",
@@ -142,7 +142,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "elements",
-        "detail": "Informativno — ne ulazi u službenu ocjenu. 0 praznih odlomaka (0%)",
+        "detail": "Informativno: ne ulazi u službenu ocjenu. 0 praznih odlomaka (0%)",
         "earned": 0,
         "max": 0,
         "status": "pass",
@@ -355,7 +355,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "elements",
-        "detail": "Informativno — ne ulazi u službenu ocjenu. 0 praznih odlomaka (0%)",
+        "detail": "Informativno: ne ulazi u službenu ocjenu. 0 praznih odlomaka (0%)",
         "earned": 0,
         "max": 0,
         "status": "pass",
@@ -561,7 +561,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "elements",
-        "detail": "Informativno — ne ulazi u službenu ocjenu. 0 praznih odlomaka (0%)",
+        "detail": "Informativno: ne ulazi u službenu ocjenu. 0 praznih odlomaka (0%)",
         "earned": 0,
         "max": 0,
         "status": "pass",
@@ -666,7 +666,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "checks": [
       {
         "category": "formatting",
-        "detail": "Informativno — ne ulazi u službenu ocjenu. Informativno: font nije potvrđen kao obvezno pravilo za ovaj profil",
+        "detail": "Informativno: ne ulazi u službenu ocjenu. Informativno: font nije potvrđen kao obvezno pravilo za ovaj profil",
         "earned": 0,
         "max": 0,
         "status": "pass",
@@ -674,7 +674,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "formatting",
-        "detail": "Informativno — ne ulazi u službenu ocjenu. Informativno: veličina nije potvrđena kao obvezno pravilo za ovaj profil",
+        "detail": "Informativno: ne ulazi u službenu ocjenu. Informativno: veličina nije potvrđena kao obvezno pravilo za ovaj profil",
         "earned": 0,
         "max": 0,
         "status": "pass",
@@ -682,7 +682,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "formatting",
-        "detail": "Informativno — ne ulazi u službenu ocjenu. Informativno: prored nije potvrđen kao obvezno pravilo za ovaj profil",
+        "detail": "Informativno: ne ulazi u službenu ocjenu. Informativno: prored nije potvrđen kao obvezno pravilo za ovaj profil",
         "earned": 0,
         "max": 0,
         "status": "pass",
@@ -690,7 +690,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "formatting",
-        "detail": "Informativno — ne ulazi u službenu ocjenu. Informativno: brojčane margine nisu potvrđene kao obvezno pravilo za ovaj profil",
+        "detail": "Informativno: ne ulazi u službenu ocjenu. Informativno: brojčane margine nisu potvrđene kao obvezno pravilo za ovaj profil",
         "earned": 0,
         "max": 0,
         "status": "pass",
@@ -802,7 +802,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "elements",
-        "detail": "Informativno — ne ulazi u službenu ocjenu. 0 praznih odlomaka (0%)",
+        "detail": "Informativno: ne ulazi u službenu ocjenu. 0 praznih odlomaka (0%)",
         "earned": 0,
         "max": 0,
         "status": "pass",
@@ -865,7 +865,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
     "checks": [
       {
         "category": "formatting",
-        "detail": "Informativno — ne ulazi u službenu ocjenu. Informativno: font nije potvrđen kao obvezno pravilo za ovaj profil",
+        "detail": "Informativno: ne ulazi u službenu ocjenu. Informativno: font nije potvrđen kao obvezno pravilo za ovaj profil",
         "earned": 0,
         "max": 0,
         "status": "pass",
@@ -881,7 +881,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "formatting",
-        "detail": "Informativno — ne ulazi u službenu ocjenu. Informativno: prored nije potvrđen kao obvezno pravilo za ovaj profil",
+        "detail": "Informativno: ne ulazi u službenu ocjenu. Informativno: prored nije potvrđen kao obvezno pravilo za ovaj profil",
         "earned": 0,
         "max": 0,
         "status": "pass",
@@ -889,7 +889,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "formatting",
-        "detail": "Informativno — ne ulazi u službenu ocjenu. Informativno: brojčane margine nisu potvrđene kao obvezno pravilo za ovaj profil",
+        "detail": "Informativno: ne ulazi u službenu ocjenu. Informativno: brojčane margine nisu potvrđene kao obvezno pravilo za ovaj profil",
         "earned": 0,
         "max": 0,
         "status": "pass",
@@ -929,7 +929,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "structure",
-        "detail": "Informativno — ne ulazi u službenu ocjenu. PAGE polje nije pronađeno",
+        "detail": "Informativno: ne ulazi u službenu ocjenu. PAGE polje nije pronađeno",
         "earned": 0,
         "max": 0,
         "status": "pass",
@@ -1001,7 +1001,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "elements",
-        "detail": "Informativno — ne ulazi u službenu ocjenu. 0 praznih odlomaka (0%)",
+        "detail": "Informativno: ne ulazi u službenu ocjenu. 0 praznih odlomaka (0%)",
         "earned": 0,
         "max": 0,
         "status": "pass",
@@ -1193,7 +1193,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "elements",
-        "detail": "Informativno — ne ulazi u službenu ocjenu. 0 praznih odlomaka (0%)",
+        "detail": "Informativno: ne ulazi u službenu ocjenu. 0 praznih odlomaka (0%)",
         "earned": 0,
         "max": 0,
         "status": "pass",

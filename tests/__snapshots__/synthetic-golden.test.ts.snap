@@ -29,7 +29,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "formatting",
-      "detail": "Informativno — ne ulazi u službenu ocjenu. Informativno: brojčane margine nisu potvrđene kao obvezno pravilo za ovaj profil",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. Informativno: brojčane margine nisu potvrđene kao obvezno pravilo za ovaj profil",
       "earned": 0,
       "max": 0,
       "status": "pass",
@@ -109,7 +109,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "structure",
-      "detail": "11.104 riječi (glavni tekst od Uvoda do Literature + 0 riječi u fusnotama); profil: 10.000–12.000",
+      "detail": "11.104 riječi (glavni tekst od Uvoda do Literature + 0 riječi u fusnotama); profil: 10.000-12.000",
       "earned": 5,
       "max": 5,
       "status": "pass",
@@ -149,7 +149,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "citations",
-      "detail": "Nije prepoznata nijedna autor–godina citatnica",
+      "detail": "Nije prepoznata nijedna autor-godina citatnica",
       "earned": 1,
       "max": 3,
       "status": "warn",
@@ -181,7 +181,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "citations",
-      "detail": "Nisu prepoznati izravni citati s autor–godina citatnicom",
+      "detail": "Nisu prepoznati izravni citati s autor-godina citatnicom",
       "earned": 4,
       "max": 4,
       "status": "pass",
@@ -197,7 +197,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "citations",
-      "detail": "Nisu pronađeni očiti nerazlučeni duplikati autor–godina",
+      "detail": "Nisu pronađeni očiti nerazlučeni duplikati autor-godina",
       "earned": 3,
       "max": 3,
       "status": "pass",
@@ -253,7 +253,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "elements",
-      "detail": "Informativno — ne ulazi u službenu ocjenu. 0 praznih odlomaka (0%)",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. 0 praznih odlomaka (0%)",
       "earned": 0,
       "max": 0,
       "status": "pass",
@@ -291,7 +291,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "structure",
-      "detail": "Uvod je preporučeno ograničiti na približno 10%, a Zaključak na približno 5–10% ukupnog teksta. Automatska procjena ovisi o pravilnim Heading stilovima.",
+      "detail": "Uvod je preporučeno ograničiti na približno 10%, a Zaključak na približno 5-10% ukupnog teksta. Automatska procjena ovisi o pravilnim Heading stilovima.",
       "severity": "warning",
       "title": "Omjer Uvoda ili Zaključka odstupa od FPZG smjernice",
       "where": "Struktura rada",
@@ -307,7 +307,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
       "category": "citations",
       "detail": "Dokument možda nema citatnica ili zapis odstupa od očekivanog obrasca. Provjeri ručno.",
       "severity": "info",
-      "title": "Nisu prepoznate autor–godina citatnice",
+      "title": "Nisu prepoznate autor-godina citatnice",
       "where": "",
     },
     {
@@ -393,7 +393,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "formatting",
-      "detail": "Informativno — ne ulazi u službenu ocjenu. Informativno: poravnanje nije potvrđeno kao obvezno pravilo za ovaj profil",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. Informativno: poravnanje nije potvrđeno kao obvezno pravilo za ovaj profil",
       "earned": 0,
       "max": 0,
       "status": "pass",
@@ -409,7 +409,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "structure",
-      "detail": "Informativno — ne ulazi u službenu ocjenu. 7 naslova prepoznato",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. 7 naslova prepoznato",
       "earned": 0,
       "max": 0,
       "status": "pass",
@@ -433,7 +433,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "structure",
-      "detail": "Informativno — ne ulazi u službenu ocjenu. Uvod, zaključak i literatura su prepoznati",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. Uvod, zaključak i literatura su prepoznati",
       "earned": 0,
       "max": 0,
       "status": "pass",
@@ -457,7 +457,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "structure",
-      "detail": "Informativno — ne ulazi u službenu ocjenu. Nisu pronađeni očiti ručno oblikovani naslovi",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. Nisu pronađeni očiti ručno oblikovani naslovi",
       "earned": 0,
       "max": 0,
       "status": "pass",
@@ -465,7 +465,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "citations",
-      "detail": "Nije prepoznata nijedna autor–godina citatnica",
+      "detail": "Nije prepoznata nijedna autor-godina citatnica",
       "earned": 1,
       "max": 3,
       "status": "warn",
@@ -497,7 +497,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "citations",
-      "detail": "Nisu prepoznati izravni citati s autor–godina citatnicom",
+      "detail": "Nisu prepoznati izravni citati s autor-godina citatnicom",
       "earned": 4,
       "max": 4,
       "status": "pass",
@@ -513,7 +513,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "citations",
-      "detail": "Nisu pronađeni očiti nerazlučeni duplikati autor–godina",
+      "detail": "Nisu pronađeni očiti nerazlučeni duplikati autor-godina",
       "earned": 3,
       "max": 3,
       "status": "pass",
@@ -553,7 +553,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "elements",
-      "detail": "Informativno — ne ulazi u službenu ocjenu. 0 praznih odlomaka (0%)",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. 0 praznih odlomaka (0%)",
       "earned": 0,
       "max": 0,
       "status": "pass",
@@ -579,7 +579,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
       "category": "citations",
       "detail": "Dokument možda nema citatnica ili zapis odstupa od očekivanog obrasca. Provjeri ručno.",
       "severity": "info",
-      "title": "Nisu prepoznate autor–godina citatnice",
+      "title": "Nisu prepoznate autor-godina citatnice",
       "where": "",
     },
     {
@@ -650,7 +650,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "formatting",
-      "detail": "Informativno — ne ulazi u službenu ocjenu. Informativno: brojčane margine nisu potvrđene kao obvezno pravilo za ovaj profil",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. Informativno: brojčane margine nisu potvrđene kao obvezno pravilo za ovaj profil",
       "earned": 0,
       "max": 0,
       "status": "pass",
@@ -730,7 +730,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "structure",
-      "detail": "41 riječi (cijeli dokument + 0 riječi u fusnotama); profil: 5.000–6.000",
+      "detail": "41 riječi (cijeli dokument + 0 riječi u fusnotama); profil: 5.000-6.000",
       "earned": 2,
       "max": 5,
       "status": "warn",
@@ -770,7 +770,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "citations",
-      "detail": "Nije prepoznata nijedna autor–godina citatnica",
+      "detail": "Nije prepoznata nijedna autor-godina citatnica",
       "earned": 1,
       "max": 3,
       "status": "warn",
@@ -802,7 +802,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "citations",
-      "detail": "Nisu prepoznati izravni citati s autor–godina citatnicom",
+      "detail": "Nisu prepoznati izravni citati s autor-godina citatnicom",
       "earned": 4,
       "max": 4,
       "status": "pass",
@@ -818,7 +818,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "citations",
-      "detail": "Nisu pronađeni očiti nerazlučeni duplikati autor–godina",
+      "detail": "Nisu pronađeni očiti nerazlučeni duplikati autor-godina",
       "earned": 3,
       "max": 3,
       "status": "pass",
@@ -866,7 +866,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "elements",
-      "detail": "Informativno — ne ulazi u službenu ocjenu. 0 praznih odlomaka (0%)",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. 0 praznih odlomaka (0%)",
       "earned": 0,
       "max": 0,
       "status": "pass",
@@ -962,7 +962,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
       "category": "citations",
       "detail": "Dokument možda nema citatnica ili zapis odstupa od očekivanog obrasca. Provjeri ručno.",
       "severity": "info",
-      "title": "Nisu prepoznate autor–godina citatnice",
+      "title": "Nisu prepoznate autor-godina citatnice",
       "where": "",
     },
   ],
@@ -1026,7 +1026,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "formatting",
-      "detail": "Informativno — ne ulazi u službenu ocjenu. Informativno: brojčane margine nisu potvrđene kao obvezno pravilo za ovaj profil",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. Informativno: brojčane margine nisu potvrđene kao obvezno pravilo za ovaj profil",
       "earned": 0,
       "max": 0,
       "status": "pass",
@@ -1106,7 +1106,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "structure",
-      "detail": "5.824 riječi (glavni tekst od Uvoda do Literature + 0 riječi u fusnotama); profil: 5.000–6.000",
+      "detail": "5.824 riječi (glavni tekst od Uvoda do Literature + 0 riječi u fusnotama); profil: 5.000-6.000",
       "earned": 5,
       "max": 5,
       "status": "pass",
@@ -1146,7 +1146,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "citations",
-      "detail": "Nije prepoznata nijedna autor–godina citatnica",
+      "detail": "Nije prepoznata nijedna autor-godina citatnica",
       "earned": 1,
       "max": 3,
       "status": "warn",
@@ -1178,7 +1178,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "citations",
-      "detail": "Nisu prepoznati izravni citati s autor–godina citatnicom",
+      "detail": "Nisu prepoznati izravni citati s autor-godina citatnicom",
       "earned": 4,
       "max": 4,
       "status": "pass",
@@ -1194,7 +1194,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "citations",
-      "detail": "Nisu pronađeni očiti nerazlučeni duplikati autor–godina",
+      "detail": "Nisu pronađeni očiti nerazlučeni duplikati autor-godina",
       "earned": 3,
       "max": 3,
       "status": "pass",
@@ -1242,7 +1242,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "elements",
-      "detail": "Informativno — ne ulazi u službenu ocjenu. 0 praznih odlomaka (0%)",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. 0 praznih odlomaka (0%)",
       "earned": 0,
       "max": 0,
       "status": "pass",
@@ -1273,7 +1273,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "structure",
-      "detail": "Uvod je preporučeno ograničiti na približno 10%, a Zaključak na približno 5–10% ukupnog teksta. Automatska procjena ovisi o pravilnim Heading stilovima.",
+      "detail": "Uvod je preporučeno ograničiti na približno 10%, a Zaključak na približno 5-10% ukupnog teksta. Automatska procjena ovisi o pravilnim Heading stilovima.",
       "severity": "warning",
       "title": "Omjer Uvoda ili Zaključka odstupa od FPZG smjernice",
       "where": "Struktura rada",
@@ -1289,7 +1289,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
       "category": "citations",
       "detail": "Dokument možda nema citatnica ili zapis odstupa od očekivanog obrasca. Provjeri ručno.",
       "severity": "info",
-      "title": "Nisu prepoznate autor–godina citatnice",
+      "title": "Nisu prepoznate autor-godina citatnice",
       "where": "",
     },
     {
@@ -1360,7 +1360,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "formatting",
-      "detail": "Informativno — ne ulazi u službenu ocjenu. Informativno: brojčane margine nisu potvrđene kao obvezno pravilo za ovaj profil",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. Informativno: brojčane margine nisu potvrđene kao obvezno pravilo za ovaj profil",
       "earned": 0,
       "max": 0,
       "status": "pass",
@@ -1384,7 +1384,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "formatting",
-      "detail": "font Times New Roman · 12 pt · prored — · poravnanje default",
+      "detail": "font Times New Roman · 12 pt · prored ? · poravnanje default",
       "earned": 2,
       "max": 6,
       "status": "warn",
@@ -1464,7 +1464,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "structure",
-      "detail": "Informativno — ne ulazi u službenu ocjenu. TOC polje je možda prisutno, ali spremljene stavke sadržaja nisu dostupne za pouzdanu provjeru",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. TOC polje je možda prisutno, ali spremljene stavke sadržaja nisu dostupne za pouzdanu provjeru",
       "earned": 0,
       "max": 0,
       "status": "pass",
@@ -1496,7 +1496,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "structure",
-      "detail": "Informativno — ne ulazi u službenu ocjenu. Word nije spremio pouzdan broj stranica; profil: oko 30. Provjeri broj u otvorenom dokumentu.",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. Word nije spremio pouzdan broj stranica; profil: oko 30. Provjeri broj u otvorenom dokumentu.",
       "earned": 0,
       "max": 0,
       "status": "pass",
@@ -1512,7 +1512,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "structure",
-      "detail": "Informativno — ne ulazi u službenu ocjenu. Nije pronađen pouzdan prijelom prve stranice; redoslijed treba provjeriti vizualno",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. Nije pronađen pouzdan prijelom prve stranice; redoslijed treba provjeriti vizualno",
       "earned": 0,
       "max": 0,
       "status": "pass",
@@ -1520,7 +1520,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "structure",
-      "detail": "Informativno — ne ulazi u službenu ocjenu. Nije pronađen pouzdan prijelom prve stranice; vizualni raspored nije bodovan",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. Nije pronađen pouzdan prijelom prve stranice; vizualni raspored nije bodovan",
       "earned": 0,
       "max": 0,
       "status": "pass",
@@ -1584,7 +1584,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "citations",
-      "detail": "Informativno — ne ulazi u službenu ocjenu. Kratica id. nije korištena",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. Kratica id. nije korištena",
       "earned": 0,
       "max": 0,
       "status": "pass",
@@ -1632,7 +1632,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "elements",
-      "detail": "Informativno — ne ulazi u službenu ocjenu. 0 tablica · 0 prepoznatih naslova",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. 0 tablica · 0 prepoznatih naslova",
       "earned": 0,
       "max": 0,
       "status": "pass",
@@ -1640,7 +1640,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "elements",
-      "detail": "Informativno — ne ulazi u službenu ocjenu. 0 grafičkih elemenata · 0 prepoznatih naslova",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. 0 grafičkih elemenata · 0 prepoznatih naslova",
       "earned": 0,
       "max": 0,
       "status": "pass",
@@ -1648,7 +1648,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "elements",
-      "detail": "Informativno — ne ulazi u službenu ocjenu. Nisu pronađene očito neispravne poveznice",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. Nisu pronađene očito neispravne poveznice",
       "earned": 0,
       "max": 0,
       "status": "pass",
@@ -1656,7 +1656,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "elements",
-      "detail": "Informativno — ne ulazi u službenu ocjenu. 0 praznih odlomaka (0%)",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. 0 praznih odlomaka (0%)",
       "earned": 0,
       "max": 0,
       "status": "pass",
@@ -1760,7 +1760,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "formatting",
-      "detail": "Informativno — ne ulazi u službenu ocjenu. Informativno: brojčane margine nisu potvrđene kao obvezno pravilo za ovaj profil",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. Informativno: brojčane margine nisu potvrđene kao obvezno pravilo za ovaj profil",
       "earned": 0,
       "max": 0,
       "status": "pass",
@@ -1784,7 +1784,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "formatting",
-      "detail": "font nije očitan · — pt · prored — · poravnanje —",
+      "detail": "font nije očitan · ? pt · prored ? · poravnanje ?",
       "earned": 6,
       "max": 6,
       "status": "pass",
@@ -1864,7 +1864,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "structure",
-      "detail": "Informativno — ne ulazi u službenu ocjenu. TOC polje je možda prisutno, ali spremljene stavke sadržaja nisu dostupne za pouzdanu provjeru",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. TOC polje je možda prisutno, ali spremljene stavke sadržaja nisu dostupne za pouzdanu provjeru",
       "earned": 0,
       "max": 0,
       "status": "pass",
@@ -1896,7 +1896,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "structure",
-      "detail": "Informativno — ne ulazi u službenu ocjenu. Word nije spremio pouzdan broj stranica; profil: oko 30. Provjeri broj u otvorenom dokumentu.",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. Word nije spremio pouzdan broj stranica; profil: oko 30. Provjeri broj u otvorenom dokumentu.",
       "earned": 0,
       "max": 0,
       "status": "pass",
@@ -1912,7 +1912,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "structure",
-      "detail": "Informativno — ne ulazi u službenu ocjenu. Nije pronađen pouzdan prijelom prve stranice; redoslijed treba provjeriti vizualno",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. Nije pronađen pouzdan prijelom prve stranice; redoslijed treba provjeriti vizualno",
       "earned": 0,
       "max": 0,
       "status": "pass",
@@ -1920,7 +1920,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "structure",
-      "detail": "Informativno — ne ulazi u službenu ocjenu. Nije pronađen pouzdan prijelom prve stranice; vizualni raspored nije bodovan",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. Nije pronađen pouzdan prijelom prve stranice; vizualni raspored nije bodovan",
       "earned": 0,
       "max": 0,
       "status": "pass",
@@ -1984,7 +1984,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "citations",
-      "detail": "Informativno — ne ulazi u službenu ocjenu. Kratica id. nije korištena",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. Kratica id. nije korištena",
       "earned": 0,
       "max": 0,
       "status": "pass",
@@ -1992,7 +1992,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "citations",
-      "detail": "Informativno — ne ulazi u službenu ocjenu. 0 pravnih akata · 0 uvedenih kratica",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. 0 pravnih akata · 0 uvedenih kratica",
       "earned": 0,
       "max": 0,
       "status": "pass",
@@ -2000,7 +2000,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "citations",
-      "detail": "Informativno — ne ulazi u službenu ocjenu. Sudska praksa nije prepoznata",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. Sudska praksa nije prepoznata",
       "earned": 0,
       "max": 0,
       "status": "pass",
@@ -2032,7 +2032,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "elements",
-      "detail": "Informativno — ne ulazi u službenu ocjenu. 0 tablica · 0 prepoznatih naslova",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. 0 tablica · 0 prepoznatih naslova",
       "earned": 0,
       "max": 0,
       "status": "pass",
@@ -2040,7 +2040,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "elements",
-      "detail": "Informativno — ne ulazi u službenu ocjenu. 0 grafičkih elemenata · 0 prepoznatih naslova",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. 0 grafičkih elemenata · 0 prepoznatih naslova",
       "earned": 0,
       "max": 0,
       "status": "pass",
@@ -2048,7 +2048,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "elements",
-      "detail": "Informativno — ne ulazi u službenu ocjenu. Nisu pronađene očito neispravne poveznice",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. Nisu pronađene očito neispravne poveznice",
       "earned": 0,
       "max": 0,
       "status": "pass",
@@ -2056,7 +2056,7 @@ exports[`Sinteticki golden korpus (stabilan rezultat enginea) > stabilan rezulta
     },
     {
       "category": "elements",
-      "detail": "Informativno — ne ulazi u službenu ocjenu. 0 praznih odlomaka (0%)",
+      "detail": "Informativno: ne ulazi u službenu ocjenu. 0 praznih odlomaka (0%)",
       "earned": 0,
       "max": 0,
       "status": "pass",

@@ -1,7 +1,7 @@
 import type { ThesisProfile, RuleEntry } from './profile-schema';
 
 /**
- * Option A — `ruleEntries` are the authored source of truth.
+ * Option A: `ruleEntries` are the authored source of truth.
  *
  * `effectiveRules` = clone(legacy `rules` baseline) with every recognised `ruleEntry`
  * overlaid on top. During migration the legacy `rules` object still carries keys that

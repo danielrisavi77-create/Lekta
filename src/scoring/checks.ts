@@ -38,7 +38,7 @@ export function makeCheck(
 ): Check {
   if (max === 0) {
     status = 'pass';
-    detail = `Informativno — ne ulazi u službenu ocjenu. ${detail}`;
+    detail = `Informativno: ne ulazi u službenu ocjenu. ${detail}`;
     if (issue) issue = { ...issue, severity: 'info', title: `Informativno: ${issue.title}` };
   }
   return { category, title, status, earned: clamp(earned, 0, max), max, detail, issue, scored: max > 0 };
