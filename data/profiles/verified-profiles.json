@@ -36121,6 +36121,11 @@
   },
   {
     "id": "adu-gluma-diplomski",
+    "coverage": {
+      "status": "institution-covered",
+      "label": "Pokrivenost ustanove",
+      "note": "Akademija dramske umjetnosti: svih 8 studijskih odsjeka pokriveno diplomskim profilom, ukupno 24 stvarna verificirana javna diplomska rada iz repozitorija ADU (Dabar, A4 preflight)."
+    },
     "unitId": "adu",
     "programs": [
       "Gluma"
@@ -36212,6 +36217,11 @@
   },
   {
     "id": "adu-dramaturgija-diplomski",
+    "coverage": {
+      "status": "institution-covered",
+      "label": "Pokrivenost ustanove",
+      "note": "Akademija dramske umjetnosti: svih 8 studijskih odsjeka pokriveno diplomskim profilom, ukupno 24 stvarna verificirana javna diplomska rada iz repozitorija ADU (Dabar, A4 preflight)."
+    },
     "unitId": "adu",
     "programs": [
       "Dramaturgija"
@@ -36303,6 +36313,11 @@
   },
   {
     "id": "adu-snimanje-diplomski",
+    "coverage": {
+      "status": "institution-covered",
+      "label": "Pokrivenost ustanove",
+      "note": "Akademija dramske umjetnosti: svih 8 studijskih odsjeka pokriveno diplomskim profilom, ukupno 24 stvarna verificirana javna diplomska rada iz repozitorija ADU (Dabar, A4 preflight)."
+    },
     "unitId": "adu",
     "programs": [
       "Snimanje"
@@ -36395,6 +36410,11 @@
   },
   {
     "id": "adu-montaza-diplomski",
+    "coverage": {
+      "status": "institution-covered",
+      "label": "Pokrivenost ustanove",
+      "note": "Akademija dramske umjetnosti: svih 8 studijskih odsjeka pokriveno diplomskim profilom, ukupno 24 stvarna verificirana javna diplomska rada iz repozitorija ADU (Dabar, A4 preflight)."
+    },
     "unitId": "adu",
     "programs": [
       "Montaža"
@@ -36501,6 +36521,11 @@
   },
   {
     "id": "adu-ftv-rezija-diplomski",
+    "coverage": {
+      "status": "institution-covered",
+      "label": "Pokrivenost ustanove",
+      "note": "Akademija dramske umjetnosti: svih 8 studijskih odsjeka pokriveno diplomskim profilom, ukupno 24 stvarna verificirana javna diplomska rada iz repozitorija ADU (Dabar, A4 preflight)."
+    },
     "unitId": "adu",
     "programs": [
       "Filmska i TV režija"
@@ -36586,6 +36611,11 @@
   },
   {
     "id": "adu-produkcija-diplomski",
+    "coverage": {
+      "status": "institution-covered",
+      "label": "Pokrivenost ustanove",
+      "note": "Akademija dramske umjetnosti: svih 8 studijskih odsjeka pokriveno diplomskim profilom, ukupno 24 stvarna verificirana javna diplomska rada iz repozitorija ADU (Dabar, A4 preflight)."
+    },
     "unitId": "adu",
     "programs": [
       "Produkcija"
@@ -36673,6 +36703,11 @@
   },
   {
     "id": "adu-kazalisna-rezija-diplomski",
+    "coverage": {
+      "status": "institution-covered",
+      "label": "Pokrivenost ustanove",
+      "note": "Akademija dramske umjetnosti: svih 8 studijskih odsjeka pokriveno diplomskim profilom, ukupno 24 stvarna verificirana javna diplomska rada iz repozitorija ADU (Dabar, A4 preflight)."
+    },
     "unitId": "adu",
     "programs": [
       "Kazališna režija i radiofonija"
@@ -36764,6 +36799,11 @@
   },
   {
     "id": "adu-opci-diplomski",
+    "coverage": {
+      "status": "institution-covered",
+      "label": "Pokrivenost ustanove",
+      "note": "Akademija dramske umjetnosti: svih 8 studijskih odsjeka pokriveno diplomskim profilom, ukupno 24 stvarna verificirana javna diplomska rada iz repozitorija ADU (Dabar, A4 preflight)."
+    },
     "unitId": "adu",
     "programs": [
       "Opći profil akademije"
