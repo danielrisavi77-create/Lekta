@@ -36118,5 +36118,740 @@
       ],
       "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), NE prored/font sadrzaja. Radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet je PID."
     }
+  },
+  {
+    "id": "adu-gluma-diplomski",
+    "unitId": "adu",
+    "programs": [
+      "Gluma"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Akademija dramske umjetnosti, Odsjek glume, diplomski rad",
+    "verifiedAt": "2026-07-05",
+    "documentDate": null,
+    "rules": {
+      "checkFont": false,
+      "checkSize": false,
+      "checkSpacing": false,
+      "checkMargins": false,
+      "checkJustify": false
+    },
+    "facts": [],
+    "note": "Odsjek glume ADU: pisani diplomski rad postoji i javno je dostupan u repozitoriju ADU (Dabar), no javno dohvatljiv tehnički pravilnik s propisanom tipografijom za ovaj odsjek nije potvrđen u izradi profila. Poznati primjer unutar ADU (Odsjek montaže, Pravilnik o diplomskim radovima 2018) propisuje Times New Roman 12, prored 1,5 i format A4; taj standard NE pretpostavljamo za ovaj odsjek bez izvora za sam odsjek. Tipografija i citatni stil (upute mentora/kolegija) provjeravaju se savjetodavno. Uzorci su 3 stvarna javna diplomska rada iz repozitorija ADU, A4 preflight.",
+    "sources": [
+      {
+        "title": "Pravilnik o studiranju (Akademija dramske umjetnosti)",
+        "url": "https://web.archive.org/web/20240501122536/http://masterwww.adu.hr/wp-content/uploads/2012/04/PRAVILNIK_O_STUDIRANJU_konaPDF1.pdf"
+      },
+      {
+        "title": "Statut Akademije dramske umjetnosti (2023)",
+        "url": "https://www.unizg.hr/fileadmin/rektorat/O_Sveucilistu/Dokumenti_javnost/Propisi/statuti_sastavnica/2023_ADU_statut.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o studiranju (Akademija dramske umjetnosti)",
+      "Statut Akademije dramske umjetnosti (2023)"
+    ],
+    "ruleAuthority": "official-recommended-mentor-priority",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Tipografija",
+      "Citatni stil"
+    ],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-05",
+      "scope": "3 stvarna javna diplomska rada (Odsjek glume) iz službenog repozitorija ADU (repozitorij.adu.unizg.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016,
+          2017
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "adu:30",
+          "repository": "repozitorij.adu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 42,
+          "sha256": "ccb07f655466b19a145081598d1add9a05ca6333812acc51d3565ade1bd812fe",
+          "level": "diplomski"
+        },
+        {
+          "pid": "adu:33",
+          "repository": "repozitorij.adu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 27,
+          "sha256": "4f9ea953d6be0e8b63498d0206d1fccb30ea5a36be0484981f556be41e0c6e82",
+          "level": "diplomski"
+        },
+        {
+          "pid": "adu:39",
+          "repository": "repozitorij.adu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 23,
+          "sha256": "0523bd7bd9d1c514a7fccc1debcbe8b0d0810a6af2089d67daeaee8820bf2b55",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna diplomska rada (adu:30, adu:33, adu:39) prolaze byte-level A4 preflight: valjan nešifriran PDF, višelistni (23-42 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), ne prored/font sadržaja. Radovi služe samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "adu-dramaturgija-diplomski",
+    "unitId": "adu",
+    "programs": [
+      "Dramaturgija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Akademija dramske umjetnosti, Odsjek dramaturgije, diplomski rad",
+    "verifiedAt": "2026-07-05",
+    "documentDate": null,
+    "rules": {
+      "checkFont": false,
+      "checkSize": false,
+      "checkSpacing": false,
+      "checkMargins": false,
+      "checkJustify": false
+    },
+    "facts": [],
+    "note": "Odsjek dramaturgije ADU: pisani diplomski rad postoji i javno je dostupan u repozitoriju ADU (Dabar), no javno dohvatljiv tehnički pravilnik s propisanom tipografijom za ovaj odsjek nije potvrđen u izradi profila. Poznati primjer unutar ADU (Odsjek montaže, Pravilnik o diplomskim radovima 2018) propisuje Times New Roman 12, prored 1,5 i format A4; taj standard NE pretpostavljamo za ovaj odsjek bez izvora za sam odsjek. Tipografija i citatni stil (upute mentora/kolegija) provjeravaju se savjetodavno. Uzorci su 3 stvarna javna diplomska rada iz repozitorija ADU, A4 preflight.",
+    "sources": [
+      {
+        "title": "Pravilnik o studiranju (Akademija dramske umjetnosti)",
+        "url": "https://web.archive.org/web/20240501122536/http://masterwww.adu.hr/wp-content/uploads/2012/04/PRAVILNIK_O_STUDIRANJU_konaPDF1.pdf"
+      },
+      {
+        "title": "Statut Akademije dramske umjetnosti (2023)",
+        "url": "https://www.unizg.hr/fileadmin/rektorat/O_Sveucilistu/Dokumenti_javnost/Propisi/statuti_sastavnica/2023_ADU_statut.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o studiranju (Akademija dramske umjetnosti)",
+      "Statut Akademije dramske umjetnosti (2023)"
+    ],
+    "ruleAuthority": "official-recommended-mentor-priority",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Tipografija",
+      "Citatni stil"
+    ],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-05",
+      "scope": "3 stvarna javna diplomska rada (Odsjek dramaturgije) iz službenog repozitorija ADU (repozitorij.adu.unizg.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016,
+          2018
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "adu:120",
+          "repository": "repozitorij.adu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 88,
+          "sha256": "55e2d6c1ddc5dae96261d92a5c998ae8e2ac9636c4bbebb7dd8886e8a80f635a",
+          "level": "diplomski"
+        },
+        {
+          "pid": "adu:195",
+          "repository": "repozitorij.adu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 78,
+          "sha256": "ca9995a86e66373738634daedca51c84cb4b21e5eadcb949b770080d081e58a0",
+          "level": "diplomski"
+        },
+        {
+          "pid": "adu:226",
+          "repository": "repozitorij.adu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 68,
+          "sha256": "b22bbbed611109ab06fbab25b4a25d333e8b0e7d91a334f420e57ddab943d112",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna diplomska rada (adu:120, adu:195, adu:226) prolaze byte-level A4 preflight: valjan nešifriran PDF, višelistni (68-88 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), ne prored/font sadržaja. Radovi služe samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "adu-snimanje-diplomski",
+    "unitId": "adu",
+    "programs": [
+      "Snimanje"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Akademija dramske umjetnosti, Odsjek snimanja, diplomski rad",
+    "verifiedAt": "2026-07-05",
+    "documentDate": null,
+    "rules": {
+      "checkFont": false,
+      "checkSize": false,
+      "checkSpacing": false,
+      "checkMargins": false,
+      "checkJustify": false
+    },
+    "facts": [],
+    "note": "Odsjek snimanja ADU: pisani diplomski rad postoji i javno je dostupan u repozitoriju ADU (Dabar), no javno dohvatljiv tehnički pravilnik s propisanom tipografijom za ovaj odsjek nije potvrđen u izradi profila. Poznati primjer unutar ADU (Odsjek montaže, Pravilnik o diplomskim radovima 2018) propisuje Times New Roman 12, prored 1,5 i format A4; taj standard NE pretpostavljamo za ovaj odsjek bez izvora za sam odsjek. Tipografija i citatni stil (upute mentora/kolegija) provjeravaju se savjetodavno. Uzorci su 3 stvarna javna diplomska rada iz repozitorija ADU, A4 preflight.",
+    "sources": [
+      {
+        "title": "Pravilnik o studiranju (Akademija dramske umjetnosti)",
+        "url": "https://web.archive.org/web/20240501122536/http://masterwww.adu.hr/wp-content/uploads/2012/04/PRAVILNIK_O_STUDIRANJU_konaPDF1.pdf"
+      },
+      {
+        "title": "Statut Akademije dramske umjetnosti (2023)",
+        "url": "https://www.unizg.hr/fileadmin/rektorat/O_Sveucilistu/Dokumenti_javnost/Propisi/statuti_sastavnica/2023_ADU_statut.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o studiranju (Akademija dramske umjetnosti)",
+      "Statut Akademije dramske umjetnosti (2023)"
+    ],
+    "ruleAuthority": "official-recommended-mentor-priority",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Tipografija",
+      "Citatni stil"
+    ],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-05",
+      "scope": "3 stvarna javna diplomska rada (Odsjek snimanja) iz službenog repozitorija ADU (repozitorij.adu.unizg.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015,
+          2016,
+          2017
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "adu:8",
+          "repository": "repozitorij.adu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 51,
+          "sha256": "332351e82ba9bda1102b5ea2b22608fba5b2d58c9a76f0b7ab700c12a7f79abb",
+          "level": "diplomski"
+        },
+        {
+          "pid": "adu:11",
+          "repository": "repozitorij.adu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 35,
+          "sha256": "bf4510b99cb81708c6241f083f3f6ab0505c7db03f225dca437a2616bc379b4e",
+          "level": "diplomski"
+        },
+        {
+          "pid": "adu:31",
+          "repository": "repozitorij.adu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 93,
+          "sha256": "a885fdd95c069db60220c9bd2a52923dad3ae876a210f92be9e0da27a0c61ed9",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna diplomska rada (adu:8, adu:11, adu:31) prolaze byte-level A4 preflight: valjan nešifriran PDF, višelistni (35-93 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), ne prored/font sadržaja. Radovi služe samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "adu-montaza-diplomski",
+    "unitId": "adu",
+    "programs": [
+      "Montaža"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Akademija dramske umjetnosti, Odsjek montaže, diplomski rad",
+    "verifiedAt": "2026-07-05",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 4
+      }
+    },
+    "facts": [
+      "Naslovi poglavlja: veličina 14 pt.",
+      "Opseg: 35 do 50 stranica, najmanje 40.000 slovnih znakova (bez sadržaja, popisa literature i priloga).",
+      "Naslovnica: velika tiskana slova 16 pt (sveučilište/odsjek, ime, naslov), 14 pt (vrsta rada, mentor, mjesto i godina).",
+      "Sve stranice numerirane; tekst lektoriran (hrvatski književni jezik)."
+    ],
+    "note": "Odsjek montaže ADU ima vlastiti Pravilnik o diplomskim radovima i diplomskom ispitu (2018) koji propisuje tehničko uređenje pisanoga diplomskog rada: Times New Roman 12, prored 1,5, format A4, margine 25 mm (lijeva 40 mm), naslovi poglavlja 14 pt, opseg 35 do 50 stranica (najmanje 40.000 slovnih znakova). Citatni stil NIJE jedinstveno propisan: Pravilnik navodi harvardski ili APA sustav, odnosno prema uputama mentora, pa se stil ne pina (custom). Uzorci su 3 stvarna javna diplomska rada Odsjeka montaže iz repozitorija ADU (Dabar), provjerena A4 preflightom.",
+    "sources": [
+      {
+        "title": "Pravilnik o diplomskim radovima i diplomskom ispitu diplomskog studija Montaže (Akademija dramske umjetnosti, 2018)",
+        "url": "https://web.archive.org/web/20240501130942/http://masterwww.adu.hr/wp-content/uploads/2014/07/Pravilnik-o-diplomskim-radovima-i-diplomskom-ispitu-diplomskog-studija-Monta%C5%BEe-_-2018.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o diplomskim radovima i diplomskom ispitu diplomskog studija Montaže (Akademija dramske umjetnosti, 2018)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Veličina slova",
+      "Prored",
+      "Opseg rada"
+    ],
+    "advisoryScope": [
+      "Citatni stil"
+    ],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-05",
+      "scope": "3 stvarna javna diplomska rada (Odsjek montaže) iz službenog repozitorija ADU (repozitorij.adu.unizg.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015,
+          2016
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "adu:6",
+          "repository": "repozitorij.adu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 86,
+          "sha256": "f2017ebe58a8605a578e0133cb77faae5d1f694cc3962e6940093913921c167f",
+          "level": "diplomski"
+        },
+        {
+          "pid": "adu:9",
+          "repository": "repozitorij.adu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 77,
+          "sha256": "1a5624bc0d7431df4c73f55bc34f3ede24bb7c903ac740237098377238227bc1",
+          "level": "diplomski"
+        },
+        {
+          "pid": "adu:122",
+          "repository": "repozitorij.adu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 49,
+          "sha256": "cb16d1fa99e615bd71628f48243561a2221c12993dde9dec536c7da98107d861",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna diplomska rada (adu:6, adu:9, adu:122) prolaze byte-level A4 preflight: valjan nešifriran PDF, višelistni (49-86 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), ne prored/font sadržaja. Radovi služe samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "adu-ftv-rezija-diplomski",
+    "unitId": "adu",
+    "programs": [
+      "Filmska i TV režija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Akademija dramske umjetnosti, Odsjek filmske i TV režije, diplomski rad",
+    "verifiedAt": "2026-07-05",
+    "documentDate": null,
+    "rules": {
+      "checkFont": false,
+      "checkSize": false,
+      "checkSpacing": false,
+      "checkMargins": false,
+      "checkJustify": false
+    },
+    "facts": [],
+    "note": "Odsjek filmske i TV režije ADU ima Pravilnik o izvođenju nastave, nastavne produkcije i ispita (2017) koji uređuje diplomski rad (filmski rad uz pisani rad), ali za pisani rad ne propisuje jedinstvenu tipografiju (spominje se predaja u fontu veličine 12 uz standardne margine). Tipografija se stoga ne nameće; citatni stil je prema uputama mentora (custom). Uzorci su 3 stvarna javna diplomska rada odsjeka iz repozitorija ADU (Dabar), A4 preflight.",
+    "sources": [
+      {
+        "title": "Pravilnik o izvođenju nastave, nastavne produkcije i ispita preddiplomskog i diplomskog studija Filmske i TV režije (ADU, pročišćeni tekst 2017)",
+        "url": "https://web.archive.org/web/20240501123949/http://masterwww.adu.hr/wp-content/uploads/2017/04/PRO%C4%8CI%C5%A0%C4%86ENI-TEKST-PRAVILNIKA-FTV-RE%C5%BDIJA-2017..doc"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o izvođenju nastave, nastavne produkcije i ispita preddiplomskog i diplomskog studija Filmske i TV režije (ADU, pročišćeni tekst 2017)"
+    ],
+    "ruleAuthority": "official-recommended-mentor-priority",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Tipografija",
+      "Citatni stil"
+    ],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-05",
+      "scope": "3 stvarna javna diplomska rada (Odsjek filmske i TV režije) iz službenog repozitorija ADU (repozitorij.adu.unizg.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "adu:3",
+          "repository": "repozitorij.adu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 64,
+          "sha256": "9f9830fac66302caccb91a6a7ce914929e901ee38c2a8c443f92e1db6f4fa1ec",
+          "level": "diplomski"
+        },
+        {
+          "pid": "adu:4",
+          "repository": "repozitorij.adu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 42,
+          "sha256": "69beafca8b2fb7b65ad736957fa5d5df9298e73d2e159fa5cc7a44d06c8d0895",
+          "level": "diplomski"
+        },
+        {
+          "pid": "adu:5",
+          "repository": "repozitorij.adu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 42,
+          "sha256": "f16264a0e7bc3b0719c390fe242907332b07ff13e4e8d97892c4a27615b2e014",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna diplomska rada (adu:3, adu:4, adu:5) prolaze byte-level A4 preflight: valjan nešifriran PDF, višelistni (42-64 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), ne prored/font sadržaja. Radovi služe samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "adu-produkcija-diplomski",
+    "unitId": "adu",
+    "programs": [
+      "Produkcija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Akademija dramske umjetnosti, Odsjek produkcije, diplomski rad",
+    "verifiedAt": "2026-07-05",
+    "documentDate": null,
+    "rules": {
+      "checkFont": false,
+      "checkSize": false,
+      "checkSpacing": false,
+      "checkMargins": false,
+      "checkJustify": false
+    },
+    "facts": [],
+    "note": "Odsjek produkcije ADU ima Pravilnik odsjeka (2017): diplomski je produkcijski projekt uz teorijski pisani rad, a za pisanje se poziva na sveučilišna pravila pisanja diplomskih radova bez vlastite propisane tipografije. Tipografija se ne nameće; citatni stil je prema uputama mentora (custom). Uzorci su 3 stvarna javna diplomska rada odsjeka iz repozitorija ADU (Dabar), A4 preflight.",
+    "sources": [
+      {
+        "title": "Pravilnik Odsjeka produkcije (ADU, pročišćeni tekst 2017)",
+        "url": "https://web.archive.org/web/20240501153414/http://masterwww.adu.hr/wp-content/uploads/2017/04/PRO%C4%8CI%C5%A0%C4%86ENI-TEKST-PRAVILNIKA-ODSJEKA-PRODUKCIJE-2017.doc"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik Odsjeka produkcije (ADU, pročišćeni tekst 2017)"
+    ],
+    "ruleAuthority": "official-recommended-mentor-priority",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Tipografija",
+      "Citatni stil"
+    ],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-05",
+      "scope": "3 stvarna javna diplomska rada (Odsjek produkcije) iz službenog repozitorija ADU (repozitorij.adu.unizg.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015,
+          2016,
+          2017
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "adu:7",
+          "repository": "repozitorij.adu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 67,
+          "sha256": "b65e1148a566043cdc92cf87f3a249477f9b2e45717d0593eec1c966ea9154cf",
+          "level": "diplomski"
+        },
+        {
+          "pid": "adu:34",
+          "repository": "repozitorij.adu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 68,
+          "sha256": "d8108df867b314d009e2a7f8102b8665e0758c2ddfe5175d4f955d3e749f0d79",
+          "level": "diplomski"
+        },
+        {
+          "pid": "adu:112",
+          "repository": "repozitorij.adu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 44,
+          "sha256": "217c70797e64d3f6fd9f7be47a83f85da5c8a5f6ec0c15923b8eaf83ba5585b7",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna diplomska rada (adu:7, adu:34, adu:112) prolaze byte-level A4 preflight: valjan nešifriran PDF, višelistni (44-68 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), ne prored/font sadržaja. Radovi služe samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "adu-kazalisna-rezija-diplomski",
+    "unitId": "adu",
+    "programs": [
+      "Kazališna režija i radiofonija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Akademija dramske umjetnosti, Odsjek kazališne režije i radiofonije, diplomski rad",
+    "verifiedAt": "2026-07-05",
+    "documentDate": null,
+    "rules": {
+      "checkFont": false,
+      "checkSize": false,
+      "checkSpacing": false,
+      "checkMargins": false,
+      "checkJustify": false
+    },
+    "facts": [],
+    "note": "Odsjek kazališne režije i radiofonije ADU: pisani diplomski rad postoji i javno je dostupan u repozitoriju ADU (Dabar), no javno dohvatljiv tehnički pravilnik s propisanom tipografijom za ovaj odsjek nije potvrđen u izradi profila. Poznati primjer unutar ADU (Odsjek montaže, Pravilnik o diplomskim radovima 2018) propisuje Times New Roman 12, prored 1,5 i format A4; taj standard NE pretpostavljamo za ovaj odsjek bez izvora za sam odsjek. Tipografija i citatni stil (upute mentora/kolegija) provjeravaju se savjetodavno. Uzorci su 3 stvarna javna diplomska rada iz repozitorija ADU, A4 preflight.",
+    "sources": [
+      {
+        "title": "Pravilnik o studiranju (Akademija dramske umjetnosti)",
+        "url": "https://web.archive.org/web/20240501122536/http://masterwww.adu.hr/wp-content/uploads/2012/04/PRAVILNIK_O_STUDIRANJU_konaPDF1.pdf"
+      },
+      {
+        "title": "Statut Akademije dramske umjetnosti (2023)",
+        "url": "https://www.unizg.hr/fileadmin/rektorat/O_Sveucilistu/Dokumenti_javnost/Propisi/statuti_sastavnica/2023_ADU_statut.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o studiranju (Akademija dramske umjetnosti)",
+      "Statut Akademije dramske umjetnosti (2023)"
+    ],
+    "ruleAuthority": "official-recommended-mentor-priority",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Tipografija",
+      "Citatni stil"
+    ],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-05",
+      "scope": "3 stvarna javna diplomska rada (Odsjek kazališne režije i radiofonije) iz službenog repozitorija ADU (repozitorij.adu.unizg.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016,
+          2017
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "adu:95",
+          "repository": "repozitorij.adu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 42,
+          "sha256": "7323808d1c2d5c33315b2dfec3fd193955086b4146e19d8be2729edf591e77dd",
+          "level": "diplomski"
+        },
+        {
+          "pid": "adu:116",
+          "repository": "repozitorij.adu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 37,
+          "sha256": "b1e167419fc598164c32da027b302d93cf1141dd0cafc4d5639b7ed9f4a529da",
+          "level": "diplomski"
+        },
+        {
+          "pid": "adu:123",
+          "repository": "repozitorij.adu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 27,
+          "sha256": "795ee9cfd9d580564f49f8e3e2f372a7046e1d82bc9928066a6d5a657fea1bf9",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna diplomska rada (adu:95, adu:116, adu:123) prolaze byte-level A4 preflight: valjan nešifriran PDF, višelistni (27-42 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), ne prored/font sadržaja. Radovi služe samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
+  },
+  {
+    "id": "adu-opci-diplomski",
+    "unitId": "adu",
+    "programs": [
+      "Opći profil akademije"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Akademija dramske umjetnosti, Opći profil ADU, diplomski rad",
+    "verifiedAt": "2026-07-05",
+    "documentDate": null,
+    "rules": {
+      "checkFont": false,
+      "checkSize": false,
+      "checkSpacing": false,
+      "checkMargins": false,
+      "checkJustify": false
+    },
+    "facts": [],
+    "note": "Opći profil ADU pokriva diplomske radove bez zasebne odsjeČke atribucije u repozitoriju. Pisani diplomski rad postoji i javno je dostupan (Dabar). Jedinstveni tehnički pravilnik ADU s propisanom tipografijom nije javno potvrđen; pojedini odsjeci uređuju diplomski rad vlastitim pravilnicima. Poznati primjer unutar ADU (Odsjek montaže, Pravilnik o diplomskim radovima 2018) propisuje Times New Roman 12, prored 1,5 i format A4; taj standard NE pretpostavljamo za ovaj odsjek bez izvora za sam odsjek. Tipografija i citatni stil (upute mentora/kolegija) provjeravaju se savjetodavno. Uzorci su 3 stvarna javna diplomska rada iz repozitorija ADU, A4 preflight.",
+    "sources": [
+      {
+        "title": "Pravilnik o studiranju (Akademija dramske umjetnosti)",
+        "url": "https://web.archive.org/web/20240501122536/http://masterwww.adu.hr/wp-content/uploads/2012/04/PRAVILNIK_O_STUDIRANJU_konaPDF1.pdf"
+      },
+      {
+        "title": "Statut Akademije dramske umjetnosti (2023)",
+        "url": "https://www.unizg.hr/fileadmin/rektorat/O_Sveucilistu/Dokumenti_javnost/Propisi/statuti_sastavnica/2023_ADU_statut.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o studiranju (Akademija dramske umjetnosti)",
+      "Statut Akademije dramske umjetnosti (2023)"
+    ],
+    "ruleAuthority": "official-recommended-mentor-priority",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Tipografija",
+      "Citatni stil"
+    ],
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-05",
+      "scope": "3 stvarna javna diplomska rada (Opći profil ADU) iz službenog repozitorija ADU (repozitorij.adu.unizg.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2017,
+          2018,
+          2019
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "adu:106",
+          "repository": "repozitorij.adu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 221,
+          "sha256": "45625e406a224a79c4cea79fc0dbe3ff49ea234fa7cb661cc23a1c8bea851dc2",
+          "level": "diplomski"
+        },
+        {
+          "pid": "adu:229",
+          "repository": "repozitorij.adu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 28,
+          "sha256": "d8b7f863e9d3c982d8baf9ba8d27c8964656526b55f7f69f17019b49481497e9",
+          "level": "diplomski"
+        },
+        {
+          "pid": "adu:277",
+          "repository": "repozitorij.adu.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 37,
+          "sha256": "045b2e2e4f80a1129de50d9f4ce9046d64244cbf9b532cb45a2e960896fb3032",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna diplomska rada (adu:106, adu:229, adu:277) prolaze byte-level A4 preflight: valjan nešifriran PDF, višelistni (28-221 str.), A4 (595x842 pt)."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan: Dabar repozitoriji utiskuju watermark po preuzimanju; stabilni identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI), ne prored/font sadržaja. Radovi služe samo provjeri parsera i formata (CLAUDE.md). PID je identitet; PDF-ovi se ne commitaju."
+    }
   }
 ]

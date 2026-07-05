@@ -435,14 +435,15 @@
         "family": "arts",
         "programs": [
           "Gluma",
-          "Režija",
           "Dramaturgija",
-          "Produkcija",
           "Snimanje",
           "Montaža",
+          "Produkcija",
+          "Filmska i TV režija",
+          "Kazališna režija i radiofonija",
           "Opći profil akademije"
         ],
-        "status": "generic"
+        "status": "partial"
       },
       {
         "id": "alu",
