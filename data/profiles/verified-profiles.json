@@ -37702,5 +37702,102 @@
       ],
       "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI). Radovi služe samo provjeri parsera i formata (CLAUDE.md). PDF-ovi se ne commitaju."
     }
+  },
+  {
+    "id": "pmf-geofizika-graduate",
+    "unitId": "pmf",
+    "programs": [
+      "Geofizika"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Prirodoslovno-matematički fakultet, Geofizički odsjek, diplomski rad",
+    "verifiedAt": "2026-07-05",
+    "documentDate": null,
+    "rules": {
+      "recommendedCitation": "harvard",
+      "checkFont": false,
+      "checkSize": false,
+      "checkSpacing": false,
+      "checkMargins": false,
+      "checkJustify": false
+    },
+    "facts": [
+      "Citatni stil: harvardski (autor-godina), propisan od Geofizičke knjižnice PMF-a (Upute za citiranje diplomskih radova).",
+      "Literatura se navodi abecednim redom po prezimenu prvog autora; u tekstu do tri autora, u popisu svi autori.",
+      "Predložak (Word/LaTeX) i Pravilnik o diplomskom radu Geofizičkog odsjeka postoje; tipografija u predlošku (Cambria/TNR mješovito) nije jedinstveno propisana pa se ne nameće."
+    ],
+    "note": "Geofizički odsjek PMF-a (diplomski studij Fizika-Geofizika). Citatni stil je HARVARDSKI (autor-godina), izrijekom propisan od Geofizičke knjižnice u Uputama za citiranje diplomskih radova, pa je imenovan i mandiran (scored). Tehnička tipografija nije jedinstveno propisana tekstualnim izvorom (Pravilnik je proceduralan, Word predložak koristi mješovito Cambria/TNR), pa se ne nameće. Uzorci su 3 stvarna javna diplomska rada Geofizičkog odsjeka iz repozitorija PMF-a (Dabar), A4 preflight.",
+    "sources": [
+      {
+        "title": "Upute za citiranje diplomskih radova - Harvardski stil (Geofizički odsjek PMF-a)",
+        "url": "https://www.pmf.unizg.hr/_download/repository/Pravila_za_pisanje_diplomskih_radova%5B1%5D.pdf"
+      },
+      {
+        "title": "Pravilnik o diplomskom radu i diplomskom ispitu na Geofizičkom odsjeku PMF-a",
+        "url": "https://www.pmf.unizg.hr/_download/repository/Pravilnik_o_diplomskom_radu_i_diplomskom_ispitu_na_Geofizickom_odsjeku_PMF-a%5B1%5D.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za citiranje diplomskih radova - Harvardski stil (Geofizički odsjek PMF-a)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "stil citiranja (harvardski, autor-godina)"
+    ],
+    "advisoryScope": [
+      "Tipografija"
+    ],
+    "coverage": null,
+    "fieldValidation": {
+      "status": "field-sampled",
+      "validatedAt": "2026-07-05",
+      "scope": "3 stvarna javna diplomska rada (Geofizički odsjek) iz službenog repozitorija PMF-a (repozitorij.pmf.unizg.hr, Dabar, open access) kroz PDF preflight (A4).",
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016,
+          2017
+        ]
+      },
+      "publicSources": [
+        {
+          "pid": "pmf:53",
+          "repository": "repozitorij.pmf.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 48,
+          "sha256": "647038e625833c7ef5b07ce6fd560a7bcab2c78bb795d6c85ddfa1bc29cf4e74",
+          "level": "diplomski"
+        },
+        {
+          "pid": "pmf:54",
+          "repository": "repozitorij.pmf.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 46,
+          "sha256": "cf24e97993f8f26b0241f91322da6eaadd462a46f60e184a13e599836d1187e2",
+          "level": "diplomski"
+        },
+        {
+          "pid": "pmf:55",
+          "repository": "repozitorij.pmf.unizg.hr",
+          "pageFormat": "A4",
+          "pages": 56,
+          "sha256": "debc821af33c3de450a12303500974c3393c5f2eb5fe7f79eaa3de1f7aa7ff63",
+          "level": "diplomski"
+        }
+      ],
+      "confirmed": [
+        "3 stvarna javna diplomska rada (pmf:53, pmf:54, pmf:55) prolaze byte-level A4 preflight: valjan nešifriran PDF, višelistni (46-56 str.), A4."
+      ],
+      "observedDeviations": [
+        "sha256 NIJE reproducibilan (Dabar watermark po preuzimanju); identitet je PID."
+      ],
+      "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI). Radovi služe samo provjeri parsera i formata (CLAUDE.md). PDF-ovi se ne commitaju."
+    }
   }
 ]
