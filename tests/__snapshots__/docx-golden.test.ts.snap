@@ -94,7 +94,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "citations",
-        "detail": "FPZG autor–godina: ručna završna provjera potrebna",
+        "detail": "FPZG autor-godina: ručna završna provjera potrebna",
         "earned": 3,
         "max": 3,
         "status": "warn",
@@ -166,7 +166,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "citations",
-        "detail": "Za stil FPZG autor–godina citatnice i literaturu treba dodatno ručno pregledati.",
+        "detail": "Za stil FPZG autor-godina citatnice i literaturu treba dodatno ručno pregledati.",
         "severity": "info",
         "title": "Odabrani citatni stil nije u potpunosti automatiziran",
         "where": "Citatni profil",
@@ -307,7 +307,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "citations",
-        "detail": "FPZG autor–godina: ručna završna provjera potrebna",
+        "detail": "FPZG autor-godina: ručna završna provjera potrebna",
         "earned": 3,
         "max": 3,
         "status": "warn",
@@ -372,7 +372,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "citations",
-        "detail": "Za stil FPZG autor–godina citatnice i literaturu treba dodatno ručno pregledati.",
+        "detail": "Za stil FPZG autor-godina citatnice i literaturu treba dodatno ručno pregledati.",
         "severity": "info",
         "title": "Odabrani citatni stil nije u potpunosti automatiziran",
         "where": "Citatni profil",
@@ -513,7 +513,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "citations",
-        "detail": "FPZG autor–godina: ručna završna provjera potrebna",
+        "detail": "FPZG autor-godina: ručna završna provjera potrebna",
         "earned": 3,
         "max": 3,
         "status": "warn",
@@ -585,7 +585,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "citations",
-        "detail": "Za stil FPZG autor–godina citatnice i literaturu treba dodatno ručno pregledati.",
+        "detail": "Za stil FPZG autor-godina citatnice i literaturu treba dodatno ručno pregledati.",
         "severity": "info",
         "title": "Odabrani citatni stil nije u potpunosti automatiziran",
         "where": "Citatni profil",
@@ -754,7 +754,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "citations",
-        "detail": "FPZG autor–godina: ručna završna provjera potrebna",
+        "detail": "FPZG autor-godina: ručna završna provjera potrebna",
         "earned": 3,
         "max": 3,
         "status": "warn",
@@ -819,7 +819,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "citations",
-        "detail": "Za stil FPZG autor–godina citatnice i literaturu treba dodatno ručno pregledati.",
+        "detail": "Za stil FPZG autor-godina citatnice i literaturu treba dodatno ručno pregledati.",
         "severity": "info",
         "title": "Odabrani citatni stil nije u potpunosti automatiziran",
         "where": "Citatni profil",
@@ -953,7 +953,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "citations",
-        "detail": "FPZG autor–godina: ručna završna provjera potrebna",
+        "detail": "FPZG autor-godina: ručna završna provjera potrebna",
         "earned": 3,
         "max": 3,
         "status": "warn",
@@ -1018,7 +1018,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "citations",
-        "detail": "Za stil FPZG autor–godina citatnice i literaturu treba dodatno ručno pregledati.",
+        "detail": "Za stil FPZG autor-godina citatnice i literaturu treba dodatno ručno pregledati.",
         "severity": "info",
         "title": "Odabrani citatni stil nije u potpunosti automatiziran",
         "where": "Citatni profil",
@@ -1145,7 +1145,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "citations",
-        "detail": "FPZG autor–godina: ručna završna provjera potrebna",
+        "detail": "FPZG autor-godina: ručna završna provjera potrebna",
         "earned": 3,
         "max": 3,
         "status": "warn",
@@ -1210,7 +1210,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "citations",
-        "detail": "Za stil FPZG autor–godina citatnice i literaturu treba dodatno ručno pregledati.",
+        "detail": "Za stil FPZG autor-godina citatnice i literaturu treba dodatno ručno pregledati.",
         "severity": "info",
         "title": "Odabrani citatni stil nije u potpunosti automatiziran",
         "where": "Citatni profil",

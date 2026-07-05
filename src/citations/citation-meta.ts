@@ -11,12 +11,12 @@ export interface CitationMeta {
 }
 
 const CITATION_META: Record<string, CitationMeta> = {
-  fpzg: { label: 'FPZG autor–godina', accessDate: true, mode: 'author-year' },
-  'pravo-fusnote': { label: 'Pravni fakultet – pravne fusnote', accessDate: false, mode: 'legal-notes' },
-  'pravo-social-author': { label: 'Pravni fakultet – Socijalni rad autor–godina', accessDate: true, mode: 'author-year' },
+  fpzg: { label: 'FPZG autor-godina', accessDate: true, mode: 'author-year' },
+  'pravo-fusnote': { label: 'Pravni fakultet: pravne fusnote', accessDate: false, mode: 'legal-notes' },
+  'pravo-social-author': { label: 'Pravni fakultet: Socijalni rad autor-godina', accessDate: true, mode: 'author-year' },
   apa7: { label: 'APA 7', accessDate: false, mode: 'author-year' },
-  harvard: { label: 'Harvard / autor–godina', accessDate: true, mode: 'author-year' },
-  'chicago-author': { label: 'Chicago autor–datum', accessDate: false, mode: 'author-year' },
+  harvard: { label: 'Harvard / autor-godina', accessDate: true, mode: 'author-year' },
+  'chicago-author': { label: 'Chicago autor-datum', accessDate: false, mode: 'author-year' },
   'chicago-notes': { label: 'Chicago fusnote', accessDate: false, mode: 'notes' },
   mla9: { label: 'MLA 9', accessDate: false, mode: 'author-page' },
   vancouver: { label: 'Vancouver', accessDate: false, mode: 'numeric' },
