@@ -209,7 +209,7 @@
       "observedDeviations": [
         "fpzg:2450 su u US Letter formatu (612x792), ne A4 - preflight ih tocno oznaci ispod A4 praga. Dio FPZG radova nije u A4."
       ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4 vs Letter) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). FPZG oblikovanje je faculty-wide isto za smjerove; uzorci su iz programa tog smjera. PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4 vs Letter) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). FPZG oblikovanje je faculty-wide isto za smjerove; uzorci su iz programa tog smjera. PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
     },
     "ruleAuthority": "official-sources-only",
     "repositoryRole": "Regresijsko testiranje parsera; repozitorijski radovi nisu izvor obveznih pravila.",
@@ -289,7 +289,7 @@
       "observedDeviations": [
         "fpzg:2410 su u US Letter formatu (612x792), ne A4 - preflight ih tocno oznaci ispod A4 praga. Dio FPZG radova nije u A4."
       ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4 vs Letter) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). FPZG oblikovanje je faculty-wide isto za smjerove; uzorci su iz programa tog smjera. PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4 vs Letter) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). FPZG oblikovanje je faculty-wide isto za smjerove; uzorci su iz programa tog smjera. PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
     },
     "rules": {
       "font": [
@@ -816,7 +816,7 @@
       "observedDeviations": [
         "Radovi bez PDF/A oznake (info, ne greska)."
       ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4 vs Letter) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). FPZG oblikovanje je faculty-wide isto za smjerove; uzorci su iz programa tog smjera. PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4 vs Letter) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). FPZG oblikovanje je faculty-wide isto za smjerove; uzorci su iz programa tog smjera. PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
     },
     "ruleAuthority": "official-sources-only",
     "repositoryRole": "Regresijsko testiranje parsera; repozitorijski radovi nisu izvor obveznih pravila.",
@@ -889,7 +889,7 @@
       "observedDeviations": [
         "Radovi bez PDF/A oznake (info, ne greska)."
       ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4 vs Letter) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). FPZG oblikovanje je faculty-wide isto za smjerove; uzorci su iz programa tog smjera. PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4 vs Letter) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). FPZG oblikovanje je faculty-wide isto za smjerove; uzorci su iz programa tog smjera. PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
     },
     "rules": {
       "font": [
@@ -1277,7 +1277,7 @@
       "observedDeviations": [
         "Radovi bez PDF/A oznake (info, ne greska)."
       ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4 vs Letter) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). FPZG oblikovanje je faculty-wide isto za smjerove; uzorci su iz programa tog smjera. PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4 vs Letter) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). FPZG oblikovanje je faculty-wide isto za smjerove; uzorci su iz programa tog smjera. PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
     },
     "validationNote": "Profil je verificiran prema službenim izvorima i ograničeno testiran na stvarnim Word dokumentima; uzorci ne predstavljaju službeni predložak.",
     "ruleAuthority": "official-sources-only",
@@ -1334,7 +1334,7 @@
         "fpzg:1840 su u US Letter formatu (612x792), ne A4 - preflight ih tocno oznaci ispod A4 praga. Dio FPZG radova nije u A4.",
         "MES (Master of European Studies) je malen program na engleskom; nadjen 1 otvoreni javni rad u ZIR uzorku, dodatni nisu dostupni."
       ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4 vs Letter) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). FPZG oblikovanje je faculty-wide isto za smjerove; uzorci su iz programa tog smjera. PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4 vs Letter) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). FPZG oblikovanje je faculty-wide isto za smjerove; uzorci su iz programa tog smjera. PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
     },
     "rules": {
       "font": [
@@ -1558,7 +1558,7 @@
       "observedDeviations": [
         "Radovi bez PDF/A oznake (info, ne greska)."
       ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4 vs Letter) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). FPZG oblikovanje je faculty-wide isto za smjerove; uzorci su iz programa tog smjera. PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4 vs Letter) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). FPZG oblikovanje je faculty-wide isto za smjerove; uzorci su iz programa tog smjera. PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
     },
     "rules": {
       "font": [
@@ -1785,7 +1785,7 @@
       "observedDeviations": [
         "Dohvacena 2 stvarna rada tog programa; program je malen pa treci otvoreni javni rad nije nadjen u ZIR uzorku."
       ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4 vs Letter) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). FPZG oblikovanje je faculty-wide isto za smjerove; uzorci su iz programa tog smjera. PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4 vs Letter) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). FPZG oblikovanje je faculty-wide isto za smjerove; uzorci su iz programa tog smjera. PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
     },
     "rules": {
       "font": [
@@ -2013,7 +2013,7 @@
       "observedDeviations": [
         "Radovi bez PDF/A oznake (info, ne greska)."
       ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4 vs Letter) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). FPZG oblikovanje je faculty-wide isto za smjerove; uzorci su iz programa tog smjera. PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4 vs Letter) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). FPZG oblikovanje je faculty-wide isto za smjerove; uzorci su iz programa tog smjera. PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
     },
     "rules": {
       "font": [
@@ -2240,7 +2240,7 @@
       "observedDeviations": [
         "Radovi bez PDF/A oznake (info, ne greska)."
       ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4 vs Letter) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). FPZG oblikovanje je faculty-wide isto za smjerove; uzorci su iz programa tog smjera. PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4 vs Letter) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). FPZG oblikovanje je faculty-wide isto za smjerove; uzorci su iz programa tog smjera. PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
     },
     "rules": {
       "font": [
@@ -5961,7 +5961,7 @@
     "fieldValidation": {
       "status": "field-sampled",
       "validatedAt": "2026-07-02",
-      "scope": "Sinteticki golden .docx (prored 1,15) + 4 stvarna javna diplomska rada iz ZIR-a kroz byte-level PDF preflight.",
+      "scope": "Sintetički golden .docx (prored 1,15) + 4 stvarna javna diplomska rada iz ZIR-a kroz byte-level PDF preflight.",
       "sample": {
         "syntheticDocxAudits": 1,
         "docxAudits": 0,
@@ -6015,7 +6015,7 @@
       "observedDeviations": [
         "Nijedan od cetiri rada nema PDF/A oznaku (pdfaid:part); preflight to javlja kao info, ne kao gresku."
       ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
     },
     "rules": {
       "font": [
@@ -6041,11 +6041,11 @@
       "accessDate": true
     },
     "facts": [
-      "Numeracija stranica ide od sazetka do kraja teksta, u donjem desnom kutu (imperativ).",
-      "Sadrzaj je obvezna cjelina rada (imperativ).",
+      "Numeracija stranica ide od sažetka do kraja teksta, u donjem desnom kutu (imperativ).",
+      "Sadržaj je obvezna cjelina rada (imperativ).",
       "Font 12, prored 1,15, margine 2,5 cm, A4 i opseg 20-50 str. formulirani su kao Preporuke (advisory)."
     ],
-    "note": "Tehnicko oblikovanje i opseg su u Uputama pod \"Preporuke za tehnicko oblikovanje rada\" pa su advisory; scored su samo imperativna pravila (numeracija stranica, obvezan Sadrzaj). Prijediplomski (zavrsni, 2017) i doktorski (DR.08, 2026) profili dolaze kasnije iz zasebnih Uputa.",
+    "note": "Tehničko oblikovanje i opseg su u Uputama pod \"Preporuke za tehničko oblikovanje rada\" pa su advisory; scored su samo imperativna pravila (numeracija stranica, obvezan Sadržaj). Prijediplomski (završni, 2017) i doktorski (DR.08, 2026) profili dolaze kasnije iz zasebnih Uputa.",
     "sources": [
       {
         "title": "Upute za izradu diplomskog rada (AGR, 2019)",
@@ -6058,10 +6058,10 @@
     "ruleAuthority": "official-program-guidelines",
     "normativeScope": [
       "numeracija stranica",
-      "sadrzaj (obvezna cjelina)"
+      "sadržaj (obvezna cjelina)"
     ],
     "advisoryScope": [
-      "velicina slova",
+      "veličina slova",
       "prored",
       "margine",
       "format papira",
@@ -6141,7 +6141,7 @@
         "agr:4300 i agr:4550 su predani u US Letter formatu (612x792pt), ne A4 - preflight ih tocno oznaci ispod A4 praga. Stvaran nalaz: dio zavrsnih radova nije u A4.",
         "Nijedan od cetiri rada nema PDF/A oznaku (preflight to javlja kao info)."
       ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4 vs Letter) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4 vs Letter) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
     },
     "rules": {
       "font": [
@@ -6376,7 +6376,7 @@
       "observedDeviations": [
         "Radovi nemaju PDF/A oznaku (pdfaid:part); preflight to javlja kao info, ne kao gresku. U sirem ZIR uzorku dio radova je u US Letter formatu; ovi su odabrani kao 100% A4."
       ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
     },
     "rules": {
       "font": [
@@ -6966,7 +6966,7 @@
       "observedDeviations": [
         "Radovi bez PDF/A oznake (info, ne greska)."
       ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
     },
     "rules": {
       "font": [
@@ -7077,7 +7077,7 @@
       "observedDeviations": [
         "Radovi bez PDF/A oznake (info, ne greska)."
       ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
     },
     "rules": {
       "font": [
@@ -7172,7 +7172,7 @@
         "Radovi bez PDF/A oznake (info, ne greska).",
         "FER na ZIR-u u pravilu embargira fulltext (vecina objekata closedAccess), pa je pribavljen samo 1 otvoreni javni diplomski rad; vise ih javno nije dostupno."
       ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
     },
     "rules": {
       "font": [
@@ -7267,7 +7267,7 @@
         "Radovi bez PDF/A oznake (info, ne greska).",
         "FER na ZIR-u u pravilu embargira fulltext (vecina objekata closedAccess), pa je pribavljen samo 1 otvoreni javni zavrsni rad; vise ih javno nije dostupno."
       ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
     },
     "rules": {
       "font": [
@@ -7376,7 +7376,7 @@
       "observedDeviations": [
         "Radovi bez PDF/A oznake (info, ne greska)."
       ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
     },
     "rules": {
       "checkSpacing": false,
@@ -7499,7 +7499,7 @@
       "observedDeviations": [
         "Radovi nemaju PDF/A oznaku (pdfaid:part); preflight to javlja kao info, ne kao gresku. U sirem ZIR uzorku dio radova je u US Letter formatu; ovi su odabrani kao 100% A4."
       ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
     },
     "rules": {
       "font": [
@@ -7612,7 +7612,7 @@
       "observedDeviations": [
         "Radovi nemaju PDF/A oznaku (pdfaid:part); preflight to javlja kao info, ne kao gresku. U sirem ZIR uzorku dio radova je u US Letter formatu; ovi su odabrani kao 100% A4."
       ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
     },
     "rules": {
       "font": [
@@ -7714,7 +7714,7 @@
         "Nijedan od cetiri rada nema PDF/A oznaku (pdfaid:part); preflight to javlja kao info, ne kao gresku.",
         "U sirem uzorku sumfak radova dio ih je predan u US Letter formatu (612x792), ne A4; ova cetiri su odabrana kao 100% A4."
       ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
     },
     "rules": {
       "font": [
@@ -7842,7 +7842,7 @@
       "observedDeviations": [
         "Nijedan od cetiri rada nema PDF/A oznaku (pdfaid:part); preflight to javlja kao info, ne kao gresku."
       ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
     },
     "rules": {
       "font": [
@@ -7958,7 +7958,7 @@
       "observedDeviations": [
         "Radovi bez PDF/A oznake (info, ne greska)."
       ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
     },
     "rules": {
       "font": [
@@ -8110,7 +8110,7 @@
       "observedDeviations": [
         "Radovi bez PDF/A oznake (info, ne greska)."
       ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
     },
     "rules": {
       "font": [
@@ -8261,7 +8261,7 @@
       "observedDeviations": [
         "Radovi bez PDF/A oznake (info, ne greska)."
       ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
     },
     "rules": {
       "font": [
@@ -8377,7 +8377,7 @@
       "observedDeviations": [
         "Radovi bez PDF/A oznake (info, ne greska)."
       ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
     },
     "rules": {
       "font": [
@@ -9598,7 +9598,7 @@
       "observedDeviations": [
         "Radovi bez PDF/A oznake (info, ne greska)."
       ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan.",
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan.",
       "note": "Opci naputak GEOF propisuje samo obvezan Sadrzaj i autor-godina citiranje; ne propisuje font, velicinu, prored, margine ni format papira. Format provjere su zato informativne (iskljucene) i profil ne moze dosegnuti punu format-spremnost bez sluzbenog izvora tehnickog oblikovanja. Stvarni radovi ipak potvrdjuju A4 i integritet."
     },
     "rules": {
@@ -10015,7 +10015,7 @@
       "observedDeviations": [
         "Radovi nemaju PDF/A oznaku (pdfaid:part); preflight to javlja kao info, ne kao gresku. U sirem ZIR uzorku dio radova je u US Letter formatu; ovi su odabrani kao 100% A4."
       ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
     },
     "rules": {
       "font": [
@@ -10185,7 +10185,7 @@
       "observedDeviations": [
         "Radovi nemaju PDF/A oznaku (pdfaid:part); preflight to javlja kao info, ne kao gresku. U sirem ZIR uzorku dio radova je u US Letter formatu; ovi su odabrani kao 100% A4."
       ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
     },
     "rules": {
       "font": [
@@ -10702,7 +10702,7 @@
       "observedDeviations": [
         "Radovi bez PDF/A oznake (info, ne greska). U sirem pbf uzorku dio radova je US Letter; ova tri su odabrana kao 100% A4."
       ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
     },
     "rules": {
       "font": [
@@ -11200,7 +11200,7 @@
       "observedDeviations": [
         "Radovi bez PDF/A oznake (info). U sirem hrstud uzorku dio radova je US Letter; ova tri su 100% A4."
       ],
-      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadrzaja (to radi DOCX audit). Stvarni javni radovi sluze samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
+      "productDecision": "PDF preflight je plitak: dokazuje format stranice (A4) i integritet PDF-a, NE prored ni font sadržaja (to radi DOCX audit). Stvarni javni radovi služe samo provjeri parsera i formata, nikada kao izvor pravila (CLAUDE.md). PDF-ovi se ne commitaju; identitet izvora je PID; sha256 je otisak konkretne preuzete kopije jer nsk.hr repozitoriji utiskuju jedinstveni watermark (~63 bajta u repu PDF-a) po preuzimanju, pa sha nije reproducibilan."
     },
     "rules": {
       "font": [
