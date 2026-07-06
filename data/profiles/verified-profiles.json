@@ -37799,5 +37799,84 @@
       ],
       "productDecision": "PDF preflight je plitak (A4 + integritet + razina iz OAI). Radovi služe samo provjeri parsera i formata (CLAUDE.md). PDF-ovi se ne commitaju."
     }
+  },
+  {
+    "id": "fsb-opci-akademski-rad",
+    "unitId": "fsb",
+    "programs": [
+      "Strojarstvo",
+      "Brodogradnja",
+      "Zrakoplovno inženjerstvo i svemirska tehnika",
+      "Diplomski studiji Fakulteta strojarstva i brodogradnje",
+      "Prijediplomski studiji Fakulteta strojarstva i brodogradnje (zavrsni rad)",
+      "Doktorski studij Fakulteta strojarstva i brodogradnje",
+      "Opći profil fakulteta"
+    ],
+    "workTypes": [
+      "seminar",
+      "project",
+      "article"
+    ],
+    "status": "partial",
+    "profileLabel": "FSB · opći akademski rad (seminar/projekt)",
+    "verifiedAt": "2026-07-06",
+    "documentDate": "Upute za pisanje seminarskog, završnog i diplomskog rada (FSB, 2020) za tehničko oblikovanje i citiranje; opseg i struktura seminarskog ili projektnog rada ovise o kolegiju i mentoru.",
+    "rules": {
+      "font": [
+        "Times New Roman",
+        "Arial"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2,
+        "right": 2,
+        "bottom": 2,
+        "left": 2.5
+      },
+      "checkMargins": false,
+      "justify": true,
+      "checkJustify": true,
+      "requireToc": false,
+      "requirePageNumbers": true,
+      "requireA4": true,
+      "recommendedCitation": "ieee",
+      "accessDate": true,
+      "requiredSections": [],
+      "requireElementSources": false,
+      "requireListsWhenElements": false,
+      "checkFont": true,
+      "checkSize": true,
+      "checkSpacing": true,
+      "scoreStructure": false,
+      "scoreElements": false,
+      "checkSectionShares": false,
+      "checkTitlePage": false,
+      "titleWorkTerms": [
+        "seminarski rad",
+        "istraživački rad",
+        "projektni rad",
+        "znanstveni članak"
+      ]
+    },
+    "note": "Opći FSB profil za seminarski, projektni i istraživački rad: tehničko oblikovanje (font, veličina, prored, A4, numeracija stranica) i citiranje (IEEE) provjeravaju se prema Uputama za pisanje seminarskog, završnog i diplomskog rada (FSB, 2020), koje izrijekom obuhvaćaju seminarski rad. Opseg, struktura i sadržaj ovise o kolegiju i pisanoj uputi mentora; nije zaseban fakultetski propis za seminar.",
+    "normativeScope": [
+      "FSB tehničko oblikovanje i IEEE citiranje iz Uputa za pisanje radova (2020)",
+      "posebna uputa kolegija ili mentora ima prednost"
+    ],
+    "advisoryScope": [
+      "opseg, struktura i sadržaj seminarskog ili projektnog rada ovise o kolegiju i pisanoj uputi mentora"
+    ],
+    "sources": [
+      {
+        "title": "Upute za pisanje seminarskog, zavrsnog i diplomskog rada (FSB, 2020)",
+        "url": "https://www.fsb.unizg.hr/atlantis/upload/newsboard/15_07_2020__15271_Upute_za_pisanje_radova.doc"
+      }
+    ],
+    "ruleAuthority": "official-sources-only",
+    "fieldValidation": null,
+    "repositoryRole": "Opći format-profil; nije vezan uz konkretan javni rad kao izvor pravila."
   }
 ]
