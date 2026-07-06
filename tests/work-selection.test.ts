@@ -9,6 +9,7 @@ import { VERIFIED_PROFILE_REGISTRY } from '../src/profiles/profile-registry';
 import {
   workTypesForSelection,
   pickWorkType,
+  defaultWorkTypeForProgram,
   isWorkTypeLocked,
   citationForDefinition,
   isCitationLocked,
@@ -70,6 +71,28 @@ describe('feature 2: automatski odabir vrste rada iz studija', () => {
     expect(pickWorkType(new Set(['seminar', 'doctoral', 'graduate'] as WorkType[]), 'x')).toBe('doctoral');
     expect(pickWorkType(new Set(['seminar', 'graduate'] as WorkType[]), 'x')).toBe('graduate');
     expect(WORK_TYPE_PRIORITY[0]).toBe('doctoral');
+  });
+});
+
+describe('feature 2b: zadana vrsta rada prema razini studija (defaultWorkTypeForProgram)', () => {
+  const any = new Set<WorkType>(['final', 'seminar', 'project', 'article']);
+  it('preddiplomski/prijediplomski -> seminar (ne teza)', () => {
+    expect(defaultWorkTypeForProgram('Prijediplomski studij Politologija', any, 'graduate')).toBe('seminar');
+    expect(defaultWorkTypeForProgram('Preddiplomski sveučilišni studij X', any, 'graduate')).toBe('seminar');
+  });
+  it('diplomski -> graduate; integrirani (prijediplomski i diplomski) -> graduate', () => {
+    expect(defaultWorkTypeForProgram('Diplomski studij Politologija', any, 'x')).toBe('graduate');
+    expect(defaultWorkTypeForProgram('Sveučilišni integrirani prijediplomski i diplomski studij Pravo', any, 'x')).toBe('graduate');
+  });
+  it('doktorski -> doctoral, specijalisticki -> specialist', () => {
+    expect(defaultWorkTypeForProgram('Doktorski studij Politologija', any, 'x')).toBe('doctoral');
+    expect(defaultWorkTypeForProgram('Sveučilišni specijalistički studij Odnosi s javnošću', any, 'x')).toBe('specialist');
+  });
+  it('bez prepoznate razine -> fallback na prioritetski odabir (pickWorkType)', () => {
+    // 'Master of European Studies' nema hrvatsku razinsku rijec -> prioritet: current podrzan ostaje
+    expect(defaultWorkTypeForProgram('Master of European Studies', any, 'seminar')).toBe('seminar');
+    // current izvan skupa -> najvisi po prioritetu (final)
+    expect(defaultWorkTypeForProgram('Master of European Studies', any, 'x')).toBe('final');
   });
 });
 

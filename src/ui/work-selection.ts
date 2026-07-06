@@ -70,11 +70,32 @@ export function pickWorkType(exact: Set<WorkType>, current: string): string {
 }
 
 /**
- * Je li vrsta rada odredjena studijem (zakljucava se u UI-u). Preslikava uvjet
- * exact.size===1 u updateWorkTypeSupport() (app.ts).
+ * Je li vrsta rada odredjena studijem. NAPOMENA: od 2026-07 UI vise NE zakljucava selektor
+ * (svaka vrsta je provjerljiva - poseban profil ili opci baseline); ova cista funkcija ostaje
+ * radi regresijskih testova i eventualnog informativnog prikaza.
  */
 export function isWorkTypeLocked(exact: Set<WorkType>): boolean {
   return exact.size === 1;
+}
+
+/**
+ * Zadana vrsta rada prema RAZINI studija (iz naziva programa). Preddiplomski student najcesce
+ * pise seminar pa je to razuman default umjesto teze; diplomski/doktorski default na svoju tezu.
+ * REDOSLIJED je kljucan jer "Prijediplomski"/"Preddiplomski" SADRZE substring "diplomski":
+ * 'integrirani' -> graduate; pa preddiplomski/prijediplomski -> seminar; pa tek standalone
+ * 'diplomski' -> graduate (npr. "integrirani prijediplomski i diplomski studij Pravo" -> graduate,
+ * a "Prijediplomski studij Politologija" -> seminar). Bez poklapanja pada na pickWorkType.
+ */
+const LEVEL_DEFAULT_RULES: readonly (readonly [WorkType, RegExp])[] = [
+  ['doctoral', /doktor/i],
+  ['specialist', /specijalist/i],
+  ['graduate', /integrirani/i],
+  ['seminar', /prijediplomski|preddiplomski|prvostupni/i],
+  ['graduate', /diplomski/i],
+];
+export function defaultWorkTypeForProgram(program: string, exact: Set<WorkType>, current: string): string {
+  for (const [wt, re] of LEVEL_DEFAULT_RULES) if (re.test(program)) return wt;
+  return pickWorkType(exact, current);
 }
 
 /**
