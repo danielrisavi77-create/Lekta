@@ -35,6 +35,12 @@ serverska odluka; klijent nikad nije izvor istine.
   dolazi iz Lemon Squeezy dashboarda, ostalo je DB-izvedivo.
 - `migrations/0009_set_product_price.sql` - `set_product_price` (atomski products + pricing_changelog,
   kriterij 14.12). Rucni UPDATE cijene bez changeloga je prekrsaj procesa.
+- `migrations/0011_faculty_requests.sql` - `faculty_requests` (waitlist nepokrivenih fakulteta) +
+  `faculty_request_counts` view + RLS (klijent ne cita ni ne pise, sve preko service role) +
+  `submit_faculty_request`/`attach_email_to_faculty_request` (atomski upis uz rate limit po ip_hash) +
+  `purge_faculty_request_ip` (retencija: anonimizira ip_hash). Core: `src/waitlist/*`.
+- `functions/faculty-request/` - anoniman signal potraznje za nepokriven fakultet + opcionalni
+  e-mail kontakt (WAITLIST_NEPOKRIVENI_FAKULTETI.md). Deploy s `--no-verify-jwt`; ip_hash serverski.
 - `ACCEPTANCE.md` - mapiranje svih 14 kriterija (sekcija 14) na unit testove vs integraciju.
 
 ## Odnos prema testiranom jezgru
@@ -62,7 +68,12 @@ integracija (DB, RLS, webhook potpis) provjerava se u Supabase okruzenju.
 supabase db push                              # migracije
 supabase functions deploy generate-report
 supabase functions deploy webhook-mor
+supabase functions deploy faculty-request --no-verify-jwt   # anoniman waitlist upis
 ```
+
+Za `faculty-request` klijentu trebaju `supabaseUrl` i anon kljuc (kao paywall); endpoint je
+`<supabaseUrl>/functions/v1/faculty-request`. `--no-verify-jwt` je nuzan jer je anoniman upis
+dopusten; funkcija ipak opcionalno razrijesi JWT prijavljenog korisnika (upise user_id).
 
 Env varijable: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_ANON_KEY`, `DAILY_CAP`,
 `MOR_WEBHOOK_SECRET`, te za create-checkout `LEMONSQUEEZY_API_KEY`, `LEMONSQUEEZY_STORE_ID`,
