@@ -37878,5 +37878,342 @@
     "ruleAuthority": "official-sources-only",
     "fieldValidation": null,
     "repositoryRole": "Opći format-profil; nije vezan uz konkretan javni rad kao izvor pravila."
+  },
+  {
+    "id": "efst-opci-akademski-rad",
+    "unitId": "efst",
+    "programs": [
+      "Prijediplomski studiji EFST (zavrsni rad)",
+      "Diplomski studiji EFST"
+    ],
+    "workTypes": [
+      "seminar",
+      "project",
+      "article"
+    ],
+    "status": "partial",
+    "profileLabel": "EFST · opći akademski rad (seminar/projekt)",
+    "verifiedAt": "2026-07-06",
+    "documentDate": "Uputa za izradu studentskih radova (EFST, 2013) za tehničko oblikovanje i citiranje; opseg i struktura seminarskog ili projektnog rada ovise o kolegiju i mentoru.",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "checkMargins": false,
+      "justify": true,
+      "checkJustify": true,
+      "requireToc": false,
+      "requiredSections": [],
+      "requireElementSources": false,
+      "requireListsWhenElements": false,
+      "checkFont": true,
+      "checkSize": true,
+      "checkSpacing": true,
+      "scoreStructure": false,
+      "scoreElements": false,
+      "checkSectionShares": false,
+      "checkTitlePage": false,
+      "titleWorkTerms": [
+        "seminarski rad",
+        "istraživački rad",
+        "projektni rad",
+        "znanstveni članak"
+      ]
+    },
+    "note": "Opći profil za seminarski, projektni i istraživački rad: tehničko oblikovanje (font, veličina, prored, obostrano poravnanje) provjerava se prema izvoru „Uputa za izradu studentskih radova (EFST, 2013)\", koji obuhvaća studentske radove. Opseg, struktura i sadržaj ovise o kolegiju i pisanoj uputi mentora; nije zaseban fakultetski propis za seminar.",
+    "normativeScope": [
+      "tehničko oblikovanje (font, veličina, prored, obostrano poravnanje) prema izvoru: Uputa za izradu studentskih radova",
+      "posebna uputa kolegija ili mentora ima prednost"
+    ],
+    "advisoryScope": [
+      "opseg, struktura i sadržaj seminarskog ili projektnog rada ovise o kolegiju i pisanoj uputi mentora"
+    ],
+    "sources": [
+      {
+        "title": "Uputa za izradu studentskih radova (EFST, 2013)",
+        "url": "http://www.efst.unist.hr/portals/0/upute_za_izradu_studentskih_radova.pdf"
+      }
+    ],
+    "ruleAuthority": "official-sources-only",
+    "fieldValidation": null,
+    "repositoryRole": "Opći format-profil; nije vezan uz konkretan javni rad kao izvor pravila."
+  },
+  {
+    "id": "efos-opci-akademski-rad",
+    "unitId": "efos",
+    "programs": [
+      "Prijediplomski/strucni studiji EFOS (zavrsni rad)",
+      "Diplomski studiji EFOS"
+    ],
+    "workTypes": [
+      "seminar",
+      "project",
+      "article"
+    ],
+    "status": "partial",
+    "profileLabel": "EFOS · opći akademski rad (seminar/projekt)",
+    "verifiedAt": "2026-07-06",
+    "documentDate": "Upute za pisanje studentskih radova (EFOS, 2023) za tehničko oblikovanje i citiranje; opseg i struktura seminarskog ili projektnog rada ovise o kolegiju i mentoru.",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "checkMargins": false,
+      "requireToc": false,
+      "requireA4": true,
+      "recommendedCitation": "harvard",
+      "accessDate": true,
+      "requiredSections": [],
+      "requireElementSources": false,
+      "requireListsWhenElements": false,
+      "checkFont": true,
+      "checkSize": true,
+      "checkSpacing": true,
+      "scoreStructure": false,
+      "scoreElements": false,
+      "checkSectionShares": false,
+      "checkTitlePage": false,
+      "titleWorkTerms": [
+        "seminarski rad",
+        "istraživački rad",
+        "projektni rad",
+        "znanstveni članak"
+      ]
+    },
+    "note": "Opći profil za seminarski, projektni i istraživački rad: tehničko oblikovanje (font, veličina, prored, A4) i citiranje (Harvard) provjerava se prema izvoru „Upute za pisanje studentskih radova (EFOS, 2023)\", koji obuhvaća studentske radove. Opseg, struktura i sadržaj ovise o kolegiju i pisanoj uputi mentora; nije zaseban fakultetski propis za seminar.",
+    "normativeScope": [
+      "tehničko oblikovanje (font, veličina, prored, A4) i citiranje (Harvard) prema izvoru: Upute za pisanje studentskih radova",
+      "posebna uputa kolegija ili mentora ima prednost"
+    ],
+    "advisoryScope": [
+      "opseg, struktura i sadržaj seminarskog ili projektnog rada ovise o kolegiju i pisanoj uputi mentora"
+    ],
+    "sources": [
+      {
+        "title": "Upute za pisanje studentskih radova (EFOS, 2023)",
+        "url": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx"
+      }
+    ],
+    "ruleAuthority": "official-sources-only",
+    "fieldValidation": null,
+    "repositoryRole": "Opći format-profil; nije vezan uz konkretan javni rad kao izvor pravila."
+  },
+  {
+    "id": "pravri-opci-akademski-rad",
+    "unitId": "pravri",
+    "programs": [
+      "Stručni prijediplomski studij Upravni studij",
+      "Integrirani prijediplomski i diplomski sveučilišni studij Pravo",
+      "Stručni diplomski studij Javna uprava"
+    ],
+    "workTypes": [
+      "seminar",
+      "project",
+      "article"
+    ],
+    "status": "partial",
+    "profileLabel": "PRAVRI · opći akademski rad (seminar/projekt)",
+    "verifiedAt": "2026-07-06",
+    "documentDate": "Upute za izradu studentskih pisanih radova (PRAVRI, rev. 2023) za tehničko oblikovanje i citiranje; opseg i struktura seminarskog ili projektnog rada ovise o kolegiju i mentoru.",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "checkMargins": false,
+      "requireToc": false,
+      "requireA4": true,
+      "recommendedCitation": "pravo-fusnote",
+      "accessDate": true,
+      "requiredSections": [],
+      "requireElementSources": false,
+      "requireListsWhenElements": false,
+      "checkFont": true,
+      "checkSize": true,
+      "checkSpacing": true,
+      "scoreStructure": false,
+      "scoreElements": false,
+      "checkSectionShares": false,
+      "checkTitlePage": false,
+      "titleWorkTerms": [
+        "seminarski rad",
+        "istraživački rad",
+        "projektni rad",
+        "znanstveni članak"
+      ]
+    },
+    "note": "Opći profil za seminarski, projektni i istraživački rad: tehničko oblikovanje (font, veličina, prored, A4) i citiranje (pravne fusnote) provjerava se prema izvoru „Upute za izradu studentskih pisanih radova (PRAVRI, rev. 2023)\", koji obuhvaća studentske pisane radove. Opseg, struktura i sadržaj ovise o kolegiju i pisanoj uputi mentora; nije zaseban fakultetski propis za seminar.",
+    "normativeScope": [
+      "tehničko oblikovanje (font, veličina, prored, A4) i citiranje (pravne fusnote) prema izvoru: Upute za izradu studentskih pisanih radova",
+      "posebna uputa kolegija ili mentora ima prednost"
+    ],
+    "advisoryScope": [
+      "opseg, struktura i sadržaj seminarskog ili projektnog rada ovise o kolegiju i pisanoj uputi mentora"
+    ],
+    "sources": [
+      {
+        "title": "Upute za izradu studentskih pisanih radova (PRAVRI, rev. 2023)",
+        "url": "https://pravri.uniri.hr/files/Dokumenti/Pravilnici/uputeradovi.pdf"
+      }
+    ],
+    "ruleAuthority": "official-sources-only",
+    "fieldValidation": null,
+    "repositoryRole": "Opći format-profil; nije vezan uz konkretan javni rad kao izvor pravila."
+  },
+  {
+    "id": "geof-opci-akademski-rad",
+    "unitId": "geof",
+    "programs": [
+      "Geodezija i geoinformatika",
+      "Diplomski studiji Geodetskog fakulteta",
+      "Doktorski studij Geodetskog fakulteta",
+      "Opći profil fakulteta"
+    ],
+    "workTypes": [
+      "seminar",
+      "project",
+      "article"
+    ],
+    "status": "partial",
+    "profileLabel": "GEOF · opći akademski rad (seminar/projekt)",
+    "verifiedAt": "2026-07-06",
+    "documentDate": "Opci naputak za pisanje ocjenskih radova na Geodetskom fakultetu za citiranje; opseg i struktura seminarskog ili projektnog rada ovise o kolegiju i mentoru.",
+    "rules": {
+      "checkMargins": false,
+      "requireToc": false,
+      "recommendedCitation": "harvard",
+      "accessDate": true,
+      "requiredSections": [],
+      "requireElementSources": false,
+      "requireListsWhenElements": false,
+      "scoreStructure": false,
+      "scoreElements": false,
+      "checkSectionShares": false,
+      "checkTitlePage": false,
+      "titleWorkTerms": [
+        "seminarski rad",
+        "istraživački rad",
+        "projektni rad",
+        "znanstveni članak"
+      ]
+    },
+    "note": "Opći profil za seminarski, projektni i istraživački rad: citiranje (Harvard) provjerava se prema izvoru „Opci naputak za pisanje ocjenskih radova na Geodetskom fakultetu\", koji obuhvaća ocjenske radove. Opseg, struktura i sadržaj ovise o kolegiju i pisanoj uputi mentora; nije zaseban fakultetski propis za seminar.",
+    "normativeScope": [
+      "Opci naputak za pisanje ocjenskih radova na Geodetskom fakultetu: citiranje",
+      "posebna uputa kolegija ili mentora ima prednost"
+    ],
+    "advisoryScope": [
+      "font, prored i margine ovise o naputku i uputi mentora (opći naputak ne propisuje jedinstvene vrijednosti)",
+      "opseg, struktura i sadržaj seminarskog ili projektnog rada ovise o kolegiju i pisanoj uputi mentora"
+    ],
+    "sources": [
+      {
+        "title": "Opci naputak za pisanje ocjenskih radova na Geodetskom fakultetu",
+        "url": "https://www.geof.unizg.hr/wp-content/uploads/2020/02/Naputak_za_pisanje_ocjenskih_radova.pdf"
+      }
+    ],
+    "ruleAuthority": "official-sources-only",
+    "fieldValidation": null,
+    "repositoryRole": "Opći format-profil; nije vezan uz konkretan javni rad kao izvor pravila."
+  },
+  {
+    "id": "vuka-poslovni-opci-akademski-rad",
+    "unitId": "vuka",
+    "programs": [
+      "Poslovni odjel (zavrsni rad, Karlovac)",
+      "Poslovni odjel (diplomski rad, Karlovac)"
+    ],
+    "workTypes": [
+      "seminar",
+      "project",
+      "article"
+    ],
+    "status": "partial",
+    "profileLabel": "Veleučilište u Karlovcu · Poslovni odjel · opći akademski rad",
+    "verifiedAt": "2026-07-06",
+    "documentDate": "Upute za pisanje seminarskih i zavrsnih radova, Poslovni odjel (Veleuciliste u Karlovcu) za tehničko oblikovanje i citiranje; opseg i struktura seminarskog ili projektnog rada ovise o kolegiju i mentoru.",
+    "rules": {
+      "font": [
+        "Arial",
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.54,
+        "right": 2.54,
+        "bottom": 2.54,
+        "left": 2.54
+      },
+      "checkMargins": false,
+      "requireToc": false,
+      "requireA4": true,
+      "recommendedCitation": "chicago-notes",
+      "accessDate": true,
+      "requiredSections": [],
+      "requireElementSources": false,
+      "requireListsWhenElements": false,
+      "checkFont": true,
+      "checkSize": true,
+      "checkSpacing": true,
+      "scoreStructure": false,
+      "scoreElements": false,
+      "checkSectionShares": false,
+      "checkTitlePage": false,
+      "titleWorkTerms": [
+        "seminarski rad",
+        "istraživački rad",
+        "projektni rad",
+        "znanstveni članak"
+      ]
+    },
+    "note": "Opći profil za seminarski, projektni i istraživački rad: tehničko oblikovanje (font, veličina, prored, A4) i citiranje (Chicago fusnote) provjerava se prema izvoru „Upute za pisanje seminarskih i zavrsnih radova, Poslovni odjel (Veleuciliste u Karlovcu)\", koji obuhvaća seminarske i završne radove. Opseg, struktura i sadržaj ovise o kolegiju i pisanoj uputi mentora; nije zaseban fakultetski propis za seminar.",
+    "normativeScope": [
+      "tehničko oblikovanje (font, veličina, prored, A4) i citiranje (Chicago fusnote) prema izvoru: Upute za pisanje seminarskih i zavrsnih radova, Poslovni odjel",
+      "posebna uputa kolegija ili mentora ima prednost"
+    ],
+    "advisoryScope": [
+      "opseg, struktura i sadržaj seminarskog ili projektnog rada ovise o kolegiju i pisanoj uputi mentora"
+    ],
+    "sources": [
+      {
+        "title": "Upute za pisanje seminarskih i zavrsnih radova, Poslovni odjel (Veleuciliste u Karlovcu)",
+        "url": "https://www.vuka.hr/_download/repository/Upute_za_pisanje_seminarskih_i_zavrsnih_radova_PO.pdf"
+      }
+    ],
+    "ruleAuthority": "official-sources-only",
+    "fieldValidation": null,
+    "repositoryRole": "Opći format-profil; nije vezan uz konkretan javni rad kao izvor pravila."
   }
 ]
