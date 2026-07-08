@@ -4,7 +4,7 @@ import {
 } from '../src/waitlist/waitlist-detect';
 import {
   isLikelyEmail, buildFacultyRequestBody, submitFacultyRequest, attachEmailToRequest,
-  type WaitlistConfig,
+  submitUnknownFaculty, type WaitlistConfig,
 } from '../src/waitlist/waitlist-client';
 import { waitlistCopy } from '../src/waitlist/waitlist-copy';
 
@@ -171,6 +171,23 @@ describe('waitlistCopy', () => {
     expect(c.cta).toBeTruthy();
     // bez em/en crtica u tekstovima
     for (const v of Object.values(c)) expect(v).not.toMatch(/[–—]/);
+  });
+});
+
+describe('submitUnknownFaculty', () => {
+  it('salje facultyId null + slobodni naziv + source no_faculty', async () => {
+    let body: any = {};
+    const r = await submitUnknownFaculty(CFG, { name: 'Neki fakultet', workType: 'graduate', email: 'a@b.hr' }, '',
+      fetchOnce(res(200, { requestId: 'r1' }), (_u, i) => { body = JSON.parse(i.body as string); }));
+    expect(r).toEqual({ kind: 'ok', requestId: 'r1' });
+    expect(body.facultyId).toBeNull();
+    expect(body.facultyName).toBe('Neki fakultet');
+    expect(body.source).toBe('no_faculty');
+    expect(body.email).toBe('a@b.hr');
+  });
+  it('bez endpointa preskoci', async () => {
+    const r = await submitUnknownFaculty({ endpoint: '' }, { name: 'X', workType: 'final' }, '', fetchOnce(res(200)));
+    expect(r).toEqual({ kind: 'skipped', reason: 'not_configured' });
   });
 });
 

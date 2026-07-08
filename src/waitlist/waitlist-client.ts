@@ -95,6 +95,18 @@ export async function submitFacultyRequest(
   return { kind: 'error', status: res.status, message: `neocekivani odgovor ${res.status}` };
 }
 
+/** Upis fakulteta izvan kataloga (stanje C, sekcija 3): facultyId null, slobodni naziv. */
+export async function submitUnknownFaculty(
+  config: WaitlistConfig,
+  input: { name: string; workType: string; email?: string },
+  accessToken = '',
+  fetchImpl: typeof fetch = fetch,
+): Promise<SubmitOutcome> {
+  const cell: WaitlistCell = { facultyId: null, facultyName: input.name, program: null, workType: input.workType };
+  const body = buildFacultyRequestBody(cell, { email: input.email, source: 'no_faculty' });
+  return submitFacultyRequest(config, body, accessToken, fetchImpl);
+}
+
 /** Nakndno vezanje e-maila na vec upisan anoniman red. */
 export async function attachEmailToRequest(
   config: WaitlistConfig,

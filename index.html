@@ -187,6 +187,12 @@ h1,.section-head h2,.cta h2,.result-main h2,.analyzer-header h2{font-family:var(
 .waitlist-bar.wl-done{border-color:var(--ok);background:var(--ok-soft)}
 .waitlist-bar.wl-done .wl-title{color:var(--ok)}
 @media print{.waitlist-bar{display:none}}
+/* "Nema mog fakulteta na popisu" (stanje C, fakultet izvan kataloga) */
+.no-faculty-link{margin-top:7px;background:none;border:none;padding:0;font:inherit;font-size:13px;font-weight:650;color:var(--brand);text-decoration:underline;cursor:pointer}
+.no-faculty-panel{margin-top:10px;padding:12px;border:1px solid var(--line,#dfe4ee);border-radius:12px;background:var(--panel);display:flex;flex-direction:column;gap:7px}
+.no-faculty-panel label{font-size:12px;font-weight:700;color:var(--muted);margin-bottom:-3px}
+.no-faculty-panel input{padding:9px 11px;border:1px solid var(--line,#dfe4ee);border-radius:10px;font:inherit;background:var(--bg,#fff);color:var(--text)}
+.no-faculty-panel .wl-msg{color:var(--brand);font-size:13px;font-weight:700}
 .frb-note{flex-basis:100%;margin:0;font-size:12px;color:var(--muted)}
 .score-card{position:relative}
 .ready-stamp{position:absolute;top:12px;right:12px;transform:rotate(-11deg);font-family:var(--ink-serif);font-weight:800;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ok);border:2px solid var(--ok);border-radius:9px;padding:5px 9px;background:var(--ok-soft);box-shadow:0 2px 0 color-mix(in srgb,var(--ok) 28%,transparent);pointer-events:none}
@@ -252,7 +258,7 @@ h1,.section-head h2,.cta h2,.result-main h2,.analyzer-header h2{font-family:var(
             <div class="panel-title">2. Odaberi profil</div><div class="detect-badge hidden" id="detectBadge" role="status"></div>
             <div class="form-grid">
               <div class="field full"><label for="institutionSelect">Sveučilište</label><select id="institutionSelect"></select></div>
-              <div class="field full"><label for="unitSelect">Fakultet ili akademija</label><select id="unitSelect"></select></div>
+              <div class="field full"><label for="unitSelect">Fakultet ili akademija</label><select id="unitSelect"></select><button type="button" class="no-faculty-link hidden" id="noFacultyBtn">Nema mog fakulteta na popisu</button><div class="no-faculty-panel" id="noFacultyPanel" hidden><label for="noFacultyName">Naziv fakulteta</label><input id="noFacultyName" type="text" maxlength="200" placeholder="npr. Filozofski fakultet u Osijeku"><label for="noFacultyEmail">E-mail (nije obavezno)</label><input id="noFacultyEmail" type="email" inputmode="email" autocomplete="email" placeholder="tvoj@email.hr"><button type="button" class="btn btn-primary btn-sm" id="noFacultySubmit">Pošalji</button><div class="wl-msg" id="noFacultyMsg" aria-live="polite"></div></div></div>
               <div class="field full"><label for="programSelect">Studij ili smjer</label><select id="programSelect"></select></div><div class="field full hidden" id="departmentField"><label for="departmentSelect">Katedra ili područje rada (opcionalno)</label><select id="departmentSelect"><option value="general">Bez posebnog profila katedre</option></select><div class="subtle-help">Profil katedre nadopunjuje studijski profil i vrijedi samo za ono što izričito uređuje.</div></div>
               <div class="field"><label for="workType">Što provjeravaš?</label><select id="workType"><option value="seminar">Seminarski rad</option><option value="final">Završni rad</option><option value="graduate" selected>Diplomski rad</option><option value="specialist">Specijalistički rad</option><option value="doctoral">Doktorski rad</option><option value="article">Znanstveni članak</option><option value="project">Projektni / istraživački rad</option></select><div class="work-support" id="workTypeSupport"></div></div>
               <div class="field hidden" id="variantField"><label for="workVariant">Varijanta rada</label><select id="workVariant"><option value="default">Opći profil</option></select></div>
