@@ -6,6 +6,7 @@ import {
   isLikelyEmail, buildFacultyRequestBody, submitFacultyRequest, attachEmailToRequest,
   type WaitlistConfig,
 } from '../src/waitlist/waitlist-client';
+import { waitlistCopy } from '../src/waitlist/waitlist-copy';
 
 function res(status: number, body: unknown = {}): Response {
   return { ok: status >= 200 && status < 300, status, json: async () => body } as unknown as Response;
@@ -148,6 +149,28 @@ describe('submitFacultyRequest', () => {
   it('ne-2xx -> error sa statusom', async () => {
     const r = await submitFacultyRequest(CFG, BODY, '', fetchOnce(res(500)));
     expect(r).toMatchObject({ kind: 'error', status: 500 });
+  });
+});
+
+describe('waitlistCopy', () => {
+  const cell = { facultyId: 'x', facultyName: 'Filozofski fakultet', program: 'Povijest', workType: 'graduate' };
+  it('faculty-uncovered spominje ime fakulteta', () => {
+    const c = waitlistCopy({ state: 'faculty-uncovered', uncovered: true, cell, dedupeKey: 'k' });
+    expect(c.title).toContain('Filozofski fakultet');
+    expect(c.body).toContain('opća akademska pravila');
+    expect(c.success).toContain('Filozofski fakultet');
+  });
+  it('worktype-uncovered spominje vrstu rada', () => {
+    const c = waitlistCopy({ state: 'worktype-uncovered', uncovered: true, cell, dedupeKey: 'k' }, { workTypeLabel: 'doktorski rad' });
+    expect(c.title).toContain('doktorski rad');
+    expect(c.body).toContain('doktorski rad');
+  });
+  it('zajednicki tekstovi bez crtica i s privatnosnom napomenom', () => {
+    const c = waitlistCopy({ state: 'faculty-uncovered', uncovered: true, cell, dedupeKey: 'k' });
+    expect(c.note).toBe('E-mail koristimo samo za tu jednu obavijest.');
+    expect(c.cta).toBeTruthy();
+    // bez em/en crtica u tekstovima
+    for (const v of Object.values(c)) expect(v).not.toMatch(/[–—]/);
   });
 });
 
