@@ -1,4 +1,5 @@
 import type { ThesisProfile } from './profile-schema';
+import { FIXER_IDS } from '../repair/apply-fixers';
 
 export interface ProfileValidationError {
   profileId: string;
@@ -22,6 +23,31 @@ export function validateProfiles(profiles: ThesisProfile[]): ProfileValidationEr
       errors.push({ profileId: profile.id, message: 'Duplikat id-a profila.' });
     }
     seen.add(profile.id);
+
+    // Repair Engine (REPAIR_ENGINE.md sekcija 3): autoFixable:true je dopusteno SAMO na
+    // ljudski verificiranom pravilu (status 'verified') i uz postavljen fixerId. Time
+    // nijedno neverificirano ili nemapirano pravilo ne moze pisati u korisnikov docx.
+    for (const entry of profile.ruleEntries ?? []) {
+      if (entry.autoFixable !== true) continue;
+      if (!entry.fixerId) {
+        errors.push({
+          profileId: profile.id,
+          message: `Pravilo ${entry.ruleId}: autoFixable:true bez fixerId-a.`,
+        });
+      } else if (!(FIXER_IDS as readonly string[]).includes(entry.fixerId)) {
+        // Tipfeler u fixerId-u bi u runtimeu tiho preskocio placeni popravak.
+        errors.push({
+          profileId: profile.id,
+          message: `Pravilo ${entry.ruleId}: nepoznat fixerId "${entry.fixerId}" (poznati: ${FIXER_IDS.join(', ')}).`,
+        });
+      }
+      if (entry.status !== 'verified') {
+        errors.push({
+          profileId: profile.id,
+          message: `Pravilo ${entry.ruleId}: autoFixable:true na pravilu koje nije status:"verified" (trenutno: ${entry.status ?? 'bez statusa'}).`,
+        });
+      }
+    }
   }
   return errors;
 }

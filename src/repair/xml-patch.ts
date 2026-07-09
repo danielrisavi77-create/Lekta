@@ -1,0 +1,180 @@
+// src/repair/xml-patch.ts
+//
+// NAMJERNA ODLUKA (odstupanje od REPAIR_ENGINE.md sekcije 4, u konzervativnijem
+// smjeru): umjesto DOMParser + XMLSerializer round-trip, ovo koristi CILJANE
+// regexe koji mijenjaju SAMO vrijednosti konkretnih atributa unutar konkretno
+// imenovanog taga (sve pojave), ostavljajuci apsolutno svaki drugi bajt netaknut.
+//
+// Razlog: DOMParser/XMLSerializer round-trip moze suptilno promijeniti
+// formatiranje (poredak atributa, whitespace, self-closing notaciju) na
+// DIJELOVIMA dokumenta koje NISMO namjeravali dirati, sto je tocno onaj tihi
+// rizik zbog kojeg GOLDEN.md postoji. Regex na tocno imenovanom atributu
+// unutar tocno imenovanog taga je uze i sigurnije: ili se atribut nade i
+// promijeni, ili se ne dira NISTA. Dodatna prednost: nema DOMParser
+// ovisnosti, pa je testabilno u cistom Node bez happy-dom/jsdom polyfilla.
+
+export interface PatchResult {
+  xml: string;
+  applied: boolean;
+  before: Record<string, string>;
+  after: Record<string, string>;
+}
+
+const NO_OP: PatchResult = { xml: '', applied: false, before: {}, after: {} };
+
+// Krpa imenovane atribute u SVIM pojavama ciljanog taga (analyzeDocx provjerava
+// margine/format preko SVIH w:sectPr sekcija, pa i popravak mora pogoditi svaku;
+// naslovnica s vlastitim sectPr je standard u tezama). Tag se prepoznaje po
+// otvarajucem obliku, i self-closing (<w:pgMar .../>) i obicnom (<w:pgMar ...>),
+// jer atributi u OOXML-u zive iskljucivo u otvarajucem tagu. before/after biljeze
+// prvu promijenjenu vrijednost po atributu (za citljiv changelog).
+function patchTagAttributes(
+  xml: string,
+  tagPattern: RegExp,
+  attrUpdates: Record<string, string>,
+): PatchResult {
+  const globalPattern = new RegExp(tagPattern.source, 'g');
+  const before: Record<string, string> = {};
+  const after: Record<string, string> = {};
+  let changed = false;
+
+  const newXml = xml.replace(globalPattern, (tag) => {
+    let out = tag;
+    for (const [attr, newValue] of Object.entries(attrUpdates)) {
+      const attrRegex = new RegExp(`(${escapeRegex(attr)}=")([^"]*)(")`);
+      const attrMatch = out.match(attrRegex);
+      if (!attrMatch) continue; // atribut ne postoji na ovom tagu, ne izmisljaj ga
+      const oldValue = attrMatch[2];
+      const escapedValue = escapeXmlAttr(newValue);
+      if (oldValue === escapedValue) continue;
+      if (!(attr in before)) {
+        before[attr] = oldValue;
+        after[attr] = escapedValue;
+      }
+      // Replacer funkcija umjesto replacement stringa: vrijednost s '$' ($&, $1)
+      // se ne smije interpretirati kao referenca na grupu.
+      out = out.replace(attrRegex, (_m, p1: string, _old: string, p3: string) => p1 + escapedValue + p3);
+      changed = true;
+    }
+    return out;
+  });
+
+  if (!changed) return { ...NO_OP, xml };
+  return { xml: newXml, applied: true, before, after };
+}
+
+function escapeRegex(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+// Vrijednost ide unutar dvostrukih navodnika XML atributa: escapaj &, < i ".
+function escapeXmlAttr(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+}
+
+// === Margine i format stranice (documentXml, sectPr je uvijek u document.xml) ===
+
+export function patchMargins(
+  documentXml: string,
+  marginsTwips: Partial<Record<'top' | 'right' | 'bottom' | 'left', number>>,
+): PatchResult {
+  const attrUpdates: Record<string, string> = {};
+  if (marginsTwips.top !== undefined) attrUpdates['w:top'] = String(marginsTwips.top);
+  if (marginsTwips.right !== undefined) attrUpdates['w:right'] = String(marginsTwips.right);
+  if (marginsTwips.bottom !== undefined) attrUpdates['w:bottom'] = String(marginsTwips.bottom);
+  if (marginsTwips.left !== undefined) attrUpdates['w:left'] = String(marginsTwips.left);
+  return patchTagAttributes(documentXml, /<w:pgMar\b[^>]*\/?>/, attrUpdates);
+}
+
+export function patchPaperSize(documentXml: string, sizeTwips: { w: number; h: number }): PatchResult {
+  return patchTagAttributes(documentXml, /<w:pgSz\b[^>]*\/?>/, {
+    'w:w': String(sizeTwips.w),
+    'w:h': String(sizeTwips.h),
+  });
+}
+
+// === Zadani font, velicina, prored, poravnanje (stylesXml, v1 opseg: samo
+// docDefaults / Normal stil, NE svaki pojedinacni run/odlomak koji odstupa,
+// vidi REPAIR_ENGINE.md sekciju 2, "granica presjeka" ===
+
+function findBlock(xml: string, pattern: RegExp): { block: string; start: number; end: number } | null {
+  const match = xml.match(pattern);
+  if (!match || match.index === undefined) return null;
+  return { block: match[0], start: match.index, end: match.index + match[0].length };
+}
+
+export function patchDefaultFont(
+  stylesXml: string,
+  update: { fontName?: string; sizeHalfPoints?: number },
+): PatchResult {
+  const found = findBlock(stylesXml, /<w:docDefaults>[\s\S]*?<\/w:docDefaults>/);
+  if (!found) return { ...NO_OP, xml: stylesXml };
+
+  let block = found.block;
+  const before: Record<string, string> = {};
+  const after: Record<string, string> = {};
+  let changed = false;
+
+  if (update.fontName !== undefined) {
+    const fontResult = patchTagAttributes(block, /<w:rFonts\b[^>]*\/?>/, {
+      'w:ascii': update.fontName,
+      'w:hAnsi': update.fontName,
+    });
+    if (fontResult.applied) {
+      block = fontResult.xml;
+      before.fontName = fontResult.before['w:ascii'] ?? '';
+      after.fontName = update.fontName;
+      changed = true;
+    }
+  }
+
+  if (update.sizeHalfPoints !== undefined) {
+    const szResult = patchTagAttributes(block, /<w:sz\b[^>]*\/?>/, {
+      'w:val': String(update.sizeHalfPoints),
+    });
+    if (szResult.applied) {
+      block = szResult.xml;
+      before.sizeHalfPoints = szResult.before['w:val'] ?? '';
+      after.sizeHalfPoints = String(update.sizeHalfPoints);
+      changed = true;
+    }
+  }
+
+  if (!changed) return { ...NO_OP, xml: stylesXml };
+
+  const newXml = stylesXml.slice(0, found.start) + block + stylesXml.slice(found.end);
+  return { xml: newXml, applied: true, before, after };
+}
+
+function findNormalStyleBlock(stylesXml: string) {
+  return findBlock(stylesXml, /<w:style\b[^>]*w:styleId="Normal"[^>]*>[\s\S]*?<\/w:style>/);
+}
+
+export function patchDefaultSpacing(
+  stylesXml: string,
+  lineTwips: number,
+  lineRule = 'auto',
+): PatchResult {
+  const found = findNormalStyleBlock(stylesXml);
+  if (!found) return { ...NO_OP, xml: stylesXml };
+
+  const result = patchTagAttributes(found.block, /<w:spacing\b[^>]*\/?>/, {
+    'w:line': String(lineTwips),
+    'w:lineRule': lineRule,
+  });
+  if (!result.applied) return { ...NO_OP, xml: stylesXml };
+
+  const newXml = stylesXml.slice(0, found.start) + result.xml + stylesXml.slice(found.end);
+  return { xml: newXml, applied: true, before: result.before, after: result.after };
+}
+
+export function patchDefaultAlignment(stylesXml: string, val: string): PatchResult {
+  const found = findNormalStyleBlock(stylesXml);
+  if (!found) return { ...NO_OP, xml: stylesXml };
+
+  const result = patchTagAttributes(found.block, /<w:jc\b[^>]*\/?>/, { 'w:val': val });
+  if (!result.applied) return { ...NO_OP, xml: stylesXml };
+
+  const newXml = stylesXml.slice(0, found.start) + result.xml + stylesXml.slice(found.end);
+  return { xml: newXml, applied: true, before: result.before, after: result.after };
+}

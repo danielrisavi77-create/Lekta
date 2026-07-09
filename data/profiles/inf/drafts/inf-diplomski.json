@@ -14,6 +14,8 @@
       "quote": "Diplomski rad mora biti otisnut računalnim pisačem na papiru formata A4 (21 x 29,7 cm) i mora imati najmanje 40 stranica teksta bez priloga.",
       "status": "verified",
       "scored": true,
+      "autoFixable": true,
+      "fixerId": "paper-size-fixer",
       "verifiedHash": "4b95064c1ebf2c84ac7dc06168db83866d43e9ee280f02c7245808a6730097f2",
       "lastVerified": "2026-07-02",
       "verifiedBy": "Daniel Risavi",

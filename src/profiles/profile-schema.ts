@@ -47,11 +47,12 @@ export interface RuleEntry {
   verifiedBy?: string | null;
   reviewedBy?: string | null;
   /**
-   * Kako je pravilo potvrdjeno: 'human' (covjek citao izvor) ili 'ai-3pass-batch' (AI
+   * Kako je pravilo potvrdjeno: 'human' (covjek citao izvor), 'human-audit' (covjek u
+   * rucnom audit prolazu; postojeci podaci ga koriste) ili 'ai-3pass-batch' (AI
    * 3-prolazna provjera, covjek batch odobrio). Honesty trag: nikad ne tvrdimo cisto
    * ljudsku verifikaciju ako je AI radio citanje. Ne utjece na bodovanje (boduje status verified).
    */
-  confirmedVia?: 'human' | 'ai-3pass-batch' | 'ai-1pass-batch' | null;
+  confirmedVia?: 'human' | 'human-audit' | 'ai-3pass-batch' | 'ai-1pass-batch' | null;
   /**
    * `snapshotHash` izvora protiv kojeg je covjek verificirao pravilo. Ako se trenutni
    * snapshotHash izvora razlikuje od ovoga, izvor je promijenjen nakon verifikacije pa
@@ -67,6 +68,20 @@ export interface RuleEntry {
    * dopunski moraju biti snapshotirani (vrata to provjeravaju). `covers` opisuje sto podupire.
    */
   additionalSources?: RuleSourceRef[] | null;
+  /**
+   * Repair Engine (REPAIR_ENGINE.md sekcija 3): smije li se ovo pravilo automatski
+   * popraviti u korisnikovom .docx. Default false (undefined se tretira kao false).
+   * Smije biti true SAMO na bodovanom, ljudski verificiranom pravilu (status 'verified')
+   * i uz postavljen `fixerId`; profile-validator to iznudjuje (autoFixable:true bez
+   * fixerId-a ili na pravilu koje nije 'verified' je strukturna greska).
+   */
+  autoFixable?: boolean;
+  /**
+   * Id fixera iz src/repair/apply-fixers.ts (npr. 'margins-fixer'). Tip je string (ne uvezeni
+   * FixerId union) da profile-schema ostane odvojena od repair modula; null dok pravilo nije
+   * autoFixable. params za fixer NE stoje ovdje: izvode se iz vrijednosti profila u tocki spoja.
+   */
+  fixerId?: string | null;
 }
 
 /** Referenca na jedan sluzbeni izvor koji podupire dio kompozitnog pravila. */

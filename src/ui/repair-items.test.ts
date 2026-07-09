@@ -1,0 +1,94 @@
+import { describe, it, expect } from 'vitest';
+import { paramsForCheck, buildRepairableItems, type AnalyzedCheck } from './repair-items';
+import type { RuleEntry } from '../profiles/profile-schema';
+
+// Profil s ciljanim vrijednostima (kao currentProfile().p).
+const PROFILE = {
+  margins: { top: 2.5, right: 2.5, bottom: 2.5, left: 3 },
+  font: ['Times New Roman', 'Arial'],
+  size: [12, 11],
+  spacing: 1.5,
+  justify: true,
+  paperSizes: ['A4'],
+};
+
+function entry(over: Partial<RuleEntry>): RuleEntry {
+  return { ruleId: 'r', checkId: 'margins', value: null, status: 'verified', autoFixable: true, fixerId: 'margins-fixer', ...over };
+}
+
+const FAIL = (title: string): AnalyzedCheck => ({ title, status: 'fail', max: 6 });
+const PASS = (title: string): AnalyzedCheck => ({ title, status: 'pass', max: 6 });
+
+describe('paramsForCheck (params dolaze IZ PROFILA)', () => {
+  it('margins iz profila, ne hardkodirano', () => {
+    expect(paramsForCheck('margins', PROFILE)).toEqual({ top: 2.5, right: 2.5, bottom: 2.5, left: 3 });
+    // drugaciji profil -> drugaciji params (dokaz da nije fiksna vrijednost)
+    expect(paramsForCheck('margins', { margins: { top: 2, right: 2, bottom: 2, left: 2 } })).toEqual({
+      top: 2, right: 2, bottom: 2, left: 2,
+    });
+  });
+  it('font i font-size uzimaju PRVU dopustenu vrijednost profila', () => {
+    expect(paramsForCheck('font', PROFILE)).toEqual({ fontName: 'Times New Roman' });
+    expect(paramsForCheck('font-size', PROFILE)).toEqual({ fontSizePt: 12 });
+  });
+  it('line-spacing iz profila', () => {
+    expect(paramsForCheck('line-spacing', PROFILE)).toEqual({ multiplier: 1.5 });
+    expect(paramsForCheck('line-spacing', { spacing: 2 })).toEqual({ multiplier: 2 });
+  });
+  it('justify -> both kad profil trazi poravnanje', () => {
+    expect(paramsForCheck('justify', PROFILE)).toEqual({ val: 'both' });
+    expect(paramsForCheck('justify', { justify: false })).toEqual({ val: 'left' });
+  });
+  it('paper-size iz imena u profilu (A4 -> 21x29.7)', () => {
+    expect(paramsForCheck('paper-size', PROFILE)).toEqual({ w: 21, h: 29.7 });
+    expect(paramsForCheck('paper-size', { requireA4: true })).toEqual({ w: 21, h: 29.7 });
+    expect(paramsForCheck('paper-size', { paperSizes: ['A3'] })).toEqual({ w: 29.7, h: 42 });
+  });
+  it('null kad profil nema ciljanu vrijednost', () => {
+    expect(paramsForCheck('margins', {})).toBeNull();
+    expect(paramsForCheck('font', {})).toBeNull();
+    expect(paramsForCheck('paper-size', {})).toBeNull();
+  });
+});
+
+describe('buildRepairableItems (Opcija A: samo prekrseno)', () => {
+  it('prazno kad nijedno pravilo nije autoFixable', () => {
+    const entries = [entry({ autoFixable: false })];
+    expect(buildRepairableItems([FAIL('Margine dokumenta')], PROFILE, entries)).toEqual([]);
+  });
+
+  it('ukljuci prekrseno autoFixable+verified pravilo, params iz profila', () => {
+    const items = buildRepairableItems([FAIL('Margine dokumenta')], PROFILE, [entry({ ruleId: 'margine', label: 'Margine' })]);
+    expect(items).toEqual([
+      { ruleId: 'margine', fixerId: 'margins-fixer', label: 'Margine', params: { top: 2.5, right: 2.5, bottom: 2.5, left: 3 } },
+    ]);
+  });
+
+  it('NE nudi popravak kad dimenzija NIJE prekrsena (check je pass)', () => {
+    const items = buildRepairableItems([PASS('Margine dokumenta')], PROFILE, [entry({})]);
+    expect(items).toEqual([]);
+  });
+
+  it('NE nudi popravak za autoFixable pravilo koje nije status:verified', () => {
+    const items = buildRepairableItems([FAIL('Margine dokumenta')], PROFILE, [entry({ status: 'draft' })]);
+    expect(items).toEqual([]);
+  });
+
+  it('poravnanje (justify) je pokriveno preko postojeceg checka', () => {
+    const items = buildRepairableItems(
+      [FAIL('Poravnanje osnovnog teksta')],
+      PROFILE,
+      [entry({ ruleId: 'jc', checkId: 'justify', fixerId: 'alignment-fixer', label: 'Poravnanje' })],
+    );
+    expect(items).toEqual([{ ruleId: 'jc', fixerId: 'alignment-fixer', label: 'Poravnanje', params: { val: 'both' } }]);
+  });
+
+  it('paper-size prepoznaje dinamican naslov ("Format stranice (A4/A3)")', () => {
+    const items = buildRepairableItems(
+      [{ title: 'Format stranice (A4/A3)', status: 'warn', max: 3 }],
+      PROFILE,
+      [entry({ ruleId: 'ps', checkId: 'paper-size', fixerId: 'paper-size-fixer', label: 'Format' })],
+    );
+    expect(items).toEqual([{ ruleId: 'ps', fixerId: 'paper-size-fixer', label: 'Format', params: { w: 21, h: 29.7 } }]);
+  });
+});
