@@ -135,6 +135,7 @@ revoke all on function attach_email_to_faculty_request(uuid, text) from public, 
 create or replace function purge_faculty_request_ip(retention_days int default 30)
 returns integer
 language sql
+set search_path = public
 as $$
   with upd as (
     update faculty_requests

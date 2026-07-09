@@ -65,6 +65,11 @@ begin
 end;
 $$;
 
+-- Makni default PUBLIC execute (advisor lint 0028/0029): anon ne treba zvati ovu fn i
+-- ionako ne pogadja nijedan red (where user_id=auth.uid()). Email-link odjava ide
+-- direktnim service-role updateom u unsubscribe-reminder edge fn, ne preko ovog RPC-a.
+-- Pristup ima samo prijavljeni korisnik.
+revoke execute on function unsubscribe_own_deadline_subscription(uuid) from public;
 grant execute on function unsubscribe_own_deadline_subscription(uuid) to authenticated;
 
 -- === Istek slota, transakcijski podsjetnik, default ukljuceno ===
