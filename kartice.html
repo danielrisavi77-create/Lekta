@@ -12,6 +12,8 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Besplatni brojač kartica, riječi i znakova">
 <meta name="twitter:description" content="Besplatni hrvatski brojač kartica, riječi i znakova za akademski rad. Jedna autorska kartica je 1800 znakova s razmacima. Sve se računa lokalno u pregledniku.">
+<link rel="canonical" href="https://lektahr.netlify.app/kartice.html">
+<meta property="og:url" content="https://lektahr.netlify.app/kartice.html">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Besplatni brojač kartica, riječi i znakova","description":"Besplatni hrvatski brojač kartica, riječi i znakova za akademski rad. Jedna autorska kartica je 1800 znakova s razmacima. Sve se računa lokalno u pregledniku.","applicationCategory":"EducationalApplication","operatingSystem":"Web","inLanguage":"hr","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},"publisher":{"@type":"Organization","name":"Lekta"}}</script>
 <meta name="color-scheme" content="light dark">
 <title>Besplatni brojač kartica, riječi i znakova - Lekta</title>
@@ -33,7 +35,10 @@
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;min-width:320px}
-a{color:inherit}:focus-visible{outline:none;box-shadow:var(--focus);border-radius:6px}
+a{color:inherit}:focus-visible{outline:2px solid var(--brand);outline-offset:2px;box-shadow:var(--focus);border-radius:6px}
+@media (forced-colors:active){:focus-visible{outline:2px solid CanvasText}}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media print{.topbar,.cta,.kt-actions,.out-bar,.hero-back,.sibling,footer{display:none!important}.out-panel{position:static}}
 .serif{font-family:var(--ink-serif)}
 .shell{width:min(var(--max),calc(100% - 40px));margin:auto}
 .topbar{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(16px);border-bottom:1px solid color-mix(in srgb,var(--line) 80%,transparent)}
@@ -133,8 +138,9 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
   <div class="mobile-nav" id="mobileNav">
     <a href="index.html#how">Kako radi</a>
     <a href="landing_usporedba.html">Usporedba</a>
+    <a href="alati.html">Svi alati</a>
     <a href="citat.html">Citat generator</a>
-    <a href="kartice.html">Brojač kartica</a>
+    <a class="active" aria-current="page" href="kartice.html">Brojač kartica</a>
     <a href="naslovnica.html">Naslovnica</a>
     <a href="literatura.html">Sređivanje literature</a>
     <a href="izjava.html">Izjava o izvornosti</a>
@@ -173,14 +179,15 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
       <div class="card">
         <h2>Rezultat</h2>
         <p class="sub">Ažurira se dok tipkaš.</p>
-        <div class="kpi" role="status" aria-live="polite"><span class="kpi-num" id="m-kartice">0</span><span class="kpi-label">kartica<br>(1800 znakova s razmacima)</span></div>
+        <div class="kpi"><span class="kpi-num" id="m-kartice">0</span><span class="kpi-label">kartica<br>(1800 znakova s razmacima)</span></div>
+        <div class="sr-only" id="kt-sr-summary" role="status" aria-live="polite"></div>
         <div class="metrics" aria-label="Detaljne mjere teksta">
           <div class="metric"><span>Riječi</span><b id="m-words">0</b></div>
           <div class="metric"><span>Znakovi s razmacima</span><b id="m-chars">0</b></div>
           <div class="metric"><span>Znakovi bez razmaka</span><b id="m-chars-nospace">0</b></div>
           <div class="metric"><span>Rečenice</span><b id="m-sentences">0</b></div>
           <div class="metric"><span>Odlomci</span><b id="m-paragraphs">0</b></div>
-          <div class="metric"><span>Procijenjene stranice</span><b id="m-pages">0</b></div>
+          <div class="metric"><span>Procjena A4 stranica</span><b id="m-pages">0</b></div>
           <div class="metric"><span>Vrijeme čitanja</span><b id="m-reading">0 min</b></div>
         </div>
         <div class="out-bar">
@@ -210,7 +217,7 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
     </div>
   </div>
 </section>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Koliko znakova ima jedna autorska kartica?","acceptedAnswer":{"@type":"Answer","text":"Standardno 1800 znakova s razmacima (30 redaka po 60 znakova). Dio kolegija umjesto toga računa 1500 znakova bez razmaka."}},{"@type":"Question","name":"Broje li se razmaci u kartici teksta?","acceptedAnswer":{"@type":"Answer","text":"U standardnoj autorskoj kartici da: mjera je 1800 znakova s razmacima."}},{"@type":"Question","name":"Koliko je jedna kartica riječi i stranica?","acceptedAnswer":{"@type":"Answer","text":"Približno 250 riječi, odnosno oko pola A4 stranice u Times New Roman 12 s proredom 1,5."}},{"@type":"Question","name":"Kako izbrojiti kartice teksta?","acceptedAnswer":{"@type":"Answer","text":"Ukupan broj znakova s razmacima podijeli s 1800. Na primjer, 9000 znakova je 5 kartica."}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Koliko znakova ima jedna autorska kartica?","acceptedAnswer":{"@type":"Answer","text":"Standardno 1800 znakova s razmacima (30 redaka po 60 znakova). Dio kolegija umjesto toga računa 1500 znakova bez razmaka."}},{"@type":"Question","name":"Broje li se razmaci?","acceptedAnswer":{"@type":"Answer","text":"U standardnoj autorskoj kartici da: mjera je 1800 znakova s razmacima."}},{"@type":"Question","name":"Koliko je jedna kartica riječi i stranica?","acceptedAnswer":{"@type":"Answer","text":"Približno 250 riječi, odnosno oko pola A4 stranice u Times New Roman 12 s proredom 1,5."}},{"@type":"Question","name":"Kako izbrojiti kartice teksta?","acceptedAnswer":{"@type":"Answer","text":"Ukupan broj znakova s razmacima podijeli s 1800. Na primjer, 9000 znakova je 5 kartica."}}]}</script>
 
 <section class="section">
   <div class="shell">

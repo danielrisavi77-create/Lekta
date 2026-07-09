@@ -87,4 +87,65 @@ describe('countText', () => {
     expect(m.words).toBe(400);
     expect(m.readingMinutes).toBe(2);
   });
+
+  it('kratica "sv." pred velikim imenom se neutralizira (audit: LEX lookahead ju je sustavno promasivao)', () => {
+    expect(countText('Crkva sv. Marka je stara.').sentences).toBe(1);
+    expect(countText('Idem u crkvu sv. Ivana danas.').sentences).toBe(1);
+  });
+
+  it('"vidi" je puna rijec, ne kratica: "Vidi." na kraju recenice broji granicu', () => {
+    expect(countText('Dođi. Vidi.').sentences).toBe(2);
+    expect(countText('Vidi npr. tab. 3 i sl.').sentences).toBe(1); // "vidi" bez vlastite tocke i dalje ok
+  });
+
+  it('e-mail adrese i gole domene ne broje se kao kraj recenice', () => {
+    expect(countText('Kontakt ivan@example.com danas.').sentences).toBe(1);
+    expect(countText('Posjeti Google.com za pretragu.').sentences).toBe(1);
+    expect(countText('Stranica primjer.hr ima upute.').sentences).toBe(1);
+  });
+
+  it('tocka pred velikim slovom bez razmaka ostaje granica (tipfeler, ne domena)', () => {
+    expect(countText('Kraj.Novi pocetak je tu.').sentences).toBe(2);
+  });
+
+  it('numerirano nabrajanje na pocetku retka ne napuhuje recenice, ni pred velikim slovom', () => {
+    expect(countText('1. Uvod\n2. Razrada\n3. Zaključak').sentences).toBe(1);
+    expect(countText('1. stavka\n2. stavka').sentences).toBe(1);
+    // godina koja legitimno zavrsava recenicu usred retka ostaje granica
+    expect(countText('Godina 1990. Danas je drugačije.').sentences).toBe(2);
+  });
+
+  it('CRLF ulaz se normalizira: prijelomi se ne broje u znakove, odlomci rade', () => {
+    const m = countText('Prvi.\r\n\r\nDrugi.');
+    expect(m.charsWithSpaces).toBe('Prvi.Drugi.'.length);
+    expect(m.paragraphs).toBe(2);
+    expect(m.sentences).toBe(2);
+  });
+
+  it('zero-width znakovi i BOM se ne broje ni u jednu metriku znakova', () => {
+    const m = countText('﻿a​b');
+    expect(m.charsWithSpaces).toBe(2);
+    expect(m.charsWithoutSpaces).toBe(2);
+  });
+
+  it('emoji (astralni znak) broji se kao jedan znak, ne dva code unita', () => {
+    const m = countText('a😀b');
+    expect(m.charsWithSpaces).toBe(3);
+    expect(m.charsWithoutSpaces).toBe(3);
+  });
+
+  it('procjena A4 stranica: kartica je oko pola stranice', () => {
+    expect(countText('a'.repeat(7200)).pages).toBe(2); // 4 kartice -> 2 A4 stranice
+    expect(countText('a'.repeat(1800)).pages).toBe(1); // 1 kartica -> zaokruzeno na 1
+  });
+
+  it('kratki ne-prazan tekst ima minimalno 0.1 min citanja, ne 0', () => {
+    expect(countText('Samo tri riječi.').readingMinutes).toBe(0.1);
+  });
+
+  it('grupirana zavrsna interpunkcija, trotocka i LEX kratica na samom kraju', () => {
+    expect(countText('Što?! Zaista?').sentences).toBe(2);
+    expect(countText('Kraj misli… Nova misao.').sentences).toBe(2);
+    expect(countText('Kupili smo jabuke itd.').sentences).toBe(1);
+  });
 });

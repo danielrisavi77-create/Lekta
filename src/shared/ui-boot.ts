@@ -17,9 +17,16 @@ function prefersReduced() {
 
 // Motion se ucitava lijeno (zaseban chunk, ne blokira prvi paint); animacije su cisto
 // progresivno pobojlsanje. app.ts (rezultati) koristi window.__lektaAnimate kad je spreman.
-const motionReady: Promise<any> = prefersReduced()
-  ? Promise.resolve(null)
-  : import('motion').then((m) => { (window as any).__lektaAnimate = m.animate; return m; }).catch(() => null);
+// Import se okida tek na zahtjev (animateHero), pa tool stranice bez animacijskih meta
+// (.hero-copy/.preview-card) uopce ne skidaju motion chunk.
+let motionPromise: Promise<any> | null = null;
+function motionReady(): Promise<any> {
+  if (prefersReduced()) return Promise.resolve(null);
+  if (!motionPromise) {
+    motionPromise = import('motion').then((m) => { (window as any).__lektaAnimate = m.animate; return m; }).catch(() => null);
+  }
+  return motionPromise;
+}
 
 function renderIcons() {
   try {
@@ -69,12 +76,13 @@ function setupReveal() {
 // defaultu, Motion samo poboljsava ulaz. Djeca .hero-copy nemaju hover pa nema sukoba stilova.
 function animateHero() {
   if (prefersReduced()) return;
-  motionReady.then((m) => {
+  // Mete se traze PRIJE poziva motionReady(): bez njih se motion chunk uopce ne ucitava.
+  const copy = Array.from(document.querySelectorAll<HTMLElement>('.hero-copy > *'));
+  const preview = document.querySelector<HTMLElement>('.preview-card');
+  const items = preview ? [...copy, preview] : copy;
+  if (!items.length) return;
+  motionReady().then((m) => {
     if (!m) return;
-    const copy = Array.from(document.querySelectorAll<HTMLElement>('.hero-copy > *'));
-    const preview = document.querySelector<HTMLElement>('.preview-card');
-    const items = preview ? [...copy, preview] : copy;
-    if (!items.length) return;
     m.animate(items, { opacity: [0, 1], y: [22, 0] }, { duration: 0.62, delay: m.stagger(0.07), ease: EASE_OUT });
   });
 }

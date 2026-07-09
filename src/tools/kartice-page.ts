@@ -13,6 +13,12 @@ const SAMPLE = `Ovo je primjer teksta koji možeš zamijeniti svojim radom. Zali
 
 Jedna autorska kartica u hrvatskoj lekturi i prijevodu iznosi 1800 znakova s razmacima. Cijena lekture obično se računa upravo po kartici, pa je ovaj broj koristan kad procjenjuješ trošak i opseg.`;
 
+function readingLabel(minutes: number): string {
+  if (!minutes) return '0 min';
+  if (minutes < 1) return '< 1 min'; // 1-9 rijeci: iskrenije od "0 min" za neprazan tekst
+  return `${nf1.format(minutes)} min`;
+}
+
 function render(text: any) {
   const m = countText(text);
   const set = (id: any, v: any) => { const el = $(id); if (el) el.textContent = v; };
@@ -24,11 +30,26 @@ function render(text: any) {
   set('#m-sentences', nf.format(m.sentences));
   set('#m-paragraphs', nf.format(m.paragraphs));
   set('#m-pages', nf.format(m.pages));
-  set('#m-reading', m.readingMinutes ? `${nf1.format(m.readingMinutes)} min` : '0 min');
+  set('#m-reading', readingLabel(m.readingMinutes));
 
   const copyBtn = $('#kt-copy');
   if (copyBtn) copyBtn.disabled = m.charsWithSpaces === 0;
+  scheduleSrSummary(m);
   return m;
+}
+
+// Najava za citace ekrana: vizualne metrike se osvjezavaju na svaki unos, ali se izgovor
+// salje u skriveni aria-live tek nakon pauze u tipkanju, da SR ne brblja na svaki znak.
+let _srTimer: any = 0;
+function scheduleSrSummary(m: any) {
+  const live = $('#kt-sr-summary');
+  if (!live) return;
+  clearTimeout(_srTimer);
+  _srTimer = setTimeout(() => {
+    live.textContent = m.charsWithSpaces
+      ? `${nf2.format(m.kartice)} kartica, ${nf.format(m.words)} riječi, ${nf.format(m.charsWithSpaces)} znakova`
+      : 'Nema teksta.';
+  }, 900);
 }
 
 function summaryText(m: any) {
@@ -39,8 +60,8 @@ function summaryText(m: any) {
     `Znakovi bez razmaka: ${nf.format(m.charsWithoutSpaces)}`,
     `Rečenice: ${nf.format(m.sentences)}`,
     `Odlomci: ${nf.format(m.paragraphs)}`,
-    `Procijenjene stranice: ${nf.format(m.pages)}`,
-    `Vrijeme čitanja: ${m.readingMinutes ? `${nf1.format(m.readingMinutes)} min` : '0 min'}`,
+    `Procjena A4 stranica: ${nf.format(m.pages)}`,
+    `Vrijeme čitanja: ${readingLabel(m.readingMinutes)}`,
   ].join('\n');
 }
 
@@ -49,7 +70,16 @@ function init() {
   if (!input) return;
 
   render(input.value || '');
-  input.addEventListener('input', () => render(input.value));
+  // rAF spajanje: kod brzog tipkanja/velikog pastea rendera se najvise jednom po frameu,
+  // umjesto vise punih regex prolaza preko cijelog teksta na svaki keystroke.
+  let rafId = 0;
+  input.addEventListener('input', () => {
+    if (rafId) return;
+    rafId = requestAnimationFrame(() => {
+      rafId = 0;
+      render(input.value);
+    });
+  });
 
   $('#kt-clear')?.addEventListener('click', () => {
     input.value = '';
