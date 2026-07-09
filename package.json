@@ -13,6 +13,7 @@
     "recompute-coverage": "node scripts/recompute-coverage.mjs",
     "apply-verification": "node scripts/apply-verification.mjs",
     "dossier": "node scripts/verification-dossier.mjs",
+    "generate-citation-tools": "node scripts/generate-citation-tools.mjs",
     "docx-smoke": "vite-node scripts/docx-smoke.mts",
     "dev": "vite",
     "build": "vite build",

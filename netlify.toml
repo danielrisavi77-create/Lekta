@@ -9,9 +9,14 @@
 # _headers se jednako primjenjuje.
 
 [build]
-  command = "npm run build"
+  # generate-citation-tools MORA ici POSLIJE `vite build` (vite prazni dist/ pri buildu), pa
+  # potom doda staticke SEO stranice u dist/alati/** koje se objave iz istog artefakta.
+  command = "npm run build && npm run generate-citation-tools"
   publish = "dist"
 
 [build.environment]
   NODE_VERSION = "20"
   DEPLOY = "1"
+  # Generator citata pece kanonske URL-ove i sitemap iz ove domene (BEZ zavrsne kose crte,
+  # inace bi ${ORIGIN}/alati/... dalo dvostruki //). Ziva domena je Netlify subdomena.
+  LEKTA_SITE_ORIGIN = "https://lektahr.netlify.app"
