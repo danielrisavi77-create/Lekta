@@ -6,7 +6,7 @@
 // subscribeToDeadline (cisti REST + JWT), isti kroj kao waitlist-bar/-client.
 // Tanak DOM glue s injektiranim deps (config/token/fetch) -> testabilno.
 
-import { findConfirmedDeadline } from '../submission/deadline-registry';
+import { findUpcomingDeadline } from '../submission/deadline-registry';
 import { subscribeToDeadline, type DeadlineConfig } from '../submission/deadline-client';
 import type { AcademicDeadlineEntry } from '../submission/types';
 
@@ -27,12 +27,12 @@ export interface DeadlineReminderContext {
 export function renderDeadlineReminderToggleIfAvailable(ctx: DeadlineReminderContext): void {
   if (!ctx.mountEl) return;
 
-  const entry = findConfirmedDeadline(
+  const entry = findUpcomingDeadline(
     { facultyId: ctx.facultyId, programId: ctx.programId, workType: ctx.workType },
     ctx.deadlineRegistry,
   );
 
-  if (!entry) return; // nema potvrdenog roka, ne prikazuj nista (nikad ne nagadaj datum)
+  if (!entry) return; // nema pouzdanog roka, ne prikazuj nista (nikad ne nagadaj datum)
   if (!ctx.accessToken || !ctx.userId) return; // insert trazi prijavu; bez nje ne nudi toggle
 
   const wrapper = document.createElement('label');
@@ -43,6 +43,15 @@ export function renderDeadlineReminderToggleIfAvailable(ctx: DeadlineReminderCon
   const span = document.createElement('span');
   span.textContent = `Podsjeti me e-mailom 7 dana i 1 dan prije roka (${formatDate(entry.deadlineDate)})`;
   wrapper.append(checkbox, span);
+
+  // Iskrena oznaka: rok koji je AI auto-provjerio, ali covjek jos nije rucno potvrdio.
+  if (entry.confirmed !== true && entry.verification?.autoVerified === true) {
+    const note = document.createElement('small');
+    note.className = 'lekta-deadline-toggle__note';
+    note.style.display = 'block';
+    note.textContent = 'Rok automatski provjeren iz sluzbenog izvora (ceka zavrsnu rucnu potvrdu).';
+    wrapper.appendChild(note);
+  }
 
   checkbox.addEventListener('change', async () => {
     if (!checkbox.checked) return; // nema "un-check da otkaze prije spremanja" tijeka u v1

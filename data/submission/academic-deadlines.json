@@ -1,1 +1,242 @@
-[]
+[
+  {
+    "facultyId": "fpzg",
+    "programId": "Diplomski studij Politologija",
+    "workType": "diplomski",
+    "academicYear": "2025/2026",
+    "deadlineDate": "2026-01-30",
+    "source": "FPZG Odluka o rokovima obrana diplomskih radova 2025./2026. (KLASA 007-04/25-02/02, 23.10.2025), rok 'zakljucavanje popisa' za obranu u veljaci 2026 (obrane 16.-20.02.2026.); https://www.fpzg.unizg.hr/_download/repository/5.%20Odluka_rokovi%20prijave%20i%20obrane%20diplomskih%20radova%202025.pdf",
+    "fetchedAt": "2026-07-09",
+    "confirmed": false,
+    "verification": {
+      "autoVerified": true,
+      "passes": 3,
+      "checkedAt": "2026-07-09",
+      "sources": [
+        "https://www.fpzg.unizg.hr/_download/repository/5.%20Odluka_rokovi%20prijave%20i%20obrane%20diplomskih%20radova%202025.pdf",
+        "https://www.fpzg.unizg.hr/studenti/obrane_diplomskih_radova"
+      ],
+      "note": "3 lece: (1) ekstrakcija iz PDF Odluke KLASA 007-04/25-02/02 (23.10.2025); (2) adversarijalno: 'zakljucavanje popisa' = rok predaje uvezanog rada + potpisan obrazac D2 (nije datum obrane), potvrdena ak.god 2025/2026 i tri diplomska studija, dokument nije zamijenjen novijim; (3) interna konzistentnost: rok predaje je prije pocetka pripadne obrane (30.01<16.02, 22.05<08.06, 19.06<29.06, 01.09<07.09). OPREZ: konkretni datumi postoje SAMO u PDF Odluci (HTML stranica ih ne navodi), dakle jedan mjerodavan izvor bez nezavisne druge potvrde -> ceka zavrsnu rucnu potvrdu."
+    }
+  },
+  {
+    "facultyId": "fpzg",
+    "programId": "Diplomski studij Politologija",
+    "workType": "diplomski",
+    "academicYear": "2025/2026",
+    "deadlineDate": "2026-05-22",
+    "source": "FPZG Odluka o rokovima obrana diplomskih radova 2025./2026. (KLASA 007-04/25-02/02, 23.10.2025), rok 'zakljucavanje popisa' za obranu u lipnju 2026 (obrane 08.-12.06.2026.); https://www.fpzg.unizg.hr/_download/repository/5.%20Odluka_rokovi%20prijave%20i%20obrane%20diplomskih%20radova%202025.pdf",
+    "fetchedAt": "2026-07-09",
+    "confirmed": false,
+    "verification": {
+      "autoVerified": true,
+      "passes": 3,
+      "checkedAt": "2026-07-09",
+      "sources": [
+        "https://www.fpzg.unizg.hr/_download/repository/5.%20Odluka_rokovi%20prijave%20i%20obrane%20diplomskih%20radova%202025.pdf",
+        "https://www.fpzg.unizg.hr/studenti/obrane_diplomskih_radova"
+      ],
+      "note": "3 lece: (1) ekstrakcija iz PDF Odluke KLASA 007-04/25-02/02 (23.10.2025); (2) adversarijalno: 'zakljucavanje popisa' = rok predaje uvezanog rada + potpisan obrazac D2 (nije datum obrane), potvrdena ak.god 2025/2026 i tri diplomska studija, dokument nije zamijenjen novijim; (3) interna konzistentnost: rok predaje je prije pocetka pripadne obrane (30.01<16.02, 22.05<08.06, 19.06<29.06, 01.09<07.09). OPREZ: konkretni datumi postoje SAMO u PDF Odluci (HTML stranica ih ne navodi), dakle jedan mjerodavan izvor bez nezavisne druge potvrde -> ceka zavrsnu rucnu potvrdu."
+    }
+  },
+  {
+    "facultyId": "fpzg",
+    "programId": "Diplomski studij Politologija",
+    "workType": "diplomski",
+    "academicYear": "2025/2026",
+    "deadlineDate": "2026-06-19",
+    "source": "FPZG Odluka o rokovima obrana diplomskih radova 2025./2026. (KLASA 007-04/25-02/02, 23.10.2025), rok 'zakljucavanje popisa' za obranu u srpnju 2026 (obrane 29.06.-03.07.2026.); https://www.fpzg.unizg.hr/_download/repository/5.%20Odluka_rokovi%20prijave%20i%20obrane%20diplomskih%20radova%202025.pdf",
+    "fetchedAt": "2026-07-09",
+    "confirmed": false,
+    "verification": {
+      "autoVerified": true,
+      "passes": 3,
+      "checkedAt": "2026-07-09",
+      "sources": [
+        "https://www.fpzg.unizg.hr/_download/repository/5.%20Odluka_rokovi%20prijave%20i%20obrane%20diplomskih%20radova%202025.pdf",
+        "https://www.fpzg.unizg.hr/studenti/obrane_diplomskih_radova"
+      ],
+      "note": "3 lece: (1) ekstrakcija iz PDF Odluke KLASA 007-04/25-02/02 (23.10.2025); (2) adversarijalno: 'zakljucavanje popisa' = rok predaje uvezanog rada + potpisan obrazac D2 (nije datum obrane), potvrdena ak.god 2025/2026 i tri diplomska studija, dokument nije zamijenjen novijim; (3) interna konzistentnost: rok predaje je prije pocetka pripadne obrane (30.01<16.02, 22.05<08.06, 19.06<29.06, 01.09<07.09). OPREZ: konkretni datumi postoje SAMO u PDF Odluci (HTML stranica ih ne navodi), dakle jedan mjerodavan izvor bez nezavisne druge potvrde -> ceka zavrsnu rucnu potvrdu."
+    }
+  },
+  {
+    "facultyId": "fpzg",
+    "programId": "Diplomski studij Politologija",
+    "workType": "diplomski",
+    "academicYear": "2025/2026",
+    "deadlineDate": "2026-09-01",
+    "source": "FPZG Odluka o rokovima obrana diplomskih radova 2025./2026. (KLASA 007-04/25-02/02, 23.10.2025), rok 'zakljucavanje popisa' za obranu u rujnu 2026 (obrane 07.-18.09.2026.); https://www.fpzg.unizg.hr/_download/repository/5.%20Odluka_rokovi%20prijave%20i%20obrane%20diplomskih%20radova%202025.pdf",
+    "fetchedAt": "2026-07-09",
+    "confirmed": false,
+    "verification": {
+      "autoVerified": true,
+      "passes": 3,
+      "checkedAt": "2026-07-09",
+      "sources": [
+        "https://www.fpzg.unizg.hr/_download/repository/5.%20Odluka_rokovi%20prijave%20i%20obrane%20diplomskih%20radova%202025.pdf",
+        "https://www.fpzg.unizg.hr/studenti/obrane_diplomskih_radova"
+      ],
+      "note": "3 lece: (1) ekstrakcija iz PDF Odluke KLASA 007-04/25-02/02 (23.10.2025); (2) adversarijalno: 'zakljucavanje popisa' = rok predaje uvezanog rada + potpisan obrazac D2 (nije datum obrane), potvrdena ak.god 2025/2026 i tri diplomska studija, dokument nije zamijenjen novijim; (3) interna konzistentnost: rok predaje je prije pocetka pripadne obrane (30.01<16.02, 22.05<08.06, 19.06<29.06, 01.09<07.09). OPREZ: konkretni datumi postoje SAMO u PDF Odluci (HTML stranica ih ne navodi), dakle jedan mjerodavan izvor bez nezavisne druge potvrde -> ceka zavrsnu rucnu potvrdu."
+    }
+  },
+  {
+    "facultyId": "fpzg",
+    "programId": "Diplomski studij Politologija – Nacionalna sigurnost",
+    "workType": "diplomski",
+    "academicYear": "2025/2026",
+    "deadlineDate": "2026-01-30",
+    "source": "FPZG Odluka o rokovima obrana diplomskih radova 2025./2026. (KLASA 007-04/25-02/02, 23.10.2025), rok 'zakljucavanje popisa' za obranu u veljaci 2026 (obrane 16.-20.02.2026.); https://www.fpzg.unizg.hr/_download/repository/5.%20Odluka_rokovi%20prijave%20i%20obrane%20diplomskih%20radova%202025.pdf",
+    "fetchedAt": "2026-07-09",
+    "confirmed": false,
+    "verification": {
+      "autoVerified": true,
+      "passes": 3,
+      "checkedAt": "2026-07-09",
+      "sources": [
+        "https://www.fpzg.unizg.hr/_download/repository/5.%20Odluka_rokovi%20prijave%20i%20obrane%20diplomskih%20radova%202025.pdf",
+        "https://www.fpzg.unizg.hr/studenti/obrane_diplomskih_radova"
+      ],
+      "note": "3 lece: (1) ekstrakcija iz PDF Odluke KLASA 007-04/25-02/02 (23.10.2025); (2) adversarijalno: 'zakljucavanje popisa' = rok predaje uvezanog rada + potpisan obrazac D2 (nije datum obrane), potvrdena ak.god 2025/2026 i tri diplomska studija, dokument nije zamijenjen novijim; (3) interna konzistentnost: rok predaje je prije pocetka pripadne obrane (30.01<16.02, 22.05<08.06, 19.06<29.06, 01.09<07.09). OPREZ: konkretni datumi postoje SAMO u PDF Odluci (HTML stranica ih ne navodi), dakle jedan mjerodavan izvor bez nezavisne druge potvrde -> ceka zavrsnu rucnu potvrdu."
+    }
+  },
+  {
+    "facultyId": "fpzg",
+    "programId": "Diplomski studij Politologija – Nacionalna sigurnost",
+    "workType": "diplomski",
+    "academicYear": "2025/2026",
+    "deadlineDate": "2026-05-22",
+    "source": "FPZG Odluka o rokovima obrana diplomskih radova 2025./2026. (KLASA 007-04/25-02/02, 23.10.2025), rok 'zakljucavanje popisa' za obranu u lipnju 2026 (obrane 08.-12.06.2026.); https://www.fpzg.unizg.hr/_download/repository/5.%20Odluka_rokovi%20prijave%20i%20obrane%20diplomskih%20radova%202025.pdf",
+    "fetchedAt": "2026-07-09",
+    "confirmed": false,
+    "verification": {
+      "autoVerified": true,
+      "passes": 3,
+      "checkedAt": "2026-07-09",
+      "sources": [
+        "https://www.fpzg.unizg.hr/_download/repository/5.%20Odluka_rokovi%20prijave%20i%20obrane%20diplomskih%20radova%202025.pdf",
+        "https://www.fpzg.unizg.hr/studenti/obrane_diplomskih_radova"
+      ],
+      "note": "3 lece: (1) ekstrakcija iz PDF Odluke KLASA 007-04/25-02/02 (23.10.2025); (2) adversarijalno: 'zakljucavanje popisa' = rok predaje uvezanog rada + potpisan obrazac D2 (nije datum obrane), potvrdena ak.god 2025/2026 i tri diplomska studija, dokument nije zamijenjen novijim; (3) interna konzistentnost: rok predaje je prije pocetka pripadne obrane (30.01<16.02, 22.05<08.06, 19.06<29.06, 01.09<07.09). OPREZ: konkretni datumi postoje SAMO u PDF Odluci (HTML stranica ih ne navodi), dakle jedan mjerodavan izvor bez nezavisne druge potvrde -> ceka zavrsnu rucnu potvrdu."
+    }
+  },
+  {
+    "facultyId": "fpzg",
+    "programId": "Diplomski studij Politologija – Nacionalna sigurnost",
+    "workType": "diplomski",
+    "academicYear": "2025/2026",
+    "deadlineDate": "2026-06-19",
+    "source": "FPZG Odluka o rokovima obrana diplomskih radova 2025./2026. (KLASA 007-04/25-02/02, 23.10.2025), rok 'zakljucavanje popisa' za obranu u srpnju 2026 (obrane 29.06.-03.07.2026.); https://www.fpzg.unizg.hr/_download/repository/5.%20Odluka_rokovi%20prijave%20i%20obrane%20diplomskih%20radova%202025.pdf",
+    "fetchedAt": "2026-07-09",
+    "confirmed": false,
+    "verification": {
+      "autoVerified": true,
+      "passes": 3,
+      "checkedAt": "2026-07-09",
+      "sources": [
+        "https://www.fpzg.unizg.hr/_download/repository/5.%20Odluka_rokovi%20prijave%20i%20obrane%20diplomskih%20radova%202025.pdf",
+        "https://www.fpzg.unizg.hr/studenti/obrane_diplomskih_radova"
+      ],
+      "note": "3 lece: (1) ekstrakcija iz PDF Odluke KLASA 007-04/25-02/02 (23.10.2025); (2) adversarijalno: 'zakljucavanje popisa' = rok predaje uvezanog rada + potpisan obrazac D2 (nije datum obrane), potvrdena ak.god 2025/2026 i tri diplomska studija, dokument nije zamijenjen novijim; (3) interna konzistentnost: rok predaje je prije pocetka pripadne obrane (30.01<16.02, 22.05<08.06, 19.06<29.06, 01.09<07.09). OPREZ: konkretni datumi postoje SAMO u PDF Odluci (HTML stranica ih ne navodi), dakle jedan mjerodavan izvor bez nezavisne druge potvrde -> ceka zavrsnu rucnu potvrdu."
+    }
+  },
+  {
+    "facultyId": "fpzg",
+    "programId": "Diplomski studij Politologija – Nacionalna sigurnost",
+    "workType": "diplomski",
+    "academicYear": "2025/2026",
+    "deadlineDate": "2026-09-01",
+    "source": "FPZG Odluka o rokovima obrana diplomskih radova 2025./2026. (KLASA 007-04/25-02/02, 23.10.2025), rok 'zakljucavanje popisa' za obranu u rujnu 2026 (obrane 07.-18.09.2026.); https://www.fpzg.unizg.hr/_download/repository/5.%20Odluka_rokovi%20prijave%20i%20obrane%20diplomskih%20radova%202025.pdf",
+    "fetchedAt": "2026-07-09",
+    "confirmed": false,
+    "verification": {
+      "autoVerified": true,
+      "passes": 3,
+      "checkedAt": "2026-07-09",
+      "sources": [
+        "https://www.fpzg.unizg.hr/_download/repository/5.%20Odluka_rokovi%20prijave%20i%20obrane%20diplomskih%20radova%202025.pdf",
+        "https://www.fpzg.unizg.hr/studenti/obrane_diplomskih_radova"
+      ],
+      "note": "3 lece: (1) ekstrakcija iz PDF Odluke KLASA 007-04/25-02/02 (23.10.2025); (2) adversarijalno: 'zakljucavanje popisa' = rok predaje uvezanog rada + potpisan obrazac D2 (nije datum obrane), potvrdena ak.god 2025/2026 i tri diplomska studija, dokument nije zamijenjen novijim; (3) interna konzistentnost: rok predaje je prije pocetka pripadne obrane (30.01<16.02, 22.05<08.06, 19.06<29.06, 01.09<07.09). OPREZ: konkretni datumi postoje SAMO u PDF Odluci (HTML stranica ih ne navodi), dakle jedan mjerodavan izvor bez nezavisne druge potvrde -> ceka zavrsnu rucnu potvrdu."
+    }
+  },
+  {
+    "facultyId": "fpzg",
+    "programId": "Diplomski studij Novinarstvo",
+    "workType": "diplomski",
+    "academicYear": "2025/2026",
+    "deadlineDate": "2026-01-30",
+    "source": "FPZG Odluka o rokovima obrana diplomskih radova 2025./2026. (KLASA 007-04/25-02/02, 23.10.2025), rok 'zakljucavanje popisa' za obranu u veljaci 2026 (obrane 16.-20.02.2026.); https://www.fpzg.unizg.hr/_download/repository/5.%20Odluka_rokovi%20prijave%20i%20obrane%20diplomskih%20radova%202025.pdf",
+    "fetchedAt": "2026-07-09",
+    "confirmed": false,
+    "verification": {
+      "autoVerified": true,
+      "passes": 3,
+      "checkedAt": "2026-07-09",
+      "sources": [
+        "https://www.fpzg.unizg.hr/_download/repository/5.%20Odluka_rokovi%20prijave%20i%20obrane%20diplomskih%20radova%202025.pdf",
+        "https://www.fpzg.unizg.hr/studenti/obrane_diplomskih_radova"
+      ],
+      "note": "3 lece: (1) ekstrakcija iz PDF Odluke KLASA 007-04/25-02/02 (23.10.2025); (2) adversarijalno: 'zakljucavanje popisa' = rok predaje uvezanog rada + potpisan obrazac D2 (nije datum obrane), potvrdena ak.god 2025/2026 i tri diplomska studija, dokument nije zamijenjen novijim; (3) interna konzistentnost: rok predaje je prije pocetka pripadne obrane (30.01<16.02, 22.05<08.06, 19.06<29.06, 01.09<07.09). OPREZ: konkretni datumi postoje SAMO u PDF Odluci (HTML stranica ih ne navodi), dakle jedan mjerodavan izvor bez nezavisne druge potvrde -> ceka zavrsnu rucnu potvrdu."
+    }
+  },
+  {
+    "facultyId": "fpzg",
+    "programId": "Diplomski studij Novinarstvo",
+    "workType": "diplomski",
+    "academicYear": "2025/2026",
+    "deadlineDate": "2026-05-22",
+    "source": "FPZG Odluka o rokovima obrana diplomskih radova 2025./2026. (KLASA 007-04/25-02/02, 23.10.2025), rok 'zakljucavanje popisa' za obranu u lipnju 2026 (obrane 08.-12.06.2026.); https://www.fpzg.unizg.hr/_download/repository/5.%20Odluka_rokovi%20prijave%20i%20obrane%20diplomskih%20radova%202025.pdf",
+    "fetchedAt": "2026-07-09",
+    "confirmed": false,
+    "verification": {
+      "autoVerified": true,
+      "passes": 3,
+      "checkedAt": "2026-07-09",
+      "sources": [
+        "https://www.fpzg.unizg.hr/_download/repository/5.%20Odluka_rokovi%20prijave%20i%20obrane%20diplomskih%20radova%202025.pdf",
+        "https://www.fpzg.unizg.hr/studenti/obrane_diplomskih_radova"
+      ],
+      "note": "3 lece: (1) ekstrakcija iz PDF Odluke KLASA 007-04/25-02/02 (23.10.2025); (2) adversarijalno: 'zakljucavanje popisa' = rok predaje uvezanog rada + potpisan obrazac D2 (nije datum obrane), potvrdena ak.god 2025/2026 i tri diplomska studija, dokument nije zamijenjen novijim; (3) interna konzistentnost: rok predaje je prije pocetka pripadne obrane (30.01<16.02, 22.05<08.06, 19.06<29.06, 01.09<07.09). OPREZ: konkretni datumi postoje SAMO u PDF Odluci (HTML stranica ih ne navodi), dakle jedan mjerodavan izvor bez nezavisne druge potvrde -> ceka zavrsnu rucnu potvrdu."
+    }
+  },
+  {
+    "facultyId": "fpzg",
+    "programId": "Diplomski studij Novinarstvo",
+    "workType": "diplomski",
+    "academicYear": "2025/2026",
+    "deadlineDate": "2026-06-19",
+    "source": "FPZG Odluka o rokovima obrana diplomskih radova 2025./2026. (KLASA 007-04/25-02/02, 23.10.2025), rok 'zakljucavanje popisa' za obranu u srpnju 2026 (obrane 29.06.-03.07.2026.); https://www.fpzg.unizg.hr/_download/repository/5.%20Odluka_rokovi%20prijave%20i%20obrane%20diplomskih%20radova%202025.pdf",
+    "fetchedAt": "2026-07-09",
+    "confirmed": false,
+    "verification": {
+      "autoVerified": true,
+      "passes": 3,
+      "checkedAt": "2026-07-09",
+      "sources": [
+        "https://www.fpzg.unizg.hr/_download/repository/5.%20Odluka_rokovi%20prijave%20i%20obrane%20diplomskih%20radova%202025.pdf",
+        "https://www.fpzg.unizg.hr/studenti/obrane_diplomskih_radova"
+      ],
+      "note": "3 lece: (1) ekstrakcija iz PDF Odluke KLASA 007-04/25-02/02 (23.10.2025); (2) adversarijalno: 'zakljucavanje popisa' = rok predaje uvezanog rada + potpisan obrazac D2 (nije datum obrane), potvrdena ak.god 2025/2026 i tri diplomska studija, dokument nije zamijenjen novijim; (3) interna konzistentnost: rok predaje je prije pocetka pripadne obrane (30.01<16.02, 22.05<08.06, 19.06<29.06, 01.09<07.09). OPREZ: konkretni datumi postoje SAMO u PDF Odluci (HTML stranica ih ne navodi), dakle jedan mjerodavan izvor bez nezavisne druge potvrde -> ceka zavrsnu rucnu potvrdu."
+    }
+  },
+  {
+    "facultyId": "fpzg",
+    "programId": "Diplomski studij Novinarstvo",
+    "workType": "diplomski",
+    "academicYear": "2025/2026",
+    "deadlineDate": "2026-09-01",
+    "source": "FPZG Odluka o rokovima obrana diplomskih radova 2025./2026. (KLASA 007-04/25-02/02, 23.10.2025), rok 'zakljucavanje popisa' za obranu u rujnu 2026 (obrane 07.-18.09.2026.); https://www.fpzg.unizg.hr/_download/repository/5.%20Odluka_rokovi%20prijave%20i%20obrane%20diplomskih%20radova%202025.pdf",
+    "fetchedAt": "2026-07-09",
+    "confirmed": false,
+    "verification": {
+      "autoVerified": true,
+      "passes": 3,
+      "checkedAt": "2026-07-09",
+      "sources": [
+        "https://www.fpzg.unizg.hr/_download/repository/5.%20Odluka_rokovi%20prijave%20i%20obrane%20diplomskih%20radova%202025.pdf",
+        "https://www.fpzg.unizg.hr/studenti/obrane_diplomskih_radova"
+      ],
+      "note": "3 lece: (1) ekstrakcija iz PDF Odluke KLASA 007-04/25-02/02 (23.10.2025); (2) adversarijalno: 'zakljucavanje popisa' = rok predaje uvezanog rada + potpisan obrazac D2 (nije datum obrane), potvrdena ak.god 2025/2026 i tri diplomska studija, dokument nije zamijenjen novijim; (3) interna konzistentnost: rok predaje je prije pocetka pripadne obrane (30.01<16.02, 22.05<08.06, 19.06<29.06, 01.09<07.09). OPREZ: konkretni datumi postoje SAMO u PDF Odluci (HTML stranica ih ne navodi), dakle jedan mjerodavan izvor bez nezavisne druge potvrde -> ceka zavrsnu rucnu potvrdu."
+    }
+  }
+]
