@@ -1,5 +1,6 @@
 node_modules/
 dist/
 scratchpad-dist-public/
+artifacts/
 *.local
 .DS_Store

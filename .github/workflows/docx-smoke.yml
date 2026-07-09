@@ -1,0 +1,46 @@
+# Smoke test: sagradi sintetski .docx i pokazi kako motor reagira (score, provjere, nalazi).
+# Ne treba tajne ni bazu: sve je lokalno (analyzeDocx radi u Node preko @xmldom/xmldom, ista
+# putanja kao Web Worker). Artefakti (uzorci .docx + analiza-*.json + IZVJESTAJ.md) se uploadaju
+# pa se mogu preuzeti iz run-a; IZVJESTAJ.md ide i u sazetak job-a.
+name: docx-smoke
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  generate-and-analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Instaliraj ovisnosti
+        run: npm ci
+
+      - name: Generiraj uzorke .docx i analiziraj
+        run: npx vite-node scripts/docx-smoke.mts
+
+      - name: IZVJESTAJ u sazetak job-a
+        if: always()
+        run: |
+          if [ -f artifacts/IZVJESTAJ.md ]; then
+            cat artifacts/IZVJESTAJ.md >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "IZVJESTAJ.md nije generiran (skripta je pala prije zapisa)." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload artefakte (docx + analiza)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: docx-smoke-artifacts
+          path: artifacts/
+          if-no-files-found: warn
