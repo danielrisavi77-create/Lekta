@@ -71,12 +71,19 @@ supabase functions deploy webhook-mor
 supabase functions deploy faculty-request --no-verify-jwt   # anoniman waitlist upis
 ```
 
-Za `faculty-request` klijentu trebaju `supabaseUrl` i anon kljuc (kao paywall); endpoint je
+Za `faculty-request` klijentu treba `waitlistEndpoint` (ili `supabaseUrl` + anon kljuc); endpoint je
 `<supabaseUrl>/functions/v1/faculty-request`. `--no-verify-jwt` je nuzan jer je anoniman upis
-dopusten; funkcija ipak opcionalno razrijesi JWT prijavljenog korisnika (upise user_id).
+dopusten; funkcija ipak opcionalno razrijesi JWT prijavljenog korisnika (upise user_id). ip_hash
+se soli `IP_HASH_SALT`-om (ako nije postavljen, izvodi se iz service-role kljuca) pa nije reverzibilan.
+
+Discovery strana waitlista (offline, service role): `npm run demand-signal` cita zivi agregat
+`faculty_request_counts` i rangira nepokrivene fakultete po potraznji (izlaz
+`discovery/out/{demand-signal.json, DEMAND.md}`); `npm run notify-covered -- --faculty <id>` posalje
+jednokratnu obavijest redovima s e-mailom kad fakultet dobije profil (dry-run po defaultu, `--send`
++ `RESEND_API_KEY`/`NOTIFY_FROM` za stvarno slanje). Obje imaju `--from-file` za offline test.
 
 Env varijable: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_ANON_KEY`, `DAILY_CAP`,
-`MOR_WEBHOOK_SECRET`, te za create-checkout `LEMONSQUEEZY_API_KEY`, `LEMONSQUEEZY_STORE_ID`,
+`IP_HASH_SALT` (opcionalno, waitlist ip_hash salt), `MOR_WEBHOOK_SECRET`, te za create-checkout `LEMONSQUEEZY_API_KEY`, `LEMONSQUEEZY_STORE_ID`,
 `CHECKOUT_REDIRECT_URL`. Webhook HMAC provjera potpisa je već implementirana
 (`verifyLemonSignature`, timing-safe); dovoljno je postaviti `MOR_WEBHOOK_SECRET`. Nakon
 `db push` popuni `products.mor_product_id` stvarnim Lemon

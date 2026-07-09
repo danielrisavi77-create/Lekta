@@ -8,6 +8,8 @@
     "bootstrap": "node scripts/split-prototype.mjs",
     "extract-data": "node scripts/extract-data.mjs",
     "discovery": "node discovery/ingest.mjs && node discovery/generate-coverage.mjs",
+    "demand-signal": "node discovery/demand-signal.mjs",
+    "notify-covered": "node discovery/notify-covered.mjs",
     "recompute-coverage": "node scripts/recompute-coverage.mjs",
     "apply-verification": "node scripts/apply-verification.mjs",
     "dossier": "node scripts/verification-dossier.mjs",
