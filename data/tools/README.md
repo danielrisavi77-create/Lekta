@@ -1,87 +1,34 @@
 # data/tools/citation-configs.json
 
-## Namjerna odluka, odstupanje od SEO_FREE_TOOLS.md
+## Kako se stil citiranja odreduje (derivacija iz profila)
 
-Spec (sekcija 3) predlaze citanje direktno iz `data/profiles/verified-profiles.json`.
-Ovaj generator umjesto toga cita iz ZASEBNE datoteke, `citation-configs.json`.
+Generator citatnih alata (`scripts/generate-citation-tools.mjs`) NE autorira stil po
+fakultetu rucno. Stil se DERIVIRA iz glavnog registra:
 
-Razlog: `verified-profiles.json` je interni format za analizator (ruleEntries,
-effectiveRules, checkId mapiranja), oblikovan za strojnu provjeru dokumenta, ne
-za renderiranje formulara i predlozaka javnog alata. Prisiljavanje javnog
-generatora da parsira interni engine format stvara krhku spregu: promjena u
-analizatoru bi mogla tiho pokvariti javnu stranicu. Ova datoteka je namjerno
-odvojen, jednostavniji "content" sloj, autoriran RUCNO za svaki fakultet tek
-NAKON sto je citatno pravilo vec verificirano u glavnom sustavu (`sourceId` dolje
-referencira isti izvor kao u glavnom sustavu, ali sama datoteka ne uvozi
-`verified-profiles.json` programski).
+1. `data/profiles/verified-profiles.json` -> `rules.recommendedCitation` (token stila po
+   profilu, npr. `harvard`, `apa7`, `ieee`, `vancouver`, `chicago-notes`, `pravo-fusnote`).
+2. `src/citations/citation-meta.ts` -> token preslikan u oznaku i nacin (`mode`).
+3. `src/citations/citation-web.ts` -> `engineStyleFor(token)` bira engine stil, a
+   `src/tools/citation.ts` (isti testirani motor) stvarno sastavlja citat
+   (autor-godina / fusnota / ieee / vancouver).
 
-Ako se kasnije pokaze vrijednim automatski izvoditi ovu datoteku iz glavnog
-registra pravila, to je buduci korak (mapping skripta), ne danasnja
-pretpostavka.
+Fakultet u alatu ima onoliko stilova koliko ih njegovi profili stvarno koriste (veliki
+fakulteti se razlikuju po odsjeku, npr. FFZG: Harvard + Chicago + APA7). Fakulteti s
+tokenom `custom` ili bez tokena NE dobivaju izmisljen format, nego stranicu koja posteno
+vodi na opci generator (`/citat.html`) i upute mentora.
 
-## Prazan pocetak, namjerno
+Ovo je "mapping skripta iz glavnog registra" koju je ranija verzija ostavljala kao buduci
+korak; sada je primarni izvor. Sprega je jednosmjerna i uska: generator cita samo
+`recommendedCitation` token, ne cijeli engine format, pa promjena analizatora ne moze tiho
+pokvariti javnu stranicu.
 
-Datoteka pocinje kao `[]`. NE popunjavaj je primjerima ili pretpostavljenim
-formatima. Isto nacelo kao `VERIFICATION_PIPELINE.md`: dok stil citiranja nije
-STVARNO potvrden protiv sluzbenog izvora tog fakulteta, unos ne postoji.
+## Ova datoteka (`citation-configs.json`)
 
-## Shema po unosu
+Rezervirana za BUDUCE RUCNE IZNIMKE (npr. custom fakultet kojem stil nije u profilima).
+Pocinje i ostaje `[]` dok ne zatreba. Mora biti JSON niz; generator ju za sada samo
+validira (ne primjenjuje override). NE popunjavaj je izmisljenim ni pretpostavljenim
+stilom: isto nacelo kao `VERIFICATION_PIPELINE.md` i glavni registar, unos postoji tek kad
+je stil STVARNO potvrden protiv sluzbenog izvora tog fakulteta.
 
-```json
-{
-  "facultyId": "fpzg",
-  "facultyName": "Fakultet politickih znanosti (FPZG)",
-  "citationStyleName": "FPZG autor-godina stil",
-  "status": "verified",
-  "sourceId": "fpzg-upute-2024",
-  "sourceLabel": "Upute za izradu zavrsnog/diplomskog rada FPZG",
-  "verifiedAt": "2026-07-01",
-  "sourceTypes": [
-    {
-      "type": "book",
-      "label": "Knjiga",
-      "fields": [
-        { "key": "author", "label": "Autor (Prezime, Ime)", "required": true },
-        { "key": "year", "label": "Godina", "required": true },
-        { "key": "title", "label": "Naslov", "required": true },
-        { "key": "publisher", "label": "Izdavac", "required": false },
-        { "key": "place", "label": "Mjesto izdanja", "required": false }
-      ],
-      "template": "{author} ({year}). {title}. {place}: {publisher}."
-    },
-    {
-      "type": "article",
-      "label": "Clanak",
-      "fields": [
-        { "key": "author", "label": "Autor", "required": true },
-        { "key": "year", "label": "Godina", "required": true },
-        { "key": "title", "label": "Naslov clanka", "required": true },
-        { "key": "journal", "label": "Casopis", "required": true },
-        { "key": "volume", "label": "Broj/svezak", "required": false },
-        { "key": "pages", "label": "Stranice", "required": false }
-      ],
-      "template": "{author} ({year}). {title}. {journal}, {volume}, {pages}."
-    },
-    {
-      "type": "web",
-      "label": "Web stranica",
-      "fields": [
-        { "key": "author", "label": "Autor ili institucija", "required": true },
-        { "key": "year", "label": "Godina", "required": false },
-        { "key": "title", "label": "Naslov stranice", "required": true },
-        { "key": "url", "label": "URL", "required": true },
-        { "key": "accessedDate", "label": "Datum pristupa", "required": true }
-      ],
-      "template": "{author} ({year}). {title}. Dostupno na: {url} (pristupljeno {accessedDate})."
-    }
-  ]
-}
-```
-
-- `status`: MORA biti `"verified"` da bi generator uopce razmotrio unos. Bilo koja
-  druga vrijednost (ili nedostatak polja) se PRESKACE uz upozorenje, ne koristi se.
-- `template`: `{polje}` placeholderi se zamjenjuju vrijednostima iz forme.
-  Prazna polja se cisto uklone (vidi `src/tools/format-citation.js`), ne ostavljaju
-  prazne zagrade ni dvostruke tocke.
-- Vrste izvora (`book`, `article`, `web`, `law`) su primjer, ne fiksni popis;
-  dodaj sto je stvarno potrebno za taj fakultet.
+Kad override zatreba, prvo ozici primjenu u generatoru (merge preko derivirane mape) pa tek
+onda dodaj unos; do tada je namjerno inertna.

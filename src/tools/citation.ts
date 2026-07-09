@@ -9,7 +9,9 @@
 // Namjerno konzervativno: bez em/en crtica, bez nagadanja polja koja korisnik nije dao.
 
 export type SourceType = 'knjiga' | 'poglavlje' | 'clanak' | 'mrezni' | 'zavrsni' | 'propis';
-export type CitationStyle = 'autor-godina' | 'fusnota';
+// autor-godina (APA/Harvard obitelj), fusnota (Chicago/pravne biljeske), te dva numericka
+// stila (IEEE, Vancouver) koja Lekta profili stvarno koriste (recommendedCitation tokeni).
+export type CitationStyle = 'autor-godina' | 'fusnota' | 'ieee' | 'vancouver';
 
 export interface CitationInput {
   type: SourceType;
@@ -273,6 +275,164 @@ function formatFusnota(inp: CitationInput): string {
   return tidy(parts.join(' '));
 }
 
+// --- Numericki stilovi (IEEE, Vancouver) -----------------------------------
+// Referentni redak (bibliografski unos). U tekstu se koristi broj [n] koji ovisi o
+// redoslijedu pojavljivanja pa ga generator ne moze znati -> inText je prazan (kao fusnota).
+// Plain-text izlaz (bez kurziva); struktura i interpunkcija prate javne stilske specifikacije.
+
+/** IEEE autori: inicijali ISPRED prezimena ("A. A. Prezime"), zadnji spojen s "and". */
+function authorsIeee(list: ParsedAuthor[]): string {
+  if (!list.length) return '';
+  const fmt = (a: ParsedAuthor) => (a.first ? `${initials(a.first)} ${a.last}` : a.last);
+  if (list.length === 1) return fmt(list[0]);
+  if (list.length === 2) return `${fmt(list[0])} and ${fmt(list[1])}`;
+  const head = list.slice(0, -1).map(fmt).join(', ');
+  return `${head}, and ${fmt(list[list.length - 1])}`;
+}
+
+/** IEEE naslov clanka/priloga: u navodnicima s zarezom UNUTAR navodnika ("Naslov,"). */
+function ieeeQuoted(title: string): string {
+  const t = (title || '').trim().replace(/[.,]$/, '');
+  return t ? `"${t},"` : '';
+}
+
+/** Vancouver inicijali: bez tocaka i razmaka ("Ana Maria" -> "AM"). */
+function vancInitials(first: string): string {
+  return first.split(/[\s-]+/).filter(Boolean).map((p) => p[0].toUpperCase()).join('');
+}
+
+/** Vancouver autori: "Prezime AA"; 7+ autora -> prvih 6 pa "et al.". */
+function authorsVancouver(list: ParsedAuthor[]): string {
+  if (!list.length) return '';
+  const fmt = (a: ParsedAuthor) => (a.first ? `${a.last} ${vancInitials(a.first)}` : a.last);
+  const shown = list.length > 6 ? list.slice(0, 6) : list;
+  const joined = shown.map(fmt).join(', ');
+  return list.length > 6 ? `${joined}, et al.` : joined;
+}
+
+function formatIeee(inp: CitationInput): string {
+  const A = authorsIeee(parseAuthors(inp.authors));
+  const t = inp.title || '';
+  const parts: string[] = [];
+  if (A) parts.push(`${A},`);
+
+  switch (inp.type) {
+    case 'knjiga': {
+      if (t) parts.push(withDot(t));
+      const pub = [inp.place, inp.publisher].filter(Boolean).join(': ');
+      const tail = [pub, inp.year].filter(Boolean).join(', ');
+      if (tail) parts.push(withDot(tail));
+      break;
+    }
+    case 'zavrsni': {
+      if (t) parts.push(withDot(t));
+      const kind = inp.institution ? `Neobjavljeni završni rad, ${inp.institution}` : 'Neobjavljeni završni rad';
+      parts.push(withDot([kind, inp.year].filter(Boolean).join(', ')));
+      break;
+    }
+    case 'clanak': {
+      if (t) parts.push(ieeeQuoted(t));
+      const vol = inp.volume ? `vol. ${inp.volume}` : '';
+      const no = inp.issue ? `no. ${inp.issue}` : '';
+      const pp = inp.pages ? `pp. ${inp.pages}` : '';
+      const seg = [inp.container, vol, no, pp, inp.year].filter(Boolean).join(', ');
+      if (seg) parts.push(withDot(seg));
+      const doi = doiUrl(inp.doi);
+      if (doi) parts.push(withDot(doi));
+      break;
+    }
+    case 'poglavlje': {
+      if (t) parts.push(ieeeQuoted(t));
+      const ed = inp.editor ? `${inp.editor}, Ed. ` : '';
+      const inWork = inp.container ? `in ${inp.container}` : '';
+      const pub = [inp.place, inp.publisher].filter(Boolean).join(': ');
+      const pp = inp.pages ? `pp. ${inp.pages}` : '';
+      const seg = [inWork, `${ed}${pub}`.trim(), inp.year, pp].filter(Boolean).join(', ');
+      if (seg) parts.push(withDot(seg));
+      break;
+    }
+    case 'mrezni': {
+      if (t) parts.push(ieeeQuoted(t));
+      if (inp.publisher) parts.push(withDot(inp.publisher));
+      const link = doiUrl(inp.doi) || inp.url;
+      if (link) {
+        const acc = inp.accessed ? ` (accessed ${inp.accessed})` : '';
+        parts.push(withDot(`${link}${acc}`));
+      }
+      break;
+    }
+    case 'propis': {
+      if (t) parts.push(withDot(t));
+      const src = [inp.container, inp.issue].filter(Boolean).join(', ');
+      if (src) parts.push(withDot(src));
+      break;
+    }
+  }
+  return tidy(parts.join(' '));
+}
+
+function formatVancouver(inp: CitationInput): string {
+  const A = authorsVancouver(parseAuthors(inp.authors));
+  const parts: string[] = [];
+  if (A) parts.push(withDot(A));
+  const t = inp.title || '';
+
+  switch (inp.type) {
+    case 'knjiga': {
+      if (t) parts.push(withDot(t));
+      const pub = [inp.place, inp.publisher].filter(Boolean).join(': ');
+      const tail = [pub, inp.year].filter(Boolean).join('; ');
+      if (tail) parts.push(withDot(tail));
+      break;
+    }
+    case 'zavrsni': {
+      if (t) parts.push(withDot(`${t} [završni rad]`));
+      const tail = [inp.institution, inp.year].filter(Boolean).join('; ');
+      if (tail) parts.push(withDot(tail));
+      break;
+    }
+    case 'clanak': {
+      if (t) parts.push(withDot(t));
+      if (inp.container) parts.push(withDot(inp.container));
+      const vi = `${inp.year || ''}${inp.volume ? ';' + inp.volume : ''}${inp.issue ? '(' + inp.issue + ')' : ''}${inp.pages ? ':' + inp.pages : ''}`;
+      if (vi) parts.push(withDot(vi));
+      const doi = doiUrl(inp.doi);
+      if (doi) parts.push(withDot(doi));
+      break;
+    }
+    case 'poglavlje': {
+      if (t) parts.push(withDot(t));
+      const inWork = inp.container
+        ? (inp.editor ? `In: ${inp.editor}, editor. ${inp.container}` : `In: ${inp.container}`)
+        : '';
+      if (inWork) parts.push(withDot(inWork));
+      const pub = [inp.place, inp.publisher].filter(Boolean).join(': ');
+      const tail = [pub, inp.year].filter(Boolean).join('; ');
+      if (tail) parts.push(withDot(tail));
+      if (inp.pages) parts.push(withDot(`p. ${inp.pages}`));
+      break;
+    }
+    case 'mrezni': {
+      if (t) parts.push(withDot(`${t} [Internet]`));
+      const pubYear = [inp.publisher, inp.year].filter(Boolean).join('; ');
+      if (pubYear) parts.push(withDot(pubYear));
+      const link = doiUrl(inp.doi) || inp.url;
+      if (link) {
+        const cited = inp.accessed ? `[cited ${inp.accessed}]. ` : '';
+        parts.push(`${cited}Available from: ${link}`);
+      }
+      break;
+    }
+    case 'propis': {
+      if (t) parts.push(withDot(t));
+      const src = [inp.container, inp.issue].filter(Boolean).join(', ');
+      if (src) parts.push(withDot(src));
+      break;
+    }
+  }
+  return tidy(parts.join(' '));
+}
+
 export interface CitationResult {
   citation: string;
   /** Oblik za citiranje U TEKSTU (autor-godina), npr. "(Ivic, 2020)". Prazno za fusnotu
@@ -315,7 +475,14 @@ const FIELD_LABEL: Partial<Record<keyof CitationInput, string>> = {
 };
 
 export function formatCitation(inp: CitationInput, style: CitationStyle): CitationResult {
-  const citation = style === 'autor-godina' ? formatAutorGodina(inp) : formatFusnota(inp);
+  let citation: string;
+  switch (style) {
+    case 'fusnota': citation = formatFusnota(inp); break;
+    case 'ieee': citation = formatIeee(inp); break;
+    case 'vancouver': citation = formatVancouver(inp); break;
+    default: citation = formatAutorGodina(inp);
+  }
+  // Samo autor-godina ima in-text (Prezime, god.); fusnota i numericki koriste broj biljeske/[n].
   const inText = style === 'autor-godina'
     ? inTextAuthorYear(parseAuthors(inp.authors), (inp.year || '').trim())
     : '';

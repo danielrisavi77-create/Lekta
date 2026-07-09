@@ -179,3 +179,70 @@ describe('formatCitation fusnota', () => {
     expect(r.citation).toBe('Ivic, Ivan, Ana Horvat i Marko Kovac. Prirucnik. X, 2018.');
   });
 });
+
+describe('formatCitation IEEE (numericki)', () => {
+  it('knjiga: inicijali ispred prezimena, mjesto: izdavac, godina', () => {
+    const r = formatCitation(
+      { type: 'knjiga', authors: 'Ivic, Ivan', title: 'Digitalni sustavi', place: 'Zagreb', publisher: 'Element', year: '2020' },
+      'ieee',
+    );
+    expect(r.citation).toBe('I. Ivic, Digitalni sustavi. Zagreb: Element, 2020.');
+  });
+
+  it('clanak: naslov u navodnicima sa zarezom unutra, vol./no./pp.', () => {
+    const r = formatCitation(
+      { type: 'clanak', authors: 'Kovac, Marko', title: 'Analiza presuda', container: 'IEEE Trans. Educ.', volume: '70', issue: '2', year: '2021', pages: '145-170' },
+      'ieee',
+    );
+    expect(r.citation).toBe('M. Kovac, "Analiza presuda," IEEE Trans. Educ., vol. 70, no. 2, pp. 145-170, 2021.');
+  });
+
+  it('dva autora spaja s "and"', () => {
+    const r = formatCitation(
+      { type: 'knjiga', authors: 'Ivic, Ivan; Horvat, Ana', title: 'Mreze', year: '2019', publisher: 'X' },
+      'ieee',
+    );
+    expect(r.citation).toContain('I. Ivic and A. Horvat,');
+  });
+
+  it('numericki stil nema in-text oblik', () => {
+    expect(formatCitation({ type: 'knjiga', authors: 'Ivic, Ivan', year: '2020' }, 'ieee').inText).toBe('');
+    expect(formatCitation({ type: 'knjiga', authors: 'Ivic, Ivan', year: '2020' }, 'vancouver').inText).toBe('');
+  });
+});
+
+describe('formatCitation Vancouver (numericki)', () => {
+  it('knjiga: "Prezime I", mjesto: izdavac; godina', () => {
+    const r = formatCitation(
+      { type: 'knjiga', authors: 'Ivic, Ivan', title: 'Farmakologija', place: 'Zagreb', publisher: 'Medicinska naklada', year: '2019' },
+      'vancouver',
+    );
+    expect(r.citation).toBe('Ivic I. Farmakologija. Zagreb: Medicinska naklada; 2019.');
+  });
+
+  it('clanak: Year;Volume(Issue):Pages', () => {
+    const r = formatCitation(
+      { type: 'clanak', authors: 'Ivic, Ivan; Horvat, Ana', title: 'Metabolizam lijekova', container: 'Lijec Vjesn', volume: '143', issue: '3', year: '2021', pages: '88-95' },
+      'vancouver',
+    );
+    expect(r.citation).toBe('Ivic I, Horvat A. Metabolizam lijekova. Lijec Vjesn. 2021;143(3):88-95.');
+  });
+
+  it('7+ autora skracuje na prvih 6 pa "et al."', () => {
+    const r = formatCitation(
+      { type: 'clanak', authors: 'A, A; B, B; C, C; D, D; E, E; F, F; G, G', title: 'T', container: 'J', year: '2020' },
+      'vancouver',
+    );
+    expect(r.citation).toContain('et al.');
+    expect(r.citation).not.toContain('G G');
+  });
+
+  it('mrezni: [Internet], [cited ...], Available from', () => {
+    const r = formatCitation(
+      { type: 'mrezni', title: 'Smjernice', publisher: 'HZJZ', url: 'https://hzjz.hr/s', accessed: '2.7.2026.' },
+      'vancouver',
+    );
+    expect(r.citation).toContain('[Internet]');
+    expect(r.citation).toContain('Available from: https://hzjz.hr/s');
+  });
+});
