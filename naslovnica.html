@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Besplatni generator naslovnice za seminarski, završni, diplomski i doktorski rad. Složi naslovnicu, kopiraj tekst ili spremi kao PDF. Sve lokalno u pregledniku.">
+<meta name="description" content="Besplatni generator naslovnice za seminarski, završni, diplomski i doktorski rad. Odaberi fakultet pa se raspored slaže po njegovu predlošku; kopiraj tekst, spremi PDF ili .docx. Sve lokalno u pregledniku.">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Lekta">
 <meta property="og:locale" content="hr_HR">
 <meta property="og:title" content="Besplatni generator naslovnice za akademski rad">
-<meta property="og:description" content="Besplatni generator naslovnice za seminarski, završni, diplomski i doktorski rad. Složi naslovnicu, kopiraj tekst ili spremi kao PDF. Sve lokalno u pregledniku.">
+<meta property="og:description" content="Besplatni generator naslovnice za seminarski, završni, diplomski i doktorski rad. Odaberi fakultet pa se raspored slaže po njegovu predlošku; kopiraj tekst, spremi PDF ili .docx. Sve lokalno u pregledniku.">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Besplatni generator naslovnice za akademski rad">
-<meta name="twitter:description" content="Besplatni generator naslovnice za seminarski, završni, diplomski i doktorski rad. Složi naslovnicu, kopiraj tekst ili spremi kao PDF. Sve lokalno u pregledniku.">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Besplatni generator naslovnice za akademski rad","description":"Besplatni generator naslovnice za seminarski, završni, diplomski i doktorski rad. Složi naslovnicu, kopiraj tekst ili spremi kao PDF. Sve lokalno u pregledniku.","applicationCategory":"EducationalApplication","operatingSystem":"Web","inLanguage":"hr","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},"publisher":{"@type":"Organization","name":"Lekta"}}</script>
+<meta name="twitter:description" content="Besplatni generator naslovnice za seminarski, završni, diplomski i doktorski rad. Odaberi fakultet pa se raspored slaže po njegovu predlošku; kopiraj tekst, spremi PDF ili .docx. Sve lokalno u pregledniku.">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Besplatni generator naslovnice za akademski rad","description":"Besplatni generator naslovnice za seminarski, završni, diplomski i doktorski rad. Odaberi fakultet pa se raspored slaže po njegovu predlošku; kopiraj tekst, spremi PDF ili .docx. Sve lokalno u pregledniku.","applicationCategory":"EducationalApplication","operatingSystem":"Web","inLanguage":"hr","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},"publisher":{"@type":"Organization","name":"Lekta"}}</script>
 <meta name="color-scheme" content="light dark">
 <title>Besplatni generator naslovnice za akademski rad - Lekta</title>
 <script>try{var _t=localStorage.getItem('lekta.theme');if(_t)document.documentElement.dataset.theme=_t;}catch(e){}</script>
@@ -99,6 +99,21 @@ a{color:inherit}:focus-visible{outline:none;box-shadow:var(--focus);border-radiu
 .tp-placeyear{font-size:14px;margin-top:auto;padding-top:20px}
 .tp-empty{margin:auto;color:#6f6a5c;font-style:italic;font-family:Inter,sans-serif;font-size:14px}
 
+/* Predlozak fakulteta: retci grupirani u zone; prva zona vrh, druga se spusta prema sredini,
+   zadnja na dno (kao genericke tri zone, ali vodjene group vrijednostima predloska) */
+.tp-group{margin-top:22px}
+.tp-group:first-child{margin-top:0}
+.tp-group:nth-child(2){margin-top:auto}
+.tp-group:last-child{margin-top:auto}
+.tp-group .tp-line{line-height:1.35;margin-top:4px}
+.tp-group .tp-line:first-child{margin-top:0}
+
+/* Badge porijekla predloska (iznad pregleda) */
+.tp-badge{display:inline-block;font-size:12px;font-weight:750;padding:4px 10px;border-radius:999px;margin:0 0 10px;border:1px solid var(--line-strong)}
+.tp-badge.official{background:var(--ok-soft);color:var(--ok);border-color:transparent}
+.tp-badge.derived{background:var(--brand-soft);color:var(--brand);border-color:transparent}
+.tp-badge.generic{background:var(--panel-2);color:var(--muted)}
+
 .cta{background:linear-gradient(140deg,#191d31,#2a2d63);color:#fff;border-radius:22px;padding:34px;text-align:center;margin:14px 0 34px}
 .cta h2{font-family:var(--ink-serif);font-size:25px;letter-spacing:-.02em;margin:0 0 8px;font-weight:800;color:#fff}
 .cta p{color:#cdd0e0;margin:0 0 16px}.cta .btn{background:#fff;color:#191d31}
@@ -167,7 +182,7 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
     <div class="hero-back"><a class="backlink" href="index.html#top">&larr; Natrag na Lektu</a></div>
     <span class="eyebrow">Besplatan alat, bez registracije</span>
     <h1>Generator <span class="ink">naslovnice rada</span></h1>
-    <p class="lead">Složi naslovnicu za seminarski, završni, diplomski ili doktorski rad. Ispuni podatke, a naslovnica se slaže uživo. Kopiraj tekst ili spremi kao PDF. Sve lokalno, ništa se ne šalje na poslužitelj.</p>
+    <p class="lead">Složi naslovnicu za seminarski, završni, diplomski ili doktorski rad. Odaberi fakultet pa se raspored prilagodi njegovu predlošku kad postoji, a naslovnica se slaže uživo. Kopiraj tekst ili spremi kao PDF. Sve lokalno, ništa se ne šalje na poslužitelj.</p>
     <p class="sibling">Trebaš izmjeriti opseg? Otvori <a href="kartice.html">brojač kartica</a> ili <a href="citat.html">citat generator</a>.</p>
   </div>
 </section>
@@ -176,7 +191,21 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
   <div class="shell grid">
     <div class="card tp-form-col">
       <h2>Podaci</h2>
-      <p class="sub">Ispuni što imaš. Preporučena polja koja fale prikazuju se ispod pregleda.</p>
+      <p class="sub">Odaberi fakultet s popisa pa se raspored prilagodi njegovu predlošku kad postoji; polja ispod uvijek možeš urediti ručno.</p>
+      <div class="row2">
+        <div class="field">
+          <label for="tp-institution">Ustanova s popisa</label>
+          <select id="tp-institution"><option value="">Slobodan unos / nije na popisu</option></select>
+        </div>
+        <div class="field">
+          <label for="tp-unit">Fakultet s popisa</label>
+          <select id="tp-unit" disabled><option value="">Prvo odaberi ustanovu</option></select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="tp-program">Studij s popisa (opcionalno)</label>
+        <select id="tp-program" disabled><option value="">Prvo odaberi fakultet</option></select>
+      </div>
       <div class="field">
         <label for="tp-university">Sveučilište</label>
         <input id="tp-university" type="text" list="dl-university" placeholder="npr. Sveučilište u Zagrebu">
@@ -205,12 +234,12 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
       <div class="field">
         <label for="tp-worktype">Vrsta rada</label>
         <select id="tp-worktype">
-          <option>Seminarski rad</option>
-          <option>Završni rad</option>
-          <option selected>Diplomski rad</option>
-          <option>Specijalistički rad</option>
-          <option>Doktorski rad</option>
-          <option>Projektni rad</option>
+          <option value="seminar">Seminarski rad</option>
+          <option value="final">Završni rad</option>
+          <option value="graduate" selected>Diplomski rad</option>
+          <option value="specialist">Specijalistički rad</option>
+          <option value="doctoral">Doktorski rad</option>
+          <option value="project">Projektni rad</option>
         </select>
       </div>
       <div class="row2">
@@ -241,6 +270,7 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
       <div class="card">
         <h2>Pregled naslovnice</h2>
         <p class="sub">Ažurira se dok tipkaš. Spremi kao PDF ispisom u datoteku.</p>
+        <span class="tp-badge generic" id="tp-template-badge">Generički raspored</span>
         <div class="tp-sheet-wrap">
           <div id="tp-sheet" aria-label="Pregled naslovnice"><div class="tp-empty">Ispuni polja lijevo pa se naslovnica slaže ovdje.</div></div>
         </div>
@@ -276,10 +306,11 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
       <details><summary>Kojim redom idu podaci?</summary><p>Od vrha: sveučilište i fakultet, autor, naslov rada u sredini, vrsta rada, mentor te mjesto i godina na dnu.</p></details>
       <details><summary>Piše li se mentor na naslovnici?</summary><p>Kod završnih i diplomskih radova gotovo uvijek da, s akademskom titulom. Kod seminarskih ovisi o kolegiju.</p></details>
       <details><summary>Numerira li se naslovnica?</summary><p>Ne prikazuje se broj na naslovnici; ona se u pravilu ne broji vidljivo, iako se računa kao stranica.</p></details>
+      <details><summary>Ima li moj fakultet poseban predložak naslovnice?</summary><p>Za dio fakulteta alat ima predložak izveden iz službenih uputa ili javnih radova: odaberi ustanovu i fakultet s popisa pa se redoslijed i tipografija prilagode, a oznaka iznad pregleda kaže odakle predložak dolazi. Ako predloška nema, koristi se uobičajeni generički raspored.</p></details>
     </div>
   </div>
 </section>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Što mora biti na naslovnici seminarskog rada?","acceptedAnswer":{"@type":"Answer","text":"Naziv fakulteta, ime autora, naslov rada, vrsta rada, kolegij ili mentor te mjesto i godina. Točan raspored propisuje fakultet ili kolegij."}},{"@type":"Question","name":"Kojim redom idu podaci na naslovnici?","acceptedAnswer":{"@type":"Answer","text":"Od vrha: sveučilište i fakultet, autor, naslov rada u sredini, vrsta rada, mentor te mjesto i godina na dnu."}},{"@type":"Question","name":"Piše li se mentor na naslovnici?","acceptedAnswer":{"@type":"Answer","text":"Kod završnih i diplomskih radova gotovo uvijek da, s akademskom titulom. Kod seminarskih ovisi o kolegiju."}},{"@type":"Question","name":"Numerira li se naslovnica?","acceptedAnswer":{"@type":"Answer","text":"Ne prikazuje se broj na naslovnici; ona se u pravilu ne broji vidljivo, iako se računa kao stranica."}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Što mora biti na naslovnici seminarskog rada?","acceptedAnswer":{"@type":"Answer","text":"Naziv fakulteta, ime autora, naslov rada, vrsta rada, kolegij ili mentor te mjesto i godina. Točan raspored propisuje fakultet ili kolegij."}},{"@type":"Question","name":"Kojim redom idu podaci na naslovnici?","acceptedAnswer":{"@type":"Answer","text":"Od vrha: sveučilište i fakultet, autor, naslov rada u sredini, vrsta rada, mentor te mjesto i godina na dnu."}},{"@type":"Question","name":"Piše li se mentor na naslovnici?","acceptedAnswer":{"@type":"Answer","text":"Kod završnih i diplomskih radova gotovo uvijek da, s akademskom titulom. Kod seminarskih ovisi o kolegiju."}},{"@type":"Question","name":"Numerira li se naslovnica?","acceptedAnswer":{"@type":"Answer","text":"Ne prikazuje se broj na naslovnici; ona se u pravilu ne broji vidljivo, iako se računa kao stranica."}},{"@type":"Question","name":"Ima li moj fakultet poseban predložak naslovnice?","acceptedAnswer":{"@type":"Answer","text":"Za dio fakulteta alat ima predložak izveden iz službenih uputa ili javnih radova: odaberi ustanovu i fakultet s popisa pa se redoslijed i tipografija prilagode. Ako predloška nema, koristi se uobičajeni generički raspored."}}]}</script>
 
 <section class="section">
   <div class="shell">
@@ -302,6 +333,9 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
     <a href="citat.html">Citat generator</a>
     <a href="kartice.html">Brojač kartica</a>
     <a href="literatura.html">Sređivanje literature</a>
+    <a href="/privatnost.html">Privatnost</a>
+    <a href="/uvjeti-koristenja.html">Uvjeti</a>
+    <a href="/garancija.html">Garancija</a>
     <a href="index.html#top">Natrag na glavnu</a>
   </div>
 </div></footer>
