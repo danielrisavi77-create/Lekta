@@ -20,10 +20,3 @@
   # Generator citata pece kanonske URL-ove i sitemap iz ove domene (BEZ zavrsne kose crte,
   # inace bi ${ORIGIN}/alati/... dalo dvostruki //). Ziva domena je Netlify subdomena.
   LEKTA_SITE_ORIGIN = "https://lektahr.netlify.app"
-
-# Server-side naplata (Stripe + Supabase report_slots): /api/create-checkout, /api/stripe-webhook,
-# /api/unlock-report. Rute su definirane u samim funkcijama (export const config.path). Inertno dok
-# se ne postave STRIPE_* / SUPABASE_* / REPORT_TOKEN_SECRET env varijable (vidi docs/STRIPE_SLOTS_SETUP.md).
-[functions]
-  directory = "netlify/functions"
-  node_bundler = "esbuild"
