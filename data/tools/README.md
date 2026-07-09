@@ -1,34 +1,45 @@
-# data/tools/citation-configs.json
+# data/tools: citatni sadrzajni sloj
 
-## Kako se stil citiranja odreduje (derivacija iz profila)
+## citation-specs/ (vjerni per-fakultetski citatni formati)
 
-Generator citatnih alata (`scripts/generate-citation-tools.mjs`) NE autorira stil po
-fakultetu rucno. Stil se DERIVIRA iz glavnog registra:
+Pipeline (isti duh kao VERIFICATION_PIPELINE.md, prilagodjen content sloju alata):
 
-1. `data/profiles/verified-profiles.json` -> `rules.recommendedCitation` (token stila po
-   profilu, npr. `harvard`, `apa7`, `ieee`, `vancouver`, `chicago-notes`, `pravo-fusnote`).
-2. `src/citations/citation-meta.ts` -> token preslikan u oznaku i nacin (`mode`).
-3. `src/citations/citation-web.ts` -> `engineStyleFor(token)` bira engine stil, a
-   `src/tools/citation.ts` (isti testirani motor) stvarno sastavlja citat
-   (autor-godina / fusnota / ieee / vancouver).
+```
+data/sources/<fac>/*.pdf  (snapshotirane sluzbene upute)
+   | scripts/extract-citation-sections.mjs   (keyword isjecci + INDEX.json klasifikacija)
+   v
+citation-specs/extractions/<fac>.txt
+   | draft (covjek ili agent; quoteRaw DOSLOVNO iz ekstrakcije, sourcePage, NE izmislja)
+   v
+citation-specs/drafts/<fac>.json             (status:"draft" — NIKAD ne izlazi u build)
+   | scripts/citation-spec-dossier.mjs       (dosje: RENDER vs IZVOR diff, MATCH/DIFF)
+   v
+data/verification/citation-dossiers/<fac>.md (covjek pregleda + PDF#page link)
+   | scripts/approve-citation-spec.mjs <fac> "Ime Prezime"   (SAMO COVJEK)
+   v
+citation-specs/verified/<fac>.json           (verified + verifiedHash + ledger zapisi)
+   | scripts/generate-citation-tools.mjs     (gate: verified-only, hash freshness fail-closed)
+   v
+dist/alati/citati/*                          (javne stranice s provenijencijom)
+```
 
-Fakultet u alatu ima onoliko stilova koliko ih njegovi profili stvarno koriste (veliki
-fakulteti se razlikuju po odsjeku, npr. FFZG: Harvard + Chicago + APA7). Fakulteti s
-tokenom `custom` ili bez tokena NE dobivaju izmisljen format, nego stranicu koja posteno
-vodi na opci generator (`/citat.html`) i upute mentora.
+Tvrda pravila:
+- `verified` proglasava ISKLJUCIVO covjek, nakon pregleda dosjea (renderer mora
+  reproducirati worked-example iz uputa; DIFF se rjesava prije approvea ili flagira).
+- Build cita SAMO `verified/`; gate (generator + tests/citation-specs.test.ts) rusi build na:
+  status != verified, flagirane predloske, orphan sourceId, verifiedHash != snapshotHash
+  (izvor promijenjen nakon verifikacije -> reverifikacija, nista se ne osvjezava tiho).
+- `quoteRaw` je DOSLOVAN tekst iz ekstrakcije (greppable; pdftotext gubi dijakritike pa
+  usporedbe idu uz normalizaciju); `sourcePage` se nikad ne nagadja.
+- Fakultet BEZ verificiranog speca zadrzava dosadasnje obiteljsko renderiranje s jasnim
+  "opci oblik" caveatom; custom/bez tokena vodi na opci alat. Nista se ne pogorsava.
 
-Ovo je "mapping skripta iz glavnog registra" koju je ranija verzija ostavljala kao buduci
-korak; sada je primarni izvor. Sprega je jednosmjerna i uska: generator cita samo
-`recommendedCitation` token, ne cijeli engine format, pa promjena analizatora ne moze tiho
-pokvariti javnu stranicu.
+Shema speca: vidi tipove u `src/citations/citation-spec.ts` (CitationSpec). Template jezik:
+`{placeholder}` + `[[...]]` opcionalne grupe (ispadaju kad su SVI placeholderi prazni);
+interpunkcija doslovna; `authorFormat` opcije pokrivaju red, inicijale, separatore i et-al.
 
-## Ova datoteka (`citation-configs.json`)
+## Povijest
 
-Rezervirana za BUDUCE RUCNE IZNIMKE (npr. custom fakultet kojem stil nije u profilima).
-Pocinje i ostaje `[]` dok ne zatreba. Mora biti JSON niz; generator ju za sada samo
-validira (ne primjenjuje override). NE popunjavaj je izmisljenim ni pretpostavljenim
-stilom: isto nacelo kao `VERIFICATION_PIPELINE.md` i glavni registar, unos postoji tek kad
-je stil STVARNO potvrden protiv sluzbenog izvora tog fakulteta.
-
-Kad override zatreba, prvo ozici primjenu u generatoru (merge preko derivirane mape) pa tek
-onda dodaj unos; do tada je namjerno inertna.
+`citation-configs.json` (raniji rucni override hook, uvijek prazan) je uklonjen; zamijenio
+ga je gornji citation-specs/ tok koji stil DERIVIRA iz sluzbenih izvora s verifikacijom,
+umjesto rucnog autorstva predlozaka bez provenijencije.

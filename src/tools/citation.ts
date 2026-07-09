@@ -36,8 +36,9 @@ export interface CitationInput {
   institution?: string;
 }
 
-/** Normaliziran DOI kao https://doi.org/... ili prazno. Prihvaca goli DOI i puni URL. */
-function doiUrl(doi?: string): string {
+/** Normaliziran DOI kao https://doi.org/... ili prazno. Prihvaca goli DOI i puni URL.
+ *  Exportano za citation-spec renderer (behaviour-neutralno). */
+export function doiUrl(doi?: string): string {
   const d = (doi || '').trim().replace(/^https?:\/\/(dx\.)?doi\.org\//i, '').replace(/^doi:\s*/i, '');
   return d ? `https://doi.org/${d}` : '';
 }
@@ -67,7 +68,7 @@ const ORG_STEM = [
 ];
 const ORG_FULL = [
   'vlada', 'vlade', 'vladi', 'vladu', 'zavod', 'ured', 'odbor', 'centar',
-  'savez', 'udruga', 'udruge', 'komora', 'komore',
+  'savez', 'udruga', 'udruge', 'komora', 'komore', 'sabor', 'sabora',
 ];
 const ORG_KEYWORDS = new RegExp(
   '(?:^|[^\\p{L}\\p{N}])(?:(?:' + ORG_STEM.join('|') + ')|(?:(?:' + ORG_FULL.join('|') + ')(?![\\p{L}])))',
@@ -99,7 +100,8 @@ export function parseAuthors(raw: string | undefined): ParsedAuthor[] {
     });
 }
 
-function initials(first: string): string {
+/** "Ana Maria" -> "A. M." Exportano za citation-spec renderer. */
+export function initials(first: string): string {
   return first
     .split(/[\s-]+/)
     .filter(Boolean)
@@ -127,8 +129,9 @@ function authorsFootnote(list: ParsedAuthor[]): string {
   return rest.length ? `${firstStr}, ${rest.join(', ')} i ${last}` : `${firstStr} i ${last}`;
 }
 
-/** Ukloni visestruke razmake i suvisnu interpunkciju na spojevima. */
-function tidy(s: string): string {
+/** Ukloni visestruke razmake i suvisnu interpunkciju na spojevima.
+ *  Exportano za citation-spec renderer (isti cleanup za spec-drivene citate). */
+export function tidy(s: string): string {
   return s
     .replace(/\s+/g, ' ')
     .replace(/\s+([.,])/g, '$1')

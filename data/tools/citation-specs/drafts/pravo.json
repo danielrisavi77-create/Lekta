@@ -1,0 +1,169 @@
+{
+  "facultyId": "pravo",
+  "styleToken": "pravo-fusnote",
+  "status": "draft",
+  "outcome": "custom-spec",
+  "label": "Pravni fakultet: pravne fusnote (sluzbene Upute)",
+  "sourceId": "pravo-upute-oblikovanje-2024",
+  "sourceLabel": "Upute za oblikovanje i uredenje teksta i navodenje izvora (Pravni fakultet u Zagrebu)",
+  "verifiedAt": null,
+  "verifiedBy": null,
+  "verifiedHash": null,
+  "accessDate": true,
+  "authorFormat": {
+    "order": "family-first",
+    "initials": "dotted-spaced",
+    "separator": "; ",
+    "finalJoiner": null,
+    "etAlAfter": 5,
+    "etAlKeep": 1,
+    "etAlJoiner": " ",
+    "etAlText": "et al."
+  },
+  "inText": {
+    "mode": "note-number",
+    "provenance": {
+      "kind": "rule-text",
+      "quoteRaw": "Bibliografski podatci o koristenim izvorima navode se u biljeskama (fusnotama) koje moraju",
+      "sourcePage": "str. 5",
+      "note": "U tekstu je broj biljeske; alat generira BIBLIOGRAFSKI oblik (popis literature, bez str. za knjige, s punim rasponom za clanke). Ponovljena navodenja (op. cit., ibid., id.) su izvan dosega generatora, provjerava ih analizator."
+    }
+  },
+  "numbering": null,
+  "bibliography": { "sort": "alphabetical" },
+  "sourceTypes": [
+    {
+      "type": "knjiga",
+      "template": "{authors}, {title}[[, {volume}. izdanje]], {publisher}, {place}, {year}.",
+      "requiredFields": ["authors", "title", "publisher", "place", "year"],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Horvat, M.; Petrak, M., Rimsko pravo, 17. izdanje, Pravni fakultet Sveucilista u Zagrebu,",
+        "sourcePage": "str. 5-6",
+        "note": "Bibliografski (popis literature) oblik BEZ stranica: 'U popisu literature ne navode se stranice'. Broj izdanja ide u polje volume (17 -> '17. izdanje'). Vise autora odvaja se tockom sa zarezom."
+      },
+      "example": {
+        "input": {
+          "type": "knjiga",
+          "authors": "Horvat, Marijan; Petrak, Marko",
+          "title": "Rimsko pravo",
+          "volume": "17",
+          "publisher": "Pravni fakultet Sveucilista u Zagrebu",
+          "place": "Zagreb",
+          "year": "2022"
+        },
+        "expected": "Horvat, M.; Petrak, M., Rimsko pravo, 17. izdanje, Pravni fakultet Sveucilista u Zagrebu, Zagreb, 2022."
+      }
+    },
+    {
+      "type": "clanak",
+      "template": "{authors}, {title}, {container}[[, vol. {volume}]][[, br. {issue}]], {year}.[[, str. {pages}.]]",
+      "requiredFields": ["authors", "title", "container", "year", "pages"],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Apostolova Marsavelski, M., O problemu porijekla rimske hipoteke, Zbornik Pravnog fakulteta",
+        "sourcePage": "str. 6",
+        "note": "U popisu literature navode se prva i zadnja stranica clanka (str. 345-361); iza broja stranice ne stavlja se tocka osim na kraju biljeske/recenice."
+      },
+      "example": {
+        "input": {
+          "type": "clanak",
+          "authors": "Apostolova Marsavelski, Magdalena",
+          "title": "O problemu porijekla rimske hipoteke",
+          "container": "Zbornik Pravnog fakulteta u Zagrebu",
+          "volume": "24",
+          "issue": "1",
+          "year": "1974",
+          "pages": "345-361"
+        },
+        "expected": "Apostolova Marsavelski, M., O problemu porijekla rimske hipoteke, Zbornik Pravnog fakulteta u Zagrebu, vol. 24, br. 1, 1974., str. 345-361."
+      }
+    },
+    {
+      "type": "poglavlje",
+      "template": "{authors}, {title}, u: {editor} (ur.), {container}, {publisher}, {place}, {year}.[[, str. {pages}.]]",
+      "requiredFields": ["authors", "title", "editor", "container", "publisher", "place", "year"],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Petrak, M., The Byzantine Emperor in Medieval Dalmatian Exultets, u: Slootjes, D.;",
+        "sourcePage": "str. 6",
+        "note": "Urednici se odvajaju tockom sa zarezom i upisuju u obliku 'Prezime, I.'; skracena naznaka (ur.) S tockom (razlika od FPZG)."
+      },
+      "example": {
+        "input": {
+          "type": "poglavlje",
+          "authors": "Petrak, Marko",
+          "title": "The Byzantine Emperor in Medieval Dalmatian Exultets",
+          "editor": "Slootjes, D.; Verhoeven, M.",
+          "container": "Byzantium in Dialogue with the Mediterranean: History and Heritage",
+          "publisher": "Brill",
+          "place": "Leiden",
+          "year": "2019",
+          "pages": "47-66"
+        },
+        "expected": "Petrak, M., The Byzantine Emperor in Medieval Dalmatian Exultets, u: Slootjes, D.; Verhoeven, M. (ur.), Byzantium in Dialogue with the Mediterranean: History and Heritage, Brill, Leiden, 2019., str. 47-66."
+      }
+    },
+    {
+      "type": "mrezni",
+      "template": "{authors}, {title}[[, {container}]][[, {year}.]], dostupno na: {url} ({accessed}).",
+      "requiredFields": ["authors", "title", "url", "accessed"],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Primjer: Koske, I.; Naru, F.; Beiter, P.; Wanner, I., Regulatory Management Practices in OECD",
+        "sourcePage": "str. 8",
+        "note": "Oblik: autori, naslov, (naziv stranice/publikacije), godina, dostupno na: URL (datum pristupa). Clanci koji postoje u casopisu citiraju se kao clanak, bez URL-a."
+      },
+      "example": {
+        "input": {
+          "type": "mrezni",
+          "authors": "De Stefano, V.; Aloisi, A.",
+          "title": "European legal framework for digital labour platforms",
+          "container": "Publication Office of the European Union, Luxembourg",
+          "year": "2018",
+          "url": "https://publications.jrc.ec.europa.eu/repository/handle/JRC112243",
+          "accessed": "29. rujna 2022."
+        },
+        "expected": "De Stefano, V.; Aloisi, A., European legal framework for digital labour platforms, Publication Office of the European Union, Luxembourg, 2018., dostupno na: https://publications.jrc.ec.europa.eu/repository/handle/JRC112243 (29. rujna 2022.)."
+      }
+    },
+    {
+      "type": "propis",
+      "template": "{title}[[ (dalje u tekstu: {institution})]], {container}[[, br. {issue}]].",
+      "requiredFields": ["title", "container", "issue"],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Primjer za navoenje zakona u biljesci: Zakon o obveznim odnosima (dalje u tekstu: ZOO),",
+        "sourcePage": "str. 8-9",
+        "note": "Uvedena kratica zakona ide u polje institution (opcionalno); brojevi svih izmjena u issue (npr. 35/05, 41/08). Kod ponovljenog navodenja koristi se kratica (Cl. 15. ZOO-a), nikad op. cit."
+      },
+      "example": {
+        "input": {
+          "type": "propis",
+          "title": "Zakon o obveznim odnosima",
+          "institution": "ZOO",
+          "container": "Narodne novine",
+          "issue": "35/05, 41/08, 125/11, 78/15, 29/18, 126/21"
+        },
+        "expected": "Zakon o obveznim odnosima (dalje u tekstu: ZOO), Narodne novine, br. 35/05, 41/08, 125/11, 78/15, 29/18, 126/21."
+      }
+    },
+    {
+      "type": "zavrsni",
+      "template": "{authors}, {title}, {institution}, {place}, {year}.",
+      "requiredFields": ["authors", "title", "institution", "year"],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Prezime autora, prvo slovo imena autora s tockom, naslov djela (u kurzivu), broj izdanja (ako",
+        "sourcePage": "str. 5",
+        "note": "Upute NE obraduju citiranje zavrsnih/diplomskih radova; predlozak je izveden iz opceg oblika za knjigu (izdavac -> ustanova). Potvrditi ili oboriti pri verifikaciji."
+      },
+      "example": null
+    }
+  ],
+  "contradictions": [
+    "Zavrsni/diplomski rad kao izvor nije pokriven u Uputama; predlozak je izveden iz knjige (derived).",
+    "Naslov djela je u izvorniku kurzivom; alat radi plain text (napomena na stranici alata).",
+    "Fusnotni oblik s brojem stranice (prvo navodenje, npr. 'str. 55.') razlikuje se od bibliografskog; alat generira bibliografski (popis literature) oblik jer je to ono sto student lijepi u rad."
+  ]
+}

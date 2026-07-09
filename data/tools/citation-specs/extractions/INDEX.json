@@ -1,0 +1,123 @@
+[
+  {
+    "facultyId": "fpzg",
+    "sources": [
+      {
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "kind": "guidelines",
+        "pages": 38,
+        "snippets": 30
+      },
+      {
+        "sourceId": "fpzg-pravila-navodenja-citiranja",
+        "kind": "citation-style",
+        "pages": 7,
+        "snippets": 7
+      },
+      {
+        "sourceId": "fpzg-akademsko-pisanje-smjernice",
+        "kind": "guidelines",
+        "pages": 2,
+        "snippets": 1
+      },
+      {
+        "sourceId": "fpzg-odluka-zavrsni-opseg-2025",
+        "kind": "guidelines",
+        "pages": 3,
+        "snippets": 0
+      }
+    ],
+    "needsOcr": [
+      "fpzg-drsc08-doktorski (.doc binarni format)"
+    ],
+    "chars": 18897,
+    "workedExamples": 68,
+    "authorYear": 68,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 2,
+    "classHint": "a",
+    "priorTokens": [
+      "fpzg"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "pravo",
+    "sources": [
+      {
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "kind": "guidelines",
+        "pages": 12,
+        "snippets": 7
+      },
+      {
+        "sourceId": "pravo-pravilnik-studiji-2026",
+        "kind": "pravilnik",
+        "pages": 34,
+        "snippets": 4
+      },
+      {
+        "sourceId": "pravo-zavrsni-diplomski-postupak",
+        "kind": "program-page",
+        "pages": 1,
+        "snippets": 2
+      },
+      {
+        "sourceId": "pravo-studij-integrirani-pravo",
+        "kind": "program-page",
+        "pages": 1,
+        "snippets": 6
+      },
+      {
+        "sourceId": "pravo-studij-javna-uprava-prijediplomski",
+        "kind": "program-page",
+        "pages": 1,
+        "snippets": 5
+      },
+      {
+        "sourceId": "pravo-studij-javna-uprava-diplomski",
+        "kind": "program-page",
+        "pages": 1,
+        "snippets": 5
+      },
+      {
+        "sourceId": "pravo-studij-porezni-prijediplomski",
+        "kind": "program-page",
+        "pages": 1,
+        "snippets": 5
+      },
+      {
+        "sourceId": "pravo-katedra-trgovacko-upute",
+        "kind": "guidelines",
+        "pages": 4,
+        "snippets": 3
+      },
+      {
+        "sourceId": "pravo-katedra-radno-socijalno-upute-2021",
+        "kind": "guidelines",
+        "pages": 15,
+        "snippets": 12
+      },
+      {
+        "sourceId": "pravo-katedra-sociologija-upute",
+        "kind": "guidelines",
+        "pages": 1,
+        "snippets": 6
+      }
+    ],
+    "needsOcr": [],
+    "chars": 18479,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 3,
+    "classHint": "b",
+    "priorTokens": [
+      "pravo-fusnote",
+      "pravo-social-author"
+    ],
+    "contradictions": []
+  }
+]

@@ -27,7 +27,10 @@ const ROOT = path.resolve(__dirname, '..');
 const PROFILES_PATH = path.join(ROOT, 'data/profiles/verified-profiles.json');
 const CATALOG_PATH = path.join(ROOT, 'data/catalog/zagreb-catalog.json');
 const ENGINE_ENTRY = path.join(ROOT, 'src/citations/citation-web.ts');
-const OVERRIDES_PATH = path.join(ROOT, 'data/tools/citation-configs.json'); // opcionalni rucni override
+const REGISTRY_PATH = path.join(ROOT, 'data/sources/source-registry.json');
+// Verificirani per-fakultet citatni specovi (data/tools/citation-specs/README tok):
+// build cita ISKLJUCIVO verified/; drafts/ nikad ne izlazi u dist.
+const SPECS_VERIFIED_DIR = path.join(ROOT, 'data/tools/citation-specs/verified');
 const OUT_DIR = path.join(ROOT, 'dist/alati');
 const CITATI_OUT_DIR = path.join(OUT_DIR, 'citati');
 
@@ -106,6 +109,17 @@ const PAGE_STYLE = `
   .lekta-cta a { color: #1d4ed8; }
   .lekta-back { display: block; margin-top: 0.5rem; font-size: 0.8125rem; color: #71717a; }
   select#style-select { margin-top: 0.5rem; }
+  .tabs { display: flex; gap: 0.5rem; margin: 1rem 0 0.25rem; }
+  .tab { margin: 0; background: #e4e4e7; color: #3f3f46; padding: 0.4rem 0.85rem; font-size: 0.85rem; }
+  .tab.active { background: #18181b; color: #fff; }
+  textarea#bulk-input { min-height: 170px; }
+  .bulk-note { font-size: 0.85rem; color: #92400e; background: #fffbeb; border: 1px solid #fde68a; padding: 0.5rem 0.65rem; border-radius: 0.5rem; margin: 0.5rem 0; }
+  .bulk-card { border: 1px solid #e4e4e7; border-radius: 0.5rem; padding: 0.5rem 0.75rem 0.75rem; margin: 0.6rem 0; }
+  .bulk-card.low-conf { border-color: #fca5a5; background: #fef2f2; }
+  .bulk-card-head { font-size: 0.78rem; color: #71717a; margin-bottom: 0.25rem; }
+  #bulk-output { margin-top: 1rem; }
+  #bulk-output a { color: #1d4ed8; font-size: 0.8rem; }
+  #bulk-result { min-height: 120px; font-size: 0.85rem; }
 `;
 
 // Klijentski upravljac alata: cita window.LEKTA_TOOL_CONFIG + window.LektaCitation. Bez ${} i backtickova.
@@ -114,75 +128,144 @@ const TOOL_JS = String.raw`
   var C = window.LektaCitation;
   var cfg = window.LEKTA_TOOL_CONFIG || {};
   function el(id) { return document.getElementById(id); }
-  function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
-
-  var facSel = el('faculty-select');
-  var styleSel = el('style-select');
-  var styleInfo = el('style-info');
-  var formWrap = el('citation-form');
-  var typeSel = el('source-type');
-  var fieldsBox = el('fields');
-  var output = el('citation-output');
+  function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
   var current = null;
 
-  function currentType() {
-    var v = typeSel.value;
-    var found = C.SOURCE_TYPES.filter(function (s) { return s.type === v; })[0];
-    return found || C.SOURCE_TYPES[0];
-  }
+  function typeDef(t) { return C.SOURCE_TYPES.filter(function (s) { return s.type === t; })[0] || C.SOURCE_TYPES[0]; }
 
-  function renderTypeOptions() {
-    typeSel.innerHTML = C.SOURCE_TYPES.map(function (s) {
-      return '<option value="' + s.type + '">' + esc(s.label) + '</option>';
+  // Napuni karticu izvora: <select.card-type> + polja. values nosi type + vrijednosti polja.
+  function renderCard(card, values) {
+    values = values || {};
+    var type = values.type || card.getAttribute('data-type') || C.SOURCE_TYPES[0].type;
+    card.setAttribute('data-type', type);
+    var opts = C.SOURCE_TYPES.map(function (s) {
+      return '<option value="' + s.type + '"' + (s.type === type ? ' selected' : '') + '>' + esc(s.label) + '</option>';
     }).join('');
+    var fieldsHtml = typeDef(type).fields.map(function (f) {
+      if (f.key === 'accessed' && current && current.accessDate === false) return '';
+      var v = values[f.key] != null ? values[f.key] : '';
+      return '<label>' + esc(f.label) + '<input type="text" data-key="' + f.key + '" value="' + esc(v) + '"></label>';
+    }).join('');
+    card.innerHTML = '<label class="card-type-label">Vrsta izvora<select class="card-type">' + opts + '</select></label>' + fieldsHtml;
+    card.querySelector('.card-type').addEventListener('change', function () { renderCard(card, readCard(card)); });
   }
 
-  function renderFields() {
-    var st = currentType();
-    fieldsBox.innerHTML = '';
-    st.fields.forEach(function (f) {
-      if (f.key === 'accessed' && current && current.accessDate === false) return;
-      var label = document.createElement('label');
-      label.setAttribute('for', 'f-' + f.key);
-      label.textContent = f.label;
-      var input = document.createElement('input');
-      input.type = 'text';
-      input.id = 'f-' + f.key;
-      input.setAttribute('data-key', f.key);
-      fieldsBox.appendChild(label);
-      fieldsBox.appendChild(input);
-    });
+  function readCard(card) {
+    var sel = card.querySelector('.card-type');
+    if (!sel) return { type: C.SOURCE_TYPES[0].type };
+    var out = { type: sel.value };
+    card.setAttribute('data-type', out.type);
+    card.querySelectorAll('input[data-key]').forEach(function (i) { out[i.getAttribute('data-key')] = i.value; });
+    return out;
   }
 
-  function generate() {
-    if (!current || !current.engineStyle) return;
-    var st = currentType();
-    var inp = { type: st.type };
-    st.fields.forEach(function (f) { var i = el('f-' + f.key); if (i) inp[f.key] = i.value; });
-    var res = C.formatCitation(inp, current.engineStyle);
+  function sortKeyOf(inp) {
+    var a = C.parseAuthors(inp.authors || '');
+    return ((a.length ? a[0].last : (inp.title || '')) || '').toLowerCase();
+  }
+
+  // Vjeran spec (verificiran iz sluzbenih uputa) ima prednost pred obiteljskim motorom.
+  function formatWithCurrent(inp) {
+    if (current && current.spec) return C.formatFromSpec(current.spec, inp);
+    return C.formatCitation(inp, current.engineStyle);
+  }
+
+  // --- Jedan izvor ---
+  var singleCard = el('single-card');
+  function generateSingle() {
+    if (!current || (!current.engineStyle && !current.spec)) return;
+    var res = formatWithCurrent(readCard(singleCard));
     var html = res.citation
       ? '<div class="cit-line">' + esc(res.citation) + '</div>'
       : '<div class="cit-empty">Popuni polja pa klikni Generiraj.</div>';
     if (res.inText) html += '<div class="cit-intext">U tekstu: ' + esc(res.inText) + '</div>';
     if (res.missing && res.missing.length) html += '<div class="cit-missing">Nedostaje (preporuceno): ' + res.missing.map(esc).join(', ') + '</div>';
-    output.innerHTML = html;
+    el('citation-output').innerHTML = html;
+  }
+
+  // --- Cijela literatura (bulk): zalijepi -> prepoznaj -> UREDI po unosu -> formatiraj + sortiraj ---
+  function parseBulk() {
+    var refs = C.splitReferences(el('bulk-input').value);
+    var box = el('bulk-entries');
+    box.innerHTML = '';
+    if (!refs.length) { el('bulk-generate').style.display = 'none'; el('bulk-output').innerHTML = ''; return; }
+    refs.forEach(function (raw, i) {
+      var p = C.parseReference(raw);
+      var card = document.createElement('div');
+      card.className = 'bulk-card' + (p.lowConfidence ? ' low-conf' : '');
+      var head = document.createElement('div');
+      head.className = 'bulk-card-head';
+      head.textContent = 'Referenca ' + (i + 1) + (p.lowConfidence ? ' (malo prepoznato, dopuni rucno)' : '');
+      var fields = document.createElement('div');
+      fields.className = 'bulk-card-fields';
+      card.appendChild(head);
+      card.appendChild(fields);
+      box.appendChild(card);
+      var values = { type: p.type };
+      Object.keys(p.fields).forEach(function (k) { values[k] = p.fields[k]; });
+      renderCard(fields, values);
+    });
+    el('bulk-generate').style.display = '';
+    el('bulk-output').innerHTML = '';
+  }
+
+  function generateBulk() {
+    if (!current || (!current.engineStyle && !current.spec)) return;
+    var items = [];
+    el('bulk-entries').querySelectorAll('.bulk-card-fields').forEach(function (card) {
+      var inp = readCard(card);
+      var res = formatWithCurrent(inp);
+      if (res.citation) items.push({ key: sortKeyOf(inp), text: res.citation });
+    });
+    // Redoslijed literature: abecedno osim ako verificirani spec propisuje redoslijed pojavljivanja.
+    var byAppearance = current.spec && current.spec.bibliography && current.spec.bibliography.sort === 'appearance';
+    if (!byAppearance) items.sort(function (a, b) { return a.key.localeCompare(b.key, 'hr'); });
+    var listText = items.map(function (x) { return x.text; }).join('\n');
+    el('bulk-output').innerHTML =
+      '<label>Literatura (abecedno, ' + items.length + ') <a href="#" id="bulk-copy">kopiraj</a></label>' +
+      '<textarea id="bulk-result" rows="' + Math.min(20, Math.max(4, items.length + 1)) + '"></textarea>';
+    el('bulk-result').value = listText;
+    el('bulk-copy').addEventListener('click', function (e) {
+      e.preventDefault();
+      el('bulk-result').select();
+      try { document.execCommand('copy'); } catch (_) {}
+    });
+  }
+
+  function showTab(which) {
+    el('panel-single').style.display = which === 'single' ? '' : 'none';
+    el('panel-bulk').style.display = which === 'bulk' ? '' : 'none';
+    el('tab-single').className = 'tab' + (which === 'single' ? ' active' : '');
+    el('tab-bulk').className = 'tab' + (which === 'bulk' ? ' active' : '');
   }
 
   function setStyle(style) {
     current = style;
-    if (!style || !style.engineStyle) {
-      if (formWrap) formWrap.style.display = 'none';
-      styleInfo.innerHTML = style
+    var tabs = el('tool-tabs');
+    // Tri postene razine: (1) verificiran spec iz sluzbenih uputa; (2) obiteljski oblik
+    // (token poznat, spec ne) uz jasan caveat; (3) custom/bez tokena -> opci alat.
+    if (!style || (!style.engineStyle && !style.spec)) {
+      if (tabs) tabs.style.display = 'none';
+      el('panel-single').style.display = 'none';
+      el('panel-bulk').style.display = 'none';
+      el('style-info').innerHTML = style
         ? '<p>Za ovaj stil (' + esc(style.label) + ') Lekta nema automatski format. Koristi <a href="' + esc(cfg.generalToolUrl || '/citat.html') + '">opci generator citata</a> i provjeri upute mentora.</p>'
         : '<p>Za ovaj fakultet jos nemamo verificiran citatni stil. Koristi <a href="' + esc(cfg.generalToolUrl || '/citat.html') + '">opci generator citata</a> i provjeri sluzbene upute.</p>';
       return;
     }
-    if (formWrap) formWrap.style.display = '';
-    styleInfo.innerHTML = '<p>Stil: <strong>' + esc(style.label) + '</strong></p>';
-    renderFields();
-    output.innerHTML = '';
+    if (tabs) tabs.style.display = '';
+    if (style.spec) {
+      el('style-info').innerHTML = '<p>Stil: <strong>' + esc(style.label) + '</strong>. Format prema sluzbenim uputama: &quot;' + esc(style.spec.sourceLabel) + '&quot;, provjereno ' + esc(style.spec.verifiedAt || '') + '.</p>';
+    } else {
+      el('style-info').innerHTML = '<p>Stil: <strong>' + esc(style.label) + '</strong> (opci oblik). Tvoj fakultet koristi ovaj stil; tocan izgled interpunkcije provjeri u uputama fakulteta ili kod mentora.</p>';
+    }
+    showTab('single');
+    renderCard(singleCard, readCard(singleCard));
   }
 
+  // --- Izbor fakulteta/stila (index) ---
+  var facSel = el('faculty-select');
+  var styleSel = el('style-select');
   function stylesForFaculty(fid) {
     var f = (cfg.faculties || []).filter(function (x) { return x.id === fid; })[0];
     return f ? f.styles : [];
@@ -190,10 +273,8 @@ const TOOL_JS = String.raw`
   function onFaculty() {
     var styles = stylesForFaculty(facSel.value);
     if (styleSel) {
-      if (styles.length <= 1) {
-        styleSel.style.display = 'none';
-        styleSel.innerHTML = '';
-      } else {
+      if (styles.length <= 1) { styleSel.style.display = 'none'; styleSel.innerHTML = ''; }
+      else {
         styleSel.style.display = '';
         styleSel.innerHTML = styles.map(function (s, i) {
           var hint = s.programsHint ? ' (' + esc(s.programsHint) + ')' : '';
@@ -204,13 +285,15 @@ const TOOL_JS = String.raw`
     setStyle(styles[0] || null);
   }
   function onStyle() {
-    var styles = stylesForFaculty(facSel.value);
-    setStyle(styles[parseInt(styleSel.value, 10)] || null);
+    setStyle(stylesForFaculty(facSel.value)[parseInt(styleSel.value, 10)] || null);
   }
 
-  renderTypeOptions();
-  typeSel.addEventListener('change', renderFields);
-  el('generate-btn').addEventListener('click', generate);
+  renderCard(singleCard, { type: C.SOURCE_TYPES[0].type });
+  el('generate-btn').addEventListener('click', generateSingle);
+  el('tab-single').addEventListener('click', function () { showTab('single'); });
+  el('tab-bulk').addEventListener('click', function () { showTab('bulk'); });
+  el('bulk-parse').addEventListener('click', parseBulk);
+  el('bulk-generate').addEventListener('click', generateBulk);
 
   if (cfg.mode === 'index') {
     facSel.addEventListener('change', onFaculty);
@@ -252,12 +335,22 @@ function toolFormHtml({ withFacultyPicker }) {
   return `<div id="tool">
 ${picker}
 <div id="style-info"></div>
-<div id="citation-form">
-  <label for="source-type">Vrsta izvora</label>
-  <select id="source-type"></select>
-  <div id="fields"></div>
+<div id="tool-tabs" class="tabs">
+  <button id="tab-single" class="tab active" type="button">Jedan izvor</button>
+  <button id="tab-bulk" class="tab" type="button">Cijela literatura</button>
+</div>
+<div id="panel-single">
+  <div id="single-card"></div>
   <button id="generate-btn" type="button">Generiraj citat</button>
   <div id="citation-output" aria-live="polite"></div>
+</div>
+<div id="panel-bulk" style="display:none">
+  <p class="bulk-note">Zalijepi popis literature (jedna referenca po retku ili odvojene praznim retkom). Alat prepozna polja koliko moze; OBAVEZNO provjeri i ispravi svaki unos prije koristenja.</p>
+  <textarea id="bulk-input" rows="8" placeholder="Zalijepi cijelu literaturu ovdje, npr.:&#10;Kovacic, I. (2020). Naslov knjige. Zagreb: Izdavac.&#10;Horvat, A. (2019). Naslov clanka. Casopis, 28(3), 45-67."></textarea>
+  <button id="bulk-parse" type="button">Prepoznaj reference</button>
+  <div id="bulk-entries"></div>
+  <button id="bulk-generate" type="button" style="display:none">Generiraj i sortiraj abecedno</button>
+  <div id="bulk-output"></div>
 </div>
 </div>`;
 }
@@ -271,11 +364,63 @@ function ctaHtml(backHref, backLabel) {
 </div>`;
 }
 
+// --- Verificirani citatni specovi + gate -------------------------------------
+
+// Ucita verified/*.json uz TVRDI gate (exit 1): shema valjana, status verified, nijedan
+// predlozak flagiran, izvor snapshotiran, verifiedHash == aktualni snapshotHash (drift).
+// Neverificiran ili driftan spec NE SMIJE u dist; bolje srusiti build nego objaviti krivo.
+function loadVerifiedSpecs(engine) {
+  const specs = new Map(); // "facultyId:styleToken" -> spec
+  if (!fs.existsSync(SPECS_VERIFIED_DIR)) return specs;
+  const registry = loadJson(REGISTRY_PATH);
+  for (const file of fs.readdirSync(SPECS_VERIFIED_DIR).filter((f) => f.endsWith('.json'))) {
+    const spec = loadJson(path.join(SPECS_VERIFIED_DIR, file));
+    const fail = (msg) => {
+      console.error(`[generate-citation-tools] FAIL spec ${file}: ${msg}`);
+      process.exit(1);
+    };
+    const errs = engine.validateCitationSpec(spec);
+    if (errs.length) fail(`shema: ${errs.join('; ')}`);
+    if (spec.status !== 'verified') fail(`status "${spec.status}" nije "verified"`);
+    if ((spec.sourceTypes ?? []).some((t) => t.recheck)) fail('sadrzi flagirane (needs-recheck) predloske');
+    const src = registry.find((r) => r.id === spec.sourceId);
+    if (!src || !src.snapshotHash) fail(`izvor ${spec.sourceId} nije snapshotiran u registryju`);
+    if (src.snapshotHash !== spec.verifiedHash) {
+      fail(`izvor ${spec.sourceId} promijenjen nakon verifikacije (hash drift); reverificiraj (approve-citation-spec)`);
+    }
+    const key = `${spec.facultyId}:${spec.styleToken}`;
+    if (specs.has(key)) fail(`duplikat za ${key}`);
+    specs.set(key, spec);
+  }
+  return specs;
+}
+
+// Klijentu treba samo render-podskup speca (bez provenijencije/examples), stranica ostaje lagana.
+function clientSpec(spec) {
+  return {
+    label: spec.label,
+    sourceLabel: spec.sourceLabel,
+    verifiedAt: spec.verifiedAt,
+    accessDate: spec.accessDate !== false,
+    authorFormat: spec.authorFormat,
+    inText: {
+      mode: spec.inText.mode,
+      template: spec.inText.template,
+      withPagesTemplate: spec.inText.withPagesTemplate,
+      authorsShort: spec.inText.authorsShort,
+    },
+    bibliography: spec.bibliography,
+    sourceTypes: (spec.sourceTypes ?? []).map((t) => ({
+      type: t.type, template: t.template, requiredFields: t.requiredFields,
+    })),
+  };
+}
+
 // --- Popuna podataka -------------------------------------------------------
 
 let FACULTY_OPTIONS = ''; // popunjava buildFaculties()
 
-function buildFaculties(engine) {
+function buildFaculties(engine, specs) {
   const catalog = loadJson(CATALOG_PATH);
   const profiles = loadJson(PROFILES_PATH);
 
@@ -305,13 +450,15 @@ function buildFaculties(engine) {
         .map((tok) => {
           const m = engine.citationMeta(tok);
           const progs = [...tokens[tok].programs].slice(0, 2).join(', ');
+          const spec = specs.get(`${u}:${tok}`) ?? null;
           return {
             token: tok,
-            label: m.label,
+            label: spec ? spec.label : m.label,
             mode: m.mode,
             engineStyle: engine.engineStyleFor(tok),
-            accessDate: m.accessDate,
+            accessDate: spec ? spec.accessDate !== false : m.accessDate,
             programsHint: progs,
+            spec: spec ? clientSpec(spec) : null,
           };
         });
       return { id: u, name: meta.name, instId: meta.instId, instName: meta.instName, styles };
@@ -335,14 +482,14 @@ function buildFaculties(engine) {
 }
 
 function slugFor(faculty, style) {
-  const renderable = faculty.styles.filter((s) => s.engineStyle);
+  const renderable = faculty.styles.filter((s) => s.engineStyle || s.spec);
   return renderable.length > 1 ? `${faculty.id}-${slugify(style.token)}` : faculty.id;
 }
 
 function buildIndexPage(faculties, engineJs) {
   const clientData = faculties.map((f) => ({
     id: f.id,
-    styles: f.styles.map((s) => ({ token: s.token, label: s.label, engineStyle: s.engineStyle, accessDate: s.accessDate, programsHint: s.programsHint })),
+    styles: f.styles.map((s) => ({ token: s.token, label: s.label, engineStyle: s.engineStyle, accessDate: s.accessDate, programsHint: s.programsHint, spec: s.spec })),
   }));
   const config = { mode: 'index', generalToolUrl: GENERAL_TOOL_URL, faculties: clientData };
   const body = `<h1>Generator citata po fakultetu</h1>
@@ -363,15 +510,20 @@ function buildFacultyStylePage(faculty, style, engineJs) {
   const config = {
     mode: 'static',
     generalToolUrl: GENERAL_TOOL_URL,
-    style: { token: style.token, label: style.label, engineStyle: style.engineStyle, accessDate: style.accessDate },
+    style: { token: style.token, label: style.label, engineStyle: style.engineStyle, accessDate: style.accessDate, spec: style.spec },
   };
+  const metaLine = style.spec
+    ? `Vjeran format prema sluzbenim uputama: ${escapeHtml(style.spec.sourceLabel)}, provjereno ${escapeHtml(style.spec.verifiedAt ?? '')}.`
+    : `Stil: ${escapeHtml(style.label)}. Prema profilu ${escapeHtml(faculty.name)} u Lekti.`;
   const body = `<h1>Generator citata za ${escapeHtml(faculty.name)}</h1>
-<p class="lekta-tool-meta">Stil: ${escapeHtml(style.label)}. Prema profilu ${escapeHtml(faculty.name)} u Lekti.</p>
+<p class="lekta-tool-meta">${metaLine}</p>
 ${toolFormHtml({ withFacultyPicker: false })}
 ${ctaHtml('./index.html', 'Svi fakulteti')}`;
   return pageShell({
     title: `Generator citata za ${faculty.name} (${style.label}) | Lekta`,
-    description: `Citiraj po stilu ${style.label} za ${faculty.name}, provjereno i s izvorom.`,
+    description: style.spec
+      ? `Citiraj tocno po sluzbenim uputama za ${faculty.name}, s izvorom i datumom provjere.`
+      : `Citiraj po stilu ${style.label} za ${faculty.name}, provjereno i s izvorom.`,
     canonical: `${SITE_ORIGIN}/alati/citati/${slugFor(faculty, style)}.html`,
     bodyHtml: body,
     engineJs,
@@ -399,7 +551,7 @@ function buildCharCounterHtml() {
 <textarea id="text-input" placeholder="Zalijepi svoj tekst ovdje..."></textarea>
 <div class="lekta-stats">
   <span>Znakova: <strong id="char-count">0</strong></span>
-  <span>Kartica: <strong id="page-count">0.0</strong></span>
+  <span>Kartica: <strong id="page-count">0,00</strong></span>
   <span>Rijeci: <strong id="word-count">0</strong></span>
 </div>
 ${ctaHtml(`${SITE_ORIGIN}/alati/citati/index.html`, 'Generator citata po fakultetu')}
@@ -410,10 +562,11 @@ var pageCount = document.getElementById('page-count');
 var wordCount = document.getElementById('word-count');
 input.addEventListener('input', function () {
   var text = input.value;
-  var chars = text.length;
+  // isto pravilo kao kanonski brojac (src/tools/counter.ts): prijelomi retka se NE broje u znakove
+  var chars = text.replace(/[\\r\\n]/g, '').length;
   var words = text.trim() ? text.trim().split(/\\s+/).length : 0;
   charCount.textContent = chars;
-  pageCount.textContent = (chars / 1800).toFixed(1);
+  pageCount.textContent = (chars / 1800).toFixed(2).replace('.', ',');
   wordCount.textContent = words;
 });
 </script>
@@ -428,18 +581,10 @@ function buildSitemap(urls) {
 }
 
 async function main() {
-  // Opcionalni rucni override (npr. custom fakultet): trenutno se samo validira oblik; derivacija
-  // iz profila je primarni izvor. Zadrzano radi buducih rucnih iznimaka (vidi data/tools/README.md).
-  if (fs.existsSync(OVERRIDES_PATH)) {
-    const ov = loadJson(OVERRIDES_PATH);
-    if (!Array.isArray(ov)) {
-      console.error('[generate-citation-tools] citation-configs.json mora biti niz (override), preskacem.');
-    }
-  }
-
   const engineJs = await buildEngine();
   const engine = loadEngineInNode(engineJs);
-  const faculties = buildFaculties(engine);
+  const specs = loadVerifiedSpecs(engine); // gate: exit 1 na neverificirano/drift
+  const faculties = buildFaculties(engine, specs);
 
   fs.mkdirSync(CITATI_OUT_DIR, { recursive: true });
 
@@ -454,7 +599,7 @@ async function main() {
   const seen = new Set();
   for (const f of faculties) {
     for (const s of f.styles) {
-      if (!s.engineStyle) continue; // custom/none nema staticku stranicu (tanki sadrzaj)
+      if (!s.engineStyle && !s.spec) continue; // custom/none bez speca nema staticku stranicu
       const slug = slugFor(f, s);
       if (seen.has(slug)) continue;
       seen.add(slug);
@@ -467,13 +612,17 @@ async function main() {
   fs.writeFileSync(path.join(OUT_DIR, 'brojac-kartica.html'), buildCharCounterHtml(), 'utf-8');
   fs.writeFileSync(path.join(OUT_DIR, 'sitemap-alati.xml'), buildSitemap(sitemapUrls), 'utf-8');
 
-  const withStyle = faculties.filter((f) => f.styles.some((s) => s.engineStyle)).length;
+  const withSpec = faculties.filter((f) => f.styles.some((s) => s.spec)).length;
+  const withStyle = faculties.filter((f) => f.styles.some((s) => s.engineStyle || s.spec)).length;
   const noStyle = faculties.length - withStyle;
   console.log(
     `[generate-citation-tools] gotovo. ${faculties.length} fakultet(a) u izborniku, ` +
       `${pageCount} statickih stranica po (fakultet x stil), plus brojac + sitemap.`,
   );
-  console.log(`[generate-citation-tools] ${withStyle} fakulteta s auto-stilom, ${noStyle} bez (vode na opci alat).`);
+  console.log(
+    `[generate-citation-tools] ${withSpec} s VERIFICIRANIM specom (sluzbene upute), ` +
+      `${withStyle - withSpec} s obiteljskim stilom, ${noStyle} bez (vode na opci alat).`,
+  );
 }
 
 main().catch((e) => {

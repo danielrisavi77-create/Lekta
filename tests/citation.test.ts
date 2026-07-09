@@ -45,6 +45,12 @@ describe('parseAuthors', () => {
     }
   });
 
+  it('Hrvatski sabor je ustanova (donositelj propisa), ne osoba', () => {
+    expect(parseAuthors('Hrvatski sabor')).toEqual([{ last: 'Hrvatski sabor', first: '' }]);
+    // trailing granica: "saborski" se NE hvata kao ustanova
+    expect(parseAuthors('Ivan Saborski')).toEqual([{ last: 'Saborski', first: 'Ivan' }]);
+  });
+
   it('osobe s rijecju nalik ustanovi ostaju osobe (trailing granica)', () => {
     // "Urednik"/"Vladimir" sadrze "ured"/"vladi" ali su osobe: trailing granica ih cuva.
     expect(parseAuthors('Vladimir Nazor')).toEqual([{ last: 'Nazor', first: 'Vladimir' }]);

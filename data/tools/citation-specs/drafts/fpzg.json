@@ -1,0 +1,180 @@
+{
+  "facultyId": "fpzg",
+  "styleToken": "fpzg",
+  "status": "draft",
+  "outcome": "custom-spec",
+  "label": "FPZG autor-godina (sluzbena Pravila navodenja)",
+  "sourceId": "fpzg-pravila-navodenja-citiranja",
+  "sourceLabel": "Pravila navodenja bibliografskih jedinica i citatnica na Fakultetu politickih znanosti",
+  "verifiedAt": null,
+  "verifiedBy": null,
+  "verifiedHash": null,
+  "accessDate": true,
+  "authorFormat": {
+    "order": "family-first",
+    "initials": "none",
+    "separator": ", ",
+    "finalJoiner": " i ",
+    "etAlAfter": 2,
+    "etAlKeep": 1,
+    "etAlJoiner": " ",
+    "etAlText": "i dr."
+  },
+  "inText": {
+    "mode": "author-year",
+    "template": "({authorsShort}, {year})",
+    "withPagesTemplate": "({authorsShort}, {year}: {pages})",
+    "authorsShort": { "twoJoiner": " i ", "etAlAfter": 3, "etAlText": "i dr" },
+    "provenance": {
+      "kind": "worked-example",
+      "quoteRaw": "article.1 Chicago i London: The University of Chicago Press.  (Becker, 2007)",
+      "sourcePage": "str. 1",
+      "note": "Citatnica iza strelice u svakom primjeru; 2 autora '(Ani i Sili, 2001)', 3+ '(Babi i dr, 2008)' (i dr bez tocke prije zareza, pravilo ekonomicnosti, fusnota 2 u izvoru). withPagesTemplate ({authorsShort}, {year}: {pages}) je IZVEDEN iz sekcije Citatnice u fpzg-upute-akademski-radovi (str. 21), potvrditi pri verifikaciji."
+    }
+  },
+  "numbering": null,
+  "bibliography": { "sort": "alphabetical" },
+  "sourceTypes": [
+    {
+      "type": "knjiga",
+      "template": "{authors} ({year}) {title}. {place}: {publisher}.",
+      "requiredFields": ["authors", "title", "year", "place", "publisher"],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Buchberger, Iva (2012) Kriticko misljenje. Prirucnik kritickog misljenja, slusanja, citanja i pisanja.",
+        "sourcePage": "str. 1",
+        "note": "Puna imena (ne inicijali); bez tocke iza (godina); naslov kurzivom u izvorniku (alat radi plain text)."
+      },
+      "example": {
+        "input": {
+          "type": "knjiga",
+          "authors": "Buchberger, Iva",
+          "year": "2012",
+          "title": "Kriticko misljenje. Prirucnik kritickog misljenja, slusanja, citanja i pisanja",
+          "place": "Rijeka",
+          "publisher": "Udruga za razvoj visokog skolstva Universitas"
+        },
+        "expected": "Buchberger, Iva (2012) Kriticko misljenje. Prirucnik kritickog misljenja, slusanja, citanja i pisanja. Rijeka: Udruga za razvoj visokog skolstva Universitas."
+      }
+    },
+    {
+      "type": "poglavlje",
+      "template": "{authors} ({year}) {title}. U: {editor} (ur) {container}[[ (str. {pages})]]. {place}: {publisher}.",
+      "requiredFields": ["authors", "title", "year", "editor", "container", "place", "publisher"],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "poglavlje s 1 autorom /icom u zborniku s 1 urednikom/icom:",
+        "sourcePage": "str. 1",
+        "note": "Primjer: Petak, Zdravko (2001) Proracunska politika Sabora. U: Kasapovi, Mirjana (ur) Hrvatska politika 1990.-2000. (str. 101-131). Zagreb: Fakultet politickih znanosti. Skracenica (ur) BEZ tocke. Urednik se upisuje u obliku Prezime, Ime."
+      },
+      "example": {
+        "input": {
+          "type": "poglavlje",
+          "authors": "Petak, Zdravko",
+          "year": "2001",
+          "title": "Proracunska politika Sabora",
+          "editor": "Kasapovi, Mirjana",
+          "container": "Hrvatska politika 1990.-2000.",
+          "pages": "101-131",
+          "place": "Zagreb",
+          "publisher": "Fakultet politickih znanosti"
+        },
+        "expected": "Petak, Zdravko (2001) Proracunska politika Sabora. U: Kasapovi, Mirjana (ur) Hrvatska politika 1990.-2000. (str. 101-131). Zagreb: Fakultet politickih znanosti."
+      }
+    },
+    {
+      "type": "clanak",
+      "template": "{authors} ({year}) {title}. {container} {volume}[[({issue})]][[: {pages}]].[[ {url} Pristupljeno {accessed}.]]",
+      "requiredFields": ["authors", "title", "year", "container", "volume", "pages"],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "clanak u casopisu:",
+        "sourcePage": "str. 2",
+        "note": "Primjer: Prpi, Ivan (2001) Napomena o shvaanju suverena u Ustavu Republike Hrvatske. Politicka misao 38(1): 5-11. Casopis BEZ zareza prije godista; dvotocka prije stranica. Online clanci dodaju URL + Pristupljeno datum (str. 2)."
+      },
+      "example": {
+        "input": {
+          "type": "clanak",
+          "authors": "Prpi, Ivan",
+          "year": "2001",
+          "title": "Napomena o shvaanju suverena u Ustavu Republike Hrvatske",
+          "container": "Politicka misao",
+          "volume": "38",
+          "issue": "1",
+          "pages": "5-11"
+        },
+        "expected": "Prpi, Ivan (2001) Napomena o shvaanju suverena u Ustavu Republike Hrvatske. Politicka misao 38(1): 5-11."
+      }
+    },
+    {
+      "type": "mrezni",
+      "template": "{authors} ({year}) {title}. {url} Pristupljeno {accessed}.",
+      "requiredFields": ["authors", "title", "year", "url", "accessed"],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "individualni autori/ce:",
+        "sourcePage": "str. 3",
+        "note": "Primjer: Aastrup, Jesper (2005) Change in Networks... http://www.impgroup.org/uploads/papers/27.pdf. Pristupljeno 30. rujna 2010. Korporativni autori: KRATICA (Puni naziv) (godina) - unosi se doslovno u polje autora, org-detekcija cuva doslovni oblik."
+      },
+      "example": {
+        "input": {
+          "type": "mrezni",
+          "authors": "Kgz.hr",
+          "year": "2013",
+          "title": "Knjiznice Grada Zagreba",
+          "url": "http://www.kgz.hr/",
+          "accessed": "5. veljace 2013."
+        },
+        "expected": "Kgz.hr (2013) Knjiznice Grada Zagreba. http://www.kgz.hr/ Pristupljeno 5. veljace 2013."
+      }
+    },
+    {
+      "type": "zavrsni",
+      "template": "{authors} ({year}) {title} (neobjavljen diplomski rad). {place}: {institution}.",
+      "requiredFields": ["authors", "title", "year", "place", "institution"],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "diplomski i magistarski radovi:",
+        "sourcePage": "str. 5",
+        "note": "Primjer: Zguri, Borna (2009) Diplomacija nedrzavnih aktera: studija slucaja Carter Centra (neobjavljen diplomski rad). Zagreb: Fakultet politickih znanosti. Za disertacije izvor koristi '(neobjavljena doktorska disertacija)'; alat koristi diplomsku varijantu kao default."
+      },
+      "example": {
+        "input": {
+          "type": "zavrsni",
+          "authors": "Zguri, Borna",
+          "year": "2009",
+          "title": "Diplomacija nedrzavnih aktera: studija slucaja Carter Centra",
+          "place": "Zagreb",
+          "institution": "Fakultet politickih znanosti"
+        },
+        "expected": "Zguri, Borna (2009) Diplomacija nedrzavnih aktera: studija slucaja Carter Centra (neobjavljen diplomski rad). Zagreb: Fakultet politickih znanosti."
+      }
+    },
+    {
+      "type": "propis",
+      "template": "{authors} ({year}) {title}. {container}[[ {issue}]].[[ {url} Pristupljeno {accessed}.]]",
+      "requiredFields": ["authors", "title", "year", "container"],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "iz sluzbenog glasila:",
+        "sourcePage": "str. 3",
+        "note": "Primjer: Hrvatski sabor (2011) Zakon o Vladi Republike Hrvatske. Narodne novine 150. FPZG navodi i DONOSITELJA kao autora pravnog akta (Hrvatski sabor); broj glasila bez 'br.'."
+      },
+      "example": {
+        "input": {
+          "type": "propis",
+          "authors": "Hrvatski sabor",
+          "year": "2011",
+          "title": "Zakon o Vladi Republike Hrvatske",
+          "container": "Narodne novine",
+          "issue": "150"
+        },
+        "expected": "Hrvatski sabor (2011) Zakon o Vladi Republike Hrvatske. Narodne novine 150."
+      }
+    }
+  ],
+  "contradictions": [
+    "withPagesTemplate za citatnicu sa stranicama je izveden (nije u ekstrakciji Pravila navodenja); potvrditi protiv sekcije Citatnice u fpzg-upute-akademski-radovi (sadrzaj pokazuje str. 21).",
+    "Kurziv naslova (knjige, casopisi, novine; fusnota 8 u izvoru) alat ne reproducira - plain text izlaz; navesti kao napomenu na stranici alata."
+  ]
+}

@@ -12,8 +12,12 @@ import { formatCitation, parseAuthors } from '../tools/citation';
 import type { CitationStyle, SourceType } from '../tools/citation';
 import { citationMeta } from './citation-meta';
 import { parseReference, splitReferences } from './parse-reference';
+import { formatFromSpec, validateCitationSpec, authorsFromOptions, renderTemplate } from './citation-spec';
 
-export { formatCitation, parseAuthors, citationMeta, parseReference, splitReferences };
+export {
+  formatCitation, parseAuthors, citationMeta, parseReference, splitReferences,
+  formatFromSpec, validateCitationSpec, authorsFromOptions, renderTemplate,
+};
 
 /**
  * recommendedCitation token -> engine stil za formatCitation.
