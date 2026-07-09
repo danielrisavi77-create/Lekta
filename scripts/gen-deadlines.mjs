@@ -68,6 +68,39 @@ const BATCHES = [
         "potvrde -> ceka zavrsnu rucnu potvrdu.",
     },
   },
+  {
+    facultyId: 'fsb',
+    workType: 'diplomski',
+    academicYear: '2025/2026',
+    programs: ['Diplomski studiji Fakulteta strojarstva i brodogradnje'],
+    fetchedAt: '2026-07-09',
+    confirmed: false,
+    // rok predaje = kolona "Datum predaje diplomskog rada" (NE "Zadnji dan predaje molbe")
+    terms: [
+      { deadlineDate: '2025-12-04', obrana: 'roku 1 (obrane 11., 12. i 15.12.2025.)' },
+      { deadlineDate: '2026-01-29', obrana: 'roku 2 (obrane 05., 06. i 09.02.2026.)' },
+      { deadlineDate: '2026-03-19', obrana: 'roku 3* (obrane 26., 27. i 30.03.2026.)' },
+      { deadlineDate: '2026-05-07', obrana: 'roku 4 (obrane 14., 15. i 18.05.2026.)' },
+      { deadlineDate: '2026-07-16', obrana: 'roku 5** (obrane 23.-24.07.2026.)' },
+    ],
+    sourceCitation:
+      "FSB Plan obrane diplomskih radova diplomskih studija za ak. god. 2025./2026., kolona 'Datum predaje diplomskog rada', predaja u",
+    sourceUrl: 'https://www.fsb.unizg.hr/index.php?alias=diplomski_ispiti',
+    verification: {
+      autoVerified: true,
+      passes: 3,
+      checkedAt: '2026-07-09',
+      sources: ['https://www.fsb.unizg.hr/index.php?alias=diplomski_ispiti'],
+      note:
+        "3 lece: (1) ekstrakcija iz kolone 'Datum predaje diplomskog rada' (razlicito od 'Zadnji dan " +
+        "predaje molbe' i 'Datum preuzimanja zadatka'); (2) adversarijalno: to je rok predaje gotovog rada " +
+        "(ne datum obrane ni rok molbe), god 2025/2026, vrijedi za sve diplomske studije FSB-a (Strojarstvo, " +
+        "Brodogradnja, Zrakoplovno inzenjerstvo, Mehatronika i robotika); (3) dvije nezavisne procitanosti " +
+        "tablice (browser render + WebFetch) daju iste datume + interna konzistentnost (predaja prije " +
+        "pripadne obrane). OPREZ: rokovi 3 i 5 nose oznake * i ** bez legende na stranici (moguce uvjetni); " +
+        "jedan sluzbeni izvor (FSB stranica).",
+    },
+  },
 ];
 
 function buildEntries() {
