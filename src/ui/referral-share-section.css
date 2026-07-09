@@ -1,0 +1,46 @@
+/* src/ui/referral-share-section.css */
+
+.lekta-referral-share {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  background: var(--lekta-surface-muted, #f4f4f5);
+  border: 1px solid var(--lekta-border-muted, #e4e4e7);
+  font-size: 0.875rem;
+}
+
+.lekta-referral-share__title {
+  display: block;
+  margin-bottom: 0.625rem;
+}
+
+.lekta-referral-share__link-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.lekta-referral-share__input {
+  flex: 1 1 14rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--lekta-border, #d4d4d8);
+  color: var(--lekta-text-secondary, #52525b);
+  background: white;
+}
+
+.lekta-referral-share__copy {
+  padding: 0.5rem 0.875rem;
+  border-radius: 0.5rem;
+  border: none;
+  background: var(--lekta-accent, #18181b);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.lekta-referral-share__status {
+  margin: 0.625rem 0 0;
+  color: var(--lekta-text-secondary, #52525b);
+}

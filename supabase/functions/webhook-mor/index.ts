@@ -28,6 +28,7 @@ import {
   semesterStart,
   REFERRAL_WELCOME_DISCOUNT,
 } from '../../../src/report/referral.ts';
+import { tryGrantReferrerReward } from '../_shared/grant-referrer-reward.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -128,6 +129,29 @@ async function pullReferralReward(admin: any, orderId: string): Promise<void> {
   }
 }
 
+// Isto za "pozovi-prijatelja" nagradu (0013): refund kupnje koja je okinula preporuciteljevu
+// nagradu povlaci tu nagradu ako je NEPOTROSENA (potrosenu pusti, false-allow, 6.7). Precizno preko
+// converted_order_id; status signupa se vraca na 'converted' pa vise ne trosi mjesecni strop.
+async function pullReferralSignupReward(admin: any, orderId: string): Promise<void> {
+  const { data: signups } = await admin
+    .from('referral_signups')
+    .select('id, referrer_reward_entitlement_id')
+    .eq('converted_order_id', orderId)
+    .eq('status', 'rewarded');
+  for (const s of signups ?? []) {
+    if (!s.referrer_reward_entitlement_id) continue;
+    const { data: ent } = await admin
+      .from('entitlements')
+      .select('id, slots_used')
+      .eq('id', s.referrer_reward_entitlement_id)
+      .maybeSingle();
+    if (ent && rewardIsPullable(ent.slots_used)) {
+      await admin.from('entitlements').update({ status: 'void' }).eq('id', ent.id);
+      await admin.from('referral_signups').update({ status: 'converted' }).eq('id', s.id);
+    }
+  }
+}
+
 Deno.serve(async (req: Request) => {
   if (req.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
 
@@ -143,7 +167,8 @@ Deno.serve(async (req: Request) => {
   // refund: blokiraj daljnje vezivanje slotova iz tog entitlementa (sekcija 6.7)
   if (ev.refunded) {
     await admin.from('entitlements').update({ status: 'refunded' }).eq('provider', PROVIDER).eq('order_id', ev.orderId);
-    await pullReferralReward(admin, ev.orderId); // povuci nepotrosenu referral nagradu (6.7)
+    await pullReferralReward(admin, ev.orderId); // povuci nepotrosenu referral nagradu (0005, 6.7)
+    await pullReferralSignupReward(admin, ev.orderId); // isto za pozovi-prijatelja nagradu (0013)
     return json({ ok: true, action: 'refunded' });
   }
 
@@ -177,6 +202,10 @@ Deno.serve(async (req: Request) => {
     .insert(buildEntitlementInsert(product, ev, PROVIDER, Date.now()));
   if (error && (error as any).code === '23505') return json({ ok: true, action: 'duplicate_ignored' });
   if (error) return json({ error: 'insert_failed', detail: error.message }, 500);
+
+  // Referral (pozovi-prijatelja, 0013): kupceva placena kupnja nagraduje preporucitelja internim
+  // entitlementom. Fail-safe (ne provjerava se rezultat); ZASEBAN od attributeReferral (0005 program).
+  await tryGrantReferrerReward(admin, ev.userId, product.workType, ev.orderId);
 
   // pass bonus kupon (6.5): samo uz tek kreiran entitlement (ne na duplikat)
   if (isPassProduct(product.kind)) {

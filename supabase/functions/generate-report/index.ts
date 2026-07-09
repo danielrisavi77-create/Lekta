@@ -16,10 +16,15 @@ import { buildFullReport } from '../../../src/report/report.ts';
 import { decideReportAccess } from '../../../src/report/slot-logic.ts';
 import { resolveDailyCap } from '../../../src/report/partner.ts';
 import { coverageTierForStatus } from '../../../src/report/guarantee.ts';
+import { tryGrantFriendReferralReward } from '../_shared/grant-friend-referral-reward.ts';
+import { hashClientIp } from '../_shared/hash-ip.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const DAILY_CAP = Number(Deno.env.get('DAILY_CAP') ?? '30');
+// Soljeni IP hash: isti salt kao redeem-referral-signup, da anti-fraud usporedba u
+// grant-referrer-reward (referred_ip_hash vs report_generations.ip_hash) uopce moze pogoditi.
+const IP_HASH_SALT = Deno.env.get('IP_HASH_SALT') ?? '';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -92,7 +97,8 @@ Deno.serve(async (req: Request) => {
     DAILY_CAP,
   );
 
-  // dohvat konteksta za odluku
+  // dohvat konteksta + odluka; re-runnable jer friend referral moze stvoriti entitlement pa se ponovi
+  const decide = async () => {
   const [{ data: slots }, { data: entitlements }, { count: recent }] = await Promise.all([
     admin
       .from('document_slots')
@@ -114,7 +120,7 @@ Deno.serve(async (req: Request) => {
       .gt('created_at', new Date(Date.now() - 24 * 3600 * 1000).toISOString()),
   ]);
 
-  const decision = decideReportAccess(
+  return decideReportAccess(
     {
       now,
       workType,
@@ -138,8 +144,18 @@ Deno.serve(async (req: Request) => {
     },
     { dailyCap },
   );
+  };
 
-  const ipHash = await sha256Hex(req.headers.get('x-forwarded-for') ?? '');
+  let decision = await decide();
+  // Referral (pozovi-prijatelja, 0013): prijatelj s aktivnim signupom dobiva prvu provjeru
+  // besplatno (interni entitlement), pa se odluka PONOVI (sad postoji slot). Bez signupa ostaje
+  // payment_required. Nagrada NIJE coupon_grant nego entitlement (generate-report gleda samo te).
+  if (decision.decision === 'payment_required') {
+    const friend = await tryGrantFriendReferralReward(admin, user.id, workType);
+    if (friend.granted) decision = await decide();
+  }
+
+  const ipHash = await hashClientIp(req.headers.get('x-forwarded-for'), IP_HASH_SALT);
   const log = (status: string, slotId: string | null) =>
     admin.from('report_generations').insert({
       user_id: user.id,
