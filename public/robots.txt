@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://lektahr.netlify.app/sitemap.xml

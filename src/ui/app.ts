@@ -47,7 +47,12 @@ const SESSION_MEMORY=new Map();
 /* WORK_TYPE_LABELS i CHECK_ITEMS se uvoze iz config-loader (data/work-type-labels.json, data/checks) */
 const VALID_WORK_TYPES=new Set(Object.keys(WORK_TYPE_LABELS));
 const VALID_CITATION_IDS=new Set(['fpzg','pravo-fusnote','pravo-social-author','apa7','harvard','chicago-author','chicago-notes','mla9','vancouver','ieee','custom']);
-const params=new URLSearchParams(location.search),qaMode=params.get('qa')==='1',setupMode=params.get('setup')==='1';
+const params=new URLSearchParams(location.search),qaMode=params.get('qa')==='1';
+/* Setup panel (produkcijska konfiguracija: endpointi, payment linkovi, Supabase URL) NIJE javan.
+   Dopusten samo na localhostu ili kad je rucno postavljen admin flag u pregledniku
+   (localStorage.setItem('lekta.admin','1')). Time ?setup=1 na zivom siteu ne otvara nista. */
+function setupAllowed(){try{if(localStorage.getItem('lekta.admin')==='1')return true;}catch(e){}const h=location.hostname;return h==='localhost'||h==='127.0.0.1'||h==='';}
+const setupMode=params.get('setup')==='1'&&setupAllowed();
 const TERMS_VERSION='2026-07-03';
 const CHECKOUT_CONSENT_TEXT='Pristajem da isporuka digitalnog sadržaja (puni izvještaj) počne odmah nakon plaćanja i izričito se odričem prava na jednostrani raskid ugovora u roku od 14 dana (čl. 86. Zakona o zaštiti potrošača). Bez ovog pristanka kupnja se ne može dovršiti.';
 const DEFAULT_PRODUCTION_CONFIG={enabled:false,submissionMode:'netlify-form',orderEndpoint:'/',paymentProvider:'stripe',paymentLinks:{format:'',panic:'',premium:''},businessName:'Lekta',contactEmail:'lekta.kontakt@gmail.com',privacyController:'',retentionDays:30,uploadMaxBytes:8*1024*1024,analyticsEndpoint:'',serverAnalytics:'netlify-optional',reportEndpoint:'',reportToken:'',checkoutEndpoint:'',guaranteeEndpoint:'',supabaseUrl:'https://zrrjttizjyfcxmcpgzml.supabase.co',supabaseAnonKey:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpycmp0dGl6anlmY3htY3Bnem1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM1ODIzMTcsImV4cCI6MjA5OTE1ODMxN30.OOUm0_WszIhV1SE2Li3HUhE4QR-voe7CsmiMFuwAx_8',waitlistEndpoint:'https://zrrjttizjyfcxmcpgzml.supabase.co/functions/v1/faculty-request',referralEndpoint:'',errorEndpoint:''};

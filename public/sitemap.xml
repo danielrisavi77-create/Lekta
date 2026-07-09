@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://lektahr.netlify.app/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://lektahr.netlify.app/alati.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://lektahr.netlify.app/citat.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://lektahr.netlify.app/naslovnica.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://lektahr.netlify.app/literatura.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://lektahr.netlify.app/izjava.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://lektahr.netlify.app/kartice.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://lektahr.netlify.app/landing_usporedba.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+</urlset>
