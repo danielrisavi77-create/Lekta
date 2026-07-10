@@ -11,7 +11,7 @@
 [build]
   # generate-citation-tools MORA ici POSLIJE `vite build` (vite prazni dist/ pri buildu), pa
   # potom doda staticke SEO stranice u dist/alati/** koje se objave iz istog artefakta.
-  command = "npm run build && npm run generate-citation-tools && npm run generate-title-page-tools && npm run generate-legal-pages"
+  command = "npm run build && npm run generate-citation-tools && npm run generate-title-page-tools && npm run generate-legal-pages && node scripts/verify-deploy-dist.mjs"
   publish = "dist"
 
 [build.environment]

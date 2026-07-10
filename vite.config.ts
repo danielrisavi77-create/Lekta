@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'node:path';
+import { stripDevOnly } from './scripts/strip-dev-only.mjs';
 
 // Vite dev i preview posluzuju HTML kao 'text/html' bez charseta i oslanjaju se na
 // <meta charset="utf-8"> u dokumentu. Ovaj mali plugin eksplicitno dodaje
@@ -46,8 +47,23 @@ const input: Record<string, string> = {
 };
 if (!isDeploy) input.verification = resolve(__dirname, 'verification.html');
 
+// DEPLOY=1 dodatno REZE dev-only regije iz HTML-a (setup modal, QA konzola): to su interni
+// alati koje javni build ne smije ni sadrzavati (audit P0), ne samo skrivati. Par s
+// __DEV_TOOLS__ define-om koji iz JS bundlea tree-shakea pripadajuci kod (src/ui/app.ts).
+function stripDevOnlyHtml() {
+  return {
+    name: 'lekta-strip-dev-only',
+    apply: 'build' as const,
+    transformIndexHtml: {
+      order: 'pre' as const,
+      handler: (html: string) => (isDeploy ? stripDevOnly(html) : html),
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [htmlCharsetUtf8()],
+  plugins: [htmlCharsetUtf8(), stripDevOnlyHtml()],
+  define: { __DEV_TOOLS__: JSON.stringify(!isDeploy) },
   build: {
     target: 'es2022',
     rollupOptions: { input },
