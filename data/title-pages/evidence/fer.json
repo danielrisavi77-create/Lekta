@@ -1,0 +1,446 @@
+{
+ "unitId": "fer",
+ "generatedAt": "2026-07-10",
+ "samples": [
+  {
+   "pid": "fer:5035",
+   "repository": "dr.nsk.hr",
+   "level": "doktorski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "NimbusSanL-ReguCond",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.252
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "NimbusSanL-ReguCond",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.384
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "NimbusSanL-Bold",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.479
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "NimbusSanL-Bold",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.513
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "NimbusSanL-Bold",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.546
+    },
+    {
+     "role": "worktype",
+     "redactedText": "DOCTORAL THESIS",
+     "font": "NimbusSanL-ReguCond",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.651
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, 2014",
+     "font": "NimbusSanL-ReguCond",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.881
+    }
+   ]
+  },
+  {
+   "pid": "fer:5361",
+   "repository": "dr.nsk.hr",
+   "level": "doktorski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "NimbusSanL-ReguCond",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.247
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "NimbusSanL-ReguCond",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.37
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "NimbusSanL-Bold",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.457
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "NimbusSanL-Bold",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.479
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "NimbusSanL-Bold",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.501
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "NimbusSanL-Bold",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.526
+    },
+    {
+     "role": "worktype",
+     "redactedText": "DOCTORAL THESIS",
+     "font": "NimbusSanL-ReguCond",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.621
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, 2019",
+     "font": "NimbusSanL-ReguCond",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.886
+    }
+   ]
+  },
+  {
+   "pid": "fer:6579",
+   "repository": "dr.nsk.hr",
+   "level": "doktorski",
+   "pageIndex": 0,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.273
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.404
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.535
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.565
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.595
+    },
+    {
+     "role": "worktype",
+     "redactedText": "DOCTORAL THESIS",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.669
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, 2013",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.821
+    }
+   ]
+  },
+  {
+   "pid": "fer:4150",
+   "repository": "zir.nsk.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U ZAGREBU",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.103
+    },
+    {
+     "role": "faculty",
+     "redactedText": "FAKULTET ELEKTROTEHNIKE I RAČUNARSTVA",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.144
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.403
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.445
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.486
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.527
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.568
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.62
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, lipanj 2017.",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.879
+    }
+   ]
+  },
+  {
+   "pid": "fer:7600",
+   "repository": "zir.nsk.hr",
+   "level": "zavrsni",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "faculty",
+     "redactedText": "FAKULTET ELEKTROTEHNIKE I RAČUNARSTVA",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.274
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.405
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.536
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.566
+    },
+    {
+     "role": "worktype",
+     "redactedText": "SPECIJALISTIČKI RAD",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.64
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, 2022.",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.792
+    }
+   ]
+  }
+ ]
+}

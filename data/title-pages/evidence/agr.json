@@ -1,0 +1,772 @@
+{
+ "unitId": "agr",
+ "generatedAt": "2026-07-10",
+ "samples": [
+  {
+   "pid": "agr:2075",
+   "repository": "zir.nsk.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U ZAGREBU",
+     "font": "Calibri",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.088
+    },
+    {
+     "role": "faculty",
+     "redactedText": "AGRONOMSKI FAKULTET",
+     "font": "Calibri",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.111
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Calibri",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.364
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Calibri",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.393
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Calibri",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.422
+    },
+    {
+     "role": "worktype",
+     "redactedText": "DIPLOMSKI RAD",
+     "font": "Calibri",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.471
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Calibri",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.598
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, srpanj, 2021.",
+     "font": "Calibri",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.886
+    }
+   ]
+  },
+  {
+   "pid": "agr:76",
+   "repository": "dr.nsk.hr",
+   "level": "doktorski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "faculty",
+     "redactedText": "AGRONOMSKI FAKULTET",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.259
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.417
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.527
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.557
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.587
+    },
+    {
+     "role": "worktype",
+     "redactedText": "DOKTORSKI RAD",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.69
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, 2016.",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.857
+    }
+   ]
+  },
+  {
+   "pid": "agr:2678",
+   "repository": "zir.nsk.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.2,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U ZAGREBU",
+     "font": "Calibri",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.071
+    },
+    {
+     "role": "faculty",
+     "redactedText": "AGRONOMSKI FAKULTET",
+     "font": "Calibri",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.106
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Calibri",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.493
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Calibri",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.525
+    },
+    {
+     "role": "worktype",
+     "redactedText": "DIPLOMSKI RAD",
+     "font": "Calibri",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.596
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Calibri",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.759
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, rujan, 2022.",
+     "font": "Calibri",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.897
+    }
+   ]
+  },
+  {
+   "pid": "agr:211",
+   "repository": "dr.nsk.hr",
+   "level": "doktorski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "faculty",
+     "redactedText": "AGRONOMSKI FAKULTET",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.255
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.43
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.539
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.569
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.599
+    },
+    {
+     "role": "worktype",
+     "redactedText": "DOKTORSKI RAD",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.66
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, 2016.",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.856
+    }
+   ]
+  },
+  {
+   "pid": "agr:2900",
+   "repository": "zir.nsk.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U ZAGREBU",
+     "font": "Calibri",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.088
+    },
+    {
+     "role": "faculty",
+     "redactedText": "AGRONOMSKI FAKULTET",
+     "font": "Calibri",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.111
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Calibri",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.405
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Calibri",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.434
+    },
+    {
+     "role": "worktype",
+     "redactedText": "DIPLOMSKI RAD",
+     "font": "Calibri",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.482
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Calibri",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.61
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, rujan, 2023.",
+     "font": "Calibri",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.877
+    }
+   ]
+  },
+  {
+   "pid": "agr:212",
+   "repository": "dr.nsk.hr",
+   "level": "doktorski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "faculty",
+     "redactedText": "AGRONOMSKI FAKULTET",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.28
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.381
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.47
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.501
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.531
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.561
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.591
+    },
+    {
+     "role": "worktype",
+     "redactedText": "DOKTORSKI RAD",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.683
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, 2016.",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.862
+    }
+   ]
+  },
+  {
+   "pid": "agr:3600",
+   "repository": "zir.nsk.hr",
+   "level": "zavrsni",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U ZAGREBU",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.197
+    },
+    {
+     "role": "faculty",
+     "redactedText": "AGRONOMSKI FAKULTET",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.23
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.429
+    },
+    {
+     "role": "worktype",
+     "redactedText": "ZAVRŠNI RAD",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.507
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.672
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, srpanj, 2023.",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.871
+    }
+   ]
+  },
+  {
+   "pid": "agr:4520",
+   "repository": "zir.nsk.hr",
+   "level": "zavrsni",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.2,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U ZAGREBU",
+     "font": "Calibri",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.088
+    },
+    {
+     "role": "faculty",
+     "redactedText": "AGRONOMSKI FAKULTET",
+     "font": "Calibri",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.111
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Calibri",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.379
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Calibri",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.408
+    },
+    {
+     "role": "worktype",
+     "redactedText": "ZAVRŠNI RAD",
+     "font": "Calibri",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.456
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Calibri",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.584
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, rujan, 2025.",
+     "font": "Calibri",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.891
+    }
+   ]
+  },
+  {
+   "pid": "agr:4300",
+   "repository": "zir.nsk.hr",
+   "level": "zavrsni",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 612.0,
+    "h": 792.0
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U ZAGREBU",
+     "font": "Calibri",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.095
+    },
+    {
+     "role": "faculty",
+     "redactedText": "AGRONOMSKI FAKULTET",
+     "font": "Calibri",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.13
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Calibri",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.451
+    },
+    {
+     "role": "worktype",
+     "redactedText": "ZAVRŠNI RAD",
+     "font": "Calibri",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.491
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Calibri",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.763
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, rujan, 2021.",
+     "font": "Calibri",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.861
+    }
+   ]
+  }
+ ]
+}

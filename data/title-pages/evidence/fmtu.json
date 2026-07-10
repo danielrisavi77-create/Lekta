@@ -1,0 +1,730 @@
+{
+ "unitId": "fmtu",
+ "generatedAt": "2026-07-10",
+ "samples": [
+  {
+   "pid": "fthm:727",
+   "repository": "repository.fthm.uniri.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U RIJECI",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.067
+    },
+    {
+     "role": "faculty",
+     "redactedText": "FAKULTET ZA MENADŽMENT U TURIZMU I UGOSTITELJSTVU, OPATIJA",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.091
+    },
+    {
+     "role": "study",
+     "redactedText": "POSLIJEDIPLOMSKI SPECIJALISTIČKI STUDIJ",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.115
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.138
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.328
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.395
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.42
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.471
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.497
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.572
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Opatija, 2016.",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.874
+    }
+   ]
+  },
+  {
+   "pid": "fthm:728",
+   "repository": "repository.fthm.uniri.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U RIJECI",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.071
+    },
+    {
+     "role": "faculty",
+     "redactedText": "FAKULTET ZA MENADŽMENT U TURIZMU I UGOSTITELJSTVU, OPATIJA",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.094
+    },
+    {
+     "role": "study",
+     "redactedText": "POSLIJEDIPLOMSKI INTERDISCIPLINARNI SPECIJALISTIČKI STUDIJ",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.134
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.154
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.338
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.371
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.436
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.469
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Specijalistički rad",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.534
+    },
+    {
+     "role": "mentor",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 11.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.75
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 11.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.766
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 11.5,
+     "bold": false,
+     "uppercase": true,
+     "align": "left",
+     "yRel": 0.782
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Opatija, 2016.",
+     "font": "Times New Roman",
+     "sizePt": 11.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.845
+    }
+   ]
+  },
+  {
+   "pid": "fthm:731",
+   "repository": "repository.fthm.uniri.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište u Rijeci",
+     "font": "Times New Roman",
+     "sizePt": 10.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.085
+    },
+    {
+     "role": "faculty",
+     "redactedText": "FAKULTET ZA MENADŽMENT U TURIZMU I UGOSTITELJSTVU,",
+     "font": "Times New Roman",
+     "sizePt": 10.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.112
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 10.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.14
+    },
+    {
+     "role": "study",
+     "redactedText": "Poslijediplomski interdisciplinarni specijalistički studij",
+     "font": "Times New Roman",
+     "sizePt": 10.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.168
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 10.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.191
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.324
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.358
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.377
+    },
+    {
+     "role": "worktype",
+     "redactedText": "SPECIJALISTIČKI RAD",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.428
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Opatija, rujan 2016.",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.698
+    }
+   ]
+  },
+  {
+   "pid": "fthm:2218",
+   "repository": "repository.fthm.uniri.hr",
+   "level": "zavrsni",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.4,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište u Rijeci",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.051
+    },
+    {
+     "role": "faculty",
+     "redactedText": "FAKULTET  ZA MENADŽMENT U TURIZMU I UGOSTITELJSTVU",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.075
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.098
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.286
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.38
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.402
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.46
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.482
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.633
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "OPATIJA, 2011.",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.891
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Calibri",
+     "sizePt": 11.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "right",
+     "yRel": 0.929
+    }
+   ]
+  },
+  {
+   "pid": "fthm:3099",
+   "repository": "repository.fthm.uniri.hr",
+   "level": "zavrsni",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U RIJECI",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.085
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Fakultet za menadžment u turizmu i ugostiteljstvu",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.104
+    },
+    {
+     "role": "study",
+     "redactedText": "Preddiplomski sveučilišni studij",
+     "font": "Times New Roman",
+     "sizePt": 10.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.123
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.295
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.355
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.399
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.421
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.491
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Opatija, 2022.",
+     "font": "Times New Roman",
+     "sizePt": 10.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.879
+    }
+   ]
+  },
+  {
+   "pid": "fthm:3467",
+   "repository": "repository.fthm.uniri.hr",
+   "level": "zavrsni",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.2,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U RIJECI",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.085
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Fakultet za menadžment u turizmu i ugostiteljstvu Opatija",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.114
+    },
+    {
+     "role": "study",
+     "redactedText": "Preddiplomski sveučilišni studij",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.142
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.339
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.429
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.462
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.495
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.528
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.63
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Opatija, Rujan, 2022.",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.83
+    }
+   ]
+  }
+ ]
+}

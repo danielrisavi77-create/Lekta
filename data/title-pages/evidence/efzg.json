@@ -1,0 +1,1456 @@
+{
+ "unitId": "efzg",
+ "generatedAt": "2026-07-10",
+ "samples": [
+  {
+   "pid": "efzg:2571",
+   "repository": "repozitorij.efzg.unizg.hr",
+   "level": "specijalisticki",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.0,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.083
+    },
+    {
+     "role": "faculty",
+     "redactedText": "EKONOMSKI FAKULTET ZAGREB",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.121
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.339
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.413
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.441
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.521
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "ZAGREB, 2019. GODINE",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.887
+    }
+   ]
+  },
+  {
+   "pid": "efzg:2636",
+   "repository": "repozitorij.efzg.unizg.hr",
+   "level": "specijalisticki",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U ZAGREBU",
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.109
+    },
+    {
+     "role": "faculty",
+     "redactedText": "EKONOMSKI FAKULTET",
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.133
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.281
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.428
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.453
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.65
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "ZAGREB, 2019.",
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.871
+    }
+   ]
+  },
+  {
+   "pid": "efzg:2665",
+   "repository": "repozitorij.efzg.unizg.hr",
+   "level": "specijalisticki",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U ZAGREBU",
+     "font": "Times New Roman",
+     "sizePt": 20.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.085
+    },
+    {
+     "role": "faculty",
+     "redactedText": "EKONOMSKI FAKULTET",
+     "font": "Times New Roman",
+     "sizePt": 20.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.112
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.311
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.377
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.399
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.464
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "ZAGREB, 2019.",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.836
+    }
+   ]
+  },
+  {
+   "pid": "efzg:2853",
+   "repository": "repozitorij.efzg.unizg.hr",
+   "level": "strucni-diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": null,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište u Zagrebu",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.086
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Ekonomski fakultet",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.118
+    },
+    {
+     "role": "study",
+     "redactedText": "Specijalistički diplomski stručni studij Ekonomika poduzetništva",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.15
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.36
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.393
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Diplomski rad",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.433
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.572
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, rujan 2019.",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.838
+    }
+   ]
+  },
+  {
+   "pid": "efzg:2907",
+   "repository": "repozitorij.efzg.unizg.hr",
+   "level": "strucni-diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": null,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište u Zagrebu",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.085
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Ekonomski fakultet",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.109
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.429
+    },
+    {
+     "role": "worktype",
+     "redactedText": "završni rad",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.462
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.704
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.732
+    },
+    {
+     "role": "mentor",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.761
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, rujan 2019.",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.892
+    }
+   ]
+  },
+  {
+   "pid": "efzg:2952",
+   "repository": "repozitorij.efzg.unizg.hr",
+   "level": "strucni-diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": null,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište u Zagrebu",
+     "font": "Calibri",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.088
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Ekonomski fakultet",
+     "font": "Calibri",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.122
+    },
+    {
+     "role": "study",
+     "redactedText": "Preddiplomski stručni studij Poslovna ekonomija",
+     "font": "Calibri",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.157
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Calibri",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.364
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Calibri",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.389
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Calibri",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.424
+    },
+    {
+     "role": "worktype",
+     "redactedText": "ZAVRŠNI RAD",
+     "font": "Calibri",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.458
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Calibri",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.631
+    },
+    {
+     "role": "mentor",
+     "redactedText": null,
+     "font": "Calibri",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.666
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, rujan 2019.",
+     "font": "Calibri",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.872
+    }
+   ]
+  },
+  {
+   "pid": "efzg:9500",
+   "repository": "zir.nsk.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište u Zagrebu",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.085
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Ekonomski fakultet",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.116
+    },
+    {
+     "role": "study",
+     "redactedText": "Integrirani preddiplomski i diplomski studij Poslovna ekonomija",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.148
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.339
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.371
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Diplomski rad",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.411
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.538
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, rujan, 2022.",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.825
+    },
+    {
+     "role": "university",
+     "redactedText": "Sveučilište u Zagrebu",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.856
+    }
+   ]
+  },
+  {
+   "pid": "efzg:2626",
+   "repository": "dr.nsk.hr",
+   "level": "doktorski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U ZAGREBU",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.268
+    },
+    {
+     "role": "faculty",
+     "redactedText": "EKONOMSKI FAKULTET ZAGREB",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.29
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.394
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.482
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.512
+    },
+    {
+     "role": "worktype",
+     "redactedText": "DOKTORSKI RAD",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.607
+    },
+    {
+     "role": "mentor",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.716
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.738
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, 2019.",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.869
+    }
+   ]
+  },
+  {
+   "pid": "efzg:8800",
+   "repository": "zir.nsk.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.2,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište u Zagrebu",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.085
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Ekonomski fakultet",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.109
+    },
+    {
+     "role": "study",
+     "redactedText": "Specijalistički diplomskog stručni studij “Ekonomika poduzetništva”",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.134
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.417
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.45
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Diplomski rad",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.482
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.593
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, srpanj, 2022.",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.851
+    },
+    {
+     "role": "university",
+     "redactedText": "Sveučilište u Zagrebu",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.876
+    }
+   ]
+  },
+  {
+   "pid": "efzg:2696",
+   "repository": "dr.nsk.hr",
+   "level": "doktorski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.1,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "faculty",
+     "redactedText": "Ekonomski fakultet u Zagrebu",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.27
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.381
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.492
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.527
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.561
+    },
+    {
+     "role": "worktype",
+     "redactedText": "DOKTORSKI RAD",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.7
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, 2019.",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.849
+    }
+   ]
+  },
+  {
+   "pid": "efzg:8700",
+   "repository": "zir.nsk.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište u Zagrebu",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.085
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Ekonomski fakultet",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.119
+    },
+    {
+     "role": "study",
+     "redactedText": "Specijalistički diplomski stručni studij",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.153
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.187
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.412
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Diplomski rad",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.454
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.603
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, lipanj 2022.",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.87
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Calibri",
+     "sizePt": 11.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "right",
+     "yRel": 0.929
+    }
+   ]
+  },
+  {
+   "pid": "efzg:4098",
+   "repository": "dr.nsk.hr",
+   "level": "doktorski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "faculty",
+     "redactedText": "Ekonomski fakultet",
+     "font": "CIDFont+F2",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.269
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "CIDFont+F2",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.356
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "CIDFont+F3",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.525
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "CIDFont+F3",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.555
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "CIDFont+F3",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.586
+    },
+    {
+     "role": "worktype",
+     "redactedText": "DOKTORSKI RAD",
+     "font": "CIDFont+F2",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.661
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, 2019.",
+     "font": "CIDFont+F2",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.863
+    }
+   ]
+  },
+  {
+   "pid": "efzg:8840",
+   "repository": "zir.nsk.hr",
+   "level": "zavrsni",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.6,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište u Zagrebu",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.094
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Ekonomski fakultet",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.123
+    },
+    {
+     "role": "study",
+     "redactedText": "Preddiplomski stručni studij",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.18
+    },
+    {
+     "role": "study",
+     "redactedText": "Poslovna ekonomija – smjer Trgovinsko poslovanje",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.209
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.409
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.431
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.463
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Calibri",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.694
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, lipanj 2022.",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.892
+    }
+   ]
+  },
+  {
+   "pid": "efzg:7560",
+   "repository": "zir.nsk.hr",
+   "level": "zavrsni",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište u Zagrebu",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.085
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Ekonomski fakultet",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.115
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.298
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.323
+    },
+    {
+     "role": "worktype",
+     "redactedText": "završni rad",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.36
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.662
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.696
+    },
+    {
+     "role": "mentor",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.73
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, rujan 2021.",
+     "font": "Calibri",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.887
+    }
+   ]
+  },
+  {
+   "pid": "efzg:9590",
+   "repository": "zir.nsk.hr",
+   "level": "zavrsni",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište u Zagrebu",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.086
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Ekonomski fakultet",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.117
+    },
+    {
+     "role": "study",
+     "redactedText": "Preddiplomski stručni studij",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.147
+    },
+    {
+     "role": "study",
+     "redactedText": "Poslovna ekonomija – smjer Trgovinsko poslovanje",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.178
+    },
+    {
+     "role": "worktype",
+     "redactedText": "ZAVRŠNI RAD",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.314
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.349
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.38
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.645
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, rujan 2022.",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.878
+    }
+   ]
+  }
+ ]
+}

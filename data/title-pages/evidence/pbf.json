@@ -1,0 +1,470 @@
+{
+ "unitId": "pbf",
+ "generatedAt": "2026-07-10",
+ "samples": [
+  {
+   "pid": "pbf:2830",
+   "repository": "dr.nsk.hr",
+   "level": "doktorski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.0,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "faculty",
+     "redactedText": "PREHRAMBENO-BIOTEHNOLOŠKI FAKULTET",
+     "font": "Helvetica",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.291
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Helvetica",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.417
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Helvetica",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.542
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Helvetica",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.577
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Helvetica",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.611
+    },
+    {
+     "role": "worktype",
+     "redactedText": "DOKTORSKI RAD",
+     "font": "Helvetica",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.722
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, 2012.",
+     "font": "Helvetica",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.872
+    }
+   ]
+  },
+  {
+   "pid": "pbf:3004",
+   "repository": "dr.nsk.hr",
+   "level": "doktorski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.0,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "faculty",
+     "redactedText": "PREHRAMBENO-BIOTEHNOLOŠKI FAKULTET",
+     "font": "Helvetica",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.254
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Helvetica",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.385
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Helvetica",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.494
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Helvetica",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.524
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Helvetica",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.554
+    },
+    {
+     "role": "worktype",
+     "redactedText": "DOKTORSKI RAD",
+     "font": "Helvetica",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.667
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, 2018.",
+     "font": "Helvetica",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.864
+    }
+   ]
+  },
+  {
+   "pid": "pbf:3117",
+   "repository": "dr.nsk.hr",
+   "level": "doktorski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "faculty",
+     "redactedText": "Prehrambeno-biotehnološki fakultet",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.216
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.304
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.41
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.444
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.479
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.514
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.548
+    },
+    {
+     "role": "worktype",
+     "redactedText": "DOKTORSKI RAD",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.648
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, 2019.",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.844
+    }
+   ]
+  },
+  {
+   "pid": "pbf:4880",
+   "repository": "zir.nsk.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.0,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U ZAGREBU",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.083
+    },
+    {
+     "role": "faculty",
+     "redactedText": "PREHRAMBENO-BIOTEHNOLOŠKI FAKULTET",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.105
+    },
+    {
+     "role": "worktype",
+     "redactedText": "DIPLOMSKI RAD",
+     "font": "Times New Roman",
+     "sizePt": 28.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.308
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.694
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.694
+    }
+   ]
+  },
+  {
+   "pid": "pbf:5070",
+   "repository": "zir.nsk.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.0,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U ZAGREBU",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.083
+    },
+    {
+     "role": "faculty",
+     "redactedText": "PREHRAMBENO-BIOTEHNOLOŠKI FAKULTET",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.102
+    },
+    {
+     "role": "worktype",
+     "redactedText": "DIPLOMSKI RAD",
+     "font": "Arial",
+     "sizePt": 26.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.421
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, rujan 2024.",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.797
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.797
+    }
+   ]
+  },
+  {
+   "pid": "pbf:5630",
+   "repository": "zir.nsk.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U ZAGREBU",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.086
+    },
+    {
+     "role": "faculty",
+     "redactedText": "PREHRAMBENO-BIOTEHNOLOŠKI FAKULTET",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.105
+    },
+    {
+     "role": "worktype",
+     "redactedText": "DIPLOMSKI RAD",
+     "font": "Arial",
+     "sizePt": 26.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.409
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, ožujak 2026.",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.848
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.848
+    }
+   ]
+  }
+ ]
+}

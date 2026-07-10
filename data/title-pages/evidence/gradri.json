@@ -1,0 +1,510 @@
+{
+ "unitId": "gradri",
+ "generatedAt": "2026-07-10",
+ "samples": [
+  {
+   "pid": "gradri:782",
+   "repository": "repository.gradri.uniri.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 612.0,
+    "h": 792.0
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U RIJECI",
+     "font": "CIDFont+F2",
+     "sizePt": 13.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.085
+    },
+    {
+     "role": "faculty",
+     "redactedText": "GRAĐEVINSKI FAKULTET U RIJECI",
+     "font": "CIDFont+F2",
+     "sizePt": 13.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.115
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "CIDFont+F2",
+     "sizePt": 13.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.45
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "CIDFont+F2",
+     "sizePt": 13.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.541
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "CIDFont+F2",
+     "sizePt": 13.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.561
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Diplomski rad",
+     "font": "CIDFont+F2",
+     "sizePt": 11.5,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.622
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Rijeka, 2019.",
+     "font": "CIDFont+F2",
+     "sizePt": 10.5,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.868
+    }
+   ]
+  },
+  {
+   "pid": "gradri:783",
+   "repository": "repository.gradri.uniri.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 612.0,
+    "h": 792.0
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U RIJECI",
+     "font": "Cambria",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.153
+    },
+    {
+     "role": "faculty",
+     "redactedText": "GRAĐEVINSKI FAKULTET U RIJECI",
+     "font": "Cambria",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.185
+    },
+    {
+     "role": "study",
+     "redactedText": "Diplomski sveučilišni studij",
+     "font": "Cambria",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.25
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Cambria",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.283
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Cambria",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.315
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Cambria",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.412
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Cambria",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.445
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Cambria",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.575
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Diplomski rad",
+     "font": "Cambria",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.673
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Rijeka, veljača  2019.",
+     "font": "Cambria",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.864
+    }
+   ]
+  },
+  {
+   "pid": "gradri:784",
+   "repository": "repository.gradri.uniri.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 612.0,
+    "h": 792.0
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U RIJECI",
+     "font": "Cambria",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.112
+    },
+    {
+     "role": "faculty",
+     "redactedText": "GRAĐEVINSKI FAKULTET U RIJECI",
+     "font": "Cambria",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.132
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Cambria",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.464
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Cambria",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.567
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Diplomski rad",
+     "font": "Cambria",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.651
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Rijeka, 2019.",
+     "font": "Cambria",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.855
+    }
+   ]
+  },
+  {
+   "pid": "gradri:800",
+   "repository": "repository.gradri.uniri.hr",
+   "level": "zavrsni",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U RIJECI",
+     "font": "Cambria",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.084
+    },
+    {
+     "role": "faculty",
+     "redactedText": "GRAĐEVINSKI FAKULTET U RIJECI",
+     "font": "Cambria",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.118
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Cambria",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.393
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Cambria",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.461
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "Cambria",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.564
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Rijeka, rujan 2018.",
+     "font": "Cambria",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.87
+    }
+   ]
+  },
+  {
+   "pid": "gradri:857",
+   "repository": "repository.gradri.uniri.hr",
+   "level": "zavrsni",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 612.0,
+    "h": 792.0
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U RIJECI",
+     "font": "Cambria",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.132
+    },
+    {
+     "role": "faculty",
+     "redactedText": "GRAĐEVINSKI FAKULTET",
+     "font": "Cambria",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.153
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Cambria",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.505
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Cambria",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.609
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Cambria",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.63
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "Cambria",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.671
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Rijeka, 2019.",
+     "font": "Cambria",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.84
+    }
+   ]
+  },
+  {
+   "pid": "gradri:858",
+   "repository": "repository.gradri.uniri.hr",
+   "level": "zavrsni",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U RIJECI",
+     "font": "Cambria",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.123
+    },
+    {
+     "role": "faculty",
+     "redactedText": "GRAĐEVINSKI FAKULTET",
+     "font": "Cambria",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.142
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Cambria",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.474
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Cambria",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.571
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "Cambria",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.649
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Rijeka, 2019.",
+     "font": "Cambria",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.825
+    }
+   ]
+  }
+ ]
+}

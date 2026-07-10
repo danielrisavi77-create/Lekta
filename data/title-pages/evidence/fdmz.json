@@ -1,0 +1,378 @@
+{
+ "unitId": "fdmz",
+ "generatedAt": "2026-07-10",
+ "samples": [
+  {
+   "pid": "fdmz:13",
+   "repository": "repozitorij.fdmz.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.0,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE JOSIPA JURJA STROSSMAYERA U OSIJEKU",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.086
+    },
+    {
+     "role": "faculty",
+     "redactedText": "FAKULTET ZA DENTALNU MEDICINU I ZDRAVSTVO",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.13
+    },
+    {
+     "role": "study",
+     "redactedText": "Studij Sestrinstvo",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.175
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.354
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 24.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.398
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 24.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.448
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 24.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.497
+    },
+    {
+     "role": "study",
+     "redactedText": "PREDDIPLOMSKOG STUDIJA",
+     "font": "Times New Roman",
+     "sizePt": 24.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.546
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 24.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.595
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Diplomski rad",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.656
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Osijek, 2018.",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.888
+    }
+   ]
+  },
+  {
+   "pid": "fdmz:32",
+   "repository": "repozitorij.fdmz.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 612.0,
+    "h": 792.0
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE JOSIPA JURJA STROSSMAYERA U OSIJEKU",
+     "font": "Times New Roman",
+     "sizePt": 15.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.087
+    },
+    {
+     "role": "faculty",
+     "redactedText": "FAKULTET ZA DENTALNU MEDICINU I ZDRAVSTVO",
+     "font": "Times New Roman",
+     "sizePt": 15.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.13
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 15.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.162
+    },
+    {
+     "role": "study",
+     "redactedText": "Diplomski sveučilišni studij Sestrinstvo",
+     "font": "Times New Roman",
+     "sizePt": 15.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.205
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 15.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.373
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.5,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.417
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.5,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.466
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.5,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.516
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.5,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.565
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.5,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.614
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Diplomski rad",
+     "font": "Times New Roman",
+     "sizePt": 15.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.671
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Slavonski Brod, 2019.",
+     "font": "Times New Roman",
+     "sizePt": 15.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.882
+    }
+   ]
+  },
+  {
+   "pid": "fdmz:34",
+   "repository": "repozitorij.fdmz.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 612.0,
+    "h": 792.0
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE JOSIPA JURJA STROSSMAYERA U OSIJEKU",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.092
+    },
+    {
+     "role": "faculty",
+     "redactedText": "FAKULTET ZA DENTALNU MEDICINU I ZDRAVSTVO",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.136
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.182
+    },
+    {
+     "role": "study",
+     "redactedText": "Diplomski sveučilišni studij Fizioterapija",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.226
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.406
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 24.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.452
+    },
+    {
+     "role": "study",
+     "redactedText": "PREDDIPLOMSKOG STUDIJA",
+     "font": "Times New Roman",
+     "sizePt": 24.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.504
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 24.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.557
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Diplomski rad",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.618
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Osijek, 2020.",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.878
+    }
+   ]
+  }
+ ]
+}

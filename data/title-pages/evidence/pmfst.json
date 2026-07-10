@@ -1,0 +1,590 @@
+{
+ "unitId": "pmfst",
+ "generatedAt": "2026-07-10",
+ "samples": [
+  {
+   "pid": "pmfst:9",
+   "repository": "repozitorij.pmfst.unist.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "NimbusRomNo9L-Regu",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.081
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Prirodoslovno-matematiˇcki fakultet",
+     "font": "NimbusRomNo9L-Regu",
+     "sizePt": 17.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.119
+    },
+    {
+     "role": "study",
+     "redactedText": "Odjel za ﬁziku",
+     "font": "NimbusRomNo9L-Regu",
+     "sizePt": 17.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.156
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "NimbusRomNo9L-Medi",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.324
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "NimbusRomNo9L-Medi",
+     "sizePt": 25.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.368
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "NimbusRomNo9L-Medi",
+     "sizePt": 25.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.406
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "NimbusRomNo9L-Medi",
+     "sizePt": 25.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.443
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "NimbusRomNo9L-ReguItal",
+     "sizePt": 14.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.616
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "NimbusRomNo9L-Regu",
+     "sizePt": 14.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.647
+    },
+    {
+     "role": "mentor",
+     "redactedText": null,
+     "font": "NimbusRomNo9L-ReguItal",
+     "sizePt": 14.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.694
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "NimbusRomNo9L-Regu",
+     "sizePt": 14.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.724
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Split, srpnja 2015.",
+     "font": "NimbusRomNo9L-Regu",
+     "sizePt": 14.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.88
+    }
+   ]
+  },
+  {
+   "pid": "pmfst:12",
+   "repository": "repozitorij.pmfst.unist.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište u Splitu",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.046
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Prirodoslovno-matematički fakultet",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.083
+    },
+    {
+     "role": "study",
+     "redactedText": "Odjel za biologiju",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.12
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.268
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.417
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Diplomski rad",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.601
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Split, 2015.",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.749
+    }
+   ]
+  },
+  {
+   "pid": "pmfst:14",
+   "repository": "repozitorij.pmfst.unist.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "faculty",
+     "redactedText": "PRIRODOSLOVNO-MATEMATIČKI FAKULTET",
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.087
+    },
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U SPLITU",
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.124
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.537
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.574
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.61
+    },
+    {
+     "role": "mentor",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.827
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.851
+    }
+   ]
+  },
+  {
+   "pid": "pmfst:6",
+   "repository": "repozitorij.pmfst.unist.hr",
+   "level": "zavrsni",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište u Splitu",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.084
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Prirodoslovno- matematički fakultet",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.118
+    },
+    {
+     "role": "study",
+     "redactedText": "Odjel za biologiju",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.16
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.355
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.398
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.443
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 21.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.488
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.54
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Split, 2015.",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.878
+    }
+   ]
+  },
+  {
+   "pid": "pmfst:23",
+   "repository": "repozitorij.pmfst.unist.hr",
+   "level": "zavrsni",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište u Splitu",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.087
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Prirodoslovno – matematički fakultet",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.132
+    },
+    {
+     "role": "study",
+     "redactedText": "Odjel za biologiju",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.176
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.4
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.491
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.603
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Split, 2015.",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.871
+    }
+   ]
+  },
+  {
+   "pid": "pmfst:27",
+   "repository": "repozitorij.pmfst.unist.hr",
+   "level": "zavrsni",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 612.0,
+    "h": 792.0
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište u Splitu",
+     "font": "Times New Roman",
+     "sizePt": 11.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.134
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Prirodoslovno-matematički fakultet",
+     "font": "Times New Roman",
+     "sizePt": 15.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.163
+    },
+    {
+     "role": "study",
+     "redactedText": "Odjel za biologiju",
+     "font": "Times New Roman",
+     "sizePt": 15.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.197
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 15.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.35
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 21.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.429
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 21.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.463
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 15.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.561
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Split, 2015.",
+     "font": "Times New Roman",
+     "sizePt": 15.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.905
+    }
+   ]
+  }
+ ]
+}

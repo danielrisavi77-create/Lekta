@@ -1,0 +1,660 @@
+{
+ "unitId": "biotech",
+ "generatedAt": "2026-07-10",
+ "samples": [
+  {
+   "pid": "biotechri:235",
+   "repository": "repository.biotech.uniri.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U RIJECI",
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.134
+    },
+    {
+     "role": "study",
+     "redactedText": "ODJEL ZA BIOTEHNOLOGIJU",
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.16
+    },
+    {
+     "role": "study",
+     "redactedText": "Diplomski sveučilišni studij",
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.186
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.212
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Verdana",
+     "sizePt": 11.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.385
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.441
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.467
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Diplomski rad",
+     "font": "Verdana",
+     "sizePt": 11.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.526
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Rijeka, 2018. godina",
+     "font": "Verdana",
+     "sizePt": 11.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.765
+    }
+   ]
+  },
+  {
+   "pid": "biotechri:246",
+   "repository": "repository.biotech.uniri.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUĈILIŠTE U RIJECI",
+     "font": "Verdana",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.084
+    },
+    {
+     "role": "study",
+     "redactedText": "ODJEL ZA BIOTEHNOLOGIJU",
+     "font": "Verdana",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.126
+    },
+    {
+     "role": "study",
+     "redactedText": "Diplomski sveuĉilišni studij",
+     "font": "Verdana",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.168
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Verdana",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.211
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Verdana",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.38
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Verdana",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.422
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Verdana",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.452
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Diplomski rad",
+     "font": "Verdana",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.494
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Rijeka, 2018. godina",
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.874
+    }
+   ]
+  },
+  {
+   "pid": "biotechri:247",
+   "repository": "repository.biotech.uniri.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U RIJECI",
+     "font": "Verdana",
+     "sizePt": 10.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.084
+    },
+    {
+     "role": "study",
+     "redactedText": "ODJEL ZA BIOTEHNOLOGIJU",
+     "font": "Verdana",
+     "sizePt": 10.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.101
+    },
+    {
+     "role": "study",
+     "redactedText": "Diplomski sveučilišni studij",
+     "font": "Verdana",
+     "sizePt": 10.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.117
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Verdana",
+     "sizePt": 10.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.134
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Verdana",
+     "sizePt": 10.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.419
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Verdana",
+     "sizePt": 10.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.447
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Verdana",
+     "sizePt": 10.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.474
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Diplomski rad",
+     "font": "Verdana",
+     "sizePt": 10.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.5
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Rijeka, 2018.",
+     "font": "Verdana",
+     "sizePt": 10.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.813
+    }
+   ]
+  },
+  {
+   "pid": "biotechri:231",
+   "repository": "repository.biotech.uniri.hr",
+   "level": "zavrsni",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U RIJECI",
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.084
+    },
+    {
+     "role": "study",
+     "redactedText": "ODJEL ZA BIOTEHNOLOGIJU",
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.119
+    },
+    {
+     "role": "study",
+     "redactedText": "Preddiplomski sveučilišni studij",
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.155
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.19
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.474
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.51
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.536
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.571
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Rijeka, 2018.",
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.891
+    }
+   ]
+  },
+  {
+   "pid": "biotechri:263",
+   "repository": "repository.biotech.uniri.hr",
+   "level": "zavrsni",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U RIJECI",
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.084
+    },
+    {
+     "role": "study",
+     "redactedText": "ODJEL ZA BIOTEHNOLOGIJU",
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.119
+    },
+    {
+     "role": "study",
+     "redactedText": "Preddiplomski sveučilišni studij",
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.155
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.19
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.403
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Verdana",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.439
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Verdana",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.469
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.509
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Rijeka, 2018.",
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.857
+    }
+   ]
+  },
+  {
+   "pid": "biotechri:266",
+   "repository": "repository.biotech.uniri.hr",
+   "level": "zavrsni",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U RIJECI",
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.084
+    },
+    {
+     "role": "study",
+     "redactedText": "ODJEL ZA BIOTEHNOLOGIJU",
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.12
+    },
+    {
+     "role": "study",
+     "redactedText": "Preddiplomski sveučilišni studij",
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.155
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.191
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.368
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.404
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.43
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.517
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Rijeka, 2018.",
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.659
+    },
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U RIJECI",
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.801
+    },
+    {
+     "role": "study",
+     "redactedText": "ODJEL ZA BIOTEHNOLOGIJU",
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.837
+    },
+    {
+     "role": "study",
+     "redactedText": "Preddiplomski sveučilišni studij",
+     "font": "Verdana",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.872
+    }
+   ]
+  }
+ ]
+}

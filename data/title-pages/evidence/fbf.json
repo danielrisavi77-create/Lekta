@@ -1,0 +1,610 @@
+{
+ "unitId": "fbf",
+ "generatedAt": "2026-07-10",
+ "samples": [
+  {
+   "pid": "pharma:258",
+   "repository": "dr.nsk.hr",
+   "level": "doktorski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U ZAGREBU",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.212
+    },
+    {
+     "role": "faculty",
+     "redactedText": "FARMACEUTSKO-BIOKEMIJSKI FAKULTET",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.237
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.314
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.438
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.472
+    },
+    {
+     "role": "worktype",
+     "redactedText": "DOKTORSKI RAD",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.583
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, 2015.",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.834
+    }
+   ]
+  },
+  {
+   "pid": "pharma:260",
+   "repository": "dr.nsk.hr",
+   "level": "doktorski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "faculty",
+     "redactedText": "FARMACEUTSKO-BIOKEMIJSKI FAKULTET",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.264
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.373
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.439
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.469
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.499
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.529
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.559
+    },
+    {
+     "role": "worktype",
+     "redactedText": "DOKTORSKI RAD",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.655
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, 2015.",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.873
+    }
+   ]
+  },
+  {
+   "pid": "pharma:261",
+   "repository": "dr.nsk.hr",
+   "level": "doktorski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.0,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U ZAGREBU",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.228
+    },
+    {
+     "role": "faculty",
+     "redactedText": "FARMACEUTSKO-BIOKEMIJSKI FAKULTET",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.249
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.32
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.438
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.468
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.498
+    },
+    {
+     "role": "worktype",
+     "redactedText": "DOKTORSKI RAD",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.632
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, 2015.",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.828
+    }
+   ]
+  },
+  {
+   "pid": "pharma:2300",
+   "repository": "zir.nsk.hr",
+   "level": "specijalisticki",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "DejaVuSans-Bold",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.06
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "DejaVuSans-Bold",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.085
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "DejaVuSans-Bold",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.165
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "DejaVuSans-Bold",
+     "sizePt": 11.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.231
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "DejaVuSans-Bold",
+     "sizePt": 11.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.264
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "DejaVuSans-Oblique",
+     "sizePt": 11.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.297
+    },
+    {
+     "role": "university",
+     "redactedText": "Zagreb, Faculty of Pharmacy and Biochemistry / Sveučilište u Zagrebu, Farmaceutsko-",
+     "font": "DejaVuSans-Bold",
+     "sizePt": 11.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.318
+    },
+    {
+     "role": "faculty",
+     "redactedText": "biokemijski fakultet",
+     "font": "DejaVuSans-Bold",
+     "sizePt": 11.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.338
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "DejaVuSans",
+     "sizePt": 11.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.371
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "DejaVuSans",
+     "sizePt": 11.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.404
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "DejaVuSans-Oblique",
+     "sizePt": 11.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.437
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "DejaVuSans-Oblique",
+     "sizePt": 11.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.538
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "DejaVuSans",
+     "sizePt": 11.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.574
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "DejaVuSans",
+     "sizePt": 11.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.594
+    }
+   ]
+  },
+  {
+   "pid": "pharma:2900",
+   "repository": "zir.nsk.hr",
+   "level": "specijalisticki",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U ZAGREBU",
+     "font": "CIDFont+F2",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.085
+    },
+    {
+     "role": "faculty",
+     "redactedText": "FARMACEUTSKO-BIOKEMIJSKI FAKULTET",
+     "font": "CIDFont+F2",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.135
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "CIDFont+F2",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.429
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "CIDFont+F3",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.485
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "CIDFont+F3",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.529
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Specijalistički rad",
+     "font": "CIDFont+F2",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.584
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, 2023.",
+     "font": "CIDFont+F2",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.884
+    }
+   ]
+  },
+  {
+   "pid": "pharma:210",
+   "repository": "zir.nsk.hr",
+   "level": "specijalisticki",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.0,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Helvetica",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.081
+    },
+    {
+     "role": "faculty",
+     "redactedText": "FARMACEUTSKO-BIOKEMIJSKI FAKULTET",
+     "font": "Helvetica",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.112
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Helvetica",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.292
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Helvetica",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.34
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Helvetica",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.369
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Helvetica",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.412
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, 2015.",
+     "font": "Helvetica",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.841
+    }
+   ]
+  }
+ ]
+}

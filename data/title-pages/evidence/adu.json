@@ -1,0 +1,248 @@
+{
+ "unitId": "adu",
+ "generatedAt": "2026-07-10",
+ "samples": [
+  {
+   "pid": "adu:30",
+   "repository": "repozitorij.adu.unizg.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U ZAGREBU",
+     "font": "Times New Roman",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.085
+    },
+    {
+     "role": "faculty",
+     "redactedText": "AKADEMIJA DRAMSKE UMJETNOSTI",
+     "font": "Times New Roman",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.123
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.354
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.428
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.46
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.539
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, 2017.",
+     "font": "Times New Roman",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.847
+    }
+   ]
+  },
+  {
+   "pid": "adu:33",
+   "repository": "repozitorij.adu.unizg.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.0,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 20.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.067
+    },
+    {
+     "role": "faculty",
+     "redactedText": "AKADEMIJA DRAMSKE UMJETNOSTI",
+     "font": "Times New Roman",
+     "sizePt": 20.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.103
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 20.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.366
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.435
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Diplomski rad",
+     "font": "Times New Roman",
+     "sizePt": 20.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.508
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb,2016.",
+     "font": "Times New Roman",
+     "sizePt": 20.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.839
+    }
+   ]
+  },
+  {
+   "pid": "adu:39",
+   "repository": "repozitorij.adu.unizg.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUĈILIŠTE U ZAGREBU",
+     "font": "Times New Roman",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.068
+    },
+    {
+     "role": "faculty",
+     "redactedText": "AKADEMIJA DRAMSKE UMJETNOSTI",
+     "font": "Times New Roman",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.112
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.371
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.415
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.449
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Diplomski rad",
+     "font": "Times New Roman",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.496
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, 2016.",
+     "font": "Times New Roman",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.799
+    }
+   ]
+  }
+ ]
+}

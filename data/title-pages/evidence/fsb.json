@@ -1,0 +1,682 @@
+{
+ "unitId": "fsb",
+ "generatedAt": "2026-07-10",
+ "samples": [
+  {
+   "pid": "fsb:5161",
+   "repository": "dr.nsk.hr",
+   "level": "doktorski",
+   "pageIndex": 0,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "University of Zagreb",
+     "font": "SFRM1728",
+     "sizePt": 17.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.179
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "SFRM1728",
+     "sizePt": 17.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.212
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "SFRM1728",
+     "sizePt": 17.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.333
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "SFBX2488",
+     "sizePt": 25.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.421
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "SFBX2488",
+     "sizePt": 25.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.456
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "SFBX2488",
+     "sizePt": 25.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.492
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "SFBX2488",
+     "sizePt": 25.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.527
+    },
+    {
+     "role": "worktype",
+     "redactedText": "DOCTORAL THESIS",
+     "font": "SFRM1728",
+     "sizePt": 17.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.639
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, 2019",
+     "font": "SFRM1440",
+     "sizePt": 14.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.842
+    }
+   ]
+  },
+  {
+   "pid": "fsb:5282",
+   "repository": "dr.nsk.hr",
+   "level": "doktorski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "faculty",
+     "redactedText": "Fakultet strojarstva i brodogradnje",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.228
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.337
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.445
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.475
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.505
+    },
+    {
+     "role": "worktype",
+     "redactedText": "DOKTORSKI RAD",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.596
+    },
+    {
+     "role": "mentor",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.696
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.729
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, 2019.",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.861
+    }
+   ]
+  },
+  {
+   "pid": "fsb:5283",
+   "repository": "dr.nsk.hr",
+   "level": "doktorski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.0,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "faculty",
+     "redactedText": "Fakultet strojarstva i brodogradnje",
+     "font": "Helvetica",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.29
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Helvetica",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.365
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Helvetica",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.452
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Helvetica",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.483
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Helvetica",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.513
+    },
+    {
+     "role": "worktype",
+     "redactedText": "DOKTORSKI RAD",
+     "font": "Helvetica",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.609
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, 2019.",
+     "font": "Helvetica",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.85
+    }
+   ]
+  },
+  {
+   "pid": "fsb:8200",
+   "repository": "zir.nsk.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.2,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U ZAGREBU",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.102
+    },
+    {
+     "role": "faculty",
+     "redactedText": "FAKULTET STROJARSTVA I BRODOGRADNJE",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.124
+    },
+    {
+     "role": "worktype",
+     "redactedText": "DIPLOMSKI RAD",
+     "font": "Times New Roman",
+     "sizePt": 28.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.431
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.711
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, 2022. godina.",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.88
+    }
+   ]
+  },
+  {
+   "pid": "fsb:7400",
+   "repository": "zir.nsk.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U ZAGREBU",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.102
+    },
+    {
+     "role": "faculty",
+     "redactedText": "FAKULTET STROJARSTVA I BRODOGRADNJE",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.124
+    },
+    {
+     "role": "worktype",
+     "redactedText": "DIPLOMSKI RAD",
+     "font": "Times New Roman",
+     "sizePt": 28.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.431
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.711
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, 2021.",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.88
+    }
+   ]
+  },
+  {
+   "pid": "fsb:5400",
+   "repository": "zir.nsk.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.2,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U ZAGREBU",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.101
+    },
+    {
+     "role": "faculty",
+     "redactedText": "FAKULTET STROJARSTVA I BRODOGRADNJE",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.123
+    },
+    {
+     "role": "worktype",
+     "redactedText": "DIPLOMSKI RAD",
+     "font": "Times New Roman",
+     "sizePt": 28.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.431
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.711
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, 2019.",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.88
+    }
+   ]
+  },
+  {
+   "pid": "fsb:8440",
+   "repository": "zir.nsk.hr",
+   "level": "zavrsni",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U ZAGREBU",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.102
+    },
+    {
+     "role": "faculty",
+     "redactedText": "FAKULTET STROJARSTVA I BRODOGRADNJE",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.124
+    },
+    {
+     "role": "worktype",
+     "redactedText": "ZAVRŠNI RAD",
+     "font": "Times New Roman",
+     "sizePt": 28.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.431
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.711
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, 2022.",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.88
+    }
+   ]
+  },
+  {
+   "pid": "fsb:7960",
+   "repository": "zir.nsk.hr",
+   "level": "zavrsni",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U ZAGREBU",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.101
+    },
+    {
+     "role": "faculty",
+     "redactedText": "FAKULTET STROJARSTVA I BRODOGRADNJE",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.123
+    },
+    {
+     "role": "worktype",
+     "redactedText": "ZAVRŠNI RAD",
+     "font": "Times New Roman",
+     "sizePt": 28.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.431
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.711
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, 2022.",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.88
+    }
+   ]
+  },
+  {
+   "pid": "fsb:3300",
+   "repository": "zir.nsk.hr",
+   "level": "zavrsni",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U ZAGREBU",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.099
+    },
+    {
+     "role": "faculty",
+     "redactedText": "FAKULTET STROJARSTVA I BRODOGRADNJE",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.126
+    },
+    {
+     "role": "worktype",
+     "redactedText": "ZAVRŠNI RAD",
+     "font": "Times New Roman",
+     "sizePt": 28.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.427
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.713
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, 2016 godina.",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.882
+    }
+   ]
+  }
+ ]
+}

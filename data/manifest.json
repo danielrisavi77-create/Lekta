@@ -77,7 +77,7 @@
   {
     "name": "SOURCE_REGISTRY",
     "file": "data/sources/source-registry.json",
-    "entries": 162
+    "entries": 163
   },
   {
     "name": "VERIFICATION_LEDGER",
@@ -93,5 +93,10 @@
     "name": "SCORED_COVERAGE",
     "file": "data/coverage/scored-coverage.json",
     "entries": 212
+  },
+  {
+    "name": "TITLE_PAGE_TEMPLATES",
+    "file": "data/title-pages/templates.json",
+    "entries": 170
   }
 ]

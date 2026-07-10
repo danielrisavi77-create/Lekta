@@ -1,0 +1,390 @@
+{
+ "unitId": "fgag",
+ "generatedAt": "2026-07-10",
+ "samples": [
+  {
+   "pid": "gradst:1",
+   "repository": "repozitorij.gradst.unist.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U SPLITU",
+     "font": "Times New Roman",
+     "sizePt": 15.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.098
+    },
+    {
+     "role": "faculty",
+     "redactedText": "FAKULTET GRAĐEVINARSTVA, ARHITEKTURE I GEODEZIJE",
+     "font": "Times New Roman",
+     "sizePt": 15.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.119
+    },
+    {
+     "role": "worktype",
+     "redactedText": "DIPLOMSKI RAD",
+     "font": "Times New Roman",
+     "sizePt": 25.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.365
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 15.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.496
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Split, 2015.",
+     "font": "Times New Roman",
+     "sizePt": 15.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.802
+    }
+   ]
+  },
+  {
+   "pid": "gradst:2",
+   "repository": "repozitorij.gradst.unist.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.0,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U SPLITU",
+     "font": "Times New Roman",
+     "sizePt": 15.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.086
+    },
+    {
+     "role": "faculty",
+     "redactedText": "FAKULTET GRAĐEVINARSTVA, ARHITEKTURE I GEODEZIJE",
+     "font": "Times New Roman",
+     "sizePt": 15.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.124
+    },
+    {
+     "role": "worktype",
+     "redactedText": "DIPLOMSKI RAD",
+     "font": "Times New Roman",
+     "sizePt": 25.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.353
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 15.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.483
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Split, 2015.",
+     "font": "Times New Roman",
+     "sizePt": 15.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.79
+    }
+   ]
+  },
+  {
+   "pid": "gradst:3",
+   "repository": "repozitorij.gradst.unist.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U SPLITU",
+     "font": "Times New Roman",
+     "sizePt": 15.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.098
+    },
+    {
+     "role": "faculty",
+     "redactedText": "FAKULTET GRAĐEVINARSTVA, ARHITEKTURE I GEODEZIJE",
+     "font": "Times New Roman",
+     "sizePt": 15.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.119
+    },
+    {
+     "role": "worktype",
+     "redactedText": "DIPLOMSKI RAD",
+     "font": "Times New Roman",
+     "sizePt": 25.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.365
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 15.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.496
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Split, 2015.",
+     "font": "Times New Roman",
+     "sizePt": 15.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.802
+    }
+   ]
+  },
+  {
+   "pid": "gradst:54",
+   "repository": "repozitorij.gradst.unist.hr",
+   "level": "zavrsni",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U SPLITU",
+     "font": "Times New Roman",
+     "sizePt": 15.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.098
+    },
+    {
+     "role": "faculty",
+     "redactedText": "FAKULTET GRAĐEVINARSTVA, ARHITEKTURE I GEODEZIJE",
+     "font": "Times New Roman",
+     "sizePt": 15.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.13
+    },
+    {
+     "role": "worktype",
+     "redactedText": "ZAVRŠNI RAD",
+     "font": "Times New Roman",
+     "sizePt": 25.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.365
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 15.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.496
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Split, 2015.",
+     "font": "Times New Roman",
+     "sizePt": 15.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.802
+    }
+   ]
+  },
+  {
+   "pid": "gradst:57",
+   "repository": "repozitorij.gradst.unist.hr",
+   "level": "zavrsni",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U SPLITU",
+     "font": "Times New Roman",
+     "sizePt": 15.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.082
+    },
+    {
+     "role": "faculty",
+     "redactedText": "FAKULTET GRAĐEVINARSTVA, ARHITEKTURE I GEODEZIJE",
+     "font": "Times New Roman",
+     "sizePt": 15.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.103
+    },
+    {
+     "role": "worktype",
+     "redactedText": "ZAVRŠNI RAD",
+     "font": "Times New Roman",
+     "sizePt": 25.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.337
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 15.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.471
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Split, 2015.",
+     "font": "Times New Roman",
+     "sizePt": 15.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.82
+    }
+   ]
+  },
+  {
+   "pid": "gradst:77",
+   "repository": "repozitorij.gradst.unist.hr",
+   "level": "zavrsni",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE U SPLITU",
+     "font": "Times New Roman",
+     "sizePt": 15.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.082
+    },
+    {
+     "role": "faculty",
+     "redactedText": "FAKULTET GRAĐEVINARSTVA, ARHITEKTURE I GEODEZIJE",
+     "font": "Times New Roman",
+     "sizePt": 15.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.118
+    },
+    {
+     "role": "worktype",
+     "redactedText": "ZAVRŠNI RAD",
+     "font": "Times New Roman",
+     "sizePt": 25.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.329
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 15.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.417
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Split, 2015.",
+     "font": "Times New Roman",
+     "sizePt": 15.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.791
+    }
+   ]
+  }
+ ]
+}

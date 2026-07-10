@@ -2101,5 +2101,18 @@
     "validityClass": "stable",
     "lastChecked": "2026-07-03",
     "note": "Tekstualni PDF. Font 3-opcijski preporuka->adv; opseg u karticama->adv. Harvard imenovan->scored."
+  },
+  {
+    "id": "adu-montaza-diplomski",
+    "kind": "pravilnik",
+    "title": "Pravilnik o diplomskim radovima i diplomskom ispitu diplomskog studija Montaze (ADU, 2018)",
+    "url": "https://web.archive.org/web/20240501130942/http://masterwww.adu.hr/wp-content/uploads/2014/07/Pravilnik-o-diplomskim-radovima-i-diplomskom-ispitu-diplomskog-studija-Monta%C5%BEe-_-2018.pdf",
+    "publisher": "Akademija dramske umjetnosti Sveucilista u Zagrebu, Odsjek montaze",
+    "fetchedAt": "2026-07-10",
+    "snapshotPath": "data/sources/adu/adu-pravilnik-montaza-2018.pdf",
+    "snapshotHash": "f6f86b249872d10a6dcb4bab96500efdccde29dc0b016e41075126915b966998",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-10",
+    "note": "Wayback snapshot (masterwww.adu.hr je mrtav); jedini ADU odsjek s propisanom naslovnicom. Izvor za title-page predlozak adu-graduate (Odsjek montaze)."
   }
 ]
