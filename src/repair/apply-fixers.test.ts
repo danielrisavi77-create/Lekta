@@ -13,6 +13,8 @@ function buildSyntheticDocx() {
   const documentXml =
     '<?xml version="1.0"?><w:document><w:body>' +
     '<w:p><w:r><w:t>Ovo je tekst rada koji se ne smije mijenjati.</w:t></w:r></w:p>' +
+    '<w:p><w:r><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:b/></w:rPr><w:t>Direktno formatiran odlomak.</w:t></w:r></w:p>' +
+    '<w:p><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Georgia" w:hAnsi="Georgia"/></w:rPr><w:t>Naslov</w:t></w:r></w:p>' +
     '<w:sectPr><w:pgSz w:w="11906" w:h="16838"/>' +
     '<w:pgMar w:top="1600" w:right="1134" w:bottom="1417" w:left="1417" w:header="708" w:footer="708" w:gutter="0"/>' +
     '</w:sectPr></w:body></w:document>';
@@ -105,6 +107,114 @@ describe('applyFixers golden round-trip', () => {
     expect(result.skipped).toEqual(['vec-ok', 'nepostojeci-atribut']);
     // Bez rekompresije i bez re-encode: dokument bez popravaka se NE prepisuje.
     expect(result.docxBytes).toEqual(originalDocx);
+  });
+
+  it('deep (Feature B): font fixer cisti izravno formatiranje tijela, naslov i bold prezivljavaju', async () => {
+    const fixture = buildSyntheticDocx();
+    const originalDocx = await writeZip(fixture.entries);
+
+    const result = await applyFixers(originalDocx, [
+      { ruleId: 'font-glavni', fixerId: 'font-fixer', params: { fontName: 'Times New Roman', deep: true } },
+    ]);
+
+    expect(result.changelog).toHaveLength(1);
+    expect(result.changelog[0].afterLabel).toContain('izravno formatiranje uklonjeno u 1 odlomaka');
+
+    const newEntries = await readZip(result.docxBytes);
+    const dec = new TextDecoder();
+    const newDocumentXml = dec.decode(newEntries.find((e) => e.name === 'word/document.xml')!.data);
+    const newStylesXml = dec.decode(newEntries.find((e) => e.name === 'word/styles.xml')!.data);
+
+    expect(newStylesXml).toContain('w:ascii="Times New Roman"'); // docDefaults popravljen
+    expect(newDocumentXml).not.toContain('Calibri'); // direct override tijela uklonjen
+    expect(newDocumentXml).toContain('<w:b/>'); // bold prezivljava
+    expect(newDocumentXml).toContain('w:ascii="Georgia"'); // stilizirani naslov netaknut
+    expect(newDocumentXml).toContain('Direktno formatiran odlomak.');
+  });
+
+  it('deep BEZ stilskog backstopa (theme-only rFonts) NE cisti tijelo: nema regresije na theme', async () => {
+    const enc = new TextEncoder();
+    // Stock Word predlozak: docDefaults ima SAMO theme atribute, Normal bez spacinga.
+    const themeStyles =
+      '<?xml version="1.0"?><w:styles><w:docDefaults><w:rPrDefault><w:rPr>' +
+      '<w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi"/>' +
+      '</w:rPr></w:rPrDefault></w:docDefaults></w:styles>';
+    const doc =
+      '<?xml version="1.0"?><w:document><w:body>' +
+      '<w:p><w:r><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/></w:rPr><w:t>Rucno postavljen TNR preko theme predloska.</w:t></w:r></w:p>' +
+      '</w:body></w:document>';
+    const docx = await writeZip([
+      { name: 'word/document.xml', data: enc.encode(doc) },
+      { name: 'word/styles.xml', data: enc.encode(themeStyles) },
+    ]);
+
+    const result = await applyFixers(docx, [
+      { ruleId: 'font-glavni', fixerId: 'font-fixer', params: { fontName: 'Times New Roman', deep: true } },
+    ]);
+
+    // Stilski patch ne uspije (theme-only, patch-only politika) I deep se NE
+    // primijeni: da jest, dokument bi pao na Calibri theme umjesto na TNR.
+    expect(result.changelog).toHaveLength(0);
+    expect(result.skipped).toEqual(['font-glavni']);
+    expect(result.docxBytes).toEqual(docx);
+  });
+
+  it('deep-only: stil VEC na cilju (patch no-op) ali deep i dalje cisti run-override', async () => {
+    const enc = new TextEncoder();
+    // docDefaults VEC ima Times New Roman (backstop postoji, patch je no-op),
+    // Normal bez rFonts. Deep svejedno treba ocistiti run-level Calibri override.
+    const styles =
+      '<?xml version="1.0"?><w:styles><w:docDefaults><w:rPrDefault><w:rPr>' +
+      '<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/></w:rPr></w:rPrDefault></w:docDefaults></w:styles>';
+    const doc =
+      '<?xml version="1.0"?><w:document><w:body>' +
+      '<w:p><w:r><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/></w:rPr><w:t>Tekst tijela rada.</w:t></w:r></w:p>' +
+      '</w:body></w:document>';
+    const docx = await writeZip([
+      { name: 'word/document.xml', data: enc.encode(doc) },
+      { name: 'word/styles.xml', data: enc.encode(styles) },
+    ]);
+
+    const result = await applyFixers(docx, [
+      { ruleId: 'font-glavni', fixerId: 'font-fixer', params: { fontName: 'Times New Roman', deep: true } },
+    ]);
+
+    expect(result.changelog).toHaveLength(1); // deep-only promjena je primijenjena
+    expect(result.changelog[0].afterLabel).toContain('izravno formatiranje uklonjeno');
+    const newEntries = await readZip(result.docxBytes);
+    const newDoc = new TextDecoder().decode(newEntries.find((e) => e.name === 'word/document.xml')!.data);
+    expect(newDoc).not.toContain('w:ascii="Calibri"'); // run-override skinut, run pao na TNR docDefaults
+    expect(newDoc).toContain('Tekst tijela rada.'); // sadrzaj netaknut
+  });
+
+  it('deep NE cisti font kad Normal stil nadjacava cilj drugim fontom (regresija-zastita)', async () => {
+    const enc = new TextEncoder();
+    // docDefaults ima literal ascii+hAnsi (backstop postoji), ALI Normal stil
+    // definira SVOJ rFonts=Arial koji nadjacava docDefaults za Normal-odlomke.
+    const styles =
+      '<?xml version="1.0"?><w:styles><w:docDefaults><w:rPrDefault><w:rPr>' +
+      '<w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/></w:rPr></w:rPrDefault></w:docDefaults>' +
+      '<w:style w:type="paragraph" w:styleId="Normal"><w:name w:val="Normal"/>' +
+      '<w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/></w:rPr></w:style></w:styles>';
+    const doc =
+      '<?xml version="1.0"?><w:document><w:body>' +
+      '<w:p><w:r><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/></w:rPr><w:t>Rucni TNR preko Arial Normala.</w:t></w:r></w:p>' +
+      '</w:body></w:document>';
+    const docx = await writeZip([
+      { name: 'word/document.xml', data: enc.encode(doc) },
+      { name: 'word/styles.xml', data: enc.encode(styles) },
+    ]);
+
+    const result = await applyFixers(docx, [
+      { ruleId: 'font-glavni', fixerId: 'font-fixer', params: { fontName: 'Times New Roman', deep: true } },
+    ]);
+
+    // docDefaults se patcha (changelog nije prazan), ALI deep NE skida run TNR:
+    // da ga skine, run bi pao na Normal=Arial umjesto na cilj TNR.
+    const newEntries = await readZip(result.docxBytes);
+    const dec = new TextDecoder();
+    const newDoc = dec.decode(newEntries.find((e) => e.name === 'word/document.xml')!.data);
+    expect(newDoc).toContain('w:ascii="Times New Roman"'); // run TNR ostaje
   });
 
   it('mijenja SAMO stvarno promijenjeni dio: styles fix ne re-enkodira document.xml', async () => {

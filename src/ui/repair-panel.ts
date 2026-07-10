@@ -11,7 +11,17 @@ export interface RepairableItem {
   fixerId: FixerId;
   label: string; // npr. "Desna margina", citljivo, ne interni checkId
   params: Record<string, unknown>;
+  /** Je li dimenzija prekrsena u analizi. Prekrsene su predodabrane (opt-out);
+   * neprekrsene (Feature B "uskladi sve") su opt-in i default NEodabrane. */
+  violated?: boolean;
 }
+
+/** Fixeri koji podrzavaju v2 dubinsko ciscenje izravnog formatiranja u tekstu. */
+const DEEP_CAPABLE: ReadonlySet<FixerId> = new Set([
+  'font-fixer',
+  'line-spacing-fixer',
+  'alignment-fixer',
+] as FixerId[]);
 
 export interface RepairPanelContext {
   items: RepairableItem[];
@@ -31,18 +41,50 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
   const list = document.createElement('ul');
   list.className = 'lekta-repair-panel__list';
 
-  ctx.items.forEach((item, idx) => {
+  // Prekrsene dimenzije prve (predodabrane); neprekrsene iza podnaslova kao
+  // opt-in "uskladi cijeli dokument" (Feature B).
+  const ordered = [...ctx.items].sort((a, b) => Number(b.violated !== false) - Number(a.violated !== false));
+  const firstExtraIdx = ordered.findIndex((i) => i.violated === false);
+
+  ordered.forEach((item, orderIdx) => {
+    const idx = ctx.items.indexOf(item);
+    const isViolated = item.violated !== false;
+    if (orderIdx === firstExtraIdx && firstExtraIdx !== -1) {
+      const sub = document.createElement('li');
+      sub.className = 'lekta-repair-panel__subtitle';
+      // Kad NISTA nije prekrseno (uredan rad), "i ostalo" nema smisla: preokreni
+      // u pozitivnu poruku. Inace: dodatne dimenzije ispod prekrsenih.
+      sub.textContent =
+        firstExtraIdx === 0
+          ? 'Sve prepoznato je usklađeno. Po želji dodatno uskladi:'
+          : 'Uskladi i ostalo (trenutno nije prekršeno):';
+      list.appendChild(sub);
+    }
     const li = document.createElement('li');
     li.className = 'lekta-repair-panel__item';
     li.innerHTML = `
       <label>
-        <input type="checkbox" checked data-idx="${idx}" />
+        <input type="checkbox" ${isViolated ? 'checked' : ''} data-idx="${idx}" />
         <span>${escapeHtml(item.label)}</span>
       </label>
-      <span class="lekta-repair-panel__badge">Možemo ovo popraviti umjesto tebe</span>
+      <span class="lekta-repair-panel__badge">${isViolated ? 'Možemo ovo popraviti umjesto tebe' : 'Uskladi s profilom'}</span>
     `;
     list.appendChild(li);
   });
+
+  // v2 dubinsko ciscenje: uklanja izravno formatiranje u tekstu (font, prored,
+  // poravnanje po runovima/odlomcima) da popravljeni stilovi stvarno pobijede.
+  const deepAvailable = ctx.items.some((i) => DEEP_CAPABLE.has(i.fixerId));
+  let deepToggle: HTMLInputElement | null = null;
+  const deepRow = document.createElement('label');
+  if (deepAvailable) {
+    deepRow.className = 'lekta-repair-panel__deep';
+    deepRow.innerHTML = `
+      <input type="checkbox" checked />
+      <span>Ukloni i izravno formatiranje u tekstu (dubinsko usklađivanje). Netaknuti ostaju: naslovi i stilizirani dijelovi, podebljano/kurziv, centrirano, veće naslovne veličine, formule, tablice (prored/poravnanje), simbolski fontovi i tekstualni okviri. Tekst pisan drugim fontom uskladit će se s fontom profila.</span>
+    `;
+    deepToggle = deepRow.querySelector('input');
+  }
 
   const downloadBtn = document.createElement('button');
   downloadBtn.type = 'button';
@@ -64,7 +106,12 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
 
   downloadBtn.addEventListener('click', async () => {
     const checkedItems = getCheckedItems();
-    if (checkedItems.length === 0) return;
+    if (checkedItems.length === 0) {
+      // Tihi no-op zbunjuje: reci sto treba (i ocisti eventualni stari sazetak).
+      summary.hidden = false;
+      summary.innerHTML = '<strong>Odaberi barem jednu stavku za popravak.</strong>';
+      return;
+    }
 
     downloadBtn.disabled = true;
     const originalLabel = downloadBtn.textContent;
@@ -72,10 +119,11 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
 
     try {
       const { applyFixers } = await import('../repair/apply-fixers');
+      const deep = deepToggle?.checked === true;
       const requests = checkedItems.map((item) => ({
         ruleId: item.ruleId,
         fixerId: item.fixerId,
-        params: item.params,
+        params: deep && DEEP_CAPABLE.has(item.fixerId) ? { ...item.params, deep: true } : item.params,
       }));
       const docxBytes = await ctx.getDocxBytes();
       const result = await applyFixers(docxBytes, requests);
@@ -103,9 +151,20 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
   });
 
   container.appendChild(list);
+  if (deepToggle) container.appendChild(deepRow);
   container.appendChild(downloadBtn);
   container.appendChild(summary);
   ctx.mountEl.appendChild(container);
+}
+
+// Hrvatska sklonidba uz broj: 1 popravak, 2-4 popravka, 5+ popravaka
+// (iznimka 11-14 -> popravaka). Isti obrazac kao renderIssues drugdje u appu.
+function pluralRepairs(n: number): string {
+  const d = n % 10;
+  const dd = n % 100;
+  if (d === 1 && dd !== 11) return `${n} popravak`;
+  if (d >= 2 && d <= 4 && !(dd >= 12 && dd <= 14)) return `${n} popravka`;
+  return `${n} popravaka`;
 }
 
 function renderSummary(
@@ -115,7 +174,7 @@ function renderSummary(
 ): void {
   el.hidden = false;
   el.innerHTML = `
-    <strong>Primijenjeno ${changelog.length} popravaka</strong>
+    <strong>Primijenjeno ${pluralRepairs(changelog.length)}</strong>
     <ul>
       ${changelog
         .map((c) => `<li>${escapeHtml(c.beforeLabel)} &rarr; ${escapeHtml(c.afterLabel)}</li>`)

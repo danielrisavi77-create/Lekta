@@ -50,7 +50,10 @@ export function paramsForCheck(checkId: string, profile: any): Record<string, un
     case 'line-spacing':
       return profile?.spacing != null ? { multiplier: profile.spacing } : null;
     case 'justify':
-      return { val: profile?.justify ? 'both' : 'left' };
+      // Ponudi poravnanje SAMO kad profil ima izrican zahtjev: true -> obostrano,
+      // false -> lijevo. undefined znaci "profil ne propisuje poravnanje" pa se u
+      // "uskladi sve" toku ne smije ponuditi (inace bi lijevo poravnao ispravan rad).
+      return profile?.justify === true ? { val: 'both' } : profile?.justify === false ? { val: 'left' } : null;
     case 'paper-size': {
       const name = profile?.paperSizes?.[0] || (profile?.requireA4 ? 'A4' : null);
       const dim = name ? A_SERIES[name] : null;
@@ -71,19 +74,23 @@ function isViolated(checkId: string, checks: AnalyzedCheck[]): boolean {
 }
 
 /**
- * Opcija A: za svako pravilo koje je autoFixable + status:'verified' + ima fixerId i checkId,
- * ako je pripadna dimenzija PREKRSENA u rezultatu, izgradi RepairableItem s params IZ PROFILA.
- * Prazno dok nijedno pravilo nije oznaceno autoFixable (korak 7), pa je panel dotad dormant.
+ * Za svako pravilo koje je autoFixable + status:'verified' + ima fixerId i checkId,
+ * izgradi RepairableItem s params IZ PROFILA i oznakom je li dimenzija prekrsena.
+ * Default (Opcija A, besplatni teaser): vraca SAMO prekrsene dimenzije. S
+ * includeNonViolated (Feature B, placeno): vraca i neprekrsene (violated:false),
+ * za "uskladi cijeli dokument" tok. Prazno dok nijedno pravilo nije autoFixable.
  */
 export function buildRepairableItems(
   checks: AnalyzedCheck[],
   profile: any,
   ruleEntries: RuleEntry[],
+  opts?: { includeNonViolated?: boolean },
 ): RepairableItem[] {
   const out: RepairableItem[] = [];
   for (const e of ruleEntries) {
     if (e.autoFixable !== true || e.status !== 'verified' || !e.fixerId || !e.checkId) continue;
-    if (!isViolated(e.checkId, checks)) continue; // A: samo prekrseno
+    const violated = isViolated(e.checkId, checks);
+    if (!violated && !opts?.includeNonViolated) continue; // A: samo prekrseno
     const params = paramsForCheck(e.checkId, profile);
     if (!params) continue; // profil nema ciljanu vrijednost -> ne nudi popravak
     out.push({
@@ -91,6 +98,7 @@ export function buildRepairableItems(
       fixerId: e.fixerId as RepairableItem['fixerId'],
       label: e.label || CHECK_TITLE[e.checkId] || e.ruleId,
       params,
+      violated,
     });
   }
   return out;

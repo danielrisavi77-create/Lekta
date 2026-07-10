@@ -18,9 +18,18 @@ export interface PatchResult {
   applied: boolean;
   before: Record<string, string>;
   after: Record<string, string>;
+  /**
+   * Po trazenom atributu: je li atribut uopce PRONADJEN u ciljanom tagu.
+   * applied:false + found:true znaci "vec je na ciljanoj vrijednosti" (backstop
+   * postoji); applied:false + found:false znaci "nema ga i nije umetnut"
+   * (patch-only politika). Deep ciscenje (fixers.ts) smije brisati direct
+   * override-e SAMO kad backstop postoji, inace bi dokument regresirao na
+   * theme/naslijedjene vrijednosti umjesto na cilj.
+   */
+  found: Record<string, boolean>;
 }
 
-const NO_OP: PatchResult = { xml: '', applied: false, before: {}, after: {} };
+const NO_OP: PatchResult = { xml: '', applied: false, before: {}, after: {}, found: {} };
 
 // Krpa imenovane atribute u SVIM pojavama ciljanog taga (analyzeDocx provjerava
 // margine/format preko SVIH w:sectPr sekcija, pa i popravak mora pogoditi svaku;
@@ -36,6 +45,7 @@ function patchTagAttributes(
   const globalPattern = new RegExp(tagPattern.source, 'g');
   const before: Record<string, string> = {};
   const after: Record<string, string> = {};
+  const found: Record<string, boolean> = {};
   let changed = false;
 
   const newXml = xml.replace(globalPattern, (tag) => {
@@ -44,6 +54,7 @@ function patchTagAttributes(
       const attrRegex = new RegExp(`(${escapeRegex(attr)}=")([^"]*)(")`);
       const attrMatch = out.match(attrRegex);
       if (!attrMatch) continue; // atribut ne postoji na ovom tagu, ne izmisljaj ga
+      found[attr] = true;
       const oldValue = attrMatch[2];
       const escapedValue = escapeXmlAttr(newValue);
       if (oldValue === escapedValue) continue;
@@ -59,8 +70,8 @@ function patchTagAttributes(
     return out;
   });
 
-  if (!changed) return { ...NO_OP, xml };
-  return { xml: newXml, applied: true, before, after };
+  if (!changed) return { ...NO_OP, xml, found };
+  return { xml: newXml, applied: true, before, after, found };
 }
 
 function escapeRegex(s: string): string {
@@ -113,6 +124,7 @@ export function patchDefaultFont(
   let block = found.block;
   const before: Record<string, string> = {};
   const after: Record<string, string> = {};
+  const foundAttrs: Record<string, boolean> = {};
   let changed = false;
 
   if (update.fontName !== undefined) {
@@ -120,6 +132,11 @@ export function patchDefaultFont(
       'w:ascii': update.fontName,
       'w:hAnsi': update.fontName,
     });
+    // Backstop postoji tek kad docDefaults ima LITERALNI w:ascii I w:hAnsi
+    // (theme-only rFonts se patch-only politikom ne dira). Deep strippa OBA
+    // slota s runova, pa i backstop mora jamciti oba: inace bi High-ANSI slot
+    // (hrvatski dijakritici c/z-kvacica, dj) pao na theme font.
+    if (fontResult.found['w:ascii'] && fontResult.found['w:hAnsi']) foundAttrs.fontName = true;
     if (fontResult.applied) {
       block = fontResult.xml;
       before.fontName = fontResult.before['w:ascii'] ?? '';
@@ -132,6 +149,7 @@ export function patchDefaultFont(
     const szResult = patchTagAttributes(block, /<w:sz\b[^>]*\/?>/, {
       'w:val': String(update.sizeHalfPoints),
     });
+    if (szResult.found['w:val']) foundAttrs.sizeHalfPoints = true;
     if (szResult.applied) {
       block = szResult.xml;
       before.sizeHalfPoints = szResult.before['w:val'] ?? '';
@@ -140,10 +158,10 @@ export function patchDefaultFont(
     }
   }
 
-  if (!changed) return { ...NO_OP, xml: stylesXml };
+  if (!changed) return { ...NO_OP, xml: stylesXml, found: foundAttrs };
 
   const newXml = stylesXml.slice(0, found.start) + block + stylesXml.slice(found.end);
-  return { xml: newXml, applied: true, before, after };
+  return { xml: newXml, applied: true, before, after, found: foundAttrs };
 }
 
 function findNormalStyleBlock(stylesXml: string) {
@@ -162,10 +180,10 @@ export function patchDefaultSpacing(
     'w:line': String(lineTwips),
     'w:lineRule': lineRule,
   });
-  if (!result.applied) return { ...NO_OP, xml: stylesXml };
+  if (!result.applied) return { ...NO_OP, xml: stylesXml, found: result.found };
 
   const newXml = stylesXml.slice(0, found.start) + result.xml + stylesXml.slice(found.end);
-  return { xml: newXml, applied: true, before: result.before, after: result.after };
+  return { xml: newXml, applied: true, before: result.before, after: result.after, found: result.found };
 }
 
 export function patchDefaultAlignment(stylesXml: string, val: string): PatchResult {
@@ -173,8 +191,8 @@ export function patchDefaultAlignment(stylesXml: string, val: string): PatchResu
   if (!found) return { ...NO_OP, xml: stylesXml };
 
   const result = patchTagAttributes(found.block, /<w:jc\b[^>]*\/?>/, { 'w:val': val });
-  if (!result.applied) return { ...NO_OP, xml: stylesXml };
+  if (!result.applied) return { ...NO_OP, xml: stylesXml, found: result.found };
 
   const newXml = stylesXml.slice(0, found.start) + result.xml + stylesXml.slice(found.end);
-  return { xml: newXml, applied: true, before: result.before, after: result.after };
+  return { xml: newXml, applied: true, before: result.before, after: result.after, found: result.found };
 }

@@ -35,9 +35,12 @@ describe('paramsForCheck (params dolaze IZ PROFILA)', () => {
     expect(paramsForCheck('line-spacing', PROFILE)).toEqual({ multiplier: 1.5 });
     expect(paramsForCheck('line-spacing', { spacing: 2 })).toEqual({ multiplier: 2 });
   });
-  it('justify -> both kad profil trazi poravnanje', () => {
+  it('justify -> both kad profil trazi poravnanje, left kad izrijekom ne, null kad ne propisuje', () => {
     expect(paramsForCheck('justify', PROFILE)).toEqual({ val: 'both' });
     expect(paramsForCheck('justify', { justify: false })).toEqual({ val: 'left' });
+    // undefined = profil ne propisuje poravnanje -> ne nudi popravak (inace bi u
+    // "uskladi sve" lijevo poravnao ispravan rad).
+    expect(paramsForCheck('justify', {})).toBeNull();
   });
   it('paper-size iz imena u profilu (A4 -> 21x29.7)', () => {
     expect(paramsForCheck('paper-size', PROFILE)).toEqual({ w: 21, h: 29.7 });
@@ -60,7 +63,7 @@ describe('buildRepairableItems (Opcija A: samo prekrseno)', () => {
   it('ukljuci prekrseno autoFixable+verified pravilo, params iz profila', () => {
     const items = buildRepairableItems([FAIL('Margine dokumenta')], PROFILE, [entry({ ruleId: 'margine', label: 'Margine' })]);
     expect(items).toEqual([
-      { ruleId: 'margine', fixerId: 'margins-fixer', label: 'Margine', params: { top: 2.5, right: 2.5, bottom: 2.5, left: 3 } },
+      { ruleId: 'margine', fixerId: 'margins-fixer', label: 'Margine', params: { top: 2.5, right: 2.5, bottom: 2.5, left: 3 }, violated: true },
     ]);
   });
 
@@ -80,7 +83,7 @@ describe('buildRepairableItems (Opcija A: samo prekrseno)', () => {
       PROFILE,
       [entry({ ruleId: 'jc', checkId: 'justify', fixerId: 'alignment-fixer', label: 'Poravnanje' })],
     );
-    expect(items).toEqual([{ ruleId: 'jc', fixerId: 'alignment-fixer', label: 'Poravnanje', params: { val: 'both' } }]);
+    expect(items).toEqual([{ ruleId: 'jc', fixerId: 'alignment-fixer', label: 'Poravnanje', params: { val: 'both' }, violated: true }]);
   });
 
   it('paper-size prepoznaje dinamican naslov ("Format stranice (A4/A3)")', () => {
@@ -89,6 +92,27 @@ describe('buildRepairableItems (Opcija A: samo prekrseno)', () => {
       PROFILE,
       [entry({ ruleId: 'ps', checkId: 'paper-size', fixerId: 'paper-size-fixer', label: 'Format' })],
     );
-    expect(items).toEqual([{ ruleId: 'ps', fixerId: 'paper-size-fixer', label: 'Format', params: { w: 21, h: 29.7 } }]);
+    expect(items).toEqual([{ ruleId: 'ps', fixerId: 'paper-size-fixer', label: 'Format', params: { w: 21, h: 29.7 }, violated: true }]);
+  });
+
+  it('includeNonViolated (Feature B): vraca i neprekrsene s violated:false', () => {
+    const items = buildRepairableItems(
+      [PASS('Margine dokumenta'), FAIL('Dominantni font')],
+      PROFILE,
+      [
+        entry({ ruleId: 'margine', label: 'Margine' }),
+        entry({ ruleId: 'font', checkId: 'font', fixerId: 'font-fixer', label: 'Font' }),
+      ],
+      { includeNonViolated: true },
+    );
+    expect(items).toEqual([
+      { ruleId: 'margine', fixerId: 'margins-fixer', label: 'Margine', params: { top: 2.5, right: 2.5, bottom: 2.5, left: 3 }, violated: false },
+      { ruleId: 'font', fixerId: 'font-fixer', label: 'Font', params: { fontName: 'Times New Roman' }, violated: true },
+    ]);
+  });
+
+  it('bez includeNonViolated neprekrsene i dalje ispadaju (teaser ostaje Opcija A)', () => {
+    const items = buildRepairableItems([PASS('Margine dokumenta')], PROFILE, [entry({})]);
+    expect(items).toEqual([]);
   });
 });

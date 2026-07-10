@@ -12,6 +12,7 @@ import {
   patchDefaultSpacing,
   patchDefaultAlignment,
 } from './xml-patch';
+import { stripDirectFormatting, type RunLevelResult } from './run-level';
 
 export interface DocxXmlParts {
   documentXml: string;
@@ -72,6 +73,54 @@ function joinMarginLabels(entries: Record<string, string>): string {
     .join(', ');
 }
 
+// Feature B (deep): spoji rezultat stilskog patcha s v2 ciscenjem izravnog
+// formatiranja (run-level.ts). Deep radi na document.xml, stilski fixeri na
+// styles.xml, pa se rezultati ne preklapaju. applied je true cim je BILO STO
+// promijenjeno; changelog objasnjava oba dijela.
+function combineDeep(base: FixerOutput, parts: DocxXmlParts, deep: RunLevelResult | null): FixerOutput {
+  if (!deep || !deep.applied) return base;
+  const mergedParts: DocxXmlParts = { ...(base.applied ? base.parts : parts), documentXml: deep.xml };
+  const deepNote = `izravno formatiranje uklonjeno u ${deep.paragraphsTouched} odlomaka`;
+  if (!base.applied) {
+    return {
+      parts: mergedParts,
+      applied: true,
+      beforeLabel: 'Izravno formatiranje u tekstu',
+      afterLabel: deepNote,
+    };
+  }
+  return {
+    parts: mergedParts,
+    applied: true,
+    beforeLabel: base.beforeLabel,
+    afterLabel: `${base.afterLabel}; ${deepNote}`,
+  };
+}
+
+// === Normal stil: provjera nadjacava li cilj (za sigurnost deep ciscenja) ===
+// Deep skida run-level font/velicinu tako da run nasljedi iz Normal stila pa
+// docDefaults. Ako Normal stil sam definira DRUGACIJI font/velicinu, skidanje
+// bi regresiralo run na Normal umjesto na cilj: te slucajeve deep preskace.
+
+/** Run-rPr Normal stila (child od <w:style>, ne pPr>rPr paragraph-mark). */
+function normalRunRPr(stylesXml: string): string {
+  const styleMatch = stylesXml.match(/<w:style\b[^>]*w:styleId="Normal"[^>]*>[\s\S]*?<\/w:style>/);
+  if (!styleMatch) return '';
+  const withoutPPr = styleMatch[0].replace(/<w:pPr\b[\s\S]*?<\/w:pPr>/, '');
+  const rPr = withoutPPr.match(/<w:rPr\b[\s\S]*?<\/w:rPr>/);
+  return rPr ? rPr[0] : '';
+}
+
+function normalStyleConflictsFont(stylesXml: string, target: string): boolean {
+  const m = normalRunRPr(stylesXml).match(/<w:rFonts\b[^>]*w:ascii="([^"]*)"/);
+  return !!m && m[1] !== target;
+}
+
+function normalStyleConflictsSize(stylesXml: string, targetHalfPoints: number): boolean {
+  const m = normalRunRPr(stylesXml).match(/<w:sz\b[^>]*w:val="([^"]*)"/);
+  return !!m && Number(m[1]) !== targetHalfPoints;
+}
+
 // === Fixeri ===
 
 export function marginsFixer(
@@ -107,43 +156,81 @@ export function paperSizeFixer(parts: DocxXmlParts, sizeCm: { w: number; h: numb
 
 export function fontFixer(
   parts: DocxXmlParts,
-  update: { fontName?: string; fontSizePt?: number },
+  update: { fontName?: string; fontSizePt?: number; deep?: boolean },
 ): FixerOutput {
   const result = patchDefaultFont(parts.stylesXml, {
     fontName: update.fontName,
     sizeHalfPoints: update.fontSizePt !== undefined ? ptToHalfPoints(update.fontSizePt) : undefined,
   });
-  if (!result.applied) return NO_OP(parts);
 
-  const beforeParts: string[] = [];
-  const afterParts: string[] = [];
-  if (result.before.fontName !== undefined) {
-    beforeParts.push(`Font: ${result.before.fontName}`);
-    afterParts.push(`Font: ${result.after.fontName}`);
-  }
-  if (result.before.sizeHalfPoints !== undefined) {
-    beforeParts.push(`Veličina: ${halfPointsToPtLabel(result.before.sizeHalfPoints)}`);
-    afterParts.push(`Veličina: ${halfPointsToPtLabel(result.after.sizeHalfPoints)}`);
+  let base: FixerOutput;
+  if (!result.applied) {
+    base = NO_OP(parts);
+  } else {
+    const beforeParts: string[] = [];
+    const afterParts: string[] = [];
+    if (result.before.fontName !== undefined) {
+      beforeParts.push(`Font: ${result.before.fontName}`);
+      afterParts.push(`Font: ${result.after.fontName}`);
+    }
+    if (result.before.sizeHalfPoints !== undefined) {
+      beforeParts.push(`Veličina: ${halfPointsToPtLabel(result.before.sizeHalfPoints)}`);
+      afterParts.push(`Veličina: ${halfPointsToPtLabel(result.after.sizeHalfPoints)}`);
+    }
+    base = {
+      parts: { ...parts, stylesXml: result.xml },
+      applied: true,
+      beforeLabel: beforeParts.join(', '),
+      afterLabel: afterParts.join(', '),
+    };
   }
 
-  return {
-    parts: { ...parts, stylesXml: result.xml },
-    applied: true,
-    beforeLabel: beforeParts.join(', '),
-    afterLabel: afterParts.join(', '),
-  };
+  // Deep SAMO za svojstva ciji stilski backstop postoji (result.found) I gdje
+  // Normal stil NE nadjacava cilj drugom vrijednoscu. Efektivni font/velicina
+  // Normal-odlomka dolazi iz Normal stila (ako ga definira) pa tek onda iz
+  // docDefaults; da Normal ima drugaciji font, skidanje run-override-a bi run
+  // regresiralo na Normal, ne na cilj. Bez backstopa (npr. theme-only docDefaults)
+  // isto ne diramo (dokument bi pao na theme/naslijedjeno).
+  const fontOk =
+    update.fontName !== undefined &&
+    result.found.fontName === true &&
+    !normalStyleConflictsFont(parts.stylesXml, update.fontName);
+  const sizeTarget = update.fontSizePt !== undefined ? ptToHalfPoints(update.fontSizePt) : undefined;
+  const sizeOk =
+    sizeTarget !== undefined &&
+    result.found.sizeHalfPoints === true &&
+    !normalStyleConflictsSize(parts.stylesXml, sizeTarget);
+  const deepOpts = update.deep
+    ? {
+        stripFontName: fontOk,
+        stripFontSizeNearHalfPoints: sizeOk ? sizeTarget : undefined,
+      }
+    : null;
+  const deep =
+    deepOpts && (deepOpts.stripFontName || deepOpts.stripFontSizeNearHalfPoints !== undefined)
+      ? stripDirectFormatting(parts.documentXml, deepOpts)
+      : null;
+  return combineDeep(base, parts, deep);
 }
 
-export function lineSpacingFixer(parts: DocxXmlParts, multiplier: number): FixerOutput {
+export function lineSpacingFixer(parts: DocxXmlParts, multiplier: number, deep = false): FixerOutput {
   const result = patchDefaultSpacing(parts.stylesXml, multiplierToTwips(multiplier), 'auto');
-  if (!result.applied) return NO_OP(parts);
+  const base: FixerOutput = !result.applied
+    ? NO_OP(parts)
+    : {
+        parts: { ...parts, stylesXml: result.xml },
+        applied: true,
+        beforeLabel: `Prored: ${twipsToMultiplierLabel(result.before['w:line'])}`,
+        afterLabel: `Prored: ${twipsToMultiplierLabel(result.after['w:line'])}`,
+      };
 
-  return {
-    parts: { ...parts, stylesXml: result.xml },
-    applied: true,
-    beforeLabel: `Prored: ${twipsToMultiplierLabel(result.before['w:line'])}`,
-    afterLabel: `Prored: ${twipsToMultiplierLabel(result.after['w:line'])}`,
-  };
+  // Backstop uvjet: Normal stil ima w:spacing s w:line (result.found), inace
+  // bi skidanje direct proreda vratilo dokument na Word default, ne na cilj.
+  const deepResult =
+    deep && result.found['w:line'] === true
+      ? stripDirectFormatting(parts.documentXml, { stripLineSpacing: true })
+      : null;
+  return combineDeep(base, parts, deepResult);
 }
 
 const ALIGNMENT_LABELS: Record<string, string> = {
@@ -153,14 +240,27 @@ const ALIGNMENT_LABELS: Record<string, string> = {
   both: 'obostrano (justify)',
 };
 
-export function alignmentFixer(parts: DocxXmlParts, val: 'left' | 'right' | 'center' | 'both'): FixerOutput {
+export function alignmentFixer(
+  parts: DocxXmlParts,
+  val: 'left' | 'right' | 'center' | 'both',
+  deep = false,
+): FixerOutput {
   const result = patchDefaultAlignment(parts.stylesXml, val);
-  if (!result.applied) return NO_OP(parts);
+  const base: FixerOutput = !result.applied
+    ? NO_OP(parts)
+    : {
+        parts: { ...parts, stylesXml: result.xml },
+        applied: true,
+        beforeLabel: `Poravnanje: ${ALIGNMENT_LABELS[result.before['w:val']] ?? result.before['w:val']}`,
+        afterLabel: `Poravnanje: ${ALIGNMENT_LABELS[result.after['w:val']] ?? result.after['w:val']}`,
+      };
 
-  return {
-    parts: { ...parts, stylesXml: result.xml },
-    applied: true,
-    beforeLabel: `Poravnanje: ${ALIGNMENT_LABELS[result.before['w:val']] ?? result.before['w:val']}`,
-    afterLabel: `Poravnanje: ${ALIGNMENT_LABELS[result.after['w:val']] ?? result.after['w:val']}`,
-  };
+  // Deep ima smisla samo kad je cilj obostrano: skida se iskljucivo left/start
+  // (Word default), namjerno centriranje/desno ostaje. Backstop uvjet: Normal
+  // stil ima w:jc (result.found), inace nema jamstva ciljanog poravnanja.
+  const deepResult =
+    deep && val === 'both' && result.found['w:val'] === true
+      ? stripDirectFormatting(parts.documentXml, { stripLeftJustify: true })
+      : null;
+  return combineDeep(base, parts, deepResult);
 }

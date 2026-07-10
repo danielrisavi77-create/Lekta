@@ -58,10 +58,14 @@ function runFixer(fixerId: FixerId, parts: DocxXmlParts, params: Record<string, 
       return paperSizeFixer(parts, params as never);
     case 'font-fixer':
       return fontFixer(parts, params as never);
-    case 'line-spacing-fixer':
-      return lineSpacingFixer(parts, (params as { multiplier: number }).multiplier);
-    case 'alignment-fixer':
-      return alignmentFixer(parts, (params as { val: 'left' | 'right' | 'center' | 'both' }).val);
+    case 'line-spacing-fixer': {
+      const p = params as { multiplier: number; deep?: boolean };
+      return lineSpacingFixer(parts, p.multiplier, p.deep === true);
+    }
+    case 'alignment-fixer': {
+      const p = params as { val: 'left' | 'right' | 'center' | 'both'; deep?: boolean };
+      return alignmentFixer(parts, p.val, p.deep === true);
+    }
     default:
       return { parts, applied: false, beforeLabel: '', afterLabel: '' };
   }
