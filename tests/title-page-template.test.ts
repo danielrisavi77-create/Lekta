@@ -93,6 +93,32 @@ describe('buildTitlePage s predloskom', () => {
       .toBe('Sveučilište u Splitu');
   });
 
+  it('ponovljena uloga: prvi element korisnikov unos, drugi samo fixedText', () => {
+    // Dvojezicni worktype (ZAVRSNI RAD / BACHELOR THESIS): korisnik ima jedno polje pa
+    // drugi worktype element prikazuje svoj fixedText, a ne ponovljeni korisnikov unos.
+    const bilingual: TitlePageTemplate = {
+      ...TEMPLATE,
+      elements: [
+        { role: 'worktype', required: true, elementProvenance: 'official-rules', group: 0, uppercase: true, fixedText: 'ZAVRŠNI RAD' },
+        { role: 'worktype', required: false, elementProvenance: 'official-rules', group: 0, uppercase: true, fixedText: 'BACHELOR THESIS' },
+      ],
+    };
+    const m = buildTitlePage({ workType: 'Završni rad' }, bilingual);
+    expect(m.lines.map((l) => l.text)).toEqual(['Završni rad', 'BACHELOR THESIS']);
+  });
+
+  it('ponovljena uloga bez fixedTexta se preskace (nema duplog retka)', () => {
+    const dupStudy: TitlePageTemplate = {
+      ...TEMPLATE,
+      elements: [
+        { role: 'study', required: false, elementProvenance: 'official-rules', group: 0 },
+        { role: 'study', required: false, elementProvenance: 'official-rules', group: 0 },
+      ],
+    };
+    const m = buildTitlePage({ study: 'Politologija' }, dupStudy);
+    expect(m.lines.map((l) => l.text)).toEqual(['Politologija']);
+  });
+
   it('mentor zadrzava prefiks titule i s predloskom', () => {
     const m = buildTitlePage({ ...INPUT, mentorLabel: 'Mentorica', mentor: 'Ana Barić' }, TEMPLATE);
     expect(m.lines.find((l) => l.role === 'mentor')!.text).toBe('Mentorica: Ana Barić');

@@ -147,12 +147,20 @@ export function buildTitlePage(input: TitlePageInput, template?: TitlePageTempla
   if (template) {
     const lines: TitleLine[] = [];
     const missing: string[] = [];
+    const seenRoles = new Set<TitleRole>();
     for (const el of template.elements) {
-      // Tekst propisan predloskom (fixedText) popunjava prazno polje, korisnikov unos ima prednost.
-      const text = textForRole(el.role, f, input) || clean(el.fixedText);
+      // Prvi element uloge dobiva korisnikov unos (uz fixedText kao popunu praznog polja).
+      // Ponovljena uloga (npr. dvojezicni worktype ZAVRSNI RAD / BACHELOR THESIS ili studij u
+      // dva retka) ima samo jedno korisnicko polje, pa dodatni elementi prikazuju ISKLJUCIVO
+      // svoj fixedText; bez fixedTexta se preskacu da se korisnikov unos ne ponovi.
+      const firstOfRole = !seenRoles.has(el.role);
+      seenRoles.add(el.role);
+      const text = firstOfRole
+        ? textForRole(el.role, f, input) || clean(el.fixedText)
+        : clean(el.fixedText);
       if (text) {
         lines.push({ role: el.role, text, style: styleForElement(el, template), group: el.group });
-      } else if (el.required) {
+      } else if (el.required && firstOfRole) {
         missing.push(ROLE_LABELS_HR[el.role]);
       }
     }
