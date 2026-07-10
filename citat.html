@@ -93,6 +93,21 @@ a{color:inherit}:focus-visible{outline:none;box-shadow:var(--focus);border-radiu
 .note{margin-top:16px;background:var(--brand-soft);border-left:3px solid var(--brand);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--text)}
 .note b{color:var(--brand)}
 
+.cit-tabs{display:flex;gap:8px;margin-top:16px;border-bottom:1px solid var(--line)}
+.cit-tab{appearance:none;background:none;border:0;border-bottom:2px solid transparent;padding:9px 4px;margin-bottom:-1px;font:inherit;font-weight:700;color:var(--muted);cursor:pointer}
+.cit-tab:hover{color:var(--text)}
+.cit-tab.active{color:var(--brand);border-bottom-color:var(--brand)}
+#bulk-input{width:100%;font-family:var(--ink-serif);font-size:14px;line-height:1.5;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--text);resize:vertical}
+.bulk-card{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:12px 0;background:var(--panel)}
+.bulk-card.low-conf{border-color:var(--warn,#c9821f);background:color-mix(in srgb,var(--warn,#c9821f) 8%,var(--panel))}
+.bulk-card-head{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin-bottom:8px}
+.bulk-card-fields{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px}
+.bulk-card-fields label{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--muted)}
+.bulk-card-fields input,.bulk-card-fields select{padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--bg,var(--panel));color:var(--text);font:inherit;font-size:13px}
+#bulk-result{width:100%;font-family:var(--ink-serif);font-size:14px;line-height:1.6;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--brand-soft);color:var(--text);margin-top:8px;resize:vertical}
+#bulk-output label{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+@media(max-width:560px){.bulk-card-fields{grid-template-columns:1fr}}
+
 .cta{background:linear-gradient(140deg,#191d31,#2a2d63);color:#fff;border-radius:22px;padding:34px;text-align:center;margin:14px 0 34px}
 .cta h2{font-family:var(--ink-serif);font-size:25px;letter-spacing:-.02em;margin:0 0 8px;font-weight:800;color:#fff}
 .cta p{color:#cdd0e0;margin:0 0 16px}.cta .btn{background:#fff;color:#191d31}
@@ -156,11 +171,8 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
 </section>
 
 <section class="section">
-  <div class="shell grid">
-    <div class="card">
-      <h2>Podaci o izvoru</h2>
-      <p class="sub">Ispuni što imaš. Preporučena polja koja fale prikazuju se ispod citata.</p>
-
+  <div class="shell">
+    <div class="card" style="margin-bottom:18px">
       <div class="field">
         <label for="f-faculty">Tvoj fakultet <span class="sub" style="font-weight:normal">(učita njegov provjereni citatni stil)</span></label>
         <select id="f-faculty">
@@ -168,6 +180,17 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
         </select>
       </div>
       <p id="f-style-info" class="out-hint ok" hidden></p>
+      <div class="cit-tabs" id="tool-tabs" role="tablist">
+        <button id="tab-single" class="cit-tab active" type="button">Jedan izvor</button>
+        <button id="tab-bulk" class="cit-tab" type="button">Cijela literatura</button>
+      </div>
+    </div>
+
+    <div id="panel-single">
+      <div class="grid">
+    <div class="card">
+      <h2>Podaci o izvoru</h2>
+      <p class="sub">Ispuni što imaš. Preporučena polja koja fale prikazuju se ispod citata.</p>
 
       <div class="row2">
         <div class="field">
@@ -270,6 +293,22 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
         </div>
         <p class="out-hint" id="out-hint" aria-live="polite"></p>
         <div class="note"><b>Napomena:</b> generator daje okvirni oblik citata prema uobičajenim hrvatskim akademskim stilovima. Točan stil i interpunkciju uvijek provjeri prema uputama svog fakulteta, studija ili mentora.</div>
+      </div>
+    </div>
+      </div>
+    </div>
+
+    <div id="panel-bulk" hidden>
+      <div class="card">
+        <h2>Cijela literatura</h2>
+        <p class="sub">Zalijepi popis literature (jedna referenca po retku ili odvojene praznim retkom). Alat prepozna polja koliko može; obavezno provjeri i ispravi svaki unos prije korištenja.</p>
+        <textarea id="bulk-input" rows="8" placeholder="Zalijepi cijelu literaturu ovdje, npr.:&#10;Kovačić, I. (2020). Naslov knjige. Zagreb: Izdavač.&#10;Horvat, A. (2019). Naslov članka. Časopis, 28(3), 45-67."></textarea>
+        <div class="tp-toolbar"><button class="btn btn-secondary btn-sm" id="bulk-parse" type="button">Prepoznaj reference</button></div>
+        <div id="bulk-entries"></div>
+        <button class="btn btn-primary" id="bulk-generate" type="button" hidden>Generiraj i sortiraj</button>
+        <div id="bulk-output"></div>
+        <div class="tp-toolbar"><button class="btn btn-secondary btn-sm" id="bulk-copy" type="button" hidden>Kopiraj literaturu</button></div>
+        <div class="note"><b>Napomena:</b> automatsko prepoznavanje polja je okvirno; provjeri svaku referencu prije korištenja. Redoslijed je abecedni, osim kad fakultetski stil propisuje redoslijed pojavljivanja.</div>
       </div>
     </div>
   </div>

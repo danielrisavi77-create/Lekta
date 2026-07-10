@@ -1,17 +1,19 @@
-// DOM glue za besplatni citat generator (citat.html). Sva logika formatiranja je u
-// citation.ts (opci stilovi) i citations/faculty-styles.ts (vjeran po fakultetu); ovdje samo
-// vezanje na formu i ispis. Bez mreze.
+// DOM glue za besplatni citat generator (citat.html). Logika formatiranja je u citation.ts
+// (opci stilovi), citations/faculty-styles.ts (vjeran po fakultetu) i citations/parse-reference.ts
+// (prepoznavanje zalijepljene literature); ovdje samo vezanje na formu i ispis. Bez mreze.
 import '../shared/ui-boot';
-import { formatCitation } from './citation';
+import { formatCitation, parseAuthors } from './citation';
 import { bindCopyButton } from './tool-ui';
 import { buildFacultyOptions, formatForFaculty, type FacultyStyle } from '../citations/faculty-styles';
+import { splitReferences, parseReference } from '../citations/parse-reference';
+import { SOURCE_TYPES } from '../citations/citation-web';
 
 const $ = (s: string): any => document.querySelector(s);
 function esc(s: string): string {
   return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-// Koja polja su relevantna za koji tip izvora (ostala se sakriju da forma ostane cista).
+// Koja polja su relevantna za koji tip izvora (jedan izvor: ostala se sakriju da forma ostane cista).
 const FIELDS_BY_TYPE: any = {
   knjiga: ['authors', 'title', 'year', 'place', 'publisher'],
   poglavlje: ['authors', 'title', 'container', 'editor', 'pages', 'year', 'place', 'publisher'],
@@ -31,6 +33,18 @@ const GENERIC_STYLE_HTML = `<option value="autor-godina">Autor-godina (društven
 // Kad je fakultet odabran, #f-style nosi njegove stilove (value = indeks); inace je null (genericki mod).
 let facultyStyles: FacultyStyle[] | null = null;
 
+function activeFacultyStyle(): FacultyStyle | null {
+  if (!facultyStyles) return null;
+  const idx = Math.max(0, $('#f-style').selectedIndex);
+  return facultyStyles[idx] || facultyStyles[0] || null;
+}
+
+// Jedan izvor iz kojeg formatiraju i pojedinacni citat i bulk: fakultetski spec ili opci stil.
+function formatWithCurrent(inp: any) {
+  const fs = activeFacultyStyle();
+  return fs ? formatForFaculty(fs, inp) : formatCitation(inp, $('#f-style').value);
+}
+
 function readInp(): any {
   const inp: any = { type: $('#f-type').value };
   for (const key of TEXT_FIELDS) {
@@ -40,16 +54,10 @@ function readInp(): any {
   return inp;
 }
 
-function activeFacultyStyle(): FacultyStyle | null {
-  if (!facultyStyles) return null;
-  const idx = Math.max(0, $('#f-style').selectedIndex);
-  return facultyStyles[idx] || facultyStyles[0] || null;
-}
-
 function syncVisibleFields() {
   const type = $('#f-type').value;
   const allowed = new Set(FIELDS_BY_TYPE[type] || []);
-  document.querySelectorAll('[data-field]').forEach((row: any) => {
+  document.querySelectorAll('#panel-single [data-field]').forEach((row: any) => {
     row.style.display = allowed.has(row.getAttribute('data-field')) ? '' : 'none';
   });
 }
@@ -77,9 +85,7 @@ function updateStyleInfo(): void {
 }
 
 function render() {
-  const inp = readInp();
-  const fs = activeFacultyStyle();
-  const { citation, inText, missing } = fs ? formatForFaculty(fs, inp) : formatCitation(inp, $('#f-style').value);
+  const { citation, inText, missing } = formatWithCurrent(readInp());
   const out = $('#out');
   const hint = $('#out-hint');
   if (!citation) {
@@ -98,7 +104,8 @@ function render() {
   hint.className = missing.length ? 'out-hint warn' : 'out-hint ok';
 }
 
-// Napuni izbornik fakulteta (grupiran po sveucilistu). Samo fakulteti s verificiranim specom.
+// --- Izbornik fakulteta -----------------------------------------------------
+
 function populateFaculties() {
   const facSel = $('#f-faculty');
   if (!facSel) return;
@@ -128,12 +135,100 @@ function onFacultyChange() {
     styleSel.innerHTML = GENERIC_STYLE_HTML;
   } else {
     facultyStyles = opt.styles;
-    styleSel.innerHTML = opt.styles
-      .map((s, i) => `<option value="${i}">${esc(s.label)}</option>`)
-      .join('');
+    styleSel.innerHTML = opt.styles.map((s, i) => `<option value="${i}">${esc(s.label)}</option>`).join('');
   }
   updateStyleInfo();
   render();
+}
+
+// --- Cijela literatura (bulk): zalijepi -> prepoznaj -> UREDI po unosu -> formatiraj + sortiraj ---
+
+function typeDef(t: string) {
+  return SOURCE_TYPES.find((s) => s.type === t) || SOURCE_TYPES[0];
+}
+
+// Editabilna kartica po referenci: <select vrste> + polja te vrste (accessed se sakrije ako stil ne trazi datum).
+function renderBulkCard(card: any, values: any) {
+  values = values || {};
+  const type = values.type || card.getAttribute('data-type') || SOURCE_TYPES[0].type;
+  card.setAttribute('data-type', type);
+  const accessOk = (activeFacultyStyle()?.spec?.accessDate) !== false;
+  const opts = SOURCE_TYPES.map((s) => `<option value="${s.type}"${s.type === type ? ' selected' : ''}>${esc(s.label)}</option>`).join('');
+  const fieldsHtml = typeDef(type).fields
+    .filter((f) => !(f.key === 'accessed' && !accessOk))
+    .map((f) => {
+      const v = values[f.key] != null ? values[f.key] : '';
+      return `<label>${esc(f.label)}<input type="text" data-key="${esc(f.key)}" value="${esc(v)}"></label>`;
+    }).join('');
+  card.innerHTML = `<label>Vrsta izvora<select class="card-type">${opts}</select></label>${fieldsHtml}`;
+  card.querySelector('.card-type').addEventListener('change', () => renderBulkCard(card, readBulkCard(card)));
+}
+
+function readBulkCard(card: any): any {
+  const sel = card.querySelector('.card-type');
+  if (!sel) return { type: SOURCE_TYPES[0].type };
+  const out: any = { type: sel.value };
+  card.setAttribute('data-type', out.type);
+  card.querySelectorAll('input[data-key]').forEach((i: any) => { out[i.getAttribute('data-key')] = i.value; });
+  return out;
+}
+
+function sortKeyOf(inp: any): string {
+  const a = parseAuthors(inp.authors || '');
+  return ((a.length ? a[0].last : (inp.title || '')) || '').toLowerCase();
+}
+
+function parseBulk() {
+  const refs = splitReferences($('#bulk-input').value);
+  const box = $('#bulk-entries');
+  box.innerHTML = '';
+  $('#bulk-copy').hidden = true;
+  $('#bulk-output').innerHTML = '';
+  if (!refs.length) { $('#bulk-generate').hidden = true; return; }
+  refs.forEach((raw: string, i: number) => {
+    const p = parseReference(raw);
+    const card = document.createElement('div');
+    card.className = 'bulk-card' + (p.lowConfidence ? ' low-conf' : '');
+    const head = document.createElement('div');
+    head.className = 'bulk-card-head';
+    head.textContent = 'Referenca ' + (i + 1) + (p.lowConfidence ? ' (malo prepoznato, dopuni ručno)' : '');
+    const fields = document.createElement('div');
+    fields.className = 'bulk-card-fields';
+    card.appendChild(head);
+    card.appendChild(fields);
+    box.appendChild(card);
+    const values: any = { type: p.type };
+    Object.keys(p.fields).forEach((k) => { values[k] = (p.fields as any)[k]; });
+    renderBulkCard(fields, values);
+  });
+  $('#bulk-generate').hidden = false;
+}
+
+function generateBulk() {
+  const items: { key: string; text: string }[] = [];
+  $('#bulk-entries').querySelectorAll('.bulk-card-fields').forEach((card: any) => {
+    const inp = readBulkCard(card);
+    const res = formatWithCurrent(inp);
+    if (res.citation) items.push({ key: sortKeyOf(inp), text: res.citation });
+  });
+  // Redoslijed literature: abecedno, osim ako verificirani fakultetski spec propisuje pojavljivanje.
+  const fs = activeFacultyStyle();
+  const byAppearance = !!(fs && fs.spec && fs.spec.bibliography && fs.spec.bibliography.sort === 'appearance');
+  if (!byAppearance) items.sort((a, b) => a.key.localeCompare(b.key, 'hr'));
+  const listText = items.map((x) => x.text).join('\n');
+  const label = byAppearance ? 'redoslijedom pojavljivanja' : 'abecedno';
+  $('#bulk-output').innerHTML =
+    `<label>Literatura (${label}, ${items.length})</label>` +
+    `<textarea id="bulk-result" rows="${Math.min(20, Math.max(4, items.length + 1))}"></textarea>`;
+  $('#bulk-result').value = listText;
+  $('#bulk-copy').hidden = items.length === 0;
+}
+
+function showTab(which: 'single' | 'bulk') {
+  $('#panel-single').hidden = which !== 'single';
+  $('#panel-bulk').hidden = which !== 'bulk';
+  $('#tab-single').classList.toggle('active', which === 'single');
+  $('#tab-bulk').classList.toggle('active', which === 'bulk');
 }
 
 function init() {
@@ -143,18 +238,25 @@ function init() {
   $('#f-type').addEventListener('change', syncVisibleFields);
   $('#f-faculty')?.addEventListener('change', onFacultyChange);
   $('#f-style').addEventListener('change', updateStyleInfo);
-  document.querySelectorAll('input, select, textarea').forEach((el: any) => {
+  // Genericki listener veze SAMO staticka polja (bulk kartice nastaju kasnije i ne diraju #out).
+  document.querySelectorAll('#panel-single input, #f-style, #f-faculty, #f-type, #bulk-input').forEach((el: any) => {
     el.addEventListener('input', render);
     el.addEventListener('change', render);
   });
-  // Kopira samo kad citat postoji (gumb je inace onemogucen); getText cita gotovi ispis.
+  $('#tab-single')?.addEventListener('click', () => showTab('single'));
+  $('#tab-bulk')?.addEventListener('click', () => showTab('bulk'));
+  $('#bulk-parse')?.addEventListener('click', parseBulk);
+  $('#bulk-generate')?.addEventListener('click', generateBulk);
+
+  // Kopira samo kad citat/literatura postoji (gumbi su inace onemoguceni/skriveni).
   bindCopyButton($('#copyBtn'), () => ($('#copyBtn').disabled ? '' : ($('#out').textContent || '')));
   bindCopyButton($('#copyIntextBtn'), () => ($('#copyIntextBtn').disabled ? '' : ($('#intextValue').textContent || '')));
+  bindCopyButton($('#bulk-copy'), () => ($('#bulk-copy').hidden ? '' : ($('#bulk-result')?.value || '')));
 
   $('#c-sample')?.addEventListener('click', () => {
     const set = (id: string, v: string) => { const el = $(id); if (el) el.value = v; };
     // primjer koristi genericki stil: vrati izbornik fakulteta na prazno
-    $('#f-faculty') && ($('#f-faculty').value = '');
+    if ($('#f-faculty')) $('#f-faculty').value = '';
     facultyStyles = null;
     $('#f-style').innerHTML = GENERIC_STYLE_HTML;
     updateStyleInfo();
@@ -170,7 +272,7 @@ function init() {
 
   $('#c-clear')?.addEventListener('click', () => {
     $('#f-type').selectedIndex = 0;
-    $('#f-faculty') && ($('#f-faculty').value = '');
+    if ($('#f-faculty')) $('#f-faculty').value = '';
     facultyStyles = null;
     $('#f-style').innerHTML = GENERIC_STYLE_HTML;
     updateStyleInfo();
