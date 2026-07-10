@@ -216,6 +216,68 @@ describe('titlePageDoc: naslovnica iz TitlePageModel', () => {
   });
 });
 
+describe('titlePageDoc s predloskom fakulteta', () => {
+  const template: import('../src/title-pages/template-schema').TitlePageTemplate = {
+    id: 'fpzg-doctoral',
+    unitId: 'fpzg',
+    level: 'doctoral',
+    name: 'FPZG doktorski rad',
+    provenance: { status: 'official', sourceIds: ['x'] },
+    status: 'draft',
+    marginsCm: { top: 3, right: 3, bottom: 3, left: 3 },
+    defaultFont: 'Arial',
+    elements: [
+      { role: 'faculty', required: true, elementProvenance: 'official-rules', group: 0, sizePt: 16, uppercase: true },
+      { role: 'author', required: true, elementProvenance: 'official-rules', group: 1, sizePt: 16 },
+      { role: 'title', required: true, elementProvenance: 'official-rules', group: 1, sizePt: 22, bold: true },
+      { role: 'placeyear', required: true, elementProvenance: 'official-rules', group: 2, sizePt: 14 },
+    ],
+  };
+  const model = buildTitlePage(
+    {
+      faculty: 'Fakultet političkih znanosti',
+      author: 'Ana Anić',
+      title: 'Politika i mediji',
+      place: 'Zagreb',
+      year: '2026',
+    },
+    template,
+  );
+
+  it('poredak odlomaka = poredak elemenata predloska, font iz predloska (defaultFont fallback)', async () => {
+    const doc = await readDocument(buildDocxBytes(titlePageDoc(model, template)));
+    const texts = els(doc, 'w:p').map(paraText);
+    expect(texts).toEqual([
+      'Fakultet političkih znanosti', 'Ana Anić', 'Politika i mediji', 'Zagreb, 2026.',
+    ]);
+    for (const text of texts) {
+      expect(attr(first(paraOf(doc, text), 'w:rFonts'), 'w:ascii')).toBe('Arial');
+    }
+    expect(attr(first(paraOf(doc, 'Politika i mediji'), 'w:sz'), 'w:val')).toBe('44');
+  });
+
+  it('w:caps nosi samo uppercase element; tekst ostaje netransformiran', async () => {
+    const doc = await readDocument(buildDocxBytes(titlePageDoc(model, template)));
+    expect(first(paraOf(doc, 'Fakultet političkih znanosti'), 'w:caps')).toBeTruthy();
+    expect(first(paraOf(doc, 'Ana Anić'), 'w:caps')).toBeNull();
+  });
+
+  it('margine dolaze iz template.marginsCm', async () => {
+    const doc = await readDocument(buildDocxBytes(titlePageDoc(model, template)));
+    const pgMar = first(doc, 'w:pgMar');
+    expect(attr(pgMar, 'w:top')).toBe(String(Math.round(3 * 567)));
+    expect(attr(pgMar, 'w:left')).toBe(String(Math.round(3 * 567)));
+  });
+
+  it('razmak skupina na promjeni group vrijednosti, prvi redak bez razmaka', async () => {
+    const doc = await readDocument(buildDocxBytes(titlePageDoc(model, template)));
+    expect(first(paraOf(doc, 'Fakultet političkih znanosti'), 'w:spacing')).toBeNull();
+    expect(Number(attr(first(paraOf(doc, 'Ana Anić'), 'w:spacing'), 'w:before'))).toBeGreaterThan(0);
+    expect(first(paraOf(doc, 'Politika i mediji'), 'w:spacing')).toBeNull();
+    expect(Number(attr(first(paraOf(doc, 'Zagreb, 2026.'), 'w:spacing'), 'w:before'))).toBeGreaterThan(0);
+  });
+});
+
 describe('statementDoc: izjava iz StatementModel', () => {
   const model = buildStatement({
     author: 'Ana Anić',

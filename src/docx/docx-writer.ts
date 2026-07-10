@@ -12,6 +12,7 @@
  * predloske, tocan oblik i dalje se provjerava prema uputama studija.
  */
 import type { TitlePageModel, TitleRole } from '../tools/title-page';
+import type { TitlePageTemplate } from '../title-pages/template-schema';
 import type { StatementModel } from '../tools/statement';
 
 const TWIPS_PER_CM = 567; // parser (readPPr/sectPr logika) racuna cm preko 567 twipa
@@ -24,6 +25,7 @@ export interface ParaSpec {
   sizePt?: number; // tipografske tocke (w:sz je pola-tocke)
   bold?: boolean; // w:b
   italic?: boolean; // w:i
+  caps?: boolean; // w:caps, prikaz verzalom (tekst ostaje netaknut; predlosci naslovnice)
   jc?: 'both' | 'left' | 'center' | 'right'; // w:jc poravnanje
   spacingLine?: number; // w:line u 240-tinama (240 jednostruki, 360 prored 1,5), lineRule auto
   spacingBeforePt?: number; // w:spacing w:before, u tockama
@@ -69,11 +71,12 @@ function spacingXml(p: ParaSpec): string {
 }
 
 function paraXml(p: ParaSpec): string {
-  // rPr redoslijed po OOXML shemi: rFonts, b, i, sz.
+  // rPr redoslijed po OOXML shemi: rFonts, b, i, caps, sz.
   const rpr: string[] = [];
   if (p.font) rpr.push(`<w:rFonts w:ascii="${esc(p.font)}" w:hAnsi="${esc(p.font)}"/>`);
   if (p.bold) rpr.push('<w:b/>');
   if (p.italic) rpr.push('<w:i/>');
+  if (p.caps) rpr.push('<w:caps/>');
   if (p.sizePt) rpr.push(`<w:sz w:val="${Math.round(p.sizePt * 2)}"/>`);
   const rPr = rpr.length ? `<w:rPr>${rpr.join('')}</w:rPr>` : '';
 
@@ -294,8 +297,32 @@ function titleRoleStyle(role: TitleRole): Pick<ParaSpec, 'sizePt' | 'bold' | 'it
  * Naslovnica: centrirani raspored po uzoru na titlePageText (ustanova gore, naslov
  * u sredini vece i bold, autor/mentor/mjesto i godina dolje). Razmak izmedju skupina
  * ide preko spacingBeforePt na prvom retku skupine, ne praznim odlomcima.
+ *
+ * S predloskom fakulteta (data/title-pages): tipografija po retku dolazi iz
+ * model.lines[].style (font je vec razrijesen u jezgri, ukljucivo defaultFont),
+ * skupine iz line.group, margine iz template.marginsCm. Grana bez predloska je
+ * doslovno stara logika (regresijski blok u tests/docx-writer.test.ts).
+ * Ogranicenje v1: logotip/slike nisu podrzani (writer nema media parts ni w:drawing);
+ * predlosci koji propisuju logotip nose to kao napomenu u UI-u.
  */
-export function titlePageDoc(model: TitlePageModel): DocSpec {
+export function titlePageDoc(model: TitlePageModel, template?: TitlePageTemplate): DocSpec {
+  if (template) {
+    const paragraphs: ParaSpec[] = [];
+    let prevGroup: number | undefined;
+    model.lines.forEach((line, i) => {
+      const s = line.style ?? {};
+      const para: ParaSpec = { text: line.text, jc: s.align ?? 'center', sizePt: s.sizePt ?? 12 };
+      if (s.font) para.font = s.font;
+      if (s.bold) para.bold = true;
+      if (s.italic) para.italic = true;
+      if (s.uppercase) para.caps = true;
+      if (i > 0 && line.group !== prevGroup) para.spacingBeforePt = TITLE_GROUP_GAP_PT;
+      prevGroup = line.group;
+      paragraphs.push(para);
+    });
+    return template.marginsCm ? { paragraphs, marginsCm: template.marginsCm } : { paragraphs };
+  }
+
   const paragraphs: ParaSpec[] = [];
   let hasPrevGroup = false;
   for (const roles of TITLE_GROUPS) {
