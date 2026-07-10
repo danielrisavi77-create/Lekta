@@ -1,0 +1,324 @@
+===== [ffrz-oblikovanje-diplomski-2021 | str. 2] =====
+Ope je pravilo da se u svim pisanim radovima uvijek jasno mora odvojiti tui tekst, tue spoznaje i
+tui podaci od autorova teksta, njegovih zakljucaka, spoznaja, ideja, podataka i sl. Od drugih autora
+se mogu preuzeti manji dijelovi teksta, ali se to uvijek mora oznaciti na jasan i uobicajen nacin.
+
+Rad mora sadrzavati:
+
+Naslovnicu na jeziku kojim je rad napisan.
+Sazetak. On mora biti napisan na jeziku na kojemu je napisan rad kao i na nekom drugom jeziku.
+Sazetak obuhvaa pola kartice teksta koji omoguuje citatelju razumijevanje cilja rada, metode
+istrazivanja, rezultata s bitnim obrazlozenjima te autorovih zakljucaka. Na kraju sazetka nalaze se
+kljucne rijeci (3-5) koje upuuju na sadrzaj rada.
+Sadrzaj.
+Tekst rada (pocevsi s uvodom).
+Zakljucak.
+Popis literature.
+Prilozi (neobavezno).
+Zivotopis studentice/studenta u treem licu (do 1800 znakova) s eventualnim popisom objavljenih
+bibliografskih jedinica.
+
+Popis literature:
+
+Navode se svi radovi koji su u diplomskom radu citirani, kao i oni na koje se autor poziva. Dakle, u
+popisu literature ne smiju biti radovi koji nisu citirani, kao ni oni na koje se u radu ne upuuje.
+
+===== [ffrz-oblikovanje-diplomski-2021 | str. 5] =====
+Pravila navoenja unutartekstnih citatnica i bibliografskih jedinica.
+
+Bakalaureatski rad se ureuje prema pravilima casopisa Obnovljeni zivot (usp:
+https://hrcak.srce.hr/upute/upute_reference_Obnovljeni_zivot.pdf).
+
+        Citiranje, parafraziranje te referiranja druge vrste pridonose vjerodostojnosti znanstvenog
+rada ako se koriste na nacin da se postuju moralna prava intelektualnog vlasnistva autora cija se
+znanstvena i druga postignua spominju te ako se koriste u mjeri potrebnoj za jasnou clanka. Autor
+se u tekstu smije referirati samo na konkretno izdanje nekog djela, a ne na djelo openito. Ako se
+citira tekst iz publikacije na stranom jeziku na nacin da se prenosi na hrvatskom jeziku, potrebno je
+naznaciti tko je preveo tekst, u biljesci ispod teksta ili u popisu literature uz bibliografsku jedinicu.
+
+        Obnovljeni zivot za citiranje i referiranje koristi sustav unutartekstnih citatnica (In-Text
+Citations) i izdvojenog popisa literature (Reference List), tzv. harvardski nacin referiranja po uzoru
+na standard APA (American Psychological Association).
+
+        Tekst koji se citira treba biti precizno prepisan iz izvora te odvojen od ostalog teksta
+citatnim navodnicima � �. Referirati se moze i parafraziranjem ili prepricavanjem bez navodnika.
+Neposredno nakon uvrstenog citata i drugih nacina referiranja, unutar samog teksta umee se u
+zagradama unutartekstna citatnica. Unutartekstna citatnica skraeni je podatak o bibliografskoj
+jedinici u popisu literature, a sadrzava: prezime (prvog) autora, godinu izdanja te stranicu ili sub
+voce u citiranom izvoru, primjerice: (Macan, 1997, 15-16); (Jalsenjak i Sestak, 2015, 153); (Cifrak i
+dr., 2008, 32); (Jambresi, 1742, s. v. pietas). Kada clanak potpisuju dva autora, navode se oba, a
+kod tri i vise autora navodi se samo prvi autor s naznakom ,,i dr." (ostali autori navedeni su u popisu
+literature). Umjesto prezimena autora nekad je potrebno navesti kraticu naslova ili signaturu
+arhivskoga gradiva, primjerice: (GS 30); (HR-HDA-650). Svakoj unutartekstnoj citatnici prethodi
+citat ili komentar autora clanka na konkretno mjesto u referiranom djelu, a po istom se nacelu moze
+umetnuti i u tekst biljeske.
+
+        Bibliografska jedinica potpuni je bibliografski opis autorskog rada u publikaciji ili u drugom
+obliku (primjerice rukopis ili tekst na Internetu) u popisu literature na kraju clanka. Bibliografsku
+jedinicu cine podatci o cjelovitom autorskom djelu jednoga ili vise autora, pri cemu su svi navedeni
+autori ujedno i suautori u nerazlucivim dijelovima. Osnovni podatci bibliografske jedinice su ime
+(imena) autora, godina izdanja i naslov rada. Ostali podatci odnose se na mjesto gdje je rad
+objavljen ili gdje se nalazi: naslov publikacije, urednici, mjesto izdanja, izdavac, broj sveska,
+stranice, internetska lokacija i sl.
+
+        Autori se u bibliografskoj jedinici navode prezimenom i punim imenom svih autora. Za
+djelo s vise od dva autora, u unutartekstnoj citatnici, navodi se samo prezime prvog autora s
+naznakom "i dr." Za djelo kojemu nije mogue navesti autora, u popisu literature moze se osmisliti
+posebna kratica (primjerice AR za Akademijin rjecnik) radi oblikovanje unutartekstne citatnice.
+Ako se navodi vise radova istog autora objavljenih u istoj godini, iza godine se dodaju mala slova
+abecede: 1998a, 1998b, 1998c.
+
+        Vise mjesta izdanja i vise izdavaca grupiraju se po vrsti podatka i odvajaju se meusobno
+crtom s razmacima. Za internetske izvore potrebno je u popisu literature navesti DOI ili URL s
+datumom pristupa u zagradama. Arhivsko gradivo potrebno je izdvojiti unutar popisa literature te ga
+navesti prema signaturi i naslovu koji je dodijelio arhiv u kojem se gradivo nalazi. Potrebno je dati
+tocan jednoznacan bibliografski podatak pomou kojeg citatelj moze doi do publikacije, ali ujedno
+ne optereivati popis nepotrebnim drugim podatcima.
+
+        Autori su duzni prilagoditi bibliografske natuknice u popisu literature po uzoru na sljedee
+primjere:
+
+1. Autorska knjiga, doktorski ili magistarski rad
+
+===== [ffrz-oblikovanje-diplomski-2021 | str. 6] =====
+4. Neautorizirana natuknica u rjecniku, leksikonu ili enciklopediji
+
+        Jambresi, Andrija (1742). Lexicon latinum interpretatione Illyrica, Germanica, et
+Hungarica locuples. Zagreb: Typis Academicis Societatis JESU, per Adalbertum Wilh. Wesseli. 
+(Jambresi, 1742, s. v. pietas)
+
+        Marevi, Jozo (2000). Latinsko-hrvatski enciklopedijski rjecnik (I. A�L, II. M�Z). Velika
+Gorica � Zagreb: Marka � Matica hrvatska.  (Marevi, 2000, s. v. sermo)
+
+5. Dokumenti crkvenog uciteljstva
+
+        Dokumenti crkvenog uciteljstva u popisu literature navode se abecednim redom svoje
+kratice, nakon cega slijedi puni naslov dokumenta te izvor kojim se autor sluzio. Autori se mogu
+referirati na neprevedene ili na prevedene objave dokumenta, a mjesto objave u popisu literature
+navode kao prethodno opisane knjige, casopise i dr. U unutartekstnoj citatnici navodi se kratica i
+eventualni drugi podatci, primjerice: (GS 30).
+
+5.1 Papinski dokumenti i djela
+
+===== [ffrz-oblikovanje-diplomski-2021 | str. 7] =====
+5.2 Dokumenti kongregacija i drugih ustanova Svete Stolice
+
+        RF. Relatio finalis. U: XIV. opa redovita skupstina Biskupske sinode, Relatio finalis:
+Zakljucno izvjese biskupske sinode Svetom Ocu Franji: Poziv i poslanje obitelji u Crkvi i
+suvremenom svijetu. Zagreb: Krsanska sadasnjost, 2016.
+
+        RS. Redemptionis Sacramentum. U: Kongregacija za bogostovlje i disciplinu sakramenata,
+Redemptionis sacramentum: Sakrament otkupljenja. Zagreb: Krsanska sadasnjost, 2016.
+
+6. Internetski izvori
+
+       Bibliografska natuknica za internetske izvore formira se po istom nacelu kako je opisano za
+
+sve publikacije, ali joj je potrebno dodati URL ili DOI te datum zadnjeg pristupanja stranici. Cesto
+
+se ne moze utvrditi autor ili godina pa se ti podatci izostavljaju, a u popis literature upisuju se samo
+
+podatci dostupni u samom izvoru. Ako se u unutartekstnoj citatnici ne moze jednostavno i kratko
+
+povezati citat s podatkom u popisu literature, onda je potrebno u biljesci ispod teksta navesti
+
+bibliografski podatak na sto krai nacin, a cjeloviti bibliografski podatak navesti u popisu literature.
+
+       Anon. Stepinac, Alojzije, bl. U: Hrvatska enciklopedija. Leksikografski zavod Miroslav
+
+Krleza. URL: http://www.enciklopedija.hr/natuknica.aspx?id=58021 (02.11.2016.)
+
+       Granderoute, Robert. Pierre Joseph Andr� Roubaud (1730?-1792). U: Dictionnaire des
+
+journalistes (1600-1789). Institut des sciences de l'homme. URL: http://dictionnaire-
+
+journalistes.gazettes18e.fr/journaliste/709-pierre-joseph-andre- roubaud (23.06.2016.)
+
+       GS. Gaudium et spes. U: Paulus VI., Paulus episcopus servus servorum Dei una cum
+
+===== [ffrz-oblikovanje-diplomski-2021 | str. 7] =====
+comparison. Philosophy & Social Criticism, 41(1), 21-28. DOI:10.1177/0191453714553496
+
+7. Arhivsko gradivo
+
+        HR-HDA-650 Pavlinski samostan Lepoglava, fasc. 10, br. 82. [Hrvatski drzavni arhiv]
+        HR-MP-127 Catalogus Authorum Seu Scriptorum Ex Religiosis ordinis S. Pauli primi
+Eremitae, Qui aliqua Doctrina aut pietatis monumenta Scriptis ediderunt. Collectus per P. T. Nic.
+Ben. eiusdem Ords. [Metropolitana]
+
+8. Ostale upute
+
+        Ovisno o potrebama u tekstu se mogu koristiti dvije vrste navodnika: �citatni navodnici� i
+,,znacenjski navodnici".
+
+        Citatni navodnici koriste se kod doslovnog prenosenja teksta (ukljucujui i slovne pogreske)
+iz citiranog izvora kao sastavni dio referiranja.
+
+        Znacenjski navodnici isticu da je rijec koristena u prenesenom ili dvojbenom znacenju.
+
+===== [ffrz-oblikovanje-bakalaureatski-2021 | str. 2] =====
+Ope je pravilo da se u svim pisanim radovima uvijek jasno mora odvojiti tui tekst, tue
+spoznaje i tui podaci od autorova teksta, njegovih zakljucaka, spoznaja, ideja, podataka i sl.
+Od drugih autora se mogu preuzeti manji dijelovi teksta, ali se to uvijek mora oznaciti na jasan
+i uobicajen nacin.
+Rad mora sadrzavati:
+Naslovnicu na jeziku kojim je rad napisan.
+Sazetak. On mora biti napisan na jeziku na kojemu je napisan rad kao i na nekom drugom
+jeziku. Sazetak obuhvaa pola kartice teksta koji omoguuje citatelju razumijevanje cilja rada,
+metode istrazivanja, rezultata s bitnim obrazlozenjima te autorovih zakljucaka. Na kraju sazetka
+nalaze se kljucne rijeci (3-5) koje upuuju na sadrzaj rada.
+Sadrzaj.
+Tekst rada (pocevsi s uvodom).
+Zakljucak.
+Popis literature.
+Prilozi (neobavezno).
+Zivotopis studentice/studenta u treem licu (do 1800 znakova) s eventualnim popisom
+objavljenih bibliografskih jedinica.
+Popis literature:
+Navode se svi radovi koji su u diplomskom radu citirani, kao i oni na koje se autor poziva.
+Dakle, u popisu literature ne smiju biti radovi koji nisu citirani, kao ni oni na koje se u radu ne
+upuuje.
+
+                                                                                                                 2
+
+===== [ffrz-oblikovanje-bakalaureatski-2021 | str. 5] =====
+Pravila navoenja unutartekstnih citatnica i bibliografskih jedinica.
+
+Bakalaureatski rad se ureuje prema pravilima casopisa Obnovljeni zivot (usp:
+https://hrcak.srce.hr/upute/upute_reference_Obnovljeni_zivot.pdf).
+
+        Citiranje, parafraziranje te referiranja druge vrste pridonose vjerodostojnosti
+znanstvenog rada ako se koriste na nacin da se postuju moralna prava intelektualnog vlasnistva
+autora cija se znanstvena i druga postignua spominju te ako se koriste u mjeri potrebnoj za
+jasnou clanka. Autor se u tekstu smije referirati samo na konkretno izdanje nekog djela, a ne
+na djelo openito. Ako se citira tekst iz publikacije na stranom jeziku na nacin da se prenosi na
+hrvatskom jeziku, potrebno je naznaciti tko je preveo tekst, u biljesci ispod teksta ili u popisu
+literature uz bibliografsku jedinicu.
+
+        Obnovljeni zivot za citiranje i referiranje koristi sustav unutartekstnih citatnica (In-Text
+Citations) i izdvojenog popisa literature (Reference List), tzv. harvardski nacin referiranja po
+uzoru na standard APA (American Psychological Association).
+
+        Tekst koji se citira treba biti precizno prepisan iz izvora te odvojen od ostalog teksta
+citatnim navodnicima � �. Referirati se moze i parafraziranjem ili prepricavanjem bez
+navodnika. Neposredno nakon uvrstenog citata i drugih nacina referiranja, unutar samog teksta
+umee se u zagradama unutartekstna citatnica. Unutartekstna citatnica skraeni je podatak o
+bibliografskoj jedinici u popisu literature, a sadrzava: prezime (prvog) autora, godinu izdanja
+te stranicu ili sub voce u citiranom izvoru, primjerice: (Macan, 1997, 15-16); (Jalsenjak i Sestak,
+2015, 153); (Cifrak i dr., 2008, 32); (Jambresi, 1742, s. v. pietas). Kada clanak potpisuju dva
+autora, navode se oba, a kod tri i vise autora navodi se samo prvi autor s naznakom ,,i dr." (ostali
+autori navedeni su u popisu literature). Umjesto prezimena autora nekad je potrebno navesti
+kraticu naslova ili signaturu arhivskoga gradiva, primjerice: (GS 30); (HR-HDA-650). Svakoj
+unutartekstnoj citatnici prethodi citat ili komentar autora clanka na konkretno mjesto u
+referiranom djelu, a po istom se nacelu moze umetnuti i u tekst biljeske.
+
+        Bibliografska jedinica potpuni je bibliografski opis autorskog rada u publikaciji ili u
+drugom obliku (primjerice rukopis ili tekst na Internetu) u popisu literature na kraju clanka.
+Bibliografsku jedinicu cine podatci o cjelovitom autorskom djelu jednoga ili vise autora, pri
+cemu su svi navedeni autori ujedno i suautori u nerazlucivim dijelovima. Osnovni podatci
+bibliografske jedinice su ime (imena) autora, godina izdanja i naslov rada. Ostali podatci odnose
+se na mjesto gdje je rad objavljen ili gdje se nalazi: naslov publikacije, urednici, mjesto izdanja,
+izdavac, broj sveska, stranice, internetska lokacija i sl.
+
+        Autori se u bibliografskoj jedinici navode prezimenom i punim imenom svih autora. Za
+djelo s vise od dva autora, u unutartekstnoj citatnici, navodi se samo prezime prvog autora s
+naznakom "i dr." Za djelo kojemu nije mogue navesti autora, u popisu literature moze se
+osmisliti posebna kratica (primjerice AR za Akademijin rjecnik) radi oblikovanje unutartekstne
+citatnice. Ako se navodi vise radova istog autora objavljenih u istoj godini, iza godine se dodaju
+mala slova abecede: 1998a, 1998b, 1998c.
+
+        Vise mjesta izdanja i vise izdavaca grupiraju se po vrsti podatka i odvajaju se
+meusobno crtom s razmacima. Za internetske izvore potrebno je u popisu literature navesti
+DOI ili URL s datumom pristupa u zagradama. Arhivsko gradivo potrebno je izdvojiti unutar
+popisa literature te ga navesti prema signaturi i naslovu koji je dodijelio arhiv u kojem se
+gradivo nalazi. Potrebno je dati tocan jednoznacan bibliografski podatak pomou kojeg citatelj
+moze doi do publikacije, ali ujedno ne optereivati popis nepotrebnim drugim podatcima.
+
+        Autori su duzni prilagoditi bibliografske natuknice u popisu literature po uzoru na
+sljedee primjere:
+
+                                                                                                                 5
+
+===== [ffrz-oblikovanje-bakalaureatski-2021 | str. 6] =====
+4. Neautorizirana natuknica u rjecniku, leksikonu ili enciklopediji
+
+        Jambresi, Andrija (1742). Lexicon latinum interpretatione Illyrica, Germanica, et
+Hungarica locuples. Zagreb: Typis Academicis Societatis JESU, per Adalbertum Wilh.
+Wesseli.  (Jambresi, 1742, s. v. pietas)
+
+        Marevi, Jozo (2000). Latinsko-hrvatski enciklopedijski rjecnik (I. A�L, II. M�Z).
+Velika Gorica � Zagreb: Marka � Matica hrvatska.  (Marevi, 2000, s. v. sermo)
+
+5. Dokumenti crkvenog uciteljstva
+
+        Dokumenti crkvenog uciteljstva u popisu literature navode se abecednim redom svoje
+kratice, nakon cega slijedi puni naslov dokumenta te izvor kojim se autor sluzio. Autori se mogu
+referirati na neprevedene ili na prevedene objave dokumenta, a mjesto objave u popisu literature
+navode kao prethodno opisane knjige, casopise i dr. U unutartekstnoj citatnici navodi se kratica
+i eventualni drugi podatci, primjerice: (GS 30).
+
+                                                                                                                 6
+
+===== [ffrz-oblikovanje-bakalaureatski-2021 | str. 7] =====
+5.2 Dokumenti kongregacija i drugih ustanova Svete Stolice
+
+        RF. Relatio finalis. U: XIV. opa redovita skupstina Biskupske sinode, Relatio finalis:
+Zakljucno izvjese biskupske sinode Svetom Ocu Franji: Poziv i poslanje obitelji u Crkvi i
+suvremenom svijetu. Zagreb: Krsanska sadasnjost, 2016.
+
+        RS. Redemptionis Sacramentum. U: Kongregacija za bogostovlje i disciplinu
+sakramenata, Redemptionis sacramentum: Sakrament otkupljenja. Zagreb: Krsanska
+sadasnjost, 2016.
+
+6. Internetski izvori
+
+       Bibliografska natuknica za internetske izvore formira se po istom nacelu kako je opisano
+
+za sve publikacije, ali joj je potrebno dodati URL ili DOI te datum zadnjeg pristupanja stranici.
+
+Cesto se ne moze utvrditi autor ili godina pa se ti podatci izostavljaju, a u popis literature upisuju
+
+se samo podatci dostupni u samom izvoru. Ako se u unutartekstnoj citatnici ne moze
+
+jednostavno i kratko povezati citat s podatkom u popisu literature, onda je potrebno u biljesci
+
+ispod teksta navesti bibliografski podatak na sto krai nacin, a cjeloviti bibliografski podatak
+
+navesti u popisu literature.
+
+       Anon. Stepinac, Alojzije, bl. U: Hrvatska enciklopedija. Leksikografski zavod Miroslav
+
+Krleza. URL: http://www.enciklopedija.hr/natuknica.aspx?id=58021 (02.11.2016.)
+
+       Granderoute, Robert. Pierre Joseph Andr� Roubaud (1730?-1792). U: Dictionnaire des
+
+journalistes (1600-1789). Institut des sciences de l'homme. URL: http://dictionnaire-
+
+journalistes.gazettes18e.fr/journaliste/709-pierre-joseph-andre- roubaud (23.06.2016.)
+
+       GS. Gaudium et spes. U: Paulus VI., Paulus episcopus servus servorum Dei una cum
+
+===== [ffrz-oblikovanje-bakalaureatski-2021 | str. 7] =====
+comparison. Philosophy & Social Criticism, 41(1), 21-28. DOI:10.1177/0191453714553496
+
+7. Arhivsko gradivo
+
+        HR-HDA-650 Pavlinski samostan Lepoglava, fasc. 10, br. 82. [Hrvatski drzavni arhiv]
+        HR-MP-127 Catalogus Authorum Seu Scriptorum Ex Religiosis ordinis S. Pauli primi
+Eremitae, Qui aliqua Doctrina aut pietatis monumenta Scriptis ediderunt. Collectus per P. T.
+Nic. Ben. eiusdem Ords. [Metropolitana]
+
+8. Ostale upute
+
+        Ovisno o potrebama u tekstu se mogu koristiti dvije vrste navodnika: �citatni navodnici�
+i ,,znacenjski navodnici".
+
+                                                                                        7
+
+===== [ffrz-oblikovanje-bakalaureatski-2021 | str. 8] =====
+Citatni navodnici koriste se kod doslovnog prenosenja teksta (ukljucujui i slovne
+pogreske) iz citiranog izvora kao sastavni dio referiranja.
+
+        Znacenjski navodnici isticu da je rijec koristena u prenesenom ili dvojbenom znacenju.
+
+                                                                                                                 8

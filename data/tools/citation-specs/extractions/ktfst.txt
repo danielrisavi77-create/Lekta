@@ -1,0 +1,102 @@
+===== [ktf-prilog3-zavrsni | str. 1] =====
+Ključne riječi: (3-6)
+
+Rad sadrži: XX stranica, XX slika, X tablica, X priloga, XX literaturnih reference
+Jezik izvornika: hrvatski
+
+Sastav Povjerenstva za ocjenu i obranu završnog rada:
+
+1. doc. dr. sc. XXXXpredsjednik
+2. izv. prof. dr. sc. XXXXčlan/komentor
+3. prof. dr.sc. XXXXmentor
+
+
+Datum obrane: (datum upisuje Studentska služba nakon uspješne obrane rada)
+
+Rad je u tiskanom i elektroničkom (PDF) obliku pohranjen u Knjižnici Kemijsko-tehnološkog fakulteta u Splitu, Ruđera Boškovića 35, u javnoj internetskoj bazi Sveučilišne knjižnice u Splitu te u javnoj internetskoj bazi završnih radova Nacionalne i sveučilišne knjižnice.
+
+===== [ktf-prilog3-zavrsni | str. 1] =====
+Keywords: (3-6)
+
+Thesis contains: XX pages, XX figures, X tables, X supplements, XX references
+Original in: Croatian
+
+Defence committee for evaluation and defense of bachelor thesis:
+
+1. XXXX, PhD, a Asst. Prof.chair person
+2. XXXX, PhD, Assoc. Prof.member/co-supervisor
+3. XXXX, PhD, full Prof.supervisor
+
+
+Defence date: (Employee of Student office fulfill the date after successfully defended thesis)
+
+Printed and electronic (PDF) form of thesis is deposed in Library of Faculty of Chemistry and Technology in Split, Ruđera Boškovića 35, in the public library database of the University of Split Library and in the digital academic archives and repositories of the National and University Library.
+
+===== [ktf-prilog3-zavrsni | str. 1] =====
+2.1.1.
+itd.
+3. REZULTATI (REZULTATI se mogu povezati u jedan naslov zajedno s RASPRAVOM)
+3.1.
+3.1.1.
+itd.
+4. RASPRAVA
+4.1.
+4.1.1.
+itd.
+5. ZAKLJUČCI
+6. POPIS KRATICA I SIMBOLA (Prema uputama časopisa "Kemija u industriji".)
+7. LITERATURA (Prema uputama časopisa: "Kemija u industriji" (http://silverstripe.fkit.hr/kui/assets/PDFovi/Oprema-rukopisa.pdf))
+8. PRILOZI
+
+
+NAPOMENA: kod preglednog rada obvezna poglavlja su SADRŽAJ, UVOD, OPĆI DIO, ZAKLJUČCI, POPIS KRATICA I SIMBOLA te LITERATURA.
+
+===== [ktf-prilog4-diplomski | str. 1] =====
+Ključne riječi: (3-6)
+
+Rad sadrži: XX stranica, XX slika, X tablica, X priloga, XX literaturnih reference
+Jezik izvornika: hrvatski
+
+Sastav Povjerenstva za ocjenu i obranu diplomskog rada:
+
+1. doc. dr. sc. XXXXpredsjednik
+2. izv. prof. dr. sc. XXXXčlan/komentor
+3. prof. dr.sc. XXXXmentor
+
+
+Datum obrane: (datum upisuje Studentska služba nakon uspješne obrane rada)
+
+Rad je u tiskanom i elektroničkom (PDF) obliku pohranjen u Knjižnici Kemijsko-tehnološkog fakulteta u Splitu, Ruđera Boškovića 35, u javnoj internetskoj bazi Sveučilišne knjižnice u Splitu te u javnoj internetskoj bazi diplomskih radova Nacionalne i sveučilišne knjižnice.
+
+===== [ktf-prilog4-diplomski | str. 1] =====
+Keywords: (3-6)
+
+Thesis contains: XX pages, XX figures, X tables, X supplements, XX references
+Original in: Croatian
+
+Defence committee for evaluation and defense of diploma thesis:
+
+1. XXXX, PhD, Asst. Prof.chair person
+2. XXXX, PhD, Assoc. Prof.member/co-supervisor
+3. XXXX, PhD, Full Prof.supervisor
+
+
+Defence date: (Employee of Student office fulfill the date after successfully defended thesis)
+
+Printed and electronic (PDF) form of thesis is deposed in Library of Faculty of Chemistry and Technology in Split, Ruđera Boškovića 35, in the public library database of the University of Split Library and in the digital academic archives and repositories of the National and University Library.
+
+===== [ktf-prilog4-diplomski | str. 1] =====
+2.1.1.
+itd.
+3. REZULTATI (REZULTATI se mogu povezati u jedan naslov zajedno s RASPRAVOM)
+3.1.
+3.1.1.
+itd.
+4. RASPRAVA
+4.1.
+4.1.1.
+itd.
+5. ZAKLJUČCI
+6. POPIS KRATICA I SIMBOLA (Prema uputama časopisa "Kemija u industriji".)
+7. LITERATURA (Prema uputama časopisa: "Kemija u industriji" (http://silverstripe.fkit.hr/kui/assets/PDFovi/Oprema-rukopisa.pdf))
+8. PRILOZI

@@ -1,0 +1,314 @@
+===== [vuv-upute-radovi-2025 | str. 1] =====
+Zavrsni/diplomski rad predstavlja samostalno strucno djelo studenta u kome student pod
+voditeljstvom mentora obrauje odreenu temu. Tema zavrsnog/diplomskog rada moze se
+odnositi na teorijsku, prakticnu ili teorijsko-prakticnu problematiku, pri cemu je preporucljivo
+dovoenje teorijskih spoznaja u izravnu vezu s rjesavanjem aktualnih prakticnih problema.
+
+Osnovna svrha izrade i obrane zavrsnog/diplomskog rada je dokaz:
+
+     Sposobnosti primjene znanja stecenih tijekom studija
+     Sposobnosti primjene primjerenih metoda u obradi odabrane teme.
+     Sposobnosti koristenja relevantnih tuih spoznaja, stavova i cinjenica koje su objavljene u
+
+         koristenoj literaturi.
+     Sposobnosti pravilne obrade ilustracija (tablica, grafikona, slika i crteza)
+     Sposobnosti i vjestine pisanja strucnih radova.
+
+1. Priprema za izradu zavrsnog/diplomskog rada
+
+1.1. Dogovor s mentorom o izboru teme zavrsnog/diplomskog rada
+
+Temu zavrsnog/diplomskog rada moze predloziti student ili mentor. Naslov zavrsnog/diplomskog
+rada student odreuje u dogovoru s mentorom. Izabrana tema i predlozeni sadrzaj predstavljaju
+osnovni okvir za pristupanje prikupljanju literature i drugih izvora informacija i podataka koje
+student namjerava koristiti pri obradi teme i pisanju zavrsnog/diplomskog rada.
+
+1.2. Prikupljanje literature i ostalih izvora
+
+Prikupljanje i citanje strucne literature nuzan je preduvjet daljnjega samostalnoga rada studenata.
+U prikupljanju strucne literature i ostalih izvora informacija i podataka uputno je koristiti usluge
+Knjiznice Veleucilista u Virovitici te ostale dostupne knjiznice. Takoer je uputno koristiti ostale
+izvore poput online izvora kojima pripadaju razni portali, baze podataka, periodicke publikacije i
+
+===== [vuv-upute-radovi-2025 | str. 2] =====
+monografije, ali i ostale sluzbene internetske stranice. Prilikom prikupljanja literature putem online
+izvora studenti moraju paziti da se koristi relevantan i kvalitetan izvor. Kvaliteti
+zavrsnog/diplomskog rada pridonijeti e i koristenje radova iz strucnih i znanstvenih casopisa,
+zbornika i s konferencija.
+
+1.3. Odreivanje strukture zavrsnog/diplomskog rada
+
+Strukturu zavrsnog/diplomskog rada predlaze student i konacno ju odreuje u dogovoru s
+mentorom, cime se osigurava sustavnost, jasnoa i uvid u temeljne probleme i podrucja koja e
+zavrsni/diplomski rad obuhvaati. Struktura zavrsnog/diplomskog rada ovisit e o pristupu i
+metodologiji obrade odabrane teme.
+
+    1. Naslov
+    2. Zadatak zavrsnog/diplomskog rada
+    3. Sazetak i kljucne rijeci (na hrvatskom i engleskom jeziku)
+    4. Sadrzaj
+    5. Uvod
+    6. Razrada teme po poglavljima (broj poglavlja i potpoglavlja ovisi o obimu teme)
+    7. Osvrt na mogunosti prakticne primjene
+    8. Zakljucak
+    9. Popis literature
+    10. Popis grafickih ilustracija (tablice, grafikoni i slike)
+    11. Popis koristenih alata umjetne inteligencije
+    12. Prilozi (Izjava o autorstvu i Odobrenje za objavljivanje zavrsnog/diplomskog rada u
+
+         digitalnom repozitoriju
+
+*Ukoliko tema zavrsnog/diplomskog rada osim teorijske razrade problematike obuhvaa i
+empirijsko istrazivanje s osvrtom na prakticnu primjenu rezultata istrazivanja, struktura
+zavrsnog/diplomskog rada sadrzi:
+
+      1. Naslov
+      2. Zadatak zavrsnog/diplomskog rada
+      3. Sazetak i kljucne rijeci (na hrvatskom i engleskom jeziku)
+      4. Sadrzaj
+      5. Uvod
+     6. Teorijski dio - razrada teme po poglavljima (broj poglavlja i potpoglavlja ovisi o obimu
+
+           teme)
+     7. Osvrt Empirijski dio - cilj i zadaci istrazivanja, opis primijenjenih metoda i postupaka
+
+           istrazivanja te interpretacija rezultata istrazivanja i rasprava
+      8. Zakljucak
+      9. Popis literature
+      10. Popis grafickih ilustracija (tablice, grafikoni i slike)
+      11. Popis koristenih alata umjetne inteligencije
+
+===== [vuv-upute-radovi-2025 | str. 3] =====
+2.1. Osnovni parametri za pisanje zavrsnog/diplomskog rada
+
+    � Zavrsni/diplomski rad treba biti pisan na hrvatskom jeziku te pravopisno i gramaticki
+         ispravan
+
+    � vrsta papira: standardni A4 papir
+    � margine: - 2,5 cm s gornje i donje strane
+
+                      - 2 cm s desne i 3 cm s lijeve strane
+    � prored: - 1,5 u glavnom dijelu teksta
+
+                    - 1 u pozivnim biljeskama (fusnotama)
+    � vrsta slova: Times New Roman
+    � velicina slova: - font 14 u naslovnoj stranici
+
+                            - font 14 u naslovima poglavlja
+                            - font 12 u naslovima potpoglavlja
+                            - font 12 u tekstu
+                            - font 10 u fusnotama (pozivnim biljeskama)
+                            - font 10 u endnotama (krajnjim biljeskama)
+    � poravnanje reda (margine): obostrano
+    � uvlaka odlomka: 10 mm
+    � razmak izmeu naslova, podnaslova i teksta: 1 red
+    � numeracija stranica: na desnoj strani podnozja stranice (u istom tipu i velicini slova)
+    � numeracija se ne stavlja: - na naslovnu stranicu
+
+                                          - na stranicu sa sadrzajem
+    � pocetak numeriranja: od uvoda (arapskim brojkama)
+    � opseg rada (ne racunajui naslovnu stranicu, sadrzaj i priloge):
+
+              - prijediplomski studij - izmeu 20-35 stranica
+              - diplomski studij - izmeu 35-60 stranica
+
+===== [vuv-upute-radovi-2025 | str. 9] =====
+je obavezan na hrvatskom i engleskom jeziku, dok su sazetak i kljucne rijeci obavezni samo na
+hrvatskom, a na engleskom po izboru. Prored u sazetku ide 1,0. Primjer stranice sazetka:
+
+         NASLOV ZAVRSNOG/DIPLOMSKOG RADA NA HRVATSKOM JEZIKU
+                                                  (1 red prazno)
+
+               NASLOV ZAVRSNOG/DIPLOMSKOG RADA NA ENGLESKOM
+                                              JEZIKU (obavezan)
+
+(1 red prazno)
+SAZETAK - Sazetak treba imati 200 do 250 rijeci i pise se u jednom odlomku, u treem
+licu i pasivu. Tekst sazetka je pisan koso (italic) vrstom slova Times New Roman i fontom
+12. U njemu se ne citira. Sazetak je jezgroviti prikaz cijelog rada te u njemu trebaju biti
+sadrzane najvaznije informacije o radu. Na prvom mjestu navode se cilj i svrha rada, zatim
+se objasnjava teorijski i metodoloski pristup opisu problematike. Ukoliko se radi o
+istrazivanju, navode se odabrane metode i uzorak istrazivanja. Na kraju se navodi glavni
+rezultat i doprinos rada.
+(1 red prazno)
+Kljucne rijeci: 3 do 5 kljucnih rijeci
+(2 reda prazno)
+
+SUMMARY - Sazetak na engleskom jeziku je prijevod sazetka na hrvatskom jeziku. Tekst
+sazetka mora biti napisan na standardnom engleskom jeziku uvazavajui pravopisne i
+gramaticke norme u engleskom jeziku. Nije dopusteno napisati tekst sazetka koristei neki
+oblik strojnog prevoenja, npr. Google prevoditelj. Sazetak na engleskom nije obavezan
+
+===== [vuv-upute-radovi-2025 | str. 10] =====
+SADRZAJ (velikim slovima, podebljano, font 14, centrirano)
+
+        (1 red prazno)
+        1. UVOD (velikim slovima, font 12)...................................................... 1
+        2. NASLOV 1 (velikim slovima, font 12)................................................ 2
+
+             2.1. Podnaslov 1 (malim slovima, font 12).............................................. 2
+             2.2. Podnaslov 2 (malim slovima, font 12)............................................. 3
+              2.3. .......... ..........................................................................................4
+        3. NASLOV 2 (velikim slovima, font 12).................................................4
+        4. NASLOV............ ..........................................................................5
+        5. ZAKLJUCAK (velikim slovima, font 12)............................................. 5
+        6. POPIS LITERATURE (velikim slovima, font 12).................................... 6
+        7. POPIS ILUSTRACIJA (velikim slovima, font 12)....................................7
+        8. POPIS KORISTENIH ALATA UMJETNE INTELIGENCIJE (velikim slovima,
+         font 12)............................................................................................................8
+        9. PRILOZI (velikim slovima, font 12).......................................................9
+
+2.6. Uvod
+
+Tekst zavrsnog/diplomskog rada zapocinje uvodom. Naslov ,,UVOD" oznacava se arapskim
+brojem 1. i pise se velikim slovima centrirano na vrhu stranice font 14, podebljano (bold). Uvod
+sadrzi osnovne naznake teme i problema koji se u zavrsnom/diplomskom radu obraduje, razlog
+izbora teme proucavanja, autorov pristup problemu, opis strukture i kompozicijske podjele rada
+te kratku najavu pojedinih dijelova zavrsnog/diplomskog rada. Prva stranica uvoda oznacava se
+
+===== [vuv-upute-radovi-2025 | str. 13] =====
+2.7.2. Tablice, grafikoni i slike
+Svaku tablicu, grafikon i sliku u radu treba oznaciti rednim brojem i naslovom slovima font 11,
+bold. Ukoliko tablica, grafikon ili slika nije autorov rad obvezno treba naznaciti izvor iz koga je
+preuzet sa svim podacima koje sadrzi (font 11, italic). Ukoliko je izvor iz internetskog izvora pored
+rijeci ,,Izvor:" pise se naziv stranice, link na kojem je dostupan (ne duzi od tri reda) i datum
+posjeenosti. No, ukoliko je duzi pise se naziv stranice i oznaka pozivne biljeske u kojoj e bit
+sadrzan dostupan link s datumom posjeenosti. Brojevi i slova u tablicama i grafickim prikazima
+pisu se fontom 11. U izvoru se pisu podaci prema primjerima. Ukoliko radite neku novu graficku
+ilustraciju prema podacima iz nekog izvora tada prije svih podataka stavljate ,,prilagoeno prema",
+a ukoliko ste vi autor podataka (npr. proveli ste istrazivanje) iz ilustracije samo tada stavljate autor
+rada u izvor.
+Primjer grafickih prikaza moze se vidjeti na sljedeem primjeru:
+
+             Tablica 1. Broj stanovnika gradova i opina u Viroviticko-podravskoj zupaniji
+
+Izvor: Ravli, Z. (2010). Polozaj zena u rukovodeim strukturama sluzbi jedinica lokalne i podrucne
+(regionalne) samouprave na primjeru Viroviticko podravske zupanije, visoka skola za menadzment u
+turizmu i informatici u Virovitici, neobjavljeni zavrsni rad, str. 34
+
+===== [vuv-upute-radovi-2025 | str. 14] =====
+Tablica 2. Samoprocjena jezicnih vjestina
+
+                              Izvor: Jezicna putovnica � obrazac i uputstva europass1
+
+2.7.3. Citiranje i parafraziranje
+Citiranje je doslovno preuzimanje manjeg dijela originalnog teksta. Prilikom citiranja originalni dio
+teksta prenosi se doslovno u tekst rada uz oznacavanje u navodnicima. Prihvatljiv je citat do 5
+redaka teksta.
+Primjer citiranja: (doslovno preuzimanje tueg teksta u navodnicima)
+Jedan autor
+Pojmovi se zasnivaju na iskustvenom misljenju kojim "gradimo takve skupove iskustvenih
+elemenata koje nikad nismo aktualno dozivjeli"(Markovi, 1971:272). Zakonski tekstovi citiraju
+se u samom tekstu rada, uz navoenje punog naziva propisa (kada se prvi put citira) i skraenice
+za sve idue citate, pri cemu se u zagradi navodi o kojemu se clanku, stavku, alineji i dr. propisa
+radi.
+Dva autora
+,,Korporativne drustvene inicijative (akcije) su najvaznije aktivnosti koje korporacija poduzima
+kako bi podrzala drustvo i ostvarila svoje opredjeljenje za drustveno odgovorno poslovanje"
+(Kotler i Lee, 2009:15).
+Tri autora
+,,Analizu rizika mozemo promatrati kao postupak u kojem su rizici iz procesa identifikacije rizika
+grupirani, filtrirani i sortirani po znacaju" (Andrijani, Gregurek, Merkas, 2016:161).
+
+1 http://europass.cedefop.europa.eu/sites/default/files/elp/UserT6zdbSAhVHQBQKHdK5BoYQ_AUIBigB&biw=
+1317&bih=611&dpr=1#tbm=isch&q=invest48563DocsImages/Dokumenti%20za%20web/Izvje%C5%A1bazaC
+DXPHZ%C4info48dkzzth%87+iertkC4%8Dki+zavbbrsh&site=webhp&source=lnms&tbm=isch&sa=X&ved=0a
+
+===== [vuv-upute-radovi-2025 | str. 15] =====
+Cetiri i vise autora
+,,Obiteljski i bracni status osobe je jos jedna vazna demografska varijabla, jer utjece na
+potrosaceve prioritete pri trosenju novca" (Solomon i sur., 2015:10).
+
+Primjer citiranja pravnih propisa:
+"Plaa je iznos isplaen za radnikov rad u bruto iznosu" (cl. 83. st. 1. Zakona o radu, NN 149/09.).
+
+Primjer citiranja sekundarnog teksta:
+Ukoliko se citira sekundarni tekst, odnosno tekst koji je kao izvor citiranja ve koristen u radu iz
+kojega se citira, potrebno je navesti oba izvora (primjer: Ivi, 2009:16 prema Kovac, 2003). Prvi
+izvor je onaj kojeg je student nasao, a drugi onaj koji je u tom izvoru spomenut.
+
+Halmi (1999:42 prema Mili, 1978:132) metodologiju promatra kao "posebnu logicku disciplinu
+ciji je zadatak proucavanje i razvijanje logickih okvira znanstvene spoznaje, ali i istrazivackih
+sredstava i postupaka koje odreena znanost ili grupa srodnih znanosti primjenjuje u svojim
+istrazivanjima kako bi dosla do novih znanstvenih spoznaja".
+
+Metodologija se moze promatrati kao "posebna logicka disciplina ciji je zadatak proucavanje i
+razvijanje logickih okvira znanstvene spoznaje, ali i istrazivackih sredstava i postupaka koje
+odreena znanost ili grupa srodnih znanosti primjenjuje u svojim istrazivanjima kako bi dosla do
+novih znanstvenih spoznaja" (Halmi, 1999:42 prema Mili, 1978:132).
+
+Primjer citiranja sa izostavljenim dijelovima teksta:
+Tekst se moze citirati i tako da se s ciljem sazimanja i izdvajanja bitnoga njegovi pojedini dijelovi
+izostave. Izostavljeni dijelovi oznacavaju se trotocjem (...).
+
+Okretanje prema tradicionalnim elementima i kulturnim obrascima lokalne kulture odraz je
+suprostavljenosti dviju dimenzija: tradicionalne i nove (globalne). Friedman (2003:42)
+tradicionalnu dimenziju opisuje kao maslinu koja ,,...nas ukorjenjuje, usidruje i smjesta nekomu
+na ovom svijetu... maslinska nam stabla daju toplinu obitelji, radost individualnosti, intimnost
+osobnih rituala... i samouvjerenost i sigurnost potrebnu da izaemo i susretnemo se s drugima...,,
+a globalnu dimenziju opisuje kao Lexus koji predstavlja ,, ... sva ona propupala svjetska trzista...
+i racunalne tehnologije kojima se danas sluzimo u potrazi za visim zivotnim standardom."
+
+Primjer citiranja kada nisu poznati autori:
+,,DOP je kratica za drustvo odgovorno poslovanje. O DOP-u govorimo kada neka tvrtka, iznad
+strogo zakonom propisanih obaveza, integrira brigu za okolis i drustvo u sustav donosenja
+odluka." (Hrvatska gospodarska komora, 2010).
+
+Parafraziranje podrazumijeva ukljucivanje veeg dijela teksta drugog autora u vlastiti tekst.
+Prilikom parafraziranja originalni dio teksta prenosi se iskljucivo svojim rijecima, slijedei temeljne
+postavke originalnog teksta. Kod parafraziranja je potrebno voditi racuna da parafrazirani
+(prepricani) tekst ne izgubi smisao izvornog teksta. Preuzimanje tuih ostvarenja (tueg teksta)
+bez navoenja autora nedopusteno je i predstavlja plagijat. Za navoenje izvora parafraze s dva,
+tri, cetiri i vise autora pravila vrijede kao kod citiranja samo bez pripadajue stranice.
+
+===== [vuv-upute-radovi-2025 | str. 16] =====
+Primjer parafraziranja:
+Znanstvena hipoteza predstavlja misaono-teorijsku dopunu izvjesnih praznina u poznavanju
+odreene pojave ili citavog sklopa pojave cije izvjesne segmente, dijelove ili aspekte ve
+poznajemo, dok u logickom smislu hipoteza predstavlja stav, odnosno iskaz odreenog
+predmetnog znacenja i pretpostavljene spoznajne vrijednosti koju treba provjeriti (Sesi, 1978).
+
+Primjer parafraziranja istovremeno vise autora:
+U literaturi se mogu nai razlicite vrste modela znanstvenog istrazivanja koje su se razvile iz
+logicki razlicitih misaonih postupaka, a primjenjuju se u razlicitim vrstama istrazivanja, kao i
+njihove brojne klasifikacije (Mejovsek, 2008; Belak, 2005; Zelenika, 2000; Baban i sur., 2000;
+Muzi, 1973; Muzi, 1999; Zugaj, 1997; Ivanovi, 1996).
+
+Literatura za koju nema imena i prezimena autora navodi se u tekstu tako da se navodi naziv
+stranice/clanka i godina te za citate i stranica (ako se nalazi na vise stranica).
+
+2.7.4. Koristenje pozivnih biljezaka (fusnota)
+
+U tekstu je mogue koristiti pozivne biljeske (fusnote):
+         eksplikativne (kao dopunska objasnjenja pojedinih dijelova teksta)
+         komparativne (upuuju na neki drugi izvor koji obrauje istu ili slicnu problematiku)
+         dokumentarne (upuuju na koristenu literaturu) i njih NE KORISTIMO.
+
+Pozivne biljeske pisu se na dnu stranice odvojene crtom od glavnog teksta, oznacene arapskim
+brojevima koji se u tekstu pisu kronoloski u neprekinutom nizu od pocetka do kraja rada. Zbog
+mogue nepreglednosti rada, a u svrhu izbjegavanja dugih linkova online izvore obavezno stavljati
+u fusnote za reference, za izvore grafickih prikaza linkove duze od 3 reda staviti u fusnotu, a krae
+linkove uz naziv i datum staviti u izvor.
+
+Primjeri dokumentarnih fusnota
+
+Pocetak 21. Stoljea smatra se vremenom neizvjesnosti i porasta opeg globalnog
+
+nezadovoljstva u kome je otpor prema nejednakosti, siromastvu i nametanju nemilosrdnih trzisnih
+
+pravila razvijenih zemalja, izrazen socijalnim nemirima i lokalnim ratovima, dodatno poduprijet
+
+antiglobalizacijskim pokretima i djelovanjem raznovrsnih nevladinih organizacija civilnog
+
+drustva na nacionalnim i transnacionalnoj razini koje preuzimaju protekcionisticki ulogu
+
+korektivne naravi.2             primjer parafraziranja
+
+Paradigma koja zagovara individualnost, otvorenost, kriticnost i bijeg od rigidnih teorija, krajem
+proslog stoljea dramaticno je najavila nezaustavljive drustvene preokrete te duboke i dalekosezne
+promjene u vremenu kada ,,staro pocinje umirati, a novo se jos nije rodilo."3
+
+                                primjer citiranja
+
+2 Milardovi, A. (2004). Pod globalnim sesirom. Drustva i drzave u tranziciji i globalizaciji. Zagreb, CPI
+3 Sria, V. (1993). Upravljanje kreativnosu, Zagreb, Skolska knjiga, str. 43

@@ -1,0 +1,137 @@
+===== [sfzg-naputak-diplomski-2024 | str. 3] =====
+Sadrzaj
+
+Vrsta diplomskog rada ............................................................................................................................................ 4
+Jezik i lektoriranje.................................................................................................................................................... 4
+Postavke stranice i pisma ........................................................................................................................................ 4
+Numeriranje stranica .............................................................................................................................................. 4
+Zaglavlje (header) i podnozje (footer) ..................................................................................................................... 4
+Skraenice ............................................................................................................................................................... 5
+Ilustracije................................................................................................................................................................. 5
+Uvodne stranice ...................................................................................................................................................... 5
+Tijelo rada ............................................................................................................................................................... 7
+Preliminarne stranice .............................................................................................................................................. 8
+Citiranje i literatura ................................................................................................................................................. 9
+Zivotopis ................................................................................................................................................................ 10
+Predaja rada na ocjenu ......................................................................................................................................... 10
+
+                                                                    3
+
+===== [sfzg-naputak-diplomski-2024 | str. 5] =====
+Sve ilustracije trebaju imati odgovarajui naslov i biti numerirane. Ilustracije se oznacavaju arapskim brojkama
+redoslijedom kojim se pojavljuju u tekstu rada, Slika 10. Ilustracije se postavljaju sto je mogue blize uz tekst u
+kojem se spominju.
+
+Brojevi i naslovi tablica nalaze se uvijek iznad tablica. Brojevi i naslovi slika nalaze se uvijek ispod slika. U
+naslovima ilustracija ne smiju se koristiti skraenice i oznake koje nisu protumacene, bilo ranije u tekstu ili u
+legendi koja se nalazi ispod ilustracije, Slika 10.
+
+Ukoliko ilustracija nije izvorni doprinos autora diplomskog rada, obavezno je navoenje izvora (ako je ilustracija
+ve objavljena), odnosno imena i prezimena autora od kojeg je preuzeta (ako ilustracija jos nije objavljena).
+Navedeno vrijedi i za ilustracije preuzete s interneta. Izvor iz kojeg je ilustracija preuzeta, odnosno njen autor se
+navodi neposredno uz naslov ilustracije uz naznaku da je ilustracija preuzeta s dopustenjem vlasnika autorskih
+prava, Slika 10. Izvor se navodi kao i sve reference u tekstu s time da se pazi da ilustracija prati poziciju u tekstu
+(kako bi reference bile po redu).
+
+Dopustenje za koristenje pojedine ilustracije moze dati samo vlasnik autorskih prava. Dopustenje mora biti u
+pisanom obliku. Za sve ilustracije uz koje nije naveden izvor odnosno autor smatra se da je autor diplomskog rada
+ujedno i vlasnik autorskih prava. Autor diplomskog rada je odgovoran za sve eventualne posljedice koje mogu
+nastati zbog nedopustenog preuzimanja ilustracija odnosno propusta u navoenju njihovog izvora odnosno
+autora.
+
+Ako student koristi prilikom izrade diplomskog rada tua autorska djela (tablice, fotografije, crteze, sheme,
+grafikone, dijagrame, histograme, karte i drugo) potrebno je priloziti i scan Izjave o pravu koristenja tuih
+autorskih djela.
+
+Svaki diplomski rad proi e provjeru kroz informaticki sustav za provjeru izvornosti (Turnitin).
+
+===== [sfzg-naputak-diplomski-2024 | str. 7] =====
+Tijelo rada
+
+Tijelo rada ovisi o vrsti rada:
+
+Znanstveni rad mora imati sljedea poglavlja:
+
+1. Uvod
+2. Materijali i postupci/Ispitanici i postupci
+3. Rezultati
+4. Rasprava
+5. Zakljucak
+6. Literatura
+7. Zivotopis autora
+
+Strucni rad i pregledni rad moraju imati sljedea poglavlja:
+1. Uvod
+2. Poglavlje ili vise poglavlja po izboru autora rada
+3. Rasprava
+4. Zakljucak
+5. Literatura
+6. Zivotopis autora
+
+Prikaz slucaja mora imati sljedea poglavlja:
+1. Uvod
+2. Prikaz slucaja
+3. Rasprava
+
+                                                                    7
+
+===== [sfzg-naputak-diplomski-2024 | str. 8] =====
+Naputak za tehnicko oblikovanje i izradu diplomskog rada na Stomatoloskom fakultetu Sveucilista u Zagrebu
+
+4. Zakljucak
+5. Literatura
+6. Zivotopis autora
+
+Neovisno o vrsti rada, u poglavlju Uvod mora biti jasno navedena svrha rada. Unutar
+navedenih obveznih poglavlja mogue je stavljati potpoglavlja. Potpoglavlja se numeriraju na
+nacin da se stavi prvo redni broj poglavlja, a potom broj potpoglavlja (npr. 1.1, 1.2. ili pot-
+potpoglavlja 1.2.1.).
+
+Preliminarne stranice
+  I. Stranica s podacima o radu, lektorima i povjerenstvu za obranu
+
+Druga stranica sadrzi sljedee podatke:
+
+===== [sfzg-naputak-diplomski-2024 | str. 9] =====
+Naputak za tehnicko oblikovanje i izradu diplomskog rada na Stomatoloskom fakultetu Sveucilista u Zagrebu
+
+  II. Proslov ili Posveta ili Zahvala (Slika 3)
+ III. Sazetak na hrvatskom jeziku (Slika 4)
+
+         Sazetak treba biti napisan na jednoj kartici teksta i mora omoguiti citatelju
+         razumijevanje cilja rada, metode istrazivanja, rezultate s bitnim obrazlozenjima te
+         autorove zakljucke. Na kraju treba biti popis kljucnih rijeci.
+ IV. Sazetak na engleskom jeziku-Summary (Slika 5)
+         Sazetak na engleskome jeziku. Na kraju sazetka treba biti popis kljucnih rijeci.
+ V. Sadrzaj (Slika 6)
+         Sadrzaj se sastoji od popisa svih poglavlja, potpoglavlja i potpotpoglavlja rada koja se
+         oznacavaju arapskim brojkama i s desne strane imaju oznaku stranice na kojoj
+         zapocinju. Iznimka je uvezani privitak koji se, ako postoji, navodi u Sadrzaju iza
+         Zivotopisa i nije oznacen arapskom brojkom niti stranicom na kojoj zapocinje.
+ VI. Popis skraenica ili kratica (Slika 7)
+         Stranica s popisom skraenica ili kratica sadrzava popis kratica koristenih u radu prema
+         abecednom redu i njihovo objasnjenje na jeziku na kojem je rad pisan te puni naziv
+         kratice na izvornom jeziku.
+VII. Tijelo rada (Slika 8 i 9)
+
+Citiranje i literatura
+
+U svim pisanim radovima uvijek se mora jasno odvojiti tui tekst i tui podaci od autorovog
+teksta i podataka. Od drugih autora se mogu preuzeti samo manji dijelovi teksta odnosno
+podataka i to se uvijek mora oznaciti na jasan nacin citiranjem. Oznaka podrijetla citiranih
+dijelova stavlja se kao brojka u zagradu na kraju recenice prije tocke, Slika 9. Brojka u zagradi
+odgovara brojci u popisu koristene literature. Preuzimanje tueg ili vlastitog prethodno
+objavljenog teksta i podataka, a bez pravilnog citiranja smatra se plagiranjem odnosno
+autoplagiranjem. To su neeticni postupci koji mogu biti na odgovarajui nacin sankcionirani.
+
+Navode se svi radovi koji su u diplomskom radu citirani, kao i oni na koje se autor poziva.
+Jednako tako, u popisu ne smiju biti radovi koji nisu citirani, niti oni na koje se u radu ne
+upuuje.
+
+Popis koristene literature numerira se slijedom navoenja u tekstu. Naslovi casopisa pisu se
+kraticom u obliku koji se upotrebljava u Index Medicusu. Obvezna je primjena pravila citiranja
+prema International Committee of Medical Journal Editors � ICMJE (ranije Vancouverski stil).
+Pravila citiranja su dostupna na mreznoj stranici: http://www.icmje.org/, a primjeri na:
+https://www.nlm.nih.gov/bsd/uniform_requirements.html.
+
+                                                                    9

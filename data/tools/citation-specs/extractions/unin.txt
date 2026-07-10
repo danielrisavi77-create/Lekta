@@ -1,0 +1,255 @@
+===== [unin-upute-radovi-2026 | str. 1] =====
+1.Uvod (stil – Naslov 1) PAGEREF _Toc219112362 \h 9
+2.Obrada zadatka (stil – Naslov 1) PAGEREF _Toc219112363 \h 10
+2.1.Potpoglavlje 1 (stil – Naslov 2) PAGEREF _Toc219112364 \h 10
+2.2.Potpoglavlje 2 (stil – Naslov 2) PAGEREF _Toc219112365 \h 10
+2.3.Potpoglavlje 3 (stil – Naslov 2) PAGEREF _Toc219112366 \h 10
+3.Praktični dio (stil – Naslov 1) PAGEREF _Toc219112367 \h 11
+3.1.Svrha i cilj istraživanja (stil – Naslov 2) PAGEREF _Toc219112368 \h 11
+3.2.Istraživačka pitanja/hipoteze (stil – Naslov 2) PAGEREF _Toc219112369 \h 11
+3.3.Metodologija istraživanja (stil – Naslov 2) PAGEREF _Toc219112370 \h 11
+4.Rezultati  (stil – Naslov 1) PAGEREF _Toc219112371 \h 12
+5.Rasprava PAGEREF _Toc219112372 \h 15
+6.Zaključak (stil – Naslov 1) PAGEREF _Toc219112373 \h 16
+7.Literatura (stil – Naslov 1) PAGEREF _Toc219112374 \h 18
+
+
+
+
+
+Uvod (stil – Naslov 1)
+Uvod završnog/diplomskog rada je obavezan. Njime počinje numeriranje stranica završnog/diplomskog rada. Uvod je početni i pristupni dio završnog/diplomskog rada koji treba čitatelja uvesti u temu rada, upoznati ga s problemom i predmetom rada, svrhom i ciljevima te strukturom završnog/diplomskog rada. U uvodu treba naznačiti što se namjerava u radu pokazati, izvore podataka kao i načine njihovog prikupljanja i obrade.
+Uvod treba biti napisan na 2-3 stranice A4 formata. U uvodu se ne iznose zaključci.
+Obrada zadatka (stil – Naslov 1)
+U obradi zadatka (teorijski dio rada) primjereno je da se cjelokupna problematika završnog/diplomskog rada sustavno rasporedi, razradi i prezentira u više međusobno povezanih cjelina (poglavlja i potpoglavlja):
+Nakon uvoda na prvim stranicama teorijskog dijela objašnjavamo osnovne pojmove. 
+U sljedećim poglavljima i potpoglavljima raspravljamo o teorijskim spoznajama na sintetičko-analitički način, čime nastojimo postići ciljeve postavljene u uvodu. Na kraju većeg poglavlja treba ukratko sažeti najvažnije nalaze.
+
+===== [unin-upute-radovi-2026 | str. 1] =====
+Empirijski/istraživački dio obavezni je dio završnog/diplomskog rada koji sadrži istraživanje. Istraživanje može biti kvalitativne, kvantitativne ili eksperimentalne prirode. 
+Empirijski/istraživački dio sadrži sljedeća potpoglavlja: 
+Svrha i cilj istraživanja (stil – Naslov 2)
+Istraživačka pitanja/hipoteze (stil – Naslov 2)
+Metodologija istraživanja (stil – Naslov 2)
+3.3.1. Opis instrumenta (stil – Naslov 3)
+3.3.2. Opis uzorka (stil – Naslov 3)
+3.3.3. Opis prikupljanja i obrade podataka (stil – Naslov 3)
+3.3.4. Etički aspekt istraživanja (stil – Naslov 3)
+
+
+Rezultati  (stil – Naslov 1)
+Kandidat/kinja u završnom/diplomskom radu može koristiti tuđe spoznaje i formulacije ili grafičke prikaze i slike preuzete iz druge literature. U tekstu rada mora biti navedena literatura uvijek kada je navođenje ili grafički prikaz preuzet ili se temelji na nekom pisanom predlošku. U tekstu se literatura navodi prema stilu citiranja za pojedina područja znanosti. 
+Kandidat/kinja u završnom/diplomskom radu koristi slike, formule i tablice. Numeriranje slika, formula i tablica izvodi se tako da prvi broj ilustracije označava cjelinu (poglavlje) kojoj ta ilustracija pripada, a drugi – redni broj ilustracije u toj cjelini (poglavlju).
+Naslov slike ili tablice piše se ispod slike odnosno tablice, a sadrži najneophodnije podatke za njezino razumijevanje. Dodatna objašnjenja treba dati u tekstu, uz povezivanje s rednim brojem slike ili tablice.
+Autori
+Vrsta 
+istraživanja
+Cilj/svrha
+Uzorak
+Zaključci
+Martins-Junior i dr. (2019)
+Presječno istraživanje
+Istražiti prepoznaju li zdravstveni djelatnici dijete koje je žrtva tjelesnog nasilja te prijavljuju li ga.
+62 zdravstvena djelatnika (27 stomatologa; 10 liječnika; 25 medicinskih sestara/tehničara)
+Glavne poteškoće u prepoznavanju i prijavljivanju tjelesnog nasilja nad djetetom u zdravstvenih djelatnika jesu manjak znanja, profesionalni nemar, uvjerenje da se slučaj nasilja neće rješavati. Postoji potreba za edukacijom o prepoznavanju i prijavljivanju nasilja nad djetetom te  njezinim uvođenjem u obavezni dio obrazovanja medicinskih sestara/tehničara.
+Napomena: navodi se ako je potrebno dodatno pojasniti oznake unutar tablice.
+Tablica 3.4.1. Naslov tablice. Izvor: inicijali imena i prezimena, godina.  
+
+Grafikon 3.4.1. Naslov grafikona. Izvor: inicijali imena i prezimena, godina.
+
+
+Sve komponente koje se pojavljuju na slikama moraju imati svoju oznaku i vrijednost (ako se preuzima iz strane literature, obavezno je prevođenje na hrvatski jezik). Osi i parametri na slikama i grafičkim prikazima moraju biti obilježene fizikalnim veličinama i mjernim jedinicama.
+Formule se obilježavaju brojevima u okrugloj zagradi uz desni rub stranice, a u tekstu se poziva na broj formule. Npr.
+E=mc2 (1)
+Slike, formule i tablice ne predstavljaju samo dodatak tekstu, nego su oni važan dio rada i obavezno se u tekstu mora pozivati na njih, navodeći njihov broj. Dijelovi programskih kodova koji se uključuju u tekst rada, moraju se umetnuti kao tekst unutar teksta ili u zaseban okvir numeriran kao slika ili neka druga sekvenca Program  SEQ Program \* ARABIC 1. Sav programski kod treba biti u stilu "Programski kod". 
+while (true) {
+echo "formatiran programski kod";
+}
+Ili, kod treba ubaciti u okvir i na njega se pozvati kao na sliku ili prilog. Ključne riječi programskog jezika koji se koristi može se istaknuti ili napisati drugom bojom. Iz nekih programskih alata moguće je iskopirati obojani i formatirani tekst i ubaciti ga u stil za programski kod. Za kod obavezno koristiti proporcionalni font poput Couriera veličine 11 točaka.
+Kandidat/kinja u završnom/diplomskom radu može koristiti kratice. Kada se prvi put u tekstu uvodi neka kratica, potrebno je ispisati puni naziv ili uz naziv na stranom jeziku u zagradi. Dalje se u tekstu može koristiti samo kratica.
+Popis svih korištenih kratica, uz ispisani puni naziv, mora se dodati na početak završnog/diplomskog rada, iza sadržaja – bez numeriranja naslova.
+Za slike koje se umeću u tekst potrebno je dodati podnatpise (engl. caption) s brojem slike koji sadrži redni broj poglavlja, opis slike i eventualni izvor. Na sliku se tada može pozivati koristeći automatizirano krosreferenciranje (Insert/Cross reference). Primjerice, na umetnutu sliku može se pozvati ovako: „ REF _Ref297406557 \h  \* MERGEFORMAT Slika 4.1. prikazuje...“
+
+Slika  STYLEREF 1 \s 4. SEQ Slika \* ARABIC \s 1 1. Planiranje kao temelj organiziranja 
+Rasprava
+Rasprava je obavezni dio završnog/diplomskog rada – istraživačke prirode. U prvom dijelu rasprave navodi se jesu li postignuti postavljeni ciljevi, odnosno je li dobiven odgovor na postavljena istraživačka pitanja/hipoteze. U daljnjim odlomcima kritički se vrednuju rezultati provedenog istraživanja i objašnjavaju uzročno-posljedično. U interpretaciji se uspoređuju podaci i rezultati dobiveni provedenim istraživanjem s podacima koji su opisani u teorijskom dijelu kao i s drugim relevantnim istraživanjima dostupnim u znanstvenim bazama podataka. Podatke je važno predstaviti objektivno – ne donositi neprimjerene zaključke niti generalizirati na temelju nereprezentativnog uzorka. Navode se ograničenja istraživanja, doprinos praksi te mogućnosti za daljnji istraživački rad. U raspravu se mogu dodati i vlastite definicije, mišljenja i stajališta. 
+Zaključak (stil – Naslov 1)
+Zaključak je završni dio rada. U zaključku treba kratko, jasno i pregledno dati prikaz relevantnih spoznaja, informacija, činjenica i stavova koji su prethodno opširnije razrađeni.
+Dijelovi, odnosno odlomci, zaključka formuliraju se prema strukturi završnog/diplomskog rada. 
+
+
+Iza zaključka, kandidat/kinja potpisuje i umeće Izjavu o akademskoj čestitosti.
+
+===== [unin-upute-radovi-2026 | str. 1] =====
+Stilovi citiranja
+Literatura (stil – Naslov 1)
+Za referenciranje se koriste standardizirani stilovi označavanja izvora informacija navedenih u radu. Ne postoji jedinstveni stil citiranja, već se oni razlikuju s obzirom na znanstveno područje ili odjel: 
+American Psychological Association (tzv. APA) stil citiranja u području biomedicine. 
+Harvard stil citiranja u području društvenih znanosti.
+Vancouver stil citiranja u području tehničkih znanosti.
+Dva su glavna dijela referenciranja: 
+navođenje u tekstu odnosno naznačavanje izvora informacija koji su se koristili u tekstu: 
+izravno navođenje – prepisuje se tekst autora bez ikakvih preinaka i označava se navodnim znakovima „“ uz obavezno navođenje točnog broja stranice preuzetog teksta. Ako tekst koji se citira ima više od 40 riječi, potrebno ga je odvojiti u drugi paragraf. 
+Npr. Tomiša i Milković (2013: 25) navode kako „grafički dizajn ima važnu socijalnu i kulturnu ulogu… može utjecati na društvene procese, pomoći u podizanju svijesti i rješavanju socijalnih problema.“ 
+neizravno navođenje – svojim riječima prepričavamo, sažimamo ili tumačimo, odnosno parafraziramo autorove riječi.
+Npr. Grafički dizajn ima značajnu društvenu i kulturnu funkciju te može oblikovati društvene procese, podići razinu osviještenosti i pridonijeti rješavanju socijalnih izazova (Tomiša i Milković 2013). 
+popis literature na kraju rada koji sadrži sve informacije o bibliografskim jedinicama koje su citirane unutar teksta.
+Npr. Tomiša, M.; Milković, M. 2013. Grafički dizajn i komunikacija. Varaždin: Veleučilište u Varaždinu. 
+
+* upute za navođenje prema ostalim stilovima nalaze se niže u dokumentu.
+
+
+
+
+
+
+
+Navođenje izvora prema 
+APA
+(American Psychological Association) stilu citiranja
+
+
+
+
+
+
+
+
+
+
+
+
+
+Popis literature navodi se prema APA 7 stilu te se oblikuje abecednim redom prema prezimenu prvog autora ili prema naslovu ako je autor nepoznat. Ako se isti autor pojavljuje jednom samostalno i jednom kao prvi autor u skupini od više autora, tada se prvo navode samostalna djela, a zatim skupna koja su abecedno poredana prema drugom autoru. 
+Primjer popisa literature: 
+Anatollahi, J., Firouzabadi, M.M., Mousavi, S.A., Akhondimeybodi, Z., Hamidfar, M., Shahcheragh, S.H. (2022). Knowledge of nursing Students of Shahid Sadoughi University of Medical Sciences about vaccination in adults. The Journal of Medical Research,  8(5), 159-161. 
+Boyd, G., Heaton, P.A., Wilkinson, R., Prosad Paul, S. (2017). Nursing management of childhood chickenpox infection. Emergency Nurse, 25(8), 32-39. doi: 10.7748/en2017.e1720
+Ho, E.W., Ereno, I.L., Ibrahim, M., Yeo, C.L. (2012). Knowledge, Attitudes, and Practices Regarding Chickenpox Disease and Its Prevention in Singapore: Comparison between Parents and Medical Students. Proceedings of Singapore Healthcare, 21(4), 257-264. 
+Hrvatski zdravstveno-statistički ljetopis za 2021. godinu (2022). Dostupno: https://www.hzjz.hr/hrvatski-zdravstveno-statisticki-ljetopis/hrvatski-zdravstveno-statisticki-ljetopis-za-2021-g/ , Pristupljeno: 2.11.2023.
+Navođenje literature unutar teksta i u popisu literature
+KNJIGE
+Broj autora 
+Navođenje u popisu literature
+Navođenje unutar teksta
+1 autor
+Mirić, M. (2003). Naslov knjige. Mjesto izdavanja, Nakladnik. 
+(Mirić, 2003, str. 15)
+
+2 autora
+Mirić, M. i Ivić, I. (2003). Naslov knjige. Mjesto izdavanja, Nakladnik.
+(Mirić i Ivić, 2003, str. 15)
+3 i više autora 
+Mirić, M., Ivić, I., Anić, A., Markić, M., Perić, P., Barić, B., Ivić, A. (2003). Naslov knjige. Mjesto izdavanja, Nakladnik.
+(Mirić i dr., 2003, str. 5)
+Knjiga s nepoznatim autorom 
+Publication Manual of the American Psychological Association. (2003). Washington, DC: American Psychological Association.
+(Publication Manual, 2020, str. 20)
+Knjiga s urednikom
+Gibbs, J. T. (ur.). (1991). Children of color: psychological interventions with minority youth. San Francisco: Jossey-Bass.
+(Gibbs, 1991, str. 45)
+
+Poglavlje u knjizi
+Filipčič, T. in Štemberger, V. (2017). Prilagoditve pri ocenjevanju učencev s posebnimi potrebami pri predmetu šport. V T. Devjak in I. Saksida (ur.), Kakovost in ocenjevanje znanja (str. 61-70). Univerza v Ljubljani, Pedagoška fakulteta.
+(Filipčič in Štemberger, 2017, str. 23)
+
+ČLANCI
+
+Navođenje u popisu literature
+Navođenje unutar teksta
+Članak u časopisu
+Boyd, G., Heaton, P.A., Wilkinson, R., Prosad Paul, S. (2017). Nursing management of childhood chickenpox infection. Emergency Nurse, 25(8), 32-39. 
+(Boyd i dr., 2017, str. 33)
+Članak s DOI identifikatorom 
+Tomas, N., Kampanza, F. (2022). Awareness of varicella-zoster virus among undergraduate students at the University of Namibia. Journal of Public Health in Africa, 13(2), 1-9 doi: 10.4081/jphia.2022.1923 
+
+(Tomas i  Kampanza, 2022, str. 5)
+Članak s brojem članka
+Tomas, N., Kampanza, F. (2022). Awareness of varicella-zoster virus among undergraduate students at the University of Namibia. Journal of Public Health in Africa, 13(2), članak 1923. doi: 10.4081/jphia.2022.1923 
+
+(Tomas i dr., 2022)
+Članak sa stranice organizacije (bez autora i godine)
+Zavod za javno zdravstvo (b.d.) Poboljšanje integriteta u sportu.  https://www.hzjz.hr/aktualnosti/poboljsanje-integriteta-u-sportu/
+(Zavod za javno zdravstvo, b.d.)
+
+
+ZAVRŠNI/DIPLOMSKI RADOVI I DOKTORSKE DISERTACIJE
+Navođenje u popisu literature
+Navođenje unutar teksta
+Marić, M. (2018). Naslov rada [Diplomski rad, Sveučilište u Zagrebu, Medicinski fakultet]
+(Marić, 2018, str. 23)
+
+ZAKONI, PRAVILNICI, UREDBE OBJAVLJENI U NARODNIM NOVINAMA REPUBLIKE HRVATSKE
+Navođenje u popisu literature
+Navođenje unutar teksta
+Kazneni zakon. (2024). NN 135/24. https://www.zakon.hr/z/98/Kazneni-zakon 
+(Kazneni zakon, 2024)
+
+
+
+WEB-stranice
+
+Navođenje u popisu literature
+Navođenje unutar teksta
+Poznati autor
+Lam, N. i Silver, L. (27.07.2023.). Amerikanci navode Kinu kao zemlju koja predstavlja najveću prijetnju američkom istraživačkom centru Pew .https://www.pewresearch.org/short-reads/2023/07/27/americans-name-china-as-the-country-posing-the-greatest-threat-to-the-us/ 
+(Lam i Silver, 2023)
+Web stranica s grupom autora (organizacijom) 
+World Health Organization (2019). Child maltreatment. Dostupno: https://www.who.int/multi-media/details/child-maltreatment-infographic
+
+(World Health Organization, 2019) 
+
+
+Popis slika
+ TOC \c "Slika" Slika 3.2. Planiranje kao temelj organiziranja Izvor: P. Sikavica: Temelji menadžmenta, Školska knjiga, Zagreb, 2008.…… PAGEREF _Toc297406496 \h 14
+
+
+
+
+
+
+
+
+
+
+
+
+
+Navođenje izvora prema
+ Vancouver stilu citiranja
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Vancouver stil je tzv. numerički stil citiranja koji se najčešće primjenjuje u području tehničkih znanosti. Izvori se u tekstu rada označavaju arapskim brojkama prema redu pojavljivanja, a smještaju se na mjesta u tekstu u kojima se autor referira na određeno citirano djelo. Ti brojevi upućuju na konkretan izvor u numerički poredanom popisu literature na kraju rada. Kod ponovljenog citiranja određenog rada, u zagradi treba označiti istim brojem pod kojim je rad prvi put spomenut te pod kojim je ujedno naveden i u popisu literature. 
+Formatiranje u tekstu:
+Brojevi se stavljaju u okrugle zagrade npr. (1) ili kvadratne zagrade [1]. Kada se navodi više izvora odjednom, u zagrade se stavljaju sve brojčane oznake (1, 3, 6), a ako izvori idu po redu pojavljivanja, onda (1-5). U popisu literature reference se pojavljuju prema rasporedu pojavljivanja u tekstu.
+
+Navođenje literature u popisu literature i unutar teksta
+KNJIGE
+Prezime i Inicijal(i) imena autora. Naslov knjige. Izdanje. Mjesto izdavanja: Nakladnik; godina izdavanja. 
+
+Navođenje u popisu literature
+1 autor
+
+Biti M. U svijetu medijskoga teksta. Koprivnica: Sveučilište Sjever; 2022.
+2-6 autora Ako djelo ima do 6 autora, navode se svi.
+6 ili više autoraAko djelo ima više od 6 autora, navodi se prvih 6, a 7. i svi ostali autori označuju se kraticom „i dr.“ (i drugi) ako se piše na hrvatskom jeziku,  odnosno „et al.“ ako je rad napisan na engleskom jeziku.
+Miric I, Ivici I. Naslov. Varaždin: Sveučilište Sjever; 2025.
+
+
+Smith J, Johnson A, Williams B, Brown C, Garcia D, Martinez E, et al. Naslov knjige. 1izd. Zagreb: Medicinska naklada; 2025.
+Knjiga s nepoznatim autorom
+
+Publication Manual of the American Psychological Association. Washington, DC: American Psychological Association; 2020.

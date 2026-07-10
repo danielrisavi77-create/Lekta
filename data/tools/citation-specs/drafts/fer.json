@@ -1,0 +1,151 @@
+{
+  "facultyId": "fer",
+  "styleToken": "fer",
+  "status": "draft",
+  "outcome": "custom-spec",
+  "label": "FER numericko navodenje (sluzbene upute za diplomski rad, ZEMRIS)",
+  "sourceId": "fer-upute-diplomski-zemris",
+  "sourceLabel": "Upute za izradu diplomskog rada (FER, ZEMRIS predlozak)",
+  "verifiedAt": null,
+  "verifiedBy": null,
+  "verifiedHash": null,
+  "accessDate": true,
+  "authorFormat": {
+    "order": "given-first",
+    "initials": "none",
+    "separator": ", ",
+    "finalJoiner": null
+  },
+  "inText": {
+    "mode": "bracket-number",
+    "provenance": {
+      "kind": "worked-example",
+      "quoteRaw": "Ucestale pravopisne greske studenata u radovima prikazana su u [3].",
+      "sourcePage": "str. 14",
+      "note": "Sekcija 3.8 Pozivanje na literaturu: u tekstu se referencira brojem u uglatim zagradama; vise referenci ide zarezom unutar istih zagrada, npr. '[1,2,3,4]' (isti isjecak, str. 14). Izravno imenovanje autora u tekstu izvor dopusta samo iznimno ('Ipak, ovo izbjegavati.')."
+    }
+  },
+  "numbering": null,
+  "bibliography": {
+    "sort": "appearance"
+  },
+  "sourceTypes": [
+    {
+      "type": "knjiga",
+      "template": "{authors}, {title}[[, {publisher}]], {year}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "year"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "3. izdavac (ako je poznat),",
+        "sourcePage": "str. 16",
+        "note": "Izvor nema worked-example za knjigu; predlozak izveden iz popisa elemenata reference (str. 16): autor, naslov djela (koso), izdavac ako je poznat, godina, elementi odvojeni zarezom. Naslov je u izvorniku koso, alat radi plain text. Potvrditi pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "poglavlje",
+      "template": "{authors}, {title}, {container}[[, {publisher}]], str. {pages}, {year}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "container",
+        "pages",
+        "year"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "5. stranice ,,od-od\" (ako se radi o poglavlju knjige ili zbornika radova, ili clanku nekog",
+        "sourcePage": "str. 16",
+        "note": "Izvor propisuje stranice od-do za poglavlje knjige ili zbornika, ali ne imenuje naslov cjeline (container) ni urednike kao elemente; container je izveden i smjesten iza naslova, urednici izostavljeni. Oznaka 'str.' ispred raspona je izvedena (izvor kaze samo stranice od-od). Potvrditi pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "clanak",
+      "template": "{authors}, {title}, {container}, str. {pages}, {year}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "container",
+        "pages",
+        "year"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "5. stranice ,,od-od\" (ako se radi o poglavlju knjige ili zbornika radova, ili clanku nekog",
+        "sourcePage": "str. 16",
+        "note": "Izvor trazi stranice od-do za clanak casopisa, ali casopis (container) nije eksplicitno imenovan kao element pa je izveden; volume i issue izvor uopce ne spominje pa nisu ukljuceni. Potvrditi pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "mrezni",
+      "template": "[[{authors}, ]]{title}, {url}, {accessed}",
+      "requiredFields": [
+        "title",
+        "url",
+        "accessed"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "2. Repozitorij predmeta Zavrsni rad, http://www.fer.unizg.hr/predmet/zavrad, 2. 7. 2013.",
+        "sourcePage": "str. 16",
+        "note": "Primjer iz Literature predloska; redni broj '2.' je oznaka mjesta u numeriranom popisu, ne dio jedinice. Autor izostavljen jer je nepoznat (pravilo: autor ako je poznat); primjer s autorima na istoj stranici: '5. Sandor Dembitz, Gordan Gledec, Hrvoje Miholi, Hascheck...' (puna imena, given-first, zarez). Datum je 'datum zadnje provjere adrese' i nosi vlastitu tocku; godina objave se u primjerima ne pojavljuje."
+      },
+      "example": {
+        "input": {
+          "type": "mrezni",
+          "title": "Repozitorij predmeta Zavrsni rad",
+          "url": "http://www.fer.unizg.hr/predmet/zavrad",
+          "accessed": "2. 7. 2013."
+        },
+        "expected": "Repozitorij predmeta Zavrsni rad, http://www.fer.unizg.hr/predmet/zavrad, 2. 7. 2013."
+      }
+    },
+    {
+      "type": "zavrsni",
+      "template": "{authors}, {title}, {institution}, {year}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "institution",
+        "year"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Svaka reference bi se trebala sastojati od:",
+        "sourcePage": "str. 16",
+        "note": "Upute ne obraduju citiranje zavrsnih/diplomskih radova; predlozak izveden iz opceg popisa elemenata (autor, naslov, izdavac zamijenjen ustanovom, godina), elementi odvojeni zarezom. Potvrditi ili oboriti pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "propis",
+      "template": "{title}, {container}[[, {issue}]], {year}.",
+      "requiredFields": [
+        "title",
+        "container",
+        "year"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Elemente referenci odvojiti zarezom.",
+        "sourcePage": "str. 16",
+        "note": "Upute ne obraduju pravne propise; predlozak izveden iz opceg popisa elemenata (naslov djela, glasilo kao container, broj glasila, godina), elementi odvojeni zarezom. Potvrditi ili oboriti pri verifikaciji."
+      },
+      "example": null
+    }
+  ],
+  "contradictions": [
+    "Prior profila navodi ieee i harvard; ekstrakcija ne imenuje nijedan standardni stil. Izvor propisuje vlastiti numericki oblik [n] s elementima odvojenim zarezom (slici IEEE po numeraciji, ali format elemenata nije IEEE: dopustena puna imena autora, naslov koso). Harvard nema nikakve potpore u isjeccima.",
+    "Izvor dopusta tri oblika autora ('Pero Peri, Ivo Ivi', 'P. Peri, I. Ivi' ili 'Peri, P.; Ivi, I.', str. 16); authorFormat pinan na oblik iz worked-examplea u Literaturi (puna imena, given-first, zarez), ostali oblici su po izvoru takoder dopusteni.",
+    "Izvor dopusta redanje literature po kriteriju znacaja ILI po redoslijedu koristenja (str. 17); schema podrzava samo alphabetical/appearance pa je odabran appearance (jedini koji izvor eksplicitno ilustrira: 'prva referenca bi tada imala brojku [1]').",
+    "Bibliografske jedinice u izvoru su numerirane ('1.', '2.' s tockom); polje numbering ostavljeno null jer format markera nije izrazen u schemi, broj proizlazi iz bracket-number moda.",
+    "Jedini worked-example primjeri su mrezni izvori iz predloskove Literature; knjiga, clanak, poglavlje, zavrsni i propis su derived iz popisa elemenata na str. 16 i traze ljudsku verifikaciju.",
+    "Naslov djela je u izvorniku koso (kurziv); alat radi plain text."
+  ]
+}

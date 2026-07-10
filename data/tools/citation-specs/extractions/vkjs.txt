@@ -1,0 +1,359 @@
+===== [vkjs-upute-zavrsni-diplomski-2024 | str. 1] =====
+ispisanog teksta (tekst na papiru uvijek je kvalitetnije procitan nego na ekranu). Tekst se
+          moze provjeriti pomou sucelja Hascheck, javne i besplatne internetske usluge
+          pravopisne provjere teksta pisanog hrvatskim i engleskim jezikom
+          (http://hascheck.tel.fer.hr/). Za provjeru pisanja ili znacenja neke rijeci moze se pogledati
+          i u rjecnicku bazu Hrvatskog jezicnog portala (http://hjp.znanje.hr/).
+
+     1.2. Rad treba biti racunalno napisan u formatu docx (kompatibilan s programom Microsoft
+          Word), u formatu A4 (21 x 29,7 cm).
+
+     1.3. Margine trebaju biti: lijeva 2,5 cm, desna 2,0 cm, gornja i donja po 2,5 cm.
+     1.4. Oblik i velicina slova (velicina: 12 tocaka, font: Times New Roman) su jednaki u cijelom
+
+          tekstu, osim u naslovima, podnaslovima i fusnotama, a prored je 1,5 redak u cijelom
+          tekstu.
+     1.5. Tekst se pise iskljucivo na desnoj stranici.
+     1.6. Svako poglavlje u radu zapocinje na novoj stranici.
+     1.7. Stranice su oznacene rednim brojem (dolje desno), pri cemu se prva brojcana oznaka (1)
+          stavlja na prvu stranicu uvoda.
+     1.8. Tekst se pise s obostranim poravnanjem.
+     1.9. Tekst je podijeljen u poglavlja i potpoglavlja.
+     1.10. Tekst se pise u odlomcima. Pocetak odlomka je uvucen, a izmeu odlomaka nema
+          praznog reda.
+     1.11. Decimalno mjesto odvaja se iskljucivo zarezom (npr. 567,89), a tisuice se uvijek
+          odvajaju jednim razmakom (npr. 1 989 ili 12 345 567).
+     1.12. Statisticki izrazi pisu se cijelim decimalnim brojevima (npr. p<0,05).
+
+===== [vkjs-upute-zavrsni-diplomski-2024 | str. 2] =====
+znak i (&) pise se odvojeno od rijeci izmeu kojih stoji
+       trotocje (...) se pise zajedno s rijecju kojoj prethodi, a odvojeno od rijeci ispred koje se
+
+          nalazi
+       crtica ( � ) pravopisni je znak koji se pise s bjelinama slijeva i zdesna, npr. autocesta
+
+          Split � Zagreb. Spojnica (-) pravopisni je znak koji se pise bez bjelina slijeva i zdesna,
+          npr. zemlja-zrak
+       pri uspravnome nabrajanju, kad se u posebnim redcima ne navode cijele recenice, prva
+          rijec u retku pise se malim pocetnim slovom, a na kraju retka ne pise se nijedan
+          pravopisni znak.
+
+   1.15. Fusnote (pozivne biljeske) ispisuju se na dnu svake stranice - oznacavaju se od rednog
+        broja 1 i nadalje, a velicina slova je 10 tocaka, font: Times New Roman.
+
+   1.16. Za sve kratice koje se rabe u tekstu treba pri prvom spominjanju koristiti puni naziv, a
+        nakon toga se moze rabiti kratica, npr. Europska unija (u daljnjem tekstu EU).
+
+   1.17. Tablice i slike nalaze se u onom dijelu teksta kojem i sadrzajno pripadaju, te se u tekstu
+        potrebno pozvati na njih tako da se navede njihov broj, npr. (Tablica 2.). Ako je tablica
+        ili slika preuzeta iz literature, tocan izvor potrebno je navesti u popisu literature. Takoer,
+        ako je samo dio neke tablice ili slike posluzio kao osnova za izradu tablice ili slike, u
+        popisu literature potrebno je navesti izvor na sljedei nacin: Slika 1.: izvor. Broj i naslov
+        tablice navodi se iznad tablice, kod grafikona i slike navode se ispod njih. Ukoliko su u
+        tablici ili na slici (npr. grafickom prikazu rezultata) koristene skraenice, ispod
+        tablice/slike potrebno je staviti legendu koja objasnjava sto znaci pojedina skraenica.
+        Popis tablica i slika uvrstava se u popis literature, a sadrzava naznaku popis tablica (slika)
+        te redni broj i naslov tablice/slike naveden prema redoslijedu pojavljivanja.
+
+   1.18. Zavrsni/diplomski rad potrebno je uvezati u tvrde korice plave boje sa srebrnim slovima.
+        Rad je potrebno priloziti u elektronickom formatu docx i pdf snimljenom na CD/DVD
+        medij na koji je potrebno napisati ime i prezime, naslov rada i godinu obrane rada, npr.
+        Ante Anti, Kriminalisticka praksa, 2023.
+
+   1.19. Kosa slova (kurziv) upotrebljavaju se:
+         - za izvorno pisanje stranih rijeci i razgovornog jezika
+         - za pisanje naslova knjiga, zbornika, novina, casopisa te dijelova naziva (tj. uzih
+           naziva) udruga, ustanova, tvrtki, sportskih klubova i sl.
+
+    Podebljana slova upotrebljavaju se:
+         - za naslove, podnaslove, katkad i za naglasavanje u tekstu.
+
+    Fusnota (pozivna biljeska, napomena): navodi se na dnu stranice odvojena crtom od glavnog
+teksta i oznacena brojem povezanim s istim brojem u tekstu (velicina slova: 10 tocaka, font:
+
+                                                                                                                             2
+
+===== [vkjs-upute-zavrsni-diplomski-2024 | str. 3] =====
+Times New Roman). Brojevi fusnota u tekstu pisu se kronoloski u neprekinutom nizu od pocetka
+do kraja rada. Fusnote predstavljaju dopunska, korisna, ali ne i nuzna objasnjenja. Osim toga
+mogu upuivati na neki drugi izvor koji obrauje istu ili slicnu problematiku. Takoer, izvori s
+internetskih stranica obicno se radi svoje duzine navode u fusnoti.
+
+  2. STRUKTURA ZAVRSNOG/DIPLOMSKOG RADA
+   2.1. Korice ili vanjska stranica: razlicita ovisno o vrsti rada (seminarski i zavrsni rad).
+
+        Podaci na vanjskoj i unutarnjoj stranici trebaju biti napisani u fontu Times New Roman,
+        velicine 14 tocaka, a naslov rada slovima velicine 16 tocaka.
+        Naslovi i podnaslovi pisu se bez tocke na kraju.
+        Godina ima obavezno tocku: Zagreb, 2023. (Nije potrebno pisati g. ili god. ili godine).
+        Naziv predmeta: Naziv predmeta pise se velikim slovom.
+        Mentor: prof. dr. sc. (titule se pisu malim slovom i s bjelinama izmeu)
+
+                                                                                                                             3
+
+===== [vkjs-upute-zavrsni-diplomski-2024 | str. 6] =====
+Primjer
+
+     2.6. Uvod: uvodne napomene o onome sto e biti obraeno u radu.
+     2.7. Razrada teme: obraivanje teme samog rada (obrada gradiva, rezultati nekog
+
+          istrazivanja, rasprava o stavovima drugih autora); dijeli se na poglavlja i potpoglavlja.
+          Potrebno je navesti naslove poglavlja i potpoglavlja s brojcanom oznakom i tipovima
+          slova prema primjeru koji slijedi:
+     2.8. Zakljucak: Naslov zakljucka se numerira i pise se velikim slovima (,,5.
+          ZAKLJUCAK"). Zakljucak je zavrsni dio rada u kojem treba sazeto i jasno izloziti
+          zakljucke do kojih je autor dosao.
+     2.9. Literatura: Naslov ,,LITERATURA" se ne numerira.
+U popisu literature trebaju se nai sva djela koja su citirana u samom radu. Popis koristene
+   literature treba se nalaziti na kraju rada, a pravilno sastavljen popis literature vazan je za
+   kredibilitet samog rada.
+
+                                                                                                                              6
+
+===== [vkjs-upute-zavrsni-diplomski-2024 | str. 7] =====
+Pravila kod sastavljanja popisa literature prema APA stilu:
+
+ 1. Popis literature mora biti slozen abecednim redom prema prezimenu autora.
+ 2. Ako je vise radova istog autora, potrebno je sloziti popis od najnovijeg rada prema starijem
+
+      radu.
+ 3. Ako rad nema autora, rad se pomice na poziciju u abecednom redu prema prvoj najznacajnijoj
+
+      rijeci u naslovu.
+ 4. Svi citirani radovi (knjige, clanci, web stranice i dr.) moraju biti navedeni zajedno u jednom
+
+      popisu literature, u skladu s abecednim redoslijedom.
+ 5. Naslove knjiga, nazive casopisa, te naziv web dokumenta potrebno je oznaciti kosim pismom
+
+      (kurziv).
+ 6. Elementi citiranog rada (naslov, naziv casopisa itd.) trebaju biti odvojeni tockom.
+ 7. U popisu literature izvori se navode bez rednih brojeva, no zbog toga se svaki izvor oblikuje
+
+      s viseom uvlakom (hanging).
+
+Prilikom navoenja literature vazno je:
+     postovati redoslijed unosenja podataka
+     paziti na velika i mala slova
+     postovati font (poseban naglasak na stil fonta: obican i kurziv)
+     pridrzavati se razmaka i interpunkcija.
+
+Napomena: Naslovi knjiga, radova, casopisa itd. se NE prevode.
+
+    3. CITIRANJE I REFERENCIRANJE
+
+         Pri pisanju zavrsnih i diplomskih radova, ali i svih ostalih oblika strucnih i zavrsnih radova,
+potrebno je ispravno koristiti citiranje i referenciranje koristene literature. Prilikom referenciranja
+koriste se standardizirani stilovi za oznacavanje izvora informacija koji se koriste u radu. Za izradu
+zavrsnih/diplomskih radova na Veleucilistu kriminalistike i javne sigurnosti koristi se APA stil.
+APA je akronim od American Psychological Association (prosirene upute dostupne su na:
+https://apastyle.apa.org/ ).
+
+Dva su glavna dijela referenciranja:
+    1. navoenje u tekstu - naznacavanje izvora informacija koji su se koristili u tekstu
+    2. popis literature - sadrzi detalje o svemu sto je citirano, a nalazi se na kraju rada.
+
+    Pri pozivanju na druge autore i djela, neovisno radi li se o citatima, izvor se navodi u tekstu, a
+ne u fusnotama. Referenca u tekstu se stavlja u zagrade, a sadrzi prezime autora i godinu izdanja.
+
+    3.1. Citiranje i parafraziranje
+
+Prilikom navoenja tueg rada, razlikujemo:
+     citiranje ili direktno navoenje (preuzimanje teksta iz drugih izvora od rijeci do rijeci)
+     parafraziranje (prepricavanje teksta iz drugih izvora vlastitim rijecima)
+
+                                                                                                                              7
+
+===== [vkjs-upute-zavrsni-diplomski-2024 | str. 8] =====
+interpretiranje (tumacenje tuih koncepata, misljenja, nalaza, zakljucaka i slicno na
+         vlastiti nacin, tj. dodavanje vrijednosti radu drugih).
+
+         3.1.1. Citiranje (direktno navoenje)
+         Citiranje treba koristiti rijetko, kada se nesto naglasava u radu. Citat se treba kopirati
+direktno kako je napisan u izvornom radu, ukljucujui i eventualne greske. Prema APA stilu
+razlikujemo kratak i dugi citat. Kratak citat ima manje od 40 rijeci, a duzi citat � vise od 40 rijeci.
+
+         Kratak citat predstavlja tocno naveden originalni tekst autora, a najcese se radi o jednoj
+recenici. Kratki citati se u tekstu rada obavezno navode u dvostrukim navodnim znakovima.
+
+                                                     Primjer:
+
+U tekstu:
+,,Uspjesnost studiranja na fakultetima do sada je uglavnom istrazivana u cilju pronalazenja
+prosjecnih ocjena, duljine studiranja i slicnih pokazatelja, dok cimbenici koji utjecu na postizanje
+uspjeha nisu dovoljno istrazeni." (Zeki-Susac, Frajman-Jaksi, Drvenkar, 2009, 315).
+
+U popisu literature:
+Zeki-Susac, M., Frajman-Jaksi, A., Drvenkar, N. (2009). Neuronske mreze i stabla odlucivanja
+za predvianje uspjesnosti studiranja. Ekonomski Vjesnik/Econviews: Review of contemporary
+business, entrepreneurship and economic issues, 22(2), 314-327.
+
+         Duzi citat predstavlja tocno naveden originalni tekst autora, koji se moze sastojati od vise
+recenica ili vise od 5 redaka teksta) i koji se ne stavlja u navodne znakove. Cijeli citat treba biti
+uvucen u odnosu na ostatak teksta, a velicina slova smanjena u odnosu na ostatak teksta (Times
+New Roman, 11). Na kraju se navodi prezime autora i godina izdanja, a sve to nakon tocke kojom
+je zavrsen citat.
+
+                                                     Primjer:
+
+U tekstu:
+Autori komentiraju model na sljedei nacin:
+
+         Potencijalne koristi modela koji e uspjeti s velikom tocnosu predvidjeti uspjesnost studenta i
+         ekstrahirati kljucne cimbenike uspjesnosti velike su, no model dobiven u ovom radu tek je pocetak
+         za dublje istrazivanje ove problematike. Model je nuzno poboljsati i prilagoditi potrebama
+         korisnika, tj. ustanove koja s pomou modela uspjesnosti zeli donositi odluke o primanju studenata
+         ili ucenika u svoju ustanovu, ali i planiranju strategijskog razvoja studijskih programa. (Zeki-
+         Susac, Frajman-Jaksi, Drvenkar, 2009, 325)
+
+U popisu literature:
+Zeki-Susac, M., Frajman-Jaksi, A., Drvenkar, N. (2009). Neuronske mreze i stabla odlucivanja
+za predvianje uspjesnosti studiranja. Ekonomski Vjesnik/Econviews: Review of contemporary
+business, entrepreneurship and economic issues, 22(2), 314-327.
+
+         Ako se citati iz tekstova na jeziku razlicitom od jezika rada prenose iz prethodno objavljene
+publikacije koja sadrzi prijevod citiranoga teksta, dovoljno je navesti izvor iz kojega je prijevod
+
+                                                                                                                              8
+
+===== [vkjs-upute-zavrsni-diplomski-2024 | str. 9] =====
+preuzet. Ako je pak autor za potrebe pisanja rada sam preveo citirani ulomak potrebno je u tekst
+rada uvrstiti prijevod ulomka, a isti ulomak na izvornome jeziku dati u fusnoti. Uz izvor je potrebno
+dodati napomenu prev. a.
+
+         3.1.2. Parafraziranje
+
+         Parafraziranje je prenosenje tuih ideja svojim rijecima. Prarafraziranje se takoer citira s
+navoenjem imena autora (ili urednika) i godinom publikacije.
+
+Primjer
+
+U tekstu:
+Graunke i Woosley (2005) navode da je poboljsanje akademskog uspjeha jedan od najveih
+izazova visokog obrazovanja.
+
+U popisu literature:
+Graunke, S. S., & Woosley, S. A. (2005). An exploration of the factors that affect the academic
+success of college sophomores. College Student Journal, 39(2), 367
+
+         3.1.3. Citiranje i referenciranje vise autora
+
+         Ako rad ima 3, 4 ili 5 autora, prvi put se navode svi autori, a dalje samo prezime prvog
+autora i oznaka ,,i ostali".
+
+Primjer:
+
+U tekstu:
+Slanger, Berg, Fisk i Hanson (2015) istrazuju motivacijske faktore koji vode akademskom uspjehu.
+Slanger i ostali (2015) pronalaze korelaciju izmeu percipirane tezine studija i prosjeka ocjena.
+
+U popisu literature:
+Slanger, W. D., Berg, E. A., Fisk, P. S., & Hanson, M. G. (2015). A Longitudinal Cohort Study of
+Student Motivational Factors Related to Academic Success and Retention Using the College
+Student Inventory. Journal of College Student Retention: Research, Theory & Practice, 17(3),
+278-302.
+
+Ako rad ima vise od sest autora, tada se i u prvom navodu, i u svim ostalima, navodi samo
+prezime prvog autora uz oznaku ,,i ostali".
+
+         3.1.4. Citiranje i referenciranje vise izvora
+
+         Vise autora moze dati slicnu informaciju, pa se refereriramo na vise od jednog izvora za
+istu informaciju. U takvim slucajevim sve izvore navodimo po abecednom redu, unutar zagrada,
+odvojeno tocka zarezom.
+
+                                                                                                                              9
+
+===== [vkjs-upute-zavrsni-diplomski-2024 | str. 10] =====
+Primjer
+Citiranje u tekstu:
+Tehnike rudarenja podataka postizu veu tocnost u odnosu na klasicne statisticke tehnike u
+domeni obrazovanja (Gorr, Nagin i Szczypula, 1994; Hardgrave, Wilson i Walstrom, 1994).
+U popisu literature:
+Gorr, W. L., Nagin, D., & Szczypula, J. (1994). Comparative study of artificial neural network
+and statistical models for predicting student grade point averages. International Journal of
+Forecasting, 10, 17� 34.
+Hardgrave, B. C., Wilson, R. L., & Walstrom, K. A. (1994). Predicting graduate student success:
+A comparison of neural networks and traditional techniques. Computers and Operations
+Research, 21, 249�263.
+
+         3.1.5. Citiranje i referenciranje sekundarnih izvora
+
+         Kad god je to mogue, preporuca se navoenje originalnog izvora. Ponekad nismo u
+mogunosti doi do originalnog izvora informacija ve on predstavlja sekundarni izvor o kojem
+smo saznali preko nekog drugog, primarnog informacijskog izvora.
+U popisu literature navode se samo izvori koji su citani (primarni izvori), a u tekstu se navode i
+sekundarni izvori (oni o kojima se procitalo u djelu koje navodimo kao bibliografsku jedinicu).
+
+                                                      Primjer
+Citiranje u tekstu:
+Kovaci (prema Simeunovi i Preradovi, 2014) navodi prednosti metode stabla odlucivanja u
+odnosu na druge metode predikcije u obrazovanju.
+ili
+Neki autori navode prednosti metode stabla odlucivanja u odnosu na druge metode predikcije u
+obrazovanju (Kovaci, 2012, prema Simeunovi i Preradovi, 2014).
+U popisu literature:
+Simeunovic, V., Preradovic, Lj. (2014). Using Data Mining to Predict Success in Studying.
+Hrvatski casopis za odgoj i obrazovanje, 16(2), 491-523.
+
+         3.1.6. Citiranje i referenciranje tijela, ustanova, organizacija i sl.
+
+         Autor teksta moze biti odreena grupacija. Imena grupa koje su autori nekog teksta (npr.
+korporacije, vladine agencije, i sl.) obicno se navode punim imenom svaki put kada pisu u tekstu.
+Imena nekih grupa (npr. Vladinih agencija) se punim nazivom pisu kod prvog pojavljivanja, a
+akronimom kod svakog slijedeeg. Prilikom odluke da li e se uvijek pisati puni naziv ili ne, treba
+se voditi pravilom da se daje dovoljno informacije citatelju da pronae izvor u popisu literature
+bez problema.
+
+         Primjer:
+Citiranje u tekstu:
+Prvo citiranje u tekstu:
+
+                                                                                                                             10
+
+===== [vkjs-upute-zavrsni-diplomski-2024 | str. 11] =====
+Republika Hrvatska istice obrazovanje kao svoj razvojni prioritet (Ministarstvo znanosti i
+obrazovanja [MOZ], 2017).
+Drugo i sva ostala pojavljivanja:
+Hrvatska mora postati otvoreno drustvo za postizanje razine visokorazvijenih zemalja (MZO,
+2017).
+U popisu literature:
+Ministarstvo znanosti i obrazovanja [MZO]. (2017). Strategija obrazovanja, znanosti i
+tehnologije. Preuzeto s http://narodne-novine.nn.hr/clanci/sluzbeni/2014_10_124_2364.html
+
+         3.1.7. Citiranje i referenciranje pravnih izvora
+
+         Kod koristenja pravnih izvora navodi se naziv zakona, skraeni naziv sluzbenog glasila,
+broj i godina objave zakona te broj clanka odnosno broj stavka. U drugom citiranju navodi se naziv
+zakona, odnosno kratica (ako je navedena u prvom citiranju) i clanak, a nije potrebno navoditi
+sluzbeno glasilo i godinu objave, osim ako se pozivamo na tocno odreeni zakon od ranije ili
+njegove izmjene i dopune.
+
+                                                      Primjer
+
+Prvo citiranje u tekstu
+Prava zrtava u Republici Hrvatskoj propisana su Zakonom o zaknenom postupku (Zakon o
+kaznenom postupku [ZKP], NN 152/08, 76/09, 80/11, 121/11, 91/12, 143/12, 56/13, 145/13,
+152/14, 70/17, 126/19, 126/19, 130/20, 80/22, cl. 43. st. 1.).
+Drugo citiranje u tekstu
+Prava zrtava u Republici Hrvatskoj propisana su Zakonom o zakonom postupku (ZKP, cl. 43. st.
+1.).
+U popisu literature
+Zakon o kaznenom postupku, NN 152/08, 76/09, 80/11, 121/11, 91/12, 143/12, 56/13, 145/13,
+152/14, 70/17, 126/19, 126/19, 130/20, 80/22
+
+3.1.8. Citiranje i referenciranje knjiga
+
+         Kod koristenja knjiga kao izvora za zavrsne i diplomske radove za knjigu je osim autora
+(urednika ako nije poznat autor), naslova i godine objave potrebno navesti i mjesto izdavanja te
+izdavaca. Ako je knjiga izdana u Hrvatskoj dovoljno je navesti samo mjesto, a za druge drzave uz
+mjesto se navodi i naziv drzave. Naslov knjige pise se kurzivom.
+
+         Kada se u tekstu citiraju, parafraziraju ili interpretiraju odreeni koncepti iz knjiga drugih
+autora, pozeljno je navesti i broj stranice na kojoj (kojima) se nalazi koristeni tekst, s obzirom na
+to da se radi s izvorima u kojima je zbog opsega nekada tesko identificirati koristene dijelove.
+Navoenje broja (brojeva) stranica obavezno je kod doslovnih citata.
+
+Knjiga s jednim autorom  Primjer
+Citiranje u tekstu:
+
+                                          11

@@ -1,5 +1,732 @@
 [
   {
+    "facultyId": "agr",
+    "sources": [
+      {
+        "sourceId": "agr-upute-diplomski-2019",
+        "kind": "guidelines",
+        "pages": 20,
+        "snippets": 18
+      },
+      {
+        "sourceId": "agr-upute-zavrsni-2017",
+        "kind": "guidelines",
+        "pages": 15,
+        "snippets": 12
+      },
+      {
+        "sourceId": "agr-upute-doktorski-2026",
+        "kind": "guidelines",
+        "pages": 14,
+        "snippets": 3
+      }
+    ],
+    "needsOcr": [],
+    "chars": 16627,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 1,
+    "classHint": "c",
+    "priorTokens": [
+      "harvard"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "alu",
+    "sources": [
+      {
+        "sourceId": "alu-pravilnik-diplomski-2014",
+        "kind": "regulation",
+        "pages": 25,
+        "snippets": 2
+      },
+      {
+        "sourceId": "alu-vodic-doktorski-2026",
+        "kind": "guidelines",
+        "pages": 16,
+        "snippets": 1
+      },
+      {
+        "sourceId": "alu-pravila-smjernice-doktorandi",
+        "kind": "guidelines",
+        "pages": 34,
+        "snippets": 7
+      }
+    ],
+    "needsOcr": [
+      "alu-pravilnik-doktorski-2025 (skeniran PDF bez -ocr.txt)"
+    ],
+    "chars": 15140,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 3,
+    "classHint": "b",
+    "priorTokens": [
+      "custom"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "arh",
+    "sources": [
+      {
+        "sourceId": "arh-pravilnik-diplomski-2013",
+        "kind": "regulation",
+        "pages": 7,
+        "snippets": 2
+      },
+      {
+        "sourceId": "arh-pravilnik-doktorski-2025",
+        "kind": "regulation",
+        "pages": 17,
+        "snippets": 4
+      }
+    ],
+    "needsOcr": [],
+    "chars": 8404,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 1,
+    "classHint": "c",
+    "priorTokens": [],
+    "contradictions": []
+  },
+  {
+    "facultyId": "biotech",
+    "sources": [
+      {
+        "sourceId": "biotech-upute-radovi",
+        "kind": "guidelines",
+        "pages": 22,
+        "snippets": 10
+      }
+    ],
+    "needsOcr": [],
+    "chars": 12742,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 0,
+    "classHint": "c",
+    "priorTokens": [
+      "vancouver"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "effectus",
+    "sources": [
+      {
+        "sourceId": "effectus-pravilnik-2023",
+        "kind": "regulation",
+        "pages": 39,
+        "snippets": 18
+      }
+    ],
+    "needsOcr": [],
+    "chars": 18280,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 0,
+    "classHint": "c",
+    "priorTokens": [
+      "chicago-notes"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "efos",
+    "sources": [
+      {
+        "sourceId": "efos-upute-studentski-2023",
+        "kind": "guidelines",
+        "pages": 1,
+        "snippets": 21
+      }
+    ],
+    "needsOcr": [],
+    "chars": 19132,
+    "workedExamples": 30,
+    "authorYear": 27,
+    "numeric": 0,
+    "footnote": 3,
+    "styleNames": 12,
+    "classHint": "a",
+    "priorTokens": [
+      "harvard"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "efri",
+    "sources": [
+      {
+        "sourceId": "efri-pravilnik-zavrsni-2014",
+        "kind": "regulation",
+        "pages": 13,
+        "snippets": 4
+      },
+      {
+        "sourceId": "efri-pravilnik-diplomski-2014",
+        "kind": "regulation",
+        "pages": 13,
+        "snippets": 4
+      }
+    ],
+    "needsOcr": [],
+    "chars": 12573,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 4,
+    "classHint": "b",
+    "priorTokens": [
+      "harvard"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "efst",
+    "sources": [
+      {
+        "sourceId": "efst-upute-studentski-radovi-2013",
+        "kind": "guidelines",
+        "pages": 15,
+        "snippets": 8
+      }
+    ],
+    "needsOcr": [],
+    "chars": 9728,
+    "workedExamples": 7,
+    "authorYear": 6,
+    "numeric": 0,
+    "footnote": 1,
+    "styleNames": 5,
+    "classHint": "a",
+    "priorTokens": [],
+    "contradictions": []
+  },
+  {
+    "facultyId": "efzg",
+    "sources": [
+      {
+        "sourceId": "efzg-postupak-zavrsni",
+        "kind": "guidelines",
+        "pages": 4,
+        "snippets": 2
+      },
+      {
+        "sourceId": "efzg-upute-diplomski-seminarski",
+        "kind": "guidelines",
+        "pages": 32,
+        "snippets": 14
+      },
+      {
+        "sourceId": "efzg-upute-specijalisticki-2021",
+        "kind": "guidelines",
+        "pages": 22,
+        "snippets": 9
+      },
+      {
+        "sourceId": "efzg-upute-strucni-diplomski-racunovodstvo",
+        "kind": "guidelines",
+        "pages": 12,
+        "snippets": 5
+      }
+    ],
+    "needsOcr": [
+      "efzg-pravilnik-diplomski-2012 (skeniran PDF bez -ocr.txt)"
+    ],
+    "chars": 18370,
+    "workedExamples": 1,
+    "authorYear": 1,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 3,
+    "classHint": "b",
+    "priorTokens": [
+      "harvard"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "erf",
+    "sources": [
+      {
+        "sourceId": "erf-upute-diplomski",
+        "kind": "guidelines",
+        "pages": 4,
+        "snippets": 3
+      },
+      {
+        "sourceId": "erf-hrri-upute-autorima",
+        "kind": "guidelines",
+        "pages": 1,
+        "snippets": 2
+      }
+    ],
+    "needsOcr": [],
+    "chars": 8114,
+    "workedExamples": 5,
+    "authorYear": 5,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 4,
+    "classHint": "a",
+    "priorTokens": [
+      "apa7"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "fazos",
+    "sources": [
+      {
+        "sourceId": "fazos-upute-zavrsni-2024",
+        "kind": "guidelines",
+        "pages": 22,
+        "snippets": 12
+      },
+      {
+        "sourceId": "fazos-upute-diplomski-2024",
+        "kind": "guidelines",
+        "pages": 22,
+        "snippets": 13
+      }
+    ],
+    "needsOcr": [],
+    "chars": 18889,
+    "workedExamples": 2,
+    "authorYear": 2,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 3,
+    "classHint": "b",
+    "priorTokens": [
+      "apa7"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "fbf",
+    "sources": [
+      {
+        "sourceId": "fbf-upute-spec-2014",
+        "kind": "guidelines",
+        "pages": 8,
+        "snippets": 3
+      }
+    ],
+    "needsOcr": [],
+    "chars": 4893,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 2,
+    "classHint": "b",
+    "priorTokens": [
+      "vancouver"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "fer",
+    "sources": [
+      {
+        "sourceId": "fer-upute-diplomski-zemris",
+        "kind": "guidelines",
+        "pages": 20,
+        "snippets": 9
+      },
+      {
+        "sourceId": "fer-pravilnik-doktorski-2017",
+        "kind": "regulation",
+        "pages": 8,
+        "snippets": 1
+      }
+    ],
+    "needsOcr": [
+      "fer-formalno-oblikovanje-doktorski-2012 (.doc binarni format)",
+      "fer-preporuke-doktorski-2012 (.doc binarni format)"
+    ],
+    "chars": 13154,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 1,
+    "classHint": "c",
+    "priorTokens": [
+      "ieee",
+      "harvard"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "ferit",
+    "sources": [
+      {
+        "sourceId": "ferit-upute-zavrsni-2010",
+        "kind": "guidelines",
+        "pages": 7,
+        "snippets": 4
+      },
+      {
+        "sourceId": "ferit-upute-diplomski",
+        "kind": "guidelines",
+        "pages": 7,
+        "snippets": 3
+      }
+    ],
+    "needsOcr": [],
+    "chars": 16833,
+    "workedExamples": 6,
+    "authorYear": 0,
+    "numeric": 6,
+    "footnote": 0,
+    "styleNames": 0,
+    "classHint": "a",
+    "priorTokens": [
+      "ieee"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "ffos",
+    "sources": [
+      {
+        "sourceId": "ffos-upute-diplomski",
+        "kind": "guidelines",
+        "pages": 1,
+        "snippets": 1
+      },
+      {
+        "sourceId": "ffos-pravilnik-radovi",
+        "kind": "regulation",
+        "pages": 13,
+        "snippets": 5
+      }
+    ],
+    "needsOcr": [],
+    "chars": 13641,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 0,
+    "classHint": "c",
+    "priorTokens": [
+      "chicago-notes",
+      "apa7",
+      "harvard"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "ffri",
+    "sources": [
+      {
+        "sourceId": "ffri-pravilnik-zavrsni-2023",
+        "kind": "regulation",
+        "pages": 8,
+        "snippets": 4
+      },
+      {
+        "sourceId": "ffri-pravilnik-diplomski-2023",
+        "kind": "regulation",
+        "pages": 8,
+        "snippets": 4
+      }
+    ],
+    "needsOcr": [],
+    "chars": 7308,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 0,
+    "classHint": "c",
+    "priorTokens": [
+      "harvard",
+      "apa7",
+      "chicago-notes"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "ffrz",
+    "sources": [
+      {
+        "sourceId": "ffrz-oblikovanje-diplomski-2021",
+        "kind": "guidelines",
+        "pages": 8,
+        "snippets": 5
+      },
+      {
+        "sourceId": "ffrz-oblikovanje-bakalaureatski-2021",
+        "kind": "guidelines",
+        "pages": 9,
+        "snippets": 6
+      }
+    ],
+    "needsOcr": [],
+    "chars": 18532,
+    "workedExamples": 10,
+    "authorYear": 10,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 4,
+    "classHint": "a",
+    "priorTokens": [
+      "harvard"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "ffzg",
+    "sources": [
+      {
+        "sourceId": "ffzg-inf-diplomski-2024",
+        "kind": "guidelines",
+        "pages": 10,
+        "snippets": 3
+      },
+      {
+        "sourceId": "ffzg-filoz-diplomski-2019",
+        "kind": "guidelines",
+        "pages": 6,
+        "snippets": 4
+      },
+      {
+        "sourceId": "ffzg-psihologija-diplomski-2024",
+        "kind": "guidelines",
+        "pages": 1,
+        "snippets": 6
+      },
+      {
+        "sourceId": "ffzg-socio-diplomski-2014",
+        "kind": "guidelines",
+        "pages": 19,
+        "snippets": 10
+      },
+      {
+        "sourceId": "ffzg-kroatistika-diplomski-2026",
+        "kind": "guidelines",
+        "pages": 1,
+        "snippets": 1
+      },
+      {
+        "sourceId": "ffzg-pedagogija-diplomski-2024",
+        "kind": "guidelines",
+        "pages": 7,
+        "snippets": 2
+      },
+      {
+        "sourceId": "ffzg-lingvistika-diplomski-2024",
+        "kind": "guidelines",
+        "pages": 5,
+        "snippets": 4
+      },
+      {
+        "sourceId": "ffzg-povum-diplomski-2016",
+        "kind": "guidelines",
+        "pages": 14,
+        "snippets": 9
+      },
+      {
+        "sourceId": "ffzg-arheologija-pisani-radovi-2014",
+        "kind": "guidelines",
+        "pages": 14,
+        "snippets": 10
+      },
+      {
+        "sourceId": "ffzg-etnologija-diplomski-2019",
+        "kind": "guidelines",
+        "pages": 16,
+        "snippets": 6
+      }
+    ],
+    "needsOcr": [],
+    "chars": 17219,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 5,
+    "classHint": "b",
+    "priorTokens": [
+      "harvard",
+      "chicago-notes",
+      "apa7",
+      "chicago-author"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "fgag",
+    "sources": [
+      {
+        "sourceId": "fgag-predlozak-zavrsni-2026",
+        "kind": "template",
+        "pages": 1,
+        "snippets": 1
+      },
+      {
+        "sourceId": "fgag-predlozak-diplomski-2026",
+        "kind": "template",
+        "pages": 1,
+        "snippets": 2
+      }
+    ],
+    "needsOcr": [],
+    "chars": 4309,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 0,
+    "classHint": "c",
+    "priorTokens": [],
+    "contradictions": []
+  },
+  {
+    "facultyId": "fhs",
+    "sources": [
+      {
+        "sourceId": "fhs-upute-diplomski-2026",
+        "kind": "guidelines",
+        "pages": 34,
+        "snippets": 16
+      },
+      {
+        "sourceId": "fhs-upute-zavrsni-diplomski-2023",
+        "kind": "guidelines",
+        "pages": 25,
+        "snippets": 9
+      }
+    ],
+    "needsOcr": [],
+    "chars": 18896,
+    "workedExamples": 21,
+    "authorYear": 21,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 11,
+    "classHint": "a",
+    "priorTokens": [
+      "apa7"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "fizri",
+    "sources": [
+      {
+        "sourceId": "fizri-pravilnik-radovi-2023",
+        "kind": "regulation",
+        "pages": 10,
+        "snippets": 2
+      }
+    ],
+    "needsOcr": [],
+    "chars": 2505,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 0,
+    "classHint": "c",
+    "priorTokens": [],
+    "contradictions": []
+  },
+  {
+    "facultyId": "fkit",
+    "sources": [
+      {
+        "sourceId": "fkit-izmjene-2025",
+        "kind": "regulation",
+        "pages": 3,
+        "snippets": 0
+      }
+    ],
+    "needsOcr": [
+      "fkit-pravilnik-2023 (skeniran PDF bez -ocr.txt)"
+    ],
+    "chars": 0,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 0,
+    "classHint": "c",
+    "priorTokens": [],
+    "contradictions": []
+  },
+  {
+    "facultyId": "fmtu",
+    "sources": [
+      {
+        "sourceId": "fmtu-upute-zavrsni-2025",
+        "kind": "guidelines",
+        "pages": 30,
+        "snippets": 20
+      },
+      {
+        "sourceId": "fmtu-upute-diplomski-2025",
+        "kind": "guidelines",
+        "pages": 31,
+        "snippets": 23
+      }
+    ],
+    "needsOcr": [],
+    "chars": 18647,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 2,
+    "classHint": "b",
+    "priorTokens": [
+      "chicago-author"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "fpz",
+    "sources": [
+      {
+        "sourceId": "fpz-upute-zavrsni-diplomski-2018",
+        "kind": "guidelines",
+        "pages": 54,
+        "snippets": 21
+      }
+    ],
+    "needsOcr": [],
+    "chars": 19384,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 0,
+    "classHint": "c",
+    "priorTokens": [
+      "custom"
+    ],
+    "contradictions": []
+  },
+  {
     "facultyId": "fpzg",
     "sources": [
       {
@@ -39,6 +766,724 @@
     "classHint": "a",
     "priorTokens": [
       "fpzg"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "fsb",
+    "sources": [
+      {
+        "sourceId": "fsb-pravilnik-radovi-2018",
+        "kind": "regulation",
+        "pages": 8,
+        "snippets": 0
+      }
+    ],
+    "needsOcr": [
+      "fsb-upute-radovi-2020 (.doc binarni format)"
+    ],
+    "chars": 0,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 0,
+    "classHint": "c",
+    "priorTokens": [
+      "ieee"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "fzsri",
+    "sources": [
+      {
+        "sourceId": "fzsri-upute-radovi-2022",
+        "kind": "guidelines",
+        "pages": 15,
+        "snippets": 14
+      }
+    ],
+    "needsOcr": [],
+    "chars": 17467,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 0,
+    "classHint": "c",
+    "priorTokens": [
+      "vancouver"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "geof",
+    "sources": [
+      {
+        "sourceId": "geof-naputak-ocjenski-2000",
+        "kind": "guidelines",
+        "pages": 9,
+        "snippets": 5
+      }
+    ],
+    "needsOcr": [],
+    "chars": 5325,
+    "workedExamples": 3,
+    "authorYear": 3,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 0,
+    "classHint": "b",
+    "priorTokens": [
+      "harvard"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "grad",
+    "sources": [
+      {
+        "sourceId": "grad-predlozak-2024",
+        "kind": "guidelines",
+        "pages": 1,
+        "snippets": 4
+      }
+    ],
+    "needsOcr": [
+      "grad-upute-radovi-2024 (skeniran PDF bez -ocr.txt)",
+      "grad-pravilnik-zavrsni-diplomski (skeniran PDF bez -ocr.txt)"
+    ],
+    "chars": 7477,
+    "workedExamples": 2,
+    "authorYear": 0,
+    "numeric": 2,
+    "footnote": 0,
+    "styleNames": 0,
+    "classHint": "b",
+    "priorTokens": [
+      "ieee"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "grafos",
+    "sources": [
+      {
+        "sourceId": "grafos-smjernice-2022",
+        "kind": "guidelines",
+        "pages": 1,
+        "snippets": 4
+      }
+    ],
+    "needsOcr": [],
+    "chars": 8261,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 0,
+    "classHint": "c",
+    "priorTokens": [
+      "ieee"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "grf",
+    "sources": [
+      {
+        "sourceId": "grf-upute-zavrsni",
+        "kind": "guidelines",
+        "pages": 10,
+        "snippets": 3
+      },
+      {
+        "sourceId": "grf-pravilnik-poslijediplomski-2008",
+        "kind": "regulation",
+        "pages": 20,
+        "snippets": 3
+      }
+    ],
+    "needsOcr": [
+      "grf-pravilnik-diplomski-2012 (skeniran PDF bez -ocr.txt)",
+      "grf-uputa-diplomski-prilog3 (.doc binarni format)"
+    ],
+    "chars": 7837,
+    "workedExamples": 1,
+    "authorYear": 1,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 3,
+    "classHint": "b",
+    "priorTokens": [
+      "ieee"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "hks",
+    "sources": [
+      {
+        "sourceId": "hks-opce-upute-diplomski-2023",
+        "kind": "guidelines",
+        "pages": 9,
+        "snippets": 3
+      }
+    ],
+    "needsOcr": [],
+    "chars": 2991,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 0,
+    "classHint": "c",
+    "priorTokens": [],
+    "contradictions": []
+  },
+  {
+    "facultyId": "inf",
+    "sources": [
+      {
+        "sourceId": "inf-pravilnik-zavrsni-2024",
+        "kind": "regulation",
+        "pages": 14,
+        "snippets": 3
+      },
+      {
+        "sourceId": "inf-pravilnik-diplomski-2024",
+        "kind": "regulation",
+        "pages": 14,
+        "snippets": 3
+      }
+    ],
+    "needsOcr": [],
+    "chars": 6104,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 0,
+    "classHint": "c",
+    "priorTokens": [],
+    "contradictions": []
+  },
+  {
+    "facultyId": "kbf",
+    "sources": [
+      {
+        "sourceId": "kbf-upute-zavrsni-diplomski-2017",
+        "kind": "guidelines",
+        "pages": 17,
+        "snippets": 10
+      }
+    ],
+    "needsOcr": [],
+    "chars": 16008,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 1,
+    "classHint": "c",
+    "priorTokens": [
+      "chicago-notes"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "kbfst",
+    "sources": [
+      {
+        "sourceId": "kbfst-tehnicke-postavke",
+        "kind": "guidelines",
+        "pages": 3,
+        "snippets": 1
+      }
+    ],
+    "needsOcr": [],
+    "chars": 276,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 0,
+    "classHint": "c",
+    "priorTokens": [],
+    "contradictions": []
+  },
+  {
+    "facultyId": "kemos",
+    "sources": [
+      {
+        "sourceId": "kemos-upute-radovi-2024",
+        "kind": "guidelines",
+        "pages": 12,
+        "snippets": 8
+      }
+    ],
+    "needsOcr": [],
+    "chars": 10480,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 0,
+    "classHint": "c",
+    "priorTokens": [
+      "ieee"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "kif",
+    "sources": [
+      {
+        "sourceId": "kif-upute-diplomski-2023",
+        "kind": "guidelines",
+        "pages": 24,
+        "snippets": 10
+      },
+      {
+        "sourceId": "kif-upute-oblikovanje-diplomski",
+        "kind": "guidelines",
+        "pages": 17,
+        "snippets": 11
+      },
+      {
+        "sourceId": "kif-struktura-doktorski",
+        "kind": "guidelines",
+        "pages": 3,
+        "snippets": 2
+      },
+      {
+        "sourceId": "kif-pravilnik-doktorski-2024",
+        "kind": "regulation",
+        "pages": 16,
+        "snippets": 3
+      }
+    ],
+    "needsOcr": [
+      "kif-drsc08-oblikovanje-doktorski-2025 (.doc binarni format)"
+    ],
+    "chars": 18356,
+    "workedExamples": 23,
+    "authorYear": 23,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 2,
+    "classHint": "a",
+    "priorTokens": [
+      "apa7",
+      "harvard"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "kifst",
+    "sources": [
+      {
+        "sourceId": "kifst-upute-diplomski-2022",
+        "kind": "guidelines",
+        "pages": 15,
+        "snippets": 6
+      }
+    ],
+    "needsOcr": [],
+    "chars": 5916,
+    "workedExamples": 8,
+    "authorYear": 8,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 2,
+    "classHint": "a",
+    "priorTokens": [
+      "apa7"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "ktfst",
+    "sources": [
+      {
+        "sourceId": "ktf-prilog3-zavrsni",
+        "kind": "template",
+        "pages": 1,
+        "snippets": 3
+      },
+      {
+        "sourceId": "ktf-prilog4-diplomski",
+        "kind": "template",
+        "pages": 1,
+        "snippets": 3
+      }
+    ],
+    "needsOcr": [],
+    "chars": 3797,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 0,
+    "classHint": "c",
+    "priorTokens": [],
+    "contradictions": []
+  },
+  {
+    "facultyId": "libertas",
+    "sources": [
+      {
+        "sourceId": "libertas-pravilnik-zavrsni-2024",
+        "kind": "regulation",
+        "pages": 9,
+        "snippets": 3
+      },
+      {
+        "sourceId": "libertas-pravilnik-diplomski-2024",
+        "kind": "regulation",
+        "pages": 14,
+        "snippets": 3
+      }
+    ],
+    "needsOcr": [],
+    "chars": 7938,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 4,
+    "classHint": "b",
+    "priorTokens": [],
+    "contradictions": []
+  },
+  {
+    "facultyId": "medri",
+    "sources": [
+      {
+        "sourceId": "medri-naputak-diplomski-farmacija-2025",
+        "kind": "guidelines",
+        "pages": 1,
+        "snippets": 2
+      },
+      {
+        "sourceId": "medri-naputak-diplomski-2026",
+        "kind": "guidelines",
+        "pages": 12,
+        "snippets": 7
+      }
+    ],
+    "needsOcr": [],
+    "chars": 19471,
+    "workedExamples": 1,
+    "authorYear": 1,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 3,
+    "classHint": "b",
+    "priorTokens": [
+      "vancouver"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "mef",
+    "sources": [
+      {
+        "sourceId": "mef-pravilnik-diplomski-2023",
+        "kind": "regulation",
+        "pages": 30,
+        "snippets": 5
+      },
+      {
+        "sourceId": "mef-naputci-tehnicka-obrada-doktorski-2022",
+        "kind": "guidelines",
+        "pages": 1,
+        "snippets": 1
+      },
+      {
+        "sourceId": "mef-pravilnik-doktorski-studiji",
+        "kind": "regulation",
+        "pages": 23,
+        "snippets": 7
+      }
+    ],
+    "needsOcr": [],
+    "chars": 17674,
+    "workedExamples": 6,
+    "authorYear": 6,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 5,
+    "classHint": "a",
+    "priorTokens": [
+      "harvard",
+      "vancouver"
+    ],
+    "contradictions": [
+      "prior je numericki stil, a izvor pokazuje autor-godina primjere"
+    ]
+  },
+  {
+    "facultyId": "mefos",
+    "sources": [
+      {
+        "sourceId": "mefos-upute-radovi-2025",
+        "kind": "guidelines",
+        "pages": 17,
+        "snippets": 16
+      }
+    ],
+    "needsOcr": [],
+    "chars": 19274,
+    "workedExamples": 1,
+    "authorYear": 1,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 6,
+    "classHint": "b",
+    "priorTokens": [
+      "vancouver"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "mefst",
+    "sources": [
+      {
+        "sourceId": "mefst-uputa-diplomski-2021",
+        "kind": "guidelines",
+        "pages": 19,
+        "snippets": 9
+      }
+    ],
+    "needsOcr": [],
+    "chars": 13690,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 1,
+    "classHint": "c",
+    "priorTokens": [
+      "vancouver"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "mev",
+    "sources": [
+      {
+        "sourceId": "mev-upute-zavrsni",
+        "kind": "guidelines",
+        "pages": 9,
+        "snippets": 7
+      }
+    ],
+    "needsOcr": [],
+    "chars": 11362,
+    "workedExamples": 6,
+    "authorYear": 6,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 6,
+    "classHint": "a",
+    "priorTokens": [
+      "vancouver"
+    ],
+    "contradictions": [
+      "prior je numericki stil, a izvor pokazuje autor-godina primjere"
+    ]
+  },
+  {
+    "facultyId": "muza",
+    "sources": [
+      {
+        "sourceId": "muza-pravilnik-zavrsetak-2025",
+        "kind": "regulation",
+        "pages": 23,
+        "snippets": 3
+      }
+    ],
+    "needsOcr": [],
+    "chars": 4313,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 0,
+    "classHint": "c",
+    "priorTokens": [
+      "custom"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "pbf",
+    "sources": [
+      {
+        "sourceId": "pbf-upute-diplomski-2018",
+        "kind": "guidelines",
+        "pages": 37,
+        "snippets": 18
+      }
+    ],
+    "needsOcr": [],
+    "chars": 19895,
+    "workedExamples": 18,
+    "authorYear": 18,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 6,
+    "classHint": "a",
+    "priorTokens": [
+      "harvard"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "pfri",
+    "sources": [
+      {
+        "sourceId": "pfri-upute-zavrsni-2025",
+        "kind": "guidelines",
+        "pages": 32,
+        "snippets": 18
+      },
+      {
+        "sourceId": "pfri-upute-diplomski-2025",
+        "kind": "guidelines",
+        "pages": 35,
+        "snippets": 20
+      }
+    ],
+    "needsOcr": [],
+    "chars": 19986,
+    "workedExamples": 5,
+    "authorYear": 0,
+    "numeric": 5,
+    "footnote": 0,
+    "styleNames": 9,
+    "classHint": "a",
+    "priorTokens": [
+      "chicago-notes"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "pfst",
+    "sources": [
+      {
+        "sourceId": "pfst-upute-ocjenski-2022",
+        "kind": "guidelines",
+        "pages": 30,
+        "snippets": 13
+      }
+    ],
+    "needsOcr": [],
+    "chars": 19222,
+    "workedExamples": 12,
+    "authorYear": 1,
+    "numeric": 11,
+    "footnote": 0,
+    "styleNames": 1,
+    "classHint": "a",
+    "priorTokens": [
+      "ieee"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "pmf",
+    "sources": [
+      {
+        "sourceId": "pmf-geog-upute-diplomski-2026",
+        "kind": "guidelines",
+        "pages": 9,
+        "snippets": 6
+      },
+      {
+        "sourceId": "pmf-geog-pravilnik-2026",
+        "kind": "regulation",
+        "pages": 7,
+        "snippets": 1
+      },
+      {
+        "sourceId": "pmf-biol-upute-diplomski-2026",
+        "kind": "guidelines",
+        "pages": 18,
+        "snippets": 11
+      },
+      {
+        "sourceId": "pmf-math-upute-diplomski-2024",
+        "kind": "guidelines",
+        "pages": 8,
+        "snippets": 2
+      },
+      {
+        "sourceId": "pmf-math-pravilnik-diplomski-2024",
+        "kind": "pravilnik",
+        "pages": 6,
+        "snippets": 1
+      },
+      {
+        "sourceId": "pmf-geol-upute-diplomski-2024",
+        "kind": "guidelines",
+        "pages": 20,
+        "snippets": 8
+      },
+      {
+        "sourceId": "pmf-geol-pravilnik-2021",
+        "kind": "pravilnik",
+        "pages": 12,
+        "snippets": 2
+      }
+    ],
+    "needsOcr": [
+      "pmf-phy-upute-diplomski-2014 (.doc binarni format)"
+    ],
+    "chars": 19298,
+    "workedExamples": 18,
+    "authorYear": 18,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 1,
+    "classHint": "a",
+    "priorTokens": [
+      "harvard",
+      "custom",
+      "ieee"
+    ],
+    "contradictions": [
+      "prior je numericki stil, a izvor pokazuje autor-godina primjere"
+    ]
+  },
+  {
+    "facultyId": "pmfst",
+    "sources": [
+      {
+        "sourceId": "pmfst-upute-zavrsni",
+        "kind": "guidelines",
+        "pages": 8,
+        "snippets": 4
+      },
+      {
+        "sourceId": "pmfst-upute-diplomski",
+        "kind": "guidelines",
+        "pages": 9,
+        "snippets": 5
+      }
+    ],
+    "needsOcr": [],
+    "chars": 13399,
+    "workedExamples": 18,
+    "authorYear": 18,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 2,
+    "classHint": "a",
+    "priorTokens": [
+      "harvard"
     ],
     "contradictions": []
   },
@@ -118,6 +1563,712 @@
       "pravo-fusnote",
       "pravo-social-author"
     ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "pravos",
+    "sources": [
+      {
+        "sourceId": "pravos-upute-radovi",
+        "kind": "guidelines",
+        "pages": 7,
+        "snippets": 3
+      }
+    ],
+    "needsOcr": [],
+    "chars": 5073,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 0,
+    "classHint": "c",
+    "priorTokens": [],
+    "contradictions": []
+  },
+  {
+    "facultyId": "pravri",
+    "sources": [
+      {
+        "sourceId": "pravri-upute-radovi-2023",
+        "kind": "guidelines",
+        "pages": 42,
+        "snippets": 20
+      }
+    ],
+    "needsOcr": [],
+    "chars": 19249,
+    "workedExamples": 3,
+    "authorYear": 1,
+    "numeric": 0,
+    "footnote": 2,
+    "styleNames": 2,
+    "classHint": "b",
+    "priorTokens": [
+      "pravo-fusnote"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "ptfos",
+    "sources": [
+      {
+        "sourceId": "ptfos-upute-diplomski-2020",
+        "kind": "guidelines",
+        "pages": 15,
+        "snippets": 15
+      }
+    ],
+    "needsOcr": [],
+    "chars": 19600,
+    "workedExamples": 10,
+    "authorYear": 10,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 0,
+    "classHint": "a",
+    "priorTokens": [
+      "harvard"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "pvzg",
+    "sources": [
+      {
+        "sourceId": "pvzg-pravilnik-zavrsni-2018",
+        "kind": "regulation",
+        "pages": 11,
+        "snippets": 7
+      }
+    ],
+    "needsOcr": [],
+    "chars": 9582,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 3,
+    "classHint": "b",
+    "priorTokens": [],
+    "contradictions": []
+  },
+  {
+    "facultyId": "rgnf",
+    "sources": [
+      {
+        "sourceId": "rgnf-predlozak-2022",
+        "kind": "template",
+        "pages": 1,
+        "snippets": 3
+      }
+    ],
+    "needsOcr": [
+      "rgnf-uputa-zavrsni-diplomski-2025 (skeniran PDF bez -ocr.txt)"
+    ],
+    "chars": 12208,
+    "workedExamples": 11,
+    "authorYear": 11,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 11,
+    "classHint": "a",
+    "priorTokens": [
+      "harvard"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "riteh",
+    "sources": [
+      {
+        "sourceId": "riteh-upute-radovi-2025",
+        "kind": "guidelines",
+        "pages": 12,
+        "snippets": 6
+      }
+    ],
+    "needsOcr": [],
+    "chars": 10272,
+    "workedExamples": 7,
+    "authorYear": 0,
+    "numeric": 7,
+    "footnote": 0,
+    "styleNames": 2,
+    "classHint": "a",
+    "priorTokens": [
+      "ieee"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "rrif",
+    "sources": [
+      {
+        "sourceId": "rrif-upute-zavrsni",
+        "kind": "guidelines",
+        "pages": 20,
+        "snippets": 13
+      }
+    ],
+    "needsOcr": [],
+    "chars": 17484,
+    "workedExamples": 9,
+    "authorYear": 6,
+    "numeric": 0,
+    "footnote": 3,
+    "styleNames": 0,
+    "classHint": "a",
+    "priorTokens": [],
+    "contradictions": []
+  },
+  {
+    "facultyId": "sfzg",
+    "sources": [
+      {
+        "sourceId": "sfzg-naputak-diplomski-2024",
+        "kind": "guidelines",
+        "pages": 11,
+        "snippets": 5
+      }
+    ],
+    "needsOcr": [],
+    "chars": 8326,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 1,
+    "classHint": "c",
+    "priorTokens": [
+      "vancouver"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "sumfak",
+    "sources": [
+      {
+        "sourceId": "sumfak-upute-zavrsni-diplomski-2024",
+        "kind": "guidelines",
+        "pages": 1,
+        "snippets": 3
+      }
+    ],
+    "needsOcr": [],
+    "chars": 19170,
+    "workedExamples": 14,
+    "authorYear": 14,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 1,
+    "classHint": "a",
+    "priorTokens": [
+      "harvard"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "ttf",
+    "sources": [
+      {
+        "sourceId": "ttf-upute-zavrsni-diplomski",
+        "kind": "guidelines",
+        "pages": 5,
+        "snippets": 3
+      }
+    ],
+    "needsOcr": [],
+    "chars": 5147,
+    "workedExamples": 3,
+    "authorYear": 3,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 6,
+    "classHint": "b",
+    "priorTokens": [
+      "vancouver",
+      "apa7"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "ufri",
+    "sources": [
+      {
+        "sourceId": "ufri-upute-diplomski-2024",
+        "kind": "guidelines",
+        "pages": 7,
+        "snippets": 5
+      }
+    ],
+    "needsOcr": [],
+    "chars": 8446,
+    "workedExamples": 12,
+    "authorYear": 12,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 0,
+    "classHint": "a",
+    "priorTokens": [
+      "harvard"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "ufzg",
+    "sources": [
+      {
+        "sourceId": "ufzg-upute-zavrsni-diplomski-2026",
+        "kind": "guidelines",
+        "pages": 7,
+        "snippets": 5
+      }
+    ],
+    "needsOcr": [],
+    "chars": 7578,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 1,
+    "classHint": "c",
+    "priorTokens": [
+      "apa7"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "unidu",
+    "sources": [
+      {
+        "sourceId": "unidu-povijest-upute",
+        "kind": "guidelines",
+        "pages": 11,
+        "snippets": 10
+      },
+      {
+        "sourceId": "unidu-komunikologija-upute-2025",
+        "kind": "guidelines",
+        "pages": 15,
+        "snippets": 10
+      },
+      {
+        "sourceId": "unidu-ekonomija-prirucnik-2024",
+        "kind": "guidelines",
+        "pages": 21,
+        "snippets": 8
+      },
+      {
+        "sourceId": "unidu-umjetnost-naputak",
+        "kind": "guidelines",
+        "pages": 15,
+        "snippets": 11
+      }
+    ],
+    "needsOcr": [],
+    "chars": 19961,
+    "workedExamples": 3,
+    "authorYear": 3,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 3,
+    "classHint": "b",
+    "priorTokens": [
+      "chicago-notes",
+      "harvard",
+      "ieee"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "unin",
+    "sources": [
+      {
+        "sourceId": "unin-upute-radovi-2026",
+        "kind": "guidelines",
+        "pages": 1,
+        "snippets": 8
+      }
+    ],
+    "needsOcr": [],
+    "chars": 15995,
+    "workedExamples": 31,
+    "authorYear": 31,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 7,
+    "classHint": "a",
+    "priorTokens": [
+      "vancouver",
+      "apa7",
+      "harvard"
+    ],
+    "contradictions": [
+      "prior je numericki stil, a izvor pokazuje autor-godina primjere"
+    ]
+  },
+  {
+    "facultyId": "unipu",
+    "sources": [
+      {
+        "sourceId": "fet-naputak-radovi",
+        "kind": "guidelines",
+        "pages": 25,
+        "snippets": 16
+      },
+      {
+        "sourceId": "tfpu-naputak-radovi-2025",
+        "kind": "guidelines",
+        "pages": 18,
+        "snippets": 11
+      }
+    ],
+    "needsOcr": [
+      "fooz-upute-radovi (.doc binarni format)"
+    ],
+    "chars": 19308,
+    "workedExamples": 8,
+    "authorYear": 8,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 12,
+    "classHint": "a",
+    "priorTokens": [],
+    "contradictions": []
+  },
+  {
+    "facultyId": "unizd",
+    "sources": [
+      {
+        "sourceId": "unizd-turizam-upute",
+        "kind": "guidelines",
+        "pages": 24,
+        "snippets": 14
+      },
+      {
+        "sourceId": "unizd-psihologija-upute",
+        "kind": "guidelines",
+        "pages": 11,
+        "snippets": 8
+      },
+      {
+        "sourceId": "unizd-pedagogija-upute-2019",
+        "kind": "guidelines",
+        "pages": 10,
+        "snippets": 7
+      },
+      {
+        "sourceId": "unizd-povijest-umj-upute-2019",
+        "kind": "guidelines",
+        "pages": 10,
+        "snippets": 7
+      }
+    ],
+    "needsOcr": [],
+    "chars": 19270,
+    "workedExamples": 2,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 2,
+    "styleNames": 2,
+    "classHint": "b",
+    "priorTokens": [
+      "apa7",
+      "harvard",
+      "chicago-author",
+      "vancouver"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "unizg",
+    "sources": [],
+    "needsOcr": [
+      "unizg-drsc08-doktorski (.doc binarni format)"
+    ],
+    "chars": 0,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 0,
+    "classHint": "c",
+    "priorTokens": [],
+    "contradictions": []
+  },
+  {
+    "facultyId": "vef",
+    "sources": [
+      {
+        "sourceId": "vef-naputak-diplomski-2024",
+        "kind": "guidelines",
+        "pages": 13,
+        "snippets": 10
+      }
+    ],
+    "needsOcr": [],
+    "chars": 19998,
+    "workedExamples": 4,
+    "authorYear": 4,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 0,
+    "classHint": "b",
+    "priorTokens": [
+      "harvard"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "veleknin",
+    "sources": [
+      {
+        "sourceId": "veleknin-upute-zavrsni-2020",
+        "kind": "guidelines",
+        "pages": 23,
+        "snippets": 11
+      }
+    ],
+    "needsOcr": [],
+    "chars": 15898,
+    "workedExamples": 9,
+    "authorYear": 9,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 0,
+    "classHint": "a",
+    "priorTokens": [],
+    "contradictions": []
+  },
+  {
+    "facultyId": "veleri",
+    "sources": [
+      {
+        "sourceId": "veleri-upute-formalni-izgled",
+        "kind": "guidelines",
+        "pages": 12,
+        "snippets": 10
+      }
+    ],
+    "needsOcr": [],
+    "chars": 13437,
+    "workedExamples": 4,
+    "authorYear": 4,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 3,
+    "classHint": "b",
+    "priorTokens": [
+      "harvard"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "vevu",
+    "sources": [
+      {
+        "sourceId": "vevu-upute-zavrsni",
+        "kind": "guidelines",
+        "pages": 14,
+        "snippets": 4
+      }
+    ],
+    "needsOcr": [],
+    "chars": 5050,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 0,
+    "classHint": "c",
+    "priorTokens": [
+      "harvard"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "vhzk",
+    "sources": [
+      {
+        "sourceId": "vhzk-pravilnik-zavrsni-2022",
+        "kind": "regulation",
+        "pages": 21,
+        "snippets": 14
+      }
+    ],
+    "needsOcr": [],
+    "chars": 18774,
+    "workedExamples": 20,
+    "authorYear": 20,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 2,
+    "classHint": "a",
+    "priorTokens": [
+      "harvard"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "vkjs",
+    "sources": [
+      {
+        "sourceId": "vkjs-upute-zavrsni-diplomski-2024",
+        "kind": "guidelines",
+        "pages": 24,
+        "snippets": 21
+      }
+    ],
+    "needsOcr": [],
+    "chars": 19910,
+    "workedExamples": 11,
+    "authorYear": 11,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 6,
+    "classHint": "a",
+    "priorTokens": [
+      "apa7"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "vsite",
+    "sources": [
+      {
+        "sourceId": "vsite-pravilnik-2014",
+        "kind": "regulation",
+        "pages": 5,
+        "snippets": 1
+      }
+    ],
+    "needsOcr": [],
+    "chars": 1726,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 0,
+    "classHint": "c",
+    "priorTokens": [],
+    "contradictions": []
+  },
+  {
+    "facultyId": "vub",
+    "sources": [
+      {
+        "sourceId": "vub-upute-diplomski-2025",
+        "kind": "guidelines",
+        "pages": 33,
+        "snippets": 16
+      }
+    ],
+    "needsOcr": [],
+    "chars": 19797,
+    "workedExamples": 1,
+    "authorYear": 1,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 2,
+    "classHint": "b",
+    "priorTokens": [
+      "vancouver"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "vuv",
+    "sources": [
+      {
+        "sourceId": "vuv-upute-radovi-2025",
+        "kind": "guidelines",
+        "pages": 29,
+        "snippets": 12
+      }
+    ],
+    "needsOcr": [],
+    "chars": 17918,
+    "workedExamples": 12,
+    "authorYear": 10,
+    "numeric": 0,
+    "footnote": 2,
+    "styleNames": 0,
+    "classHint": "a",
+    "priorTokens": [
+      "apa7"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "vvg",
+    "sources": [
+      {
+        "sourceId": "vvg-upute-radovi-2013",
+        "kind": "guidelines",
+        "pages": 25,
+        "snippets": 7
+      }
+    ],
+    "needsOcr": [],
+    "chars": 10635,
+    "workedExamples": 4,
+    "authorYear": 0,
+    "numeric": 4,
+    "footnote": 0,
+    "styleNames": 0,
+    "classHint": "b",
+    "priorTokens": [
+      "ieee"
+    ],
+    "contradictions": []
+  },
+  {
+    "facultyId": "zsem",
+    "sources": [
+      {
+        "sourceId": "zsem-pravilnik-zavrsni-2023",
+        "kind": "regulation",
+        "pages": 8,
+        "snippets": 4
+      },
+      {
+        "sourceId": "zsem-pravilnik-diplomski-2023",
+        "kind": "regulation",
+        "pages": 28,
+        "snippets": 13
+      }
+    ],
+    "needsOcr": [],
+    "chars": 18545,
+    "workedExamples": 4,
+    "authorYear": 4,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 3,
+    "classHint": "b",
+    "priorTokens": [],
+    "contradictions": []
+  },
+  {
+    "facultyId": "zvu",
+    "sources": [
+      {
+        "sourceId": "zvu-pravilnik-zavrsni-2015",
+        "kind": "regulation",
+        "pages": 21,
+        "snippets": 9
+      }
+    ],
+    "needsOcr": [],
+    "chars": 18283,
+    "workedExamples": 0,
+    "authorYear": 0,
+    "numeric": 0,
+    "footnote": 0,
+    "styleNames": 2,
+    "classHint": "b",
+    "priorTokens": [],
     "contradictions": []
   }
 ]

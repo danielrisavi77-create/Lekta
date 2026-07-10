@@ -1,0 +1,380 @@
+===== [fhs-upute-diplomski-2026 | str. 3] =====
+Odsjecno vijee: imenuje mentora (i sumentora ako treba) na studentov prijedlog i uz suglasnost
+predlozenoga nastavnika, odobrava temu rada na studentov prijedlog, usuglasen s mentorom (i
+sumentorom) te odlucuje o promjeni mentora ili teme rada.
+
+b) Sadrzaj i opseg diplomskoga rada
+   Diplomski rad po svojem sadrzaju mora pokazati studentovo poznavanje teme, sposobnost
+
+samostalnoga istrazivanja i sposobnost primjene znanstvene i strucne metodologije, sluzenja
+literaturom i akademsku pismenost. Po svojem opsegu diplomski rad moze imati od 90.000 do
+130.000 znakova s bjelinama (50 do 70 kartica).
+
+   Uz mentorovu suglasnost diplomski rad moze biti pisan na klasicnom ili stranom jeziku.
+
+c) Pravo pristupa obrani diplomskoga rada
+
+   Pravo pristupa obrani diplomskoga rada student stjece nakon sto je prethodno polozio sve
+propisane ispite i razlikovne ispite te izvrsio ostale obveze predviene studijskim programom,
+zakonom i Pravilnikom o studiranju.
+
+d) Izrada i predaja diplomskoga rada � postupak:
+
+===== [fhs-upute-diplomski-2026 | str. 6] =====
+Tekst je obostrano poravnat
+Naslovnica ima drugacije margine!
+Bold podebljanjem oznacavati glavne naslove, a podnaslove italikom (kao i sve rijeci na
+stranom jeziku).
+Rad mora sadrzavati:
+Naslovnicu na jeziku kojim je rad pisan
+Sazetak na jeziku na kojem je rad napisan i na engleskom jeziku
+Kljucne rijeci
+Sadrzaj
+Tekst rada (diplomski rad treba sadrzavati sve sastavnice svojstvene znanstvenom radu iz
+podrucja psihologije: Uvod, Ciljevi i problemi, Metoda, Rezultati, Rasprava)
+Zakljucak
+Popis literature
+Prilozi (neobavezno)
+U pisanju (posebice kod opisa metode, provedenih analiza i zakljucaka) koristite aktiv i prvo
+lice mnozine (istrazili smo, dobili smo, otkrili smo... ). ,,...Ne preporucuje se prvo lice
+jednine... jer se time gubi dojam znanstvene objektivnosti i nepristranosti..." (Milas, 2009;
+str.76). Uvazite jezicna i pravopisna pravila hrvatskoga jezika (primjerice ljestvica-
+podljestvica umjesto skala-subskala, visedimenzionalno umjesto multidimenzionalno, tjelesni
+
+                                                             6
+
+===== [fhs-upute-diplomski-2026 | str. 7] =====
+umjesto fizicki simptomi, obrada umjesto procesiranje, psihicko zdravlje umjesto mentalno
+zdravlje). Obratite paznju na navoenje pojmova koji su psihologiji i srodnim profesijama
+poprimale razlicite oblike u skladu sa suvremenim poimanjem tih pojmova: spolne/rodne
+razlike, invalidi/osobe s invaliditetom, bolesnici/oboljeli od, djeca s posebnim
+potrebama/djeca s razvojnim teskoama.
+
+Openito, sadrzaj i ureenje teksta treba biti u skladu s APA standardima za pisanje
+znanstvenih radova (Publication Manual of the American Psychological Association, 7th
+edition), osim u slucajevima u kojima APA standardi odstupaju od kulturalnih i jezicnih
+normi hrvatskoga jezika.
+
+Opa struktura i logika pisanja rada treba slijediti Poglavlje 5 udzbenika Istrazivacke metode
+u psihologiji i drugim drustvenim znanostima (Milas, 2005 ili 2009).
+
+Izgled prvih stranica mozete vidjeti u nastavku.
+
+Redoslijed prvih stranica treba biti sljedei:
+
+Nasl           Praz    Repl      Saze     Sadr  Uvo
+
+ovna           na      ika       tak      zaj   d
+
+===== [fhs-upute-diplomski-2026 | str. 7] =====
+Vrste radova:          u
+
+     1. Empirijski radovi, koji odgovaraju uvrijezenom empirijskom znanstvenom radu: ova
+         kategorija rada moze sadrzavati idiografski (studija slucaja) ili nomoteticki
+         (istrazivanja na veem broju sudionika) pristup empirijskom istrazivanju fenomena.
+
+     2. Neempirijski radovi, primarno pregledni, koji prvenstveno prikazuju status
+         istrazivanja ili teorijskoga modeliranja nekoga relevantnoga psiholoskoga fenomena,
+         analiziraju i kriticki vrednuju rezultate istoga (kao i probleme u istrazivanju i
+         teorijskom modeliranju) te nude smjernice za budua istrazivanja. Napominjemo kako
+         i pregledni rad treba sadrzavati sve elemente znanstvenoga izvjestavanja: uvod, cilj,
+         metodu, rezultate, raspravu, zakljucak i literaturu.
+
+Izgled korica: Hrbat:  ime autora godina obrane vrsta rada (diplomski rad)
+
+                              7
+
+===== [fhs-upute-diplomski-2026 | str. 11] =====
+Uvod
+Ne duzi od 1/3 ukupnoga broja stranica samoga teksta.
+
+U uvodnom dijelu potrebno je argumentirati relevantnost istrazivackoga problema, odnosno pruziti
+citateljima informacije zbog cega je potrebno provesti istrazivanje te koji su teorijski (i/ili prakticni)
+razlozi koji poticu na njegovu provedbu. Zatim je potrebno osvrnuti se na postojeu bazu znanja,
+odnosno prethodno provedena istrazivanja vezana uz cilj i/ili probleme diplomskoga rada. Pregled
+prethodnih spoznaja treba uciniti s mjerom, tj. usmjeriti se na relevantne radove i dovesti bilo
+probleme, bilo metodu bilo ishode tih istrazivanja i teorijskih pretpostavki u vezu s ciljem i
+problemima diplomskoga rada. U zavrsnom dijelu uvoda potrebno je sumirati iz cega proizlaze
+ciljevi diplomskoga rada i navesti mogue teorijske i/ili prakticne implikacije rezultata.
+
+Cilj i problemi
+Openito navesti glavni cilj istrazivanja, taksativno navesti probleme i ispod njih definirati
+istrazivacke hipoteze (nul-hipoteze ili direktivne hipoteze, ovisno o nalazima prethodnih
+istrazivanja).
+
+Metoda
+Mentor prije svega treba uskladiti nacrt istrazivanja s Kodeksom etike psiholoske djelatnosti. Treba
+voditi racuna o osiguravanju anonimnosti sudionika te trazenju pristanka za sudjelovanje: primjerice,
+od institucije u kojoj se provodi istrazivanje, od roditelja/skrbnika za sudionike mlae od 14 godina,
+od samih sudionika ako su iznad 14 godina (Prilozi 4-6). Takoer je vazno planirati nacine zastite
+povjerljivosti podataka, nacin cuvanja podataka te hoe li i kako biti dana povratna informacija
+sudionicima istrazivanja. Dakle, treba postupati prema svim nacelima propisanima Kodeksom etike
+psiholoske djelatnosti Hrvatske psiholoske komore.
+
+Sudionici
+Navesti karakteristike uzorka - broj, spol, dob sudionika i sve ostale relevantne karakteristike uzorka
+koje su bitne za postavljene probleme i valjanost istrazivanja. Pri opisu uzorka koristiti najnizu
+razinu openitosti koja ne narusava anonimnost sudionika (npr. ''Sudionici su ucenici jedne srednje
+
+                                                                 11
+
+===== [fhs-upute-diplomski-2026 | str. 14] =====
+tekstu (i grafickih prikaza) radi se preko rednoga broja (npr. vidi tablicu 2; ili u tablici 2
+    nalaze se rezultati....).
+
+- Najcese koristeni stil tablica u znanstvenim casopisima je bez vertikalnih linija (vidi
+    primjere).
+
+Tablica 1. Deskriptivni podaci nekih oblika percipiranoga roditeljskoga ponasanja, ovisno o spolu sudionika
+
+                                      n      M  SD
+
+Oceva toplina-prihvaanje
+
+Mladii                                157 27.1 4.23
+
+Djevojke                              157 28.8 3.78
+
+Majcina toplina-prihvaanje
+
+Mladii                                147 26.0 4.88
+
+Djevojke                              157 26.0 5.67
+
+Oceva agresivnost-neprijateljstvo
+
+Mladii                                154 8.3 2.66
+
+Djevojke                              158 8.4 3.02
+
+Majcina agresivnost-neprijateljstvo
+
+Mladii                                149 8.6 3.45
+
+Djevojke                              153 8.3 3.06
+
+Oceva indiferentnost-zanemarivanje
+
+Mladii                                155 9.0 3.08
+
+Djevojke                              157 8.8 2.88
+
+Majcina indiferentnost-zanemarivanje
+
+Mladii                                153 10.2 3.58
+
+Djevojke                              157 5.1 2.08
+
+                                         14
+
+===== [fhs-upute-diplomski-2026 | str. 16] =====
+Slika 1. Vrijeme pocetka spavanja kroz sedam noi vezanih uz jutarnju i poslijepodnevnu smjenu
+
+Statisticki simboli i statisticke vrijednosti u tekstu
+    - svi statisticki simboli, kako u tablicama tako i u tekstu, pisu se kosim slovima (italik), osim
+         grckih slova; ako se statisticki simboli koriste u tekstu, moraju sadrzavati toliko informacija
+         da citatelji u potpunosti mogu razumjeti tekst.
+    - kao decimalni ''zarez'' treba koristiti tocku prema APA standard-u, sto je razlicito od
+         Hrvatskoga pravopisa. Prokomentirajte s mentorom koristenje decimalnoga zareza ili tocke i
+         koje standarde ete uvaziti.
+    - sve statisticke vrijednosti koje ne mogu poprimiti vrijednost veu od 1 pisu se bez 0 ispred
+         decimalne tocke (npr. p < .01, a ne p < 0.01 ili r = .65, a ne r = 0.65)
+
+    Primjeri:
+    - kod analize varijance: F(2,60) = 8.15; p < .01 (2 i 60 su stupnjevi slobode)
+    - za t-test: t (87) = 1.30; p > .05 (87 su stupnjevi slobode)
+    - za Pearsonov koeficijent korelacije: r = .65; p < .01
+    - za Hi-kvadrat: 2(5, 100) = 8.73; p < .01 (5 su stupnjevi slobode, a 100 velicina uzorka)
+
+                                                                 16
+
+===== [fhs-upute-diplomski-2026 | str. 18] =====
+Zakljucak
+
+   Sazeto i jasno odgovoriti na postavljene probleme, temeljeno na rezultatima i cinjenicama
+iznesenim u radu.
+
+Literatura
+
+Popis referenci (koristene literature)
+
+- Redoslijed referenci treba pisati abecednim redom, prema prezimenu prvoga autora, bez rednih
+    brojeva.
+
+- Ako isti autor ima vise referenci, prvo se pisu one koje su novijega datuma.
+- Ovisno o vrsti izvora, struktura pisanja pojedine reference ponesto je drugacija.
+- Ako je referenca duza od jednoga reda, tekst u ostalim redovima se uvlaci (opcija visee ,,hang"
+
+    u Wordu) za 1 cm. Prored unutar pojedine reference je 1, a izmeu referenci treba ostaviti
+    razmak.
+- U literaturi diplomskoga rada se ne navode sekundarne reference, dakle navodite samo onu
+    literaturu koju ste imali dostupnu i koristili je u tekstu diplomskoga rada.
+
+Primjer popisa literature:
+Martin, M. O. i Morgan, M. (1994). Reading literacy in Irish schools: A comparative analysis. Irish
+
+         Journal of Education, 26(1), 3-101.
+Oldham, E. (1989). Is there an international mathematics curriculum? U B. Greer i G. Mulhern (ur.), New
+
+       directions in mathematics education (str. 185-224). London: Routledge.
+Tierney, R.J., Carter, M.A. i Desai, L.E. (1991). Portfolio assessment in reading-writing classrooms.
+
+       Norwood, MA: Christopher-Gordon.
+
+Izvorni znanstveni clanci u casopisu
+(Prezime autora, inicijal imena. (godina izdavanja). Naslov rada. Naslov casopisa, volumen
+
+===== [fhs-upute-diplomski-2026 | str. 19] =====
+(Prezime(na) autora, inicijal imena. (godina izdavanja). Naslov knjige. Grad izdavanja: Ime
+izdavaca.)
+Tierney, R.J., Carter, M.A. i Desai, L.E. (1991). Portfolio assessment in reading-writing classrooms.
+
+       Norwood, MA: Christopher-Gordon.
+
+Nunnally, J. C. i Bernstein, I. H. (1994). Psychometric theory (3rd edition). New York: McGraw-
+Hill.
+
+    � Poglavlje u knjizi
+(Prezime autora, inicijali imena. (godina izdavanja). Naslov poglavlja u knjizi. Urednik(ci) ako
+postoje najprije inicijal(i) imena, a potom prezimena (ur.), naslov knjige ili zbornika, stranice teksta
+koji se citira. Grad izdavanja: Ime izdavaca.
+
+Oldham, E. (1989). Is there an international mathematics curriculum? U B. Greer i G.Mulhern (ur.),
+       New directions in mathematics education (str. 185-224). London: Routledge.
+
+Delale, E. A., Branica, V. (2007). Ethnicity in the Curriculum and Research of the Croatian School
+       of Social Work. U D. Zavirsek, J. Zorn, LJ. Rihter, S. Znidarec Demsar (ur.), Ethnicity in
+       Eastern Europe, A challenge for Social Work Education (str. 197-213). Ljubljana: Fakulteta za
+       socijalno delo (Book series Anti-rasist social work).
+
+Doktorske disertacije, magisteriji, diplomski radovi
+(Prezime autora, inicijal imena. (godina obrane). Naslov rada. Mjesto i institucija obrane.)
+
+===== [fhs-upute-diplomski-2026 | str. 20] =====
+Pravni izvori
+(Ime zakona. Narodne novine, br. broj(evi) zakona.)
+
+Obiteljski zakon. Narodne novine, br. 116/2003, 25/2013.
+
+Naslov publikacije u kojoj je zakon objavljen (godina izdavanja) Naslov zakona: podnaslov.
+Mjesto izdavanja: Nakladnik, oznaka sveska/godista (broj), str. od-do
+
+Narodne novine (1992) Zakon o visokim ucilistima. Zagreb: Narodne novine d.d., 49 (1), str. 2142-
+2159.
+
+Citiranje literature - navoenje autora u tekstu
+
+- Autori ciji radovi, definicije, klasifikacije, rezultati istrazivanja su citirani u tekstu diplomskoga
+    rada, trebaju biti navedeni i u popisu literature i obrnuto, tj. autori ciji radovi, knjige su navedeni
+    u literaturi moraju biti citirani i u samom tekstu.
+
+- Potrebno je pravilno citirati izvore podataka navedene u tekstu diplomskoga rada i u literaturi.
+- Citiraju se: definicije, klasifikacije/Odsjeke, (rezultati) istrazivanja nekoga autora, autorove
+
+    doslovne rijeci i sl.
+- Nije potrebno citirati: recenice, objasnjenja koja se mogu opisati i vlastitim rijecima.
+
+Primjeri:
+- Istrazivanje Wegenera i suradnika (1994) podrzava teoriju...
+- Iako postoje i leksicka istrazivanja rezultati kojih odstupaju od velepetoroga modela (Boies i
+
+    sur., 2001; Church i sur., 1998; Di Blas i Forzi, 1998; Saucier i sur., 2005; Szirmak i De Raad,
+    1994), a pitanje koja...
+- Primjenom takvoga instrumenta uvelike se smanjuje dvosmislenost i automatizam u odgovorima
+    (Wilson i Patterson, 1968).
+- Ve su i neki od pionirskih radova (Ferguson, 1939; Eysenck, 1944) pokazali kako se drustveni
+    stavovi koje pojedinci zastupaju ne javljaju izdvojeno i nepovezano.
+
+===== [fhs-upute-diplomski-2026 | str. 21] =====
+- Ako autori imaju isto prezime, onda se dodaje i inicijal imena:
+    npr. (E. Johnson, 2001; L. Johnson, 1998).
+
+- Ako se u tekstu spominje istrazivanje veega broja autora (3 do 5), kod prvoga navoenja treba
+    napisati prezimena svih autora, a u sljedeim navoenjima samo prvoga autora te dodatak i sur.
+    (primjerice prvi put u tekstu: Aronson, Wilson i Akert, 2005, kasnije u tekstu: Aronson i sur.,
+    2005).
+
+- Ako ima vise od pet autora, onda se i pri prvom i kasnijim navoenjima navodi samo prezime
+    prvoga autora + i sur. (osim u slucaju kada u istom tekstu citiramo dva rada s istim prvim
+    autorom, koji su objavljeni iste godine, jer u tom slucaju svaki puta navodimo sve autore).
+
+- Kad se prezime prvoga autora + i sur. pise kao dio teksta, onda treba pisati prezime prvoga
+    autora i suradnici (primjerice: Aronson i suradnici (2005) navode kako ..., a kad je u zagradi,
+    onda se pise kratica i sur.).
+
+- Kada je autor rada neka ustanova ili organizacija, obicno citiramo ime te ustanove u cijelosti. S
+    obzirom na to da su imena nekih ustanova duga i nespretna za uzastopno citiranje, nakon prvoga
+    citiranja ga mozemo skratiti (ako ve ne postoji uvrijezeni akronim), kada mislimo da e to biti
+    jasno.
+
+- Ako se radi o doslovnom citatu, potrebno ga je staviti pod navodne znakove, i navesti stranu rada
+    na kojoj se nalazi:
+
+"Cinjenica da okolno svjetlo mijenja dozivljenu svjetlinu nekoga ciljnoga objekta, sugerira da je na
+djelu neka vrsta prostorne interakcije" (Coren, Ward i Enns, 2003; str. 109).
+
+Sekundarne reference
+- Kada se u tekstu diplomskoga rada navodi neko istrazivanje koje nije pronaeno u originalu, tada
+
+    treba navesti ime autora koji je prvi naveo neke rezultate, a onda i autora u cijoj je publikaciji ta
+    informacija pronaena. Npr.:
+
+       Smith i Kline (1992, prema Garder, 2002) pronasli su da...
+   Wever i Block (1946, prema Pecjak, 1977)
+- Stavite godinu i zarez iza godine (iako odstupa od APA preporuka).
+- Pogresno je navesti izvor na kraju recenice, primjerice:
+Wever i Block su u svome istrazivanju pokazali.... (1946, prema Pecjak, 1977)
+
+                                                                 21
+
+===== [fhs-upute-diplomski-2026 | str. 22] =====
+Wever i Block (1946) su u svome istrazivanju pokazali.... (prema Pecjak, 1977)
+- U popisu referenci za ovakav slucaj treba navesti posrednu (onu koju ste citali) publikaciju
+
+    (Garder, 2002).
+
+- Ako se zeli specificnije naglasiti neka informacija, npr. stranica na kojoj je nesto pronaeno, ta
+    se informacija moze navesti (Smith i Kline, 1999, prema Gardner, 2002, str. 191, ili poglavlje
+    IV).
+
+- Pogresan nacin navoenja referenci u tekstu, kada Bandura nije naveden kao primarna
+    referenca:
+
+- U prilog objasnjenu utjecaja neuspjeha na stanje organizma ide i Bandurina teorija samo-
+    djelotvornosti. Naime, Bandura (1977) tvrdi da osobe mogu dozivjeti neuspjeh usporeujui se s
+    drugima s kojima se mogu identificirati. Ako osoba koja opaza model ne uspije na identican ili
+    slican nacin reproducirati modelovo ponasanje, kod nje se nee razviti osjeaj samo-
+    djelotvornosti. Takoer, osjeaj manje djelotvornosti se moze javiti i u situacijama kada osobu
+    pokusavamo uvjeriti da je sposobna nositi se s teskom situacijom, a ona nakon pokusaja dozivi
+    neuspjeh (prema Beck, 2003).
+
+- Tocan nacin navoenja referenci u tekstu, kada Bandura nije naveden kao primarna referenca:
+
+- Naime, Bandura (1977, prema Beck, 2003) tvrdi da osobe mogu dozivjeti neuspjeh usporeujui
+    se s drugima s kojima se mogu identificirati. Ako osoba koja opaza model ne uspije na identican
+    ili slican nacin reproducirati modelovo ponasanje, kod nje se nee razviti osjeaj samo-
+    djelotvornosti. Takoer, osjeaj manje djelotvornosti se moze javiti i u situacijama kada osobu
+    pokusavamo uvjeriti da je sposobna nositi se s teskom situacijom, a ona nakon pokusaja dozivi
+    neuspjeh.
+
+- Primjer u iznimnim situacijama kada nije navedena godina uz autora:
+
+- Naime, Bandura (prema Beck, 2003) tvrdi da osobe mogu dozivjeti neuspjeh usporeujui se s
+    drugima s kojima se mogu identificirati. Ako osoba koja opaza model ne uspije na identican ili
+
+===== [fhs-upute-diplomski-2026 | str. 23] =====
+- Sekundarno citiranje svesti na najmanju moguu mjeru!
+- Citiranje pravnih izvora u tekstu: (Obiteljski zakon, NN 116/2003, cl. 11, st1).
+Citiranje napisa u novinama i intervjua
+ napisi u novinama
+-ako je poznat autor napisa
+Prezime, inicijal(i) autora. (godina izdavanja) Naslov napisa: podnaslov. Naslov novina,
+datum, str. od-do.
+Soap, J. (1992) The trends in bubble bath production. Financial Markets, 6 March, str. 18 -19.
+- ako nije poznat autor napisa
+Naslov novina (godina izdavanja) Naslov napisa: podnaslov. Nakladnik, datum, str. od-do.
+Vecernji list (2007) Rehn politicarima u BiH: prestanite se svaati i provedite reforme. Vecernji list
+digital d.o.o., 16. ozujka, str. 5.
+Sunday Times (1993) Students improve quality of written work. Sunday Times, 5 May, str. 17.
+ intervju
+- u novinama

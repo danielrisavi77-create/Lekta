@@ -1,0 +1,247 @@
+===== [biotech-upute-radovi | str. 3] =====
+1. OPE NAPOMENE
+
+1.1. Zavrsni rad
+
+Zavrsni rad na preddiplomskom studiju je strucni rad studenata koji nije obavezan. Ako student
+zeli izraditi rad, isti se boduje prema odluci Odjelskog vijea s 6 ECTS-a. Zavrsni rad moze
+sacinjavati kriticki pregled literature odreenog podrucja ili malo znanstveno istrazivanje. Upute
+za obje vrste zavrsnog rada navedene su u nastavku. Studenti ciji zavrsni rad je temeljen na
+eksperimentalnom istrazivackom radu u laboratoriju mentora slijede principe izrade diplomskog
+rada. Zavrsni rad je po obimu provedenih eksperimenata i ogranicenju broja rijeci po poglavljima
+manji nego diplomski rad, no zavrsni radovi veeg obima su dozvoljeni ako su suglasno dogovoreni
+izmeu studenta i mentora.
+
+1.2. Diplomski rad
+
+Diplomski rad na diplomskim studijima znanstveni je rad koji predstavlja publikaciju baziranu na
+istrazivackom projektu na kome student radi tijekom druge godine studija i koji se vrednuje sa 24
+ECTS-a. Okosnica rada je eksperimentalni rad sproveden u znanstveno-istrazivackom laboratoriju
+mentora ili u izvanrednim slucajevima retrospektivna opservacijska studija, koji trebaju biti
+
+===== [biotech-upute-radovi | str. 5] =====
+mentor +
+
+        nije nastavnik     komentor            OB
+
+        (npr. IRB, ICGEB) (nastavnik (ZNV) -
+
+                           OB)
+
+Obaveze mentora su da:
+- na pocetku akademske godine objave teme zavrsnih i diplomskih radnji koje tekue akad.god. planiraju
+mentorirati,
+- upozoravaju studenta na vremenska ogranicenja tijekom pojedinih faza pripreme i pisanja rada (analiza
+literature, pisanje pojedinih verzija rada),
+- usmjeravaju studenta tijekom pripreme i pisanja rada,
+- provjere da je rad napisan prema dokumentu Postupak za prijavu, oblikovanje i obranu zavrsnog i
+diplomskog rada koji je publiciran na mreznim stranicama OB,
+- osiguraju da je konacna verzija rada provjerena u sustavu Turnitin i pravovremeno predana na citanje
+clanovima Povjerenstva za obranu rada.
+Duznost clanova povjerenstva za obranu rada je procitati rad, te upozoriti studenta i mentora ukoliko rad
+nije u skladu s Uputama za pisanje rada.
+
+                                                                  5
+
+===== [biotech-upute-radovi | str. 8] =====
+3.1. Ope upute za pisanje
+
+Pisanje rada koji zadovoljava uvjete za predaju na citanje clanovima komisije zahtijeva otprilike
+dva mjeseca. Pod pisanjem se podrazumijeva: analiza rezultata, izrada slika i pripadajuih opisa,
+pisanje pojedinih poglavlja uz dodatno pretrazivanje literature, visekratno mentorovo citanje i
+ispravljanje teksta.
+
+Ope upute su:
+
+     postivati pravila gramatike, pravopisa i sintakse;
+     strucnu terminologiju objasniti i definirati;
+     skraenice objasniti kod prvog spominjanja;
+     Izrazavati se objektivno, koncizno, jasno i argumentirano;
+     paziti na duzinu recenice - jedna misao, jasna, razumljiva, gramaticki i sintakticki
+
+         pravilna.
+
+===== [biotech-upute-radovi | str. 9] =====
+naredni listovi:  numerirane stranice s numeriranim poglavljima od kojih svako
+                   zapocinje na novom listu:
+                   Kriticki pregled literature
+                   Tematska poglavlja. Literatura. Zivotopis
+                   Eksperimentani rad
+                   1. Uvod, 2. Cilj rada, 3. Materijali i metode, 4. Rezultati,
+                   5. Rasprava, 6. Zakljucak, 7. Literatura, 8. Zivotopis
+
+Nakon popisa literature rad moze sadrzavati i priloge, ovisno o dogovoru i preporuci mentora.
+
+3.3. Broj rijeci i stil pisanja po poglavljima
+
+Broj rijeci u pojedinom poglavlju rada je ogranicen, a izrazavati se treba koncizno, jasno i
+argumentirano i pritom paziti da svako poglavlje sadrzi informacije bitne za to poglavlje.
+Glavna poglavlja rada, njihov obim za zavrsni (Z) i diplomski (D) rad i smjernice za pisanje su
+sljedei:
+
+  Sazetak          - navesti glavnu svrhu istrazivanja
+do 300 rijeci      - opisati znanstveni kontekst istrazivanja
+                   - sumirati glavne metode i pristup, te rezultate
+   (Z i D)         - navesti zakljucke
+
+Kriticki pregled literature (samo Z)
+
+Kriticki pregled literature slican je preglednom znanstvenom clanku koji se temelji na prethodno
+publiciranim rezultatima. Prilikom pripreme za pisanje student s mentorom dogovora vrstu
+preglednog rada: organiziranje literature, evaluacija literature, identifikacija novih trendova u
+literaturi ili upuivanje na postojee nedostatke ili kontradikcije u literaturi.
+
+     Uvod          - definirati svrhu rada i staviti je u znanstveni kontekst
+oko 1000 rijeci    - objasniti zasto je kriticka analiza literature potrebna, nova ili
+
+                       drugacija
+
+                                                                                               9
+
+===== [biotech-upute-radovi | str. 10] =====
+Svrha rada          - navesti konkretnu svrhu pregleda literature
+do 300 rijeci
+
+  Tematska          - broj poglavlja i njihov obim proizlazi iz tematskih jedinica koje se
+  poglavlja             predstavljaju
+do 5000 rijeci
+                    - preporuka je da pojedino poglavlje ne bude krae od jedne
+  Literatura            stranice i nekoliko potpoglavlja
+  maks. 50
+  referenci         - popis literature treba sadrzavati izvore koje je student proucio i
+                        ciji sadrzaj je integriran u sadrzaj rada
+
+Zivotopis           - Zivotopis studenta u EU formatu.
+
+Eksperimentalni rad (Z i D)
+
+     1. Uvod        - definirati svrhu istrazivanja i staviti je u znanstveni kontekst,
+                        prezentirati literaturu relevantnu za razumijevanje svrhe
+  do priblizno          istrazivanja
+- 2000 rijeci za Z
+- 3500 rijeci za D  - pisati je u vidu lijevka, od openitog ka specificnom
+                    - Uvod napisati nakon pisanja poglavlja Rezultati i Rasprava jer to
+
+                        definira koju literaturu prezentirati u Uvodu
+
+2. Cilj rada        - moze sadrzavati svrhu istrazivanja, ako ona nije jasno definirana u
+                        uvodu
+do priblizno
+ 300 rijeci         - pozeljno je da sadrzi jednu ili vise glavnih hipoteza koje e se
+  za Z i D              ispitati u rezultatima
+
+                    - opisati postupke i metode koji su koristeni za dobivanje rezultata
+                        koji se prikazuju u poglavlju Rezultati
+
+                                                                                                                10
+
+===== [biotech-upute-radovi | str. 11] =====
+3. Materijali i     - opis mora biti dovoljno precizan i specifican da se postupak u
+      metode              budunosti moze ponoviti na osnovu prezentiranih informacija
+
+   do priblizno       - navoenje liste svih materijala nije prihvatljivo; navode se kljucni
+2000 rijeci za Z i D      reagensi koji odreuju vrstu i kvalitetu detektiranog signala, npr.
+                          protutijela, oligonukleotidi
+
+                      - citiranja reference koja je zamjena za opis metode nije prihvatljivo
+                      - ovo poglavlje preporuca se napisati tijekom provoenja
+
+                          eksperimenata
+
+   4. Rezultati       - kratko i objektivno opisati rezultate, ali NE interpretirati
+                      - svaki opisani eksperiment mora imati opisanu metodu u
+  izuzevsi slike,
+tablice, legende i        Materijalima i metodama i obrnuto
+                      - rezultati ne trebaju biti prikazani kronoloski i nije potrebno
+         sl.
+   do priblizno           prikazati sve rezultate, narocito ako jasno ne podrzavaju svrhu
+    3500 rijeci           istrazivanja
+
+===== [biotech-upute-radovi | str. 12] =====
+6. Zakljucak       - jako sazet opis glavnih rezultata
+                     - kako je rad pridonio znanju u podrucju
+   do priblizno      - navesti nedostatke ili otvorena pitanja
+300 rijeci za Z i D  - opisati moguu primjenu rezultata u svakodnevnom zivotu
+
+  7. Literatura      - Citiranje referenci treba biti s rednim brojem prema redoslijedu
+                         kojim se citat pojavljuje u tekstu.
+    maks. 50
+referenci za Z i D   - Broj citirane reference u tekstu stavlja se u zagradu.
+                     - Rad se citira na sljedei nacin: svi autori, naslov rada, casopis, godina
+
+                         izdanja, volumen, stranica od � do, prema primjeru:
+                         Silva-Vargas V, Maldonado-Soto AR, Mizrak D, Codega P, Doetsch F.
+                         Age-Dependent Niche Signals from the Choroid Plexus Regulate Adult
+                         Neural Stem Cells. *Cell Stem Cell* 2016; *19*: 643�652.
+                         U racunalnom programu Zotero navedeni stil citiranja zove se Nature
+                         Publishing Group-Vancuver
+
+8. Zivotopis         - Zivotopis studenta u EU formatu.
+
+Prilikom pisanja zavrsnog ili diplomskog rada od studenta se ocekuje da se pridrzava uputa o ogranicenju
+broja rijeci, a dozvoljava se da ukupan broj rijeci u radu odstupa maksimalno 15% od preporucenog
+ogranicenja.
+
+3.4. Jezik i graficki elementi
+
+Rad treba pisati na hrvatskom ili engleskom jeziku, a student to definira u obrascu "Prijava teme
+diplomskog rada" ili "Zamolba za izradu zavrsnog rada". Rad pisan na engleskom jeziku treba
+
+===== [biotech-upute-radovi | str. 15] =====
+5. ISPIT
+
+Ispitu student pristupa nakon polozenih svih ispita doticnog studija. Ispit je otvoren za javnost.
+
+5.1. Priprema prezentacije za ispit
+
+Student mora u ogranicenom vremenu (30 min.) prezentirati rad. S obzirom na ograniceno
+vrijeme za prezentaciju, potrebno je pazljivo odabrati vrstu i kolicinu informacija za izlaganje. Nije
+potrebno prezentirati sve rezultate i prihvatljivo je prezentiranje sadrzaja koji nije prikazan u radu,
+a koji olaksava praenje prezentacije.
+
+Ope napomene: sto manje teksta, sto vise slika i dijagrama, font dovoljno velik da ga svi mogu
+jasno citati, minimalizirati ukrasavanje slajdova koji odvraaju paznju od sadrzaja.
+
+Nije prihvatljivo kao sadrzaj prezentacije na prvom slajdu navesti popis poglavlja rada.
+
+Kriticki pregled  - Student prezentira rezultate iz literature koji potkrepljuju
+   literature          svrhu preglednoga rada, te slike ili dijagrame iz literature,
+    (samo Z)           ili one koje je student sam izradio kako bi jasnije
+                       predstavio problematiku.
+
+                                                                                      15
+
+===== [biotech-upute-radovi | str. 16] =====
+mentorom. Pri pohrani u repozitorij Odjela za biotehnologiju radi zastite privatnosti podataka rad
+ne treba sadrzavati zivotopis autora. Tiskane verzije rada nisu obavezne i student ih donosi na
+obranu prema prethodnom dogovoru sa svakim pojedinim clanom povjerenstva.
+
+5.3. Usmeno izlaganje rada
+
+Student je obavezan odrzati kratko, strukturirano izlaganje ne duze od 30 min. Po zavrsenom
+izlaganju student odgovara na pitanja clanova povjerenstva i mentora. Na ispitu se ocekuje da
+student suvereno barata znanstvenim cinjenicama vezano za temu rada.
+
+5.4. Zavrsna ocjena rada
+
+Rad se ocjenjuje nakon odrzane prezentacije i ispita. Ocjena za kriticki pregled literature (zavrsni
+rad) objedinjuje vrednovanje pismenog dijela rada, kvalitetu prezentacije i ispita. Ocjena za
+eksperimentalni rad sastoji se od posebne ocjene za pismeni dio (kvalitetu pisanja) i posebne
+ocjene za ispit, ukljucujui openito zalaganje za rad.
+
+                                                                                                                              16
+
+===== [biotech-upute-radovi | str. 17] =====
+Na osnovu srednje vrijednosti ocjene pismenog dijela (ocjenjuju clanovi Strucnog povjerenstva
+bez mentora) i ocjene ispita (ocjenjuju clanovi Strucnog povjerenstva i mentor) predsjednik
+Strucnog povjerenstva donosi odluku o zavrsnoj ocjeni rada (,,Zapisnik i ocjena obrane
+diplomskog ispita"). Ako je obrana ispita negativno ocjenjena, Strucno povjerenstvo za obranu
+diplomskog rada donosi odluku da li student treba ponovno pristupiti ispitu s istom pismenom
+verzijom rada ili u narednoj akademskoj godini ponovno provesti istrazivacki rad, te napisati i
+obraniti diplomski rad.
+Ako je obrana zavrsnog ispita (kriticki pregled literature) negativno ocjenjena student treba
+ponovno pristupiti ispitu s istom pismenom verzijom rada. Ako je negativno ocjenjen zavrsni
+ispit baziran na eksperimentalnom radu, primjenjuju se ista pravila kao za negativnu ocjenu
+diplomskoga rada.
+
+                                                                                                                              17

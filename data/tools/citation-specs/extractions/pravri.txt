@@ -1,0 +1,428 @@
+===== [pravri-upute-radovi-2023 | str. 2] =====
+I. Uvodne napomene
+
+1.1. Akademski (studentski) radovi
+
+1.2. Dijelovi studentskoga rada
+
+II. Tehnicke upute za pisanje rada
+
+2.1. Normativ stranice
+
+2.2. Brojcano oznacavanje elemenata rada
+
+2.3. Graficko oblikovanje biljeski
+
+2.4. Ispravno pisanje odlomaka
+
+III. Navoenje literature
+
+IV. Sustavi navoenja izvora
+
+V. Sustav navoenja literature koristenjem fusnota
+
+5.1. Prvo navoenje djela u fusnoti
+
+5.2. Ponovno navoenje istoga djela istog autora, ako se neposredno nastavlja
+
+5.3. Ponovno navoenje istoga djela istog autora i iste stranice
+
+5.4. Navoenje drugoga rada istog autora u slucaju neposrednog nastavljanja
+
+5.5. Navoenje drugih stranica ve navedenog djela bez kontinuiteta
+
+5.6. Navoenje razlicitih djela istog autora bez kontinuiteta
+
+5.7. Navoenje odrednica iz enciklopedija/leksikona
+
+5.8. Navoenje svoga vlastitog rada
+
+5.9. Navoenje pravnih propisa
+
+VI. Izrada popisa literature
+
+6.1. Monografije (knjige)
+
+6.2. Clanak u casopisu
+
+6.3. Hrvatski pravni propisi
+
+6.4. Europski pravni propisi
+
+6.5. Svjetski pravni propisi
+
+VII.    Kratice
+
+7.1. Odabir uobicajenih kratica
+
+VIII. Literatura
+
+Popis priloga
+
+Prilog 1. Primjer korica diplomskog rada na Integriranom preddiplomskom i
+
+diplomskom sveucilisnom studiju prava
+
+Prilog 2. Primjer naslovnice diplomskog rada na Integriranom preddiplomskom i
+
+diplomskom sveucilisnom studiju prava
+
+Prilog 3. Primjer korica zavrsnoga rada na Specijalistickim diplomskom strucnom
+
+===== [pravri-upute-radovi-2023 | str. 4] =====
+I. Uvodne napomene
+
+Upute za izradu studentskih pisanih radova namijenjene su studentima Pravnoga fakulteta u
+Rijeci, kako bi im se olaksala izrada svih vrsta studentskih radova (seminarski rad, zavrsni rad
+i diplomski rad). Svrha je uputa ukazati na vaznost dosljedne primjene pravila u izradi
+studentskih radova te ujednaciti okvirnu struktura radova, tehnicku izradu, nacin oznacavanja
+tablica i grafickih prikaza, sustav navoenja literature koristenjem fusnota, izradu popisa
+literature, kratica te navesti primjere korica i naslovnica svih vrsta radova.
+
+       1.1. Akademski (studentski) radovi
+
+Akademski (studentski) radovi izrauju se na strucnim i sveucilisnim studijima radi
+profesionalnoga osposobljavanja te stjecanja znanstvenih i strucnih naziva i akademskih
+stupnjeva.1 Budui da studentski radovi ovise o organizaciji studija, razlikuju se u obrazovnim
+sustavima i zemljama. Najcese vrste studentskih akademskih radova: eseji, referati, seminarski
+radovi, zavrsni radovi, diplomski radovi, doktorske disertacije.
+
+Seminarski rad (engl. term paper/paper, njem. Seminararbeit) je krai strucni rad, najcese
+opsegom oko 15 kartica, u kojemu studenti samostalno u pisanom obliku obrauju odreenu
+temu prema vlastitu izboru ili na prijedlog nastavnika.2 Studenti pisanjem seminarskog rada
+prosiruju znanja iz nastavnog predmeta, savladavaju pravila akademskog pisanja i izlaganja
+problematike, te primjenjuju pravilno citiranje tekstova.
+
+Diplomski rad u klasicnome studiju (engl. diploma essay, njem. Diplomarbeit) opsirniji je
+strucni rad koji studenti pod vodstvom mentora prijavljuju, izrauju i nakon svih polozenih
+ispita brane pred povjerenstvom kao uvjet za stjecanje diplome i pripadnoga akademskog i
+strucnog naziva. 3 Opseg diplomskog rada najcese je 40 i vise kartica teksta.
+
+1 Orai Toli, D., Akademsko pismo: strategije i tehnike klasicne retorike za suvremene studentice i studente,
+Zagreb, Naklada Ljevak, 2011., str. 118.
+2 Tkalac Vercic, A., Sinci, D., Poloski Voki, N., Prirucnik za metodologiju istrazivackog rada u drustvenim
+istrazivanjima: kako osmisliti, provesti i opisati znanstveno i strucno istrazivanje, Zagreb, M.E.P., 2011., str. 209.
+3 Orai Toli, D., op. cit.
+
+===== [pravri-upute-radovi-2023 | str. 5] =====
+Zavrsnim se radom na kraju preddiplomskoga studija stjece diploma bakalaureata kojim se
+dokazuje ovladavanje propisanim znanjima iz struke za koju se obrazuje. Obuhvaa sve
+uobicajene dijelove akademskoga rada: naslovnicu s odrednicom ,,zavrsni rad", sadrzaj,
+osnovni tekst rada, popis literature, popis priloga, sazetak i kljucne rijeci.
+
+  1.2. Dijelovi studentskoga rada
+
+                 Primjer brojcanog oznacavanja elemenata studentskoga rada
+
+                Sadrzaj - sastoji se od naslova i stranica svih poglavlja
+
+                Sazetak - ne bi trebao prelaziti pola kartice teksta (uz njega na stranici
+                obvezatno stoje i kljucne rijeci, koje se smjestaju nakon njega, pod
+                podnaslovom Kljucne rijeci (3 do 5 rijeci)
+                Uz sazetak na hrv. jeziku sazetak se pise i na engleskom jeziku �
+                Summary. (Uz njega na stranici obvezatno stoje i kljucne rijeci na engl.
+                jeziku, koje se smjestaju nakon njega, pod podnaslovom Key words (3 do
+                5 rijeci)
+
+                I. Uvod - uvodi citatelja u problem, navodi cilj rada te obrauje
+                metode koristene u izradi rada
+
+                II. Tekst rada - razrada seminarskog rada (pristupni dio, gradivo i
+                obrada, rezultati, rasprava o stavovima drugih autora)
+
+                   3. Naslov poglavlja
+                         3.1. Podnaslov prve razine
+                             3.1.1. Podnaslov druge razine
+                               3.1.2.
+                         3.2. Podnaslov prve razine
+                                3.2.1. Podnaslov druge razine
+                                  3.2.1.1. Podnaslov tree razine
+                                  3.2.1.2. ...
+                                      ...
+                             ... itd.
+
+                IV. Zakljucak
+                V. Literatura
+                VI. Prilozi
+
+Svako poglavlje teksta zapocinje na novoj stranici.
+
+Numeriranje stranica:
+
+                                                                                                                 4
+
+===== [pravri-upute-radovi-2023 | str. 7] =====
+Smjestaju se nakon popisa literature, odnosno popisa slika i tablica, ako ih rad ima. Numeriraju
+se arapskim brojevima od 1 do n.
+Svaki prilog zapocinje na novoj stranici. Na stranici na kojoj zapocinje svaki od priloga velikim
+se podebljanim slovima lijevo gore pise rijec PRILOG i njegov broj (npr. PRILOG 1.). U tekstu
+je rada potrebno ukazati na priloge, tako da se pozovete na broj priloga na koji se tekst odnosi
+(npr. vidi Prilog 1.).
+
+   II. Tehnicke upute za pisanja rada
+Tehnicko je oblikovanje rada vazno kako bi oni bili pregledniji, sustavniji i razumljiviji.
+
+                                                                                                                 6
+
+===== [pravri-upute-radovi-2023 | str. 9] =====
+4.785         127,77 245     4.540
+          4.375         106,89 183     4.192
+
+Brojcano oznacavanje priloga: Prilozima se dodjeljuju redni brojevi redoslijedom pozivanja
+na njih u tekstu rada.7 Dopusteni prilozi uz tekst rada su tablice i slike. Svi se ostali prilozi
+(sheme, grafikoni, dijagrami, prikazi i sl.) moraju uvrstiti u jednu od dviju navedenih
+skupina. U radu se numeriraju arapskim brojevima onim redom kojim se pojavljuju za sva
+poglavlja rada zajedno i u pravilu se smjestaju odmah uz tekst u kojem se opisuju, a samo se
+iznimno kao privitak rada uvezuju na samom kraju (npr. racunalni ispis programa kao privitak,
+anketni upitnik i sl.). Svi prilozi moraju biti naslovljeni.
+
+   2.3. Graficko oblikovanje biljeski
+
+Biljeske na dnu stranice (fusnote) pisu se velicinom slova od 10 tocaka bez proreda, a vrsta
+slova je Times New Roman.
+
+7 Tkalac Vercic, A., Sinci, D., Poloski Voki, N., op. cit., str. 183.
+
+                                                                                                                 8
+
+===== [pravri-upute-radovi-2023 | str. 10] =====
+2.4.2. Ako odlomke radite tako sto uvlacite pocetak odlomka, neete imati prazan red izmeu
+         odlomaka.
+
+               PRIMJER
+
+               Portal Hrcak izraen i radi uz potporu Ministarstva znanosti, obrazovanja i sporta, realiziran
+         je u Srcu, a osnovna ideja potekla je iz Hrvatskog informacijskog i dokumentacijskog drustva.
+
+               Za opi izgled i funkcionalnost portala te sigurnost podataka odgovara projektni tim
+         HRCAK, a za sadrzaj, azurnost i tocnost podataka unutar pojedinog naslova odgovara redakcija
+         svakog casopisa.
+
+   III. Navoenje literature
+
+                                                                                                                 9
+
+===== [pravri-upute-radovi-2023 | str. 11] =====
+Odabrana literatura, tj. bibliografski navodi (referencije) trebaju biti navedeni prema
+pravilima citiranja literature. Citiranje je neizostavan dio znanstvene eticke prakse i elegantan
+nacin kako se iskljucuje kraa tuih ideja i rezultate predstavlja obranu od plagijarizma.8
+
+        Citiranje je preuzimanje teksta iz drugih izvora od rijeci do rijeci, u kojem slucaju je
+preuzeti tekst potrebno staviti u navodne znakove (,,..."). U slucaju izostavljanja dijelova
+izvornog teksta, umjesto izostavljenog, ali jos uvijek unutar navodnika, stavlja se trotocje (...).
+
+        Parafraziranje je prepricavanje teksta drugih vlastitim rijecima. koristi se u slucaju ako
+se zeli preuzeti vei dio teksta, jer se sumiranjem i oblikovanjem vlastitim rijecima on svodi na
+manji obim. Pri parafraziranju je bitno paziti da se zadrzi smisao izvornog teksta.
+
+        Interpretiranje je tumacenje tuih koncepata, misljenja, nalaza, zakljucaka i slicno na
+vlastiti nacin, odnosno dodavanje vrijednosti radu drugih.9
+
+Napomena:
+        a) Broj izvora literature u tekstu rada mora biti isto broju izvora u popisu literature na
+
+kraju rada.
+        b) U popisu literature navode se samo izvori koji su citani u izvorniku, a ne sekundarni
+
+izvori (tj. oni izvori koje ste procitali u djelima drugih).
+        c) Paziti na duzinu citata u tekstu. Smatra se da je maksimalno prihvatljiva duzina citata
+
+u tekstu pet redova.
+        c) Budite dosljedni u primjeni sustava koji ste odabrali u radu i ne mijesajte vise sustava
+
+navoenja literature.10
+
+   IV. Sustavi navoenja izvora
+
+8 Murati, T., Osnova informacijske i akademske pismenosti, Zagreb, T. Murati, 2009., str. 101.
+9 Tkalac Vercic, A., Sinci, D., Poloski Voki, N., op. cit., str. 170.
+10 Loc. cit.
+
+                                                                                                               10
+
+===== [pravri-upute-radovi-2023 | str. 12] =====
+S obzirom na izvor informacije, treba obratiti pozornost na tocno citiranje knjiga,
+clanaka, zakona ili sudske prakse pri izradi bibliografije koristenih izvora.
+
+        U literaturi se pojavljuju razliciti sustavi navoenja literature, a unutar svakoga od njih
+bezbrojne su varijacije, tj. stilovi.11 Dakle razliciti znanstveni casopisi navode razlicite stilove
+citiranja (npr. Harvardski stil, Chicago stil, Stil Americkog psiholoskog drustva), koji se mogu
+razlikovati u razlicitim znanstvenim disciplinama (npr. abecedni redoslijed, redoslijed
+spominjanja u tekstu, skraeni ili puni naziv casopisa, godina izdanja na pocetku ili kraju
+reference), no bitno je da svaki bibliografski navod obuhvati nekoliko temeljenih
+podataka. 12
+
+        Sustav navoenja literature koristenjem fusnota, odnosno biljeski na dnu stranice (engl.
+footnote refrencing system) sustav je kod kojeg se u tekstu rada redoslijedom pojavljivanja
+eksponent brojkama od 1 do n (za pojedino poglavlje ili za tekst u cijelosti) oznacava u kojoj
+se biljeski na dnu stranice (ispod teksta) navedeni podatci o izvoru literature. Odnosno iz izvora
+literature preuzete informacije oznacavaju se rednim brojevima istovjetnim rednim brojevima
+fusnota u kojim su ti izvori navedeni. Izvori u fusnotama pisu se jednako kao i u popisu
+koristene literature (v. poglavlje 4) te se na kraju navoda samo dodaje broj stranice s koje je
+preuzet citat, podatak ili ideja. Pri koristenju sustava navoenja izvora literature koristenjem
+fusnota, dodatno morate izraditi i abecedni popis koristene literature.13 Popis koristene
+literature navodi se u posebnom poglavlju, prema abecedi prezimena autora, odnosno naslovu.
+
+   V. Sustav navoenja literature koristenjem fusnota
+
+11 Tkalac Vercic, A., Sinci, D., Poloski Voki, N., op. cit., str. 172.
+12 Milas, G., Istrazivacke metode u psihologiji i drugim drustvenim znanostima, Zagreb, Naklada Slap, 2005.,
+
+   str. 85.
+13 Tkalac Vercic, A., Sinci, D., Poloski Voki, N., op. cit.., str. 176.
+
+                                                                                                               11
+
+===== [pravri-upute-radovi-2023 | str. 13] =====
+5.1. Prvo navoenje djela u fusnoti
+
+5.1.1. Knjiga
+
+              PRIMJER
+
+         Hartley, Trevor C., Temelji prava Europske zajednice: uvod u ustavno i upravno pravo Europske
+         zajednice, 2. hrv. izd., Rijeka, Pravni fakutet, 2004., str. 78.
+
+5.1.2. Clanak u casopisu
+
+              PRIMJER
+
+===== [pravri-upute-radovi-2023 | str. 16] =====
+Directive 2005/36/EC of the European Parliament and of the Council of 7 September 2005 on
+         the recognition of professional qualifications, OJ L 255, 30.09.2005., p. 22-142 14
+
+5.9.2.2. Ugovori
+
+             PRIMJER
+
+         Ugovor iz Nice o izmjenama Ugovora o Europskoj uniji, ugovora o osnivanju europskih
+         zajednica i odreenih povezanih propisa [2001] SL C 80/1.
+
+              PRIMJER
+
+14 U slucaju nepostojanja sluzbenog prijevoda europskog propisa na hrvatski jezik, tada se citira u obliku
+dostupnom u Sluzbenom listu Europske unije (Official Journal of the European Union) na engleskom jeziku.
+
+                                                                                                               15
+
+===== [pravri-upute-radovi-2023 | str. 17] =====
+Uredba Vijea (EZ) br. 2001/2003 od 27. studenog 2003 o nadleznosti, priznavanju i ovrsi
+         odluka u bracnom sporovima i u stvarima povezanim s roditeljskom odgovornosu, kojom se
+         stavlja izvan snage Uredba (EZ) br. 1243/2000, SL L 338, 23.12.2003., str. 1.-29., cl. 2.
+         (Pri ponovljenom citiranju koje se nastavlja neposredno: ibid., cl. 2.)
+         (Pri ponovljenom citiranju koje se ne nastavlja neposredno: uredba Vijea br. 2001/2003, op.
+         cit., cl. 2.)
+
+5.9.2.3. Sudska praksa
+
+Predmeti objavljeni u Zbirci sudske prakse (European Court Reports - ECR) dobivaju, tzv. ECLI oznaku
+(European Case-Law Identifier). 15
+
+Dva su nacina citiranja ovisno o vrsti suda:
+
+    a) Predmeti Europskog suda i Sluzbenickog suda
+
+              PRIMJER
+
+         Presuda Gonz�lez S�nchez, C-183/00, EU:C:2002:255, para. 13
+
+(Pri ponovljenom citiranju koje se nastavlja neposredno: ibid., para 13.)
+(Pri ponovljenom citiranju koje se ne nastavlja neposredno: Presuda Gonz�lez S�nchez, EU:C:2002:255,
+para. 13)
+
+    b) Predmeti Opeg suda
+
+              PRIMJER
+
+         Presuda od 15. sijecnja 2013., Kraljevina Spanjolska protiv Europske komisije, T-54/11,
+         EU:T:2013:10, para. 29
+
+(Pri ponovljenom citiranju koje se nastavlja neposredno: ibid., para 30.)
+(Pri ponovljenom citiranju koje se ne nastavlja neposredno: Presuda Kraljevina Spanjolska protiv
+Europske komisije, para. 29, EU:T:2013:10, para. 33.
+
+Napomena
+    Predmeti pred Opim sudom, odnosno prijasnjim Prvostupanjskim sudom, dobivaju oznaku T (npr.
+    predmet T 108/08).
+    Predmeti pred Sudom za sluzbenike dobivaju oznaku F (npr. predmet F 98/07).
+    Presude donesene prije 1989. godine nemaju oznaku (npr. predmet 53/76).
+    Presude donesene nakon 1989. godine dobivaju oznaku C ispred broja (npr.: predmet C 136/00)
+
+5.9.3. Svjetski pravni propisi
+
+5.9.3.1. Normativni akti
+
+===== [pravri-upute-radovi-2023 | str. 18] =====
+5.9.3.2. Sudska praksa
+
+              PRIMJER
+
+         Abul Ghani v. Subedar Khan, 38 I.L.R. 3(W. Pak. High Ct. 1964)
+
+   VI. Izrada popisa literature
+
+  Popis koristene literature izraujete kako biste naveli potpune bibliografske podatke o
+svakom djelu koje ste koristili pri pisanju rada. Popis izvora prilaze se na kraju rada, izrauje
+abecednim redom prema prezimenima autora, te se u pravilu numerira. Moze se oblikovati i
+tako da se zasebno za svaku vrstu publikacije izrauje abecedni popis (npr. knjige, clanci,
+internetske stranice, zakoni...).16, 17
+
+  6.1. Monografije (knjige)
+
+6.1.1. Kod citiranja knjige bitni su podatci o autoru (prezime, ime ili inicijali imena), naslov
+rada, izdanje, ako je knjiga tiskana u nekoliko izdanja, nakladnik, mjesto i godina izdanja. Titule
+autora se ne pisu.
+Ako publikacija pored naslova, sadrzi i podnaslov on se takoer navodi i razdjeljuje od naslova
+sa znakom dvotocja ( : ).
+
+             PRIMJER
+
+         Petranovi, Anamari, Obligationes iuris romani: breviarum, Rijeka, Pravni fakultet Sveucilista,
+         2010.
+
+              PRIMJER
+
+16 Tkalac Vercic, A., Sinci, D., Poloski Voki, N., op. cit., str. 177.
+17 Ako se u radu citira vise od 10 jedinica pravnih propisa, onda se zasebno izrauju dva popisa: jedan abecedni
+popis zakona te iza njega abecedni popis ostalih propisa.
+
+                                                                                                               17
+
+===== [pravri-upute-radovi-2023 | str. 20] =====
+Crni-Groti, Vesna, Matulovi, Miomir (ed.), International Law and the Use of Force at the
+         Turn of Centuries: Essays in Honour of V. . Degan, Rijeka, Faculty of Law, University of
+         Rijeka, 2006.
+6.1.6. Komentar zakona
+
+               PRIMJER
+
+         Pavisi, Berislav, Komentar Zakona o kaznenom postupku, 2. izd., Rijeka, Dusevi & Krsovnik,
+         2013.
+
+  6.2. Clanak u casopisu
+
+Kod citiranja clanaka u casopisu bitni su podatci o autoru (prezime, ime ili inicijali imena),
+naslov rada, volumen, broj, godina te prva i zadnja stranica clanka.
+
+              PRIMJER
+
+         Zuni Kovacevi, Natasa, Gadzo, Stjepan, Institut zakonskog poreznog jamstva nakon novele
+         Opeg poreznog zakona 2012: proboj pravne osobnosti trgovackih drustava u slucaju zloporabe
+         prava, Zbornik Pravnog fakulteta Sveucilista u Rijeci, vol. 34, br. 1(2013), str. 393-416
+6.2.1. Clanak ili poglavlje u knjizi
+
+             PRIMJER
+
+         Benacchio, Gian Antonio,Winkler, Sandra, The Europeanisation of Law : Imposition or Natural
+         Development of Legal Models, u: Bodiroga-Vukobrat, N., Sander, G.G., Rodin, S. (eds.), Legal
+         Culture in Transition : Supranational and International Law before National Courts, Berlin,
+         Logos, 2013., str. 61-73.
+
+6.2.2. Clanak s interneta
+Isto se pravilo primjenjuje kod citiranje clanka u casopisu (podatci o autoru (prezime, ime ili
+inicijali imena), naslov clanka, naziv casopisa, volumen, broj, godina te prva i zadnja stranica
+clanka) uz dodatne podatke o mreznoj stranici i datumu pregleda casopisa.
+
+             PRIMJER
+
+                                                                                                               19

@@ -1,0 +1,201 @@
+{
+  "facultyId": "pmfst",
+  "styleToken": "pmfst",
+  "status": "draft",
+  "outcome": "custom-spec",
+  "label": "PMFST autor-godina (upute Odjela za biologiju i kemiju)",
+  "sourceId": "pmfst-upute-zavrsni",
+  "sourceLabel": "Upute za pisanje zavrsnog rada (PMFST, odjel bio/kem)",
+  "verifiedAt": null,
+  "verifiedBy": null,
+  "verifiedHash": null,
+  "accessDate": true,
+  "authorFormat": {
+    "order": "family-first",
+    "firstAuthorOnlyInverted": false,
+    "initials": "dotted-spaced",
+    "separator": ", ",
+    "finalJoiner": null,
+    "etAlAfter": null
+  },
+  "inText": {
+    "mode": "author-year",
+    "template": "({authorsShort}, {year})",
+    "authorsShort": {
+      "twoJoiner": " i ",
+      "etAlAfter": 3,
+      "etAlText": "i sur."
+    },
+    "provenance": {
+      "kind": "worked-example",
+      "quoteRaw": "U tekstu rada navodi se prezime autora te godina u kojoj je rad objavljen, na primjer: (Holland,",
+      "sourcePage": "str. 4",
+      "note": "Primjeri iz izvora: jedan autor '(Holland, 2000)', dva autora '(Hughes i Kaufman, 2002)', tri i vise prvi autor + 'i sur.' '(Graham i sur., 1993)'. Imena kao dio recenice: 'Hughes i Kaufman (2002) su utvrdili da ...'. Izvor nema primjer citata s brojem stranice pa withPagesTemplate namjerno nije postavljen."
+    }
+  },
+  "numbering": null,
+  "bibliography": {
+    "sort": "alphabetical"
+  },
+  "sourceTypes": [
+    {
+      "type": "knjiga",
+      "template": "{authors} ({year}). {title}. {publisher}[[, {place}]].",
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "publisher",
+        "place"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Stearns, S. C. (1992). The evolution of life histories. Oxford University Press, Oxford.",
+        "sourcePage": "str. 4",
+        "note": "Redoslijed izdavac pa mjesto (obratno od poglavlja, gdje je mjesto pa izdavac); tocka iza zagrade s godinom. Inicijali s razmakom ('S. C.'), vidi kontradikciju o nekonzistentnim inicijalima."
+      },
+      "example": {
+        "input": {
+          "type": "knjiga",
+          "authors": "Stearns, S. C.",
+          "year": "1992",
+          "title": "The evolution of life histories",
+          "publisher": "Oxford University Press",
+          "place": "Oxford"
+        },
+        "expected": "Stearns, S. C. (1992). The evolution of life histories. Oxford University Press, Oxford."
+      }
+    },
+    {
+      "type": "poglavlje",
+      "template": "{authors} ({year}). {title}. U: {editor} (ur.) {container}. {place}, {publisher}[[, str. {pages}]].",
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "editor",
+        "container",
+        "place",
+        "publisher"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Gaines, G., Elbr�chter, M. (1987). Heterotrophic nutrition. U: Taylor, F. J. R. (ur.) The biology of",
+        "sourcePage": "str. 5",
+        "note": "Urednik u obliku 'Prezime, I.' pa '(ur.)' S tockom, bez zareza iza '(ur.)'; kod poglavlja mjesto ide PRIJE izdavaca ('Oxford, Blackwell Scientific Publications'), obratno od knjige; stranice 'str. 224-268'. Znak � u prezimenu urednika je pdftotext artefakt (u PDF-u dijakritika)."
+      },
+      "example": {
+        "input": {
+          "type": "poglavlje",
+          "authors": "Gaines, G.; Elbr�chter, M.",
+          "year": "1987",
+          "title": "Heterotrophic nutrition",
+          "editor": "Taylor, F. J. R.",
+          "container": "The biology of the dinoflagellates",
+          "place": "Oxford",
+          "publisher": "Blackwell Scientific Publications",
+          "pages": "224-268"
+        },
+        "expected": "Gaines, G., Elbr�chter, M. (1987). Heterotrophic nutrition. U: Taylor, F. J. R. (ur.) The biology of the dinoflagellates. Oxford, Blackwell Scientific Publications, str. 224-268."
+      }
+    },
+    {
+      "type": "clanak",
+      "template": "{authors} ({year}). {title}. {container}[[ {volume}]][[: {pages}]].",
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "container",
+        "volume",
+        "pages"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "McGinnis, W., Krumlauf, R. (1992). Homeobox genes and axial pattering. Cell 68: 283-302.",
+        "sourcePage": "str. 4",
+        "note": "Casopis (moze i kraticom, npr. 'Dev. Biol.') pa volumen golim brojem, dvotocka, raspon stranica; bez broja sveska u primjerima. Drugi primjer (Teillet i sur., 3 autora) potvrdjuje da se u popisu navode SVI autori odvojeni zarezom, bez veznika prije zadnjeg."
+      },
+      "example": {
+        "input": {
+          "type": "clanak",
+          "authors": "McGinnis, W.; Krumlauf, R.",
+          "year": "1992",
+          "title": "Homeobox genes and axial pattering",
+          "container": "Cell",
+          "volume": "68",
+          "pages": "283-302"
+        },
+        "expected": "McGinnis, W., Krumlauf, R. (1992). Homeobox genes and axial pattering. Cell 68: 283-302."
+      }
+    },
+    {
+      "type": "mrezni",
+      "template": "{authors}[[ ({year})]] {title}.[[ {container}.]] {url} Pristupljeno {accessed}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "url",
+        "accessed"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "NIKOLI, T. (ed.) (2012) Flora Croatica baza podataka / Flora Croatica Database. On-Line",
+        "sourcePage": "str. 5",
+        "note": "Rule-text oblik (isti odlomak, str. 5): 'Prezime i inicijali imena autora stranice/institucije (ako nisu poznati staviti naziv Anonymus) (datum kreiranja ili azuriranja stranice) Naslov teksta. Naslov cijele stranice. Adresa stranice. Datum pristupa.' Container = naslov cijele stranice; ako autor nije poznat, upisuje se 'Anonymus'. Bez tocke iza zagrade s godinom (za razliku od ostalih vrsta izvora)."
+      },
+      "example": {
+        "input": {
+          "type": "mrezni",
+          "authors": "NIKOLI, T.",
+          "year": "2012",
+          "title": "Flora Croatica baza podataka / Flora Croatica Database",
+          "url": "http://hirc.botanic.hr/fcd/",
+          "accessed": "12. 7. 2012."
+        },
+        "expected": "NIKOLI, T. (ed.) (2012) Flora Croatica baza podataka / Flora Croatica Database. On-Line URL: http://hirc.botanic.hr/fcd/ Botanicki zavod, Prirodoslovno-matematicki fakultet, Sveuciliste u Zagrebu. Pristupljeno 12. 7. 2012.",
+        "knownDiff": "Jedini worked-example u izvoru je specijalni slucaj (mrezna baza podataka): sadrzi '(ed.)' iza autora, oznaku 'On-Line URL:' i ustanovu iza URL-a, sto propisani rule-text oblik (Naslov teksta. Naslov cijele stranice. Adresa stranice. Datum pristupa.) ne predvida. Predlozak slijedi rule-text oblik pa render namjerno ispusta te tri specificnosti."
+      }
+    },
+    {
+      "type": "zavrsni",
+      "template": "{authors} ({year}). {title}. {institution}[[, {place}]].",
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "institution"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Poglavlje LITERATURA sadrzi popis svih izvornika tj. znanstvenih radova, monografija,",
+        "sourcePage": "str. 4",
+        "note": "Upute ne obraduju citiranje zavrsnih/diplomskih radova kao izvora. Predlozak je izveden iz oblika za knjigu (izdavac zamijenjen ustanovom). Oznaka vrste rada (npr. 'zavrsni rad') nije dodana jer je izvor ne potvrdjuje. Potvrditi ili oboriti pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "propis",
+      "template": "{title}[[ ({year})]]. {container}[[ {issue}]].",
+      "requiredFields": [
+        "title",
+        "container",
+        "issue"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "naziva i kratica nalazi se u Narodnim novinama 107/2007.",
+        "sourcePage": "str. 1",
+        "note": "Upute ne obraduju citiranje propisa. Predlozak je izveden iz nacina na koji same upute referiraju sluzbeno glasilo ('Narodnim novinama 107/2007': naziv glasila pa broj/godina, bez 'br.') i kucnog autor-godina oblika (opcionalna godina u zagradi radi citatnice u tekstu). Nepotvrdjeno izvorom, potvrditi pri verifikaciji."
+      },
+      "example": null
+    }
+  ],
+  "contradictions": [
+    "Inicijali u primjerima izvora nisu ujednaceni: 'Teillet, A.M.' i 'LeDurain, N.M.' su kompaktni, a 'Stearns, S. C.' i urednik 'Taylor, F. J. R.' s razmakom; sam izvor trazi da interpunkcija bude ujednacena. Odabrano dotted-spaced; potvrditi pri verifikaciji.",
+    "Mrezni worked-example (Flora Croatica) odstupa od vlastitog rule-text oblika ('(ed.)', 'On-Line URL:', ustanova iza URL-a); predlozak slijedi rule-text, render namjerno odstupa od primjera (knownDiff deklariran).",
+    "Zavrsni i propis nisu obradjeni u izvoru; oba predloska su derived i traze potvrdu ili obaranje pri verifikaciji.",
+    "Identicni primjeri citiranja postoje i u pmfst-upute-diplomski (str. 3 i str. 4); spec je sidran na pmfst-upute-zavrsni, a diplomske upute ga neovisno potvrdjuju. Oba izvora vrijede za Odjel za biologiju i kemiju, ne nuzno za cijeli PMFST.",
+    "Profil-prior je 'harvard'; izvor jest u harvardskoj obitelji (autor-godina), ali propisuje vlastiti format worked-exampleima (tocka iza zagrade s godinom, 'i sur.', 'U: Prezime, I. (ur.)', volumen: stranice), pa je izradjen custom-spec umjesto style-pina. Nije proturjecje, nego preciznije od priora."
+  ]
+}

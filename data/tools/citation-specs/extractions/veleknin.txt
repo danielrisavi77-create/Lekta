@@ -1,0 +1,278 @@
+===== [veleknin-upute-zavrsni-2020 | str. 2] =====
+2.1. Izrada istrazivackog zavrsnog rada.............................................................................. 1
+  2.2. Izrada preglednog zavrsnog rada ................................................................................. 2
+  2.3. Izrada projektnog zavrsnog rada.................................................................................. 3
+3. TEHNICKI IZGLED ZAVRSNOG RADA ....................................................................... 4
+4. STRUKTURA ZAVRSNOG RADA ................................................................................. 5
+  4.1. Izgled omotne stranice zavrsnog rada ......................................................................... 5
+  4.2. Izgled naslovne stranice zavrsnog rada ....................................................................... 6
+  4.3. Zadatak zavrsnog rada ................................................................................................. 7
+  4.4. Izjava o akademskoj cestitosti ..................................................................................... 8
+  4.5. Izgled sadrzaja ............................................................................................................. 8
+  4.6. Sazetak......................................................................................................................... 8
+5. JEZIK I STIL PISANJA ZAVRSNOG RADA .................................................................. 9
+6. PRAVILA CITIRANJA I IZRADA POPISA LITERATURE........................................... 9
+  6.1. Citiranje izvora u tekstu............................................................................................... 9
+  6.2. Izrada popisa literature .............................................................................................. 10
+7. OBRANA ZAVRSNOG RADA....................................................................................... 12
+PRILOG 1 ................................................................................................................................ 14
+PRILOG 2 ................................................................................................................................ 17
+PRILOG 3 ................................................................................................................................ 19
+
+===== [veleknin-upute-zavrsni-2020 | str. 3] =====
+1. UVOD
+
+Preddiplomski strucni studiji na Veleucilistu ,,Marko Maruli" u Kninu zavrsavaju
+polaganjem svih ispita te izradom i javnom obranom zavrsnog rada, odnosno polaganjem
+zavrsnog ispita. Zavrsni rad je samostalna obrada izabrane i odobrene teme iz podrucja struke,
+pri cemu student treba pokazati sposobnost primjene teorijskog i prakticnog znanja stecenog
+tijekom studija, kao i sposobnost samostalnog koristenja strucnom i znanstvenom literaturom.
+Zavrsni rad se izrauje u skladu s Pravilnikom o izradi i obrani zavrsnog rada na strucnim
+studijima Veleucilista ,,Marko Maruli" u Kninu koji je dostupan na mreznim stranicama
+Veleucilista. Temu zavrsnog rada odobrava procelnik odjela. Student odabire mentora koji je
+suodgovoran za kvalitetu izrade zavrsnog rada. Ako se radi o interdisciplinarnom zavrsnom
+radu, studentu se moze uz mentora odrediti i komentor specijaliziran za pojedino znanstveno
+podrucje. Ostale aktivnosti oko postupka predaje i obrane zavrsnog rada, mentor koordinira s
+voditeljem Studentske sluzbe.
+
+Napomena: Upute za izradu i obranu zavrsnog rada primjenjuju se pri izradi diplomskog rada.
+
+2. VRSTE ZAVRSNOG RADA
+
+===== [veleknin-upute-zavrsni-2020 | str. 4] =====
+odgovarajuih naslova meusobno povezanih u smislenu cjelinu.
+Eksperimentalni dio odnosi se na materijal i metode istrazivanja. Materijali i metode
+osiguravaju ponovljivost istrazivanja te se u njima detaljno navodi na cemu se (materijal) i
+kako (metode) istrazivalo. Eksperimentalni dio moze imati i vise potpoglavlja ovisno o prirodi
+istrazivanja.
+Rezultati su vazan dio zavrsnog rada u kojem se prikazuju dobiveni rezultati istrazivanja. U
+pravilu su rezultati prikazani u tablicama, grafikonima, slikama te se u tekstu obrazlazu.
+Mogu biti u istom poglavlju s raspravom, gdje se postignuti rezultati komentiraju i
+usporeuju s rezultatima istrazivanja drugih autora.
+Zakljucna razmatranja ili zakljucak je zavrsni dio rada u kojem se kratko i jasno odgovara
+na postavljene ciljeve istrazivanja i navodi sto se istrazivanjem utvrdilo. U zakljucku se mogu
+dati smjernice i ideje za daljnja istrazivanja.
+Literatura sadrzi abecednim redom navedene sve u radu koristene izvore.
+Prilozi sadrze razlicite dokumente, obrasce, tablice, planove, karte, anketne upitnike i sl. koje
+je student koristio u izradi zavrsnog rada.
+
+2.2. Izrada preglednog zavrsnog rada
+
+Pregledni (kompilacijski) zavrsni rad zahtijeva proucavanje i analizu iscrpne literature iz
+tematike strucnog podrucja.
+Izrada preglednog rada podrazumijeva detaljno upoznavanje, analizu, sintezu i kriticku
+obradu vee kolicine raznolike proucene literature vezane uz zadanu temu.
+Koristena literatura obrauje se tako da se tekst parafrazira, tj. opisuje vlastitim rijecima, a po
+potrebi mogu se koristiti i izravni citati koji moraju biti jasno oznaceni navodnicima.
+
+                                                                                                                          2
+
+===== [veleknin-upute-zavrsni-2020 | str. 5] =====
+Student moze dodati stranicu s osobnom zahvalom za pomo pri izradi rada. Ukoliko je
+zahvala napisana, smjestena je pri vrhu stranice, nakon Izjave o akademskoj cestitosti, i pise
+se kurzivom (italic).
+Sadrzaj je popis naslova poglavlja i potpoglavlja s brojem stranice na kojoj zapocinju.
+Uvod opisuje temu i cilj istrazivanja na jasan i sazet nacin.
+U sredisnjem dijelu preglednog zavrsnog rada detaljno se analizira vei broj izvora znacajnih
+za temu rada (sto se do sada o toj temi zna) te se prouceni materijal sazima. On se sastoji od
+vise poglavlja i potpoglavlja odgovarajuih naslova meusobno povezanih u smislenu cjelinu.
+Zakljucna razmatranja ili zakljucak je zavrsni dio rada koji kratko, jasno i pregledno
+prikazuje relevantne spoznaje, cinjenice, postupke i stavove koji su opsirnije razraeni u
+sredisnjem dijelu, bez iznosenja novih spoznaja i navoenja izvora. U zakljucku treba ukratko
+navesti sto je vazno u obraenoj temi te mogui pravci razvoja iste.
+Literatura sadrzi abecednim redom navedene sve u radu koristene izvore.
+Prilozi sadrze razlicite dokumente, obrasce, tablice, planove, karte, anketne upitnike i sl. koje
+je student koristio u izradi zavrsnog rada.
+
+2.3. Izrada projektnog zavrsnog rada
+
+Projektni zavrsni rad podrazumijeva izradu konkretnog zadatka ili poslovne ideje na
+prakticnom primjeru iz podrucja struke.
+Pri izradi projektnog rada student mora oblikovati idejno rjesenje ili razraditi poslovnu ideju
+koristei relevantnu dokumentaciju i grau (primjere gotovih projektnih rjesenja, vlastite
+snimljene fotografije i sl.) ili poslovne informacije (statisticke izvjestaje, ekonomske i
+financijske podatke, rezultate istrazivanja trzista i sl.) te ih strucno obraditi i analizirati.
+Naslov rada treba obuhvatiti glavnu ideju te biti jasan i jednoznacan. Potrebno je izbjegavati
+
+===== [veleknin-upute-zavrsni-2020 | str. 6] =====
+Uvod opisuje temu i cilj projektnog zadatka na jasan i sazet nacin.
+
+Sredisnji dio projektnog zavrsnog rada sustavno razrauje problematiku rada uz ispravno
+navoenje izvora, iscrpno opisuje metode te daje rjesenje. On se sastoji od vise poglavlja i
+potpoglavlja koja logicki opisuju etape izrade projekta.
+
+Zakljucna razmatranja ili zakljucak je zavrsni dio rada koji kratko, jasno i pregledno
+prikazuje relevantne spoznaje, cinjenice, postupke i stavove koji su opsirnije razraeni u
+sredisnjem dijelu, bez iznosenja novih spoznaja i navoenja izvora. U zakljucku treba ukratko
+navesti sto je vazno u obraenom projektu te mogui pravci razvoja istog.
+
+Literatura sadrzi abecednim redom navedene sve u radu koristene izvore.
+
+Prilozi sadrze razlicite dokumente, obrasce, tablice, planove, karte, anketne upitnike i sl. koje
+je student koristio u izradi zavrsnog rada.
+
+3. TEHNICKI IZGLED ZAVRSNOG RADA
+
+    - Rad se obvezno pise na racunalu u programu za obradu teksta Microsoft Word.
+    - Opseg rada iznosi najmanje 20 stranica osnovnog teksta rada bez uvodnih stranica
+
+         zavrsnog rada, popisa literature i priloga. Format rada je A4.
+    - Margine rada trebaju iznositi 2,5 cm.
+    - Rad se pise fontom Times New Roman, velicine 12 pt, uz prored 1,5 i obostrano
+
+         poravnanje (Justify) bez uvlacenja prvog retka odlomka.
+    - Naslovi poglavlja pisu se velikim slovima velicine 16 pt, podebljano (Bold), a naslovi
+
+         potpoglavlja malim slovima velicine 14 pt i 12 pt (ovisno o razini), podebljano (Bold).
+         Poglavlja zapocinju na novoj stranici, a izmeu naslova poglavlja i teksta potrebno je
+         ostaviti jedan red prazan. Poglavlja i potpoglavlja se numeriraju u tekstu i Sadrzaju.
+
+                                                                                                                          4
+
+===== [veleknin-upute-zavrsni-2020 | str. 7] =====
+Omotna stranica
+     Naslovna stranica
+     Zadatak zavrsnog rada
+     Izjava o akademskoj cestitosti
+     Zahvala (nije obvezna)
+     Sadrzaj
+     Sazetak
+     Summary
+     Uvod
+     Sredisnji dio rada (ovisno o vrsti rada)
+     Zakljucna razmatranja (Zakljucak)
+     Literatura
+     Prilozi (nisu obvezni)
+
+4.1. Izgled omotne stranice zavrsnog rada
+
+Zavrsni rad sadrzi omotnu stranicu i naslovnu stranicu (Prilog 1). Na omotnoj stranici rada
+(Slika 1) nalaze se sljedei podaci:
+
+    - Memorandum Veleucilista
+    - Naziv Veleucilista
+    - Naziv strucnog studija i odjela
+
+                                                                                                                          5
+
+===== [veleknin-upute-zavrsni-2020 | str. 10] =====
+4.4. Izjava o akademskoj cestitosti
+Student odgovara za tocnost podataka navedenih u radu, ispravnost citiranja dijelova tuih
+radova i literature te pravopisnu i gramaticku ispravnost. Stoga je Izjava o akademskoj
+cestitosti obvezan dio zavrsnog rada (Prilog 3).
+4.5. Izgled sadrzaja
+Sadrzaj je popis naslova poglavlja i potpoglavlja uz navoenje broja stranice na kojoj
+zapocinju (Slika 3).
+
+    - Naslov ,,Sadrzaj" pise se malim slovima velicine 16 pt, podebljano (Bold), uz lijevo
+         poravnanje.
+
+    - Naslovi poglavlja pisu se velikim slovima velicine 12 pt, a naslovi potpoglavlja malim
+         slovima velicine 12 pt.
+
+                                        Slika 3. Izgled Tablice sadrzaja
+
+===== [veleknin-upute-zavrsni-2020 | str. 11] =====
+- Zavrsni rad pise se hrvatskim knjizevnim jezikom, znanstvenim stilom, jasno i precizno, u
+    neodreenom licu. Izbjegava se uporaba pasivnih oblika kad god je to mogue.
+
+- Posebice treba obratiti pozornost na pravopisnu i gramaticku ispravnost.
+- Sazetak, materijal i metode rada te rezultati opisuju se u proslom vremenu, a uvod i
+
+    rasprava u sadasnjem vremenu.
+- Latinska imena roda i vrsta treba uvijek pisati kurzivom (italic).
+- Kada se u radu koriste kratice, prvi put potrebno je ispisati puni naziv, a dalje se u tekstu
+
+    moze koristiti kratica.
+
+6. PRAVILA CITIRANJA I IZRADA POPISA LITERATURE
+
+U zavrsnom radu vrlo je vazno tocno citirati izvore podataka koji se koriste.
+6.1. Citiranje izvora u tekstu
+Citiranje izvora � jedan autor:
+... prema Rahmanu (2014) pluni oksidacijski stres javlja se kao vazan faktor u patogenezi
+bolesti disnog sustava...
+ili
+... pluni oksidacijski stres javlja se kao vazan faktor u patogenezi bolesti disnog sustava
+(Rahman, 2014).
+Citiranje izvora � dva autora:
+...kako navode Konrad i Marosevi (2001) antioksidacijski obrambeni sustav disnih putova
+posebno je dobro razvijen.....
+ili
+Antioksidacijski obrambeni sustav disnih putova posebno je dobro razvijen (Konrad i
+Marosevi, 2001).
+
+                                                                                                                          9
+
+===== [veleknin-upute-zavrsni-2020 | str. 12] =====
+Citiranje izvora � vise autora:
+... prema Davier i sur. (2012) fizickim radom generiraju se slobodni radikali...
+ili
+Davier i sur. (2012) prvi su dokazali da se fizickim radom generiraju slobodni radikali i od
+tada postoji vee zanimanje za njihovu ulogu i utjecaj....
+
+Citiranje organizacija i institucija:
+Podaci Svjetske zdravstvene organizacije (WHO, 2010) pokazuju da...
+Pravilnik o ekoloskoj proizvodnji bilja i zivotinja (NN 01/13) predlaze da se unutar sustava
+ekoloske proizvodnje uzgajaju zdrave, prirodno otporne i dugovjecne zivotinje koje su
+prilagoene uvjetima lokalne sredine (Anonymus, 2013).
+... izolacija sulfitoreducirajuih bakterija provedena je u skladu s normom HRN ISO 15213
+(HZN, 2004)...
+Publikacije istog autora ili vise njih u istoj godini izdanja navode se prema pravilu npr. 2015a;
+2015b; itd.
+
+6.2. Izrada popisa literature
+
+U popisu literature navode se svi izvori (knjige, znanstveni i strucni clanci, pravilnici i ostalo)
+koji su koristeni i citirani u radu.
+
+    - Popis literature mora biti potpun i tocan.
+    - Literatura se navodi abecednim redom prema prezimenu (prvog) autora i kronoloski
+
+         (ako su isti autori).
+    - Student tijekom istrazivanja i pisanja treba koristiti najmanje 15 literaturnih izvora.
+    - Literaturne izvore potrebno je numerirati.
+    - Popis literature dolazi na kraju rada (poslije Zakljucka).
+
+Knjige � jedan autor:
+Rupi, V. (2009): Zastita zdravlja domaih zivotinja 1. Unutrasnje i kirurske bolesti i zahvati.
+Hrvatska mljekarska udruga, Zagreb.
+
+                                                                                                                         10
+
+===== [veleknin-upute-zavrsni-2020 | str. 14] =====
+Mrezni izvori:
+Wood, B. J. B., Holzapfel, W. H. (1995): Genera of lactic acid bacteria. Dostupno na:
+http://books.google.hr/books?id=Q8B_WusVacsC&printsec=frontcover#v=onepage&q&f=tr
+ue (pristupljeno 19.04.2015.).
+
+7. OBRANA ZAVRSNOG RADA
+
+Obrana zavrsnog rada sastoji se od usmenog izlaganja u trajanju 10 � 15 minuta i rasprave s
+clanovima Povjerenstva. Preporucuje se, iako nije obvezno, pripremiti izlaganje u obliku
+PowerPoint prezentacije.
+Korisni savjeti za pripremu PowerPoint prezentacije:
+
+    - Koristite veu velicinu slova da se tekst moze procitati i s vee udaljenosti.
+    - Naslovni slajd prezentacije treba sadrzavati iste podatke kao omotna stranica zavrsnog
+
+         rada.
+    - Ispod svake slike, tablice ili grafike (ako nisu Vase) potrebno je navesti izvor.
+    - Koristite jednu velicinu slova za naslove, a drugu za tekst.
+
+                                                                                                                         12
+
+===== [veleknin-upute-zavrsni-2020 | str. 22] =====
+IZJAVA O AKADEMSKOJ CESTITOSTI
+
+Ja, upisite ime i prezime (Maticni broj: upisite maticni broj) izjavljujem i svojim potpisom
+potvrujem da je zavrsni rad pod naslovom: upisite naslov rada iskljucivo rezultat mog
+vlastitog rada koji se temelji na mojim istrazivanjima i oslanja se na objavljenu literaturu, a
+sto pokazuju koristene biljeske i bibliografija. Izjavljujem da nijedan dio rada nije napisan na
+nedopusten nacin, odnosno da nije prepisan iz necitiranog rada, te da nijedan dio rada ne krsi
+bilo cija autorska prava. Izjavljujem, takoer, da nijedan dio rada nije iskoristen za bilo koji
+drugi rad u bilo kojoj drugoj visokoskolskoj, znanstvenoj ili obrazovnoj ustanovi.
+
+Knin, upisite datum
+
+                                               Potpis studenta/ice: ____________________________

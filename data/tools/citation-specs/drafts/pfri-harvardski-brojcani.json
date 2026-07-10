@@ -1,0 +1,195 @@
+{
+  "facultyId": "pfri",
+  "styleToken": "harvardski-brojcani",
+  "status": "draft",
+  "outcome": "custom-spec",
+  "label": "Harvardski brojcani sustav (sluzbene upute PFRI)",
+  "sourceId": "pfri-upute-zavrsni-2025",
+  "sourceLabel": "Upute za izradu zavrsnog rada (Sveuciliste u Rijeci, Pomorski fakultet, ozujak 2025)",
+  "verifiedAt": null,
+  "verifiedBy": null,
+  "verifiedHash": null,
+  "accessDate": true,
+  "authorFormat": {
+    "order": "family-first",
+    "initials": "dotted-spaced",
+    "separator": ", ",
+    "finalJoiner": " & "
+  },
+  "inText": {
+    "mode": "bracket-number",
+    "provenance": {
+      "kind": "worked-example",
+      "quoteRaw": "Ako se poziva na samo jednu bibliografsku jedinicu pise se [1. p. 9], ako je njih vise, a",
+      "sourcePage": "str. 19",
+      "note": "U tekstu brojcana oznaka u uglatoj zagradi: jedna jedinica sa stranicom '[1. p. 9]', vise jedinica bez stranice '[1, 2, 6]', uzastopne jedinice '[1-5]' (sve str. 19). Numericki mod nema template; oblik sa stranicom unutar zagrade provjerava covjek pri verifikaciji."
+    }
+  },
+  "numbering": {
+    "referenceMarker": "[{n}]"
+  },
+  "bibliography": {
+    "sort": "appearance"
+  },
+  "sourceTypes": [
+    {
+      "type": "knjiga",
+      "template": "{authors} {year}, {title}[[, {volume}]], {publisher}, {place}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "publisher",
+        "place"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "[4] Zelenika, R. 2000, Metodologija i tehnologija izrade znanstvenog i strucnog djela, 4.",
+        "sourcePage": "str. 21",
+        "note": "Popis literature numerira se arapskim brojevima u uglatim zagradama prema redoslijedu pojavljivanja u tekstu (str. 20); redni broj [n] je oznaka mjesta u popisu (referenceMarker), ne dio jedinice. Primjer [4] je u ekstrakciji prelomljen u dva retka, spojen u expected. Broj izdanja unosi se cijeli u polje volume ('4. izmijenjeno i dopunjeno izdanje'; kod [5] McTaggart '2nd ed'). Naslov je u izvorniku kurzivom, alat radi plain text. Korporativni autor se pise punim imenom (primjer [2] Australian Government Publishing Service, str. 20)."
+      },
+      "example": {
+        "input": {
+          "type": "knjiga",
+          "authors": "Zelenika, R.",
+          "year": "2000",
+          "title": "Metodologija i tehnologija izrade znanstvenog i strucnog djela",
+          "volume": "4. izmijenjeno i dopunjeno izdanje",
+          "publisher": "Ekonomski fakultet Sveucilista u Rijeci",
+          "place": "Rijeka"
+        },
+        "expected": "Zelenika, R. 2000, Metodologija i tehnologija izrade znanstvenog i strucnog djela, 4. izmijenjeno i dopunjeno izdanje, Ekonomski fakultet Sveucilista u Rijeci, Rijeka."
+      }
+    },
+    {
+      "type": "clanak",
+      "template": "{authors} {year}, '{title}', {container}[[, {publisher}]][[, vol. {volume}]][[, no. {issue}]][[, p. {pages}]][[, online: {url} ({accessed})]].",
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "container",
+        "pages"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "- Huffman, L. M. 1996, 'Processing whey protein for use as a food ingredient', Food",
+        "sourcePage": "str. 22",
+        "note": "Redoslijed elemenata po popisu na str. 22: prezime autora i inicijal imena, godina izdanja, naslov clanka u jednostrukim navodnicima, naziv casopisa (kurziv), izdavac casopisa, broj casopisa, stranice. Primjer [1] na str. 20 je isti clanak bez izdavaca pa je {publisher} opcionalan. Clanak s interneta (Daniel, str. 22) dodaje 'online: URL (datum)' na kraju. Primjer je u ekstrakciji prelomljen, spojen u expected. Novinski clanak (Simpson, str. 22) i zbornik radova (Bohrer, str. 21 i 22) slijede isti obrazac s publikacijom kao containerom."
+      },
+      "example": {
+        "input": {
+          "type": "clanak",
+          "authors": "Huffman, L. M.",
+          "year": "1996",
+          "title": "Processing whey protein for use as a food ingredient",
+          "container": "Food Technology",
+          "publisher": "Food Institute",
+          "volume": "50",
+          "issue": "2",
+          "pages": "49-52"
+        },
+        "expected": "Huffman, L. M. 1996, 'Processing whey protein for use as a food ingredient', Food Technology, Food Institute, vol. 50, no. 2, p. 49-52."
+      }
+    },
+    {
+      "type": "poglavlje",
+      "template": "{authors} {year}, {title} in {container}, ed. {editor}, {publisher}, {place}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "container",
+        "editor",
+        "publisher",
+        "place"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "- Bernstein, D. 1995, Transportation planning in The Civil Engineering Handbook, ed.",
+        "sourcePage": "str. 22",
+        "note": "Jedini primjer poglavlja u knjizi (str. 22); veznik 'in' i oznaka 'ed.' doslovno iz primjera (engleski uzorak iz AGPS prirucnika). Urednik se unosi doslovno (u primjeru 'W.F.Chen'). Stranice poglavlja primjer ne navodi. Primjer je u ekstrakciji prelomljen, spojen u expected. Naslov knjige je u izvorniku kurzivom, alat radi plain text."
+      },
+      "example": {
+        "input": {
+          "type": "poglavlje",
+          "authors": "Bernstein, D.",
+          "year": "1995",
+          "title": "Transportation planning",
+          "container": "The Civil Engineering Handbook",
+          "editor": "W.F.Chen",
+          "publisher": "CRC Press",
+          "place": "Boca Raton"
+        },
+        "expected": "Bernstein, D. 1995, Transportation planning in The Civil Engineering Handbook, ed. W.F.Chen, CRC Press, Boca Raton."
+      }
+    },
+    {
+      "type": "mrezni",
+      "template": "[[{authors} ]]{title}, {year}, online: {url} ({accessed})",
+      "requiredFields": [
+        "title",
+        "year",
+        "url",
+        "accessed"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "- Proizvodnja kemikalija, kemijskih proizvoda i proizvoda od gume, 2007, online:",
+        "sourcePage": "str. 23",
+        "note": "Worked example bez autora: naslov je prvi element citiranja kad autor nije naveden (str. 23). Mrezni izvor S autorom u izvoru slijedi opci red autor, godina, naslov (Daniel, str. 22), sto ovaj predlozak ne reproducira; potvrditi ili podijeliti pri verifikaciji. Jedinica u izvoru zavrsava bez tocke iza zagrade s datumom pristupa. Primjer je u ekstrakciji prelomljen, spojen u expected."
+      },
+      "example": {
+        "input": {
+          "type": "mrezni",
+          "title": "Proizvodnja kemikalija, kemijskih proizvoda i proizvoda od gume",
+          "year": "2007",
+          "url": "http://hgk.biznet.hr/hgk/ileovi/10677.pdf",
+          "accessed": "24.3.2007."
+        },
+        "expected": "Proizvodnja kemikalija, kemijskih proizvoda i proizvoda od gume, 2007, online: http://hgk.biznet.hr/hgk/ileovi/10677.pdf (24.3.2007.)"
+      }
+    },
+    {
+      "type": "zavrsni",
+      "template": "{authors} {year}, {title}, {institution}, {place}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "institution"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Prilikom koristenja vazno je postivati redoslijed unosenja podataka, paziti na velika i",
+        "sourcePage": "str. 21",
+        "note": "Upute ne obraduju citiranje zavrsnih/diplomskih radova; predlozak izveden iz oblika za knjigu ([4] Zelenika, str. 21) uz izdavaca zamijenjenog ustanovom. Potvrditi ili oboriti pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "propis",
+      "template": "{title}, {year}, {container}[[, {issue}]].",
+      "requiredFields": [
+        "title",
+        "year",
+        "container"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "bibliografskih jedinica (knjiga, clanaka, pravilnika, rjecnika...).",
+        "sourcePage": "str. 20",
+        "note": "Upute spominju pravilnike kao dopustene bibliografske jedinice, ali ne daju format za propise; predlozak izveden iz pravila da je bez autora naslov prvi element citiranja i iz reda naslov-godina-izvor u primjeru The CCH Macquarie dictionary of business (str. 22). Broj sluzbenog glasila u {issue}. Potvrditi ili oboriti pri verifikaciji."
+      },
+      "example": null
+    }
+  ],
+  "contradictions": [
+    "Prior profila je chicago-notes; izvor ne imenuje Chicago nego dopusta izbor izmedju Europskog i Harvardskog sustava (str. 19: 'Pri izradi zavrsnog rada moze se koristiti Europski sustav ili Harvardski sustav pozitivnih biljeski', uz obveznu dosljednost jednog nacina kroz cijeli rad). Ovaj spec pokriva Harvardski; Europski je u pfri-europski-fusnote.",
+    "PFRI 'Harvardski sustav' nije klasicni autor-godina Harvard: u tekstu su brojcane uglate zagrade sa stranicom ([1. p. 9], str. 19), a popis literature se numerira po redoslijedu pojavljivanja (str. 20); jedinice su autor-godina oblika po australskom AGPS prirucniku (primjer [2] Style Manual for Authors, Editors and Printers, str. 20). Zato custom-spec, ne style-pin na harvard.",
+    "Spojnica prije zadnjeg autora je u izvoru nekonzistentna: 'and' ([3] Bohrer, str. 21) i '&' ([5] McTaggart, str. 21; Bohrer ponovljen s '&' na str. 22); odabran ' & ' kao cesci, potvrditi pri verifikaciji.",
+    "Naslovi knjiga i casopisa u izvorniku su kurzivom, naslov clanka u jednostrukim navodnicima (u ekstrakciji mjesavina ` i '); alat radi plain text s ravnim apostrofima.",
+    "Online jedinice u izvoru zavrsavaju bez tocke iza zagrade s datumom pristupa (Daniel, str. 22; Proizvodnja kemikalija, str. 23); predlozak clanka dodaje zavrsnu tocku pa se online varijanta clanka razlikuje u zavrsnoj interpunkciji.",
+    "Zavrsni radovi i propisi nisu obradeni u izvoru (derived); zbornik radova, novinski clanak i digitalni mediji (CD, video) izvor pokazuje kao zasebne kategorije koje alat pokriva predloscima clanka odnosno knjige."
+  ]
+}

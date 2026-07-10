@@ -1,0 +1,349 @@
+===== [pfst-upute-ocjenski-2022 | str. 3] =====
+1.1. POSTUPAK PRIJAVE I OBRANE DIPLOMSKOG RADA ........................................ 1
+
+2. ORGANIZACIJA DIPLOMSKOG RADA .................................................. 4
+
+2.1. PRVA NASLOVNA STRANICA ..................................................................................... 5
+2.2. DRUGA NASLOVNA STRANICA.................................................................................. 5
+2.3. SAZETAK/ABSTRACT ................................................................................................... 6
+2.4. SADRZAJ........................................................................................................................... 6
+2.5. UVOD ................................................................................................................................. 6
+2.6. OBRADA TEME (POGLAVLJA) ................................................................................... 7
+2.7. ZAKLJUCAK .................................................................................................................... 7
+2.8. LITERATURA .................................................................................................................. 8
+2.9. POPIS TABLICA I ILUSTRACIJA ................................................................................ 9
+
+3. OBLIKOVANJE TEKSTA DIPLOMSKOG RADA ................................ 10
+
+3.1. POSTAVKE STRANICE DIPLOMSKOG RADA....................................................... 10
+3.2. NAVODI (CITATI) ......................................................................................................... 12
+3.3. TABLICE, SLIKE, GRAFOVI I DIJAGRAMI............................................................ 12
+3.4. MATEMATICKI IZRAZI.............................................................................................. 13
+3.5. KRATICE ........................................................................................................................ 14
+3.6. STRANO NAZIVLJE ..................................................................................................... 14
+
+PRILOZI
+
+       � Uzorak formulara prijava teme diplomskog rada
+       � Izgled prve naslovne stranice diplomskog rada
+       � Izgled druge naslovne stranice diplomskog rada
+       � Uzorak sazetka/abstract
+       � Uzorak sadrzaja
+       � Prikaz slika, grafikona, dijagrama i tablica
+       � Prikaz literature
+       � Uzorak popisa tablica (ilustracija)
+       � Uzorak popisa kratica
+       � Najcese pogreske koje treba izbjegavati
+
+===== [pfst-upute-ocjenski-2022 | str. 4] =====
+Student izabire predmet u okviru kojega e izraditi diplomski rad. Izabrani predmet
+mora biti obuhvaen nastavnim planom i programom upisanoga studija, odnosno mora biti
+jedan od predmeta koje je student upisao.
+
+        U izradi diplomskog rada student mora dokazati:
+    � posjedovanje kompetencija i postizanje ishoda ucenja pri rjesavanju problema iz
+
+         strucnih i znanstvenih podrucja koja su bila sadrzaj njegova studija
+    � sposobnost primjene teorijskog i prakticnog znanja stecenog tijekom studija
+    � sposobnost primjene znanstvenih metoda u obradi aktualne teme
+    � sposobnost uocavanja relevantnih velicina pomorskih procesa
+    � sposobnost sluzenja aktualnom stranom i domaom literaturom, tj. koristenja
+
+         relevantnih tuih spoznaja, stavova i znanstvenih cinjenica koje su objavljene u
+         koristenoj literaturi, pri pismenoj obradi teme
+    � sposobnost te pretrazivanje razlicitih baza podataka na internetu
+    � sposobnost pravilne obrade ilustracija (tablica, grafikona, fotografija i crteza).
+
+        U druge ocjenske radove spadaju seminarski radovi, projekti i drugi pristupni radovi
+kojima se dijelom ili u cijelosti polaze ispit iz odreenog predmeta. Odredbe ovih uputa koje
+se odnose na diplomski rad na odgovarajui nacin se primjenjuju i na druge ocjenske radove.
+
+  Diplomski i drugi ocjenski radovi ne moraju biti izvorni (originalni) radovi, ali moraju biti
+                                    samostalno izraeni od kandidata.
+
+1.1. POSTUPAK PRIJAVE I OBRANE DIPLOMSKOG RADA
+
+===== [pfst-upute-ocjenski-2022 | str. 7] =====
+Clan:
+              Clan:
+              Kolegij:
+
+        - Zadatak diplomskog rada
+        - Druga ili unutarnja naslovna stranica
+        - Sazetak/Abstract
+        - Kljucne rijec /Keywords
+        - Sadrzaj
+        - Uvod
+        - Obrada teme
+        - Zakljucak
+        - Popis literature i drugih izvora podataka koji su koristeni u izradi diplomskog rada
+        - Prilozi (popis tablica, ilustracija, kratica...).
+
+Tvrde    Replika      Druga    Sazetak  Sadrzaj  Zakljucak Literatura
+korice  korica na  naslovnica
+ rada    bijelom
+
+         papiru
+
+        Slika 1. Redoslijed prvih nekoliko stranica
+                                                                                           4
+
+===== [pfst-upute-ocjenski-2022 | str. 10] =====
+Diplomski dio rada je zakljucak. Zakljucak rada je kratak prikaz samo cvrstih i
+temeljito obrazlozenih stajalista, dokaza i rezultata sto su proizisli iz naslova teme diplomskog
+rada. U zadacima gdje se koristio racunalni program zakljucak sadrzi i komentar izlaznih
+rezultata programskog sustava, programskog paketa ili programa te ocjenu rezultata primjene
+neke od metoda racionalizacije procesa ili testiranja hipoteze.
+
+        Ovdje je vazno usporediti stavove na pocetku rada (cilj rada � opisan u uvodu) sa
+stavovima na kraju rada, tj. zakljuciti je li ostvarena svrha rada. Zatim se u zakljucku daje i
+vlastiti sud o obraenoj tematici s eventualnim prijedlogom za daljnje istrazivanje u tom
+podrucju.
+
+VAZNO: U zakljucku se ne navode tui citati i ne pisu se fusnote.
+
+                                                                                                                 7
+
+===== [pfst-upute-ocjenski-2022 | str. 11] =====
+2.8. LITERATURA
+
+        Literatura koristena za izradu zavrsnog rada mora biti navedena u popisu literature
+abecednim redoslijedom prema uputama za navoenje literature (vidjeti primjer navoenja
+literature u Prilogu 7).
+
+VAZNO: Fusnote (engl. footnote) se ne smiju koristiti za navoenje literature.
+
+        Izvori se oznacavaju arapskim brojevima u kutnoj zagradi. Najprije se navodi prezime
+autora koje se odvaja zarezom od inicijala imena. Titule autora nije potrebno pisati. Ako je
+vise autora, navode se redom koji je oznacen na samome djelu i odvajaju se tocka-zarezom.
+� Nakon imena autora, ako se radi o knjizi, disertaciji ili magistarskom radu, pise se naslov
+
+    knjige (italic, kurziv), zatim ime izdavacke kue, sjediste izdavacke kue ili mjesto u
+    kojemu je knjiga izdana, te godina kada je izdana (vidjeti u Prilogu 7 reference [1], [2] i
+    [3]).
+� Clanci koristeni u diplomskom radu navode se na slican nacin kao i knjige. Navodi se
+    prezime, inicijal(i) imena autora: naslov rada (italic), naslov casopisa u kojem je clanak
+    objavljen, mjesto u kojemu je izdan, volumen/godista casopisa, redni broj casopisa,
+    godina izdanja navedenog broja, od-do stranice na kojima je clanak tiskan (vidjeti u
+    Prilogu 7 reference [4-6]).
+� Propisi (zakoni, pravilnici, uredbe i sl.) se citiraju punim nazivom iza kojeg se u zagradi
+    navodi kraticu naziva te popis brojeva i godina izdanja sluzbenog glasila u kojima su
+    objavljeni propis i sve njegove izmjene ili dopune. Propisi koji su citirani u tekstu u
+    pravilu se ne navode u popisu literature na kraju rada, a ako se ipak navedu, obicno se
+    navode na kraju popisa, malo odvojeno od ostalih referenci.
+
+            Primjer: Pruzanje usluga informacijskog drustva u Hrvatskoj je ureeno Zakonom o
+   elektronickoj trgovini (Narodne novine, br. 173/2003, 67/2008, 36/2009 i 130/2011).
+� U primjeru koristenja programskih sustava, programskih paketa ili programa treba navesti
+    njegov puni i skraeni naziv, verziju, ime proizvoaca i godinu proizvodnje.
+� Uz adresu internetske stranice trebalo bi se navesti prezime(na), inicijal ime(na) autora
+    citiranog materijala (ako je/su poznat(a), naslov potpunog djela (italic), datum nastanka
+    (ako se razlikuje od datuma pristupa izvoru), potpuna http/ftp adresa (zajedno s potpunom
+    stazom pristupa direktoriju na kojem se nalazi dokument) i datum pristupa dokumentu
+    (vidjeti u Prilogu 7 reference [7] i [8]).
+
+                                                                                                                 8
+
+===== [pfst-upute-ocjenski-2022 | str. 12] =====
+o Ako je autor nepoznat, moze se navesti samo adresa s datumom stavljanja te
+          informacije na posluzitelj, odnosno ako to na nekim posluziteljima ne pise stavlja se
+          datum kada je ta informacija procitana, primjerice:
+          [12] www.skladisna-logistika.hr, (26. sijecnja, 2020.)
+
+    � Za ostale izvore na odgovarajui nacin se primjenjuje nacin navoenja kao za knjige.
+        Popis koristene literature dolazi na stranicu rada iza zakljucka (a prije popisa tablica,
+
+popisa ilustracija i priloga ako postoje). Naslov "LITERATURA" pise se velikim slovima
+lijevo na vrhu stranice (velicina 14 tocaka, bold, velika slova, poravnanje: lijevo, razmak
+ispod (Spacing After): 24 pt, prored (Line spacing): 1,5 lines). Naslov se ne numerira. A
+stranica se numerira arapskim brojem.
+2.9. POPIS TABLICA I ILUSTRACIJA
+
+        Popis tablica slijedi nakon stranice s literaturom. Popis sadrzi redni broj i naziv svih
+tablica navedenih prema redoslijedu (broj stranice) pojavljivanja u radu. Naslov "POPIS
+TABLICA", napisan velikim slovima (14 pt, bold, poravnanje: lijevo, razmak ispod (Spacing
+After): 24 pt, prored (Line spacing): 1,5 lines), ne numerira se i nalazi se na vrhu stranice
+lijevo (vidjeti Prilog 8). Stranica se numerira arapskim brojem.
+
+        Popis ilustracija dolazi iza stranice s popisom tablica. Ilustracije obuhvaaju grafikone,
+crteze i slike. Pojavljuje li se u radu vise od jedne vrste ilustracija, preporucljivo je popis
+grafikona, crteza i slika naciniti odvojeno. Izrada stranice s popisom ilustracija istovjetna je
+tehnici izrade stranice s popisom tablica.
+
+                                                                                                                 9
+
+===== [pfst-upute-ocjenski-2022 | str. 13] =====
+mjerenja dobra.                             Pasivna forma.
+
+Iz navedenih mjerenja moze
+                                     Dobro
+
+se zakljuciti ...
+
+Obradio/la sam  Lose
+
+Obraeno je      Dobro
+
+        Preporucuje se opseg od 40 do 50 stranica za diplomski rad (bez sazetka, sadrzaja,
+popisa literature i priloga).
+
+3.1. POSTAVKE STRANICE DIPLOMSKOG RADA
+
+        Tekst diplomskog rada kreira se i ureuje u MS Wordu ili nekom drugom ureivacu
+teksta prema sljedeim postavkama:
+� Cijeli tekst rada treba biti napisan jednim (istim) fontom (Times New Roman ili Arial)
+
+     velicine 12 tocaka (pt).
+� Prored meu redcima mora biti 1,5 redak, a razmak iznad/ispod (space before/after) je 0.
+� Za biljeske ("fusnote" / "endnote") treba odabrati velicinu slova 10 tocaka.
+� Rad treba podijeliti u poglavlja i potpoglavlja. Svako poglavlje koje se dijeli mora imati
+
+     najmanje dva potpoglavlja. Poglavlje mora poceti na novoj stranici. Stoga treba ubaciti
+     prekid stranice ispred takvog naslova.
+
+                                                                          10
+
+===== [pfst-upute-ocjenski-2022 | str. 15] =====
+3.2. NAVODI (CITATI)
+
+        Pri izradi diplomskog rada dopusteno je koristenje literature, a time i citiranja drugih.
+Citiranje je od rijeci do rijeci usmeno ili pismeno navoenje necijih rijeci ili dijelova teksta
+koji moze biti ispisan izvorno (na stranom jeziku). Vazno je da se u tekstu jednoznacno moze
+razluciti sto pripada samom autoru, a sto je preuzeto od drugih autora / izvora. Uobicajeni
+nacin odvajanja vlastitih misli, stavova, tvrdnji itd. od onih koje pripadaju drugima je
+pisanjem u kurzivu. Na kraju navoda (citata) mora se navesti originalni izvor u kojem je
+navedeni citat. Kada se navodi izvor, tada se na kraju navoda ili prepricanog izvatka stavlja
+oznaka (broj) literature koja se citira, a u literaturnom popisu daje se cijela referenca;
+primjerice [broj reference iz koristene literature].
+
+        Ako se izravno citira vei dio teksta, a jedan dio se zeli ispustiti, ispusteni dio
+oznacava se znakom [...].
+
+Primjer 3: Pisanje navoda
+        Fraktali predstavljaju granice nove vrste skupova tocaka u kompleksnoj ravnini [7].
+
+VAZNO: Doslovno navoenje tuih stavova, misljenja, tvrdnji, ideja i sl. u tekstu rada
+uobicajeno se istice pisanjem tog dijela teksta unutar navodnih znakova ili u kurzivu.
+Usvojeni nacin oznacavanja navoda potrebno je dosljedno primjenjivati u cijelom radu.
+
+        Vazno je istaknuti da se izvori trebaju navesti i za sve preuzete grafikone, skice,
+shematske prikaze, slike, tablice, formule i sl.
+
+3.3. TABLICE, SLIKE, GRAFOVI I DIJAGRAMI
+
+        Tablice i slike (grafikoni, dijagrami, ...) numeriraju se rednim brojem od 1 do n
+(Tablica 1. prva je tablica u cijelom radu, Slika 1. prva je slika u radu). Naslovi tablica i slika
+(grafikona, dijagrama, ...) pisu se masnim fontom, velicine 12 pt, nakon cega slijedi 1 red
+razmaka.
+
+        Naslov tablice pise se iznad tablice, a naslov slike ispod slike (vidjeti Prilog 6).
+Naslov tablice se navodi na nacin: Tablica iza cega slijedi broj, pripadni naziv (objasnjenje
+koje podatke prikazuje) i izvor (ako se preuzima iz literature).
+
+                                                                                                               12
+
+===== [pfst-upute-ocjenski-2022 | str. 16] =====
+Slike, dijagrami, grafovi, sheme i sl. � dakle sve osim tablica referenciraju se ispod
+same slike (grafikona, dijagrama) na nacin: Slika iza cega slijedi broj, zatim naziv i na kraju
+izvor. Slika i pripadna referenca se centriraju.
+
+        Ako je autor samostalno izradio tablicu, sliku, grafikon ili dijagram, izvor se ne navodi.
+Sve u radu koristene tablice, slike, grafikoni i dijagrami trebaju se u tekstu spomenuti
+(referencirati). Nuzno je da svi preuzeti materijali budu zadovoljavajue kvalitete s obzirom
+na njihovu citljivost i jasnou.
+
+        Dozvoljeno je napraviti vlastitu preradu slika, grafikona ili tablica na nacin da se
+zadrzi isti smisao sadrzaja, ali promijeni izgled. U takvim se slucajevima takoer obvezno u
+nazivu navodi referenca izvornog djela npr: (Prema: Klacmer Calopa i Cingula, 2012).
+
+3.4. MATEMATICKI IZRAZI
+
+        Za unos matematickog izraza (formula) treba se koristiti Equation Editor ili srodni alat
+za unos matematickog izraza. Za pisanje formula koristiti font Times New Roman, velicine 12
+pt. Eksponenti i indeksi se pisu velicinom slova 10 pt.
+
+        Oznake fizikalnih velicina, izmjereni iznos i mjerna jedinica pisu se u jedinicama SI
+sustava. To se odnosi na sve velicine, a ne samo one u formulama. Pozeljno je uvijek dati
+kratke opise oznaka koje se koriste u formulama.
+
+       Matematicki izrazi obiljezavaju se brojem u obicnoj zagradi koji se ispisuje na desnoj
+
+===== [pfst-upute-ocjenski-2022 | str. 22] =====
+2.4. ODABIR NAPONA..................................................................................................18
+
+3. PRIMIJENJENI SUSTAV ELEKTRICNE PROPULZIJE ..................... 21
+
+     3.1. OPENITO .............................................................................................................. 21
+     3.2. SNAGA GENERATORSKOG SUSTAVA............................................................ 22
+     3.3. GLAVNI DISTRIBUCIJSKI SUSTAV SNAGE................................................... 24
+     3.4. PROPULZIJSKI POGON....................................................................................... 26
+
+                                                       ...
+
+7. ZAKLJUCAK ................................................................................................ 31
+   LITERATURA .............................................................................................. 32
+   POPIS SLIKA................................................................................................ 33
+   POPIS TABLICA .......................................................................................... 34
+   KRATICE ...................................................................................................... 35
+
+===== [pfst-upute-ocjenski-2022 | str. 25] =====
+Prilog 7. Prikaz literature
+
+LITERATURA
+
+[1] Bosnjak, I.: Telekomunikacijski promet I, Fakultet prometnih znanosti, Zagreb, 2001.
+
+[2] Brooks, C.; Warren, R. P.: Understanding poetry, 3rd ed, Holt, Rinehart and Winston,
+
+New York, 1960.
+
+[3] Bruckman, A.: Approaches to managing deviant behavior in virtual communities. Apr.
+
+1994.         ftp://ftp.media.mit.edu/pub/asb/paper/deviance-chi94.txt,  (pristupljeno
+
+4.12.1994.).
+
+===== [pfst-upute-ocjenski-2022 | str. 25] =====
+[7] Lucky, R. W.: Automatic equalization for digital communication, Bell Syst. Tech. J.,
+
+44, 4, 1965, str. 547-588.
+
+[8] Mufti, O.; Sivoncik, K.: Ekspertni sistemi i njihova primjena u strojarstvu, Strojarstvo
+
+31, 1989, 1, str. 37-43.
+
+[9] Radosevi, D.: Osnove teorije sustava. Nakladni zavod Matice Hrvatske, Zagreb, 2001.
+
+[10] Tabain, T.: Njihanja broda na nepravilnim valovima, Brodarski institut, Zagreb, 1972.
+
+[11] Williams, J: Narrow-band analyzer, doktorska disertacija, Dept. Elect. Eng., Harvard
+
+Univ., Cambridge, MA, 1993.
+
+[12] http://ic.ims.hr/faq/office2007/word2007/sadrzaj-word2007.html,     (pristupljeno
+
+22.5.2015.).
+
+                                                                         21
+
+===== [pfst-upute-ocjenski-2022 | str. 29] =====
+Prilog 11. Najcese pogreske koje treba izbjegavati
+* ( 1999.-2005. ) � ne treba razmak od zagrade do broja
+* (1999. - 2005.) � ne treba razmak izmeu crtice i brojeva
+* (1999-2005) � ne mogu biti redni brojevi godina bez tocaka
+* str.15-20 � nedostaje razmak iza str.
+* str. 15.-20. � iza stranica ne treba tocka, osim ako je na kraju recenice
+* str. 15 - 20 � ne treba razmak izmeu brojeva stranica
+*Ante ANTI � izmeu broja fusnote i imena treba staviti razmak
+* Svaka biljeska na dnu stranice jest recenica pa treba zavrsiti tockom
+* Interpunkcijski znak vezan je za prethodnu rijec, a poslije njega ide razmak
+* ... srednjovjekovna Humska zemlja ... � u oba slucaja tri su tocke vezane za rijec
+* Aleksandar III � iza svakog rednog broja mora doi tocka
+* Zagreb-Split � izmeu crtice i gradova treba biti razmak
+* Kada je cijela recenica u navodu, navodnici idu iza tocke, a kada je samo dio recenice u
+navodu, navodnici idu prije tocke
+* Izmeu rijeci treba izbjegavati duple razmake
+* Svaki novi odlomak zapocinje jednim tabulatorom, a izmeu odlomaka ne treba razmak
+* Odlomak zaokruzuje jednu cijelu misao, a ne svaka recenica novi odlomak.
+
+                                                                                                          25

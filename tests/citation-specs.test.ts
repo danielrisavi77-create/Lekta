@@ -73,6 +73,14 @@ describe('citation-specs data gate', () => {
         for (const st of s.sourceTypes ?? []) {
           if (!st.example || !st.example.input) continue;
           const res = formatFromSpec(s, st.example.input as unknown as CitationInput);
+          const declared = (st.example.knownDiff ?? '').trim();
+          if (declared) {
+            // Deklariran mismatch (izvor nekonzistentan/tipfeler): render MORA odstupati,
+            // inace je knownDiff zastario i treba ga maknuti.
+            expect(norm(res.citation), `${path.basename(dir)}/${f} ${st.type}: knownDiff je zastario (render == expected), makni ga`)
+              .not.toBe(norm(st.example.expected));
+            continue;
+          }
           expect(norm(res.citation), `${path.basename(dir)}/${f} ${st.type}`).toBe(norm(st.example.expected));
         }
       }

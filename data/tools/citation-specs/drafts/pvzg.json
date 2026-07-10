@@ -1,0 +1,18 @@
+{
+  "facultyId": "pvzg",
+  "styleToken": "harvard",
+  "status": "draft",
+  "outcome": "style-pin",
+  "label": "Harvard (Pravilnik o zavrsnom radu PVZG)",
+  "sourceId": "pvzg-pravilnik-zavrsni-2018",
+  "sourceLabel": "Pravilnik o zavrsnom radu, Poslovno veleuciliste Zagreb (2018)",
+  "verifiedAt": null,
+  "verifiedBy": null,
+  "verifiedHash": null,
+  "evidence": {
+    "kind": "rule-text",
+    "quoteRaw": "navoditi izvore prema harvardskome ili europskome citatnome stilu kako je navedeno u",
+    "sourcePage": "str. 8"
+  },
+  "sourceTypes": []
+}

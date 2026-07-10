@@ -1,0 +1,176 @@
+===== [riteh-upute-radovi-2025 | str. 2] =====
+1. STRUKTURA RADA
+
+         Zavrsni/diplomski rad (u daljnjem tekstu: rad) je samostalan strucni rad u kojem student
+pod vodstvom mentora obrauje izabranu temu. Izradom rada student pokazuje teorijsko i
+prakticno znanje, sposobnost planiranja i obrade zadanog strucnog problema kao i sposobnost
+samostalnog sluzenja domaom i stranom literaturom. Rad zadaje mentor iz podrucja njegove
+strucnosti, a mora biti u skladu s osnovnim ishodima ucenja studijskog programa. Nakon
+definiranja i prihvaanja teme, nastavnik je duzan uputiti studenta u nacin obrade teme, uputiti
+ga na dodatnu literaturu i odrediti opseg rada.
+
+         Korice rada trebaju izgledati kako je navedeno u Prilogu 1. Prva stranica po otvaranju
+korica treba biti replika korica na bijelom papiru, s time da se ispod naslova rada dopisuje ime i
+prezime te znanstveno-nastavno zvanje mentora kako je navedeno u Prilogu 2. Sljedea uvezana
+stranica mora biti izvornik (original) zadatka. Sljedea stranica je potpisana izjava o samostalnoj
+izradbi rada. Zatim slijedi ili prazna stranica ili stranica sa zahvalom (zahvala nije obvezna). Nakon
+toga dolazi stranica s ispisom sadrzaja rada te dalje tekst rada.
+
+         Rad je potrebno podijeliti na poglavlja sa sljedeom strukturom:
+1) Sadrzaj � ispis poglavlja i potpoglavlja s brojem stranice na kojem se nalaze.
+
+2) Uvod � temu rada na temelju dostupne literature smjestiti u sire podrucje struke. U pravilu
+     Uvod ne bi trebao biti duzi od dvije stranice.
+
+3) Poglavlja u kojima se:
+     - analizira problem i daju osnovne poznate zakonitosti vezane uz njegovo rjesavanje,
+     - opisuje rjesavanje zadatka i odgovarajui proracuni,
+     - opisuje sklop ili programska podrska,
+     - iznose i analiziraju rezultati do kojih se doslo rjesavajui problematiku zadatka, rezultati
+           mjerenja, graficki prikazi, ispisi i sl.
+     Poglavlja bi trebala biti uravnotezenog obima.
+
+4) Zakljucak � u kojemu se sazimaju rezultati rada. U pravilu Zakljucak ne bi trebao biti duzi od
+     dvije stranice.
+
+5) Literatura � se navodi iza Zakljucka. U tekstu rada mora svugdje biti navedena literatura gdje
+     je navoenje ili graficki prikaz preuzet ili se temelji na nekom pisanom predlosku tj. prilikom
+     svakog kopiranja teksta ili grafickog prikaza da bi citatelj lakse dosao do izvornih informacija
+     u radu. U tekstu se literatura navodi unutar pravokutnih zagrada [1].
+
+                                                                      1
+
+===== [riteh-upute-radovi-2025 | str. 3] =====
+problematiku zadatka i sl.
+8) Dodatak A, B, ... (po potrebi) � u kojemu dolaze tablice, programski kod, dokumentacija vezana
+     uz prakticni dio rada i sl.
+
+2. TEHNICKE UPUTE ZA IZRADU PISANOG DIJELA RADA
+      Tehnickomu oblikovanju pisanoga rada potrebno je posvetiti primjerenu pozornost. Uredno
+
+i pregledno pripremljen rad olaksava citanje te daje uvid u sustavnost izlaganja i obrade izabranog
+predmeta rada. Rad se pise na racunalu u jednom od standardnih tekst procesora. Uz
+zadovoljavajui vanjski izgled i primjerenu sadrzajnu strukturu, rad mora biti korektan u
+gramatickome, pravopisnome i stilskome smislu. Student je duzan savjesno kontrolirati i ispraviti
+tekst, jer za tocnost odgovara iskljucivo autor. Dakle, prije predaje rada student je duzan pozorno
+procitati rad i ispraviti greske u svim primjercima.
+
+      Cjelokupan sadrzaj teksta koji student izlaze u radu treba biti smisleno podijeljen na
+poglavlja. Poglavlja moraju biti numerirana i svakom poglavlju treba pridijeliti odgovarajui
+naslov. Naslov poglavlja pise se velikim slovima velicine 14 pt. bold. Svako novo poglavlje treba
+poceti na novoj stranici. Poglavlja se prema potrebi dalje rasclanjuju na potpoglavlja. Prva razina
+potpoglavlja pise se malim slovima velicine 12 pt. bold, a druga razina potpoglavlja velicinom
+slova 12 pt. Izmeu naslova poglavlja, odnosno potpoglavlja i teksta ispred i iza potrebno je
+ostaviti jedan prazan red.
+
+      Primjer:
+2. POGLAVLJE
+2.1. Prvo potpoglavlje
+
+===== [riteh-upute-radovi-2025 | str. 4] =====
+zatvorena zagrada, navodnici na kraju navoda, znak za postotak, pisu se zajedno s rijecju iza
+     koje slijede (izmeu tih znakova i rijeci ne stavlja se razmak),
+     - znakovi kao sto su navodnici na pocetku navoda i otvorena zagrada, pisu se zajedno s rijecju
+     ispred koje se nalaze (izmeu tih znakova i rijeci takoer se ne ostavlja razmak),
+     - ako iza neke rijeci dolazi tekst u zagradi, izmeu te rijeci i pocetka zagrade ostavlja se
+     razmak,
+     - crtica se pise zajedno s rijecima izmeu kojih stoji ako se radi o slozenici (npr. znanstveno-
+     istrazivacki), a odvojeno ako se koristi u neku drugu svrhu,
+     - ispred i iza znaka jednakosti ostavlja se po jedan razmak.
+
+Tablice
+
+         Tablice je potrebno smjestiti sto blize mjestu njihovog referenciranja u tekstu i uvijek se
+smjestaju iza onog dijela u tekstu gdje se prvi puta spominju. Izbjegavajte prelamanje tablice
+preko dvije (ili vise) stranica. Svaka tablica mora imati naslov i mora biti numerirana. Naslov
+tablice dolazi iznad nje. Koristiti zasebnu numeraciju u svakom poglavlju (npr. Tablica 2.1. Naslov
+tablice). Naslov tablice pise se kosim (italic) slovima. Prvi broj je redni broj poglavlja, a drugi broj
+je redni broj tablice u tom poglavlju. Tablicu i naslov tablice treba centrirati horizontalno na
+stranici.
+
+         Naziv tablice treba odabrati tako da odrazava smisao podataka koje prikazuje i pise se
+velikim pocetnim slovom. Ako se tablica preuzima iz literature, na kraju naziva pozeljno je navesti
+referencu na nacin kako je to opisano u poglavlju gdje se opisuju reference. Izmeu teksta i
+tablice treba biti jedan red razmaka.
+
+                                                                      3
+
+===== [riteh-upute-radovi-2025 | str. 5] =====
+Slike
+         Slike je takoer potrebno smjestiti sto blize mjestu njihovog referenciranja u tekstu i
+
+uvijek se smjestaju iza onog dijela u tekstu gdje se prvi puta spominju. Naziv slike pise se velikim
+pocetnim slovom i treba ga odabrati tako da odrazava njen smisao. Treba izbjegavati preduge
+naslove. Naslov slike dolazi ispod nje i svaka slika mora biti numerirana. Koristiti zasebnu
+numeraciju u svakom poglavlju (npr. Slika 2.1. Naslov slike). Prvi broj je redni broj poglavlja, a
+drugi broj je redni broj slike u tom poglavlju. Naslov slike pise se kosim (italic) slovima. Sliku i
+naslov slike treba centrirati horizontalno na stranici.
+
+         Ukoliko se slika preuzima iz literature na kojoj se nalaze pojmovi na nekom od stranih
+jezika, znacenje tih pojmova mora biti navedeno i na hrvatskom jeziku. Ako se slika preuzima iz
+literature, na kraju naziva potrebno je navesti referencu odakle je slika preuzeta, na nacin kako
+je to opisano u poglavlju gdje se opisuju reference.
+
+         Pri dodavanju slika u rad, potrebno je voditi racuna o njihovoj kvaliteti (razlucivosti).
+Kvalitetu je mogue ocijeniti preko otiska, dok je prikaz na zaslonu ovisan o nizu cimbenika
+(razlucivosti zaslona, velicini radne povrsine na zaslonu, poveanju, itd.). Izmeu teksta i slike
+treba biti jedan red razmaka.
+
+                                                                      4
+
+===== [riteh-upute-radovi-2025 | str. 6] =====
+(2.7)
+
+         Prilikom pisanja velicina i jedinica obvezno je pridrzavati se Zakona o mjeriteljstvu i drugih
+zakonskih propisa Republike Hrvatske. Obvezna je uporaba jedinica SI (Meunarodni sustav
+mjernih jedinica). Prema tom Zakonu, varijable i oznake velicina pisu se kurzivnim (italic) slovima
+(npr. duljina l, brzima v, vrijeme t), a jedinice uspravnim slovima (npr. metar m, amper A, volt V).
+Nadalje, decimalne se vrijednosti oznacavaju zarezom, a ne tockom. Uvijek se ostavlja razmak
+izmeu brojcanog iznosa i oznake jedinice osim kada se pise iznos kuta u stupnjevima, minutama
+i sekundama. Iznos neke velicine izrazava se kao umnozak brojcanog iznosa i njene jedinice.
+Primjer: brojcani iznos jakosti struje pisat emo kao I = 2 A.
+
+LITERATURA
+         Popis literature navodi se na kraju rada. Redoslijed navoenja literature prati redoslijed
+
+referenciranja u tekstu. Reference se navode pod rednim brojem pod kojim se pojavljuju u
+popisu, u uglatim zagradama (npr. [1] ili [1, 2, 3, 5]).
+
+      Postoje razliciti izvori informacija, a kao literaturu je najbolje koristiti strucne knjige i
+casopise. One se u popisu literature navode na sljedei nacin:
+[1] Prezime1, I1.; Prezime2, I2.; Prezime3, I3.: "Naslov knjige", Izdavac, mjesto izdavanja, godina.
+
+                                                                      5
+
+===== [riteh-upute-radovi-2025 | str. 7] =====
+[2] Prezime1, I1.; Prezime2, I2.; Prezime3, I3.: "Naslov clanka", Ime casopisa, broj casopisa, broj
+      stranica, mjesto izdavanja, godina.
+      Ako rad ima vise od tri autora, zbog preglednosti preporuca se navesti ime prvog autora i
+
+nakon toga "i dr.".
+      Danas je velik broj informacija objavljen na Internetu. Meutim, kako se internetske
+
+stranice cesto mijenjaju, u popisu literature navodi se internetska stranica uz ciju adresu svakako
+mora biti naveden autor citiranog materijala i datum:
+[3] Prezime, I.: "Naslov", s Interneta, http://adresa.xx, tocan datum.
+
+Primjeri citirane literature:
+[1] Poor, H.: "An Introduction to Signal Detection and Estimation", Springer-Verlag, New York,
+
+     1985.
+[2] Vainio, O.; Ovaska, S. J.: "Multistage Adaptive Filters for In-Phase Processing of Line-
+
+     Frequency Signals", IEEE Trans. Ind. Electron., Vol. 44, No. 2, pp. 258-264, 1997.
+[3] Williams, J.: "Narrow-band Analyzer", doktorska disertacija, Dept. Elect. Eng., Harvard Univ.,
+
+     Cambridge, MA, 1993.
+[4] Ally, M.: "Osnovne obrazovne teorije online ucenja", s Interneta,
+
+     http://www.carnet.hr/casopis/38/clanci/3, 11. rujna 2006.
+
+PRILOZI (po potrebi) -
+u kojemu dolaze tablice, slike, nacrti, dokumentacija vezana uz prakticni dio rada, programski
+kod, i slicno.
+
+3. UPUTA ZA SAMOARHIVIRANJE RADA U REPOZITORIJU TEHNICKOG FAKULTETA
+        Student samostalno arhivira rad u Digitalni akademski arhiv i repozitorij Dabar (Repozitorij

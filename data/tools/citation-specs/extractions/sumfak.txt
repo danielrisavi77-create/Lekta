@@ -1,0 +1,206 @@
+===== [sumfak-upute-zavrsni-diplomski-2024 | str. 1] =====
+Završni i diplomski rad
+
+Završni rad
+
+Prijediplomski studij završava polaganjem svih ispita, ispunjavanjem svih studentskih i ostalih obveza propisanih studijskim programom studija te izradom i obranom završnoga rada. Završni je rad sadržajno vezan uz upisani kolegij prijediplomskoga studija. Izradom završnoga rada student pokazuje sposobnost primjene teorijskoga i praktičnoga znanja stečena tijekom studija radi samostalnoga rješavanja stručne problematike u okviru ishoda učenja prijediplomskoga studijskoga programa.
+
+Izradom završnoga rada student u okviru prijediplomskoga studija pokazuje:
+
+znanja iz osnove struke
+vještine u prikupljanju podataka i znanja iz literature i drugih medija
+sposobnost samostalnoga rješavanja problema u struci povezivanjem znanja iz više kolegija prijediplomskoga studija u okviru kompetencija koje ima prvostupnik. 
+
+Završni je rad samostalan stručni rad eksperimentalnog karaktera ili pregledni rad u kojem student pod vodstvom i uz pomoć mentora obrađuje izabranu temu. Prije pristupanja samoj izradi završnog rada, student je dužan odabrati i prijaviti temu završnog rada, a nakon konzultacija s potencijalnim mentorom (vidi 3. Prijava završnoga i diplomskoga rada). Student predlaže temu i mentora do datuma propisanog Pravilnikom o izradi i obrani završnog rada, a ako to ne učini, voditelj studija u konzultacijama s mentorima odabire mu temu i mentora završnoga rada. Tema završnoga rada može biti povezana s interdisciplinarnim znanjima, ako ona odgovaraju naslovu i ciljevima završnoga rada, o čemu se student dogovara s mogućim mentorom završnoga rada. Student odgovara za sve dijelove završnoga rada i potpisuje Izjavu o akademskoj čestitosti. Mentor je dužan uz predani rad priložiti i izvještaj iz specijaliziranoga programa o provedenom postupku provjere izvornosti teksta. Izrađeni završni rad prezentira se i brani na ispitu pred odabranim mentorom (vidi 7. Prezentacija završnoga i diplomskoga rada).
+
+Izrada završnoga rada eksperimentalnoga karaktera razumijeva samostalan rad studenta koji se zasniva na istraživanju manjega opsega ili njegovu dijelu koje student samostalno provodi te sam analizira, opisuje i prezentira rezultate. Završni rad ne treba sadržavati originalne poglede i rezultate. U njemu se može obrađivati već poznato i opisano, pri čemu takav rad služi za širenje znanja i primjenu poznatoga te se po tome razlikuje od originalnog znanstvenog rada Pregledni završni rad ima spoznajnu vrijednost jer daje cjelovit pregled nekoga problema/teme na osnovi već objavljenih radova i studija te zahtijeva proučavanje i analizu literature.
+
+Diplomski rad
+
+Diplomski studij završava polaganjem svih ispita, ispunjavanjem svih studentskih i ostalih obveza propisanih studijskim programom studija te izradom i javnom obranom diplomskoga rada. Diplomski je rad pisani izvorni znanstveni ili pregledni znanstveni rad, koji sustavno i jasno na znanstveni način obrađuje ciljanu problemsku, stručnu ili teorijsku cjelinu iz područja studija na suvremen i tehnološki napredan način. Izrada diplomskoga rada se zasniva na istraživanju manjega opsega ili njegova dijela koje student samostalno provodi, analizira, opisuje i prezentira rezultate prema uobičajenim poglavljima – uvod, metode, rezultati i diskusija (rasprava), zaključci. Treba biti zasnovan na temeljnim postulatima znanosti – na aktualnosti, izvornosti, ponovljivosti.
+Diplomskim radom student pokazuje da vlada osnovama istraživačkoga rada i struke i da se koristi najnovijim znanjima iz područja svoga studija, u prvom redu iz kolegija odabira diplomskoga rada, ali i interdisciplinarnim znanjima. Preporuka je da diplomski rad bude opsega najmanje 30 stranica osnovnoga teksta na papiru formata A4 bez naslovnice, sadržaja, popisa literature i priloga.
+Izradi diplomskog rada prethodi prijava teme, koja se podnosi na odgovarajućem obrascu (vidi 3. Prijava završnoga i diplomskoga rada). Temu predlaže i mentora bira student do datuma propisanoga Pravilnikom o izradi i obrani diplomskoga rada. Literatura potrebna za izradu bilo kojega tipa diplomskoga rada pronalazi se pretraživanjem baza podataka uz savjetodavnu pomoć mentora (ključne riječi, autori, časopisi, knjige itd.). Student odgovara za sve dijelove rada i potpisuje Izjavu o akademskoj čestitosti (vidi 1.3. Akademska čestitost). Izrađeni diplomski rad prezentira se i brani pred Povjerenstvom za ocjenu i obranu diplomskog rada, na javnoj obrani.
+
+Akademska čestitost
+
+Plagiranje je prikazivanje tuđih tekstova, slika ili podataka kao vlastitih. Svaki oblik plagiranja radova i ideja smatra se povredom Etičkoga kodeksa Sveučilišta u Zagrebu – 2007. i 2018. (čl. 18. i 19) (http://www.unizg.hr/fileadmin/rektorat/O_Sveucilistu/Dokumenti_javnost/Propisi/Pravilnici/Eticki_kodeks.pdf). Kako bi se izbjegao svaki, pa i nenamjerni oblik plagiranja, kao posljedica neznanja, važno je držati se pravila citiranja (vidi 5. Pravila citiranja i izrada popisa literature). Prilikom predaje izrađenoga diplomskoga rada pristupnik potpisuje Izjavu o akademskoj čestitosti kojom potvrđuje poštovanje etičkih pravila te izvornost predanoga rada. Mentor je prilikom pregleda rada dužan također provesti postupak provjere autentičnosti u odgovarajućem računalnom programu i ispuniti Izvješće o provedenoj provjeri izvornosti studentskoga rada – OB FŠDT 09 03. Izvornost diplomskoga rada provjerava se softverom za provjeru autentičnosti radova Turnitin. Prijava na sučelje omogućena je putem AAI korisničkih podataka za studente i za mentore.
+
+
+
+Struktura i sadržaj završnoga i diplomskoga rada
+
+Dijelovi rada su sljedeći:
+
+Naslov rada (hrvatski i engleski) treba obuhvatiti glavnu ideju/temu te biti kratak (do 100 znakova s razmacima), jasan, logičan i jednoznačan. Potrebno je izbjegavati kratice, tuđice i posuđenice ako postoje hrvatske istoznačnice. Latinska imena roda i vrsta treba uvijek pisati kurzivom (italic).
+
+Student može dodati stranicu s osobnom zahvalom za pomoć pri izradi rada.
+
+Sadržaj je popis naslova poglavlja i potpoglavlja s brojem stranice na kojoj započinju.
+
+U sažetku (hrvatski i engleski) potrebno je ukratko prikazati cijeli rad – opisati problem, izraziti najvažnije ideje i ciljeve, materijal i metode rada te rezultate i zaključke, bez citata, tablica i grafova. Opseg je sažetka do 1000 znakova s razmacima. Na kraju sažetka potrebno je navesti 3 – 5 ključnih riječi. Sažetak treba napisati i na engleskom jeziku.
+
+U uvodu se na jasan i jezgrovit način opisuju tema rada i problemi koji će biti obrađivani. U uvodu treba opisati namjeru rada i uvesti u problem. Uvod se može organizirati u potpoglavljima prema ključnim aspektima teme.
+U ciljevima istraživanja potrebno je navesti (nabrojiti) što se točno želi utvrditi. 
+
+Pronalaženje recentne literature izuzetno je važno za istraživački rad. U pregledu literature opisuju 
+se dosadašnja istraživanja s područja teme rada drugih autora čiji se radovi navode kao izvor (vidi 5. Pravila citiranja i izrada popisa literature). 
+
+Cilj istraživanja i pregled literature mogu biti potpoglavlja uvoda.
+
+–Poglavlje materijal i metode istraživanja osiguravaju ponovljivost istraživanja te se u njima podrobno navodi na čemu se (materijal) i kako (metode) istraživalo. Postupak provedbe istraživanja opisuje se kronološki i logičnim redoslijedom. Opisuju se i definiraju:
+materijali istraživanja s opisom
+metode uzorkovanja, metode za prikupljanje podataka
+korištena oprema
+svojstva (varijable) koja su praćena: mjerenjem, opažanjem i bilježenjem uz datume prikupljanja podataka – zavisne varijable (u smislu statističke analize)
+analitičke metode – laboratorijske (aparat, instrument), statističke (svrha, računalni program).
+
+Rezultati su važan dio završnoga i diplomskoga rada u kojem se odgovara na pitanje što se istraživanjem utvrdilo, a prikazuju se logičnim slijedom. Rezultati su uglavnom prikazani u tablicama, grafikonima, slikama te se u tekstu opisuju. Rezultati mogu biti u istom poglavlju s raspravom, tj. poglavlje Rezultati i rasprava. U raspravi se postignuti rezultati komentiraju i uspoređuju s rezultatima istraživanja drugih autora u području teme (a navedeni su u popisu literaturnih izvora), obrazlaže se ishod postignutosti cilja ili provjere hipotezâ istraživanja te značenje dobivenih rezultata. Rezultati i rasprava pišu se u logično organiziranim potpoglavljima.
+
+U slučaju diplomskog rada preglednog karaktera središnji dio rada čini poglavlje Materijali i metode istraživanja te više međusobno povezanih poglavlja odgovarajućih naslova u kojima su pojedini dijelovi osnovne teme raščlanjeni i organizirani u logične cjeline prema ključnim aspektima.
+
+Zaključak je završni dio rada. U zaključku treba kratko (opsega do jedne stranice), jasno i pregledno odgovoriti na postavljene ciljeve istraživanja i navesti što se istraživanjem utvrdilo te eventualno dati smjernice i ideje za daljnja istraživanja. Zaključak se piše na osnovu prethodno iznesenih spoznaja. On je kratka sinteza cjelokupnoga rada. U zaključku se ne navode citati drugih autora i treba ga napisati vlastitim riječima. U njemu se može dati vlastito mišljenje, različita stajališta, usporedba ili osvrt na današnje stanje i sl.
+
+U popisu literature abecednim redom navode se svi korišteni izvori u radu. Ne navode se radovi koji se u radu ne citiraju ni oni na koje se u radu ne upućuje (vidi 5. Pravila citiranja i izrada popisa literature).
+
+U prilogu student može priložiti različite dokumente, obrasce, tablice, planove, karte, anketne upitnike, dijelove rezultata analize i slično, kojima se koristio u izradi diplomskoga rada.
+
+Poglavlja povezana s pitanjima na koja treba dati odgovor:
+
+Naslov– Što je glavna ideja?
+Uvod– O čemu je riječ, što će se i zašto istraživati?
+Pregled literature   – Što je do sada poznato o problemu ili ideji koja se opisuje u radu?
+Cilj istraživanja– Što se želi utvrditi? 
+Materijal– Čime, kada i gdje se istraživalo? (detaljno, kronološki)
+Metode– Kako se istraživalo? (laboratorijske, statističke)
+Rezultati– Što se utvrdilo? (tablice, grafovi)
+Rasprava– Koji je značaj dobivenih rezultata?
+Zaključci– Odgovori na postavljene ciljeve!
+
+Prijava završnoga i diplomskoga rada
+
+Nakon postignutog dogovora s mentorom student piše prijavu završnoga rada na obrascu Molba za odobrenje teme završnoga rada (doc) ili diplomskoga rada na obrascu Molba za odobrenje teme diplomskoga rada (doc).
+
+
+Jezik i stil pisanja završnoga i diplomskoga rada
+
+Završni i diplomski rad se pišu znanstvenim stilom koji je namijenjen stručnjacima i specijalistima. Stručni pojmovi se izražavaju znanstvenim nazivima. Rad se piše hrvatskim ili engleskim jezikom i mora biti gramatički, pravopisno i stilski ispravan.
+U radu se mogu koristiti kratice. Kada se prvi put u tekstu uvodi neka kratica, potrebno je ispisati puni naziv ili ime koje se krati, a dalje se u tekstu može upotrebljavati kratica. Kada rad sadrži veći broj kratica, potrebno ih je prikazati u obliku tablice kao prilog na kraju rada.
+
+
+Pravila citiranja i izrada popisa literature
+Citirati se može izravno – koristeći navodnike, i neizravno – prepričavanjem, sažimanjem. Preporučuje se neizravno citiranje.
+
+Citiranje izvora u tekstu 
+Citiranje izvora – jedan autor
+Đuka (2014), razvijajući model prometnosti terena za planiranje privlačenja drva, kao jedan od cijelog niza kriterija kretnosti šumskih vozila navodi i dopušteno opterećenje pneumatika (guma) kotača šumskih vozila, koje deklariraju njihovi proizvođači.
+
+ili
+
+Razvijajući model prometnosti terena za planiranje privlačenja drva, kao jedan od cijelog niza kriterija kretnosti šumskih vozila navodi se i dopušteno opterećenje pneumatika (guma) kotača šumskih vozila, koje deklariraju njihovi proizvođači (Đuka 2014).
+
+Citiranje izvora – dva autora
+
+Usporedbu odumiranja stabala hrasta lužnjaka i poljskog jasena u odnosu na ekološku konstituciju vrsta opisali su Ugarković i Pleša (2017).
+
+ili
+
+Učestalost sušnih i izostanak kišnih razdoblja značajno utječu na odumiranje hrasta lužnjaka i poljskog jasena, s time da su korelacije veće za poljski jasen (Ugarković i Pleša 2017).
+
+Citiranje izvora – više autora:
+Prema Posavec i dr. (2015) šumoposjednici u Hrvatskoj su uglavnom spremni gospodariti svojim šumoposjedima u svrhu proizvodnje biomase, što je izuzetno važno kako za ruralni razvoj tako i za ostvarivost povećane opskrbe drvom. 
+
+ili
+
+Šumoposjednici u Hrvatskoj su uglavnom spremni gospodariti svojim šumoposjedima u svrhu proizvodnje biomase, što je izuzetno važno kako za ruralni razvoj tako i za ostvarivost povećane opskrbe drvom (Posavec i dr. 2005)
+
+Posredno citiranje izvora
+Ukoliko se poziva na rad koji je nedostupan i nije pročitan nego je u radu drugog autora pronađena njegova referenca tada se posredno citira izvor na sljedeći način:
+Glass i sur. 1972 (prema: McDonald 2014) simulacijskim su studijama utvrdili da ANOVA nije jako osjetljiva na umjerena odstupanja od normalnosti.
+
+ili
+
+Simulacijskim studijama utvrđeno je da ANOVA nije jako osjetljiva na umjerena odstupanja od normalnosti (Glass i sur. 1972, prema: McDonald 2014).
+U popisu literature ne navodi se posredno citirano djelo, već se navodi samo izvorno djelo iz kojega je preuzet citat.
+
+
+Izrada popisa literature s primjerima
+Pravila
+literatura se popisuje abecednim redom prema (prvom) autoru i kronološki (ako su isti autori)
+navode se svi radovi koji su u diplomskom radu citirani
+ako se autor (i koautor/i) pojavljuje više puta, treba pratiti redoslijed:
+publikacije autora prema godinama izdanja
+publikacije autora s jednim koautorom prema godinama izdanja
+publikacije autora s više koautora prema godinama izdanja
+publikacije autora ili više njih u istoj godini izdanja prema pravilu, npr. 2012a, 2012b.
+Knjige
+Prezime autora, inicijal(i) osobnoga imena, godina: Naslov. Izdanje (ako nije prvo, ev. svezak). Izdavač, Mjesto izdanja, (ev. stranice od – do).
+
+Primjeri:
+
+Eckenwalder, J. E., 2009: Conifers of the world, Timber Press, Portland, 744 str.
+
+===== [sumfak-upute-zavrsni-diplomski-2024 | str. 1] =====
+Primjer:
+
+Kärki, T., 2001: Variation of wood density and shrinkage in European aspen (Populus tremula). Holz als Roh- und Werkstoff, 59: 79-84. http://dx.doi.org/10.1007/s001070050479.
+
+Rad u zborniku radova
+Primjer:
+
+Pervan, S., Prekrat, S., Gorišek, Ž., Straže, A., Humar, M., 2006: Effect of steaming on colour and chemistry of cherrywood (Prunus avium L.). Wood structure and properties ’06, IUFRO, 3. 9. 2006, Zvolen, Slovačka. 
+
+Računalni programi (softver)
+*** 2020. Woodworking for inventor, Version 11. Čeli Automatizuoto Projektavimo Sistemos UAB, Vilnius, Litva.
+
+Citiranje sadržaja s mrežnih stranica
+
+Preuzimanje knjige ili priručnika u pdf-u s mrežne stranice s autorom
+u tekstu uobičajeno navođenje, npr. Simpson (1991) ili (Simpson 1991)
+u popisu literature potrebno navođenje prema sljedećem modelu:
+Simpson, W. T. 2021: Dry Kiln Operator's Manual. https://www.esf.edu/wus/documents/DryKiln OperatorsManual.pdf (Pristupljeno 19. 1. 2021.)
+Preuzimanje djela s mrežne stranice bez autora
+u tekstu:
+Biološkom obnovom šuma preko projekta Naturavita planira se obnoviti 1021 ha šuma koje su bile onečišćene minama, šuma koje se zbog ratnih djelovanja nisu mogle pravodobno obnoviti i koje su zahvaćene sušenjem i propadanjem  (projekt Naturavita 2020, Hrvatske šume).
+u popisu literature potrebno je navođenje izvora
+Projekt Naturavita: Biološka obnova šuma https://www.hrsume.hr/index.php/hr/75-news/latest-news/1141-dobri-rezultati-aktivnosti-obnove-suma-u-2020-u-sklopu-projekta-naturavita (Pristupljeno 19. 1. 2021.)
+Preuzimanje sadržaja s mrežnih stranica međunarodnih organizacija i društava
+IUFRO 2021: International Union of Forest Research Organization. https://www.iufro.org/ (Pristupljeno 19. 1. 2021.)
+FAO  2019: Food and Agriculture Organization of the United Nations. http://www.fao.org/home/en/  (Pristupljeno 15. 5. 2019.)
+Preuzimanje slike ili grafa s mrežne stranice bez autora
+u tekstu: ispod slike ili grafa … naslov
+
+
+
+Slika 1. Složaj za prirodno sušenje drva (Izvor: Wikipedia, Wood drying https://en.wikipedia.org/wiki/ Wood_drying (Pristupljeno 19. 1. 2021.)
+
+U popisu literature nije potrebno ponovno navođenje izvora.
+
+Vlastito se ime uz autorske fotografije, slike ili crteže ne navodi.
+Tehničko oblikovanje rada
+
+Tehničkomu oblikovanju rada potrebno je obratiti posebnu pozornost. Uredno i pregledno pripremljen rad olakšava čitanje, a ujedno pruža uvid u sustavnost obrade teme.
+Rad se piše na računalu jednim od programa za obradu teksta (npr. MS Word), uz primjeren vanjski izgled i poštivanje sadržajne strukture (vidi Predložak_završni rad ili Predložak_diplomski rad).
+
+Preporuke za tehničko oblikovanje rada 
+rad se piše veličinom slova 11 ili 12 pt, prored 1,15
+preporučuju se fontovi Arial, Times New Roman, Calibri
+margine rada trebaju iznositi 2,5 cm
+naslovi poglavlja pišu se velikim slovima veličine 16 pt, podebljano (bold) – 1. razina, naslov prvoga potpoglavlja malim slovima veličine 14 pt podebljano (bold) – 2. razina, a naslov drugoga potpoglavlja malim slovima veličine 14 pt ne podebljano (bold) – 3. razina
+poglavlja započinju na novoj stranici, a između naslova poglavlja i teksta potrebno je ostaviti jedan red prazan
+novi odlomak započinje ili s uvučenim prvim redom (tab) ili s proredom
+treba obostrano poravnati tekst (justify)
+iza svake riječi stavlja se jedan razmak (bjelina)
+pravopisni znakovi, kao što su točka, upitnik, uskličnik, zarez, dvotočke, točka-zarez, otvorena i zatvorena zagrada, navodnici na početku i kraju navoda, pišu se zajedno s riječju ili brojem iza kojega slijede (između tih znakova i riječi ne stavlja se razmak)
+crtica (–) i spojnica (-) različiti su pravopisni znakovi. Crtica je nešto duža od spojnice i piše se s razmacima s obiju njezinih strana (primjer: 3 – 5 ključnih riječi), ali se u bilježenju stranica u bibliografskim jedinicama crtica piše bez bjelina (str. 123–146). Spojnica je nešto kraća i piše se bez razmaka (primjer: Ličko-senjska županija). Njihovo je značenje, dakako, različito.
+oznake fizikalnih veličina pišu se u kurzivu
+kratice mjernih jedinica pišu se iza numeričke vrijednosti  s jednim praznim mjestom, tj. s razmakom (bjelinom), prema ovim pravilima:
+između broja i znaka mjerne jedinice dolazi jedan razmak, npr.: 3 kg, 2 m, 220 V, 60 W, 5 oC
+brojčane vrijednosti i znakovi mjernih jedinica pišu se samo uspravnim pismom
+razmak se u mjernoj jedinici ne piše u složenim mjernim jedinicama: 50 m/s, 2 kg/m2 i između broja i oznake za kutni stupanj, minutu i sekundu: 180° 20' 50"
+u decimalnim se brojevima piše zarez, a ne točka: temperatura je 36,6 °C
+poglavlja se numeriraju u sadržaju i tekstu, a numeracija počinje od uvodnoga poglavlja
+stranice se numeriraju od sažetka do kraja teksta, a numeracija se postavlja u donji desni kut
+svaka tablica, graf, slika mora biti numerirana, mora imati naslov i mora biti smještena na sredinu stranice
+naslov tablice piše se iznad tablice
+naslov slike ili grafa piše se ispod slike ili grafa
+ako je tablica, slika ili graf preuzet iz drugoga izvora, potrebno je navesti izvor ispod njih u veličini slova 10 pt. (knjiga, mrežna stranica)

@@ -1,0 +1,18 @@
+{
+  "facultyId": "unidu",
+  "styleToken": "harvard",
+  "status": "draft",
+  "outcome": "style-pin",
+  "label": "Harvard (sluzbene upute Odjela za komunikologiju, unidu)",
+  "sourceId": "unidu-komunikologija-upute-2025",
+  "sourceLabel": "Upute za izradu diplomskog rada (2025), Odjel za komunikologiju (Sveuciliste u Dubrovniku)",
+  "verifiedAt": null,
+  "verifiedBy": null,
+  "verifiedHash": null,
+  "evidence": {
+    "kind": "rule-text",
+    "quoteRaw": "Studenti trebaju koristiti harvardski stil citiranja literature i to u: citatima u tekstu,",
+    "sourcePage": "str. 7"
+  },
+  "sourceTypes": []
+}

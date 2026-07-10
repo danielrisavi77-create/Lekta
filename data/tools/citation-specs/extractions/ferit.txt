@@ -1,0 +1,253 @@
+===== [ferit-upute-zavrsni-2010 | str. 1] =====
+preddiplomski studij.pdf)
+         Obrazac IIa/b, potpisan od strane predsjednika Odbora, treba umetnuti iza naslovne
+        stranice u konacnu verziju zavrsnog rada, tj. nakon sto pristupnik ispravi Zavrsni
+        rad prema primjedbama Odbora, odnosno neposredno prije uvezivanja rada u meki ili
+        spiralni uvez (v. 2.12.).
+1.3. Sadrzaj zavrsnog rada s naslovima poglavlja i potpoglavlja, pri cemu su pocetne
+        stranice poglavlja i potpoglavlja upisane uz desni rub stranice. Po potrebi, u sadrzaju
+        se mogu naznaciti i pojedini odjeljci u potpoglavljima.
+1.4. Uvod (PRVO POGLAVLJE)
+        Ovo poglavlje predstavlja uvod u zavrsni rad. Ovdje je potrebno opisati problem koji
+        se u zavrsnom radu rjesava (detaljnije obrazloziti zadatak zavrsnog rada), istaknuti
+        vazne teme obuhvaene zadatkom zavrsnog rada, te dati pregled rezultata u rjesavanju
+        ovog problema opisanih u citiranoj literaturi. Na kraju uvodnog poglavlja potrebno je
+        naznaciti strukturu zavrsnog rada i dati kratki opis pojedinih poglavlja.
+1.5. Glavni dio rada
+        Glavni dio rada preporuca se podijeliti u vise poglavlja (najvise cetiri) i potpoglavlja,
+        tako da se zasebno mogu opisati: vazne teorijske podloge, analiza sustava (uz npr.
+        matematicki i simulacijski model sustava), izvod rjesenja problema (npr. algoritma
+        upravljanja), sklopovlje za realizaciju rjesenja problema (npr. upravljanja, nadzora i
+        zastite), postignuti rezultati, i slicno.
+        Pri navo�enju formula, shema, slika i podataka preuzetih iz literature neophodno je
+        citirati koristenu literaturu. Pri opisu rjesenja problema potrebno je u potpunosti
+        opisati izvod formula s me�u rezultatima, a ne samo navesti konacne rezultate. Slike
+        koje prikazuju rezultate simulacije i eksperimenta neophodno je komentirati. Opis rada
+        sklopovlja treba biti cjelovit i detaljan.
+        Pri izradi odgovarajuih racunalnih programa (npr. program za simulaciju, program za
+        upravljanje i sl.), dijagrame toka treba opisati detaljno i povezati ih s ispisom
+        programa (koji se najcese stavlja u privitak zavrsnom radu). Glavni dio rada najcese
+        se podijeli u 3 poglavlja: poglavlje uvoda u materiju koja se obra�uje u radu s
+        pripadnom teorijskom podlogom (2. poglavlje), sredisnje poglavlje gdje se iznosi
+        rjesenje zadatka zavrsnog rada (3. poglavlje), te rezimirajue poglavlje gdje se
+        prikazuju postignuti rezultati, daje opis rezultata te odgovarajua rasprava (4.
+        poglavlje).
+1.6. Zakljucak (ZADNJE POGLAVLJE)
+
+===== [ferit-upute-zavrsni-2010 | str. 2] =====
+1.7.   Dobro je predloziti mogunosti i postupke rjesavanja uocenih problema, za ono sto je
+1.8.   u radu ostalo nerijeseno ili za predlozeno rjesenje ako nije dalo zadovoljavajue
+1.9.   rezultate, cime se daju smjernice za daljnji rad na ovom podrucju.
+1.10.  Literatura - popis upotrijebljene literature.
+       Popis i opis upotrijebljenih oznaka (u slucaju koristenja veeg broja oznaka).
+1.11.  Popis i opis upotrijebljenih kratica (u slucaju koristenja veeg broja kratica).
+       Sazetak s kljucnim rijecima na hrvatskom jeziku. Naslov i sazetak s kljucnim
+1.12.  rijecima na engleskom jeziku. Navedeni sadrzaji trebaju biti na istoj stranici. U
+       sazecima na 10 do 15 redaka opisati glavni problem, naznaciti smjernice kako je
+       rjesavan te naznaciti postignute rezultate zavrsnog rada.
+       Zivotopis
+       Uz biografske podatke navesti i sudjelovanje na natjecanjima te osvojene nagrade.
+       Rad treba vlastorucno potpisati na kraju zivotopisa.
+       Prilozi
+       U prilog zavrsnom radu pozeljno je staviti materijale koji nisu neophodni za temeljito
+       praenje materije u zavrsnom radu i rjesenja zadatka zavrsnog rada. Najcese su to
+
+===== [ferit-upute-zavrsni-2010 | str. 2] =====
+predaje rada.
+
+                                          2. OBRADA TEKSTA
+
+2.1. Format rada je A4 (210 x 297 mm).
+2.2. Stranice treba numerirati uz desnu marginu (prvo poglavlje zapocinje sa str. 1.).
+2.3. Sadrzaj rada navesti iza obrasca za prijavu teme i imenovanje mentora zavrsnog rada.
+2.4. Rad mora sadrzavati:
+
+                 - uvod,
+                 - glavni dio (do najvise 4 poglavlja),
+                 - zakljucak,
+                 - popis upotrijebljene literature (iza literature dolaze ostali popisi, ako ih ima),
+                 - sazetak (na hrvatskom i engleskom jeziku),
+                 - zivotopis, te
+                 - prilozi (ako ih ima).
+        Tekst napisati nekim od programa za obradu teksta na racunalu (preporuca se MS
+        Word) uz prored od 1,5. Pri obradi teksta potrebno je koristiti font Times Roman 12 pt
+        (ili 10opi). Ukoliko font Times Roman nije raspoloziv, mogue je upotrijebiti font
+        najslicniji trazenom fontu, iste velicine. Margine teksta trebaju biti: lijeva 25 mm,
+        desna 20 mm, gornja i donja 25 mm.
+2.5. U citavom radu potrebno je upotrebljavati iste oznake za iste velicine, a njihovo
+        objasnjenje dati nakon prve pojave u formuli, a po potrebi i u popisu na kraju rada iza
+        literature (kada se koristi velik broj oznaka).
+2.6. Poglavlja, potpoglavlja, odjeljke (tocke), slike, tablice i formule treba numerirati.
+        Nova poglavlja treba zapoceti na novoj stranici. Nacin numeriranja je sljedei:
+
+       2
+
+===== [ferit-upute-zavrsni-2010 | str. 3] =====
+broj formule unutar poglavlja. Oznaka se stavlja u visini formule uz desni rub stranice,
+        zatvorena je u okrugle zagrade, a brojevi su odvojeni crticom. Npr. prva formula u
+        drugom poglavlju imala bi oznaku (2-1).
+2.7. Obavezna je uporaba jedinica me�unarodnog sustava SI i onih koje su u Hrvatskoj
+        zakonite (Zakon o mjernim jedinicama, NN br. 58 iz 1993., str. 1469).
+2.8. Slike i tablice treba ukomponirati u tekst najblize mjestu gdje se na njih poziva
+        (ukoliko nisu vee od A4 formata). Slike uze od sirine stranice mogu se pozicionirati
+        na sredini stranice ili desno na stranici, dok se one velicine A4 ili vee mogu dati u
+        prilogu. Slike i tablice vee od A4 potrebno je sloziti na format A4. Prilog se uvezuje
+        na kraju rada ili se slaze u posebni dzep na koricama rada. U prilogu se osim slika i
+        tablica daju dijagrami tokova programa i ispisi programa. Priloge treba oznaciti
+        slovom P i brojem poglavlja te brojem priloga u poglavlju, kao npr. P.2.1.
+2.9. Literaturu treba svrstati redom kojim se pojavljuje u radu i napisati na sljedei nacin:
+        - Primjer za clanak iz casopisa:
+        [1] Inicijali imena, prezime autora, naslov rada, naziv casopisa, broj casopisa
+
+                 (br./No.), broj sveska (sv./Vol.), str. (pp.) od � do, mjesec i godina izdanja.
+        - Primjer za referat objavljen u zborniku konferencije:
+        [2] Inicijali imena, prezime autora, naslov referata, naziv konferencije, sv. (broj
+
+                 sveska), str. (stranice) od � do, mjesto, godina izdanja.
+         - Primjer za knjigu:
+        [3] Inicijali imena, prezime autora, naslov knjige, izdavac, mjesto, godina izdanja.
+
+2.10. Na slike se u tekstu poziva na sljedei nacin: prema slici 2.3. (ukoliko se poziva na
+        sliku 2.3.), a kada se zeli u zagradi naznaciti slika na koju se tekst odnosi tada:
+        ...(Sl.2.3.)... Na jednadzbu (3-4) pozivalo bi se: prema jednadzbi (3-4). Na literaturu
+        broj 2 poziva se: prema [2]. Ukoliko se poziva na vise referenci literature, mogue je
+        vise oznaka odvojenih zarezom staviti u zajednicke uglate zagrade. Pri pozivanju na
+        knjigu korisno je uz broj literature u zagradi oznaciti i broj stranice knjige na kojoj se
+        nalazi podatak, formula ili slika, kao npr. [4, str.132], sto znaci da je informacija uzeta
+        iz knjige pod rednim brojem cetiri u popisu literature, sa stranice 132.
+
+2.11. Prema "Pravilniku o zavrsnim i diplomskim ispitima na preddiplomskim, diplomskim i
+       strucnim studijima" pristupnik predaje mentoru dva neuvezana primjerka zavrsnog
+
+                                                                                                                 3
+
+===== [ferit-upute-diplomski | str. 1] =====
+1.1. Diplomski zadatak (izvornik u jednom primjerku rada, dok su kopije diplomskog
+         zadatka u ostalim primjercima).
+
+1.2. Sadrzaj diplomskog rada s naslovima poglavlja i potpoglavlja, pri cemu su pocetne
+         stranice poglavlja i potpoglavlja upisane uz desni rub stranice. Po potrebi, u sadrzaju se
+         mogu naznaciti i pojedini odjeljci u potpoglavljima.
+
+1.3. Uvod (1. POGLAVLJE)
+         Ovo poglavlje predstavlja uvod u diplomski rad. Ovdje je potrebno opisati problem koji
+         se u diplomskom radu rjesava (detaljnije obrazloziti diplomski zadatak), istaknuti vazne
+         teme obuhvaene diplomskim zadatkom, te dati pregled rezultata u rjesavanju ovog
+         problema opisanih u citiranoj literaturi. Na kraju uvodnog poglavlja potrebno je naznaciti
+         strukturu diplomskog rada i dati kratki opis pojedinih poglavlja.
+
+1.4. Glavni dio rada
+         Glavni dio rada preporuca se podijeliti u vise poglavlja (najvise cetiri) i potpoglavlja,
+         tako da se zasebno mogu opisati: vazne teorijske podloge, analiza sustava (uz npr.
+         matematicki i simulacijski model sustava), izvod rjesenja problema (npr. algoritma
+         upravljanja), sklopovlje za realizaciju rjesenja problema (npr. upravljanja, nadzora i
+         zastite), postignuti rezultati, i slicno.
+         Pri navoenju formula, shema, slika i podataka preuzetih iz literature neophodno je
+         citirati koristenu literaturu. Pri opisu rjesenja problema potrebno je u potpunosti opisati
+         izvod formula s meu rezultatima, a ne samo navesti konacne rezultate. Slike koje
+         prikazuju rezultate simulacije i eksperimenta neophodno je komentirati. Opis rada
+         sklopovlja treba biti cjelovit i detaljan.
+         Pri izradi odgovarajuih racunalnih programa (npr. program za simulaciju, program za
+         upravljanje i sl.), dijagrame toka treba opisati detaljno i povezati ih s listingom programa
+         (koji se najcese stavlja u privitak diplomskom radu).
+         Glavni dio rada najcese se podijeli u 3 poglavlja: poglavlje uvoda u materiju koja se
+         obrauje u radu s pripadnom teorijskom podlogom (2. poglavlje), sredisnje poglavlje gdje
+         se iznosi rjesenje diplomskog zadatka (3. poglavlje), te rezimirajue poglavlje gdje se
+         prikazuju postignuti rezultati, daje opis rezultata te odgovarajua rasprava (4. poglavlje).
+
+1.5. Zakljucak (POSLJEDNJE POGLAVLJE)
+         Ovo je rezimirajue poglavlje u kojem se daje osvrt na ciljeve postavljene u diplomskom
+         zadatku i postignute rezultate. Preporuca se, drzei se sadrzaja diplomskog rada, opisati
+         najznacajnije ostvarene rezultate (po poglavljima, bez navoenja broja i naslova
+         poglavlja). Pri tome je dobro navesti pogodnosti, ogranicenja i podrucja mogue primjene
+         dobivenih rezultata.
+         Dobro je predloziti mogunosti i postupke rjesavanja uocenih problema, za ono sto je u
+         radu ostalo nerijeseno ili za predlozeno rjesenje ako nije dalo zadovoljavajue rezultate,
+         cime se daju smjernice za daljnji rad na ovom podrucju.
+
+1.6. Literatura - popis koristene literature.
+1.7. Popis i opis upotrjebljenih oznaka (u slucaju koristenja veeg broja oznaka).
+1.8. Popis i opis upotrjebljenih kratica (u slucaju koristenja veeg broja kratica).
+1.9. Sazetak na hrvatskom i engleskom jeziku, s kljucnim rijecima.
+
+                                                                                                                    1
+
+===== [ferit-upute-diplomski | str. 2] =====
+termina uveza i predaje rada.
+
+                                              2. OBRADA TEKSTA
+
+2.1. Format rada je A4 (210 x 297 mm).
+2.2. Stranice treba numerirati uz desnu marginu (prvo poglavlje zapocinje sa str. 1.).
+2.3. Sadrzaj rada navesti iza diplomskog zadatka.
+2.4. Rad mora sadrzavati:
+
+                  - uvod,
+                  - glavni dio (do najvise 4 poglavlja),
+                  - zakljucak,
+                  - popis upotrjebljene literature (iza literature dolaze ostali popisi, ako ih ima),
+                  - sazetak (na hrvatskom i engleskom jeziku),
+                  - zivotopis, te
+                  - prilozi (ako ih ima).
+         Tekst napisati nekim od programa za obradu teksta na racunalu (preporuca se MS
+         Word) uz prored od 1,5. Pri obradi teksta potrebno je koristiti font Times Roman 12 pt
+         (ili 10opi). Ukoliko font Times Roman nije raspoloziv, mogue je upotrijebiti font
+         najslicniji trazenom fontu, iste velicine. Margine teksta trebaju biti: lijeva 25 mm, desna
+         20 mm, gornja i donja 25 mm.
+2.5. U citavom radu potrebno je upotrebljavati iste oznake za iste velicine, a njihovo
+         objasnjenje dati nakon prve pojave u formuli, a po potrebi i u popisu na kraju rada iza
+         literature (kada se koristi velik broj oznaka).
+2.6. Poglavlja, potpoglavlja, odjeljke (tocke), slike, tablice i formule treba numerirati. Nacin
+         numeriranja je sljedei:
+           - Naslovi poglavlja se pisu velikim slovima (14 pt, bold, centrirano, razmak 12 do
+                  16 pt) i numeriraju arapskim rednim brojevima (s tockom), pocevsi brojem 1 za
+                  uvod, a posljednjim brojem zakljucak.
+           - Potpoglavlja se pisu malim slovima (14 pt, bold, razmak 8 do 12 pt) i numeriraju
+                  tako da prvi broj sadrzi broj poglavlja, drugi broj potpoglavlja. Npr. prvo
+                  potpoglavlje u drugom poglavlju imat e oznaku 2.1.. Broj nivoa (odjeljaka,
+
+                                                                                                                    2
+
+===== [ferit-upute-diplomski | str. 3] =====
+2.7. Obavezna je uporaba jedinica meunarodnog sustava SI i onih koje su u Hrvatskoj
+         zakonite (Zakon o mjernim jedinicama, NN br. 58 iz 1993., str. 1469).
+
+2.8. Slike i tablice treba ukomponirati u tekst najblize mjestu gdje se na njih poziva (ukoliko
+         nisu vee od A4 formata). Slike uze od sirine stranice mogu se pozicionirati na sredini
+         stranice ili desno na stranici, dok se one velicine A4 ili vee mogu dati u prilogu. Slike i
+         tablice vee od A4 potrebno je sloziti na format A4. Prilog se uvezuje na kraju rada ili se
+         slaze u posebni dzep na koricama rada. U prilogu se osim slika i tablica daju dijagrami
+         tokova programa i listinzi programa. Priloge treba oznaciti slovom P i brojem poglavlja
+         te brojem priloga u poglavlju, kao npr. P.2.1.
+
+2.9. Literaturu treba svrstati redom kojim se pojavljuje u radu i napisati na slijedei nacin:
+
+           - Primjer za clanak iz casopisa:
+         [1] Inicijali imena, prezime autora, naslov rada, naziv casopisa, broj casopisa
+
+                  (br./No.), broj sveska (sv./Vol.), str. (pp.) od � do, mjesec i godina izdanja.
+
+           - Primjer za referat objavljen u zborniku konferencije:
+         [2] Inicijali imena, prezime autora, naslov referata, naziv konferencije, sv. (broj
+
+                  sveska), str. (stranice) od � do, mjesto, godina izdanja.
+
+           - Primjer za knjigu:
+         [3] Inicijali imena, prezime autora, naslov knjige, izdavac, mjesto, godina izdanja.
+
+2.10.  Na slike se u tekstu poziva na slijedei nacin: prema slici 2.3. (ukoliko se poziva na sliku
+2.11.  2.3.), a kada se zeli u zagradi naznaciti slika na koju se tekst odnosi tada: ...(Sl.2.3.)... Na
+       jednadzbu (3-4) pozivalo bi se: prema jednadzbi (3-4). Na literaturu broj 2 poziva se:
+       prema [2]. Ukoliko se poziva na vise referenci literature, mogue je vise oznaka
+       odvojenih zarezom staviti u zajednicke uglate zagrade. Pri pozivanju na knjigu korisno
+       je uz broj literature u zagradi oznaciti i broj stranice knjige na kojoj se nalazi podatak,
+       formula ili slika, kao npr. [4, str.132], sto znaci da je informacija uzeta iz knjige pod
+       rednim brojem cetiri u popisu literature, sa stranice 132.
+
+       Tekst diplomskog rada treba uvezati i predati u tri primjerka, a na korice upisati tekst
+       kao sto je to prikazano na donjoj slici (pri tome koristiti isti font kao u diplomskom radu,
+       velicine 14 do 18 pt). Margine teksta na koricama su takoer kao i one na stranicama
+       diplomskog rada. Prema tome, prva stranica koja se stavlja ispred stranice s diplomskim
+       zadatkom je otisnuta i na korice.
+
+       3

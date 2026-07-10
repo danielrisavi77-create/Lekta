@@ -1,0 +1,208 @@
+===== [vvg-upute-radovi-2013 | str. 2] =====
+nekih pravila danim u ovim Uputama.
+
+         U daljnjem tekstu ovih Uputa, koristit e se termin 'diplomski rad' i za diplomski rad
+i za zavrsni rad, ako to nije izrijekom drugacije napisano.
+
+    1. Uvod
+
+         Diplomski rad je samostalni strucni rad u kojem student pod vodstvom mentora i/ili
+komentora obrauje izabranu temu.
+
+         Izradom diplomskog rada student treba dokazati sposobnost primjene teorijskog i
+prakticnog znanja stecenog tijekom studija te pokazati sposobnost samostalnog sluzenja
+strucnom i znanstvenom literaturom u pismenoj obradi teme.
+
+         Diplomski rad ne mora biti izvorni rad, ali mora biti samostalno izraen od strane
+studenta.
+
+         Rad se obvezno pise na racunalu koristenjem nekog od programa za obradu teksta u
+ope prihvaenom formatu zapisa u datoteku (doc, docx, odt), a ispisuje jednostrano na
+bijelom papiru A4 formata.
+
+         Obavezno je koristenje najvaznijih funkcionalnosti programa za obradu teksta
+(koristenje stilova; automatsko numeriranje stranica, slika i tablica; fusnote; krosreference;
+generiranje sadrzaja, popisa slika i tablica).
+
+         Rad treba biti pisan hrvatskim jezikom i pravopisom (osim u slucaju posebnog
+odobrenja za pisanje na drugom jeziku, pri tomu treba imati prijevod na hrvatski jezik).
+
+         Rad treba biti pisan u treem licu pasivno.
+
+===== [vvg-upute-radovi-2013 | str. 3] =====
+Rad se sastoji od obveznih i neobveznih dijelova.
+
+   Obvezni dijelovi rad su:
+        korice
+        unutrasnja naslovnica (podkorice)
+        zadatak (originalno potpisan)
+        sazetak na hrvatskom i engleskom jeziku (Abstract) s popisom kljucnih rijeci na
+          hrvatskom i engleskom jeziku
+        sadrzaj (automatski generiran)
+        uvod
+        razradu teme
+        zakljucak
+        popis koristene literature
+        potvrda mentora o zavrsenom radu
+        izjava o samostalnoj izradi rada s osobnim potpisom studenta
+        CD s cijelim radom u editabilnom formatu.
+
+   Neobvezni dijelovi rada su:
+        abecedni popis koristenih kratica i akronima s punim nazivom (objasnjenjem) �
+          ako je u radu koristeno vise od 10 razlicitih kratica i akronima
+        popis slika (automatski generiran) � ako je u radu vise od 20 slika
+        popisa tablica (automatski generiran) � ako je u radu vise od 20 tablica
+        priloga (ako ih ima).
+
+   Redoslijed uvezivanja dijelova rada prikazan je na slici 1.
+
+===== [vvg-upute-radovi-2013 | str. 9] =====
+U tom poglavlju kandidat treba napraviti vrednovanje vlastitog rjesenja problema, razmotriti
+probleme koji su se javili prilikom rjesavanja zadatka te, ukoliko je na osnovi vlastitog
+iskustva uocio neka mogua poboljsanja rjesenja, spomenuti ih. Takoer navesti smjernice za
+mogui daljnji rad na predmetnom problemu.
+
+   Zakljucak
+
+         Zakljucak treba sadrzavati sazetak rezultata zavrsnog rada, i ne bi trebao prelaziti 1
+stranicu teksta, ali ni manje od pola stranice. Uobicajeno se u zakljucku sazeto daju odgovori
+na pitanja koja su otvorena u Uvodu, naravno temeljem rezultat do kojih se doslo u diskusiji
+(razmatranju) rada.
+
+   Literatura
+
+         Popis koristene literature daje se na kraju rada. Voditi racuna da redoslijed navoenja
+literature bude u skladu s redoslijedom navoenja literature u tekstu, pa se prva referenca koja
+je navedena u tekstu nalazi na prvom mjestu popisa koristene literature, druga na drugom
+mjestu, itd. Reference se navode pod rednim brojem pod kojim se pojavljuju u popisu, u
+uglatim zagradama (npr). [1]).
+
+         Literaturu koristenu pri izradi zavrsnog rada u sirem smislu treba razdvojeno navesti u
+dvije grupe: (1) citirana literatura � ona koja se doista citirala i (2) ostala koristena literatura �
+ona koja je posredno utjecala na rad (npr. prirucnici, standardi).
+
+         Citiranog teksta u radu moze biti najvise 5%. Citiranje dijela teksta iz literature u
+popisu, oznacava se na kraju citata rednim brojem literature iz popisa u uglatim zagradama.
+Za povezivanje citata s radnim brojem literature treba koristiti funkcionalnosti programa za
+obradu teksta.
+
+===== [vvg-upute-radovi-2013 | str. 10] =====
+Svaka slika, graficki ili tablicni prikaz rezultata necijeg istrazivanja i rada, a koja se
+prenosi u rad, treba obvezno navesti izvor koristenjem pozivne biljeske (fusnote). Fusnota se
+pise na dnu stranice na kojoj se poziva. Za pisanje fusnota i njihovih poziva u tekstu treba
+koristiti funkcionalnosti programa za obradu teksta.
+
+         Popis literature se radi na sljedei nacin:
+
+         Za knjige i druge pisane radove i clanke:
+
+         [<redni broj>] <autor(i)>: <Naslov rada>, <izdavac>, <godina izdanja>
+        Napomena: Pojmovi napisani <pojam> u tekstu se zamjenjuju stvarnim pojmom, a ostalo se prenosi upravo onako kao je to u
+
+                   sintaksnom formatu napisano (npr. znaci interpunkcije: [ ] , . ; i td.)
+         Autori se navode u popis u bibliografskom formatu:
+
+         <Prezime1, Ime1>; <Prezime2, Ime2>;....
+
+         ili
+
+         <Prezime1, inicijali_imena1>; <Prezime2, inicijali_imena2>;...
+
+         Primjeri:
+        [1] Markovi, Marko; Ivi, Ivan: Programiranje u C jeziku, Profil d.o.o, 2008.
+        [2] Markovi, M; Ivi, I: Programiranje u C jeziku, Profil d.o.o, 2008.
+        [3] Rothbaum, BO; Hodges, L: Virtual reality exposure therapy for PTSD Vietnam
+
+              veterans: a case study. Journal of Traumatic Stress 1999;12(2):263-71.
+
+         Ako rad ima vise od tri autora, zbog preglednosti se preporuca navesti ime prvog
+autora i nakon toga "i dr." ako je literatura na hrvatskom jeziku i "et al" ako je na engleskom
+ili drugom stranom jeziku.
+
+         Primjer:
+        [3] Grgi, Marko, i dr.: Komunikacijski sustavi, Skolska knjiga Zagreb, 2012.
+
+         Ukoliko se kao izvor koristi Internet, treba biti svjestan da se internetske stranice cesto
+mijenjaju te je dobro potraziti istu informaciju u objavljenom casopisu, zborniku ili knjizi.
+Ako se bas mora citirati izvor s internetske stranice tada se to radi na sljedei nacin.
+
+         Za internetske sadrzaje za koje se ne zna autor(i).
+
+         [<redni broj>] URL: <potpuna putanja do stranice koja je koristena u radu>, <datum
+zadnjeg pristupa toj stranici>
+
+         Primjer:
+
+===== [vvg-upute-radovi-2013 | str. 11] =====
+ili dijelova radova. Zavrsni i Diplomski radovi su javni radovi i kao takvi trebaju biti
+dostupnim svima ili odreenim skupinama. Sukladno tomu student treba svojim potpisom
+potvrditi da je to njegov rad i da dozvoljava javno objavljivanje. Izuzetno, ako postoje
+opravdani razlozi, student moze zahtijevati od Povjerenstva za zavrsne i diplomske radove
+svoga studija izuzee od javnog objavljivanja, pri cemu treba argumentirano obrazloziti svoj
+zahtjev. Povjerenstvo razmatra zahtjev i odlucuje o izuzeu. Zahtjev treba biti upuen zajedno
+s predajom uvezanog rada.
+
+         Izgled stranice s Izjavom i potpisom prikazan je na slici 6, a tekst izjave je:
+
+         ,,Izjavljujem, s potpunom materijalnom i moralnom odgovornosu, da sam ovaj rad
+samostalno napravio, te da u njemu nema kopiranih ili prepisanih dijelova teksta tuih
+radova, koji nisu oznaceni kao citati s napisanim izvorom odakle su preneseni.
+
+         Svojim vlastorucnim potpisom potvrujem da sam suglasan da se ovaj moj rad javno
+objavi na Internetu."
+
+===== [vvg-upute-radovi-2013 | str. 18] =====
+Heading2      Colibri 20, B    lijevo                                               1.1.1.
+              Times 20, B                                       stranica,
+Heading3                       lijevo                                               1.1.1.1.
+              Ariel 16, B                                       30 prije
+Heading4      Colibri 16, B    lijevo                                               Slika 1.
+              Times 16, B                                       24 poslije
+Figure        Ariel 14, B      sredina,                                             Tablica 1.
+Caption       Colibri 14, B    ispod slike                      18 prije    1
+Table         Times 14, B      lijevo,                                              graficki znak
+Caption       Ariel 11, B,I    iznad tablice                    12 poslije          (bullet)
+List paragrf  Colibri 12, B,I  Isto kao Normal                                      [1]
+(Nabrajanje)  Times 12, B,I    lijevo ili isto kao              10 prije    1
+Literatura    Ariel 9, I       Normal
+              Colibri 10, I                                     10 poslije
+              Times 10, I
+              Ariel 9, I                                        10 prije    1
+              Colibri 10, I
+              Times 10, I                                       6 poslije
+              Isti font kao
+              Normal                                            6 prije     1
+              Isto kao
+              Normal                                            12 poslije
+
+                                                                6 pt prije 1
+                                                                6 poslije
+
+===== [vvg-upute-radovi-2013 | str. 21] =====
+Slika 13. Stil Literatura
+
+Ceste primjedbe na pisanje rada
+
+        Neujednacenost stila oblikovanja teksta u cijelom radu (neprimjenjivanje stilova
+           oblikovanja teksta ili njihovo nepravilno koristenje).
+
+        Pisanje hijerarhijskih (nasljednih) rednih brojeva (redni brojevi i kod
+           hijerarhijskog pisanja u hrvatskom jeziku zavrsavaju tockom.
+
+        Naslovi razlicite razine vizualno ne odrazavaju razinu (pisanje jednakim
+           oblikom i velicinom slova)
+
+        Naslov rada nije identican onome u Zadatku.
+        Samo glavni naslovi mogu biti uvijek na novoj stranici, ostali naslovi se
+
+           nastavljaju na prethodnoj stranici, ako tamo ima mjesta bar za jedan redak teksta
+           iza naslova.
+         Nepravilno pisanje stavki nabrajanja (pravopisno i stilski).
+         Nepravilno pisanje popisa literature.
+         Strane rijeci treba pisati kosim slovima.
+         Iza zakljucka se vise naslovi ne numeriraju (Literatura, Popis kratica i akronima,
+           i td.)
+         Pisanje naslova u upitnom obliku nije preporucljivo i treba izbjegavati.
+         Pisanje rada u prvom licu nije dozvoljeno.
+         Komande sustava i aplikacija, njihovu sintaksu, te programski kod trebate pisati
+           slovima jednake sirine, npr. consolas (preferirano) ili eventualno courier.

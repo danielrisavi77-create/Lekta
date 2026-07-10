@@ -1,0 +1,178 @@
+{
+  "facultyId": "kifst",
+  "styleToken": "kifst",
+  "status": "draft",
+  "outcome": "custom-spec",
+  "label": "APA autor-godina (sluzbene upute KIFST)",
+  "sourceId": "kifst-upute-diplomski-2022",
+  "sourceLabel": "Upute za izradu diplomskog rada (Kinezioloski fakultet u Splitu)",
+  "verifiedAt": null,
+  "verifiedBy": null,
+  "verifiedHash": null,
+  "accessDate": true,
+  "authorFormat": {
+    "order": "family-first",
+    "initials": "dotted-compact",
+    "separator": ", ",
+    "finalJoiner": null
+  },
+  "inText": {
+    "mode": "author-year",
+    "template": "({authorsShort}, {year})",
+    "withPagesTemplate": "({authorsShort}, {year}, str. {pages})",
+    "authorsShort": {
+      "twoJoiner": " i ",
+      "etAlAfter": 3,
+      "etAlText": "i sur."
+    },
+    "provenance": {
+      "kind": "worked-example",
+      "quoteRaw": "Npr. Posljedicno ta mjerenja mogu pomoi u identifikaciji talenata (Carter, 1985) ili",
+      "sourcePage": "str. 4",
+      "note": "Izvor daje oba oblika: (Prezime, godina) i narativni Prezime (godina), npr. 'Grgantov, Kati i Jankovi (2006) su imali za cilj utvrditi...'. Pravila: do 2 autora uvijek svi; 3 do 5 autora prvi put svi, npr. '(Buss, Salovey, Schmitt i Miller, 2005)', svaki sljedeci put '(Buss i sur., 2005)'; vise od 5 autora uvijek samo prvi + 'i sur.'. Alat generira skraceni oblik (etAlAfter 3), puni prvi navod za 3 do 5 autora dokumentiran je ovdje i u contradictions. withPagesTemplate iz primjera doslovnog citata '(Miljkovi, 2009, str.197)' na str. 4; u ekstrakciji 'str.197' bez razmaka, razmak dodan kao vjerojatni artefakt izvlacenja teksta, potvrditi pri verifikaciji. twoJoiner ' i ' izveden iz troautorskog narativnog primjera, primjer za tocno 2 autora nije naveden."
+    }
+  },
+  "numbering": null,
+  "bibliography": {
+    "sort": "alphabetical"
+  },
+  "sourceTypes": [
+    {
+      "type": "knjiga",
+      "template": "{authors} ({year}). {title}. {place}: {publisher}.",
+      "requiredFields": [
+        "authors",
+        "year",
+        "title",
+        "place",
+        "publisher"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Pinel, J. (2001). Bioloska psihologija. Jastrebarsko: Naklada Slap.",
+        "sourcePage": "str. 5",
+        "note": "Autor-godina s tockom iza zagrade godine, zatim naslov, pa mjesto izdanja, dvotocka, izdavac (starija APA praksa s mjestom izdanja). Jedini primjer knjige ima jednog autora; oblik visestrukih autora (separator ', ', bez zavrsnog veznika, inicijali s tockom) preuzet iz primjera clanka na istoj stranici. Puno ime autora nije navedeno u izvoru pa se u inputu ne izmislja."
+      },
+      "example": {
+        "input": {
+          "type": "knjiga",
+          "authors": "Pinel, J.",
+          "year": "2001",
+          "title": "Bioloska psihologija",
+          "place": "Jastrebarsko",
+          "publisher": "Naklada Slap"
+        },
+        "expected": "Pinel, J. (2001). Bioloska psihologija. Jastrebarsko: Naklada Slap."
+      }
+    },
+    {
+      "type": "clanak",
+      "template": "{authors} ({year}). {title}. {container}, {volume}[[ ({issue})]], {pages}.",
+      "requiredFields": [
+        "authors",
+        "year",
+        "title",
+        "container",
+        "volume",
+        "pages"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Pausi, J., Cavala, M., Kati, R. (2006). Relations of the Morphological Characteristic Latent",
+        "sourcePage": "str. 5",
+        "note": "Puni primjer (spojeni prelomljeni retci): 'Pausi, J., Cavala, M., Kati, R. (2006). Relations of the Morphological Characteristic Latent Structure and Body Posture Indicators in Children Aged Seven to Nine Years. Collegium Antropologicum, 30 (3), 621-627.'. Autori u popisu literature odvojeni zarezom BEZ veznika 'i' ili '&' prije zadnjeg (razlika od APA 7); casopis pa zarez, godiste, broj u zagradi S razmakom ('30 (3)', razlika od APA 7 '30(3)'), zarez, stranice, tocka. Visestruki inicijali bez razmaka po primjeru 'Meyer, A.S., Bock, K.' sa str. 14."
+      },
+      "example": {
+        "input": {
+          "type": "clanak",
+          "authors": "Pausi, J.; Cavala, M.; Kati, R.",
+          "year": "2006",
+          "title": "Relations of the Morphological Characteristic Latent Structure and Body Posture Indicators in Children Aged Seven to Nine Years",
+          "container": "Collegium Antropologicum",
+          "volume": "30",
+          "issue": "3",
+          "pages": "621-627"
+        },
+        "expected": "Pausi, J., Cavala, M., Kati, R. (2006). Relations of the Morphological Characteristic Latent Structure and Body Posture Indicators in Children Aged Seven to Nine Years. Collegium Antropologicum, 30 (3), 621-627."
+      }
+    },
+    {
+      "type": "poglavlje",
+      "template": "{authors} ({year}). {title}. U {editor} (ur.), {container}[[ (str. {pages})]].[[ {place}: {publisher}.]]",
+      "requiredFields": [
+        "authors",
+        "year",
+        "title",
+        "editor",
+        "container"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "B. Males, . Mileti (ur.), Zbornik radova Meunarodno znanstveno-strucnog",
+        "sourcePage": "str. 14",
+        "note": "Primjer rada u zborniku (str. 14, primjer 4: 'Pausi, J., Kosinac, Z., Pazanin, R. (2005). Procjena pouzdanosti i valjanosti mjernog instrumenta Skoliozometra... U D. Sekuli, B. Males, . Mileti (ur.), Zbornik radova...') odrezan je u ekstrakciji nakon naziva zbornika. Potvrdjen je pocetak: autori, godina, naslov rada, 'U' bez dvotocke, urednici u obliku 'I. Prezime' (given-first, upisuju se doslovno u polje editor), '(ur.),', naziv zbornika. Zavrsetak (stranice, mjesto, izdavac) IZVEDEN po analogiji s oblikom knjige iz istog izvora; potvrditi ili oboriti pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "mrezni",
+      "template": "{authors} ({year}). {title}.[[ {place}: {publisher}.]] Postavljeno {accessed} sa {url}.",
+      "requiredFields": [
+        "authors",
+        "year",
+        "title",
+        "url",
+        "accessed"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Postavljeno 3.5.2000 sa http://www.apa.org/webref.html.",
+        "sourcePage": "str. 14",
+        "note": "Jedini mrezni primjer u izvoru je elektronicki dokument BEZ osobnog autora (naslov na mjestu autora): 'Electronic reference formats recommended by the American Psychological Association. (19.11.1999). Washington, DC: American Psychological Association. Postavljeno 3.5.2000 sa http://www.apa.org/webref.html.'. Opci predlozak s autorom izveden spajanjem autor-godina pocetka (iz primjera knjige i clanka) i zavrsne formule preuzimanja 'Postavljeno <datum> sa <URL>.' iz tog primjera. Datum pristupa je obavezan po primjeru. Potvrditi pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "zavrsni",
+      "template": "{authors} ({year}). {title} (diplomski rad). {place}: {institution}.",
+      "requiredFields": [
+        "authors",
+        "year",
+        "title",
+        "place",
+        "institution"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Pausi, J. (2007). Konstrukcija i vrednovanje mjernih postupaka za procijenu tjelesnog",
+        "sourcePage": "str. 5",
+        "note": "Izvor ima rubriku '3) Doktorske disertacije, magistarski/diplomski radovi' s primjerom koji je u ekstrakciji odrezan nakon pocetka naslova. Potvrdjen je pocetak (autor, godina u zagradi s tockom, naslov); oznaka vrste rada u zagradi i 'mjesto: ustanova' zavrsetak IZVEDENI po analogiji s oblikom knjige iz istog izvora (izdavac zamijenjen ustanovom). Potvrditi ili oboriti pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "propis",
+      "template": "{title} ({year}). {container}[[, {issue}]].[[ {url}]]",
+      "requiredFields": [
+        "title",
+        "year",
+        "container"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Redoslijed referenci u popisu koristene literature treba pisati abecednim redom prema",
+        "sourcePage": "str. 5",
+        "note": "Izvor uopce ne obraduje citiranje propisa (kinezioloske upute, nema pravnih izvora u primjerima). Predlozak izveden iz opceg autor-godina obrasca izvora: naslov propisa na mjestu autora, godina, glasilo (npr. Narodne novine) u polju container, broj u issue. Potvrditi ili oboriti pri verifikaciji."
+      },
+      "example": null
+    }
+  ],
+  "contradictions": [
+    "PRIOR apa7 vs izvor: izvor izrijekom kaze 'CITIRANJE I NAVOENJE IZVORA PO APA STANDARDU' (str. 14), ali pravila i primjeri odgovaraju starijoj APA praksi, ne APA 7: mjesto izdanja kod knjige, autori u popisu literature bez veznika '&' ili 'i' prije zadnjeg, '30 (3)' s razmakom, 'Postavljeno <datum> sa <URL>' umjesto APA 7 oblika, prvi navod 3 do 5 autora svi pa 'i sur.'. Zato custom-spec iz worked-example primjera, ne style-pin apa7.",
+    "Dvostruko pravilo u tekstu (3 do 5 autora: prvi put svi, kasnije prvi + 'i sur.') ne stane u jedan etAlAfter; alat generira skraceni oblik (etAlAfter 3), puni prvi navod dokumentiran u napomeni.",
+    "Primjeri za rad u zborniku (str. 14) i za disertacije/diplomske radove (str. 5) odrezani su u ekstrakciji pa su zavrseci tih predlozaka izvedeni (derived), a poglavlje i zavrsni nemaju example.",
+    "Predlozak poglavlja LITERATURA na str. 14 prikazuje numerirane stavke (1. do 4.) iako je redoslijed abecedni i str. 5 izrijekom trazi abecedni red; numeracija je tretirana kao oblikovanje popisa, ne kao numericki citatni stil. Potvrditi pri verifikaciji treba li popis numerirati.",
+    "Primjer doslovnog citata u ekstrakciji glasi '(Miljkovi, 2009, str.197)' bez razmaka iza 'str.'; withPagesTemplate koristi 'str. {pages}' s razmakom uz pretpostavku artefakta izvlacenja teksta. Potvrditi pri verifikaciji.",
+    "Visestruki inicijali bez razmaka (dotted-compact) potvrdjeni samo primjerom 'Meyer, A.S., Bock, K.' sa str. 14; svi ostali primjeri imaju jednoslovne inicijale."
+  ]
+}

@@ -1,0 +1,188 @@
+{
+  "facultyId": "pbf",
+  "styleToken": "pbf",
+  "status": "draft",
+  "outcome": "custom-spec",
+  "label": "PBF harvardski sustav (sluzbene upute za diplomski rad)",
+  "sourceId": "pbf-upute-diplomski-2018",
+  "sourceLabel": "Upute za izradu diplomskog rada (Prehrambeno-biotehnoloski fakultet Sveucilista u Zagrebu)",
+  "verifiedAt": null,
+  "verifiedBy": null,
+  "verifiedHash": null,
+  "accessDate": true,
+  "authorFormat": {
+    "order": "family-first",
+    "initials": "dotted-spaced",
+    "separator": ", ",
+    "finalJoiner": null,
+    "etAlAfter": null
+  },
+  "inText": {
+    "mode": "author-year",
+    "template": "({authorsShort}, {year})",
+    "authorsShort": {
+      "twoJoiner": " i ",
+      "etAlAfter": 3,
+      "etAlText": "i sur."
+    },
+    "provenance": {
+      "kind": "worked-example",
+      "quoteRaw": "1998); ako su dva autora na radu: samo prezimena oba autora i godina, npr. (Taylor i Walker, 1996); a",
+      "sourcePage": "str. 7",
+      "note": "Sekcija 5.7: 1 autor '(Walker, 1998)', 2 autora '(Taylor i Walker, 1996)', 3+ prvi autor + 'i sur.' '(Lansen i sur., 1997)'. Vise radova iste godine dobiva slovne oznake (Walker, 1998a; Walker, 1998b) sto motor ne generira. Norme se citiraju brojem norme s godinom (ISO 520, 1997), nepoznat autor weba kao Anonymous i godina; izvor ne opisuje citatnicu s brojem stranice pa withPagesTemplate nije postavljen."
+    }
+  },
+  "numbering": null,
+  "bibliography": {
+    "sort": "alphabetical"
+  },
+  "sourceTypes": [
+    {
+      "type": "knjiga",
+      "template": "{authors} ({year}) {title},[[ {volume}. izd.,]] {publisher}, {place}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "publisher",
+        "place"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Timbrell, J. A. (1995) Introduction to toxicology, 2. izd., Taylor & Francis, London.",
+        "sourcePage": "str. 7",
+        "note": "Primjer za knjigu (sekcija 5.7). Broj izdanja ide u polje volume (2 -> '2. izd.,'). Isti oblik bez izdanja potvrdjuje referenca na str. 2: 'Kniewald, J. (1993) Metodika znanstvenog rada, Multigraf, Zagreb.'"
+      },
+      "example": {
+        "input": {
+          "type": "knjiga",
+          "authors": "Timbrell, J. A.",
+          "year": "1995",
+          "title": "Introduction to toxicology",
+          "volume": "2",
+          "publisher": "Taylor & Francis",
+          "place": "London"
+        },
+        "expected": "Timbrell, J. A. (1995) Introduction to toxicology, 2. izd., Taylor & Francis, London."
+      }
+    },
+    {
+      "type": "poglavlje",
+      "template": "{authors} ({year}) {title}. U:[[ {editor} (ur.)]] {container},[[ {volume}. izd.,]] {publisher}, {place}[[, str. {pages}]].",
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "container",
+        "publisher",
+        "place"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Primjer za stranicu u knjizi:",
+        "sourcePage": "str. 7",
+        "note": "Izvor IMA primjer za stranicu u knjizi (najavljen na str. 7), ali je izgubljen prelomom stranice u ekstrakciji (isjecak str. 8 pocinje usred teksta 'metoda).'). Predlozak izveden iz oblika za knjigu i clanak: tocka iza naslova rada kao kod clanka, zarezi izmedju izdavaca i mjesta kao kod knjige; oznaka 'U:', polozaj urednika '(ur.)' i 'str.' ispred raspona su pretpostavke. Obavezno usporediti s primjerom u PDF-u pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "clanak",
+      "template": "{authors} ({year}) {title}. {container} {volume}, {pages}.[[ doi:{doi}]]",
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "container",
+        "volume",
+        "pages"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Renner, G., Pongratz, K., Braunegg, G. (1996) Production of poly(3-hydroxybutyrate-co-4-",
+        "sourcePage": "str. 7",
+        "note": "Primjer za rad u periodickom casopisu: 'Renner, G., Pongratz, K., Braunegg, G. (1996) Production of ... Food Technol. Biotechnol. 34, 91-95.' Naziv casopisa u SKRACENOM obliku po WoS Journal Title Abbreviations (korisnik unosi skraceni naziv, alat ne skracuje). Volumen bez godista u zagradi, zarez pa stranice. Doi varijanta iz primjera Guler (str. 8): '... Int. J. Food Sci. Technol.42, 235-245. doi:10.1111/j.1365-2621.2006.01505.x'."
+      },
+      "example": {
+        "input": {
+          "type": "clanak",
+          "authors": "Renner, G.; Pongratz, K.; Braunegg, G.",
+          "year": "1996",
+          "title": "Production of poly(3-hydroxybutyrate-co-4-hydroxybutyrate) by Comamonas testosteronii A3",
+          "container": "Food Technol. Biotechnol.",
+          "volume": "34",
+          "pages": "91-95"
+        },
+        "expected": "Renner, G., Pongratz, K., Braunegg, G. (1996) Production of poly(3-hydroxybutyrate-co-4-hydroxybutyrate) by Comamonas testosteronii A3. Food Technol. Biotechnol. 34, 91-95."
+      }
+    },
+    {
+      "type": "mrezni",
+      "template": "{authors} ({year}) {title}[[. {container}]], <{url}>. Pristupljeno {accessed}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "url",
+        "accessed"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Anonymous (2002) Sirovine i sastojci energetskih plocica, <http://www.vitamini.hr>.",
+        "sourcePage": "str. 8",
+        "note": "Primjer web stranice nepoznatog autora; URL u siljastim zagradama, iza 'Pristupljeno' datum. Izvorni primjer ima '11 prosinca' bez tocke iza broja (tipfeler u izvoru), zadrzano doslovno u expected. Varijanta s organizacijom (IFIS, str. 8) dodaje naziv organizacije iza naslova s tockom, pokriveno opcionalnim {container}. Nepoznat autor se navodi kao Anonymous."
+      },
+      "example": {
+        "input": {
+          "type": "mrezni",
+          "authors": "Anonymous",
+          "year": "2002",
+          "title": "Sirovine i sastojci energetskih plocica",
+          "url": "http://www.vitamini.hr",
+          "accessed": "11 prosinca 2007"
+        },
+        "expected": "Anonymous (2002) Sirovine i sastojci energetskih plocica, <http://www.vitamini.hr>. Pristupljeno 11 prosinca 2007."
+      }
+    },
+    {
+      "type": "zavrsni",
+      "template": "{authors} ({year}) {title}, diplomski rad, {institution}[[, {place}]].",
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "institution"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Literaturni navodi u poglavlju Literatura pisu se prema pravilu za pisanje referenci na kraju rada kao",
+        "sourcePage": "str. 6",
+        "note": "Upute ne obraduju citiranje zavrsnih/diplomskih radova kao bibliografske jedinice; predlozak izveden iz oblika za knjigu (izdavac zamijenjen ustanovom, dodana oznaka vrste rada 'diplomski rad' po analogiji s '2. izd.' umetkom). Za detalje izvor upucuje na Kniewald (1993) Metodika znanstvenog rada. Potvrditi ili oboriti pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "propis",
+      "template": "{title} ({year}) {container}[[ {issue}]].",
+      "requiredFields": [
+        "title",
+        "year",
+        "container"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "npr. Pravilnika objavljenih u sluzbenom glasilu u istoj godini (Pravilnik, 2004a; Pravilnik 2004b). Kod",
+        "sourcePage": "str. 7",
+        "note": "Izvor propisuje samo citatnicu propisa u tekstu (Pravilnik, 2004a), bez primjera bibliografske jedinice. Predlozak izveden iz worked-examplea za djelo u izdanju institucije (str. 8): 'Guidelines for the preparation of bibliographies (1983) United States Department of Agriculture, Washington.' - naslov (godina) izvor, uz broj glasila u issue. Potvrditi ili oboriti pri verifikaciji."
+      },
+      "example": null
+    }
+  ],
+  "contradictions": [
+    "Izvor uz harvardski sustav izricito dopusta i alternativni numericki sustav: 'Osim harvardskog sustava moze se primijeniti i tzv. numericki sustav citiranja gdje referenca dobiva' broj prema redoslijedu pojavljivanja, u tekstu broj u zagradi, npr. (5) (str. 8). Spec pokriva samo harvardski sustav jer numericki u izvoru nema vlastite primjere oblikovanja referenci; prior 'harvard' time je potvrdjen kao primarni.",
+    "Worked-example za poglavlje (stranicu u knjizi) u izvoru postoji, ali je u ekstrakciji izgubljen prelomom stranice 7 na 8; poglavlje je derived i trazi provjeru u PDF snapshotu.",
+    "Zavrsni rad i propis nisu obradjeni kao bibliografske jedinice u uputama; oba su derived (propis iz primjera djela u izdanju institucije).",
+    "Nazive casopisa treba pisati skraceno po WoS Journal Title Abbreviations (str. 7); alat ne skracuje automatski, korisnik mora unijeti skraceni naziv.",
+    "Clanak u elektronickom casopisu ima u izvoru dvije varijante (str. 8): '[online]' s URL-om i 'Pristupljeno' datumom, ili doi na kraju; template pokriva doi varijantu, [online] varijanta nije izrazena.",
+    "Vise radova istog autora u istoj godini oznacava se slovima uz godinu (1998a, 1998b), a vise Anonymous citata rednim brojem (Anonymous 3, 2008); to je izvan dosega generatora, provjerava se ljudski."
+  ]
+}

@@ -1,0 +1,278 @@
+===== [pbf-upute-diplomski-2018 | str. 2] =====
+2. PRIPREMA ZA RAD
+
+Mentor u dogovoru sa studentom odreuje program rada. Studentu moraju biti jasni ciljevi koji se radom
+zele postii. Mentor ukazuje studentu je li u predlozenom programu rada nesto novo ili e student svojim
+radom dokazati, odnosno potvrditi, rezultate nekih ranije provedenih istrazivanja.
+Nakon upoznavanja s temom istrazivanja, student pristupa pregledu i proucavanju literature, cime se
+upoznaje s onim sto se do tog trenutka istrazivalo, kako su objasnjene do tada utvrene cinjenice i kakvi
+su zakljucci donijeti. Prethodno proucavanje literature pomaze u upoznavanju metoda rada u odabranom
+podrucju, razmisljanju o cinjenicama koje treba dobiti ili potvrditi, s ciljem da se student pripremi za
+eksperimentalni rad.
+Upute o pripremi i nacinima pretrazivanja literature koristenjem tiskanih materijala ili elektronickih
+izvora student moze nai u udzbeniku:
+Kniewald, J. (1993) Metodika znanstvenog rada, Multigraf, Zagreb.
+i u prirucniku:
+Stojanovski, J. (2007) Online baze podataka - Prirucnik za pretrazivanje, 2. izd., Hrvatska akademska
+i istrazivacka mreza - CARnet, Zagreb. (dostupno na http://www.online-baze.hr/prirucnik).
+Preporuca se studentima koristenje usluga Centra za online baze podataka s pristupom bazama
+(http://www.online-baze.hr) s racunala u multimedijskoj ucionici na PBF-u i u Nacionalnoj i
+sveucilisnoj knjiznici, gdje su pretrazivanja besplatna.
+Nakon pretrazivanja literature na temelju kljucnih rijeci pristupa se razradbi ideje zadatka i postavljanju
+radne hipoteze od koje se u radu polazi i koju treba dokazati. Radnom hipotezom se pretpostavlja
+objasnjenje cinjenica i pojava koje e biti provjerene planiranim istrazivanjima.
+
+3. PLANIRANJE I IZVOENJE EKSPERIMENATA
+
+Nakon sto je proucena literatura i postavljena radna hipoteza zadatka, pristupa se organizaciji
+istrazivanja. U biotehnickom znanstvenom podrucju istrazivanja su povezana s izvoenjem
+eksperimenata. Planiranje eksperimenata i prikupljanje podataka vazan je i odgovoran rad jer o tome
+ovisi kakve e se cinjenice utvrditi, na temelju kojih e se dati objasnjenja i izvesti zakljucci. Zato treba
+provesti preliminarne eksperimente, na temelju kojih se planira onaj eksperiment koji e sluziti kao
+odgovor na postavljeni radni zadatak. Vrlo pazljivo se mora odabrati slijed izvoenja eksperimenata,
+koji relevantno ukazuju na cinjenice potrebne za objasnjenje pojava i dokazivanje radne hipoteze.
+Nakon postavljanja plana eksperimenata, moze se pristupiti njihovu izvoenju. Posao je slozen i
+zahtjeva: primjenu instrumenata i aparatura, pripremu materijala i velik broj razlicitih operacija. Danas
+postoje vrlo sofisticirani ureaji i rad na njima zahtjeva odreeno predznanje, zato je vazno da se student
+prije rada na njima dobro upozna s tehnikom rada, umjeravanjem instrumenata, izradom bazdarnih
+dijagrama za pojedina mjerenja i slicno. Student mora pazljivo pratiti tijek eksperimenata, znati i
+razumjeti kako se provode odreene metode rada te uociti, ako je mogue izbjei i/ili izracunati nastale
+pogreske pri radu.
+Za vrijeme provoenja eksperimenata student mora voditi dnevnik rada. Podatke o uvjetima pri
+izvoenju eksperimenata kao sto je priprema materijala, otopina i drugo treba biljeziti i nakon zavrsenih
+eksperimenata jasno prikazati u obliku tablica ili grafickih prikaza kako bi se dobila prava slika o
+djelovanju primijenjenog postupka; o trendu koji se pojavljuje i povezanosti izmeu pojava.
+Preliminarna obrada podataka moze pokazati da li se dobro radilo, sto se propustilo i hoe li biti
+potrebno ponoviti dio eksperimenata ili provesti dodatne eksperimente.
+
+===== [pbf-upute-diplomski-2018 | str. 4] =====
+5.3. Numeracija stranica i oznacavanje poglavlja
+
+Numeracija diplomskog rada zapocinje tekstom u poglavlju Uvod, a zavrsava zadnjom stranicom
+poglavlja Literatura. Pregled stranica koje se ne numeriraju: naslovna stranica identicna koricama,
+naslov diplomskog rada, gdje je rad izraen i imena mentora i asistenta koji su pomogli pri izradi,
+zahvala (nije nuzna), Temeljna dokumentacijska kartica na hrvatskom i engleskom jeziku, sadrzaj,
+prilozi.
+Unutar samog rada, navoenje naslova glavnih poglavlja i podpoglavlja mora biti ujednaceno:
+
+    - glavno poglavlje, npr. 1. (Times New Roman 16, Bold, velikim slovima)
+    - podpoglavlje prve dubine, npr. 2.1. (Times New Roman 12, Bold, velikim slovima)
+    - podpoglavlje druge dubine, npr. 2.1.1. (Times New Roman 12)
+    - podpoglavlje tree dubine, npr. 2.1.1.1. (Times New Roman 12, Italic).
+Preporuca se navoenje podpoglavlja zavrsiti s podpoglavljem tree dubine budui da je najvei broj
+stranica rada do 80.
+
+===== [pbf-upute-diplomski-2018 | str. 4] =====
+Diplomski rad mora sadrzavati sljedea poglavlja ili dijelove:
+
+1. UVOD
+2. TEORIJSKI DIO
+2.1. Podpoglavlje
+2.1.1. Podpoglavlje
+3. EKSPERIMENTALNI DIO
+3.1. Podpoglavlje
+3.1.1. Podpoglavlje
+4. REZULTATI I RASPRAVA
+4.1. sa ili bez Podpoglavlja (ovisno o samom radu)
+5. ZAKLJUCCI
+6. LITERATURA
+7. PRILOZI (nisu nuzni)
+7.1. Podpoglavlje
+7.1.1. Podpoglavlje
+
+Uvod je izuzetno bitan dio diplomskog rada koji sluzi za uvoenje citatelja u problematiku istrazivanja
+koje je tema diplomskog rada. Ovaj dio daje ton i kontekst citavom diplomskom radu jer mora sazeto
+prikazati razloge i svrhu istrazivanja, postaviti pitanja na koja e istrazivanje dati odgovor i metodologiju
+kojom e se odgovoriti na postavljena pitanja. Uvod treba koncizno i jednostavno objasniti vaznost
+istrazivanja i smjestiti ga u siri kontekst pa treba izbjegavati suvisna objasnjenja. Uvod treba sadrzavati
+kratki opis dosadasnjih spoznaja u podrucju odabranog istrazivanja, precizno definirati pitanja na koja
+e istrazivanje dati odgovor te navesti metode istrazivanja kojima se namjerava dobiti rezultate cijom
+e se obradom odgovoriti na postavljena pitanja. U Uvodu se nikako ne navode dobiveni rezultati. Uvod
+se pise u pasivnom obliku, npr. ,,Istrazit e se.."; Odgovorit e se..", a ne ,,Istrazit u ili odgovorit u".
+Uvod moze imati najvise dvije stranice.
+
+Teorijski dio odnosno pregled literature je prikaz do sada poznatih spoznaja o odabranoj temi
+istrazivanja. Pregled literature mora sadrzavati najvaznije literaturne navode koji su usko povezani s
+istrazivanjem koje se provodi u diplomskom radu i pitanjima na koja istrazivanje pokusava dati odgovor.
+Veina literature bi trebala biti iz skupine znanstvenih radova objavljenih u znanstvenim casopisima
+zastupljenima u bazama podataka sadrzanim u WoSCC (Web of Science Core Collection) pri cemu
+treba citirati uglavnom novije radove (objavljene u zadnjih pet godina). Ako je potrebno, u teorijskom
+dijelu se moze opisati i prenijeti neki dio iz udzbenika ili neki teorijski pristup problemu te prikazati
+neki kljucni grafikon, tablicu, shemu, ali samo ako je u uskoj vezi s pitanjima na koje diplomski rad
+pokusava odgovoriti. Ako se u radu koriste ilustracije ili tablice preuzete iz publikacija drugih autora,
+
+===== [pbf-upute-diplomski-2018 | str. 5] =====
+ispitanicima, analitickim metodama, postrojenjima na kojima su pokusi provoeni, uvjetima u kojima
+su pokusi provedeni (temperatura, tlak, pH i sl.) odnosno svim eksperimentalnim materijalima i
+metodama ovisno o vrsti i nacinu istrazivanja, a kako bi se na temelju toga mogli vjerodostojno ponoviti
+svi opisani postupci. Za kemijske spojeve treba navesti sva svojstva, cistou, kolicinu, proizvoaca,
+izvor i postupak pripremanja, ponekad i fizicko-kemijska svojstva. Potrebno je navoditi genericke i
+kemijske nazive, a ne samo komercijalna imena, a prema potrebi oboje. Na primjer, za voni sok treba
+navesti naziv proizvoaca, godinu berbe, porijeklo i druge karakteristike. Mikroorganizme, biljke i
+eksperimentalne zivotinje valja tocno opisati (rod, vrsta, soj, spol i dr.), a najbolje se pritom pridrzavati
+prihvaenih meunarodnih dogovora. Za ispitanike je potrebno navesti raspodjelu s obzirom na dob,
+spol, zdravstveni status te antropometriju. Podaci o koristenoj opremi trebali bi sadrzavati naziv i tip te
+proizvoaca. Ako se istrazivanje provodi na pilot postrojenjima ili industrijskim postrojenjima, iste je
+potrebno detaljno opisati i priloziti shemu i/ili fotografiju detalja ili citavog ureaja. Ako se radi o dobro
+poznatoj metodi i/ili primjenjenom standardu potrebno je navesti odgovarajuu literaturnu referencu.
+Pri opisivanju osobito je bitna tocnost i jasnoa. Potrebno je provesti statisticku obradu podataka, a
+statisticke metode opisati u podpoglavlju Obrada podataka. Glavna karakteristika dobrog istrazivanja je
+njegova ponovljivost, zato ovo poglavlje mora biti napisati detaljno kako bi bilo tko mogao ponoviti
+provedena istrazivanja i provjeriti rezultate rada.
+
+Rezultati i Rasprava su jedno od najvaznijih poglavlja diplomskog rada. Rezultati istrazivanja prikazuju
+se u tablicama ili grafickim prikazima. Isti rezultati ne smiju se prikazivati i u tablicama i u grafickim
+prikazima.
+Prije samog navoenja rezultata, stranica koja slijedi iza naslova ovog poglavlja mora sadrzavati opisno
+objasnjenje teme diplomskog rada, sto je tijekom istrazivanja izmjereno i sto e biti prikazano te na koji
+nacin uz eventualna obrazlozenja.
+Rezultati moraju biti izneseni jasno i precizno. Pri iznosenju brojcanih pokazatelja treba uvijek iznositi
+i pouzdanost metoda mjerenja, kao i pri prikazu statistickih podataka. Broj ponovljenih mjerenja treba
+navesti u tekstu, a rezultate vise puta ponovljenih mjerenja treba statisticki obraditi najprikladnijom
+statistickom metodom i rezultate prikazati u tablicama ili pomou slikovnih prikaza. Rezultate treba
+navoditi logicnim slijedom, sto cesto nije i slijed kojim se radilo. Potrebno je opisati eksperimentalne
+pristupe, ali bez ponavljanja detalja o materijalu i metodama.
+Vazno je da opisi tablica i slika budu cjeloviti i potpuni, tako da svaki zasebno budu razumljivi bez
+citanja ostalog dijela teksta. U tekstu rasprave prikazanih rezultata potrebno je citirati prikazane tablice
+i slike (na primjer: rezultati istrazivanja u tablici 1 i/ili slici 1 prikazuju da....; dobiveni rezultati
+prikazani u tablici 1 i/ili slici 1 podudaraju se s rezultatima drugih autora koji su u svojim istrazivanjima
+dokazali da...). U raspravi se ne ponavljaju podaci izneseni u tablicama i slikama te zbog toga prije
+pisanja rasprave treba sabrano i temeljito promisliti o vlastitim i rezultatima drugih autora, procijeniti
+vrijednost vlastitih rezultata i njihovo znacenje. Potrebno je opisati prikazane odnose i nacela koji
+proizlaze iz dobivenih rezultata te ih komentirati; istaknuti iznimke; povezanost ili nedostatke
+povezanosti meu rezultatima; definirati nejasne rezultate; procijeniti kako se izneseni rezultati i njihovo
+tumacenje slazu s objavljenim rezultatima; jasno iznijeti teorijske i prakticne posljedice vlastitih
+rezultata. Svrha rasprave prikazanih rezultata je da se prikazu odnosi izmeu dobivenih rezultata i ranije
+utvrenih cinjenica.
+Na kraju poglavlja Rezultati i Rasprava treba dati kratak opis doprinosa vlastitog istrazivanja na temelju
+objektivne procjene. To treba povezati s pitanjima postavljenim u Uvodu diplomskog rada, na koja ovdje
+
+===== [pbf-upute-diplomski-2018 | str. 6] =====
+Zakljucak ili Zakljucci (ako ih ima vise) je poglavlje u kojem se na temelju rezultata vlastitog
+istrazivanja i njihovog objasnjenja u poglavlju Rezultati i Rasprava pokusava donijeti zakljucke o
+znacenju rezultata. Zakljucke treba pisati sto konciznije, uz argumentaciju koja mora u potpunosti
+proizai iz dobivenih rezultata bez navoenja tuih rezultata. Bolje je napisati manje dobro utemeljenih
+zakljucaka nego nerealno zakljucivati nesto sto se iz rezultata ne moze pouzdano zakljuciti. Svakako
+treba izbjegavati samo ponavljanje rezultata bez njihovog objasnjenja. Zbog preglednosti, zakljucci se
+uvijek prikazuju u numeriranim odsjeccima. Zakljucci se pisu na najvise dvije stranice.
+
+Literatura je poglavlje s popisom literaturnih navoda za sve radove koji su koristeni i citirani u
+diplomskom radu. Literaturni navodi moraju biti sto kvalitetnije i bolje je da rad ima manje kvalitetnih
+referenci relevantnih za istrazivanje nego mnogo zastarjelih ili nepouzdanih izvora podataka. Broj
+literaturnih navoda ovisi o vrsti i temi rada, to moze biti 20 publikacija, a moze biti i do 100 publikacija.
+Literaturni navodi u poglavlju Literatura pisu se prema pravilu za pisanje referenci na kraju rada kao
+citat (vidi detaljna objasnjenja u Kniewald, J. (1993) Metodika znanstvenog rada, Multigraf, Zagreb).
+Literaturni navodi se mogu svrstati u poglavlju Literatura na kraju diplomskog rada na 2 nacina: prema
+harvardskom sustavu ili numerickom sustavu.
+
+Prilozi je poglavlje u kojem se abecednim redom moze prikazati popis koristenih kratica, popis
+koristenih jedinica ili shema i fotografija koje mogu doprinijeti boljem razumijevanju rezultata
+istrazivanja. Takoer, u prilozima se mogu dati rezultati koji nisu prikazani u poglavlju Rezultati i
+Rasprava.
+
+Zadnja stranica diplomskog rada je stranica s izjavom o izvornosti ispod koje se navodi ime i prezime
+studenta te vlastorucni potpis: Izjavljujem da je ovaj diplomski rad izvorni rezultat mojeg rada te da se
+u njegovoj izradi nisam koristio/la drugim izvorima, osim onih koji su u njemu navedeni. Ovu stranicu
+treba ukljuciti u digitalni oblik diplomskog rada u pdf formatu kao skeniranu potpisanu stranicu.
+
+5.5. Tablice i slike
+
+Nazivi svih tablica unutar rada pisu se iznad tablica. Nazivi svih slikovnih prikaza unutar rada pisu se
+ispod slika. Sve tablice i slikovni prikazi moraju biti citirani u tekstu, bilo kao dio recenice ili na kraju
+recenice (navedeni u zagradi). Sve slike i tablice moraju biti oznacene u rastuem nizu pocevsi od broja
+1 kroz sva poglavlja do kraja diplomskog rada. Svaka tablica i slika mora imati naveden literaturni navod
+rada iz kojeg su preuzeti koji odgovara izvoru informacije, osim onih koje prikazuju eksperimentalne
+uvjete i rezultate istrazivanja ili su studentovo vlastito autorsko djelo.
+
+5.6. Jedinice i kemijska nomenklatura
+
+Ukoliko se u radu navodi vise od tri jednadzbe potrebno ih je numerirati u rastuem nizu u uglatoj
+zagradi, npr. 1. Koristiti SI sustav jedinica i pisati ih na ujednaceni nacin, u obliku brojnika, npr., g
+cm-3; mL kg-1.
+
+OSNOVNE JEDINICE SI          Znak              Velicina
+                               m                duljina
+                     Naziv    kg                 masa
+
+===== [pbf-upute-diplomski-2018 | str. 7] =====
+Anorganski i organski spojevi trebaju biti imenovani u skladu s odgovarajuom literaturom:
+    1. Hrvatska nomenklatura anorganske kemije, Meunarodna unija za cistu i primijenjenu kemiju,
+         (urednik prijevoda: Vl. Simeon; prijevod: B. Grabari, A. Janekovi, M. Markovi, V. Simeon-
+         Rudolf, Vl. Simeon, H. Vancik), Skolska knjiga, Zagreb, 1996.
+    2. Vodic kroz IUPAC-ovu nomenklaturu organskih spojeva, Meunarodna unija za cistu i
+         primijenjenu kemiju, (urednik prijevoda: V. Rapi; prijevod: I. Bregovec, S. Horvat, K.
+         Majerski, V. Rapi), Skolska knjiga, Zagreb, 2002.
+
+Osim pravila za imenovanje osnovnih organskih spojeva opisanih u ,,Vodicu" postoji i niz prijevoda
+IUPAC-ovih naslova koji se odnose na pojedinacne tipove organskih spojeva (aminokiseline, polimeri,
+ugljikohidrati...) koji su citirani u predgovoru tih preporuka. Nomenklaturna i terminoloska pravila
+objavljena poslije 2001. tiskana su u Biblioteci Hrvatska nomenklatura i terminologija organske kemije
+(urednici: V. Rapi i D. Skare), HDKI/ Kemija u industriji (utemeljeno 2003., do danas izisle 4 knjige).
+Veina tih naslova deponirana je u knjiznici PBF-a.
+
+5.7. Citiranje literaturnih navoda
+
+Literaturni navodi svrstavaju se prema harvardskom sustavu ili numerickom sustavu u poglavlju
+Literatura na kraju diplomskog rada. U harvardskom sustavu se reference u poglavlju Literatura
+poslazu abecednim redoslijedom prema prezimenu prvog autora na radu, a u tekstu se pojavljivanje
+reference oznacuje u zagradi: ako je jedan autor na radu: samo prezime autora i godina, npr. (Walker,
+1998); ako su dva autora na radu: samo prezimena oba autora i godina, npr. (Taylor i Walker, 1996); a
+ako su tri ili vise autora na radu samo prezime prvog autora i suradnici te godina., npr. (Lansen i sur.,
+1997). U oznacavanju vise radova istog/istih autora objavljenih u istoj godini pridruzuju se godini slovne
+oznake, npr. (Walker, 1998a; Walker, 1998b). Na isti nacin oznacava se i navoenje vise dokumenata,
+npr. Pravilnika objavljenih u sluzbenom glasilu u istoj godini (Pravilnik, 2004a; Pravilnik 2004b). Kod
+citiranja normi u tekstu se navodi broj norme ukljucujui godinu objave, npr. (ISO 520, 1997). Ako se
+citira literatura s interneta: navodi se autor i godina, ako je to poznato, a u literaturnom popisu daje se
+cijela referenca; ako autor nije poznat u tekstu se navodi Anonymous i godina kada je web stranica
+postavljena ili osvjezena, npr. (Anonymous, 2008). Ako ima vise takvih citata onda se navodu,
+Anonymous i godina, pridruzuje i redni broj, npr. (Anonymous 3, 2008).
+
+U nastavku su prikazani primjeri pisanja bibliografskih referenci kad su u popisu svrstane prema
+harvardskom sustavu. U bibliografskim referencama za radove objavljene u periodickim casopisima
+nazive casopisa treba pisati u skraenom obliku, pri cemu se treba pridrzavati preporuka Thomson
+Reuters - Web of Science: Journal Title Abbreviations dostupnih na poveznici:
+https://images.webofknowledge.com/images/help/WOS/A_abrvjt.html
+
+Primjer za rad objavljen u periodickom casopisu:
+Renner, G., Pongratz, K., Braunegg, G. (1996) Production of poly(3-hydroxybutyrate-co-4-
+hydroxybutyrate) by Comamonas testosteronii A3. Food Technol. Biotechnol. 34, 91-95.
+
+Primjer za knjigu:
+Timbrell, J. A. (1995) Introduction to toxicology, 2. izd., Taylor & Francis, London.
+
+Primjer za stranicu u knjizi:
+
+===== [pbf-upute-diplomski-2018 | str. 8] =====
+metoda).
+
+Primjer za djelo u izdanju institucije:
+Guidelines for the preparation of bibliographies (1983) United States Department of Agriculture,
+Washington.
+
+Primjeri za izvore s web-stranica:
+         zvanicna stranica (organizacija, udruzenje ...)
+         IFIS (2007) Food Science Central. IFIS - International Food Information Service,
+         <http://www.foodsciencecentral.com> . Pristupljeno 13. prosinca 2007.
+
+         U.S. Department of Agriculture, Agricultural Research Service. 2007. USDA National
+         Nutrient Database for Standard Reference, Release 20. Nutrient Data Laboratory
+         Home Page, <http://www.ars.usda.gov/ba/bhnrc/ndl>. Pristupljeno 10. sijecnja 2008.
+
+         web stranca nepoznatog autora
+         Anonymous (2002) Sirovine i sastojci energetskih plocica, <http://www.vitamini.hr>.
+         Pristupljeno 11 prosinca 2007.
+
+         osobna stranica autora
+         Garfield, E. (2007) Eugene Garfield, Ph.D. � Home Page,
+         <http://www.garfield.library.upenn.edu>. Pristupljeno 12. studenog 2007.
+
+         rad u elektronickom obliku casopisa
+         G�ler, Z. (2007) Changes in salted yoghurt during storage. Int. J. Food Sci. Technol. [online]
+         42, 235-245, <http://www.blackwell-synergy.com> . Pristupljeno 10. prosinca 2007
+         ili uz koristenje identifikatora digitalnog objekta (doi):
+         G�ler, Z. (2007) Changes in salted yoghurt during storage. Int. J. Food Sci. Technol.42, 235-
+         245. doi:10.1111/j.1365-2621.2006.01505.x
+
+Osim harvardskog sustava moze se primijeniti i tzv. numericki sustav citiranja gdje referenca dobiva
+broj prema redoslijedu pojavljivanja u tekstu te je tako npr. referenca koja se pojavljuje peta u slijedu
+oznacena brojem pet u zagradi (5), a u poglavlju Literatura navedena pod rednim brojem pet.

@@ -165,8 +165,9 @@ const TOOL_JS = String.raw`
   }
 
   // Vjeran spec (verificiran iz sluzbenih uputa) ima prednost pred obiteljskim motorom.
+  // Style-pin nema vlastite predloske: dokazuje KOJI stil vrijedi, renderira obiteljski motor.
   function formatWithCurrent(inp) {
-    if (current && current.spec) return C.formatFromSpec(current.spec, inp);
+    if (current && current.spec && !current.spec.pin) return C.formatFromSpec(current.spec, inp);
     return C.formatCitation(inp, current.engineStyle);
   }
 
@@ -254,7 +255,9 @@ const TOOL_JS = String.raw`
       return;
     }
     if (tabs) tabs.style.display = '';
-    if (style.spec) {
+    if (style.spec && style.spec.pin) {
+      el('style-info').innerHTML = '<p>Stil: <strong>' + esc(style.label) + '</strong>. Propisan sluzbenim uputama: &quot;' + esc(style.spec.sourceLabel) + '&quot;, provjereno ' + esc(style.spec.verifiedAt || '') + '. Format: opci ' + esc(style.label) + ' oblik.</p>';
+    } else if (style.spec) {
       el('style-info').innerHTML = '<p>Stil: <strong>' + esc(style.label) + '</strong>. Format prema sluzbenim uputama: &quot;' + esc(style.spec.sourceLabel) + '&quot;, provjereno ' + esc(style.spec.verifiedAt || '') + '.</p>';
     } else {
       el('style-info').innerHTML = '<p>Stil: <strong>' + esc(style.label) + '</strong> (opci oblik). Tvoj fakultet koristi ovaj stil; tocan izgled interpunkcije provjeri u uputama fakulteta ili kod mentora.</p>';
@@ -397,7 +400,18 @@ function loadVerifiedSpecs(engine) {
 
 // Klijentu treba samo render-podskup speca (bez provenijencije/examples), stranica ostaje lagana.
 function clientSpec(spec) {
+  if (spec.outcome === 'style-pin') {
+    // pin: obiteljski motor + provenijencija; ne nosi (i ne mora imati) vlastite predloske
+    return {
+      pin: true,
+      label: spec.label,
+      sourceLabel: spec.sourceLabel,
+      verifiedAt: spec.verifiedAt,
+      accessDate: spec.accessDate !== false,
+    };
+  }
   return {
+    pin: false,
     label: spec.label,
     sourceLabel: spec.sourceLabel,
     verifiedAt: spec.verifiedAt,
@@ -512,9 +526,11 @@ function buildFacultyStylePage(faculty, style, engineJs) {
     generalToolUrl: GENERAL_TOOL_URL,
     style: { token: style.token, label: style.label, engineStyle: style.engineStyle, accessDate: style.accessDate, spec: style.spec },
   };
-  const metaLine = style.spec
-    ? `Vjeran format prema sluzbenim uputama: ${escapeHtml(style.spec.sourceLabel)}, provjereno ${escapeHtml(style.spec.verifiedAt ?? '')}.`
-    : `Stil: ${escapeHtml(style.label)}. Prema profilu ${escapeHtml(faculty.name)} u Lekti.`;
+  const metaLine = style.spec && style.spec.pin
+    ? `Stil propisan sluzbenim uputama: ${escapeHtml(style.spec.sourceLabel)}, provjereno ${escapeHtml(style.spec.verifiedAt ?? '')}. Format: opci ${escapeHtml(style.label)} oblik.`
+    : style.spec
+      ? `Vjeran format prema sluzbenim uputama: ${escapeHtml(style.spec.sourceLabel)}, provjereno ${escapeHtml(style.spec.verifiedAt ?? '')}.`
+      : `Stil: ${escapeHtml(style.label)}. Prema profilu ${escapeHtml(faculty.name)} u Lekti.`;
   const body = `<h1>Generator citata za ${escapeHtml(faculty.name)}</h1>
 <p class="lekta-tool-meta">${metaLine}</p>
 ${toolFormHtml({ withFacultyPicker: false })}

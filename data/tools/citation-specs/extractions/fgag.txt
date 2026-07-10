@@ -1,0 +1,88 @@
+===== [fgag-predlozak-zavrsni-2026 | str. 1] =====
+Naslov na stranom jeziku
+Abstract:
+Abstract
+Keywords:
+Keywords
+
+
+Sadržaj
+ TOC \o "1-3" \h \z \u 1.PRVA RAZINA NASLOVA PAGEREF _Toc170718919 \h 1
+1.1Druga razina naslova PAGEREF _Toc170718920 \h 1
+1.1.1Treća razina naslova PAGEREF _Toc170718921 \h 1
+1.1.2Označavanje grafičkih priloga i tablica PAGEREF _Toc170718922 \h 1
+Literatura (stil Literatura) PAGEREF _Toc170718923 \h 2
+
+
+
+
+Običan tekst pisati s obostranim ravnanjem, font Times New Roman, veličina slova 12, prored 1.5 redaka, razmak prije pasusa 6 točaka, (stil Normal), s eventualnim isticanjem važnih podataka boldom, italicom ili italic boldom po osobnoj procjeni.
+Svi crteži, tablice i prilozi moraju biti numerirani.
+Naslove pisati prema priloženom opisu. Ako se koriste definirani stilovi za naslove, moguće je automatski generirati sadržaj na početku dokumenta.
+Redni brojevi poglavlja ažuriraju se automatski!
+PRVA RAZINA NASLOVA
+Veličina slova 14, masni (bold) ispis, velika slova, lijevo ravnanje, razmak prije pasusa 24 točke, a nakon pasusa 18 točaka (stil Heading 1).
+Druga razina naslova
+Veličina slova 13, masni (bold) ispis, lijevo ravnanje, razmak prije pasusa 18 točaka, a nakon pasusa 6 točaka (stil Heading 2).
+Treća razina naslova
+Veličina slova 12, masni (bold) ispis, lijevo ravnanje, razmak prije pasusa 12 točaka (stil Heading 3).
+Označavanje grafičkih priloga i tablica
+Grafički prilozi (slike, dijagrami itd.) postavljaju se u dokumentu u stil Grafika. Legenda uzu grafičke priloge i tablice postavlja se u stil Caption. Pritom se legenda postavlja ispod grafičkih priloga i iznad tablice
+
+Slika 1: Izvor rijeke Jadro (izvor: privatna dokumentacija)
+Literatura (stil Literatura)
+Ime i prezime autora, naziv knjige, izdavač, godina. (stil Referenca)
+
+===== [fgag-predlozak-diplomski-2026 | str. 1] =====
+IZJAVA O AKADEMSKOJ ČESTITOSTI
+
+
+
+
+
+kojom ja, ime i prezime, JMBAG: xxxxx, student/ica Fakulteta građevinarstva, arhitekture i geodezije Sveučilišta u Splitu, kao autor/ica ovog diplomskog rada izjavljujem da sam ga izradio/la samostalno pod mentorstvom prof. dr. sc. ime i prezime / komentorstvom prof. dr. sc. ime i prezime. 
+U radu sam primijenio/la metodologiju znanstvenoistraživačkog rada i koristio/la literaturu koja je navedena na kraju rada. Tuđe spoznaje, zaključke, teorije, formulacije i grafičke prikaze koje sam izravno ili parafrazirajući naveo/la u radu citirao/la sam i povezao/la s korištenim bibliografskim jedinicama.
+
+
+
+
+
+
+
+
+(vlastoručni potpis studenta/ice)
+
+===== [fgag-predlozak-diplomski-2026 | str. 1] =====
+Naslov na stranom jeziku
+Abstract:
+Abstract
+Keywords:
+Keywords
+
+
+Sadržaj
+ TOC \o "1-3" \h \z \u 1.PRVA RAZINA NASLOVA PAGEREF _Toc170718919 \h 1
+1.1Druga razina naslova PAGEREF _Toc170718920 \h 1
+1.1.1Treća razina naslova PAGEREF _Toc170718921 \h 1
+1.1.2Označavanje grafičkih priloga i tablica PAGEREF _Toc170718922 \h 1
+Literatura (stil Literatura) PAGEREF _Toc170718923 \h 2
+
+
+
+
+Običan tekst pisati s obostranim ravnanjem, font Times New Roman, veličina slova 12, prored 1.5 redaka, razmak prije pasusa 6 točaka, (stil Normal), s eventualnim isticanjem važnih podataka boldom, italicom ili italic boldom po osobnoj procjeni.
+Svi crteži, tablice i prilozi moraju biti numerirani.
+Naslove pisati prema priloženom opisu. Ako se koriste definirani stilovi za naslove, moguće je automatski generirati sadržaj na početku dokumenta.
+Redni brojevi poglavlja ažuriraju se automatski!
+PRVA RAZINA NASLOVA
+Veličina slova 14, masni (bold) ispis, velika slova, lijevo ravnanje, razmak prije pasusa 24 točke, a nakon pasusa 18 točaka (stil Heading 1).
+Druga razina naslova
+Veličina slova 13, masni (bold) ispis, lijevo ravnanje, razmak prije pasusa 18 točaka, a nakon pasusa 6 točaka (stil Heading 2).
+Treća razina naslova
+Veličina slova 12, masni (bold) ispis, lijevo ravnanje, razmak prije pasusa 12 točaka (stil Heading 3).
+Označavanje grafičkih priloga i tablica
+Grafički prilozi (slike, dijagrami itd.) postavljaju se u dokumentu u stil Grafika. Legenda uzu grafičke priloge i tablice postavlja se u stil Caption. Pritom se legenda postavlja ispod grafičkih priloga i iznad tablice
+
+Slika 1: Izvor rijeke Jadro (izvor: privatna dokumentacija)
+Literatura (stil Literatura)
+Ime i prezime autora, naziv knjige, izdavač, godina. (stil Referenca)

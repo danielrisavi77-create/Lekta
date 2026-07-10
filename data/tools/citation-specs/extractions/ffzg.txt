@@ -1,0 +1,291 @@
+===== [ffzg-inf-diplomski-2024 | str. 6] =====
+3. Upute za pisanje rada
+
+3.1. Struktura rada
+Rad se sastoji od sljedeih cjelina: Naslovnica, Izjava o akademskoj cestitosti, Sadrzaj, Uvod,
+Glavni dio, Zakljucak, Literatura, te Sazetak i Summary s kljucnim rijecima. Cjeline se u radu
+moraju pisati prema navedenom redoslijedu. Ispred sadrzaja moze doi Zahvala. Iza Literature
+moze doi Popis oznaka i kratica, Popis slika, Popis tablica i Popis grafikona. Iza popisa moze
+doi poglavlje Prilozi. Na samom kraju rada stavlja se Sazetak i Summary.
+Izjava o akademskoj cestitosti opisana je u posebnom poglavlju u sklopu ovog dokumenta.
+Sadrzaj se sastoji od naslova poglavlja i rednih brojeva njihovih pocetnih stranica. Uvod je
+poglavlje od kojeg pocinje numeracija poglavlja i numeracija stranica. U uvodu se uglavnom
+opisuje tema, motivacija studenta za temu, daje se kratak pregled poglavlja i definiraju ciljevi
+rada. Glavni dio sastoji se od poglavlja i potpoglavlja koje cine logicku cjelinu. Naslov i
+podnaslov moraju biti razdvojeni s barem jednim odjeljkom teksta. Zakljucak treba koncizno
+iznijeti najvaznije rezultate istrazivanja, eventualna ogranicenja i prijedloge za njihovo
+poboljsanje.
+Literatura sadrzi popis bibliografskih jedinica koristenih u radu. Nacin citiranja objasnjen je u
+posebnom poglavlju. Prilozi se numeriraju i omoguuju prilaganje dijelova istrazivanja koji su
+vazni za rad, ali ne mogu biti dio glavnog dijela rada, poput dijelova programskog koda,
+detaljnijih tablica, podataka i grafova, dodatnih slika, anketnih upitnika i sl.
+U sazetku je potrebno u 150 do 200 rijeci opisati sadrzaj rada. U sklopu sazetka potrebno je
+navesti 3 do 5 kljucnih rijeci. Summary je prijevod sazetka i kljucnih rijeci na engleski jezik.
+
+3.2. Opseg rada
+Zavrsni rad mora imati najmanje 25 kartica teksta (45.000 znakova s razmacima), a diplomski
+rad 45 kartica teksta (80.000 znakova s razmacima), pri cemu se u obzir uzima samo dio rada
+izmeu poglavlja Uvod i Zakljucak, ukljucivo.
+
+                                                                      6
+
+===== [ffzg-inf-diplomski-2024 | str. 7] =====
+3.3. Jezik pisanja
+Rad se pise na hrvatskom jeziku. U radu je potrebno koristiti iskljucivo hrvatske izraze, a prema
+potrebi, u zagradi se iza hrvatskog izraza, prilikom njegovog prvog navoenja, moze staviti i
+izraz na stranom (npr. engleskom) jeziku. Pritom se izraz na stranom jeziku stavlja u kurziv. Na
+primjer, ,,...na posluzitelju (engl. server) nalaze se..."
+
+3.4. Stil pisanja
+Rad se pise u treem licu jednine ili se koristi bezlicni oblik. Prema tome, umjesto ,,U radu emo
+objasniti..." potrebno je napisati ,,U radu e biti objasnjeno...". Takoer, umjesto ,,Ukratko u
+opisati..." potrebno je napisati ,,Ukratko e biti opisan...".
+Recenice trebaju biti jasne, bez pjesnickih figura i zargonskih izraza koji nisu dio strucnog
+nazivlja. U radu treba izbjegavati referenciranje na ostala poglavlja, a moze se eventualno
+nadovezati na prethodno poglavlje, ako je to potrebno radi povezivanja. Potrebno je izbjegavati
+pisanje vlastitog misljenja ili zakljucaka, osim ako oni ne proizlaze iz postojeeg istrazivanja ili
+istrazivanja provedenog u sklopu samog rada. Preporuca se da odjeljci ne budu krai od 5
+redaka.
+
+3.5. Slike i tablice
+U radu koji ukljucuje slike, tablice i grafikone, tekst treba ucinkovito integrirati i referencirati te
+elemente kako bi se poboljsalo ukupno razumijevanje sadrzaja. Primjeri referenciranja ukljucuju:
+"Iz tablice 1 vidljivo je..." i "Kao sto je naznaceno na slici 2...". Svaka slika, tablica i grafikon
+trebaju biti opisani rednim brojem i kratkim naslovom koji sazima njihov sadrzaj. Ovaj bi opis
+trebao biti dovoljno informativan da stoji samostalno, pruzajui kontekst bez potrebe za
+vraanjem na tekst. Na primjer, "Slika 1. Model baze podataka" ili "Tablica 4. Prosjek prema
+godini studiranja". Redni broj i naslov stavljaju se iznad tablica, ali uvijek ispod slika i
+grafikona.
+
+                                                                      7
+
+===== [ffzg-inf-diplomski-2024 | str. 8] =====
+Potrebno je napisati kratak opis onoga sto slika, tablica ili grafikon ilustrira, sazimajui kljucne
+nalaze ili trendove prikazane na njima. Na primjer, "Slika 2 ilustrira raspodjelu odgovora meu
+razlicitim demografskim skupinama." Relevantnost slike, tablice ili grafikona za ukupnu
+argumentaciju ili nalaze rada treba dodatno objasniti u tekstu kako biste pomogli citatelju da
+razumije zasto su ti elementi vazni. Na primjer, "Ovi podaci podrzavaju hipotezu da...". Vazno
+je ponuditi interpretaciju podataka sa slike, tablice i grafikona i raspraviti o bilo kakvim
+implikacijama ili zakljuccima koji se mogu izvui iz njih. Na primjer, "Poveanje varijable C
+tijekom vremena, kao sto se vidi na slici 3, sugerira potencijalnu uzrocnu povezanost."
+Vazno je osigurati da su slike, tablice i grafikoni postavljeni blizu relevantnog teksta radi lakseg
+referenciranja. To pomaze odrzavanju protoka informacija i omoguava citateljima da lako
+povezu tekst s vizualnim podacima.
+
+3.6. Literatura
+Svi bibliografski izvori (knjiga, casopis, internetska stranica itd.) moraju abecednim redom biti
+navedeni u popisu literature. Svako koristenje navedenih izvora u radu mora biti naznaceno.
+Citat se naznacuje navodnicima, dok parafrazirane dijelove nije potrebno naznaciti navodnicima.
+Prijevod s drugog jezika takoer moze biti citat. Svi bibliografski izvori moraju biti barem
+jednom referencirani u tekstu.
+U radu je potrebno koristiti Harvardski, APA ili neki drugi stil citiranja, a odreuje ga mentor.
+
+3.7. Izjava o akademskoj cestitosti
+Student potpisuje Izjavu o akademskoj cestitosti kojom, izmeu ostaloga, potvruje da rad nije
+plagijat, odnosno da su svi preuzeti dijelovi naznaceni u skladu s uputama o navoenju literature.
+Plagiranje je teska povreda akademske cestitosti te e biti prijavljena i sankcionirana od strane
+Etickog povjerenstva.
+
+                                                                      8
+
+===== [ffzg-filoz-diplomski-2019 | str. 1] =====
+Sveuciliste u Zagrebu
+Filozofski fakultet
+Odsjek za filozofiju
+
+          Upute za oblikovanje diplomskoga rada na studiju filozofije
+
+Diplomski rad koji se prijavljuje i brani na Odsjeku za filozofiju mora sadrzavati:
+    - naslovnu stranicu,
+    - sadrzaj,
+    - sazetke i kljucne rijeci na hrvatskom te na engleskom, njemackom ili francuskom
+         jeziku,
+    - uvod, razradu teme, zakljucak,
+    - popis literature.
+
+Tekst treba oblikovati na sljedei nacin:
+    - pismo (font): Times New Roman, velicina 12;
+    - margine: lijevo i desno 2,5 cm, gore i dolje 2,5 cm;
+    - prored: 1,5;
+    - stranice numerirati arapskim brojkama u donjem desnom kutu;
+    - naslovnu stranicu i stranice sa sadrzajem i sazecima ne numerirati;
+    - tekst pisati s obostranim poravnanjem;
+    - pocetak svakoga novog odlomka uvui;
+    - naslove poglavlja i potpoglavlja pisati podebljanim slovima (bold), velicina 12, te
+        numerirati (1. Naslov poglavlja; 1.1. Naslov potpoglavlja);
+    - poglavlje treba zapoceti na zasebnoj stranici, a potpoglavlja se nizu kontinuirano s
+        jednim praznim redom iznad naslova potpoglavlja;
+    - za sve dijelove teksta koji se zele istaknuti koristiti kurziv (italic), a ne podebljano
+        niti podcrtano pismo;
+    - fusnote pisati na dnu stranice, a ne na kraju teksta; pismo (font) velicine 10, prored
+        jednostruk.
+
+Prve tri stranice rada treba oblikovati na sljedei nacin:
+
+===== [ffzg-filoz-diplomski-2019 | str. 3] =====
+(centrirano, velicina 12, podebljano)
+
+    Navesti naslove i podnaslove poglavlja (lijevo poravnanje, velicina 12) s brojevima stranica
+    na kojima zapocinju poglavlja (desno).
+    Uvod .......................................................................................................................................... 1
+    1. Naslov poglavlja ................................................................................................................... x
+    2. Naslov poglavlja ................................................................................................................. xx
+    2.1. Naslov potpoglavlja ......................................................................................................... xx
+    .
+    .
+    .
+    Zakljucak ................................................................................................................................ xx
+    Popis literature ........................................................................................................................ xx
+
+                                                                                                                 (Ne numerirati stranicu.)
+
+3. STRANICA
+
+                                        Naslov rada na hrvatskom jeziku
+
+                                                           (centrirano, podebljano)
+
+    Sazetak
+
+     (na hrvatskom, do 250 rijeci, obostrano poravnanje, jednostruki prored)
+
+===== [ffzg-filoz-diplomski-2019 | str. 4] =====
+Upute o navoenju literature i citiranju
+
+Izvori za citirane, sazete ili parafrazirane misli nekog drugog autora navode se u fusnotama na
+dnu pojedine stranice, Ti navodi sadrzavaju propisno oblikovan bibliografski opis citirane
+bibliografske jedinice. Ako oznaka reference u tekstu dolazi pokraj interpunkcijskoga znaka,
+oznacava se iza znaka.
+Prilikom citiranja, izvorni se tekst stavlja u navodnike, a iza navodnika se stavlja oznaka
+fusnote (,, "xx). Ako se navodi posredno prema nekoj drugoj publikaciji, potrebno je u fusnoti
+navesti bibliografske podatke obje publikacije uz uputu: prema, a u popisu literature navesti
+takoer publikaciju iz koje se preuzima.
+Osim za pozivanje na izvore, fusnote mogu sluziti takoer za dodatna objasnjenja i
+komentare.
+
+Bibliografski podaci u fusnotama za prvo pojavljivanje jedinice navode se na sljedei nacin:
+Knjige:
+
+          xx Ime Prezime [autora], Naslov knjige, Izdavac, Mjesto izdavanja, godina izdavanja, str. xxx [broj
+          stranice]
+
+Radovi/poglavlja iz zbornika/knjige:
+
+          xx Ime Prezime [autora], ,,Naslov rada/poglavlja iz zbornika/knjige", u: Ime Prezime [urednika/autora]
+          (ur.), Naslov zbornika/knjige, Izdavac, Mjesto izdavanja, godina izdavanja, str. xxx�xxx [raspon
+          stranica rada/poglavlja], ovdje str. xxx [broj stranice].
+
+Radovi iz casopisa:
+
+          xx Ime Prezime [autora], ,,Naslov rada", Naslov casopisa, godiste casopisa (broj casopisa), godina
+          izdavanja, str. xxx�xxx [raspon stranica rada/poglavlja], ovdje str. xxx [broj stranice].
+
+Radovi koji se citiraju s internetskih stranica (a koji nisu objavljeni u znanstvenim casopisima
+te nemaju tiskano izdanje):
+
+          xx Ime Prezime [autora], ,,Naslov teksta", internetska adresa (pristup: [datum pristupa]).
+
+Za ponovljene jedinice bibliografski se podaci trebaju sazeti na sljedei nacin:
+
+Knjige:
+
+          xx I. Prezime [autora], Naslov knjige, str. xxx [broj stranice]
+
+Radovi/poglavlja iz zbornika/knjige:
+
+          xx I. Prezime [autora], ,,Naslov rada/poglavlja iz zbornika/knjige", str. xxx [broj stranice].
+
+Radovi iz casopisa:
+
+          xx I. Prezime [autora], ,,Naslov rada", str. xxx [broj stranice].
+
+Radovi koji se citiraju s internetskih stranica (a koji nisu objavljeni u znanstvenim casopisima
+te nemaju tiskano izdanje):
+
+          xx I. Prezime [autora], ,,Naslov teksta".
+
+Ukoliko se jedinice uzastopno ponavljaju, navodi se na sljedei nacin:
+
+           xx Isto, str. xxx [broj stranice].
+
+===== [ffzg-filoz-diplomski-2019 | str. 5] =====
+Popis literature
+
+Popis literature nalazi se na kraju diplomskoga rada. Sva djela na koja se referiralo u tekstu
+trebaju biti navedena u popisu literature. U popisu moze biti navedena i koristena literatura
+koja se ne spominje u tekstu.
+Popis literature pise se abecednim redom prema prezimenu (prvog) autora bez rednih brojeva.
+Ako se navodi vise radova istog autora, najprije se navode oni starijega datuma. Za zajednicki
+rad vise autora ne koristi se oblik "i dr." (et al.), nego se navode svi autori punim imenima
+(Prezime1, Ime1; Prezime2, Ime2,).
+Prored za jedan navod u popisu je jednostruk, a izmeu dvaju navedenih radova u popisu
+literature treba ostaviti razmak (prazan red). Velicina pisma bibliografskih jedinica je 11.
+
+Bibliografski podaci u popisu literature navode se na sljedei nacin:
+
+Knjige:
+         Prezime, Ime [autora], Naslov knjige, Izdavac, Mjesto izdavanja, godina izdavanja.
+
+Radovi/poglavlja iz knjige/zbornika:
+         Prezime, Ime [autora], ,,Naslov rada/poglavlja iz zbornika/knjige", u: Prezime, Ime
+         [urednika/autora] (ur.), Naslov zbornika/knjige, Izdavac, Mjesto izdavanja, godina izdavanja,
+         str. xxx�xxx [raspon stranica rada].
+
+Radovi iz casopisa:
+         Prezime, Ime [autora], ,,Naslov rada", Naslov casopisa, XX (X) [godiste casopisa (svezak/broj
+         casopisa)], godina izdavanja, str. xxx�xxx [raspon stranica rada].
+
+Radovi koji se citiraju s internetskih stranica (a koji nisu objavljeni u znanstvenim casopisima
+ili imaju tiskano izdanje:
+
+         Prezime, Ime [autora], ,,Naslov teksta", internetska adresa (pristup: [datum pristupa]).
+
+===== [ffzg-psihologija-diplomski-2024 | str. 1] =====
+UPUTE ZA PISANJE I OBLIKOVANJE DIPLOMSKOG RADA NA ODSJEKU ZA PSIHOLOGIJU FILOZOFSKOG FAKULTETA SVEUČILIŠTA U ZAGREBU
+
+
+
+
+
+
+
+Diplomski rad završni je rad studija psihologije kojim studentica/student pokazuje sposobnost da što samostalnije, uz vođenje mentora, provede empirijsko istraživanje iz područja psihologije te primjereno tumači i raspravi dobivene rezultate i njihove implikacije. Glavni dio diplomskog rada uobičajeno sadrži sljedeća poglavlja: sažetak, ključne riječi, uvod, cilj, problem, metoda (sudionici, instrumenti, postupak), rezultati, rasprava, zaključak, literatura i eventualno prilozi. Diplomskom se radu ne prilažu komercijalni psihologijski instrumenti niti oni koji nemaju pismeno odobrenje autora za objavu. Rad se piše na hrvatskom standardnom jeziku i prema ovim uputama kojih se potrebno strogo pridržavati.
+
+STROGO SE PRIDRŽAVATI !
+
+Opseg rada je minimalno 20 i maksimalno 30 stranica teksta. Prve četiri stranice tj. naslovna stranica, izjava o izvornosti rada, sadržaj, te stranica sa sažecima se ne računaju u taj opseg. Stranice s popisom referenci, tj. poglavlje literatura ne računaju se u maksimalni opseg od 30 stranica. Isto tako, ako postoje prilozi na kraju rada, oni se ne računaju u maksimalni opseg od 30 stranica. 
+
+Formatiranje stranice teksta i nekih njegovih karakteristika je sljedeća:
+margine: sve 2,54 cm (lijevo, desno, gore, dolje)
+font: veličina 12, Times New Roman
+prored: 1,5
+potrebno je uvući prvi red svakog novog odlomka
+ne stavlja se dodatni razmak između odlomaka
+stranice moraju biti označene rednim brojem, na dnu po sredini stranice počevši od Uvoda (Uvod mora biti na prvoj stranici)
+tekst se piše lijevo poravnato
+sve dijelove teksta koji se žele istaknuti valja pisati italikom (kurzivom; ne bold niti podcrtano)
+glavne naslove treba pisati sukladno APA standardima (vidi ispod)
+
+Izgled prve, naslovne stranice je propisan (vidi ispod) i na njoj nema oznake broja stranice.
+
+Druga stranica je Izjava o izvornosti rada (vidi ispod), također bez broja stranice.
+
+Treća stranica je Sadržaj, također bez broja stranice.
+
+Četvrta stranica sadrži Naslov rada, Sažetak te Ključne riječi na hrvatskom i engleskom jeziku, bez oznake broja stranice. Sažetak treba biti opsega između 200 i 300 riječi. Sažetak treba sadržavati cilj istraživanja, opis metodologije i najvažnije dobivene rezultate.
+Treba navesti 3-5 ključnih riječi. 
+ 
+Forma teksta uobičajena je za pisanje znanstvenog rada, a sadrži sljedeće osnovne elemente: Uvod, Cilj, Problem, Metoda, Rezultati, Rasprava, Zaključak, Literatura. Prema potrebi mogu se dodati prilozi koje treba označiti (npr. Prilog A, Prilog B) i jasno nasloviti. Prilozi se ne računaju u opseg od 30 stranica.
+
+U pisanju treba preferirati aktiv nad pasivom kako bi rečenice bile direktne, jasne i koncizne. Pasiv se koristi kada se važnije fokusirati na subjekt na kojega je radnja usmjerena, nego na vršitelja radnje (npr. u opisivanju eksperimentalnog postupka). Primjerice, „sudionici su bili izloženi određenoj eksperimentalnoj manipulaciji“ umjesto „mi smo izložili sudionike određenoj eksperimentalnoj manipulaciji“.
+
+Uređenje teksta rada treba biti sukladno APA standardima (standardi za pisanje znanstvenih radova American Psychological Association). U knjižnici Filozofskog fakulteta postoji priručnik za takvo uređenje teksta, no s obzirom da APA-in priručnik ima oko 300 stranica i niz detalja za koje je malo vjerojatno da će ih studenti biti u prilici koristiti, priredili smo kratak sažetak najvažnijih naputaka (vidi ispod). Za sve nejasnoće i specifičnosti treba konzultirati spomenuti priručnik i/ili upute dostupne na web-stranicama, od kojih neke navodimo i niže u tekstu.
+
+
+Izgled Prve, naslovne stranice
+
+
+Sveučilište u Zagrebu
+Filozofski fakultet
+Odsjek za psihologiju
+(centrirano)

@@ -1,0 +1,331 @@
+===== [unizd-turizam-upute | str. 2] =====
+PREDGOVOR ................................................................................................................... 3
+      1. UPUTE ZA IZRADU ZAVRSNOG RADA ............................................................. 4
+      1.1. IZGLED ZAVRSNOG RADA ................................................................................... 4
+      1.1.1. Izgled vanjske (omotne) stranice zavrsnog rada ...................................................... 5
+      1.1.2. Izgled naslovne stranice zavrsnog rada .................................................................... 6
+      1.1.3. OSNOVNE CJELINE ZAVRSNOG RADA ........................................................... 7
+      1.2.1. Sadrzaj ...................................................................................................................... 7
+      1.2.2. Uvod ........................................................................................................................ 8
+      1.2.3. Razrada teme ............................................................................................................ 8
+      1.2.4. Zakljucak .................................................................................................................. 8
+      1.2.5. Sazetak ..................................................................................................................... 8
+      1.2.6. Literatura .................................................................................................................. 8
+      1.2.7. Popis tablica ........................................................................................................... 10
+      1.2.8. Popis ilustracija ...................................................................................................... 11
+      1.2.9. Prilozi ..................................................................................................................... 12
+      1.2.10. Zivotopis............................................................................................................... 12
+      2. UPUTE ZA IZRADU DIPLOMSKOG RADA ........................................................... 13
+      2.1. IZGLED DIPLOMSKOG RADA ............................................................................. 13
+      2.1.1. Izgled vanjske (omotne) i naslovne stranice diplomskog rada............................... 14
+      2.1.2. Izgled naslovne stranice diplomskog rada.............................................................. 15
+      2.2. OSNOVNE CJELINE DIPLOMSKOG RADA ....................................................... 16
+      2.2.1. Sadrzaj .................................................................................................................... 17
+      2.2.2. Uvod ....................................................................................................................... 18
+      2.2.3. Razrada teme .......................................................................................................... 18
+      2.2.4. Zakljucak ................................................................................................................ 18
+      2.2.5. Sazetak ................................................................................................................... 19
+      2.2.6. Literatura ................................................................................................................ 19
+      2.2.7. Popis tablica ........................................................................................................... 21
+      2.2.8. Popis ilustracija ...................................................................................................... 22
+      2.2.9. Prilozi ..................................................................................................................... 22
+      2.2.10. Zivotopis............................................................................................................... 22
+
+                                                                                                                 2
+
+===== [unizd-turizam-upute | str. 4] =====
+Upute za izradu zavrsnoga i diplomskog rada
+
+   1. UPUTE ZA IZRADU ZAVRSNOG RADA
+
+    Zavrsni se rad izra�uje na kraju preddiplomskog studija. U njemu student/ica, pod
+vodstvom mentora/ice, samostalno obra�uje temu koju odobrava Strucno vijee Odjela.
+Studenti izra�uju rad temeljen na teorijskom i prakticnom znanju, sluzei se domaom i
+stranom pisanom literaturom, pretrazivanjem razlicitih baza podataka i internetskih izvora te
+samostalnim znanstvenim istrazivanjem.
+
+1.1. IZGLED ZAVRSNOG RADA
+
+         Zavrsni rad treba biti napisan jednim od programa za obradu teksta na racunalu
+         (preporuca se MS Word).
+         Format rada je A4 (210 x 297 mm).
+         Rad treba pisati fontom Times New Roman, velicine 12 pt, uz prored 1,5.
+         Rad treba pisati s obostranim poravnanjem (,,justify").
+         Naslovi velicine 14 pt i podnaslovi velicine 13 pt rada pisu se velikim slovima,
+         podebljano (,,bold"), poravnati uz lijevi rub teksta.
+         Stranice rada potrebno je numerirati arapskim brojkama u donjem desnom uglu
+
+===== [unizd-turizam-upute | str. 7] =====
+Upute za izradu zavrsnoga i diplomskog rada
+
+1.1.3. OSNOVNE CJELINE ZAVRSNOG RADA
+
+    Zavrsni rad treba sadrzavati sljedee cjeline:
+
+         Sadrzaj
+         Uvod
+         Razradu teme
+         Zakljucak
+         Sazetak
+         Sazetak na stranom jeziku (engleski, njemacki, talijanski ili francuski)
+         Literaturu
+         Popis tablica (ukoliko ih ima)
+         Popis ilustracija (ukoliko ih ima)
+         Priloge (ako ih ima)
+         Zivotopis.
+
+1.2.1. Sadrzaj
+
+        Sadrzaj zavrsnog rada predstavlja tematski sazetak rada temeljem kojega se daje uvid
+u stranice zavrsnog rada na kojima se nalaze naslovi poglavlja i potpoglavlja. Pocetne stranice
+poglavlja trebaju biti upisane uz desni rub stranice. Naslov ,,SADRZAJ" pise se velikim
+slovima, velicine 14 pt, podebljano (,,bold") i poravnato uz lijevi rub teksta. Primjer izgleda
+stranice sadrzaja i oznacavanja poglavlja prikazano je u Primjeru 3.
+
+===== [unizd-turizam-upute | str. 7] =====
+3.2.1. Podnaslov .......................................28
+
+3.2.2. Podnaslov .......................................32
+
+3.2.3. Podnaslov .......................................34
+
+4. ZAKLJUCAK ................................................35
+
+5. SAZETAK ...................................................36
+
+6. SAZETAK (strani jezik) ..................................37
+
+7. LITERATURA ..............................................38
+
+8. POPIS TABLICA ............................................39
+
+9. POPIS ILUSTRACIJA..........................................40                   7
+10. PRILOZI......................................................41
+
+11. ZIVOTOPIS................................................ 42
+
+===== [unizd-turizam-upute | str. 8] =====
+U zakljucku zavrsnog rada daje se osvrt na postavljene ciljeve, rezultate i spoznaje do
+
+kojih se u radu doslo. Zakljucak se pise na zasebnoj stranici. Naslov ,,ZAKLJUCAK" pise se
+velikim slovima, podebljano (,,bold"), velicine 14 pt i poravnato uz lijevi rub teksta.
+
+1.2.5. Sazetak
+        Sazetak je rada potrebno napisati na hrvatskom i jednom od stranih jezika, a sadrzava
+
+kljucne rijeci zavrsnoga rada. Naslov ,,SAZETAK", na hrvatskom jeziku, i na stranom jeziku
+(npr. ,,SUMMARY"), pisu se velikim slovima, podebljano (,,bold"), velicine 14 pt i
+poravnato uz lijevi rub teksta.
+
+1.2.6. Literatura
+        Na kraju zavrsnog rada potrebno je navesti popis koristene literature koji mora biti
+
+naveden abecednim slijedom (prema prezimenu autora, a ako ne postoji autor ili urednik,
+prema prvoj rijeci naslova, oznacena arapskim brojkama). U popisu literature prvo se navode
+knjige, potom clanci u znanstvenim casopisima, clanci u zbornicima sa znanstvenih skupova
+te ostala literatura � npr. Narodne novine; i u konacnici Internetski izvori.
+
+                                                                                                                 8
+
+===== [unizd-turizam-upute | str. 9] =====
+Upute za izradu zavrsnoga i diplomskog rada
+
+Ukoliko se u radu ukljucuje obavljeni razgovor s nekim ekspertom, potrebno je navesti ime i
+prezime eksperta, kvalifikaciju sto ga cini ekspertom za navedeno podrucje, te datum i mjesto
+obavljanja razgovora.
+
+        Postoji nekoliko sustava citiranja, parafraziranja i upuivanja na izvore. Preporucamo
+dva nacina:
+1. americki ili Harvardski sustav � upute za ovaj sustav citiranja mozete pronai na
+internetskoj stranici
+http://www.unizd.hr/Portals/46/seminarski_rad/citiranje_parafraziranje.pdf
+
+2. europski sustav citiranja ispod teksta (u podnozju stranice) � u ovom sustavu biljeske
+se kronoloski oznacavaju arapskim brojevima ispod teksta u podnozju stranice (fusnote).
+Prema ovom nacinu citiranja tu�ih djela ili spoznaja na kraju recenice koja sadrzi tu�e
+podatke, spoznaje, ideje i sl. napise se arapski broj, koji se zatim ponovi na podnozju doticne
+stranice ispod crte koja se stavlja ispod teksta, a iza njega svi bitni elementi bibliografske
+jedinice. 1
+Nakon navedenih bibliografskih jedinica, potrebno je navesti broj stranice odakle je preuzet
+citat (vidjeti primjer u fusnoti br. 1).
+Pozivne biljeske (fusnote) pisu se sitnim slovima kronoloski, rednim arapskim brojevima od
+prve do posljednje stranice djela.2
+Prijedlog uputa za citiranje bibliografskih jedinica prema ovom sustavu citiranja je sljedei:
+
+KNJIGA
+Prezime, inicijal(i) imena autora. Naslov: podnaslov. Podatak o izdanju. Mjesto izdavanja:
+Nakladnik, godina izdavanja.
+
+RAD U ZBORNIKU, ESEJ U ZBIRCI I SL.
+Prezime, inicijal(i) imena autora. Naslov rada: podnaslov. // Naslov zbornika / podatak o
+uredniku. Podatak o izdanju. Mjesto izdavanja: Nakladnik, godina izdavanja. str. pocetna-
+zavrsna.
+
+1 Zelenika, R. Metodologija i tehnologija izrade znanstvenog i strucnog djela. Rijeka: Ekonomski fakultet
+Sveucilista u Rijeci, 2000., str. 485.
+
+===== [unizd-turizam-upute | str. 10] =====
+NOVINSKI CLANAK
+
+Prezime, inicijali imena autora. Naslov i podnaslov clanka. Naslov novine. Broj pojedinacnog
+izdanja novine, datum pojedinacnog izdanja novine, stranica.
+
+JEDINICA S INTERNETA
+Ime(na) autora (ako je/su poznata), naslov dokumenta, datum nastanka (ako se razlikuje od
+datuma pristupa izvoru), naslov potpunog djela (italic), naziv stranice, potpuna http adresa, i
+datum pristupa dokumentu
+
+Vazno je da student/studentica odabere u dogovoru s mentor jedan od navedenih sustava
+citiranja i da pri tome bude dosljedan/dosljedna.
+
+1.2.7. Popis tablica
+        Popis tablica slijedi nakon stranice s literaturom. Sadrzi redni broj i naziv svih tablica
+
+navedenih prema redoslijedu (broju stranice) pojavljivanja u radu.
+        Naslov ,,POPIS TABLICA" pise se velikim slovima, podebljano (,,bold"), velicine 14
+
+pt i poravnato uz lijevi rub teksta.
+        Svaka tablica koja se nalazi unutar teksta rada mora biti numerirana i imati naslov,
+
+tumac kratica i znakova, ako je potrebno. Ukoliko je tablica preuzeta iz drugih izvora,
+potrebno je navesti izvor ispod tablice. Velicina fonta za pisanje izvora ispod tablice je 10 pt.
+Izgled stranice s popisom tablica prikazan je u Primjeru 9.
+
+                                                                                                               10
+
+===== [unizd-turizam-upute | str. 13] =====
+Upute za izradu zavrsnoga i diplomskog rada
+
+2. UPUTE ZA IZRADU DIPLOMSKOG RADA
+
+    Diplomski se rad izra�uje na kraju diplomskoga studija. Student/ica u pravilu izra�uje
+diplomski rad iz kolegija znanstvenog podrucja smjera koji je upisao. U diplomskome radu
+student/ica pokazuje sposobnost samostalnoga obra�ivanja slozenijih problema. Student/ica
+mora jasno prepoznati problem istrazivanja za koji mu mentor daje suglasnost. Kod prijave
+teme diplomskog rada (temeljem Pravila o diplomskom radu Odjela za turizam i
+komunikacijske znanosti, cl. 3.) student/ica treba izraditi Prijavu koja e sadrzavati: naslov,
+predmet, ciljeve, hipoteze, znanstvene metode, preliminarnu strukturu s objasnjenjem,
+popisom literature i zivotopisom. Pod vodstvom mentora/ice, samostalno obra�uje strucnu
+temu temeljenu na teorijskome i prakticnom znanju. Po zavrsenom prethodnom pretrazivanju
+i obradi domae i strane pisane literature te pretrazivanjem razlicitih izvora na Internetu,
+student/ica uz vodstvo mentora postavlja radne hipoteze temeljem kojeg provodi samostalno
+istrazivanje vezano za problem diplomskog rada.
+
+2.1. IZGLED DIPLOMSKOG RADA
+
+         Diplomski rad treba biti napisan jednim od programa za obradu teksta na racunalu
+         (preporuca se MS Word).
+         Format rada je A4 (210 x 297 mm).
+         Rad treba pisati fontom Times New Roman, velicine 12 pt, uz prored 1,5.
+         Tekst treba pisati s obostranim poravnanjem (,,justify").
+         Naslovi velicine 14 pt i podnaslovi velicine 13 pt rada pisu se velikim slovima,
+         podebljano (,,bold"), poravnati uz lijevi rub teksta.
+
+===== [unizd-turizam-upute | str. 17] =====
+Upute za izradu zavrsnoga i diplomskog rada
+
+         Zakljucak
+         Sazetak
+         Sazetak na stranom jeziku (engleski, njemacki, talijanski ili francuski)
+         Literaturu
+         Popis tablica (ukoliko ih ima)
+         Popis ilustracija (ukoliko ih ima)
+         Priloge (ako ih ima)
+         Zivotopis.
+
+2.2.1. Sadrzaj
+
+        Sadrzaj diplomskog rada predstavlja tematski sazetak rada temeljem kojega se daje
+uvid u stranice diplomskog rada na kojima se nalaze naslovi poglavlja i potpoglavlja. Pocetne
+stranice poglavlja trebaju biti upisane uz desni rub stranice.
+
+        Naslov ,,SADRZAJ" pise se velikim slovima, velicine 14 pt, podebljano (,,bold") i
+
+===== [unizd-turizam-upute | str. 17] =====
+3. Glavni naslov ................................................15
+                  3.1. Naslov ...................................................16
+                        3.1.1. Podnaslov .......................................18
+                        3.1.2. Podnaslov .......................................21
+                        3.1.3. Podnaslov .......................................24
+                  3.2. Naslov ...................................................27
+                        3.2.1. Podnaslov .......................................28
+                        3.2.2. Podnaslov .......................................32
+                        3.2.3. Podnaslov .......................................34
+               4. ZAKLJUCAK ...............................................35
+               5. SAZETAK ...................................................36
+               6. SAZETAK (strani jezik) ..................................37
+               7. LITERATURA..............................................38
+               8. POPIS TABLICA...........................................39
+               8. POPIS ILUSTRACIJA....................................40
+               10. PRILOZI...........................................................41
+               11. ZIVOTOPIS.................................................42
+
+                                                                                                               17
+
+===== [unizd-turizam-upute | str. 18] =====
+Kada je student/ica prepoznao temeljni istrazivacki problem i definirao predmet i cilj
+rada, izvodi istrazivacku hipotezu/e koju je/e u diplomskom radu testirati. U podpoglavlju
+metodologija, vo�en smjernicama usvojenim na kolegijima koji se bave ovom
+problematikom, navodi i pojasnjava znanstvene metode kojim e se sluziti prilikom testiranja
+hipoteze/a, u svrhu njihovog potvr�ivanja ili odbacivanja.
+
+        Naslov ,,UVOD" pise se velikim slovima, podebljano (,,bold"), velicine 14 pt i
+poravnato uz lijevi rub teksta.
+
+2.2.3. Razrada teme
+
+U razradi teme (glavnom dijelu rada) potrebno je prikazati:
+         pregled literature - ovom dijelu se daje pregled dosadasnjih znanstvenih spoznaja uze
+         ili sire vezanih na istrazivanu problematiku;
+         rezultati primarnog istrazivanja - ovo je od najvaznijih poglavlja diplomskog rada u
+         kojem se prikazuju rezultati i tumacenje istrazivanja, te se daje rasprava o
+         istrazivanom problemu;
+         procjene za budunost.
+
+Kao sto je prikazano u strukturi sadrzaja diplomskog rada, glavni dio rada treba podijeliti u
+poglavlja i potpoglavlja koji cine odre�enu logicku cjelinu.
+
+        Naslovi poglavlja i potpoglavlja trebaju biti poravnati uz lijevi rub teksta i podebljani
+(,,bold"). Naslovi poglavlja trebaju biti velicine 14 pt, a potpoglavlja 13 pt.
+
+===== [unizd-turizam-upute | str. 19] =====
+Upute za izradu zavrsnoga i diplomskog rada
+
+2.2.5. Sazetak
+
+        Sazetak rada potrebno je napisati na hrvatskom i jednom od stranih jezika. Sadrzava
+kljucne rijeci diplomskoga rada.
+
+        Naslov ,,SAZETAK", na hrvatskom jeziku, i na stranom jeziku (npr. ,,SUMMARY"),
+pisu se velikim slovima, podebljano (,,bold"), velicine 14 pt i poravnato uz lijevi rub teksta.
+
+2.2.6. Literatura
+
+        Na kraju je zavrsnoga rada potrebno navesti popis koristene literature naveden
+abecednim slijedom (prema prezimenu autora, a ako ne postoji autor ili urednik, prema prvoj
+rijeci naslova, oznacena arapskim brojkama). U popisu literature prvo se navode knjige,
+potom clanci u znanstvenim casopisima, clanci u zbornicima sa znanstvenih skupova te ostala
+literatura � npr. Narodne novine; i u konacnici Internetski izvori.
+Ukoliko se u radu ukljucuje obavljeni razgovor s nekim ekspertom, potrebno je navesti ime i
+prezime eksperta, kvalifikaciju sto ga cini ekspertom za navedeno podrucje, te datum i mjesto
+obavljanja razgovora.
+
+        Postoji nekoliko sustava citiranja, parafraziranja i upuivanja na izvore. Preporucamo
+dva nacina:
+1. americki ili Harvardski sustav � upute za ovaj sustav citiranja mozete pronai na
+internetskoj stranici
+http://www.unizd.hr/Portals/46/seminarski_rad/citiranje_parafraziranje.pdf
+
+2. europski sustav citiranja ispod teksta (u podnozju stranice) � u ovom sustavu biljeske
+se kronoloski oznacavaju arapskim brojevima ispod teksta u podnozju stranice (fusnote).
+Prema ovom nacinu citiranja tu�ih djela ili spoznaja, na kraju recenice koja sadrzi tu�e
+podatke, spoznaje, ideje i sl. napise se arapski broj, koji se zatim ponovi na podnozju doticne
+stranice ispod crte koja se stavlja ispod teksta, a iza njega svi bitni elementi bibliografske
+jedinice. 3
+Nakon navedenih bibliografskih jedinica, potrebno je navesti broj stranice odakle je preuzet
+citat (vidjeti primjer u fusnoti br. 1).
+
+3 Zelenika, R. Metodologija i tehnologija izrade znanstvenog i strucnog djela. Rijeka: Ekonomski fakultet
+Sveucilista u Rijeci, 2000., str. 485.
+
+                                                                                                               19

@@ -1,0 +1,65 @@
+===== [hks-opce-upute-diplomski-2023 | str. 2] =====
+- stranice numerirane arapskim brojkama u donjem desnom kutu, font Book Antiqua
+    - naslovna stranica, stranice sa sadrzajem, sazecima i predgovor se ne numeriraju, prva
+
+         stranica: Uvod numerira se arapskim brojem 1
+    - tekst mora biti obostrano poravnan (Paragraph, Justify)
+    - pocetak svakoga pasusa se uvlaci 1,25 cm (Paragraph, Identation, Special: First line,
+
+         By: 1,25 cm)
+    - naslovi i podnaslovi poglavlja (lijevo poravnanje) s brojevima stranica na kojima
+
+         zapocinju poglavlja (desno) pisu se podebljanim slovima (Bold)
+    - za dijelove teksta koji se zele istaknuti koristi se kurziv (italic)
+    - biljeske se pisu na dnu stranice (footnote), a pismo (font) je velicine 10, prored
+
+         jednostruk s obostranim poravnanjem
+    - ilustrativni prilozi (grafikoni, karte, dijagrami, crtezi, preslici dokumenata, fotografije
+
+         i sl.) i tablice mogu se nalaziti u samom radu ili na kraju rada u cjelini Prilozi; svaki
+         ilustrativni prilog mora biti numeriran (Slika 1., Slika 2., itd.) i naveden (pod prilogom)
+         a svaka tablica numerirana (Tablica 1., Tablica 2., itd.) i naslovljena (iznad tablice)
+    - ako prilog nije autorski mora sadrzavati zapis o izvoru podataka
+
+                                                            II.
+Formalni izgled diplomskog rada:
+1. Korice (boja: plava � Pantone 280 C ili CMYK 100/72/0/18.); slova i logo na 1. korici (boja:
+
+===== [hks-opce-upute-diplomski-2023 | str. 2] =====
+srebrna)
+2. Hrbat
+3. Prazna stranica
+4. Naslovna stranica
+5. Prazna stranica
+6. Izjava o akademskoj cestitosti
+7. Temeljna dokumentacijska kartica
+8. Basic dokumentation card
+9. Sazetak (do 1800 znakova)/Abstract (do 1800 znakova)
+10. Zahvala (izborno)
+11. Glavnina teksta (obvezni dijelovi strukture)
+12. Popis priloga (ukoliko diplomski rad sadrzi priloge)
+13. Popis literature
+
+===== [hks-opce-upute-diplomski-2023 | str. 6] =====
+(Ime i prezime studenta)
+
+IZJAVA O AKADEMSKOJ CESTITOSTI
+
+kojom izjavljujem i potpisom potvrujem da je diplomski rad:
+
+__________________________________________________________________________________
+
+                                                     (naslov diplomskog rada)
+
+iskljucivo rezultat mog vlastitog i samostalnog rada koji se temelji na mojim istrazivanjima i
+objavljenoj literaturi, a dijelovi rada, nalazi ili ideje koje su u radu citirane ili se temelje na
+drugim izvorima su jasno oznaceni kao takvi te navedeni u popisu literature.
+
+Izjavljujem da nijedan dio rada nije napisan na nedopusten nacin, odnosno nije prepisan iz
+necitiranog rada, te nijedan dio rada ne krsi bilo cija autorska prava.
+
+Izjavljujem da nijedan dio rada nije iskoristen za bilo koji drugi rad u drugoj visokoskolskoj,
+znanstvenoj ili obrazovnoj ustanovi.
+
+U Zagrebu, _____________       ______________________
+                                          (potpis)

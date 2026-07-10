@@ -1,0 +1,191 @@
+===== [kif-upute-diplomski-2023 | str. 1] =====
+slika?            UPUTE ZA IZRADU                              tekst?
+                     DIPLOMSKOG/
+                                                            literatura?
+                 SPECIJALISTICKOG
+        molba? DIPLOMSKOG RADA
+
+struktura?                     tema?                           proces?
+    mentor? prijava?                           povjerenstvo?            tablica?
+
+       obrana?                                                       sadrzaj?
+                   citiranje?
+                                                            izvori?
+izrada?
+
+         SVEUCILISTE U ZAGREBU KINEZIOLOSKI FAKULTET        1
+
+===== [kif-upute-diplomski-2023 | str. 4] =====
+KAKO
+ZAPOCETI?
+
+                                     Specijalisticki diplomski i/ili diplomski rad je pisani: a) znanstveno-istra-
+                                     zivacki i b) strucni rad koji sustavno i jasno obrauje ciljanu problem-
+                                     sku, projektnu ili teorijsku cjelinu iz podrucja kompetencija studija na
+                                     suvremen i tehnoloski napredan nacin. Specijalistickim diplomskim i/ili
+                                     diplomskim radom student pokazuje razumijevanje osnova istrazivackog
+                                     rada i struke � najnovijim znanjima iz podrucja svog studija, prije svega
+                                     iz predmeta mentora diplomskog rada, ali i interdisciplinarnim znanjima.
+                                     To dokazuje sposobnosu pronalazenja relevantne i recentne literature i
+                                     njezinim koristenjem te u postavljanju hipoteza i ciljeva, rjesavanja pro-
+                                     blema i pisanju vlastitih sinteza i zakljucaka koji odgovaraju naslovu i ci-
+                                     ljevima dodijeljenog diplomskog rada.
+                                     Literaturu neophodnu za izradu bilo kojeg tipa diplomskog rada prona-
+                                     i ete u knjiznici (knjiznicni katalog) ili u bazama podataka, uz pomo
+                                     mentora (bitne kljucne rijeci, autori, casopisi, knjige, itd.). Izrada specijali-
+                                     stickog diplomskog i/ili diplomskog rada ukljucuje i prijedlog prijave teme
+                                     sa svim neophodnim odjeljcima u obrascu Zahtjev za odobrenje teme
+                                     ovisno o vrsti specijalistickog diplomskog i/ili diplomskog rada.
+                                     Na mreznim stranicama Kinezioloskog fakulteta Sveucilista u Zagrebu
+                                     nalaze se potencijalne teme za tekuu akademsku godinu. Prvi korak ko-
+                                     jim zapocinjete izradu svog rada jest odabir zeljene teme s objavljenog
+                                     popisa. Potom se obraate potencijalnom mentoru, koji vam daje infor-
+                                     maciju o raspolozivosti teme za koju ste zainteresirani, obavlja inicijalni
+                                     razgovor s vama i izrazava svoj pristanak za mentoriranjem.
+
+===== [kif-upute-diplomski-2023 | str. 14] =====
+teorijska pozadina, dosadasnje spoznaje, problem    teorijska pozadina, dosadasnje spoznaje, problem
+       UVOD                                                                                 istrazivanja
+       ovdje se ukratko (dvije-tri stranice teksta) daje opis dosadasnjih spoznaja
+       na podrucju odabranog istrazivanja, prikazuje se svrha rada i osnovne teme           2. Ciljevi i hipoteze                               2. Razrada teme
+       i iznosi se plan rjesavanja problema istrazivanja. Ovdje se nikako ne navode         3. Metode istrazivanja                              na poglavlja i potpoglavlja
+       rezultati koje ste dobili u vlastitom istrazivanju. Zato se pise u treem licu i      uzorak ispitanika, opis protokola, mjernih instru-
+       buduem vremenu (npr. analizirat e se, prikazat e se... itd.). Uvod je prva           menata i varijabli, metode obrade podataka          3. Zakljucak
+       stranica na kojoj se mora nai napisana numeracija, a kako se sve stranice            4. Rezultati
+       prije broje uvod najcese pocinje na stranici 6.                                      5. Rasprava
+
+       RAZRADA TEME                                                                         6. Zakljucak
+       Razrada teme je najopsezniji dio diplomskoga rada. U raspravi svakako valja
+       usporediti rezultate dobivene vlastitim istrazivanjem s rezultatima dosadas-         7. Literatura                                       4. Literatura
+       njih istrazivanja.                                                                   minimalno 20 referenci                              minimalno 20 referenci
+
+       ZAKLJUCAK                                                                            8. Prilozi                                          5. Prilozi
+       stranica, najvise dvije; naglasavaju se samo najvazniji rezultati i prakticna vaz-
+       nost rada.                                                                           Opseg ne smije biti manji od 4000 rijeci, odnosno   Opseg ne smije biti manji od 6000 rijeci, odnosno
+                                                                                            15 kartica teksta (jedna kartica = 1800 znakova)    25 kartica teksta (jedna kartica = 1800 znakova).
+       LITERATURA
+       popis koristene literature te upuivanje na dosadasnja istrazivanja u tekstu
+       diplomskog rada pisu se APA stilu. Popis literature mora biti ureen abeced-
+       no (literaturne jedinice nizu se abecednim redom prema prezimenu prvoga
+       autora).
+
+       PRILOZI
+       prilozi se numeriraju i stavljaju na kraj rada (Prilog 1, Prilog 2 itd.). Numerira-
+       nje je nuzno kako bi se u tekstu rada moglo upuivati na pojedini prilog � na
+       primjer: (vidjeti Prilog 2).
+
+       OPSEG
+       Opseg rada ovisi o podrucju, temi, istrazivackoj perspektivi, odabranoj meto-
+       dologiji i akribicnosti autora. Ipak, s obzirom na to da je rijec o diplomskom i/
+       ili specijalistickom diplomskom radu i najzahtjevnijem radu u studiju, prepo-
+       ruceni je:
+
+===== [kif-upute-diplomski-2023 | str. 15] =====
+IZVORE?                                                                                                                                 Kada je rijec o dijagnostici motorickih sposobnosti, Milanovi
+                                                                                                                                        (2013) navodi: ,,Jedan od naprednijih dijagnostickih postupaka za
+                                     Izvor je svaki oblik grae, bez obzira na medij, dakle, tiskani ili elektronicki, kojim             procjenu motorickih sposobnosti jest izokineticka dijagnostika"
+                                     se sluzite u izradi diplomskog rada (tekst, graficki prikaz, fotografija, enciklopedija).          (str. 129).
+                                     Svi izvori nisu jednako pouzdani te se stoga pod dobrim izvorima za diplomske
+                                     radove smatraju radovi objavljeni u znanstvenim i strucnim casopisima, knjigama            Za razliku od izravnog navoenja ili doslovnog preuzimanja drugog teksta u vlastiti
+                                     i zbornicima koji mogu biti objavljeni u elektronickom obliku i/ili tiskanom obliku.       tekst, neizravnim navoenjem ili parafraziranjem se vlastitim rijecima prenosi tui
+                                     U akademskoj zajednici, znanstveni radovi prolaze postupak recenzije � recenzen-           sadrzaj.
+                                     ti, strucnjaci u odgovarajuem znanstvenom podrucju, kriticki prosuuju podatke,
+                                     tvrdnje i zakljucke u radu. Svi preuzeti dijelovi teksta i podaci u radu moraju biti         primjer:
+                                     dokumentirani, odnosno imati navedeni izvor. U diplomskom radu mogu se kori-                       Izokinetickom dijagnostikom, kao jednim od naprednijih dijagno-
+                                     stiti i ostali izvori, primjerice novinski clanak. Ipak, diplomski se rad treba temeljiti          stickih postupaka, dobiva se detaljan uvid u jakost pojedinih mi-
+                                     na znanstvenim i strucnim radovima uz koristenje izvorne literature kad god je to                  sinih skupina kao i niz specificnosti karakteristicnih za pojedini
+                                     mogue.                                                                                             sport (Milanovi, 2013).
+
+                                       primjer:                                                                                                                                                                                                                     29
+                                             Ako su informacije iz Horvatovog rada preuzete iz Babievog rada,
+                                              onda radije konzultirajte i preuzmite informacije iz Babievog rada,
+                                              dakle iz originala.
+
+                                     STO JE PLAGIRANJE?
+                                     Plagiranje je preuzimanje tuih rijeci ili rezultata bez navoenja izvora kako bi se
+                                     preuzeto djelo prikazalo kao vlastito. Plagiranje se izbjegava navoenjem izvora. Na
+                                     Kinezioloskom fakultetu koristi se American Psychological Association APA stil ci-
+                                     tiranja. Izvori se navode u samom tekstu rada i na kraju diplomskog rada, u popisu
+                                     literature. Potrebno je razlikovati izravno navoenje tuih rijeci od parafraziranja.
+                                     Izravno navoenje je umetanje drugog teksta u maticni tekst s navodnicima. Umet-
+                                     nuti tui tekst mora se jasno razlikovati od maticnog teksta.
+
+28
+
+===== [kif-upute-diplomski-2023 | str. 16] =====
+NAVOENJE                                                                                                                 KAKO      Knjige s jednim autorom
+IZVORA                                                                                                                   NAVODITI   u tekstu:
+                                                                                                                         KNJIGE                    Kessler (2003) je otkrio da razliciti epidemioloski uzorci...
+                                     U ovoj uputi je sadrzano nekoliko najcesih primjera navoenja izvora. Za osta-                                                                      ili
+                                     le izvore mozete konzultirati ovu stranicu ili prirucnik Publication Manual of the                           Razliciti epidemioloski uzorci pokazuju da... (Kessler, 2003).
+                                     American Psychological Association prema kojem su i raene ove upute (primjerci
+                                     su dostupni u knjiznici).                                                                      u popisu literature:
+                                     VAZNO: u popisu literature, reference se redaju abecednim redom i ne oznacavaju                 Kessler, M. (2003). Epidemioloske studije. Zagreb: Skolska knjiga.
+                                     se rednim brojevima. Svaka referenca mora biti visea. To se radi tako da se oznaci
+                                     cijeli popis literature, desnim klikom odabere odlomak i kod uvlake � posebno, se             Knjige s dva autora
+                                     odabere visee. Na taj se nacin vizualno lakse povezuje referenca u tekstu s cjelo-             u tekstu:
+                                     vitom referencom u popisu literature.                                                                               ... kao sto Babi i Snajder (2000) pokazuju...
+                                                                                                                                                                                     ili
+30                                                                                                                                                     Ti rezultati pokazuju da...(Babi i Snajder, 2000).
+
+                                                                                                                                    u popisu literature:
+                                                                                                                                     Babi, V. i Snajder, V. (2000). Atletika. Zagreb: Kinezioloski fakultet.
+
+                                                                                                                                   Urednicke knjige
+                                                                                                                                     u tekstu:
+
+                                                                                                                                                     Leonard i Crawford (2002)
+
+                                                                                                                                   u popisu literature:
+
+                                                                                                                                   Leonard, W. R. i Crawford, M. H. (ur.). (2002). Human biology of pastoral popu-
+                                                                                                                                   lations. Cambridge, New York: Cambridge University Press.
+
+                                                                                                                                                                                                                    31
+
+===== [kif-upute-diplomski-2023 | str. 17] =====
+KAKO         u tekstu:                                                                            KAKO          Clanci s jedan ili dva autora
+NAVODITI                                                                                          NAVODITI
+POGLAVLJA               (Toki, 2014)                                                              CLANKE          u tekstu:
+U KNJIZI                       ili                                                                U CASOPISIMA
+                                                                                                                                            Bezjak i Ceci Erpic (2021) pokazuju da...
+                        Toki (2014)                                                                                                                                  ili
+
+             u popisu literature:                                                                                                        Pokazalo se da... (Bezjak i Ceci Erpic, 2021).
+
+             Toki, M. (2014). Platonova gimnastika. U I. Zagorac (ur.), O sportu drugacije                        u popisu literature:
+             (str. 25-34). Zagreb: Hrvatsko filozofsko drustvo.
+                                                                                                                  Bezjak, R. i Ceci Erpic, S. (2021). The relationship between actual and self-per-
+KAKO         u tekstu:                                                                                            ceived physical fitness in adolescence. Kinesiology, 53(1), 37-46.
+NAVODITI                                                                                                          https://doi.org/10.26582/k.53.1.5
+RADOVE U
+ZBORNICIMA                                                                                                       --naslov casopisa i volumen se pisu u kurzivu
+SKUPOVA                                                                                                          --ako ne postoji DOI, iza broja stranice ne pise se nista
+
+                        Swalgin i suradnici (2011)
+
+             u popisu literature:                                                                               Clanci s tri i vise autora
+
+             Swalgin, K., Knjaz, D., Tomanek, L. i Fosnes, O. (2011). A study to determine the                    u tekstu: navodi se prvi autor i et al
+             status, importance and value of taking a charge in basketball by coaches in
+             the United States and selected European countries. U D. Milanovi i G. Sporis                                                          (Cigrovski i suradnici, 2020).
+             (ur.), Integrative Power of Kinesiology (str. 753-754). Zagreb: Kinezioloski fakul-                                                                     ili
+             tet Sveucilista u Zagrebu.
+                                                                                                                                          Cigrovski i suradnici (2020) pokazuju da...
+
+KAKO         u tekstu:
+NAVODITI
+DOKTORSKE,              (Nemci, 2019)
+MAGISTARSKE
+I DIPLOMSKE  u popisu literature:
+RADNJE
+U TEKSTU     Nemci, T. (2019). Oblikovanje i vrednovanje notacijskog sustava za analizu
+             izvedbe u futsalu (doktorska disertacija). Kinezioloski fakultet, Zagreb.
+32
+             ili dostupno kroz bazu Dabar:
+
+             Nemci, T. (2019). Oblikovanje i vrednovanje notacijskog sustava za analizu
+             izvedbe u futsalu (doktorska disertacija). Repozitorij Kinezioloskog fakulteta
+             Sveucilista u Zagrebu KIFoREP.
+
+                                                                                                                                                                                       33

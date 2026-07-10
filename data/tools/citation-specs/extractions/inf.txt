@@ -1,0 +1,156 @@
+===== [inf-pravilnik-zavrsni-2024 | str. 4] =====
+(1) Obveze mentora završnog rada su:
+
+upoznati studenta sa svrhom, načinom pisanja i administrativnim postupcima pri
+izradi i prijavi obrane završnog rada,
+
+pripremiti i potpisati Zadatak za završni rad na zadanom obrascu (Prilog 1.) i dostaviti
+ga studentu,
+
+pomagati studentu pri odabiru teme i metodologiji izrade i pisanja rada,
+
+pratiti rad studenta, pomagati mu stručnim savjetima u izradi i strukturiranju rada te
+upućivati na odgovarajuću literaturu,
+
+provjeriti stručnost napisanog rada kako bi njegova kvaliteta bila primjerena ishodima
+studija i kompetencijama koje student stječe po uspješnoj obrani završnog rada,
+provjeriti izvornost napisanog rada koristeći licencirani softver za tu namjenu,
+
+u roku od 15 radnih dana pročitati završni rad koji je dostavio student i dati stručne
+komentare na njega.
+
+Članak 10.
+Obveze studenta pri izradi završnog rada
+
+(1) Obaveze studenta pri izradi završnog rada su:
+
+===== [inf-pravilnik-zavrsni-2024 | str. 5] =====
+odabrati mentora i prijaviti temu završnog rada do roka utvrđenog Uputom o
+rokovima,
+
+potpisati obrazac Zadatka za završni rad,
+
+samostalno izraditi završni rad sukladno važećim pravnim aktima Fakulteta odnosno
+Sveučilišta u Rijeci (u daljnjem tekstu: Sveučilište), uz konzultacije s mentorom,
+izraditi završni rad prema predlošku koji je objavljen na službenim web stranicama
+Fakulteta te na službenim stranicama kolegija Završni rad,
+
+pravilno citirati literaturu i koristiti druge izvore informacija u skladu s Uputama za
+izradu završnog rada i Etičkim kodeksom Sveučilišta,
+
+dostaviti prvu verziju završnog rada mentoru na pregled najkasnije do roka koji je
+predviđen Uputom o rokovima i objavljen na stranicama kolegija Završni rad,
+izrađivati rad prema uputama mentora i korigirati ga u skladu s primjedbama
+mentora.
+
+Članak 11.
+Izgled i opremanje završnog rada
+
+(1) Završni rad mora biti otisnut računalnim pisačem na papiru formata A4 (21 x 29,7 cm) i mora
+imati najmanje 30 stranica teksta bez priloga, a sastoji se od:
+
+===== [inf-pravilnik-zavrsni-2024 | str. 5] =====
+naslovnice čiji izgled treba odgovarati propisanom predlošku (Prilog 2.) sljedećeg
+sadržaja: naziv sveučilišta, naziv fakulteta, naziv studija i studijske grupe, ime i prezime
+studenta, naslov rada, titula, ime i prezime mentora, datum i mjesto,
+
+Zadatka za završni rad,
+
+sažetka i ključnih riječi,
+
+sadržaja,
+
+uvoda, razrade teme i zaključka,
+
+popisa literature,
+
+popisa priloga (računalne aplikacije, dokumentacija projekta, grafički zapisi, zvučni
+zapisi ili videozapisi i sl.).
+
+Članak 12.
+Jezik pisanja rada
+
+(1) Student izrađuje završni rad na hrvatskom standardnom jeziku ili na engleskom jeziku, u
+skladu s Uputama za izradu završnog rada objavljenim na stranicama kolegija Završni rad.
+
+(2) Ako je završni rad pisan na hrvatskom jeziku, dozvoljena je upotreba stručnih termina na
+engleskom jeziku u slučaju da za njih ne postoji uvriježeni prijevod na hrvatski jezik.
+
+===== [inf-pravilnik-diplomski-2024 | str. 4] =====
+Obveze mentora diplomskog rada su:
+
+— upoznati studenta sa svrhom, načinom pisanja i administrativnim postupcima pri
+izradi i prijavi obrane diplomskog rada,
+
+— pripremiti i potpisati Zadatak za diplomski rad na zadanom obrascu (Prilog 1.) i
+dostaviti ga studentu,
+
+— pomagati studentu pri odabiru teme i metodologiji izrade i pisanja rada,
+
+— pratiti rad studenta, pomagati mu stručnim savjetima u izradi i strukturiranju rada te
+upućivati na odgovarajuću literaturu,
+
+— provjeriti stručnost napisanog rada kako bi njegova kvaliteta bila primjerena ishodima
+studija i kompetencijama koje student stječe po uspješnoj obrani diplomskog rada,
+
+— provjeriti izvornost napisanog rada koristeći licencirani softver za tu namjenu,
+
+—  uroku od 15 radnih dana pročitati diplomski rad koji je dostavio student i dati stručne
+komentare na njega.
+
+Članak 10.
+Obveze studenta pri izradi diplomskog rada
+
+===== [inf-pravilnik-diplomski-2024 | str. 5] =====
+odabrati mentora i prijaviti temu diplomskog rada do roka utvrđenog Uputom o
+rokovima,
+
+potpisati obrazac Zadatka za diplomski rad,
+
+samostalno izraditi diplomski rad sukladno važećim pravnim aktima Fakulteta
+odnosno Sveučilišta u Rijeci (u daljnjem tekstu: Sveučilište), uz konzultacije s
+mentorom,
+
+izraditi diplomski rad prema predlošku koji je objavljen na službenim web stranicama
+Fakulteta te na službenim stranicama kolegija Diplomski rad,
+
+pravilno citirati literaturu i koristiti druge izvore informacija u skladu s Uputama za
+izradu diplomskog rada i Etičkim kodeksom Sveučilišta,
+
+dostaviti prvu verziju diplomskog rada mentoru na pregled najkasnije do roka koji je
+predviđen Uputom o rokovima i objavljen na stranicama kolegija Diplomski rad,
+izrađivati rad prema uputama mentora i korigirati ga u skladu s primjedbama
+mentora.
+
+Članak 11.
+Izgled i opremanje diplomskog rada
+
+(1) Diplomski rad mora biti otisnut računalnim pisačem na papiru formata A4 (21 x 29,7 cm) i
+mora imati najmanje 40 stranica teksta bez priloga, a sastoji se od:
+
+===== [inf-pravilnik-diplomski-2024 | str. 5] =====
+naslovnice čiji izgled treba odgovarati propisanom predlošku (Prilog 2.) sljedećeg
+sadržaja: naziv sveučilišta, naziv fakulteta, naziv studija i studijske grupe, ime i prezime
+studenta, naslov rada, titula, ime i prezime mentora, mjesto i datum,
+
+Zadatka za diplomski rad,
+
+sažetka i ključnih riječi,
+
+sadržaja,
+
+uvoda, razrade teme i zaključka,
+
+popisa literature,
+
+popisa priloga (računalne aplikacije, dokumentacija projekta, grafički zapisi, zvučni
+zapisi ili videozapisi i sl.).
+
+Članak 12.
+Jezik pisanja rada
+
+(1) Student izrađuje diplomski rad na hrvatskom standardnom jeziku ili na engleskom jeziku, u
+skladu s Uputama za izradu diplomskog rada objavljenim na stranicama kolegija Diplomski rad.
+
+(2) Ako je diplomski rad pisan na hrvatskom jeziku, dozvoljena je upotreba stručnih termina na
+engleskom jeziku u slučaju da za njih ne postoji uvriježeni prijevod na hrvatski jezik.

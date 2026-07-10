@@ -1,0 +1,314 @@
+===== [fpz-upute-zavrsni-diplomski-2018 | str. 2] =====
+izradbu........................................................................................................................................ 8
+   6.1. Naslov ...................................................................................................................................... 8
+   6.2. Sazetak/Summary i Kljucne rijeci/Keywords ........................................................................... 8
+   6.3. Sadrzaj ..................................................................................................................................... 8
+   6.4. Uvod ........................................................................................................................................ 9
+   6.5. Izlaganje tematike.................................................................................................................... 9
+
+     6.5.1. Obiljezavanje dijelova i poddijelova .................................................................... 9
+     6.5.2. Oznake izvora podataka .................................................................................... 10
+     6.5.3. Tablice, grafikoni i slike ..................................................................................... 11
+     6.5.4. Kratice i strane rijeci .......................................................................................... 12
+   6.6. Zakljucak ................................................................................................................................ 12
+   6.7. Literatura ............................................................................................................................... 12
+7. Tehnicke upute za izradu zavrsnog i diplomskog rada ..................................................... 14
+8. Obrana zavrsnog i diplomskog rada.................................................................................. 16
+9. PRILOZI .............................................................................................................................. 17
+
+         Prilog 1. Dijagram toka procesa prijave i obrane zavrsnog rada .............................................. 17
+         Prilog 2. Upute za upotrebu opcije Izbor teme u ISVU sustavu ................................................ 19
+         Prilog 3. Obrazac � Zamolba za pristupanje izradbi zavrsnog rada ........................................... 22
+         Prilog 4. Dijagram toka procesa prijave i obrane diplomskog rada ...................................... 24
+         Prilog 5. Obrazac � Zamolba za pristupanje izradbi diplomskog rada ....................................... 26
+         Prilog 6. Obrazac � Prilog prijavi diplomskog rada ................................................................... 28
+         Prilog 7. Sazetak/Summary i Kljucne rijeci/Keywords............................................................... 29
+
+===== [fpz-upute-zavrsni-diplomski-2018 | str. 3] =====
+Prilog 8. Sadrzaj zavrsnog ili diplomskog rada.............................................................................. 30
+Prilog 9. Obrazac � Primjer uvoda zavrsnog ili diplomskog rada .............................................. 31
+Prilog 10. Primjeri za obiljezavanje dijelova i poddijelova te poziva na biljeske uporabom
+uglatih zagrada .......................................................................................................................... 33
+Prilog 11. Primjer za povezivanje s izvorima uporabom pozivnih biljeski................................. 34
+Prilog 12. Primjer ilustracije � tablica........................................................................................ 35
+Prilog 13. Primjer ilustracije � grafikon ..................................................................................... 36
+Prilog 14. Primjer ilustracije � slika ........................................................................................... 37
+Prilog 15. Primjer formule i jednadzbe ..................................................................................... 38
+Prilog 16. Primjer popisa kratica ............................................................................................... 39
+Prilog 17. Primjer zakljucka zavrsnog ili diplomskog rada..................................................... 40
+Prilog 18. a) Primjer popisa upotrijebljene literature, inacica vankuverskog stila; kada se
+literatura u tekstu rada navodi fusnotama ............................................................................... 41
+Prilog 18. b) Primjer popisa upotrijebljene literature, inacica vankuverskog stila; kada se
+literatura u tekstu rada navodi koristei uglate zagrade .......................................................... 42
+Prilog 19. Obrazac � Izvjese o napretku izradbe zavrsnog rada .............................................. 43
+Prilog 20. Obrazac � Potvrda o izraenom zavrsnom radu....................................................... 44
+Prilog 21. Obrazac � Potvrda o izraenom diplomskom radu .................................................. 45
+Prilog 22. Izgled korica zavrsnog rada ....................................................................................... 46
+Prilog 23. Izgled korica diplomskog rada ................................................................................... 47
+Prilog 24. Izgled potkorice zavrsnog rada ................................................................................. 48
+Prilog 25. Izgled potkorice diplomskog rada ............................................................................. 49
+Prilog 26. Izjava o akademskoj cestitosti i suglasnosti.............................................................. 50
+
+===== [fpz-upute-zavrsni-diplomski-2018 | str. 5] =====
+rjesavanju problema iz struke.
+
+2.1. Svrha i ciljevi izrade zavrsnog rada
+
+         Nakon sto student ispuni sve svoje obveze tijekom studija (izradi i obrani seminarske
+radove, polozi sve ispite i odradi strucnu praksu), treba dokazati sposobnost i samostalnost u
+rjesavanju odreenog problema.
+
+         U izradi zavrsnog rada student mora dokazati:
+                sposobnost uocavanja relevantnih prometnih i logistickih velicina te
+                   analiziranja prikupljenih podataka,
+                sposobnost primjene teorijskog i prakticnog znanja stecenog tijekom studija,
+                sposobnost sluzenja aktualnom domaom i stranom literaturom, tj.
+                   upotrebljavanja relevantnih tuih spoznaja, stavova i znanstvenih cinjenica
+                   koje su objavljene u upotrijebljenoj literaturi, pri pisanoj obradi teme,
+                sposobnost pravilne obrade ilustracija (tablica, grafikona, fotografija i crteza),
+                vjestinu pisanja strucnih radova.
+
+         Zavrsni rad ne mora imati svojstvo originalnog rada, ali student ga mora samostalno
+izraditi.
+
+2.2. Elementi zavrsnog rada
+
+         Zavrsni rad mora imati ove elemente, slozene redoslijedom prikazanim na slici 1:
+               1) Korice (tvrdi uvez)
+               2) Zadatak zavrsnog rada
+               3) Potkorice s podacima:
+
+===== [fpz-upute-zavrsni-diplomski-2018 | str. 6] =====
+7) Izlaganje tematike (najcese sadrzi od pet do sedam analiticki strukturiranih
+                 dijelova)
+
+             8) Zakljucak
+             9) Popis literature
+             10) Popis ilustracija
+             11) Popis priloga (ako postoje)
+             12) Izjava o akademskoj cestitosti i suglasnosti.
+
+NASLOVNICA
+
+  OBRAZAC              SAZETAK I
+  ZADATAK               KLJUCNE
+ZAVRSNOG                    RIJEI
+
+        RADA           SUMMARY
+                               AND
+          POTKORICA
+                     KEYWORDS
+
+                     SADRZAJ        UVOD
+
+                                          IZLAGANJE
+                                           TEMATIKE
+
+                                                     ZAKLJUCAK
+
+                                                              POPIS
+                                                     LITERATURE
+
+                                                                         POPIS
+                                                                ILUSTRACIJA
+
+                                                                                PRILOZI
+
+                                                                                       IZJAVA O
+                                                                                AKADEMSKOJ
+                                                                                 CESTITOSTI I
+                                                                                SUGLASNOSTI
+
+                                      Slika 1. Elementi zavrsnog rada
+
+===== [fpz-upute-zavrsni-diplomski-2018 | str. 7] =====
+stecenog znanja tijekom studija s konkretnim zadatkom koji mu se postavlja, kao i
+samostalnost u rjesavanju slozenih problema iz struke.
+
+3.1. Svrha i ciljevi izrade diplomskog rada
+
+         Nakon sto student ispuni sve svoje obveze tijekom studija, treba dokazati sposobnost
+i samostalnost u rjesavanju kompleksnih problema iz struke, a da pritom rjesenja ne moraju
+imati obiljezja originalnosti.
+
+         U izradi diplomskog rada student mora dokazati:
+                sposobnost primjene teorijskog i prakticnog znanja stecenog tijekom studija,
+                sposobnost samostalnog sluzenja aktualnom domaom i stranom
+                   literaturom, tj. upotrebljavanja relevantnih tuih spoznaja, stavova i
+                   znanstvenih cinjenica koje su objavljene u upotrijebljenoj literaturi, pri
+                   pisanoj obradi teme,
+                sposobnost primjene znanstvenih metoda, tehnika i alata u obradi aktualne
+                   teme,
+                sposobnost pravilne obrade ilustracija (tablica, grafikona, fotografija i crteza),
+                vjestinu pisanja strucnih radova.
+
+         Diplomski rad ne mora imati svojstvo izvornoga znanstvenog rada, ali student ga mora
+samostalno izraditi.
+
+3.2. Elementi diplomskog rada
+
+         Diplomski rad mora sadrzavati ove elemente, slozene redoslijedom prikazanim na slici
+
+===== [fpz-upute-zavrsni-diplomski-2018 | str. 8] =====
+9) Popis literature
+             10) Popis ilustracija
+             11) Popis priloga (ako postoje)
+             12) Izjava o akademskoj cestitosti i suglasnosti.
+
+NASLOVNICA
+
+     OBRAZAC              SAZETAK I
+      ZADATAK              KLJUCNE
+DIPLOMSKOG                     RIJEI
+
+           RADA           SUMMARY
+                                  AND
+             POTKORICA
+                        KEYWORDS
+
+                                        UVOD
+                        SADRZAJ
+
+                                              IZLAGANJE
+                                               TEMATIKE
+
+                                                         ZAKLJUCAK
+
+                                                                         POPIS
+                                                                LITERATURE
+
+                                                                             POPIS
+                                                                    ILUSTRACIJA
+
+                                                                                    PRILOZI
+
+                                                                                           IZJAVA O
+                                                                                    AKADEMSKOJ
+                                                                                     CESTITOSTI I
+                                                                                    SUGLASNOSTI
+
+                        Slika 2. Elementi diplomskog rada
+
+===== [fpz-upute-zavrsni-diplomski-2018 | str. 10] =====
+Nastavno osoblje Fakulteta definira popis tematskih podrucja po smjerovima studija i
+po mentorima. Popis tematskih podrucja i pripadajuih mentora dostupan je studentima
+putem ISVU sustava. Studenti mogu temu i mentora odabirati samo u za to predvienom
+razdoblju, koje se definira za svaku akademsku godinu i objavljuje putem sustava Merlin.
+Detaljne upute za upotrebu opcije Izbor teme u ISVU sustavu takoer se objavljuju putem
+sustava Merlin i nalaze se u prilogu ovih Uputa (Prilog 2). Student moze predloziti vlastiti naziv
+teme diplomskog rada, a detaljne upute o tome kako to moze uciniti nalaze se takoer u
+Prilogu 2.
+
+        Diplomski se rad prijavljuje na obrascu Zamolba za pristupanje izradbi diplomskog
+rada (vidjeti Prilog 5) i obrascu Prilog prijavi diplomskog rada (vidjeti Prilog 6).
+
+         U prijedlogu teme, naslova i sadrzaja rada student navodi i poznatu mu literaturu te
+druge izvore podataka kojima se namjerava koristiti pri obradi teme i izradbi rada.
+
+         Mentor i student zajednicki izrauju teze diplomskog rada te oblikuju tocan naziv rada.
+Temu i teze te tekst koji se nalazi u Prilogu prijavi diplomskog rada, odobrava zavod nadlezan
+za odreeni smjer studenta, a nakon toga prijavljenu temu i teze rada mora odobriti i Odbor
+za zavrsne i diplomske radove.
+
+         Nakon sto Odbor za zavrsne i diplomske radove odobri temu i naslov rada, konacni se
+rezultati objavljuju na mreznim stranicama Fakulteta pod izbornikom Diplomski studij /
+Diplomski rad.
+
+         Na osnovi objavljenog konacnog popisa tema mentor sastavlja Zadatak diplomskog
+
+===== [fpz-upute-zavrsni-diplomski-2018 | str. 11] =====
+Treba biti sto krai, ali takav da u sebi sadrzi sve vaznije kljucne rijeci. Primjerice, nije
+dopusteno staviti kao naslov: ,,ISDN", ,,Internet", ,,Prometni tok" ili ,,Prometna signalizacija".
+Potrebno je preciznije odrediti podrucje istrazivanja, npr. ,,Prometna analiza raskrizja.... u
+gradu... s prijedlozima rjesenja", ,,Analiza parametra kvalitete prijenosa govora
+internetom", ,,Dimenzioniranje sustava za odrzavanje zrakoplova primjenom modela
+teorije redova cekanja", ,,Komparativna analiza operatora mobilnih mreza u Hrvatskoj" ili
+,,Analiza obrta vucnog vozila u zeljeznickom prometu". U naslovu rada treba izbjegavati
+kratice. Naslov treba biti napisan na hrvatskom i engleskom ili drugom stranom jeziku. Treba
+izbjegavati vise od 10 rijeci i strane izraze ako postoje hrvatski izrazi.
+
+6.2. Sazetak/Summary i Kljucne rijeci/Keywords
+
+         Sazetak je jezgrovit prikaz cijelog rada. Treba ukratko prenijeti citatelju informacije o
+svrsi i cilju istrazivanja, nacinu obrade materije, primijenjenoj metodologiji, postignutim
+rezultatima i zakljuccima. Sazetak sadrzi do 150 rijeci i ne sadrzi formule ni bibliografiju (vidjeti
+Prilog 7).
+
+         Kljucne rijeci moraju na prvi pogled omoguiti citatelju prepoznavanje svrhe i
+predmeta istrazivanja. Izdvaja se nekoliko (3 � 5) kljucnih rijeci koje se najcese ponavljaju u
+tekstu rada i neposredno su vezane uz glavnu temu rada. Kljucne rijeci se odvajaju znakom
+tocka sa zarezom (;).
+
+         Napomena: kljucne rijeci su rijeci i pojmovi koji se mogu sastojati od vise rijeci (npr.
+radiofrekvencijska identifikacija i sl.), a nisu recenice (vidjeti Prilog 7).
+
+6.3. Sadrzaj
+
+         Sadrzaj je obvezan. Za citatelja rada (zavrsnog ili diplomskog) sadrzaj predstavlja
+temeljni putokaz pomou kojega moze vrlo brzo pronai sve informacije i spoznaje koje su mu
+potrebne. Sadrzaj predstavlja brojcano-tekstualni pregled dijelova i poddijelova zavrsnog i
+diplomskog rada pomou kojega se tako pronalaze stranice na kojima se ti dijelovi i
+poddijelovi nalaze. Naslov SADRZAJ pise se velikim slovima na vrhu stranice u lijevom kutu.
+Stranice sadrzaja zavrsnog i diplomskog rada se ne numeriraju (Prilog 8).
+
+                                                                                                                           8
+
+===== [fpz-upute-zavrsni-diplomski-2018 | str. 12] =====
+6.4. Uvod
+
+         Uvod je obvezan. To je pocetni i pristupni dio zavrsnog i diplomskog rada. Uvod treba
+citatelja uvesti u podrucje obraene tematike, upoznati ga s problemom i predmetom
+istrazivanja, svrhom i ciljevima istrazivanja te strukturom rada. Ne pise se u prvom licu
+(jednine ili mnozine) ve se upotrebljava tree lice ili pasiv, npr. ,,smatra se", ,,istrazivanja su
+pokazala", ,,uoceno je" itd. U uvodu se ne upotrebljava budue vrijeme. U uvodu je potrebno
+naznaciti izvore podataka i nacine njihova prikupljanja i obrade (npr. u izradi rada
+upotrijebljeni su podaci o prometu prikupljeni na dionici autoceste A1 od x do y kilometra
+tijekom listopada 2014. godine, itd.). Uvod je prvi dio teksta, tako da je prva stranica uvoda
+ujedno i prva stranica rada, tj. stranica kojom zapocinje numeriranje (za numeraciju se
+primjenjuju arapski brojevi). U uvodu se ne navode citati, ne poziva se na upotrijebljene
+izvore i ne upotrebljavaju se grafikoni, tablice ili slike. Uvod nema potpoglavlja, i preporuka
+je da se pise nakon zavrsetka pisanja teksta zavrsnog rada, ali to ne znaci da se u njemu
+iznose zakljucci. Primjer uvoda vidjeti u Prilogu 9.
+
+6.5. Izlaganje tematike
+
+         Primjereno je da se cjelokupna tematika zavrsnog i diplomskog rada sustavno
+rasporedi, obradi i prezentira u najcese od pet do sedam analiticki strukturiranih i povezanih
+dijelova.
+6.5.1. Obiljezavanje dijelova i poddijelova
+
+         U obiljezavanju dijelova i poddijelova treba dosljedno upotrijebiti decimalni sustav, ali
+
+===== [fpz-upute-zavrsni-diplomski-2018 | str. 13] =====
+Prva znamenka svakog poddijela (npr. potpoglavlja) mora se podudarati s brojem
+dijela (npr. poglavlja) kojem pripada, a druga znamenka oznacava redni broj navedenog
+potpoglavlja itd. Osim toga potrebno je voditi racuna i o tome da velicina slova u naslovima
+i podnaslovima odrazava njihovu vaznost, odnosno kojoj razini dio pripada.
+
+         Sve decimalne jedinice s pripadajuim naslovima upisuju se u sadrzaj zavrsnog i
+diplomskog rada (pozeljno je upotrebljavati automatsku izradu tablice sadrzaja koju nude alati
+za obradu teksta poput MS Word).
+
+6.5.2. Oznake izvora podataka
+
+         Student pri pisanju zavrsnog i diplomskog rada obvezno i na uobicajen nacin citira
+tue spoznaje i formulacije, odnosno navodi upotrijebljenu literaturu (izvor) i to moze ciniti
+na dva nacina:
+
+                pozivnim biljeskama � fusnotama (u podnozju stranice) ili
+                u uglatim zagradama (na kraju ulomka, u tekstu ili uz sliku/graf/tablicu). U
+
+                   zagradama se oznacava redni broj upotrijebljenog rada iz popisa literature
+                   (npr. [5]).
+
+Napomena: u istom radu ne mogu se istovremeno upotrebljavati oba nacina navoenja
+literature.
+
+         Navoenje izvora se upotrebljava:
+                za svako cjelovito navoenje tuih rijeci u tekstu (citiranje), uz uporabu
+                   pravopisnih znakova navoenja,
+                u slucaju kada se duzi tekst sazima i oblikuje svojim rijecima,
+                za navoenje svake cinjenice ili podatka koji openito nije poznat, ali je
+                   poznato tko je autor.
+
+                                                                                                                         10

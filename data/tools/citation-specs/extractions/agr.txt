@@ -1,0 +1,241 @@
+===== [agr-upute-diplomski-2019 | str. 2] =====
+1.1. Akademska cestitost ............................................................................................................................. 3
+
+2. Struktura i sadrzaj diplomskog rada .......................................................................................................4
+    a) Istrazivacki diplomski rad ....................................................................................................................... 4
+    b) Strucno-projektni diplomski rad ............................................................................................................. 6
+    c) Pregledni diplomski rad .......................................................................................................................... 6
+
+3. Prijava diplomskog rada.........................................................................................................................8
+    3.1. Primjeri prijava diplomskih radova................................................................................................... 8
+    3.2. Koraci u istrazivackom radu ........................................................................................................... 10
+
+4. Jezik i stil pisanja diplomskog rada.......................................................................................................11
+5. Pravila citiranja i izrada popisa literature.............................................................................................12
+
+    a) Citiranje izvora u tekstu ........................................................................................................................ 12
+    b) Izrada popisa literature ........................................................................................................................ 13
+    c) Citiranje sadrzaja s mreznih (web) stranica .......................................................................................... 14
+6. Tehnicko oblikovanje rada ...................................................................................................................16
+7. Prezentacija diplomskog rada ..............................................................................................................17
+8. Korisne poveznice i dodatna literatura o pisanju diplomskog rada......................................................18
+Vazne napomene za kraj: ..........................................................................................................................19
+
+Pripremili:
+Prof. dr. sc. Marija Pecina u suradnji s clanovima Povjerenstva za izradu uputa i jedinstvenih kriterija za
+zavrsne i diplomske radove i predavacima na modulu Diplomski rad � Seminar
+
+Zagreb, ozujak 2019.
+
+                                                                                                                                   2
+
+===== [agr-upute-diplomski-2019 | str. 3] =====
+1. Diplomski rad
+
+Diplomski studij zavrsava polaganjem svih ispita, ispunjavanjem svih studentskih i ostalih obveza propisanih
+studijskim programom studija te izradom i javnom obranom diplomskog rada.
+
+Diplomski rad predstavlja zadatak i optereenje studenta u vrijednosti 30 ECTS bodova, a podrazumijeva
+aktivnosti u sklopu modula Diplomski rad - Seminar i same izrade diplomskog rada.
+
+Diplomski rad je pisani: a) istrazivacki, b) strucno-projektni ili c) pregledni rad koji sustavno i jasno obrauje
+ciljanu problemsku, projektnu ili teorijsku cjelinu iz podrucja kompetencija studija na suvremen i tehnoloski
+napredan nacin. Diplomskim radom student pokazuje da razumije osnove istrazivackog rada i struke -
+najnovijim znanjima iz podrucja svog studija, prije svega iz predmeta mentora diplomskog rada, ali i
+interdisciplinarnim znanjima. To dokazuje sposobnosu pronalazenja relevantne i recentne literature i
+njezinim koristenjem te u postavljanju hipoteza i ciljeva, rjesavanja problema i pisanju vlastitih sinteza i
+zakljucaka koji odgovaraju naslovu i ciljevima dodijeljenoga diplomskog rada.
+
+Izrada diplomskog rada ukljucuje i prijedlog prijave teme sa svim neophodnim odjeljcima u obrascu Prijava
+diplomskog rada (vidi 3. Prijava diplomskog rada). Temu predlaze i mentora bira student do zakazanog
+datuma, a ako to ne ucini Vijee studija mu dodjeljuje i temu i mentora. Literatura, neophodna za izradu
+bilo kojeg tipa diplomskog rada, pronalazi se pretrazivanjem baza podataka (vidi 8. Pretrazivanje literature i
+pravila citiranja) uz savjetodavnu pomo mentora (bitne kljucne rijeci, autori, casopisi, knjige itd.).
+
+Diplomski rad je samostalan istrazivacki, strucno-projektni ili pregledni rad u kojem student pod vodstvom i
+uz pomo mentora i clanova povjerenstva obrauje izabranu temu. Preporuka je da diplomski rad bude
+opsega 20 � 50 stranica osnovnog teksta na papiru A4 formata � bez naslovnice, sadrzaja, popisa literature i
+priloga (vidi 6. Tehnicko oblikovanje rada). Konacni opseg ovisi o specificnostima podrucja i teme.
+
+Student odgovara za sve dijelove rada i potpisuje izjavu o akademskoj cestitosti (vidi 1.1. Akademska
+cestitost). Njegova odgovornost znaci tocnost navedenih podataka, oznacivanje citiranih dijelova tuih
+radova te pravopisna i gramaticka pravilnost (vidi 4. Jezik i stil pisanja i 8. Jezicni savjeti).
+
+Pri izradi diplomskog rada prijeko je potrebno postovati strukturne, sadrzajne (vidi 2. Struktura i sadrzaj
+rada) i tehnicke upute (vidi 6. Tehnicko oblikovanje rada) za pisanje rada.
+
+Izraeni diplomski rad prezentira se i brani pred povjerenstvom na javnoj obrani (vidi 7. Prezentacija rada).
+
+1.1. Akademska cestitost
+
+                          Plagiranje = Kraa autorstva
+
+Plagiranje u diplomskom radu je prikazivanje tuih tekstova, slika ili podataka kao vlastitih. Svaki oblik
+plagiranja radova i ideja smatra se povredom Etickoga kodeksa Sveucilista u Zagrebu � 2009. (cl. 18. I 19.)
+(http://www.agr.unizg.hr/hr/category/dokumenti/200).
+
+Vise o znanstvenoj i akademskoj cestitosti valja procitati na mreznim stranicama Agronomskog fakulteta
+(http://www.agr.unizg.hr/hr/article/26/etika) i u radovima Bili-Zulle, 2007. i Bazdari et al. 2009. (vidi 8.
+Korisne poveznice i dodatna literatura o pisanju diplomskog rada).
+
+Kako bi se izbjegao svaki pa i nenamjerni oblik plagijata � kao posljedica neznanja, vazno je drzati se pravila
+citiranja (vidi 5. Pravila citiranja i izrada popisa literature i 8. Korisne poveznice ...).
+
+Shodno tome u nastavku je tekst izjave o akademskoj cestitosti koju potpisuju studenti (vidi Predlozak �
+Diplomski rad na http://www.agr.unizg.hr/hr/category/dokumenti/200).
+
+                                                       3
+
+===== [agr-upute-diplomski-2019 | str. 4] =====
+IZJAVA STUDENTA O AKADEMSKOJ CESTITOSTI
+
+Ja, _______________________________________________ , JMBAG ___________________ ,
+
+izjavljujem da sam samostalno izradila/izradio diplomski rad pod naslovom:
+
+______________________________________________________________________________
+
+Svojim potpisom jamcim:
+- da sam jedina autorica/jedini autor ovoga diplomskog rada
+- da su svi koristeni izvori literature, kako objavljeni tako i neobjavljeni, primjereno citirani ili parafrazirani,
+
+    te popisani u literaturi na kraju rada
+- da ovaj diplomski rad ne sadrzi dijelove radova predanih na Agronomskom fakultetu ili drugim
+
+    ustanovama visokog obrazovanja radi zavrsetka sveucilisnoga ili strucnog studija
+- da je elektronicka verzija ovoga diplomskog rada identicna tiskanoj koju je pregledalo Povjerenstvo i
+
+    odobrio mentor
+- da sam upoznata/upoznat s odredbama Etickoga kodeksa Sveucilista u Zagrebu (cl. 19.).
+
+U Zagrebu, ____________________  _____________________________
+                      (datum)              (potpis studenta)
+
+2. Struktura i sadrzaj diplomskog rada
+
+===== [agr-upute-diplomski-2019 | str. 4] =====
+Diplomski rad prema obliku / tipu moze biti: a) istrazivacki, b) strucno-projektni ili c) pregledni rad. Rad s
+            provedenim istrazivanjem moze, ali ne mora imati znacajke znanstvenoga rada. Ovakva podjela je
+            arbitrarna i sluzi studentu i mentoru za laksi dogovor i odabir teme te strukturiranje diplomskog rada prema
+            ovdje zadanim uputama.
+
+   a) Istrazivacki diplomski rad
+
+            Izrada istrazivackoga diplomskog rada podrazumijeva samostalan i izvoran rad koji se zasniva na istrazivanju
+            manjeg opsega ili njegovu dijelu koje student sam provodi, sam analizira, opisuje i prezentira rezultate
+            prema uobicajenim i uvrijezenim poglavljima - IMRAD tj. UMRID1. Treba biti zasnovan na temeljnim
+            postulatima znanosti � aktualnost, izvornost, ponovljivost. Istrazivackom radu prethodi pretrazivanje i
+            proucavanje odgovarajue literature, a vrlo vjerojatno i dodatno prosirenje znanja koja nisu obuhvaena
+            diplomskom nastavom.
+
+            Struktura i sadrzaj istrazivackog diplomskog rada
+            Struktura istrazivackog rada definirana je prema temeljnoj organizacijskoj strukturi znanstvenog rada.
+            Poglavlja s opisom sadrzaja:
+
+              1 IMRAD = Introduction, Methods, Results and Discussion; UMRID = Uvod, Metode, Rezultati i Diskusija (rasprava)
+
+                                                                                                                                                4
+
+===== [agr-upute-diplomski-2019 | str. 5] =====
+� Naslov rada (HR i ENG) treba obuhvatiti glavnu ideju te biti kratak (do 100 znakova s bjelinama), jasan,
+    logican i jednoznacan. Potrebno je izbjegavati kratice i strane rijeci gdje postoje hrvatske istoznacnice.
+    Latinska imena roda i vrsta treba uvijek pisati kurzivom (italic).
+
+� Student moze dodati stranicu s osobnom zahvalom za pomo pri izradi rada (nije obvezno).
+
+� Sadrzaj je popis naslova poglavlja i potpoglavlja s brojem stranice na kojoj zapocinju.
+
+� U sazetku (HR i ENG) je potrebno ukratko prikazati cijeli rad � opisati problem, izraziti najvaznije ideje i
+    ciljeve, materijal i metode rada te rezultate i zakljucke, bez citata, tablica i grafova. Opseg sazetka je do
+    1000 znakova s bjelinama. Na kraju sazetka potrebno je navesti 3 � 5 kljucnih rijeci. Sazetak treba
+    napisati i na engleskom jeziku.
+
+� U uvodu se na jasan i jezgrovit nacin opisuje tema rada i problemi koji e biti obraivani. U uvodu treba
+    opisati namjeru rada i uvesti u problem. Uvod mora odgovoriti na pitanje o cemu je rijec, sto se i zasto
+    istrazivalo te sto je u tome izvorno? Uvod moze biti opsega 1 � 2 stranice.
+
+� U ciljevima istrazivanja potrebno je navesti (nabrojiti) sto se tocno istrazivanjima zeli utvrditi. Cilju
+    prethodi hipoteza istrazivanja, odnosno postavlja se pretpostavka o tome sto se namjerava
+    istrazivanjem provjeriti, tj. kakav se rezultat ocekuje?. Postavljeni cilj istrazivanja mora omoguiti
+    provjeru (testiranje) hipoteze istrazivanja, tj. njezino odbacivanje ili podrzavanje (statisticki � nulta
+    hipoteza se ne moze dokazati).
+
+� Pronalazenje recentne literature izuzetno je vazno za istrazivacki rad. U pregledu literature opisuje se
+    ono sto se o tom problemu zna iz aktualnih istrazivanja drugih znanstvenika ciji se radovi obvezno
+    navode kao izvor (vidi 5. Pravila citiranja i izrada popisa literature). Moze se pisati u potpoglavljima
+    prema kljucnim aspektima teme.
+
+� Hipoteze, cilj istrazivanja i pregled literature mogu u dogovoru s mentorom biti potpoglavlja uvoda.
+
+� Poglavlje materijali i metode istrazivanja osiguravaju ponovljivost istrazivanja te se u njima detaljno
+    navodi na cemu se (materijal) i kako (metode) istrazivalo. Postupak provedbe istrazivanja opisuje se
+    kronoloski i logicnim redoslijedom. Opisuje se i definiraju:
+    � clanovi pokusa ili tretiranja, ispitanici, objekti, ...
+    � metode uzorkovanja, metode za prikupljanje podataka
+    � nacin postavljanja pokusa
+    � mjesto / lokacije, uvjeti okolisa, vremenske prilike u godinama istrazivanja
+    � pokusni nasad / farma/ laboratorij
+    � vrste (sorte, kultivari) / pasmine/ sojevi
+    � svojstva (varijable) koja su praena: mjerenjem (uz mjerne jedinice � vidi Prilog 7.1. u Predlosku �
+        Diplomski rad), opazanjem i biljezenjem uz datume prikupljanja podataka � zavisne varijable (u
+        smislu statisticke analize)
+    � analiticke metode - laboratorijske (aparat, instrument), statisticke (svrha, softver).
+
+� Rezultati su vazan dio diplomskog rada u kojem se odgovara na pitanje sto se istrazivanjem utvrdilo, a
+    prikazuju se logicnim slijedom. U pravilu su rezultati prikazani u tablicama, grafikonima, slikama te se u
+    tekstu obrazlazu. U dogovoru s mentorom mogu biti u istom poglavlju s raspravom, tj. poglavlje
+    rezultati i rasprava. U raspravi se postignuti rezultati komentiraju i usporeuju s rezultatima istrazivanja
+    drugih autora u podrucju teme (a navedeni su u popisu literaturnih izvora), obrazlaze se ishod provjere
+    hipoteza istrazivanja te znacenje dobivenih rezultata. Rezultati i rasprava pisu se u logicno organiziranim
+    potpoglavljima.
+
+� Zakljucak je zavrsni dio diplomskog rada. U zakljucku treba u pravilu kratko (opsega do 1 stranice), jasno
+    i pregledno odgovoriti na postavljene ciljeve istrazivanja i navesti sto se istrazivanjem utvrdilo te dati
+    smjernice i ideje za daljnja istrazivanja. U zakljucku se ne iznose nove spoznaje, novi podaci ili
+    informacije te se u pravilu ne navode novi izvori i ne upuuje na literaturu.
+
+                                                                                                                                   5
+
+===== [agr-upute-diplomski-2019 | str. 6] =====
+� U popisu literature abecednim redom navode se svi u radu koristeni izvori. Navode se samo izvori i
+    radovi koji se spominju u tekstu zavrsnog rada. Ne navode se radovi koji se u radu ne citiraju niti oni na
+    koje se u radu ne upuuje (vidi 5. Pravila citiranja i izrada popisa literature).
+
+� U prilogu student moze priloziti razlicite dokumente, obrasce, tablice, planove, karte, anketne upitnike,
+    dijelove outputa analize i slicno, koje je koristio u izradi diplomskog rada.
+
+Ukratko � Poglavlja povezana s pitanjima na koje treba dati odgovor:
+
+� Naslov              � Sto je glavna ideja?
+� Uvod                � O cemu je rijec, sto e se i zasto istrazivati?
+� Pregled literature  � Sto se o tom problemu zna?
+� HIPOTEZE            � Kakav se rezultat ocekuje? (vjerojatni ishod, temelj rjesenja)
+� Cilj istrazivanja   � Sto se zeli utvrditi? (sazeto i jasno: 1., 2., 3., ...)
+� Materijal           � Na cemu, kada i gdje se istrazivalo? (detaljno, kronoloski)
+� Metode              � Kako se istrazivalo? (laboratorijske, statisticke -model?, svrha)
+� Rezultati           � Sto se utvrdilo? (tablice, grafovi, ...)
+� Rasprava            � Sto ti rezultati znace?
+� Zakljucci           � Odgovori na postavljene ciljeve!
+
+b) Strucno-projektni diplomski rad
+
+        Strucno-projektni diplomski rad podrazumijeva izradu konkretnog zadatka � npr. rjesavanje kompleksnijeg
+        problema u krajobraznom planiranju i ureenju nekog prostora; ili razrada neke poslovne ideje na
+
+===== [agr-upute-diplomski-2019 | str. 6] =====
+projektnih rjesenja, kartografske prikaze i drugu dokumentaciju o postojeem stanju prostora, vlastite
+        snimljene fotografije i sl.) ili prikuplja poslovne informacije (statisticke izvjestaje, ekonomske i financijske
+        podatke, rezultate istrazivanja trzista i sl.), koje treba strucno i kreativno obraditi i analizirati.
+
+        Student na temelju prikupljenih podataka i analizirane grae, razrauje svoju ideju, argumentirano
+        obrazlaze poboljsanja (npr. u odnosu na zateceno stanje), odabire najpovoljniju varijantu mogueg rjesenja
+        te koristei prikladne metode i alate daje svoje projektno rjesenje s procjenom troskova i moguim planom
+        realizacije.
+
+c) Pregledni diplomski rad
+
+        Pregledni diplomski rad ima spoznajnu vrijednost jer daje cjeloviti pregled nekog problema/teme na osnovi
+        ve objavljenih radova i studija te zahtijeva proucavanje i analizu iscrpne literature. Koristena literatura
+        obrauje se tako da se tekst parafrazira, tj. opisuje vlastitim rijecima, a po potrebi mogu se koristiti i izravni
+
+                                                                                                                                            6

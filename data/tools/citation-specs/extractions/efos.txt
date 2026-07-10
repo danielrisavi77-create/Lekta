@@ -1,0 +1,226 @@
+===== [efos-upute-studentski-2023 | str. 1] =====
+Kazalo
+Svrha ovih uputa i vrste studentskih radova1
+Opće upute za oblikovanje rada – vrste i veličina pisma, prored, odlomci i način predaje rada2
+Stil citiranja, parafraziranja, interpretiranja i navođenja literature4
+Uporaba pozivne bilješke7
+Seminarski rad7
+Završni rad na sveučilišnom prijediplomskom studiju i stručnom prijediplomskom                     studiju11
+Diplomski rad na sveučilišnom diplomskom studiju18
+Specijalistički rad na sveučilišnom specijalističkom studiju25
+Doktorski rad32
+Struktura rada41
+Glavni dijelovi41
+Naslov41
+Uvod42
+Teorijska podloga i prethodna istraživanja43
+Metodologija istraživanja43
+Rezultati istraživanja43
+Rasprava44
+Zaključak44
+Literatura45
+Orijentacijski dijelovi45
+Sadržaj ili kazalo45
+Popis kratica i simbola46
+Popis tablica, slika i grafikona46
+Kazalo imena47
+Kazalo pojmova47
+Pomoćni dijelovi47
+Predgovor47
+Pogovor48
+Sažetak48
+Rječnik48
+Prilozi49
+Moto49
+Zahvale i posvete49
+Etičke norme49
+Literatura51
+Popis slikaii
+
+
+
+Svrha ovih uputa i vrste studentskih radova
+
+Upute za izradu studentskih radova na Ekonomskom fakultetu u Osijeku imaju za svrhu obučiti studente akademskom pisanju radova tijekom studija te time pridonijeti kvaliteti i većoj mogućnosti objavljivanja tih radova u znanstvenim i stručnim časopisima, zbornicima s konferencija i drugim publikacijama. Kroz standardizaciju "formalnih" aspekata radova, ove upute omogućit će i lakše ocjenjivanje radova od strane njihovih mentora/nastavnika.
+Cilj je dvojak: (1) dosljednom primjenom ovih uputa ujednačavanje okvirne strukture radova, načina oblikovanja teksta, označavanja tablica i grafičkih prikaza, pisanje formula,  navođenje literature, kao i ostalih formalnih aspekata izrade jednog rada, (2) omogućavanje studentima tijekom studija usvajanje pravila akademskog pisanja i povećanje izgleda objavljivanja svojih radova u znanstveno-stručnim publikacijama.
+
+Upute se odnose na sve kategorije studentskih radova, a posebice na:
+seminarski rad
+završni rad na stručnom prijediplomskom studiju
+završni rad na sveučilišnom prijediplomskom studiju
+diplomski rad na sveučilišnom diplomskom studiju
+specijalistički rad na sveučilišnom specijalističkom studiju 
+doktorski rad.
+
+Seminarski rad, završni rad stručnog ili sveučilišnog prijediplomskog studija, diplomski rad sveučilišnog diplomskog studija i specijalistički rad na sveučilišnom specijalističkom studiju stručni su radovi, dok je doktorski rad znanstveni. 
+U nastavku su ponajprije dane opće upute za oblikovanje koje se odnose na svaki od ovih radova, preporučeni stil citiranja, parafraziranja, interpretiranja i navođenja literature i uporaba pozivnih bilježaka („fusnota“). S obzirom na njegovu učestalu uporabu u društvenim znanostima, preporučujemo za studentske radove na Ekonomskom fakultetu u Osijeku koristiti harvardski stil navođenja literature. Nakon toga slijedi dio koji opisuje posebne smjernice za strukturiranje i oblikovanje svake kategorije studentskog rada pojedinačno, kao na primjer kako treba izgledati naslovnica i struktura seminarskog, završnog, diplomskog, specijalističkog ili doktorskog rada. S obzirom na to da za svaki od strukturnih dijelova rada u akademskom pisanju  (Uvod, Metodologija, Rezultati, Rasprava, Zaključak i drugi dijelovi) postoje smjernice kako ih treba napisati i što oni trebaju sadržavati, u Poglavlju 10 detaljnije je opisan svaki strukturni dio rada i studentima preporučujemo pridržavanje ovih smjernica kod pisanja svojih radova s ciljem preglednosti i povećanja kvalitete radova.
+
+Na kraju su dane etičke norme po kojima su studenti dužni pri pisanju radova navesti sve korištene izvore i izbjegavati bilo kakav oblik plagiranja tuđih djela, a posebice plagiranje radova kolega studenata. Prema Pravilniku o stegovnoj odgovornosti studenata (Senat Sveučilišta Josipa Jurja Strossmayera u Osijeku, 2010.) plagiranje tuđih radova predstavlja tešku povredu studentskih obveza i neispunjavanja obveza za što su predviđene sankcije kao što su zabrana polaganja ispita, privremeno isključenje sa studija ili isključenje sa studija.
+
+
+
+
+Opće upute za oblikovanje rada – vrste i veličina pisma, prored, odlomci i način predaje rada
+
+Opće upute za oblikovanje teksta u studentskim radovima su sljedeće:
+studentski se rad piše u računalnom programu za obradu teksta (npr. Microsoft Word, Open Office Writer i sl.)
+veličina je stranice A4 (210x297 mm), a rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mm
+rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5
+rečenice treba pisati u neodređenom licu i ako je moguće u pasivu, npr. „U radu je istražen utjecaj …“, a ne „U radu sam istražio utjecaj …“
+ilustracije u tekstu (tablice, grafikoni, slike, zemljovidi i sl.) treba brojčano označiti i imenovati (kratko opisati). Broj i kratak opis stavlja se iznad tablice, a ispod slike i grafikona. Ako su tablica ili slika preuzete od drugih autora, potrebno je uz naslov tablice ili slike staviti referencu na izvornik. Tekst od tablice i slike mora biti odvojen proredom od 1,5. Slika, tablica i pripadajući tekst moraju biti centrirani i smješteni ispod teksta nakon kojeg dolaze i iznad teksta kojem prethode.
+na mjestima u tekstu gdje se koristi citiranje, parafraziranje ili interpretiranje drugih autora, potrebno je navesti referencu prema pravilima (vidi Poglavlje 6 za pravila i primjere korištenja literature)
+upotrijebljenu literaturu treba na kraju rada popisati abecednim redom (prezimena autora) i to u skladu s pravilima odgovarajućega stila citiranja, parafraziranja i interpretiranja u struci, odnosno prema harvardskom stilu citiranja i referenciranja
+stranice rada (osim naslovne stranice) potrebno je brojčano označiti (numerirati) tako da se stranice glavnih dijelova rada numeriraju arapskim brojevima, a stranice orijentacijskih i pomoćnih dijelova rimskim brojevima.
+
+Na naslovnoj stranici rada treba navesti naziv sveučilišta, fakulteta i studija, ime i prezime studenta, naslov rada, naziv vrste rada ispod naslova (npr. Seminarski rad iz predmeta ... ), titulu, ime i prezime mentora i komentora (ako ga ima) te mjesto i godinu nastanka rada. Preporučuje se da podatci na prvoj stranici budu napisani fontom Times New Roman, slovima veličine kako je za svaku vrstu rada prikazano u Poglavlju 6.
+
+===== [efos-upute-studentski-2023 | str. 1] =====
+Način predaje rada
+
+Vezano uz sam sadržaj rada, student treba provjeriti ima li rad ove obvezne elemente potrebne za arhiviranje radova:
+•naslovnu stranicu na hrvatskom jeziku
+•naslovnu stranicu na engleskom jeziku
+•Izjavu o akademskoj čestitosti, pravu prijenosa intelektualnog vlasništva, suglasnosti za objavu u institucijskim repozitorijima i istovjetnosti digitalne i tiskane verzije rada (u daljnjem tekstu Izjava) – tekst Izjave dan je uz svaki rad u nastavku ovog materijala
+•Sažetak i ključne riječi na hrvatskom i engleskom jeziku,
+kao i druge obvezne dijelove rada koji su propisani za svaki rad u nastavku. Za svaku vrstu rada propisana su i obvezna poglavlja koje treba navesti u radu, a po potrebi dodavati željena potpoglavlja i odjeljke. Bez obveznih dijelova rad neće moći biti prihvaćen.
+
+Završni rad na stručnom i sveučilišnom prijediplomskom studiju te diplomski rad na sveučilišnom diplomskom studiju trebaju  biti dostavljeni u količini i obliku propisanima Pravilnikom o završnim radovima i diplomskim ispitima.
+
+Prilikom predaje rada, student je dužan predati i potpisanu Izjavu kojom izjavljuje i svojim potpisom potvrđuje:
+da je rad isključivo rezultat osobnoga rada koji se temelji na vlastitim istraživanjima i oslanja se na objavljenu literaturu, potvrđuje poštivanje nepovredivosti autorstva te ispravno citiranje i referenciranje radova drugih autora
+da je Ekonomski fakultet u Osijeku bez naknade, u vremenski i teritorijalno neograničenom opsegu, nositelj svih prava intelektualnog vlasništva u odnosu na navedeni rad
+da je suglasan/suglasna trajnom pohranjivanju i objavljivanju u Institucijskom digitalnom repozitoriju Ekonomskog fakulteta u Osijeku, Repozitoriju Sveučilišta Josipa Jurja Strossmayera u Osijeku te javno dostupnom Repozitoriju Nacionalne i sveučilišne knjižnice u Zagrebu
+da je autor/autorica predanog završnog / diplomskog / specijalističkog / doktorskog rada i da je sadržaj predane elektroničke datoteke u potpunosti istovjetan s dovršenom tiskanom verzijom rada predanom u svrhu obrane istog.
+
+U Izjavi je student obvezan navesti osobne podatke, kao i podatke o radu i mentoru/komentoru. Obrazac Izjave nalazi se u elektroničkom obliku na web stranici Fakulteta.
+
+Potpisanu Izjavu student treba umetnuti u tiskani rad kao njegov sastavni dio (iza naslovnih stranica rada) i uvezati zajedno s ostalim stranicama. Elektronička inačica rada predaje se u PDF formatu, a Izjava je njezin sastavni dio, uklopljena iza naslovnih stranica rada.
+
+Stil citiranja, parafraziranja, interpretiranja i navođenja literature
+
+„Ne postoji jedan, općeprihvaćen način navođenja bibliografskih jedinica. Postoje različite prakse kojima se priklanjaju pojedini izdavači, odnosno koje se primjenjuju u pojedinim izdanjima.“ (Badurina i dr., 2007: 313).
+
+Zbog nepostojanja jedinstvenog načina citiranja, nekoliko je većih svjetskih organizacija i sveučilišta razvilo vlastite stilove pisanja radova, koji ne definiraju samo pravila citiranja i referiranja, već općenito cjelokupan izgled svakog segmenta znanstvenog i stručnog rada pa ih ne nazivamo metodama, već stilovima (Frelih, 2011:8). Danas se posebno u društvenim znanostima često koriste stilovi udruga American Psychological Association (APA), Modern Language Association (MLA), te američki (harvardski) i vancouverski stil. Više informacija o stilovima vidjeti u Šundalić, Pavić (2013:237-253).
+Za pisanje studentskih radova na Ekonomskom fakultetu u Osijeku preporučujemo američki (harvardski) stil o kojemu više informacija donosimo u nastavku.
+Američki, tzv. harvardski stil pisanja onaj je prema kojemu se citat, parafraza ili interpretacija označava u tekstu tako da se na kraju rečenice u zagradi navede prezime autora djela, godina izdanja i po mogućnosti stranica(e) s koje se citira, parafrazira ili interpretira tekst, npr. (Milas, 2009:563). Potpunu informaciju o djelu iz kojega se uzima citat autor daje u dijelu Literatura pa će tamo biti ovako navedeno djelo: 
+ Milas, G. (2009). Istraživačke metode u psihologiji. Zagreb: Naklada Slap.
+Njegova praktičnost proizlazi iz jednostavnog i kratkog navođenja izvora u zagradi odmah iza citiranja, parafraziranja ili interpretiranja nekog djela, a nepraktičnost je što se informacija o izvoru ne nalazi na istoj stranici (fusnota), već na kraju djela.
+Citiranje je doslovno preuzimanje teksta (ili izgovorenih riječi) iz drugih izvora, dakle prenošenje od riječi do riječi dijela tuđeg rada. Pri tome je bitno preuzeti tekst ili izgovorene riječi označiti navodnim znakovima kako bi se jasno izdvojili od autorova teksta i navesti stranicu s koje je preuzet citat. Niže navodimo primjer jednog fiktivnog citata.
+1346200131445
+Prema mišljenju ovoga autora, „na području tumačenja razlika u kvaliteti javnih i privatnih škola nedostaje konkluzivnih istraživanja“ (Smith, 2010:28).00
+Prema mišljenju ovoga autora, „na području tumačenja razlika u kvaliteti javnih i privatnih škola nedostaje konkluzivnih istraživanja“ (Smith, 2010:28).
+
+Parafraziranje je vrlo često prisutan način korištenja tuđih riječi, ideja ili stavova. Riječ je o autorovu skraćenom prikazivanju (prepričavanju) većih dionica tuđeg teksta, čak cijelih članaka ili knjige. Osim što je obvezan navesti izvor djela koji parafrazira, autor je obvezan voditi računa da parafraziranjem vjerno prikaže izvorno djelo. Prethodno navedeni citat u parafraziranoj verziji izgledao bi ovako:
+1353820126365
+Smith (2010) smatra da na području tumačenja razlika u kvaliteti javnih i privatnih škola nedostaje konkluzivnih istraživanja.00
+Smith (2010) smatra da na području tumačenja razlika u kvaliteti javnih i privatnih škola nedostaje konkluzivnih istraživanja.
+
+Interpretiranje je prikazivanje autorova razumijevanja tuđeg pisanog djela, predstavljene ideje ili održanog govora. Iako kod interpretacije autor dodaje vlastite ideje, vlastito razumijevanje značenja tuđeg djela, ipak je obvezan pozvati se na izvor. Jedna od mogućih interpretacija navedenog citata izgledala bi ovako:
+1353820131445
+Smith (2010) smatra da na području tumačenja razlika u kvaliteti javnih i privatnih škola nedostaje konkluzivnih istraživanja. Razlog za ovakvo mišljenje vjerojatno se00
+Smith (2010) smatra da na području tumačenja razlika u kvaliteti javnih i privatnih škola nedostaje konkluzivnih istraživanja. Razlog za ovakvo mišljenje vjerojatno se
+
+
+
+
+može pronaći u činjenici da sva dosadašnja istraživanja sadrže metodološke nedostatke ili se temelje na nepotpunim podatcima.
+može pronaći u činjenici da sva dosadašnja istraživanja sadrže metodološke nedostatke ili se temelje na nepotpunim podatcima.
+
+U popisu literature na kraju rada potrebno je navesti punu referencu, također slijedeći harvardski stil.
+Navodimo primjere referenci u popisu literature na kraju rada prema harvardskom stilu. (Iako i za harvardski postoje različita tumačenja, u nastavku su primjeri navedeni prema Šundalić, Pavić (2013) i prema Academic Skills Tutors / Librarians, Information Services (2013)).
+
+
+ Knjiga
+Referenca na knjigu treba uključiti:
+Prezime autora ili urednika, Prvo slovo imena autora ili urednika. (godinu izdavanja). Naslov djela (ukošenim slovima). Mjesto izdavanja: Naziv izdavača.
+Primjeri:
+Knjiga, jedan autor, tiskano izdanje:
+
+ Milas, G. (2009). Istraživačke metode u psihologiji. Zagreb: Naklada Slap.
+
+Knjiga, dva autora, tiskano izdanje:
+134620087630
+Granovetter, M. and Swedberg, R. (2001). The sociology of economic life. Cambridge: Westview Press.00
+Granovetter, M. and Swedberg, R. (2001). The sociology of economic life. Cambridge: Westview Press.
+
+Knjiga, više od dva autora, tiskano izdanje:
+
+===== [efos-upute-studentski-2023 | str. 1] =====
+Sadler, P. (2003) Strategic management. [Online] Sterling. VA Kogan Page. Available from: http://www.netlibrary.com/reader/. [pristupljeno: 6. svibnja 2012].00
+Sadler, P. (2003) Strategic management. [Online] Sterling. VA Kogan Page. Available from: http://www.netlibrary.com/reader/. [pristupljeno: 6. svibnja 2012].
+
+Znanstveni i stručni priručnik:
+1346200177800
+Hrvatska književna enciklopedija (2010). Zagreb: Leksikografski zavod Miroslav Krleža.00
+Hrvatska književna enciklopedija (2010). Zagreb: Leksikografski zavod Miroslav Krleža.
+
+
+
+ Zbornik radova s konferencije
+
+Referenca na zbornik radova treba uključiti:
+Prezime autora, Prvo slovo imena autora (godinu izdavanja) Naslov rada. U - Naslov konferencije. Naslov publikacije (zbornika) i broj (ako postoji). Prezime i prvo slovo imena urednika (ur.). Mjesto održavanja konferencije ili skupa. Vrijeme održavanja konferencije ili skupa. Mjesto izdavanja: Izdavač. str. od-do (na engleskom jeziku “p” ili “pp” umjesto “str.”).
+Rad u zborniku radova s konferencije:
+1346200177800
+Zekić-Sušac, M., Šarlija, N. and Benšić, M.. (2008). Insolvency prediction by neural networks. 12th International Conference on Operational Research. Proceedings.
+Boljunčić, V., Neralić, L., Šorić, K. (ur.). Pula Croatia. 24-26.09.2008. Pula: Croatian Operational Research Society. pp. 175-188.00
+Zekić-Sušac, M., Šarlija, N. and Benšić, M.. (2008). Insolvency prediction by neural networks. 12th International Conference on Operational Research. Proceedings.
+Boljunčić, V., Neralić, L., Šorić, K. (ur.). Pula Croatia. 24-26.09.2008. Pula: Croatian Operational Research Society. pp. 175-188.
+
+ Članak u časopisu
+
+Referenca na članak u časopisu treba uključiti:
+Prezime autora, Prvo slovo imena autora. (godinu izdavanja) Naslov rada. Naslov časopisa (ukošenim ili podvučenim slovima). Broj volumena (Broj časopisa/mjesec). str. (ili na engleskom jeziku “p” ili “pp”) od-do.
+
+Članak u časopisu, tiskani:
+
+Pajunen, K. (2008). Institutions and inflows of foreign direct investment: a fuzzy-set analysis. Journal of International Business Studies. 39(4), pp. 652-669.
+
+Članak u časopisu, online, bez doi broja:
+1346200179070
+Wilson, J. (1995). Enter the Cyberpunk librarian: future directions in cyberspace. Library Review. [Online] Emerald Database 44 (8). str.63-72. Raspoloživo na: http://www.emeraldinsight.com. [pristupljeno: 30. siječnja 2012].00
+Wilson, J. (1995). Enter the Cyberpunk librarian: future directions in cyberspace. Library Review. [Online] Emerald Database 44 (8). str.63-72. Raspoloživo na: http://www.emeraldinsight.com. [pristupljeno: 30. siječnja 2012].
+
+Članak u časopisu, online s doi brojem
+1346200126365
+Ku, G. (2008). Learning to de-escalate: The effects of regret in escalation of commitment. Organizational Behavior and Human Decision Processes. 105(2). str. 221-232. doi:10.1016/j.obhdp.2007.08.002. [pristupljeno: 24. veljače 2014].00
+Ku, G. (2008). Learning to de-escalate: The effects of regret in escalation of commitment. Organizational Behavior and Human Decision Processes. 105(2). str. 221-232. doi:10.1016/j.obhdp.2007.08.002. [pristupljeno: 24. veljače 2014].
+
+
+
+
+Više informacija o stilovima vidjeti u Šundalić, Pavić (2013: 237-253) te u Academic Skills Tutors / Librarians, Information Services (2013).
+
+Uporaba pozivne bilješke („fusnote“)
+
+S obzirom na to da smo se opredijelili za harvardski stil pisanja, pozivne bilješke („fusnote“) neće se koristiti za navođenje literature (izvora) u tekstu. Bit će korištene isključivo u ove svrhe:
+u bilješci autor može ukazivati na dodatne izvore o istoj problematici (navođenje drugih autora, knjiga, članaka, zbornika radova i sl.)
+bilješka služi autoru i za proširivanje iznesenih argumenata. Npr. ako tekst ne trpi previše nabrajanja detalja, pozivanja na drugačije slučajeve iste problematike i sl., tada je autor sklon u bilješci proširiti argumentaciju za svoju tezu
+često bilješka autoru služi i za navođenje drugačijih mišljenja. Time se u bilješci ograđuje od „neznanja“ i potvrđuje svoju upoznatost s njima, ali i svoje neslaganje i vlastito viđenje problema.
+
+Pozivne bilješke se u programima za obradu teksta (tekstualnim procesorima) umeću ovisno o izabranom načinu na dno teksta ili na kraj teksta, a program ih automatski numerira slijedom njihova pojavljivanja. Uobičajeno se veličina slova stavlja na Times New Roman 10 pt.
+
+Seminarski rad
+
+Dijelovi koje seminarski rad OBVEZNO treba sadržavati:
+Naslov (tema)
+Sažetak (200-250 riječi) i ključne riječi (3-5 riječi) na jeziku na kojem je rad napisan
+Sadržaj (kazalo)
+Uvod
+Teorijska podloga i prethodna istraživanja
+Metodologija rada
+Opis istraživanja i rezultati istraživanja
+Rasprava
+Zaključak
+Literatura
+Obujam rada nije strogo definiran. Preporučuje se obujam od 10 do 20 stranica (ili u dogovoru s mentorom).
+
+Naslovnica i prva stranica rada prikazani su u nastavku.
+
+
+Sveučilište Josipa Jurja Strossmayera u Osijeku (14 pt.) Ekonomski fakultet u Osijeku (14 pt.)
+92519524574500 Stručni ili Sveučilišni prijediplomski studij (naziv studija / smjera) (14 pt.)
+
+
+
+(5 proreda 1,5 14pt.)

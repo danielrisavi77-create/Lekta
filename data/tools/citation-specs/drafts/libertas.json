@@ -1,0 +1,18 @@
+{
+  "facultyId": "libertas",
+  "styleToken": "harvard",
+  "status": "draft",
+  "outcome": "style-pin",
+  "label": "Harvard (Pravilnik o diplomskom radu, Libertas)",
+  "sourceId": "libertas-pravilnik-diplomski-2024",
+  "sourceLabel": "Pravilnik o diplomskom radu (Libertas, srpanj 2024)",
+  "verifiedAt": null,
+  "verifiedBy": null,
+  "verifiedHash": null,
+  "evidence": {
+    "kind": "rule-text",
+    "quoteRaw": "Za citiranje se preporuca koristiti americki (harvardski) stil koji je detaljnije opisan u prilogu",
+    "sourcePage": "str. 4"
+  },
+  "sourceTypes": []
+}

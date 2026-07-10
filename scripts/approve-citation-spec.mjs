@@ -79,7 +79,9 @@ function main() {
         : `Ljudski pregled dosjea: renderer reproducira ${st.provenance?.kind ?? '?'} za ${st.type} (${spec.styleToken}).`,
     });
   }
-  // dual-write potvrda tokena: citation-style dokaz na razini fakulteta
+  // dual-write potvrda tokena: citation-style dokaz na razini fakulteta.
+  // Za style-pin dokaz je spec.evidence (pin nema sourceTypes predloske).
+  const tokenProv = spec.outcome === 'style-pin' ? spec.evidence : spec.sourceTypes?.[0]?.provenance;
   ledgerEntries.push({
     id: `led-citation-style--${fac}--token-human-verified-${date}`,
     ruleId: `citation-style--${fac}--${spec.styleToken}`,
@@ -88,9 +90,11 @@ function main() {
     actor: approver,
     timestamp: date,
     sourceId: spec.sourceId,
-    sourcePage: spec.sourceTypes?.[0]?.provenance?.sourcePage ?? null,
-    quote: spec.sourceTypes?.[0]?.provenance?.quoteRaw ?? null,
-    note: `Potvrda citatnog stila (${spec.styleToken}) za ${fac} iz sluzbenog izvora; podupire rules.recommendedCitation u profilima.`,
+    sourcePage: tokenProv?.sourcePage ?? null,
+    quote: tokenProv?.quoteRaw ?? null,
+    note: spec.outcome === 'style-pin'
+      ? `Style-pin: sluzbeni izvor PROPISUJE stil ${spec.styleToken} za ${fac}; format ostaje obiteljski motor, dokaz podupire rules.recommendedCitation.`
+      : `Potvrda citatnog stila (${spec.styleToken}) za ${fac} iz sluzbenog izvora; podupire rules.recommendedCitation u profilima.`,
   });
 
   if (dry) {

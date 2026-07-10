@@ -1,0 +1,183 @@
+{
+  "facultyId": "efos",
+  "styleToken": "efos",
+  "status": "draft",
+  "outcome": "custom-spec",
+  "label": "Harvardski stil autor-godina (sluzbene upute EFOS)",
+  "sourceId": "efos-upute-studentski-2023",
+  "sourceLabel": "Upute za izradu studentskih radova na Ekonomskom fakultetu u Osijeku",
+  "verifiedAt": null,
+  "verifiedBy": null,
+  "verifiedHash": null,
+  "accessDate": true,
+  "authorFormat": {
+    "order": "family-first",
+    "initials": "dotted-spaced",
+    "separator": ", ",
+    "finalJoiner": " and "
+  },
+  "inText": {
+    "mode": "author-year",
+    "template": "({authorsShort}, {year})",
+    "withPagesTemplate": "({authorsShort}, {year}:{pages})",
+    "authorsShort": {
+      "twoJoiner": ", ",
+      "etAlAfter": 3,
+      "etAlText": "i dr."
+    },
+    "provenance": {
+      "kind": "worked-example",
+      "quoteRaw": "npr. (Milas, 2009:563). Potpunu informaciju o djelu iz kojega se uzima citat autor daje u dijelu Literatura pa će tamo biti ovako navedeno djelo:",
+      "sourcePage": "str. 1",
+      "note": "Propisani primjeri (Milas, 2009:563) i (Smith, 2010:28) su bez razmaka iza dvotocke; dokument u vlastitom tekstu koristi i '(Badurina i dr., 2007: 313)' s razmakom, slijedimo propisane primjere. twoJoiner ', ' izveden iz uporabe 'Šundalić, Pavić (2013:237-253)' u samom izvoru; etAlText 'i dr.' iz '(Badurina i dr., 2007: 313)'; etAlAfter 3 je IZVEDEN (nema izricitog pravila), potvrditi pri verifikaciji. Stranica je 'po mogućnosti', pa osnovni oblik bez stranica postoji."
+    }
+  },
+  "numbering": null,
+  "bibliography": {
+    "sort": "alphabetical"
+  },
+  "sourceTypes": [
+    {
+      "type": "knjiga",
+      "template": "{authors} ({year}). {title}. {place}: {publisher}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "place",
+        "publisher"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Milas, G. (2009). Istraživačke metode u psihologiji. Zagreb: Naklada Slap.",
+        "sourcePage": "str. 1",
+        "note": "Pravilo: Prezime, Prvo slovo imena. (godina). Naslov (ukosenim slovima). Mjesto: Izdavac. Dva autora veze 'and' (Granovetter, M. and Swedberg, R.), tri autora zarez pa 'and' (Zekic-Susac, Sarlija and Bensic); hrvatski veznik 'i' nije evidentiran u ekstrakciji. Online knjiga u izvoru (Sadler) koristi engleski 'Available from' obrazac, nije reproduciran. Kurziv naslova alat ne reproducira."
+      },
+      "example": {
+        "input": {
+          "type": "knjiga",
+          "authors": "Milas, Goran",
+          "year": "2009",
+          "title": "Istraživačke metode u psihologiji",
+          "place": "Zagreb",
+          "publisher": "Naklada Slap"
+        },
+        "expected": "Milas, G. (2009). Istraživačke metode u psihologiji. Zagreb: Naklada Slap."
+      }
+    },
+    {
+      "type": "poglavlje",
+      "template": "{authors} ({year}). {title}. {container}.[[ {editor} (ur.).]] {place}: {publisher}.[[ str. {pages}.]]",
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "container",
+        "place",
+        "publisher"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Naslov publikacije (zbornika) i broj (ako postoji). Prezime i prvo slovo imena urednika (ur.). Mjesto održavanja konferencije ili skupa. Vrijeme održavanja konferencije ili skupa. Mjesto izdavanja: Izdavač. str. od-do",
+        "sourcePage": "str. 1",
+        "note": "Izvor pokriva samo rad u zborniku s konferencije (worked example Zekic-Susac, Sarlija and Bensic 2008) s poljima mjesto i vrijeme odrzavanja skupa koja alat nema; predlozak je pojednostavljen na rad/poglavlje u zborniku bez podataka o skupu, pa je izveden i bez examplea (izvorni primjer se ne moze reproducirati bez polja skupa). 'str.' prema pravilu za hrvatski, engleski primjeri koriste 'pp.'."
+      },
+      "example": null
+    },
+    {
+      "type": "clanak",
+      "template": "{authors} ({year}). {title}. {container}. {volume}[[({issue})]]. str. {pages}.[[ doi:{doi}.]][[ Raspoloživo na: {url}.]][[ [pristupljeno: {accessed}].]]",
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "container",
+        "volume",
+        "pages"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Ku, G. (2008). Learning to de-escalate: The effects of regret in escalation of commitment. Organizational Behavior and Human Decision Processes. 105(2). str. 221-232. doi:10.1016/j.obhdp.2007.08.002. [pristupljeno: 24. veljače 2014].",
+        "sourcePage": "str. 1",
+        "note": "Tiskani primjer (Pajunen) koristi '39(4), pp. 652-669.' (zarez i pp.), online s doi (Ku) koristi '105(2). str. 221-232.'; predlozak slijedi Ku primjer i hrvatsko 'str.' iz pravila ('str.' ili na engleskom 'p'/'pp'). Online bez doi dodaje 'Raspoloživo na: URL' (Wilson primjer); oznaka [Online] i naziv baze nisu reproducirani."
+      },
+      "example": {
+        "input": {
+          "type": "clanak",
+          "authors": "Ku, Gillian",
+          "year": "2008",
+          "title": "Learning to de-escalate: The effects of regret in escalation of commitment",
+          "container": "Organizational Behavior and Human Decision Processes",
+          "volume": "105",
+          "issue": "2",
+          "pages": "221-232",
+          "doi": "10.1016/j.obhdp.2007.08.002",
+          "accessed": "24. veljače 2014"
+        },
+        "expected": "Ku, G. (2008). Learning to de-escalate: The effects of regret in escalation of commitment. Organizational Behavior and Human Decision Processes. 105(2). str. 221-232. doi:10.1016/j.obhdp.2007.08.002. [pristupljeno: 24. veljače 2014]."
+      }
+    },
+    {
+      "type": "mrezni",
+      "template": "{authors} ({year}). {title}. [Online] Raspoloživo na: {url}. [pristupljeno: {accessed}].",
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "url",
+        "accessed"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Wilson, J. (1995). Enter the Cyberpunk librarian: future directions in cyberspace. Library Review. [Online] Emerald Database 44 (8). str.63-72. Raspoloživo na: http://www.emeraldinsight.com. [pristupljeno: 30. siječnja 2012].",
+        "sourcePage": "str. 1",
+        "note": "Izvor nema primjer za samostalnu mreznu stranicu; obrazac '[Online] Raspoloživo na: URL. [pristupljeno: datum].' izveden iz online clanka (Wilson) i online knjige (Sadler, engleski 'Available from'). Potvrditi pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "zavrsni",
+      "template": "{authors} ({year}). {title}. Diplomski rad. {place}: {institution}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "place",
+        "institution"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Prezime autora ili urednika, Prvo slovo imena autora ili urednika. (godinu izdavanja). Naslov djela (ukošenim slovima). Mjesto izdavanja: Naziv izdavača.",
+        "sourcePage": "str. 1",
+        "note": "Upute ne obraduju citiranje zavrsnih/diplomskih radova; predlozak izveden iz opceg oblika za knjigu (izdavac -> ustanova, dodana oznaka vrste rada 'Diplomski rad'). Potvrditi ili oboriti pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "propis",
+      "template": "{authors} ({year}). {title}. {container}[[ {issue}]].",
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "container"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Prema Pravilniku o stegovnoj odgovornosti studenata (Senat Sveučilišta Josipa Jurja Strossmayera u Osijeku, 2010.) plagiranje tuđih radova predstavlja tešku povredu studentskih obveza",
+        "sourcePage": "str. 1",
+        "note": "Upute nemaju primjer za citiranje propisa; predlozak izveden iz harvardskog autor-godina obrasca, s donositeljem kao autorom prema uporabi u samim Uputama (Senat Sveucilista..., 2010.). Interpunkcija oko broja glasila nije evidentirana; potvrditi pri verifikaciji."
+      },
+      "example": null
+    }
+  ],
+  "contradictions": [
+    "Stil je preporucen ('preporučujemo američki (harvardski) stil'), ne izricito propisan kao obvezan; vrijedi za sve kategorije studentskih radova EFOS-a.",
+    "Primjeri clanka su nedosljedni: tiskani (Pajunen) koristi '39(4), pp. 652-669.' a online s doi (Ku) '105(2). str. 221-232.'; predlozak slijedi Ku primjer i hrvatsko 'str.'.",
+    "In-text: propisani primjeri (Milas, 2009:563) i (Smith, 2010:28) su bez razmaka iza dvotocke, ali dokument u vlastitom tekstu koristi '(Badurina i dr., 2007: 313)' s razmakom; predlozak slijedi propisane primjere.",
+    "Veznik 'and' izmedu autora evidentiran je samo na engleskim primjerima; hrvatski oblik ('i') nije evidentiran u ekstrakciji.",
+    "Oznake stranica u PDF ekstrakciji su za sve isjecke 'str. 1' (pdftotext artefakt), pa sourcePage ne razlikuje stvarne stranice dokumenta.",
+    "Kurziv naslova (ukosenim slovima) alat ne reproducira, izlaz je plain text.",
+    "Poglavlje, mrezni, zavrsni i propis nemaju reproducibilan primjer u izvoru; predlosci su izvedeni (derived) i cekaju potvrdu."
+  ]
+}

@@ -1,0 +1,198 @@
+{
+  "facultyId": "mefst",
+  "styleToken": "mefst",
+  "status": "draft",
+  "outcome": "custom-spec",
+  "label": "Vancouver numericko (sluzbena Uputa MEFST)",
+  "sourceId": "mefst-uputa-diplomski-2021",
+  "sourceLabel": "Uputa za oblikovanje diplomskoga rada (MEFST, 2021)",
+  "verifiedAt": null,
+  "verifiedBy": null,
+  "verifiedHash": null,
+  "accessDate": true,
+  "authorFormat": {
+    "order": "family-first",
+    "initials": "plain-compact",
+    "separator": ", ",
+    "finalJoiner": null,
+    "etAlAfter": 6,
+    "etAlKeep": 6,
+    "etAlJoiner": " ",
+    "etAlText": "i sur."
+  },
+  "inText": {
+    "mode": "paren-number",
+    "provenance": {
+      "kind": "rule-text",
+      "quoteRaw": "Kada se citira vise referenci zajedno navode se s razmakom kao (1, 2) ili (1-3) za uzastopno",
+      "sourcePage": "str. 13",
+      "note": "Izvor stil imenuje: 'Literatura se navodi Vancouver stilom kako je prikazano.' (ista stranica). Broj reference u OKRUGLOJ zagradi na kraju recenice, prije tocke; vise referenci s razmakom '(1, 2)' ili rasponom '(1-3)'. Narativno navodenje: prezime prvog autora + 'i suradnici' (npr. 'U istrazivanju Tonkia i sur...') uz brojku reference u zagradi na kraju recenice. Numericki stil nema in-text predlozak."
+    }
+  },
+  "numbering": {
+    "referenceMarker": "({n})"
+  },
+  "bibliography": {
+    "sort": "appearance"
+  },
+  "sourceTypes": [
+    {
+      "type": "knjiga",
+      "template": "{authors}. {title}.[[ {volume} izdanje.]] {place}: {publisher}; {year}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "place",
+        "publisher",
+        "year"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Prezime1 I1, Prezime2 I2. Naslov poglavlja. U: Autorknjigeprezime1 I1, Autorknjigeprezime2",
+        "sourcePage": "str. 16",
+        "note": "Uputa IMA zasebnu sekciju Knjiga (sadrzaj, str. 15 dokumenta), ali ta stranica NIJE u ekstrakciji. Predlozak izveden iz verbalnog predloska za poglavlje knjige na str. 16 (isti rep: 'Naslov knjige. Izdanje. Mjesto: Izdavac; godina.') ispustanjem dijela o poglavlju i urednicima, u skladu s Vancouver stilom. Broj izdanja upisuje se u polje volume onako kako se zeli ispisati ('Drugo' ili '2.'), jer primjer poglavlja izdanje pise rijecju. Potvrditi protiv PDF-a pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "poglavlje",
+      "template": "{authors}. {title}. U: {editor}, urednici. {container}.[[ {volume} izdanje.]] {place}: {publisher}; {year}.[[ str. {pages}.]]",
+      "requiredFields": [
+        "authors",
+        "title",
+        "editor",
+        "container",
+        "place",
+        "publisher",
+        "year",
+        "pages"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Blaxter PS, Farnsworth TP. Social health and class inequalities. U: Carter C, Peel JR, urednici.",
+        "sourcePage": "str. 16",
+        "note": "Sekcija 'Poglavlje knjige', 'Primjer u konacnom formatu'. Verbalni predlozak na istoj stranici: 'Prezime1 I1, Prezime2 I2. Naslov poglavlja. U: Autorknjigeprezime1 I1, Autorknjigeprezime2 I2, urednici. Naslov knjige. Izdanje. Mjesto: Izdavac; godina. str. kratka paginacija.' Urednici se upisuju doslovno u polje editor u obliku 'Prezime I' odvojeni zarezom ('Carter C, Peel JR'). Izdanje se u primjeru pise rijecju ('Drugo izdanje'), pa polje volume prima doslovan oblik. Paginacija kracena (165-78)."
+      },
+      "example": {
+        "input": {
+          "type": "poglavlje",
+          "authors": "Blaxter, P. S.; Farnsworth, T. P.",
+          "title": "Social health and class inequalities",
+          "editor": "Carter C, Peel JR",
+          "container": "Equalities and inequalities in health",
+          "volume": "Drugo",
+          "place": "London",
+          "publisher": "Academic Press",
+          "year": "1976",
+          "pages": "165-78"
+        },
+        "expected": "Blaxter PS, Farnsworth TP. Social health and class inequalities. U: Carter C, Peel JR, urednici. Equalities and inequalities in health. Drugo izdanje. London: Academic Press; 1976. str. 165-78."
+      }
+    },
+    {
+      "type": "clanak",
+      "template": "{authors}. {title}. {container}. {year};{volume}:{pages}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "container",
+        "year",
+        "volume",
+        "pages"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Primjer (Pubmed): Zivkovic PM, Matetic A, Tadin Hadjina I, Rusic D, Vilovic M, Supe-",
+        "sourcePage": "str. 13",
+        "note": "Sekcija 'Publikacije' propisuje redoslijed prozom: prezime + inicijal bez tocke, zarez izmedju autora, naslov u Sentence case, skraceni naziv casopisa bez tocaka, godina;svezak:kracena paginacija. Broj (issue) u zagradi pored sveska se NE navodi. Paginacija se krati (175-185 -> 175-85), a kada stranice nisu dostupne zamjenjuje je broj rada (npr. 120456 ili e3440). Uputa uz Pubmed primjer trazi da se Title Case naslova ispravi prema hrvatskom pisanju; alat naslov ne mijenja."
+      },
+      "example": {
+        "input": {
+          "type": "clanak",
+          "authors": "Zivkovic, P. M.; Matetic, A.; Tadin Hadjina, I.; Rusic, D.; Vilovic, M.; Supe-Domic, D.",
+          "title": "Serum Catestatin Levels and Arterial Stiffness Parameters Are Increased in Patients with Inflammatory Bowel Disease",
+          "container": "J Clin Med",
+          "year": "2020",
+          "volume": "9",
+          "pages": "628"
+        },
+        "expected": "Zivkovic PM, Matetic A, Tadin Hadjina I, Rusic D, Vilovic M, Supe-Domic D i sur. Serum Catestatin Levels and Arterial Stiffness Parameters Are Increased in Patients with Inflammatory Bowel Disease. J Clin Med. 2020;9:628.",
+        "knownDiff": "Izvorni primjer iza sestog autora ima 'i sur.' jer clanak ima vise od 6 autora, a ekstrakcija imena preostalih autora ne sadrzi; input zato navodi samo 6 vidljivih autora pa render (etAlAfter 6) ispravno NE dodaje 'i sur.'. Razlika je iskljucivo taj dodatak."
+      }
+    },
+    {
+      "type": "mrezni",
+      "template": "{authors}. {title} [Internet]. {place}: {publisher}; {year} [citirano {accessed}]. Dostupno na: {url}",
+      "requiredFields": [
+        "authors",
+        "title",
+        "place",
+        "publisher",
+        "year",
+        "accessed",
+        "url"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Diabetes Australia. Diabetes globally [Internet]. Canberra ACT: Diabetes Australia; 2012",
+        "sourcePage": "str. 16",
+        "note": "Sekcija 'Pocetna stanica, Homepage', 'Primjer u konacnom formatu'. Verbalni predlozak na istoj stranici: 'Autor/naziv organizacije. Naslov stranice [Internet]. Mjesto izdavanja: Izdavac; godina publiciranja [citirano DD mjesec GGGG]. Dostupno na: url bez hyperlinka'. Organizacijski autor bez prepoznate kljucne rijeci upisuje se sa zavrsnim zarezom ('Diabetes Australia,') da ostane doslovan. Postoji i varijanta 'Dio web stranice' (AMA primjer, ista stranica) s drugacijim redoslijedom koju ovaj predlozak ne izrazava."
+      },
+      "example": {
+        "input": {
+          "type": "mrezni",
+          "authors": "Diabetes Australia,",
+          "title": "Diabetes globally",
+          "place": "Canberra ACT",
+          "publisher": "Diabetes Australia",
+          "year": "2012",
+          "accessed": "5. studenog 2012.",
+          "url": "http://www.diabetesaustralia.com.au/en/Understanding-Diabetes/DiabetesGlobally/"
+        },
+        "expected": "Diabetes Australia. Diabetes globally [Internet]. Canberra ACT: Diabetes Australia; 2012 [citirano 5. studenog 2012.]. Dostupno na: http://www.diabetesaustralia.com.au/en/Understanding-Diabetes/DiabetesGlobally/"
+      }
+    },
+    {
+      "type": "zavrsni",
+      "template": "{authors}. {title} [diplomski rad]. {place}: {institution}; {year}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "place",
+        "institution",
+        "year"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Disertacije............................................................................................................................. 16",
+        "sourcePage": "str. 1",
+        "note": "Uputa IMA sekciju Disertacije (sadrzaj, str. 16 dokumenta), ali njezin tekst NIJE u ekstrakciji. Predlozak izveden iz opceg Vancouver (NLM) obrasca za disertacije i teze (oznaka vrste rada u uglatoj zagradi) uz interpunkcijski rep 'Mjesto: Ustanova; godina.' preuzet iz ostalih MEFST predlozaka; alat koristi oznaku [diplomski rad] kao default. Potvrditi protiv PDF-a pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "propis",
+      "template": "{title}. {container}[[ {issue}]].",
+      "requiredFields": [
+        "title",
+        "container"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Literatura se navodi Vancouver stilom kako je prikazano. Literatura bi trebala poglavito biti",
+        "sourcePage": "str. 13",
+        "note": "Uputa NE obraduje citiranje pravnih propisa (biomedicinski diplomski rad); predlozak izveden iz domace prakse navodenja propisa unutar numerickog popisa (naslov propisa, sluzbeno glasilo kao container, broj glasila u issue). Potvrditi ili oboriti pri verifikaciji."
+      },
+      "example": null
+    }
+  ],
+  "contradictions": [
+    "Prag kracenja autora nije izrijekom naveden u ekstrakciji; Pubmed primjer pokazuje 6 autora + 'i sur.', pa su etAlAfter/etAlKeep 6 preuzeti iz Vancouver konvencije (prvih 6 pa 'i sur.'). Potvrditi prag protiv PDF-a.",
+    "Clanak worked-example ima deklarirani knownDiff: ekstrakcija ne sadrzi imena autora nakon sestog, pa render s 6 autora nema zavrsni 'i sur.' iz izvornog primjera.",
+    "Sekcije Knjiga i Disertacije postoje u sadrzaju uputa (str. 15 i 16 dokumenta), ali te stranice nisu u ekstrakciji; predlosci za knjigu i zavrsni rad su izvedeni (derived), ne dokazani primjerom.",
+    "Oblik broja u samom popisu literature nije prikazan u ekstrakciji (vidljiva je samo geometrija: brojka na 0 cm, uvlaka 0,8 cm); referenceMarker '({n})' je preslikan iz okruglih zagrada in-text navoda.",
+    "Mrezni izvori imaju dvije varijante ('Pocetna stanica, Homepage' i 'Dio web stranice' s drugacijim redoslijedom); jedan predlozak izrazava samo homepage oblik, AMA primjer dijela stranice ostaje nepokriven.",
+    "Uputa trazi ispravljanje Title Case naslova clanaka prema hrvatskom pisanju (Sentence case); alat unos naslova ne mijenja, a Pubmed primjer u izvoru namjerno pokazuje neispravljeni oblik.",
+    "Prior profila ['vancouver'] je POTVRDJEN: izvor izrijekom kaze 'Literatura se navodi Vancouver stilom kako je prikazano.' uz vlastite primjere, pa je umjesto style-pina izgraden custom-spec po tim primjerima."
+  ]
+}

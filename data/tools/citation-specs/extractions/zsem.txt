@@ -1,0 +1,337 @@
+===== [zsem-pravilnik-zavrsni-2023 | str. 3] =====
+Clanak 2.
+
+Za stjecanje odgovarajueg strucnog naziva obavezno je da student, osim polozenih
+ispita i drugih obaveza, prijavi i uspjesno izradi zavrsni rad, te da zavrsni rad obrani
+pred ispitnim Povjerenstvom, u skladu sa odredbama Pravilnika o studiranju i ovog
+Pravilnika.
+
+                                                  Clanak 3.
+
+Zavrsni rad je samostalni rad studenta, a svrha mu je potvrivanje studentove
+sposobnosti i samostalnosti u obradi odreenog podrucja iz struke, uz koristenje:
+literature, empirijskih istrazivanja, znanja i iskustava strucnjaka iz prakse te svih
+ostalih izvora neophodnih za izradu rada.
+U zavrsnom radu student, primjenom znanja i metoda, dokazuje sposobnost
+povezivanja stecenih znanja.
+
+                                                  Clanak 4.
+
+Student koji tijekom studija nacini iznimno uspjesan seminarski rad kojim u dostatnoj
+mjeri ispunjava ciljeve skolovanja, moze biti osloboen izrade zavrsnog rada. U tom
+slucaju, na prijedlog predmetnog nastavnika (mentora), Povjerenstvo imenovano od
+dekana postupa sa seminarskim radom jednako kao sa zavrsnim radom.
+
+    2. ODABIR TEME ZAVRSNOG RADA
+
+===== [zsem-pravilnik-zavrsni-2023 | str. 4] =====
+Mentor je duzan voditi i usmjeravati studenta pri izradi zavrsnog rada. Mentor je
+obvezan odrzati odreeni broj sati konzultacija sa svakim kandidatom. Broj sati
+utvren je Izvedbenim planom za svaku akademsku godinu.
+
+    4. OBLIK I OPSEG ZAVRSNOG RADA
+
+                                                  Clanak 11.
+
+Zavrsni rad treba biti napisan na racunalu u formatu A4 u pravilu na ne manje od 30
+stranica sadrzaja. Prilikom pisanja koristi se font Times New Roman, size 12,
+obostrano poravnavanje teksta, razmak izmeu redova 1,5pt, uvlaka za prvi red
+odlomka 1,27pt, razmak izmeu pojedinog odlomka 6pt. Naslovna stranica, sadrzaj,
+bibliografija i Izjava o akademskoj cestitosti ne ulaze u broj stranica zavrsnog rada.
+Zavrsni rad pise se i brani na standardnom hrvatskom jeziku. Naziv teme, sazetak i
+kljucne rijeci zavrsnog rada, osim na hrvatskom obvezno je napisati i na engleskom
+jeziku.
+Zavrsni rad se moze pisati i braniti na engleskom jeziku.
+Svi clanovi Povjerenstva za obranu zavrsnog rada moraju poznavati jezik na kojem
+se brani zavrsni rad.
+Student predaje zavrsni rad u PDF-u mailom na zavrsni@zsem.hr.
+
+                                                        4
+
+===== [zsem-pravilnik-zavrsni-2023 | str. 6] =====
+usmene obrane svakog clana ispitnog Povjerenstva. Povjerenstvo je duzno ocjenu
+priopiti studentu.
+Ako je tijekom usmene obrane rad ocijenjen negativnom ocjenom, student se
+upuuje na ponavljanje postupka izbora teme, mentora i izrade novog zavrsnog rada
+uz plaanje.
+Ponavljanje postupka izrade novog zavrsnog rada mogue je samo jedanput.
+
+                                                  Clanak 18.
+
+Plagiranje zavrsnog rada predstavlja tesku stegovnu povredu sukladno Pravilniku o
+stegovnom postupku.
+Potpisivanjem Izjave o akademskoj cestitosti student: jamci da je autor zavrsnog
+rada, da su svi koristeni izvori, kako objavljeni, tako i neobjavljeni, adekvatno citirani i
+parafrazirani te popisani u bibliografiji na kraju rada, da rad ne sadrzi dijelove radova
+predanih na Zagrebackoj skoli ekonomije i managementa ili drugim ustanovama radi
+zavrsetka studija, da je elektronicka verzija zavrsnog rada identicna onoj tiskanoj, te
+da je to verzija rada koju je odobrio mentor, te da je upoznat s odredbama Etickog
+kodeksa Zagrebacke skole ekonomije i managementa. Izjava o akademskoj cestitosti
+prilaze se kao zadnja stranica u radu te mora biti takoer i u PDF-u.
+Izjava o akademskoj cestitosti nalazi se u Prilogu 1. i sastavni je dio ovog Pravilnika.
+
+                                                  Clanak 19.
+
+Po obrani zavrsnog rada student je obvezan, najkasnije u roku od 3 dana izvrsiti
+unos podataka vezanih uz zavrsni rad.
+Validaciju unosa podataka u institucionalni repozitorij obavlja zaduzena sluzbena
+
+===== [zsem-pravilnik-zavrsni-2023 | str. 7] =====
+Prilog 1.
+
+           Izjava o akademskoj cestitosti
+
+Ime i prezime studenta: _______________________________________________________
+Maticni broj studenta: ________________________________________________________
+Naziv zavrsnog rada: _________________________________________________________
+___________________________________________________________________________
+___________________________________________________________________________
+
+Svojim potpisom jamcim:
+     da sam jedini autor / jedina autorica ovog zavrsnog rada.
+     da su svi koristeni izvori, kako objavljeni, tako i neobjavljeni, adekvatno citirani i
+         parafrazirani te popisani u bibliografiji na kraju rada.
+     da ovaj zavrsni rad ne sadrzi dijelove radova predanih na Zagrebackoj skoli ekonomije
+         i managementa ili drugim ustanovama radi zavrsetka studija.
+     da je elektronicka verzija zavrsnog rada identicna onoj tiskanoj, te da je to verzija rada
+         koju je odobrio mentor.
+     da sam upoznat/upoznata s odredbama Etickog kodeksa Zagrebacke skole ekonomije i
+         managementa.
+
+                                                                        Potpis studenta:
+                                                               __________________________
+
+           7
+
+===== [zsem-pravilnik-diplomski-2023 | str. 4] =====
+Ukoliko studenti Strucnog diplomskog studija, MBA programa, iz odreenih razloga
+nisu bili u mogunosti odslusati neki od obveznih kolegija, iznimno ukoliko se kolegij
+ne moze poloziti bez prisustvovanja nastavi, Povjerenstvo za nastavu diplomskih
+studija moze razmotriti zamolbu studenta te odobriti zamjenski kolegij.
+Zamjenski kolegij moze se iznimno odobriti zbog:
+ zdravstvenih razloga
+ poslovnih obveza.
+Zamjenski kolegij moze biti obvezni ili izborni kolegij bilo koje koncentracije pod
+uvjetom da ima isti ili vei broj ECTS bodova kao i kolegij kojega student zeli zamijeniti.
+Povjerenstvo studentu moze odobriti zamjenski kolegij ukoliko zamjenski kolegij ima
+odgovarajui broj ECTS bodova i zadovoljava iste ishode ucenja.
+Kandidat moze odabrati samo one zamjenske kolegije ciji se raspored predavanja ne
+preklapa s rasporedom predavanja njegovih preostalih obveznih kolegija.
+Student koji zeli zamijeniti kolegij treba poslati zamolbu za zamjenu kolegija
+elektronickim putem na Povjerenstvo za nastavu diplomskih studija, na mail
+povjerenstvo@zsem.hr. Zamolbu treba poslati najkasnije sedam (7) dana od
+zavrsetka predavanja kolegija kojega student nije odslusao te ga zeli zamijeniti.
+Zamolba mora sadrzavati razlog zamjene kolegija, ispravan naziv kolegija koji se
+mijenja i ECTS bodove, te ispravan naziv zamjenskog kolegija i ECTS bodove.
+Takoer, zamolbi mora priloziti dokaz koji se odnosi na gore navedene situacije u
+kojima se odobrava iznimna zamjena kolegija.
+Ukoliko zamolba ne sadrzava sve navedene elemente, nee se razmotriti na
+Povjerenstvu za nastavu diplomskog studija.
+
+                                                  Clanak 9.
+
+===== [zsem-pravilnik-diplomski-2023 | str. 5] =====
+Obrazlozenje teme rada treba sadrzavati sve sljedee elemente:
+
+a) postavljanje problema istrazivanja
+
+b) postavljanje svrhe i cilja istrazivanja
+
+c) ocjenu dosadasnjih istrazivanja o predmetu istrazivanja
+
+d) znanstvene i/ili istrazivacke metode
+
+e) kratki opis sadrzaja rada (po dijelovima)
+
+f) popis domae i strane literature koju student planira koristiti tijekom pisanja
+
+rada.
+
+Student prijavu teme treba napisati sukladno cl. 27., cl. 28., cl. 29., cl. 30., cl. 31. i cl.
+
+32. (tehnicko ureenje i organizacija teksta, struktura rada, nacin citiranja i navoenja).
+
+Prijava mora biti lektorirana i lektora treba navesti u Izjavi o mentorskoj suglasnosti
+
+(Prilog A). Lektor moze biti osoba koja je zavrsila preddiplomski studij iz podrucja
+
+hrvatskog jezika ili komparativne knjizevnosti te ona mora biti navedena u prijavi.
+
+Ukoliko se diplomski rad pise na engleskom jeziku, tada lektor mora biti osoba koja je
+
+zavrsila preddiplomski studij engleskog jezika.
+
+Prijavi se prilaze zivotopis u EU formatu. Obrazac zivotopisa student moze preuzeti na
+
+===== [zsem-pravilnik-diplomski-2023 | str. 12] =====
+Clanak 27.
+
+Opseg rada
+
+Diplomski rad treba biti opsega, u pravilu, ne manje od sezdeset (60) stranica sadrzaja.
+Naslovna stranica, sadrzaj te popis tablica, grafikona, slika i literature ne ulaze u broj
+stranica diplomskog rada.
+
+                                                 Clanak 28.
+
+Tehnicko ureenje rada
+
+Pismo: Times New Roman
+Font: 12
+Poravnanje teksta: obostrano
+Uvlaka za prvi redak odlomka (pasusa): 1,27 cm
+Razmak izmeu redova: 1,5
+Razmak iza pojedinog pasusa (odlomka): 6 t
+Oznake glava, poglavlja i potpoglavlja prema vaznosti:
+1. Naslov - TISKANA VELIKA SLOVA � bold, font 14 -18
+2. Glave - TISKANA VELIKA SLOVA � font 12 - 14
+3. Poglavlja i potpoglavlja - mala slova � bold, font 12
+4. Naglasavanje vaznih dijelova u tekstu: bold
+5. Tekst - mala slova � font 12
+Fusnote - mala slova � italic, font 10
+Originalni konacni tekst rada dijeli se u poglavlja i potpoglavlja. Naslovi poglavlja i
+potpoglavlja moraju biti kratki i jasni, te redom numerirani arapskim brojevima, najvise
+do tri (3) razine, ali ne vise od toga (Primjer 1., 1.1., 1.1.1.).
+Reference u tekstu i citati navode se u tekstu, a ne u biljeskama.
+Napomene, biljeske i pojasnjenja u tekstu smjestaju se na dno stranice u fusnote:
+oznacuju se pocevsi od broja 1. Fusnote se rabe samo za dodatna pojasnjenja
+osnovnoga teksta. Ne koriste se kao poziv na koristenu literaturu.
+Tablice, grafikoni i slike dolaze unutar glavnog teksta. Tablice, grafikoni i slike moraju
+imati broj, naziv i izvor podataka. Numeriraju se u kontinuitetu arapskim brojevima
+(posebno tablice, posebno grafikoni, posebno slike). Naslovi tablica, grafikona i slika:
+iznad tablice, grafikona ili slike, centrirano na sredinu. Izvori za tablice, grafikone ili
+slike navode se ispod, centrirano na sredinu. Sve tablice, grafikoni i slike trebaju se
+nalaziti unutar teksta i biti objasnjeni (tj. poglavlje ili podpoglavlje ne moze s njima
+zapocinjati ili zavrsavati).
+
+                                                 Clanak 29.
+
+Struktura rada
+
+===== [zsem-pravilnik-diplomski-2023 | str. 13] =====
+Predgovor (nije obavezan)
+ Uvod (cilj i predmet istrazivanja, dosadasnja istrazivanja, metode istrazivanja)
+ Glavni tekst (siri opis problema, opis rezultata vlastita istrazivanja, usporedba s
+rezultatima istrazivanja drugih...)
+ Zakljucak
+ Literatura
+ Popis tablica
+ Popis grafikona
+ Popis slika
+ Prilozi i primjeri (koji zbog opseznosti ne stanu u tekst).
+
+Sve do Zakljucka se numerira kao poglavlja i potpoglavlja, a iza Zakljucka se ne
+numerira.
+
+                                                 Clanak 30.
+
+Organizacija teksta
+
+Tekst rada mora biti organiziran na sljedei nacin:
+
+NASLOV - najvazniji sazetak rada koji mora odrazavati sadrzaj i svrhu rada. Naslov
+treba biti jasan i sto je mogue krai te tako odabran da citatelju odmah pruzi jasnu
+informaciju o obraivanoj problematici.
+
+SAZETAK (ABSTRACT) na hrvatskom i engleskom jeziku. Sazetak mora biti
+relevantan i sadrzavati izmeu 150 i 200 rijeci. U sazetku autor daje opi prikaz teme
+(predmet i cilj rada), opisuje metode rada, rezultate i temeljni zakljucak. Treba istaknuti
+zakljucke koji proizlaze iz rezultata vlastitog istrazivanja. Iza sazetaka ispisuju se
+kljucne rijeci na hrvatskom i engleskom jeziku.
+SADRZAJ - ispisuje se i u prijavi teme diplomskog rada, a u svojoj konacnoj verziji
+nakon sto je napisan cijeli rad. U sadrzaju moraju biti navedene sve tocke rada i
+stranice na kojima se one nalaze.
+PREDGOVOR - kratko navodi motive i razloge istrazivanja obraenog u radu. U
+predgovoru se obicno iskazuju i zahvale tvrtkama ili pojedincima koji su omoguili
+izradu rada. Isto tako se iskazuje i zahvala mentoru/komentoru, a i svima drugima koji
+su na bilo koji nacin pomogli izradi rada.
+1. UVOD - autor rada opisuje znacaj i svrhu obraivane teme. Kree od opeg
+prema specificnom, tj. autor kratkim pregledom opih obiljezja uvodi u problematiku
+koju istrazuje u radu. Logickim slijedom definira svrhu i ciljeve istrazivanja te
+objasnjava sadrzaj i strukturu rada. Uvod citatelju treba pruziti uvid u obraivanu
+problematiku kroz sire probleme teme kojom se bavi sa tendencijom usmjeravanja
+citatelja prema uskoj cjelini kojom e se dalje baviti u radu. Iz primjereno postavljenih
+problema i predmeta istrazivanja proizlazi i upoznavanje citatelja s radnim hipotezama
+i/ili istrazivackim pitanjima. Hipoteze su pretpostavke koje treba dokazati. Istrazivacka
+pitanja su otvorena pitanja koja se odnose na predmet i cilj rada, te se u radu
+razmatraju. U zakljucku se obrazlazu istrazivacka pitanja ili se potvruju (odnosno ne
+potvruju) postavljene hipoteze. Ponekad moze postojati i nekoliko pomonih
+hipoteza, ili istrazivackih pitanja. Pozeljno je nakon postavljene glavne i pomonih
+hipoteza/istrazivackih pitanja, navesti i nekoliko argumenata kojima se isto podupire.
+Uvod se moze razdijeliti na poglavlja na sljedei nacin:
+
+                                                                                                               13
+
+===== [zsem-pravilnik-diplomski-2023 | str. 14] =====
+1.1. Cilj i predmet istrazivanja - jasno naznacen cilj i podciljevi, svrha i predmet
+istrazivanja rada - razlozi obrade izabrane teme, objasnjenje o namjerama autora, tj.
+sto se zeljelo postii obraenom temom. Objekt ili predmet istrazivanja proizlazi iz
+postavljenog problema istrazivanja i treba ga vrlo jasno i koncizno definirati.
+1.2. Dosadasnja istrazivanja - u ovom dijelu rada autor sazeto opisuje dosadasnja
+istrazivanja teme ili srodna istrazivanja koja su napravili drugi, tj. obrauje sukladnu
+literaturu iz teme rada. Dosadasnja istrazivanja predstavljaju vodilju istrazivanja iz koje
+proizlazi cilj i svrha rada.
+1.3. Metode istrazivanja - u ovom potpoglavlju autor opisuje mjesto, metode i tehnike
+mjerenja i obrade rezultata istrazivanja. Opisuje se nacin prikupljanja podataka,
+ukazuje na probleme i dostupnost izvora podataka, opisuju tehnike izmjere i obrade
+podataka i drugi relevantni cinitelji potrebni za obradu rezultata istrazivanja.
+2. GLAVNI TEKST - dio teksta koji nosi naslov istovjetan onome naslovu rada, a
+poglavlja unutar njega nazive po pojedinim temama obraivanim u njima. Glavni tekst
+najopsezniji je dio rada i predstavlja opis vlastita istrazivanja, prikaz dobivenih
+rezultata. Potkrepljuje se citatima iz literature, tablicama i grafikonima, slikama itd. U
+tekstu se koriste referentne oznake koje upuuju na podatke u tablicama, slikama ili
+grafikonima. Primjer:
+2.1. Poglavlje (naziv) (siri opis problema, teoretska razrada, siri opis dosadasnjih
+istrazivanja drugih autora s citatima, podijeljeno u potpoglavlja 2.1.1., 2.1.2....),
+2.2. Poglavlje (naziv) (uzi opis specificnog problema, teoretska razrada, podijeljeno
+u potpoglavlja 2.2.1., 2.2.2., 2.2.3....),
+2.3. Poglavlje (prikaz vlastita istrazivanja, rezultati vlastitih istrazivanja na podrucju
+rada, usporedba s dosadasnjim istrazivanjima. Podijeljeno u potpoglavlja 2.3.1....)
+2.4. Poglavlje (diskusija teza i obraenih rezultata, komentari, misljenja, kritike,
+prijedlozi. Podijeljeno u potpoglavlja 2.4.1.....) Ovaj dio se moze iznijeti i u Zakljucku
+rada.
+3. ZAKLJUCAK - sadrzi jasno izrecene znanstvene tvrdnje, otvorena pitanja i
+preporuke za daljnja istrazivanja. Ovo neposredno proizlazi iz posljednjeg poglavlja
+glavnog teksta. U zakljucku se kratko i jasno po tockama iznose zakljucci proizisli iz
+istrazivanja obraenog u radu. Navode se relevantni zakljucci u skladu s postavljenim
+ciljem istrazivanja, tezama i dobivenim rezultatima istrazivanja.
+POPIS TABLICA, POPIS GRAFIKONA I POPIS SLIKA - posebno dodati svaki od
+popisa s oznacenim stranicama na kojima se tablice, grafikoni i slike nalaze.
+POPIS LITERATURE - vidi cl. 32.
+PRILOZI I PRIMJERI - sve sto ne stane u tekst zbog opsega ili ga optereuje; tj.
+opsirnije ilustracije, tablice, grafikoni, primjeri, potvrda lektora (podaci, kontakt)...
+
+                            Clanak 31.
+
+Nacin citiranja i navoenja
+
+Pri pisanju diplomskog rada moze se koristiti nacin citiranja i navoenja literature
+napravljen po uzoru na Harvardski sistem citiranja bibliografije; (opsirnije na;
+http://libweb.anglia.ac.uk/referencing/harvard.htm). Mentor/komentor moze odobriti i
+drukciji nacin citiranja i student ga treba konzistentno koristiti.
+Reference i citirane dijelove teksta navodi se u tekstu u kurzivu ili pod navodnicima, a
+ne u biljeskama. U zagrade se stavlja prezime autora i godina izdanja npr. (Bombelles,
+2003). U slucaju citata navodi se i broj stranice (Bombelles, 2003:150). Ne koristi se
+ibid, i sl. Svaka biljeska navodi se kao i prvi put. Ako se radi o dvojici autora: (Bombelles
+
+                                        14
+
+===== [zsem-pravilnik-diplomski-2023 | str. 15] =====
+i Marusi, 2004). Ako je vise autora navesti prvog i pisati: (Bombelles i suradnici, 2003).
+Svaka referenca mora se u potpunosti navesti u popisu literature.
+POPIS LITERATURE: obuhvaa sve koristene izvore i potpune podatke o djelima koja
+se obvezno spominju u referencama. Popis literature pise se bez broja poglavlja i
+dolazi na kraju rada (poslije Zakljucka). Literatura se numerira. Ureuje se abecednim
+redom autora te kronoloski za radove istog autora. Literatura se citira prema primjerima
+za knjige, casopise i ostale izvore:
+Knjige: prezime, ime, (godina), naslov, mjesto izdavanja: ime izdavaca. Ukoliko su dva
+ili tri autora, redom navesti njihova prezimena i inicijale (godinu) naslov, mjesto
+izdavanja: ime izdavaca. Ukoliko je vise autora (cetiri ili vise), navodi se prezime prvog
+autora nakon cega slijedi et al ili i suradnici.
+Casopisi: prezime, ime, (godina), "naslov clanka", naziv casopisa u kojem je objavljen;
+broj, volumen, svezak, stranice. Ukoliko je vise radova istog autora objavljenih iste
+godine, uz godinu se rabe oznake "a,b,c".
+Izvori preuzeti s Internetskih stranica: prezime autora/urednika, ime, (godina), "naslov
+clanka", naslov casopisa, datum publikacije, godiste, broj stranice, internet adresa,
+datum posjete toj internetskoj stranici. Npr: Wells, Joseph (2007), ,,What Is Your Fraud
+IQ?", Journal of Accountancy, May 2007, Vol. 203, Br. 5,

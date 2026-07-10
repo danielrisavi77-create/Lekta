@@ -1,0 +1,228 @@
+===== [fer-upute-diplomski-zemris | str. 5] =====
+3.1. Format stranice ....................................................................................................... 3
+   3.2. Naslovi poglavlja i potpoglavlja ............................................................................. 3
+
+       3.2.1. Primjer naslova 3. razine ............................................................................................ 4
+   3.3. Tekst poglavlja........................................................................................................ 4
+
+       3.3.1. Nabrajanja .................................................................................................................. 5
+   3.4. Slike i tablice .......................................................................................................... 5
+   3.5. Algoritmi, pseudo k�d i izvorni k�d ....................................................................... 7
+   3.6. Formule ................................................................................................................... 8
+   3.7. Strani pojmovi......................................................................................................... 8
+   3.8. Pozivanje na literaturu ............................................................................................ 9
+4. Zakljucak .................................................................................................................. 10
+Literatura ........................................................................................................................... 11
+Sazetak ................................................................................................................................ 13
+Summary ............................................................................................................................ 13
+PRIVITAK A: Primjer dodatka ...................................................................................... 14
+
+                                                                                                              i
+
+===== [fer-upute-diplomski-zemris | str. 8] =====
+1. naslov poglavlja (engl. Heading 1) � font 14, masno, sve velikim slovima,
+    2. naslov potpoglavlja (engl. Heading 2) - font 13, masno,
+    3. naslov tree razine (engl. Heading 3) - font 12, masno te
+    4. naslov cetvrte razine (engl. Heading 4) - font 12, koso, masno
+Izbjegavati koristenje potpoglavlja 4. razine, dok poglavlja nize razine (5. i nize) ne
+koristiti.
+Naslov poglavlja (razina 1) mora zapoceti na praznoj stranici. Izmeu svakog naslova i
+okolnog teksta treba ostaviti dovoljno razmaka (npr. 24 pt iznad i 18 pt ispod za razinu 1,
+12/6 za treu i cetvrtu).
+Naslovi poglavlja trebaju biti numerirani. Naslov osnovnog poglavlja s rednim brojevima
+1., 2. i dalje prema potrebi. Iza broja treba doi tocka. Svaki naslov poglavlja mora imati
+ime, osim posebnih poglavlja: Literature, Sazetka i slicno (koji nisu ni numerirani).
+
+                                                                                                             3
+
+===== [fer-upute-diplomski-zemris | str. 10] =====
+Tekst pisati u ,,treem licu". Primjerice, ne pisati ,,algoritam sam provjerio..." ili ,,time
+smo pokazali..." ve ,,algoritam je provjeren..." i ,,time je pokazano...".
+Procitati rad prije slanja mentoru. Recenice i dijelove koji su nejasni i slozeni popraviti
+(pojednostaviti). Duge recenice razbiti na manje.
+
+3.3.1. Nabrajanja
+Nabrajanja mogu biti obicna ili numerirana. Nabrajanja koristiti kada je potrebno istaknuti
+neku podjelu ili elemente necega.
+Nabrajanja spadaju u jednu recenicu � dio su te recenice. Stoga svaki element mora biti
+kratak. Ukoliko je potrebno obrazloziti pojedini element to napraviti naknadno, ne u
+nabrajanju! Obzirom da su elementi nabrajanja dio recenice, na kraju svakog dolazi zarez,
+predzadnji zavrsava s veznikom ,,i" ili ,,te", a zadnji s tockom.
+Primjerice, brojeve mozemo grupirati po neki svojstvima na mnogo nacina:
+
+  � pozitivni ili negativni � jesu li vei od nule ili manji,
+
+===== [fer-upute-diplomski-zemris | str. 11] =====
+poglavlja u kojem se slika nalazi, dok druga brojka oznacava redni broj slike u tom
+poglavlju.
+Font naslova slika i tablica treba biti malo manji od obicnog teksta (ovog teksta),
+primjerice font 9 ili 10, ali iste porodice kao i ostatak (Times New Roman u ovom
+predlosku) te podebljan (engl. bold).
+Osnovni stil naslova slika i tablica jest ,,Caption" (kad se naslov ubaci biti e ovog tipa).
+Labela za sliku moze biti ,,Slika" ili skraeno ,,Sl.". Iako bi na prvi pogled labela ,,Slika"
+bila bolji izbor, problemi sa sustavom referenciranjem slika u Wordu koji ne zna za padeze
+(a nee dati samo broj uz sliku) ukazuju na prednosti koristenja labele ,,Sl.". Primjerice,
+idua slika napravljena je u skladu s preporukama.
+
+                                                Slika 3.1. Mrav ide na posao
+
+Referenca na prethodnu sliku (preko ReferencesCross-reference) ispada ,,Slika 3.1" sto
+je nezgodno ako referenca treba usred recenice, a ne na samom pocetku. Npr. ,,kao sto je
+prikazano na slici Slika 3.1.". Kada bi labela bila ,,Sl." to bi izgledalo nesto ljepse (,,kao sto
+je prikazano na slici Sl. 3.1.". Ipak, za studentske radove i jedno i drugo je prihvatljivo.
+Tablice trebaju imati zaglavlja za stupce i/ili retke, prema sadrzaju. Zaglavlja mogu biti
+naglasena (npr. podebljana), ali i ne moraju.
+Poravnanje sadrzaja ovisi o samom sadrzaju. Moze biti centrirano, lijevo ili desno
+poravnanje. Cijela tablica treba biti poravnata po sredini i ne smije biti sira od teksta.
+Sadrzaje elija vertikalno poravnati po sredini (osim kada drukcije ima vise smisla).
+Velicinu fonta i razmak izmeu redaka tablice najjednostavnije podesiti novim stilom
+(tekst-tablice u predlosku) koji e imati jednaki razmak prema visim i nizim recima (npr. 2
+pt, kao u predlosku). Tekst u tablici treba takoer biti nesto manji od obicnog teksta.
+Kada tablica ne stane na jednu stranicu, zaglavlja trebaju biti ponovljena i na iduoj
+stranici.
+
+===== [fer-upute-diplomski-zemris | str. 14] =====
+Web                                    prevesti (iz programskog jezika u strojni oblik)
+Internet                               prevesti, povezati
+operating system                       Web (web)
+upload                                 Internet (internet)
+download                               operacijski sustav
+link (web link)                        pohraniti (prilagoditi kontekstu)
+                                       dohvatiti, spremiti (prilagoditi kontekstu)
+                                       link, poveznica, adresa (prilagoditi kontekstu)
+
+Neki strani pojmovi se razlicito prevode ovisno o kontekstu.
+Izbjegavati koristenje stranih rijeci u naslovima.
+
+3.8. Pozivanje na literaturu
+
+Literaturu se moze navoditi uzgred ili kao osnovni dio recenice. Navedeno je ilustrirano s
+par primjera u nastavku.
+Studentima se preporuca da prije zapocinjanja rada na dokumentu procitaju preporuke i
+predloske za oblikovanje radova [1,2,3,4].
+Ucestale pravopisne greske studenata u radovima prikazana su u [3].
+Ako je jako bitno, u tekst se moze izravno staviti referenca na neku literaturu (ne samo
+preko broja u literaturi, kao ,,[x]" ve i tekstom, spomenuti autore i po potrebi naslov).
+Ipak, ovo izbjegavati.
+
+                                                                                          9
+
+===== [fer-upute-diplomski-zemris | str. 15] =====
+4. ZAKLJUCAK
+
+Tekst zakljucka.
+Zakljucak ukratko sumira sto je u radu napravljeno s naglaskom na dobivene rezultate (i
+njihov kratki komentar) te mogua poboljsanja (budui rad). Zakljucak treba biti sazet �
+pola stranice do stranica teksta je sasvim dovoljna.
+Sto se tice izrade dokumenata, najbitniji zakljucci su:
+
+ � definirati i koristiti stilove,
+ � koristiti pravopisne alate (spelling checker) te
+ � prije slanja mentoru procitati dokument jos barem jednom (i pritom popraviti uocene
+
+     greske).
+
+                                                                                                           10
+
+===== [fer-upute-diplomski-zemris | str. 16] =====
+LITERATURA
+
+1. Repozitorij predmeta Diplomski rad, http://www.fer.unizg.hr/predmet/diprad, 2. 7.
+    2013.
+
+2. Repozitorij predmeta Zavrsni rad, http://www.fer.unizg.hr/predmet/zavrad, 2. 7. 2013.
+3. Gordan Gledec, Pravopisni savjeti za izradu studentskih radova v1.4.0,
+
+    http://www.fer.unizg.hr/_download/repository/pravopisni_savjeti.pdf,
+    http://www.fer.unizg.hr/_download/repository/zi-mi-pravopis-prezentacija.pdf, 2. 7.
+    2013.
+4. Maja Matijasevi, Savjeti za oblikovanje studentskih radova (radna verzija, 9.3.2010.),
+    http://www.fer.unizg.hr/_download/repository/Savjeti_za_oblikovanje_studentskih_ra
+    dova_20100309.pdf
+5. Sandor Dembitz, Gordan Gledec, Hrvoje Miholi, Hascheck � hrvatski akademski
+    spelling checker, http://hascheck.tel.fer.hr/, 2. 7. 2013.
+6. Institut za hrvatski jezik i jezikoslovlje, Hrvatski pravopis, http://pravopis.hr/, 2. 7.
+    2013.
+
+U popis literature staviti sve izvore podataka koji su doprinijeli izradi ovog rada. U izvore
+spadaju knjige, poglavlja knjiga, clanci iz casopisa ili zbornika radova, dokumenti na
+Webu (ukljucujui i video priloge) i slicno.
+
+U literaturu ne stavljati elemente koji opisuju ope operacije koje nisu svojstvene samo
+zadanom problemu ve mnostvu njih. Primjerice, iako se mozda koristi numericka
+integracija nee se u literaturu navesti knjiga koja opisuje postupak numericke integracije
+(to spada u ,,ope znanje"). Iznimku treba napraviti jedino ako se referencira na specificni
+dio necega za sto je potrebno nesto posebno napraviti. Npr. ,,izvorni algoritam X
+[referenca] je promijenjen u dijelu ...".
+
+U literaturi se mogu navesti i neobjavljeni materijali (ni u tiskanom obliku, ni na Webu)
+ako su bitni za rad. Primjerice, zabiljeske s predavanja, prezentacije, okruglog stola i
+slicno.
+
+Svaka reference bi se trebala sastojati od:
+
+1. autora (ako je poznat, npr. Pero Peri, Ivo Ivi ili samo inicijal imena i prezime, npr.
+    P. Peri, I. Ivi ili Peri, P.; Ivi, I.),
+
+2. naslova djela (koso),
+
+3. izdavac (ako je poznat),
+
+4. Web adresa rada i datum zadnje provjere adrese (ako je rad dostupan na Webu),
+
+5. stranice ,,od-od" (ako se radi o poglavlju knjige ili zbornika radova, ili clanku nekog
+    casopisa) te
+
+6. godina nastanka ili objave rada (ako je poznat).
+
+Elemente referenci odvojiti zarezom.
+                                                                                                           11
+
+===== [fer-upute-diplomski-zemris | str. 17] =====
+Svaka literatura treba biti referencirana (spomenuta) u tekstu rada!
+Literatura moze biti slozena prema kriteriju znacaja literature ili prema redoslijedu
+koristenja u tekstu (prva referenca bi tada imala brojku [1]).
+Referenciranje je objasnjeno u poglavlju 3.8.
+
+                                                                                                           12
+
+===== [fer-upute-diplomski-zemris | str. 19] =====
+PRIVITAK A: PRIMJER DODATKA
+
+Sadrzaj privitka.
+Privicima se koristiti kada je nesto preopsirno (primjerice dio koda, opis algoritma,
+protokola i slicno) i ne toliko bitno da se ukljuci u sam tekst rada, tj. prijasnja poglavlja, a
+opet autor rada smatra da bi mnoge citatelje rada moglo zanimati to prosirenje.
+Izbjegavati koristenje privitaka. Ako se radi o kodu, referencirati se na datoteku s izvornim
+kodom koja je dio rada, ali pohranjena na mediju uz rad. Primjerice, "Algoritam je
+ostvaren funkcijom ostvarenje_algoritma koja se nalazi u datoteci
+put_do_datoteke/datoteka.x, prilozena uz rad".
+Privici ne bi trebali imati potpoglavlja.
+
+                                                                                                           14
+
+===== [fer-pravilnik-doktorski-2017 | str. 2] =====
+Clanak 8.
+
+(1) Konacnu odluku o odrzavanju doktorskoga studija na osnovi raspisanoga javnog natjecaja
+donosi Fakultetsko vijee, ako utvrdi da postoji dovoljan broj pristupnika koji ispunjavaju
+uvjete za upis.
+
+(2) Na prijedlog Odbora Fakultetsko vijee odobrava upis pristupnika, pri cemu svakom
+pristupniku dodjeljuje predvidivog mentora, koji doktorandu pomaze u studiju te prati njegov
+rad i napredak do okoncanja postupka predlaganja teme i imenovanja mentora.
+
+                                                   Clanak 9.
+
+S pristupnikom koji ostvari pravo upisa na doktorski studij sklapa se ugovor o studiranju, kojim
+se utvruju meusobna prava i obveze ugovornih strana.
+
+                                                  Clanak 10.
+
+(1) Troskovi doktorskoga studija podmiruju se prije upisa u svaki od sest semestara, i to u
+jednakim udjelima od ukupnog troska, ili odjednom, prije upisa na doktorski studij.
+
+(2) Student koji ponovno upisuje semestar plaa trosak ponovnog upisa semestra sukladno
+odluci o troskovima koju donosi Fakultetsko vijee.
+
+                                                             2

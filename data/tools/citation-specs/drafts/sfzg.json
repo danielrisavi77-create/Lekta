@@ -1,0 +1,18 @@
+{
+  "facultyId": "sfzg",
+  "styleToken": "vancouver",
+  "status": "draft",
+  "outcome": "style-pin",
+  "label": "Vancouver (ICMJE, sluzbene upute SFZG)",
+  "sourceId": "sfzg-naputak-diplomski-2024",
+  "sourceLabel": "Naputak za tehnicko oblikovanje i izradu diplomskog rada na Stomatoloskom fakultetu Sveucilista u Zagrebu",
+  "verifiedAt": null,
+  "verifiedBy": null,
+  "verifiedHash": null,
+  "evidence": {
+    "kind": "rule-text",
+    "quoteRaw": "prema International Committee of Medical Journal Editors � ICMJE (ranije Vancouverski stil).",
+    "sourcePage": "str. 9"
+  },
+  "sourceTypes": []
+}

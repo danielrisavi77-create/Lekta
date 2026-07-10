@@ -1,0 +1,177 @@
+{
+  "facultyId": "kemos",
+  "styleToken": "kemos-brojcani",
+  "status": "draft",
+  "outcome": "custom-spec",
+  "label": "Brojcani stil citiranja (sluzbene upute Odjela za kemiju u Osijeku)",
+  "sourceId": "kemos-upute-radovi-2024",
+  "sourceLabel": "Upute za pisanje zavrsnog / diplomskog rada, Sveuciliste u Osijeku, Odjel za kemiju (lipanj 2024.)",
+  "verifiedAt": null,
+  "verifiedBy": null,
+  "verifiedHash": null,
+  "accessDate": true,
+  "authorFormat": {
+    "order": "given-first",
+    "initials": "dotted-spaced",
+    "separator": ", ",
+    "finalJoiner": null
+  },
+  "inText": {
+    "mode": "bracket-number",
+    "provenance": {
+      "kind": "rule-text",
+      "quoteRaw": "U Uvodu se zapocinje s navoenjem izvora (citiranjem). Izvori se numeriraju brojevima od 1 pa",
+      "sourcePage": "str. 7",
+      "note": "Izvori se numeriraju od 1 i stavljaju u uglate zagrade na kraju recenice, prije tocke (primjer u izvoru: 'tvari [1].'). Vise referenci ide u iste uglate zagrade, odvojeno zarezom bez razmaka, pr. [1,3,15] (str. 7). Popis literature je zasebno poglavlje na kraju rada, redoslijedom spominjanja u tekstu (str. 7 i str. 10); u popisu su jedinice oznacene oblikom 'N.' (broj s tockom), a pozivi u tekstu oblikom [N]."
+    }
+  },
+  "numbering": null,
+  "bibliography": {
+    "sort": "appearance"
+  },
+  "sourceTypes": [
+    {
+      "type": "knjiga",
+      "template": "{authors}, {title}, {publisher}, {place}, {year}[[, p. {pages}]].",
+      "requiredFields": [
+        "authors",
+        "title",
+        "publisher",
+        "place",
+        "year"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "2. E. Wingender, Gene Regulation in Eukaryotes, VCH, Weinheim, 1993, p. 215.",
+        "sourcePage": "str. 11",
+        "note": "Redni broj '2.' je pozicijska oznaka popisa literature i nije dio predloska. Autor kao inicijal pa prezime; sve odvojeno zarezima. Primjer navodi konkretnu stranicu s engleskom oznakom 'p.' unatoc hrvatskim uputama; stranica je u predlosku opcionalna."
+      },
+      "example": {
+        "input": {
+          "type": "knjiga",
+          "authors": "E. Wingender",
+          "title": "Gene Regulation in Eukaryotes",
+          "publisher": "VCH",
+          "place": "Weinheim",
+          "year": "1993",
+          "pages": "215"
+        },
+        "expected": "E. Wingender, Gene Regulation in Eukaryotes, VCH, Weinheim, 1993, p. 215."
+      }
+    },
+    {
+      "type": "poglavlje",
+      "template": "{authors}, {title}, u: {container}, {publisher}, {place}, {year}[[, p. {pages}]].",
+      "requiredFields": [
+        "authors",
+        "title",
+        "container",
+        "publisher",
+        "place",
+        "year"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "*primjere, citata i biljeski pogledajte u posebnom prilogu � prilog 3.",
+        "sourcePage": "str. 11",
+        "note": "Ekstrakcija ne sadrzi primjer za poglavlje u knjizi ili zborniku (puni primjeri su u Prilogu 3 uputa, koji nije u ekstrakciji). Predlozak je izveden iz oblika za knjigu: naslov poglavlja, zatim 'u:' i naslov knjige, pa izdavac, mjesto, godina. Urednika izvor nigdje ne prikazuje pa ga predlozak nema. Potvrditi prema Prilogu 3 pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "clanak",
+      "template": "{authors}, {title}. {container} {year}, {volume}, {pages}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "container",
+        "year",
+        "volume",
+        "pages"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "1. M. Martins-Costa, J. M. Anglada, J. S. Francisco M. Ruiz-L�pez, The Aqueous Surface as",
+        "sourcePage": "str. 11",
+        "note": "Nastavak prelomljenih redaka u izvoru: 'an Efficient Transient Stop for the Reactivity of Gaseous NO2 in Liquid Water. J. Am Chem. Soc. 2020, 142, 20937�20941.'. Redni broj '1.' je pozicijska oznaka popisa i nije dio predloska. Kemijski oblik: naslov clanka pa tocka, casopis kraticom, godina, volumen, raspon stranica bez oznake 'str.'. Naziv casopisa u ekstrakciji glasi 'J. Am Chem. Soc.', vjerojatno 'J. Am. Chem. Soc.' s tockom izgubljenom na prijelomu retka. Autori se unose kao \"Prezime, Inicijali\" par po autoru (odvojeno tocka-zarezom); alat ih preslaguje u given-first oblik."
+      },
+      "example": {
+        "input": {
+          "type": "clanak",
+          "authors": "Martins-Costa, M.; Anglada, J. M.; Francisco, J. S.; Ruiz-L�pez, M.",
+          "title": "The Aqueous Surface as an Efficient Transient Stop for the Reactivity of Gaseous NO2 in Liquid Water",
+          "container": "J. Am Chem. Soc.",
+          "year": "2020",
+          "volume": "142",
+          "pages": "20937�20941"
+        },
+        "expected": "M. Martins-Costa, J. M. Anglada, J. S. Francisco M. Ruiz-L�pez, The Aqueous Surface as an Efficient Transient Stop for the Reactivity of Gaseous NO2 in Liquid Water. J. Am Chem. Soc. 2020, 142, 20937�20941.",
+        "knownDiff": "Ekstrakcija je izgubila zarez izmedju 3. i 4. autora (izvor: \"J. S. Francisco M. Ruiz-L�pez\"); proper autorski unos daje ispravan zarez pa render pise \"J. S. Francisco, M. Ruiz-L�pez\". Rijec je o given-first ACS obliku (inicijali ispred prezimena); potvrditi u PDF-u je li zarez doista izostao."
+      }
+    },
+    {
+      "type": "mrezni",
+      "template": "{title}. URL: {url} ({accessed})",
+      "requiredFields": [
+        "title",
+        "url",
+        "accessed"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "3. Hrvatsko knjiznicarsko drustvo. URL: http://www.hkdrustvo.hr/ (10.11.2024.)",
+        "sourcePage": "str. 11",
+        "note": "Redni broj '3.' je pozicijska oznaka popisa i nije dio predloska. Primjer koristi naziv organizacije odnosno stranice kao jedini element prije URL-a (mapirano u polje title). Oznaka 'URL:' doslovno, datum pristupa u zagradi u obliku D.M.GGGG., bez tocke iza zavrsne zagrade. Oblik s osobnim autorom nije prikazan u ekstrakciji."
+      },
+      "example": {
+        "input": {
+          "type": "mrezni",
+          "title": "Hrvatsko knjiznicarsko drustvo",
+          "url": "http://www.hkdrustvo.hr/",
+          "accessed": "10.11.2024."
+        },
+        "expected": "Hrvatsko knjiznicarsko drustvo. URL: http://www.hkdrustvo.hr/ (10.11.2024.)"
+      }
+    },
+    {
+      "type": "zavrsni",
+      "template": "{authors}, {title}, {institution}, {place}, {year}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "institution",
+        "year"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Na kraju je teksta potrebno pobrojati i napisati koristenu literatura. Djela koja su navedena u tekstu",
+        "sourcePage": "str. 10",
+        "note": "Upute ne obraduju citiranje zavrsnih i diplomskih radova; predlozak je izveden iz oblika za knjigu (izdavac zamijenjen ustanovom). Potvrditi ili oboriti pri verifikaciji, po mogucnosti prema Prilogu 3."
+      },
+      "example": null
+    },
+    {
+      "type": "propis",
+      "template": "{title}, {container}, br. {issue}.",
+      "requiredFields": [
+        "title",
+        "container",
+        "issue"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "*primjere, citata i biljeski pogledajte u posebnom prilogu � prilog 3.",
+        "sourcePage": "str. 11",
+        "note": "Izvor (prirodoslovne upute Odjela za kemiju) nigdje ne obraduje pravne propise. Predlozak je izveden iz opceg zareznog niza polja kojim izvor pise bibliografske jedinice, uz uobicajeno navodenje sluzbenog glasila s brojem. Potvrditi ili oboriti pri verifikaciji."
+      },
+      "example": null
+    }
+  ],
+  "contradictions": [
+    "Prior profila predlaze ieee, ali upute ne imenuju nijedan standardni stil: pozivi [N] i redoslijed pojavljivanja jesu slicni IEEE-u, no bibliografski primjeri slijede kemijski oblik (casopis kraticom, godina iza casopisa, pa volumen i raspon stranica bez oznake str.), pa je izraden custom-spec umjesto style-pin ieee.",
+    "U primjeru clanka izmedu treceg i cetvrtog autora ('J. S. Francisco M. Ruiz-L�pez') u ekstrakciji nema zareza; separator ', ' je pretpostavljen za sve autore, moguci tipfeler u izvoru ili gubitak pri ekstrakciji.",
+    "Puni primjeri citata i biljeski su u Prilogu 3 uputa, koji NIJE u ekstrakciji; predlosci za poglavlje, zavrsni i propis su izvedeni (derived) i treba ih potvrditi prema Prilogu 3.",
+    "Popis literature u izvoru numeriran je oblikom 'N.' (broj s tockom), a pozivi u tekstu oblikom [N]; pozicijski redni brojevi nisu dio predlozaka i izostavljeni su iz example.expected.",
+    "Osteceni znakovi iz pdftotext ekstrakcije (Ruiz-L�pez, raspon 20937�20941, 'J. Am Chem. Soc.' bez tocke iza Am) zadrzani su doslovno u quoteRaw i example poljima, ne popravljati bez uvida u izvorni PDF."
+  ]
+}

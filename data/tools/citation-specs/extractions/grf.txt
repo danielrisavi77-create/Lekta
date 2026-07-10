@@ -1,0 +1,157 @@
+===== [grf-upute-zavrsni | str. 4] =====
+SADRZAJ
+1. UVOD
+l. l. Izbor problema za zavrsni rad
+1.2. Cilj i zadaci zavrsnog rada
+2. TEORIJSKI DIO
+2. l. Uvod u predmetno podrucje
+2.2. Teorijske postavke koje se odnose na temu iz koje se radi zavrsni rad
+3. PRAKTICNI DIO (ukoliko postoji)
+3.1. Metode koristene za izradu zavrsnog rada
+4. REZULTATI I RASPRAVA
+5. ZAKLJUCCI
+6. LITERATURA
+7. PRILOZI
+
+Ukoliko nema prakticnog dijela, sadrzaj zavrsnog rada dogovara se s mentorom. Tekst
+navedenih poglavlja uvijek mora poceti na novoj stranici, bez obzira na to gdje je
+zavrsio tekst prethodnog poglavlja. Preporucuje se decimalno oznacavanje poglavlja i
+podpoglavlja. Tekst treba pisati logicno, jasno i jezicno cisto.
+Tekst treba pisati u treem licu jednine kao sto se pisu tekstovi za strucne clanke,
+prirucnike i sl. (npr. utvreno je, a ne utvrdio sam). To posebice vrijedi za zakljucke.
+
+1. Uvod izrauje se u opsegu do 2 stranice. U uvodu je potrebno prikazati razlog izbora
+teme zavrsnog rada, te postaviti cilj, ocekivane rezultate i njihova ocekivana primjena.
+
+===== [grf-upute-zavrsni | str. 5] =====
+3. Prakticni dio obuhvaa opis pripreme uzoraka za mjerenje, metode, koristeni ureaji
+i mjerni instrumenti, te nacin izvedbe mjerenja.
+
+4. Rezultati i rasprava obuhvaaju prikaz dobivenih rezultata i njihovo tumacenje u
+skladu s teorijskim postavkama.
+
+5. Zakljucci se izrauje kao posebno poglavlje iskazano po mogunosti na slijedei
+nacin: u ovom radu dokazano je..., potvreno je..., smatra se...,tj. navode se kratki za-
+kljucci koji su doneseni na osnovi provedenog istrazivanja. U zakljucku se mogu dati i
+preporuke za dodatna istrazivanja.
+
+6. Literatura je pozivanje na druge autore, navodi se na kraju rada samo za one autore
+koji su citirani ili na koje se poziva u radu. Literatura se obiljezava rednim brojem po
+redoslijedu citiranja. Primjeri navoenja literature:
+za knjige
+1. D. Babi, D. Jureci, A.Tomas, Interakcije u doradnom procesu kao rezultat
+plastificiranja digitalno otisnutih araka", u DAAAM International Scientific Book, (B.
+Katalini, ur.), Vienna, 2006. 1-8.
+za zbornike
+2. D. Babi, D.Jureci, B. Laji, Annals of DAAAM for 2006 & Proceedings / (B.
+Katalini, ur.),Vienna, 2006. 019-020.
+za casopise
+3. V.D. Stankovi, M. Gojo, Surf. Coat. Technol., 81 (1996), 225-232.
+za web stranice
+4. www.heidelberg.com, 11.12.2006.
+(po redoslijedu citiranja navesti web stranice ili prezime i inicijal imena autora ili naslov
+citiranog te u nastavku potpunu web adresu i svakako datum posjeta toj web stranici).
+
+===== [grf-upute-zavrsni | str. 6] =====
+za doktorske disertacije, magistarske i diplomske radove
+5. P. Pavici, Utjecaj gume na okolis, doktorska disertacija, (odnosno magistarski rad,
+diplomski rad) Graficki fakultet Sveucilista u Zagrebu, Zagreb, 1999.
+U literaturu se ne uvrstavaju skripta, biljeske s predavanja, upute proizvoaca, pro-
+spekti, pravilnici i propisi.
+
+Citati i biljeske. Pri izradi zavrsnog rada dopusteno je koristenje literature, a time i
+citiranja drugih. U pravilu se na jednom mjestu smije citirati najvise 15 redaka tueg
+teksta, pod uvjetom da se citat stavi pod navodnike i da se navede izvor na kraju
+poglavlja u kojem je naveden citat. U zavrsnom radu moze se svojim rijecima prepricati
+i nekoliko stranica tueg teksta uz navoenje izvora. Citat ima svrhu jedino ako od-
+govara kontekstu, ako se zeli potkrijepiti misljenje autoritetom ili ako se zeli protiv
+necijeg misljenja polemizirati. Kada se navodi izvor tada se na kraju citata ili pre-
+pricanog izvatka stavlja oznaka za biljesku koja se citira u literaturi.
+
+Numeriranje stranica ide od prve stranice uvoda do zadnje u tekuem nizu. Prva
+stranica uvoda je paginirana ali se ne prikazuje. Paginacija se pise arapskim brojkama.
+Formule i jednadzbe koje se koriste uklapaju se u tekst zavrsnog rada.
+
+7. Prilozi u obliku ilustracija ili tablica mogu stajati uz sam tekst, a mogu biti (uz
+napomenu) i na kraju teksta. Ako su prilozi veeg formata, moraju se preklopiti i
+uklopiti u sam rad (nacrti) ili u poseban dzep.
+
+U prijelomu teksta osnovno pismo je Times New Roman 12 pt, a izgled stranice je takav
+da se naslovi poglavlja pisu polumasno i verzal, a podnaslovi kurent. Dijelove teksta
+koje je potrebno posebno istaknuti pisu se u kurzivu. Iskljucivanje na puni format s
+ukljucenim rastavljanjem rijeci u duhu Hrvatskog jezika. Cijeli rad pise se jednostrano.
+
+===== [grf-pravilnik-poslijediplomski-2008 | str. 6] =====
+Izbor prijavljenih pristupnika
+
+1) Pristupnici se pismeno obavjestavaju o rezultatu njihove prijave za studij.
+2) Pristupnik cija prijava za upis nije prihvaena moze u roku od 15 dana od dana
+
+    primitka obavijesti podnijeti prigovor Fakultetskom vijeu putem Povjerenstva.
+3) Odluka Fakultetskog vijea je konacna.
+
+                                                Clanak 23.
+
+Ugovor o studiranju
+
+1) Pristupnik koji radi na Fakultetu ne sklapa poseban ugovor o studiranju budui da je s
+    pristupnikom sklopljen ugovor o radu kojim se utvruju meusobna prava i obveze.
+
+2) S pristupnikom koji nije zaposlenik Fakulteta a ostvario je pravo upisa na studij sklapa
+    se Ugovor o studiranju uz plaanje. U Ugovoru o studiranju tocno se specificira da li
+    plaa sam ili poslodavac koji ga upuuje na studij.
+
+3) Ugovorom o studiranju utvruje se status studenta, visina skolarine te prava i obveze
+    ugovornih strana.
+
+4) Materijalni troskovi izrade eksperimentalnog dijela disertacije nisu uracunati u cijenu
+    skolarine, o cemu pristupnik potpisuje izjavu o suglasnosti prilikom upisa.
+
+                                                Clanak 24.
+
+Mentor
+
+===== [grf-pravilnik-poslijediplomski-2008 | str. 7] =====
+dodjeljuje se i drugi mentor iz redova nastavnika Grafickog fakulteta u Zagrebu. Ovu
+         odluku potvruje Fakultetsko vijee.
+    4) Mentor koji nije nastavnik Grafickog fakulteta u Zagrebu mora dokazati
+         kompetentnost za voenje doktorata. Kompetentnost se dokazuje prema uputama
+         Sveucilista u Zagrebu.
+    5) U slucaju multidisciplinarne teme kandidat moze u dogovoru s Povjerenstvom izraditi
+         disertaciju uz mentorstvo vise mentora a koji pokrivaju podrucja koja se obrauju u
+         disertaciji. Mentori mogu biti s drugih visokih ucilista iz zemlje i inozemstva. Mentori
+         moraju dokazati kompetenciju prema stavku 4. ovog clanka.
+    6) Mentor pomaze studentu u odabiru kolegija iz studija, upuuje studenta u literaturu te
+         u primjenu odgovarajuih znanstvenoistrazivackih metoda. Pomaze studentu u izboru
+         teme i izradi doktorskog rada.
+
+4. Studiranje
+
+                                                    Clanak 25.
+
+    Nastava i znanstvenoistrazivacki rad
+
+    1) Studij se izvodi kroz znanstvenoistrazivacki rad i nastavu koji se izvode na Fakultetu i
+         studentu donose odreene ECTS bodove. Uz odobrenje Povjerenstva
+         znanstvenoistrazivacki rad moze se u cijelosti ili u dijelovima izvoditi u drugoj
+
+===== [grf-pravilnik-poslijediplomski-2008 | str. 8] =====
+Stjecanje ECTS bodova
+
+     1) 40 ECTS bodova student stjece nakon poloznih svih ispita koje je upisao.
+
+     2) 90 ECTS bodova student stjece za znanstveni rad objavljen u casopisu indeksiranom u
+
+     bazama podataka Science Citation Indeks (SCI) ili Current Contents (CC). Ovakvih
+
+     clanaka koji ulaze u zbroj ECTS bodova moze biti jedan.
+
+     3) 45 ECTS bodova student stjece za znanstveni rad objavljen u casopisu indeksiranom u
+
+     drugim sekundarnim publikacijama navedenim Pravilnikom o uvjetima za izbor u
+
+     znanstvena zvanja (NN 84/05). Ovakvih clanaka koji ulaze u zbroj ECTS bodova
+
+     moze biti jedan.
+
+     4) 30 ECTS bodova student stjece za znanstveni rad usmeno prezentiran i objavljen u

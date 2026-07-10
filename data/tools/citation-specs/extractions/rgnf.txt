@@ -1,0 +1,193 @@
+===== [rgnf-predlozak-2022 | str. 1] =====
+Datum obrane: datum, Rudarsko-geološko-naftni fakultet Sveučilišta u Zagrebu 00
+Datum obrane: datum, Rudarsko-geološko-naftni fakultet Sveučilišta u Zagrebu Sveučilište u Zagrebu Vrsta rada
+Rudarsko-geološko-naftni fakultet
+NASLOV RADA
+Ime i prezime
+Rad izrađen:Sveučilište u Zagrebu
+Rudarsko-geološko-naftni fakultet
+Naziv zavoda (npr. Zavod za naftno inženjerstvo)
+Pierottijeva 6, 10 000 Zagreb
+Sažetak
+Upisati sažetak. Font: Times New Roman, 10 pt. Najviše 2500 znakova ubrajajući i razmake.
+Ključne riječi:Upisati ključne riječi
+Završni rad sadrži:broj stranice, broj tablica, broj slika, broj priloga, i broj reference.
+Jezik izvornika:Hrvatski / Engleski
+Pohrana rada:Knjižnica Rudarsko-geološko-naftnog fakulteta, Pierottijeva 6, Zagreb
+Mentori:prof.dr.sc. Ime prezime 
+izv.prof.dr.sc. Ime Prezime
+Pomagao pri izradi: dr.sc. Ime Prezime
+Ime Prezime, asistent
+Ocjenjivači:prof.dr.sc. Ime prezime
+izv.prof.dr.sc. Ime Prezime
+doc.dr.sc. Ime Prezime
+
+right9439275
+Defence date: November 16, 2014, Faculty of Mining, Geology and Petroleum Engineering, University of Zagreb00
+Defence date: November 16, 2014, Faculty of Mining, Geology and Petroleum Engineering, University of ZagrebUniversity of Zagreb Master's Thesis
+Faculty of Mining, Geology and Petroleum Engineering
+THESIS TITLE
+Name and Surename
+Thesis completed at:University of Zagreb
+Faculty of Mining, Geology and Petroleum Engineering
+Department title
+Pierottijeva 6, 10 000 Zagreb
+Abstract
+Type the abstract. Font: Times New Roman, 10 pt. Maximum 2500 characters with spaces.
+OVA STRANICA POTREBNA JE PRI IZRADI DIPLOMSKOG RADA, KOD ZAVRŠNOG JE POTREBNO IZBRISATI
+Keywords:Type keywords
+Thesis contains:number pages, number tables, number figures, number appendixes, i number references.
+Original in:Croatian/English
+Archived in:Library of Faculty of Mining, Geology and Petroleum Engineering, Pierottijeva 6, Zagreb
+Supervisors: Full Professor Name Surename, PhD
+Associate Professor Name Surename, PhD
+Tech. assistance: Senior Assistant Name Surename, PhD
+Assistant Name Surename
+Reviewers:Full Professor Name Surename, PhD
+Associate Professor Name Surename, PhD
+Assistant Professor Name Surename, PhD
+
+
+
+SADRŽAJ
+ TOC \o "1-4" \h \z \u 1.uvod PAGEREF _Toc100743070 \h 1
+2.izrada završnog/DIPLOMSKg rada PAGEREF _Toc100743071 \h 2
+2.1.Tekst rada i postavke stranica PAGEREF _Toc100743072 \h 2
+2.2.Umetanje slika u tekst PAGEREF _Toc100743073 \h 3
+2.3.Umetanje tablica u tekst PAGEREF _Toc100743074 \h 4
+2.4.Umetanje jednadžbi PAGEREF _Toc100743075 \h 4
+3.Automatsko generiranje sadržaja i popisa PAGEREF _Toc100743076 \h 5
+4.literaturA PAGEREF _Toc100743077 \h 6
+4.1.Citiranje u tekstu PAGEREF _Toc100743078 \h 6
+4.2.Popis literature PAGEREF _Toc100743079 \h 8
+
+===== [rgnf-predlozak-2022 | str. 1] =====
+Obvezni dijelovi u strukturi rada su redom:
+Naslovnica ili prva stranica, istovjetna koricama (1. stranica ovog predloška)
+Rješenje Povjerenstva o dodjeli teme rada (ubacuje se u rad nakon potpisivanja i ovjeravanja u Studentskoj referadi)
+Kartica sažetka i informacija o radu (za završne radove - 2. stranica ovog predloška, za diplomske radove 2. na hrvatskom i 3. stranica na engleskom jeziku)
+Sadržaj koji uključuje: (4. stranca ovog predloška)
+popis poglavlja s numeracijom stranica
+popis tablica u tekstu s numeracijom stranica
+popis slika u tekstu s numeracijom stranica
+popis priloga (grafičkih, tabličnih, tekstualnih...)
+popis korištenih oznaka i odgovarajućih SI jedinica
+Nakon toga rad u pravilu mora sadržavati iduće cjeline:
+Uvod (definiranje zadatka završnog rada,  svrha završnog rada, postupak izrade, očekivani rezultati)
+Prikaz raspoloživih literaturnih podataka (kratki prikaz rezultata ranije objavljenih znanstvenih, stručnih, završnih i diplomskih radova o srodnoj problematici)
+Teorijske osnove rada
+Opis rezultata terenskih, laboratorijskih i/ili kabinetskih istraživanja
+Analiza rezultata
+Diskusija i zaključak
+Ovo nisu nužno i nazivi poglavlja rada, već samu strukturu definira kandidat ovisno o temi rada. 
+Na kraju rada obavezan je popis literature. Stavke popisa moraju odgovarati citatima iz teksta rada (sve što se nalazi u popisu literature mora imati referencu u tekstu i obratno).
+Literatura
+Tekst rada i postavke stranica
+Za pisanje teksta koristi se font Times New Roman, veličine slova 12 pt i proreda 1,5. U ovom predlošku to je predefinirano stilom „Tekst“, koji je moguće odabrati u alatnoj traci (slika 2-1).
+Isto tako postoje predefinirani stilovi za iduće:
+Popis (poput ovoga u nastavku)
+Naziv poglavlja (1.)
+Naziv prve razine podpoglavlja (1.1.)
+Naziv druge razine podpoglavlja (1.1.1.)
+Naziv treće razine podpoglavlja (1.1.1.1.) 
+
+Slika  STYLEREF 1 \s 2 SEQ Slika \* ARABIC \s 1 1. Odabir stilova za oblikovanje
+Margine stranica kroz cijeli rad moraju biti iduće: lijeva 3 cm, ostale 2,5 cm (postavljeno u predlošku). 
+Umetanje slika u tekst
+
+===== [rgnf-predlozak-2022 | str. 1] =====
+gdje su: Δp- diferencijalni tlak (Pa),
+f- koeficijent otpora,
+L- duljina (m),
+ρ- gustoća (kg/m3),
+O- opseg (m),
+A- površina (m2),
+v- brzina TOC \h \z \c "Slika"  (m/s).
+Automatsko generiranje sadržaja i popisa
+Popis poglavlja s numeracijom stranica (sadržaj) te popis slika i tablica, mogu se upisivati ručno ili automatski. Pri automatskom umetanju sadržaja i popisa MS Word formira tzv. polja (eng. field) koje se sastoji od naziva poglavlja/slike/tablica i broja stranice na kojoj se poglavlje/slika/tablica nalazi. Pri izmjenama unutar dokumenta ova se polja mogu automatski ažurirati, bez potrebe za ručnom izmjenom (slika 3-1.). Da bi automatsko ažuriranje funkcioniralo, potrebno je koristiti stilove oblikovanja poglavlja, te nazive (engl. caption) slika i tablica.
+
+Slika  STYLEREF 1 \s 3 SEQ Slika \* ARABIC \s 1 1. Ažuriranje polja Sadržaj
+literaturA
+Korištenje radova/izvora drugih autora (knjige, članci, norme, prezentacije, internet izvori...) navodi se u tekstu rada i u popisu literature. Citati u tekstu služe kao poveznice s popisom literature, dok se u popisu nalaze detaljne informacije o korištenom izvoru.
+Pri izradi diplomskog/završnog rada treba slijediti harvardski sustav citiranja. U nastavku su navedeni primjeri a detaljnije informacije mogu se pronaći na
+https://library.leeds.ac.uk/skills-referencing-harvard#atoz-nav-j.
+Citiranje u tekstu
+Ako citat ima prirodni slijed u rečenici navodi se autor, te godina u zagradi, npr.:
+jedan autor:Jones (1998) navodi da studenti imaju poteškoća koristeći… ,
+dva autora:Jones i Collymore (1994) istražuju utjecaj… ,
+više autora:Park i dr. (2003) ili Park et al. (2003) u svome radu raspravljaju….
+Ako citat nema prirodni slijed u rečenici navode se autor i godina u zagradi, npr.:
+jedan autor:Studenti imaju poteškoća koristeći APA stil (Jones, 1998)…,
+dva autora: (Dalglish i Rush, 1983),
+više autora: (Dalglish i dr., 1983 ili Dalglish et al., 1983).
+Doslovno citiranje nekog rada postavlja se unutar navodih znakova i kosog je fonta, a iza navoda slijedi broj stranice s koje je navod preuzet, npr.:
+"Students often had difficulty using APA style, especially when it was their first time" (Jones, 1998, p. 199).
+ili prirodnim slijedom:
+According to Jones (1998), "Students often had difficulty using APA style, especially when it was their first time" (p. 199),
+Organizacija kao autor. Često se dokumenti izrađuju pod okriljem organizacija, tako da su individualni autori nepoznati. Organizacije se navode punim nazivom, npr:
+The purpose of the style was to give clarity and simplicity to the writing (American Psychological Association, 2000),
+a u slučaju ponavljanja citata istog izvora koriste se kratice, npr:
+prvi citat: The purpose… (American Psychological Association [APA], 2000),
+sljedeći citati: Style is… (APA, 2000).
+Zakoni i pravilnici navode se punim nazivom, uz broj izdanja u zagradi, npr.:
+Prema Pravilniku o istraživanju i eksploataciji mineralnih sirovina (NN 142/13) eksploatacijska polja…
+
+Norme se navode samo oznakom norme, npr.:
+Ispitivanje je izvedeno prema zahtjevima norme HRN EN 13631-3:2007… 
+Pri osobnoj komunikaciji (intervjui, mailovi, telefonski razgovori i sl.) navodi se i datum komunikacije, npr.:
+Many students have difficulty with the APA style initially (E. Robbins, osobna komunikacija, 4. siječnja 2001),
+ili prirodnim slijedom:
+E. Robbins also claimed that many of her students had difficulties with APA style (osobna komunikacija, 4. siječnja  2002).
+Online sadržaji (Internet stranice, e-knjige, e-časopisi…) navode se u tekstu jedako kao i svi ostali izvori, tj. autor i godina objavljivanja. Kod Internet stranica datum zadnje izmjene obično se može pronaći pri dnu web stranice, međutim često nije poznat autor teksta te se u tom slučaju navodi naziv orgnizacije čija je web stranica. Pri tome se URL poveznica (link) ne navodi u tekstu već u popisu literature:
+Longwall mining is underground method… (University of Kentucky, 2012), 
+Tunel Sleme, autocesta Rijeka-Zagreb… (Viadukt d.d., 2014).
+Posebni slučajevi
+Navođenje više izvora na istome mjestu u tekstu odvaja se točka-zarezom, npr.:
+Prema istraživanjima… (Jones, 1998; Dalglish i Rush, 1983; Dalglish i dr., 1983) može se zaključiti da…
+Ako dva ili više izvora imaju istog autora i godinu objavljivanja, godini se dodaju mala slova abecede, npr.:
+Dalglish (1977a i 1977b).
+Ako su dva ili više autora istog prezimena, ispred prezimena se dodaju inicijali imena(G. Johnson, 2001; P. Johnson, 1998),
+U slučaju nepoznatog autora piše se kratica anon.
+(anon., 2002),
+a nepoznatog datum kratica n.d.
+(Jones, n.d.).
+
+
+
+Popis literature
+Zapisi u popisu literature navode se abecednim redom. Svaka vrsta rada ima određenu strukturu zapisa. U nastavku su navedene strukture zapisa, uz primjere za često korištene vrste radova. Detaljnije informacije mogu se pronaći na https://library.leeds.ac.uk/skills-referencing-harvard#atoz-nav-j. Sve što je citirano o samom tekstu, mora biti navedeno u popisu literature, i obrnuto.
+
+Knjige
+PREZIME, INICIJAL(I) AUTORA. GODINA. Naziv rada. Izdanje (ako nije prvo). Mjesto izdavanja: Nakladnik.
+JOVIČIĆ, V., MILJKOVIĆ, M., NUIĆ, J., ULJIĆ, H., VUKIĆ, M. 1987. Sigurnost i tehnička zaštita u   rudarstvu. Tuzla: Univerzitetska knjiga.
+
+Časopisi
+PREZIME, INICIJAL (I) AUTORA. GODINA. Naslov članka. Naslov časopisa. Volumen (broj), početna-završna stranica članka.
+MATIĆ, M., PERIĆ, P. 1999. Slijeganje površine terena uzrokovan podzemnom eksploatacijom. Građevinar, 43(6), str. 5-17.
+
+Norme
+ORGANIZACIJA/AUTOR. GODINA. BROJ NORME. Naziv norme. Mjesto izdavanja: Izdavač.
+BRITISH STANDARDS INSTITUTION. 1990. BS5605:1990. Recommendations for citing and referencing published material. Milton Keynes: BSI
+
+Projekti, studije, elaborati, disertacije, diplomski i završni radovi
+PREZIME, INICIJALI AUTORA. GODINA. Naziv dokumenta. Vrsta rada (ako nije vidljivo iz naslova - projekt, studija, izvješće). Mjesto institucije: Naziv institucije, broj projekta/studije (ako postoji).
+MIKO, S., PEH, Z., ŠPARICA, M. 2001. Geokemijski atlas zapadne Hrvatske. Izvještaj. Zagreb: Institut za geološka istraživanja, 36/2001.
+
+Zakoni i pravilnici
+NAZIV I BROJ IZDANJA. Naziv zakona/pravilnika. Mjesto: Naziv izdavača.
+NARODNE NOVINE br. 142/13. Pravilnik o istraživanju i eksploataciji mineralnih sirovina. Zagreb: Narodne novine d.d.
+
+
+Osobna komunikacija
+PREZIME, INICIJALI AUTORA. GODINA. Medij i primatelj (pismo, e-mail, telefonski razgovor…), datum komunikacije. 
+ROBBINS, E. 2004. Elektonska pošta Peri Periću, 4. siječnja 2004.
+
+Online sadržaji (Intrenet stranice, e-knjige, e-časopisi…) uz ostalo sadrže i URL adresu stranice te datum pristupa. 
+PREZIME, INICIJAL(I) AUTORA. GODINA. Naziv teksta/web stranice. URL adresa (datum pristupa)
+VIADUKT d.d. 2006. Tunel Sleme. URL: http://www.viadukt.hr/ tunel-sleme-desna-cijev  (3.9.2006.)
+UNIVERSITY OF KENTUCKY. 2012. Methods of mining. URL: https:// www.uky.edu/ KGS/ coal/ coal_mining.htm (3.2.2017.)
+
+U slučaju da je URL poveznica duga i nepregledna potrebno je poveznicu razlomiti ili skratiti do prve kose crte, npr.:
+URL: https:// www.uky.edu/
+
+Literatura preuzeta (download) u elektronskom obliku (PDF, DOC, ODT…) ne smatra se on-line sadržajem i citira se jednako kao i papirnati oblik, zavisno o vrsti rada.

@@ -1,0 +1,18 @@
+{
+  "facultyId": "efzg",
+  "styleToken": "harvard",
+  "status": "draft",
+  "outcome": "style-pin",
+  "label": "Harvard stil (sluzbene upute EFZG za zavrsni rad)",
+  "sourceId": "efzg-postupak-zavrsni",
+  "sourceLabel": "Postupak prijave, izrade i obrane zavrsnog rada na preddiplomskom sveucilisnom studiju (EFZG)",
+  "verifiedAt": null,
+  "verifiedBy": null,
+  "verifiedHash": null,
+  "evidence": {
+    "kind": "rule-text",
+    "quoteRaw": "ispravno citirati. Preporucuje se na tue radove upuivati harvardskim stilom navoenja literature.",
+    "sourcePage": "str. 2"
+  },
+  "sourceTypes": []
+}

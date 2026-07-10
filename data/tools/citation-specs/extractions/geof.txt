@@ -1,0 +1,125 @@
+===== [geof-naputak-ocjenski-2000 | str. 1] =====
+* Sazetak (hrvatski, do 300 rijeci).
+
+         * Abstract (engleski, do 300 rijeci).
+
+         * Prosireni sazetak na hrvatskom jeziku: pise se samo onda kada je rad (u
+         pravilu doktorska disertacija), na temelju
+         prethodno pribavljene suglasnosti Sveucilista, napisana engleskim jezikom.
+
+         * Uvod: sazeto definirati obraivanje problema (u svezi s postojeim znanjem
+         o njemu) te, u zasebnom odlomku, jasno
+         iskazati svrhu, cilj i opseg rada, metode koje e biti uporabljene te polaznu i
+         radnu) hipotezu. Svaku vazniju tvrdnju
+         treba potkrijepiti citatima relevantnih i aktualnih (nedavnih) izvornih radova.
+
+         * Pregled dosadasnjih radova ili Pregled postojeeg stanja sadrzi iscrpan i
+         aktualan pregled znanja o uzem podrucju
+
+===== [geof-naputak-ocjenski-2000 | str. 2] =====
+ostalima je mjestu u Prilogu. Posebnu paznju treba posvetiti sastavljanju
+tablica i grafova, koji trebaju biti sto sadrzajniji,
+tako da njihov ukupan broj ne bude prevelik, jer bi inace tekst bio tesko citljiv.
+Svaka tablica i graf neka budu sto
+samostalnije jedinke, citljive i izvan svojeg konteksta. Za razliku od uobicajene
+prakse u znanstvenim casopisima, u
+ocjenskoj se radnji smiju isti podaci prikazati u tablicnom i u grafickom obliku,
+s time da bi tablicni prikaz trebalo uvrstiti
+kada je god mogue. Ako bi tablice odvise optereivale tekst, treba ih staviti u
+Prilog.
+
+* Rasprava (diskusija): sadrzi izvoenje zakljucaka iz vlastitih rezultata, u
+svezi sa spoznajama objavljenim u literaturi.
+U nacelu, najprije valja kriticki usporediti vlastite rezultate s rezultatima drugih
+autora za isti problem.
+
+* Zakljucak: sazeta rekapitulacija najvaznijih spoznaja dosegnutih u Raspravi,
+kada je rasprava kratka i pregledna,
+zasebno poglavlje nije nuzno nego se ukljucuje u Raspravu kao poseban
+odlomak. Zakljucak niposto nije isto sto i sazetak.
+
+* Literatura: sluzi za dokumentiranje vaznijih tvrdnji i podataka. Smiju se
+navesti samo oni naslovi koje je autor(ica) sam
+procitao i prethodno naveo u tekstu. Iznimno, ako je vazno navesti
+bibliografski podatak za rad nedostupan autoru(ici),
+tada obvezatno treba navesti i izvor iz kojeg je referenca preuzeta.
+Literatura se u tekstu citira navodenjem u zagradi prezimena autora i godine
+izdanja, npr.: (Lovri 1988).
+Citiranu literaturu treba poredati po abecednom redu prezimena autora. Knjige
+
+===== [geof-naputak-ocjenski-2000 | str. 3] =====
+se citiraju navodenjem slijedeih podataka:
+         prezime autora (ako iz ima vise odvajaju se zarezom), inicijali imena, godina u
+         zagradi, naslov knjige, izdavac,
+         mjesto izdanja, npr.:
+         Lovric, P. (1988): Opa kartografija, Sveucilisna naklada Liber, Zagreb.
+         Redoslijed pri citiranju casopisa je slijedei: prezime autora, inicijali imena,
+         godina u zagradi, naslov clanka,
+         broj sveska, pocetna i zavrsna stranica, npr.:
+         Coli, K. (1996): Geodezija u Hrvatskoj 1991-1994, Geodetski list 1, 17-28.
+
+         � Prilog (primarni mjerni podaci, manje vazni izvedeni podaci, dulji
+         matematicki dokazi i izvodi, algoritmi,
+         racunarski programi i sl.). Vrijedno je truda sastaviti prilog, jer se tako znatno
+         olaksava pisanje znanstvenih publikacija
+         na osnovi podataka iz ocjenske radnje.
+         U prilog ocjenske radnje mogu se takoer uvrstiti i podaci mjerenja i
+         racunanja, digitalne podloge ili banke podataka,
+         kao i programski paketi koje je autor(ica) u okviru rada obradio ili sastavio koji
+         su pohranjeni na nekom drugom tipu
+         medija (diskete, DC, magnetske vrpce i sl.). U slucaju da takvi zapisi cine
+         integralni dio ocjenskog rada neophodno
+         je u prilogu naznaciti sadrzaj pohranjen na nosacima zapisa, nacin upotrebe,
+         kao i njihovu svrhu.
+
+         * Zivotopis autora.
+
+2. NACIN PISANJA
+
+Pisati treba sazeto, ali jasno i logicki potpuno. Treba teziti kratkim recenicama. Pri izboru
+razine izlaganja treba pretpostaviti
+da e rad citati akademski naobrazen geodet koji nije specijalist za to podrucje. Duznu paznju
+treba posvetiti jezicnoj
+ispravnosti teksta. Ne valja prii pisanju nemajui pri ruci pravopis i gramatiku. Pristupnika
+koji nije dovoljno vjest pravilnom
+pisanju mentor treba uputiti da svoju radnju preda na jezicnu lekturu prije negoli e je predati
+na ocjenu.
+
+3. PRILOZI
+
+===== [geof-naputak-ocjenski-2000 | str. 6] =====
+Broj stranica:
+Broj slika:
+Broj bibliografskih podataka:
+Ustanova i mjesto gdje je rad izraen:
+Znanstveno podrucje:
+Znanstveno polje:
+Znanstvena grana:
+Mentor:
+Oznaka i redni broj rada:
+
+            III. Ocjena i obrana
+Datum prijave teme:
+Datum sjednice Fakultetskog vijea
+na kojoj je rad prihvaen:
+Sastav povjerenstva koje je ocijenilo
+
+===== [geof-naputak-ocjenski-2000 | str. 7] =====
+Zagreb, godina
+
+                    I. Autor
+Ime i prezime:
+Datum i mjesto roenja:
+Sadasnje zaposlenje:
+
+          II. Doktorska disertacija
+Naslov:
+Broj stranica:
+Broj slika:
+Broj bibliografskih podataka:
+Ustanova i mjesto gdje je rad izraen:
+Znanstveno podrucje:
+Znanstveno polje:
+Znanstvena grana:
+Mentor:
+Oznaka i redni broj rada:

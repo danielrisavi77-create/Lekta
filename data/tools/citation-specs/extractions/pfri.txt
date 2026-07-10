@@ -1,0 +1,374 @@
+===== [pfri-upute-zavrsni-2025 | str. 2] =====
+SVEUCILISTE U RIJECI
+                         POMORSKI FAKULTET
+
+            UPUTE ZA IZRADU
+             ZAVRSNOG RADA
+
+Urednici:
+Prof. dr. sc. Ines Kolanovi
+prof. dr. sc. Ana Peri Hadzi
+prof. dr.sc. Irena Jurdana
+doc. dr. sc. Mladen Jardas
+
+                                    Rijeka, ozujak 2025.
+
+===== [pfri-upute-zavrsni-2025 | str. 3] =====
+Upute za izradu zavrsnog rada Sveucilista u Rijeci, Pomorskog fakulteta
+
+PREDGOVOR
+
+       Upute za izradu zavrsnog rada (dalje: Upute) imaju za cilj otkloniti brojne nedoumice
+koje imaju studenti/studentice prilikom pisanja zavrsnih radova na Sveucilistu u Rijeci,
+Pomorskom fakultetu, a u skladu su s Pravilnikom o zavrsnom radu na prijediplomskom
+sveucilisnom studiju Sveucilista u Rijeci, Pomorskog fakulteta.
+
+       Upute su pripremljene prema relevantnoj literaturi koja se koristi u okviru metodologije
+znanstvenoistrazivackog rada:
+
+    - Zelenika, R.: Metodologija i tehnologija izrade znanstvenog i strucnog djela, 5.
+         izmijenjeno i dopunjeno izdanje, Ekonomski fakultet Sveucilista u Rijeci, Rijeka, 2011.
+
+    - Kulenovi, Z.: Metodologija istrazivackog rada, Pomorski fakultet Sveucilista u Splitu,
+         Split 2005.
+
+    - Zugaj, M., Dumici, K., Dusak, V.: Temelji znanstvenoistrazivackog rada:
+         metodologija i metodika , 2. dopunjeno i izmijenjeno izdanje, Varazdin, Tiva, 2006
+
+    - Ivanovi, Z.: Metodologija izrade znanstvenog i strucnog djela, Hotelijerski fakultet,
+
+===== [pfri-upute-zavrsni-2025 | str. 4] =====
+RADA.................................................................................................................................................. 9
+4. TEHNOLOGIJA IZRADE ZAVRSNOG RADA......................................................................... 10
+   4.1. OSNOVNE CJELINE ZAVRSNOG RADA ............................................................................. 10
+
+      4.1.1. Sazetak/Summary ................................................................................................................ 10
+      4.1.2. Sadrzaj ................................................................................................................................. 10
+      4.1.3. Uvod .................................................................................................................................... 12
+   4.2. RAZRADA TEME..................................................................................................................... 12
+      4.2.1. Povijesno-teorijski, retrospektivni i eksplikativni dio ......................................................... 12
+      4.2.2. Analiticko-eksperimentalni dio ........................................................................................... 12
+      4.2.3. Perspektivni dio ................................................................................................................... 13
+   4.3. ZAKLJUCAK ............................................................................................................................ 13
+   4.4. PREUZIMANJE TUIH SPOZNAJA (REFERENCIRANJE U TEKSTU) ............................ 14
+      4.4.1. Harvardski sustav ................................................................................................................ 14
+      4.4.2. Europski sustav.................................................................................................................... 14
+      4.4.3. Koristenje latinskih kratica u pisanju fusnota...................................................................... 14
+   4.5. LITERATURA ........................................................................................................................... 15
+      4.5.1. Harvardski sustav prikaza literature .................................................................................... 15
+      4.5.2. Europski sustav pisanja literature ........................................................................................ 18
+   4.6.POPIS KRATICA ....................................................................................................................... 21
+   4.7. POPISI ILUSTRACIJA ............................................................................................................. 22
+   4.8. PRILOZI..................................................................................................................................... 22
+
+                                                                                                                          II
+
+===== [pfri-upute-zavrsni-2025 | str. 6] =====
+1. SVRHA I CILJEVI PISANJA ZAVRSNOG RADA
+
+       Prijediplomski studij zavrsava izradom zavrsnog rada i njegovom obranom te stjecanjem
+180 ECTS bodova predvienih studijskim programom.
+
+       Zavrsni rad je samostalna strucna ili znanstvena obrada utvrene teme. Zavrsnim radom
+student/studentica dokazuje posjedovanje kompetencija i ishoda ucenja pri rjesavanju problema
+iz strucnih i znanstvenih podrucja koja su bila sadrzaj njegova studija te koristenje teoretskog i
+prakticnog znanja stecenog tijekom studija.
+
+       Ciljevi su izrade zavrsnog rada dokazati:
+       - sposobnost primjene teorijskog i prakticnog znanja stecenog tijekom studija,
+       - sposobnost samostalnog sluzenja aktualnom stranom i domaom literaturom u
+
+          pismenoj obradi teme,
+       - sposobnost koristenja relevantnih tuih spoznaja, stavova i znanstvenih cinjenica koje
+
+          su objavljene u koristenoj literaturi,
+       - sposobnost pravilne obrade ilustracija (tablica, grafikona, fotografija, crteza).
+     Zavrsni rad na Fakultetu zadaje se, pise i brani na hrvatskom jeziku. Iznimno, zavrsni rad
+se moze pisati i braniti na stranom jeziku.
+     Student koji rad zeli pisati i braniti na stranom jeziku, duzan je podnijeti pisani zahtjev
+prodekanu za nastavu, uz prethodnu suglasnost mentora. Student kojem je odobreno pisanje
+rada na stranom jeziku obvezan je izraditi sazetak i kljucne rijeci rada na hrvatskom jeziku.
+
+2. POSTUPAK PRIJAVE MENTORA I PRIJAVE I OBRANE ZAVRSNOG
+RADA
+
+      2.1. POSTUPAK PRIJAVE MENTORA
+
+===== [pfri-upute-zavrsni-2025 | str. 13] =====
+JMBAG:
+
+                        IZJAVA O SAMOSTALNOJ IZRADI ZAVRSNOG RADA
+ Kojom izjavljujem da sam zavrsni rad pod naslovom
+ ______________________________________________________________________
+ (naslov zavrsnog rada)
+ izradio/la samostalno pod mentorstvom
+ ______________________________________________________________________
+ (prof. dr. sc. / izv. prof. dr. sc. / doc dr. sc Ime i Prezime)
+ te komentorstvom ________________________________________________________
+ strucnjaka/strucnjakinje iz tvrtke ____________________________________________
+ (naziv tvrtke).
+ U radu sam primijenio/la metodologiju izrade strucnog/znanstvenog rada i koristio/la literaturu koja
+ je navedena na kraju zavrsnog rada. Tue spoznaje, stavove, zakljucke, teorije i zakonitosti koje sam
+ izravno ili parafrazirajui naveo/la u zavrsnom radu na uobicajen, standardan nacin citirao/la sam i
+ povezao/la s fusnotama i koristenim bibliografskim jedinicama, te nijedan dio rada ne krsi bilo cija
+ autorska prava. Rad je pisan u duhu hrvatskoga jezika.
+
+ Student/studentica
+ _______________________________
+ (potpis)
+ Ime i prezime studenta/studentice
+
+                                                                                                                           8
+
+===== [pfri-upute-zavrsni-2025 | str. 15] =====
+Upute za izradu zavrsnog rada Sveucilista u Rijeci, Pomorskog fakulteta
+
+4. TEHNOLOGIJA IZRADE ZAVRSNOG RADA
+
+      4.1. OSNOVNE CJELINE ZAVRSNOG RADA
+
+       Zavrsni rad treba sadrzavati sljedee cjeline:
+    - Sazetak/Summary
+    - Sadrzaj
+    - Uvod
+    - Razradu teme
+    - Zakljucak
+    - Literaturu
+    - Popis tablica (ukoliko ih ima)
+    - Popis grafikona (ukoliko ih ima)
+    - Prilog (ukoliko ih ima)
+
+        4.1.1. Sazetak/Summary
+       Sazetak je dio u kojemu se daje kratki pregled zavrsnog rada te kljucne rijeci, na
+hrvatskom i engleskom jeziku.
+       Sazetak i Summary pisu se zajedno na jednoj stranici rada, maksimalno do 150 rijeci
+svaki. Takoer navode se i kljucne rijeci/key words: do pet rijeci, navedene abecednim redom.
+       Stranica na kojoj je Sazetak/Summary numerira se rimskim brojem I.
+
+        4.1.2. Sadrzaj
+
+===== [pfri-upute-zavrsni-2025 | str. 17] =====
+vremenu! Prva stranica uvoda numerira se brojem 1.
+
+      4.2. RAZRADA TEME
+
+       U pravilu tema se razrauje u minimalno tri meusobno povezane cjeline (poglavlja):
+       1. Povijesno-teorijski dio (retrospektivni dio)
+       2. Analiticko-eksperimentalni dio
+       3. Perspektivni dio.
+       Svaka od navedenih cjelina obavezno se razrauje na potpoglavlja. Pritom treba imati na
+umu da se poglavlje moze dijeliti na najmanje dva potpoglavlja.
+
+          4.2.1. Povijesno-teorijski, retrospektivni i eksplikativni dio
+       U ovome dijelu student bi trebao sebe i citatelje na makrorazini koncizno upoznati s
+teorijskim znacajkama, znakovitostima, obiljezjima, karakteristikama, odrednicama pojava,
+odnosa, stvari ... koje znanstveno istrazuje i o kojima pise.
+       Student koristi, u pravilu, aktualne i ve poznate i javnosti predocene, odnosno dostupne
+spoznaje, cinjenice, zakone, zakonitosti ...
+       Prilikom istrazivanja i pisanja zavrsnog rada student treba koristiti minimalno 10
+bibliografskih jedinica (knjiga, clanaka, zbornika radova, pravilnika, rjecnika...)
+       Student treba pisati samo onoliko koliko je potrebno da on i citatelji shvate bit
+proucavanih fenomena kako bi u tome dijelu stvorili temelje, podlogu, osnovu za formuliranje
+rezultata istrazivanja koja slijede u sljedeim dijelovima zavrsnog rada.
+       Na osnovi povijesnih i sadasnjih spoznaja o proucavanim fenomenima student/studentica
+treba uvjerljivo i argumentirano naznaciti vaznost, aktualnost, opravdanost i korisnost
+istrazivanja u okviru doticnoga zavrsnog rada.
+
+          4.2.2. Analiticko-eksperimentalni dio
+       To je najvazniji, najzahtjevniji i najopsirniji dio zavrsnog rada. Zasto? U tome se dijelu
+iznose najvazniji rezultati istrazivanja, najvaznije znanstvene cinjenice, spoznaje, zakoni,
+
+                                                                                                                         12
+
+===== [pfri-upute-zavrsni-2025 | str. 18] =====
+rezultata simulacijom procesa ili nekim posebnim algoritmom. Potrebno je opisati postojeu ili
+izvedenu matematicku podrsku, rezultate i rjesenja. Kod koristenja programskog sustava,
+programskih paketa i programa, potrebno je dati kratki prikaz postojeih rjesenja te opis
+pristupnikove primjene u rjesavanju zadatka.
+       U eksperimentalnom dijelu rada mogu se razviti nova programska rjesenja, izraditi
+prakticni elektronicki sklopovi, osmisliti mjerne metode i izvesti mjerenja na odabranom
+uzorku utjecajnih parametara od znacenja za zadatak rada. Rezultati eksperimentalnog dijela
+rada se analiziraju i predlazu konkretni zakljucci.
+
+      4.3. ZAKLJUCAK
+
+       Zakljucak je sinteza rezultata istrazivanja.
+       U zakljucku nema tuih spoznaja, nema citiranja, nema novih spoznaja, nema prepisanih
+pasusa iz prethodnih dijelova, nema doslovnih ponavljanja prethodnih misli i citata!
+       Pisanju zakljucka, kao zavrsnoga dijela svakoga pisanoga djela, student/studentica mora
+posvetiti posebnu pozornost. Prije njegovoga pisanja mora pazljivo procitati cijelo djelo i iz
+njega ciljano preuzimati sintetizirane spoznaje do kojih je dosao/dosla provedenim
+istrazivanjem.
+
+                                                                                                                         13
+
+===== [pfri-upute-zavrsni-2025 | str. 19] =====
+Upute za izradu zavrsnog rada Sveucilista u Rijeci, Pomorskog fakulteta
+
+      4.4. PREUZIMANJE TUIH SPOZNAJA (REFERENCIRANJE U
+             TEKSTU)
+
+       Pri izradi zavrsnog rada moze se koristiti Europski sustav ili Harvardski sustav pozitivnih
+biljeski. Nuzna je dosljedna primjena samo jednog nacina citiranja kroz cijeli rad te
+sukladno tome i azuriranje popisa literature na kraju zavrsnog rada.
+
+        4.4.1. Harvardski sustav
+       Prema Harvardskom sustavu citiranja u tekstu na mjestu citiranja ili pozivanja na
+izvoriste stavlja se brojcana oznaka citirane literature u uglatoj zagradi te broj stranice sa koje
+je citati preuzet. Citati se obicno navode na kraju recenice prije tocke ili eventualno kod kljucne
+rijeci citiranoga teksta.
+       Ako se poziva na samo jednu bibliografsku jedinicu pise se [1. p. 9], ako je njih vise, a
+nema direktnog pozivanja na broj stranice pise se: [1, 2, 6] odnosno ukoliko se poziva na
+nekoliko bibliografskih jedinica koje su identicnim redoslijedom slozene u literature moze se
+pisati: [1-5].
+       Puni naziv bibliografske jedinice mora biti naveden na kraju rada u popisu literature kako
+je objasnjeno u poglavlju 4.7. LITERATURA.
+
+        4.4.2. Europski sustav
+       U tekstu se referencira pod brojem te se referenca navodi na dnu stranice1.
+       Koristeni izvori sadrze sve podatke o referenciranom djelu kao sto je navedeno u
+poglavlju LITERATURA, osim sto se na kraju biljeske dodaje tocna stranica s koje je preuzet
+citat. Referencirani izvor se navodi identicno kao i u popisu Literature.
+       Primjer fusnote: Zugaj, M.: Osnove znanstvenog i strucnog rada, Zagreb, Samobor,
+1989., p. 405.
+       U literaturi, pisalo bi Zugaj, M.: Osnove znanstvenog i strucnog rada, Zagreb,
+Samobor, 1989.
+
+        4.4.3. Koristenje latinskih kratica u pisanju fusnota
+       Cesto se u pisanju fusnota prema Europskom sustavu pozitivnih biljeski koriste latinski
+izrazi kojima je mogue skratiti tekst fusnota. Najcesi latinski izrazi pri referenciranju jesu
+Opus citatum i Ibidem i to;
+       Opus citatum (skraeno op. cit. ili o.c.) � navedeno djelo, tj. poziva se na djelo koje je
+ve ranije spomenuto u citiranju, odnosno u fusnoti.
+
+1Vise o citiranju u nastavku
+
+                                                                                                                         14
+
+===== [pfri-upute-zavrsni-2025 | str. 20] =====
+Upute za izradu zavrsnog rada Sveucilista u Rijeci, Pomorskog fakulteta
+
+       Ako se pojavljuje samo jedna bibliografska jedinica od jednog autora (ili grupe autora),
+a ve je jednom spomenuta u fusnoti, onda se navodi primjerice :
+
+     - Zelenika, R., op. cit., p. 60.
+Ako se pojavljuje vise razlicitih literarnih jedinica od jednog autora (ili grupe autora), a ve je
+jednom spomenuta u fusnoti, onda se navodi :
+
+     - Zelenika, R.: Kako nastaje recenzija znanstvenog i strucnog djela, op. cit., p. 60.
+Ibidem (Ibid, Ib.)- na istom mjestu
+Ako se citiranje iste literarne jedinice javlja neposredno nakon sto se ista citirala u tekstu onda
+se pise
+
+   - Ibidem - ako je na istom mjestu, u istom djelu, na istoj stranici neke knjige
+   - Ibidem, p. 60. � ako je na istom mjestu, u istom djelu, ali na drugoj stranici
+
+      4.5. LITERATURA
+
+       Literatura obuhvaa sve koristene izvore i potpune podatke o djelima koja se obvezno
+spominju u referencama. Popis literature mora biti potpun, tocan, svaka bibliografska jedinica
+mora imati sve bitne elemente.
+
+       Pritom treba imati na umu da je svaka bibliografska jedinica morala biti prethodno
+navedena kao pozivna biljeska (fusnota).
+
+       Student/studentica tijekom istrazivanja i pisanja treba koristiti minimalno 10
+bibliografskih jedinica (knjiga, clanaka, pravilnika, rjecnika...).
+
+       Popis literature pise se bez broja poglavlja i dolazi na kraju rada (poslije Zakljucka).
+       Literatura (kao poglavlje) se ne numerira te se ureuje sukladno koristenom nacinu
+citiranja.
+
+        4.5.1. Harvardski sustav prikaza literature
+       Prema ovome sustavu popis literature se numerira arapskim brojevima u uglatim
+zagradama, prema redoslijedu pojavljivanja u tekstu npr.
+[1] Huffman, L. M. 1996, `Processing whey protein for use as a food ingredient', Food
+     Technology, vol. 50, no. 2, p. 49-52.
+[2] Australian Government Publishing Service 1994, Style Manual for Authors, Editors and
+     Printers, 5th ed, AGPS, Canberra.
+
+                                                                                                                         15
+
+===== [pfri-upute-zavrsni-2025 | str. 21] =====
+Upute za izradu zavrsnog rada Sveucilista u Rijeci, Pomorskog fakulteta
+
+[3] Bohrer, S., Zielke, T. and Freiburg, V. 1995, `Integrated obstacle detection framework for
+     intelligent cruise control on motorways', IEEE Intelligent Vehicles Symposium Detroit, MI
+     Piscataway, p. 276-281.
+
+[4] Zelenika, R. 2000, Metodologija i tehnologija izrade znanstvenog i strucnog djela, 4.
+     izmijenjeno i dopunjeno izdanje, Ekonomski fakultet Sveucilista u Rijeci, Rijeka.
+
+[5] McTaggart, D., Findlay, C. & Parkin, M. 1995, Economics, 2nd ed, Addison-Wesley,
+     Sydney.
+       Prilikom koristenja vazno je postivati redoslijed unosenja podataka, paziti na velika i
+
+mala slova, postovati font (poseban naglasak na stil fonta: obican i italic), pridrzavati se
+razmaka i interpunkcija.
+
+===== [pfri-upute-zavrsni-2025 | str. 22] =====
+Upute za izradu zavrsnog rada Sveucilista u Rijeci, Pomorskog fakulteta
+
+    - Bernstein, D. 1995, Transportation planning in The Civil Engineering Handbook, ed.
+         W.F.Chen, CRC Press, Boca Raton.
+
+Primjer kada nije naveden autor:
+       Ukoliko autor nije naveden, naslov knjige se koristi kao prvi element citiranja.
+
+    - The CCH Macquarie dictionary of business, 1993, CCH Australia, North Ryde, NSW.
+
+2) CLANCI U CASOPISIMA
+
+Redoslijed navoenja potrebnih podataka:
+
+1. prezime autora, inicijal imena.
+2. godina izdanja
+3. naslov clanka, navesti u jednostrukim navodnicima `clanak'
+4. naziv casopisa (oznaciti italic)
+5. izdavac casopisa
+
+===== [pfri-upute-zavrsni-2025 | str. 22] =====
+7. broj casopisa
+8. stranice (npr. str. 15-25).
+
+Primjeri za clanke objavljene u casopisima:
+
+- Huffman, L. M. 1996, 'Processing whey protein for use as a food ingredient', Food
+    Technology, Food Institute, vol. 50, no. 2, p. 49-52.
+
+Zbornici radova
+
+-                 Bohrer, S., Zielke, T. & Freiburg, V. 1995, `Integrated obstacle detection
+
+framework for intelligent cruise control on motorways', IEEE Intelligent Vehicles
+
+Symposium, Detroit, MI, Piscataway, p. 276-281.
+
+Novinski clanak:
+
+- Simpson, L. 1997, Tasmania's railway goes private, Australian Financial Review, 13
+    Oct., p. 10.
+
+Primjer za clanak preuzet s interneta:
+
+- Daniel, T. 2009, 'Learning from simpler times', Risk management, vol. 56., no. 1, p. 40-
+    44, online: http://imej.wfu.edu/articles/2005/1/01/index.asp (30.10.2009.)
+
+===== [pfri-upute-zavrsni-2025 | str. 23] =====
+Ukoliko autor nije naveden, tada se navodi naslov kao prvi element:
+    - Proizvodnja kemikalija, kemijskih proizvoda i proizvoda od gume, 2007, online:
+         http://hgk.biznet.hr/hgk/ileovi/10677.pdf (24.3.2007.)
+       Za djela koja nisu u pisanom formatu, odnosno za djela koja su izdana u digitalnom
+
+formatu navode se svi podaci kao za knjige, s naznakom o kojem je obliku digitalnog medija
+rijec(CD, videorecording, tape, computer file, etc.).
+
+    - Getthe Facts (And Get Them Organised) (video recording) 1990, Williamstown, Vic.,
+         Appleseed Productions.
+
+        4.5.2. Europski sustav pisanja literature
+       Prilikom pisanja zavrsnog rada studenti/studentice trebali bi bibliografske izvore
+svrstati u odgovarajue skupine, abecednim redom autora, a potom kronoloski za radove istog
+autora, primjerice:
+
+                                                                                                                         18

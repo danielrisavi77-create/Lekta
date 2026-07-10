@@ -35,6 +35,8 @@ export interface AuthorFormatOptions {
   etAlKeep?: number;
   /** Spojnica prije etAlText (default = separator). FPZG: " " ("Babic, Stjepan i dr."), Vancouver: ", ". */
   etAlJoiner?: string;
+  /** Prezime velikim/malim slovima (neke Harvard varijante: "NEVILLE, C."); default = doslovno. Ne dira institucije. */
+  surnameCase?: 'upper' | 'lower';
 }
 
 export interface SpecProvenance {
@@ -54,8 +56,11 @@ export interface SpecSourceType {
   requiredFields?: string[];
   provenance: SpecProvenance;
   /** Worked example za dosje i golden: input polja + ocekivani citat IZ IZVORA.
-   *  Dossier renderira formatFromSpec(spec, input) i diffa protiv expected. */
-  example?: { input: Record<string, string>; expected: string } | null;
+   *  Dossier renderira formatFromSpec(spec, input) i diffa protiv expected.
+   *  knownDiff: izricito deklariran razlog zasto render NE odgovara expected (npr. izvor
+   *  interno nekonzistentan ili sadrzi tipfeler); gate tada preskace bajt-jednakost, ali
+   *  dossier i dalje pokazuje DIFF covjeku. Zastarjeli knownDiff (render ipak jednak) rusi gate. */
+  example?: { input: Record<string, string>; expected: string; knownDiff?: string } | null;
 }
 
 export interface SpecInText {
@@ -89,6 +94,9 @@ export interface CitationSpec {
   numbering?: { referenceMarker: string } | null;
   bibliography: { sort: 'alphabetical' | 'appearance' };
   sourceTypes: SpecSourceType[];
+  /** Za style-pin: dokaz da izvor PROPISUJE standardni stil (quoteRaw + sourcePage).
+   *  Pin ne nosi vlastite predloske; renderira obiteljski motor, spec dodaje provenijenciju. */
+  evidence?: SpecProvenance | null;
   /** Kontradikcije/nesigurnosti za covjeka (draft faza). */
   contradictions?: string[];
 }
@@ -106,8 +114,15 @@ function initialsPlain(first: string): string {
   return first.split(/[\s-]+/).filter(Boolean).map((p) => p[0].toUpperCase()).join('');
 }
 
+function surnameCased(last: string, opts: AuthorFormatOptions): string {
+  if (opts.surnameCase === 'upper') return last.toLocaleUpperCase('hr-HR');
+  if (opts.surnameCase === 'lower') return last.toLocaleLowerCase('hr-HR');
+  return last;
+}
+
 function oneAuthor(a: ParsedAuthor, opts: AuthorFormatOptions, inverted: boolean): string {
-  if (!a.first) return a.last; // institucija ili samo prezime: doslovno
+  if (!a.first) return a.last; // institucija ili samo prezime: doslovno, bez surnameCase
+  const last = surnameCased(a.last, opts);
   let f: string;
   switch (opts.initials) {
     case 'dotted-spaced': f = initials(a.first); break;
@@ -115,8 +130,8 @@ function oneAuthor(a: ParsedAuthor, opts: AuthorFormatOptions, inverted: boolean
     case 'plain-compact': f = initialsPlain(a.first); break;
     default: f = a.first;
   }
-  if (inverted) return opts.initials === 'plain-compact' ? `${a.last} ${f}` : `${a.last}, ${f}`;
-  return `${f} ${a.last}`;
+  if (inverted) return opts.initials === 'plain-compact' ? `${last} ${f}` : `${last}, ${f}`;
+  return `${f} ${last}`;
 }
 
 /** Generalizacija authorsAuthorYear/authorsFootnote/authorsIeee/authorsVancouver:
@@ -201,6 +216,9 @@ export function validateCitationSpec(spec: unknown): string[] {
       }
     }
   }
+  if (s.outcome === 'style-pin') {
+    if (!s.evidence || !s.evidence.quoteRaw) errs.push('style-pin bez evidence.quoteRaw (dokaz da izvor propisuje stil)');
+  }
   if (s.status === 'verified') {
     if (!s.verifiedAt) errs.push('verified bez verifiedAt');
     if (!s.verifiedBy) errs.push('verified bez verifiedBy');
@@ -211,6 +229,9 @@ export function validateCitationSpec(spec: unknown): string[] {
           errs.push(`${st.type}: verified spec s sourcePage=null (nikad se ne nagadja, ali verified trazi potvrdu)`);
         }
       }
+    }
+    if (s.outcome === 'style-pin' && s.evidence && s.evidence.sourcePage == null) {
+      errs.push('verified style-pin s evidence.sourcePage=null');
     }
   }
   return errs;
@@ -230,9 +251,11 @@ const FIELD_LABEL: Record<string, string> = {
   editor: 'urednik', year: 'godina', publisher: 'izdavač', url: 'poveznica', institution: 'ustanova',
 };
 
-/** Vjeran render po verificiranom specu. Isti CitationResult ugovor kao formatCitation. */
+/** Vjeran render po verificiranom specu. Isti CitationResult ugovor kao formatCitation.
+ *  Style-pin specovi nemaju predloske (renderira ih obiteljski motor) - guard vraca prazno. */
 export function formatFromSpec(spec: CitationSpec, inp: CitationInput): CitationResult {
   const st = spec.sourceTypes.find((t) => t.type === inp.type) ?? spec.sourceTypes[0];
+  if (!st) return { citation: '', inText: '', missing: [] };
   const list = parseAuthors(inp.authors);
 
   const values: Record<string, string> = {};

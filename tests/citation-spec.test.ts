@@ -37,6 +37,18 @@ describe('authorsFromOptions reproducira sva 4 postojeca ponasanja', () => {
     expect(authorsFromOptions(A7, o)).toBe('A A, B B, C C, D D, E E, F F, et al.');
   });
 
+  it('surnameCase upper: prezime velikim slovima (unipu Harvard varijanta), inicijal netaknut', () => {
+    const o: AuthorFormatOptions = { order: 'family-first', initials: 'dotted-spaced', separator: ', ', finalJoiner: ' i ', surnameCase: 'upper' };
+    expect(authorsFromOptions(A1, o)).toBe('IVIC, I.');
+    expect(authorsFromOptions(A2, o)).toBe('IVIC, I. i HORVAT, A.');
+  });
+
+  it('surnameCase ne dira instituciju (nema imena)', () => {
+    const org = parseAuthors('Državni zavod za statistiku');
+    const o: AuthorFormatOptions = { order: 'family-first', initials: 'dotted-spaced', separator: ', ', surnameCase: 'upper' };
+    expect(authorsFromOptions(org, o)).toBe('Državni zavod za statistiku');
+  });
+
   it('institucija ostaje doslovna u svim varijantama', () => {
     const org = parseAuthors('Državni zavod za statistiku');
     for (const initialsMode of ['dotted-spaced', 'none', 'plain-compact'] as const) {
@@ -143,11 +155,23 @@ describe('validateCitationSpec', () => {
     expect(errs.some((e) => e.includes('verified bez verifiedHash'))).toBe(true);
   });
 
-  it('style-pin ne trazi sourceTypes', () => {
+  it('style-pin ne trazi sourceTypes, ali TRAZI evidence dokaz', () => {
     const pin: CitationSpec = {
       ...SYNTHETIC, outcome: 'style-pin', styleToken: 'apa7', sourceTypes: [],
       authorFormat: SYNTHETIC.authorFormat, inText: { mode: 'author-year' },
+      evidence: { kind: 'rule-text', quoteRaw: 'Rad mora biti citiran po APA standardu', sourcePage: 'str. 4' },
     };
     expect(validateCitationSpec(pin)).toEqual([]);
+    const noEvidence = { ...pin, evidence: null };
+    expect(validateCitationSpec(noEvidence).some((e) => e.includes('style-pin bez evidence'))).toBe(true);
+  });
+
+  it('formatFromSpec guard: pin bez sourceTypes vraca prazno umjesto rusenja', () => {
+    const pin: CitationSpec = {
+      ...SYNTHETIC, outcome: 'style-pin', sourceTypes: [],
+      evidence: { kind: 'rule-text', quoteRaw: 'x', sourcePage: 'str. 1' },
+    };
+    const r = formatFromSpec(pin, { type: 'knjiga', authors: 'Ivic, Ivan', title: 'T', year: '2020' });
+    expect(r.citation).toBe('');
   });
 });

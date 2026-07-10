@@ -1,0 +1,146 @@
+{
+  "facultyId": "ferit",
+  "styleToken": "ferit-brojcani",
+  "status": "draft",
+  "outcome": "custom-spec",
+  "label": "Brojcani stil citiranja (sluzbene upute FERIT)",
+  "sourceId": "ferit-upute-diplomski",
+  "sourceLabel": "Sluzbene upute za pisanje diplomskog rada (FERIT), t. 2.9 i 2.10",
+  "verifiedAt": null,
+  "verifiedBy": null,
+  "verifiedHash": null,
+  "accessDate": false,
+  "authorFormat": {
+    "order": "given-first",
+    "initials": "dotted-spaced",
+    "separator": ", ",
+    "finalJoiner": null
+  },
+  "inText": {
+    "mode": "bracket-number",
+    "provenance": {
+      "kind": "rule-text",
+      "quoteRaw": "prema [2]. Ukoliko se poziva na vise referenci literature, mogue je vise oznaka",
+      "sourcePage": "str. 3",
+      "note": "Na literaturu se u tekstu poziva rednim brojem u uglatoj zagradi (prema [2]); vise referenci se odvojeno zarezima stavlja u zajednicke uglate zagrade, a pri pozivanju na knjigu moze se dodati stranica, npr. [4, str.132] (t. 2.10). Brojevi se dodjeljuju redoslijedom pojavljivanja u radu (t. 2.9)."
+    }
+  },
+  "numbering": null,
+  "bibliography": {
+    "sort": "appearance"
+  },
+  "sourceTypes": [
+    {
+      "type": "knjiga",
+      "template": "{authors}, {title}, {publisher}, {place}, {year}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "publisher",
+        "place",
+        "year"
+      ],
+      "provenance": {
+        "kind": "rule-text",
+        "quoteRaw": "[3] Inicijali imena, prezime autora, naslov knjige, izdavac, mjesto, godina izdanja.",
+        "sourcePage": "str. 3",
+        "note": "Redak u izvoru je shematski (opisna polja s doslovnom interpunkcijom), ne konkretan citat, pa je kind rule-text i nema examplea (opisni autorski blok nije provediv kroz parser autora). Redoslijed: autor (inicijali imena pa prezime), naslov, izdavac, mjesto, godina; sve odvojeno zarezima, tocka na kraju. Redni broj [3] je pozicijska oznaka u popisu literature (redoslijed pojavljivanja u radu) i nije dio predloska."
+      },
+      "example": null
+    },
+    {
+      "type": "poglavlje",
+      "template": "{authors}, {title}, {container}[[, sv. {volume}]][[, str. {pages}]], {place}, {year}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "container",
+        "place",
+        "year"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "[2] Inicijali imena, prezime autora, naslov referata, naziv konferencije, sv. (broj",
+        "sourcePage": "str. 3",
+        "note": "Izvor daje primjer samo za referat u zborniku konferencije: autor, naslov referata, naziv konferencije, sv. (broj sveska), str. od-do, mjesto, godina izdanja. Poglavlje u knjizi ili zborniku izvedeno je analogijom (container umjesto naziva konferencije). Urednika izvor uopce ne propisuje pa ga predlozak nema. Potvrditi pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "clanak",
+      "template": "{authors}, {title}, {container}[[, br. {issue}]][[, sv. {volume}]], str. {pages}, {year}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "container",
+        "pages",
+        "year"
+      ],
+      "provenance": {
+        "kind": "rule-text",
+        "quoteRaw": "[1] Inicijali imena, prezime autora, naslov rada, naziv casopisa, broj casopisa",
+        "sourcePage": "str. 3",
+        "note": "Nastavak retka u izvoru: '(br./No.), broj sveska (sv./Vol.), str. (pp.) od - do, mjesec i godina izdanja.' Redak je shematski (opisna polja + objasnjenja etiketa u zagradama), ne konkretan citat, pa je kind rule-text i nema examplea; predlozak pise 'br.', 'sv.' i 'str.' bez objasnjenja. Neuobicajeno: broj casopisa (issue) dolazi PRIJE broja sveska (volume). Izvor trazi 'mjesec i godina izdanja', alat ima samo polje year."
+      },
+      "example": null
+    },
+    {
+      "type": "mrezni",
+      "template": "{authors}, {title}, {url}[[, pristupljeno {accessed}]].",
+      "requiredFields": [
+        "authors",
+        "title",
+        "url"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "2.9. Literaturu treba svrstati redom kojim se pojavljuje u radu i napisati na slijedei nacin:",
+        "sourcePage": "str. 3",
+        "note": "Upute (t. 2.9) ne obraduju mrezne izvore. Predlozak je izveden iz opceg zareznog niza polja kojim izvor pise sve bibliografske jedinice; oznaka pristupa je dodana konvencija (izvor ne spominje datum pristupa, zato accessDate false). Potvrditi ili oboriti pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "zavrsni",
+      "template": "{authors}, {title}, {institution}, {place}, {year}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "institution",
+        "year"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "[3] Inicijali imena, prezime autora, naslov knjige, izdavac, mjesto, godina izdanja.",
+        "sourcePage": "str. 3",
+        "note": "Upute ne obraduju citiranje zavrsnih i diplomskih radova; predlozak je izveden iz oblika za knjigu (izdavac -> ustanova). Potvrditi pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "propis",
+      "template": "{title}, {container} br. {issue} iz {year}.[[, str. {pages}.]]",
+      "requiredFields": [
+        "title",
+        "container",
+        "issue",
+        "year"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "zakonite (Zakon o mjernim jedinicama, NN br. 58 iz 1993., str. 1469).",
+        "sourcePage": "str. 3",
+        "note": "Sekcija o literaturi (t. 2.9) ne propisuje oblik za propise; predlozak je izveden iz nacina na koji same upute usput navode zakon u t. 2.7 (naslov, NN br. X iz GGGG., str. N). To je uporabna instanca, ne propisani primjer. Potvrditi pri verifikaciji."
+      },
+      "example": null
+    }
+  ],
+  "contradictions": [
+    "Prior profila predlaze ieee, ali upute ne imenuju nijedan standardni stil; propisuju vlastiti brojcani oblik slican IEEE-u s razlikama (broj casopisa prije broja sveska kod clanka, izdavac prije mjesta kod knjige), pa je izraden custom-spec umjesto style-pin ieee.",
+    "Primjeri u izvoru su shematski (opisna polja s doslovnom interpunkcijom), ne konkretni citati; example.expected je doslovni shematski redak iz izvora, ukljucujuci pozicijski redni broj [n] i objasnjenja etiketa (br./No., sv./Vol., pp.) koje predlozak ne reproducira.",
+    "Oblik autora 'Inicijali imena, prezime autora' ne pokazuje tockanje i razmake inicijala ni odvajanje vise autora; pretpostavljeno 'I. I. Prezime' (dotted-spaced) i zarez izmedu autora, potvrditi pri verifikaciji.",
+    "Za clanak izvor trazi 'mjesec i godina izdanja'; alat ima samo polje year pa se mjesec gubi ili ga korisnik upisuje uz godinu.",
+    "Identicna pravila citiranja postoje i u ferit-upute-zavrsni-2010 (str. 3, t. 2.9 i 2.10, uz sitne pravopisne razlike 'sljedei'/'slijedei'); jedan spec pokriva zavrsni i diplomski rad.",
+    "Mrezni izvori, zavrsni radovi i propisi nisu obradeni u t. 2.9; predlosci su izvedeni (derived) iz najblizih oblika u izvoru."
+  ]
+}

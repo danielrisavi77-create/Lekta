@@ -1,0 +1,303 @@
+===== [mef-pravilnik-diplomski-2023 | str. 3] =====
+izborni predmet nema pravo traziti priznavanje ekvivalenta za diplomski rad.
+
+                                                Clanak 6.
+
+(1) Mentor za diplomski rad moze biti nastavnik Medicinskog fakulteta ili
+sastavnice Sveucilista u Zagrebu, izabran u znanstveno-nastavno zvanje (radno
+mjesto ili naslovno zvanje) ili poslijedoktorand Fakulteta upisan u Upisnik
+znanstvenika Republike Hrvatske.
+(2) Mentor moze u jednoj akademskoj godini imati 3 mentorstva, a vei broj
+odobravat e prodekan za nastavu.
+(3) Mentor pomaze pristupniku pri izradi diplomskog rada objasnjavajui mu
+poblize zadatke i dajui savjete u pogledu nacina odabira i obrade materijala,
+odabira sredstava za rad, dokumentacije i literature.
+(4) Mentora imenuje Povjerenstvo.
+
+                                                Clanak 7.
+
+(1) Temu za diplomski rad odobrava Povjerenstvo na prijedlog mentora i
+studenta, te uz suglasnost procelnika Katedre ili Vijea predmeta.
+(2) Student moze jedanput promijeniti temu diplomskog rada i/ili mentora
+diplomskog rada (obrazac 09. i 10.).
+
+                                                  Clanak 8.
+
+(1) Diplomski rad obvezno se prijavljuje tijekom zimskog semestra posljednje godine
+
+===== [mef-pravilnik-diplomski-2023 | str. 25] =====
+Zakljuc ci
+        Zahvale
+        Literatura
+        Zivotopis
+
+Ako je rijec o preglednom ili struc nom radu, sadrzaj takoer mora imati sljede e
+        elemente: Sazetak
+        Summary
+        Zahvale
+        Literatura
+        Zivotopis
+
+Ostale podnaslove (koji dolaze izmeu Summary i Zahvale) odredit  e zajednic ki student i
+mentor, sukladno naravi i sadrzaju rada.
+
+Napomena: Sazetak se pise na hrvatskom i engleskom jeziku (svaki na zasebnoj stranici) i
+mora obuhva ati: Naslov rada, ime i prezime autora, tekst sazetka, kljuc ne rijec i (tri do pet
+kljuc nih rijec i); odnosno naslov rada na engleskom, ime i prezime autora, tekst (summary)
+na engleskom, te key words. Sazetak ima 200 do 400 rijec i � toc nije, najvise onoliko rijec i
+(ukljuc uju i i naslov, autora i kljuc ne rijec i) koliko uz propisani font stane na jednu stranicu.
+
+Numeriranje stranica zapoc inje s poglavljem Uvod, tako da je prva stranica Uvoda ujedno i
+
+===== [mef-pravilnik-diplomski-2023 | str. 26] =====
+odnosno uz odgovaraju i dio teksta ako je rijec o preglednom radu.
+Vazna napomena: Ako u radu koristite ilustracije ili tablice preuzete iz publikacija drugih
+autora, ne zaboravite da su ti materijali legalno zasti eni (autorska, izdavac ka i srodna
+prava � copyright) i da ste u svakom sluc aju DUZNI navesti toc an izvor (zastita autorskih
+prava), a u ve ini sluc ajeva i prethodno pribaviti dopustenje izdavac a za koristenje tog
+materijala (zastita izdavac kih prava). Ako se materijal preuzima iz publikacija objavljenih
+prije 1930. godine, u pravilu je dovoljno samo navesti toc an izvor (u pravilu, izdavac ka
+prava vrijede 70 do 75 godina � no, uvijek je potrebno toc no provjeriti!). Nepostivanje ovih
+pravila predstavlja ozbiljan prekrsaj akademskog integriteta i Etic kog kodeksa sveuc ilista
+(kao i odgovaraju ih pravilnika Medicinskog fakulteta). Stoga je zajednic ka duznost i
+studenta i mentora da ovom pitanju pristupaju s punom odgovornos u.
+
+Dva primjera citiranja preuzetog materijala:
+Slika 1. Brodmannova citoarhitektonska mapa mozdane kore c ovjeka. Prema: Brodmann
+(1909), str. 78.
+Slika 2. Suvremena podjela premotoric ke mozdane kore u sedam strukturno i funkcionalno
+definiranih kortikalnih polja. Prema: Rizzolatti & Craighero (2004), str. x, uz dopustenje
+(naziv izdavac a).
+U oba sluc aja, potpuni literaturni navod (Brodmann 1909; Rizzolatti & Craighero 2004)
+mora biti naveden u popisu literature.
+
+CITIRANJE LITERATURE U TEKSTU I NACIN PISANJA U POPISU LITERATURE
+
+Sve publikacije citirane u tekstu moraju biti navedene u popisu literature. Isto tako, sve
+publikacije navedene u popisu literature moraju biti citirane na odgovaraju em mjestu u
+tekstu. Publikacije se u tekstu citiraju tako da se navede autor-godina (za rad jednog
+autora) ili autor-autor-godina (za rad dva autora) ili autor et al.-godina (za rad tri i vise
+autora). Primjer: ,,Na vaznost ovog procesa prvi je ukazao Veliki Uc itelj (Uc itelj 1956),
+potom su to neovisno provjerili i potvrdili Sumnjalo i Kritic ar (Sumnjalo & Kritic ar 1960), a
+
+                                                                                                                                                    26
+
+===== [mef-pravilnik-diplomski-2023 | str. 27] =====
+detaljna istrazivanja obavili su brojni uc enici i suradnici (Uc enik 1965; Uc enik & Suradnik
+1966; Suradnik et al. 1970, 1975, 1990)."
+
+Koliko literaturnih navoda treba biti u popisu literature? Onoliko koliko je razborito i
+primjereno � to jest, NAJMANJI potreban broj da bi se potpuno, jasno i precizno
+dokumentirao sadrzaj i argumentacija rada. Ovisno o vrsti i temi rada, to moze biti 10 do
+20 publikacija, a moze biti i 100 do 150 publikacija.
+
+Kako se toc no pisu literaturni navodi u popisu literature? Prvo, navode se abecednim
+redom autora, pri c emu je potrebno navesti prezimena svih autora i inicijale njihovih
+imena, potom godinu objave rada, pa puni naslov rada, pa uobic ajenu skra enicu
+c asopisa, pa volumen c asopisa i poc etnu i zavrsnu stranicu rada. Vise radova istog autora
+navodi se kronoloskim redom, a vise radova istog autora iz iste godine navodi se kao:
+Autor (2010a, b, c). Ako je rijec o knjizi, navodi se autor (godina) Naslov knjige, mjesto
+izdanja, izdavac . Ako je rijec o poglavlju u knjizi, navodi se autor, godina, naslov poglavlja,
+urednici knjige, naslov knjige, mjesto izdanja, izdavac . Ako je rijec o c lanku koji je u tisku,
+ali jos nema volumen i broj stranica (advanced online access + doi), navodi se na kraju
+naziv c asopisa te doi oznaka. Ako je rijec o tekstu ili materijalu objavljenom na nekoj
+mreznoj stranici, navodi se toc na adresa mrezne stranice.
+
+Primjeri:
+
+===== [mef-pravilnik-diplomski-2023 | str. 28] =====
+Haymaker W, Adams RD (Ur.) Histology and Histopathology of the Nervous System.
+Springfield: Thomas, str. 3-145.
+Slifka MK, Whitton JL (2000) Clinical implications of dysregulated cytokine production. J
+Mol Med doi:10.1007/s001090000086
+
+OBLIK NEUVEZANOG PRIMJERKA RADA (ZA OCJENU) TE
+KONACNOG (UVEZANOG) RADA:
+
+C etiri primjerka gotovog neuvezanog rada te verzija rada u elektronic kom obliku dostavlja
+se Povjerenstvu na ocjenu, tiskan na papiru formata A4, pisan fontom Times New Roman
+ili Arial (velic ina fonta: 11 ili 12; prored: 1.5 ili 2, to jest 1,5 redaka ili dvostruki prored), s
+ispisom na samo jednoj stranici svakog lista (dakle, u istom obliku u kojem bi se poslao rad
+na recenziju u c asopis, da recenzenti imaju prostora za biljeske i ispravke).
+Nakon sto je rad pozitivno ocijenjen i unesene su sve potrebne ispravke, pristupa se
+konac nom prijelomu teksta i uvezu. Pritom je dopusteno i pozeljno da se rad oblikuje i
+tiska kao tipic ni c lanak u znanstvenom ili struc nom c asopisu (formata A4 � dakle, dva
+stupca sirine 8 cm i izmeu njih razmak od 1 cm, a slike i tablice sirine jednog stupca ili
+cijele stranice � dakle, 8 cm ili 17 cm; margine su najmanje 2,5 cm gore, dolje, lijevo i
+
+                                                                                                                                                    28
+
+===== [mef-naputci-tehnicka-obrada-doktorski-2022 | str. 1] =====
+- Popis oznaka i kratica, 
+te poglavlja:
+1. Uvod i svrha rada
+2. Hipoteza
+3. Ciljevi rada
+4. Materijali i metode (ispitanici – uzorak)
+5. Rezultati
+6. Rasprava
+7. Zaključak
+8. Kratki sadržaj na hrvatskom jeziku
+9. Kratki sadržaj i naslov doktorskog rada na engleskom jeziku ime i prezime te 
+godina obrane doktorskog rada do (200 riječi)
+ 10. Popis literature (prema naputcima Liječničkog vjesnika)
+ 11. Kratka biografija (do 200 riječi)
+
+6) Stranice obavezno označiti brojevima (prva stranica je stranica Uvod)
+
+7) Numerirati i označiti nazive slika i tablica (naslov slike piše se ispod slike, a naslov tablice piše se iznad tablice)
+
+8) Doktorski rad mora biti pisan u skladu s pravopisom hrvatskog jezika i poželjno ga je 
+ lektorirati
+
+9) Kod predaje primjeraka uvezanih doktorskih radova treba predati jedan primjerak 
+doktorskog rada na kompaktnom disku
+
+===== [mef-pravilnik-doktorski-studiji | str. 2] =====
+2) Doktorandu se pri upisu doktorskog studija, a do trenutka imenovanja mentora
+doktorskog rada, moze dodijeliti studijski savjetnik koji u tom razdoblju obavlja funkcije
+mentora.
+         3) Za svakog upisanog doktoranda moze se imenovati troclano studijsko povjerenstvo
+koje obavlja funkciju studijskog savjetnika tijekom cijelog studija. Mentor doktorskog rada je
+po polofaju clan troclanog studijskog povjerenstva, no niti mentor niti ostali clanovi tog
+povjerenstva ne mogu biti clanovi povjerenstava za ocjenu i obranu prijedloga doktorskog
+rada i/ili gotovog doktorskog rada.
+         4) Mentor, studijski savjetnik te clanovi troclanog studijskog povjerenstva moraju biti
+zaposlenici Fakulteta u znanstveno-nastavnom ili znanstvenom zvanju.
+
+                                                   Clanak4.
+         Studentov portfolio je mapa koja sadrfava sve bitne podatke o studentu od njegovog
+prijema na doktorski studij do promocije. Fakultet je odgovoran za prikupljanje i pohranu
+podataka u portfolio.
+
+                                                   Clanak5.
+         I) Sveucilisni doktorski studiji mogu se osnivati i izvoditi samo u podrucjima u
+kojima Fakultet kao nositelj ima potrebne kadrovske potencijale i materijalne resurse te
+medunarodnu prepoznatljivost u znanstvenom istrazivanju.
+         2) Sveucilisni doktorski studiji se temelje na izvomom istrazivackom radu te ucenju
+kroz istrazivanje, uz primjenu kompetitivnih i medunarodnih mjerila kvalitete te poticanje
+interdisciplinarnosti, medunarodne suradnje i mobilnosti nastavnika i doktoranada. Zadaca
+doktorskih studija je stvaranje novih znanja, spoznaja i inovacija te poticanje na primjenu tih
+znanja i inovacija u cilju socijalnog i gospodarskog napretka.
+
+===== [mef-pravilnik-doktorski-studiji | str. 3] =====
+6) Na temelju unaprijed utvrdenih uvjeta i/ili potpisanih ugovora, dio nastave na
+doktorskim studijima Fakulteta mogu pohadati i studenti doktorskih studija drugih doma6ih ili
+inozemnih sveucilista.
+
+UVJETI UPISA NA STUDIJ I TRAJANJE STUDIJA
+
+                                                    Clanak 7.
+         1) Uvjete upisa odreduje Vije6e za poslijediplomske studije u skladu s postoje6im
+prop1S1ma.
+         2) Doktorski studij moze upisati osoba koja je zavrsila odgovaraju6i sveucilisni
+diplomski studij ili sveucilisni integrirani preddiplomski i diplomski studij.
+         3) Upisne kvote odreduju se prema raspolozivosti istrazivackih, nastavnickih i
+mentorskih kapaciteta. Upisne kvote odreduje Vije6e za poslijediplomske studije.
+         4) Upis na doktorski studij se obavlja na temelju javnog natjecaja, koji se objavljuje u
+dnevnom tisku i na mreznim stranicama Fakulteta. Javni natjecaj za upis na doktorski studij
+raspisuje se najmanje mjesec dana prije pocetka nastave.
+         5) Natjecaj za upis pristupnika na doktorske studije sadrzi:
+
+                   - naziv studija,
+                   - uvjete upisa,
+                   - najmanji i najveci broj mjesta za upis,
+                   - visinu skolarine,
+                   - postupak,
+                   - popis isprava potrebnih za prijavu na natjecaj ,
+                   - propisane obrasce za prijavu
+
+===== [mef-pravilnik-doktorski-studiji | str. 5] =====
+2) Broj prijelaznika i broj redovitih studenata ne moze biti ve6i od kapaciteta
+Fakulteta. Studenti kojima je odobren prijelaz s doktorskog studija na drugim sveucilistima
+upisuju se uz obvezu pla6anja skolarine u visini koja vazi za akademsku godinu u kojoj se
+odobrava prijelaz.
+
+                                                 Clanak8C.
+         1) Opci uvjeti za prijelaz studenata s drugih doktorskih studija su:
+
+                  a) da ispunjavaju uvjete i kriterije iz clanka 7. ovog Pravilnika;
+                  b) da imaju prosjek ocjena polozenih predmeta diplomskog studija vise od
+
+                       3,50;
+                  c) da nakon obavljenog razgovora imaju pozitivno misljenje Povjerenstva
+
+===== [mef-pravilnik-doktorski-studiji | str. 6] =====
+Clanak 10.
+         Nastavni program doktorskog studija sadrzi:
+
+                  - akademski stupanj ,
+                  - trajanje studija i rok u kojem se moze zavrsiti studiranje,
+                  - uvjete upisa na studij,
+                  - okvimi sadrzaj obveznih, izbomih i neobveznih predmeta,
+                  - predvidene ishode ucenja koji se stjecu ispunjavanjem pojedinacnih studijskih
+                  obveza, modula studija i ukupnog studijskog programa, kao i predviden broj
+                  sati za svaku studijsku obvezu koji osigurava stjecanje predvidenih ishoda
+                  ucenja,
+                  - nacin izvodenja nastave (predavanja, seminari, vjezbe, prakticni rad,
+                  laboratorijske rotacije itd.) i preporucena literatura
+                  - broj bodova za svaki pojedini predmet,
+                  - naziv inozemnih programa s kojimaje studij usporediv,
+                  - opis izvedbe studija te redoslijed upisa i polaganja ispita,
+                  - uvjete upisa u sljedecu godinu studija,
+                  - nacin pracenja kvalitete i uspjesnosti izvedbe programa, te nacin sudjelovanja
+                  pristupnika u njegovom ocjenjivanju,
+                 - popis aktivnih znanstvenih projekata i voditelja projekata i/ili laboratorija
+                  (kao potencijalnih mentora za doktorske radove),
+                  - popis drugih studijskih programa iz kojih se mogu steci ECTS bodovi,
+                  - nacin zavrsetka studija u suglasnosti s odredbama ovog pravilnika, i
+                  - uvjete pod kojim studenti koji su prekinuli studij mogu nastaviti studij.
+
+===== [mef-pravilnik-doktorski-studiji | str. 7] =====
+Clanak 14.
+         Doktorski studiji ustrojavaju se u pravilu s obveznim i izbornim predmetima, po
+bodovnom sustavu, kao studiji za stjecanje akademskog stupnja doktora znanosti, sukladno
+nastavnom planu i programu studija i odredbama Statuta Sveucilista i Statuta Fakulteta.
+         Program doktorskog studija oblikuje se za svakog studenta iz raspolozivih i slobodno
+izabranih predmeta na Sveucilistu, a taj program oblikuje student u dogovoru s mentorom i/ili
+troclanim studijskim povjerenstvom te uz odobrenje Fakultetskog vijeca.
+
+                                                      Clanak 15.
+         Poslijediplomski doktorski studij sastoji se od:
+         (a) organizirane nastave tijekom tri studijske godine sukladno planu i programu studija
+(obvezni i izbomi predmeti, tj. po sadrzaju metodoloski i granski predmeti te praktikumi);
+         (b) znanstvene aktivnosti studenata (objavljeni radovi i citati, dobivene domace i
+medunarodne nagrade, znanstvena predavanja, sudjelovanje na znanstvenim skupovima,
+sudjelovanje u organizaciji domacih i medunarodnih znanstvenih skupova i skola, itd.),
+sukladno odredbama iz programa doticnog doktorskog studija;
+         c) prijave prijedloga doktorskog rada, te uspjesne izrade i obrane doktorskog rada.
+
+                                                      Clanak 16.
+         Nastavnim programom utvrduju se uvjeti upisa u visu godinu studija te uvjeti za
+predaju gotovog doktorskog rada na ocjenu.
+
+ZAVRSETAK DOKTORSKOG STUDIJA
+
+                                                      Clanak 17.
+
+===== [mef-pravilnik-doktorski-studiji | str. 9] =====
+(b) da je tijekom proteklih pet godina objavio medunarodno prepoznate radove
+                  relevantne za izradu doktorskog rada (sto se dokazuje ispisom podataka iz baze
+                  Web ofScience)
+         2) Professor emeritus te redoviti clan HAZU mogu biti mentori doktorskog rada,
+posebice ako su jos uvijek voditelji aktivnih istrazivackih projekata. Odluku o tome donosi
+Fakultetsko vije6e na prijedlog Odbora za doktorske radove.
+         3) Zaposlenik Fakulteta moze biti ko-mentor na drugoj sastavnici Sveucilista u
+Zagrebu ili na drugome sveucilistu samo uz prethodno pribavljeno posebno dopustenje
+Fakulteta.
+
+                                                   Clanak26.
+         U cilju osiguranja punog 1 svestranog razvoja i obrazovanja doktoranada te
+unapredenja interdisciplinarnosti, kvalitete istrazivanja i mobilnosti mladih istrazivaca,
+Fakultet moze uz mentora imenovati jos jednog mentora (u daljnjem tekstu ko-mentor). Ko-
+mentor moze biti osoba u znanstveno-nastavnom ili znanstvenom zvanju koja je:
+         a) zaposlenik Fakulteta, ali u drugoj znanstvenoj grani;
+         b) zaposlenik druge sastavnice Sveucilista u Zagrebu;
+         c) zaposlenik druge institucije u Republici Hrvatskoj s kojom Fakultet i/ili Sveuciliste
+         ima sklopljen ugovor o znanstvenoj , nastavnoj i strucnoj suradnji;
+         d) inozemni istrazivac s kojim mentor ima znanstvenu i strucnu suradnju.
+
+                                                   Clanak27.
+         1) Prije preuzimanja prvog mentorstva, budu6i mentor treba pro6i mentorsku radionicu
+u organizaciji Sveucilista, Fakulteta ili priznatih medunarodnih skola, ili biti ko-mentor
+jednog doktorskog rada (posebice kadaje mentor tog rada njegov bivsi mentor).

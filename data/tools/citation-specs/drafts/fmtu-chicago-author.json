@@ -1,0 +1,18 @@
+{
+  "facultyId": "fmtu",
+  "styleToken": "chicago-author",
+  "status": "draft",
+  "outcome": "style-pin",
+  "label": "Chicago autor-datum sustav (sluzbene upute FMTU)",
+  "sourceId": "fmtu-upute-zavrsni-2025",
+  "sourceLabel": "Upute za prijavu, izradu, predaju i obranu zavrsnog rada na sveucilisnom prijediplomskom studiju (FMTU Opatija)",
+  "verifiedAt": null,
+  "verifiedBy": null,
+  "verifiedHash": null,
+  "evidence": {
+    "kind": "rule-text",
+    "quoteRaw": "8.8.1. Chicago stil � Bibliografski sustav i Autor-datum sustav (primjeri)",
+    "sourcePage": "str. 2"
+  },
+  "sourceTypes": []
+}

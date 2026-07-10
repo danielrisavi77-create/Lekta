@@ -1,0 +1,90 @@
+===== [grafos-smjernice-2022 | str. 1] =====
+Osijek, rujan 2022.
+
+Sadržaj
+ TOC \o "1-3" \h \z \u 1.Uvod PAGEREF _Toc115537216 \h 1
+2.Struktura rada PAGEREF _Toc115537217 \h 2
+3.Oblikovanje i uređivanje rada PAGEREF _Toc115537218 \h 3
+3.1.Oblikovanje teksta PAGEREF _Toc115537219 \h 3
+3.2.Numeriranje i opisi slika i tablica PAGEREF _Toc115537220 \h 4
+3.3.Oznake veličina, simbola i izraza PAGEREF _Toc115537221 \h 4
+3.4.Citiranje i uređivanje popisa literature PAGEREF _Toc115537222 \h 5
+3.5.Zaglavlje i podnožje PAGEREF _Toc115537223 \h 6
+
+===== [grafos-smjernice-2022 | str. 1] =====
+Uvod
+Smjernice za izradu i oblikovanje diplomskih i završnih radova interni su dokument Građevinskog i arhitektonskog fakulteta Osijek koji slijedi odredbe Pravilnika o završnim i diplomskim ispitima.
+
+Studenti preddiplomskog (sveučilišnog i stručnog) studija obvezni su na kraju studija izraditi završni rad, dok je obveza studenata diplomskog (sveučilišnog i specijalističkog diplomskog stručnog) studija izraditi diplomski rad.
+
+Završni/diplomski rad je samostalni studentski rad izrađen pod vodstvom mentora (i komentora). Izradom rada pristupnik pokazuje sposobnost uspješno rješavati zadatke svoje struke, na razini naziva stečenog diplomom, kroz primjenu teorijskog i praktičnog znanja usvojenog tijekom studija te sposobnost samostalnog služenja literaturom u svrhu korištenja spoznaja, činjenica i stavova objavljenih u njima. 
+
+Osnovna svrha ovog dokumenta je pristupnicima opisati pravila kojih se trebaju pridržavati prilikom izrade i oblikovanja završnih i diplomskih radova, a s ciljem ujednačavanja okvirne strukture radova, tehničke izrade, načina označivanja tablica, grafičkih prikaza i formula, sustava navođenja literature i izrade popisa literature.
+
+===== [grafos-smjernice-2022 | str. 1] =====
+Struktura rada
+Završni i diplomski radovi trebaju imati sljedeće dijelove:
+naslovna stranica rada
+zadatak za završni/diplomski rad
+sažetak i ključne riječi
+sadržaj
+uvod
+glavni dio rada 
+zaključak
+literatura
+dodaci i prilozi (po potrebi).
+
+Oblikovanje izgleda naslovne stranice, prve stranice i zadatka za rad propisani su obrascima Oblikovanje izgleda završnog rada (OB-7-10-4) i Oblikovanje izgleda diplomskog/specijalističkog diplomskog rada (OB-7-11-5) te se isti mogu preuzeti na internetskim stranicama Fakulteta.
+
+Sažetak rada treba se sastojati od približno 200 riječi. U sažetku je potrebno ukratko opisati zadatak odnosno problem kojim se rad bavi, metode i način rješavanja problema te glavne rezultate i zaključke u radu. Sažetak ne smije sadržavati reference, skraćenice, pozive na slike, tablice, formule, priloge i sl. Na kraju sažetka potrebno je navesti 3 do 5 ključnih riječi rada. Sažetak (Summary), naslov rada i ključne riječi (Key words) moraju biti napisani na hrvatskom i engleskom jeziku. 
+
+Sadržajem rada prikazuje se struktura rada i sastoji se od naziva poglavlja i potpoglavlja, pri čemu su početne stranice na kojima se poglavlja i potpoglavlja nalaze upisane uz desni rub stranice.
+
+U uvodnom poglavlju rada potrebno je detaljnije opisati zadatak, obrazložiti svrhu i cilj rada, navesti metode koje su korištene pri rješavanju zadatka, te prikazati strukturu rada s kratkim opisima pojedinih poglavlja u radu.
+
+Glavni dio rada podijeljen je, u ovisnosti o opsegu teme i problematici koja se izlaže, na više poglavlja i potpoglavlja, a sadrži opis metoda i postupaka primijenjenih pri rješavanju problema, detaljan prikaz rješenja zadatka, interpretaciju dobivenih rezultata i raspravu, te smjernice za mogući daljnji rad na problemu.
+
+U zaključku rada daje se osvrt na postavljene ciljeve, sustavno i sažeto se navode najvažnije informacije i zaključci do kojih se došlo izradom rada s naglaskom na dobivene rezultate.
+
+Na kraju rada navodi se popis literature koji obuhvaća sve korištene izvore i potpune podatke o djelima koja se spominju u referencama. 
+
+U svrhu postizanja veće preglednosti rada može se javiti potreba za dodacima i prilozima. Sadržaji koji se stavljaju u dodatak su npr.: projektna dokumentacija koja služi kao podloga za izradu rada, mrežni planovi, gantogrami, troškovnici, ispisi računalnih programa, radionička dokumentacija i slično.
+Oblikovanje i uređivanje rada
+Završni/diplomski rad piše se na računalu korištenjem programa za obradu teksta (preporučuje se MS Word). Rad mora biti pisan hrvatskim standardnim jezikom ili drugim stranim jezikom u skladu s nastavnim programom ili uz suglasnost Odbora za završne i diplomske ispite.
+Student koji želi pisati rad na nekom od svjetskih jezika dužan je, uz suglasnost mentora, podnijeti pisani zahtjev Odboru za završne i diplomske radove.
+Oblikovanje teksta
+Tekst rada mora biti oblikovan na sljedeći način:
+rad se ispisuje jednostrano na papiru formata A4 (210x297 mm),
+naslovi i podnaslovi trebaju biti 14 ili 16 pt, podebljano (bold), poravnati uz lijevi rub,
+veličina slova u tekstu (font size) treba biti 12 pt, 
+vrsta slova (font) može biti Times New Roman, Arial ili Arial Narrow,
+poravnanje teksta treba biti obostrano (justify),
+
+===== [grafos-smjernice-2022 | str. 1] =====
+Nazivi slika i tablica trebaju odražavati njihov smisao i pišu se samo podaci neophodni za njihovo razumijevanje, a dodatna objašnjenja daju se u tekstu. 
+Ako se slika ili tablica preuzima iz literature, obavezno je navođenje reference. Ako se slika ili tablica preuzima iz literature u kojoj se nalaze pojmovi na stranom jeziku, značenje tih pojmova mora biti objašnjeno u tekstu i na hrvatskom jeziku.
+Slike, tablice i njihove opise potrebno je centrirati horizontalno na stranici i pozicionirati u tekstu najbliže mjestu gdje se na njih poziva.
+Oznake veličina, simbola i izraza
+U čitavom radu potrebno je upotrebljavati iste oznake za iste veličine, a njihovo objašnjenje dati nakon prve pojave u formuli.
+Fizikalne i druge veličine pišu se kosim slovima, a konstante, mjerne jedinice, matematički simboli, funkcije i operatori pišu se uspravno. Eksponenti i indeksi pišu se uspravno osim u slučaju kada predstavljaju neku veličinu (tada se pišu kosim slovima). 
+Formule se numeriraju s dva (arapska) broja, od kojih prvi broj označava broj poglavlja, a drugi redni broj formule unutar poglavlja. Formule se centriraju na sredinu stranice, a njihova numerička oznaka piše se u istom retku i poravnava uz desni rub stranice.
+
+(3.1)
+Pri pisanju rada nužno je koristiti jedinice Međunarodni sustav mjernih jedinica (SI) i one koje su u skladu sa Zakonom o mjernim jedinicama (NN 58/1993).
+Citiranje i uređivanje popisa literature
+Citiranje literature je postupak kojim se navode dokumenti i djela kojima se koristilo pri izradi rada kako bi se argumentirali stavovi, pozvalo na postojeće rezultate, osigurao uvid u izvore zbog provjere ili daljnjeg korištenja te kako bi se u konačnici izbjeglo plagiranje.
+
+Prema Pravilniku o završnim i diplomskim ispitima, pri pisanju rada najstrože je zabranjeno prepisivanje ili direktno prevođenje dijelova tuđeg teksta bez navođenja izvora, a mentor je obvezan rad pregledati licenciranim računalnim programom za provjeru izvornosti.
+
+Popis literature obuhvaća sve korištene izvore i potpune podatke o djelima koja se spominju u referencama. Popis literature se numerira arapskim brojevima u uglatim zagradama, prema redoslijedu pojavljivanja u tekstu, a svaka bibliografska jedinica mora imati sve bitne elemente kako je prikazano sljedećim primjerima:
+članak iz časopisa:
+Prezime autora, inicijali imena, naslov rada, naziv časopisa, broj časopisa (br./No.), broj sveska (sv./Vol.), str. (pp.) od – do, mjesec i godina izdanja.
+članak objavljen u zborniku konferencije:
+Prezime autora, inicijali imena, naslov članka, naziv konferencije, sv. (broj sveska), str.  (stranice) od – do, mjesto, godina izdanja.
+knjiga:
+Prezime autora, inicijali imena, naslov knjige, izdavač, mjesto, godina izdanja.
+internetski sadržaj:
+Prezime autora, inicijali imena, naslov članka, poveznica na izvor, datum pristupanja mrežnom izvoru.
+
+Zaglavlje i podnožje
+Zaglavlje i podnožje započinju s uvodnom stranicom. Tekst zaglavlja treba odvojiti crtom i pisati u jednom retku. U zaglavlju se upisuje ime i prezime pristupnika (lijevo poravnanje teksta) te naslov rada (desno poravnanje), a u podnožje s desnim poravnanjem upisuje se broj stranice.

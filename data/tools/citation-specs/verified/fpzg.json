@@ -1,14 +1,14 @@
 {
   "facultyId": "fpzg",
   "styleToken": "fpzg",
-  "status": "draft",
+  "status": "verified",
   "outcome": "custom-spec",
   "label": "FPZG autor-godina (sluzbena Pravila navodenja)",
   "sourceId": "fpzg-pravila-navodenja-citiranja",
   "sourceLabel": "Pravila navodenja bibliografskih jedinica i citatnica na Fakultetu politickih znanosti",
-  "verifiedAt": null,
-  "verifiedBy": null,
-  "verifiedHash": null,
+  "verifiedAt": "2026-07-09",
+  "verifiedBy": "Daniel Risavi",
+  "verifiedHash": "56df35ca9ab16a3650f6599ca481928dfdc7a2d081321529ba3219a34fe9be9b",
   "accessDate": true,
   "authorFormat": {
     "order": "family-first",
@@ -24,7 +24,11 @@
     "mode": "author-year",
     "template": "({authorsShort}, {year})",
     "withPagesTemplate": "({authorsShort}, {year}: {pages})",
-    "authorsShort": { "twoJoiner": " i ", "etAlAfter": 3, "etAlText": "i dr" },
+    "authorsShort": {
+      "twoJoiner": " i ",
+      "etAlAfter": 3,
+      "etAlText": "i dr"
+    },
     "provenance": {
       "kind": "worked-example",
       "quoteRaw": "article.1 Chicago i London: The University of Chicago Press.  (Becker, 2007)",
@@ -33,12 +37,20 @@
     }
   },
   "numbering": null,
-  "bibliography": { "sort": "alphabetical" },
+  "bibliography": {
+    "sort": "alphabetical"
+  },
   "sourceTypes": [
     {
       "type": "knjiga",
       "template": "{authors} ({year}) {title}. {place}: {publisher}.",
-      "requiredFields": ["authors", "title", "year", "place", "publisher"],
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "place",
+        "publisher"
+      ],
       "provenance": {
         "kind": "worked-example",
         "quoteRaw": "Buchberger, Iva (2012) Kriticko misljenje. Prirucnik kritickog misljenja, slusanja, citanja i pisanja.",
@@ -60,7 +72,15 @@
     {
       "type": "poglavlje",
       "template": "{authors} ({year}) {title}. U: {editor} (ur) {container}[[ (str. {pages})]]. {place}: {publisher}.",
-      "requiredFields": ["authors", "title", "year", "editor", "container", "place", "publisher"],
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "editor",
+        "container",
+        "place",
+        "publisher"
+      ],
       "provenance": {
         "kind": "worked-example",
         "quoteRaw": "poglavlje s 1 autorom /icom u zborniku s 1 urednikom/icom:",
@@ -85,7 +105,14 @@
     {
       "type": "clanak",
       "template": "{authors} ({year}) {title}. {container} {volume}[[({issue})]][[: {pages}]].[[ {url} Pristupljeno {accessed}.]]",
-      "requiredFields": ["authors", "title", "year", "container", "volume", "pages"],
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "container",
+        "volume",
+        "pages"
+      ],
       "provenance": {
         "kind": "worked-example",
         "quoteRaw": "clanak u casopisu:",
@@ -109,7 +136,13 @@
     {
       "type": "mrezni",
       "template": "{authors} ({year}) {title}. {url} Pristupljeno {accessed}.",
-      "requiredFields": ["authors", "title", "year", "url", "accessed"],
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "url",
+        "accessed"
+      ],
       "provenance": {
         "kind": "worked-example",
         "quoteRaw": "individualni autori/ce:",
@@ -131,7 +164,13 @@
     {
       "type": "zavrsni",
       "template": "{authors} ({year}) {title} (neobjavljen diplomski rad). {place}: {institution}.",
-      "requiredFields": ["authors", "title", "year", "place", "institution"],
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "place",
+        "institution"
+      ],
       "provenance": {
         "kind": "worked-example",
         "quoteRaw": "diplomski i magistarski radovi:",
@@ -153,7 +192,12 @@
     {
       "type": "propis",
       "template": "{authors} ({year}) {title}. {container}[[ {issue}]].[[ {url} Pristupljeno {accessed}.]]",
-      "requiredFields": ["authors", "title", "year", "container"],
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "container"
+      ],
       "provenance": {
         "kind": "worked-example",
         "quoteRaw": "iz sluzbenog glasila:",

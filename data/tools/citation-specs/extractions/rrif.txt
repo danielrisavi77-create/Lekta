@@ -1,0 +1,345 @@
+===== [rrif-upute-zavrsni | str. 1] =====
+2.1. Odabir teme                                                         2
+
+2.2.Prijava teme                                                         2
+
+3. IZRADA ZAVRSNOG RADA                                                  3
+
+3.1. Struktura zavrsnog rada                                             3
+
+3.2.Izvori informacija                                                   6
+
+3.2.1. Vrste izvora informacija                                          6
+
+3.2.2. Prikupljanje literature                                           6
+
+3.3.Istrazivanje                                                         9
+
+3.4. Oblikovanje zavrsnog rada                                           9
+
+3.4.1.Numeriranje stranica                                               9
+
+3.4.2. Prikaz redoslijeda stranica                                       10
+
+3.4.3. Font teksta                                                       10
+
+3.4.4. Margine                                                           10
+
+3.4.5.Vanjska naslovna stranica                                          11
+
+3.4.6.Unutarnja naslovna stranica                                        11
+
+3.4.7.Sazetak i kljucne rijeci                                           12
+
+3.4.8. Poglavlja                                                         12
+
+3.4.9. Tablice, slike, grafikoni                                         12
+
+3.4.10. Biljeske (fusnote), citiranje i popis literature                 13
+
+3.4.11. Sadrzaj zavrsnog rada                                            13
+
+3.4.12. Uvez i broj primjeraka                                           13
+
+4. OBRANA ZAVRSNOG RADA                                                  15
+
+5. HODOGRAM ZAVRSNOG RADA                                                16
+
+6. ZAKLJUCAK                                                             17
+
+7. POPIS LITERATURE                                                      18
+
+===== [rrif-upute-zavrsni | str. 2] =====
+1. SVRHA I CILJEVI IZRADE ZAVRSNOG RADA
+
+         Zavrsni rad je samostalan pisani strucni rad u kojem student pod vodstvom mentora
+obrauje izabranu strucnu temu. Tema se moze odnositi na teorijsku i/ili prakticnu
+problematiku, pri cemu je pozeljno da se u obradi neke teme teorijske spoznaje stavljaju
+izravno u funkciju rjesavanja aktualnih prakticnih problema. Osnovna svrha i cilj izrade
+zavrsnog rada jest da student nakon polozenih ispita tijekom studija dokaze sposobnost,
+samostalnost i snalazenje u rjesavanju teorijskih i prakticnih istrazivackih problema koji ne
+moraju imati karakter izvornosti. U izradi zavrsnog rada student mora dokazati sposobnost
+primjene teorijskog i prakticnog znanja stecenog tijekom studija te sposobnost samostalnog
+sluzenja strucnom literaturom u pismenoj obradi teme1.
+
+        Zavrsni rad izrauje se po tocno odreenim pravilima � od strukture, elemenata i
+nacina oblikovanja zavrsnog rada do usmene obrane i obvezno je pridrzavati se ovih uputa.
+
+1 Zelenika, R. (2000) Metodologija i tehnologija izrade znanstvenog i strucnog djela. Rijeka: Ekonomski fakultet
+u Rijeci, str. 264-265.
+
+                                                             1
+
+===== [rrif-upute-zavrsni | str. 3] =====
+2.1. Odabir teme
+          Student izmeu ponuenih i objavljenih tema zavrsnih radova za tekuu akademsku
+
+godinu odabire temu po vlastitoj zelji i osobnom interesu. Prije konacnog odabira student se
+treba zapitati:
+Sto me zanima, sto zelim proucavati?
+Kako u proucavati (struktura i metode) ?
+Kako u i gdje pronai izvore informacija, podataka i znanja?2
+Velika je vjerojatnost da zavrsni rad nee biti uspjesan niti kvalitetan ako student
+nema interesa za odabranu temu, stoga je odgovor na prvo pitanje od velike vaznosti.
+
+          Nacin izrade (struktura, metode, elementi) zavrsnog rada kao i izvori podataka i
+nacin citiranja literature ukratko su objasnjeni u ovim Uputama za izradu zavrsnog rada, a
+imaju li potrebe, studenti se za sva dodatna pitanja mogu obratiti izabranom mentoru ili u
+Knjiznicu RRiF Visoke skole.
+
+        2.2.Prijava teme
+          Nakon sto student odabere temu zavrsnog rada o tome treba obavijestiti nadleznog
+
+mentora i dobiti njegovu usmenu suglasnost. Ako su dva ili vise studenata odabrala istu temu,
+mentor ima pravo izbora studenta. Odabranu temu potrebno je i pismeno prijaviti putem
+obrasca Prijava teme zavrsnog rada.
+Ispunjen obrazac potpisan od strane mentora i studenta treba predati u studentsku referadu ili
+tajnistvo RRiF Visoke skole. Nakon prijave student moze pristupiti izradi zavrsnog rada.
+
+===== [rrif-upute-zavrsni | str. 4] =====
+3. IZRADA ZAVRSNOG RADA
+
+         Zavrsnim radom student treba dokazati :
+          - sposobnost primjene znanja stecenog tijekom studija u rjesavanju konkretnih
+
+teorijsko-prakticnih problema
+          - sposobnost primjene relevantnih tuih spoznaja, stavova, znanstvenih i strucnih
+
+cinjenica koje su objavljene u koristenoj literaturi
+          - sposobnost samostalnog koristenja aktualnom domaom i stranom literaturom u
+
+pismenoj obradi teme
+          - vjestinu pisanja strucnih radova
+
+        3.1. Struktura zavrsnog rada
+          Struktura zavrsnog rada sastoji se od obveznih (bitnih) i neobveznih elemenata:
+
+    a) NASLOV
+          Naslov se navodi na vanjskoj i prvoj unutarnjoj naslovnoj stranici3.
+          Naslov se navodi i na stranici na kojoj je sazetak i kljucne rijeci. Naslov preveden na
+
+engleski jezik navodi se na stranici na kojoj su sazetak i kljucne rijeci prevedene na engleski
+
+===== [rrif-upute-zavrsni | str. 5] =====
+zahvale ne treba biti vei od pola stranice.
+
+    c) SAZETAK, KLJUCNE RIJECI
+    d) Ukratko prikazati sadrzaj rada i koji su najvazniji ciljevi i/ili rezultati postignuti.
+
+         Velicina sazetka: 100-150 rijeci.
+          Kljucne rijeci: upisati 3-5 kljucnih rijeci
+          Sazetak i kljucne rijeci treba napisati i na engleskom jeziku (Summary, Key Words)
+
+    e) SADRZAJ
+          Sadrzaj zavrsnog rada detaljno oznacuje poglavlja po stranicama, ukljucujui popis
+
+literature i priloge. Sadrzaj se sastavlja kada je zavrsni rad gotov. Naslov ,,SADRZAJ" pise
+se velikim slovima centrirano na vrhu stranice. Zavrsni rad pise se u Microsoft Word
+programu te je potrebno koristiti automatsku izradu sadrzaja (kazala).
+Stranice na kojima je sadrzaj ne numeriraju se.
+
+    f) UVOD
+          U uvodu treba navesti problematiku koja se istrazuje, svrhu i ciljeve istrazivanja,
+
+ocjenu dosadasnjih istrazivanja, metode istrazivanja te kompoziciju rada.
+          Uvodom zapocinje numeriranje stranica (UVOD je stranica br. 1).
+
+                                                             4
+
+===== [rrif-upute-zavrsni | str. 6] =====
+g) IZLAGANJE TEME
+
+           Pri izlaganju teme treba detaljno razloziti i razvijati temu zavrsnog rada -
+objektivno, strucno i logicki povezujui djelovanja, dokaze i misli. Teoretski dio donosi
+dosadasnja poznata saznanja o problemu s teorijske tocke gledanja pri cemu se navode razne
+ve poznate teze, modeli, koncepti i metode. Zakljucak teorijskog dijela izlaganja osim
+kratke analize treba dati i smjer rjesavanja navedenog problema. Empirijski dio trazi
+primjeren metodoloski i istrazivacki pristup pri cemu se student moze sluziti intervjuima,
+anketama, studijama i eksperimentima koji su strukovno i znanstveno utemeljeni. Tada se
+pristupa interpretaciji navedenih podataka na nacin da se hipoteze koje su postavljene u
+uvodu dokazu kao pravilne ili ih se opovrgne. Pri izlaganju se preuzimaju i navode misli, teze
+i zakljucci drugih autora pri cemu treba voditi brigu o pravilnom citiranju4. Citirani navodi ne
+bi trebali biti predugi niti bi ih smjelo biti previse, no preporuca se koristiti sirok izbor
+literature i autora. Tekst izlaganja treba biti podijeljen na poglavlja i po potrebi na
+podpoglavlja koja trebaju biti logicki povezana - svako poglavlje treba se smisleno nastavljati
+na prijasnje i naravno, biti povezano sa naslovom poglavlja.
+
+    h) ZAKLJUCAK
+
+          Za razliku od ostalih elemenata rada, zakljucak mora biti potpuno autorski.
+Zakljucak je sistematicna i skraena sinteza spoznaja, misli, djelovanja i zakljucaka do kojih
+smo dosli pri izradi rada. U zakljucku je potrebno navesti da li smo dokazali hipotezu ili
+tvrdnju koja je u uvodu navedena kao pretpostavka, da li smo svojom analizom problematike
+dosli do novih spoznaja koje mogu biti koristene za rjesenje problema i utvrditi
+njihovu eventualnu korisnost u praksi5. Zakljucak treba biti razmjerno kratak, do tri stranice.
+
+    i) POPIS LITERATURE
+
+          Svaki podatak koji se unosi u zavrsni rad, svako znanje, teorija ili misao koju
+upotrijebimo ima svoga autora. Zbog javnog interesa za slobodni protok informacija svatko se
+ima pravo sluziti radovima drugih autora, no time sto je njihovo djelo ( ili dio njihovog djela )
+
+4 Vidi : Upute za citiranje literature Knjiznice RRiF Visoke skole za financijski menadzment
+5 Kovac, T. et al. (2008) Kako do diplome na magisterskem studiju. Celje: Visoka komercialna sola,
+str.12
+
+                                                             5
+
+===== [rrif-upute-zavrsni | str. 7] =====
+upotrijebljeno za pisanje novog rada daje im pravo navoda autorstva. Svaki navod drugog
+autora koji nije oznacen kao takav jest plagijat.6
+
+          Kod pisanja teksta misli drugih autora oznacavaju se kratkim biljeskama
+(fusnotama), a potpuni popis koristene literature navodi se u poglavlju Popis literature.
+
+          Pravila citiranja literature u tekstu i popisu literature opisana su u Uputama za
+citiranje literature i potrebno je pridrzavati ih se u potpunosti
+
+    j) POPIS PRILOGA ( ako postoje )
+
+        3.2.Izvori informacija
+
+3.2.1. Vrste izvora informacija
+
+           1. primarni izvori � opazanja, analize, zakljucci koje donosi sam student (autor
+            zavrsnog rada)
+           2. sekundarni izvori � knjige, clanci iz periodike, strucne enciklopedije, prirucnici
+           3. tercijalni izvori � zapisi o literaturi � bibliografije, recenzije, i sl.7
+          Najbolje je sluziti se svim navedenim izvorima informacija i podataka.
+
+3.2.2. Prikupljanje literature
+
+          O literaturi potrebnoj za izradu zavrsnog rada studentima se preporuca konzultirati s
+mentorom.
+
+          Literatura se moze traziti neposredno u knjiznicama ili putem online kataloga.
+Online katalog Knjiznice RRiF Visoke skole dostupan je na internet stranici RRiF Visoke
+skole. Takoer, na internet stranici mogu se pronai i neke baze podataka (Sluzbe i servisi 
+Knjiznica  E knjiznica  Baze podataka) putem kojih se mogu, klasificirano po
+podrucjima pretrazivati casopisi koji nude otvoren pristup svojim radovima.
+
+          Od ostalih knjiznica preporuka je pretraziti kataloge Nacionalne Sveucilisne
+Knjiznice (www.nsk.hr) i Knjiznice grada Zagreba (www.kgz.hr). NSK osim Lokanog
+kataloga nudi i pretrazivanje Skupnog kataloga koji sadrzi zapise grae iz kataloga NSK i
+
+6Ibid., str. 8
+7 Kovac, T. et al. (2008) Kako do diplome na magisterskem studiju. Celje: Visoka komercialna sola, str. 8
+
+===== [rrif-upute-zavrsni | str. 8] =====
+kataloga ostalih knjiznica koje su umrezene u knjiznicno-informacijski sustav CROLIST.
+          Katalozi se mogu pretrazivati po nekoliko kriterija � ovisno o tome da li je studentu
+
+poznat autor i/ili naslov neke odreene publikacije ili nema nikakvih saznanja o literaturi u
+kojoj moze pronai informacije potrebne za izradu zavrsnog rada. U tom slucaju literatura se
+moze pretrazivati po kljucnoj rijeci, predmetu i sl., a detaljnije upute mogu se dobiti na web
+stranicama knjiznica (Upute za pretrazivanje kataloga).
+
+Slika 1 : pretrazivac lokalnog kataloga NSK
+Izvor: NSK. URL: http://katalog.nsk.hr/F?RN=282735155 [pristupljeno 13.veljace 2012.]
+
+                                                             7
+
+===== [rrif-upute-zavrsni | str. 10] =====
+3.3.Istrazivanje
+          Empirijski dio izlaganja teme zahtjeva razlicite metode znanstvenog i strucnog
+
+istrazivanja kao sto su prakticni rad, ankete, intervjui, proucavanje literature itd. Osnovne
+znacajke svih metoda su objektivnost, pouzdanost, preciznost, sustavnost i openitost. Prema
+Zeleniki8 objektivnost je bitna znacajka znanstvenih metoda. Pretpostavlja nepristran, stvaran
+i neutralan odnos prema odreenoj pojavi, predmetu ili objektu koji postoji neovisno o
+subjektima, njegovim opazanjima i misljenjima, dok pouzdanost znaci da svaki stav i sud
+moraju biti dovoljno obrazlozeni i argumentima potkrijepljeni.
+
+          Za iscrpnije informacije o metodologiji i metodama znanstvenog i strucnog
+istrazivanja preporucaju se knjige Metodologija i tehnologija izrade znanstvenog i strucnog
+djela9 i Temelji znanstveno istrazivackog rada10.
+
+        3.4. Oblikovanje zavrsnog rada
+          Zavrsni rad pise se u Microsoft Word Windows programu. Opseg rada je najmanje
+
+===== [rrif-upute-zavrsni | str. 11] =====
+RIJECI
+
+UVOD               TEKST                 ZAKLJUCAK    POPIS PRILOGA
+                1  ZAVRSNOG                           (ako postoje)
+                   RADA
+                   po poglavljima
+
+                                   2...
+
+3.4.3. Font teksta
+
+          Font teksta treba biti Times New Roman, velicine 12. Velicina slova za pisanje
+fusnota treba biti 10. Naslovi glavnih poglavlja pisu se velicinom 14 podebljanim slovima (na
+prvom nivou). Naslovi podpoglavlja pisu se velicinom 12 malim, podebljanim slovima (na
+drugom nivou) , a naslovi unutar podpoglavlja malim podebljanim i kosim slovima (na treem
+nivou).
+
+glavni naslov poglavlja                               NASLOV � 14, velika slova, podebljano (1.)
+naslov podpoglavlja
+naslovi unutar podpoglavlja                           Naslov � 12, mala slova, podebljano (1.1.)
+                                                       Naslov � 12, mala slova, podebljano, koso (1.1.1.)
+
+Tekst koji oznacava slike, tablice i grafikone pise se podebljanim slovima.
+3.4.4. Margine
+
+===== [rrif-upute-zavrsni | str. 14] =====
+Graf 1 : Kretanje stanovnistva i ukupno zaposlenih, 1994-2002
+Izvor: Hrvatska gospodarska komora. URL:http://hgk.biznet.hr/hgk/tekst.php [pristupljeno
+28. sijecnja 2009.]
+3.4.10. Biljeske (fusnote), citiranje i popis literature
+
+          Biljeske ispod teksta (fusnote) treba pisati velicinom slova 10. Pravila citiranja
+literature u tekstu i popisu literature opisana su u Uputama za citiranje literature knjiznice
+RRiF Visoke skole za financijski menadzment i potrebno je pridrzavati ih se u potpunosti.
+
+3.4.11. Sadrzaj zavrsnog rada
+          Sadrzaj (kazalo) treba napraviti automatski, alatima worda (generirati iz teksta).
+
+Naslov ,,SADRZAJ" pise se velikim slovima centrirano na vrhu stranice.
+
+3.4.12. Uvez i broj primjeraka
+          Zavrsni rad student treba dostaviti :
+             - mentoru jedan uvezani primjerak, spiralni uvez
+             - clanovima povjerenstva po jedan primjerak, spiralni uvez
+             - u knjiznicu ili tajnistvo RRiF Visoke skole jedan primjerak, tvrdo ukoricen i
+
+===== [rrif-upute-zavrsni | str. 17] =====
+5. Po zavrsetku izrade, koncept rada predaje se mentoru na uvid (student je obvezan
+
+           postupati prema uputama i primjedbama mentora. Ako student nije postupio prema
+           uputama i primjedbama mentora, rad mu se vraa na dopunu)
+      6. Po primitku koncepta zavrsnog rada na pregled, mentor je obvezan pregledati rad i
+           vratiti ga studentu s primjedbama najkasnije u roku od 30 dana
+      7. Student dostavlja konacnu verziju zavrsnog rada mentoru
+      8. Nakon sto mentor prihvati konacnu verziju zavrsnog rada student ispunjava obrazac
+           Potvrda o prihvaanju zavrsnog rada, te je potpisanu od strane mentora dostavlja u
+           referadu/tajnistvo RRiF VS
+      9. Student u tajnistvo dostavlja konacnu verziju zavrsnog rada, i to:
+           - tri rada u spiralnom uvezu (za mentora i clanove komisije)
+      10. Student treba vratiti svu posuenu literaturu u Knjiznicu RRiF VS, sto se ovjerava
+           pecatom knjiznice i potpisom knjiznicara u indeks.
+      11. Student je u obvezi potpisati obrazac Izjava o autenticnosti zavrsnog rada najkasnije
+           osam dana prije obrane zavrsnog rada i predati je u tajnistvo RRiF Visoke skole
+      12. Tajnistvo obavjestava studenta o datumu obrane i imenima clanova Povjerenstva
+      13. Tajnistvo obavjestava mentora i clanove Povjerenstva o datumu obrane
+      14. Student na obranu zavrsnog rada donosi ostale primjerke rada, i to:
+           - jedan uvezan (tvrdo ukoricen) primjerak rada (za Knjiznicu RRiF VS)
+           - CD sa zavrsnim radom u PDF obliku, u tvrdoj (plasticnoj) kutijici, oznacen po
+
+                pravilima za izradu zavrsnog rada (za arhivu RRiF VS)
+      15. Obrana zavrsnog rada
+
+===== [rrif-upute-zavrsni | str. 19] =====
+7. POPIS LITERATURE
+
+1. Zelenika, R. (2000) Metodologija i tehnologija izrade znanstvenog i strucnog djela.
+    IV. izdanje. Rijeka: Ekonomski fakultet u Rijeci.
+
+2. Kovac, T. et al. (2008) Kako do diplome na magisterskem studiju. Celje:Visoka
+    komercialna sola.
+
+3. Zugaj, M. , Dumici, K. , Dusak, V. (2006) Temelji znanstvenoistrazivackog
+    rada. Varazdin: Tiva.
+
+                                                        18

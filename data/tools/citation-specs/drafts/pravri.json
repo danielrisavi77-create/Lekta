@@ -1,0 +1,184 @@
+{
+  "facultyId": "pravri",
+  "styleToken": "pravri-fusnote",
+  "status": "draft",
+  "outcome": "custom-spec",
+  "label": "Pravne fusnote (sluzbene upute PRAVRI)",
+  "sourceId": "pravri-upute-radovi-2023",
+  "sourceLabel": "Upute za izradu studentskih pisanih radova (PRAVRI, rev. 2023)",
+  "verifiedAt": null,
+  "verifiedBy": null,
+  "verifiedHash": null,
+  "accessDate": true,
+  "authorFormat": {
+    "order": "family-first",
+    "initials": "none",
+    "separator": ", ",
+    "finalJoiner": null
+  },
+  "inText": {
+    "mode": "note-number",
+    "provenance": {
+      "kind": "rule-text",
+      "quoteRaw": "fusnota u kojim su ti izvori navedeni. Izvori u fusnotama pisu se jednako kao i u popisu",
+      "sourcePage": "str. 12",
+      "note": "Sustav navodenja literature koristenjem fusnota (poglavlje IV/V): u tekstu je eksponent broj fusnote, u fusnoti se izvor pise jednako kao u popisu literature uz dodan broj stranice na kraju (potvrdjeno primjerom Hartley, str. 13: '..., 2004., str. 78.'). Alat generira bibliografski (popis literature) oblik. Ponovljena navodenja (op. cit., ibid., loc. cit., poglavlja 5.2-5.6) su izvan dosega generatora."
+    }
+  },
+  "numbering": null,
+  "bibliography": {
+    "sort": "alphabetical"
+  },
+  "sourceTypes": [
+    {
+      "type": "knjiga",
+      "template": "{authors}, {title}[[, {volume}. izd.]], {place}, {publisher}, {year}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "place",
+        "publisher",
+        "year"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Petranovi, Anamari, Obligationes iuris romani: breviarum, Rijeka, Pravni fakultet Sveucilista,",
+        "sourcePage": "str. 18",
+        "note": "Poglavlje 6.1.1: autor (prezime, ime), naslov (podnaslov iza dvotocja), izdanje ako postoji, MJESTO pa nakladnik, godina; titule se ne pisu. Broj izdanja ide u polje volume ('N. izd.', potvrdjeno primjerom Pavisi '2. izd.', str. 20; Hartley u fusnoti ima '2. hrv. izd.', str. 13). Redoslijed mjesto-nakladnik je obrnut od zagrebackog Pravnog."
+      },
+      "example": {
+        "input": {
+          "type": "knjiga",
+          "authors": "Petranovi, Anamari",
+          "title": "Obligationes iuris romani: breviarum",
+          "place": "Rijeka",
+          "publisher": "Pravni fakultet Sveucilista",
+          "year": "2010"
+        },
+        "expected": "Petranovi, Anamari, Obligationes iuris romani: breviarum, Rijeka, Pravni fakultet Sveucilista, 2010."
+      }
+    },
+    {
+      "type": "clanak",
+      "template": "{authors}, {title}, {container}[[, vol. {volume}]][[, br. {issue}]]({year})[[, str. {pages}]]",
+      "requiredFields": [
+        "authors",
+        "title",
+        "container",
+        "volume",
+        "issue",
+        "year",
+        "pages"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Zuni Kovacevi, Natasa, Gadzo, Stjepan, Institut zakonskog poreznog jamstva nakon novele",
+        "sourcePage": "str. 20",
+        "note": "Poglavlje 6.2: 'bitni su podatci o autoru (prezime, ime ili inicijali imena), naslov rada, volumen, broj, godina te prva i zadnja stranica clanka'. Godina u zagradi odmah iza broja: 'vol. 34, br. 1(2013)'. Primjer u izvoru NEMA zavrsnu tocku iza raspona stranica; prenijeto doslovno."
+      },
+      "example": {
+        "input": {
+          "type": "clanak",
+          "authors": "Zuni Kovacevi, Natasa; Gadzo, Stjepan",
+          "title": "Institut zakonskog poreznog jamstva nakon novele Opeg poreznog zakona 2012: proboj pravne osobnosti trgovackih drustava u slucaju zloporabe prava",
+          "container": "Zbornik Pravnog fakulteta Sveucilista u Rijeci",
+          "volume": "34",
+          "issue": "1",
+          "year": "2013",
+          "pages": "393-416"
+        },
+        "expected": "Zuni Kovacevi, Natasa, Gadzo, Stjepan, Institut zakonskog poreznog jamstva nakon novele Opeg poreznog zakona 2012: proboj pravne osobnosti trgovackih drustava u slucaju zloporabe prava, Zbornik Pravnog fakulteta Sveucilista u Rijeci, vol. 34, br. 1(2013), str. 393-416"
+      }
+    },
+    {
+      "type": "poglavlje",
+      "template": "{authors}, {title}, u: {editor} (eds.), {container}, {place}, {publisher}, {year}.[[, str. {pages}.]]",
+      "requiredFields": [
+        "authors",
+        "title",
+        "editor",
+        "container",
+        "place",
+        "publisher",
+        "year"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Benacchio, Gian Antonio,Winkler, Sandra, The Europeanisation of Law : Imposition or Natural",
+        "sourcePage": "str. 20",
+        "note": "Poglavlje 6.2.1 (Clanak ili poglavlje u knjizi): autori, naslov poglavlja, 'u:' urednici s inicijalima i naznakom (eds.), naslov zbornika, mjesto, nakladnik, godina, str. raspon. Izvor u primjerima koristi englesko '(eds.)' odnosno '(ed.)' (Crni-Groti/Matulovi, str. 20); hrvatsko '(ur.)' nije potvrdjeno u ekstrakciji. Urednici se u polje editor upisuju doslovno ('Bodiroga-Vukobrat, N., Sander, G.G., Rodin, S.')."
+      },
+      "example": {
+        "input": {
+          "type": "poglavlje",
+          "authors": "Benacchio, Gian Antonio; Winkler, Sandra",
+          "title": "The Europeanisation of Law : Imposition or Natural Development of Legal Models",
+          "editor": "Bodiroga-Vukobrat, N., Sander, G.G., Rodin, S.",
+          "container": "Legal Culture in Transition : Supranational and International Law before National Courts",
+          "place": "Berlin",
+          "publisher": "Logos",
+          "year": "2013",
+          "pages": "61-73"
+        },
+        "expected": "Benacchio, Gian Antonio,Winkler, Sandra, The Europeanisation of Law : Imposition or Natural Development of Legal Models, u: Bodiroga-Vukobrat, N., Sander, G.G., Rodin, S. (eds.), Legal Culture in Transition : Supranational and International Law before National Courts, Berlin, Logos, 2013., str. 61-73.",
+        "knownDiff": "Tipfeler u izvoru: nema razmaka iza zareza izmedu autora ('Antonio,Winkler'); render normalizira razmak ('Antonio, Winkler'). Ostatak retka je istovjetan."
+      }
+    },
+    {
+      "type": "mrezni",
+      "template": "{authors}, {title}[[, {container}]][[, {year}]], {url} ({accessed}).",
+      "requiredFields": [
+        "authors",
+        "title",
+        "url",
+        "accessed"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Isto se pravilo primjenjuje kod citiranje clanka u casopisu (podatci o autoru (prezime, ime ili",
+        "sourcePage": "str. 20",
+        "note": "Poglavlje 6.2.2 (Clanak s interneta) propisuje ista polja kao clanak 'uz dodatne podatke o mreznoj stranici i datumu pregleda casopisa', ali sam PRIMJER nije u ekstrahiranim stranicama. Predlozak je izveden: lanac zarezima u stilu izvora + URL i datum pregleda u zagradi; tocnu interpunkciju URL-a i datuma potvrditi pri verifikaciji protiv PDF-a."
+      },
+      "example": null
+    },
+    {
+      "type": "zavrsni",
+      "template": "{authors}, {title}[[, {place}]], {institution}, {year}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "institution",
+        "year"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "6.1.1. Kod citiranja knjige bitni su podatci o autoru (prezime, ime ili inicijali imena), naslov",
+        "sourcePage": "str. 18",
+        "note": "Upute ne obraduju citiranje zavrsnih/diplomskih radova kao izvora. Predlozak je izveden iz oblika za knjigu (6.1.1): nakladnik zamijenjen ustanovom, redoslijed mjesto-ustanova-godina zadrzan. Potvrditi ili oboriti pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "propis",
+      "template": "{title}, {container}[[, br. {issue}]][[, str. {pages}]].",
+      "requiredFields": [
+        "title",
+        "container"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Uredba Vijea (EZ) br. 2001/2003 od 27. studenog 2003 o nadleznosti, priznavanju i ovrsi",
+        "sourcePage": "str. 17",
+        "note": "Ekstrakcija sadrzi samo EU primjere propisa (5.9.2: naslov akta, sluzbeno glasilo 'SL L 338, 23.12.2003., str. 1.-29.'); poglavlja 5.9.1 i 6.3 (Hrvatski pravni propisi) nisu u ekstrahiranim stranicama. Predlozak je izveden iz strukture EU primjera (naslov, glasilo, broj, stranice) prilagodjene navodu iz Narodnih novina; potvrditi protiv PDF-a pri verifikaciji."
+      },
+      "example": null
+    }
+  ],
+  "contradictions": [
+    "Prior iz profila je bio 'pravo-fusnote' (zagrebacki Pravni fakultet); pravri upute propisuju vlastiti fusnotni oblik koji se razlikuje: puna imena autora umjesto inicijala, autori odvojeni zarezom umjesto tockom sa zarezom, mjesto prije nakladnika, a clanak ima 'vol. X, br. N(godina)'. Zato zaseban spec (pravri-fusnote), ne pin na pravo-fusnote.",
+    "Clanak primjer u izvoru zavrsava bez tocke ('str. 393-416'), dok knjiga i poglavlje zavrsavaju tockom; prenijeto doslovno, potvrditi pri verifikaciji je li to namjera ili tipfeler izvora.",
+    "Naznaka urednika: izvor u primjerima koristi englesko '(ed.)'/'(eds.)' nekonzistentno (dva urednika s '(ed.)' u Crni-Groti primjeru); hrvatska varijanta '(ur.)' nije dokazana u ekstrakciji.",
+    "Pravilo o kracenju popisa autora (et al. / i dr.) nije u ekstrahiranim stranicama; authorFormat namjerno bez et-al kracenja.",
+    "Primjeri za hrvatske propise (5.9.1, 6.3), clanak s interneta (6.2.2) i enciklopedijske odrednice nisu u ekstrahiranim stranicama; mrezni, zavrsni i propis su izvedeni (derived)."
+  ]
+}

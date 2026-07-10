@@ -82,8 +82,10 @@ async function main() {
     const spec = JSON.parse(fs.readFileSync(path.join(DRAFTS_DIR, `${fac}.json`), 'utf-8'));
     const errs = engine.validateCitationSpec(spec);
     const meta = sourceMeta(spec.sourceId);
+    // Multi-stil fakulteti imaju datoteke <facultyId>-<token>.json; grep ide po facultyId ekstrakciji.
+    const grepFac = spec.facultyId || fac;
     const lines = [];
-    let matches = 0, diffs = 0, noExample = 0;
+    let matches = 0, diffs = 0, declaredDiffs = 0, noExample = 0, grepFails = 0;
 
     lines.push(`# Citatni spec: ${fac} (outcome: ${spec.outcome}, status: ${spec.status})`);
     lines.push('');
@@ -97,20 +99,37 @@ async function main() {
       lines.push('');
     }
 
+    if (spec.outcome === 'style-pin') {
+      const ev = spec.evidence ?? {};
+      lines.push(`## STYLE-PIN dokaz  [${ev.sourcePage ?? 'str. ?'}] (${ev.kind ?? '?'})`);
+      lines.push(`Otvori PDF: \`${pdfLink(meta, ev.sourcePage)}\``);
+      lines.push('```');
+      lines.push(`PIN     : izvor propisuje stil "${spec.styleToken}" -> format ostaje obiteljski motor`);
+      lines.push(`QUOTE   : ${ev.quoteRaw ?? '(prazno)'}   [grep: ${ev.quoteRaw ? grepCheck(grepFac, ev.quoteRaw) : 'n/a'}]`);
+      if (ev.note) lines.push(`NAPOMENA: ${ev.note}`);
+      lines.push('```');
+      lines.push('');
+    }
+
     for (const st of spec.sourceTypes ?? []) {
       const p = st.provenance ?? {};
       lines.push(`## ${st.type}  [${p.sourcePage ?? 'str. ?'}] (${p.kind ?? '?'})`);
       lines.push(`Otvori PDF: \`${pdfLink(meta, p.sourcePage)}\``);
       lines.push('```');
       lines.push(`TEMPLATE: ${st.template}`);
-      lines.push(`QUOTE   : ${p.quoteRaw ?? '(prazno)'}   [grep: ${p.quoteRaw ? grepCheck(fac, p.quoteRaw) : 'n/a'}]`);
+      const gres = p.quoteRaw ? grepCheck(grepFac, p.quoteRaw) : 'n/a';
+      if (gres.startsWith('NIJE')) grepFails++;
+      lines.push(`QUOTE   : ${p.quoteRaw ?? "(prazno)"}   [grep: ${gres}]`);
       if (st.example && st.example.input) {
         const res = engine.formatFromSpec(spec, st.example.input);
-        const verdict = norm(res.citation) === norm(st.example.expected) ? 'MATCH' : 'DIFF';
-        if (verdict === 'MATCH') matches++; else diffs++;
+        const same = norm(res.citation) === norm(st.example.expected);
+        const declared = String(st.example.knownDiff ?? '').trim();
+        const verdict = same ? 'MATCH' : (declared ? 'DIFF (deklariran)' : 'DIFF');
+        if (same) matches++; else if (declared) declaredDiffs++; else diffs++;
         lines.push(`IZVOR   : ${st.example.expected}`);
         lines.push(`RENDER  : ${res.citation}`);
-        lines.push(`VERDIKT : ${verdict}${verdict === 'MATCH' ? ' (uz dijakriticku normalizaciju)' : '  <-- USPOREDI ZNAK PO ZNAK'}`);
+        lines.push(`VERDIKT : ${verdict}${same ? ' (uz dijakriticku normalizaciju)' : '  <-- USPOREDI ZNAK PO ZNAK'}`);
+        if (!same && declared) lines.push(`DEKLARIRANO: ${declared}`);
       } else {
         noExample++;
         lines.push('IZVOR   : (nema worked-examplea; provjeri template rucno protiv pravila u PDF-u)');
@@ -128,7 +147,7 @@ async function main() {
       lines.push(`TEMPLATE : ${spec.inText.template}   /  s pages: ${spec.inText.withPagesTemplate ?? '(nema)'}`);
       lines.push(`RENDER   : ${demo.inText}   /  ${demoP.inText}`);
       if (spec.inText.provenance) {
-        lines.push(`QUOTE    : ${spec.inText.provenance.quoteRaw}   [grep: ${grepCheck(fac, spec.inText.provenance.quoteRaw)}]`);
+        lines.push(`QUOTE    : ${spec.inText.provenance.quoteRaw}   [grep: ${grepCheck(grepFac, spec.inText.provenance.quoteRaw)}]`);
         if (spec.inText.provenance.note) lines.push(`NAPOMENA : ${spec.inText.provenance.note}`);
       }
       lines.push('```');
@@ -150,21 +169,31 @@ async function main() {
     lines.push('');
 
     fs.writeFileSync(path.join(OUT_DIR, `${fac}.md`), lines.join('\n'), 'utf-8');
-    indexRows.push({ fac, outcome: spec.outcome, matches, diffs, noExample, schemaErrs: errs.length });
-    console.log(`[dossier] ${fac}: ${matches} MATCH, ${diffs} DIFF, ${noExample} bez examplea, ${errs.length} shema-gresaka`);
+    indexRows.push({ fac, outcome: spec.outcome, matches, diffs, declaredDiffs, noExample, schemaErrs: errs.length, grepFails });
+    const warn = (diffs || errs.length || grepFails) ? '  <-- PROVJERI' : '';
+    console.log(`[dossier] ${fac}: ${matches} MATCH, ${diffs} DIFF(nedeklariran), ${declaredDiffs} DIFF(dekl), ${noExample} bez examplea, ${errs.length} shema, ${grepFails} grep-fail${warn}`);
   }
 
+  // Nedeklariran DIFF, shema-greska ili promasen grep = blokira approve; deklariran DIFF je ocekivan.
+  const blockers = indexRows.filter((r) => r.diffs || r.schemaErrs || r.grepFails);
   const idx = [
     '# Citatni specovi: verifikacijski dosjei', '',
-    '| fakultet | outcome | MATCH | DIFF | bez examplea | shema-greske |',
-    '|---|---|---|---|---|---|',
-    ...indexRows.map((r) => `| [${r.fac}](${r.fac}.md) | ${r.outcome} | ${r.matches} | ${r.diffs} | ${r.noExample} | ${r.schemaErrs} |`),
+    'Legenda: **DIFF!** = nedeklariran mismatch (blokira approve, popravi ili dodaj knownDiff); ',
+    'DIFF(dekl) = deklariran razlog (ocekivan, npr. tipfeler/artefakt izvora); grep! = quoteRaw nije nadjen u ekstrakciji (blokira).',
+    '',
+    '| fakultet | outcome | MATCH | DIFF! | DIFF(dekl) | bez ex. | shema! | grep! |',
+    '|---|---|---|---|---|---|---|---|',
+    ...indexRows.map((r) => `| [${r.fac}](${r.fac}.md) | ${r.outcome} | ${r.matches} | ${r.diffs || ''} | ${r.declaredDiffs || ''} | ${r.noExample} | ${r.schemaErrs || ''} | ${r.grepFails || ''} |`),
+    '',
+    blockers.length
+      ? `BLOKIRA APPROVE (${blockers.length}): ${blockers.map((r) => r.fac).join(', ')} - rijesi prije verifikacije.`
+      : 'Nijedan draft nema nedeklariran DIFF, shema-gresku ni promasen grep. Svi su spremni za ljudski pregled.',
     '',
     `Verificirano do sada: ${fs.existsSync(VERIFIED_DIR) ? fs.readdirSync(VERIFIED_DIR).filter((f) => f.endsWith('.json')).length : 0} spec(ova) u verified/.`,
     '',
   ];
   fs.writeFileSync(path.join(OUT_DIR, 'INDEX.md'), idx.join('\n'), 'utf-8');
-  console.log(`[dossier] INDEX.md: ${indexRows.length} dosjea.`);
+  console.log(`[dossier] INDEX.md: ${indexRows.length} dosjea, ${blockers.length} blokira approve.`);
 }
 
 main().catch((e) => { console.error('[dossier] GRESKA:', e); process.exit(1); });

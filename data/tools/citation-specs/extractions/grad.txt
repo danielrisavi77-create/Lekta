@@ -1,0 +1,126 @@
+===== [grad-predlozak-2024 | str. 1] =====
+SAŽETAK PAGEREF _Toc167280098 \h ii
+SUMMARY PAGEREF _Toc167280099 \h iii
+SADRŽAJ PAGEREF _Toc167280100 \h iv
+1.UVOD PAGEREF _Toc167280101 \h 1
+2.METODE I TEHNIKE RADA PAGEREF _Toc167280102 \h 2
+3.RAZRADA TEME PAGEREF _Toc167280103 \h 3
+3.1.Poglavlje druge razine PAGEREF _Toc167280104 \h 3
+3.1.1.Poglavlje treće razine PAGEREF _Toc167280105 \h 3
+3.1.1.1.Poglavlje četvrte razine PAGEREF _Toc167280106 \h 3
+4.TEHNIČKE UPUTE PAGEREF _Toc167280107 \h 4
+4.1.Upute za oblikovanje izgleda rada PAGEREF _Toc167280108 \h 4
+5.ZAKLJUČAK PAGEREF _Toc167280109 \h 9
+POPIS LITERATURE PAGEREF _Toc167280110 \h 10
+POPIS SLIKA PAGEREF _Toc167280111 \h 11
+POPIS TABLICA PAGEREF _Toc167280112 \h 12
+PRILOZI (NEOBAVEZNO) PAGEREF _Toc167280113 \h 13
+PRILOG B PAGEREF _Toc167280114 \h 14
+
+
+UVOD
+Načelna napomena o strukturi rada jest da se nazivi i struktura poglavlja obavezno definiraju u dogovoru s mentorom. Sadržajna preporuka je da u uvodu treba opisati što je tema završnog/diplomskog rada, zašto je tema značajna te koja je motivacija studenta/studentice za odabir teme.
+
+===== [grad-predlozak-2024 | str. 1] =====
+Poglavlje treće razine
+Tekst poglavlja treće razine.
+Poglavlje četvrte razine
+Tekst poglavlja četvrte razine.
+Nabrajanja.
+Nabrajanja.
+Nabrajanja.
+
+
+
+
+TEHNIČKE UPUTE
+Tehničke upute u nastavku opisuju način tehničkog oblikovanja rada i navođenja literature.
+Upute za oblikovanje izgleda rada
+Postavke stranice: 
+Font (tip pisma): obavezna potpora svih hrvatskih znakova – Titillium
+Veličina pisma: 12 tipografskih točaka
+Prored: 1,15 redak
+Veličina i oblik papira je A4
+Lijeva i desna margina: 2,5 cm
+Gornja i donja margina: 2,5 cm
+Naslovnice imaju drugačije margine! 
+Naslovne stranice rada se ne numeriraju! 
+Nakon naslovnih stranica, sve sljedeće stranice do 1. poglavlja se numeriraju rimskim brojevima, počevši od i.
+Od 1. poglavlja nadalje, stranice se numeriraju arapskim brojevima.
+
+===== [grad-predlozak-2024 | str. 1] =====
+u naslovima četvrte razine „3.1.1.1. Poglavlje četvrte razine“ koristite se fontom Titillium 12 pt, , s proredom 1,5 te razmakom 12 pt prije i razmakom 12 pt poslije odlomka;
+ostalo značajno isticanje cjelina rada može biti istaknuto podebljanim i kurziv slovima, korištenjem fonta Titillium 12 pt.
+Ilustracije (tablice i slike)
+Sve tablice i slike (grafikoni, fotografije, crteži, sheme, dijagrami, histogrami, karte...) trebaju imati odgovarajući naslov i biti numerirane. 
+Brojevi i naslovi tablica nalaze se uvijek iznad tablica. 
+Brojevi i naslovi slika nalaze se uvijek ispod slika. 
+Tablice i slike numerirajte redom pojavljivanja u tekstu.
+Za tekst u tablicama i slikama koristite font Titillium i to minimalno 9 pt.
+Za nazive slika koristite iste postavke fonta kao i za tekst, ali stavite naziv slike u centrirani položaj.
+Ispred same slike umetnite jedan prazan redak (osim ako je slika pozicionirana na početku stranice).
+Nakon naziva slike ostavite jedan redak prazan (osim ako je naziv slike zadnji redak na stranici).
+Kod prijeloma stranice treba obratiti posebnu pozornost da naziv slike, izvor i sama slika moraju biti na istoj stranici.
+Ako ilustracija nije izvoran doprinos autora obavezno je navođenje izvora (ako je ilustracija već objavljena), odnosno autora (ako ilustracija još nije objavljena) od kojeg je preuzeta. Izvor se navodi neposredno ispod ilustracije.
+Ako je ilustracija reprodukcija umjetničkog djela, navodi se autor (ako je poznat), naslov te ostali nužni podaci relevantni za pojedine umjetničke vrste.
+Opće pravilo je da se u svim pisanim radovima uvijek jasno mora odvojiti tuđi tekst, tuđe spoznaje i tuđi podaci od autorova teksta, njegovih zaključaka, spoznaja, ideja, podataka i sl. Od drugih se autora mogu preuzeti manji dijelovi teksta, ali se to uvijek mora označiti na jasan i uobičajen način. 
+Dozvoljeno je napraviti vlastitu preradu slika, grafikona ili tablica na način da se zadrži isti smisao sadržaja, ali promijeni izgled. I u takvim se slučajevima obavezno u nazivu navodi referenca izvornog djela.
+Dozvoljeno je preuzeti samo jednu sliku, grafikon ili tablicu u izvornom obliku iz istog izvora. Za doslovno preuzimanje većeg dijela sadržaja potrebno je ishoditi dozvolu nositelja autorskih prava. 
+Više o etičkom kodeksu i plagiranju možete pročitati u literaturi [1].
+Primjer označavanja slike možete vidjeti u nastavku.
+
+
+Slika  SEQ Slika \* ARABIC 1.: Naziv slike (Izvor: [2])
+
+Za nazive tablica koristite iste postavke fonta kao i za tekst, ali stavite naziv tablice u centrirani položaj.
+Prije naziva tablice umetnite jedan redak prazan (osim ako je naziv tablice prvi redak na stranici).
+Nakon same tablice umetnite jedan prazan redak (osim ako je tablica pozicionirana na kraju stranice).
+Kod prijeloma stranice treba obratiti posebnu pozornost da naziv tablice, izvor i sama tablica moraju biti na istoj stranici;.
+Ako je tablica preuzeta iz drugog izvora, nakon navođenja naziva tablice potrebno je navesti izvor, na isti način kako je opisano kod slika.
+Primjer označavanja tablice možete vidjeti u nastavku.
+
+Tablica  SEQ Tablica \* ARABIC 1.: Naziv tablice (Izvor: [x])
+
+===== [grad-predlozak-2024 | str. 1] =====
+Iza nje slijedi naslovnica na engleskom jeziku.
+Naslovne stranice s informacijama o mentoru/komentorima
+Obrazac 3 (s potpisom mentora)
+Obrazac 5 (s potpisom studenta)
+Obrazac 6 (s potpisom studenta)
+Zahvale (neobavezno).
+Sažetak na hrvatskom i engleskom jeziku
+Sažetak mora sadržavati maksimalno 200 riječi, sadržavati ključne riječi i omogućiti čitatelju razumijevanje cilja rada, metode, rezultate te zaključke.
+Ključne riječi na hrvatskom i engleskom jeziku
+Sadržaj
+Tekst rada (počevši s Uvodom)
+Zaključak
+Popis literature
+Navode se svi radovi koji su u radu citirani, kao i oni na koje se autor poziva. Jednako tako, u popisu ne smiju biti radovi koji nisu citirani, niti oni na koje se u radu ne upućuje.
+Uz svaku preuzetu tvrdnju potrebno je navesti njezin izvor, tj. referencu. Reference se u tekstu navode tako da se uz citirani tekst navede izvor, sukladno načinu propisanom odabranim stilom.
+Više o navođenju literature u tekstu možete pročitati u literaturi [1].
+Prilozi (neobavezno).
+Ukoliko se pri izradi rada koriste određeni prilozi (primjerice objavljeni radovi, određene ankete, obrasci i sl.), njih treba dodati na kraju rada. Mogu se označiti PRILOG A, PRILOG B… ili PRILOG 1, PRILOG 2...
+Korice kod tvrdog uveza 
+Hrbat: ime autoragodina obranevrsta rada (završni ispit/diplomski rad)
+Lijeva i desna margina: 3,0 cm
+Gornja i donja margina: 3,0 cm
+
+
+ZAKLJUČAK
+U zaključku treba sažeto rezimirati najvažnije rezultate razrade teme rada. Potrebno je sažeto opisati što je predmet rada, koje su metode, tehnike, programski alati ili aplikacije korištene u razradi rada te koje su pretpostavke dokazane, a koje opovrgnute. Sadržajno, ono što se u uvodu rada najavljuje i kasnije je obuhvaćeno u samom radu, moralo bi biti opisano u zaključnom dijelu kroz rezultate rada.
+
+
+POPIS LITERATURE
+Popis literature treba izraditi u skladu s odabranim stilom navođenja prema [1].
+[1]Cerić, A., Ivić, I: Upute za pisanje i obranu studentskih radova, Sveučilište u Zagrebu, Građevinski fakultet, 2023.
+[2]Hao, S.: I-35W Bridge Collapse, Journal of Bridge Engineering, ASCE, Vol. 15, 5, 608–614, 2010.
+[x]xxxx
+
+
+POPIS SLIKA
+ TOC \h \z \c "Slika" Slika 1: Naziv slike (Izvor: [2]) PAGEREF _Toc152324831 \h 6
+
+
+
+POPIS TABLICA
+ TOC \h \z \c "Tablica" Tablica 1: Naziv tablice (Izvor: [x]) PAGEREF _Toc152324823 \h 6

@@ -1,14 +1,14 @@
 {
   "facultyId": "pravo",
   "styleToken": "pravo-fusnote",
-  "status": "draft",
+  "status": "verified",
   "outcome": "custom-spec",
   "label": "Pravni fakultet: pravne fusnote (sluzbene Upute)",
   "sourceId": "pravo-upute-oblikovanje-2024",
   "sourceLabel": "Upute za oblikovanje i uredenje teksta i navodenje izvora (Pravni fakultet u Zagrebu)",
-  "verifiedAt": null,
-  "verifiedBy": null,
-  "verifiedHash": null,
+  "verifiedAt": "2026-07-09",
+  "verifiedBy": "Daniel Risavi",
+  "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
   "accessDate": true,
   "authorFormat": {
     "order": "family-first",
@@ -30,12 +30,20 @@
     }
   },
   "numbering": null,
-  "bibliography": { "sort": "alphabetical" },
+  "bibliography": {
+    "sort": "alphabetical"
+  },
   "sourceTypes": [
     {
       "type": "knjiga",
       "template": "{authors}, {title}[[, {volume}. izdanje]], {publisher}, {place}, {year}.",
-      "requiredFields": ["authors", "title", "publisher", "place", "year"],
+      "requiredFields": [
+        "authors",
+        "title",
+        "publisher",
+        "place",
+        "year"
+      ],
       "provenance": {
         "kind": "worked-example",
         "quoteRaw": "Horvat, M.; Petrak, M., Rimsko pravo, 17. izdanje, Pravni fakultet Sveucilista u Zagrebu,",
@@ -58,7 +66,13 @@
     {
       "type": "clanak",
       "template": "{authors}, {title}, {container}[[, vol. {volume}]][[, br. {issue}]], {year}.[[, str. {pages}.]]",
-      "requiredFields": ["authors", "title", "container", "year", "pages"],
+      "requiredFields": [
+        "authors",
+        "title",
+        "container",
+        "year",
+        "pages"
+      ],
       "provenance": {
         "kind": "worked-example",
         "quoteRaw": "Apostolova Marsavelski, M., O problemu porijekla rimske hipoteke, Zbornik Pravnog fakulteta",
@@ -82,7 +96,15 @@
     {
       "type": "poglavlje",
       "template": "{authors}, {title}, u: {editor} (ur.), {container}, {publisher}, {place}, {year}.[[, str. {pages}.]]",
-      "requiredFields": ["authors", "title", "editor", "container", "publisher", "place", "year"],
+      "requiredFields": [
+        "authors",
+        "title",
+        "editor",
+        "container",
+        "publisher",
+        "place",
+        "year"
+      ],
       "provenance": {
         "kind": "worked-example",
         "quoteRaw": "Petrak, M., The Byzantine Emperor in Medieval Dalmatian Exultets, u: Slootjes, D.;",
@@ -107,7 +129,12 @@
     {
       "type": "mrezni",
       "template": "{authors}, {title}[[, {container}]][[, {year}.]], dostupno na: {url} ({accessed}).",
-      "requiredFields": ["authors", "title", "url", "accessed"],
+      "requiredFields": [
+        "authors",
+        "title",
+        "url",
+        "accessed"
+      ],
       "provenance": {
         "kind": "worked-example",
         "quoteRaw": "Primjer: Koske, I.; Naru, F.; Beiter, P.; Wanner, I., Regulatory Management Practices in OECD",
@@ -130,7 +157,11 @@
     {
       "type": "propis",
       "template": "{title}[[ (dalje u tekstu: {institution})]], {container}[[, br. {issue}]].",
-      "requiredFields": ["title", "container", "issue"],
+      "requiredFields": [
+        "title",
+        "container",
+        "issue"
+      ],
       "provenance": {
         "kind": "worked-example",
         "quoteRaw": "Primjer za navoenje zakona u biljesci: Zakon o obveznim odnosima (dalje u tekstu: ZOO),",
@@ -151,7 +182,12 @@
     {
       "type": "zavrsni",
       "template": "{authors}, {title}, {institution}, {place}, {year}.",
-      "requiredFields": ["authors", "title", "institution", "year"],
+      "requiredFields": [
+        "authors",
+        "title",
+        "institution",
+        "year"
+      ],
       "provenance": {
         "kind": "derived",
         "quoteRaw": "Prezime autora, prvo slovo imena autora s tockom, naslov djela (u kurzivu), broj izdanja (ako",
