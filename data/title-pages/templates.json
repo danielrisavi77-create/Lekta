@@ -11,9 +11,9 @@
         "adu:33",
         "adu:39"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -79,14 +79,14 @@
       "sourceNote": "DR.08 Upute (2026) sadrze graficki predlozak naslovnice na hrvatskom jeziku sa svim marginama 3,0 cm.",
       "quote": "Naslovnica na hrvatskom jeziku: Naziv sastavnice (Arial 16), Ime i prezime (Arial 16), NASLOV RADA (Arial 22, Bold), DOKTORSKI RAD (Arial 16), Mentor(i): (Arial 16), Zagreb, godina (Arial 14); sve margine 3,0 cm.",
       "sourcePage": 5,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "agr:211",
         "agr:212",
         "agr:76"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -182,14 +182,14 @@
       "sourceNote": "Upute za izradu zavrsnog rada (2017) propisuju sadrzaj unutarnje naslovne stranice; tocan graficki raspored je u Predlosku - Zavrsni rad (docx) koji je sastavni dio Uputa.",
       "quote": "unutarnja naslovna stranica: studij, ime i prezime studenta, naslov rada, oznaka ZR-a, ime i prezime mentora",
       "sourcePage": 11,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "agr:3600",
         "agr:4300",
         "agr:4520"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -286,14 +286,14 @@
       "sourceNote": "Upute za izradu diplomskog rada (2019) propisuju sadrzaj unutarnje naslovne stranice; tocan graficki raspored je u AFZ Predlosku (docx) koji je sastavni dio Uputa.",
       "quote": "unutarnja naslovna stranica: studij, ime i prezime studenta, naslov rada, oznaka Diplomski rad, ime i prezime mentora",
       "sourcePage": 16,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "agr:2075",
         "agr:2678",
         "agr:2900"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -388,9 +388,9 @@
         "alu:895",
         "alu:899"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -462,9 +462,9 @@
         "alu:209",
         "alu:228"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -558,9 +558,9 @@
         "bak:89",
         "bak:91"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -629,9 +629,9 @@
         "bioos:131",
         "bioos:132"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -716,9 +716,9 @@
         "bioos:8",
         "bioos:9"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -793,14 +793,14 @@
       "sourceNote": "Prilog 6.1 Uputa (str. 18) graficki prikazuje ovitak i prve unutarnje listove zavrsnog rada.",
       "quote": "6.1. Izgled ovitka i prva 4 unutarnja lista zavrsnog rada",
       "sourcePage": 18,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "biotechri:231",
         "biotechri:263",
         "biotechri:266"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -911,14 +911,14 @@
       "sourceNote": "Prilog 6.2 Uputa (str. 19) graficki prikazuje ovitak i prve unutarnje listove diplomskog rada.",
       "quote": "6.2. Izgled ovitka i prva 4 unutarnja lista diplomskog rada",
       "sourcePage": 19,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "biotechri:235",
         "biotechri:246",
         "biotechri:247"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -1023,9 +1023,9 @@
       "sourceNote": "Primjer 3 Uputa uz Pravilnik (2023) propisuje vanjsku naslovnicu zavrsnog rada; oznaka ZAVRŠNI RAD dolazi prije naslova (teme).",
       "quote": "Primjer 3: Vanjska stranica naslovnice završnog rada ... ZAVRŠNI RAD (Times New Roman 18 Pt Bold- Center)",
       "sourcePage": 28,
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -1102,9 +1102,9 @@
       "sourceNote": "Primjer 5 Uputa uz Pravilnik (2023) propisuje vanjsku naslovnicu diplomskog rada; oznaka DIPLOMSKI RAD dolazi prije naslova (teme).",
       "quote": "Primjer 5: Vanjska stranica naslovnice specijalističkog diplomskog rada ... DIPLOMSKI RAD (Times New Roman 18 Pt Bold- Center)",
       "sourcePage": 30,
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -1181,9 +1181,9 @@
       "sourceNote": "Primjer 1 Uputa uz Pravilnik (2023) propisuje vanjsku naslovnicu seminarskog rada; sve u Times New Roman bold centrirano.",
       "quote": "Primjer 1: Naslovna (vanjska) stranica seminarskog rada ... EFFECTUS veleučilište (Times New Roman 14 Pt Bold- Center)",
       "sourcePage": 26,
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -1260,9 +1260,9 @@
       "sourceNote": "Upute (travanj 2023) sadrže predložak naslovnice doktorskog rada s vlastitom, krupnijom tipografijom; zapis prati drugu stranicu naslovnice.",
       "quote": "Izgled doktorskog rada i redoslijed stranica prikazan je u nastavku.",
       "sourcePage": null,
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -1362,14 +1362,14 @@
       "sourceNote": "Upute (travanj 2023) propisuju tri stranice naslovnice završnog rada; predložak modelira drugu (unutarnju) stranicu s mentorom.",
       "quote": "Predložak za izradu naslovnica, sažetka i sadržaja završnog rada dan je u nastavku.",
       "sourcePage": null,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "efos:3393",
         "efos:3408",
         "efos:3605"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -1479,13 +1479,13 @@
       "sourceNote": "Upute (travanj 2023) sadrže nacrtani predložak naslovnice diplomskog rada; ovaj zapis prati drugu stranicu naslovnice s mentorom.",
       "quote": "Dijelovi koje diplomski rad OBVEZNO treba sadržavati: naslovnica na jeziku kojim je rad napisan (prva i druga stranica naslovnice), naslovnica na engleskom jeziku (treća stranica naslovnice)...",
       "sourcePage": null,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "efos:3457",
         "efos:3640"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -1595,9 +1595,9 @@
       "sourceNote": "Upute za pisanje studentskih radova (travanj 2023) sadrže nacrtani predložak naslovnice seminarskog rada.",
       "quote": "Na naslovnoj stranici rada treba navesti naziv sveučilišta, fakulteta i studija, ime i prezime studenta, naslov rada, naziv vrste rada ispod naslova, titulu, ime i prezime mentora i komentora (ako ga ima) te mjesto i godinu nastanka rada.",
       "sourcePage": null,
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -1693,9 +1693,9 @@
       "sourceNote": "Upute (travanj 2023) sadrže predložak naslovnice specijalističkog rada; zapis prati drugu stranicu naslovnice s mentorom.",
       "quote": "Izgled stranice uveza, prve stranice, druge stranice i treće stranice prikazani su u nastavku.",
       "sourcePage": null,
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -1793,9 +1793,9 @@
       "sourceNote": "Prilog 3 Pravilnika o zavrsnom radu propisuje predlozak naslovnice; polja Predmet i JMBAG dodaj rucno.",
       "quote": "Izgled naslovne stranice dan je u prilogu 3. ovog Pravilnika.",
       "sourcePage": 9,
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -1890,9 +1890,9 @@
       "sourceNote": "Prilog 4 Pravilnika o diplomskom radu propisuje predlozak naslovnice; uz nju je obvezna i zasebna korica (Prilog 3).",
       "quote": "Izgled korice i naslovne stranice dani su u Obrascima Prilogu 3. i 4. ovog Pravilnika.",
       "sourcePage": 10,
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -1987,7 +1987,7 @@
       "sourceNote": "Slika 1 Uputa za izradu studentskih radova (EFST, 2013) prikazuje predlozak naslovnice s propisanim fontovima.",
       "quote": "Svaki studentski rad mora imati naslovnicu koja se ne numerira, a koja ima sljedeće obvezne elemente",
       "sourcePage": 4,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "efst:111",
         "efst:119",
@@ -1997,7 +1997,7 @@
         "efst:95"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -2102,9 +2102,9 @@
         "efzg:2696",
         "efzg:4098"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -2173,9 +2173,9 @@
         "efzg:8840",
         "efzg:9590"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -2262,14 +2262,14 @@
       "sourceNote": "Upute (2003) propisuju sadržaj naslovnice; raspored prema Primjeru 3 na str. 9 Uputa.",
       "quote": "Naslovna stranica diplomskoga rada sadrži sljedeće podatke: ime i prezime autora, naslov rada, naznaka DIPLOMSKI RAD, naziv sveučilišta i naziv fakulteta, naziv kolegija iz kojega je diplomski rad izrađen, titulu, ime i prezime mentora, matični broj (broj indeksa) autora, mjesto i mjesec predaje rada.",
       "sourcePage": 10,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "efzg:8700",
         "efzg:8800",
         "efzg:9500"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "author",
@@ -2371,9 +2371,9 @@
       "sourceNote": "Upute (2003) propisuju sadržaj naslovnice; raspored prema Primjeru 1 na str. 7 Uputa.",
       "quote": "Naslovna stranica seminarskoga rada sadrži sljedeće podatke: ime i prezime autora, naslov rada, naznaku SEMINARSKI RAD, naziv sveučilišta i naziv fakulteta, naziv kolegija iz kojega je seminarski rad izrađen, titulu, ime i prezime mentora, matični broj (broj indeksa) autora, mjesto i mjesec predaje rada.",
       "sourcePage": 10,
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "author",
@@ -2443,13 +2443,13 @@
       "sourceNote": "Prilog 4 Uputa (2021) pokazuje predložak naslovne stranice; matični broj studenta upiši ručno.",
       "quote": "Naslovna stranica sveučilišnog specijalističkog rada treba sadržavati sljedeće informacije: naziv sveučilišta; naziv fakulteta; naziv studija; naslov rada; naslov rada na engleskom jeziku; vrsta rada; ime i prezime studenta; matični broj studenta; titula, ime i prezime mentora; mjesto, mjesec i godina završetka pisanja sveučilišnog specijalističkog rada.",
       "sourcePage": 18,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "efzg:2636",
         "efzg:2665"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -2580,9 +2580,9 @@
         "erf:211",
         "erf:212"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -2650,14 +2650,14 @@
       "sourceNote": "Upute za pisanje diplomskog rada propisuju sest elemenata prve stranice; tipografiju i verzal ne propisuju.",
       "quote": "Na prvoj stranici rada treba pisati: 1. naziv Sveučilišta 2. naziv Fakulteta 3. \"Diplomski rad\" 4. naslov rada 5. ime i prezime studenta 6. mjesto, mjesec i godina obrane",
       "sourcePage": 3,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "erf:1200",
         "erf:1400",
         "erf:1600"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -2734,14 +2734,14 @@
       "sourceNote": "Prilog 1 Uputa (2024) propisuje korice i naslovnu stranicu; tekst 14 pt, naslov podebljano malim tiskanim slovima.",
       "quote": "Na koricama završnog rada treba navesti naziv Sveučilišta, Fakulteta, ime i prezime studenta, naziv studija i modula, naslov rada, vrstu rada (Završni rad) te mjesto i godinu (Prilog 1). Naslovna stranica treba biti identična koricama.",
       "sourcePage": 14,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "pfos:124",
         "pfos:125",
         "pfos:126"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -2838,14 +2838,14 @@
       "sourceNote": "Prilog 1 Uputa (2024) propisuje korice i naslovnu stranicu; tekst 14 pt, naslov podebljano malim tiskanim slovima.",
       "quote": "Na koricama diplomskog rada treba navesti naziv Sveučilišta, Fakulteta, ime i prezime studenta, naziv studija i modula, naslov rada, vrstu rada (Diplomski rad) te mjesto i godinu (Prilog 1). Naslovna stranica treba biti identična koricama.",
       "sourcePage": 15,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "pfos:19",
         "pfos:20",
         "pfos:22"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -2945,9 +2945,9 @@
         "pharma:260",
         "pharma:261"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -3025,13 +3025,13 @@
       "sourceNote": "Uputa FBF-a iz 2014. propisuje sadržaj ovitka koji se ponavlja na naslovnici (drugom listu) specijalističkog rada.",
       "quote": "Na prednjoj stranici ovitka treba u gornjem dijelu, pri vrhu, pisati: SVEUČILIŠTE U ZAGREBU, FARMACEUTSKO-BIOKEMIJSKI FAKULTET. U sredini stranice treba pisati: Ime i prezime, NASLOV RADA, Specijalistički rad. Pri dnu stranice treba pisati: Mjesto, godina.",
       "sourcePage": 5,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "pharma:2300",
         "pharma:2900"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -3098,9 +3098,9 @@
         "fdmz:32",
         "fdmz:34"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -3194,9 +3194,9 @@
         "fer:5361",
         "fer:6579"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "author",
@@ -3254,9 +3254,9 @@
       "sourceNote": "Naslovna stranica ZEMRIS uputa za diplomski rad (2013) sluzi kao predlozak; broj rada (br. XXXX) upisi rucno.",
       "quote": "Iako je pripremljen u MS Word alatu (stoga se može koristiti i kao predložak), ista pravila vrijede i za druge alate.",
       "sourcePage": 1,
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -3336,14 +3336,14 @@
       "sourceNote": "Upute za izradu zavrsnog rada (2010) na str. 6 donose predlozak naslovnice (Sl. 3.1) s propisanim fontom, velicinama i marginama.",
       "quote": "Naslovnica završnog rada uređena prema predlošku navedenom na kraju Uputa. ... Sl. 3.1. Predložak za naslovnicu završnog rada",
       "sourcePage": 6,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "etfos:837",
         "etfos:838",
         "etfos:839"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -3453,14 +3453,14 @@
       "sourceNote": "Upute za izradu diplomskog rada na str. 4 donose predlozak prve stranice (ista stranica otisnuta i na korice) s propisanim fontom, velicinama i marginama.",
       "quote": "Tekst diplomskog rada treba uvezati i predati u tri primjerka, a na korice upisati tekst kao što je to prikazano na donjoj slici (pri tome koristiti isti font kao u diplomskom radu, veličine 14 do 18 pt).",
       "sourcePage": 4,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "etfos:136",
         "etfos:407",
         "etfos:469"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -3568,9 +3568,9 @@
         "unipu:8",
         "unipu:94"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -3639,9 +3639,9 @@
         "unipu:123",
         "unipu:130"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -3710,9 +3710,9 @@
         "ffos:2",
         "ffos:9"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -3807,14 +3807,14 @@
       "sourceNote": "Upute za izradu diplomskoga rada (FFOS) propisuju sadrzaj prve stranice i donose primjer naslovnice; velicine 14 i 16 pt su preporuka iz istih Uputa.",
       "quote": "Na prvoj stranici diplomskoga rada treba navesti naziv sveučilišta, fakulteta i puni naziv jednopredmetnog ili dvopredmetnog studija, ime i prezime studenta, naslov diplomskoga rada, naziv vrste rada ispod naslova (diplomski rad), titulu, ime i prezime mentora/komentora/sumentora te mjesto i godinu nastanka rada.",
       "sourcePage": null,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "ffos:102",
         "ffos:14",
         "ffos:5"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -3932,14 +3932,14 @@
       "sourceNote": "Clanak 10. Pravilnika o zavrsnom radu (2023) propisuje sadrzaj naslovne stranice; raspored i tipografija naslovnice nisu propisani.",
       "quote": "Naslovna stranica sadrži: Naziv sveučilišta (Sveučilište u Rijeci), Naziv fakulteta (Filozofski fakultet), Ime i prezime studenta, Naslov rada na jeziku na kojem se rad piše i na engleskom jeziku, Vrsta rada (Završni rad), Mjesto i godina izrade rada",
       "sourcePage": 3,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "ffri:10",
         "ffri:11",
         "ffri:8"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -4029,14 +4029,14 @@
       "sourceNote": "Clanak 13. Pravilnika o diplomskom radu (2023) propisuje sadrzaj naslovne stranice; raspored i tipografija naslovnice nisu propisani.",
       "quote": "Naslovna stranica sadrži: Naziv sveučilišta (Sveučilište u Rijeci), Naziv fakulteta (Filozofski fakultet), Ime i prezime studenta, Naslov rada na jeziku na kojem se rad piše i na engleskom jeziku, Vrsta rada (Diplomski rad), Mjesto i godina izrade rada",
       "sourcePage": 4,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "ffri:1",
         "ffri:12",
         "ffri:13"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -4141,9 +4141,9 @@
         "ffrz:116",
         "ffrz:117"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -4221,9 +4221,9 @@
       "sourceNote": "Upute 2021 daju predlozak naslovne stranice; margine naslovnice 3,0 cm propisane u postavkama stranice.",
       "quote": "Naslovna stranica mora sadržavati sljedeće elemente",
       "sourcePage": 3,
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -4308,14 +4308,14 @@
       "sourceNote": "Upute 2021 daju predlozak: naslovna stranica u radu je drugi list s nazivom studija i mentorom; margine naslovnice 3,0 cm.",
       "quote": "sadržaj isti kao i na koricama uključujući i popis mentora",
       "sourcePage": 4,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "ffrz:166",
         "ffrz:171",
         "ffrz:182"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -4421,9 +4421,9 @@
         "ffst:585",
         "ffst:640"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -4496,9 +4496,9 @@
         "ffst:240",
         "ffst:280"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -4578,9 +4578,9 @@
         "ffzg:4246",
         "ffzg:4252"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -4678,14 +4678,14 @@
       "sourceNote": "Predložak naslovne stranice iz Uputa Odsjeka za filozofiju (2019); drugi odsjeci FFZG imaju vlastite varijante rasporeda.",
       "quote": "NASLOV RADA (centrirano, velikim tiskanim slovima, podebljano, veličina 16) ... Zagreb, mjesec i godina obrane diplomskoga rada (centrirano, veličina 14) (Ne numerirati stranicu.)",
       "sourcePage": 2,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "ffzg:6500",
         "ffzg:7200",
         "ffzg:7500"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -4811,9 +4811,9 @@
         "gradst:57",
         "gradst:77"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -4893,9 +4893,9 @@
         "gradst:2",
         "gradst:3"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -4975,9 +4975,9 @@
         "hrstud:930",
         "hrstud:933"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "study",
@@ -5046,14 +5046,14 @@
       "sourceNote": "Upute za pisanje zavrsnoga i diplomskoga rada donose predlozak naslovnice zavrsnoga rada (Times New Roman 16, naslov 22 bold, rubovi 3,0 cm).",
       "quote": "Drugi list, druga pisana stranica unutar rada (sadržaj isti kao i na koricama, uz dodatak odsjeka te imena i potpisa mentora i sumentora).",
       "sourcePage": 6,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "hrstud:3000",
         "hrstud:3050",
         "hrstud:3080"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -5174,14 +5174,14 @@
       "sourceNote": "Upute za izradu i obranu diplomskoga rada 2025./2026. donose predlozak naslovnice (drugi list) s Times New Roman 16 i naslovom 22 bold; margine 3,0 cm prema predlosku prednje strane.",
       "quote": "Drugi list, druga pisana stranica unutar rada (sadržaj isti kao i na koricama, uz dodatak Odsjeka te imena i potpisa mentora i sumentora).",
       "sourcePage": 9,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "hrstud:2220",
         "hrstud:2340",
         "hrstud:2580"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -5301,9 +5301,9 @@
         "fizos:3",
         "fizos:4"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -5384,9 +5384,9 @@
       "sourceNote": "Članak 17. Pravilnika propisuje sadržaj naslovnice završnog rada; raspored i tipografija nisu propisani.",
       "quote": "naslovnice sljedećeg sadržaja: Sveučilište u Rijeci, Fakultet za fiziku, naziv studija/studijske grupe, ime i prezime kandidata, naslov rada, ime i prezime mentora, datum i mjesto",
       "sourcePage": 7,
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -5455,9 +5455,9 @@
         "fkit:1299",
         "fkit:1301"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -5528,14 +5528,14 @@
       "sourceNote": "Prilog Pravilnika FKIT (2023), tocka 1.3, propisuje sadrzaj prve stranice s okomitim pozicijama u mm; izmjene 2025 ne mijenjaju naslovnicu.",
       "quote": "1.3. Prva stranica sadrži sljedeće: SVEUČILIŠTE U ZAGREBU (25 mm), FAKULTET KEMIJSKOG INŽENJERSTVA I TEHNOLOGIJE (35 mm), SVEUČILIŠNI PRIJEDIPLOMSKI / DIPLOMSKI STUDIJ (40 mm) NAZIV STUDIJA, Ime i prezime (105 mm), NASLOV RADA (120 mm), ZAVRŠNI / DIPLOMSKI RAD (160 mm), Mentor (180 mm), Zagreb, mjesec i godina (265 mm)",
       "sourcePage": 7,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "fkit:2200",
         "fkit:2400",
         "fkit:2800"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -5647,14 +5647,14 @@
       "sourceNote": "Prilog Pravilnika FKIT (2023), tocka 1.3, propisuje sadrzaj prve stranice s okomitim pozicijama u mm; izmjene 2025 ne mijenjaju naslovnicu.",
       "quote": "1.3. Prva stranica sadrži sljedeće: SVEUČILIŠTE U ZAGREBU (25 mm), FAKULTET KEMIJSKOG INŽENJERSTVA I TEHNOLOGIJE (35 mm), SVEUČILIŠNI PRIJEDIPLOMSKI / DIPLOMSKI STUDIJ (40 mm) NAZIV STUDIJA, Ime i prezime (105 mm), NASLOV RADA (120 mm), ZAVRŠNI / DIPLOMSKI RAD (160 mm), Mentor (180 mm), Zagreb, mjesec i godina (265 mm)",
       "sourcePage": 7,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "fkit:1800",
         "fkit:2900",
         "fkit:3000"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -5766,14 +5766,14 @@
       "sourceNote": "Upute za zavrsni rad 2025, tocka 8.1 Naslovnica; tipografiju i tocan raspored propisuje zaseban Word Predlozak za zavrsni rad na stranici Fakulteta.",
       "quote": "Na unutarnjoj naslovnici rada (unutarnja stranica) naznacuje se (i dopunske informacije): naziv i sjediste sveucilista, naziv i sjediste fakulteta, naziv studija, smjer studija, naslov pisanog rada, vrsta pisanog rada (Zavrsni rad), kolegij, mentor, student, maticni broj, mjesto sjedista fakulteta, mjesec i godina izrade rada.",
       "sourcePage": 16,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "fthm:2218",
         "fthm:3099",
         "fthm:3467"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -5879,9 +5879,9 @@
       "sourceNote": "Upute za diplomski rad 2025, tocka 8.1 Naslovnica; tipografiju i tocan raspored propisuje zaseban Word Predlozak za diplomski rad na stranici Fakulteta.",
       "quote": "Na unutarnjoj naslovnici rada (unutarnja stranica) naznacuje se (i dopunske informacije): naziv i sjediste sveucilista, naziv i sjediste fakulteta, naziv studija, smjer studija, naslov pisanog rada, vrsta pisanog rada (Diplomski rad), kolegij, mentor, student, maticni broj, mjesto sjedista fakulteta, mjesec i godina izrade rada.",
       "sourcePage": 16,
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -5963,9 +5963,9 @@
         "foozos:4",
         "foozos:5"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -6045,9 +6045,9 @@
         "unipu:4",
         "unipu:7"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -6119,9 +6119,9 @@
         "unipu:24",
         "unipu:49"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -6195,14 +6195,14 @@
       "sourceNote": "Prilog 24 Uputa (2018) propisuje izgled potkorice zavrsnog rada; JMBAG dodaj rucno ispod imena studenta.",
       "quote": "Potkorice s podacima: naslov na hrvatskom i engleskom jeziku, ime i prezime mentora, ime i prezime kandidata, JMBAG, mjesto, mjesec i godina",
       "sourcePage": 51,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "fpz:2800",
         "fpz:3200",
         "fpz:3300"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -6315,13 +6315,13 @@
       "sourceNote": "Prilog 25 Uputa (2018) propisuje izgled potkorice diplomskog rada; JMBAG dodaj rucno ispod imena studenta.",
       "quote": "Potkorice s podacima: naslov na hrvatskom i engleskom jeziku, ime i prezime mentora, ime i prezime kandidata, JMBAG, mjesto, mjesec i godina",
       "sourcePage": 52,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "fpz:3000",
         "fpz:3100"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -6424,9 +6424,9 @@
         "fpzg:589",
         "fpzg:599"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -6496,9 +6496,9 @@
         "fpzg:2890",
         "fpzg:2930"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -6595,14 +6595,14 @@
       "sourceNote": "Slika 4 Uputa (str. 16) pokazuje predlozak unutarnje naslovnice diplomskog rada; vanjska naslovnica (Slika 3) umjesto bloka mentor i student ima ime studenta iznad naslova.",
       "quote": "Rad treba imati korice ili vanjsku naslovnicu (v. Sliku 3), pa potkorice ili unutarnju naslovnicu (v. Sliku 4).",
       "sourcePage": 16,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "fpzg:1930",
         "fpzg:2530",
         "fpzg:2770"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -6697,9 +6697,9 @@
       "sourceNote": "Slika 4 Uputa (str. 16) pokazuje predlozak unutarnje naslovnice zavrsnog specijalistickog rada; vanjska naslovnica (Slika 3) umjesto bloka mentor i student ima ime studenta iznad naslova.",
       "quote": "Rad treba imati korice ili vanjsku naslovnicu (v. Sliku 3), pa potkorice ili unutarnju naslovnicu (v. Sliku 4).",
       "sourcePage": 16,
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -6783,9 +6783,9 @@
         "unipu:475",
         "unipu:74"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -6858,9 +6858,9 @@
         "unipu:659",
         "unipu:660"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -6929,9 +6929,9 @@
         "fsb:5282",
         "fsb:5283"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -6994,9 +6994,9 @@
         "fsb:7960",
         "fsb:8440"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -7074,9 +7074,9 @@
         "fsb:7400",
         "fsb:8200"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -7154,9 +7154,9 @@
         "ftrr:38",
         "ftrr:6"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -7227,14 +7227,14 @@
       "sourceNote": "Poglavlje 2.3 Uputa (2022) tekstualno propisuje raspored naslovnice; drugi list ponavlja sadržaj na engleskom jeziku.",
       "quote": "Na prednjoj strani ovitka treba u gornjem dijelu, centrirano i velikim slovima pisati: SVEUČILIŠTE U RIJECI, FAKULTET ZDRAVSTVENIH STUDIJA, NAZIV STUDIJA. Na sredini naslovne stranice treba staviti naslov rada velikim tiskanim slovima, a ostalo malim tiskanim slovima.",
       "sourcePage": 6,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "fzsri:311",
         "fzsri:677",
         "fzsri:847"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -7329,14 +7329,14 @@
       "sourceNote": "Poglavlje 2.3 Uputa (2022) tekstualno propisuje raspored naslovnice; drugi list ponavlja sadržaj na engleskom jeziku.",
       "quote": "Na prednjoj strani ovitka treba u gornjem dijelu, centrirano i velikim slovima pisati: SVEUČILIŠTE U RIJECI, FAKULTET ZDRAVSTVENIH STUDIJA, NAZIV STUDIJA. Na sredini naslovne stranice treba staviti naslov rada velikim tiskanim slovima, a ostalo malim tiskanim slovima.",
       "sourcePage": 6,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "fzsri:284",
         "fzsri:600",
         "fzsri:623"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -7431,14 +7431,14 @@
       "sourceNote": "Opci naputak za pisanje ocjenskih radova propisuje sadrzaj naslovnice; primjer je u prilogu Naputka, tipografija nije propisana.",
       "quote": "Naslovna stranica: naziv Sveučilišta i Fakulteta, ime autora, naslov rada, vrsta rada (diplomski rad, magistarski rad, doktorska disertacija), znak fakulteta, mjesto i godina (vidi primjer u prilogu Naputka).",
       "sourcePage": 1,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "geof:324",
         "geof:361",
         "geof:389"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -7515,14 +7515,14 @@
       "sourceNote": "Opci naputak za pisanje ocjenskih radova propisuje sadrzaj naslovnice; primjer je u prilogu Naputka, tipografija nije propisana.",
       "quote": "Naslovna stranica: naziv Sveučilišta i Fakulteta, ime autora, naslov rada, vrsta rada (diplomski rad, magistarski rad, doktorska disertacija), znak fakulteta, mjesto i godina (vidi primjer u prilogu Naputka).",
       "sourcePage": 1,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "geof:280",
         "geof:300",
         "geof:375"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -7610,9 +7610,9 @@
         "grad:977",
         "grad:992"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -7682,9 +7682,9 @@
       "sourceNote": "Sluzbeni docx predlozak GF 2024 sadrzi stranicu naslovnice s propisanim rasporedom i tipografijom (Titillium); logotip fakulteta na vrhu dodaj rucno.",
       "quote": "GRAĐEVINSKI FAKULTET (Titillium 16); Ime i prezime (Titillium 16); NASLOV RADA (Titillium 22, Bold); ZAVRŠNI ISPIT/DIPLOMSKI RAD (Titillium 16); Mentor(i) (Titillium 16); Zagreb, godina (Titillium 12)",
       "sourcePage": null,
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -7774,13 +7774,13 @@
       "sourceNote": "Sluzbeni docx predlozak GF 2024 sadrzi stranicu naslovnice s propisanim rasporedom i tipografijom (Titillium); logotip fakulteta na vrhu dodaj rucno.",
       "quote": "GRAĐEVINSKI FAKULTET (Titillium 16); Ime i prezime (Titillium 16); NASLOV RADA (Titillium 22, Bold); ZAVRŠNI ISPIT/DIPLOMSKI RAD (Titillium 16); Mentor(i) (Titillium 16); Zagreb, godina (Titillium 12)",
       "sourcePage": null,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "grad:2980",
         "grad:3220"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -7873,9 +7873,9 @@
         "gradri:857",
         "gradri:858"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -7954,9 +7954,9 @@
         "gradri:783",
         "gradri:784"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -8035,9 +8035,9 @@
         "grf:3569",
         "grf:3570"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -8105,14 +8105,14 @@
       "sourceNote": "Upute za izradu završnog rada sadrže špranca stranicu naslovnice (str. 3) s propisanim veličinama pisma.",
       "quote": "Prva unutarnja stranica završnog rada: puni naziv Fakulteta (16 pt, polumasno, verzal), naziv smjera (14 pt, kurent), završni rad (28 pt, polumasno, verzal), naslov teme završnog rada (18 pt, polumasno, verzal), ime i prezime mentora (lijevo) te ime i prezime studenta (desno) (14 pt, kurent), mjesto i godina (14 pt, kurent), isključivanje u sredinu.",
       "sourcePage": 3,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "grf:11",
         "grf:15",
         "grf:19"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -8224,9 +8224,9 @@
       "sourceNote": "Opće upute za izradu diplomskog rada (izmjene prosinac 2023) sadrže predložak naslovne stranice; sve centrirano, Book Antiqua.",
       "quote": "(NASLOVNA STRANICA) ... NASLOV RADA (centrirano, velikim tiskanim slovima, podebljano, Book Antiqua, veličina 16), Diplomski rad (centrirano, Book Antiqua, veličina 14)",
       "sourcePage": 5,
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -8317,9 +8317,9 @@
         "infri:179",
         "infri:205"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -8391,9 +8391,9 @@
         "infri:192",
         "infri:215"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -8468,9 +8468,9 @@
         "kbf:6",
         "kbf:8"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "author",
@@ -8527,14 +8527,14 @@
       "sourceNote": "Prilog 4 Uputa (2017) pokazuje predlozak unutarnje naslovnice s propisanim Times New Roman velicinama i marginama.",
       "quote": "Prva unutarnja stranica rada, uz podatke navedene na naslovnoj stranici (koricama), treba sadržavati i: naziv studijskoga programa i ime i prezime mentora (vidi Prilog 4).",
       "sourcePage": 15,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "kbf:228",
         "kbf:229",
         "kbf:252"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -8681,14 +8681,14 @@
       "sourceNote": "Prilog 4 Uputa (2017) pokazuje predlozak unutarnje naslovnice s propisanim Times New Roman velicinama i marginama.",
       "quote": "Prva unutarnja stranica rada, uz podatke navedene na naslovnoj stranici (koricama), treba sadržavati i: naziv studijskoga programa i ime i prezime mentora (vidi Prilog 4).",
       "sourcePage": 15,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "kbf:178",
         "kbf:179",
         "kbf:181"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -8834,9 +8834,9 @@
         "djkbf:3",
         "djkbf:4"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -8931,9 +8931,9 @@
         "kbfst:15",
         "kbfst:17"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -9029,14 +9029,14 @@
       "sourceNote": "Prilog 1 Uputa za pisanje zavrsnog/diplomskog rada (2024) propisuje predlozak naslovnice s tipografijom po elementu.",
       "quote": "NASLOVNA STRANICA (prva stranica) sadrži isti tekst kao i na koricama s tim da se na prvoj stranici upisuje ime i prezime mentora i komentora (Prilog 1).",
       "sourcePage": 3,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "kemos:1",
         "kemos:2",
         "kemos:4"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -9141,9 +9141,9 @@
       "sourceNote": "Prilog 1 Uputa za pisanje zavrsnog/diplomskog rada (2024) propisuje predlozak naslovnice s tipografijom po elementu.",
       "quote": "NASLOVNA STRANICA (prva stranica) sadrži isti tekst kao i na koricama s tim da se na prvoj stranici upisuje ime i prezime mentora i komentora (Prilog 1).",
       "sourcePage": 3,
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -9238,14 +9238,14 @@
       "sourceNote": "Sveučilišni obrazac DR.SC.-08 propisuje predlozak prve pisane stranice doktorskog rada s marginama 3,0 cm.",
       "quote": "Prva pisana stranica: Naziv sastavnice (Arial 16), Ime i prezime (Arial 16), NASLOV RADA (Arial 22, Bold), DOKTORSKI RAD (Arial 16), Mentor(i): (Arial 16), Zagreb, godina (Arial 14); margine 3.0 cm sa svake strane.",
       "sourcePage": null,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "kif:193",
         "kif:195",
         "kif:198"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -9333,14 +9333,14 @@
       "sourceNote": "Upute 2023 (str. 9) donose predlozak glavne naslovne stranice; omot mora imati isto oblikovanje.",
       "quote": "Glavnu naslovnu stranicu, tj. 1. stranicu knjižnoga bloka (u sredini na vrhu stranice: naziv sveučilišta, naziv fakulteta (velika slova); u sredini: ime i prezime studenta (mala slova), naslov rada (velika slova), diplomski rad; na dnu stranice u sredini: grad, mjesec i godina obrane diplomskoga rada).",
       "sourcePage": 9,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "kif:2040",
         "kif:2130",
         "kif:2175"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -9436,9 +9436,9 @@
       "sourceNote": "Upute 2023 vrijede za diplomski i specijalistički diplomski rad; predlozak naslovnice je na str. 9.",
       "quote": "Glavnu naslovnu stranicu, tj. 1. stranicu knjižnoga bloka (u sredini na vrhu stranice: naziv sveučilišta, naziv fakulteta (velika slova); u sredini: ime i prezime studenta (mala slova), naslov rada (velika slova), diplomski rad; na dnu stranice u sredini: grad, mjesec i godina obrane diplomskoga rada).",
       "sourcePage": 9,
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -9529,9 +9529,9 @@
       "sourceNote": "Upute za izradu diplomskog rada (2022) propisuju sadrzaj i tipografiju naslovne stranice na str. 1, a str. 6 donosi ogledni predlozak.",
       "quote": "NASLOVNA STRANICA: SVEUČILIŠTE U SPLITU, KINEZIOLOŠKI FAKULTET, SVEUČILIŠNI DIPLOMSKI STUDIJ KINEZIOLOGIJE, Centrirano Times New Roman 16pt; NASLOV DIPLOMSKOG RADA, Centrirano Times New Roman 22pt BOLD",
       "sourcePage": 1,
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -9633,9 +9633,9 @@
         "ktfst:94",
         "ktfst:95"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -9715,9 +9715,9 @@
         "ktfst:5",
         "ktfst:9"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -9806,9 +9806,9 @@
         "medri:148",
         "medri:228"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -9894,14 +9894,14 @@
       "sourceNote": "Naputci za tehnicku obradu doktorskog rada propisuju sadrzaj korica; naslovna stranica ponavlja isti tekst bez grba.",
       "quote": "Na prvoj stranici drugog lista ispisuje se tekst kao na koricama bez grba.",
       "sourcePage": null,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "mef:2545",
         "mef:2571",
         "mef:2572"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -9984,14 +9984,14 @@
       "sourceNote": "Upute uz Pravilnik daju primjer naslovne stranice i Arial tipografiju; znak Fakulteta iznad retka Zagreb, godina dodaj rucno.",
       "quote": "Naslovna stranica mora sadržavati sljedeće elemente: (a) na vrhu, u prvome redu, naziv „Sveučilište u Zagrebu“, a u drugome redu naziv „Medicinski fakultet“; (b) u sredini stranice: u prvome redu ime i prezime autora, u drugome redu puni naslov rada; (c) na dnu stranice „Zagreb, godina“ (a iznad toga znak Fakulteta).",
       "sourcePage": 24,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "mef:4200",
         "mef:4500",
         "mef:4650"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -10087,13 +10087,13 @@
       "sourceNote": "Stranica 3 Uputa MEFOS 2025 prikazuje ogledni predlozak naslovnice zavrsnog rada.",
       "quote": null,
       "sourcePage": 3,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "mefos:55",
         "mefos:62"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -10190,13 +10190,13 @@
       "sourceNote": "Upute MEFOS 2025 vrijede za zavrsni i diplomski rad; str. 3 prikazuje ogledni predlozak naslovnice.",
       "quote": null,
       "sourcePage": 3,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "mefos:36",
         "mefos:6"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -10293,14 +10293,14 @@
       "sourceNote": "Uputa MEFST 2021 propisuje predlozak korica i primjer naslovne stranice; prva stranica rada identicna je naslovnoj.",
       "quote": "SVEUČILIŠTE U SPLITU MEDICINSKI FAKULTET (Font: Times New Roman, Masno otisnuto, VELIKA SLOVA (engl. UPPERCASE); Font veličina: 12; Poravnanje: Center; Prored: 1,5)",
       "sourcePage": 2,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "mefst:1",
         "mefst:2",
         "mefst:6"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -10403,7 +10403,7 @@
       "sourceNote": "Upute za izradu završnog rada (Prilog 3), Dodatak 1.A i 1.B propisuju izgled naslovnih stranica; predložak u generatoru slijedi unutarnju naslovnicu (Dodatak 1.B) s mentorom.",
       "quote": "Naslov, naslovna stranica treba sadržavati naziv veleučilišta i studija, ime i prezime, naslov rada, naznaku da se radi o završnom radu, mjesto i godinu izdavanja (Dodatak 1.A). Iza naslovne stranice slijedi stranica na kojoj se uz navedeno na prvoj naslovnoj strani navodi i mentor rada (Dodatak 1.B).",
       "sourcePage": 6,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "mev:1341",
         "mev:1342",
@@ -10413,7 +10413,7 @@
         "mev:1369"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -10542,9 +10542,9 @@
         "unisb:766",
         "unisb:777"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -10623,9 +10623,9 @@
         "unisb:791",
         "unisb:792"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -10701,9 +10701,9 @@
         "pbf:3004",
         "pbf:3117"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -10773,14 +10773,14 @@
       "sourceNote": "Odjeljak 5.2 Uputa i ogledni primjerak u Prilogu I propisuju izgled korica; prva stranica rada identična je koricama.",
       "quote": "na koricama treba upisati na vrhu Sveučilište u Zagrebu (Times New Roman 16) i naziv fakulteta (Times New Roman 16), u sredini Diplomski rad (Times New Roman 28), a na dnu korica s lijeve strane Zagreb, mjesec i godina obrane, a s desne strane ime i prezime studenta i matični broj studenta (Times New Roman 12)",
       "sourcePage": 15,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "pbf:4880",
         "pbf:5070",
         "pbf:5630"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -10869,13 +10869,13 @@
       "sourceNote": "Upute PFRI (26.3.2025), tocka 3.2 i Primjer 2 propisuju naslovnu stranicu zavrsnog rada; Kolegij i JMBAG dodaj rucno.",
       "quote": "Naslovna stranica završnog rada mora sadržavati sljedeće podatke: Sveučilište u Rijeci, Pomorski fakultet, Naslov rada na hrvatskom jeziku, Naslov rada na engleskom jeziku, Naznaku Završni rad, Kolegij, Mentor/komentor, Ime i prezime studenta/studentice, Studijski program, JMBAG, Rijeka, godina.",
       "sourcePage": 12,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "pfri:1827",
         "pfri:1830"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -11004,14 +11004,14 @@
       "sourceNote": "Upute PFRI (26.3.2025), tocka 3.2 i Primjer 2 propisuju naslovnu stranicu diplomskog rada; Kolegij i JMBAG dodaj rucno.",
       "quote": "Naslovna stranica diplomskog rada mora sadržavati sljedeće podatke: Sveučilište u Rijeci, Pomorski fakultet, Naslov rada na hrvatskom jeziku, Naslov rada na engleskom jeziku, Naznaku Diplomski rad, Kolegij, Mentor/komentor, Ime i prezime studenta/studentice, Studijski program, JMBAG, Rijeka, godina.",
       "sourcePage": 12,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "pfri:1810",
         "pfri:1811",
         "pfri:1812"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -11138,9 +11138,9 @@
         "pfst:35",
         "pfst:40"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -11217,14 +11217,14 @@
       "sourceNote": "Poglavlje 2.1 Uputa propisuje prvu naslovnu stranicu, a Prilog 2 (str. 19 PDF-a) pokazuje predlozak.",
       "quote": "Na prvoj naslovnoj stranici (koricama) rada mora pisati (vidjeti Prilog 2): Puni naziv Fakulteta (na vrhu stranice), centrirano i ispisano velikim slovima veličine 16 točaka (pt), podebljano.",
       "sourcePage": 19,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "pfst:11",
         "pfst:5",
         "pfst:8"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -11322,14 +11322,14 @@
       "sourceNote": "Predlozak Geoloskog odsjeka (PMF-GO2021, str. 1) pokazuje raspored i tipografiju naslovnice; Bioloski odsjek tekstualno propisuje isti sadrzaj naslovne strane.",
       "quote": "NASLOVNA STRANA - uvijek sadrži naziv sveučilišta, fakulteta i odsjeka, ime i prezime studenta, naslov rada, vrstu ocjenskog rada (Diplomski rad) te mjesto i godinu izrade diplomskog rada.",
       "sourcePage": 1,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "pmf:8258",
         "pmf:8259",
         "pmf:8261"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -11426,13 +11426,13 @@
       "sourceNote": "Prilog 1 Uputa za pisanje zavrsnog rada (odjeli za biologiju i kemiju) daje predlozak naslovnice s propisanim Times New Roman velicinama.",
       "quote": "Korice: ispisuje se naziv sveučilišta, fakulteta i odjela, ime i prezime studenta, naslov rada, vrsta rada (Završni rad), mjesto i godina (Prilog 1). Naslovna stranica sadrži isti tekst kao korice.",
       "sourcePage": 6,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "pmfst:23",
         "pmfst:6"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -11528,13 +11528,13 @@
       "sourceNote": "Prilog 1 Uputa za pisanje diplomskog rada (odjeli za biologiju i kemiju) daje predlozak naslovnice s propisanim Times New Roman velicinama.",
       "quote": "Korice: ispisuje se naziv sveučilišta, fakulteta i odjela, ime i prezime studenta, naslov rada, vrsta rada (Diplomski rad), mjesto i godina (Prilog 1). Naslovna stranica sadrži isti tekst kao korice (Prilog 1).",
       "sourcePage": 5,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "pmfst:12",
         "pmfst:14"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -11629,9 +11629,9 @@
         "pravo:4927",
         "pravo:5084"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -11699,14 +11699,14 @@
       "sourceNote": "Iste Upute 2024 vrijede za diplomske i završne radove; primjer naslovnice pokazuje raspored, oznaka vrste rada prilagođava se završnom radu.",
       "quote": "Na naslovnoj stranici trebaju biti navedeni: naslov rada (u sredini), autor rada (u sredini iznad naslova), naznaka Pravni fakultet Sveučilišta u Zagrebu i katedra (na vrhu u sredini u dva reda), naznaka mentora (u sredini ispod naslova), naznaka mjesta i godine izrade rada (na dnu stranice u sredini: Zagreb, 2023.).",
       "sourcePage": 2,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "pravo:4415",
         "pravo:4421",
         "pravo:4442"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -11830,13 +11830,13 @@
       "sourceNote": "Upute za oblikovanje 2024 (str. 1 pravila, str. 2 primjer naslovnice); primjer sadrži i oznaku Republika Hrvatska te kolegij koje generator ne podržava.",
       "quote": "Na naslovnoj stranici trebaju biti navedeni: naslov rada (u sredini), autor rada (u sredini iznad naslova), naznaka Pravni fakultet Sveučilišta u Zagrebu i katedra (na vrhu u sredini u dva reda), naznaka mentora (u sredini ispod naslova), naznaka mjesta i godine izrade rada (na dnu stranice u sredini: Zagreb, 2023.).",
       "sourcePage": 2,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "pravo:2782",
         "pravo:2792"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -11948,9 +11948,9 @@
         "pravo:5738",
         "pravo:5739"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -12031,14 +12031,14 @@
       "sourceNote": "Upute za pisanje i predaju zavrsnog/diplomskog rada donose primjer naslovne stranice s propisanim velicinama u tockama.",
       "quote": "Naslovna stranica (korice rada) nema numeraciju te mora sadržavati: naziv sveučilišta, fakulteta i studija, ime i prezime studenta, naslov rada, naziv vrste rada, akademsku titulu, ime i prezime mentora, mjesto i godinu nastanka rada.",
       "sourcePage": 3,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "pravos:1640",
         "pravos:1641",
         "pravos:1644"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -12138,14 +12138,14 @@
       "sourceNote": "Upute za pisanje i predaju zavrsnog/diplomskog rada donose primjer naslovne stranice s propisanim velicinama u tockama.",
       "quote": "Naslovna stranica (korice rada) nema numeraciju te mora sadržavati: naziv sveučilišta, fakulteta i studija, ime i prezime studenta, naslov rada, naziv vrste rada, akademsku titulu, ime i prezime mentora, mjesto i godinu nastanka rada.",
       "sourcePage": 3,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "pravos:1250",
         "pravos:1251",
         "pravos:1252"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -12245,14 +12245,14 @@
       "sourceNote": "Prilozi 4 i 6 Uputa (2023) pokazuju istovjetan predlozak naslovnice zavrsnog rada na strucnim studijima; naslovnica je prva unutarnja stranica iza korica.",
       "quote": "Prilog 4. Primjer naslovnice završnoga rada na Stručnom diplomskom studiju Javna uprava (prva unutarnja stranica rada iza korica)",
       "sourcePage": 30,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "pravri:1580",
         "pravri:1592",
         "pravri:68"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -12354,14 +12354,14 @@
       "sourceNote": "Prilog 2 Uputa (2023) pokazuje predlozak naslovnice diplomskog rada; naslovnica je prva unutarnja stranica iza korica.",
       "quote": "Prilog 2. Primjer naslovnice diplomskog rada na Sveučilišnom integriranom prijediplomskom i diplomskom studiju Pravo (prva unutarnja stranica rada iza korica)",
       "sourcePage": 28,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "pravri:176",
         "pravri:49",
         "pravri:66"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -12464,9 +12464,9 @@
       "sourceNote": "Prilog 13 Uputa (2023) pokazuje predlozak naslovnice seminarskog rada; bez naziva studija.",
       "quote": "Prilog 13. Primjer naslovnice seminarskoga rada",
       "sourcePage": 39,
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "author",
@@ -12533,9 +12533,9 @@
       "sourceNote": "Prilozi 8, 10 i 12 Uputa (2023) pokazuju istovjetan predlozak naslovnice zavrsnog rada sveucilisnih specijalistickih studija.",
       "quote": "Prilog 8. Primjer naslovnice završnoga rada na Sveučilišnom specijalističkom studiju Financijsko pravo trgovačkih društava (prva unutarnja stranica rada iza korica)",
       "sourcePage": 34,
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "study",
@@ -12611,14 +12611,14 @@
       "sourceNote": "Upute PTFOS 2020 propisuju sadrzaj korica, a naslovna stranica je tekstom identicna koricama; font Arial ili Calibri, sve 16 pt.",
       "quote": "Na prednjoj stranici korica diplomskog rada nalaze se sljedeći podaci: naziv sveučilišta (pri vrhu stranice; podebljanim velikim slovima, Arial 16 pt ili Calibri 16 pt)... Tekst naslovne stranice identičan je onom na koricama.",
       "sourcePage": 3,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "ptfos:85",
         "ptfos:86",
         "ptfos:88"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -12697,14 +12697,14 @@
       "sourceNote": "Sluzbeni Word predlozak zavrsnog ili diplomskog rada (2022) sadrzi zakljucanu naslovnicu; maticni broj studenta ispod imena dodaj rucno.",
       "quote": null,
       "sourcePage": null,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "rgn:1043",
         "rgn:444",
         "rgn:445"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -12808,14 +12808,14 @@
       "sourceNote": "Sluzbeni Word predlozak zavrsnog ili diplomskog rada (2022) sadrzi zakljucanu naslovnicu; maticni broj studenta ispod imena dodaj rucno.",
       "quote": null,
       "sourcePage": null,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "rgn:13",
         "rgn:5",
         "rgn:6"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -12921,14 +12921,14 @@
       "sourceNote": "Prilog 2 Uputa (2025) propisuje predlozak prve (naslovne) stranice s tipografijom Times New Roman.",
       "quote": "Prva stranica po otvaranju korica treba biti replika korica na bijelom papiru, s time da se ispod naslova rada dopisuje ime i prezime te znanstveno-nastavno zvanje mentora kako je navedeno u Prilogu 2.",
       "sourcePage": 11,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "riteh:1019",
         "riteh:1627",
         "riteh:2086"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -13029,14 +13029,14 @@
       "sourceNote": "Prilog 2 Uputa (2025) propisuje predlozak prve (naslovne) stranice s tipografijom Times New Roman.",
       "quote": "Prva stranica po otvaranju korica treba biti replika korica na bijelom papiru, s time da se ispod naslova rada dopisuje ime i prezime te znanstveno-nastavno zvanje mentora kako je navedeno u Prilogu 2.",
       "sourcePage": 11,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "riteh:2125",
         "riteh:27",
         "riteh:764"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -13137,9 +13137,9 @@
       "sourceNote": "Upute za izradu završnog rada, poglavlje 3.4.6, taksativno propisuju sadržaj unutarnje naslovne stranice; raspored i tipografija nisu propisani.",
       "quote": "Na prvoj unutarnjoj stranici upisuju se sljedeći podatci: a) RRiF VISOKA ŠKOLA ZA FINANCIJSKI MENADŽMENT b) PREDDIPLOMSKI STRUČNI STUDIJ RAČUNOVODSTVO I FINANCIJE ili SPECIJALISTIČKI DIPLOMSKI STRUČNI STUDIJ KORPORATIVNE FINANCIJE c) ZAVRŠNI RAD d) NASLOV ZAVRŠNOG RADA e) Ime i prezime studenta f) Mentor: Ime i prezime mentora g) Matični broj studenta h) Zagreb, mjesec, godina",
       "sourcePage": 12,
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -13212,9 +13212,9 @@
         "unisb:2077",
         "unisb:2078"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -13302,9 +13302,9 @@
         "unisb:323",
         "unisb:497"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -13397,9 +13397,9 @@
         "sfzg:223",
         "sfzg:224"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -13478,9 +13478,9 @@
         "sfzg:600",
         "sfzg:800"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -13537,9 +13537,9 @@
         "sumfak:3450",
         "sumfak:3480"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -13631,9 +13631,9 @@
         "sumfak:3400",
         "sumfak:3500"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -13712,9 +13712,9 @@
         "unisb:137",
         "unisb:2076"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "worktype",
@@ -13781,9 +13781,9 @@
         "unipu:3990",
         "unipu:3994"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -13856,9 +13856,9 @@
         "unipu:2943",
         "unipu:3543"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -13926,9 +13926,9 @@
         "ttf:927",
         "ttf:928"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -13997,9 +13997,9 @@
         "ttf:1160",
         "ttf:800"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -14077,9 +14077,9 @@
         "ttf:840",
         "ttf:880"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -14158,9 +14158,9 @@
         "uaos:156",
         "uaos:159"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -14264,9 +14264,9 @@
         "uaos:86",
         "uaos:93"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -14351,14 +14351,14 @@
       "sourceNote": "Upute (2024) propisuju tekst naslovnice; redak Predmet i Maticni broj (JMBAG) nisu podrzani u generatoru v1.",
       "quote": "Tekst na sljedecem listu: SVEUCILISTE U RIJECI, UCITELJSKI FAKULTET U RIJECI, Integrirani preddiplomski i diplomski sveucilisni uciteljski studij, Naslov rada, DIPLOMSKI RAD, Mentor: ime i prezime, te zvanje mentora, Student: ime i prezime studenta, U Mjesto, mjesec, godina",
       "sourcePage": 6,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "ufri:191",
         "ufri:223",
         "ufri:238"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -14452,9 +14452,9 @@
         "ufzg:3832",
         "ufzg:3833"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -14531,9 +14531,9 @@
         "ufzg:3020",
         "ufzg:3080"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -14616,9 +14616,9 @@
         "ufzg:2720",
         "ufzg:2840"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -14709,13 +14709,13 @@
       "sourceNote": "Upute za preddiplomski studij Povijest Jadrana i Mediterana propisuju sadrzaj i velicine na unutarnjoj naslovnoj stranici.",
       "quote": "SVEUCILISTE U DUBROVNIKU (font 18) ... NASLOV RADA (bold, font 22) ... Zavrsni rad (font 14)",
       "sourcePage": 2,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "unidu:421",
         "unidu:423"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -14820,14 +14820,14 @@
       "sourceNote": "Naputak Odjela za umjetnost i restauraciju propisuje centriranu naslovnu stranicu diplomskog rada s tocnim velicinama fonta.",
       "quote": "Naslov rada na hrvatskom jeziku (velikim slovima, podebljano, font 22)",
       "sourcePage": 3,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "unidu:241",
         "unidu:426",
         "unidu:519"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -14952,9 +14952,9 @@
         "unin:2790",
         "unin:3145"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "author",
@@ -14999,9 +14999,9 @@
         "unin:2477",
         "unin:2478"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "author",
@@ -15047,14 +15047,14 @@
       "sourceNote": "Primjer 2 u Uputama Odjela za turizam pokazuje predlozak naslovnice zavrsnog rada s tocnim fontovima; nazivi odjela i studija su placeholderi.",
       "quote": "SVEUCILISTE U ZADRU / ODJEL ... / STUDIJ ... (Times New Roman, 14 pt, centrirano); Ime i prezime, NASLOV RADA, Zavrsni rad (Times New Roman, 16 pt, bold, centrirano); Zadar, godina. (Times New Roman, 14 pt, centrirano)",
       "sourcePage": 6,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "unizd:351",
         "unizd:433",
         "unizd:434"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -15172,14 +15172,14 @@
       "sourceNote": "Primjer 7 u Uputama Odjela za turizam pokazuje predlozak naslovnice diplomskog rada s tocnim fontovima; nazivi odjela i studija su placeholderi.",
       "quote": "SVEUCILISTE U ZADRU / ODJEL ... / NAZIV DIPLOMSKOG STUDIJA (Times New Roman, 14 pt, centrirano); Ime i prezime, NASLOV RADA, Diplomski rad, Titula, ime i prezime mentora (Times New Roman, 16 pt, bold, centrirano); Zadar, godina. (Times New Roman, 14 pt, centrirano)",
       "sourcePage": 16,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "unizd:171",
         "unizd:222",
         "unizd:34"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -15294,9 +15294,9 @@
         "vef:641",
         "vef:644"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -15367,14 +15367,14 @@
       "sourceNote": "Naputak (2024), t. 5 Oblikovanje naslovnice, prikazuje predlozak naslovnice s propisanim fontom i velicinama (Times New Roman, centrirano).",
       "quote": "Primjer naslovne stranice: SVEUČILIŠTE U ZAGREBU / VETERINARSKI FAKULTET (Times New Roman, 14pt, centrirano)",
       "sourcePage": 6,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "vef:1080",
         "vef:1110",
         "vef:1290"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -15470,13 +15470,13 @@
       "sourceNote": "Prilog 1 Uputa pokazuje predlozak naslovne stranice zavrsnog rada; maticni broj i logotip/memorandum dodaju se rucno.",
       "quote": "Naslovna stranica zavrsnog rada (Slika 2) mora sadrzavati sljedece podatke",
       "sourcePage": 18,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "veleknin:1083",
         "veleknin:739"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -15590,14 +15590,14 @@
       "sourceNote": "Upute za formalni izgled propisuju podatke na koricama zavrsnog rada; tipografija nije propisana.",
       "quote": "Na koricama se ispisuju sljedeci podaci: Veleuciliste u Rijeci, ime i prezime studenta, naslov zavrsnog/diplomskog rada, (zavrsni rad / diplomski rad), Rijeka, godina.",
       "sourcePage": 1,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "veleri:1971",
         "veleri:1974",
         "veleri:718"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -15676,9 +15676,9 @@
       "sourceNote": "Upute za formalni izgled propisuju podatke na koricama diplomskog rada; tipografija nije propisana.",
       "quote": "Na koricama se ispisuju sljedeci podaci: Veleuciliste u Rijeci, ime i prezime studenta, naslov zavrsnog/diplomskog rada, (zavrsni rad / diplomski rad), Rijeka, godina.",
       "sourcePage": 1,
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -15734,14 +15734,14 @@
       "sourceNote": "Prilog 4 Uputa daje predlozak naslovnice (Prilog 4/1 i 4/2) i graficki opis; oznake u zagradama i tekst na str. 9 propisuju fontove i velicine.",
       "quote": "VELEUCILISTE LAVOSLAV RUZICKA U VUKOVARU (Times New Roman 16 Pt Bold Center)",
       "sourcePage": 2,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "vevu:1496",
         "vevu:1764",
         "vevu:1803"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -15845,9 +15845,9 @@
         "vevu:1455",
         "vevu:1710"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -15931,9 +15931,9 @@
         "vguk:648",
         "vguk:649"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "author",
@@ -15990,9 +15990,9 @@
       "sourceNote": "Clanak 12. Pravilnika propisuje podatke unutarnje naslovne stranice (Prilog 4); tipografija nije propisana.",
       "quote": "Na unutarnjoj naslovnoj stranici (Prilog 4.) ispisuju se sljedeci podaci: Veleuciliste Hrvatsko zagorje Krapina, Naziv studija, Naslov rada, Mentor, komentor (ako postoji) te ime i prezime studenta, Krapina, godina.",
       "sourcePage": 4,
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -16060,9 +16060,9 @@
       "sourceNote": "Upute (2024) prikazuju predlozak vanjske stranice (korica) s propisanim fontom Times New Roman 14, naslov 16; isti predlozak vrijedi za zavrsni i diplomski rad.",
       "quote": "2.1.1. Izgled vanjske stranice (korica)",
       "sourcePage": 4,
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -16166,9 +16166,9 @@
         "vtsbj:521",
         "vtsbj:61"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -16234,9 +16234,9 @@
       "sourceNote": "Prilog 5.1 Uputa (2025) propisuje predlozak naslovnice diplomskog rada; obavezno ga se pridrzavati.",
       "quote": "Izgled naslovne stranice definiran je predloskom na kraju ovih Uputa i potrebno je pridrzavati ga se.",
       "sourcePage": 31,
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
@@ -16326,9 +16326,9 @@
         "vuka:1527",
         "vuka:1528"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -16399,9 +16399,9 @@
         "vuka:16",
         "vuka:19"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "author",
@@ -16465,9 +16465,9 @@
         "vus:1518",
         "vus:1519"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -16551,9 +16551,9 @@
         "vsmti:623",
         "vsmti:624"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -16629,9 +16629,9 @@
         "vsmti:651",
         "vsmti:652"
       ],
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -16708,7 +16708,7 @@
       "sourceNote": "Upute (2013), str. 4, propisuju raspored unutrasnje naslovnice (podkorice); vrijedi za zavrsni i diplomski rad.",
       "quote": "Unutrasnja naslovnica (podkorice) sadrzi zaglavlje u dva retka. U 1. retku pise velikim slovima VELEUCILISTE VELIKA GORICA (Ariel 14, bold), a u 2. retku naziv studija (Ariel 14, bold). U sredisnjem dijelu stranice ispisuje se redom: naslov rada (Ariel 16, bold), vrsta rada (zavrsni ili diplomski) (Ariel 14, bold). U donjem dijelu podkorica ispisuje se lijevo Mentor, titula, ime i prezime a desno Student, ime i prezime, JMBAG. Na dnu stranice pise se Velika Gorica i godine izrade rada (sve Ariel 12 ili 14, bold).",
       "sourcePage": 4,
-      "verifiedAt": null,
+      "verifiedAt": "2026-07-10",
       "evidencePids": [
         "vvg:29",
         "vvg:35",
@@ -16718,7 +16718,7 @@
         "vvg:72"
       ]
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -16827,9 +16827,9 @@
       "sourceNote": "Clanak 26. Pravilnika o diplomskom radu propisuje tekst naslovnice; raspored je opisan rijecima, bez propisanog fonta i margina za naslovnicu.",
       "quote": "Na koricama diplomskog rada treba biti ovaj tekst: Na vrhu ZAGREBAČKA ŠKOLA EKONOMIJE I MANAGEMENTA ZAGREB ... U sredini Ime i prezime studenta ... NASLOV RADA ... DIPLOMSKI RAD ... Pri dnu Zagreb, godina",
       "sourcePage": 10,
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "faculty",
@@ -16904,9 +16904,9 @@
       "sourceNote": "Upute u Pravilniku propisuju sadrzaj vanjske naslovnice (Prilog 1); unutarnja naslovnica (Prilog 2) uz to navodi i mentora.",
       "quote": "Vanjska naslovna stranica treba sadržavati naziv veleučilišta i studija, ime i prezime, naslov rada, naznaku da se radi o završnom radu, Zagreb i godinu izrade (prilog 1.)",
       "sourcePage": 11,
-      "verifiedAt": null
+      "verifiedAt": "2026-07-10"
     },
-    "status": "draft",
+    "status": "verified",
     "elements": [
       {
         "role": "university",
