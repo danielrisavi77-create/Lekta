@@ -455,10 +455,27 @@ function buildFaculties(engine, specs) {
     for (const pr of p.programs || []) t.programs.add(pr);
   }
 
-  const faculties = Object.keys(acc)
+  // Verified specovi po fakultetu, da se surface i custom-spec tokeni kojih NEMA u profilima
+  // (npr. "efos", "filoz-fusnote"); style-pinove ciji token = profilni token vec hvata acc petlja.
+  const specsByFac = {};
+  for (const spec of specs.values()) (specsByFac[spec.facultyId] ??= []).push(spec);
+
+  const styleFromSpec = (spec) => ({
+    token: spec.styleToken,
+    label: spec.label,
+    mode: spec.inText?.mode ?? engine.citationMeta(spec.styleToken)?.mode ?? 'author-year',
+    engineStyle: engine.engineStyleFor(spec.styleToken), // null za custom -> klijent koristi formatFromSpec
+    accessDate: spec.accessDate !== false,
+    programsHint: '',
+    spec: clientSpec(spec),
+  });
+
+  // fakulteti = oni s profilnim tokenima UNIJA onih koji imaju samo verified spec
+  const unitIds = new Set([...Object.keys(acc), ...Object.keys(specsByFac)]);
+  const faculties = [...unitIds]
     .map((u) => {
       const meta = unitMeta[u] || { name: u, instId: 'other', instName: 'Ostalo' };
-      const tokens = acc[u];
+      const tokens = acc[u] || {};
       const styles = Object.keys(tokens)
         .sort((a, b) => tokens[b].count - tokens[a].count)
         .map((tok) => {
@@ -475,6 +492,11 @@ function buildFaculties(engine, specs) {
             spec: spec ? clientSpec(spec) : null,
           };
         });
+      // dodaj verified specove ciji token NIJE medju profilnim tokenima (custom-spec surface)
+      const covered = new Set(styles.map((s) => s.token));
+      for (const spec of specsByFac[u] || []) {
+        if (!covered.has(spec.styleToken)) { styles.push(styleFromSpec(spec)); covered.add(spec.styleToken); }
+      }
       return { id: u, name: meta.name, instId: meta.instId, instName: meta.instName, styles };
     })
     .sort((a, b) => a.name.localeCompare(b.name, 'hr'));
