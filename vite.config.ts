@@ -1,5 +1,7 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'node:path';
+import { execFileSync } from 'node:child_process';
+import { existsSync, statSync, createReadStream } from 'node:fs';
 import { stripDevOnly } from './scripts/strip-dev-only.mjs';
 
 // Vite dev i preview posluzuju HTML kao 'text/html' bez charseta i oslanjaju se na
@@ -61,8 +63,70 @@ function stripDevOnlyHtml() {
   };
 }
 
+// Citatni alati po fakultetu (/alati/citati/**, /alati/brojac-kartica.html) NISU Vite ulazi
+// nego build-time IZLAZ generatora u dist/ (SEO: ~178 pred-renderanih stranica, ne stavljaju
+// se kao ulazi da ne zatrpaju dev graf). Posljedica je da ih `npm run dev` sam po sebi ne
+// prikazuje. Ovaj plugin to popravlja: pri startu dev/preview servera pokrene generator,
+// servira njegov izlaz iz dist/ i regenerira ga (uz full-reload) kad promijenis verificiran
+// spec ili motor. LEKTA_SITE_ORIGIN='' u dev-u daje root-relativne linkove (ostaju na localhostu).
+function citationTools() {
+  const genOut = () => {
+    try {
+      execFileSync(process.execPath, ['scripts/generate-citation-tools.mjs'], {
+        cwd: __dirname,
+        stdio: 'inherit',
+        env: { ...process.env, LEKTA_SITE_ORIGIN: process.env.LEKTA_SITE_ORIGIN || '' },
+      });
+    } catch (e) {
+      console.error('[citati-dev] generator nije uspio:', (e && e.message) || e);
+    }
+  };
+  const serveGenerated = (req, res, next) => {
+    const url = String(req.url || '').split('?')[0];
+    const hit = url.startsWith('/alati/citati/') || url === '/alati/brojac-kartica.html' || url === '/alati/sitemap-alati.xml';
+    if (hit) {
+      let rel = url.replace(/^\/+/, '');
+      if (url.endsWith('/')) rel += 'index.html';
+      const file = resolve(__dirname, 'dist', rel);
+      if (existsSync(file) && statSync(file).isFile()) {
+        res.setHeader('Content-Type', url.endsWith('.xml') ? 'application/xml; charset=utf-8' : 'text/html; charset=utf-8');
+        createReadStream(file).pipe(res);
+        return;
+      }
+    }
+    next();
+  };
+  const WATCH = /(citation-specs[\\/]verified|generate-citation-tools\.mjs|src[\\/]citations[\\/]|src[\\/]tools[\\/]citation\.ts|zagreb-catalog\.json|verified-profiles\.json)/;
+  let timer;
+  return {
+    name: 'lekta-citation-tools',
+    apply: 'serve' as const,
+    configureServer(server) {
+      genOut();
+      server.middlewares.use(serveGenerated);
+      server.watcher.add([
+        resolve(__dirname, 'data/tools/citation-specs/verified'),
+        resolve(__dirname, 'scripts/generate-citation-tools.mjs'),
+      ]);
+      server.watcher.on('all', (_e, file) => {
+        if (file && WATCH.test(String(file))) {
+          clearTimeout(timer);
+          timer = setTimeout(() => {
+            genOut();
+            server.ws.send({ type: 'full-reload' });
+          }, 200);
+        }
+      });
+    },
+    configurePreviewServer(server) {
+      genOut();
+      server.middlewares.use(serveGenerated);
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [htmlCharsetUtf8(), stripDevOnlyHtml()],
+  plugins: [htmlCharsetUtf8(), citationTools(), stripDevOnlyHtml()],
   define: { __DEV_TOOLS__: JSON.stringify(!isDeploy) },
   build: {
     target: 'es2022',
