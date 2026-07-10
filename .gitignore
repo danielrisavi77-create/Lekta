@@ -4,3 +4,4 @@ scratchpad-dist-public/
 artifacts/
 *.local
 .DS_Store
+__pycache__/
