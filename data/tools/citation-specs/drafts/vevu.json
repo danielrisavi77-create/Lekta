@@ -1,0 +1,159 @@
+{
+  "facultyId": "vevu",
+  "styleToken": "vevu",
+  "status": "draft",
+  "outcome": "custom-spec",
+  "label": "Autor-godina (sluzbene upute VEVU za zavrsni rad)",
+  "sourceId": "vevu-upute-zavrsni",
+  "sourceLabel": "Upute za izradu zavrsnog rada (VEVU)",
+  "verifiedAt": null,
+  "verifiedBy": null,
+  "verifiedHash": null,
+  "accessDate": true,
+  "authorFormat": {
+    "order": "family-first",
+    "initials": "dotted-spaced",
+    "separator": "; ",
+    "finalJoiner": null,
+    "etAlAfter": 1,
+    "etAlKeep": 1,
+    "etAlJoiner": " ",
+    "etAlText": "et al"
+  },
+  "inText": {
+    "mode": "author-year",
+    "template": "({authorsShort}, {year})",
+    "authorsShort": {
+      "etAlAfter": 1,
+      "etAlText": "et al"
+    },
+    "provenance": {
+      "kind": "rule-text",
+      "quoteRaw": "U tekstu rada nakon citiranog dijela u zagradi se upisuje prezime autora, godina izdanja",
+      "sourcePage": "str. 11",
+      "note": "In-text je autor-godina: u zagradi prezime autora i godina izdanja. Za vise autora izvor propisuje prvi autor + oznaka et al (redak: 'Ako ima vise autora pise se prvi autor i oznaka ,,et al\".', str. 11). Zato je etAlAfter postavljen na 1. 'et al' bez tocke kako pise u izvoru."
+    }
+  },
+  "numbering": null,
+  "bibliography": {
+    "sort": "alphabetical"
+  },
+  "sourceTypes": [
+    {
+      "type": "knjiga",
+      "template": "{authors} ({year}) {title}. {place}: {publisher}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "place",
+        "publisher"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Prezime, inicijal(i) autora. (godina izdavanja) Naslov: podnaslov. Podatak o izdanju.",
+        "sourcePage": "str. 11",
+        "note": "Oblik uzet izravno iz sematskog oblika za knjigu u izvoru (sekcija '*Knjiga:', str. 11): 'Prezime, inicijal(i) autora. (godina izdavanja) Naslov: podnaslov. Podatak o izdanju.' Nastavak 'Mjesto: nakladnik' dovrsen iz odsjecenog retka 107 ('Mjesto') jer je ekstrakcija tu prekinuta. Podatak o izdanju izostavljen jer nema dopusteni placeholder. Nema stvarnog popunjenog primjera u izvoru pa example ostaje null.",
+        "example": null
+      }
+    },
+    {
+      "type": "poglavlje",
+      "template": "{authors} ({year}) {title}. U: {editor} (ur.) {container}[[ (str. {pages})]]. {place}: {publisher}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "editor",
+        "container",
+        "place",
+        "publisher"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Prezime, inicijal(i) autora. (godina izdavanja) Naslov: podnaslov. Podatak o izdanju.",
+        "sourcePage": "str. 11",
+        "note": "Izvor (u isjecku) NE navodi zaseban oblik za poglavlje u zborniku; ekstrakcija je prekinuta odmah nakon oblika za knjigu. Predlozak izveden iz oblika za knjigu + uobicajena autor-godina konvencija (U: urednik (ur.) naziv zbornika). Potvrditi protiv punog dokumenta.",
+        "example": null
+      }
+    },
+    {
+      "type": "clanak",
+      "template": "{authors} ({year}) {title}. {container} {volume}[[({issue})]][[: {pages}]].",
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "container",
+        "volume",
+        "pages"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Prezime, inicijal(i) autora. (godina izdavanja) Naslov: podnaslov. Podatak o izdanju.",
+        "sourcePage": "str. 11",
+        "note": "Izvor (u isjecku) NE navodi zaseban oblik za clanak u casopisu; ekstrakcija je prekinuta nakon oblika za knjigu. Predlozak izveden iz oblika za knjigu + uobicajena autor-godina konvencija (naziv casopisa, godiste(broj): stranice). Interpunkcija je pretpostavka, potvrditi.",
+        "example": null
+      }
+    },
+    {
+      "type": "mrezni",
+      "template": "{authors} ({year}) {title}. {url} Pristupljeno {accessed}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "url",
+        "accessed"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Prezime, inicijal(i) autora. (godina izdavanja) Naslov: podnaslov. Podatak o izdanju.",
+        "sourcePage": "str. 11",
+        "note": "Izvor (u isjecku) NE navodi zaseban oblik za mrezni izvor niti pristupni datum; ekstrakcija je prekinuta nakon oblika za knjigu. Predlozak i pristupni datum izvedeni iz oblika za knjigu + uobicajena autor-godina konvencija. accessDate je pretpostavka, potvrditi.",
+        "example": null
+      }
+    },
+    {
+      "type": "zavrsni",
+      "template": "{authors} ({year}) {title} (zavrsni rad). {place}: {institution}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "place",
+        "institution"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Prezime, inicijal(i) autora. (godina izdavanja) Naslov: podnaslov. Podatak o izdanju.",
+        "sourcePage": "str. 11",
+        "note": "Izvor (u isjecku) NE navodi oblik za citiranje zavrsnih/diplomskih radova iako je sam izvor 'Upute za zavrsni rad'. Predlozak izveden iz oblika za knjigu (nakladnik -> ustanova) + oznaka vrste rada '(zavrsni rad)'. Potvrditi protiv punog dokumenta.",
+        "example": null
+      }
+    },
+    {
+      "type": "propis",
+      "template": "{title}. {container}[[ {issue}]].",
+      "requiredFields": [
+        "title",
+        "container"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Prezime, inicijal(i) autora. (godina izdavanja) Naslov: podnaslov. Podatak o izdanju.",
+        "sourcePage": "str. 11",
+        "note": "Izvor (u isjecku) NE navodi oblik za citiranje propisa; ekstrakcija je prekinuta nakon oblika za knjigu. Predlozak izveden iz uobicajene hrvatske prakse (naziv akta, glasilo, broj). Cijeli oblik je pretpostavka, potvrditi.",
+        "example": null
+      }
+    }
+  ],
+  "contradictions": [
+    "Ekstrakcija je odsjecena na 'Mjesto' (str. 11, redak 107): potpun oblik za knjigu (Mjesto: nakladnik) i oblici za ostale vrste izvora nisu u isjecku. Dovrsiti i potvrditi protiv punog dokumenta prije verifikacije.",
+    "Samo in-text pravilo (prezime, godina; prvi autor + et al) i sematski oblik za knjigu su izravno iz izvora. Poglavlje, clanak, mrezni, zavrsni i propis su IZVEDENI (derived) iz oblika za knjigu i uobicajene autor-godina konvencije, nisu propisani u isjecku; njihova interpunkcija je pretpostavka.",
+    "Izvor NE imenuje standardni stil (nema 'Harvard'/'APA'); prior 'harvard' je samo priblizno tocan. Oblik knjige (Prezime, inicijal(i). (godina) Naslov. Mjesto: nakladnik) je harvardu slican, ali je kodiran kao custom-spec jer izvor daje vlastiti oblik i ne imenuje standard.",
+    "Prag za 'et al' je nejasan: 'ako ima vise autora' doslovno znaci vise od 1 autora, pa je etAlAfter postavljen na 1. Provjeriti primjenjuje li se et al vec kod 2 autora ili tek kod 3+.",
+    "Razdvajac vise autora u popisu literature (postavljeno '; '), ponasanje et al u bibliografiji, in-text oblik sa stranicom i pristupni datum za mrezne izvore nisu u isjecku; postavljene su razumne pretpostavke koje treba potvrditi.",
+    "Izvor numerira jedinice popisa literature arapskim brojevima (str. 11); to je detalj prikaza popisa pa numbering ostaje null, a sortiranje je alphabetical (poredani abecednim redom)."
+  ]
+}

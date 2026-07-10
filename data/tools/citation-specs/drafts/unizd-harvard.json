@@ -1,0 +1,18 @@
+{
+  "facultyId": "unizd",
+  "styleToken": "harvard",
+  "status": "draft",
+  "outcome": "style-pin",
+  "label": "Harvard (sluzbene upute Odjela za turizam UNIZD)",
+  "sourceId": "unizd-turizam-upute",
+  "sourceLabel": "Upute za izradu zavrsnoga i diplomskog rada (Odjel za turizam i komunikacijske znanosti, Sveuciliste u Zadru)",
+  "verifiedAt": null,
+  "verifiedBy": null,
+  "verifiedHash": null,
+  "evidence": {
+    "kind": "rule-text",
+    "quoteRaw": "americki ili Harvardski sustav",
+    "sourcePage": "str. 9"
+  },
+  "sourceTypes": []
+}

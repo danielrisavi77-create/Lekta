@@ -56,7 +56,24 @@ DIFF(dekl) = deklariran razlog (ocekivan, npr. tipfeler/artefakt izvora); grep! 
 | [ufzg](ufzg.md) | style-pin | 0 |  |  | 0 |  |  |
 | [unidu-harvard](unidu-harvard.md) | style-pin | 0 |  |  | 0 |  |  |
 | [unidu-povijest-fusnote](unidu-povijest-fusnote.md) | custom-spec | 3 |  |  | 3 |  |  |
-| [unipu-harvard](unipu-harvard.md) | custom-spec | 2 |  | 1 | 3 |  |  |
+| [unin-apa7](unin-apa7.md) | custom-spec | 4 |  | 2 | 0 |  |  |
+| [unin-harvard](unin-harvard.md) | style-pin | 0 |  |  | 0 |  |  |
+| [unin-vancouver](unin-vancouver.md) | style-pin | 0 |  |  | 0 |  |  |
+| [unipu-chicago-notes](unipu-chicago-notes.md) | custom-spec | 2 |  |  | 4 |  |  |
+| [unipu-harvard](unipu-harvard.md) | custom-spec | 3 |  |  | 3 |  |  |
+| [unizd-fusnote](unizd-fusnote.md) | custom-spec | 1 |  |  | 5 |  |  |
+| [unizd-harvard](unizd-harvard.md) | style-pin | 0 |  |  | 0 |  |  |
+| [vef](vef.md) | custom-spec | 3 |  | 1 | 2 |  |  |
+| [veleknin](veleknin.md) | custom-spec | 2 |  |  | 4 |  |  |
+| [veleri](veleri.md) | custom-spec | 5 |  |  | 1 |  |  |
+| [vevu](vevu.md) | custom-spec | 0 |  |  | 6 |  |  |
+| [vhzk](vhzk.md) | custom-spec | 1 |  |  | 5 |  |  |
+| [vkjs](vkjs.md) | custom-spec | 3 |  |  | 3 |  |  |
+| [vub](vub.md) | style-pin | 0 |  |  | 0 |  |  |
+| [vuv](vuv.md) | custom-spec | 2 |  |  | 4 |  |  |
+| [vvg](vvg.md) | custom-spec | 2 |  |  | 4 |  |  |
+| [zsem](zsem.md) | custom-spec | 3 |  |  | 3 |  |  |
+| [zvu](zvu.md) | custom-spec | 2 |  |  | 4 |  |  |
 
 Nijedan draft nema nedeklariran DIFF, shema-gresku ni promasen grep. Svi su spremni za ljudski pregled.
 

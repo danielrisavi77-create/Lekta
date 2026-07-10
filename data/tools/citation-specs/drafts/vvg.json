@@ -1,0 +1,172 @@
+{
+  "facultyId": "vvg",
+  "styleToken": "vvg",
+  "status": "draft",
+  "outcome": "custom-spec",
+  "label": "Numericko citiranje u uglatim zagradama (sluzbene upute VVG)",
+  "sourceId": "vvg-upute-radovi-2013",
+  "sourceLabel": "Upute za izradu diplomskog (zavrsnog) rada (Veleuciliste Velika Gorica)",
+  "verifiedAt": null,
+  "verifiedBy": null,
+  "verifiedHash": null,
+  "accessDate": true,
+  "authorFormat": {
+    "order": "family-first",
+    "initials": "none",
+    "separator": "; ",
+    "finalJoiner": null,
+    "etAlAfter": 3,
+    "etAlKeep": 1,
+    "etAlJoiner": ", ",
+    "etAlText": "i dr."
+  },
+  "inText": {
+    "mode": "bracket-number",
+    "provenance": {
+      "kind": "rule-text",
+      "quoteRaw": "popisu, oznacava se na kraju citata rednim brojem literature iz popisa u uglatim zagradama.",
+      "sourcePage": "str. 9",
+      "note": "U tekstu se izvor oznacava rednim brojem literature u uglatim zagradama, npr. [1] (str. 9: 'Reference se navode pod rednim brojem pod kojim se pojavljuju u popisu, u uglatim zagradama'). Numericki stil pa nema in-text template. Popis se numerira po redoslijedu pojavljivanja u tekstu (str. 9: prva referenca u tekstu je na prvom mjestu popisa), zato bibliography.sort=appearance, a redni broj [n] dodjeljuje generator popisa (referenceMarker)."
+    }
+  },
+  "numbering": {
+    "referenceMarker": "[{n}]"
+  },
+  "bibliography": {
+    "sort": "appearance"
+  },
+  "sourceTypes": [
+    {
+      "type": "knjiga",
+      "template": "{authors}: {title}, {publisher}, {year}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "publisher",
+        "year"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "[1] Markovi, Marko; Ivi, Ivan: Programiranje u C jeziku, Profil d.o.o, 2008.",
+        "sourcePage": "str. 10",
+        "note": "Opci format str. 10: '[<redni broj>] <autor(i)>: <Naslov rada>, <izdavac>, <godina izdanja>'. Autori family-first ('Prezime, Ime'), vise autora odvojeno '; ', dvotocka iza autora, bez mjesta izdavanja (u primjeru [3] 'Skolska knjiga Zagreb' cijelo ide u polje izdavaca). Redni broj [1] je oznaka popisa (referenceMarker), ne dio bibliografskog retka. Vise od tri autora: prvi autor + ', i dr.' (str. 10, primjer [3] 'Grgi, Marko, i dr.: Komunikacijski sustavi, Skolska knjiga Zagreb, 2012.'; 'et al' za literaturu na stranom jeziku). Izvor dopusta i inicijale imena (primjer [2] 'Markovi, M; Ivi, I')."
+      },
+      "example": {
+        "input": {
+          "type": "knjiga",
+          "authors": "Markovi, Marko; Ivi, Ivan",
+          "title": "Programiranje u C jeziku",
+          "publisher": "Profil d.o.o",
+          "year": "2008"
+        },
+        "expected": "Markovi, Marko; Ivi, Ivan: Programiranje u C jeziku, Profil d.o.o, 2008."
+      }
+    },
+    {
+      "type": "clanak",
+      "template": "{authors}: {title}. {container} {year};{volume}[[({issue})]]:{pages}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "container",
+        "year",
+        "volume",
+        "pages"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "[3] Rothbaum, BO; Hodges, L: Virtual reality exposure therapy for PTSD Vietnam",
+        "sourcePage": "str. 10",
+        "note": "Izvor formalno navodi jedan opci format za knjige i clanke, ali primjer [3] za clanak u casopisu pokazuje zaseban vankuverski oblik: 'autori: naslov. Naziv casopisa godina;godiste(broj):stranice.' Primjer je u ekstrakciji prelomljen u dva retka (redak s 'veterans: a case study. Journal of Traumatic Stress 1999;12(2):263-71.'), spojen u expected. Inicijali imena bez tocaka ('Rothbaum, BO') doslovni su iz primjera, alat ih prenosi verbatim."
+      },
+      "example": {
+        "input": {
+          "type": "clanak",
+          "authors": "Rothbaum, BO; Hodges, L",
+          "title": "Virtual reality exposure therapy for PTSD Vietnam veterans: a case study",
+          "container": "Journal of Traumatic Stress",
+          "year": "1999",
+          "volume": "12",
+          "issue": "2",
+          "pages": "263-71"
+        },
+        "expected": "Rothbaum, BO; Hodges, L: Virtual reality exposure therapy for PTSD Vietnam veterans: a case study. Journal of Traumatic Stress 1999;12(2):263-71."
+      }
+    },
+    {
+      "type": "mrezni",
+      "template": "URL: {url}, {accessed}",
+      "requiredFields": [
+        "url",
+        "accessed"
+      ],
+      "provenance": {
+        "kind": "rule-text",
+        "quoteRaw": "[<redni broj>] URL: <potpuna putanja do stranice koja je koristena u radu>, <datum",
+        "sourcePage": "str. 10",
+        "note": "Format za internetske sadrzaje za koje se ne zna autor(i) (str. 10-11): '[<redni broj>] URL: <potpuna putanja do stranice koja je koristena u radu>, <datum zadnjeg pristupa toj stranici>'. Oznaka 'URL:' pise se doslovno; redni broj je oznaka popisa. Izvor pod 'Primjer:' ne daje popunjen primjer u ekstrakciji pa je oblik prenesen iz formata bez izmisljanja (example: null). Mrezni izvor s poznatim autorom izvor formalno ne pokriva."
+      },
+      "example": null
+    },
+    {
+      "type": "poglavlje",
+      "template": "{authors}: {title}, U: {editor} (ur.), {container}, {publisher}, {year}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "editor",
+        "container",
+        "publisher",
+        "year"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "[<redni broj>] <autor(i)>: <Naslov rada>, <izdavac>, <godina izdanja>",
+        "sourcePage": "str. 10",
+        "note": "Izvor ne daje zaseban oblik za poglavlje u uredjenoj knjizi/zborniku. Predlozak je izveden iz opceg oblika za knjigu (str. 10) ubacivanjem urednika 'U: {editor} (ur.),' i naziva zbornika kao containera. Potvrditi ili oboriti pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "zavrsni",
+      "template": "{authors}: {title}, {institution}, {year}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "institution",
+        "year"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "[<redni broj>] <autor(i)>: <Naslov rada>, <izdavac>, <godina izdanja>",
+        "sourcePage": "str. 10",
+        "note": "Izvor ne obradjuje citiranje zavrsnih/diplomskih radova. Predlozak je izveden iz opceg oblika za knjigu (str. 10) zamjenom izdavaca ustanovom u kojoj je rad izradjen. Potvrditi ili oboriti pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "propis",
+      "template": "{title}, {container}[[, br. {issue}]], {year}.",
+      "requiredFields": [
+        "title",
+        "container",
+        "year"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "ona koja je posredno utjecala na rad (npr. prirucnici, standardi).",
+        "sourcePage": "str. 9",
+        "note": "Izvor spominje standarde i prirucnike kao ostalu koristenu literaturu (str. 9) ali ne daje format za propise/pravne akte. Predlozak je izveden iz uobicajenog hrvatskog oblika (naslov, glasilo, broj, godina); broj sluzbenog glasila u {issue}. Potvrditi ili oboriti pri verifikaciji."
+      },
+      "example": null
+    }
+  ],
+  "contradictions": [
+    "Prior hint je 'ieee'. Izvor jest numericki stil u uglatim zagradama (srodan IEEE-u), ali propisuje vlastiti oblik jedinice: autori family-first ('Prezime, Ime' ili 'Prezime, inicijali'), dvotocka iza autora i vankuverski oblik clanka (godina;godiste(broj):stranice, primjer [3]). Zato custom-spec, ne style-pin na ieee.",
+    "Izvor dopusta DVA oblika autora: puna imena (primjer [1] 'Markovi, Marko; Ivi, Ivan') ILI inicijale (primjer [2] 'Markovi, M; Ivi, I'; primjer [3] 'Rothbaum, BO'). Alat koristi verbatim family-first (initials:none) pa prenosi onaj oblik koji korisnik upise; oba primjera se reproduciraju.",
+    "clanak: izvor formalno navodi jedan opci format za knjige i clanke, no primjer [3] pokazuje zaseban vankuverski oblik casopisnog clanka. Predlozak clanka je gradjen iz primjera [3].",
+    "poglavlje, zavrsni i propis izvor ne obradjuje (derived): poglavlje izvedeno iz oblika za knjigu uz urednika i zbornik, zavrsni iz oblika za knjigu uz ustanovu, propis iz uobicajenog hrvatskog oblika za pravni akt.",
+    "etAlText: izvor propisuje ', i dr.' za literaturu na hrvatskom i ', et al' za literaturu na stranom jeziku (str. 10); alat koristi jedan default ', i dr.'.",
+    "mrezni: izvor daje samo oblik za internetske izvore bez poznatog autora ('URL: ...') i u ekstrakciji nema popunjen primjer (example: null); izvor s poznatim web-autorom nije formalno pokriven."
+  ]
+}

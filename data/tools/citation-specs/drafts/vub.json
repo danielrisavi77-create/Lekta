@@ -1,0 +1,18 @@
+{
+  "facultyId": "vub",
+  "styleToken": "vancouver",
+  "status": "draft",
+  "outcome": "style-pin",
+  "label": "Vancouver (sluzbene upute VUB)",
+  "sourceId": "vub-upute-diplomski-2025",
+  "sourceLabel": "Upute za izradu diplomskog rada (Veleuciliste u Bjelovaru)",
+  "verifiedAt": null,
+  "verifiedBy": null,
+  "verifiedHash": null,
+  "evidence": {
+    "kind": "rule-text",
+    "quoteRaw": "Citirati relevantne studije koristei odgovarajui citatni stil (npr. Vancouver).",
+    "sourcePage": "str. 13"
+  },
+  "sourceTypes": []
+}

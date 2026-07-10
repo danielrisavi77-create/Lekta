@@ -1,0 +1,204 @@
+{
+  "facultyId": "vef",
+  "styleToken": "vef",
+  "status": "draft",
+  "outcome": "custom-spec",
+  "label": "VEF autor-godina (sluzbeni Naputak za diplomski rad)",
+  "sourceId": "vef-naputak-diplomski-2024",
+  "sourceLabel": "Naputak za prijavu, pisanje i oblikovanje diplomskog rada (Veterinarski fakultet Sveucilista u Zagrebu)",
+  "verifiedAt": null,
+  "verifiedBy": null,
+  "verifiedHash": null,
+  "accessDate": true,
+  "authorFormat": {
+    "order": "family-first",
+    "firstAuthorOnlyInverted": true,
+    "initials": "dotted-spaced",
+    "separator": ", ",
+    "finalJoiner": null
+  },
+  "inText": {
+    "mode": "author-year",
+    "template": "({authorsShort}, {year})",
+    "authorsShort": {
+      "twoJoiner": " i ",
+      "etAlAfter": 3,
+      "etAlText": "i sur."
+    },
+    "provenance": {
+      "kind": "worked-example",
+      "quoteRaw": "BLACK (2021.) opazio je da s porastom tjelesne mase raste i rizik za pojavu bolesti krvozilnog",
+      "sourcePage": "str. 10",
+      "note": "Autor-godina; prezime autora VELIKIM slovima. Narativni oblik 'BLACK (2021.)' i zagradni oblik 'Opazeno je ... (BLACK, 2021.).'; template koristi zagradni oblik. Dva autora 'BLACK i BROWN (2022.)' (twoJoiner ' i '); tri i vise 'BLACK i sur.' (etAlAfter 3, etAlText 'i sur.'). Vise izvora u zagradi odvaja se tockom sa zarezom kronoloskim redom (str. 11): '(BLACK, 2021.; BLACK i BROWN, 2022.; BLACK i sur., 2023.)'. Isti autor ista godina dobiva mala slova '2021.a; 2021.b'. Godina nosi tocku za rad na hrvatskom, bez tocke za rad na engleskom (str. 10)."
+    }
+  },
+  "numbering": null,
+  "bibliography": {
+    "sort": "alphabetical"
+  },
+  "sourceTypes": [
+    {
+      "type": "knjiga",
+      "template": "{authors} ({year}): {title}. [[{volume}. izd., ]]{publisher}, {place}[[, str. {pages}]].",
+      "requiredFields": [
+        "authors",
+        "year",
+        "title",
+        "publisher",
+        "place"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "AITKEN, I. D. (2007): Diseases of Sheep. 4. izd., Blackwell Publishing, Oxford, str. 602- 603.",
+        "sourcePage": "str. 11",
+        "note": "Prezime autora VELIKIM slovima, inicijali s tockom i razmakom (I. D.); godina u zagradi iza koje ide dvotocka. Broj izdanja upisuje se u polje volume ('4' -> '4. izd.,'). Izdavac pa mjesto, odvojeni zarezom. Raspon stranica opcionalan ('str. 602- 603.', razmak oko crtice je pdftotext artefakt)."
+      },
+      "example": {
+        "input": {
+          "type": "knjiga",
+          "authors": "AITKEN, I. D.",
+          "year": "2007",
+          "title": "Diseases of Sheep",
+          "volume": "4",
+          "publisher": "Blackwell Publishing",
+          "place": "Oxford",
+          "pages": "602- 603"
+        },
+        "expected": "AITKEN, I. D. (2007): Diseases of Sheep. 4. izd., Blackwell Publishing, Oxford, str. 602- 603."
+      }
+    },
+    {
+      "type": "poglavlje",
+      "template": "{authors} ({year}): {title}. U: {container} ({editor}, Ur.), {publisher}, {place}[[, str. {pages}]].",
+      "requiredFields": [
+        "authors",
+        "year",
+        "title",
+        "container",
+        "editor",
+        "publisher",
+        "place"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "LAMMLER, C. H., G. HAHN (1994): Streptokokken. U: Hanbdbuch der bakteriellen Infektionen",
+        "sourcePage": "str. 11",
+        "note": "Prvi autor invertiran (Prezime, inicijali), sljedeci autor inicijali pa prezime ('G. HAHN'); autori odvojeni zarezom. 'U:' uvodi zbornik/knjigu. Urednici u zagradi s oznakom 'Ur.' (veliko U, s tockom, razlika od FPZG '(ur)' i pravo '(ur.)'). Naziv knjige (container) obuhvaca i oznaku sveska/dijela 'Band II. Teil 2.' kako stoji u izvoru; 'Hanbdbuch' je tipfeler izvora, prenesen doslovno. Izvor prelama u tri retka do 'str. 15 � 141.' (spojeno u expected, spacirana crtica normalizirana u '15-141')."
+      },
+      "example": {
+        "input": {
+          "type": "poglavlje",
+          "authors": "LAMMLER, C. H.; HAHN, G.",
+          "year": "1994",
+          "title": "Streptokokken",
+          "container": "Hanbdbuch der bakteriellen Infektionen bei Tieren. Band II. Teil 2.",
+          "editor": "Blobel, H., T. Schliesser",
+          "publisher": "Gustav Fischer Verlag Jena",
+          "place": "Stuttgart",
+          "pages": "15-141"
+        },
+        "expected": "LAMMLER, C. H., G. HAHN (1994): Streptokokken. U: Hanbdbuch der bakteriellen Infektionen bei Tieren. Band II. Teil 2. (Blobel, H., T. Schliesser, Ur.), Gustav Fischer Verlag Jena, Stuttgart, str. 15-141."
+      }
+    },
+    {
+      "type": "clanak",
+      "template": "{authors} ({year}): {title}. {container} {volume}[[({issue})]], {pages}.",
+      "requiredFields": [
+        "authors",
+        "year",
+        "title",
+        "container",
+        "volume",
+        "pages"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "- brojcane podatke: godina izdanja knjige ili casopisa, volumen, broj i stranica clanka",
+        "sourcePage": "str. 10",
+        "note": "Izvedeno. Ekstrakcija sadrzi naslov 'Rad u casopisu:' (str. 11), ali je konkretni primjer izrezan na kraju datoteke, pa nema worked-example retka. Predlozak je izveden iz opceg pravila o brojcanim podacima (godina, volumen, broj, stranica clanka; str. 10) i stila knjige (VELIKO prezime, godina u zagradi + dvotocka). Casopis se u tekstu navodi 'prema Uputstvu za pisanje clanka u Veterinarskom arhivu' (str. 7). Potvrditi tocnu interpunkciju pri verifikaciji iz punog izvora."
+      },
+      "example": null
+    },
+    {
+      "type": "mrezni",
+      "template": "{authors} ({year}): {title}. [[{publisher}, ]]{place}. {url} ({accessed})",
+      "requiredFields": [
+        "authors",
+        "year",
+        "title",
+        "url",
+        "accessed"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "EUROPEAN EVALUATION NETWORK FOR RURAL DEVELOPMENT (2010): Working paper on",
+        "sourcePage": "str. 11",
+        "note": "Korporativni/organizacijski autor VELIKIM slovima, godina u zagradi + dvotocka, naslov s tockom, izdavac i mjesto, zatim URL i datum pristupa u zagradi. Izvor prelama primjer u pet redaka (317-321), spojeno u expected. Varijanta bez izdavaca u izvoru (EUROPSKA KOMISIJA, 2018) ima naslov koji zavrsava zarezom pa mjesto; zato je publisher opcionalan. Datum pristupa u obliku '(17.7.2019.)'."
+      },
+      "example": {
+        "input": {
+          "type": "mrezni",
+          "authors": "EUROPEAN EVALUATION NETWORK FOR RURAL DEVELOPMENT",
+          "year": "2010",
+          "title": "Working paper on Approaches for assessing the impacts of the Rural Development Programmes in the context of multiple intervening factors",
+          "publisher": "European Commission",
+          "place": "Bruxselles, Belgium",
+          "url": "https://enrd.ec.europa.eu/enrd-static/fms/pdf/EB43A527-C292-F36CFC51-9EA5B47CEDAE.pdf",
+          "accessed": "17.7.2019."
+        },
+        "expected": "EUROPEAN EVALUATION NETWORK FOR RURAL DEVELOPMENT (2010): Working paper on Approaches for assessing the impacts of the Rural Development Programmes in the context of multiple intervening factors. European Commission, Bruxselles, Belgium. https://enrd.ec.europa.eu/enrd-static/fms/pdf/EB43A527-C292-F36CFC51-9EA5B47CEDAE.pdf (17.7.2019.)",
+        "knownDiff": "Institucijski autor (EUROPEAN EVALUATION NETWORK FOR RURAL DEVELOPMENT); author-formatter ga tretira kao osobu jer org-detekcija ne hvata naziv. Za institucijske autore unos ostaje doslovan; ogranicenje alata."
+      }
+    },
+    {
+      "type": "zavrsni",
+      "template": "{authors} ({year}): {title} (diplomski rad). {institution}, {place}.",
+      "requiredFields": [
+        "authors",
+        "year",
+        "title",
+        "institution",
+        "place"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "AITKEN, I. D. (2007): Diseases of Sheep. 4. izd., Blackwell Publishing, Oxford, str. 602- 603.",
+        "sourcePage": "str. 11",
+        "note": "Izvedeno. Naputak opisuje kako se pise diplomski rad, ali NE daje primjer citiranja zavrsnog/diplomskog rada u popisu literature. Predlozak je izveden iz oblika za knjigu (ustanova umjesto izdavaca, uz oznaku '(diplomski rad)'). Potvrditi ili oboriti pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "propis",
+      "template": "{title} ({container}, br. {issue}).",
+      "requiredFields": [
+        "title",
+        "container",
+        "issue"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Zakon o drzavnoj potpori u poljoprivredi, ribarstvu i sumarstvu (Narodne novine, br. 87/02).",
+        "sourcePage": "str. 11",
+        "note": "Naslov propisa, zatim u zagradi glasilo i broj s oznakom 'br.'. U tekstu se propis navodi kraticom '(NN 87/2002.)', a u popisu literature punim oblikom '(Narodne novine, br. 87/02)'. Bez autora/donositelja u primjeru popisa (razlika od FPZG koji navodi donositelja)."
+      },
+      "example": {
+        "input": {
+          "type": "propis",
+          "title": "Zakon o drzavnoj potpori u poljoprivredi, ribarstvu i sumarstvu",
+          "container": "Narodne novine",
+          "issue": "87/02"
+        },
+        "expected": "Zakon o drzavnoj potpori u poljoprivredi, ribarstvu i sumarstvu (Narodne novine, br. 87/02)."
+      }
+    }
+  ],
+  "contradictions": [
+    "PRIOR hint je 'harvard': izvor JEST autor-godina (obitelj-godina, slicno Harvardu), ali propisuje vlastite worked-example oblike (VELIKA prezimena, 'i sur.', urednicka oznaka 'Ur.', dvotocka iza godine, tocka iza godine samo za hrvatske radove), pa je kodiran kao custom-spec, ne kao genericki harvard style-pin. Slijedjen IZVOR, ne prior.",
+    "clanak: ekstrakcija ima naslov 'Rad u casopisu:' (str. 11) ali je primjer izrezan na kraju datoteke; predlozak je izveden (derived) iz opceg pravila o brojcanim podacima i stila knjige. Verificirati iz punog izvora.",
+    "zavrsni: Naputak ne pokriva citiranje diplomskog/zavrsnog rada u popisu literature; predlozak izveden iz oblika za knjigu (derived).",
+    "Prezimena autora se u izvoru pisu VELIKIM slovima (i u tekstu i u popisu literature), a naslovi knjiga/casopisa kurzivom; authorFormat nema zastavicu za velika slova, a alat radi plain-text izlaz, pa se ta dva svojstva ne reproduciraju automatski (napomena na stranici alata).",
+    "In-text godina nosi tocku za rad na hrvatskom, a bez tocke za rad na engleskom (str. 10); jedan template ne moze uvjetovati po jeziku, pa polje year mora nositi tocku po potrebi.",
+    "Raspon stranica u poglavlju ('str. 15 � 141.') ima spaciranu crticu ostecenu pdftotext-om; u expected je normaliziran u 'str. 15-141.'."
+  ]
+}

@@ -1,0 +1,174 @@
+{
+  "facultyId": "veleknin",
+  "styleToken": "veleknin",
+  "status": "draft",
+  "outcome": "custom-spec",
+  "label": "Autor-godina (sluzbene upute Veleucilista Marko Marulic u Kninu)",
+  "sourceId": "veleknin-upute-zavrsni-2020",
+  "sourceLabel": "Upute za izradu i obranu zavrsnog rada (Veleuciliste Marko Marulic u Kninu)",
+  "verifiedAt": null,
+  "verifiedBy": null,
+  "verifiedHash": null,
+  "accessDate": true,
+  "authorFormat": {
+    "order": "family-first",
+    "initials": "dotted-spaced",
+    "separator": ", ",
+    "finalJoiner": null
+  },
+  "inText": {
+    "mode": "author-year",
+    "template": "({authorsShort}, {year})",
+    "authorsShort": {
+      "twoJoiner": " i ",
+      "etAlAfter": 3,
+      "etAlText": "i sur."
+    },
+    "provenance": {
+      "kind": "worked-example",
+      "quoteRaw": "(Rahman, 2014).",
+      "sourcePage": "str. 11",
+      "note": "Sekcija 6.1 Citiranje izvora u tekstu. Jedan autor: '(Rahman, 2014)' ili narativno 'prema Rahmanu (2014)' (str. 11). Dva autora spajaju se s ' i ': '(Konrad i Marosevi, 2001)' (str. 11). Tri i vise autora: prvi autor + 'i sur.': 'Davier i sur. (2012)' (str. 12). Organizacije/institucije: '(WHO, 2010)', '(HZN, 2004)' (str. 12). Vise radova istog autora iz iste godine: '2015a; 2015b' (str. 12). Oblik s brojem stranice nije prikazan u izvoru pa withPagesTemplate nije definiran."
+    }
+  },
+  "numbering": null,
+  "bibliography": {
+    "sort": "alphabetical"
+  },
+  "sourceTypes": [
+    {
+      "type": "knjiga",
+      "template": "{authors} ({year}): {title}. {publisher}, {place}.",
+      "requiredFields": [
+        "authors",
+        "year",
+        "title",
+        "publisher",
+        "place"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Rupi, V. (2009): Zastita zdravlja domaih zivotinja 1. Unutrasnje i kirurske bolesti i zahvati.",
+        "sourcePage": "str. 12",
+        "note": "Cijeli primjer (spojena dva retka), sekcija 6.2 'Knjige - jedan autor': Rupi, V. (2009): Zastita zdravlja domaih zivotinja 1. Unutrasnje i kirurske bolesti i zahvati. Hrvatska mljekarska udruga, Zagreb. Prezime pa inicijal(i) imena, godina u zagradi iza koje ide DVOTOCKA, naslov s tockom, zatim izdavac, ZAREZ, mjesto, tocka. Dijakritika ostecena od pdftotext-a ('Rupi' = Rupic, 'domaih' = domacih)."
+      },
+      "example": {
+        "input": {
+          "type": "knjiga",
+          "authors": "Rupi, V.",
+          "year": "2009",
+          "title": "Zastita zdravlja domaih zivotinja 1. Unutrasnje i kirurske bolesti i zahvati",
+          "publisher": "Hrvatska mljekarska udruga",
+          "place": "Zagreb"
+        },
+        "expected": "Rupi, V. (2009): Zastita zdravlja domaih zivotinja 1. Unutrasnje i kirurske bolesti i zahvati. Hrvatska mljekarska udruga, Zagreb."
+      }
+    },
+    {
+      "type": "mrezni",
+      "template": "{authors} ({year}): {title}. Dostupno na: {url} (pristupljeno {accessed}).",
+      "requiredFields": [
+        "title",
+        "url",
+        "accessed"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Wood, B. J. B., Holzapfel, W. H. (1995): Genera of lactic acid bacteria. Dostupno na:",
+        "sourcePage": "str. 14",
+        "note": "Cijeli primjer (spojena tri retka), sekcija 'Mrezni izvori': Wood, B. J. B., Holzapfel, W. H. (1995): Genera of lactic acid bacteria. Dostupno na: http://books.google.hr/books?id=Q8B_WusVacsC&printsec=frontcover#v=onepage&q&f=true (pristupljeno 19.04.2015.). Isti autor-godina-dvotocka oblik kao knjiga, zatim 'Dostupno na:' + URL + '(pristupljeno DATUM).'. Dva autora odvojena su ZAREZOM (', '); inicijali su razmaknuti s tockom (dotted-spaced, 'B. J. B.')."
+      },
+      "example": {
+        "input": {
+          "type": "mrezni",
+          "authors": "Wood, B. J. B.; Holzapfel, W. H.",
+          "year": "1995",
+          "title": "Genera of lactic acid bacteria",
+          "url": "http://books.google.hr/books?id=Q8B_WusVacsC&printsec=frontcover#v=onepage&q&f=true",
+          "accessed": "19.04.2015."
+        },
+        "expected": "Wood, B. J. B., Holzapfel, W. H. (1995): Genera of lactic acid bacteria. Dostupno na: http://books.google.hr/books?id=Q8B_WusVacsC&printsec=frontcover#v=onepage&q&f=true (pristupljeno 19.04.2015.)."
+      }
+    },
+    {
+      "type": "clanak",
+      "template": "{authors} ({year}): {title}. {container}[[, {volume}]][[({issue})]][[: {pages}]].",
+      "requiredFields": [
+        "authors",
+        "year",
+        "title",
+        "container",
+        "pages"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "U popisu literature navode se svi izvori (knjige, znanstveni i strucni clanci, pravilnici i ostalo)",
+        "sourcePage": "str. 12",
+        "note": "Sekcija 6.2 popis literature izricito imenuje 'znanstvene i strucne clanke' kao vrstu izvora, ali NE daje formatirani primjer clanka (ekstrakcija sadrzi samo primjer knjige i mreznog izvora). Predlozak je izveden iz oblika za knjigu (autor, (godina):, naslov.) prosiren nazivom casopisa, sveskom, brojem i rasponom stranica po opcem hrvatskom prirodoznanstvenom obicaju. Interpunkciju (zarez/dvotocka oko volumena i stranica) potvrditi ili oboriti pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "poglavlje",
+      "template": "{authors} ({year}): {title}. U: {editor} (ur.), {container}. {publisher}, {place}.",
+      "requiredFields": [
+        "authors",
+        "year",
+        "title",
+        "editor",
+        "container",
+        "publisher",
+        "place"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "6.2. Izrada popisa literature",
+        "sourcePage": "str. 12",
+        "note": "Poglavlje u knjizi/zborniku nije prikazano u ekstrakciji (pada pod 'i ostalo' iz popisa vrsta izvora). Predlozak je izveden iz oblika za knjigu uz umetak 'U: urednik (ur.), naslov djela'. Redoslijed izdavac, mjesto preuzet iz potvrdenog oblika za knjigu. Potvrditi ili oboriti pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "zavrsni",
+      "template": "{authors} ({year}): {title}. Zavrsni rad. {institution}, {place}.",
+      "requiredFields": [
+        "authors",
+        "year",
+        "title",
+        "institution",
+        "place"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "6.2. Izrada popisa literature",
+        "sourcePage": "str. 12",
+        "note": "Upute NE obraduju citiranje zavrsnih/diplomskih radova kao izvora (dokument propisuje IZRADU zavrsnog rada, ne njegovo citiranje). Predlozak je izveden iz oblika za knjigu: izdavac zamijenjen ustanovom, dodana oznaka vrste rada 'Zavrsni rad.'. Potvrditi ili oboriti pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "propis",
+      "template": "{title} ({year}): {container}[[, {issue}]].",
+      "requiredFields": [
+        "title",
+        "year",
+        "container"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "U popisu literature navode se svi izvori (knjige, znanstveni i strucni clanci, pravilnici i ostalo)",
+        "sourcePage": "str. 12",
+        "note": "Popis literature imenuje 'pravilnike' kao vrstu izvora, ali bibliografski oblik propisa nije prikazan (u tekstu se propisi navode samo in-text: 'Pravilnik ... (NN 01/13)' i '(Anonymus, 2013)', str. 12). Predlozak je minimalno izveden iz opceg autor-godina reda natuknice (naslov propisa, godina u zagradi s dvotockom, glasilo, broj). Potvrditi pri verifikaciji."
+      },
+      "example": null
+    }
+  ],
+  "contradictions": [
+    "PRIOR iz profila je prazan; izvor daje vlastite worked-example primjere (autor-godina s dvotockom iza godine) pa je spec izveden iskljucivo iz njih, a ne pinnan na standardni stil.",
+    "Izvor propisuje da se literatura navodi abecednim redom prema prezimenu prvog autora i kronoloski (str. 12), ali istovremeno trazi da se 'literaturne izvore numerira' (str. 12); numeriranje je ovdje samo redni broj abecedno sortiranog popisa, a in-text ostaje autor-godina, pa je bibliography.sort = alphabetical, a mode = author-year.",
+    "Worked-example primjeri postoje samo za knjigu (str. 12) i mrezni izvor (str. 14); clanak, poglavlje, zavrsni i propis su izvedeni (derived) i traze verifikaciju.",
+    "Primjer knjige ima jedan inicijal ('Rupi, V.'), ali mrezni primjer potvrduje razmaknute inicijale s tockom ('Wood, B. J. B.'), pa je initials = dotted-spaced potvrden.",
+    "Naslovi u izvorniku (knjige/casopisi) mogli bi biti kurzivom; ekstrakcija to ne pokazuje pa se ne pretpostavlja, a alat ionako radi plain text.",
+    "Propis se in-text navodi dvojako: preko broja Narodnih novina ('(NN 01/13)') i preko '(Anonymus, godina)' (str. 12); bibliografski oblik propisa nije potvrden."
+  ]
+}

@@ -1,0 +1,169 @@
+{
+  "facultyId": "vhzk",
+  "styleToken": "vhzk-harvard",
+  "status": "draft",
+  "outcome": "custom-spec",
+  "label": "Harvard (sluzbene upute VHZK)",
+  "sourceId": "vhzk-pravilnik-zavrsni-2022",
+  "sourceLabel": "Pravilnik o zavrsnom radu, Prilog 7: Upute za tehnicko oblikovanje i citiranje literature (Veleuciliste Hrvatsko zagorje Krapina)",
+  "verifiedAt": null,
+  "verifiedBy": null,
+  "verifiedHash": null,
+  "accessDate": true,
+  "authorFormat": {
+    "order": "family-first",
+    "initials": "dotted-spaced",
+    "separator": ", ",
+    "finalJoiner": " i ",
+    "etAlAfter": 3,
+    "etAlKeep": 1,
+    "etAlJoiner": " ",
+    "etAlText": "i ost."
+  },
+  "inText": {
+    "mode": "author-year",
+    "template": "({authorsShort}, {year})",
+    "authorsShort": {
+      "twoJoiner": " i ",
+      "etAlAfter": 3,
+      "etAlText": "i ost."
+    },
+    "provenance": {
+      "kind": "worked-example",
+      "quoteRaw": "Uoceno je da su pomona sredstva neophodna za uspjesni rad (Poli, 2001).",
+      "sourcePage": "str. 17",
+      "note": "Harvardski stil, autor-godina: 'u tekstu se navodi u okruglim zagradama prezime (prvog) autora i godina izdavanja'. Narativni oblik 'Mali (1999) izvjestava'; parafraza/referenca na kraju recenice '(Poli, 2001)'. Doslovni navod ide unutar navodnih znakova ('Doli (2005) definira: ,,...'); izvor NE prikazuje broj stranice u tekstu pa withPagesTemplate nije postavljen."
+    }
+  },
+  "numbering": null,
+  "bibliography": {
+    "sort": "alphabetical"
+  },
+  "sourceTypes": [
+    {
+      "type": "knjiga",
+      "template": "{authors}, ({year}), {title}[[, {volume}]], {place}: {publisher}.",
+      "requiredFields": [
+        "authors",
+        "year",
+        "title",
+        "place",
+        "publisher"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Bali, A., (2000), Istrazivanja, Zagreb: Najbolja stamparija.",
+        "sourcePage": "str. 18",
+        "note": "Format iz izvora: 'Autor, Inicijal imena, (godina), Naslov knjige, Izdanje (samo ako nije prvo), Mjesto izdavanja knjige: Izdavac.' Zarez iza inicijala i iza (godine); dvotocka prije izdavaca; zavrsna tocka. Volume = broj izdanja, opcionalno (samo ako nije prvo). Dva autora se spajaju s ' i ' (Poli, D. i Soli, K.); vise autora 'Zoli, J. i ost.'; urednici 'Zoli, M. i Roli, N. urednici'."
+      },
+      "example": {
+        "input": {
+          "type": "knjiga",
+          "authors": "Bali, A.",
+          "year": "2000",
+          "title": "Istrazivanja",
+          "place": "Zagreb",
+          "publisher": "Najbolja stamparija"
+        },
+        "expected": "Bali, A., (2000), Istrazivanja, Zagreb: Najbolja stamparija."
+      }
+    },
+    {
+      "type": "poglavlje",
+      "template": "{authors}, ({year}), {title}, u: {editor} (ur.), {container}[[, {volume}]], {place}: {publisher}.",
+      "requiredFields": [
+        "authors",
+        "year",
+        "title",
+        "editor",
+        "container",
+        "place",
+        "publisher"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Zoli, M. i Roli, N. urednici, (2011), Zbornik radova, Krapina: Izdavac d.o.o",
+        "sourcePage": "str. 18",
+        "note": "Izvedeno iz oblika za knjigu. Ekstrakcija je odrezana na primjerima knjiga pa nema primjera poglavlja u zborniku; izvor prikazuje samo cijeli uredeni zbornik s oznakom 'urednici' iza imena urednika. Predlozak koristi kompaktni '(ur.)' i raspored 'naslov poglavlja, u: urednik, naslov zbornika' izveden iz Harvardske konvencije; uskladiti s oblikom 'urednici' pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "clanak",
+      "template": "{authors}, ({year}), {title}, {container}, {volume}[[({issue})]][[, str. {pages}]].",
+      "requiredFields": [
+        "authors",
+        "year",
+        "title",
+        "container",
+        "volume",
+        "pages"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Radove u zavrsnom radu treba citirati i referencirati Harvardskim stilom (Panjkota, 2010). Osnovna je",
+        "sourcePage": "str. 17",
+        "note": "Izvor izrijekom propisuje Harvardski stil, ali u odrezanoj ekstrakciji nema primjera clanka u casopisu. Predlozak (autor, (godina), naslov, casopis, godiste(broj), stranice) izveden je iz Harvardske konvencije uz interpunkciju iz oblika za knjigu; potvrditi pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "mrezni",
+      "template": "{authors}, ({year}), {title}, dostupno na: {url} (pristupljeno: {accessed}).",
+      "requiredFields": [
+        "authors",
+        "year",
+        "title",
+        "url",
+        "accessed"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "mogu se nai na: http://lib.irb.hr/web/en/how-to-cite-literature.html (pristupljeno: 9. svibnja 2022.).",
+        "sourcePage": "str. 17",
+        "note": "Format datuma pristupa '(pristupljeno: DATUM)' evidentiran je u ovoj recenici (upucivanje na mrezni izvor). Nema punog bibliografskog primjera mreznog izvora u ekstrakciji; predlozak izveden iz oblika za knjigu + ove konvencije pristupa. Uvod 'dostupno na:' je izveden, potvrditi pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "zavrsni",
+      "template": "{authors}, ({year}), {title} (zavrsni rad), {place}: {institution}.",
+      "requiredFields": [
+        "authors",
+        "year",
+        "title",
+        "place",
+        "institution"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Osnovna karakteristika da se abecednim redom navode svi izvori prema prezimenu prvog autora ili",
+        "sourcePage": "str. 18",
+        "note": "Izvor ne obraduje citiranje zavrsnih/diplomskih radova kao izvora. Predlozak izveden iz oblika za knjigu (ustanova umjesto izdavaca, oznaka '(zavrsni rad)'); potvrditi ili oboriti pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "propis",
+      "template": "{title}, {container}[[, br. {issue}]].",
+      "requiredFields": [
+        "title",
+        "container"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Zakonom o autorskom pravu i srodnim pravima (2021) i Zakonom o znanstvenoj djelatnosti i visokom",
+        "sourcePage": "str. 17",
+        "note": "Zakoni se u izvoru pojavljuju samo kao navodi u tekstu (naziv zakona + godina u zagradi). Nema bibliografskog primjera propisa; predlozak (naziv, glasilo, broj) izveden je iz opce hrvatske prakse, potvrditi pri verifikaciji."
+      },
+      "example": null
+    }
+  ],
+  "contradictions": [
+    "Ekstrakcija je odrezana na primjerima za knjigu (str. 18); samo sourceType 'knjiga' ima worked-example, dok su poglavlje/clanak/mrezni/zavrsni/propis izvedeni (derived) i cekaju potvrdu iz punih Uputa (Prilog 7, poglavlje 3.2.2).",
+    "Prag za 'i ost.' (etAlAfter) i konfiguracija authorsShort nisu brojcano propisani u izvoru; oblik 'Zoli, J. i ost.' je evidentiran (etAlKeep 1), a prag 3 je Harvardska pretpostavka.",
+    "Izvor u primjerima doslovnih navoda ne prikazuje broj stranice u tekstu (npr. 'Doli (2005) definira...'), pa withPagesTemplate nije postavljen iako standardni Harvard koristi stranice za doslovne navode.",
+    "Uredeni zbornik u izvoru koristi rijec 'urednici' iza imena ('Zoli, M. i Roli, N. urednici'); predlozak za poglavlje koristi kompaktni '(ur.)' i treba ga uskladiti pri verifikaciji.",
+    "Prior hint ['harvard'] potvrden je izvorom (Harvardski stil izrijekom imenovan, str. 17); nema proturjecja s priorom."
+  ]
+}
