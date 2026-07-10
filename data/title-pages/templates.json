@@ -14343,72 +14343,97 @@
     "level": "graduate",
     "name": "Učiteljski fakultet u Rijeci: diplomski rad",
     "provenance": {
-      "status": "derived",
-      "sourceNote": "Raspored izveden konsenzusom 3 javnih radova; nije sluzbeni predlozak.",
+      "status": "official",
+      "sourceIds": [
+        "ufri-upute-diplomski-2024"
+      ],
+      "sourceUrl": "https://www.ufri.uniri.hr/files/nastava/Upute_za_izradu_rada/240417_Upute_za_izradu_dipl_rada.pdf",
+      "sourceNote": "Upute (2024) propisuju tekst naslovnice; redak Predmet i Maticni broj (JMBAG) nisu podrzani u generatoru v1.",
+      "quote": "Tekst na sljedecem listu: SVEUCILISTE U RIJECI, UCITELJSKI FAKULTET U RIJECI, Integrirani preddiplomski i diplomski sveucilisni uciteljski studij, Naslov rada, DIPLOMSKI RAD, Mentor: ime i prezime, te zvanje mentora, Student: ime i prezime studenta, U Mjesto, mjesec, godina",
+      "sourcePage": 6,
+      "verifiedAt": null,
       "evidencePids": [
         "ufri:191",
         "ufri:223",
         "ufri:238"
-      ],
-      "verifiedAt": null
+      ]
     },
     "status": "draft",
     "elements": [
       {
         "role": "university",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
+        "required": true,
+        "elementProvenance": "official-rules",
         "group": 0,
-        "confidence": 1,
+        "label": "Sveuciliste",
+        "fixedText": "SVEUČILIŠTE U RIJECI",
+        "uppercase": true,
         "font": "Times New Roman",
-        "sizePt": 14,
-        "uppercase": true
+        "sizePt": 14
       },
       {
         "role": "faculty",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
+        "required": true,
+        "elementProvenance": "official-rules",
         "group": 0,
-        "confidence": 1,
+        "label": "Fakultet",
+        "fixedText": "UČITELJSKI FAKULTET U RIJECI",
+        "uppercase": true,
         "font": "Times New Roman",
-        "sizePt": 12,
-        "uppercase": true
+        "sizePt": 12
       },
       {
-        "role": "author",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
-        "group": 1
+        "role": "study",
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 0,
+        "label": "Studij"
       },
       {
         "role": "title",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
+        "required": true,
+        "elementProvenance": "official-rules",
         "group": 1,
-        "confidence": 1,
+        "label": "Naslov rada",
         "font": "Times New Roman",
         "sizePt": 14
       },
       {
         "role": "worktype",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
+        "required": true,
+        "elementProvenance": "official-rules",
         "group": 1,
-        "confidence": 1,
+        "label": "Vrsta rada",
+        "fixedText": "DIPLOMSKI RAD",
+        "uppercase": true,
         "font": "Times New Roman",
-        "sizePt": 14,
-        "uppercase": true
+        "sizePt": 14
+      },
+      {
+        "role": "mentor",
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 2,
+        "label": "Mentor"
+      },
+      {
+        "role": "author",
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 2,
+        "label": "Student"
       },
       {
         "role": "placeyear",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
-        "group": 2,
-        "confidence": 1,
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 3,
+        "label": "Mjesto i godina",
         "font": "Times New Roman",
         "sizePt": 12
       }
     ],
+    "notes": "Izvor propisuje i tekst na koricama i tekst na sljedecem listu (naslovnici). Modeliran je sljedeci list (naslovnica) jer sadrzi studij, mentora i studenta. Predlozak sadrzi i redak Predmet (naziv predmeta) i Maticni broj (JMBAG) koji nemaju ulogu u vokabularu generatora pa nisu ukljuceni kao elementi. Font i velicine za pojedine elemente naslovnice nisu izricito propisani (opca tehnicka obrada trazi Times New Roman 12 za tekst rada).",
     "derivation": {
       "samples": 3,
       "conflicts": []
@@ -14671,85 +14696,150 @@
     }
   },
   {
-    "id": "unidu-final",
+    "id": "unidu-povijest-final",
     "unitId": "unidu",
     "level": "final",
-    "name": "Sveuciliste u Dubrovniku: završni rad",
+    "name": "Sveuciliste u Dubrovniku: zavrsni rad (Odjel za humanisticke studije)",
     "provenance": {
-      "status": "derived",
-      "sourceNote": "Raspored izveden konsenzusom 2 javnih radova; nije sluzbeni predlozak.",
+      "status": "official",
+      "sourceIds": [
+        "unidu-povijest-upute"
+      ],
+      "sourceUrl": "https://www.unidu.hr/wp-content/plugins/quarascope/download.php?file=7709",
+      "sourceNote": "Upute za preddiplomski studij Povijest Jadrana i Mediterana propisuju sadrzaj i velicine na unutarnjoj naslovnoj stranici.",
+      "quote": "SVEUCILISTE U DUBROVNIKU (font 18) ... NASLOV RADA (bold, font 22) ... Zavrsni rad (font 14)",
+      "sourcePage": 2,
+      "verifiedAt": null,
       "evidencePids": [
         "unidu:421",
         "unidu:423"
-      ],
-      "verifiedAt": null
+      ]
     },
     "status": "draft",
     "elements": [
       {
         "role": "university",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
+        "required": true,
+        "elementProvenance": "official-rules",
         "group": 0,
-        "confidence": 1,
-        "font": "Times New Roman",
-        "uppercase": true
+        "label": "Naziv sveucilista",
+        "fixedText": "Sveuciliste u Dubrovniku",
+        "sizePt": 18,
+        "uppercase": true,
+        "font": "Times New Roman"
       },
       {
-        "role": "author",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
-        "group": 1
+        "role": "faculty",
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 0,
+        "label": "Naziv odjela",
+        "fixedText": "Odjel za humanisticke studije",
+        "sizePt": 16
+      },
+      {
+        "role": "study",
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 0,
+        "label": "Naziv studija",
+        "fixedText": "Preddiplomski studij \"Povijest Jadrana i Mediterana\"",
+        "sizePt": 16
       },
       {
         "role": "title",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
+        "required": true,
+        "elementProvenance": "official-rules",
         "group": 1,
-        "confidence": 1,
-        "font": "Times New Roman",
-        "uppercase": true
+        "label": "Naslov rada",
+        "sizePt": 22,
+        "bold": true,
+        "uppercase": true,
+        "font": "Times New Roman"
+      },
+      {
+        "role": "worktype",
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 1,
+        "label": "Vrsta rada",
+        "fixedText": "Zavrsni rad",
+        "sizePt": 14
+      },
+      {
+        "role": "author",
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 2,
+        "label": "Student",
+        "sizePt": 16
+      },
+      {
+        "role": "mentor",
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 2,
+        "label": "Mentor",
+        "sizePt": 16
+      },
+      {
+        "role": "comentor",
+        "required": false,
+        "elementProvenance": "official-rules",
+        "group": 2,
+        "label": "Komentor",
+        "sizePt": 16
       },
       {
         "role": "placeyear",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
-        "group": 2,
-        "confidence": 1,
-        "font": "Times New Roman",
-        "sizePt": 14
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 3,
+        "label": "Mjesto i godina",
+        "sizePt": 14,
+        "font": "Times New Roman"
       }
     ],
+    "notes": "Upute daju vanjski omot te unutarnju naslovnu stranicu na hrvatskom i na engleskom jeziku; modelirana je unutarnja naslovna na hrvatskom. Odjel je u izvoru naveden kao 'u osnivanju'. Font naslovnice nije izrijekom imenovan (opce upute traze Times New Roman za rad), pa je izostavljen.",
     "derivation": {
       "samples": 2,
       "conflicts": []
     }
   },
   {
-    "id": "unidu-graduate",
+    "id": "unidu-umjetnost-graduate",
     "unitId": "unidu",
     "level": "graduate",
-    "name": "Sveuciliste u Dubrovniku: diplomski rad",
+    "name": "Sveuciliste u Dubrovniku: diplomski rad (Odjel za umjetnost i restauraciju)",
     "provenance": {
-      "status": "derived",
-      "sourceNote": "Raspored izveden konsenzusom 3 javnih radova; nije sluzbeni predlozak.",
+      "status": "official",
+      "sourceIds": [
+        "unidu-umjetnost-naputak"
+      ],
+      "sourceUrl": "https://www.unidu.hr/wp-content/plugins/quarascope/download.php?file=2333",
+      "sourceNote": "Naputak Odjela za umjetnost i restauraciju propisuje centriranu naslovnu stranicu diplomskog rada s tocnim velicinama fonta.",
+      "quote": "Naslov rada na hrvatskom jeziku (velikim slovima, podebljano, font 22)",
+      "sourcePage": 3,
+      "verifiedAt": null,
       "evidencePids": [
         "unidu:241",
         "unidu:426",
         "unidu:519"
-      ],
-      "verifiedAt": null
+      ]
     },
     "status": "draft",
     "elements": [
       {
         "role": "university",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
+        "required": true,
+        "elementProvenance": "official-rules",
         "group": 0,
-        "confidence": 1,
+        "label": "Naziv sveucilista",
+        "fixedText": "Sveuciliste u Dubrovniku",
+        "sizePt": 18,
+        "uppercase": true,
+        "align": "center",
         "font": "Times New Roman",
-        "sizePt": 14,
         "bold": true
       },
       {
@@ -14763,49 +14853,90 @@
         "bold": true
       },
       {
+        "role": "faculty",
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 0,
+        "label": "Naziv odjela",
+        "fixedText": "Odjel za umjetnost i restauraciju",
+        "sizePt": 16,
+        "align": "center"
+      },
+      {
         "role": "author",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
+        "required": true,
+        "elementProvenance": "official-rules",
         "group": 1,
-        "confidence": 0.67,
+        "label": "Ime i prezime kandidata",
+        "sizePt": 14,
+        "uppercase": true,
+        "align": "center",
         "font": "Times New Roman"
       },
       {
         "role": "title",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
-        "group": 1,
-        "confidence": 1,
-        "font": "Times New Roman",
-        "sizePt": 16,
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 2,
+        "label": "Naslov rada",
+        "sizePt": 22,
         "bold": true,
-        "uppercase": true
+        "uppercase": true,
+        "align": "center",
+        "font": "Times New Roman"
       },
       {
         "role": "worktype",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
-        "group": 1,
-        "confidence": 1,
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 2,
+        "label": "Vrsta rada",
+        "fixedText": "Diplomski rad",
+        "sizePt": 16,
+        "uppercase": true,
+        "align": "center",
         "font": "Times New Roman",
-        "sizePt": 14,
-        "bold": true,
-        "uppercase": true
+        "bold": true
+      },
+      {
+        "role": "mentor",
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 3,
+        "label": "Mentor",
+        "sizePt": 16,
+        "align": "center"
+      },
+      {
+        "role": "comentor",
+        "required": false,
+        "elementProvenance": "official-rules",
+        "group": 3,
+        "label": "Komentor",
+        "sizePt": 16,
+        "align": "center"
       },
       {
         "role": "placeyear",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
-        "group": 2,
-        "confidence": 1,
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 4,
+        "label": "Mjesto i godina",
+        "sizePt": 14,
+        "align": "center",
         "font": "Times New Roman",
-        "sizePt": 12,
         "bold": true
       }
     ],
+    "notes": "Naputak razlikuje naslovnicu omota (koja sadrzi i naslov na engleskom jeziku) i naslovnu stranicu (bez engleskog naslova, ali s mentorom i komentorom); modelirana je naslovna stranica. Cijeli tekst je centriran. Font naslovnice nije izrijekom imenovan, pa je izostavljen.",
     "derivation": {
       "samples": 3,
-      "conflicts": []
+      "conflicts": [
+        "university.sizePt: sluzbeno 18 vs teze 14",
+        "title.sizePt: sluzbeno 22 vs teze 16",
+        "worktype.sizePt: sluzbeno 16 vs teze 14",
+        "placeyear.sizePt: sluzbeno 14 vs teze 12"
+      ]
     }
   },
   {
@@ -14906,80 +15037,125 @@
     "id": "unizd-final",
     "unitId": "unizd",
     "level": "final",
-    "name": "Sveuciliste u Zadru: završni rad",
+    "name": "Sveuciliste u Zadru: zavrsni rad",
     "provenance": {
-      "status": "derived",
-      "sourceNote": "Raspored izveden konsenzusom 3 javnih radova; nije sluzbeni predlozak.",
+      "status": "official",
+      "sourceIds": [
+        "unizd-turizam-upute"
+      ],
+      "sourceUrl": "https://www.unizd.hr/Portals/46/DIPLOMSKI%2C%20ZAVRSNI%20I%20SEMINARSKI%20RADOVI/Zavrsni%20radovi/Upute%20za%20izradu%20zavrsnoga%20i%20diplomskog%20rada.pdf",
+      "sourceNote": "Primjer 2 u Uputama Odjela za turizam pokazuje predlozak naslovnice zavrsnog rada s tocnim fontovima; nazivi odjela i studija su placeholderi.",
+      "quote": "SVEUCILISTE U ZADRU / ODJEL ... / STUDIJ ... (Times New Roman, 14 pt, centrirano); Ime i prezime, NASLOV RADA, Zavrsni rad (Times New Roman, 16 pt, bold, centrirano); Zadar, godina. (Times New Roman, 14 pt, centrirano)",
+      "sourcePage": 6,
+      "verifiedAt": null,
       "evidencePids": [
         "unizd:351",
         "unizd:433",
         "unizd:434"
-      ],
-      "verifiedAt": null
+      ]
     },
     "status": "draft",
     "elements": [
       {
         "role": "university",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
+        "required": true,
+        "elementProvenance": "official-template",
         "group": 0,
-        "confidence": 1,
+        "label": "Ime Sveucilista",
+        "fixedText": "SVEUCILISTE U ZADRU",
         "font": "Times New Roman",
-        "sizePt": 18
+        "sizePt": 14,
+        "uppercase": true,
+        "align": "center"
+      },
+      {
+        "role": "faculty",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 0,
+        "label": "Naziv Odjela",
+        "font": "Times New Roman",
+        "sizePt": 14,
+        "uppercase": true,
+        "align": "center"
       },
       {
         "role": "study",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
+        "required": true,
+        "elementProvenance": "official-template",
         "group": 0,
-        "confidence": 1,
+        "label": "Naziv studija",
         "font": "Times New Roman",
-        "sizePt": 16
+        "sizePt": 14,
+        "uppercase": true,
+        "align": "center"
       },
       {
         "role": "author",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
+        "required": true,
+        "elementProvenance": "official-template",
         "group": 1,
-        "confidence": 1,
+        "label": "Ime i prezime studenta",
         "font": "Times New Roman",
         "sizePt": 16,
-        "bold": true
+        "bold": true,
+        "align": "center"
       },
       {
         "role": "title",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
-        "group": 1,
-        "confidence": 1,
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 2,
+        "label": "Naslov rada",
         "font": "Times New Roman",
-        "sizePt": 20,
-        "bold": true
+        "sizePt": 16,
+        "bold": true,
+        "uppercase": true,
+        "align": "center"
       },
       {
         "role": "worktype",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
-        "group": 1,
-        "confidence": 1,
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 3,
+        "label": "Vrsta rada",
+        "fixedText": "Zavrsni rad",
         "font": "Times New Roman",
         "sizePt": 16,
-        "bold": true
+        "bold": true,
+        "align": "center"
+      },
+      {
+        "role": "mentor",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 4,
+        "label": "Titula, ime i prezime mentora",
+        "font": "Times New Roman",
+        "sizePt": 16,
+        "bold": true,
+        "align": "center"
       },
       {
         "role": "placeyear",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
-        "group": 2,
-        "confidence": 1,
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 5,
+        "label": "Mjesto i godina",
         "font": "Times New Roman",
-        "sizePt": 14
+        "sizePt": 14,
+        "align": "center"
       }
     ],
+    "defaultFont": "Times New Roman",
+    "notes": "Predlozak je Odjela za turizam i komunikacijske znanosti; drugi zadarski odjeli (psihologija, pedagogija, povijest umjetnosti) propisuju vlastite naslovnice ili vanjske obrasce iz Digitalnog repozitorija Sveucilista u Zadru. JMBAG i logotip se ne navode u ovom predlosku.",
     "derivation": {
       "samples": 3,
-      "conflicts": []
+      "conflicts": [
+        "university.sizePt: sluzbeno 14 vs teze 18",
+        "study.sizePt: sluzbeno 14 vs teze 16",
+        "title.sizePt: sluzbeno 16 vs teze 20"
+      ]
     }
   },
   {
@@ -14988,73 +15164,121 @@
     "level": "graduate",
     "name": "Sveuciliste u Zadru: diplomski rad",
     "provenance": {
-      "status": "derived",
-      "sourceNote": "Raspored izveden konsenzusom 3 javnih radova; nije sluzbeni predlozak.",
+      "status": "official",
+      "sourceIds": [
+        "unizd-turizam-upute"
+      ],
+      "sourceUrl": "https://www.unizd.hr/Portals/46/DIPLOMSKI%2C%20ZAVRSNI%20I%20SEMINARSKI%20RADOVI/Zavrsni%20radovi/Upute%20za%20izradu%20zavrsnoga%20i%20diplomskog%20rada.pdf",
+      "sourceNote": "Primjer 7 u Uputama Odjela za turizam pokazuje predlozak naslovnice diplomskog rada s tocnim fontovima; nazivi odjela i studija su placeholderi.",
+      "quote": "SVEUCILISTE U ZADRU / ODJEL ... / NAZIV DIPLOMSKOG STUDIJA (Times New Roman, 14 pt, centrirano); Ime i prezime, NASLOV RADA, Diplomski rad, Titula, ime i prezime mentora (Times New Roman, 16 pt, bold, centrirano); Zadar, godina. (Times New Roman, 14 pt, centrirano)",
+      "sourcePage": 16,
+      "verifiedAt": null,
       "evidencePids": [
         "unizd:171",
         "unizd:222",
         "unizd:34"
-      ],
-      "verifiedAt": null
+      ]
     },
     "status": "draft",
     "elements": [
       {
         "role": "university",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
+        "required": true,
+        "elementProvenance": "official-template",
         "group": 0,
-        "confidence": 1,
+        "label": "Ime Sveucilista",
+        "fixedText": "SVEUCILISTE U ZADRU",
         "font": "Times New Roman",
-        "sizePt": 18
+        "sizePt": 14,
+        "uppercase": true,
+        "align": "center"
+      },
+      {
+        "role": "faculty",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 0,
+        "label": "Naziv Odjela",
+        "font": "Times New Roman",
+        "sizePt": 14,
+        "uppercase": true,
+        "align": "center"
       },
       {
         "role": "study",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
+        "required": true,
+        "elementProvenance": "official-template",
         "group": 0,
-        "confidence": 1,
+        "label": "Naziv diplomskog studija",
         "font": "Times New Roman",
-        "sizePt": 14
+        "sizePt": 14,
+        "uppercase": true,
+        "align": "center"
       },
       {
         "role": "author",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
-        "group": 1
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 1,
+        "label": "Ime i prezime studenta",
+        "font": "Times New Roman",
+        "sizePt": 16,
+        "bold": true,
+        "align": "center"
       },
       {
         "role": "title",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
-        "group": 1,
-        "confidence": 1,
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 2,
+        "label": "Naslov rada",
         "font": "Times New Roman",
-        "bold": true
+        "sizePt": 16,
+        "bold": true,
+        "uppercase": true,
+        "align": "center"
       },
       {
         "role": "worktype",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
-        "group": 1,
-        "confidence": 1,
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 3,
+        "label": "Vrsta rada",
+        "fixedText": "Diplomski rad",
         "font": "Times New Roman",
         "sizePt": 16,
-        "bold": true
+        "bold": true,
+        "align": "center"
+      },
+      {
+        "role": "mentor",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 4,
+        "label": "Titula, ime i prezime mentora",
+        "font": "Times New Roman",
+        "sizePt": 16,
+        "bold": true,
+        "align": "center"
       },
       {
         "role": "placeyear",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
-        "group": 2,
-        "confidence": 1,
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 5,
+        "label": "Mjesto i godina",
         "font": "Times New Roman",
-        "sizePt": 14
+        "sizePt": 14,
+        "align": "center"
       }
     ],
+    "defaultFont": "Times New Roman",
+    "notes": "Predlozak je Odjela za turizam i komunikacijske znanosti; drugi zadarski odjeli (npr. pedagogija) upucuju na vanjske obrasce iz Digitalnog repozitorija Sveucilista u Zadru. Diplomski rad ima i zasebnu vanjsku (omotnu) stranicu (Primjer 6) bez mentora; ovaj predlozak opisuje unutarnju naslovnicu (Primjer 7). JMBAG i logotip se ne navode.",
     "derivation": {
       "samples": 3,
-      "conflicts": []
+      "conflicts": [
+        "university.sizePt: sluzbeno 14 vs teze 18"
+      ]
     }
   },
   {
@@ -15135,73 +15359,98 @@
     "level": "graduate",
     "name": "Veterinarski fakultet: diplomski rad",
     "provenance": {
-      "status": "derived",
-      "sourceNote": "Raspored izveden konsenzusom 3 javnih radova; nije sluzbeni predlozak.",
+      "status": "official",
+      "sourceIds": [
+        "vef-naputak-diplomski-2024"
+      ],
+      "sourceUrl": "https://www.vef.unizg.hr/wp-content/uploads/2024/01/N-A-P-U-T-A-K-za-prijavu-pisanje-i-oblikovanje-diplomskig-rada-odobren-Fakultetsko-vijece-24.1.2024.pdf",
+      "sourceNote": "Naputak (2024), t. 5 Oblikovanje naslovnice, prikazuje predlozak naslovnice s propisanim fontom i velicinama (Times New Roman, centrirano).",
+      "quote": "Primjer naslovne stranice: SVEUČILIŠTE U ZAGREBU / VETERINARSKI FAKULTET (Times New Roman, 14pt, centrirano)",
+      "sourcePage": 6,
+      "verifiedAt": null,
       "evidencePids": [
         "vef:1080",
         "vef:1110",
         "vef:1290"
-      ],
-      "verifiedAt": null
+      ]
     },
     "status": "draft",
     "elements": [
       {
         "role": "university",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
+        "required": true,
+        "elementProvenance": "official-template",
         "group": 0,
-        "confidence": 1,
+        "fixedText": "SVEUČILIŠTE U ZAGREBU",
         "font": "Times New Roman",
         "sizePt": 14,
-        "uppercase": true
+        "uppercase": true,
+        "align": "center"
       },
       {
         "role": "faculty",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
+        "required": true,
+        "elementProvenance": "official-template",
         "group": 0,
-        "confidence": 1,
+        "fixedText": "VETERINARSKI FAKULTET",
         "font": "Times New Roman",
         "sizePt": 14,
-        "uppercase": true
+        "uppercase": true,
+        "align": "center"
+      },
+      {
+        "role": "study",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 1,
+        "fixedText": "SVEUČILIŠNI INTEGRIRANI PRIJEDIPLOMSKI I DIPLOMSKI STUDIJ VETERINARSKA MEDICINA",
+        "font": "Times New Roman",
+        "sizePt": 12,
+        "uppercase": true,
+        "align": "center"
       },
       {
         "role": "author",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
-        "group": 1,
-        "confidence": 0.67,
-        "font": "Times New Roman"
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 2,
+        "label": "Ime i prezime studenta",
+        "font": "Times New Roman",
+        "sizePt": 12,
+        "align": "center"
       },
       {
         "role": "title",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
-        "group": 1,
-        "confidence": 1,
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 3,
+        "label": "Naziv diplomskog rada",
         "font": "Times New Roman",
-        "sizePt": 14
+        "sizePt": 14,
+        "align": "center"
       },
       {
         "role": "worktype",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
-        "group": 2,
-        "confidence": 1,
-        "font": "Times New Roman",
-        "sizePt": 12
-      },
-      {
-        "role": "placeyear",
         "required": false,
         "elementProvenance": "thesis-consensus",
         "group": 3,
         "confidence": 1,
         "font": "Times New Roman",
         "sizePt": 12
+      },
+      {
+        "role": "placeyear",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 4,
+        "label": "Zagreb, godina.",
+        "font": "Times New Roman",
+        "sizePt": 12,
+        "align": "center"
       }
     ],
+    "defaultFont": "Times New Roman",
+    "notes": "Naputak (t. 5) uz predlozak nalaze: Navedeni podaci trebaju se ravnomjerno rasporediti na cijelu stranicu kako bi ona imala uredan izgled. Predlozak ne prikazuje logotip ni oznaku vrste rada (worktype) kao zaseban redak; naslov je zadan kao Naziv diplomskog rada. Druga stranica rada je zaseban obrazac i nije naslovnica.",
     "derivation": {
       "samples": 3,
       "conflicts": []
@@ -15211,15 +15460,21 @@
     "id": "veleknin-final",
     "unitId": "veleknin",
     "level": "final",
-    "name": "Veleuciliste Marko Marulic u Kninu: završni rad",
+    "name": "Veleuciliste Marko Marulic u Kninu: zavrsni rad",
     "provenance": {
-      "status": "derived",
-      "sourceNote": "Raspored izveden konsenzusom 2 javnih radova; nije sluzbeni predlozak.",
+      "status": "official",
+      "sourceIds": [
+        "veleknin-upute-zavrsni-2020"
+      ],
+      "sourceUrl": "https://www.veleknin.hr/wp-content/uploads/2023/12/uputezaizraduiobranuzavrnograda.pdf",
+      "sourceNote": "Prilog 1 Uputa pokazuje predlozak naslovne stranice zavrsnog rada; maticni broj i logotip/memorandum dodaju se rucno.",
+      "quote": "Naslovna stranica zavrsnog rada (Slika 2) mora sadrzavati sljedece podatke",
+      "sourcePage": 18,
+      "verifiedAt": null,
       "evidencePids": [
         "veleknin:1083",
         "veleknin:739"
-      ],
-      "verifiedAt": null
+      ]
     },
     "status": "draft",
     "elements": [
@@ -15234,69 +15489,113 @@
         "bold": true
       },
       {
-        "role": "study",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
+        "role": "university",
+        "required": true,
+        "elementProvenance": "official-template",
         "group": 0,
-        "confidence": 1,
+        "fixedText": "Veleučilište „Marko Marulić\" u Kninu",
         "font": "Times New Roman",
-        "sizePt": 16,
+        "sizePt": 14
+      },
+      {
+        "role": "study",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 0,
+        "label": "Naziv strucnog studija i odjela",
+        "font": "Times New Roman",
+        "sizePt": 14,
         "bold": true
       },
       {
         "role": "author",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
-        "group": 1
-      },
-      {
-        "role": "title",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
+        "required": true,
+        "elementProvenance": "official-template",
         "group": 1,
-        "confidence": 1,
-        "font": "Times New Roman",
-        "bold": true
-      },
-      {
-        "role": "worktype",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
-        "group": 2,
-        "confidence": 1,
-        "font": "Times New Roman",
-        "bold": true
-      },
-      {
-        "role": "placeyear",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
-        "group": 3,
-        "confidence": 1,
+        "label": "Ime i prezime studenta",
         "font": "Times New Roman",
         "sizePt": 16,
         "bold": true
+      },
+      {
+        "role": "title",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 1,
+        "label": "Naslov rada",
+        "font": "Times New Roman",
+        "sizePt": 16,
+        "bold": true,
+        "uppercase": true
+      },
+      {
+        "role": "worktype",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 1,
+        "fixedText": "Završni rad",
+        "font": "Times New Roman",
+        "sizePt": 16,
+        "bold": true
+      },
+      {
+        "role": "mentor",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 2,
+        "label": "Mentor: Ime i prezime, zvanje",
+        "font": "Times New Roman",
+        "sizePt": 16
+      },
+      {
+        "role": "comentor",
+        "required": false,
+        "elementProvenance": "official-template",
+        "group": 2,
+        "label": "Komentor: Ime i prezime, zvanje",
+        "font": "Times New Roman",
+        "sizePt": 16
+      },
+      {
+        "role": "placeyear",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 3,
+        "label": "Knin, godina.",
+        "font": "Times New Roman",
+        "sizePt": 14,
+        "bold": true
       }
     ],
+    "notes": "Predlozak (Prilog 1, str. 18) izmedju vrste rada i mentora sadrzi redak 'Maticni broj: xxxxxxxxxxxxx' (JMBAG) koji nema ulogu u vokabularu generatora. Upute (str. 5) navode i 'Memorandum Veleucilista' na omotnoj stranici (logotip), sto nije podrzano u generatoru v1. Komentor se prema fusnoti na predlosku brise ako rad nema komentora. Poravnanje nije eksplicitno dano u tekstu (nema x koordinata) pa je izostavljeno.",
     "derivation": {
       "samples": 2,
-      "conflicts": []
+      "conflicts": [
+        "study.sizePt: sluzbeno 14 vs teze 16",
+        "placeyear.sizePt: sluzbeno 14 vs teze 16"
+      ]
     }
   },
   {
     "id": "veleri-final",
     "unitId": "veleri",
     "level": "final",
-    "name": "Veleuciliste u Rijeci: završni rad",
+    "name": "Veleuciliste u Rijeci: zavrsni rad",
     "provenance": {
-      "status": "derived",
-      "sourceNote": "Raspored izveden konsenzusom 3 javnih radova; nije sluzbeni predlozak.",
+      "status": "official",
+      "sourceIds": [
+        "veleri-upute-formalni-izgled"
+      ],
+      "sourceUrl": "https://www.veleri.hr/sites/default/files/2023-01/upute-za-formalni-izgled-zavrsnog-i-diplomskog-rada-veleucilista-u-rijeci_0_0.pdf",
+      "sourceNote": "Upute za formalni izgled propisuju podatke na koricama zavrsnog rada; tipografija nije propisana.",
+      "quote": "Na koricama se ispisuju sljedeci podaci: Veleuciliste u Rijeci, ime i prezime studenta, naslov zavrsnog/diplomskog rada, (zavrsni rad / diplomski rad), Rijeka, godina.",
+      "sourcePage": 1,
+      "verifiedAt": null,
       "evidencePids": [
         "veleri:1971",
         "veleri:1974",
         "veleri:718"
-      ],
-      "verifiedAt": null
+      ]
     },
     "status": "draft",
     "elements": [
@@ -15312,111 +15611,223 @@
         "uppercase": true
       },
       {
+        "role": "university",
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 0,
+        "label": "Veleuciliste u Rijeci",
+        "fixedText": "Veleuciliste u Rijeci"
+      },
+      {
         "role": "author",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
+        "required": true,
+        "elementProvenance": "official-rules",
         "group": 1,
-        "confidence": 1,
+        "label": "Ime i prezime studenta",
         "font": "Times New Roman",
         "sizePt": 14
       },
       {
         "role": "title",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
-        "group": 1,
-        "confidence": 1,
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 2,
+        "label": "Naslov zavrsnog rada",
         "font": "Times New Roman",
         "sizePt": 16,
         "bold": true,
         "uppercase": true
       },
       {
-        "role": "placeyear",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
+        "role": "worktype",
+        "required": true,
+        "elementProvenance": "official-rules",
         "group": 2,
-        "confidence": 1,
+        "label": "Vrsta rada",
+        "fixedText": "zavrsni rad"
+      },
+      {
+        "role": "placeyear",
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 3,
+        "label": "Rijeka, godina",
         "font": "Times New Roman",
         "sizePt": 14
       }
     ],
+    "notes": "Iste Upute propisuju i drugu unutarnju stranicu s dodatnim podatkom naziv odjela i strucnog studija; prva unutarnja stranica ostaje prazna. Tipografija naslovnice nije eksplicitno propisana. Ovo je tekstualno pravilo, ne obrazac.",
     "derivation": {
       "samples": 3,
       "conflicts": []
     }
   },
   {
-    "id": "vevu-final",
-    "unitId": "vevu",
-    "level": "final",
-    "name": "Veleuciliste Lavoslav Ruzicka u Vukovaru: završni rad",
+    "id": "veleri-graduate",
+    "unitId": "veleri",
+    "level": "graduate",
+    "name": "Veleuciliste u Rijeci: diplomski rad",
     "provenance": {
-      "status": "derived",
-      "sourceNote": "Raspored izveden konsenzusom 3 javnih radova; nije sluzbeni predlozak.",
-      "evidencePids": [
-        "vevu:1496",
-        "vevu:1764",
-        "vevu:1803"
+      "status": "official",
+      "sourceIds": [
+        "veleri-upute-formalni-izgled"
       ],
+      "sourceUrl": "https://www.veleri.hr/sites/default/files/2023-01/upute-za-formalni-izgled-zavrsnog-i-diplomskog-rada-veleucilista-u-rijeci_0_0.pdf",
+      "sourceNote": "Upute za formalni izgled propisuju podatke na koricama diplomskog rada; tipografija nije propisana.",
+      "quote": "Na koricama se ispisuju sljedeci podaci: Veleuciliste u Rijeci, ime i prezime studenta, naslov zavrsnog/diplomskog rada, (zavrsni rad / diplomski rad), Rijeka, godina.",
+      "sourcePage": 1,
       "verifiedAt": null
     },
     "status": "draft",
     "elements": [
       {
-        "role": "faculty",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
+        "role": "university",
+        "required": true,
+        "elementProvenance": "official-rules",
         "group": 0,
-        "confidence": 1,
-        "font": "Times New Roman",
-        "sizePt": 16,
-        "bold": true,
-        "uppercase": true
-      },
-      {
-        "role": "title",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
-        "group": 1,
-        "confidence": 1,
-        "font": "Times New Roman",
-        "sizePt": 26,
-        "bold": true,
-        "uppercase": true
-      },
-      {
-        "role": "worktype",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
-        "group": 1,
-        "confidence": 1,
-        "font": "Times New Roman",
-        "sizePt": 18,
-        "bold": true,
-        "uppercase": true
+        "label": "Veleuciliste u Rijeci",
+        "fixedText": "Veleuciliste u Rijeci"
       },
       {
         "role": "author",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 1,
+        "label": "Ime i prezime studenta"
+      },
+      {
+        "role": "title",
+        "required": true,
+        "elementProvenance": "official-rules",
         "group": 2,
-        "confidence": 1,
-        "font": "Times New Roman",
-        "sizePt": 16,
-        "bold": true
+        "label": "Naslov diplomskog rada"
+      },
+      {
+        "role": "worktype",
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 2,
+        "label": "Vrsta rada",
+        "fixedText": "diplomski rad"
       },
       {
         "role": "placeyear",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
+        "required": true,
+        "elementProvenance": "official-rules",
         "group": 3,
-        "confidence": 1,
-        "font": "Times New Roman",
-        "sizePt": 14,
-        "bold": true
+        "label": "Rijeka, godina"
       }
     ],
+    "notes": "Iste Upute propisuju i drugu unutarnju stranicu s dodatnim podatkom naziv odjela i strucnog studija; prva unutarnja stranica ostaje prazna. Tipografija naslovnice nije eksplicitno propisana. Ovo je tekstualno pravilo, ne obrazac."
+  },
+  {
+    "id": "vevu-final",
+    "unitId": "vevu",
+    "level": "final",
+    "name": "Veleuciliste Lavoslav Ruzicka u Vukovaru: zavrsni rad",
+    "provenance": {
+      "status": "official",
+      "sourceIds": [
+        "vevu-upute-zavrsni"
+      ],
+      "sourceUrl": "http://www.vevu.hr/uploads/50Prilog-4-Upute-za-izradu-zavrsnog-rada.pdf",
+      "sourceNote": "Prilog 4 Uputa daje predlozak naslovnice (Prilog 4/1 i 4/2) i graficki opis; oznake u zagradama i tekst na str. 9 propisuju fontove i velicine.",
+      "quote": "VELEUCILISTE LAVOSLAV RUZICKA U VUKOVARU (Times New Roman 16 Pt Bold Center)",
+      "sourcePage": 2,
+      "verifiedAt": null,
+      "evidencePids": [
+        "vevu:1496",
+        "vevu:1764",
+        "vevu:1803"
+      ]
+    },
+    "status": "draft",
+    "elements": [
+      {
+        "role": "university",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 0,
+        "label": "Naziv veleucilista",
+        "fixedText": "VELEUCILISTE LAVOSLAV RUZICKA U VUKOVARU",
+        "font": "Times New Roman",
+        "sizePt": 16,
+        "bold": true,
+        "uppercase": true,
+        "align": "center"
+      },
+      {
+        "role": "faculty",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 0,
+        "label": "Odjel za studij (naziv studija)",
+        "font": "Times New Roman",
+        "sizePt": 16,
+        "bold": true,
+        "uppercase": true,
+        "align": "center"
+      },
+      {
+        "role": "title",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 1,
+        "label": "Naslov teme",
+        "font": "Times New Roman",
+        "sizePt": 26,
+        "bold": true,
+        "uppercase": true,
+        "align": "center"
+      },
+      {
+        "role": "worktype",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 1,
+        "fixedText": "ZAVRSNI RAD",
+        "font": "Times New Roman",
+        "sizePt": 18,
+        "bold": true,
+        "uppercase": true,
+        "align": "center"
+      },
+      {
+        "role": "mentor",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 2,
+        "label": "Mentor:",
+        "font": "Times New Roman",
+        "sizePt": 16,
+        "bold": true,
+        "align": "left"
+      },
+      {
+        "role": "author",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 2,
+        "label": "Student:",
+        "font": "Times New Roman",
+        "sizePt": 16,
+        "bold": true,
+        "align": "right"
+      },
+      {
+        "role": "placeyear",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 3,
+        "label": "Mjesto, godina",
+        "font": "Times New Roman",
+        "sizePt": 14,
+        "bold": true,
+        "align": "center"
+      }
+    ],
+    "defaultFont": "Times New Roman",
+    "notes": "Prilog nudi dvije varijante: vanjska naslovnica uveza (Prilog 4/1) ima samo ime studenta bez mentora, a unutarnja naslovnica (Prilog 4/2, ovaj zapis) dodatno sadrzi blok Mentor lijevo i Student desno. Uz ime studenta ide i mat. broj (JMBAG), sto nije podrzana uloga u generatoru. Mjesto je Vukovar (Vukovar, godina izrade rada).",
     "derivation": {
       "samples": 3,
       "conflicts": []
@@ -15566,6 +15977,183 @@
     }
   },
   {
+    "id": "vhzk-final",
+    "unitId": "vhzk",
+    "level": "final",
+    "name": "Veleuciliste Hrvatsko zagorje Krapina: zavrsni rad",
+    "provenance": {
+      "status": "official",
+      "sourceIds": [
+        "vhzk-pravilnik-zavrsni-2022"
+      ],
+      "sourceUrl": "https://www.vhzk.hr/Uploads/Documents/Privremeni%20pravilnik%20o%20zavr%C5%A1nom%20radu%202022%20web.pdf",
+      "sourceNote": "Clanak 12. Pravilnika propisuje podatke unutarnje naslovne stranice (Prilog 4); tipografija nije propisana.",
+      "quote": "Na unutarnjoj naslovnoj stranici (Prilog 4.) ispisuju se sljedeci podaci: Veleuciliste Hrvatsko zagorje Krapina, Naziv studija, Naslov rada, Mentor, komentor (ako postoji) te ime i prezime studenta, Krapina, godina.",
+      "sourcePage": 4,
+      "verifiedAt": null
+    },
+    "status": "draft",
+    "elements": [
+      {
+        "role": "university",
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 0,
+        "fixedText": "Veleuciliste Hrvatsko zagorje Krapina"
+      },
+      {
+        "role": "study",
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 1,
+        "label": "Naziv studija"
+      },
+      {
+        "role": "title",
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 2,
+        "label": "Naslov rada"
+      },
+      {
+        "role": "mentor",
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 3,
+        "label": "Mentor"
+      },
+      {
+        "role": "comentor",
+        "required": false,
+        "elementProvenance": "official-rules",
+        "group": 3,
+        "label": "Komentor (ako postoji)"
+      },
+      {
+        "role": "author",
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 3,
+        "label": "Ime i prezime studenta"
+      },
+      {
+        "role": "placeyear",
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 4,
+        "label": "Krapina, godina"
+      }
+    ],
+    "notes": "Raspored izveden iz teksta Clanka 12. (Prilog 4, unutarnja naslovna stranica); redoslijed po nabrajanju u pravilniku. Tipografija, margine i verzal nisu propisani pa su izostavljeni. Clanak 11. (Prilog 3) opisuje tvrde korice (plavo platno) s poljima Veleuciliste, Ime i prezime studenta, Naslov rada, Zavrsni rad, Krapina godina, ali su korice fizicki uvez, ne .docx naslovnica, pa nisu modelirane. Redak Mentor, komentor (ako postoji) te ime i prezime studenta razdvojen je u zasebne elemente; komentor je uvjetovan (ako postoji). Godina u polju mjesta i godine je promjenjiva pa nije fiksirana. Prilog 4 nije uhvacen kao stranica-predlozak (isTemplateCandidate=false), stoga provenijencija elemenata je tekstualno pravilo. JMBAG i eventualni logotip nemaju ulogu i nisu podrzani."
+  },
+  {
+    "id": "vkjs",
+    "unitId": "vkjs",
+    "level": null,
+    "name": "Veleučilište kriminalistike i javne sigurnosti: naslovnica završnog i diplomskog rada",
+    "provenance": {
+      "status": "official",
+      "sourceIds": [
+        "vkjs-upute-zavrsni-diplomski-2024"
+      ],
+      "sourceUrl": "https://kriminalistika.gov.hr/UserDocsImages/04_vps/2024/Upute%20za%20izradu%20zavr%C5%A1nog_diplomskog%20rada.pdf",
+      "sourceNote": "Upute (2024) prikazuju predlozak vanjske stranice (korica) s propisanim fontom Times New Roman 14, naslov 16; isti predlozak vrijedi za zavrsni i diplomski rad.",
+      "quote": "2.1.1. Izgled vanjske stranice (korica)",
+      "sourcePage": 4,
+      "verifiedAt": null
+    },
+    "status": "draft",
+    "elements": [
+      {
+        "role": "university",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 0,
+        "fixedText": "MINISTARSTVO UNUTARNJIH POSLOVA",
+        "font": "Times New Roman",
+        "sizePt": 14,
+        "uppercase": true,
+        "align": "center"
+      },
+      {
+        "role": "faculty",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 0,
+        "fixedText": "POLICIJSKA AKADEMIJA \"PRVI HRVATSKI REDARSTVENIK\"",
+        "font": "Times New Roman",
+        "sizePt": 14,
+        "uppercase": true,
+        "align": "center"
+      },
+      {
+        "role": "faculty",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 0,
+        "fixedText": "VELEUČILIŠTE KRIMINALISTIKE I JAVNE SIGURNOSTI",
+        "font": "Times New Roman",
+        "sizePt": 14,
+        "uppercase": true,
+        "align": "center"
+      },
+      {
+        "role": "title",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 1,
+        "label": "Naslov rada",
+        "font": "Times New Roman",
+        "sizePt": 16,
+        "bold": true,
+        "uppercase": true,
+        "align": "center"
+      },
+      {
+        "role": "worktype",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 1,
+        "fixedText": "(završni / diplomski rad)",
+        "font": "Times New Roman",
+        "sizePt": 14,
+        "align": "center"
+      },
+      {
+        "role": "author",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 2,
+        "label": "Student",
+        "font": "Times New Roman",
+        "sizePt": 14,
+        "align": "left"
+      },
+      {
+        "role": "study",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 2,
+        "label": "Studij",
+        "font": "Times New Roman",
+        "sizePt": 14,
+        "align": "left"
+      },
+      {
+        "role": "placeyear",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 3,
+        "label": "Mjesto i godina (npr. Zagreb, 2024.)",
+        "font": "Times New Roman",
+        "sizePt": 14,
+        "align": "center"
+      }
+    ],
+    "defaultFont": "Times New Roman",
+    "notes": "Predlozak vanjske stranice ne sadrzi logotip. Unutarnja stranica (potkorica, str. 5) dodatno propisuje blok Povjerenstvo za obranu rada s potpisima clanova i mentora te Datum obrane rada; te uloge (povjerenstvo, potpisi, datum obrane) nisu podrzane u generatoru naslovnice v1. Pravilo na str. 3 propisuje da se naziv predmeta pise velikim slovom, no naziv predmeta se ne pojavljuje na predlosku vanjske stranice."
+  },
+  {
     "id": "vub-final",
     "unitId": "vub",
     "level": "final",
@@ -15631,6 +16219,99 @@
       "samples": 3,
       "conflicts": []
     }
+  },
+  {
+    "id": "vub-graduate",
+    "unitId": "vub",
+    "level": "graduate",
+    "name": "Veleuciliste u Bjelovaru: diplomski rad",
+    "provenance": {
+      "status": "official",
+      "sourceIds": [
+        "vub-upute-diplomski-2025"
+      ],
+      "sourceUrl": "https://vub.hr/wp-content/uploads/2025/11/UPUTE-ZA-IZRADU-I-OBLIKOVANJE-DIPLOMSKOG-RADA-3.pdf",
+      "sourceNote": "Prilog 5.1 Uputa (2025) propisuje predlozak naslovnice diplomskog rada; obavezno ga se pridrzavati.",
+      "quote": "Izgled naslovne stranice definiran je predloskom na kraju ovih Uputa i potrebno je pridrzavati ga se.",
+      "sourcePage": 31,
+      "verifiedAt": null
+    },
+    "status": "draft",
+    "elements": [
+      {
+        "role": "university",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 0,
+        "label": "Naziv veleucilista",
+        "fixedText": "VELEUCILISTE U BJELOVARU",
+        "font": "Times New Roman",
+        "sizePt": 14,
+        "uppercase": true,
+        "align": "center"
+      },
+      {
+        "role": "study",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 0,
+        "label": "Naziv studija",
+        "font": "Times New Roman",
+        "sizePt": 14,
+        "uppercase": true,
+        "align": "center"
+      },
+      {
+        "role": "title",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 1,
+        "label": "Naslov diplomskog rada",
+        "font": "Times New Roman",
+        "sizePt": 18,
+        "bold": true,
+        "uppercase": true,
+        "align": "center"
+      },
+      {
+        "role": "worktype",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 1,
+        "label": "Broj diplomskog rada",
+        "font": "Times New Roman",
+        "sizePt": 14,
+        "align": "center"
+      },
+      {
+        "role": "author",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 2,
+        "label": "Ime i prezime studenta/ice",
+        "font": "Times New Roman",
+        "sizePt": 16,
+        "align": "center"
+      },
+      {
+        "role": "placeyear",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 3,
+        "label": "Mjesto, mjesec i godina",
+        "font": "Times New Roman",
+        "sizePt": 14,
+        "align": "center"
+      }
+    ],
+    "marginsCm": {
+      "top": 2.5,
+      "right": 2.5,
+      "bottom": 2.5,
+      "left": 2.5
+    },
+    "defaultFont": "Times New Roman",
+    "notes": "Predlozak (Prilog 5.1 Uputa) prikazuje polje 'Diplomski rad br. XY/SDS-SES/GGGG' (broj rada, mapiran na worktype jer nosi oznaku vrste rada) i primjer studija 'STRUCNI DIPLOMSKI STUDIJ SESTRINSTVO' koji se mijenja po studiju. Mjesec i godina na naslovnici navode se prema datumu obrane (npr. 'Bjelovar, rujan 2026.')."
   },
   {
     "id": "vuka-final",
@@ -16014,19 +16695,28 @@
     }
   },
   {
-    "id": "vvg-final",
+    "id": "vvg",
     "unitId": "vvg",
-    "level": "final",
-    "name": "Veleuciliste Velika Gorica: završni rad",
+    "level": null,
+    "name": "Veleuciliste Velika Gorica: zavrsni i diplomski rad",
     "provenance": {
-      "status": "derived",
-      "sourceNote": "Raspored izveden konsenzusom 3 javnih radova; nije sluzbeni predlozak.",
+      "status": "official",
+      "sourceIds": [
+        "vvg-upute-radovi-2013"
+      ],
+      "sourceUrl": "https://vvg.hr/app/uploads/2020/02/Upute-za-izradu-i-obranu-zavrs%CC%8Cnog-i-diplomskog-rada-2013.pdf",
+      "sourceNote": "Upute (2013), str. 4, propisuju raspored unutrasnje naslovnice (podkorice); vrijedi za zavrsni i diplomski rad.",
+      "quote": "Unutrasnja naslovnica (podkorice) sadrzi zaglavlje u dva retka. U 1. retku pise velikim slovima VELEUCILISTE VELIKA GORICA (Ariel 14, bold), a u 2. retku naziv studija (Ariel 14, bold). U sredisnjem dijelu stranice ispisuje se redom: naslov rada (Ariel 16, bold), vrsta rada (zavrsni ili diplomski) (Ariel 14, bold). U donjem dijelu podkorica ispisuje se lijevo Mentor, titula, ime i prezime a desno Student, ime i prezime, JMBAG. Na dnu stranice pise se Velika Gorica i godine izrade rada (sve Ariel 12 ili 14, bold).",
+      "sourcePage": 4,
+      "verifiedAt": null,
       "evidencePids": [
         "vvg:29",
         "vvg:35",
-        "vvg:37"
-      ],
-      "verifiedAt": null
+        "vvg:37",
+        "vvg:43",
+        "vvg:58",
+        "vvg:72"
+      ]
     },
     "status": "draft",
     "elements": [
@@ -16042,118 +16732,225 @@
         "uppercase": true
       },
       {
-        "role": "author",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
-        "group": 1
-      },
-      {
-        "role": "title",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
-        "group": 1,
-        "confidence": 1,
-        "font": "Arial",
-        "sizePt": 16,
-        "bold": true
-      },
-      {
-        "role": "worktype",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
-        "group": 1,
-        "confidence": 1,
+        "role": "university",
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 0,
+        "fixedText": "VELEUCILISTE VELIKA GORICA",
         "font": "Arial",
         "sizePt": 14,
         "bold": true,
+        "uppercase": true,
+        "align": "center"
+      },
+      {
+        "role": "study",
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 0,
+        "label": "Naziv studija",
+        "font": "Arial",
+        "sizePt": 14,
+        "bold": true,
+        "align": "center"
+      },
+      {
+        "role": "title",
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 1,
+        "label": "Naslov rada",
+        "font": "Arial",
+        "sizePt": 16,
+        "bold": true,
+        "align": "center",
         "uppercase": true
       },
       {
-        "role": "placeyear",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
-        "group": 2,
-        "confidence": 1,
+        "role": "worktype",
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 1,
+        "label": "Vrsta rada (zavrsni ili diplomski)",
         "font": "Arial",
         "sizePt": 14,
-        "bold": true
+        "bold": true,
+        "align": "center",
+        "uppercase": true
+      },
+      {
+        "role": "mentor",
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 2,
+        "label": "Mentor, titula, ime i prezime",
+        "font": "Arial",
+        "align": "left"
+      },
+      {
+        "role": "author",
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 2,
+        "label": "Student, ime i prezime, JMBAG",
+        "font": "Arial",
+        "align": "right"
+      },
+      {
+        "role": "placeyear",
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 3,
+        "font": "Arial",
+        "bold": true,
+        "align": "center",
+        "sizePt": 14
       }
     ],
+    "notes": "Upute razlikuju korice (platnene, plave) i unutrasnju naslovnicu (podkorice); ovaj zapis modelira unutrasnju naslovnicu. Zaglavlje (sveuciliste + studij) razdvaja horizontalna crta izmedu lijeve i desne margine (nije podrzano kao uloga u generatoru v1). Uz studenta se ispisuje i JMBAG, a mentor se navodi s titulom; JMBAG i titula nemaju vlastitu ulogu. Izvor pise font kao 'Ariel', sto je ocita pogreska za Arial.",
     "derivation": {
       "samples": 3,
       "conflicts": []
     }
   },
   {
-    "id": "vvg-graduate",
-    "unitId": "vvg",
+    "id": "zsem-graduate",
+    "unitId": "zsem",
     "level": "graduate",
-    "name": "Veleuciliste Velika Gorica: diplomski rad",
+    "name": "Zagrebačka škola ekonomije i managementa: diplomski rad",
     "provenance": {
-      "status": "derived",
-      "sourceNote": "Raspored izveden konsenzusom 3 javnih radova; nije sluzbeni predlozak.",
-      "evidencePids": [
-        "vvg:43",
-        "vvg:58",
-        "vvg:72"
+      "status": "official",
+      "sourceIds": [
+        "zsem-pravilnik-diplomski-2023"
       ],
+      "sourceUrl": "https://zsem.hr/wp-content/uploads/2024/11/PRAVILNIK-O-DIPLOMSKOM-RADU-svibanj-2023-1.pdf",
+      "sourceNote": "Clanak 26. Pravilnika o diplomskom radu propisuje tekst naslovnice; raspored je opisan rijecima, bez propisanog fonta i margina za naslovnicu.",
+      "quote": "Na koricama diplomskog rada treba biti ovaj tekst: Na vrhu ZAGREBAČKA ŠKOLA EKONOMIJE I MANAGEMENTA ZAGREB ... U sredini Ime i prezime studenta ... NASLOV RADA ... DIPLOMSKI RAD ... Pri dnu Zagreb, godina",
+      "sourcePage": 10,
       "verifiedAt": null
     },
     "status": "draft",
     "elements": [
       {
         "role": "faculty",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
+        "required": true,
+        "elementProvenance": "official-rules",
         "group": 0,
-        "confidence": 1,
-        "font": "Arial",
-        "sizePt": 14,
-        "bold": true,
-        "uppercase": true
+        "fixedText": "ZAGREBAČKA ŠKOLA EKONOMIJE I MANAGEMENTA\nZAGREB",
+        "uppercase": true,
+        "align": "center"
       },
       {
         "role": "author",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
-        "group": 1
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 1,
+        "label": "Ime i prezime studenta",
+        "align": "center"
       },
       {
         "role": "title",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
-        "group": 1,
-        "confidence": 1,
-        "font": "Arial",
-        "sizePt": 16,
-        "bold": true,
-        "uppercase": true
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 2,
+        "label": "Naslov rada",
+        "uppercase": true,
+        "align": "center"
       },
       {
         "role": "worktype",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
-        "group": 1,
-        "confidence": 1,
-        "font": "Arial",
-        "sizePt": 14,
-        "bold": true,
-        "uppercase": true
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 3,
+        "fixedText": "DIPLOMSKI RAD",
+        "uppercase": true,
+        "align": "center"
+      },
+      {
+        "role": "study",
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 3,
+        "fixedText": "Strucnog diplomskog studija, MBA programa",
+        "align": "center"
       },
       {
         "role": "placeyear",
-        "required": false,
-        "elementProvenance": "thesis-consensus",
-        "group": 2,
-        "confidence": 1,
-        "font": "Arial",
-        "sizePt": 14,
-        "bold": true
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 4,
+        "label": "Zagreb, godina"
       }
     ],
-    "derivation": {
-      "samples": 3,
-      "conflicts": []
-    }
+    "marginsCm": {
+      "top": 0,
+      "right": 0,
+      "bottom": 0,
+      "left": 0
+    },
+    "notes": "Izvor (Clanak 26.) opisuje naslovnicu tekstualno, bez predloska-obrasca; nema propisanog fonta, velicine slova ni margina za naslovnicu (Clanak 28. propisuje TNR 12 za tijelo rada, ne izricito za naslovnicu). Ispod naziva skole na vrhu stoji rijec ZAGREB (sjediste ustanove), ovdje spojena u naziv ustanove. Redak studija glasi tocno 'Strucnog diplomskog studija, MBA programa'; za druge studije/programe uredi rucno. Godina u zadnjem retku je promjenjiva pa je 'Zagreb, godina' ostavljena kao oznaka, ne fiksni tekst."
+  },
+  {
+    "id": "zvu",
+    "unitId": "zvu",
+    "level": null,
+    "name": "Zdravstveno veleučilište: naslovnica završnog rada",
+    "provenance": {
+      "status": "official",
+      "sourceIds": [
+        "zvu-pravilnik-zavrsni-2015"
+      ],
+      "sourceUrl": "https://www.zvu.hr/wp-content/uploads/Pravilnik-o-zavrsnim-radovima1.pdf",
+      "sourceNote": "Upute u Pravilniku propisuju sadrzaj vanjske naslovnice (Prilog 1); unutarnja naslovnica (Prilog 2) uz to navodi i mentora.",
+      "quote": "Vanjska naslovna stranica treba sadržavati naziv veleučilišta i studija, ime i prezime, naslov rada, naznaku da se radi o završnom radu, Zagreb i godinu izrade (prilog 1.)",
+      "sourcePage": 11,
+      "verifiedAt": null
+    },
+    "status": "draft",
+    "elements": [
+      {
+        "role": "university",
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 0,
+        "label": "Naziv veleučilišta"
+      },
+      {
+        "role": "study",
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 0,
+        "label": "Naziv studija"
+      },
+      {
+        "role": "author",
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 1,
+        "label": "Ime i prezime studenta"
+      },
+      {
+        "role": "title",
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 2,
+        "label": "Naslov rada"
+      },
+      {
+        "role": "worktype",
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 3,
+        "label": "Naznaka da se radi o završnom radu"
+      },
+      {
+        "role": "placeyear",
+        "required": true,
+        "elementProvenance": "official-rules",
+        "group": 4,
+        "label": "Zagreb i godina izrade"
+      }
+    ],
+    "notes": "Isti raspored vrijedi za preddiplomski strucni zavrsni rad (final) i specijalisticki diplomski strucni zavrsni rad (specialist), pa je zapis na razini null. Rad ima dvije naslovnice: vanjsku (Prilog 1, ovdje modelirana) i unutarnju (Prilog 2) koja uz sve navedeno dodaje i mentora rada. Stvarni obrasci Prilog 1 i Prilog 2 nisu uhvaceni kao stranice-predlosci u skenu pa su tipografija i verzal nepoznati. Izvor ne spominje logotip."
   }
 ]
