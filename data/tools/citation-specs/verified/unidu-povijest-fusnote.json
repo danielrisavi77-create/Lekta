@@ -1,0 +1,186 @@
+{
+  "facultyId": "unidu",
+  "styleToken": "unidu-povijest-fusnote",
+  "status": "verified",
+  "outcome": "custom-spec",
+  "label": "Fusnotni stil (sluzbene upute za zavrsni rad, Povijest Jadrana i Mediterana, unidu)",
+  "sourceId": "unidu-povijest-upute",
+  "sourceLabel": "Upute za izradu zavrsnog rada, preddiplomski studij Povijest Jadrana i Mediterana (Sveuciliste u Dubrovniku)",
+  "verifiedAt": "2026-07-10",
+  "verifiedBy": "Daniel Risavi",
+  "verifiedHash": "be4bc778e16ba824881220957514f48b3566b7b90c9f9a2c0adc149b5c786a5a",
+  "accessDate": true,
+  "authorFormat": {
+    "order": "family-first",
+    "initials": "none",
+    "separator": ", ",
+    "finalJoiner": " i ",
+    "etAlAfter": 4,
+    "etAlKeep": 1,
+    "etAlJoiner": " ",
+    "etAlText": "i dr."
+  },
+  "inText": {
+    "mode": "note-number",
+    "provenance": {
+      "kind": "rule-text",
+      "quoteRaw": "UPUTE ZA CITIRANJE I REFERIRANJE U BILJESKAMA (FUSNOTAMA):",
+      "sourcePage": "str. 9",
+      "note": "Biljeske se navode kao fusnote i oznacavaju rednim brojevima (str. 1). Prvo citiranje jednako je bibliografskoj jedinici uz obrnut redoslijed ime-prezime i navedene stranice; drugo i svako sljedee: inicijal imena + prezime + (kraeni) naslov + stranica (str. 9). Alat generira BIBLIOGRAFSKI oblik za popis literature (prezime-ime, abecedno); op. cit./ibid. i skraeni oblici izvan su dosega generatora."
+    }
+  },
+  "numbering": null,
+  "bibliography": {
+    "sort": "alphabetical"
+  },
+  "sourceTypes": [
+    {
+      "type": "knjiga",
+      "template": "{authors}. {title}. {place}: {publisher}, {year}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "place",
+        "publisher",
+        "year"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Vekari, Nenad. Stanovnistvo poluotoka Peljesca. Svezak 1. Dubrovnik: Zavod za povijesne",
+        "sourcePage": "str. 7",
+        "note": "Polja iz izvora (str. 6): prezime i ime autora/koautora, naslov knjige (u kurzivu), mjesto izdanja, izdavac, godina izdanja. U popisu literature prezime pa ime; alat radi plain text (kurziv se ne reproducira). 'Svezak 1' je dio naslova u primjeru."
+      },
+      "example": {
+        "input": {
+          "type": "knjiga",
+          "authors": "Vekari, Nenad",
+          "title": "Stanovnistvo poluotoka Peljesca. Svezak 1",
+          "place": "Dubrovnik",
+          "publisher": "Zavod za povijesne znanosti HAZU u Dubrovniku",
+          "year": "1992"
+        },
+        "expected": "Vekari, Nenad. Stanovnistvo poluotoka Peljesca. Svezak 1. Dubrovnik: Zavod za povijesne znanosti HAZU u Dubrovniku, 1992."
+      }
+    },
+    {
+      "type": "clanak",
+      "template": "{authors}. „{title}.“ {container} {volume} ({year}): {pages}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "container",
+        "volume",
+        "year",
+        "pages"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Vekari, Nenad. �Sud Janjinske kapetanije.� Anali Zavoda za povijesne znanosti HAZU u",
+        "sourcePage": "str. 7",
+        "note": "Polja iz izvora (str. 7): prezime i ime, naslov rada (u navodnicima), naslov casopisa (u kurzivu), godiste (volumen) + broj unutar godista (ako postoji), godina, pocetna i posljednja stranica. Navodnike (korumpirani glif '�' u ekstrakciji) rekonstruiram kao „ “. Broj unutar godista (issue) nije eksemplificiran pa nije u predlosku."
+      },
+      "example": {
+        "input": {
+          "type": "clanak",
+          "authors": "Vekari, Nenad",
+          "title": "Sud Janjinske kapetanije",
+          "container": "Anali Zavoda za povijesne znanosti HAZU u Dubrovniku",
+          "volume": "27",
+          "year": "1989",
+          "pages": "133-147"
+        },
+        "expected": "Vekari, Nenad. „Sud Janjinske kapetanije.“ Anali Zavoda za povijesne znanosti HAZU u Dubrovniku 27 (1989): 133-147."
+      }
+    },
+    {
+      "type": "poglavlje",
+      "template": "{authors}. „{title}.“ u: {container}, ur. {editor}. {place}: {publisher}, {year}[[: {pages}]].",
+      "requiredFields": [
+        "authors",
+        "title",
+        "container",
+        "editor",
+        "place",
+        "publisher",
+        "year"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Zuljani iz XVI stoljea.�, u: Beritiev zbornik, ur. Vjekoslav Cvitanovi. Dubrovnik:",
+        "sourcePage": "str. 7",
+        "note": "Izvor daje eksplicitan popis polja (str. 7): prezime i ime, naslov rada (u navodnicima), naslov knjige/zbornika (u kurzivu), urednik, mjesto, izdavac, godina, pocetna i posljednja stranica. Primjer (Marinovi, Ante...) prelomljen je na granici str. 7/8 pa nedostaju izdavac, godina i stranice; expected se ne moze vjerno dovrsiti, zato derived. Urednik u primjeru je u obliku ime-prezime ('ur. Vjekoslav Cvitanovi'), ne invertiran. Predlozak izveden iz popisa polja + knjiga/clanak obrasca."
+      },
+      "example": null
+    },
+    {
+      "type": "mrezni",
+      "template": "{authors}. „{title}.“ {container}[[ {year}]]. Dostupno na: {url} (pristup: {accessed}).",
+      "requiredFields": [
+        "authors",
+        "title",
+        "container",
+        "url",
+        "accessed"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Alfani, Guido. �I padrini: patroni o parenti? Tendenzedifondo nella selezione dei parent",
+        "sourcePage": "str. 8",
+        "note": "Za tekstove samo u elektronickom obliku izvor trazi bar ime autora, naslov rada, ime elektronicke publikacije s uputom na mreznu stranicu i datum (mjesec i godina) pristupa (str. 8). Prelomljene retke (171-173) spojio sam doslovno, zajedno s pdftotext lomovima rijeci ('Tendenzedifondo', 'parent ispirituali'). Navodnike '�' rekonstruiram kao „ “."
+      },
+      "example": {
+        "input": {
+          "type": "mrezni",
+          "authors": "Alfani, Guido",
+          "title": "I padrini: patroni o parenti? Tendenzedifondo nella selezione dei parent ispirituali in Europa (XV-XX secolo)",
+          "container": "Nuevo Mundo Mundos Nuevos, Colloques",
+          "year": "2008",
+          "url": "http://nuevomundo.revues.org/30172",
+          "accessed": "lipanj 2016"
+        },
+        "expected": "Alfani, Guido. „I padrini: patroni o parenti? Tendenzedifondo nella selezione dei parent ispirituali in Europa (XV-XX secolo).“ Nuevo Mundo Mundos Nuevos, Colloques 2008. Dostupno na: http://nuevomundo.revues.org/30172 (pristup: lipanj 2016)."
+      }
+    },
+    {
+      "type": "zavrsni",
+      "template": "{authors}. {title}. {place}: {institution}, {year}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "place",
+        "institution",
+        "year"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Knjiga (bibliografska jedinica treba sadrzavati):",
+        "sourcePage": "str. 6",
+        "note": "Ove upute ne propisuju format citiranja zavrsnih/diplomskih radova ni disertacija (spominju se samo u kontekstu plagijata, str. 3). Predlozak izveden iz obrasca za knjigu (str. 6): izdavac zamijenjen ustanovom. Potvrditi ili oboriti pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "propis",
+      "template": "{title}, {container} br. {issue}.",
+      "requiredFields": [
+        "title",
+        "container",
+        "issue"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Sukladno Zakonu o znanstvenoj djelatnosti i visokom obrazovanju (NN br. 94/2013), svi zavrsni",
+        "sourcePage": "str. 3",
+        "note": "Upute ne propisuju bibliografski format za propise/zakone u citatnom dijelu. Jedina opazena upotreba je unutartekstna 'Zakon o... (NN br. 94/2013)' (str. 3). Predlozak izveden iz te unutartekstne forme (kratica NN razrijesena u Narodne novine); potvrditi pri verifikaciji."
+      },
+      "example": null
+    }
+  ],
+  "contradictions": [
+    "Naslovi (knjige/casopisa u kurzivu, radova u navodnicima) u izvorniku su tipografski oznaceni; alat radi plain text pa kurziv otpada, a korumpirane navodnike '�' iz ekstrakcije rekonstruiram kao „ “.",
+    "poglavlje: primjer je prelomljen na granici str. 7/8 (staje na 'Dubrovnik:') pa nedostaju izdavac, godina i stranice; predlozak je derived iz eksplicitnog popisa polja + knjiga/clanak obrasca, bez examplea.",
+    "zavrsni/diplomski rad, disertacija i propis nemaju propisan citatni format u ovim uputama; predlosci su derived (zavrsni iz knjige, propis iz unutartekstne '(NN br. ...)' forme).",
+    "Visestruko autorstvo u popisu literature nije eksemplificirano (primjer koautorstva 'Niko Kapetani i Nenad Vekari' / 'Nenad Vekari i dr.' je u fusnotnom, ime-prezime obliku, str. 10); redoslijed i razdvajanje 2-4 autora u popisu literature su pretpostavljeni (family-first, ' i ' za zadnjeg, 'i dr.' za vise od cetiri).",
+    "Prior profila je [chicago-notes, harvard, ieee]. Fusnotni stil nalikuje Chicago notes-bibliography, ali je ovdje predstavljen kao custom-spec (vlastiti radni primjeri fakulteta), ne kao pin na standardni stil. 'ieee' nije potvrdjen ni u jednom isjecku."
+  ]
+}

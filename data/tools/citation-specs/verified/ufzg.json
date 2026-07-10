@@ -1,0 +1,18 @@
+{
+  "facultyId": "ufzg",
+  "styleToken": "apa7",
+  "status": "verified",
+  "outcome": "style-pin",
+  "label": "APA (sluzbene upute UFZG)",
+  "sourceId": "ufzg-upute-zavrsni-diplomski-2026",
+  "sourceLabel": "Upute za izradu zavrsnog odnosno diplomskog rada (Uciteljski fakultet u Zagrebu)",
+  "verifiedAt": "2026-07-10",
+  "verifiedBy": "Daniel Risavi",
+  "verifiedHash": "83f5b025467e448db1ec530edb224a29cfed924f4241a5c2f5fd79b28d69e26d",
+  "evidence": {
+    "kind": "rule-text",
+    "quoteRaw": "usklaeno s APA stilom. Detaljnije upute za citiranje literature i oblikovanje tablica i grafickih",
+    "sourcePage": "str. 4"
+  },
+  "sourceTypes": []
+}

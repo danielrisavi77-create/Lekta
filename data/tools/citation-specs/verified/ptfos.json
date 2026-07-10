@@ -1,0 +1,190 @@
+{
+  "facultyId": "ptfos",
+  "styleToken": "ptfos-autor-godina",
+  "status": "verified",
+  "outcome": "custom-spec",
+  "label": "PTFOS autor-godina (sluzbene upute za diplomski rad)",
+  "sourceId": "ptfos-upute-diplomski-2020",
+  "sourceLabel": "Upute za pisanje, ocjenu i obranu diplomskih radova (PTFOS)",
+  "verifiedAt": "2026-07-10",
+  "verifiedBy": "Daniel Risavi",
+  "verifiedHash": "7f31be75164ca9ded88b432fabbc6e2fb639a4766875ac7698159cccbceca94d",
+  "accessDate": false,
+  "authorFormat": {
+    "order": "family-first",
+    "initials": "plain-compact",
+    "separator": ", ",
+    "finalJoiner": null,
+    "etAlAfter": null
+  },
+  "inText": {
+    "mode": "author-year",
+    "template": "({authorsShort}, {year})",
+    "authorsShort": {
+      "twoJoiner": " i ",
+      "etAlAfter": 3,
+      "etAlText": "i sur."
+    },
+    "provenance": {
+      "kind": "worked-example",
+      "quoteRaw": "Rezultati navedenog rada su ukazali na niske razine aflatoksina (Sarkanj, 2010).",
+      "sourcePage": "str. 9",
+      "note": "Autor-godina u zagradi na kraju recenice. Dva autora veznikom i: '(Budzaki i Seruga, 2005)' (str. 9); vise od dva autora prvi + 'i sur.': '(Tisma i sur., 2009)' (str. 9); vise radova odvaja tocka-zarez '(Primorac, 2008; Kopjar i sur., 2009)'; isti autor ista godina dobiva slova a, b: '(Klapec, 2007a; 2007b)' (str. 10); organizacije kraticom '(WHO, 2008)', '(MZSS, 2008)' (str. 10). U tekstu bez zagrade oblik je 'Nedi-Tiban (2009)'. Izvor ne pokazuje in-text citat s brojem stranice, pa withPagesTemplate nije postavljen."
+    }
+  },
+  "numbering": null,
+  "bibliography": {
+    "sort": "alphabetical"
+  },
+  "sourceTypes": [
+    {
+      "type": "knjiga",
+      "template": "{authors}: {title}. {publisher}[[, {place}]], {year}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "publisher",
+        "year"
+      ],
+      "provenance": {
+        "kind": "rule-text",
+        "quoteRaw": "Prezime I: Naslov knjige ili skripte. Nakladnik, mjesto izdanja, godina izdanja.",
+        "sourcePage": "str. 10",
+        "note": "Shematski obrazac s doslovnom interpunkcijom (dvotocka iza autora, godina na kraju). Konkretan worked example knjige je u ekstrakciji odsjecen (na str. 11 ostao samo rep 'education. Palgrave Macmillan, 2004.'), pa examplea nema. Rep potvrduje pravilo sa str. 10 da mjesto izdanja nije nuzno kod velikih medunarodnih izdavackih kuca, zato je place opcionalan."
+      },
+      "example": null
+    },
+    {
+      "type": "poglavlje",
+      "template": "{authors}: {title}. U {container}[[, str. {pages}]]. {publisher}[[, {place}]], {year}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "container",
+        "pages",
+        "publisher",
+        "year"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Pilizota V: Prerada voa i povra. U Hrvatska poljoprivreda na raskrizju, str. 156-160. Ministarstvo",
+        "sourcePage": "str. 11",
+        "note": "Puni primjer (prelomljen u ekstrakciji): 'Pilizota V: Prerada voa i povra. U Hrvatska poljoprivreda na raskrizju, str. 156-160. Ministarstvo poljoprivrede i sumarstva RH, Zagreb, 1997.' Obrazac: 'Prezime I: Naslov poglavlja ili natuknice. U Naslov knjige ili enciklopedije, raspon stranica (str. od-do). Nakladnik, mjesto izdanja, godina izdanja.' Obrazac NEMA urednika, pa ga ni predlozak nema. Isti oblik vrijedi i za rad u zborniku skupa ('Jug D, Jug I, Ugarci-Hardi Z, Sabo M: Effect of reduced tillage...', str. 11)."
+      },
+      "example": {
+        "input": {
+          "type": "poglavlje",
+          "authors": "Pilizota, V.",
+          "title": "Prerada voa i povra",
+          "container": "Hrvatska poljoprivreda na raskrizju",
+          "pages": "156-160",
+          "publisher": "Ministarstvo poljoprivrede i sumarstva RH",
+          "place": "Zagreb",
+          "year": "1997"
+        },
+        "expected": "Pilizota V: Prerada voa i povra. U Hrvatska poljoprivreda na raskrizju, str. 156-160. Ministarstvo poljoprivrede i sumarstva RH, Zagreb, 1997."
+      }
+    },
+    {
+      "type": "clanak",
+      "template": "{authors}: {title}. {container} {volume}:{pages}, {year}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "container",
+        "volume",
+        "pages",
+        "year"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Mandi ML, Kenjeri D, Perl Piricki A: Intake of some minerals in healthy adult volunteers from eastern",
+        "sourcePage": "str. 11",
+        "note": "Puni primjer (prelomljen u ekstrakciji): 'Mandi ML, Kenjeri D, Perl Piricki A: Intake of some minerals in healthy adult volunteers from eastern Croatia. International Journal of Food Sciences and Nutrition 60:77-87, 2009.' Obrazac: 'Prezime I: Naslov rada. Puni Naslov Casopisa volumen:raspon stranica, godina izdanja.' Puni naziv casopisa (ne kratica), bez broja sveska (issue). Elektronicki casopisi imaju istu formu s brojem clanka umjesto raspona stranica: 'Traka M, Gasper AV, Melchini A: ... PLoS ONE 3:e2568, 2008.' (str. 11), broj clanka ide u polje pages."
+      },
+      "example": {
+        "input": {
+          "type": "clanak",
+          "authors": "Mandi, M. L.; Kenjeri, D.; Perl Piricki, A.",
+          "title": "Intake of some minerals in healthy adult volunteers from eastern Croatia",
+          "container": "International Journal of Food Sciences and Nutrition",
+          "volume": "60",
+          "pages": "77-87",
+          "year": "2009"
+        },
+        "expected": "Mandi ML, Kenjeri D, Perl Piricki A: Intake of some minerals in healthy adult volunteers from eastern Croatia. International Journal of Food Sciences and Nutrition 60:77-87, 2009."
+      }
+    },
+    {
+      "type": "mrezni",
+      "template": "{authors}: {title}. {url}[[ ({accessed})]], {year}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "url",
+        "year"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Pri upotrebi mreznih izvora preporuca se pohraniti URL adresu ili citavu stranicu s koje",
+        "sourcePage": "str. 6",
+        "note": "Ekstrakcija NE sadrzi obrazac za opce mrezne stranice u popisu literature (pokriva samo elektronicke casopise, koji idu pod clanak). Predlozak je izveden iz opceg reda podataka 'Prezime I: Naslov. Izvor, godina.' uz URL, jer izvor izrijekom trazi pohranu URL adrese mreznog izvora (str. 6), a in-text pravila kazu da se i publikacije s mreznog izvora citiraju autor-godina (str. 9). Opcionalni datum pristupa je dodana konvencija, izvor ga u ekstrakciji ne propisuje (zato accessDate false). Potvrditi ili oboriti pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "zavrsni",
+      "template": "{authors}: {title}. Diplomski rad. {institution}[[, {place}]], {year}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "institution",
+        "place",
+        "year"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Mari I: Utjecaj temperature na kinetiku halogenog susenja tjestenine. Diplomski rad. Prehrambeno-",
+        "sourcePage": "str. 11",
+        "note": "Puni primjer (prelomljen u ekstrakciji na spojnici): 'Mari I: Utjecaj temperature na kinetiku halogenog susenja tjestenine. Diplomski rad. Prehrambeno-tehnoloski fakultet, Osijek, 2005.' Obrazac: 'Prezime I: Naslov rada. Vrsta rada. Naziv institucije, mjesto izdanja, godina izdanja.' Vrsta rada varira (diplomski rad, magistarski rad, disertacija); alat koristi 'Diplomski rad.' kao default, za druge vrste korisnik rucno mijenja."
+      },
+      "example": {
+        "input": {
+          "type": "zavrsni",
+          "authors": "Mari, I.",
+          "title": "Utjecaj temperature na kinetiku halogenog susenja tjestenine",
+          "institution": "Prehrambeno-tehnoloski fakultet",
+          "place": "Osijek",
+          "year": "2005"
+        },
+        "expected": "Mari I: Utjecaj temperature na kinetiku halogenog susenja tjestenine. Diplomski rad. Prehrambeno-tehnoloski fakultet, Osijek, 2005."
+      }
+    },
+    {
+      "type": "propis",
+      "template": "{authors}: {title}. [[{container} {issue}, ]]{year}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "container",
+        "year"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Djela u izdanju organizacija (zakoni, pravilnici, norme, prirucnici, izvjesa, i dr.)",
+        "sourcePage": "str. 11",
+        "note": "Ekstrakcija iz sekcije o djelima organizacija sadrzi samo podnaslov IZVJESA s pravilom 'Izvjesa i slicni dokumenti citiraju se poput knjiga.' (str. 11); obrazac za zakone, pravilnike i norme je odsjecen. Predlozak je izveden iz oblika za knjigu s organizacijom (kraticom donositelja) kao autorom, kako to rade in-text primjeri '(MZSS, 2008)' i '(HZN, 2004)' (str. 10); glasilo (npr. Narodne novine) i broj idu u container/issue. Potvrditi ili oboriti pri verifikaciji."
+      },
+      "example": null
+    }
+  ],
+  "contradictions": [
+    "Prior profila predlaze harvard, ali upute ne imenuju nijedan standardni stil: u tekstu je autor-godina nalik Harvardu, no popis literature ima vlastiti PTFOS red (Prezime II: Naslov. Nakladnik, mjesto, godina.) s dvotockom iza autora, inicijalima bez tocaka i godinom na KRAJU, pa je izraden custom-spec umjesto style-pin harvard.",
+    "Knjiga: konkretan primjer je u ekstrakciji odsjecen (ostao samo rep 'education. Palgrave Macmillan, 2004.' na str. 11), predlozak je uzet iz shematskog retka (rule-text) na str. 10.",
+    "Poglavlje u knjizi po obrascu NEMA urednika (neuobicajeno), pa ga predlozak nema; isti oblik pokriva i radove u zborniku skupa.",
+    "Mrezne stranice i propisi nisu pokriveni ekstrakcijom (odsjeceni dijelovi dokumenta); predlosci su derived i traze potvrdu nad punim PDF-om.",
+    "Et-al prag u popisu literature nije prikazan: primjeri ispisuju sva imena do 4 autora ('Jug D, Jug I, Ugarci-Hardi Z, Sabo M'), pa je etAlAfter null; u tekstu se 3 i vise autora krati na prvi + 'i sur.'.",
+    "Elektronicki casopisi koriste broj clanka umjesto raspona stranica (PLoS ONE 3:e2568); alat ima jedan clanak predlozak pa broj clanka ide u polje pages.",
+    "Datum pristupa mreznom izvoru nije propisan u ekstrakciji (samo preporuka o pohrani URL-a), accessed je opcionalna dodana konvencija."
+  ]
+}

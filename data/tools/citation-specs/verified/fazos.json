@@ -1,0 +1,18 @@
+{
+  "facultyId": "fazos",
+  "styleToken": "apa7",
+  "status": "verified",
+  "outcome": "style-pin",
+  "label": "APA stil citiranja (sluzbene upute FAZOS)",
+  "sourceId": "fazos-upute-zavrsni-2024",
+  "sourceLabel": "Upute za izradu zavrsnog rada (Fakultet agrobiotehnickih znanosti Osijek)",
+  "verifiedAt": "2026-07-10",
+  "verifiedBy": "Daniel Risavi",
+  "verifiedHash": "eb5b2331f173ba14ea3ca5472200945cdd8a38d503e15669048ea7e3d41b9779",
+  "evidence": {
+    "kind": "rule-text",
+    "quoteRaw": "Prilikom citiranja autora ili navoenja literaturnih izvora u tekstu rada treba koristiti APA",
+    "sourcePage": "str. 6"
+  },
+  "sourceTypes": []
+}

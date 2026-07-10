@@ -1,0 +1,18 @@
+{
+  "facultyId": "unin",
+  "styleToken": "vancouver",
+  "status": "verified",
+  "outcome": "style-pin",
+  "label": "Vancouver (sluzbene upute UNIN, tehnicke znanosti)",
+  "sourceId": "unin-upute-radovi-2026",
+  "sourceLabel": "Upute za izradu zavrsnih i diplomskih radova (Sveuciliste Sjever)",
+  "verifiedAt": "2026-07-10",
+  "verifiedBy": "Daniel Risavi",
+  "verifiedHash": "53d0ff0b8b1859985329170db1eddc29d77a616a4ba5e63a86c987e920678c6d",
+  "evidence": {
+    "kind": "rule-text",
+    "quoteRaw": "Vancouver stil citiranja u području tehničkih znanosti.",
+    "sourcePage": "str. 1"
+  },
+  "sourceTypes": []
+}

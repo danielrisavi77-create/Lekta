@@ -1,0 +1,18 @@
+{
+  "facultyId": "fpz",
+  "styleToken": "vancouver",
+  "status": "verified",
+  "outcome": "style-pin",
+  "label": "Vancouver, inacica FPZ (sluzbene upute FPZ)",
+  "sourceId": "fpz-upute-zavrsni-diplomski-2018",
+  "sourceLabel": "Upute za izradu zavrsnog i diplomskog rada, Fakultet prometnih znanosti (2018)",
+  "verifiedAt": "2026-07-10",
+  "verifiedBy": "Daniel Risavi",
+  "verifiedHash": "b5040734e60a8238520b526c1511b288a92172718388bb5bfeda110c897a7c5b",
+  "evidence": {
+    "kind": "rule-text",
+    "quoteRaw": "Prilog 18. a) Primjer popisa upotrijebljene literature, inacica vankuverskog stila; kada se",
+    "sourcePage": "str. 3"
+  },
+  "sourceTypes": []
+}

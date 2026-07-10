@@ -1,0 +1,18 @@
+{
+  "facultyId": "ffzg",
+  "styleToken": "apa7",
+  "status": "verified",
+  "outcome": "style-pin",
+  "label": "APA stil (sluzbene upute Odsjeka za psihologiju FFZG)",
+  "sourceId": "ffzg-psihologija-diplomski-2024",
+  "sourceLabel": "Upute za pisanje i oblikovanje diplomskog rada na Odsjeku za psihologiju Filozofskog fakulteta Sveucilista u Zagrebu",
+  "verifiedAt": "2026-07-10",
+  "verifiedBy": "Daniel Risavi",
+  "verifiedHash": "ad885d20070f3349adae2f27ef0d08ea1223e7cf1322521e25a41f8b2d02fac4",
+  "evidence": {
+    "kind": "rule-text",
+    "quoteRaw": "Uređenje teksta rada treba biti sukladno APA standardima (standardi za pisanje znanstvenih radova American Psychological Association).",
+    "sourcePage": "str. 1"
+  },
+  "sourceTypes": []
+}

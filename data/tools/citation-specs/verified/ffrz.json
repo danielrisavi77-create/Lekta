@@ -1,0 +1,179 @@
+{
+  "facultyId": "ffrz",
+  "styleToken": "ffrz",
+  "status": "verified",
+  "outcome": "custom-spec",
+  "label": "Autor-godina po pravilima casopisa Obnovljeni zivot (sluzbene upute FFRZ)",
+  "sourceId": "ffrz-oblikovanje-diplomski-2021",
+  "sourceLabel": "Upute za oblikovanje diplomskog rada (FFRZ, 2021), pravila navodenja prema casopisu Obnovljeni zivot",
+  "verifiedAt": "2026-07-10",
+  "verifiedBy": "Daniel Risavi",
+  "verifiedHash": "224b21163df97c8c9c5a11f9c39a3131f6809ffac2104c9014200bd6aa70d00d",
+  "accessDate": true,
+  "authorFormat": {
+    "order": "family-first",
+    "initials": "none",
+    "separator": ", ",
+    "finalJoiner": " i "
+  },
+  "inText": {
+    "mode": "author-year",
+    "template": "({authorsShort}, {year})",
+    "withPagesTemplate": "({authorsShort}, {year}, {pages})",
+    "authorsShort": {
+      "twoJoiner": " i ",
+      "etAlAfter": 3,
+      "etAlText": "i dr."
+    },
+    "provenance": {
+      "kind": "worked-example",
+      "quoteRaw": "voce u citiranom izvoru, primjerice: (Macan, 1997, 15-16); (Jalsenjak i Sestak, 2015, 153); (Cifrak i",
+      "sourcePage": "str. 5",
+      "note": "Puni primjeri iz izvora: (Macan, 1997, 15-16); (Jalsenjak i Sestak, 2015, 153); (Cifrak i dr., 2008, 32); (Jambresi, 1742, s. v. pietas). Dva autora vezuje 'i', kod tri i vise navodi se samo prvi autor s 'i dr.'. Bazni template bez stranica je izveden (svi primjeri u izvoru imaju stranicu ili s. v.); polje pages moze primiti i 's. v. natuknica'. Vise radova istog autora u istoj godini: 1998a, 1998b, 1998c."
+    }
+  },
+  "numbering": null,
+  "bibliography": {
+    "sort": "alphabetical"
+  },
+  "sourceTypes": [
+    {
+      "type": "knjiga",
+      "template": "{authors} ({year}). {title}. {place}: {publisher}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "place",
+        "publisher"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Jambresi, Andrija (1742). Lexicon latinum interpretatione Illyrica, Germanica, et",
+        "sourcePage": "str. 6",
+        "note": "Primjer je iz sekcije 4 (rjecnik citiran kao cjelina), ali slijedi opci oblik autorske knjige: Prezime, Puno ime (godina). Naslov. Mjesto: Izdavac. Tocka iza (godina), dvotocka izmedu mjesta i izdavaca. Vise mjesta ili izdavaca odvaja se crtom s razmacima (primjer Marevi, 2000: Velika Gorica i Zagreb; Marka i Matica hrvatska). Autori se navode prezimenom i punim imenom svih autora (bez inicijala)."
+      },
+      "example": {
+        "input": {
+          "type": "knjiga",
+          "authors": "Jambresi, Andrija",
+          "year": "1742",
+          "title": "Lexicon latinum interpretatione Illyrica, Germanica, et Hungarica locuples",
+          "place": "Zagreb",
+          "publisher": "Typis Academicis Societatis JESU, per Adalbertum Wilh. Wesseli"
+        },
+        "expected": "Jambresi, Andrija (1742). Lexicon latinum interpretatione Illyrica, Germanica, et Hungarica locuples. Zagreb: Typis Academicis Societatis JESU, per Adalbertum Wilh. Wesseli."
+      }
+    },
+    {
+      "type": "poglavlje",
+      "template": "{authors} ({year}). {title}. U: {editor} (ur.), {container}. {place}: {publisher}[[, {pages}]].",
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "editor",
+        "container",
+        "place",
+        "publisher"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "objavljen ili gdje se nalazi: naslov publikacije, urednici, mjesto izdanja, izdavac, broj sveska,",
+        "sourcePage": "str. 5",
+        "note": "Ekstrakcija nema primjer poglavlja u zborniku (sekcije 1-3 izvora nisu u ekstrakciji). Predlozak izveden iz opceg nacela (izvor nabraja: naslov publikacije, urednici, mjesto izdanja, izdavac, stranice) i oblika za knjigu; veznik 'U:' je evidenciran u primjerima crkvenih dokumenata i enciklopedija. Oznaka (ur.) i tocan redoslijed nisu evidencirani, potvrditi pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "clanak",
+      "template": "{authors} ({year}). {title}. {container}, {volume}[[({issue})]], {pages}.[[ DOI:{doi}]]",
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "container",
+        "volume",
+        "pages"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "comparison. Philosophy & Social Criticism, 41(1), 21-28. DOI:10.1177/0191453714553496",
+        "sourcePage": "str. 7",
+        "note": "Rep primjera clanka je izravno vidljiv u fragmentu: casopis, svezak(broj), stranice, pa 'DOI:' bez razmaka. Pocetak retka (autor, godina, naslov) nije u ekstrakciji (odsjecen na prijelomu stranice), pa je glava predloska izvedena iz opceg nacela i oblika za knjigu; zato derived, ne worked-example. Za internetske izvore navodi se DOI ili URL s datumom pristupa u zagradama."
+      },
+      "example": null
+    },
+    {
+      "type": "mrezni",
+      "template": "{authors}[[ ({year})]]. {title}.[[ U: {container}.]][[ {publisher}.]] URL: {url} ({accessed})",
+      "requiredFields": [
+        "authors",
+        "title",
+        "url",
+        "accessed"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Anon. Stepinac, Alojzije, bl. U: Hrvatska enciklopedija. Leksikografski zavod Miroslav",
+        "sourcePage": "str. 7",
+        "note": "Oba primjera u izvoru (Anon i Granderoute) nemaju godinu (pravilo: nedostupni podatci se izostavljaju), pa je (godina) opcionalna grupa. Anonimni autor u primjeru izvora je 'Anon.'. Datum pristupa u zagradama u obliku DD.MM.GGGG. iza URL-a, bez zavrsne tocke iza zagrade."
+      },
+      "example": {
+        "input": {
+          "type": "mrezni",
+          "authors": "Anon",
+          "title": "Stepinac, Alojzije, bl",
+          "container": "Hrvatska enciklopedija",
+          "publisher": "Leksikografski zavod Miroslav Krleza",
+          "url": "http://www.enciklopedija.hr/natuknica.aspx?id=58021",
+          "accessed": "02.11.2016."
+        },
+        "expected": "Anon. Stepinac, Alojzije, bl. U: Hrvatska enciklopedija. Leksikografski zavod Miroslav Krleza. URL: http://www.enciklopedija.hr/natuknica.aspx?id=58021 (02.11.2016.)"
+      }
+    },
+    {
+      "type": "zavrsni",
+      "template": "{authors} ({year}). {title}. {place}: {institution}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "place",
+        "institution"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "1. Autorska knjiga, doktorski ili magistarski rad",
+        "sourcePage": "str. 5",
+        "note": "Izvor svrstava doktorske i magistarske radove u istu kategoriju s autorskom knjigom (naslov sekcije 1), ali konkretan primjer nije u ekstrakciji (prijelom stranice). Predlozak izveden iz oblika za knjigu s ustanovom umjesto izdavaca; potvrditi ili oboriti pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "propis",
+      "template": "{authors} ({year}). {title}. {container}[[, {issue}]].",
+      "requiredFields": [
+        "authors",
+        "title",
+        "year",
+        "container"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "(imena) autora, godina izdanja i naslov rada. Ostali podatci odnose se na mjesto gdje je rad",
+        "sourcePage": "str. 5",
+        "note": "Upute ne obraduju drzavne propise. Predlozak izveden iz opceg nacela bibliografske jedinice (autor ili donositelj, godina, naslov, publikacija odnosno glasilo, broj). Crkveni dokumenti imaju vlastiti kratica-model (u tekstu (GS 30), u popisu npr. 'RF. Relatio finalis. U: ...'), koji je izvan dosega ovog predloska."
+      },
+      "example": null
+    }
+  ],
+  "contradictions": [
+    "Svi cjeloviti bibliografski primjeri u ekstrakciji su jednoautorski; separator i finalJoiner u authorFormat za popis literature nisu evidencirani, ' i ' je izveden iz unutartekstnog primjera (Jalsenjak i Sestak, 2015, 153). Potvrditi pri verifikaciji, po mogucnosti iz uputa casopisa Obnovljeni zivot.",
+    "Primjer za clanak je u ekstrakciji odsjecen na prijelomu stranice (vidljiv samo rep: Philosophy & Social Criticism, 41(1), 21-28. DOI:...), pa je clanak derived umjesto worked-example.",
+    "Zavrsni rad i drzavni propis nemaju vlastiti primjer u ekstrakciji; zavrsni je izveden iz naslova sekcije 1 (Autorska knjiga, doktorski ili magistarski rad), propis iz opceg nacela.",
+    "Dokument za diplomski rad na str. 5 doslovno kaze 'Bakalaureatski rad se ureuje prema pravilima casopisa Obnovljeni zivot' (vjerojatno prijepis iz bakalaureatskih uputa u samom izvorniku); oba dokumenta (ffrz-oblikovanje-diplomski-2021 i ffrz-oblikovanje-bakalaureatski-2021) propisuju identican stil.",
+    "Kratica-model za djela bez autora, crkvene dokumente i arhivsko gradivo (unutartekstno (GS 30), (HR-HDA-650)) alat ne generira; izvan dosega 6 sourceTypes.",
+    "Prior iz profila ('harvard') je potvrdjen sadrzajem: izvor izrijekom kaze 'tzv. harvardski nacin referiranja po uzoru na standard APA', ali s vlastitim kucnim primjerima casopisa Obnovljeni zivot, pa je ishod custom-spec, ne style-pin."
+  ]
+}

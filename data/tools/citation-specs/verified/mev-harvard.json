@@ -1,0 +1,186 @@
+{
+  "facultyId": "mev",
+  "styleToken": "harvard",
+  "status": "verified",
+  "outcome": "custom-spec",
+  "label": "Harvard autor-godina (sluzbene upute MEV)",
+  "sourceId": "mev-upute-zavrsni",
+  "sourceLabel": "Upute za izradu zavrsnog rada na Medimurskom veleucilistu u Cakovcu",
+  "verifiedAt": "2026-07-10",
+  "verifiedBy": "Daniel Risavi",
+  "verifiedHash": "422c25447635bea9a9ad696a0e5d4aac688d7161ecf573780ff25aa153b07adc",
+  "accessDate": true,
+  "authorFormat": {
+    "order": "family-first",
+    "initials": "dotted-spaced",
+    "separator": "; ",
+    "finalJoiner": null
+  },
+  "inText": {
+    "mode": "author-year",
+    "template": "({authorsShort}, {year})",
+    "authorsShort": {
+      "twoJoiner": " i ",
+      "etAlAfter": 3,
+      "etAlText": "i sur."
+    },
+    "provenance": {
+      "kind": "worked-example",
+      "quoteRaw": "kojoj je rad objavljen, na primjer: (Creasy, 1987); ako su dva autora clanka treba navesti oba",
+      "sourcePage": "str. 7",
+      "note": "Dodatak 1.C, tocka 1. Harvardski stil. Dva autora '(Dubey i Sharma, 1990)', tri i vise prvi autor + kratica za 'i suradnici' '(Yang i sur., 1989)'. Narativni oblik: 'Olsson (1990) je utvrdio da...' (samo godina u zagradi kad je ime dio recenice). Oblik s brojem stranice nije prikazan u izvoru pa withPagesTemplate nije definiran. Sort popisa: 'Popis literature na kraju rada sadrzi bibliografske reference po abecednom redu autora.' (str. 7)."
+    }
+  },
+  "numbering": null,
+  "bibliography": {
+    "sort": "alphabetical"
+  },
+  "sourceTypes": [
+    {
+      "type": "knjiga",
+      "template": "{authors} ({year}). {title}.[[ {volume}. izd.]] {place}, {publisher}.",
+      "requiredFields": [
+        "authors",
+        "year",
+        "title",
+        "place",
+        "publisher"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Silobrci, V. (2003). Kako sastaviti, objaviti i ocijeniti znanstveno djelo. 5. izd. Zagreb,",
+        "sourcePage": "str. 7",
+        "note": "Cijeli Primjer 1 (spojeni redci): Silobrci, V. (2003). Kako sastaviti, objaviti i ocijeniti znanstveno djelo. 5. izd. Zagreb, Medicinska naklada. Redoslijed propisan popisom u Dodatku 1.D: prezime i inicijali, (godina), naslov i podnaslov, broj izdanja (ako nije prvo), mjesto izdavanja, ime izdavaca. Broj izdanja ide u polje volume (5 -> '5. izd.'). Mjesto i izdavac odvojeni su ZAREZOM, ne dvotockom."
+      },
+      "example": {
+        "input": {
+          "type": "knjiga",
+          "authors": "Silobrci, V.",
+          "year": "2003",
+          "title": "Kako sastaviti, objaviti i ocijeniti znanstveno djelo",
+          "volume": "5",
+          "place": "Zagreb",
+          "publisher": "Medicinska naklada"
+        },
+        "expected": "Silobrci, V. (2003). Kako sastaviti, objaviti i ocijeniti znanstveno djelo. 5. izd. Zagreb, Medicinska naklada."
+      }
+    },
+    {
+      "type": "poglavlje",
+      "template": "{authors} ({year}). {title}. U: {editor} (ur.), {container}. {place}, {publisher}.[[ {pages}.]]",
+      "requiredFields": [
+        "authors",
+        "year",
+        "title",
+        "editor",
+        "container",
+        "place",
+        "publisher"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Knjiga, odnosno monografija:",
+        "sourcePage": "str. 7",
+        "note": "Ekstrahirani dijelovi Dodatka 1.D pokrivaju knjigu, clanak u casopisu i internetske izvore; poglavlje u knjizi ili zborniku nije prikazano (Primjer 2 i 3 nedostaju u ekstrakciji). Predlozak je izveden iz oblika za knjigu uz umetak 'U: urednik (ur.), naslov knjige'. Potvrditi ili oboriti pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "clanak",
+      "template": "{authors} ({year}). \"{title}\", {container}, vol. {volume}[[({issue})]], {pages}.",
+      "requiredFields": [
+        "authors",
+        "year",
+        "title",
+        "container",
+        "volume",
+        "pages"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Davies, E. (1997). ,,Learn by wire: managing network access to learning materials\", The",
+        "sourcePage": "str. 8",
+        "note": "Cijeli Primjer 4 (spojeni redci): Davies, E. (1997). ,,Learn by wire: managing network access to learning materials\", The electronic library, vol. 15(3), 658-693. Propisani redoslijed (str. 8): godina objave, naslov rada (navodnici!), naslov casopisa (kurziv!), broj sveska (volumena), broj pojedinacnog broja, raspon stranica. Hrvatski donji navodnik iz PDF-a (u ekstrakciji ,,) zamijenjen je ASCII navodnikom, kurziv casopisa alat ne reproducira."
+      },
+      "example": {
+        "input": {
+          "type": "clanak",
+          "authors": "Davies, E.",
+          "year": "1997",
+          "title": "Learn by wire: managing network access to learning materials",
+          "container": "The electronic library",
+          "volume": "15",
+          "issue": "3",
+          "pages": "658-693"
+        },
+        "expected": "Davies, E. (1997). \"Learn by wire: managing network access to learning materials\", The electronic library, vol. 15(3), 658-693."
+      }
+    },
+    {
+      "type": "mrezni",
+      "template": "[[{authors} ]]{title}. {url} ({accessed})",
+      "requiredFields": [
+        "title",
+        "url",
+        "accessed"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Toki, M.; Proklin, M. Znacajke racunovodstvenoga informacijskog sustava poduzetnika.",
+        "sourcePage": "str. 8",
+        "note": "Cijeli Primjer 5 (spojeni redci): Toki, M.; Proklin, M. Znacajke racunovodstvenoga informacijskog sustava poduzetnika. http://hrcak.srce.hr/index.php?show=clanak&id_clanak_jezik=112975 (01.09.2012.). Primjer 6 bez autora: IEEE- Advancing Technology for Humanity. http://www.ieee.org/index.html (05.09.2012.), pa je autor opcionalan ('ako je poznat'). Godina objave se ne navodi; datum preuzimanja s interneta u zagradi na kraju. Vise autora odvaja se tockom sa zarezom."
+      },
+      "example": {
+        "input": {
+          "type": "mrezni",
+          "authors": "Toki, M.; Proklin, M.",
+          "title": "Znacajke racunovodstvenoga informacijskog sustava poduzetnika",
+          "url": "http://hrcak.srce.hr/index.php?show=clanak&id_clanak_jezik=112975",
+          "accessed": "01.09.2012."
+        },
+        "expected": "Toki, M.; Proklin, M. Znacajke racunovodstvenoga informacijskog sustava poduzetnika. http://hrcak.srce.hr/index.php?show=clanak&id_clanak_jezik=112975 (01.09.2012.)"
+      }
+    },
+    {
+      "type": "zavrsni",
+      "template": "{authors} ({year}). {title}. Zavrsni rad. {place}, {institution}.",
+      "requiredFields": [
+        "authors",
+        "year",
+        "title",
+        "place",
+        "institution"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Dodatak 1.D Navoenje popisa literature",
+        "sourcePage": "str. 7",
+        "note": "Upute ne obraduju citiranje zavrsnih ili diplomskih radova. Predlozak je izveden iz oblika za knjigu: izdavac zamijenjen ustanovom, dodana oznaka vrste rada 'Zavrsni rad.'. Potvrditi ili oboriti pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "propis",
+      "template": "{title} ({year}). {container}[[, {issue}]].",
+      "requiredFields": [
+        "title",
+        "year",
+        "container"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Dodatak 1.D Navoenje popisa literature",
+        "sourcePage": "str. 7",
+        "note": "Upute ne obraduju citiranje propisa. Predlozak je minimalno izveden iz opceg autor-godina reda natuknice (nositelj natuknice, godina u zagradi, glasilo, broj), samo radi potpunosti alata. Potvrditi pri verifikaciji."
+      },
+      "example": null
+    }
+  ],
+  "contradictions": [
+    "PRIOR iz profila je 'vancouver', ali izvor izbor stila izricito prepusta studentu i mentoru ('Student u dogovoru sa svojim mentorom odabire koji e nacin citiranja koristiti', str. 7) i opisuje Harvardski I VanCouverski stil; oba su dokazana pa postoje dva nacrta (mev-harvard, mev-vancouver).",
+    "Primjeri u Dodatku 1.D formatirani su autor-godina redom pa prirodno pripadaju harvardskoj varijanti; izvor ih ipak daje kao jedini opci oblik popisa literature, zajednicki za oba stila.",
+    "Naslov casopisa je u izvorniku kurzivom, a naslov clanka u hrvatskim navodnicima; alat radi plain text pa je kurziv izostavljen, navodnici zamijenjeni ASCII navodnicima.",
+    "Primjer 2 i 3 iz Dodatka 1.D nedostaju u ekstrakciji (blok str. 8 pocinje usred popisa za casopis); poglavlje, zavrsni i propis su zato izvedeni (derived).",
+    "Svi primjeri autora imaju jedan inicijal pa se razmak izmedu vise inicijala ne moze potvrditi; odabrano dotted-spaced, potvrditi pri verifikaciji."
+  ]
+}

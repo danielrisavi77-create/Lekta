@@ -1,0 +1,18 @@
+{
+  "facultyId": "ttf",
+  "styleToken": "vancouver",
+  "status": "verified",
+  "outcome": "style-pin",
+  "label": "Vancouver (sluzbene upute TTF)",
+  "sourceId": "ttf-upute-zavrsni-diplomski",
+  "sourceLabel": "Upute za izradu zavrsnog i diplomskog rada (Tekstilno-tehnoloski fakultet, Sveuciliste u Zagrebu)",
+  "verifiedAt": "2026-07-10",
+  "verifiedBy": "Daniel Risavi",
+  "verifiedHash": "a56354fe4ac7435f101d47bd4259a5ea3a6d81a0e7d180b8032c6c774c6e3500",
+  "evidence": {
+    "kind": "rule-text",
+    "quoteRaw": "U podrucju tehnickih znanosti treba koristiti Vancouver stil referenciranja, a u drustvenom,",
+    "sourcePage": "str. 2"
+  },
+  "sourceTypes": []
+}

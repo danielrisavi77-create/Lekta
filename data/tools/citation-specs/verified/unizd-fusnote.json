@@ -1,0 +1,159 @@
+{
+  "facultyId": "unizd",
+  "styleToken": "unizd-fusnote",
+  "status": "verified",
+  "outcome": "custom-spec",
+  "label": "Europski sustav fusnota (sluzbene upute Odjela za turizam UNIZD)",
+  "sourceId": "unizd-turizam-upute",
+  "sourceLabel": "Upute za izradu zavrsnoga i diplomskog rada (Odjel za turizam i komunikacijske znanosti, Sveuciliste u Zadru)",
+  "verifiedAt": "2026-07-10",
+  "verifiedBy": "Daniel Risavi",
+  "verifiedHash": "96d4895ec69f1dd6648ca946f324eb7032cc25ed6a3184e55ef7b5e64c7b5728",
+  "accessDate": true,
+  "authorFormat": {
+    "order": "family-first",
+    "initials": "dotted-spaced",
+    "separator": ", ",
+    "finalJoiner": null
+  },
+  "inText": {
+    "mode": "note-number",
+    "provenance": {
+      "kind": "rule-text",
+      "quoteRaw": "Pozivne biljeske (fusnote) pisu se sitnim slovima kronoloski, rednim arapskim brojevima od",
+      "sourcePage": "str. 9",
+      "note": "Europski sustav = citiranje ispod teksta (fusnote); u tekstu stoji redni arapski broj biljeske, a bibliografska jedinica ide u podnozje. Alat generira bibliografski oblik za popis literature (Literatura), koji se slaze abecedno po prezimenu autora."
+    }
+  },
+  "numbering": null,
+  "bibliography": {
+    "sort": "alphabetical"
+  },
+  "sourceTypes": [
+    {
+      "type": "knjiga",
+      "template": "{authors}. {title}.[[ {volume}.]] {place}: {publisher}, {year}.[[, str. {pages}.]]",
+      "requiredFields": [
+        "authors",
+        "title",
+        "place",
+        "publisher",
+        "year"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Zelenika, R. Metodologija i tehnologija izrade znanstvenog i strucnog djela. Rijeka: Ekonomski fakultet",
+        "sourcePage": "str. 9",
+        "note": "Jedini gotovi primjer u izvoru (fusnota br. 1); fusnotni oblik ukljucuje broj stranice (str. 485). Za popis literature stranica se izostavlja pa je {pages} opcionalan. Format-spec knjige (str. 9): 'Prezime, inicijal(i) imena autora. Naslov: podnaslov. Podatak o izdanju. Mjesto izdavanja: Nakladnik, godina izdavanja.' Broj izdanja ide u {volume} (opcionalno)."
+      },
+      "example": {
+        "input": {
+          "type": "knjiga",
+          "authors": "Zelenika, R.",
+          "title": "Metodologija i tehnologija izrade znanstvenog i strucnog djela",
+          "place": "Rijeka",
+          "publisher": "Ekonomski fakultet Sveucilista u Rijeci",
+          "year": "2000",
+          "pages": "485"
+        },
+        "expected": "Zelenika, R. Metodologija i tehnologija izrade znanstvenog i strucnog djela. Rijeka: Ekonomski fakultet Sveucilista u Rijeci, 2000., str. 485."
+      }
+    },
+    {
+      "type": "poglavlje",
+      "template": "{authors}. {title}. // {container}[[ / {editor}]].[[ {volume}.]] {place}: {publisher}, {year}. str. {pages}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "container",
+        "place",
+        "publisher",
+        "year",
+        "pages"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Prezime, inicijal(i) imena autora. Naslov rada: podnaslov. // Naslov zbornika / podatak o",
+        "sourcePage": "str. 9",
+        "note": "Predlozak je doslovna transkripcija sluzbene format-specifikacije za RAD U ZBORNIKU/ESEJ (str. 9-10): '...Naslov rada: podnaslov. // Naslov zbornika / podatak o uredniku. Podatak o izdanju. Mjesto izdavanja: Nakladnik, godina izdavanja. str. pocetna-zavrsna.' Izvor NE daje gotovi primjer za ovaj tip; podatak o uredniku ({editor}) i broj izdanja ({volume}) su opcionalni."
+      },
+      "example": null
+    },
+    {
+      "type": "clanak",
+      "template": "{authors}. {title}. {container}.[[ {issue},]][[ {year},]] {pages}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "container",
+        "pages"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Prezime, inicijali imena autora. Naslov i podnaslov clanka. Naslov novine. Broj pojedinacnog",
+        "sourcePage": "str. 10",
+        "note": "Jedini format-spec za clanak u izvoru je NOVINSKI CLANAK (str. 10): '...Naslov novine. Broj pojedinacnog izdanja novine, datum pojedinacnog izdanja novine, stranica.' {issue}=broj izdanja, {year} nosi datum pojedinacnog izdanja (nema zasebnog placeholdera za datum), {pages}=stranica (izvor nema prefiks 'str.'). Izvor NE daje zaseban format za clanak u znanstvenom casopisu (samo ga navodi u redoslijedu popisa literature); potvrditi pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "mrezni",
+      "template": "{authors}, {title}[[, {year}]][[, {container}]], {url}, {accessed}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "url",
+        "accessed"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Ime(na) autora (ako je/su poznata), naslov dokumenta, datum nastanka (ako se razlikuje od",
+        "sourcePage": "str. 10",
+        "note": "Format-spec JEDINICE S INTERNETA (str. 10), elementi odvojeni zarezom: 'Ime(na) autora, naslov dokumenta, datum nastanka (ako se razlikuje od datuma pristupa), naslov potpunog djela (italic), naziv stranice, potpuna http adresa, i datum pristupa dokumentu.' {year}=datum nastanka (opcionalno), {container}=naslov potpunog djela. Nema zasebnog placeholdera za 'naziv stranice' (izostavljeno); kurziv naslova nije reproduciran (plain text). Izvor bez gotovog primjera."
+      },
+      "example": null
+    },
+    {
+      "type": "zavrsni",
+      "template": "{authors}. {title}. {place}: {institution}, {year}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "place",
+        "institution",
+        "year"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "Prezime, inicijal(i) imena autora. Naslov: podnaslov. Podatak o izdanju. Mjesto izdavanja:",
+        "sourcePage": "str. 9",
+        "note": "Izvor ne obraduje citiranje zavrsnih/diplomskih radova kao izvora; predlozak je izveden iz format-spec za knjigu (nakladnik -> ustanova). Potvrditi ili oboriti pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "propis",
+      "template": "{title}, {container}[[, br. {issue}]].",
+      "requiredFields": [
+        "title",
+        "container"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "knjige, potom clanci u znanstvenim casopisima, clanci u zbornicima sa znanstvenih skupova",
+        "sourcePage": "str. 8",
+        "note": "Izvor navodi propise (Narodne novine) samo kao kategoriju u redoslijedu popisa literature ('ostala literatura, npr. Narodne novine'), bez format-spec. Predlozak je izveden iz opce hrvatske konvencije za citiranje Narodnih novina (naslov, glasilo, broj). Potvrditi pri verifikaciji."
+      },
+      "example": null
+    }
+  ],
+  "contradictions": [
+    "Izvor ima samo JEDAN gotovi primjer (Zelenika, knjiga, u fusnotnom obliku sa str. 485); poglavlje, clanak i mrezni su transkribirani iz eksplicitnih format-spec redaka bez ispunjenog primjera (kind derived), a zavrsni i propis nemaju format u izvoru (izvedeni).",
+    "Visestruki autori: separator i razmak inicijala nisu izravno dokazani (izvor daje samo primjere s jednim autorom); separator postavljen na ', ' kao najizglednija pretpostavka, provjeriti.",
+    "Tip 'clanak' koristi format za NOVINSKI CLANAK (jedini format clanka u izvoru); za clanke u znanstvenim casopisima izvor ne daje zaseban format, samo ih navodi u redoslijedu popisa literature.",
+    "Novinski datum pojedinacnog izdanja preslikan je na {year} (nema zasebnog placeholdera za datum); internetska 'naziv stranice' nema placeholder pa je izostavljena.",
+    "Predlozak za propis izveden je iz opce konvencije za Narodne novine jer izvor ne daje format (samo kategorija u popisu literature).",
+    "Kurziv naslova (npr. 'naslov potpunog djela (italic)' za internet) alat ne reproducira; izlaz je plain text.",
+    "Ovo su upute Odjela za turizam i komunikacijske znanosti; vrijede za taj odjel, ne nuzno za cijelo Sveuciliste u Zadru. Izvor nudi i alternativni americki/Harvardski sustav (zaseban style-pin draft)."
+  ]
+}

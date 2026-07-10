@@ -1,0 +1,18 @@
+{
+  "facultyId": "efst",
+  "styleToken": "harvard",
+  "status": "verified",
+  "outcome": "style-pin",
+  "label": "Harvard (sluzbene upute EFST)",
+  "sourceId": "efst-upute-studentski-radovi-2013",
+  "sourceLabel": "Uputa za izradu studentskih radova (Ekonomski fakultet u Splitu, 2013)",
+  "verifiedAt": "2026-07-10",
+  "verifiedBy": "Daniel Risavi",
+  "verifiedHash": "04a74df6eab084c41f547b6a46ed5b8e26dcac5df4aceb296e82610fed983fbe",
+  "evidence": {
+    "kind": "rule-text",
+    "quoteRaw": "izvora u fusnoti2 ili uporabom tzv. Harvardskog stila citiranja. Pravilo o obveznom",
+    "sourcePage": "str. 10"
+  },
+  "sourceTypes": []
+}

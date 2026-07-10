@@ -1,0 +1,177 @@
+{
+  "facultyId": "fbf",
+  "styleToken": "fbf",
+  "status": "verified",
+  "outcome": "custom-spec",
+  "label": "Vancouver numericko (sluzbene upute FBF)",
+  "sourceId": "fbf-upute-spec-2014",
+  "sourceLabel": "Uputa za prijavu teme i oblikovanje zavrsnog specijalistickog rada (Farmaceutsko-biokemijski fakultet, 2014)",
+  "verifiedAt": "2026-07-10",
+  "verifiedBy": "Daniel Risavi",
+  "verifiedHash": "f9442b886142e2ea476ec4588e87ae6ce47c14659bc9c0d4632eb0b0874a4f93",
+  "accessDate": true,
+  "authorFormat": {
+    "order": "family-first",
+    "initials": "plain-compact",
+    "separator": ", ",
+    "finalJoiner": null,
+    "etAlAfter": 6,
+    "etAlKeep": 3,
+    "etAlJoiner": ", ",
+    "etAlText": "i sur."
+  },
+  "inText": {
+    "mode": "paren-number",
+    "provenance": {
+      "kind": "rule-text",
+      "quoteRaw": "navode se brojem u zagradi (1).",
+      "sourcePage": "str. 2",
+      "note": "Numericko citiranje: 'Svi se navodi iz literature citiraju Vancouverskim stilom, tj. prema redoslijedu pojavljivanja, a u tekstu obrazlozenja teme navode se brojem u zagradi (1).' (str. 2). Potvrdjeno i na str. 3: 'Literatura se navodi Vancouverskim stilom, a u popisu slijede redosljedom pojavljivanja u tekstu'. Numericki stil nema in-text predlozak."
+    }
+  },
+  "numbering": {
+    "referenceMarker": "({n})"
+  },
+  "bibliography": {
+    "sort": "appearance"
+  },
+  "sourceTypes": [
+    {
+      "type": "clanak",
+      "template": "{authors}. {title}. {container} {year};{volume}:{pages}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "container",
+        "year",
+        "volume",
+        "pages"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "Marusteri M, Bacarea V.Comparing groups for statistical differences:How to chose the",
+        "sourcePage": "str. 3",
+        "note": "Puni redak (prelomljen u ekstrakciji): 'Marusteri M, Bacarea V.Comparing groups for statistical differences:How to chose the right statistical test. Biochem Med 2010;20:15-32.' Ekstrakcija je izgubila razmak iza 'V.' i iza ':' (pdftotext artefakt); expected je rekonstruiran s razmacima prema razmacima u primjeru poglavlja na istoj stranici. Kompaktan oblik 'godina;volumen:stranice' bez razmaka, skraceni naziv casopisa (Biochem Med), pravopisna gresska 'chose' je iz izvora."
+      },
+      "example": {
+        "input": {
+          "type": "clanak",
+          "authors": "Marusteri, M.; Bacarea, V.",
+          "title": "Comparing groups for statistical differences: How to chose the right statistical test",
+          "container": "Biochem Med",
+          "year": "2010",
+          "volume": "20",
+          "pages": "15-32"
+        },
+        "expected": "Marusteri M, Bacarea V. Comparing groups for statistical differences: How to chose the right statistical test. Biochem Med 2010;20:15-32."
+      }
+    },
+    {
+      "type": "poglavlje",
+      "template": "{authors}. {title}. U: {editor}, ur. {container}. {publisher}, {year};{pages}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "editor",
+        "container",
+        "publisher",
+        "year",
+        "pages"
+      ],
+      "provenance": {
+        "kind": "worked-example",
+        "quoteRaw": "O Donnell VB. Eicosanoid-Based Signaling. U: Jacob K, Winyard PG, ur. Redox Signaling",
+        "sourcePage": "str. 3",
+        "note": "Puni redak (prelomljen u ekstrakciji): 'O Donnell VB. Eicosanoid-Based Signaling. U: Jacob K, Winyard PG, ur. Redox Signaling and Regulation in Biology and Medicine. Wiley-VCH Verlag GmbH and Co KgaA, 2009;229-44.' Primjer NEMA mjesto izdanja (odstupanje od tipicnog Vancouvera), predlozak slijedi primjer. 'O Donnell' je vjerojatno O'Donnell (apostrof izgubljen u ekstrakciji); 'and Co KgaA' ostavljeno kako pise. Urednici u istom obliku kao autori, oznaka 'ur.' s tockom."
+      },
+      "example": {
+        "input": {
+          "type": "poglavlje",
+          "authors": "O Donnell, V. B.",
+          "title": "Eicosanoid-Based Signaling",
+          "editor": "Jacob K, Winyard PG",
+          "container": "Redox Signaling and Regulation in Biology and Medicine",
+          "publisher": "Wiley-VCH Verlag GmbH and Co KgaA",
+          "year": "2009",
+          "pages": "229-44"
+        },
+        "expected": "O Donnell VB. Eicosanoid-Based Signaling. U: Jacob K, Winyard PG, ur. Redox Signaling and Regulation in Biology and Medicine. Wiley-VCH Verlag GmbH and Co KgaA, 2009;229-44."
+      }
+    },
+    {
+      "type": "knjiga",
+      "template": "{authors}. {title}.[[ {place}:]] {publisher}, {year}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "publisher",
+        "year"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "osmisljeno ispitivanje, i prijedlog teme rada. Literatura se navodi Vancouverskim stilom,",
+        "sourcePage": "str. 3",
+        "note": "Izvor nema primjer za samostalnu knjigu; oblik je izveden iz primjera poglavlja u urednickoj knjizi na str. 3 (izdavac pa zarez pa godina, bez obveznog mjesta izdanja) uz opcionalno mjesto prema opcoj Vancouver konvenciji. Potvrditi ili oboriti pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "mrezni",
+      "template": "{authors}. {title}.[[ {container}.]] Dostupno na: {url} (pristupljeno {accessed}).",
+      "requiredFields": [
+        "authors",
+        "title",
+        "url",
+        "accessed"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "osmisljeno ispitivanje, i prijedlog teme rada. Literatura se navodi Vancouverskim stilom,",
+        "sourcePage": "str. 3",
+        "note": "Izvor ne obraduje mrezne izvore; oblik i datum pristupa izvedeni su iz Vancouver konvencije za elektronicke izvore s hrvatskom lokalizacijom (Dostupno na, pristupljeno). Izvor ga ne egzemplificira, potvrditi pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "zavrsni",
+      "template": "{authors}. {title} (diplomski rad).[[ {place}:]] {institution}, {year}.",
+      "requiredFields": [
+        "authors",
+        "title",
+        "institution",
+        "year"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "osmisljeno ispitivanje, i prijedlog teme rada. Literatura se navodi Vancouverskim stilom,",
+        "sourcePage": "str. 3",
+        "note": "Izvor ne obraduje citiranje zavrsnih, diplomskih ni specijalistickih radova kao izvora; oblik je izveden iz izvedenog oblika za knjigu (ustanova umjesto izdavaca) po Vancouver konvenciji za teze. Oznaka vrste rada (diplomski, specijalisticki, doktorski) prilagodava se stvarnom radu. Potvrditi pri verifikaciji."
+      },
+      "example": null
+    },
+    {
+      "type": "propis",
+      "template": "{title}. {container}[[ {issue}]].",
+      "requiredFields": [
+        "title",
+        "container"
+      ],
+      "provenance": {
+        "kind": "derived",
+        "quoteRaw": "osmisljeno ispitivanje, i prijedlog teme rada. Literatura se navodi Vancouverskim stilom,",
+        "sourcePage": "str. 3",
+        "note": "Izvor ne obraduje propise ni pravne akte kao izvore; oblik (naslov, sluzbeno glasilo, broj) izveden je iz opce hrvatske prakse u Vancouver okruzenju, ne iz izvora. Potvrditi ili oboriti pri verifikaciji."
+      },
+      "example": null
+    }
+  ],
+  "contradictions": [
+    "Prior ['vancouver'] je POTVRDJEN: izvor izrijekom imenuje Vancouverski stil na str. 2 i str. 3, nema proturjecja.",
+    "Samo clanak u casopisu i poglavlje u urednickoj knjizi imaju worked-example (str. 3, 'Primjeri navoenja najcese rabljenih literaturnih izvora'); knjiga, mrezni, zavrsni i propis su DERIVED i izvor ih ne egzemplificira. Svaki derived predlozak zasebno potvrditi.",
+    "Pravilo o autorima (str. 3): do sest autora navode se svi, sedam i vise navode se prva tri i 'i sur.' (etAlAfter 6, etAlKeep 3); etAlJoiner ', ' je pretpostavljen po Vancouver konvenciji jer izvor nema primjer sa sedam i vise autora.",
+    "Ekstrakcija je u primjeru clanka izgubila razmake ('V.Comparing', 'differences:How', pdftotext artefakt); expected je rekonstruiran s razmacima prema primjeru poglavlja. 'O Donnell' je vjerojatno O'Donnell (izgubljen apostrof).",
+    "Primjer poglavlja nema mjesto izdanja ('Wiley-VCH Verlag GmbH and Co KgaA, 2009;229-44.'), sto odstupa od tipicnog Vancouvera (Mjesto: Izdavac; godina); predlosci slijede primjer iz izvora.",
+    "Izvor je Uputa za zavrsni SPECIJALISTICKI rad (poslijediplomski, 2014); za druge razine studija FBF-a stil nije ovim izvorom dokazan.",
+    "Popis literature ogranicen na najvise 30 navoda sto novijeg datuma (str. 3); to je pravilo opsega, ne formata, generator ga ne provodi."
+  ]
+}
