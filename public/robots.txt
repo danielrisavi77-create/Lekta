@@ -2,3 +2,5 @@ User-agent: *
 Allow: /
 
 Sitemap: https://lektahr.netlify.app/sitemap.xml
+Sitemap: https://lektahr.netlify.app/alati/sitemap-alati.xml
+Sitemap: https://lektahr.netlify.app/alati/sitemap-naslovnica.xml
