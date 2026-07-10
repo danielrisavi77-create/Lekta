@@ -51,6 +51,11 @@ let selectedDocx: any=null,selectedPdf: any=null,selectedMetadataDocx: any=null,
 // params smiju doci samo odavde: currentProfile() u trenutku rendera moze biti
 // druga selekcija (povijest/odjava) pa bi popravak gadjao krivi fakultet.
 let analyzedProfile: any=null;
+// Ocuvani DOM podstablo repair panela: renderSubmissionChecklist se ponovno
+// izvodi na svaki toggle checkliste i pregazi #repairPanelMount; da korisnikov
+// odabir stavki, deep-preklopnik i prikazani sazetak ne nestanu, cuvamo stvarni
+// cvor i re-attachamo ga dok je isti rezultat aktivan (samo za placeni panel).
+let repairPanelNode: any=null, repairPanelForResult: any=null;
 const STORAGE_KEYS={preferences:'lekta.preferences.v2',history:'lekta.history.v2',production:'lekta.production.v2.1',submission:'lekta.submission.v2.2.2',analyticsConsent:'lekta.analytics-consent.v1',orders:'lekta.orders.v1',waitlist:'lekta.waitlist.v1'};/* jednokratna migracija starih lokalnih podataka na lekta.* (sigurno, bez gubitka) */(function migrateLegacyStorage(){try{var MIG: any={'thesisready.preferences.v2':'lekta.preferences.v2','thesisready.history.v2':'lekta.history.v2','thesisready.production.v2.1':'lekta.production.v2.1','thesisready.submission.v2.2.2':'lekta.submission.v2.2.2','thesisready.analytics-consent.v1':'lekta.analytics-consent.v1','thesisready.orders.v1':'lekta.orders.v1','thesisready.theme':'lekta.theme'};for(var o in MIG){var nk=MIG[o],ov=localStorage.getItem(o);if(ov!==null&&localStorage.getItem(nk)===null)localStorage.setItem(nk,ov);localStorage.removeItem(o);}}catch(e: any){}})();
 const SESSION_MEMORY=new Map();
 /* WORK_TYPE_LABELS i CHECK_ITEMS se uvoze iz config-loader (data/work-type-labels.json, data/checks) */
@@ -662,6 +667,9 @@ function renderSubmissionChecklist(r: any){
  // dok se ne unesu rokovi, a auth je OFF dok supabaseUrl/anon nisu postavljeni).
  const _sess=authConfigured()?authStore.load():null;
  renderDeadlineReminderToggleIfAvailable({facultyId:r.settings?.selectionIds?.unit||null,programId:r.selection?.program||null,workType:toReportWorkType(r.settings?.workType||r.selection?.workType||'final'),deadlineRegistry:ACADEMIC_DEADLINES,config:authConfig(),accessToken:_sess?.accessToken||'',userId:_sess?.userId||'',mountEl:$('#deadlineReminderMount')});
+ // Ocuvaj vec renderiran placeni repair panel (checkboxi, deep-preklopnik,
+ // sazetak) umjesto da ga innerHTML iznad pregazi: re-attach isti cvor.
+ if(repairPanelNode&&repairPanelForResult===r){const m=$('#repairPanelMount');if(m){m.appendChild(repairPanelNode);return}}
  try{renderRepairSection(r)}catch(e: any){console.error('Repair panel:',e)}
 }
 
@@ -671,6 +679,7 @@ function renderSubmissionChecklist(r: any){
 // currentProfile() u trenutku rendera: selekcija se u meduvremenu mogla promijeniti (povijest).
 function renderRepairSection(r: any){
  const mount=$('#repairPanelMount'); if(!mount) return; mount.innerHTML='';
+ repairPanelNode=null; repairPanelForResult=null; // dok se ne renderira stateful panel, nema sto cuvati
  const defId=r.details?.profileDefinitionId; if(!defId) return;
  if(r!==currentResult||!analyzedProfile) return; // demo, zastarjeli rezultat ili nema snapshota
  const entries=draftRuleEntriesFor(defId);
@@ -679,7 +688,7 @@ function renderRepairSection(r: any){
   const items=buildRepairableItems(r.checks||[],analyzedProfile,entries);
   if(!items.length) return;
   mount.innerHTML=`<div class="lekta-repair-panel"><p><strong>Ovo možemo popraviti umjesto tebe:</strong> ${items.map((i: any)=>escapeHtml(i.label)).join(', ')}.</p></div>`+paywallLockHtml('Automatski popravak s dubinskim usklađivanjem cijelog dokumenta i preuzimanje ispravljene datoteke');
-  wireLockCtas(); return;
+  wireLockCtas(); return; // teaser je bez stanja: re-render na svakom toggleu je bezopasan
  }
  // Placeno (fullReport) ili soft-launch: Feature B, nudi i neprekrsene dimenzije
  // ("uskladi cijeli dokument") uz v2 dubinsko ciscenje izravnog formatiranja.
@@ -688,6 +697,8 @@ function renderRepairSection(r: any){
  if(!selectedDocx){mount.innerHTML=`<div class="lekta-repair-panel"><p>Za automatski popravak ponovno učitaj .docx datoteku (dokument više nije u memoriji).</p></div>`;return}
  const file=selectedDocx;
  renderRepairPanel({items,getDocxBytes:async()=>new Uint8Array(await file.arrayBuffer()),originalFileName:r.file?.name||'rad.docx',mountEl:mount});
+ // Zapamti stvarni cvor placenog panela za ocuvanje kroz re-render checkliste.
+ repairPanelNode=mount.firstElementChild; repairPanelForResult=r;
 }
 
 function renderCheckTable(id: any,items: any){const el=$('#'+id);if(!el)return;if(paywallGateActive()){const pass=items.filter((c: any)=>c.max>0&&c.status==='pass').length,warn=items.filter((c: any)=>c.max>0&&c.status==='warn').length,fail=items.filter((c: any)=>c.max>0&&c.status==='fail').length,info=items.filter((c: any)=>c.max===0).length;el.innerHTML=`<div class="teaser-check-summary"><span class="status pass"><i data-lucide="check-circle"></i> U redu: ${pass}</span><span class="status warn"><i data-lucide="alert-triangle"></i> Provjeri: ${warn}</span><span class="status fail"><i data-lucide="alert-circle"></i> Važno: ${fail}</span><span class="status pass"><i data-lucide="info"></i> Informativno: ${info}</span></div>${paywallLockHtml('Detaljna tablica provjera s bodovima i obrazloženjima')}`;wireLockCtas();return}el.innerHTML=`<div style="overflow:auto"><table class="check-table"><thead><tr><th>Provjera</th><th>Status</th><th>Rezultat</th><th>Bodovi</th></tr></thead><tbody>${items.map((c: any)=>`<tr><td><strong>${escapeHtml(c.title)}</strong></td><td><span class="status ${c.max===0?'pass':c.status}">${c.max===0?'<i data-lucide="info"></i> Informativno':c.status==='pass'?'<i data-lucide="check-circle"></i> U redu':c.status==='fail'?'<i data-lucide="alert-circle"></i> Važno':'<i data-lucide="alert-triangle"></i> Provjeri'}</span></td><td>${escapeHtml(c.detail)}</td><td>${c.max===0?'?':Math.round(c.earned*10)/10+'/'+c.max}</td></tr>`).join('')}</tbody></table></div>`}
