@@ -1,4 +1,4 @@
-# Citatni spec: unin-apa7 (outcome: custom-spec, status: draft)
+# Citatni spec: unin-apa7 (outcome: custom-spec, status: verified)
 
 Stil: **APA 7 autor-godina (sluzbene upute UNIN, biomedicina)** (token `apa7`)
 Izvor: Upute za izradu zavrsnih i diplomskih radova (Sveuciliste Sjever) (`unin-upute-radovi-2026`)
@@ -90,9 +90,6 @@ NAPOMENA : APA sekcija: 1 autor '(Mirić, 2003, str. 15)', 2 autora '(Mirić i I
 - Web primjeri su nedosljedni ('Dostupno:' vs izravan URL vs ', Pristupljeno:'); mrezni predlozak izveden iz primjera organizacije (WHO), datum pristupa opcionalan.
 - Naslovi knjiga i casopisa su u APA izvorniku kurzivom; alat radi plain text pa je kurziv izostavljen (napomena na stranici alata).
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs unin-apa7 "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `53d0ff0b8b18...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs unin-apa7 "Daniel Risavi"`.

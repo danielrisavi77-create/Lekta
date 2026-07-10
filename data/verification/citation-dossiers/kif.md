@@ -1,4 +1,4 @@
-# Citatni spec: kif (outcome: custom-spec, status: draft)
+# Citatni spec: kif (outcome: custom-spec, status: verified)
 
 Stil: **APA autor-godina, hrvatska prilagodba (sluzbene upute KIF)** (token `kif`)
 Izvor: Upute za izradu diplomskog/specijalistickog diplomskog rada (Kinezioloski fakultet Sveucilista u Zagrebu) (`kif-upute-diplomski-2023`)
@@ -82,9 +82,6 @@ NAPOMENA : Izvor daje i narativni oblik 'Kessler (2003) je otkrio da...'. Dva au
 - Skracivanje popisa autora u literaturi nije evidentirano (primjer zbornika navodi sva 4 autora bez kracenja) pa etAl polja u authorFormat nisu postavljena.
 - Kurziv (naslov casopisa i volumen, izvor izrijekom str. 17; naslovi knjiga u primjerima) alat ne reproducira, izlaz je plain text; viseca uvlaka popisa literature (str. 16) je formatiranje izvan dosega generatora.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs kif "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `aa87190f7f1f...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs kif "Daniel Risavi"`.

@@ -1,4 +1,4 @@
-# Citatni spec: grf (outcome: custom-spec, status: draft)
+# Citatni spec: grf (outcome: custom-spec, status: verified)
 
 Stil: **GRF numericki stil (sluzbene upute za zavrsni rad)** (token `grf`)
 Izvor: Upute za izradu zavrsnog rada (Graficki fakultet Sveucilista u Zagrebu) (`grf-upute-zavrsni`)
@@ -75,9 +75,6 @@ NAPOMENA: Izvor IZRICITO ISKLJUCUJE pravilnike i propise iz popisa literature ('
 - U primjeru za poglavlje iza naslova stoji zaostali zavrsni navodnik (araka"), vjerojatno je naslov u izvorniku pod navodnicima a otvoreni navodnik je izgubljen u ekstrakciji; predlosci rade bez navodnika, potvrditi pri verifikaciji.
 - Primjer za zavrsni rad je doktorska disertacija; izvor izricito dopusta oznake 'magistarski rad' i 'diplomski rad', alat koristi 'diplomski rad'.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs grf "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `fb5934de22d9...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs grf "Daniel Risavi"`.

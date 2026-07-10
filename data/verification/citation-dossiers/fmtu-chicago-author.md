@@ -1,4 +1,4 @@
-# Citatni spec: fmtu-chicago-author (outcome: style-pin, status: draft)
+# Citatni spec: fmtu-chicago-author (outcome: style-pin, status: verified)
 
 Stil: **Chicago autor-datum sustav (sluzbene upute FMTU)** (token `chicago-author`)
 Izvor: Upute za prijavu, izradu, predaju i obranu zavrsnog rada na sveucilisnom prijediplomskom studiju (FMTU Opatija) (`fmtu-upute-zavrsni-2025`)
@@ -11,9 +11,6 @@ PIN     : izvor propisuje stil "chicago-author" -> format ostaje obiteljski moto
 QUOTE   : 8.8.1. Chicago stil � Bibliografski sustav i Autor-datum sustav (primjeri)   [grep: OK]
 ```
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs fmtu-chicago-author "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `700b66c3100a...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs fmtu-chicago-author "Daniel Risavi"`.

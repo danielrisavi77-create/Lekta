@@ -1,4 +1,4 @@
-# Citatni spec: vevu (outcome: custom-spec, status: draft)
+# Citatni spec: vevu (outcome: custom-spec, status: verified)
 
 Stil: **Autor-godina (sluzbene upute VEVU za zavrsni rad)** (token `vevu`)
 Izvor: Upute za izradu zavrsnog rada (VEVU) (`vevu-upute-zavrsni`)
@@ -74,9 +74,6 @@ NAPOMENA : In-text je autor-godina: u zagradi prezime autora i godina izdanja. Z
 - Razdvajac vise autora u popisu literature (postavljeno '; '), ponasanje et al u bibliografiji, in-text oblik sa stranicom i pristupni datum za mrezne izvore nisu u isjecku; postavljene su razumne pretpostavke koje treba potvrditi.
 - Izvor numerira jedinice popisa literature arapskim brojevima (str. 11); to je detalj prikaza popisa pa numbering ostaje null, a sortiranje je alphabetical (poredani abecednim redom).
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs vevu "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `66d1e460151a...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs vevu "Daniel Risavi"`.

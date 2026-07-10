@@ -1,4 +1,4 @@
-# Citatni spec: grad (outcome: custom-spec, status: draft)
+# Citatni spec: grad (outcome: custom-spec, status: verified)
 
 Stil: **Numericko navodenje u uglatim zagradama (sluzbeni predlozak GRAD)** (token `grad`)
 Izvor: Sluzbeni predlozak zavrsnog/diplomskog rada Gradevinskog fakulteta u Zagrebu (2024) (`grad-predlozak-2024`)
@@ -72,9 +72,6 @@ NAPOMENA: Predlozak ne obraduje pravne propise. Red je minimalno izveden (naziv 
 - Svaka jedinica popisa nosi oznaku [n] neposredno uz red ('[1]Cerić...', '[2]Hao...'); numbering polje ostavljeno null jer schema mapiranje oznake nije poznato, oznaku treba dodavati prikaz popisa.
 - Razmak izmedu visestrukih inicijala (dotted-spaced) nije dokaziv iz primjera s jednim inicijalom; pretpostavljen razmak.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs grad "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `6a9db283e1b6...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs grad "Daniel Risavi"`.

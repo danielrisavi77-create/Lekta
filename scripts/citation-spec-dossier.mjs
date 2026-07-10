@@ -70,16 +70,16 @@ async function main() {
   const engine = await loadEngine();
   fs.mkdirSync(OUT_DIR, { recursive: true });
 
-  const draftFiles = fs.existsSync(DRAFTS_DIR)
-    ? fs.readdirSync(DRAFTS_DIR).filter((f) => f.endsWith('.json'))
-    : [];
-  const targets = draftFiles
-    .map((f) => f.replace(/\.json$/, ''))
-    .filter((fac) => !only.length || only.includes(fac));
+  const readDir = (dir) => (fs.existsSync(dir) ? fs.readdirSync(dir).filter((f) => f.endsWith('.json')) : []);
+  // Pokriva i drafts/ (u pregledu) i verified/ (vec approvano) - dossier ostaje tocan i nakon approvea.
+  const targets = [
+    ...readDir(DRAFTS_DIR).map((f) => ({ fac: f.replace(/\.json$/, ''), dir: DRAFTS_DIR })),
+    ...readDir(VERIFIED_DIR).map((f) => ({ fac: f.replace(/\.json$/, ''), dir: VERIFIED_DIR })),
+  ].filter((t) => !only.length || only.includes(t.fac));
 
   const indexRows = [];
-  for (const fac of targets) {
-    const spec = JSON.parse(fs.readFileSync(path.join(DRAFTS_DIR, `${fac}.json`), 'utf-8'));
+  for (const { fac, dir } of targets) {
+    const spec = JSON.parse(fs.readFileSync(path.join(dir, `${fac}.json`), 'utf-8'));
     const errs = engine.validateCitationSpec(spec);
     const meta = sourceMeta(spec.sourceId);
     // Multi-stil fakulteti imaju datoteke <facultyId>-<token>.json; grep ide po facultyId ekstrakciji.
@@ -160,16 +160,23 @@ async function main() {
       lines.push('');
     }
 
-    lines.push('## Odluka');
-    lines.push('- [ ] approve sve');
-    lines.push('- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)');
-    lines.push('- [ ] odbaci / prekvalificiraj outcome');
-    lines.push('');
-    lines.push(`Naredba: \`node scripts/approve-citation-spec.mjs ${fac} "Daniel Risavi" [--flag clanak,mrezni] [--dry]\``);
-    lines.push('');
+    if (spec.status === 'verified') {
+      lines.push('## Verifikacija');
+      lines.push(`VERIFICIRANO: ${spec.verifiedBy ?? '?'} (${spec.verifiedAt ?? '?'}); verifiedHash \`${(spec.verifiedHash ?? '').slice(0, 12)}...\` sidri na snapshot izvora.`);
+      lines.push(`Reverifikacija nakon drifta (izvor promijenjen): \`node scripts/approve-citation-spec.mjs ${fac} "Daniel Risavi"\`.`);
+      lines.push('');
+    } else {
+      lines.push('## Odluka');
+      lines.push('- [ ] approve sve');
+      lines.push('- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)');
+      lines.push('- [ ] odbaci / prekvalificiraj outcome');
+      lines.push('');
+      lines.push(`Naredba: \`node scripts/approve-citation-spec.mjs ${fac} "Daniel Risavi" [--flag clanak,mrezni] [--dry]\``);
+      lines.push('');
+    }
 
     fs.writeFileSync(path.join(OUT_DIR, `${fac}.md`), lines.join('\n'), 'utf-8');
-    indexRows.push({ fac, outcome: spec.outcome, matches, diffs, declaredDiffs, noExample, schemaErrs: errs.length, grepFails });
+    indexRows.push({ fac, status: spec.status, outcome: spec.outcome, matches, diffs, declaredDiffs, noExample, schemaErrs: errs.length, grepFails });
     const warn = (diffs || errs.length || grepFails) ? '  <-- PROVJERI' : '';
     console.log(`[dossier] ${fac}: ${matches} MATCH, ${diffs} DIFF(nedeklariran), ${declaredDiffs} DIFF(dekl), ${noExample} bez examplea, ${errs.length} shema, ${grepFails} grep-fail${warn}`);
   }
@@ -181,19 +188,30 @@ async function main() {
     'Legenda: **DIFF!** = nedeklariran mismatch (blokira approve, popravi ili dodaj knownDiff); ',
     'DIFF(dekl) = deklariran razlog (ocekivan, npr. tipfeler/artefakt izvora); grep! = quoteRaw nije nadjen u ekstrakciji (blokira).',
     '',
-    '| fakultet | outcome | MATCH | DIFF! | DIFF(dekl) | bez ex. | shema! | grep! |',
-    '|---|---|---|---|---|---|---|---|',
-    ...indexRows.map((r) => `| [${r.fac}](${r.fac}.md) | ${r.outcome} | ${r.matches} | ${r.diffs || ''} | ${r.declaredDiffs || ''} | ${r.noExample} | ${r.schemaErrs || ''} | ${r.grepFails || ''} |`),
+    '| fakultet | status | outcome | MATCH | DIFF! | DIFF(dekl) | bez ex. | shema! | grep! |',
+    '|---|---|---|---|---|---|---|---|---|',
+    ...indexRows.map((r) => `| [${r.fac}](${r.fac}.md) | ${r.status} | ${r.outcome} | ${r.matches} | ${r.diffs || ''} | ${r.declaredDiffs || ''} | ${r.noExample} | ${r.schemaErrs || ''} | ${r.grepFails || ''} |`),
     '',
     blockers.length
-      ? `BLOKIRA APPROVE (${blockers.length}): ${blockers.map((r) => r.fac).join(', ')} - rijesi prije verifikacije.`
-      : 'Nijedan draft nema nedeklariran DIFF, shema-gresku ni promasen grep. Svi su spremni za ljudski pregled.',
+      ? `PROBLEM (${blockers.length}): ${blockers.map((r) => r.fac).join(', ')} - nedeklariran DIFF/shema/grep, rijesi (kod verified znaci drift/regresiju).`
+      : 'Nijedan spec nema nedeklariran DIFF, shema-gresku ni promasen grep.',
     '',
-    `Verificirano do sada: ${fs.existsSync(VERIFIED_DIR) ? fs.readdirSync(VERIFIED_DIR).filter((f) => f.endsWith('.json')).length : 0} spec(ova) u verified/.`,
+    `Verificirano: ${indexRows.filter((r) => r.status === 'verified').length} / u pregledu (draft): ${indexRows.filter((r) => r.status !== 'verified').length}.`,
     '',
   ];
   fs.writeFileSync(path.join(OUT_DIR, 'INDEX.md'), idx.join('\n'), 'utf-8');
-  console.log(`[dossier] INDEX.md: ${indexRows.length} dosjea, ${blockers.length} blokira approve.`);
+
+  // Cleanup: makni orphan dossiere (.md bez odgovarajuceg speca u drafts/ ILI verified/).
+  if (!only.length) {
+    const live = new Set(targets.map((t) => `${t.fac}.md`));
+    live.add('INDEX.md');
+    let removed = 0;
+    for (const f of fs.readdirSync(OUT_DIR).filter((f) => f.endsWith('.md'))) {
+      if (!live.has(f)) { fs.unlinkSync(path.join(OUT_DIR, f)); removed++; }
+    }
+    if (removed) console.log(`[dossier] cleanup: uklonjeno ${removed} orphan dossiera (spec vise ne postoji).`);
+  }
+  console.log(`[dossier] INDEX.md: ${indexRows.length} dosjea, ${blockers.length} problem.`);
 }
 
 main().catch((e) => { console.error('[dossier] GRESKA:', e); process.exit(1); });

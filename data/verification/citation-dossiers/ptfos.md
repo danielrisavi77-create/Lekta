@@ -1,4 +1,4 @@
-# Citatni spec: ptfos (outcome: custom-spec, status: draft)
+# Citatni spec: ptfos (outcome: custom-spec, status: verified)
 
 Stil: **PTFOS autor-godina (sluzbene upute za diplomski rad)** (token `ptfos-autor-godina`)
 Izvor: Upute za pisanje, ocjenu i obranu diplomskih radova (PTFOS) (`ptfos-upute-diplomski-2020`)
@@ -81,9 +81,6 @@ NAPOMENA : Autor-godina u zagradi na kraju recenice. Dva autora veznikom i: '(Bu
 - Elektronicki casopisi koriste broj clanka umjesto raspona stranica (PLoS ONE 3:e2568); alat ima jedan clanak predlozak pa broj clanka ide u polje pages.
 - Datum pristupa mreznom izvoru nije propisan u ekstrakciji (samo preporuka o pohrani URL-a), accessed je opcionalna dodana konvencija.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs ptfos "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `7f31be75164c...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs ptfos "Daniel Risavi"`.

@@ -1,4 +1,4 @@
-# Citatni spec: pmf (outcome: custom-spec, status: draft)
+# Citatni spec: pmf (outcome: custom-spec, status: verified)
 
 Stil: **Harvardski sustav (upute Geografskog odsjeka PMF)** (token `pmf`)
 Izvor: Upute za prijavu i izradu diplomskog rada, Geografski odsjek Prirodoslovno-matematickog fakulteta u Zagrebu (`pmf-geog-upute-diplomski-2026`)
@@ -81,9 +81,6 @@ NAPOMENA : Doslovni citat sa stranicom: '(Chang, 2019, 97)' (stranica odvojena Z
 - initials dotted-spaced je pretpostavka: svi primjeri imaju samo jedan inicijal pa razmak izmedu visestrukih inicijala nije dokaziv.
 - Za urednicke knjige na engleskom ili drugom jeziku izvor propisuje 'ed.'/'eds.' umjesto '(ur.)'; template poglavlja nosi samo hrvatsku varijantu (ur.), jezicna varijanta je izvan dosega jednog templatea.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs pmf "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `bef096b5167b...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs pmf "Daniel Risavi"`.

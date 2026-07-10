@@ -1,4 +1,4 @@
-# Citatni spec: kbf (outcome: custom-spec, status: draft)
+# Citatni spec: kbf (outcome: custom-spec, status: verified)
 
 Stil: **Fusnotni stil Bogoslovske smotre (sluzbene upute KBF)** (token `kbf-fusnote`)
 Izvor: Upute za izradu zavrsnoga i diplomskoga rada (Katolicki bogoslovni fakultet Sveucilista u Zagrebu) (`kbf-upute-zavrsni-diplomski-2017`)
@@ -74,9 +74,6 @@ NAPOMENA: Ni ekstrakcija ni vidljivi dio uputa Bogoslovske smotre ne donose prim
 - Oblik za clanak u znanstvenom casopisu (godiste, broj, stranice) nije uhvacen ekstrakcijom; clanak je izgraden iz novinskog primjera s punim datumom u polju year.
 - Kurziv naslova nije vidljiv u tekstualnoj ekstrakciji; alat radi plain text.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs kbf "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `be1213970cdb...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs kbf "Daniel Risavi"`.

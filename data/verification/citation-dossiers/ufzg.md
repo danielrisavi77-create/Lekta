@@ -1,4 +1,4 @@
-# Citatni spec: ufzg (outcome: style-pin, status: draft)
+# Citatni spec: ufzg (outcome: style-pin, status: verified)
 
 Stil: **APA (sluzbene upute UFZG)** (token `apa7`)
 Izvor: Upute za izradu zavrsnog odnosno diplomskog rada (Uciteljski fakultet u Zagrebu) (`ufzg-upute-zavrsni-diplomski-2026`)
@@ -11,9 +11,6 @@ PIN     : izvor propisuje stil "apa7" -> format ostaje obiteljski motor
 QUOTE   : usklaeno s APA stilom. Detaljnije upute za citiranje literature i oblikovanje tablica i grafickih   [grep: OK]
 ```
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs ufzg "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `83f5b025467e...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs ufzg "Daniel Risavi"`.

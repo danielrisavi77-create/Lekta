@@ -1,4 +1,4 @@
-# Citatni spec: fbf (outcome: custom-spec, status: draft)
+# Citatni spec: fbf (outcome: custom-spec, status: verified)
 
 Stil: **Vancouver numericko (sluzbene upute FBF)** (token `fbf`)
 Izvor: Uputa za prijavu teme i oblikovanje zavrsnog specijalistickog rada (Farmaceutsko-biokemijski fakultet, 2014) (`fbf-upute-spec-2014`)
@@ -71,9 +71,6 @@ NAPOMENA: Izvor ne obraduje propise ni pravne akte kao izvore; oblik (naslov, sl
 - Izvor je Uputa za zavrsni SPECIJALISTICKI rad (poslijediplomski, 2014); za druge razine studija FBF-a stil nije ovim izvorom dokazan.
 - Popis literature ogranicen na najvise 30 navoda sto novijeg datuma (str. 3); to je pravilo opsega, ne formata, generator ga ne provodi.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs fbf "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `f9442b886142...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs fbf "Daniel Risavi"`.

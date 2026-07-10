@@ -1,4 +1,4 @@
-# Citatni spec: riteh (outcome: custom-spec, status: draft)
+# Citatni spec: riteh (outcome: custom-spec, status: verified)
 
 Stil: **Numericko citiranje u uglatim zagradama (sluzbene upute RiTeh)** (token `riteh`)
 Izvor: Upute za izradu zavrsnog i diplomskog rada (Tehnicki fakultet u Rijeci) (`riteh-upute-radovi-2025`)
@@ -73,9 +73,6 @@ NAPOMENA: Upute (tehnicki fakultet) ne obradjuju citiranje propisa/pravnih akata
 - Jedini primjer kvalifikacijskog rada je doktorska disertacija; doslovna oznaka 'doktorska disertacija' zadrzana je iz primjera iako bi se za diplomski/zavrsni razlikovala.
 - Worked example clanka ne sadrzi mjesto izdavanja iako ga genericki predlozak na str. 7 spominje; predlozak gradjen iskljucivo iz primjera pa mjesto nije ukljuceno.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs riteh "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `017dda8a9896...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs riteh "Daniel Risavi"`.

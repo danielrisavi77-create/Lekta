@@ -1,4 +1,4 @@
-# Citatni spec: sumfak (outcome: custom-spec, status: draft)
+# Citatni spec: sumfak (outcome: custom-spec, status: verified)
 
 Stil: **Autor-godina (sluzbene upute Fakulteta sumarstva i drvne tehnologije)** (token `sumfak`)
 Izvor: Upute za izradu zavrsnog i diplomskog rada, poglavlje Pravila citiranja i izrada popisa literature (Fakultet sumarstva i drvne tehnologije, Sveuciliste u Zagrebu) (`sumfak-upute-zavrsni-diplomski-2024`)
@@ -81,9 +81,6 @@ NAPOMENA : In-text je autor-godina BEZ zareza izmedu prezimena i godine: jedan a
 - Zanr 'Racunalni programi (softver)' ('*** 2020. Woodworking for inventor ...') i mrezni izvori bez autora / slike s mreze imaju vlastite oblike koje 6 standardnih sourceTypes ne pokriva.
 - Kurziv (latinska imena roda i vrsta, oznake fizikalnih velicina) alat ne reproducira; izlaz je plain text (napomena na stranici alata).
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs sumfak "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `16c870fde070...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs sumfak "Daniel Risavi"`.

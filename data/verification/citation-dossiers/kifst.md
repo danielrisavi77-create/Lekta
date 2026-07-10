@@ -1,4 +1,4 @@
-# Citatni spec: kifst (outcome: custom-spec, status: draft)
+# Citatni spec: kifst (outcome: custom-spec, status: verified)
 
 Stil: **APA autor-godina (sluzbene upute KIFST)** (token `kifst`)
 Izvor: Upute za izradu diplomskog rada (Kinezioloski fakultet u Splitu) (`kifst-upute-diplomski-2022`)
@@ -78,9 +78,6 @@ NAPOMENA : Izvor daje oba oblika: (Prezime, godina) i narativni Prezime (godina)
 - Primjer doslovnog citata u ekstrakciji glasi '(Miljkovi, 2009, str.197)' bez razmaka iza 'str.'; withPagesTemplate koristi 'str. {pages}' s razmakom uz pretpostavku artefakta izvlacenja teksta. Potvrditi pri verifikaciji.
 - Visestruki inicijali bez razmaka (dotted-compact) potvrdjeni samo primjerom 'Meyer, A.S., Bock, K.' sa str. 14; svi ostali primjeri imaju jednoslovne inicijale.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs kifst "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `3e8c1c64d65d...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs kifst "Daniel Risavi"`.

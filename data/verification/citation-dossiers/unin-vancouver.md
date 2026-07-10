@@ -1,4 +1,4 @@
-# Citatni spec: unin-vancouver (outcome: style-pin, status: draft)
+# Citatni spec: unin-vancouver (outcome: style-pin, status: verified)
 
 Stil: **Vancouver (sluzbene upute UNIN, tehnicke znanosti)** (token `vancouver`)
 Izvor: Upute za izradu zavrsnih i diplomskih radova (Sveuciliste Sjever) (`unin-upute-radovi-2026`)
@@ -11,9 +11,6 @@ PIN     : izvor propisuje stil "vancouver" -> format ostaje obiteljski motor
 QUOTE   : Vancouver stil citiranja u području tehničkih znanosti.   [grep: OK]
 ```
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs unin-vancouver "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `53d0ff0b8b18...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs unin-vancouver "Daniel Risavi"`.

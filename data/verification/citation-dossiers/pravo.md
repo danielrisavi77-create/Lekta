@@ -1,4 +1,4 @@
-# Citatni spec: pravo (outcome: custom-spec, status: draft)
+# Citatni spec: pravo (outcome: custom-spec, status: verified)
 
 Stil: **Pravni fakultet: pravne fusnote (sluzbene Upute)** (token `pravo-fusnote`)
 Izvor: Upute za oblikovanje i uredenje teksta i navodenje izvora (Pravni fakultet u Zagrebu) (`pravo-upute-oblikovanje-2024`)
@@ -73,9 +73,6 @@ NAPOMENA: Upute NE obraduju citiranje zavrsnih/diplomskih radova; predlozak je i
 - Naslov djela je u izvorniku kurzivom; alat radi plain text (napomena na stranici alata).
 - Fusnotni oblik s brojem stranice (prvo navodenje, npr. 'str. 55.') razlikuje se od bibliografskog; alat generira bibliografski (popis literature) oblik jer je to ono sto student lijepi u rad.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs pravo "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-09); verifiedHash `1917a74d113d...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs pravo "Daniel Risavi"`.

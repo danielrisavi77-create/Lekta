@@ -1,4 +1,4 @@
-# Citatni spec: vhzk (outcome: custom-spec, status: draft)
+# Citatni spec: vhzk (outcome: custom-spec, status: verified)
 
 Stil: **Harvard (sluzbene upute VHZK)** (token `vhzk-harvard`)
 Izvor: Pravilnik o zavrsnom radu, Prilog 7: Upute za tehnicko oblikovanje i citiranje literature (Veleuciliste Hrvatsko zagorje Krapina) (`vhzk-pravilnik-zavrsni-2022`)
@@ -75,9 +75,6 @@ NAPOMENA : Harvardski stil, autor-godina: 'u tekstu se navodi u okruglim zagrada
 - Uredeni zbornik u izvoru koristi rijec 'urednici' iza imena ('Zoli, M. i Roli, N. urednici'); predlozak za poglavlje koristi kompaktni '(ur.)' i treba ga uskladiti pri verifikaciji.
 - Prior hint ['harvard'] potvrden je izvorom (Harvardski stil izrijekom imenovan, str. 17); nema proturjecja s priorom.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs vhzk "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `2c3b183451b7...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs vhzk "Daniel Risavi"`.

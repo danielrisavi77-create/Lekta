@@ -1,4 +1,4 @@
-# Citatni spec: kemos (outcome: custom-spec, status: draft)
+# Citatni spec: kemos (outcome: custom-spec, status: verified)
 
 Stil: **Brojcani stil citiranja (sluzbene upute Odjela za kemiju u Osijeku)** (token `kemos-brojcani`)
 Izvor: Upute za pisanje zavrsnog / diplomskog rada, Sveuciliste u Osijeku, Odjel za kemiju (lipanj 2024.) (`kemos-upute-radovi-2024`)
@@ -72,9 +72,6 @@ NAPOMENA: Izvor (prirodoslovne upute Odjela za kemiju) nigdje ne obraduje pravne
 - Popis literature u izvoru numeriran je oblikom 'N.' (broj s tockom), a pozivi u tekstu oblikom [N]; pozicijski redni brojevi nisu dio predlozaka i izostavljeni su iz example.expected.
 - Osteceni znakovi iz pdftotext ekstrakcije (Ruiz-L�pez, raspon 20937�20941, 'J. Am Chem. Soc.' bez tocke iza Am) zadrzani su doslovno u quoteRaw i example poljima, ne popravljati bez uvida u izvorni PDF.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs kemos "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `c4e0f565e130...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs kemos "Daniel Risavi"`.

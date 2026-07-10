@@ -1,4 +1,4 @@
-# Citatni spec: ferit (outcome: custom-spec, status: draft)
+# Citatni spec: ferit (outcome: custom-spec, status: verified)
 
 Stil: **Brojcani stil citiranja (sluzbene upute FERIT)** (token `ferit-brojcani`)
 Izvor: Sluzbene upute za pisanje diplomskog rada (FERIT), t. 2.9 i 2.10 (`ferit-upute-diplomski`)
@@ -66,9 +66,6 @@ NAPOMENA: Sekcija o literaturi (t. 2.9) ne propisuje oblik za propise; predlozak
 - Identicna pravila citiranja postoje i u ferit-upute-zavrsni-2010 (str. 3, t. 2.9 i 2.10, uz sitne pravopisne razlike 'sljedei'/'slijedei'); jedan spec pokriva zavrsni i diplomski rad.
 - Mrezni izvori, zavrsni radovi i propisi nisu obradeni u t. 2.9; predlosci su izvedeni (derived) iz najblizih oblika u izvoru.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs ferit "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `d596eb1f8605...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs ferit "Daniel Risavi"`.

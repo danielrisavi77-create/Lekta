@@ -1,4 +1,4 @@
-# Citatni spec: grafos (outcome: custom-spec, status: draft)
+# Citatni spec: grafos (outcome: custom-spec, status: verified)
 
 Stil: **Brojcani stil citiranja (sluzbene smjernice GrAFOS)** (token `grafos-brojcani`)
 Izvor: Smjernice za izradu i oblikovanje diplomskih i zavrsnih radova (Gradevinski i arhitektonski fakultet Osijek, 2022.), t. 3.4 (`grafos-smjernice-2022`)
@@ -67,9 +67,6 @@ NAPOMENA: Sekcija o citiranju (t. 3.4) ne propisuje oblik za propise; predlozak 
 - Poglavlje u knjizi, zavrsni radovi i propisi nisu obradeni u t. 3.4; predlosci su izvedeni (derived) iz najblizih oblika u izvoru (zbornik konferencije, knjiga, uporabna instanca 'NN 58/1993').
 - Raspon stranica u shematskim recima pisan je s en crticom ('od – do'); quoteRaw i expected zadrzani doslovno.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs grafos "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `6916e4f1620c...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs grafos "Daniel Risavi"`.

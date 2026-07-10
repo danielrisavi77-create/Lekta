@@ -1,4 +1,4 @@
-# Citatni spec: efzg (outcome: style-pin, status: draft)
+# Citatni spec: efzg (outcome: style-pin, status: verified)
 
 Stil: **Harvard stil (sluzbene upute EFZG za zavrsni rad)** (token `harvard`)
 Izvor: Postupak prijave, izrade i obrane zavrsnog rada na preddiplomskom sveucilisnom studiju (EFZG) (`efzg-postupak-zavrsni`)
@@ -11,9 +11,6 @@ PIN     : izvor propisuje stil "harvard" -> format ostaje obiteljski motor
 QUOTE   : ispravno citirati. Preporucuje se na tue radove upuivati harvardskim stilom navoenja literature.   [grep: OK]
 ```
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs efzg "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `0807863ff289...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs efzg "Daniel Risavi"`.

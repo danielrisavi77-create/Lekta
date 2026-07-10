@@ -1,4 +1,4 @@
-# Citatni spec: fazos (outcome: style-pin, status: draft)
+# Citatni spec: fazos (outcome: style-pin, status: verified)
 
 Stil: **APA stil citiranja (sluzbene upute FAZOS)** (token `apa7`)
 Izvor: Upute za izradu zavrsnog rada (Fakultet agrobiotehnickih znanosti Osijek) (`fazos-upute-zavrsni-2024`)
@@ -11,9 +11,6 @@ PIN     : izvor propisuje stil "apa7" -> format ostaje obiteljski motor
 QUOTE   : Prilikom citiranja autora ili navoenja literaturnih izvora u tekstu rada treba koristiti APA   [grep: OK]
 ```
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs fazos "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `eb5b2331f173...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs fazos "Daniel Risavi"`.

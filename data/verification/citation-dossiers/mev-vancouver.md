@@ -1,4 +1,4 @@
-# Citatni spec: mev-vancouver (outcome: custom-spec, status: draft)
+# Citatni spec: mev-vancouver (outcome: custom-spec, status: verified)
 
 Stil: **Vancouver numericki (sluzbene upute MEV)** (token `vancouver`)
 Izvor: Upute za izradu zavrsnog rada na Medimurskom veleucilistu u Cakovcu (`mev-upute-zavrsni`)
@@ -71,9 +71,6 @@ NAPOMENA: Upute ne obraduju citiranje propisa. Predlozak je minimalno izveden iz
 - Primjer 2 i 3 iz Dodatka 1.D nedostaju u ekstrakciji (blok str. 8 pocinje usred popisa za casopis); poglavlje, zavrsni i propis su zato izvedeni (derived).
 - Svi primjeri autora imaju jedan inicijal pa se razmak izmedu vise inicijala ne moze potvrditi; odabrano dotted-spaced, potvrditi pri verifikaciji.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs mev-vancouver "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `422c25447635...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs mev-vancouver "Daniel Risavi"`.

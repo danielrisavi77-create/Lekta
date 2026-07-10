@@ -1,4 +1,4 @@
-# Citatni spec: medri (outcome: custom-spec, status: draft)
+# Citatni spec: medri (outcome: custom-spec, status: verified)
 
 Stil: **Vancouver numericko (sluzbeni Naputak MEDRI)** (token `medri`)
 Izvor: Naputak za prijavu, oblikovanje i izradu diplomskog rada - Farmacija (MEDRI, 2025) (`medri-naputak-diplomski-farmacija-2025`)
@@ -76,9 +76,6 @@ NAPOMENA: Izvor pravne propise navodi kao vrstu literature, ali ih ne egzemplifi
 - Zavrsni i propis nisu egzemplificirani u izvoru: zavrsni je izveden iz Citing Medicine konvencije na koju izvor upucuje, propis iz opce hrvatske prakse. Oba potvrditi ili oboriti pri verifikaciji.
 - Oba izvora dijele isti knjiznicni tekst: spec je vezan na farmacijski naputak (2025, DOCX pa su svi lokatori 'str. 1') jer njegova ekstrakcija sadrzi sve primjere (ukljucivo clanak i mreznu stranicu), a Naputak za Medicinu 2025./2026. (str. 8-9) potvrdjuje ista pravila i iste primjere knjige i poglavlja, dakle stil vrijedi fakultetski, ne samo za Farmaciju.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs medri "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `ea0173f92c1e...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs medri "Daniel Risavi"`.

@@ -1,4 +1,4 @@
-# Citatni spec: vef (outcome: custom-spec, status: draft)
+# Citatni spec: vef (outcome: custom-spec, status: verified)
 
 Stil: **VEF autor-godina (sluzbeni Naputak za diplomski rad)** (token `vef`)
 Izvor: Naputak za prijavu, pisanje i oblikovanje diplomskog rada (Veterinarski fakultet Sveucilista u Zagrebu) (`vef-naputak-diplomski-2024`)
@@ -83,9 +83,6 @@ NAPOMENA : Autor-godina; prezime autora VELIKIM slovima. Narativni oblik 'BLACK 
 - In-text godina nosi tocku za rad na hrvatskom, a bez tocke za rad na engleskom (str. 10); jedan template ne moze uvjetovati po jeziku, pa polje year mora nositi tocku po potrebi.
 - Raspon stranica u poglavlju ('str. 15 � 141.') ima spaciranu crticu ostecenu pdftotext-om; u expected je normaliziran u 'str. 15-141.'.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs vef "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `de34916f3dda...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs vef "Daniel Risavi"`.

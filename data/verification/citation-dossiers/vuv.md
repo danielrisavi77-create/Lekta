@@ -1,4 +1,4 @@
-# Citatni spec: vuv (outcome: custom-spec, status: draft)
+# Citatni spec: vuv (outcome: custom-spec, status: verified)
 
 Stil: **Autor-godina (sluzbene upute VUV)** (token `vuv`)
 Izvor: Upute za izradu zavrsnog/diplomskog rada (Veleuciliste u Virovitici) (`vuv-upute-radovi-2025`)
@@ -77,9 +77,6 @@ NAPOMENA : Autor-godina s dvotockom prije stranice, bez razmaka (godina:stranica
 - Izvor je interno proturjecan oko fusnota: kaze da dokumentarne fusnote (upucuju na literaturu) 'NE KORISTIMO', a onda daje 'Primjere dokumentarnih fusnota'. Bibliografski oblik knjige izveden je iz tih primjera fusnota i izvora tablice, ne iz zasebne sekcije 'Popis literature' (koje u ekstrakciji nema).
 - Interpunkcija knjige nekonzistentna u izvoru: fusnota 2 koristi '. Naslov. Mjesto, Izdavac', fusnota 3 '. Naslov, Mjesto, Izdavac, str.'; odabran je oblik bez stranice. authorFormat.separator/finalJoiner/etAl prag za popis literature (vise autora) te bibliography.sort 'alphabetical' izvedeni su (izvor ih eksplicitno ne propisuje).
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs vuv "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `82e65a3cb997...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs vuv "Daniel Risavi"`.

@@ -1,4 +1,4 @@
-# Citatni spec: zsem (outcome: custom-spec, status: draft)
+# Citatni spec: zsem (outcome: custom-spec, status: verified)
 
 Stil: **Harvard autor-godina (sluzbeni Pravilnik ZSEM)** (token `zsem`)
 Izvor: Pravilnik o diplomskom radu ZSEM (2023), cl. 31-32 (nacin citiranja i popis literature) (`zsem-pravilnik-diplomski-2023`)
@@ -82,9 +82,6 @@ NAPOMENA : U zagradu ide prezime autora i godina '(Bombelles, 2003)'; broj stran
 - Reference u tekstu izvor navodi u kurzivu ili pod navodnicima; alat radi plain text (napomena na stranici alata).
 - Popis literature je numeriran ('Literatura se numerira'), ali uredem abecednim redom autora; spec biljezi sort alphabetical, numeriranje je prezentacijsko.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs zsem "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `14cbc4cdbbff...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs zsem "Daniel Risavi"`.

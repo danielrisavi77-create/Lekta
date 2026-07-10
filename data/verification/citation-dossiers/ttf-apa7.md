@@ -1,4 +1,4 @@
-# Citatni spec: ttf-apa7 (outcome: style-pin, status: draft)
+# Citatni spec: ttf-apa7 (outcome: style-pin, status: verified)
 
 Stil: **APA (7. izdanje) (sluzbene upute TTF)** (token `apa7`)
 Izvor: Upute za izradu zavrsnog i diplomskog rada (Tekstilno-tehnoloski fakultet, Sveuciliste u Zagrebu) (`ttf-upute-zavrsni-diplomski`)
@@ -11,9 +11,6 @@ PIN     : izvor propisuje stil "apa7" -> format ostaje obiteljski motor
 QUOTE   : humanistickom i umjetnickom podrucju APA (7. izdanje) stil referenciranja.   [grep: OK]
 ```
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs ttf-apa7 "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `a56354fe4ac7...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs ttf-apa7 "Daniel Risavi"`.

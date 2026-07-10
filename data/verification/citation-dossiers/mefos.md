@@ -1,4 +1,4 @@
-# Citatni spec: mefos (outcome: custom-spec, status: draft)
+# Citatni spec: mefos (outcome: custom-spec, status: verified)
 
 Stil: **Vancouver numericko (sluzbene upute MEFOS)** (token `mefos`)
 Izvor: Upute za izradu i oblikovanje zavrsnog i diplomskog rada (MEFOS, 2025) (`mefos-upute-radovi-2025`)
@@ -75,9 +75,6 @@ NAPOMENA: Upute pravne propise uopce ne obraduju (biomedicinski izvori); oblik (
 - Mrezni: u ekstrakciji 'Dostupno na adresi:' bez razmaka prije URL-a (vjerojatno pdftotext); predlozak koristi razmak. Korporativni autor (ICMJE) se u alatu razbija kao osoba, deklarirano kao knownDiff.
 - Rekonstrukcija dijakritike u expected: 'Marchiol' + osteceni znak u ekstrakciji je 'Marchiole' s akcentom (pdftotext).
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs mefos "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `4bfabfddce83...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs mefos "Daniel Risavi"`.

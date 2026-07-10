@@ -1,4 +1,4 @@
-# Citatni spec: vvg (outcome: custom-spec, status: draft)
+# Citatni spec: vvg (outcome: custom-spec, status: verified)
 
 Stil: **Numericko citiranje u uglatim zagradama (sluzbene upute VVG)** (token `vvg`)
 Izvor: Upute za izradu diplomskog (zavrsnog) rada (Veleuciliste Velika Gorica) (`vvg-upute-radovi-2013`)
@@ -70,9 +70,6 @@ NAPOMENA: Izvor spominje standarde i prirucnike kao ostalu koristenu literaturu 
 - etAlText: izvor propisuje ', i dr.' za literaturu na hrvatskom i ', et al' za literaturu na stranom jeziku (str. 10); alat koristi jedan default ', i dr.'.
 - mrezni: izvor daje samo oblik za internetske izvore bez poznatog autora ('URL: ...') i u ekstrakciji nema popunjen primjer (example: null); izvor s poznatim web-autorom nije formalno pokriven.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs vvg "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `5d7e28333d8c...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs vvg "Daniel Risavi"`.

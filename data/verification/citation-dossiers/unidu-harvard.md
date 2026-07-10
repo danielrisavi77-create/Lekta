@@ -1,4 +1,4 @@
-# Citatni spec: unidu-harvard (outcome: style-pin, status: draft)
+# Citatni spec: unidu-harvard (outcome: style-pin, status: verified)
 
 Stil: **Harvard (sluzbene upute Odjela za komunikologiju, unidu)** (token `harvard`)
 Izvor: Upute za izradu diplomskog rada (2025), Odjel za komunikologiju (Sveuciliste u Dubrovniku) (`unidu-komunikologija-upute-2025`)
@@ -11,9 +11,6 @@ PIN     : izvor propisuje stil "harvard" -> format ostaje obiteljski motor
 QUOTE   : Studenti trebaju koristiti harvardski stil citiranja literature i to u: citatima u tekstu,   [grep: OK]
 ```
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs unidu-harvard "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `0ffa9c114e9d...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs unidu-harvard "Daniel Risavi"`.

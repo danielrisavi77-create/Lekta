@@ -1,4 +1,4 @@
-# Citatni spec: erf (outcome: custom-spec, status: draft)
+# Citatni spec: erf (outcome: custom-spec, status: verified)
 
 Stil: **APA 7 autor-godina (ERF upute preko casopisa HRRI)** (token `erf`)
 Izvor: Upute autorima casopisa Hrvatska revija za rehabilitacijska istrazivanja; ERF Upute za izradu diplomskog rada upucuju na propozicije tog casopisa (`erf-hrri-upute-autorima`)
@@ -82,9 +82,6 @@ NAPOMENA : Izvor daje i narativni oblik 'Author (year): Jandrić Nišević (2010
 - Pravilo o skracivanju dugih popisa autora u literaturi (APA 7 dopusta do 20 autora) nije evidentirano u izvoru pa etAl polja u authorFormat nisu postavljena.
 - Kurziv naslova (knjiga, casopis, zbornik) alat ne reproducira, izlaz je plain text.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs erf "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `0fca0d605fc1...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs erf "Daniel Risavi"`.

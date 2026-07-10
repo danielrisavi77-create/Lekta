@@ -1,4 +1,4 @@
-# Citatni spec: pbf (outcome: custom-spec, status: draft)
+# Citatni spec: pbf (outcome: custom-spec, status: verified)
 
 Stil: **PBF harvardski sustav (sluzbene upute za diplomski rad)** (token `pbf`)
 Izvor: Upute za izradu diplomskog rada (Prehrambeno-biotehnoloski fakultet Sveucilista u Zagrebu) (`pbf-upute-diplomski-2018`)
@@ -80,9 +80,6 @@ NAPOMENA : Sekcija 5.7: 1 autor '(Walker, 1998)', 2 autora '(Taylor i Walker, 19
 - Clanak u elektronickom casopisu ima u izvoru dvije varijante (str. 8): '[online]' s URL-om i 'Pristupljeno' datumom, ili doi na kraju; template pokriva doi varijantu, [online] varijanta nije izrazena.
 - Vise radova istog autora u istoj godini oznacava se slovima uz godinu (1998a, 1998b), a vise Anonymous citata rednim brojem (Anonymous 3, 2008); to je izvan dosega generatora, provjerava se ljudski.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs pbf "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `86cfde9d825c...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs pbf "Daniel Risavi"`.

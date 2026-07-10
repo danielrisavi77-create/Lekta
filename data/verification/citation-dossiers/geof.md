@@ -1,4 +1,4 @@
-# Citatni spec: geof (outcome: custom-spec, status: draft)
+# Citatni spec: geof (outcome: custom-spec, status: verified)
 
 Stil: **GEOF autor-godina (sluzbeni Naputak za ocjenske radove)** (token `geof`)
 Izvor: Opci naputak za pisanje ocjenskih radova na Geodetskom fakultetu (`geof-naputak-ocjenski-2000`)
@@ -76,9 +76,6 @@ NAPOMENA : Puna recenica: 'Literatura se u tekstu citira navodenjem u zagradi pr
 - Rule-text za clanak ne spominje naslov casopisa, ali worked-example ga sadrzi (Geodetski list); template slijedi primjer.
 - Poglavlje, mrezni, zavrsni i propis nisu pokriveni Naputkom; predlosci su izvedeni (derived) iz oblika za knjigu/clanak.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs geof "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `c68ba17ed259...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs geof "Daniel Risavi"`.

@@ -1,4 +1,4 @@
-# Citatni spec: fhs (outcome: custom-spec, status: draft)
+# Citatni spec: fhs (outcome: custom-spec, status: verified)
 
 Stil: **Prilagodeni APA 7 autor-godina (sluzbene upute FHS za diplomski rad)** (token `fhs-apa`)
 Izvor: Upute za izradu diplomskoga rada (Fakultet hrvatskih studija, 2026) (`fhs-upute-diplomski-2026`)
@@ -87,9 +87,6 @@ NAPOMENA : Parenteticki bez stranica: '(Wilson i Patterson, 1968)' (str. 20); do
 - Drugi izvor iz INDEX-a (fhs-upute-zavrsni-diplomski-2023, 9 isjecaka) NIJE prisutan u ekstrakcijskoj datoteci (odrezana na cap od ~19k znakova); nacrt je u cijelosti iz fhs-upute-diplomski-2026. Upute su izrazito psihologijski usmjerene (struktura Uvod/Metoda/Rezultati, Kodeks etike psiholoske djelatnosti), pa domet izvan studija psihologije potvrditi pri verifikaciji.
 - Kurziv naslova (knjige, casopisi) nije vidljiv u tekstualnoj ekstrakciji; alat radi plain text.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs fhs "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `8807628d8863...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs fhs "Daniel Risavi"`.

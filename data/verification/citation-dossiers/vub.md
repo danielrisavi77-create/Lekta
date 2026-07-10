@@ -1,4 +1,4 @@
-# Citatni spec: vub (outcome: style-pin, status: draft)
+# Citatni spec: vub (outcome: style-pin, status: verified)
 
 Stil: **Vancouver (sluzbene upute VUB)** (token `vancouver`)
 Izvor: Upute za izradu diplomskog rada (Veleuciliste u Bjelovaru) (`vub-upute-diplomski-2025`)
@@ -11,9 +11,6 @@ PIN     : izvor propisuje stil "vancouver" -> format ostaje obiteljski motor
 QUOTE   : Citirati relevantne studije koristei odgovarajui citatni stil (npr. Vancouver).   [grep: OK]
 ```
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs vub "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `bd6702cb3ca7...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs vub "Daniel Risavi"`.

@@ -1,4 +1,4 @@
-# Citatni spec: ffzg-filoz-fusnote (outcome: custom-spec, status: draft)
+# Citatni spec: ffzg-filoz-fusnote (outcome: custom-spec, status: verified)
 
 Stil: **Fusnotni stil Odsjeka za filozofiju (sluzbene upute FFZG)** (token `filoz-fusnote`)
 Izvor: Upute za oblikovanje diplomskoga rada na studiju filozofije (Odsjek za filozofiju, Filozofski fakultet u Zagrebu) (`ffzg-filoz-diplomski-2019`)
@@ -68,9 +68,6 @@ NAPOMENA: Upute NE obraduju citiranje propisa/pravnih izvora; minimalni predloza
 - Zavrsni i propis nisu pokriveni u izvoru; predlosci su izvedeni (derived), example je null.
 - Eventualni kurziv naslova nije vidljiv u tekstualnoj ekstrakciji; alat radi plain text.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs ffzg-filoz-fusnote "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `ba222ed21e3a...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs ffzg-filoz-fusnote "Daniel Risavi"`.

@@ -1,4 +1,4 @@
-# Citatni spec: rgnf (outcome: custom-spec, status: draft)
+# Citatni spec: rgnf (outcome: custom-spec, status: verified)
 
 Stil: **Harvard autor-godina (sluzbene upute RGNF)** (token `rgnf-harvard`)
 Izvor: Predlozak za izradu zavrsnog i diplomskog rada (Rudarsko-geolosko-naftni fakultet) (`rgnf-predlozak-2022`)
@@ -85,9 +85,6 @@ NAPOMENA : Autor i godina u zagradi; jedan autor '(Jones, 1998)', dva '(Dalglish
 - Razmak izmedju viseznakovnih inicijala (initials: dotted-spaced) nije potvrdjen jer svi primjeri imaju jednoslovne inicijale.
 - Zavrsni primjer u izvoru je zapravo izvjestaj (Izvještaj); ista struktura pokriva projekte, studije, elaborate, disertacije te diplomske i zavrsne radove.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs rgnf "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `1773255a260c...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs rgnf "Daniel Risavi"`.

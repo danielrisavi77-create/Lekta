@@ -1,4 +1,4 @@
-# Citatni spec: fpz (outcome: style-pin, status: draft)
+# Citatni spec: fpz (outcome: style-pin, status: verified)
 
 Stil: **Vancouver, inacica FPZ (sluzbene upute FPZ)** (token `vancouver`)
 Izvor: Upute za izradu zavrsnog i diplomskog rada, Fakultet prometnih znanosti (2018) (`fpz-upute-zavrsni-diplomski-2018`)
@@ -11,9 +11,6 @@ PIN     : izvor propisuje stil "vancouver" -> format ostaje obiteljski motor
 QUOTE   : Prilog 18. a) Primjer popisa upotrijebljene literature, inacica vankuverskog stila; kada se   [grep: OK]
 ```
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs fpz "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `b5040734e60a...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs fpz "Daniel Risavi"`.

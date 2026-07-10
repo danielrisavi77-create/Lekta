@@ -1,4 +1,4 @@
-# Citatni spec: veleri (outcome: custom-spec, status: draft)
+# Citatni spec: veleri (outcome: custom-spec, status: verified)
 
 Stil: **Autor-godina (sluzbene upute Veleucilista u Rijeci)** (token `veleri`)
 Izvor: Upute za izradu i formalni izgled zavrsnog/diplomskog rada (Veleuciliste u Rijeci) (`veleri-upute-formalni-izgled`)
@@ -82,9 +82,6 @@ NAPOMENA : Izvori u zagradi prije tocke; polja zarezom odvojena: (autor, godina,
 - poglavlje: prvom autoru u jedinom primjeru ('Horvat, .') izgubljen je inicijal u ekstrakciji; primjer je zbornicki rad bez urednika pa template nema editor polje (poglavlje u knjizi s urednikom nije primjerom pokriveno).
 - zavrsni/diplomski rad kao IZVOR nije pokriven primjerom; predlozak je izveden iz oblika za knjigu (derived).
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs veleri "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `bcd508baf145...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs veleri "Daniel Risavi"`.

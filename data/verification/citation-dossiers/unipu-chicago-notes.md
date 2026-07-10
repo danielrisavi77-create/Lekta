@@ -1,4 +1,4 @@
-# Citatni spec: unipu-chicago-notes (outcome: custom-spec, status: draft)
+# Citatni spec: unipu-chicago-notes (outcome: custom-spec, status: verified)
 
 Stil: **Chicago fusnotni stil (sluzbene upute FET Pula)** (token `chicago-notes`)
 Izvor: Naputak za izradu zavrsnih i diplomskih radova (Fakultet ekonomije i turizma, Sveuciliste Jurja Dobrile u Puli) (`fet-naputak-radovi`)
@@ -70,9 +70,6 @@ NAPOMENA: Naputak (ekonomsko-turisticki kontekst) ne obraduje navodenje propisa 
 - bibliography.sort 'alphabetical' je izveden iz invertiranog (prezime-prvo) oblika popisa literature; izvor to ne navodi izrijekom.
 - clanak, mrezni, zavrsni i propis nemaju potpun Chicago worked-example u ekstrakciji (mrezni ima samo rep primjera); ti su predlosci izvedeni (derived).
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs unipu-chicago-notes "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `68059a4cab8c...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs unipu-chicago-notes "Daniel Risavi"`.

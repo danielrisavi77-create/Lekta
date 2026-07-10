@@ -1,4 +1,4 @@
-# Citatni spec: mef (outcome: custom-spec, status: draft)
+# Citatni spec: mef (outcome: custom-spec, status: verified)
 
 Stil: **MEF autor-godina (sluzbeni Pravilnik o diplomskom radu)** (token `mef`)
 Izvor: Pravilnik o diplomskom radu Medicinskog fakulteta u Zagrebu (upute za citiranje literature) (`mef-pravilnik-diplomski-2023`)
@@ -75,9 +75,6 @@ NAPOMENA : Autor-godina BEZ zareza: '(Uc itelj 1956)'. Dva autora s '&': '(Sumnj
 - Doktorska razina: mef-naputci-tehnicka-obrada-doktorski-2022 (str. 1) upucuje 'Popis literature (prema naputcima Liječničkog vjesnika)'. To nije imenovani standardni stil s dopustenog popisa tokena (Lijecnicki vjesnik slijedi ICMJE/Vancouver obitelj, ali izvor to ne imenuje), pa NIJE pinano; ovaj spec pokriva diplomski rad.
 - Prior profila je bio ['harvard','vancouver']: diplomski izvor propisuje vlastitu autor-godina varijantu (harvardska obitelj, ali citatnica bez zareza i s '&', inicijali bez tocaka), a vancouver trag postoji samo posredno preko Lijecnickog vjesnika za doktorski.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs mef "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `2f1e177187c7...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs mef "Daniel Risavi"`.

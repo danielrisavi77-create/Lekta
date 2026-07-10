@@ -1,4 +1,4 @@
-# Citatni spec: pravri (outcome: custom-spec, status: draft)
+# Citatni spec: pravri (outcome: custom-spec, status: verified)
 
 Stil: **Pravne fusnote (sluzbene upute PRAVRI)** (token `pravri-fusnote`)
 Izvor: Upute za izradu studentskih pisanih radova (PRAVRI, rev. 2023) (`pravri-upute-radovi-2023`)
@@ -72,9 +72,6 @@ NAPOMENA: Ekstrakcija sadrzi samo EU primjere propisa (5.9.2: naslov akta, sluzb
 - Pravilo o kracenju popisa autora (et al. / i dr.) nije u ekstrahiranim stranicama; authorFormat namjerno bez et-al kracenja.
 - Primjeri za hrvatske propise (5.9.1, 6.3), clanak s interneta (6.2.2) i enciklopedijske odrednice nisu u ekstrahiranim stranicama; mrezni, zavrsni i propis su izvedeni (derived).
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs pravri "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `1943a0cbb283...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs pravri "Daniel Risavi"`.

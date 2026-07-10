@@ -1,4 +1,4 @@
-# Citatni spec: mev-harvard (outcome: custom-spec, status: draft)
+# Citatni spec: mev-harvard (outcome: custom-spec, status: verified)
 
 Stil: **Harvard autor-godina (sluzbene upute MEV)** (token `harvard`)
 Izvor: Upute za izradu zavrsnog rada na Medimurskom veleucilistu u Cakovcu (`mev-upute-zavrsni`)
@@ -79,9 +79,6 @@ NAPOMENA : Dodatak 1.C, tocka 1. Harvardski stil. Dva autora '(Dubey i Sharma, 1
 - Primjer 2 i 3 iz Dodatka 1.D nedostaju u ekstrakciji (blok str. 8 pocinje usred popisa za casopis); poglavlje, zavrsni i propis su zato izvedeni (derived).
 - Svi primjeri autora imaju jedan inicijal pa se razmak izmedu vise inicijala ne moze potvrditi; odabrano dotted-spaced, potvrditi pri verifikaciji.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs mev-harvard "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `422c25447635...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs mev-harvard "Daniel Risavi"`.

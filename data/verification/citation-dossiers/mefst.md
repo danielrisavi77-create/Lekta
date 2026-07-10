@@ -1,4 +1,4 @@
-# Citatni spec: mefst (outcome: custom-spec, status: draft)
+# Citatni spec: mefst (outcome: custom-spec, status: verified)
 
 Stil: **Vancouver numericko (sluzbena Uputa MEFST)** (token `mefst`)
 Izvor: Uputa za oblikovanje diplomskoga rada (MEFST, 2021) (`mefst-uputa-diplomski-2021`)
@@ -74,9 +74,6 @@ NAPOMENA: Uputa NE obraduje citiranje pravnih propisa (biomedicinski diplomski r
 - Uputa trazi ispravljanje Title Case naslova clanaka prema hrvatskom pisanju (Sentence case); alat unos naslova ne mijenja, a Pubmed primjer u izvoru namjerno pokazuje neispravljeni oblik.
 - Prior profila ['vancouver'] je POTVRDJEN: izvor izrijekom kaze 'Literatura se navodi Vancouver stilom kako je prikazano.' uz vlastite primjere, pa je umjesto style-pina izgraden custom-spec po tim primjerima.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs mefst "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `cf9fae26b635...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs mefst "Daniel Risavi"`.

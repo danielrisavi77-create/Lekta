@@ -1,4 +1,4 @@
-# Citatni spec: unidu-povijest-fusnote (outcome: custom-spec, status: draft)
+# Citatni spec: unidu-povijest-fusnote (outcome: custom-spec, status: verified)
 
 Stil: **Fusnotni stil (sluzbene upute za zavrsni rad, Povijest Jadrana i Mediterana, unidu)** (token `unidu-povijest-fusnote`)
 Izvor: Upute za izradu zavrsnog rada, preddiplomski studij Povijest Jadrana i Mediterana (Sveuciliste u Dubrovniku) (`unidu-povijest-upute`)
@@ -71,9 +71,6 @@ NAPOMENA: Upute ne propisuju bibliografski format za propise/zakone u citatnom d
 - Visestruko autorstvo u popisu literature nije eksemplificirano (primjer koautorstva 'Niko Kapetani i Nenad Vekari' / 'Nenad Vekari i dr.' je u fusnotnom, ime-prezime obliku, str. 10); redoslijed i razdvajanje 2-4 autora u popisu literature su pretpostavljeni (family-first, ' i ' za zadnjeg, 'i dr.' za vise od cetiri).
 - Prior profila je [chicago-notes, harvard, ieee]. Fusnotni stil nalikuje Chicago notes-bibliography, ali je ovdje predstavljen kao custom-spec (vlastiti radni primjeri fakulteta), ne kao pin na standardni stil. 'ieee' nije potvrdjen ni u jednom isjecku.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs unidu-povijest-fusnote "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `be4bc778e16b...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs unidu-povijest-fusnote "Daniel Risavi"`.

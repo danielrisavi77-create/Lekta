@@ -1,4 +1,4 @@
-# Citatni spec: pfst (outcome: custom-spec, status: draft)
+# Citatni spec: pfst (outcome: custom-spec, status: verified)
 
 Stil: **Numericko navodenje u kutnim zagradama (sluzbene upute PFST)** (token `pfst`)
 Izvor: Upute za izradu diplomskih i drugih ocjenskih radova, Pomorski fakultet u Splitu (2022) (`pfst-upute-ocjenski-2022`)
@@ -80,9 +80,6 @@ NAPOMENA: Primjer je recenica u tekstu pa je naziv u instrumentalu ('Zakonom o e
 - Naslovi knjiga i radova su u izvorniku kurzivom (italic); alat radi plain text.
 - Zavrsni: 'Williams, J:' bez tocke iza inicijala je tipfeler izvora; knownDiff deklariran, renderer pise tocku.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs pfst "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `a0cff8bd6cc0...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs pfst "Daniel Risavi"`.

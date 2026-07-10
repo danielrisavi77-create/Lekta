@@ -1,4 +1,4 @@
-# Citatni spec: zvu (outcome: custom-spec, status: draft)
+# Citatni spec: zvu (outcome: custom-spec, status: verified)
 
 Stil: **Vancouver numericki (sluzbene upute ZVU)** (token `vancouver`)
 Izvor: Pravilnik o zavrsnim radovima na strucnim i specijalistickim diplomskim studijima, Prilog 3: Citiranje literature (Zdravstveno veleuciliste, 2015) (`zvu-pravilnik-zavrsni-2015`)
@@ -69,9 +69,6 @@ NAPOMENA: Izvor ne obradjuje citiranje propisa/pravnih akata (Prilog 3 pokriva k
 - Worked example za poglavlje (Christensen S, Oppacher F...) je odrezan u ekstrakciji (str. 16 zavrsava na 'Genetic'); predlozak je izveden iz eksplicitnog recepta za clanak u zborniku, bez examplea.
 - mrezni, zavrsni i propis nisu prikazani u Prilogu 3 (obuhvaca knjigu, clanak u casopisu i clanak u zborniku); predlosci su izvedeni iz najblizih oblika i potrebno ih je potvrditi ili oboriti.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs zvu "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `4f171b8ed92a...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs zvu "Daniel Risavi"`.

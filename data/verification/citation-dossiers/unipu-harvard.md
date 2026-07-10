@@ -1,4 +1,4 @@
-# Citatni spec: unipu-harvard (outcome: custom-spec, status: draft)
+# Citatni spec: unipu-harvard (outcome: custom-spec, status: verified)
 
 Stil: **Harvard autor-godina (sluzbene upute FET Pula)** (token `harvard`)
 Izvor: Naputak za izradu zavrsnih i diplomskih radova (Fakultet ekonomije i turizma, Sveuciliste Jurja Dobrile u Puli) (`fet-naputak-radovi`)
@@ -81,9 +81,6 @@ NAPOMENA : Autor-godina u zagradi na kraju recenice: '(Feynman, 1960.)' (godina 
 - Prag za 'et al.' u POPISU literature nije dokazan (jedini viseautorski biblio primjer ima 2 autora i oba se ispisuju); authorFormat.etAlAfter je izostavljen dok se ne potvrdi. U tekstu vrijedi >2 autora -> et al. (inText.authorsShort.etAlAfter = 2).
 - poglavlje, zavrsni i propis nemaju Harvard worked-example u ekstrakciji (stavke 3-6 popisa preskocene); ti su predlosci derived. Konferencijski clanak (str. 11) postoji u izvoru ali nije jedan od 6 obveznih tipova.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs unipu-harvard "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `68059a4cab8c...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs unipu-harvard "Daniel Risavi"`.

@@ -1,4 +1,4 @@
-# Citatni spec: fpzg (outcome: custom-spec, status: draft)
+# Citatni spec: fpzg (outcome: custom-spec, status: verified)
 
 Stil: **FPZG autor-godina (sluzbena Pravila navodenja)** (token `fpzg`)
 Izvor: Pravila navodenja bibliografskih jedinica i citatnica na Fakultetu politickih znanosti (`fpzg-pravila-navodenja-citiranja`)
@@ -82,9 +82,6 @@ NAPOMENA : Citatnica iza strelice u svakom primjeru; 2 autora '(Ani i Sili, 2001
 - withPagesTemplate za citatnicu sa stranicama je izveden (nije u ekstrakciji Pravila navodenja); potvrditi protiv sekcije Citatnice u fpzg-upute-akademski-radovi (sadrzaj pokazuje str. 21).
 - Kurziv naslova (knjige, casopisi, novine; fusnota 8 u izvoru) alat ne reproducira - plain text izlaz; navesti kao napomenu na stranici alata.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs fpzg "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-09); verifiedHash `56df35ca9ab1...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs fpzg "Daniel Risavi"`.

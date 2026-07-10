@@ -1,4 +1,4 @@
-# Citatni spec: fer (outcome: custom-spec, status: draft)
+# Citatni spec: fer (outcome: custom-spec, status: verified)
 
 Stil: **FER numericko navodenje (sluzbene upute za diplomski rad, ZEMRIS)** (token `fer`)
 Izvor: Upute za izradu diplomskog rada (FER, ZEMRIS predlozak) (`fer-upute-diplomski-zemris`)
@@ -68,9 +68,6 @@ NAPOMENA: Upute ne obraduju pravne propise; predlozak izveden iz opceg popisa el
 - Jedini worked-example primjeri su mrezni izvori iz predloskove Literature; knjiga, clanak, poglavlje, zavrsni i propis su derived iz popisa elemenata na str. 16 i traze ljudsku verifikaciju.
 - Naslov djela je u izvorniku koso (kurziv); alat radi plain text.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs fer "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `853f096a6496...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs fer "Daniel Risavi"`.

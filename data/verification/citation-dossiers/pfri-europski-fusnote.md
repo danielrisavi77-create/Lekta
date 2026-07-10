@@ -1,4 +1,4 @@
-# Citatni spec: pfri-europski-fusnote (outcome: custom-spec, status: draft)
+# Citatni spec: pfri-europski-fusnote (outcome: custom-spec, status: verified)
 
 Stil: **Europski fusnotni sustav (sluzbene upute PFRI)** (token `europski-fusnote`)
 Izvor: Upute za izradu zavrsnog rada (Sveuciliste u Rijeci, Pomorski fakultet, ozujak 2025) (`pfri-upute-zavrsni-2025`)
@@ -68,9 +68,6 @@ NAPOMENA: Pravilnici su izrijekom dopustena bibliografska jedinica, ali izvor ne
 - Popis literature se 'svrstava u odgovarajuce skupine, abecednim redom autora, a potom kronoloski za radove istog autora' (str. 23); alat reproducira samo abecedni sort, grupiranje po vrstama izvora i kronologiju istog autora ne.
 - Svi tipovi osim knjige su derived jer primjeri iz poglavlja 4.5.2 nisu zahvaceni ekstrakcijom (isjecak se prekida na str. 23).
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs pfri-europski-fusnote "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `2b6ab8d65a52...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs pfri-europski-fusnote "Daniel Risavi"`.

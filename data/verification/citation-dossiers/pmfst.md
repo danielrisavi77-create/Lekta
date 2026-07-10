@@ -1,4 +1,4 @@
-# Citatni spec: pmfst (outcome: custom-spec, status: draft)
+# Citatni spec: pmfst (outcome: custom-spec, status: verified)
 
 Stil: **PMFST autor-godina (upute Odjela za biologiju i kemiju)** (token `pmfst`)
 Izvor: Upute za pisanje zavrsnog rada (PMFST, odjel bio/kem) (`pmfst-upute-zavrsni`)
@@ -82,9 +82,6 @@ NAPOMENA : Primjeri iz izvora: jedan autor '(Holland, 2000)', dva autora '(Hughe
 - Identicni primjeri citiranja postoje i u pmfst-upute-diplomski (str. 3 i str. 4); spec je sidran na pmfst-upute-zavrsni, a diplomske upute ga neovisno potvrdjuju. Oba izvora vrijede za Odjel za biologiju i kemiju, ne nuzno za cijeli PMFST.
 - Profil-prior je 'harvard'; izvor jest u harvardskoj obitelji (autor-godina), ali propisuje vlastiti format worked-exampleima (tocka iza zagrade s godinom, 'i sur.', 'U: Prezime, I. (ur.)', volumen: stranice), pa je izradjen custom-spec umjesto style-pina. Nije proturjecje, nego preciznije od priora.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs pmfst "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `cb10791e4870...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs pmfst "Daniel Risavi"`.

@@ -1,4 +1,4 @@
-# Citatni spec: ffrz (outcome: custom-spec, status: draft)
+# Citatni spec: ffrz (outcome: custom-spec, status: verified)
 
 Stil: **Autor-godina po pravilima casopisa Obnovljeni zivot (sluzbene upute FFRZ)** (token `ffrz`)
 Izvor: Upute za oblikovanje diplomskog rada (FFRZ, 2021), pravila navodenja prema casopisu Obnovljeni zivot (`ffrz-oblikovanje-diplomski-2021`)
@@ -78,9 +78,6 @@ NAPOMENA : Puni primjeri iz izvora: (Macan, 1997, 15-16); (Jalsenjak i Sestak, 2
 - Kratica-model za djela bez autora, crkvene dokumente i arhivsko gradivo (unutartekstno (GS 30), (HR-HDA-650)) alat ne generira; izvan dosega 6 sourceTypes.
 - Prior iz profila ('harvard') je potvrdjen sadrzajem: izvor izrijekom kaze 'tzv. harvardski nacin referiranja po uzoru na standard APA', ali s vlastitim kucnim primjerima casopisa Obnovljeni zivot, pa je ishod custom-spec, ne style-pin.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs ffrz "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `224b21163df9...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs ffrz "Daniel Risavi"`.

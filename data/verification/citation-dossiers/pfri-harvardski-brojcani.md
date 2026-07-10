@@ -1,4 +1,4 @@
-# Citatni spec: pfri-harvardski-brojcani (outcome: custom-spec, status: draft)
+# Citatni spec: pfri-harvardski-brojcani (outcome: custom-spec, status: verified)
 
 Stil: **Harvardski brojcani sustav (sluzbene upute PFRI)** (token `harvardski-brojcani`)
 Izvor: Upute za izradu zavrsnog rada (Sveuciliste u Rijeci, Pomorski fakultet, ozujak 2025) (`pfri-upute-zavrsni-2025`)
@@ -74,9 +74,6 @@ NAPOMENA: Upute spominju pravilnike kao dopustene bibliografske jedinice, ali ne
 - Online jedinice u izvoru zavrsavaju bez tocke iza zagrade s datumom pristupa (Daniel, str. 22; Proizvodnja kemikalija, str. 23); predlozak clanka dodaje zavrsnu tocku pa se online varijanta clanka razlikuje u zavrsnoj interpunkciji.
 - Zavrsni radovi i propisi nisu obradeni u izvoru (derived); zbornik radova, novinski clanak i digitalni mediji (CD, video) izvor pokazuje kao zasebne kategorije koje alat pokriva predloscima clanka odnosno knjige.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs pfri-harvardski-brojcani "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `2b6ab8d65a52...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs pfri-harvardski-brojcani "Daniel Risavi"`.

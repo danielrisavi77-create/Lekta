@@ -1,4 +1,4 @@
-# Citatni spec: unin-harvard (outcome: style-pin, status: draft)
+# Citatni spec: unin-harvard (outcome: style-pin, status: verified)
 
 Stil: **Harvard (sluzbene upute UNIN, drustvene znanosti)** (token `harvard`)
 Izvor: Upute za izradu zavrsnih i diplomskih radova (Sveuciliste Sjever) (`unin-upute-radovi-2026`)
@@ -11,9 +11,6 @@ PIN     : izvor propisuje stil "harvard" -> format ostaje obiteljski motor
 QUOTE   : Harvard stil citiranja u području društvenih znanosti.   [grep: OK]
 ```
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs unin-harvard "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `53d0ff0b8b18...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs unin-harvard "Daniel Risavi"`.

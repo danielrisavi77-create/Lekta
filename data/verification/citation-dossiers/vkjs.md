@@ -1,4 +1,4 @@
-# Citatni spec: vkjs (outcome: custom-spec, status: draft)
+# Citatni spec: vkjs (outcome: custom-spec, status: verified)
 
 Stil: **APA autor-godina (sluzbene upute VKJS)** (token `apa7`)
 Izvor: Upute za izradu zavrsnog i diplomskog rada (Veleuciliste kriminalistike i javne sigurnosti) (`vkjs-upute-zavrsni-diplomski-2024`)
@@ -81,9 +81,6 @@ NAPOMENA : APA autor-godina u zagradama (prezime autora, godina); izvor se navod
 - Naslovi knjiga, casopisa i web dokumenata su u APA izvorniku kurzivom (str. 7, pravilo 5); alat radi plain text pa je kurziv izostavljen (napomena na stranici alata).
 - sourcePage je preuzet iz tagova isjecaka (str. N); propis i knjiga padaju pod tag 'str. 11' iako sekcija pravnih izvora u PDF-u prelazi na sljedecu stranicu.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs vkjs "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `630384c031cc...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs vkjs "Daniel Risavi"`.

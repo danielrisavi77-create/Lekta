@@ -1,4 +1,4 @@
-# Citatni spec: biotech (outcome: custom-spec, status: draft)
+# Citatni spec: biotech (outcome: custom-spec, status: verified)
 
 Stil: **Vancouver numericko (sluzbene upute Odjela za biotehnologiju)** (token `biotech`)
 Izvor: Upute za pisanje zavrsnog i diplomskog rada (Odjel za biotehnologiju) (`biotech-upute-radovi`)
@@ -67,9 +67,6 @@ NAPOMENA: Upute ne obraduju propise/pravne akte kao izvore; oblik (naslov, sluzb
 - Naziv casopisa i volumen su u izvorniku u kurzivu (*Cell Stem Cell* 2016; *19*); alat daje plain text bez kurziva.
 - Raspon stranica u izvoru koristi crtu (n-crtu ostecenu u pdftotext-u kao znak '�'); alat izlaze obicnu spojnicu (643-652).
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs biotech "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `e5182e75a4ad...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs biotech "Daniel Risavi"`.

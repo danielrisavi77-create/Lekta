@@ -1,4 +1,4 @@
-# Citatni spec: ufri (outcome: custom-spec, status: draft)
+# Citatni spec: ufri (outcome: custom-spec, status: verified)
 
 Stil: **Autor-godina (sluzbene upute UFRI, diplomski rad)** (token `ufri`)
 Izvor: Upute za izradu diplomskog rada (Uciteljski fakultet u Rijeci) (`ufri-upute-diplomski-2024`)
@@ -84,9 +84,6 @@ NAPOMENA : Autor-godina u zagradama (str. 2: 'navodeci u zagradama prezime autor
 - Kurziv naslova knjiga i naziva casopisa (str. 4 'kosi tekst') alat ne reproducira (plain text izlaz).
 - PRIOR hint iz profila je 'harvard'; izvor ne imenuje standardni stil nego daje vlastite worked-example primjere, pa je ishod custom-spec (autor-godina, APA/Harvard-slicno) a ne style-pin.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs ufri "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `197d276efb3a...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs ufri "Daniel Risavi"`.

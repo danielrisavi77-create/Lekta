@@ -1,4 +1,4 @@
-# Citatni spec: veleknin (outcome: custom-spec, status: draft)
+# Citatni spec: veleknin (outcome: custom-spec, status: verified)
 
 Stil: **Autor-godina (sluzbene upute Veleucilista Marko Marulic u Kninu)** (token `veleknin`)
 Izvor: Upute za izradu i obranu zavrsnog rada (Veleuciliste Marko Marulic u Kninu) (`veleknin-upute-zavrsni-2020`)
@@ -78,9 +78,6 @@ NAPOMENA : Sekcija 6.1 Citiranje izvora u tekstu. Jedan autor: '(Rahman, 2014)' 
 - Naslovi u izvorniku (knjige/casopisi) mogli bi biti kurzivom; ekstrakcija to ne pokazuje pa se ne pretpostavlja, a alat ionako radi plain text.
 - Propis se in-text navodi dvojako: preko broja Narodnih novina ('(NN 01/13)') i preko '(Anonymus, godina)' (str. 12); bibliografski oblik propisa nije potvrden.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs veleknin "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `e383dfbd3d6a...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs veleknin "Daniel Risavi"`.

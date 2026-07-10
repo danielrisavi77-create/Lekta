@@ -1,4 +1,4 @@
-# Citatni spec: efos (outcome: custom-spec, status: draft)
+# Citatni spec: efos (outcome: custom-spec, status: verified)
 
 Stil: **Harvardski stil autor-godina (sluzbene upute EFOS)** (token `efos`)
 Izvor: Upute za izradu studentskih radova na Ekonomskom fakultetu u Osijeku (`efos-upute-studentski-2023`)
@@ -79,9 +79,6 @@ NAPOMENA : Propisani primjeri (Milas, 2009:563) i (Smith, 2010:28) su bez razmak
 - Kurziv naslova (ukosenim slovima) alat ne reproducira, izlaz je plain text.
 - Poglavlje, mrezni, zavrsni i propis nemaju reproducibilan primjer u izvoru; predlosci su izvedeni (derived) i cekaju potvrdu.
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs efos "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `1f107aa41b7a...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs efos "Daniel Risavi"`.

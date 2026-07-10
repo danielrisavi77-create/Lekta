@@ -1,4 +1,4 @@
-# Citatni spec: libertas (outcome: style-pin, status: draft)
+# Citatni spec: libertas (outcome: style-pin, status: verified)
 
 Stil: **Harvard (Pravilnik o diplomskom radu, Libertas)** (token `harvard`)
 Izvor: Pravilnik o diplomskom radu (Libertas, srpanj 2024) (`libertas-pravilnik-diplomski-2024`)
@@ -11,9 +11,6 @@ PIN     : izvor propisuje stil "harvard" -> format ostaje obiteljski motor
 QUOTE   : Za citiranje se preporuca koristiti americki (harvardski) stil koji je detaljnije opisan u prilogu   [grep: OK]
 ```
 
-## Odluka
-- [ ] approve sve
-- [ ] --flag <sourceTypes> (pojedini predlosci u needs-recheck)
-- [ ] odbaci / prekvalificiraj outcome
-
-Naredba: `node scripts/approve-citation-spec.mjs libertas "Daniel Risavi" [--flag clanak,mrezni] [--dry]`
+## Verifikacija
+VERIFICIRANO: Daniel Risavi (2026-07-10); verifiedHash `38cd29c599d7...` sidri na snapshot izvora.
+Reverifikacija nakon drifta (izvor promijenjen): `node scripts/approve-citation-spec.mjs libertas "Daniel Risavi"`.
