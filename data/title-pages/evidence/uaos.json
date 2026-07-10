@@ -651,6 +651,150 @@
      "yRel": 0.853
     }
    ]
+  },
+  {
+   "pid": "uaos:93",
+   "repository": "repozitorij.uaos.unios.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.2,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE JOSIPA JURJA STROSSMAYERA U OSIJEKU",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.084
+    },
+    {
+     "role": "faculty",
+     "redactedText": "UMJETNIČKA AKADEMIJA U OSIJEKU",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.117
+    },
+    {
+     "role": "study",
+     "redactedText": "ODSJEK ZA LIKOVNU UMJETNOST",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.15
+    },
+    {
+     "role": "study",
+     "redactedText": "STUDIJ LIKOVNE KULTURE",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.183
+    },
+    {
+     "role": "study",
+     "redactedText": "SMJER: LIKOVNA KULTURA",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.215
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.339
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.421
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.466
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.556
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.593
+    },
+    {
+     "role": "mentor",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.742
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Osijek, 2015.",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.842
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.925
+    }
+   ]
   }
  ]
 }
