@@ -40,6 +40,7 @@ import { cellCoverage, detectWaitlist } from '../waitlist/waitlist-detect';
 import { mountWaitlistBar } from '../waitlist/waitlist-bar';
 import { submitUnknownFaculty } from '../waitlist/waitlist-client';
 import { legalDocuments as legalContent, TERMS_VERSION } from '../legal/legal-content';
+import { academicYearFromDate } from '../profiles/academic-year';
 import { postReferralRedeem } from '../referral/redeem-referral';
 import { renderReferralShareSection } from './referral-share-section';
 import './referral-share-section.css';
@@ -324,7 +325,7 @@ function currentProfile(){
 function workTypeLabel(v: any){return (WORK_TYPE_LABELS as any)[v]||v}
 function updateProfile(){
  const {p}=currentProfile(),sel=p.selection,sm=(PROFILE_STATUS as any)[p.statusKey]||PROFILE_STATUS.generic,am=p.authority||PROFILE_AUTHORITY.generic;
- const sourceHtml=p.sources?.length?`<div class="source-stack">${p.sources.map((s: any)=>`<div class="source-line">Službeni izvor: <a href="${escapeHtml(safeHref(s.url))}" target="_blank" rel="noopener">${escapeHtml(s.title)}</a></div>`).join('')}${p.verifiedAt?`<div class="source-line">Ručno provjereno: ${escapeHtml(new Date(p.verifiedAt+'T12:00:00').toLocaleDateString('hr-HR'))}${p.documentDate?' · Dokument: '+escapeHtml(p.documentDate):''}</div>`:''}</div>`:`<div class="source-line">Posebna pravila još nisu povezana s provjerenim službenim izvorom. Primjenjuje se generička provjera.</div>`;
+ const sourceHtml=p.sources?.length?`<div class="source-stack">${p.sources.map((s: any)=>`<div class="source-line">Službeni izvor: <a href="${escapeHtml(safeHref(s.url))}" target="_blank" rel="noopener">${escapeHtml(s.title)}</a></div>`).join('')}${p.verifiedAt?`<div class="source-line">Ručno provjereno: ${escapeHtml(new Date(p.verifiedAt+'T12:00:00').toLocaleDateString('hr-HR'))}${p.documentDate?' · Dokument: '+escapeHtml(p.documentDate):''}${academicYearFromDate(p.verifiedAt)?' · ak. godina verifikacije: '+escapeHtml(academicYearFromDate(p.verifiedAt)):''}</div>`:''}</div>`:`<div class="source-line">Posebna pravila još nisu povezana s provjerenim službenim izvorom. Primjenjuje se generička provjera.</div>`;
  const facts=p.facts?.length?`<div class="rule-facts">${p.facts.map((f: any)=>`<span class="rule-fact">${escapeHtml(f)}</span>`).join('')}</div>`:'';
  const variant=sel.workVariant?` · ${escapeHtml(sel.workVariant)}`:'',methodVariant=sel.methodology?` · ${escapeHtml(sel.methodology)}`:'';
  const hierarchy=p.sourceHierarchy?.length?`<div class="source-line"><strong>Hijerarhija pravila:</strong> ${p.sourceHierarchy.map(escapeHtml).join(' → ')}</div>`:'';

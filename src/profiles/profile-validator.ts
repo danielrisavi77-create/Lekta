@@ -1,5 +1,6 @@
 import type { ThesisProfile } from './profile-schema';
 import { FIXER_IDS } from '../repair/apply-fixers';
+import { ACADEMIC_YEAR_RE } from './academic-year';
 
 export interface ProfileValidationError {
   profileId: string;
@@ -28,6 +29,18 @@ export function validateProfiles(profiles: ThesisProfile[]): ProfileValidationEr
     // ljudski verificiranom pravilu (status 'verified') i uz postavljen fixerId. Time
     // nijedno neverificirano ili nemapirano pravilo ne moze pisati u korisnikov docx.
     for (const entry of profile.ruleEntries ?? []) {
+      // academicYear (opcionalni override): format "2025./2026." i uzastopne godine,
+      // inace bi se u UI-ju prikazala besmislena godina verifikacije.
+      if (entry.academicYear != null) {
+        const m = ACADEMIC_YEAR_RE.test(entry.academicYear);
+        const years = entry.academicYear.match(/^(\d{4})\.\/(\d{4})\.$/);
+        if (!m || !years || Number(years[2]) !== Number(years[1]) + 1) {
+          errors.push({
+            profileId: profile.id,
+            message: `Pravilo ${entry.ruleId}: academicYear "${entry.academicYear}" nije oblika "2025./2026." s uzastopnim godinama.`,
+          });
+        }
+      }
       if (entry.autoFixable !== true) continue;
       if (!entry.fixerId) {
         errors.push({

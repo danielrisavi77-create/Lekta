@@ -47,6 +47,13 @@ export interface RuleEntry {
   verifiedBy?: string | null;
   reviewedBy?: string | null;
   /**
+   * Akademska godina VERIFIKACIJE pravila, format "2025./2026." (granica 1.10.).
+   * Opcionalni rucni override; kad nije postavljen, izvodi se iz lastVerified /
+   * profil.verifiedAt (src/profiles/academic-year.ts). NE znaci "za koju godinu
+   * pravilo vrijedi" - to izvor cesto ne kaze i ne nagadamo.
+   */
+  academicYear?: string | null;
+  /**
    * Kako je pravilo potvrdjeno: 'human' (covjek citao izvor), 'human-audit' (covjek u
    * rucnom audit prolazu; postojeci podaci ga koriste) ili 'ai-3pass-batch' (AI
    * 3-prolazna provjera, covjek batch odobrio). Honesty trag: nikad ne tvrdimo cisto
