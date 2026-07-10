@@ -6,6 +6,10 @@
  * (godina, DOI, URL, stranice, prvi autor, gruba podjela autor/naslov), a dvojbena polja
  * ostavlja prazna. Rezultat je UVIJEK za ljudski pregled i ispravak (obavezan review korak u
  * UI-u), nikad slijepo objaviti. Cist, bez DOM-a, bez mreze, testabilan.
+ *
+ * Ciljani formati: APA (stariji "Mjesto: Izdavac" i APA7 bez mjesta), hrvatski autor-godina
+ * s veznikom "i"/"te", poglavlje u zborniku ("U: urednici (ur.), Knjiga (str. X-Y). Mjesto:
+ * Izdavac") i propis ("Naziv. Narodne novine, 42/18"). Sto je izvan toga -> lowConfidence.
  */
 import type { CitationInput, SourceType } from '../tools/citation';
 
@@ -47,25 +51,64 @@ function firstSentence(s: string): [string, string] {
   return [s.replace(/\.\s*$/, '').trim(), ''];
 }
 
+// Ujednaci veznike (& / and / und / et / hrv "i" / "te") u zarez. Koristi se i za autore i za urednike.
+function normalizeConnectors(a: string): string {
+  return a
+    .replace(/\s*&\s*/g, ', ')
+    .replace(/\s+(?:and|und|et)\s+/gi, ', ')
+    .replace(/\s+(?:i|te)\s+/g, ', ');
+}
+
 // Normaliziraj popis autora u ";"-odvojen oblik koji ocekuje parseAuthors (citation.ts).
-// Pasted liste koriste "&"/"and", a APA "Prezime, I., Prezime, J." (zarez i dijeli i spaja).
+// Kljucno: rekonstruira samo kad prepozna >=2 "Prezime, Inicijali." jedinice (APA); inace
+// zadrzi ulaz (npr. korporativni autor "Naklada X" ili "Prezime, Ime" bez inicijala).
 function normalizeAuthors(a: string): string {
-  let s = a.replace(/\s*&\s*/g, '; ').replace(/\s+and\s+/gi, '; ');
-  // APA jedinice "Prezime, I. I." (prezime, pa inicijali s tockama) -> razdvoji ako ih je vise
-  const units = s.match(/[\p{Lu}][\p{L}'’.\- ]*?,\s*(?:[\p{Lu}]\.[ ]?)+/gu);
+  const s = normalizeConnectors(a);
+  // Jedinica = "Prezime(i), Inicijali s tockom". Prezime moze biti viserjecno/spojnica/dijakritika.
+  // Inicijali MORAJU imati tocku (razlikuje "Ivanec, D." od punog imena "Ivanec, David").
+  const units = s.match(/\p{Lu}[\p{L}'’.\-]*(?:\s+[\p{L}'’.\-]+)*,\s*(?:\p{Lu}\.\s*)+/gu);
   if (units && units.length > 1) {
-    return units.map((u) => u.replace(/[;,]\s*$/, '').trim()).join('; ');
+    return units.map((u) => u.replace(/[,;\s]+$/, '').trim()).join('; ');
   }
-  return s.replace(/\s*;\s*/g, '; ').trim();
+  return s.replace(/\s*;\s*/g, '; ').replace(/,\s*,/g, ',').trim();
 }
 
 function guessType(low: string, f: Partial<CitationInput>): SourceType {
   if (/\bzavršni rad\b|\bdiplomski rad\b|\bdoktorsk|\bdisertacij|\bthesis\b|\bmagistarski\b|\bzavrsni rad\b/.test(low)) return 'zavrsni';
   if (/narodne novine|\bnn\b|\bzakon\b|pravilnik\b|\buredb|\bsl\. list|\bod luk/.test(low)) return 'propis';
+  // Poglavlje PRIJE clanka: "U:/In:" ili "(ur.)/(eds.)" inace "(str. X-Y)" pogresno vodi na clanak.
+  if (/\bu:\s|\bin:\s|\(ur\.?\)|\(prir\.?\)|\(eds?\.?\)|\(ed\.?\)|urednik|priredio/.test(low)) return 'poglavlje';
   if (f.doi || (f.volume && f.issue) || /\bvol\.|\bbr\.\s*\d|časopis|\bstr\.\s*\d|\bpp\.\s*\d/.test(low)) return 'clanak';
-  if (/\bu:\s|\bin:\s|\(ur\.\)|\(eds?\.\)|\(ed\.\)|urednik/.test(low)) return 'poglavlje';
   if (f.url) return 'mrezni';
   return 'knjiga';
+}
+
+// Poglavlje u zborniku: "U: <urednici> (ur.), <Knjiga> (str. X-Y). Mjesto: Izdavac".
+function parseChapter(rem: string, fields: Partial<CitationInput>): void {
+  const m = rem.match(/^(?:u|in)\s*:?\s*(.+?)\s*\((?:ur|prir|eds?|ed)\.?\)\s*,?\s*(.*)$/is);
+  if (!m) return;
+  fields.editor = normalizeConnectors(m[1].trim()).replace(/[.,\s]+$/, '').trim();
+  let tail = m[2].trim();
+  const pg = tail.match(/\(\s*(?:str\.?|pp?\.?)\s*(\d+\s*[-–]\s*\d+)\s*\)/i);
+  if (pg) { fields.pages = pg[1].replace(/\s+/g, ''); tail = tail.replace(pg[0], ' ').replace(/\s{2,}/g, ' ').trim(); }
+  const cont = tail.match(/^([^(.]+)/);
+  if (cont) fields.container = cont[1].replace(/[\s,]+$/, '').trim();
+  const pub = tail.match(/([^:.()]+):\s*([^.]+)/);
+  if (pub) {
+    fields.place = pub[1].replace(/^[\s,]+|[\s,]+$/g, '').trim();
+    fields.publisher = pub[2].replace(/[.,\s]+$/, '').trim();
+  }
+}
+
+// Propis: "Naziv propisa. Narodne novine, 42/18" -> naziv=title, NN=container, broj=issue.
+function parsePropis(original: string, fields: Partial<CitationInput>): void {
+  const nn = original.match(/(.+?)[.,]?\s*(?:narodne novine|\bnn\b)\.?\s*,?\s*(\d+\/\d+)/i);
+  if (!nn) return;
+  const title = nn[1].replace(/\(\d{4}[a-z]?\)\.?/g, '').replace(/[.,\s]+$/, '').trim();
+  if (title) fields.title = title;
+  fields.container = 'Narodne novine';
+  fields.issue = nn[2];
+  delete fields.authors;
 }
 
 export function parseReference(raw: string): ParsedReference {
@@ -87,7 +130,8 @@ export function parseReference(raw: string): ParsedReference {
   let remainder = '';
   if (ym && (ym.index ?? 0) <= 80) {
     const yStart = s.indexOf(year);
-    const authors = s.slice(0, yStart).replace(/[\s.,(]+$/, '').trim();
+    // NE gutaj tocku zadnjeg inicijala ("Ivanec, D. (2012)"); makni samo razmak i otvorenu zagradu.
+    const authors = s.slice(0, yStart).replace(/[\s(]+$/, '').replace(/,+$/, '').trim();
     const after = s.slice(yStart + year.length).replace(/^[a-z]?\)?[.,]?\s*/, '');
     if (authors) fields.authors = normalizeAuthors(authors);
     const [title, rest] = firstSentence(after);
@@ -105,35 +149,72 @@ export function parseReference(raw: string): ParsedReference {
   remainder = remainder
     .replace(/https?:\/\/\S+/g, '')
     .replace(/\b10\.\d{4,9}\/\S+/g, '')
+    .replace(/preuzeto s|dostupno (?:na|s)|retrieved from|available at/gi, '')
     .replace(/\s{2,}/g, ' ')
     .trim();
 
-  // Clanak uzorak: "Casopis, 28(3), 45-67"
-  const art = remainder.match(/^([^,]+?),\s*(\d+)\s*\((\d+)\)/);
-  if (art) {
-    fields.container = art[1].trim();
-    fields.volume = art[2];
-    fields.issue = art[3];
-  }
+  if (/^(?:u|in)\s*:/i.test(remainder) || /\((?:ur|prir|eds?|ed)\.?\)/i.test(remainder)) {
+    parseChapter(remainder, fields);
+  } else {
+    let rem = remainder;
+    // Stranice "str./pp. 145-170" (ukloni iz ostatka da ne procure u izdavaca).
+    const pg = rem.match(/(?:pp?\.?|str\.?)\s*(\d+\s*[-–]\s*\d+)/i);
+    if (pg) { fields.pages = pg[1].replace(/\s+/g, ''); rem = rem.replace(pg[0], ' ').replace(/\s{2,}/g, ' ').trim(); }
 
-  // Stranice: "pp. 145-170" / "str. 145-170" / ": 145-170" / goli raspon
-  const pg =
-    remainder.match(/(?:pp?\.?|str\.?|:)\s*(\d+\s*[-–]\s*\d+)/i) || remainder.match(/(\b\d+\s*[-–]\s*\d+\b)/);
-  if (pg) fields.pages = pg[1].replace(/\s+/g, '');
+    // Clanak: "Casopis, 28(3), 45-67" ili "Casopis, 5, 1-10".
+    let matched = false;
+    const m1 = rem.match(/^(.+?),\s*(\d+)\s*\((\d+)\)(?:,\s*(\d+\s*[-–]\s*\d+))?/);
+    if (m1) {
+      fields.container = m1[1].trim();
+      fields.volume = m1[2];
+      fields.issue = m1[3];
+      if (m1[4] && !fields.pages) fields.pages = m1[4].replace(/\s+/g, '');
+      matched = true;
+    } else {
+      const m2 = rem.match(/^(.+?),\s*(\d+),\s*(\d+\s*[-–]\s*\d+)/);
+      if (m2) {
+        fields.container = m2[1].trim();
+        fields.volume = m2[2];
+        if (!fields.pages) fields.pages = m2[3].replace(/\s+/g, '');
+        matched = true;
+      }
+    }
+    if (!fields.pages) {
+      const bp = rem.match(/:\s*(\d+\s*[-–]\s*\d+)/) || rem.match(/\b(\d+\s*[-–]\s*\d+)\b/);
+      if (bp) fields.pages = bp[1].replace(/\s+/g, '');
+    }
 
-  // Knjiga uzorak: "Mjesto: Izdavac" (ako nije clanak)
-  if (!fields.container) {
-    const pub = remainder.match(/([^,:.]+):\s*([^.,]+)/);
-    if (pub) {
-      fields.place = pub[1].trim();
-      fields.publisher = pub[2].trim();
+    // Knjiga: "Mjesto: Izdavac" (mjesto smije imati zarez "Cambridge, MA"; izdavac tocke "W. H. Freeman").
+    if (!matched && !fields.container) {
+      const pub = rem.match(/([^:.]+?):\s*(.+?)[.]?\s*$/);
+      if (pub) {
+        fields.place = pub[1].replace(/^[\s,]+|[\s,]+$/g, '').trim();
+        fields.publisher = pub[2].replace(/[.,\s]+$/, '').trim();
+      } else if (rem && !fields.url && !fields.doi) {
+        // APA7 bez mjesta: "Naklada Slap."
+        const only = rem.replace(/[.,\s]+$/, '').trim();
+        if (only && !/\d/.test(only) && only.length <= 60) fields.publisher = only;
+      }
     }
   }
 
   if (fields.title) fields.title = fields.title.replace(/[.,]+$/, '').trim();
-  if (fields.authors) fields.authors = fields.authors.replace(/[,;]+$/, '').trim();
+  if (fields.authors) {
+    fields.authors = fields.authors
+      .replace(/[,;]+\s*$/, '')
+      .replace(/(?<=\p{Ll})\.$/u, '') // makni tocku iza rijeci (korporativni autor), ne iza inicijala
+      .trim();
+  }
 
   const type = guessType(original.toLowerCase(), fields);
+  if (type === 'propis') parsePropis(original, fields);
+  // Zavrsni/doktorski: ustanova je "institution", ne izdavac ("Filozofski fakultet, ...").
+  if (type === 'zavrsni' && !fields.institution && fields.publisher) {
+    fields.institution = [fields.place, fields.publisher].filter(Boolean).join(', ');
+    delete fields.publisher;
+    delete fields.place;
+  }
+
   const filled = Object.values(fields).filter(Boolean).length;
   return { type, fields, lowConfidence: filled <= 2 };
 }

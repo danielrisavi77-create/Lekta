@@ -80,3 +80,82 @@ describe('parseReference', () => {
     expect(r.type).toBe('propis');
   });
 });
+
+// Golden korpus: realan zalijepljen popis literature (APA hr/en mix). Pinovi pokrivaju svaku
+// klasu popravka bulk parsera; regresija ako se parser pokvari. Ne mijenjati bez razloga.
+describe('parseReference: korpus (regresija bulk)', () => {
+  const cases: Array<{ name: string; raw: string; type: SourceTypeLike; expect: Record<string, string> }> = [
+    {
+      name: 'hrv veznik "i": zadrzava SVA tri autora',
+      raw: 'Petz, B., Kolesarić, V. i Ivanec, D. (2012). Petzova statistika. Jastrebarsko: Naklada Slap.',
+      type: 'knjiga',
+      expect: { authors: 'Petz, B.; Kolesarić, V.; Ivanec, D.', place: 'Jastrebarsko', publisher: 'Naklada Slap' },
+    },
+    {
+      name: 'zadnji inicijal se NE gubi (Deci, E. L.)',
+      raw: 'Deci, E. L., & Ryan, R. M. (1985). Intrinsic motivation and self-determination in human behavior. New York: Plenum.',
+      type: 'knjiga',
+      expect: { authors: 'Deci, E. L.; Ryan, R. M.', place: 'New York', publisher: 'Plenum' },
+    },
+    {
+      name: 'mjesto sa zarezom (Cambridge, MA)',
+      raw: 'Vygotsky, L. S. (1978). Mind in society. Cambridge, MA: Harvard University Press.',
+      type: 'knjiga',
+      expect: { place: 'Cambridge, MA', publisher: 'Harvard University Press' },
+    },
+    {
+      name: 'izdavac s tockama (W. H. Freeman)',
+      raw: 'Bandura, A. (1997). Self-efficacy: The exercise of control. New York: W. H. Freeman.',
+      type: 'knjiga',
+      expect: { title: 'Self-efficacy: The exercise of control', publisher: 'W. H. Freeman' },
+    },
+    {
+      name: 'izdavac sa zarezom (Farrar, Straus and Giroux)',
+      raw: 'Kahneman, D. (2011). Thinking, fast and slow. New York: Farrar, Straus and Giroux.',
+      type: 'knjiga',
+      expect: { publisher: 'Farrar, Straus and Giroux' },
+    },
+    {
+      name: 'clanak: casopis, volumen(broj), stranice',
+      raw: 'Kardum, I., & Hudek-Knežević, J. (2012). Osobine ličnosti i zdravlje. Psihologijske teme, 21(2), 235-256.',
+      type: 'clanak',
+      expect: { authors: 'Kardum, I.; Hudek-Knežević, J.', container: 'Psihologijske teme', volume: '21', issue: '2', pages: '235-256' },
+    },
+    {
+      name: 'poglavlje u zborniku "U: ... (ur.), Knjiga (str. X-Y). Mjesto: Izdavac"',
+      raw: 'Šverko, B. (2004). Ljudske vrednote. U: J. Obradović i M. Čudina-Obradović (ur.), Psihologija (str. 45-78). Zagreb: Golden marketing.',
+      type: 'poglavlje',
+      expect: { title: 'Ljudske vrednote', editor: 'J. Obradović, M. Čudina-Obradović', container: 'Psihologija', pages: '45-78', place: 'Zagreb', publisher: 'Golden marketing' },
+    },
+    {
+      name: 'propis: naziv + Narodne novine + broj',
+      raw: 'Zakon o zaštiti osobnih podataka. (2018). Narodne novine, 42/18.',
+      type: 'propis',
+      expect: { title: 'Zakon o zaštiti osobnih podataka', container: 'Narodne novine', issue: '42/18' },
+    },
+    {
+      name: 'zavrsni/doktorski: ustanova u institution, ne izdavac',
+      raw: 'Marušić, I. (2019). Motivacija za učenje (Doktorska disertacija). Filozofski fakultet, Sveučilište u Zagrebu.',
+      type: 'zavrsni',
+      expect: { institution: 'Filozofski fakultet, Sveučilište u Zagrebu' },
+    },
+    {
+      name: 'APA7 bez mjesta: goli izdavac',
+      raw: 'Fulgosi, A. (1997). Faktorska analiza. Školska knjiga.',
+      type: 'knjiga',
+      expect: { publisher: 'Školska knjiga' },
+    },
+  ];
+
+  for (const c of cases) {
+    it(c.name, () => {
+      const r = parseReference(c.raw);
+      expect(r.type).toBe(c.type);
+      for (const [k, v] of Object.entries(c.expect)) {
+        expect(`${k}=${(r.fields as any)[k] ?? ''}`).toBe(`${k}=${v}`);
+      }
+    });
+  }
+});
+
+type SourceTypeLike = 'knjiga' | 'poglavlje' | 'clanak' | 'mrezni' | 'zavrsni' | 'propis';
