@@ -444,16 +444,31 @@ Datum: 2026-07-11.
 - Rizik regresije: nizak (golden zelen, promjena ZipReadera aktivna samo uz eksplicitni budzet).
 - Velicina: M
 
-**BL-P0-05-8, Jak default profil i potvrda profila prije analize**
+**BL-P0-05-8, Jak default profil i potvrda profila prije analize** — GOTOVO (2026-07-11)
 - Prioritet: P0 paket (izvorni ux-02 P2)
 - Problem: default tvrdo FPZG/Politologija/Diplomski; auto-detekcija samo unizg; non-unizg
-  korisnik tiho dobije FPZG-specifican rezultat; analiza se pali cim je datoteka odabrana.
-- Lokacija: src/ui/app.ts:278, :164, :149, :449
-- Preporuka: ublaziti default (neutralni/opci profil) ili potvrda profila prije analize;
-  prosiriti auto-detekciju na sve institucije.
-- Acceptance: korisnik koji nije mijenjao izbornike ne dobiva tiho FPZG rezultat; profil
-  istaknut uz gumb; auto-detekcija pokusava sve institucije.
-- Rizik regresije: srednji (dira default i detekciju; golden/UI smoke).
+  korisnik tiho dobije FPZG-specifican rezultat. (Napomena: "analiza se pali cim je datoteka
+  odabrana" je bio zastario; analiza se okida SAMO klikom na #analyzeBtn, setFile samo omoguci gumb.)
+- Dizajn: workflow (3 pristupa + judge, wf_777700f5-d38); izabran hibrid (detekcija svih institucija
+  + istaknuti profil uz gumb + potvrdni gate OGRANICEN na nepotvrdjeni verificirani default).
+- Isporuceno:
+  * Nova cista, DOM-free jezgra src/ui/profile-detect.ts: detectContextFromText(units, rawText) radi
+    longest-match po SVIM jedinicama kataloga (allUnits() vec nosi institutionId/institutionName) i vraca
+    institutionId; needsProfileConfirmation(statusKey, confirmed) = verified && !confirmed. Jedinicno
+    testirano (tests/profile-detect.test.ts, 7 testova).
+  * (c) detectDocxContext sada zove detectContextFromText(allUnits(), ...) umjesto unizg-only petlje;
+    applyDetectedContext postavlja ctx.institutionId (ne tvrdi 'unizg') -> detekcija POKUSAVA sve institucije.
+  * (b) novi #analyzeProfile sazetak tik uz #analyzeBtn (renderAnalyzeSummary, zove se iz updateProfile
+    i setFile): status pill + red "Institucija · Fakultet · Studij · Vrsta · Stil".
+  * (a) _profileConfirmed zastavica (pali se na stvarnu promjenu izbornika preko addEventListener('change'),
+    na uspjesnu detekciju, i na restorePreferences); gate na vrhu runAnalysis: needsProfileConfirmation ->
+    prikazi warn + gumbe "Da, ovo je moj profil" / "Promijeni fakultet" i return (netaknuti verificirani
+    default NE moze tiho zabodovati). Programatske .value= dodjele NE pale change pa se zastavica ne lazira.
+- GOLDEN NETAKNUT: detekcija/summary/gate su UI, ne ulaze u analyzeDocx ni golden-entry (docx-golden 1/1).
+- Git-race: app.ts + index.html dijeljeni; stageani samo moji hunkovi (git apply --cached / binarni reconstruct).
+- Acceptance ispunjen (a/b/c). Rizik: gate dodaje 1 potvrdni klik samo kad detekcija ne prepozna verificirani
+  default (uzak, tocno rizican slucaj). Istoimeni fakulteti u vise gradova = moguc krivi longest-match,
+  ublazeno gateom+badgeom (ispravljivo), buduci tie-break po nazivu sveucilista.
 - Velicina: M
 
 **BL-P0-05-9, Uskladiti oglaseni i stvarni limit uploada na mobitelu** — GOTOVO (2026-07-11)
@@ -567,8 +582,16 @@ Datum: 2026-07-11.
 
 ## FAZA P1 (nakon P0)
 
-**BL-P1-01, Skip link na svim stranicama**
+**BL-P1-01, Skip link na svim stranicama** — GOTOVO (kod, 2026-07-11; necommitano)
 - Prioritet: P1 (izvorni accessibility-01, CONFIRMED)
+- Status: RIJESENO bez diranja HTML-a (izbjegnut git-race). Nova cista datoteka
+  src/shared/skip-link.ts (setupSkipLink: prepend <a class="skip-link"> kao PRVI element
+  <body>, cilja <main>, reuse postojeceg id-a ili fallback 'glavni-sadrzaj', tabindex=-1 na
+  main, fokus na klik) + src/shared/skip-link.css (nevidljiv dok nije fokusiran, reduced-motion
+  + forced-colors fallback). Wirano jednim pozivom u boot() zajednickog ui-boot.ts (loada svaka
+  stranica). Test tests/skip-link.test.ts (5). DOKAZANO u pregledniku (vite preview + Playwright):
+  prvi Tab na / i /citat.html fokusira vidljiv "Preskoci na sadrzaj" (translateY 0), Enter pomice
+  fokus na <main> (#top odn. #glavni-sadrzaj). npm run check zelen; CSS u dijeljenom ui-boot chunku.
 - Problem: nijedna stranica nema "Preskoci na sadrzaj" (WCAG 2.4.1 A); 6 do 8 nav poveznica
   prije sadrzaja.
 - Lokacija: index.html:236-258; citat.html:110-147; sve ostale stranice

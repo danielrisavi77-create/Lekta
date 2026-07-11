@@ -168,6 +168,7 @@ details.more{margin-top:12px;border-top:1px dashed var(--line-strong);padding-to
 /* Analyze-row: primarni CTA dominira i "spreman je" kad je datoteka ucitana; disclaimer ispod, tiho. */
 .analyze-row{flex-direction:column;align-items:stretch;gap:12px}
 .analyze-actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;align-items:center}
+.analyze-profile{border:1px solid var(--line);border-radius:12px;padding:11px 13px;background:var(--panel-2);font-size:12.5px;display:grid;gap:8px}.analyze-profile:empty{display:none}.analyze-profile .ap-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.analyze-profile .ap-path{color:var(--muted);font-weight:700}.analyze-profile .ap-warn{background:var(--warn-soft);border-radius:10px;padding:9px 11px;display:grid;gap:8px}.analyze-profile .ap-warn p{margin:0;color:var(--warn);font-weight:750;font-size:12.5px}.analyze-profile .ap-actions{display:flex;gap:8px;flex-wrap:wrap}
 .analyze-note{color:var(--muted);font-size:11.5px;line-height:1.5}
 .btn-lg{padding:14px 22px;font-size:15px;border-radius:14px}
 .analyze-actions .btn-primary:not(:disabled){box-shadow:0 12px 28px rgba(51,64,126,.34)}
@@ -379,7 +380,7 @@ h1,.section-head h2,.cta h2,.result-main h2,.analyzer-header h2{font-family:var(
             </div>
           </div>
         </details>
-        <div class="analyze-row"><div class="analyze-actions"><button class="btn btn-ghost" id="demoBtn" type="button" title="Pogledaj kako izgleda izvještaj bez učitavanja dokumenta">Pogledaj primjer izvještaja</button><button class="btn btn-primary btn-lg" id="analyzeBtn" type="button" disabled>Analiziraj dokument →</button></div><small class="analyze-note">Heuristička pomoć, ne službena potvrda ustanove.</small></div>
+        <div class="analyze-row"><div class="analyze-profile" id="analyzeProfile" aria-live="polite"></div><div class="analyze-actions"><button class="btn btn-ghost" id="demoBtn" type="button" title="Pogledaj kako izgleda izvještaj bez učitavanja dokumenta">Pogledaj primjer izvještaja</button><button class="btn btn-primary btn-lg" id="analyzeBtn" type="button" disabled>Analiziraj dokument →</button></div><small class="analyze-note">Heuristička pomoć, ne službena potvrda ustanove.</small></div>
       </div>
       <div class="progress-view hidden" id="progressView" role="status" aria-live="polite"><div class="spinner"></div><h3>Analiziram dokument…</h3><p id="progressMessage">Otvaram Word strukturu</p><div class="progress-track"><i id="progressBar"></i></div><div class="progress-step" id="progressPercent" aria-hidden="true">0%</div><div class="progress-actions" style="margin-top:24px"><button class="btn btn-secondary btn-sm" id="cancelAnalysisBtn" type="button">Prekini analizu</button></div></div>
       <div class="result-view hidden" id="resultView">
