@@ -56,6 +56,31 @@ function stripDevOnlyHtml(devTools: boolean) {
   };
 }
 
+// performance-01b (audit): fieldValidation.publicSources (PID + sha256 provenijencija javnih PDF
+// uzoraka; ~174 KB raw, ~1300 sha256 hashova visoke entropije) je AUTORSKA provenijencija koju ZIVI
+// runtime NIKAD ne cita (grep src/ = samo komentari i tipovi; renderValidationSummary cita sample/
+// scope/productDecision/confirmed/observedDeviations, NE publicSources). Strip ga iz PRODUKCIJSKOG
+// bundlea (NE iz izvora data/profiles/verified-profiles.json): manji glavni chunk bez gubitka funkcije.
+//   apply:'build' -> vitest NE primjenjuje plugin pa dobiva PUN JSON (title-page test cita raw JSON i
+//   dalje radi). enforce:'pre' -> transform vidi sirovi JSON prije vite:json. Gate na !devTools: QA/
+//   verifikacijski build (DEV_CONSOLE=1) zadrzava punu provenijenciju za internu konzolu.
+function stripRuntimeDeadProvenance(devTools: boolean) {
+  return {
+    name: 'lekta-strip-provenance',
+    apply: 'build' as const,
+    enforce: 'pre' as const,
+    transform(code: string, id: string) {
+      if (devTools) return null;
+      if (!id.split('?')[0].replace(/\\/g, '/').endsWith('/verified-profiles.json')) return null;
+      const data = JSON.parse(code) as Array<{ fieldValidation?: { publicSources?: unknown } }>;
+      for (const p of data) {
+        if (p.fieldValidation && 'publicSources' in p.fieldValidation) delete p.fieldValidation.publicSources;
+      }
+      return { code: JSON.stringify(data), map: null };
+    },
+  };
+}
+
 // Host-neovisni guard: svaki produkcijski (ne-dev) build koji bi ipak emitirao internu konzolu
 // pada odmah, ne samo u netlify lancu (routes-02). Dopunjuje scripts/verify-deploy-dist.mjs.
 function assertSafeBuild(devTools: boolean) {
@@ -152,7 +177,7 @@ export default defineConfig(({ command }) => {
   // Interna verifikacijska konzola ulazi u build SAMO kad su dev alati ukljuceni (QA opt-in).
   if (devTools) input.verification = resolve(__dirname, 'verification.html');
   return {
-    plugins: [htmlCharsetUtf8(), citationTools(), stripDevOnlyHtml(devTools), assertSafeBuild(devTools)],
+    plugins: [htmlCharsetUtf8(), citationTools(), stripRuntimeDeadProvenance(devTools), stripDevOnlyHtml(devTools), assertSafeBuild(devTools)],
     define: { __DEV_TOOLS__: JSON.stringify(devTools) },
     // NAPOMENA (audit performance-05, ODBIJENO nakon mjerenja): `json.stringify:true` bi veliki JSON
     // emitirao kao `JSON.parse('...')` (brzi V8 parse), ALI Vite ASCII-escapea sav ne-ASCII u \uXXXX.

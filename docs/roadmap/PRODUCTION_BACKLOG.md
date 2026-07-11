@@ -315,14 +315,22 @@ Datum: 2026-07-11.
 - Prioritet: P0 (izvorni performance-01 P1, CONFIRMED)
 - Problem: glavni entry chunk 2.478.762 B raw / 369.013 B gzip; dominiraju podaci
   (verified-profiles 1,45 MB + 169 draftova 1,3 MB + source-registry 152 KB).
-- NAPREDAK (mjereno): glavni chunk gzip 369.010 -> 234.961 B (-36,3%); raw 2.478.826 -> 1.392.982.
-  Postignuto: (a) draftovi + source-registry MAKNUTI iz runtimea (BL-P0-05-2, pecene mape) +
-  (perf-03) motor analize lijeno. Draft markeri (verifiedBy/Risavi/sourcePage/snapshotHash) sada 0
-  u glavnom chunku.
-- PREOSTAJE za pun 40%+ (BL-P0-05-1b): razdvoji verified-profiles.json (1,45 MB, jos u glavnom
-  chunku) na lagani indeks za selektore + puni skup pravila po profilu (dinamicki). Srednji rizik
-  (asinkroni currentProfile, utrka odabir vs pravila). To je jedina preostala velika poluga.
-- Velicina: L (glavni dio isporucen; ostaje verified-profiles split)
+- NAPREDAK (mjereno): glavni chunk gzip 369.010 -> **178.054 B (-51,7%)**; raw 2.478.826 -> 1.225.927.
+  ACCEPTANCE (>=40% gzip pad) ISPUNJEN. Postignuto u tri koraka:
+  (a) draftovi + source-registry MAKNUTI iz runtimea (BL-P0-05-2, pecene mape);
+  (b) motor analize lijen (perf-03);
+  (c) BL-P0-05-1b: strip fieldValidation.publicSources (PID+sha256 provenijencija, ~174 KB, ~1300
+      hashova) iz PRODUKCIJSKOG bundlea preko build-only Vite plugina (vite.config.ts
+      stripRuntimeDeadProvenance, apply:'build', gate !devTools). Draft/provenance markeri
+      (verifiedBy/Risavi/sourcePage/publicSources) = 0 u javnom chunku.
+- KLJUC (zasto NIJE trebao rizicni async split): tezina verified-profiles NIJE u `rules` (126 KB)
+  nego u DISPLAY-only provenijenciji; publicSources (174 KB) runtime NIKAD ne cita (samo title-page
+  TEST cita raw JSON izravno pa apply:'build' plugin njega ne dira). Zato je izbjegnut async
+  currentProfile (utrka odabir vs pravila) - dobiven pun 40%+ bez tog rizika.
+- PREOSTALO (opcionalno, manji povrat): note (106 KB) + sources (89 KB) + scopes su jos u chunku,
+  ali ih updateProfile renderira sinkrono na odabir profila pa bi njihovo micanje trazilo async
+  panel (srednji rizik, mali povrat). Nije nuzno za acceptance.
+- Velicina: L (ISPORUCENO, acceptance ispunjen)
 
 **BL-P0-05-2, Ispeci advisory mapu u buildu, izbaci draftove iz runtimea** — GOTOVO (2026-07-11)
 - Prioritet: P0 paket (izvorni performance-02 P2)
