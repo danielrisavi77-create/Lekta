@@ -106,8 +106,12 @@ Datum: 2026-07-11.
 - Rizik regresije: nizak (aditivni gate, fail-closed).
 - Velicina: M
 
-**BL-P0-02-2, Pinati Edge importe @supabase/supabase-js (esm.sh)**
+**BL-P0-02-2, Pinati Edge importe @supabase/supabase-js (esm.sh)** — KOD GOTOVO (commit df2bdc5)
 - Prioritet: P0 (izvorni dependencies-01 P1, CONFIRMED)
+- Status: KOD RIJESEN. Svih 10 importa (8 index + 2 type-only) pinano na eksaktnu @2.110.2;
+  guard test tests/supabase-edge-imports.test.ts pada na golom @2. PREOSTAJE vlasniku
+  (traži Deno CLI, ne Node): deno.lock s integritetom + smoke checkout/webhook potpis pri
+  deployu (dokumentirano u GO_LIVE_NAPLATA.md korak 5).
 - Problem: svih 8 Edge funkcija (uklj. create-checkout, webhook-mor) uvoze createClient s
   esm.sh @2 bez tocne verzije, bez deno.lock/import map integriteta.
 - Lokacija: create-checkout/index.ts:10, webhook-mor/index.ts:12, generate-report/index.ts:
