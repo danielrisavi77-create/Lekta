@@ -12,19 +12,15 @@
 //
 // deno-lint-ignore-file no-explicit-any
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
+import { corsHeadersFor } from '../_shared/cors.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
-const CORS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, content-type, apikey',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-};
-
-function json(body: unknown, status = 200): Response {
-  return new Response(JSON.stringify(body), { status, headers: { ...CORS, 'content-type': 'application/json' } });
-}
+// Dopusteno CORS porijeklo (data-flow-07): produkcijska domena; override preko ALLOWED_ORIGIN
+// (zarezom odvojeno). Localhost je uvijek dopusten (dev). Reflektira se u corsHeadersFor.
+const ALLOWED_ORIGINS = (Deno.env.get('ALLOWED_ORIGIN') ?? 'https://lektahr.netlify.app')
+  .split(',').map((s) => s.trim()).filter(Boolean);
 
 async function sha256Hex(input: string): Promise<string> {
   const data = new TextEncoder().encode(input);
@@ -48,8 +44,11 @@ const WORK_TYPES = ['seminarski', 'zavrsni', 'diplomski', 'doktorski'];
 const isEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
 Deno.serve(async (req: Request) => {
+ const cors = corsHeadersFor(req.headers.get('Origin'), ALLOWED_ORIGINS);
+ const json = (body: unknown, status = 200): Response =>
+   new Response(JSON.stringify(body), { status, headers: { ...cors, 'content-type': 'application/json' } });
  try {
-  if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS });
+  if (req.method === 'OPTIONS') return new Response('ok', { headers: cors });
   if (req.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
 
   // input guard: odbij predimenzioniran payload prije parsiranja

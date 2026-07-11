@@ -148,8 +148,11 @@ Datum: 2026-07-11.
   pisanja u produkciji).
 - Velicina: S
 
-**BL-P0-02-4, faculty-request CORS suziti na vlastito porijeklo**
+**BL-P0-02-4, faculty-request CORS suziti na vlastito porijeklo** — GOTOVO
 - Prioritet: P0 paket (izvorni data-flow-07 P3)
+- Status: RIJESENO. _shared/cors.ts (pickAllowedOrigin/corsHeadersFor) reflektira samo dopusteno
+  porijeklo (produkcija + localhost), inace primarno, nikad *; faculty-request prebacen (json u
+  closure koji hvata per-request CORS). Override ALLOWED_ORIGIN env. 7 testova (cors.test.ts).
 - Problem: CORS `*` i anoniman upis s bilo kojeg porijekla; zastita samo rate-limit.
 - Lokacija: supabase/functions/faculty-request/index.ts:19-23, :66-73, :97
 - Dokaz: POST s proizvoljne domene prolazi CORS i upisuje red do rate limita.
@@ -160,8 +163,12 @@ Datum: 2026-07-11.
 - Rizik regresije: nizak (provjeriti preflight s produkcijske domene).
 - Velicina: S
 
-**BL-P0-02-5, verify_jwt zakovati po funkciji u config.toml**
+**BL-P0-02-5, verify_jwt zakovati po funkciji u config.toml** — GOTOVO
 - Prioritet: P0 paket (izvorni security-04 P3)
+- Status: RIJESENO. config.toml dobio [functions.<ime>] verify_jwt za svih 9 funkcija: true za
+  create-checkout/generate-report/redeem-referral-signup/file-guarantee-claim (getUser), false za
+  faculty-request/send-reminders/unsubscribe-reminder/webhook-mor/health (anon/cron/potpis/token).
+  Kodificira postojecu namjeru (bez promjene ponasanja); vlasnik deploya iz konfiguracije.
 - Problem: nema [functions.<ime>] blokova; posture ovisi o ad-hoc deploy zastavicama.
 - Lokacija: supabase/config.toml (nema [functions]); namjera samo u komentarima
   unsubscribe-reminder/index.ts:11, redeem-referral-signup/index.ts:9
@@ -173,8 +180,11 @@ Datum: 2026-07-11.
 - Rizik regresije: nizak (dira deploy proces).
 - Velicina: S
 
-**BL-P0-02-6, .gitignore .env i revoke purge RPC od anon**
+**BL-P0-02-6, .gitignore .env i revoke purge RPC od anon** — GOTOVO
 - Prioritet: P0 paket (izvorni security-06 P3)
+- Status: RIJESENO. .gitignore dobio .env i .env.*; migracija 0015_revoke_purge.sql: revoke execute
+  on purge_old_report_generations(int)/purge_faculty_request_ip(int) from public (obje language sql
+  bez security definer pa bezopasno; cron kao postgres i dalje radi). Time je P0-02 paket zatvoren.
 - Problem: .gitignore ne hvata obican .env; purge_old_report_generations i
   purge_faculty_request_ip nisu revocani od public/anon.
 - Lokacija: .gitignore:1-7; 0009_log_retention.sql:7; 0011_faculty_requests.sql:135

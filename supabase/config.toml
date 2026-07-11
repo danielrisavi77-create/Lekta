@@ -385,6 +385,36 @@ deno_version = 2
 # [edge_runtime.secrets]
 # secret_key = "env(SECRET_VALUE)"
 
+# Autorizacija po funkciji (security-04): zakovano ovdje umjesto ad-hoc --no-verify-jwt zastavica
+# pri deployu. verify_jwt=true => gateway trazi valjan Supabase JWT PRIJE funkcije; false => javno
+# dostupno, a funkcija se sama stiti (potpis webhooka, cron tajna, ili potpisani token iz e-maila).
+[functions.create-checkout]
+verify_jwt = true
+
+[functions.generate-report]
+verify_jwt = true
+
+[functions.redeem-referral-signup]
+verify_jwt = true
+
+[functions.file-guarantee-claim]
+verify_jwt = true
+
+[functions.faculty-request]
+verify_jwt = false
+
+[functions.send-reminders]
+verify_jwt = false
+
+[functions.unsubscribe-reminder]
+verify_jwt = false
+
+[functions.webhook-mor]
+verify_jwt = false
+
+[functions.health]
+verify_jwt = false
+
 [analytics]
 enabled = true
 port = 54327

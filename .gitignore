@@ -3,5 +3,8 @@ dist/
 scratchpad-dist-public/
 artifacts/
 *.local
+# Tajne (Supabase/MoR/Resend) nikad u repo (security-06). .env* pokriva sve varijante.
+.env
+.env.*
 .DS_Store
 __pycache__/
