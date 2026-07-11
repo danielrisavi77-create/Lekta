@@ -780,8 +780,18 @@ Datum: 2026-07-11.
 
 ## FAZA P3 (optimizacije)
 
-**BL-P3-01, Usporedna tablica bez zaglavlja po opsegu** (accessibility-07)
-- landing_usporedba.html:188-216; dodati scope=col, <th scope=row>, <caption>. Velicina: S
+**BL-P3-01, Usporedna tablica bez zaglavlja po opsegu** (accessibility-07) — GOTOVO (2026-07-11)
+- Problem: <table class="cmp"> u landing_usporedba.html bez scope, bez row-headera, bez caption
+  (WCAG 1.3.1) pa citac ekrana ne povezuje celije sa zaglavljima stupca/retka.
+- ISPORUCENO: 5 zaglavlja stupaca dobilo scope="col"; prvi (dimenzijski) stupac svakog od 7 redaka
+  konvertiran iz <td class="dim"> u <th scope="row" class="dim">; dodan vizualno skriven <caption>
+  (SR ga cita). KRITICNO: tablica ima slozeni responzivni layout (desktop td.dim = 250px bold stupac;
+  mobitel display:block card + :before labeli), pa su 3 CSS pravila prosirena da th dobije isti stil
+  kao td.dim (.cmp td.dim -> .cmp td.dim,.cmp th.dim x2; display:block set + table.cmp th) cime je
+  vizualni rezultat identican. Value celije ostaju <td>. Nativni CRLF ocuvan.
+- Guard test tests/comparison-table-a11y.test.ts (4): caption uz table, 5x scope=col, 7x th scope=row,
+  nijedan <td class="dim"> ne ostaje, CSS prosiren na th.dim/th.
+- Acceptance ispunjen: scope=col + th scope=row + caption. Velicina: S
 
 **BL-P3-02, Spinner gejtati prefers-reduced-motion** (accessibility-08)
 - index.html:62; @media reduce animation:none. Velicina: S

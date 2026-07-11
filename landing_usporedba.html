@@ -93,7 +93,7 @@ table.cmp{width:100%;border-collapse:collapse;min-width:760px}
 table.cmp th,table.cmp td{padding:15px 16px;border-top:1px solid var(--line);text-align:left;vertical-align:top;font-size:14px}
 table.cmp thead th{position:sticky;top:0;background:var(--panel-2);border-top:0;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:800}
 table.cmp thead th.lekta{color:var(--brand);font-family:var(--ink-serif);font-size:15px;text-transform:none;letter-spacing:0}
-table.cmp td.dim{font-weight:750;color:var(--text);width:250px}
+table.cmp td.dim,.cmp th.dim{font-weight:750;color:var(--text);width:250px}
 table.cmp td.lekta{background:color-mix(in srgb,var(--brand-soft) 55%,var(--panel));font-weight:650}
 table.cmp tbody tr:hover td{background:color-mix(in srgb,var(--panel-2) 40%,var(--panel))}
 table.cmp tbody tr:hover td.lekta{background:color-mix(in srgb,var(--brand-soft) 65%,var(--panel))}
@@ -134,9 +134,9 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
 @media(max-width:720px){
   table.cmp{min-width:0}
   table.cmp thead{display:none}
-  table.cmp,table.cmp tbody,table.cmp tr,table.cmp td{display:block;width:100%}
+  table.cmp,table.cmp tbody,table.cmp tr,table.cmp td,table.cmp th{display:block;width:100%}
   table.cmp tr{border-top:1px solid var(--line);padding:14px 2px}
-  table.cmp td.dim{width:auto;font-size:15px;font-weight:800;padding:0 0 8px}
+  table.cmp td.dim,.cmp th.dim{width:auto;font-size:15px;font-weight:800;padding:0 0 8px}
   table.cmp td:not(.dim){display:flex;justify-content:space-between;gap:14px;border:0;padding:6px 0;font-size:13px}
   table.cmp td:not(.dim):before{color:var(--muted);font-weight:700;flex:0 0 44%}
   table.cmp td:nth-child(2):before{content:"AI chat i savjet"}
@@ -204,60 +204,61 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
 <section class="section">
   <div class="shell card tbl-wrap">
     <table class="cmp">
+      <caption style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap">Usporedba pristupa provjeri akademskog rada: AI chat i savjet, alati za upute, ljudsko lektoriranje i Lekta.</caption>
       <thead>
         <tr>
-          <th>Što zapravo dobivaš</th>
-          <th>AI chat i savjet</th>
-          <th>Alati "uploadaj svoje upute"</th>
-          <th>Ljudsko lektoriranje</th>
-          <th class="lekta">Lekta</th>
+          <th scope="col">Što zapravo dobivaš</th>
+          <th scope="col">AI chat i savjet</th>
+          <th scope="col">Alati "uploadaj svoje upute"</th>
+          <th scope="col">Ljudsko lektoriranje</th>
+          <th scope="col" class="lekta">Lekta</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td class="dim">Verificirana pravila po instituciji (izvor, stranica, datum i akademska godina verifikacije)</td>
+          <th scope="row" class="dim">Verificirana pravila po instituciji (izvor, stranica, datum i akademska godina verifikacije)</th>
           <td><span class="no">Ne</span></td>
           <td><span class="no">Ne</span> (pravila nosi student pri svakom uploadu)</td>
           <td><span class="no">Ne</span> (znanje lektora, nedokumentirano)</td>
           <td class="lekta"><span class="yes">Da</span>, kurirana i verzionirana baza</td>
         </tr>
         <tr>
-          <td class="dim">Mjeri stvarni dokument (margine, stilovi, numeracija) umjesto savjeta</td>
+          <th scope="row" class="dim">Mjeri stvarni dokument (margine, stilovi, numeracija) umjesto savjeta</th>
           <td><span class="no">Ne</span>, samo tekstualni savjet</td>
           <td><span class="mid">Djelomično</span>, ovisi o AI ekstrakciji</td>
           <td><span class="yes">Da</span>, ručno</td>
           <td class="lekta"><span class="yes">Da</span>, deterministički DOCX sloj</td>
         </tr>
         <tr>
-          <td class="dim">Hrvatski kontekst + admin sloj (rokovi, obrasci, koraci predaje)</td>
+          <th scope="row" class="dim">Hrvatski kontekst + admin sloj (rokovi, obrasci, koraci predaje)</th>
           <td><span class="no">Ne</span></td>
           <td><span class="no">Ne</span></td>
           <td><span class="mid">Djelomično</span></td>
           <td class="lekta"><span class="yes">Da</span>, FPZG fusnote, pravno citiranje, rokovi</td>
         </tr>
         <tr>
-          <td class="dim">Brzina</td>
+          <th scope="row" class="dim">Brzina</th>
           <td>Sekunde (ali nepouzdano)</td>
           <td>Minute</td>
           <td>12 h do nekoliko dana</td>
           <td class="lekta"><span class="yes">Sekunde</span>, lokalno</td>
         </tr>
         <tr>
-          <td class="dim">Cijena provjere</td>
+          <th scope="row" class="dim">Cijena provjere</th>
           <td>Besplatno / pretplata</td>
           <td>Plaćeno po radu</td>
           <td>100+ EUR po radu</td>
           <td class="lekta">Od 3,99 EUR po radu <span class="mid">(uskoro)</span></td>
         </tr>
         <tr>
-          <td class="dim">Garancija vezana na točnost pravila</td>
+          <th scope="row" class="dim">Garancija vezana na točnost pravila</th>
           <td><span class="no">Ne</span></td>
           <td><span class="mid">Povrat bez mjerljivog kriterija</span></td>
           <td><span class="mid">Happiness garancija</span></td>
           <td class="lekta"><span class="yes">Da</span>, na profilima s potvrđenim službenim izvorom</td>
         </tr>
         <tr>
-          <td class="dim">Podatak ostaje na tvom uređaju</td>
+          <th scope="row" class="dim">Podatak ostaje na tvom uređaju</th>
           <td><span class="no">Ne</span></td>
           <td><span class="mid">Upload na server</span></td>
           <td><span class="mid">Upload na server</span></td>
