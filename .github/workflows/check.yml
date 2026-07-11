@@ -1,0 +1,29 @@
+# Build gate u CI (tvrdo pravilo iz CLAUDE.md: `npm run check` = tsc --noEmit && vitest run && vite build).
+# Do sada je jedini workflow bio docx-smoke (ponasanje motora); ovaj cuva da PR ne moze srusiti
+# tipove, testove ni build. Bez tajni i baze: analiza radi lokalno (@xmldom/xmldom, ista putanja
+# kao Web Worker), pa je gate potpuno reproducibilan na CI-u.
+name: check
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Instaliraj ovisnosti
+        run: npm ci
+
+      - name: Build gate (tsc + vitest + vite build)
+        run: npm run check
