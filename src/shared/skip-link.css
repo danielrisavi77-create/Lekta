@@ -1,0 +1,43 @@
+/* Pristupacni skip link (BL-P1-01): nevidljiv dok nije fokusiran, iskoci u gornji lijevi
+   kut na prvi Tab. Fallback vrijednosti pokrivaju stranice bez punog seta tema-tokena. */
+.skip-link {
+  position: fixed;
+  top: 0.6rem;
+  left: 0.6rem;
+  z-index: 100000;
+  padding: 0.62rem 1.05rem;
+  border-radius: 12px;
+  background: var(--accent, #33407e);
+  color: #fff;
+  font: 700 0.95rem/1.2 var(--font-sans, "Inter Variable", system-ui, sans-serif);
+  text-decoration: none;
+  box-shadow: 0 10px 24px rgba(20, 24, 45, 0.28);
+  transform: translateY(-180%);
+  transition: transform 0.18s ease;
+}
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: translateY(0);
+  outline: 3px solid var(--focus, #1e2333);
+  outline-offset: 2px;
+}
+/* Programski fokusiran <main> ne treba puni fokus-ring oko cijele stranice. */
+main[tabindex="-1"]:focus {
+  outline: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .skip-link {
+    transition: none;
+  }
+}
+@media (forced-colors: active) {
+  .skip-link {
+    background: Canvas;
+    color: CanvasText;
+    border: 1px solid CanvasText;
+  }
+  .skip-link:focus,
+  .skip-link:focus-visible {
+    outline: 3px solid CanvasText;
+  }
+}

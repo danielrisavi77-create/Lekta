@@ -17,11 +17,11 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import esbuild from 'esbuild';
+import { SITE_ORIGIN } from './site-origin.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 const DIST = path.join(ROOT, 'dist');
-const SITE_ORIGIN = process.env.LEKTA_SITE_ORIGIN || 'https://lektahr.netlify.app';
 
 if (!fs.existsSync(DIST)) {
   console.error('[generate-legal-pages] dist/ ne postoji; pokreni poslije `vite build`.');

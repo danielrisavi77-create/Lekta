@@ -7,6 +7,8 @@ import '@fontsource-variable/source-serif-4';
 import '@fontsource-variable/inter'; // self-hostan body sans (latin + latin-ext za hrvatski)
 import 'open-props/easings'; // samo easing krivulje (bez boja/sjena, da topla paleta ostane netaknuta)
 import './motion.css'; // dijeljeni sloj gibanja: tokeni, tekstura papira, View Transitions, tipografija
+import './skip-link.css'; // pristupacni "Preskoci na sadrzaj" (BL-P1-01)
+import { setupSkipLink } from './skip-link';
 import { createIcons, SunMoon, Menu, Lock, Upload, CheckCircle, AlertTriangle, AlertCircle, Info, SlidersHorizontal, ClipboardCheck, X, ChevronDown, Wrench, BadgeCheck } from 'lucide';
 
 const EASE_OUT = [0.22, 1, 0.36, 1];
@@ -167,7 +169,7 @@ function setupMobileNav() {
 }
 
 function boot() {
-  renderIcons(); setupReveal(); animateHero(); setupTilt(); setupNavTools(); setupThemeToggle(); setupMobileNav();
+  setupSkipLink(); renderIcons(); setupReveal(); animateHero(); setupTilt(); setupNavTools(); setupThemeToggle(); setupMobileNav();
 }
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', boot);

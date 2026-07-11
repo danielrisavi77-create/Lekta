@@ -20,6 +20,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import esbuild from 'esbuild';
+import { SITE_ORIGIN } from './site-origin.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -34,7 +35,7 @@ const SPECS_VERIFIED_DIR = path.join(ROOT, 'data/tools/citation-specs/verified')
 const OUT_DIR = path.join(ROOT, 'dist/alati');
 const CITATI_OUT_DIR = path.join(OUT_DIR, 'citati');
 
-const SITE_ORIGIN = process.env.LEKTA_SITE_ORIGIN || 'https://lekta.hr';
+// SITE_ORIGIN dolazi iz scripts/site-origin.mjs (jedan izvor, fallback lektahr.netlify.app).
 const GENERAL_TOOL_URL = `${SITE_ORIGIN}/citat.html`;
 
 function loadJson(filePath) {
