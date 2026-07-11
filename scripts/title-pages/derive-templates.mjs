@@ -19,6 +19,7 @@
 import { readFileSync, writeFileSync, readdirSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { CONSENSUS_SHARE, mode, voteAttr, groupFirstLineByRole, roleConventions } from './consensus-lib.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const EVIDENCE_DIR = join(ROOT, 'data', 'title-pages', 'evidence');
@@ -42,38 +43,28 @@ const mergeNullUnits = (() => {
   return value ? new Set(value.split(',')) : new Set();
 })();
 
+// --derived-only: regeneriraj/kreiraj samo DERIVED predloske; nikad ne diraj sluzbene
+// (preskoci mergeIntoOfficial). Za sigurnu ponovnu derivaciju uz ocuvane official zapise.
+const derivedOnly = process.argv.includes('--derived-only');
+
 const LEVEL_MAP = { zavrsni: 'final', diplomski: 'graduate', doktorski: 'doctoral', specijalisticki: 'specialist' };
-/** Uloge koje sudjeluju u rasporedu; unknown se ignorira. */
-const LAYOUT_ROLES = new Set(['university', 'faculty', 'study', 'author', 'title', 'subtitle', 'worktype', 'mentor', 'comentor', 'placeyear']);
-const CONSENSUS_SHARE = 2 / 3;
 
 const median = (xs) => {
   const s = [...xs].sort((a, b) => a - b);
   return s.length % 2 ? s[(s.length - 1) / 2] : (s[s.length / 2 - 1] + s[s.length / 2]) / 2;
 };
-/** Mod s determinstickim tie-breakom (leksikografski po JSON reprezentaciji). */
-function mode(values) {
-  const counts = new Map();
-  for (const v of values) {
-    const key = JSON.stringify(v);
-    counts.set(key, (counts.get(key) || 0) + 1);
-  }
-  const best = [...counts.entries()].sort((a, b) => b[1] - a[1] || (a[0] < b[0] ? -1 : 1))[0];
-  return { value: JSON.parse(best[0]), share: best[1] / values.length };
-}
 
-/** Konsenzusni elementi za skup uzoraka (>= 2 uzorka). */
-function consensusElements(samples) {
-  const byRole = new Map();
-  for (const sample of samples) {
-    const seen = new Set();
-    for (const line of sample.lines) {
-      if (!LAYOUT_ROLES.has(line.role) || seen.has(line.role)) continue;
-      seen.add(line.role); // po uzorku brojimo ulogu jednom (prva linija uloge nosi geometriju)
-      if (!byRole.has(line.role)) byRole.set(line.role, []);
-      byRole.get(line.role).push(line);
-    }
-  }
+/**
+ * Konsenzusni elementi za skup uzoraka (>= 2 uzorka). Raspored te font/velicina/verzal/
+ * poravnanje racunaju se na PROSLIJEDJENIM (po razini) uzorcima (legitimno se razlikuju po
+ * razini). Bold je UNIJA: postavlja se ako ga podrzi razina (per-level glas, neovisno o
+ * fontu) ILI konvencija cijelog fakulteta (roleConventions). Tako se ne gubi bold koji
+ * fakultet u pravilu koristi (tanak podskup po razini), a ni bold koji je stvar razine
+ * (npr. doktorski boldira naslov, diplomski ne) kad faculty-wide vote padne ispod praga.
+ * Kljucevi se dodaju kanonskim redoslijedom: font, sizePt, bold, uppercase, align.
+ */
+function consensusElements(samples, conventions) {
+  const byRole = groupFirstLineByRole(samples);
   const elements = [];
   for (const [role, lines] of byRole) {
     if (lines.length < 2) continue; // premalo za konsenzus
@@ -85,20 +76,26 @@ function consensusElements(samples) {
       confidence: Number((lines.length / samples.length).toFixed(2)),
       _yRel: median(lines.map((l) => l.yRel)),
     };
-    // Tipografija samo bez OCR fallbacka i uz >= 2/3 slaganja.
+    // Font/velicina/verzal/poravnanje po razini uz prepoznat font (kao i dosad).
     const typed = lines.filter((l) => l.font && l.font !== '?');
+    let fontVal, sizeVal, upperVal, alignVal;
     if (typed.length >= 2) {
-      const font = mode(typed.map((l) => l.font));
-      if (font.share >= CONSENSUS_SHARE) el.font = font.value;
-      const size = mode(typed.map((l) => Math.round(l.sizePt)));
-      if (size.share >= CONSENSUS_SHARE) el.sizePt = size.value;
-      const bold = mode(typed.map((l) => l.bold));
-      if (bold.share >= CONSENSUS_SHARE && bold.value) el.bold = true;
-      const upper = mode(typed.map((l) => l.uppercase));
-      if (upper.share >= CONSENSUS_SHARE && upper.value) el.uppercase = true;
-      const align = mode(typed.map((l) => l.align));
-      if (align.share >= CONSENSUS_SHARE && align.value !== 'center') el.align = align.value;
+      const f = mode(typed.map((l) => l.font));
+      if (f.share >= CONSENSUS_SHARE) fontVal = f.value;
+      const s = mode(typed.map((l) => Math.round(l.sizePt)));
+      if (s.share >= CONSENSUS_SHARE) sizeVal = s.value;
+      const u = mode(typed.map((l) => l.uppercase));
+      if (u.share >= CONSENSUS_SHARE && u.value) upperVal = true;
+      const a = mode(typed.map((l) => l.align));
+      if (a.share >= CONSENSUS_SHARE && a.value !== 'center') alignVal = a.value;
     }
+    // Bold = razina ILI konvencija fakulteta; ostalo po razini. Kanonski redoslijed kljuceva.
+    const boldByLevel = voteAttr(lines, (l) => !!l.bold) === true;
+    if (fontVal) el.font = fontVal;
+    if (sizeVal !== undefined) el.sizePt = sizeVal;
+    if (boldByLevel || conventions.get(role)?.bold) el.bold = true;
+    if (upperVal) el.uppercase = true;
+    if (alignVal) el.align = alignVal;
     elements.push(el);
   }
   elements.sort((a, b) => a._yRel - b._yRel);
@@ -184,12 +181,16 @@ for (const file of evidenceFiles) {
   const ev = JSON.parse(readFileSync(join(EVIDENCE_DIR, file), 'utf8'));
   if (unitFilter && !unitFilter.has(ev.unitId)) continue;
 
+  // Konvencije (bold/uppercase) glasaju se jednom, na svim ne-OCR uzorcima jedinice
+  // (stil fakulteta, ne razine); raspored, font i velicina ostaju po razini nize.
+  const unitConv = roleConventions(ev.samples.filter((s) => !s.ocrFallback));
+
   // Eksplicitni level=null merge (jednoformatni unit, razina nebitna): svi ne-OCR uzorci.
   if (mergeNullUnits.has(ev.unitId)) {
     const samples = ev.samples.filter((s) => !s.ocrFallback);
     const hasExisting = templates.some((t) => t.unitId === ev.unitId);
     if (!hasExisting && samples.length >= 2) {
-      const consensus = consensusElements(samples);
+      const consensus = consensusElements(samples, unitConv);
       if (consensus.length) {
         const pids = samples.map((s) => s.pid).sort();
         templates.push({
@@ -226,7 +227,7 @@ for (const file of evidenceFiles) {
   let producedForUnit = 0;
   for (const [level, samples] of [...byLevel.entries()].sort()) {
     if (samples.length < 2) continue;
-    const consensus = consensusElements(samples);
+    const consensus = consensusElements(samples, unitConv);
     if (!consensus.length) continue;
     const pids = samples.map((s) => s.pid).sort();
 
@@ -234,6 +235,8 @@ for (const file of evidenceFiles) {
       (t) => t.unitId === ev.unitId && (t.level === level || t.level === null) && t.provenance.status === 'official',
     );
     if (official) {
+      // --derived-only: ne diraj sluzbene predloske (ne popunjavaj njihove rupe iz teza).
+      if (derivedOnly) continue;
       mergeIntoOfficial(official, consensus, pids);
       corroborated++;
       continue;
@@ -271,7 +274,7 @@ for (const file of evidenceFiles) {
     const allUsable = [...byLevel.values()].flat();
     const hasExisting = templates.some((t) => t.unitId === ev.unitId);
     if (!hasExisting && allUsable.length >= 2) {
-      const consensus = consensusElements(allUsable);
+      const consensus = consensusElements(allUsable, unitConv);
       if (consensus.length) {
         const pids = allUsable.map((s) => s.pid).sort();
         templates.push({

@@ -11,7 +11,7 @@
         "adu:33",
         "adu:39"
       ],
-      "verifiedAt": "2026-07-10"
+      "verifiedAt": "2026-07-11"
     },
     "status": "verified",
     "elements": [
@@ -23,6 +23,7 @@
         "confidence": 1,
         "font": "Times New Roman",
         "sizePt": 20,
+        "bold": true,
         "uppercase": true
       },
       {
@@ -39,6 +40,7 @@
         "confidence": 1,
         "font": "Times New Roman",
         "sizePt": 22,
+        "bold": true,
         "uppercase": true
       },
       {
@@ -57,7 +59,8 @@
         "group": 2,
         "confidence": 1,
         "font": "Times New Roman",
-        "sizePt": 20
+        "sizePt": 20,
+        "bold": true
       }
     ],
     "derivation": {
@@ -462,7 +465,7 @@
         "alu:209",
         "alu:228"
       ],
-      "verifiedAt": "2026-07-10"
+      "verifiedAt": "2026-07-11"
     },
     "status": "verified",
     "elements": [
@@ -509,6 +512,7 @@
         "group": 1,
         "confidence": 1,
         "font": "Times New Roman",
+        "bold": true,
         "uppercase": true
       },
       {
@@ -3895,7 +3899,7 @@
         "unipu:123",
         "unipu:130"
       ],
-      "verifiedAt": "2026-07-10"
+      "verifiedAt": "2026-07-11"
     },
     "status": "verified",
     "elements": [
@@ -3927,7 +3931,8 @@
         "elementProvenance": "thesis-consensus",
         "group": 1,
         "confidence": 1,
-        "font": "Times New Roman"
+        "font": "Times New Roman",
+        "bold": true
       },
       {
         "role": "worktype",
@@ -4772,7 +4777,7 @@
         "ffst:585",
         "ffst:640"
       ],
-      "verifiedAt": "2026-07-10"
+      "verifiedAt": "2026-07-11"
     },
     "status": "verified",
     "elements": [
@@ -4807,7 +4812,8 @@
         "group": 1,
         "confidence": 1,
         "font": "Times New Roman",
-        "sizePt": 16
+        "sizePt": 16,
+        "bold": true
       },
       {
         "role": "worktype",
@@ -4817,6 +4823,7 @@
         "confidence": 1,
         "font": "Times New Roman",
         "sizePt": 16,
+        "bold": true,
         "uppercase": true
       },
       {
@@ -7367,7 +7374,7 @@
         "fsb:5282",
         "fsb:5283"
       ],
-      "verifiedAt": "2026-07-10"
+      "verifiedAt": "2026-07-11"
     },
     "status": "verified",
     "elements": [
@@ -7403,6 +7410,7 @@
         "group": 2,
         "confidence": 1,
         "sizePt": 16,
+        "bold": true,
         "uppercase": true
       },
       {
@@ -8562,7 +8570,7 @@
         "grf:3569",
         "grf:3570"
       ],
-      "verifiedAt": "2026-07-10"
+      "verifiedAt": "2026-07-11"
     },
     "status": "verified",
     "elements": [
@@ -8601,6 +8609,7 @@
         "group": 2,
         "confidence": 0.67,
         "sizePt": 16,
+        "bold": true,
         "uppercase": true
       },
       {
@@ -8844,7 +8853,7 @@
         "infri:179",
         "infri:205"
       ],
-      "verifiedAt": "2026-07-10"
+      "verifiedAt": "2026-07-11"
     },
     "status": "verified",
     "elements": [
@@ -8862,7 +8871,8 @@
         "elementProvenance": "thesis-consensus",
         "group": 0,
         "confidence": 1,
-        "font": "Times New Roman"
+        "font": "Times New Roman",
+        "bold": true
       },
       {
         "role": "author",
@@ -8995,7 +9005,7 @@
         "kbf:6",
         "kbf:8"
       ],
-      "verifiedAt": "2026-07-10"
+      "verifiedAt": "2026-07-11"
     },
     "status": "verified",
     "elements": [
@@ -9024,6 +9034,7 @@
         "confidence": 1,
         "font": "Arial",
         "sizePt": 16,
+        "bold": true,
         "uppercase": true
       },
       {
@@ -9032,7 +9043,8 @@
         "elementProvenance": "thesis-consensus",
         "group": 2,
         "confidence": 1,
-        "font": "Arial"
+        "font": "Arial",
+        "bold": true
       }
     ],
     "derivation": {
@@ -11517,7 +11529,7 @@
         "unisb:791",
         "unisb:792"
       ],
-      "verifiedAt": "2026-07-10"
+      "verifiedAt": "2026-07-11"
     },
     "status": "verified",
     "elements": [
@@ -11555,7 +11567,8 @@
         "role": "author",
         "required": false,
         "elementProvenance": "thesis-consensus",
-        "group": 1
+        "group": 1,
+        "bold": true
       },
       {
         "role": "title",
@@ -14612,7 +14625,7 @@
         "sumfak:3400",
         "sumfak:3500"
       ],
-      "verifiedAt": "2026-07-10"
+      "verifiedAt": "2026-07-11"
     },
     "status": "verified",
     "elements": [
@@ -14631,6 +14644,7 @@
         "elementProvenance": "thesis-consensus",
         "group": 0,
         "confidence": 0.67,
+        "bold": true,
         "uppercase": true
       },
       {
@@ -14693,7 +14707,7 @@
         "unisb:137",
         "unisb:2076"
       ],
-      "verifiedAt": "2026-07-10"
+      "verifiedAt": "2026-07-11"
     },
     "status": "verified",
     "elements": [
@@ -14722,7 +14736,8 @@
         "role": "author",
         "required": false,
         "elementProvenance": "thesis-consensus",
-        "group": 0
+        "group": 0,
+        "bold": true
       },
       {
         "role": "title",
@@ -15591,7 +15606,7 @@
         "ufzg:3020",
         "ufzg:3080"
       ],
-      "verifiedAt": "2026-07-10"
+      "verifiedAt": "2026-07-11"
     },
     "status": "verified",
     "elements": [
@@ -15623,6 +15638,7 @@
         "confidence": 1,
         "font": "Times New Roman",
         "sizePt": 14,
+        "bold": true,
         "uppercase": true
       },
       {
@@ -15638,7 +15654,8 @@
         "group": 1,
         "confidence": 1,
         "font": "Times New Roman",
-        "sizePt": 16
+        "sizePt": 16,
+        "bold": true
       },
       {
         "role": "worktype",
