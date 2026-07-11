@@ -85,8 +85,12 @@ Datum: 2026-07-11.
 
 ### P0-02 Tajne i RLS
 
-**BL-P0-02-1, send-reminders autorizacija + per-slot sent-marker**
+**BL-P0-02-1, send-reminders autorizacija + per-slot sent-marker** — GOTOVO (commit 20964ca)
 - Prioritet: P0 (izvorni security-01 P1, CONFIRMED)
+- Status: RIJESENO. _shared/cron-auth.ts (Bearer + konstantno-vremenska usporedba, fail-closed)
+  gate prije ikakvog rada; _shared/slot-reminder.ts cista odluka + migracija 0014 marker
+  (document_slots.slot_expiry_reminder_sent_at); 11 testova; cron/GO_LIVE na REMINDER_CRON_SECRET.
+  npm run check zelen (828 testova). Feature ostaje INERT dok vlasnik ne postavi tajne.
 - Problem: handler provjerava samo POST pa salje preko Resenda i pise service_role kljucem;
   deployan verify_jwt=false, potpuno otvoren; slot grana bez sent-markera pa ponavlja slanje.
 - Lokacija: supabase/functions/send-reminders/index.ts:170-173, :25, :164;
