@@ -9,7 +9,7 @@
 // Odluke (potpis, parsiranje, rok, kupon) su u testiranom coreu src/report/webhook.ts.
 //
 // deno-lint-ignore-file no-explicit-any
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 import {
   verifyLemonSignature,
   parseLemonEvent,

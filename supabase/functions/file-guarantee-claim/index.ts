@@ -4,7 +4,7 @@
 // src/report/guarantee.ts (canFileGuaranteeClaim). Auth JWT obavezan.
 //
 // deno-lint-ignore-file no-explicit-any
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 import { canFileGuaranteeClaim } from '../../../src/report/guarantee.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;

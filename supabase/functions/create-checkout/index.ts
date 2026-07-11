@@ -7,7 +7,7 @@
 // Tanki omotac: odluka i tijelo LS poziva su u testiranom coreu src/report/checkout.ts.
 //
 // deno-lint-ignore-file no-explicit-any
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 import { resolveCheckout, buildLemonSqueezyCheckout } from '../../../src/report/checkout.ts';
 import { mapProductRow } from '../../../src/catalog/products-catalog.ts';
 

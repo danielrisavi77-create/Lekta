@@ -17,7 +17,7 @@
 //
 // Deploy: supabase functions deploy send-reminders
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 import { signUnsubscribeToken } from '../_shared/reminder-token.ts';
 import { isCronAuthorized } from '../_shared/cron-auth.ts';
 import { shouldSendSlotReminder } from '../_shared/slot-reminder.ts';

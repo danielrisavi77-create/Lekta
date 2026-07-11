@@ -58,6 +58,19 @@ supabase functions deploy webhook-mor
 supabase functions deploy file-guarantee-claim
 ```
 
+**Lanac nabave (dependencies-01):** svi Edge importi `@supabase/supabase-js` su sada EKSAKTNO
+pinani (`@2.110.2`), ne više goli `@2`, pa deploy ne drift-a na novu 2.x verziju. Guard test
+`tests/supabase-edge-imports.test.ts` pada ako se goli major vrati. Za PUNI integritet (kriptografski
+lock transitivnih ovisnosti dohvacenih s esm.sh) generiraj lockfile prije deploya:
+
+```
+cd supabase/functions
+deno cache --lock=deno.lock --lock-write --allow-import send-reminders/index.ts create-checkout/index.ts webhook-mor/index.ts generate-report/index.ts file-guarantee-claim/index.ts faculty-request/index.ts unsubscribe-reminder/index.ts redeem-referral-signup/index.ts
+```
+
+Zatim commitaj `deno.lock`; Supabase deploy ga postuje. Ovaj korak trazi Deno CLI pa se radi uz
+ostatak deploya (ne moze se odraditi iz Node build okoline).
+
 Env varijable (Supabase → Edge Functions → Secrets):
 
 - `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_ANON_KEY`

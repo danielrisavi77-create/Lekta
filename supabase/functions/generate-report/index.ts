@@ -8,7 +8,7 @@
 // Logika je verificirana preko cistih modula; ovdje je samo glue (HTTP, JWT, SQL).
 //
 // deno-lint-ignore-file no-explicit-any
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 
 import { computeFingerprint } from '../../../src/fingerprint/fingerprint.ts';
 import { isReportWorkType } from '../../../src/report/pricing.ts';

@@ -8,7 +8,7 @@
 // Deploy: supabase functions deploy unsubscribe-reminder --no-verify-jwt
 // (--no-verify-jwt je nuzan jer korisnik nije prijavljen kad klikne link)
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 import { verifyUnsubscribeToken } from '../_shared/reminder-token.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;

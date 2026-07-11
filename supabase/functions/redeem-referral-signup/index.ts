@@ -7,7 +7,7 @@
 // Deploy: supabase functions deploy redeem-referral-signup   (BEZ --no-verify-jwt: treba JWT)
 // Env: SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY, IP_HASH_SALT
 
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 
 import { hashClientIp } from '../_shared/hash-ip.ts';
 

@@ -13,7 +13,7 @@
 // (0006) i referralRewardEntitlement (webhook-mor). NAMJERNO ne coupon_grants: to je popust-kupon
 // tablica (code NOT NULL, reason CHECK), a generate-report gleda iskljucivo entitlements/slots.
 
-import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 
 const REWARD_WINDOW_DAYS = 90;
 const isoAfterDays = (days: number) => new Date(Date.now() + days * 86_400_000).toISOString();

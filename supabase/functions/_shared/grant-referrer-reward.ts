@@ -15,7 +15,7 @@
 // buyerOrderId se biljezi u converted_order_id da refund te kupnje (webhook-mor refund grana)
 // moze povuci nepotrosenu nagradu preporucitelju.
 
-import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import type { SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 
 const MAX_REWARDED_PER_MONTH = 10;
 const REWARD_WINDOW_DAYS = 90;
