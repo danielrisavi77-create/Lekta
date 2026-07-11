@@ -8,7 +8,7 @@ import { describe, it, expect } from 'vitest';
 
 import manifest from '../data/manifest.json';
 
-import rawVerified from '../data/profiles/verified-profiles.json';
+import rawIndex from '../data/profiles/verified-profiles-index.json';
 import rawLegal from '../data/profiles/legal-departments.json';
 import rawCatalog from '../data/catalog/zagreb-catalog.json';
 import rawMatrix from '../data/coverage/institutional-coverage-matrix.json';
@@ -31,8 +31,8 @@ function manifestEntries(name: string): number {
 }
 
 describe('data loaderi: faithfulness (deep-equal s JSON-om)', () => {
-  it('verificirani profili = raw JSON', () => {
-    expect(VERIFIED_PROFILE_REGISTRY).toEqual(rawVerified);
+  it('verificirani profili = light indeks (teska pravila su lazy, vidi verified-split.test)', () => {
+    expect(VERIFIED_PROFILE_REGISTRY).toEqual(rawIndex);
   });
   it('pravne katedre = raw JSON', () => {
     expect(LEGAL_DEPARTMENT_REGISTRY).toEqual(rawLegal);

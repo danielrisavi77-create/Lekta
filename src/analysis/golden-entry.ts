@@ -10,6 +10,15 @@ import { analyzeDocx } from './analyze-docx';
 import { VERIFIED_PROFILE_REGISTRY, PROFILE_STATUS } from '../profiles/profile-registry';
 import { normalizeCheckFlags } from '../profiles/profile-baseline';
 import { citationMeta } from '../citations/citation-meta';
+import heavyProfiles from '../../data/profiles/verified-profiles-heavy.json';
+
+// Golden/sinteticki harness NIJE u app bundleu: teska profilna pravila su u zivom app-u lazy
+// (profile-registry.ensureProfileRules), ali resolveProfile mora raditi SINKRONO. Ovdje ih spajamo
+// EAGER u registry pri ucitavanju modula (mutacija in place), pa golden testovi vide pun profil.
+for (const entry of VERIFIED_PROFILE_REGISTRY as unknown as Array<{ id: string }>) {
+  const full = (heavyProfiles as Record<string, object>)[entry.id];
+  if (full) Object.assign(entry, full);
+}
 
 /** Razrjesi profilni objekt koji analyzeDocx ocekuje (spljosteni rules + metapodaci). */
 export function resolveProfile(profileId: string) {

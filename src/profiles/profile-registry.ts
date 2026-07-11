@@ -4,7 +4,7 @@
  * po obitelji studija. Tanak prolaz: import + tipiziranje, bez logike. Rewiring
  * src/main.ts da cita odavde je zaseban korak (uz faithfulness test).
  */
-import rawVerified from '../../data/profiles/verified-profiles.json';
+import rawIndex from '../../data/profiles/verified-profiles-index.json';
 import rawLegal from '../../data/profiles/legal-departments.json';
 import rawAuthority from '../../data/profiles/profile-authority.json';
 import rawBase from '../../data/profiles/base-profiles.json';
@@ -21,7 +21,35 @@ import type {
   DraftsStagingFile,
 } from './profile-schema';
 
-export const VERIFIED_PROFILE_REGISTRY = rawVerified as unknown as VerifiedProfile[];
+/**
+ * VERIFIED_PROFILE_REGISTRY je LAGANI indeks (perf: skini ~90 KB gzip s glavnog chunka). Nosi samo
+ * polja koja picker/hero citaju PRIJE odabira profila (id, unitId, programs, workTypes, status,
+ * variant + fieldValidation.sample + rules.recommendedCitation/citationLocked). Teska polja (puna
+ * rules, fieldValidation, sources, facts, scopes...) dolaze LIJENO preko ensureProfileRules(), koji
+ * dinamicki ucita verified-profiles-heavy.json i spoji ga U ISTE objekte registryja (mutacija in
+ * place, pa vec dohvaceni `definition` referenci vide pravila). Izvor: scripts/gen-verified-split.mjs;
+ * drift hvata tests/verified-split.test.ts.
+ */
+export const VERIFIED_PROFILE_REGISTRY = rawIndex as unknown as VerifiedProfile[];
+
+let _rulesReady: Promise<void> | null = null;
+/**
+ * Lijeno ucita teska profilna pravila (verified-profiles-heavy.json) i spoji ih u registry.
+ * Memoizirano: heavy chunk se dohvaca i mergea tocno jednom. Pozovi (i await) PRIJE citanja
+ * definition.rules/.fieldValidation/.sources (currentProfile, analiza). Picker/hero rade i bez ovoga.
+ */
+export function ensureProfileRules(): Promise<void> {
+  if (!_rulesReady) {
+    _rulesReady = import('../../data/profiles/verified-profiles-heavy.json').then((mod) => {
+      const heavy = ((mod as { default?: unknown }).default ?? mod) as Record<string, VerifiedProfile>;
+      for (const entry of VERIFIED_PROFILE_REGISTRY) {
+        const full = heavy[entry.id];
+        if (full) Object.assign(entry, full);
+      }
+    });
+  }
+  return _rulesReady;
+}
 
 export const LEGAL_DEPARTMENT_REGISTRY = rawLegal as unknown as LegalDepartment[];
 

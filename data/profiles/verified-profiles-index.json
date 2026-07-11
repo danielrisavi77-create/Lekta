@@ -1,0 +1,7804 @@
+[
+  {
+    "id": "fpzg-politologija-zavrsni",
+    "unitId": "fpzg",
+    "programs": [
+      "Prijediplomski studij Politologija"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "verified",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 1,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2022,
+          2023,
+          2024,
+          2025,
+          2026
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "fpzg"
+    }
+  },
+  {
+    "id": "fpzg-novinarstvo-zavrsni-tekst",
+    "unitId": "fpzg",
+    "programs": [
+      "Prijediplomski studij Novinarstvo"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "verified",
+    "variant": "text",
+    "variantLabel": "Tekstualni završni rad",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2022,
+          2023,
+          2024,
+          2025,
+          2026
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "fpzg"
+    }
+  },
+  {
+    "id": "fpzg-novinarstvo-zavrsni-av",
+    "unitId": "fpzg",
+    "programs": [
+      "Prijediplomski studij Novinarstvo"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "variant": "av",
+    "variantLabel": "Audiovizualni završni rad",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "fpzg"
+    }
+  },
+  {
+    "id": "fpzg-politologija-diplomski",
+    "unitId": "fpzg",
+    "programs": [
+      "Diplomski studij Politologija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "verified",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 2,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2022,
+          2023,
+          2024,
+          2025,
+          2026
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "fpzg"
+    }
+  },
+  {
+    "id": "fpzg-nacionalna-sigurnost-diplomski",
+    "unitId": "fpzg",
+    "programs": [
+      "Diplomski studij Politologija – Nacionalna sigurnost"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "verified",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2023,
+          2024,
+          2025,
+          2026
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "fpzg"
+    }
+  },
+  {
+    "id": "fpzg-novinarstvo-diplomski",
+    "unitId": "fpzg",
+    "programs": [
+      "Diplomski studij Novinarstvo"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "verified",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 1,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2022,
+          2023,
+          2024,
+          2025,
+          2026
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "fpzg"
+    }
+  },
+  {
+    "id": "fpzg-mes-master-thesis",
+    "unitId": "fpzg",
+    "programs": [
+      "Master of European Studies"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "verified",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 1,
+        "metadataSpotChecks": 0,
+        "years": [
+          2020,
+          2026
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "fpzg"
+    }
+  },
+  {
+    "id": "fpzg-specijalisticki-odnosi-s-javnoscu",
+    "unitId": "fpzg",
+    "programs": [
+      "Sveučilišni specijalistički studij Odnosi s javnošću"
+    ],
+    "workTypes": [
+      "specialist"
+    ],
+    "status": "verified",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2023,
+          2024,
+          2026
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "fpzg"
+    }
+  },
+  {
+    "id": "fpzg-specijalisticki-prilagodba-eu",
+    "unitId": "fpzg",
+    "programs": [
+      "Sveučilišni specijalistički studij Prilagodba Europskoj uniji: upravljanje projektima i korištenje fondova i programa EU"
+    ],
+    "workTypes": [
+      "specialist"
+    ],
+    "status": "verified",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2023,
+          2024,
+          2026
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "fpzg"
+    }
+  },
+  {
+    "id": "fpzg-specijalisticki-sigurnosna-politika-rh",
+    "unitId": "fpzg",
+    "programs": [
+      "Sveučilišni specijalistički studij Sigurnosna politika Republike Hrvatske"
+    ],
+    "workTypes": [
+      "specialist"
+    ],
+    "status": "verified",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2023,
+          2024,
+          2025,
+          2026
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "fpzg"
+    }
+  },
+  {
+    "id": "fpzg-specijalisticki-vanjska-politika-diplomacija",
+    "unitId": "fpzg",
+    "programs": [
+      "Sveučilišni specijalistički studij Vanjska politika i diplomacija"
+    ],
+    "workTypes": [
+      "specialist"
+    ],
+    "status": "verified",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2023,
+          2024,
+          2026
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "fpzg"
+    }
+  },
+  {
+    "id": "fpzg-doktorski-politologija",
+    "unitId": "fpzg",
+    "programs": [
+      "Doktorski studij Politologija"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "verified",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "fpzg"
+    }
+  },
+  {
+    "id": "fpzg-opci-akademski-rad",
+    "unitId": "fpzg",
+    "programs": [
+      "Prijediplomski studij Politologija",
+      "Prijediplomski studij Novinarstvo",
+      "Diplomski studij Politologija",
+      "Diplomski studij Politologija – Nacionalna sigurnost",
+      "Diplomski studij Novinarstvo",
+      "Master of European Studies",
+      "Sveučilišni specijalistički studij Odnosi s javnošću",
+      "Sveučilišni specijalistički studij Prilagodba Europskoj uniji: upravljanje projektima i korištenje fondova i programa EU",
+      "Sveučilišni specijalistički studij Sigurnosna politika Republike Hrvatske",
+      "Sveučilišni specijalistički studij Vanjska politika i diplomacija",
+      "Doktorski studij Politologija",
+      "Opći FPZG profil"
+    ],
+    "workTypes": [
+      "seminar",
+      "project",
+      "article"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "fpzg"
+    }
+  },
+  {
+    "id": "pravo-integrirani-diplomski",
+    "unitId": "pravo",
+    "programs": [
+      "Sveučilišni integrirani prijediplomski i diplomski studij Pravo"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "verified",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "pravo-fusnote"
+    }
+  },
+  {
+    "id": "pravo-javna-uprava-prijediplomski",
+    "unitId": "pravo",
+    "programs": [
+      "Stručni prijediplomski studij Javna uprava"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "verified",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "pravo-fusnote"
+    }
+  },
+  {
+    "id": "pravo-javna-uprava-diplomski",
+    "unitId": "pravo",
+    "programs": [
+      "Stručni diplomski studij Javna uprava"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "verified",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "pravo-fusnote"
+    }
+  },
+  {
+    "id": "pravo-porezni-prijediplomski",
+    "unitId": "pravo",
+    "programs": [
+      "Stručni prijediplomski Porezni studij"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "verified",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "pravo-fusnote"
+    }
+  },
+  {
+    "id": "pravo-socijalni-rad-zavrsni",
+    "unitId": "pravo",
+    "programs": [
+      "Sveučilišni prijediplomski studij Socijalni rad"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "verified",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2024,
+          2025
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "pravo-social-author"
+    }
+  },
+  {
+    "id": "pravo-socijalni-rad-diplomski",
+    "unitId": "pravo",
+    "programs": [
+      "Sveučilišni diplomski studij Socijalni rad"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "verified",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2023,
+          2024,
+          2025
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "pravo-social-author"
+    }
+  },
+  {
+    "id": "pravo-socijalna-politika-diplomski",
+    "unitId": "pravo",
+    "programs": [
+      "Sveučilišni diplomski studij Socijalna politika"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "verified",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "pravo-social-author"
+    }
+  },
+  {
+    "id": "pravo-opci-pravni-akademski-rad",
+    "unitId": "pravo",
+    "programs": [
+      "Sveučilišni integrirani prijediplomski i diplomski studij Pravo",
+      "Stručni prijediplomski studij Javna uprava",
+      "Stručni diplomski studij Javna uprava",
+      "Stručni prijediplomski Porezni studij",
+      "Opći profil Pravnog fakulteta"
+    ],
+    "workTypes": [
+      "seminar",
+      "project",
+      "article"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "pravo-fusnote"
+    }
+  },
+  {
+    "id": "pravo-socijalni-opci-akademski-rad",
+    "unitId": "pravo",
+    "programs": [
+      "Sveučilišni prijediplomski studij Socijalni rad",
+      "Sveučilišni diplomski studij Socijalni rad",
+      "Sveučilišni diplomski studij Socijalna politika"
+    ],
+    "workTypes": [
+      "seminar",
+      "project",
+      "article"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "pravo-social-author"
+    }
+  },
+  {
+    "id": "pravo-specijalisticki-pravni-opci",
+    "unitId": "pravo",
+    "programs": [
+      "Sveučilišni specijalistički studij Europsko pravo",
+      "Sveučilišni specijalistički studij Građanskopravne i obiteljskopravne znanosti",
+      "Sveučilišni specijalistički studij Kaznenopravne znanosti",
+      "Sveučilišni specijalistički studij Fiskalni sustav i fiskalna politika",
+      "Sveučilišni specijalistički studij Javno pravo i javna uprava",
+      "Sveučilišni specijalistički studij Međunarodno javno i međunarodno privatno pravo",
+      "Sveučilišni specijalistički studij Pravo društava i trgovačko pravo"
+    ],
+    "workTypes": [
+      "specialist"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "pravo-fusnote"
+    }
+  },
+  {
+    "id": "pravo-doktorski-pravne-znanosti",
+    "unitId": "pravo",
+    "programs": [
+      "Doktorski studij Pravne znanosti"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "pravo-fusnote"
+    }
+  },
+  {
+    "id": "pravo-socijalne-djelatnosti-specijalisticki",
+    "unitId": "pravo",
+    "programs": [
+      "Sveučilišni specijalistički studij Obiteljska medijacija",
+      "Sveučilišni specijalistički studij Psihosocijalni pristup u socijalnom radu",
+      "Sveučilišni specijalistički studij Socijalna politika",
+      "Sveučilišni specijalistički studij Supervizija psihosocijalnog rada"
+    ],
+    "workTypes": [
+      "specialist"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "pravo-social-author"
+    }
+  },
+  {
+    "id": "pravo-socijalne-djelatnosti-doktorski",
+    "unitId": "pravo",
+    "programs": [
+      "Doktorski studij Socijalni rad i socijalna politika"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "pravo-social-author"
+    }
+  },
+  {
+    "id": "agr-diplomski",
+    "unitId": "agr",
+    "programs": [
+      "Diplomski studiji Agronomskog fakulteta"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2021,
+          2022,
+          2023,
+          2026
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "agr-zavrsni",
+    "unitId": "agr",
+    "programs": [
+      "Prijediplomski studiji Agronomskog fakulteta (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2022,
+          2023,
+          2025,
+          2026
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "agr-doktorski",
+    "unitId": "agr",
+    "programs": [
+      "Doktorski studij Agronomskog fakulteta"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "efzg-zavrsni",
+    "unitId": "efzg",
+    "programs": [
+      "Prijediplomski studiji Ekonomskog fakulteta (zavrsni rad)",
+      "Poslovna ekonomija",
+      "Ekonomija"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2021,
+          2022,
+          2026
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "efzg-specijalisticki",
+    "unitId": "efzg",
+    "programs": [
+      "Sveučilišni specijalistički studiji"
+    ],
+    "workTypes": [
+      "specialist"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "efzg-strucni-racunovodstvo",
+    "unitId": "efzg",
+    "programs": [
+      "Stručni diplomski studij Računovodstvo, financijsko izvještavanje i revizija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "efzg-diplomski",
+    "unitId": "efzg",
+    "programs": [
+      "Diplomski studiji Ekonomskog fakulteta",
+      "Poslovna ekonomija",
+      "Ekonomija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2021,
+          2022
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "fsb-diplomski",
+    "unitId": "fsb",
+    "programs": [
+      "Diplomski studiji Fakulteta strojarstva i brodogradnje"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2019,
+          2021,
+          2022
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "ieee"
+    }
+  },
+  {
+    "id": "fsb-zavrsni",
+    "unitId": "fsb",
+    "programs": [
+      "Prijediplomski studiji Fakulteta strojarstva i brodogradnje (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016,
+          2022
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "ieee"
+    }
+  },
+  {
+    "id": "fer-diplomski",
+    "unitId": "fer",
+    "programs": [
+      "Diplomski studiji Fakulteta elektrotehnike i racunarstva"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 1,
+        "metadataSpotChecks": 0,
+        "years": [
+          2018
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "ieee"
+    }
+  },
+  {
+    "id": "fer-zavrsni",
+    "unitId": "fer",
+    "programs": [
+      "Prijediplomski studiji Fakulteta elektrotehnike i racunarstva (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 1,
+        "metadataSpotChecks": 0,
+        "years": [
+          2022
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "ieee"
+    }
+  },
+  {
+    "id": "mef-diplomski",
+    "unitId": "mef",
+    "programs": [
+      "Diplomski studiji Medicinskog fakulteta"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2021
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "vef-diplomski",
+    "unitId": "vef",
+    "programs": [
+      "Diplomski studiji Veterinarskog fakulteta Sveucilista u Zagrebu"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2023,
+          2024,
+          2025,
+          2026
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "kif-diplomski",
+    "unitId": "kif",
+    "programs": [
+      "Diplomski studiji Kineziološkog fakulteta"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2024,
+          2025,
+          2026
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "apa7"
+    }
+  },
+  {
+    "id": "sumfak-diplomski",
+    "unitId": "sumfak",
+    "programs": [
+      "Diplomski studiji Fakulteta šumarstva i drvne tehnologije"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2022,
+          2023,
+          2025,
+          2026
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "sumfak-zavrsni",
+    "unitId": "sumfak",
+    "programs": [
+      "Prijediplomski studiji Fakulteta šumarstva i drvne tehnologije (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2023,
+          2024,
+          2026
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "ttf-diplomski",
+    "unitId": "ttf",
+    "programs": [
+      "Diplomski studiji Tekstilno-tehnološkog fakulteta"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2020,
+          2021
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "vancouver"
+    }
+  },
+  {
+    "id": "ttf-zavrsni",
+    "unitId": "ttf",
+    "programs": [
+      "Prijediplomski studiji Tekstilno-tehnološkog fakulteta (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2020,
+          2021,
+          2022
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "vancouver"
+    }
+  },
+  {
+    "id": "grad-diplomski",
+    "unitId": "grad",
+    "programs": [
+      "Diplomski studiji Građevinskog fakulteta"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2024,
+          2025
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "ieee"
+    }
+  },
+  {
+    "id": "grad-zavrsni",
+    "unitId": "grad",
+    "programs": [
+      "Prijediplomski studiji Građevinskog fakulteta (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2024,
+          2025
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "ieee"
+    }
+  },
+  {
+    "id": "ffzg-informacijske-zavrsni",
+    "unitId": "ffzg",
+    "programs": [
+      "Informacijske i komunikacijske znanosti"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "ffzg-filozofija-diplomski",
+    "unitId": "ffzg",
+    "programs": [
+      "Filozofija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016,
+          2017
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "chicago-notes"
+    }
+  },
+  {
+    "id": "pmf-geografija-diplomski",
+    "unitId": "pmf",
+    "programs": [
+      "Geografija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "fbf-specijalisticki",
+    "unitId": "fbf",
+    "programs": [
+      "Poslijediplomski specijalisticki studiji Farmaceutsko-biokemijskog fakulteta"
+    ],
+    "workTypes": [
+      "specialist"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2022,
+          2023
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "vancouver"
+    }
+  },
+  {
+    "id": "sfzg-diplomski",
+    "unitId": "sfzg",
+    "programs": [
+      "Diplomski studiji Stomatološkog fakulteta"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2019,
+          2021
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "vancouver"
+    }
+  },
+  {
+    "id": "fpz-zavrsni",
+    "unitId": "fpz",
+    "programs": [
+      "Prijediplomski studiji Fakulteta prometnih znanosti (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2023,
+          2024
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "custom"
+    }
+  },
+  {
+    "id": "fpz-diplomski",
+    "unitId": "fpz",
+    "programs": [
+      "Diplomski studiji Fakulteta prometnih znanosti"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 2,
+        "metadataSpotChecks": 0,
+        "years": [
+          2023
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "custom"
+    }
+  },
+  {
+    "id": "geof-diplomski",
+    "unitId": "geof",
+    "programs": [
+      "Diplomski studiji Geodetskog fakulteta"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2025,
+          2026
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "geof-doktorski",
+    "unitId": "geof",
+    "programs": [
+      "Doktorski studij Geodetskog fakulteta"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "grf-zavrsni",
+    "unitId": "grf",
+    "programs": [
+      "Prijediplomski studiji Grafičkog fakulteta (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "ieee"
+    }
+  },
+  {
+    "id": "erf-diplomski",
+    "unitId": "erf",
+    "programs": [
+      "Diplomski studiji Edukacijsko-rehabilitacijskog fakulteta",
+      "Edukacijska rehabilitacija",
+      "Logopedija",
+      "Socijalna pedagogija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2021,
+          2023
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "apa7"
+    }
+  },
+  {
+    "id": "ufzg-zavrsni",
+    "unitId": "ufzg",
+    "programs": [
+      "Prijediplomski studiji Učiteljskog fakulteta (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2023,
+          2024,
+          2026
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "apa7"
+    }
+  },
+  {
+    "id": "ufzg-diplomski",
+    "unitId": "ufzg",
+    "programs": [
+      "Diplomski studiji Učiteljskog fakulteta"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2023,
+          2024,
+          2026
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "apa7"
+    }
+  },
+  {
+    "id": "arh-diplomski",
+    "unitId": "arh",
+    "programs": [
+      "Diplomski studiji Arhitektonskog fakulteta"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      }
+    }
+  },
+  {
+    "id": "fkit-diplomski",
+    "unitId": "fkit",
+    "programs": [
+      "Diplomski studiji Fakulteta kemijskog inženjerstva i tehnologije"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2021,
+          2025
+        ]
+      }
+    }
+  },
+  {
+    "id": "fkit-zavrsni",
+    "unitId": "fkit",
+    "programs": [
+      "Prijediplomski studiji Fakulteta kemijskog inženjerstva i tehnologije (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2019,
+          2021
+        ]
+      }
+    }
+  },
+  {
+    "id": "pbf-diplomski",
+    "unitId": "pbf",
+    "programs": [
+      "Diplomski studiji Prehrambeno-biotehnološkog fakulteta"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2022,
+          2023,
+          2024,
+          2026
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "ffrz-diplomski",
+    "unitId": "ffrz",
+    "programs": [
+      "Diplomski studiji Fakulteta filozofije i religijskih znanosti"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "ffrz-bakalaureatski",
+    "unitId": "ffrz",
+    "programs": [
+      "Prijediplomski studiji Fakulteta filozofije i religijskih znanosti (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "fhs-diplomski",
+    "unitId": "fhs",
+    "programs": [
+      "Diplomski studiji Fakulteta hrvatskih studija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2020,
+          2021,
+          2022,
+          2026
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "apa7"
+    }
+  },
+  {
+    "id": "fhs-zavrsni",
+    "unitId": "fhs",
+    "programs": [
+      "Prijediplomski studiji Fakulteta hrvatskih studija (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2024,
+          2025
+        ]
+      }
+    }
+  },
+  {
+    "id": "kbf-zavrsni",
+    "unitId": "kbf",
+    "programs": [
+      "Prijediplomski studiji Katolickog bogoslovnog fakulteta (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "chicago-notes"
+    }
+  },
+  {
+    "id": "kbf-diplomski",
+    "unitId": "kbf",
+    "programs": [
+      "Diplomski studiji Katolickog bogoslovnog fakulteta"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "chicago-notes"
+    }
+  },
+  {
+    "id": "alu-diplomski",
+    "unitId": "alu",
+    "programs": [
+      "Diplomski studiji Akademije likovnih umjetnosti"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      }
+    }
+  },
+  {
+    "id": "muza-diplomski",
+    "unitId": "muza",
+    "programs": [
+      "Diplomski studiji Muzičke akademije"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "custom"
+    }
+  },
+  {
+    "id": "ffzg-psihologija-diplomski",
+    "unitId": "ffzg",
+    "programs": [
+      "Psihologija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "apa7"
+    }
+  },
+  {
+    "id": "ffzg-sociologija-diplomski",
+    "unitId": "ffzg",
+    "programs": [
+      "Sociologija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016,
+          2024
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "ffzg-kroatistika-graduate",
+    "unitId": "ffzg",
+    "programs": [
+      "Kroatistika"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "pmf-biologija-graduate",
+    "unitId": "pmf",
+    "programs": [
+      "Biologija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "pmf-fizika-graduate",
+    "unitId": "pmf",
+    "programs": [
+      "Fizika"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "custom"
+    }
+  },
+  {
+    "id": "pmf-matematika-graduate",
+    "unitId": "pmf",
+    "programs": [
+      "Matematika"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2018,
+          2020
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "ieee"
+    }
+  },
+  {
+    "id": "ffzg-pedagogija-graduate",
+    "unitId": "ffzg",
+    "programs": [
+      "Pedagogija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "apa7"
+    }
+  },
+  {
+    "id": "ffzg-lingvistika-diplomski",
+    "unitId": "ffzg",
+    "programs": [
+      "Lingvistika"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "ffzg-povijest-umjetnosti-diplomski",
+    "unitId": "ffzg",
+    "programs": [
+      "Povijest umjetnosti"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "chicago-notes"
+    }
+  },
+  {
+    "id": "ffzg-arheologija-graduate",
+    "unitId": "ffzg",
+    "programs": [
+      "Arheologija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "chicago-notes"
+    }
+  },
+  {
+    "id": "ffzg-etnologija-graduate",
+    "unitId": "ffzg",
+    "programs": [
+      "Etnologija i kulturna antropologija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "chicago-author"
+    }
+  },
+  {
+    "id": "pmf-geologija-graduate",
+    "unitId": "pmf",
+    "programs": [
+      "Geologija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "fer-doktorski",
+    "unitId": "fer",
+    "programs": [
+      "Doktorski studij Fakulteta elektrotehnike i racunarstva"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "kif-doktorski",
+    "unitId": "kif",
+    "programs": [
+      "Doktorski studij Kineziološkog fakulteta"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "mef-doktorski",
+    "unitId": "mef",
+    "programs": [
+      "Doktorski studij Medicinskog fakulteta"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "vancouver"
+    }
+  },
+  {
+    "id": "alu-doktorski",
+    "unitId": "alu",
+    "programs": [
+      "Doktorski studij Akademije likovnih umjetnosti"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "custom"
+    }
+  },
+  {
+    "id": "grf-diplomski",
+    "unitId": "grf",
+    "programs": [
+      "Diplomski studiji Grafičkog fakulteta"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2018,
+          2019
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "ieee"
+    }
+  },
+  {
+    "id": "arh-doktorski",
+    "unitId": "arh",
+    "programs": [
+      "Doktorski studij Arhitektonskog fakulteta"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      }
+    }
+  },
+  {
+    "id": "efzg-doktorski",
+    "unitId": "efzg",
+    "programs": [
+      "Doktorski studij Ekonomskog fakulteta"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "erf-doktorski",
+    "unitId": "erf",
+    "programs": [
+      "Doktorski studij Edukacijsko-rehabilitacijskog fakulteta"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "fbf-doktorski",
+    "unitId": "fbf",
+    "programs": [
+      "Doktorski studij Farmaceutsko-biokemijskog fakulteta"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "ffrz-doktorski",
+    "unitId": "ffrz",
+    "programs": [
+      "Doktorski studij Fakulteta filozofije i religijskih znanosti"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "fhs-doktorski",
+    "unitId": "fhs",
+    "programs": [
+      "Doktorski studij Fakulteta hrvatskih studija"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "fkit-doktorski",
+    "unitId": "fkit",
+    "programs": [
+      "Doktorski studij Fakulteta kemijskog inženjerstva i tehnologije"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "fsb-doktorski",
+    "unitId": "fsb",
+    "programs": [
+      "Doktorski studij Fakulteta strojarstva i brodogradnje"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "grad-doktorski",
+    "unitId": "grad",
+    "programs": [
+      "Doktorski studij Građevinskog fakulteta"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "grf-doktorski",
+    "unitId": "grf",
+    "programs": [
+      "Doktorski studij Grafičkog fakulteta"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "kbf-doktorski",
+    "unitId": "kbf",
+    "programs": [
+      "Doktorski studij Katolickog bogoslovnog fakulteta"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 2,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "muza-doktorski",
+    "unitId": "muza",
+    "programs": [
+      "Doktorski studij Muzičke akademije"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      }
+    }
+  },
+  {
+    "id": "pbf-doktorski",
+    "unitId": "pbf",
+    "programs": [
+      "Doktorski studij Prehrambeno-biotehnološkog fakulteta"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "sfzg-doktorski",
+    "unitId": "sfzg",
+    "programs": [
+      "Doktorski studij Stomatološkog fakulteta"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "ttf-doktorski",
+    "unitId": "ttf",
+    "programs": [
+      "Doktorski studij Tekstilno-tehnološkog fakulteta"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "ufzg-doktorski",
+    "unitId": "ufzg",
+    "programs": [
+      "Doktorski studij Učiteljskog fakulteta"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "vef-doktorski",
+    "unitId": "vef",
+    "programs": [
+      "Doktorski studij Veterinarskog fakulteta"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "rgnf-zavrsni",
+    "unitId": "rgnf",
+    "programs": [
+      "Prijediplomski studiji Rudarsko-geolosko-naftnog fakulteta (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "rgnf-diplomski",
+    "unitId": "rgnf",
+    "programs": [
+      "Diplomski studiji Rudarsko-geolosko-naftnog fakulteta"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "zsem-zavrsni",
+    "unitId": "zsem",
+    "programs": [
+      "Prijediplomski strucni studiji ZSEM (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "zsem-diplomski",
+    "unitId": "zsem",
+    "programs": [
+      "Diplomski studiji ZSEM"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "libertas-zavrsni",
+    "unitId": "libertas",
+    "programs": [
+      "Prijediplomski studiji Libertas (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "libertas-diplomski",
+    "unitId": "libertas",
+    "programs": [
+      "Diplomski studiji Libertas"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "effectus-zavrsni",
+    "unitId": "effectus",
+    "programs": [
+      "Financije i poslovno pravo"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2023
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "chicago-notes"
+    }
+  },
+  {
+    "id": "effectus-diplomski",
+    "unitId": "effectus",
+    "programs": [
+      "Poslovno upravljanje",
+      "Poslovno upravljanje - Financijski menadžment",
+      "Poslovno upravljanje - Menadžment ljudskih potencijala i znanja",
+      "Poslovno upravljanje - Porezi i poslovno pravo",
+      "Poslovno upravljanje - Analitički menadžment",
+      "Poslovno upravljanje - Bihevioralna ekonomija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2023
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "chicago-notes"
+    }
+  },
+  {
+    "id": "rrif-zavrsni",
+    "unitId": "rrif",
+    "programs": [
+      "Prijediplomski strucni studij RRiF (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "pvzg-zavrsni",
+    "unitId": "pvzg",
+    "programs": [
+      "Prijediplomski strucni studiji PVZG (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "pvzg-specijalisticki",
+    "unitId": "pvzg",
+    "programs": [
+      "Specijalisticki diplomski strucni studiji PVZG"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "zvu-zavrsni",
+    "unitId": "zvu",
+    "programs": [
+      "Prijediplomski strucni studiji ZVU (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "zvu-specijalisticki",
+    "unitId": "zvu",
+    "programs": [
+      "Specijalisticki diplomski strucni studiji ZVU"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "vsite-zavrsni",
+    "unitId": "vsite",
+    "programs": [
+      "Prijediplomski strucni studiji VSITE (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "vsite-diplomski",
+    "unitId": "vsite",
+    "programs": [
+      "Diplomski strucni studiji VSITE"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "vkjs-zavrsni",
+    "unitId": "vkjs",
+    "programs": [
+      "Prijediplomski strucni studij VKJS (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "rules": {
+      "recommendedCitation": "apa7"
+    }
+  },
+  {
+    "id": "vkjs-diplomski",
+    "unitId": "vkjs",
+    "programs": [
+      "Specijalisticki diplomski strucni studij VKJS (diplomski rad)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "rules": {
+      "recommendedCitation": "apa7"
+    }
+  },
+  {
+    "id": "hks-diplomski",
+    "unitId": "hks",
+    "programs": [
+      "Diplomski sveucilisni studiji HKS"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "efri-zavrsni",
+    "unitId": "efri",
+    "programs": [
+      "Sveučilišni prijediplomski studij Poslovna ekonomija",
+      "Sveučilišni prijediplomski studij Poslovna ekonomija (smjer Poduzetništvo)",
+      "Sveučilišni prijediplomski studij Poslovna ekonomija (smjer Menadžment)",
+      "Sveučilišni prijediplomski studij Poslovna ekonomija (smjer Financije)",
+      "Sveučilišni prijediplomski studij Poslovna ekonomija (smjer Marketing)",
+      "Sveučilišni prijediplomski studij Poslovna ekonomija (smjer Međunarodno poslovanje)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "efri-diplomski",
+    "unitId": "efri",
+    "programs": [
+      "Sveučilišni diplomski studij Poslovna ekonomija",
+      "Sveučilišni diplomski studij Poslovna ekonomija (smjer Poduzetništvo)",
+      "Sveučilišni diplomski studij Poslovna ekonomija (smjer Menadžment)",
+      "Sveučilišni diplomski studij Poslovna ekonomija (smjer Financije)",
+      "Sveučilišni diplomski studij Poslovna ekonomija (smjer Marketing)",
+      "Sveučilišni diplomski studij Poslovna ekonomija (smjer Međunarodno poslovanje)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "pravri-zavrsni",
+    "unitId": "pravri",
+    "programs": [
+      "Stručni prijediplomski studij Upravni studij"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015,
+          2021
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "pravo-fusnote"
+    }
+  },
+  {
+    "id": "pravri-diplomski",
+    "unitId": "pravri",
+    "programs": [
+      "Integrirani prijediplomski i diplomski sveučilišni studij Pravo",
+      "Stručni diplomski studij Javna uprava"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015,
+          2016
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "pravo-fusnote"
+    }
+  },
+  {
+    "id": "ffri-zavrsni",
+    "unitId": "ffri",
+    "programs": [
+      "Prijediplomski studij Hrvatski jezik i književnost",
+      "Prijediplomski studij Engleski jezik i književnost",
+      "Prijediplomski studij Talijanski jezik i književnost",
+      "Prijediplomski studij Filozofija",
+      "Prijediplomski studij Povijest",
+      "Prijediplomski studij Pedagogija",
+      "Prijediplomski studij Psihologija",
+      "Prijediplomski studij Kulturalni studiji"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2014,
+          2015
+        ]
+      }
+    }
+  },
+  {
+    "id": "ffri-diplomski",
+    "unitId": "ffri",
+    "programs": [
+      "Diplomski studij Hrvatski jezik i književnost",
+      "Diplomski studij Engleski jezik i književnost",
+      "Diplomski studij Talijanski jezik i književnost",
+      "Diplomski studij Filozofija",
+      "Diplomski studij Povijest",
+      "Diplomski studij Povijest i interpretacija baštine",
+      "Diplomski studij Pedagogija",
+      "Diplomski studij Prevoditeljski studij"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      }
+    }
+  },
+  {
+    "id": "pfri-zavrsni",
+    "unitId": "pfri",
+    "programs": [
+      "Prijediplomski studij Nautika i tehnologija pomorskog prometa",
+      "Prijediplomski studij Brodostrojarstvo",
+      "Prijediplomski studij Elektroničke i informatičke tehnologije u pomorstvu",
+      "Prijediplomski studij Logistika i menadžment u pomorstvu i prometu",
+      "Prijediplomski studij Promet i mobilnost"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2018,
+          2020
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "chicago-notes"
+    }
+  },
+  {
+    "id": "pfri-diplomski",
+    "unitId": "pfri",
+    "programs": [
+      "Diplomski studij Nautika i tehnologija pomorskog prometa",
+      "Diplomski studij Brodostrojarstvo i tehnologija pomorskog prometa",
+      "Diplomski studij Elektroničke i informatičke tehnologije u pomorstvu",
+      "Diplomski studij Logistika i menadžment u pomorstvu i prometu",
+      "Diplomski studij Promet i mobilnost"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2020
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "chicago-notes"
+    }
+  },
+  {
+    "id": "medri-farmacija-diplomski",
+    "unitId": "medri",
+    "programs": [
+      "Sveučilišni integrirani prijediplomski i diplomski studij Farmacija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015,
+          2016
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "vancouver"
+    }
+  },
+  {
+    "id": "fmtu-zavrsni",
+    "unitId": "fmtu",
+    "programs": [
+      "Prijediplomski studij Poslovna ekonomija u turizmu i ugostiteljstvu",
+      "Prijediplomski studij Menadžment održivog razvoja"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2011,
+          2022
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "chicago-author"
+    }
+  },
+  {
+    "id": "fmtu-diplomski",
+    "unitId": "fmtu",
+    "programs": [
+      "Diplomski studij Marketing u turizmu",
+      "Diplomski studij Menadžment u turizmu",
+      "Diplomski studij Menadžment u hotelijerstvu",
+      "Diplomski studij Održivi razvoj turizma"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016,
+          2017
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "chicago-author"
+    }
+  },
+  {
+    "id": "inf-zavrsni",
+    "unitId": "inf",
+    "programs": [
+      "Sveučilišni prijediplomski studij Informatika",
+      "Sveučilišni prijediplomski studij Informatika (modul Razvoj programske potpore)",
+      "Sveučilišni prijediplomski studij Informatika (modul Multimedijski sustavi)",
+      "Sveučilišni prijediplomski studij Informatika (modul Informacijski sustavi)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2018
+        ]
+      }
+    }
+  },
+  {
+    "id": "inf-diplomski",
+    "unitId": "inf",
+    "programs": [
+      "Sveučilišni diplomski studij Informatika",
+      "Sveučilišni diplomski studij Informatika (nastavnički smjer)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2018
+        ]
+      }
+    }
+  },
+  {
+    "id": "pmfst-zavrsni",
+    "unitId": "pmfst",
+    "programs": [
+      "Prijediplomski studiji PMFST bio/kem (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "pmfst-diplomski",
+    "unitId": "pmfst",
+    "programs": [
+      "Diplomski studiji PMFST bio/kem"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "fgag-zavrsni",
+    "unitId": "fgag",
+    "programs": [
+      "Prijediplomski studiji FGAG (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "fgag-diplomski",
+    "unitId": "fgag",
+    "programs": [
+      "Diplomski studiji FGAG"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "efst-zavrsni",
+    "unitId": "efst",
+    "programs": [
+      "Prijediplomski studiji EFST (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "efst-diplomski",
+    "unitId": "efst",
+    "programs": [
+      "Diplomski studiji EFST"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "ktfst-zavrsni",
+    "unitId": "ktfst",
+    "programs": [
+      "Prijediplomski studiji KTF Split (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "ktfst-diplomski",
+    "unitId": "ktfst",
+    "programs": [
+      "Diplomski studiji KTF Split"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "pfst-zavrsni",
+    "unitId": "pfst",
+    "programs": [
+      "Prijediplomski/ocjenski radovi PFST (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "ieee"
+    }
+  },
+  {
+    "id": "pfst-diplomski",
+    "unitId": "pfst",
+    "programs": [
+      "Diplomski studiji PFST"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "ieee"
+    }
+  },
+  {
+    "id": "mefst-diplomski",
+    "unitId": "mefst",
+    "programs": [
+      "Integrirani studij medicine (MEFST, diplomski rad)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "vancouver"
+    }
+  },
+  {
+    "id": "ferit-zavrsni",
+    "unitId": "ferit",
+    "programs": [
+      "Prijediplomski studiji FERIT (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "ieee"
+    }
+  },
+  {
+    "id": "ferit-diplomski",
+    "unitId": "ferit",
+    "programs": [
+      "Diplomski studiji FERIT"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015,
+          2016
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "ieee"
+    }
+  },
+  {
+    "id": "grafos-zavrsni",
+    "unitId": "grafos",
+    "programs": [
+      "Prijediplomski/strucni studiji GFOS (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "rules": {
+      "recommendedCitation": "ieee"
+    }
+  },
+  {
+    "id": "grafos-diplomski",
+    "unitId": "grafos",
+    "programs": [
+      "Diplomski studiji GFOS"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "rules": {
+      "recommendedCitation": "ieee"
+    }
+  },
+  {
+    "id": "ptfos-diplomski",
+    "unitId": "ptfos",
+    "programs": [
+      "Diplomski studiji PTFOS"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "efos-zavrsni",
+    "unitId": "efos",
+    "programs": [
+      "Prijediplomski/strucni studiji EFOS (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2019,
+          2020
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "efos-diplomski",
+    "unitId": "efos",
+    "programs": [
+      "Diplomski studiji EFOS"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2018,
+          2020,
+          2021
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "pravos-zavrsni",
+    "unitId": "pravos",
+    "programs": [
+      "Prijediplomski studij Pravo/Socijalni rad (zavrsni rad, Osijek)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "pravos-diplomski",
+    "unitId": "pravos",
+    "programs": [
+      "Diplomski/integrirani studij Pravo (Osijek)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "ffos-zavrsni",
+    "unitId": "ffos",
+    "programs": [
+      "Prijediplomski studiji FFOS (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "ffos-diplomski",
+    "unitId": "ffos",
+    "programs": [
+      "Diplomski studiji FFOS"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "fazos-zavrsni",
+    "unitId": "fazos",
+    "programs": [
+      "Prijediplomski studiji FAZOS (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "apa7"
+    }
+  },
+  {
+    "id": "fazos-diplomski",
+    "unitId": "fazos",
+    "programs": [
+      "Diplomski studiji FAZOS"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "apa7"
+    }
+  },
+  {
+    "id": "mefos-zavrsni",
+    "unitId": "mefos",
+    "programs": [
+      "Prijediplomski/strucni studiji MEFOS (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "vancouver"
+    }
+  },
+  {
+    "id": "mefos-diplomski",
+    "unitId": "mefos",
+    "programs": [
+      "Diplomski/integrirani studiji MEFOS"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "vancouver"
+    }
+  },
+  {
+    "id": "kemos-zavrsni",
+    "unitId": "kemos",
+    "programs": [
+      "Prijediplomski studij Kemija (zavrsni rad, Osijek)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "ieee"
+    }
+  },
+  {
+    "id": "kemos-diplomski",
+    "unitId": "kemos",
+    "programs": [
+      "Diplomski studij Kemija (Osijek)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "ieee"
+    }
+  },
+  {
+    "id": "unizd-turizam-zavrsni",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za turizam i komunikacijske znanosti (zavrsni rad, Zadar)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "unizd-turizam-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za turizam i komunikacijske znanosti (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "unizd-psihologija-zavrsni",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za psihologiju (zavrsni rad, Zadar)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "apa7"
+    }
+  },
+  {
+    "id": "unizd-pedagogija-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za pedagogiju (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "unizd-povijest-umj-zavrsni",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za povijest umjetnosti (zavrsni rad, Zadar)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "fetpu-zavrsni",
+    "unitId": "fetpu",
+    "programs": [
+      "Sveučilišni prijediplomski studij Primijenjena ekonomija",
+      "Sveučilišni prijediplomski studij Kultura i turizam",
+      "Sveučilišni prijediplomski studij Poslovna ekonomija (smjer Financije i računovodstvo)",
+      "Sveučilišni prijediplomski studij Poslovna ekonomija (smjer Financijski management)",
+      "Sveučilišni prijediplomski studij Poslovna ekonomija (smjer Management i poduzetništvo)",
+      "Sveučilišni prijediplomski studij Poslovna ekonomija (smjer Marketinško upravljanje)",
+      "Sveučilišni prijediplomski studij Poslovna ekonomija (smjer Informatički menadžment)",
+      "Sveučilišni prijediplomski studij Poslovna ekonomija (smjer Turizam)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      }
+    }
+  },
+  {
+    "id": "fetpu-diplomski",
+    "unitId": "fetpu",
+    "programs": [
+      "Sveučilišni diplomski studij Primijenjena ekonomija",
+      "Sveučilišni diplomski studij Kultura i turizam",
+      "Sveučilišni diplomski studij Poslovna ekonomija (smjer Financije i računovodstvo)",
+      "Sveučilišni diplomski studij Poslovna ekonomija (smjer Financijski management)",
+      "Sveučilišni diplomski studij Poslovna ekonomija (smjer Management i poduzetništvo)",
+      "Sveučilišni diplomski studij Poslovna ekonomija (smjer Marketinško upravljanje)",
+      "Sveučilišni diplomski studij Poslovna ekonomija (smjer Informatički menadžment)",
+      "Sveučilišni diplomski studij Poslovna ekonomija (smjer Turizam i razvoj)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      }
+    }
+  },
+  {
+    "id": "tfpu-zavrsni",
+    "unitId": "tfpu",
+    "programs": [
+      "Prijediplomski sveučilišni studij Računarstvo",
+      "Prijediplomski stručni studij Proizvodno strojarstvo"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2019
+        ]
+      }
+    }
+  },
+  {
+    "id": "tfpu-diplomski",
+    "unitId": "tfpu",
+    "programs": [
+      "Diplomski sveučilišni studij Računarstvo",
+      "Diplomski sveučilišni studij Strojarstvo"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 2,
+        "metadataSpotChecks": 0,
+        "years": [
+          2018,
+          2019
+        ]
+      }
+    }
+  },
+  {
+    "id": "foozpu-zavrsni",
+    "unitId": "foozpu",
+    "programs": [
+      "Sveučilišni prijediplomski studij Rani i predškolski odgoj i obrazovanje (na hrvatskom jeziku)",
+      "Sveučilišni prijediplomski studij Rani i predškolski odgoj i obrazovanje (na talijanskom jeziku)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      }
+    }
+  },
+  {
+    "id": "foozpu-diplomski",
+    "unitId": "foozpu",
+    "programs": [
+      "Sveučilišni integrirani prijediplomski i diplomski Učiteljski studij (na hrvatskom jeziku)",
+      "Sveučilišni integrirani prijediplomski i diplomski Učiteljski studij (na talijanskom jeziku)",
+      "Sveučilišni diplomski studij Rani i predškolski odgoj i obrazovanje (na hrvatskom jeziku)",
+      "Sveučilišni diplomski studij Rani i predškolski odgoj i obrazovanje (na talijanskom jeziku)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      }
+    }
+  },
+  {
+    "id": "unidu-povijest-zavrsni",
+    "unitId": "unidu",
+    "programs": [
+      "Povijest Jadrana i Mediterana (zavrsni rad, Dubrovnik)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "rules": {
+      "recommendedCitation": "chicago-notes"
+    }
+  },
+  {
+    "id": "unidu-komunikologija-diplomski",
+    "unitId": "unidu",
+    "programs": [
+      "Odjel za komunikologiju (diplomski rad, Dubrovnik)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 2,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "unidu-ekonomija-zavrsni",
+    "unitId": "unidu",
+    "programs": [
+      "Odjel za ekonomiju i poslovnu ekonomiju (zavrsni rad, Dubrovnik)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "unidu-ekonomija-diplomski",
+    "unitId": "unidu",
+    "programs": [
+      "Odjel za ekonomiju i poslovnu ekonomiju (diplomski rad, Dubrovnik)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "unidu-umjetnost-diplomski",
+    "unitId": "unidu",
+    "programs": [
+      "Odjel za umjetnost i restauraciju (diplomski rad, Dubrovnik)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "rules": {
+      "recommendedCitation": "chicago-notes"
+    }
+  },
+  {
+    "id": "medri-medicina-diplomski",
+    "unitId": "medri",
+    "programs": [
+      "Sveučilišni integrirani prijediplomski i diplomski studij Medicina"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "vancouver"
+    }
+  },
+  {
+    "id": "fzsri-zavrsni",
+    "unitId": "fzsri",
+    "programs": [
+      "Prijediplomski studij Sestrinstvo",
+      "Prijediplomski studij Fizioterapija",
+      "Prijediplomski studij Primaljstvo",
+      "Prijediplomski stručni studij Radiološka tehnologija"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2018,
+          2019,
+          2020
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "vancouver"
+    }
+  },
+  {
+    "id": "fzsri-diplomski",
+    "unitId": "fzsri",
+    "programs": [
+      "Diplomski studij Sestrinstvo",
+      "Diplomski studij Fizioterapija",
+      "Diplomski studij Primaljstvo",
+      "Diplomski studij Klinički nutricionizam",
+      "Diplomski studij Sestrinstvo (izborni smjer Promicanje i zaštita mentalnog zdravlja)",
+      "Diplomski studij Sestrinstvo (izborni smjer Menadžment u sestrinstvu)",
+      "Diplomski studij Sestrinstvo (izborni smjer Javno zdravstvo)",
+      "Diplomski studij Sestrinstvo (izborni smjer Gerontologija i palijativna skrb starijih)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2018,
+          2019,
+          2020
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "vancouver"
+    }
+  },
+  {
+    "id": "biotech-zavrsni",
+    "unitId": "biotech",
+    "programs": [
+      "Prijediplomski sveučilišni studij Biotehnologija i istraživanje lijekova"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2018
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "vancouver"
+    }
+  },
+  {
+    "id": "biotech-diplomski",
+    "unitId": "biotech",
+    "programs": [
+      "Diplomski sveučilišni studij Istraživanje i razvoj lijekova",
+      "Diplomski sveučilišni studij Biotehnologija u medicini",
+      "Diplomski sveučilišni studij Medicinska kemija",
+      "Diplomski sveučilišni studij Biotehnološka istraživanja znanosti o životu"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2018
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "vancouver"
+    }
+  },
+  {
+    "id": "fizri-zavrsni",
+    "unitId": "fizri",
+    "programs": [
+      "Sveučilišni prijediplomski studiji fizike (završni rad, Rijeka)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "fizri-diplomski",
+    "unitId": "fizri",
+    "programs": [
+      "Sveučilišni diplomski studiji fizike (Rijeka)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "ufri-diplomski",
+    "unitId": "ufri",
+    "programs": [
+      "Sveučilišni integrirani prijediplomski i diplomski Učiteljski studij",
+      "Sveučilišni diplomski studij Rani i predškolski odgoj i obrazovanje"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2017,
+          2018
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "riteh-zavrsni",
+    "unitId": "riteh",
+    "programs": [
+      "Sveučilišni prijediplomski studij Strojarstvo",
+      "Sveučilišni prijediplomski studij Brodogradnja",
+      "Sveučilišni prijediplomski studij Elektrotehnika",
+      "Sveučilišni prijediplomski studij Računarstvo",
+      "Sveučilišni prijediplomski studij Mehatronika i robotika",
+      "Stručni prijediplomski studij Strojarstvo",
+      "Stručni prijediplomski studij Brodogradnja",
+      "Stručni prijediplomski studij Elektrotehnika"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "ieee"
+    }
+  },
+  {
+    "id": "riteh-diplomski",
+    "unitId": "riteh",
+    "programs": [
+      "Sveučilišni diplomski studij Strojarstvo (smjer Konstruiranje i mehatronika)",
+      "Sveučilišni diplomski studij Strojarstvo (smjer Računarska mehanika i inženjerstvo)",
+      "Sveučilišni diplomski studij Strojarstvo (smjer Industrijsko i proizvodno inženjerstvo)",
+      "Sveučilišni diplomski studij Strojarstvo (smjer Termotehnika)",
+      "Sveučilišni diplomski studij Strojarstvo (smjer Procesno i energetsko strojarstvo)",
+      "Sveučilišni diplomski studij Strojarstvo (smjer Brodostrojarstvo)",
+      "Sveučilišni diplomski studij Strojarstvo (smjer Inženjerstvo materijala)",
+      "Sveučilišni diplomski studij Elektrotehnika (smjer Automatika)",
+      "Sveučilišni diplomski studij Elektrotehnika (smjer Elektroenergetika)",
+      "Sveučilišni diplomski studij Računarstvo (smjer Programsko inženjerstvo)",
+      "Sveučilišni diplomski studij Računarstvo (smjer Računalni sustavi)",
+      "Sveučilišni diplomski studij Brodogradnja (smjer Projektiranje i konstrukcija plovnih objekata)",
+      "Sveučilišni diplomski studij Brodogradnja (smjer Tehnologija i organizacija brodogradnje)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "ieee"
+    }
+  },
+  {
+    "id": "kifst-diplomski",
+    "unitId": "kifst",
+    "programs": [
+      "Diplomski studiji Kineziološkog fakulteta (Split)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "apa7"
+    }
+  },
+  {
+    "id": "kbfst-diplomski",
+    "unitId": "kbfst",
+    "programs": [
+      "Diplomski studij (Katolički bogoslovni fakultet, Split)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "unin-tehnicki-zavrsni",
+    "unitId": "unin",
+    "programs": [
+      "Odjel za tehničke i gospodarske studije (završni rad, Sveučilište Sjever)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "vancouver"
+    }
+  },
+  {
+    "id": "unin-tehnicki-diplomski",
+    "unitId": "unin",
+    "programs": [
+      "Odjel za tehničke i gospodarske studije (diplomski rad, Sveučilište Sjever)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "vancouver"
+    }
+  },
+  {
+    "id": "unin-biomedicina-zavrsni",
+    "unitId": "unin",
+    "programs": [
+      "Odjel za biomedicinske znanosti (završni rad, Sveučilište Sjever)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "apa7"
+    }
+  },
+  {
+    "id": "unin-biomedicina-diplomski",
+    "unitId": "unin",
+    "programs": [
+      "Odjel za biomedicinske znanosti (diplomski rad, Sveučilište Sjever)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "apa7"
+    }
+  },
+  {
+    "id": "unin-drustveni-zavrsni",
+    "unitId": "unin",
+    "programs": [
+      "Odjeli društvenih znanosti - ekonomija, novinarstvo, komunikologija (završni rad, Sveučilište Sjever)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "unin-drustveni-diplomski",
+    "unitId": "unin",
+    "programs": [
+      "Odjeli društvenih znanosti - ekonomija, novinarstvo, komunikologija (diplomski rad, Sveučilište Sjever)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "veleri-zavrsni",
+    "unitId": "veleri",
+    "programs": [
+      "Prijediplomski stručni studiji (završni rad, Veleučilište u Rijeci)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2017,
+          2020
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "veleri-diplomski",
+    "unitId": "veleri",
+    "programs": [
+      "Specijalistički diplomski stručni studiji (Veleučilište u Rijeci)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016,
+          2017,
+          2018
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "vub-diplomski",
+    "unitId": "vub",
+    "programs": [
+      "Specijalistički diplomski stručni studiji (Veleučilište u Bjelovaru)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "rules": {
+      "recommendedCitation": "vancouver"
+    }
+  },
+  {
+    "id": "mev-zavrsni",
+    "unitId": "mev",
+    "programs": [
+      "Stručni prijediplomski studiji Računarstvo i Održivi razvoj (završni rad, Međimursko veleučilište)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2022
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "vancouver"
+    }
+  },
+  {
+    "id": "vvg-zavrsni",
+    "unitId": "vvg",
+    "programs": [
+      "Stručni prijediplomski studiji (završni rad, Veleučilište Velika Gorica)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2023,
+          2024
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "ieee"
+    }
+  },
+  {
+    "id": "vvg-diplomski",
+    "unitId": "vvg",
+    "programs": [
+      "Stručni diplomski studiji (Veleučilište Velika Gorica)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2024
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "ieee"
+    }
+  },
+  {
+    "id": "vevu-zavrsni",
+    "unitId": "vevu",
+    "programs": [
+      "Stručni prijediplomski studiji (završni rad, Veleučilište u Vukovaru)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2023,
+          2024
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "vuv-zavrsni",
+    "unitId": "vuv",
+    "programs": [
+      "Prijediplomski stručni studiji (završni rad, Veleučilište u Virovitici)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "apa7"
+    }
+  },
+  {
+    "id": "vuv-diplomski",
+    "unitId": "vuv",
+    "programs": [
+      "Diplomski stručni studiji (Veleučilište u Virovitici)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "apa7"
+    }
+  },
+  {
+    "id": "veleknin-zavrsni",
+    "unitId": "veleknin",
+    "programs": [
+      "Stručni prijediplomski studiji (završni rad, Veleučilište u Kninu)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2020,
+          2025
+        ]
+      }
+    }
+  },
+  {
+    "id": "vhzk-zavrsni",
+    "unitId": "vhzk",
+    "programs": [
+      "Stručni prijediplomski studiji (završni rad, Veleučilište Hrvatsko zagorje Krapina)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "dizajn-diplomski",
+    "unitId": "arh",
+    "programs": [
+      "Dizajn"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 1,
+        "docxAudits": 0,
+        "publicPdfAudits": 0,
+        "metadataSpotChecks": 0,
+        "years": [
+          2026
+        ]
+      }
+    }
+  },
+  {
+    "id": "gradri-zavrsni",
+    "unitId": "gradri",
+    "programs": [
+      "Sveučilišni prijediplomski studij Građevinarstvo",
+      "Stručni prijediplomski studij Građevinarstvo"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2019
+        ]
+      }
+    }
+  },
+  {
+    "id": "gradri-diplomski",
+    "unitId": "gradri",
+    "programs": [
+      "Sveučilišni diplomski studij Građevinarstvo",
+      "Stručni diplomski studij Građevinarstvo",
+      "Sveučilišni diplomski studij Građevinarstvo (smjer Konstrukcije)",
+      "Sveučilišni diplomski studij Građevinarstvo (smjer Hidrotehnika)",
+      "Sveučilišni diplomski studij Građevinarstvo (smjer Geotehnika)",
+      "Sveučilišni diplomski studij Građevinarstvo (smjer Urbano inženjerstvo)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2019
+        ]
+      }
+    }
+  },
+  {
+    "id": "ffri-germanistika-zavrsni",
+    "unitId": "ffri",
+    "programs": [
+      "Prijediplomski studij Njemački jezik i književnost"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015,
+          2024,
+          2025
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "ffri-germanistika-diplomski",
+    "unitId": "ffri",
+    "programs": [
+      "Diplomski studij Njemački jezik i književnost"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "ffri-psihologija-diplomski",
+    "unitId": "ffri",
+    "programs": [
+      "Diplomski studij Psihologija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015,
+          2016
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "apa7"
+    }
+  },
+  {
+    "id": "ffri-povum-zavrsni",
+    "unitId": "ffri",
+    "programs": [
+      "Prijediplomski studij Povijest umjetnosti"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "chicago-notes"
+    }
+  },
+  {
+    "id": "ffri-povum-diplomski",
+    "unitId": "ffri",
+    "programs": [
+      "Diplomski studij Povijest umjetnosti"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "chicago-notes"
+    }
+  },
+  {
+    "id": "ffri-kulturalni-diplomski",
+    "unitId": "ffri",
+    "programs": [
+      "Diplomski studij Kulturalni studiji"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "fpzpu-zavrsni",
+    "unitId": "fpzpu",
+    "programs": [
+      "Sveučilišni prijediplomski studij Znanost o moru"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015,
+          2016
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "fpzpu-diplomski",
+    "unitId": "fpzpu",
+    "programs": [
+      "Sveučilišni diplomski studij Znanost o moru"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015,
+          2016
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "ffst-zavrsni",
+    "unitId": "ffst",
+    "programs": [
+      "Prijediplomski studiji FFST (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "ffst-diplomski",
+    "unitId": "ffst",
+    "programs": [
+      "Diplomski studiji FFST"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "fesb-zavrsni",
+    "unitId": "fesb",
+    "programs": [
+      "Prijediplomski studiji FESB (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "fesb-diplomski",
+    "unitId": "fesb",
+    "programs": [
+      "Diplomski studiji FESB"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 1,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "pravst-zavrsni",
+    "unitId": "pravst",
+    "programs": [
+      "Prijediplomski/integrirani studij (zavrsni rad), Pravni fakultet u Splitu"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "pravst-diplomski",
+    "unitId": "pravst",
+    "programs": [
+      "Diplomski/integrirani studij, Pravni fakultet u Splitu"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 1,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "ffos-povijest-zavrsni",
+    "unitId": "ffos",
+    "programs": [
+      "Prijediplomski studij Povijest"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2014,
+          2015
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "chicago-notes"
+    }
+  },
+  {
+    "id": "ffos-povijest-diplomski",
+    "unitId": "ffos",
+    "programs": [
+      "Diplomski studij Povijest"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015,
+          2016
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "chicago-notes"
+    }
+  },
+  {
+    "id": "ffos-psihologija-zavrsni",
+    "unitId": "ffos",
+    "programs": [
+      "Prijediplomski studij Psihologija"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "apa7"
+    }
+  },
+  {
+    "id": "ffos-psihologija-diplomski",
+    "unitId": "ffos",
+    "programs": [
+      "Diplomski studij Psihologija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015,
+          2016
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "apa7"
+    }
+  },
+  {
+    "id": "ffos-informatologija-zavrsni",
+    "unitId": "ffos",
+    "programs": [
+      "Prijediplomski studij Informatologija"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2013,
+          2015
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "apa7"
+    }
+  },
+  {
+    "id": "ffos-informatologija-diplomski",
+    "unitId": "ffos",
+    "programs": [
+      "Diplomski studij Informatologija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015,
+          2016
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "apa7"
+    }
+  },
+  {
+    "id": "ffos-germanistika-zavrsni",
+    "unitId": "ffos",
+    "programs": [
+      "Prijediplomski studij Njemački jezik i književnost"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "ffos-germanistika-diplomski",
+    "unitId": "ffos",
+    "programs": [
+      "Diplomski studij Njemački jezik i književnost"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2014,
+          2015
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "uaos-zavrsni",
+    "unitId": "uaos",
+    "programs": [
+      "Prijediplomski studiji AUK Osijek (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016
+        ]
+      }
+    }
+  },
+  {
+    "id": "uaos-diplomski",
+    "unitId": "uaos",
+    "programs": [
+      "Diplomski studiji AUK Osijek"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2014,
+          2015
+        ]
+      }
+    }
+  },
+  {
+    "id": "fdmz-diplomski",
+    "unitId": "fdmz",
+    "programs": [
+      "Diplomski/integrirani studiji FDMZ"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2018,
+          2019,
+          2020
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "vancouver"
+    }
+  },
+  {
+    "id": "foozos-diplomski",
+    "unitId": "foozos",
+    "programs": [
+      "Diplomski/integrirani studiji FOOZOS"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "apa7"
+    }
+  },
+  {
+    "id": "kbfdj-diplomski",
+    "unitId": "kbfdj",
+    "programs": [
+      "Integrirani filozofsko-teoloski studij (KBF Djakovo)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      }
+    }
+  },
+  {
+    "id": "biolos-zavrsni",
+    "unitId": "biolos",
+    "programs": [
+      "Prijediplomski studij Biologija (zavrsni rad, Osijek)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "biolos-diplomski",
+    "unitId": "biolos",
+    "programs": [
+      "Diplomski studiji Odjela za biologiju (Osijek)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "fizos-diplomski",
+    "unitId": "fizos",
+    "programs": [
+      "Diplomski studij Fizika i informatika (Osijek)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      }
+    }
+  },
+  {
+    "id": "unizd-kroatistika-zavrsni",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za kroatistiku (zavrsni rad, Zadar)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "unizd-kroatistika-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za kroatistiku (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "unizd-ekonomija-zavrsni",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za ekonomiju (zavrsni rad, Zadar)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "unizd-ekonomija-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za ekonomiju (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "unizd-ekologija-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za ekologiju, agronomiju i akvakulturu (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "unizd-ekologija-zavrsni",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za ekologiju, agronomiju i akvakulturu (zavrsni rad, Zadar)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "unizd-etnologija-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za etnologiju i antropologiju (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "chicago-author"
+    }
+  },
+  {
+    "id": "unizd-geografija-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za geografiju (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "unizd-zdravstvo-zavrsni",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za zdravstvene studije (zavrsni rad, Zadar)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "vancouver"
+    }
+  },
+  {
+    "id": "unizd-zdravstvo-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za zdravstvene studije (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "vancouver"
+    }
+  },
+  {
+    "id": "unizd-informacijske-zavrsni",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za informacijske znanosti (zavrsni rad, Zadar)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "chicago-author"
+    }
+  },
+  {
+    "id": "unizd-informacijske-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za informacijske znanosti (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "chicago-author"
+    }
+  },
+  {
+    "id": "unizd-arheologija-zavrsni",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za arheologiju (zavrsni rad, Zadar)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "unizd-arheologija-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za arheologiju (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "unizd-klasicna-filologija-zavrsni",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za klasicnu filologiju (zavrsni rad, Zadar)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "unizd-klasicna-filologija-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za klasicnu filologiju (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "unizd-filozofija-zavrsni",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za filozofiju (zavrsni rad, Zadar)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "unizd-filozofija-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za filozofiju (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "unizd-anglistika-zavrsni",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za anglistiku (zavrsni rad, Zadar)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "unizd-anglistika-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za anglistiku (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "unizd-germanistika-zavrsni",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za germanistiku (zavrsni rad, Zadar)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "unizd-germanistika-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za germanistiku (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "unizd-hispanistika-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za hispanistiku i iberske studije (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 2,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "unizd-francuski-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za francuske i frankofonske studije (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "unizd-povijest-zavrsni",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za povijest (zavrsni rad, Zadar)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "unizd-povijest-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za povijest (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "unizd-talijanistika-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za talijanistiku (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "unizd-sociologija-zavrsni",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za sociologiju (zavrsni rad, Zadar)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "unizd-sociologija-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za sociologiju (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "unizd-lingvistika-zavrsni",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za lingvistiku (zavrsni rad, Zadar)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "unizd-lingvistika-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za lingvistiku (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "unizd-rusistika-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za rusistiku (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "unizd-pomorski-zavrsni",
+    "unitId": "unizd",
+    "programs": [
+      "Pomorski odjel (zavrsni rad, Zadar)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "unizd-pomorski-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Pomorski odjel (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "unizd-ucitelji-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za izobrazbu ucitelja i odgojitelja (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "unizd-psihologija-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za psihologiju (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "apa7"
+    }
+  },
+  {
+    "id": "unizd-povijest-umj-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Odjel za povijest umjetnosti (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016,
+          2017
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "unidu-marikultura-diplomski",
+    "unitId": "unidu",
+    "programs": [
+      "Diplomski studij Marikultura (Dubrovnik)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2017
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "unidu-sestrinstvo-zavrsni",
+    "unitId": "unidu",
+    "programs": [
+      "Strucni prijediplomski studij Sestrinstvo (zavrsni rad, Dubrovnik)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2017
+        ]
+      }
+    }
+  },
+  {
+    "id": "unidu-komunikologija-zavrsni",
+    "unitId": "unidu",
+    "programs": [
+      "Odjel za komunikologiju (zavrsni rad, Dubrovnik)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "unidu-umjetnost-zavrsni",
+    "unitId": "unidu",
+    "programs": [
+      "Odjel za umjetnost i restauraciju (zavrsni rad, Dubrovnik)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "rules": {
+      "recommendedCitation": "chicago-notes"
+    }
+  },
+  {
+    "id": "unidu-elektro-zavrsni",
+    "unitId": "unidu",
+    "programs": [
+      "Fakultet elektrotehnike i primijenjenog racunarstva (zavrsni rad, Dubrovnik)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2017,
+          2019
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "ieee"
+    }
+  },
+  {
+    "id": "unidu-elektro-diplomski",
+    "unitId": "unidu",
+    "programs": [
+      "Fakultet elektrotehnike i primijenjenog racunarstva (diplomski rad, Dubrovnik)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2018,
+          2020
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "ieee"
+    }
+  },
+  {
+    "id": "vub-zavrsni-tehnicki",
+    "unitId": "vub",
+    "programs": [
+      "Stručni prijediplomski studiji Mehatronika i Računarstvo (završni rad, Veleučilište u Bjelovaru)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016,
+          2020
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "vancouver"
+    }
+  },
+  {
+    "id": "vub-zavrsni-sestrinstvo",
+    "unitId": "vub",
+    "programs": [
+      "Stručni prijediplomski studij Sestrinstvo (završni rad, Veleučilište u Bjelovaru)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "vancouver"
+    }
+  },
+  {
+    "id": "mev-zavrsni-drustveni",
+    "unitId": "mev",
+    "programs": [
+      "Stručni prijediplomski studij Menadžment turizma i sporta (završni rad, Međimursko veleučilište)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2022
+        ]
+      }
+    }
+  },
+  {
+    "id": "mev-diplomski",
+    "unitId": "mev",
+    "programs": [
+      "Specijalistički diplomski stručni studij Menadžment turizma i sporta (Međimursko veleučilište)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2022
+        ]
+      }
+    }
+  },
+  {
+    "id": "vevu-diplomski",
+    "unitId": "vevu",
+    "programs": [
+      "Stručni diplomski studiji (Veleučilište u Vukovaru)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 2,
+        "metadataSpotChecks": 0,
+        "years": [
+          2023,
+          2024
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "veleknin-diplomski",
+    "unitId": "veleknin",
+    "programs": [
+      "Stručni diplomski studiji (Veleučilište u Kninu)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 4,
+        "metadataSpotChecks": 0,
+        "years": [
+          2021,
+          2022,
+          2025
+        ]
+      }
+    }
+  },
+  {
+    "id": "vus-zavrsni",
+    "unitId": "vus",
+    "programs": [
+      "Strucni prijediplomski studiji (Veleuciliste u Sibeniku)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "apa7"
+    }
+  },
+  {
+    "id": "vus-diplomski",
+    "unitId": "vus",
+    "programs": [
+      "Strucni diplomski studiji (Veleuciliste u Sibeniku)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "apa7"
+    }
+  },
+  {
+    "id": "bak-zavrsni",
+    "unitId": "bak",
+    "programs": [
+      "Strucni prijediplomski studiji (Veleuciliste Baltazar Zapresic)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "apa7"
+    }
+  },
+  {
+    "id": "bak-diplomski",
+    "unitId": "bak",
+    "programs": [
+      "Strucni diplomski studiji (Veleuciliste Baltazar Zapresic)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "apa7"
+    }
+  },
+  {
+    "id": "vguk-zavrsni",
+    "unitId": "vguk",
+    "programs": [
+      "Strucni prijediplomski studij Poljoprivreda (Veleuciliste u Krizevcima)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "vguk-diplomski",
+    "unitId": "vguk",
+    "programs": [
+      "Strucni diplomski studiji (Veleuciliste u Krizevcima)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "aspira-zavrsni",
+    "unitId": "aspira",
+    "programs": [
+      "Strucni prijediplomski studiji (Veleuciliste Aspira)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "aspira-diplomski",
+    "unitId": "aspira",
+    "programs": [
+      "Strucni diplomski studiji (Veleuciliste Aspira)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "par-zavrsni",
+    "unitId": "par",
+    "programs": [
+      "Strucni prijediplomski studiji (Veleuciliste PAR)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "par-diplomski",
+    "unitId": "par",
+    "programs": [
+      "Strucni diplomski studij Poslovno upravljanje (Veleuciliste PAR)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "vss-zavrsni",
+    "unitId": "vss",
+    "programs": [
+      "Strucni prijediplomski studij sigurnosti (Veleuciliste studija sigurnosti)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 1,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "vss-diplomski",
+    "unitId": "vss",
+    "programs": [
+      "Strucni diplomski studij sigurnosti (Veleuciliste studija sigurnosti)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "vuka-poslovni-zavrsni",
+    "unitId": "vuka",
+    "programs": [
+      "Poslovni odjel (zavrsni rad, Karlovac)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "chicago-notes"
+    }
+  },
+  {
+    "id": "vuka-poslovni-diplomski",
+    "unitId": "vuka",
+    "programs": [
+      "Poslovni odjel (diplomski rad, Karlovac)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "chicago-notes"
+    }
+  },
+  {
+    "id": "vuka-strojarski-zavrsni",
+    "unitId": "vuka",
+    "programs": [
+      "Strojarski odjel (zavrsni rad, Karlovac)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "ieee"
+    }
+  },
+  {
+    "id": "vuka-strojarski-diplomski",
+    "unitId": "vuka",
+    "programs": [
+      "Strojarski odjel (diplomski rad, Karlovac)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "ieee"
+    }
+  },
+  {
+    "id": "vuka-sigurnost-zavrsni",
+    "unitId": "vuka",
+    "programs": [
+      "Odjel sigurnosti i zastite (zavrsni rad, Karlovac)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "ieee"
+    }
+  },
+  {
+    "id": "vuka-sigurnost-diplomski",
+    "unitId": "vuka",
+    "programs": [
+      "Odjel sigurnosti i zastite (diplomski rad, Karlovac)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "ieee"
+    }
+  },
+  {
+    "id": "vuka-prehrambena-zavrsni",
+    "unitId": "vuka",
+    "programs": [
+      "Odjel prehrambene tehnologije (zavrsni rad, Karlovac)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "vuka-lovstvo-zavrsni",
+    "unitId": "vuka",
+    "programs": [
+      "Odjel lovstva i zastite prirode (zavrsni rad, Karlovac)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "unisb-sfsb-zavrsni",
+    "unitId": "sfsb",
+    "programs": [
+      "Strojarski fakultet u Slavonskom Brodu (zavrsni rad, Slavonski Brod)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "unisb-sfsb-diplomski",
+    "unitId": "sfsb",
+    "programs": [
+      "Strojarski fakultet u Slavonskom Brodu (diplomski rad, Slavonski Brod)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "unisb-teho-zavrsni",
+    "unitId": "teho",
+    "programs": [
+      "Tehnicki odjel (zavrsni rad, Slavonski Brod)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "unisb-teho-diplomski",
+    "unitId": "teho",
+    "programs": [
+      "Tehnicki odjel (diplomski rad, Slavonski Brod)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 2,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "unisb-btho-zavrsni",
+    "unitId": "btho",
+    "programs": [
+      "Biotehnicki odjel (zavrsni rad, Slavonski Brod)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 2,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "unisb-btho-diplomski",
+    "unitId": "btho",
+    "programs": [
+      "Biotehnicki odjel (diplomski rad, Slavonski Brod)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 2,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "unisb-odhz-zavrsni",
+    "unitId": "odhz",
+    "programs": [
+      "Odjel drustveno-humanistickih znanosti (zavrsni rad, Slavonski Brod)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "unisb-odhz-diplomski",
+    "unitId": "odhz",
+    "programs": [
+      "Odjel drustveno-humanistickih znanosti (diplomski rad, Slavonski Brod)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    }
+  },
+  {
+    "id": "ftrr-zavrsni",
+    "unitId": "ftrr",
+    "programs": [
+      "Prijediplomski studiji FTRR (zavrsni rad, Pozega)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "ftrr-diplomski",
+    "unitId": "ftrr",
+    "programs": [
+      "Diplomski studiji FTRR (diplomski rad, Pozega)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": []
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "adu-gluma-diplomski",
+    "unitId": "adu",
+    "programs": [
+      "Gluma"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016,
+          2017
+        ]
+      }
+    }
+  },
+  {
+    "id": "adu-dramaturgija-diplomski",
+    "unitId": "adu",
+    "programs": [
+      "Dramaturgija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016,
+          2018
+        ]
+      }
+    }
+  },
+  {
+    "id": "adu-snimanje-diplomski",
+    "unitId": "adu",
+    "programs": [
+      "Snimanje"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015,
+          2016,
+          2017
+        ]
+      }
+    }
+  },
+  {
+    "id": "adu-montaza-diplomski",
+    "unitId": "adu",
+    "programs": [
+      "Montaža"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015,
+          2016
+        ]
+      }
+    }
+  },
+  {
+    "id": "adu-ftv-rezija-diplomski",
+    "unitId": "adu",
+    "programs": [
+      "Filmska i TV režija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015
+        ]
+      }
+    }
+  },
+  {
+    "id": "adu-produkcija-diplomski",
+    "unitId": "adu",
+    "programs": [
+      "Produkcija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2015,
+          2016,
+          2017
+        ]
+      }
+    }
+  },
+  {
+    "id": "adu-kazalisna-rezija-diplomski",
+    "unitId": "adu",
+    "programs": [
+      "Kazališna režija i radiofonija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016,
+          2017
+        ]
+      }
+    }
+  },
+  {
+    "id": "adu-opci-diplomski",
+    "unitId": "adu",
+    "programs": [
+      "Opći profil akademije"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2017,
+          2018,
+          2019
+        ]
+      }
+    }
+  },
+  {
+    "id": "alu-slikarstvo-diplomski",
+    "unitId": "alu",
+    "programs": [
+      "Slikarstvo"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2018,
+          2019
+        ]
+      }
+    }
+  },
+  {
+    "id": "alu-kiparstvo-diplomski",
+    "unitId": "alu",
+    "programs": [
+      "Kiparstvo"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2018,
+          2019
+        ]
+      }
+    }
+  },
+  {
+    "id": "alu-grafika-diplomski",
+    "unitId": "alu",
+    "programs": [
+      "Grafika"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2018,
+          2019,
+          2020
+        ]
+      }
+    }
+  },
+  {
+    "id": "alu-novi-mediji-diplomski",
+    "unitId": "alu",
+    "programs": [
+      "Animirani film i novi mediji"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2019,
+          2020
+        ]
+      }
+    }
+  },
+  {
+    "id": "alu-nastavnicki-diplomski",
+    "unitId": "alu",
+    "programs": [
+      "Nastavnički odsjek"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2017
+        ]
+      }
+    }
+  },
+  {
+    "id": "alu-konzerviranje-diplomski",
+    "unitId": "alu",
+    "programs": [
+      "Konzerviranje i restauriranje"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2017,
+          2018,
+          2019
+        ]
+      }
+    }
+  },
+  {
+    "id": "ttf-dizajn-diplomski",
+    "unitId": "ttf",
+    "programs": [
+      "Tekstilni i modni dizajn"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "apa7"
+    }
+  },
+  {
+    "id": "ttf-dizajn-zavrsni",
+    "unitId": "ttf",
+    "programs": [
+      "Tekstilni i modni dizajn"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016,
+          2017
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "apa7"
+    }
+  },
+  {
+    "id": "pmf-geofizika-graduate",
+    "unitId": "pmf",
+    "programs": [
+      "Geofizika"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "fieldValidation": {
+      "sample": {
+        "syntheticDocxAudits": 0,
+        "docxAudits": 0,
+        "publicPdfAudits": 3,
+        "metadataSpotChecks": 0,
+        "years": [
+          2016,
+          2017
+        ]
+      }
+    },
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "fsb-opci-akademski-rad",
+    "unitId": "fsb",
+    "programs": [
+      "Strojarstvo",
+      "Brodogradnja",
+      "Zrakoplovno inženjerstvo i svemirska tehnika",
+      "Diplomski studiji Fakulteta strojarstva i brodogradnje",
+      "Prijediplomski studiji Fakulteta strojarstva i brodogradnje (zavrsni rad)",
+      "Doktorski studij Fakulteta strojarstva i brodogradnje",
+      "Opći profil fakulteta"
+    ],
+    "workTypes": [
+      "seminar",
+      "project",
+      "article"
+    ],
+    "status": "partial",
+    "rules": {
+      "recommendedCitation": "ieee"
+    }
+  },
+  {
+    "id": "efst-opci-akademski-rad",
+    "unitId": "efst",
+    "programs": [
+      "Prijediplomski studiji EFST (zavrsni rad)",
+      "Diplomski studiji EFST"
+    ],
+    "workTypes": [
+      "seminar",
+      "project",
+      "article"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "efos-opci-akademski-rad",
+    "unitId": "efos",
+    "programs": [
+      "Prijediplomski/strucni studiji EFOS (zavrsni rad)",
+      "Diplomski studiji EFOS"
+    ],
+    "workTypes": [
+      "seminar",
+      "project",
+      "article"
+    ],
+    "status": "partial",
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "pravri-opci-akademski-rad",
+    "unitId": "pravri",
+    "programs": [
+      "Stručni prijediplomski studij Upravni studij",
+      "Integrirani prijediplomski i diplomski sveučilišni studij Pravo",
+      "Stručni diplomski studij Javna uprava"
+    ],
+    "workTypes": [
+      "seminar",
+      "project",
+      "article"
+    ],
+    "status": "partial",
+    "rules": {
+      "recommendedCitation": "pravo-fusnote"
+    }
+  },
+  {
+    "id": "geof-opci-akademski-rad",
+    "unitId": "geof",
+    "programs": [
+      "Geodezija i geoinformatika",
+      "Diplomski studiji Geodetskog fakulteta",
+      "Doktorski studij Geodetskog fakulteta",
+      "Opći profil fakulteta"
+    ],
+    "workTypes": [
+      "seminar",
+      "project",
+      "article"
+    ],
+    "status": "partial",
+    "rules": {
+      "recommendedCitation": "harvard"
+    }
+  },
+  {
+    "id": "vuka-poslovni-opci-akademski-rad",
+    "unitId": "vuka",
+    "programs": [
+      "Poslovni odjel (zavrsni rad, Karlovac)",
+      "Poslovni odjel (diplomski rad, Karlovac)"
+    ],
+    "workTypes": [
+      "seminar",
+      "project",
+      "article"
+    ],
+    "status": "partial",
+    "rules": {
+      "recommendedCitation": "chicago-notes"
+    }
+  }
+]

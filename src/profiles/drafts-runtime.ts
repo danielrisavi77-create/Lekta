@@ -17,6 +17,7 @@ import {
 } from './drafts-merge';
 import { VERIFIED_PROFILE_REGISTRY, LEGAL_DEPARTMENT_REGISTRY } from './profile-registry';
 import type { VerifiedProfile, LegalDepartment, RuleEntry } from './profile-schema';
+import heavyProfiles from '../../data/profiles/verified-profiles-heavy.json';
 
 const draftModules = import.meta.glob('../../data/profiles/*/drafts/*.json', {
   eager: true,
@@ -48,6 +49,14 @@ export function draftRuleEntriesFor(profileId: string): RuleEntry[] {
 
 function withDrafts<T extends { id: string }>(profile: T): T & { ruleEntries: RuleEntry[] } {
   return { ...profile, ruleEntries: draftRuleEntriesFor(profile.id) };
+}
+
+// Split (perf): teska pravila su u zivom app-u lazy (profile-registry.ensureProfileRules). drafts-runtime
+// je verifikacijski/test sloj (NIJE u javnom bundleu, vidi profile-registry napomenu) pa ovdje EAGER
+// spajamo heavy u registry da VERIFIED_PROFILES_WITH_DRAFTS nose PUN profil (rules/fieldValidation).
+for (const entry of VERIFIED_PROFILE_REGISTRY as unknown as Array<{ id: string }>) {
+  const full = (heavyProfiles as Record<string, object>)[entry.id];
+  if (full) Object.assign(entry, full);
 }
 
 /** Verificirani profili s pridruzenim staging nacrtima (za verifikacijske module). */
