@@ -370,7 +370,7 @@ Datum: 2026-07-11.
   Pravi lijek za parse/veličinu je BL-P0-05-1/2 (maknuti podatke iz runtime grafa), ne stringify.
 - Velicina: S (zatvoreno, wontfix)
 
-**BL-P0-05-4, Lijeno ucitati DOCX/PDF motor (skinuti s landinga)** — DJELOMICNO GOTOVO (2026-07-11)
+**BL-P0-05-4, Lijeno ucitati DOCX/PDF motor (skinuti s landinga)** — GOTOVO (2026-07-12)
 - Prioritet: P0 paket (izvorni performance-03 P2)
 - Problem: analyzeDocx u glavnom chunku preko inline fallbacka; pdf preflight staticki;
   motor duplo isporucen.
@@ -385,11 +385,15 @@ Datum: 2026-07-11.
   app.ts:17) sad se ucitava dinamicki (`await import`) u analyzePdfFile, jedinom call-siteu. Modul
   je zaseban lazy chunk (pdf-preflight-*.js ~2,5 kB), dohvaca se tek kad korisnik doda PDF; docx
   put i glavni chunk vise ga ne nose. tsc/build zeleni, chunk se dijeli.
-- PREOSTAJE: lijeno uciti CIJELI analizator na prvu interakciju (drop/odabir). Veca app.ts izmjena
-  -> coord s paralelnom sesijom.
-- Rizik regresije: nizak. Fallback grana sada radi dodatni fetch samo kad je worker vec pao;
-  sretni put nepromijenjen (worker chunk isti).
-- Velicina: M (S dio isporucen)
+- ISPORUCENO (parser+quick-stats dio, 2026-07-12, commit 5469d66): parser (ZipReader/parseXml/
+  paragraphText) i docxQuickStats zamijenjeni dinamickim `await import` u 4 post-interakcijske
+  funkcije (updateQuickStats/detectDocxContext/analyzeMetadataDocx/docxCoreMetadata). Landing chunk
+  vise NE nosi NIJEDAN DOCX-parsing kod. Novi lazy parser-*.js (~2,7 KB gzip) + quick-stats-*.js;
+  glavni chunk gzip 180,64 -> 178,43 KB. Preostala tezina glavnog chunka je PODATKOVNA
+  (profile-registry/catalog/coverage), ne analizator (zaseban trud, vidi BL-P0-05-1/2).
+- Rizik regresije: nizak. Fallback grana radi dodatni fetch samo kad je worker vec pao; lazy parser
+  se ucita na prvu interakciju (drop/odabir); sretni put nepromijenjen (worker chunk isti).
+- Velicina: M (isporuceno u cijelosti)
 
 **BL-P0-05-5, Gumb Prekini analizu + Escape** — GOTOVO (2026-07-11)
 - Prioritet: P0 paket (izvorni performance-04 P2)
