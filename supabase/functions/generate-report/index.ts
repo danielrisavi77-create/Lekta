@@ -17,13 +17,15 @@ import { decideReportAccess } from '../../../src/report/slot-logic.ts';
 import { resolveDailyCap } from '../../../src/report/partner.ts';
 import { coverageTierForStatus } from '../../../src/report/guarantee.ts';
 import { tryGrantFriendReferralReward } from '../_shared/grant-friend-referral-reward.ts';
-import { hashClientIp } from '../_shared/hash-ip.ts';
+import { hashClientIpSalted } from '../_shared/hash-ip.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const DAILY_CAP = Number(Deno.env.get('DAILY_CAP') ?? '30');
 // Soljeni IP hash: isti salt kao redeem-referral-signup, da anti-fraud usporedba u
 // grant-referrer-reward (referred_ip_hash vs report_generations.ip_hash) uopce moze pogoditi.
+// Bez dediciranog IP_HASH_SALT derivira se stabilan salt iz service-role kljuca (hash-ip.ts),
+// pa ip_hash nikad nije nesoljen (security-02).
 const IP_HASH_SALT = Deno.env.get('IP_HASH_SALT') ?? '';
 
 const CORS = {
@@ -155,7 +157,7 @@ Deno.serve(async (req: Request) => {
     if (friend.granted) decision = await decide();
   }
 
-  const ipHash = await hashClientIp(req.headers.get('x-forwarded-for'), IP_HASH_SALT);
+  const ipHash = await hashClientIpSalted(req.headers.get('x-forwarded-for'), IP_HASH_SALT, SERVICE_ROLE);
   const log = (status: string, slotId: string | null) =>
     admin.from('report_generations').insert({
       user_id: user.id,

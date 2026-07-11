@@ -128,8 +128,13 @@ Datum: 2026-07-11.
 - Rizik regresije: nizak do srednji (pin je no-op; ublazuje deno.lock + staging webhook).
 - Velicina: M
 
-**BL-P0-02-3, IP hash salt fallback u generate-report i redeem-referral-signup**
+**BL-P0-02-3, IP hash salt fallback u generate-report i redeem-referral-signup** — GOTOVO (commit u tijeku)
 - Prioritet: P0 (izvorni security-02 P2, elevirano u paket)
+- Status: RIJESENO. hash-ip.ts dobio deriveIpSalt (stabilan salt iz service-role kljuca kad
+  IP_HASH_SALT fali, isti string kao faculty-request) + hashClientIpSalted; generate-report i
+  redeem-referral-signup prebaceni na hashClientIpSalted(fwd, IP_HASH_SALT, SERVICE_ROLE). 7
+  testova (soljen != nesoljen, cross-fn konzistentnost). Napomena rizika: OK jer je jos nema
+  zivih ip_hash upisa (soft-launch, generate-report se ne poziva). npm run check zelen (847 t).
 - Problem: ip_hash fallbacka na prazan salt; nesoljeni SHA-256 IPv4 je reverzibilan.
 - Lokacija: generate-report/index.ts:27, redeem-referral-signup/index.ts:17,
   _shared/hash-ip.ts:20; kontrast faculty-request/index.ts:39-45

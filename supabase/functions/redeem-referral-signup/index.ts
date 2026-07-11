@@ -9,11 +9,13 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 
-import { hashClientIp } from '../_shared/hash-ip.ts';
+import { hashClientIpSalted } from '../_shared/hash-ip.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY')!;
 const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+// Bez dediciranog IP_HASH_SALT derivira se stabilan salt iz service-role kljuca (hash-ip.ts),
+// pa ip_hash nikad nije nesoljen (security-02); ista derivacija kao generate-report.
 const IP_HASH_SALT = Deno.env.get('IP_HASH_SALT') ?? '';
 
 const CORS_HEADERS: Record<string, string> = {
@@ -80,8 +82,8 @@ Deno.serve(async (req: Request) => {
 
   if (existing) return jsonResponse({ ok: true, reason: 'already_referred' }, 200);
 
-  // Isti kanonski hash (ekstrakcija + IP_HASH_SALT) kao generate-report, inace fraud usporedba pada.
-  const ipHash = await hashClientIp(req.headers.get('x-forwarded-for'), IP_HASH_SALT);
+  // Isti kanonski hash (ekstrakcija + izvedeni salt) kao generate-report, inace fraud usporedba pada.
+  const ipHash = await hashClientIpSalted(req.headers.get('x-forwarded-for'), IP_HASH_SALT, SERVICE_ROLE_KEY);
 
   const { error: insertError } = await supabase.from('referral_signups').insert({
     referrer_user_id: codeRow.user_id,
