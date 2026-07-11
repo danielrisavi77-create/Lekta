@@ -41,6 +41,9 @@ interface CopyButtonOptions {
   okLabel?: string;
   failLabel?: string;
   holdMs?: number;
+  statusEl?: any;       // opcionalni aria-live element: ishod se najavljuje citacu ekrana (WCAG 4.1.3)
+  okStatus?: string;
+  failStatus?: string;
 }
 
 /**
@@ -58,6 +61,8 @@ export function bindCopyButton(
   const okLabel = opts.okLabel ?? 'Kopirano ✓';
   const failLabel = opts.failLabel ?? 'Označi pa Ctrl+C';
   const holdMs = opts.holdMs ?? 1600;
+  const okStatus = opts.okStatus ?? 'Sažetak kopiran u međuspremnik.';
+  const failStatus = opts.failStatus ?? 'Kopiranje nije uspjelo, označite tekst pa Ctrl+C.';
   const original = btn.textContent;
   let timer = 0;
   btn.addEventListener('click', async () => {
@@ -66,6 +71,8 @@ export function bindCopyButton(
     const ok = await copyText(text);
     if (timer) clearTimeout(timer);
     btn.textContent = ok ? okLabel : failLabel;
+    // Vizualna potvrda je na gumbu; citac ekrana je dobiva preko aria-live statusa kad je predan.
+    if (opts.statusEl) opts.statusEl.textContent = ok ? okStatus : failStatus;
     timer = window.setTimeout(() => {
       btn.textContent = original;
       timer = 0;

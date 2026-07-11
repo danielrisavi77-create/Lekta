@@ -9,6 +9,11 @@ const nf = new Intl.NumberFormat('hr-HR');
 const nf1 = new Intl.NumberFormat('hr-HR', { minimumFractionDigits: 0, maximumFractionDigits: 1 });
 const nf2 = new Intl.NumberFormat('hr-HR', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
 
+// Gornja granica unosa: brojanje radi vise punih prolaza po tekstu na svaki frame, pa ogroman
+// paste (vise MB) inace kratko zamrzne karticu. HTML maxlength pokriva tipkanje/paste u polje,
+// ovaj guard pokriva i programatski upisan value. 2 milijuna znakova je daleko iznad realnog rada.
+const MAX_ZNAKOVA = 2_000_000;
+
 const SAMPLE = `Ovo je primjer teksta koji možeš zamijeniti svojim radom. Zalijepi ovdje uvod, poglavlje ili cijeli rad pa gledaj kako se broj kartica, riječi i znakova mijenja u stvarnom vremenu.
 
 Jedna autorska kartica u hrvatskoj lekturi i prijevodu iznosi 1800 znakova s razmacima. Cijena lekture obično se računa upravo po kartici, pa je ovaj broj koristan kad procjenjuješ trošak i opseg.`;
@@ -47,7 +52,9 @@ function scheduleSrSummary(m: any) {
   clearTimeout(_srTimer);
   _srTimer = setTimeout(() => {
     live.textContent = m.charsWithSpaces
-      ? `${nf2.format(m.kartice)} kartica, ${nf.format(m.words)} riječi, ${nf.format(m.charsWithSpaces)} znakova`
+      ? `${nf2.format(m.kartice)} kartica, ${nf.format(m.words)} riječi, ${nf.format(m.charsWithSpaces)} znakova s razmacima, `
+        + `${nf.format(m.charsWithoutSpaces)} bez razmaka, ${nf.format(m.sentences)} rečenica, `
+        + `${nf.format(m.paragraphs)} odlomaka, ${nf.format(m.pages)} stranica, vrijeme čitanja ${readingLabel(m.readingMinutes)}`
       : 'Nema teksta.';
   }, 900);
 }
@@ -77,6 +84,8 @@ function init() {
     if (rafId) return;
     rafId = requestAnimationFrame(() => {
       rafId = 0;
+      // Zastita od ogromnog pastea koji bi zamrznuo nit (uz HTML maxlength na polju).
+      if (input.value.length > MAX_ZNAKOVA) input.value = input.value.slice(0, MAX_ZNAKOVA);
       render(input.value);
     });
   });
@@ -96,7 +105,7 @@ function init() {
   bindCopyButton($('#kt-copy'), () => {
     const m = countText(input.value || '');
     return m.charsWithSpaces ? summaryText(m) : '';
-  });
+  }, { statusEl: $('#kt-copy-status') });
 }
 
 if (document.readyState === 'loading') {

@@ -134,9 +134,11 @@ describe('countText', () => {
     expect(m.charsWithoutSpaces).toBe(3);
   });
 
-  it('procjena A4 stranica: kartica je oko pola stranice', () => {
-    expect(countText('a'.repeat(7200)).pages).toBe(2); // 4 kartice -> 2 A4 stranice
-    expect(countText('a'.repeat(1800)).pages).toBe(1); // 1 kartica -> zaokruzeno na 1
+  it('procjena A4 stranica: prored 1,5, ~2600 znakova po stranici', () => {
+    // Djelitelj /2 je odgovarao jednostrukom proredu i podbrajao stranice; sada je osnovica 2600.
+    expect(countText('a'.repeat(7200)).pages).toBe(3); // 7200/2600 -> 3 A4 stranice (prored 1,5)
+    expect(countText('a'.repeat(1800)).pages).toBe(1); // 1 kartica ~ 2/3 stranice -> 1
+    expect(countText('a'.repeat(18000)).pages).toBe(7); // 10 kartica -> 7 stranica
   });
 
   it('kratki ne-prazan tekst ima minimalno 0.1 min citanja, ne 0', () => {
@@ -147,5 +149,62 @@ describe('countText', () => {
     expect(countText('Što?! Zaista?').sentences).toBe(2);
     expect(countText('Kraj misli… Nova misao.').sentences).toBe(2);
     expect(countText('Kupili smo jabuke itd.').sentences).toBe(1);
+  });
+
+  it('NFD (dekomponirani) dijakritici daju isti broj znakova kao NFC (audit #1)', () => {
+    // Bez .normalize(NFC) se osnovno slovo + kombinirajuci znak brojalo kao 2, pa je isti
+    // vidljivi tekst iz NFD izvora (macOS, neki PDF/CMS) napuhivao karticu.
+    const nfc = countText('riječ');
+    const nfd = countText('riječ'.normalize('NFD'));
+    expect(nfc.charsWithSpaces).toBe(5);
+    expect(nfd.charsWithSpaces).toBe(5);
+    expect(nfd.kartice).toBe(nfc.kartice);
+  });
+
+  it('meki prijelom (U+00AD) i word joiner (U+2060) su nevidljivi, ne broje se (audit #7)', () => {
+    expect(countText('a\u00ADb').charsWithSpaces).toBe(2);
+    expect(countText('a\u2060b').charsWithSpaces).toBe(2);
+  });
+
+  it('vodeci/zavrsni razmaci i prazni redovi ne napuhuju naplatnu karticu (audit #4/#22)', () => {
+    // Cist whitespace oko sadrzaja se ne naplacuje: kartice se racunaju iz trimanog teksta.
+    expect(countText('Rad.' + ' '.repeat(1800)).charsWithSpaces).toBe(4);
+    expect(countText('Rad.' + ' '.repeat(1800)).kartice).toBe(countText('Rad.').kartice);
+    expect(countText('x' + ' '.repeat(1799)).kartice).toBe(0);
+    expect(countText('   '.repeat(600)).kartice).toBe(0);
+  });
+
+  it('NBSP nosi sadrzaj pa ulazi u "znakove bez razmaka" (audit #26)', () => {
+    expect(countText('10 kg').charsWithoutSpaces).toBe(5);
+  });
+
+  it('samostalna interpunkcija nije rijec; em/en crtica bez razmaka razdvaja (audit #11/#12/#20)', () => {
+    expect(countText('prva - druga').words).toBe(2); // samostalna crtica nije rijec
+    expect(countText('rijec—rijec').words).toBe(2); // em crtica bez razmaka razdvaja
+    expect(countText('dobro-poznat pojam').words).toBe(2); // spojnica ostaje jedna rijec
+    expect(countText('.').words).toBe(0);
+    expect(countText('...').words).toBe(0);
+    expect(countText('. . .').words).toBe(0);
+  });
+
+  it('cista interpunkcija nema vremena citanja (audit #20)', () => {
+    expect(countText('...').readingMinutes).toBe(0);
+  });
+
+  it('tekst ispod jedne minute se ne zaokruzuje na "1 min" (audit #21)', () => {
+    const m = countText(Array.from({ length: 190 }, () => 'r').join(' '));
+    expect(m.words).toBe(190);
+    expect(m.readingMinutes).toBe(0.9); // 0,95 min ostaje ispod 1
+  });
+
+  it('raspon brojeva s crticom ne cijepa recenicu (audit #3)', () => {
+    expect(countText('Vidi str. 10.-20. za dokaz.').sentences).toBe(1);
+    expect(countText('Razdoblje 2020.-2024. bilo je burno.').sentences).toBe(1);
+  });
+
+  it('terminator ispred zatvarajuceg navodnika kad se recenica nastavlja (audit #10)', () => {
+    expect(countText('Pitao je: Zašto?" i otišao.').sentences).toBe(1);
+    // veliko slovo iza zatvorenog navodnika ostaje granica recenice
+    expect(countText('Rekao je: Idi." Zatim je otišao.').sentences).toBe(2);
   });
 });
