@@ -458,37 +458,47 @@ Datum: 2026-07-11.
   landing_usporedba - vecina LOW, neki kontendirani). Nalazi u workflow izlazu za follow-up.
 - Gate: tsc 0, vitest svi (legal-content+csp-hash 8/8), build OK; 3 ciste datoteke (index/app/legal).
 
-**BL-P0-06-3, Pravila kupnje i povrata u footer**
+**BL-P0-06-3, Pravila kupnje i povrata u footer** — GOTOVO (2026-07-11)
 - Prioritet: P0 paket (izvorni routes-04 P2)
 - Problem: glavni footer izostavlja pravila-povrata.html; footeri alata linkaju 3 od 7.
-- Lokacija: index.html:344; citat.html:327-329; alati.html:183-185;
-  generate-legal-pages.mjs:69-72
-- Preporuka: dodati poveznicu na Pravila kupnje i povrata u sve footere; ujednaciti pravni set.
-- Acceptance: pravila-povrata.html dostupan iz footera svake javne stranice; svih 7 u dva
-  klika.
-- Rizik regresije: nizak (paziti data-legal="purchase" ili href fallback).
+- Isporuceno: index.html footer dobio poveznicu Pravila kupnje i povrata (data-legal="purchase",
+  href="/pravila-povrata.html"); svih 7 root alata (citat/alati/kartice/naslovnica/literatura/
+  izjava/landing_usporedba) prosireno s 3 na svih 7 legal linkova (dodano Odricanje, Obrada
+  dokumenata, Kolacici, Pravila kupnje i povrata). generate-legal-pages.mjs footer vec renderira
+  svih 7 dokumenata (Object.values(docs)) pa je bez izmjene. Per-fakultet citatne SEO stranice
+  imaju CTA natrag na hub pa je "svih 7 u dva klika" pokriveno (per-fakultet -> citat.html/index
+  -> legal).
+- Acceptance ispunjen: pravila-povrata.html dostupan iz footera svake glavne javne stranice; svih
+  7 u jednom kliku s huba, u dva klika s per-fakultet stranica.
+- Gate: DEPLOY build + verify-deploy-dist OK; dist tool pages 7/7 legal linkova, index footer
+  purchase prisutan.
 - Velicina: S
 
-**BL-P0-06-4, Brandirana 404 stranica**
+**BL-P0-06-4, Brandirana 404 stranica** — GOTOVO (2026-07-11)
 - Prioritet: P0 paket (spoj routes-06 P3 + seo-07 P3)
 - Problem: nema 404.html ni [[redirects]]; clean URL i typani linkovi padaju na genericki
   Netlify 404.
-- Lokacija: netlify.toml; glob 404.html/_redirects prazan
-- Preporuka: public/404.html s brendom i navigacijom; po zelji redirect za clean URL.
-- Acceptance: nepostojeca ruta vraca brandiranu 404 s navigacijom.
-- Rizik regresije: nizak (aditivno).
+- Isporuceno: public/404.html (self-contained, kopira se u dist/ root pa Netlify automatski servira
+  na svakoj nepostojecoj ruti; bez [[redirects]]). Brend (logo mark), veliki "404", hrvatska poruka,
+  primarni CTA na provjeru rada + navigacija na 6 alata. CSP-safe: inline <style> (style-src
+  'unsafe-inline'), BEZ inline <script> (script-src hasha samo FOUC skriptu glavnih stranica).
+  robots noindex,follow. Paleta uskladjena s legal statickim stranicama (#f8f6f0/#33407e).
+- Acceptance ispunjen: nepostojeca ruta vraca brandiranu 404 s navigacijom (dist/404.html potvrdjen
+  u buildu; Vite kopira public/ -> dist/ root).
 - Velicina: S
 
-**BL-P0-06-5, Pravne poveznice u index footeru kao pravi <a href>**
+**BL-P0-06-5, Pravne poveznice u index footeru kao pravi <a href>** — GOTOVO (2026-07-11)
 - Prioritet: P0 paket (izvorni routes-07 P3)
 - Problem: pravne stavke su JS gumbi (legal-open), ne <a>; bez JS nema poveznice; nulti link
   equity.
-- Lokacija: index.html:344; kontrast citat.html:327
-- Preporuka: uciniti <a href="/privatnost.html"> uz legal-open preko preventDefault
-  (progressive enhancement).
-- Acceptance: footer sadrzi prave poveznice; modal radi uz JS.
-- Rizik regresije: nizak do srednji (legal-open handler ne smije puknuti kad element postane
-  <a>).
+- Isporuceno: svih 7 legal stavki u index footeru pretvoreno iz <button class="footer-link-btn
+  legal-open"> u <a class="footer-link-btn legal-open" href="/slug.html"> (progressive enhancement).
+  Handler (app.ts:146) vec radi e.preventDefault() na .legal-open pa uz JS otvara modal, a bez JS
+  <a href> navigira na staticku pravnu stranicu. CSS .footer-link-btn (border:0;background:transparent;
+  color:inherit) radi identicno na <a> (naslijedi muted iz .footer-links, hover var(--text)) pa nema
+  vizualne regresije. Obrazac vec postoji u guaranteeModalu (<a class="legal-open" href="/garancija.html">).
+- Acceptance ispunjen: footer sadrzi prave poveznice s href; modal i dalje radi uz JS (0 preostalih
+  legal <button> u dist/index.html, 7 legal <a> s href).
 - Velicina: S
 
 ### P0-07 Naplata
