@@ -296,17 +296,15 @@ Datum: 2026-07-11.
 - Rizik regresije: nizak.
 - Velicina: S
 
-**BL-P0-04-4, Error-kolektor UA i privola**
+**BL-P0-04-4, Error-kolektor UA i privola** — GOTOVO (2026-07-11)
 - Prioritet: P0 paket (izvorni data-flow-08 P3)
-- Problem: installErrorTracking salje navigator.userAgent i putanju bez privole (kanal OFF
-  po defaultu).
-- Lokacija: src/ui/app.ts:77, :122; kontrast sanitizeEventData :234-235
-- Dokaz: beacon nosi UA i path; ne nosi tekst dokumenta.
-- Posljedica: pseudonimni tehnicki kontekst bez privole kad se ozici.
-- Preporuka: dokumentirati u privacy (legitimni interes) ili izostaviti UA; zadrzati
-  izostavljanje teksta dokumenta.
-- Acceptance: error payload opisan u pravnom tekstu ili bez UA; nikad ne nosi sadrzaj.
-- Rizik regresije: nizak.
+- Isporuceno: `ua:(navigator.userAgent||'').slice(0,200)` UKLONJEN iz error payloada
+  (installErrorTracking, app.ts). Beacon sada nosi samo: kind, message (<=500), stack (<=2000),
+  version, path (ruta, ne PII), timestamp. Bez UA -> nema pseudonimnog otiska preglednika bez
+  privole. Komentar dopunjen upozorenjem da se UA ne dodaje natrag bez pravne osnove. Tekst
+  dokumenta se i dalje nikad ne salje (bilo i ostaje).
+- Acceptance ispunjen: error payload bez UA; nikad ne nosi sadrzaj. Kanal je i dalje OFF po
+  defaultu (errorEndpoint prazan). tsc 0; nijedan test ne ovisi o payloadu.
 - Velicina: S
 
 ### P0-05 Obrada datoteka
