@@ -105,9 +105,11 @@ comment on table user_notification_preferences is
 
 -- === Napomena o pg_cron (rucni korak, vidi RUNBOOK_OPS.md obrazac) ===
 --
--- Ovo NIJE dio migracije jer treba stvarne vrijednosti projekta (URL, service role
--- kljuc u Vault-u ili anon kljuc s posebnom zastitom). Pokreni RUCNO u SQL editoru
--- nakon deploya `send-reminders` Edge Functiona:
+-- Ovo NIJE dio migracije jer treba stvarne vrijednosti projekta (URL i cron tajnu).
+-- send-reminders je verify_jwt=false pa se stiti DEDICIRANOM cron tajnom
+-- (REMINDER_CRON_SECRET, ista vrijednost u Edge secrets i u headeru ispod). NE
+-- koristi service role kljuc u headeru. Pokreni RUCNO u SQL editoru nakon deploya
+-- `send-reminders` Edge Functiona:
 --
 -- select cron.schedule(
 --   'send-deadline-reminders',
@@ -117,7 +119,7 @@ comment on table user_notification_preferences is
 --     url := 'https://<PROJECT_REF>.supabase.co/functions/v1/send-reminders',
 --     headers := jsonb_build_object(
 --       'Content-Type', 'application/json',
---       'Authorization', 'Bearer <SERVICE_ROLE_KEY_ILI_CRON_SECRET>'
+--       'Authorization', 'Bearer <REMINDER_CRON_SECRET>'
 --     ),
 --     body := '{}'::jsonb
 --   );

@@ -25,11 +25,14 @@ Resend salje samo s VERIFICIRANE domene; `lektahr.netlify.app` subdomena ne ide.
 2. Resend -> API Keys -> Create.
 3. Postavi Supabase Edge Function secrets (project-wide, vrijede za OBJE funkcije).
    `SUPABASE_URL` i `SUPABASE_SERVICE_ROLE_KEY` Supabase ubrizgava sam, ne diraj ih.
-   Trebas cetiri:
+   Trebas pet:
    - `RESEND_API_KEY` = Resend key
    - `REMINDER_FROM_EMAIL` = `Lekta <podsjetnici@tvoja-domena>`
    - `REMINDER_UNSUB_SECRET` = tajna (generiraj: `openssl rand -hex 32`). VAZNO: jednom
      postavljena se NE mijenja, inace svi vec poslani "odjava" linkovi prestaju vrijediti.
+   - `REMINDER_CRON_SECRET` = tajna (`openssl rand -hex 32`) kojom se cron autorizira
+     (funkcija je verify_jwt=false pa bez ove tajne vraca 401). Ista vrijednost mora ici
+     u `Authorization: Bearer` header cron poziva (vidi migraciju 0012). NIJE service role.
    - `APP_BASE_URL` = `https://lektahr.netlify.app` (ili prava domena kad je bude)
 
    Dashboard: Edge Functions -> Secrets -> Add new secret. Ili CLI:
@@ -39,9 +42,11 @@ Resend salje samo s VERIFICIRANE domene; `lektahr.netlify.app` subdomena ne ide.
      RESEND_API_KEY="re_xxx" \
      REMINDER_FROM_EMAIL="Lekta <podsjetnici@tvoja-domena>" \
      REMINDER_UNSUB_SECRET="<hex>" \
+     REMINDER_CRON_SECRET="<hex>" \
      APP_BASE_URL="https://lektahr.netlify.app"
    ```
-   Cron vec postoji; cim su tajne postavljene, pocinje slati.
+   Cron vec postoji; cim su tajne postavljene (ukljucujuci REMINDER_CRON_SECRET u cron
+   headeru), pocinje slati.
 
 ## 2. OTP email template (da prijava radi)  [blokira login]
 
@@ -72,11 +77,13 @@ mice oznaku.
 1. Na zivom sajtu klikni Prijava, upisi e-mail, provjeri da stigne KOD (ne link), upisi ga.
 2. Analiziraj FPZG ili FSB diplomski `.docx` -> ekran "Spremnost za predaju" -> pojavi se
    checkbox s rokom -> pretplati se (insert u `deadline_subscriptions`).
-3. Rucni test cron funkcije bez cekanja 08:00 UTC:
+3. Rucni test cron funkcije bez cekanja 08:00 UTC (treba cron tajnu; bez nje je 401):
    ```bash
-   curl -X POST https://zrrjttizjyfcxmcpgzml.supabase.co/functions/v1/send-reminders
+   curl -X POST https://zrrjttizjyfcxmcpgzml.supabase.co/functions/v1/send-reminders \
+     -H "Authorization: Bearer <REMINDER_CRON_SECRET>"
    ```
-   Ocekivano 200; uz pretplatu u prozoru 7d/1d prije roka stize e-mail.
+   Ocekivano 200 (bez ispravne tajne: 401, ne dira bazu ni Resend); uz pretplatu u prozoru
+   7d/1d prije roka stize e-mail.
 
 ## Napomene
 
