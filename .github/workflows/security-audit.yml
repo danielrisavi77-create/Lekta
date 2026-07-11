@@ -1,0 +1,31 @@
+# Supply-chain provjera (BL-P3-14): revizija PRODUKCIJSKIH ovisnosti.
+# Dev CLI-jevi (netlify-cli, supabase) dominiraju lockfileom pa ih namjerno izostavljamo
+# (--omit=dev); ono sto zavrsi u browser bundleu mora biti bez high/critical ranjivosti.
+# Tjedni cron hvata novoobjavljene ranjivosti i bez novog commita.
+name: security-audit
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * 1" # ponedjeljak 06:00 UTC
+
+jobs:
+  npm-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Instaliraj ovisnosti
+        run: npm ci
+
+      - name: Audit produkcijskih ovisnosti (high+)
+        run: npm audit --omit=dev --audit-level=high

@@ -1,0 +1,26 @@
+# Dependabot (BL-P3-14): automatski PR-ovi za sigurnosne i verzijske zakrpe.
+# Dva ekosustava: npm (ovisnosti aplikacije) i github-actions (verzije akcija u workflowima).
+# Teski dev CLI-jevi (netlify-cli, supabase) se NE nadograduju automatski: dominiraju lockfileom
+# i nisu u produkcijskom bundleu (vidi BL-P2-09), pa ih dizemo rucno po potrebi da se izbjegne sum.
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    groups:
+      # Grupiraj nerizicne minor/patch nadogradnje u jedan PR (manje suma, laksi pregled).
+      minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
+    ignore:
+      - dependency-name: "netlify-cli"
+      - dependency-name: "supabase"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3
