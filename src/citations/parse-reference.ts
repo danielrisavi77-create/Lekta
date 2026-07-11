@@ -111,10 +111,101 @@ function parsePropis(original: string, fields: Partial<CitationInput>): void {
   delete fields.authors;
 }
 
+// --- Vancouver / ICMJE (numericki biomedicinski stil) ------------------------
+// "Prezime XY, Prezime2 Z. Naslov. Casopis. Godina;Vol(Broj):Str." (clanak)
+// "... Naslov. Mjesto: Izdavac; Godina." (knjiga)   "... [zavrsni rad]. ..." (teza)
+// Autori nemaju zareze ni tocke pa je struktura pravilnija od APA-e kad se prepozna.
+function looksLikeVancouver(s: string): boolean {
+  return /\b(?:19|20)\d{2}\s*;\s*\d/.test(s)                          // Godina;Vol (clanak)
+      || /;\s*(?:19|20)\d{2}\.?\s*$/.test(s)                          // ...; Godina.  (knjiga/teza)
+      || /\[(?:zavr[sš]ni|diplomski|doktorski|magistarski)\s+rad\]/i.test(s);
+}
+
+// "Đorđević V" -> "Đorđević, V."; "Zarkan AH" -> "Zarkan, A. H."; "Van Goethem M" -> "Van Goethem, M."
+// Kljucno: zbijene inicijale ("AH") sirimo u razmaknute ("A. H.") jer initials() dijeli po razmaku.
+function vancouverName(p: string): string | null {
+  const tokens = p.split(/\s+/).filter(Boolean);
+  if (!tokens.length) return null;
+  let suffix = '';
+  while (tokens.length > 1 && /^(?:Jr|Sr|II|III|IV)\.?$/.test(tokens[tokens.length - 1])) {
+    suffix = tokens.pop()!.replace(/\.$/, '');
+  }
+  const initTok = tokens[tokens.length - 1];
+  if (tokens.length >= 2 && /^[\p{Lu}]{1,4}\.?$/u.test(initTok)) {
+    const surname = tokens.slice(0, -1).join(' ') + (suffix ? ` ${suffix}` : '');
+    const inits = initTok.replace(/\./g, '').split('').map((c) => `${c}.`).join(' ');
+    return `${surname}, ${inits}`;
+  }
+  return suffix ? `${p} ${suffix}` : p; // korporativni/nepoznato: doslovno
+}
+
+function parseVancouverAuthors(seg: string): string {
+  const names: string[] = [];
+  for (const part of seg.split(/\s*,\s*/).map((x) => x.trim()).filter(Boolean)) {
+    if (/^(?:et\s+al\.?|i\s+sur\.?|and\s+others)$/i.test(part)) continue; // "et al." / "i sur."
+    if (/^(?:ur|urednici?|eds?|ed|prir)\.?$/i.test(part)) continue;        // urednik marker
+    const n = vancouverName(part);
+    if (n) names.push(n);
+  }
+  return names.join('; ');
+}
+
+function parseVancouver(input: string, fields: Partial<CitationInput>): SourceType {
+  const raw = input.replace(/\s+/g, ' ').trim().replace(/\.\s*$/, '');
+  let rest = raw;
+  const am = raw.match(/^(.+?)\.\s+(.*)$/); // autori do prve tocke (nemaju internih ". ")
+  if (am) {
+    const authors = parseVancouverAuthors(am[1]);
+    if (authors) fields.authors = authors;
+    rest = am[2];
+  }
+
+  // Clanak: "... Casopis. Godina;Vol(Broj):Str"
+  const cm = rest.match(/((?:19|20)\d{2})\s*;\s*(\d+)(?:\s*\(([^)]+)\))?(?::\s*([\dA-Za-z\-–]+))?/);
+  if (cm && cm.index !== undefined) {
+    fields.year = cm[1];
+    fields.volume = cm[2];
+    if (cm[3]) fields.issue = cm[3];
+    if (cm[4]) fields.pages = cm[4].replace(/–/g, '-');
+    const head = rest.slice(0, cm.index).replace(/[.\s;]+$/, '').trim(); // "Naslov. Casopis"
+    const li = head.lastIndexOf('. ');
+    if (li >= 0) { fields.title = head.slice(0, li).trim(); fields.container = head.slice(li + 2).trim(); }
+    else if (head) fields.title = head;
+    return 'clanak';
+  }
+
+  // Knjiga/teza: "Naslov[ marker]. Mjesto: Izdavac; Godina"
+  const ym = rest.match(/;\s*((?:19|20)\d{2})\b/);
+  if (ym) fields.year = ym[1];
+  let body = rest.replace(/;\s*(?:19|20)\d{2}\s*$/, '').replace(/\s+\./g, '.').trim();
+  const th = body.match(/\[([^\]]+)\]/);
+  const isThesis = !!(th && /\brad\b|thesis|disertacij/i.test(th[1]));
+  if (th) body = body.replace(th[0], '').replace(/\s{2,}/g, ' ').trim();
+  const pub = body.match(/^(.*?)\.\s*([^.]+?):\s*([^.]+?)$/);
+  if (pub) {
+    fields.title = pub[1].replace(/[.\s]+$/, '').trim();
+    const place = pub[2].trim(), publisher = pub[3].trim();
+    if (isThesis) fields.institution = [place, publisher].filter(Boolean).join(', ');
+    else { fields.place = place; fields.publisher = publisher; }
+  } else if (body) {
+    fields.title = body.replace(/[.\s]+$/, '').trim();
+  }
+  return isThesis ? 'zavrsni' : 'knjiga';
+}
+
 export function parseReference(raw: string): ParsedReference {
   const original = stripMarker((raw || '').replace(/\s+/g, ' ').trim());
   const fields: Partial<CitationInput> = {};
   if (!original) return { type: 'knjiga', fields, lowConfidence: true };
+
+  if (looksLikeVancouver(original)) {
+    const type = parseVancouver(original, fields);
+    const vdoi = original.match(/10\.\d{4,9}\/[^\s,;]+/);
+    if (vdoi) fields.doi = vdoi[0].replace(/[.,;]+$/, '');
+    if (fields.title) fields.title = fields.title.replace(/[.,]+$/, '').trim();
+    const filled = Object.values(fields).filter(Boolean).length;
+    return { type, fields, lowConfidence: filled <= 2 };
+  }
 
   const s = original;
 

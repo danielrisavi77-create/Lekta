@@ -159,3 +159,68 @@ describe('parseReference: korpus (regresija bulk)', () => {
 });
 
 type SourceTypeLike = 'knjiga' | 'poglavlje' | 'clanak' | 'mrezni' | 'zavrsni' | 'propis';
+
+// Vancouver / ICMJE (numericko biomedicinsko): autori bez zareza/tocaka, "Godina;Vol(Broj):Str".
+// Stvarni radioloski/zdravstveni popis (fakulteti medicine/zdravstva ga koriste). Regresija.
+describe('parseReference: Vancouver korpus', () => {
+  const cases: Array<{ name: string; raw: string; type: SourceTypeLike; expect: Record<string, string> }> = [
+    {
+      name: 'clanak: autori bez zareza, casopis, godina;vol(broj):str',
+      raw: 'Đorđević V, Braš M. Osnovni pojmovi o komunikaciji u medicini. Medix. 2011;17(92 Supl 1):12-4.',
+      type: 'clanak',
+      expect: { authors: 'Đorđević, V.; Braš, M.', title: 'Osnovni pojmovi o komunikaciji u medicini', container: 'Medix', year: '2011', volume: '17', issue: '92 Supl 1', pages: '12-4' },
+    },
+    {
+      name: 'clanak: viserjecno prezime + jednorjecni casopis',
+      raw: 'Marojević Glibo D, Topić Stipić D. Načela uspješne komunikacije u zdravstvu. Mostariensia. 2019;23(1):81-93.',
+      type: 'clanak',
+      expect: { authors: 'Marojević Glibo, D.; Topić Stipić, D.', container: 'Mostariensia', volume: '23', issue: '1', pages: '81-93' },
+    },
+    {
+      name: 'clanak: bez broja (samo volumen), broj clanka kao stranica',
+      raw: 'Sharkiya SH. Quality communication. BMC Health Serv Res. 2023;23:886.',
+      type: 'clanak',
+      expect: { authors: 'Sharkiya, S. H.', container: 'BMC Health Serv Res', volume: '23', pages: '886' },
+    },
+    {
+      name: 'clanak: zbijeni inicijali (YKE) se sire, et al se izostavlja',
+      raw: 'Zarkan AH, Bamunif AS, Othman Names DI, Almotiri AK, et al. Communication strategies in MRI. J Ecohumanism. 2025;4(4):3494-505.',
+      type: 'clanak',
+      expect: { authors: 'Zarkan, A. H.; Bamunif, A. S.; Othman Names, D. I.; Almotiri, A. K.', container: 'J Ecohumanism', volume: '4', issue: '4', pages: '3494-505' },
+    },
+    {
+      name: 'clanak: particle prezime (Van) + hrv "i sur."',
+      raw: 'Van Goethem M, Mortelmans D, i sur. Influence of the radiographer on the pain felt during mammography. Eur Radiol. 2003;13(10):2384-9.',
+      type: 'clanak',
+      expect: { authors: 'Van Goethem, M.; Mortelmans, D.', container: 'Eur Radiol', volume: '13', issue: '10', pages: '2384-9' },
+    },
+    {
+      name: 'knjiga: urednici (ur.), Mjesto: Izdavac; Godina',
+      raw: 'Sindik J, Vučković Matić M, ur. Komuniciranje u zdravstvu: zbirka nastavnih tekstova. Dubrovnik: Sveučilište u Dubrovniku; 2016.',
+      type: 'knjiga',
+      expect: { authors: 'Sindik, J.; Vučković Matić, M.', title: 'Komuniciranje u zdravstvu: zbirka nastavnih tekstova', place: 'Dubrovnik', publisher: 'Sveučilište u Dubrovniku', year: '2016' },
+    },
+    {
+      name: 'zavrsni rad: [zavrsni rad] -> institution',
+      raw: 'Lukić A. Verbalna i neverbalna komunikacija [završni rad]. Pula: Sveučilište Jurja Dobrile u Puli; 2016.',
+      type: 'zavrsni',
+      expect: { authors: 'Lukić, A.', title: 'Verbalna i neverbalna komunikacija', institution: 'Pula, Sveučilište Jurja Dobrile u Puli', year: '2016' },
+    },
+    {
+      name: 'diplomski rad: [diplomski rad] -> institution s fakultetom',
+      raw: 'Sokol K. Komunikacija kao temelj kvalitetne zdravstvene skrbi [diplomski rad]. Zagreb: Sveučilište u Zagrebu, Medicinski fakultet; 2020.',
+      type: 'zavrsni',
+      expect: { institution: 'Zagreb, Sveučilište u Zagrebu, Medicinski fakultet', year: '2020' },
+    },
+  ];
+
+  for (const c of cases) {
+    it(c.name, () => {
+      const r = parseReference(c.raw);
+      expect(r.type).toBe(c.type);
+      for (const [k, v] of Object.entries(c.expect)) {
+        expect(`${k}=${(r.fields as any)[k] ?? ''}`).toBe(`${k}=${v}`);
+      }
+    });
+  }
+});
