@@ -547,6 +547,180 @@
     }
   },
   {
+    "id": "apuri",
+    "unitId": "apuri",
+    "level": null,
+    "name": "Akademija primijenjenih umjetnosti u Rijeci: naslovnica",
+    "provenance": {
+      "status": "official",
+      "sourceIds": [
+        "apuri-pravilnik-diplomski-2025"
+      ],
+      "sourceUrl": "https://apuri.uniri.hr/wp-content/uploads/2025/02/Pravilnik-o-diplomskom-radu-i-diplomskom-ispitu-veljaca-2025.pdf",
+      "sourceNote": "Pravilnik o diplomskom radu (veljaca 2025.), prilog Upute, str. 8-9 \"Izgled korica i naslovne strane\".",
+      "quote": "SVEUCILISTE U RIJECI / AKADEMIJA PRIMIJENJENIH UMJETNOSTI / <naslov> / Diplomski rad / <ime> / Rijeka, <mjesec i godina>",
+      "sourcePage": null,
+      "verifiedAt": "2026-07-10"
+    },
+    "status": "verified",
+    "marginsCm": {
+      "top": 2.5,
+      "right": 2.5,
+      "bottom": 2.5,
+      "left": 2.5
+    },
+    "defaultFont": "Times New Roman",
+    "elements": [
+      {
+        "role": "university",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 0,
+        "fixedText": "SVEUČILIŠTE U RIJECI",
+        "sizePt": 12,
+        "uppercase": true,
+        "align": "center"
+      },
+      {
+        "role": "faculty",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 0,
+        "fixedText": "AKADEMIJA PRIMIJENJENIH UMJETNOSTI",
+        "sizePt": 12,
+        "uppercase": true,
+        "align": "center"
+      },
+      {
+        "role": "study",
+        "required": false,
+        "elementProvenance": "official-template",
+        "group": 0,
+        "sizePt": 12,
+        "align": "center"
+      },
+      {
+        "role": "title",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 1,
+        "sizePt": 14,
+        "uppercase": true,
+        "align": "center"
+      },
+      {
+        "role": "worktype",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 1,
+        "sizePt": 12,
+        "align": "center"
+      },
+      {
+        "role": "author",
+        "required": false,
+        "elementProvenance": "official-template",
+        "group": 2,
+        "sizePt": 12,
+        "align": "right"
+      },
+      {
+        "role": "placeyear",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 3,
+        "sizePt": 12,
+        "align": "center"
+      }
+    ]
+  },
+  {
+    "id": "aspira",
+    "unitId": "aspira",
+    "level": null,
+    "name": "Veleuciliste Aspira: naslovnica",
+    "provenance": {
+      "status": "official",
+      "sourceIds": [
+        "aspira-pravilnik-izgled-2023"
+      ],
+      "sourceUrl": "https://www.aspira.hr/wp-content/uploads/2023/10/Pravilnik-o-izgledu-zavrsnog-i-diplomskog-rada.pdf",
+      "sourceNote": "Pravilnik o izgledu zavrsnog i diplomskog rada, cl. 4 (Times New Roman 14).",
+      "quote": "Naslovna stranica rada mora imati na vrhu centriran puni naziv \"VELEUCILISTE ASPIRA\"... Velicina slova naslovnice je 14, a font Times New Roman.",
+      "sourcePage": null,
+      "verifiedAt": "2026-07-10"
+    },
+    "status": "verified",
+    "marginsCm": {
+      "top": 2.5,
+      "right": 2.5,
+      "bottom": 2.5,
+      "left": 2.5
+    },
+    "defaultFont": "Times New Roman",
+    "elements": [
+      {
+        "role": "university",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 0,
+        "fixedText": "VELEUČILIŠTE ASPIRA",
+        "sizePt": 14,
+        "uppercase": true,
+        "align": "center"
+      },
+      {
+        "role": "study",
+        "required": false,
+        "elementProvenance": "official-template",
+        "group": 0,
+        "sizePt": 14,
+        "align": "center"
+      },
+      {
+        "role": "title",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 1,
+        "sizePt": 14,
+        "uppercase": true,
+        "align": "center"
+      },
+      {
+        "role": "worktype",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 1,
+        "sizePt": 14,
+        "align": "center"
+      },
+      {
+        "role": "mentor",
+        "required": false,
+        "elementProvenance": "official-template",
+        "group": 2,
+        "sizePt": 14,
+        "align": "left"
+      },
+      {
+        "role": "author",
+        "required": false,
+        "elementProvenance": "official-template",
+        "group": 2,
+        "sizePt": 14,
+        "align": "right"
+      },
+      {
+        "role": "placeyear",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 3,
+        "sizePt": 14,
+        "align": "center"
+      }
+    ]
+  },
+  {
     "id": "bak-final",
     "unitId": "bak",
     "level": "final",
@@ -8287,6 +8461,95 @@
     }
   },
   {
+    "id": "grafos",
+    "unitId": "grafos",
+    "level": null,
+    "name": "Gradevinski i arhitektonski fakultet Osijek: naslovnica",
+    "provenance": {
+      "status": "official",
+      "sourceIds": [
+        "grafos-obrazac-naslovnica"
+      ],
+      "sourceUrl": "https://www.gfos.unios.hr/download/zavrsni-rad-naslovne-stranice.pdf",
+      "sourceNote": "Sluzbeni obrazac naslovnice (OB-7-10-4) i fakultetske upute (Times New Roman 12).",
+      "quote": "SVEUCILISTE JOSIPA JURJA STROSSMAYERA U OSIJEKU / GRADEVINSKI FAKULTET OSIJEK / ZAVRSNI RAD",
+      "sourcePage": null,
+      "verifiedAt": "2026-07-10"
+    },
+    "status": "verified",
+    "marginsCm": {
+      "top": 2.5,
+      "right": 2.5,
+      "bottom": 2.5,
+      "left": 2.5
+    },
+    "defaultFont": "Times New Roman",
+    "elements": [
+      {
+        "role": "university",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 0,
+        "fixedText": "SVEUČILIŠTE JOSIPA JURJA STROSSMAYERA U OSIJEKU",
+        "sizePt": 12,
+        "uppercase": true,
+        "align": "center"
+      },
+      {
+        "role": "faculty",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 0,
+        "fixedText": "GRAĐEVINSKI I ARHITEKTONSKI FAKULTET OSIJEK",
+        "sizePt": 12,
+        "uppercase": true,
+        "align": "center"
+      },
+      {
+        "role": "study",
+        "required": false,
+        "elementProvenance": "official-template",
+        "group": 0,
+        "sizePt": 12,
+        "align": "center"
+      },
+      {
+        "role": "worktype",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 1,
+        "sizePt": 12,
+        "uppercase": true,
+        "align": "center"
+      },
+      {
+        "role": "title",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 2,
+        "sizePt": 16,
+        "bold": true,
+        "align": "center"
+      },
+      {
+        "role": "author",
+        "required": false,
+        "elementProvenance": "official-template",
+        "group": 3,
+        "sizePt": 12,
+        "align": "center"
+      },
+      {
+        "role": "placeyear",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 4,
+        "sizePt": 12,
+        "align": "center"
+      }
+    ]
+  },
+  {
     "id": "grf-doctoral",
     "unitId": "grf",
     "level": "doctoral",
@@ -10981,6 +11244,97 @@
       "samples": 10,
       "conflicts": []
     }
+  },
+  {
+    "id": "muza",
+    "unitId": "muza",
+    "level": null,
+    "name": "Muzicka akademija: naslovnica",
+    "provenance": {
+      "status": "official",
+      "sourceIds": [
+        "muza-diplomski-predlozak"
+      ],
+      "sourceUrl": "http://www.muza.unizg.hr/UserFiles/file/REFERADA/diplomski%20predlozak/diplomski%20rad%20predlozak%20finalni.dot",
+      "sourceNote": "Sluzbeni Word predlozak Referade Muzicke akademije (naslovnica).",
+      "quote": "SVEUCILISTE U ZAGREBU MUZICKA AKADEMIJA / <odsjek> / <autor> / <naslov> / DIPLOMSKI RAD / ZAGREB, <godina>",
+      "sourcePage": null,
+      "verifiedAt": "2026-07-10"
+    },
+    "status": "verified",
+    "marginsCm": {
+      "top": 2.5,
+      "right": 2.5,
+      "bottom": 2.5,
+      "left": 2.5
+    },
+    "defaultFont": "Times New Roman",
+    "elements": [
+      {
+        "role": "university",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 0,
+        "fixedText": "SVEUČILIŠTE U ZAGREBU",
+        "sizePt": 12,
+        "uppercase": true,
+        "align": "center"
+      },
+      {
+        "role": "faculty",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 0,
+        "fixedText": "MUZIČKA AKADEMIJA",
+        "sizePt": 12,
+        "uppercase": true,
+        "align": "center"
+      },
+      {
+        "role": "study",
+        "required": false,
+        "elementProvenance": "official-template",
+        "group": 0,
+        "sizePt": 12,
+        "uppercase": true,
+        "align": "center"
+      },
+      {
+        "role": "author",
+        "required": false,
+        "elementProvenance": "official-template",
+        "group": 1,
+        "sizePt": 12,
+        "align": "center"
+      },
+      {
+        "role": "title",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 2,
+        "sizePt": 14,
+        "uppercase": true,
+        "align": "center"
+      },
+      {
+        "role": "worktype",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 3,
+        "sizePt": 12,
+        "uppercase": true,
+        "align": "center"
+      },
+      {
+        "role": "placeyear",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 4,
+        "sizePt": 12,
+        "uppercase": true,
+        "align": "center"
+      }
+    ]
   },
   {
     "id": "odhz-final",
@@ -14684,6 +15038,85 @@
       "samples": 3,
       "conflicts": []
     }
+  },
+  {
+    "id": "tvz",
+    "unitId": "tvz",
+    "level": null,
+    "name": "Tehnicko veleuciliste u Zagrebu: naslovnica",
+    "provenance": {
+      "status": "official",
+      "sourceIds": [
+        "tvz-obrazac-diplomski"
+      ],
+      "sourceUrl": "https://nastava.tvz.hr/gukov/pdf/diplomski-podloga.doc",
+      "sourceNote": "Predlozak naslovnice s TVZ domene (kolegijski, ~2009); najbolji dostupni izvor jer su sveustanovski pravilnici skenirani.",
+      "quote": "TEHNICKO VELEUCILISTE U ZAGREBU / <studij> / <ime> / NASLOV DIPLOMSKOG RADA / DIPLOMSKI RAD br. / Zagreb, mjesec, godina",
+      "sourcePage": null,
+      "verifiedAt": "2026-07-10"
+    },
+    "status": "verified",
+    "marginsCm": {
+      "top": 2.5,
+      "right": 2.5,
+      "bottom": 2.5,
+      "left": 2.5
+    },
+    "defaultFont": "Times New Roman",
+    "elements": [
+      {
+        "role": "university",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 0,
+        "fixedText": "TEHNIČKO VELEUČILIŠTE U ZAGREBU",
+        "sizePt": 12,
+        "uppercase": true,
+        "align": "center"
+      },
+      {
+        "role": "study",
+        "required": false,
+        "elementProvenance": "official-template",
+        "group": 0,
+        "sizePt": 12,
+        "uppercase": true,
+        "align": "center"
+      },
+      {
+        "role": "author",
+        "required": false,
+        "elementProvenance": "official-template",
+        "group": 1,
+        "sizePt": 12,
+        "align": "center"
+      },
+      {
+        "role": "title",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 2,
+        "sizePt": 14,
+        "uppercase": true,
+        "align": "center"
+      },
+      {
+        "role": "worktype",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 3,
+        "sizePt": 12,
+        "align": "center"
+      },
+      {
+        "role": "placeyear",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 4,
+        "sizePt": 12,
+        "align": "center"
+      }
+    ]
   },
   {
     "id": "uaos-final",

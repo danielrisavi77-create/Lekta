@@ -2114,5 +2114,70 @@
     "validityClass": "stable",
     "lastChecked": "2026-07-10",
     "note": "Wayback snapshot (masterwww.adu.hr je mrtav); jedini ADU odsjek s propisanom naslovnicom. Izvor za title-page predlozak adu-graduate (Odsjek montaze)."
+  },
+  {
+    "id": "grafos-obrazac-naslovnica",
+    "kind": "template",
+    "title": "Obrazac OB-7-10-4 Naslovnica / Prva stranica (zavrsni/diplomski rad)",
+    "url": "https://www.gfos.unios.hr/download/zavrsni-rad-naslovne-stranice.pdf",
+    "publisher": "Gradevinski i arhitektonski fakultet Osijek",
+    "fetchedAt": "2026-07-11",
+    "snapshotPath": "data/sources/grafos/grafos-obrazac-naslovnica.pdf",
+    "snapshotHash": "95be88d5371314d196693d50503da231a456c9d986781d91c7fbe558f4942007",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-11",
+    "note": "Sluzbeni kontrolirani obrazac naslovnice (SVEUCILISTE J.J.S. U OSIJEKU, sastavnica, vrsta rada, naslov, mjesto/datum). Fakultetske upute propisuju Times New Roman 12, prored 1,5."
+  },
+  {
+    "id": "aspira-pravilnik-izgled-2023",
+    "kind": "regulation",
+    "title": "Pravilnik o izgledu zavrsnog i diplomskog rada (ASP-P/033 v.6, 14.07.2023.)",
+    "url": "https://www.aspira.hr/wp-content/uploads/2023/10/Pravilnik-o-izgledu-zavrsnog-i-diplomskog-rada.pdf",
+    "publisher": "Veleuciliste Aspira",
+    "fetchedAt": "2026-07-11",
+    "snapshotPath": "data/sources/aspira/aspira-pravilnik-izgled-2023.pdf",
+    "snapshotHash": "cfda1be75091c18aed69322d2902ddf0943d48faacbe6073bc5b8dfaa0850f11",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-11",
+    "note": "Clanak 4 doslovno propisuje naslovnicu: na vrhu centriran naziv \"VELEUCILISTE ASPIRA\", na sredini velikim slovima naslov pa vrsta rada, pri dnu lijevo mentor i desno student, u posljednjem redu centrirano mjesto i datum; font Times New Roman 14."
+  },
+  {
+    "id": "tvz-obrazac-diplomski",
+    "kind": "template",
+    "title": "Predlozak naslovnice diplomskog rada (Politehnicki specijalisticki diplomski strucni studij)",
+    "url": "https://nastava.tvz.hr/gukov/pdf/diplomski-podloga.doc",
+    "publisher": "Tehnicko veleuciliste u Zagrebu",
+    "fetchedAt": "2026-07-11",
+    "snapshotPath": "data/sources/tvz/tvz-diplomski-podloga.doc",
+    "snapshotHash": "9c6dc810f8a860695e7c8671ec8e449c6b93a7ef64d22f4c3c9b14338a75533c",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-11",
+    "note": "Predlozak s TVZ domene: TEHNICKO VELEUCILISTE U ZAGREBU -> studij -> ime autora -> NASLOV -> \"DIPLOMSKI RAD br.\" -> \"Zagreb, mjesec, godina\". CAVEAT: kolegijski i datiran (~2009) predlozak, ne potvrdjeni sveustanovski obrazac; visevlasni pravilnici su skenirani pa se izgled preuzima iz ovog predloska."
+  },
+  {
+    "id": "muza-diplomski-predlozak",
+    "kind": "template",
+    "title": "Predlozak diplomskog rada (Word .dot, naslovnica)",
+    "url": "http://www.muza.unizg.hr/UserFiles/file/REFERADA/diplomski%20predlozak/diplomski%20rad%20predlozak%20finalni.dot",
+    "publisher": "Muzicka akademija Sveucilista u Zagrebu",
+    "fetchedAt": "2026-07-11",
+    "snapshotPath": "data/sources/muza/muza-diplomski-predlozak.dot",
+    "snapshotHash": "9ea40e6b15dfbeebc7e010108f2ceacec1dd6d830e0102aca4525b3b979ee01a",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-11",
+    "note": "Sluzbeni Word predlozak Referade s formatiranom naslovnicom: SVEUCILISTE U ZAGREBU / MUZICKA AKADEMIJA -> odsjek -> autor -> naslov -> DIPLOMSKI RAD -> ZAGREB, godina."
+  },
+  {
+    "id": "apuri-pravilnik-diplomski-2025",
+    "kind": "regulation",
+    "title": "Pravilnik o diplomskom radu i diplomskom ispitu (APURI, veljaca 2025.) s prilogom Upute za izradu diplomskog rada",
+    "url": "https://apuri.uniri.hr/wp-content/uploads/2025/02/Pravilnik-o-diplomskom-radu-i-diplomskom-ispitu-veljaca-2025.pdf",
+    "publisher": "Akademija primijenjenih umjetnosti u Rijeci",
+    "fetchedAt": "2026-07-11",
+    "snapshotPath": "data/sources/apuri/apuri-pravilnik-diplomski-2025.pdf",
+    "snapshotHash": "6ca953a7deac52d9d7272367a25f99a1e9ed135fa4b23425091e5ee09d86ea56",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-11",
+    "note": "Prilog \"Upute za izradu diplomskog rada\", str. 8-9 \"Izgled korica i naslovne strane\": SVEUCILISTE U RIJECI, AKADEMIJA PRIMIJENJENIH UMJETNOSTI, naziv studija, naslov (sredina), \"Diplomski rad\", ime i prezime (desno), \"Rijeka, mjesec i godina\" (dno, centrirano)."
   }
 ]
