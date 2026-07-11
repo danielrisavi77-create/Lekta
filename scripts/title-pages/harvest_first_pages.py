@@ -287,26 +287,43 @@ def main():
     ap.add_argument("--per-cell", type=int, default=2, help="PDF-ova po (unit, razina), default 2")
     ap.add_argument("--max", type=int, default=0, help="globalni limit dohvata (0 = bez limita)")
     ap.add_argument("--png", action="store_true", help="render prve stranice u artifacts (imena!)")
+    ap.add_argument("--pids-file", help="JSON lista [{pid,repository,unitId,level}] (izlaz oai_discover.py); "
+                                        "umjesto publicSources iz verified-profiles")
     args = ap.parse_args()
 
-    verified = json.loads((ROOT / "data" / "profiles" / "verified-profiles.json").read_text("utf-8"))
     unit_filter = set(args.units.split(",")) if args.units else None
 
-    # (unitId, level) -> [(pid, repository)], dedupe PID-ova preko profila.
+    # (unitId, level) -> [(pid, repository)], dedupe PID-ova.
     cells = defaultdict(list)
     seen_pids = set()
-    for p in verified:
-        unit_id = p.get("unitId")
-        if not unit_id or (unit_filter and unit_id not in unit_filter):
-            continue
-        for s in (p.get("fieldValidation") or {}).get("publicSources") or []:
-            pid = s.get("pid")
-            repo = s.get("repository")
-            level = s.get("level") or "?"
-            if not pid or not repo or pid in seen_pids:
+
+    if args.pids_file:
+        # Otkriveni PID-ovi (oai_discover.py). Datoteka je ili lista zapisa ili {picked:[...]}.
+        raw = json.loads(Path(args.pids_file).read_text("utf-8"))
+        records = raw.get("picked", raw) if isinstance(raw, dict) else raw
+        for s in records:
+            pid, repo = s.get("pid"), s.get("repository")
+            unit_id, level = s.get("unitId"), s.get("level") or "?"
+            if not pid or not repo or not unit_id or pid in seen_pids:
+                continue
+            if unit_filter and unit_id not in unit_filter:
                 continue
             seen_pids.add(pid)
             cells[(unit_id, level)].append((pid, repo))
+    else:
+        verified = json.loads((ROOT / "data" / "profiles" / "verified-profiles.json").read_text("utf-8"))
+        for p in verified:
+            unit_id = p.get("unitId")
+            if not unit_id or (unit_filter and unit_id not in unit_filter):
+                continue
+            for s in (p.get("fieldValidation") or {}).get("publicSources") or []:
+                pid = s.get("pid")
+                repo = s.get("repository")
+                level = s.get("level") or "?"
+                if not pid or not repo or pid in seen_pids:
+                    continue
+                seen_pids.add(pid)
+                cells[(unit_id, level)].append((pid, repo))
 
     STATE_PATH.parent.mkdir(parents=True, exist_ok=True)
     state = load_json(STATE_PATH, {})

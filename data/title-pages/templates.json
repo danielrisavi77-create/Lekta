@@ -3557,6 +3557,88 @@
     }
   },
   {
+    "id": "fesb",
+    "unitId": "fesb",
+    "level": null,
+    "name": "Fakultet elektrotehnike, strojarstva i brodogradnje (FESB): naslovnica",
+    "provenance": {
+      "status": "derived",
+      "sourceNote": "Raspored izveden konsenzusom 11 javnih radova; nije sluzbeni predlozak.",
+      "evidencePids": [
+        "fesb:1251",
+        "fesb:1256",
+        "fesb:1259",
+        "fesb:1275",
+        "fesb:1276",
+        "fesb:1284",
+        "fesb:1287",
+        "fesb:1288",
+        "fesb:1377",
+        "fesb:780",
+        "fesb:875"
+      ],
+      "verifiedAt": "2026-07-10"
+    },
+    "status": "verified",
+    "elements": [
+      {
+        "role": "university",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 0,
+        "confidence": 0.36,
+        "uppercase": true
+      },
+      {
+        "role": "faculty",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 0,
+        "confidence": 0.82,
+        "uppercase": true
+      },
+      {
+        "role": "author",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 1,
+        "confidence": 0.91,
+        "font": "Times New Roman",
+        "sizePt": 14,
+        "bold": true
+      },
+      {
+        "role": "title",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 1,
+        "confidence": 1,
+        "bold": true,
+        "uppercase": true
+      },
+      {
+        "role": "worktype",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 2,
+        "confidence": 1,
+        "sizePt": 14,
+        "uppercase": true
+      },
+      {
+        "role": "placeyear",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 3,
+        "confidence": 1
+      }
+    ],
+    "derivation": {
+      "samples": 11,
+      "conflicts": []
+    }
+  },
+  {
     "id": "fetpu-final",
     "unitId": "fetpu",
     "level": "final",
@@ -3915,6 +3997,101 @@
     "notes": "Velicina slova (14 pt, naslov 16 pt) i font Times New Roman su izrijekom preporuka, ne stroga obveza. Upute propisuju i drugu (unutarnju) stranicu s odsjekom ili samostalnom katedrom te znanstvenim podrucjem, poljem i granom; ona nije pokrivena ovim predloskom. Mentor, sumentor i komentor navode se u istom retku s titulom.",
     "derivation": {
       "samples": 3,
+      "conflicts": []
+    }
+  },
+  {
+    "id": "ffpu",
+    "unitId": "ffpu",
+    "level": null,
+    "name": "Filozofski fakultet u Puli: naslovnica",
+    "provenance": {
+      "status": "derived",
+      "sourceNote": "Raspored izveden konsenzusom 10 javnih radova; nije sluzbeni predlozak.",
+      "evidencePids": [
+        "unipu:4191",
+        "unipu:4192",
+        "unipu:4193",
+        "unipu:4194",
+        "unipu:4195",
+        "unipu:4196",
+        "unipu:4197",
+        "unipu:4198",
+        "unipu:4237",
+        "unipu:4243"
+      ],
+      "verifiedAt": "2026-07-10"
+    },
+    "status": "verified",
+    "elements": [
+      {
+        "role": "university",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 0,
+        "confidence": 1,
+        "font": "Arial",
+        "sizePt": 12
+      },
+      {
+        "role": "faculty",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 0,
+        "confidence": 0.9,
+        "font": "Arial",
+        "sizePt": 12
+      },
+      {
+        "role": "study",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 0,
+        "confidence": 0.7,
+        "font": "Arial",
+        "sizePt": 12
+      },
+      {
+        "role": "author",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 1,
+        "confidence": 0.7,
+        "font": "Arial",
+        "bold": true,
+        "uppercase": true
+      },
+      {
+        "role": "title",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 1,
+        "confidence": 1,
+        "font": "Arial",
+        "bold": true,
+        "uppercase": true
+      },
+      {
+        "role": "worktype",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 1,
+        "confidence": 1,
+        "font": "Arial",
+        "sizePt": 12
+      },
+      {
+        "role": "placeyear",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 2,
+        "confidence": 1,
+        "font": "Arial",
+        "sizePt": 12
+      }
+    ],
+    "derivation": {
+      "samples": 10,
       "conflicts": []
     }
   },
@@ -5285,6 +5462,93 @@
     "notes": "Predlozak razlikuje prednju stranu (korice, bez odsjeka i mentora, str. 8) i drugi list (naslovnica u radu, str. 9); ovaj zapis modelira drugi list. Margine 3,0 cm su ispisane na predlosku prednje strane, a opce upute (str. 6) kazu da naslovnica ima drugacije margine od tijela rada (2,5 cm). Starije upute iz 2023. za diplomski predlozak navode Arial; novije upute 2025./2026. propisuju Times New Roman pa vrijedi Times New Roman. Predlozak ne sadrzi logotip.",
     "derivation": {
       "samples": 3,
+      "conflicts": []
+    }
+  },
+  {
+    "id": "fipu",
+    "unitId": "fipu",
+    "level": null,
+    "name": "Fakultet informatike u Puli: naslovnica",
+    "provenance": {
+      "status": "derived",
+      "sourceNote": "Raspored izveden konsenzusom 10 javnih radova; nije sluzbeni predlozak.",
+      "evidencePids": [
+        "unipu:3692",
+        "unipu:3697",
+        "unipu:3699",
+        "unipu:3705",
+        "unipu:3718",
+        "unipu:3721",
+        "unipu:3757",
+        "unipu:3766",
+        "unipu:3771",
+        "unipu:3781"
+      ],
+      "verifiedAt": "2026-07-10"
+    },
+    "status": "verified",
+    "elements": [
+      {
+        "role": "university",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 0,
+        "confidence": 1,
+        "font": "Arial",
+        "sizePt": 12
+      },
+      {
+        "role": "faculty",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 0,
+        "confidence": 1,
+        "font": "Arial",
+        "sizePt": 12
+      },
+      {
+        "role": "author",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 1,
+        "confidence": 0.8,
+        "font": "Arial",
+        "sizePt": 12,
+        "bold": true,
+        "uppercase": true
+      },
+      {
+        "role": "title",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 1,
+        "confidence": 1,
+        "font": "Arial",
+        "bold": true,
+        "uppercase": true
+      },
+      {
+        "role": "worktype",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 1,
+        "confidence": 1,
+        "font": "Arial",
+        "sizePt": 12
+      },
+      {
+        "role": "placeyear",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 2,
+        "confidence": 1,
+        "font": "Arial",
+        "sizePt": 12
+      }
+    ],
+    "derivation": {
+      "samples": 10,
       "conflicts": []
     }
   },
@@ -9794,6 +10058,98 @@
     }
   },
   {
+    "id": "mapu",
+    "unitId": "mapu",
+    "level": null,
+    "name": "Muzička akademija u Puli: naslovnica",
+    "provenance": {
+      "status": "derived",
+      "sourceNote": "Raspored izveden konsenzusom 10 javnih radova; nije sluzbeni predlozak.",
+      "evidencePids": [
+        "unipu:4785",
+        "unipu:4864",
+        "unipu:5379",
+        "unipu:5380",
+        "unipu:5381",
+        "unipu:5382",
+        "unipu:5383",
+        "unipu:5384",
+        "unipu:5385",
+        "unipu:5412"
+      ],
+      "verifiedAt": "2026-07-10"
+    },
+    "status": "verified",
+    "elements": [
+      {
+        "role": "university",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 0,
+        "confidence": 0.9,
+        "sizePt": 12
+      },
+      {
+        "role": "faculty",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 0,
+        "confidence": 1,
+        "sizePt": 12
+      },
+      {
+        "role": "study",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 0,
+        "confidence": 0.2,
+        "font": "Arial",
+        "sizePt": 12,
+        "uppercase": true
+      },
+      {
+        "role": "author",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 1,
+        "confidence": 0.8,
+        "sizePt": 12,
+        "bold": true,
+        "uppercase": true
+      },
+      {
+        "role": "title",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 1,
+        "confidence": 1,
+        "sizePt": 12,
+        "bold": true,
+        "uppercase": true
+      },
+      {
+        "role": "worktype",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 1,
+        "confidence": 1,
+        "sizePt": 12
+      },
+      {
+        "role": "placeyear",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 2,
+        "confidence": 1,
+        "sizePt": 12
+      }
+    ],
+    "derivation": {
+      "samples": 10,
+      "conflicts": []
+    }
+  },
+  {
     "id": "medri-graduate",
     "unitId": "medri",
     "level": "graduate",
@@ -10527,6 +10883,103 @@
         "worktype.sizePt: sluzbeno 12 vs teze 14",
         "placeyear.sizePt: sluzbeno 12 vs teze 14"
       ]
+    }
+  },
+  {
+    "id": "mfpu",
+    "unitId": "mfpu",
+    "level": null,
+    "name": "Medicinski fakultet u Puli: naslovnica",
+    "provenance": {
+      "status": "derived",
+      "sourceNote": "Raspored izveden konsenzusom 10 javnih radova; nije sluzbeni predlozak.",
+      "evidencePids": [
+        "unipu:5472",
+        "unipu:5480",
+        "unipu:5486",
+        "unipu:5490",
+        "unipu:5502",
+        "unipu:5510",
+        "unipu:5521",
+        "unipu:5525",
+        "unipu:5577",
+        "unipu:5611"
+      ],
+      "verifiedAt": "2026-07-10"
+    },
+    "status": "verified",
+    "elements": [
+      {
+        "role": "university",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 0,
+        "confidence": 1,
+        "font": "Arial",
+        "sizePt": 12
+      },
+      {
+        "role": "faculty",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 0,
+        "confidence": 0.7,
+        "font": "Arial",
+        "sizePt": 12
+      },
+      {
+        "role": "study",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 0,
+        "confidence": 1,
+        "font": "Arial",
+        "sizePt": 12
+      },
+      {
+        "role": "author",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 1,
+        "confidence": 0.7,
+        "font": "Arial",
+        "sizePt": 12,
+        "bold": true,
+        "uppercase": true
+      },
+      {
+        "role": "title",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 1,
+        "confidence": 1,
+        "font": "Arial",
+        "sizePt": 12,
+        "bold": true,
+        "uppercase": true
+      },
+      {
+        "role": "worktype",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 1,
+        "confidence": 1,
+        "font": "Arial",
+        "sizePt": 12
+      },
+      {
+        "role": "placeyear",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 2,
+        "confidence": 1,
+        "font": "Arial",
+        "sizePt": 12
+      }
+    ],
+    "derivation": {
+      "samples": 10,
+      "conflicts": []
     }
   },
   {
@@ -12680,6 +13133,93 @@
     "notes": "Upute dopustaju Arial 16 pt ILI Calibri 16 pt (izbor korisnika), pa font nije fiksiran po elementu. Naznaka 'diplomski rad' propisana je 'smanjenim velikim slovima' (small caps). Propisane su i vertikalne pozicije: autor 8,5 cm, naslov 10,5 cm, naznaka vrste rada 15,5 cm od gornje margine; mjesto, mjesec i godina obrane pri dnu stranice. Poravnanje nije izricito propisano. Margine (3 lijevo, 2 desno, 2,5 gore/dolje cm) propisane su za cijeli rad, ne posebno za naslovnicu, pa nisu ukljucene. Mentor, studij i logotip nisu propisani na naslovnici.",
     "derivation": {
       "samples": 3,
+      "conflicts": []
+    }
+  },
+  {
+    "id": "pvzg",
+    "unitId": "pvzg",
+    "level": null,
+    "name": "Poslovno veleučilište Zagreb: naslovnica",
+    "provenance": {
+      "status": "derived",
+      "sourceNote": "Raspored izveden konsenzusom 10 javnih radova; nije sluzbeni predlozak.",
+      "evidencePids": [
+        "vpsz:417",
+        "vpsz:423",
+        "vpsz:436",
+        "vpsz:438",
+        "vpsz:449",
+        "vpsz:452",
+        "vpsz:453",
+        "vpsz:454",
+        "vpsz:455",
+        "vpsz:458"
+      ],
+      "verifiedAt": "2026-07-10"
+    },
+    "status": "verified",
+    "elements": [
+      {
+        "role": "faculty",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 0,
+        "confidence": 1,
+        "font": "Times New Roman",
+        "sizePt": 16,
+        "uppercase": true
+      },
+      {
+        "role": "author",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 1,
+        "confidence": 0.9,
+        "font": "Times New Roman",
+        "sizePt": 16
+      },
+      {
+        "role": "title",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 1,
+        "confidence": 1,
+        "font": "Times New Roman",
+        "sizePt": 22,
+        "bold": true,
+        "uppercase": true
+      },
+      {
+        "role": "worktype",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 1,
+        "confidence": 0.7,
+        "font": "Times New Roman",
+        "sizePt": 16
+      },
+      {
+        "role": "study",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 1,
+        "confidence": 0.8,
+        "font": "Times New Roman",
+        "sizePt": 16
+      },
+      {
+        "role": "placeyear",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 2,
+        "confidence": 1,
+        "font": "Times New Roman",
+        "sizePt": 16
+      }
+    ],
+    "derivation": {
+      "samples": 10,
       "conflicts": []
     }
   },
@@ -15721,6 +16261,81 @@
     "notes": "Iste Upute propisuju i drugu unutarnju stranicu s dodatnim podatkom naziv odjela i strucnog studija; prva unutarnja stranica ostaje prazna. Tipografija naslovnice nije eksplicitno propisana. Ovo je tekstualno pravilo, ne obrazac."
   },
   {
+    "id": "vern",
+    "unitId": "vern",
+    "level": null,
+    "name": "Sveučilište VERN': naslovnica",
+    "provenance": {
+      "status": "derived",
+      "sourceNote": "Raspored izveden konsenzusom 10 javnih radova; nije sluzbeni predlozak.",
+      "evidencePids": [
+        "vern:692",
+        "vern:701",
+        "vern:711",
+        "vern:713",
+        "vern:715",
+        "vern:717",
+        "vern:721",
+        "vern:722",
+        "vern:723",
+        "vern:727"
+      ],
+      "verifiedAt": "2026-07-10"
+    },
+    "status": "verified",
+    "elements": [
+      {
+        "role": "faculty",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 0,
+        "confidence": 1,
+        "sizePt": 16,
+        "bold": true,
+        "uppercase": true
+      },
+      {
+        "role": "study",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 0,
+        "confidence": 0.9,
+        "sizePt": 14
+      },
+      {
+        "role": "title",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 1,
+        "confidence": 1,
+        "sizePt": 18,
+        "bold": true,
+        "uppercase": true
+      },
+      {
+        "role": "author",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 2,
+        "confidence": 0.8,
+        "sizePt": 14,
+        "align": "right"
+      },
+      {
+        "role": "placeyear",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 3,
+        "confidence": 1,
+        "sizePt": 14
+      }
+    ],
+    "derivation": {
+      "samples": 10,
+      "conflicts": []
+    }
+  },
+  {
     "id": "vevu-final",
     "unitId": "vevu",
     "level": "final",
@@ -16152,6 +16767,100 @@
     ],
     "defaultFont": "Times New Roman",
     "notes": "Predlozak vanjske stranice ne sadrzi logotip. Unutarnja stranica (potkorica, str. 5) dodatno propisuje blok Povjerenstvo za obranu rada s potpisima clanova i mentora te Datum obrane rada; te uloge (povjerenstvo, potpisi, datum obrane) nisu podrzane u generatoru naslovnice v1. Pravilo na str. 3 propisuje da se naziv predmeta pise velikim slovom, no naziv predmeta se ne pojavljuje na predlosku vanjske stranice."
+  },
+  {
+    "id": "vsite",
+    "unitId": "vsite",
+    "level": null,
+    "name": "Veleučilište suvremenih informacijskih tehnologija: naslovnica",
+    "provenance": {
+      "status": "derived",
+      "sourceNote": "Raspored izveden konsenzusom 10 javnih radova; nije sluzbeni predlozak.",
+      "evidencePids": [
+        "vsite:117",
+        "vsite:119",
+        "vsite:120",
+        "vsite:121",
+        "vsite:122",
+        "vsite:27",
+        "vsite:49",
+        "vsite:69",
+        "vsite:86",
+        "vsite:93"
+      ],
+      "verifiedAt": "2026-07-10"
+    },
+    "status": "verified",
+    "elements": [
+      {
+        "role": "faculty",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 0,
+        "confidence": 0.9,
+        "font": "Arial",
+        "sizePt": 16,
+        "bold": true,
+        "uppercase": true
+      },
+      {
+        "role": "study",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 0,
+        "confidence": 1,
+        "font": "Arial",
+        "sizePt": 16,
+        "bold": true,
+        "uppercase": true
+      },
+      {
+        "role": "author",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 1,
+        "confidence": 0.8,
+        "font": "Arial",
+        "sizePt": 14,
+        "bold": true
+      },
+      {
+        "role": "worktype",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 1,
+        "confidence": 1,
+        "font": "Arial",
+        "sizePt": 16,
+        "bold": true,
+        "uppercase": true
+      },
+      {
+        "role": "title",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 1,
+        "confidence": 1,
+        "font": "Arial",
+        "sizePt": 18,
+        "bold": true,
+        "uppercase": true
+      },
+      {
+        "role": "placeyear",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 2,
+        "confidence": 1,
+        "font": "Arial",
+        "sizePt": 14,
+        "bold": true
+      }
+    ],
+    "derivation": {
+      "samples": 10,
+      "conflicts": []
+    }
   },
   {
     "id": "vss",

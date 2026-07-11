@@ -1,0 +1,846 @@
+{
+ "unitId": "ffpu",
+ "generatedAt": "2026-07-11",
+ "samples": [
+  {
+   "pid": "unipu:4243",
+   "repository": "repozitorij.unipu.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.4,
+    "h": 841.8
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE JURJA DOBRILE U PULI",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.085
+    },
+    {
+     "role": "faculty",
+     "redactedText": "FILOZOFSKI FAKULTET",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.119
+    },
+    {
+     "role": "study",
+     "redactedText": "ODSJEK ZA KROATISTIKU",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.153
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.528
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.562
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.596
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Pula, 2019.",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.869
+    }
+   ]
+  },
+  {
+   "pid": "unipu:4237",
+   "repository": "repozitorij.unipu.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.2,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište Jurja Dobrile u Puli",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.084
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Filozofski fakultet",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.109
+    },
+    {
+     "role": "study",
+     "redactedText": "Odsjek za povijest",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.134
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.361
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.45
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.539
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Pula, rujan 2019.",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.868
+    }
+   ]
+  },
+  {
+   "pid": "unipu:4198",
+   "repository": "repozitorij.unipu.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište Jurja Dobrile u Puli",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.085
+    },
+    {
+     "role": "study",
+     "redactedText": "Preddiplomski studij povijesti",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.119
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.304
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.477
+    },
+    {
+     "role": "worktype",
+     "redactedText": "ZAVRŠNI RAD",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.51
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Pula, lipanj 2019.",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.887
+    }
+   ]
+  },
+  {
+   "pid": "unipu:4197",
+   "repository": "repozitorij.unipu.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište Jurja Dobrile u Puli",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.086
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Filozofski fakultet",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.115
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.287
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.385
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.451
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Pula, 2019.",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.877
+    }
+   ]
+  },
+  {
+   "pid": "unipu:4196",
+   "repository": "repozitorij.unipu.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište Jurja Dobrile u Puli",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.083
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Filozofski fakultet",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.117
+    },
+    {
+     "role": "study",
+     "redactedText": "Odsjek za povijest",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.148
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.359
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.431
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.46
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Pula, rujan, 2019.",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.871
+    }
+   ]
+  },
+  {
+   "pid": "unipu:4195",
+   "repository": "repozitorij.unipu.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište Jurja Dobrile u Puli",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.082
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Filozofski fakultet",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.112
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "left",
+     "yRel": 0.35
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.431
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.459
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Pula, 2019.",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.845
+    }
+   ]
+  },
+  {
+   "pid": "unipu:4194",
+   "repository": "repozitorij.unipu.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište Jurja Dobrile u Puli",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.085
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Filozofski fakultet",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.112
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.139
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.258
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.299
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.318
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.425
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Pula, rujan 2019.",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.877
+    }
+   ]
+  },
+  {
+   "pid": "unipu:4193",
+   "repository": "repozitorij.unipu.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.2,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE JURJA DOBRILE U PULI",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.085
+    },
+    {
+     "role": "faculty",
+     "redactedText": "FILOZOFSKI FAKULTET",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.113
+    },
+    {
+     "role": "study",
+     "redactedText": "ODSJEK ZA POVIJEST",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.141
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.368
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.425
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.447
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.507
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Pula, 2019.",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.876
+    }
+   ]
+  },
+  {
+   "pid": "unipu:4192",
+   "repository": "repozitorij.unipu.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište Jurja Dobrile u Puli",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.085
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Filozofski fakultet",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.104
+    },
+    {
+     "role": "study",
+     "redactedText": "Odsjek za povijest",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.123
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.353
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.374
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Diplomski rad",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.396
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Pula, kolovoz 2019.",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.86
+    }
+   ]
+  },
+  {
+   "pid": "unipu:4191",
+   "repository": "repozitorij.unipu.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveuĉilište Jurja Dobrile",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.084
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Filozofski fakultet",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.121
+    },
+    {
+     "role": "study",
+     "redactedText": "Odsjek za povijest",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.157
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.34
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.413
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Diplomski rad",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.486
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Pula, 2019.",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.887
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Calibri",
+     "sizePt": 11.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.929
+    }
+   ]
+  }
+ ]
+}

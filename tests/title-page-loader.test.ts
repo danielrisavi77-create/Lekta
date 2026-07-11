@@ -155,7 +155,12 @@ describe('template-loader: slugovi razina', () => {
 
 describe('templates.json: validacijski gate za pipeline output', () => {
   const sourceIds = new Set((rawSourceRegistry as Array<{ id: string }>).map((s) => s.id));
+  // evidencePid je valjan ako je (a) kuriran publicSource u profilu ILI (b) zabiljezen u
+  // commitanoj evidence datoteci (PID-ovi otkriveni OAI discoveryjem zive tamo, ne u profilima).
   const knownPids = new Set<string>();
+  for (const { data } of loadEvidenceFiles()) {
+    for (const s of data.samples) knownPids.add(s.pid);
+  }
   for (const p of rawVerified as Array<{
     fieldValidation?: { publicSources?: Array<{ pid: string }> };
   }>) {

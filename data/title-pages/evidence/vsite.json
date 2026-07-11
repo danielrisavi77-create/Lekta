@@ -1,0 +1,876 @@
+{
+ "unitId": "vsite",
+ "generatedAt": "2026-07-11",
+ "samples": [
+  {
+   "pid": "vsite:120",
+   "repository": "repozitorij.vsite.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 612.0,
+    "h": 792.0
+   },
+   "lines": [
+    {
+     "role": "faculty",
+     "redactedText": "VELEUČILIŠTE SUVREMENIH INFORMACIJSKIH TEHNOLOGIJA",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.054
+    },
+    {
+     "role": "study",
+     "redactedText": "STRUČNI PRIJEDIPLOMSKI STUDIJ INFORMACIJSKIH",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.098
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.122
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.359
+    },
+    {
+     "role": "worktype",
+     "redactedText": "ZAVRŠNI RAD",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.404
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 18.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.448
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, travnja 2026.",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.896
+    }
+   ]
+  },
+  {
+   "pid": "vsite:93",
+   "repository": "repozitorij.vsite.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 612.0,
+    "h": 792.0
+   },
+   "lines": [
+    {
+     "role": "faculty",
+     "redactedText": "VELEUČILIŠTE SUVREMENIH INFORMACIJSKIH TEHNOLOGIJA",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.051
+    },
+    {
+     "role": "study",
+     "redactedText": "STRUČNI PRIJEDIPLOMSKI STUDIJ INFORMACIJSKIH",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.095
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.124
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.357
+    },
+    {
+     "role": "worktype",
+     "redactedText": "ZAVRŠNI RAD",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.406
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 18.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.446
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, rujna 2023.",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.898
+    }
+   ]
+  },
+  {
+   "pid": "vsite:86",
+   "repository": "repozitorij.vsite.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 612.0,
+    "h": 792.0
+   },
+   "lines": [
+    {
+     "role": "faculty",
+     "redactedText": "VELEUČILIŠTE SUVREMENIH INFORMACIJSKIH TEHNOLOGIJA",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.051
+    },
+    {
+     "role": "study",
+     "redactedText": "STRUČNI PRIJEDIPLOMSKI STUDIJ INFORMACIJSKIH",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.095
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.124
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.357
+    },
+    {
+     "role": "worktype",
+     "redactedText": "ZAVRŠNI RAD",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.406
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 18.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.446
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, srpnja 2023.",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.898
+    }
+   ]
+  },
+  {
+   "pid": "vsite:69",
+   "repository": "repozitorij.vsite.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 612.0,
+    "h": 792.0
+   },
+   "lines": [
+    {
+     "role": "faculty",
+     "redactedText": "VISOKA ŠKOLA ZA INFORMACIJSKE TEHNOLOGIJE",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.056
+    },
+    {
+     "role": "study",
+     "redactedText": "SPECIJALISTIČKI DIPLOMSKI STRUČNI STUDIJ INFORMACIJSKIH",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.095
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.124
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.357
+    },
+    {
+     "role": "worktype",
+     "redactedText": "DIPLOMSKI RAD",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.406
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 18.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.446
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 18.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.474
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, ožujka 2023.",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.925
+    }
+   ]
+  },
+  {
+   "pid": "vsite:49",
+   "repository": "repozitorij.vsite.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 612.0,
+    "h": 792.0
+   },
+   "lines": [
+    {
+     "role": "faculty",
+     "redactedText": "VISOKA ŠKOLA ZA INFORMACIJSKE TEHNOLOGIJE",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.056
+    },
+    {
+     "role": "study",
+     "redactedText": "PREDDIPLOMSKI STRUČNI STUDIJ INFORMACIJSKIH",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.095
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.124
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.362
+    },
+    {
+     "role": "worktype",
+     "redactedText": "ZAVRŠNI RAD",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.406
+    },
+    {
+     "role": "study",
+     "redactedText": "USPOREDBA PROTOKOLA ZA USMJERAVANJE PAKETA",
+     "font": "Arial",
+     "sizePt": 18.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.446
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 18.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.472
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, siječnja 2023.",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.92
+    }
+   ]
+  },
+  {
+   "pid": "vsite:27",
+   "repository": "repozitorij.vsite.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "faculty",
+     "redactedText": "VELEUČILIŠTE SUVREMENIH INFORMACIJSKIH TEHNOLOGIJA",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.053
+    },
+    {
+     "role": "study",
+     "redactedText": "STRUČNI DIPLOMSKI STUDIJ INFORMACIJSKIH TEHNOLOGIJA",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.094
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.318
+    },
+    {
+     "role": "worktype",
+     "redactedText": "DIPLOMSKI RAD",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.36
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 18.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.402
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 18.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.427
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, siječnja 2025.",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.848
+    }
+   ]
+  },
+  {
+   "pid": "vsite:122",
+   "repository": "repozitorij.vsite.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 596.0,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.05
+    },
+    {
+     "role": "study",
+     "redactedText": "STRU Č NI PRIJEDIPLOMSKI STUDIJ INFORMACIJSKIH",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.092
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.115
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.338
+    },
+    {
+     "role": "worktype",
+     "redactedText": "ZAVRŠNI RAD",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.38
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 18.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.422
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, listopada 2025.",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.843
+    }
+   ]
+  },
+  {
+   "pid": "vsite:121",
+   "repository": "repozitorij.vsite.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 596.0,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "faculty",
+     "redactedText": "VELEUČILIŠTE SUVREMENIH INFORMACIJSKIH TEHNOLOGIJA",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.048
+    },
+    {
+     "role": "study",
+     "redactedText": "STRUČNI PRIJEDIPLOMSKI STUDIJ INFORMACIJSKIH",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.089
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.112
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.336
+    },
+    {
+     "role": "worktype",
+     "redactedText": "ZAVRŠNI RAD",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.377
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 18.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.418
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, travnja 2025.",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.84
+    }
+   ]
+  },
+  {
+   "pid": "vsite:119",
+   "repository": "repozitorij.vsite.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 596.0,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "faculty",
+     "redactedText": "VELEUČILIŠTE SUVREMENIH INFORMACIJSKIH TEHNOLOGIJA",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.051
+    },
+    {
+     "role": "study",
+     "redactedText": "STRUČNI PRIJEDIPLOMSKI STUDIJ INFORMACIJSKIH",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.092
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.115
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.338
+    },
+    {
+     "role": "worktype",
+     "redactedText": "ZAVRŠNI RAD",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.38
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 18.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.422
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 18.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.447
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, listopada 2025.",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.868
+    }
+   ]
+  },
+  {
+   "pid": "vsite:117",
+   "repository": "repozitorij.vsite.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 596.0,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "faculty",
+     "redactedText": "VELEUČILIŠTE SUVREMENIH INFORMACIJSKIH TEHNOLOGIJA",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.048
+    },
+    {
+     "role": "study",
+     "redactedText": "STRUČNI PRIJEDIPLOMSKI STUDIJ INFORMACIJSKIH",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.089
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.112
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.336
+    },
+    {
+     "role": "worktype",
+     "redactedText": "ZAVRŠNI RAD",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.377
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 18.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.418
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, travnja 2025.",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.84
+    }
+   ]
+  }
+ ]
+}

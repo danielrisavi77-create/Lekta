@@ -1,0 +1,896 @@
+{
+ "unitId": "mfpu",
+ "generatedAt": "2026-07-11",
+ "samples": [
+  {
+   "pid": "unipu:5611",
+   "repository": "repozitorij.unipu.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 612.0,
+    "h": 792.0
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište Jurja Dobrile u Puli",
+     "font": "CIDFont+F1",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.091
+    },
+    {
+     "role": "study",
+     "redactedText": "Preddiplomski studij Sestrinstvo",
+     "font": "CIDFont+F1",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.109
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "CIDFont+F2",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.265
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "CIDFont+F1",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.335
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "CIDFont+F1",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.353
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "CIDFont+F1",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.387
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Pula, lipanj, 2021.  godine",
+     "font": "CIDFont+F1",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.875
+    }
+   ]
+  },
+  {
+   "pid": "unipu:5577",
+   "repository": "repozitorij.unipu.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 612.0,
+    "h": 792.0
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE JURJA DOBRILE U PULI",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.091
+    },
+    {
+     "role": "faculty",
+     "redactedText": "MEDICINSKI FAKULTET U PULI",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.13
+    },
+    {
+     "role": "study",
+     "redactedText": "Preddiplomski stručni studij Sestrinstvo",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.169
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.338
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.443
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.469
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.495
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Pula, 2021. godine",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.887
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 10.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.948
+    }
+   ]
+  },
+  {
+   "pid": "unipu:5525",
+   "repository": "repozitorij.unipu.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE JURJA DOBRILE U PULI",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.085
+    },
+    {
+     "role": "faculty",
+     "redactedText": "MEDICINSKI FAKULTET U PULI",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.101
+    },
+    {
+     "role": "study",
+     "redactedText": "Preddiplomski stručni studij Sestrinstvo",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.117
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.396
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.445
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.478
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Pula, svibanj, 2021.",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.888
+    }
+   ]
+  },
+  {
+   "pid": "unipu:5521",
+   "repository": "repozitorij.unipu.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište Jurja Dobrile u Puli",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.114
+    },
+    {
+     "role": "study",
+     "redactedText": "Preddiplomski stručni studij Sestrinstvo",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.167
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.465
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.538
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.575
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Pula, 2021.",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.867
+    }
+   ]
+  },
+  {
+   "pid": "unipu:5510",
+   "repository": "repozitorij.unipu.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE JURJA DOBRILE U PULI",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.084
+    },
+    {
+     "role": "faculty",
+     "redactedText": "MEDICINSKI FAKULTET U PULI",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.106
+    },
+    {
+     "role": "study",
+     "redactedText": "Preddiplomski stručni studij sestrinstvo",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.128
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.391
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 24.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.435
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 24.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.468
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.522
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Pula, ožujak 2021.",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.893
+    }
+   ]
+  },
+  {
+   "pid": "unipu:5502",
+   "repository": "repozitorij.unipu.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.2,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište Jurja Dobrile u Puli",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.101
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Medicinski fakultet",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.126
+    },
+    {
+     "role": "study",
+     "redactedText": "Preddiplomski stručni studij Sestrinstvo",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.15
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.331
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.413
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.446
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Pula, ožujak 2021. godine",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.855
+    }
+   ]
+  },
+  {
+   "pid": "unipu:5490",
+   "repository": "repozitorij.unipu.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.6,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište Jurja Dobrile u Puli",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.085
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Medicinski fakultet",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.112
+    },
+    {
+     "role": "study",
+     "redactedText": "Preddiplomski stručni studij Sestrinstva",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.139
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.411
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.465
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.493
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Pula, 2021. godine",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.874
+    }
+   ]
+  },
+  {
+   "pid": "unipu:5486",
+   "repository": "repozitorij.unipu.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.6,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište Jurja Dobrile u Puli Medicinski fakultet u Puli Preddiplomski stručni",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.079
+    },
+    {
+     "role": "study",
+     "redactedText": "studij Sestrinstvo",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.097
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.367
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "right",
+     "yRel": 0.44
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "right",
+     "yRel": 0.458
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.51
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Pula, 2021.",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.903
+    }
+   ]
+  },
+  {
+   "pid": "unipu:5480",
+   "repository": "repozitorij.unipu.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište Jurja Dobrile u Puli",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.084
+    },
+    {
+     "role": "faculty",
+     "redactedText": "MEDICINSKI FAKULTET PULA",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.127
+    },
+    {
+     "role": "study",
+     "redactedText": "Preddiplomski stručni studij Sestrinstvo",
+     "font": "Arial",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.169
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.348
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.462
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.491
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.605
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Pula, 2021.",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.873
+    }
+   ]
+  },
+  {
+   "pid": "unipu:5472",
+   "repository": "repozitorij.unipu.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište Jurja Dobrile u Puli",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.102
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Medicinski fakultet",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.126
+    },
+    {
+     "role": "study",
+     "redactedText": "Preddiplomski stručni studij",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.153
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.178
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.442
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.474
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.503
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.539
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Pula, veljača, 2021.",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.869
+    }
+   ]
+  }
+ ]
+}

@@ -32,6 +32,16 @@ const unitFilter = (() => {
   return value ? new Set(value.split(',')) : null;
 })();
 
+// Uniti kojima se svjesno derivira JEDAN level=null predlozak iz SVIH ne-OCR uzoraka
+// (jednoformatni fakulteti/veleucilista gdje razina nije bitna, pa se ignorira
+// levelMarkerMatch). Koristi se samo za konsistencijom potvrdjene unite (workflow analiza).
+const mergeNullUnits = (() => {
+  const arg = process.argv.find((a) => a.startsWith('--merge-null-units'));
+  if (!arg) return new Set();
+  const value = arg.includes('=') ? arg.split('=')[1] : process.argv[process.argv.indexOf(arg) + 1];
+  return value ? new Set(value.split(',')) : new Set();
+})();
+
 const LEVEL_MAP = { zavrsni: 'final', diplomski: 'graduate', doktorski: 'doctoral', specijalisticki: 'specialist' };
 /** Uloge koje sudjeluju u rasporedu; unknown se ignorira. */
 const LAYOUT_ROLES = new Set(['university', 'faculty', 'study', 'author', 'title', 'subtitle', 'worktype', 'mentor', 'comentor', 'placeyear']);
@@ -173,6 +183,35 @@ let corroborated = 0;
 for (const file of evidenceFiles) {
   const ev = JSON.parse(readFileSync(join(EVIDENCE_DIR, file), 'utf8'));
   if (unitFilter && !unitFilter.has(ev.unitId)) continue;
+
+  // Eksplicitni level=null merge (jednoformatni unit, razina nebitna): svi ne-OCR uzorci.
+  if (mergeNullUnits.has(ev.unitId)) {
+    const samples = ev.samples.filter((s) => !s.ocrFallback);
+    const hasExisting = templates.some((t) => t.unitId === ev.unitId);
+    if (!hasExisting && samples.length >= 2) {
+      const consensus = consensusElements(samples);
+      if (consensus.length) {
+        const pids = samples.map((s) => s.pid).sort();
+        templates.push({
+          id: `${ev.unitId}`,
+          unitId: ev.unitId,
+          level: null,
+          name: `${unitNames.get(ev.unitId) || ev.unitId}: naslovnica`,
+          provenance: {
+            status: 'derived',
+            sourceNote: `Raspored izveden konsenzusom ${samples.length} javnih radova; nije sluzbeni predlozak.`,
+            evidencePids: pids,
+            verifiedAt: null,
+          },
+          status: 'draft',
+          elements: consensus,
+          derivation: { samples: samples.length, conflicts: [] },
+        });
+        derivedNew++;
+      }
+    }
+    continue;
+  }
 
   // Grupe po razini; uzorci sa sumnjivom razinom (marker eksplicitno false) se preskacu.
   const byLevel = new Map();

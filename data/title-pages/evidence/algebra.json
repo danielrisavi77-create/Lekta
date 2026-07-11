@@ -1,0 +1,796 @@
+{
+ "unitId": "algebra",
+ "generatedAt": "2026-07-11",
+ "samples": [
+  {
+   "pid": "algebra:294",
+   "repository": "repozitorij.algebra.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.102
+    },
+    {
+     "role": "worktype",
+     "redactedText": "DIPLOMSKI RAD",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.42
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.456
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.497
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.544
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, travanj 2019.",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.866
+    }
+   ]
+  },
+  {
+   "pid": "algebra:237",
+   "repository": "repozitorij.algebra.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.102
+    },
+    {
+     "role": "worktype",
+     "redactedText": "ZAVRŠNI RAD",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.419
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.456
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.497
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.538
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.585
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, veljača 2019.",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.875
+    }
+   ]
+  },
+  {
+   "pid": "algebra:232",
+   "repository": "repozitorij.algebra.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.085
+    },
+    {
+     "role": "worktype",
+     "redactedText": "ZAVRŠNI RAD",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.371
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.4
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.429
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.457
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, veljača 2019.",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.773
+    }
+   ]
+  },
+  {
+   "pid": "algebra:231",
+   "repository": "repozitorij.algebra.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.101
+    },
+    {
+     "role": "worktype",
+     "redactedText": "ZAVRŠNI RAD",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.388
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.424
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.461
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.498
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.541
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, siječanj 2019.",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.839
+    }
+   ]
+  },
+  {
+   "pid": "algebra:229",
+   "repository": "repozitorij.algebra.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.101
+    },
+    {
+     "role": "worktype",
+     "redactedText": "ZAVRŠNI RAD",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.419
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.456
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.497
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.544
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, veljača 2019.",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.87
+    }
+   ]
+  },
+  {
+   "pid": "algebra:226",
+   "repository": "repozitorij.algebra.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.101
+    },
+    {
+     "role": "worktype",
+     "redactedText": "ZAVRŠNI RAD",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.419
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.456
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.504
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.545
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.593
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, veljača 2019.",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.854
+    }
+   ]
+  },
+  {
+   "pid": "algebra:225",
+   "repository": "repozitorij.algebra.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.101
+    },
+    {
+     "role": "worktype",
+     "redactedText": "ZAVRŠNI RAD",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.355
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.385
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.43
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.475
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.519
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, veljača 2019.",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.724
+    }
+   ]
+  },
+  {
+   "pid": "algebra:222",
+   "repository": "repozitorij.algebra.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.101
+    },
+    {
+     "role": "worktype",
+     "redactedText": "ZAVRŠNI RAD",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.419
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.456
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.503
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, siječanj 2019.",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.829
+    }
+   ]
+  },
+  {
+   "pid": "algebra:220",
+   "repository": "repozitorij.algebra.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.086
+    },
+    {
+     "role": "worktype",
+     "redactedText": "ZAVRŠNI RAD",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.341
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.377
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.418
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.466
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 20.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.514
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.562
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, Veljača 2019.",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.895
+    }
+   ]
+  },
+  {
+   "pid": "algebra:217",
+   "repository": "repozitorij.algebra.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.4,
+    "h": 841.7
+   },
+   "lines": [
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.253
+    },
+    {
+     "role": "worktype",
+     "redactedText": "ZAVRŠNI RAD",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.434
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.472
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.505
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.585
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, veljača 2019 .",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.816
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,836 @@
+{
+ "unitId": "mapu",
+ "generatedAt": "2026-07-11",
+ "samples": [
+  {
+   "pid": "unipu:5412",
+   "repository": "repozitorij.unipu.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 612.0,
+    "h": 792.0
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište Jurja Dobrile u Puli",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.111
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Muzička akademija u Puli",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.129
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.303
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.39
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.407
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Diplomski rad",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.442
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Pula,  16. rujan 2020.  godine",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.86
+    }
+   ]
+  },
+  {
+   "pid": "unipu:5385",
+   "repository": "repozitorij.unipu.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.0,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište Jurja Dobrile u Puli",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.085
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Muzička akademija u Puli",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.119
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.255
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.358
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.382
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Diplomski rad",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.45
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Pula, 2020.",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.893
+    }
+   ]
+  },
+  {
+   "pid": "unipu:5384",
+   "repository": "repozitorij.unipu.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.2,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "faculty",
+     "redactedText": "MUZIČKA AKADEMIJA U PULI",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.09
+    },
+    {
+     "role": "study",
+     "redactedText": "ODSJEK ZA GLAZBENU PEDAGOGIJU",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.127
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.309
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.345
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Diplomski rad",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.467
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Pula, rujan 2020.",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.82
+    }
+   ]
+  },
+  {
+   "pid": "unipu:5383",
+   "repository": "repozitorij.unipu.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište Jurja Dobrile u Puli",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.084
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Muzička akademija u Puli",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.11
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.409
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.477
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.503
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Diplomski rad",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.529
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Pula, rujan 2020.",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.894
+    }
+   ]
+  },
+  {
+   "pid": "unipu:5382",
+   "repository": "repozitorij.unipu.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.2,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište Jurja Dobrile u Puli",
+     "font": "Times New Roman",
+     "sizePt": 13.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.086
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Muzička akademija u Puli",
+     "font": "Times New Roman",
+     "sizePt": 13.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.143
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.397
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.457
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.478
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "Times New Roman",
+     "sizePt": 13.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.535
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Pula, 2020.",
+     "font": "Times New Roman",
+     "sizePt": 13.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.879
+    }
+   ]
+  },
+  {
+   "pid": "unipu:5381",
+   "repository": "repozitorij.unipu.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište Jurja Dobrile u Puli",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.085
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Muzička akademija u Puli",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.116
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.407
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.493
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.536
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.579
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Pula, rujan 2020.",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.863
+    }
+   ]
+  },
+  {
+   "pid": "unipu:5380",
+   "repository": "repozitorij.unipu.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište Jurja Dobrile u Puli",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.085
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Muzička akademija u Puli",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.109
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.281
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.38
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.404
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.454
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Pula, rujan 2020 .",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.896
+    }
+   ]
+  },
+  {
+   "pid": "unipu:5379",
+   "repository": "repozitorij.unipu.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište Jurja Dobrile u Puli",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.085
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Muzička akademija u Puli",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.109
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.38
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.429
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "Arial",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.47
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Pula, rujan, 2020.",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.882
+    }
+   ]
+  },
+  {
+   "pid": "unipu:4864",
+   "repository": "repozitorij.unipu.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE JURJA DOBRILE U PULI",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.084
+    },
+    {
+     "role": "faculty",
+     "redactedText": "MUZIČKA AKADEMIJA U PULI",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.116
+    },
+    {
+     "role": "study",
+     "redactedText": "ODSJEK STUDIJA GLAZBENE PEDAGOGIJE",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.148
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.37
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.402
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.426
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Završni rad",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.46
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Pula, 2020. godine",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.843
+    },
+    {
+     "role": "university",
+     "redactedText": "SVEUČILIŠTE JURJA DOBRILE U PULI",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.877
+    }
+   ]
+  },
+  {
+   "pid": "unipu:4785",
+   "repository": "repozitorij.unipu.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište Jurja Dobrile u Puli",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.085
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Muzička akademija u Puli",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.121
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.413
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.486
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Diplomski rad",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.522
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Pula, srpanj, 2020.",
+     "font": "Arial",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.887
+    }
+   ]
+  }
+ ]
+}

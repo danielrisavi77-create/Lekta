@@ -1,0 +1,826 @@
+{
+ "unitId": "libertas",
+ "generatedAt": "2026-07-11",
+ "samples": [
+  {
+   "pid": "libertas:98",
+   "repository": "repozitorij.libertas.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "LIBERTAS MEĐUNARODNO SVEUČILIŠTE",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.084
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.126
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.279
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.382
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.499
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.528
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, 29.ožujka 2019.",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.884
+    }
+   ]
+  },
+  {
+   "pid": "libertas:93",
+   "repository": "repozitorij.libertas.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "LIBERTAS MEĐUNARODNO SVEUČILIŠTE",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.119
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.138
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.28
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.526
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.575
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.6
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, travanj 2019.",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.895
+    }
+   ]
+  },
+  {
+   "pid": "libertas:92",
+   "repository": "repozitorij.libertas.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "MEĐUNARODNO SVEUČILIŠTE LIBERTAS",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.084
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.107
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.265
+    },
+    {
+     "role": "worktype",
+     "redactedText": "DIPLOMSKI RAD",
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.408
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.482
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.51
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "ZAGREB, SVIBANJ 2019.",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.875
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 11.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.928
+    }
+   ]
+  },
+  {
+   "pid": "libertas:91",
+   "repository": "repozitorij.libertas.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "LIBERTAS MEĐUNARODNO SVEUČILIŠTE",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.119
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.138
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.305
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.452
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, lipanj 2019 .",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.821
+    }
+   ]
+  },
+  {
+   "pid": "libertas:87",
+   "repository": "repozitorij.libertas.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "LIBERTAS MEĐUNARODNO SVEUĈILIŠTE",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.085
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.109
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.23
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.351
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.5
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.529
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, sijeĉanj 2019.",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.893
+    }
+   ]
+  },
+  {
+   "pid": "libertas:67",
+   "repository": "repozitorij.libertas.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "LIBERTAS MEĐUNARODNO SVEUČILIŠTE",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.085
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.104
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.266
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.413
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.462
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.477
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, veljača 2019.",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.869
+    }
+   ]
+  },
+  {
+   "pid": "libertas:63",
+   "repository": "repozitorij.libertas.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "LIBERTAS MEĐUNARODNO SVEUČILIŠTE",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.085
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.113
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.314
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.466
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, siječanj 2019.",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.917
+    }
+   ]
+  },
+  {
+   "pid": "libertas:54",
+   "repository": "repozitorij.libertas.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "LIBERTAS MEĐUNARODNO SVEUČILIŠTE",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.084
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.122
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.276
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.464
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.501
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.529
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, prosinac 2018.",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.872
+    }
+   ]
+  },
+  {
+   "pid": "libertas:53",
+   "repository": "repozitorij.libertas.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 612.0,
+    "h": 792.0
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "LIBERTAS MEĐUNARODNO SVEUČILIŠTE ZAGREB",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.09
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.406
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, travanj 2019.",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.861
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.948
+    }
+   ]
+  },
+  {
+   "pid": "libertas:50",
+   "repository": "repozitorij.libertas.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.2,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "LIBERTAS MEĐUNARODNO SVEUČILIŠTE",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.12
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.15
+    },
+    {
+     "role": "study",
+     "redactedText": "SPECIJALISTIČKI DIPLOMSKI STRUČNI STUDIJ",
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.301
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.337
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.363
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.507
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 18.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.534
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.69
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.72
+    },
+    {
+     "role": "mentor",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.751
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, Siječanj 2018.",
+     "font": "Times New Roman",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.871
+    }
+   ]
+  }
+ ]
+}

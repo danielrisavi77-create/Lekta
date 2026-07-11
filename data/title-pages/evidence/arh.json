@@ -1,0 +1,846 @@
+{
+ "unitId": "arh",
+ "generatedAt": "2026-07-11",
+ "samples": [
+  {
+   "pid": "arhitekt:99",
+   "repository": "repozitorij.arhitekt.unizg.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 1190.6,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Poppins-Medium",
+     "sizePt": 32.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "left",
+     "yRel": 0.339
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Poppins-Medium",
+     "sizePt": 32.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "left",
+     "yRel": 0.386
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Poppins-Medium",
+     "sizePt": 32.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "left",
+     "yRel": 0.431
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Poppins-Medium",
+     "sizePt": 32.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "left",
+     "yRel": 0.477
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Poppins-Medium",
+     "sizePt": 32.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "left",
+     "yRel": 0.523
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Poppins-Light",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.657
+    },
+    {
+     "role": "university",
+     "redactedText": "Arhitektonski fakultet Sveučilišta u Zagrebu",
+     "font": "Poppins-Light",
+     "sizePt": 10.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.889
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Diplomska radionica | 2025./26.",
+     "font": "Poppins-Light",
+     "sizePt": 10.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.903
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Poppins-Light",
+     "sizePt": 10.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.917
+    },
+    {
+     "role": "mentor",
+     "redactedText": null,
+     "font": "Poppins-Light",
+     "sizePt": 10.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.932
+    }
+   ]
+  },
+  {
+   "pid": "arhitekt:98",
+   "repository": "repozitorij.arhitekt.unizg.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 1191.0,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "worktype",
+     "redactedText": "Diplomski rad",
+     "font": "Bahnschrift",
+     "sizePt": 13.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.368
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Bahnschrift",
+     "sizePt": 24.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.414
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Bahnschrift",
+     "sizePt": 24.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.45
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Bahnschrift",
+     "sizePt": 11.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.531
+    },
+    {
+     "role": "mentor",
+     "redactedText": null,
+     "font": "Bahnschrift",
+     "sizePt": 11.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.563
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Arhitektonski fakultet",
+     "font": "Bahnschrift",
+     "sizePt": 11.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.6
+    },
+    {
+     "role": "university",
+     "redactedText": "Sveučilište u Zagrebu",
+     "font": "Bahnschrift",
+     "sizePt": 11.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.616
+    },
+    {
+     "role": "study",
+     "redactedText": "Diplomski studij arhitekture i urbanizma",
+     "font": "Bahnschrift",
+     "sizePt": 11.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.632
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Bahnschrift",
+     "sizePt": 11.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.648
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Akademska godina: 2025./2026.",
+     "font": "Bahnschrift",
+     "sizePt": 11.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.665
+    }
+   ]
+  },
+  {
+   "pid": "arhitekt:97",
+   "repository": "repozitorij.arhitekt.unizg.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 1191.0,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "GillSansMT-Condensed",
+     "sizePt": 38.5,
+     "bold": false,
+     "uppercase": true,
+     "align": "left",
+     "yRel": 0.554
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "GillSansMT-Condensed",
+     "sizePt": 19.5,
+     "bold": false,
+     "uppercase": true,
+     "align": "left",
+     "yRel": 0.554
+    },
+    {
+     "role": "mentor",
+     "redactedText": null,
+     "font": "GillSansMT",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.556
+    },
+    {
+     "role": "university",
+     "redactedText": "Arhitektonski fakultet Sveučilišta u Zagrebu",
+     "font": "GillSansMT",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.557
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "GillSansMT",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.557
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "GillSansMT",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.557
+    }
+   ]
+  },
+  {
+   "pid": "arhitekt:96",
+   "repository": "repozitorij.arhitekt.unizg.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 1190.6,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Liberation Serif",
+     "sizePt": 18.5,
+     "bold": true,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.452
+    },
+    {
+     "role": "mentor",
+     "redactedText": null,
+     "font": "Liberation Serif",
+     "sizePt": 9.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.485
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Arhitektonski fakultet Sveulčilišta u Zagrebu",
+     "font": "Liberation Serif",
+     "sizePt": 9.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.498
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Liberation Serif",
+     "sizePt": 9.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.511
+    }
+   ]
+  },
+  {
+   "pid": "arhitekt:95",
+   "repository": "repozitorij.arhitekt.unizg.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 842.0,
+    "h": 1191.0
+   },
+   "lines": [
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Helvetica",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.137
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Helvetica",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.267
+    },
+    {
+     "role": "mentor",
+     "redactedText": null,
+     "font": "Helvetica",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.279
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Helvetica",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.31
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Helvetica",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.319
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Helvetica",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.331
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Helvetica",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.332
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Helvetica",
+     "sizePt": 12.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.336
+    }
+   ]
+  },
+  {
+   "pid": "arhitekt:94",
+   "repository": "repozitorij.arhitekt.unizg.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 842.0,
+    "h": 1191.0
+   },
+   "lines": [
+    {
+     "role": "worktype",
+     "redactedText": "diplomski rad",
+     "font": "SitkaDisplay",
+     "sizePt": 13.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.023
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "SitkaDisplay",
+     "sizePt": 13.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.036
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "SitkaDisplay",
+     "sizePt": 13.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.05
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "SitkaDisplay-Bold",
+     "sizePt": 21.5,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.351
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "SitkaDisplay",
+     "sizePt": 21.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.391
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "SitkaDisplay-Bold",
+     "sizePt": 13.5,
+     "bold": true,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.952
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "SitkaDisplay",
+     "sizePt": 13.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.952
+    },
+    {
+     "role": "mentor",
+     "redactedText": null,
+     "font": "SitkaDisplay",
+     "sizePt": 13.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.967
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "SitkaDisplay",
+     "sizePt": 13.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.967
+    }
+   ]
+  },
+  {
+   "pid": "arhitekt:93",
+   "repository": "repozitorij.arhitekt.unizg.hr",
+   "level": "diplomski",
+   "pageIndex": 0,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 1191.0,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "faculty",
+     "redactedText": "ARHITEKTONSKI FAKULTET",
+     "font": "Bahnschrift",
+     "sizePt": 8.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "left",
+     "yRel": 0.961
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Bahnschrift",
+     "sizePt": 8.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "right",
+     "yRel": 0.962
+    },
+    {
+     "role": "study",
+     "redactedText": "Diplomski studij arhitekture i urbanizma",
+     "font": "Bahnschrift",
+     "sizePt": 8.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.967
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Bahnschrift",
+     "sizePt": 9.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.968
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Bahnschrift",
+     "sizePt": 8.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.968
+    },
+    {
+     "role": "university",
+     "redactedText": "Sveučilište u Zagrebu",
+     "font": "Bahnschrift",
+     "sizePt": 8.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "left",
+     "yRel": 0.973
+    },
+    {
+     "role": "mentor",
+     "redactedText": null,
+     "font": "Bahnschrift",
+     "sizePt": 8.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.974
+    }
+   ]
+  },
+  {
+   "pid": "arhitekt:92",
+   "repository": "repozitorij.arhitekt.unizg.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 1191.0,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Verdana",
+     "sizePt": 19.5,
+     "bold": false,
+     "uppercase": true,
+     "align": "right",
+     "yRel": 0.829
+    },
+    {
+     "role": "university",
+     "redactedText": "Sveučilište u Zagrebu | Arhitektonski fakultet",
+     "font": "Verdana",
+     "sizePt": 11.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.86
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Verdana",
+     "sizePt": 11.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.877
+    },
+    {
+     "role": "mentor",
+     "redactedText": null,
+     "font": "Verdana",
+     "sizePt": 11.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.901
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 27.5,
+     "bold": true,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.907
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Verdana",
+     "sizePt": 11.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.918
+    }
+   ]
+  },
+  {
+   "pid": "arhitekt:91",
+   "repository": "repozitorij.arhitekt.unizg.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 842.0,
+    "h": 1191.0
+   },
+   "lines": [
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "FuturaBT-Book",
+     "sizePt": 15.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.921
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "FuturaBT-Light",
+     "sizePt": 15.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.937
+    },
+    {
+     "role": "university",
+     "redactedText": "Sveučilište u Zagrebu | Arhitektonski fakultet | diplomska radionica | akademska godina 2025. / 2026.",
+     "font": "FuturaBT-Light",
+     "sizePt": 8.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.957
+    },
+    {
+     "role": "mentor",
+     "redactedText": null,
+     "font": "FuturaBT-Light",
+     "sizePt": 8.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.969
+    }
+   ]
+  },
+  {
+   "pid": "arhitekt:90",
+   "repository": "repozitorij.arhitekt.unizg.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 1191.0,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Arhitektonski fakultet Sveučilišta u Zagrebu",
+     "font": "Arial",
+     "sizePt": 10.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.04
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 10.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.054
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 13.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.874
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 13.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.913
+    },
+    {
+     "role": "worktype",
+     "redactedText": "diplomski rad",
+     "font": "Arial",
+     "sizePt": 13.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.932
+    },
+    {
+     "role": "mentor",
+     "redactedText": null,
+     "font": "Arial",
+     "sizePt": 13.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.95
+    }
+   ]
+  }
+ ]
+}

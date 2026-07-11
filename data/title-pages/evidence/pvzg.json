@@ -1,0 +1,986 @@
+{
+ "unitId": "pvzg",
+ "generatedAt": "2026-07-11",
+ "samples": [
+  {
+   "pid": "vpsz:458",
+   "repository": "repozitorij.pvzg.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "faculty",
+     "redactedText": "POSLOVNO VELEUČILIŠTE ZAGREB",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "right",
+     "yRel": 0.101
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.325
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "right",
+     "yRel": 0.365
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.41
+    },
+    {
+     "role": "worktype",
+     "redactedText": "završni rad",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.462
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.502
+    },
+    {
+     "role": "study",
+     "redactedText": "specijalističkom diplomskom stručnom studiju",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.541
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, rujan 2019. godine",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.835
+    }
+   ]
+  },
+  {
+   "pid": "vpsz:455",
+   "repository": "repozitorij.pvzg.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.2,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "faculty",
+     "redactedText": "POSLOVNO VELEUČILIŠTE ZAGREB",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.102
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.364
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.426
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.471
+    },
+    {
+     "role": "study",
+     "redactedText": "završni rad na specijalističkom diplomskom stručnom studiju",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.552
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, rujan 2019.",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.814
+    }
+   ]
+  },
+  {
+   "pid": "vpsz:454",
+   "repository": "repozitorij.pvzg.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "faculty",
+     "redactedText": "POSLOVNO VELEUČILIŠTE ZAGREB",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.101
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.282
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.315
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.36
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.404
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, rujan 2019. godine",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.855
+    }
+   ]
+  },
+  {
+   "pid": "vpsz:453",
+   "repository": "repozitorij.pvzg.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "faculty",
+     "redactedText": "POSLOVNO VELEUČILIŠTE ZAGREB",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.208
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.374
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.44
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.473
+    },
+    {
+     "role": "worktype",
+     "redactedText": "završni rad",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.514
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.547
+    },
+    {
+     "role": "study",
+     "redactedText": "preddiplomskom stručnom studiju Menadžmenta i produkcije u",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.58
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.604
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, rujan, 2019. godine",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.869
+    }
+   ]
+  },
+  {
+   "pid": "vpsz:452",
+   "repository": "repozitorij.pvzg.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "faculty",
+     "redactedText": "POSLOVNO VELEUČILIŠTE ZAGREB",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.101
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.287
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.332
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.366
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.401
+    },
+    {
+     "role": "worktype",
+     "redactedText": "završni rad",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.456
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.478
+    },
+    {
+     "role": "study",
+     "redactedText": "specijalističkom diplomskom stručnom studiju",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.5
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, rujan, 2019. godine",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.85
+    }
+   ]
+  },
+  {
+   "pid": "vpsz:449",
+   "repository": "repozitorij.pvzg.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "faculty",
+     "redactedText": "POSLOVNO VELEUČILIŠTE ZAGREB",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.102
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.282
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.325
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.37
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.415
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.46
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.505
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.55
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.595
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, rujan 2019. godine",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.873
+    }
+   ]
+  },
+  {
+   "pid": "vpsz:438",
+   "repository": "repozitorij.pvzg.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "faculty",
+     "redactedText": "POSLOVNO VELEUČILIŠTE ZAGREB",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.085
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.325
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.351
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.385
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.42
+    },
+    {
+     "role": "worktype",
+     "redactedText": "završni rad",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.454
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.479
+    },
+    {
+     "role": "study",
+     "redactedText": "specijalističkom diplomskom stručnom studiju",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.504
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, kolovoz 2019.",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.836
+    }
+   ]
+  },
+  {
+   "pid": "vpsz:436",
+   "repository": "repozitorij.pvzg.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 612.0,
+    "h": 792.0
+   },
+   "lines": [
+    {
+     "role": "faculty",
+     "redactedText": "POSLOVNO VELEUČILIŠTE ZAGREB",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.109
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.327
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.388
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.436
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.484
+    },
+    {
+     "role": "worktype",
+     "redactedText": "završni rad",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.532
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.566
+    },
+    {
+     "role": "study",
+     "redactedText": "specijalističkom diplomskom stručnom studiju",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.601
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, srpanj, 2019. godine",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.793
+    }
+   ]
+  },
+  {
+   "pid": "vpsz:423",
+   "repository": "repozitorij.pvzg.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 612.0,
+    "h": 792.0
+   },
+   "lines": [
+    {
+     "role": "faculty",
+     "redactedText": "POSLOVNO VELEUČILIŠTE ZAGREB",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.108
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.317
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.387
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.435
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.483
+    },
+    {
+     "role": "worktype",
+     "redactedText": "završni rad",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.53
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.565
+    },
+    {
+     "role": "study",
+     "redactedText": "specijalističkom diplomskom stručnom studiju",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.6
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, srpanj, 2019.",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.844
+    }
+   ]
+  },
+  {
+   "pid": "vpsz:417",
+   "repository": "repozitorij.pvzg.hr",
+   "level": "diplomski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": false,
+   "pageSizePt": {
+    "w": 595.4,
+    "h": 841.8
+   },
+   "lines": [
+    {
+     "role": "faculty",
+     "redactedText": "POSLOVNO VELEUČILIŠTE ZAGREB",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.084
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.336
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.369
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.399
+    },
+    {
+     "role": "author",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 22.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.429
+    },
+    {
+     "role": "worktype",
+     "redactedText": "završni rad",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.459
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.481
+    },
+    {
+     "role": "study",
+     "redactedText": "specijalističkom diplomskom stručnom studiju",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.503
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Zagreb, srpanj 2019.",
+     "font": "Times New Roman",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.852
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,976 @@
+{
+ "unitId": "grafos",
+ "generatedAt": "2026-07-11",
+ "samples": [
+  {
+   "pid": "gfos:3235",
+   "repository": "repozitorij.gfos.hr",
+   "level": "doktorski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište Josipa Jurja Strossmayera u Osijeku",
+     "font": "Century Gothic",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.084
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Građevinski i arhitektonski fakultet Osijek",
+     "font": "Century Gothic",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.115
+    },
+    {
+     "role": "study",
+     "redactedText": "Poslijediplomski sveučilišni studij Građevinarstvo",
+     "font": "Century Gothic",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.176
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Doktorski rad",
+     "font": "Century Gothic",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.396
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Century Gothic",
+     "sizePt": 18.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.458
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Century Gothic",
+     "sizePt": 18.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.484
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Century Gothic",
+     "sizePt": 18.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.51
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Century Gothic",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.572
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Osijek, 2026. godine",
+     "font": "Century Gothic",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.877
+    }
+   ]
+  },
+  {
+   "pid": "gfos:3188",
+   "repository": "repozitorij.gfos.hr",
+   "level": "doktorski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište Josipa Jurja Strossmayera u Osijeku",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.163
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Građevinski i arhitektonski fakultet Osijek",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.194
+    },
+    {
+     "role": "study",
+     "redactedText": "Doktorski studij Građevinarstvo",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.258
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Doktorski rad",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.394
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.485
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.576
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Osijek, 6. studenoga 2025. godine",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.849
+    }
+   ]
+  },
+  {
+   "pid": "gfos:3187",
+   "repository": "repozitorij.gfos.hr",
+   "level": "doktorski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "CenturyGothic",
+     "sizePt": 10.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.084
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "CenturyGothic",
+     "sizePt": 10.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.106
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "CenturyGothic",
+     "sizePt": 10.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.168
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "CenturyGothic",
+     "sizePt": 10.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.325
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "CenturyGothic-Bold",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.356
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "CenturyGothic-Bold",
+     "sizePt": 14.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.38
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "CenturyGothic",
+     "sizePt": 10.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.439
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Osijek, October 2025.",
+     "font": "CenturyGothic",
+     "sizePt": 10.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.886
+    }
+   ]
+  },
+  {
+   "pid": "gfos:2995",
+   "repository": "repozitorij.gfos.hr",
+   "level": "doktorski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište Josipa Jurja Strossmayera u Osijeku",
+     "font": "CenturyGothic",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.084
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Građevinski i arhitektonski fakultet Osijek",
+     "font": "CenturyGothic",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.115
+    },
+    {
+     "role": "study",
+     "redactedText": "Poslijediplomski sveučilišni studij Građevinarstvo",
+     "font": "CenturyGothic",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.176
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Doktorski rad",
+     "font": "CenturyGothic",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.395
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "CenturyGothic",
+     "sizePt": 18.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.457
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "CenturyGothic",
+     "sizePt": 18.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.484
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "CenturyGothic",
+     "sizePt": 18.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.51
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "CenturyGothic",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.572
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Osijek, 30. lipnja 2025. godine",
+     "font": "CenturyGothic",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.877
+    }
+   ]
+  },
+  {
+   "pid": "gfos:2643",
+   "repository": "repozitorij.gfos.hr",
+   "level": "doktorski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište Josipa Jurja Strossmayera u Osijeku",
+     "font": "CIDFont+F2",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.085
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Građevinski i arhitektonski fakultet Osijek",
+     "font": "CIDFont+F2",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.115
+    },
+    {
+     "role": "study",
+     "redactedText": "Poslijediplomski sveučilišni studij Građevinarstvo",
+     "font": "CIDFont+F2",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.177
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Doktorski rad",
+     "font": "CIDFont+F2",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.396
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "CIDFont+F2",
+     "sizePt": 18.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "right",
+     "yRel": 0.458
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "CIDFont+F2",
+     "sizePt": 18.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.484
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "CIDFont+F2",
+     "sizePt": 18.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.511
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "CIDFont+F2",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.573
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Osijek, 14. svibanj 2024. godine",
+     "font": "CIDFont+F2",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.877
+    }
+   ]
+  },
+  {
+   "pid": "gfos:2428",
+   "repository": "repozitorij.gfos.hr",
+   "level": "doktorski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "SFRM1440",
+     "sizePt": 14.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.085
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "SFRM1440",
+     "sizePt": 14.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.117
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "SFRM1440",
+     "sizePt": 14.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.166
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "SFRM1728",
+     "sizePt": 17.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.404
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "SFBX2488",
+     "sizePt": 25.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.47
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "SFBX2488",
+     "sizePt": 25.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.509
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "SFBX2488",
+     "sizePt": 25.0,
+     "bold": true,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.548
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "SFRM1728",
+     "sizePt": 17.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.601
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Osijek, October, 2024",
+     "font": "SFRM1728",
+     "sizePt": 17.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.884
+    }
+   ]
+  },
+  {
+   "pid": "gfos:2427",
+   "repository": "repozitorij.gfos.hr",
+   "level": "doktorski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 842.0
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište Josipa Juraja Strossmayera u Osijeku",
+     "font": "CenturyGothic",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.084
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Građevinski i arhitektonski fakultet Osijek",
+     "font": "CenturyGothic",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.121
+    },
+    {
+     "role": "study",
+     "redactedText": "Poslijediplomski sveučilišni studij Građevinarstvo",
+     "font": "CenturyGothic",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.182
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Doktorski rad",
+     "font": "CenturyGothic",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.395
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "CenturyGothic",
+     "sizePt": 19.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.494
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "CenturyGothic",
+     "sizePt": 19.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.52
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "CenturyGothic",
+     "sizePt": 19.5,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.546
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "CenturyGothic",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.634
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Osijek, 2. rujan 2024.",
+     "font": "CenturyGothic",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.868
+    }
+   ]
+  },
+  {
+   "pid": "gfos:2426",
+   "repository": "repozitorij.gfos.hr",
+   "level": "doktorski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište Josipa Jurja Strossmayera u Osijeku",
+     "font": "Palatino",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.089
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Građevinski i arhitektonski fakultet Osijek",
+     "font": "Palatino",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.123
+    },
+    {
+     "role": "study",
+     "redactedText": "Doktorski studij Građevinarstvo",
+     "font": "Palatino",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.189
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Doktorski rad",
+     "font": "Palatino",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.394
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Palatino",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.477
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Palatino",
+     "sizePt": 16.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.503
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "Palatino",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.576
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Osijek, 6. rujna 2024. godine",
+     "font": "Palatino",
+     "sizePt": 14.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.881
+    }
+   ]
+  },
+  {
+   "pid": "gfos:2336",
+   "repository": "repozitorij.gfos.hr",
+   "level": "doktorski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 595.3,
+    "h": 841.9
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište Josipa Jurja Strossmayera u Osijeku",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.159
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Građevinski i arhitektonski fakultet Osijek",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.191
+    },
+    {
+     "role": "study",
+     "redactedText": "Doktorski studij Građevinarstvo",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.255
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Doktorski rad",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.391
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.482
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.572
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Osijek, 1. prosinca 2023. godine",
+     "font": "Times New Roman",
+     "sizePt": 12.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.845
+    }
+   ]
+  },
+  {
+   "pid": "gfos:2318",
+   "repository": "repozitorij.gfos.hr",
+   "level": "doktorski",
+   "pageIndex": 1,
+   "ocrFallback": false,
+   "levelMarkerMatch": true,
+   "pageSizePt": {
+    "w": 612.0,
+    "h": 792.0
+   },
+   "lines": [
+    {
+     "role": "university",
+     "redactedText": "Sveučilište Josipa Jurja Strossmayera u Osijeku",
+     "font": "CIDFont+F1",
+     "sizePt": 13.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.086
+    },
+    {
+     "role": "faculty",
+     "redactedText": "Građevinski i arhitektonski fakultet Osijek",
+     "font": "CIDFont+F1",
+     "sizePt": 13.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.116
+    },
+    {
+     "role": "study",
+     "redactedText": "Doktorski studij Građevinarstvo",
+     "font": "CIDFont+F1",
+     "sizePt": 13.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.177
+    },
+    {
+     "role": "worktype",
+     "redactedText": "Doktorski rad",
+     "font": "CIDFont+F1",
+     "sizePt": 13.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.392
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "CIDFont+F2",
+     "sizePt": 15.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.475
+    },
+    {
+     "role": "title",
+     "redactedText": null,
+     "font": "CIDFont+F2",
+     "sizePt": 15.0,
+     "bold": true,
+     "uppercase": true,
+     "align": "center",
+     "yRel": 0.498
+    },
+    {
+     "role": "unknown",
+     "redactedText": null,
+     "font": "CIDFont+F1",
+     "sizePt": 13.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.604
+    },
+    {
+     "role": "placeyear",
+     "redactedText": "Osijek, 29. lipnja 2023.",
+     "font": "CIDFont+F1",
+     "sizePt": 13.0,
+     "bold": false,
+     "uppercase": false,
+     "align": "center",
+     "yRel": 0.879
+    }
+   ]
+  }
+ ]
+}
