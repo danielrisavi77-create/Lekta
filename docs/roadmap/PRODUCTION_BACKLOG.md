@@ -695,14 +695,23 @@ Datum: 2026-07-11.
   JSON-LD.
 - Rizik regresije: srednji (mijenja generator; escapeHtml/CSP). Velicina: M
 
-**BL-P2-07, og:image / social slika**
+**BL-P2-07, og:image / social slika** — GOTOVO (landing, 2026-07-11)
 - Prioritet: P2 (seo-05)
-- Problem: nijedna stranica nema og:image; nema asseta.
-- Lokacija: index.html:18; nema og*.png u public/
-- Preporuka: default 1200x630 u public/, og:image + twitter:image apsolutni URL, propagirati
-  kroz generatore (CSP img-src 'self').
-- Acceptance: glavne stranice imaju og:image koji vraca 200.
-- Rizik regresije: nizak. Velicina: S
+- Problem: index.html NIJE imao nijednu og:image/twitter:image (twitter:card=summary bez slike),
+  pa Lekta pri dijeljenju na social mrezama nije imala preview sliku.
+- ISPORUCENO: public/og-image.png (1200x630, 52 kB, brand paleta #f5f2ea/#33407e/#1a7a54,
+  logo mark + "Provjeri rad prije nego sto ga predas." + honesty pill "Nista se ne salje" +
+  lektahr.netlify.app). Deterministicki generiran Pillowom (scratchpad/gen_og.py, bez novih
+  deps; kvacica rucno crtana jer Arial nema U+2713); vizualno provjeren. index.html head dobio
+  og:image + og:image:width/height (1200/630) + og:image:alt + twitter:image (apsolutni URL na
+  LEKTA_SITE_ORIGIN, konzistentno s canonical/og:url) i twitter:card summary -> summary_large_image.
+  Vite kopira public/ -> dist root pa /og-image.png vraca 200. CSP img-src 'self' ne dira (meta
+  sliku dohvaca crawler, ne stranica). CRLF ocuvan (binarni bytes.replace; diff = 6 linija).
+- Guard test tests/og-image.test.ts (5): og:image==twitter:image na /og-image.png (apsolutni),
+  summary_large_image, 1200x630, raster postoji + >5kB + PNG magicni bajtovi (ne preimenovan SVG).
+- PREOSTAJE (deferrano, SEO domena paralelne sesije - generatori): propagirati og:image kroz
+  generate-citation-tools/generate-legal-pages na tool/legal stranice (per-stranica ili shared).
+- Acceptance (landing): index.html ima og:image koji vraca 200. Rizik regresije: nizak. Velicina: S
 
 **BL-P2-08, motion/mini umjesto motion barrela** — BLOKIRANO PAKETOM (provjereno 2026-07-11)
 - Prioritet: P2 (dependencies-02)
