@@ -29,5 +29,13 @@ declare module 'canvas-confetti' {
   export type { ConfettiOptions };
 }
 
+// Side-effect importi paketa bez tipova (ui-boot.ts ih uvozi samo radi nuspojave: ucitavanje
+// fonta/easinga u bundle). TypeScript 7 (native compiler) je strozi i bez ovih deklaracija javlja
+// TS2882 ("Cannot find module or type declarations for side-effect import"); TS 5.9 ih je tiho
+// propustao. Prazna deklaracija je dovoljna i forward-kompatibilna (bezopasna pod 5.9).
+declare module '@fontsource-variable/source-serif-4';
+declare module '@fontsource-variable/inter';
+declare module 'open-props/easings';
+
 // Build-flag (vite/vitest define): dev alati (QA konzola, setup modal) postoje samo kad je true.
 declare const __DEV_TOOLS__: boolean;
