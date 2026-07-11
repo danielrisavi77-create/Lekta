@@ -850,9 +850,19 @@ Datum: 2026-07-11.
 - index.html:265, :327; src/ui/app.ts:503, index.html:332; jedan primarni ulaz po radnji.
   Velicina: S
 
-**BL-P3-17, Prazan tab "Spremnost za predaju" u zadanoj fazi** (ux-09)
-- src/ui/app.ts:664, :442; index.html:307; CTA "Dodaj konacni PDF i odaberi fazu" u praznom
-  stanju. Velicina: S
+**BL-P3-17, Prazan tab "Spremnost za predaju" u zadanoj fazi** (ux-09) — GOTOVO (2026-07-11)
+- Problem: u zadanoj fazi "Samo dokument" (currentSubmissionPhase default) tab je pokazivao slijepu
+  poruku "nema administrativne checkliste" bez iduceg koraka; a tu vecina korisnika i zavrsi.
+- ISPORUCENO: renderSubmissionChecklist (app.ts) prazno-groups stanje sada prikazuje CTA blok
+  (2 recenice objasnjenja + gumb "Odaberi fazu predaje i dodaj PDF", data-open-phase). Klik
+  (delegiran preko #submissionChecklist onclick, uz postojeci data-download-submission) vraca u
+  carobnjak ($('#resultView') hidden, $('#wizardView') visible), otvara .advanced-options, skrola
+  na #analyzer i fokusira #submissionPhase, po uzoru na nsPrecise. Nula novog CSS-a (reuse .empty,
+  .btn.btn-secondary.btn-sm; 2 intra-line izmjene pa CRLF ocuvan).
+- Guard test tests/submission-empty-cta.test.ts (3): prazno-groups fallback sadrzi data-open-phase
+  gumb "Odaberi fazu", delegirani handler vraca wizardView+advanced-options+focus submissionPhase,
+  download akcija netaknuta.
+- Acceptance ispunjen: prazno stanje vodi na iduci korak umjesto slijepe poruke. Velicina: S
 
 ---
 
