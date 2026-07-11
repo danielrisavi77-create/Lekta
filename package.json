@@ -14,7 +14,6 @@
     "apply-verification": "node scripts/apply-verification.mjs",
     "dossier": "node scripts/verification-dossier.mjs",
     "generate-citation-tools": "node scripts/generate-citation-tools.mjs",
-    "generate-title-page-tools": "node scripts/generate-title-page-tools.mjs",
     "generate-legal-pages": "node scripts/generate-legal-pages.mjs",
     "extract-citation-sections": "node scripts/extract-citation-sections.mjs",
     "citation-dossiers": "node scripts/citation-spec-dossier.mjs",
