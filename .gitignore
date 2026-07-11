@@ -8,3 +8,6 @@ artifacts/
 .env.*
 .DS_Store
 __pycache__/
+# Cache harvest citata (doi.org/CSL) - transient, ne commitati
+.harvest-cache/
+.playwright-mcp/

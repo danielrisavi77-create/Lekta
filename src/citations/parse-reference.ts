@@ -35,7 +35,8 @@ export function splitReferences(text: string): string[] {
 }
 
 function stripMarker(s: string): string {
-  return s.replace(/^\s*(?:\[\d+\]|\(\d+\)|\d+[.)]|[-–•*])\s+/, '').trim();
+  // [n]/(n) mogu biti zalijepljeni bez razmaka (elsevier-vancouver "[1]Prezime"); numericki "1."/"-" traze razmak.
+  return s.replace(/^\s*(?:\[\d+\]|\(\d+\))\s*/, '').replace(/^\s*(?:\d+[.)]|[-–•*])\s+/, '').trim();
 }
 
 // Podijeli na prvu recenicu (tocka + razmak), ali NE na inicijalu ("I. Ivic"): trazi da znak
@@ -48,7 +49,8 @@ function firstSentence(s: string): [string, string] {
     const after = s.charAt(m.index + m[0].length);
     if (/(?:^|\s)[\p{Lu}]$/u.test(head)) continue;                    // inicijal ("I. Ivic")
     if (/\d$/.test(head) && after && !/\p{Lu}/u.test(after)) continue; // redni broj/raspon ("11. stoljeca", "1990. – 2020")
-    if (/(?:^|\s)(?:sv|bl|dr|prof|mr|sci|fra|don|st|god|str|op|cit|cf|usp|itd|npr|tzv)$/i.test(head)) continue; // hrv/lat kratice ("sv. Dominike")
+    if (/(?:^|\s)(?:sv|bl|dr|prof|mr|sci|fra|don|st|god|str|op|cit|cf|usp|itd|npr|tzv|prev)$/i.test(head)) continue; // hrv/lat kratice ("sv. Dominike", "prev.")
+    if ((head.match(/\(/g) || []).length > (head.match(/\)/g) || []).length) continue; // tocka unutar otvorene zagrade "(prev. A. Cvitanovic)"
     return [head.trim(), s.slice(m.index + m[0].length).trim()];
   }
   const dot = s.search(/\.\s/);
@@ -102,19 +104,31 @@ function guessType(low: string, f: Partial<CitationInput>): SourceType {
 }
 
 // Poglavlje u zborniku: "U: <urednici> (ur.), <Knjiga> (str. X-Y). Mjesto: Izdavac".
+// Konferencijski zbornik cesto nema urednika: "U: <Zbornik> (str. X-Y). Mjesto: Izdavac".
 function parseChapter(rem: string, fields: Partial<CitationInput>): void {
+  let tail: string;
   const m = rem.match(/^(?:u|in)\s*:?\s*(.+?)\s*\((?:ur|prir|eds?|ed)\.?\)\s*,?\s*(.*)$/is);
-  if (!m) return;
-  fields.editor = normalizeConnectors(m[1].trim()).replace(/[.,\s]+$/, '').trim();
-  let tail = m[2].trim();
+  if (m) {
+    fields.editor = normalizeConnectors(m[1].trim()).replace(/[.,\s]+$/, '').trim();
+    tail = m[2].trim();
+  } else {
+    const m2 = rem.match(/^(?:u|in)\s*:?\s*(.*)$/is);
+    if (!m2) return;
+    tail = m2[1].trim();
+  }
   const pg = tail.match(/\(\s*(?:str\.?|pp?\.?)\s*(\d+\s*[-–]\s*\d+)\s*\)/i);
   if (pg) { fields.pages = pg[1].replace(/\s+/g, ''); tail = tail.replace(pg[0], ' ').replace(/\s{2,}/g, ' ').trim(); }
   const cont = tail.match(/^([^(.]+)/);
   if (cont) fields.container = cont[1].replace(/[\s,]+$/, '').trim();
-  const pub = tail.match(/([^:.()]+):\s*([^.]+)/);
+  // "Mjesto: Izdavac" IZA container-tocke (preskace podnaslovnu dvotocku u nazivu zbornika "Kognicija: temeljni procesi").
+  const pub = tail.match(/\.\s+([^:.]+):\s*([^.]+?)\.?\s*$/);
   if (pub) {
     fields.place = pub[1].replace(/^[\s,]+|[\s,]+$/g, '').trim();
     fields.publisher = pub[2].replace(/[.,\s]+$/, '').trim();
+  } else {
+    // APA7 poglavlje bez mjesta: "... Zbornik (str. X-Y). Izdavac."
+    const only = tail.match(/\.\s+([^.:]+?)\.?\s*$/);
+    if (only && !/\d/.test(only[1]) && only[1].trim().length <= 60) fields.publisher = only[1].trim();
   }
 }
 
@@ -168,6 +182,30 @@ function parseVancouverAuthors(seg: string): string {
   return names.join('; ');
 }
 
+// Poglavlje/rad u zborniku (Vancouver): "Naslov. In: [Urednik, editor. ]Zbornik. Mjesto: Izdavac; Godina. p. Str."
+function parseVancouverChapter(rest: string, fields: Partial<CitationInput>): boolean {
+  const im = rest.match(/^(.*?)\.\s+(?:in|u)\s*:\s*(.*)$/is);
+  if (!im) return false;
+  fields.title = im[1].replace(/[.\s]+$/, '').trim();
+  let body = im[2].trim();
+  const pg = body.match(/\bp\.?\s*(\d+\s*[-–]\s*\d+)/i);
+  if (pg) { fields.pages = pg[1].replace(/\s+/g, '').replace(/–/g, '-'); body = body.replace(pg[0], ' ').replace(/\s{2,}/g, ' ').trim(); }
+  const ym = body.match(/;\s*((?:19|20)\d{2})\b/);
+  if (ym) fields.year = ym[1];
+  const edm = body.match(/^(.*?),\s*editors?\.\s*/i); // "I. Urednik, editor(s)."
+  if (edm) { fields.editor = edm[1].replace(/[.,\s]+$/, '').trim(); body = body.slice(edm[0].length).trim(); }
+  body = body.replace(/;\s*(?:19|20)\d{2}[.\s]*$/, '').replace(/[.\s]+$/, '').trim(); // makni "; Godina."
+  const pub = body.match(/^(.*)\.\s+([^.:]+):\s*(.+)$/); // "Zbornik. Mjesto: Izdavac"
+  if (pub) {
+    fields.container = pub[1].replace(/[.\s]+$/, '').trim();
+    fields.place = pub[2].trim();
+    fields.publisher = pub[3].replace(/[.\s]+$/, '').trim();
+  } else if (body) {
+    fields.container = body.replace(/[.\s]+$/, '').trim();
+  }
+  return true;
+}
+
 function parseVancouver(input: string, fields: Partial<CitationInput>): SourceType {
   const raw = input.replace(/\s+/g, ' ').trim().replace(/\.\s*$/, '');
   let rest = raw;
@@ -180,16 +218,23 @@ function parseVancouver(input: string, fields: Partial<CitationInput>): SourceTy
   // Makni Hrcak/PubMed sum: "[Internet]", "[pristupljeno ...]", "[cited ...]" (lomi Godina;Vol koordinatu).
   // NE dira "[zavrsni rad]"/"[diplomski rad]" marker (treba za detekciju teze).
   rest = rest.replace(/\[\s*(?:internet|online|pristupljeno[^\]]*|cited[^\]]*|updated[^\]]*)\s*\]/gi, ' ')
-    .replace(/\s{2,}/g, ' ').trim();
+    .replace(/\b(?:available from|preuzeto s(?:a)?|dostupno na|retrieved from)\s*:?\s*/gi, ' ') // "Available from:"/"Preuzeto s"
+    .replace(/\s+([.;])/g, '$1').replace(/\s{2,}/g, ' ').trim();
   const vdoi = rest.match(/10\.\d{4,9}\/[^\s,;]+/); if (vdoi) fields.doi = vdoi[0].replace(/[.,;]+$/, '');
+  // Makni DOI/URL da ne procuri u naslov/casopis/izdavaca (elsevier-vancouver ih lijepi na kraj).
+  rest = rest.replace(/https?:\/\/\S+/g, ' ').replace(/\bdoi:\s*\S+/gi, ' ').replace(/10\.\d{4,9}\/\S+/g, ' ').replace(/\s{2,}/g, ' ').trim();
 
-  // Clanak: "... Casopis. Godina;Vol(Broj):Str"
-  const cm = rest.match(/((?:19|20)\d{2})\s*;\s*(\d+)\.?(?:\s*\(([^)]+)\))?(?::\s*([\dA-Za-z\-–]+))?/); // "64.(3)" (tocka iza vol.)
+  // Poglavlje u zborniku (ima "In:"/"U:") ide prije clanka/knjige.
+  if (/(?:^|\.\s)(?:in|u)\s*:\s/i.test(rest) && parseVancouverChapter(rest, fields)) return 'poglavlje';
+
+  // Clanak: ICMJE "Casopis. God;Vol(Broj):Str" ILI elsevier bez volumena "Casopis God:Str".
+  const cm = rest.match(/((?:19|20)\d{2})\s*;\s*(\d+)\.?(?:\s*\(([^)]+)\))?(?::\s*([\dA-Za-z\-–]+))?|((?:19|20)\d{2})\s*:\s*(\d[\dA-Za-z\-–]*)/); // "64.(3)"; "2009:27-47"
   if (cm && cm.index !== undefined) {
-    fields.year = cm[1];
-    fields.volume = cm[2];
+    fields.year = cm[1] || cm[5];
+    if (cm[2]) fields.volume = cm[2];
     if (cm[3]) fields.issue = cm[3];
-    if (cm[4]) fields.pages = cm[4].replace(/–/g, '-');
+    const pg = cm[4] || cm[6];
+    if (pg) fields.pages = pg.replace(/–/g, '-');
     const head = rest.slice(0, cm.index).replace(/[.\s;]+$/, '').trim(); // "Naslov. Casopis"
     const li = head.lastIndexOf('. ');
     if (li >= 0) { fields.title = head.slice(0, li).trim(); fields.container = head.slice(li + 2).trim(); }
@@ -197,17 +242,19 @@ function parseVancouver(input: string, fields: Partial<CitationInput>): SourceTy
     return 'clanak';
   }
 
-  // Knjiga/teza: "Naslov[ marker]. Mjesto: Izdavac; Godina"
+  // Knjiga/teza: "Naslov[ marker]. Mjesto: Izdavac; Godina"  (elsevier moze glue-ati golu godinu: "Naslov Godina")
   const ym = rest.match(/;\s*((?:19|20)\d{2})\b/);
   if (ym) fields.year = ym[1];
-  let body = rest.replace(/;\s*(?:19|20)\d{2}\s*$/, '').replace(/\s+\./g, '.').trim();
+  let body = rest.replace(/;\s*(?:19|20)\d{2}\.?\s*$/, '').replace(/\s+\./g, '.').trim();
+  if (!fields.year) { const by = body.match(/[\s.]((?:19|20)\d{2})\.?\s*$/); if (by) { fields.year = by[1]; body = body.slice(0, by.index).trim(); } }
   const th = body.match(/\[([^\]]+)\]/);
   const isThesis = !!(th && /\brad\b|thesis|disertacij/i.test(th[1]));
   if (th) body = body.replace(th[0], '').replace(/\s{2,}/g, ' ').trim();
-  const pub = body.match(/^(.*?)\.\s*([^.]+?):\s*([^.]+?)$/);
+  // "Naslov. Mjesto: Izdavac"; izdavac smije imati tocke ("W. H. Freeman"); mjesto smije imati kraticu ("St. Louis").
+  const pub = body.match(/^(.+?)\.\s+((?:(?:St|Ste|Mt|Ft|Sv)\.\s+)?[^.:]+):\s*(.+)$/);
   if (pub) {
     fields.title = pub[1].replace(/[.\s]+$/, '').trim();
-    const place = pub[2].trim(), publisher = pub[3].trim();
+    const place = pub[2].trim(), publisher = pub[3].replace(/[.\s]+$/, '').trim();
     if (isThesis) fields.institution = [place, publisher].filter(Boolean).join(', ');
     else { fields.place = place; fields.publisher = publisher; }
   } else if (isThesis && body.includes('. ')) {
@@ -258,12 +305,24 @@ function parseIeee(input: string, fields: Partial<CitationInput>): SourceType {
   if (doi) fields.doi = doi[0].replace(/[.,;]+$/, '');
   const qm = raw.match(/["“]([^"”]+)["”]/);
   if (!qm || qm.index === undefined) {
-    // IEEE knjiga bez navodnika ("F. Last, Title. City: Publisher, Year") - best effort.
-    const parts = raw.split(/,\s*/);
-    if (parts.length >= 2) fields.authors = parseIeeeAuthors(parts[0]);
-    const ye = raw.match(/\b((?:19|20)\d{2})\b/g); if (ye) fields.year = ye[ye.length - 1];
-    const pub = raw.match(/([^:.,]+):\s*([^,]+),\s*(?:19|20)\d{2}/);
-    if (pub) { fields.place = pub[1].trim(); fields.publisher = pub[2].trim(); }
+    // IEEE knjiga/monografija bez navodnika: "Init Surname[, ... and Init Surname], Naslov. Mjesto: Izdavac, Godina."
+    const rawNoRef = raw.replace(/10\.\d{4,9}\/\S+/g, ' ').replace(/https?:\/\/\S+/g, ' ');
+    const ye = rawNoRef.match(/\b((?:19|20)\d{2})\b/g); if (ye) fields.year = ye[ye.length - 1];
+    // Vodece "Init. Surname" jedinice su autori; prvi chunk bez inicijala je naslov.
+    const isAuthor = (c: string) => /^(?:and\s+|i\s+)?(?:\p{Lu}\.\s*)+\p{Lu}[\p{L}'’\-]+/u.test(c.trim());
+    const chunks = raw.split(/,\s*/);
+    let i = 0;
+    while (i < chunks.length && i < 8 && isAuthor(chunks[i])) i++;
+    const authorRegion = chunks.slice(0, i).join(', '); // parseIeeeAuthors normalizira "and"/"i" (inace "Metev and V. P. Veiko")
+    if (authorRegion) fields.authors = parseIeeeAuthors(authorRegion);
+    let rest = chunks.slice(i).join(', ')
+      .replace(/,?\s*doi:\s*\S+/gi, ' ').replace(/10\.\d{4,9}\/\S+/g, ' ').replace(/https?:\/\/\S+/g, ' ')
+      .replace(/\[online\]\.?/gi, ' ').replace(/\bavailable\s*:?\s*/gi, ' ')     // "[Online]. Available: URL"
+      .replace(/^Eds?\.,?\s*/i, '')                                              // "Ime, Ed., Naslov" -> makni marker urednika
+      .replace(/,\s*(?:19|20)\d{2}\.?\s*$/, '').replace(/\s{2,}/g, ' ').trim();
+    const pub = rest.match(/^(.*)\.\s+([^:]+?):\s*(.+)$/); // "Naslov. Mjesto: Izdavac" (mjesto smije imati zarez "Cambridge, MA")
+    if (pub) { fields.title = pub[1].replace(/[.\s]+$/, '').trim(); fields.place = pub[2].trim(); fields.publisher = pub[3].replace(/[.,\s]+$/, '').trim(); }
+    else if (rest) fields.title = rest.replace(/[.,\s]+$/, '').trim();
     return 'knjiga';
   }
   fields.title = qm[1].replace(/[.,]+$/, '').trim();
@@ -279,16 +338,34 @@ function parseIeee(input: string, fields: Partial<CitationInput>): SourceType {
   // Zadrzi zavrsnu tocku (kratica casopisa "IEEE Trans. Med. Imag."), makni samo zarez/razmak.
   const splitSrc = (t: string) => t.split(/,\s*(?:vol\.|no\.|br\.|pp?\.|str\.|(?:19|20)\d{2}\b)/i)[0].replace(/[,\s]+$/, '').trim();
   if (/^in\s+/i.test(tail)) {
-    const c = splitSrc(tail.replace(/^in\s+/i, ''));
-    if (c) {
-      const ci = c.indexOf(', '); // "Proc. Konf., Grad, ST" -> naziv | mjesto
-      if (ci >= 0) { fields.container = c.slice(0, ci).trim(); fields.place = c.slice(ci + 2).replace(/[.,\s]+$/, '').trim(); }
-      else fields.container = c;
+    // Poglavlje/zbornik: "in <Zbornik>[, <Urednik>, Ed(s).] <Mjesto>: <Izdavac>, God, pp."  ILI konf. "in <Proc>, <Grad>, God, pp."
+    let body = tail.replace(/^in\s+/i, '').trim();
+    // pp./str. LOWERCASE (bez /i) da veliki inicijal urednika ", P." ne prode kao "pp."
+    body = body.split(/,\s*(?:(?:19|20)\d{2}\b|pp?\.|str\.|vol\.|no\.)/)[0].replace(/[,.\s]+$/, '').trim();
+    let container = body, tailPub = '';
+    const edm = body.match(/^(.+?),\s*(.+?),\s*Eds?\.\s*(.*)$/i); // "<Zbornik>, <Urednik>, Ed. <Mjesto>: <Izdavac>"
+    const colon = body.match(/^(.+?),\s*([^,]*:\s*.+)$/);         // "<Zbornik>, <Mjesto>: <Izdavac>"
+    if (edm) { container = edm[1].trim(); fields.editor = edm[2].replace(/[.,\s]+$/, '').trim(); tailPub = edm[3].trim(); }
+    else if (colon) { container = colon[1].trim(); tailPub = colon[2].trim(); }
+    else if (/\(.*\)/.test(body)) {
+      // konferencija s akronimom u zagradi: naziv (s internim zarezima) ide do ")", grad je iza "), "
+      const m = body.match(/^(.*\))\s*,\s*(.+)$/);
+      if (m) { container = m[1].trim(); tailPub = m[2].trim(); } else container = body;
+    }
+    else { const cm2 = body.match(/^(.+?),\s*(.*)$/); if (cm2) { container = cm2[1].trim(); tailPub = cm2[2].trim(); } } // "Proc. Konf, Grad"
+    fields.container = container.replace(/[.,\s]+$/, '').trim();
+    if (tailPub) {
+      const pm = tailPub.match(/^([^:]+):\s*(.+)$/); // "Mjesto: Izdavac" ILI goli grad
+      if (pm) { fields.place = pm[1].trim(); fields.publisher = pm[2].replace(/[.,\s]+$/, '').trim(); }
+      else fields.place = tailPub.replace(/[.,\s]+$/, '').trim();
     }
     return 'poglavlje';
   }
-  const src = splitSrc(tail);
-  if (src) fields.container = src;
+  // Casopis/zbornik: makni DOI/URL rep pa uzmi do prve koordinate; NE izmisljaj container iz golog datuma (monografija).
+  const cleanTail = tail.replace(/,?\s*doi:\s*\S+/gi, ' ').replace(/10\.\d{4,9}\/\S+/g, ' ').replace(/https?:\/\/\S+/g, ' ').replace(/\s{2,}/g, ' ').trim();
+  const src = splitSrc(cleanTail); // splitSrc vec makne zavrsni zarez/razmak, ali ZADRZI tocku (kratica casopisa "IEEE Trans. Med. Imag.")
+  const srcCore = src.replace(/\b(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\.?\b/gi, ' ').replace(/\b(?:19|20)\d{2}\b/g, ' ').replace(/[.,\s]+/g, '');
+  if (src && srcCore) fields.container = src;
   return 'clanak';
 }
 
@@ -362,17 +439,22 @@ function parseChicago(input: string, fields: Partial<CitationInput>): SourceType
       fields.pages = am[4].replace(/\s+/g, '');
       return 'clanak';
     }
-    // poglavlje u zborniku: "u: Urednik (ur.), Knjiga, Mjesto: Izdavac, godina. str. X-Y"
+    // poglavlje u zborniku: "u: [Urednik (ur.), ]Knjiga, Mjesto: Izdavac, godina. str. X-Y" (urednik opcionalan)
     if (/^u\s*:?\s|^in\s+/i.test(tail)) {
       const em = tail.match(/^(?:u|in)\s*:?\s*(.+?)\s*\((?:ur|prir|eds?|ed)\.?\)\s*,?\s*(.*)$/i);
-      if (em) {
-        fields.editor = normalizeConnectors(em[1]).replace(/[.,\s]+$/, '').trim();
-        let t = em[2];
-        const pg = t.match(/(?:str\.?|pp?\.?)\s*(\d+\s*[-–]\s*\d+)/i);
-        if (pg) { fields.pages = pg[1].replace(/\s+/g, ''); t = t.replace(pg[0], ' '); }
-        const cont = t.match(/^([^,]+)/); if (cont) fields.container = cont[1].replace(/[.\s]+$/, '').trim();
-        const pub = t.match(/([^:.,]+):\s*([^,.]+)/); if (pub) { fields.place = pub[1].trim(); fields.publisher = pub[2].trim(); }
-      }
+      let t: string;
+      if (em) { fields.editor = normalizeConnectors(em[1]).replace(/[.,\s]+$/, '').trim(); t = em[2]; }
+      else { const m2 = tail.match(/^(?:u|in)\s*:?\s*(.*)$/i); t = m2 ? m2[1] : ''; }
+      // Chicago cesto navodi gole stranice poglavlja ("..., Zbornik, 45-78. Mjesto: Izdavac"), bez "str."/"pp.".
+      // NE mutiraj t (container uzima ^[^,]+ pa mu treba prvi zarez; pub trazi "Mjesto: Izdavac" neovisno).
+      const pg = t.match(/(?:str\.?|pp?\.?)\s*(\d+\s*[-–]\s*\d+)/i) || t.match(/,\s*(\d+\s*[-–]\s*\d+)(?=[.,\s]|$)/);
+      if (pg) fields.pages = pg[1].replace(/\s+/g, '');
+      if (!fields.editor) { const eb = t.match(/\bedited by\s+(.+?)\s*,/i); if (eb) fields.editor = eb[1].trim(); } // engleski CMOS "edited by X,"
+      const cont = t.match(/^([^,]+)/); if (cont) fields.container = cont[1].replace(/[.\s]+$/, '').trim();
+      // "Mjesto: Izdavac" IZA containera (mjesto smije imati zarez "Cambridge, MA"; podnaslovna dvotocka je u nazivu, prije prvog zareza).
+      const rest = cont ? t.slice(cont[0].length) : t;
+      const pub = rest.match(/([^:.]+?):\s*([^:.]+?)(?:,\s*(?:19|20)\d{2}|\.\s|\.?\s*$)/);
+      if (pub) { fields.place = pub[1].replace(/^[\s,]+/, '').trim(); fields.publisher = pub[2].replace(/[.,\s]+$/, '').trim(); }
       return 'poglavlje';
     }
     return 'clanak';
@@ -385,10 +467,12 @@ function parseChicago(input: string, fields: Partial<CitationInput>): SourceType
   const naive = (x: string): [string, string] => { const d = x.search(/\.\s/); return d >= 0 ? [x.slice(0, d).trim(), x.slice(d + 2).trim()] : [x.replace(/\.\s*$/, '').trim(), '']; };
   const split = multi ? splitAtSentence : naive;
   const [authorPart, afterAuthor] = split(raw);
-  const [titlePart, afterTitle] = split(afterAuthor);
+  // Naslov UVIJEK preko splitAtSentence: preskace inicijale u naslovu ("Studije o A. G. Matosu").
+  const [titlePart, afterTitle] = splitAtSentence(afterAuthor);
   if (authorPart) fields.authors = chicagoAuthorsInverted(authorPart);
   if (titlePart) fields.title = titlePart.replace(/[.,]+$/, '').trim();
-  const pub = (afterTitle || '').match(/([^:.]+?):\s*([^,]+),\s*(?:19|20)\d{2}/);
+  // Izdavac smije imati zarez ("Harcourt, Brace and Company"); godina je zadnji ", NNNN".
+  const pub = (afterTitle || '').match(/([^:.]+?):\s*(.+?),\s*(?:19|20)\d{2}\b/);
   if (pub) { fields.place = pub[1].trim(); fields.publisher = pub[2].trim(); }
   return 'knjiga';
 }
@@ -462,6 +546,12 @@ function parseApa(original: string, fields: Partial<CitationInput>): SourceType 
       if (bp) fields.pages = bp[1].replace(/\s+/g, '');
     }
 
+    // APA konferencija/poglavlje bez volumena: "... Naslov. Zbornik, str." -> Zbornik = container.
+    if (!matched && !fields.container && fields.pages) {
+      const cc = rem.match(/^(.+?),\s*\d+\s*[-–]\s*\d+\.?\s*$/);
+      if (cc && !cc[1].includes(':')) { fields.container = cc[1].trim(); matched = true; }
+    }
+
     // Knjiga: "Mjesto: Izdavac" (mjesto smije imati zarez "Cambridge, MA"; izdavac tocke "W. H. Freeman").
     if (!matched && !fields.container) {
       const pub = rem.match(/([^:.]+?):\s*(.+?)[.]?\s*$/);
@@ -502,8 +592,13 @@ export function parseReference(raw: string, style: BulkStyle = 'auto'): ParsedRe
   else if (style === 'chicago' || (style === 'auto' && looksLikeChicago(original))) type = parseChicago(original, fields);
   else type = parseApa(original, fields);
 
-  // Zajednicko ciscenje (svi stilovi): naslov bez zavrsne interpunkcije, autori bez repa/tocke-iza-rijeci.
-  if (fields.title) fields.title = fields.title.replace(/[.,]+$/, '').trim();
+  // Zajednicko ciscenje (svi stilovi): naslov bez prijevodne/izdanjske napomene i zavrsne interpunkcije.
+  if (fields.title) {
+    fields.title = fields.title
+      .replace(/\s*\((?:prev|preveo|prevela|prijevod|trans|[\d.]+\s*izd|\d+(?:st|nd|rd|th)?\s*ed)\b[^)]*\)\s*$/i, '') // "(prev. ...)", "(3. izd.)", "(2nd ed.)"
+      .replace(/[.,]?\s*\d+\.?\s*(?:st|nd|rd|th)?\s*(?:ed|izd)\.?\s*$/i, '')                                          // ". 13th ed", ", 3. izd."
+      .replace(/[.,]+$/, '').trim();
+  }
   if (fields.authors) {
     fields.authors = fields.authors
       .replace(/[,;]+\s*$/, '')

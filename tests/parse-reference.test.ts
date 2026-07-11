@@ -310,3 +310,71 @@ describe('parseReference: Vancouver korpus', () => {
     });
   }
 });
+
+// KNJIGE / MONOGRAFIJE / ZBORNICI po SVIM stilovima (regresija). Pokrivaju oblike koje round-trip
+// (nas renderer) i cross-style konsenzus (doi.org/CSL) korpus dokazuju; ovdje su pinani doslovno.
+describe('parseReference: knjige/monografije/zbornici po stilovima (regresija)', () => {
+  const cases: Array<{ name: string; raw: string; type: SourceTypeLike; expect: Record<string, string>; style?: BulkStyle }> = [
+    {
+      name: 'IEEE knjiga: vise autora, naslov i dotirani izdavac',
+      raw: 'B. Petz, V. Kolesarić, and D. Ivanec, Statistika. Zagreb: Naklada Slap, 2012.',
+      style: 'ieee', type: 'knjiga',
+      expect: { authors: 'Petz, B.; Kolesarić, V.; Ivanec, D.', title: 'Statistika', place: 'Zagreb', publisher: 'Naklada Slap', year: '2012' },
+    },
+    {
+      name: 'IEEE knjiga: naslov s dvotockom (podnaslov)',
+      raw: 'A. Bandura, Self-efficacy: The exercise of control. New York: W. H. Freeman, 1997.',
+      style: 'ieee', type: 'knjiga',
+      expect: { title: 'Self-efficacy: The exercise of control', place: 'New York', publisher: 'W. H. Freeman', year: '1997' },
+    },
+    {
+      name: 'IEEE poglavlje u knjizi: "in Knjiga, Urednik, Ed. Mjesto: Izdavac, God, pp."',
+      raw: 'B. Šverko, "Vrednote," in Psihologija, J. Obradović, Ed. Zagreb: Golden marketing, 2004, pp. 45-78.',
+      style: 'ieee', type: 'poglavlje',
+      expect: { title: 'Vrednote', container: 'Psihologija', editor: 'J. Obradović', place: 'Zagreb', publisher: 'Golden marketing', pages: '45-78', year: '2004' },
+    },
+    {
+      name: 'Vancouver poglavlje: "In: Urednik, editor. Zbornik. Mjesto: Izdavac; God. p. X-Y"',
+      raw: 'Čorkalo Biruški D. Psihologija sukoba. In: Ajduković M, editor. Socijalna psihologija. Zagreb: Naklada Slap; 2010. p. 201-230.',
+      style: 'vancouver', type: 'poglavlje',
+      expect: { title: 'Psihologija sukoba', container: 'Socijalna psihologija', editor: 'Ajduković M', place: 'Zagreb', publisher: 'Naklada Slap', pages: '201-230', year: '2010' },
+    },
+    {
+      name: 'Vancouver (elsevier) rad u zborniku bez volumena: "Zbornik God:Str"',
+      raw: 'Saha S, Bhattacharyya SS. Design methodology for embedded computer vision. Embedded Computer Vision 2009:27-47.',
+      style: 'vancouver', type: 'clanak',
+      expect: { authors: 'Saha, S.; Bhattacharyya, S. S.', title: 'Design methodology for embedded computer vision', container: 'Embedded Computer Vision', year: '2009', pages: '27-47' },
+    },
+    {
+      name: 'Vancouver (elsevier) monografija: gola godina zalijepljena na naslov',
+      raw: 'Carbonnier G. Humanitarian economics 2016.',
+      style: 'vancouver', type: 'knjiga',
+      expect: { authors: 'Carbonnier, G.', title: 'Humanitarian economics', year: '2016' },
+    },
+    {
+      name: 'APA rad u zborniku bez volumena: "Naslov. Zbornik, str."',
+      raw: 'Kanmani, B. (2011). Introducing signals and systems. 2011 DSP/SPE Meeting, 84-89.',
+      style: 'apa', type: 'knjiga',
+      expect: { title: 'Introducing signals and systems', container: '2011 DSP/SPE Meeting', pages: '84-89', year: '2011' },
+    },
+    {
+      name: 'APA zbornik BEZ urednika: "U: Zbornik (str. X-Y). Mjesto: Izdavac"',
+      raw: 'Horvat, I., & Kovač, M. (2019). Detekcija anomalija. U: Zbornik radova MIPRO (str. 112-118). Rijeka: MIPRO.',
+      style: 'apa', type: 'poglavlje',
+      expect: { container: 'Zbornik radova MIPRO', pages: '112-118', place: 'Rijeka', publisher: 'MIPRO' },
+    },
+    {
+      name: 'Chicago poglavlje: gole stranice ("..., Zbornik, 45-78. Mjesto: Izdavac")',
+      raw: 'Kardum, Igor, i Jasna Hudek-Knežević. "Osobine ličnosti." U: Denis Bratko (ur.), Ličnost i zdravlje, 45-78. Zagreb: Naklada Slap, 2012.',
+      style: 'chicago', type: 'poglavlje',
+      expect: { container: 'Ličnost i zdravlje', pages: '45-78', editor: 'Denis Bratko', place: 'Zagreb', publisher: 'Naklada Slap' },
+    },
+    {
+      name: 'Chicago zbornik BEZ urednika: "u: Zbornik, Mjesto: Izdavac, God. str. X-Y"',
+      raw: 'Horvat, Ivan. "Detekcija anomalija." u: Zbornik radova MIPRO, Rijeka: MIPRO, 2019. str. 112-118.',
+      style: 'chicago', type: 'poglavlje',
+      expect: { container: 'Zbornik radova MIPRO', place: 'Rijeka', publisher: 'MIPRO', pages: '112-118', year: '2019' },
+    },
+  ];
+  runCases(cases);
+});

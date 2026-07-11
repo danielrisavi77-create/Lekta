@@ -31,12 +31,20 @@ const { parseAuthors } = await import('data:text/javascript,' + encodeURICompone
 const norm = (s) => (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').replace(/[^a-z0-9]/g, '');
 // PRVI autor (svi stilovi ga navode); cijeli skup NE - stilovi legitimno skracuju (et al./i sur./...).
 const firstSurname = (a) => { const p = parseAuthors(a || ''); return p.length ? norm(p[0].last) : ''; };
+// Raspon stranica: elsevier krati zavrsnu ("84-9" = 84-89); prosiri prije usporedbe (nije bug parsera, nego stil).
+function normPages(p) {
+  const m = (p || '').replace(/\s/g, '').match(/^(\d+)[-–](\d+)$/);
+  if (!m) return (p || '').replace(/\s/g, '');
+  let [, a, b] = m;
+  if (b.length < a.length) b = a.slice(0, a.length - b.length) + b;
+  return a === b ? a : `${a}-${b}`; // "11-11" -> "11"
+}
 
 const FIELDS = ['aut', 'god', 'cas', 'vol', 'broj', 'str', 'nas'];
 function proj(f) {
   return {
     aut: firstSurname(f.authors), god: f.year || '', cas: norm(f.container),
-    vol: f.volume || '', broj: f.issue || '', str: (f.pages || '').replace(/\s/g, ''), nas: norm(f.title),
+    vol: f.volume || '', broj: f.issue || '', str: normPages(f.pages), nas: norm(f.title),
   };
 }
 function mode(vals) {

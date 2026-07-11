@@ -1,0 +1,515 @@
+{
+  "_note": "Realni cross-style citati za KNJIGE/MONOGRAFIJE/POGLAVLJA/ZBORNIKE, harvestirani doi.org content negotiation (CSL). Stil->parser: apa->apa, ieee->ieee, elsevier-vancouver->vancouver. Isti DOI u vise stilova = ground truth bez ljudskih oznaka. Pipeline: scripts/harvest-doi-citations.mjs; audit: scripts/citation-parser-audit.mjs.",
+  "articles": [
+    {
+      "id": "doi-10-1007-978-1-84800-304-0-11",
+      "type": "book-chapter",
+      "doi": "10.1007/978-1-84800-304-0_11",
+      "styles": {
+        "apa": "Chai, S. (2009). Mobile Challenges for Embedded Computer Vision. Embedded Computer Vision, 219–235. https://doi.org/10.1007/978-1-84800-304-0_11",
+        "ieee": "[1]S. Chai, \"Mobile Challenges for Embedded Computer Vision,\" Embedded Computer Vision, pp. 219–235, 2009, doi: 10.1007/978-1-84800-304-0_11.",
+        "vancouver": "[1]Chai S. Mobile Challenges for Embedded Computer Vision. Embedded Computer Vision 2009:219–35. https://doi.org/10.1007/978-1-84800-304-0_11."
+      }
+    },
+    {
+      "id": "doi-10-1007-978-1-84800-304-0-2",
+      "type": "book-chapter",
+      "doi": "10.1007/978-1-84800-304-0_2",
+      "styles": {
+        "apa": "Saha, S., & Bhattacharyya, S. S. (2009). Design Methodology for Embedded Computer Vision Systems. Embedded Computer Vision, 27–47. https://doi.org/10.1007/978-1-84800-304-0_2",
+        "ieee": "[1]S. Saha and S. S. Bhattacharyya, \"Design Methodology for Embedded Computer Vision Systems,\" Embedded Computer Vision, pp. 27–47, 2009, doi: 10.1007/978-1-84800-304-0_2.",
+        "vancouver": "[1]Saha S, Bhattacharyya SS. Design Methodology for Embedded Computer Vision Systems. Embedded Computer Vision 2009:27–47. https://doi.org/10.1007/978-1-84800-304-0_2."
+      }
+    },
+    {
+      "id": "doi-10-1007-978-3-319-12203-8-7",
+      "type": "book-chapter",
+      "doi": "10.1007/978-3-319-12203-8_7",
+      "styles": {
+        "apa": "Battle-Fisher, M. (2014). Health Disparities in Public Health. Application of Systems Thinking to Health Policy &Amp; Public Health Ethics, 61–64. https://doi.org/10.1007/978-3-319-12203-8_7",
+        "ieee": "[1]M. Battle-Fisher, \"Health Disparities in Public Health,\" Application of Systems Thinking to Health Policy &amp; Public Health Ethics, pp. 61–64, Nov. 2014, doi: 10.1007/978-3-319-12203-8_7.",
+        "vancouver": "[1]Battle-Fisher M. Health Disparities in Public Health. Application of Systems Thinking to Health Policy &Amp; Public Health Ethics 2014:61–4. https://doi.org/10.1007/978-3-319-12203-8_7."
+      }
+    },
+    {
+      "id": "doi-10-1007-978-3-319-50551-0-3",
+      "type": "book-chapter",
+      "doi": "10.1007/978-3-319-50551-0_3",
+      "styles": {
+        "apa": "Rezaei, M., & Klette, R. (2017). Computer Vision Basics. Computer Vision for Driver Assistance, 37–49. https://doi.org/10.1007/978-3-319-50551-0_3",
+        "ieee": "[1]M. Rezaei and R. Klette, \"Computer Vision Basics,\" Computer Vision for Driver Assistance, pp. 37–49, 2017, doi: 10.1007/978-3-319-50551-0_3.",
+        "vancouver": "[1]Rezaei M, Klette R. Computer Vision Basics. Computer Vision for Driver Assistance 2017:37–49. https://doi.org/10.1007/978-3-319-50551-0_3."
+      }
+    },
+    {
+      "id": "doi-10-1016-b978-0-12-803678-5-00248-4",
+      "type": "book-chapter",
+      "doi": "10.1016/b978-0-12-803678-5.00248-4",
+      "styles": {
+        "apa": "Allan, S. (2017). Public Health Law and Public Health Policy. International Encyclopedia of Public Health, 200–209. https://doi.org/10.1016/b978-0-12-803678-5.00248-4",
+        "ieee": "[1]S. Allan, \"Public Health Law and Public Health Policy,\" International Encyclopedia of Public Health, pp. 200–209, 2017, doi: 10.1016/b978-0-12-803678-5.00248-4.",
+        "vancouver": "[1]Allan S. Public Health Law and Public Health Policy. International Encyclopedia of Public Health 2017:200–9. https://doi.org/10.1016/b978-0-12-803678-5.00248-4."
+      }
+    },
+    {
+      "id": "doi-10-1016-b978-0-12-813445-0-00007-1",
+      "type": "book-chapter",
+      "doi": "10.1016/b978-0-12-813445-0.00007-1",
+      "styles": {
+        "apa": "Dimiccoli, M. (2018). Computer Vision for Egocentric (First-Person) Vision. Computer Vision for Assistive Healthcare, 183–210. https://doi.org/10.1016/b978-0-12-813445-0.00007-1",
+        "ieee": "[1]M. Dimiccoli, \"Computer Vision for Egocentric (First-Person) Vision,\" Computer Vision for Assistive Healthcare, pp. 183–210, 2018, doi: 10.1016/b978-0-12-813445-0.00007-1.",
+        "vancouver": "[1]Dimiccoli M. Computer Vision for Egocentric (First-Person) Vision. Computer Vision for Assistive Healthcare 2018:183–210. https://doi.org/10.1016/b978-0-12-813445-0.00007-1."
+      }
+    },
+    {
+      "id": "doi-10-1016-b978-0-323-95504-1-00472-5",
+      "type": "book-chapter",
+      "doi": "10.1016/b978-0-323-95504-1.00472-5",
+      "styles": {
+        "apa": "Divjak, D. (2026). Corpus Linguistics and Cognitive Linguistics. International Encyclopedia of Language and Linguistics, 407–411. https://doi.org/10.1016/b978-0-323-95504-1.00472-5",
+        "ieee": "[1]D. Divjak, \"Corpus Linguistics and Cognitive Linguistics,\" International Encyclopedia of Language and Linguistics, pp. 407–411, 2026, doi: 10.1016/b978-0-323-95504-1.00472-5.",
+        "vancouver": "[1]Divjak D. Corpus Linguistics and Cognitive Linguistics. International Encyclopedia of Language and Linguistics 2026:407–11. https://doi.org/10.1016/b978-0-323-95504-1.00472-5."
+      }
+    },
+    {
+      "id": "doi-10-1016-b978-0-323-95504-1-01616-1",
+      "type": "book-chapter",
+      "doi": "10.1016/b978-0-323-95504-1.01616-1",
+      "styles": {
+        "apa": "Curry, N. (2026). Corpus Linguistics and Contrastive Linguistics. International Encyclopedia of Language and Linguistics, 435–440. https://doi.org/10.1016/b978-0-323-95504-1.01616-1",
+        "ieee": "[1]N. Curry, \"Corpus Linguistics and Contrastive Linguistics,\" International Encyclopedia of Language and Linguistics, pp. 435–440, 2026, doi: 10.1016/b978-0-323-95504-1.01616-1.",
+        "vancouver": "[1]Curry N. Corpus Linguistics and Contrastive Linguistics. International Encyclopedia of Language and Linguistics 2026:435–40. https://doi.org/10.1016/b978-0-323-95504-1.01616-1."
+      }
+    },
+    {
+      "id": "doi-10-1093-acprof-oso-9780190491543-001-0001",
+      "type": "monograph",
+      "doi": "10.1093/acprof:oso/9780190491543.001.0001",
+      "styles": {
+        "apa": "Carbonnier, G. (2016). Humanitarian Economics. https://doi.org/10.1093/acprof:oso/9780190491543.001.0001",
+        "ieee": "[1]G. Carbonnier, \"Humanitarian Economics,\" Apr. 2016, doi: 10.1093/acprof:oso/9780190491543.001.0001.",
+        "vancouver": "[1]Carbonnier G. Humanitarian Economics 2016. https://doi.org/10.1093/acprof:oso/9780190491543.001.0001."
+      }
+    },
+    {
+      "id": "doi-10-1093-med-9780198737483-003-0001",
+      "type": "book-chapter",
+      "doi": "10.1093/med/9780198737483.003.0001",
+      "styles": {
+        "apa": "Edwards, R. T., & Atenstaedt, R. (2019). Introduction to public health and public health economics. Applied Health Economics for Public Health Practice and Research, 1–26. https://doi.org/10.1093/med/9780198737483.003.0001",
+        "ieee": "[1]R. T. Edwards and R. Atenstaedt, \"Introduction to public health and public health economics,\" Applied Health Economics for Public Health Practice and Research, pp. 1–26, Mar. 2019, doi: 10.1093/med/9780198737483.003.0001.",
+        "vancouver": "[1]Edwards RT, Atenstaedt R. Introduction to public health and public health economics. Applied Health Economics for Public Health Practice and Research 2019:1–26. https://doi.org/10.1093/med/9780198737483.003.0001."
+      }
+    },
+    {
+      "id": "doi-10-1093-med-9780198737483-003-0008",
+      "type": "book-chapter",
+      "doi": "10.1093/med/9780198737483.003.0008",
+      "styles": {
+        "apa": "Edwards, R. T., & Winrow, E. (2019). Cost–utility analysis of public health interventions. Applied Health Economics for Public Health Practice and Research, 177–203. https://doi.org/10.1093/med/9780198737483.003.0008",
+        "ieee": "[1]R. T. Edwards and E. Winrow, \"Cost–utility analysis of public health interventions,\" Applied Health Economics for Public Health Practice and Research, pp. 177–203, Mar. 2019, doi: 10.1093/med/9780198737483.003.0008.",
+        "vancouver": "[1]Edwards RT, Winrow E. Cost–utility analysis of public health interventions. Applied Health Economics for Public Health Practice and Research 2019:177–203. https://doi.org/10.1093/med/9780198737483.003.0008."
+      }
+    },
+    {
+      "id": "doi-10-1093-med-9780198792994-003-0001",
+      "type": "book-chapter",
+      "doi": "10.1093/med/9780198792994.003.0001",
+      "styles": {
+        "apa": "Stewart-Brown, S. (2018). Principles of public health. Oxford Textbook of Public Mental Health, 3–16. https://doi.org/10.1093/med/9780198792994.003.0001",
+        "ieee": "[1]S. Stewart-Brown, \"Principles of public health,\" Oxford Textbook of Public Mental Health, pp. 3–16, Sep. 2018, doi: 10.1093/med/9780198792994.003.0001.",
+        "vancouver": "[1]Stewart-Brown S. Principles of public health. Oxford Textbook of Public Mental Health 2018:3–16. https://doi.org/10.1093/med/9780198792994.003.0001."
+      }
+    },
+    {
+      "id": "doi-10-1093-med-9780198862994-003-0007",
+      "type": "book-chapter",
+      "doi": "10.1093/med/9780198862994.003.0007",
+      "styles": {
+        "apa": "Spreckley, M., & Kellehear, A. (2022). The ‘new’ public health. Oxford Textbook of Public Health Palliative Care, 52–63. https://doi.org/10.1093/med/9780198862994.003.0007",
+        "ieee": "[1]M. Spreckley and A. Kellehear, \"The ‘new’ public health,\" Oxford Textbook of Public Health Palliative Care, pp. 52–63, Apr. 2022, doi: 10.1093/med/9780198862994.003.0007.",
+        "vancouver": "[1]Spreckley M, Kellehear A. The ‘new’ public health. Oxford Textbook of Public Health Palliative Care 2022:52–63. https://doi.org/10.1093/med/9780198862994.003.0007."
+      }
+    },
+    {
+      "id": "doi-10-1093-oso-9780190901349-001-0001",
+      "type": "monograph",
+      "doi": "10.1093/oso/9780190901349.001.0001",
+      "styles": {
+        "apa": "Zamir, E., & Teichman, D. (2018). Behavioral Law and Economics. https://doi.org/10.1093/oso/9780190901349.001.0001",
+        "ieee": "[1]E. Zamir and D. Teichman, \"Behavioral Law and Economics,\" Jun. 2018, doi: 10.1093/oso/9780190901349.001.0001.",
+        "vancouver": "[1]Zamir E, Teichman D. Behavioral Law and Economics 2018. https://doi.org/10.1093/oso/9780190901349.001.0001."
+      }
+    },
+    {
+      "id": "doi-10-1093-oso-9780198793205-003-0011",
+      "type": "book-chapter",
+      "doi": "10.1093/oso/9780198793205.003.0011",
+      "styles": {
+        "apa": "Deumert, A. (2020). The missionary in the theatre of linguistics. Colonial and Decolonial Linguistics, 178–198. https://doi.org/10.1093/oso/9780198793205.003.0011",
+        "ieee": "[1]A. Deumert, \"The missionary in the theatre of linguistics,\" Colonial and Decolonial Linguistics, pp. 178–198, Nov. 2020, doi: 10.1093/oso/9780198793205.003.0011.",
+        "vancouver": "[1]Deumert A. The missionary in the theatre of linguistics. Colonial and Decolonial Linguistics 2020:178–98. https://doi.org/10.1093/oso/9780198793205.003.0011."
+      }
+    },
+    {
+      "id": "doi-10-1109-dsp-spe-2011-5739191",
+      "type": "proceedings-article",
+      "doi": "10.1109/dsp-spe.2011.5739191",
+      "styles": {
+        "apa": "Kanmani, B. (2011). Introducing signals and systems concepts through analog signal processing first. 2011 Digital Signal Processing and Signal Processing Education Meeting (DSP/SPE), 84–89. https://doi.org/10.1109/dsp-spe.2011.5739191",
+        "ieee": "[1]B. Kanmani, \"Introducing signals and systems concepts through analog signal processing first,\" 2011 Digital Signal Processing and Signal Processing Education Meeting (DSP/SPE), pp. 84–89, Jan. 2011, doi: 10.1109/dsp-spe.2011.5739191.",
+        "vancouver": "[1]Kanmani B. Introducing signals and systems concepts through analog signal processing first. 2011 Digital Signal Processing and Signal Processing Education Meeting (DSP/SPE) 2011:84–9. https://doi.org/10.1109/dsp-spe.2011.5739191."
+      }
+    },
+    {
+      "id": "doi-10-1109-dsp-spe-2011-5739216",
+      "type": "proceedings-article",
+      "doi": "10.1109/dsp-spe.2011.5739216",
+      "styles": {
+        "apa": "Usevitch, B., & Starks, S. (2011). Using remote sensing to promote signal and image processing. 2011 Digital Signal Processing and Signal Processing Education Meeting (DSP/SPE), 226–230. https://doi.org/10.1109/dsp-spe.2011.5739216",
+        "ieee": "[1]B. Usevitch and S. Starks, \"Using remote sensing to promote signal and image processing,\" 2011 Digital Signal Processing and Signal Processing Education Meeting (DSP/SPE), pp. 226–230, Jan. 2011, doi: 10.1109/dsp-spe.2011.5739216.",
+        "vancouver": "[1]Usevitch B, Starks S. Using remote sensing to promote signal and image processing. 2011 Digital Signal Processing and Signal Processing Education Meeting (DSP/SPE) 2011:226–30. https://doi.org/10.1109/dsp-spe.2011.5739216."
+      }
+    },
+    {
+      "id": "doi-10-1109-dsp-spe-2011-5739217",
+      "type": "proceedings-article",
+      "doi": "10.1109/dsp-spe.2011.5739217",
+      "styles": {
+        "apa": "Herman, G. L. (2011). Teaching signal processing according to what your students know. 2011 Digital Signal Processing and Signal Processing Education Meeting (DSP/SPE), 231–236. https://doi.org/10.1109/dsp-spe.2011.5739217",
+        "ieee": "[1]G. L. Herman, \"Teaching signal processing according to what your students know,\" 2011 Digital Signal Processing and Signal Processing Education Meeting (DSP/SPE), pp. 231–236, Jan. 2011, doi: 10.1109/dsp-spe.2011.5739217.",
+        "vancouver": "[1]Herman GL. Teaching signal processing according to what your students know. 2011 Digital Signal Processing and Signal Processing Education Meeting (DSP/SPE) 2011:231–6. https://doi.org/10.1109/dsp-spe.2011.5739217."
+      }
+    },
+    {
+      "id": "doi-10-1109-dsp-spe-2011-5739266",
+      "type": "proceedings-article",
+      "doi": "10.1109/dsp-spe.2011.5739266",
+      "styles": {
+        "apa": "Ambikairajah, E., & Epps, J. (2011). Project-based learning in digital signal processing: Development and experiences. 2011 Digital Signal Processing and Signal Processing Education Meeting (DSP/SPE), 506–511. https://doi.org/10.1109/dsp-spe.2011.5739266",
+        "ieee": "[1]E. Ambikairajah and J. Epps, \"Project-based learning in digital signal processing: Development and experiences,\" 2011 Digital Signal Processing and Signal Processing Education Meeting (DSP/SPE), pp. 506–511, Jan. 2011, doi: 10.1109/dsp-spe.2011.5739266.",
+        "vancouver": "[1]Ambikairajah E, Epps J. Project-based learning in digital signal processing: Development and experiences. 2011 Digital Signal Processing and Signal Processing Education Meeting (DSP/SPE) 2011:506–11. https://doi.org/10.1109/dsp-spe.2011.5739266."
+      }
+    },
+    {
+      "id": "doi-10-1109-dsp-spe-2015-7369527",
+      "type": "proceedings-article",
+      "doi": "10.1109/dsp-spe.2015.7369527",
+      "styles": {
+        "apa": "Spanias, A. (2015). An introductory signal processing course offered across the curriculum. 2015 IEEE Signal Processing and Signal Processing Education Workshop (SP/SPE), 55–58. https://doi.org/10.1109/dsp-spe.2015.7369527",
+        "ieee": "[1]A. Spanias, \"An introductory signal processing course offered across the curriculum,\" 2015 IEEE Signal Processing and Signal Processing Education Workshop (SP/SPE), pp. 55–58, Aug. 2015, doi: 10.1109/dsp-spe.2015.7369527.",
+        "vancouver": "[1]Spanias A. An introductory signal processing course offered across the curriculum. 2015 IEEE Signal Processing and Signal Processing Education Workshop (SP/SPE) 2015:55–8. https://doi.org/10.1109/dsp-spe.2015.7369527."
+      }
+    },
+    {
+      "id": "doi-10-1109-dsp-2009-4785974",
+      "type": "proceedings-article",
+      "doi": "10.1109/dsp.2009.4785974",
+      "styles": {
+        "apa": "Sun, H., & Maitre, H. (2009). Turbo Iterative Signal Processing. 2009 IEEE 13th Digital Signal Processing Workshop and 5th IEEE Signal Processing Education Workshop, 495–500. https://doi.org/10.1109/dsp.2009.4785974",
+        "ieee": "[1]H. Sun and H. Maitre, \"Turbo Iterative Signal Processing,\" 2009 IEEE 13th Digital Signal Processing Workshop and 5th IEEE Signal Processing Education Workshop, pp. 495–500, Jan. 2009, doi: 10.1109/dsp.2009.4785974.",
+        "vancouver": "[1]Sun H, Maitre H. Turbo Iterative Signal Processing. 2009 IEEE 13th Digital Signal Processing Workshop and 5th IEEE Signal Processing Education Workshop 2009:495–500. https://doi.org/10.1109/dsp.2009.4785974."
+      }
+    },
+    {
+      "id": "doi-10-1109-elmar-2015-7334537",
+      "type": "proceedings-article",
+      "doi": "10.1109/elmar.2015.7334537",
+      "styles": {
+        "apa": "Kavran, K., & Majstorovic, N. (2015). Custom applications for information system for higher education in Croatia. 2015 57th International Symposium ELMAR (ELMAR), 238–241. https://doi.org/10.1109/elmar.2015.7334537",
+        "ieee": "[1]K. Kavran and N. Majstorovic, \"Custom applications for information system for higher education in Croatia,\" 2015 57th International Symposium ELMAR (ELMAR), pp. 238–241, Sep. 2015, doi: 10.1109/elmar.2015.7334537.",
+        "vancouver": "[1]Kavran K, Majstorovic N. Custom applications for information system for higher education in Croatia. 2015 57th International Symposium ELMAR (ELMAR) 2015:238–41. https://doi.org/10.1109/elmar.2015.7334537."
+      }
+    },
+    {
+      "id": "doi-10-1109-icar-2011-6088636",
+      "type": "proceedings-article",
+      "doi": "10.1109/icar.2011.6088636",
+      "styles": {
+        "apa": "Burattini, E., Finzi, A., Rossi, S., & Staffa, M. (2011). Cognitive control in cognitive robotics: Attentional executive control. 2011 15th International Conference on Advanced Robotics (ICAR), 359–364. https://doi.org/10.1109/icar.2011.6088636",
+        "ieee": "[1]E. Burattini, A. Finzi, S. Rossi, and M. Staffa, \"Cognitive control in cognitive robotics: Attentional executive control,\" 2011 15th International Conference on Advanced Robotics (ICAR), pp. 359–364, Jun. 2011, doi: 10.1109/icar.2011.6088636.",
+        "vancouver": "[1]Burattini E, Finzi A, Rossi S, Staffa M. Cognitive control in cognitive robotics: Attentional executive control. 2011 15th International Conference on Advanced Robotics (ICAR) 2011:359–64. https://doi.org/10.1109/icar.2011.6088636."
+      }
+    },
+    {
+      "id": "doi-10-1109-icmlc-2014-7009127",
+      "type": "proceedings-article",
+      "doi": "10.1109/icmlc.2014.7009127",
+      "styles": {
+        "apa": "Lai, L. L., & Chan, C. L. (2014). Machine learning class with automatic learning materials. 2014 International Conference on Machine Learning and Cybernetics, 263–270. https://doi.org/10.1109/icmlc.2014.7009127",
+        "ieee": "[1]L. L. Lai and C. L. Chan, \"Machine learning class with automatic learning materials,\" 2014 International Conference on Machine Learning and Cybernetics, pp. 263–270, Jul. 2014, doi: 10.1109/icmlc.2014.7009127.",
+        "vancouver": "[1]Lai LL, Chan CL. Machine learning class with automatic learning materials. 2014 International Conference on Machine Learning and Cybernetics 2014:263–70. https://doi.org/10.1109/icmlc.2014.7009127."
+      }
+    },
+    {
+      "id": "doi-10-1109-mipro-2014-6859806",
+      "type": "proceedings-article",
+      "doi": "10.1109/mipro.2014.6859806",
+      "styles": {
+        "apa": "Vojkovic, G., & Katulic, T. (2014). Legal regulation of public Information Infrastructure in Republic of Croatia. 2014 37th International Convention on Information and Communication Technology, Electronics and Microelectronics (MIPRO), 1515–1520. https://doi.org/10.1109/mipro.2014.6859806",
+        "ieee": "[1]G. Vojkovic and T. Katulic, \"Legal regulation of public Information Infrastructure in Republic of Croatia,\" 2014 37th International Convention on Information and Communication Technology, Electronics and Microelectronics (MIPRO), pp. 1515–1520, May 2014, doi: 10.1109/mipro.2014.6859806.",
+        "vancouver": "[1]Vojkovic G, Katulic T. Legal regulation of public Information Infrastructure in Republic of Croatia. 2014 37th International Convention on Information and Communication Technology, Electronics and Microelectronics (MIPRO) 2014:1515–20. https://doi.org/10.1109/mipro.2014.6859806."
+      }
+    },
+    {
+      "id": "doi-10-1109-softcom-2014-7039068",
+      "type": "proceedings-article",
+      "doi": "10.1109/softcom.2014.7039068",
+      "styles": {
+        "apa": "Ivic, M., & Lutilsky, I. D. (2014). Accounting information systems of telecommunication operators in Croatia. 2014 22nd International Conference on Software, Telecommunications and Computer Networks (SoftCOM), 201–205. https://doi.org/10.1109/softcom.2014.7039068",
+        "ieee": "[1]M. Ivic and I. D. Lutilsky, \"Accounting information systems of telecommunication operators in Croatia,\" 2014 22nd International Conference on Software, Telecommunications and Computer Networks (SoftCOM), pp. 201–205, Sep. 2014, doi: 10.1109/softcom.2014.7039068.",
+        "vancouver": "[1]Ivic M, Lutilsky ID. Accounting information systems of telecommunication operators in Croatia. 2014 22nd International Conference on Software, Telecommunications and Computer Networks (SoftCOM) 2014:201–5. https://doi.org/10.1109/softcom.2014.7039068."
+      }
+    },
+    {
+      "id": "doi-10-1142-9789812771285-0030",
+      "type": "proceedings-article",
+      "doi": "10.1142/9789812771285_0030",
+      "styles": {
+        "apa": "GEREŠ, D. (2007). SUSTAINABLE DEVELOPMENT OF WATER MANAGEMENT IN CROATIA. Sustainable Development of Energy, Water and Environment Systems, 331–340. https://doi.org/10.1142/9789812771285_0030",
+        "ieee": "[1]D. GEREŠ, \"SUSTAINABLE DEVELOPMENT OF WATER MANAGEMENT IN CROATIA,\" Sustainable Development of Energy, Water and Environment Systems, pp. 331–340, Jun. 2007, doi: 10.1142/9789812771285_0030.",
+        "vancouver": "[1]GEREŠ D. SUSTAINABLE DEVELOPMENT OF WATER MANAGEMENT IN CROATIA. Sustainable Development of Energy, Water and Environment Systems 2007:331–40. https://doi.org/10.1142/9789812771285_0030."
+      }
+    },
+    {
+      "id": "doi-10-1142-9789814343138-0029",
+      "type": "book-chapter",
+      "doi": "10.1142/9789814343138_0029",
+      "styles": {
+        "apa": "CHELLAPPA, R., & ROSENFELD, A. (1993). VISION ENGINEERING: DESIGNING COMPUTER VISION SYSTEMS. Handbook of Pattern Recognition and Computer Vision, 805–815. https://doi.org/10.1142/9789814343138_0029",
+        "ieee": "[1]R. CHELLAPPA and A. ROSENFELD, \"VISION ENGINEERING: DESIGNING COMPUTER VISION SYSTEMS,\" Handbook of Pattern Recognition and Computer Vision, pp. 805–815, Aug. 1993, doi: 10.1142/9789814343138_0029.",
+        "vancouver": "[1]CHELLAPPA R, ROSENFELD A. VISION ENGINEERING: DESIGNING COMPUTER VISION SYSTEMS. Handbook of Pattern Recognition and Computer Vision 1993:805–15. https://doi.org/10.1142/9789814343138_0029."
+      }
+    },
+    {
+      "id": "doi-10-1142-9789814460941-0015",
+      "type": "book-chapter",
+      "doi": "10.1142/9789814460941_0015",
+      "styles": {
+        "apa": "Waters, K. R. (2013). COMPUTER VISION IN INTERVENTIONAL CARDIOLOGY. Computer Vision in Medical Imaging, 273–287. https://doi.org/10.1142/9789814460941_0015",
+        "ieee": "[1]K. R. Waters, \"COMPUTER VISION IN INTERVENTIONAL CARDIOLOGY,\" Computer Vision in Medical Imaging, pp. 273–287, Nov. 2013, doi: 10.1142/9789814460941_0015.",
+        "vancouver": "[1]Waters KR. COMPUTER VISION IN INTERVENTIONAL CARDIOLOGY. Computer Vision in Medical Imaging 2013:273–87. https://doi.org/10.1142/9789814460941_0015."
+      }
+    },
+    {
+      "id": "doi-10-1145-3426826-3426837",
+      "type": "proceedings-article",
+      "doi": "10.1145/3426826.3426837",
+      "styles": {
+        "apa": "Afsahhosseini, F., & Al-Mulla, Y. (2020). Machine Learning in Tourism. 2020 the 3rd International Conference on Machine Learning and Machine Intelligence, 53–57. https://doi.org/10.1145/3426826.3426837",
+        "ieee": "[1]F. Afsahhosseini and Y. Al-Mulla, \"Machine Learning in Tourism,\" 2020 The 3rd International Conference on Machine Learning and Machine Intelligence, pp. 53–57, Sep. 2020, doi: 10.1145/3426826.3426837.",
+        "vancouver": "[1]Afsahhosseini F, Al-Mulla Y. Machine Learning in Tourism. 2020 the 3rd International Conference on Machine Learning and Machine Intelligence 2020:53–7. https://doi.org/10.1145/3426826.3426837."
+      }
+    },
+    {
+      "id": "doi-10-1163-9789004502055",
+      "type": "monograph",
+      "doi": "10.1163/9789004502055",
+      "styles": {
+        "apa": "Byrskog, S. (2002). Story as History - History as Story. https://doi.org/10.1163/9789004502055",
+        "ieee": "[1]S. Byrskog, \"Story as History - History as Story,\" Jan. 2002, doi: 10.1163/9789004502055.",
+        "vancouver": "[1]Byrskog S. Story as History - History as Story 2002. https://doi.org/10.1163/9789004502055."
+      }
+    },
+    {
+      "id": "doi-10-1332-policypress-9781847424631-003-0002",
+      "type": "book-chapter",
+      "doi": "10.1332/policypress/9781847424631.003.0002",
+      "styles": {
+        "apa": "Hunter, D. J., Marks, L., & Smith, K. E. (2010). Public health and a public health system. The Public Health System in England, 17–48. https://doi.org/10.1332/policypress/9781847424631.003.0002",
+        "ieee": "[1]D. J. Hunter, L. Marks, and K. E. Smith, \"Public health and a public health system,\" The public health system in England, pp. 17–48, Mar. 2010, doi: 10.1332/policypress/9781847424631.003.0002.",
+        "vancouver": "[1]Hunter DJ, Marks L, Smith KE. Public health and a public health system. The Public Health System in England 2010:17–48. https://doi.org/10.1332/policypress/9781847424631.003.0002."
+      }
+    },
+    {
+      "id": "doi-10-1515-9780691194318",
+      "type": "monograph",
+      "doi": "10.1515/9780691194318",
+      "styles": {
+        "apa": "Wood, C. S. (2019). A History of Art History. https://doi.org/10.1515/9780691194318",
+        "ieee": "[1]C. S. Wood, \"A History of Art History,\" Sep. 2019, doi: 10.1515/9780691194318.",
+        "vancouver": "[1]Wood CS. A History of Art History 2019. https://doi.org/10.1515/9780691194318."
+      }
+    },
+    {
+      "id": "doi-10-2307-j-ctv25tnwz9",
+      "type": "monograph",
+      "doi": "10.2307/j.ctv25tnwz9",
+      "styles": {
+        "apa": "OBERMANN, K., & THIELSCHER, C. (2021). Medical Economics. https://doi.org/10.2307/j.ctv25tnwz9",
+        "ieee": "[1]K. OBERMANN and C. THIELSCHER, \"Medical Economics,\" Dec. 2021, doi: 10.2307/j.ctv25tnwz9.",
+        "vancouver": "[1]OBERMANN K, THIELSCHER C. Medical Economics 2021. https://doi.org/10.2307/j.ctv25tnwz9."
+      }
+    },
+    {
+      "id": "doi-10-2307-j-ctvdf0jr3",
+      "type": "monograph",
+      "doi": "10.2307/j.ctvdf0jr3",
+      "styles": {
+        "apa": "Wood, C. S. (2019). A History of Art History. https://doi.org/10.2307/j.ctvdf0jr3",
+        "ieee": "[1]C. S. Wood, \"A History of Art History,\" Sep. 2019, doi: 10.2307/j.ctvdf0jr3.",
+        "vancouver": "[1]Wood CS. A History of Art History 2019. https://doi.org/10.2307/j.ctvdf0jr3."
+      }
+    },
+    {
+      "id": "doi-10-23919-mipro48935-2020-9245121",
+      "type": "proceedings-article",
+      "doi": "10.23919/mipro48935.2020.9245121",
+      "styles": {
+        "apa": "Valencic, D. (2020). Implementation of NETCONF Standard by Major Customers in Croatia. 2020 43rd International Convention on Information, Communication and Electronic Technology (MIPRO), 529–535. https://doi.org/10.23919/mipro48935.2020.9245121",
+        "ieee": "[1]D. Valencic, \"Implementation of NETCONF Standard by Major Customers in Croatia,\" 2020 43rd International Convention on Information, Communication and Electronic Technology (MIPRO), pp. 529–535, Sep. 2020, doi: 10.23919/mipro48935.2020.9245121.",
+        "vancouver": "[1]Valencic D. Implementation of NETCONF Standard by Major Customers in Croatia. 2020 43rd International Convention on Information, Communication and Electronic Technology (MIPRO) 2020:529–35. https://doi.org/10.23919/mipro48935.2020.9245121."
+      }
+    },
+    {
+      "id": "doi-10-23919-mipro55190-2022-9803814",
+      "type": "proceedings-article",
+      "doi": "10.23919/mipro55190.2022.9803814",
+      "styles": {
+        "apa": "Vojkovic, G. (2022). Electronic Office Management of Public Administration in Croatia. 2022 45th Jubilee International Convention on Information, Communication and Electronic Technology (MIPRO), 1220–1224. https://doi.org/10.23919/mipro55190.2022.9803814",
+        "ieee": "[1]G. Vojkovic, \"Electronic Office Management of Public Administration in Croatia,\" 2022 45th Jubilee International Convention on Information, Communication and Electronic Technology (MIPRO), pp. 1220–1224, May 2022, doi: 10.23919/mipro55190.2022.9803814.",
+        "vancouver": "[1]Vojkovic G. Electronic Office Management of Public Administration in Croatia. 2022 45th Jubilee International Convention on Information, Communication and Electronic Technology (MIPRO) 2022:1220–4. https://doi.org/10.23919/mipro55190.2022.9803814."
+      }
+    },
+    {
+      "id": "doi-10-3998-mpub-14010",
+      "type": "monograph",
+      "doi": "10.3998/mpub.14010",
+      "styles": {
+        "apa": "Hodgson, G. (1993). Economics and Evolution. https://doi.org/10.3998/mpub.14010",
+        "ieee": "[1]G. Hodgson, \"Economics and Evolution,\" 1993, doi: 10.3998/mpub.14010.",
+        "vancouver": "[1]Hodgson G. Economics and Evolution 1993. https://doi.org/10.3998/mpub.14010."
+      }
+    },
+    {
+      "id": "doi-10-4135-9781452233109",
+      "type": "monograph",
+      "doi": "10.4135/9781452233109",
+      "styles": {
+        "apa": "Hoskins, C., McFadyen, S., & Finn, A. (2004). Media Economics: Applying Economics to New and Traditional Media. https://doi.org/10.4135/9781452233109",
+        "ieee": "[1]C. Hoskins, S. McFadyen, and A. Finn, \"Media Economics: Applying Economics to New and Traditional Media,\" 2004, doi: 10.4135/9781452233109.",
+        "vancouver": "[1]Hoskins C, McFadyen S, Finn A. Media Economics: Applying Economics to New and Traditional Media 2004. https://doi.org/10.4135/9781452233109."
+      }
+    },
+    {
+      "id": "doi-10-4324-9781003363309-2",
+      "type": "book-chapter",
+      "doi": "10.4324/9781003363309-2",
+      "styles": {
+        "apa": "Csomay, E., & Crawford, W. J. (2024). Linguistics, Corpus Linguistics, and Language Variation. Doing Corpus Linguistics, 3–12. https://doi.org/10.4324/9781003363309-2",
+        "ieee": "[1]E. Csomay and W. J. Crawford, \"Linguistics, Corpus Linguistics, and Language Variation,\" Doing Corpus Linguistics, pp. 3–12, Jan. 2024, doi: 10.4324/9781003363309-2.",
+        "vancouver": "[1]Csomay E, Crawford WJ. Linguistics, Corpus Linguistics, and Language Variation. Doing Corpus Linguistics 2024:3–12. https://doi.org/10.4324/9781003363309-2."
+      }
+    },
+    {
+      "id": "doi-10-4337-9781035310661-00005",
+      "type": "book-chapter",
+      "doi": "10.4337/9781035310661.00005",
+      "styles": {
+        "apa": "Stern, C. (2025). Introduction to the Handbook of Experimental Social Psychology. Handbook of Experimental Social Psychology, 1–6. https://doi.org/10.4337/9781035310661.00005",
+        "ieee": "[1]C. Stern, \"Introduction to the Handbook of Experimental Social Psychology,\" Handbook of Experimental Social Psychology, pp. 1–6, May 2025, doi: 10.4337/9781035310661.00005.",
+        "vancouver": "[1]Stern C. Introduction to the Handbook of Experimental Social Psychology. Handbook of Experimental Social Psychology 2025:1–6. https://doi.org/10.4337/9781035310661.00005."
+      }
+    },
+    {
+      "id": "doi-10-5121-csit-2021-111214",
+      "type": "proceedings-article",
+      "doi": "10.5121/csit.2021.111214",
+      "styles": {
+        "apa": "Kee Wong, Y. (2021). Machine Learning and Deep Learning Technologies. Machine Learning, IOT and Blockchain Technologies &Amp; Trends, 175–183. https://doi.org/10.5121/csit.2021.111214",
+        "ieee": "[1]Y. Kee Wong, \"Machine Learning and Deep Learning Technologies,\" Machine Learning, IOT and Blockchain Technologies &amp; Trends, pp. 175–183, Aug. 2021, doi: 10.5121/csit.2021.111214.",
+        "vancouver": "[1]Kee Wong Y. Machine Learning and Deep Learning Technologies. Machine Learning, IOT and Blockchain Technologies &Amp; Trends 2021:175–83. https://doi.org/10.5121/csit.2021.111214."
+      }
+    },
+    {
+      "id": "doi-10-5121-csit-2021-111519",
+      "type": "proceedings-article",
+      "doi": "10.5121/csit.2021.111519",
+      "styles": {
+        "apa": "Wong, Y. K. (2021). The Difference of Machine Learning and Deep Learning Algorithms. Advances in Machine Learning, 249–257. https://doi.org/10.5121/csit.2021.111519",
+        "ieee": "[1]Y. K. Wong, \"The Difference of Machine Learning and Deep Learning Algorithms,\" Advances in Machine Learning, pp. 249–257, Sep. 2021, doi: 10.5121/csit.2021.111519.",
+        "vancouver": "[1]Wong YK. The Difference of Machine Learning and Deep Learning Algorithms. Advances in Machine Learning 2021:249–57. https://doi.org/10.5121/csit.2021.111519."
+      }
+    },
+    {
+      "id": "doi-10-5220-0006867103640371",
+      "type": "proceedings-article",
+      "doi": "10.5220/0006867103640371",
+      "styles": {
+        "apa": "Nasr, S., Abadi, A., Bouallegue, K., & Mekki, H. (2018). Chaos Engineering and Control in Mobile Robotics Applications. Proceedings of the 15th International Conference on Informatics in Control, Automation and Robotics, 364–371. https://doi.org/10.5220/0006867103640371",
+        "ieee": "[1]S. Nasr, A. Abadi, K. Bouallegue, and H. Mekki, \"Chaos Engineering and Control in Mobile Robotics Applications,\" Proceedings of the 15th International Conference on Informatics in Control, Automation and Robotics, pp. 364–371, 2018, doi: 10.5220/0006867103640371.",
+        "vancouver": "[1]Nasr S, Abadi A, Bouallegue K, Mekki H. Chaos Engineering and Control in Mobile Robotics Applications. Proceedings of the 15th International Conference on Informatics in Control, Automation and Robotics 2018:364–71. https://doi.org/10.5220/0006867103640371."
+      }
+    },
+    {
+      "id": "doi-10-5220-0006867103740381",
+      "type": "proceedings-article",
+      "doi": "10.5220/0006867103740381",
+      "styles": {
+        "apa": "Nasr, S., Abadi, A., Bouallegue, K., & Mekki, H. (2018). Chaos Engineering and Control in Mobile Robotics Applications. Proceedings of the 15th International Conference on Informatics in Control, Automation and Robotics, 374–381. https://doi.org/10.5220/0006867103740381",
+        "ieee": "[1]S. Nasr, A. Abadi, K. Bouallegue, and H. Mekki, \"Chaos Engineering and Control in Mobile Robotics Applications,\" Proceedings of the 15th International Conference on Informatics in Control, Automation and Robotics, pp. 374–381, 2018, doi: 10.5220/0006867103740381.",
+        "vancouver": "[1]Nasr S, Abadi A, Bouallegue K, Mekki H. Chaos Engineering and Control in Mobile Robotics Applications. Proceedings of the 15th International Conference on Informatics in Control, Automation and Robotics 2018:374–81. https://doi.org/10.5220/0006867103740381."
+      }
+    },
+    {
+      "id": "doi-10-5220-0009470802400245",
+      "type": "proceedings-article",
+      "doi": "10.5220/0009470802400245",
+      "styles": {
+        "apa": "Šiljeg, S., Milošević, R., & Vilić, E. (2020). Multiscale GIS based Analysis of Urban Green Spaces (UGS) Accessibility: Case Study of Sisak (Croatia). Proceedings of the 6th International Conference on Geographical Information Systems Theory, Applications and Management, 240–245. https://doi.org/10.5220/0009470802400245",
+        "ieee": "[1]S. Šiljeg, R. Milošević, and E. Vilić, \"Multiscale GIS based Analysis of Urban Green Spaces (UGS) Accessibility: Case Study of Sisak (Croatia),\" Proceedings of the 6th International Conference on Geographical Information Systems Theory, Applications and Management, pp. 240–245, 2020, doi: 10.5220/0009470802400245.",
+        "vancouver": "[1]Šiljeg S, Milošević R, Vilić E. Multiscale GIS based Analysis of Urban Green Spaces (UGS) Accessibility: Case Study of Sisak (Croatia). Proceedings of the 6th International Conference on Geographical Information Systems Theory, Applications and Management 2020:240–5. https://doi.org/10.5220/0009470802400245."
+      }
+    },
+    {
+      "id": "doi-10-5220-0010465102670273",
+      "type": "proceedings-article",
+      "doi": "10.5220/0010465102670273",
+      "styles": {
+        "apa": "Milošević, R., Šiljeg, S., & Marić, I. (2021). Derivation of Urban Planning Indicators (UPIs) using Worldview-3 Imagery and GEOBIA Method for Split Settlement, Croatia. Proceedings of the 7th International Conference on Geographical Information Systems Theory, Applications and Management, 267–273. https://doi.org/10.5220/0010465102670273",
+        "ieee": "[1]R. Milošević, S. Šiljeg, and I. Marić, \"Derivation of Urban Planning Indicators (UPIs) using Worldview-3 Imagery and GEOBIA Method for Split Settlement, Croatia,\" Proceedings of the 7th International Conference on Geographical Information Systems Theory, Applications and Management, pp. 267–273, 2021, doi: 10.5220/0010465102670273.",
+        "vancouver": "[1]Milošević R, Šiljeg S, Marić I. Derivation of Urban Planning Indicators (UPIs) using Worldview-3 Imagery and GEOBIA Method for Split Settlement, Croatia. Proceedings of the 7th International Conference on Geographical Information Systems Theory, Applications and Management 2021:267–73. https://doi.org/10.5220/0010465102670273."
+      }
+    },
+    {
+      "id": "doi-10-5220-0010734300003101",
+      "type": "proceedings-article",
+      "doi": "10.5220/0010734300003101",
+      "styles": {
+        "apa": "Chentoufi, O., & Chougdali, K. (2021). Intrusion Detection Systems based on Machine Learning. Proceedings of the 2nd International Conference on Big Data, Modelling and Machine Learning, 355–359. https://doi.org/10.5220/0010734300003101",
+        "ieee": "[1]O. Chentoufi and K. Chougdali, \"Intrusion Detection Systems based on Machine Learning,\" Proceedings of the 2nd International Conference on Big Data, Modelling and Machine Learning, pp. 355–359, 2021, doi: 10.5220/0010734300003101.",
+        "vancouver": "[1]Chentoufi O, Chougdali K. Intrusion Detection Systems based on Machine Learning. Proceedings of the 2nd International Conference on Big Data, Modelling and Machine Learning 2021:355–9. https://doi.org/10.5220/0010734300003101."
+      }
+    },
+    {
+      "id": "doi-10-5220-0011933700003473",
+      "type": "proceedings-article",
+      "doi": "10.5220/0011933700003473",
+      "styles": {
+        "apa": "Glavačević, K., Marić, I., & Šiljeg, A. (2023). Accuracy Assessment of Direct Georeferencing Using UAV Matrice 210 RTK V2 on Gully Santiš, Island of Pag (Croatia). Proceedings of the 9th International Conference on Geographical Information Systems Theory, Applications and Management, 184–191. https://doi.org/10.5220/0011933700003473",
+        "ieee": "[1]K. Glavačević, I. Marić, and A. Šiljeg, \"Accuracy Assessment of Direct Georeferencing Using UAV Matrice 210 RTK V2 on Gully Santiš, Island of Pag (Croatia),\" Proceedings of the 9th International Conference on Geographical Information Systems Theory, Applications and Management, pp. 184–191, 2023, doi: 10.5220/0011933700003473.",
+        "vancouver": "[1]Glavačević K, Marić I, Šiljeg A. Accuracy Assessment of Direct Georeferencing Using UAV Matrice 210 RTK V2 on Gully Santiš, Island of Pag (Croatia). Proceedings of the 9th International Conference on Geographical Information Systems Theory, Applications and Management 2023:184–91. https://doi.org/10.5220/0011933700003473."
+      }
+    },
+    {
+      "id": "doi-10-5220-0013486400004619",
+      "type": "proceedings-article",
+      "doi": "10.5220/0013486400004619",
+      "styles": {
+        "apa": "Chai, Y. (2024). Machine Learning Application: Flight Delay Prediction. Proceedings of the 2nd International Conference on Data Analysis and Machine Learning, 5–9. https://doi.org/10.5220/0013486400004619",
+        "ieee": "[1]Y. Chai, \"Machine Learning Application: Flight Delay Prediction,\" Proceedings of the 2nd International Conference on Data Analysis and Machine Learning, pp. 5–9, 2024, doi: 10.5220/0013486400004619.",
+        "vancouver": "[1]Chai Y. Machine Learning Application: Flight Delay Prediction. Proceedings of the 2nd International Conference on Data Analysis and Machine Learning 2024:5–9. https://doi.org/10.5220/0013486400004619."
+      }
+    },
+    {
+      "id": "doi-10-5771-9781461642732",
+      "type": "monograph",
+      "doi": "10.5771/9781461642732",
+      "styles": {
+        "apa": "Atkinson, R. D. (2006). Supply-Side Follies. https://doi.org/10.5771/9781461642732",
+        "ieee": "[1]R. D. Atkinson, \"Supply-Side Follies,\" 2006, doi: 10.5771/9781461642732.",
+        "vancouver": "[1]Atkinson RD. Supply-Side Follies 2006. https://doi.org/10.5771/9781461642732."
+      }
+    }
+  ]
+}
