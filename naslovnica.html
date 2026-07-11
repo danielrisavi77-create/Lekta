@@ -129,8 +129,11 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
 @media(max-width:820px){.mobile-menu{display:grid;margin-left:auto}.mobile-nav.open{display:flex;flex-direction:column;gap:2px;position:absolute;left:0;right:0;top:100%;background:var(--panel);border-bottom:1px solid var(--line);box-shadow:var(--shadow);padding:10px 20px 16px;z-index:29}.mobile-nav a:not(.btn){padding:13px 6px;color:var(--text);text-decoration:none;font-weight:700;border-bottom:1px solid var(--line)}.mobile-nav .btn{margin-top:10px;width:100%;justify-content:center}}
 
 @media print{
+  /* Ispis daje TOCNO naslovnu stranicu: sve osim pregleda (#tp-sheet) je skriveno.
+     Vodic (#vodic), zavrsni CTA (#tp-cta), oznaka porijekla (.tp-badge) i akcije
+     ne smiju zavrsiti u PDF-u, inace se dobiju dodatne stranice teksta. */
   body{background:#fff}
-  .topbar,.hero,footer,.cta,.disclaimer,.tp-form-col,.out-bar,.out-hint,.note,.card>h2,.card>.sub{display:none!important}
+  .topbar,.hero,footer,#vodic,#tp-cta,.cta,.disclaimer,.tp-form-col,.out-bar,.out-hint,.note,.tp-badge,.card>h2,.card>.sub{display:none!important}
   .section{padding:0}.shell{width:100%}.grid{display:block}
   .out-panel{position:static}
   .tp-sheet-wrap{background:#fff;border:0;padding:0}
@@ -312,7 +315,7 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
 </section>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Što mora biti na naslovnici seminarskog rada?","acceptedAnswer":{"@type":"Answer","text":"Naziv fakulteta, ime autora, naslov rada, vrsta rada, kolegij ili mentor te mjesto i godina. Točan raspored propisuje fakultet ili kolegij."}},{"@type":"Question","name":"Kojim redom idu podaci na naslovnici?","acceptedAnswer":{"@type":"Answer","text":"Od vrha: sveučilište i fakultet, autor, naslov rada u sredini, vrsta rada, mentor te mjesto i godina na dnu."}},{"@type":"Question","name":"Piše li se mentor na naslovnici?","acceptedAnswer":{"@type":"Answer","text":"Kod završnih i diplomskih radova gotovo uvijek da, s akademskom titulom. Kod seminarskih ovisi o kolegiju."}},{"@type":"Question","name":"Numerira li se naslovnica?","acceptedAnswer":{"@type":"Answer","text":"Ne prikazuje se broj na naslovnici; ona se u pravilu ne broji vidljivo, iako se računa kao stranica."}},{"@type":"Question","name":"Ima li moj fakultet poseban predložak naslovnice?","acceptedAnswer":{"@type":"Answer","text":"Za dio fakulteta alat ima predložak izveden iz službenih uputa ili javnih radova: odaberi ustanovu i fakultet s popisa pa se redoslijed i tipografija prilagode. Ako predloška nema, koristi se uobičajeni generički raspored."}}]}</script>
 
-<section class="section">
+<section class="section" id="tp-cta">
   <div class="shell">
     <div class="cta">
       <h2>Naslovnica je prva stranica. Provjeri cijeli rad.</h2>
