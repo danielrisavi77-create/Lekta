@@ -10413,6 +10413,93 @@
     }
   },
   {
+    "id": "mathos",
+    "unitId": "mathos",
+    "level": null,
+    "name": "Fakultet primijenjene matematike i informatike (Osijek): naslovnica",
+    "provenance": {
+      "status": "official",
+      "sourceIds": [
+        "mathos-predlozak-diplomski",
+        "mathos-pravilnik-diplomski"
+      ],
+      "sourceUrl": "https://www.mathos.unios.hr/wp-content/uploads/2026/03/Predlozak_diplomski_rad.rar",
+      "sourceNote": "Sluzbeni LaTeX predlozak mathos.cls (obavezan po Pravilniku o diplomskim radovima).",
+      "quote": "Sveuciliste Josipa Jurja Strossmayera u Osijeku / Fakultet primijenjene matematike i informatike / <studij> / <naslov> / <vrsta rada> / Osijek, <godina>",
+      "sourcePage": null,
+      "verifiedAt": "2026-07-10"
+    },
+    "status": "verified",
+    "marginsCm": {
+      "top": 2.5,
+      "right": 2.5,
+      "bottom": 2.5,
+      "left": 2.5
+    },
+    "defaultFont": "Times New Roman",
+    "elements": [
+      {
+        "role": "university",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 0,
+        "fixedText": "Sveučilište Josipa Jurja Strossmayera u Osijeku",
+        "sizePt": 12,
+        "align": "center"
+      },
+      {
+        "role": "faculty",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 0,
+        "fixedText": "Fakultet primijenjene matematike i informatike",
+        "sizePt": 12,
+        "align": "center"
+      },
+      {
+        "role": "study",
+        "required": false,
+        "elementProvenance": "official-template",
+        "group": 0,
+        "sizePt": 12,
+        "align": "center"
+      },
+      {
+        "role": "title",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 1,
+        "sizePt": 18,
+        "bold": true,
+        "align": "center"
+      },
+      {
+        "role": "worktype",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 2,
+        "sizePt": 12,
+        "align": "center"
+      },
+      {
+        "role": "author",
+        "required": false,
+        "elementProvenance": "official-template",
+        "group": 3,
+        "sizePt": 12,
+        "align": "center"
+      },
+      {
+        "role": "placeyear",
+        "required": true,
+        "elementProvenance": "official-template",
+        "group": 4,
+        "sizePt": 12,
+        "align": "center"
+      }
+    ]
+  },
+  {
     "id": "medri-graduate",
     "unitId": "medri",
     "level": "graduate",

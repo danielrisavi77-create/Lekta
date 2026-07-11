@@ -77,7 +77,7 @@
   {
     "name": "SOURCE_REGISTRY",
     "file": "data/sources/source-registry.json",
-    "entries": 168
+    "entries": 170
   },
   {
     "name": "VERIFICATION_LEDGER",
@@ -97,6 +97,6 @@
   {
     "name": "TITLE_PAGE_TEMPLATES",
     "file": "data/title-pages/templates.json",
-    "entries": 197
+    "entries": 198
   }
 ]

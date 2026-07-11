@@ -2179,5 +2179,31 @@
     "validityClass": "stable",
     "lastChecked": "2026-07-11",
     "note": "Prilog \"Upute za izradu diplomskog rada\", str. 8-9 \"Izgled korica i naslovne strane\": SVEUCILISTE U RIJECI, AKADEMIJA PRIMIJENJENIH UMJETNOSTI, naziv studija, naslov (sredina), \"Diplomski rad\", ime i prezime (desno), \"Rijeka, mjesec i godina\" (dno, centrirano)."
+  },
+  {
+    "id": "mathos-predlozak-diplomski",
+    "kind": "template",
+    "title": "Predlozak diplomskog rada (LaTeX klasa mathos.cls, naslovnica)",
+    "url": "https://www.mathos.unios.hr/wp-content/uploads/2026/03/Predlozak_diplomski_rad.rar",
+    "publisher": "Fakultet primijenjene matematike i informatike Osijek",
+    "snapshotPath": "data/sources/mathos/mathos-predlozak-diplomski.rar",
+    "note": "Sluzbeni LaTeX predlozak (mathos.cls + Diplomski-predlozak.tex/.pdf + MathosLogo). Titlepage centrirano odozgo: logo, Sveuciliste J.J.S. u Osijeku (small-caps), Fakultet primijenjene matematike i informatike, naziv studija, naslov (large bold), oznaka vrste rada, autor, Osijek + godina.",
+    "fetchedAt": "2026-07-11",
+    "snapshotHash": "8d280764934c41a5890a3ca090bb66002603d24618823b6a8a29abdf770873d7",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-11"
+  },
+  {
+    "id": "mathos-pravilnik-diplomski",
+    "kind": "regulation",
+    "title": "Pravilnik o diplomskim radovima (potpisano)",
+    "url": "https://www.mathos.unios.hr/wp-content/uploads/2023/11/Pravilnik_o_diplomskim_radovima_-_potpisano.pdf",
+    "publisher": "Fakultet primijenjene matematike i informatike Osijek",
+    "snapshotPath": "data/sources/mathos/mathos-pravilnik-diplomski.pdf",
+    "note": "Pravilnik upucuje na obavezni sluzbeni predlozak (mathos.cls).",
+    "fetchedAt": "2026-07-11",
+    "snapshotHash": "ac7fb707920ca89d618e4ff8ac19ea698f76adb3b75ea79947f36ca2a8c3ff57",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-11"
   }
 ]
