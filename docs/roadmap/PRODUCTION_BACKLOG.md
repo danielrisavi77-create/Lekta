@@ -21,44 +21,42 @@ Datum: 2026-07-11.
 
 ### P0-01 Javna konfiguracija
 
-**BL-P0-01-1, Uskladiti zive endpointe s javnom komunikacijom**
+**BL-P0-01-1, Uskladiti zive endpointe s javnom komunikacijom** — RIJESENO ODLUKOM (2026-07-11)
 - Prioritet: P0 (izvorni data-flow-06 P2, elevirano)
-- Problem: DEFAULT_PRODUCTION_CONFIG hardkodira zivi supabaseUrl, anon kljuc i
-  waitlistEndpoint pa su prijava i waitlist zivi za sve, dok komunikacija sugerira suprotno.
-- Lokacija: src/ui/app.ts:71, :221 (loadProductionConfig), :556 (waitlistConfig), :596
-  (authConfigured), :621 (renderAuthEntry)
-- Dokaz: bez overridea authConfigured()=true i waitlistConfig().endpoint je zivi URL.
-- Posljedica: backend prima e-mail i pseudonimne signale dok se komunikacijom sugerira
-  "bez registracije".
-- Preporuka: svjesna odluka, ili ostavi zivim i uskladi copy, ili isprazni default
-  endpointe i drzi ih iza konfiguracije.
-- Acceptance: stanje endpointa u kodu odgovara javnoj komunikaciji.
-- Rizik regresije: nizak, ali dira dijeljeni app.ts (git-race oprez).
-- Velicina: S
+- Problem: DEFAULT_PRODUCTION_CONFIG hardkodira zivi supabaseUrl/anon/waitlistEndpoint pa su
+  prijava i waitlist zivi, dok je komunikacija sugerirala suprotno.
+- ODLUKA: endpointi OSTAJU zivi (auth za podsjetnike + waitlist su namjerne, deployane funkcije);
+  umjesto praznjenja configa USKLADENA je javna komunikacija da bude istinita (BL-P0-01-2 copy +
+  BL-P0-01-3 disclosure). Time "stanje endpointa odgovara javnoj komunikaciji" bez diranja app.ts
+  configa (izbjegnut git-race na dijeljenom app.ts).
+- Velicina: S (zatvoreno kroz copy)
 
-**BL-P0-01-2, Ukloniti apsolutnu tvrdnju "Nista se ne salje na posluzitelj"**
+**BL-P0-01-1-STARO (referenca):**
+- Lokacija: src/ui/app.ts:71 (DEFAULT_PRODUCTION_CONFIG), :221/:556/:596/:621.
+
+**BL-P0-01-2, Ukloniti apsolutnu tvrdnju "Nista se ne salje na posluzitelj"** — GOTOVO (2026-07-11)
 - Prioritet: P0 (izvorni data-flow-01 P1, CONFIRMED)
-- Problem: twitter meta apsolutno tvrdi da se nista ne salje; prijava i waitlist salju.
-- Lokacija: index.html:20 (potkrijepljeno :6, :266)
-- Dokaz: index.html:20 twitter:description = "...Nista se ne salje na posluzitelj";
-  usporedi session.ts:88 (OTP), waitlist-bar.ts:82 (auto POST).
-- Posljedica: GDPR cl.13 transparentnost, zavaravajuca apsolutna tvrdnja.
-- Preporuka: ograniciti na tekst i datoteku rada ("Tekst i datoteka rada ostaju na
-  uredaju; automatska analiza je lokalna").
-- Acceptance: nijedan javni meta/hero tekst ne tvrdi da se nista ne salje.
-- Rizik regresije: nizak (tekst).
-- Velicina: S
+- Isporuceno: index.html:20 twitter:description "...Nista se ne salje na posluzitelj" ->
+  "...Tekst i datoteka rada ostaju na tvom uredaju" (dokument-scoped, istinito, uskladeno s :6/:17).
+  Dodatno index.html:396 "nema registracije" -> "ne treba obavezna registracija" (prijava je opciona).
+- Verifikacija: dist/index.html vise nema apsolutnu tvrdnju (grep = 0); nova dokument-scoped tvrdnja
+  prisutna. Ostale tvrdnje (:6/:17 "Dokument ostaje na uredaju", :400 footer "obradjuju lokalno") su
+  vec dokument-scoped i istinite pa ostaju.
+- Rizik regresije: nizak (tekst). Velicina: S
 
-**BL-P0-01-3, Waitlist traka ne smije slati signal bez radnje korisnika**
+**BL-P0-01-3, Waitlist traka ne smije slati signal bez radnje korisnika** — DJELOMICNO: OBJAVLJENO (2026-07-11)
 - Prioritet: P0 (izvorni data-flow-02 P1, CONFIRMED)
 - Problem: mountWaitlistBar na prikazu automatski POST-a na faculty-request; server racuna
   soljeni ip_hash. Bez privole i bez objave.
-- Lokacija: src/waitlist/waitlist-bar.ts:82 (fireSignal :49, guard :72); okida se iz
-  src/ui/app.ts:566; endpoint app.ts:71; server faculty-request/index.ts:97
-- Dokaz: `if(!entry) void fireSignal(detection,deps)` na prikazu trake bez klika.
-- Posljedica: pseudonimni telemetrijski upis bez privole, nesuklad s "lokalno".
-- Preporuka: odgoditi mrezni upis do eksplicitne radnje; alternativno dokumentirati
-  automatski demand-signal (legitimni interes) uz opt-out. Preferirati prvo.
+- ISPORUCENO (opcija 2 iz audita, transparentnost): waitlist traka sada OBJAVLJUJE upis na tocki
+  obrade (waitlist-copy.ts note: "Bez imena biljezimo da je ovaj fakultet trazen; e-mail koristimo
+  samo za tu jednu obavijest."). Time se zatvara GDPR cl.13 transparentnost (osnova: legitimni
+  interes, agregatna potraznja, soljeni ireverzibilni ip_hash, bez imena/e-maila).
+- SVJESNO NIJE odabrana opcija 1 (ukloniti auto-signal): to bi obrisalo zivu discovery telemetriju
+  (anonimni "hit" po nepokrivenom fakultetu), ucinilo attachEmailToRequest mrtvim i trazilo prepis 3
+  testa. Opcija 2 popravlja stvarni nedostatak (objava) bez gubitka funkcije.
+- FOLLOW-UP (owner): ako se zeli maksimalna privatnost, dodati opt-out ILI upis u sluzbeni tekst
+  obrade (legal-content.ts, odjeljak izvrsitelji/osnova) i po zelji odgoditi na eksplicitnu radnju.
 - Acceptance: bez korisnicke radnje nema poziva na faculty-request; test dokazuje da render
   trake sam ne salje.
 - Rizik regresije: srednji (mijenja demand-signal, azurirati waitlist testove).

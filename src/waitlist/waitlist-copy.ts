@@ -21,7 +21,7 @@ export interface WaitlistCopy {
 }
 
 const COMMON = {
-  note: 'E-mail koristimo samo za tu jednu obavijest.',
+  note: 'Bez imena bilježimo da je ovaj fakultet tražen; e-mail koristimo samo za tu jednu obavijest.',
   placeholder: 'tvoj@email.hr',
   cta: 'Javi mi kad bude gotovo',
   emailInvalid: 'Provjeri e-mail adresu.',

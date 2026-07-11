@@ -167,7 +167,7 @@ describe('waitlistCopy', () => {
   });
   it('zajednicki tekstovi bez crtica i s privatnosnom napomenom', () => {
     const c = waitlistCopy({ state: 'faculty-uncovered', uncovered: true, cell, dedupeKey: 'k' });
-    expect(c.note).toBe('E-mail koristimo samo za tu jednu obavijest.');
+    expect(c.note).toBe('Bez imena bilježimo da je ovaj fakultet tražen; e-mail koristimo samo za tu jednu obavijest.');
     expect(c.cta).toBeTruthy();
     // bez em/en crtica u tekstovima
     for (const v of Object.values(c)) expect(v).not.toMatch(/[–—]/);
