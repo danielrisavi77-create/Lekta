@@ -344,15 +344,18 @@ Datum: 2026-07-11.
 - Rizik regresije: nizak do srednji.
 - Velicina: M
 
-**BL-P0-05-3, build.json.stringify za brzi startup parse**
+**BL-P0-05-3, build.json.stringify za brzi startup parse** — ODBIJENO (mjereno 2026-07-11)
 - Prioritet: P0 paket (izvorni performance-05 P2)
 - Problem: veliki JSON emitiran kao objektni literali (sporiji V8 parse).
-- Lokacija: vite.config.ts:67-70
-- Preporuka: dodati build:{json:{stringify:true}}.
-- Acceptance: glavni chunk sadrzi JSON.parse omote za profilne podatke; script evaluation
-  vrijeme padne; ponasanje nepromijenjeno.
-- Rizik regresije: nizak (golden i registar testovi hvataju rubove).
-- Velicina: S
+- Lokacija: vite.config.ts (top-level `json`, NE `build.json` kako je audit napisao).
+- ISHOD: implementirano `json:{stringify:true}` pa IZMJERENO na stvarnom buildu. Vite emitira
+  `JSON.parse('...')` ali ASCII-escapea sav ne-ASCII u \uXXXX. Ovaj korpus je gusto hrvatski
+  (c, c, z, s, d): 20.402 \u escapea. Glavni chunk: raw 2.478.826 -> 4.315.059 B, gzip
+  369.010 -> 473.051 B (+28% / +104 KB na zici). JSON.parse omoti skocili 2 -> 189 (parse-dobitak
+  postoji) ali je download veci, sto na mobitelu (ciljani slucaj) kosta vise nego sto parse stedi.
+- ODLUKA: vraceno na objektne literale; ostavljen komentar u vite.config.ts da se ne pokusa opet.
+  Pravi lijek za parse/veličinu je BL-P0-05-1/2 (maknuti podatke iz runtime grafa), ne stringify.
+- Velicina: S (zatvoreno, wontfix)
 
 **BL-P0-05-4, Lijeno ucitati DOCX/PDF motor (skinuti s landinga)**
 - Prioritet: P0 paket (izvorni performance-03 P2)
@@ -376,14 +379,13 @@ Datum: 2026-07-11.
 - Rizik regresije: nizak (token guard postoji; resetirati analyzeBtn u finally).
 - Velicina: M
 
-**BL-P0-05-6, Immutable cache za hashirane assete**
+**BL-P0-05-6, Immutable cache za hashirane assete** — GOTOVO (2026-07-11)
 - Prioritet: P0 paket (izvorni performance-06 P2)
-- Problem: public/_headers nema Cache-Control za /assets/*.
-- Lokacija: public/_headers:18-22; netlify.toml
-- Preporuka: /assets/* Cache-Control: public, max-age=31536000, immutable; HTML kratko
-  keširan.
-- Acceptance: /assets/* nose immutable godinu; HTML nema dugi cache; ponovni posjet iz cachea.
-- Rizik regresije: vrlo nizak.
+- Isporuceno: public/_headers dobio `/assets/* Cache-Control: public, max-age=31536000, immutable`
+  (Vite fingerprint u imenu jamci sigurnost dugog cachea) i `/*.html max-age=0, must-revalidate`
+  (HTML nema hash pa se novi build odmah vidi). Postojeci `/*` sigurnosni blok netaknut.
+- Verifikacija: `dist/_headers` sadrzi immutable pravilo nakon builda (Vite kopira public/).
+- Acceptance ispunjen: /assets/* nose immutable godinu; HTML kratko; ponovni posjet iz cachea.
 - Velicina: S
 
 **BL-P0-05-7, Memorija i mobilni cap (OOM)**

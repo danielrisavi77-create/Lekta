@@ -218,6 +218,16 @@ nepromijenjeno; `npm run check` zelen.
 Rizik regresije: nizak. Semantika podataka je identična; jedini rizik su rubni tipovi (npr. `undefined`
 vs izostanak ključa) koje JSON ionako ne nosi. Golden i registar testovi to hvataju.
 
+> AŽURIRANO 2026-07-11 (IMPLEMENTIRANO PA ODBIJENO nakon mjerenja): postavljeno `json:{stringify:true}`
+> (top-level u vite.config, NE `build.json` kako je gore navedeno) i izmjeren stvarni build. Vite
+> emitira `JSON.parse('...')` (JSON.parse omoti u glavnom chunku skočili 2 -> 189, parse-put stvarno
+> aktiviran), ALI izlaz je ASCII-safe pa svaki hrvatski dijakritik (č, ć, ž, š, đ) postaje `\uXXXX`.
+> Ovaj korpus je gotovo u cijelosti hrvatski: izmjereno 20.402 `\u` escapea. Posljedica na stvarnom
+> buildu: glavni chunk raw 2.478.826 -> 4.315.059 B, gzip **369.010 -> 473.051 B (+28%, +104 KB na žici)**.
+> Parse-ubrzanje ne pokriva veći download na mobitelu (ciljani slučaj ovog nalaza). Zato je stringify
+> VRAĆEN; ostaje objektni literal. Zaključak: za dijakritikom gust JSON `stringify` je neto gubitak na
+> transferu; jedini ispravan potez je performance-01/02 (maknuti podatke iz runtime grafa), ne stringify.
+
 ## performance-06 (P2): Nema immutable cache zaglavlja za hashirane assete
 
 Problem: `public/_headers` sadrži samo sigurnosna zaglavlja (CSP, X-Content-Type-Options, Referrer-Policy,

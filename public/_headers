@@ -20,3 +20,15 @@
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY
+
+# performance-06 (audit PERFORMANCE_AUDIT.md): content-hashirani asseti (Vite fingerprint u imenu,
+# npr. index-CzOlIHYC.js, *.woff2) su nepromjenjivi po imenu, pa se smiju kesirati godinu dana bez
+# revalidacije. Promjena sadrzaja mijenja hash u imenu, dakle URL, pa je dugi cache siguran i povratni
+# posjet posluzuje glavni chunk i fontove iz predmemorije bez mreznog kruga.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# HTML NIKAD ne smije dugo kesirati (nema hash u imenu): kratko, uvijek revalidiraj, da novi build
+# (nove hashirane reference) korisnik odmah vidi.
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate

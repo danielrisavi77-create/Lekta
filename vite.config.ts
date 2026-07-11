@@ -154,6 +154,11 @@ export default defineConfig(({ command }) => {
   return {
     plugins: [htmlCharsetUtf8(), citationTools(), stripDevOnlyHtml(devTools), assertSafeBuild(devTools)],
     define: { __DEV_TOOLS__: JSON.stringify(devTools) },
+    // NAPOMENA (audit performance-05, ODBIJENO nakon mjerenja): `json.stringify:true` bi veliki JSON
+    // emitirao kao `JSON.parse('...')` (brzi V8 parse), ALI Vite ASCII-escapea sav ne-ASCII u \uXXXX.
+    // Ovaj korpus je gusto hrvatski (c, c, z, s, d): mjereno 20.402 \u escapea, glavni chunk naraste
+    // 2,48 -> 4,32 MB raw i 369 -> 473 KB gzip (+28% na zici). Parse-dobitak ne pokriva veci download na
+    // mobitelu. Pravi lijek je performance-01/02 (maknuti podatke iz runtime grafa), ne stringify.
     build: {
       target: 'es2022',
       rollupOptions: { input },
