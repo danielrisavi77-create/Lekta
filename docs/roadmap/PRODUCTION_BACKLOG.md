@@ -810,9 +810,19 @@ Datum: 2026-07-11.
 **BL-P3-09, Siroce SEO stranice bez interne poveznice** (routes-05)
 - alati.html:159-163; dodati poveznice na /alati/citati/ i /alati/naslovnica/; hub. Velicina: S
 
-**BL-P3-10, Favicon pokrivenost i /favicon.ico** (spoj routes-08 + seo-06)
-- index.html:10; generatori pageShell; dodati rel=icon u zajednicki head i .ico fallback.
-  Velicina: S
+**BL-P3-10, Favicon pokrivenost i /favicon.ico** (spoj routes-08 + seo-06) — GOTOVO (2026-07-11)
+- Problem: samo index.html imao favicon (svg); 7 tool stranica BEZ ijednog favicona (generic tab
+  ikona + /favicon.ico 404 jer .ico nije postojao); nigdje apple-touch-icon (iOS home-screen).
+- ISPORUCENO: public/favicon.ico (multi-size 16/32/48, 2.3kB) + public/apple-touch-icon.png
+  (180x180, puni kvadrat jer iOS sam zaobljuje), oba deterministicki Pillowom iz ISTOG brand marka
+  kao favicon.svg (indigo #33407e zaobljeni kvadrat rx 7/32 + bijeli geometrijski L polygon iz SVG
+  path-a; bez novih deps). Svih 8 stranica (index + 7 tool) dobilo <link rel=icon svg> + <link rel=icon
+  favicon.ico sizes=32x32> + <link rel=apple-touch-icon>; index imao svg pa +ico/apple, tool stranice
+  dobile puni trio prije color-scheme. Nativni EOL po fajlu (index+landing CRLF, 6 tool LF; bytes.replace
+  assert count==1). CSP img-src netaknut (favikoni nisu u img-src opsegu; browser ih dohvaca izravno).
+- Guard test tests/favicon.test.ts (10): svaka od 8 stranica ima svg+ico+apple link; favicon.ico ICO
+  magicni bajtovi (00 00 01 00) + >200B; apple-touch-icon PNG magicni bajtovi + >200B.
+- Acceptance ispunjen: rel=icon u svim head-ovima + .ico fallback (nema vise /favicon.ico 404). Velicina: S
 
 **BL-P3-11, Sitemap: index, lastmod, ujednacen kanonski oblik** (seo-08)
 - public/sitemap.xml; generatori; sitemap index + lastmod + ujednacen oblik direktorija.
