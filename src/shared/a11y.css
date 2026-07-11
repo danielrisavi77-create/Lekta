@@ -1,0 +1,13 @@
+/* Dijeljeni a11y sloj: uvozi ga ui-boot.ts pa vrijedi na SVIM stranicama bez diranja HTML-a.
+   Samo robustna, aditivna pravila koja ne ovise o redoslijedu inline stranicnih stilova. */
+
+/* BL-P2-02: vidljiv fokus u Windows High Contrast (forced-colors). Vise tool stranica ima
+   :focus-visible{outline:none;box-shadow:...} pa u WHCM (gdje se box-shadow ignorira) fokus
+   nestane. Ovdje ga vracamo sistemskom bojom. !important je namjeran i standardan za
+   forced-colors a11y: nadjacava inline outline:none samo u tom nacinu, ne dira normalan prikaz. */
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 2px solid CanvasText !important;
+    outline-offset: 2px;
+  }
+}

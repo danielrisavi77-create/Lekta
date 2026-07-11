@@ -8,6 +8,7 @@ import '@fontsource-variable/inter'; // self-hostan body sans (latin + latin-ext
 import 'open-props/easings'; // samo easing krivulje (bez boja/sjena, da topla paleta ostane netaknuta)
 import './motion.css'; // dijeljeni sloj gibanja: tokeni, tekstura papira, View Transitions, tipografija
 import './skip-link.css'; // pristupacni "Preskoci na sadrzaj" (BL-P1-01)
+import './a11y.css'; // dijeljeni a11y sloj: forced-colors fokus fallback (BL-P2-02)
 import { setupSkipLink } from './skip-link';
 import { createIcons, SunMoon, Menu, Lock, Upload, CheckCircle, AlertTriangle, AlertCircle, Info, SlidersHorizontal, ClipboardCheck, X, ChevronDown, Wrench, BadgeCheck } from 'lucide';
 
@@ -144,10 +145,14 @@ function setupNavTools() {
 function setupThemeToggle() {
   const btn = document.getElementById('themeBtn');
   if (!btn) return;
+  // BL-P3-08: aria-pressed prati aktivnu (tamnu) temu, pa citac zaslona zna stanje preklopnika.
+  const reflect = () => btn.setAttribute('aria-pressed', document.documentElement.dataset.theme === 'dark' ? 'true' : 'false');
+  reflect();
   btn.addEventListener('click', () => {
     const dark = document.documentElement.dataset.theme === 'dark';
     document.documentElement.dataset.theme = dark ? 'light' : 'dark';
     try { localStorage.setItem('lekta.theme', dark ? 'light' : 'dark'); } catch { /* storage odbijen */ }
+    reflect();
   });
 }
 
