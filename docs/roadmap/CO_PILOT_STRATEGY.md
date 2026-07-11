@@ -129,9 +129,28 @@ Time se cuva isto obecanje kao Faza 1 i 4 (dokument ne napusta preglednik), a re
 - Sljedeci korak (opcionalno): LLM-potpomognut registar iza cloud privole (Faza 4), i vezanje
   prvog lica uz profilnu zastavicu kad je uputa poznata.
 
-### Faza 4: cloud integritetski modul (odluka A, najveći lift)
-- Vidi [PHASE4_CLOUD_INTEGRITY.md](PHASE4_CLOUD_INTEGRITY.md). Supabase Edge + pgvector,
-  cross-lingual embeddings, plagijat, AI-detekcija. Opt-in, uz privolu, iza plaćenog gatea.
+### Faza 4: cloud integritetski modul (odluka A, najveći lift) — U TIJEKU (inertna jezgra)
+Dizajn: [PHASE4_CLOUD_INTEGRITY.md](PHASE4_CLOUD_INTEGRITY.md). Fiksirane odluke foundera:
+retencija = kratko zadrzavanje (7 dana) sirovog teksta pa auto-purge; free hook = DA (ograniceni
+cross-lingual teaser uz privolu, pun izvjestaj iza Passa).
+
+Izgradjeno (provider-agnosticno, testirano, INERTNO, kao waitlist/rokovi prije wiringa):
+- [src/integrity/integrity-consent.ts](../../src/integrity/integrity-consent.ts): `IntegrityConsent`
+  + tekst privole (salje se cijeli tekst, cuva 7d pa se brise, NIKAD za treniranje). Jedini korak
+  koji salje tekst; bez privole nema slanja.
+- [src/integrity/integrity-client.ts](../../src/integrity/integrity-client.ts): inertan klijent
+  (teaser/full mode), `buildIntegrityRequest` ukljucuje tekst SAMO uz privolu, mapiranje 200/402/401/429.
+- [supabase/migrations/0018_integrity.sql](../../supabase/migrations/0018_integrity.sql): pgvector
+  ekstenzija + `integrity_checks` (privola, sazetak, sent_text) + RLS (select-own, pisanje samo
+  service-role) + 7d purge (purge_integrity_text, pg_cron). Provider-agnosticno; korpus tablica
+  dolazi s odabirom embedding modela.
+- Testovi: [tests/integrity.test.ts](../../tests/integrity.test.ts).
+
+Deferirano (owner-gated, kao i live wiring waitlist/rokova/naplate):
+- Provider odluke: embedding model (hosted vs self-host v2), plagijat korpus/API, AI-detektor.
+- `integrity-check` Edge Function (auth + entitlement gate + poziv providera + retention stamping).
+- Supabase tajne/konfiguracija endpointa + trosak; UI wiring (privola-ekran + gumb) u app.ts kad
+  endpoint postoji (svjesno nedirano sada zbog git-race na app.ts).
 
 ### Faza 5: regionalno (Srbija, BiH) + i18n
 - i18n sloj za UI copy; profili su data-driven pa su nove institucije unos podataka, ne kod.
