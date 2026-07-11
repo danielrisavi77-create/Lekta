@@ -2,6 +2,16 @@
   "_note": "Realni cross-style citati za KNJIGE/MONOGRAFIJE/POGLAVLJA/ZBORNIKE, harvestirani doi.org content negotiation (CSL). Stil->parser: apa->apa, ieee->ieee, elsevier-vancouver->vancouver. Isti DOI u vise stilova = ground truth bez ljudskih oznaka. Pipeline: scripts/harvest-doi-citations.mjs; audit: scripts/citation-parser-audit.mjs.",
   "articles": [
     {
+      "id": "doi-10-1007-978-1-4684-1449-3-2",
+      "type": "book-chapter",
+      "doi": "10.1007/978-1-4684-1449-3_2",
+      "styles": {
+        "apa": "Bonny, J. B. (1980). Management Functions, Problems, and Types of Organization. Handbook of Construction Management and Organization, 13–23. https://doi.org/10.1007/978-1-4684-1449-3_2",
+        "ieee": "[1]J. B. Bonny, \"Management Functions, Problems, and Types of Organization,\" Handbook of Construction Management and Organization, pp. 13–23, 1980, doi: 10.1007/978-1-4684-1449-3_2.",
+        "vancouver": "[1]Bonny JB. Management Functions, Problems, and Types of Organization. Handbook of Construction Management and Organization 1980:13–23. https://doi.org/10.1007/978-1-4684-1449-3_2."
+      }
+    },
+    {
       "id": "doi-10-1007-978-1-84800-304-0-11",
       "type": "book-chapter",
       "doi": "10.1007/978-1-84800-304-0_11",
@@ -19,6 +29,16 @@
         "apa": "Saha, S., & Bhattacharyya, S. S. (2009). Design Methodology for Embedded Computer Vision Systems. Embedded Computer Vision, 27–47. https://doi.org/10.1007/978-1-84800-304-0_2",
         "ieee": "[1]S. Saha and S. S. Bhattacharyya, \"Design Methodology for Embedded Computer Vision Systems,\" Embedded Computer Vision, pp. 27–47, 2009, doi: 10.1007/978-1-84800-304-0_2.",
         "vancouver": "[1]Saha S, Bhattacharyya SS. Design Methodology for Embedded Computer Vision Systems. Embedded Computer Vision 2009:27–47. https://doi.org/10.1007/978-1-84800-304-0_2."
+      }
+    },
+    {
+      "id": "doi-10-1007-978-3-031-64699-7-22",
+      "type": "book-chapter",
+      "doi": "10.1007/978-3-031-64699-7_22",
+      "styles": {
+        "apa": "Fitzgerald, D. (2024). The Cognitive Neuroscience of Nature?: Sociological and Historical Perspective on Environmental Neuroscience. Environmental Neuroscience, 565–581. https://doi.org/10.1007/978-3-031-64699-7_22",
+        "ieee": "[1]D. Fitzgerald, \"The Cognitive Neuroscience of Nature?: Sociological and Historical Perspective on Environmental Neuroscience,\" Environmental Neuroscience, pp. 565–581, 2024, doi: 10.1007/978-3-031-64699-7_22.",
+        "vancouver": "[1]Fitzgerald D. The Cognitive Neuroscience of Nature?: Sociological and Historical Perspective on Environmental Neuroscience. Environmental Neuroscience 2024:565–81. https://doi.org/10.1007/978-3-031-64699-7_22."
       }
     },
     {
@@ -42,6 +62,86 @@
       }
     },
     {
+      "id": "doi-10-1007-978-3-319-76333-0-16",
+      "type": "book-chapter",
+      "doi": "10.1007/978-3-319-76333-0_16",
+      "styles": {
+        "apa": "Chatillon, A., Charles, M., & Bradley, K. (2018). Gender Ideologies. Handbook of the Sociology of Gender, 217–226. https://doi.org/10.1007/978-3-319-76333-0_16",
+        "ieee": "[1]A. Chatillon, M. Charles, and K. Bradley, \"Gender Ideologies,\" Handbook of the Sociology of Gender, pp. 217–226, 2018, doi: 10.1007/978-3-319-76333-0_16.",
+        "vancouver": "[1]Chatillon A, Charles M, Bradley K. Gender Ideologies. Handbook of the Sociology of Gender 2018:217–26. https://doi.org/10.1007/978-3-319-76333-0_16."
+      }
+    },
+    {
+      "id": "doi-10-1007-978-3-319-76333-0-18",
+      "type": "book-chapter",
+      "doi": "10.1007/978-3-319-76333-0_18",
+      "styles": {
+        "apa": "McDaniel, A., & Phillips, E. (2018). Gender and Education. Handbook of the Sociology of Gender, 245–256. https://doi.org/10.1007/978-3-319-76333-0_18",
+        "ieee": "[1]A. McDaniel and E. Phillips, \"Gender and Education,\" Handbook of the Sociology of Gender, pp. 245–256, 2018, doi: 10.1007/978-3-319-76333-0_18.",
+        "vancouver": "[1]McDaniel A, Phillips E. Gender and Education. Handbook of the Sociology of Gender 2018:245–56. https://doi.org/10.1007/978-3-319-76333-0_18."
+      }
+    },
+    {
+      "id": "doi-10-1007-978-3-319-76333-0-33",
+      "type": "book-chapter",
+      "doi": "10.1007/978-3-319-76333-0_33",
+      "styles": {
+        "apa": "Cooky, C. (2018). Sociology of Gender and Sport. Handbook of the Sociology of Gender, 459–467. https://doi.org/10.1007/978-3-319-76333-0_33",
+        "ieee": "[1]C. Cooky, \"Sociology of Gender and Sport,\" Handbook of the Sociology of Gender, pp. 459–467, 2018, doi: 10.1007/978-3-319-76333-0_33.",
+        "vancouver": "[1]Cooky C. Sociology of Gender and Sport. Handbook of the Sociology of Gender 2018:459–67. https://doi.org/10.1007/978-3-319-76333-0_33."
+      }
+    },
+    {
+      "id": "doi-10-1007-978-3-540-68498-5-1",
+      "type": "book-chapter",
+      "doi": "10.1007/978-3-540-68498-5_1",
+      "styles": {
+        "apa": "Paegelow, M., & Camacho, M. O. (2008). Advances in geomatic simulations for environmental dynamics. Modelling Environmental Dynamics, 3–54. https://doi.org/10.1007/978-3-540-68498-5_1",
+        "ieee": "[1]M. Paegelow and M. O. Camacho, \"Advances in geomatic simulations for environmental dynamics,\" Modelling Environmental Dynamics, pp. 3–54, 2008, doi: 10.1007/978-3-540-68498-5_1.",
+        "vancouver": "[1]Paegelow M, Camacho MO. Advances in geomatic simulations for environmental dynamics. Modelling Environmental Dynamics 2008:3–54. https://doi.org/10.1007/978-3-540-68498-5_1."
+      }
+    },
+    {
+      "id": "doi-10-1007-978-3-642-29590-4-4",
+      "type": "book-chapter",
+      "doi": "10.1007/978-3-642-29590-4_4",
+      "styles": {
+        "apa": "Yang, G., & Li, M. (2012). Western Political Science Theories and the Development of Political Theories in China. Political Science and Chinese Political Studies, 61–84. https://doi.org/10.1007/978-3-642-29590-4_4",
+        "ieee": "[1]G. Yang and M. Li, \"Western Political Science Theories and the Development of Political Theories in China,\" Political Science and Chinese Political Studies, pp. 61–84, Jun. 2012, doi: 10.1007/978-3-642-29590-4_4.",
+        "vancouver": "[1]Yang G, Li M. Western Political Science Theories and the Development of Political Theories in China. Political Science and Chinese Political Studies 2012:61–84. https://doi.org/10.1007/978-3-642-29590-4_4."
+      }
+    },
+    {
+      "id": "doi-10-1007-978-3-642-29590-4-5",
+      "type": "book-chapter",
+      "doi": "10.1007/978-3-642-29590-4_5",
+      "styles": {
+        "apa": "Jing, Y., & Wang, G. (2012). Western Political Research Approaches and the Development of Political Science Methodology in China. Political Science and Chinese Political Studies, 85–102. https://doi.org/10.1007/978-3-642-29590-4_5",
+        "ieee": "[1]Y. Jing and G. Wang, \"Western Political Research Approaches and the Development of Political Science Methodology in China,\" Political Science and Chinese Political Studies, pp. 85–102, Jun. 2012, doi: 10.1007/978-3-642-29590-4_5.",
+        "vancouver": "[1]Jing Y, Wang G. Western Political Research Approaches and the Development of Political Science Methodology in China. Political Science and Chinese Political Studies 2012:85–102. https://doi.org/10.1007/978-3-642-29590-4_5."
+      }
+    },
+    {
+      "id": "doi-10-1007-978-94-017-8845-8-12",
+      "type": "book-chapter",
+      "doi": "10.1007/978-94-017-8845-8_12",
+      "styles": {
+        "apa": "Rendtorff, J. D. (2014). Conclusion and Perspectives: Implications of French Philosophy for Business Ethics and Philosophy of Management. French Philosophy and Social Theory, 299–303. https://doi.org/10.1007/978-94-017-8845-8_12",
+        "ieee": "[1]J. D. Rendtorff, \"Conclusion and Perspectives: Implications of French Philosophy for Business Ethics and Philosophy of Management,\" French Philosophy and Social Theory, pp. 299–303, 2014, doi: 10.1007/978-94-017-8845-8_12.",
+        "vancouver": "[1]Rendtorff JD. Conclusion and Perspectives: Implications of French Philosophy for Business Ethics and Philosophy of Management. French Philosophy and Social Theory 2014:299–303. https://doi.org/10.1007/978-94-017-8845-8_12."
+      }
+    },
+    {
+      "id": "doi-10-1007-978-981-97-3512-9-12",
+      "type": "book-chapter",
+      "doi": "10.1007/978-981-97-3512-9_12",
+      "styles": {
+        "apa": "Hunt, K., & Kaushik, A. K. (2024). Regulating Innovation in Microfinance. Economics and Finance Readings, 217–235. https://doi.org/10.1007/978-981-97-3512-9_12",
+        "ieee": "[1]K. Hunt and A. K. Kaushik, \"Regulating Innovation in Microfinance,\" Economics and Finance Readings, pp. 217–235, 2024, doi: 10.1007/978-981-97-3512-9_12.",
+        "vancouver": "[1]Hunt K, Kaushik AK. Regulating Innovation in Microfinance. Economics and Finance Readings 2024:217–35. https://doi.org/10.1007/978-981-97-3512-9_12."
+      }
+    },
+    {
       "id": "doi-10-1016-b978-0-12-803678-5-00248-4",
       "type": "book-chapter",
       "doi": "10.1016/b978-0-12-803678-5.00248-4",
@@ -59,6 +159,16 @@
         "apa": "Dimiccoli, M. (2018). Computer Vision for Egocentric (First-Person) Vision. Computer Vision for Assistive Healthcare, 183–210. https://doi.org/10.1016/b978-0-12-813445-0.00007-1",
         "ieee": "[1]M. Dimiccoli, \"Computer Vision for Egocentric (First-Person) Vision,\" Computer Vision for Assistive Healthcare, pp. 183–210, 2018, doi: 10.1016/b978-0-12-813445-0.00007-1.",
         "vancouver": "[1]Dimiccoli M. Computer Vision for Egocentric (First-Person) Vision. Computer Vision for Assistive Healthcare 2018:183–210. https://doi.org/10.1016/b978-0-12-813445-0.00007-1."
+      }
+    },
+    {
+      "id": "doi-10-1016-b978-0-12-821953-9-00017-9",
+      "type": "book-chapter",
+      "doi": "10.1016/b978-0-12-821953-9.00017-9",
+      "styles": {
+        "apa": "Vallero, D. A. (2021). Environmental systems science models. Environmental Systems Science, 463–507. https://doi.org/10.1016/b978-0-12-821953-9.00017-9",
+        "ieee": "[1]D. A. Vallero, \"Environmental systems science models,\" Environmental Systems Science, pp. 463–507, 2021, doi: 10.1016/b978-0-12-821953-9.00017-9.",
+        "vancouver": "[1]Vallero DA. Environmental systems science models. Environmental Systems Science 2021:463–507. https://doi.org/10.1016/b978-0-12-821953-9.00017-9."
       }
     },
     {
@@ -82,6 +192,66 @@
       }
     },
     {
+      "id": "doi-10-1016-b978-008045046-9-00992-x",
+      "type": "book-chapter",
+      "doi": "10.1016/b978-008045046-9.00992-x",
+      "styles": {
+        "apa": "Gross, C. G. (2009). History of Neuroscience: Early Neuroscience. Encyclopedia of Neuroscience, 1167–1171. https://doi.org/10.1016/b978-008045046-9.00992-x",
+        "ieee": "[1]C. G. Gross, \"History of Neuroscience: Early Neuroscience,\" Encyclopedia of Neuroscience, pp. 1167–1171, 2009, doi: 10.1016/b978-008045046-9.00992-x.",
+        "vancouver": "[1]Gross CG. History of Neuroscience: Early Neuroscience. Encyclopedia of Neuroscience 2009:1167–71. https://doi.org/10.1016/b978-008045046-9.00992-x."
+      }
+    },
+    {
+      "id": "doi-10-1049-ic-20040411",
+      "type": "proceedings-article",
+      "doi": "10.1049/ic:20040411",
+      "styles": {
+        "apa": "Baxter, R. (2004). Software engineering is software engineering. \"Software Engineering for High Performance Computing System (HPCS) Applications\" W3S Workshop - 26th International Conference on Software Engineering, 2004, 14–18. https://doi.org/10.1049/ic:20040411",
+        "ieee": "[1]R. Baxter, \"Software engineering is software engineering,\" \"Software Engineering for High Performance Computing System (HPCS) Applications\" W3S Workshop - 26th International Conference on Software Engineering, vol. 2004, pp. 14–18, 2004, doi: 10.1049/ic:20040411.",
+        "vancouver": "[1]Baxter R. Software engineering is software engineering. \"Software Engineering for High Performance Computing System (HPCS) Applications\" W3S Workshop - 26th International Conference on Software Engineering 2004;2004:14–8. https://doi.org/10.1049/ic:20040411."
+      }
+    },
+    {
+      "id": "doi-10-1057-9780230361133-2",
+      "type": "book-chapter",
+      "doi": "10.1057/9780230361133_2",
+      "styles": {
+        "apa": "Langton, J., Trullols, C., & Turkistani, A. Q. (2011). Introduction to Islamic Economics and Finance. Islamic Economics and Finance, 33–68. https://doi.org/10.1057/9780230361133_2",
+        "ieee": "[1]J. Langton, C. Trullols, and A. Q. Turkistani, \"Introduction to Islamic Economics and Finance,\" Islamic Economics and Finance, pp. 33–68, 2011, doi: 10.1057/9780230361133_2.",
+        "vancouver": "[1]Langton J, Trullols C, Turkistani AQ. Introduction to Islamic Economics and Finance. Islamic Economics and Finance 2011:33–68. https://doi.org/10.1057/9780230361133_2."
+      }
+    },
+    {
+      "id": "doi-10-1057-9780230501577-5",
+      "type": "book-chapter",
+      "doi": "10.1057/9780230501577_5",
+      "styles": {
+        "apa": "Bull, M. (2005). Is Medieval History Relevant? Thinking Medieval, 99–136. https://doi.org/10.1057/9780230501577_5",
+        "ieee": "[1]M. Bull, \"Is Medieval History Relevant?,\" Thinking Medieval, pp. 99–136, 2005, doi: 10.1057/9780230501577_5.",
+        "vancouver": "[1]Bull M. Is Medieval History Relevant? Thinking Medieval 2005:99–136. https://doi.org/10.1057/9780230501577_5."
+      }
+    },
+    {
+      "id": "doi-10-1057-9781137308153-2",
+      "type": "book-chapter",
+      "doi": "10.1057/9781137308153_2",
+      "styles": {
+        "apa": "Hillaby, J., & Hillaby, C. (2013). Dictionary of Medieval Anglo-Jewish History. The Palgrave Dictionary of Medieval Anglo-Jewish History, 17–436. https://doi.org/10.1057/9781137308153_2",
+        "ieee": "[1]J. Hillaby and C. Hillaby, \"Dictionary of Medieval Anglo-Jewish History,\" The Palgrave Dictionary of Medieval Anglo-Jewish History, pp. 17–436, 2013, doi: 10.1057/9781137308153_2.",
+        "vancouver": "[1]Hillaby J, Hillaby C. Dictionary of Medieval Anglo-Jewish History. The Palgrave Dictionary of Medieval Anglo-Jewish History 2013:17–436. https://doi.org/10.1057/9781137308153_2."
+      }
+    },
+    {
+      "id": "doi-10-1061-40759-152-17",
+      "type": "proceedings-article",
+      "doi": "10.1061/40759(152)17",
+      "styles": {
+        "apa": "Arwade, S. R., & Schafer, B. W. (2004). Perspectives on the Evolution of Structures: Teaching Civil Engineering History at Johns Hopkins. Baltimore Civil Engineering History, 332–342. https://doi.org/10.1061/40759(152)17",
+        "ieee": "[1]S. R. Arwade and B. W. Schafer, \"Perspectives on the Evolution of Structures: Teaching Civil Engineering History at Johns Hopkins,\" Baltimore Civil Engineering History, pp. 332–342, Oct. 2004, doi: 10.1061/40759(152)17.",
+        "vancouver": "[1]Arwade SR, Schafer BW. Perspectives on the Evolution of Structures: Teaching Civil Engineering History at Johns Hopkins. Baltimore Civil Engineering History 2004:332–42. https://doi.org/10.1061/40759(152)17."
+      }
+    },
+    {
       "id": "doi-10-1093-acprof-oso-9780190491543-001-0001",
       "type": "monograph",
       "doi": "10.1093/acprof:oso/9780190491543.001.0001",
@@ -89,6 +259,26 @@
         "apa": "Carbonnier, G. (2016). Humanitarian Economics. https://doi.org/10.1093/acprof:oso/9780190491543.001.0001",
         "ieee": "[1]G. Carbonnier, \"Humanitarian Economics,\" Apr. 2016, doi: 10.1093/acprof:oso/9780190491543.001.0001.",
         "vancouver": "[1]Carbonnier G. Humanitarian Economics 2016. https://doi.org/10.1093/acprof:oso/9780190491543.001.0001."
+      }
+    },
+    {
+      "id": "doi-10-1093-acprof-oso-9780195167498-001-0001",
+      "type": "monograph",
+      "doi": "10.1093/acprof:oso/9780195167498.001.0001",
+      "styles": {
+        "apa": "Clarke, E., & Cook, N. (2004). Empirical Musicology. https://doi.org/10.1093/acprof:oso/9780195167498.001.0001",
+        "ieee": "[1]E. Clarke and N. Cook, \"Empirical Musicology,\" Mar. 2004, doi: 10.1093/acprof:oso/9780195167498.001.0001.",
+        "vancouver": "[1]Clarke E, Cook N. Empirical Musicology 2004. https://doi.org/10.1093/acprof:oso/9780195167498.001.0001."
+      }
+    },
+    {
+      "id": "doi-10-1093-acprof-oso-9780198749417-001-0001",
+      "type": "monograph",
+      "doi": "10.1093/acprof:oso/9780198749417.001.0001",
+      "styles": {
+        "apa": "Cave, T. (2016). Thinking with Literature. https://doi.org/10.1093/acprof:oso/9780198749417.001.0001",
+        "ieee": "[1]T. Cave, \"Thinking with Literature,\" Mar. 2016, doi: 10.1093/acprof:oso/9780198749417.001.0001.",
+        "vancouver": "[1]Cave T. Thinking with Literature 2016. https://doi.org/10.1093/acprof:oso/9780198749417.001.0001."
       }
     },
     {
@@ -142,6 +332,46 @@
       }
     },
     {
+      "id": "doi-10-1093-oso-9780198758679-003-0005",
+      "type": "book-chapter",
+      "doi": "10.1093/oso/9780198758679.003.0005",
+      "styles": {
+        "apa": "Palmer, J. (2020). Ethics and Natural Philosophy in Empedocles. Early Greek Ethics, 54–73. https://doi.org/10.1093/oso/9780198758679.003.0005",
+        "ieee": "[1]J. Palmer, \"Ethics and Natural Philosophy in Empedocles,\" Early Greek Ethics, pp. 54–73, Sep. 2020, doi: 10.1093/oso/9780198758679.003.0005.",
+        "vancouver": "[1]Palmer J. Ethics and Natural Philosophy in Empedocles. Early Greek Ethics 2020:54–73. https://doi.org/10.1093/oso/9780198758679.003.0005."
+      }
+    },
+    {
+      "id": "doi-10-1093-oso-9780198789932-003-0005",
+      "type": "book-chapter",
+      "doi": "10.1093/oso/9780198789932.003.0005",
+      "styles": {
+        "apa": "Braeutigam, S., & Kenning, P. (2022). Neuroscience Technologies. An Integrative Guide to Consumer Neuroscience, 80–106. https://doi.org/10.1093/oso/9780198789932.003.0005",
+        "ieee": "[1]S. Braeutigam and P. Kenning, \"Neuroscience Technologies,\" An Integrative Guide to Consumer Neuroscience, pp. 80–106, Mar. 2022, doi: 10.1093/oso/9780198789932.003.0005.",
+        "vancouver": "[1]Braeutigam S, Kenning P. Neuroscience Technologies. An Integrative Guide to Consumer Neuroscience 2022:80–106. https://doi.org/10.1093/oso/9780198789932.003.0005."
+      }
+    },
+    {
+      "id": "doi-10-1093-oso-9780198789932-003-0007",
+      "type": "book-chapter",
+      "doi": "10.1093/oso/9780198789932.003.0007",
+      "styles": {
+        "apa": "Braeutigam, S., & Kenning, P. (2022). Individual Consumer Neuroscience. An Integrative Guide to Consumer Neuroscience, 136–145. https://doi.org/10.1093/oso/9780198789932.003.0007",
+        "ieee": "[1]S. Braeutigam and P. Kenning, \"Individual Consumer Neuroscience,\" An Integrative Guide to Consumer Neuroscience, pp. 136–145, Mar. 2022, doi: 10.1093/oso/9780198789932.003.0007.",
+        "vancouver": "[1]Braeutigam S, Kenning P. Individual Consumer Neuroscience. An Integrative Guide to Consumer Neuroscience 2022:136–45. https://doi.org/10.1093/oso/9780198789932.003.0007."
+      }
+    },
+    {
+      "id": "doi-10-1093-oso-9780198789932-003-0008",
+      "type": "book-chapter",
+      "doi": "10.1093/oso/9780198789932.003.0008",
+      "styles": {
+        "apa": "Braeutigam, S., & Kenning, P. (2022). Social Consumer Neuroscience. An Integrative Guide to Consumer Neuroscience, 146–154. https://doi.org/10.1093/oso/9780198789932.003.0008",
+        "ieee": "[1]S. Braeutigam and P. Kenning, \"Social Consumer Neuroscience,\" An Integrative Guide to Consumer Neuroscience, pp. 146–154, Mar. 2022, doi: 10.1093/oso/9780198789932.003.0008.",
+        "vancouver": "[1]Braeutigam S, Kenning P. Social Consumer Neuroscience. An Integrative Guide to Consumer Neuroscience 2022:146–54. https://doi.org/10.1093/oso/9780198789932.003.0008."
+      }
+    },
+    {
       "id": "doi-10-1093-oso-9780198793205-003-0011",
       "type": "book-chapter",
       "doi": "10.1093/oso/9780198793205.003.0011",
@@ -149,6 +379,56 @@
         "apa": "Deumert, A. (2020). The missionary in the theatre of linguistics. Colonial and Decolonial Linguistics, 178–198. https://doi.org/10.1093/oso/9780198793205.003.0011",
         "ieee": "[1]A. Deumert, \"The missionary in the theatre of linguistics,\" Colonial and Decolonial Linguistics, pp. 178–198, Nov. 2020, doi: 10.1093/oso/9780198793205.003.0011.",
         "vancouver": "[1]Deumert A. The missionary in the theatre of linguistics. Colonial and Decolonial Linguistics 2020:178–98. https://doi.org/10.1093/oso/9780198793205.003.0011."
+      }
+    },
+    {
+      "id": "doi-10-1093-oxfordhb-9780199696253-013-28",
+      "type": "book",
+      "doi": "10.1093/oxfordhb/9780199696253.013.28",
+      "styles": {
+        "apa": "Seth, S. (2017). Quantum Physics. In J. Z. Buchwald & R. Fox (Editors), Oxford Handbooks Online. Oxford University Press. https://doi.org/10.1093/oxfordhb/9780199696253.013.28",
+        "ieee": "[1]S. Seth, Quantum Physics. Oxford University Press, 2017. doi: 10.1093/oxfordhb/9780199696253.013.28.",
+        "vancouver": "[1]Seth S. Quantum Physics. Oxford University Press; 2017. https://doi.org/10.1093/oxfordhb/9780199696253.013.28."
+      }
+    },
+    {
+      "id": "doi-10-1109-aiesre67541-2025-11470042",
+      "type": "proceedings-article",
+      "doi": "10.1109/aiesre67541.2025.11470042",
+      "styles": {
+        "apa": "Hassaini, F., Aissou, S., Berboucha, A., Amirouche, E., Hamoudi, Y., Deboucha, H., & Belkaid, A. (2025). Recent Advancements in Energy Management for Hybrid Renewable Energy Systems. 2025 International Conference on Artificial Intelligence, Embedded Systems, and Renewable Energy (AIESRE), 1–6. https://doi.org/10.1109/aiesre67541.2025.11470042",
+        "ieee": "[1]F. Hassaini et al., \"Recent Advancements in Energy Management for Hybrid Renewable Energy Systems,\" 2025 International Conference on Artificial Intelligence, Embedded Systems, and Renewable Energy (AIESRE), pp. 1–6, Dec. 2025, doi: 10.1109/aiesre67541.2025.11470042.",
+        "vancouver": "[1]Hassaini F, Aissou S, Berboucha A, Amirouche E, Hamoudi Y, Deboucha H, et al. Recent Advancements in Energy Management for Hybrid Renewable Energy Systems. 2025 International Conference on Artificial Intelligence, Embedded Systems, and Renewable Energy (AIESRE) 2025:1–6. https://doi.org/10.1109/aiesre67541.2025.11470042."
+      }
+    },
+    {
+      "id": "doi-10-1109-aswec-2008-4483185",
+      "type": "proceedings-article",
+      "doi": "10.1109/aswec.2008.4483185",
+      "styles": {
+        "apa": "Dillon, T. S., Chang, E., & Wongthongtham, P. (2008). Ontology-Based Software Engineering- Software Engineering 2.0. 19th Australian Conference on Software Engineering (Aswec 2008), 13–23. https://doi.org/10.1109/aswec.2008.4483185",
+        "ieee": "[1]T. S. Dillon, E. Chang, and P. Wongthongtham, \"Ontology-Based Software Engineering- Software Engineering 2.0,\" 19th Australian Conference on Software Engineering (aswec 2008), pp. 13–23, Mar. 2008, doi: 10.1109/aswec.2008.4483185.",
+        "vancouver": "[1]Dillon TS, Chang E, Wongthongtham P. Ontology-Based Software Engineering- Software Engineering 2.0. 19th Australian Conference on Software Engineering (Aswec 2008) 2008:13–23. https://doi.org/10.1109/aswec.2008.4483185."
+      }
+    },
+    {
+      "id": "doi-10-1109-cidm-2007-368905",
+      "type": "proceedings-article",
+      "doi": "10.1109/cidm.2007.368905",
+      "styles": {
+        "apa": "Horeis, T., & Sick, B. (2007). Collaborative Knowledge Discovery &amp; Data Mining: From Knowledge to Experience. 2007 IEEE Symposium on Computational Intelligence and Data Mining, 421–428. https://doi.org/10.1109/cidm.2007.368905",
+        "ieee": "[1]T. Horeis and B. Sick, \"Collaborative Knowledge Discovery &amp; Data Mining: From Knowledge to Experience,\" 2007 IEEE Symposium on Computational Intelligence and Data Mining, pp. 421–428, 2007, doi: 10.1109/cidm.2007.368905.",
+        "vancouver": "[1]Horeis T, Sick B. Collaborative Knowledge Discovery &amp; Data Mining: From Knowledge to Experience. 2007 IEEE Symposium on Computational Intelligence and Data Mining 2007:421–8. https://doi.org/10.1109/cidm.2007.368905."
+      }
+    },
+    {
+      "id": "doi-10-1109-cpe-2007-4296507",
+      "type": "proceedings-article",
+      "doi": "10.1109/cpe.2007.4296507",
+      "styles": {
+        "apa": "Dmowski, A., & Dzik, T. (2007). Electronics And Power Electronics Devices In Dissipated Power Systems With Fuel Cells. 2007 Compatibility in Power Electronics, 1–9. https://doi.org/10.1109/cpe.2007.4296507",
+        "ieee": "[1]A. Dmowski and T. Dzik, \"Electronics And Power Electronics Devices In Dissipated Power Systems With Fuel Cells,\" 2007 Compatibility in Power Electronics, pp. 1–9, May 2007, doi: 10.1109/cpe.2007.4296507.",
+        "vancouver": "[1]Dmowski A, Dzik T. Electronics And Power Electronics Devices In Dissipated Power Systems With Fuel Cells. 2007 Compatibility in Power Electronics 2007:1–9. https://doi.org/10.1109/cpe.2007.4296507."
       }
     },
     {
@@ -212,6 +492,36 @@
       }
     },
     {
+      "id": "doi-10-1109-ecbios-2019-8807809",
+      "type": "proceedings-article",
+      "doi": "10.1109/ecbios.2019.8807809",
+      "styles": {
+        "apa": "Meen, T.-H. (2019). Biomedical Engineering, Healthcare and Sustainability. 2019 IEEE Eurasia Conference on Biomedical Engineering, Healthcare and Sustainability (ECBIOS), 1–3. https://doi.org/10.1109/ecbios.2019.8807809",
+        "ieee": "[1]T.-H. Meen, \"Biomedical Engineering, Healthcare and Sustainability,\" 2019 IEEE Eurasia Conference on Biomedical Engineering, Healthcare and Sustainability (ECBIOS), pp. 1–3, May 2019, doi: 10.1109/ecbios.2019.8807809.",
+        "vancouver": "[1]Meen T-H. Biomedical Engineering, Healthcare and Sustainability. 2019 IEEE Eurasia Conference on Biomedical Engineering, Healthcare and Sustainability (ECBIOS) 2019:1–3. https://doi.org/10.1109/ecbios.2019.8807809."
+      }
+    },
+    {
+      "id": "doi-10-1109-ecnlpir57021-2022-00014",
+      "type": "proceedings-article",
+      "doi": "10.1109/ecnlpir57021.2022.00014",
+      "styles": {
+        "apa": "Qin, M. (2022). Machine Translation Technology Based on Natural Language Processing. 2022 European Conference on Natural Language Processing and Information Retrieval (ECNLPIR), 10–13. https://doi.org/10.1109/ecnlpir57021.2022.00014",
+        "ieee": "[1]M. Qin, \"Machine Translation Technology Based on Natural Language Processing,\" 2022 European Conference on Natural Language Processing and Information Retrieval (ECNLPIR), pp. 10–13, Jul. 2022, doi: 10.1109/ecnlpir57021.2022.00014.",
+        "vancouver": "[1]Qin M. Machine Translation Technology Based on Natural Language Processing. 2022 European Conference on Natural Language Processing and Information Retrieval (ECNLPIR) 2022:10–3. https://doi.org/10.1109/ecnlpir57021.2022.00014."
+      }
+    },
+    {
+      "id": "doi-10-1109-electr-1994-472659",
+      "type": "proceedings-article",
+      "doi": "10.1109/electr.1994.472659",
+      "styles": {
+        "apa": "Eden, H. S. (1994). Biomedical engineering at the biomedical engineering and instrumentation program, NIH. Proceedings of ELECTRO ’94, 643–648. https://doi.org/10.1109/electr.1994.472659",
+        "ieee": "[1]H. S. Eden, \"Biomedical engineering at the biomedical engineering and instrumentation program, NIH,\" Proceedings of ELECTRO ’94, pp. 643–648, 1994, doi: 10.1109/electr.1994.472659.",
+        "vancouver": "[1]Eden HS. Biomedical engineering at the biomedical engineering and instrumentation program, NIH. Proceedings of ELECTRO ’94 1994:643–8. https://doi.org/10.1109/electr.1994.472659."
+      }
+    },
+    {
       "id": "doi-10-1109-elmar-2015-7334537",
       "type": "proceedings-article",
       "doi": "10.1109/elmar.2015.7334537",
@@ -242,6 +552,106 @@
       }
     },
     {
+      "id": "doi-10-1109-icnlp60986-2024-10692776",
+      "type": "proceedings-article",
+      "doi": "10.1109/icnlp60986.2024.10692776",
+      "styles": {
+        "apa": "Das, S., & Das, D. (2024). Natural Language Processing (NLP) Techniques: Usability in Human-Computer Interactions. 2024 6th International Conference on Natural Language Processing (ICNLP), 783–787. https://doi.org/10.1109/icnlp60986.2024.10692776",
+        "ieee": "[1]S. Das and D. Das, \"Natural Language Processing (NLP) Techniques: Usability in Human-Computer Interactions,\" 2024 6th International Conference on Natural Language Processing (ICNLP), pp. 783–787, Mar. 2024, doi: 10.1109/icnlp60986.2024.10692776.",
+        "vancouver": "[1]Das S, Das D. Natural Language Processing (NLP) Techniques: Usability in Human-Computer Interactions. 2024 6th International Conference on Natural Language Processing (ICNLP) 2024:783–7. https://doi.org/10.1109/icnlp60986.2024.10692776."
+      }
+    },
+    {
+      "id": "doi-10-1109-icrera-2012-6477391",
+      "type": "proceedings-article",
+      "doi": "10.1109/icrera.2012.6477391",
+      "styles": {
+        "apa": "Kawakami, N., & Iijima, Y. (2012). Overview of battery energy storage systems for stabilization of renewable energy in Japan. 2012 International Conference on Renewable Energy Research and Applications (ICRERA), 1–5. https://doi.org/10.1109/icrera.2012.6477391",
+        "ieee": "[1]N. Kawakami and Y. Iijima, \"Overview of battery energy storage systems for stabilization of renewable energy in Japan,\" 2012 International Conference on Renewable Energy Research and Applications (ICRERA), pp. 1–5, Nov. 2012, doi: 10.1109/icrera.2012.6477391.",
+        "vancouver": "[1]Kawakami N, Iijima Y. Overview of battery energy storage systems for stabilization of renewable energy in Japan. 2012 International Conference on Renewable Energy Research and Applications (ICRERA) 2012:1–5. https://doi.org/10.1109/icrera.2012.6477391."
+      }
+    },
+    {
+      "id": "doi-10-1109-icrera-2018-8566827",
+      "type": "proceedings-article",
+      "doi": "10.1109/icrera.2018.8566827",
+      "styles": {
+        "apa": "Shahid, A. (2018). Smart Grid Integration of Renewable Energy Systems. 2018 7th International Conference on Renewable Energy Research and Applications (ICRERA), 944–948. https://doi.org/10.1109/icrera.2018.8566827",
+        "ieee": "[1]A. Shahid, \"Smart Grid Integration of Renewable Energy Systems,\" 2018 7th International Conference on Renewable Energy Research and Applications (ICRERA), pp. 944–948, Oct. 2018, doi: 10.1109/icrera.2018.8566827.",
+        "vancouver": "[1]Shahid A. Smart Grid Integration of Renewable Energy Systems. 2018 7th International Conference on Renewable Energy Research and Applications (ICRERA) 2018:944–8. https://doi.org/10.1109/icrera.2018.8566827."
+      }
+    },
+    {
+      "id": "doi-10-1109-icsresa49121-2019-9182478",
+      "type": "proceedings-article",
+      "doi": "10.1109/icsresa49121.2019.9182478",
+      "styles": {
+        "apa": "Hassani, H., Rekioua, D., Zaouche, F., & Bacha, S. (2019). Supervision of Hybrid Renewable Energy Systems. 2019 1st International Conference on Sustainable Renewable Energy Systems and Applications (ICSRESA), 1–5. https://doi.org/10.1109/icsresa49121.2019.9182478",
+        "ieee": "[1]H. Hassani, D. Rekioua, F. Zaouche, and S. Bacha, \"Supervision of Hybrid Renewable Energy Systems,\" 2019 1st International Conference on Sustainable Renewable Energy Systems and Applications (ICSRESA), pp. 1–5, Dec. 2019, doi: 10.1109/icsresa49121.2019.9182478.",
+        "vancouver": "[1]Hassani H, Rekioua D, Zaouche F, Bacha S. Supervision of Hybrid Renewable Energy Systems. 2019 1st International Conference on Sustainable Renewable Energy Systems and Applications (ICSRESA) 2019:1–5. https://doi.org/10.1109/icsresa49121.2019.9182478."
+      }
+    },
+    {
+      "id": "doi-10-1109-ieeeconf63577-2024-10881403",
+      "type": "proceedings-article",
+      "doi": "10.1109/ieeeconf63577.2024.10881403",
+      "styles": {
+        "apa": "Alfares, A. (2024). Parallel AC Link Power Converter for Hybrid Renewable Energy Systems Using Machine Learning Control. 2024 Conference on Renewable Energy Technologies and Modern Communications Systems: Future and Challenges, 1–7. https://doi.org/10.1109/ieeeconf63577.2024.10881403",
+        "ieee": "[1]A. Alfares, \"Parallel AC Link Power Converter for Hybrid Renewable Energy Systems Using Machine Learning Control,\" 2024 Conference on Renewable Energy Technologies and Modern Communications Systems: Future and Challenges, pp. 1–7, Dec. 2024, doi: 10.1109/ieeeconf63577.2024.10881403.",
+        "vancouver": "[1]Alfares A. Parallel AC Link Power Converter for Hybrid Renewable Energy Systems Using Machine Learning Control. 2024 Conference on Renewable Energy Technologies and Modern Communications Systems: Future and Challenges 2024:1–7. https://doi.org/10.1109/ieeeconf63577.2024.10881403."
+      }
+    },
+    {
+      "id": "doi-10-1109-ipec-2010-5543291",
+      "type": "proceedings-article",
+      "doi": "10.1109/ipec.2010.5543291",
+      "styles": {
+        "apa": "Majumdar, G. (2010). Power module technology for home power electronics. The 2010 International Power Electronics Conference - ECCE ASIA -, 773–777. https://doi.org/10.1109/ipec.2010.5543291",
+        "ieee": "[1]G. Majumdar, \"Power module technology for home power electronics,\" The 2010 International Power Electronics Conference - ECCE ASIA -, pp. 773–777, Jun. 2010, doi: 10.1109/ipec.2010.5543291.",
+        "vancouver": "[1]Majumdar G. Power module technology for home power electronics. The 2010 International Power Electronics Conference - ECCE ASIA - 2010:773–7. https://doi.org/10.1109/ipec.2010.5543291."
+      }
+    },
+    {
+      "id": "doi-10-1109-irec59750-2023-10389307",
+      "type": "proceedings-article",
+      "doi": "10.1109/irec59750.2023.10389307",
+      "styles": {
+        "apa": "Harb, A., Saliek, W. A., & Alhusseini, M. (2023). On the Impacts of Renewable Energy on Distribution Power Systems and the Effects of Energy Storage Systems. 2023 14th International Renewable Energy Congress (IREC), 1–6. https://doi.org/10.1109/irec59750.2023.10389307",
+        "ieee": "[1]A. Harb, W. A. Saliek, and M. Alhusseini, \"On the Impacts of Renewable Energy on Distribution Power Systems and the Effects of Energy Storage Systems,\" 2023 14th International Renewable Energy Congress (IREC), pp. 1–6, Dec. 2023, doi: 10.1109/irec59750.2023.10389307.",
+        "vancouver": "[1]Harb A, Saliek WA, Alhusseini M. On the Impacts of Renewable Energy on Distribution Power Systems and the Effects of Energy Storage Systems. 2023 14th International Renewable Energy Congress (IREC) 2023:1–6. https://doi.org/10.1109/irec59750.2023.10389307."
+      }
+    },
+    {
+      "id": "doi-10-1109-irsec-2015-7454988",
+      "type": "proceedings-article",
+      "doi": "10.1109/irsec.2015.7454988",
+      "styles": {
+        "apa": "Amrouche, S. O., Rekioua, D., & Rekioua, T. (2015). Overview of energy storage in renewable energy systems. 2015 3rd International Renewable and Sustainable Energy Conference (IRSEC), 1–6. https://doi.org/10.1109/irsec.2015.7454988",
+        "ieee": "[1]S. O. Amrouche, D. Rekioua, and T. Rekioua, \"Overview of energy storage in renewable energy systems,\" 2015 3rd International Renewable and Sustainable Energy Conference (IRSEC), pp. 1–6, Dec. 2015, doi: 10.1109/irsec.2015.7454988.",
+        "vancouver": "[1]Amrouche SO, Rekioua D, Rekioua T. Overview of energy storage in renewable energy systems. 2015 3rd International Renewable and Sustainable Energy Conference (IRSEC) 2015:1–6. https://doi.org/10.1109/irsec.2015.7454988."
+      }
+    },
+    {
+      "id": "doi-10-1109-irsec53969-2021-9741165",
+      "type": "proceedings-article",
+      "doi": "10.1109/irsec53969.2021.9741165",
+      "styles": {
+        "apa": "Ounnabi, S., & Mounir, H. (2021). Recent Development of Hybrid Renewable Energy Systems. 2021 9th International Renewable and Sustainable Energy Conference (IRSEC), 1–7. https://doi.org/10.1109/irsec53969.2021.9741165",
+        "ieee": "[1]S. Ounnabi and H. Mounir, \"Recent Development of Hybrid Renewable Energy Systems,\" 2021 9th International Renewable and Sustainable Energy Conference (IRSEC), pp. 1–7, Nov. 2021, doi: 10.1109/irsec53969.2021.9741165.",
+        "vancouver": "[1]Ounnabi S, Mounir H. Recent Development of Hybrid Renewable Energy Systems. 2021 9th International Renewable and Sustainable Energy Conference (IRSEC) 2021:1–7. https://doi.org/10.1109/irsec53969.2021.9741165."
+      }
+    },
+    {
+      "id": "doi-10-1109-it-dreps-2013-6588171",
+      "type": "proceedings-article",
+      "doi": "10.1109/it-dreps.2013.6588171",
+      "styles": {
+        "apa": "Kayed, A. (2013). Renewable energy ontology. 2013 1st International Conference &Amp; Exhibition on the Applications of Information Technology to Renewable Energy Processes and Systems, 144–148. https://doi.org/10.1109/it-dreps.2013.6588171",
+        "ieee": "[1]A. Kayed, \"Renewable energy ontology,\" 2013 1st International Conference &amp; Exhibition on the Applications of Information Technology to Renewable Energy Processes and Systems, pp. 144–148, May 2013, doi: 10.1109/it-dreps.2013.6588171.",
+        "vancouver": "[1]Kayed A. Renewable energy ontology. 2013 1st International Conference &Amp; Exhibition on the Applications of Information Technology to Renewable Energy Processes and Systems 2013:144–8. https://doi.org/10.1109/it-dreps.2013.6588171."
+      }
+    },
+    {
       "id": "doi-10-1109-mipro-2014-6859806",
       "type": "proceedings-article",
       "doi": "10.1109/mipro.2014.6859806",
@@ -249,6 +659,26 @@
         "apa": "Vojkovic, G., & Katulic, T. (2014). Legal regulation of public Information Infrastructure in Republic of Croatia. 2014 37th International Convention on Information and Communication Technology, Electronics and Microelectronics (MIPRO), 1515–1520. https://doi.org/10.1109/mipro.2014.6859806",
         "ieee": "[1]G. Vojkovic and T. Katulic, \"Legal regulation of public Information Infrastructure in Republic of Croatia,\" 2014 37th International Convention on Information and Communication Technology, Electronics and Microelectronics (MIPRO), pp. 1515–1520, May 2014, doi: 10.1109/mipro.2014.6859806.",
         "vancouver": "[1]Vojkovic G, Katulic T. Legal regulation of public Information Infrastructure in Republic of Croatia. 2014 37th International Convention on Information and Communication Technology, Electronics and Microelectronics (MIPRO) 2014:1515–20. https://doi.org/10.1109/mipro.2014.6859806."
+      }
+    },
+    {
+      "id": "doi-10-1109-nlpke-2007-4368002",
+      "type": "proceedings-article",
+      "doi": "10.1109/nlpke.2007.4368002",
+      "styles": {
+        "apa": "Isahara, H. (2007). Resource-based Natural Language Processing. 2007 International Conference on Natural Language Processing and Knowledge Engineering, 11–12. https://doi.org/10.1109/nlpke.2007.4368002",
+        "ieee": "[1]H. Isahara, \"Resource-based Natural Language Processing,\" 2007 International Conference on Natural Language Processing and Knowledge Engineering, pp. 11–12, Aug. 2007, doi: 10.1109/nlpke.2007.4368002.",
+        "vancouver": "[1]Isahara H. Resource-based Natural Language Processing. 2007 International Conference on Natural Language Processing and Knowledge Engineering 2007:11–2. https://doi.org/10.1109/nlpke.2007.4368002."
+      }
+    },
+    {
+      "id": "doi-10-1109-pgsret-2015-7312256",
+      "type": "proceedings-article",
+      "doi": "10.1109/pgsret.2015.7312256",
+      "styles": {
+        "apa": "Faiz, A., & Rehman, A. (2015). Hybrid renewable energy systems: Hybridization and advance control. 2015 Power Generation System and Renewable Energy Technologies (PGSRET), 1–5. https://doi.org/10.1109/pgsret.2015.7312256",
+        "ieee": "[1]A. Faiz and A. Rehman, \"Hybrid renewable energy systems: Hybridization and advance control,\" 2015 Power Generation System and Renewable Energy Technologies (PGSRET), pp. 1–5, Jun. 2015, doi: 10.1109/pgsret.2015.7312256.",
+        "vancouver": "[1]Faiz A, Rehman A. Hybrid renewable energy systems: Hybridization and advance control. 2015 Power Generation System and Renewable Energy Technologies (PGSRET) 2015:1–5. https://doi.org/10.1109/pgsret.2015.7312256."
       }
     },
     {
@@ -262,6 +692,96 @@
       }
     },
     {
+      "id": "doi-10-1109-vitae-2013-6617055",
+      "type": "proceedings-article",
+      "doi": "10.1109/vitae.2013.6617055",
+      "styles": {
+        "apa": "Balamuralidhar, P. (2013). An approach using Qualitative Probabilistic Networks for knowledge modeling in Cognitive Wireless Networks. Wireless VITAE 2013, 1–5. https://doi.org/10.1109/vitae.2013.6617055",
+        "ieee": "[1]P. Balamuralidhar, \"An approach using Qualitative Probabilistic Networks for knowledge modeling in Cognitive Wireless Networks,\" Wireless VITAE 2013, pp. 1–5, Jun. 2013, doi: 10.1109/vitae.2013.6617055.",
+        "vancouver": "[1]Balamuralidhar P. An approach using Qualitative Probabilistic Networks for knowledge modeling in Cognitive Wireless Networks. Wireless VITAE 2013 2013:1–5. https://doi.org/10.1109/vitae.2013.6617055."
+      }
+    },
+    {
+      "id": "doi-10-1109-wimesh-2006-288600",
+      "type": "proceedings-article",
+      "doi": "10.1109/wimesh.2006.288600",
+      "styles": {
+        "apa": "Yang, X., & Vaidya, N. (2006). Spatial backoff contention resolution for wireless networks. 2006 2nd IEEE Workshop on Wireless Mesh Networks, 13–22. https://doi.org/10.1109/wimesh.2006.288600",
+        "ieee": "[1]X. Yang and N. Vaidya, \"Spatial backoff contention resolution for wireless networks,\" 2006 2nd IEEE Workshop on Wireless Mesh Networks, pp. 13–22, 2006, doi: 10.1109/wimesh.2006.288600.",
+        "vancouver": "[1]Yang X, Vaidya N. Spatial backoff contention resolution for wireless networks. 2006 2nd IEEE Workshop on Wireless Mesh Networks 2006:13–22. https://doi.org/10.1109/wimesh.2006.288600."
+      }
+    },
+    {
+      "id": "doi-10-1109-wimesh-2006-288607",
+      "type": "proceedings-article",
+      "doi": "10.1109/wimesh.2006.288607",
+      "styles": {
+        "apa": "Maheshwari, R., Gao, T., & Das, S. (2006). Detecting wormhole attacks in wireless networks. 2006 2nd IEEE Workshop on Wireless Mesh Networks, 109–111. https://doi.org/10.1109/wimesh.2006.288607",
+        "ieee": "[1]R. Maheshwari, T. Gao, and S. Das, \"Detecting wormhole attacks in wireless networks,\" 2006 2nd IEEE Workshop on Wireless Mesh Networks, pp. 109–111, 2006, doi: 10.1109/wimesh.2006.288607.",
+        "vancouver": "[1]Maheshwari R, Gao T, Das S. Detecting wormhole attacks in wireless networks. 2006 2nd IEEE Workshop on Wireless Mesh Networks 2006:109–11. https://doi.org/10.1109/wimesh.2006.288607."
+      }
+    },
+    {
+      "id": "doi-10-1109-wkdd-2008-109",
+      "type": "proceedings-article",
+      "doi": "10.1109/wkdd.2008.109",
+      "styles": {
+        "apa": "Lan, T., Zhang, R., & Dai, H. (2008). A New Frame of Knowledge Discovery. First International Workshop on Knowledge Discovery and Data Mining (WKDD 2008), 607–611. https://doi.org/10.1109/wkdd.2008.109",
+        "ieee": "[1]T. Lan, R. Zhang, and H. Dai, \"A New Frame of Knowledge Discovery,\" First International Workshop on Knowledge Discovery and Data Mining (WKDD 2008), pp. 607–611, Jan. 2008, doi: 10.1109/wkdd.2008.109.",
+        "vancouver": "[1]Lan T, Zhang R, Dai H. A New Frame of Knowledge Discovery. First International Workshop on Knowledge Discovery and Data Mining (WKDD 2008) 2008:607–11. https://doi.org/10.1109/wkdd.2008.109."
+      }
+    },
+    {
+      "id": "doi-10-1109-wkdd-2008-12",
+      "type": "proceedings-article",
+      "doi": "10.1109/wkdd.2008.12",
+      "styles": {
+        "apa": "Jiuhua, Z. (2008). Intrusion Detection System Based on Data Mining. First International Workshop on Knowledge Discovery and Data Mining (WKDD 2008), 402–405. https://doi.org/10.1109/wkdd.2008.12",
+        "ieee": "[1]Z. Jiuhua, \"Intrusion Detection System Based on Data Mining,\" First International Workshop on Knowledge Discovery and Data Mining (WKDD 2008), pp. 402–405, Jan. 2008, doi: 10.1109/wkdd.2008.12.",
+        "vancouver": "[1]Jiuhua Z. Intrusion Detection System Based on Data Mining. First International Workshop on Knowledge Discovery and Data Mining (WKDD 2008) 2008:402–5. https://doi.org/10.1109/wkdd.2008.12."
+      }
+    },
+    {
+      "id": "doi-10-1109-wkdd-2008-153",
+      "type": "proceedings-article",
+      "doi": "10.1109/wkdd.2008.153",
+      "styles": {
+        "apa": "Luo, Q. (2008). Advancing Knowledge Discovery and Data Mining. First International Workshop on Knowledge Discovery and Data Mining (WKDD 2008), 3–5. https://doi.org/10.1109/wkdd.2008.153",
+        "ieee": "[1]Q. Luo, \"Advancing Knowledge Discovery and Data Mining,\" First International Workshop on Knowledge Discovery and Data Mining (WKDD 2008), pp. 3–5, Jan. 2008, doi: 10.1109/wkdd.2008.153.",
+        "vancouver": "[1]Luo Q. Advancing Knowledge Discovery and Data Mining. First International Workshop on Knowledge Discovery and Data Mining (WKDD 2008) 2008:3–5. https://doi.org/10.1109/wkdd.2008.153."
+      }
+    },
+    {
+      "id": "doi-10-1109-wkdd-2009-143",
+      "type": "proceedings-article",
+      "doi": "10.1109/wkdd.2009.143",
+      "styles": {
+        "apa": "Zhang, Y. (2009). Multi Relational Rules Mining in Data Warehouse. 2009 Second International Workshop on Knowledge Discovery and Data Mining, 944–947. https://doi.org/10.1109/wkdd.2009.143",
+        "ieee": "[1]Y. Zhang, \"Multi Relational Rules Mining in Data Warehouse,\" 2009 Second International Workshop on Knowledge Discovery and Data Mining, pp. 944–947, Jan. 2009, doi: 10.1109/wkdd.2009.143.",
+        "vancouver": "[1]Zhang Y. Multi Relational Rules Mining in Data Warehouse. 2009 Second International Workshop on Knowledge Discovery and Data Mining 2009:944–7. https://doi.org/10.1109/wkdd.2009.143."
+      }
+    },
+    {
+      "id": "doi-10-1109-wkdd-2009-181",
+      "type": "proceedings-article",
+      "doi": "10.1109/wkdd.2009.181",
+      "styles": {
+        "apa": "Lei, F., & Hexin, C. (2009). Analysis Methods of Workflow Execution Data Based on Data Mining. 2009 Second International Workshop on Knowledge Discovery and Data Mining, 116–118. https://doi.org/10.1109/wkdd.2009.181",
+        "ieee": "[1]F. Lei and C. Hexin, \"Analysis Methods of Workflow Execution Data Based on Data Mining,\" 2009 Second International Workshop on Knowledge Discovery and Data Mining, pp. 116–118, Jan. 2009, doi: 10.1109/wkdd.2009.181.",
+        "vancouver": "[1]Lei F, Hexin C. Analysis Methods of Workflow Execution Data Based on Data Mining. 2009 Second International Workshop on Knowledge Discovery and Data Mining 2009:116–8. https://doi.org/10.1109/wkdd.2009.181."
+      }
+    },
+    {
+      "id": "doi-10-1109-wocn-2007-4284186",
+      "type": "proceedings-article",
+      "doi": "10.1109/wocn.2007.4284186",
+      "styles": {
+        "apa": "Lakkundi, V. (2007). WirVAN: Wireless in Virtual Automation Networks. 2007 IFIP International Conference on Wireless and Optical Communications Networks, 1–5. https://doi.org/10.1109/wocn.2007.4284186",
+        "ieee": "[1]V. Lakkundi, \"WirVAN: Wireless in Virtual Automation Networks,\" 2007 IFIP International Conference on Wireless and Optical Communications Networks, pp. 1–5, Jul. 2007, doi: 10.1109/wocn.2007.4284186.",
+        "vancouver": "[1]Lakkundi V. WirVAN: Wireless in Virtual Automation Networks. 2007 IFIP International Conference on Wireless and Optical Communications Networks 2007:1–5. https://doi.org/10.1109/wocn.2007.4284186."
+      }
+    },
+    {
       "id": "doi-10-1142-9789812771285-0030",
       "type": "proceedings-article",
       "doi": "10.1142/9789812771285_0030",
@@ -269,6 +789,36 @@
         "apa": "GEREŠ, D. (2007). SUSTAINABLE DEVELOPMENT OF WATER MANAGEMENT IN CROATIA. Sustainable Development of Energy, Water and Environment Systems, 331–340. https://doi.org/10.1142/9789812771285_0030",
         "ieee": "[1]D. GEREŠ, \"SUSTAINABLE DEVELOPMENT OF WATER MANAGEMENT IN CROATIA,\" Sustainable Development of Energy, Water and Environment Systems, pp. 331–340, Jun. 2007, doi: 10.1142/9789812771285_0030.",
         "vancouver": "[1]GEREŠ D. SUSTAINABLE DEVELOPMENT OF WATER MANAGEMENT IN CROATIA. Sustainable Development of Energy, Water and Environment Systems 2007:331–40. https://doi.org/10.1142/9789812771285_0030."
+      }
+    },
+    {
+      "id": "doi-10-1142-9789812791146-0021",
+      "type": "proceedings-article",
+      "doi": "10.1142/9789812791146_0021",
+      "styles": {
+        "apa": "BAKSHI, A., & PRASANNA, V. K. (2003). ENERGY BALANCED COMMUNICATION IN WIRELESS SENSOR NETWORKS. Mobile and Wireless Communications Networks, 97–100. https://doi.org/10.1142/9789812791146_0021",
+        "ieee": "[1]A. BAKSHI and V. K. PRASANNA, \"ENERGY BALANCED COMMUNICATION IN WIRELESS SENSOR NETWORKS,\" Mobile and Wireless Communications Networks, pp. 97–100, Oct. 2003, doi: 10.1142/9789812791146_0021.",
+        "vancouver": "[1]BAKSHI A, PRASANNA VK. ENERGY BALANCED COMMUNICATION IN WIRELESS SENSOR NETWORKS. Mobile and Wireless Communications Networks 2003:97–100. https://doi.org/10.1142/9789812791146_0021."
+      }
+    },
+    {
+      "id": "doi-10-1142-9789812799562-0006",
+      "type": "proceedings-article",
+      "doi": "10.1142/9789812799562_0006",
+      "styles": {
+        "apa": "JAMHOUR, E. (2001). INTEGRATING IPV4 AND IPV6 IN WIRELESS NETWORKS. Wireless LANs and Home Networks, 57–66. https://doi.org/10.1142/9789812799562_0006",
+        "ieee": "[1]E. JAMHOUR, \"INTEGRATING IPV4 AND IPV6 IN WIRELESS NETWORKS,\" Wireless LANs and Home Networks, pp. 57–66, Nov. 2001, doi: 10.1142/9789812799562_0006.",
+        "vancouver": "[1]JAMHOUR E. INTEGRATING IPV4 AND IPV6 IN WIRELESS NETWORKS. Wireless LANs and Home Networks 2001:57–66. https://doi.org/10.1142/9789812799562_0006."
+      }
+    },
+    {
+      "id": "doi-10-1142-9789812799562-0031",
+      "type": "proceedings-article",
+      "doi": "10.1142/9789812799562_0031",
+      "styles": {
+        "apa": "KARL, H., & MENGESHA, S. (2001). ANALYSING CAPACITY IMPROVEMENTS IN WIRELESS NETWORKS BY RELAYING. Wireless LANs and Home Networks, 339–348. https://doi.org/10.1142/9789812799562_0031",
+        "ieee": "[1]H. KARL and S. MENGESHA, \"ANALYSING CAPACITY IMPROVEMENTS IN WIRELESS NETWORKS BY RELAYING,\" Wireless LANs and Home Networks, pp. 339–348, Nov. 2001, doi: 10.1142/9789812799562_0031.",
+        "vancouver": "[1]KARL H, MENGESHA S. ANALYSING CAPACITY IMPROVEMENTS IN WIRELESS NETWORKS BY RELAYING. Wireless LANs and Home Networks 2001:339–48. https://doi.org/10.1142/9789812799562_0031."
       }
     },
     {
@@ -292,6 +842,16 @@
       }
     },
     {
+      "id": "doi-10-1145-3183377-3183395",
+      "type": "proceedings-article",
+      "doi": "10.1145/3183377.3183395",
+      "styles": {
+        "apa": "Balaban, M., & Sturm, A. (2018). Software engineering lab. Proceedings of the 40th International Conference on Software Engineering: Software Engineering Education and Training, 21–30. https://doi.org/10.1145/3183377.3183395",
+        "ieee": "[1]M. Balaban and A. Sturm, \"Software engineering lab,\" Proceedings of the 40th International Conference on Software Engineering: Software Engineering Education and Training, pp. 21–30, May 2018, doi: 10.1145/3183377.3183395.",
+        "vancouver": "[1]Balaban M, Sturm A. Software engineering lab. Proceedings of the 40th International Conference on Software Engineering: Software Engineering Education and Training 2018:21–30. https://doi.org/10.1145/3183377.3183395."
+      }
+    },
+    {
       "id": "doi-10-1145-3426826-3426837",
       "type": "proceedings-article",
       "doi": "10.1145/3426826.3426837",
@@ -302,6 +862,36 @@
       }
     },
     {
+      "id": "doi-10-1145-956750-956806",
+      "type": "proceedings-article",
+      "doi": "10.1145/956750.956806",
+      "styles": {
+        "apa": "Bhatnagar, R., Kurra, G., & Niu, W. (2003). Mining high dimensional data for classifier knowledge. Proceedings of the Ninth ACM SIGKDD International Conference on Knowledge Discovery and Data Mining, 481–486. https://doi.org/10.1145/956750.956806",
+        "ieee": "[1]R. Bhatnagar, G. Kurra, and W. Niu, \"Mining high dimensional data for classifier knowledge,\" Proceedings of the ninth ACM SIGKDD international conference on Knowledge discovery and data mining, pp. 481–486, Aug. 2003, doi: 10.1145/956750.956806.",
+        "vancouver": "[1]Bhatnagar R, Kurra G, Niu W. Mining high dimensional data for classifier knowledge. Proceedings of the Ninth ACM SIGKDD International Conference on Knowledge Discovery and Data Mining 2003:481–6. https://doi.org/10.1145/956750.956806."
+      }
+    },
+    {
+      "id": "doi-10-1163-9789004247772-002",
+      "type": "book-chapter",
+      "doi": "10.1163/9789004247772_002",
+      "styles": {
+        "apa": "Kaku, S. (2013). Introduction: Toward a Comparative Sociology of Gender. Patriarchy in East Asia, 1–3. https://doi.org/10.1163/9789004247772_002",
+        "ieee": "[1]S. Kaku, \"Introduction: Toward a Comparative Sociology of Gender,\" Patriarchy in East Asia, pp. 1–3, Jan. 2013, doi: 10.1163/9789004247772_002.",
+        "vancouver": "[1]Kaku S. Introduction: Toward a Comparative Sociology of Gender. Patriarchy in East Asia 2013:1–3. https://doi.org/10.1163/9789004247772_002."
+      }
+    },
+    {
+      "id": "doi-10-1163-9789004289819",
+      "type": "monograph",
+      "doi": "10.1163/9789004289819",
+      "styles": {
+        "apa": "Beaman, L. G., & Van Arragon, L. (2015). Issues in Religion and Education. https://doi.org/10.1163/9789004289819",
+        "ieee": "[1]L. G. Beaman and L. Van Arragon, \"Issues in Religion and Education,\" Feb. 2015, doi: 10.1163/9789004289819.",
+        "vancouver": "[1]Beaman LG, Van Arragon L. Issues in Religion and Education 2015. https://doi.org/10.1163/9789004289819."
+      }
+    },
+    {
       "id": "doi-10-1163-9789004502055",
       "type": "monograph",
       "doi": "10.1163/9789004502055",
@@ -309,6 +899,86 @@
         "apa": "Byrskog, S. (2002). Story as History - History as Story. https://doi.org/10.1163/9789004502055",
         "ieee": "[1]S. Byrskog, \"Story as History - History as Story,\" Jan. 2002, doi: 10.1163/9789004502055.",
         "vancouver": "[1]Byrskog S. Story as History - History as Story 2002. https://doi.org/10.1163/9789004502055."
+      }
+    },
+    {
+      "id": "doi-10-1163-9789004517073",
+      "type": "monograph",
+      "doi": "10.1163/9789004517073",
+      "styles": {
+        "apa": "Jao, T.-i., & Huehns, C. (2022). Harmoniousness: Essays in Chinese Musicology. https://doi.org/10.1163/9789004517073",
+        "ieee": "[1]T.-i. Jao and C. Huehns, \"Harmoniousness: Essays in Chinese Musicology,\" Aug. 2022, doi: 10.1163/9789004517073.",
+        "vancouver": "[1]Jao T-i, Huehns C. Harmoniousness: Essays in Chinese Musicology 2022. https://doi.org/10.1163/9789004517073."
+      }
+    },
+    {
+      "id": "doi-10-1201-9780203496947",
+      "type": "monograph",
+      "doi": "10.1201/9780203496947",
+      "styles": {
+        "apa": "Beran, J. (2003). Statistics in Musicology. https://doi.org/10.1201/9780203496947",
+        "ieee": "[1]J. Beran, \"Statistics in Musicology,\" Jul. 2003, doi: 10.1201/9780203496947.",
+        "vancouver": "[1]Beran J. Statistics in Musicology 2003. https://doi.org/10.1201/9780203496947."
+      }
+    },
+    {
+      "id": "doi-10-1201-9780429187292-2",
+      "type": "book-chapter",
+      "doi": "10.1201/9780429187292-2",
+      "styles": {
+        "apa": "Dashek, W. V. (2019). Environmental Science. Biological Environmental Science, 9–26. https://doi.org/10.1201/9780429187292-2",
+        "ieee": "[1]W. V. Dashek, \"Environmental Science,\" Biological Environmental Science, pp. 9–26, Apr. 2019, doi: 10.1201/9780429187292-2.",
+        "vancouver": "[1]Dashek WV. Environmental Science. Biological Environmental Science 2019:9–26. https://doi.org/10.1201/9780429187292-2."
+      }
+    },
+    {
+      "id": "doi-10-1201-9781003009214-9",
+      "type": "book-chapter",
+      "doi": "10.1201/9781003009214-9",
+      "styles": {
+        "apa": "Nehru, R. S. S. (2020). 4Ei-Digital Pedagogy Model for Teacher Education. Digital Education Pedagogy, 235–250. https://doi.org/10.1201/9781003009214-9",
+        "ieee": "[1]R. S. S. Nehru, \"4Ei-Digital Pedagogy Model for Teacher Education,\" Digital Education Pedagogy, pp. 235–250, Dec. 2020, doi: 10.1201/9781003009214-9.",
+        "vancouver": "[1]Nehru RSS. 4Ei-Digital Pedagogy Model for Teacher Education. Digital Education Pedagogy 2020:235–50. https://doi.org/10.1201/9781003009214-9."
+      }
+    },
+    {
+      "id": "doi-10-1201-9781003024781-1",
+      "type": "book-chapter",
+      "doi": "10.1201/9781003024781-1",
+      "styles": {
+        "apa": "Benade, L., & Jackson, M. (2020). Introduction to Design, Education and Pedagogy. Design, Education and Pedagogy, 1–5. https://doi.org/10.1201/9781003024781-1",
+        "ieee": "[1]L. Benade and M. Jackson, \"Introduction to Design, Education and Pedagogy,\" Design, Education and Pedagogy, pp. 1–5, Jun. 2020, doi: 10.1201/9781003024781-1.",
+        "vancouver": "[1]Benade L, Jackson M. Introduction to Design, Education and Pedagogy. Design, Education and Pedagogy 2020:1–5. https://doi.org/10.1201/9781003024781-1."
+      }
+    },
+    {
+      "id": "doi-10-1201-9781003083160-2",
+      "type": "book-chapter",
+      "doi": "10.1201/9781003083160-2",
+      "styles": {
+        "apa": "Kumar, R., & Kumar, K. (2022). Pedagogy Toward Outcome-Based Engineering Education. Engineering Pedagogy towards Outcome-Based Education, 3–22. https://doi.org/10.1201/9781003083160-2",
+        "ieee": "[1]R. Kumar and K. Kumar, \"Pedagogy Toward Outcome-Based Engineering Education,\" Engineering Pedagogy Towards Outcome-Based Education, pp. 3–22, Aug. 2022, doi: 10.1201/9781003083160-2.",
+        "vancouver": "[1]Kumar R, Kumar K. Pedagogy Toward Outcome-Based Engineering Education. Engineering Pedagogy towards Outcome-Based Education 2022:3–22. https://doi.org/10.1201/9781003083160-2."
+      }
+    },
+    {
+      "id": "doi-10-1201-9781351069830",
+      "type": "book",
+      "doi": "10.1201/9781351069830",
+      "styles": {
+        "apa": "Barnabe, G. (2018). Aquaculture (G. Barnabé, Ed.). CRC Press. https://doi.org/10.1201/9781351069830",
+        "ieee": "[1]G. Barnabe, Aquaculture. CRC Press, 2018. doi: 10.1201/9781351069830.",
+        "vancouver": "[1]Barnabe G. Aquaculture. CRC Press; 2018. https://doi.org/10.1201/9781351069830."
+      }
+    },
+    {
+      "id": "doi-10-1201-b22178-3",
+      "type": "book-chapter",
+      "doi": "10.1201/b22178-3",
+      "styles": {
+        "apa": "Kontogiannis, T., & Malakis, S. (2017). Safety Organization and Risk Management. Cognitive Engineering and Safety Organization in Air Traffic Management, 65–104. https://doi.org/10.1201/b22178-3",
+        "ieee": "[1]T. Kontogiannis and S. Malakis, \"Safety Organization and Risk Management,\" Cognitive Engineering and Safety Organization in Air Traffic Management, pp. 65–104, Oct. 2017, doi: 10.1201/b22178-3.",
+        "vancouver": "[1]Kontogiannis T, Malakis S. Safety Organization and Risk Management. Cognitive Engineering and Safety Organization in Air Traffic Management 2017:65–104. https://doi.org/10.1201/b22178-3."
       }
     },
     {
@@ -332,6 +1002,96 @@
       }
     },
     {
+      "id": "doi-10-15224-978-1-63248-083-5-23",
+      "type": "proceedings-article",
+      "doi": "10.15224/978-1-63248-083-5-23",
+      "styles": {
+        "apa": "JURASZEK, J. (2015). A system monitoring operational safety of structures used in civil engineering. Third International Conference on Advances in Civil, Structural and Mechanical Engineering - ACSM 2015, 38–41. https://doi.org/10.15224/978-1-63248-083-5-23",
+        "ieee": "[1]J. JURASZEK, \"A system monitoring operational safety of structures used in civil engineering,\" Third International Conference on Advances in Civil, Structural and Mechanical Engineering - ACSM 2015, pp. 38–41, Dec. 2015, doi: 10.15224/978-1-63248-083-5-23.",
+        "vancouver": "[1]JURASZEK J. A system monitoring operational safety of structures used in civil engineering. Third International Conference on Advances in Civil, Structural and Mechanical Engineering - ACSM 2015 2015:38–41. https://doi.org/10.15224/978-1-63248-083-5-23."
+      }
+    },
+    {
+      "id": "doi-10-18293-seke2015-222",
+      "type": "proceedings-article",
+      "doi": "10.18293/seke2015-222",
+      "styles": {
+        "apa": "Lee, H.-C., & Lee, S.-W. (2015). Towards Knowledge-intensive Software Engineering Framework for Self-Adaptive Software. Proceedings of the 27th International Conference on Software Engineering and Knowledge Engineering, 2015, 30–35. https://doi.org/10.18293/seke2015-222",
+        "ieee": "[1]H.-C. Lee and S.-W. Lee, \"Towards Knowledge-intensive Software Engineering Framework for Self-Adaptive Software,\" Proceedings of the 27th International Conference on Software Engineering and Knowledge Engineering, vol. 2015, pp. 30–35, Jul. 2015, doi: 10.18293/seke2015-222.",
+        "vancouver": "[1]Lee H-C, Lee S-W. Towards Knowledge-intensive Software Engineering Framework for Self-Adaptive Software. Proceedings of the 27th International Conference on Software Engineering and Knowledge Engineering 2015;2015:30–5. https://doi.org/10.18293/seke2015-222."
+      }
+    },
+    {
+      "id": "doi-10-18293-seke2019-213",
+      "type": "proceedings-article",
+      "doi": "10.18293/seke2019-213",
+      "styles": {
+        "apa": "Exman, I., & Spanier, A. (2019). Algebraic Convergence to Software-Knowledge: Deep Software Learning (P). Proceedings of the 31st International Conference on Software Engineering and Knowledge Engineering, 2019, 61–63. https://doi.org/10.18293/seke2019-213",
+        "ieee": "[1]I. Exman and A. Spanier, \"Algebraic Convergence to Software-Knowledge: Deep Software Learning (P),\" Proceedings of the 31st International Conference on Software Engineering and Knowledge Engineering, vol. 2019, pp. 61–63, Jul. 2019, doi: 10.18293/seke2019-213.",
+        "vancouver": "[1]Exman I, Spanier A. Algebraic Convergence to Software-Knowledge: Deep Software Learning (P). Proceedings of the 31st International Conference on Software Engineering and Knowledge Engineering 2019;2019:61–3. https://doi.org/10.18293/seke2019-213."
+      }
+    },
+    {
+      "id": "doi-10-18653-v1-2022-emnlp-tutorials-2",
+      "type": "proceedings-article",
+      "doi": "10.18653/v1/2022.emnlp-tutorials.2",
+      "styles": {
+        "apa": "Habash, N. (2022). Arabic Natural Language Processing. Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing: Tutorial Abstracts, 9–10. https://doi.org/10.18653/v1/2022.emnlp-tutorials.2",
+        "ieee": "[1]N. Habash, \"Arabic Natural Language Processing,\" Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing: Tutorial Abstracts, pp. 9–10, 2022, doi: 10.18653/v1/2022.emnlp-tutorials.2.",
+        "vancouver": "[1]Habash N. Arabic Natural Language Processing. Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing: Tutorial Abstracts 2022:9–10. https://doi.org/10.18653/v1/2022.emnlp-tutorials.2."
+      }
+    },
+    {
+      "id": "doi-10-18653-v1-2022-nllp-1-14",
+      "type": "proceedings-article",
+      "doi": "10.18653/v1/2022.nllp-1.14",
+      "styles": {
+        "apa": "Yin, Y., & Habernal, I. (2022). Privacy-Preserving Models for Legal Natural Language Processing. Proceedings of the Natural Legal Language Processing Workshop 2022, 172–183. https://doi.org/10.18653/v1/2022.nllp-1.14",
+        "ieee": "[1]Y. Yin and I. Habernal, \"Privacy-Preserving Models for Legal Natural Language Processing,\" Proceedings of the Natural Legal Language Processing Workshop 2022, pp. 172–183, 2022, doi: 10.18653/v1/2022.nllp-1.14.",
+        "vancouver": "[1]Yin Y, Habernal I. Privacy-Preserving Models for Legal Natural Language Processing. Proceedings of the Natural Legal Language Processing Workshop 2022 2022:172–83. https://doi.org/10.18653/v1/2022.nllp-1.14."
+      }
+    },
+    {
+      "id": "doi-10-18653-v1-d18-1319",
+      "type": "proceedings-article",
+      "doi": "10.18653/v1/d18-1319",
+      "styles": {
+        "apa": "Chirkova, N., Lobacheva, E., & Vetrov, D. (2018). Bayesian Compression for Natural Language Processing. Proceedings of the 2018 Conference on Empirical Methods in Natural Language Processing, 2910–2915. https://doi.org/10.18653/v1/d18-1319",
+        "ieee": "[1]N. Chirkova, E. Lobacheva, and D. Vetrov, \"Bayesian Compression for Natural Language Processing,\" Proceedings of the 2018 Conference on Empirical Methods in Natural Language Processing, pp. 2910–2915, 2018, doi: 10.18653/v1/d18-1319.",
+        "vancouver": "[1]Chirkova N, Lobacheva E, Vetrov D. Bayesian Compression for Natural Language Processing. Proceedings of the 2018 Conference on Empirical Methods in Natural Language Processing 2018:2910–5. https://doi.org/10.18653/v1/d18-1319."
+      }
+    },
+    {
+      "id": "doi-10-18653-v1-d19-1329",
+      "type": "proceedings-article",
+      "doi": "10.18653/v1/d19-1329",
+      "styles": {
+        "apa": "Kann, K., Cho, K., & Bowman, S. R. (2019). Towards Realistic Practices In Low-Resource Natural Language Processing: The Development Set. Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing (EMNLP-IJCNLP), 3340–3347. https://doi.org/10.18653/v1/d19-1329",
+        "ieee": "[1]K. Kann, K. Cho, and S. R. Bowman, \"Towards Realistic Practices In Low-Resource Natural Language Processing: The Development Set,\" Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing (EMNLP-IJCNLP), pp. 3340–3347, 2019, doi: 10.18653/v1/d19-1329.",
+        "vancouver": "[1]Kann K, Cho K, Bowman SR. Towards Realistic Practices In Low-Resource Natural Language Processing: The Development Set. Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing (EMNLP-IJCNLP) 2019:3340–7. https://doi.org/10.18653/v1/d19-1329."
+      }
+    },
+    {
+      "id": "doi-10-18653-v1-w15-3205",
+      "type": "proceedings-article",
+      "doi": "10.18653/v1/w15-3205",
+      "styles": {
+        "apa": "Shoufan, A., & Alameri, S. (2015). Natural Language Processing for Dialectical Arabic: A Survey. Proceedings of the Second Workshop on Arabic Natural Language Processing, 36–48. https://doi.org/10.18653/v1/w15-3205",
+        "ieee": "[1]A. Shoufan and S. Alameri, \"Natural Language Processing for Dialectical Arabic: A Survey,\" Proceedings of the Second Workshop on Arabic Natural Language Processing, pp. 36–48, 2015, doi: 10.18653/v1/w15-3205.",
+        "vancouver": "[1]Shoufan A, Alameri S. Natural Language Processing for Dialectical Arabic: A Survey. Proceedings of the Second Workshop on Arabic Natural Language Processing 2015:36–48. https://doi.org/10.18653/v1/w15-3205."
+      }
+    },
+    {
+      "id": "doi-10-2307-j-ctv1pdrq7r",
+      "type": "monograph",
+      "doi": "10.2307/j.ctv1pdrq7r",
+      "styles": {
+        "apa": "Wade-Martins, P. (2017). A Life in Norfolk’s Archaeology: 1950-2016. https://doi.org/10.2307/j.ctv1pdrq7r",
+        "ieee": "[1]P. Wade-Martins, \"A Life in Norfolk’s Archaeology: 1950-2016,\" Nov. 2017, doi: 10.2307/j.ctv1pdrq7r.",
+        "vancouver": "[1]Wade-Martins P. A Life in Norfolk’s Archaeology: 1950-2016 2017. https://doi.org/10.2307/j.ctv1pdrq7r."
+      }
+    },
+    {
       "id": "doi-10-2307-j-ctv25tnwz9",
       "type": "monograph",
       "doi": "10.2307/j.ctv25tnwz9",
@@ -342,6 +1102,16 @@
       }
     },
     {
+      "id": "doi-10-2307-j-ctv301d8x",
+      "type": "monograph",
+      "doi": "10.2307/j.ctv301d8x",
+      "styles": {
+        "apa": "Adluri, V., & Bagchee, J. (2018). Philology and Criticism. https://doi.org/10.2307/j.ctv301d8x",
+        "ieee": "[1]V. Adluri and J. Bagchee, \"Philology and Criticism,\" Jun. 2018, doi: 10.2307/j.ctv301d8x.",
+        "vancouver": "[1]Adluri V, Bagchee J. Philology and Criticism 2018. https://doi.org/10.2307/j.ctv301d8x."
+      }
+    },
+    {
       "id": "doi-10-2307-j-ctvdf0jr3",
       "type": "monograph",
       "doi": "10.2307/j.ctvdf0jr3",
@@ -349,6 +1119,26 @@
         "apa": "Wood, C. S. (2019). A History of Art History. https://doi.org/10.2307/j.ctvdf0jr3",
         "ieee": "[1]C. S. Wood, \"A History of Art History,\" Sep. 2019, doi: 10.2307/j.ctvdf0jr3.",
         "vancouver": "[1]Wood CS. A History of Art History 2019. https://doi.org/10.2307/j.ctvdf0jr3."
+      }
+    },
+    {
+      "id": "doi-10-2307-jj-29979979-3",
+      "type": "book-chapter",
+      "doi": "10.2307/jj.29979979.3",
+      "styles": {
+        "apa": "DeVries, K. (2004). The Use of Chronicles in Recreating Medieval Military History. Journal of Medieval Military History, 1–16. https://doi.org/10.2307/jj.29979979.3",
+        "ieee": "[1]K. DeVries, \"The Use of Chronicles in Recreating Medieval Military History,\" Journal of Medieval Military History, pp. 1–16, May 2004, doi: 10.2307/jj.29979979.3.",
+        "vancouver": "[1]DeVries K. The Use of Chronicles in Recreating Medieval Military History. Journal of Medieval Military History 2004:1–16. https://doi.org/10.2307/jj.29979979.3."
+      }
+    },
+    {
+      "id": "doi-10-2307-jj-41545404",
+      "type": "monograph",
+      "doi": "10.2307/jj.41545404",
+      "styles": {
+        "apa": "WALDRON, J. (2016). Political Political Theory. https://doi.org/10.2307/jj.41545404",
+        "ieee": "[1]J. WALDRON, \"Political Political Theory,\" Mar. 2016, doi: 10.2307/jj.41545404.",
+        "vancouver": "[1]WALDRON J. Political Political Theory 2016. https://doi.org/10.2307/jj.41545404."
       }
     },
     {
@@ -372,6 +1162,86 @@
       }
     },
     {
+      "id": "doi-10-23943-princeton-9780691163543-001-0001",
+      "type": "monograph",
+      "doi": "10.23943/princeton/9780691163543.001.0001",
+      "styles": {
+        "apa": "Leiter, B. (2014). Why Tolerate Religion? https://doi.org/10.23943/princeton/9780691163543.001.0001",
+        "ieee": "[1]B. Leiter, \"Why Tolerate Religion?,\" Aug. 2014, doi: 10.23943/princeton/9780691163543.001.0001.",
+        "vancouver": "[1]Leiter B. Why Tolerate Religion? 2014. https://doi.org/10.23943/princeton/9780691163543.001.0001."
+      }
+    },
+    {
+      "id": "doi-10-23943-princeton-9780691180816-001-0001",
+      "type": "monograph",
+      "doi": "10.23943/princeton/9780691180816.001.0001",
+      "styles": {
+        "apa": "Roberts, W. C. (2018). Marx’s Inferno. https://doi.org/10.23943/princeton/9780691180816.001.0001",
+        "ieee": "[1]W. C. Roberts, \"Marx’s Inferno,\" Mar. 2018, doi: 10.23943/princeton/9780691180816.001.0001.",
+        "vancouver": "[1]Roberts WC. Marx’s Inferno 2018. https://doi.org/10.23943/princeton/9780691180816.001.0001."
+      }
+    },
+    {
+      "id": "doi-10-23943-princeton-9780691200989-003-0004",
+      "type": "book-chapter",
+      "doi": "10.23943/princeton/9780691200989.003.0004",
+      "styles": {
+        "apa": "Neier, A. (2020). International Human Rights Law. The International Human Rights Movement, 94–116. https://doi.org/10.23943/princeton/9780691200989.003.0004",
+        "ieee": "[1]A. Neier, \"International Human Rights Law,\" The International Human Rights Movement, pp. 94–116, Apr. 2020, doi: 10.23943/princeton/9780691200989.003.0004.",
+        "vancouver": "[1]Neier A. International Human Rights Law. The International Human Rights Movement 2020:94–116. https://doi.org/10.23943/princeton/9780691200989.003.0004."
+      }
+    },
+    {
+      "id": "doi-10-25120-dtah-r909",
+      "type": "monograph",
+      "doi": "10.25120/dtah-r909",
+      "styles": {
+        "apa": "Petray, T., & Osbaldiston, N. (2023). Exploring sociology in the Antipodes: introduction to sociology. https://doi.org/10.25120/dtah-r909",
+        "ieee": "[1]T. Petray and N. Osbaldiston, \"Exploring sociology in the Antipodes: introduction to sociology,\" 2023, doi: 10.25120/dtah-r909.",
+        "vancouver": "[1]Petray T, Osbaldiston N. Exploring sociology in the Antipodes: introduction to sociology 2023. https://doi.org/10.25120/dtah-r909."
+      }
+    },
+    {
+      "id": "doi-10-30861-9781407304090",
+      "type": "monograph",
+      "doi": "10.30861/9781407304090",
+      "styles": {
+        "apa": "Pratap, A. (2009). Indigenous Archaeology in India: Prospects for an Archaeology of the Subaltern. https://doi.org/10.30861/9781407304090",
+        "ieee": "[1]A. Pratap, \"Indigenous Archaeology in India: Prospects for an Archaeology of the Subaltern,\" 2009, doi: 10.30861/9781407304090.",
+        "vancouver": "[1]Pratap A. Indigenous Archaeology in India: Prospects for an Archaeology of the Subaltern 2009. https://doi.org/10.30861/9781407304090."
+      }
+    },
+    {
+      "id": "doi-10-30861-9781841714097",
+      "type": "monograph",
+      "doi": "10.30861/9781841714097",
+      "styles": {
+        "apa": "Blockley, K., & Halfpenney, I. (2002). Aberglasney House and Gardens: Archaeology, history and architecture. https://doi.org/10.30861/9781841714097",
+        "ieee": "[1]K. Blockley and I. Halfpenney, \"Aberglasney House and Gardens: Archaeology, history and architecture,\" 2002, doi: 10.30861/9781841714097.",
+        "vancouver": "[1]Blockley K, Halfpenney I. Aberglasney House and Gardens: Archaeology, history and architecture 2002. https://doi.org/10.30861/9781841714097."
+      }
+    },
+    {
+      "id": "doi-10-3115-974557-974592",
+      "type": "proceedings-article",
+      "doi": "10.3115/974557.974592",
+      "styles": {
+        "apa": "Cunningham, H., Humphreys, K., Gaizauskas, R., & Wilks, Y. (1997). Software infrastructure for natural language processing. Proceedings of the Fifth Conference on Applied Natural Language Processing -, 237–244. https://doi.org/10.3115/974557.974592",
+        "ieee": "[1]H. Cunningham, K. Humphreys, R. Gaizauskas, and Y. Wilks, \"Software infrastructure for natural language processing,\" Proceedings of the fifth conference on Applied natural language processing -, pp. 237–244, 1997, doi: 10.3115/974557.974592.",
+        "vancouver": "[1]Cunningham H, Humphreys K, Gaizauskas R, Wilks Y. Software infrastructure for natural language processing. Proceedings of the Fifth Conference on Applied Natural Language Processing - 1997:237–44. https://doi.org/10.3115/974557.974592."
+      }
+    },
+    {
+      "id": "doi-10-31761-pa-oas1-19aaoa",
+      "type": "monograph",
+      "doi": "10.31761/pa-oas1.19aaoa",
+      "styles": {
+        "apa": "Borofsky, R. (2019). An Anthropology of Anthropology: Is It Time to Shift Paradigms? https://doi.org/10.31761/pa-oas1.19aaoa",
+        "ieee": "[1]R. Borofsky, \"An Anthropology of Anthropology: Is It Time to Shift Paradigms?,\" Mar. 2019, doi: 10.31761/pa-oas1.19aaoa.",
+        "vancouver": "[1]Borofsky R. An Anthropology of Anthropology: Is It Time to Shift Paradigms? 2019. https://doi.org/10.31761/pa-oas1.19aaoa."
+      }
+    },
+    {
       "id": "doi-10-3998-mpub-14010",
       "type": "monograph",
       "doi": "10.3998/mpub.14010",
@@ -379,6 +1249,16 @@
         "apa": "Hodgson, G. (1993). Economics and Evolution. https://doi.org/10.3998/mpub.14010",
         "ieee": "[1]G. Hodgson, \"Economics and Evolution,\" 1993, doi: 10.3998/mpub.14010.",
         "vancouver": "[1]Hodgson G. Economics and Evolution 1993. https://doi.org/10.3998/mpub.14010."
+      }
+    },
+    {
+      "id": "doi-10-4018-978-1-7998-2257-8-ch010",
+      "type": "book-chapter",
+      "doi": "10.4018/978-1-7998-2257-8.ch010",
+      "styles": {
+        "apa": "Raden Aji Haqqi, A. (2020). Strengthening Islamic Finance in South-East Asia Through Innovation of Islamic FinTech in Brunei Darussalam. Economics, Business, and Islamic Finance in ASEAN Economics Community, 202–226. https://doi.org/10.4018/978-1-7998-2257-8.ch010",
+        "ieee": "[1]A. Raden Aji Haqqi, \"Strengthening Islamic Finance in South-East Asia Through Innovation of Islamic FinTech in Brunei Darussalam,\" Economics, Business, and Islamic Finance in ASEAN Economics Community, pp. 202–226, 2020, doi: 10.4018/978-1-7998-2257-8.ch010.",
+        "vancouver": "[1]Raden Aji Haqqi A. Strengthening Islamic Finance in South-East Asia Through Innovation of Islamic FinTech in Brunei Darussalam. Economics, Business, and Islamic Finance in ASEAN Economics Community 2020:202–26. https://doi.org/10.4018/978-1-7998-2257-8.ch010."
       }
     },
     {
@@ -392,6 +1272,146 @@
       }
     },
     {
+      "id": "doi-10-4324-9780203788936",
+      "type": "monograph",
+      "doi": "10.4324/9780203788936",
+      "styles": {
+        "apa": "Lewis, H. S. (2017). In Defense of Anthropology. https://doi.org/10.4324/9780203788936",
+        "ieee": "[1]H. S. Lewis, \"In Defense of Anthropology,\" Sep. 2017, doi: 10.4324/9780203788936.",
+        "vancouver": "[1]Lewis HS. In Defense of Anthropology 2017. https://doi.org/10.4324/9780203788936."
+      }
+    },
+    {
+      "id": "doi-10-4324-9780429058509-8",
+      "type": "book-chapter",
+      "doi": "10.4324/9780429058509-8",
+      "styles": {
+        "apa": "Seppälä, T. (2020). On ‘outsourcing’ the political in political science. Reoccupying the Political, 91–106. https://doi.org/10.4324/9780429058509-8",
+        "ieee": "[1]T. Seppälä, \"On ‘outsourcing’ the political in political science,\" Reoccupying the Political, pp. 91–106, Jun. 2020, doi: 10.4324/9780429058509-8.",
+        "vancouver": "[1]Seppälä T. On ‘outsourcing’ the political in political science. Reoccupying the Political 2020:91–106. https://doi.org/10.4324/9780429058509-8."
+      }
+    },
+    {
+      "id": "doi-10-4324-9780429424106",
+      "type": "monograph",
+      "doi": "10.4324/9780429424106",
+      "styles": {
+        "apa": "Graham, P., & Hoffman, J. (2022). Introduction to Political Theory. https://doi.org/10.4324/9780429424106",
+        "ieee": "[1]P. Graham and J. Hoffman, \"Introduction to Political Theory,\" Mar. 2022, doi: 10.4324/9780429424106.",
+        "vancouver": "[1]Graham P, Hoffman J. Introduction to Political Theory 2022. https://doi.org/10.4324/9780429424106."
+      }
+    },
+    {
+      "id": "doi-10-4324-9780429451751",
+      "type": "monograph",
+      "doi": "10.4324/9780429451751",
+      "styles": {
+        "apa": "Hansen, K. A., Askerøi, E., & Jarman, F. (2020). Popular Musicology and Identity. https://doi.org/10.4324/9780429451751",
+        "ieee": "[1]K. A. Hansen, E. Askerøi, and F. Jarman, \"Popular Musicology and Identity,\" Aug. 2020, doi: 10.4324/9780429451751.",
+        "vancouver": "[1]Hansen KA, Askerøi E, Jarman F. Popular Musicology and Identity 2020. https://doi.org/10.4324/9780429451751."
+      }
+    },
+    {
+      "id": "doi-10-4324-9780429479687-4",
+      "type": "book-chapter",
+      "doi": "10.4324/9780429479687-4",
+      "styles": {
+        "apa": "Watt, D. F. (2018). Psychotherapy in an age of neuroscience: bridges to affective neuroscience. Revolutionary Connections, 79–115. https://doi.org/10.4324/9780429479687-4",
+        "ieee": "[1]D. F. Watt, \"Psychotherapy in an age of neuroscience: bridges to affective neuroscience,\" Revolutionary Connections, pp. 79–115, Apr. 2018, doi: 10.4324/9780429479687-4.",
+        "vancouver": "[1]Watt DF. Psychotherapy in an age of neuroscience: bridges to affective neuroscience. Revolutionary Connections 2018:79–115. https://doi.org/10.4324/9780429479687-4."
+      }
+    },
+    {
+      "id": "doi-10-4324-9781003180234-11",
+      "type": "book-chapter",
+      "doi": "10.4324/9781003180234-11",
+      "styles": {
+        "apa": "Tunderman, S., de Jonge, L., & Couperus, S. (2022). Studying Populism at the Intersection of Political Science and Political History. Combining Political History and Political Science, 185–205. https://doi.org/10.4324/9781003180234-11",
+        "ieee": "[1]S. Tunderman, L. de Jonge, and S. Couperus, \"Studying Populism at the Intersection of Political Science and Political History,\" Combining Political History and Political Science, pp. 185–205, Sep. 2022, doi: 10.4324/9781003180234-11.",
+        "vancouver": "[1]Tunderman S, de Jonge L, Couperus S. Studying Populism at the Intersection of Political Science and Political History. Combining Political History and Political Science 2022:185–205. https://doi.org/10.4324/9781003180234-11."
+      }
+    },
+    {
+      "id": "doi-10-4324-9781003180234-2",
+      "type": "book-chapter",
+      "doi": "10.4324/9781003180234-2",
+      "styles": {
+        "apa": "Muto, S. (2022). Political Science and Political History. Combining Political History and Political Science, 8–25. https://doi.org/10.4324/9781003180234-2",
+        "ieee": "[1]S. Muto, \"Political Science and Political History,\" Combining Political History and Political Science, pp. 8–25, Sep. 2022, doi: 10.4324/9781003180234-2.",
+        "vancouver": "[1]Muto S. Political Science and Political History. Combining Political History and Political Science 2022:8–25. https://doi.org/10.4324/9781003180234-2."
+      }
+    },
+    {
+      "id": "doi-10-4324-9781003180234-8",
+      "type": "book-chapter",
+      "doi": "10.4324/9781003180234-8",
+      "styles": {
+        "apa": "Orsina, G. (2022). Political Science as a Modernist Project. Combining Political History and Political Science, 126–140. https://doi.org/10.4324/9781003180234-8",
+        "ieee": "[1]G. Orsina, \"Political Science as a Modernist Project,\" Combining Political History and Political Science, pp. 126–140, Sep. 2022, doi: 10.4324/9781003180234-8.",
+        "vancouver": "[1]Orsina G. Political Science as a Modernist Project. Combining Political History and Political Science 2022:126–40. https://doi.org/10.4324/9781003180234-8."
+      }
+    },
+    {
+      "id": "doi-10-4324-9781003193623",
+      "type": "monograph",
+      "doi": "10.4324/9781003193623",
+      "styles": {
+        "apa": "Kilminster, R. (2023). Post-Philosophical Sociology. https://doi.org/10.4324/9781003193623",
+        "ieee": "[1]R. Kilminster, \"Post-Philosophical Sociology,\" Jul. 2023, doi: 10.4324/9781003193623.",
+        "vancouver": "[1]Kilminster R. Post-Philosophical Sociology 2023. https://doi.org/10.4324/9781003193623."
+      }
+    },
+    {
+      "id": "doi-10-4324-9781003227649-2",
+      "type": "book-chapter",
+      "doi": "10.4324/9781003227649-2",
+      "styles": {
+        "apa": "Levent, A. (2022). Islamic Economics and Institutional Economics. Institutional Islamic Economics and Finance, 10–26. https://doi.org/10.4324/9781003227649-2",
+        "ieee": "[1]A. Levent, \"Islamic Economics and Institutional Economics,\" Institutional Islamic Economics and Finance, pp. 10–26, Mar. 2022, doi: 10.4324/9781003227649-2.",
+        "vancouver": "[1]Levent A. Islamic Economics and Institutional Economics. Institutional Islamic Economics and Finance 2022:10–26. https://doi.org/10.4324/9781003227649-2."
+      }
+    },
+    {
+      "id": "doi-10-4324-9781003242536",
+      "type": "monograph",
+      "doi": "10.4324/9781003242536",
+      "styles": {
+        "apa": "Rasmussen, T. (2022). Political Legitimacy. https://doi.org/10.4324/9781003242536",
+        "ieee": "[1]T. Rasmussen, \"Political Legitimacy,\" May 2022, doi: 10.4324/9781003242536.",
+        "vancouver": "[1]Rasmussen T. Political Legitimacy 2022. https://doi.org/10.4324/9781003242536."
+      }
+    },
+    {
+      "id": "doi-10-4324-9781003252764-21",
+      "type": "book-chapter",
+      "doi": "10.4324/9781003252764-21",
+      "styles": {
+        "apa": "Indra, & Ascarya. (2022). Standard Methodology for Research in Islamic Economics and Finance. Teaching and Research Methods for Islamic Economics and Finance, 255–281. https://doi.org/10.4324/9781003252764-21",
+        "ieee": "[1]Indra and Ascarya, \"Standard Methodology for Research in Islamic Economics and Finance,\" Teaching and Research Methods for Islamic Economics and Finance, pp. 255–281, Jan. 2022, doi: 10.4324/9781003252764-21.",
+        "vancouver": "[1]Indra, Ascarya. Standard Methodology for Research in Islamic Economics and Finance. Teaching and Research Methods for Islamic Economics and Finance 2022:255–81. https://doi.org/10.4324/9781003252764-21."
+      }
+    },
+    {
+      "id": "doi-10-4324-9781003252764-22",
+      "type": "book-chapter",
+      "doi": "10.4324/9781003252764-22",
+      "styles": {
+        "apa": "Ascarya, & Tekdogan, O. F. (2022). Recommended Methodology for Research in Islamic Economics and Finance. Teaching and Research Methods for Islamic Economics and Finance, 282–302. https://doi.org/10.4324/9781003252764-22",
+        "ieee": "[1]Ascarya and O. F. Tekdogan, \"Recommended Methodology for Research in Islamic Economics and Finance,\" Teaching and Research Methods for Islamic Economics and Finance, pp. 282–302, Jan. 2022, doi: 10.4324/9781003252764-22.",
+        "vancouver": "[1]Ascarya, Tekdogan OF. Recommended Methodology for Research in Islamic Economics and Finance. Teaching and Research Methods for Islamic Economics and Finance 2022:282–302. https://doi.org/10.4324/9781003252764-22."
+      }
+    },
+    {
+      "id": "doi-10-4324-9781003255390",
+      "type": "monograph",
+      "doi": "10.4324/9781003255390",
+      "styles": {
+        "apa": "Bennett, A., & Royle, N. (2023). An Introduction to Literature, Criticism and Theory. https://doi.org/10.4324/9781003255390",
+        "ieee": "[1]A. Bennett and N. Royle, \"An Introduction to Literature, Criticism and Theory,\" Feb. 2023, doi: 10.4324/9781003255390.",
+        "vancouver": "[1]Bennett A, Royle N. An Introduction to Literature, Criticism and Theory 2023. https://doi.org/10.4324/9781003255390."
+      }
+    },
+    {
       "id": "doi-10-4324-9781003363309-2",
       "type": "book-chapter",
       "doi": "10.4324/9781003363309-2",
@@ -399,6 +1419,156 @@
         "apa": "Csomay, E., & Crawford, W. J. (2024). Linguistics, Corpus Linguistics, and Language Variation. Doing Corpus Linguistics, 3–12. https://doi.org/10.4324/9781003363309-2",
         "ieee": "[1]E. Csomay and W. J. Crawford, \"Linguistics, Corpus Linguistics, and Language Variation,\" Doing Corpus Linguistics, pp. 3–12, Jan. 2024, doi: 10.4324/9781003363309-2.",
         "vancouver": "[1]Csomay E, Crawford WJ. Linguistics, Corpus Linguistics, and Language Variation. Doing Corpus Linguistics 2024:3–12. https://doi.org/10.4324/9781003363309-2."
+      }
+    },
+    {
+      "id": "doi-10-4324-9781003414261-2",
+      "type": "book-chapter",
+      "doi": "10.4324/9781003414261-2",
+      "styles": {
+        "apa": "Henley, J. (2025). Understanding pedagogy. Inclusive Pedagogy in Music Education, 17–39. https://doi.org/10.4324/9781003414261-2",
+        "ieee": "[1]J. Henley, \"Understanding pedagogy,\" Inclusive Pedagogy in Music Education, pp. 17–39, Oct. 2025, doi: 10.4324/9781003414261-2.",
+        "vancouver": "[1]Henley J. Understanding pedagogy. Inclusive Pedagogy in Music Education 2025:17–39. https://doi.org/10.4324/9781003414261-2."
+      }
+    },
+    {
+      "id": "doi-10-4324-9781003414261-3",
+      "type": "book-chapter",
+      "doi": "10.4324/9781003414261-3",
+      "styles": {
+        "apa": "Henley, J. (2025). Pedagogy and inclusion. Inclusive Pedagogy in Music Education, 40–63. https://doi.org/10.4324/9781003414261-3",
+        "ieee": "[1]J. Henley, \"Pedagogy and inclusion,\" Inclusive Pedagogy in Music Education, pp. 40–63, Oct. 2025, doi: 10.4324/9781003414261-3.",
+        "vancouver": "[1]Henley J. Pedagogy and inclusion. Inclusive Pedagogy in Music Education 2025:40–63. https://doi.org/10.4324/9781003414261-3."
+      }
+    },
+    {
+      "id": "doi-10-4324-9781003570868-17",
+      "type": "book-chapter",
+      "doi": "10.4324/9781003570868-17",
+      "styles": {
+        "apa": "Walter, C. S. (2025). Finance Management and the Arts Organization. Arts Management, 445–481. https://doi.org/10.4324/9781003570868-17",
+        "ieee": "[1]C. S. Walter, \"Finance Management and the Arts Organization,\" Arts Management, pp. 445–481, Dec. 2025, doi: 10.4324/9781003570868-17.",
+        "vancouver": "[1]Walter CS. Finance Management and the Arts Organization. Arts Management 2025:445–81. https://doi.org/10.4324/9781003570868-17."
+      }
+    },
+    {
+      "id": "doi-10-4324-9781003582588",
+      "type": "monograph",
+      "doi": "10.4324/9781003582588",
+      "styles": {
+        "apa": "Róheim, G. (2024). Social Anthropology. https://doi.org/10.4324/9781003582588",
+        "ieee": "[1]G. Róheim, \"Social Anthropology,\" Nov. 2024, doi: 10.4324/9781003582588.",
+        "vancouver": "[1]Róheim G. Social Anthropology 2024. https://doi.org/10.4324/9781003582588."
+      }
+    },
+    {
+      "id": "doi-10-4324-9781003604235",
+      "type": "monograph",
+      "doi": "10.4324/9781003604235",
+      "styles": {
+        "apa": "Sherbert, M. G. (2025). Deconstructing Transhumanism. https://doi.org/10.4324/9781003604235",
+        "ieee": "[1]M. G. Sherbert, \"Deconstructing Transhumanism,\" Aug. 2025, doi: 10.4324/9781003604235.",
+        "vancouver": "[1]Sherbert MG. Deconstructing Transhumanism 2025. https://doi.org/10.4324/9781003604235."
+      }
+    },
+    {
+      "id": "doi-10-4324-9781003635437",
+      "type": "monograph",
+      "doi": "10.4324/9781003635437",
+      "styles": {
+        "apa": "Zuckerman, P. (2025). Sociology, Unplugged. https://doi.org/10.4324/9781003635437",
+        "ieee": "[1]P. Zuckerman, \"Sociology, Unplugged,\" Jul. 2025, doi: 10.4324/9781003635437.",
+        "vancouver": "[1]Zuckerman P. Sociology, Unplugged 2025. https://doi.org/10.4324/9781003635437."
+      }
+    },
+    {
+      "id": "doi-10-4324-9781032714165",
+      "type": "monograph",
+      "doi": "10.4324/9781032714165",
+      "styles": {
+        "apa": "Jeřábek, H. (2024). Lazarsfeld’s Methodology and Its Influence on Postwar Sociology in Europe. https://doi.org/10.4324/9781032714165",
+        "ieee": "[1]H. Jeřábek, \"Lazarsfeld’s Methodology and Its Influence on Postwar Sociology in Europe,\" Oct. 2024, doi: 10.4324/9781032714165.",
+        "vancouver": "[1]Jeřábek H. Lazarsfeld’s Methodology and Its Influence on Postwar Sociology in Europe 2024. https://doi.org/10.4324/9781032714165."
+      }
+    },
+    {
+      "id": "doi-10-4324-9781041055365-6",
+      "type": "book-chapter",
+      "doi": "10.4324/9781041055365-6",
+      "styles": {
+        "apa": "Seal, M., & Smith, A. (2025). Critical pedagogy in higher education institutions. Enabling Critical Pedagogy in Higher Education, 78–88. https://doi.org/10.4324/9781041055365-6",
+        "ieee": "[1]M. Seal and A. Smith, \"Critical pedagogy in higher education institutions,\" Enabling Critical Pedagogy in Higher Education, pp. 78–88, Feb. 2025, doi: 10.4324/9781041055365-6.",
+        "vancouver": "[1]Seal M, Smith A. Critical pedagogy in higher education institutions. Enabling Critical Pedagogy in Higher Education 2025:78–88. https://doi.org/10.4324/9781041055365-6."
+      }
+    },
+    {
+      "id": "doi-10-4324-9781315102023-2",
+      "type": "book-chapter",
+      "doi": "10.4324/9781315102023-2",
+      "styles": {
+        "apa": "Lindsey, L. L. (2020). The Sociology of Gender. Gender, 3–37. https://doi.org/10.4324/9781315102023-2",
+        "ieee": "[1]L. L. Lindsey, \"The Sociology of Gender,\" Gender, pp. 3–37, Dec. 2020, doi: 10.4324/9781315102023-2.",
+        "vancouver": "[1]Lindsey LL. The Sociology of Gender. Gender 2020:3–37. https://doi.org/10.4324/9781315102023-2."
+      }
+    },
+    {
+      "id": "doi-10-4324-9781315198651-2",
+      "type": "book-chapter",
+      "doi": "10.4324/9781315198651-2",
+      "styles": {
+        "apa": "Lock, D. (2017). Project management organization. Project Management, 15–49. https://doi.org/10.4324/9781315198651-2",
+        "ieee": "[1]D. Lock, \"Project management organization,\" Project Management, pp. 15–49, Nov. 2017, doi: 10.4324/9781315198651-2.",
+        "vancouver": "[1]Lock D. Project management organization. Project Management 2017:15–49. https://doi.org/10.4324/9781315198651-2."
+      }
+    },
+    {
+      "id": "doi-10-4324-9781315208879",
+      "type": "monograph",
+      "doi": "10.4324/9781315208879",
+      "styles": {
+        "apa": "Buck, D. N. (2017). A Musicology for Landscape. https://doi.org/10.4324/9781315208879",
+        "ieee": "[1]D. N. Buck, \"A Musicology for Landscape,\" May 2017, doi: 10.4324/9781315208879.",
+        "vancouver": "[1]Buck DN. A Musicology for Landscape 2017. https://doi.org/10.4324/9781315208879."
+      }
+    },
+    {
+      "id": "doi-10-4324-9781315211879-15",
+      "type": "book-chapter",
+      "doi": "10.4324/9781315211879-15",
+      "styles": {
+        "apa": "Baddeley, M. (2018). Corporate investment and finance. Behavioural Economics and Finance, 231–241. https://doi.org/10.4324/9781315211879-15",
+        "ieee": "[1]M. Baddeley, \"Corporate investment and finance,\" Behavioural Economics and Finance, pp. 231–241, Oct. 2018, doi: 10.4324/9781315211879-15.",
+        "vancouver": "[1]Baddeley M. Corporate investment and finance. Behavioural Economics and Finance 2018:231–41. https://doi.org/10.4324/9781315211879-15."
+      }
+    },
+    {
+      "id": "doi-10-4324-9781315613192-31",
+      "type": "book-chapter",
+      "doi": "10.4324/9781315613192-31",
+      "styles": {
+        "apa": "Page, S. (2019). Medieval magical figures. The Routledge History of Medieval Magic, 432–457. https://doi.org/10.4324/9781315613192-31",
+        "ieee": "[1]S. Page, \"Medieval magical figures,\" The Routledge History of Medieval Magic, pp. 432–457, Jan. 2019, doi: 10.4324/9781315613192-31.",
+        "vancouver": "[1]Page S. Medieval magical figures. The Routledge History of Medieval Magic 2019:432–57. https://doi.org/10.4324/9781315613192-31."
+      }
+    },
+    {
+      "id": "doi-10-4324-9781315708386",
+      "type": "monograph",
+      "doi": "10.4324/9781315708386",
+      "styles": {
+        "apa": "Jiong, Z. (2017). Literature and Literary Criticism in Contemporary China. https://doi.org/10.4324/9781315708386",
+        "ieee": "[1]Z. Jiong, \"Literature and Literary Criticism in Contemporary China,\" Oct. 2017, doi: 10.4324/9781315708386.",
+        "vancouver": "[1]Jiong Z. Literature and Literary Criticism in Contemporary China 2017. https://doi.org/10.4324/9781315708386."
+      }
+    },
+    {
+      "id": "doi-10-4324-9781351060110-2",
+      "type": "book-chapter",
+      "doi": "10.4324/9781351060110-2",
+      "styles": {
+        "apa": "Moore, A. W. (2018). Ethics and the Limits of Philosophy. Ethics beyond the Limits, 9–26. https://doi.org/10.4324/9781351060110-2",
+        "ieee": "[1]A. W. Moore, \"Ethics and the Limits of Philosophy,\" Ethics Beyond the Limits, pp. 9–26, Dec. 2018, doi: 10.4324/9781351060110-2.",
+        "vancouver": "[1]Moore AW. Ethics and the Limits of Philosophy. Ethics beyond the Limits 2018:9–26. https://doi.org/10.4324/9781351060110-2."
       }
     },
     {

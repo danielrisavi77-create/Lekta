@@ -1,24 +1,723 @@
 {
   "_note": "Adversarijalni slucajevi (knjige/monografije/zbornici, svi stilovi) koje je nasao i skeptik-agent potvrdio kroz workflow adversarial-citation-book-parser (2026-07-11), pa rucno provjereno. Svaki je STVARNI bug parsera (kriva/prazna vrijednost na CESTOM stvarnom obliku), ne dvosmislenost. Tekst se normalizira kao u scripts/parse-check.mjs; str se prosiruje. Regresija ako parser ponovno pukne.",
+  "_note_skaliranje": "Slucajevi od 'Pedersen' nadalje su bugovi otkriveni SKALIRANJEM cross-style korpusa na 168 doi.org/CSL stavki (2026-07-11): knjiga bez mjesta (Naslov. Izdavac[,;] God.) u APA/IEEE/Vancouver, APA zbornik s podnaslovnom dvotockom, Vancouver crticom-spojeni inicijali (Lee H-C, Jao T-i Wade-Giles), DOI/URL rep u naslovu, naslov koji zavrsava upitnikom ('... relevant? Zbornik, str.') u APA i Vancouver. Degenerirane doi.org stavke koje su ih pokazale (prazan urednik '(, Ed.)', container==naslov, <title> XML) filtrirane su iz konsenzus-korpusa pa ovdje zive kao trajna regresija.",
   "cases": [
-    { "style": "apa", "raw": "Kahneman, D. (2013). Misljenje, brzo i sporo (prev. A. Cvitanovic). Zagreb: Mozaik knjiga.", "expect": { "aut": "kahneman", "god": "2013", "nas": "Misljenje, brzo i sporo", "mj": "Zagreb", "izd": "Mozaik knjiga" } },
-    { "style": "apa", "raw": "Foucault, M. (1994). Nadzor i kazna: Radanje zatvora (prev. D. Grozdanic). Zagreb: Informator.", "expect": { "aut": "foucault", "god": "1994", "nas": "Nadzor i kazna: Radanje zatvora", "mj": "Zagreb", "izd": "Informator" } },
-    { "style": "apa", "raw": "Maric, M. (2018). Percepcija boli. U: I. Ivic (ur.), Kognicija: temeljni procesi (str. 45-78). Zagreb: Naklada Slap.", "expect": { "aut": "maric", "god": "2018", "cas": "Kognicija: temeljni procesi", "str": "45-78", "mj": "Zagreb", "izd": "Naklada Slap" } },
-    { "style": "apa", "raw": "Smith, J. (2020). Cognitive load theory. In R. Baumeister (Ed.), Handbook of psychology (pp. 45-78). Wiley.", "expect": { "aut": "smith", "god": "2020", "cas": "Handbook of psychology", "str": "45-78", "izd": "Wiley" } },
-    { "style": "chicago", "raw": "Ujevic, Mate. Studije o A. G. Matosu. Zagreb: Matica hrvatska, 1955.", "expect": { "aut": "ujevic", "god": "1955", "nas": "Studije o A. G. Matosu", "mj": "Zagreb", "izd": "Matica hrvatska" } },
-    { "style": "chicago", "raw": "Woolf, Virginia. A Room of One's Own. New York: Harcourt, Brace and Company, 1929.", "expect": { "aut": "woolf", "god": "1929", "nas": "A Room of One's Own", "mj": "New York", "izd": "Harcourt, Brace and Company" } },
-    { "style": "chicago", "raw": "Novak, Ivan. \"Cognitive Load Theory.\" U: Sarah Miller (ur.), Handbook of Learning Sciences, 112-140. Cambridge, MA: Harvard University Press, 2020.", "expect": { "aut": "novak", "cas": "Handbook of Learning Sciences", "str": "112-140", "mj": "Cambridge, MA", "izd": "Harvard University Press", "ured": "Sarah Miller" } },
-    { "style": "chicago", "raw": "Horvat, Petra. \"Metodologija istrazivanja.\" U: Ivan Baric (ur.), Zbornik: nove perspektive, 200-215. Rijeka: Naklada Val, 2018.", "expect": { "aut": "horvat", "cas": "Zbornik: nove perspektive", "str": "200-215", "mj": "Rijeka", "izd": "Naklada Val", "ured": "Ivan Baric" } },
-    { "style": "chicago", "raw": "Smith, John. \"Data Structures in Practice.\" In Handbook of Computer Science, edited by Jane Doe, 45-78. New York: Springer, 2020.", "expect": { "aut": "smith", "cas": "Handbook of Computer Science", "str": "45-78", "mj": "New York", "izd": "Springer", "ured": "Jane Doe" } },
-    { "style": "ieee", "raw": "S. M. Metev and V. P. Veiko, Laser Assisted Microtechnology. Berlin: Springer, 1998.", "expect": { "aut": "metev", "god": "1998", "nas": "Laser Assisted Microtechnology", "mj": "Berlin", "izd": "Springer" } },
-    { "style": "ieee", "raw": "M. G. Morgan, Ed., Uncertainty: A Guide to Dealing with Uncertainty. Cambridge: Cambridge University Press, 1990.", "expect": { "aut": "morgan", "god": "1990", "nas": "Uncertainty: A Guide to Dealing with Uncertainty", "mj": "Cambridge", "izd": "Cambridge University Press" } },
-    { "style": "ieee", "raw": "K. Ivic and M. Horvat, \"Robusna detekcija govora,\" in Proc. IEEE Int. Conf. Acoust., Speech, Signal Process. (ICASSP), 2018, pp. 1-5.", "expect": { "aut": "ivic", "god": "2018", "cas": "Proc. IEEE Int. Conf. Acoust., Speech, Signal Process. (ICASSP)", "str": "1-5" } },
-    { "style": "ieee", "raw": "R. Singh, \"Adaptive beamforming methods,\" in Proc. IEEE Int. Conf. Acoust., Speech, Signal Process. (ICASSP), Brighton, U.K., 2019, pp. 4520-4524.", "expect": { "aut": "singh", "god": "2019", "cas": "Proc. IEEE Int. Conf. Acoust., Speech, Signal Process. (ICASSP)", "mj": "Brighton, U.K.", "str": "4520-4524" } },
-    { "style": "ieee", "raw": "M. Kovac, \"Fuzzy control systems,\" in Advances in Robotics, P. Ban, Ed. Berlin: Springer, 2017, pp. 88-102.", "expect": { "aut": "kovac", "god": "2017", "cas": "Advances in Robotics", "ured": "P. Ban", "mj": "Berlin", "izd": "Springer", "str": "88-102" } },
-    { "style": "ieee", "raw": "T. H. Cormen, Introduction to Algorithms. Cambridge, MA: MIT Press, 2009. doi: 10.5555/1614191", "expect": { "aut": "cormen", "god": "2009", "nas": "Introduction to Algorithms", "mj": "Cambridge, MA", "izd": "MIT Press" } },
-    { "style": "vancouver", "raw": "Robbins SL, Cotran RS. Pathologic Basis of Disease. St. Louis: Mosby; 2010.", "expect": { "aut": "robbins", "god": "2010", "nas": "Pathologic Basis of Disease", "mj": "St. Louis", "izd": "Mosby" } },
-    { "style": "vancouver", "raw": "Guyton AC. Textbook of Medical Physiology. 13th ed. Philadelphia: Elsevier; 2016.", "expect": { "aut": "guyton", "god": "2016", "nas": "Textbook of Medical Physiology", "mj": "Philadelphia", "izd": "Elsevier" } },
-    { "style": "vancouver", "raw": "Guyton AC, Hall JE. Textbook of medical physiology [Internet]. Philadelphia: Elsevier; 2016 [cited 2020 Jan 5]. Available from: https://example.com/book", "expect": { "aut": "guyton", "god": "2016", "nas": "Textbook of medical physiology", "mj": "Philadelphia", "izd": "Elsevier" } },
-    { "style": "vancouver", "raw": "Horvat A. Etika u zdravstvu. In: Novak B, editor. Zbornik radova. Zagreb: Medicinska naklada; 2018. p. 45-67. Available from: https://example.com/zbornik", "expect": { "aut": "horvat", "god": "2018", "cas": "Zbornik radova", "str": "45-67", "mj": "Zagreb", "izd": "Medicinska naklada", "ured": "Novak B" } }
-  ]
+    {
+      "style": "apa",
+      "raw": "Kahneman, D. (2013). Misljenje, brzo i sporo (prev. A. Cvitanovic). Zagreb: Mozaik knjiga.",
+      "expect": {
+        "aut": "kahneman",
+        "god": "2013",
+        "nas": "Misljenje, brzo i sporo",
+        "mj": "Zagreb",
+        "izd": "Mozaik knjiga"
+      }
+    },
+    {
+      "style": "apa",
+      "raw": "Foucault, M. (1994). Nadzor i kazna: Radanje zatvora (prev. D. Grozdanic). Zagreb: Informator.",
+      "expect": {
+        "aut": "foucault",
+        "god": "1994",
+        "nas": "Nadzor i kazna: Radanje zatvora",
+        "mj": "Zagreb",
+        "izd": "Informator"
+      }
+    },
+    {
+      "style": "apa",
+      "raw": "Maric, M. (2018). Percepcija boli. U: I. Ivic (ur.), Kognicija: temeljni procesi (str. 45-78). Zagreb: Naklada Slap.",
+      "expect": {
+        "aut": "maric",
+        "god": "2018",
+        "cas": "Kognicija: temeljni procesi",
+        "str": "45-78",
+        "mj": "Zagreb",
+        "izd": "Naklada Slap"
+      }
+    },
+    {
+      "style": "apa",
+      "raw": "Smith, J. (2020). Cognitive load theory. In R. Baumeister (Ed.), Handbook of psychology (pp. 45-78). Wiley.",
+      "expect": {
+        "aut": "smith",
+        "god": "2020",
+        "cas": "Handbook of psychology",
+        "str": "45-78",
+        "izd": "Wiley"
+      }
+    },
+    {
+      "style": "chicago",
+      "raw": "Ujevic, Mate. Studije o A. G. Matosu. Zagreb: Matica hrvatska, 1955.",
+      "expect": {
+        "aut": "ujevic",
+        "god": "1955",
+        "nas": "Studije o A. G. Matosu",
+        "mj": "Zagreb",
+        "izd": "Matica hrvatska"
+      }
+    },
+    {
+      "style": "chicago",
+      "raw": "Woolf, Virginia. A Room of One's Own. New York: Harcourt, Brace and Company, 1929.",
+      "expect": {
+        "aut": "woolf",
+        "god": "1929",
+        "nas": "A Room of One's Own",
+        "mj": "New York",
+        "izd": "Harcourt, Brace and Company"
+      }
+    },
+    {
+      "style": "chicago",
+      "raw": "Novak, Ivan. \"Cognitive Load Theory.\" U: Sarah Miller (ur.), Handbook of Learning Sciences, 112-140. Cambridge, MA: Harvard University Press, 2020.",
+      "expect": {
+        "aut": "novak",
+        "cas": "Handbook of Learning Sciences",
+        "str": "112-140",
+        "mj": "Cambridge, MA",
+        "izd": "Harvard University Press",
+        "ured": "Sarah Miller"
+      }
+    },
+    {
+      "style": "chicago",
+      "raw": "Horvat, Petra. \"Metodologija istrazivanja.\" U: Ivan Baric (ur.), Zbornik: nove perspektive, 200-215. Rijeka: Naklada Val, 2018.",
+      "expect": {
+        "aut": "horvat",
+        "cas": "Zbornik: nove perspektive",
+        "str": "200-215",
+        "mj": "Rijeka",
+        "izd": "Naklada Val",
+        "ured": "Ivan Baric"
+      }
+    },
+    {
+      "style": "chicago",
+      "raw": "Smith, John. \"Data Structures in Practice.\" In Handbook of Computer Science, edited by Jane Doe, 45-78. New York: Springer, 2020.",
+      "expect": {
+        "aut": "smith",
+        "cas": "Handbook of Computer Science",
+        "str": "45-78",
+        "mj": "New York",
+        "izd": "Springer",
+        "ured": "Jane Doe"
+      }
+    },
+    {
+      "style": "ieee",
+      "raw": "S. M. Metev and V. P. Veiko, Laser Assisted Microtechnology. Berlin: Springer, 1998.",
+      "expect": {
+        "aut": "metev",
+        "god": "1998",
+        "nas": "Laser Assisted Microtechnology",
+        "mj": "Berlin",
+        "izd": "Springer"
+      }
+    },
+    {
+      "style": "ieee",
+      "raw": "M. G. Morgan, Ed., Uncertainty: A Guide to Dealing with Uncertainty. Cambridge: Cambridge University Press, 1990.",
+      "expect": {
+        "ured": "Morgan, M. G.",
+        "god": "1990",
+        "nas": "Uncertainty: A Guide to Dealing with Uncertainty",
+        "mj": "Cambridge",
+        "izd": "Cambridge University Press"
+      }
+    },
+    {
+      "style": "ieee",
+      "raw": "K. Ivic and M. Horvat, \"Robusna detekcija govora,\" in Proc. IEEE Int. Conf. Acoust., Speech, Signal Process. (ICASSP), 2018, pp. 1-5.",
+      "expect": {
+        "aut": "ivic",
+        "god": "2018",
+        "cas": "Proc. IEEE Int. Conf. Acoust., Speech, Signal Process. (ICASSP)",
+        "str": "1-5"
+      }
+    },
+    {
+      "style": "ieee",
+      "raw": "R. Singh, \"Adaptive beamforming methods,\" in Proc. IEEE Int. Conf. Acoust., Speech, Signal Process. (ICASSP), Brighton, U.K., 2019, pp. 4520-4524.",
+      "expect": {
+        "aut": "singh",
+        "god": "2019",
+        "cas": "Proc. IEEE Int. Conf. Acoust., Speech, Signal Process. (ICASSP)",
+        "mj": "Brighton, U.K.",
+        "str": "4520-4524"
+      }
+    },
+    {
+      "style": "ieee",
+      "raw": "M. Kovac, \"Fuzzy control systems,\" in Advances in Robotics, P. Ban, Ed. Berlin: Springer, 2017, pp. 88-102.",
+      "expect": {
+        "aut": "kovac",
+        "god": "2017",
+        "cas": "Advances in Robotics",
+        "ured": "P. Ban",
+        "mj": "Berlin",
+        "izd": "Springer",
+        "str": "88-102"
+      }
+    },
+    {
+      "style": "ieee",
+      "raw": "T. H. Cormen, Introduction to Algorithms. Cambridge, MA: MIT Press, 2009. doi: 10.5555/1614191",
+      "expect": {
+        "aut": "cormen",
+        "god": "2009",
+        "nas": "Introduction to Algorithms",
+        "mj": "Cambridge, MA",
+        "izd": "MIT Press"
+      }
+    },
+    {
+      "style": "vancouver",
+      "raw": "Robbins SL, Cotran RS. Pathologic Basis of Disease. St. Louis: Mosby; 2010.",
+      "expect": {
+        "aut": "robbins",
+        "god": "2010",
+        "nas": "Pathologic Basis of Disease",
+        "mj": "St. Louis",
+        "izd": "Mosby"
+      }
+    },
+    {
+      "style": "vancouver",
+      "raw": "Guyton AC. Textbook of Medical Physiology. 13th ed. Philadelphia: Elsevier; 2016.",
+      "expect": {
+        "aut": "guyton",
+        "god": "2016",
+        "nas": "Textbook of Medical Physiology",
+        "mj": "Philadelphia",
+        "izd": "Elsevier"
+      }
+    },
+    {
+      "style": "vancouver",
+      "raw": "Guyton AC, Hall JE. Textbook of medical physiology [Internet]. Philadelphia: Elsevier; 2016 [cited 2020 Jan 5]. Available from: https://example.com/book",
+      "expect": {
+        "aut": "guyton",
+        "god": "2016",
+        "nas": "Textbook of medical physiology",
+        "mj": "Philadelphia",
+        "izd": "Elsevier"
+      }
+    },
+    {
+      "style": "vancouver",
+      "raw": "Horvat A. Etika u zdravstvu. In: Novak B, editor. Zbornik radova. Zagreb: Medicinska naklada; 2018. p. 45-67. Available from: https://example.com/zbornik",
+      "expect": {
+        "aut": "horvat",
+        "god": "2018",
+        "cas": "Zbornik radova",
+        "str": "45-67",
+        "mj": "Zagreb",
+        "izd": "Medicinska naklada",
+        "ured": "Novak B"
+      }
+    },
+    {
+      "style": "apa",
+      "raw": "Pedersen, M. (2018). Functional analysis in applied mathematics and engineering. CRC Press.",
+      "expect": {
+        "aut": "pedersen",
+        "god": "2018",
+        "nas": "Functional analysis in applied mathematics and engineering",
+        "izd": "CRC Press"
+      }
+    },
+    {
+      "style": "ieee",
+      "raw": "M. Pedersen, Functional Analysis in Applied Mathematics and Engineering. CRC Press, 2018.",
+      "expect": {
+        "aut": "pedersen",
+        "god": "2018",
+        "nas": "Functional Analysis in Applied Mathematics and Engineering",
+        "izd": "CRC Press"
+      }
+    },
+    {
+      "style": "vancouver",
+      "raw": "Ewen S, Kulenthiran S, Mahfoud F. Alterations in cardiovascular physiology in pathological states. Oxford University Press; 2018.",
+      "expect": {
+        "aut": "ewen",
+        "god": "2018",
+        "nas": "Alterations in cardiovascular physiology in pathological states",
+        "izd": "Oxford University Press"
+      }
+    },
+    {
+      "style": "apa",
+      "raw": "Alfares, A. (2024). Parallel AC link power converter for hybrid renewable energy systems using machine learning control. 2024 Conference on Renewable Energy Technologies and Modern Communications Systems: Future and Challenges, 1-7.",
+      "expect": {
+        "aut": "alfares",
+        "god": "2024",
+        "cas": "2024 Conference on Renewable Energy Technologies and Modern Communications Systems: Future and Challenges",
+        "str": "1-7"
+      }
+    },
+    {
+      "style": "apa",
+      "raw": "Balaban, M., & Sturm, A. (2018). Software engineering lab. Proceedings of the 40th International Conference on Software Engineering: Software Engineering Education and Training, 21-30.",
+      "expect": {
+        "aut": "balaban",
+        "god": "2018",
+        "cas": "Proceedings of the 40th International Conference on Software Engineering: Software Engineering Education and Training",
+        "str": "21-30"
+      }
+    },
+    {
+      "style": "vancouver",
+      "raw": "Lee H-C, Lee S-W. Towards knowledge-intensive software engineering framework for self-adaptive software. Proceedings of the 27th International Conference on Software Engineering and Knowledge Engineering. 2015:30-5.",
+      "expect": {
+        "aut": "lee",
+        "god": "2015",
+        "cas": "Proceedings of the 27th International Conference on Software Engineering and Knowledge Engineering",
+        "str": "30-35"
+      }
+    },
+    {
+      "style": "apa",
+      "raw": "Borofsky, R. (2019). An anthropology of anthropology: Is it time to shift paradigms? https://doi.org/10.31761/pa-oas1.19aaoa",
+      "expect": {
+        "aut": "borofsky",
+        "god": "2019",
+        "nas": "An anthropology of anthropology: Is it time to shift paradigms"
+      }
+    },
+    {
+      "style": "apa",
+      "raw": "Bull, M. (2005). Is medieval history relevant? Thinking Medieval, 99-136.",
+      "expect": {
+        "aut": "bull",
+        "god": "2005",
+        "nas": "Is medieval history relevant",
+        "cas": "Thinking Medieval",
+        "str": "99-136"
+      }
+    },
+    {
+      "style": "vancouver",
+      "raw": "Bull M. Is medieval history relevant? Thinking Medieval 2005:99-136.",
+      "expect": {
+        "aut": "bull",
+        "god": "2005",
+        "nas": "Is medieval history relevant",
+        "cas": "Thinking Medieval",
+        "str": "99-136"
+      }
+    },
+    {
+      "style": "apa",
+      "raw": "Sen, A. (1999). What difference can they make? Journal of Ethics, 3(1), 5-24.",
+      "expect": {
+        "aut": "sen",
+        "god": "1999",
+        "nas": "What difference can they make",
+        "cas": "Journal of Ethics",
+        "vol": "3",
+        "broj": "1",
+        "str": "5-24"
+      }
+    },
+    {
+      "style": "vancouver",
+      "raw": "Jao T-i, Huehns C. Harmoniousness: essays in Chinese musicology. Leiden: Brill; 2022.",
+      "expect": {
+        "aut": "jao",
+        "god": "2022",
+        "nas": "Harmoniousness: essays in Chinese musicology",
+        "mj": "Leiden",
+        "izd": "Brill"
+      }
+    },
+    {
+      "style": "apa",
+      "raw": "Moore, K. L. (2010). Clinical anatomy. St. Louis, MO: Mosby.",
+      "expect": {
+        "aut": "moore",
+        "god": "2010",
+        "nas": "Clinical anatomy",
+        "mj": "St. Louis, MO",
+        "izd": "Mosby"
+      }
+    },
+    {
+      "style": "apa",
+      "raw": "Larson, R. (2008). Elementary statistics. St. Paul, MN: West Publishing.",
+      "expect": {
+        "aut": "larson",
+        "god": "2008",
+        "mj": "St. Paul, MN",
+        "izd": "West Publishing"
+      }
+    },
+    {
+      "style": "ieee",
+      "raw": "K. McCance and S. Huether, Pathophysiology. St. Louis, MO: Mosby, 2019.",
+      "expect": {
+        "aut": "mccance",
+        "god": "2019",
+        "nas": "Pathophysiology",
+        "mj": "St. Louis, MO",
+        "izd": "Mosby"
+      }
+    },
+    {
+      "style": "ieee",
+      "raw": "R. C. Hibbeler, Engineering Mechanics: Statics. Ft. Worth, TX: Pearson, 2016.",
+      "expect": {
+        "aut": "hibbeler",
+        "god": "2016",
+        "nas": "Engineering Mechanics: Statics",
+        "mj": "Ft. Worth, TX",
+        "izd": "Pearson"
+      }
+    },
+    {
+      "style": "vancouver",
+      "raw": "Robbins SL, Cotran RS. Pathologic basis of disease. St. Louis, MO: Mosby; 2010.",
+      "expect": {
+        "aut": "robbins",
+        "god": "2010",
+        "mj": "St. Louis, MO",
+        "izd": "Mosby"
+      }
+    },
+    {
+      "style": "apa",
+      "raw": "Committee, N. R. (2015). Ecosystem dynamics. Washington, D.C.: National Academy Press.",
+      "expect": {
+        "god": "2015",
+        "nas": "Ecosystem dynamics",
+        "mj": "Washington, D.C.",
+        "izd": "National Academy Press"
+      }
+    },
+    {
+      "style": "chicago",
+      "raw": "Sabatier, Paul A. Theories of the Policy Process. Washington, D.C.: Island Press, 2007.",
+      "expect": {
+        "aut": "sabatier",
+        "god": "2007",
+        "nas": "Theories of the Policy Process",
+        "mj": "Washington, D.C.",
+        "izd": "Island Press"
+      }
+    },
+    {
+      "style": "chicago",
+      "raw": "Sunstein, Cass R. Republic.com. Princeton, N.J.: Princeton University Press, 2001.",
+      "expect": {
+        "aut": "sunstein",
+        "god": "2001",
+        "mj": "Princeton, N.J.",
+        "izd": "Princeton University Press"
+      }
+    },
+    {
+      "style": "apa",
+      "raw": "Jones, R. (2015). Memory systems. In K. Miller (Ed.), Cognition: core processes (pp. 300-330). Hillsdale, NJ: L. Erlbaum Associates.",
+      "expect": {
+        "aut": "jones",
+        "god": "2015",
+        "cas": "Cognition: core processes",
+        "str": "300-330",
+        "mj": "Hillsdale, NJ",
+        "izd": "L. Erlbaum Associates"
+      }
+    },
+    {
+      "style": "chicago",
+      "raw": "Miller, Sarah. \"Reading Practices.\" In The Handbook of Reading, edited by Peter Gray, 100-125. New York: W. W. Norton, 2020.",
+      "expect": {
+        "aut": "miller",
+        "cas": "The Handbook of Reading",
+        "str": "100-125",
+        "mj": "New York",
+        "izd": "W. W. Norton",
+        "ured": "Peter Gray"
+      }
+    },
+    {
+      "style": "chicago",
+      "raw": "Miller, Sarah. \"Gothic Space.\" In Medieval Architecture, ed. Robert Lang, 112-140. Cambridge: Cambridge University Press, 2018.",
+      "expect": {
+        "cas": "Medieval Architecture",
+        "str": "112-140",
+        "mj": "Cambridge",
+        "izd": "Cambridge University Press",
+        "ured": "Robert Lang"
+      }
+    },
+    {
+      "style": "chicago",
+      "raw": "Smith, John. \"Chapter Title.\" In The Handbook of Things, edited by Anne Brown, Carla Diaz, and Emil Frank, 45-78. New York: Springer, 2020.",
+      "expect": {
+        "cas": "The Handbook of Things",
+        "str": "45-78",
+        "ured": "Anne Brown, Carla Diaz, and Emil Frank"
+      }
+    },
+    {
+      "style": "apa",
+      "raw": "Kovac, A. (2020). Percepcija rizika. U: M. Urednik (ur.), Kognitivna psihologija (2. izd., str. 112-140). Jastrebarsko: Naklada Slap.",
+      "expect": {
+        "aut": "kovac",
+        "god": "2020",
+        "cas": "Kognitivna psihologija",
+        "str": "112-140",
+        "mj": "Jastrebarsko",
+        "izd": "Naklada Slap"
+      }
+    },
+    {
+      "style": "apa",
+      "raw": "Smith, J. (2019). Framing effects. In A. Editor (Ed.), Handbook of judgment (3rd ed., pp. 200-231). New York, NY: Guilford Press.",
+      "expect": {
+        "aut": "smith",
+        "god": "2019",
+        "cas": "Handbook of judgment",
+        "str": "200-231",
+        "mj": "New York, NY",
+        "izd": "Guilford Press"
+      }
+    },
+    {
+      "style": "apa",
+      "raw": "Ivic, I. (2018). Predgovor. U: M. Maric (ur.), Povijest ideja (str. xi-xiv). Zagreb: Naklada Slap.",
+      "expect": {
+        "aut": "ivic",
+        "god": "2018",
+        "cas": "Povijest ideja",
+        "str": "xi-xiv",
+        "mj": "Zagreb",
+        "izd": "Naklada Slap"
+      }
+    },
+    {
+      "style": "apa",
+      "raw": "Smith, J. A. (2010). Ethics. U: Encyclopedia of Philosophy (str. 45). Oxford: Blackwell.",
+      "expect": {
+        "aut": "smith",
+        "god": "2010",
+        "cas": "Encyclopedia of Philosophy",
+        "str": "45",
+        "mj": "Oxford",
+        "izd": "Blackwell"
+      }
+    },
+    {
+      "style": "apa",
+      "raw": "Watson, J. D., & Crick, F. H. C. (1953). Molecular structure of nucleic acids. Nature, 171, 737.",
+      "expect": {
+        "aut": "watson",
+        "god": "1953",
+        "cas": "Nature",
+        "vol": "171",
+        "str": "737"
+      }
+    },
+    {
+      "style": "apa",
+      "raw": "Petrovic, M. (2018). Kratka biljeska. Priroda, 108(3), 45.",
+      "expect": {
+        "aut": "petrovic",
+        "god": "2018",
+        "cas": "Priroda",
+        "vol": "108",
+        "broj": "3",
+        "str": "45"
+      }
+    },
+    {
+      "style": "apa",
+      "raw": "Smith, J. (2020). Editorial overview. PLoS ONE, 15(3), e0231234.",
+      "expect": {
+        "aut": "smith",
+        "god": "2020",
+        "cas": "PLoS ONE",
+        "vol": "15",
+        "broj": "3",
+        "str": "e0231234"
+      }
+    },
+    {
+      "style": "chicago",
+      "raw": "Said, Edward. \"Introduction.\" In Orientalism, xi-xxviii. New York: Pantheon, 1978.",
+      "expect": {
+        "aut": "said",
+        "cas": "Orientalism",
+        "str": "xi-xxviii",
+        "mj": "New York",
+        "izd": "Pantheon"
+      }
+    },
+    {
+      "style": "ieee",
+      "raw": "R. Courant and D. Hilbert, Methods of Mathematical Physics, vol. 1. New York: Interscience, 1953.",
+      "expect": {
+        "aut": "courant",
+        "god": "1953",
+        "nas": "Methods of Mathematical Physics",
+        "vol": "1",
+        "mj": "New York",
+        "izd": "Interscience"
+      }
+    },
+    {
+      "style": "ieee",
+      "raw": "B. P. Lathi, Linear Systems and Signals, Rev. ed. New York: Oxford Univ. Press, 2005.",
+      "expect": {
+        "aut": "lathi",
+        "god": "2005",
+        "nas": "Linear Systems and Signals",
+        "mj": "New York",
+        "izd": "Oxford Univ. Press"
+      }
+    },
+    {
+      "style": "vancouver",
+      "raw": "Gray H. Anatomy of the human body. 2nd rev. ed. Philadelphia: Lea and Febiger; 1918.",
+      "expect": {
+        "aut": "gray",
+        "god": "1918",
+        "nas": "Anatomy of the human body",
+        "mj": "Philadelphia",
+        "izd": "Lea and Febiger"
+      }
+    },
+    {
+      "style": "vancouver",
+      "raw": "Cormen TH, Leiserson CE. Introduction to algorithms. Second edition. Cambridge: MIT Press; 2009.",
+      "expect": {
+        "aut": "cormen",
+        "god": "2009",
+        "nas": "Introduction to algorithms",
+        "mj": "Cambridge",
+        "izd": "MIT Press"
+      }
+    },
+    {
+      "style": "ieee",
+      "raw": "J. Kacprzyk, Ed., Handbook of Fuzzy Computation. Bristol: IOP Publishing, 1998.",
+      "expect": {
+        "ured": "Kacprzyk, J.",
+        "god": "1998",
+        "nas": "Handbook of Fuzzy Computation",
+        "mj": "Bristol",
+        "izd": "IOP Publishing"
+      }
+    },
+    {
+      "style": "ieee",
+      "raw": "T. Smith and R. Jones, Eds., Handbook of Signal Processing. New York: Wiley, 2015.",
+      "expect": {
+        "ured": "Smith, T.; Jones, R.",
+        "god": "2015",
+        "nas": "Handbook of Signal Processing",
+        "mj": "New York",
+        "izd": "Wiley"
+      }
+    },
+    {
+      "style": "vancouver",
+      "raw": "Longo DL, Fauci AS, Kasper DL, editors. Harrison's principles of internal medicine. 18th ed. New York: McGraw-Hill; 2012.",
+      "expect": {
+        "ured": "Longo, DL; Fauci, AS; Kasper, DL",
+        "god": "2012",
+        "mj": "New York",
+        "izd": "McGraw-Hill"
+      }
+    },
+    {
+      "style": "vancouver",
+      "raw": "Guyton AC, Hall JE. Textbook of medical physiology. Philadelphia: Saunders; 2011. 1120 p.",
+      "expect": {
+        "aut": "guyton",
+        "god": "2011",
+        "nas": "Textbook of medical physiology",
+        "mj": "Philadelphia",
+        "izd": "Saunders"
+      }
+    },
+    {
+      "style": "chicago",
+      "raw": "Carr, Edward Hallett. What Is History? London: Penguin, 1990.",
+      "expect": {
+        "aut": "carr",
+        "god": "1990",
+        "nas": "What Is History",
+        "mj": "London",
+        "izd": "Penguin"
+      }
+    },
+    {
+      "style": "ieee",
+      "raw": "K. He, X. Zhang, S. Ren, and J. Sun, \"Deep residual learning for image recognition,\" in Proc. IEEE Conf. Computer Vision and Pattern Recognition (CVPR), Las Vegas, NV, USA, Jun. 2016, pp. 770-778.",
+      "expect": {
+        "aut": "he",
+        "god": "2016",
+        "cas": "Proc. IEEE Conf. Computer Vision and Pattern Recognition (CVPR)",
+        "mj": "Las Vegas, NV, USA",
+        "str": "770-778"
+      }
+    },
+    {
+      "style": "ieee",
+      "raw": "J. van der Berg, Modern Control Systems. Boston: Pearson, 2018.",
+      "expect": {
+        "god": "2018",
+        "nas": "Modern Control Systems",
+        "mj": "Boston",
+        "izd": "Pearson"
+      }
+    },
+    {
+      "style": "ieee",
+      "raw": "L. de Vries, Applied Photonics. Amsterdam: Elsevier, 2015.",
+      "expect": {
+        "god": "2015",
+        "nas": "Applied Photonics",
+        "mj": "Amsterdam",
+        "izd": "Elsevier"
+      }
+    },
+    {
+      "style": "chicago",
+      "raw": "Putnam, Robert D. Bowling Alone: The Collapse and Revival of American Community. New York: Simon and Schuster, 2000.",
+      "expect": {
+        "aut": "putnam",
+        "god": "2000",
+        "nas": "Bowling Alone: The Collapse and Revival of American Community",
+        "mj": "New York",
+        "izd": "Simon and Schuster"
+      }
+    },
+    {
+      "style": "chicago",
+      "raw": "Anderson, John R. Cognitive Psychology and Its Implications. New York: Worth Publishers, 2005.",
+      "expect": {
+        "aut": "anderson",
+        "god": "2005",
+        "nas": "Cognitive Psychology and Its Implications",
+        "mj": "New York",
+        "izd": "Worth Publishers"
+      }
+    },
+    {
+      "style": "chicago",
+      "raw": "Fromm, Erich. Bijeg od slobode. Zagreb: Naprijed, 1986 (1941).",
+      "expect": {
+        "aut": "fromm",
+        "god": "1986",
+        "nas": "Bijeg od slobode",
+        "mj": "Zagreb",
+        "izd": "Naprijed"
+      }
+    }
+  ],
+  "_note_runda2": "Runda 2 adversarijalnog workflowa (174 agenta, 9.2M tokena, 2026-07-11) potvrdila 134 buga; 115 popravljeno u ~15 klasa: kratica s tockom u mjestu (St. Louis, Washington D.C., Princeton N.J.), izdavac s inicijalom (L. Erlbaum, W. W. Norton), stranice iza izdanja u zagradi + rimske + jedna stranica + eLocator, vol.N i nebrojcana/rijecna edicija (Rev. ed., Second edition) u naslovu, editor marker (Ed.,/Eds.,/editors/ed. X,), konf. mjesto bez mjesec+godine, plemicka cestica (de Vries), korporativni autor (cuva i/and), Chicago multi-detekcija (and u naslovu/izdavacu), reprint godina (1986 (1941)). Zadnjih 35 slucajeva su te klase; expecti su MOJI (parser-tocni), ne labavi finder-expecti. Preostalih 19 = 12 gdje je parser vec tocan (finder htio prezime umjesto punog urednika/autora) + 7 dvosmislenih (inicijal-prvo-ime Fitzgerald, redni broj 21. u containeru)."
 }

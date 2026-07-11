@@ -32,7 +32,9 @@ const args = process.argv.slice(2);
 const outPath = resolve(args.find((a) => !a.startsWith('--')) || join(root, 'tests/fixtures/citation-samples-books.json'));
 const doisArg = (args.find((a) => a.startsWith('--dois=')) || '').replace('--dois=', '');
 const explicitDois = doisArg ? doisArg.split(',').map((s) => s.trim()).filter(Boolean) : [];
-const limit = Number((args.find((a) => a.startsWith('--limit=')) || '--limit=60').replace('--limit=', '')) || 60;
+const limit = Number((args.find((a) => a.startsWith('--limit=')) || '--limit=140').replace('--limit=', '')) || 140;
+// --merge: uniraj s postojecim fixtureom po DOI-ju (skaliranje je akumulativno, ne zamjena verificiranih).
+const merge = args.includes('--merge');
 
 const STYLES = { apa: 'apa', ieee: 'ieee', vancouver: 'elsevier-vancouver' };
 
@@ -63,15 +65,48 @@ const QUERIES = [
   { type: 'proceedings-article', q: 'signal processing' },
   { type: 'proceedings-article', q: 'information systems Croatia' },
   { type: 'proceedings-article', q: 'robotics control' },
+  { type: 'proceedings-article', q: 'wireless networks' },
+  { type: 'proceedings-article', q: 'power electronics' },
+  { type: 'proceedings-article', q: 'natural language processing' },
+  { type: 'proceedings-article', q: 'software engineering' },
+  { type: 'proceedings-article', q: 'civil engineering structures' },
+  { type: 'proceedings-article', q: 'renewable energy systems' },
   // book-chapters (poglavlje u knjizi / handbooku)
   { type: 'book-chapter', q: 'psychology handbook' },
   { type: 'book-chapter', q: 'computer vision' },
   { type: 'book-chapter', q: 'linguistics' },
   { type: 'book-chapter', q: 'public health' },
-  // monografije / knjige s izdavacem
+  { type: 'book-chapter', q: 'political science' },
+  { type: 'book-chapter', q: 'education pedagogy' },
+  { type: 'book-chapter', q: 'environmental science' },
+  { type: 'book-chapter', q: 'law human rights' },
+  { type: 'book-chapter', q: 'philosophy ethics' },
+  { type: 'book-chapter', q: 'management organization' },
+  // monografije / knjige s izdavacem (podzastupljene: vise upita)
   { type: 'monograph', q: 'economics' },
-  { type: 'book', q: 'statistics' },
   { type: 'monograph', q: 'history' },
+  { type: 'monograph', q: 'sociology' },
+  { type: 'monograph', q: 'anthropology' },
+  { type: 'monograph', q: 'political theory' },
+  { type: 'monograph', q: 'literature criticism' },
+  { type: 'book', q: 'statistics' },
+  { type: 'book', q: 'mathematics analysis' },
+  { type: 'book', q: 'chemistry' },
+  { type: 'book', q: 'medicine physiology' },
+  { type: 'book', q: 'geography' },
+  // dopunski krug (raznolikost domena/izdavaca): sprijeci da svi primjeri budu isti oblik
+  { type: 'proceedings-article', q: 'computer graphics' },
+  { type: 'proceedings-article', q: 'data mining knowledge discovery' },
+  { type: 'proceedings-article', q: 'biomedical engineering' },
+  { type: 'book-chapter', q: 'sociology gender' },
+  { type: 'book-chapter', q: 'economics finance' },
+  { type: 'book-chapter', q: 'history medieval' },
+  { type: 'book-chapter', q: 'neuroscience' },
+  { type: 'monograph', q: 'religion' },
+  { type: 'monograph', q: 'archaeology' },
+  { type: 'monograph', q: 'musicology' },
+  { type: 'book', q: 'physics quantum' },
+  { type: 'book', q: 'biology ecology' },
 ];
 
 function familyOf(a) { return (a && (a.family || a.name)) ? String(a.family || a.name) : ''; }
@@ -87,9 +122,15 @@ function complete(m) {
   const authors = Array.isArray(m.author) ? m.author : [];
   const hasAuthor = authors.length >= 1 && authors.every((a) => familyOf(a).trim());
   const title = String((m.title && m.title[0]) || '');
-  // Odbaci ambiguozne naslove: podnaslov tockom ("Glavni. Podnaslov" -> autor-godina ne zna granicu polja)
-  // i ugnijezdeni navodnici (lome IEEE ',"' granicu). To NISU bugovi parsera nego neodredivost izvora.
-  const hasTitle = !!title && !/\.\s/.test(title) && !/["“”]/.test(title);
+  const container = String((m['container-title'] && m['container-title'][0]) || '');
+  // Container-title == title (npr. jednopoglavljna knjiga / naslov = naziv knjige): granica
+  // naslov/container je nedefinirana pa se stilovi razilaze (jedan dedu plira, drugi ne). Odbaci.
+  const nrm = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+  if (container && nrm(container) === nrm(title)) return false;
+  // Odbaci ambiguozne naslove: podnaslov tockom ("Glavni. Podnaslov" -> autor-godina ne zna granicu polja),
+  // ugnijezdeni navodnici (lome IEEE ',"' granicu) i XML markup u naslovu ("<title>...</title>", SPIE/
+  // Crossref los meta). To NISU bugovi parsera nego neodredivost/kvar izvora.
+  const hasTitle = !!title && !/\.\s/.test(title) && !/["“”]/.test(title) && !/[<>]|&lt;|&gt;/.test(title);
   const hasYear = !!yearOf(m);
   if (!hasAuthor || !hasTitle || !hasYear) return false;
   if (m.type === 'proceedings-article' || m.type === 'book-chapter') {
@@ -139,6 +180,17 @@ function looksDegenerate(styles) {
   }
   // APA "In (Editor)," / "In ( )" = nedostaje urednik u metapodacima -> nekonzistentno medu stilovima.
   if (/\bIn \(\s*(?:Editor|Ed\.?)?\s*\)\s*,/i.test(styles.apa)) return true;
+  // Prazan urednik "(, Ed.)" / "( , Editor)" (Crossref editor bez imena) -> APA pusti "(, Ed.)" u naslov.
+  if (/\(\s*,\s*Ed(?:itor)?s?\.?\s*\)/i.test(styles.apa)) return true;
+  // XML markup u naslovu ("&lt;title&gt;...", SPIE/Crossref los meta): degeneriran naslov u svim stilovima.
+  if (Object.values(styles).some((v) => /&lt;|&gt;|<\/?title>/i.test(v))) return true;
+  // Naslov = naziv knjige/containera: naslov se u APA-i ponovi ("Naslov? Naslov?, str."). Granica polja
+  // je nedefinirana pa se stilovi razilaze; to nije bug parsera nego neodrediv izvor.
+  const apaBody = styles.apa.replace(/^.*?\(\d{4}[a-z]?\)\.\s*/, '');
+  if (/^(.{15,}?)[\s,.]+\1(?![\w])/i.test(apaBody)) return true;
+  // Knjiga/monografija s urednikom+platformom umjesto stranicama ("In X (Editor), Oxford Medicine Online.")
+  // -> jedan stil je poglavlje, drugi knjiga; type-ambiguozno. Odbaci.
+  if (/\bIn\s+[^,]+\((?:Editor|Ed\.?)\),\s+[A-Z]/.test(styles.apa) && !/,\s*\d+[-–]\d+/.test(styles.apa)) return true;
   return false;
 }
 function clean(s) {
@@ -158,6 +210,18 @@ async function harvestOne({ doi, type }) {
 }
 
 // --- main -------------------------------------------------------------------
+// --refilter: bez mreze, ponovno primijeni looksDegenerate na SPREMLJENI fixture i izbaci degenerirane.
+if (args.includes('--refilter')) {
+  const prev = JSON.parse(readFileSync(outPath, 'utf8'));
+  const kept = [], dropped = [];
+  for (const a of prev.articles || []) (looksDegenerate(a.styles) ? dropped : kept).push(a);
+  prev.articles = kept;
+  writeFileSync(outPath, JSON.stringify(prev, null, 2) + '\n');
+  console.log(`Refilter: zadrzano ${kept.length}, izbaceno ${dropped.length}`);
+  dropped.forEach((a) => console.log(`  - ${a.id}`));
+  process.exit(0);
+}
+
 const targets = explicitDois.length
   ? explicitDois.map((doi) => ({ doi: doi.toLowerCase(), type: 'unknown' }))
   : (await discover()).slice(0, limit);
@@ -170,9 +234,25 @@ for (const t of targets) {
   else console.log(`  - preskocen (error/degenerirano) ${t.doi}`);
 }
 
+// --merge: uniraj s vec verificiranim fixtureom (dedup po DOI-ju); novi harvest samo dodaje.
+let finalArticles = articles;
+if (merge && existsSync(outPath)) {
+  let prev = [];
+  try { prev = JSON.parse(readFileSync(outPath, 'utf8')).articles || []; } catch { /* prazno */ }
+  const byDoi = new Map();
+  for (const a of prev) byDoi.set(String(a.doi).toLowerCase(), a);
+  let added = 0;
+  for (const a of articles) {
+    const k = String(a.doi).toLowerCase();
+    if (!byDoi.has(k)) { byDoi.set(k, a); added++; }
+  }
+  finalArticles = [...byDoi.values()].sort((a, b) => String(a.doi).localeCompare(String(b.doi)));
+  console.log(`\nMerge: ${prev.length} postojecih + ${added} novih = ${finalArticles.length}`);
+}
+
 const corpus = {
   _note: 'Realni cross-style citati za KNJIGE/MONOGRAFIJE/POGLAVLJA/ZBORNIKE, harvestirani doi.org content negotiation (CSL). Stil->parser: apa->apa, ieee->ieee, elsevier-vancouver->vancouver. Isti DOI u vise stilova = ground truth bez ljudskih oznaka. Pipeline: scripts/harvest-doi-citations.mjs; audit: scripts/citation-parser-audit.mjs.',
-  articles,
+  articles: finalArticles,
 };
 writeFileSync(outPath, JSON.stringify(corpus, null, 2) + '\n');
-console.log(`\nZapisano ${articles.length} clanaka -> ${outPath}`);
+console.log(`\nZapisano ${finalArticles.length} clanaka -> ${outPath}`);
