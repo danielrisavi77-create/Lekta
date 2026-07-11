@@ -171,7 +171,7 @@ async function processSlotExpiryReminders(): Promise<{ sent: number }> {
     const ok = await sendEmail(
       email,
       `Tvoj ${slot.work_type} rad istjece za 2 dana`,
-      `<p>Prozor za besplatan re-check tvog ${slot.work_type} rada (${slot.label ?? ''}) istjece uskoro.</p>
+      `<p>Prozor za besplatan re-check tvog ${slot.work_type} rada istjece uskoro.</p>
        <p>Provjeri ga jos jednom: <a href="${APP_BASE_URL}">${APP_BASE_URL}</a></p>
        <p><a href="${unsubUrl}">Ugasi ove obavijesti</a></p>`,
     );

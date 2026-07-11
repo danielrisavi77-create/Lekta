@@ -48,6 +48,15 @@ Resend salje samo s VERIFICIRANE domene; `lektahr.netlify.app` subdomena ne ide.
    Cron vec postoji; cim su tajne postavljene (ukljucujuci REMINDER_CRON_SECRET u cron
    headeru), pocinje slati.
 
+   PRIVATNOST prije aktivacije (audit data-flow-05): PRIJE postavljanja `RESEND_API_KEY`
+   1) potvrdi Resend regiju obrade (zadano je US) i potpisan DPA / subprocesor status;
+   2) dodaj Resend u popis izvrsitelja obrade (`src/legal/legal-content.ts`, odjeljak 5) s
+      REGIJOM i osnovom prijenosa. Ako regija nije EU, uskladi s `processing.html` odjeljkom 4
+      ("podaci u EU regiji") ili dodaj iznimku za dostavu e-maila uz osnovu transfera (SCC,
+      pogl. V GDPR). NE upisuj "EU regija" bez potvrde. Tijelo maila vise NE nosi naslov rada
+      (slot.label uklonjen), ali dostava e-mail adrese trecoj strani (Resend) i dalje treba
+      navedenog izvrsitelja.
+
 ## 2. OTP email template (da prijava radi)  [blokira login]
 
 Klijent (`verifyEmailOtp`) ocekuje 6-znamenkasti KOD, ne magic link.

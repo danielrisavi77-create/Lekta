@@ -254,8 +254,18 @@ Datum: 2026-07-11.
 - Rizik regresije: srednji (mijenja oblik payloada; report i golden testovi).
 - Velicina: M
 
-**BL-P0-04-2, Retencija za document_slots i faculty_requests**
+**BL-P0-04-2, Retencija za document_slots i faculty_requests** — GOTOVO (migracija 0016)
 - Prioritet: P0 paket (izvorni data-flow-04 P2)
+- Status: RIJESENO (0016_retention_slots_faculty.sql; dizajn verificiran workflowom
+  p0-04-retention-design). ANONIMIZACIJA (ne DELETE, jer FK-ovi su ON DELETE SET NULL pa bi
+  DELETE unistio kontekst): purge_document_slots nulira fingerprint.authorNorm/titleNorm/headings
+  + label WHERE slot_expires_at < now()-30d (kljuci na STUPAC, ne konstantu, zbog 'Do obrane' 120d)
+  I preskace slot s pending guarantee_claim; zadrzava sectionCount/bound_at/coverage_tier/work_type
+  (v_tier_share + FK). purge_faculty_request_email nulira email 7d nakon notified_at ili 90d od
+  created_at (red ostaje = discovery signal). Obrazac 0009/0011/0015 (language sql, search_path,
+  pg_extension guard, revoke from public, stagger 03:30/03:45). NE dira 0009 90d (referral anti-fraud
+  gornja granica). Tradeoff: nuliranje emaila degradira faculty_request_counts.unique_requesters
+  (zaseban requester_hash zadatak, ne blokira privatnost). Vlasnik: ukljuci pg_cron + primijeni.
 - Problem: nema purge joba za document_slots (authorNorm = ime autora, label = fragment
   naslova) ni brisanja reda faculty_requests (e-mail neograniceno).
 - Lokacija: 0001_monetization.sql:28-29; 0011_faculty_requests.sql:14, 132-144;
@@ -269,8 +279,14 @@ Datum: 2026-07-11.
 - Rizik regresije: nizak do srednji (paziti na garancijski prozor guarantee_claims).
 - Velicina: M
 
-**BL-P0-04-3, Resend kao izvrsitelj + ukloniti naslov iz podsjetnika**
+**BL-P0-04-3, Resend kao izvrsitelj + ukloniti naslov iz podsjetnika** — KOD GOTOVO
 - Prioritet: P0 paket (izvorni data-flow-05 P2)
+- Status: KOD RIJESEN. Tijelo maila (send-reminders slot-expiry grana) vise NE nosi slot.label
+  (fragment naslova) - uklonjeno; subject je vec bio samo work_type; slot.label se vise nigdje
+  ne cita. PREOSTAJE vlasniku (pravni + potvrda, dokumentirano u GO_LIVE_ROKOVI.md korak 1):
+  potvrditi Resend regiju (US default) + DPA i dodati ga u src/legal/legal-content.ts odjeljak 5
+  s regijom/osnovom transfera PRIJE postavljanja RESEND_API_KEY (ne upisivati "EU regija" bez
+  potvrde; uskladiti s processing.html odjeljak 4). Feature INERT dok tajna nije postavljena.
 - Problem: send-reminders salje preko api.resend.com (nije u popisu izvrsitelja, moguc
   transfer izvan EU); tijelo nosi slot.label (fragment naslova rada).
 - Lokacija: supabase/functions/send-reminders/index.ts:34, :74, :160
