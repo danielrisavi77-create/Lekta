@@ -456,12 +456,21 @@ Datum: 2026-07-11.
 - Rizik regresije: srednji (dira default i detekciju; golden/UI smoke).
 - Velicina: M
 
-**BL-P0-05-9, Uskladiti oglaseni i stvarni limit uploada na mobitelu**
+**BL-P0-05-9, Uskladiti oglaseni i stvarni limit uploada na mobitelu** — GOTOVO (2026-07-11)
 - Prioritet: P0 paket (izvorni ux-07 P2)
-- Problem: opis tvrdi 50 MB, mobilni efektivni cap je 20 MB.
-- Lokacija: index.html:288; src/ui/app.ts:208, :534, :147
-- Preporuka: prikazati stvarni efektivni limit iz effectiveUploadCap ovisno o uredaju.
-- Acceptance: mobitel prikazuje 20 MB, desktop 50 MB; nema neslaganja.
+- Problem: opis tvrdi 50 MB, a stvarni cap je graduiran (BL-P0-05-7): 12/20/50 MB po uredaju.
+- Isporuceno: opis dropzone (#wordUploadDescription) sada prikazuje STVARNI effectiveUploadCap
+  po uredaju: app.ts updatePackageUi (zove se na init i na svakoj promjeni) racuna
+  Math.round(effectiveUploadCap()/1024/1024) i upisuje "Word (.docx), do {cap} MB" (odn.
+  "Prateci tekst · najvise {cap} MB" u AV nacinu). Staticki index.html #wordUploadDescription
+  vise ne hardkodira "· najvise 50 MB" (JS ga svejedno prepise na boot; time nema krive brojke
+  ni u pre-hydration flashu). setFile poruka o prevelikoj datoteci vec je koristila effectiveUploadCap.
+- Acceptance ispunjen: desktop prikazuje 50, <=4 GB / coarse pointer 20, <=2 GB 12 MB; prikazani
+  broj == stvarno nametnuti cap (setFile odbija po istom effectiveUploadCap). NAPOMENA: order-upload
+  (rucna usluga) je zaseban productionConfig.uploadMaxBytes (8 MB) i nije predmet ovog taska.
+- Git-race: app.ts + index.html imali su tudji WIP; stageani samo moji hunkovi (app.ts git apply
+  --cached; index.html binarni reconstruct iz HEAD bloba uz update-index, jer je blob CRLF pa je
+  LF reconstruct lazno mijenjao svaki redak).
 - Rizik regresije: nizak.
 - Velicina: S
 
