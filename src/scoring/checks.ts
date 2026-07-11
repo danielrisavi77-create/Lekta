@@ -70,5 +70,5 @@ export function scoreMeta(s: number): { label: string; color: string; text: stri
   if (s >= 90) return { label: 'Visoka usklađenost s profilom', color: 'var(--ok)', text: 'Dokument je visoko usklađen s automatski provjerljivim pravilima odabranog profila.' };
   if (s >= 75) return { label: 'Dobra usklađenost s profilom', color: 'var(--info)', text: 'Dokument je uglavnom usklađen, ali prije predaje provjeri označene stavke.' };
   if (s >= 60) return { label: 'Potrebne su dorade', color: 'var(--warn)', text: 'Pronađeno je više stavki koje bi trebalo ispraviti prije predaje.' };
-  return { label: 'Nije spremno za predaju', color: 'var(--danger)', text: 'Pronađene su važne tehničke ili citatne nedosljednosti.' };
+  return { label: 'Slaba usklađenost s profilom', color: 'var(--danger)', text: 'Pronađene su važne tehničke ili citatne nedosljednosti koje treba ispraviti prije predaje.' };
 }

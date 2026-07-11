@@ -513,9 +513,15 @@ Datum: 2026-07-11.
   (provjerljiva pravila)"; hero podnaslov + PRICING_TIERS + guaranteeNote suzeni na tehnicki opseg;
   titlovi/meta reframe. statusLabel BAZA namjerno NEDIRNUTA (reuse za pod-kartice) - scoping na hero/report.
 - Acceptance ispunjen: nijedan javni tekst ne tvrdi bezuvjetnu spremnost ni "potvrduje uskladjenost".
-- DEFERRANO (nizi prioritet/rizik): checks.ts scoreMeta "Nije spremno za predaju" (golden snapshot rizik);
-  JSON-LD FAQ mirror (fiddly inline JSON); tool-page disclaimeri (citat/kartice/naslovnica/alati/
-  landing_usporedba - vecina LOW, neki kontendirani). Nalazi u workflow izlazu za follow-up.
+- DEFERRANO -> checks.ts scoreMeta GOTOVO (2026-07-11): label "Nije spremno za predaju" (bezuvjetni
+  predajni verdikt) -> "Slaba usklađenost s profilom" (paralelno "Visoka/Dobra usklađenost"; tehnicki
+  opseg, spremnost odlucuje mentor/fakultet). Golden BEZ rizika: scoreMeta je UI/report sloj, NE ulazi
+  u analyzeDocx ni golden-entry (grep src/analysis = 0; docx-golden 1/1 potvrdjen). Nijedan test/HTML
+  nije asertirao staru oznaku. Dodan tests/score-meta.test.ts (3): pragovi + nijedan razred ne daje
+  "spremno za predaju" verdikt. Time je ux-04 preobecavanje spremnosti POTPUNO zatvoreno (pecat,
+  glagoli, gate hero, izvjestaj naslov, scoreMeta).
+- PREOSTALO DEFERRANO (nizi prioritet): JSON-LD FAQ mirror (SEO strukturirani podaci za plagijat FAQ);
+  tool-page disclaimeri (citat/kartice/naslovnica/alati/landing_usporedba - vecina LOW, neki kontendirani).
 - Gate: tsc 0, vitest svi (legal-content+csp-hash 8/8), build OK; 3 ciste datoteke (index/app/legal).
 
 **BL-P0-06-3, Pravila kupnje i povrata u footer** — GOTOVO (2026-07-11)
