@@ -146,11 +146,19 @@ Izgradjeno (provider-agnosticno, testirano, INERTNO, kao waitlist/rokovi prije w
   dolazi s odabirom embedding modela.
 - Testovi: [tests/integrity.test.ts](../../tests/integrity.test.ts).
 
-Deferirano (owner-gated, kao i live wiring waitlist/rokova/naplate):
-- Provider odluke: embedding model (hosted vs self-host v2), plagijat korpus/API, AI-detektor.
-- `integrity-check` Edge Function (auth + entitlement gate + poziv providera + retention stamping).
-- Supabase tajne/konfiguracija endpointa + trosak; UI wiring (privola-ekran + gumb) u app.ts kad
-  endpoint postoji (svjesno nedirano sada zbog git-race na app.ts).
+Provider odluke (fiksirane): MVP = cross-lingual + AI-signal (bez istojezicnog plagijata);
+embedding = hostani multilingual API; AI = vanjski detektor, strogo informativno.
+
+Edge skeleton izgradjen: [supabase/functions/integrity-check/index.ts](../../supabase/functions/integrity-check/index.ts)
+(auth + consent gate + teaser/full entitlement gate + env-seam-ovi providera + retention-stamped
+zapis). INERTNO dok tajne/korpus nisu spremni (svaki seam vraca {available:false}).
+
+Deferirano (owner-gated, kao live wiring waitlist/rokova/naplate):
+- integrity_corpus tablica + match_integrity_corpus RPC (dolaze S ODABIROM konkretnog embedding
+  modela jer vector(N) dimenzija ovisi o modelu) + sourcing korpusa.
+- Provider tajne u Edge env: EMBEDDING_API_URL/KEY, AI_DETECTOR_API_URL/KEY; config.toml po potrebi.
+- UI wiring (privola-ekran + gumb) u app.ts kad endpoint postoji (svjesno nedirano zbog git-race).
+- Self-host embedding model kao v2 (privatnost naspram troska).
 
 ### Faza 5: regionalno (Srbija, BiH) + i18n
 - i18n sloj za UI copy; profili su data-driven pa su nove institucije unos podataka, ne kod.
