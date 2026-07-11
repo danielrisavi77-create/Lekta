@@ -3,6 +3,7 @@ import { resolve } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { existsSync, statSync, createReadStream } from 'node:fs';
 import { stripDevOnly } from './scripts/strip-dev-only.mjs';
+import { resolveDevTools } from './scripts/dev-console.mjs';
 
 // Vite dev i preview posluzuju HTML kao 'text/html' bez charseta i oslanjaju se na
 // <meta charset="utf-8"> u dokumentu. Ovaj mali plugin eksplicitno dodaje
@@ -36,29 +37,40 @@ function htmlCharsetUtf8() {
 // grafa, pa ispada i njen import.meta.glob svih source PDF-ova (~163MB). Time javni bundle
 // pada na ~3MB i interni alat nije izlozen. Default (bez DEPLOY) ukljucuje sve entryje pa
 // `npm run check` i lokalni QA ostaju nepromijenjeni.
-const isDeploy = process.env.DEPLOY === '1';
-const input: Record<string, string> = {
-  index: resolve(__dirname, 'index.html'),
-  usporedba: resolve(__dirname, 'landing_usporedba.html'),
-  alati: resolve(__dirname, 'alati.html'),
-  citat: resolve(__dirname, 'citat.html'),
-  kartice: resolve(__dirname, 'kartice.html'),
-  naslovnica: resolve(__dirname, 'naslovnica.html'),
-  literatura: resolve(__dirname, 'literatura.html'),
-  izjava: resolve(__dirname, 'izjava.html'),
-};
-if (!isDeploy) input.verification = resolve(__dirname, 'verification.html');
+// Interni dev alati (setup modal, QA konzola, verification.html entry + ~163MB source PDF-ova)
+// su SAFE-BY-DEFAULT iskljuceni iz produkcijskog builda; ukljucuju se samo u dev serveru ili uz
+// eksplicitni DEV_CONSOLE=1 (scripts/dev-console.mjs, routes-02). Odluka (devTools) se racuna po
+// buildu unutar defineConfig nize i prosljeduje pluginovima.
 
-// DEPLOY=1 dodatno REZE dev-only regije iz HTML-a (setup modal, QA konzola): to su interni
-// alati koje javni build ne smije ni sadrzavati (audit P0), ne samo skrivati. Par s
-// __DEV_TOOLS__ define-om koji iz JS bundlea tree-shakea pripadajuci kod (src/ui/app.ts).
-function stripDevOnlyHtml() {
+// REZE dev-only regije iz HTML-a (setup modal, QA konzola) kad build NIJE dev: to su interni
+// alati koje javni build ne smije ni sadrzavati (audit P0), ne samo skrivati. Par s __DEV_TOOLS__
+// define-om koji iz JS bundlea tree-shakea pripadajuci kod (src/ui/app.ts).
+function stripDevOnlyHtml(devTools: boolean) {
   return {
     name: 'lekta-strip-dev-only',
     apply: 'build' as const,
     transformIndexHtml: {
       order: 'pre' as const,
-      handler: (html: string) => (isDeploy ? stripDevOnly(html) : html),
+      handler: (html: string) => (devTools ? html : stripDevOnly(html)),
+    },
+  };
+}
+
+// Host-neovisni guard: svaki produkcijski (ne-dev) build koji bi ipak emitirao internu konzolu
+// pada odmah, ne samo u netlify lancu (routes-02). Dopunjuje scripts/verify-deploy-dist.mjs.
+function assertSafeBuild(devTools: boolean) {
+  return {
+    name: 'lekta-assert-safe-build',
+    apply: 'build' as const,
+    closeBundle() {
+      if (devTools) return; // QA build (DEV_CONSOLE=1) smije imati konzolu
+      const leaked = resolve(__dirname, 'dist', 'verification.html');
+      if (existsSync(leaked)) {
+        throw new Error(
+          '[assert-safe-build] dist/verification.html je u safe buildu (interna konzola bi procurila). ' +
+          'Gradi s DEV_CONSOLE=1 samo za lokalni QA.',
+        );
+      }
     },
   };
 }
@@ -125,11 +137,26 @@ function citationTools() {
   };
 }
 
-export default defineConfig({
-  plugins: [htmlCharsetUtf8(), citationTools(), stripDevOnlyHtml()],
-  define: { __DEV_TOOLS__: JSON.stringify(!isDeploy) },
-  build: {
-    target: 'es2022',
-    rollupOptions: { input },
-  },
+export default defineConfig(({ command }) => {
+  const devTools = resolveDevTools(command, process.env);
+  const input: Record<string, string> = {
+    index: resolve(__dirname, 'index.html'),
+    usporedba: resolve(__dirname, 'landing_usporedba.html'),
+    alati: resolve(__dirname, 'alati.html'),
+    citat: resolve(__dirname, 'citat.html'),
+    kartice: resolve(__dirname, 'kartice.html'),
+    naslovnica: resolve(__dirname, 'naslovnica.html'),
+    literatura: resolve(__dirname, 'literatura.html'),
+    izjava: resolve(__dirname, 'izjava.html'),
+  };
+  // Interna verifikacijska konzola ulazi u build SAMO kad su dev alati ukljuceni (QA opt-in).
+  if (devTools) input.verification = resolve(__dirname, 'verification.html');
+  return {
+    plugins: [htmlCharsetUtf8(), citationTools(), stripDevOnlyHtml(devTools), assertSafeBuild(devTools)],
+    define: { __DEV_TOOLS__: JSON.stringify(devTools) },
+    build: {
+      target: 'es2022',
+      rollupOptions: { input },
+    },
+  };
 });

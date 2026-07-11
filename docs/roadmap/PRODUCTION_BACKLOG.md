@@ -200,8 +200,16 @@ Datum: 2026-07-11.
 
 ### P0-03 Admin izlozenost
 
-**BL-P0-03-1, verification.html izuzeti iz produkcijskog builda hosting-neovisno**
+**BL-P0-03-1, verification.html izuzeti iz produkcijskog builda hosting-neovisno** — GOTOVO
 - Prioritet: P0 (izvorni routes-02 P2, elevirano)
+- Status: RIJESENO. Logika obrnuta u SAFE-BY-DEFAULT: scripts/dev-console.mjs resolveDevTools
+  (serve uvijek alati; build samo uz DEV_CONSOLE=1, DEPLOY vise nerelevantan). vite.config.ts:
+  verification entry, stripDevOnly i __DEV_TOOLS__ svi vezani na devTools; plain vite build na
+  BILO KOJEM hostu ne sadrzi konzolu. Novi host-neovisni closeBundle guard assertSafeBuild pada
+  ako verification.html procuri (dopunjuje verify-deploy-dist.mjs koji je samo u netlify lancu).
+  Provjereno: clean build (8 HTML, bez verification), DEV_CONSOLE=1 (emitira), safe rebuild
+  (emptyOutDir makne staru). 3 testa (dev-console.test.ts). Napomena: netlify.toml DEPLOY=1 sada
+  redundantan (safe je default), komentar ondje moze osvjeziti vlasnik netlify.toml.
 - Problem: verification.html se izuzima samo kad DEPLOY=1; guard je dio samo netlify command
   lanca; na hostu bez env-a konzola i teski PDF artefakti zavrse u dist/.
 - Lokacija: vite.config.ts:48, :33-36; netlify.toml:14,19; scripts/verify-deploy-dist.mjs:54
