@@ -1,0 +1,39 @@
+{
+  "_note": "Stvarni, stilom-oznaceni citati harvestirani s Hrcak clanaka (portal hrvatskih casopisa). Isti clanak u vise stilova = cross-style ground truth: godina/vol/broj/str/naslov/autori se moraju poklopiti u svim stilovima. Hrvatski lokalizirano (br./str./i/[Internet]/[pristupljeno]). Kurziv (_..._) iz markdowna maknut. Izvor: hrcak.srce.hr/clanak/<id>.",
+  "articles": [
+    {
+      "id": "hrcak-299380",
+      "styles": {
+        "ieee": "A. Laissaoui, B. Nekhoul, S. Mezoued i D. Poljak, \"Assessment of the human exposure to transient and time-harmonic fields using the enhanced transmission line theory approach\", Automatika, vol.58, br. 4, str. 355-362, 2017. [Online]. https://doi.org/10.1080/00051144.2018.1435341",
+        "vancouver": "Laissaoui A, Nekhoul B, Mezoued S, Poljak D. Assessment of the human exposure to transient and time-harmonic fields using the enhanced transmission line theory approach. Automatika [Internet]. 2017 [pristupljeno 11.07.2026.];58(4):355-362. https://doi.org/10.1080/00051144.2018.1435341",
+        "apa": "Laissaoui, A., Nekhoul, B., Mezoued, S. i Poljak, D. (2017). Assessment of the human exposure to transient and time-harmonic fields using the enhanced transmission line theory approach. Automatika, 58 (4), 355-362. https://doi.org/10.1080/00051144.2018.1435341",
+        "chicago": "Laissaoui, A., B. Nekhoul, S. Mezoued i D. Poljak. \"Assessment of the human exposure to transient and time-harmonic fields using the enhanced transmission line theory approach.\" Automatika 58, br. 4 (2017): 355-362. https://doi.org/10.1080/00051144.2018.1435341"
+      }
+    },
+    {
+      "id": "hrcak-299383",
+      "styles": {
+        "ieee": "E. Hosseini i G. Shahgholian, \"Output power levelling for DFIG wind turbine system using intelligent pitch angle control\", Automatika, vol.58, br. 4, str. 363-374, 2017. [Online]. https://doi.org/10.1080/00051144.2018.1455017",
+        "vancouver": "Hosseini E, Shahgholian G. Output power levelling for DFIG wind turbine system using intelligent pitch angle control. Automatika [Internet]. 2017 [pristupljeno 11.07.2026.];58(4):363-374. https://doi.org/10.1080/00051144.2018.1455017",
+        "apa": "Hosseini, E. i Shahgholian, G. (2017). Output power levelling for DFIG wind turbine system using intelligent pitch angle control. Automatika, 58 (4), 363-374. https://doi.org/10.1080/00051144.2018.1455017",
+        "chicago": "Hosseini, Ehsan i Ghazanfar Shahgholian. \"Output power levelling for DFIG wind turbine system using intelligent pitch angle control.\" Automatika 58, br. 4 (2017): 363-374. https://doi.org/10.1080/00051144.2018.1455017"
+      }
+    },
+    {
+      "id": "hrcak-493724",
+      "styles": {
+        "chicago": "Majnarić, Ivan. \"Posljednji kralj: srednjovjekovni narativi o Kraljevini Hrvatskoj i Dalmaciji potkraj 11. stoljeća.\" Povijesni prilozi 44, br. 69 (2025): 9-43. https://doi.org/10.22586/pp.v44i69.8y26gn53",
+        "ieee": "I. Majnarić, \"Posljednji kralj: srednjovjekovni narativi o Kraljevini Hrvatskoj i Dalmaciji potkraj 11. stoljeća\", Povijesni prilozi, vol.44, br. 69, str. 9-43, 2025. [Online]. https://doi.org/10.22586/pp.v44i69.8y26gn53",
+        "apa": "Majnarić, I. (2025). Posljednji kralj: srednjovjekovni narativi o Kraljevini Hrvatskoj i Dalmaciji potkraj 11. stoljeća. Povijesni prilozi, 44 (69), 9-43. https://doi.org/10.22586/pp.v44i69.8y26gn53"
+      }
+    },
+    {
+      "id": "hrcak-493726",
+      "styles": {
+        "chicago": "Popić, Tomislav. \"Kapitular prokuratora zadarske komune iz 1373. godine.\" Povijesni prilozi 44, br. 69 (2025): 45-68. https://doi.org/10.22586/pp.v44i69.7x5rve59",
+        "ieee": "T. Popić, \"Kapitular prokuratora zadarske komune iz 1373. godine\", Povijesni prilozi, vol.44, br. 69, str. 45-68, 2025. [Online]. https://doi.org/10.22586/pp.v44i69.7x5rve59",
+        "apa": "Popić, T. (2025). Kapitular prokuratora zadarske komune iz 1373. godine. Povijesni prilozi, 44 (69), 45-68. https://doi.org/10.22586/pp.v44i69.7x5rve59"
+      }
+    }
+  ]
+}

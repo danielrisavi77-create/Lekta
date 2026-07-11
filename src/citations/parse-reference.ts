@@ -41,13 +41,14 @@ function stripMarker(s: string): string {
 // Podijeli na prvu recenicu (tocka + razmak), ali NE na inicijalu ("I. Ivic"): trazi da znak
 // prije tocke nije samostalno veliko slovo.
 function firstSentence(s: string): [string, string] {
-  const re = /([^\s][^.]*?[^\s.])\.\s+/;
-  const m = s.match(re);
-  if (m && m.index !== undefined) {
+  const re = /([^\s][^.]*?[^\s.])\.\s+/g;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(s))) {
     const head = s.slice(0, m.index + m[1].length);
-    const tail = s.slice(m.index + m[0].length);
-    // odbij ako "recenica" zavrsava samo velikim slovom (inicijal)
-    if (!/(?:^|\s)[\p{Lu}]$/u.test(head)) return [head.trim(), tail.trim()];
+    const after = s.charAt(m.index + m[0].length);
+    if (/(?:^|\s)[\p{Lu}]$/u.test(head)) continue;              // inicijal ("I. Ivic")
+    if (/\d$/.test(head) && /\p{Ll}/u.test(after)) continue;    // redni broj + malo slovo ("11. stoljeca")
+    return [head.trim(), s.slice(m.index + m[0].length).trim()];
   }
   const dot = s.search(/\.\s/);
   if (dot >= 0) return [s.slice(0, dot).trim(), s.slice(dot + 2).trim()];
@@ -175,6 +176,11 @@ function parseVancouver(input: string, fields: Partial<CitationInput>): SourceTy
     if (authors) fields.authors = authors;
     rest = am[2];
   }
+  // Makni Hrcak/PubMed sum: "[Internet]", "[pristupljeno ...]", "[cited ...]" (lomi Godina;Vol koordinatu).
+  // NE dira "[zavrsni rad]"/"[diplomski rad]" marker (treba za detekciju teze).
+  rest = rest.replace(/\[\s*(?:internet|online|pristupljeno[^\]]*|cited[^\]]*|updated[^\]]*)\s*\]/gi, ' ')
+    .replace(/\s{2,}/g, ' ').trim();
+  const vdoi = rest.match(/10\.\d{4,9}\/[^\s,;]+/); if (vdoi) fields.doi = vdoi[0].replace(/[.,;]+$/, '');
 
   // Clanak: "... Casopis. Godina;Vol(Broj):Str"
   const cm = rest.match(/((?:19|20)\d{2})\s*;\s*(\d+)(?:\s*\(([^)]+)\))?(?::\s*([\dA-Za-z\-–]+))?/);
@@ -236,7 +242,7 @@ function ieeeName(p: string): string {
 }
 
 function parseIeeeAuthors(seg: string): string {
-  const cleaned = seg.replace(/\s*,?\s+and\s+/gi, ', ').replace(/\bet\s+al\.?/gi, '');
+  const cleaned = seg.replace(/\s*,?\s+(?:and|i)\s+/gi, ', ').replace(/\bet\s+al\.?/gi, ''); // hrv "i" i "and"
   const names: string[] = [];
   for (const part of cleaned.split(/\s*,\s*/).map((x) => x.trim()).filter(Boolean)) {
     const n = ieeeName(part);
@@ -263,12 +269,14 @@ function parseIeee(input: string, fields: Partial<CitationInput>): SourceType {
   const before = raw.slice(0, qm.index).replace(/[\s,]+$/, '').trim();
   if (before) fields.authors = parseIeeeAuthors(before);
   const tail = raw.slice(qm.index + qm[0].length).replace(/^[\s,.]+/, '').trim();
-  const ye = tail.match(/\b((?:19|20)\d{2})\b/g); if (ye) fields.year = ye[ye.length - 1];
+  // Godina bez DOI/URL suma (DOI "10.1080/...2018..." ima laznu godinu).
+  const ye = tail.replace(/10\.\d{4,9}\/\S+/g, ' ').replace(/https?:\/\/\S+/g, ' ').match(/\b((?:19|20)\d{2})\b/g);
+  if (ye) fields.year = ye[ye.length - 1];
   const vol = tail.match(/\bvol\.\s*(\d+)/i); if (vol) fields.volume = vol[1];
   const no = tail.match(/\b(?:no|br)\.\s*(\d+)/i); if (no) fields.issue = no[1];
-  const pp = tail.match(/\bpp?\.\s*(\d+(?:\s*[-–]\s*\d+)?)/i); if (pp) fields.pages = pp[1].replace(/\s+/g, '');
+  const pp = tail.match(/\b(?:pp?|str)\.\s*(\d+(?:\s*[-–]\s*\d+)?)/i); if (pp) fields.pages = pp[1].replace(/\s+/g, ''); // "pp." i hrv "str."
   // Zadrzi zavrsnu tocku (kratica casopisa "IEEE Trans. Med. Imag."), makni samo zarez/razmak.
-  const splitSrc = (t: string) => t.split(/,\s*(?:vol\.|no\.|br\.|pp?\.|(?:19|20)\d{2}\b)/i)[0].replace(/[,\s]+$/, '').trim();
+  const splitSrc = (t: string) => t.split(/,\s*(?:vol\.|no\.|br\.|pp?\.|str\.|(?:19|20)\d{2}\b)/i)[0].replace(/[,\s]+$/, '').trim();
   if (/^in\s+/i.test(tail)) {
     const c = splitSrc(tail.replace(/^in\s+/i, ''));
     if (c) {
