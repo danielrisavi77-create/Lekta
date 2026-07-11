@@ -759,14 +759,22 @@ Datum: 2026-07-11.
   prvog uploada.
 - Rizik regresije: srednji (sidra #analyzer, SEO, breakpointi). Velicina: M
 
-**BL-P2-12, Prijava pogresne provjere bez window.prompt**
+**BL-P2-12, Prijava pogresne provjere bez window.prompt** — GOTOVO (2026-07-11)
 - Prioritet: P2 (ux-05)
-- Problem: reportWrongCheck koristi native window.prompt (neostiliziran, blokirljiv, losa
-  mobilna UX).
-- Lokacija: src/ui/app.ts:546; index.html:332
-- Preporuka: mali modal (textarea + gumb) uz postojeci trapModal; zadrzati mailto/JSON.
-- Acceptance: unos kroz tematizirani element, radi na mobitelu, hvata fokus; slanje isto.
-- Rizik regresije: nizak do srednji. Velicina: S
+- Problem: reportWrongCheck koristio native window.prompt (neostiliziran, blokirljiv, losa
+  mobilna/a11y UX; ne hvata fokus, ne moze se tematizirati).
+- ISPORUCENO: reportWrongCheck() sada otvara tematizirani #reportModal (labeliran textarea
+  #reportNote maxlength 1000 + privacy napomena "bez teksta rada") preko postojeceg trapModal
+  (fokus na .modal-close, Tab trap, Escape zatvara, klik na backdrop zatvara). Logika slanja
+  izvucena u submitReport() koji zadrzava IDENTICAN mailto/JSON-fallback + trackEvent, note se
+  cita iz textarea (uz empty-guard: prazna poruka toasta i vraca fokus). Reuse .modal/.field/
+  .history-privacy klasa (nula novog CSS-a). Escape handler dobio closeReport(). Sve funkcije
+  na jednoj liniji (app.ts je CRLF, gust stil) da se ocuva CRLF; index.html modal binarno umetnut.
+- Guard test tests/report-modal.test.ts (6): app.ts NEMA window.prompt/goli prompt(, reportWrongCheck
+  otvara modal, closeReport/submitReport postoje, submitReport zadrzava mailto/downloadBlob/trackEvent,
+  gumbi ozicani u bind(), Escape zatvara reportModal, index.html ima role=dialog+aria-modal+labeliran textarea.
+- Acceptance ispunjen: unos kroz tematizirani element, hvata fokus, radi na mobitelu; slanje isto.
+- Rizik regresije: nizak (reuse postojece modal infrastrukture, mailto/JSON logika netaknuta). Velicina: S
 
 ---
 
