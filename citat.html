@@ -98,6 +98,8 @@ a{color:inherit}:focus-visible{outline:none;box-shadow:var(--focus);border-radiu
 .cit-tab:hover{color:var(--text)}
 .cit-tab.active{color:var(--brand);border-bottom-color:var(--brand)}
 #bulk-input{width:100%;font-family:var(--ink-serif);font-size:14px;line-height:1.5;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--text);resize:vertical}
+.bulk-style-row{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:700;color:var(--muted);margin:0 0 12px}
+.bulk-style-row select{font:inherit;font-weight:600;color:var(--text);padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:var(--panel);max-width:420px}
 .bulk-card{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:12px 0;background:var(--panel)}
 .bulk-card.low-conf{border-color:var(--warn,#c9821f);background:color-mix(in srgb,var(--warn,#c9821f) 8%,var(--panel))}
 .bulk-card-head{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin-bottom:8px}
@@ -302,6 +304,15 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
       <div class="card">
         <h2>Cijela literatura</h2>
         <p class="sub">Zalijepi popis literature (jedna referenca po retku ili odvojene praznim retkom). Alat prepozna polja koliko može; obavezno provjeri i ispravi svaki unos prije korištenja.</p>
+        <label class="bulk-style-row">Stil izvora (kako je popis napisan)
+          <select id="bulk-style">
+            <option value="auto">Automatski (prepoznaj po obliku)</option>
+            <option value="apa">APA / Harvard (autor, godina)</option>
+            <option value="vancouver">Vancouver / ICMJE (numeričko, medicina i zdravstvo)</option>
+            <option value="ieee">IEEE (numeričko, tehnika)</option>
+            <option value="chicago">Chicago / fusnota (humanistika, pravo)</option>
+          </select>
+        </label>
         <textarea id="bulk-input" rows="8" placeholder="Zalijepi cijelu literaturu ovdje, npr.:&#10;Kovačić, I. (2020). Naslov knjige. Zagreb: Izdavač.&#10;Horvat, A. (2019). Naslov članka. Časopis, 28(3), 45-67."></textarea>
         <div class="tp-toolbar"><button class="btn btn-secondary btn-sm" id="bulk-parse" type="button">Prepoznaj reference</button></div>
         <div id="bulk-entries"></div>

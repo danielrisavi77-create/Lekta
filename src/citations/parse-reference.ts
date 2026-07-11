@@ -20,6 +20,9 @@ export interface ParsedReference {
   lowConfidence: boolean;
 }
 
+/** Stil ulaznog popisa. 'auto' = prepoznaj po obliku; ostalo forsira granu (rucni izbor u UI-u). */
+export type BulkStyle = 'auto' | 'apa' | 'vancouver' | 'ieee' | 'chicago';
+
 // Godina 1900-2099, moze imati sufiks (2020a). Ne hvata dio duljeg broja.
 const YEAR_RE = /(?:^|[^\d])((?:19|20)\d{2})[a-z]?(?![\d])/;
 
@@ -193,20 +196,164 @@ function parseVancouver(input: string, fields: Partial<CitationInput>): SourceTy
   return isThesis ? 'zavrsni' : 'knjiga';
 }
 
-export function parseReference(raw: string): ParsedReference {
-  const original = stripMarker((raw || '').replace(/\s+/g, ' ').trim());
-  const fields: Partial<CitationInput> = {};
-  if (!original) return { type: 'knjiga', fields, lowConfidence: true };
+// --- IEEE (numericki tehnicki: inicijali PRIJE prezimena, naslov u navodnicima) -------------
+// "F. M. Prezime, "Naslov," Casopis, vol. V, no. N, pp. P, Godina."  (clanak)
+// "... in Proc. Konf., Grad, Godina, pp. P."  (konferencija)
+function looksLikeIeee(s: string): boolean {
+  if (/\((?:19|20)\d{2}\)\s*:\s*\d/.test(s)) return false; // "(2019): 45" je Chicago clanak, ne IEEE
+  const hasQuote = /["“][^"”]{3,}["”]/.test(s);
+  const hasCoord = /\bvol\.\s*\d|\bno\.\s*\d|\bpp?\.\s*\d/i.test(s);
+  return hasQuote && (hasCoord || /\bin\s+proc\b/i.test(s) || /,\s*(?:19|20)\d{2}\.?\s*$/.test(s));
+}
 
-  if (looksLikeVancouver(original)) {
-    const type = parseVancouver(original, fields);
-    const vdoi = original.match(/10\.\d{4,9}\/[^\s,;]+/);
-    if (vdoi) fields.doi = vdoi[0].replace(/[.,;]+$/, '');
-    if (fields.title) fields.title = fields.title.replace(/[.,]+$/, '').trim();
-    const filled = Object.values(fields).filter(Boolean).length;
-    return { type, fields, lowConfidence: filled <= 2 };
+// "J. Smith" -> "Smith, J."; "A. B. Author" -> "Author, A. B."; "J. van der Berg" -> "van der Berg, J."
+function ieeeName(p: string): string {
+  const tokens = p.trim().split(/\s+/).filter(Boolean);
+  const inits: string[] = [];
+  let i = 0;
+  while (i < tokens.length && /^[\p{Lu}]\.?$/u.test(tokens[i])) { inits.push(`${tokens[i].replace(/\.$/, '')}.`); i++; }
+  const surname = tokens.slice(i).join(' ');
+  if (!surname) return p.trim();
+  return inits.length ? `${surname}, ${inits.join(' ')}` : surname;
+}
+
+function parseIeeeAuthors(seg: string): string {
+  const cleaned = seg.replace(/\s*,?\s+and\s+/gi, ', ').replace(/\bet\s+al\.?/gi, '');
+  const names: string[] = [];
+  for (const part of cleaned.split(/\s*,\s*/).map((x) => x.trim()).filter(Boolean)) {
+    const n = ieeeName(part);
+    if (n) names.push(n);
+  }
+  return names.join('; ');
+}
+
+function parseIeee(input: string, fields: Partial<CitationInput>): SourceType {
+  const raw = input.replace(/\s+/g, ' ').trim();
+  const doi = raw.match(/10\.\d{4,9}\/[^\s,;]+/);
+  if (doi) fields.doi = doi[0].replace(/[.,;]+$/, '');
+  const qm = raw.match(/["“]([^"”]+)["”]/);
+  if (!qm || qm.index === undefined) {
+    // IEEE knjiga bez navodnika ("F. Last, Title. City: Publisher, Year") - best effort.
+    const parts = raw.split(/,\s*/);
+    if (parts.length >= 2) fields.authors = parseIeeeAuthors(parts[0]);
+    const ye = raw.match(/\b((?:19|20)\d{2})\b/g); if (ye) fields.year = ye[ye.length - 1];
+    const pub = raw.match(/([^:.,]+):\s*([^,]+),\s*(?:19|20)\d{2}/);
+    if (pub) { fields.place = pub[1].trim(); fields.publisher = pub[2].trim(); }
+    return 'knjiga';
+  }
+  fields.title = qm[1].replace(/[.,]+$/, '').trim();
+  const before = raw.slice(0, qm.index).replace(/[\s,]+$/, '').trim();
+  if (before) fields.authors = parseIeeeAuthors(before);
+  const tail = raw.slice(qm.index + qm[0].length).replace(/^[\s,.]+/, '').trim();
+  const ye = tail.match(/\b((?:19|20)\d{2})\b/g); if (ye) fields.year = ye[ye.length - 1];
+  const vol = tail.match(/\bvol\.\s*(\d+)/i); if (vol) fields.volume = vol[1];
+  const no = tail.match(/\b(?:no|br)\.\s*(\d+)/i); if (no) fields.issue = no[1];
+  const pp = tail.match(/\bpp?\.\s*(\d+(?:\s*[-–]\s*\d+)?)/i); if (pp) fields.pages = pp[1].replace(/\s+/g, '');
+  // Zadrzi zavrsnu tocku (kratica casopisa "IEEE Trans. Med. Imag."), makni samo zarez/razmak.
+  const splitSrc = (t: string) => t.split(/,\s*(?:vol\.|no\.|br\.|pp?\.|(?:19|20)\d{2}\b)/i)[0].replace(/[,\s]+$/, '').trim();
+  if (/^in\s+/i.test(tail)) {
+    const c = splitSrc(tail.replace(/^in\s+/i, ''));
+    if (c) {
+      const ci = c.indexOf(', '); // "Proc. Konf., Grad, ST" -> naziv | mjesto
+      if (ci >= 0) { fields.container = c.slice(0, ci).trim(); fields.place = c.slice(ci + 2).replace(/[.,\s]+$/, '').trim(); }
+      else fields.container = c;
+    }
+    return 'poglavlje';
+  }
+  const src = splitSrc(tail);
+  if (src) fields.container = src;
+  return 'clanak';
+}
+
+// --- Chicago / fusnota (humanistika, pravo) --------------------------------------------------
+// biblio knjiga: "Prezime, Ime. Naslov. Mjesto: Izdavac, godina."
+// biblio clanak: "Prezime, Ime. "Naslov." Casopis vol, no. N (godina): str."
+// fusnota:       "Ime Prezime, Naslov (Mjesto: Izdavac, godina), str."
+function looksLikeChicago(s: string): boolean {
+  return /,\s*(?:19|20)\d{2}\.?\s*$/.test(s)                        // "..., 2020." (biblio knjiga)
+      || /\((?:19|20)\d{2}\)\s*:\s*\d/.test(s)                       // "(2019): 45" (biblio clanak)
+      || /\([^)]*:\s*[^)]*,\s*(?:19|20)\d{2}\)/.test(s);             // "(Mjesto: Izdavac, godina)" fusnota
+}
+
+function invertNatural(name: string): string {
+  const t = name.trim().split(/\s+/).filter(Boolean);
+  if (t.length < 2) return name.trim();
+  return `${t[t.length - 1]}, ${t.slice(0, -1).join(' ')}`;
+}
+
+// Prvi autor je vec obrnut ("Prezime, Ime"), ostali su prirodni ("Ime Prezime"); veznik "i"/"and".
+function chicagoAuthorsInverted(seg: string): string {
+  const s = seg.replace(/\s*,?\s+(?:i|and)\s+/gi, '|').trim();
+  const chunks = s.split('|').map((x) => x.trim()).filter(Boolean);
+  const out: string[] = [];
+  chunks.forEach((chunk, idx) => {
+    if (idx === 0 && chunk.includes(',')) out.push(chunk);
+    else chunk.split(/\s*,\s*/).filter(Boolean).forEach((c) => out.push(invertNatural(c)));
+  });
+  return out.join('; ');
+}
+
+// "Ime Prezime, Ime2 Prezime2" -> "Prezime, Ime; Prezime2, Ime2" (fusnota: prirodni redoslijed).
+function chicagoAuthorsNatural(seg: string): string {
+  return seg.replace(/\s*,?\s+(?:i|and)\s+/gi, ', ').split(/\s*,\s*/).filter(Boolean)
+    .map((c) => invertNatural(c)).join('; ');
+}
+
+function parseChicago(input: string, fields: Partial<CitationInput>): SourceType {
+  const raw = input.replace(/\s+/g, ' ').trim();
+  const doi = raw.match(/10\.\d{4,9}\/[^\s,;]+/); if (doi) fields.doi = doi[0].replace(/[.,;]+$/, '');
+  const url = raw.match(/https?:\/\/[^\s,;]+/); if (url && !/doi\.org/i.test(url[0])) fields.url = url[0].replace(/[.,;)]+$/, '');
+
+  // FUSNOTA: "Ime Prezime, Naslov (Mjesto: Izdavac, godina), str."
+  const fn = raw.match(/^(.+?),\s*(.+?)\s*\(([^):]+):\s*([^),]+),\s*((?:19|20)\d{2})\)\s*,?\s*(\d+(?:\s*[-–]\s*\d+)?)?/);
+  if (fn) {
+    fields.authors = chicagoAuthorsNatural(fn[1]);
+    fields.title = fn[2].replace(/[.,]+$/, '').trim();
+    fields.place = fn[3].trim();
+    fields.publisher = fn[4].trim();
+    fields.year = fn[5];
+    if (fn[6]) fields.pages = fn[6].replace(/\s+/g, '');
+    return 'knjiga';
   }
 
+  const ymEnd = raw.match(/\(((?:19|20)\d{2})\)/) || raw.match(/,\s*((?:19|20)\d{2})\.?\s*$/);
+  if (ymEnd) fields.year = ymEnd[1];
+
+  // biblio clanak/poglavlje s navodnicima
+  const qm = raw.match(/["“]([^"”]+)["”]/);
+  if (qm && qm.index !== undefined) {
+    fields.title = qm[1].replace(/[.,]+$/, '').trim();
+    const before = raw.slice(0, qm.index).replace(/[\s.]+$/, '').trim();
+    if (before) fields.authors = chicagoAuthorsInverted(before);
+    const tail = raw.slice(qm.index + qm[0].length).replace(/^[\s.]+/, '').trim();
+    // "Casopis 12, no. 3 (2019): 45-67"
+    const am = tail.match(/^(.+?)\s+(\d+)(?:,\s*(?:no\.|br\.)\s*(\d+))?\s*\((?:19|20)\d{2}\)\s*:\s*(\d+(?:\s*[-–]\s*\d+)?)/i);
+    if (am) {
+      fields.container = am[1].replace(/[.,\s]+$/, '').trim();
+      fields.volume = am[2];
+      if (am[3]) fields.issue = am[3];
+      fields.pages = am[4].replace(/\s+/g, '');
+      return 'clanak';
+    }
+    if (/^u\s+|^in\s+/i.test(tail)) return 'poglavlje';
+    return 'clanak';
+  }
+
+  // biblio knjiga: "Prezime, Ime. Naslov. Mjesto: Izdavac, godina."
+  const parts = raw.split(/\.\s+/);
+  if (parts.length >= 2) {
+    fields.authors = chicagoAuthorsInverted(parts[0]);
+    fields.title = parts[1].replace(/[.,]+$/, '').trim();
+    const rest = parts.slice(2).join('. ');
+    const pub = rest.match(/([^:.]+?):\s*([^,]+),\s*(?:19|20)\d{2}/);
+    if (pub) { fields.place = pub[1].trim(); fields.publisher = pub[2].trim(); }
+  } else {
+    fields.title = raw.replace(/[.,]+$/, '').trim();
+  }
+  return 'knjiga';
+}
+
+function parseApa(original: string, fields: Partial<CitationInput>): SourceType {
   const s = original;
 
   const doi = s.match(/10\.\d{4,9}\/[^\s,;]+/);
@@ -289,14 +436,6 @@ export function parseReference(raw: string): ParsedReference {
     }
   }
 
-  if (fields.title) fields.title = fields.title.replace(/[.,]+$/, '').trim();
-  if (fields.authors) {
-    fields.authors = fields.authors
-      .replace(/[,;]+\s*$/, '')
-      .replace(/(?<=\p{Ll})\.$/u, '') // makni tocku iza rijeci (korporativni autor), ne iza inicijala
-      .trim();
-  }
-
   const type = guessType(original.toLowerCase(), fields);
   if (type === 'propis') parsePropis(original, fields);
   // Zavrsni/doktorski: ustanova je "institution", ne izdavac ("Filozofski fakultet, ...").
@@ -304,6 +443,29 @@ export function parseReference(raw: string): ParsedReference {
     fields.institution = [fields.place, fields.publisher].filter(Boolean).join(', ');
     delete fields.publisher;
     delete fields.place;
+  }
+  return type;
+}
+
+export function parseReference(raw: string, style: BulkStyle = 'auto'): ParsedReference {
+  const original = stripMarker((raw || '').replace(/\s+/g, ' ').trim());
+  const fields: Partial<CitationInput> = {};
+  if (!original) return { type: 'knjiga', fields, lowConfidence: true };
+
+  // 'auto': prepoznaj po obliku (Vancouver i IEEE su nedvosmisleni pa idu prvi). Inace forsiraj granu.
+  let type: SourceType;
+  if (style === 'vancouver' || (style === 'auto' && looksLikeVancouver(original))) type = parseVancouver(original, fields);
+  else if (style === 'ieee' || (style === 'auto' && looksLikeIeee(original))) type = parseIeee(original, fields);
+  else if (style === 'chicago' || (style === 'auto' && looksLikeChicago(original))) type = parseChicago(original, fields);
+  else type = parseApa(original, fields);
+
+  // Zajednicko ciscenje (svi stilovi): naslov bez zavrsne interpunkcije, autori bez repa/tocke-iza-rijeci.
+  if (fields.title) fields.title = fields.title.replace(/[.,]+$/, '').trim();
+  if (fields.authors) {
+    fields.authors = fields.authors
+      .replace(/[,;]+\s*$/, '')
+      .replace(/(?<=\p{Ll})\.$/u, '') // makni tocku iza rijeci (korporativni autor), ne iza inicijala
+      .trim();
   }
 
   const filled = Object.values(fields).filter(Boolean).length;

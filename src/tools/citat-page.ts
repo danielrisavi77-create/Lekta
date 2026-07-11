@@ -5,7 +5,7 @@ import '../shared/ui-boot';
 import { formatCitation, parseAuthors } from './citation';
 import { bindCopyButton } from './tool-ui';
 import { buildFacultyOptions, formatForFaculty, type FacultyStyle } from '../citations/faculty-styles';
-import { splitReferences, parseReference } from '../citations/parse-reference';
+import { splitReferences, parseReference, type BulkStyle } from '../citations/parse-reference';
 import { SOURCE_TYPES } from '../citations/citation-web';
 
 const $ = (s: string): any => document.querySelector(s);
@@ -178,6 +178,10 @@ function sortKeyOf(inp: any): string {
   return ((a.length ? a[0].last : (inp.title || '')) || '').toLowerCase();
 }
 
+function bulkStyle(): BulkStyle {
+  return (($('#bulk-style')?.value as BulkStyle) || 'auto');
+}
+
 function parseBulk() {
   const refs = splitReferences($('#bulk-input').value);
   const box = $('#bulk-entries');
@@ -185,8 +189,9 @@ function parseBulk() {
   $('#bulk-copy').hidden = true;
   $('#bulk-output').innerHTML = '';
   if (!refs.length) { $('#bulk-generate').hidden = true; return; }
+  const style = bulkStyle();
   refs.forEach((raw: string, i: number) => {
-    const p = parseReference(raw);
+    const p = parseReference(raw, style);
     const card = document.createElement('div');
     card.className = 'bulk-card' + (p.lowConfidence ? ' low-conf' : '');
     const head = document.createElement('div');
@@ -247,6 +252,8 @@ function init() {
   $('#tab-bulk')?.addEventListener('click', () => showTab('bulk'));
   $('#bulk-parse')?.addEventListener('click', parseBulk);
   $('#bulk-generate')?.addEventListener('click', generateBulk);
+  // Promjena stila ponovno prepozna vec zalijepljeni popis (bez ovoga picker ne bi imao ucinak).
+  $('#bulk-style')?.addEventListener('change', () => { if ($('#bulk-input').value.trim()) parseBulk(); });
 
   // Kopira samo kad citat/literatura postoji (gumbi su inace onemoguceni/skriveni).
   bindCopyButton($('#copyBtn'), () => ($('#copyBtn').disabled ? '' : ($('#out').textContent || '')));

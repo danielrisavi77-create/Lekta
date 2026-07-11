@@ -26,6 +26,7 @@ function buildDom(): void {
       <button id="c-clear"></button>
     </div>
     <div id="panel-bulk" hidden>
+      <select id="bulk-style"><option value="auto">Auto</option><option value="apa">APA</option><option value="vancouver">Vancouver</option><option value="ieee">IEEE</option><option value="chicago">Chicago</option></select>
       <textarea id="bulk-input"></textarea>
       <button id="bulk-parse"></button>
       <div id="bulk-entries"></div>
@@ -100,5 +101,16 @@ describe('citat-page: izbornik fakulteta + bulk (DOM)', () => {
     const lines = result.value.split('\n').filter(Boolean);
     expect(lines.length).toBe(2);
     expect($('#bulk-copy').hidden).toBe(false);
+  });
+
+  it('bulk: ručni izbor stila (IEEE) prepoznaje inicijale-prije-prezimena', () => {
+    fireChange('#bulk-style', 'ieee');
+    $('#bulk-input').value = 'J. Smith and A. Jones, "Deep learning," IEEE Trans. Med. Imag., vol. 39, no. 5, pp. 12-20, 2020.';
+    $('#bulk-parse').click();
+    const card = $('#bulk-entries').querySelector('.bulk-card');
+    expect(card).toBeTruthy();
+    const authors = card.querySelector('input[data-key="authors"]');
+    expect(authors.value).toContain('Smith, J.');
+    expect(authors.value).toContain('Jones, A.');
   });
 });

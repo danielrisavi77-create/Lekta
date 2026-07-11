@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 
-import { parseReference, splitReferences } from '../src/citations/parse-reference';
+import { parseReference, splitReferences, type BulkStyle } from '../src/citations/parse-reference';
 
 describe('splitReferences', () => {
   it('dijeli po praznom retku kad postoji', () => {
@@ -159,6 +159,92 @@ describe('parseReference: korpus (regresija bulk)', () => {
 });
 
 type SourceTypeLike = 'knjiga' | 'poglavlje' | 'clanak' | 'mrezni' | 'zavrsni' | 'propis';
+
+// IEEE (numericki tehnicki: inicijali PRIJE prezimena, naslov u navodnicima, "vol./no./pp.").
+describe('parseReference: IEEE korpus', () => {
+  const cases: Array<{ name: string; raw: string; type: SourceTypeLike; expect: Record<string, string> }> = [
+    {
+      name: 'clanak: inicijali prije prezimena, kratica casopisa s tockom',
+      raw: 'J. Smith and A. Jones, "Deep learning for radiology," IEEE Trans. Med. Imag., vol. 39, no. 5, pp. 1234-1245, 2020.',
+      type: 'clanak',
+      expect: { authors: 'Smith, J.; Jones, A.', title: 'Deep learning for radiology', container: 'IEEE Trans. Med. Imag.', volume: '39', issue: '5', pages: '1234-1245', year: '2020' },
+    },
+    {
+      name: 'konferencija: "in Proc. ...", grad odvojen od naziva',
+      raw: 'K. He, X. Zhang, S. Ren, and J. Sun, "Deep residual learning for image recognition," in Proc. IEEE CVPR, Las Vegas, NV, 2016, pp. 770-778.',
+      type: 'poglavlje',
+      expect: { authors: 'He, K.; Zhang, X.; Ren, S.; Sun, J.', container: 'Proc. IEEE CVPR', place: 'Las Vegas, NV', pages: '770-778', year: '2016' },
+    },
+    {
+      name: 'clanak: dvoslovni inicijali (G. E.)',
+      raw: 'A. Krizhevsky, I. Sutskever, and G. E. Hinton, "ImageNet classification," in Proc. NeurIPS, 2012, pp. 1097-1105.',
+      type: 'poglavlje',
+      expect: { authors: 'Krizhevsky, A.; Sutskever, I.; Hinton, G. E.', container: 'Proc. NeurIPS', pages: '1097-1105' },
+    },
+  ];
+  runCases(cases);
+});
+
+// Chicago / fusnota (humanistika, pravo): "Prezime, Ime" ILI "Ime Prezime, Naslov (Mjesto: Izd, god)".
+describe('parseReference: Chicago / fusnota korpus', () => {
+  const cases: Array<{ name: string; raw: string; type: SourceTypeLike; expect: Record<string, string> }> = [
+    {
+      name: 'biblio knjiga: "Prezime, Ime. Naslov. Mjesto: Izdavac, godina."',
+      raw: 'Bloom, Harold. The Western Canon: The Books and School of the Ages. New York: Harcourt Brace, 1994.',
+      type: 'knjiga',
+      expect: { authors: 'Bloom, Harold', title: 'The Western Canon: The Books and School of the Ages', place: 'New York', publisher: 'Harcourt Brace', year: '1994' },
+    },
+    {
+      name: 'biblio clanak: "Casopis Vol, no. N (godina): str" (ne mijesa se s IEEE-om)',
+      raw: 'Smith, John. "The Rhetoric of Silence." Critical Inquiry 12, no. 3 (2019): 45-67.',
+      type: 'clanak',
+      expect: { authors: 'Smith, John', title: 'The Rhetoric of Silence', container: 'Critical Inquiry', volume: '12', issue: '3', pages: '45-67', year: '2019' },
+    },
+    {
+      name: 'fusnota: "Ime Prezime, Naslov (Mjesto: Izdavac, godina), str."',
+      raw: 'Ivan Ivić, Ustavno pravo Republike Hrvatske (Zagreb: Narodne novine, 2020), 45.',
+      type: 'knjiga',
+      expect: { authors: 'Ivić, Ivan', title: 'Ustavno pravo Republike Hrvatske', place: 'Zagreb', publisher: 'Narodne novine', year: '2020', pages: '45' },
+    },
+    {
+      name: 'biblio knjiga: dva autora (prvi obrnut, drugi prirodan + "i")',
+      raw: 'Petz, Boris, i Vladimir Kolesarić. Uvod u statistiku. Jastrebarsko: Naklada Slap, 2010.',
+      type: 'knjiga',
+      expect: { authors: 'Petz, Boris; Kolesarić, Vladimir', place: 'Jastrebarsko', publisher: 'Naklada Slap', year: '2010' },
+    },
+  ];
+  runCases(cases);
+});
+
+// Rucni izbor stila: forsiranje grane daje ispravan rezultat cak i kad je auto-detekcija dvojbena.
+describe('parseReference: forsiranje stila (rucni izbor)', () => {
+  it('chicago picker ispravno parsira clanak koji auto inace moze pomijesati', () => {
+    const r = parseReference('Smith, John. "The Title." Journal 5, no. 2 (2019): 10-20.', 'chicago');
+    expect(r.type).toBe('clanak');
+    expect(r.fields.authors).toBe('Smith, John');
+    expect(r.fields.volume).toBe('5');
+    expect(r.fields.pages).toBe('10-20');
+  });
+
+  it('vancouver picker forsira granu i na graničnom obliku', () => {
+    const r = parseReference('Kovač M. Naslov rada. Časopis. 2020;5(2):10-5.', 'vancouver');
+    expect(r.type).toBe('clanak');
+    expect(r.fields.authors).toBe('Kovač, M.');
+    expect(r.fields.container).toBe('Časopis');
+  });
+});
+
+function runCases(cases: Array<{ name: string; raw: string; type: SourceTypeLike; expect: Record<string, string>; style?: BulkStyle }>): void {
+  for (const c of cases) {
+    it(c.name, () => {
+      const r = parseReference(c.raw, c.style);
+      expect(r.type).toBe(c.type);
+      for (const [k, v] of Object.entries(c.expect)) {
+        expect(`${k}=${(r.fields as any)[k] ?? ''}`).toBe(`${k}=${v}`);
+      }
+    });
+  }
+}
 
 // Vancouver / ICMJE (numericko biomedicinsko): autori bez zareza/tocaka, "Godina;Vol(Broj):Str".
 // Stvarni radioloski/zdravstveni popis (fakulteti medicine/zdravstva ga koriste). Regresija.
