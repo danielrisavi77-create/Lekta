@@ -622,15 +622,13 @@ Datum: 2026-07-11.
   produkcijski audit cist.
 - Rizik regresije: nizak. Velicina: S
 
-**BL-P2-10, HSTS zaglavlje**
+**BL-P2-10, HSTS zaglavlje** — GOTOVO (2026-07-11)
 - Prioritet: P2 (security-03)
-- Problem: nema Strict-Transport-Security; downgrade na prvi posjet.
-- Lokacija: public/_headers:19-23
-- Dokaz: grep strict-transport = 0; ublazeno jer je netlify.app na HSTS preload listi.
-- Preporuka: /* Strict-Transport-Security: max-age=31536000; includeSubDomains; preload tek
-  uz vlastitu domenu.
-- Acceptance: odgovor nosi HSTS max-age >= 15552000.
-- Rizik regresije: nizak. Velicina: S
+- Isporuceno: /* blok u public/_headers dobio `Strict-Transport-Security: max-age=31536000;
+  includeSubDomains` (max-age 1 god >= tražen 15552000). `preload` NAMJERNO izostavljen: smo na
+  *.netlify.app (vec HSTS-preloadan na razini registra); preload se dodaje tek uz vlastitu domenu.
+- Verifikacija: dist/_headers nosi HSTS nakon builda; csp-hash test i dalje zelen (CSP linija netaknuta).
+- Rizik regresije: nizak (cisto aditivno zaglavlje). Velicina: S
 
 **BL-P2-11, Fokusirani ulaz umjesto guste pocetne**
 - Prioritet: P2 (ux-06)
@@ -706,10 +704,13 @@ Datum: 2026-07-11.
 - package.json:27; .github/workflows/; npm audit --omit=dev --audit-level=high + Dependabot;
   overrides za hitne zakrpe. Velicina: S
 
-**BL-P3-15, Permissions-Policy i suzenje CSP connect-src/form-action** (security-05)
-- public/_headers:19; Permissions-Policy camera=()/microphone=()/geolocation=()/payment=();
-  suziti connect-src na self + *.supabase.co + Lemon Squeezy. Velicina: S (srednji rizik za
-  connect-src suzenje).
+**BL-P3-15, Permissions-Policy i suzenje CSP connect-src/form-action** (security-05) — DJELOMICNO (2026-07-11)
+- ISPORUCENO: /* blok dobio `Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()`
+  (zakljucava senzore koje app ne koristi; nizak rizik, aditivno).
+- PREOSTAJE (srednji rizik, kad se ozici naplata): suziti connect-src/form-action s `https:` na
+  self + *.supabase.co + Lemon Squeezy; trazi provjeru zive liste hostova (auth/waitlist/katalog/
+  checkout) da se legitiman poziv ne blokira. Dokumentirano komentarom u public/_headers.
+- Velicina: S (Permissions-Policy dio isporucen).
 
 **BL-P3-16, Redundantne tocke ulaza i preuzimanja** (ux-08)
 - index.html:265, :327; src/ui/app.ts:503, index.html:332; jedan primarni ulaz po radnji.

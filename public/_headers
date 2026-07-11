@@ -15,11 +15,22 @@
 # (npr. element.style.width, setProperty) sto hash ne moze pokriti; CSS injection je nizak rizik
 # (ne izvrsava JS, a img/font/connect su ograniceni). connect-src dopusta self + https
 # (korisnicki konfiguriran Supabase + Lemon Squeezy su https).
+#
+# Strict-Transport-Security (audit security-03): prisili HTTPS i sprijeci downgrade/SSL-strip.
+# Bez `preload` i s ovime na *.netlify.app subdomeni (netlify.app je vec HSTS-preloadan na razini
+# registra); `preload` dodati TEK uz vlastitu domenu (npr. lekta.hr) koju trajno zakljucavas na HTTPS.
+# Permissions-Policy (audit security-05): zakljucaj senzore koje app NE koristi (camera/microphone/
+# geolocation/payment) da eventualni injection ne moze zatraziti pristup. Cisto aditivno, nizak rizik.
+# NAPOMENA (deferrano, security-05 srednji rizik): suzenje connect-src/form-action s `https:` na
+# konkretne hostove (self + *.supabase.co + Lemon Squeezy) trazi provjeru zive liste hostova (auth,
+# waitlist, katalog, checkout) da se legitiman poziv ne blokira; radi se kad se ozici naplata.
 /*
   Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-ws2+tIofKe8Oi9MB7J4qYjlxZsGRTkubfdubL9tzznQ='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' https:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' https:
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
 
 # performance-06 (audit PERFORMANCE_AUDIT.md): content-hashirani asseti (Vite fingerprint u imenu,
 # npr. index-CzOlIHYC.js, *.woff2) su nepromjenjivi po imenu, pa se smiju kesirati godinu dana bez
