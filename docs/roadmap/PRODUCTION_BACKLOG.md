@@ -753,7 +753,11 @@ Datum: 2026-07-11.
 - Verifikacija: dist/_headers nosi HSTS nakon builda; csp-hash test i dalje zelen (CSP linija netaknuta).
 - Rizik regresije: nizak (cisto aditivno zaglavlje). Velicina: S
 
-**BL-P2-11, Fokusirani ulaz umjesto guste pocetne**
+**BL-P2-11, Fokusirani ulaz umjesto guste pocetne** — OWNER/PRODUCT ODLUKA (trijaza 2026-07-11)
+- NAPOMENA: hero primarni CTA vec skace na #analyzer u jednom kliku, pa je analizator dostupan
+  odmah. Preslagivanje pocetne (analizator prije marketinga) je marketing/konverzijska odluka sa
+  srednjim rizikom (sidra #analyzer, SEO, breakpointi), ne tehnicki popravak. Ceka vlasnikovu
+  odluku o funnel redoslijedu; ne mijenjam unilateralno.
 - Prioritet: P2 (ux-06)
 - Problem: pocetna servira landing + analizator + cjenik + FAQ na jednom scrollu; analizator
   ispod tri sekcije.
@@ -877,9 +881,16 @@ Datum: 2026-07-11.
   checkout) da se legitiman poziv ne blokira. Dokumentirano komentarom u public/_headers.
 - Velicina: S (Permissions-Policy dio isporucen).
 
-**BL-P3-16, Redundantne tocke ulaza i preuzimanja** (ux-08)
-- index.html:265, :327; src/ui/app.ts:503, index.html:332; jedan primarni ulaz po radnji.
-  Velicina: S
+**BL-P3-16, Redundantne tocke ulaza i preuzimanja** (ux-08) — LAZNI POZITIV (trijaza 2026-07-11)
+- NALAZ: pregled svih #analyzer CTA-ova pokazuje da NISU redundantni nego RAZLICITI namjerni
+  funnel/nav polozaji koji se ne pojavljuju istovremeno: desktop nav (index.html:308, btn-sm),
+  MOBILNI nav (:320, #mobileNav, vidljiv samo na mobitelu), hero primarni CTA (:330), zavrsni
+  CTA (:406). To je standardan CTA funnel (persistentni nav + hero + closing), ne slucajna
+  duplikacija. Preuzimanja su VEC konsolidirana u jedan dropdown (printReport/downloadHtml/
+  downloadJson pod .dl-menu) + zaseban submission "paketni izvjestaj" (razlicit sadrzaj).
+- ODLUKA: NE mijenjati. Uklanjanje bilo kojeg CTA-a je konverzijski rizik bez dobitka; audit
+  nalaz je lazni pozitiv (kao diagnosis-vs-note princip). Ako vlasnik ipak zeli manje CTA-ova,
+  to je product/marketing odluka, ne tehnicki popravak.
 
 **BL-P3-17, Prazan tab "Spremnost za predaju" u zadanoj fazi** (ux-09) — GOTOVO (2026-07-11)
 - Problem: u zadanoj fazi "Samo dokument" (currentSubmissionPhase default) tab je pokazivao slijepu
