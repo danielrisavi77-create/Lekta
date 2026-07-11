@@ -431,29 +431,32 @@ Datum: 2026-07-11.
 
 ### P0-06 Pravne stranice i 404
 
-**BL-P0-06-1, Eksplicitna izjava da Lekta nije provjera plagijata**
-- Prioritet: P0 (izvorni ux-01 P1, CONFIRMED)
-- Problem: rijec plagijat ne postoji na pocetnoj; jaz u ocekivanjima (Turnitin).
-- Lokacija: index.html:341, :281, :264
-- Dokaz: grep plagijat|Turnitin|slicnost|originaln u index.html = 0.
-- Posljedica: korisnik ocekuje slicnost, dobije audit, rizik povrata kod naplate.
-- Preporuka: vidljiva izjava u hero/FAQ + FAQ pitanje "Provjerava li Lekta plagijat?" s Ne.
-- Acceptance: na pocetnoj i u FAQ-u eksplicitna recenica da alat nije provjera plagijata/
-  slicnosti/originalnosti.
-- Rizik regresije: vrlo nizak.
-- Velicina: S
+**BL-P0-06-1, Eksplicitna izjava da Lekta nije provjera plagijata** — GOTOVO (2026-07-11)
+- Prioritet: P0 (izvorni ux-01 P1, CONFIRMED, refund driver)
+- Isporuceno (dizajn workflowom p0-06, 6 sweep + 3 draft agenta; nacelo partial-status-reframe: vodi
+  pozitivom, plagijat-negacija ide gdje oprezni kupac gleda, NE u hero da ne posije sumnju):
+  * index.html: novi FAQ "Provjerava li Lekta plagijat ili slicnost teksta? Ne...", plagijat-negacija u
+    #pricingDisclaimer (uz cjenik/CTA), footer-copy i meta description ("Nije provjera plagijata").
+  * legal-content.ts (pravno najcvrsce): disclaimer.html (negacijska lista + "ne usporeduje s bazama,
+    nije zamjena za Turnitin"), terms.html Predmet usluge (negativni opseg), purchase.html Predmet i
+    cijena, guarantee.html t.8 (razdvojeno "izvan usluge" od "izvan garancije").
+  * app.ts: paidOffersLive pricingDisclaimer + guaranteeNote dobili istu plagijat-negaciju.
+- Acceptance ispunjen: eksplicitna recenica na pocetnoj (FAQ+disclaimer), u pravnim tekstovima i uz naplatu.
 
-**BL-P0-06-2, Ublaziti preobecavanje spremnosti ("Spremno", "potvrduje")**
+**BL-P0-06-2, Ublaziti preobecavanje spremnosti ("Spremno", "potvrduje")** — GOTOVO (2026-07-11)
 - Prioritet: P0 (spoj ux-03 P2 + ux-04 P2)
-- Problem: pecat "Spremno" i disclaimer "potvrduje tehnicku uskladjenost" sugeriraju
-  certifikaciju spremnosti, u napetosti s "nije sluzbena potvrda".
-- Lokacija: index.html:230, :263, :340; src/ui/app.ts:566, :128
-- Preporuka: pecat u tehnicki okvir ("Tehnicki uredno") uz caveat; "potvrduje" -> "procjenjuje/
-  provjerava" na oba mjesta.
-- Acceptance: nijedan javni disclaimer ne tvrdi bezuvjetnu spremnost ni "potvrduje
-  uskladjenost".
-- Rizik regresije: vrlo nizak.
-- Velicina: S
+- Isporuceno: pecat #readyStamp "Spremno" -> "Tehnicki uredno" (konfeti/animacija netaknuti); glagol
+  jamstva "Usluga potvrduje tehnicku uskladjenost" -> "Usluga provjerava oblikovanje/strukturu/opseg/
+  citatnu tehniku" (index.html #pricingDisclaimer I app.ts:132 paid grana); gate hero (app.ts:447)
+  "<STATUS> ZA PREDAJU" -> "Tehnicka spremnost za predaju: <STATUS>" + tekst reframe ("ruce obveze si
+  oznacio, nije potvrda prihvacanja"); preuzeti izvjestaj (app.ts:577) naslov -> "Tehnicka spremnost
+  (provjerljiva pravila)"; hero podnaslov + PRICING_TIERS + guaranteeNote suzeni na tehnicki opseg;
+  titlovi/meta reframe. statusLabel BAZA namjerno NEDIRNUTA (reuse za pod-kartice) - scoping na hero/report.
+- Acceptance ispunjen: nijedan javni tekst ne tvrdi bezuvjetnu spremnost ni "potvrduje uskladjenost".
+- DEFERRANO (nizi prioritet/rizik): checks.ts scoreMeta "Nije spremno za predaju" (golden snapshot rizik);
+  JSON-LD FAQ mirror (fiddly inline JSON); tool-page disclaimeri (citat/kartice/naslovnica/alati/
+  landing_usporedba - vecina LOW, neki kontendirani). Nalazi u workflow izlazu za follow-up.
+- Gate: tsc 0, vitest svi (legal-content+csp-hash 8/8), build OK; 3 ciste datoteke (index/app/legal).
 
 **BL-P0-06-3, Pravila kupnje i povrata u footer**
 - Prioritet: P0 paket (izvorni routes-04 P2)
