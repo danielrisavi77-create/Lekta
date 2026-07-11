@@ -33,7 +33,9 @@
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;min-width:320px}
-a{color:inherit}:focus-visible{outline:none;box-shadow:var(--focus);border-radius:6px}
+a{color:inherit}:focus-visible{outline:2px solid var(--brand);outline-offset:2px;box-shadow:var(--focus);border-radius:6px}
+@media (forced-colors:active){:focus-visible{outline:2px solid CanvasText}}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .serif{font-family:var(--ink-serif)}
 .shell{width:min(var(--max),calc(100% - 40px));margin:auto}
 .topbar{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(16px);border-bottom:1px solid color-mix(in srgb,var(--line) 80%,transparent)}
@@ -47,28 +49,30 @@ a{color:inherit}:focus-visible{outline:none;box-shadow:var(--focus);border-radiu
 .mobile-menu{display:none}.mobile-nav{display:none}
 .nav-tools{position:relative;display:flex;align-items:center}.nav-tools-btn{border:0;background:transparent;color:var(--muted);font:inherit;font-weight:700;font-size:14px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;padding:0}.nav-tools:hover .nav-tools-btn,.nav-tools:focus-within .nav-tools-btn{color:var(--text)}.nav-tools-btn.active{color:var(--brand);font-weight:800}.nav-tools .caret{font-size:11px;transition:transform .18s var(--ease-out-3)}.nav-tools:hover .caret,.nav-tools-btn[aria-expanded="true"] .caret{transform:rotate(180deg)}.nav-tools-menu{position:absolute;top:100%;left:50%;transform:translateX(-50%) translateY(-6px);min-width:214px;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:8px;margin-top:12px;display:grid;gap:2px;opacity:0;visibility:hidden;transition:opacity .16s,transform .16s;z-index:40}.nav-tools-menu::before{content:"";position:absolute;top:-12px;left:0;right:0;height:12px}.nav-tools:hover .nav-tools-menu,.nav-tools-btn[aria-expanded="true"]~.nav-tools-menu{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}.nav-tools-menu a{padding:9px 11px;border-radius:9px;font-size:14px;font-weight:650;color:var(--text);text-decoration:none;white-space:nowrap}.nav-tools-menu a:hover{background:var(--brand-soft);color:var(--brand)}.nav-tools-menu a.active{color:var(--brand);font-weight:800;background:var(--brand-soft)}@media(prefers-reduced-motion:reduce){.nav-tools .caret,.nav-tools-menu{transition:none}}
 .icon-btn svg{width:19px;height:19px;display:block}
-.btn{transition-timing-function:var(--ease-out-3)}
-.card{transition:transform .22s var(--ease-out-3),box-shadow .22s var(--ease-out-3)}
-.card:hover{transform:translateY(-3px);box-shadow:var(--shadow-sm)}
-@media(prefers-reduced-motion:reduce){.card,.btn{transition:none}.card:hover{transform:none}}
-.btn{border:0;border-radius:12px;padding:11px 16px;font-weight:750;display:inline-flex;align-items:center;gap:8px;text-decoration:none;cursor:pointer;transition:.18s transform}
+.btn{border:0;border-radius:12px;padding:11px 16px;font-weight:750;display:inline-flex;align-items:center;gap:8px;text-decoration:none;cursor:pointer;transition:.18s transform;transition-timing-function:var(--ease-out-3)}
 .btn:hover{transform:translateY(-1px)}.btn:disabled{opacity:.45;cursor:default;transform:none}
+@media(prefers-reduced-motion:reduce){.btn{transition:none}}
 .btn-primary{background:linear-gradient(140deg,var(--brand),var(--brand-2));color:#fff;box-shadow:0 10px 22px rgba(51,64,126,.26)}
 .btn-secondary{background:var(--panel);border:1px solid var(--line-strong);color:var(--text)}
 .btn-sm{padding:9px 13px;font-size:13px}
+.btn-ghost{background:transparent;color:var(--brand);text-decoration:underline;text-underline-offset:3px;padding:9px 4px}
+.tp-toolbar{display:flex;gap:9px;flex-wrap:wrap;margin-top:6px}
 .backlink{display:inline-flex;align-items:center;gap:7px;color:var(--muted);text-decoration:none;font-size:13px;font-weight:650}
 .backlink:hover{color:var(--brand)}
 .hero-back{margin-bottom:14px}
 
 .hero{padding:44px 0 6px;text-align:center}
-.eyebrow{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--brand)}
+.eyebrow{display:inline-flex;align-items:center;gap:12px;font-size:11px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.eyebrow::before,.eyebrow::after{content:"";width:24px;height:1px;background:var(--line-strong)}
 .hero h1{font-family:var(--ink-serif);font-size:clamp(28px,4.2vw,44px);line-height:1.08;letter-spacing:-.015em;margin:14px auto 12px;max-width:660px;font-weight:800}
 .hero h1 .ink{color:var(--brand)}
 .hero p.lead{font-size:17px;color:var(--muted);max-width:600px;margin:0 auto}
+.hero .sibling{margin:14px 0 0;font-size:13px;color:var(--muted)}
+.hero .sibling a{color:var(--brand);font-weight:750}
 
 .section{padding:26px 0}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px}
+.grid{display:grid;grid-template-columns:1.05fr .95fr;gap:16px;align-items:start}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-sm);padding:24px}
 .card h2{font-family:var(--ink-serif);margin:0 0 4px;font-size:19px;font-weight:800}
 .card .sub{color:var(--muted);font-size:13px;margin:0 0 16px}
 .field{margin-bottom:12px}
@@ -90,8 +94,8 @@ a{color:inherit}:focus-visible{outline:none;box-shadow:var(--focus);border-radiu
 .out-intext{margin:12px 0 0;font-size:14px;color:var(--text)}
 .out-intext-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-right:6px}
 .out-intext code{font-family:var(--ink-serif);background:var(--brand-soft);color:var(--brand);padding:2px 8px;border-radius:6px;font-size:15px}
-.note{margin-top:16px;background:var(--brand-soft);border-left:3px solid var(--brand);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--text)}
-.note b{color:var(--brand)}
+.note{margin-top:18px;padding:2px 0 2px 14px;border-left:2px solid var(--line-strong);font-size:12.5px;color:var(--muted);line-height:1.55}
+.note b{color:var(--text)}
 
 .cit-tabs{display:flex;gap:8px;margin-top:16px;border-bottom:1px solid var(--line)}
 .cit-tab{appearance:none;background:none;border:0;border-bottom:2px solid transparent;padding:9px 4px;margin-bottom:-1px;font:inherit;font-weight:700;color:var(--muted);cursor:pointer}
@@ -108,11 +112,33 @@ a{color:inherit}:focus-visible{outline:none;box-shadow:var(--focus);border-radiu
 .bulk-card-fields input,.bulk-card-fields select{padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--bg,var(--panel));color:var(--text);font:inherit;font-size:13px}
 #bulk-result{width:100%;font-family:var(--ink-serif);font-size:14px;line-height:1.6;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--brand-soft);color:var(--text);margin-top:8px;resize:vertical}
 #bulk-output label{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
-@media(max-width:560px){.bulk-card-fields{grid-template-columns:1fr}}
+@media(max-width:560px){.bulk-card-fields{grid-template-columns:1fr}.fact-list>div,.cite-ex>div{grid-template-columns:1fr;gap:2px}}
 
-.cta{background:linear-gradient(140deg,#191d31,#2a2d63);color:#fff;border-radius:22px;padding:34px;text-align:center;margin:14px 0 34px}
-.cta h2{font-family:var(--ink-serif);font-size:25px;letter-spacing:-.02em;margin:0 0 8px;font-weight:800;color:#fff}
-.cta p{color:#cdd0e0;margin:0 0 16px}.cta .btn{background:#fff;color:#191d31}
+.sec-h{font-family:var(--ink-serif);font-size:clamp(21px,3vw,27px);font-weight:800;letter-spacing:-.015em;line-height:1.15;margin:0 0 6px}
+.sec-sub{color:var(--muted);font-size:14.5px;line-height:1.55;max-width:640px;margin:0}
+.fact-list{margin:18px 0 0;padding:0;border-top:1px solid var(--line)}
+.fact-list>div{display:grid;grid-template-columns:minmax(104px,150px) 1fr;gap:18px;align-items:baseline;padding:13px 2px;border-bottom:1px solid var(--line)}
+.fact-list dt{margin:0;font-family:var(--ink-serif);font-size:16px;font-weight:800;color:var(--brand)}
+.fact-list dd{margin:0;font-size:14px;color:var(--text);line-height:1.5}
+.cite-ex{margin:18px 0 0;border-top:1px solid var(--line)}
+.cite-ex>div{padding:14px 2px;border-bottom:1px solid var(--line)}
+.cite-ex h3{font-family:var(--ink-serif);font-size:16px;font-weight:800;color:var(--brand);margin:0 0 6px}
+.cite-ex p{margin:0 0 6px;font-size:14px;line-height:1.55;color:var(--text)}
+.cite-ex p:last-child{margin-bottom:0}
+.cite-ex code,.faq code{font-family:var(--ink-serif);background:var(--brand-soft);color:var(--brand);padding:1px 6px;border-radius:5px;font-size:.95em}
+.faq{margin-top:14px;border-top:1px solid var(--line)}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{list-style:none;cursor:pointer;padding:15px 2px;font-family:var(--ink-serif);font-size:16px;font-weight:700;color:var(--text);display:flex;justify-content:space-between;align-items:center;gap:16px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-size:20px;font-weight:400;color:var(--muted);line-height:1}
+.faq details[open] summary{color:var(--brand)}
+.faq details[open] summary::after{content:"\2212";color:var(--brand)}
+.faq details p{margin:0 2px 16px;color:var(--muted);font-size:14.5px;line-height:1.6;max-width:660px}
+.cta{border:1px solid var(--line-strong);border-radius:18px;background:var(--panel);padding:clamp(26px,5vw,40px);text-align:center;margin:8px 0 30px}
+.cta h2{font-family:var(--ink-serif);font-size:clamp(21px,3vw,27px);letter-spacing:-.02em;margin:0 0 10px;font-weight:800;color:var(--text)}
+.cta p{color:var(--muted);margin:0 auto 18px;max-width:560px}
+.cta-upsell{margin:16px auto 0;font-size:13px;color:var(--muted)}
+.cta-upsell a{color:var(--brand);font-weight:700;text-decoration:underline;text-underline-offset:3px}
 .disclaimer{text-align:center;color:var(--muted);font-size:12px;margin:18px auto 0;max-width:760px}
 
 footer{padding:30px 0;border-top:1px solid var(--line)}
@@ -168,7 +194,7 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
     <span class="eyebrow">Besplatan alat, bez registracije</span>
     <h1>Hrvatski <span class="ink">citat generator</span></h1>
     <p class="lead">Oblikuj citat u zadanom stilu (autor-godina, fusnota) ili vjerno po fakultetu, pojedinačno ili cijelu literaturu odjednom. Za knjigu, poglavlje, članak, mrežni izvor, završni rad ili propis. Sve lokalno, ništa se ne šalje na poslužitelj.</p>
-    <p class="sibling" style="margin:14px 0 0;font-size:13px;color:var(--muted)">Već imaš gotov popis? Posloži ga i izvezi u <a href="literatura.html" style="color:var(--brand);font-weight:750">Sređivanju literature</a>. Za opseg: <a href="kartice.html" style="color:var(--brand);font-weight:750">brojač kartica</a>.</p>
+    <p class="sibling">Već imaš gotov popis? Posloži ga i izvezi u <a href="literatura.html">Sređivanju literature</a>. Za opseg: <a href="kartice.html">brojač kartica</a>.</p>
   </div>
 </section>
 
@@ -327,9 +353,9 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
 
 <section class="section" id="primjeri">
   <div class="shell">
-    <h2>Kako citirati po vrsti izvora</h2>
-    <p class="sub">Okvirni oblici u dva najčešća hrvatska akademska stila: autor-godina (društvene znanosti) i fusnota (pravo, humanistika). Točnu interpunkciju uvijek uskladi s uputama svog fakulteta.</p>
-    <div class="card" style="display:grid;gap:16px;margin-top:16px">
+    <h2 class="sec-h">Kako citirati po vrsti izvora</h2>
+    <p class="sec-sub">Okvirni oblici u dva najčešća hrvatska akademska stila: autor-godina (društvene znanosti) i fusnota (pravo, humanistika). Točnu interpunkciju uvijek uskladi s uputama svog fakulteta.</p>
+    <div class="cite-ex">
       <div><h3>Knjiga</h3><p><b>Autor-godina:</b> <code>Prezime, I. (2024). Naslov knjige. Zagreb: Izdavač.</code> &middot; u tekstu <code>(Prezime, 2024)</code></p><p><b>Fusnota:</b> <code>I. Prezime, Naslov knjige, Izdavač, Zagreb, 2024., str. 15.</code></p></div>
       <div><h3>Poglavlje u knjizi ili zborniku</h3><p><b>Autor-godina:</b> <code>Prezime, I. (2024). Naslov poglavlja. U: A. Urednik (ur.), Naslov zbornika (str. 33-50). Zagreb: Izdavač.</code></p><p><b>Fusnota:</b> <code>I. Prezime, „Naslov poglavlja", u: A. Urednik (ur.), Naslov zbornika, Izdavač, Zagreb, 2024., str. 33-50.</code></p></div>
       <div><h3>Članak u časopisu</h3><p><b>Autor-godina:</b> <code>Prezime, I. (2024). Naslov članka. Naziv časopisa, 70(2), 145-170.</code> &middot; u tekstu <code>(Prezime, 2024: 150)</code></p><p><b>Fusnota:</b> <code>I. Prezime, „Naslov članka", Naziv časopisa, god. 70, br. 2, 2024., str. 145-170.</code></p></div>
@@ -338,19 +364,17 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
       <div><h3>Zakon ili propis</h3><p><code>Naziv zakona, Narodne novine br. 93/14.</code> &middot; u tekstu <code>(čl. 5. Zakona o ...)</code></p></div>
     </div>
 
-    <h2 style="margin-top:38px">Kratki vodič</h2>
-    <div class="card" style="margin-top:12px">
-      <ul style="margin:0;padding-left:18px;display:grid;gap:9px">
-        <li>Autor-godina navodi prezime i godinu u tekstu, a puni zapis ide u popis literature. Fusnota stavlja puni zapis u bilješku na dnu stranice.</li>
-        <li>U popisu literature izvori idu abecedno po prezimenu prvog autora.</li>
-        <li>Za doslovni navod dodaj broj stranice, npr. <code>(Prezime, 2024: 150)</code>.</li>
-        <li>Naslove knjiga i časopisa u autor-godina stilu obično se pišu kurzivom (ovdje su prikazani običnim slovima radi jasnoće).</li>
-        <li>Kod više radova istog autora iz iste godine razlikuj ih slovima: <code>2024a</code>, <code>2024b</code>.</li>
-      </ul>
-    </div>
+    <h2 class="sec-h" style="margin-top:42px">Kratki vodič</h2>
+    <dl class="fact-list">
+      <div><dt>Dva stila</dt><dd>Autor-godina navodi prezime i godinu u tekstu, a puni zapis ide u popis literature. Fusnota stavlja puni zapis u bilješku na dnu stranice.</dd></div>
+      <div><dt>Redoslijed</dt><dd>U popisu literature izvori idu abecedno po prezimenu prvog autora.</dd></div>
+      <div><dt>Doslovni navod</dt><dd>Dodaj broj stranice, npr. <code>(Prezime, 2024: 150)</code>.</dd></div>
+      <div><dt>Kurziv</dt><dd>Naslovi knjiga i časopisa u autor-godina stilu obično idu kurzivom (ovdje su prikazani običnim slovima radi jasnoće).</dd></div>
+      <div><dt>Ista godina</dt><dd>Više radova istog autora iz iste godine razlikuj slovima: <code>2024a</code>, <code>2024b</code>.</dd></div>
+    </dl>
 
-    <h2 style="margin-top:38px">Česta pitanja o citiranju</h2>
-    <div style="margin-top:12px;display:grid;gap:8px">
+    <h2 class="sec-h" style="margin-top:42px">Česta pitanja o citiranju</h2>
+    <div class="faq">
       <details><summary>Kako citirati knjigu?</summary><p>U autor-godina stilu: <code>Prezime, I. (2024). Naslov knjige. Zagreb: Izdavač.</code>, a u tekstu <code>(Prezime, 2024)</code>. U fusnota stilu puni zapis ide u bilješku: <code>I. Prezime, Naslov knjige, Izdavač, Zagreb, 2024., str. 15.</code></p></details>
       <details><summary>Kako citirati članak iz časopisa?</summary><p>Autor-godina: <code>Prezime, I. (2024). Naslov članka. Naziv časopisa, 70(2), 145-170.</code> Navedi godište (volumen), broj i raspon stranica; ako postoji DOI, dodaj ga na kraj.</p></details>
       <details><summary>Kako citirati mrežni izvor?</summary><p>Navedi autora ili organizaciju, godinu, naslov, poveznicu i datum pristupa: <code>Prezime, I. (2024). Naslov. Dostupno na: https://... (pristupljeno 2. 7. 2026.).</code></p></details>
@@ -366,8 +390,8 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
     <div class="cta">
       <h2>Citat je sitni dio. Provjeri cijeli rad.</h2>
       <p>Lekta mjeri margine, stilove, numeraciju, sadržaj i literaturu prema verificiranom profilu tvog fakulteta. Besplatan teaser, dokument ostaje na tvom uređaju.</p>
-      <a class="btn" href="index.html#analyzer">Besplatno provjeri rad &rarr;</a>
-      <p class="cta-upsell" style="margin:14px 0 0;font-size:13px;color:#cdd0e0">Za provjeru svih citata i literature u radu: <a href="index.html#pricing" style="color:#fff;font-weight:750;text-decoration:underline;text-underline-offset:3px">puni izvještaj ili ljudska lektura &rarr;</a></p>
+      <a class="btn btn-primary" href="index.html#analyzer">Besplatno provjeri rad &rarr;</a>
+      <p class="cta-upsell">Za provjeru svih citata i literature u radu: <a href="index.html#pricing">puni izvještaj ili ljudska lektura &rarr;</a></p>
     </div>
     <p class="disclaimer">Lekta radi pomoćnu tehničku provjeru i ne zamjenjuje službene upute ustanove, studija, kolegija ni mentora.</p>
   </div>
