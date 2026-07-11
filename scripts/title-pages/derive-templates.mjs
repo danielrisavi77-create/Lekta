@@ -184,6 +184,7 @@ for (const file of evidenceFiles) {
     byLevel.get(level).push(s);
   }
 
+  let producedForUnit = 0;
   for (const [level, samples] of [...byLevel.entries()].sort()) {
     if (samples.length < 2) continue;
     const consensus = consensusElements(samples);
@@ -219,6 +220,39 @@ for (const file of evidenceFiles) {
     if (existingDerived >= 0) templates[existingDerived] = entry;
     else templates.push(entry);
     derivedNew++;
+    producedForUnit++;
+  }
+
+  // Fallback za male fakultete/veleucilista s malo teza koje se dijele preko razina
+  // (jedan format naslovnice za sve vrste rada): ako nijedna razina nije dala predlozak,
+  // unit nema NIJEDAN postojeci predlozak, a ukupno ima >= 2 iskoristiva uzorka, deriviraj
+  // level=null iz svih. Redak vrste rada se ionako slaze iz korisnikova odabira. Posteno
+  // "izveden iz javnih radova" (draft); required nikad ne dolazi iz teza.
+  if (producedForUnit === 0) {
+    const allUsable = [...byLevel.values()].flat();
+    const hasExisting = templates.some((t) => t.unitId === ev.unitId);
+    if (!hasExisting && allUsable.length >= 2) {
+      const consensus = consensusElements(allUsable);
+      if (consensus.length) {
+        const pids = allUsable.map((s) => s.pid).sort();
+        templates.push({
+          id: `${ev.unitId}`,
+          unitId: ev.unitId,
+          level: null,
+          name: `${unitNames.get(ev.unitId) || ev.unitId}: naslovnica`,
+          provenance: {
+            status: 'derived',
+            sourceNote: `Raspored izveden konsenzusom ${allUsable.length} javnih radova (sve vrste rada); nije sluzbeni predlozak.`,
+            evidencePids: pids,
+            verifiedAt: null,
+          },
+          status: 'draft',
+          elements: consensus,
+          derivation: { samples: allUsable.length, conflicts: [] },
+        });
+        derivedNew++;
+      }
+    }
   }
 }
 

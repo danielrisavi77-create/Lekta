@@ -16154,6 +16154,83 @@
     "notes": "Predlozak vanjske stranice ne sadrzi logotip. Unutarnja stranica (potkorica, str. 5) dodatno propisuje blok Povjerenstvo za obranu rada s potpisima clanova i mentora te Datum obrane rada; te uloge (povjerenstvo, potpisi, datum obrane) nisu podrzane u generatoru naslovnice v1. Pravilo na str. 3 propisuje da se naziv predmeta pise velikim slovom, no naziv predmeta se ne pojavljuje na predlosku vanjske stranice."
   },
   {
+    "id": "vss",
+    "unitId": "vss",
+    "level": null,
+    "name": "Veleuciliste studija sigurnosti: naslovnica",
+    "provenance": {
+      "status": "derived",
+      "sourceNote": "Raspored izveden konsenzusom 2 javnih radova (sve vrste rada); nije sluzbeni predlozak.",
+      "evidencePids": [
+        "vss:159",
+        "vss:161"
+      ],
+      "verifiedAt": "2026-07-10"
+    },
+    "status": "verified",
+    "elements": [
+      {
+        "role": "faculty",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 0,
+        "confidence": 1,
+        "font": "Times New Roman",
+        "sizePt": 14,
+        "uppercase": true
+      },
+      {
+        "role": "study",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 0,
+        "confidence": 1,
+        "font": "Times New Roman",
+        "sizePt": 14,
+        "uppercase": true
+      },
+      {
+        "role": "author",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 1
+      },
+      {
+        "role": "title",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 1,
+        "confidence": 1,
+        "font": "Times New Roman",
+        "sizePt": 16,
+        "bold": true
+      },
+      {
+        "role": "worktype",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 2,
+        "confidence": 1,
+        "font": "Times New Roman",
+        "sizePt": 16,
+        "bold": true
+      },
+      {
+        "role": "placeyear",
+        "required": false,
+        "elementProvenance": "thesis-consensus",
+        "group": 3,
+        "confidence": 1,
+        "font": "Times New Roman",
+        "sizePt": 12
+      }
+    ],
+    "derivation": {
+      "samples": 2,
+      "conflicts": []
+    }
+  },
+  {
     "id": "vub-final",
     "unitId": "vub",
     "level": "final",
