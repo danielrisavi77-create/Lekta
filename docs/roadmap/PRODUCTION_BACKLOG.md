@@ -598,14 +598,13 @@ Datum: 2026-07-11.
 - Acceptance: glavne stranice imaju og:image koji vraca 200.
 - Rizik regresije: nizak. Velicina: S
 
-**BL-P2-08, motion/mini umjesto motion barrela**
+**BL-P2-08, motion/mini umjesto motion barrela** — BLOKIRANO PAKETOM (provjereno 2026-07-11)
 - Prioritet: P2 (dependencies-02)
-- Problem: import('motion') vuce framer-motion; koristi se samo animate/stagger.
-- Lokacija: src/shared/ui-boot.ts:26
-- Preporuka: import('motion/mini') s imenovanim {animate, stagger}; zadrzati lijeni oblik i
-  .catch.
-- Acceptance: mini ulaz; animacije rade uz reduced-motion; chunk ne sadrzi framer-motion.
-- Rizik regresije: nizak. Velicina: S
+- NALAZ: motion/mini (motion 12.42.2) izvozi `animate` i `animateSequence`, ali NE `stagger`.
+  ui-boot.ts:86 koristi `m.stagger(0.07)` u hero kaskadi. Prelazak bi trazio ili uvoz `stagger` iz
+  punog `motion` (ponistava dobitak) ili rucni prepis staggera po elementu (mijenja user-facing
+  animaciju). Motion se vec ucitava LIJENO (zaseban chunk, ne na kriticnom putu) pa je dobitak mali.
+  Ostavljeno kako jest dok se ne pojavi mini stagger ili dok se hero animacija namjerno ne prepise.
 
 **BL-P2-09, Teski dev CLI-jevi iz devDependencies**
 - Prioritet: P2 (dependencies-03)
@@ -687,13 +686,21 @@ Datum: 2026-07-11.
 - public/sitemap.xml; generatori; sitemap index + lastmod + ujednacen oblik direktorija.
   Velicina: S
 
-**BL-P3-12, @fontsource ciljani podskupovi** (spoj dependencies-04 + performance-07)
-- src/shared/ui-boot.ts:6-7; uvesti samo latin + latin-ext, preload primarnog fonta; PAZITI
-  da latin-ext ostane (nosi c,c,z,s,d). Obavezan vizualni pregled hrvatskog teksta. Velicina: S
+**BL-P3-12, @fontsource ciljani podskupovi** (spoj dependencies-04 + performance-07) — BLOKIRANO PAKETOM (provjereno 2026-07-11)
+- src/shared/ui-boot.ts:6-7; cilj: uvesti samo latin + latin-ext.
+- NALAZ: @fontsource-variable/inter i /source-serif-4 (5.2.x) NE izvoze per-subset CSS ulaze (samo
+  po OSI: wght/opsz/standard). Build vec emitira samo `wght-normal` po subsetu (nema italic/opsz
+  otpada); jedini "otpad" su ne-latinski subsetovi (cyrillic/greek/vietnamese woff2). Preglednik ih
+  zbog `unicode-range` ionako NE skida (runtime trosak = 0); ostaje samo cisci build artefakt.
+  Micanje bi trazilo rucni @font-face + self-host konkretnih subset woff2 (fragilno, obavezan
+  vizualni pregled). Za P3 "nije blokator" nije vrijedno rizika. Preload hasiranog fonta trazi
+  build-time injekciju (hashirano ime), zaseban zadatak.
 
-**BL-P3-13, canvas-confetti tipovi** (dependencies-05)
-- src/types/ambient.d.ts:2; dodati @types/canvas-confetti, ukloniti goli declare module.
-  Velicina: S
+**BL-P3-13, canvas-confetti tipovi** (dependencies-05) — GOTOVO (2026-07-11)
+- Isporuceno: src/types/ambient.d.ts vise nije goli `declare module` (any); dodana minimalna
+  tipizirana deklaracija (ConfettiOptions + default ConfettiFn + reset/create) koja hvata tipfelere
+  u opcijama confetti poziva (app.ts). BEZ novog devDependencyja (@types/canvas-confetti) da se ne
+  dira dijeljeni package.json. tsc 0 (poziv mod.default||mod ostaje kompatibilan).
 
 **BL-P3-14, Supply chain provjera u CI (npm audit, Dependabot/Renovate)** (dependencies-06)
 - package.json:27; .github/workflows/; npm audit --omit=dev --audit-level=high + Dependabot;
