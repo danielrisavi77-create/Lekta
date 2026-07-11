@@ -183,11 +183,60 @@ export function buildFullReport(
   };
 }
 
-/** Sastavi zahtjev za serverski izvjestaj (klijentska strana). */
+/**
+ * Ukloni doslovni tekst rada iz opisa nalaza: "odlomak N: <tekst>" -> "odlomak N".
+ * Lokacija (indeks odlomka) ostaje, citirani sadrzaj rada nestaje (data-flow-03). Engine
+ * (analyze-docx) i lokalni prikaz ostaju netaknuti; redakcija je samo na mreznoj kopiji.
+ */
+export function redactParagraphQuotes(detail: string | undefined): string | undefined {
+  if (!detail) return detail;
+  return detail.replace(/(odlomak\s+\d+):\s*[^;]*/gi, '$1');
+}
+
+function sanitizeCheck(c: Check): Check {
+  const issue = c.issue ? { ...c.issue, detail: redactParagraphQuotes(c.issue.detail) ?? c.issue.detail } : c.issue;
+  return { ...c, detail: redactParagraphQuotes(c.detail) ?? c.detail, issue };
+}
+
+function sanitizeIssue(i: Issue): Issue {
+  return { ...i, detail: redactParagraphQuotes(i.detail) ?? i.detail };
+}
+
+/**
+ * Sanitizira rezultat analize PRIJE slanja serveru (data-flow-03). Salje SAMO ono sto puni
+ * izvjestaj (buildFullReport) treba: score, profil, statistiku, nalaze i sigurnu metapodatkovnu
+ * jezgru profila. Namjerno IZOSTAVLJA sve nosace doslovnog teksta rada koje je klijentski
+ * `currentResult` inace drzao: details.typoLint (isjecci do 60 znakova, do 200), reference s
+ * doslovnim tekstom (missing/uncited/incompleteReferences), legalCitationEngine, file.name,
+ * documentStructure (naslov/autor/struktura idu ZASEBNO kao parsedStructure, sto je i objavljeno).
+ * Uz to redaktira citate ugradjene u opise nalaza ("odlomak N: <tekst>" -> "odlomak N").
+ */
+export function sanitizeAnalysisResult(result: AnalysisResultLike): AnalysisResultLike {
+  const d = result.details;
+  return {
+    score: result.score,
+    profile: result.profile,
+    profileStatus: result.profileStatus,
+    stats: result.stats,
+    checks: (result.checks ?? []).map(sanitizeCheck),
+    issues: (result.issues ?? []).map(sanitizeIssue),
+    details: d
+      ? {
+          profileFingerprint: d.profileFingerprint,
+          ruleAuthority: d.ruleAuthority,
+          profileDefinitionId: d.profileDefinitionId,
+          sources: d.sources,
+        }
+      : undefined,
+  };
+}
+
+/** Sastavi zahtjev za serverski izvjestaj (klijentska strana). Rezultat se sanitizira
+ *  (data-flow-03): doslovni tekst rada ne napusta preglednik. */
 export function buildReportRequest(
   parsedStructure: FingerprintInput,
   analysisResult: AnalysisResultLike,
   workType: ReportWorkType,
 ): ReportRequest {
-  return { parsedStructure, analysisResult, workType };
+  return { parsedStructure, analysisResult: sanitizeAnalysisResult(analysisResult), workType };
 }

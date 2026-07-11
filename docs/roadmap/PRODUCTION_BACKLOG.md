@@ -227,8 +227,16 @@ Datum: 2026-07-11.
 
 ### P0-04 Privatni izvjestaji
 
-**BL-P0-04-1, Sanitizirati payload punog izvjestaja (doslovni isjecci teksta rada)**
+**BL-P0-04-1, Sanitizirati payload punog izvjestaja (doslovni isjecci teksta rada)** — GOTOVO
 - Prioritet: P0 (izvorni data-flow-03 P1, CONFIRMED; dormant, P0 na dan ozicavanja)
+- Status: RIJESENO (report.ts, BEZ diranja golden enginea). buildReportRequest sada zove
+  sanitizeAnalysisResult: whitelist score/profil/stats/checks/issues + sigurna details jezgra
+  (ruleAuthority/profileFingerprint/profileDefinitionId/sources); IZBACENI svi nosaci doslovnog
+  teksta (typoLint.findings/excerpt, missing/uncited/incompleteReferences.text, legalCitationEngine,
+  file.name, documentStructure). Uz to redactParagraphQuotes ("odlomak N: <tekst>" -> "odlomak N",
+  linije 76/81 enginea) na opisima nalaza. Lokalni prikaz i analyze-docx NETAKNUTI. 8 testova
+  (serijalizirani payload bez SECRET stringa; buildFullReport i dalje radi). tsc+report testovi
+  zeleni. parsedStructure (naslov/autor/struktura) i dalje ide zasebno = objavljeno, ne curi.
 - Problem: klijent salje cijeli currentResult ukljucujuci typoLint.findings[].excerpt
   (doslovni isjecci do 60 znakova, do 200 nalaza), incompleteReferences[].text,
   legalCitationEngine.problems i doslovne naslove, iako privacy tvrdi da tekst ostaje lokalno.
