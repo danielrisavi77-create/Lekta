@@ -655,7 +655,12 @@ Datum: 2026-07-11.
 - Preporuka: dodati @media (forced-colors:active) outline; poravnati s indexom.
 - Acceptance: fokus vidljiv u forced-colors na svih 8 stranica. Rizik: vrlo nizak. Velicina: S
 
-**BL-P2-03, Inertna pozadina modala**
+**BL-P2-03, Inertna pozadina modala** — GOTOVO (2026-07-11)
+- ISPORUCENO: nova setBackgroundInert(on) togluje inert + aria-hidden na header.topbar/main/footer;
+  trapModal ju pali na PRVOM modalu (brojac _modalDepth), releaseModal gasi tek kad se zatvori
+  ZADNJI (--_modalDepth<=0) pa ugnijezdjeni modali (legal preko narudzbe) ne otkljucaju pozadinu
+  prerano. Reuse postojeceg trapModal/releaseModal (2 intra-line izmjene + helper). Guard test
+  tests/modal-inert.test.ts (3). Sad citac ne doseze pozadinu dok je modal otvoren.
 - Prioritet: P2 (accessibility-05)
 - Problem: trapModal hvata Tab ali ne postavlja inert/aria-hidden na pozadinu; citac cita
   pozadinu.
@@ -800,10 +805,16 @@ Datum: 2026-07-11.
 - index.html:240, :41; src/shared/ui-boot.ts:117-137; ukloniti role=menu/menuitem,
   sinkronizirati aria-expanded s vidljivim stanjem. Velicina: S
 
-**BL-P3-04, Ciljevi manji od 24x24 px** (accessibility-10)
+**BL-P3-04, Ciljevi manji od 24x24 px** (accessibility-10) — GOTOVO (2026-07-11)
+- ISPORUCENO: .remove-file i .wl-close (index.html) dobili min-width/min-height:24px +
+  display:inline-grid;place-items:center (WCAG 2.5.8, centriran glyph). Guard u tests/a11y-css.test.ts.
 - index.html:61 (.remove-file), :210 (.wl-close); min-width/height:24px. Velicina: S
 
-**BL-P3-05, Fokus prsten niskog kontrasta** (accessibility-11)
+**BL-P3-05, Fokus prsten niskog kontrasta** (accessibility-11) — GOTOVO (2026-07-11)
+- ISPORUCENO: --focus na SVIH 8 stranica (isti slabi rgba(51,64,126,.22)) -> dvotonski
+  0 0 0 2px var(--panel),0 0 0 4px var(--brand) (neproziran, tematski svjestan, kontrast >=3:1,
+  vidljiv na bilo kojoj pozadini; forced-colors override iz BL-P2-02 ostaje netaknut). Guard
+  tests/a11y-css.test.ts (8 stranica). Velicina: S
 - index.html:31 (--focus), :39; povecati kontrast na >= 3:1. Velicina: S
 
 **BL-P3-06, Preskok razine naslova + h1 u QA konzoli** (accessibility-12)
