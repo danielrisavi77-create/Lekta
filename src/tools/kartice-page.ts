@@ -14,6 +14,34 @@ const nf2 = new Intl.NumberFormat('hr-HR', { minimumFractionDigits: 0, maximumFr
 // ovaj guard pokriva i programatski upisan value. 2 milijuna znakova je daleko iznad realnog rada.
 const MAX_ZNAKOVA = 2_000_000;
 
+// Glavni broj (kartice) se glatko odbrojava do nove vrijednosti (serif brojka je fokus panela).
+// Cisto vizualno pobojlsanje: poestuje prefers-reduced-motion (tada se broj postavi odmah, bez
+// animacije). Jedan rAF loop, retargeta se na svaki render.
+const reduceMotion = typeof window.matchMedia === 'function'
+  && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+let ktNum: any = null;
+let ktRefs = false;
+let dispKartice = 0;
+let targetKartice = 0;
+let ktAnim = 0;
+function ktPaint(v: number) {
+  if (ktNum) ktNum.textContent = nf2.format(v);
+}
+function ktTick() {
+  const d = targetKartice - dispKartice;
+  if (Math.abs(d) < 0.004) { dispKartice = targetKartice; ktAnim = 0; ktPaint(dispKartice); return; }
+  dispKartice += d * 0.2;
+  ktPaint(dispKartice);
+  ktAnim = requestAnimationFrame(ktTick);
+}
+function animateKartice(target: number) {
+  if (!ktRefs) { ktNum = $('#m-kartice'); ktRefs = true; }
+  targetKartice = target;
+  if (reduceMotion) { dispKartice = target; ktPaint(target); return; }
+  ktPaint(dispKartice); // odmah osvjezi (i pri inicijalnom renderu)
+  if (!ktAnim) ktAnim = requestAnimationFrame(ktTick);
+}
+
 const SAMPLE = `Ovo je primjer teksta koji možeš zamijeniti svojim radom. Zalijepi ovdje uvod, poglavlje ili cijeli rad pa gledaj kako se broj kartica, riječi i znakova mijenja u stvarnom vremenu.
 
 Jedna autorska kartica u hrvatskoj lekturi i prijevodu iznosi 1800 znakova s razmacima. Cijena lekture obično se računa upravo po kartici, pa je ovaj broj koristan kad procjenjuješ trošak i opseg.`;
@@ -28,7 +56,7 @@ function render(text: any) {
   const m = countText(text);
   const set = (id: any, v: any) => { const el = $(id); if (el) el.textContent = v; };
 
-  set('#m-kartice', nf2.format(m.kartice));
+  animateKartice(m.kartice); // glatko odbrojavanje + prsten (umjesto izravnog set)
   set('#m-words', nf.format(m.words));
   set('#m-chars', nf.format(m.charsWithSpaces));
   set('#m-chars-nospace', nf.format(m.charsWithoutSpaces));
