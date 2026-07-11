@@ -520,8 +520,13 @@ Datum: 2026-07-11.
   nije asertirao staru oznaku. Dodan tests/score-meta.test.ts (3): pragovi + nijedan razred ne daje
   "spremno za predaju" verdikt. Time je ux-04 preobecavanje spremnosti POTPUNO zatvoreno (pecat,
   glagoli, gate hero, izvjestaj naslov, scoreMeta).
-- PREOSTALO DEFERRANO (nizi prioritet): JSON-LD FAQ mirror (SEO strukturirani podaci za plagijat FAQ);
-  tool-page disclaimeri (citat/kartice/naslovnica/alati/landing_usporedba - vecina LOW, neki kontendirani).
+- DEFERRANO -> JSON-LD FAQ mirror GOTOVO (2026-07-11): vidljivi FAQ imao 6 pitanja (ukljucujuci honesty
+  "Provjerava li Lekta plagijat ili slicnost teksta?"), ali FAQPage JSON-LD (index.html:22) samo 5 - plagijat
+  Q&A nije stizao u Google rich results. Dodano plagijat pitanje u strukturirane podatke na poziciju 3 (isti
+  redoslijed kao vidljivi FAQ). CRLF ocuvan (diff = 1 linija). Guard test tests/faq-jsonld.test.ts (3): vidljivi
+  FAQ i JSON-LD isti skup/redom, plagijat pitanje u oba, svaki JSON-LD odgovor neprazan - hvata buducu drift.
+- PREOSTALO DEFERRANO (nizi prioritet): tool-page disclaimeri
+  (citat/kartice/naslovnica/alati/landing_usporedba - vecina LOW, neki kontendirani).
 - Gate: tsc 0, vitest svi (legal-content+csp-hash 8/8), build OK; 3 ciste datoteke (index/app/legal).
 
 **BL-P0-06-3, Pravila kupnje i povrata u footer** — GOTOVO (2026-07-11)
@@ -608,8 +613,16 @@ Datum: 2026-07-11.
 - Rizik regresije: vrlo nizak.
 - Velicina: S
 
-**BL-P1-02, Fokus i najava rezultata nakon analize**
+**BL-P1-02, Fokus i najava rezultata nakon analize** — GOTOVO (kod, 2026-07-11; necommitano)
 - Prioritet: P1 (izvorni accessibility-02, CONFIRMED)
+- Status: RIJESENO. Cista datoteka src/shared/result-a11y.ts (focusResult: #resultTitle dobije
+  tabindex=-1 + .focus({preventScroll}); announceStatus preko polite aria-live regije
+  #lekta-sr-status). Wirano JEDNIM pozivom u renderResult (app.ts, odmah nakon
+  $('#resultTitle').textContent=r.file.name) pa pokriva SVE putanje rezultata (runAnalysis,
+  runDemo, history-restore koje sve idu kroz renderResult). Test tests/result-a11y.test.ts (3).
+  DOKAZANO u pregledniku (vite preview + Playwright, demo tok): activeElement === #resultTitle,
+  tabindex=-1, aria-live regija najavljuje "Rezultat analize je spreman.". app.ts diff = +2 reda
+  (import + poziv), aditivno. npm run check zelen. Necommitano: app.ts je dijeljen (git-race).
 - Problem: fokus pada na <body> nakon skrivanja #wizardView; #resultView nije ziva regija;
   citac ekrana ne dobiva obavijest (WCAG 2.4.3, 4.1.3).
 - Lokacija: src/ui/app.ts:449-457, :566, :466; index.html:329, :330
