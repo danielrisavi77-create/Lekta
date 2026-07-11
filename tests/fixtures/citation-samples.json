@@ -1,5 +1,5 @@
 {
-  "_note": "Stvarni, stilom-oznaceni citati harvestirani s Hrcak clanaka (portal hrvatskih casopisa). Isti clanak u vise stilova = cross-style ground truth: godina/vol/broj/str/naslov/autori se moraju poklopiti u svim stilovima. Hrvatski lokalizirano (br./str./i/[Internet]/[pristupljeno]). Kurziv (_..._) iz markdowna maknut. Izvor: hrcak.srce.hr/clanak/<id>.",
+  "_note": "Stvarni, stilom-oznaceni citati harvestirani s Hrcak clanaka (portal hrvatskih casopisa). Isti clanak u vise stilova = cross-style ground truth: prvi autor + godina/vol/broj/str/naslov se moraju poklopiti u svim stilovima (cijeli skup autora NE - stilovi legitimno skracuju: et al./i sur./...). Hrvatski lokalizirano (br./str./i/i sur./[Internet]/[pristupljeno], vol.64.). Kurziv (_..._) iz markdowna maknut; ostalo verbatim (uklj. daggersimbol i APA ... elipsu). Izvor: hrcak.srce.hr/clanak/<id>. Pipeline: scripts/citation-parser-audit.mjs.",
   "articles": [
     {
       "id": "hrcak-299380",
@@ -33,6 +33,224 @@
         "chicago": "Popić, Tomislav. \"Kapitular prokuratora zadarske komune iz 1373. godine.\" Povijesni prilozi 44, br. 69 (2025): 45-68. https://doi.org/10.22586/pp.v44i69.7x5rve59",
         "ieee": "T. Popić, \"Kapitular prokuratora zadarske komune iz 1373. godine\", Povijesni prilozi, vol.44, br. 69, str. 45-68, 2025. [Online]. https://doi.org/10.22586/pp.v44i69.7x5rve59",
         "apa": "Popić, T. (2025). Kapitular prokuratora zadarske komune iz 1373. godine. Povijesni prilozi, 44 (69), 45-68. https://doi.org/10.22586/pp.v44i69.7x5rve59"
+      }
+    },
+    {
+      "id": "hrcak-494669",
+      "styles": {
+        "apa": "Planinić, P., Vujić, G., Babić, I., Radošević, V., Matak, L., Mikuš, M., ... Ćorušić†, A. (2025). Sentinel Lymph Node Biopsy in Locally Advanced Cervical Cancer: A Prospective, Single-Center Study. Acta clinica Croatica, 64. (3), 413-717. https://doi.org/10.20471/acc.2025.64.03.01",
+        "chicago": "Planinić, Pavao, Goran Vujić, Ivan Babić, Velena Radošević, Luka Matak, Mislav Mikuš, Joško Lešin i Ante Ćorušić†. \"Sentinel Lymph Node Biopsy in Locally Advanced Cervical Cancer: A Prospective, Single-Center Study.\" Acta clinica Croatica 64., br. 3 (2025): 413-717. https://doi.org/10.20471/acc.2025.64.03.01",
+        "ieee": "P. Planinić, et al., \"Sentinel Lymph Node Biopsy in Locally Advanced Cervical Cancer: A Prospective, Single-Center Study\", Acta clinica Croatica, vol.64., br. 3, str. 413-717, 2025. [Online]. https://doi.org/10.20471/acc.2025.64.03.01",
+        "vancouver": "Planinić P, Vujić G, Babić I, Radošević V, Matak L, Mikuš M i sur. Sentinel Lymph Node Biopsy in Locally Advanced Cervical Cancer: A Prospective, Single-Center Study. Acta clinica Croatica [Internet]. 2025 [pristupljeno 11.07.2026.];64.(3):413-717. https://doi.org/10.20471/acc.2025.64.03.01"
+      }
+    },
+    {
+      "id": "hrcak-494695",
+      "styles": {
+        "ieee": "K. Kovač Durmiš, M. Pap, I. Jurak, M. Boban i P. Perić, \"Depressive and Anxiety Symptoms in Psoriatic Arthritis Patients – A Cross-Sectional Study\", Acta clinica Croatica, vol.64., br. 3, str. 419-426, 2025. [Online]. https://doi.org/10.20471/acc.2025.64.03.02",
+        "chicago": "Kovač Durmiš, Kristina, Mislav Pap, Ivan Jurak, Marina Boban i Porin Perić. \"Depressive and Anxiety Symptoms in Psoriatic Arthritis Patients – A Cross-Sectional Study.\" Acta clinica Croatica 64., br. 3 (2025): 419-426. https://doi.org/10.20471/acc.2025.64.03.02",
+        "apa": "Kovač Durmiš, K., Pap, M., Jurak, I., Boban, M. i Perić, P. (2025). Depressive and Anxiety Symptoms in Psoriatic Arthritis Patients – A Cross-Sectional Study. Acta clinica Croatica, 64. (3), 419-426. https://doi.org/10.20471/acc.2025.64.03.02",
+        "vancouver": "Kovač Durmiš K, Pap M, Jurak I, Boban M, Perić P. Depressive and Anxiety Symptoms in Psoriatic Arthritis Patients – A Cross-Sectional Study. Acta clinica Croatica [Internet]. 2025 [pristupljeno 11.07.2026.];64.(3):419-426. https://doi.org/10.20471/acc.2025.64.03.02"
+      }
+    },
+    {
+      "id": "hrcak-494698",
+      "styles": {
+        "ieee": "A. Lovrenčić-Huzjan, M. Roje-Bedeković, L. Dežmalj-Grbelja i M. Bosnar-Puretić, \"Impaired Quality of Life in Survivors of Craniocervical Artery Dissection\", Acta clinica Croatica, vol.64., br. 3, str. 428-433, 2025. [Online]. https://doi.org/10.20471/acc.2025.64.03.03",
+        "chicago": "Lovrenčić-Huzjan, Arijana, Marina Roje-Bedeković, Lidija Dežmalj-Grbelja i Marijana Bosnar-Puretić. \"Impaired Quality of Life in Survivors of Craniocervical Artery Dissection.\" Acta clinica Croatica 64., br. 3 (2025): 428-433. https://doi.org/10.20471/acc.2025.64.03.03",
+        "apa": "Lovrenčić-Huzjan, A., Roje-Bedeković, M., Dežmalj-Grbelja, L. i Bosnar-Puretić, M. (2025). Impaired Quality of Life in Survivors of Craniocervical Artery Dissection. Acta clinica Croatica, 64. (3), 428-433. https://doi.org/10.20471/acc.2025.64.03.03",
+        "vancouver": "Lovrenčić-Huzjan A, Roje-Bedeković M, Dežmalj-Grbelja L, Bosnar-Puretić M. Impaired Quality of Life in Survivors of Craniocervical Artery Dissection. Acta clinica Croatica [Internet]. 2025 [pristupljeno 11.07.2026.];64.(3):428-433. https://doi.org/10.20471/acc.2025.64.03.03"
+      }
+    },
+    {
+      "id": "hrcak-465246",
+      "styles": {
+        "apa": "Imer, Ç. i Genç, M.O. (2024). Impulse Shock Analysis of DMF Timing Ring in Vehicle Curb Crash Condition. Tehnički vjesnik, 31 (6), 1797-1804. https://doi.org/10.17559/TV-20240422001483",
+        "chicago": "Imer, Çağlar i Mehmet Onur Genç. \"Impulse Shock Analysis of DMF Timing Ring in Vehicle Curb Crash Condition.\" Tehnički vjesnik 31, br. 6 (2024): 1797-1804. https://doi.org/10.17559/TV-20240422001483",
+        "ieee": "Ç. Imer i M.O. Genç, \"Impulse Shock Analysis of DMF Timing Ring in Vehicle Curb Crash Condition\", Tehnički vjesnik, vol.31, br. 6, str. 1797-1804, 2024. [Online]. https://doi.org/10.17559/TV-20240422001483",
+        "vancouver": "Imer Ç, Genç MO. Impulse Shock Analysis of DMF Timing Ring in Vehicle Curb Crash Condition. Tehnički vjesnik [Internet]. 2024 [pristupljeno 11.07.2026.];31(6):1797-1804. https://doi.org/10.17559/TV-20240422001483"
+      }
+    },
+    {
+      "id": "hrcak-465247",
+      "styles": {
+        "ieee": "E. Panin, et al., \"FEM Simulation of Rolling-Pressing Process with Horizontal and Vertical Rolls\", Tehnički vjesnik, vol.31, br. 6, str. 1805-1814, 2024. [Online]. https://doi.org/10.17559/TV-20231210001195",
+        "chicago": "Panin, Evgeniy, Irina Volokitina, Andrey Volokitin, Abdrakhman Naizabekov, Gulzhainat Akhmetova, Sergey Lezhnev, Andrey Tolkushkin i Aibol Esbolat. \"FEM Simulation of Rolling-Pressing Process with Horizontal and Vertical Rolls.\" Tehnički vjesnik 31, br. 6 (2024): 1805-1814. https://doi.org/10.17559/TV-20231210001195",
+        "apa": "Panin, E., Volokitina, I., Volokitin, A., Naizabekov, A., Akhmetova, G., Lezhnev, S., ... Esbolat, A. (2024). FEM Simulation of Rolling-Pressing Process with Horizontal and Vertical Rolls. Tehnički vjesnik, 31 (6), 1805-1814. https://doi.org/10.17559/TV-20231210001195",
+        "vancouver": "Panin E, Volokitina I, Volokitin A, Naizabekov A, Akhmetova G, Lezhnev S i sur. FEM Simulation of Rolling-Pressing Process with Horizontal and Vertical Rolls. Tehnički vjesnik [Internet]. 2024 [pristupljeno 11.07.2026.];31(6):1805-1814. https://doi.org/10.17559/TV-20231210001195"
+      }
+    },
+    {
+      "id": "hrcak-465248",
+      "styles": {
+        "ieee": "Z. Chen, L. Yan, C. Wang i Z. Ye, \"Improved Discriminator Network Based on Residual Network for Person Image Synthesis\", Tehnički vjesnik, vol.31, br. 6, str. 1815-1825, 2024. [Online]. https://doi.org/10.17559/TV-20240416001467",
+        "chicago": "Chen, Zixuan, Lingyu Yan, Chunzhi Wang i Zhiwei Ye. \"Improved Discriminator Network Based on Residual Network for Person Image Synthesis.\" Tehnički vjesnik 31, br. 6 (2024): 1815-1825. https://doi.org/10.17559/TV-20240416001467",
+        "apa": "Chen, Z., Yan, L., Wang, C. i Ye, Z. (2024). Improved Discriminator Network Based on Residual Network for Person Image Synthesis. Tehnički vjesnik, 31 (6), 1815-1825. https://doi.org/10.17559/TV-20240416001467",
+        "vancouver": "Chen Z, Yan L, Wang C, Ye Z. Improved Discriminator Network Based on Residual Network for Person Image Synthesis. Tehnički vjesnik [Internet]. 2024 [pristupljeno 11.07.2026.];31(6):1815-1825. https://doi.org/10.17559/TV-20240416001467"
+      }
+    },
+    {
+      "id": "hrcak-492534",
+      "styles": {
+        "apa": "Stanić, L., Branica, V. i Rajhvajn Bulat, L. (2025). Konceptualizacija i mjerenje parentifikacije: pregled literature. Psihologijske teme, 34 (3), 369-391. https://doi.org/10.31820/pt.34.3.1",
+        "chicago": "Stanić, Luka, Vanja Branica i Linda Rajhvajn Bulat. \"Konceptualizacija i mjerenje parentifikacije: pregled literature.\" Psihologijske teme 34, br. 3 (2025): 369-391. https://doi.org/10.31820/pt.34.3.1",
+        "ieee": "L. Stanić, V. Branica i L. Rajhvajn Bulat, \"Konceptualizacija i mjerenje parentifikacije: pregled literature\", Psihologijske teme, vol.34, br. 3, str. 369-391, 2025. [Online]. https://doi.org/10.31820/pt.34.3.1",
+        "vancouver": "Stanić L, Branica V, Rajhvajn Bulat L. Konceptualizacija i mjerenje parentifikacije: pregled literature. Psihologijske teme [Internet]. 2025 [pristupljeno 11.07.2026.];34(3):369-391. https://doi.org/10.31820/pt.34.3.1"
+      }
+    },
+    {
+      "id": "hrcak-492536",
+      "styles": {
+        "apa": "Bajšanski, I., Žauhar, V. i Valerjev, P. (2025). Povezanost prihvaćanja psiholoških miskoncepcija s metakognitivnim procjenama, obrazovanjem, kognitivnim stilom i paranormalnim vjerovanjima. Psihologijske teme, 34 (3), 393-414. https://doi.org/10.31820/pt.34.3.2",
+        "chicago": "Bajšanski, Igor, Valnea Žauhar i Pavle Valerjev. \"Povezanost prihvaćanja psiholoških miskoncepcija s metakognitivnim procjenama, obrazovanjem, kognitivnim stilom i paranormalnim vjerovanjima.\" Psihologijske teme 34, br. 3 (2025): 393-414. https://doi.org/10.31820/pt.34.3.2",
+        "ieee": "I. Bajšanski, V. Žauhar i P. Valerjev, \"Povezanost prihvaćanja psiholoških miskoncepcija s metakognitivnim procjenama, obrazovanjem, kognitivnim stilom i paranormalnim vjerovanjima\", Psihologijske teme, vol.34, br. 3, str. 393-414, 2025. [Online]. https://doi.org/10.31820/pt.34.3.2",
+        "vancouver": "Bajšanski I, Žauhar V, Valerjev P. Povezanost prihvaćanja psiholoških miskoncepcija s metakognitivnim procjenama, obrazovanjem, kognitivnim stilom i paranormalnim vjerovanjima. Psihologijske teme [Internet]. 2025 [pristupljeno 11.07.2026.];34(3):393-414. https://doi.org/10.31820/pt.34.3.2"
+      }
+    },
+    {
+      "id": "hrcak-492538",
+      "styles": {
+        "apa": "Ružojčić, M., Galić, Z., Palanović, A., Parmač Kovačić, M. i Žnidar, K. (2025). Rad od kuće kao nužan, ali neuobičajen oblik rada: slučaj hrvatskih radnika tijekom pandemije bolesti COVID-19. Psihologijske teme, 34 (3), 415-435. https://doi.org/10.31820/pt.34.3.3",
+        "chicago": "Ružojčić, Mitja, Zvonimir Galić, Antun Palanović, Maja Parmač Kovačić i Krešimir Žnidar. \"Rad od kuće kao nužan, ali neuobičajen oblik rada: slučaj hrvatskih radnika tijekom pandemije bolesti COVID-19.\" Psihologijske teme 34, br. 3 (2025): 415-435. https://doi.org/10.31820/pt.34.3.3",
+        "ieee": "M. Ružojčić, Z. Galić, A. Palanović, M. Parmač Kovačić i K. Žnidar, \"Rad od kuće kao nužan, ali neuobičajen oblik rada: slučaj hrvatskih radnika tijekom pandemije bolesti COVID-19\", Psihologijske teme, vol.34, br. 3, str. 415-435, 2025. [Online]. https://doi.org/10.31820/pt.34.3.3",
+        "vancouver": "Ružojčić M, Galić Z, Palanović A, Parmač Kovačić M, Žnidar K. Rad od kuće kao nužan, ali neuobičajen oblik rada: slučaj hrvatskih radnika tijekom pandemije bolesti COVID-19. Psihologijske teme [Internet]. 2025 [pristupljeno 11.07.2026.];34(3):415-435. https://doi.org/10.31820/pt.34.3.3"
+      }
+    },
+    {
+      "id": "hrcak-492540",
+      "styles": {
+        "apa": "Maslić Seršić, D., Rebernjak, B., Mikac, U., Buško, V., Tomas, J. i De Witte, H. (2025). Mjerenje sindroma sagorijevanja u Hrvatskoj upitnikom BAT-23: validacijsko istraživanje i statističke norme. Psihologijske teme, 34 (3), 437-459. https://doi.org/10.31820/pt.34.3.4",
+        "chicago": "Maslić Seršić, Darja, Blaž Rebernjak, Una Mikac, Vesna Buško, Jasmina Tomas i Hans De Witte. \"Mjerenje sindroma sagorijevanja u Hrvatskoj upitnikom BAT-23: validacijsko istraživanje i statističke norme.\" Psihologijske teme 34, br. 3 (2025): 437-459. https://doi.org/10.31820/pt.34.3.4",
+        "ieee": "D. Maslić Seršić, B. Rebernjak, U. Mikac, V. Buško, J. Tomas i H. De Witte, \"Mjerenje sindroma sagorijevanja u Hrvatskoj upitnikom BAT-23: validacijsko istraživanje i statističke norme\", Psihologijske teme, vol.34, br. 3, str. 437-459, 2025. [Online]. https://doi.org/10.31820/pt.34.3.4",
+        "vancouver": "Maslić Seršić D, Rebernjak B, Mikac U, Buško V, Tomas J, De Witte H. Mjerenje sindroma sagorijevanja u Hrvatskoj upitnikom BAT-23: validacijsko istraživanje i statističke norme. Psihologijske teme [Internet]. 2025 [pristupljeno 11.07.2026.];34(3):437-459. https://doi.org/10.31820/pt.34.3.4"
+      }
+    },
+    {
+      "id": "hrcak-482704",
+      "styles": {
+        "apa": "Galić, Z. (2025). Kvaliteta radnoga života u Hrvatskoj u 2020-ima: predstavljanje SUPERB modela kvalitete poslova. Društvena istraživanja, 34 (2), 253-271. https://doi.org/10.5559/di.34.2.06",
+        "chicago": "Galić, Zvonimir. \"Kvaliteta radnoga života u Hrvatskoj u 2020-ima: predstavljanje SUPERB modela kvalitete poslova.\" Društvena istraživanja 34, br. 2 (2025): 253-271. https://doi.org/10.5559/di.34.2.06",
+        "ieee": "Z. Galić, \"Kvaliteta radnoga života u Hrvatskoj u 2020-ima: predstavljanje SUPERB modela kvalitete poslova\", Društvena istraživanja, vol.34, br. 2, str. 253-271, 2025. [Online]. https://doi.org/10.5559/di.34.2.06",
+        "vancouver": "Galić Z. Kvaliteta radnoga života u Hrvatskoj u 2020-ima: predstavljanje SUPERB modela kvalitete poslova. Društvena istraživanja [Internet]. 2025 [pristupljeno 11.07.2026.];34(2):253-271. https://doi.org/10.5559/di.34.2.06"
+      }
+    },
+    {
+      "id": "hrcak-479608",
+      "styles": {
+        "ieee": "S. Jambrek, \"Crkve reformacijske baštine u Hrvatskoj (1990. – 2020.): Pravni položaj, restrukturiranje i stanje 2021. godine\", Kairos, vol.19, br. 1, str. 7-44, 2025. [Online]. https://doi.org/10.32862/k1.19.1.1",
+        "chicago": "Jambrek, Stanko. \"Crkve reformacijske baštine u Hrvatskoj (1990. – 2020.): Pravni položaj, restrukturiranje i stanje 2021. godine.\" Kairos 19, br. 1 (2025): 7-44. https://doi.org/10.32862/k1.19.1.1",
+        "apa": "Jambrek, S. (2025). Crkve reformacijske baštine u Hrvatskoj (1990. – 2020.): Pravni položaj, restrukturiranje i stanje 2021. godine. Kairos, 19 (1), 7-44. https://doi.org/10.32862/k1.19.1.1",
+        "vancouver": "Jambrek S. Crkve reformacijske baštine u Hrvatskoj (1990. – 2020.): Pravni položaj, restrukturiranje i stanje 2021. godine. Kairos [Internet]. 2025 [pristupljeno 11.07.2026.];19(1):7-44. https://doi.org/10.32862/k1.19.1.1"
+      }
+    },
+    {
+      "id": "hrcak-494703",
+      "styles": {
+        "ieee": "B. Sudarević, et al., \"Erectile Dysfunction and Vitamin D Serum Concentration Associated Only in Diabetics\", Acta clinica Croatica, vol.64., br. 3, str. 435-446, 2025.",
+        "chicago": "Sudarević, Bojan, Sanja Mandić, Vesna Horvat, Željko Debeljak, Vatroslav Šerić, Hrvoje Kuveždić i Lada Zibar. \"Erectile Dysfunction and Vitamin D Serum Concentration Associated Only in Diabetics.\" Acta clinica Croatica 64., br. 3 (2025): 435-446.",
+        "apa": "Sudarević, B., Mandić, S., Horvat, V., Debeljak, Ž., Šerić, V., Kuveždić, H. i Zibar, L. (2025). Erectile Dysfunction and Vitamin D Serum Concentration Associated Only in Diabetics. Acta clinica Croatica, 64. (3), 435-446.",
+        "vancouver": "Sudarević B, Mandić S, Horvat V, Debeljak Ž, Šerić V, Kuveždić H i sur. Erectile Dysfunction and Vitamin D Serum Concentration Associated Only in Diabetics. Acta clinica Croatica [Internet]. 2025 [pristupljeno 11.07.2026.];64.(3):435-446."
+      }
+    },
+    {
+      "id": "hrcak-494906",
+      "styles": {
+        "apa": "Djaković, I., Soljačić-Vraneš, H., Benčić, A., Chiddenton, H.M., Kuna, H. i Bogović, A. (2025). The Combined Effect of the COVID-19 Pandemic and the Earthquake in Zagreb on the Psychological and Social Life of Pregnant Women. Acta clinica Croatica, 64. (3), 447-455. https://doi.org/10.20471/acc.2025.64.03.05",
+        "chicago": "Djaković, Ivka, Hrvojka Soljačić-Vraneš, Ana Benčić, Helen Marie Chiddenton, Hrvojka Kuna i Anamarija Bogović. \"The Combined Effect of the COVID-19 Pandemic and the Earthquake in Zagreb on the Psychological and Social Life of Pregnant Women.\" Acta clinica Croatica 64., br. 3 (2025): 447-455. https://doi.org/10.20471/acc.2025.64.03.05",
+        "vancouver": "Djaković I, Soljačić-Vraneš H, Benčić A, Chiddenton HM, Kuna H, Bogović A. The Combined Effect of the COVID-19 Pandemic and the Earthquake in Zagreb on the Psychological and Social Life of Pregnant Women. Acta clinica Croatica [Internet]. 2025 [pristupljeno 11.07.2026.];64.(3):447-455. https://doi.org/10.20471/acc.2025.64.03.05",
+        "ieee": "I. Djaković, H. Soljačić-Vraneš, A. Benčić, H.M. Chiddenton, H. Kuna i A. Bogović, \"The Combined Effect of the COVID-19 Pandemic and the Earthquake in Zagreb on the Psychological and Social Life of Pregnant Women\", Acta clinica Croatica, vol.64., br. 3, str. 447-455, 2025. [Online]. https://doi.org/10.20471/acc.2025.64.03.05"
+      }
+    },
+    {
+      "id": "hrcak-495170",
+      "styles": {
+        "apa": "Jagnjić, S., Bingulac-Popović, J., Đogić, V., Vladić, A., Štingl Janković, K., Kruhonja Galić, Z., ... Jukić, I. (2025). HLA II Alleles and Susceptibility to Multiple Sclerosis in Croatia. Acta clinica Croatica, 64. (3), 456-465. https://doi.org/10.20471/acc.2025.64.03.06",
+        "chicago": "Jagnjić, Sandra, Jasna Bingulac-Popović, Vesna Đogić, Anton Vladić, Katarina Štingl Janković, Zrinka Kruhonja Galić, Ana Hećimović i Irena Jukić. \"HLA II Alleles and Susceptibility to Multiple Sclerosis in Croatia.\" Acta clinica Croatica 64., br. 3 (2025): 456-465. https://doi.org/10.20471/acc.2025.64.03.06",
+        "vancouver": "Jagnjić S, Bingulac-Popović J, Đogić V, Vladić A, Štingl Janković K, Kruhonja Galić Z i sur. HLA II Alleles and Susceptibility to Multiple Sclerosis in Croatia. Acta clinica Croatica [Internet]. 2025 [pristupljeno 11.07.2026.];64.(3):456-465. https://doi.org/10.20471/acc.2025.64.03.06",
+        "ieee": "S. Jagnjić, et al., \"HLA II Alleles and Susceptibility to Multiple Sclerosis in Croatia\", Acta clinica Croatica, vol.64., br. 3, str. 456-465, 2025. [Online]. https://doi.org/10.20471/acc.2025.64.03.06"
+      }
+    },
+    {
+      "id": "hrcak-465249",
+      "styles": {
+        "ieee": "S. Gong, X. Zhao i S. Yang, \"Wind Tunnel Investigation and Numerical Simulation of Flow Characteristics Around the Enclosed Railing Steel Box Girder Section\", Tehnički vjesnik, vol.31, br. 6, str. 1826-1836, 2024. [Online]. https://doi.org/10.17559/TV-20240601001728",
+        "chicago": "Gong, Sai, Xue Zhao i Shucheng Yang. \"Wind Tunnel Investigation and Numerical Simulation of Flow Characteristics Around the Enclosed Railing Steel Box Girder Section.\" Tehnički vjesnik 31, br. 6 (2024): 1826-1836. https://doi.org/10.17559/TV-20240601001728",
+        "apa": "Gong, S., Zhao, X. i Yang, S. (2024). Wind Tunnel Investigation and Numerical Simulation of Flow Characteristics Around the Enclosed Railing Steel Box Girder Section. Tehnički vjesnik, 31 (6), 1826-1836. https://doi.org/10.17559/TV-20240601001728",
+        "vancouver": "Gong S, Zhao X, Yang S. Wind Tunnel Investigation and Numerical Simulation of Flow Characteristics Around the Enclosed Railing Steel Box Girder Section. Tehnički vjesnik [Internet]. 2024 [pristupljeno 11.07.2026.];31(6):1826-1836. https://doi.org/10.17559/TV-20240601001728"
+      }
+    },
+    {
+      "id": "hrcak-465250",
+      "styles": {
+        "apa": "Kang, B., Chen, Y. i Zhu, J. (2024). MS-PBFT: A Master-Slave Multichain Consensus Mechanism Based on Pre-Broadcast and Threshold Signatures. Tehnički vjesnik, 31 (6), 1837-1844. https://doi.org/10.17559/TV-20231119001117",
+        "chicago": "Kang, Bohan, Yunzhi Chen i Jianming Zhu. \"MS-PBFT: A Master-Slave Multichain Consensus Mechanism Based on Pre-Broadcast and Threshold Signatures.\" Tehnički vjesnik 31, br. 6 (2024): 1837-1844. https://doi.org/10.17559/TV-20231119001117",
+        "vancouver": "Kang B, Chen Y, Zhu J. MS-PBFT: A Master-Slave Multichain Consensus Mechanism Based on Pre-Broadcast and Threshold Signatures. Tehnički vjesnik [Internet]. 2024 [pristupljeno 11.07.2026.];31(6):1837-1844. https://doi.org/10.17559/TV-20231119001117",
+        "ieee": "B. Kang, Y. Chen i J. Zhu, \"MS-PBFT: A Master-Slave Multichain Consensus Mechanism Based on Pre-Broadcast and Threshold Signatures\", Tehnički vjesnik, vol.31, br. 6, str. 1837-1844, 2024. [Online]. https://doi.org/10.17559/TV-20231119001117"
+      }
+    },
+    {
+      "id": "hrcak-465251",
+      "styles": {
+        "apa": "Lee, W. i Kim, J. (2024). Re-Clustering Documents to Enhance Search Accuracy with Imbalanced Abbreviation Data. Tehnički vjesnik, 31 (6), 1845-1858. https://doi.org/10.17559/TV-20231214001207",
+        "chicago": "Lee, Woon-Kyo i Ja-Hee Kim. \"Re-Clustering Documents to Enhance Search Accuracy with Imbalanced Abbreviation Data.\" Tehnički vjesnik 31, br. 6 (2024): 1845-1858. https://doi.org/10.17559/TV-20231214001207",
+        "ieee": "W. Lee i J. Kim, \"Re-Clustering Documents to Enhance Search Accuracy with Imbalanced Abbreviation Data\", Tehnički vjesnik, vol.31, br. 6, str. 1845-1858, 2024. [Online]. https://doi.org/10.17559/TV-20231214001207",
+        "vancouver": "Lee W, Kim J. Re-Clustering Documents to Enhance Search Accuracy with Imbalanced Abbreviation Data. Tehnički vjesnik [Internet]. 2024 [pristupljeno 11.07.2026.];31(6):1845-1858. https://doi.org/10.17559/TV-20231214001207"
+      }
+    },
+    {
+      "id": "hrcak-493729",
+      "_fix": "IEEE naziv casopisa korumpiran u dohvatu ('Històrijski') -> ispravljen na 'Povijesni prilozi' (artefakt WebFetcha, ne parsera).",
+      "styles": {
+        "ieee": "Z. Dundović, \"Bratovština kovača sv. Dominike u Zadru\", Povijesni prilozi, vol.44, br. 69, str. 71-91, 2025.",
+        "chicago": "Dundović, Zdenko. \"Bratovština kovača sv. Dominike u Zadru.\" Povijesni prilozi 44, br. 69 (2025): 71-91.",
+        "apa": "Dundović, Z. (2025). Bratovština kovača sv. Dominike u Zadru. Povijesni prilozi, 44(69), 71-91.",
+        "vancouver": "Dundović Z. Bratovština kovača sv. Dominike u Zadru. Povijesni prilozi [Internet]. 2025;44(69):71-91."
+      }
+    },
+    {
+      "id": "hrcak-493740",
+      "_fix": "Chicago naziv casopisa imao zero-width znak ('Povijest\\u200bni') -> ispravljen.",
+      "styles": {
+        "apa": "Kurelac, I. (2025). Dragoman Nikola Cambi i njegov izvještaj o šibenskim granicama (1569.) za Giovannija Battistu Calba. Povijesni prilozi, 44 (69), 125-150. https://doi.org/10.22586/pp.v44i69.1hze0d38",
+        "chicago": "Kurelac, Iva. \"Dragoman Nikola Cambi i njegov izvještaj o šibenskim granicama (1569.) za Giovannija Battistu Calba.\" Povijesni prilozi 44, br. 69 (2025): 125-150. https://doi.org/10.22586/pp.v44i69.1hze0d38",
+        "vancouver": "Kurelac I. Dragoman Nikola Cambi i njegov izvještaj o šibenskim granicama (1569.) za Giovannija Battistu Calba. Povijesni prilozi [Internet]. 2025 [pristupljeno 11.07.2026.];44(69):125-150. https://doi.org/10.22586/pp.v44i69.1hze0d38",
+        "ieee": "I. Kurelac, \"Dragoman Nikola Cambi i njegov izvještaj o šibenskim granicama (1569.) za Giovannija Battistu Calba\", Povijesni prilozi, vol.44, br. 69, str. 125-150, 2025. [Online]. https://doi.org/10.22586/pp.v44i69.1hze0d38"
+      }
+    },
+    {
+      "id": "hrcak-493748",
+      "styles": {
+        "apa": "Božić Bogović, D. i Lovaš, E. (2025). Dječji mortalitet u matičnim knjigama umrlih reformiranoga stanovništva u južnoj Baranji (1750. – 1850.). Povijesni prilozi, 44 (69), 153-192. https://doi.org/10.22586/pp.v44i69.7fpm5h03",
+        "chicago": "Božić Bogović, Dubravka i Eldina Lovaš. \"Dječji mortalitet u matičnim knjigama umrlih reformiranoga stanovništva u južnoj Baranji (1750. – 1850.).\" Povijesni prilozi 44, br. 69 (2025): 153-192. https://doi.org/10.22586/pp.v44i69.7fpm5h03",
+        "vancouver": "Božić Bogović D, Lovaš E. Dječji mortalitet u matičnim knjigama umrlih reformiranoga stanovništva u južnoj Baranji (1750. – 1850.). Povijesni prilozi [Internet]. 2025 [pristupljeno 11.07.2026.];44(69):153-192. https://doi.org/10.22586/pp.v44i69.7fpm5h03",
+        "ieee": "D. Božić Bogović i E. Lovaš, \"Dječji mortalitet u matičnim knjigama umrlih reformiranoga stanovništva u južnoj Baranji (1750. – 1850.)\", Povijesni prilozi, vol.44, br. 69, str. 153-192, 2025. [Online]. https://doi.org/10.22586/pp.v44i69.7fpm5h03"
+      }
+    },
+    {
+      "id": "hrcak-492542",
+      "styles": {
+        "apa": "Bažon, M. (2025). Primjena metakognitivnih poticaja kod zadatka čitanja s razumijevanjem – prikaz procesnih modela samoregulacijskih aktivnosti. Psihologijske teme, 34 (3), 461-488. https://doi.org/10.31820/pt.34.3.5",
+        "chicago": "Bažon, Martina. \"Primjena metakognitivnih poticaja kod zadatka čitanja s razumijevanjem – prikaz procesnih modela samoregulacijskih aktivnosti.\" Psihologijske teme 34, br. 3 (2025): 461-488. https://doi.org/10.31820/pt.34.3.5",
+        "vancouver": "Bažon M. Primjena metakognitivnih poticaja kod zadatka čitanja s razumijevanjem – prikaz procesnih modela samoregulacijskih aktivnosti. Psihologijske teme [Internet]. 2025 [pristupljeno 11.07.2026.];34(3):461-488. https://doi.org/10.31820/pt.34.3.5",
+        "ieee": "M. Bažon, \"Primjena metakognitivnih poticaja kod zadatka čitanja s razumijevanjem – prikaz procesnih modela samoregulacijskih aktivnosti\", Psihologijske teme, vol.34, br. 3, str. 461-488, 2025. [Online]. https://doi.org/10.31820/pt.34.3.5"
+      }
+    },
+    {
+      "id": "hrcak-492544",
+      "styles": {
+        "apa": "Jeremić, Ž. i Ivanec, D. (2025). Psihološki aspekti temperature boje svjetlosti. Psihologijske teme, 34 (3), 489-512. https://doi.org/10.31820/pt.34.3.6",
+        "chicago": "Jeremić, Željko i Dragutin Ivanec. \"Psihološki aspekti temperature boje svjetlosti.\" Psihologijske teme 34, br. 3 (2025): 489-512. https://doi.org/10.31820/pt.34.3.6",
+        "vancouver": "Jeremić Ž, Ivanec D. Psihološki aspekti temperature boje svjetlosti. Psihologijske teme [Internet]. 2025 [pristupljeno 11.07.2026.];34(3):489-512. https://doi.org/10.31820/pt.34.3.6",
+        "ieee": "Ž. Jeremić i D. Ivanec, \"Psihološki aspekti temperature boje svjetlosti\", Psihologijske teme, vol.34, br. 3, str. 489-512, 2025. [Online]. https://doi.org/10.31820/pt.34.3.6"
+      }
+    },
+    {
+      "id": "hrcak-299384",
+      "styles": {
+        "ieee": "T. Wu, L. Xie, X. Chen i J. He, \"Dual sub-swarm interaction QPSO algorithm based on different correlation coefficients\", Automatika, vol.58, br. 4, str. 375-383, 2017. [Online]. https://doi.org/10.1080/00051144.2018.1454732",
+        "chicago": "Wu, Tao, Lei Xie, Xi Chen i Jia He. \"Dual sub-swarm interaction QPSO algorithm based on different correlation coefficients.\" Automatika 58, br. 4 (2017): 375-383. https://doi.org/10.1080/00051144.2018.1454732",
+        "apa": "Wu, T., Xie, L., Chen, X. i He, J. (2017). Dual sub-swarm interaction QPSO algorithm based on different correlation coefficients. Automatika, 58 (4), 375-383. https://doi.org/10.1080/00051144.2018.1454732",
+        "vancouver": "Wu T, Xie L, Chen X, He J. Dual sub-swarm interaction QPSO algorithm based on different correlation coefficients. Automatika [Internet]. 2017 [pristupljeno 11.07.2026.];58(4):375-383. https://doi.org/10.1080/00051144.2018.1454732"
       }
     }
   ]

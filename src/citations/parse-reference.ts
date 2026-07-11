@@ -46,8 +46,9 @@ function firstSentence(s: string): [string, string] {
   while ((m = re.exec(s))) {
     const head = s.slice(0, m.index + m[1].length);
     const after = s.charAt(m.index + m[0].length);
-    if (/(?:^|\s)[\p{Lu}]$/u.test(head)) continue;              // inicijal ("I. Ivic")
-    if (/\d$/.test(head) && /\p{Ll}/u.test(after)) continue;    // redni broj + malo slovo ("11. stoljeca")
+    if (/(?:^|\s)[\p{Lu}]$/u.test(head)) continue;                    // inicijal ("I. Ivic")
+    if (/\d$/.test(head) && after && !/\p{Lu}/u.test(after)) continue; // redni broj/raspon ("11. stoljeca", "1990. – 2020")
+    if (/(?:^|\s)(?:sv|bl|dr|prof|mr|sci|fra|don|st|god|str|op|cit|cf|usp|itd|npr|tzv)$/i.test(head)) continue; // hrv/lat kratice ("sv. Dominike")
     return [head.trim(), s.slice(m.index + m[0].length).trim()];
   }
   const dot = s.search(/\.\s/);
@@ -183,7 +184,7 @@ function parseVancouver(input: string, fields: Partial<CitationInput>): SourceTy
   const vdoi = rest.match(/10\.\d{4,9}\/[^\s,;]+/); if (vdoi) fields.doi = vdoi[0].replace(/[.,;]+$/, '');
 
   // Clanak: "... Casopis. Godina;Vol(Broj):Str"
-  const cm = rest.match(/((?:19|20)\d{2})\s*;\s*(\d+)(?:\s*\(([^)]+)\))?(?::\s*([\dA-Za-z\-–]+))?/);
+  const cm = rest.match(/((?:19|20)\d{2})\s*;\s*(\d+)\.?(?:\s*\(([^)]+)\))?(?::\s*([\dA-Za-z\-–]+))?/); // "64.(3)" (tocka iza vol.)
   if (cm && cm.index !== undefined) {
     fields.year = cm[1];
     fields.volume = cm[2];
@@ -353,7 +354,7 @@ function parseChicago(input: string, fields: Partial<CitationInput>): SourceType
     if (before) fields.authors = chicagoAuthorsInverted(before);
     const tail = raw.slice(qm.index + qm[0].length).replace(/^[\s.]+/, '').trim();
     // "Casopis 12, no. 3 (2019): 45-67"
-    const am = tail.match(/^(.+?)\s+(\d+)(?:,\s*(?:no\.|br\.)\s*(\d+))?\s*\((?:19|20)\d{2}\)\s*:\s*(\d+(?:\s*[-–]\s*\d+)?)/i);
+    const am = tail.match(/^(.+?)\s+(\d+)\.?(?:,\s*(?:no\.|br\.)\s*(\d+))?\s*\((?:19|20)\d{2}\)\s*:\s*(\d+(?:\s*[-–]\s*\d+)?)/i); // "64., br. 3"
     if (am) {
       fields.container = am[1].replace(/[.,\s]+$/, '').trim();
       fields.volume = am[2];
@@ -440,7 +441,7 @@ function parseApa(original: string, fields: Partial<CitationInput>): SourceType 
 
     // Clanak: "Casopis, 28(3), 45-67" ili "Casopis, 5, 1-10".
     let matched = false;
-    const m1 = rem.match(/^(.+?),\s*(\d+)\s*\((\d+)\)(?:,\s*(\d+\s*[-–]\s*\d+))?/);
+    const m1 = rem.match(/^(.+?),\s*(\d+)\.?\s*\((\d+)\)(?:,\s*(\d+\s*[-–]\s*\d+))?/); // "64. (3)" (tocka iza vol.)
     if (m1) {
       fields.container = m1[1].trim();
       fields.volume = m1[2];

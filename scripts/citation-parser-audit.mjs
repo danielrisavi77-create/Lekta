@@ -29,12 +29,13 @@ const parseAuthorsBundle = await build({ entryPoints: [join(root, 'src/tools/cit
 const { parseAuthors } = await import('data:text/javascript,' + encodeURIComponent(parseAuthorsBundle.outputFiles[0].text));
 
 const norm = (s) => (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').replace(/[^a-z0-9]/g, '');
-const surnames = (a) => parseAuthors(a || '').map((x) => norm(x.last)).filter(Boolean).sort().join('|');
+// PRVI autor (svi stilovi ga navode); cijeli skup NE - stilovi legitimno skracuju (et al./i sur./...).
+const firstSurname = (a) => { const p = parseAuthors(a || ''); return p.length ? norm(p[0].last) : ''; };
 
 const FIELDS = ['aut', 'god', 'cas', 'vol', 'broj', 'str', 'nas'];
 function proj(f) {
   return {
-    aut: surnames(f.authors), god: f.year || '', cas: norm(f.container),
+    aut: firstSurname(f.authors), god: f.year || '', cas: norm(f.container),
     vol: f.volume || '', broj: f.issue || '', str: (f.pages || '').replace(/\s/g, ''), nas: norm(f.title),
   };
 }

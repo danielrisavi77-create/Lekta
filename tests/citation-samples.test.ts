@@ -13,13 +13,16 @@ import samples from './fixtures/citation-samples.json';
  */
 const norm = (s: string | undefined): string =>
   (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').replace(/[^a-z0-9]/g, '');
-const surnames = (a: string | undefined): string =>
-  parseAuthors(a || '').map((x) => norm(x.last)).filter(Boolean).sort().join('|');
+// PRVI autor (svi stilovi ga navode); cijeli skup NE - stilovi legitimno skracuju (et al./i sur./...).
+const firstSurname = (a: string | undefined): string => {
+  const p = parseAuthors(a || '');
+  return p.length ? norm(p[0].last) : '';
+};
 
 const FIELDS = ['aut', 'god', 'cas', 'vol', 'broj', 'str', 'nas'] as const;
 function proj(f: Record<string, any>): Record<string, string> {
   return {
-    aut: surnames(f.authors), god: f.year || '', cas: norm(f.container),
+    aut: firstSurname(f.authors), god: f.year || '', cas: norm(f.container),
     vol: f.volume || '', broj: f.issue || '', str: (f.pages || '').replace(/\s/g, ''), nas: norm(f.title),
   };
 }
