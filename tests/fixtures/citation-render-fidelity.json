@@ -1,0 +1,1843 @@
+{
+  "_note": "FIDELITY IZLAZNOG renderera: strukturirana Crossref polja + doi.org/CSL autoritativni izlaz (apa/harvard-cite-them-right/chicago-author-date). Nas renderer izrenderira `fields` po stilu i usporedi s `styles[stil]` (normalizirano). Pipeline: scripts/harvest-render-fidelity.mjs; audit: scripts/render-fidelity-audit.mjs.",
+  "items": [
+    {
+      "doi": "10.1007/bf01205498",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Dowrick, Steve",
+        "title": "Estimating the impact of government consumption on growth: Growth accounting and endogenous growth models",
+        "year": "1996",
+        "doi": "10.1007/bf01205498",
+        "container": "Empirical Economics",
+        "volume": "21",
+        "issue": "1",
+        "pages": "163-186",
+        "publisher": "Springer Science and Business Media LLC"
+      },
+      "styles": {
+        "apa": "Dowrick, S. (1996). Estimating the impact of government consumption on growth: Growth accounting and endogenous growth models. Empirical Economics, 21(1), 163–186. https://doi.org/10.1007/bf01205498",
+        "harvard": "Dowrick, S. (1996) \"Estimating the impact of government consumption on growth: Growth accounting and endogenous growth models,\" Empirical Economics, 21(1), pp. 163–186. Available at: https://doi.org/10.1007/bf01205498.",
+        "chicago-author-date": "Dowrick, Steve. 1996. \"Estimating the Impact of Government Consumption on Growth: Growth Accounting and Endogenous Growth Models.\" Empirical Economics 21 (1): 163–86. https://doi.org/10.1007/bf01205498."
+      }
+    },
+    {
+      "doi": "10.1016/0304-3878(83)90040-8",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Tan, Gerald",
+        "title": "Export instability, export growth and GDP growth",
+        "year": "1983",
+        "doi": "10.1016/0304-3878(83)90040-8",
+        "container": "Journal of Development Economics",
+        "volume": "12",
+        "issue": "1-2",
+        "pages": "219-227",
+        "publisher": "Elsevier BV"
+      },
+      "styles": {
+        "apa": "Tan, G. (1983). Export instability, export growth and GDP growth. Journal of Development Economics, 12(1-2), 219–227. https://doi.org/10.1016/0304-3878(83)90040-8",
+        "harvard": "Tan, G. (1983) \"Export instability, export growth and GDP growth,\" Journal of Development Economics, 12(1-2), pp. 219–227. Available at: https://doi.org/10.1016/0304-3878(83)90040-8.",
+        "chicago-author-date": "Tan, Gerald. 1983. \"Export Instability, Export Growth and GDP Growth.\" Journal of Development Economics 12 (1-2): 219–27. https://doi.org/10.1016/0304-3878(83)90040-8."
+      }
+    },
+    {
+      "doi": "10.1016/j.ecolecon.2013.01.007",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Daly, Herman",
+        "title": "A further critique of growth economics",
+        "year": "2013",
+        "doi": "10.1016/j.ecolecon.2013.01.007",
+        "container": "Ecological Economics",
+        "volume": "88",
+        "pages": "20-24",
+        "publisher": "Elsevier BV"
+      },
+      "styles": {
+        "apa": "Daly, H. (2013). A further critique of growth economics. Ecological Economics, 88, 20–24. https://doi.org/10.1016/j.ecolecon.2013.01.007",
+        "harvard": "Daly, H. (2013) \"A further critique of growth economics,\" Ecological Economics, 88, pp. 20–24. Available at: https://doi.org/10.1016/j.ecolecon.2013.01.007.",
+        "chicago-author-date": "Daly, Herman. 2013. \"A Further Critique of Growth Economics.\" Ecological Economics 88 (April): 20–24. https://doi.org/10.1016/j.ecolecon.2013.01.007."
+      }
+    },
+    {
+      "doi": "10.1016/j.ecolecon.2025.108823",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Hasselbalch, Jacob; Larsen, Mathias",
+        "title": "Reimagining growth futures: Overcoming the false binary between green growth and degrowth",
+        "year": "2026",
+        "doi": "10.1016/j.ecolecon.2025.108823",
+        "container": "Ecological Economics",
+        "volume": "240",
+        "pages": "108823",
+        "publisher": "Elsevier BV"
+      },
+      "styles": {
+        "apa": "Hasselbalch, J., & Larsen, M. (2026). Reimagining growth futures: Overcoming the false binary between green growth and degrowth. Ecological Economics, 240, 108823. https://doi.org/10.1016/j.ecolecon.2025.108823",
+        "harvard": "Hasselbalch, J. and Larsen, M. (2026) \"Reimagining growth futures: Overcoming the false binary between green growth and degrowth,\" Ecological Economics, 240, p. 108823. Available at: https://doi.org/10.1016/j.ecolecon.2025.108823.",
+        "chicago-author-date": "Hasselbalch, Jacob, and Mathias Larsen. 2026. \"Reimagining Growth Futures: Overcoming the False Binary between Green Growth and Degrowth.\" Ecological Economics 240 (February): 108823. https://doi.org/10.1016/j.ecolecon.2025.108823."
+      }
+    },
+    {
+      "doi": "10.1016/j.econlet.2007.01.010",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Jin, Yi; Zeng, Zhixiong",
+        "title": "International Growth Equalization along nonbalanced constant growth paths",
+        "year": "2007",
+        "doi": "10.1016/j.econlet.2007.01.010",
+        "container": "Economics Letters",
+        "volume": "96",
+        "issue": "2",
+        "pages": "245-252",
+        "publisher": "Elsevier BV"
+      },
+      "styles": {
+        "apa": "Jin, Y., & Zeng, Z. (2007). International Growth Equalization along nonbalanced constant growth paths. Economics Letters, 96(2), 245–252. https://doi.org/10.1016/j.econlet.2007.01.010",
+        "harvard": "Jin, Y. and Zeng, Z. (2007) \"International Growth Equalization along nonbalanced constant growth paths,\" Economics Letters, 96(2), pp. 245–252. Available at: https://doi.org/10.1016/j.econlet.2007.01.010.",
+        "chicago-author-date": "Jin, Yi, and Zhixiong Zeng. 2007. \"International Growth Equalization along Nonbalanced Constant Growth Paths.\" Economics Letters 96 (2): 245–52. https://doi.org/10.1016/j.econlet.2007.01.010."
+      }
+    },
+    {
+      "doi": "10.1016/j.econlet.2010.08.019",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Karras, Georgios",
+        "title": "Land and population growth in the Solow growth model: Some empirical evidence",
+        "year": "2010",
+        "doi": "10.1016/j.econlet.2010.08.019",
+        "container": "Economics Letters",
+        "volume": "109",
+        "issue": "2",
+        "pages": "66-68",
+        "publisher": "Elsevier BV"
+      },
+      "styles": {
+        "apa": "Karras, G. (2010). Land and population growth in the Solow growth model: Some empirical evidence. Economics Letters, 109(2), 66–68. https://doi.org/10.1016/j.econlet.2010.08.019",
+        "harvard": "Karras, G. (2010) \"Land and population growth in the Solow growth model: Some empirical evidence,\" Economics Letters, 109(2), pp. 66–68. Available at: https://doi.org/10.1016/j.econlet.2010.08.019.",
+        "chicago-author-date": "Karras, Georgios. 2010. \"Land and Population Growth in the Solow Growth Model: Some Empirical Evidence.\" Economics Letters 109 (2): 66–68. https://doi.org/10.1016/j.econlet.2010.08.019."
+      }
+    },
+    {
+      "doi": "10.1016/j.econlet.2013.04.001",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Manganelli, Simone; Popov, Alexander",
+        "title": "Financial dependence, global growth opportunities, and growth revisited",
+        "year": "2013",
+        "doi": "10.1016/j.econlet.2013.04.001",
+        "container": "Economics Letters",
+        "volume": "120",
+        "issue": "1",
+        "pages": "123-125",
+        "publisher": "Elsevier BV"
+      },
+      "styles": {
+        "apa": "Manganelli, S., & Popov, A. (2013). Financial dependence, global growth opportunities, and growth revisited. Economics Letters, 120(1), 123–125. https://doi.org/10.1016/j.econlet.2013.04.001",
+        "harvard": "Manganelli, S. and Popov, A. (2013) \"Financial dependence, global growth opportunities, and growth revisited,\" Economics Letters, 120(1), pp. 123–125. Available at: https://doi.org/10.1016/j.econlet.2013.04.001.",
+        "chicago-author-date": "Manganelli, Simone, and Alexander Popov. 2013. \"Financial Dependence, Global Growth Opportunities, and Growth Revisited.\" Economics Letters 120 (1): 123–25. https://doi.org/10.1016/j.econlet.2013.04.001."
+      }
+    },
+    {
+      "doi": "10.1016/s0165-1765(96)00876-2",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Yip, Chong K.; Zhang, Junxi",
+        "title": "Population growth and economic growth: A reconsideration",
+        "year": "1996",
+        "doi": "10.1016/s0165-1765(96)00876-2",
+        "container": "Economics Letters",
+        "volume": "52",
+        "issue": "3",
+        "pages": "319-324",
+        "publisher": "Elsevier BV"
+      },
+      "styles": {
+        "apa": "Yip, C. K., & Zhang, J. (1996). Population growth and economic growth: A reconsideration. Economics Letters, 52(3), 319–324. https://doi.org/10.1016/s0165-1765(96)00876-2",
+        "harvard": "Yip, C.K. and Zhang, J. (1996) \"Population growth and economic growth: A reconsideration,\" Economics Letters, 52(3), pp. 319–324. Available at: https://doi.org/10.1016/s0165-1765(96)00876-2.",
+        "chicago-author-date": "Yip, Chong K., and Junxi Zhang. 1996. \"Population Growth and Economic Growth: A Reconsideration.\" Economics Letters 52 (3): 319–24. https://doi.org/10.1016/s0165-1765(96)00876-2."
+      }
+    },
+    {
+      "doi": "10.1016/s0378-777x(75)80047-3",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "STREIBL, M",
+        "title": "Environmental policy in a Federal State",
+        "year": "1975",
+        "doi": "10.1016/s0378-777x(75)80047-3",
+        "container": "Environmental Policy and Law",
+        "volume": "1",
+        "issue": "3",
+        "pages": "138-140",
+        "publisher": "SAGE Publications"
+      },
+      "styles": {
+        "apa": "STREIBL, M. (1975). Environmental policy in a Federal State. Environmental Policy and Law, 1(3), 138–140. https://doi.org/10.1016/s0378-777x(75)80047-3",
+        "harvard": "STREIBL, M. (1975) \"Environmental policy in a Federal State,\" Environmental Policy and Law, 1(3), pp. 138–140. Available at: https://doi.org/10.1016/s0378-777x(75)80047-3.",
+        "chicago-author-date": "STREIBL, M. 1975. \"Environmental Policy in a Federal State.\" Environmental Policy and Law 1 (3): 138–40. https://doi.org/10.1016/s0378-777x(75)80047-3."
+      }
+    },
+    {
+      "doi": "10.1016/s0378-777x(77)80092-9",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "MOLTKE, K",
+        "title": "The legal basis for environmental policy",
+        "year": "1977",
+        "doi": "10.1016/s0378-777x(77)80092-9",
+        "container": "Environmental Policy and Law",
+        "volume": "3",
+        "issue": "3-4",
+        "pages": "136-140",
+        "publisher": "SAGE Publications"
+      },
+      "styles": {
+        "apa": "MOLTKE, K. (1977). The legal basis for environmental policy. Environmental Policy and Law, 3(3-4), 136–140. https://doi.org/10.1016/s0378-777x(77)80092-9",
+        "harvard": "MOLTKE, K. (1977) \"The legal basis for environmental policy,\" Environmental Policy and Law, 3(3-4), pp. 136–140. Available at: https://doi.org/10.1016/s0378-777x(77)80092-9.",
+        "chicago-author-date": "MOLTKE, K. 1977. \"The Legal Basis for Environmental Policy.\" Environmental Policy and Law 3 (3-4): 136–40. https://doi.org/10.1016/s0378-777x(77)80092-9."
+      }
+    },
+    {
+      "doi": "10.1016/s0378-777x(79)80101-8",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "MALANCZUK, P",
+        "title": "Policy developments",
+        "year": "1979",
+        "doi": "10.1016/s0378-777x(79)80101-8",
+        "container": "Environmental Policy and Law",
+        "volume": "5",
+        "issue": "1",
+        "pages": "20-23",
+        "publisher": "SAGE Publications"
+      },
+      "styles": {
+        "apa": "MALANCZUK, P. (1979). Policy developments. Environmental Policy and Law, 5(1), 20–23. https://doi.org/10.1016/s0378-777x(79)80101-8",
+        "harvard": "MALANCZUK, P. (1979) \"Policy developments,\" Environmental Policy and Law, 5(1), pp. 20–23. Available at: https://doi.org/10.1016/s0378-777x(79)80101-8.",
+        "chicago-author-date": "MALANCZUK, P. 1979. \"Policy Developments.\" Environmental Policy and Law 5 (1): 20–23. https://doi.org/10.1016/s0378-777x(79)80101-8."
+      }
+    },
+    {
+      "doi": "10.1016/s0378-777x(80)80096-5",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "OFOSUAMAAH, W",
+        "title": "ECA discusses environmental policy",
+        "year": "1980",
+        "doi": "10.1016/s0378-777x(80)80096-5",
+        "container": "Environmental Policy and Law",
+        "volume": "6",
+        "issue": "4",
+        "pages": "171-174",
+        "publisher": "SAGE Publications"
+      },
+      "styles": {
+        "apa": "OFOSUAMAAH, W. (1980). ECA discusses environmental policy. Environmental Policy and Law, 6(4), 171–174. https://doi.org/10.1016/s0378-777x(80)80096-5",
+        "harvard": "OFOSUAMAAH, W. (1980) \"ECA discusses environmental policy,\" Environmental Policy and Law, 6(4), pp. 171–174. Available at: https://doi.org/10.1016/s0378-777x(80)80096-5.",
+        "chicago-author-date": "OFOSUAMAAH, W. 1980. \"ECA Discusses Environmental Policy.\" Environmental Policy and Law 6 (4): 171–74. https://doi.org/10.1016/s0378-777x(80)80096-5."
+      }
+    },
+    {
+      "doi": "10.1017/s0031819100003880",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Waterhouse, E. S.",
+        "title": "Ethics and Christian Ethics",
+        "year": "1943",
+        "doi": "10.1017/s0031819100003880",
+        "container": "Philosophy",
+        "volume": "18",
+        "issue": "69",
+        "pages": "50-59",
+        "publisher": "Cambridge University Press (CUP)"
+      },
+      "styles": {
+        "apa": "Waterhouse, E. S. (1943). Ethics and Christian Ethics. Philosophy, 18(69), 50–59. https://doi.org/10.1017/s0031819100003880",
+        "harvard": "Waterhouse, E.S. (1943) \"Ethics and Christian Ethics,\" Philosophy, 18(69), pp. 50–59. Available at: https://doi.org/10.1017/s0031819100003880.",
+        "chicago-author-date": "Waterhouse, E. S. 1943. \"Ethics and Christian Ethics.\" Philosophy 18 (69): 50–59. https://doi.org/10.1017/s0031819100003880."
+      }
+    },
+    {
+      "doi": "10.1080/01154451.2013.789175",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Tuazon, Bobby M.",
+        "title": "Chasing the Wind: Assessing Philippine Democracy/Philippine Democracy Assessment: Free and Fair Elections and the Democratic Role of Political Parties",
+        "year": "2013",
+        "doi": "10.1080/01154451.2013.789175",
+        "container": "Philippine Political Science Journal",
+        "volume": "34",
+        "issue": "1",
+        "pages": "113-116",
+        "publisher": "Walter de Gruyter GmbH"
+      },
+      "styles": {
+        "apa": "Tuazon, B. M. (2013). Chasing the Wind: Assessing Philippine Democracy/Philippine Democracy Assessment: Free and Fair Elections and the Democratic Role of Political Parties. Philippine Political Science Journal, 34(1), 113–116. https://doi.org/10.1080/01154451.2013.789175",
+        "harvard": "Tuazon, B.M. (2013) \"Chasing the Wind: Assessing Philippine Democracy/Philippine Democracy Assessment: Free and Fair Elections and the Democratic Role of Political Parties,\" Philippine Political Science Journal, 34(1), pp. 113–116. Available at: https://doi.org/10.1080/01154451.2013.789175.",
+        "chicago-author-date": "Tuazon, Bobby M. 2013. \"Chasing the Wind: Assessing Philippine Democracy/Philippine Democracy Assessment: Free and Fair Elections and the Democratic Role of Political Parties.\" Philippine Political Science Journal 34 (1): 113–16. https://doi.org/10.1080/01154451.2013.789175."
+      }
+    },
+    {
+      "doi": "10.1080/02723638.2020.1729001",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Van Heur, Bas",
+        "title": "Urban geography as if urban knowledge matters",
+        "year": "2020",
+        "doi": "10.1080/02723638.2020.1729001",
+        "container": "Urban Geography",
+        "volume": "41",
+        "issue": "5",
+        "pages": "694-702",
+        "publisher": "Informa UK Limited"
+      },
+      "styles": {
+        "apa": "Van Heur, B. (2020). Urban geography as if urban knowledge matters. Urban Geography, 41(5), 694–702. https://doi.org/10.1080/02723638.2020.1729001",
+        "harvard": "Van Heur, B. (2020) \"Urban geography as if urban knowledge matters,\" Urban Geography, 41(5), pp. 694–702. Available at: https://doi.org/10.1080/02723638.2020.1729001.",
+        "chicago-author-date": "Van Heur, Bas. 2020. \"Urban Geography as If Urban Knowledge Matters.\" Urban Geography 41 (5): 694–702. https://doi.org/10.1080/02723638.2020.1729001."
+      }
+    },
+    {
+      "doi": "10.1080/09620219970200013",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Whitty, Geoff",
+        "title": "Education policy and the sociology of education",
+        "year": "1997",
+        "doi": "10.1080/09620219970200013",
+        "container": "International Studies in Sociology of Education",
+        "volume": "7",
+        "issue": "2",
+        "pages": "121-135",
+        "publisher": "Informa UK Limited"
+      },
+      "styles": {
+        "apa": "Whitty, G. (1997). Education policy and the sociology of education. International Studies in Sociology of Education, 7(2), 121–135. https://doi.org/10.1080/09620219970200013",
+        "harvard": "Whitty, G. (1997) \"Education policy and the sociology of education,\" International Studies in Sociology of Education, 7(2), pp. 121–135. Available at: https://doi.org/10.1080/09620219970200013.",
+        "chicago-author-date": "Whitty, Geoff. 1997. \"Education Policy and the Sociology of Education.\" International Studies in Sociology of Education 7 (2): 121–35. https://doi.org/10.1080/09620219970200013."
+      }
+    },
+    {
+      "doi": "10.1080/10714413.2019.1570794",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Zembylas, Michalinos",
+        "title": "Reinventing critical pedagogy as decolonizing pedagogy: The education of empathy",
+        "year": "2018",
+        "doi": "10.1080/10714413.2019.1570794",
+        "container": "Review of Education, Pedagogy, and Cultural Studies",
+        "volume": "40",
+        "issue": "5",
+        "pages": "404-421",
+        "publisher": "Informa UK Limited"
+      },
+      "styles": {
+        "apa": "Zembylas, M. (2018). Reinventing critical pedagogy as decolonizing pedagogy: The education of empathy. Review of Education, Pedagogy, and Cultural Studies, 40(5), 404–421. https://doi.org/10.1080/10714413.2019.1570794",
+        "harvard": "Zembylas, M. (2018) \"Reinventing critical pedagogy as decolonizing pedagogy: The education of empathy,\" Review of Education, Pedagogy, and Cultural Studies, 40(5), pp. 404–421. Available at: https://doi.org/10.1080/10714413.2019.1570794.",
+        "chicago-author-date": "Zembylas, Michalinos. 2018. \"Reinventing Critical Pedagogy as Decolonizing Pedagogy: The Education of Empathy.\" Review of Education, Pedagogy, and Cultural Studies 40 (5): 404–21. https://doi.org/10.1080/10714413.2019.1570794."
+      }
+    },
+    {
+      "doi": "10.1080/14759390300200153",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Loveless, Avril",
+        "title": "Technology, pedagogy and education – widening the scope",
+        "year": "2003",
+        "doi": "10.1080/14759390300200153",
+        "container": "Technology, Pedagogy and Education",
+        "volume": "12",
+        "issue": "2",
+        "pages": "197-199",
+        "publisher": "Informa UK Limited"
+      },
+      "styles": {
+        "apa": "Loveless, A. (2003). Technology, pedagogy and education – widening the scope. Technology, Pedagogy and Education, 12(2), 197–199. https://doi.org/10.1080/14759390300200153",
+        "harvard": "Loveless, A. (2003) \"Technology, pedagogy and education – widening the scope,\" Technology, Pedagogy and Education, 12(2), pp. 197–199. Available at: https://doi.org/10.1080/14759390300200153.",
+        "chicago-author-date": "Loveless, Avril. 2003. \"Technology, Pedagogy and Education – Widening the Scope.\" Technology, Pedagogy and Education 12 (2): 197–99. https://doi.org/10.1080/14759390300200153."
+      }
+    },
+    {
+      "doi": "10.1080/14759390400200182",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Loveless, Avril",
+        "title": "Frameworks for analysing technology, pedagogy and education",
+        "year": "2004",
+        "doi": "10.1080/14759390400200182",
+        "container": "Technology, Pedagogy and Education",
+        "volume": "13",
+        "issue": "3",
+        "pages": "231-234",
+        "publisher": "Informa UK Limited"
+      },
+      "styles": {
+        "apa": "Loveless, A. (2004). Frameworks for analysing technology, pedagogy and education. Technology, Pedagogy and Education, 13(3), 231–234. https://doi.org/10.1080/14759390400200182",
+        "harvard": "Loveless, A. (2004) \"Frameworks for analysing technology, pedagogy and education,\" Technology, Pedagogy and Education, 13(3), pp. 231–234. Available at: https://doi.org/10.1080/14759390400200182.",
+        "chicago-author-date": "Loveless, Avril. 2004. \"Frameworks for Analysing Technology, Pedagogy and Education.\" Technology, Pedagogy and Education 13 (3): 231–34. https://doi.org/10.1080/14759390400200182."
+      }
+    },
+    {
+      "doi": "10.1080/14759390500200198",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Loveless, Avril",
+        "title": "Research and Practice in Technology, Pedagogy and Education: what do we stand for?",
+        "year": "2005",
+        "doi": "10.1080/14759390500200198",
+        "container": "Technology, Pedagogy and Education",
+        "volume": "14",
+        "issue": "2",
+        "pages": "149-153",
+        "publisher": "Informa UK Limited"
+      },
+      "styles": {
+        "apa": "Loveless, A. (2005). Research and Practice in Technology, Pedagogy and Education: what do we stand for? Technology, Pedagogy and Education, 14(2), 149–153. https://doi.org/10.1080/14759390500200198",
+        "harvard": "Loveless, A. (2005) \"Research and Practice in Technology, Pedagogy and Education: what do we stand for?,\" Technology, Pedagogy and Education, 14(2), pp. 149–153. Available at: https://doi.org/10.1080/14759390500200198.",
+        "chicago-author-date": "Loveless, Avril. 2005. \"Research and Practice in Technology, Pedagogy and Education: What Do We Stand for?\" Technology, Pedagogy and Education 14 (2): 149–53. https://doi.org/10.1080/14759390500200198."
+      }
+    },
+    {
+      "doi": "10.1080/14759390701614496",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Laurillard, Diana",
+        "title": "Technology, pedagogy and education: concluding comments",
+        "year": "2007",
+        "doi": "10.1080/14759390701614496",
+        "container": "Technology, Pedagogy and Education",
+        "volume": "16",
+        "issue": "3",
+        "pages": "357-360",
+        "publisher": "Informa UK Limited"
+      },
+      "styles": {
+        "apa": "Laurillard, D. (2007). Technology, pedagogy and education: concluding comments. Technology, Pedagogy and Education, 16(3), 357–360. https://doi.org/10.1080/14759390701614496",
+        "harvard": "Laurillard, D. (2007) \"Technology, pedagogy and education: concluding comments,\" Technology, Pedagogy and Education, 16(3), pp. 357–360. Available at: https://doi.org/10.1080/14759390701614496.",
+        "chicago-author-date": "Laurillard, Diana. 2007. \"Technology, Pedagogy and Education: Concluding Comments.\" Technology, Pedagogy and Education 16 (3): 357–60. https://doi.org/10.1080/14759390701614496."
+      }
+    },
+    {
+      "doi": "10.1080/15295036.2015.1059466",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Mayer, Vicki A.; Krohling Peruzzo, Cicilia M.",
+        "title": "TRANSLATION: Civic Media, Meet Community Media; Community Communication and Education for Citizenship",
+        "year": "2015",
+        "doi": "10.1080/15295036.2015.1059466",
+        "container": "Critical Studies in Media Communication",
+        "volume": "32",
+        "issue": "3",
+        "pages": "143-157",
+        "publisher": "Informa UK Limited"
+      },
+      "styles": {
+        "apa": "Mayer, V. A., & Krohling Peruzzo, C. M. (2015). TRANSLATION: Civic Media, Meet Community Media; Community Communication and Education for Citizenship. Critical Studies in Media Communication, 32(3), 143–157. https://doi.org/10.1080/15295036.2015.1059466",
+        "harvard": "Mayer, V.A. and Krohling Peruzzo, C.M. (2015) \"TRANSLATION: Civic Media, Meet Community Media; Community Communication and Education for Citizenship,\" Critical Studies in Media Communication, 32(3), pp. 143–157. Available at: https://doi.org/10.1080/15295036.2015.1059466.",
+        "chicago-author-date": "Mayer, Vicki A., and Cicilia M. Krohling Peruzzo. 2015. \"TRANSLATION: Civic Media, Meet Community Media; Community Communication and Education for Citizenship.\" Critical Studies in Media Communication 32 (3): 143–57. https://doi.org/10.1080/15295036.2015.1059466."
+      }
+    },
+    {
+      "doi": "10.1080/17408989.2018.1470615",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Shelley, Karen; McCuaig, Louise",
+        "title": "Close encounters with critical pedagogy in socio-critically informed health education teacher education",
+        "year": "2018",
+        "doi": "10.1080/17408989.2018.1470615",
+        "container": "Physical Education and Sport Pedagogy",
+        "volume": "23",
+        "issue": "5",
+        "pages": "510-523",
+        "publisher": "Informa UK Limited"
+      },
+      "styles": {
+        "apa": "Shelley, K., & McCuaig, L. (2018). Close encounters with critical pedagogy in socio-critically informed health education teacher education. Physical Education and Sport Pedagogy, 23(5), 510–523. https://doi.org/10.1080/17408989.2018.1470615",
+        "harvard": "Shelley, K. and McCuaig, L. (2018) \"Close encounters with critical pedagogy in socio-critically informed health education teacher education,\" Physical Education and Sport Pedagogy, 23(5), pp. 510–523. Available at: https://doi.org/10.1080/17408989.2018.1470615.",
+        "chicago-author-date": "Shelley, Karen, and Louise McCuaig. 2018. \"Close Encounters with Critical Pedagogy in Socio-Critically Informed Health Education Teacher Education.\" Physical Education and Sport Pedagogy 23 (5): 510–23. https://doi.org/10.1080/17408989.2018.1470615."
+      }
+    },
+    {
+      "doi": "10.1080/17408989.2020.1720633",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Clark, Langston",
+        "title": "Toward a critical race pedagogy of physical education",
+        "year": "2020",
+        "doi": "10.1080/17408989.2020.1720633",
+        "container": "Physical Education and Sport Pedagogy",
+        "volume": "25",
+        "issue": "4",
+        "pages": "439-450",
+        "publisher": "Informa UK Limited"
+      },
+      "styles": {
+        "apa": "Clark, L. (2020). Toward a critical race pedagogy of physical education. Physical Education and Sport Pedagogy, 25(4), 439–450. https://doi.org/10.1080/17408989.2020.1720633",
+        "harvard": "Clark, L. (2020) \"Toward a critical race pedagogy of physical education,\" Physical Education and Sport Pedagogy, 25(4), pp. 439–450. Available at: https://doi.org/10.1080/17408989.2020.1720633.",
+        "chicago-author-date": "Clark, Langston. 2020. \"Toward a Critical Race Pedagogy of Physical Education.\" Physical Education and Sport Pedagogy 25 (4): 439–50. https://doi.org/10.1080/17408989.2020.1720633."
+      }
+    },
+    {
+      "doi": "10.1080/17511320601173329",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "McNamee, Mike",
+        "title": "Sport, ethics and philosophy; context, history, prospects",
+        "year": "2007",
+        "doi": "10.1080/17511320601173329",
+        "container": "Sport, Ethics and Philosophy",
+        "volume": "1",
+        "issue": "1",
+        "pages": "1-6",
+        "publisher": "Informa UK Limited"
+      },
+      "styles": {
+        "apa": "McNamee, M. (2007). Sport, ethics and philosophy; context, history, prospects. Sport, Ethics and Philosophy, 1(1), 1–6. https://doi.org/10.1080/17511320601173329",
+        "harvard": "McNamee, M. (2007) \"Sport, ethics and philosophy; context, history, prospects,\" Sport, Ethics and Philosophy, 1(1), pp. 1–6. Available at: https://doi.org/10.1080/17511320601173329.",
+        "chicago-author-date": "McNamee, Mike. 2007. \"Sport, Ethics and Philosophy; Context, History, Prospects.\" Sport, Ethics and Philosophy 1 (1): 1–6. https://doi.org/10.1080/17511320601173329."
+      }
+    },
+    {
+      "doi": "10.1080/17511321.2011.615757",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Carlson, Chad",
+        "title": "Ethics and Morality in Sport Management",
+        "year": "2011",
+        "doi": "10.1080/17511321.2011.615757",
+        "container": "Sport, Ethics and Philosophy",
+        "volume": "5",
+        "issue": "4",
+        "pages": "457-459",
+        "publisher": "Informa UK Limited"
+      },
+      "styles": {
+        "apa": "Carlson, C. (2011). Ethics and Morality in Sport Management. Sport, Ethics and Philosophy, 5(4), 457–459. https://doi.org/10.1080/17511321.2011.615757",
+        "harvard": "Carlson, C. (2011) \"Ethics and Morality in Sport Management,\" Sport, Ethics and Philosophy, 5(4), pp. 457–459. Available at: https://doi.org/10.1080/17511321.2011.615757.",
+        "chicago-author-date": "Carlson, Chad. 2011. \"Ethics and Morality in Sport Management.\" Sport, Ethics and Philosophy 5 (4): 457–59. https://doi.org/10.1080/17511321.2011.615757."
+      }
+    },
+    {
+      "doi": "10.1080/17511321.2011.621393",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "McNamee, Mike",
+        "title": "After Pistorius: Paralympic Philosophy and Ethics",
+        "year": "2011",
+        "doi": "10.1080/17511321.2011.621393",
+        "container": "Sport, Ethics and Philosophy",
+        "volume": "5",
+        "issue": "4",
+        "pages": "359-361",
+        "publisher": "Informa UK Limited"
+      },
+      "styles": {
+        "apa": "McNamee, M. (2011). After Pistorius: Paralympic Philosophy and Ethics. Sport, Ethics and Philosophy, 5(4), 359–361. https://doi.org/10.1080/17511321.2011.621393",
+        "harvard": "McNamee, M. (2011) \"After Pistorius: Paralympic Philosophy and Ethics,\" Sport, Ethics and Philosophy, 5(4), pp. 359–361. Available at: https://doi.org/10.1080/17511321.2011.621393.",
+        "chicago-author-date": "McNamee, Mike. 2011. \"After Pistorius: Paralympic Philosophy and Ethics.\" Sport, Ethics and Philosophy 5 (4): 359–61. https://doi.org/10.1080/17511321.2011.621393."
+      }
+    },
+    {
+      "doi": "10.1080/17511321.2012.676826",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "McNamee, Mike; Parry, Jim",
+        "title": "Olympic Ethics and Philosophy: Old Wine in New Bottles",
+        "year": "2012",
+        "doi": "10.1080/17511321.2012.676826",
+        "container": "Sport, Ethics and Philosophy",
+        "volume": "6",
+        "issue": "2",
+        "pages": "103-107",
+        "publisher": "Informa UK Limited"
+      },
+      "styles": {
+        "apa": "McNamee, M., & Parry, J. (2012). Olympic Ethics and Philosophy: Old Wine in New Bottles. Sport, Ethics and Philosophy, 6(2), 103–107. https://doi.org/10.1080/17511321.2012.676826",
+        "harvard": "McNamee, M. and Parry, J. (2012) \"Olympic Ethics and Philosophy: Old Wine in New Bottles,\" Sport, Ethics and Philosophy, 6(2), pp. 103–107. Available at: https://doi.org/10.1080/17511321.2012.676826.",
+        "chicago-author-date": "McNamee, Mike, and Jim Parry. 2012. \"Olympic Ethics and Philosophy: Old Wine in New Bottles.\" Sport, Ethics and Philosophy 6 (2): 103–7. https://doi.org/10.1080/17511321.2012.676826."
+      }
+    },
+    {
+      "doi": "10.1080/17511321.2013.761882",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Edgar, Andrew",
+        "title": "Sport and Philosophy",
+        "year": "2013",
+        "doi": "10.1080/17511321.2013.761882",
+        "container": "Sport, Ethics and Philosophy",
+        "volume": "7",
+        "issue": "1",
+        "pages": "10-29",
+        "publisher": "Informa UK Limited"
+      },
+      "styles": {
+        "apa": "Edgar, A. (2013). Sport and Philosophy. Sport, Ethics and Philosophy, 7(1), 10–29. https://doi.org/10.1080/17511321.2013.761882",
+        "harvard": "Edgar, A. (2013) \"Sport and Philosophy,\" Sport, Ethics and Philosophy, 7(1), pp. 10–29. Available at: https://doi.org/10.1080/17511321.2013.761882.",
+        "chicago-author-date": "Edgar, Andrew. 2013. \"Sport and Philosophy.\" Sport, Ethics and Philosophy 7 (1): 10–29. https://doi.org/10.1080/17511321.2013.761882."
+      }
+    },
+    {
+      "doi": "10.1093/hrlr/2.2.181",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Eekelaar, J.",
+        "title": "PERSONAL RIGHTS AND HUMAN RIGHTS",
+        "year": "2002",
+        "doi": "10.1093/hrlr/2.2.181",
+        "container": "Human Rights Law Review",
+        "volume": "2",
+        "issue": "2",
+        "pages": "181-197",
+        "publisher": "Oxford University Press (OUP)"
+      },
+      "styles": {
+        "apa": "Eekelaar, J. (2002). PERSONAL RIGHTS AND HUMAN RIGHTS. Human Rights Law Review, 2(2), 181–197. https://doi.org/10.1093/hrlr/2.2.181",
+        "harvard": "Eekelaar, J. (2002) \"PERSONAL RIGHTS AND HUMAN RIGHTS,\" Human Rights Law Review, 2(2), pp. 181–197. Available at: https://doi.org/10.1093/hrlr/2.2.181.",
+        "chicago-author-date": "Eekelaar, J. 2002. \"Personal Rights and Human Rights.\" Human Rights Law Review 2 (2): 181–97. https://doi.org/10.1093/hrlr/2.2.181."
+      }
+    },
+    {
+      "doi": "10.1093/hrlr/ngn037",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Murray, R.",
+        "title": "Frans Viljoen, International Human Rights Law in Africa",
+        "year": "2009",
+        "doi": "10.1093/hrlr/ngn037",
+        "container": "Human Rights Law Review",
+        "volume": "9",
+        "issue": "1",
+        "pages": "172-176",
+        "publisher": "Oxford University Press (OUP)"
+      },
+      "styles": {
+        "apa": "Murray, R. (2009). Frans Viljoen, International Human Rights Law in Africa. Human Rights Law Review, 9(1), 172–176. https://doi.org/10.1093/hrlr/ngn037",
+        "harvard": "Murray, R. (2009) \"Frans Viljoen, International Human Rights Law in Africa,\" Human Rights Law Review, 9(1), pp. 172–176. Available at: https://doi.org/10.1093/hrlr/ngn037.",
+        "chicago-author-date": "Murray, R. 2009. \"Frans Viljoen, International Human Rights Law in Africa.\" Human Rights Law Review 9 (1): 172–76. https://doi.org/10.1093/hrlr/ngn037."
+      }
+    },
+    {
+      "doi": "10.1093/hrlr/ngr006",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Grene, H.",
+        "title": "Jernej Letnar Cernic, Human Rights Law and Business: Corporate Responsibility for Fundamental Human Rights",
+        "year": "2011",
+        "doi": "10.1093/hrlr/ngr006",
+        "container": "Human Rights Law Review",
+        "volume": "11",
+        "issue": "2",
+        "pages": "411-414",
+        "publisher": "Oxford University Press (OUP)"
+      },
+      "styles": {
+        "apa": "Grene, H. (2011). Jernej Letnar Cernic, Human Rights Law and Business: Corporate Responsibility for Fundamental Human Rights. Human Rights Law Review, 11(2), 411–414. https://doi.org/10.1093/hrlr/ngr006",
+        "harvard": "Grene, H. (2011) \"Jernej Letnar Cernic, Human Rights Law and Business: Corporate Responsibility for Fundamental Human Rights,\" Human Rights Law Review, 11(2), pp. 411–414. Available at: https://doi.org/10.1093/hrlr/ngr006.",
+        "chicago-author-date": "Grene, H. 2011. \"Jernej Letnar Cernic, Human Rights Law and Business: Corporate Responsibility for Fundamental Human Rights.\" Human Rights Law Review 11 (2): 411–14. https://doi.org/10.1093/hrlr/ngr006."
+      }
+    },
+    {
+      "doi": "10.1093/hrlr/ngs045",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "McDonagh, M.",
+        "title": "The Right to Information in International Human Rights Law",
+        "year": "2013",
+        "doi": "10.1093/hrlr/ngs045",
+        "container": "Human Rights Law Review",
+        "volume": "13",
+        "issue": "1",
+        "pages": "25-55",
+        "publisher": "Oxford University Press (OUP)"
+      },
+      "styles": {
+        "apa": "McDonagh, M. (2013). The Right to Information in International Human Rights Law. Human Rights Law Review, 13(1), 25–55. https://doi.org/10.1093/hrlr/ngs045",
+        "harvard": "McDonagh, M. (2013) \"The Right to Information in International Human Rights Law,\" Human Rights Law Review, 13(1), pp. 25–55. Available at: https://doi.org/10.1093/hrlr/ngs045.",
+        "chicago-author-date": "McDonagh, M. 2013. \"The Right to Information in International Human Rights Law.\" Human Rights Law Review 13 (1): 25–55. https://doi.org/10.1093/hrlr/ngs045."
+      }
+    },
+    {
+      "doi": "10.1093/hrlr/ngt043",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Cumper, P.",
+        "title": "Multiculturalism, Human Rights and the Accommodation of Sharia Law",
+        "year": "2014",
+        "doi": "10.1093/hrlr/ngt043",
+        "container": "Human Rights Law Review",
+        "volume": "14",
+        "issue": "1",
+        "pages": "31-57",
+        "publisher": "Oxford University Press (OUP)"
+      },
+      "styles": {
+        "apa": "Cumper, P. (2014). Multiculturalism, Human Rights and the Accommodation of Sharia Law. Human Rights Law Review, 14(1), 31–57. https://doi.org/10.1093/hrlr/ngt043",
+        "harvard": "Cumper, P. (2014) \"Multiculturalism, Human Rights and the Accommodation of Sharia Law,\" Human Rights Law Review, 14(1), pp. 31–57. Available at: https://doi.org/10.1093/hrlr/ngt043.",
+        "chicago-author-date": "Cumper, P. 2014. \"Multiculturalism, Human Rights and the Accommodation of Sharia Law.\" Human Rights Law Review 14 (1): 31–57. https://doi.org/10.1093/hrlr/ngt043."
+      }
+    },
+    {
+      "doi": "10.1111/1469-8676.12313",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Feuchtwang, Stephan",
+        "title": "Is there a French anthropology?",
+        "year": "2016",
+        "doi": "10.1111/1469-8676.12313",
+        "container": "Social Anthropology",
+        "volume": "24",
+        "issue": "4",
+        "pages": "514-517",
+        "publisher": "Berghahn Books"
+      },
+      "styles": {
+        "apa": "Feuchtwang, S. (2016). Is there a French anthropology? Social Anthropology, 24(4), 514–517. Portico. https://doi.org/10.1111/1469-8676.12313",
+        "harvard": "Feuchtwang, S. (2016) \"Is there a French anthropology?,\" Social Anthropology, 24(4), pp. 514–517. Available at: https://doi.org/10.1111/1469-8676.12313.",
+        "chicago-author-date": "Feuchtwang, Stephan. 2016. \"Is There a French Anthropology?\" Social Anthropology 24 (4): 514–17. Portico. https://doi.org/10.1111/1469-8676.12313."
+      }
+    },
+    {
+      "doi": "10.1111/j.0737-1209.2004.0announce.x",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Walls, Sandra",
+        "title": "CALL FOR 2004 AWARD NOMINATIONS",
+        "year": "2004",
+        "doi": "10.1111/j.0737-1209.2004.0announce.x",
+        "container": "Public Health Nursing",
+        "volume": "21",
+        "issue": "2",
+        "publisher": "Wiley"
+      },
+      "styles": {
+        "apa": "Walls, S. (2004). CALL FOR 2004 AWARD NOMINATIONS. Public Health Nursing, 21(2). Portico. https://doi.org/10.1111/j.0737-1209.2004.0announce.x",
+        "harvard": "Walls, S. (2004) \"CALL FOR 2004 AWARD NOMINATIONS,\" Public Health Nursing, 21(2). Available at: https://doi.org/10.1111/j.0737-1209.2004.0announce.x.",
+        "chicago-author-date": "Walls, Sandra. 2004. \"Call for 2004 Award Nominations.\" Public Health Nursing 21 (2). Portico. https://doi.org/10.1111/j.0737-1209.2004.0announce.x."
+      }
+    },
+    {
+      "doi": "10.1111/j.1469-8676.2008.00046.x",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Pels, Peter",
+        "title": "What has anthropology learned from the anthropology of colonialism?",
+        "year": "2008",
+        "doi": "10.1111/j.1469-8676.2008.00046.x",
+        "container": "Social Anthropology",
+        "volume": "16",
+        "issue": "3",
+        "pages": "280-299",
+        "publisher": "Berghahn Books"
+      },
+      "styles": {
+        "apa": "Pels, P. (2008). What has anthropology learned from the anthropology of colonialism? Social Anthropology, 16(3), 280–299. https://doi.org/10.1111/j.1469-8676.2008.00046.x",
+        "harvard": "Pels, P. (2008) \"What has anthropology learned from the anthropology of colonialism?,\" Social Anthropology, 16(3), pp. 280–299. Available at: https://doi.org/10.1111/j.1469-8676.2008.00046.x.",
+        "chicago-author-date": "Pels, Peter. 2008. \"What Has Anthropology Learned from the Anthropology of Colonialism?\" Social Anthropology 16 (3): 280–99. https://doi.org/10.1111/j.1469-8676.2008.00046.x."
+      }
+    },
+    {
+      "doi": "10.1111/j.1525-1446.1989.tb00592.x",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Ward, Debbie",
+        "title": "Public Health Nursing and The Future of Public Health",
+        "year": "1989",
+        "doi": "10.1111/j.1525-1446.1989.tb00592.x",
+        "container": "Public Health Nursing",
+        "volume": "6",
+        "issue": "4",
+        "pages": "163-168",
+        "publisher": "Wiley"
+      },
+      "styles": {
+        "apa": "Ward, D. (1989). Public Health Nursing and The Future of Public Health. Public Health Nursing, 6(4), 163–168. Portico. https://doi.org/10.1111/j.1525-1446.1989.tb00592.x",
+        "harvard": "Ward, D. (1989) \"Public Health Nursing and The Future of Public Health,\" Public Health Nursing, 6(4), pp. 163–168. Available at: https://doi.org/10.1111/j.1525-1446.1989.tb00592.x.",
+        "chicago-author-date": "Ward, Debbie. 1989. \"Public Health Nursing and the Future of Public Health.\" Public Health Nursing 6 (4): 163–68. Portico. https://doi.org/10.1111/j.1525-1446.1989.tb00592.x."
+      }
+    },
+    {
+      "doi": "10.1111/j.1525-1446.1993.tb00053.x",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Crandall, Ella Phillips",
+        "title": "The Relation of Public Health Nursing to the Public Health Campaign",
+        "year": "1993",
+        "doi": "10.1111/j.1525-1446.1993.tb00053.x",
+        "container": "Public Health Nursing",
+        "volume": "10",
+        "issue": "3",
+        "pages": "204-209",
+        "publisher": "Wiley"
+      },
+      "styles": {
+        "apa": "Crandall, E. P. (1993). The Relation of Public Health Nursing to the Public Health Campaign. Public Health Nursing, 10(3), 204–209. Portico. https://doi.org/10.1111/j.1525-1446.1993.tb00053.x",
+        "harvard": "Crandall, E.P. (1993) \"The Relation of Public Health Nursing to the Public Health Campaign,\" Public Health Nursing, 10(3), pp. 204–209. Available at: https://doi.org/10.1111/j.1525-1446.1993.tb00053.x.",
+        "chicago-author-date": "Crandall, Ella Phillips. 1993. \"The Relation of Public Health Nursing to the Public Health Campaign.\" Public Health Nursing 10 (3): 204–9. Portico. https://doi.org/10.1111/j.1525-1446.1993.tb00053.x."
+      }
+    },
+    {
+      "doi": "10.1111/j.1525-1446.2006.00575.x",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "O'Hara, Hazel",
+        "title": "Public Health Nursing in Latin America",
+        "year": "2006",
+        "doi": "10.1111/j.1525-1446.2006.00575.x",
+        "container": "Public Health Nursing",
+        "volume": "23",
+        "issue": "4",
+        "pages": "373-375",
+        "publisher": "Wiley"
+      },
+      "styles": {
+        "apa": "O'Hara, H. (2006). Public Health Nursing in Latin America. Public Health Nursing, 23(4), 373–375. Portico. https://doi.org/10.1111/j.1525-1446.2006.00575.x",
+        "harvard": "O'Hara, H. (2006) \"Public Health Nursing in Latin America,\" Public Health Nursing, 23(4), pp. 373–375. Available at: https://doi.org/10.1111/j.1525-1446.2006.00575.x.",
+        "chicago-author-date": "O'Hara, Hazel. 2006. \"Public Health Nursing in Latin America.\" Public Health Nursing 23 (4): 373–75. Portico. https://doi.org/10.1111/j.1525-1446.2006.00575.x."
+      }
+    },
+    {
+      "doi": "10.1111/j.1525-1446.2008.00703.x",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Chaudry, Rosemary Valedes",
+        "title": "The Precautionary Principle, Public Health, and Public Health Nursing",
+        "year": "2008",
+        "doi": "10.1111/j.1525-1446.2008.00703.x",
+        "container": "Public Health Nursing",
+        "volume": "25",
+        "issue": "3",
+        "pages": "261-268",
+        "publisher": "Wiley"
+      },
+      "styles": {
+        "apa": "Chaudry, R. V. (2008). The Precautionary Principle, Public Health, and Public Health Nursing. Public Health Nursing, 25(3), 261–268. Portico. https://doi.org/10.1111/j.1525-1446.2008.00703.x",
+        "harvard": "Chaudry, R.V. (2008) \"The Precautionary Principle, Public Health, and Public Health Nursing,\" Public Health Nursing, 25(3), pp. 261–268. Available at: https://doi.org/10.1111/j.1525-1446.2008.00703.x.",
+        "chicago-author-date": "Chaudry, Rosemary Valedes. 2008. \"The Precautionary Principle, Public Health, and Public Health Nursing.\" Public Health Nursing 25 (3): 261–68. Portico. https://doi.org/10.1111/j.1525-1446.2008.00703.x."
+      }
+    },
+    {
+      "doi": "10.1111/phn.12016",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Russell, Marion E.",
+        "title": "Health Insurance in California, Its Effect on Public Health Nursing",
+        "year": "2013",
+        "doi": "10.1111/phn.12016",
+        "container": "Public Health Nursing",
+        "volume": "30",
+        "issue": "1",
+        "pages": "87-89",
+        "publisher": "Wiley"
+      },
+      "styles": {
+        "apa": "Russell, M. E. (2013). Health Insurance in California, Its Effect on Public Health Nursing. Public Health Nursing, 30(1), 87–89. Portico. https://doi.org/10.1111/phn.12016",
+        "harvard": "Russell, M.E. (2013) \"Health Insurance in California, Its Effect on Public Health Nursing,\" Public Health Nursing, 30(1), pp. 87–89. Available at: https://doi.org/10.1111/phn.12016.",
+        "chicago-author-date": "Russell, Marion E. 2013. \"Health Insurance in California, Its Effect on Public Health Nursing.\" Public Health Nursing 30 (1): 87–89. Portico. https://doi.org/10.1111/phn.12016."
+      }
+    },
+    {
+      "doi": "10.1111/phn.12317",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Rosa, William",
+        "title": "Public Health Nursing and Transnational Agendas: Local to Global Health Advocacy",
+        "year": "2017",
+        "doi": "10.1111/phn.12317",
+        "container": "Public Health Nursing",
+        "volume": "34",
+        "issue": "3",
+        "pages": "197-199",
+        "publisher": "Wiley"
+      },
+      "styles": {
+        "apa": "Rosa, W. (2017). Public Health Nursing and Transnational Agendas: Local to Global Health Advocacy. Public Health Nursing, 34(3), 197–199. Portico. https://doi.org/10.1111/phn.12317",
+        "harvard": "Rosa, W. (2017) \"Public Health Nursing and Transnational Agendas: Local to Global Health Advocacy,\" Public Health Nursing, 34(3), pp. 197–199. Available at: https://doi.org/10.1111/phn.12317.",
+        "chicago-author-date": "Rosa, William. 2017. \"Public Health Nursing and Transnational Agendas: Local to Global Health Advocacy.\" Public Health Nursing 34 (3): 197–99. Portico. https://doi.org/10.1111/phn.12317."
+      }
+    },
+    {
+      "doi": "10.1111/phn.12871",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Blacksin, Beth",
+        "title": "Civic engagement: School‐based health centers and public health nursing",
+        "year": "2021",
+        "doi": "10.1111/phn.12871",
+        "container": "Public Health Nursing",
+        "volume": "38",
+        "issue": "3",
+        "pages": "357-366",
+        "publisher": "Wiley"
+      },
+      "styles": {
+        "apa": "Blacksin, B. (2021). Civic engagement: School‐based health centers and public health nursing. Public Health Nursing, 38(3), 357–366. Portico. https://doi.org/10.1111/phn.12871",
+        "harvard": "Blacksin, B. (2021) \"Civic engagement: School‐based health centers and public health nursing,\" Public Health Nursing, 38(3), pp. 357–366. Available at: https://doi.org/10.1111/phn.12871.",
+        "chicago-author-date": "Blacksin, Beth. 2021. \"Civic Engagement: School‐Based Health Centers and Public Health Nursing.\" Public Health Nursing 38 (3): 357–66. Portico. https://doi.org/10.1111/phn.12871."
+      }
+    },
+    {
+      "doi": "10.1177/009862839402100313",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Carney, Russell N.; Levin, Joel R.; Levin, Mary E.",
+        "title": "Enhancing the Psychology of Memory by Enhancing Memory of Psychology",
+        "year": "1994",
+        "doi": "10.1177/009862839402100313",
+        "container": "Teaching of Psychology",
+        "volume": "21",
+        "issue": "3",
+        "pages": "171-174",
+        "publisher": "SAGE Publications"
+      },
+      "styles": {
+        "apa": "Carney, R. N., Levin, J. R., & Levin, M. E. (1994). Enhancing the Psychology of Memory by Enhancing Memory of Psychology. Teaching of Psychology, 21(3), 171–174. https://doi.org/10.1177/009862839402100313",
+        "harvard": "Carney, R.N., Levin, J.R. and Levin, M.E. (1994) \"Enhancing the Psychology of Memory by Enhancing Memory of Psychology,\" Teaching of Psychology, 21(3), pp. 171–174. Available at: https://doi.org/10.1177/009862839402100313.",
+        "chicago-author-date": "Carney, Russell N., Joel R. Levin, and Mary E. Levin. 1994. \"Enhancing the Psychology of Memory by Enhancing Memory of Psychology.\" Teaching of Psychology 21 (3): 171–74. https://doi.org/10.1177/009862839402100313."
+      }
+    },
+    {
+      "doi": "10.1177/0192512100212001",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Schemeil, Yves",
+        "title": "Democracy Before Democracy?",
+        "year": "2000",
+        "doi": "10.1177/0192512100212001",
+        "container": "International Political Science Review",
+        "volume": "21",
+        "issue": "2",
+        "pages": "99-120",
+        "publisher": "SAGE Publications"
+      },
+      "styles": {
+        "apa": "Schemeil, Y. (2000). Democracy Before Democracy? International Political Science Review, 21(2), 99–120. https://doi.org/10.1177/0192512100212001",
+        "harvard": "Schemeil, Y. (2000) \"Democracy Before Democracy?,\" International Political Science Review, 21(2), pp. 99–120. Available at: https://doi.org/10.1177/0192512100212001.",
+        "chicago-author-date": "Schemeil, Yves. 2000. \"Democracy before Democracy?\" International Political Science Review 21 (2): 99–120. https://doi.org/10.1177/0192512100212001."
+      }
+    },
+    {
+      "doi": "10.1177/0192512116657677",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Kneuer, Marianne",
+        "title": "E-democracy: A new challenge for measuring democracy",
+        "year": "2016",
+        "doi": "10.1177/0192512116657677",
+        "container": "International Political Science Review",
+        "volume": "37",
+        "issue": "5",
+        "pages": "666-678",
+        "publisher": "SAGE Publications"
+      },
+      "styles": {
+        "apa": "Kneuer, M. (2016). E-democracy: A new challenge for measuring democracy. International Political Science Review, 37(5), 666–678. https://doi.org/10.1177/0192512116657677",
+        "harvard": "Kneuer, M. (2016) \"E-democracy: A new challenge for measuring democracy,\" International Political Science Review, 37(5), pp. 666–678. Available at: https://doi.org/10.1177/0192512116657677.",
+        "chicago-author-date": "Kneuer, Marianne. 2016. \"E-Democracy: A New Challenge for Measuring Democracy.\" International Political Science Review 37 (5): 666–78. https://doi.org/10.1177/0192512116657677."
+      }
+    },
+    {
+      "doi": "10.1177/019251218000100306",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Graziano, Luigi",
+        "title": "The Historic Compromise and Consociational Democracy",
+        "year": "1980",
+        "doi": "10.1177/019251218000100306",
+        "container": "International Political Science Review",
+        "volume": "1",
+        "issue": "3",
+        "pages": "345-368",
+        "publisher": "SAGE Publications"
+      },
+      "styles": {
+        "apa": "Graziano, L. (1980). The Historic Compromise and Consociational Democracy. International Political Science Review, 1(3), 345–368. https://doi.org/10.1177/019251218000100306",
+        "harvard": "Graziano, L. (1980) \"The Historic Compromise and Consociational Democracy,\" International Political Science Review, 1(3), pp. 345–368. Available at: https://doi.org/10.1177/019251218000100306.",
+        "chicago-author-date": "Graziano, Luigi. 1980. \"The Historic Compromise and Consociational Democracy.\" International Political Science Review 1 (3): 345–68. https://doi.org/10.1177/019251218000100306."
+      }
+    },
+    {
+      "doi": "10.1177/019251218300400308",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Botwinick, Aryeh; Bachrach, Peter",
+        "title": "Democracy and Scarcity",
+        "year": "1983",
+        "doi": "10.1177/019251218300400308",
+        "container": "International Political Science Review",
+        "volume": "4",
+        "issue": "3",
+        "pages": "361-373",
+        "publisher": "SAGE Publications"
+      },
+      "styles": {
+        "apa": "Botwinick, A., & Bachrach, P. (1983). Democracy and Scarcity. International Political Science Review, 4(3), 361–373. https://doi.org/10.1177/019251218300400308",
+        "harvard": "Botwinick, A. and Bachrach, P. (1983) \"Democracy and Scarcity,\" International Political Science Review, 4(3), pp. 361–373. Available at: https://doi.org/10.1177/019251218300400308.",
+        "chicago-author-date": "Botwinick, Aryeh, and Peter Bachrach. 1983. \"Democracy and Scarcity.\" International Political Science Review 4 (3): 361–73. https://doi.org/10.1177/019251218300400308."
+      }
+    },
+    {
+      "doi": "10.1177/17427665070030030203",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Mansell, Robin",
+        "title": "The problem of internationalizing media and communication research",
+        "year": "2007",
+        "doi": "10.1177/17427665070030030203",
+        "container": "Global Media and Communication",
+        "volume": "3",
+        "issue": "3",
+        "pages": "283-288",
+        "publisher": "SAGE Publications"
+      },
+      "styles": {
+        "apa": "Mansell, R. (2007). The problem of internationalizing media and communication research. Global Media and Communication, 3(3), 283–288. https://doi.org/10.1177/17427665070030030203",
+        "harvard": "Mansell, R. (2007) \"The problem of internationalizing media and communication research,\" Global Media and Communication, 3(3), pp. 283–288. Available at: https://doi.org/10.1177/17427665070030030203.",
+        "chicago-author-date": "Mansell, Robin. 2007. \"The Problem of Internationalizing Media and Communication Research.\" Global Media and Communication 3 (3): 283–88. https://doi.org/10.1177/17427665070030030203."
+      }
+    },
+    {
+      "doi": "10.1177/17427665070030030405",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Kamalipour, Yahya R.",
+        "title": "Communication media and globalization: an Iranian perspective",
+        "year": "2007",
+        "doi": "10.1177/17427665070030030405",
+        "container": "Global Media and Communication",
+        "volume": "3",
+        "issue": "3",
+        "pages": "340-342",
+        "publisher": "SAGE Publications"
+      },
+      "styles": {
+        "apa": "Kamalipour, Y. R. (2007). Communication media and globalization: an Iranian perspective. Global Media and Communication, 3(3), 340–342. https://doi.org/10.1177/17427665070030030405",
+        "harvard": "Kamalipour, Y.R. (2007) \"Communication media and globalization: an Iranian perspective,\" Global Media and Communication, 3(3), pp. 340–342. Available at: https://doi.org/10.1177/17427665070030030405.",
+        "chicago-author-date": "Kamalipour, Yahya R. 2007. \"Communication Media and Globalization: An Iranian Perspective.\" Global Media and Communication 3 (3): 340–42. https://doi.org/10.1177/17427665070030030405."
+      }
+    },
+    {
+      "doi": "10.1177/1742766507074363",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Brant, João",
+        "title": "Book Review: Media and Glocal Change: Rethinking Communication for Development",
+        "year": "2007",
+        "doi": "10.1177/1742766507074363",
+        "container": "Global Media and Communication",
+        "volume": "3",
+        "issue": "1",
+        "pages": "111-114",
+        "publisher": "SAGE Publications"
+      },
+      "styles": {
+        "apa": "Brant, J. (2007). Book Review: Media and Glocal Change: Rethinking Communication for Development. Global Media and Communication, 3(1), 111–114. https://doi.org/10.1177/1742766507074363",
+        "harvard": "Brant, J. (2007) \"Book Review: Media and Glocal Change: Rethinking Communication for Development,\" Global Media and Communication, 3(1), pp. 111–114. Available at: https://doi.org/10.1177/1742766507074363.",
+        "chicago-author-date": "Brant, João. 2007. \"Book Review: Media and Glocal Change: Rethinking Communication for Development.\" Global Media and Communication 3 (1): 111–14. https://doi.org/10.1177/1742766507074363."
+      }
+    },
+    {
+      "doi": "10.1177/1742766507082570",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Livingstone, Sonia",
+        "title": "Part II: Institutional perspectives",
+        "year": "2007",
+        "doi": "10.1177/1742766507082570",
+        "container": "Global Media and Communication",
+        "volume": "3",
+        "issue": "3",
+        "pages": "273-279",
+        "publisher": "SAGE Publications"
+      },
+      "styles": {
+        "apa": "Livingstone, S. (2007). Part II: Institutional perspectives. Global Media and Communication, 3(3), 273–279. https://doi.org/10.1177/1742766507082570",
+        "harvard": "Livingstone, S. (2007) \"Part II: Institutional perspectives,\" Global Media and Communication, 3(3), pp. 273–279. Available at: https://doi.org/10.1177/1742766507082570.",
+        "chicago-author-date": "Livingstone, Sonia. 2007. \"Part II: Institutional Perspectives.\" Global Media and Communication 3 (3): 273–79. https://doi.org/10.1177/1742766507082570."
+      }
+    },
+    {
+      "doi": "10.1177/1742766515578036a",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Utman, Jorge Saavedra",
+        "title": "Book review: Media systems and communication policies in Latin America",
+        "year": "2015",
+        "doi": "10.1177/1742766515578036a",
+        "container": "Global Media and Communication",
+        "volume": "11",
+        "issue": "1",
+        "pages": "82-84",
+        "publisher": "SAGE Publications"
+      },
+      "styles": {
+        "apa": "Utman, J. S. (2015). Book review: Media systems and communication policies in Latin America. Global Media and Communication, 11(1), 82–84. https://doi.org/10.1177/1742766515578036a",
+        "harvard": "Utman, J.S. (2015) \"Book review: Media systems and communication policies in Latin America,\" Global Media and Communication, 11(1), pp. 82–84. Available at: https://doi.org/10.1177/1742766515578036a.",
+        "chicago-author-date": "Utman, Jorge Saavedra. 2015. \"Book Review: Media Systems and Communication Policies in Latin America.\" Global Media and Communication 11 (1): 82–84. https://doi.org/10.1177/1742766515578036a."
+      }
+    },
+    {
+      "doi": "10.1177/25151274221144218",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Silberman, Dave; Aguinis, Herman; Carpenter, Rob E.",
+        "title": "Using Extreme Pedagogy to Enhance Entrepreneurship Education",
+        "year": "2022",
+        "doi": "10.1177/25151274221144218",
+        "container": "Entrepreneurship Education and Pedagogy",
+        "volume": "6",
+        "issue": "3",
+        "pages": "546-560",
+        "publisher": "SAGE Publications"
+      },
+      "styles": {
+        "apa": "Silberman, D., Aguinis, H., & Carpenter, R. E. (2022). Using Extreme Pedagogy to Enhance Entrepreneurship Education. Entrepreneurship Education and Pedagogy, 6(3), 546–560. https://doi.org/10.1177/25151274221144218",
+        "harvard": "Silberman, D., Aguinis, H. and Carpenter, R.E. (2022) \"Using Extreme Pedagogy to Enhance Entrepreneurship Education,\" Entrepreneurship Education and Pedagogy, 6(3), pp. 546–560. Available at: https://doi.org/10.1177/25151274221144218.",
+        "chicago-author-date": "Silberman, Dave, Herman Aguinis, and Rob E. Carpenter. 2022. \"Using Extreme Pedagogy to Enhance Entrepreneurship Education.\" Entrepreneurship Education and Pedagogy 6 (3): 546–60. https://doi.org/10.1177/25151274221144218."
+      }
+    },
+    {
+      "doi": "10.1186/1747-5341-2-22",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Denys, Damiaan",
+        "title": "How new is the new philosophy of psychiatry?",
+        "year": "2007",
+        "doi": "10.1186/1747-5341-2-22",
+        "container": "Philosophy, Ethics, and Humanities in Medicine",
+        "volume": "2",
+        "issue": "1",
+        "pages": "22",
+        "publisher": "Springer Science and Business Media LLC"
+      },
+      "styles": {
+        "apa": "Denys, D. (2007). How new is the new philosophy of psychiatry? Philosophy, Ethics, and Humanities in Medicine, 2(1), 22. https://doi.org/10.1186/1747-5341-2-22",
+        "harvard": "Denys, D. (2007) \"How new is the new philosophy of psychiatry?,\" Philosophy, Ethics, and Humanities in Medicine, 2(1), p. 22. Available at: https://doi.org/10.1186/1747-5341-2-22.",
+        "chicago-author-date": "Denys, Damiaan. 2007. \"How New Is the New Philosophy of Psychiatry?\" Philosophy, Ethics, and Humanities in Medicine 2 (1): 22. https://doi.org/10.1186/1747-5341-2-22."
+      }
+    },
+    {
+      "doi": "10.1207/s15328023top2103_12",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Carney, Russell N.; Levin, Joel R.; Levin, Mary E.",
+        "title": "Enhancing the psychology of memory by enhancing memory of psychology",
+        "year": "1994",
+        "doi": "10.1207/s15328023top2103_12",
+        "container": "Teaching of Psychology",
+        "volume": "21",
+        "issue": "3",
+        "pages": "171-174",
+        "publisher": "SAGE Publications"
+      },
+      "styles": {
+        "apa": "Carney, R. N., Levin, J. R., & Levin, M. E. (1994). Enhancing the psychology of memory by enhancing memory of psychology. Teaching of Psychology, 21(3), 171–174. https://doi.org/10.1207/s15328023top2103_12",
+        "harvard": "Carney, R.N., Levin, J.R. and Levin, M.E. (1994) \"Enhancing the psychology of memory by enhancing memory of psychology,\" Teaching of Psychology, 21(3), pp. 171–174. Available at: https://doi.org/10.1207/s15328023top2103_12.",
+        "chicago-author-date": "Carney, Russell N., Joel R. Levin, and Mary E. Levin. 1994. \"Enhancing the Psychology of Memory by Enhancing Memory of Psychology.\" Teaching of Psychology 21 (3): 171–74. https://doi.org/10.1207/s15328023top2103_12."
+      }
+    },
+    {
+      "doi": "10.1525/tea.1993.2.2.9",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Pulford, Mary H.",
+        "title": "Anthropology Behind Bars: Teaching Anthropology in a Prison Setting",
+        "year": "1993",
+        "doi": "10.1525/tea.1993.2.2.9",
+        "container": "Teaching Anthropology: Society for Anthropology in Community Colleges Notes",
+        "volume": "2",
+        "issue": "2",
+        "pages": "9-10",
+        "publisher": "Wiley"
+      },
+      "styles": {
+        "apa": "Pulford, M. H. (1993). Anthropology Behind Bars: Teaching Anthropology in a Prison Setting. Teaching Anthropology: Society for Anthropology in Community Colleges Notes, 2(2), 9–10. https://doi.org/10.1525/tea.1993.2.2.9",
+        "harvard": "Pulford, M.H. (1993) \"Anthropology Behind Bars: Teaching Anthropology in a Prison Setting,\" Teaching Anthropology: Society for Anthropology in Community Colleges Notes, 2(2), pp. 9–10. Available at: https://doi.org/10.1525/tea.1993.2.2.9.",
+        "chicago-author-date": "Pulford, Mary H. 1993. \"Anthropology behind Bars: Teaching Anthropology in a Prison Setting.\" Teaching Anthropology: Society for Anthropology in Community Colleges Notes 2 (2): 9–10. https://doi.org/10.1525/tea.1993.2.2.9."
+      }
+    },
+    {
+      "doi": "10.2307/2020363",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Wienpahl, Paul D.",
+        "title": "Philosophy of Ethics, Ethics, and Moral Theory",
+        "year": "1948",
+        "doi": "10.2307/2020363",
+        "container": "The Journal of Philosophy",
+        "volume": "45",
+        "issue": "3",
+        "pages": "57",
+        "publisher": "Philosophy Documentation Center"
+      },
+      "styles": {
+        "apa": "Wienpahl, P. D. (1948). Philosophy of Ethics, Ethics, and Moral Theory. The Journal of Philosophy, 45(3), 57. https://doi.org/10.2307/2020363",
+        "harvard": "Wienpahl, P.D. (1948) \"Philosophy of Ethics, Ethics, and Moral Theory,\" The Journal of Philosophy, 45(3), p. 57. Available at: https://doi.org/10.2307/2020363.",
+        "chicago-author-date": "Wienpahl, Paul D. 1948. \"Philosophy of Ethics, Ethics, and Moral Theory.\" The Journal of Philosophy 45 (3): 57. https://doi.org/10.2307/2020363."
+      }
+    },
+    {
+      "doi": "10.2307/2111812",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Friedman, Norman L.",
+        "title": "Religion's Subsystem: Toward a Sociology of Jewish Education",
+        "year": "1969",
+        "doi": "10.2307/2111812",
+        "container": "Sociology of Education",
+        "volume": "42",
+        "issue": "1",
+        "pages": "104",
+        "publisher": "JSTOR"
+      },
+      "styles": {
+        "apa": "Friedman, N. L. (1969). Religion's Subsystem: Toward a Sociology of Jewish Education. Sociology of Education, 42(1), 104. https://doi.org/10.2307/2111812",
+        "harvard": "Friedman, N.L. (1969) \"Religion's Subsystem: Toward a Sociology of Jewish Education,\" Sociology of Education, 42(1), p. 104. Available at: https://doi.org/10.2307/2111812.",
+        "chicago-author-date": "Friedman, Norman L. 1969. \"Religion's Subsystem: Toward a Sociology of Jewish Education.\" Sociology of Education 42 (1): 104. https://doi.org/10.2307/2111812."
+      }
+    },
+    {
+      "doi": "10.2307/2111868",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Feldmesser, Robert A.",
+        "title": "Sociology in the Secondary Schools",
+        "year": "1966",
+        "doi": "10.2307/2111868",
+        "container": "Sociology of Education",
+        "volume": "39",
+        "issue": "2",
+        "pages": "200",
+        "publisher": "JSTOR"
+      },
+      "styles": {
+        "apa": "Feldmesser, R. A. (1966). Sociology in the Secondary Schools. Sociology of Education, 39(2), 200. https://doi.org/10.2307/2111868",
+        "harvard": "Feldmesser, R.A. (1966) \"Sociology in the Secondary Schools,\" Sociology of Education, 39(2), p. 200. Available at: https://doi.org/10.2307/2111868.",
+        "chicago-author-date": "Feldmesser, Robert A. 1966. \"Sociology in the Secondary Schools.\" Sociology of Education 39 (2): 200. https://doi.org/10.2307/2111868."
+      }
+    },
+    {
+      "doi": "10.2307/2111922",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Tomoda, Yasumasa",
+        "title": "Recent Trends in Educational Sociology in Japan",
+        "year": "1966",
+        "doi": "10.2307/2111922",
+        "container": "Sociology of Education",
+        "volume": "39",
+        "issue": "4",
+        "pages": "397",
+        "publisher": "JSTOR"
+      },
+      "styles": {
+        "apa": "Tomoda, Y. (1966). Recent Trends in Educational Sociology in Japan. Sociology of Education, 39(4), 397. https://doi.org/10.2307/2111922",
+        "harvard": "Tomoda, Y. (1966) \"Recent Trends in Educational Sociology in Japan,\" Sociology of Education, 39(4), p. 397. Available at: https://doi.org/10.2307/2111922.",
+        "chicago-author-date": "Tomoda, Yasumasa. 1966. \"Recent Trends in Educational Sociology in Japan.\" Sociology of Education 39 (4): 397. https://doi.org/10.2307/2111922."
+      }
+    },
+    {
+      "doi": "10.2307/2112203",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Clark, Burton R.",
+        "title": "Development of the Sociology of Higher Education",
+        "year": "1973",
+        "doi": "10.2307/2112203",
+        "container": "Sociology of Education",
+        "volume": "46",
+        "issue": "1",
+        "pages": "2",
+        "publisher": "JSTOR"
+      },
+      "styles": {
+        "apa": "Clark, B. R. (1973). Development of the Sociology of Higher Education. Sociology of Education, 46(1), 2. https://doi.org/10.2307/2112203",
+        "harvard": "Clark, B.R. (1973) \"Development of the Sociology of Higher Education,\" Sociology of Education, 46(1), p. 2. Available at: https://doi.org/10.2307/2112203.",
+        "chicago-author-date": "Clark, Burton R. 1973. \"Development of the Sociology of Higher Education.\" Sociology of Education 46 (1): 2. https://doi.org/10.2307/2112203."
+      }
+    },
+    {
+      "doi": "10.2307/2673257",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Riehl, Carolyn",
+        "title": "Bridges to the Future: The Contributions of Qualitative Research to the Sociology of Education",
+        "year": "2001",
+        "doi": "10.2307/2673257",
+        "container": "Sociology of Education",
+        "volume": "74",
+        "pages": "115",
+        "publisher": "JSTOR"
+      },
+      "styles": {
+        "apa": "Riehl, C. (2001). Bridges to the Future: The Contributions of Qualitative Research to the Sociology of Education. Sociology of Education, 74, 115. https://doi.org/10.2307/2673257",
+        "harvard": "Riehl, C. (2001) \"Bridges to the Future: The Contributions of Qualitative Research to the Sociology of Education,\" Sociology of Education, 74, p. 115. Available at: https://doi.org/10.2307/2673257.",
+        "chicago-author-date": "Riehl, Carolyn. 2001. \"Bridges to the Future: The Contributions of Qualitative Research to the Sociology of Education.\" Sociology of Education 74: 115. https://doi.org/10.2307/2673257."
+      }
+    },
+    {
+      "doi": "10.2307/2783123",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Banks, Marcus",
+        "title": "Visual Anthropology and Ethnographic Film in British Anthropology Departments",
+        "year": "1993",
+        "doi": "10.2307/2783123",
+        "container": "Anthropology Today",
+        "volume": "9",
+        "issue": "3",
+        "pages": "21",
+        "publisher": "JSTOR"
+      },
+      "styles": {
+        "apa": "Banks, M. (1993). Visual Anthropology and Ethnographic Film in British Anthropology Departments. Anthropology Today, 9(3), 21. https://doi.org/10.2307/2783123",
+        "harvard": "Banks, M. (1993) \"Visual Anthropology and Ethnographic Film in British Anthropology Departments,\" Anthropology Today, 9(3), p. 21. Available at: https://doi.org/10.2307/2783123.",
+        "chicago-author-date": "Banks, Marcus. 1993. \"Visual Anthropology and Ethnographic Film in British Anthropology Departments.\" Anthropology Today 9 (3): 21. https://doi.org/10.2307/2783123."
+      }
+    },
+    {
+      "doi": "10.2307/2783190",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Turner, Jane",
+        "title": "Theatre Anthropology",
+        "year": "1995",
+        "doi": "10.2307/2783190",
+        "container": "Anthropology Today",
+        "volume": "11",
+        "issue": "5",
+        "pages": "20",
+        "publisher": "JSTOR"
+      },
+      "styles": {
+        "apa": "Turner, J. (1995). Theatre Anthropology. Anthropology Today, 11(5), 20. https://doi.org/10.2307/2783190",
+        "harvard": "Turner, J. (1995) \"Theatre Anthropology,\" Anthropology Today, 11(5), p. 20. Available at: https://doi.org/10.2307/2783190.",
+        "chicago-author-date": "Turner, Jane. 1995. \"Theatre Anthropology.\" Anthropology Today 11 (5): 20. https://doi.org/10.2307/2783190."
+      }
+    },
+    {
+      "doi": "10.2307/3032826",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Ardener, Shirley",
+        "title": "The Social Anthropology of Women and Feminist Anthropology",
+        "year": "1985",
+        "doi": "10.2307/3032826",
+        "container": "Anthropology Today",
+        "volume": "1",
+        "issue": "5",
+        "pages": "24",
+        "publisher": "JSTOR"
+      },
+      "styles": {
+        "apa": "Ardener, S. (1985). The Social Anthropology of Women and Feminist Anthropology. Anthropology Today, 1(5), 24. https://doi.org/10.2307/3032826",
+        "harvard": "Ardener, S. (1985) \"The Social Anthropology of Women and Feminist Anthropology,\" Anthropology Today, 1(5), p. 24. Available at: https://doi.org/10.2307/3032826.",
+        "chicago-author-date": "Ardener, Shirley. 1985. \"The Social Anthropology of Women and Feminist Anthropology.\" Anthropology Today 1 (5): 24. https://doi.org/10.2307/3032826."
+      }
+    },
+    {
+      "doi": "10.2307/3032980",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Allen, Timothy",
+        "title": "Anthropology and Development",
+        "year": "1986",
+        "doi": "10.2307/3032980",
+        "container": "Anthropology Today",
+        "volume": "2",
+        "issue": "5",
+        "pages": "20",
+        "publisher": "JSTOR"
+      },
+      "styles": {
+        "apa": "Allen, T. (1986). Anthropology and Development. Anthropology Today, 2(5), 20. https://doi.org/10.2307/3032980",
+        "harvard": "Allen, T. (1986) \"Anthropology and Development,\" Anthropology Today, 2(5), p. 20. Available at: https://doi.org/10.2307/3032980.",
+        "chicago-author-date": "Allen, Timothy. 1986. \"Anthropology and Development.\" Anthropology Today 2 (5): 20. https://doi.org/10.2307/3032980."
+      }
+    },
+    {
+      "doi": "10.2307/3033165",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Thomas, Nicholas",
+        "title": "Anthropology and Orientalism",
+        "year": "1991",
+        "doi": "10.2307/3033165",
+        "container": "Anthropology Today",
+        "volume": "7",
+        "issue": "2",
+        "pages": "4",
+        "publisher": "JSTOR"
+      },
+      "styles": {
+        "apa": "Thomas, N. (1991). Anthropology and Orientalism. Anthropology Today, 7(2), 4. https://doi.org/10.2307/3033165",
+        "harvard": "Thomas, N. (1991) \"Anthropology and Orientalism,\" Anthropology Today, 7(2), p. 4. Available at: https://doi.org/10.2307/3033165.",
+        "chicago-author-date": "Thomas, Nicholas. 1991. \"Anthropology and Orientalism.\" Anthropology Today 7 (2): 4. https://doi.org/10.2307/3033165."
+      }
+    },
+    {
+      "doi": "10.2307/3108453",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Epstein, Joyce L.",
+        "title": "New Connections for Sociology and Education: Contributing to School Reform",
+        "year": "1996",
+        "doi": "10.2307/3108453",
+        "container": "Sociology of Education",
+        "volume": "69",
+        "pages": "6",
+        "publisher": "JSTOR"
+      },
+      "styles": {
+        "apa": "Epstein, J. L. (1996). New Connections for Sociology and Education: Contributing to School Reform. Sociology of Education, 69, 6. https://doi.org/10.2307/3108453",
+        "harvard": "Epstein, J.L. (1996) \"New Connections for Sociology and Education: Contributing to School Reform,\" Sociology of Education, 69, p. 6. Available at: https://doi.org/10.2307/3108453.",
+        "chicago-author-date": "Epstein, Joyce L. 1996. \"New Connections for Sociology and Education: Contributing to School Reform.\" Sociology of Education 69: 6. https://doi.org/10.2307/3108453."
+      }
+    },
+    {
+      "doi": "10.2307/3108459",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Meyer, John W.; Baker, David P.",
+        "title": "Forming American Educational Policy with International Data: Lessons from the Sociology of Education",
+        "year": "1996",
+        "doi": "10.2307/3108459",
+        "container": "Sociology of Education",
+        "volume": "69",
+        "pages": "123",
+        "publisher": "JSTOR"
+      },
+      "styles": {
+        "apa": "Meyer, J. W., & Baker, D. P. (1996). Forming American Educational Policy with International Data: Lessons from the Sociology of Education. Sociology of Education, 69, 123. https://doi.org/10.2307/3108459",
+        "harvard": "Meyer, J.W. and Baker, D.P. (1996) \"Forming American Educational Policy with International Data: Lessons from the Sociology of Education,\" Sociology of Education, 69, p. 123. Available at: https://doi.org/10.2307/3108459.",
+        "chicago-author-date": "Meyer, John W., and David P. Baker. 1996. \"Forming American Educational Policy with International Data: Lessons from the Sociology of Education.\" Sociology of Education 69: 123. https://doi.org/10.2307/3108459."
+      }
+    },
+    {
+      "doi": "10.2747/0272-3638.12.4.363",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Muscarà, Calogero",
+        "title": "PROGRESS REPORT ITALIAN URBAN GEOGRAPHY: COUNTERURBANIZATION VERSUS PERIPHERAL DEVELOPMENT",
+        "year": "1991",
+        "doi": "10.2747/0272-3638.12.4.363",
+        "container": "Urban Geography",
+        "volume": "12",
+        "issue": "4",
+        "pages": "363-380",
+        "publisher": "Informa UK Limited"
+      },
+      "styles": {
+        "apa": "Muscarà, C. (1991). PROGRESS REPORT ITALIAN URBAN GEOGRAPHY: COUNTERURBANIZATION VERSUS PERIPHERAL DEVELOPMENT. Urban Geography, 12(4), 363–380. https://doi.org/10.2747/0272-3638.12.4.363",
+        "harvard": "Muscarà, C. (1991) \"PROGRESS REPORT ITALIAN URBAN GEOGRAPHY: COUNTERURBANIZATION VERSUS PERIPHERAL DEVELOPMENT,\" Urban Geography, 12(4), pp. 363–380. Available at: https://doi.org/10.2747/0272-3638.12.4.363.",
+        "chicago-author-date": "Muscarà, Calogero. 1991. \"Progress Report Italian Urban Geography: Counterurbanization versus Peripheral Development.\" Urban Geography 12 (4): 363–80. https://doi.org/10.2747/0272-3638.12.4.363."
+      }
+    },
+    {
+      "doi": "10.2747/0272-3638.17.6.475",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Ley, David",
+        "title": "URBAN GEOGRAPHY AND CULTURAL STUDIES",
+        "year": "1996",
+        "doi": "10.2747/0272-3638.17.6.475",
+        "container": "Urban Geography",
+        "volume": "17",
+        "issue": "6",
+        "pages": "475-477",
+        "publisher": "Informa UK Limited"
+      },
+      "styles": {
+        "apa": "Ley, D. (1996). URBAN GEOGRAPHY AND CULTURAL STUDIES. Urban Geography, 17(6), 475–477. https://doi.org/10.2747/0272-3638.17.6.475",
+        "harvard": "Ley, D. (1996) \"URBAN GEOGRAPHY AND CULTURAL STUDIES,\" Urban Geography, 17(6), pp. 475–477. Available at: https://doi.org/10.2747/0272-3638.17.6.475.",
+        "chicago-author-date": "Ley, David. 1996. \"Urban Geography and Cultural Studies.\" Urban Geography 17 (6): 475–77. https://doi.org/10.2747/0272-3638.17.6.475."
+      }
+    },
+    {
+      "doi": "10.2747/0272-3638.20.6.487",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Wheeler, James O.",
+        "title": "PROGENITORS AND PRESENT DISTRIBUTIONS: URBAN GEOGRAPHY AND URBAN GEOGRAPHERS",
+        "year": "1999",
+        "doi": "10.2747/0272-3638.20.6.487",
+        "container": "Urban Geography",
+        "volume": "20",
+        "issue": "6",
+        "pages": "487-492",
+        "publisher": "Informa UK Limited"
+      },
+      "styles": {
+        "apa": "Wheeler, J. O. (1999). PROGENITORS AND PRESENT DISTRIBUTIONS: URBAN GEOGRAPHY AND URBAN GEOGRAPHERS. Urban Geography, 20(6), 487–492. https://doi.org/10.2747/0272-3638.20.6.487",
+        "harvard": "Wheeler, J.O. (1999) \"PROGENITORS AND PRESENT DISTRIBUTIONS: URBAN GEOGRAPHY AND URBAN GEOGRAPHERS,\" Urban Geography, 20(6), pp. 487–492. Available at: https://doi.org/10.2747/0272-3638.20.6.487.",
+        "chicago-author-date": "Wheeler, James O. 1999. \"Progenitors and Present Distributions: Urban Geography and Urban Geographers.\" Urban Geography 20 (6): 487–92. https://doi.org/10.2747/0272-3638.20.6.487."
+      }
+    },
+    {
+      "doi": "10.2747/0272-3638.30.1.1",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Brown, Michael",
+        "title": "2008 Urban Geography Plenary Lecture—Public Health as Urban Politics, Urban Geography: Venereal Biopower in Seattle, 1943-1983",
+        "year": "2009",
+        "doi": "10.2747/0272-3638.30.1.1",
+        "container": "Urban Geography",
+        "volume": "30",
+        "issue": "1",
+        "pages": "1-29",
+        "publisher": "Informa UK Limited"
+      },
+      "styles": {
+        "apa": "Brown, M. (2009). 2008 Urban Geography Plenary Lecture—Public Health as Urban Politics, Urban Geography: Venereal Biopower in Seattle, 1943-1983. Urban Geography, 30(1), 1–29. https://doi.org/10.2747/0272-3638.30.1.1",
+        "harvard": "Brown, M. (2009) \"2008 Urban Geography Plenary Lecture—Public Health as Urban Politics, Urban Geography: Venereal Biopower in Seattle, 1943-1983,\" Urban Geography, 30(1), pp. 1–29. Available at: https://doi.org/10.2747/0272-3638.30.1.1.",
+        "chicago-author-date": "Brown, Michael. 2009. \"2008 Urban Geography Plenary Lecture—Public Health as Urban Politics, Urban Geography: Venereal Biopower in Seattle, 1943-1983.\" Urban Geography 30 (1): 1–29. https://doi.org/10.2747/0272-3638.30.1.1."
+      }
+    },
+    {
+      "doi": "10.2747/0272-3638.7.3.258",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Goheen, Peter G.",
+        "title": "URBAN HISTORICAL GEOGRAPHY: A 1985 REPORT CARD",
+        "year": "1986",
+        "doi": "10.2747/0272-3638.7.3.258",
+        "container": "Urban Geography",
+        "volume": "7",
+        "issue": "3",
+        "pages": "258-262",
+        "publisher": "Informa UK Limited"
+      },
+      "styles": {
+        "apa": "Goheen, P. G. (1986). URBAN HISTORICAL GEOGRAPHY: A 1985 REPORT CARD. Urban Geography, 7(3), 258–262. https://doi.org/10.2747/0272-3638.7.3.258",
+        "harvard": "Goheen, P.G. (1986) \"URBAN HISTORICAL GEOGRAPHY: A 1985 REPORT CARD,\" Urban Geography, 7(3), pp. 258–262. Available at: https://doi.org/10.2747/0272-3638.7.3.258.",
+        "chicago-author-date": "Goheen, Peter G. 1986. \"Urban Historical Geography: A 1985 Report Card.\" Urban Geography 7 (3): 258–62. https://doi.org/10.2747/0272-3638.7.3.258."
+      }
+    },
+    {
+      "doi": "10.2747/0272-3638.7.5.448",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Holcomb, Briavel",
+        "title": "GEOGRAPHY AND URBAN WOMEN",
+        "year": "1986",
+        "doi": "10.2747/0272-3638.7.5.448",
+        "container": "Urban Geography",
+        "volume": "7",
+        "issue": "5",
+        "pages": "448-456",
+        "publisher": "Informa UK Limited"
+      },
+      "styles": {
+        "apa": "Holcomb, B. (1986). GEOGRAPHY AND URBAN WOMEN. Urban Geography, 7(5), 448–456. https://doi.org/10.2747/0272-3638.7.5.448",
+        "harvard": "Holcomb, B. (1986) \"GEOGRAPHY AND URBAN WOMEN,\" Urban Geography, 7(5), pp. 448–456. Available at: https://doi.org/10.2747/0272-3638.7.5.448.",
+        "chicago-author-date": "Holcomb, Briavel. 1986. \"Geography and Urban Women.\" Urban Geography 7 (5): 448–56. https://doi.org/10.2747/0272-3638.7.5.448."
+      }
+    },
+    {
+      "doi": "10.2747/0272-3638.9.3.227",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Cadwallader, Martin",
+        "title": "Urban Geography and Social Theory",
+        "year": "1988",
+        "doi": "10.2747/0272-3638.9.3.227",
+        "container": "Urban Geography",
+        "volume": "9",
+        "issue": "3",
+        "pages": "227-251",
+        "publisher": "Informa UK Limited"
+      },
+      "styles": {
+        "apa": "Cadwallader, M. (1988). Urban Geography and Social Theory. Urban Geography, 9(3), 227–251. https://doi.org/10.2747/0272-3638.9.3.227",
+        "harvard": "Cadwallader, M. (1988) \"Urban Geography and Social Theory,\" Urban Geography, 9(3), pp. 227–251. Available at: https://doi.org/10.2747/0272-3638.9.3.227.",
+        "chicago-author-date": "Cadwallader, Martin. 1988. \"Urban Geography and Social Theory.\" Urban Geography 9 (3): 227–51. https://doi.org/10.2747/0272-3638.9.3.227."
+      }
+    },
+    {
+      "doi": "10.30863/palakka.v2i2.2369",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Wandi, Wandi; Andriana, Niar",
+        "title": "Social Media and Communication",
+        "year": "2021",
+        "doi": "10.30863/palakka.v2i2.2369",
+        "container": "Palakka : Media and Islamic Communication",
+        "volume": "2",
+        "issue": "2",
+        "pages": "145-154",
+        "publisher": "IAIN BONE"
+      },
+      "styles": {
+        "apa": "Wandi, W., & Andriana, N. (2021). Social Media and Communication. Palakka : Media and Islamic Communication, 2(2), 145–154. https://doi.org/10.30863/palakka.v2i2.2369",
+        "harvard": "Wandi, W. and Andriana, N. (2021) \"Social Media and Communication,\" Palakka : Media and Islamic Communication, 2(2), pp. 145–154. Available at: https://doi.org/10.30863/palakka.v2i2.2369.",
+        "chicago-author-date": "Wandi, Wandi, and Niar Andriana. 2021. \"Social Media and Communication.\" Palakka : Media and Islamic Communication 2 (2): 145–54. https://doi.org/10.30863/palakka.v2i2.2369."
+      }
+    },
+    {
+      "doi": "10.33545/26646021.2026.v8.i6a.1086",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Parida, Debapriya",
+        "title": "Democracy to delibeartive democracy",
+        "year": "2026",
+        "doi": "10.33545/26646021.2026.v8.i6a.1086",
+        "container": "International Journal of Political Science and Governance",
+        "volume": "8",
+        "issue": "6",
+        "pages": "23-25",
+        "publisher": "Comprehensive Publications"
+      },
+      "styles": {
+        "apa": "Parida, D. (2026). Democracy to delibeartive democracy. International Journal of Political Science and Governance, 8(6), 23–25. https://doi.org/10.33545/26646021.2026.v8.i6a.1086",
+        "harvard": "Parida, D. (2026) \"Democracy to delibeartive democracy,\" International Journal of Political Science and Governance, 8(6), pp. 23–25. Available at: https://doi.org/10.33545/26646021.2026.v8.i6a.1086.",
+        "chicago-author-date": "Parida, Debapriya. 2026. \"Democracy to Delibeartive Democracy.\" International Journal of Political Science and Governance 8 (6): 23–25. https://doi.org/10.33545/26646021.2026.v8.i6a.1086."
+      }
+    },
+    {
+      "doi": "10.3389/fpsyg.2010.00175",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Sligte, Ilja G.",
+        "title": "Detailed sensory memory, sloppy working memory",
+        "year": "2010",
+        "doi": "10.3389/fpsyg.2010.00175",
+        "container": "Frontiers in Psychology",
+        "volume": "1",
+        "publisher": "Frontiers Media SA"
+      },
+      "styles": {
+        "apa": "Sligte, I. G. (2010). Detailed sensory memory, sloppy working memory. Frontiers in Psychology, 1. https://doi.org/10.3389/fpsyg.2010.00175",
+        "harvard": "Sligte, I.G. (2010) \"Detailed sensory memory, sloppy working memory,\" Frontiers in Psychology, 1. Available at: https://doi.org/10.3389/fpsyg.2010.00175.",
+        "chicago-author-date": "Sligte, Ilja G. 2010. \"Detailed Sensory Memory, Sloppy Working Memory.\" Frontiers in Psychology 1. https://doi.org/10.3389/fpsyg.2010.00175."
+      }
+    },
+    {
+      "doi": "10.3389/fpsyg.2013.00013",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Davelaar, Eddy J.",
+        "title": "Short-term memory as a working memory control process",
+        "year": "2013",
+        "doi": "10.3389/fpsyg.2013.00013",
+        "container": "Frontiers in Psychology",
+        "volume": "4",
+        "publisher": "Frontiers Media SA"
+      },
+      "styles": {
+        "apa": "Davelaar, E. J. (2013). Short-term memory as a working memory control process. Frontiers in Psychology, 4. https://doi.org/10.3389/fpsyg.2013.00013",
+        "harvard": "Davelaar, E.J. (2013) \"Short-term memory as a working memory control process,\" Frontiers in Psychology, 4. Available at: https://doi.org/10.3389/fpsyg.2013.00013.",
+        "chicago-author-date": "Davelaar, Eddy J. 2013. \"Short-Term Memory as a Working Memory Control Process.\" Frontiers in Psychology 4. https://doi.org/10.3389/fpsyg.2013.00013."
+      }
+    },
+    {
+      "doi": "10.52589/bjmcmr-cbqrsm5z",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Ugochukwu Obasi, Heavens",
+        "title": "The Role of Media in Public Relations Crisis Communication",
+        "year": "2024",
+        "doi": "10.52589/bjmcmr-cbqrsm5z",
+        "container": "British Journal of Mass Communication and Media Research",
+        "volume": "4",
+        "issue": "4",
+        "pages": "77-86",
+        "publisher": "African - British Journals"
+      },
+      "styles": {
+        "apa": "Ugochukwu Obasi, H. (2024). The Role of Media in Public Relations Crisis Communication. British Journal of Mass Communication and Media Research, 4(4), 77–86. https://doi.org/10.52589/bjmcmr-cbqrsm5z",
+        "harvard": "Ugochukwu Obasi, H. (2024) \"The Role of Media in Public Relations Crisis Communication,\" British Journal of Mass Communication and Media Research, 4(4), pp. 77–86. Available at: https://doi.org/10.52589/bjmcmr-cbqrsm5z.",
+        "chicago-author-date": "Ugochukwu Obasi, Heavens. 2024. \"The Role of Media in Public Relations Crisis Communication.\" British Journal of Mass Communication and Media Research 4 (4): 77–86. https://doi.org/10.52589/bjmcmr-cbqrsm5z."
+      }
+    },
+    {
+      "doi": "10.5512/sea.1971.5",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Yamamoto, T.",
+        "title": "Major Problems of Southeast Asian History",
+        "year": "1971",
+        "doi": "10.5512/sea.1971.5",
+        "container": "Southeast Asia: History and Culture",
+        "volume": "1971",
+        "issue": "1",
+        "pages": "5-11",
+        "publisher": "Japan Society for Southeast Asian Studies"
+      },
+      "styles": {
+        "apa": "Yamamoto, T. (1971). Major Problems of Southeast Asian History. Southeast Asia: History and Culture, 1971(1), 5–11. https://doi.org/10.5512/sea.1971.5",
+        "harvard": "Yamamoto, T. (1971) \"Major Problems of Southeast Asian History,\" Southeast Asia: History and Culture, 1971(1), pp. 5–11. Available at: https://doi.org/10.5512/sea.1971.5.",
+        "chicago-author-date": "Yamamoto, T. 1971. \"Major Problems of Southeast Asian History.\" Southeast Asia: History and Culture 1971 (1): 5–11. https://doi.org/10.5512/sea.1971.5."
+      }
+    },
+    {
+      "doi": "10.5512/sea.1973.117",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Shiraishi, M.",
+        "title": "Studies of Contemporary History in South Vietna",
+        "year": "1973",
+        "doi": "10.5512/sea.1973.117",
+        "container": "Southeast Asia: History and Culture",
+        "volume": "1973",
+        "issue": "3",
+        "pages": "117-126",
+        "publisher": "Japan Society for Southeast Asian Studies"
+      },
+      "styles": {
+        "apa": "Shiraishi, M. (1973). Studies of Contemporary History in South Vietna. Southeast Asia: History and Culture, 1973(3), 117–126. https://doi.org/10.5512/sea.1973.117",
+        "harvard": "Shiraishi, M. (1973) \"Studies of Contemporary History in South Vietna,\" Southeast Asia: History and Culture, 1973(3), pp. 117–126. Available at: https://doi.org/10.5512/sea.1973.117.",
+        "chicago-author-date": "Shiraishi, M. 1973. \"Studies of Contemporary History in South Vietna.\" Southeast Asia: History and Culture 1973 (3): 117–26. https://doi.org/10.5512/sea.1973.117."
+      }
+    },
+    {
+      "doi": "10.5512/sea.1991.136",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Shiratori, Y.",
+        "title": "Pre-history of the Japan Society for Southeast Asian History",
+        "year": "1991",
+        "doi": "10.5512/sea.1991.136",
+        "container": "Southeast Asia: History and Culture",
+        "volume": "1991",
+        "issue": "20",
+        "pages": "136-141",
+        "publisher": "Japan Society for Southeast Asian Studies"
+      },
+      "styles": {
+        "apa": "Shiratori, Y. (1991). Pre-history of the Japan Society for Southeast Asian History. Southeast Asia: History and Culture, 1991(20), 136–141. https://doi.org/10.5512/sea.1991.136",
+        "harvard": "Shiratori, Y. (1991) \"Pre-history of the Japan Society for Southeast Asian History,\" Southeast Asia: History and Culture, 1991(20), pp. 136–141. Available at: https://doi.org/10.5512/sea.1991.136.",
+        "chicago-author-date": "Shiratori, Y. 1991. \"Pre-History of the Japan Society for Southeast Asian History.\" Southeast Asia: History and Culture 1991 (20): 136–41. https://doi.org/10.5512/sea.1991.136."
+      }
+    },
+    {
+      "doi": "10.5512/sea.1994.141",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Furuta, M.",
+        "title": "Collections Relating to Contemporary Vietnamese History",
+        "year": "1994",
+        "doi": "10.5512/sea.1994.141",
+        "container": "Southeast Asia: History and Culture",
+        "volume": "1994",
+        "issue": "23",
+        "pages": "141-143",
+        "publisher": "Japan Society for Southeast Asian Studies"
+      },
+      "styles": {
+        "apa": "Furuta, M. (1994). Collections Relating to Contemporary Vietnamese History. Southeast Asia: History and Culture, 1994(23), 141–143. https://doi.org/10.5512/sea.1994.141",
+        "harvard": "Furuta, M. (1994) \"Collections Relating to Contemporary Vietnamese History,\" Southeast Asia: History and Culture, 1994(23), pp. 141–143. Available at: https://doi.org/10.5512/sea.1994.141.",
+        "chicago-author-date": "Furuta, M. 1994. \"Collections Relating to Contemporary Vietnamese History.\" Southeast Asia: History and Culture 1994 (23): 141–43. https://doi.org/10.5512/sea.1994.141."
+      }
+    },
+    {
+      "doi": "10.7146/chku.v3i4.117151",
+      "type": "journal-article",
+      "fields": {
+        "type": "clanak",
+        "authors": "Hastrup, Frida",
+        "title": "Culture and History: Hverdag",
+        "year": "2019",
+        "doi": "10.7146/chku.v3i4.117151",
+        "container": "Culture and History: Student Research Papers",
+        "volume": "3",
+        "issue": "4",
+        "pages": "3",
+        "publisher": "Det Kgl. Bibliotek/Royal Danish Library"
+      },
+      "styles": {
+        "apa": "Hastrup, F. (2019). Culture and History: Hverdag. Culture and History: Student Research Papers, 3(4), 3. https://doi.org/10.7146/chku.v3i4.117151",
+        "harvard": "Hastrup, F. (2019) \"Culture and History: Hverdag,\" Culture and History: Student Research Papers, 3(4), p. 3. Available at: https://doi.org/10.7146/chku.v3i4.117151.",
+        "chicago-author-date": "Hastrup, Frida. 2019. \"Culture and History: Hverdag.\" Culture and History: Student Research Papers 3 (4): 3. https://doi.org/10.7146/chku.v3i4.117151."
+      }
+    }
+  ]
+}

@@ -26,6 +26,11 @@ export {
 export function engineStyleFor(token: string): CitationStyle | null {
   if (token === 'ieee') return 'ieee';
   if (token === 'vancouver') return 'vancouver';
+  // Vjerni autor-datum pod-stilovi (validirano protiv doi.org/CSL). fpzg/pravo-social-author ostaju
+  // genericki 'autor-godina' (hrvatske strukturne rijeci; njihov TOCAN oblik zivi u per-fakultet spec-u).
+  if (token === 'apa7') return 'apa';
+  if (token === 'harvard') return 'harvard';
+  if (token === 'chicago-author') return 'chicago-author-date';
   const mode = citationMeta(token).mode;
   if (mode === 'author-year' || mode === 'author-page') return 'autor-godina';
   if (mode === 'notes' || mode === 'legal-notes') return 'fusnota';

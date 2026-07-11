@@ -11,7 +11,9 @@
 export type SourceType = 'knjiga' | 'poglavlje' | 'clanak' | 'mrezni' | 'zavrsni' | 'propis';
 // autor-godina (APA/Harvard obitelj), fusnota (Chicago/pravne biljeske), te dva numericka
 // stila (IEEE, Vancouver) koja Lekta profili stvarno koriste (recommendedCitation tokeni).
-export type CitationStyle = 'autor-godina' | 'fusnota' | 'ieee' | 'vancouver';
+// 'autor-godina' = naslijedeni genericki autor-godina (back-compat, hrvatske strukturne rijeci).
+// 'apa'/'harvard'/'chicago-author-date' = VJERNI pod-stilovi (validirani protiv doi.org/CSL).
+export type CitationStyle = 'autor-godina' | 'apa' | 'harvard' | 'chicago-author-date' | 'fusnota' | 'ieee' | 'vancouver';
 
 export interface CitationInput {
   type: SourceType;
@@ -66,6 +68,10 @@ const ORG_STEM = [
   'republik', 'udruženj', 'udruzenj', 'knjižnic', 'knjiznic', 'društv', 'drustv',
   'agencij', 'komisij', 'zaklad', 'muzej', 'nakladn', 'škol', 'skol',
 ];
+// Poznato ogranicenje: ENGLESKI grupni autori bez zareza (World Health Organization, United
+// Nations...) jos se ne prepoznaju pa ispadaju kao osoba ("Organization, W. H."). Detekcija je
+// u dijeljenom parseAuthors (koristi ga i citation-spec renderer), pa se ne prosiruje ovdje
+// bez sireg testiranja; hrvatski institucijski nazivi (ministarstv/sveucilis/...) su pokriveni.
 const ORG_FULL = [
   'vlada', 'vlade', 'vladi', 'vladu', 'zavod', 'ured', 'odbor', 'centar',
   'savez', 'udruga', 'udruge', 'komora', 'komore', 'sabor', 'sabora',
@@ -100,12 +106,13 @@ export function parseAuthors(raw: string | undefined): ParsedAuthor[] {
     });
 }
 
-/** "Ana Maria" -> "A. M." Exportano za citation-spec renderer. */
+/** "Ana Maria" -> "A. M."; crtica u imenu se zadrzava ("Jean-Baptiste" -> "J.-B.").
+ *  Exportano za citation-spec renderer. */
 export function initials(first: string): string {
   return first
-    .split(/[\s-]+/)
+    .split(/\s+/)
     .filter(Boolean)
-    .map((p) => p[0].toUpperCase() + '.')
+    .map((sp) => sp.split('-').filter(Boolean).map((w) => w[0].toUpperCase() + '.').join('-'))
     .join(' ');
 }
 
@@ -116,6 +123,52 @@ function authorsAuthorYear(list: ParsedAuthor[]): string {
   if (list.length === 1) return fmt(list[0]);
   const head = list.slice(0, -1).map(fmt).join(', ');
   return `${head}, & ${fmt(list[list.length - 1])}`;
+}
+
+/** Harvard kompaktni inicijali: "Ann Marie" -> "A.M." (bez razmaka; cite-them-right).
+ *  Crtica u imenu se zadrzava ("Jean-Baptiste" -> "J.-B."). */
+function initialsCompact(first: string): string {
+  return first
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((sp) => sp.split('-').filter(Boolean).map((w) => w[0].toUpperCase() + '.').join('-'))
+    .join('');
+}
+
+// Vjerni autor-datum autor-formati (razlikuju apa7/harvard/chicago; validirano protiv doi.org/CSL).
+/** APA 7: "Prezime, I. I."; spoj ", & " (Oxford zarez pred &).
+ *  21+ autora (sekcija 9.8): prvih 19, elipsa, pa ZADNJI autor (bez &). */
+function authorsApa(list: ParsedAuthor[]): string {
+  if (!list.length) return '';
+  const fmt = (a: ParsedAuthor) => (a.first ? `${a.last}, ${initials(a.first)}` : a.last);
+  if (list.length === 1) return fmt(list[0]);
+  if (list.length > 20) {
+    // Elipsa je jedan znak (…), ne tri tocke, da je tidy() ne skupi u jednu tocku.
+    return `${list.slice(0, 19).map(fmt).join(', ')}, … ${fmt(list[list.length - 1])}`;
+  }
+  return `${list.slice(0, -1).map(fmt).join(', ')}, & ${fmt(list[list.length - 1])}`;
+}
+/** Harvard (cite-them-right): "Prezime, I.I."; spoj " and " (bez Oxford zareza). */
+function authorsHarvard(list: ParsedAuthor[]): string {
+  if (!list.length) return '';
+  const fmt = (a: ParsedAuthor) => (a.first ? `${a.last}, ${initialsCompact(a.first)}` : a.last);
+  if (list.length === 1) return fmt(list[0]);
+  return `${list.slice(0, -1).map(fmt).join(', ')} and ${fmt(list[list.length - 1])}`;
+}
+/** Chicago autor-datum: prvi "Prezime, Ime" (PUNO ime), ostali "Ime Prezime"; spoj ", and " (Oxford).
+ *  11+ autora (CMOS 17, 14.76/15.9): prvih 7, pa "et al.". */
+function authorsChicagoAD(list: ParsedAuthor[]): string {
+  if (!list.length) return '';
+  const f0 = list[0];
+  const firstStr = f0.first ? `${f0.last}, ${f0.first}` : f0.last;
+  if (list.length === 1) return firstStr;
+  const nat = (a: ParsedAuthor) => (a.first ? `${a.first} ${a.last}` : a.last);
+  if (list.length > 10) {
+    return `${[firstStr, ...list.slice(1, 7).map(nat)].join(', ')}, et al.`;
+  }
+  const rest = list.slice(1).map(nat);
+  const lastOne = rest.pop() as string;
+  return rest.length ? `${firstStr}, ${rest.join(', ')}, and ${lastOne}` : `${firstStr}, and ${lastOne}`;
 }
 
 /** Fusnota/bibliografija (Chicago-slicno): prvi autor obrnut, ostali prirodno. */
@@ -204,6 +257,240 @@ function formatAutorGodina(inp: CitationInput): string {
         const acc = inp.accessed ? `Pristupljeno ${inp.accessed} ` : '';
         parts.push(`${acc}${doi || inp.url}`);
       }
+      break;
+    }
+    case 'propis': {
+      parts.push(withDot(t));
+      const src = [inp.container, inp.issue].filter(Boolean).join(', ');
+      if (src) parts.push(withDot(src));
+      break;
+    }
+  }
+  return tidy(parts.join(' '));
+}
+
+/** "181-181" -> "181" (jedna stranica zapisana kao raspon; Crossref/uvoz cesto tako daje). */
+function collapsePages(p?: string): string {
+  const s = (p || '').trim();
+  const m = s.match(/^(\d+)\s*[-–]\s*(\d+)$/);
+  return m && m[1] === m[2] ? m[1] : s;
+}
+
+/** Naslov u navodnicima sa zarezom UNUTAR navodnika (Harvard cite-them-right: "Naslov,").
+ *  Dvostruki navodnici + zarez unutra su NAMJERNI: to je oblik koji doi.org/CSL
+ *  harvard-cite-them-right procesor emitira i protiv kojeg je motor validiran (264/264).
+ *  Britanska knjiga CTR koristi jednostruke navodnike; taj oblik zivi u per-fakultet spec-u. */
+function quotedComma(title: string): string {
+  const t = (title || '').trim().replace(/[.,]\s*$/, '');
+  return t ? `"${t},"` : '';
+}
+
+/** Vise urednika zbornika (odvojenih ";") spojenih po stilu. connector = "&" (APA) ili "and"
+ *  (Harvard/Chicago); oxford = Oxford zarez pred veznikom za 3+ (APA/Chicago da, Harvard ne).
+ *  multi = ima li vise od jednog urednika (za "Eds." vs "Ed." / "eds" vs "ed."). */
+function joinEditors(raw: string, connector: string, oxford: boolean): { text: string; multi: boolean } {
+  const names = raw.split(';').map((s) => s.trim()).filter(Boolean);
+  if (names.length <= 1) return { text: raw.trim(), multi: false };
+  if (names.length === 2) return { text: `${names[0]} ${connector} ${names[1]}`, multi: true };
+  const head = names.slice(0, -1).join(', ');
+  return { text: `${head}${oxford ? ',' : ''} ${connector} ${names[names.length - 1]}`, multi: true };
+}
+
+/** CMOS 9.61 elizija inkluzivnih brojeva (163-186 -> 163-86; 1181-1206 -> 1181-206). Samo Chicago.
+ *  Isti oblik koji doi.org/CSL chicago-author-date procesor emitira. */
+function chicagoElide(startStr: string, endStr: string): string {
+  const a = parseInt(startStr, 10);
+  const b = parseInt(endStr, 10);
+  if (!(b > a)) return `${startStr}-${endStr}`;
+  const as = String(a);
+  const bs = String(b);
+  if (a < 100 || a % 100 === 0 || as.length !== bs.length) return `${a}-${b}`; // sve znamenke
+  let i = 0;
+  while (i < as.length && as[i] === bs[i]) i++;
+  const lastTwo = a % 100;
+  // n01-n09: samo promijenjeni dio; inace bar dvije znamenke (vise ako je promjena u stotici).
+  const keepFrom = lastTwo >= 1 && lastTwo <= 9 ? i : Math.min(i, bs.length - 2);
+  return `${a}-${bs.slice(keepFrom)}`;
+}
+
+/** Chicago stranice: skupi identican raspon (181-181 -> 181) pa primijeni CMOS 9.61 eliziju. */
+function chicagoPages(p?: string): string {
+  const s = collapsePages(p);
+  const m = s.match(/^(\d+)\s*[-–]\s*(\d+)$/);
+  return m ? chicagoElide(m[1], m[2]) : s;
+}
+
+// --- Vjerni autor-datum stilovi: apa7 / harvard (cite-them-right) / chicago-author-date -----
+// Validirano protiv doi.org/CSL (scripts/render-fidelity-audit.mjs) na clancima; knjiga/poglavlje
+// po stilskim prirucnicima. Strukturne rijeci su ENGLESKE (In, Eds., pp., Available at) jer su to
+// engleski standardi; hrvatske adaptacije (FPZG) su per-fakultet citation-spec, ne motor.
+
+function formatApa(inp: CitationInput): string {
+  const A = authorsApa(parseAuthors(inp.authors));
+  const year = inp.year ? `(${inp.year}).` : (A ? '(n.d.).' : '');
+  const t = inp.title || '';
+  const doi = doiUrl(inp.doi);
+  const parts: string[] = [];
+  // Element autora zavrsava tockom prije godine ("Autor. (Godina).") i za grupnog autora
+  // (osobni ju dobiva "gratis" od zavrsnog inicijala; ustanova bez zareza nema inicijal).
+  const lead = [A ? withDot(A) : '', year].filter(Boolean).join(' ');
+  if (lead) parts.push(withDot(lead));
+  switch (inp.type) {
+    case 'clanak': {
+      parts.push(withDot(t));
+      const pgs = collapsePages(inp.pages);
+      const vi = `${[inp.container, inp.volume].filter(Boolean).join(', ')}${inp.issue ? `(${inp.issue})` : ''}${pgs ? `, ${pgs}` : ''}`;
+      if (vi) parts.push(withDot(vi));
+      if (doi) parts.push(doi);
+      else if (inp.url) parts.push(inp.url); // mrezni clanak bez DOI-a: URL na kraju (Hrcak/Srce)
+      break;
+    }
+    case 'knjiga':
+    case 'zavrsni': {
+      parts.push(withDot(t));
+      if (inp.type === 'zavrsni') parts.push(withDot(inp.institution ? `[Neobjavljeni završni rad, ${inp.institution}]` : '[Neobjavljeni završni rad]'));
+      else if (inp.publisher) parts.push(withDot(inp.publisher)); // APA7 ISPUSTA mjesto
+      if (doi) parts.push(doi);
+      break;
+    }
+    case 'poglavlje': {
+      parts.push(withDot(t));
+      let ed = '';
+      if (inp.editor) {
+        const e = joinEditors(inp.editor, '&', true); // APA: "A & B" / "A, B, & C"
+        ed = `${e.text} (${e.multi ? 'Eds.' : 'Ed.'}), `;
+      }
+      const pg = inp.pages ? ` (pp. ${inp.pages})` : '';
+      if (inp.container) parts.push(withDot(`In ${ed}${inp.container}${pg}`));
+      if (inp.publisher) parts.push(withDot(inp.publisher));
+      if (doi) parts.push(doi);
+      break;
+    }
+    case 'mrezni': {
+      parts.push(withDot(t));
+      if (inp.publisher) parts.push(withDot(inp.publisher));
+      const link = doi || inp.url;
+      if (link) parts.push(link);
+      break;
+    }
+    case 'propis': {
+      parts.push(withDot(t));
+      const src = [inp.container, inp.issue].filter(Boolean).join(', ');
+      if (src) parts.push(withDot(src));
+      break;
+    }
+  }
+  return tidy(parts.join(' '));
+}
+
+function formatHarvard(inp: CitationInput): string {
+  const A = authorsHarvard(parseAuthors(inp.authors));
+  const year = inp.year ? `(${inp.year})` : (A ? '(no date)' : '');
+  const t = inp.title || '';
+  const doi = doiUrl(inp.doi);
+  const lead = [A, year].filter(Boolean).join(' ');
+  const parts: string[] = [];
+  switch (inp.type) {
+    case 'clanak': {
+      const volIss = inp.volume ? `${inp.volume}${inp.issue ? `(${inp.issue})` : ''}` : '';
+      const loc = [inp.container, volIss].filter(Boolean).join(', ');
+      const pgs = collapsePages(inp.pages);
+      const pg = pgs ? `, ${/[-–]/.test(pgs) ? 'pp.' : 'p.'} ${pgs}` : ''; // cite-them-right: p. jedna, pp. raspon
+      parts.push(withDot(`${lead} ${quotedComma(t)} ${loc}${pg}`.trim()));
+      if (doi) parts.push(withDot(`Available at: ${doi}`));
+      else if (inp.url) { // online clanak bez DOI-a: Available at URL (+ Accessed datum)
+        const acc = inp.accessed ? ` (Accessed: ${inp.accessed})` : '';
+        parts.push(withDot(`Available at: ${inp.url}${acc}`));
+      }
+      break;
+    }
+    case 'knjiga':
+    case 'zavrsni': {
+      parts.push(withDot(`${lead} ${t}`.trim()));
+      if (inp.type === 'zavrsni') parts.push(withDot(inp.institution ? `Unpublished thesis. ${inp.institution}` : 'Unpublished thesis'));
+      else { const pub = [inp.place, inp.publisher].filter(Boolean).join(': '); if (pub) parts.push(withDot(pub)); }
+      if (doi) parts.push(withDot(`Available at: ${doi}`));
+      break;
+    }
+    case 'poglavlje': {
+      // cite-them-right: "'Naslov,' in Ur. (ed.) Knjiga. Mjesto: Izdavac, pp. Str."
+      let ed = '';
+      if (inp.editor) {
+        const e = joinEditors(inp.editor, 'and', false); // CTR: "A and B" (bez Oxford zareza)
+        ed = `${e.text} (${e.multi ? 'eds' : 'ed.'}) `;
+      }
+      parts.push(withDot(`${lead} ${quotedComma(t)} in ${ed}${inp.container || ''}`.trim()));
+      const pub = [inp.place, inp.publisher].filter(Boolean).join(': ');
+      const tail = [pub, inp.pages ? `pp. ${inp.pages}` : ''].filter(Boolean).join(', ');
+      if (tail) parts.push(withDot(tail));
+      if (doi) parts.push(withDot(`Available at: ${doi}`));
+      break;
+    }
+    case 'mrezni': {
+      parts.push(withDot(`${lead} ${t}`.trim()));
+      if (inp.publisher) parts.push(withDot(inp.publisher));
+      const link = doi || inp.url;
+      if (link) { const acc = inp.accessed ? ` (Accessed: ${inp.accessed})` : ''; parts.push(withDot(`Available at: ${link}${acc}`)); }
+      break;
+    }
+    case 'propis': {
+      parts.push(withDot(`${lead} ${t}`.trim()));
+      const src = [inp.container, inp.issue].filter(Boolean).join(', ');
+      if (src) parts.push(withDot(src));
+      break;
+    }
+  }
+  return tidy(parts.join(' '));
+}
+
+function formatChicagoAuthorDate(inp: CitationInput): string {
+  const A = authorsChicagoAD(parseAuthors(inp.authors));
+  const year = inp.year || 'n.d.';
+  const t = inp.title || '';
+  const doi = doiUrl(inp.doi);
+  const parts: string[] = [];
+  if (A) parts.push(withDot(A));
+  if (A || inp.year) parts.push(withDot(year));
+  switch (inp.type) {
+    case 'clanak': {
+      parts.push(quoted(t));
+      const pgs = chicagoPages(inp.pages);
+      // Broj bez sveska nosi oznaku "no." iza zareza (CMOS 15.48); uz svezak ide u zagradi.
+      const volPart = inp.volume ? ` ${inp.volume}` : '';
+      const issPart = inp.issue ? (inp.volume ? ` (${inp.issue})` : `, no. ${inp.issue}`) : '';
+      const loc = `${inp.container || ''}${volPart}${issPart}${pgs ? `: ${pgs}` : ''}`;
+      if (loc.trim()) parts.push(withDot(loc));
+      if (doi) parts.push(withDot(doi));
+      else if (inp.url) parts.push(withDot(inp.url)); // clanak bez DOI-a: URL na kraju
+      break;
+    }
+    case 'knjiga':
+    case 'zavrsni': {
+      parts.push(withDot(t));
+      if (inp.type === 'zavrsni') parts.push(withDot(inp.institution ? `Thesis, ${inp.institution}` : 'Thesis'));
+      else { const pub = [inp.place, inp.publisher].filter(Boolean).join(': '); if (pub) parts.push(withDot(pub)); }
+      if (doi) parts.push(withDot(doi));
+      break;
+    }
+    case 'poglavlje': {
+      // Chicago: "\"Naslov.\" In Knjiga, edited by Ur., Str. Mjesto: Izdavac."
+      parts.push(quoted(t));
+      const ed = inp.editor ? `edited by ${joinEditors(inp.editor, 'and', true).text}` : '';
+      const inWork = inp.container ? `In ${inp.container}` : '';
+      const seg = [inWork, ed, chicagoPages(inp.pages)].filter(Boolean).join(', ');
+      if (seg) parts.push(withDot(seg));
+      const pub = [inp.place, inp.publisher].filter(Boolean).join(': ');
+      if (pub) parts.push(withDot(pub));
+      if (doi) parts.push(withDot(doi));
+      break;
+    }
+    case 'mrezni': {
+      parts.push(quoted(t));
+      if (inp.publisher) parts.push(withDot(inp.publisher));
+      // CMOS 15.50/15.51: datum pristupa je zaseban element "Accessed ..." PRIJE URL-a.
+      if (inp.accessed) parts.push(withDot(`Accessed ${inp.accessed}`));
+      const link = doi || inp.url;
+      if (link) parts.push(withDot(link));
       break;
     }
     case 'propis': {
@@ -445,16 +732,28 @@ export interface CitationResult {
   missing: string[];
 }
 
-/** In-text oblik autor-godina: 1 autor (Prezime, god.), 2 (A i B, god.), 3+ (A i sur., god.). */
-function inTextAuthorYear(list: ParsedAuthor[], year: string): string {
+/** Strukturne rijeci in-text oblika po stilu. Vjerni stilovi (apa/harvard/chicago) koriste
+ *  ENGLESKE oznake (& / and, et al., n.d./no date) da se in-text slaze s njihovim engleskim
+ *  referentnim retkom; genericki 'autor-godina' zadrzava hrvatske (i, i sur., bez dat.). */
+interface InTextStyle { two: string; etAl: string; noDate: string; comma: boolean; }
+const IN_TEXT: Record<string, InTextStyle> = {
+  'autor-godina': { two: ' i ', etAl: ' i sur.', noDate: 'bez dat.', comma: true },
+  apa: { two: ' & ', etAl: ' et al.', noDate: 'n.d.', comma: true },
+  harvard: { two: ' and ', etAl: ' et al.', noDate: 'no date', comma: false },
+  'chicago-author-date': { two: ' and ', etAl: ' et al.', noDate: 'n.d.', comma: false },
+};
+
+/** In-text oblik autor-godina: 1 autor (Prezime), 2 (A i/and/& B), 3+ (A i sur./et al.).
+ *  cfg razlikuje veznik, oznaku "vise autora", oznaku bez godine i zarez pred godinom. */
+function inTextAuthorYear(list: ParsedAuthor[], year: string, cfg: InTextStyle): string {
   if (!list.length) return '';
-  const yr = year || 'bez dat.';
+  const yr = year || cfg.noDate;
   const sur = (a: ParsedAuthor) => a.last; // institucija ima cijeli naziv u "last"
   let who: string;
   if (list.length === 1) who = sur(list[0]);
-  else if (list.length === 2) who = `${sur(list[0])} i ${sur(list[1])}`;
-  else who = `${sur(list[0])} i sur.`;
-  return `(${who}, ${yr})`;
+  else if (list.length === 2) who = `${sur(list[0])}${cfg.two}${sur(list[1])}`;
+  else who = `${sur(list[0])}${cfg.etAl}`;
+  return cfg.comma ? `(${who}, ${yr})` : `(${who} ${yr})`;
 }
 
 const RECOMMENDED: Record<SourceType, Array<keyof CitationInput>> = {
@@ -483,11 +782,16 @@ export function formatCitation(inp: CitationInput, style: CitationStyle): Citati
     case 'fusnota': citation = formatFusnota(inp); break;
     case 'ieee': citation = formatIeee(inp); break;
     case 'vancouver': citation = formatVancouver(inp); break;
+    case 'apa': citation = formatApa(inp); break;
+    case 'harvard': citation = formatHarvard(inp); break;
+    case 'chicago-author-date': citation = formatChicagoAuthorDate(inp); break;
     default: citation = formatAutorGodina(inp);
   }
-  // Samo autor-godina ima in-text (Prezime, god.); fusnota i numericki koriste broj biljeske/[n].
-  const inText = style === 'autor-godina'
-    ? inTextAuthorYear(parseAuthors(inp.authors), (inp.year || '').trim())
+  // Autor-datum stilovi imaju in-text (veznik/oznake po stilu). Fusnota i numericki koriste
+  // broj biljeske/[n] pa je in-text prazan.
+  const cfg = IN_TEXT[style];
+  const inText = cfg
+    ? inTextAuthorYear(parseAuthors(inp.authors), (inp.year || '').trim(), cfg)
     : '';
   const missing = (RECOMMENDED[inp.type] || [])
     .filter((f) => !(inp[f] && String(inp[f]).trim()))
