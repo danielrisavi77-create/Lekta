@@ -34,6 +34,7 @@ const FPZG_SUBMISSION_CALENDAR: any = _FPZG_CAL;
 import { WORK_TYPE_LABELS, CHECK_ITEMS } from '../config/config-loader';
 // (R3) zajednicka normalizacija check* zastavica, dijeli se s golden resolveProfile
 import { analyzeDocxOffThread, cancelActiveAnalysis, isAnalysisCancelled } from '../analysis/analyze-docx-client';
+import { uploadCapBytes, decompressionBudgetBytes } from '../analysis/memory-budget';
 import { normalizeCheckFlags } from '../profiles/profile-baseline';
 import { citationMeta } from '../citations/citation-meta';
 import { APP_VERSION } from '../config/app-version';
@@ -452,7 +453,7 @@ function downloadSubmissionReport(){if(!currentResult)return;const a=submissionA
 // Feature detection (P0 6): bez File.arrayBuffer ili DOMParsera analiza ne moze proci; umjesto
 // tihog kvara (bijeli ekran / neuhvacena greska) daj jasnu poruku.
 function browserSupportsDocxAnalysis(file: any){try{if(typeof DOMParser==='undefined')return false;if(file&&typeof file.arrayBuffer!=='function')return false;return true}catch(e: any){return false}}
-async function runAnalysis(){if(!selectedDocx)return;if(!browserSupportsDocxAnalysis(selectedDocx)){const err=$('#dropError'),msg='Ovaj preglednik ne podržava čitanje datoteka potrebno za analizu. Ažuriraj preglednik ili otvori aplikaciju u novijem Chromeu, Safariju ili Firefoxu.';if(err){err.textContent=msg;err.classList.remove('hidden')}$('#dropzone')?.classList.add('has-error');toast(msg);return}const {id,p}=currentProfile(),settings={profileId:id,profileDefinitionId:p.definitionId||null,selection:p.selection,profileStatus:p.statusKey,workType:$('#workType').value,citationStyle:$('#citationStyle').value,language:$('#docLanguage').value,strictness:$('#strictness').value,submissionPhase:currentSubmissionPhase(),fpzgCohort:currentFpzgCohort(),fpzgDeadline:currentFpzgDeadlineId(),mentorOverride:$('#mentorOverride').checked,mentorNotes:$('#mentorNotes').value.trim(),methodology:selectedMethodology(),selectionIds:{institution:$('#institutionSelect').value,unit:$('#unitSelect').value,program:$('#programSelect').value,workType:$('#workType').value,variant:$('#workVariant').value,department:$('#departmentSelect')?.value||'general',methodology:$('#methodologySelect')?.value||'auto',citation:$('#citationStyle').value}};const token=++_analyzeToken,analyzeBtn=$('#analyzeBtn'),docxFile=selectedDocx;if(analyzeBtn)analyzeBtn.disabled=true;$('#wizardView').classList.add('hidden');$('#resultView').classList.add('hidden');$('#progressView').classList.remove('hidden');progress(0,'Pripremam paketnu analizu');try{
+async function runAnalysis(){if(!selectedDocx)return;if(!browserSupportsDocxAnalysis(selectedDocx)){const err=$('#dropError'),msg='Ovaj preglednik ne podržava čitanje datoteka potrebno za analizu. Ažuriraj preglednik ili otvori aplikaciju u novijem Chromeu, Safariju ili Firefoxu.';if(err){err.textContent=msg;err.classList.remove('hidden')}$('#dropzone')?.classList.add('has-error');toast(msg);return}const {id,p}=currentProfile(),settings={profileId:id,profileDefinitionId:p.definitionId||null,selection:p.selection,profileStatus:p.statusKey,workType:$('#workType').value,citationStyle:$('#citationStyle').value,language:$('#docLanguage').value,strictness:$('#strictness').value,submissionPhase:currentSubmissionPhase(),fpzgCohort:currentFpzgCohort(),fpzgDeadline:currentFpzgDeadlineId(),mentorOverride:$('#mentorOverride').checked,mentorNotes:$('#mentorNotes').value.trim(),methodology:selectedMethodology(),maxDecompressedBytes:decompressionBudgetBytes(deviceMemoryGb()),selectionIds:{institution:$('#institutionSelect').value,unit:$('#unitSelect').value,program:$('#programSelect').value,workType:$('#workType').value,variant:$('#workVariant').value,department:$('#departmentSelect')?.value||'general',methodology:$('#methodologySelect')?.value||'auto',citation:$('#citationStyle').value}};const token=++_analyzeToken,analyzeBtn=$('#analyzeBtn'),docxFile=selectedDocx;if(analyzeBtn)analyzeBtn.disabled=true;$('#wizardView').classList.add('hidden');$('#resultView').classList.add('hidden');$('#progressView').classList.remove('hidden');progress(0,'Pripremam paketnu analizu');try{
  // Pomocne datoteke (PDF, metapodaci) NE smiju obarati glavnu analizu: neuspjeh se biljezi
  // kao stavka, a glavni .docx se svejedno analizira (F1).
  currentPdfAudit=selectedPdf?await safeAux(()=>analyzePdfFile(selectedPdf),'PDF preflight'):null;
@@ -465,7 +466,7 @@ function cancelAnalysis(){if($('#progressView').classList.contains('hidden'))ret
 // Izvrsi pomocnu analizu (aux datoteka); nikad ne baca - neuspjeh vrati null i zabiljezi u konzolu.
 async function safeAux(fn: any,label: any){try{return await fn()}catch(e: any){console.warn(`Pomoćna analiza (${label}) nije uspjela:`,e);return null}}
 // Razlikovanje uzroka greske glavne analize u citljivu poruku (F5).
-function analysisErrorMessage(e: any){const m=String(e&&e.message||'');if(/dekompresijska bomba|sigurnosnu granicu|previše odlomaka/i.test(m))return m;if(/DTD/i.test(m))return'Dokument sadrži nedopuštenu XML deklaraciju i odbijen je iz sigurnosnih razloga.';if(/ZIP\/DOCX arhiva|Oštećen lokalni zapis|glavni Word dokument|DataView|out of bounds|Offset is outside/i.test(m))return'Datoteka je oštećena ili nije valjan .docx. Ponovno je izvezi iz Worda (Spremi kao .docx).';if(/kompresija/i.test(m))return'Ovaj oblik .docx kompresije nije podržan. Ponovno spremi dokument iz Worda.';return m||'Dokument nije moguće analizirati.'}
+function analysisErrorMessage(e: any){const m=String(e&&e.message||'');if(/dekompresijska bomba|sigurnosnu granicu|previše odlomaka/i.test(m))return m+(isLikelyMobile()?' Na ovom uređaju granica je niža radi memorije; za velike dokumente pokušaj na računalu.':'');if(/DTD/i.test(m))return'Dokument sadrži nedopuštenu XML deklaraciju i odbijen je iz sigurnosnih razloga.';if(/ZIP\/DOCX arhiva|Oštećen lokalni zapis|glavni Word dokument|DataView|out of bounds|Offset is outside/i.test(m))return'Datoteka je oštećena ili nije valjan .docx. Ponovno je izvezi iz Worda (Spremi kao .docx).';if(/kompresija/i.test(m))return'Ovaj oblik .docx kompresije nije podržan. Ponovno spremi dokument iz Worda.';return m||'Dokument nije moguće analizirati.'}
 // UX 3.2: demo kao sredisnji alat povjerenja. Tri javna primjera izvjestaja (FPZG diplomski,
 // Pravo diplomski, genericki seminarski) s realisticnim nalazima; prebacuju se u demo traci
 // iznad rezultata. Uzorci su izmisljeni radi prikaza i ne tvrde nista o sluzbenim pravilima.
@@ -534,11 +535,14 @@ function celebrateReady(r: any){
 // Animacije ekrana rezultata (count-up, ring sweep, punjenje traka). Sve ima instant-fallback
 // na prefers-reduced-motion ili ako Motion nije dostupan; vrijednosti su uvijek tocne.
 function motionReduced(){return !!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches)}
-// Mobilno-svjestan limit velicine (P1 6): docx do 50 MB dekomprimira do ~200 MB po zapisu, sto na
-// slabijem mobitelu moze premasiti memoriju taba prije nego capovi parsera reagiraju. Na mobilnim
-// uredajima (coarse pointer ili malo deviceMemory) snizi prag na 20 MB.
-function isLikelyMobile(){try{return !!((window.matchMedia&&window.matchMedia('(pointer:coarse)').matches)||((navigator as any).deviceMemory&&(navigator as any).deviceMemory<=4))}catch(e: any){return false}}
-function effectiveUploadCap(){return isLikelyMobile()?20*1024*1024:50*1024*1024}
+// Mobilno-svjestan limit velicine (P1 6, BL-P0-05-7): docx do 50 MB dekomprimira do ~200 MB po
+// zapisu, sto na slabijem mobitelu moze premasiti memoriju taba prije nego capovi parsera reagiraju.
+// Granice su izvucene u cistu, testabilnu jezgru (src/analysis/memory-budget.ts); ovdje samo citamo
+// signale uredaja iz preglednika i delegiramo.
+function deviceMemoryGb(){try{return (navigator as any).deviceMemory ?? null}catch(e: any){return null}}
+function coarsePointer(){try{return !!(window.matchMedia&&window.matchMedia('(pointer:coarse)').matches)}catch(e: any){return false}}
+function isLikelyMobile(){return coarsePointer()||((deviceMemoryGb() as number)>0&&(deviceMemoryGb() as number)<=4)}
+function effectiveUploadCap(){return uploadCapBytes({deviceMemory:deviceMemoryGb(),coarsePointer:coarsePointer()})}
 function _animate(){return window.__lektaAnimate} // lijeno ucitan Motion (ui-boot); null dok se ne ucita
 function countUp(el: any,to: any,fmtFn?: any){if(!el)return;const target=Number(to);if(!isFinite(target)){el.textContent=to;return}const out=(v: any)=>{const n=Math.round(v);el.textContent=fmtFn?fmtFn(n):String(n)};const A=_animate();if(motionReduced()||typeof A!=='function'){out(target);return}A(0,target,{duration:.9,ease:[.22,1,.36,1],onUpdate:out})}
 function animateScore(ring: any,valueEl: any,score: any){countUp(valueEl,score==null?'?':score);if(!ring)return;const s=Number(score),A=_animate();if(!isFinite(s)||motionReduced()||typeof A!=='function'){ring.style.setProperty('--score',isFinite(s)?s:0);return}A(ring,{'--score':[0,s]},{duration:.95,ease:[.22,1,.36,1]})}

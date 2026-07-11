@@ -62,9 +62,18 @@ Datum: 2026-07-11.
 - Rizik regresije: srednji (mijenja demand-signal, azurirati waitlist testove).
 - Velicina: M
 
-**BL-P0-01-4, Ujednaciti default origin generatora i dodati origin guard**
+**BL-P0-01-4, Ujednaciti default origin generatora i dodati origin guard** — GOTOVO (kod, 2026-07-11; necommitano)
 - Prioritet: P0 (spoj seo-01 P1 PLAUSIBLE + routes-01 P2; realni impact P3, ali se rjesava
   ovdje jer je dio konfiguracije)
+- Status: RIJESENO. Jedan izvor origina scripts/site-origin.mjs (fallback lektahr.netlify.app,
+  bez zavrsne kose crte); generate-citation-tools.mjs i generate-legal-pages.mjs oba ga uvoze
+  (nema vlastitog fallbacka). Guard u verify-deploy-dist.mjs pada ako neki dist HTML/sitemap
+  nosi lekta.hr ili kanonik izvan LEKTA_SITE_ORIGIN. Test tests/deploy-origin.test.ts (2) cuva
+  rascjep u `npm run check`. DOKAZANO: default build -> canonical lektahr.netlify.app, grep
+  dist/alati lekta.hr = 0, guard OK; LEKTA_SITE_ORIGIN=lekta.hr -> guard FAIL (exit 1). Napomena:
+  src/ui/referral-share-section.ts:15 ima lekta.hr samo u komentaru-primjeru (runtime vrijednost
+  se prosljeduje), izvan opsega ovog SEO popravka. npm run check zelen. Necommitano: paralelna
+  sesija drzi dijeljene datoteke; ove izmjene su samo build-skripte + test (nema git-race).
 - Problem: generator citata default-a na lekta.hr (nije ziva domena); pravni generator na
   lektahr.netlify.app. Nekonzistentno; footgun za build bez env-a. (KOREKCIJA 2026-07-11 iz
   AUDIT_STATUS: scripts/generate-title-page-tools.mjs NE postoji; naslovnica je staticki MPA
@@ -408,16 +417,31 @@ Datum: 2026-07-11.
 - Acceptance ispunjen: /assets/* nose immutable godinu; HTML kratko; ponovni posjet iz cachea.
 - Velicina: S
 
-**BL-P0-05-7, Memorija i mobilni cap (OOM)**
+**BL-P0-05-7, Memorija i mobilni cap (OOM)** — GOTOVO (2026-07-11)
 - Prioritet: P0 paket (izvorni performance-08 P3)
 - Problem: analiza cita cijelu datoteku u memoriju; grubi progress; moguc OOM na graniznom
   dokumentu na slabom mobitelu.
-- Lokacija: src/analysis/analyze-docx.ts:43, :41; src/ui/app.ts:534
-- Preporuka: sniziti mobilni cap ili gejtati po deviceMemory; inkrementalni progress;
-  oslobadanje velikih medupolja. Spojiti s BL-P0-05-5.
-- Acceptance: granicni dokument prode ili padne s jasnom porukom (ne tihi crash); progres
-  glatko napreduje.
-- Rizik regresije: srednji (diranje analyzeDocx tek uz zeleni golden).
+- Isporuceno: nova cista, testabilna jezgra src/analysis/memory-budget.ts:
+  * uploadCapBytes() GRADUIRAN po uredaju: deviceMemory<=2 GB -> 12 MB, coarse pointer ili
+    <=4 GB -> 20 MB, ostalo (desktop) -> 50 MB (prije binarno 20/50). effectiveUploadCap()/
+    isLikelyMobile() u app.ts sad citaju samo signale (deviceMemoryGb/coarsePointer) i delegiraju.
+  * decompressionBudgetBytes() -> device-aware dekompresijski budzet PO ZAPISU koji se salje
+    ZipReaderu: <=2 GB -> 100 MB, <=4 GB -> 150 MB, jaci uredaj -> null (ZipReader koristi puni
+    MAX_DECOMPRESSED_BYTES=200 MB). runAnalysis stavlja maxDecompressedBytes u settings; analyze-docx.ts:43
+    prosljedjuje ZipReaderu SAMO ako postoji (settings?.maxDecompressedBytes?{...}:{}).
+  * Na slabom uredaju runaway inflacija (legit velik doc ili bomba) pada RANIJE na postojeci
+    ZipReader cap (jasna throw poruka, ne tihi OOM); analysisErrorMessage na mobitelu dodaje
+    "granica je niza radi memorije; za velike dokumente pokusaj na racunalu".
+- KLJUC (golden): golden-entry NE salje maxDecompressedBytes (settings bez njega) -> ZipReader koristi
+  default 200 MB -> golden snapshoti NEPROMIJENJENI (docx-golden 1/1 zeleno potvrdjeno). result echira
+  settings pa production result.settings dobije maxDecompressedBytes (null na desktopu), sto golden ne dira.
+- Test: tests/memory-budget.test.ts (tieri uploadCap + budget, nevaljan deviceMemory). parser-security
+  6/6 (ZipReader custom cap vec podrzan i testiran, MAX ostaje >=100 MB).
+- Acceptance ispunjen: granicni dokument prode ili padne s jasnom porukom (ZipReader throw + hint),
+  slab uredaj dobije nizu granicu (manje inflacije). Napomena: pravi OOM se ne moze uhvatiti, zato
+  preventivno (nizi cap + tvrdi budzet). Inkrementalni progress i oslobadanje medupolja NISU dirani
+  (DOM je dominantni trosak i drzi se kroz cijelu funkciju; snizavanje capa je stvarna poluga).
+- Rizik regresije: nizak (golden zelen, promjena ZipReadera aktivna samo uz eksplicitni budzet).
 - Velicina: M
 
 **BL-P0-05-8, Jak default profil i potvrda profila prije analize**

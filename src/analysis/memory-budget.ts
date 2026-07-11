@@ -1,0 +1,42 @@
+/**
+ * Memorijski proracun analize (BL-P0-05-7: OOM na slabom mobitelu). DOCX se cita cijeli u
+ * memoriju, document.xml se inflira do desetaka ili stotina MB, a DOM parse je jos nekoliko
+ * puta veci; na uredaju s malo RAM-a to moze TIHO srusiti karticu (pravi OOM se ne moze uhvatiti
+ * try/catchem). Zato radimo preventivno: manja gornja granica uploada i nizi dekompresijski
+ * budzet na slabom uredaju daju RANIJE, jasno odbijanje umjesto tihog pada.
+ *
+ * Ciste funkcije bez DOM-a: navigator.deviceMemory i matchMedia('(pointer:coarse)') citaju
+ * pozivatelji (src/ui/app.ts) i prosljedjuju vrijednosti ovamo, pa je logika jedinicno testabilna.
+ */
+
+const MB = 1024 * 1024;
+
+/**
+ * Gornja granica velicine uploada ovisno o uredaju:
+ *  - vrlo slab uredaj (deviceMemory <= 2 GB): 12 MB,
+ *  - mobilni (coarse pointer ili deviceMemory <= 4 GB): 20 MB,
+ *  - ostalo (desktop): 50 MB.
+ * deviceMemory je gruba, zaokruzena vrijednost (ili nedostupna); coarsePointer hvata dodir.
+ */
+export function uploadCapBytes(opts: { deviceMemory?: number | null; coarsePointer?: boolean } = {}): number {
+  const dm = typeof opts.deviceMemory === 'number' && opts.deviceMemory > 0 ? opts.deviceMemory : null;
+  if (dm !== null && dm <= 2) return 12 * MB;
+  if (opts.coarsePointer || (dm !== null && dm <= 4)) return 20 * MB;
+  return 50 * MB;
+}
+
+/**
+ * Dekompresijski budzet PO ZAPISU koji se salje ZipReaderu na slabom uredaju:
+ *  - deviceMemory <= 2 GB: 100 MB,
+ *  - deviceMemory <= 4 GB: 150 MB,
+ *  - jaci uredaj: null (ZipReader koristi puni MAX_DECOMPRESSED_BYTES = 200 MB).
+ * Vracanjem null-a na jacem uredaju ponasanje ostaje identicno golden korpusu, koji ZipReaderu
+ * NE salje budzet; time se OOM-guard aktivira samo tamo gdje je stvarno potreban.
+ */
+export function decompressionBudgetBytes(deviceMemory?: number | null): number | null {
+  const dm = typeof deviceMemory === 'number' && deviceMemory > 0 ? deviceMemory : null;
+  if (dm === null) return null;
+  if (dm <= 2) return 100 * MB;
+  if (dm <= 4) return 150 * MB;
+  return null;
+}
