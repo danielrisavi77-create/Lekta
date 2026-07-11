@@ -381,9 +381,12 @@ Datum: 2026-07-11.
   dohvaca se samo kad worker padne. Mjereno: glavni chunk gzip 369.010 -> 344.002 B (-25 KB, -6,8%);
   markeri "Otvaram Word strukturu"/"Provjeravam font" 1 -> 0 u glavnom chunku. Golden nedirnut
   (golden-entry.ts zove analyzeDocx izravno). 3 postojeca fallback testa i dalje zelena.
-- PREOSTAJE (dio koji dira app.ts, uz P0-05b): pdfPreflight (app.ts:16) je jos staticki pa
-  "dekompresijska bomba" ostaje 3x u glavnom chunku; i lijeno uciti cijeli analizator na prvu
-  interakciju (drop/odabir). Traži app.ts izmjenu -> coord s paralelnom sesijom.
+- ISPORUCENO (pdfPreflight dio, 2026-07-12, commit 16393d4): pdfPreflight (bio staticki import na
+  app.ts:17) sad se ucitava dinamicki (`await import`) u analyzePdfFile, jedinom call-siteu. Modul
+  je zaseban lazy chunk (pdf-preflight-*.js ~2,5 kB), dohvaca se tek kad korisnik doda PDF; docx
+  put i glavni chunk vise ga ne nose. tsc/build zeleni, chunk se dijeli.
+- PREOSTAJE: lijeno uciti CIJELI analizator na prvu interakciju (drop/odabir). Veca app.ts izmjena
+  -> coord s paralelnom sesijom.
 - Rizik regresije: nizak. Fallback grana sada radi dodatni fetch samo kad je worker vec pao;
   sretni put nepromijenjen (worker chunk isti).
 - Velicina: M (S dio isporucen)
