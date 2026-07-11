@@ -675,14 +675,23 @@ Datum: 2026-07-11.
 - Acceptance: check pada na uvedenoj a11y regresiji, zelen na bazi.
 - Rizik regresije: nizak za bazu, srednji za CI vrijeme. Velicina: M
 
-**BL-P2-05, Canonical i og:url na tool stranicama; OG za landing**
+**BL-P2-05, Canonical i og:url na tool stranicama; OG za landing** — GOTOVO (2026-07-11)
 - Prioritet: P2 (spoj routes-03 + seo-03, + seo-04 za landing)
 - Problem: alati/citat/izjava/literatura/naslovnica bez canonical/og:url; landing_usporedba
   bez OG/canonical/JSON-LD.
-- Lokacija: citat.html:1-109; alati.html; izjava.html; literatura.html; naslovnica.html;
-  landing_usporedba.html:1-132; uzor kartice.html
-- Preporuka: dodati canonical + og:url (apsolutni zivi URL); landingu puni OG blok.
-- Acceptance: sve tool stranice i landing imaju tocno jedan canonical + og:url.
+- ISPORUCENO: svih 7 statickih tool stranica ujednaceno. 5 nepotpunih (citat/naslovnica/
+  literatura/izjava/alati) dobilo self-canonical (apsolutni, po imenu) + og:url + og:image
+  (/og-image.png iz BL-P2-07) + width/height/alt + twitter:image; kartice.html popravljena
+  (og:image favicon.svg -> og-image.png jer social ne renderira SVG, uklonjen stale "Privremena"
+  komentar); landing_usporedba dobio PUNI og/twitter/canonical set (prije nista). Svi twitter:card
+  summary -> summary_large_image. Nativni EOL svakog fajla ocuvan (6x LF, landing CRLF; Python
+  bytes.replace s assert count==1 po anchoru). CSP img-src netaknut (meta sliku dohvaca crawler).
+- Guard test tests/tool-pages-seo.test.ts (30): po stranici self-canonical==og:url, og:image==
+  twitter:image==/og-image.png, summary_large_image; globalno: nijedan .html ne referencira
+  favicon.svg kao og/twitter sliku (regresija SVG placeholdera), index.html root canonical+og:image.
+- Acceptance ispunjen: sve tool stranice i landing imaju tocno jedan canonical + og:url (+ og:image).
+- NAPOMENA: BL-P2-06 (diferencirati GENERIRANE citatne stranice /alati/citati/**, thin content)
+  je zaseban i dira generate-citation-tools.mjs = SEO/citation domena paralelne sesije, NE ovdje.
 - Rizik regresije: vrlo nizak. Velicina: S
 
 **BL-P2-06, Diferencirati staticke citatne stranice (thin content)**
