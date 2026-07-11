@@ -333,14 +333,18 @@ Datum: 2026-07-11.
       hashova) iz PRODUKCIJSKOG bundlea preko build-only Vite plugina (vite.config.ts
       stripRuntimeDeadProvenance, apply:'build', gate !devTools). Draft/provenance markeri
       (verifiedBy/Risavi/sourcePage/publicSources) = 0 u javnom chunku.
-- KLJUC (zasto NIJE trebao rizicni async split): tezina verified-profiles NIJE u `rules` (126 KB)
-  nego u DISPLAY-only provenijenciji; publicSources (174 KB) runtime NIKAD ne cita (samo title-page
-  TEST cita raw JSON izravno pa apply:'build' plugin njega ne dira). Zato je izbjegnut async
-  currentProfile (utrka odabir vs pravila) - dobiven pun 40%+ bez tog rizika.
-- PREOSTALO (opcionalno, manji povrat): note (106 KB) + sources (89 KB) + scopes su jos u chunku,
-  ali ih updateProfile renderira sinkrono na odabir profila pa bi njihovo micanje trazilo async
-  panel (srednji rizik, mali povrat). Nije nuzno za acceptance.
-- Velicina: L (ISPORUCENO, acceptance ispunjen)
+- KLJUC (prva runda, 2026-07-11): publicSources (174 KB) runtime NIKAD ne cita, strip build-only.
+- ISPORUCENO (druga runda, 2026-07-12, commit 5ff12de): teski profilni sloj (rules+fieldValidation+
+  note+sources+scopes) IZMJESTEN u lazy chunk. verified-profiles.json -> verified-profiles-index.json
+  (LIGHT, eager ~10 KB gzip: id/unitId/programs/workTypes/status/variant/sample/recommendedCitation) +
+  verified-profiles-heavy.json (id->pun profil, LAZY ~107 KB gzip). Build: scripts/gen-verified-split.mjs.
+  profile-registry.ensureProfileRules() lijeno ucita heavy i SPOJI ga u iste objekte registryja (in
+  place); app.ts gejta updateProfile/runAnalysis/submitOrder. Glavni chunk gzip 178 -> **86,7 KB (JOS
+  -51%)**. Async-currentProfile utrke (koje se ranija procjena bojala) IZBJEGNUTA: currentProfile ostaje
+  SINKRON (gate na ulazu + in-place merge). Ranija procjena "mali povrat" bila je pogresna: preostali
+  podatak je bio ~89 KB gzip, ne marginalan. Golden/test harness (golden-entry, drafts-runtime; nisu u
+  javnom bundleu) EAGER spoje heavy. Drift: tests/verified-split.test.ts. tsc/vitest 1635/build/CI zeleni.
+- Velicina: L (ISPORUCENO u cijelosti; glavni chunk 369 -> 87 KB gzip kroz obje runde)
 
 **BL-P0-05-2, Ispeci advisory mapu u buildu, izbaci draftove iz runtimea** — GOTOVO (2026-07-11)
 - Prioritet: P0 paket (izvorni performance-02 P2)
