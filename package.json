@@ -26,7 +26,7 @@
     "check": "tsc --noEmit && vitest run && vite build"
   },
   "devDependencies": {
-    "happy-dom": "^15.11.6",
+    "happy-dom": "^20.10.6",
     "netlify-cli": "^26.2.0",
     "supabase": "^2.109.1",
     "typescript": "^7.0.2",
