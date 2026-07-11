@@ -54,6 +54,19 @@ function firstSentence(s: string): [string, string] {
   return [s.replace(/\.\s*$/, '').trim(), ''];
 }
 
+// Podijeli na prvu ". " koja NIJE iza inicijala (jedno veliko slovo) ni iza veznika "i"/"and".
+// Robusnije od firstSentence za Chicago autore s vise inicijala ("Petz, B., V. Kolesaric i D. Ivanec").
+function splitAtSentence(s: string): [string, string] {
+  const re = /\.\s+/g;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(s))) {
+    const head = s.slice(0, m.index);
+    if (/(?:^|[\s.])[\p{Lu}]$/u.test(head) || /\b(?:i|and)$/i.test(head)) continue;
+    return [head.trim(), s.slice(m.index + m[0].length).trim()];
+  }
+  return [s.replace(/\.\s*$/, '').trim(), ''];
+}
+
 // Ujednaci veznike (& / and / und / et / hrv "i" / "te") u zarez. Koristi se i za autore i za urednike.
 function normalizeConnectors(a: string): string {
   return a
@@ -190,6 +203,11 @@ function parseVancouver(input: string, fields: Partial<CitationInput>): SourceTy
     const place = pub[2].trim(), publisher = pub[3].trim();
     if (isThesis) fields.institution = [place, publisher].filter(Boolean).join(', ');
     else { fields.place = place; fields.publisher = publisher; }
+  } else if (isThesis && body.includes('. ')) {
+    // teza bez "Mjesto:" (samo ustanova): "Naslov. Ustanova"
+    const dot = body.indexOf('. ');
+    fields.title = body.slice(0, dot).trim();
+    fields.institution = body.slice(dot + 2).replace(/[.,\s]+$/, '').trim();
   } else if (body) {
     fields.title = body.replace(/[.\s]+$/, '').trim();
   }
@@ -282,14 +300,14 @@ function invertNatural(name: string): string {
 }
 
 // Prvi autor je vec obrnut ("Prezime, Ime"), ostali su prirodni ("Ime Prezime"); veznik "i"/"and".
+// Kljuc: prvi autor nosi INTERNI zarez ("Prezime, Ime") pa se ne smije naivno dijeliti po zarezu.
 function chicagoAuthorsInverted(seg: string): string {
-  const s = seg.replace(/\s*,?\s+(?:i|and)\s+/gi, '|').trim();
-  const chunks = s.split('|').map((x) => x.trim()).filter(Boolean);
-  const out: string[] = [];
-  chunks.forEach((chunk, idx) => {
-    if (idx === 0 && chunk.includes(',')) out.push(chunk);
-    else chunk.split(/\s*,\s*/).filter(Boolean).forEach((c) => out.push(invertNatural(c)));
-  });
+  // Multi = ima veznik ILI "Prezime, I. Prezime2" uzorak; inace je jedan autor "Prezime, Ime".
+  const multi = /\s+(?:i|and)\s+/i.test(seg) || /,\s*\p{Lu}\.\s/u.test(seg);
+  const parts = normalizeConnectors(seg).trim().split(/\s*,\s*/).map((x) => x.trim()).filter(Boolean);
+  if (!multi || parts.length < 2) return normalizeConnectors(seg).trim();
+  const out = [`${parts[0]}, ${parts[1]}`];               // prvi: "Prezime, Ime/Inicijali" (2 tokena)
+  for (const p of parts.slice(2)) out.push(invertNatural(p)); // ostali: "Ime Prezime" -> "Prezime, Ime"
   return out.join('; ');
 }
 
@@ -316,7 +334,7 @@ function parseChicago(input: string, fields: Partial<CitationInput>): SourceType
     return 'knjiga';
   }
 
-  const ymEnd = raw.match(/\(((?:19|20)\d{2})\)/) || raw.match(/,\s*((?:19|20)\d{2})\.?\s*$/);
+  const ymEnd = raw.match(/\(((?:19|20)\d{2})\)/) || raw.match(/,\s*((?:19|20)\d{2})(?:[.,]|\s*$)/);
   if (ymEnd) fields.year = ymEnd[1];
 
   // biblio clanak/poglavlje s navodnicima
@@ -335,21 +353,34 @@ function parseChicago(input: string, fields: Partial<CitationInput>): SourceType
       fields.pages = am[4].replace(/\s+/g, '');
       return 'clanak';
     }
-    if (/^u\s+|^in\s+/i.test(tail)) return 'poglavlje';
+    // poglavlje u zborniku: "u: Urednik (ur.), Knjiga, Mjesto: Izdavac, godina. str. X-Y"
+    if (/^u\s*:?\s|^in\s+/i.test(tail)) {
+      const em = tail.match(/^(?:u|in)\s*:?\s*(.+?)\s*\((?:ur|prir|eds?|ed)\.?\)\s*,?\s*(.*)$/i);
+      if (em) {
+        fields.editor = normalizeConnectors(em[1]).replace(/[.,\s]+$/, '').trim();
+        let t = em[2];
+        const pg = t.match(/(?:str\.?|pp?\.?)\s*(\d+\s*[-–]\s*\d+)/i);
+        if (pg) { fields.pages = pg[1].replace(/\s+/g, ''); t = t.replace(pg[0], ' '); }
+        const cont = t.match(/^([^,]+)/); if (cont) fields.container = cont[1].replace(/[.\s]+$/, '').trim();
+        const pub = t.match(/([^:.,]+):\s*([^,.]+)/); if (pub) { fields.place = pub[1].trim(); fields.publisher = pub[2].trim(); }
+      }
+      return 'poglavlje';
+    }
     return 'clanak';
   }
 
   // biblio knjiga: "Prezime, Ime. Naslov. Mjesto: Izdavac, godina."
-  const parts = raw.split(/\.\s+/);
-  if (parts.length >= 2) {
-    fields.authors = chicagoAuthorsInverted(parts[0]);
-    fields.title = parts[1].replace(/[.,]+$/, '').trim();
-    const rest = parts.slice(2).join('. ');
-    const pub = rest.match(/([^:.]+?):\s*([^,]+),\s*(?:19|20)\d{2}/);
-    if (pub) { fields.place = pub[1].trim(); fields.publisher = pub[2].trim(); }
-  } else {
-    fields.title = raw.replace(/[.,]+$/, '').trim();
-  }
+  // Jedan autor ("Milas, G.") -> zavrsava na prvoj ". " (i iza inicijala); vise autora
+  // (veznik "i"/"and") -> splitAtSentence preskace inicijale do zadnjeg prezimena.
+  const multi = /\s+(?:i|and)\s+/i.test(raw);
+  const naive = (x: string): [string, string] => { const d = x.search(/\.\s/); return d >= 0 ? [x.slice(0, d).trim(), x.slice(d + 2).trim()] : [x.replace(/\.\s*$/, '').trim(), '']; };
+  const split = multi ? splitAtSentence : naive;
+  const [authorPart, afterAuthor] = split(raw);
+  const [titlePart, afterTitle] = split(afterAuthor);
+  if (authorPart) fields.authors = chicagoAuthorsInverted(authorPart);
+  if (titlePart) fields.title = titlePart.replace(/[.,]+$/, '').trim();
+  const pub = (afterTitle || '').match(/([^:.]+?):\s*([^,]+),\s*(?:19|20)\d{2}/);
+  if (pub) { fields.place = pub[1].trim(); fields.publisher = pub[2].trim(); }
   return 'knjiga';
 }
 
@@ -440,7 +471,10 @@ function parseApa(original: string, fields: Partial<CitationInput>): SourceType 
   if (type === 'propis') parsePropis(original, fields);
   // Zavrsni/doktorski: ustanova je "institution", ne izdavac ("Filozofski fakultet, ...").
   if (type === 'zavrsni' && !fields.institution && fields.publisher) {
-    fields.institution = [fields.place, fields.publisher].filter(Boolean).join(', ');
+    fields.institution = [fields.place, fields.publisher].filter(Boolean).join(', ')
+      .replace(/\bneobjavljena?i?\s+/i, '')                                    // "Neobjavljeni ..."
+      .replace(/\b(?:zavr[sš]ni|diplomski|doktorski|magistarski)\s+rad[.,]?\s*/i, '') // deskriptor vrste
+      .replace(/^[\s,.]+/, '').trim();
     delete fields.publisher;
     delete fields.place;
   }
