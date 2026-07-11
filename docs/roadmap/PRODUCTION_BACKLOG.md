@@ -65,19 +65,22 @@ Datum: 2026-07-11.
 **BL-P0-01-4, Ujednaciti default origin generatora i dodati origin guard**
 - Prioritet: P0 (spoj seo-01 P1 PLAUSIBLE + routes-01 P2; realni impact P3, ali se rjesava
   ovdje jer je dio konfiguracije)
-- Problem: generatori citata i naslovnica default-aju na lekta.hr (nije ziva domena);
-  pravni generator na lektahr.netlify.app. Nekonzistentno; footgun za build bez env-a.
-- Lokacija: scripts/generate-citation-tools.mjs:37, scripts/generate-title-page-tools.mjs:
-  33 (default 'https://lekta.hr'); scripts/generate-legal-pages.mjs:24 (ispravan);
+- Problem: generator citata default-a na lekta.hr (nije ziva domena); pravni generator na
+  lektahr.netlify.app. Nekonzistentno; footgun za build bez env-a. (KOREKCIJA 2026-07-11 iz
+  AUDIT_STATUS: scripts/generate-title-page-tools.mjs NE postoji; naslovnica je staticki MPA
+  bez canonical/og:url pa nije u opsegu. Ostaje samo generator citata.)
+- Lokacija: scripts/generate-citation-tools.mjs:37 (default 'https://lekta.hr');
+  scripts/generate-legal-pages.mjs:24 (ispravan default 'https://lektahr.netlify.app');
   scripts/verify-deploy-dist.mjs (ne provjerava origin)
-- Dokaz: dist lokalni build daje lekta.hr kanonike na citati/naslovnica; netlify.toml:22
-  postavlja env pa je zivi deploy ispravan; dist/ u .gitignore (nije commitan).
+- Dokaz: dist lokalni build daje lekta.hr kanonike na statickim citatnim stranicama;
+  netlify.toml:22 postavlja env pa je zivi deploy ispravan; dist/ u .gitignore (nije commitan).
 - Posljedica: latentni cross-domain kanonik i CTA na neregistriranu domenu ako build izade
   bez env-a (Cloudflare Pages dashboard).
 - Preporuka: ujednaciti fallback na 'https://lektahr.netlify.app'; verify-deploy-dist.mjs
   pada ako neki canonical/loc sadrzi lekta.hr ili ne pocinje s LEKTA_SITE_ORIGIN.
-- Acceptance: grep dist/alati/** ne nalazi lekta.hr; sva tri generatora dijele isti izvor
-  domene; build bez env-a pada ili koristi tocnu domenu.
+- Acceptance: grep dist/alati/** ne nalazi lekta.hr; generator citata i pravni generator
+  dijele isti izvor domene (fallback lektahr.netlify.app); build bez env-a pada ili koristi
+  tocnu domenu.
 - Rizik regresije: nizak (string + build provjera, ne dira runtime).
 - Velicina: S
 
@@ -376,15 +379,24 @@ Datum: 2026-07-11.
   sretni put nepromijenjen (worker chunk isti).
 - Velicina: M (S dio isporucen)
 
-**BL-P0-05-5, Gumb Prekini analizu + Escape**
+**BL-P0-05-5, Gumb Prekini analizu + Escape** — GOTOVO (2026-07-11)
 - Prioritet: P0 paket (izvorni performance-04 P2)
 - Problem: nema prekida tekuce analize; worker se gasi tek pri novoj analizi.
-- Lokacija: src/ui/app.ts:449-457; index.html:329; src/analysis/analyze-docx-client.ts:35
-- Preporuka: gumb Prekini u #progressView + Escape -> terminate(), ponisti token, vrati na
-  wizard; izloziti cancelActiveAnalysis().
-- Acceptance: klik/Escape unutar ~100 ms vrati wizard, worker prestane trositi CPU, kasni
-  postMessage se odbaci tokenom.
-- Rizik regresije: nizak (token guard postoji; resetirati analyzeBtn u finally).
+- Isporuceno: analyze-docx-client dobio izlozeni prekid cancelActiveAnalysis() (gasi aktivni
+  worker i odbacuje tekuci promise novim AnalysisCancelledError; helper isAnalysisCancelled)
+  + cancelActive seam u analyzeInWorker (postavljen dok analiza traje, ocisti se u done()).
+  app.ts: cancelAnalysis() bumpa _analyzeToken (utisa in-flight preko postojeceg guarda),
+  zove cancelActiveAnalysis(), vrati progressView->wizardView, re-enable analyzeBtn, progress(0)
+  reset, fokus natrag na gumb (a11y); runAnalysis catch dobio `||isAnalysisCancelled(e)` (prekid
+  nikad ne prikaze error toast). Gumb #cancelAnalysisBtn u #progressView (index.html) + Escape
+  (samo kad je progress vidljiv I nijedan modal nije otvoren, da Escape prvo zatvara modal).
+- Acceptance ispunjen: klik/Escape sinkrono vrati wizard i rejecta worker promise (worker.terminate),
+  kasni postMessage odbacuje token guard; inline (glavna nit) analiza se ne moze prekinuti jer drzi
+  nit, ali njen kasni rezultat token guard svejedno odbaci.
+- Test: tests/analyze-docx-cancel.test.ts (hanging-Worker stub) dokazuje prekid rejecta kao
+  AnalysisCancelledError + cancelActiveAnalysis()=false kad nista ne tece. Zaseban file (svjez
+  workerBroken state).
+- Rizik regresije: nizak (token guard postoji; cancelAnalysis vlasnik stanja gumba nakon bumpa).
 - Velicina: M
 
 **BL-P0-05-6, Immutable cache za hashirane assete** — GOTOVO (2026-07-11)
