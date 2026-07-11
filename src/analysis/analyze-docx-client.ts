@@ -8,8 +8,13 @@
  * inline fallback, ali greska SAME ANALIZE (zip bomba, previse odlomaka, korupcija)
  * NE smije se ponoviti inline; bomba bi upravo tamo zamrznula glavnu nit. Takva
  * greska se prosljedjuje s izvornom porukom (analysisErrorMessage mapira po tekstu).
+ *
+ * Performanse (audit performance-03): jezgra analyzeDocx (parser, auditi, pravni citation
+ * engine) NIJE staticki uvezena ovdje, nego se lijeno ucita dinamickim importom TEK u
+ * fallback grani. Time motor ispada iz glavnog entry chunka (bio je dvaput isporucen: main +
+ * worker); na sretnom putu (worker radi) fallback chunk se nikad ne dohvaca. Golden korpus
+ * poziva analyzeDocx izravno preko golden-entry.ts pa je nedirnut.
  */
-import { analyzeDocx } from './analyze-docx';
 
 /** Pad worker infrastrukture (spawn, ucitavanje, postMessage clone); nije greska analize. */
 class WorkerInfraError extends Error {}
@@ -75,5 +80,8 @@ export async function analyzeDocxOffThread(file: File, profile: any, settings: a
       console.warn('Worker analiza nije dostupna; nastavljam na glavnoj niti:', e.message);
     }
   }
+  // Lijeno: motor se dohvaca samo kad zaista treba (nema/slomljen worker), pa ne opterecuje
+  // glavni entry chunk. U testovima (bez Workera) ovaj put je uvijek aktivan.
+  const { analyzeDocx } = await import('./analyze-docx');
   return analyzeDocx(file, profile, settings, onProgress);
 }

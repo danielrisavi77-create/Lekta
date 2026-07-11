@@ -357,16 +357,23 @@ Datum: 2026-07-11.
   Pravi lijek za parse/veličinu je BL-P0-05-1/2 (maknuti podatke iz runtime grafa), ne stringify.
 - Velicina: S (zatvoreno, wontfix)
 
-**BL-P0-05-4, Lijeno ucitati DOCX/PDF motor (skinuti s landinga)**
+**BL-P0-05-4, Lijeno ucitati DOCX/PDF motor (skinuti s landinga)** — DJELOMICNO GOTOVO (2026-07-11)
 - Prioritet: P0 paket (izvorni performance-03 P2)
 - Problem: analyzeDocx u glavnom chunku preko inline fallbacka; pdf preflight staticki;
   motor duplo isporucen.
-- Lokacija: src/analysis/analyze-docx-client.ts:12; src/ui/app.ts:16, :34
-- Dokaz: markeri jezgre analize u glavnom i worker chunku.
-- Preporuka: inline fallback -> dinamicki import; lijeno uciti analizator na prvu interakciju.
-- Acceptance: 0 markera jezgre u glavnom chunku; prva analiza i fallback rade; golden zelen.
-- Rizik regresije: nizak do srednji (testirati fallback granu simulacijom Worker iznimke).
-- Velicina: M
+- Lokacija: src/analysis/analyze-docx-client.ts:12 (RIJESENO); src/ui/app.ts:16, :34 (preostaje)
+- ISPORUCENO (moja datoteka, bez app.ts): staticki `import { analyzeDocx }` u analyze-docx-client.ts
+  zamijenjen dinamickim `await import('./analyze-docx')` u fallback grani. Jezgra (parser/auditi/
+  pravni citation engine) ispala iz glavnog chunka u zaseban lazy chunk (analyze-docx-*.js ~73 KB),
+  dohvaca se samo kad worker padne. Mjereno: glavni chunk gzip 369.010 -> 344.002 B (-25 KB, -6,8%);
+  markeri "Otvaram Word strukturu"/"Provjeravam font" 1 -> 0 u glavnom chunku. Golden nedirnut
+  (golden-entry.ts zove analyzeDocx izravno). 3 postojeca fallback testa i dalje zelena.
+- PREOSTAJE (dio koji dira app.ts, uz P0-05b): pdfPreflight (app.ts:16) je jos staticki pa
+  "dekompresijska bomba" ostaje 3x u glavnom chunku; i lijeno uciti cijeli analizator na prvu
+  interakciju (drop/odabir). Traži app.ts izmjenu -> coord s paralelnom sesijom.
+- Rizik regresije: nizak. Fallback grana sada radi dodatni fetch samo kad je worker vec pao;
+  sretni put nepromijenjen (worker chunk isti).
+- Velicina: M (S dio isporucen)
 
 **BL-P0-05-5, Gumb Prekini analizu + Escape**
 - Prioritet: P0 paket (izvorni performance-04 P2)
