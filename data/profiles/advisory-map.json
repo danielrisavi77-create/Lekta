@@ -1,0 +1,1118 @@
+{
+  "agr-diplomski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size"
+  ],
+  "agr-doktorski": [
+    "font",
+    "justify"
+  ],
+  "agr-zavrsni": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size"
+  ],
+  "alu-diplomski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "alu-doktorski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "arh-diplomski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "page-numbers"
+  ],
+  "arh-doktorski": [
+    "justify",
+    "toc"
+  ],
+  "biotech-diplomski": [
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "biotech-zavrsni": [
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "effectus-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
+  "effectus-zavrsni": [
+    "toc",
+    "page-numbers"
+  ],
+  "efos-diplomski": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "efos-zavrsni": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "efri-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
+  "efri-zavrsni": [
+    "toc",
+    "page-numbers"
+  ],
+  "efst-diplomski": [
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "efst-zavrsni": [
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "efzg-diplomski": [
+    "paper-size",
+    "page-numbers"
+  ],
+  "efzg-doktorski": [
+    "justify",
+    "toc"
+  ],
+  "efzg-specijalisticki": [
+    "paper-size",
+    "page-numbers"
+  ],
+  "efzg-strucni-racunovodstvo": [
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "efzg-zavrsni": [
+    "paper-size"
+  ],
+  "erf-diplomski": [
+    "margins",
+    "justify",
+    "paper-size",
+    "page-numbers"
+  ],
+  "erf-doktorski": [
+    "justify",
+    "toc"
+  ],
+  "fazos-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
+  "fazos-zavrsni": [
+    "toc",
+    "page-numbers"
+  ],
+  "fbf-doktorski": [
+    "justify",
+    "toc"
+  ],
+  "fbf-specijalisticki": [
+    "font",
+    "justify",
+    "toc"
+  ],
+  "fer-diplomski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "fer-doktorski": [
+    "font",
+    "justify"
+  ],
+  "fer-zavrsni": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "ferit-diplomski": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "ferit-zavrsni": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "fetpu-diplomski": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "fetpu-zavrsni": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "ffos-diplomski": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "ffos-zavrsni": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "ffri-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
+  "ffri-zavrsni": [
+    "toc",
+    "page-numbers"
+  ],
+  "ffrz-bakalaureatski": [
+    "justify"
+  ],
+  "ffrz-diplomski": [
+    "justify"
+  ],
+  "ffrz-doktorski": [
+    "justify",
+    "toc"
+  ],
+  "ffzg-arheologija-graduate": [
+    "justify",
+    "paper-size",
+    "page-numbers"
+  ],
+  "ffzg-etnologija-graduate": [
+    "paper-size",
+    "toc"
+  ],
+  "ffzg-filozofija-diplomski": [
+    "paper-size"
+  ],
+  "ffzg-informacijske-zavrsni": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size"
+  ],
+  "ffzg-kroatistika-graduate": [
+    "paper-size"
+  ],
+  "ffzg-lingvistika-diplomski": [
+    "paper-size",
+    "toc"
+  ],
+  "ffzg-pedagogija-graduate": [
+    "paper-size"
+  ],
+  "ffzg-povijest-umjetnosti-diplomski": [
+    "toc"
+  ],
+  "ffzg-psihologija-diplomski": [
+    "justify",
+    "paper-size"
+  ],
+  "ffzg-sociologija-diplomski": [
+    "paper-size",
+    "toc"
+  ],
+  "fgag-diplomski": [
+    "margins",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "fgag-zavrsni": [
+    "margins",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "fhs-diplomski": [
+    "paper-size"
+  ],
+  "fhs-doktorski": [
+    "justify",
+    "toc"
+  ],
+  "fhs-zavrsni": [
+    "paper-size"
+  ],
+  "fizri-diplomski": [
+    "font",
+    "margins",
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "fizri-zavrsni": [
+    "font",
+    "margins",
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "fkit-diplomski": [
+    "font",
+    "margins",
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "fkit-doktorski": [
+    "justify",
+    "toc"
+  ],
+  "fkit-zavrsni": [
+    "font",
+    "margins",
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "fmtu-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
+  "fmtu-zavrsni": [
+    "toc",
+    "page-numbers"
+  ],
+  "foozpu-diplomski": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "foozpu-zavrsni": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "fpz-diplomski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size"
+  ],
+  "fpz-zavrsni": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size"
+  ],
+  "fpzg-doktorski-politologija": [
+    "justify",
+    "toc"
+  ],
+  "fpzg-mes-master-thesis": [
+    "margins",
+    "justify"
+  ],
+  "fpzg-nacionalna-sigurnost-diplomski": [
+    "margins",
+    "justify"
+  ],
+  "fpzg-novinarstvo-diplomski": [
+    "margins",
+    "justify"
+  ],
+  "fpzg-novinarstvo-zavrsni-av": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "fpzg-novinarstvo-zavrsni-tekst": [
+    "margins",
+    "justify"
+  ],
+  "fpzg-opci-akademski-rad": [
+    "margins",
+    "justify",
+    "paper-size",
+    "toc"
+  ],
+  "fpzg-politologija-diplomski": [
+    "margins",
+    "justify"
+  ],
+  "fpzg-politologija-zavrsni": [
+    "margins",
+    "justify"
+  ],
+  "fpzg-specijalisticki-odnosi-s-javnoscu": [
+    "margins",
+    "justify"
+  ],
+  "fpzg-specijalisticki-prilagodba-eu": [
+    "margins",
+    "justify"
+  ],
+  "fpzg-specijalisticki-sigurnosna-politika-rh": [
+    "margins",
+    "justify"
+  ],
+  "fpzg-specijalisticki-vanjska-politika-diplomacija": [
+    "margins",
+    "justify"
+  ],
+  "fsb-diplomski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "fsb-doktorski": [
+    "justify",
+    "toc"
+  ],
+  "fsb-zavrsni": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "fzsri-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
+  "fzsri-zavrsni": [
+    "toc",
+    "page-numbers"
+  ],
+  "geof-diplomski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "page-numbers"
+  ],
+  "geof-doktorski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "page-numbers"
+  ],
+  "grad-diplomski": [
+    "margins",
+    "justify",
+    "paper-size"
+  ],
+  "grad-doktorski": [
+    "justify",
+    "toc"
+  ],
+  "grad-zavrsni": [
+    "margins",
+    "justify",
+    "paper-size"
+  ],
+  "grafos-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
+  "grafos-zavrsni": [
+    "toc",
+    "page-numbers"
+  ],
+  "grf-diplomski": [
+    "justify"
+  ],
+  "grf-doktorski": [
+    "justify",
+    "toc"
+  ],
+  "grf-zavrsni": [],
+  "hks-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
+  "inf-diplomski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "inf-zavrsni": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "kbf-diplomski": [
+    "paper-size"
+  ],
+  "kbf-doktorski": [
+    "justify",
+    "toc"
+  ],
+  "kbf-zavrsni": [
+    "paper-size"
+  ],
+  "kbfst-diplomski": [
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "kemos-diplomski": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "kemos-zavrsni": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "kif-diplomski": [
+    "justify",
+    "paper-size"
+  ],
+  "kif-doktorski": [
+    "font",
+    "justify"
+  ],
+  "kifst-diplomski": [
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "ktfst-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
+  "ktfst-zavrsni": [
+    "toc",
+    "page-numbers"
+  ],
+  "libertas-diplomski": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "libertas-zavrsni": [
+    "margins",
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "medri-farmacija-diplomski": [
+    "font",
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "medri-medicina-diplomski": [
+    "font",
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "mef-diplomski": [
+    "line-spacing",
+    "margins",
+    "justify"
+  ],
+  "mef-doktorski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify"
+  ],
+  "mefos-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
+  "mefos-zavrsni": [
+    "toc",
+    "page-numbers"
+  ],
+  "mefst-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
+  "mev-zavrsni": [
+    "font",
+    "toc",
+    "page-numbers"
+  ],
+  "muza-diplomski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "muza-doktorski": [
+    "justify",
+    "toc"
+  ],
+  "pbf-diplomski": [
+    "margins",
+    "justify"
+  ],
+  "pbf-doktorski": [
+    "justify",
+    "toc"
+  ],
+  "pfri-diplomski": [
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "pfri-zavrsni": [
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "pfst-diplomski": [
+    "margins",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "pfst-zavrsni": [
+    "margins",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "pmf-biologija-graduate": [
+    "font",
+    "justify",
+    "toc"
+  ],
+  "pmf-fizika-graduate": [
+    "paper-size",
+    "toc"
+  ],
+  "pmf-geografija-diplomski": [
+    "justify",
+    "toc"
+  ],
+  "pmf-geologija-graduate": [
+    "margins",
+    "justify",
+    "paper-size"
+  ],
+  "pmf-matematika-graduate": [
+    "font",
+    "line-spacing",
+    "margins",
+    "justify",
+    "page-numbers"
+  ],
+  "pmfst-diplomski": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "pmfst-zavrsni": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "pravo-doktorski-pravne-znanosti": [
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "pravo-integrirani-diplomski": [
+    "margins",
+    "justify",
+    "paper-size"
+  ],
+  "pravo-javna-uprava-diplomski": [
+    "margins",
+    "justify",
+    "paper-size"
+  ],
+  "pravo-javna-uprava-prijediplomski": [
+    "margins",
+    "justify",
+    "paper-size"
+  ],
+  "pravo-opci-pravni-akademski-rad": [
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "pravo-porezni-prijediplomski": [
+    "margins",
+    "justify",
+    "paper-size"
+  ],
+  "pravo-socijalna-politika-diplomski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "pravo-socijalne-djelatnosti-doktorski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "pravo-socijalne-djelatnosti-specijalisticki": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "pravo-socijalni-opci-akademski-rad": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "pravo-socijalni-rad-diplomski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "pravo-socijalni-rad-zavrsni": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "pravo-specijalisticki-pravni-opci": [
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "pravos-diplomski": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "pravos-zavrsni": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "pravri-diplomski": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "pravri-zavrsni": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "ptfos-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
+  "pvzg-specijalisticki": [
+    "toc",
+    "page-numbers"
+  ],
+  "pvzg-zavrsni": [
+    "toc",
+    "page-numbers"
+  ],
+  "radno-socijalno-pravo": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size"
+  ],
+  "rgnf-diplomski": [
+    "justify",
+    "paper-size",
+    "page-numbers"
+  ],
+  "rgnf-zavrsni": [
+    "justify",
+    "paper-size",
+    "page-numbers"
+  ],
+  "riteh-diplomski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "riteh-zavrsni": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "rrif-zavrsni": [
+    "toc",
+    "page-numbers"
+  ],
+  "sfzg-diplomski": [
+    "paper-size"
+  ],
+  "sfzg-doktorski": [
+    "justify",
+    "toc"
+  ],
+  "sociologija": [
+    "margins",
+    "justify",
+    "paper-size"
+  ],
+  "sumfak-diplomski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size"
+  ],
+  "sumfak-zavrsni": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size"
+  ],
+  "tfpu-diplomski": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "tfpu-zavrsni": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "trgovacko-pravo": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size"
+  ],
+  "ttf-diplomski": [
+    "paper-size"
+  ],
+  "ttf-doktorski": [
+    "justify",
+    "toc"
+  ],
+  "ttf-zavrsni": [
+    "paper-size"
+  ],
+  "ufri-diplomski": [
+    "margins",
+    "toc",
+    "page-numbers"
+  ],
+  "ufzg-diplomski": [],
+  "ufzg-doktorski": [
+    "justify",
+    "toc"
+  ],
+  "ufzg-zavrsni": [],
+  "unidu-ekonomija-diplomski": [
+    "line-spacing",
+    "toc",
+    "page-numbers"
+  ],
+  "unidu-ekonomija-zavrsni": [
+    "line-spacing",
+    "toc",
+    "page-numbers"
+  ],
+  "unidu-komunikologija-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
+  "unidu-povijest-zavrsni": [
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "unidu-umjetnost-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
+  "unin-biomedicina-diplomski": [
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "unin-biomedicina-zavrsni": [
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "unin-drustveni-diplomski": [
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "unin-drustveni-zavrsni": [
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "unin-tehnicki-diplomski": [
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "unin-tehnicki-zavrsni": [
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "unizd-pedagogija-diplomski": [
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "unizd-povijest-umj-zavrsni": [
+    "toc",
+    "page-numbers"
+  ],
+  "unizd-psihologija-zavrsni": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "unizd-turizam-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
+  "unizd-turizam-zavrsni": [
+    "toc",
+    "page-numbers"
+  ],
+  "vef-diplomski": [
+    "margins",
+    "justify"
+  ],
+  "vef-doktorski": [
+    "justify",
+    "toc"
+  ],
+  "veleknin-zavrsni": [
+    "toc",
+    "page-numbers"
+  ],
+  "veleri-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
+  "veleri-zavrsni": [
+    "toc",
+    "page-numbers"
+  ],
+  "vevu-zavrsni": [
+    "toc",
+    "page-numbers"
+  ],
+  "vhzk-zavrsni": [
+    "font",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "vkjs-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
+  "vkjs-zavrsni": [
+    "toc",
+    "page-numbers"
+  ],
+  "vsite-diplomski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "page-numbers"
+  ],
+  "vsite-zavrsni": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "page-numbers"
+  ],
+  "vub-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
+  "vuv-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
+  "vuv-zavrsni": [
+    "toc",
+    "page-numbers"
+  ],
+  "vvg-diplomski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "vvg-zavrsni": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "zsem-diplomski": [
+    "margins",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "zsem-zavrsni": [
+    "margins",
+    "toc",
+    "page-numbers"
+  ],
+  "zvu-specijalisticki": [
+    "font",
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "zvu-zavrsni": [
+    "font",
+    "justify",
+    "toc",
+    "page-numbers"
+  ]
+}

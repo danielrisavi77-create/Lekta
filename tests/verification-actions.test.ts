@@ -14,7 +14,7 @@ import { SOURCE_REGISTRY, findSource } from '../src/verification/verification-re
 import {
   VERIFIED_PROFILES_WITH_DRAFTS,
   LEGAL_DEPARTMENTS_WITH_DRAFTS,
-} from '../src/profiles/profile-registry';
+} from '../src/profiles/drafts-runtime';
 import type { ThesisProfile, RuleEntry, SourceEntry } from '../src/profiles/profile-schema';
 
 const NOW = '2026-06-30';

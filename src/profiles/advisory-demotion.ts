@@ -10,23 +10,30 @@
  */
 import type { RuleEntry, SourceEntry } from './profile-schema';
 import { computePublishedRules } from '../verification/published-rules';
-
-type ScoreBase = Record<string, unknown>;
-
-/** Mapiranje checkId -> engine "flag off" koji dimenziju pretvara u informativnu provjeru. */
-const DEMOTION: Array<[string, (b: ScoreBase) => void]> = [
-  ['font', (b) => { b.checkFont = false; }],
-  ['font-size', (b) => { b.checkSize = false; }],
-  ['line-spacing', (b) => { b.checkSpacing = false; }],
-  ['margins', (b) => { b.checkMargins = false; }],
-  ['justify', (b) => { b.checkJustify = false; }],
-  ['paper-size', (b) => { b.requireA4 = false; }],
-  ['toc', (b) => { b.requireToc = false; }],
-  ['page-numbers', (b) => { b.requirePageNumbers = false; }],
-];
+import { DEMOTABLE_CHECK_IDS, applyDemotion, type ScoreBase } from './advisory-levers';
 
 /** checkId-jevi koje engine tvrdo boduje, a demotion moze prebaciti u informativne. */
-export const DEMOTABLE_CHECK_IDS: readonly string[] = DEMOTION.map(([id]) => id);
+export { DEMOTABLE_CHECK_IDS } from './advisory-levers';
+
+/**
+ * Izracunaj demotirane advisory dimenzije za profil iz njegovih ruleEntries + izvora (racunski put:
+ * povlaci computePublishedRules). Koriste ga golden/verifikacijski put i build-time generator pecene
+ * mape (gen-profile-runtime-maps). Zivi app.ts NE zove ovo nego cita pecenu mapu.
+ * Prazno ako profil nema ruleEntries (neverificiran) ili nema definicije.
+ */
+export function computeDemotedAdvisory(
+  definition: { id: string } | null | undefined,
+  ruleEntries: RuleEntry[] | undefined,
+  sources: SourceEntry[],
+): string[] {
+  if (!definition || !ruleEntries || ruleEntries.length === 0) return [];
+  const { scored } = computePublishedRules(
+    { ...(definition as Record<string, unknown>), ruleEntries } as any,
+    sources,
+  );
+  const scoredIds = new Set(scored.map((e) => e.checkId));
+  return DEMOTABLE_CHECK_IDS.filter((checkId) => !scoredIds.has(checkId));
+}
 
 /**
  * Demotira advisory dimenzije na `base` prema verificiranom scored skupu profila.
@@ -39,16 +46,7 @@ export function applyScoredAdvisory(
   ruleEntries: RuleEntry[] | undefined,
   sources: SourceEntry[],
 ): string[] {
-  if (!definition || !ruleEntries || ruleEntries.length === 0) return [];
-  const { scored } = computePublishedRules(
-    { ...(definition as Record<string, unknown>), ruleEntries } as any,
-    sources,
-  );
-  const scoredIds = new Set(scored.map((e) => e.checkId));
-  const demoted: string[] = [];
-  for (const [checkId, off] of DEMOTION) {
-    if (!scoredIds.has(checkId)) { off(base); demoted.push(checkId); }
-  }
-  base.advisoryDimensions = demoted;
-  return demoted;
+  const demoted = computeDemotedAdvisory(definition, ruleEntries, sources);
+  if (demoted.length === 0 && (!definition || !ruleEntries || ruleEntries.length === 0)) return [];
+  return applyDemotion(base, demoted);
 }

@@ -17,9 +17,11 @@ import { pdfPreflight } from '../pdf/pdf-preflight';
 import { createCheckout } from '../report/checkout';
 import { slotProductForWorkType } from '../report/rulebook';
 import { getValidAccessToken, requestEmailOtp, verifyEmailOtp } from '../auth/session';
-import { VERIFIED_PROFILE_REGISTRY, LEGAL_DEPARTMENT_REGISTRY, BASE_PROFILES, FPZG_PARTIAL, PROFILE_STATUS, PROFILE_AUTHORITY, draftRuleEntriesFor } from '../profiles/profile-registry';
-import { SOURCE_REGISTRY } from '../verification/verification-registry';
-import { applyScoredAdvisory } from '../profiles/advisory-demotion';
+import { VERIFIED_PROFILE_REGISTRY, LEGAL_DEPARTMENT_REGISTRY, BASE_PROFILES, FPZG_PARTIAL, PROFILE_STATUS, PROFILE_AUTHORITY } from '../profiles/profile-registry';
+// Advisory demotion i repair stavke citaju se iz PECENIH mapa (performance-01/02): drafts (~1,3 MB)
+// i source-registry (152 KB) vise NISU u glavnom entry chunku. Izvor istine ostaje u draftovima;
+// mape pece scripts/gen-profile-runtime-maps.mts, drift hvata tests/profile-runtime-maps.test.ts.
+import { applyBakedAdvisory, repairEntriesFor } from '../profiles/profile-runtime-maps';
 import { ZAGREB_CATALOG } from '../catalog/catalog-loader';
 import { workTypesForSelection, defaultWorkTypeForProgram, citationForDefinition, isCitationLocked } from './work-selection';
 import { INSTITUTIONAL_COVERAGE_MATRIX, COVERAGE_STATUS_META } from '../coverage/coverage-loader';
@@ -324,7 +326,7 @@ function currentProfile(){
  base.department=department?{id:department.id,name:department.name,status:department.status,note:department.note,sources:department.sources||[]}:null;base.socialMethodologyEnabled=socialMethodologyEligible();base.methodologySelection=methodologyId;base.methodologyProfile=methodology;base.methodologyProfiles=SOCIAL_METHOD_REGISTRY;
  base.note=(definition?.note||((PROFILE_STATUS as any)[base.statusKey]||PROFILE_STATUS.generic).note)+(department?` Odabran je dodatni profil: ${department.name}. ${department.note}`:'')+(override?' Posebni korisnički zahtjevi imaju prednost u tehničkoj provjeri.':'');
  if(lightBaseline&&!override){base.note='Opća provjera za seminarski, projektni ili istraživački rad: oblikovanje i citiranje provjeravaju se prema općem hrvatskom akademskom baselineu, a opseg, struktura i sadržaj (npr. Sadržaj) ovise o silabusu i pisanoj uputi nastavnika. Nije fakultetski propis.';base.advisoryScope=uniqueStrings([...(base.advisoryScope||[]),'opseg, struktura i sadržaj ovise o silabusu i uputi nastavnika','oblikovanje i citiranje su opća preporuka, nije fakultetski propis']);}
- base.selection={country:'Hrvatska',city:'Zagreb',institution:g.name,unit:u.name,program:$('#programSelect').value,department:department?.name||null,workType,workVariant:definition?.variantLabel||null,methodology:methodologyId==='none'?null:methodologyLabel(methodologyId),citationStyle:cit.label,mentorOverride:override,mentorNotes:$('#mentorNotes').value.trim()};base.readiness=profileReadiness(base);base.fingerprint=profileFingerprint(base);if(!override&&definition)applyScoredAdvisory(base,definition,draftRuleEntriesFor(definition.id),SOURCE_REGISTRY);
+ base.selection={country:'Hrvatska',city:'Zagreb',institution:g.name,unit:u.name,program:$('#programSelect').value,department:department?.name||null,workType,workVariant:definition?.variantLabel||null,methodology:methodologyId==='none'?null:methodologyLabel(methodologyId),citationStyle:cit.label,mentorOverride:override,mentorNotes:$('#mentorNotes').value.trim()};base.readiness=profileReadiness(base);base.fingerprint=profileFingerprint(base);if(!override&&definition)applyBakedAdvisory(base,definition.id);
  return{id:[definition?.id||u.id,department?.id,methodologyId!=='none'?methodologyId:null].filter(Boolean).join('::'),p:base};
 }
 function workTypeLabel(v: any){return (WORK_TYPE_LABELS as any)[v]||v}
@@ -682,7 +684,7 @@ function renderRepairSection(r: any){
  repairPanelNode=null; repairPanelForResult=null; // dok se ne renderira stateful panel, nema sto cuvati
  const defId=r.details?.profileDefinitionId; if(!defId) return;
  if(r!==currentResult||!analyzedProfile) return; // demo, zastarjeli rezultat ili nema snapshota
- const entries=draftRuleEntriesFor(defId);
+ const entries=repairEntriesFor(defId);
  if(paywallGateActive()){
   // Teaser: samo prekrseno (Opcija A); "uskladi sve" + dubinsko ciscenje je placeni dio (Feature B).
   const items=buildRepairableItems(r.checks||[],analyzedProfile,entries);

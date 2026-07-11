@@ -313,35 +313,32 @@ Datum: 2026-07-11.
 
 ### P0-05 Obrada datoteka
 
-**BL-P0-05-1, Skinuti autorski podatkovni sloj s kriticnog puta (2,4 MB chunk)**
+**BL-P0-05-1, Skinuti autorski podatkovni sloj s kriticnog puta (2,4 MB chunk)** — VELIKIM DIJELOM (2026-07-11)
 - Prioritet: P0 (izvorni performance-01 P1, CONFIRMED)
 - Problem: glavni entry chunk 2.478.762 B raw / 369.013 B gzip; dominiraju podaci
-  (verified-profiles 1,45 MB + 169 draftova 1,3 MB + source-registry 152 KB); draftovi
-  eager glob.
-- Lokacija: src/profiles/profile-registry.ts:49-51, :7; src/ui/app.ts:20-21
-- Dokaz: markeri provenijencije u chunku 1:1 s izvorom (verifiedBy x1392, Risavi x2380).
-- Posljedica: parse/compile sekunde glavne niti na mobitelu prije interaktivnosti.
-- Preporuka: (a) ispeci advisory listu (BL-P0-05-2), (b) razdvoji verified-profiles na indeks
-  + puni skup po profilu (dinamicki), (c) build.json.stringify.
-- Acceptance: glavni chunk gzip padne barem 40 posto; 0 draft markera u glavnom chunku;
-  selektori/analiza/advisory nepromijenjeni; golden i UI smoke zeleni.
-- Rizik regresije: srednji (asinkroni currentProfile/applyScoredAdvisory, utrka odabir vs
-  pravila; golden stiti jezgru; treba UI smoke odaberi-pa-odmah-pokreni).
-- Velicina: L
+  (verified-profiles 1,45 MB + 169 draftova 1,3 MB + source-registry 152 KB).
+- NAPREDAK (mjereno): glavni chunk gzip 369.010 -> 234.961 B (-36,3%); raw 2.478.826 -> 1.392.982.
+  Postignuto: (a) draftovi + source-registry MAKNUTI iz runtimea (BL-P0-05-2, pecene mape) +
+  (perf-03) motor analize lijeno. Draft markeri (verifiedBy/Risavi/sourcePage/snapshotHash) sada 0
+  u glavnom chunku.
+- PREOSTAJE za pun 40%+ (BL-P0-05-1b): razdvoji verified-profiles.json (1,45 MB, jos u glavnom
+  chunku) na lagani indeks za selektore + puni skup pravila po profilu (dinamicki). Srednji rizik
+  (asinkroni currentProfile, utrka odabir vs pravila). To je jedina preostala velika poluga.
+- Velicina: L (glavni dio isporucen; ostaje verified-profiles split)
 
-**BL-P0-05-2, Ispeci advisory mapu u buildu, izbaci draftove iz runtimea**
+**BL-P0-05-2, Ispeci advisory mapu u buildu, izbaci draftove iz runtimea** — GOTOVO (2026-07-11)
 - Prioritet: P0 paket (izvorni performance-02 P2)
-- Problem: draftovi + source-registry sluze runtimeu samo za applyScoredAdvisory (kratka
-  advisoryDimensions lista).
-- Lokacija: src/ui/app.ts:327; src/profiles/advisory-demotion.ts:36-54;
-  src/verification/published-rules.ts:29-46
-- Dokaz: advisoryDimensions je jedini izlaz koji app konzumira iz cijelog lanca.
-- Posljedica: 1,45 MB raw JSON u javnom bundleu samo da bi se iznova izracunala mala lista.
-- Preporuka: predizracunaj advisory-map.json (profileId -> checkId-jevi) u buildu; runtime
-  ucita samo mapu; computePublishedRules ostaje build-time.
-- Acceptance: draftRuleEntriesFor i SOURCE_REGISTRY nisu u grafu index.html; identican
-  advisoryDimensions (snapshot test); CI test da se pecena mapa ne razide od izvora.
-- Rizik regresije: nizak do srednji.
+- Isporuceno: eager glob 169 draftova PRESELJEN iz profile-registry.ts u novi src/profiles/
+  drafts-runtime.ts (uvoze ga samo verification-console = nije u javnom buildu, i testovi). Zivi
+  app.ts vise NE cita drafts: (a) advisory demotion cita pecenu data/profiles/advisory-map.json
+  (profileId -> demotirani checkId-jevi) preko applyBakedAdvisory (profile-runtime-maps.ts); (b)
+  repair panel cita pecenu data/profiles/repair-map.json (slim autoFixable+verified ruleEntries)
+  preko repairEntriesFor. Obje mape pece scripts/gen-profile-runtime-maps.mts (vite-node).
+  DEMOTION poluge izdvojene u advisory-levers.ts (jedan izvor za racunski i peceni put).
+- Verifikacija: draftRuleEntriesFor + SOURCE_REGISTRY vise nisu u grafu index.html (verifiedBy/
+  Risavi/sourcePage/snapshotHash = 0 u glavnom chunku). tests/profile-runtime-maps.test.ts dokazuje
+  (1) pecene mape == izracun iz izvora (drift guard) i (2) applyBakedAdvisory bit-identican starom
+  applyScoredAdvisory za svih 212 profila. tsc 0, vitest 1157/1157, golden zelen.
 - Velicina: M
 
 **BL-P0-05-3, build.json.stringify za brzi startup parse** — ODBIJENO (mjereno 2026-07-11)

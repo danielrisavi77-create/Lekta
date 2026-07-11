@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { applyScoredAdvisory, DEMOTABLE_CHECK_IDS } from '../src/profiles/advisory-demotion';
-import { draftRuleEntriesFor } from '../src/profiles/profile-registry';
+import { draftRuleEntriesFor } from '../src/profiles/drafts-runtime';
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import type { SourceEntry } from '../src/profiles/profile-schema';
 

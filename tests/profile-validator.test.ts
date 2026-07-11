@@ -3,7 +3,7 @@ import { validateProfiles } from '../src/profiles/profile-validator';
 import {
   VERIFIED_PROFILES_WITH_DRAFTS,
   LEGAL_DEPARTMENTS_WITH_DRAFTS,
-} from '../src/profiles/profile-registry';
+} from '../src/profiles/drafts-runtime';
 import type { RuleEntry } from '../src/profiles/profile-schema';
 
 // Ovaj test je jedini pozivatelj validateProfiles u `npm run check`: bez njega su

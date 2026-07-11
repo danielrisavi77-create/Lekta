@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { VERIFIED_PROFILES_WITH_DRAFTS, LEGAL_DEPARTMENTS_WITH_DRAFTS } from '../src/profiles/profile-registry';
+import { VERIFIED_PROFILES_WITH_DRAFTS, LEGAL_DEPARTMENTS_WITH_DRAFTS } from '../src/profiles/drafts-runtime';
 import { SOURCE_REGISTRY } from '../src/verification/verification-registry';
 import { runVerificationGate, isRuleScored } from '../src/verification/verification-gate';
 import type { ThesisProfile, SourceEntry } from '../src/profiles/profile-schema';

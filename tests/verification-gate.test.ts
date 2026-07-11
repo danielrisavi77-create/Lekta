@@ -8,7 +8,7 @@ import { SOURCE_REGISTRY, VERIFICATION_LEDGER, findSource } from '../src/verific
 import {
   VERIFIED_PROFILES_WITH_DRAFTS,
   LEGAL_DEPARTMENTS_WITH_DRAFTS,
-} from '../src/profiles/profile-registry';
+} from '../src/profiles/drafts-runtime';
 import {
   isRuleScored,
   runVerificationGate,

@@ -14,7 +14,7 @@ import { escapeHtml } from '../utils/helpers';
 import {
   VERIFIED_PROFILES_WITH_DRAFTS,
   LEGAL_DEPARTMENTS_WITH_DRAFTS,
-} from '../profiles/profile-registry';
+} from '../profiles/drafts-runtime';
 import { SOURCE_REGISTRY, findSource } from '../verification/verification-registry';
 import {
   pendingRules,

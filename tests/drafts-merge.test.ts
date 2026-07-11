@@ -1,11 +1,11 @@
 import { describe, it, expect } from 'vitest';
 
 import { mergeDraftSources } from '../src/profiles/drafts-merge';
+import { LAW_DRAFTS } from '../src/profiles/profile-registry';
 import {
-  LAW_DRAFTS,
   IGNORED_FANOUT_PROFILES,
   draftRuleEntriesFor,
-} from '../src/profiles/profile-registry';
+} from '../src/profiles/drafts-runtime';
 import type { RuleEntry } from '../src/profiles/profile-schema';
 
 const r = (ruleId: string, checkId: string): RuleEntry => ({
