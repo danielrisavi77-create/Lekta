@@ -79,6 +79,23 @@ Profil plus pravilo je mehanizam Å¡irenja. Hrvatsko trÅ¾iÅ¡te je predloÅ�
 2. Scope creep u "ocjenjujemo sadrÅ¾aj" gubi obranjivi lane.
 3. Fragilan .docx parser tiho krivo Äita stvarne dokumente bez Å¡iroke fixture pokrivenosti.
 
+## Dopune: co-pilot smjer (2026-07-11)
+
+Strateski reframe iz "provjere prije predaje" u "co-pilota kroz cijeli proces". Razrada i mapiranje
+na kod: [roadmap/CO_PILOT_STRATEGY.md](roadmap/CO_PILOT_STRATEGY.md). Tri fiksirane odluke:
+
+- Privatnost (A): analiza formata, strukture i citata ostaje lokalna i besplatna. Plagijat,
+  cross-lingual i AI-detekcija su opcionalni cloud korak iza zasebne privole i placenog gatea.
+  Time se linija "parsiranje ostaje u pregledniku" precizira, ne krsi: dokument napusta uredaj
+  samo za integritetsku provjeru koju korisnik izricito zatrazi. Dizajn:
+  [roadmap/PHASE4_CLOUD_INTEGRITY.md](roadmap/PHASE4_CLOUD_INTEGRITY.md).
+- Registar (B), carve-out uz "Lane i granice": registar i jasnoca su FORMA izraza, ne argument.
+  Lekta ih smije oznaciti read-only zastavicama (duga recenica, pasiv, kolokvijalizam, prvo lice
+  gdje profil zabranjuje), ali ih NIKAD ne prepisuje ni ne ocjenjuje sadrzaj. Ovo je jedina iznimka
+  i ne otvara "ocjenjujemo sadrzaj". Generativni writing assistant ostaje izvan opsega.
+- Naplata (C): zadrzavamo naplatu po dokumentu (panic prije roka) i dodajemo Thesis Pass (jedno
+  placanje, provjeravaj isti rad do obrane). Bez mjesecne pretplate za retail.
+
 ## Sjeverna zvijezda, ponovljeno
 
 Student otvori Lektu pred predaju, u tri dodira odabere kontekst, uploada rad, dobije jasan score i prioritiziranu listu popravaka, iterira do zeleno, i preda mirno. Svako pravilo je toÄno i sljedivo do izvora. Novi fakultet je novi redak podataka, ne novi kod.
