@@ -14,7 +14,6 @@ import { tierFor } from '../report/pricing';
 import { fetchRetailCatalog } from '../catalog/products-catalog';
 import { docxQuickStats } from '../docx/quick-stats';
 import { typoLint, typoLintSummary } from '../tools/typo-lint';
-import { pdfPreflight } from '../pdf/pdf-preflight';
 import { createCheckout } from '../report/checkout';
 import { slotProductForWorkType } from '../report/rulebook';
 import { getValidAccessToken, requestEmailOtp, verifyEmailOtp } from '../auth/session';
@@ -357,7 +356,9 @@ function progress(p: any,msg: any){$('#progressBar').style.width=p+'%';$('#progr
 
 // PDF preflight je izvucen u tipiziran modul src/pdf/pdf-preflight.ts (cist, testiran, uz
 // S5 granicu skeniranja); ovdje ostaje tanki I/O omotac koji cita bajtove datoteke.
-async function analyzePdfFile(file: any){if(!file)return null;return pdfPreflight(new Uint8Array(await file.arrayBuffer()),file.name,file.size)}
+// BL-P0-05-4: modul se ucitava LIJENO (dinamicki import) tek kad korisnik doda PDF, pa
+// preflight/dekompresijski kod ispada iz glavnog chunka landinga (nepotreban za docx put).
+async function analyzePdfFile(file: any){if(!file)return null;const { pdfPreflight }=await import('../pdf/pdf-preflight');return pdfPreflight(new Uint8Array(await file.arrayBuffer()),file.name,file.size)}
 async function analyzeMetadataDocx(file: any){
  if(!file)return null;try{const zip=new ZipReader(await file.arrayBuffer()),xml=await zip.text('word/document.xml'),doc=parseXml(xml,'Zasebni Word dokument'),paras=els(doc,'w:p').map(paragraphText).map(x=>x.trim()).filter(Boolean),text=paras.join('\n'),n=normalize(text),required={summary:n.includes('sazetak'),abstract:n.includes('abstract'),keywordsHr:n.includes('kljucnerijeci'),keywordsEn:n.includes('keywords')};const keywordCount=(labelRe: any)=>{const i=paras.findIndex(x=>labelRe.test(x));if(i<0)return null;let value=paras[i].replace(labelRe,'').replace(/^\s*[:–-]\s*/,'').trim();if(!value&&paras[i+1])value=paras[i+1];return value.split(/[,;]+/).map(x=>x.trim()).filter(Boolean).length};const sectionText=(startRe: any,endRe: any)=>{const a=paras.findIndex(x=>startRe.test(x));if(a<0)return'';let end=paras.length;for(let i=a+1;i<paras.length;i++)if(endRe.test(paras[i])){end=i;break}return paras.slice(a+1,end).join(' ')};const hrKeywords=keywordCount(/^\s*Klju[čc]ne\s+rije[čc]i\b/i),enKeywords=keywordCount(/^\s*Keywords?\b/i),hrSummary=sectionText(/^\s*Sa[žz]etak\s*$/i,/^\s*(Klju[čc]ne\s+rije[čc]i|Abstract)\b/i),enSummary=sectionText(/^\s*Abstract\s*$/i,/^\s*Keywords?\b/i),sentences=(x: any)=>(x.match(/[.!?]+(?:\s|$)/g)||[]).length||(+!!x),summarySentences={hr:sentences(hrSummary),en:sentences(enSummary)},keywordRangeOk=[hrKeywords,enKeywords].every(x=>x!=null&&x>=6&&x<=8),summaryRangeOk=summarySentences.hr<=20&&summarySentences.en<=20&&summarySentences.hr>0&&summarySentences.en>0,complete=Object.values(required).every(Boolean);return{name:file.name,size:file.size,valid:true,required,complete,compliant:complete&&keywordRangeOk&&summaryRangeOk,keywordCounts:{hr:hrKeywords,en:enKeywords},summarySentences,keywordRangeOk,summaryRangeOk,wordCount:(text.match(/[\p{L}\p{N}]+/gu)||[]).length}}catch(e: any){return{name:file.name,size:file.size,valid:false,complete:false,compliant:false,error:e.message}}
 }
