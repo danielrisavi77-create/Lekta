@@ -16,6 +16,7 @@ import rawVerified from '../data/profiles/verified-profiles.json';
 import {
   TITLE_PAGE_TEMPLATES,
   resolveTemplate,
+  reuseForLevel,
   findTitlePageTemplate,
   selectTemplate,
   LEVEL_SLUGS,
@@ -61,14 +62,19 @@ describe('template-loader: faithfulness i manifest', () => {
 });
 
 describe('template-loader: izbor predloska (fallback lanac)', () => {
-  const t = (id: string, unitId: string, level: string | null): TitlePageTemplate => ({
+  const t = (
+    id: string,
+    unitId: string,
+    level: string | null,
+    elements?: TitlePageTemplate['elements'],
+  ): TitlePageTemplate => ({
     id,
     unitId,
     level: level as TitlePageTemplate['level'],
     name: id,
     provenance: { status: 'official' },
     status: 'draft',
-    elements: [
+    elements: elements || [
       { role: 'university', required: true, elementProvenance: 'official-rules', group: 0 },
     ],
   });
@@ -76,6 +82,7 @@ describe('template-loader: izbor predloska (fallback lanac)', () => {
     t('fpzg-doctoral', 'fpzg', 'doctoral'),
     t('fpzg', 'fpzg', null),
     t('pravo-graduate', 'pravo', 'graduate'),
+    t('pravo-final', 'pravo', 'final'),
   ];
 
   it('tocna razina ima prednost pred level=null zapisom', () => {
@@ -84,9 +91,44 @@ describe('template-loader: izbor predloska (fallback lanac)', () => {
   it('bez tocne razine pada na level=null zapis jedinice', () => {
     expect(resolveTemplate(synthetic, 'fpzg', 'graduate')?.id).toBe('fpzg');
   });
-  it('jedinica bez zapisa za trazenu razinu i bez null zapisa daje null', () => {
-    expect(resolveTemplate(synthetic, 'pravo', 'final')).toBeNull();
+  it('bez tocne razine i bez null zapisa preuzima fakultetski predlozak druge vrste rada', () => {
+    // pravo ima graduate i final, ali ne seminar; REUSE_ORDER preferira graduate.
+    expect(resolveTemplate(synthetic, 'pravo', 'seminar')?.id).toBe('pravo-graduate');
+    expect(resolveTemplate(synthetic, 'pravo', 'doctoral')?.id).toBe('pravo-graduate');
+  });
+  it('nepoznata jedinica i dalje daje null (nema sto preuzeti)', () => {
     expect(resolveTemplate(synthetic, 'nepoznat', 'graduate')).toBeNull();
+  });
+  it('selectTemplate oznaci levelReused kad je predlozak preuzet iz druge vrste rada', () => {
+    const exact = selectTemplate('pravo', 'graduate');
+    expect(exact.levelReused).toBe(false);
+    expect(exact.provenance).toBe('official');
+
+    const reused = selectTemplate('pravo', 'seminar');
+    expect(reused.levelReused).toBe(true);
+    expect(reused.reusedFromLevel).toBe('graduate');
+    expect(reused.provenance).toBe('official');
+    expect(reused.template?.id).toBe('pravo-graduate');
+  });
+  it('reuseForLevel izbacuje sekundarne (dvojezicne) worktype retke, primarni ostaje', () => {
+    const bilingual = t('feri', 'feri', 'final', [
+      { role: 'faculty', required: true, elementProvenance: 'official-rules', group: 0 },
+      { role: 'worktype', required: false, group: 1, fixedText: 'ZAVRŠNI RAD' },
+      { role: 'worktype', required: false, group: 1, fixedText: 'BACHELOR THESIS' },
+      { role: 'placeyear', required: false, group: 2 },
+    ]);
+    const reduced = reuseForLevel(bilingual);
+    const worktypes = reduced.elements.filter((e) => e.role === 'worktype');
+    expect(worktypes.length).toBe(1);
+    expect(worktypes[0].fixedText).toBe('ZAVRŠNI RAD');
+    // Ostale uloge netaknute (faculty, placeyear).
+    expect(reduced.elements.map((e) => e.role)).toEqual(['faculty', 'worktype', 'placeyear']);
+  });
+  it('reuseForLevel bez viska worktype redaka vraca isti objekt (bez kloniranja)', () => {
+    const single = t('x', 'x', 'graduate', [
+      { role: 'worktype', required: false, group: 0, fixedText: 'DIPLOMSKI RAD' },
+    ]);
+    expect(reuseForLevel(single)).toBe(single);
   });
   it('selectTemplate mapira null predlozak na generic provenijenciju', () => {
     expect(selectTemplate(undefined, 'graduate')).toEqual({ template: null, provenance: 'generic' });

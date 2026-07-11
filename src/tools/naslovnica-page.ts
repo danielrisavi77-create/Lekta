@@ -8,7 +8,7 @@ import { titlePageDoc, docxBlob } from '../docx/docx-writer';
 import { escapeHtml } from '../utils/helpers';
 import { bindCopyButton, downloadBlob } from './tool-ui';
 import { ZAGREB_CATALOG } from '../catalog/catalog-loader';
-import { selectTemplate, type TemplateSelection } from '../title-pages/template-loader';
+import { selectTemplate, LEVEL_SLUGS, type TemplateSelection } from '../title-pages/template-loader';
 import { parseTitlePageParams, serializeTitlePageParams } from '../title-pages/title-page-params';
 import { defaultWorkTypeForProgram } from '../ui/work-selection';
 import type { WorkType } from '../profiles/profile-schema';
@@ -96,17 +96,31 @@ function renderTemplateSheet(model: TitlePageModel): string {
 function renderBadge(sel: TemplateSelection) {
   const badge = $('#tp-template-badge');
   if (!badge) return;
+  const note = sel.template?.provenance.sourceNote || '';
+  if (sel.provenance === 'generic') {
+    badge.className = 'tp-badge generic';
+    badge.textContent = 'Generički raspored';
+    badge.title = note;
+    return;
+  }
+  if (sel.levelReused) {
+    // Predlozak je preuzet iz druge vrste rada istog fakulteta: posteno kazemo da je
+    // fakultetski raspored prilagodjen, ne da je sluzbeni propis bas za ovu vrstu rada.
+    badge.className = sel.provenance === 'official' ? 'tp-badge official' : 'tp-badge derived';
+    badge.textContent = 'Raspored tvog fakulteta';
+    const from = sel.reusedFromLevel ? LEVEL_SLUGS[sel.reusedFromLevel] : '';
+    badge.title =
+      `Preuzet iz fakultetskog rasporeda za ${from} rad i prilagođen odabranoj vrsti rada.` +
+      (note ? ` ${note}` : '');
+    return;
+  }
   if (sel.provenance === 'official') {
     badge.className = 'tp-badge official';
     badge.textContent = 'Službeni predložak fakulteta';
-  } else if (sel.provenance === 'derived') {
+  } else {
     badge.className = 'tp-badge derived';
     badge.textContent = 'Raspored izveden iz javnih radova';
-  } else {
-    badge.className = 'tp-badge generic';
-    badge.textContent = 'Generički raspored';
   }
-  const note = sel.template?.provenance.sourceNote || '';
   badge.title = note;
 }
 
