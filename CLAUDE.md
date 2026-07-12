@@ -125,6 +125,22 @@ ModSecurity vraca HTTP 418.
 - Bez localStorage hackova u novim modulima; postojeÄi `safeStorageGet/Set` ostaje.
 - Produkcijski kod, ne primjeri. Male, fokusirane promjene, svaki korak zelen.
 
+## Codex (drugo misljenje)
+
+Instaliran je Codex plugin (codex@openai-codex). Podjela uloga: Claude Code je
+primarni driver (implementacija, orkestracija, memorija, domensko znanje), Codex
+je neovisno drugo misljenje drugog modela.
+
+- `/codex:review` prije commita netrivijalnih promjena; `/codex:adversarial-review`
+  za parser/citation/security kod i arhitektonske odluke (npr. backlog 6 backend).
+- Nalazi su ADVISORY: hard gate ostaje `npm run check` + golden testovi. Svaki
+  nalaz re-verificiraj prije primjene, ne preuzimaj tudje expecte.
+- `/codex:rescue` je default write-capable: za parser/citation kod trazi read-only
+  ili prvo snimi golden baseline; sve rescue izmjene moraju proci `npm run check`.
+- `AGENTS.md` je kompaktni derivat tvrdih pravila ovog vodica (Codex cita njega,
+  ne CLAUDE.md); kad mijenjas tvrdo pravilo, azuriraj obje datoteke.
+- Codexov Stop review gate je namjerno iskljucen (rucni review na commit-tockama).
+
 ## Backlog (svaki je Äist, samostalan task; Definition of Done = `npm run check` zelen)
 
 1. Golden harness s podacima: ubaci 5 do 10 realnih `.docx` fixtura i snimi baseline.
