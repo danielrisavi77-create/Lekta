@@ -30,7 +30,34 @@ function setupDesk(): void {
   onScroll();
 }
 
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setupDesk);
-else setupDesk();
+// Sekcijske scene (Kako radi / Sto ti lektor podcrta / Privatnost): klik samo postavlja
+// data-atribut na kontejner + aria-pressed na gumbe; sav prikaz vodi CSS. Bez JS-a je
+// vidljiva prva scena, pa je sve progresivno.
+function bindScenes(rootSel: string, btnSel: string, attr: string): void {
+  const root = document.querySelector<HTMLElement>(rootSel);
+  if (!root) return;
+  const btns = [...root.querySelectorAll<HTMLElement>(btnSel)];
+  btns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      root.setAttribute(attr, btn.dataset.k || '0');
+      btns.forEach((b) => b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'));
+    });
+  });
+}
+
+function setupSections(): void {
+  bindScenes('.ks-kako', '.ks-step', 'data-scene');
+  bindScenes('.ks-doc-grid', '.ks-di', 'data-issue');
+  bindScenes('.ks-priv', '.ks-priv-btn', 'data-mode');
+  // "Otvori puni izvjestaj" u prozoru proizvoda pokrece postojeci demo (guarded).
+  document.querySelectorAll<HTMLElement>('.ks-demo-link').forEach((b) => {
+    b.addEventListener('click', () => { document.getElementById('demoBtn')?.click(); });
+  });
+}
+
+function boot(): void { setupDesk(); setupSections(); }
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+else boot();
 
 export {};
