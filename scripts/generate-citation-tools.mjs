@@ -91,77 +91,80 @@ function loadEngineInNode(bundleJs) {
 }
 
 const PAGE_STYLE = `
-  /* Lekta Tinta i papir: citatni alat kao bijeli list na papiru, tinta indeksa za akciju.
-     Standalone stranice bez importa fonta pa se stackovi gracilno spustaju na Georgia/Times/system. */
+  /* ===== KS: Korektorski stol sloj ===== */
+  /* Lekta Korektorski stol: citatni alat kao list papira pod radnom lampom, korektorska
+     crvena kao jedini akcent. Stranice su samostalne (ne ucitavaju design-system.css),
+     pa tokeni istog imena zive lokalno; sistemski fontovi (Georgia serif, ui-monospace).
+     Default tema je TAMNA (radna lampa), [data-theme="light"] je danja.
+     List papira ostaje SVIJETAO u obje teme: formatirani citati zrcale izlaz na papiru. */
   :root {
+    color-scheme: dark;
+    --desk:#191512; --desk-ink:#EDE7DC;
+    --paper:#F7F3E8; --paper-2:#F0EAD9; --paper-ink:#26221B; --paper-muted:#6E6656; --paper-line:#DCD4BF; --paper-line-strong:#C6BCA2;
+    --sheet:#FDFBF3;
+    --red:#E4573D; --red-deep:#C4372E; --red-soft:#F6E3DE; --on-red:#FFF6EF;
+    --paper-sh:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);
+    --font-serif:Georgia,"Iowan Old Style","Times New Roman",serif;
+    --font-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  :root[data-theme="light"] {
     color-scheme: light;
-    --bg: #FCFBF8; --panel: #FFFFFF; --panel-2: #F4F2EC;
-    --text: #101319; --muted: #3E4553; --line: #E4E1D8; --line-strong: #C9C6BB;
-    --brand: #1D3FBF; --brand-2: #142E93; --on-brand: #ffffff;
-    --warn: #B77416; --warn-soft: #F7EEDD; --warn-strong: #8A570E;
-    --danger: #C4372E; --danger-soft: #FAE9E7;
-    --shadow-sm: 0 1px 2px rgba(16,19,25,.05), 0 8px 24px rgba(16,19,25,.06);
-    --display-serif: "Newsreader Variable", "Source Serif 4 Variable", Georgia, "Times New Roman", serif;
-    --ink-serif: "Source Serif 4 Variable", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
-    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    --radius: 10px; --radius-sm: 8px; --radius-pill: 999px;
+    --desk:#DFD8C6; --desk-ink:#26221B;
+    --paper:#FDFBF3; --paper-2:#F4EFDF;
+    --sheet:#FFFFFF;
+    --red:#C4372E;
+    --paper-sh:0 2px 6px rgba(56,46,32,.16),0 18px 44px rgba(56,46,32,.2);
   }
   * { box-sizing: border-box; }
-  html { background: var(--bg); }
+  html { background: var(--desk); min-height: 100%; }
   body {
-    font-family: "Inter Tight Variable", Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    color-scheme: light;
     max-width: 680px; margin: 2rem auto; padding: 1.75rem 1.85rem 2.25rem;
-    color: var(--text); line-height: 1.55; position: relative;
-    background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
-    box-shadow: var(--shadow-sm);
+    color: var(--paper-ink); line-height: 1.55; position: relative; overflow: hidden;
+    background: var(--paper); border: 1px solid var(--paper-line); border-radius: 2px;
+    box-shadow: var(--paper-sh);
   }
-  /* rub tinte indeksa (margin keyline), vertikalno uvucen da ne viri iz zaobljenih kutova */
-  body::before { content: ""; position: absolute; left: 0; top: 14px; bottom: 14px; width: 3px; border-radius: 3px; background: color-mix(in srgb, var(--brand) 55%, transparent); }
-  h1 { font-family: var(--display-serif); font-optical-sizing: auto; font-weight: 600; font-size: 1.55rem; letter-spacing: -0.015em; line-height: 1.12; margin: 0.1rem 0 0.3rem; }
-  .lekta-tool-meta { color: var(--muted); font-size: 0.875rem; margin: 0 0 1.25rem; padding-bottom: 0.85rem; border-bottom: 1px solid var(--line); }
-  label { display: block; font-size: 0.85rem; font-weight: 600; margin: 0.75rem 0 0.25rem; color: var(--text); }
-  input, select, textarea { width: 100%; padding: 0.5rem 0.7rem; border-radius: var(--radius-sm); border: 1px solid var(--line-strong); font: inherit; color: var(--text); background: var(--panel-2); }
-  input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible, a:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--panel), 0 0 0 4px var(--brand); border-radius: var(--radius-sm); }
-  button { margin-top: 1rem; padding: 0.6rem 1.15rem; border-radius: var(--radius-pill); border: none; background: var(--brand); color: var(--on-brand); font-weight: 600; cursor: pointer; }
-  button:hover { background: var(--brand-2); }
-  #citation-output { margin-top: 1rem; padding: 0.9rem 1rem; background: var(--panel-2); border: 1px solid var(--line); border-radius: var(--radius-sm); min-height: 1.25rem; }
-  .cit-line { font-family: var(--ink-serif); font-variant-numeric: tabular-nums; font-size: 1rem; line-height: 1.5; white-space: pre-wrap; }
-  .cit-intext { margin-top: 0.5rem; font-size: 0.85rem; color: var(--muted); }
-  .cit-missing { margin-top: 0.5rem; font-size: 0.8rem; color: var(--warn); }
-  .cit-empty { color: var(--muted); font-size: 0.875rem; }
+  /* korektorska margina: crvena linija uz lijevi rub lista */
+  body::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--red-deep); }
+  h1 { font-family: var(--font-serif); font-weight: 600; font-size: 1.55rem; letter-spacing: -0.01em; line-height: 1.12; margin: 0.1rem 0 0.3rem; color: var(--paper-ink); }
+  .lekta-tool-meta { color: var(--paper-muted); font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.02em; margin: 0 0 1.25rem; padding-bottom: 0.85rem; border-bottom: 1px solid var(--paper-line); }
+  label { display: block; font-size: 0.85rem; font-weight: 600; margin: 0.75rem 0 0.25rem; color: var(--paper-ink); }
+  input, select, textarea { width: 100%; padding: 0.5rem 0.7rem; border-radius: 2px; border: 1px solid var(--paper-line-strong); font: inherit; color: var(--paper-ink); background: var(--sheet); }
+  input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible, a:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--paper), 0 0 0 4px var(--red-deep); border-radius: 2px; }
+  button { margin-top: 1rem; padding: 0.6rem 1.15rem; border-radius: 2px; border: none; background: var(--red-deep); color: var(--on-red); font-weight: 600; cursor: pointer; }
+  button:hover { background: var(--red); }
+  /* PROTECTED: prikaz formatiranog citata = bijeli list, citljiva serifna tipografija (zrcali izlaz) */
+  #citation-output { margin-top: 1rem; padding: 0.9rem 1rem; background: var(--sheet); border: 1px solid var(--paper-line); border-radius: 2px; min-height: 1.25rem; }
+  .cit-line { font-family: var(--font-serif); font-variant-numeric: tabular-nums; font-size: 1rem; line-height: 1.5; white-space: pre-wrap; color: var(--paper-ink); }
+  .cit-intext { margin-top: 0.5rem; font-size: 0.85rem; color: var(--paper-muted); }
+  .cit-missing { margin-top: 0.5rem; font-size: 0.8rem; color: var(--red-deep); }
+  .cit-empty { color: var(--paper-muted); font-size: 0.875rem; }
   #style-info { margin: 0.5rem 0 0.25rem; font-size: 0.9rem; }
-  a { color: var(--brand); }
-  #style-info a { color: var(--brand); }
-  .lekta-cta { margin-top: 2rem; padding-top: 1.1rem; border-top: 1px solid var(--line); font-size: 0.9375rem; }
-  .lekta-cta strong { font-family: var(--display-serif); font-weight: 600; font-size: 1.05rem; }
-  .lekta-cta a { display: inline-block; margin-top: 0.4rem; color: var(--brand); font-weight: 600; }
-  .lekta-back { display: block; margin-top: 0.5rem; font-size: 0.8125rem; color: var(--muted); font-weight: 400; }
+  a { color: var(--red-deep); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  a:hover { text-decoration-thickness: 2px; }
+  #style-info a { color: var(--red-deep); }
+  .lekta-cta { margin-top: 2rem; padding-top: 1.1rem; border-top: 1px solid var(--paper-line); font-size: 0.9375rem; }
+  .lekta-cta strong { font-family: var(--font-serif); font-weight: 600; font-size: 1.05rem; }
+  .lekta-cta a { display: inline-block; margin-top: 0.4rem; color: var(--red-deep); font-weight: 600; }
+  .lekta-back { display: block; margin-top: 0.5rem; font-size: 0.8125rem; color: var(--paper-muted); font-weight: 400; }
   select#style-select { margin-top: 0.5rem; }
   .tabs { display: flex; gap: 0.5rem; margin: 1.1rem 0 0.25rem; }
-  .tab { margin: 0; background: var(--panel-2); color: var(--muted); padding: 0.4rem 0.9rem; font-size: 0.85rem; border: 1px solid var(--line); }
-  .tab.active { background: var(--brand); color: var(--on-brand); border-color: transparent; }
+  .tab { margin: 0; background: var(--paper-2); color: var(--paper-muted); padding: 0.4rem 0.9rem; font-size: 0.85rem; border: 1px solid var(--paper-line); }
+  .tab.active { background: var(--red-deep); color: var(--on-red); border-color: transparent; }
   textarea#bulk-input { min-height: 170px; }
-  .bulk-note { font-size: 0.85rem; color: var(--text); background: var(--warn-soft); border-left: 3px solid var(--warn); padding: 0.55rem 0.75rem; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin: 0.6rem 0; }
-  .bulk-card { border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 0.5rem 0.75rem 0.75rem; margin: 0.6rem 0; }
-  .bulk-card.low-conf { border-color: var(--danger); background: var(--danger-soft); }
-  .bulk-card-head { font-size: 0.78rem; color: var(--muted); margin-bottom: 0.25rem; }
+  .bulk-note { font-size: 0.85rem; color: var(--paper-ink); background: var(--paper-2); border: 1px solid var(--paper-line); border-left: 3px solid var(--red-deep); padding: 0.55rem 0.75rem; border-radius: 0 2px 2px 0; margin: 0.6rem 0; }
+  .bulk-card { border: 1px solid var(--paper-line); border-radius: 2px; padding: 0.5rem 0.75rem 0.75rem; margin: 0.6rem 0; }
+  .bulk-card.low-conf { border-color: var(--red-deep); background: var(--red-soft); }
+  .bulk-card-head { font-family: var(--font-mono); font-size: 0.74rem; letter-spacing: 0.02em; color: var(--paper-muted); margin-bottom: 0.25rem; }
   #bulk-output { margin-top: 1rem; }
-  #bulk-output a { color: var(--brand); font-size: 0.8rem; }
-  #bulk-result { min-height: 120px; font-family: var(--ink-serif); font-variant-numeric: tabular-nums; font-size: 0.9rem; }
-  .lekta-stats strong { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+  #bulk-output a { color: var(--red-deep); font-size: 0.8rem; }
+  /* PROTECTED: i skupni izlaz literature ostaje serif na bijelom listu */
+  #bulk-result { min-height: 120px; font-family: var(--font-serif); font-variant-numeric: tabular-nums; font-size: 0.9rem; background: var(--sheet); color: var(--paper-ink); }
+  .lekta-stats strong { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+  /* responzivno: uvijek na SAMOM KRAJU bloka da pregazi gornja pravila */
   @media (max-width: 700px) {
     body { margin: 0; max-width: none; border-radius: 0; border-left-width: 0; border-right-width: 0; box-shadow: none; }
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      color-scheme: dark;
-      --bg: #0E1116; --panel: #151A22; --panel-2: #1B2130;
-      --text: #E9EAE6; --muted: #A9AFBA; --line: #242B36; --line-strong: #333C4A;
-      --brand: #6E8BFF; --brand-2: #8CA2FF; --on-brand: #0E1116;
-      --warn: #E3A94E; --warn-soft: #332810; --warn-strong: #ECB868;
-      --danger: #F07B70; --danger-soft: #3A1D1A;
-      --shadow-sm: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.3);
-    }
   }
 `;
 

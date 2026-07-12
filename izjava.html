@@ -151,12 +151,87 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
 
 /* Val 4: Tinta i papir eyebrow (mono podatkovni glas) */
 .eyebrow{font-family:var(--mono);font-weight:600;letter-spacing:.1em}
+
+/* ===== KS: Korektorski stol sloj ===== */
+/* ===== KS: Korektorski stol chrome (dijeljeni predlozak) ===== */
+body{background:var(--desk);color:var(--desk-ink);font:15px/1.6 var(--sans);overflow-x:clip;position:relative}
+::selection{background:var(--red);color:#fff}
+h1,h2,h3,h4{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:400}
+.topbar{background:color-mix(in srgb,var(--desk) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--desk-line)}
+.nav{height:66px;gap:24px}
+.logo{gap:12px;color:var(--desk-ink);font-family:var(--display-serif)}
+.ks-mark{position:relative;width:30px;height:30px;flex:none;background:var(--desk-ink);color:var(--desk);display:grid;place-items:center;font-family:var(--display-serif);font-weight:600;font-size:19px;line-height:1}
+.ks-tick{position:absolute;right:-4px;bottom:-4px;width:13px;height:13px;background:var(--red);color:#F7F3E8;display:grid;place-items:center}
+.ks-tick svg{width:9px;height:9px;display:block}
+.logo-word{font-family:var(--display-serif);font-style:italic;font-weight:500;font-size:26px;letter-spacing:-.01em;color:var(--desk-ink)}
+footer .logo-word{font-size:21px}
+footer .ks-mark{width:24px;height:24px;font-size:15px}
+footer .ks-tick{width:11px;height:11px}
+.nav-links a{color:var(--desk-muted);font-family:var(--display-serif);font-weight:400;font-size:15.5px}
+.nav-links a:hover{color:var(--red)}
+.nav-links a.active{color:var(--red);font-weight:500}
+.nav-tools-btn{font-family:var(--display-serif);font-weight:400;font-size:15.5px;color:var(--desk-muted)}
+.nav-tools-btn.active{color:var(--red);font-weight:500}
+.nav-tools-menu{background:var(--paper);color:var(--paper-ink);border:0;border-radius:0;box-shadow:var(--paper-sh);padding:8px}
+.nav-tools-menu a{color:var(--paper-ink);border-radius:0;font-family:var(--display-serif);font-weight:400;font-size:15px}
+.nav-tools-menu a:hover{background:var(--paper-2);color:var(--red-deep)}
+.nav-tools-menu a.active{background:var(--red-soft);color:var(--red-deep);font-weight:500}
+.lampa-btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--desk-line);background:transparent;padding:8px 13px;border-radius:2px;color:var(--desk-muted);font:600 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
+.lampa-btn:hover{color:var(--desk-ink);border-color:var(--desk-muted)}
+.lampa-btn svg{width:13px;height:13px;flex:none}
+.icon-btn{border:1px solid var(--desk-line);border-radius:2px;background:transparent;color:var(--desk-ink)}
+.btn{border-radius:2px;font-family:var(--sans);font-weight:600;letter-spacing:.04em}
+.btn:hover{transform:none}
+.btn-primary{background:var(--paper);color:var(--paper-ink);border:none;box-shadow:4px 4px 0 var(--red);transition:transform .15s var(--ease),box-shadow .15s var(--ease)}
+.btn-primary:hover{background:var(--paper);color:var(--paper-ink);transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--red)}
+.btn-primary:disabled{opacity:.45;transform:none;box-shadow:3px 3px 0 var(--desk-line)}
+.nav>.btn-primary{background:var(--red);color:var(--on-red);box-shadow:none;text-transform:uppercase;font-size:12.5px;letter-spacing:.05em;padding:11px 18px}
+.nav>.btn-primary:hover{background:var(--red-deep);color:#F7F3E8;transform:none;box-shadow:none}
+.btn-secondary{background:transparent;border:1.5px solid var(--line-strong);color:var(--text);border-radius:2px}
+.btn-secondary:hover{border-color:var(--text);background:transparent;color:var(--text)}
+.btn-ghost{background:transparent;color:var(--brand)}
+.eyebrow{font-family:var(--sans);font-weight:600;letter-spacing:.18em;color:var(--desk-faint)}
+.hero h1{font-family:var(--display-serif);font-weight:400;letter-spacing:-.02em;color:var(--desk-ink)}
+.hero h1 .ink{font-style:italic;font-weight:400;color:var(--red)}
+.hero p.lead,.hero .lead{font-family:var(--display-serif);color:var(--desk-muted)}
+.backlink{font-family:var(--sans)}
+.backlink:hover{color:var(--red)}
+footer{border-top:1px solid var(--desk-line)}
+.footer-inner{color:var(--desk-muted);font-family:var(--display-serif);font-size:14px}
+.footer-inner a:hover{color:var(--desk-ink)}
+
+/* KS papir scope: velike povrsine ove stranice koje su list papira na stolu
+   (panel forme, panel pregleda izjave, CTA kutija; samo vanjski okviri).
+   #st-sheet i .st-* NAMJERNO netaknuti, zrcale Word dokument. */
+.card,.cta{--text:var(--paper-ink);--muted:var(--paper-muted);--muted-2:var(--paper-muted);--line:var(--paper-line);--line-strong:var(--paper-line);--panel:#fff;--panel-2:var(--paper-2);--bg:var(--paper);--brand:var(--red-deep);--brand-2:var(--paper-ink);--brand-soft:var(--red-soft);--on-brand:#F7F3E8;--info-soft:rgba(74,108,240,.08);--pass:#1E7F4F;--ok:#1E7F4F;--ok-soft:rgba(30,127,79,.12);--warn:#8A570E;--warn-strong:#8A570E;background:var(--paper);color:var(--paper-ink);border:0;border-radius:0;box-shadow:var(--paper-sh-sm)}
+
+/* KS unutar papira: tipografija, polja, gumbi */
+.card h2,.cta h2{font-family:var(--display-serif);font-weight:500}
+.card .field input,.card .field select{background:#fff;border:1px solid var(--paper-line);border-radius:0;color:var(--paper-ink)}
+.card .field label{font:500 10px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--paper-muted)}
+.card .btn-primary,.cta .btn-primary{background:var(--paper-ink);color:var(--paper);box-shadow:3px 3px 0 var(--red-deep)}
+.card .btn-primary:hover,.cta .btn-primary:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--red-deep);background:var(--paper-ink);color:var(--paper)}
+.card .btn-primary:disabled{transform:none;box-shadow:3px 3px 0 var(--paper-line)}
+
+/* KS polish: ostri rubovi i crveni akcenti na desk povrsinama */
+.card,.card .tp-sheet-wrap{border-radius:0}
+.hero .sibling a{color:var(--red)}
+.cta-upsell a{color:var(--red-deep)}
+.fact-list dt{color:var(--red)}
+.faq details[open] summary,.faq details[open] summary::after{color:var(--red)}
+
+/* KS print fix: papir scope ne smije zaprljati PDF ispis (mora ostati zadnje uz responzivna pravila) */
+@media print{.card{background:#fff;box-shadow:none;border:0;border-radius:0}}
+/* KS: mobilni nav (na SAMOM kraju sloja da pobijedi appendana pravila) */
+@media(max-width:720px){.nav{gap:12px}.nav>.btn-primary{display:none}.lampa-txt{display:none}.lampa-btn{padding:8px 10px}}
+/* KS: print na bijelom (tamni stol se ne printa) */
+@media print{body{background:#fff;color:#111}}
 </style>
 </head>
 <body>
 <header class="topbar">
   <nav class="shell nav" aria-label="Glavna navigacija">
-    <a class="logo" href="index.html#top"><svg class="logo-tick" viewBox="0 0 14 12" aria-hidden="true" focusable="false"><path d="M1 6.4 5 10.4 13 1.4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="logo-word">Lekta</span></a>
+    <a class="logo" href="index.html#top"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span></a>
     <div class="nav-links">
       <a href="index.html#how">Kako radi</a>
       <a href="landing_usporedba.html">Usporedba</a>
@@ -174,7 +249,7 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
       <a href="index.html#pricing">Paketi</a>
     </div>
     <button class="icon-btn mobile-menu" id="mobileMenuBtn" type="button" aria-label="Otvori izbornik" aria-expanded="false"><i data-lucide="menu"></i></button>
-    <button class="icon-btn" id="themeBtn" type="button" aria-label="Promijeni temu" title="Promijeni temu"><i data-lucide="sun-moon"></i></button>
+    <button class="lampa-btn" id="themeBtn" type="button" aria-label="Promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 2h8l-5 7h4L7 22l3-9H6l3-11Z"/></svg><span class="lampa-txt">Lampa</span></button>
     <a class="btn btn-primary btn-sm" href="index.html#analyzer">Provjeri rad</a>
   </nav>
   <div class="mobile-nav" id="mobileNav">
@@ -300,7 +375,7 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
 </main>
 
 <footer><div class="shell footer-inner">
-  <a class="logo" href="index.html#top" style="font-size:16px"><svg class="logo-tick" viewBox="0 0 14 12" aria-hidden="true" focusable="false"><path d="M1 6.4 5 10.4 13 1.4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="logo-word">Lekta</span></a>
+  <a class="logo" href="index.html#top" style="font-size:16px"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span></a>
   <span>&copy; 2026 &middot; Zagreb</span>
   <div class="footer-links">
     <a href="index.html#analyzer">Provjera</a>

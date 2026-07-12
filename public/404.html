@@ -119,6 +119,67 @@
     border-radius: 8px;
   }
   .cta:focus-visible { border-radius: var(--radius-pill); }
+  /* ===== KS: Korektorski stol sloj ===== */
+  /* Default je tamni radni stol (radna lampa); kartica je list papira na stolu. */
+  :root {
+    color-scheme: dark;
+    --bg: #191512;
+    --panel: #F7F3E8;
+    --panel-2: #211C17;
+    --text: #EDE7DC;
+    --muted: rgba(237, 231, 220, .55);
+    --line: rgba(237, 231, 220, .14);
+    --brand: #E4573D;
+    --brand-2: #C4372E;
+    --on-brand: #1A1512;
+    --shadow: 0 3px 8px rgba(0, 0, 0, .35), 0 22px 60px rgba(0, 0, 0, .55);
+    --radius-xl: 2px;
+    --radius: 2px;
+    --radius-pill: 2px;
+    --display-serif: Georgia, "Times New Roman", serif;
+    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  /* Sucelje govori monospaceom (sistemski fallback, stranica ne ucitava webfontove) */
+  body { font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+  /* Papir: sadrzaj kartice pise tintom papira, ne tintom stola */
+  .card {
+    --text: #26221B;
+    --muted: #6E6656;
+    --line: #DCD4BF;
+    color: var(--text);
+  }
+  a:focus-visible, .cta:focus-visible, .brand:focus-visible { border-radius: 2px; }
+  /* Danja tema: svijetli stol; papir ostaje papir */
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      color-scheme: light;
+      --bg: #DFD8C6;
+      --panel: #FDFBF3;
+      --panel-2: #D6CEB9;
+      --text: #26221B;
+      --muted: #655C4B;
+      --line: rgba(38, 34, 27, .16);
+      --brand: #C4372E;
+      --brand-2: #A62B23;
+      --on-brand: #F7F3E8;
+      --shadow: 0 2px 5px rgba(60, 50, 30, .18), 0 18px 44px rgba(60, 50, 30, .25);
+    }
+    :root:not([data-theme="dark"]) .card { --line: #E0D9C6; }
+  }
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --bg: #DFD8C6;
+    --panel: #FDFBF3;
+    --panel-2: #D6CEB9;
+    --text: #26221B;
+    --muted: #655C4B;
+    --line: rgba(38, 34, 27, .16);
+    --brand: #C4372E;
+    --brand-2: #A62B23;
+    --on-brand: #F7F3E8;
+    --shadow: 0 2px 5px rgba(60, 50, 30, .18), 0 18px 44px rgba(60, 50, 30, .25);
+  }
+  :root[data-theme="light"] .card { --line: #E0D9C6; }
 </style>
 </head>
 <body>

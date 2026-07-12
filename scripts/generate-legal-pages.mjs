@@ -46,30 +46,45 @@ async function loadLegal() {
 }
 
 const PAGE_STYLE = `
-  /* Lekta Tinta i papir: pravne stranice kao bijeli list na papiru, tinta indeksa za akciju. */
-  :root { color-scheme: light; --ink:#101319; --muted:#3E4553; --paper:#FCFBF8; --panel:#FFFFFF; --brand:#1D3FBF; --line:#E4E1D8; }
+  /* ===== KS: Korektorski stol sloj ===== */
+  /* Lekta Korektorski stol: pravni dokument kao list papira pod radnom lampom, korektorska crvena samo za akcente.
+     Stranice su samostalne (ne ucitavaju design-system.css), pa tokeni istog imena zive lokalno. */
+  :root {
+    color-scheme: dark;
+    --desk:#191512; --desk-ink:#EDE7DC; --desk-muted:rgba(237,231,220,.55); --desk-line:rgba(237,231,220,.14);
+    --paper:#F7F3E8; --paper-2:#F0EAD9; --paper-ink:#26221B; --paper-muted:#6E6656; --paper-line:#DCD4BF;
+    --red:#E4573D; --red-deep:#C4372E;
+    --paper-sh:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);
+    --font-serif:Georgia,"Times New Roman",serif;
+    --font-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --desk:#DFD8C6; --desk-ink:#26221B; --desk-muted:rgba(38,34,27,.6); --desk-line:rgba(38,34,27,.18);
+    --paper:#FDFBF3; --paper-2:#F4EFDF;
+    --red:#C4372E;
+    --paper-sh:0 2px 6px rgba(56,46,32,.16),0 18px 44px rgba(56,46,32,.2);
+  }
   * { box-sizing: border-box; }
-  body { font-family: "Inter Tight Variable", Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; margin: 0; color: var(--ink); line-height: 1.62; background: var(--paper); }
+  body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; margin: 0; color: var(--desk-ink); line-height: 1.62; background: var(--desk); }
   header { max-width: 760px; margin: 2rem auto 0; padding: 0 1.1rem; }
-  header a.home { color: var(--brand); text-decoration: none; font-weight: 700; font-size: 0.9rem; }
-  main { max-width: 760px; margin: 1rem auto; padding: 1.6rem 1.85rem 2.1rem; position: relative; overflow: hidden; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 1px 2px rgba(16,19,25,.05), 0 8px 24px rgba(16,19,25,.06); }
-  main::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: color-mix(in srgb, var(--brand) 55%, transparent); }
-  h1 { font-family: "Newsreader Variable", Georgia, "Times New Roman", serif; font-optical-sizing: auto; font-weight: 550; font-size: 1.8rem; margin: 0.2rem 0 0.25rem; letter-spacing: -0.015em; line-height: 1.1; }
-  .legal-meta { color: var(--muted); font-size: 0.85rem; margin: 0.5rem 0 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--line); }
-  .legal-note { background: #F7EEDD; border-left: 3px solid #B77416; padding: 0.6rem 0.8rem; border-radius: 0 0.4rem 0.4rem 0; font-size: 0.9rem; color: #101319; }
-  h4 { font-family: "Newsreader Variable", Georgia, serif; font-optical-sizing: auto; font-weight: 550; margin: 1.5rem 0 0.35rem; font-size: 1.1rem; }
+  header a.home { color: var(--desk-ink); text-decoration: none; font-weight: 600; font-size: 0.82rem; font-family: var(--font-mono); letter-spacing: 0.05em; text-transform: uppercase; border-bottom: 1px solid var(--desk-line); padding-bottom: 2px; }
+  header a.home:hover { color: var(--red); border-bottom-color: var(--red); }
+  main { max-width: 760px; margin: 1.1rem auto; padding: 1.7rem 1.9rem 2.2rem; position: relative; overflow: hidden; background: var(--paper); color: var(--paper-ink); border: 1px solid var(--paper-line); border-radius: 2px; box-shadow: var(--paper-sh); }
+  main::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--red-deep); }
+  h1 { font-family: var(--font-serif); font-weight: 600; font-size: 1.8rem; margin: 0.2rem 0 0.25rem; letter-spacing: -0.01em; line-height: 1.12; color: var(--paper-ink); }
+  .legal-meta { color: var(--paper-muted); font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.02em; margin: 0.55rem 0 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--paper-line); }
+  .legal-note { background: var(--paper-2); border: 1px solid var(--paper-line); border-left: 3px solid var(--red-deep); padding: 0.6rem 0.8rem; border-radius: 0 2px 2px 0; font-size: 0.9rem; color: var(--paper-ink); }
+  h4 { font-family: var(--font-serif); font-weight: 600; margin: 1.5rem 0 0.35rem; font-size: 1.12rem; color: var(--paper-ink); }
   p, li { font-size: 0.95rem; }
   ul { padding-left: 1.2rem; }
-  a { color: var(--brand); }
-  footer { max-width: 760px; margin: 0 auto; padding: 1.3rem 1.1rem 2.4rem; border-top: 1px solid var(--line); font-size: 0.85rem; color: var(--muted); }
+  a { color: var(--red-deep); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  a:hover { text-decoration-thickness: 2px; }
+  footer { max-width: 760px; margin: 0 auto; padding: 1.3rem 1.1rem 2.4rem; border-top: 1px solid var(--desk-line); font-size: 0.85rem; color: var(--desk-muted); }
   footer nav { display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; margin-top: 0.4rem; }
-  footer a { text-decoration: none; color: var(--brand); }
-  footer a:hover { text-decoration: underline; }
-  @media (prefers-color-scheme: dark) {
-    :root { color-scheme: dark; --ink:#E9EAE6; --muted:#A9AFBA; --paper:#0E1116; --panel:#151A22; --brand:#6E8BFF; --line:#242B36; }
-    main { box-shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.3); }
-    .legal-note { background: #332810; border-left-color: #E3A94E; color: #E9EAE6; }
-  }
+  footer nav span { color: var(--desk-muted); }
+  footer a { text-decoration: none; color: var(--desk-ink); }
+  footer a:hover { text-decoration: underline; color: var(--red); }
 `;
 
 function esc(s) {

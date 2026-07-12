@@ -8,5 +8,9 @@ export default defineConfig({
     environment: 'happy-dom',
     passWithNoTests: true,
     setupFiles: ['./tests/setup/xml-dom.ts'],
+    // Paralelne sesije drze git worktreeove pod .claude/worktrees/; default exclude ih ne
+    // pokriva pa bi parent `npm run check` testirao TUDJU kopiju repoa (duplo testova +
+    // tudi crveni padovi). Worktree sesija svoje testove vrti iz vlastitog cwd-a.
+    exclude: ['**/node_modules/**', '**/dist/**', '**/.claude/**'],
   },
 });
