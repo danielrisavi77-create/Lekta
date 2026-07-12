@@ -806,6 +806,166 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
 .ks-tape-track b{color:var(--red-deep);font-weight:400}
 @media print{.ks-marquee{display:none}}
 @media(prefers-reduced-motion:reduce){.hero-kicker .pulse,.hd-caret,.ks-tape-track{animation:none}.hd-sheet{transition:none}}
+/* ===== KS W3: analizator kao papirnati obrazac LK-01 (wizard, progres, rezultati, modali) ===== */
+@keyframes ksScan{0%{top:6%}55%{top:88%}100%{top:6%}}
+@keyframes ksCircle{from{stroke-dashoffset:560}to{stroke-dashoffset:0}}
+#analyzer{padding:72px 0 96px;background:none}
+.analyzer-header{display:flex;align-items:baseline;gap:20px;margin-bottom:38px;flex-wrap:wrap;padding:0;border:0;background:none}
+.analyzer-header h2{font-family:var(--display-serif);font-weight:400;font-size:clamp(34px,4vw,54px);letter-spacing:-.02em;margin:0;color:var(--desk-ink)}
+.ks-no{font-family:var(--font-hand);font-size:30px;color:var(--red);transform:rotate(-2deg);display:inline-block;margin-right:14px;font-weight:500}
+.ks-dot{color:var(--red)}
+.launch-actions{margin-left:auto;display:flex;align-items:center;gap:14px}
+#historyBtn{font:600 10px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--desk-muted);border:1px solid var(--desk-line);background:none;padding:8px 12px;border-radius:2px}
+#historyBtn:hover{color:var(--desk-ink);border-color:var(--desk-muted);background:none}
+.privacy-pill{font:500 10.5px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--desk-faint);background:none;border:0;padding:0;display:inline-flex;align-items:center;gap:7px}
+.privacy-pill svg{width:12px;height:12px}
+/* obrazac: veliki papir s trakom */
+.analyzer-wrap{border:0;border-radius:0;box-shadow:var(--paper-sh);transform:rotate(.3deg);position:relative;overflow:visible}
+.analyzer-wrap::before{content:"";position:absolute;top:-14px;left:50%;transform:translateX(-50%) rotate(-1.5deg);width:150px;height:30px;background:color-mix(in srgb,var(--paper) 55%,transparent);border:1px solid color-mix(in srgb,var(--paper-ink) 8%,transparent);backdrop-filter:blur(2px);z-index:3}
+.wizard-rail{display:flex;align-items:center;gap:14px;padding:14px 30px;border-bottom:1.5px solid var(--paper-ink);margin:0;background:none;flex-wrap:wrap}
+.rail-form-title{font:600 11px var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--paper-ink);margin-right:auto}
+.rail-step{display:inline-flex;align-items:center;gap:7px;font:500 10.5px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--paper-muted);background:none;border:0;padding:0}
+.rail-step b{display:inline-grid;place-items:center;width:19px;height:19px;border-radius:50%;border:1.5px solid var(--paper-line);background:none;color:var(--paper-muted);font-size:9.5px;font-weight:600}
+.rail-line{width:14px;height:0;border-top:1px solid var(--paper-line);background:none;flex:none}
+.rail-step[data-rail] b{background:none}
+.rail-step[data-rail="1"] b{border-color:var(--red-deep);color:var(--red-deep)}
+.analyzer-wrap:has(#dropzone.has-file) .rail-step[data-rail="1"] b{border-color:var(--pass);color:var(--pass);background:none}
+.analyzer-wrap:has(#dropzone.has-file) .rail-step[data-rail="2"]{color:var(--paper-ink)}
+.analyzer-wrap:has(#dropzone.has-file) .rail-step[data-rail="2"] b{border-color:var(--red-deep);color:var(--red-deep);background:none}
+.analyzer-wrap:has(#progressView:not(.hidden)) .rail-step[data-rail="3"] b,.analyzer-wrap:has(#resultView:not(.hidden)) .rail-step[data-rail="3"] b{border-color:var(--red-deep);color:var(--red-deep);background:none}
+.analyzer-wrap:has(#resultView:not(.hidden)) .rail-step:is([data-rail="1"],[data-rail="2"],[data-rail="3"]) b{border-color:var(--pass);color:var(--pass);background:none}
+.analyzer-wrap:has(#resultView:not(.hidden)) .rail-step{color:var(--paper-ink)}
+.analyzer-body{padding:30px}
+.wizard-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:34px;align-items:start}
+.wizard-col{border:0;padding:0}
+.wstep{display:flex;align-items:baseline;gap:8px;font:600 11px var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--paper-muted);margin-bottom:12px}
+.wstep-no{width:auto;height:auto;border:0;background:none;color:var(--red-deep);font:inherit;display:inline;padding:0}
+/* dropzone kao prazna kosuljica */
+#dropzone{position:relative;min-height:320px;border:1.5px dashed var(--paper-muted);border-radius:0;background:var(--paper-2);display:flex;align-items:center;justify-content:center;padding:26px;transition:border-color .2s,background .2s}
+#dropzone::before{display:none}
+#dropzone::after{content:"ovdje ↓";position:absolute;top:10px;left:14px;font-family:var(--font-hand);font-size:21px;color:var(--red-deep);transform:rotate(-2deg);pointer-events:none;font-weight:500}
+#dropzone.drag{border-color:var(--scan);background:rgba(74,108,240,.08)}
+#dropzone.has-file{border-color:var(--pass);background:var(--pass-soft)}
+#dropzone.has-error{border-color:var(--red-deep);background:var(--red-soft)}
+#dropEmpty h3{font-family:var(--display-serif);font-weight:400;font-size:22px;margin:10px 0 0;color:var(--paper-ink)}
+#dropEmpty p{font:12px var(--sans);color:var(--paper-muted);margin:8px 0 18px}
+.upload-icon{color:var(--paper-muted);background:none;border:0}
+.selected-file{background:#fff;border:1px solid var(--paper-line);border-radius:0;box-shadow:var(--paper-sh-sm);transform:rotate(-.5deg);padding:16px 18px}
+.selected-file .file-icon{width:42px;height:42px;border-radius:0;background:#2B579A;color:#fff;font-weight:700;font-size:17px;display:grid;place-items:center}
+.selected-file .meta strong{font-size:13px}
+.selected-file .meta small{font:11px var(--sans);color:var(--paper-muted)}
+/* profil: potezi olovkom ispod vrijednosti */
+.analyzer-wrap fieldset.profile-group{border:0;padding:0;margin:0 0 18px}
+.analyzer-wrap .fg-label{font:600 10.5px var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--paper-muted);padding:0;margin-bottom:8px}
+.analyzer-wrap .field label{font:500 10px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--paper-muted)}
+.analyzer-wrap .field select,.analyzer-wrap .field input.input,.analyzer-wrap .field input{border:0;border-bottom:1.5px solid var(--paper-ink);border-radius:0;background:transparent;padding:8px 26px 8px 0;font-family:var(--display-serif);font-size:14.5px;color:var(--paper-ink);width:100%;box-shadow:none}
+.analyzer-wrap .field select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10' fill='none'%3E%3Cpath d='M1 3l4 4 4-4' stroke='%236E6656' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 4px center;background-size:11px}
+.analyzer-wrap .field textarea{border:1px dashed var(--paper-line);border-radius:0;background:transparent;font-family:var(--display-serif);font-size:13.5px;padding:10px}
+.analyzer-wrap .field-seg select{border:1.5px solid var(--paper-line);border-radius:999px;padding:9px 38px 9px 15px;font:600 12px var(--sans);color:var(--paper-ink);background-position:right 14px center}
+/* III. preciznija provjera */
+.advanced-options{border:0;background:none;border-radius:0;margin-top:26px}
+.advanced-summary{display:flex;align-items:center;gap:14px;padding:16px 4px;border-top:1px dashed var(--paper-line);border-radius:0;background:none;flex-wrap:wrap}
+.advanced-summary:hover{background:none}
+.adv-label{font:600 11px var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--paper-muted)}
+.adv-hint{font:11px var(--sans);color:var(--paper-muted);letter-spacing:.02em;text-transform:none}
+.advanced-body{padding:8px 4px 22px;border-top:0}
+.panel-title{font:600 10px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--paper-muted)}
+.package-file{border:1px dashed var(--paper-line);border-radius:0;box-shadow:none;background:none}
+.override-box{border:0;border-top:1px dashed var(--paper-line);border-radius:0;background:none;padding:16px 0 0}
+.override-toggle span{font-family:var(--display-serif);font-size:13.5px;font-weight:600}
+.analyzer-wrap input[type="checkbox"],.modal input[type="checkbox"]{accent-color:var(--red-deep)}
+.override-toggle::after{content:"← mentor uvijek ima zadnju riječ";font-family:var(--font-hand);font-size:19px;color:var(--red-deep);transform:rotate(-2deg);margin-left:8px;font-weight:500;white-space:nowrap}
+/* pokretanje */
+.analyze-row{border-top:1.5px solid var(--paper-ink);padding-top:20px;margin-top:8px}
+.analyze-note{font:10.5px var(--sans);letter-spacing:.04em;color:var(--paper-muted)}
+.analyze-actions .btn-ghost{font-family:var(--display-serif);font-style:italic;font-size:15.5px;font-weight:400;color:var(--red-deep);border-bottom:1px dashed var(--red-deep);border-radius:0;padding:0 0 2px;text-transform:none;letter-spacing:0}
+.analyze-actions .btn-ghost:hover{color:var(--paper-ink);border-bottom-color:var(--paper-ink)}
+#analyzeBtn{text-transform:uppercase;font-size:13.5px;letter-spacing:.06em;padding:16px 28px}
+/* progres: mini papir sa skenom */
+.progress-view{padding:66px 30px;display:flex;flex-direction:column;align-items:center;text-align:center}
+.spinner{width:116px;height:156px;border:1px solid var(--paper-line);border-top-color:var(--paper-line);border-radius:0;background:#fff;box-shadow:var(--paper-sh-sm);animation:none;transform:rotate(-1.5deg);position:relative;overflow:hidden;margin-bottom:26px}
+.spinner::before{content:"";position:absolute;left:14px;right:14px;top:16px;height:4px;background:var(--paper-2);box-shadow:0 11px 0 var(--paper-2),0 22px 0 var(--paper-2),0 40px 0 var(--paper-2),0 51px 0 var(--paper-2),0 62px 0 var(--paper-2),0 80px 0 var(--paper-2)}
+.spinner::after{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:var(--scan);box-shadow:0 0 10px 2px color-mix(in srgb,var(--scan) 50%,transparent);animation:ksScan 1.8s var(--ease) infinite}
+.progress-view h3{font-family:var(--display-serif);font-weight:400;font-size:28px;margin:0 0 10px}
+#progressMessage{font:12px var(--sans);color:var(--paper-muted)}
+.progress-track{width:min(420px,100%);height:5px;background:var(--paper-2);border-radius:0;overflow:hidden;margin:24px 0 10px}
+#progressBar{background:var(--red-deep);border-radius:0}
+#progressPercent{font:10.5px var(--sans);letter-spacing:.1em;color:var(--paper-muted)}
+/* rezultat: izvjestaj o provjeri */
+.result-summary{display:grid;grid-template-columns:250px 1fr;gap:34px;border:0;border-bottom:1px dashed var(--paper-line);border-radius:0;background:none;padding:2px 0 26px;margin-bottom:0}
+.score-card{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:none;border:0;box-shadow:none;padding:0}
+.score-ring{width:190px;height:150px;background:none;border:0;border-radius:0;display:grid;place-items:center;position:relative;padding:0;box-shadow:none}
+.score-ring::before,.score-ring::after{display:none}
+.score-ring-inner{background:none;border:0;width:auto;height:auto;box-shadow:none}
+.score-ring-inner span{display:flex;align-items:baseline}
+#scoreValue{font-family:var(--display-serif);font-weight:600;font-size:86px;line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums;color:var(--paper-ink)}
+.score-ring-inner small{font-family:var(--display-serif);font-size:22px;color:var(--paper-muted)}
+.ks-circle{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.ks-circle path{stroke:var(--red-deep);stroke-width:3;stroke-linecap:round;stroke-dasharray:560;stroke-dashoffset:0;animation:ksCircle 1.1s cubic-bezier(.22,1,.36,1) .35s backwards}
+.score-label{font-family:var(--font-hand);font-size:26px;color:var(--red-deep);transform:rotate(-2deg);font-weight:500;background:none;border:0;padding:0;letter-spacing:0;text-transform:none}
+.ready-stamp{border:2.5px double var(--pass);color:var(--pass);background:none;font:600 10px var(--sans);letter-spacing:.16em;text-transform:uppercase;padding:9px 13px;border-radius:999px;transform:rotate(-4deg);box-shadow:none}
+#resultTitle{font-family:var(--display-serif);font-weight:400;font-size:30px;margin:0;letter-spacing:-.01em}
+#resultSubtitle{font-family:var(--display-serif);font-size:15px;color:var(--paper-muted);line-height:1.7}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1.5px solid var(--paper-ink);border-radius:0;background:none;overflow:hidden}
+.metric{padding:14px 16px;border:0;border-right:1.5px solid var(--paper-ink);border-radius:0;background:none;box-shadow:none}
+.metric:last-child{border-right:0}
+.metric span{font:500 9.5px var(--sans);letter-spacing:.16em;color:var(--paper-muted)}
+.metric b{font-family:var(--display-serif);font-weight:600;font-size:28px;margin-top:4px;font-variant-numeric:tabular-nums;color:var(--paper-ink)}
+.metric-jump{border-left:0;border-right:1.5px solid var(--paper-ink);background:none}
+.metric-jump b{color:var(--red-deep)}
+.metric-jump:hover{background:var(--paper-2)}
+#unlockReport{background:var(--red-deep);color:#F7F3E8;box-shadow:none;text-transform:uppercase;font-size:12px;letter-spacing:.06em;padding:12px 18px}
+#unlockReport:hover{background:var(--paper-ink);color:var(--paper);transform:none;box-shadow:none}
+.result-actions .btn-secondary{border:1.5px solid var(--paper-ink);color:var(--paper-ink);text-transform:uppercase;font-size:12px;letter-spacing:.06em}
+.result-actions .btn-secondary:hover{background:var(--paper-2);border-color:var(--paper-ink)}
+.result-actions .btn-ghost{font:600 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--paper-muted)}
+.result-actions .btn-ghost:hover{color:var(--paper-ink)}
+.dl-menu-list{background:#fff;border:1px solid var(--paper-line);border-radius:0;box-shadow:var(--paper-sh-sm)}
+.dl-item{font:12px var(--sans);border-radius:0}
+/* tabovi kao jahaci fascikla */
+.tabs{display:flex;gap:6px;padding:18px 30px 0;border:0;background:none;overflow-x:auto;margin:0}
+.tab{white-space:nowrap;padding:12px 18px;font:600 11.5px var(--sans);letter-spacing:.08em;text-transform:uppercase;border:1.5px solid var(--paper-ink);border-radius:0;background:var(--paper-2);color:var(--paper-muted);transform:translateY(1.5px);box-shadow:none}
+.tab.active{background:var(--paper);color:var(--paper-ink);border-bottom-color:var(--paper);box-shadow:none}
+.tab:hover{color:var(--paper-ink)}
+.tab-toggle{font:600 10.5px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--paper-muted);border:0;background:none;padding:12px 10px}
+.tab-toggle:hover{color:var(--paper-ink)}
+.tab-details{padding-top:8px}
+.tab-panels{border:0;border-top:1.5px solid var(--paper-ink);border-radius:0;background:none;padding:26px 30px 34px}
+/* filteri i problemi */
+.issues-toolbar{border:0;background:none;padding:0 0 18px}
+.filter-btn{border:1.5px solid var(--paper-line);border-radius:999px;padding:8px 14px;font:600 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--paper-muted);background:transparent}
+.filter-btn.active{border-color:var(--red-deep);background:var(--red-soft);color:var(--red-deep)}
+#issueCountLabel{font:10.5px var(--sans);letter-spacing:.04em;color:var(--paper-muted)}
+.issues-list{border:0;background:none}
+.issue{border:0;border-top:1px dashed var(--paper-line);border-radius:0;background:none;padding:14px 4px;box-shadow:none}
+.issue::before{display:none}
+.issue.error .issue-icon{color:var(--red-deep)}
+.issue.warning .issue-icon{color:var(--warn)}
+.issue.info .issue-icon{color:var(--paper-muted)}
+.issue .where{font:10.5px var(--sans);color:var(--paper-muted)}
+/* paywall: povjerljiva stranica */
+.lock-panel{position:relative;border:1.5px solid var(--paper-ink);border-radius:0;background:none}
+.lock-panel::after{content:"POVJERLJIVO";position:absolute;top:14px;right:14px;border:2px solid var(--red-deep);color:var(--red-deep);font:600 10px var(--sans);letter-spacing:.22em;padding:6px 12px;transform:rotate(-3deg);pointer-events:none;background:color-mix(in srgb,var(--paper) 80%,transparent)}
+/* sazetak: kartice kategorija kao mali papirici */
+.category-grid>*{background:#fff;border:1px solid var(--paper-line);border-radius:0;box-shadow:var(--paper-sh-sm)}
+.category-grid>*:nth-child(odd){transform:rotate(-.4deg)}
+.category-grid>*:nth-child(even){transform:rotate(.35deg)}
+.summary-note{position:relative;padding:2px 0 12px 44px;border:0;border-bottom:1px dashed var(--paper-line);border-radius:0;background:none;font-family:var(--display-serif);font-size:14.5px;color:var(--paper-muted);line-height:1.65}
+.summary-note::before{content:"NB!";position:absolute;left:2px;top:0;font-family:var(--font-hand);font-size:24px;color:var(--red-deep);transform:rotate(-3deg);font-weight:600}
+/* modali: papir na stolu */
+.modal-backdrop{background:rgba(12,9,7,.72);backdrop-filter:blur(8px)}
+.modal{border:0;border-top:0;border-radius:0;background:var(--paper);box-shadow:0 8px 20px rgba(0,0,0,.5),0 60px 140px rgba(0,0,0,.6)}
+.modal-head{border-bottom:1.5px solid var(--paper-ink);background:none}
+.modal-head h3{font:600 11px var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--paper-ink)}
+.modal-close{color:var(--paper-muted);border:0;background:none;border-radius:0}
+.modal-close:hover{color:var(--red-deep);background:none}
+.modal .field label{font:500 10px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--paper-muted)}
+.modal input.input,.modal .field select{border:0;border-bottom:1.5px solid var(--paper-ink);border-radius:0;background:transparent;font-family:var(--display-serif);font-size:14px;box-shadow:none}
+.modal textarea{border:1px dashed var(--paper-line);border-radius:0;background:transparent;font-family:var(--display-serif);font-size:13.5px}
+.modal .btn-secondary{border:0;color:var(--paper-muted);text-transform:uppercase;font-size:12px;letter-spacing:.06em}
+.modal .btn-secondary:hover{color:var(--paper-ink);background:none}
+/* responzivno za obrazac */
+@media(max-width:900px){.wizard-grid{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}.metric:nth-child(2){border-right:0}.result-summary{grid-template-columns:1fr}.analyzer-body{padding:18px}.tabs{padding:14px 18px 0}.tab-panels{padding:20px 18px 26px}.wizard-rail{padding:12px 18px}.rail-form-title{width:100%}.override-toggle::after{display:none}}
 /* Mobilna/tablet navigacija: MORA biti na kraju sloja (appendana pravila gaze media blokove
    bez obzira na poziciju media querya), KS nav se skuplja vec na 1080px jer je siri od starog. */
 @media(max-width:1080px){.nav-links{display:none}.mobile-menu{display:grid}}
@@ -887,14 +1047,14 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
 
 <section class="section section-soft" id="analyzer">
   <div class="shell">
+    <div class="analyzer-header"><div><h2><span class="ks-no" aria-hidden="true">2.</span>Stavi rad na stol<span class="ks-dot">.</span></h2></div><div class="launch-actions"><button class="btn btn-secondary btn-sm" id="historyBtn" type="button">Povijest <span id="historyCount"></span></button><!-- dev-only:start --><button class="btn btn-secondary btn-sm hidden" id="qaBtn" type="button">QA konzola</button><!-- dev-only:end --><span class="privacy-pill"><i data-lucide="lock"></i> Lokalna obrada</span></div></div>
     <div class="analyzer-wrap">
-      <div class="analyzer-header"><div><h2>Provjeri svoj dokument</h2></div><div class="launch-actions"><button class="btn btn-secondary btn-sm" id="historyBtn" type="button">Povijest <span id="historyCount"></span></button><!-- dev-only:start --><button class="btn btn-secondary btn-sm hidden" id="qaBtn" type="button">QA konzola</button><!-- dev-only:end --><span class="privacy-pill"><i data-lucide="lock"></i> Lokalna obrada</span></div></div>
-      <div class="wizard-rail" aria-hidden="true"><span class="rail-step" data-rail="1"><b>1</b> Učitaj</span><i class="rail-line"></i><span class="rail-step" data-rail="2"><b>2</b> Profil</span><i class="rail-line"></i><span class="rail-step" data-rail="3"><b>3</b> Provjeri</span></div>
+      <div class="wizard-rail" aria-hidden="true"><span class="rail-form-title">Obrazac LK-01 · Tehnička provjera rada</span><span class="rail-step" data-rail="1"><b>1</b> Dokument</span><i class="rail-line"></i><span class="rail-step" data-rail="2"><b>2</b> Profil</span><i class="rail-line"></i><span class="rail-step" data-rail="3"><b>3</b> Nalaz</span></div>
       <div class="analyzer-body wizard-view" id="wizardView">
         <div class="wizard-grid">
-          <section class="wizard-col wizard-col-upload"><div class="wstep"><span class="wstep-no">1</span>Učitaj Word dokument</div><div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Učitaj Word dokument"><input class="sr-only" type="file" id="fileInput" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"><div id="dropEmpty"><div class="upload-icon"><i data-lucide="upload"></i></div><h3 id="wordUploadTitle">Učitaj rad u Wordu</h3><p id="wordUploadDescription">Glavna analiza dokumenta · lokalno</p><button class="btn btn-primary btn-sm" type="button" id="browseBtn">Odaberi .docx</button></div><div class="selected-file hidden" id="selectedFile"><div class="file-icon">W</div><div class="meta"><strong id="selectedName"></strong><small id="selectedMeta"></small></div><button class="remove-file" id="removeFile" type="button" aria-label="Ukloni dokument"><i data-lucide="x"></i></button></div></div><div class="drop-error hidden" id="dropError" role="alert" aria-live="assertive"></div></section>
+          <section class="wizard-col wizard-col-upload"><div class="wstep"><span class="wstep-no">I.</span>Dokument</div><div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Učitaj Word dokument"><input class="sr-only" type="file" id="fileInput" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"><div id="dropEmpty"><div class="upload-icon"><i data-lucide="upload"></i></div><h3 id="wordUploadTitle">Učitaj rad u Wordu</h3><p id="wordUploadDescription">Glavna analiza dokumenta · lokalno</p><button class="btn btn-primary btn-sm" type="button" id="browseBtn">Odaberi .docx</button></div><div class="selected-file hidden" id="selectedFile"><div class="file-icon">W</div><div class="meta"><strong id="selectedName"></strong><small id="selectedMeta"></small></div><button class="remove-file" id="removeFile" type="button" aria-label="Ukloni dokument"><i data-lucide="x"></i></button></div></div><div class="drop-error hidden" id="dropError" role="alert" aria-live="assertive"></div></section>
           <section class="wizard-col wizard-col-profile">
-            <div class="wstep"><span class="wstep-no">2</span>Odaberi profil</div><div class="detect-badge hidden" id="detectBadge" role="status"></div>
+            <div class="wstep"><span class="wstep-no">II.</span>Profil fakulteta</div><div class="detect-badge hidden" id="detectBadge" role="status"></div>
             <fieldset class="profile-group"><legend class="fg-label">Ustanova</legend>
             <div class="form-grid">
               <div class="field full"><label for="institutionSelect">Sveučilište</label><select id="institutionSelect"></select></div>
@@ -907,14 +1067,14 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
               <div class="field"><label for="workType">Vrsta rada</label><select id="workType"><option value="seminar">Seminarski rad</option><option value="final">Završni rad</option><option value="graduate" selected>Diplomski rad</option><option value="specialist">Specijalistički rad</option><option value="doctoral">Doktorski rad</option><option value="article">Znanstveni članak</option><option value="project">Projektni / istraživački rad</option></select><div class="work-support" id="workTypeSupport"></div></div>
               <div class="field hidden" id="variantField"><label for="workVariant">Varijanta rada</label><select id="workVariant"><option value="default">Opći profil</option></select></div>
               <div class="field full hidden" id="methodologyField"><label for="methodologySelect">Metodološka varijanta diplomskog rada</label><select id="methodologySelect"><option value="auto">Automatski prepoznaj iz strukture</option><option value="theoretical">Teorijski rad</option><option value="qualitative">Empirijski rad, kvalitativno istraživanje</option><option value="quantitative">Empirijski rad, kvantitativno istraživanje</option></select><div class="methodology-help">Aktivira provjeru cilja, pitanja ili hipoteza, metode, rezultata i rasprave. Automatski način zaključuje iz strukture dokumenta.</div></div>
-              <div class="field full hidden" id="fpzgCohortField"><label for="fpzgCohort">Status završnog rada u 2025./2026.</label><select id="fpzgCohort"><option value="current">Završni rad upisan u 2025./2026.</option><option value="carried">Završni rad prenesen iz 2024./2025.</option></select><div class="subtle-help">Preneseni završni rad ima i prvi dio integriranog ispitnog roka; novoupisani završni rad nema taj rok.</div></div><div class="field full hidden" id="fpzgDeadlineField"><label for="fpzgDeadline">Ciljani godišnji rok obrane</label><select id="fpzgDeadline"></select><div class="subtle-help" id="fpzgDeadlineHelp">Rokovi se preuzimaju iz odluke FPZG-a i akademskog kalendara za 2025./2026.</div></div><div class="field full hidden" id="fpzgPhaseHint"><div class="subtle-help">Za godišnji rok obrane i kohortu odaberi „Fazu provjere" pod <button type="button" class="linklike" id="openPhaseFromHint">Želim precizniju provjeru</button>.</div></div>
+              <div class="field full hidden" id="fpzgCohortField"><label for="fpzgCohort">Status završnog rada u 2025./2026.</label><select id="fpzgCohort"><option value="current">Završni rad upisan u 2025./2026.</option><option value="carried">Završni rad prenesen iz 2024./2025.</option></select><div class="subtle-help">Preneseni završni rad ima i prvi dio integriranog ispitnog roka; novoupisani završni rad nema taj rok.</div></div><div class="field full hidden" id="fpzgDeadlineField"><label for="fpzgDeadline">Ciljani godišnji rok obrane</label><select id="fpzgDeadline"></select><div class="subtle-help" id="fpzgDeadlineHelp">Rokovi se preuzimaju iz odluke FPZG-a i akademskog kalendara za 2025./2026.</div></div><div class="field full hidden" id="fpzgPhaseHint"><div class="subtle-help">Za godišnji rok obrane i kohortu odaberi „Fazu provjere" pod <button type="button" class="linklike" id="openPhaseFromHint">III. Preciznija provjera</button>.</div></div>
             </div>
             </fieldset>
             <div class="profile-note" id="profileNote"></div>
           </section>
         </div>
         <details class="advanced-options">
-          <summary class="advanced-summary"><span class="adv-label">Želim precizniju provjeru</span><span class="adv-hint">PDF, stil citiranja, jezik, strogost i faza provjere</span></summary>
+          <summary class="advanced-summary"><span class="adv-label">III. Preciznija provjera</span><span class="adv-hint">PDF, stil citiranja, jezik, strogost i faza provjere</span></summary>
           <div class="advanced-body">
             <div class="panel-title">Dodatne datoteke (opcionalno)</div>
             <div class="package-files"><article class="package-file"><input class="sr-only" type="file" id="pdfInput" accept=".pdf,application/pdf"><div class="package-file-head"><div><strong>Konačni PDF / PDF-A</strong><small id="pdfMeta">Dodaj za provjeru predajnog paketa.</small></div><span class="file-state" id="pdfState">nije odabran</span></div><div class="package-file-actions"><button class="btn btn-secondary btn-sm" type="button" id="browsePdf">Odaberi PDF</button><button class="btn btn-ghost btn-sm hidden" type="button" id="removePdf">Ukloni</button></div></article><article class="package-file" id="metadataFileCard"><input class="sr-only" type="file" id="metadataInput" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"><div class="package-file-head"><div><strong>Zasebni Word s metapodatcima</strong><small id="metadataMeta">Za profile i faze koji ga zahtijevaju.</small></div><span class="file-state" id="metadataState">nije odabran</span></div><div class="package-file-actions"><button class="btn btn-secondary btn-sm" type="button" id="browseMetadata">Odaberi .docx</button><button class="btn btn-ghost btn-sm hidden" type="button" id="removeMetadata">Ukloni</button></div></article><article class="package-file hidden" id="avFileCard"><input class="sr-only" type="file" id="avInput" accept="video/*,audio/*,.zip,.7z,.rar"><div class="package-file-head"><div><strong>Audiovizualni prilog / produkcijski paket</strong><small id="avMeta">Za audiovizualni završni rad Novinarstva. Datoteka se samo lokalno evidentira.</small></div><span class="file-state" id="avState">nije odabran</span></div><div class="package-file-actions"><button class="btn btn-secondary btn-sm" type="button" id="browseAv">Odaberi AV datoteku</button><button class="btn btn-ghost btn-sm hidden" type="button" id="removeAv">Ukloni</button></div><div class="av-package-note">Javno dostupna odluka ne propisuje jedinstveni format, trajanje ni kanal predaje audiovizualne datoteke. To se potvrđuje s mentorom i administratorom aplikacije.</div></article></div>
@@ -942,7 +1102,7 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
       <div class="progress-view hidden" id="progressView" role="status" aria-live="polite"><div class="spinner"></div><h3>Analiziram dokument…</h3><p id="progressMessage">Otvaram Word strukturu</p><div class="progress-track"><i id="progressBar"></i></div><div class="progress-step" id="progressPercent" aria-hidden="true">0%</div><div class="progress-actions" style="margin-top:24px"><button class="btn btn-secondary btn-sm" id="cancelAnalysisBtn" type="button">Prekini analizu</button></div></div>
       <div class="result-view hidden" id="resultView">
         <div class="demo-bar hidden" id="demoBar" role="note" aria-label="Primjer izvještaja"></div>
-        <div class="result-summary"><div class="score-card"><div class="score-ring" id="scoreRing"><div class="score-ring-inner"><span><b id="scoreValue">0</b><small>/ 100</small></span></div></div><div class="score-label" id="scoreLabel">Analiza završena</div><div class="ready-stamp hidden" id="readyStamp" aria-hidden="true">Tehnički uredno</div></div><div class="result-main"><h2 id="resultTitle">Rezultat provjere</h2><p id="resultSubtitle"></p><div class="metrics"><div class="metric metric-jump" data-jump="issues" role="button" tabindex="0" aria-label="Prikaži sve probleme"><span>MOGUĆI PROBLEMI</span><b id="metricIssues">0</b></div><div class="metric"><span>RIJEČI</span><b id="metricWords">0</b></div><div class="metric"><span>IZVORI</span><b id="metricRefs">0</b></div><div class="metric"><span>CITATNICE</span><b id="metricCitations">0</b></div></div><div class="result-actions"><button class="btn btn-primary btn-sm hidden" id="unlockReport">Otključaj puni izvještaj</button><button class="btn btn-secondary btn-sm" id="orderFromResult">Naruči potpuno uređivanje</button><div class="dl-menu"><button class="btn btn-secondary btn-sm dl-menu-btn" type="button" aria-haspopup="true" aria-expanded="false">Preuzmi <i data-lucide="chevron-down"></i></button><div class="dl-menu-list" role="menu"><button class="dl-item" id="printReport" type="button" role="menuitem">Spremi kao PDF</button><button class="dl-item" id="downloadHtml" type="button" role="menuitem">HTML izvještaj</button><button class="dl-item" id="downloadJson" type="button" role="menuitem">Podatke (JSON)</button></div></div><button class="btn btn-ghost btn-sm" id="reportWrongCheck" title="Prijavi ako je neka provjera po tvome kriva">Prijavi pogrešnu provjeru</button><button class="btn btn-ghost btn-sm" id="newAnalysis">Nova provjera</button></div></div></div>
+        <div class="result-summary"><div class="score-card"><div class="score-ring" id="scoreRing"><div class="score-ring-inner"><span><b id="scoreValue">0</b><small>/ 100</small></span></div><svg class="ks-circle" viewBox="0 0 190 150" fill="none" aria-hidden="true" focusable="false"><path d="M95 14 C 158 10, 184 40, 181 75 C 178 116, 138 140, 92 137 C 44 134, 8 112, 11 72 C 14 34, 52 12, 95 16"/></svg></div><div class="score-label" id="scoreLabel">Analiza završena</div><div class="ready-stamp hidden" id="readyStamp" aria-hidden="true">Tehnički uredno</div></div><div class="result-main"><h2 id="resultTitle">Rezultat provjere</h2><p id="resultSubtitle"></p><div class="metrics"><div class="metric metric-jump" data-jump="issues" role="button" tabindex="0" aria-label="Prikaži sve probleme"><span>MOGUĆI PROBLEMI</span><b id="metricIssues">0</b></div><div class="metric"><span>RIJEČI</span><b id="metricWords">0</b></div><div class="metric"><span>IZVORI</span><b id="metricRefs">0</b></div><div class="metric"><span>CITATNICE</span><b id="metricCitations">0</b></div></div><div class="result-actions"><button class="btn btn-primary btn-sm hidden" id="unlockReport">Otključaj puni izvještaj</button><button class="btn btn-secondary btn-sm" id="orderFromResult">Naruči potpuno uređivanje</button><div class="dl-menu"><button class="btn btn-secondary btn-sm dl-menu-btn" type="button" aria-haspopup="true" aria-expanded="false">Preuzmi <i data-lucide="chevron-down"></i></button><div class="dl-menu-list" role="menu"><button class="dl-item" id="printReport" type="button" role="menuitem">Spremi kao PDF</button><button class="dl-item" id="downloadHtml" type="button" role="menuitem">HTML izvještaj</button><button class="dl-item" id="downloadJson" type="button" role="menuitem">Podatke (JSON)</button></div></div><button class="btn btn-ghost btn-sm" id="reportWrongCheck" title="Prijavi ako je neka provjera po tvome kriva">Prijavi pogrešnu provjeru</button><button class="btn btn-ghost btn-sm" id="newAnalysis">Nova provjera</button></div></div></div>
         <div class="next-steps hidden" id="nextSteps"></div>
         <div class="full-report-banner hidden" id="fullReportBanner"></div><section class="waitlist-bar" id="waitlistBar" aria-label="Obavijest o pokrivenosti" hidden></section><div class="tabs" role="tablist" aria-label="Prikaz rezultata"><button class="tab active" role="tab" id="tabbtn-overview" aria-controls="tab-overview" aria-selected="true" tabindex="0" data-tab="overview">Sažetak</button><button class="tab" role="tab" id="tabbtn-action" aria-controls="tab-action" aria-selected="false" tabindex="-1" data-tab="action">Plan ispravaka</button><button class="tab" role="tab" id="tabbtn-issues" aria-controls="tab-issues" aria-selected="false" tabindex="-1" data-tab="issues">Svi problemi <span id="issueTabCount"></span></button><button class="tab" role="tab" id="tabbtn-submission" aria-controls="tab-submission" aria-selected="false" tabindex="-1" data-tab="submission">Spremnost za predaju <span id="submissionTabCount"></span></button><button class="tab-toggle" id="detailsToggle" type="button" aria-expanded="false">Više detalja <i data-lucide="chevron-down"></i></button></div><div class="tabs tab-details" id="tabDetails" role="tablist" aria-label="Detaljni prikazi" hidden><button class="tab" role="tab" id="tabbtn-formatting" aria-controls="tab-formatting" aria-selected="false" tabindex="-1" data-tab="formatting">Oblikovanje</button><button class="tab" role="tab" id="tabbtn-citations" aria-controls="tab-citations" aria-selected="false" tabindex="-1" data-tab="citations">Citatnice i literatura</button><button class="tab" role="tab" id="tabbtn-structure" aria-controls="tab-structure" aria-selected="false" tabindex="-1" data-tab="structure">Struktura i elementi</button><button class="tab" role="tab" id="tabbtn-validation" aria-controls="tab-validation" aria-selected="false" tabindex="-1" data-tab="validation">Profil i validacija</button></div>
         <div class="tab-panels"><section class="tab-panel active" id="tab-overview" role="tabpanel" aria-labelledby="tabbtn-overview" tabindex="0" data-print-title="Sažetak"><div class="category-grid" id="categoryGrid"></div><div class="summary-note" id="summaryNote"></div></section><section class="tab-panel" id="tab-action" role="tabpanel" aria-labelledby="tabbtn-action" tabindex="0" data-print-title="Plan ispravaka"><div id="actionPlan"></div></section><section class="tab-panel" id="tab-formatting" role="tabpanel" aria-labelledby="tabbtn-formatting" tabindex="0" data-print-title="Oblikovanje"><div id="formattingChecks"></div><div id="typoLintSummary" class="hidden"></div><div id="registerLintSummary" class="hidden"></div></section><section class="tab-panel" id="tab-citations" role="tabpanel" aria-labelledby="tabbtn-citations" tabindex="0" data-print-title="Citatnice i literatura"><div id="citationChecks"></div><div id="legalCitationSummary" class="hidden"></div></section><section class="tab-panel" id="tab-structure" role="tabpanel" aria-labelledby="tabbtn-structure" tabindex="0" data-print-title="Struktura i elementi"><div id="structureChecks"></div></section><section class="tab-panel" id="tab-validation" role="tabpanel" aria-labelledby="tabbtn-validation" tabindex="0" data-print-title="Profil i terenska validacija"><div id="validationSummary"></div></section><section class="tab-panel" id="tab-submission" role="tabpanel" aria-labelledby="tabbtn-submission" tabindex="0" data-print-title="Spremnost za predaju"><div class="gate-shell"><div id="submissionGate"></div><div id="pdfPreflightSummary"></div><div id="submissionChecklist"></div><div id="referralShareBar"></div></div></section><section class="tab-panel" id="tab-issues" role="tabpanel" aria-labelledby="tabbtn-issues" tabindex="0" data-print-title="Svi problemi"><div class="issues-toolbar"><div class="filters" id="issueFilters"><button class="filter-btn active" data-filter="all">Sve</button><button class="filter-btn" data-filter="error">Važno</button><button class="filter-btn" data-filter="warning">Upozorenja</button><button class="filter-btn" data-filter="info">Napomene</button></div><small id="issueCountLabel"></small></div><div class="issues-list" id="issuesList"></div></section></div>
