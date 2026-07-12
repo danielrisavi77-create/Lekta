@@ -40,6 +40,9 @@ declare module '@fontsource-variable/newsreader/opsz-italic.css';
 declare module '@fontsource/ibm-plex-mono/400.css';
 declare module '@fontsource/ibm-plex-mono/500.css';
 declare module '@fontsource/ibm-plex-mono/600.css';
+declare module '@fontsource/caveat/500.css';
+declare module '@fontsource/caveat/600.css';
+declare module '@fontsource/caveat/700.css';
 declare module 'open-props/easings';
 
 // Build-flag (vite/vitest define): dev alati (QA konzola, setup modal) postoje samo kad je true.

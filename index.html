@@ -608,29 +608,158 @@ h1,.section-head h2,.cta h2,.result-main h2,.analyzer-header h2{font-family:var(
 .footer-bottom{font-family:var(--mono);font-size:10.5px;letter-spacing:.03em}
 @media (max-width:980px){.footer-grid{grid-template-columns:1fr 1fr}}
 @media (max-width:720px){.footer-grid{grid-template-columns:1fr}}
+/* ===== KS W1: Korektorski stol, tokeni + baza + stol + nav + footer (appended sloj pobjeduje kaskadu) =====
+   Tamna radna ploha pod lampom; sadrzaj zive na papirima. Novi tokeni --desk/--paper/--red/... +
+   remap starih imena kroz html:root (specificnost (0,1,1) namjerno tuce bundle :root koji se u
+   buildu ucitava NAKON ovog inline bloka). Crvena je jedini brand akcent; zelena i zuta ostaju
+   iskljucivo za nalaze provjere. Radna lampa je default (korektorski.ts postavi data-theme="dark"
+   kad nema spremljene teme); data-theme="light" je "danje svjetlo". */
+html:root{
+  --desk:#191512;--desk-2:#211C17;--desk-ink:#EDE7DC;--desk-muted:rgba(237,231,220,.55);--desk-faint:rgba(237,231,220,.32);--desk-line:rgba(237,231,220,.14);
+  --paper:#F7F3E8;--paper-2:#EFE9D9;--paper-ink:#26221B;--paper-muted:#6E6656;--paper-line:#DCD4BF;
+  --red:#E4573D;--red-deep:#C4372E;--red-soft:rgba(196,55,46,.12);--on-red:#1A1512;
+  --pass:#2E8B5F;--pass-soft:rgba(46,139,95,.14);
+  --scan:#4A6CF0;--lamp:rgba(255,214,150,.15);
+  --paper-sh:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);
+  --paper-sh-sm:0 2px 6px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4);
+  --ease:cubic-bezier(.22,1,.36,1);--ease-pop:cubic-bezier(.34,1.4,.5,1);
+  --font-hand:"Caveat",cursive;--font-doc:Georgia,"Times New Roman",serif;
+  --max:1280px;
+  /* remap starih tokena: desk kontekst (razina stranice) */
+  --bg:var(--desk);--panel:var(--paper);--panel-2:var(--desk-2);
+  --text:var(--desk-ink);--muted:var(--desk-muted);--muted-2:var(--desk-faint);
+  --line:var(--desk-line);--line-strong:var(--desk-line);
+  --brand:var(--red);--brand-2:var(--red-deep);--brand-soft:var(--red-soft);--on-brand:var(--on-red);
+  --ok:var(--pass);--ok-soft:var(--pass-soft);
+  --warn:#C98A2E;--warn-soft:rgba(201,138,46,.15);--warn-strong:#C98A2E;
+  --danger:var(--red-deep);--danger-soft:var(--red-soft);
+  --info:var(--scan);--info-soft:rgba(74,108,240,.12);
+  --stamp:var(--red-deep);
+  --shadow:var(--paper-sh);--shadow-sm:var(--paper-sh-sm);
+  --radius-xl:2px;--radius:2px;--radius-sm:2px;
+  --sans:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --focus:0 0 0 2px var(--paper),0 0 0 4px var(--scan);
+}
+html:root[data-theme="light"]{
+  --desk:#DFD8C6;--desk-2:#D6CEB9;--desk-ink:#26221B;--desk-muted:#6B6252;--desk-faint:#98917E;--desk-line:rgba(38,34,27,.16);
+  --paper:#FDFBF3;--paper-2:#F3EEDF;--paper-line:#E0D9C6;
+  --red:#C4372E;--red-deep:#A62B23;--red-soft:rgba(196,55,46,.1);--on-red:#F7F3E8;
+  --pass:#1E7F4F;--pass-soft:rgba(30,127,79,.12);
+  --warn:#B77416;--warn-soft:rgba(183,116,22,.14);--warn-strong:#8A570E;
+  --scan:#1D3FBF;--lamp:rgba(255,255,255,.25);
+  --paper-sh:0 2px 5px rgba(60,50,30,.18),0 18px 44px rgba(60,50,30,.25);
+  --paper-sh-sm:0 1px 4px rgba(60,50,30,.15),0 8px 22px rgba(60,50,30,.18);
+}
+/* Baza: mono je osnovni glas stranice, serif nosi naslove i duge opise */
+body{background:var(--desk);color:var(--desk-ink);font:15px/1.6 var(--sans);overflow-x:clip}
+::selection{background:var(--red);color:#fff}
+h1,h2,h3,h4{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:400}
+.shell{width:min(var(--max),calc(100% - 72px))}
+@media(max-width:720px){.shell{width:min(100% - 24px,var(--max))}}
+/* Papir scope: povrsine koje su fizicki "list na stolu" re-mapiraju stare tokene u papirni
+   kontekst, pa i sadrzaj koji renderira app.ts (issue redovi, kartice, cjenik) dobiva ispravan
+   polaritet bez izmjena JS-a. Ugnijezdene "bijele karticice" unutra koriste --panel:#fff. */
+.analyzer-wrap,.modal,.price-card,.check-card,.step-card,.diff-card,.faq,.consent-banner,.toast,.package-file,.no-faculty-panel{
+  --text:var(--paper-ink);--muted:var(--paper-muted);--muted-2:var(--paper-muted);
+  --line:var(--paper-line);--line-strong:var(--paper-line);
+  --panel:#fff;--panel-2:var(--paper-2);--bg:var(--paper);
+  --brand:var(--red-deep);--brand-2:var(--paper-ink);--brand-soft:var(--red-soft);--on-brand:#F7F3E8;
+  --info-soft:rgba(74,108,240,.08);
+  background:var(--paper);color:var(--paper-ink);
+}
+/* Dekor stola: svjetlo lampe (parallax u korektorski.ts), traka citanja, vinjeta, trag salice */
+.ks-lamp{position:absolute;top:-320px;right:-100px;width:1200px;height:1200px;border-radius:50%;background:radial-gradient(circle,var(--lamp),transparent 62%);pointer-events:none;z-index:0}
+.ks-progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:110;pointer-events:none}
+.ks-progress>i{display:block;height:100%;width:0;background:var(--red);box-shadow:0 0 14px color-mix(in srgb,var(--red) 60%,transparent)}
+.ks-vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 130% 110% at 50% 40%,transparent 62%,rgba(0,0,0,.28));z-index:1}
+.ks-kava{position:absolute;top:920px;left:-40px;width:170px;height:170px;border:14px solid color-mix(in srgb,var(--desk-ink) 7%,transparent);border-radius:50%;transform:rotate(-8deg);pointer-events:none;z-index:0}
+.topbar,main,footer{position:relative;z-index:2}
+@media print{.ks-lamp,.ks-progress,.ks-vignette,.ks-kava{display:none}}
+/* Gumbi: ostri rubovi; primarni CTA na stolu = papir s crvenom offset sjenom (potpis dizajna),
+   a unutar papira = blok tinte s crveno-dubokom offset sjenom. Nav CTA je mala crvena marka. */
+.btn{border-radius:2px;font-family:var(--sans);font-weight:600;letter-spacing:.04em}
+.btn-primary{background:var(--paper);color:var(--paper-ink);border:none;box-shadow:4px 4px 0 var(--red);transition:transform .15s var(--ease),box-shadow .15s var(--ease)}
+.btn-primary:hover{background:var(--paper);color:var(--paper-ink);transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--red)}
+.btn-primary:disabled{opacity:.45;transform:none;box-shadow:3px 3px 0 var(--desk-line)}
+.analyzer-wrap .btn-primary,.modal .btn-primary,.price-card .btn-primary,.consent-banner .btn-primary{background:var(--paper-ink);color:var(--paper);box-shadow:3px 3px 0 var(--red-deep)}
+.analyzer-wrap .btn-primary:hover,.modal .btn-primary:hover,.price-card .btn-primary:hover,.consent-banner .btn-primary:hover{background:var(--paper-ink);color:var(--paper);transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--red-deep)}
+.analyzer-wrap .btn-primary:disabled,.modal .btn-primary:disabled{opacity:.45;transform:none;box-shadow:2px 2px 0 var(--paper-line)}
+.btn-secondary{background:transparent;border:1.5px solid var(--line-strong);color:var(--text);border-radius:2px}
+.btn-secondary:hover{border-color:var(--text);background:transparent;color:var(--text)}
+.btn-ghost{background:transparent;border:none;color:var(--muted)}
+.btn-ghost:hover{color:var(--text);background:transparent}
+.icon-btn{border:1px solid var(--desk-line);border-radius:2px;background:transparent;color:var(--desk-ink)}
+/* Nav: 66px bar na zamucenom stolu */
+.topbar{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--desk) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--desk-line);box-shadow:none}
+.topbar.scrolled{background:color-mix(in srgb,var(--desk) 92%,transparent);border-bottom-color:var(--desk-line);box-shadow:none}
+.nav{height:66px;display:flex;align-items:center;gap:26px;padding:0}
+.logo{display:inline-flex;align-items:center;gap:12px;color:var(--desk-ink);font-family:var(--display-serif)}
+.ks-mark{position:relative;width:30px;height:30px;flex:none;background:var(--desk-ink);color:var(--desk);display:grid;place-items:center;font-family:var(--display-serif);font-weight:600;font-size:19px;line-height:1}
+.ks-tick{position:absolute;right:-4px;bottom:-4px;width:13px;height:13px;background:var(--red);color:#F7F3E8;display:grid;place-items:center}
+.ks-tick svg{width:9px;height:9px;display:block}
+.logo-word{font-family:var(--display-serif);font-style:italic;font-weight:500;font-size:27px;letter-spacing:-.01em;background:none;-webkit-text-fill-color:currentColor;color:var(--desk-ink)}
+.logo-tag{font-size:10px;letter-spacing:.22em;color:var(--desk-faint);text-transform:uppercase;font-family:var(--sans)}
+@media(max-width:1000px){.logo-tag{display:none}}
+.nav-links{margin-left:auto;display:flex;align-items:center;gap:26px;font-family:var(--display-serif);font-size:15.5px}
+.nav-links a{color:var(--desk-muted);font-weight:400;padding:0}
+.nav-links a:hover{color:var(--red);background:none}
+.lampa-btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--desk-line);background:transparent;padding:8px 13px;border-radius:2px;color:var(--desk-muted);font:600 11px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
+.lampa-btn:hover{color:var(--desk-ink);border-color:var(--desk-muted)}
+.lampa-btn svg{width:13px;height:13px;flex:none}
+.nav>.btn-primary{background:var(--red);color:var(--on-red);box-shadow:none;text-transform:uppercase;font-size:12.5px;letter-spacing:.05em;padding:11px 18px}
+.nav>.btn-primary:hover{background:var(--red-deep);color:#F7F3E8;transform:none;box-shadow:none}
+.nav>.btn-ghost{font-family:var(--sans);font-size:12px}
+/* Mobilni sheet izbornik na stolu */
+.mobile-nav{background:var(--desk)}
+.mobile-nav a{font-family:var(--display-serif);font-size:17px;color:var(--desk-ink);border-bottom:1px solid var(--desk-line);border-radius:0;padding:13px 4px}
+.mobile-nav a:hover{background:none;color:var(--red)}
+.mobile-nav .mobile-nav-cta{margin-top:14px;display:grid}
+.mobile-nav .mobile-nav-cta a{border:none;background:var(--red);color:var(--on-red);text-align:center;font-family:var(--sans);font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.05em;padding:14px}
+/* Footer: arhivska kutija na rubu stola */
+footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relative;background:none}
+.footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1.05fr 1fr .95fr;gap:40px;align-items:start}
+.footer-brand .ks-mark{width:26px;height:26px;font-size:16px}
+.footer-brand .ks-tick{width:12px;height:12px}
+.footer-brand .logo-word{font-size:24px}
+.footer-copy{font-family:var(--display-serif);font-size:14px;color:var(--desk-muted);line-height:1.75;max-width:340px}
+.local-badge{display:inline-flex;align-items:center;gap:8px;margin-top:4px;border:1px dashed var(--desk-line);border-radius:0;background:none;padding:8px 13px;font-family:var(--display-serif);font-style:italic;font-size:13px;color:var(--pass)}
+.local-badge svg{width:13px;height:13px}
+.footer-col{display:grid;gap:9px;justify-items:start}
+.footer-col-h{font-family:var(--font-hand);font-size:22px;font-weight:600;color:var(--red);transform:rotate(-1.5deg);display:inline-block;margin-bottom:8px;letter-spacing:0;text-transform:none}
+.footer-col a,.footer-col .footer-link-btn{font-family:var(--display-serif);font-size:15px;color:var(--desk-muted);background:none;border:none;padding:0;cursor:pointer;text-align:left}
+.footer-col a:hover,.footer-col .footer-link-btn:hover{color:var(--desk-ink)}
+.footer-bottom{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:44px;padding-top:20px;border-top:1px solid var(--desk-line);font-family:var(--sans);font-size:10px;letter-spacing:.1em;color:var(--desk-faint);text-transform:uppercase}
+@media(max-width:980px){.footer-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:720px){.footer-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
+<div class="ks-lamp" aria-hidden="true"></div>
+<div class="ks-progress" aria-hidden="true"><i></i></div>
+<div class="ks-vignette" aria-hidden="true"></div>
+<div class="ks-kava" aria-hidden="true"></div>
 <header class="topbar">
   <nav class="shell nav" aria-label="Glavna navigacija">
-    <a class="logo" href="#top"><svg class="logo-tick" viewBox="0 0 14 12" aria-hidden="true" focusable="false"><path d="M1 6.4 5 10.4 13 1.4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="logo-word">Lekta</span></a>
-    <div class="nav-links"><a href="#how">Kako radi</a><a href="landing_usporedba.html">Usporedba</a><div class="nav-tools"><button class="nav-tools-btn" type="button" aria-haspopup="true">Alati <span class="caret" aria-hidden="true"><i data-lucide="chevron-down"></i></span></button><div class="nav-tools-menu" role="menu"><a role="menuitem" href="citat.html"><b>Citat generator</b><small>Citat u stilu tvog fakulteta</small></a><a role="menuitem" href="kartice.html"><b>Brojač kartica</b><small>Kartice, riječi i znakovi po A4 normi</small></a><a role="menuitem" href="naslovnica.html"><b>Naslovnica</b><small>Naslovna stranica po predlošku</small></a><a role="menuitem" href="literatura.html"><b>Sređivanje literature</b><small>Abecedni popis, čišćenje i izvoz</small></a><a role="menuitem" href="izjava.html"><b>Izjava o izvornosti</b><small>Gotov tekst izjave za umetanje</small></a></div></div><a href="#pricing">Paketi</a><a href="#faq">Pitanja</a></div>
-    <button class="icon-btn" id="themeBtn" aria-label="Promijeni temu" title="Promijeni temu"><i data-lucide="sun-moon"></i></button>
+    <a class="logo" href="#top"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span><span class="logo-tag">korektorski stol</span></a>
+    <div class="nav-links"><a href="#how">Kako radi</a><a href="#analyzer">Provjera</a><a href="#checks">Što provjerava</a><a href="#pricing">Tarife</a><a href="#faq">Pitanja</a></div>
+    <button class="lampa-btn" id="themeBtn" aria-label="Promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 2h8l-5 7h4L7 22l3-9H6l3-11Z"/></svg>Lampa</button>
     <button class="btn btn-ghost btn-sm hidden" id="authEntry" data-auth-entry type="button">Prijava</button>
     <a class="btn btn-primary btn-sm" href="#analyzer">Provjeri rad</a>
     <button class="icon-btn mobile-menu" id="mobileMenuBtn" aria-label="Otvori izbornik" aria-expanded="false"><i data-lucide="menu"></i></button>
   </nav>
   <div class="mobile-nav" id="mobileNav">
     <a href="#how">Kako radi</a>
+    <a href="#analyzer">Provjera</a>
+    <a href="#checks">Što provjerava</a>
+    <a href="#pricing">Tarife</a>
+    <a href="#faq">Pitanja</a>
     <a href="landing_usporedba.html">Usporedba</a>
     <a href="citat.html">Citat generator</a>
     <a href="kartice.html">Brojač kartica</a>
     <a href="naslovnica.html">Naslovnica</a>
     <a href="literatura.html">Sređivanje literature</a>
     <a href="izjava.html">Izjava o izvornosti</a>
-    <a href="#pricing">Paketi</a>
-    <a href="#faq">Pitanja</a>
-    <a class="btn btn-primary" href="#analyzer">Provjeri rad</a>
+    <div class="mobile-nav-cta"><a class="btn btn-primary" href="#analyzer">Provjeri rad</a></div>
   </div>
 </header>
 <main id="top">
@@ -746,7 +875,7 @@ h1,.section-head h2,.cta h2,.result-main h2,.analyzer-header h2{font-family:var(
 <section class="section section-soft" id="faq"><div class="shell"><div class="section-head"><span class="kicker">Česta pitanja</span><h2>Prije nego učitaš dokument</h2></div><div class="faq"><details><summary>Šalje li se moj rad na internet?</summary><p>Automatska analiza ostaje potpuno lokalna. Dokument se prenosi tek kada izričito naručiš ručnu uslugu, prihvatiš uvjete obrade i potvrdiš slanje. Bez narudžbe Word datoteka ne napušta uređaj.</p></details><details><summary>Može li aplikacija automatski ispraviti cijeli Word dokument?</summary><p>Ova verzija radi audit i daje konkretne upute. Potpuno automatsko formatiranje bit će zaseban modul; složeniji dokumenti i dalje zahtijevaju ljudski pregled.</p></details><details><summary>Provjerava li Lekta plagijat ili sličnost teksta?</summary><p>Ne. Lekta provjerava oblikovanje, strukturu, opseg i citiranje prema pravilima fakulteta, ali ne uspoređuje tekst s drugim izvorima i nije zamjena za Turnitin ni druge alate za provjeru izvornosti. Provjeru izvornosti provodi fakultet.</p></details><details><summary>Je li rezultat službena potvrda fakulteta?</summary><p>Nije. Rezultat je pomoćna tehnička provjera prema odabranom profilu. Uvijek vrijede aktualne službene upute fakulteta, studija, kolegija i mentora.</p></details><details><summary>Zašto je moj fakultet označen kao generički profil?</summary><p>Ustanova je dostupna za odabir, ali posebna pravila još nisu povezana s provjerenim službenim izvorom. Aplikacija zato radi opći tehnički audit i dopušta unos posebnih uputa mentora, bez tvrdnje da je dokument službeno usklađen.</p></details><details><summary>Zašto neka citatnica možda nije prepoznata?</summary><p>Citatni stilovi imaju brojne varijante, a Word tekst može sadržavati polja, fusnote i posebne znakove. Aplikacija označava moguće probleme, ali rezultat treba provjeriti u kontekstu rada.</p></details></div></div></section>
 <section class="section"><div class="shell"><div class="cta"><div><h2>Predaja bez panike u zadnji čas.</h2><p>Provjeri dokument prije nego što ga pošalješ mentoru ili učitaš u repozitorij.</p></div><div class="cta-side"><a class="btn" href="#analyzer">Provjeri rad sada →</a><small class="cta-privacy">Dokument u automatskoj provjeri ostaje na tvom uređaju.</small></div></div></div></section>
 </main>
-<footer><div class="shell"><div class="footer-grid"><div class="footer-brand"><a class="logo" href="#top"><svg class="logo-tick" viewBox="0 0 14 12" aria-hidden="true" focusable="false"><path d="M1 6.4 5 10.4 13 1.4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="logo-word">Lekta</span></a><p class="footer-copy">Tehnička provjera i priprema akademskih radova. Aplikacija ne piše sadržaj rada i ne zamjenjuje mentora, knjižničara, lektora, službene fakultetske upute ni provjeru plagijata ili sličnosti (nije Turnitin).</p><span class="local-badge"><i data-lucide="lock"></i> Dokumenti se obrađuju lokalno</span></div><nav class="footer-col" aria-label="Proizvod"><span class="footer-col-h">Proizvod</span><a href="#analyzer">Provjera</a><a href="landing_usporedba.html">Usporedba</a><a href="#pricing">Paketi</a></nav><nav class="footer-col" aria-label="Alati"><span class="footer-col-h">Alati</span><a href="citat.html">Citat generator</a><a href="kartice.html">Brojač kartica</a><a href="naslovnica.html">Naslovnica</a><a href="literatura.html">Sređivanje literature</a><a href="izjava.html">Izjava o izvornosti</a></nav><nav class="footer-col" aria-label="Pravno"><span class="footer-col-h">Pravno</span><a class="footer-link-btn legal-open" data-legal="privacy" href="/privatnost.html">Privatnost</a><a class="footer-link-btn legal-open" data-legal="terms" href="/uvjeti-koristenja.html">Uvjeti</a><a class="footer-link-btn legal-open" data-legal="disclaimer" href="/odricanje-od-odgovornosti.html">Odricanje</a><a class="footer-link-btn legal-open" data-legal="purchase" href="/pravila-povrata.html">Pravila kupnje i povrata</a><a class="footer-link-btn legal-open" data-legal="processing" href="/obrada-dokumenata.html">Obrada dokumenata</a><a class="footer-link-btn legal-open" data-legal="cookies" href="/kolacici.html">Kolačići</a><a class="footer-link-btn legal-open" data-legal="guarantee" href="/garancija.html">Garancija</a></nav><nav class="footer-col" aria-label="Ostalo"><span class="footer-col-h">Ostalo</span><button class="footer-link-btn" id="privacySettingsBtn">Postavke privatnosti</button></nav></div><div class="footer-bottom"><span>© 2026 Lekta · Zagreb</span><span>Dokumenti se u automatskoj provjeri obrađuju lokalno.</span></div></div></footer>
+<footer><div class="shell"><div class="footer-grid"><div class="footer-brand"><a class="logo" href="#top"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span></a><p class="footer-copy">Tehnička provjera i priprema akademskih radova. Aplikacija ne piše sadržaj rada i ne zamjenjuje mentora, knjižničara, lektora, službene fakultetske upute ni provjeru plagijata ili sličnosti (nije Turnitin).</p><span class="local-badge"><i data-lucide="lock"></i> Dokumenti se obrađuju lokalno</span></div><nav class="footer-col" aria-label="Proizvod"><span class="footer-col-h">Proizvod</span><a href="#analyzer">Provjera</a><a href="landing_usporedba.html">Usporedba</a><a href="#pricing">Paketi</a></nav><nav class="footer-col" aria-label="Alati"><span class="footer-col-h">Alati</span><a href="citat.html">Citat generator</a><a href="kartice.html">Brojač kartica</a><a href="naslovnica.html">Naslovnica</a><a href="literatura.html">Sređivanje literature</a><a href="izjava.html">Izjava o izvornosti</a></nav><nav class="footer-col" aria-label="Pravno"><span class="footer-col-h">Pravno</span><a class="footer-link-btn legal-open" data-legal="privacy" href="/privatnost.html">Privatnost</a><a class="footer-link-btn legal-open" data-legal="terms" href="/uvjeti-koristenja.html">Uvjeti</a><a class="footer-link-btn legal-open" data-legal="disclaimer" href="/odricanje-od-odgovornosti.html">Odricanje</a><a class="footer-link-btn legal-open" data-legal="purchase" href="/pravila-povrata.html">Pravila kupnje i povrata</a><a class="footer-link-btn legal-open" data-legal="processing" href="/obrada-dokumenata.html">Obrada dokumenata</a><a class="footer-link-btn legal-open" data-legal="cookies" href="/kolacici.html">Kolačići</a><a class="footer-link-btn legal-open" data-legal="guarantee" href="/garancija.html">Garancija</a></nav><nav class="footer-col" aria-label="Ostalo"><span class="footer-col-h">Ostalo</span><button class="footer-link-btn" id="privacySettingsBtn">Postavke privatnosti</button></nav></div><div class="footer-bottom"><span>© 2026 Lekta · Zagreb</span><span>Nije provjera plagijata · Nije službena potvrda fakulteta</span></div></div></footer>
 <div class="modal-backdrop hidden" id="orderModal" role="dialog" aria-modal="true" aria-labelledby="orderTitle"><div class="modal"><div class="modal-head"><h3 id="orderTitle">Naruči uređivanje dokumenta</h3><button class="modal-close" id="closeModal" aria-label="Zatvori"><i data-lucide="x"></i></button></div><div class="modal-body"><div class="package-picks" id="packagePicks"></div><div class="form-grid"><div class="field"><label for="orderName">Ime i prezime</label><input class="input" id="orderName" autocomplete="name" maxlength="120"></div><div class="field"><label for="orderEmail">E-mail</label><input class="input" id="orderEmail" type="email" autocomplete="email" maxlength="180"></div><div class="field full"><label for="orderDeadline">Rok predaje</label><input class="input" id="orderDeadline" type="datetime-local"></div><div class="field full"><label for="orderNotes">Napomena</label><textarea id="orderNotes" rows="4" maxlength="2000" placeholder="Vrsta rada, fakultet, posebne upute mentora…"></textarea></div></div><div class="order-upload"><label for="orderDocument">Dokument za ručnu obradu</label><input id="orderDocument" type="file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"><div class="order-file-meta" id="orderFileMeta">Možeš ponovno odabrati dokument ili poslati onaj koji je već učitan u analizator. Datoteka se šalje samo nakon potvrde narudžbe.</div></div><div class="consent-box"><label class="consent-row"><input type="checkbox" id="orderConsent"><span>Prihvaćam <button type="button" class="footer-link-btn legal-link legal-open" data-legal="terms">Uvjete korištenja</button> i potvrđujem da sam pročitao/la <button type="button" class="footer-link-btn legal-link legal-open" data-legal="privacy">Obavijest o privatnosti</button>. Razumijem da se dokument prenosi samo radi izvršenja naručene usluge.</span></label><label class="consent-row"><input type="checkbox" id="orderMarketing"><span>Želim primati povremene obavijesti o novim provjerama i popustima. Ovo nije uvjet narudžbe.</span></label></div><div class="production-state" id="productionState"></div><div class="order-status hidden" id="orderStatus" role="status" aria-live="polite"></div><div class="secure-order-note"><i data-lucide="lock"></i><span>Podaci automatske analize ne sadrže tekst rada. Kod ručne usluge šalju se samo podaci obrasca i dokument koji izričito odabereš.</span></div><div class="modal-actions"><button class="btn btn-secondary" id="cancelOrder">Odustani</button><button class="btn btn-primary" id="submitOrder">Pošalji narudžbu</button></div></div></div></div>
 
 <div class="modal-backdrop hidden" id="historyModal" role="dialog" aria-modal="true" aria-labelledby="historyTitle"><div class="modal"><div class="modal-head"><h3 id="historyTitle">Lokalna povijest analiza</h3><button class="modal-close" id="closeHistory" aria-label="Zatvori"><i data-lucide="x"></i></button></div><div class="modal-body"><p class="history-privacy">Pohranjuju se samo naziv datoteke, rezultat, odabrani profil i broj problema. Sadržaj dokumenta i sama Word datoteka ne spremaju se.</p><div class="history-list" id="historyList"></div><div class="modal-actions"><button class="btn btn-secondary" id="clearHistory">Obriši povijest</button><button class="btn btn-primary" id="closeHistoryBottom">Zatvori</button></div></div></div></div>
