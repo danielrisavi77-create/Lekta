@@ -49,11 +49,6 @@ const COPY: Record<string, CopyEntry> = {
     body: 'U metapodacima nema neuobičajenih tragova.',
     tone: 'good',
   },
-  META_CHECKED: {
-    title: 'Metapodaci pregledani',
-    body: 'Identitetska polja dokumenta su pregledana.',
-    tone: 'good',
-  },
   // --- m1_content ------------------------------------------------------
   HIDDEN_VANISH: {
     title: 'Skriveni tekst u dokumentu',
@@ -266,8 +261,8 @@ export function moduleLabel(moduleId: string): string {
 /** Kodovi koji imaju override ali nisu u allowlisti (za test simetrije). */
 export const COVERED_CODES: readonly string[] = Object.keys(COPY);
 
-/** Kodovi iz allowliste bez override (za test potpunosti). META_CHECKED je
- *  sintetski (filter ga dodaje) pa je ovdje pokriven ali nije u allowlisti. */
+/** Kodovi iz allowliste bez override (za test potpunosti). Anti-inference
+ *  padding koristi OK_META, koji vec ima override, pa nema sintetskih kodova. */
 export function missingCopyCodes(): string[] {
   return [...STUDENT_VISIBLE_CODES].filter((c) => !(c in COPY));
 }

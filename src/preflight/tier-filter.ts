@@ -119,13 +119,17 @@ function scrubIdentityEvidence(f: PreflightFinding): PreflightFinding {
   };
 }
 
-/** Neutralan pozitivan nalaz kad filtriranje isprazni m1_metadata: praznina
- *  bi studentu signalizirala da postoji skriveni nalaz (anti-inference). */
-function metaCheckedPadding(): PreflightFinding {
+/** Anti-inference padding kad filtriranje isprazni m1_metadata. Praznina bi
+ *  studentu signalizirala da postoji skriveni (forenzicki) nalaz. Kljucno: ovaj
+ *  nalaz mora biti BAJT-IDENTICAN motorovom OK_META (cist dokument), inace sam
+ *  padding postaje tell (student koji usporedi cist i "ociscen" dokument
+ *  razaznao bi da je nesto potisnuto). Vrijednosti tocno prate m1_metadata
+ *  OK_META serijalizaciju (findings.py: SEVERITY_HR + Finding.to_dict). */
+function metaCleanPadding(): PreflightFinding {
   return {
-    module: 'm1_metadata', code: 'META_CHECKED', severity: 'INFO',
-    severity_hr: 'info', title: 'Metapodaci pregledani',
-    evidence: ['Identitetska polja dokumenta su pregledana.'],
+    module: 'm1_metadata', code: 'OK_META', severity: 'INFO',
+    severity_hr: 'info', title: 'Metapodaci bez anomalija',
+    evidence: ['Nema identiteta, nerealnih vremena ni jednosesijskih tragova.'],
     recommendation: '', location: '', positive: true,
   };
 }
@@ -147,7 +151,7 @@ export function filterReportForTier(
       .filter((f) => STUDENT_VISIBLE_CODES.has(f.code))
       .map(scrubIdentityEvidence);
     if (mod.module_id === 'm1_metadata' && findings.length === 0) {
-      findings = [metaCheckedPadding()];
+      findings = [metaCleanPadding()];
     }
     modules.push({
       module_id: mod.module_id,

@@ -27,7 +27,7 @@ describe('preflight copy potpunost', () => {
   it('svaki studentski kod ima override karticu', () => {
     expect(missingCopyCodes()).toEqual([]);
   });
-  it('svaki override kod je u allowlisti ili je sintetski META_CHECKED', () => {
+  it('nepoznat/forenzicki kod nema override (fail-closed), studentski ima', () => {
     for (const code of Object.keys(MODULE_LABELS)) expect(typeof code).toBe('string');
     // copyForCode za nepoznat kod je null (fail-closed render)
     expect(copyForCode('RSID_SINGLE_PASTE')).toBeNull();

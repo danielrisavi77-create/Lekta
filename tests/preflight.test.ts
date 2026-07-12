@@ -67,7 +67,7 @@ describe('drift: registar kodova pipelinea vs tier klasifikacija', () => {
 
   it('klasifikacija nema mrtvih unosa ni preklapanja', () => {
     const dead = [...STUDENT_VISIBLE_CODES, ...FORENSIC_CODES]
-      .filter((c) => !allPipelineCodes.has(c) && c !== 'META_CHECKED');
+      .filter((c) => !allPipelineCodes.has(c));
     expect(dead, 'kod klasificiran a ne postoji u pipelineu').toEqual([]);
     const overlap = [...STUDENT_VISIBLE_CODES].filter((c) => FORENSIC_CODES.has(c));
     expect(overlap).toEqual([]);
@@ -140,15 +140,23 @@ describe('filterReportForTier: studentska razina', () => {
       ['Autor (creator): Netko', 'Stranice: 31']);
   });
 
-  it('anti-inference: ispraznjeni m1_metadata dobiva META_CHECKED padding', () => {
+  it('anti-inference: ispraznjeni m1_metadata dobiva OK_META padding nerazluciv od cistog', () => {
     const r = report([{
       module_id: 'm1_metadata', module_name: 'Meta', skipped: false, skip_reason: '',
       findings: [finding({ code: 'META_SINGLE_SESSION', severity: 'HIGH' })],
     }]);
     const out = filterReportForTier(r, 'student', 'full');
     expect(out.modules[0].findings).toHaveLength(1);
-    expect(out.modules[0].findings[0].code).toBe('META_CHECKED');
-    expect(out.modules[0].findings[0].positive).toBe(true);
+    // Padding MORA biti bajt-identican motorovom OK_META (findings.py:
+    // Finding.to_dict + SEVERITY_HR). Da je razlucljiv (npr. drukciji kod ili
+    // evidence), sam padding bi odao da je forenzicki nalaz potisnut, cime bi
+    // se izgubila anti-inference svrha. Zato deep-equal na tocnu strukturu.
+    expect(out.modules[0].findings[0]).toEqual({
+      module: 'm1_metadata', code: 'OK_META', severity: 'INFO',
+      severity_hr: 'info', title: 'Metapodaci bez anomalija',
+      evidence: ['Nema identiteta, nerealnih vremena ni jednosesijskih tragova.'],
+      recommendation: '', location: '', positive: true,
+    });
   });
 
   it('mentor vidi sve netaknuto', () => {

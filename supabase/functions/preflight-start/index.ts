@@ -102,8 +102,16 @@ Deno.serve(async (req: Request) => {
     return json({ error: 'payload_too_large', maxBytes }, 413, origin);
   }
 
-  // 3. dnevni capovi (COUNT je TOCTOU-tolerantan jer partial unique index u
-  //    0019 atomski brani vise od jednog aktivnog joba po korisniku)
+  // 3. dnevni capovi (best-effort, COUNT-pa-INSERT). VAZNO: partial unique
+  //    index u 0019 je po user_id, pa atomski jamci samo <=1 AKTIVAN job po
+  //    korisniku. To u praksi drzi per-USER dnevni cap cvrstim (zahtjevi istog
+  //    korisnika su serijalizirani, pa ih dnevni COUNT stigne uhvatiti), ali
+  //    NE backstopa per-IP cap: vise RAZLICITIH racuna s istog IP-a moze
+  //    paralelno proci stale COUNT (index nije po ip_hash). Prihvatljivo za
+  //    soft-launch (trosak ~0/analiza; obilazak trazi vise OTP-verificiranih
+  //    racuna koji istovremeno racaju). Pre-scale fiks: fold gate+INSERT u
+  //    jednu SECURITY DEFINER funkciju pod pg_advisory_xact_lock(ip_hash) da
+  //    COUNT i INSERT budu u istoj transakciji (docs/DEPLOY_PREFLIGHT.md).
   const now = new Date();
   const dayAgo = new Date(now.getTime() - 24 * 3600 * 1000).toISOString();
   const { count: userCount } = await admin
