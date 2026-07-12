@@ -1,13 +1,7 @@
 // Korektorski stol: ponasanja dekora landinga (index-only, uvozi ga src/main.ts).
-// 1. Default osvjetljenje je "radna lampa" (tamni stol). Kad korisnik NEMA spremljenu temu,
-//    postavi data-theme="dark" prije ui-boot boot()-a, pa #themeBtn preklopnik radi prirodno
-//    (dark -> light = danje svjetlo). Namjerno se NE pise u localStorage: eksplicitni izbor
-//    ostaje korisnikov, a ostale stranice zadrzavaju svoj default.
-// 2. Traka napretka citanja (3px crvena, fixed top) + parallax svjetla lampe na scroll.
-// Progresivno: bez JS-a stranica je staticna radna lampa bez trake, nista ne ovisi o ovome.
-
-const root = document.documentElement;
-if (!root.dataset.theme) root.dataset.theme = 'dark';
+// Default "radna lampa" tema postavlja se u ui-boot.ts (dijeljeno za sve stranice).
+// Ovdje: traka napretka citanja (3px crvena, fixed top) + parallax svjetla lampe na
+// scroll + sekcijske scene + demo video + "oznaci rijeseno". Sve progresivno.
 
 function prefersReduced(): boolean {
   return typeof window.matchMedia === 'function'

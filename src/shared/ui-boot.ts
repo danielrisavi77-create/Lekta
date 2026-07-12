@@ -18,6 +18,14 @@ import './a11y.css'; // dijeljeni a11y sloj: forced-colors fokus fallback (BL-P2
 import { setupSkipLink } from './skip-link';
 import { createIcons, SunMoon, Menu, Lock, Upload, CheckCircle, AlertTriangle, AlertCircle, Info, SlidersHorizontal, ClipboardCheck, X, ChevronDown, Wrench, BadgeCheck, Zap } from 'lucide';
 
+// Korektorski stol: "radna lampa" (tamni stol) je default na SVIM stranicama. Kad korisnik
+// nema spremljenu temu, postavi data-theme="dark" prije boota, pa #themeBtn preklopnik radi
+// prirodno (dark -> light = danje svjetlo). Namjerno bez pisanja u localStorage: eksplicitni
+// izbor ostaje korisnikov. FOUC skripta u <head> i dalje samo vraca SPREMLJENU temu.
+if (typeof document !== 'undefined' && !document.documentElement.dataset.theme) {
+  document.documentElement.dataset.theme = 'dark';
+}
+
 const EASE_OUT = [0.22, 1, 0.36, 1];
 function prefersReduced() {
   return typeof window.matchMedia === 'function'
