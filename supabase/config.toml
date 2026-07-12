@@ -415,6 +415,17 @@ verify_jwt = false
 [functions.health]
 verify_jwt = false
 
+# Cloud integritet (Faza 4) i Provjera prije predaje: oboje traze prijavljenog
+# korisnika (gateway JWT + getUser u funkciji).
+[functions.integrity-check]
+verify_jwt = true
+
+[functions.preflight-start]
+verify_jwt = true
+
+[functions.preflight-result]
+verify_jwt = true
+
 [analytics]
 enabled = true
 port = 54327
