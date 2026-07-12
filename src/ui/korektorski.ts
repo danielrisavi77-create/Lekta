@@ -49,19 +49,70 @@ function setupSections(): void {
   });
 }
 
-// Demo video: autoplay tek kad udje u vidokrug, pauza kad izadje (stedi podatke, preload=none).
-// Uz reduced-motion se ne pusta samo od sebe nego dobiva kontrole za rucno pokretanje.
+// Demo video: bez autoplaya i bez loopa, pokrece se iskljucivo rucno (play overlay ili klik
+// na video). Protiv stekanja: preload ostaje none dok je sekcija daleko, a IO s velikim
+// rootMarginom unaprijed bufferira prije nego korisnik stigne kliknuti. Izlazak iz vidokruga
+// pauzira, povratak nastavlja samo ako je vec sviralo. Na kraju se umjesto restarta pokaze
+// zavrsni ekran (pecat + ponovi / CTA na analizator sa "kreni ovdje" spotom na dropzoni).
+// Uz reduced-motion ili bez IO: native kontrole, bez play overlaya, zavrsni ekran ostaje.
 function setupVideo(): void {
   const v = document.querySelector<HTMLVideoElement>('.ks-video');
   if (!v) return;
-  if (prefersReduced() || typeof IntersectionObserver !== 'function') { v.controls = true; return; }
+  const playOverlay = document.getElementById('ksVideoPlay');
+  const endOverlay = document.getElementById('ksVideoEnd');
+  const basic = prefersReduced() || typeof IntersectionObserver !== 'function';
+  if (basic) { v.controls = true; playOverlay?.remove(); }
+
+  const showPlay = (show: boolean) => { if (playOverlay && !basic) playOverlay.hidden = !show; };
+  const showEnd = (show: boolean) => {
+    if (!endOverlay) return;
+    endOverlay.hidden = !show;
+    if (show) endOverlay.focus();
+  };
+  const start = () => { showEnd(false); v.play().catch(() => { v.controls = true; showPlay(false); }); };
+
+  playOverlay?.addEventListener('click', start);
+  if (!basic) v.addEventListener('click', () => { if (v.paused) start(); else v.pause(); });
+  v.addEventListener('play', () => { showPlay(false); showEnd(false); });
+  v.addEventListener('pause', () => { if (!v.ended) showPlay(true); });
+  v.addEventListener('ended', () => { showPlay(false); showEnd(true); });
+
+  endOverlay?.querySelector('[data-video-replay]')?.addEventListener('click', () => {
+    v.currentTime = 0;
+    start();
+  });
+  endOverlay?.querySelectorAll<HTMLAnchorElement>('[data-video-cta]').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      const target = document.getElementById('analyzer');
+      if (target && !prefersReduced()) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+      const dz = document.getElementById('dropzone');
+      if (!dz) return;
+      dz.classList.remove('ks-spot');
+      window.setTimeout(() => dz.classList.add('ks-spot'), 400);
+      window.setTimeout(() => dz.classList.remove('ks-spot'), 4400);
+    });
+  });
+
+  if (basic) return;
+  // Pauza izvan vidokruga; nastavak samo ako je korisnik vec gledao (nikad hladni autoplay).
+  let wasPlaying = false;
   const io = new IntersectionObserver((entries) => {
     for (const e of entries) {
-      if (e.isIntersecting) v.play().catch(() => { v.controls = true; });
-      else v.pause();
+      if (e.isIntersecting) { if (wasPlaying && !v.ended) v.play().catch(() => {}); }
+      else { wasPlaying = !v.paused && !v.ended; if (!v.paused) v.pause(); }
     }
   }, { threshold: 0.35 });
   io.observe(v);
+  // Prefetch: kad se sekcija priblizi na ~900px, bufferiraj unaprijed. load() resetira
+  // reprodukciju pa se smije pozvati samo dok nista jos nije pusteno.
+  let started = false;
+  v.addEventListener('play', () => { started = true; }, { once: true });
+  const pre = new IntersectionObserver((entries) => {
+    if (!entries.some((e) => e.isIntersecting)) return;
+    pre.disconnect();
+    if (!started) { v.preload = 'auto'; v.load(); }
+  }, { rootMargin: '900px 0px' });
+  pre.observe(v);
 }
 
 // Mini toast u postojeci #toastWrap (isti izgled kao app.ts toast, ali neovisan modul).
