@@ -37,7 +37,7 @@ TRACK D (odluke i podaci):     D1, D2 (prije K8), D3 (u K0), D4 (prije K11 imeno
 ## 2. TRACK K: kodni koraci
 
 ### K0. Stabilizacija grane i baseline (preduvjet svega)
-- Backlog: (novo, iz plana tjedan 1). Trajanje: 0,5-1 dan. Status: CEKA
+- Backlog: (novo, iz plana tjedan 1). Trajanje: 0,5-1 dan. Status: GOTOVO 2026-07-13
 - Sto: push `redesign-korektorski-stol` na origin; pricekati zeleni CI (grana nikad nije
   prosla CI, ukljucivo repair Feature B); odluka D3 (merge u master sada ili nakon K1);
   zabiljeziti baseline metrike iz analitike (posjete, upload rate, repair download rate).
@@ -45,9 +45,20 @@ TRACK D (odluke i podaci):     D1, D2 (prije K8), D3 (u K0), D4 (prije K11 imeno
 - Ulazni gate: nema. Izlazni gate: CI zelen na grani; baseline brojke zapisane.
 - Rizik: CI otkrije env razliku (memorija: vitest 2.1.9 na Node 24 kolektira 0 testova,
   koristiti vite-node ako se pojavi); rjesava se prije K1.
+- IZVJESTAJ: redesign grana mergeana u master i pushana (D3 = merge odmah, odradjeno
+  paralelnom sesijom); CI zelen na ce013a1 (redesign), b58b2df (nav fix koji je ujedno
+  zatvorio nav dio BL-03) i cae6243 (docs). Baseline metrike: klijentska analitika je
+  INERTNA (endpoint prazan), pa je baseline moguc samo iz Netlify dashboarda (vlasnicki
+  korak; zabiljeziti tjedne brojke prije deploya K1).
 
 ### K1. Paket A: istina o proizvodu (BL-01 + BL-02 + BL-03)
-- Trajanje: 1-2 dana. Status: CEKA
+- Trajanje: 1-2 dana. Status: GOTOVO 2026-07-13
+- IZVJESTAJ: FAQ + JSON-LD prepisani na istinu (obje pojave, sync ocuvan), hero-lead i
+  korak 03 najavljuju popravak s novim Wordom, "Nije provjera plagijata" u trust-row prvog
+  ekrana, meta description na stvarnu pokrivenost (30+ ucilista). Nav dio BL-03 vec rijesen
+  commitom b58b2df (paralelna sesija). Gate: npm run check zelen; dist sadrzi nove
+  stringove, negacija uklonjena, oba JSON-LD bloka valjana. Isticanje repair panela
+  odgodjeno za K3 (tamo panel dobiva score prije/poslije).
 - Sto: FAQ + JSON-LD prestaju negirati AutoFix; "nije provjera plagijata" u prvi ekran;
   meta/OG stvarna pokrivenost (33 institucije); vratiti nav linkove (Usporedba, Alati).
 - Datoteke: index.html (JSON-LD blok :29, FAQ :1489, hero, nav); seo/head regresijski test.
