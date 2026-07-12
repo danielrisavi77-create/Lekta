@@ -641,7 +641,7 @@ html:root{
   --focus:0 0 0 2px var(--paper),0 0 0 4px var(--scan);
 }
 html:root[data-theme="light"]{
-  --desk:#DFD8C6;--desk-2:#D6CEB9;--desk-ink:#26221B;--desk-muted:#6B6252;--desk-faint:#98917E;--desk-line:rgba(38,34,27,.16);
+  --desk:#DFD8C6;--desk-2:#D6CEB9;--desk-ink:#26221B;--desk-muted:#655C4B;--desk-faint:#98917E;--desk-line:rgba(38,34,27,.16);
   --paper:#FDFBF3;--paper-2:#F3EEDF;--paper-line:#E0D9C6;
   --red:#C4372E;--red-deep:#A62B23;--red-soft:rgba(196,55,46,.1);--on-red:#F7F3E8;
   --pass:#1E7F4F;--pass-soft:rgba(30,127,79,.12);
@@ -659,12 +659,15 @@ h1,h2,h3,h4{font-family:var(--display-serif);font-optical-sizing:auto;font-weigh
 /* Papir scope: povrsine koje su fizicki "list na stolu" re-mapiraju stare tokene u papirni
    kontekst, pa i sadrzaj koji renderira app.ts (issue redovi, kartice, cjenik) dobiva ispravan
    polaritet bez izmjena JS-a. Ugnijezdene "bijele karticice" unutra koriste --panel:#fff. */
-.analyzer-wrap,.modal,.price-card,.check-card,.step-card,.diff-card,.faq,.consent-banner,.toast,.package-file,.no-faculty-panel{
+.analyzer-wrap,.modal,.price-card,.check-card,.step-card,.diff-card,.faq,.consent-banner,.toast,.package-file,.no-faculty-panel,.ks-prozor,.ks-doc-paper,.ks-priv-lijevo,.ks-tvrdnja,.ks-alati a{
   --text:var(--paper-ink);--muted:var(--paper-muted);--muted-2:var(--paper-muted);
   --line:var(--paper-line);--line-strong:var(--paper-line);
   --panel:#fff;--panel-2:var(--paper-2);--bg:var(--paper);
   --brand:var(--red-deep);--brand-2:var(--paper-ink);--brand-soft:var(--red-soft);--on-brand:#F7F3E8;
   --info-soft:rgba(74,108,240,.08);
+  /* AA na papiru: zelena/zuta iz mockupa padaju za sitni tekst, pa papirni kontekst
+     nosi tamnije nijanse (4.5+); veliki rukopisni potezi na stolu zadrzavaju originale */
+  --pass:#1E7F4F;--warn:#8A570E;--warn-strong:#8A570E;
   background:var(--paper);color:var(--paper-ink);
 }
 /* Dekor stola: svjetlo lampe (parallax u korektorski.ts), traka citanja, vinjeta, trag salice.
@@ -1189,6 +1192,19 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
 /* W4 responzivno + reduced motion */
 @media(max-width:1000px){.ks-kako{grid-template-columns:1fr}.ks-prozor{position:static}.ks-doc-grid{grid-template-columns:1fr}.ks-doc-sticky{position:static}.ks-doc-paper{padding:40px 44px 40px 48px}.ks-koment{position:static;display:none;width:auto;margin-top:14px;opacity:1}.ks-doc-grid[data-issue="0"] .ks-koment-0,.ks-doc-grid[data-issue="1"] .ks-koment-1,.ks-doc-grid[data-issue="2"] .ks-koment-2,.ks-doc-grid[data-issue="3"] .ks-koment-3,.ks-doc-grid[data-issue="4"] .ks-koment-4{display:block}.ks-priv-tvrdnje{grid-template-columns:1fr}.pricing{grid-template-columns:1fr}.ks-sec-side{margin-left:0}#faq .faq{columns:1}}
 @media(prefers-reduced-motion:reduce){.ks-priv-dok,.ks-priv-rampa,.ks-priv-sken{animation:none}.ks-priv-stamp-no,.ks-priv-stamp-ok{animation:none;opacity:.92}.ks-circle path{animation:none}}
+/* ===== KS W6: oznaci rijeseno + polish (issue tipografija, toast) ===== */
+.issue{display:grid;grid-template-columns:44px 1fr auto auto;gap:14px;align-items:start}
+.issue h4{font-family:var(--display-serif);font-size:16.5px;font-weight:500;margin:0;letter-spacing:0}
+.issue p{font-family:var(--display-serif);font-size:14px;color:var(--paper-muted);line-height:1.6;margin:4px 0 0}
+.ks-resolve{white-space:nowrap;font:600 10px var(--sans);letter-spacing:.08em;text-transform:uppercase;border:1.5px solid var(--paper-line);color:var(--paper-muted);background:none;padding:7px 11px;align-self:center;cursor:pointer;border-radius:0}
+.ks-resolve:hover{border-color:var(--pass);color:var(--pass)}
+.issue.ks-done{opacity:.55}
+.issue.ks-done h4{text-decoration:line-through;text-decoration-color:var(--pass);text-decoration-thickness:2px}
+.issue.ks-done .issue-icon{color:var(--pass)}
+.issue.ks-done .ks-resolve{border-color:var(--pass);color:var(--pass)}
+.toast{background:var(--paper);color:var(--paper-ink);border:0;border-left:3px solid var(--pass);border-radius:0;box-shadow:var(--paper-sh);font-family:var(--display-serif);font-size:14px;line-height:1.6}
+@media print{.ks-resolve{display:none}}
+@media(max-width:720px){.issue{grid-template-columns:35px 1fr}.issue .where{grid-column:2}.ks-resolve{grid-column:2;justify-self:start}}
 /* Mobilna/tablet navigacija: MORA biti na kraju sloja (appendana pravila gaze media blokove
    bez obzira na poziciju media querya), KS nav se skuplja vec na 1080px jer je siri od starog. */
 @media(max-width:1080px){.nav-links{display:none}.mobile-menu{display:grid}}

@@ -70,7 +70,58 @@ function setupVideo(): void {
   io.observe(v);
 }
 
-function boot(): void { setupDesk(); setupSections(); setupVideo(); }
+// Mini toast u postojeci #toastWrap (isti izgled kao app.ts toast, ali neovisan modul).
+function ksToast(msg: string): void {
+  const wrap = document.getElementById('toastWrap');
+  if (!wrap) return;
+  const n = document.createElement('div');
+  n.className = 'toast';
+  n.textContent = msg;
+  wrap.append(n);
+  window.setTimeout(() => n.remove(), 2600);
+}
+
+// "Oznaci rijeseno": prezentacijski sloj nad issue retcima koje renderira app.ts.
+// #issuesList se ponovno renderira innerHTML-om pri svakoj promjeni filtra, pa
+// MutationObserver (childList, bez subtree: vlastiti appendi ne okidaju petlju)
+// nakon svakog rendera ponovno doda gumb. Stanje zivi u memoriji: popis vrijedi
+// za konkretnu analizu i namjerno se ne sprema.
+function setupResolve(): void {
+  const list = document.getElementById('issuesList');
+  if (!list) return;
+  const resolved = new Set<string>();
+  const keyOf = (art: Element) => art.querySelector('h4')?.textContent || '';
+  const augment = () => {
+    list.querySelectorAll<HTMLElement>('article.issue').forEach((art) => {
+      const done = resolved.has(keyOf(art));
+      art.classList.toggle('ks-done', done);
+      let btn = art.querySelector<HTMLButtonElement>('.ks-resolve');
+      if (!btn) {
+        btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'ks-resolve';
+        art.append(btn);
+      }
+      btn.textContent = done ? '✓ Riješeno' : 'Označi riješeno';
+      btn.setAttribute('aria-pressed', done ? 'true' : 'false');
+    });
+  };
+  list.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLElement>('.ks-resolve');
+    if (!btn) return;
+    const art = btn.closest('article.issue');
+    if (!art) return;
+    const key = keyOf(art);
+    const nowDone = !resolved.has(key);
+    if (nowDone) resolved.add(key); else resolved.delete(key);
+    augment();
+    if (nowDone) ksToast('Problem je označen kao riješen. Tako se slaže plan ispravaka.');
+  });
+  new MutationObserver(augment).observe(list, { childList: true });
+  augment();
+}
+
+function boot(): void { setupDesk(); setupSections(); setupVideo(); setupResolve(); }
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
 else boot();
