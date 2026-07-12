@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Lekta">
-  <rect width="32" height="32" rx="7" fill="#101319"/>
-  <path d="M11 7.5v11l4.5 4.5 9.5-10.5" fill="none" stroke="#FCFBF8" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" fill="#191512"></rect>
+  <text x="30" y="46" text-anchor="middle" font-family="Georgia, &#39;Times New Roman&#39;, serif" font-size="42" font-style="italic" font-weight="600" fill="#F7F3E8">L</text>
+  <rect x="42" y="42" width="16" height="16" fill="#E4573D"></rect>
+  <path d="M45.5 50.5l3.5 3.5 7-7" stroke="#F7F3E8" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
 </svg>

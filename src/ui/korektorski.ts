@@ -55,7 +55,22 @@ function setupSections(): void {
   });
 }
 
-function boot(): void { setupDesk(); setupSections(); }
+// Demo video: autoplay tek kad udje u vidokrug, pauza kad izadje (stedi podatke, preload=none).
+// Uz reduced-motion se ne pusta samo od sebe nego dobiva kontrole za rucno pokretanje.
+function setupVideo(): void {
+  const v = document.querySelector<HTMLVideoElement>('.ks-video');
+  if (!v) return;
+  if (prefersReduced() || typeof IntersectionObserver !== 'function') { v.controls = true; return; }
+  const io = new IntersectionObserver((entries) => {
+    for (const e of entries) {
+      if (e.isIntersecting) v.play().catch(() => { v.controls = true; });
+      else v.pause();
+    }
+  }, { threshold: 0.35 });
+  io.observe(v);
+}
+
+function boot(): void { setupDesk(); setupSections(); setupVideo(); }
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
 else boot();

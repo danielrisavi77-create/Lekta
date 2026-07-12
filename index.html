@@ -975,6 +975,19 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
 @keyframes ksPrivScanY{0%,8%{top:16%;opacity:0}16%{opacity:1}84%{opacity:1}94%,100%{top:78%;opacity:0}}
 .section{background:none}
 .section-soft{background:none}
+/* demo video: tamni okvir s tri tockice */
+#video{padding:88px 0 0}
+.ks-vplay{font-family:var(--font-hand);font-size:30px;color:var(--red);transform:rotate(-2deg);display:inline-block;font-weight:600}
+.ks-vmeta{margin-left:auto;font:500 11px var(--sans);letter-spacing:.16em;color:var(--desk-faint);text-transform:uppercase}
+.ks-video-wrap{position:relative;transform:rotate(.5deg)}
+.ks-video-frame{background:#0F0C0A;padding:10px;box-shadow:0 6px 16px rgba(0,0,0,.45),0 46px 110px rgba(0,0,0,.6)}
+.ks-video-dots{display:flex;gap:7px;padding:2px 4px 10px;align-items:center}
+.ks-video-dots i{width:9px;height:9px;border-radius:50%;background:#5c554d}
+.ks-video-dots i.d1{background:var(--red)}
+.ks-video-dots span{margin-left:auto;font:500 9.5px var(--sans);letter-spacing:.18em;color:rgba(237,231,220,.4);text-transform:uppercase}
+.ks-video{display:block;width:100%;aspect-ratio:16/9;border:0;background:#191512}
+.ks-video-note{position:absolute;right:-14px;top:-22px;transform:rotate(5deg);font-family:var(--font-hand);font-size:24px;color:var(--red);font-weight:500}
+@media print{#video{display:none}}
 .ks-sec-head{display:flex;align-items:baseline;gap:20px;margin-bottom:44px;flex-wrap:wrap}
 .ks-sec-head h2{font-family:var(--display-serif);font-weight:400;font-size:clamp(34px,4vw,54px);letter-spacing:-.02em;margin:0;color:var(--desk-ink)}
 .ks-sec-side{margin-left:auto;font-family:var(--display-serif);font-size:15px;color:var(--desk-muted);max-width:380px;line-height:1.7}
@@ -1189,13 +1202,14 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
 <header class="topbar">
   <nav class="shell nav" aria-label="Glavna navigacija">
     <a class="logo" href="#top"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span><span class="logo-tag">korektorski stol</span></a>
-    <div class="nav-links"><a href="#how">Kako radi</a><a href="#analyzer">Provjera</a><a href="#podcrta">Što provjerava</a><a href="#pricing">Tarife</a><a href="#faq">Pitanja</a></div>
+    <div class="nav-links"><a href="#video">Video</a><a href="#how">Kako radi</a><a href="#analyzer">Provjera</a><a href="#podcrta">Što provjerava</a><a href="#pricing">Tarife</a><a href="#faq">Pitanja</a></div>
     <button class="lampa-btn" id="themeBtn" aria-label="Promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 2h8l-5 7h4L7 22l3-9H6l3-11Z"/></svg><span class="lampa-txt">Lampa</span></button>
     <button class="btn btn-ghost btn-sm hidden" id="authEntry" data-auth-entry type="button">Prijava</button>
     <a class="btn btn-primary btn-sm" href="#analyzer">Provjeri rad</a>
     <button class="icon-btn mobile-menu" id="mobileMenuBtn" aria-label="Otvori izbornik" aria-expanded="false"><i data-lucide="menu"></i></button>
   </nav>
   <div class="mobile-nav" id="mobileNav">
+    <a href="#video">Video</a>
     <a href="#how">Kako radi</a>
     <a href="#analyzer">Provjera</a>
     <a href="#podcrta">Što provjerava</a>
@@ -1253,6 +1267,19 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
   <div class="ks-tape"><div class="ks-tape-track">
     <span><b>●</b>&nbsp;&nbsp;CITATNICE</span><span><b>●</b>&nbsp;&nbsp;LITERATURA</span><span><b>●</b>&nbsp;&nbsp;STRUKTURA</span><span><b>●</b>&nbsp;&nbsp;OBLIKOVANJE</span><span><b>●</b>&nbsp;&nbsp;TABLICE I SLIKE</span><span><b>●</b>&nbsp;&nbsp;PREDAJNI PAKET</span><span><b>●</b>&nbsp;&nbsp;PRIVATNOST</span><span><b>●</b>&nbsp;&nbsp;FPZG · VERIFICIRANA PRAVILA</span><span><b>●</b>&nbsp;&nbsp;CITATNICE</span><span><b>●</b>&nbsp;&nbsp;LITERATURA</span><span><b>●</b>&nbsp;&nbsp;STRUKTURA</span><span><b>●</b>&nbsp;&nbsp;OBLIKOVANJE</span><span><b>●</b>&nbsp;&nbsp;TABLICE I SLIKE</span><span><b>●</b>&nbsp;&nbsp;PREDAJNI PAKET</span><span><b>●</b>&nbsp;&nbsp;PRIVATNOST</span><span><b>●</b>&nbsp;&nbsp;FPZG · VERIFICIRANA PRAVILA</span>
   </div></div>
+</section>
+
+<section class="section" id="video">
+  <div class="shell">
+    <div class="ks-sec-head" data-reveal><span class="ks-vplay" aria-hidden="true">▶</span><h2>Pogledaj kako Lekta čita rad<span class="ks-dot">.</span></h2><span class="ks-vmeta">demo · 26 sekundi · bez zvuka</span></div>
+    <div class="ks-video-wrap" data-reveal>
+      <div class="ks-video-frame">
+        <div class="ks-video-dots" aria-hidden="true"><i class="d1"></i><i></i><i></i><span>Lekta · demo · lokalno ●</span></div>
+        <video class="ks-video" muted loop playsinline preload="none" poster="/assets/demo-poster.jpg" aria-label="Demo od 26 sekundi: Lekta pregleda rad, označi probleme i vodi dokument do ocjene 100 od 100"><source src="/assets/demo.webm" type="video/webm"><source src="/assets/demo.mp4" type="video/mp4"></video>
+      </div>
+      <span class="ks-video-note" aria-hidden="true">naš demo, 26 s →</span>
+    </div>
+  </div>
 </section>
 
 <section class="section" id="how">
