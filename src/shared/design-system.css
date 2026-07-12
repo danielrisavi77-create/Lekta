@@ -42,16 +42,9 @@
   /* Pecat (letterpress crveno-smedja): iskljucivo dekorativni seal akcenti, nikad audit */
   --stamp: #7A1F1F;
 
-  /* Prijelazni aliasi starog proof potpisa: crvena-kao-brand vise ne postoji, straggleri
-     ostaju koherentno plavi dok ih valovi ne prepisu; brisu se u zavrsnom cleanupu. */
-  --proof: var(--brand);
-  --proof-soft: var(--brand-soft);
-  --proof-strong: var(--brand-2);
-
   /* Dubina: list podignut 2mm s radnog stola */
   --shadow: 0 2px 4px rgba(16,19,25,.05), 0 16px 40px rgba(16,19,25,.09);
   --shadow-sm: 0 1px 2px rgba(16,19,25,.05), 0 8px 24px rgba(16,19,25,.06);
-  --edge: transparent;      /* paper-edge highlight umirovljen (bijeli list ga ne treba) */
 
   /* Tipografija: tri glasa */
   --display-serif: "Newsreader Variable", "Source Serif 4 Variable", Georgia, "Times New Roman", serif;
@@ -94,11 +87,6 @@
 
   --stamp: #B05C5C;
 
-  --proof: var(--brand);
-  --proof-soft: var(--brand-soft);
-  --proof-strong: var(--brand-2);
-
   --shadow: 0 2px 4px rgba(0,0,0,.3), 0 16px 40px rgba(0,0,0,.45);
   --shadow-sm: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.3);
-  --edge: transparent;
 }
