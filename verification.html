@@ -6,32 +6,31 @@
     <meta name="robots" content="noindex, nofollow" />
     <title>Lekta &middot; verifikacijska konzola</title>
     <style>
-      /* Editorial Instrument look (standalone, dev-only konzola: tokeni hardkodirani) */
+      /* Tinta i papir look (standalone, dev-only konzola: tokeni hardkodirani) */
       :root {
-        --bg: #f3eee2;
-        --panel: #fffdf8;
-        --text: #1b2030;
-        --brand: #33407e;
-        --line: #e2d9c6;
-        --proof: #c8102e;
-        --proof-strong: #a60c24;
-        --muted: #6b6455;
-        --edge: rgba(255, 255, 255, 0.7);
-        --ok-soft: #eaf3ec;
-        --ok-line: #c3ddc8;
-        --warn-soft: #f6ecd0;
-        --warn-line: #e2cf9e;
-        --radius-xl: 16px;
-        --radius: 12px;
+        --bg: #FCFBF8;
+        --panel: #FFFFFF;
+        --text: #101319;
+        --brand: #1D3FBF;
+        --line: #E4E1D8;
+        --danger: #C4372E;
+        --muted: #3E4553;
+        --edge: transparent;
+        --ok-soft: #E4F3EA;
+        --ok-line: #bfe0cc;
+        --warn-soft: #F7EEDD;
+        --warn-line: #e6d2a8;
+        --radius-xl: 12px;
+        --radius: 10px;
         --radius-sm: 8px;
-        --display-serif: "Fraunces", Georgia, "Times New Roman", serif;
-        --body-sans: "Inter", -apple-system, "Segoe UI", Arial, sans-serif;
-        --ink-serif: "Source Serif 4", "Source Serif Pro", Georgia, serif;
+        --display-serif: "Newsreader", Georgia, "Times New Roman", serif;
+        --body-sans: "Inter Tight", Inter, -apple-system, "Segoe UI", Arial, sans-serif;
+        --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
       }
       body { font: 15px/1.55 var(--body-sans); color: var(--text); max-width: 1000px; margin: 32px auto; padding: 0 20px; background: var(--bg); }
       h1 { font-family: var(--display-serif); font-weight: 600; font-size: 27px; letter-spacing: -0.01em; margin: 0 0 6px; }
       h2 { font-family: var(--display-serif); font-weight: 600; font-size: 18px; margin: 22px 0 2px; }
-      code { background: rgba(51, 64, 126, 0.08); color: var(--brand); padding: 1px 6px; border-radius: 6px; font-size: 13px; font-variant-numeric: tabular-nums; }
+      code { background: color-mix(in srgb, var(--brand) 8%, transparent); color: var(--brand); padding: 1px 6px; border-radius: 6px; font-size: 13px; font-variant-numeric: tabular-nums; }
       .vc-head { border: 1px solid var(--line); border-radius: var(--radius-xl); padding: 18px; background: var(--panel); box-shadow: 0 6px 20px rgba(27, 32, 48, 0.06), inset 0 1px 0 var(--edge); }
       .vc-actions { margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap; }
       .vc-group { margin-top: 8px; }
@@ -42,7 +41,7 @@
       .vc-badge { font-size: 11px; padding: 1px 8px; border-radius: 999px; background: rgba(27, 32, 48, 0.08); color: var(--text); }
       .vc-verified { background: var(--ok-soft); color: #2f5d3a; }
       .vc-advisory { background: var(--warn-soft); color: #7a5a12; }
-      .vc-retired { background: rgba(200, 16, 46, 0.12); color: var(--proof-strong); }
+      .vc-retired { background: color-mix(in srgb, var(--danger) 12%, transparent); color: var(--danger); }
       .vc-auth { color: var(--muted); font-size: 12px; margin-left: auto; }
       .vc-form { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 8px 0; }
       .vc-form label { display: flex; flex-direction: column; font-size: 11px; color: var(--muted); gap: 2px; }
@@ -53,13 +52,13 @@
       button:hover { border-color: var(--brand); }
       button:focus-visible { outline: 2px solid var(--brand); outline-offset: 1px; }
       button[data-act="confirm"] { background: var(--brand); color: #fff; border-color: var(--brand); }
-      button[data-act="confirm"]:hover { background: #2a3568; border-color: #2a3568; }
-      .vc-error { color: var(--proof-strong); font-size: 12px; min-height: 14px; margin: 4px 0 0; }
+      button[data-act="confirm"]:hover { background: #142E93; border-color: #142E93; }
+      .vc-error { color: var(--danger); font-size: 12px; min-height: 14px; margin: 4px 0 0; }
       .vc-empty { color: var(--muted); }
       .vc-source-pane { position: sticky; top: 8px; z-index: 5; border: 1px solid var(--line); border-radius: var(--radius); padding: 8px; margin: 10px 0; background: var(--panel); box-shadow: 0 6px 20px rgba(27, 32, 48, 0.1), inset 0 1px 0 var(--edge); }
       .vc-source-cap { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
       .vc-source-frame { width: 100%; height: 520px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: #fff; }
-      button[data-act="show-source"] { background: rgba(51, 64, 126, 0.08); color: var(--brand); border-color: rgba(51, 64, 126, 0.2); }
+      button[data-act="show-source"] { background: color-mix(in srgb, var(--brand) 8%, transparent); color: var(--brand); border-color: color-mix(in srgb, var(--brand) 20%, transparent); }
     </style>
   </head>
   <body>

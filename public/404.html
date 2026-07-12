@@ -10,46 +10,42 @@
 <style>
   :root {
     color-scheme: light;
-    /* Editorial Instrument tokeni (self-contained podskup) */
-    --bg: #f3eee2;
-    --panel: #fffdf8;
-    --panel-2: #ebe4d5;
-    --text: #1b2030;
-    --muted: #5c5f6e;
-    --line: #e2d9c6;
-    --brand: #33407e;
-    --brand-2: #4b50a4;
-    --proof: #c8102e;
-    --proof-strong: #a60c24;
-    --edge: rgba(255,255,255,.6);
-    --shadow: 0 22px 60px rgba(41,36,26,.13);
-    --radius-xl: 28px;
-    --radius: 20px;
+    /* Tinta i papir tokeni (self-contained podskup) */
+    --bg: #FCFBF8;
+    --panel: #FFFFFF;
+    --panel-2: #F4F2EC;
+    --text: #101319;
+    --muted: #3E4553;
+    --line: #E4E1D8;
+    --brand: #1D3FBF;
+    --brand-2: #142E93;
+    --on-brand: #FFFFFF;
+    --shadow: 0 2px 4px rgba(16,19,25,.05), 0 16px 40px rgba(16,19,25,.09);
+    --radius-xl: 12px;
+    --radius: 10px;
     --radius-pill: 999px;
-    --display-serif: "Fraunces Variable", Georgia, "Times New Roman", serif;
-    --ink-serif: "Source Serif 4 Variable", Georgia, "Times New Roman", serif;
+    --display-serif: "Newsreader Variable", Georgia, "Times New Roman", serif;
+    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     --focus: 0 0 0 2px var(--panel), 0 0 0 4px var(--brand);
   }
   @media (prefers-color-scheme: dark) {
     :root {
       color-scheme: dark;
-      --bg: #14151d;
-      --panel: #1c1d28;
-      --panel-2: #242536;
-      --text: #f3f1ea;
-      --muted: #a6a4b4;
-      --line: #2f3042;
-      --brand: #9199e2;
-      --brand-2: #aca6ec;
-      --proof: #f5808f;
-      --proof-strong: #f7a0ab;
-      --edge: rgba(255,255,255,.045);
-      --shadow: 0 24px 70px rgba(0,0,0,.4);
+      --bg: #0E1116;
+      --panel: #151A22;
+      --panel-2: #1B2130;
+      --text: #E9EAE6;
+      --muted: #A9AFBA;
+      --line: #242B36;
+      --brand: #6E8BFF;
+      --brand-2: #8CA2FF;
+      --on-brand: #0E1116;
+      --shadow: 0 2px 4px rgba(0,0,0,.3), 0 16px 40px rgba(0,0,0,.45);
     }
   }
   * { box-sizing: border-box; }
   body {
-    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-family: "Inter Tight Variable", Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     margin: 0; min-height: 100vh;
     display: flex; align-items: center; justify-content: center;
     padding: 2rem 1rem;
@@ -60,35 +56,30 @@
   .brand {
     display: inline-flex; align-items: center; gap: 0.55rem;
     text-decoration: none; color: var(--text);
-    font-weight: 800; font-size: 1.1rem; margin-bottom: 1.5rem;
+    font-family: var(--display-serif); font-optical-sizing: auto;
+    font-weight: 600; font-size: 1.3rem; margin-bottom: 1.5rem;
   }
-  .brand .mark {
-    width: 34px; height: 34px; border-radius: 11px;
-    display: grid; place-items: center;
-    color: #fff; font-weight: 900;
-    background: var(--brand);
-    box-shadow: 0 8px 18px rgba(51,64,126,.28);
-  }
-  /* Folija: papirnata kartica s paper-edge inset highlightom */
+  .brand .tick { width: 15px; height: 13px; color: var(--brand); transform: translateY(1px); }
+  /* Folija: bijeli list na papiru */
   .card {
     background: var(--panel);
     border: 1px solid var(--line);
     border-radius: var(--radius-xl);
-    box-shadow: var(--shadow), inset 0 1px 0 var(--edge);
+    box-shadow: var(--shadow);
     padding: 2.4rem 2rem;
     text-align: center;
   }
-  /* 404 broj: ink-serif tabularne znamenke + proofreaderska podcrta (oznaka) */
+  /* 404 broj: mono tabularne znamenke + podcrta u tinti indeksa */
   .code {
-    font-family: var(--ink-serif);
+    font-family: var(--mono);
     font-variant-numeric: tabular-nums;
-    font-size: 4rem; font-weight: 700;
+    font-size: 4rem; font-weight: 600;
     letter-spacing: -0.01em; line-height: 1;
     color: var(--text);
     margin: 0 0 0.6rem;
     display: inline-block;
     padding-bottom: 0.12em;
-    border-bottom: 3px solid var(--proof);
+    border-bottom: 3px solid var(--brand);
   }
   h1 {
     font-family: var(--display-serif);
@@ -103,11 +94,11 @@
   .cta {
     display: inline-flex; align-items: center; gap: 0.4rem;
     text-decoration: none;
-    background: var(--brand); color: #fff;
+    background: var(--brand); color: var(--on-brand);
     font-weight: 700; font-size: 0.98rem;
     padding: 0.72rem 1.35rem;
     border-radius: var(--radius-pill);
-    box-shadow: 0 10px 22px rgba(51,64,126,.28);
+    box-shadow: 0 10px 22px color-mix(in srgb, var(--brand) 25%, transparent);
   }
   .cta:hover { background: var(--brand-2); }
   .links {
@@ -115,8 +106,8 @@
     border-top: 1px solid var(--line);
   }
   .links-title {
-    font-size: 0.78rem; text-transform: uppercase;
-    letter-spacing: 0.08em; color: var(--muted);
+    font-family: var(--mono); font-size: 0.72rem; text-transform: uppercase;
+    letter-spacing: 0.12em; color: var(--muted);
     margin: 0 0 0.75rem;
   }
   nav { display: flex; flex-wrap: wrap; gap: 0.5rem 1.2rem; justify-content: center; }
@@ -132,7 +123,7 @@
 </head>
 <body>
 <main class="wrap">
-  <a class="brand" href="/"><span class="mark">L</span><span>Lekta</span></a>
+  <a class="brand" href="/"><svg class="tick" viewBox="0 0 14 12" aria-hidden="true" focusable="false"><path d="M1 6.4 5 10.4 13 1.4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Lekta</span></a>
   <div class="card">
     <p class="code">404</p>
     <h1>Ova stranica ne postoji</h1>

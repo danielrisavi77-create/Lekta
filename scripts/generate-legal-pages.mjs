@@ -46,18 +46,18 @@ async function loadLegal() {
 }
 
 const PAGE_STYLE = `
-  /* Lekta Editorial Instrument: pravne stranice na papiru (folija + serif naslovi + proof rub). */
-  :root { color-scheme: light; --ink:#1b2030; --muted:#5c5f6e; --paper:#f3eee2; --panel:#fffdf8; --brand:#33407e; --line:#e2d9c6; --proof:#c8102e; }
+  /* Lekta Tinta i papir: pravne stranice kao bijeli list na papiru, tinta indeksa za akciju. */
+  :root { color-scheme: light; --ink:#101319; --muted:#3E4553; --paper:#FCFBF8; --panel:#FFFFFF; --brand:#1D3FBF; --line:#E4E1D8; }
   * { box-sizing: border-box; }
-  body { font-family: "Inter Variable", Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; margin: 0; color: var(--ink); line-height: 1.62; background: var(--paper); }
+  body { font-family: "Inter Tight Variable", Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; margin: 0; color: var(--ink); line-height: 1.62; background: var(--paper); }
   header { max-width: 760px; margin: 2rem auto 0; padding: 0 1.1rem; }
   header a.home { color: var(--brand); text-decoration: none; font-weight: 700; font-size: 0.9rem; }
-  main { max-width: 760px; margin: 1rem auto; padding: 1.6rem 1.85rem 2.1rem; position: relative; overflow: hidden; background: var(--panel); border: 1px solid var(--line); border-radius: 20px; box-shadow: 0 8px 24px rgba(41,36,26,.09), inset 0 1px 0 rgba(255,255,255,.6); }
-  main::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: color-mix(in srgb, var(--proof) 55%, transparent); }
-  h1 { font-family: "Fraunces Variable", Georgia, "Times New Roman", serif; font-optical-sizing: auto; font-weight: 600; font-size: 1.75rem; margin: 0.2rem 0 0.25rem; letter-spacing: -0.015em; line-height: 1.1; }
+  main { max-width: 760px; margin: 1rem auto; padding: 1.6rem 1.85rem 2.1rem; position: relative; overflow: hidden; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 1px 2px rgba(16,19,25,.05), 0 8px 24px rgba(16,19,25,.06); }
+  main::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: color-mix(in srgb, var(--brand) 55%, transparent); }
+  h1 { font-family: "Newsreader Variable", Georgia, "Times New Roman", serif; font-optical-sizing: auto; font-weight: 550; font-size: 1.8rem; margin: 0.2rem 0 0.25rem; letter-spacing: -0.015em; line-height: 1.1; }
   .legal-meta { color: var(--muted); font-size: 0.85rem; margin: 0.5rem 0 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--line); }
-  .legal-note { background: #f6ecda; border-left: 3px solid #9a5b12; padding: 0.6rem 0.8rem; border-radius: 0 0.4rem 0.4rem 0; font-size: 0.9rem; color: #1e2333; }
-  h4 { font-family: "Fraunces Variable", Georgia, serif; font-optical-sizing: auto; font-weight: 600; margin: 1.5rem 0 0.35rem; font-size: 1.08rem; }
+  .legal-note { background: #F7EEDD; border-left: 3px solid #B77416; padding: 0.6rem 0.8rem; border-radius: 0 0.4rem 0.4rem 0; font-size: 0.9rem; color: #101319; }
+  h4 { font-family: "Newsreader Variable", Georgia, serif; font-optical-sizing: auto; font-weight: 550; margin: 1.5rem 0 0.35rem; font-size: 1.1rem; }
   p, li { font-size: 0.95rem; }
   ul { padding-left: 1.2rem; }
   a { color: var(--brand); }
@@ -66,9 +66,9 @@ const PAGE_STYLE = `
   footer a { text-decoration: none; color: var(--brand); }
   footer a:hover { text-decoration: underline; }
   @media (prefers-color-scheme: dark) {
-    :root { color-scheme: dark; --ink:#f3f1ea; --muted:#a6a4b4; --paper:#14151d; --panel:#1c1d28; --brand:#9199e2; --line:#2f3042; --proof:#f5808f; }
-    main { box-shadow: 0 8px 24px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.045); }
-    .legal-note { background: #3d3320; border-left-color: #e0a45a; color: #f3f1ea; }
+    :root { color-scheme: dark; --ink:#E9EAE6; --muted:#A9AFBA; --paper:#0E1116; --panel:#151A22; --brand:#6E8BFF; --line:#242B36; }
+    main { box-shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.3); }
+    .legal-note { background: #332810; border-left-color: #E3A94E; color: #E9EAE6; }
   }
 `;
 

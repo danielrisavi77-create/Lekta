@@ -91,33 +91,32 @@ function loadEngineInNode(bundleJs) {
 }
 
 const PAGE_STYLE = `
-  /* Lekta Editorial Instrument: citatni alat na papiru (folija + serif naslovi + proof korekturni rub).
+  /* Lekta Tinta i papir: citatni alat kao bijeli list na papiru, tinta indeksa za akciju.
      Standalone stranice bez importa fonta pa se stackovi gracilno spustaju na Georgia/Times/system. */
   :root {
     color-scheme: light;
-    --bg: #f3eee2; --panel: #fffdf8; --panel-2: #ebe4d5;
-    --text: #1b2030; --muted: #5c5f6e; --line: #e2d9c6; --line-strong: #cfc6b2;
-    --brand: #33407e; --brand-2: #4b50a4; --on-brand: #ffffff;
-    --proof: #c8102e; --proof-strong: #a60c24;
-    --warn: #9a5b12; --warn-soft: #f6ecda;
-    --danger: #b23a4e; --danger-soft: #f7e9ec;
-    --edge: rgba(255,255,255,.6);
-    --shadow-sm: 0 8px 24px rgba(41,36,26,.09);
-    --display-serif: "Fraunces Variable", "Source Serif 4 Variable", Georgia, "Times New Roman", serif;
+    --bg: #FCFBF8; --panel: #FFFFFF; --panel-2: #F4F2EC;
+    --text: #101319; --muted: #3E4553; --line: #E4E1D8; --line-strong: #C9C6BB;
+    --brand: #1D3FBF; --brand-2: #142E93; --on-brand: #ffffff;
+    --warn: #B77416; --warn-soft: #F7EEDD; --warn-strong: #8A570E;
+    --danger: #C4372E; --danger-soft: #FAE9E7;
+    --shadow-sm: 0 1px 2px rgba(16,19,25,.05), 0 8px 24px rgba(16,19,25,.06);
+    --display-serif: "Newsreader Variable", "Source Serif 4 Variable", Georgia, "Times New Roman", serif;
     --ink-serif: "Source Serif 4 Variable", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
-    --radius: 20px; --radius-sm: 14px; --radius-pill: 999px;
+    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --radius: 10px; --radius-sm: 8px; --radius-pill: 999px;
   }
   * { box-sizing: border-box; }
   html { background: var(--bg); }
   body {
-    font-family: "Inter Variable", Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-family: "Inter Tight Variable", Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     max-width: 680px; margin: 2rem auto; padding: 1.75rem 1.85rem 2.25rem;
     color: var(--text); line-height: 1.55; position: relative;
     background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
-    box-shadow: var(--shadow-sm), inset 0 1px 0 var(--edge);
+    box-shadow: var(--shadow-sm);
   }
-  /* proof-red korekturni rub (correction margin keyline), vertikalno uvucen da ne viri iz zaobljenih kutova */
-  body::before { content: ""; position: absolute; left: 0; top: 14px; bottom: 14px; width: 3px; border-radius: 3px; background: color-mix(in srgb, var(--proof) 55%, transparent); }
+  /* rub tinte indeksa (margin keyline), vertikalno uvucen da ne viri iz zaobljenih kutova */
+  body::before { content: ""; position: absolute; left: 0; top: 14px; bottom: 14px; width: 3px; border-radius: 3px; background: color-mix(in srgb, var(--brand) 55%, transparent); }
   h1 { font-family: var(--display-serif); font-optical-sizing: auto; font-weight: 600; font-size: 1.55rem; letter-spacing: -0.015em; line-height: 1.12; margin: 0.1rem 0 0.3rem; }
   .lekta-tool-meta { color: var(--muted); font-size: 0.875rem; margin: 0 0 1.25rem; padding-bottom: 0.85rem; border-bottom: 1px solid var(--line); }
   label { display: block; font-size: 0.85rem; font-weight: 600; margin: 0.75rem 0 0.25rem; color: var(--text); }
@@ -149,21 +148,19 @@ const PAGE_STYLE = `
   #bulk-output { margin-top: 1rem; }
   #bulk-output a { color: var(--brand); font-size: 0.8rem; }
   #bulk-result { min-height: 120px; font-family: var(--ink-serif); font-variant-numeric: tabular-nums; font-size: 0.9rem; }
-  .lekta-stats strong { font-family: var(--ink-serif); font-variant-numeric: tabular-nums; }
+  .lekta-stats strong { font-family: var(--mono); font-variant-numeric: tabular-nums; }
   @media (max-width: 700px) {
     body { margin: 0; max-width: none; border-radius: 0; border-left-width: 0; border-right-width: 0; box-shadow: none; }
   }
   @media (prefers-color-scheme: dark) {
     :root {
       color-scheme: dark;
-      --bg: #14151d; --panel: #1c1d28; --panel-2: #242536;
-      --text: #f3f1ea; --muted: #a6a4b4; --line: #2f3042; --line-strong: #44465c;
-      --brand: #9199e2; --brand-2: #aca6ec; --on-brand: #14151d;
-      --proof: #f5808f; --proof-strong: #f7a0ab;
-      --warn: #e0a45a; --warn-soft: #3d3320;
-      --danger: #e77a8b; --danger-soft: #43242b;
-      --edge: rgba(255,255,255,.045);
-      --shadow-sm: 0 8px 24px rgba(0,0,0,.28);
+      --bg: #0E1116; --panel: #151A22; --panel-2: #1B2130;
+      --text: #E9EAE6; --muted: #A9AFBA; --line: #242B36; --line-strong: #333C4A;
+      --brand: #6E8BFF; --brand-2: #8CA2FF; --on-brand: #0E1116;
+      --warn: #E3A94E; --warn-soft: #332810; --warn-strong: #ECB868;
+      --danger: #F07B70; --danger-soft: #3A1D1A;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.3);
     }
   }
 `;
