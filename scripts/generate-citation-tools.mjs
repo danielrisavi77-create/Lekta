@@ -91,36 +91,81 @@ function loadEngineInNode(bundleJs) {
 }
 
 const PAGE_STYLE = `
-  :root { color-scheme: light; }
-  body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; max-width: 680px; margin: 2rem auto; padding: 0 1rem; color: #18181b; line-height: 1.5; }
-  h1 { font-size: 1.4rem; margin-bottom: 0.25rem; }
-  .lekta-tool-meta { color: #52525b; font-size: 0.875rem; margin-bottom: 1.25rem; }
-  label { display: block; font-size: 0.85rem; font-weight: 600; margin: 0.75rem 0 0.25rem; color: #3f3f46; }
-  input, select, textarea { width: 100%; padding: 0.5rem 0.625rem; border-radius: 0.5rem; border: 1px solid #d4d4d8; box-sizing: border-box; font: inherit; background: #fff; }
-  button { margin-top: 1rem; padding: 0.625rem 1rem; border-radius: 0.5rem; border: none; background: #18181b; color: #fff; font-weight: 600; cursor: pointer; }
-  button:hover { background: #27272a; }
-  #citation-output { margin-top: 1rem; padding: 0.875rem; background: #f4f4f5; border-radius: 0.5rem; min-height: 1.25rem; }
-  .cit-line { font-size: 0.95rem; white-space: pre-wrap; }
-  .cit-intext { margin-top: 0.5rem; font-size: 0.85rem; color: #52525b; }
-  .cit-missing { margin-top: 0.5rem; font-size: 0.8rem; color: #b45309; }
-  .cit-empty { color: #71717a; font-size: 0.875rem; }
+  /* Lekta Editorial Instrument: citatni alat na papiru (folija + serif naslovi + proof korekturni rub).
+     Standalone stranice bez importa fonta pa se stackovi gracilno spustaju na Georgia/Times/system. */
+  :root {
+    color-scheme: light;
+    --bg: #f3eee2; --panel: #fffdf8; --panel-2: #ebe4d5;
+    --text: #1b2030; --muted: #5c5f6e; --line: #e2d9c6; --line-strong: #cfc6b2;
+    --brand: #33407e; --brand-2: #4b50a4; --on-brand: #ffffff;
+    --proof: #c8102e; --proof-strong: #a60c24;
+    --warn: #9a5b12; --warn-soft: #f6ecda;
+    --danger: #b23a4e; --danger-soft: #f7e9ec;
+    --edge: rgba(255,255,255,.6);
+    --shadow-sm: 0 8px 24px rgba(41,36,26,.09);
+    --display-serif: "Fraunces Variable", "Source Serif 4 Variable", Georgia, "Times New Roman", serif;
+    --ink-serif: "Source Serif 4 Variable", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+    --radius: 20px; --radius-sm: 14px; --radius-pill: 999px;
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--bg); }
+  body {
+    font-family: "Inter Variable", Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    max-width: 680px; margin: 2rem auto; padding: 1.75rem 1.85rem 2.25rem;
+    color: var(--text); line-height: 1.55; position: relative;
+    background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+    box-shadow: var(--shadow-sm), inset 0 1px 0 var(--edge);
+  }
+  /* proof-red korekturni rub (correction margin keyline), vertikalno uvucen da ne viri iz zaobljenih kutova */
+  body::before { content: ""; position: absolute; left: 0; top: 14px; bottom: 14px; width: 3px; border-radius: 3px; background: color-mix(in srgb, var(--proof) 55%, transparent); }
+  h1 { font-family: var(--display-serif); font-optical-sizing: auto; font-weight: 600; font-size: 1.55rem; letter-spacing: -0.015em; line-height: 1.12; margin: 0.1rem 0 0.3rem; }
+  .lekta-tool-meta { color: var(--muted); font-size: 0.875rem; margin: 0 0 1.25rem; padding-bottom: 0.85rem; border-bottom: 1px solid var(--line); }
+  label { display: block; font-size: 0.85rem; font-weight: 600; margin: 0.75rem 0 0.25rem; color: var(--text); }
+  input, select, textarea { width: 100%; padding: 0.5rem 0.7rem; border-radius: var(--radius-sm); border: 1px solid var(--line-strong); font: inherit; color: var(--text); background: var(--panel-2); }
+  input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible, a:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--panel), 0 0 0 4px var(--brand); border-radius: var(--radius-sm); }
+  button { margin-top: 1rem; padding: 0.6rem 1.15rem; border-radius: var(--radius-pill); border: none; background: var(--brand); color: var(--on-brand); font-weight: 600; cursor: pointer; }
+  button:hover { background: var(--brand-2); }
+  #citation-output { margin-top: 1rem; padding: 0.9rem 1rem; background: var(--panel-2); border: 1px solid var(--line); border-radius: var(--radius-sm); min-height: 1.25rem; }
+  .cit-line { font-family: var(--ink-serif); font-variant-numeric: tabular-nums; font-size: 1rem; line-height: 1.5; white-space: pre-wrap; }
+  .cit-intext { margin-top: 0.5rem; font-size: 0.85rem; color: var(--muted); }
+  .cit-missing { margin-top: 0.5rem; font-size: 0.8rem; color: var(--warn); }
+  .cit-empty { color: var(--muted); font-size: 0.875rem; }
   #style-info { margin: 0.5rem 0 0.25rem; font-size: 0.9rem; }
-  #style-info a { color: #1d4ed8; }
-  .lekta-cta { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #e4e4e7; font-size: 0.9375rem; }
-  .lekta-cta a { color: #1d4ed8; }
-  .lekta-back { display: block; margin-top: 0.5rem; font-size: 0.8125rem; color: #71717a; }
+  a { color: var(--brand); }
+  #style-info a { color: var(--brand); }
+  .lekta-cta { margin-top: 2rem; padding-top: 1.1rem; border-top: 1px solid var(--line); font-size: 0.9375rem; }
+  .lekta-cta strong { font-family: var(--display-serif); font-weight: 600; font-size: 1.05rem; }
+  .lekta-cta a { display: inline-block; margin-top: 0.4rem; color: var(--brand); font-weight: 600; }
+  .lekta-back { display: block; margin-top: 0.5rem; font-size: 0.8125rem; color: var(--muted); font-weight: 400; }
   select#style-select { margin-top: 0.5rem; }
-  .tabs { display: flex; gap: 0.5rem; margin: 1rem 0 0.25rem; }
-  .tab { margin: 0; background: #e4e4e7; color: #3f3f46; padding: 0.4rem 0.85rem; font-size: 0.85rem; }
-  .tab.active { background: #18181b; color: #fff; }
+  .tabs { display: flex; gap: 0.5rem; margin: 1.1rem 0 0.25rem; }
+  .tab { margin: 0; background: var(--panel-2); color: var(--muted); padding: 0.4rem 0.9rem; font-size: 0.85rem; border: 1px solid var(--line); }
+  .tab.active { background: var(--brand); color: var(--on-brand); border-color: transparent; }
   textarea#bulk-input { min-height: 170px; }
-  .bulk-note { font-size: 0.85rem; color: #92400e; background: #fffbeb; border: 1px solid #fde68a; padding: 0.5rem 0.65rem; border-radius: 0.5rem; margin: 0.5rem 0; }
-  .bulk-card { border: 1px solid #e4e4e7; border-radius: 0.5rem; padding: 0.5rem 0.75rem 0.75rem; margin: 0.6rem 0; }
-  .bulk-card.low-conf { border-color: #fca5a5; background: #fef2f2; }
-  .bulk-card-head { font-size: 0.78rem; color: #71717a; margin-bottom: 0.25rem; }
+  .bulk-note { font-size: 0.85rem; color: var(--text); background: var(--warn-soft); border-left: 3px solid var(--warn); padding: 0.55rem 0.75rem; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin: 0.6rem 0; }
+  .bulk-card { border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 0.5rem 0.75rem 0.75rem; margin: 0.6rem 0; }
+  .bulk-card.low-conf { border-color: var(--danger); background: var(--danger-soft); }
+  .bulk-card-head { font-size: 0.78rem; color: var(--muted); margin-bottom: 0.25rem; }
   #bulk-output { margin-top: 1rem; }
-  #bulk-output a { color: #1d4ed8; font-size: 0.8rem; }
-  #bulk-result { min-height: 120px; font-size: 0.85rem; }
+  #bulk-output a { color: var(--brand); font-size: 0.8rem; }
+  #bulk-result { min-height: 120px; font-family: var(--ink-serif); font-variant-numeric: tabular-nums; font-size: 0.9rem; }
+  .lekta-stats strong { font-family: var(--ink-serif); font-variant-numeric: tabular-nums; }
+  @media (max-width: 700px) {
+    body { margin: 0; max-width: none; border-radius: 0; border-left-width: 0; border-right-width: 0; box-shadow: none; }
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --bg: #14151d; --panel: #1c1d28; --panel-2: #242536;
+      --text: #f3f1ea; --muted: #a6a4b4; --line: #2f3042; --line-strong: #44465c;
+      --brand: #9199e2; --brand-2: #aca6ec; --on-brand: #14151d;
+      --proof: #f5808f; --proof-strong: #f7a0ab;
+      --warn: #e0a45a; --warn-soft: #3d3320;
+      --danger: #e77a8b; --danger-soft: #43242b;
+      --edge: rgba(255,255,255,.045);
+      --shadow-sm: 0 8px 24px rgba(0,0,0,.28);
+    }
+  }
 `;
 
 // Klijentski upravljac alata: cita window.LEKTA_TOOL_CONFIG + window.LektaCitation. Bez ${} i backtickova.

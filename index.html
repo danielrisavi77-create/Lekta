@@ -350,6 +350,110 @@ h1,.section-head h2,.cta h2,.result-main h2,.analyzer-header h2{font-family:var(
 .handoff-strip::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:3px;border-radius:var(--radius-pill);background:var(--proof);opacity:.5}
 /* Cijeli izvjestaj: lijevi keyline u proof crvenoj (bio danger) */
 .result-view::before{background:color-mix(in srgb,var(--proof) 55%,transparent)}
+
+/* ===== Val 3: Editorial Instrument "everything" sloj (appended = pobjeduje kaskadu) =====
+   Nacelo kao Val 2: kohezija kroz Fraunces (naslovi) + paper-edge (folije) + ink-serif tabular
+   (brojevi); semanticke boje (ok/warn/danger/info, .status/.file-state/.deadline-status) ostaju.
+   Samo DVA nova proof akcenta u cijelom sloju (modal letterhead + override korekturni rub),
+   oba kao PRAVI border (prezivljavaju forced-colors i print). Samo aditivna boja/font/shadow/border. */
+
+/* --- Modali (order/auth/history/report/guarantee/legal/checkout dijele .modal) --- */
+/* Proof akcent #1: gornja letterhead crta na modalu (pravi border, WHCM-safe) */
+.modal{box-shadow:var(--shadow),inset 0 1px 0 var(--edge);border-top:2px solid color-mix(in srgb,var(--proof) 55%,transparent)}
+.modal-head h3{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:600}
+.package-pick{box-shadow:inset 0 1px 0 var(--edge)}
+/* :checked stanje ostaje brand (akcija) preko postojeceg :has pravila, vise specificno */
+
+/* --- Analyzer wizard (ucitavanje + postavke) --- */
+.panel-title{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:600}
+.dropzone{box-shadow:inset 0 1px 0 var(--edge)}
+.dropzone h3{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:600}
+.field label{letter-spacing:.02em}
+.profile-note{box-shadow:inset 0 1px 0 var(--edge)}
+.advanced-options{box-shadow:inset 0 1px 0 var(--edge)}
+.progress-view h3{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:600}
+
+/* --- Katalog / profil identitet --- */
+.catalog-chip{font-variant-numeric:tabular-nums}
+.profile-fingerprint{font-family:var(--ink-serif);font-variant-numeric:tabular-nums}
+
+/* --- Sljedeci koraci (prvi korak ostaje brand preko postojeceg :first-child pravila) --- */
+.next-steps{box-shadow:inset 0 1px 0 var(--edge)}
+.next-steps h3{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:600}
+.next-step{box-shadow:inset 0 1px 0 var(--edge)}
+
+/* --- Predaja / submission blok --- */
+.submission-intro{box-shadow:inset 0 1px 0 var(--edge)}
+.submission-item{box-shadow:inset 0 1px 0 var(--edge)}
+.submission-item strong{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:600}
+.submission-no{font-family:var(--ink-serif);font-variant-numeric:tabular-nums}
+.submission-meta-card{box-shadow:inset 0 1px 0 var(--edge)}
+.submission-meta-card b{font-family:var(--ink-serif);font-variant-numeric:tabular-nums;color:var(--text)}
+
+/* --- Legal Citation Engine (dublji tab, PRINTA se: paper-edge nestaje u printu, ok) --- */
+.legal-engine{box-shadow:inset 0 1px 0 var(--edge)}
+.legal-engine-head h3{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:600}
+.legal-engine-badge{font-variant-numeric:tabular-nums}
+.legal-engine-card{box-shadow:inset 0 1px 0 var(--edge)}
+.legal-engine-card b{font-family:var(--ink-serif);font-variant-numeric:tabular-nums;color:var(--text)}
+/* .legal-type-chip / .legal-engine-note / .legal-problem: semantika (warn/info) ostaje */
+
+/* --- Legal pravni tekstovi (GDPR modali) --- */
+.legal-content h4{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:600}
+.legal-meta{box-shadow:inset 0 1px 0 var(--edge)}
+
+/* --- Rokovi / deadline board --- */
+.deadline-board{box-shadow:inset 0 1px 0 var(--edge)}
+.deadline-board-head h3{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:600}
+.deadline-year{font-variant-numeric:tabular-nums}
+.deadline-milestone strong{font-family:var(--ink-serif);font-variant-numeric:tabular-nums}
+.deadline-card{box-shadow:inset 0 1px 0 var(--edge)}
+.deadline-card strong{font-variant-numeric:tabular-nums}
+/* .deadline-status: semanticke boje (upcoming/active/cutoff/closed) ostaju */
+
+/* --- Faze predaje (checklist) --- */
+.phase-block{box-shadow:inset 0 1px 0 var(--edge)}
+.phase-title{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:600}
+/* .phase-tag.blocking / .crossfile-warning|ok: semantika (danger/warn/ok) ostaje */
+
+/* --- Povijest analiza --- */
+.history-card{box-shadow:inset 0 1px 0 var(--edge)}
+.history-card h4{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:600}
+.history-score{font-family:var(--ink-serif);font-variant-numeric:tabular-nums;color:var(--text)}
+
+/* --- QA dijagnostika --- */
+.qa-stat{box-shadow:inset 0 1px 0 var(--edge)}
+.qa-stat b{font-family:var(--ink-serif);font-variant-numeric:tabular-nums;color:var(--text)}
+/* .qa-row.pass|fail|warn: semanticki rubovi ostaju */
+
+/* --- Provjere: tablica + summary (info) --- */
+.check-table td{font-variant-numeric:tabular-nums}
+.check-table th{font-family:var(--ink-serif)}
+/* .summary-note: info semantika ostaje */
+
+/* --- Narudzba / placanje / privola --- */
+.production-state{box-shadow:inset 0 1px 0 var(--edge)}
+.order-upload{box-shadow:inset 0 1px 0 var(--edge)}
+.consent-box{box-shadow:inset 0 1px 0 var(--edge)}
+/* .order-status / .consent-row / .secure-order-note: semantika i muted glue ostaju */
+/* Proof akcent #2: override-box = urednicka korektura, pravi lijevi rub (WHCM + print safe) */
+.override-box{box-shadow:inset 0 1px 0 var(--edge);border-left:3px solid color-mix(in srgb,var(--proof) 55%,transparent)}
+
+/* --- Paketi / datoteke isporuke --- */
+.package-file{box-shadow:inset 0 1px 0 var(--edge)}
+/* .file-state.ready|warn|fail: semanticke boje ostaju */
+
+/* --- Puni izvjestaj banner + waitlist traka (KEEP .wl-* / .frb-* klase) --- */
+.full-report-banner{box-shadow:inset 0 1px 0 var(--edge)}
+.full-report-banner .frb-title{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:700}
+.waitlist-bar{box-shadow:inset 0 1px 0 var(--edge)}
+.waitlist-bar .wl-title{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:600}
+
+/* --- Sitni statusni/pomocni elementi: semantika namjerno netaknuta --- */
+/* .profile-status / .authority-status: semanticke boje statusa i autoriteta ostaju (bez broja) */
+/* .detect-badge / .methodology-help / .department-note / .validation-source /
+   .submission-mode-note / .work-support / .action-tool / .action-item / .rule-fact /
+   .source-line / .scored-row: informativni/semanticki glue, ostaju kakvi jesu */
 </style>
 </head>
 <body>
