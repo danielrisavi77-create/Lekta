@@ -41,7 +41,7 @@
 .step-top{display:flex;align-items:center;gap:13px;margin-bottom:17px}
 .step-icon{width:46px;height:46px;flex:none;border-radius:14px;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center}
 .step-icon svg{width:22px;height:22px}
-.step-no{font-family:var(--ink-serif);font-weight:800;color:var(--brand);font-size:13px;text-transform:uppercase;letter-spacing:.11em}
+.step-no{font-family:var(--mono);font-weight:800;color:var(--brand);font-size:13px;text-transform:uppercase;letter-spacing:.11em}
 .step-card h3{margin:0 0 8px;font-size:19px}
 .step-card p{margin:0;color:var(--muted)}
 .step-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:17px}
@@ -49,11 +49,11 @@
 .step-card:not(:last-child)::after{content:"";position:absolute;top:49px;right:-15px;width:30px;height:2px;background:var(--line-strong)}
 @media (max-width:820px){.steps{grid-template-columns:1fr}.step-card:not(:last-child)::after{display:none}}
 @media (prefers-reduced-motion:reduce){.step-card{transition:none}.step-card:hover{transform:none}}
-.check-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.check-card{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:18px}.check-card svg{width:25px;height:25px;color:var(--brand)}.check-icon{width:40px;height:40px;border-radius:12px;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;font-family:var(--ink-serif);font-weight:800;font-size:18px;line-height:1}.check-card h3{font-size:15px;margin:12px 0 5px}.check-card p{font-size:13px;color:var(--muted);margin:0}
-.analyzer-wrap{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-xl);box-shadow:var(--shadow),inset 0 1px 0 var(--edge);overflow:hidden}.analyzer-header{padding:24px 28px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:18px}.analyzer-header h2{font-size:22px;margin:0}.analyzer-header p{color:var(--muted);margin:3px 0 0;font-size:13px}.privacy-pill{display:flex;align-items:center;gap:8px;color:var(--ok);background:var(--ok-soft);padding:8px 11px;border-radius:999px;font-size:12px;font-weight:850}.analyzer-body{padding:22px 24px}.wizard-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:start}.wizard-grid>div:nth-child(2){min-height:300px}@media(max-width:980px){.wizard-grid>div:nth-child(2){min-height:0}}.panel-title{font-size:14px;font-weight:900;margin-bottom:12px}.dropzone{min-height:210px;border:2px dashed var(--line-strong);border-radius:20px;background:var(--panel-2);display:flex;align-items:center;justify-content:center;text-align:center;padding:25px;transition:.2s}.dropzone.drag{border-color:var(--brand);background:var(--brand-soft)}.dropzone.has-file{border-style:solid;border-color:var(--ok);background:var(--ok-soft)}.upload-icon{width:62px;height:62px;border-radius:20px;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;margin:0 auto 16px}.dropzone h3{margin:0 0 7px}.dropzone p{margin:0 0 17px;color:var(--muted);font-size:13px}.selected-file{display:flex;align-items:center;gap:13px;text-align:left;max-width:360px}.selected-file .file-icon{flex:0 0 auto}.selected-file .meta{min-width:0}.selected-file strong{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.selected-file small{color:var(--muted)}.remove-file{margin-left:auto;border:0;background:transparent;color:var(--danger);font-size:20px;min-width:24px;min-height:24px;display:inline-grid;place-items:center}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:grid;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:12px;font-weight:850;color:var(--muted)}.input,select,textarea{width:100%;border:1px solid var(--line);background:var(--panel);border-radius:12px;padding:11px 12px}.input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand);box-shadow:var(--focus)}.profile-note{font-size:12px;color:var(--muted);background:var(--panel-2);border-radius:12px;padding:11px 12px;margin-top:13px}.profile-note strong{color:var(--text)}.custom-settings{margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}.analyze-row{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:22px;padding-top:20px;border-top:1px solid var(--line)}.analyze-row small{color:var(--muted);max-width:570px}
+.check-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.check-card{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:18px}.check-card svg{width:25px;height:25px;color:var(--brand)}.check-icon{width:40px;height:40px;border-radius:12px;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;font-family:var(--mono);font-weight:800;font-size:18px;line-height:1}.check-card h3{font-size:15px;margin:12px 0 5px}.check-card p{font-size:13px;color:var(--muted);margin:0}
+.analyzer-wrap{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-xl);box-shadow:var(--shadow),inset 0 1px 0 var(--edge);overflow:hidden}.analyzer-header{padding:24px 28px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:18px}.analyzer-header h2{font-size:22px;margin:0}.analyzer-header p{color:var(--muted);margin:3px 0 0;font-size:13px}.privacy-pill{display:flex;align-items:center;gap:8px;color:var(--ok);background:var(--ok-soft);padding:8px 11px;border-radius:999px;font-size:12px;font-weight:850}.analyzer-body{padding:22px 24px}.wizard-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:start}.wizard-col-profile{min-height:300px}@media(max-width:980px){.wizard-col-profile{min-height:0}}.panel-title{font-size:14px;font-weight:900;margin-bottom:12px}.dropzone{min-height:210px;border:2px dashed var(--line-strong);border-radius:20px;background:var(--panel-2);display:flex;align-items:center;justify-content:center;text-align:center;padding:25px;transition:.2s}.dropzone.drag{border-color:var(--brand);background:var(--brand-soft)}.dropzone.has-file{border-style:solid;border-color:var(--ok);background:var(--ok-soft)}.upload-icon{width:62px;height:62px;border-radius:20px;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;margin:0 auto 16px}.dropzone h3{margin:0 0 7px}.dropzone p{margin:0 0 17px;color:var(--muted);font-size:13px}.selected-file{display:flex;align-items:center;gap:13px;text-align:left;max-width:360px}.selected-file .file-icon{flex:0 0 auto}.selected-file .meta{min-width:0}.selected-file strong{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.selected-file small{color:var(--muted)}.remove-file{margin-left:auto;border:0;background:transparent;color:var(--danger);font-size:20px;min-width:24px;min-height:24px;display:inline-grid;place-items:center}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field{display:grid;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:12px;font-weight:850;color:var(--muted)}.input,select,textarea{width:100%;border:1px solid var(--line);background:var(--panel);border-radius:12px;padding:11px 12px}.input:focus,select:focus,textarea:focus{outline:none;border-color:var(--brand);box-shadow:var(--focus)}.profile-note{font-size:12px;color:var(--muted);background:var(--panel-2);border-radius:12px;padding:11px 12px;margin-top:13px}.profile-note strong{color:var(--text)}.custom-settings{margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}.analyze-row{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:22px;padding-top:20px;border-top:1px solid var(--line)}.analyze-row small{color:var(--muted);max-width:570px}
 .progress-view{padding:55px 20px;text-align:center}.spinner{width:76px;height:76px;border-radius:50%;border:7px solid var(--panel-2);border-top-color:var(--brand);animation:spin .9s linear infinite;margin:0 auto 21px}@keyframes spin{to{transform:rotate(360deg)}}.progress-view h3{font-size:22px;margin:0 0 7px}.progress-view p{color:var(--muted);margin:0}.progress-track{height:9px;border-radius:99px;background:var(--panel-2);max-width:460px;margin:22px auto 9px;overflow:hidden}.progress-track i{display:block;height:100%;width:0;background:var(--brand);transition:width .3s}.progress-step{font-size:12px;color:var(--muted)}
 .result-view{padding:0}.result-summary{padding:28px;display:grid;grid-template-columns:230px 1fr;gap:28px;border-bottom:1px solid var(--line)}.score-card{background:var(--panel-2);border-radius:20px;padding:20px;display:grid;place-items:center;text-align:center}.score-ring{--score:0;width:145px;height:145px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--score-color,var(--brand)) calc(var(--score)*1%),var(--line) 0)}.score-ring-inner{width:114px;height:114px;background:var(--panel);border-radius:50%;display:grid;place-items:center}.score-ring b{font-size:38px;line-height:1}.score-ring small{color:var(--muted);font-weight:800}.score-label{margin-top:14px;font-weight:900}.result-main h2{font-size:27px;margin:0 0 6px}.result-main>p{color:var(--muted);margin:0 0 19px}.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.metric{border:1px solid var(--line);border-radius:14px;padding:13px}.metric span{display:block;color:var(--muted);font-size:11px;font-weight:800}.metric b{display:block;font-size:20px;margin-top:3px}.result-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}.dl-menu{position:relative;display:inline-flex}.dl-menu-btn{display:inline-flex;align-items:center;gap:6px}.dl-menu-btn svg{width:14px;height:14px;transition:transform .18s}.dl-menu:hover .dl-menu-btn svg,.dl-menu:focus-within .dl-menu-btn svg{transform:rotate(180deg)}.dl-menu-list{position:absolute;top:100%;left:0;margin-top:6px;min-width:210px;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:6px;display:grid;gap:2px;opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .16s,transform .16s;z-index:20}.dl-menu-list::before{content:"";position:absolute;top:-8px;left:0;right:0;height:8px}.dl-menu:hover .dl-menu-list,.dl-menu:focus-within .dl-menu-list{opacity:1;visibility:visible;transform:translateY(0)}.dl-item{text-align:left;border:0;background:transparent;color:var(--text);font:inherit;font-size:13px;font-weight:650;padding:9px 11px;border-radius:9px;cursor:pointer;white-space:nowrap}.dl-item:hover,.dl-item:focus-visible{background:var(--brand-soft);color:var(--brand)}@media(prefers-reduced-motion:reduce){.dl-menu-list,.dl-menu-btn svg{transition:none}}.tabs{display:flex;gap:4px;padding:15px 20px;border-bottom:1px solid var(--line);overflow:auto}.tab{white-space:nowrap;border:0;background:transparent;color:var(--muted);padding:11px 14px;border-radius:10px;font-weight:800;font-size:13px;min-height:44px}.tab.active{background:var(--brand-soft);color:var(--brand)}.tab-toggle{white-space:nowrap;border:0;background:transparent;color:var(--brand);padding:9px 12px;border-radius:10px;font-weight:800;font-size:13px;margin-left:auto;cursor:pointer}.tab-toggle.open{background:var(--brand-soft)}.tab-details{padding-top:6px}.tab-details[hidden]{display:none}.tab-panels{padding:23px 28px 30px}.tab-panel{display:none}.tab-panel.active{display:block}.category-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.category-card{border:1px solid var(--line);border-radius:15px;padding:16px}.category-head{display:flex;justify-content:space-between;gap:10px;align-items:center}.category-card h3{font-size:14px;margin:0}.category-card b{font-size:18px}.category-card .bar{margin:12px 0 0}.summary-note{margin-top:18px;padding:14px 16px;background:var(--info-soft);color:var(--info);border-radius:13px;font-size:13px}.issues-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}.filters{display:flex;gap:7px;flex-wrap:wrap}.filter-btn{border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:9px 13px;font-size:12px;font-weight:800;color:var(--muted);min-height:44px}.filter-btn.active{border-color:var(--brand);color:var(--brand);background:var(--brand-soft)}.issues-list{display:grid;gap:10px}.issue{border:1px solid var(--line);border-radius:15px;padding:15px 16px;display:grid;grid-template-columns:35px 1fr auto;gap:12px;align-items:start}.issue-icon{width:35px;height:35px;border-radius:11px;display:grid;place-items:center;font-weight:950}.issue.error .issue-icon{background:var(--danger-soft);color:var(--danger)}.issue.warning .issue-icon{background:var(--warn-soft);color:var(--warn)}.issue.info .issue-icon{background:var(--info-soft);color:var(--info)}.issue h4{margin:0 0 3px;font-size:14px}.issue p{margin:0;color:var(--muted);font-size:13px}.issue .where{font-size:11px;color:var(--muted);white-space:nowrap}.check-table{width:100%;border-collapse:collapse}.check-table th,.check-table td{text-align:left;padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:top}.check-table th{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}.status{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:900;border-radius:999px;padding:5px 8px}.status.pass{color:var(--ok);background:var(--ok-soft)}.status.warn{color:var(--warn);background:var(--warn-soft)}.status.fail{color:var(--danger);background:var(--danger-soft)}.empty{text-align:center;color:var(--muted);padding:38px}
-.pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.price-card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:23px;position:relative}.price-card.featured{border:2px solid var(--brand);box-shadow:var(--shadow),inset 0 1px 0 var(--edge);transform:translateY(-8px)}.popular{position:absolute;right:15px;top:15px;background:var(--brand);color:var(--on-brand);padding:5px 8px;border-radius:999px;font-size:10px;font-weight:900}.price-card h3{margin:0;font-size:17px}.price{font-size:34px;font-weight:850;letter-spacing:-.03em;margin:15px 0 4px;font-family:var(--ink-serif)}.price small{font-size:13px;color:var(--muted);font-weight:700}.price-card>p{color:var(--muted);min-height:46px}.features{list-style:none;padding:0;margin:19px 0;display:grid;gap:10px}.features li{display:flex;gap:8px;font-size:13px}.features li:before{content:"✓";color:var(--ok);font-weight:950}.price-card .btn{width:100%}.disclaimer{margin-top:28px;text-align:center;color:var(--muted);font-size:12px}
+.pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.price-card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:23px;position:relative}.price-card.featured{border:2px solid var(--brand);box-shadow:var(--shadow),inset 0 1px 0 var(--edge);transform:translateY(-8px)}.popular{position:absolute;right:15px;top:15px;background:var(--brand);color:var(--on-brand);padding:5px 8px;border-radius:999px;font-size:10px;font-weight:900}.price-card h3{margin:0;font-size:17px}.price{font-size:34px;font-weight:850;letter-spacing:-.03em;margin:15px 0 4px;font-family:var(--mono)}.price small{font-size:13px;color:var(--muted);font-weight:700}.price-card>p{color:var(--muted);min-height:46px}.features{list-style:none;padding:0;margin:19px 0;display:grid;gap:10px}.features li{display:flex;gap:8px;font-size:13px}.features li:before{content:"✓";color:var(--ok);font-weight:950}.price-card .btn{width:100%}.disclaimer{margin-top:28px;text-align:center;color:var(--muted);font-size:12px}
 .faq{max-width:850px;margin:auto;display:grid;gap:10px}.faq details{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:16px 18px}.faq summary{font-weight:850;cursor:pointer}.faq p{color:var(--muted);margin:11px 0 0}
 .cta{background:linear-gradient(135deg,#191d31,#2a2d63);color:#fff;border-radius:30px;padding:48px;display:flex;align-items:center;justify-content:space-between;gap:30px;overflow:hidden;position:relative}.cta:after{content:"";position:absolute;width:280px;height:280px;border-radius:50%;background:rgba(255,255,255,.08);right:-80px;top:-120px}.cta h2{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:480;font-size:clamp(30px,4vw,40px);line-height:1.06;letter-spacing:-.03em;margin:0 0 10px}.cta p{color:#cfd3e2;margin:0;max-width:650px}.cta .btn{position:relative;z-index:1;flex:0 0 auto;background:#fff;color:#171b27}
 footer{padding:44px 0 35px}.footer-grid{display:flex;align-items:flex-start;justify-content:space-between;gap:30px}.footer-copy{color:var(--muted);font-size:12px;max-width:620px;margin-top:10px}.footer-links{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted);font-size:13px}.footer-bottom{margin-top:30px;padding-top:20px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:20px;color:var(--muted);font-size:11px}
@@ -62,7 +62,7 @@ footer{padding:44px 0 35px}.footer-grid{display:flex;align-items:flex-start;just
 .production-state{margin-top:14px;padding:12px 13px;border:1px solid var(--line);border-radius:13px;background:var(--panel-2);font-size:12px}.production-state.ready{border-color:var(--ok);background:var(--ok-soft)}.production-state.warn{border-color:var(--warn);background:var(--warn-soft)}.production-state strong{display:block;margin-bottom:3px}.order-upload{margin-top:14px;padding:13px;border:1px dashed var(--line-strong);border-radius:14px;background:var(--panel-2)}.order-upload label{display:block;font-size:12px;font-weight:900;margin-bottom:7px}.order-upload input{width:100%}.order-file-meta{color:var(--muted);font-size:11px;margin-top:6px}.consent-box{display:grid;gap:9px;margin-top:15px;padding:13px;border:1px solid var(--line);border-radius:14px}.consent-row{display:flex;align-items:flex-start;gap:9px;font-size:12px}.consent-row input{margin-top:3px}.consent-row a,.legal-link{color:var(--brand);font-weight:850;text-decoration:underline;text-underline-offset:2px}.order-status{margin-top:14px;padding:13px;border-radius:14px;font-size:12px}.order-status.success{background:var(--ok-soft);color:var(--ok)}.order-status.error{background:var(--danger-soft);color:var(--danger)}.order-status.pending{background:var(--info-soft);color:var(--info)}.payment-action{margin-top:10px}.legal-content{font-size:13px}.legal-content h4{font-size:17px;margin:20px 0 7px}.legal-content h4:first-child{margin-top:0}.legal-content p,.legal-content li{color:var(--muted)}.legal-content ul{padding-left:20px}.legal-meta{padding:11px 12px;border-radius:12px;background:var(--panel-2);margin-bottom:16px}.consent-banner{position:fixed;left:18px;right:18px;bottom:18px;z-index:240;margin:auto;max-width:920px;padding:16px 18px;border:1px solid var(--line);border-radius:17px;background:var(--panel);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:space-between;gap:18px}.consent-banner p{margin:0;color:var(--muted);font-size:12px}.consent-actions{display:flex;gap:8px;flex:0 0 auto}.setup-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.setup-note{padding:11px 12px;background:var(--warn-soft);border-radius:12px;font-size:12px;margin-bottom:14px}.honeypot{position:absolute!important;left:-9999px!important;width:1px!important;height:1px!important;overflow:hidden!important}.footer-link-btn{border:0;background:transparent;padding:0;color:inherit;font:inherit;cursor:pointer}.footer-link-btn:hover{color:var(--text)}.provider-pill{display:inline-flex;align-items:center;gap:6px;padding:5px 8px;border-radius:999px;background:var(--brand-soft);color:var(--brand);font-size:10px;font-weight:900}.secure-order-note{display:flex;gap:9px;align-items:flex-start;margin-top:12px;color:var(--muted);font-size:11px}.setup-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
 @media(max-width:980px){.hero-grid,.wizard-grid{grid-template-columns:1fr}.hero{padding-top:55px}.preview-card{transform:none;max-width:650px}.check-grid{grid-template-columns:repeat(2,1fr)}.pricing{grid-template-columns:repeat(2,1fr)}.result-summary{grid-template-columns:190px 1fr}.metrics,.category-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:720px){.consent-banner{align-items:stretch;flex-direction:column}.consent-actions{width:100%;flex-wrap:wrap}.consent-actions .btn{flex:1}.setup-grid{grid-template-columns:1fr}.shell{width:min(100% - 24px,var(--max))}.nav-links{display:none}.mobile-menu{display:grid;margin-left:auto}.nav>.btn-primary{display:none}.hero{padding:46px 0 35px}.hero-grid{gap:35px}h1{font-size:42px}.hero-copy>p{font-size:16px}.steps,.check-grid,.pricing{grid-template-columns:1fr}.price-card.featured{transform:none}.analyzer-header{align-items:flex-start;flex-direction:column}.analyzer-body{padding:17px}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.analyze-row{align-items:stretch;flex-direction:column}.result-summary{grid-template-columns:1fr}.score-card{padding:15px}.metrics,.category-grid{grid-template-columns:1fr 1fr}.tab-panels{padding:17px}.issue{grid-template-columns:35px 1fr}.issue .where{grid-column:2}.cta{padding:32px 25px;align-items:flex-start;flex-direction:column}.footer-grid,.footer-bottom{flex-direction:column}.package-picks{grid-template-columns:1fr}}
-@media print{.topbar,.hero,.logo-strip,.section:not(#analyzer),footer,.analyzer-header,.wizard-view,.progress-view,.result-actions,.tabs,.issues-toolbar{display:none!important}body{background:#fff;color:#111}.section#analyzer{padding:0}.shell{width:100%}.analyzer-wrap{box-shadow:none;border:0}.result-view{display:block!important}.tab-panel{display:block!important;page-break-inside:avoid}.tab-panel:before{content:attr(data-print-title);display:block;font-size:20px;font-weight:800;margin:24px 0 10px}.score-card,.metric,.category-card,.issue{break-inside:avoid}}
+@media print{.topbar,.hero,.logo-strip,.section:not(#analyzer),footer,.analyzer-header,.wizard-rail,.wizard-view,.progress-view,.result-actions,.tabs,.issues-toolbar{display:none!important}body{background:#fff;color:#111}.section#analyzer{padding:0}.shell{width:100%}.analyzer-wrap{box-shadow:none;border:0}.result-view{display:block!important}.tab-panel{display:block!important;page-break-inside:avoid}.tab-panel:before{content:attr(data-print-title);display:block;font-size:20px;font-weight:800;margin:24px 0 10px}.score-card,.metric,.category-card,.issue{break-inside:avoid}}
 
 .catalog-summary{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}.catalog-chip{font-size:11px;font-weight:900;padding:6px 9px;border-radius:999px;background:var(--brand-soft);color:var(--brand)}
 .profile-path{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:9px;font-size:12px;color:var(--muted)}.profile-path span:not(:last-child):after{content:"›";margin-left:6px;color:var(--line-strong)}
@@ -191,7 +191,7 @@ details.more{margin-top:12px;border-top:1px dashed var(--line-strong);padding-to
 .sec-acc:hover{border-color:var(--line-strong)}
 .sec-acc-head{display:grid;gap:4px}
 .sec-acc-kicker{color:var(--brand);font-weight:900;text-transform:uppercase;letter-spacing:.12em;font-size:11px}
-.sec-acc-title{font-family:var(--ink-serif);font-weight:800;font-size:clamp(19px,2.4vw,25px);letter-spacing:-.02em}
+.sec-acc-title{font-family:var(--mono);font-weight:800;font-size:clamp(19px,2.4vw,25px);letter-spacing:-.02em}
 .sec-acc-chev{color:var(--muted);flex:0 0 auto;width:22px;height:22px;transition:transform .2s var(--ease-out-3,ease)}
 .sec-acc[open] .sec-acc-chev{transform:rotate(180deg)}
 .sec-acc-body{padding:2px 24px 24px}
@@ -206,7 +206,7 @@ details.more{margin-top:12px;border-top:1px dashed var(--line-strong);padding-to
 .hero-coverage{margin-top:22px;max-width:none;border-top:1px solid var(--line);padding-top:18px}
 .cov-stats{display:flex;gap:28px;flex-wrap:wrap}
 .cov-stat{display:flex;flex-direction:column;line-height:1.05}
-.cov-stat b{font-family:var(--ink-serif);font-size:26px;font-weight:800;color:var(--text);letter-spacing:-.02em}
+.cov-stat b{font-family:var(--mono);font-size:26px;font-weight:800;color:var(--text);letter-spacing:-.02em}
 .cov-stat span{font-size:11px;color:var(--muted);font-weight:800;margin-top:4px;text-transform:uppercase;letter-spacing:.05em}
 .cov-note{display:block;margin-top:12px;font-size:12px;color:var(--muted)}
 
@@ -252,7 +252,7 @@ h1,.section-head h2,.cta h2,.result-main h2,.analyzer-header h2{font-family:var(
 .full-report-banner .frb-title{display:inline-flex;align-items:center;gap:8px;font-weight:900;color:var(--ok)}
 .full-report-banner .frb-title svg{width:18px;height:18px}
 .frb-tier{font-size:11px;font-weight:900;padding:5px 9px;border-radius:999px;background:var(--panel);border:1px solid var(--ok);color:var(--ok)}
-.frb-token{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;color:var(--muted)}
+.frb-token{font-family:var(--mono);font-size:11px;color:var(--muted)}
 .frb-conf{font-size:11px;font-weight:800;padding:5px 9px;border-radius:999px;background:var(--panel);border:1px solid var(--line);color:var(--text)}.frb-unver{color:var(--muted)}
 /* Waitlist traka za nepokrivene fakultete (sekundarna, zatvoriva, ne blokira nista) */
 .waitlist-bar{position:relative;margin:14px 20px 0;padding:14px 16px 12px;border:1px solid var(--line,#dfe4ee);background:var(--brand-soft);border-radius:14px}
@@ -276,7 +276,7 @@ h1,.section-head h2,.cta h2,.result-main h2,.analyzer-header h2{font-family:var(
 .no-faculty-panel .wl-msg{color:var(--brand);font-size:13px;font-weight:700}
 .frb-note{flex-basis:100%;margin:0;font-size:12px;color:var(--muted)}
 .score-card{position:relative}
-.ready-stamp{position:absolute;top:12px;right:12px;transform:rotate(-11deg);font-family:var(--ink-serif);font-weight:800;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ok);border:2px solid var(--ok);border-radius:9px;padding:5px 9px;background:var(--ok-soft);box-shadow:0 2px 0 color-mix(in srgb,var(--ok) 28%,transparent);pointer-events:none}
+.ready-stamp{position:absolute;top:12px;right:12px;transform:rotate(-11deg);font-family:var(--mono);font-weight:800;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ok);border:2px solid var(--ok);border-radius:9px;padding:5px 9px;background:var(--ok-soft);box-shadow:0 2px 0 color-mix(in srgb,var(--ok) 28%,transparent);pointer-events:none}
 @media(prefers-reduced-motion:no-preference){.ready-stamp.stamp-in{animation:stampIn .42s var(--ease-out-3,ease-out)}}
 @keyframes stampIn{from{opacity:0;transform:rotate(7deg) scale(1.7)}to{opacity:1;transform:rotate(-11deg) scale(1)}}
 @media print{.result-view::before{display:none}.ready-stamp{box-shadow:none}}
@@ -284,7 +284,7 @@ h1,.section-head h2,.cta h2,.result-main h2,.analyzer-header h2{font-family:var(
 /* ===== Val 2: Editorial Instrument report sloj (appended = pobjeduje kaskadu) ===== */
 /* Score gauge: neispunjeni luk je NEUTRALAN (nije greska); broj tabular */
 .score-ring{background:conic-gradient(var(--score-color,var(--brand)) calc(var(--score)*1%),var(--line) 0);box-shadow:inset 0 1px 0 var(--edge)}
-.score-ring b{font-family:var(--ink-serif);font-variant-numeric:tabular-nums;color:var(--text)}
+.score-ring b{font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--text)}
 .score-ring-inner{box-shadow:inset 0 1px 0 var(--edge),0 1px 2px rgba(0,0,0,.04)}
 .score-card{border-radius:var(--radius-xl);box-shadow:inset 0 1px 0 var(--edge)}
 .score-label{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:600}
@@ -292,7 +292,7 @@ h1,.section-head h2,.cta h2,.result-main h2,.analyzer-header h2{font-family:var(
 /* Metrike */
 .metric{box-shadow:inset 0 1px 0 var(--edge)}
 .metric span{text-transform:uppercase;letter-spacing:.05em}
-.metric b{font-family:var(--ink-serif);font-variant-numeric:tabular-nums;color:var(--text)}
+.metric b{font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--text)}
 /* Jump-to-issues metrika: amber = akcijska paznja (print + forced-colors safe rub) */
 .metric-jump{border-left:3px solid var(--warn);box-shadow:inset 0 1px 0 var(--edge)}
 .metric-jump:hover{border-color:var(--brand)}
@@ -303,7 +303,7 @@ h1,.section-head h2,.cta h2,.result-main h2,.analyzer-header h2{font-family:var(
 /* Kategorije */
 .category-card{box-shadow:inset 0 1px 0 var(--edge)}
 .category-card h3{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:600}
-.category-card b{font-family:var(--ink-serif);font-variant-numeric:tabular-nums;color:var(--text)}
+.category-card b{font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--text)}
 /* Trake napretka: udubljena folija */
 .bar{box-shadow:inset 0 1px 1px rgba(0,0,0,.05)}
 .readiness-meter{background:var(--panel-2);box-shadow:inset 0 1px 1px rgba(0,0,0,.05)}
@@ -314,36 +314,36 @@ h1,.section-head h2,.cta h2,.result-main h2,.analyzer-header h2{font-family:var(
 .issue.warning::before{background:var(--warn)}
 .issue.info::before{background:var(--info)}
 .issue h4{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:600}
-.issue .where{font-family:var(--ink-serif);font-variant-numeric:tabular-nums}
+.issue .where{font-family:var(--mono);font-variant-numeric:tabular-nums}
 .issue-icon{box-shadow:inset 0 1px 0 var(--edge)}
 .issue.error .issue-icon{background:var(--danger-soft);color:var(--danger)}
 /* Plan ispravaka */
 .action-stat{box-shadow:inset 0 1px 0 var(--edge)}
-.action-stat b{font-family:var(--ink-serif);font-variant-numeric:tabular-nums;color:var(--text)}
+.action-stat b{font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--text)}
 .action-column{box-shadow:inset 0 1px 0 var(--edge)}
 .action-column h3{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:600}
 /* Spremnost za predaju: papirnata dubina + brand keyline (semantika ok/warn/blocked ostaje) */
 .gate-hero{position:relative;padding-left:24px;border-radius:var(--radius-xl);box-shadow:var(--shadow-sm),inset 0 1px 0 var(--edge)}
 .gate-hero::before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:3px;border-radius:var(--radius-pill);background:var(--brand);opacity:.5;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .gate-hero h3{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:600}
-.gate-badge{font-family:var(--ink-serif);font-variant-numeric:tabular-nums;box-shadow:inset 0 1px 0 var(--edge)}
+.gate-badge{font-family:var(--mono);font-variant-numeric:tabular-nums;box-shadow:inset 0 1px 0 var(--edge)}
 .gate-card{box-shadow:inset 0 1px 0 var(--edge)}
-.gate-card b{font-family:var(--ink-serif);font-variant-numeric:tabular-nums}
+.gate-card b{font-family:var(--mono);font-variant-numeric:tabular-nums}
 /* PDF preflight, validacija, metodologija (dublji tabovi) */
 .preflight{box-shadow:inset 0 1px 0 var(--edge)}
 .preflight-head h3{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:600}
-.preflight-cell b{font-family:var(--ink-serif);font-variant-numeric:tabular-nums}
+.preflight-cell b{font-family:var(--mono);font-variant-numeric:tabular-nums}
 .preflight-item{box-shadow:inset 0 1px 0 var(--edge)}
-.preflight-item b{font-family:var(--ink-serif);font-variant-numeric:tabular-nums}
-.preflight-score{font-family:var(--ink-serif);font-variant-numeric:tabular-nums}
+.preflight-item b{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.preflight-score{font-family:var(--mono);font-variant-numeric:tabular-nums}
 .preflight-box{box-shadow:inset 0 1px 0 var(--edge)}
 .validation-card{box-shadow:inset 0 1px 0 var(--edge)}
 .validation-card h3{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:600}
 .methodology-card{box-shadow:inset 0 1px 0 var(--edge)}
-.methodology-card b{font-family:var(--ink-serif);font-variant-numeric:tabular-nums}
+.methodology-card b{font-family:var(--mono);font-variant-numeric:tabular-nums}
 .methodology-summary{box-shadow:inset 0 1px 0 var(--edge)}
 .methodology-summary h3{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:600}
-.coverage-badge{font-family:var(--ink-serif);font-variant-numeric:tabular-nums}
+.coverage-badge{font-family:var(--mono);font-variant-numeric:tabular-nums}
 /* Predaja ljudskom uredniku: brand keyline (vec skriven u printu) */
 .handoff-strip{position:relative;padding-left:19px}
 .handoff-strip::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:3px;border-radius:var(--radius-pill);background:var(--brand);opacity:.5}
@@ -372,7 +372,7 @@ h1,.section-head h2,.cta h2,.result-main h2,.analyzer-header h2{font-family:var(
 
 /* --- Katalog / profil identitet --- */
 .catalog-chip{font-variant-numeric:tabular-nums}
-.profile-fingerprint{font-family:var(--ink-serif);font-variant-numeric:tabular-nums}
+.profile-fingerprint{font-family:var(--mono);font-variant-numeric:tabular-nums}
 
 /* --- Sljedeci koraci (prvi korak ostaje brand preko postojeceg :first-child pravila) --- */
 .next-steps{box-shadow:inset 0 1px 0 var(--edge)}
@@ -383,16 +383,16 @@ h1,.section-head h2,.cta h2,.result-main h2,.analyzer-header h2{font-family:var(
 .submission-intro{box-shadow:inset 0 1px 0 var(--edge)}
 .submission-item{box-shadow:inset 0 1px 0 var(--edge)}
 .submission-item strong{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:600}
-.submission-no{font-family:var(--ink-serif);font-variant-numeric:tabular-nums}
+.submission-no{font-family:var(--mono);font-variant-numeric:tabular-nums}
 .submission-meta-card{box-shadow:inset 0 1px 0 var(--edge)}
-.submission-meta-card b{font-family:var(--ink-serif);font-variant-numeric:tabular-nums;color:var(--text)}
+.submission-meta-card b{font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--text)}
 
 /* --- Legal Citation Engine (dublji tab, PRINTA se: paper-edge nestaje u printu, ok) --- */
 .legal-engine{box-shadow:inset 0 1px 0 var(--edge)}
 .legal-engine-head h3{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:600}
 .legal-engine-badge{font-variant-numeric:tabular-nums}
 .legal-engine-card{box-shadow:inset 0 1px 0 var(--edge)}
-.legal-engine-card b{font-family:var(--ink-serif);font-variant-numeric:tabular-nums;color:var(--text)}
+.legal-engine-card b{font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--text)}
 /* .legal-type-chip / .legal-engine-note / .legal-problem: semantika (warn/info) ostaje */
 
 /* --- Legal pravni tekstovi (GDPR modali) --- */
@@ -403,7 +403,7 @@ h1,.section-head h2,.cta h2,.result-main h2,.analyzer-header h2{font-family:var(
 .deadline-board{box-shadow:inset 0 1px 0 var(--edge)}
 .deadline-board-head h3{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:600}
 .deadline-year{font-variant-numeric:tabular-nums}
-.deadline-milestone strong{font-family:var(--ink-serif);font-variant-numeric:tabular-nums}
+.deadline-milestone strong{font-family:var(--mono);font-variant-numeric:tabular-nums}
 .deadline-card{box-shadow:inset 0 1px 0 var(--edge)}
 .deadline-card strong{font-variant-numeric:tabular-nums}
 /* .deadline-status: semanticke boje (upcoming/active/cutoff/closed) ostaju */
@@ -416,16 +416,16 @@ h1,.section-head h2,.cta h2,.result-main h2,.analyzer-header h2{font-family:var(
 /* --- Povijest analiza --- */
 .history-card{box-shadow:inset 0 1px 0 var(--edge)}
 .history-card h4{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:600}
-.history-score{font-family:var(--ink-serif);font-variant-numeric:tabular-nums;color:var(--text)}
+.history-score{font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--text)}
 
 /* --- QA dijagnostika --- */
 .qa-stat{box-shadow:inset 0 1px 0 var(--edge)}
-.qa-stat b{font-family:var(--ink-serif);font-variant-numeric:tabular-nums;color:var(--text)}
+.qa-stat b{font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--text)}
 /* .qa-row.pass|fail|warn: semanticki rubovi ostaju */
 
 /* --- Provjere: tablica + summary (info) --- */
 .check-table td{font-variant-numeric:tabular-nums}
-.check-table th{font-family:var(--ink-serif)}
+.check-table th{font-family:var(--mono)}
 /* .summary-note: info semantika ostaje */
 
 /* --- Narudzba / placanje / privola --- */
@@ -516,6 +516,89 @@ h1,.section-head h2,.cta h2,.result-main h2,.analyzer-header h2{font-family:var(
 @keyframes hd-mark-x{from{opacity:1;transform:scale(1)}to{opacity:0;transform:scale(.4)}}
 @keyframes hd-mark-check{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:scale(1)}}
 @keyframes hd-stamp{from{opacity:0;transform:rotate(6deg) scale(1.55)}to{opacity:1;transform:rotate(-6deg) scale(1)}}
+
+/* ===== Val 4b: Tinta i papir analizator (wizard + rezultati; appended = pobjeduje kaskadu) =====
+   Nacelo: svi id/klase koje app.ts cita ostaju doslovno; ovo je iskljucivo prezentacija.
+   Crvena/zelena samo za nalaze; brand samo za akciju; --mono je podatkovni glas. */
+
+/* --- Progress rail: cisto prezentacijski, stanje cita iz klasa koje app.ts vec toggla --- */
+.wizard-rail{display:flex;align-items:center;gap:12px;padding:14px 28px 0}
+.rail-step{display:inline-flex;align-items:center;gap:8px;font:600 11.5px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--muted-2)}
+.rail-step b{width:21px;height:21px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line-strong);font-weight:600;font-size:11px;transition:background var(--dur-1),border-color var(--dur-1),color var(--dur-1)}
+.rail-line{flex:0 0 26px;height:1px;background:var(--line-strong)}
+.rail-step[data-rail="1"]{color:var(--brand)}.rail-step[data-rail="1"] b{border-color:var(--brand);color:var(--brand)}
+.analyzer-wrap:has(#dropzone.has-file) .rail-step[data-rail="1"] b{background:var(--brand);border-color:var(--brand);color:var(--on-brand)}
+.analyzer-wrap:has(#dropzone.has-file) .rail-step[data-rail="2"]{color:var(--brand)}
+.analyzer-wrap:has(#dropzone.has-file) .rail-step[data-rail="2"] b{border-color:var(--brand);color:var(--brand)}
+.analyzer-wrap:has(#progressView:not(.hidden)) .rail-step[data-rail="3"],
+.analyzer-wrap:has(#resultView:not(.hidden)) .rail-step[data-rail="3"]{color:var(--brand)}
+.analyzer-wrap:has(#progressView:not(.hidden)) .rail-step[data-rail="3"] b,
+.analyzer-wrap:has(#resultView:not(.hidden)) .rail-step[data-rail="3"] b{border-color:var(--brand);color:var(--brand)}
+.analyzer-wrap:has(#resultView:not(.hidden)) .rail-step b{background:var(--brand);border-color:var(--brand);color:var(--on-brand)}
+
+/* --- Wizard kolone: rukopisni marginalni brojevi + lijevi hairline rub --- */
+.wizard-col{border-left:1px solid var(--line);padding-left:20px}
+@media(max-width:980px){.wizard-col{border-left:0;padding-left:0}}
+.wstep{font-weight:800;font-size:14.5px}
+.wstep-no{background:transparent;color:var(--brand);border:1px solid color-mix(in srgb,var(--brand) 45%,transparent);box-shadow:none;font:600 12px/1 var(--mono)}
+.profile-group{border:0;padding:0;margin:0 0 16px;min-width:0}
+.fg-label{font:600 10.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:0 0 10px;display:flex;align-items:center;gap:8px}
+.fg-label::before{content:"";width:14px;height:2px;background:var(--brand);border-radius:2px}
+
+/* --- Polja: urezana u foliju (bg svjetliji od panela) --- */
+.input,select,textarea{background:var(--bg);border-radius:var(--radius-sm)}
+.field label{font:600 11px/1.4 var(--mono);letter-spacing:.05em;text-transform:uppercase}
+
+/* --- Dropzone kao prazan A4 list s isprekidanim marginama --- */
+.dropzone{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:6px;min-height:250px;box-shadow:var(--shadow-sm);transition:border-color var(--dur-1),background var(--dur-1)}
+.dropzone::before{content:"";position:absolute;inset:10% 8%;border:1.5px dashed var(--line-strong);border-radius:2px;pointer-events:none;transition:border-color var(--dur-1)}
+.dropzone.drag{border-color:var(--brand);background:var(--brand-soft)}
+.dropzone.drag::before{border-color:var(--brand)}
+.dropzone.has-file{border:1px solid var(--brand);background:var(--brand-soft)}
+.dropzone.has-file::before{border-color:color-mix(in srgb,var(--brand) 45%,transparent)}
+.dropzone>#dropEmpty,.dropzone>.selected-file{position:relative;z-index:1}
+.upload-icon{border-radius:var(--radius-sm)}
+.selected-file{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px 14px;box-shadow:var(--shadow-sm)}
+.selected-file small{font-family:var(--mono);font-size:11px}
+.remove-file{border-radius:6px}.remove-file:hover{background:var(--danger-soft)}
+
+/* --- Segmented izgled za strogost/fazu: restyled nativni select --- */
+.field-seg select{appearance:none;-webkit-appearance:none;font:600 12.5px/1.4 var(--mono);letter-spacing:.02em;padding:11px 34px 11px 12px;border-radius:var(--radius-pill);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%233E4553' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center}
+.field-seg select:hover{border-color:var(--brand)}
+[data-theme="dark"] .field-seg select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23A9AFBA' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")}
+
+/* --- Kondicionalni explaineri kao fusnote kartice (JS pise textContent u iste id-jeve) --- */
+.subtle-help,.work-support,.methodology-help,.submission-mode-note,.profile-note{position:relative;margin-top:8px;padding:8px 0 0 20px;border-top:1px solid var(--line);background:transparent;border-radius:0;font-size:11.5px;line-height:1.55;color:var(--muted)}
+.subtle-help::before,.work-support::before,.methodology-help::before,.submission-mode-note::before,.profile-note::before{content:"\203B";position:absolute;left:0;top:7px;font-family:var(--mono);font-size:11px;color:var(--brand)}
+.subtle-help:empty,.work-support:empty,.profile-note:empty{display:none}
+.work-support.exact::before{color:var(--ok)}.work-support.generic::before{color:var(--warn)}
+
+/* --- Rezultat: score prsten (conic ostaje; vanjski hairline + mono brojka) --- */
+.score-ring{position:relative}
+.score-ring::before{content:"";position:absolute;inset:-8px;border-radius:50%;border:1px solid var(--line);pointer-events:none}
+.score-card{background:var(--panel-2);border:1px solid var(--line)}
+/* --- Metrike kao stat kartice --- */
+.metric{background:var(--panel);border-radius:var(--radius-sm)}
+.metric span{font:600 10px/1.4 var(--mono);letter-spacing:.09em}
+.metric b{font-size:23px;font-variant-numeric:tabular-nums}
+/* --- Tabovi: cista podcrta, bez pill pozadine --- */
+.tab{border-radius:0}
+.tab:hover{color:var(--text)}
+/* --- Filter chipovi u semantickim bojama nalaza --- */
+.filter-btn[data-filter="error"]{color:var(--danger)}
+.filter-btn[data-filter="error"].active{border-color:var(--danger);background:var(--danger-soft);color:var(--danger)}
+.filter-btn[data-filter="warning"]{color:var(--warn-strong)}
+.filter-btn[data-filter="warning"].active{border-color:var(--warn);background:var(--warn-soft);color:var(--warn-strong)}
+.filter-btn[data-filter="info"]{color:var(--info)}
+.filter-btn[data-filter="info"].active{border-color:var(--info);background:var(--info-soft);color:var(--info)}
+/* --- Issue redovi: kratki severity tick u lijevoj margini (rukopisna korektura) --- */
+.issue{padding-left:24px}
+.issue::before{top:17px;bottom:auto;height:16px;width:3px;left:9px;border-radius:2px}
+/* --- Paywall kartica: redigirani pregled + lock + postojeci copy (paywallLockHtml netaknut) --- */
+.lock-panel{display:grid;grid-template-columns:auto 1fr;align-items:start;gap:6px 12px;border:1px solid var(--line);border-top:2px solid var(--brand);border-radius:var(--radius-sm);background:var(--panel);box-shadow:var(--shadow-sm)}
+.lock-panel::before{content:"";grid-column:1/-1;height:52px;border-radius:4px;background:repeating-linear-gradient(180deg,color-mix(in srgb,var(--text) 15%,transparent) 0 7px,transparent 7px 17px);filter:blur(3px);-webkit-mask-image:linear-gradient(180deg,#000 15%,transparent 95%);mask-image:linear-gradient(180deg,#000 15%,transparent 95%)}
+.lock-panel>svg{color:var(--brand)}
+@media(forced-colors:active){.lock-panel::before{display:none}}
 </style>
 </head>
 <body>
@@ -588,22 +671,29 @@ h1,.section-head h2,.cta h2,.result-main h2,.analyzer-header h2{font-family:var(
   <div class="shell">
     <div class="analyzer-wrap">
       <div class="analyzer-header"><div><h2>Provjeri svoj dokument</h2></div><div class="launch-actions"><button class="btn btn-secondary btn-sm" id="historyBtn" type="button">Povijest <span id="historyCount"></span></button><!-- dev-only:start --><button class="btn btn-secondary btn-sm hidden" id="qaBtn" type="button">QA konzola</button><!-- dev-only:end --><span class="privacy-pill"><i data-lucide="lock"></i> Lokalna obrada</span></div></div>
+      <div class="wizard-rail" aria-hidden="true"><span class="rail-step" data-rail="1"><b>1</b> Učitaj</span><i class="rail-line"></i><span class="rail-step" data-rail="2"><b>2</b> Profil</span><i class="rail-line"></i><span class="rail-step" data-rail="3"><b>3</b> Provjeri</span></div>
       <div class="analyzer-body wizard-view" id="wizardView">
         <div class="wizard-grid">
-          <div><div class="wstep"><span class="wstep-no">1</span>Učitaj Word dokument</div><div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Učitaj Word dokument"><input class="sr-only" type="file" id="fileInput" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"><div id="dropEmpty"><div class="upload-icon"><i data-lucide="upload"></i></div><h3 id="wordUploadTitle">Učitaj rad u Wordu</h3><p id="wordUploadDescription">Glavna analiza dokumenta · lokalno</p><button class="btn btn-primary btn-sm" type="button" id="browseBtn">Odaberi .docx</button></div><div class="selected-file hidden" id="selectedFile"><div class="file-icon">W</div><div class="meta"><strong id="selectedName"></strong><small id="selectedMeta"></small></div><button class="remove-file" id="removeFile" type="button" aria-label="Ukloni dokument"><i data-lucide="x"></i></button></div></div><div class="drop-error hidden" id="dropError" role="alert" aria-live="assertive"></div></div>
-          <div>
+          <section class="wizard-col wizard-col-upload"><div class="wstep"><span class="wstep-no">1</span>Učitaj Word dokument</div><div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Učitaj Word dokument"><input class="sr-only" type="file" id="fileInput" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"><div id="dropEmpty"><div class="upload-icon"><i data-lucide="upload"></i></div><h3 id="wordUploadTitle">Učitaj rad u Wordu</h3><p id="wordUploadDescription">Glavna analiza dokumenta · lokalno</p><button class="btn btn-primary btn-sm" type="button" id="browseBtn">Odaberi .docx</button></div><div class="selected-file hidden" id="selectedFile"><div class="file-icon">W</div><div class="meta"><strong id="selectedName"></strong><small id="selectedMeta"></small></div><button class="remove-file" id="removeFile" type="button" aria-label="Ukloni dokument"><i data-lucide="x"></i></button></div></div><div class="drop-error hidden" id="dropError" role="alert" aria-live="assertive"></div></section>
+          <section class="wizard-col wizard-col-profile">
             <div class="wstep"><span class="wstep-no">2</span>Odaberi profil</div><div class="detect-badge hidden" id="detectBadge" role="status"></div>
+            <fieldset class="profile-group"><legend class="fg-label">Ustanova</legend>
             <div class="form-grid">
               <div class="field full"><label for="institutionSelect">Sveučilište</label><select id="institutionSelect"></select></div>
               <div class="field full"><label for="unitSelect">Fakultet ili akademija</label><select id="unitSelect"></select><button type="button" class="no-faculty-link hidden" id="noFacultyBtn">Nema mog fakulteta na popisu</button><div class="no-faculty-panel" id="noFacultyPanel" hidden><label for="noFacultyName">Naziv fakulteta</label><input id="noFacultyName" type="text" maxlength="200" placeholder="npr. Filozofski fakultet u Osijeku"><label for="noFacultyEmail">E-mail (nije obavezno)</label><input id="noFacultyEmail" type="email" inputmode="email" autocomplete="email" placeholder="tvoj@email.hr"><button type="button" class="btn btn-primary btn-sm" id="noFacultySubmit">Pošalji</button><div class="wl-msg" id="noFacultyMsg" aria-live="polite"></div></div></div>
               <div class="field full"><label for="programSelect">Studij</label><select id="programSelect"></select></div><div class="field full hidden" id="departmentField"><label for="departmentSelect">Katedra ili područje rada (opcionalno)</label><select id="departmentSelect"><option value="general">Bez posebnog profila katedre</option></select><div class="subtle-help">Profil katedre nadopunjuje studijski profil i vrijedi samo za ono što izričito uređuje.</div></div>
+            </div>
+            </fieldset>
+            <fieldset class="profile-group"><legend class="fg-label">Rad</legend>
+            <div class="form-grid">
               <div class="field"><label for="workType">Vrsta rada</label><select id="workType"><option value="seminar">Seminarski rad</option><option value="final">Završni rad</option><option value="graduate" selected>Diplomski rad</option><option value="specialist">Specijalistički rad</option><option value="doctoral">Doktorski rad</option><option value="article">Znanstveni članak</option><option value="project">Projektni / istraživački rad</option></select><div class="work-support" id="workTypeSupport"></div></div>
               <div class="field hidden" id="variantField"><label for="workVariant">Varijanta rada</label><select id="workVariant"><option value="default">Opći profil</option></select></div>
               <div class="field full hidden" id="methodologyField"><label for="methodologySelect">Metodološka varijanta diplomskog rada</label><select id="methodologySelect"><option value="auto">Automatski prepoznaj iz strukture</option><option value="theoretical">Teorijski rad</option><option value="qualitative">Empirijski rad, kvalitativno istraživanje</option><option value="quantitative">Empirijski rad, kvantitativno istraživanje</option></select><div class="methodology-help">Aktivira provjeru cilja, pitanja ili hipoteza, metode, rezultata i rasprave. Automatski način zaključuje iz strukture dokumenta.</div></div>
               <div class="field full hidden" id="fpzgCohortField"><label for="fpzgCohort">Status završnog rada u 2025./2026.</label><select id="fpzgCohort"><option value="current">Završni rad upisan u 2025./2026.</option><option value="carried">Završni rad prenesen iz 2024./2025.</option></select><div class="subtle-help">Preneseni završni rad ima i prvi dio integriranog ispitnog roka; novoupisani završni rad nema taj rok.</div></div><div class="field full hidden" id="fpzgDeadlineField"><label for="fpzgDeadline">Ciljani godišnji rok obrane</label><select id="fpzgDeadline"></select><div class="subtle-help" id="fpzgDeadlineHelp">Rokovi se preuzimaju iz odluke FPZG-a i akademskog kalendara za 2025./2026.</div></div><div class="field full hidden" id="fpzgPhaseHint"><div class="subtle-help">Za godišnji rok obrane i kohortu odaberi „Fazu provjere" pod <button type="button" class="linklike" id="openPhaseFromHint">Želim precizniju provjeru</button>.</div></div>
             </div>
+            </fieldset>
             <div class="profile-note" id="profileNote"></div>
-          </div>
+          </section>
         </div>
         <details class="advanced-options">
           <summary class="advanced-summary"><span class="adv-label">Želim precizniju provjeru</span><span class="adv-hint">PDF, stil citiranja, jezik, strogost i faza provjere</span></summary>
@@ -614,8 +704,8 @@ h1,.section-head h2,.cta h2,.result-main h2,.analyzer-header h2{font-family:var(
             <div class="form-grid">
               <div class="field"><label for="citationStyle">Stil citiranja</label><select id="citationStyle"><option value="fpzg">FPZG autor-godina</option><option value="apa7">APA 7</option><option value="harvard" selected>Harvard / autor-godina</option><option value="chicago-author">Chicago autor-datum</option><option value="pravo-fusnote">Pravni fakultet: pravne fusnote</option><option value="pravo-social-author">Pravni fakultet: Socijalni rad (autor-godina)</option><option value="chicago-notes">Chicago fusnote</option><option value="mla9">MLA 9</option><option value="vancouver">Vancouver</option><option value="ieee">IEEE</option><option value="custom">Drugi / prema uputama</option></select><div class="subtle-help hidden" id="citationLockNote">Stil je zaključan prema odabranom profilu.</div></div>
               <div class="field"><label for="docLanguage">Jezik rada</label><select id="docLanguage"><option value="hr">Hrvatski</option><option value="en">English</option><option value="other">Drugi jezik</option></select></div>
-              <div class="field"><label for="strictness">Strogost provjere</label><select id="strictness"><option value="balanced" selected>Uravnotežena</option><option value="strict">Stroga</option><option value="lenient">Tolerantna</option></select></div>
-              <div class="field full"><label for="submissionPhase">Faza provjere</label><select id="submissionPhase"><option value="document" selected>Samo dokument, radna provjera</option><option value="before">Prije obrane / konačne predaje</option><option value="after">Nakon obrane / završetak studija</option><option value="full">Cijeli predajni paket</option></select><div class="submission-mode-note" id="submissionPhaseNote">Provjera spremnosti uključuje samo obveze odabrane faze.</div></div>
+              <div class="field field-seg"><label for="strictness">Strogost provjere</label><select id="strictness"><option value="balanced" selected>Uravnotežena</option><option value="strict">Stroga</option><option value="lenient">Tolerantna</option></select></div>
+              <div class="field full field-seg"><label for="submissionPhase">Faza provjere</label><select id="submissionPhase"><option value="document" selected>Samo dokument, radna provjera</option><option value="before">Prije obrane / konačne predaje</option><option value="after">Nakon obrane / završetak studija</option><option value="full">Cijeli predajni paket</option></select><div class="submission-mode-note" id="submissionPhaseNote">Provjera spremnosti uključuje samo obveze odabrane faze.</div></div>
             </div>
             <div class="override-box">
               <label class="override-toggle"><input type="checkbox" id="mentorOverride"><span>Imam posebne upute mentora, kolegija ili vlastiti predložak</span></label>
