@@ -69,14 +69,5 @@ body::after {
   ::view-transition-old(root), ::view-transition-new(root) { animation: none }
 }
 
-/*
- * "Prva tinta": jedan orkestriran urednicki potez na load. Proof-podcrta ispod naslova se
- * iscrta lijevo-desno, a korekturni rub hero folije se povuce od vrha prema dolje. Samo bez
- * reduced-motion; inace su elementi u punom (default) stanju, pa je i bez animacije ispravno.
- */
-@media (prefers-reduced-motion: no-preference) {
-  .proof-mark { animation: lekta-proof-draw var(--dur-3) var(--ease-spring) .55s both }
-  .preview-body::before { transform-origin: top; animation: lekta-margin-draw var(--dur-3) var(--ease-spring) .5s both }
-}
-@keyframes lekta-proof-draw { from { background-size: 0% .08em } to { background-size: 100% .08em } }
-@keyframes lekta-margin-draw { from { transform: scaleY(0) } to { transform: scaleY(1) } }
+/* Hero "zivi pregled" timeline (Tinta i papir) zivi u index.html Val 4a sloju + src/ui/hero-demo.ts
+   (index-only), pa ovdje nema hero keyframeova; stari "prva tinta" potez je umirovljen. */

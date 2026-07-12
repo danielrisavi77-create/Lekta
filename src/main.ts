@@ -2,3 +2,4 @@
 // framework-agnosticni engine moduli su u src/{docx,audits,citations,scoring,utils}.
 import './shared/ui-boot';
 import './ui/app';
+import './ui/hero-demo';

@@ -16,7 +16,7 @@ import './motion.css'; // dijeljeni sloj gibanja: tokeni gibanja, tekstura papir
 import './skip-link.css'; // pristupacni "Preskoci na sadrzaj" (BL-P1-01)
 import './a11y.css'; // dijeljeni a11y sloj: forced-colors fokus fallback (BL-P2-02)
 import { setupSkipLink } from './skip-link';
-import { createIcons, SunMoon, Menu, Lock, Upload, CheckCircle, AlertTriangle, AlertCircle, Info, SlidersHorizontal, ClipboardCheck, X, ChevronDown, Wrench, BadgeCheck } from 'lucide';
+import { createIcons, SunMoon, Menu, Lock, Upload, CheckCircle, AlertTriangle, AlertCircle, Info, SlidersHorizontal, ClipboardCheck, X, ChevronDown, Wrench, BadgeCheck, Zap } from 'lucide';
 
 const EASE_OUT = [0.22, 1, 0.36, 1];
 function prefersReduced() {
@@ -40,7 +40,7 @@ function motionReady(): Promise<any> {
 function renderIcons() {
   try {
     createIcons({
-      icons: { SunMoon, Menu, Lock, Upload, CheckCircle, AlertTriangle, AlertCircle, Info, SlidersHorizontal, ClipboardCheck, X, ChevronDown, Wrench, BadgeCheck },
+      icons: { SunMoon, Menu, Lock, Upload, CheckCircle, AlertTriangle, AlertCircle, Info, SlidersHorizontal, ClipboardCheck, X, ChevronDown, Wrench, BadgeCheck, Zap },
       attrs: { 'aria-hidden': 'true', 'stroke-width': 2 },
     });
   } catch (e) {
@@ -179,8 +179,17 @@ function setupMobileNav() {
   });
 }
 
+// Topbar dobiva hairline + blur tek nakon 24px scrolla (na vrhu je proziran, stopljen s papirom).
+function setupTopbarScroll() {
+  const bar = document.querySelector<HTMLElement>('header.topbar');
+  if (!bar) return;
+  const onScroll = () => bar.classList.toggle('scrolled', window.scrollY > 24);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+}
+
 function boot() {
-  setupSkipLink(); renderIcons(); setupReveal(); animateHero(); setupTilt(); setupNavTools(); setupThemeToggle(); setupMobileNav();
+  setupSkipLink(); renderIcons(); setupReveal(); animateHero(); setupTilt(); setupNavTools(); setupThemeToggle(); setupMobileNav(); setupTopbarScroll();
 }
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', boot);
