@@ -34,8 +34,12 @@ declare module 'canvas-confetti' {
 // TS2882 ("Cannot find module or type declarations for side-effect import"); TS 5.9 ih je tiho
 // propustao. Prazna deklaracija je dovoljna i forward-kompatibilna (bezopasna pod 5.9).
 declare module '@fontsource-variable/source-serif-4';
-declare module '@fontsource-variable/inter';
-declare module '@fontsource-variable/fraunces';
+declare module '@fontsource-variable/inter-tight';
+declare module '@fontsource-variable/newsreader/opsz.css';
+declare module '@fontsource-variable/newsreader/opsz-italic.css';
+declare module '@fontsource/ibm-plex-mono/400.css';
+declare module '@fontsource/ibm-plex-mono/500.css';
+declare module '@fontsource/ibm-plex-mono/600.css';
 declare module 'open-props/easings';
 
 // Build-flag (vite/vitest define): dev alati (QA konzola, setup modal) postoje samo kad je true.

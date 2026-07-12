@@ -46,7 +46,8 @@ body::after {
   opacity: .03;
   mix-blend-mode: multiply;
 }
-[data-theme="dark"] body::after { opacity: .06; mix-blend-mode: overlay }
+/* Radna lampa (Tinta i papir): zrno postoji samo na svijetlom papiru, nikad u darku. */
+[data-theme="dark"] body::after { opacity: 0 }
 /* Tekstura se ne printa (inace bi sum prekrio A4 naslovnicu/izjavu pri ispisu/PDF-u). */
 @media print { body::after { display: none } }
 

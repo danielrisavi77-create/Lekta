@@ -3,9 +3,13 @@
 //  2. Lucide ikone: zamjenjuje <i data-lucide="..."> jedinstvenim stroke setom.
 // Bez mreze prema trecim stranama; font se bundla lokalno (unicode-range skida
 // samo latin i latin-ext za hrvatski sadrzaj).
-import '@fontsource-variable/source-serif-4';
-import '@fontsource-variable/inter'; // self-hostan body sans (latin + latin-ext za hrvatski)
-import '@fontsource-variable/fraunces'; // self-hostan display serif za naslove (Editorial Instrument); latin + latin-ext, wght os
+import '@fontsource-variable/source-serif-4'; // dokument-pregledi (naslovnica/izjava/citat/literatura zrcale Word izlaz)
+import '@fontsource-variable/inter-tight'; // self-hostan UI/body sans (Tinta i papir); latin + latin-ext za hrvatski
+import '@fontsource-variable/newsreader/opsz.css'; // display serif s optical-size osi (naslovi)
+import '@fontsource-variable/newsreader/opsz-italic.css'; // italic za naglasne rijeci u naslovima
+import '@fontsource/ibm-plex-mono/400.css'; // podatkovni glas: brojevi, rule-code eyebrows, folio tagovi
+import '@fontsource/ibm-plex-mono/500.css';
+import '@fontsource/ibm-plex-mono/600.css';
 import 'open-props/easings'; // samo easing krivulje (bez boja/sjena, da topla paleta ostane netaknuta)
 import './design-system.css'; // JEDINI izvor tokena (boje/tipografija/radius/sjene/fokus) za sve stranice
 import './motion.css'; // dijeljeni sloj gibanja: tokeni gibanja, tekstura papira, View Transitions, tipografija

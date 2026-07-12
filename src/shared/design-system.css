@@ -3,81 +3,102 @@
  * fokus). Importa se JEDNOM iz src/shared/ui-boot.ts pa vrijedi na svih 8 stranica; time
  * nestaje token-drift (prije duplicirano inline u svakom HTML-u, s razlikama).
  *
- * Smjer "Editorial Instrument": topli papir (manuscript), indigo = akcija, crvena = oznaka
- * (proofreaderski trag). Fraunces za naslove (--display-serif), Inter za tijelo, Source Serif
- * za brojeve/podatke (--ink-serif). Motion tokeni (--dur-*, --ease-spring, --score) zive u
- * motion.css i ovdje se NE diraju (disjunktni skupovi).
+ * Smjer "Tinta i papir": sucelje se ponasa kao savrseno pripremljen akademski dokument.
+ * Papir (paper-0 stranica, bijeli listovi kao folije, paper-1 sekundarne povrsine),
+ * pen-blue tinta indeksa = JEDINA akcijska boja. Crvena i zelena su STROGO REZERVIRANE
+ * za rezultate provjere (nalazi); brand ih nikad ne koristi. Newsreader za naslove
+ * (--display-serif), Inter Tight za tijelo (--sans), IBM Plex Mono za podatkovni glas
+ * (--mono: brojevi, rule-code eyebrows, folio tagovi). Source Serif ostaje samo kao
+ * glas dokument-pregleda (--ink-serif: naslovnica/izjava/citat/literatura zrcale Word).
+ * Motion tokeni (--dur-*, --ease-spring, --score) zive u motion.css (disjunktni skupovi).
  *
  * a11y: --focus je neproziran dvotonski prsten (WCAG 1.4.11); cuva ga tests/a11y-css.test.ts.
  */
 
 :root {
   /* Papir i tinta */
-  --bg: #f3eee2;            /* manuscript papir (blago dublji ecru od default cream #f5f2ea) */
-  --panel: #fffdf8;         /* svijetla folija */
-  --panel-2: #ebe4d5;       /* uvucena folija (dublje da se odvoji od --panel) */
-  --text: #1b2030;          /* tiskana tinta */
-  --muted: #5c5f6e;         /* prigusen tekst */
-  --line: #e2d9c6;          /* topla hairline (ruled paper) */
-  --line-strong: #cfc6b2;   /* strukturna linija (dashed dropzone, konektori) */
+  --bg: #FCFBF8;            /* paper-0: topla papirnata bjelina, pozadina stranice */
+  --panel: #FFFFFF;         /* folija = bijeli list (kartice, modali) */
+  --panel-2: #F4F2EC;       /* paper-1: sekundarna/uvucena povrsina (wellovi, chipovi) */
+  --text: #101319;          /* ink-900: gotovo crna tinta */
+  --muted: #3E4553;         /* ink-600: sekundarni tekst (AA na body velicini) */
+  --muted-2: #9AA1AE;       /* ink-300: SAMO dekorativno/folio/disabled, nikad body tekst */
+  --line: #E4E1D8;          /* 1px hairline */
+  --line-strong: #C9C6BB;   /* strukturna linija (dashed dropzone, konektori) */
 
-  /* Akcija (indigo): jedini interaktivni fill */
-  --brand: #33407e;
-  --brand-2: #4b50a4;
-  --brand-soft: #e8e8f4;
+  /* Akcija (pen-blue tinta indeksa): jedini interaktivni fill */
+  --brand: #1D3FBF;
+  --brand-2: #142E93;       /* hover/active (tamnije) */
+  --brand-soft: #E7ECFF;
+  --on-brand: #FFFFFF;      /* tekst na brand fillu */
 
-  /* Semantika */
-  --ok: #1a7a54;      --ok-soft: #e6f4ec;
-  --warn: #9a5b12;    --warn-soft: #f6ecda;
-  --danger: #b23a4e;  --danger-soft: #f7e9ec;
-  --info: #2b5f96;    --info-soft: #e9f0f8;
+  /* Semantika provjere: crvena i zelena ISKLJUCIVO za nalaze */
+  --ok: #1E7F4F;      --ok-soft: #E4F3EA;
+  --warn: #B77416;    --warn-soft: #F7EEDD;
+  --warn-strong: #8A570E;   /* warn TEKST ispod 18px (B77416 pada AA za sitni tekst) */
+  --danger: #C4372E;  --danger-soft: #FAE9E7;
+  --info: #45608D;    --info-soft: #EAEFF6;
 
-  /* Potpis: proofreaderska crvena (oznaka, nikad fill dugmeta) */
-  --proof: #c8102e;         /* linije/podcrte (2px+) */
-  --proof-soft: #f6e3e1;
-  --proof-strong: #a60c24;  /* sitni crveni TEXT (4.5:1 na papiru) */
+  /* Pecat (letterpress crveno-smedja): iskljucivo dekorativni seal akcenti, nikad audit */
+  --stamp: #7A1F1F;
 
-  /* Dubina / papirnata povrsina */
-  --shadow: 0 22px 60px rgba(41,36,26,.13);
-  --shadow-sm: 0 8px 24px rgba(41,36,26,.09);
-  --edge: rgba(255,255,255,.6);   /* paper-edge inset highlight na folijama */
+  /* Prijelazni aliasi starog proof potpisa: crvena-kao-brand vise ne postoji, straggleri
+     ostaju koherentno plavi dok ih valovi ne prepisu; brisu se u zavrsnom cleanupu. */
+  --proof: var(--brand);
+  --proof-soft: var(--brand-soft);
+  --proof-strong: var(--brand-2);
 
-  /* Tipografija */
-  --display-serif: "Fraunces Variable", "Source Serif 4 Variable", Georgia, "Times New Roman", serif;
+  /* Dubina: list podignut 2mm s radnog stola */
+  --shadow: 0 2px 4px rgba(16,19,25,.05), 0 16px 40px rgba(16,19,25,.09);
+  --shadow-sm: 0 1px 2px rgba(16,19,25,.05), 0 8px 24px rgba(16,19,25,.06);
+  --edge: transparent;      /* paper-edge highlight umirovljen (bijeli list ga ne treba) */
+
+  /* Tipografija: tri glasa */
+  --display-serif: "Newsreader Variable", "Source Serif 4 Variable", Georgia, "Times New Roman", serif;
   --ink-serif: "Source Serif 4 Variable", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+  --sans: "Inter Tight Variable", Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
-  /* Radius skala */
-  --radius-xl: 28px;
-  --radius: 20px;
-  --radius-sm: 14px;
+  /* Radius skala: papirnati listovi, ne blobovi */
+  --radius-xl: 12px;
+  --radius: 10px;
+  --radius-sm: 8px;
   --radius-pill: 999px;
 
   /* Layout + fokus */
-  --max: 1180px;
+  --max: 1240px;
   --focus: 0 0 0 2px var(--panel),0 0 0 4px var(--brand);
 }
 
 [data-theme="dark"] {
-  --bg: #14151d;
-  --panel: #1c1d28;
-  --panel-2: #242536;
-  --text: #f3f1ea;
-  --muted: #a6a4b4;
-  --line: #2f3042;
-  --line-strong: #44465c;
+  /* Radna lampa: dokumenti na tamnom stolu */
+  --bg: #0E1116;
+  --panel: #151A22;
+  --panel-2: #1B2130;
+  --text: #E9EAE6;
+  --muted: #A9AFBA;
+  --muted-2: #6F7683;
+  --line: #242B36;
+  --line-strong: #333C4A;
 
-  --brand: #9199e2;
-  --brand-2: #aca6ec;
-  --brand-soft: #2a2b48;
+  --brand: #6E8BFF;
+  --brand-2: #8CA2FF;       /* hover ide SVJETLIJE u darku */
+  --brand-soft: #1D2742;
+  --on-brand: #0E1116;      /* bijelo na #6E8BFF pada AA; dugmad = tinta na svijetloplavom */
 
-  --ok: #57cf9c;      --ok-soft: #173a30;
-  --warn: #e0a45a;    --warn-soft: #3d3320;
-  --danger: #e77a8b;  --danger-soft: #43242b;
-  --info: #79b0ea;    --info-soft: #1a3148;
+  --ok: #4CC38A;      --ok-soft: #16301F;
+  --warn: #E3A94E;    --warn-soft: #332810;
+  --warn-strong: #ECB868;
+  --danger: #F07B70;  --danger-soft: #3A1D1A;
+  --info: #8AA6D6;    --info-soft: #1A2433;
 
-  --proof: #f5808f;   --proof-soft: #3f2529;   --proof-strong: #f7a0ab;
+  --stamp: #B05C5C;
 
-  --shadow: 0 24px 70px rgba(0,0,0,.4);
-  --shadow-sm: 0 8px 24px rgba(0,0,0,.28);
-  --edge: rgba(255,255,255,.045);
+  --proof: var(--brand);
+  --proof-soft: var(--brand-soft);
+  --proof-strong: var(--brand-2);
+
+  --shadow: 0 2px 4px rgba(0,0,0,.3), 0 16px 40px rgba(0,0,0,.45);
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.3);
+  --edge: transparent;
 }
