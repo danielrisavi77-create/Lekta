@@ -1,4 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Lekta">
   <rect width="32" height="32" rx="7" fill="#33407e"/>
-  <path d="M11 8h3.2v13.2h7V24H11z" fill="#ffffff"/>
+  <path d="M10.5 7h3.2v12.5h7V22.2H10.5z" fill="#ffffff"/>
+  <rect x="10.5" y="24.4" width="10.2" height="2.4" rx="1.2" fill="#f5808f"/>
 </svg>

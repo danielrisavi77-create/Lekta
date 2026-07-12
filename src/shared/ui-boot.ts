@@ -5,8 +5,10 @@
 // samo latin i latin-ext za hrvatski sadrzaj).
 import '@fontsource-variable/source-serif-4';
 import '@fontsource-variable/inter'; // self-hostan body sans (latin + latin-ext za hrvatski)
+import '@fontsource-variable/fraunces'; // self-hostan display serif za naslove (Editorial Instrument); latin + latin-ext, wght os
 import 'open-props/easings'; // samo easing krivulje (bez boja/sjena, da topla paleta ostane netaknuta)
-import './motion.css'; // dijeljeni sloj gibanja: tokeni, tekstura papira, View Transitions, tipografija
+import './design-system.css'; // JEDINI izvor tokena (boje/tipografija/radius/sjene/fokus) za sve stranice
+import './motion.css'; // dijeljeni sloj gibanja: tokeni gibanja, tekstura papira, View Transitions, tipografija
 import './skip-link.css'; // pristupacni "Preskoci na sadrzaj" (BL-P1-01)
 import './a11y.css'; // dijeljeni a11y sloj: forced-colors fokus fallback (BL-P2-02)
 import { setupSkipLink } from './skip-link';

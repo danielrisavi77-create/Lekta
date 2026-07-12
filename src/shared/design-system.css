@@ -1,0 +1,83 @@
+/*
+ * Lekta dizajn-sustav: JEDINI izvor istine za tokene (boje, tipografija, radius, sjene,
+ * fokus). Importa se JEDNOM iz src/shared/ui-boot.ts pa vrijedi na svih 8 stranica; time
+ * nestaje token-drift (prije duplicirano inline u svakom HTML-u, s razlikama).
+ *
+ * Smjer "Editorial Instrument": topli papir (manuscript), indigo = akcija, crvena = oznaka
+ * (proofreaderski trag). Fraunces za naslove (--display-serif), Inter za tijelo, Source Serif
+ * za brojeve/podatke (--ink-serif). Motion tokeni (--dur-*, --ease-spring, --score) zive u
+ * motion.css i ovdje se NE diraju (disjunktni skupovi).
+ *
+ * a11y: --focus je neproziran dvotonski prsten (WCAG 1.4.11); cuva ga tests/a11y-css.test.ts.
+ */
+
+:root {
+  /* Papir i tinta */
+  --bg: #f3eee2;            /* manuscript papir (blago dublji ecru od default cream #f5f2ea) */
+  --panel: #fffdf8;         /* svijetla folija */
+  --panel-2: #ebe4d5;       /* uvucena folija (dublje da se odvoji od --panel) */
+  --text: #1b2030;          /* tiskana tinta */
+  --muted: #5c5f6e;         /* prigusen tekst */
+  --line: #e2d9c6;          /* topla hairline (ruled paper) */
+  --line-strong: #cfc6b2;   /* strukturna linija (dashed dropzone, konektori) */
+
+  /* Akcija (indigo): jedini interaktivni fill */
+  --brand: #33407e;
+  --brand-2: #4b50a4;
+  --brand-soft: #e8e8f4;
+
+  /* Semantika */
+  --ok: #1a7a54;      --ok-soft: #e6f4ec;
+  --warn: #9a5b12;    --warn-soft: #f6ecda;
+  --danger: #b23a4e;  --danger-soft: #f7e9ec;
+  --info: #2b5f96;    --info-soft: #e9f0f8;
+
+  /* Potpis: proofreaderska crvena (oznaka, nikad fill dugmeta) */
+  --proof: #c8102e;         /* linije/podcrte (2px+) */
+  --proof-soft: #f6e3e1;
+  --proof-strong: #a60c24;  /* sitni crveni TEXT (4.5:1 na papiru) */
+
+  /* Dubina / papirnata povrsina */
+  --shadow: 0 22px 60px rgba(41,36,26,.13);
+  --shadow-sm: 0 8px 24px rgba(41,36,26,.09);
+  --edge: rgba(255,255,255,.6);   /* paper-edge inset highlight na folijama */
+
+  /* Tipografija */
+  --display-serif: "Fraunces Variable", "Source Serif 4 Variable", Georgia, "Times New Roman", serif;
+  --ink-serif: "Source Serif 4 Variable", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+
+  /* Radius skala */
+  --radius-xl: 28px;
+  --radius: 20px;
+  --radius-sm: 14px;
+  --radius-pill: 999px;
+
+  /* Layout + fokus */
+  --max: 1180px;
+  --focus: 0 0 0 2px var(--panel),0 0 0 4px var(--brand);
+}
+
+[data-theme="dark"] {
+  --bg: #14151d;
+  --panel: #1c1d28;
+  --panel-2: #242536;
+  --text: #f3f1ea;
+  --muted: #a6a4b4;
+  --line: #2f3042;
+  --line-strong: #44465c;
+
+  --brand: #9199e2;
+  --brand-2: #aca6ec;
+  --brand-soft: #2a2b48;
+
+  --ok: #57cf9c;      --ok-soft: #173a30;
+  --warn: #e0a45a;    --warn-soft: #3d3320;
+  --danger: #e77a8b;  --danger-soft: #43242b;
+  --info: #79b0ea;    --info-soft: #1a3148;
+
+  --proof: #f5808f;   --proof-soft: #3f2529;   --proof-strong: #f7a0ab;
+
+  --shadow: 0 24px 70px rgba(0,0,0,.4);
+  --shadow-sm: 0 8px 24px rgba(0,0,0,.28);
+  --edge: rgba(255,255,255,.045);
+}

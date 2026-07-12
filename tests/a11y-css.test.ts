@@ -15,10 +15,13 @@ const PAGES = [
 ];
 
 describe('fokus prsten kontrast (BL-P3-05)', () => {
-  it.each(PAGES)('%s koristi neproziran dvotonski --focus, ne rgba .22', (page) => {
-    const css = read(page);
-    expect(css).toContain('--focus:0 0 0 2px var(--panel),0 0 0 4px var(--brand)');
-    expect(css).not.toContain('rgba(51,64,126,.22)'); // stari slabi prsten uklonjen
+  // Token je centraliziran u dijeljeni design-system.css (jedini izvor istine za tokene),
+  // pa se ne duplicira vise inline u svakoj stranici. Jamstvo ostaje identicno.
+  it('design-system.css definira neproziran dvotonski --focus prsten', () => {
+    expect(read('src/shared/design-system.css')).toContain('--focus: 0 0 0 2px var(--panel),0 0 0 4px var(--brand)');
+  });
+  it.each(PAGES)('%s ne uvodi stari slabi prsten rgba .22', (page) => {
+    expect(read(page)).not.toContain('rgba(51,64,126,.22)'); // stari slabi prsten uklonjen
   });
 });
 

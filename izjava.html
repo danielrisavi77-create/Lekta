@@ -27,20 +27,6 @@
 <title>Besplatni generator izjave o izvornosti - Lekta</title>
 <script>try{var _t=localStorage.getItem('lekta.theme');if(_t)document.documentElement.dataset.theme=_t;}catch(e){}</script>
 <style>
-:root{
-  --bg:#f5f2ea;--panel:#fffdf8;--panel-2:#efeade;--text:#1e2333;--muted:#5c5f70;
-  --line:#e5ddcc;--line-strong:#cfc6b2;--brand:#33407e;--brand-2:#4b50a4;
-  --brand-soft:#e8e8f4;--ok:#1a7a54;--ok-soft:#e6f4ec;--warn:#9a5b12;--warn-soft:#f6ecda;
-  --danger:#b23a4e;--danger-soft:#f7e9ec;
-  --shadow:0 22px 60px rgba(41,36,26,.13);--shadow-sm:0 8px 24px rgba(41,36,26,.09);
-  --ink-serif:"Source Serif 4 Variable","Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
-  --radius:20px;--max:1060px;--focus:0 0 0 2px var(--panel),0 0 0 4px var(--brand)
-}
-[data-theme="dark"]{
-  --bg:#14151d;--panel:#1c1d28;--panel-2:#242536;--text:#f3f1ea;--muted:#a6a4b4;--line:#2f3042;--line-strong:#44465c;
-  --brand:#9199e2;--brand-2:#aca6ec;--brand-soft:#2a2b48;--ok:#57cf9c;--ok-soft:#173a30;--warn:#e0a45a;--warn-soft:#3d3320;
-  --danger:#e77a8b;--danger-soft:#43242b;--shadow:0 24px 70px rgba(0,0,0,.4);--shadow-sm:0 8px 24px rgba(0,0,0,.28)
-}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;min-width:320px}
 a{color:inherit}:focus-visible{outline:2px solid var(--brand);outline-offset:2px;box-shadow:var(--focus);border-radius:6px}
@@ -148,6 +134,18 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
   .card{border:0;box-shadow:none;padding:0;background:#fff}
   #st-sheet{box-shadow:none;border:0;border-radius:0;aspect-ratio:auto;min-height:auto;padding:0}
   @page{size:A4;margin:2.5cm}
+}
+
+/* Val 3: Editorial Instrument layer */
+/* Naslovi stranice (chrome) na Fraunces. NAMJERNO se NE dira pregled izjave
+   (#st-sheet i .st-* ostaju u vlastitoj tipografiji jer zrcale predani dokument). */
+.hero h1,.sec-h,.cta h2,.card>h2{font-family:var(--display-serif)}
+/* Jedan suzdrzan proof akcent: crveni podvlak na naglasenoj rijeci u hero naslovu. */
+.hero h1 .ink{text-decoration:underline;text-decoration-color:var(--proof);text-decoration-thickness:2px;text-underline-offset:4px}
+/* Paper-edge na UI karticama, samo na ekranu da ispis/PDF ostane cist. */
+@media screen{
+  .card{box-shadow:var(--shadow-sm),inset 0 1px 0 var(--edge)}
+  .cta{box-shadow:inset 0 1px 0 var(--edge)}
 }
 </style>
 </head>

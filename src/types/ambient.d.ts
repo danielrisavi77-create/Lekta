@@ -35,6 +35,7 @@ declare module 'canvas-confetti' {
 // propustao. Prazna deklaracija je dovoljna i forward-kompatibilna (bezopasna pod 5.9).
 declare module '@fontsource-variable/source-serif-4';
 declare module '@fontsource-variable/inter';
+declare module '@fontsource-variable/fraunces';
 declare module 'open-props/easings';
 
 // Build-flag (vite/vitest define): dev alati (QA konzola, setup modal) postoje samo kad je true.

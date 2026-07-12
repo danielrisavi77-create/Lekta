@@ -26,20 +26,6 @@
 <title>Lekta - usporedba pristupa provjeri akademskog rada</title>
 <script>try{var _t=localStorage.getItem('lekta.theme');if(_t)document.documentElement.dataset.theme=_t;}catch(e){}</script>
 <style>
-:root{
-  --bg:#f5f2ea;--panel:#fffdf8;--panel-2:#efeade;--text:#1e2333;--muted:#6a6d7e;
-  --line:#e5ddcc;--line-strong:#cfc6b2;--brand:#33407e;--brand-2:#4b50a4;
-  --brand-soft:#e8e8f4;--ok:#1a7a54;--ok-soft:#e6f4ec;--warn:#9a5b12;--warn-soft:#f6ecda;
-  --danger:#b23a4e;--danger-soft:#f7e9ec;
-  --shadow:0 22px 60px rgba(41,36,26,.13);--shadow-sm:0 8px 24px rgba(41,36,26,.09);
-  --ink-serif:"Source Serif 4 Variable","Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
-  --radius:20px;--max:1060px;--focus:0 0 0 2px var(--panel),0 0 0 4px var(--brand)
-}
-[data-theme="dark"]{
-  --bg:#14151d;--panel:#1c1d28;--panel-2:#242536;--text:#f3f1ea;--muted:#a6a4b4;--line:#2f3042;--line-strong:#44465c;
-  --brand:#9199e2;--brand-2:#aca6ec;--brand-soft:#2a2b48;--ok:#57cf9c;--ok-soft:#173a30;--warn:#e0a45a;--warn-soft:#3d3320;
-  --danger:#e77a8b;--danger-soft:#43242b;--shadow:0 24px 70px rgba(0,0,0,.4);--shadow-sm:0 8px 24px rgba(0,0,0,.28)
-}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font:15px/1.6 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;min-width:320px}
 a{color:inherit}:focus-visible{outline:none;box-shadow:var(--focus);border-radius:6px}
@@ -146,6 +132,25 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
   table.cmp td.lekta{background:transparent;font-weight:700}
   table.cmp td.lekta:before{color:var(--brand)}
 }
+
+/* Val 3: Editorial Instrument layer */
+/* Fraunces samo na chrome display naslovima (nema dokument-artefakata na ovoj stranici) */
+.hero h1,
+.section-head h2,
+.cta h2,
+.pillar h3{font-family:var(--display-serif)}
+/* usporedbeni naslov (Lekta stupac) kao folio naslov */
+table.cmp thead th.lekta{font-family:var(--display-serif)}
+/* brojcani izlazi: tabular serif za poravnate iznose */
+.fee-row .amount{font-family:var(--ink-serif);font-variant-numeric:tabular-nums}
+/* paper-edge inset na folijama (zadrzi postojecu sjenu, dodaj rubni highlight) */
+.paper{box-shadow:var(--shadow),inset 0 1px 0 var(--edge)}
+.card,.fees.card{box-shadow:var(--shadow),inset 0 1px 0 var(--edge)}
+.pillar{box-shadow:var(--shadow-sm),inset 0 1px 0 var(--edge)}
+/* jedini proof akcent: crvena korektorska kvacica uz kicker (potpis) */
+.section-head .kicker{position:relative;padding-left:16px}
+.section-head .kicker::before{content:"";position:absolute;left:0;top:50%;width:9px;height:1.5px;background:var(--proof-strong);transform:translateY(-50%)}
+@media print{.section-head .kicker::before{display:none}}
 </style>
 </head>
 <body>
