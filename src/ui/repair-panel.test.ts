@@ -1,5 +1,15 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { renderRepairPanel, type RepairableItem } from './repair-panel';
+import { singleSectionDocx } from '../../tests/helpers/synthetic-docx';
+
+/** Cekaj dok uvjet ne postane istinit (async DOM nakon klika: dinamicki import + applyFixers + reanalyze). */
+async function waitFor(fn: () => boolean, timeout = 4000): Promise<void> {
+  const start = Date.now();
+  while (!fn()) {
+    if (Date.now() - start > timeout) throw new Error('waitFor timeout');
+    await new Promise((r) => setTimeout(r, 10));
+  }
+}
 
 // DOM ponasanje panela (happy-dom): sortiranje/mapiranje checkboxa, podnaslov
 // grupe, deep-preklopnik, klik s 0 odabranih. Ne pokrece stvarni applyFixers
@@ -22,6 +32,10 @@ const ctxBase = {
 
 beforeEach(() => {
   document.body.innerHTML = '';
+  // triggerDownload zove URL.createObjectURL/revokeObjectURL; happy-dom ih ne mora imati,
+  // pa ih stubamo da preuzimanje ne baci (inace bi handler pao u catch i preskocio re-check).
+  (globalThis.URL as any).createObjectURL = () => 'blob:mock';
+  (globalThis.URL as any).revokeObjectURL = () => {};
 });
 
 describe('renderRepairPanel: grupiranje i checkboxi', () => {
@@ -94,5 +108,78 @@ describe('renderRepairPanel: klik s 0 odabranih', () => {
     const summary = mountEl.querySelector<HTMLElement>('.lekta-repair-panel__summary')!;
     expect(summary.hidden).toBe(false);
     expect(summary.textContent).toContain('Odaberi barem jednu stavku');
+  });
+});
+
+describe('renderRepairPanel: re-check spremnosti (K3)', () => {
+  // Realan popravak nad sintetickim .docx (margine 2,5 -> 3,0 cm) pa reanalyze prikaze
+  // "prije -> poslije". Stub reanalyze vraca fiksni score (ne pokrecemo pravu analizu).
+  const marginItem = () =>
+    item({ ruleId: 'm', fixerId: 'margins-fixer', params: { top: 3, right: 3, bottom: 3, left: 3 }, violated: true });
+
+  it('nakon popravka poziva reanalyze s popravljenim bajtovima i prikaze prije -> poslije', async () => {
+    const mountEl = mount();
+    let seen: Uint8Array | null = null;
+    renderRepairPanel({
+      items: [marginItem()],
+      getDocxBytes: async () => singleSectionDocx(),
+      originalFileName: 'rad.docx',
+      mountEl,
+      beforeScore: { score: 68, categories: { formatting: { earned: 14, max: 20 } } },
+      reanalyze: async (bytes) => {
+        seen = bytes;
+        return { score: 84, categories: { formatting: { earned: 18, max: 20 } } };
+      },
+    });
+    mountEl.querySelector<HTMLButtonElement>('.lekta-repair-panel__download')!.click();
+    await waitFor(() => !!mountEl.querySelector('.lekta-repair-panel__recheck'));
+
+    expect(seen).toBeInstanceOf(Uint8Array);
+    expect((seen as unknown as Uint8Array).length).toBeGreaterThan(0);
+    const recheck = mountEl.querySelector('.lekta-repair-panel__recheck')!;
+    expect(recheck.textContent).toContain('68');
+    expect(recheck.textContent).toContain('84');
+    expect(recheck.textContent).toContain('+16'); // delta
+    expect(recheck.textContent).toContain('Oblikovanje'); // kategorijska delta
+  });
+
+  it('pad reanalyze ne rusi panel; preuzimanje se svejedno dogodilo', async () => {
+    const mountEl = mount();
+    let downloaded = false;
+    (globalThis.URL as any).createObjectURL = () => {
+      downloaded = true;
+      return 'blob:x';
+    };
+    renderRepairPanel({
+      items: [marginItem()],
+      getDocxBytes: async () => singleSectionDocx(),
+      originalFileName: 'rad.docx',
+      mountEl,
+      beforeScore: { score: 68, categories: {} },
+      reanalyze: async () => {
+        throw new Error('reanalyze pukla');
+      },
+    });
+    mountEl.querySelector<HTMLButtonElement>('.lekta-repair-panel__download')!.click();
+    await waitFor(() =>
+      (mountEl.querySelector('.lekta-repair-panel__summary')?.textContent || '').includes('nije bilo moguće izračunati'),
+    );
+    expect(downloaded).toBe(true); // preuzimanje se dogodilo prije re-checka
+  });
+
+  it('bez reanalyze (stari pozivatelj) nema re-check bloka', async () => {
+    const mountEl = mount();
+    renderRepairPanel({
+      items: [marginItem()],
+      getDocxBytes: async () => singleSectionDocx(),
+      originalFileName: 'rad.docx',
+      mountEl,
+    });
+    mountEl.querySelector<HTMLButtonElement>('.lekta-repair-panel__download')!.click();
+    await waitFor(() =>
+      (mountEl.querySelector('.lekta-repair-panel__summary')?.textContent || '').includes('Primijenjeno'),
+    );
+    expect(mountEl.querySelector('.lekta-repair-panel__recheck')).toBeNull();
+    expect(mountEl.querySelector('.lekta-repair-panel__recheck-pending')).toBeNull();
   });
 });

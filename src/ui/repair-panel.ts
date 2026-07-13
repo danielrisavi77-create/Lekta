@@ -23,6 +23,12 @@ const DEEP_CAPABLE: ReadonlySet<FixerId> = new Set([
   'alignment-fixer',
 ] as FixerId[]);
 
+/** Bodovna slika (ukupni score + po kategorijama) za usporedbu prije/poslije popravka. */
+export interface RepairScoreSnapshot {
+  score: number | null;
+  categories: Record<string, { earned: number; max: number }>;
+}
+
 export interface RepairPanelContext {
   items: RepairableItem[];
   /** Lijeno cita originalni dokument tek na klik (ne drzi kopiju bajtova po
@@ -30,6 +36,13 @@ export interface RepairPanelContext {
   getDocxBytes: () => Promise<Uint8Array>;
   originalFileName: string;
   mountEl: HTMLElement;
+  /** Bodovna slika PRIJE popravka (iz analize koja je otvorila panel). Uz reanalyze
+   *  omogucuje prikaz "spremnost prije -> poslije" nakon preuzimanja. */
+  beforeScore?: RepairScoreSnapshot;
+  /** Ponovna analiza POPRAVLJENIH bajtova istim profilom/postavkama. Vraca null ako
+   *  profil nije bodovan; smije baciti (npr. korupcija), sto hvatamo. Radi u Web Workeru
+   *  (ne blokira nit) i NIKAD ne smije sprijeciti ni ponistiti preuzimanje. */
+  reanalyze?: (repairedBytes: Uint8Array) => Promise<RepairScoreSnapshot | null>;
 }
 
 export function renderRepairPanel(ctx: RepairPanelContext): void {
@@ -117,6 +130,7 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
     const originalLabel = downloadBtn.textContent;
     downloadBtn.textContent = 'Popravljam...';
 
+    let repairedBytes: Uint8Array | null = null;
     try {
       const { applyFixers } = await import('../repair/apply-fixers');
       const deep = deepToggle?.checked === true;
@@ -138,6 +152,7 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
       }
       renderSummary(summary, result.changelog, skippedLabels);
       triggerDownload(result.docxBytes, buildFixedFileName(ctx.originalFileName));
+      repairedBytes = result.docxBytes;
     } catch (err) {
       // Fail-safe: ne rusi ekran. Rucne upute iznad ove sekcije (postojeci
       // tekstualni popravci iz UX_PRINCIPLES.md ekrana 5) i dalje vrijede.
@@ -148,6 +163,10 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
       downloadBtn.disabled = false;
       downloadBtn.textContent = originalLabel;
     }
+
+    // Re-check (spremnost prije -> poslije): tek NAKON preuzimanja, kao dopuna. Preuzimanje
+    // se vec dogodilo pa ovo ne blokira korisnika; ako ponovna analiza padne, panel ostaje.
+    if (repairedBytes) await renderRecheck(summary, repairedBytes, ctx);
   });
 
   container.appendChild(list);
@@ -181,8 +200,93 @@ function renderSummary(
         .join('')}
     </ul>
     ${skippedLabels.length ? `<p>Nije bilo moguće automatski primijeniti: ${skippedLabels.map(escapeHtml).join(', ')}. Za to i dalje vrijede ručne upute iznad.</p>` : ''}
-    <p>Učitaj popravljeni dokument ponovno da vidiš novi score.</p>
   `;
+}
+
+const CATEGORY_LABELS: Record<string, string> = {
+  formatting: 'Oblikovanje',
+  structure: 'Struktura',
+  citations: 'Citatnice',
+  elements: 'Elementi',
+};
+
+/** Postotak kategorije (earned/max), ili null kad kategorija nije bodovana. */
+function categoryPct(cat: { earned: number; max: number } | undefined): number | null {
+  if (!cat || !cat.max) return null;
+  return Math.round((cat.earned / cat.max) * 100);
+}
+
+/**
+ * Dopuna sazetku nakon uspjesnog popravka: ponovno analizira POPRAVLJENE bajtove istim
+ * profilom i prikazuje "spremnost prije -> poslije". Read-only (ne pise u povijest).
+ * Nikad ne baca: analiza koja padne daje tihu uputu; preuzimanje je vec gotovo.
+ */
+async function renderRecheck(el: HTMLElement, bytes: Uint8Array, ctx: RepairPanelContext): Promise<void> {
+  const before = ctx.beforeScore;
+  const reanalyze = ctx.reanalyze;
+  if (!reanalyze || !before) return; // lokalni const: narrowing prezivi await ispod
+  const pending = document.createElement('p');
+  pending.className = 'lekta-repair-panel__recheck-pending';
+  pending.textContent = 'Računam spremnost popravljenog dokumenta...';
+  el.appendChild(pending);
+
+  let after: RepairScoreSnapshot | null = null;
+  let failed = false;
+  try {
+    after = await reanalyze(bytes);
+  } catch {
+    failed = true; // analiza popravljenog nije uspjela (rijetko); preuzimanje je vec gotovo
+  }
+  pending.remove();
+
+  if (failed) {
+    const note = document.createElement('p');
+    note.textContent =
+      'Novi rezultat nije bilo moguće izračunati. Učitaj popravljeni dokument ponovno da vidiš ažuriran score.';
+    el.appendChild(note);
+    return;
+  }
+  if (after === null) {
+    const note = document.createElement('p');
+    note.textContent = 'Ovaj profil ne daje bodovnu ocjenu, pa se popravak prikazuje samo kao popis iznad.';
+    el.appendChild(note);
+    return;
+  }
+  el.appendChild(buildBeforeAfter(before, after));
+}
+
+function buildBeforeAfter(before: RepairScoreSnapshot, after: RepairScoreSnapshot): HTMLElement {
+  const wrap = document.createElement('div');
+  wrap.className = 'lekta-repair-panel__recheck';
+
+  if (before.score == null || after.score == null) {
+    const p = document.createElement('p');
+    p.textContent = 'Ovaj profil ne daje bodovnu ocjenu, pa se popravak prikazuje samo kao popis iznad.';
+    wrap.appendChild(p);
+    return wrap;
+  }
+
+  const delta = after.score - before.score;
+  const deltaTxt = delta > 0 ? ` (+${delta})` : delta < 0 ? ` (${delta})` : '';
+  const head = document.createElement('p');
+  head.innerHTML = `<strong>Spremnost: ${before.score} &rarr; ${after.score}${escapeHtml(deltaTxt)}</strong>`;
+  wrap.appendChild(head);
+
+  const keys = Object.keys(CATEGORY_LABELS).filter(
+    (k) => categoryPct(before.categories?.[k]) != null || categoryPct(after.categories?.[k]) != null,
+  );
+  if (keys.length) {
+    const ul = document.createElement('ul');
+    for (const k of keys) {
+      const b = categoryPct(before.categories?.[k]);
+      const a = categoryPct(after.categories?.[k]);
+      const li = document.createElement('li');
+      li.textContent = `${CATEGORY_LABELS[k]}: ${b ?? '-'}% → ${a ?? '-'}%`;
+      ul.appendChild(li);
+    }
+    wrap.appendChild(ul);
+  }
+  return wrap;
 }
 
 function renderNothingApplied(el: HTMLElement, skippedLabels: string[]): void {
