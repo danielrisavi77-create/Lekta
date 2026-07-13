@@ -27,6 +27,9 @@ clone_sources = load("clone_sources", PIPELINE / "scripts" / "clone_sources.py")
 
 
 class PipelineTests(unittest.TestCase):
+    def test_lawful_access_tdm_is_an_explicit_build_right(self):
+        self.assertIn("lawful-access-tdm", lib.ALLOWED_RIGHTS)
+
     def test_recursive_redaction(self):
         value = {"email": "daniel@example.com", "nested": ["OIB 12345678901"]}
         redacted = lib.redact_value(value)

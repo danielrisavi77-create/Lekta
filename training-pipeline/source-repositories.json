@@ -2,15 +2,15 @@
   "version": 1,
   "repositories": [
     {"repository": "danielrisavi77-create/Daniel", "branch": "main", "inventory": true, "rights": "review-required"},
-    {"repository": "danielrisavi77-create/Fpzg-raspored", "branch": "main", "inventory": true, "rights": "review-required"},
-    {"repository": "danielrisavi77-create/Test", "branch": "main", "inventory": true, "rights": "review-required"},
-    {"repository": "danielrisavi77-create/Test-ponovo", "branch": "main", "inventory": true, "rights": "review-required"},
+    {"repository": "danielrisavi77-create/Fpzg-raspored", "branch": "main", "inventory": true, "rights": "lawful-access-tdm", "rightsBasis": {"publicAccess": true, "tdmReservation": "not-found", "confirmedBy": "repository-owner", "confirmedAt": "2026-07-13"}},
+    {"repository": "danielrisavi77-create/Test", "branch": "main", "inventory": true, "rights": "lawful-access-tdm", "rightsBasis": {"publicAccess": true, "tdmReservation": "not-found", "confirmedBy": "repository-owner", "confirmedAt": "2026-07-13"}},
+    {"repository": "danielrisavi77-create/Test-ponovo", "branch": "main", "inventory": true, "rights": "lawful-access-tdm", "rightsBasis": {"publicAccess": true, "tdmReservation": "not-found", "confirmedBy": "repository-owner", "confirmedAt": "2026-07-13"}},
     {"repository": "danielrisavi77-create/fpzg-raspored_", "branch": "main", "inventory": true, "rights": "review-required"},
     {"repository": "danielrisavi77-create/nextjs", "branch": "main", "inventory": true, "rights": "review-required"},
     {"repository": "danielrisavi77-create/SkriptaAI", "branch": "main", "inventory": true, "rights": "review-required"},
     {"repository": "danielrisavi77-create/MAtura", "branch": "main", "inventory": true, "rights": "review-required"},
     {"repository": "danielrisavi77-create/Maturiraj", "branch": "main", "inventory": true, "rights": "review-required"},
-    {"repository": "danielrisavi77-create/Maturiraj_audio_engleski", "branch": "main", "inventory": true, "rights": "review-required"},
+    {"repository": "danielrisavi77-create/Maturiraj_audio_engleski", "branch": "main", "inventory": true, "rights": "lawful-access-tdm", "rightsBasis": {"publicAccess": true, "tdmReservation": "not-found", "confirmedBy": "repository-owner", "confirmedAt": "2026-07-13"}},
     {"repository": "danielrisavi77-create/Maturiraj.hr", "branch": "main", "inventory": true, "rights": "review-required"},
     {"repository": "danielrisavi77-create/Lekta", "branch": "master", "inventory": true, "rights": "review-required"}
   ]
