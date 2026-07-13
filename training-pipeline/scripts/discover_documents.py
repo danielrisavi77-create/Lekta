@@ -14,12 +14,13 @@ EXTENSIONS = {".pdf", ".docx"}
 SKIP_PARTS = {".git", "node_modules", "dist", "artifacts", "training-pipeline"}
 
 
-def discover(roots: list[Path], limit: int):
+def discover(roots: list[Path], limit: int, max_documents: int | None = None):
+    discovered = 0
     for root in roots:
         if not root.exists():
             continue
         repository = root.name.replace("__", "/")
-        for path in root.rglob("*"):
+        for path in sorted(root.rglob("*")):
             if not path.is_file() or path.suffix.lower() not in EXTENSIONS:
                 continue
             if any(part in SKIP_PARTS for part in path.relative_to(root).parts):
@@ -38,6 +39,9 @@ def discover(roots: list[Path], limit: int):
                 "reviewStatus": "pending",
                 "_localPath": str(path.resolve()),
             }
+            discovered += 1
+            if max_documents is not None and discovered >= max_documents:
+                return
 
 
 def main() -> None:
@@ -45,8 +49,14 @@ def main() -> None:
     parser.add_argument("--roots", nargs="+", required=True, type=Path)
     parser.add_argument("--out", required=True, type=Path)
     parser.add_argument("--max-file-size-mb", type=int, default=50)
+    parser.add_argument("--max-documents", type=int)
     args = parser.parse_args()
-    count = write_jsonl(args.out, discover(args.roots, args.max_file_size_mb * 1024 * 1024))
+    if args.max_documents is not None and not 1 <= args.max_documents <= 10:
+        parser.error("--max-documents must be between 1 and 10")
+    count = write_jsonl(
+        args.out,
+        discover(args.roots, args.max_file_size_mb * 1024 * 1024, args.max_documents),
+    )
     print(f"Discovered {count} documents")
 
 

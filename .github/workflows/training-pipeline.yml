@@ -24,6 +24,12 @@ on:
         required: true
         type: boolean
         default: false
+      max_documents:
+        description: Hard build cap (1-10); inventory always scans all documents
+        required: true
+        type: choice
+        options: ['1', '5', '10']
+        default: '10'
 
 permissions:
   contents: read
@@ -67,6 +73,7 @@ jobs:
             --roots $ROOTS \
             --mode "${{ inputs.mode }}" \
             --profile "${{ inputs.profile_id }}" \
+            --max-documents "${{ inputs.max_documents }}" \
             --out-dir "$RUNNER_TEMP/lekta-output" \
             $EXTRA
       - name: Publish sanitized run summary

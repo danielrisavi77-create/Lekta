@@ -51,8 +51,12 @@ python training-pipeline/run_pipeline.py \
   --roots ../odobreni-repozitorij \
   --mode build \
   --profile fpzg-politologija-diplomski \
+  --max-documents 10 \
   --convert-pdf
 ```
+
+Build ima tvrdi limit od najviše 10 dokumenata po pokretanju. Inventory uvijek
+obuhvaća sve pronađene dokumente, ali ne izvlači njihov sadržaj prije potvrde prava.
 
 PDF u DOCX konverzija služi kao radni ulaz parseru. Izvorni PDF ostaje mjerodavan za
 vizualni raspored jer konverzija može promijeniti prijelome, fusnote i tablice.

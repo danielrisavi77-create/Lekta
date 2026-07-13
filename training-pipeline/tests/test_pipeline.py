@@ -2,11 +2,13 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import sys
 import tempfile
 import unittest
 from pathlib import Path
 
 PIPELINE = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(PIPELINE / "scripts"))
 
 
 def load(name: str, path: Path):
@@ -18,6 +20,7 @@ def load(name: str, path: Path):
 
 
 lib = load("pipeline_lib", PIPELINE / "lib.py")
+discover_documents = load("discover_documents", PIPELINE / "scripts" / "discover_documents.py")
 
 
 class PipelineTests(unittest.TestCase):
@@ -37,6 +40,15 @@ class PipelineTests(unittest.TestCase):
             count = lib.write_jsonl(path, [{"id": "1"}, {"id": "2"}])
             self.assertEqual(count, 2)
             self.assertEqual([item["id"] for item in lib.read_jsonl(path)], ["1", "2"])
+
+    def test_document_discovery_hard_cap_is_deterministic(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / "owner__repository"
+            root.mkdir()
+            for name in ("c.docx", "a.docx", "b.pdf"):
+                (root / name).write_bytes(name.encode())
+            records = list(discover_documents.discover([root], 1024, max_documents=2))
+            self.assertEqual([record["relativePath"] for record in records], ["a.docx", "b.pdf"])
 
 
 if __name__ == "__main__":

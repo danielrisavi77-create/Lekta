@@ -60,7 +60,10 @@ def main() -> None:
     parser.add_argument("--profile", default="fpzg-politologija-diplomski")
     parser.add_argument("--out-dir", type=Path, default=PIPELINE / "output")
     parser.add_argument("--convert-pdf", action="store_true")
+    parser.add_argument("--max-documents", type=int, default=10)
     args = parser.parse_args()
+    if not 1 <= args.max_documents <= 10:
+        parser.error("--max-documents must be between 1 and 10")
 
     private = args.out_dir / ".private"
     sanitized = args.out_dir / "sanitized"
@@ -71,7 +74,10 @@ def main() -> None:
     public_manifest = sanitized / "documents.jsonl"
 
     roots = [str(path.resolve()) for path in args.roots]
-    run([sys.executable, str(SCRIPTS / "discover_documents.py"), "--roots", *roots, "--out", str(manifest)])
+    discovery = [sys.executable, str(SCRIPTS / "discover_documents.py"), "--roots", *roots, "--out", str(manifest)]
+    if args.mode == "build":
+        discovery.extend(["--max-documents", str(args.max_documents)])
+    run(discovery)
     if args.mode == "inventory":
         run([sys.executable, str(SCRIPTS / "redact_text.py"), "--input", str(manifest), "--output", str(public_manifest)])
         summarize(public_manifest, sanitized / "summary.json")
