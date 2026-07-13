@@ -111,6 +111,16 @@ Dabar pravila dopuštaju harvest metapodataka, ali to nije odobrenje za obradu p
 teksta. Svaki budući dohvat datoteke mora zasebno provjeriti pristup i licencu tog
 objekta. Registar repozitorija zato ne mijenja `rights` gate training pipelinea.
 
+Workflow `Academic object rights metadata inventory` dodatno razdvaja open access
+status od stvarne licence pojedinog zapisa. CC BY, CC0 i Public Domain oznake ulaze
+samo u privatni popis kandidata sa statusom `pending`. CC licence s NC, ND ili SA
+uvjetima, oznaka `InC` i zapisi bez eksplicitne licence ostaju zasebne kategorije za
+ručni pregled. Nijedna kategorija sama ne mijenja prava izvora niti pokreće build.
+
+Javni izvještaj nema PID, naslov, autora ili sadržaj rada. Privatni manifest s OAI
+identifikatorom nastaje samo u ephemeral radnom direktoriju i workflow ga nikada ne
+objavljuje kao artefakt.
+
 Lokalna validacija registra bez mrežnog pristupa:
 
 ```bash

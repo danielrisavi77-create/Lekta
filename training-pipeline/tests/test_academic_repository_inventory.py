@@ -4,6 +4,7 @@ import importlib.util
 import json
 import sys
 import unittest
+import urllib.error
 from pathlib import Path
 from unittest.mock import patch
 
@@ -57,6 +58,10 @@ class AcademicRepositoryInventoryTests(unittest.TestCase):
         self.assertNotIn("student@example.com", serialized)
         self.assertNotIn("12345678901", serialized)
 
+    def test_oai_url_keeps_redirects_on_https(self):
+        url = inventory_module.oai_url("repo.test.hr", None, "2024-01-01")
+        self.assertTrue(url.startswith("https://repo.test.hr/oai/?"))
+
     def test_shared_repository_can_be_filtered_by_publisher(self):
         xml = """<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/"
           xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/">
@@ -92,6 +97,29 @@ class AcademicRepositoryInventoryTests(unittest.TestCase):
         registry = {"institutions": [{"units": []}]}
         with self.assertRaisesRegex(ValueError, "Nepoznati unitId"):
             inventory_module.run_inventory(registry, 1, None, {"ne-postoji"})
+
+    def test_transient_url_error_is_retried(self):
+        class Response:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *_args):
+                return False
+
+            def read(self, _limit):
+                return b"<OAI-PMH/>"
+
+        inventory_module._fetch_page.cache_clear()
+        with patch.object(
+            inventory_module.urllib.request,
+            "urlopen",
+            side_effect=[urllib.error.URLError("temporary"), Response()],
+        ) as urlopen, patch.object(inventory_module.time, "sleep"):
+            self.assertEqual(
+                inventory_module._fetch_page("https://repo.test.hr/oai", timeout=1),
+                "<OAI-PMH/>",
+            )
+        self.assertEqual(urlopen.call_count, 2)
 
 
 if __name__ == "__main__":
