@@ -73,6 +73,10 @@ const SYNTHETIC_PARAMS: Record<FixerId, Record<string, unknown>> = {
   // dokumenti nemaju footer/header partove pa uvijek zavrsi kao no-op (parts.footerHeaderParts
   // je prazna mapa), sto je ocekivano i pokriveno (isti obrazac kao footnote-spacing-fixer).
   'page-number-alignment-fixer': {},
+  // sectionInsertFixer umece prijelom prije Uvoda (odlomak 2 u OBA sinteticka dokumenta).
+  // Single-section: primijeni (nema splita) -> 2 sekcije + rimski/arapski + footer + titlePg.
+  // Multi-section: NO_OP (odlomak prije Uvoda vec nosi sectPr = prijelom vec postoji).
+  'section-insert-fixer': { target: { introParagraphIndex: 2, align: 'center' } },
 };
 
 /** Ciljani params po fixeru IZ PROFILA (isti izvor kao zivi repair-items.ts). */
@@ -165,6 +169,9 @@ function sectPrMarkers(documentXml: string) {
           }
         : null,
       pgNumType: pgNum ? { fmt: attr(pgNum, 'w:fmt'), start: attr(pgNum, 'w:start') } : null,
+      // K6: titlePg (naslovnica = drukcija prva stranica -> bez broja). Lockamo ga u golden
+      // da regresija u suzbijanju naslovnice padne snapshot.
+      titlePg: /<w:titlePg\b/.test(s),
     };
   });
 }

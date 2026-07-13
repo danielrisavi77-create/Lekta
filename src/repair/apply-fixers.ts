@@ -15,11 +15,13 @@ import {
   paragraphSpacingFixer,
   pageNumberingFixer,
   footerPageFixer,
+  sectionInsertFixer,
   emptyParagraphFixer,
   footnoteSpacingFixer,
   pageNumberAlignmentFixer,
   type DocxXmlParts,
   type FooterPageTarget,
+  type SectionInsertTarget,
 } from './fixers';
 import type { SectionNumberingTarget } from './xml-patch';
 
@@ -35,6 +37,7 @@ export const FIXER_IDS = [
   'paragraph-spacing-fixer',
   'page-numbering-fixer',
   'footer-page-fixer',
+  'section-insert-fixer',
   'empty-paragraph-fixer',
   'footnote-spacing-fixer',
   'page-number-alignment-fixer',
@@ -100,6 +103,12 @@ function runFixer(fixerId: FixerId, parts: DocxXmlParts, params: Record<string, 
     case 'footer-page-fixer': {
       const p = params as { target?: FooterPageTarget };
       return p.target ? footerPageFixer(parts, p.target) : { parts, applied: false, beforeLabel: '', afterLabel: '' };
+    }
+    case 'section-insert-fixer': {
+      const p = params as { target?: SectionInsertTarget };
+      return p.target && typeof p.target.introParagraphIndex === 'number'
+        ? sectionInsertFixer(parts, p.target)
+        : { parts, applied: false, beforeLabel: '', afterLabel: '' };
     }
     case 'empty-paragraph-fixer':
       return emptyParagraphFixer(parts);

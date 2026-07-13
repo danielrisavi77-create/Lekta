@@ -416,6 +416,107 @@ function ensureRelationshipsNamespace(documentXml: string): string {
   return documentXml.replace(/<w:document\b/, `<w:document xmlns:r="${RELATIONSHIPS_NS}"`);
 }
 
+// === Umetanje sekcije prije Uvoda (K6, BL-07c) ===
+//
+// Prednji dio rada (naslovnica, sazetak, sadrzaj) i glavni tekst se u Wordu razlikuju u
+// numeriranju (rimski vs arapski od 1) TEK ako su zasebne sekcije. Student najcesce ima
+// jednu sekciju, pa "numeriranje od Uvoda" trazi UMETANJE prijeloma sekcije neposredno
+// prije odlomka Uvoda. To se sprema kao NOVI prazan odlomak <w:p><w:pPr><w:sectPr/></w:pPr></w:p>
+// koji postaje zavrsni odlomak prednje sekcije; zavrsni body-level sectPr definira glavnu.
+
+// Geometrija stranice (pgSz, pgMar) iz ZADNJEG sectPr-a = body-level zavrsni sectPr (definira
+// glavnu sekciju). Marker prednje sekcije preuzima istu geometriju da se format ne promijeni.
+export function extractFinalSectionGeometry(documentXml: string): { pgSz: string | null; pgMar: string | null } {
+  const sects = documentXml.match(/<w:sectPr\b[^>]*?(?:\/>|>[\s\S]*?<\/w:sectPr>)/g);
+  const last = sects && sects.length ? sects[sects.length - 1] : '';
+  return {
+    pgSz: last.match(/<w:pgSz\b[^>]*\/?>/)?.[0] ?? null,
+    pgMar: last.match(/<w:pgMar\b[^>]*\/?>/)?.[0] ?? null,
+  };
+}
+
+// Ima li odlomak (koji POCINJE na start) vlastiti w:sectPr u svom (prvom) w:pPr bloku. pPr je
+// prvi dijete w:p, sectPr (kad ga ima) je zadnji u pPr; sidrimo na pocetku odlomka i uzimamo
+// PRVI </w:pPr> (vlastiti pPr), pa ugnjezdeni okvir/tablica u tijelu odlomka ne moze zavarati.
+function paragraphOwnsSectPr(documentXml: string, start: number): boolean {
+  const slice = documentXml.slice(start);
+  // Samozatvarajuci odlomak (<w:p/> ili <w:p attrs/>) nema djece pa ne moze nositi sectPr;
+  // bez ovog izlaza greedy [^>]* progutao bi "/" i match bi zahvatio pPr SLJEDECEG odlomka.
+  if (/^<w:p\b[^>]*\/>/.test(slice)) return false;
+  const ppr = slice.match(/^<w:p\b[^>]*>\s*<w:pPr\b[\s\S]*?<\/w:pPr>/);
+  if (!ppr) return false;
+  // ZIVI sectPr je zadnji element pPr-a i po CT_PPr redoslijedu dolazi neposredno PRIJE
+  // w:pPrChange (povijest pracenih izmjena, koja i sama moze sadrzavati stari <w:sectPr>).
+  // Testiraj samo dio prije pPrChange, inace bi povijesni sectPr lazno oznacio inace popravljiv
+  // dokument kao "vec ima prijelom" i tiho odbio popravak. (Lazy match iznad staje na PRVOM
+  // </w:pPr>, koji kod pPrChange zatvara njegov ugnjezdeni pPr, pa split hvata tocno zivi dio.)
+  const live = ppr[0].split(/<w:pPrChange\b/)[0];
+  return /<w:sectPr\b/.test(live);
+}
+
+// Je li pozicija na razini <w:body> (ne unutar tablice, tekstualnog okvira ni blok-kontrole
+// sadrzaja). Umetanje sekcijskog markera je valjano SAMO na razini tijela; Uvod je u praksi
+// uvijek ondje, ali branimo se od patoloskih dokumenata (uravnotezeni broj otvaranja/zatvaranja
+// prije pozicije). Poziva se nad MASKIRANIM XML-om (bez komentara) pa zakomentiran zatvarac ne
+// kvari balans.
+function isBodyLevelPosition(documentXml: string, pos: number): boolean {
+  const before = documentXml.slice(0, pos);
+  const openMinusClose = (open: RegExp, close: RegExp) =>
+    (before.match(open)?.length ?? 0) - (before.match(close)?.length ?? 0);
+  const tbl = openMinusClose(/<w:tbl\b/g, /<\/w:tbl>/g);
+  const txbx = openMinusClose(/<w:txbxContent\b/g, /<\/w:txbxContent>/g);
+  const sdt = openMinusClose(/<w:sdtContent\b/g, /<\/w:sdtContent>/g);
+  return tbl <= 0 && txbx <= 0 && sdt <= 0;
+}
+
+// Umetni prijelom sekcije PRIJE zadanog odlomka (1-based redni broj u dokument-poretku, isti
+// koordinatni sustav kao analyzeDocx paragraph.index / introParagraphIndex: n-ti <w:p> start-tag
+// u document.xml == n-ti element els(doc,'w:p')). Ubacuje <w:p><w:pPr>{markerSectPr}</w:pPr></w:p>
+// tik prije ciljnog <w:p>, cime prednji dio postaje zasebna sekcija (zavrsava markerom), a ciljni
+// odlomak (Uvod) zapocinje glavnu sekciju definiranu zavrsnim body-level sectPr-om.
+//
+// applied:false (bez izmjene bajtova) kad:
+//  - ordinal < 2 (nema prednjeg dijela za rimske listove) ili ciljni <w:p> ne postoji,
+//  - dokument ima <w:sectPrChange> (praceni sectPr; enumeracija bi bila kriva) -- kao K4/K5,
+//  - ciljni odlomak VEC ima sectPr u pPr (idempotencija: to je vec marker),
+//  - odlomak neposredno PRIJE cilja vec ima sectPr u pPr (prijelom vec postoji tocno na Uvodu),
+//  - ciljni <w:p> nije na razini tijela (unutar w:tbl / w:txbxContent / w:sdtContent).
+export function insertSectionBreakBeforeParagraph(
+  documentXml: string,
+  paragraphOrdinal: number,
+  markerSectPr: string,
+): { xml: string; applied: boolean } {
+  if (paragraphOrdinal < 2) return { xml: documentXml, applied: false };
+  if (/<w:sectPrChange\b/.test(documentXml)) return { xml: documentXml, applied: false };
+
+  // getElementsByTagName('w:p') (analyzeDocx) ne vidi komentare, CDATA ni PI, pa <w:p unutar
+  // njih ne smije pomaknuti indeks (inace bi se marker umetnuo u komentar ili ciljao krivi
+  // odlomak, npr. round-trip alati znaju ostaviti <w:p u <!-- ... -->). Maskiraj te regije
+  // istoduljinskim razmacima: SVE pozicije i svi PRAVI strukturni tagovi ostaju netaknuti pa
+  // offset vrijedi i u izvornom documentXml-u. Guardovi rade nad maskiranim XML-om da
+  // zakomentiran </w:tbl> i sl. ne pokvare balans razine tijela.
+  const masked = documentXml.replace(
+    /<!--[\s\S]*?-->|<!\[CDATA\[[\s\S]*?\]\]>|<\?[\s\S]*?\?>/g,
+    (m) => ' '.repeat(m.length),
+  );
+
+  // Pocetne pozicije svih odlomackih tagova (<w:p>, <w:p ...>, <w:p/>), u dokument-poretku.
+  // Lookahead [\s/>] iskljucuje <w:pPr>/<w:pStyle>/<w:pgSz>/<w:pgNumType> (nema granice na "P"/"g").
+  const starts: number[] = [];
+  const pOpen = /<w:p(?=[\s/>])/g;
+  for (let m = pOpen.exec(masked); m; m = pOpen.exec(masked)) starts.push(m.index);
+  if (paragraphOrdinal > starts.length) return { xml: documentXml, applied: false };
+
+  const targetStart = starts[paragraphOrdinal - 1];
+  const prevStart = starts[paragraphOrdinal - 2]; // ordinal >= 2 zajamcen gore
+  if (paragraphOwnsSectPr(masked, targetStart)) return { xml: documentXml, applied: false };
+  if (paragraphOwnsSectPr(masked, prevStart)) return { xml: documentXml, applied: false };
+  if (!isBodyLevelPosition(masked, targetStart)) return { xml: documentXml, applied: false };
+
+  const marker = `<w:p><w:pPr>${markerSectPr}</w:pPr></w:p>`;
+  return { xml: documentXml.slice(0, targetStart) + marker + documentXml.slice(targetStart), applied: true };
+}
+
 // Umetni <w:footerReference> na POCETAK ciljne sekcije (footerReference/headerReference su
 // prvi u CT_SectPr). No-op ako sekcija vec ima BILO KAKAV footerReference (ne diramo tudji
 // footer), ako trazeni indeks ne postoji ili ima sectPrChange. Enumeracija = ista kao pgNumType.

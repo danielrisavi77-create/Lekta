@@ -71,6 +71,13 @@ export function paramsForCheck(checkId: string, profile: any): Record<string, un
   }
 }
 
+/** Status checka po naslovu (ili undefined ako ga nema). Za razliku od isViolated NE trazi
+ *  max>0: numeriranje-checkovi su nebodovani (max=0, "Word ne sprema dovoljno podataka") na
+ *  jednosekcijskom radu, ali im status ostaje 'warn' kad numeriranje od Uvoda nije potvrdjeno. */
+function checkStatusByTitle(checks: AnalyzedCheck[], title: string): string | undefined {
+  return checks.find((c) => c.title === title)?.status;
+}
+
 /** Je li dimenzija (checkId) PREKRSENA: postoji bodovani check (max>0) koji nije 'pass'. */
 function isViolated(checkId: string, checks: AnalyzedCheck[]): boolean {
   const chk =
@@ -251,6 +258,67 @@ export function pageNumberAlignmentRepairableItem(checks: AnalyzedCheck[], profi
       label: 'Položaj broja stranice',
       params: {},
       violated: isViolated('page-number-alignment', checks),
+    },
+  ];
+}
+
+// GO-LIVE zastavica (K6, BL-07c). Umetanje sekcije prije Uvoda je strukturna izmjena docx-a
+// ciju realnu Word/LibreOffice valjanost golden NE moze dokazati (pokriva samo XML-transform);
+// izlazni gate K6 trazi rucnu Word/LO matricu prije objave. Dok je false, popravak se ne nudi
+// korisniku (motor + testovi + golden su zeleni, ali putanja je "tamna"). Vlasnik je postavlja
+// na true TEK nakon rucne matrice (K5+K6 se objavljuju zajedno). Vidi docs/LEKTA_BUILD_PIPELINE.md K6.
+export const SECTION_INSERT_LIVE = false;
+
+/**
+ * Popravak "numeriranje od Uvoda" za dokument BEZ upotrebljivog prijeloma sekcije (najcesci
+ * slucaj: jedna sekcija). Umece prijelom sekcije prije Uvoda pa postavlja rimski/arapski
+ * numeriranje i podnozje s brojem (kompozitni section-insert-fixer). Gejtano:
+ *  - profilnom zastavicom checkPageNumberStartAtIntro (isti izvor kao K4 stavka),
+ *  - detektabilnom granicom Uvoda: introParagraphIndex >= 2 (mora postojati prednji dio),
+ *  - ODSUSTVOM upotrebljivog splita: kad sectionNumberingTargets vec vrati detectable=true,
+ *    dokument IMA sekcije s granicom na Uvodu pa to rjesava K4 stavka (pageNumberingRepairableItem),
+ *    ne umetanje; ovdje se nudi samo kad K4 put NE hvata (nema splita ili nije na Uvodu),
+ *  - SECTION_INSERT_LIVE zastavicom (rucna Word/LO matrica prije objave).
+ * Trazi izricitu potvrdu lokacije u panelu (requiresConfirmation): umetanje prijeloma je
+ * semanticka odluka o mjestu, najveci UX rizik pipelinea. violated se cita iz STATUSA
+ * numeriranje-checka (nebodovan na jednosekcijskom radu, ali 'warn' kad nije potvrdjen).
+ */
+export function introSectionRepairableItem(result: any, profile: any): RepairableItem[] {
+  // GO-LIVE gate (K6): dok rucna Word/LO matrica nije odradjena, ne nudi se korisniku.
+  return SECTION_INSERT_LIVE ? introSectionItem(result, profile) : [];
+}
+
+/** Jezgra logike (neovisna o SECTION_INSERT_LIVE), izdvojena da se gating moze testirati bez
+ *  diranja zastavice. app.ts UVIJEK zove flag-gated introSectionRepairableItem, ne ovu. */
+export function introSectionItem(result: any, profile: any): RepairableItem[] {
+  if (profile?.checkPageNumberStartAtIntro !== true) return [];
+  const introIdx = result?.details?.introParagraphIndex;
+  if (typeof introIdx !== 'number' || introIdx < 2) return [];
+  // OPSEG K6 v1: nudi se SAMO za jednosekcijski rad (ista granica kao sectionInsertFixer
+  // backstop). Visesekcijski dokument -> ne nudimo umetanje (rizik krivog mapiranja sekcija):
+  //  - ako je granica sekcije tocno na Uvodu, K4 stavka (pageNumberingRepairableItem) to rjesava
+  //    postavljanjem pgNumType nad postojecim sekcijama; umetanje bi bilo dvostruki prijelom,
+  //  - ako granica NIJE na Uvodu (npr. zasebna naslovnica pa sazetak pa Uvod), umetanje markera
+  //    dalo bi >=3 sekcije i hardkodirani rimski/arapski ciljevi bi krivo mapirali prednji dio;
+  //    to je odgodjeno (isti razlog kao backstop u sectionInsertFixer).
+  const sections = result?.details?.sections;
+  if (!Array.isArray(sections) || sections.length !== 1) return [];
+  const checks: AnalyzedCheck[] = result?.checks ?? [];
+  const startStatus = checkStatusByTitle(checks, CHECK_TITLE['page-number-start']);
+  // violated: numeriranje od Uvoda nije potvrdjeno (status != 'pass' ili check ne postoji).
+  const violated = startStatus !== 'pass';
+  return [
+    {
+      ruleId: 'section-insert-intro',
+      fixerId: 'section-insert-fixer',
+      label: 'Numeriranje od Uvoda: umetni prijelom sekcije (rimski/arapski, naslovnica bez broja)',
+      params: { target: { introParagraphIndex: introIdx, align: 'center' } },
+      violated,
+      requiresConfirmation: true,
+      confirmationText:
+        `Umetnut ćemo prijelom sekcije neposredno prije ${introIdx}. odlomka (Uvod). ` +
+        'Prednji listovi (naslovnica, sažetak, sadržaj) dobivaju rimske brojeve, glavni tekst od Uvoda arapske od 1, ' +
+        'a naslovnica ostaje bez broja. Provjeri da je to točno mjesto početka Uvoda prije nego nastaviš.',
     },
   ];
 }

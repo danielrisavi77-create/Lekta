@@ -53,6 +53,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -121,6 +122,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16840",
               "w": "11907",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -205,6 +207,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16840",
               "w": "11907",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -265,6 +268,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -276,6 +280,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [],
     },
     "paragraph-spacing-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "section-insert-fixer": {
       "params": "nema-cilja-u-profilu",
     },
   },
@@ -330,6 +337,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -398,6 +406,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16840",
               "w": "11907",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -482,6 +491,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16840",
               "w": "11907",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -542,6 +552,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -553,6 +564,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [],
     },
     "paragraph-spacing-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "section-insert-fixer": {
       "params": "nema-cilja-u-profilu",
     },
   },
@@ -603,6 +617,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16840",
               "w": "11907",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -671,6 +686,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16840",
               "w": "11907",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -755,6 +771,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16840",
               "w": "11907",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -777,6 +794,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "params": "nema-cilja-u-profilu",
     },
     "paragraph-spacing-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "section-insert-fixer": {
       "params": "nema-cilja-u-profilu",
     },
   },
@@ -831,6 +851,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -899,6 +920,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "11907",
               "w": "8392",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -983,6 +1005,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "11907",
               "w": "8392",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -1043,6 +1066,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -1054,6 +1078,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [],
     },
     "paragraph-spacing-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "section-insert-fixer": {
       "params": "nema-cilja-u-profilu",
     },
   },
@@ -1100,6 +1127,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -1174,6 +1202,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -1185,6 +1214,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [],
     },
     "paragraph-spacing-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "section-insert-fixer": {
       "params": "nema-cilja-u-profilu",
     },
   },
@@ -1235,6 +1267,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -1300,6 +1333,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16840",
               "w": "11907",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -1370,6 +1404,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -1381,6 +1416,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [],
     },
     "paragraph-spacing-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "section-insert-fixer": {
       "params": "nema-cilja-u-profilu",
     },
   },
@@ -1431,6 +1469,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -1496,6 +1535,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16840",
               "w": "11907",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -1566,6 +1606,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -1577,6 +1618,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [],
     },
     "paragraph-spacing-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "section-insert-fixer": {
       "params": "nema-cilja-u-profilu",
     },
   },
@@ -1655,6 +1699,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
           {
             "pgMar": {
@@ -1671,11 +1716,13 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
       "skipped": [
         "paper-size-fixer-rule",
+        "section-insert-fixer-rule",
         "footnote-spacing-fixer-rule",
         "page-number-alignment-fixer-rule",
       ],
@@ -1722,6 +1769,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
           {
             "pgMar": {
@@ -1735,6 +1783,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -1786,6 +1835,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
           {
             "pgMar": {
@@ -1799,6 +1849,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -1854,6 +1905,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
           {
             "pgMar": {
@@ -1867,6 +1919,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -1919,6 +1972,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
           {
             "pgMar": {
@@ -1932,6 +1986,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -1990,6 +2045,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
           {
             "pgMar": {
@@ -2003,6 +2059,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -2079,6 +2136,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
           {
             "pgMar": {
@@ -2092,6 +2150,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -2143,6 +2202,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
           {
             "pgMar": {
@@ -2156,6 +2216,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -2208,6 +2269,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
           {
             "pgMar": {
@@ -2221,6 +2283,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -2288,6 +2351,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
           {
             "pgMar": {
@@ -2304,6 +2368,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -2379,6 +2444,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
           {
             "pgMar": {
@@ -2392,6 +2458,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -2441,6 +2508,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
           {
             "pgMar": {
@@ -2454,6 +2522,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -2462,6 +2531,21 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "deep": true,
       },
       "skipped": [],
+    },
+    "section-insert-fixer": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "target": {
+          "align": "center",
+          "introParagraphIndex": 2,
+        },
+      },
+      "skipped": [
+        "section-insert-fixer-rule",
+      ],
     },
   },
   "synthetic-single-section": {
@@ -2532,12 +2616,14 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
       "skipped": [
         "paper-size-fixer-rule",
         "page-numbering-fixer-rule",
+        "section-insert-fixer-rule",
         "footnote-spacing-fixer-rule",
         "page-number-alignment-fixer-rule",
       ],
@@ -2584,6 +2670,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -2635,6 +2722,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -2690,6 +2778,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -2742,6 +2831,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -2800,6 +2890,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -2876,6 +2967,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -2927,6 +3019,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -2979,6 +3072,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -3068,6 +3162,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -3117,12 +3212,93 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16838",
               "w": "11906",
             },
+            "titlePg": false,
           },
         ],
       },
       "noOpBitIdentican": false,
       "params": {
         "deep": true,
+      },
+      "skipped": [],
+    },
+    "section-insert-fixer": {
+      "applied": true,
+      "changelog": [
+        {
+          "after": "Umetnut prijelom sekcije prije Uvoda: rimski na prednjim listovima, arapski od Uvoda (od 1), naslovnica bez broja, broj stranice u podnožju",
+          "before": "Numeriranje od Uvoda nije postavljeno (jedna sekcija)",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 1,
+          "directLine": 1,
+          "runFonts": 1,
+          "runSz": 1,
+        },
+        "docDefaults": {
+          "ascii": "Calibri",
+          "hAnsi": "Calibri",
+          "sz": "22",
+        },
+        "footer": {
+          "footerRefs": 1,
+          "parts": [
+            {
+              "hasPage": true,
+              "name": "word/footer1.xml",
+            },
+          ],
+        },
+        "normal": {
+          "jc": "left",
+          "line": "259",
+          "lineRule": "auto",
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1417",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": {
+              "fmt": "lowerRoman",
+              "start": "1",
+            },
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+            "titlePg": true,
+          },
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1417",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": {
+              "fmt": "decimal",
+              "start": "1",
+            },
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+            "titlePg": false,
+          },
+        ],
+      },
+      "noOpBitIdentican": false,
+      "params": {
+        "target": {
+          "align": "center",
+          "introParagraphIndex": 2,
+        },
       },
       "skipped": [],
     },
@@ -3174,6 +3350,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16840",
               "w": "11907",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -3229,6 +3406,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16840",
               "w": "11907",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -3281,6 +3459,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16840",
               "w": "11907",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -3365,6 +3544,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "h": "16840",
               "w": "11907",
             },
+            "titlePg": false,
           },
         ],
       },
@@ -3387,6 +3567,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "params": "nema-cilja-u-profilu",
     },
     "paragraph-spacing-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "section-insert-fixer": {
       "params": "nema-cilja-u-profilu",
     },
   },

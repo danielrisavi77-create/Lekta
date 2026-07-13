@@ -19,6 +19,8 @@ import {
   nextRelationshipId,
   nextFooterPartName,
   buildFooterPageXml,
+  extractFinalSectionGeometry,
+  insertSectionBreakBeforeParagraph,
   FOOTER_CONTENT_TYPE,
   FOOTER_REL_TYPE,
   type SectionNumberingTarget,
@@ -450,6 +452,92 @@ export function footnoteSpacingFixer(parts: DocxXmlParts, deep = false): FixerOu
     applied: true,
     beforeLabel: base.beforeLabel,
     afterLabel: `${base.afterLabel}; ${deepNote}`,
+  };
+}
+
+export interface SectionInsertTarget {
+  /** 1-based redni broj odlomka Uvoda (analyzeDocx introParagraphIndex / paragraph.index). */
+  introParagraphIndex: number;
+  /** Poravnanje broja stranice u podnozju (kao footerPageFixer); default 'center'. */
+  align?: 'left' | 'center' | 'right';
+  /** w:fmt prednjih listova; default 'lowerRoman' (rimski mala slova). */
+  frontFmt?: 'lowerRoman' | 'upperRoman';
+}
+
+// Umetanje sekcije prije Uvoda + kompletno "numeriranje od Uvoda" (K6, BL-07c). KOMPOZITNI
+// fixer koji spaja tri koraka u jednu atomsku operaciju (sve ili NO_OP):
+//  1. umetne prijelom sekcije prije Uvoda (insertSectionBreakBeforeParagraph); marker prednje
+//     sekcije nosi geometriju stranice zavrsnog sectPr-a + <w:titlePg/> (naslovnica = "drukcija
+//     prva stranica"; bez definiranog "first" footera Word na njoj ne prikaze broj),
+//  2. postavi pgNumType: prednja sekcija (0) rimski start=1, glavna (1) arapski start=1 (K4),
+//  3. umetne podnozje s PAGE poljem u prednju sekciju (K5 footerPageFixer); glavnu sekciju Word
+//     NASLJEDJUJE, pa isti footer daje rimski broj na prednjim, arapski od Uvoda.
+//
+// NO_OP kad se prijelom ne moze umetnuti (Uvod nepoznat/ordinal<2, dokument vec ima prijelom
+// tocno prije Uvoda -> idempotencija, sectPrChange, ili Uvod nije na razini tijela). pgNum i
+// footer su najbolji trud NAD uspjesnim prijelomom; ako footer part flow (content-types/rels)
+// nedostaje, prijelom + pgNum svejedno vrijede (broj se tada oslanja na postojece zaglavlje/
+// podnozje). applied je true cim je prijelom umetnut.
+//
+// OPSEG K6 v1: SAMO jednosekcijski dokument (najcesci student rad; pipeline "dokument bez
+// sekcija"). Hardkodirani ciljevi [{0,rimski},{1,arapski}] vrijede TEK kad umetanje da tocno
+// dvije sekcije. Visesekcijski rad (npr. zasebna naslovnica s vlastitim sectPr, ili prijelom
+// negdje u tijelu) trazio bi dinamicko mapiranje rimski/arapski preko svih sekcija i footer
+// nasljedjivanje kroz vise granica; svjesno je odgodjeno (rucna matrica ga ne moze pouzdano
+// pokriti). Zato je ovdje tvrdi backstop preSectPr.length===1; visesekcijski = NO_OP.
+//
+// POZNATA OGRANICENJA (svjesno deferirano na rucnu Word/LibreOffice matricu, izlazni gate K6):
+//  - Realnu valjanost (otvara li Word bez upozorenja, nasljedjuje li glavna sekcija footer,
+//    je li naslovnica doista bez broja) dokazuje rucna matrica; golden pokriva XML-transform.
+//  - <w:evenAndOddHeaders/> u settings.xml (samo neparne stranice) se ne cita, kao u K5.
+//  - Marker je prazan odlomak: neznatno povecava broj odlomaka, ali ga stiti nested-sectPr
+//    guard u paragraph-cleanup (empty-paragraph-fixer ga nikad ne brise).
+export function sectionInsertFixer(parts: DocxXmlParts, target: SectionInsertTarget): FixerOutput {
+  if (/<w:sectPrChange\b/.test(parts.documentXml)) return NO_OP(parts);
+
+  // Tvrdi backstop: samo jednosekcijski rad (ista enumeracija sectPr kao patchSectionPageNumbering).
+  // Kad dokument vec ima prijelom (>1 sectPr), umetanje bi dalo >=3 sekcije i hardkodirani ciljevi
+  // bi krivo mapirali prednji/glavni dio; radije NO_OP nego pogresno numeriranje.
+  const preSectPr = parts.documentXml.match(/<w:sectPr\b[^>]*?(?:\/>|>[\s\S]*?<\/w:sectPr>)/g) ?? [];
+  if (preSectPr.length !== 1) return NO_OP(parts);
+  // Dokument s VLASTITOM prvo-stranica/zaglavlje/podnozje konfiguracijom se ne dira: ako jedina
+  // sekcija vec ima <w:titlePg/> (autor je "drukcijom prvom stranicom" zabijelio naslovnicu) ili
+  // header/footerReference, umetanje markera bi ostavilo titlePg na GLAVNOJ sekciji (Uvod bi ostao
+  // bez broja jer bi mu prva stranica gadjala nedefinirani "first" footer), a postojeci footer bi
+  // presao nasljedjivanje. Takve slucajeve svjesno deferiramo na rucnu matricu (isti oprez kao K5).
+  // COMPOSABILITY (adversarial K6): repair-items UVIJEK poziva section-insert kao JEDINI zahtjev,
+  // pa je preSectPr[0] izvorni dokument. U kombiniranoj bateriji s footer-page-fixerom (samo
+  // sinteticki golden __kombinirano, nikad zivo) ovaj guard vidi vec ubacen footer pa NO_OP-a
+  // (sigurno, posteno u skipped[]); prije batchanja section-inserta uz footer-page prebaci provjeru
+  // na izvorni document.xml uhvacen u apply-fixers prije ijednog fixera.
+  if (/<w:titlePg\b|<w:footerReference\b|<w:headerReference\b/.test(preSectPr[0])) return NO_OP(parts);
+
+  const geo = extractFinalSectionGeometry(parts.documentXml);
+  const markerSectPr = `<w:sectPr>${geo.pgSz ?? ''}${geo.pgMar ?? ''}<w:titlePg/></w:sectPr>`;
+  const ins = insertSectionBreakBeforeParagraph(parts.documentXml, target.introParagraphIndex, markerSectPr);
+  if (!ins.applied) return NO_OP(parts);
+
+  // pgNumType: sekcija 0 (prednja) rimski start=1, sekcija 1 (glavna) arapski start=1.
+  const front = target.frontFmt === 'upperRoman' ? 'upperRoman' : 'lowerRoman';
+  const numbered = patchSectionPageNumbering(ins.xml, [
+    { sectionIndex: 0, fmt: front, start: 1 },
+    { sectionIndex: 1, fmt: 'decimal', start: 1 },
+  ]);
+  const docAfterNum = numbered.applied ? numbered.xml : ins.xml;
+
+  // Footer s PAGE poljem u prednju sekciju (0); glavnu (1) Word nasljedjuje. Reuse K5.
+  const align: 'left' | 'center' | 'right' =
+    target.align === 'left' || target.align === 'right' ? target.align : 'center';
+  const interim: DocxXmlParts = { ...parts, documentXml: docAfterNum };
+  const footerRes = footerPageFixer(interim, { sectionIndex: 0, align });
+  const finalParts = footerRes.applied ? footerRes.parts : interim;
+
+  const footerNote = footerRes.applied ? ', broj stranice u podnožju' : '';
+  return {
+    parts: finalParts,
+    applied: true,
+    beforeLabel: 'Numeriranje od Uvoda nije postavljeno (jedna sekcija)',
+    afterLabel: `Umetnut prijelom sekcije prije Uvoda: rimski na prednjim listovima, arapski od Uvoda (od 1), naslovnica bez broja${footerNote}`,
   };
 }
 
