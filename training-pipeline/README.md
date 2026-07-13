@@ -49,6 +49,10 @@ Za `lawful-access-tdm` konfiguracija mora sadržavati `rightsBasis` s potvrdom j
 pristupa, rezultatom provjere pridržaja TDM prava, potvrditeljem i datumom. Taj status
 ne tvrdi da je djelo licencirano niti prenosi autorsko pravo.
 
+Ako je radna kopija u privatnom repozitoriju, a izvorni dokumenti su zakonito javno
+dostupni, postavi `rightsBasis.accessScope` na `source-documents`. Vidljivost radne
+kopije tada nije dokaz ni javnog pristupa izvorniku ni vlasništva nad dokumentom.
+
 Zatim pokreni:
 
 ```bash
