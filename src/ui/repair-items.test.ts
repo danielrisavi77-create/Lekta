@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest';
-import { paramsForCheck, buildRepairableItems, universalRepairableItems, type AnalyzedCheck } from './repair-items';
+import {
+  paramsForCheck,
+  buildRepairableItems,
+  universalRepairableItems,
+  paragraphSpacingRepairableItem,
+  type AnalyzedCheck,
+} from './repair-items';
 import type { RuleEntry } from '../profiles/profile-schema';
 import type { Issue } from '../scoring/checks';
 
@@ -159,5 +165,34 @@ describe('universalRepairableItems (higijena dokumenta, bez ruleEntry gate-a)', 
       label: 'Prazni odlomci',
       params: {},
     });
+  });
+});
+
+describe('paragraphSpacingRepairableItem (razmak prije/poslije, ovisi o profilu)', () => {
+  it('prazno kad profil ne provjerava razmak prije/poslije (checkParagraphSpacingZero nije true)', () => {
+    expect(paragraphSpacingRepairableItem([FAIL('Razmak prije i poslije odlomka')], {})).toEqual([]);
+    expect(
+      paragraphSpacingRepairableItem([FAIL('Razmak prije i poslije odlomka')], { checkParagraphSpacingZero: false }),
+    ).toEqual([]);
+  });
+
+  it('profil provjerava razmak, check prolazi -> violated:false', () => {
+    const items = paragraphSpacingRepairableItem(
+      [PASS('Razmak prije i poslije odlomka')],
+      { checkParagraphSpacingZero: true },
+    );
+    expect(items).toEqual([
+      { ruleId: 'paragraph-spacing-universal', fixerId: 'paragraph-spacing-fixer', label: 'Razmak prije i poslije odlomka', params: {}, violated: false },
+    ]);
+  });
+
+  it('profil provjerava razmak, check ne prolazi -> violated:true', () => {
+    const items = paragraphSpacingRepairableItem(
+      [FAIL('Razmak prije i poslije odlomka')],
+      { checkParagraphSpacingZero: true },
+    );
+    expect(items).toEqual([
+      { ruleId: 'paragraph-spacing-universal', fixerId: 'paragraph-spacing-fixer', label: 'Razmak prije i poslije odlomka', params: {}, violated: true },
+    ]);
   });
 });

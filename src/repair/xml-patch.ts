@@ -186,6 +186,24 @@ export function patchDefaultSpacing(
   return { xml: newXml, applied: true, before: result.before, after: result.after, found: result.found };
 }
 
+export function patchDefaultParagraphSpacing(
+  stylesXml: string,
+  beforeTwentieths: number,
+  afterTwentieths: number,
+): PatchResult {
+  const found = findNormalStyleBlock(stylesXml);
+  if (!found) return { ...NO_OP, xml: stylesXml };
+
+  const result = patchTagAttributes(found.block, /<w:spacing\b[^>]*\/?>/, {
+    'w:before': String(beforeTwentieths),
+    'w:after': String(afterTwentieths),
+  });
+  if (!result.applied) return { ...NO_OP, xml: stylesXml, found: result.found };
+
+  const newXml = stylesXml.slice(0, found.start) + result.xml + stylesXml.slice(found.end);
+  return { xml: newXml, applied: true, before: result.before, after: result.after, found: result.found };
+}
+
 export function patchDefaultAlignment(stylesXml: string, val: string): PatchResult {
   const found = findNormalStyleBlock(stylesXml);
   if (!found) return { ...NO_OP, xml: stylesXml };

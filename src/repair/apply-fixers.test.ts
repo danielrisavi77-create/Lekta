@@ -217,6 +217,131 @@ describe('applyFixers golden round-trip', () => {
     expect(newDoc).toContain('w:ascii="Times New Roman"'); // run TNR ostaje
   });
 
+  it('paragraph-spacing-fixer (shallow): stilski w:before/w:after na 0, w:line i document.xml netaknuti', async () => {
+    const enc = new TextEncoder();
+    const dec = new TextDecoder();
+
+    const stylesXml =
+      '<?xml version="1.0"?><w:styles><w:docDefaults><w:rPrDefault><w:rPr>' +
+      '<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="24"/>' +
+      '</w:rPr></w:rPrDefault></w:docDefaults>' +
+      '<w:style w:type="paragraph" w:styleId="Normal"><w:pPr>' +
+      '<w:spacing w:before="160" w:after="240" w:line="360" w:lineRule="auto"/>' +
+      '</w:pPr></w:style></w:styles>';
+    const documentXml =
+      '<?xml version="1.0"?><w:document><w:body>' +
+      '<w:p><w:r><w:t>Tekst bez izravnog razmaka na odlomku.</w:t></w:r></w:p>' +
+      '</w:body></w:document>';
+
+    const entries = [
+      { name: 'word/document.xml', data: enc.encode(documentXml) },
+      { name: 'word/styles.xml', data: enc.encode(stylesXml) },
+    ];
+    const originalDocx = await writeZip(entries);
+
+    const result = await applyFixers(originalDocx, [
+      { ruleId: 'razmak-odlomaka', fixerId: 'paragraph-spacing-fixer', params: {} },
+    ]);
+
+    expect(result.changelog).toHaveLength(1);
+    expect(result.changelog[0].beforeLabel).toBe('Razmak prije/poslije: 8 pt / 12 pt');
+    expect(result.changelog[0].afterLabel).toBe('Razmak prije/poslije: 0 pt / 0 pt');
+
+    const newEntries = await readZip(result.docxBytes);
+    const newStylesXml = dec.decode(newEntries.find((e) => e.name === 'word/styles.xml')!.data);
+    const newDocumentXml = dec.decode(newEntries.find((e) => e.name === 'word/document.xml')!.data);
+
+    expect(newStylesXml).toContain('w:before="0"');
+    expect(newStylesXml).toContain('w:after="0"');
+    // Prored (w:line/w:lineRule) na istom tagu nije trazen i ostaje netaknut.
+    expect(newStylesXml).toContain('w:line="360"');
+    expect(newStylesXml).toContain('w:lineRule="auto"');
+
+    // document.xml uopce nije meta ovog fixera: bit-identican original bajtovima.
+    expect(newDocumentXml).toBe(documentXml);
+  });
+
+  it('deep (Feature B): paragraph-spacing fixer cisti izravni razmak tijela, naslov s vlastitim razmakom prezivljava', async () => {
+    const enc = new TextEncoder();
+    const dec = new TextDecoder();
+
+    const stylesXml =
+      '<?xml version="1.0"?><w:styles><w:docDefaults><w:rPrDefault><w:rPr>' +
+      '<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="24"/>' +
+      '</w:rPr></w:rPrDefault></w:docDefaults>' +
+      '<w:style w:type="paragraph" w:styleId="Normal"><w:pPr>' +
+      '<w:spacing w:before="160" w:after="240"/>' +
+      '</w:pPr></w:style></w:styles>';
+    const documentXml =
+      '<?xml version="1.0"?><w:document><w:body>' +
+      '<w:p><w:pPr><w:spacing w:before="240" w:after="240"/></w:pPr>' +
+      '<w:r><w:t>Odlomak s izravnim razmakom preko Normal stila.</w:t></w:r></w:p>' +
+      '<w:p><w:pPr><w:pStyle w:val="Heading1"/><w:spacing w:before="500" w:after="500"/></w:pPr>' +
+      '<w:r><w:t>Naslov s vlastitim, namjernim razmakom.</w:t></w:r></w:p>' +
+      '</w:body></w:document>';
+
+    const entries = [
+      { name: 'word/document.xml', data: enc.encode(documentXml) },
+      { name: 'word/styles.xml', data: enc.encode(stylesXml) },
+    ];
+    const originalDocx = await writeZip(entries);
+
+    const result = await applyFixers(originalDocx, [
+      { ruleId: 'razmak-odlomaka', fixerId: 'paragraph-spacing-fixer', params: { deep: true } },
+    ]);
+
+    expect(result.changelog).toHaveLength(1);
+    expect(result.changelog[0].afterLabel).toBe('Razmak prije/poslije: 0 pt / 0 pt; izravno formatiranje uklonjeno u 1 odlomaka');
+
+    const newEntries = await readZip(result.docxBytes);
+    const newStylesXml = dec.decode(newEntries.find((e) => e.name === 'word/styles.xml')!.data);
+    const newDocumentXml = dec.decode(newEntries.find((e) => e.name === 'word/document.xml')!.data);
+
+    expect(newStylesXml).toContain('w:before="0"');
+    expect(newStylesXml).toContain('w:after="0"');
+
+    // Direct override na Normal-odlomku uklonjen (pao na stilski 0/0 backstop).
+    expect(newDocumentXml).not.toContain('w:before="240"');
+    expect(newDocumentXml).not.toContain('w:after="240"');
+    expect(newDocumentXml).toContain('Odlomak s izravnim razmakom preko Normal stila.');
+
+    // Naslov (nije Normal, ima svoj pStyle) zadrzava vlastiti, namjerni razmak.
+    expect(newDocumentXml).toContain('w:before="500"');
+    expect(newDocumentXml).toContain('w:after="500"');
+    expect(newDocumentXml).toContain('Naslov s vlastitim, namjernim razmakom.');
+  });
+
+  it('deep BEZ stilskog backstopa (Normal bez w:spacing) NE cisti tijelo: nema regresije na Word default', async () => {
+    const enc = new TextEncoder();
+
+    // Normal stil postoji ali NEMA w:spacing uopce (nema w:before/w:after ni
+    // w:line): patch je no-op i result.found ostaje prazan.
+    const stylesXml =
+      '<?xml version="1.0"?><w:styles><w:docDefaults><w:rPrDefault><w:rPr>' +
+      '<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/></w:rPr></w:rPrDefault></w:docDefaults>' +
+      '<w:style w:type="paragraph" w:styleId="Normal"><w:name w:val="Normal"/></w:style></w:styles>';
+    const documentXml =
+      '<?xml version="1.0"?><w:document><w:body>' +
+      '<w:p><w:pPr><w:spacing w:before="240" w:after="240"/></w:pPr>' +
+      '<w:r><w:t>Odlomak s izravnim razmakom bez stilskog backstopa.</w:t></w:r></w:p>' +
+      '</w:body></w:document>';
+
+    const docx = await writeZip([
+      { name: 'word/document.xml', data: enc.encode(documentXml) },
+      { name: 'word/styles.xml', data: enc.encode(stylesXml) },
+    ]);
+
+    const result = await applyFixers(docx, [
+      { ruleId: 'razmak-odlomaka', fixerId: 'paragraph-spacing-fixer', params: { deep: true } },
+    ]);
+
+    // Stilski patch ne uspije (Normal nema w:spacing, nema backstopa) I deep se
+    // NE primijeni: da jest, dokument bi pao na Wordov default umjesto na cilj.
+    expect(result.changelog).toHaveLength(0);
+    expect(result.skipped).toEqual(['razmak-odlomaka']);
+    expect(result.docxBytes).toEqual(docx);
+  });
+
   it('empty-paragraph-fixer: kolabira niz od 4 prazna odlomka na 1, styles.xml netaknut', async () => {
     const enc = new TextEncoder();
     const dec = new TextDecoder();

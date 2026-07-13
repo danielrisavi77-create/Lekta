@@ -79,6 +79,79 @@ describe('stripDirectFormatting: prored', () => {
   });
 });
 
+describe('stripDirectFormatting: prored (stripParagraphSpacing)', () => {
+  it('uklanja w:before/w:after kad su eksplicitno ne-"0"; w:line/w:lineRule ostaju netaknuti', () => {
+    const xml =
+      '<w:body>' +
+      p('<w:pPr><w:spacing w:before="120" w:after="160" w:line="240" w:lineRule="auto"/></w:pPr>' + run('', 'a')) +
+      '</w:body>';
+    const r = stripDirectFormatting(xml, { stripParagraphSpacing: true });
+
+    expect(r.applied).toBe(true);
+    expect(r.xml).not.toContain('w:before="120"');
+    expect(r.xml).not.toContain('w:after="160"');
+    expect(r.xml).toContain('<w:spacing w:line="240" w:lineRule="auto"/>'); // line/lineRule netaknuti bez stripLineSpacing
+  });
+
+  it('u tablici odlomak sa spacingom ostaje potpuno netaknut; identican odlomak izvan tablice se cisti', () => {
+    const spacedPara = '<w:pPr><w:spacing w:before="120" w:after="160"/></w:pPr>' + run('', 'tekst');
+    const xml =
+      '<w:body><w:tbl><w:tr><w:tc>' +
+      p(spacedPara) +
+      '</w:tc></w:tr></w:tbl>' +
+      p(spacedPara) +
+      '</w:body>';
+    const r = stripDirectFormatting(xml, { stripParagraphSpacing: true });
+
+    expect(r.applied).toBe(true);
+    expect(r.xml).toContain('<w:tc>' + p(spacedPara) + '</w:tc>'); // celija bajt-identicna
+    expect(r.xml.match(/w:before="120"/g)).toHaveLength(1); // samo tablicin primjerak prezivio
+    expect(r.xml.match(/w:after="160"/g)).toHaveLength(1);
+  });
+
+  it('kompozicija: samo stripParagraphSpacing dira SAMO before/after; oba flaga zajedno diraju sve cetiri bez siroceta', () => {
+    const xml =
+      '<w:body>' +
+      p('<w:pPr><w:spacing w:before="120" w:after="160" w:line="240" w:lineRule="auto"/></w:pPr>' + run('', 'a')) +
+      '</w:body>';
+
+    const onlyParagraphSpacing = stripDirectFormatting(xml, { stripParagraphSpacing: true });
+    expect(onlyParagraphSpacing.applied).toBe(true);
+    expect(onlyParagraphSpacing.xml).toContain('<w:spacing w:line="240" w:lineRule="auto"/>');
+    expect(onlyParagraphSpacing.xml).not.toContain('w:before');
+    expect(onlyParagraphSpacing.xml).not.toContain('w:after');
+
+    const both = stripDirectFormatting(xml, { stripLineSpacing: true, stripParagraphSpacing: true });
+    expect(both.applied).toBe(true);
+    expect(both.xml).not.toContain('w:before');
+    expect(both.xml).not.toContain('w:after');
+    expect(both.xml).not.toContain('w:line="240"');
+    expect(both.xml).not.toContain('w:lineRule="auto"');
+    expect(both.xml).not.toContain('<w:spacing'); // tag posve prazan -> ukloni cijeli (bez siroceta)
+  });
+});
+
+describe('stripDirectFormatting: golden baseline prije stripParagraphSpacing', () => {
+  it('nijedna postojeca opcija ne dira w:before/w:after: samo w:line/w:lineRule se skida', () => {
+    const xml =
+      '<w:body>' +
+      p('<w:pPr><w:spacing w:before="120" w:after="160" w:line="240" w:lineRule="auto"/></w:pPr>' + run('', 'a')) +
+      '</w:body>';
+    const r = stripDirectFormatting(xml, {
+      stripFontName: true,
+      stripFontSizeNearHalfPoints: 24,
+      stripLineSpacing: true,
+      stripLeftJustify: true,
+    });
+
+    expect(r.applied).toBe(true);
+    expect(r.xml).toContain('w:before="120"'); // before prezivljava svaku postojecu opciju
+    expect(r.xml).toContain('w:after="160"'); // after prezivljava svaku postojecu opciju
+    expect(r.xml).not.toContain('w:line="240"'); // line skinut (lineRule auto)
+    expect(r.xml).not.toContain('w:lineRule="auto"');
+  });
+});
+
 describe('stripDirectFormatting: poravnanje', () => {
   it('uklanja jc left, a center/right ostavlja (namjerno centriranje)', () => {
     const xml =

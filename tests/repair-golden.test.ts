@@ -39,6 +39,7 @@ const DEEP_CAPABLE: ReadonlySet<FixerId> = new Set<FixerId>([
   'font-fixer',
   'line-spacing-fixer',
   'alignment-fixer',
+  'paragraph-spacing-fixer',
 ]);
 
 // Fiksni ciljevi za sinteticke dokumente (bez profila). Namjerno se razlikuju od
@@ -50,6 +51,10 @@ const SYNTHETIC_PARAMS: Record<FixerId, Record<string, unknown>> = {
   'font-fixer': { fontName: 'Times New Roman', fontSizePt: 12 },
   'line-spacing-fixer': { multiplier: 1.5 },
   'alignment-fixer': { val: 'both' },
+  // paragraphSpacingFixer ne uzima ciljane vrijednosti (uvijek gadja 0/0), pa je jedini
+  // "param" opcionalni deep flag koji withDeep() dodaje; prazan objekt ovdje samo osigurava
+  // da FixerRequest.params nikad nije undefined (runFixer cita p.deep bez null-guarda).
+  'paragraph-spacing-fixer': {},
 };
 
 /** Ciljani params po fixeru IZ PROFILA (isti izvor kao zivi repair-items.ts). */
@@ -68,6 +73,13 @@ function paramsForFixer(fixerId: FixerId, profile: unknown): Record<string, unkn
       return paramsForCheck('line-spacing', profile);
     case 'alignment-fixer':
       return paramsForCheck('justify', profile);
+    case 'paragraph-spacing-fixer':
+      // Nema paramsForCheck ekvivalent: paragraphSpacingFixer nije ciljan profilnom
+      // vrijednoscu vec profilnom zastavicom (isto gate kao paragraphSpacingRepairableItem
+      // u src/ui/repair-items.ts), a njegov stvarni cilj je uvijek fiksno 0/0.
+      return (profile as { checkParagraphSpacingZero?: boolean } | null)?.checkParagraphSpacingZero === true
+        ? {}
+        : null;
     default:
       return null;
   }

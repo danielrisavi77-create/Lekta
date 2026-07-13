@@ -39,6 +39,8 @@ export interface RunLevelOptions {
   stripFontSizeNearHalfPoints?: number;
   /** Ukloni w:line/w:lineRule (samo lineRule auto) iz w:pPr/w:spacing. */
   stripLineSpacing?: boolean;
+  /** Ukloni w:before/w:after (kad su eksplicitno ne-"0") iz w:pPr/w:spacing. */
+  stripParagraphSpacing?: boolean;
   /** Ukloni w:jc kad je left/start (cilj je obostrano poravnanje). */
   stripLeftJustify?: boolean;
 }
@@ -211,6 +213,20 @@ function stripParagraphProps(pPr: string, opts: RunLevelOptions): { out: string;
     });
   }
 
+  if (opts.stripParagraphSpacing) {
+    out = out.replace(/<w:spacing\b[^>]*\/?>/g, (tag) => {
+      const beforeMatch = tag.match(/w:before="([^"]*)"/);
+      const afterMatch = tag.match(/w:after="([^"]*)"/);
+      // Gate: diramo tag samo ako je before ILI after eksplicitno postavljen na
+      // ne-"0" vrijednost (razmak od 0 je vec "bez razmaka", nema sto brisati).
+      const hasNonZero = (!!beforeMatch && beforeMatch[1] !== '0') || (!!afterMatch && afterMatch[1] !== '0');
+      if (!hasNonZero) return tag;
+      const stripped = stripAttrsFromTag(tag, ['w:before', 'w:after']);
+      if (stripped !== tag) changed = true;
+      return stripped;
+    });
+  }
+
   if (opts.stripLeftJustify) {
     // Podnosi i prosireni prazni oblik <w:jc w:val="left"></w:jc>: inace bi
     // ostao siroce zatvarajuci tag i document.xml bi postao malformiran.
@@ -257,7 +273,7 @@ export function stripDirectFormatting(documentXml: string, opts: RunLevelOptions
     // lijevo poravnanje u celijama su norma); font/velicina prolaze.
     const inTable = insideRanges(offset, tables);
     const paraOpts: RunLevelOptions = inTable
-      ? { ...opts, stripLineSpacing: false, stripLeftJustify: false }
+      ? { ...opts, stripLineSpacing: false, stripParagraphSpacing: false, stripLeftJustify: false }
       : opts;
 
     let out = masked;

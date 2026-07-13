@@ -21,6 +21,7 @@ const DEEP_CAPABLE: ReadonlySet<FixerId> = new Set([
   'font-fixer',
   'line-spacing-fixer',
   'alignment-fixer',
+  'paragraph-spacing-fixer',
 ] as FixerId[]);
 
 /** Bodovna slika (ukupni score + po kategorijama) za usporedbu prije/poslije popravka. */

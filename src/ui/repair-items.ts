@@ -23,6 +23,7 @@ const CHECK_TITLE: Record<string, string> = {
   'font-size': 'Veličina osnovnog teksta',
   'line-spacing': 'Prored osnovnog teksta',
   justify: 'Poravnanje osnovnog teksta',
+  'paragraph-spacing': 'Razmak prije i poslije odlomka',
 };
 // paper-size ima dinamican naslov ('Format stranice A4' / 'Format stranice (A4/A3)') -> prefiks.
 const PAPER_SIZE_PREFIX = 'Format stranice';
@@ -124,6 +125,25 @@ export function universalRepairableItems(issues: Issue[]): RepairableItem[] {
       label: 'Prazni odlomci',
       params: {},
       violated,
+    },
+  ];
+}
+
+/**
+ * Univerzalni popravak razmaka prije/poslije odlomka: NIJE vezan za ruleEntry (isti
+ * obrazac kao universalRepairableItems za prazne odlomke), ali OVISI o profilu jer
+ * checkParagraphSpacingZero (analyzeDocx) nije univerzalan check, vec ga profil ukljucuje.
+ * Kad profil ne provjerava razmak, popravak se ne nudi (nema checka za korelaciju).
+ */
+export function paragraphSpacingRepairableItem(checks: AnalyzedCheck[], profile: any): RepairableItem[] {
+  if (profile?.checkParagraphSpacingZero !== true) return [];
+  return [
+    {
+      ruleId: 'paragraph-spacing-universal',
+      fixerId: 'paragraph-spacing-fixer',
+      label: 'Razmak prije i poslije odlomka',
+      params: {},
+      violated: isViolated('paragraph-spacing', checks),
     },
   ];
 }

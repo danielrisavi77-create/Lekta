@@ -10,6 +10,7 @@ import {
   patchPaperSize,
   patchDefaultFont,
   patchDefaultSpacing,
+  patchDefaultParagraphSpacing,
   patchDefaultAlignment,
 } from './xml-patch';
 import { stripDirectFormatting, type RunLevelResult } from './run-level';
@@ -46,6 +47,10 @@ function ptToHalfPoints(pt: number): number {
 function halfPointsToPtLabel(hp: string): string {
   const n = parseInt(hp, 10);
   return `${n / 2} pt`;
+}
+function twentiethsToPtLabel(twentieths: string): string {
+  const n = parseInt(twentieths, 10);
+  return `${n / 20} pt`;
 }
 function multiplierToTwips(multiplier: number): number {
   return Math.round(multiplier * 240);
@@ -262,6 +267,26 @@ export function alignmentFixer(
   const deepResult =
     deep && val === 'both' && result.found['w:val'] === true
       ? stripDirectFormatting(parts.documentXml, { stripLeftJustify: true })
+      : null;
+  return combineDeep(base, parts, deepResult);
+}
+
+export function paragraphSpacingFixer(parts: DocxXmlParts, deep = false): FixerOutput {
+  const result = patchDefaultParagraphSpacing(parts.stylesXml, 0, 0);
+  const base: FixerOutput = !result.applied
+    ? NO_OP(parts)
+    : {
+        parts: { ...parts, stylesXml: result.xml },
+        applied: true,
+        beforeLabel: `Razmak prije/poslije: ${twentiethsToPtLabel(result.before['w:before'] ?? '0')} / ${twentiethsToPtLabel(result.before['w:after'] ?? '0')}`,
+        afterLabel: `Razmak prije/poslije: ${twentiethsToPtLabel(result.after['w:before'] ?? '0')} / ${twentiethsToPtLabel(result.after['w:after'] ?? '0')}`,
+      };
+
+  // Backstop uvjet: Normal stil ima w:spacing s w:before I w:after (result.found),
+  // inace bi skidanje direct razmaka vratilo dokument na Word default, ne na cilj.
+  const deepResult =
+    deep && result.found['w:before'] === true && result.found['w:after'] === true
+      ? stripDirectFormatting(parts.documentXml, { stripParagraphSpacing: true })
       : null;
   return combineDeep(base, parts, deepResult);
 }

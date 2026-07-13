@@ -12,6 +12,7 @@ import {
   fontFixer,
   lineSpacingFixer,
   alignmentFixer,
+  paragraphSpacingFixer,
   emptyParagraphFixer,
   type DocxXmlParts,
 } from './fixers';
@@ -25,6 +26,7 @@ export const FIXER_IDS = [
   'font-fixer',
   'line-spacing-fixer',
   'alignment-fixer',
+  'paragraph-spacing-fixer',
   'empty-paragraph-fixer',
 ] as const;
 
@@ -67,6 +69,10 @@ function runFixer(fixerId: FixerId, parts: DocxXmlParts, params: Record<string, 
     case 'alignment-fixer': {
       const p = params as { val: 'left' | 'right' | 'center' | 'both'; deep?: boolean };
       return alignmentFixer(parts, p.val, p.deep === true);
+    }
+    case 'paragraph-spacing-fixer': {
+      const p = params as { deep?: boolean };
+      return paragraphSpacingFixer(parts, p.deep === true);
     }
     case 'empty-paragraph-fixer':
       return emptyParagraphFixer(parts);

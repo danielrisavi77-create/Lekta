@@ -4,6 +4,7 @@ import {
   patchPaperSize,
   patchDefaultFont,
   patchDefaultSpacing,
+  patchDefaultParagraphSpacing,
   patchDefaultAlignment,
 } from './xml-patch';
 
@@ -132,6 +133,26 @@ describe('patchDefaultSpacing', () => {
     expect(result.xml).toContain('w:line="480"');
     expect(result.xml).toContain('w:ascii="Calibri"'); // docDefaults netaknut
     expect(result.xml).toContain('w:val="left"'); // jc netaknut
+  });
+});
+
+describe('patchDefaultParagraphSpacing', () => {
+  it('mijenja w:after, ostavlja line/lineRule/jc/docDefaults netaknute', () => {
+    // Fixture spacing tag nema w:before (samo w:after/w:line/w:lineRule), pa se
+    // vidljivo mijenja samo w:after; patch-only politika ne izmislja w:before
+    // koji ne postoji na tagu (isto ponasanje kao ostale patch* funkcije).
+    const result = patchDefaultParagraphSpacing(STYLES_XML, 0, 0);
+    expect(result.applied).toBe(true);
+    expect(result.xml).toContain('w:after="0"');
+    expect(result.xml).toContain('w:line="259"'); // netaknuto
+    expect(result.xml).toContain('w:lineRule="auto"'); // netaknuto
+    expect(result.xml).toContain('w:val="left"'); // jc netaknut
+    expect(result.xml).toContain('w:ascii="Calibri"'); // docDefaults netaknut
+  });
+
+  it('vraca applied:false kad Normal stil ne postoji', () => {
+    const result = patchDefaultParagraphSpacing('<w:styles></w:styles>', 0, 0);
+    expect(result.applied).toBe(false);
   });
 });
 
