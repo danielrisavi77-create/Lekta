@@ -1,56 +1,78 @@
 #!/usr/bin/env python3
-"""Extract text from PDF/DOCX files without copying originals."""
+"""Extract text and optionally create DOCX working copies from PDFs."""
 from __future__ import annotations
-import argparse, json, subprocess
+
+import argparse
 from pathlib import Path
 
+from training_pipeline_bootstrap import add_pipeline_to_path
+
+add_pipeline_to_path()
+from lib import read_jsonl, write_jsonl  # noqa: E402
+
+
 def pdf_text(path: Path) -> str:
-    try:
-        import fitz
-    except ImportError:
-        raise SystemExit("Install PyMuPDF: pip install pymupdf")
-    doc = fitz.open(path)
-    return "\n".join(page.get_text() for page in doc)
+    import fitz
+
+    with fitz.open(path) as document:
+        return "\n".join(page.get_text() for page in document)
+
 
 def docx_text(path: Path) -> str:
-    try:
-        from docx import Document
-    except ImportError:
-        raise SystemExit("Install python-docx: pip install python-docx")
-    return "\n".join(p.text for p in Document(path).paragraphs)
+    from docx import Document
 
-def convert_pdf_to_docx(path: Path, output_dir: Path) -> str | None:
-    output_dir.mkdir(parents=True, exist_ok=True)
+    document = Document(path)
+    parts = [paragraph.text for paragraph in document.paragraphs]
+    for table in document.tables:
+        for row in table.rows:
+            parts.append("\t".join(cell.text for cell in row.cells))
+    return "\n".join(parts)
+
+
+def pdf_to_docx(path: Path, output_dir: Path, document_id: str) -> Path | None:
     try:
-        subprocess.run(["libreoffice", "--headless", "--convert-to", "docx",
-                        "--outdir", str(output_dir), str(path)],
-                       check=True, capture_output=True)
-    except (FileNotFoundError, subprocess.CalledProcessError):
+        from pdf2docx import Converter
+    except ImportError:
         return None
-    result = output_dir / (path.stem + ".docx")
-    return str(result) if result.exists() else None
+    output_dir.mkdir(parents=True, exist_ok=True)
+    target = output_dir / f"{document_id}.docx"
+    converter = Converter(str(path))
+    try:
+        converter.convert(str(target))
+    finally:
+        converter.close()
+    return target if target.exists() else None
+
+
+def records(input_path: Path, docx_dir: Path, convert_pdf: bool):
+    for record in read_jsonl(input_path):
+        path = Path(record["_localPath"])
+        try:
+            extracted = pdf_text(path) if path.suffix.lower() == ".pdf" else docx_text(path)
+            record["extractedText"] = extracted
+            record["extractionStatus"] = "ok" if extracted.strip() else "ocr_required"
+            if path.suffix.lower() == ".docx":
+                record["_analysisDocxPath"] = str(path)
+            elif convert_pdf and extracted.strip():
+                converted = pdf_to_docx(path, docx_dir, record["id"])
+                if converted:
+                    record["_analysisDocxPath"] = str(converted)
+        except Exception as exc:
+            record["extractionStatus"] = "error"
+            record["extractionError"] = type(exc).__name__
+        yield record
+
 
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--manifest", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
-    parser.add_argument("--docx-dir", type=Path, default=Path("training-pipeline/output/docx"))
+    parser.add_argument("--docx-dir", required=True, type=Path)
+    parser.add_argument("--convert-pdf", action="store_true")
     args = parser.parse_args()
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    with args.manifest.open(encoding="utf-8") as source, args.output.open("w", encoding="utf-8") as target:
-        for line in source:
-            record = json.loads(line)
-            path = Path(record["path"])
-            try:
-                text = pdf_text(path) if path.suffix.lower() == ".pdf" else docx_text(path)
-                record["extractedText"] = text
-                record["extractionStatus"] = "ok"
-                if path.suffix.lower() == ".pdf":
-                    record["convertedDocxPath"] = convert_pdf_to_docx(path, args.docx_dir)
-            except Exception as exc:
-                record["extractionStatus"] = "error"
-                record["extractionError"] = str(exc)
-            target.write(json.dumps(record, ensure_ascii=False) + "\n")
+    count = write_jsonl(args.output, records(args.manifest, args.docx_dir, args.convert_pdf))
+    print(f"Extracted {count} documents")
+
 
 if __name__ == "__main__":
     main()
