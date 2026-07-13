@@ -24,3 +24,10 @@ scripts/demo-video/*.png
 .claude/skills/design-system/
 .claude/skills/slides/
 .claude/skills/ui-styling/
+
+# Lekta training pipeline: lokalni i osjetljivi izlazi
+training-pipeline/output/
+training-pipeline/sources/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal

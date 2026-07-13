@@ -1,0 +1,92 @@
+name: Lekta training pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Inventory only or build from rights-approved repositories
+        required: true
+        type: choice
+        options: [inventory, build]
+        default: inventory
+      profile_id:
+        description: Lekta profile ID used in build mode
+        required: true
+        type: string
+        default: fpzg-politologija-diplomski
+      convert_pdf:
+        description: Create temporary DOCX working copies from text PDFs
+        required: true
+        type: boolean
+        default: false
+      upload_sanitized_artifact:
+        description: Upload sanitized output after the run
+        required: true
+        type: boolean
+        default: false
+      max_documents:
+        description: Hard build cap (1-10); inventory always scans all documents
+        required: true
+        type: choice
+        options: ['1', '5', '10']
+        default: '10'
+
+permissions:
+  contents: read
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+      - name: Install project dependencies
+        run: |
+          npm ci
+          python -m pip install -r training-pipeline/requirements.txt
+      - name: Test pipeline helpers
+        run: |
+          python -m unittest discover -s training-pipeline/tests -p 'test_*.py'
+          python training-pipeline/scripts/validate_config.py --config training-pipeline/source-repositories.json
+      - name: Clone configured source repositories
+        env:
+          LEKTA_REPOS_TOKEN: ${{ secrets.LEKTA_REPOS_TOKEN }}
+        run: |
+          python training-pipeline/scripts/clone_sources.py \
+            --config training-pipeline/source-repositories.json \
+            --out "$RUNNER_TEMP/lekta-sources" \
+            --mode "${{ inputs.mode }}" > "$RUNNER_TEMP/sources.json"
+      - name: Run inventory or build
+        run: |
+          ROOTS=$(python -c 'import json; print(" ".join(json.load(open("${{ runner.temp }}/sources.json"))["roots"]))')
+          EXTRA=""
+          if [ "${{ inputs.convert_pdf }}" = "true" ]; then EXTRA="--convert-pdf"; fi
+          python training-pipeline/run_pipeline.py \
+            --roots $ROOTS \
+            --mode "${{ inputs.mode }}" \
+            --profile "${{ inputs.profile_id }}" \
+            --max-documents "${{ inputs.max_documents }}" \
+            --out-dir "$RUNNER_TEMP/lekta-output" \
+            $EXTRA
+      - name: Publish sanitized run summary
+        run: |
+          python training-pipeline/scripts/render_summary.py \
+            --input "$RUNNER_TEMP/lekta-output/sanitized/summary.json" \
+            --output "$RUNNER_TEMP/lekta-summary.md"
+          cat "$RUNNER_TEMP/lekta-summary.md" >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload sanitized artifact
+        if: ${{ inputs.upload_sanitized_artifact }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: lekta-${{ inputs.mode }}-${{ github.run_id }}
+          path: ${{ runner.temp }}/lekta-output/sanitized/
+          retention-days: 7
+          if-no-files-found: error

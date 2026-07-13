@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Lekta Error Example",
+  "type": "object",
+  "required": ["id", "sourceDocumentId", "category", "original", "correction", "reviewStatus"],
+  "properties": {
+    "id": {"type": "string"},
+    "sourceDocumentId": {"type": "string"},
+    "category": {"enum": ["formatting", "structure", "citations", "language", "methodology", "references", "privacy", "other"]},
+    "original": {"type": "string"},
+    "correction": {"type": "string"},
+    "explanation": {"type": "string"},
+    "ruleSource": {"type": ["string", "null"]},
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+    "reviewStatus": {"enum": ["pending", "approved", "rejected"]},
+    "reviewer": {"type": ["string", "null"]}
+  }
+}
