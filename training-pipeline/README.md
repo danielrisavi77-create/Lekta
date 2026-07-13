@@ -93,6 +93,30 @@ repozitorije dodaj repository secret `LEKTA_REPOS_TOKEN` s read-only pristupom s
 odabranim repozitorijima. Prvo koristi `inventory`. Upload sanitiziranog artefakta je
 isključen po zadanim postavkama i retencija je sedam dana kada ga uključiš.
 
+### Inventory akademskih repozitorija
+
+Workflow `Academic repository metadata inventory` pokriva svih 37 ustanova i 117
+sastavnica iz kataloga. Registar se gradi iz postojećih verificiranih PID dokaza i
+službenog Dabar popisa repozitorija. Ako službeno podudaranje nije nedvosmisleno,
+sastavnica ostaje označena kao `no-official-match`.
+
+Ovaj inventory pristupa samo OAI-PMH metapodacima. Ne preuzima PDF ili DOCX, ne
+sprema PID, naslov, autora, e-mail, OIB, JMBAG ni tekst rada. Izlaz sadrži samo
+agregatne brojeve po sastavnici, repozitoriju, razini rada i open access statusu.
+Zbroj predstavlja uočene metapodatkovne zapise, ne broj jedinstvenih radova, jer
+isti rad može postojati u institucijskom i zbirnom repozitoriju.
+Za pokretanje nije potreban `LEKTA_REPOS_TOKEN`.
+
+Dabar pravila dopuštaju harvest metapodataka, ali to nije odobrenje za obradu punog
+teksta. Svaki budući dohvat datoteke mora zasebno provjeriti pristup i licencu tog
+objekta. Registar repozitorija zato ne mijenja `rights` gate training pipelinea.
+
+Lokalna validacija registra bez mrežnog pristupa:
+
+```bash
+python training-pipeline/scripts/build_academic_repository_registry.py --validate
+```
+
 ## Sigurnosne granice
 
 - `training-pipeline/output/` i klonirani izvori nikad se ne commitaju;
