@@ -126,7 +126,23 @@ TRACK D (odluke i podaci):     D1, D2 (prije K8), D3 (u K0), D4 (prije K11 imeno
   adversarial review; NE deploya se sam (ide zajedno s K6).
 
 ### K6. Umetanje sekcije prije Uvoda + korisnikova potvrda (BL-07c)
-- Trajanje: 3-4 dana. Status: CEKA
+- Trajanje: 3-4 dana. Status: GOTOVO 2026-07-13 (commit f7b7c1c, CI zelen, DARK)
+- IZVJESTAJ: novi kompozitni section-insert-fixer za JEDNOSEKCIJSKI rad. Nova primitiva
+  insertSectionBreakBeforeParagraph (xml-patch.ts) umece <w:p><w:pPr><w:sectPr>..</w:pPr></w:p>
+  prije Uvoda; koordinatni sustav = analyzeDocx introParagraphIndex (n-ti <w:p> == n-ti
+  els(doc,'w:p')), MASKIRA komentare/CDATA/PI da <w:p u komentaru ne pomakne indeks, guardovi
+  tbl/txbxContent/sdtContent balans + pPrChange (zivi sectPr) + sectPrChange no-op. Marker
+  nosi pgSz/pgMar zavrsnog sectPr + <w:titlePg/> (naslovnica bez broja). Kompozit REUSE K4
+  (patchSectionPageNumbering [{0,rimski,1},{1,arapski,1}]) + K5 (footerPageFixer, glavnu Word
+  nasljedjuje). OPSEG v1: samo cist jednosekcijski rad (backstop preSectPr.length===1; odbija
+  i docx s postojecim titlePg/header/footerReference; visesekcijski deferiran). Panel trazi
+  potvrdu lokacije prije SVAKE strukturne primjene (bez latch flaga; escapeHtml). Adversarial
+  review (Workflow 4 lens-a, 7->5 nalaza fixano: titlePg na glavnoj sekciji, comment drift,
+  pPrChange, sdtContent, confirm latch), golden regeneriran, check + CI zeleni.
+  DARK: SECTION_INSERT_LIVE=false; app.ts zove flag-gated introSectionRepairableItem, nikad
+  jezgru. PREOSTAJE (vlasnik, izlazni gate): rucna Word/LibreOffice matrica na izlazu fixera
+  (golden dokazuje samo XML-transform, ne realnu Word valjanost) -> SECTION_INSERT_LIVE=true
+  -> DEPLOY K5+K6 ZAJEDNO + landing/FAQ + SEO (K13).
 - Sto: umetanje w:p/w:pPr/w:sectPr prije odlomka Uvoda (sidro: postojeca detekcija
   checkPageNumberStartAtIntro); panel trazi potvrdu lokacije prije primjene; kombinirano s
   K4+K5 daje kompletno "numeriranje od Uvoda".
