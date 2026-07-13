@@ -583,3 +583,137 @@ export function patchFooterPageAlignment(
   }
   return { ...NO_OP, xml: partXml };
 }
+
+// === TOC polje s dirty flagom (K7, BL-09) ===
+//
+// Student cesto ima naslov "Sadrzaj" i ISPOD njega rucno utipkane stavke (ili zastarjelo/staticno
+// polje). K7 umece ZIVO TOC polje neposredno IZA naslova Sadrzaj; Word ga na otvaranju regenerira
+// (w:dirty). Rucne stavke se NE brisu (fixer samo dodaje polje; preporuka za brisanje ide u
+// changelog i panel). Isti fldChar oblik kao K5 PAGE polje.
+
+// Postoji li VEC zivo TOC polje u dokumentu: fldSimple s TOC instrukcijom, fldChar polje s TOC
+// instrukcijom, ili SDT sadrzaj-kontrola (docPartGallery "Table of Contents"). Koristi ga I
+// analyzeDocx (details.hasTocField, repair-items gate) da se odluka ne razilazi (jedan izvor).
+//
+// Detekcija je usidrena na GRAMATIKU field koda: instrukcija MORA pocinjati s "TOC" (adversarial
+// K7): (a) izbjegava lazni POZITIV kad "toc" stoji unutar argumenta drugog polja (npr. HYPERLINK
+// URL ".../toc"), koji bi tiho suzbio ponudu; (b) fldChar instrukcija se cita iz cijele regije
+// begin..separate/end (bez tagova), pa "TOC" razbijen na vise <w:instrText> runova NIJE lazni
+// NEGATIV koji bi doveo do umetanja DRUGOG (dupliciranog) TOC-a.
+export function documentHasTocField(documentXml: string): boolean {
+  // fldSimple: vrijednost w:instr pocinje s TOC.
+  if (/<w:fldSimple\b[^>]*\sw:instr="\s*TOC\b/i.test(documentXml)) return true;
+  // SDT sadrzaj-kontrola (moderni Word auto-TOC je uvijek ovako omotan).
+  if (/<w:docPartGallery\b[^>]*w:val="Table of Contents"/i.test(documentXml)) return true;
+  // fldChar polje: instrukcija zivi izmedju begin i separate/end i moze biti razbijena na vise
+  // <w:instrText> runova. Skini tagove iz te regije i trazi da instrukcija POCINJE s TOC.
+  const regions = documentXml.match(
+    /<w:fldChar\b[^>]*w:fldCharType="begin"[\s\S]*?<w:fldChar\b[^>]*w:fldCharType="(?:separate|end)"/gi,
+  );
+  if (regions) {
+    for (const r of regions) {
+      const instr = r.replace(/<[^>]+>/g, '').replace(/&[a-zA-Z]+;/g, ' ').trim();
+      if (/^TOC\b/i.test(instr)) return true;
+    }
+  }
+  return false;
+}
+
+// Novo TOC polje kao zaseban odlomak. fldChar (ne fldSimple): rezultat TOC-a je VISEODLOMACNI, pa
+// begin..separate..end (kao K5 PAGE polje) tocno modelira polje ciji rezultat Word regenerira preko
+// vise odlomaka; fldSimple je za jednoodlomacne inline rezultate. w:dirty na begin fldChar -> Word
+// osvjezi polje pri otvaranju. Placeholder tekst se vidi dok se polje ne osvjezi (+ uputa kako).
+export function buildTocFieldXml(): string {
+  return (
+    '<w:p>' +
+    '<w:r><w:fldChar w:fldCharType="begin" w:dirty="true"/></w:r>' +
+    '<w:r><w:instrText xml:space="preserve"> TOC \\o "1-3" \\h \\z \\u </w:instrText></w:r>' +
+    '<w:r><w:fldChar w:fldCharType="separate"/></w:r>' +
+    '<w:r><w:t xml:space="preserve">Sadrzaj se azurira u Wordu: kartica Reference &gt; Azuriraj tablicu (ili desni klik na sadrzaj &gt; Azuriraj polje).</w:t></w:r>' +
+    '<w:r><w:fldChar w:fldCharType="end"/></w:r>' +
+    '</w:p>'
+  );
+}
+
+// Pozicija neposredno IZA </w:p> odlomka koji pocinje na start. Balansirano brojanje <w:p>/</w:p>
+// (podnosi ugnjezdene <w:p> iz tekstualnih okvira: naslov Sadrzaj je jednostavan, ali branimo se).
+// Samozatvarajuci <w:p/> zavrsava odmah. -1 ako se kraj ne nadje (malformiran XML).
+function paragraphEndPosition(xml: string, start: number): number {
+  const selfClose = xml.slice(start).match(/^<w:p\b[^>]*\/>/);
+  if (selfClose) return start + selfClose[0].length;
+  const token = /<w:p(?=[\s/>])[^>]*?(\/?)>|<\/w:p>/g;
+  token.lastIndex = start;
+  let depth = 0;
+  for (let m = token.exec(xml); m; m = token.exec(xml)) {
+    if (m[0] === '</w:p>') {
+      depth -= 1;
+      if (depth === 0) return m.index + m[0].length;
+    } else if (m[1] !== '/') {
+      depth += 1;
+    }
+  }
+  return -1;
+}
+
+// Umetni odlomak newParaXml NEPOSREDNO IZA odlomka na 1-based rednom broju (isti koordinatni sustav
+// kao analyzeDocx: n-ti <w:p> == n-ti els(doc,'w:p')). Maskira komentare/CDATA/PI da <w:p u njima
+// ne pomakne indeks (kao K6). Guard: cilj mora biti na razini tijela (ne u tablici/okviru/kontroli).
+// applied:false kad ordinal<1, ordinal izvan raspona, cilj nije na razini tijela ili se kraj odlomka
+// ne nadje.
+export function insertParagraphAfterParagraph(
+  documentXml: string,
+  paragraphOrdinal: number,
+  newParaXml: string,
+): { xml: string; applied: boolean } {
+  if (paragraphOrdinal < 1) return { xml: documentXml, applied: false };
+  const masked = documentXml.replace(
+    /<!--[\s\S]*?-->|<!\[CDATA\[[\s\S]*?\]\]>|<\?[\s\S]*?\?>/g,
+    (m) => ' '.repeat(m.length),
+  );
+  const starts: number[] = [];
+  const pOpen = /<w:p(?=[\s/>])/g;
+  for (let m = pOpen.exec(masked); m; m = pOpen.exec(masked)) starts.push(m.index);
+  if (paragraphOrdinal > starts.length) return { xml: documentXml, applied: false };
+  const targetStart = starts[paragraphOrdinal - 1];
+  if (!isBodyLevelPosition(masked, targetStart)) return { xml: documentXml, applied: false };
+  const endPos = paragraphEndPosition(masked, targetStart);
+  if (endPos < 0) return { xml: documentXml, applied: false };
+  return { xml: documentXml.slice(0, endPos) + newParaXml + documentXml.slice(endPos), applied: true };
+}
+
+// Pozicija neposredno IZA </w:p> PRVOG odlomka NA RAZINI TIJELA ciji goli tekst zadovoljava
+// matches(). Za razliku od insertParagraphAfterParagraph (koji uzima anal-time redni broj),
+// ovo RE-DERIVIRA sidro iz TRENUTNOG documentXml po tekstu, pa je otporno na promjenu broja
+// odlomaka od RANIJIH fixera u istoj bateriji (adversarial K7: brisanje praznih odlomaka ili
+// umetanje sekcije prije nas pomakne anal-time indeks i TOC bi sletio na krivo mjesto). Vraca
+// -1 ako nema takvog odlomka. Goli tekst = odlomak bez tagova, s dekodiranim osnovnim entitetima
+// (ukljucuje diakritiku iz izvornog XML-a); pozivatelj normalizira (npr. sectionName).
+export function findParagraphEndAfterMatch(
+  documentXml: string,
+  matches: (paragraphText: string) => boolean,
+): number {
+  const masked = documentXml.replace(
+    /<!--[\s\S]*?-->|<!\[CDATA\[[\s\S]*?\]\]>|<\?[\s\S]*?\?>/g,
+    (m) => ' '.repeat(m.length),
+  );
+  const pOpen = /<w:p(?=[\s/>])/g;
+  for (let m = pOpen.exec(masked); m; m = pOpen.exec(masked)) {
+    const start = m.index;
+    if (!isBodyLevelPosition(masked, start)) continue;
+    const endPos = paragraphEndPosition(masked, start);
+    if (endPos < 0) continue;
+    const text = documentXml
+      .slice(start, endPos)
+      .replace(/<[^>]+>/g, '')
+      .replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&apos;/g, "'");
+    if (matches(text)) return endPos;
+    // Preskoci CIJELI ovaj odlomak: bez ovoga bi pOpen uhvatio ugnjezdene <w:p> (tekstualni okvir)
+    // kao zasebne kandidate i dvaput procesirao isto tijelo.
+    pOpen.lastIndex = endPos;
+  }
+  return -1;
+}

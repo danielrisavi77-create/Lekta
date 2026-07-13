@@ -77,6 +77,11 @@ const SYNTHETIC_PARAMS: Record<FixerId, Record<string, unknown>> = {
   // Single-section: primijeni (nema splita) -> 2 sekcije + rimski/arapski + footer + titlePg.
   // Multi-section: NO_OP (odlomak prije Uvoda vec nosi sectPr = prijelom vec postoji).
   'section-insert-fixer': { target: { introParagraphIndex: 2, align: 'center' } },
+  // tocFieldFixer RE-DERIVIRA sidro po tekstu naslova "Sadrzaj" (ne po indeksu). Sinteticki docx
+  // (singleSection/multiSection) NEMAJU naslov Sadrzaj pa je ovdje bit-identican NO_OP; umetanje
+  // TOC polja pokriveno je jedinicno u src/repair/toc-field.test.ts (nad tocManualDocx). Index je
+  // samo gate signal. Prazan/nepostojeci Sadrzaj -> NO_OP je ocekivano i pokriveno.
+  'toc-field-fixer': { target: { sadrzajParagraphIndex: 1 } },
 };
 
 /** Ciljani params po fixeru IZ PROFILA (isti izvor kao zivi repair-items.ts). */

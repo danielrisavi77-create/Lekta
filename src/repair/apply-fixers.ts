@@ -19,9 +19,11 @@ import {
   emptyParagraphFixer,
   footnoteSpacingFixer,
   pageNumberAlignmentFixer,
+  tocFieldFixer,
   type DocxXmlParts,
   type FooterPageTarget,
   type SectionInsertTarget,
+  type TocFieldTarget,
 } from './fixers';
 import type { SectionNumberingTarget } from './xml-patch';
 
@@ -41,6 +43,7 @@ export const FIXER_IDS = [
   'empty-paragraph-fixer',
   'footnote-spacing-fixer',
   'page-number-alignment-fixer',
+  'toc-field-fixer',
 ] as const;
 
 export type FixerId = (typeof FIXER_IDS)[number];
@@ -118,6 +121,12 @@ function runFixer(fixerId: FixerId, parts: DocxXmlParts, params: Record<string, 
     }
     case 'page-number-alignment-fixer':
       return pageNumberAlignmentFixer(parts);
+    case 'toc-field-fixer': {
+      const p = params as { target?: TocFieldTarget };
+      return p.target && typeof p.target.sadrzajParagraphIndex === 'number'
+        ? tocFieldFixer(parts, p.target)
+        : { parts, applied: false, beforeLabel: '', afterLabel: '' };
+    }
     default:
       return { parts, applied: false, beforeLabel: '', afterLabel: '' };
   }

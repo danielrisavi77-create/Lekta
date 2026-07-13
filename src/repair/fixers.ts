@@ -26,9 +26,13 @@ import {
   type SectionNumberingTarget,
   patchFootnoteTextSpacing,
   patchFooterPageAlignment,
+  buildTocFieldXml,
+  documentHasTocField,
+  findParagraphEndAfterMatch,
 } from './xml-patch';
 import { stripDirectFormatting, type RunLevelResult } from './run-level';
 import { stripOrphanedEmptyParagraphs } from './paragraph-cleanup';
+import { sectionName } from '../utils/helpers';
 
 export interface DocxXmlParts {
   documentXml: string;
@@ -593,5 +597,55 @@ export function pageNumberAlignmentFixer(parts: DocxXmlParts): FixerOutput {
     applied: true,
     beforeLabel: `Poravnanje broja stranice: ${ALIGNMENT_LABELS[firstBefore ?? ''] ?? firstBefore}`,
     afterLabel: `Poravnanje broja stranice: desno${countNote}`,
+  };
+}
+
+export interface TocFieldTarget {
+  /** 1-based redni broj odlomka naslova "Sadrzaj" (analyzeDocx details.sadrzajParagraphIndex).
+   *  Sluzi SAMO kao gate signal (repair-items ga daje kad Sadrzaj postoji); stvarnu poziciju
+   *  umetanja fixer RE-DERIVIRA iz trenutnog XML-a (vidi nize). */
+  sadrzajParagraphIndex: number;
+}
+
+// Naslovi koji oznacavaju sadrzaj (ISTI kriterij kao analyzeDocx sadrzajParagraphIndex / tocEntryParagraphs).
+const TOC_HEADING_TERMS = ['sadrzaj', 'contents', 'tableofcontents'];
+
+// TOC polje s dirty flagom (K7, BL-09). Umece ZIVO TOC polje (fldChar, w:dirty) neposredno IZA
+// naslova "Sadrzaj". Rucno utipkane stavke se NE brisu (samo dodajemo polje; preporuka za brisanje
+// je u afterLabel, panel je prikaze u sazetku). NEMA deep varijante.
+//
+// SIDRO SE RE-DERIVIRA iz TRENUTNOG documentXml po tekstu naslova (sectionName), NE iz anal-time
+// indeksa (adversarial K7, HIGH): raniji fixeri u bateriji (empty-paragraph-fixer BRISE odlomke,
+// section-insert-fixer DODAJE odlomak) pomicu broj odlomaka pa bi anal-time indeks umetnuo TOC na
+// krivo mjesto. target.sadrzajParagraphIndex zato sluzi SAMO kao gate (postoji li Sadrzaj po analizi).
+//
+// NO_OP kad: nema sidra po analizi (sadrzajParagraphIndex<1), dokument VEC ima zivo TOC polje
+// (documentHasTocField -> ne dupliciramo, idempotencija), ili se naslov Sadrzaj ne nadje na razini
+// tijela u trenutnom XML-u.
+//
+// POZNATA OGRANICENJA (svjesno deferirano, izlazni gate K7 = rucna Word provjera):
+//  - w:dirty na begin fldChar tjera Word da regenerira TOC pri otvaranju; NE pisemo
+//    <w:updateFields> u word/settings.xml, pa preglednici koji ne osvjezavaju polja na otvaranju
+//    (LibreOffice, Google Docs) prikazu placeholder tekst dok korisnik rucno ne osvjezi. Word (cilj
+//    izlaznog gatea) postuje w:dirty; cross-viewer updateFields je moguca K7 dorada.
+//  - Ako "Sadrzaj" postoji SAMO ugnjezden (tablica/okvir), sidro se ne nadje na razini tijela pa je
+//    NO_OP (analyzeDocx sadrzajParagraphIndex broji i ugnjezdene odlomke pa repair-items ga svejedno
+//    moze ponuditi; ishod je siguran no-op, ne kriva izmjena).
+export function tocFieldFixer(parts: DocxXmlParts, target: TocFieldTarget): FixerOutput {
+  if (!target || typeof target.sadrzajParagraphIndex !== 'number' || target.sadrzajParagraphIndex < 1) {
+    return NO_OP(parts);
+  }
+  // Ne dupliciraj: ako dokument vec ima zivo TOC polje, ne diramo ga. Ovime je fixer idempotentan
+  // (nas vlastiti izlaz ima fldChar TOC polje koje documentHasTocField prepozna).
+  if (documentHasTocField(parts.documentXml)) return NO_OP(parts);
+
+  const pos = findParagraphEndAfterMatch(parts.documentXml, (t) => TOC_HEADING_TERMS.includes(sectionName(t)));
+  if (pos < 0) return NO_OP(parts);
+  const documentXml = parts.documentXml.slice(0, pos) + buildTocFieldXml() + parts.documentXml.slice(pos);
+  return {
+    parts: { ...parts, documentXml },
+    applied: true,
+    beforeLabel: 'Sadržaj: ručno upisane stavke (bez živog TOC polja)',
+    afterLabel: 'Umetnuto automatsko TOC polje (Word ga osvježi pri otvaranju); ručno upisane stavke sadržaja ispod možeš obrisati',
   };
 }

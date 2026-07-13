@@ -322,3 +322,40 @@ export function introSectionItem(result: any, profile: any): RepairableItem[] {
     },
   ];
 }
+
+// GO-LIVE zastavica (K7, BL-09). Umetanje TOC polja je strukturna docx izmjena ciju realnu Word
+// regeneraciju (osvjezava li Word polje na otvaranju, bez "repair" upozorenja) golden NE dokazuje;
+// izlazni gate K7 trazi rucnu provjeru u Wordu. Dok je false, popravak se ne nudi (motor + testovi +
+// golden zeleni, putanja tamna). Vlasnik postavlja na true nakon Word provjere (moze zajedno s K5/K6
+// matricom, jednom Word sesijom). Vidi docs/LEKTA_BUILD_PIPELINE.md K7.
+export const TOC_FIELD_LIVE = false;
+
+/**
+ * Popravak: pretvori rucni "Sadrzaj" u ZIVO TOC polje (K7, BL-09). Nedestruktivno (dodaje polje, NE
+ * brise rucne stavke; fixer to poručuje u afterLabel). Gejtano:
+ *  - profil trazi sadrzaj (requireToc),
+ *  - postoji naslov Sadrzaj (details.sadrzajParagraphIndex != null) = sidro za umetanje,
+ *  - dokument JOS NEMA zivo TOC polje (details.hasTocField !== true) = ne dupliciramo,
+ *  - TOC_FIELD_LIVE zastavica (rucna Word provjera prije objave).
+ * app.ts UVIJEK zove flag-gated tocFieldRepairableItem, ne jezgru tocFieldItem.
+ */
+export function tocFieldRepairableItem(result: any, profile: any): RepairableItem[] {
+  return TOC_FIELD_LIVE ? tocFieldItem(result, profile) : [];
+}
+
+/** Jezgra (neovisna o TOC_FIELD_LIVE), izdvojena da se gating testira bez diranja zastavice. */
+export function tocFieldItem(result: any, profile: any): RepairableItem[] {
+  if (profile?.requireToc !== true) return [];
+  const sadrzajIdx = result?.details?.sadrzajParagraphIndex;
+  if (typeof sadrzajIdx !== 'number' || sadrzajIdx < 1) return [];
+  if (result?.details?.hasTocField === true) return []; // vec ima zivo polje -> ne nudimo (ne dupliciramo)
+  return [
+    {
+      ruleId: 'toc-field-universal',
+      fixerId: 'toc-field-fixer',
+      label: 'Sadržaj: pretvori u živo TOC polje (Word ga sam ažurira)',
+      params: { target: { sadrzajParagraphIndex: sadrzajIdx } },
+      violated: true,
+    },
+  ];
+}

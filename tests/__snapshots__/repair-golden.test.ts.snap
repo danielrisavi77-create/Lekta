@@ -285,6 +285,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "section-insert-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "toc-field-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
   },
   "fer-diplomski-uskladjen.docx": {
     "__kombinirano": {
@@ -569,6 +572,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "section-insert-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "toc-field-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
   },
   "ffzg-filozofija-diplomski.docx": {
     "__kombinirano": {
@@ -797,6 +803,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "params": "nema-cilja-u-profilu",
     },
     "section-insert-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "toc-field-fixer": {
       "params": "nema-cilja-u-profilu",
     },
   },
@@ -1083,6 +1092,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "section-insert-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "toc-field-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
   },
   "mef-doktorski-disertacija.docx": {
     "__kombinirano": {
@@ -1217,6 +1229,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "params": "nema-cilja-u-profilu",
     },
     "section-insert-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "toc-field-fixer": {
       "params": "nema-cilja-u-profilu",
     },
   },
@@ -1421,6 +1436,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "section-insert-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "toc-field-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
   },
   "pmf-matematika-zasticeni-odlomci.docx": {
     "__kombinirano": {
@@ -1623,6 +1641,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "section-insert-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "toc-field-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
   },
   "synthetic-multi-section": {
     "__kombinirano": {
@@ -1725,6 +1746,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "section-insert-fixer-rule",
         "footnote-spacing-fixer-rule",
         "page-number-alignment-fixer-rule",
+        "toc-field-fixer-rule",
       ],
     },
     "alignment-fixer": {
@@ -2547,6 +2569,20 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "section-insert-fixer-rule",
       ],
     },
+    "toc-field-fixer": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "target": {
+          "sadrzajParagraphIndex": 1,
+        },
+      },
+      "skipped": [
+        "toc-field-fixer-rule",
+      ],
+    },
   },
   "synthetic-single-section": {
     "__kombinirano": {
@@ -2626,6 +2662,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "section-insert-fixer-rule",
         "footnote-spacing-fixer-rule",
         "page-number-alignment-fixer-rule",
+        "toc-field-fixer-rule",
       ],
     },
     "alignment-fixer": {
@@ -3302,6 +3339,20 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [],
     },
+    "toc-field-fixer": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "target": {
+          "sadrzajParagraphIndex": 1,
+        },
+      },
+      "skipped": [
+        "toc-field-fixer-rule",
+      ],
+    },
   },
   "ttf-diplomski-arial.docx": {
     "__kombinirano": {
@@ -3570,6 +3621,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "params": "nema-cilja-u-profilu",
     },
     "section-insert-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "toc-field-fixer": {
       "params": "nema-cilja-u-profilu",
     },
   },
