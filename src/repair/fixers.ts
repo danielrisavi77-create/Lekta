@@ -23,6 +23,7 @@ import {
   FOOTER_REL_TYPE,
   type SectionNumberingTarget,
   patchFootnoteTextSpacing,
+  patchFooterPageAlignment,
 } from './xml-patch';
 import { stripDirectFormatting, type RunLevelResult } from './run-level';
 import { stripOrphanedEmptyParagraphs } from './paragraph-cleanup';
@@ -45,6 +46,11 @@ export interface DocxXmlParts {
    * izostati). Postojeci fixeri ga ne diraju, samo ga transparentno prenose kroz
    * spread {...parts, ...}. */
   footnotesXml?: string;
+  /** Sve postojece word/footerN.xml i word/headerN.xml datoteke iz zipa, kljucane
+   *  punim imenom zip entryja. Popunjava apply-fixers.ts (isti regex kao PAGE
+   *  detekcija u analyze-docx.ts). Za razliku od footer-page-fixer (K5) koji DODAJE
+   *  nove partove, ovo su POSTOJECI partovi koje fixer smije UREDITI. */
+  footerHeaderParts?: Record<string, string>;
 }
 
 export interface FixerOutput {
@@ -468,5 +474,36 @@ export function emptyParagraphFixer(parts: DocxXmlParts): FixerOutput {
     applied: true,
     beforeLabel: `Prazni odlomci: ${odlomakLabel(totalBefore)}`,
     afterLabel: `svedeno na ${odlomakLabel(result.runsCollapsed)}, uklonjeno ${result.paragraphsRemoved}`,
+  };
+}
+
+// Poravnanje broja stranice: postojeci footer/header partovi cije PAGE polje NIJE
+// poravnato desno (analyzeDocx pageNumberAlignment check). BEZ deep moda: nema
+// "direktni override u tijelu koji nadjaca stil" koncepta za footer/header poravnanje,
+// cilj je jedini direktni zapis unutar samog footer/header parta. Prolazi kroz SVE
+// postojece footerHeaderParts (deterministicki sort() zbog stabilnog golden snapshota),
+// popravlja svaki koji ima krivo poravnano PAGE polje; namjerno siri opseg od audita
+// (koji gleda samo sectPr-referencirane mete) jer popravljanje nereferenciranog
+// ("orphan") footera je bezopasno, vidi CLAUDE.md/plan zabiljesku.
+export function pageNumberAlignmentFixer(parts: DocxXmlParts): FixerOutput {
+  const partsMap = parts.footerHeaderParts ?? {};
+  const names = Object.keys(partsMap).sort();
+  const updated: Record<string, string> = {};
+  let firstBefore: string | null = null;
+  let touchedCount = 0;
+  for (const name of names) {
+    const result = patchFooterPageAlignment(partsMap[name], 'right');
+    if (!result.applied) continue;
+    touchedCount += 1;
+    if (firstBefore == null) firstBefore = result.before['w:val'] ?? null;
+    updated[name] = result.xml;
+  }
+  if (touchedCount === 0) return NO_OP(parts);
+  const countNote = touchedCount > 1 ? ` (${touchedCount} podnožja/zaglavlja)` : '';
+  return {
+    parts: { ...parts, footerHeaderParts: { ...partsMap, ...updated } },
+    applied: true,
+    beforeLabel: `Poravnanje broja stranice: ${ALIGNMENT_LABELS[firstBefore ?? ''] ?? firstBefore}`,
+    afterLabel: `Poravnanje broja stranice: desno${countNote}`,
   };
 }

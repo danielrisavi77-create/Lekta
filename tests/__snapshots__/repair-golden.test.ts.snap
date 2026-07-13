@@ -217,6 +217,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [],
     },
+    "page-number-alignment-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "page-numbering-fixer": {
       "params": "nema-cilja-u-profilu",
     },
@@ -491,6 +494,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [],
     },
+    "page-number-alignment-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "page-numbering-fixer": {
       "params": "nema-cilja-u-profilu",
     },
@@ -761,6 +767,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [],
     },
+    "page-number-alignment-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "page-numbering-fixer": {
       "params": "nema-cilja-u-profilu",
     },
@@ -986,6 +995,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [],
     },
+    "page-number-alignment-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "page-numbering-fixer": {
       "params": "nema-cilja-u-profilu",
     },
@@ -1112,6 +1124,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "params": "nema-cilja-u-profilu",
     },
     "margins-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "page-number-alignment-fixer": {
       "params": "nema-cilja-u-profilu",
     },
     "page-numbering-fixer": {
@@ -1307,6 +1322,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "margins-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "page-number-alignment-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "page-numbering-fixer": {
       "params": "nema-cilja-u-profilu",
     },
@@ -1500,6 +1518,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "margins-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "page-number-alignment-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "page-numbering-fixer": {
       "params": "nema-cilja-u-profilu",
     },
@@ -1656,6 +1677,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [
         "paper-size-fixer-rule",
         "footnote-spacing-fixer-rule",
+        "page-number-alignment-fixer-rule",
       ],
     },
     "alignment-fixer": {
@@ -2211,6 +2233,16 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [],
     },
+    "page-number-alignment-fixer": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {},
+      "skipped": [
+        "page-number-alignment-fixer-rule",
+      ],
+    },
     "page-numbering-fixer": {
       "applied": true,
       "changelog": [
@@ -2507,6 +2539,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "paper-size-fixer-rule",
         "page-numbering-fixer-rule",
         "footnote-spacing-fixer-rule",
+        "page-number-alignment-fixer-rule",
       ],
     },
     "alignment-fixer": {
@@ -2958,6 +2991,16 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [],
     },
+    "page-number-alignment-fixer": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {},
+      "skipped": [
+        "page-number-alignment-fixer-rule",
+      ],
+    },
     "page-numbering-fixer": {
       "applied": false,
       "changelog": [],
@@ -3333,6 +3376,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "top": 2.5,
       },
       "skipped": [],
+    },
+    "page-number-alignment-fixer": {
+      "params": "nema-cilja-u-profilu",
     },
     "page-numbering-fixer": {
       "params": "nema-cilja-u-profilu",

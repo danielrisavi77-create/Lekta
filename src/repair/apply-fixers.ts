@@ -17,6 +17,7 @@ import {
   footerPageFixer,
   emptyParagraphFixer,
   footnoteSpacingFixer,
+  pageNumberAlignmentFixer,
   type DocxXmlParts,
   type FooterPageTarget,
 } from './fixers';
@@ -36,6 +37,7 @@ export const FIXER_IDS = [
   'footer-page-fixer',
   'empty-paragraph-fixer',
   'footnote-spacing-fixer',
+  'page-number-alignment-fixer',
 ] as const;
 
 export type FixerId = (typeof FIXER_IDS)[number];
@@ -67,6 +69,9 @@ const DOCUMENT_RELS_PATH = 'word/_rels/document.xml.rels';
 // Backstop protiv fixera koji bi (greskom) pokusao ubaciti bilo sto izvan te maske.
 const ENGINE_ADDABLE_PART = /^word\/footer\d+\.xml$/;
 const FOOTNOTES_XML_PATH = 'word/footnotes.xml';
+// Isti regex kao PAGE-part enumeracija u analyze-docx.ts (linija ~47): svi POSTOJECI
+// footer/header partovi, ne samo footeri koje K5 smije dodati (ENGINE_ADDABLE_PART).
+const FOOTER_HEADER_PART_RE = /^word\/(footer|header)\d+\.xml$/i;
 
 function runFixer(fixerId: FixerId, parts: DocxXmlParts, params: Record<string, unknown>) {
   switch (fixerId) {
@@ -102,6 +107,8 @@ function runFixer(fixerId: FixerId, parts: DocxXmlParts, params: Record<string, 
       const p = params as { deep?: boolean };
       return footnoteSpacingFixer(parts, p.deep === true);
     }
+    case 'page-number-alignment-fixer':
+      return pageNumberAlignmentFixer(parts);
     default:
       return { parts, applied: false, beforeLabel: '', afterLabel: '' };
   }
@@ -120,6 +127,7 @@ export async function applyFixers(
   const contentTypesEntry = entries.find((e) => e.name === CONTENT_TYPES_PATH);
   const documentRelsEntry = entries.find((e) => e.name === DOCUMENT_RELS_PATH);
   const footnotesEntry = entries.find((e) => e.name === FOOTNOTES_XML_PATH);
+  const footerHeaderEntries = entries.filter((e) => FOOTER_HEADER_PART_RE.test(e.name));
 
   if (!documentEntry) {
     throw new Error(`apply-fixers: nedostaje ${DOCUMENT_XML_PATH} u docx-u, nije valjan Word dokument`);
@@ -135,6 +143,9 @@ export async function applyFixers(
     // orphan word/footerN.xml koji je u zipu ali ne u content-typesu (adversarial K5 nalaz).
     existingParts: entries.map((e) => e.name),
     footnotesXml: footnotesEntry ? decoder.decode(footnotesEntry.data) : undefined,
+    footerHeaderParts: Object.fromEntries(
+      footerHeaderEntries.map((e) => [e.name, decoder.decode(e.data)]),
+    ),
   };
   // Zapamti pocetne stringove: dio se re-enkodira SAMO ako ga je neki fixer
   // stvarno promijenio. TextDecoder je non-fatal (nevaljani UTF-8 -> U+FFFD),
@@ -144,6 +155,7 @@ export async function applyFixers(
   const originalContentTypes = parts.contentTypesXml;
   const originalDocumentRels = parts.documentRelsXml;
   const originalFootnotesXml = parts.footnotesXml;
+  const originalFooterHeaderParts = { ...parts.footerHeaderParts };
 
   const changelog: ChangelogEntry[] = [];
   const skipped: string[] = [];
@@ -190,6 +202,13 @@ export async function applyFixers(
     }
     if (entry.name === FOOTNOTES_XML_PATH && footnotesEntry && parts.footnotesXml !== originalFootnotesXml) {
       return { name: entry.name, data: encoder.encode(parts.footnotesXml) };
+    }
+    if (
+      FOOTER_HEADER_PART_RE.test(entry.name) &&
+      parts.footerHeaderParts?.[entry.name] !== undefined &&
+      parts.footerHeaderParts[entry.name] !== originalFooterHeaderParts[entry.name]
+    ) {
+      return { name: entry.name, data: encoder.encode(parts.footerHeaderParts[entry.name]) };
     }
     return entry; // netaknuto, isti podatak
   });

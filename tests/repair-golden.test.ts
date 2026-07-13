@@ -69,6 +69,10 @@ const SYNTHETIC_PARAMS: Record<FixerId, Record<string, unknown>> = {
   // nad word/footnotes.xml; sinteticki dokumenti nemaju fusnote pa footnoteSpacingFixer ovdje
   // uvijek zavrsi kao no-op (parts.footnotesXml je undefined), sto je ocekivano i pokriveno.
   'footnote-spacing-fixer': {},
+  // pageNumberAlignmentFixer ne uzima ciljane vrijednosti (uvijek gadja desno), a sinteticki
+  // dokumenti nemaju footer/header partove pa uvijek zavrsi kao no-op (parts.footerHeaderParts
+  // je prazna mapa), sto je ocekivano i pokriveno (isti obrazac kao footnote-spacing-fixer).
+  'page-number-alignment-fixer': {},
 };
 
 /** Ciljani params po fixeru IZ PROFILA (isti izvor kao zivi repair-items.ts). */
@@ -99,6 +103,12 @@ function paramsForFixer(fixerId: FixerId, profile: unknown): Record<string, unkn
       // ciljana profilna vrijednost (cilj je uvijek fiksno 0/0 u FootnoteText stilu).
       return (profile as { checkFootnoteParagraphSpacingZero?: boolean } | null)
         ?.checkFootnoteParagraphSpacingZero === true
+        ? {}
+        : null;
+    case 'page-number-alignment-fixer':
+      // Isto gate kao pageNumberAlignmentRepairableItem u src/ui/repair-items.ts: zastavica,
+      // ne ciljana profilna vrijednost (cilj je uvijek fiksno desno poravnanje).
+      return (profile as { pageNumberAlignment?: boolean } | null)?.pageNumberAlignment === true
         ? {}
         : null;
     default:

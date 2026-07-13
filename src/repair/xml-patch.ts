@@ -446,3 +446,39 @@ export function addFooterReferenceToSection(
   if (!applied) return { ...NO_OP, xml: documentXml };
   return { xml: ensureRelationshipsNamespace(patched), applied: true, before: {}, after: {}, found: {} };
 }
+
+// === Poravnanje broja stranice u postojecem footeru/headeru (word/footerN.xml,
+// word/headerN.xml) ===
+//
+// Za razliku od gornjih footer primitiva (K5, koji DODAJU novi footer part), ovo
+// UREDUJE vec postojeci part. Odlomak s PAGE poljem se trazi istim kriterijem kao
+// analyzeDocx (PRVI <w:p> ciji tekst sadrzi "PAGE", case-insensitive), pa fixer i
+// audit nikad ne mogu gledati razlicit odlomak. Ista SELF_CLOSING_SRC/PAIRED_SRC
+// alternacija kao paragraph-cleanup.ts/run-level.ts (ne naivni /<w:p>[\s\S]*?<\/w:p>/g,
+// koji moze "progutati" sljedeci pravi odlomak kad mu prethodi samozatvarajuci <w:p/>).
+
+const FOOTER_SELF_CLOSING_SRC = String.raw`<w:p(?:\s[^>]*)?/>`;
+const FOOTER_PAIRED_SRC = String.raw`<w:p(?:\s[^>]*[^/>])?>[\s\S]*?</w:p>`;
+const FOOTER_PARAGRAPH_RE = new RegExp(`${FOOTER_SELF_CLOSING_SRC}|${FOOTER_PAIRED_SRC}`, 'g');
+
+export function patchFooterPageAlignment(
+  partXml: string,
+  align: 'left' | 'center' | 'right' = 'right',
+): PatchResult {
+  FOOTER_PARAGRAPH_RE.lastIndex = 0;
+  let match: RegExpExecArray | null;
+  while ((match = FOOTER_PARAGRAPH_RE.exec(partXml))) {
+    const block = match[0];
+    if (!/\bPAGE\b/i.test(block)) continue;
+    const result = patchTagAttributes(block, /<w:jc\b[^>]*\/?>/, { 'w:val': align });
+    if (!result.applied) return { ...NO_OP, xml: partXml, found: result.found };
+    return {
+      xml: partXml.slice(0, match.index) + result.xml + partXml.slice(match.index + block.length),
+      applied: true,
+      before: result.before,
+      after: result.after,
+      found: result.found,
+    };
+  }
+  return { ...NO_OP, xml: partXml };
+}

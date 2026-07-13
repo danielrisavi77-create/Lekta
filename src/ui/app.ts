@@ -28,7 +28,7 @@ import { INSTITUTIONAL_COVERAGE_MATRIX, COVERAGE_STATUS_META } from '../coverage
 import { FPZG_SUBMISSION_CALENDAR as _FPZG_CAL, ACADEMIC_DEADLINES } from '../submission/submission-loader';
 import { renderDeadlineReminderToggleIfAvailable } from './deadline-reminder-toggle';
 import { renderRepairPanel } from './repair-panel';
-import { buildRepairableItems, universalRepairableItems, paragraphSpacingRepairableItem, pageNumberingRepairableItem, footnoteSpacingRepairableItem } from './repair-items';
+import { buildRepairableItems, universalRepairableItems, paragraphSpacingRepairableItem, pageNumberingRepairableItem, footnoteSpacingRepairableItem, pageNumberAlignmentRepairableItem } from './repair-items';
 import './repair-panel.css';
 import '../preflight/preflight-panel.css';
 const FPZG_SUBMISSION_CALENDAR: any = _FPZG_CAL;
@@ -709,14 +709,14 @@ function renderRepairSection(r: any){
  const entries=repairEntriesFor(defId);
  if(paywallGateActive()){
   // Teaser: samo prekrseno (Opcija A); "uskladi sve" + dubinsko ciscenje je placeni dio (Feature B).
-  const items=[...buildRepairableItems(r.checks||[],analyzedProfile,entries),...universalRepairableItems(r.issues||[]).filter((i: any)=>i.violated),...paragraphSpacingRepairableItem(r.checks||[],analyzedProfile).filter((i: any)=>i.violated),...pageNumberingRepairableItem(r,analyzedProfile).filter((i: any)=>i.violated),...footnoteSpacingRepairableItem(r.checks||[],analyzedProfile).filter((i: any)=>i.violated)];
+  const items=[...buildRepairableItems(r.checks||[],analyzedProfile,entries),...universalRepairableItems(r.issues||[]).filter((i: any)=>i.violated),...paragraphSpacingRepairableItem(r.checks||[],analyzedProfile).filter((i: any)=>i.violated),...pageNumberingRepairableItem(r,analyzedProfile).filter((i: any)=>i.violated),...footnoteSpacingRepairableItem(r.checks||[],analyzedProfile).filter((i: any)=>i.violated),...pageNumberAlignmentRepairableItem(r.checks||[],analyzedProfile).filter((i: any)=>i.violated)];
   if(!items.length) return;
   mount.innerHTML=`<div class="lekta-repair-panel"><p><strong>Ovo možemo popraviti umjesto tebe:</strong> ${items.map((i: any)=>escapeHtml(i.label)).join(', ')}.</p></div>`+paywallLockHtml('Automatski popravak s dubinskim usklađivanjem cijelog dokumenta i preuzimanje ispravljene datoteke');
   wireLockCtas(); return; // teaser je bez stanja: re-render na svakom toggleu je bezopasan
  }
  // Placeno (fullReport) ili soft-launch: Feature B, nudi i neprekrsene dimenzije
  // ("uskladi cijeli dokument") uz v2 dubinsko ciscenje izravnog formatiranja.
- const items=[...buildRepairableItems(r.checks||[],analyzedProfile,entries,{includeNonViolated:true}),...universalRepairableItems(r.issues||[]),...paragraphSpacingRepairableItem(r.checks||[],analyzedProfile),...pageNumberingRepairableItem(r,analyzedProfile),...footnoteSpacingRepairableItem(r.checks||[],analyzedProfile)];
+ const items=[...buildRepairableItems(r.checks||[],analyzedProfile,entries,{includeNonViolated:true}),...universalRepairableItems(r.issues||[]),...paragraphSpacingRepairableItem(r.checks||[],analyzedProfile),...pageNumberingRepairableItem(r,analyzedProfile),...footnoteSpacingRepairableItem(r.checks||[],analyzedProfile),...pageNumberAlignmentRepairableItem(r.checks||[],analyzedProfile)];
  if(!items.length) return;
  if(!selectedDocx){mount.innerHTML=`<div class="lekta-repair-panel"><p>Za automatski popravak ponovno učitaj .docx datoteku (dokument više nije u memoriji).</p></div>`;return}
  const file=selectedDocx;

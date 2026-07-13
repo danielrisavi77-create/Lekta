@@ -28,6 +28,7 @@ const CHECK_TITLE: Record<string, string> = {
   'page-number-start': 'Numeriranje od prve stranice Uvoda',
   'page-number-scheme': 'Shema numeriranja stranica',
   'footnote-spacing': 'Razmak prije i poslije fusnota',
+  'page-number-alignment': 'Položaj broja stranice',
 };
 // paper-size ima dinamican naslov ('Format stranice A4' / 'Format stranice (A4/A3)') -> prefiks.
 const PAPER_SIZE_PREFIX = 'Format stranice';
@@ -231,6 +232,25 @@ export function footnoteSpacingRepairableItem(checks: AnalyzedCheck[], profile: 
       label: 'Razmak prije i poslije fusnota',
       params: {},
       violated: isViolated('footnote-spacing', checks),
+    },
+  ];
+}
+
+/**
+ * Univerzalni popravak poravnanja broja stranice: isti obrazac kao
+ * footnoteSpacingRepairableItem, gated na profile.pageNumberAlignment (analyzeDocx
+ * samo tada dodaje check 'Položaj broja stranice', vidi src/analysis/analyze-docx.ts).
+ * Nije vezan za ruleEntry.
+ */
+export function pageNumberAlignmentRepairableItem(checks: AnalyzedCheck[], profile: any): RepairableItem[] {
+  if (profile?.pageNumberAlignment !== true) return [];
+  return [
+    {
+      ruleId: 'page-number-alignment-universal',
+      fixerId: 'page-number-alignment-fixer',
+      label: 'Položaj broja stranice',
+      params: {},
+      violated: isViolated('page-number-alignment', checks),
     },
   ];
 }
