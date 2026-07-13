@@ -69,7 +69,7 @@ TRACK D (odluke i podaci):     D1, D2 (prije K8), D3 (u K0), D4 (prije K11 imeno
   ("dodajemo postupno").
 
 ### K2. Golden repair harness (BL-08) : GATE ZA SVE FIXERE
-- Trajanje: 2-3 dana. Status: CEKA
+- Trajanje: 2-3 dana. Status: GOTOVO 2026-07-13
 - Sto: nova suite tests/repair-golden.test.ts; za svaku realnu fixturu pokrenuti svih 5
   fixera + deep varijante i snapshotirati changelog + kljucna XML svojstva izlaza (sectPr,
   docDefaults, Normal); dodati 1-2 nove fixture s viselijecnim sekcijama (trebaju K4-K6).
@@ -77,6 +77,18 @@ TRACK D (odluke i podaci):     D1, D2 (prije K8), D3 (u K0), D4 (prije K11 imeno
 - Ulazni gate: K1. Izlazni gate: suite pada na bilo kakvu promjenu ponasanja postojecih
   fixera; postupak snimanja novog baselinea dokumentiran u testu; check zelen.
 - Rizik: nizak; cisto aditivno.
+- IZVJESTAJ: harness snima matricu 8 dokumenata (6 realnih fixtura + 2 sinteticka) x 5
+  fixera x {shallow, deep, kombinirano}; po slucaju: params (izvedeni iz profila istim
+  paramsForCheck kao zivi repair-items, ili fiksni za sintetiku), applied, changelog
+  labeli, skipped, noOpBitIdentican i XML markeri izlaza (docDefaults, Normal, SVE sectPr
+  sekcije s pgSz/pgMar/pgNumType, brojaci izravnog formatiranja). Dvije nove fixture su
+  DETERMINISTICKI sinteticki .docx u izvoru (tests/helpers/synthetic-docx.ts,
+  single/multi-section, bez pgNumType, s deep backstopima) umjesto neprozirnog binarnog
+  fixtura, reusabilne za K4-K6. Tvrdi asserti uz snapshot: bit-identican no-op i
+  idempotencija (ponovna primjena = no-op) na sintetici. Baseline: 28 stvarnih primjena,
+  14 no-op, pgNumType null u svima (ciljno stanje K4). Gate: npm run check zelen (1639
+  testova); postojeci docx-golden i synthetic-golden snapshoti NETAKNUTI. Snimanje novog
+  baselinea: npm test -- -u.
 
 ### K3. Repair re-check petlja: score prije -> poslije (BL-04)
 - Trajanje: 3-4 dana. Status: CEKA

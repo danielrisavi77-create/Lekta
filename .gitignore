@@ -11,6 +11,11 @@ __pycache__/
 # Cache harvest citata (doi.org/CSL) - transient, ne commitati
 .harvest-cache/
 .playwright-mcp/
+# Generator demo videa: izvor (scene.html + skripte + fonts) se commita, izlazi ne
+scripts/demo-video/frames/
+scripts/demo-video/demo.webm
+scripts/demo-video/demo.mp4
+scripts/demo-video/*.png
 # Claude Code lokalni skillovi/agenti (ui-ux-pro-max bundle ~3MB); frontend-design skill se commita zasebno po zelji
 .claude/skills/ui-ux-pro-max/
 .claude/skills/banner-design/

@@ -179,6 +179,12 @@ export default defineConfig(({ command }) => {
   return {
     plugins: [htmlCharsetUtf8(), citationTools(), stripRuntimeDeadProvenance(devTools), stripDevOnlyHtml(devTools), assertSafeBuild(devTools)],
     define: { __DEV_TOOLS__: JSON.stringify(devTools) },
+    // Dev watcher po defaultu gleda sve osim node_modules/.git. U repou zive git worktreei
+    // (.claude/worktrees/*/) s vlastitim izgradenim dist/ stablima (tisuce citatnih HTML-ova);
+    // watchanje svega toga iscrpi file handleove na Windowsu i rusi `npm run dev` (EMFILE).
+    // Iskljuci .claude i vlastiti dist iz watchera; serviranje dist/ (citationTools) ne ovisi
+    // o watcheru, a njegov targetirani watcher.add za citation-spec ostaje nepromijenjen.
+    server: { watch: { ignored: ['**/.claude/**', '**/dist/**'] } },
     // NAPOMENA (audit performance-05, ODBIJENO nakon mjerenja): `json.stringify:true` bi veliki JSON
     // emitirao kao `JSON.parse('...')` (brzi V8 parse), ALI Vite ASCII-escapea sav ne-ASCII u \uXXXX.
     // Ovaj korpus je gusto hrvatski (c, c, z, s, d): mjereno 20.402 \u escapea, glavni chunk naraste

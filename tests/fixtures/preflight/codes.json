@@ -1,0 +1,62 @@
+{
+  "pipeline_version": "0.1.0",
+  "codes": {
+    "m1_metadata": [
+      "META_IDENTITY",
+      "META_TOTALTIME_ZERO",
+      "META_TOTALTIME_LOW",
+      "META_SINGLE_SESSION",
+      "OK_META"
+    ],
+    "m1_rsid": [
+      "RSID_ABSENT",
+      "RSID_FEW_SESSIONS",
+      "RSID_LOW_SESSIONS",
+      "RSID_SINGLE_PASTE",
+      "OK_RSID"
+    ],
+    "m1_content": [
+      "LANG_FOREIGN_DOMINANT",
+      "LANG_MIXED",
+      "HIDDEN_VANISH",
+      "HIDDEN_WHITE",
+      "HIDDEN_TINY",
+      "EVASION_ZERO_WIDTH",
+      "EVASION_HOMOGLYPH",
+      "CHAR_SOFT_HYPHEN",
+      "CHAR_CYRILLIC",
+      "OK_CONTENT"
+    ],
+    "m1_styles": [
+      "TRACKED_CHANGES",
+      "COMMENTS_PRESENT",
+      "FONT_POLLUTION",
+      "STYLE_POLLUTION",
+      "OK_STYLES"
+    ],
+    "m2_citations": [
+      "BIBLIO_MISSING",
+      "STYLE_AUTHOR_YEAR",
+      "CITE_PHANTOM",
+      "CITE_ORPHAN",
+      "OK_CITATIONS",
+      "CITE_STATS",
+      "QUOTES_QUEUE",
+      "NUMERIC_QUEUE"
+    ],
+    "m2_references": [
+      "REF_NO_ENTRIES",
+      "REF_NOT_FOUND",
+      "REF_DOI_INVALID",
+      "REF_LIKELY",
+      "REF_UNCHECKED",
+      "REF_SUMMARY",
+      "OK_REFERENCES"
+    ],
+    "m3_websim": [
+      "WEB_VERBATIM_HIT",
+      "WEB_QUERY_PLAN",
+      "OK_WEB"
+    ]
+  }
+}
