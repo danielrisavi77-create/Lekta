@@ -12,6 +12,14 @@ from lib import hash_file, write_jsonl  # noqa: E402
 
 EXTENSIONS = {".pdf", ".docx"}
 SKIP_PARTS = {".git", "node_modules", "dist", "artifacts", "training-pipeline"}
+SKIP_PREFIXES = (("data", "sources"), ("tests", "fixtures"))
+
+
+def is_skipped(relative_path: Path) -> bool:
+    parts = relative_path.parts
+    return any(part in SKIP_PARTS for part in parts) or any(
+        parts[: len(prefix)] == prefix for prefix in SKIP_PREFIXES
+    )
 
 
 def discover(roots: list[Path], limit: int, max_documents: int | None = None):
@@ -23,7 +31,7 @@ def discover(roots: list[Path], limit: int, max_documents: int | None = None):
         for path in sorted(root.rglob("*")):
             if not path.is_file() or path.suffix.lower() not in EXTENSIONS:
                 continue
-            if any(part in SKIP_PARTS for part in path.relative_to(root).parts):
+            if is_skipped(path.relative_to(root)):
                 continue
             size = path.stat().st_size
             if size > limit:
@@ -51,8 +59,8 @@ def main() -> None:
     parser.add_argument("--max-file-size-mb", type=int, default=50)
     parser.add_argument("--max-documents", type=int)
     args = parser.parse_args()
-    if args.max_documents is not None and not 1 <= args.max_documents <= 10:
-        parser.error("--max-documents must be between 1 and 10")
+    if args.max_documents is not None and not 1 <= args.max_documents <= 50:
+        parser.error("--max-documents must be between 1 and 50")
     count = write_jsonl(
         args.out,
         discover(args.roots, args.max_file_size_mb * 1024 * 1024, args.max_documents),

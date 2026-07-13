@@ -25,10 +25,10 @@ on:
         type: boolean
         default: false
       max_documents:
-        description: Hard build cap (1-10); inventory always scans all documents
+        description: Hard build cap (1-50); inventory always scans all documents
         required: true
         type: choice
-        options: ['1', '5', '10']
+        options: ['1', '5', '10', '25', '50']
         default: '10'
 
 permissions:
@@ -81,6 +81,7 @@ jobs:
           python training-pipeline/scripts/render_summary.py \
             --input "$RUNNER_TEMP/lekta-output/sanitized/summary.json" \
             --output "$RUNNER_TEMP/lekta-summary.md"
+          cat "$RUNNER_TEMP/lekta-summary.md"
           cat "$RUNNER_TEMP/lekta-summary.md" >> "$GITHUB_STEP_SUMMARY"
       - name: Upload sanitized artifact
         if: ${{ inputs.upload_sanitized_artifact }}

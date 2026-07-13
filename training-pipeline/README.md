@@ -20,6 +20,10 @@ skupa primjera grešaka.
 Pipeline ne proglašava studentske radove izvorom fakultetskih pravila i ne trenira
 model automatski na neprovjerenim primjerima.
 
+`data/sources/**` i `tests/fixtures/**` uvijek su isključeni iz training corpusa.
+Prvi sadrži službene izvore pravila, a drugi sintetičke i regresijske testne
+dokumente. Nijedna od tih skupina nije zamjena za rights-odobrene akademske radove.
+
 ## Prvo lokalno pokretanje
 
 ```bash
@@ -64,8 +68,9 @@ python training-pipeline/run_pipeline.py \
   --convert-pdf
 ```
 
-Build ima tvrdi limit od najviše 10 dokumenata po pokretanju. Inventory uvijek
-obuhvaća sve pronađene dokumente, ali ne izvlači njihov sadržaj prije potvrde prava.
+Build ima tvrdi limit od najviše 50 dokumenata po pokretanju. Za prvo prošireno
+probno pokretanje koristi 25 dokumenata. Inventory uvijek obuhvaća sve pronađene
+dokumente, ali ne izvlači njihov sadržaj prije potvrde prava.
 
 PDF u DOCX konverzija služi kao radni ulaz parseru. Izvorni PDF ostaje mjerodavan za
 vizualni raspored jer konverzija može promijeniti prijelome, fusnote i tablice.
