@@ -47,19 +47,36 @@ def pdf_to_docx(path: Path, output_dir: Path, document_id: str) -> Path | None:
 def records(input_path: Path, docx_dir: Path, convert_pdf: bool):
     for record in read_jsonl(input_path):
         path = Path(record["_localPath"])
+        is_pdf = path.suffix.lower() == ".pdf"
         try:
-            extracted = pdf_text(path) if path.suffix.lower() == ".pdf" else docx_text(path)
+            extracted = pdf_text(path) if is_pdf else docx_text(path)
             record["extractedText"] = extracted
-            record["extractionStatus"] = "ok" if extracted.strip() else "ocr_required"
-            if path.suffix.lower() == ".docx":
-                record["_analysisDocxPath"] = str(path)
-            elif convert_pdf and extracted.strip():
-                converted = pdf_to_docx(path, docx_dir, record["id"])
-                if converted:
-                    record["_analysisDocxPath"] = str(converted)
+            record["extractionStatus"] = "ocr_required" if is_pdf and not extracted.strip() else "ok"
         except Exception as exc:
             record["extractionStatus"] = "error"
             record["extractionError"] = type(exc).__name__
+            record["analysisStatus"] = "extraction_error"
+            yield record
+            continue
+
+        if not is_pdf:
+            record["_analysisDocxPath"] = str(path)
+            record["analysisStatus"] = "ready"
+        elif not extracted.strip():
+            record["analysisStatus"] = "ocr_required"
+        elif not convert_pdf:
+            record["analysisStatus"] = "conversion_not_requested"
+        else:
+            try:
+                converted = pdf_to_docx(path, docx_dir, record["id"])
+                if converted:
+                    record["_analysisDocxPath"] = str(converted)
+                    record["analysisStatus"] = "ready"
+                else:
+                    record["analysisStatus"] = "conversion_failed"
+            except Exception as exc:
+                record["analysisStatus"] = "conversion_error"
+                record["conversionError"] = type(exc).__name__
         yield record
 
 
