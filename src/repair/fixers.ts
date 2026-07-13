@@ -12,6 +12,8 @@ import {
   patchDefaultSpacing,
   patchDefaultParagraphSpacing,
   patchDefaultAlignment,
+  patchSectionPageNumbering,
+  type SectionNumberingTarget,
 } from './xml-patch';
 import { stripDirectFormatting, type RunLevelResult } from './run-level';
 import { stripOrphanedEmptyParagraphs } from './paragraph-cleanup';
@@ -289,6 +291,23 @@ export function paragraphSpacingFixer(parts: DocxXmlParts, deep = false): FixerO
       ? stripDirectFormatting(parts.documentXml, { stripParagraphSpacing: true })
       : null;
   return combineDeep(base, parts, deepResult);
+}
+
+// Numeriranje stranica po sekcijama: rimski na prednjim listovima, arapski od Uvoda
+// (start=1). Radi ISKLJUCIVO nad postojecim sekcijama (BL-06 korak a); ciljeve (koje su
+// sekcije rimske, koja je prva glavna) racuna repair-items iz granice Uvoda, pa je fixer
+// cisti XML transform. Nema deep varijante (pgNumType nije izravno formatiranje u tijelu).
+export function pageNumberingFixer(parts: DocxXmlParts, targets: SectionNumberingTarget[]): FixerOutput {
+  const result = patchSectionPageNumbering(parts.documentXml, targets);
+  if (!result.applied) return NO_OP(parts);
+  const roman = targets.filter((t) => /roman/i.test(t.fmt)).length;
+  const decimal = targets.filter((t) => t.fmt === 'decimal').length;
+  return {
+    parts: { ...parts, documentXml: result.xml },
+    applied: true,
+    beforeLabel: 'Numeriranje stranica po sekcijama nije postavljeno',
+    afterLabel: `Rimski na prednjim (${roman}), arapski od Uvoda (${decimal}), prva stranica = 1`,
+  };
 }
 
 // Hrvatska deklinacija broja odlomaka (1 odlomak, 2-4 odlomka, 5+ odlomaka; 11-14 iznimka).

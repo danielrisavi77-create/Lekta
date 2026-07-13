@@ -199,6 +199,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [],
     },
+    "page-numbering-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "paper-size-fixer": {
       "applied": true,
       "changelog": [
@@ -448,6 +451,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [],
     },
+    "page-numbering-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "paper-size-fixer": {
       "applied": true,
       "changelog": [
@@ -693,6 +699,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [],
     },
+    "page-numbering-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "paper-size-fixer": {
       "params": "nema-cilja-u-profilu",
     },
@@ -897,6 +906,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [],
     },
+    "page-numbering-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "paper-size-fixer": {
       "applied": true,
       "changelog": [
@@ -1006,6 +1018,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "params": "nema-cilja-u-profilu",
     },
     "margins-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "page-numbering-fixer": {
       "params": "nema-cilja-u-profilu",
     },
     "paper-size-fixer": {
@@ -1180,6 +1195,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "margins-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "page-numbering-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "paper-size-fixer": {
       "applied": true,
       "changelog": [
@@ -1352,6 +1370,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "margins-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "page-numbering-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "paper-size-fixer": {
       "applied": true,
       "changelog": [
@@ -1406,7 +1427,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
   },
   "synthetic-multi-section": {
     "__kombinirano": {
-      "applied": 5,
+      "applied": 6,
       "changelog": [
         {
           "after": "Margine: gornja 3,00 cm, desna 3,00 cm, donja 3,00 cm, lijeva 3,00 cm",
@@ -1427,6 +1448,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         {
           "after": "Razmak prije/poslije: 0 pt / 0 pt",
           "before": "Razmak prije/poslije: 0 pt / 8 pt",
+        },
+        {
+          "after": "Rimski na prednjim (1), arapski od Uvoda (1), prva stranica = 1",
+          "before": "Numeriranje stranica po sekcijama nije postavljeno",
         },
       ],
       "markers": {
@@ -1454,7 +1479,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "right": "1701",
               "top": "1701",
             },
-            "pgNumType": null,
+            "pgNumType": {
+              "fmt": "lowerRoman",
+              "start": "1",
+            },
             "pgSz": {
               "h": "16838",
               "w": "11906",
@@ -1467,7 +1495,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
               "right": "1701",
               "top": "1701",
             },
-            "pgNumType": null,
+            "pgNumType": {
+              "fmt": "decimal",
+              "start": "1",
+            },
             "pgSz": {
               "h": "16838",
               "w": "11906",
@@ -1907,6 +1938,83 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "left": 3,
         "right": 3,
         "top": 3,
+      },
+      "skipped": [],
+    },
+    "page-numbering-fixer": {
+      "applied": true,
+      "changelog": [
+        {
+          "after": "Rimski na prednjim (1), arapski od Uvoda (1), prva stranica = 1",
+          "before": "Numeriranje stranica po sekcijama nije postavljeno",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 1,
+          "directLine": 1,
+          "runFonts": 1,
+          "runSz": 1,
+        },
+        "docDefaults": {
+          "ascii": "Calibri",
+          "hAnsi": "Calibri",
+          "sz": "22",
+        },
+        "normal": {
+          "jc": "left",
+          "line": "259",
+          "lineRule": "auto",
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1417",
+              "right": "1134",
+              "top": "1417",
+            },
+            "pgNumType": {
+              "fmt": "lowerRoman",
+              "start": "1",
+            },
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+          },
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1417",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": {
+              "fmt": "decimal",
+              "start": "1",
+            },
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+          },
+        ],
+      },
+      "noOpBitIdentican": false,
+      "params": {
+        "targets": [
+          {
+            "fmt": "lowerRoman",
+            "sectionIndex": 0,
+            "start": 1,
+          },
+          {
+            "fmt": "decimal",
+            "sectionIndex": 1,
+            "start": 1,
+          },
+        ],
       },
       "skipped": [],
     },
@@ -2102,6 +2210,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [
         "paper-size-fixer-rule",
+        "page-numbering-fixer-rule",
       ],
     },
     "alignment-fixer": {
@@ -2443,6 +2552,18 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "top": 3,
       },
       "skipped": [],
+    },
+    "page-numbering-fixer": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "targets": [],
+      },
+      "skipped": [
+        "page-numbering-fixer-rule",
+      ],
     },
     "paper-size-fixer": {
       "applied": false,
@@ -2777,6 +2898,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "top": 2.5,
       },
       "skipped": [],
+    },
+    "page-numbering-fixer": {
+      "params": "nema-cilja-u-profilu",
     },
     "paper-size-fixer": {
       "params": "nema-cilja-u-profilu",

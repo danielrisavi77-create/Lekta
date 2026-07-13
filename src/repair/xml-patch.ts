@@ -214,3 +214,96 @@ export function patchDefaultAlignment(stylesXml: string, val: string): PatchResu
   const newXml = stylesXml.slice(0, found.start) + result.xml + stylesXml.slice(found.end);
   return { xml: newXml, applied: true, before: result.before, after: result.after, found: result.found };
 }
+
+// === Numeriranje stranica po sekcijama (documentXml, w:pgNumType u w:sectPr) ===
+//
+// Za razliku od patchMargins/patchPaperSize koji UNIFORMNO krpaju atribute istog
+// taga preko SVIH sekcija, numeriranje je PER-SEKCIJA s RAZLICITIM vrijednostima
+// (rimski na prednjim listovima, arapski od Uvoda) i cesto ga treba UMETNUTI
+// (student rijetko ima eksplicitan w:pgNumType). Zato ovdje enumeriramo sectPr
+// blokove u dokument-poretku i primjenjujemo ciljanu vrijednost samo na trazeni indeks.
+
+export interface SectionNumberingTarget {
+  /** Redni broj sekcije u dokument-poretku (isti kao els(doc,'w:sectPr') u analyzeDocx). */
+  sectionIndex: number;
+  /** w:fmt: 'lowerRoman'/'upperRoman' (prednji dio) ili 'decimal' (glavni tekst od Uvoda). */
+  fmt: 'lowerRoman' | 'upperRoman' | 'decimal';
+  /** w:start; kad je zadan postavlja se (npr. 1 na prvoj prednjoj i prvoj glavnoj sekciji),
+   *  kad je undefined numeriranje se NASTAVLJA (postojeci w:start se ne dira). */
+  start?: number;
+}
+
+// Postavi (ili umetni ako fali) imenovani atribut u OTVARAJUCEM tagu, cuvajuci
+// self-closing oblik. Vraca nepromijenjen tag ako je vrijednost vec ista.
+function setTagAttribute(tag: string, attr: string, value: string): string {
+  const escaped = escapeXmlAttr(value);
+  const attrRegex = new RegExp(`(${escapeRegex(attr)}=")([^"]*)(")`);
+  if (attrRegex.test(tag)) {
+    return tag.replace(attrRegex, (m, p1: string, old: string, p3: string) => (old === escaped ? m : p1 + escaped + p3));
+  }
+  const inject = ` ${attr}="${escaped}"`;
+  return tag.endsWith('/>') ? tag.slice(0, -2).trimEnd() + inject + '/>' : tag.slice(0, -1).trimEnd() + inject + '>';
+}
+
+// Umetni pgNumType na CT_SectPr poziciju (ISO 29500): pgNumType neposredno prethodi
+// <w:cols>, a dolazi iza pgSz/pgMar. Redoslijed pokusaja: tik prije <w:cols> (najsigurnije
+// sidro, hvata i pgBorders/lnNumType koji su prije cols), inace iza <w:pgMar>, iza <w:pgSz>,
+// inace odmah iza otvarajuceg taga. Self-closing sectPr se pretvara u kontejner.
+function insertIntoSectPr(sectPrBlock: string, insertTag: string): string {
+  if (/^<w:sectPr\b[^>]*\/>$/.test(sectPrBlock)) {
+    return sectPrBlock.replace(/\/>$/, `>${insertTag}</w:sectPr>`);
+  }
+  // pgNumType neposredno prethodi <w:cols> u CT_SectPr, pa je umetanje TIK prije cols
+  // ispravno bez obzira na pgBorders/lnNumType (koji su takodjer prije cols).
+  const cols = sectPrBlock.match(/<w:cols\b[^>]*\/?>/);
+  if (cols) return sectPrBlock.replace(cols[0], insertTag + cols[0]);
+  // Bez cols: umetni IZA posljednjeg prisutnog elementa koji po CT_SectPr redoslijedu dolazi
+  // PRIJE pgNumType (najblizi prvi: lnNumType, pgBorders, paperSrc, pgMar, pgSz, type), da
+  // pgNumType ne zavrsi ispred pgBorders/lnNumType kad oni postoje (schema-nevaljan poredak).
+  for (const name of ['w:lnNumType', 'w:pgBorders', 'w:paperSrc', 'w:pgMar', 'w:pgSz', 'w:type']) {
+    const m = sectPrBlock.match(new RegExp(`<${name}\\b[^>]*?(?:\\/>|>[\\s\\S]*?<\\/${name}>)`));
+    if (m) return sectPrBlock.replace(m[0], m[0] + insertTag);
+  }
+  const open = sectPrBlock.match(/^<w:sectPr\b[^>]*>/);
+  if (open) return sectPrBlock.replace(open[0], open[0] + insertTag);
+  return sectPrBlock; // teoretski nedostizno (regex je vec potvrdio sectPr oblik)
+}
+
+function applyPageNumberingToSection(sectPrBlock: string, target: SectionNumberingTarget): string {
+  const existing = sectPrBlock.match(/<w:pgNumType\b[^>]*\/?>/);
+  if (existing) {
+    let tag = setTagAttribute(existing[0], 'w:fmt', target.fmt);
+    if (target.start !== undefined) tag = setTagAttribute(tag, 'w:start', String(target.start));
+    return tag === existing[0] ? sectPrBlock : sectPrBlock.replace(existing[0], tag);
+  }
+  const startAttr = target.start !== undefined ? ` w:start="${escapeXmlAttr(String(target.start))}"` : '';
+  const tag = `<w:pgNumType w:fmt="${escapeXmlAttr(target.fmt)}"${startAttr}/>`;
+  return insertIntoSectPr(sectPrBlock, tag);
+}
+
+export function patchSectionPageNumbering(documentXml: string, targets: SectionNumberingTarget[]): PatchResult {
+  if (!targets.length) return { ...NO_OP, xml: documentXml };
+  // Sigurnosni izlaz: praceni sectPrChange ugnjezduje <w:sectPr> u <w:sectPr>, sto bi
+  // razbilo poredak enumeracije (lazy zatvarajuci tag). Radije bit-identican no-op nego
+  // pogresno mapiranje sekcija; takvi radovi su rijetki (nezavrsene track-changes verzije).
+  if (/<w:sectPrChange\b/.test(documentXml)) return { ...NO_OP, xml: documentXml };
+
+  const byIndex = new Map(targets.map((t) => [t.sectionIndex, t]));
+  let sectionIdx = -1;
+  let changed = false;
+
+  // Enumerira sve sekcije u dokument-poretku, i container (<w:sectPr>...</w:sectPr>) i
+  // self-closing (<w:sectPr .../>) oblik, da se indeksi poklope s els(doc,'w:sectPr').
+  const sectPrPattern = /<w:sectPr\b[^>]*?(?:\/>|>[\s\S]*?<\/w:sectPr>)/g;
+  const newXml = documentXml.replace(sectPrPattern, (block) => {
+    sectionIdx += 1;
+    const target = byIndex.get(sectionIdx);
+    if (!target) return block;
+    const patched = applyPageNumberingToSection(block, target);
+    if (patched !== block) changed = true;
+    return patched;
+  });
+
+  if (!changed) return { ...NO_OP, xml: documentXml };
+  return { xml: newXml, applied: true, before: {}, after: {}, found: {} };
+}
