@@ -13,9 +13,11 @@ import {
   lineSpacingFixer,
   alignmentFixer,
   paragraphSpacingFixer,
+  pageNumberingFixer,
   emptyParagraphFixer,
   type DocxXmlParts,
 } from './fixers';
+import type { SectionNumberingTarget } from './xml-patch';
 
 /** Poznati fixeri kao runtime konstanta: profile-validator provjerava clanstvo
  * fixerId-a iz podataka u ovom popisu (tipfeler u draftu = strukturna greska,
@@ -27,6 +29,7 @@ export const FIXER_IDS = [
   'line-spacing-fixer',
   'alignment-fixer',
   'paragraph-spacing-fixer',
+  'page-numbering-fixer',
   'empty-paragraph-fixer',
 ] as const;
 
@@ -73,6 +76,10 @@ function runFixer(fixerId: FixerId, parts: DocxXmlParts, params: Record<string, 
     case 'paragraph-spacing-fixer': {
       const p = params as { deep?: boolean };
       return paragraphSpacingFixer(parts, p.deep === true);
+    }
+    case 'page-numbering-fixer': {
+      const p = params as { targets?: SectionNumberingTarget[] };
+      return pageNumberingFixer(parts, Array.isArray(p.targets) ? p.targets : []);
     }
     case 'empty-paragraph-fixer':
       return emptyParagraphFixer(parts);

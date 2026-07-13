@@ -55,6 +55,12 @@ const SYNTHETIC_PARAMS: Record<FixerId, Record<string, unknown>> = {
   // "param" opcionalni deep flag koji withDeep() dodaje; prazan objekt ovdje samo osigurava
   // da FixerRequest.params nikad nije undefined (runFixer cita p.deep bez null-guarda).
   'paragraph-spacing-fixer': {},
+  // pageNumberingFixer uzima targets ovisne O DOKUMENTU (koje su sekcije rimske, koja prva
+  // glavna), pa fiksni map ne moze posluziti oba sinteticka dokumenta. Prazni targets =
+  // bit-identican no-op (jedini smislen fiksni default; idempotencijski test nad
+  // single-section dokumentom ga zato preskace). buildCases per-dokument override daje prave
+  // targete multi-section dokumentu.
+  'page-numbering-fixer': { targets: [] },
 };
 
 /** Ciljani params po fixeru IZ PROFILA (isti izvor kao zivi repair-items.ts). */
@@ -199,8 +205,24 @@ async function buildCases(): Promise<Case[]> {
     const bytes = new Uint8Array(readFileSync(join(FIXTURE_DIR, fileName)));
     cases.push({ name: fileName, bytes, paramsFor: (id) => paramsForFixer(id, profile) });
   }
-  cases.push({ name: 'synthetic-single-section', bytes: await singleSectionDocx(), paramsFor: (id) => SYNTHETIC_PARAMS[id] });
-  cases.push({ name: 'synthetic-multi-section', bytes: await multiSectionDocx(), paramsFor: (id) => SYNTHETIC_PARAMS[id] });
+  // Multi-section: naslovnica (sekcija 0) -> rimski start=1, tijelo od Uvoda (sekcija 1) ->
+  // arapski start=1. Isti targeti koje bi sectionNumberingTargets izracunao iz granice Uvoda.
+  const multiTargets = [
+    { sectionIndex: 0, fmt: 'lowerRoman', start: 1 },
+    { sectionIndex: 1, fmt: 'decimal', start: 1 },
+  ];
+  cases.push({
+    name: 'synthetic-single-section',
+    bytes: await singleSectionDocx(),
+    // Jedna sekcija = nema front/main split -> prazni targeti -> bit-identican no-op (kao ziva
+    // putanja gdje sectionNumberingTargets vrati detectable:false pa se popravak ne nudi).
+    paramsFor: (id) => (id === 'page-numbering-fixer' ? { targets: [] } : SYNTHETIC_PARAMS[id]),
+  });
+  cases.push({
+    name: 'synthetic-multi-section',
+    bytes: await multiSectionDocx(),
+    paramsFor: (id) => (id === 'page-numbering-fixer' ? { targets: multiTargets } : SYNTHETIC_PARAMS[id]),
+  });
   return cases;
 }
 
