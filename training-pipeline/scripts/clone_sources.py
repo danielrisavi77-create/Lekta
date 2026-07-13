@@ -6,12 +6,28 @@ import argparse
 import json
 import os
 import subprocess
+import sys
 from pathlib import Path
 
 from training_pipeline_bootstrap import add_pipeline_to_path
 
 add_pipeline_to_path()
 from lib import ALLOWED_RIGHTS  # noqa: E402
+
+
+def repository_size(repository: str, env: dict[str, str]) -> int:
+    result = subprocess.run(
+        ["gh", "api", f"repos/{repository}", "--jq", ".size"],
+        env=env,
+        text=True,
+        capture_output=True,
+    )
+    if result.returncode:
+        raise SystemExit(f"Could not inspect {repository}. Connect the repo or check LEKTA_REPOS_TOKEN access.")
+    try:
+        return int(result.stdout.strip())
+    except ValueError as exc:
+        raise SystemExit(f"GitHub returned invalid repository metadata for {repository}.") from exc
 
 
 def main() -> None:
@@ -36,9 +52,14 @@ def main() -> None:
     if token:
         env["GH_TOKEN"] = token
     roots = []
+    skipped = []
     for source in selected:
         repository = source["repository"]
         branch = source.get("branch") or "main"
+        if repository_size(repository, env) == 0:
+            skipped.append({"repository": repository, "reason": "empty"})
+            print(f"Skipping empty repository: {repository}", file=sys.stderr)
+            continue
         destination = args.out / repository.replace("/", "__")
         if destination.exists():
             roots.append(str(destination))
@@ -46,9 +67,11 @@ def main() -> None:
         command = ["gh", "repo", "clone", repository, str(destination), "--", "--depth", "1", "--branch", branch]
         result = subprocess.run(command, env=env, text=True, capture_output=True)
         if result.returncode:
-            raise SystemExit(f"Could not clone {repository}. Connect the repo or set LEKTA_REPOS_TOKEN.")
+            raise SystemExit(f"Could not clone {repository} branch {branch}. Check repository access and configuration.")
         roots.append(str(destination))
-    print(json.dumps({"mode": args.mode, "roots": roots}, ensure_ascii=False))
+    if not roots:
+        raise SystemExit("No non-empty repositories are available for this mode.")
+    print(json.dumps({"mode": args.mode, "roots": roots, "skipped": skipped}, ensure_ascii=False))
 
 
 if __name__ == "__main__":

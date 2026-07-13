@@ -6,6 +6,8 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
+from unittest.mock import patch
 
 PIPELINE = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PIPELINE / "scripts"))
@@ -21,6 +23,7 @@ def load(name: str, path: Path):
 
 lib = load("pipeline_lib", PIPELINE / "lib.py")
 discover_documents = load("discover_documents", PIPELINE / "scripts" / "discover_documents.py")
+clone_sources = load("clone_sources", PIPELINE / "scripts" / "clone_sources.py")
 
 
 class PipelineTests(unittest.TestCase):
@@ -49,6 +52,29 @@ class PipelineTests(unittest.TestCase):
                 (root / name).write_bytes(name.encode())
             records = list(discover_documents.discover([root], 1024, max_documents=2))
             self.assertEqual([record["relativePath"] for record in records], ["a.docx", "b.pdf"])
+
+    def test_empty_repository_metadata_is_detected_without_cloning(self):
+        with patch.object(
+            clone_sources.subprocess,
+            "run",
+            return_value=SimpleNamespace(returncode=0, stdout="0\n"),
+        ) as run:
+            self.assertEqual(clone_sources.repository_size("owner/empty", {}), 0)
+            run.assert_called_once_with(
+                ["gh", "api", "repos/owner/empty", "--jq", ".size"],
+                env={},
+                text=True,
+                capture_output=True,
+            )
+
+    def test_repository_metadata_failure_stays_fatal(self):
+        with patch.object(
+            clone_sources.subprocess,
+            "run",
+            return_value=SimpleNamespace(returncode=1, stdout=""),
+        ):
+            with self.assertRaisesRegex(SystemExit, "Could not inspect owner/private"):
+                clone_sources.repository_size("owner/private", {})
 
 
 if __name__ == "__main__":
