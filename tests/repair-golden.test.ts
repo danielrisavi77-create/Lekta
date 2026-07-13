@@ -61,6 +61,9 @@ const SYNTHETIC_PARAMS: Record<FixerId, Record<string, unknown>> = {
   // single-section dokumentom ga zato preskace). buildCases per-dokument override daje prave
   // targete multi-section dokumentu.
   'page-numbering-fixer': { targets: [] },
+  // footerPageFixer umece podnozje u ciljanu sekciju. Default sekcija 0 (single-section
+  // dokument); buildCases per-dokument override cilja glavnu sekciju multi-section dokumenta.
+  'footer-page-fixer': { target: { sectionIndex: 0, align: 'right' } },
 };
 
 /** Ciljani params po fixeru IZ PROFILA (isti izvor kao zivi repair-items.ts). */
@@ -155,6 +158,17 @@ function directFormattingCounts(documentXml: string) {
   };
 }
 
+/** K5 footer flow: koje word/footerN.xml partove izlaz ima (+ imaju li PAGE polje) i koliko je
+ *  footerReference oznaka u document.xml. Prazno {parts:[],footerRefs:0} za sve fixere osim footera. */
+function footerMarkers(entries: { name: string; data: Uint8Array }[], documentXml: string) {
+  const dec = new TextDecoder();
+  const parts = entries
+    .filter((e) => /^word\/footer\d+\.xml$/.test(e.name))
+    .map((e) => ({ name: e.name, hasPage: /\bPAGE\b/.test(dec.decode(e.data)) }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+  return { parts, footerRefs: (documentXml.match(/<w:footerReference\b/g) ?? []).length };
+}
+
 async function extractMarkers(bytes: Uint8Array) {
   const entries = await readZip(bytes);
   const dec = new TextDecoder();
@@ -167,6 +181,7 @@ async function extractMarkers(bytes: Uint8Array) {
     normal: normalStyleMarkers(stylesXml),
     sectPr: sectPrMarkers(documentXml),
     directFormatting: directFormattingCounts(documentXml),
+    footer: footerMarkers(entries, documentXml),
   };
 }
 
@@ -221,7 +236,13 @@ async function buildCases(): Promise<Case[]> {
   cases.push({
     name: 'synthetic-multi-section',
     bytes: await multiSectionDocx(),
-    paramsFor: (id) => (id === 'page-numbering-fixer' ? { targets: multiTargets } : SYNTHETIC_PARAMS[id]),
+    // Footer u GLAVNU sekciju (index 1, od Uvoda); naslovnica (sekcija 0) ostaje bez broja.
+    paramsFor: (id) =>
+      id === 'page-numbering-fixer'
+        ? { targets: multiTargets }
+        : id === 'footer-page-fixer'
+          ? { target: { sectionIndex: 1, align: 'right' } }
+          : SYNTHETIC_PARAMS[id],
   });
   return cases;
 }

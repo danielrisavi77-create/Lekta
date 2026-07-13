@@ -14,8 +14,10 @@ import {
   alignmentFixer,
   paragraphSpacingFixer,
   pageNumberingFixer,
+  footerPageFixer,
   emptyParagraphFixer,
   type DocxXmlParts,
+  type FooterPageTarget,
 } from './fixers';
 import type { SectionNumberingTarget } from './xml-patch';
 
@@ -30,6 +32,7 @@ export const FIXER_IDS = [
   'alignment-fixer',
   'paragraph-spacing-fixer',
   'page-numbering-fixer',
+  'footer-page-fixer',
   'empty-paragraph-fixer',
 ] as const;
 
@@ -56,6 +59,11 @@ export interface ApplyFixersResult {
 
 const DOCUMENT_XML_PATH = 'word/document.xml';
 const STYLES_XML_PATH = 'word/styles.xml';
+const CONTENT_TYPES_PATH = '[Content_Types].xml';
+const DOCUMENT_RELS_PATH = 'word/_rels/document.xml.rels';
+// Engine POLITIKA (K5): jedini novi partovi koje engine smije DODATI su word/footerN.xml.
+// Backstop protiv fixera koji bi (greskom) pokusao ubaciti bilo sto izvan te maske.
+const ENGINE_ADDABLE_PART = /^word\/footer\d+\.xml$/;
 
 function runFixer(fixerId: FixerId, parts: DocxXmlParts, params: Record<string, unknown>) {
   switch (fixerId) {
@@ -81,6 +89,10 @@ function runFixer(fixerId: FixerId, parts: DocxXmlParts, params: Record<string, 
       const p = params as { targets?: SectionNumberingTarget[] };
       return pageNumberingFixer(parts, Array.isArray(p.targets) ? p.targets : []);
     }
+    case 'footer-page-fixer': {
+      const p = params as { target?: FooterPageTarget };
+      return p.target ? footerPageFixer(parts, p.target) : { parts, applied: false, beforeLabel: '', afterLabel: '' };
+    }
     case 'empty-paragraph-fixer':
       return emptyParagraphFixer(parts);
     default:
@@ -98,6 +110,8 @@ export async function applyFixers(
 
   const documentEntry = entries.find((e) => e.name === DOCUMENT_XML_PATH);
   const stylesEntry = entries.find((e) => e.name === STYLES_XML_PATH);
+  const contentTypesEntry = entries.find((e) => e.name === CONTENT_TYPES_PATH);
+  const documentRelsEntry = entries.find((e) => e.name === DOCUMENT_RELS_PATH);
 
   if (!documentEntry) {
     throw new Error(`apply-fixers: nedostaje ${DOCUMENT_XML_PATH} u docx-u, nije valjan Word dokument`);
@@ -106,12 +120,20 @@ export async function applyFixers(
   let parts: DocxXmlParts = {
     documentXml: decoder.decode(documentEntry.data),
     stylesXml: stylesEntry ? decoder.decode(stylesEntry.data) : '',
+    contentTypesXml: contentTypesEntry ? decoder.decode(contentTypesEntry.data) : '',
+    documentRelsXml: documentRelsEntry ? decoder.decode(documentRelsEntry.data) : '',
+    addedParts: [],
+    // Sva postojeca imena partova: footer imenovanje ih mora vidjeti da ne kolidira s
+    // orphan word/footerN.xml koji je u zipu ali ne u content-typesu (adversarial K5 nalaz).
+    existingParts: entries.map((e) => e.name),
   };
   // Zapamti pocetne stringove: dio se re-enkodira SAMO ako ga je neki fixer
   // stvarno promijenio. TextDecoder je non-fatal (nevaljani UTF-8 -> U+FFFD),
   // pa bi bezuvjetni decode+encode tiho prepisao bajtove i netaknutog dijela.
   const originalDocumentXml = parts.documentXml;
   const originalStylesXml = parts.stylesXml;
+  const originalContentTypes = parts.contentTypesXml;
+  const originalDocumentRels = parts.documentRelsXml;
 
   const changelog: ChangelogEntry[] = [];
   const skipped: string[] = [];
@@ -150,8 +172,24 @@ export async function applyFixers(
     if (entry.name === STYLES_XML_PATH && stylesEntry && parts.stylesXml !== originalStylesXml) {
       return { name: entry.name, data: encoder.encode(parts.stylesXml) };
     }
+    if (entry.name === CONTENT_TYPES_PATH && contentTypesEntry && (parts.contentTypesXml ?? '') !== originalContentTypes) {
+      return { name: entry.name, data: encoder.encode(parts.contentTypesXml ?? '') };
+    }
+    if (entry.name === DOCUMENT_RELS_PATH && documentRelsEntry && (parts.documentRelsXml ?? '') !== originalDocumentRels) {
+      return { name: entry.name, data: encoder.encode(parts.documentRelsXml ?? '') };
+    }
     return entry; // netaknuto, isti podatak
   });
+
+  // Novi partovi (K5 footer flow): SAMO iz allow-liste (word/footerN.xml) i SAMO imena koja
+  // jos ne postoje u zipu (ne prepisujemo postojeci part). Ostalo se tiho odbacuje (backstop
+  // protiv fixera koji bi pokusao dodati part izvan politike enginea).
+  const existingNames = new Set(entries.map((e) => e.name));
+  for (const p of parts.addedParts ?? []) {
+    if (!ENGINE_ADDABLE_PART.test(p.name) || existingNames.has(p.name)) continue;
+    existingNames.add(p.name);
+    newEntries.push({ name: p.name, data: encoder.encode(p.content) });
+  }
 
   const newDocxBytes = await writeZip(newEntries);
 

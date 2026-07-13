@@ -31,6 +31,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "hAnsi": "Times New Roman",
           "sz": "24",
         },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
         "normal": {
           "jc": null,
           "line": null,
@@ -95,6 +99,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "hAnsi": "Times New Roman",
           "sz": "24",
         },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
         "normal": {
           "jc": null,
           "line": null,
@@ -123,6 +131,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "fontSizePt": 12,
       },
       "skipped": [],
+    },
+    "footer-page-fixer": {
+      "params": "nema-cilja-u-profilu",
     },
     "line-spacing-fixer": {
       "applied": false,
@@ -168,6 +179,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "ascii": "Times New Roman",
           "hAnsi": "Times New Roman",
           "sz": "24",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
         },
         "normal": {
           "jc": null,
@@ -221,6 +236,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "ascii": "Times New Roman",
           "hAnsi": "Times New Roman",
           "sz": "24",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
         },
         "normal": {
           "jc": null,
@@ -283,6 +302,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "hAnsi": "Times New Roman",
           "sz": "24",
         },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
         "normal": {
           "jc": null,
           "line": null,
@@ -347,6 +370,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "hAnsi": "Times New Roman",
           "sz": "24",
         },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
         "normal": {
           "jc": null,
           "line": null,
@@ -375,6 +402,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "fontSizePt": 12,
       },
       "skipped": [],
+    },
+    "footer-page-fixer": {
+      "params": "nema-cilja-u-profilu",
     },
     "line-spacing-fixer": {
       "applied": false,
@@ -420,6 +450,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "ascii": "Times New Roman",
           "hAnsi": "Times New Roman",
           "sz": "24",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
         },
         "normal": {
           "jc": null,
@@ -473,6 +507,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "ascii": "Times New Roman",
           "hAnsi": "Times New Roman",
           "sz": "24",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
         },
         "normal": {
           "jc": null,
@@ -530,6 +568,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "ascii": "Times New Roman",
           "hAnsi": "Times New Roman",
           "sz": "24",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
         },
         "normal": {
           "jc": null,
@@ -595,6 +637,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "hAnsi": "Times New Roman",
           "sz": "24",
         },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
         "normal": {
           "jc": null,
           "line": null,
@@ -623,6 +669,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "fontSizePt": 12,
       },
       "skipped": [],
+    },
+    "footer-page-fixer": {
+      "params": "nema-cilja-u-profilu",
     },
     "line-spacing-fixer": {
       "applied": false,
@@ -668,6 +717,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "ascii": "Times New Roman",
           "hAnsi": "Times New Roman",
           "sz": "24",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
         },
         "normal": {
           "jc": null,
@@ -738,6 +791,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "hAnsi": "Times New Roman",
           "sz": "24",
         },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
         "normal": {
           "jc": null,
           "line": null,
@@ -802,6 +859,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "hAnsi": "Times New Roman",
           "sz": "24",
         },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
         "normal": {
           "jc": null,
           "line": null,
@@ -830,6 +891,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "fontSizePt": 12,
       },
       "skipped": [],
+    },
+    "footer-page-fixer": {
+      "params": "nema-cilja-u-profilu",
     },
     "line-spacing-fixer": {
       "applied": false,
@@ -875,6 +939,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "ascii": "Times New Roman",
           "hAnsi": "Times New Roman",
           "sz": "24",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
         },
         "normal": {
           "jc": null,
@@ -929,6 +997,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "hAnsi": "Times New Roman",
           "sz": "24",
         },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
         "normal": {
           "jc": null,
           "line": null,
@@ -982,6 +1054,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "hAnsi": "Times New Roman",
           "sz": "24",
         },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
         "normal": {
           "jc": null,
           "line": null,
@@ -1014,6 +1090,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "font-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "footer-page-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "line-spacing-fixer": {
       "params": "nema-cilja-u-profilu",
     },
@@ -1042,6 +1121,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "ascii": "Times New Roman",
           "hAnsi": "Times New Roman",
           "sz": "24",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
         },
         "normal": {
           "jc": null,
@@ -1100,6 +1183,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "hAnsi": "Times New Roman",
           "sz": "24",
         },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
         "normal": {
           "jc": null,
           "line": null,
@@ -1161,6 +1248,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "hAnsi": "Times New Roman",
           "sz": "24",
         },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
         "normal": {
           "jc": null,
           "line": null,
@@ -1188,6 +1279,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "fontSizePt": 12,
       },
       "skipped": [],
+    },
+    "footer-page-fixer": {
+      "params": "nema-cilja-u-profilu",
     },
     "line-spacing-fixer": {
       "params": "nema-cilja-u-profilu",
@@ -1217,6 +1311,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "ascii": "Times New Roman",
           "hAnsi": "Times New Roman",
           "sz": "24",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
         },
         "normal": {
           "jc": null,
@@ -1275,6 +1373,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "hAnsi": "Times New Roman",
           "sz": "24",
         },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
         "normal": {
           "jc": null,
           "line": null,
@@ -1336,6 +1438,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "hAnsi": "Times New Roman",
           "sz": "24",
         },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
         "normal": {
           "jc": null,
           "line": null,
@@ -1363,6 +1469,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "fontSizePt": 12,
       },
       "skipped": [],
+    },
+    "footer-page-fixer": {
+      "params": "nema-cilja-u-profilu",
     },
     "line-spacing-fixer": {
       "params": "nema-cilja-u-profilu",
@@ -1392,6 +1501,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "ascii": "Times New Roman",
           "hAnsi": "Times New Roman",
           "sz": "24",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
         },
         "normal": {
           "jc": null,
@@ -1427,7 +1540,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
   },
   "synthetic-multi-section": {
     "__kombinirano": {
-      "applied": 6,
+      "applied": 7,
       "changelog": [
         {
           "after": "Margine: gornja 3,00 cm, desna 3,00 cm, donja 3,00 cm, lijeva 3,00 cm",
@@ -1453,6 +1566,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "after": "Rimski na prednjim (1), arapski od Uvoda (1), prva stranica = 1",
           "before": "Numeriranje stranica po sekcijama nije postavljeno",
         },
+        {
+          "after": "Umetnuto podnozje s automatskim brojem stranice (desno)",
+          "before": "Podnozje s brojem stranice: nije postavljeno",
+        },
       ],
       "markers": {
         "directFormatting": {
@@ -1465,6 +1582,15 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "ascii": "Times New Roman",
           "hAnsi": "Times New Roman",
           "sz": "24",
+        },
+        "footer": {
+          "footerRefs": 1,
+          "parts": [
+            {
+              "hasPage": true,
+              "name": "word/footer1.xml",
+            },
+          ],
         },
         "normal": {
           "jc": "both",
@@ -1530,6 +1656,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "hAnsi": "Calibri",
           "sz": "22",
         },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
         "normal": {
           "jc": "both",
           "line": "259",
@@ -1589,6 +1719,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "ascii": "Calibri",
           "hAnsi": "Calibri",
           "sz": "22",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
         },
         "normal": {
           "jc": "both",
@@ -1654,6 +1788,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "hAnsi": "Times New Roman",
           "sz": "24",
         },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
         "normal": {
           "jc": "left",
           "line": "259",
@@ -1715,6 +1853,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "hAnsi": "Times New Roman",
           "sz": "24",
         },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
         "normal": {
           "jc": "left",
           "line": "259",
@@ -1757,6 +1899,78 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [],
     },
+    "footer-page-fixer": {
+      "applied": true,
+      "changelog": [
+        {
+          "after": "Umetnuto podnozje s automatskim brojem stranice (desno)",
+          "before": "Podnozje s brojem stranice: nije postavljeno",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 1,
+          "directLine": 1,
+          "runFonts": 1,
+          "runSz": 1,
+        },
+        "docDefaults": {
+          "ascii": "Calibri",
+          "hAnsi": "Calibri",
+          "sz": "22",
+        },
+        "footer": {
+          "footerRefs": 1,
+          "parts": [
+            {
+              "hasPage": true,
+              "name": "word/footer1.xml",
+            },
+          ],
+        },
+        "normal": {
+          "jc": "left",
+          "line": "259",
+          "lineRule": "auto",
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1417",
+              "right": "1134",
+              "top": "1417",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+          },
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1417",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+          },
+        ],
+      },
+      "noOpBitIdentican": false,
+      "params": {
+        "target": {
+          "align": "right",
+          "sectionIndex": 1,
+        },
+      },
+      "skipped": [],
+    },
     "line-spacing-fixer": {
       "applied": true,
       "changelog": [
@@ -1776,6 +1990,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "ascii": "Calibri",
           "hAnsi": "Calibri",
           "sz": "22",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
         },
         "normal": {
           "jc": "left",
@@ -1837,6 +2055,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "hAnsi": "Calibri",
           "sz": "22",
         },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
         "normal": {
           "jc": "left",
           "line": "360",
@@ -1897,6 +2119,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "ascii": "Calibri",
           "hAnsi": "Calibri",
           "sz": "22",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
         },
         "normal": {
           "jc": "left",
@@ -1960,6 +2186,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "ascii": "Calibri",
           "hAnsi": "Calibri",
           "sz": "22",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
         },
         "normal": {
           "jc": "left",
@@ -2051,6 +2281,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "hAnsi": "Calibri",
           "sz": "22",
         },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
         "normal": {
           "jc": "left",
           "line": "259",
@@ -2109,6 +2343,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "hAnsi": "Calibri",
           "sz": "22",
         },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
         "normal": {
           "jc": "left",
           "line": "259",
@@ -2152,7 +2390,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
   },
   "synthetic-single-section": {
     "__kombinirano": {
-      "applied": 5,
+      "applied": 6,
       "changelog": [
         {
           "after": "Margine: gornja 3,00 cm, desna 3,00 cm, donja 3,00 cm, lijeva 3,00 cm",
@@ -2174,6 +2412,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "after": "Razmak prije/poslije: 0 pt / 0 pt",
           "before": "Razmak prije/poslije: 0 pt / 8 pt",
         },
+        {
+          "after": "Umetnuto podnozje s automatskim brojem stranice (desno)",
+          "before": "Podnozje s brojem stranice: nije postavljeno",
+        },
       ],
       "markers": {
         "directFormatting": {
@@ -2186,6 +2428,15 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "ascii": "Times New Roman",
           "hAnsi": "Times New Roman",
           "sz": "24",
+        },
+        "footer": {
+          "footerRefs": 1,
+          "parts": [
+            {
+              "hasPage": true,
+              "name": "word/footer1.xml",
+            },
+          ],
         },
         "normal": {
           "jc": "both",
@@ -2233,6 +2484,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "hAnsi": "Calibri",
           "sz": "22",
         },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
         "normal": {
           "jc": "both",
           "line": "259",
@@ -2279,6 +2534,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "ascii": "Calibri",
           "hAnsi": "Calibri",
           "sz": "22",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
         },
         "normal": {
           "jc": "both",
@@ -2331,6 +2590,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "hAnsi": "Times New Roman",
           "sz": "24",
         },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
         "normal": {
           "jc": "left",
           "line": "259",
@@ -2379,6 +2642,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "hAnsi": "Times New Roman",
           "sz": "24",
         },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
         "normal": {
           "jc": "left",
           "line": "259",
@@ -2408,6 +2675,65 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [],
     },
+    "footer-page-fixer": {
+      "applied": true,
+      "changelog": [
+        {
+          "after": "Umetnuto podnozje s automatskim brojem stranice (desno)",
+          "before": "Podnozje s brojem stranice: nije postavljeno",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 1,
+          "directLine": 1,
+          "runFonts": 1,
+          "runSz": 1,
+        },
+        "docDefaults": {
+          "ascii": "Calibri",
+          "hAnsi": "Calibri",
+          "sz": "22",
+        },
+        "footer": {
+          "footerRefs": 1,
+          "parts": [
+            {
+              "hasPage": true,
+              "name": "word/footer1.xml",
+            },
+          ],
+        },
+        "normal": {
+          "jc": "left",
+          "line": "259",
+          "lineRule": "auto",
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1417",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+          },
+        ],
+      },
+      "noOpBitIdentican": false,
+      "params": {
+        "target": {
+          "align": "right",
+          "sectionIndex": 0,
+        },
+      },
+      "skipped": [],
+    },
     "line-spacing-fixer": {
       "applied": true,
       "changelog": [
@@ -2427,6 +2753,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "ascii": "Calibri",
           "hAnsi": "Calibri",
           "sz": "22",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
         },
         "normal": {
           "jc": "left",
@@ -2475,6 +2805,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "hAnsi": "Calibri",
           "sz": "22",
         },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
         "normal": {
           "jc": "left",
           "line": "360",
@@ -2522,6 +2856,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "ascii": "Calibri",
           "hAnsi": "Calibri",
           "sz": "22",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
         },
         "normal": {
           "jc": "left",
@@ -2598,6 +2936,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "hAnsi": "Calibri",
           "sz": "22",
         },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
         "normal": {
           "jc": "left",
           "line": "259",
@@ -2642,6 +2984,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "ascii": "Calibri",
           "hAnsi": "Calibri",
           "sz": "22",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
         },
         "normal": {
           "jc": "left",
@@ -2696,6 +3042,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "hAnsi": "Arial",
           "sz": "24",
         },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
         "normal": {
           "jc": null,
           "line": null,
@@ -2747,6 +3097,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "hAnsi": "Arial",
           "sz": "24",
         },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
         "normal": {
           "jc": null,
           "line": null,
@@ -2795,6 +3149,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "hAnsi": "Arial",
           "sz": "24",
         },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
         "normal": {
           "jc": null,
           "line": null,
@@ -2823,6 +3181,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "fontSizePt": 12,
       },
       "skipped": [],
+    },
+    "footer-page-fixer": {
+      "params": "nema-cilja-u-profilu",
     },
     "line-spacing-fixer": {
       "applied": false,
@@ -2868,6 +3229,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "ascii": "Times New Roman",
           "hAnsi": "Times New Roman",
           "sz": "24",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
         },
         "normal": {
           "jc": null,

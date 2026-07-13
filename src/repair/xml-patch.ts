@@ -307,3 +307,113 @@ export function patchSectionPageNumbering(documentXml: string, targets: SectionN
   if (!changed) return { ...NO_OP, xml: documentXml };
   return { xml: newXml, applied: true, before: {}, after: {}, found: {} };
 }
+
+// === Podnozje s brojem stranice (footer part + rels + content-types + footerReference) ===
+//
+// K5 (BL-07b): PRVO prosirenje engine politike izvan document.xml/styles.xml. Umetanje
+// podnozja s PAGE poljem trazi uskladjenu izmjenu na 4 mjesta: novi word/footerN.xml,
+// <Override> u [Content_Types].xml, <Relationship> u document.xml.rels i <w:footerReference>
+// u ciljni sectPr. Svaki primitiv je no-op kad je cilj vec prisutan (bit-identicna sigurnost).
+
+export const FOOTER_CONTENT_TYPE =
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml';
+export const FOOTER_REL_TYPE =
+  'http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer';
+const RELATIONSHIPS_NS = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships';
+
+// Novi footer s PAGE poljem (fldChar sekvenca; instrText " PAGE " s xml:space preserve; jc
+// po zelji). Word prikaze automatski broj stranice prema sekcijskoj pgNumType shemi (K4).
+export function buildFooterPageXml(align: 'left' | 'center' | 'right' = 'right'): string {
+  return (
+    '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+    '<w:ftr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">' +
+    `<w:p><w:pPr><w:jc w:val="${align}"/></w:pPr>` +
+    '<w:r><w:fldChar w:fldCharType="begin"/></w:r>' +
+    '<w:r><w:instrText xml:space="preserve"> PAGE </w:instrText></w:r>' +
+    '<w:r><w:fldChar w:fldCharType="separate"/></w:r>' +
+    '<w:r><w:t>1</w:t></w:r>' +
+    '<w:r><w:fldChar w:fldCharType="end"/></w:r>' +
+    '</w:p></w:ftr>'
+  );
+}
+
+// Sljedeci slobodan rIdN (max postojeci + 1; rId1 ako nema nijednog).
+export function nextRelationshipId(relsXml: string): string {
+  let max = 0;
+  for (const m of relsXml.matchAll(/\bId="rId(\d+)"/g)) {
+    const n = parseInt(m[1], 10);
+    if (n > max) max = n;
+  }
+  return `rId${max + 1}`;
+}
+
+// Sljedeci slobodan word/footerN.xml (N od 1) koji nije u content-typesu ni u dodanim partovima.
+export function nextFooterPartName(contentTypesXml: string, addedNames: string[]): string {
+  const taken = new Set<string>();
+  for (const m of contentTypesXml.matchAll(/PartName="\/word\/footer(\d+)\.xml"/g)) taken.add(m[1]);
+  for (const name of addedNames) {
+    const m = name.match(/^word\/footer(\d+)\.xml$/);
+    if (m) taken.add(m[1]);
+  }
+  let n = 1;
+  while (taken.has(String(n))) n += 1;
+  return `word/footer${n}.xml`;
+}
+
+// Dodaj <Override> u [Content_Types].xml prije </Types> (no-op ako partName vec postoji).
+export function addContentTypeOverride(
+  contentTypesXml: string,
+  partName: string,
+  contentType: string,
+): PatchResult {
+  if (contentTypesXml.includes(`PartName="${partName}"`)) return { ...NO_OP, xml: contentTypesXml };
+  if (!contentTypesXml.includes('</Types>')) return { ...NO_OP, xml: contentTypesXml };
+  const tag = `<Override PartName="${escapeXmlAttr(partName)}" ContentType="${escapeXmlAttr(contentType)}"/>`;
+  return { xml: contentTypesXml.replace('</Types>', tag + '</Types>'), applied: true, before: {}, after: {}, found: {} };
+}
+
+// Dodaj <Relationship> u rels prije </Relationships> (no-op ako Id vec postoji).
+export function addRelationship(relsXml: string, id: string, type: string, target: string): PatchResult {
+  if (new RegExp(`\\bId="${escapeRegex(id)}"`).test(relsXml)) return { ...NO_OP, xml: relsXml };
+  if (!relsXml.includes('</Relationships>')) return { ...NO_OP, xml: relsXml };
+  const tag = `<Relationship Id="${escapeXmlAttr(id)}" Type="${escapeXmlAttr(type)}" Target="${escapeXmlAttr(target)}"/>`;
+  return { xml: relsXml.replace('</Relationships>', tag + '</Relationships>'), applied: true, before: {}, after: {}, found: {} };
+}
+
+// r:id trazi deklariran xmlns:r na <w:document>; realni docx ga ima, minimalni (sinteticki)
+// ne mora. Dodaj ga ako fali, inace bi footerReference s r:id bio nevaljan XML.
+function ensureRelationshipsNamespace(documentXml: string): string {
+  if (/<w:document\b[^>]*\sxmlns:r=/.test(documentXml)) return documentXml;
+  return documentXml.replace(/<w:document\b/, `<w:document xmlns:r="${RELATIONSHIPS_NS}"`);
+}
+
+// Umetni <w:footerReference> na POCETAK ciljne sekcije (footerReference/headerReference su
+// prvi u CT_SectPr). No-op ako sekcija vec ima BILO KAKAV footerReference (ne diramo tudji
+// footer), ako trazeni indeks ne postoji ili ima sectPrChange. Enumeracija = ista kao pgNumType.
+export function addFooterReferenceToSection(
+  documentXml: string,
+  sectionIndex: number,
+  rId: string,
+  type: 'default' | 'first' | 'even' = 'default',
+): PatchResult {
+  if (/<w:sectPrChange\b/.test(documentXml)) return { ...NO_OP, xml: documentXml };
+  const ref = `<w:footerReference w:type="${type}" r:id="${escapeXmlAttr(rId)}"/>`;
+  let idx = -1;
+  let applied = false;
+  const sectPrPattern = /<w:sectPr\b[^>]*?(?:\/>|>[\s\S]*?<\/w:sectPr>)/g;
+  const patched = documentXml.replace(sectPrPattern, (block) => {
+    idx += 1;
+    if (idx !== sectionIndex) return block;
+    if (/<w:footerReference\b/.test(block)) return block; // vec ima footer -> ne diramo
+    if (/^<w:sectPr\b[^>]*\/>$/.test(block)) {
+      applied = true;
+      return block.replace(/\/>$/, `>${ref}</w:sectPr>`);
+    }
+    const open = block.match(/^<w:sectPr\b[^>]*>/);
+    if (!open) return block;
+    applied = true;
+    return block.replace(open[0], open[0] + ref);
+  });
+  if (!applied) return { ...NO_OP, xml: documentXml };
+  return { xml: ensureRelationshipsNamespace(patched), applied: true, before: {}, after: {}, found: {} };
+}
