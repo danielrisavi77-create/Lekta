@@ -156,7 +156,23 @@ TRACK D (odluke i podaci):     D1, D2 (prije K8), D3 (u K0), D4 (prije K11 imeno
   po stavci + backstop.
 
 ### K7. TOC polje s dirty flagom (BL-09)
-- Trajanje: 2 dana. Status: CEKA
+- Trajanje: 2 dana. Status: GOTOVO 2026-07-13 (commit e4ce6f5, CI zelen, DARK)
+- IZVJESTAJ: novi toc-field-fixer umece ZIVO TOC polje (fldChar begin/instrText " TOC \\o "1-3"
+  \\h \\z \\u "/separate/placeholder/end, w:dirty na begin) neposredno IZA naslova "Sadrzaj";
+  Word ga regenerira pri otvaranju. Rucno utipkane stavke se NE brisu (nedestruktivno; preporuka
+  za brisanje u afterLabel). analyze-docx details += sadrzajParagraphIndex + hasTocField. SIDRO se
+  RE-DERIVIRA iz trenutnog documentXml po tekstu (sectionName), NE iz anal-time indeksa (adversarial
+  HIGH: empty-paragraph/section-insert u istoj bateriji pomicu indekse). documentHasTocField usidren
+  na gramatiku field koda (instrukcija pocinje s TOC): hvata split-run instrText, ne lazira na "toc"
+  u HYPERLINK URL-u, fixer ne duplicira polje (idempotentan). Adversarial review (Workflow 3 lens-a,
+  7->5 nalaza): HIGH stale-index -> re-derivacija; MEDIUM split-run + LOW HYPERLINK -> field-grammar
+  detekcija; MEDIUM updateFields (LibreOffice/Docs ne osvjezavaju polje na otvaranju -> placeholder)
+  + LOW nested-Sadrzaj divergencija DOKUMENTIRANI. Testovi: src/repair/toc-field.test.ts (27).
+  DARK: TOC_FIELD_LIVE=false; app.ts zove flag-gated tocFieldRepairableItem. check + CI zeleni.
+  PREOSTAJE (vlasnik, izlazni gate): rucna Word/LibreOffice provjera (regenerira li Word TOC na
+  otvaranju, bez upozorenja) -> TOC_FIELD_LIVE=true -> deploy (moze uz K5/K6 matricu). NAPOMENA:
+  isti stale-index rizik tinja u K6 section-insert (empty-paragraph prije njega u bateriji);
+  rijesiti/provjeriti prije SECTION_INSERT_LIVE flipa (K6 koristi anal-time introParagraphIndex).
 - Sto: umetanje TOC polja (w:fldSimple ili sdt, "TOC \\o 1-3 \\h", w:dirty) na mjesto
   postojeceg naslova Sadrzaj; rucni sadrzaj se NE brise (samo preporuka u panelu).
 - Ulazni gate: K6. Izlazni gate: Word pri otvaranju izracuna TOC; no-op ako polje postoji;
