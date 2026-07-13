@@ -1,0 +1,148 @@
+/* src/preflight/preflight-panel.css
+ * Provjera prije predaje. Semafor boje (crvena/zelena) smiju samo za nalaze
+ * (dizajn pravilo "Tinta i papir"). Naslijedjuje tokene design-systema uz
+ * sigurne fallbackove. */
+
+.pf-card {
+  margin-top: 1rem;
+  padding: 1.15rem 1.25rem;
+  border-radius: 0.85rem;
+  background: var(--card, #fff);
+  border: 1px solid var(--line, #e4e4e7);
+}
+
+.pf-head { margin-bottom: 0.6rem; }
+.pf-kicker {
+  display: block;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted, #6b7280);
+  margin-bottom: 0.15rem;
+}
+.pf-card h3 { margin: 0; font-size: 1.15rem; }
+.pf-lead { margin: 0.5rem 0 0.7rem; color: var(--ink, #191d23); }
+.pf-note {
+  margin: 0.6rem 0;
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.5rem;
+  background: var(--info-soft, #eef2ff);
+  border: 1px solid var(--info-line, #c7d2fe);
+  font-size: 0.9rem;
+}
+.pf-list {
+  margin: 0 0 0.8rem;
+  padding-left: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  color: var(--ink, #191d23);
+}
+
+.pf-consent {
+  display: flex;
+  gap: 0.55rem;
+  align-items: flex-start;
+  padding: 0.75rem;
+  border-radius: 0.6rem;
+  background: var(--surface-muted, #f6f5f2);
+  border: 1px solid var(--line, #e4e4e7);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+.pf-consent input { margin-top: 0.2rem; flex: 0 0 auto; }
+
+.pf-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 0.85rem;
+}
+.pf-est { font-size: 0.82rem; color: var(--muted, #6b7280); }
+
+/* progress */
+.pf-progress { text-align: center; }
+.pf-spinner {
+  width: 34px; height: 34px;
+  margin: 0.4rem auto 0.7rem;
+  border: 3px solid var(--line, #e4e4e7);
+  border-top-color: var(--brand, #1d3fbf);
+  border-radius: 50%;
+  animation: pf-spin 0.9s linear infinite;
+}
+@keyframes pf-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .pf-spinner { animation-duration: 2.4s; } }
+.pf-phase { font-weight: 600; margin: 0.2rem 0; }
+.pf-timer { color: var(--muted, #6b7280); font-size: 0.85rem; margin: 0.15rem 0; }
+.pf-hint { color: var(--muted, #6b7280); font-size: 0.82rem; margin: 0.15rem 0 0.6rem; }
+
+/* result */
+.pf-principle {
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.55rem;
+  background: var(--surface-muted, #f6f5f2);
+  border-left: 3px solid var(--brand, #1d3fbf);
+  font-size: 0.9rem;
+  margin-bottom: 0.85rem;
+}
+.pf-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.9rem; }
+.pf-chip {
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+}
+.pf-chip.pf-good { background: var(--ok-soft, #e7f5ec); color: var(--ok, #1d6b3f); border-color: #bfe3cd; }
+.pf-chip.pf-warn { background: #fff7e6; color: #96700a; border-color: #ecd9a8; }
+.pf-chip.pf-bad { background: #fdecec; color: #b3261e; border-color: #f4c7c3; }
+.pf-chip.pf-neutral { background: var(--surface-muted, #f4f4f5); color: var(--muted, #6b7280); border-color: var(--line, #e4e4e7); }
+
+.pf-lock {
+  padding: 0.7rem 0.85rem;
+  border-radius: 0.55rem;
+  background: #fff7e6;
+  border: 1px solid #ecd9a8;
+  font-size: 0.88rem;
+  margin-bottom: 0.85rem;
+}
+
+.pf-group { margin-bottom: 1.1rem; }
+.pf-group h4 {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--line, #e4e4e7);
+}
+.pf-skip { color: var(--muted, #6b7280); font-size: 0.88rem; margin: 0.3rem 0; }
+
+.pf-finding {
+  padding: 0.7rem 0.85rem;
+  border-radius: 0.55rem;
+  border-left: 3px solid var(--muted, #9ca3af);
+  background: var(--card, #fff);
+  border: 1px solid var(--line, #e4e4e7);
+  border-left-width: 3px;
+  margin-bottom: 0.55rem;
+}
+.pf-finding h5 { margin: 0 0 0.25rem; font-size: 0.92rem; }
+.pf-finding p { margin: 0.15rem 0; font-size: 0.88rem; color: var(--ink, #191d23); }
+.pf-finding.pf-good { border-left-color: var(--ok, #1d6b3f); }
+.pf-finding.pf-warn { border-left-color: #96700a; }
+.pf-finding.pf-bad { border-left-color: #b3261e; }
+.pf-finding.pf-neutral { border-left-color: var(--muted, #9ca3af); }
+
+.pf-evidence {
+  margin: 0.35rem 0 0;
+  padding-left: 1.05rem;
+  font-size: 0.83rem;
+  color: var(--muted, #4b5563);
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.pf-evidence .pf-more { list-style: none; margin-left: -1.05rem; font-style: italic; }
+
+.pf-error p { margin: 0 0 0.7rem; }
+.pf-error .btn { margin-right: 0.5rem; }
