@@ -6,6 +6,8 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import time
+import urllib.error
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -99,17 +101,27 @@ def oai_url(host: str, token: str | None, from_date: str | None) -> str:
         if from_date:
             params["from"] = from_date
         query = urllib.parse.urlencode(params)
-    return f"https://{host}/oai?{query}"
+    return f"https://{host}/oai/?{query}"
 
 
 @lru_cache(maxsize=256)
-def _fetch_page(url: str, timeout: int = 45) -> str:
-    request = urllib.request.Request(url, headers=HEADERS)
-    with urllib.request.urlopen(request, timeout=timeout) as response:
-        content = response.read(10 * 1024 * 1024 + 1)
-        if len(content) > 10 * 1024 * 1024:
-            raise ValueError("OAI odgovor prelazi sigurnosni limit od 10 MiB")
-        return content.decode("utf-8", "replace")
+def _fetch_page(url: str, timeout: int = 45, retries: int = 3) -> str:
+    for attempt in range(retries):
+        try:
+            request = urllib.request.Request(url, headers=HEADERS)
+            with urllib.request.urlopen(request, timeout=timeout) as response:
+                content = response.read(10 * 1024 * 1024 + 1)
+                if len(content) > 10 * 1024 * 1024:
+                    raise ValueError("OAI odgovor prelazi sigurnosni limit od 10 MiB")
+                return content.decode("utf-8", "replace")
+        except urllib.error.HTTPError as exc:
+            if exc.code not in (429, 503) or attempt == retries - 1:
+                raise
+        except (urllib.error.URLError, TimeoutError):
+            if attempt == retries - 1:
+                raise
+        time.sleep(2 ** attempt)
+    raise RuntimeError("OAI dohvat nije uspio")
 
 
 FETCH_LOCKS = defaultdict(Lock)
