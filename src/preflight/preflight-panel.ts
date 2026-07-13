@@ -63,16 +63,24 @@ export class PreflightPanel {
   private consentChecked = false;
   private abort: AbortController | null = null;
   private pollTimer: ReturnType<typeof setTimeout> | null = null;
+  private progressTicker: ReturnType<typeof setTimeout> | null = null;
   private readonly fetchImpl: typeof fetch;
   private readonly now: () => number;
   private readonly setT: typeof setTimeout;
   private readonly clearT: typeof clearTimeout;
 
   constructor(private mount: HTMLElement, private deps: PreflightPanelDeps) {
-    this.fetchImpl = deps.fetchImpl ?? fetch;
+    // Nativne globalne metode MORAJU se zvati s this === globalThis. Spremljene
+    // u polje i pozvane kao this.setT(...) / this.fetchImpl(...) dobile bi
+    // this === panel, pa preglednik baca "TypeError: Illegal invocation"
+    // (setTimeout/clearTimeout su stroge; fetch je popustljiv). Zato ih vezemo
+    // uz globalThis. Happy-dom u testovima to ne provodi pa je bug promaknuo,
+    // a poll u stvarnom pregledniku nikad nije radio.
+    const g = globalThis;
+    this.fetchImpl = deps.fetchImpl ?? fetch.bind(g);
     this.now = deps.now ?? (() => Date.now());
-    this.setT = deps.setTimeoutImpl ?? setTimeout;
-    this.clearT = deps.clearTimeoutImpl ?? clearTimeout;
+    this.setT = deps.setTimeoutImpl ?? setTimeout.bind(g);
+    this.clearT = deps.clearTimeoutImpl ?? clearTimeout.bind(g);
   }
 
   /** Poziva se iz renderResult (svaki put); ako je run u tijeku, ne rusi ga. */
@@ -85,10 +93,38 @@ export class PreflightPanel {
     this.abort?.abort();
     if (this.pollTimer) this.clearT(this.pollTimer);
     this.pollTimer = null;
+    this.stopProgressTicker();
   }
 
   // -------------------------------------------------------------------- //
+  private mmss(s: number): string {
+    return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+  }
+
+  /** Zivi tajmer: osvjezava proteklo vrijeme svake sekunde bez punog re-rendera
+   *  (analiza je sinkroni upload od 15-90 s, pa staticni "0:00" izgleda zamrznuto). */
+  private startProgressTicker(): void {
+    this.stopProgressTicker();
+    const update = () => {
+      if (this.phase.k !== 'progress') { this.stopProgressTicker(); return; }
+      const el = this.mount.querySelector('.pf-timer');
+      if (el) {
+        const elapsed = Math.floor((this.now() - this.phase.started) / 1000);
+        const est = estimatePreflightSeconds(this.deps.referenceCount);
+        el.textContent = `Traje ${this.mmss(elapsed)} / procjena ~${this.mmss(est)}`;
+      }
+      this.progressTicker = this.setT(update, 1000);
+    };
+    this.progressTicker = this.setT(update, 1000);
+  }
+
+  private stopProgressTicker(): void {
+    if (this.progressTicker) this.clearT(this.progressTicker);
+    this.progressTicker = null;
+  }
+
   private paint(): void {
+    this.stopProgressTicker();
     switch (this.phase.k) {
       case 'idle': this.paintIdle(); break;
       case 'progress': this.paintProgress(); break;
@@ -159,16 +195,16 @@ export class PreflightPanel {
     if (this.phase.k !== 'progress') return;
     const elapsed = Math.floor((this.now() - this.phase.started) / 1000);
     const est = estimatePreflightSeconds(this.deps.referenceCount);
-    const mmss = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
     this.mount.innerHTML = `
       <div class="pf-card pf-progress" role="status" aria-live="polite">
         <div class="pf-spinner" aria-hidden="true"></div>
         <p class="pf-phase">${escapeHtml(this.phase.label)}</p>
-        <p class="pf-timer">Traje ${mmss(elapsed)} / procjena ~${mmss(est)}</p>
+        <p class="pf-timer">Traje ${this.mmss(elapsed)} / procjena ~${this.mmss(est)}</p>
         <p class="pf-hint">Ne zatvaraj ovu karticu dok provjera traje.</p>
         <button class="btn btn-ghost btn-sm" id="pfCancelBtn">Prekini</button>
       </div>`;
     this.mount.querySelector('#pfCancelBtn')?.addEventListener('click', () => this.cancel());
+    this.startProgressTicker();
   }
 
   private paintResult(report: PreflightReport, depth: 'teaser' | 'full'): void {
@@ -338,8 +374,12 @@ export class PreflightPanel {
       this.poll(token, start.jobId);
       return;
     }
-    // start.kind === 'ok': upload izravno na Python servis
-    this.setLabel(PROGRESS_STEPS[1]);
+    // start.kind === 'ok': upload izravno na Python servis. Analiza je SINKRONA
+    // unutar ovog uploada (metapodaci, citati i provjera referenci u bazama sve
+    // se rade dok upload traje), pa label posteno kaze da je provjera referenci
+    // najdulji korak, a zivi tajmer pokazuje da nije zamrznuto.
+    this.setLabel('Analiziram dokument i provjeravam reference u javnim bazama '
+      + '(Crossref, OpenAlex, PubMed), ovo je najdulji korak.');
     this.abort = new AbortController();
     const up = await uploadFile(start.uploadUrl, start.uploadToken, file,
       this.fetchImpl, this.abort.signal);
