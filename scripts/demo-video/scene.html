@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<title>Lekta demo scena</title>
+<style>
+@font-face{font-family:'Newsreader';font-style:normal;font-weight:200 800;src:url('fonts/newsreader-latin-opsz-normal.woff2') format('woff2');unicode-range:U+0000-00FF}
+@font-face{font-family:'Newsreader';font-style:normal;font-weight:200 800;src:url('fonts/newsreader-latin-ext-opsz-normal.woff2') format('woff2');unicode-range:U+0100-024F,U+0259,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0}
+@font-face{font-family:'Newsreader';font-style:italic;font-weight:200 800;src:url('fonts/newsreader-latin-opsz-italic.woff2') format('woff2');unicode-range:U+0000-00FF}
+@font-face{font-family:'Newsreader';font-style:italic;font-weight:200 800;src:url('fonts/newsreader-latin-ext-opsz-italic.woff2') format('woff2');unicode-range:U+0100-024F,U+0259,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0}
+@font-face{font-family:'Plex Mono';font-style:normal;font-weight:500;src:url('fonts/ibm-plex-mono-latin-500-normal.woff2') format('woff2');unicode-range:U+0000-00FF}
+@font-face{font-family:'Plex Mono';font-style:normal;font-weight:500;src:url('fonts/ibm-plex-mono-latin-ext-500-normal.woff2') format('woff2');unicode-range:U+0100-024F}
+@font-face{font-family:'Plex Mono';font-style:normal;font-weight:600;src:url('fonts/ibm-plex-mono-latin-600-normal.woff2') format('woff2');unicode-range:U+0000-00FF}
+@font-face{font-family:'Plex Mono';font-style:normal;font-weight:600;src:url('fonts/ibm-plex-mono-latin-ext-600-normal.woff2') format('woff2');unicode-range:U+0100-024F}
+@font-face{font-family:'Caveat';font-style:normal;font-weight:500;src:url('fonts/caveat-latin-500-normal.woff2') format('woff2');unicode-range:U+0000-00FF}
+@font-face{font-family:'Caveat';font-style:normal;font-weight:500;src:url('fonts/caveat-latin-ext-500-normal.woff2') format('woff2');unicode-range:U+0100-024F}
+@font-face{font-family:'Caveat';font-style:normal;font-weight:600;src:url('fonts/caveat-latin-600-normal.woff2') format('woff2');unicode-range:U+0000-00FF}
+@font-face{font-family:'Caveat';font-style:normal;font-weight:600;src:url('fonts/caveat-latin-ext-600-normal.woff2') format('woff2');unicode-range:U+0100-024F}
+
+:root{
+  --desk:#191512;--ink:#EDE7DC;--muted:rgba(237,231,220,.55);--faint:rgba(237,231,220,.34);
+  --paper:#F7F3E8;--paper2:#EFE9D9;--pink:#26221B;--pmuted:#6E6656;--pline:#DCD4BF;
+  --red:#E4573D;--redd:#C4372E;--pass:#2E8B5F;--passd:#1E7F4F;--scan:#4A6CF0;--amber:#C98A2E;
+  --serif:'Newsreader',Georgia,serif;--mono:'Plex Mono',Consolas,monospace;--hand:'Caveat',cursive;
+  --doc:Georgia,'Times New Roman',serif;--docfix:'Times New Roman',Georgia,serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1280px;height:720px;overflow:hidden;background:#000}
+#stage{position:relative;width:1280px;height:720px;background:var(--desk);overflow:hidden;font-family:var(--serif);color:var(--ink)}
+.fx{position:absolute;will-change:transform,opacity}
+
+/* stol: lampa + vinjeta + rub kadra */
+#lamp{position:absolute;top:-560px;right:-260px;width:1500px;height:1500px;border-radius:50%;background:radial-gradient(circle,rgba(255,214,150,.16),transparent 62%)}
+#vig{position:absolute;inset:0;background:radial-gradient(ellipse 125% 115% at 50% 42%,transparent 58%,rgba(0,0,0,.5))}
+#edge{position:absolute;inset:0;box-shadow:inset 0 0 0 36px #000, inset 0 0 90px 40px rgba(0,0,0,.35)}
+#logo{position:absolute;top:40px;right:64px;font:italic 500 24px var(--serif);color:var(--faint);letter-spacing:.01em}
+
+/* intro kartica */
+#intro{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+#intro .eyebrow{font:500 14px var(--mono);letter-spacing:.42em;color:var(--muted);text-transform:uppercase;margin-bottom:26px}
+#intro .l1{font:400 64px/1.12 var(--serif);letter-spacing:-.015em}
+#intro .l2{font:italic 460 64px/1.12 var(--serif);color:var(--red);letter-spacing:-.015em}
+
+/* korak naslovi lijevo */
+.korak{position:absolute;left:104px;top:92px;width:300px}
+.korak .kk{font:600 13px var(--mono);letter-spacing:.34em;color:var(--red);text-transform:uppercase;margin-bottom:16px}
+.korak .kh{font:400 30px/1.32 var(--serif);color:var(--ink)}
+
+/* papir */
+#paperWrap{position:absolute;left:430px;top:56px;width:412px;height:608px}
+.sheet{position:absolute;inset:0;background:var(--paper);color:var(--pink);box-shadow:0 4px 10px rgba(0,0,0,.4),0 30px 80px rgba(0,0,0,.55);padding:34px 30px 26px}
+/* draft list */
+#draft .head{font:400 11.5px/1.55 var(--doc);color:#3d382e}
+#draft h4{font:700 13.5px var(--doc);text-decoration:underline;margin:26px 0 10px;display:inline-block}
+#draft p{font:400 12.5px/1.72 var(--doc);color:#332e25;margin-top:12px;text-align:left}
+#draft .p2{margin-top:16px}
+.strike{position:relative;white-space:nowrap}
+.strike svg{position:absolute;left:-2px;right:-2px;top:52%;width:calc(100% + 4px);height:8px;overflow:visible}
+.strike svg path{fill:none;stroke:var(--redd);stroke-width:1.6;stroke-linecap:round}
+.circle{position:relative;white-space:nowrap}
+.circle>svg{position:absolute;left:-7px;top:-5px;width:calc(100% + 14px);height:calc(100% + 10px);overflow:visible}
+.circle>svg ellipse{fill:none;stroke:var(--redd);stroke-width:1.5}
+/* margina vodilje + crvena linija */
+#draft .guide{position:absolute;border:1px dashed rgba(196,55,46,.35)}
+#draft .gl{left:23px;top:14px;bottom:14px;width:0;border-width:0 0 0 1px}
+#draft .gr{right:23px;top:14px;bottom:14px;width:0;border-width:0 0 0 1px}
+#mline{position:absolute;left:0;right:0;top:462px;height:0;border-top:1.5px solid var(--redd)}
+/* rukopisne bilješke na papiru */
+.note{position:absolute;font-family:var(--hand);color:var(--redd);font-weight:500;white-space:nowrap}
+#n-slovo{top:22px;right:24px;font-size:19px;transform:rotate(-4deg)}
+#n-razina{top:88px;left:196px;font-size:17px;transform:rotate(-2deg)}
+#n-font{top:388px;left:196px;font-size:18px;transform:rotate(3deg)}
+#n-margina{top:474px;left:26px;font-size:20px;transform:rotate(-2deg)}
+#n-broj{top:540px;left:200px;font-size:18px;transform:rotate(2deg)}
+/* cisti list */
+#fixed{font-family:var(--docfix)}
+#fixed .head{font:400 12px/1.7 var(--docfix);text-align:center;text-transform:uppercase;letter-spacing:.06em;color:#2e2921}
+#fixed h4{font:700 14px var(--docfix);margin:30px 0 12px}
+#fixed p{font:400 12.5px/1.85 var(--docfix);color:#2e2921;text-align:justify;margin-top:12px}
+#fixed .folio{position:absolute;bottom:18px;left:0;right:0;text-align:center;font:400 11px var(--docfix);color:#6E6656}
+/* scan linija */
+#scan{position:absolute;left:-6px;right:-6px;top:0;height:3px;background:linear-gradient(90deg,transparent,var(--scan) 18%,var(--scan) 82%,transparent);box-shadow:0 0 18px 3px rgba(74,108,240,.55);border-radius:2px}
+
+/* kartice nalaza desno */
+.card{position:absolute;left:876px;width:284px;background:var(--paper);box-shadow:0 3px 8px rgba(0,0,0,.4),0 18px 44px rgba(0,0,0,.45)}
+.card .bar{position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--redd)}
+.card .in{padding:13px 16px 14px 18px}
+.card .code{font:600 10.5px var(--mono);letter-spacing:.22em;color:var(--redd);text-transform:uppercase}
+.card .tt{font:500 15.5px var(--serif);color:var(--pink);margin-top:5px}
+.card .conn{position:absolute;right:100%;top:50%;height:0;border-top:1px solid rgba(237,231,220,.28)}
+.card.ok .bar{background:var(--passd)}
+.card.ok .code{color:var(--passd)}
+#c1{top:150px}#c2{top:296px}#c3{top:442px}
+#c1 .conn{width:34px}#c2 .conn{width:34px}#c3 .conn{width:34px}
+
+/* score kartica dolje lijevo */
+#score{position:absolute;left:96px;top:468px;width:300px;background:#141018;background:linear-gradient(160deg,#221c17,#171310);box-shadow:0 3px 8px rgba(0,0,0,.5),0 20px 50px rgba(0,0,0,.5);padding:22px 26px 20px;transform:rotate(-1.2deg)}
+#score .sk{font:600 11px var(--mono);letter-spacing:.3em;color:var(--muted);text-transform:uppercase}
+#score .sn{font:500 64px/1.05 var(--serif);color:var(--ink);margin-top:6px}
+#score .sn small{font:400 22px var(--serif);color:var(--muted)}
+#score .ss{font:500 12.5px var(--mono);margin-top:8px;color:var(--amber)}
+#score .ss.ok{color:#5FBF8F}
+
+/* zeleni pecat + kvacice */
+#stamp{position:absolute;left:50%;top:47%;width:330px;height:330px;margin:-165px 0 0 -165px;color:#2E8B5F}
+#stamp svg{width:100%;height:100%;overflow:visible}
+.gnote{position:absolute;font-family:var(--hand);font-weight:600;color:#2E8B5F;white-space:nowrap}
+#g1{top:30px;right:14px;font-size:21px;transform:rotate(-5deg)}
+#g2{top:124px;right:26px;font-size:21px;transform:rotate(3deg)}
+#g3{bottom:170px;right:34px;font-size:21px;transform:rotate(-3deg)}
+#g4{bottom:96px;left:20px;font-size:21px;transform:rotate(-2deg)}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="lamp" class="fx"></div>
+  <div id="logo">Lekta</div>
+
+  <div id="intro" class="fx">
+    <div class="eyebrow">23:47&nbsp;&nbsp;·&nbsp;&nbsp;predaja je sutra</div>
+    <div class="l1" id="il1">Rad je napisan.</div>
+    <div class="l2" id="il2">Ali je li spreman?</div>
+  </div>
+
+  <div class="korak fx" id="k1"><div class="kk">Korak 1 · Sken</div><div class="kh">Lekta pročita rad kao strogi mentor.</div></div>
+  <div class="korak fx" id="k2"><div class="kk">Korak 2 · Nalaz</div><div class="kh">Pronađe ono zbog čega se radovi vraćaju.</div></div>
+  <div class="korak fx" id="k3"><div class="kk">Korak 3 · Ispravak</div><div class="kh">I kaže ti točno što i kako ispraviti.</div></div>
+
+  <div id="paperWrap" class="fx">
+    <div class="sheet" id="draft">
+      <i class="guide gl"></i><i class="guide gr"></i>
+      <div class="head">sveučilište u zagrebu<br>Fakultet Političkih znanosti<br>diplomski Studij novinarstva</div>
+      <h4>2.4.1. analiza okvira</h4>
+      <p>Analiza okvira pokazala je da dnevne novine klimatske promjene najčešće uokviruju kroz ekonomsku prizmu (Peruško, 2021, str 44), dok se znanstveni okvir pojavljuje u <span class="strike" id="strike1">značajno manjem broju<svg viewBox="0 0 100 8" preserveAspectRatio="none"><path id="strikePath" d="M1 4.2 Q 25 2.6, 50 4.4 T 99 3.8"/></svg></span> slučajeva. Slično tvrdi i <span class="circle" id="circ1">Jandrić 2019<svg viewBox="0 0 100 30" preserveAspectRatio="none"><ellipse id="circPath" cx="50" cy="15" rx="48" ry="13"/></svg></span>, koji upozorava da izostanak znanstvenih izvora osiromašuje javnu raspravu o klimi…</p>
+      <p class="p2">U promatranom razdoblju objavljeno je 214 članaka, od čega su 122 sadržavala barem jedan izravni citat. Kako navodi Grbeša, medijska pozornost raste s blizinom klimatskih konferencija…</p>
+      <div id="mline" class="fx"></div>
+      <div class="note fx" id="n-slovo">malo slovo?!</div>
+      <div class="note fx" id="n-razina">← preskočena razina!</div>
+      <div class="note fx" id="n-font">drugi font + prored 1?!</div>
+      <div class="note fx" id="n-margina">margina 2,3 → 3 cm!</div>
+      <div class="note fx" id="n-broj">gdje je broj stranice?</div>
+      <div id="scan" class="fx"></div>
+    </div>
+    <div class="sheet fx" id="fixed">
+      <div class="head">Sveučilište u Zagrebu<br>Fakultet političkih znanosti<br>Diplomski studij novinarstva</div>
+      <h4>2.4. Analiza okvira</h4>
+      <p>Analiza okvira pokazala je da dnevne novine klimatske promjene najčešće uokviruju kroz ekonomsku prizmu (Peruško 2021.), dok se znanstveni okvir pojavljuje u znatno manjem broju slučajeva. Slično tvrdi i Jandrić (2019), koji upozorava da izostanak znanstvenih izvora osiromašuje javnu raspravu o klimi…</p>
+      <p>U promatranom razdoblju objavljeno je 214 članaka, od čega su 122 sadržavala barem jedan izravni citat. Kako navodi Grbeša (2020), medijska pozornost raste s blizinom klimatskih konferencija…</p>
+      <div class="folio">14</div>
+    </div>
+    <div id="stamp" class="fx">
+      <svg viewBox="0 0 330 330">
+        <g fill="none" stroke="currentColor">
+          <circle cx="165" cy="165" r="150" stroke-width="5" opacity=".9"/>
+          <circle cx="165" cy="165" r="122" stroke-width="2" opacity=".9"/>
+        </g>
+        <g fill="currentColor">
+          <path id="arcTop" d="M 165 165 m -96 0 a 96 96 0 1 1 192 0" fill="none"/>
+          <path id="arcBot" d="M 165 165 m -96 0 a 96 96 0 1 0 192 0" fill="none"/>
+          <text style="font:600 34px 'Plex Mono',monospace;letter-spacing:.34em"><textPath href="#arcTop" startOffset="50%" text-anchor="middle">LEKTA</textPath></text>
+          <text x="165" y="158" text-anchor="middle" style="font:600 30px 'Plex Mono',monospace;letter-spacing:.14em">TEHNIČKI</text>
+          <text x="165" y="196" text-anchor="middle" style="font:600 30px 'Plex Mono',monospace;letter-spacing:.14em">UREDNO</text>
+          <text x="82" y="238" style="font:600 22px 'Plex Mono',monospace">★</text>
+          <text x="232" y="238" style="font:600 22px 'Plex Mono',monospace">★</text>
+        </g>
+      </svg>
+    </div>
+    <div class="gnote fx" id="g1">✓ naslovnica</div>
+    <div class="gnote fx" id="g2">✓ hijerarhija</div>
+    <div class="gnote fx" id="g3">✓ font + prored</div>
+    <div class="gnote fx" id="g4">✓ margina 3 cm</div>
+  </div>
+
+  <div class="card fx" id="c1"><i class="bar"></i><i class="conn"></i><div class="in"><div class="code" id="c1code">F-03 · Oblikovanje</div><div class="tt" id="c1tt">Margina 2,3 cm umjesto 3 cm</div></div></div>
+  <div class="card fx" id="c2"><i class="bar"></i><i class="conn"></i><div class="in"><div class="code" id="c2code">C-12 · Citiranje</div><div class="tt" id="c2tt">5 izvora nije u literaturi</div></div></div>
+  <div class="card fx" id="c3"><i class="bar"></i><i class="conn"></i><div class="in"><div class="code" id="c3code">S-07 · Struktura</div><div class="tt" id="c3tt">Naslov preskače razinu</div></div></div>
+
+  <div id="score" class="fx"><div class="sk">Lekta · Nalaz</div><div class="sn"><span id="scoreNum">71</span><small>/100</small></div><div class="ss" id="scoreSub">17 nalaza · potrebne dorade</div></div>
+
+  <div id="vig"></div>
+  <div id="edge"></div>
+</div>
+
+<script>
+/* Deterministicki timeline: __seek(tSec) postavlja SVE iz cistog t. Bez rAF-a, bez CSS animacija. */
+const $ = (id) => document.getElementById(id);
+
+/* easing */
+const clamp01 = (x) => x < 0 ? 0 : x > 1 ? 1 : x;
+const io = (x) => { x = clamp01(x); return x * x * (3 - 2 * x); };                 // smoothstep
+const out4 = (x) => { x = clamp01(x); return 1 - Math.pow(1 - x, 4); };            // ease-out quart
+const pop = (x) => { x = clamp01(x); const c = 1.70158 * 1.2; const t = x - 1; return 1 + (t * t * ((c + 1) * t + c)); }; // overshoot
+/* seg: 0 prije a, 1 poslije b, easing izmedju */
+const seg = (t, a, b, ease) => (ease || io)((t - a) / (b - a));
+
+const els = {};
+['intro','il1','il2','k1','k2','k3','paperWrap','draft','fixed','scan','mline','n-slovo','n-razina','n-font','n-margina','n-broj','c1','c2','c3','score','scoreNum','scoreSub','stamp','g1','g2','g3','g4','lamp','strikePath','circPath','c1code','c1tt','c2code','c2tt','c3code','c3tt'].forEach(id => els[id] = $(id));
+
+/* dash-draw priprema */
+const strikeLen = els.strikePath.getTotalLength();
+els.strikePath.style.strokeDasharray = strikeLen;
+const circLen = els.circPath.getTotalLength();
+els.circPath.style.strokeDasharray = circLen;
+
+function fadeRise(el, t, a, b, dy, extra) {
+  const p = seg(t, a, b, out4);
+  el.style.opacity = p;
+  el.style.transform = (extra || '') + ' translateY(' + ((1 - p) * dy) + 'px)';
+}
+function noteIn(el, t, a, base) {
+  const p = seg(t, a, a + 0.38, out4);
+  el.style.opacity = p;
+  el.style.transform = base + ' scale(' + (0.75 + 0.25 * pop(p)) + ')';
+}
+
+const NOTE_BASE = {
+  'n-slovo': 'rotate(-4deg)', 'n-razina': 'rotate(-2deg)', 'n-font': 'rotate(3deg)',
+  'n-margina': 'rotate(-2deg)', 'n-broj': 'rotate(2deg)'
+};
+
+const cards = [
+  { el: 'c1', tIn: 10.3, tFlip: 17.2, code: 'F-03 · Oblikovanje', tt: 'Margina 2,3 cm umjesto 3 cm', okCode: '✓ Ispravljeno', okTt: 'Margina 3 cm' },
+  { el: 'c2', tIn: 11.1, tFlip: 18.0, code: 'C-12 · Citiranje', tt: '5 izvora nije u literaturi', okCode: '✓ Ispravljeno', okTt: 'Literatura potpuna' },
+  { el: 'c3', tIn: 11.9, tFlip: 18.8, code: 'S-07 · Struktura', tt: 'Naslov preskače razinu', okCode: '✓ Ispravljeno', okTt: 'Hijerarhija uredna' },
+];
+
+window.__seek = function (t) {
+  /* lampa lagano dise (spora, deterministicka) */
+  els.lamp.style.transform = 'translateY(' + (Math.sin(t * 0.35) * 10) + 'px)';
+
+  /* ── intro 0 do 4.6 ── */
+  const introOut = seg(t, 3.9, 4.6);
+  els.intro.style.opacity = String((1 - introOut));
+  els.intro.style.transform = 'scale(' + (1 + introOut * 0.04) + ')';
+  fadeRise(els.il1, t, 0.5, 1.5, 26);
+  fadeRise(els.il2, t, 1.3, 2.4, 26);
+  const eyebrow = els.intro.querySelector('.eyebrow');
+  eyebrow.style.opacity = String(seg(t, 0.1, 0.9));
+
+  /* ── koraci ── */
+  const k1in = seg(t, 4.9, 5.7, out4), k1out = seg(t, 9.6, 10.1);
+  els.k1.style.opacity = String(k1in * (1 - k1out));
+  els.k1.style.transform = 'translateY(' + ((1 - k1in) * 22 - k1out * 14) + 'px)';
+  const k2in = seg(t, 10.1, 10.9, out4), k2out = seg(t, 15.6, 16.1);
+  els.k2.style.opacity = String(k2in * (1 - k2out));
+  els.k2.style.transform = 'translateY(' + ((1 - k2in) * 22 - k2out * 14) + 'px)';
+  const k3in = seg(t, 16.1, 16.9, out4);
+  els.k3.style.opacity = String(k3in);
+  els.k3.style.transform = 'translateY(' + ((1 - k3in) * 22) + 'px)';
+
+  /* ── papir ulazi 4.4 do 5.6, mikro-drhtaj na udar pecata ── */
+  const pin = seg(t, 4.4, 5.6, out4);
+  const jolt = (t > 22.9 && t < 23.06) ? (23.06 - t) / 0.16 : 0;
+  const jx = jolt ? Math.sin(t * 260) * 2.2 * jolt : 0;
+  els.paperWrap.style.opacity = String(pin);
+  els.paperWrap.style.transform = 'translate(' + ((1 - pin) * 60 + jx) + 'px,' + ((1 - pin) * 140) + 'px) rotate(' + (-1.6 + pin * 0.0 + (1 - pin) * 4) + 'deg)';
+
+  /* ── scan linija 5.6 do 8.1 ── */
+  const sc = seg(t, 5.6, 8.1, io);
+  const scActive = t > 5.55 && t < 8.15;
+  els.scan.style.opacity = scActive ? String(Math.min(1, seg(t, 5.6, 5.75) * (1 - seg(t, 7.95, 8.1)))) : '0';
+  els.scan.style.top = (8 + sc * 576) + 'px';
+
+  /* ── crvene bilješke prate scan ── */
+  noteIn($('n-slovo'), t, 5.9, NOTE_BASE['n-slovo']);
+  noteIn($('n-razina'), t, 6.45, NOTE_BASE['n-razina']);
+  /* precrtavanje + kruzenje: crta se dashoffsetom */
+  const st = seg(t, 6.7, 7.25, io);
+  els.strikePath.style.strokeDashoffset = String(strikeLen * (1 - st));
+  const ct = seg(t, 7.15, 7.8, io);
+  els.circPath.style.strokeDashoffset = String(circLen * (1 - ct));
+  noteIn($('n-font'), t, 7.75, NOTE_BASE['n-font']);
+  const ml = seg(t, 8.0, 8.5, io);
+  els.mline.style.opacity = String(ml > 0 ? 1 : 0);
+  els.mline.style.transform = 'scaleX(' + ml + ')';
+  els.mline.style.transformOrigin = 'left center';
+  noteIn($('n-margina'), t, 8.35, NOTE_BASE['n-margina']);
+  noteIn($('n-broj'), t, 8.8, NOTE_BASE['n-broj']);
+
+  /* ── kartice nalaza ── */
+  for (const c of cards) {
+    const el = els[c.el];
+    const p = seg(t, c.tIn, c.tIn + 0.7, out4);
+    el.style.opacity = String(p);
+    el.style.transform = 'translateX(' + ((1 - p) * 46) + 'px)';
+    /* flip u zeleno: brzi crossfade sa spljostenjem */
+    const f = seg(t, c.tFlip, c.tFlip + 0.55, io);
+    const half = f < 0.5;
+    el.classList.toggle('ok', !half && f > 0);
+    els[c.el + 'code'].textContent = half || f === 0 ? c.code : c.okCode;
+    els[c.el + 'tt'].textContent = half || f === 0 ? c.tt : c.okTt;
+    const squash = f > 0 ? Math.abs(Math.cos(f * Math.PI)) : 1;
+    if (f > 0) el.style.transform = 'translateX(0) scaleY(' + (0.25 + 0.75 * squash) + ')';
+  }
+
+  /* ── score kartica: ulaz 12.6, brojanje 71 pa 71 do 100 u koraku 3 ── */
+  const sin_ = seg(t, 12.6, 13.4, out4);
+  els.score.style.opacity = String(sin_);
+  els.score.style.transform = 'rotate(-1.2deg) translateY(' + ((1 - sin_) * 40) + 'px) scale(' + (0.92 + 0.08 * pop(sin_)) + ')';
+  let n = Math.round(40 + 31 * seg(t, 12.7, 13.6, io));           /* 40 do 71 na ulazu */
+  if (t > 19.2) n = Math.round(71 + 29 * seg(t, 19.2, 21.6, io)); /* 71 do 100 */
+  els.scoreNum.textContent = String(n);
+  const done = n >= 100;
+  els.scoreSub.textContent = done ? '✓ tehnički uredno' : '17 nalaza · potrebne dorade';
+  els.scoreSub.classList.toggle('ok', done);
+
+  /* ── popravak papira: zavjesa odozgo 16.6 do 19.2 ── */
+  const fix = seg(t, 16.6, 19.2, io);
+  els.fixed.style.opacity = fix > 0 ? '1' : '0';
+  els.fixed.style.clipPath = 'inset(0 0 ' + ((1 - fix) * 100) + '% 0)';
+
+  /* ── pecat 22.5 tresne, kvacice 23.2+ ── */
+  const sp = seg(t, 22.55, 22.95, io);
+  els.stamp.style.opacity = String(Math.min(1, sp * 1.6) * 0.92);
+  els.stamp.style.transform = 'rotate(-14deg) scale(' + (2.1 - 1.1 * sp) + ')';
+  noteIn($('g1'), t, 23.25, 'rotate(-5deg)');
+  noteIn($('g2'), t, 23.6, 'rotate(3deg)');
+  noteIn($('g3'), t, 23.95, 'rotate(-3deg)');
+  noteIn($('g4'), t, 24.3, 'rotate(-2deg)');
+};
+
+window.__seek(0);
+</script>
+</body>
+</html>
