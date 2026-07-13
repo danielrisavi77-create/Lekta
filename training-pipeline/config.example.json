@@ -1,0 +1,9 @@
+{
+  "roots": ["../local-repositories"],
+  "extensions": [".pdf", ".docx"],
+  "output": "training-pipeline/output/documents.jsonl",
+  "maxFileSizeMb": 50,
+  "ocrCommand": "python scripts/ocr_pdf.py",
+  "allowedSources": ["owned", "licensed"],
+  "storeRawFiles": false
+}
