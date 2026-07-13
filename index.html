@@ -994,7 +994,8 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
 #video{padding:88px 0 0}
 .ks-vplay{font-family:var(--font-hand);font-size:30px;color:var(--red);transform:rotate(-2deg);display:inline-block;font-weight:600}
 .ks-vmeta{margin-left:auto;font:500 11px var(--sans);letter-spacing:.16em;color:var(--desk-faint);text-transform:uppercase}
-.ks-video-wrap{position:relative;transform:rotate(.5deg)}
+/* Bez KS nagiba na videu: rotacija playajuceg videa forsira resampling i muti sitni tekst demoa */
+.ks-video-wrap{position:relative}
 .ks-video-frame{background:#0F0C0A;padding:10px;box-shadow:0 6px 16px rgba(0,0,0,.45),0 46px 110px rgba(0,0,0,.6)}
 .ks-video-dots{display:flex;gap:7px;padding:2px 4px 10px;align-items:center}
 .ks-video-dots i{width:9px;height:9px;border-radius:50%;background:#5c554d}
@@ -1006,6 +1007,7 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
    fiksne (desk-ink/red iz tamne palete), ne tematske varijable. */
 .ks-video-stage{position:relative}
 .ks-video-play{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:14px;border:0;border-radius:0;background:rgba(15,12,10,.34);cursor:pointer;padding:0;margin:0}
+.ks-video-play[hidden]{display:none}
 .ks-video-play:hover .ks-vp-circle{transform:scale(1.07)}
 .ks-vp-circle{width:76px;height:76px;border-radius:50%;background:#E4573D;color:#1A1512;display:grid;place-items:center;box-shadow:0 10px 32px rgba(0,0,0,.5);transition:transform .15s var(--ease)}
 .ks-vp-circle svg{width:30px;height:30px;margin-left:4px;display:block}
