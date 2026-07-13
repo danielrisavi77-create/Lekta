@@ -7,7 +7,7 @@ import re
 from pathlib import Path
 from typing import Any, Iterable
 
-ALLOWED_RIGHTS = {"owned", "licensed", "consented", "public-domain"}
+ALLOWED_RIGHTS = {"owned", "licensed", "consented", "public-domain", "lawful-access-tdm"}
 PII_PATTERNS = (
     (re.compile(r"\b\d{11}\b"), "[OIB_REDACTED]"),
     (re.compile(r"\b(?:\+385|0)\s?\d[\d .()/+-]{7,}\b"), "[PHONE_REDACTED]"),

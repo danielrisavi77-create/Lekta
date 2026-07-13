@@ -43,6 +43,11 @@ repozitorije za koje postoji stvarna osnova korištenja. Dopuštene vrijednosti 
 - `licensed`
 - `consented`
 - `public-domain`
+- `lawful-access-tdm` (zakonit javni pristup bez pronađenog pridržaja prava za TDM)
+
+Za `lawful-access-tdm` konfiguracija mora sadržavati `rightsBasis` s potvrdom javnog
+pristupa, rezultatom provjere pridržaja TDM prava, potvrditeljem i datumom. Taj status
+ne tvrdi da je djelo licencirano niti prenosi autorsko pravo.
 
 Zatim pokreni:
 
