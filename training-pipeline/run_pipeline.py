@@ -20,20 +20,36 @@ def run(command: list[str]) -> None:
 
 
 def summarize(path: Path, output: Path) -> None:
-    counts: dict[str, int] = {"total": 0, "pdf": 0, "docx": 0, "ocrRequired": 0, "errors": 0}
+    counts: dict[str, object] = {
+        "total": 0,
+        "pdf": 0,
+        "docx": 0,
+        "ocrRequired": 0,
+        "errors": 0,
+        "repositories": {},
+    }
     with path.open(encoding="utf-8") as source:
         for line in source:
             if not line.strip():
                 continue
             record = json.loads(line)
-            counts["total"] += 1
+            counts["total"] = int(counts["total"]) + 1
             extension = str(record.get("extension", "")).lstrip(".")
-            if extension in counts:
-                counts[extension] += 1
+            if extension in {"pdf", "docx"}:
+                counts[extension] = int(counts[extension]) + 1
             if record.get("extractionStatus") == "ocr_required":
-                counts["ocrRequired"] += 1
+                counts["ocrRequired"] = int(counts["ocrRequired"]) + 1
             if record.get("extractionStatus") == "error":
-                counts["errors"] += 1
+                counts["errors"] = int(counts["errors"]) + 1
+            repository = str(record.get("repository") or "unknown")
+            repositories = counts["repositories"]
+            assert isinstance(repositories, dict)
+            item = repositories.setdefault(repository, {"pdf": 0, "docx": 0, "bytes": 0, "ocrRequired": 0})
+            if extension in {"pdf", "docx"}:
+                item[extension] += 1
+            item["bytes"] += int(record.get("sizeBytes") or 0)
+            if record.get("extractionStatus") == "ocr_required":
+                item["ocrRequired"] += 1
     output.write_text(json.dumps(counts, indent=2) + "\n", encoding="utf-8")
 
 
