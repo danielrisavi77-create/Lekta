@@ -40,6 +40,7 @@ const DEEP_CAPABLE: ReadonlySet<FixerId> = new Set<FixerId>([
   'line-spacing-fixer',
   'alignment-fixer',
   'paragraph-spacing-fixer',
+  'footnote-spacing-fixer',
 ]);
 
 // Fiksni ciljevi za sinteticke dokumente (bez profila). Namjerno se razlikuju od
@@ -64,6 +65,10 @@ const SYNTHETIC_PARAMS: Record<FixerId, Record<string, unknown>> = {
   // footerPageFixer umece podnozje u ciljanu sekciju. Default sekcija 0 (single-section
   // dokument); buildCases per-dokument override cilja glavnu sekciju multi-section dokumenta.
   'footer-page-fixer': { target: { sectionIndex: 0, align: 'right' } },
+  // Isti obrazac kao paragraph-spacing-fixer (uvijek gadja 0/0 u FootnoteText stilu), samo
+  // nad word/footnotes.xml; sinteticki dokumenti nemaju fusnote pa footnoteSpacingFixer ovdje
+  // uvijek zavrsi kao no-op (parts.footnotesXml je undefined), sto je ocekivano i pokriveno.
+  'footnote-spacing-fixer': {},
 };
 
 /** Ciljani params po fixeru IZ PROFILA (isti izvor kao zivi repair-items.ts). */
@@ -87,6 +92,13 @@ function paramsForFixer(fixerId: FixerId, profile: unknown): Record<string, unkn
       // vrijednoscu vec profilnom zastavicom (isto gate kao paragraphSpacingRepairableItem
       // u src/ui/repair-items.ts), a njegov stvarni cilj je uvijek fiksno 0/0.
       return (profile as { checkParagraphSpacingZero?: boolean } | null)?.checkParagraphSpacingZero === true
+        ? {}
+        : null;
+    case 'footnote-spacing-fixer':
+      // Isto gate kao footnoteSpacingRepairableItem u src/ui/repair-items.ts: zastavica, ne
+      // ciljana profilna vrijednost (cilj je uvijek fiksno 0/0 u FootnoteText stilu).
+      return (profile as { checkFootnoteParagraphSpacingZero?: boolean } | null)
+        ?.checkFootnoteParagraphSpacingZero === true
         ? {}
         : null;
     default:

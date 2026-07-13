@@ -391,6 +391,171 @@ describe('applyFixers golden round-trip', () => {
     expect(newStylesXml).toEqual(enc.encode(stylesXml));
   });
 
+  // === footnote-spacing-fixer ===
+  // Isti obrazac kao paragraph-spacing-fixer testovi iznad, ali FootnoteText
+  // stil (backstop) zivi u styles.xml (kao Normal), dok direktni override
+  // po odlomku zivi u word/footnotes.xml (kao document.xml za tijelo).
+  // Namjerna, zasebna fixture (ne buildSyntheticDocx): buildSyntheticDocx
+  // nema footnotes.xml niti FootnoteText stil, a dodavanje trece varijable
+  // (footnote opcije) bi zakompliciralo fixture koju 8 postojecih testova
+  // vec oslanja na tocno zadani oblik.
+  function buildFootnoteDocx(opts: { footnoteTextBackstop?: boolean; footnoteSpacingOverride?: boolean } = {}) {
+    const enc = new TextEncoder();
+    const backstop = opts.footnoteTextBackstop !== false;
+    const override = opts.footnoteSpacingOverride === true;
+
+    const documentXml =
+      '<?xml version="1.0"?><w:document><w:body>' +
+      '<w:p><w:r><w:t>Tekst tijela rada koji se ne smije mijenjati.</w:t></w:r></w:p>' +
+      '</w:body></w:document>';
+
+    // FootnoteText backstop (kad postoji) ima before=120/after=60 (6pt/3pt),
+    // namjerno RAZLICITO od Normal stila (before=200/after=200, 10pt/10pt),
+    // da testovi dokazu da fixer dira SAMO FootnoteText, ne Normal.
+    const footnoteTextStyleBlock = backstop
+      ? '<w:style w:type="paragraph" w:styleId="FootnoteText"><w:name w:val="Fusnota"/><w:pPr>' +
+        '<w:spacing w:before="120" w:after="60"/></w:pPr></w:style>'
+      : '<w:style w:type="paragraph" w:styleId="FootnoteText"><w:name w:val="Fusnota"/></w:style>';
+
+    const stylesXml =
+      '<?xml version="1.0"?><w:styles><w:docDefaults><w:rPrDefault><w:rPr>' +
+      '<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="24"/>' +
+      '</w:rPr></w:rPrDefault></w:docDefaults>' +
+      '<w:style w:type="paragraph" w:styleId="Normal"><w:pPr>' +
+      '<w:spacing w:before="200" w:after="200"/></w:pPr></w:style>' +
+      footnoteTextStyleBlock +
+      '</w:styles>';
+
+    const footnotePPr = override
+      ? '<w:pPr><w:pStyle w:val="FootnoteText"/><w:spacing w:before="120" w:after="60"/></w:pPr>'
+      : '<w:pPr><w:pStyle w:val="FootnoteText"/></w:pPr>';
+
+    const footnotesXml =
+      '<?xml version="1.0"?><w:footnotes>' +
+      '<w:footnote w:id="1"><w:p>' +
+      footnotePPr +
+      '<w:r><w:t>Tekst fusnote s napomenom.</w:t></w:r></w:p></w:footnote>' +
+      '</w:footnotes>';
+
+    return {
+      documentXml,
+      stylesXml,
+      footnotesXml,
+      entries: [
+        { name: 'word/document.xml', data: enc.encode(documentXml) },
+        { name: 'word/styles.xml', data: enc.encode(stylesXml) },
+        { name: 'word/footnotes.xml', data: enc.encode(footnotesXml) },
+      ],
+    };
+  }
+
+  it('footnote-spacing-fixer (shallow): FootnoteText stil na 0/0, Normal stil i document.xml netaknuti', async () => {
+    const dec = new TextDecoder();
+    const fixture = buildFootnoteDocx();
+    const originalDocx = await writeZip(fixture.entries);
+
+    const result = await applyFixers(originalDocx, [
+      { ruleId: 'razmak-fusnota', fixerId: 'footnote-spacing-fixer', params: {} },
+    ]);
+
+    expect(result.changelog).toHaveLength(1);
+    expect(result.changelog[0].beforeLabel).toBe('Razmak prije/poslije (fusnote): 6 pt / 3 pt');
+    expect(result.changelog[0].afterLabel).toBe('Razmak prije/poslije (fusnote): 0 pt / 0 pt');
+
+    const newEntries = await readZip(result.docxBytes);
+    const newStylesXml = dec.decode(newEntries.find((e) => e.name === 'word/styles.xml')!.data);
+    const newDocumentXml = dec.decode(newEntries.find((e) => e.name === 'word/document.xml')!.data);
+
+    // FootnoteText stil patchan na 0/0.
+    expect(newStylesXml).toContain(
+      '<w:style w:type="paragraph" w:styleId="FootnoteText"><w:name w:val="Fusnota"/><w:pPr>' +
+        '<w:spacing w:before="0" w:after="0"/></w:pPr></w:style>',
+    );
+    // Normal stil (razlicit ciljani before/after) ostaje netaknut.
+    expect(newStylesXml).toContain('<w:spacing w:before="200" w:after="200"/>');
+
+    // document.xml uopce nije meta ovog fixera: bit-identican original bajtovima.
+    expect(newDocumentXml).toBe(fixture.documentXml);
+  });
+
+  it('footnote-spacing-fixer (deep): direktni override na footnote odlomku strippan kad FootnoteText backstop postoji', async () => {
+    const dec = new TextDecoder();
+    const fixture = buildFootnoteDocx({ footnoteSpacingOverride: true });
+    const originalDocx = await writeZip(fixture.entries);
+
+    const result = await applyFixers(originalDocx, [
+      { ruleId: 'razmak-fusnota', fixerId: 'footnote-spacing-fixer', params: { deep: true } },
+    ]);
+
+    expect(result.changelog).toHaveLength(1);
+    expect(result.changelog[0].afterLabel).toBe(
+      'Razmak prije/poslije (fusnote): 0 pt / 0 pt; izravno formatiranje uklonjeno u 1 odlomaka (fusnote)',
+    );
+
+    const newEntries = await readZip(result.docxBytes);
+    const newStylesXml = dec.decode(newEntries.find((e) => e.name === 'word/styles.xml')!.data);
+    const newFootnotesXml = dec.decode(newEntries.find((e) => e.name === 'word/footnotes.xml')!.data);
+    const newDocumentXml = dec.decode(newEntries.find((e) => e.name === 'word/document.xml')!.data);
+
+    // Stilski backstop (FootnoteText) patchan na 0/0.
+    expect(newStylesXml).toContain(
+      '<w:style w:type="paragraph" w:styleId="FootnoteText"><w:name w:val="Fusnota"/><w:pPr>' +
+        '<w:spacing w:before="0" w:after="0"/></w:pPr></w:style>',
+    );
+
+    // Direktni override na footnote odlomku uklonjen (pao na 0/0 backstop preko stila).
+    expect(newFootnotesXml).not.toContain('w:before="120"');
+    expect(newFootnotesXml).not.toContain('w:after="60"');
+    expect(newFootnotesXml).toContain('Tekst fusnote s napomenom.');
+
+    // document.xml nije meta ovog fixera (dira samo styles.xml + footnotes.xml).
+    expect(newDocumentXml).toBe(fixture.documentXml);
+  });
+
+  it('footnote-spacing-fixer deep BEZ FootnoteText backstopa NE cisti footnote odlomak (regresija-zastita)', async () => {
+    const fixture = buildFootnoteDocx({ footnoteTextBackstop: false, footnoteSpacingOverride: true });
+    const originalDocx = await writeZip(fixture.entries);
+
+    const result = await applyFixers(originalDocx, [
+      { ruleId: 'razmak-fusnota', fixerId: 'footnote-spacing-fixer', params: { deep: true } },
+    ]);
+
+    // Stilski patch ne uspije (FootnoteText nema w:spacing, nema backstopa) I
+    // deep se NE primijeni: da jest, footnote odlomak bi pao na Word default
+    // umjesto na ciljanih 0/0.
+    expect(result.changelog).toHaveLength(0);
+    expect(result.skipped).toEqual(['razmak-fusnota']);
+    expect(result.docxBytes).toEqual(originalDocx);
+  });
+
+  it('footnote-spacing-fixer bez word/footnotes.xml u zipu: skipped, ne baca, ostali entryji netaknuti', async () => {
+    const enc = new TextEncoder();
+    const documentXml =
+      '<?xml version="1.0"?><w:document><w:body>' +
+      '<w:p><w:r><w:t>Rad bez ijedne fusnote.</w:t></w:r></w:p>' +
+      '</w:body></w:document>';
+    const stylesXml =
+      '<?xml version="1.0"?><w:styles><w:docDefaults><w:rPrDefault><w:rPr>' +
+      '<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="24"/>' +
+      '</w:rPr></w:rPrDefault></w:docDefaults></w:styles>';
+    const entries = [
+      { name: 'word/document.xml', data: enc.encode(documentXml) },
+      { name: 'word/styles.xml', data: enc.encode(stylesXml) },
+    ];
+    const originalDocx = await writeZip(entries);
+
+    const result = await applyFixers(originalDocx, [
+      { ruleId: 'razmak-fusnota', fixerId: 'footnote-spacing-fixer', params: {} },
+    ]);
+
+    // Fail-safe put (parts.footnotesXml je undefined, gate u fixers.ts): ne baca,
+    // vraca skipped, i bez ijednog primijenjenog popravka ulazni bajtovi ostaju
+    // bit-identicni (isti obrazac kao "nijedan popravak nije primijenjen" test).
+    expect(result.changelog).toHaveLength(0);
+    expect(result.skipped).toEqual(['razmak-fusnota']);
+    expect(result.docxBytes).toEqual(originalDocx);
+  });
+
   it('mijenja SAMO stvarno promijenjeni dio: styles fix ne re-enkodira document.xml', async () => {
     const fixture = buildSyntheticDocx();
     const originalDocx = await writeZip(fixture.entries);

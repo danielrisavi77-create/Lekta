@@ -135,6 +135,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "footer-page-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "footnote-spacing-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "line-spacing-fixer": {
       "applied": false,
       "changelog": [],
@@ -406,6 +409,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "footer-page-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "footnote-spacing-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "line-spacing-fixer": {
       "applied": false,
       "changelog": [],
@@ -673,6 +679,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "footer-page-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "footnote-spacing-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "line-spacing-fixer": {
       "applied": false,
       "changelog": [],
@@ -895,6 +904,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "footer-page-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "footnote-spacing-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "line-spacing-fixer": {
       "applied": false,
       "changelog": [],
@@ -1093,6 +1105,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "footer-page-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "footnote-spacing-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "line-spacing-fixer": {
       "params": "nema-cilja-u-profilu",
     },
@@ -1281,6 +1296,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [],
     },
     "footer-page-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "footnote-spacing-fixer": {
       "params": "nema-cilja-u-profilu",
     },
     "line-spacing-fixer": {
@@ -1473,6 +1491,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "footer-page-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "footnote-spacing-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "line-spacing-fixer": {
       "params": "nema-cilja-u-profilu",
     },
@@ -1634,6 +1655,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [
         "paper-size-fixer-rule",
+        "footnote-spacing-fixer-rule",
       ],
     },
     "alignment-fixer": {
@@ -1970,6 +1992,28 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         },
       },
       "skipped": [],
+    },
+    "footnote-spacing-fixer": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {},
+      "skipped": [
+        "footnote-spacing-fixer-rule",
+      ],
+    },
+    "footnote-spacing-fixer(deep)": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "deep": true,
+      },
+      "skipped": [
+        "footnote-spacing-fixer-rule",
+      ],
     },
     "line-spacing-fixer": {
       "applied": true,
@@ -2462,6 +2506,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [
         "paper-size-fixer-rule",
         "page-numbering-fixer-rule",
+        "footnote-spacing-fixer-rule",
       ],
     },
     "alignment-fixer": {
@@ -2733,6 +2778,28 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         },
       },
       "skipped": [],
+    },
+    "footnote-spacing-fixer": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {},
+      "skipped": [
+        "footnote-spacing-fixer-rule",
+      ],
+    },
+    "footnote-spacing-fixer(deep)": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "deep": true,
+      },
+      "skipped": [
+        "footnote-spacing-fixer-rule",
+      ],
     },
     "line-spacing-fixer": {
       "applied": true,
@@ -3183,6 +3250,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [],
     },
     "footer-page-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "footnote-spacing-fixer": {
       "params": "nema-cilja-u-profilu",
     },
     "line-spacing-fixer": {

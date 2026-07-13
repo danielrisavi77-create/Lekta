@@ -4,6 +4,7 @@ import {
   buildRepairableItems,
   universalRepairableItems,
   paragraphSpacingRepairableItem,
+  footnoteSpacingRepairableItem,
   type AnalyzedCheck,
 } from './repair-items';
 import type { RuleEntry } from '../profiles/profile-schema';
@@ -193,6 +194,35 @@ describe('paragraphSpacingRepairableItem (razmak prije/poslije, ovisi o profilu)
     );
     expect(items).toEqual([
       { ruleId: 'paragraph-spacing-universal', fixerId: 'paragraph-spacing-fixer', label: 'Razmak prije i poslije odlomka', params: {}, violated: true },
+    ]);
+  });
+});
+
+describe('footnoteSpacingRepairableItem (razmak prije/poslije fusnota, ovisi o profilu)', () => {
+  it('prazno kad profil ne provjerava razmak prije/poslije fusnota (checkFootnoteParagraphSpacingZero nije true)', () => {
+    expect(footnoteSpacingRepairableItem([FAIL('Razmak prije i poslije fusnota')], {})).toEqual([]);
+    expect(
+      footnoteSpacingRepairableItem([FAIL('Razmak prije i poslije fusnota')], { checkFootnoteParagraphSpacingZero: false }),
+    ).toEqual([]);
+  });
+
+  it('profil provjerava razmak fusnota, check prolazi -> violated:false', () => {
+    const items = footnoteSpacingRepairableItem(
+      [PASS('Razmak prije i poslije fusnota')],
+      { checkFootnoteParagraphSpacingZero: true },
+    );
+    expect(items).toEqual([
+      { ruleId: 'footnote-spacing-universal', fixerId: 'footnote-spacing-fixer', label: 'Razmak prije i poslije fusnota', params: {}, violated: false },
+    ]);
+  });
+
+  it('profil provjerava razmak fusnota, check ne prolazi -> violated:true', () => {
+    const items = footnoteSpacingRepairableItem(
+      [FAIL('Razmak prije i poslije fusnota')],
+      { checkFootnoteParagraphSpacingZero: true },
+    );
+    expect(items).toEqual([
+      { ruleId: 'footnote-spacing-universal', fixerId: 'footnote-spacing-fixer', label: 'Razmak prije i poslije fusnota', params: {}, violated: true },
     ]);
   });
 });

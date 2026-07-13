@@ -6,6 +6,7 @@ import {
   patchDefaultSpacing,
   patchDefaultParagraphSpacing,
   patchDefaultAlignment,
+  patchFootnoteTextSpacing,
 } from './xml-patch';
 
 const DOCUMENT_XML =
@@ -166,6 +167,45 @@ describe('patchDefaultAlignment', () => {
 
   it('vraca applied:false kad Normal stil ne postoji', () => {
     const result = patchDefaultAlignment('<w:styles></w:styles>', 'both');
+    expect(result.applied).toBe(false);
+  });
+});
+
+describe('findStyleBlock / patchFootnoteTextSpacing', () => {
+  // Zaseban fixture (razlicit styleId od STYLES_XML) da findStyleBlock('FootnoteText')
+  // dokazano gadja ISPRAVAN stil, ne slucajno Normal.
+  const STYLES_XML_WITH_FOOTNOTE =
+    '<w:styles><w:docDefaults><w:rPrDefault><w:rPr>' +
+    '<w:rFonts w:ascii="Calibri" w:hAnsi="Calibri" w:cs="Calibri"/>' +
+    '<w:sz w:val="22"/><w:szCs w:val="22"/>' +
+    '</w:rPr></w:rPrDefault></w:docDefaults>' +
+    '<w:style w:type="paragraph" w:default="1" w:styleId="Normal">' +
+    '<w:name w:val="Normal"/>' +
+    '<w:pPr><w:spacing w:after="160" w:line="259" w:lineRule="auto"/><w:jc w:val="left"/></w:pPr>' +
+    '</w:style>' +
+    '<w:style w:type="paragraph" w:styleId="FootnoteText">' +
+    '<w:name w:val="Fusnota"/>' +
+    '<w:pPr><w:spacing w:before="120" w:after="80" w:line="240" w:lineRule="auto"/></w:pPr>' +
+    '</w:style></w:styles>';
+
+  it('mijenja before/after na FootnoteText stilu, ostavlja Normal i docDefaults netaknute', () => {
+    const result = patchFootnoteTextSpacing(STYLES_XML_WITH_FOOTNOTE, 0, 0);
+
+    expect(result.applied).toBe(true);
+    expect(result.xml).toContain('w:before="0"');
+    expect(result.xml).toContain('w:after="0"');
+    expect(result.xml).toContain('w:line="240"'); // FootnoteText line netaknut
+    // Normal stil u istom fixtureu netaknut
+    expect(result.xml).toContain('<w:spacing w:after="160" w:line="259" w:lineRule="auto"/>');
+    expect(result.xml).toContain('w:val="left"'); // Normal jc netaknut
+    // docDefaults netaknut
+    expect(result.xml).toContain('w:ascii="Calibri"');
+    expect(result.before).toEqual({ 'w:before': '120', 'w:after': '80' });
+    expect(result.after).toEqual({ 'w:before': '0', 'w:after': '0' });
+  });
+
+  it('vraca applied:false kad FootnoteText stil ne postoji', () => {
+    const result = patchFootnoteTextSpacing(STYLES_XML, 0, 0); // STYLES_XML nema FootnoteText
     expect(result.applied).toBe(false);
   });
 });

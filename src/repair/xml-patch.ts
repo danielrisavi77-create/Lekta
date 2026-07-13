@@ -164,9 +164,15 @@ export function patchDefaultFont(
   return { xml: newXml, applied: true, before, after, found: foundAttrs };
 }
 
-function findNormalStyleBlock(stylesXml: string) {
-  return findBlock(stylesXml, /<w:style\b[^>]*w:styleId="Normal"[^>]*>[\s\S]*?<\/w:style>/);
+function findStyleBlock(stylesXml: string, styleId: string) {
+  const escapedId = escapeRegex(styleId);
+  return findBlock(
+    stylesXml,
+    new RegExp(`<w:style\\b[^>]*w:styleId="${escapedId}"[^>]*>[\\s\\S]*?<\\/w:style>`),
+  );
 }
+
+const findNormalStyleBlock = (stylesXml: string) => findStyleBlock(stylesXml, 'Normal');
 
 export function patchDefaultSpacing(
   stylesXml: string,
@@ -192,6 +198,29 @@ export function patchDefaultParagraphSpacing(
   afterTwentieths: number,
 ): PatchResult {
   const found = findNormalStyleBlock(stylesXml);
+  if (!found) return { ...NO_OP, xml: stylesXml };
+
+  const result = patchTagAttributes(found.block, /<w:spacing\b[^>]*\/?>/, {
+    'w:before': String(beforeTwentieths),
+    'w:after': String(afterTwentieths),
+  });
+  if (!result.applied) return { ...NO_OP, xml: stylesXml, found: result.found };
+
+  const newXml = stylesXml.slice(0, found.start) + result.xml + stylesXml.slice(found.end);
+  return { xml: newXml, applied: true, before: result.before, after: result.after, found: result.found };
+}
+
+// Word ugradjeni stil za tekst fusnota ima stabilan (locale-neovisan) styleId
+// "FootnoteText" (za razliku od w:name koji je lokaliziran, npr. "Fusnota").
+// Isti patch-only obrazac kao patchDefaultParagraphSpacing: ako dokument ne
+// deklarira taj stil u styles.xml, findStyleBlock vraca null i funkcija je
+// posten no-op (ne izmislja stil koji ne postoji).
+export function patchFootnoteTextSpacing(
+  stylesXml: string,
+  beforeTwentieths: number,
+  afterTwentieths: number,
+): PatchResult {
+  const found = findStyleBlock(stylesXml, 'FootnoteText');
   if (!found) return { ...NO_OP, xml: stylesXml };
 
   const result = patchTagAttributes(found.block, /<w:spacing\b[^>]*\/?>/, {

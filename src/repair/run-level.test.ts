@@ -190,6 +190,30 @@ describe('stripDirectFormatting: zastite', () => {
     expect(r.xml).not.toContain('w:jc');
   });
 
+  it('allowedStyleId="FootnoteText": odlomak s tim stilom SE obradjuje, "Normal" bez tog opcije NE (fixers.ts footnoteSpacingFixer)', () => {
+    const xml =
+      '<w:body>' + p('<w:pPr><w:pStyle w:val="FootnoteText"/><w:spacing w:before="120" w:after="160"/></w:pPr>' + run('', 'fusnota')) + '</w:body>';
+
+    const withFootnoteTarget = stripDirectFormatting(xml, { stripParagraphSpacing: true, allowedStyleId: 'FootnoteText' });
+    expect(withFootnoteTarget.applied).toBe(true);
+    expect(withFootnoteTarget.xml).not.toContain('w:before');
+    expect(withFootnoteTarget.xml).not.toContain('w:after');
+
+    // Bez allowedStyleId (default "Normal") isti odlomak ostaje netaknut: FootnoteText
+    // se tretira kao "stilizirani odlomak, preskoci", isto kao Heading1 za tijelo.
+    const withDefaultTarget = stripDirectFormatting(xml, { stripParagraphSpacing: true });
+    expect(withDefaultTarget.applied).toBe(false);
+    expect(withDefaultTarget.xml).toBe(xml);
+  });
+
+  it('allowedStyleId="FootnoteText": odlomak s DRUGIM stilom (npr. Normal) i dalje netaknut', () => {
+    const xml =
+      '<w:body>' + p('<w:pPr><w:pStyle w:val="Normal"/><w:spacing w:before="120" w:after="160"/></w:pPr>' + run('', 'tijelo')) + '</w:body>';
+    const r = stripDirectFormatting(xml, { stripParagraphSpacing: true, allowedStyleId: 'FootnoteText' });
+    expect(r.applied).toBe(false);
+    expect(r.xml).toBe(xml);
+  });
+
   it('odlomci unutar tekstualnog okvira su netaknuti', () => {
     const inner = p(run('<w:rFonts w:ascii="Impact" w:hAnsi="Impact"/><w:sz w:val="22"/>', 'ukrasni tekst'));
     const xml =

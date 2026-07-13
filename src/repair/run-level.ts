@@ -9,9 +9,12 @@
 // - Obradjuju se odlomci tijela; PRESKACU se odlomci u tekstualnim okvirima
 //   (w:txbxContent) i strukturiranim kontrolama/ugradjenim naslovnicama (w:sdt),
 //   oboje balansirano prema ugnjezdenju; te odlomci sa stilom (w:pStyle)
-//   razlicitim od "Normal": naslovi, citati, natpisi, popisi. Runovi koji
-//   referenciraju znakovni stil (w:rStyle) se takodjer preskacu (font/velicina
-//   im dolazi iz stila, ne iz Normal/docDefaults).
+//   razlicitim od dozvoljenog cilja (opts.allowedStyleId, default "Normal" za
+//   tijelo): naslovi, citati, natpisi, popisi. Runovi koji referenciraju
+//   znakovni stil (w:rStyle) se takodjer preskacu (font/velicina im dolazi iz
+//   stila, ne iz Normal/docDefaults). fixers.ts footnoteSpacingFixer poziva
+//   ovo nad word/footnotes.xml s allowedStyleId "FootnoteText" (footnote
+//   odlomci nose taj pStyle, ne "Normal").
 // - Formule (m:oMath) i povijest revizija (w:pPrChange/w:rPrChange) se prije
 //   obrade MASKIRAJU: Cambria Math u jednadzbama i track-changes zapisi se
 //   nikad ne diraju.
@@ -43,6 +46,15 @@ export interface RunLevelOptions {
   stripParagraphSpacing?: boolean;
   /** Ukloni w:jc kad je left/start (cilj je obostrano poravnanje). */
   stripLeftJustify?: boolean;
+  /**
+   * Koji w:pStyle se smatra "bez vlastitog stila" pa se cisti (default "Normal",
+   * za tijelo dokumenta). fixers.ts footnoteSpacingFixer prosljedjuje "FootnoteText"
+   * kad cisti word/footnotes.xml: footnote odlomci redovito imaju eksplicitan
+   * <w:pStyle w:val="FootnoteText"/>, sto bi s default "Normal" gateom uvijek
+   * bilo tretirano kao "stilizirani odlomak, preskoci" i deep ciscenje fusnota
+   * bi bilo trajni no-op.
+   */
+  allowedStyleId?: string;
 }
 
 export interface RunLevelResult {
@@ -141,10 +153,10 @@ function maskProtectedBlocks(paragraph: string): { masked: string; restore: (s: 
   return { masked, restore };
 }
 
-/** Ima li odlomak w:pStyle razlicit od "Normal" (takve preskacemo). */
-function hasNonNormalStyle(paragraph: string): boolean {
+/** Ima li odlomak w:pStyle razlicit od dozvoljenog cilja (takve preskacemo). */
+function hasNonTargetStyle(paragraph: string, allowedStyleId: string): boolean {
   const m = paragraph.match(/<w:pStyle\b[^>]*w:val="([^"]*)"/);
-  return !!m && m[1] !== 'Normal';
+  return !!m && m[1] !== allowedStyleId;
 }
 
 /** Ukloni imenovane atribute s taga; vrati '' ako tag ostane bez atributa. */
@@ -267,7 +279,7 @@ export function stripDirectFormatting(documentXml: string, opts: RunLevelOptions
     // Formule i track-changes povijest se maskiraju PRIJE svega (i prije
     // pStyle provjere: povijesni pStyle u w:pPrChange ne smije laziti o stilu).
     const { masked, restore } = maskProtectedBlocks(paragraph);
-    if (hasNonNormalStyle(masked)) return paragraph; // stilizirani odlomak: preskoci
+    if (hasNonTargetStyle(masked, opts.allowedStyleId ?? 'Normal')) return paragraph; // stilizirani odlomak: preskoci
 
     // U tablicama se prored i poravnanje NE diraju (jednostruki prored i
     // lijevo poravnanje u celijama su norma); font/velicina prolaze.

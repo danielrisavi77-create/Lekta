@@ -22,6 +22,7 @@ import {
   FOOTER_CONTENT_TYPE,
   FOOTER_REL_TYPE,
   type SectionNumberingTarget,
+  patchFootnoteTextSpacing,
 } from './xml-patch';
 import { stripDirectFormatting, type RunLevelResult } from './run-level';
 import { stripOrphanedEmptyParagraphs } from './paragraph-cleanup';
@@ -38,6 +39,12 @@ export interface DocxXmlParts {
   /** SVA imena zip entryja ulaznog docx-a (apply-fixers ih puni). Nuzno da imenovanje novog
    *  footer parta ne kolidira s orphan partom koji postoji u zipu ali NIJE u content-typesu. */
   existingParts?: string[];
+  /** word/footnotes.xml, ako docx ima fusnote. Opcionalan: mnogi dokumenti nemaju
+   * nijednu fusnotu, tada je dio odsutan iz zipa (isti obrazac kao stylesXml koji
+   * je optional u apply-fixers.ts, samo strozi jer footnotes.xml smije potpuno
+   * izostati). Postojeci fixeri ga ne diraju, samo ga transparentno prenose kroz
+   * spread {...parts, ...}. */
+  footnotesXml?: string;
 }
 
 export interface FixerOutput {
@@ -382,6 +389,61 @@ export function footerPageFixer(parts: DocxXmlParts, target: FooterPageTarget): 
     applied: true,
     beforeLabel: 'Podnozje s brojem stranice: nije postavljeno',
     afterLabel: `Umetnuto podnozje s automatskim brojem stranice (${alignLabel})`,
+  };
+}
+
+// Fusnote: isti patch-only cilj kao paragraphSpacingFixer (0/0), ali preko FootnoteText
+// stila umjesto Normal stila. FootnoteText JE stilska definicija pa zivi u word/styles.xml
+// (isto mjesto kao Normal), NE u word/footnotes.xml; footnotes.xml sadrzi samo sam tekst
+// fusnota (paragraphs), ne definicije stilova. Zato base patch cilja parts.stylesXml.
+// Deep ciscenje ipak radi nad parts.footnotesXml: DIREKTNI pPr>spacing override na
+// pojedinacnom footnote odlomku zivi u footnotes.xml, isto kao sto direktni override
+// tijela zivi u document.xml. Provjera parts.footnotesXml na pocetku ostaje kao gate:
+// dokument bez ijedne fusnote nema footnotes.xml u zipu, pa nema ni stvarnog cilja za
+// ovaj popravak (analyzeDocx checkFootnoteParagraphSpacingZero ne prijavljuje nista
+// kad nema fusnota), i ne pokusava se patchati prazan string.
+export function footnoteSpacingFixer(parts: DocxXmlParts, deep = false): FixerOutput {
+  if (!parts.footnotesXml) return NO_OP(parts);
+
+  const result = patchFootnoteTextSpacing(parts.stylesXml, 0, 0);
+  const base: FixerOutput = !result.applied
+    ? NO_OP(parts)
+    : {
+        parts: { ...parts, stylesXml: result.xml },
+        applied: true,
+        beforeLabel: `Razmak prije/poslije (fusnote): ${twentiethsToPtLabel(result.before['w:before'] ?? '0')} / ${twentiethsToPtLabel(result.before['w:after'] ?? '0')}`,
+        afterLabel: `Razmak prije/poslije (fusnote): ${twentiethsToPtLabel(result.after['w:before'] ?? '0')} / ${twentiethsToPtLabel(result.after['w:after'] ?? '0')}`,
+      };
+
+  // Backstop uvjet: FootnoteText stil ima w:spacing s w:before I w:after (result.found),
+  // inace bi skidanje direct razmaka u fusnotama vratilo dokument na Word default, ne na cilj.
+  // allowedStyleId: 'FootnoteText' jer footnote odlomci nose taj pStyle (ne
+  // "Normal"), za razliku od stripDirectFormatting default poziva nad tijelom.
+  const deepResult =
+    deep && result.found['w:before'] === true && result.found['w:after'] === true
+      ? stripDirectFormatting(parts.footnotesXml, { stripParagraphSpacing: true, allowedStyleId: 'FootnoteText' })
+      : null;
+
+  // combineDeep se ne moze ponovno iskoristiti ovdje: hardkodirano spaja deep izlaz u
+  // parts.documentXml, a deep ciscenje fusnota radi nad zasebnim zip dijelom
+  // (parts.footnotesXml). Isti obrazac spajanja prepisan rucno za footnotesXml.
+  if (!deepResult || !deepResult.applied) return base;
+
+  const mergedParts: DocxXmlParts = { ...(base.applied ? base.parts : parts), footnotesXml: deepResult.xml };
+  const deepNote = `izravno formatiranje uklonjeno u ${deepResult.paragraphsTouched} odlomaka (fusnote)`;
+  if (!base.applied) {
+    return {
+      parts: mergedParts,
+      applied: true,
+      beforeLabel: 'Izravno formatiranje u fusnotama',
+      afterLabel: deepNote,
+    };
+  }
+  return {
+    parts: mergedParts,
+    applied: true,
+    beforeLabel: base.beforeLabel,
+    afterLabel: `${base.afterLabel}; ${deepNote}`,
   };
 }
 

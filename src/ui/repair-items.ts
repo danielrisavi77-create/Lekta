@@ -27,6 +27,7 @@ const CHECK_TITLE: Record<string, string> = {
   'paragraph-spacing': 'Razmak prije i poslije odlomka',
   'page-number-start': 'Numeriranje od prve stranice Uvoda',
   'page-number-scheme': 'Shema numeriranja stranica',
+  'footnote-spacing': 'Razmak prije i poslije fusnota',
 };
 // paper-size ima dinamican naslov ('Format stranice A4' / 'Format stranice (A4/A3)') -> prefiks.
 const PAPER_SIZE_PREFIX = 'Format stranice';
@@ -211,6 +212,25 @@ export function pageNumberingRepairableItem(result: any, profile: any): Repairab
       label: 'Numeriranje stranica od Uvoda (rimski/arapski)',
       params: { targets },
       violated,
+    },
+  ];
+}
+
+/**
+ * Univerzalni popravak razmaka prije/poslije fusnota: isti obrazac kao
+ * paragraphSpacingRepairableItem, ali gated na checkFootnoteParagraphSpacingZero
+ * (analyzeDocx samo tada dodaje check 'Razmak prije i poslije fusnota', vidi
+ * src/analysis/analyze-docx.ts). Nije vezan za ruleEntry.
+ */
+export function footnoteSpacingRepairableItem(checks: AnalyzedCheck[], profile: any): RepairableItem[] {
+  if (profile?.checkFootnoteParagraphSpacingZero !== true) return [];
+  return [
+    {
+      ruleId: 'footnote-spacing-universal',
+      fixerId: 'footnote-spacing-fixer',
+      label: 'Razmak prije i poslije fusnota',
+      params: {},
+      violated: isViolated('footnote-spacing', checks),
     },
   ];
 }
