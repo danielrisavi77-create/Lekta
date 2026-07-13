@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { paramsForCheck, buildRepairableItems, type AnalyzedCheck } from './repair-items';
+import { paramsForCheck, buildRepairableItems, universalRepairableItems, type AnalyzedCheck } from './repair-items';
 import type { RuleEntry } from '../profiles/profile-schema';
+import type { Issue } from '../scoring/checks';
 
 // Profil s ciljanim vrijednostima (kao currentProfile().p).
 const PROFILE = {
@@ -114,5 +115,49 @@ describe('buildRepairableItems (Opcija A: samo prekrseno)', () => {
   it('bez includeNonViolated neprekrsene i dalje ispadaju (teaser ostaje Opcija A)', () => {
     const items = buildRepairableItems([PASS('Margine dokumenta')], PROFILE, [entry({})]);
     expect(items).toEqual([]);
+  });
+});
+
+const EMPTY_PARAGRAPHS_ISSUE: Issue = {
+  severity: 'info',
+  category: 'elements',
+  title: 'Dokument sadrži mnogo praznih odlomaka',
+  detail: 'Za razmake koristi postavke odlomka umjesto višestrukog pritiskanja tipke Enter.',
+  where: '',
+};
+
+describe('universalRepairableItems (higijena dokumenta, bez ruleEntry gate-a)', () => {
+  it('violated:true kad issues sadrzi tocan "Prazni odlomci" nalaz', () => {
+    const items = universalRepairableItems([EMPTY_PARAGRAPHS_ISSUE]);
+    expect(items).toEqual([
+      { ruleId: 'empty-paragraphs-universal', fixerId: 'empty-paragraph-fixer', label: 'Prazni odlomci', params: {}, violated: true },
+    ]);
+  });
+
+  it('violated:false kad issues nema taj nalaz (prazan niz)', () => {
+    const items = universalRepairableItems([]);
+    expect(items).toEqual([
+      { ruleId: 'empty-paragraphs-universal', fixerId: 'empty-paragraph-fixer', label: 'Prazni odlomci', params: {}, violated: false },
+    ]);
+  });
+
+  it('violated:false kad issues sadrzi samo nepovezane nalaze (druga kategorija ili naslov)', () => {
+    const unrelated: Issue[] = [
+      { severity: 'warning', category: 'citations', title: 'Mrežni izvori bez datuma pristupa', detail: '', where: '' },
+      { severity: 'info', category: 'elements', title: 'Neki drugi naslov', detail: '', where: '' },
+    ];
+    const items = universalRepairableItems(unrelated);
+    expect(items[0].violated).toBe(false);
+  });
+
+  it('uvijek vraca tocno jedan item ispravnog oblika', () => {
+    const items = universalRepairableItems([EMPTY_PARAGRAPHS_ISSUE]);
+    expect(items).toHaveLength(1);
+    expect(items[0]).toMatchObject({
+      ruleId: 'empty-paragraphs-universal',
+      fixerId: 'empty-paragraph-fixer',
+      label: 'Prazni odlomci',
+      params: {},
+    });
   });
 });

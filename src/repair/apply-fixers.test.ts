@@ -217,6 +217,55 @@ describe('applyFixers golden round-trip', () => {
     expect(newDoc).toContain('w:ascii="Times New Roman"'); // run TNR ostaje
   });
 
+  it('empty-paragraph-fixer: kolabira niz od 4 prazna odlomka na 1, styles.xml netaknut', async () => {
+    const enc = new TextEncoder();
+    const dec = new TextDecoder();
+
+    const documentXml =
+      '<?xml version="1.0"?><w:document><w:body>' +
+      '<w:p><w:r><w:t>Prvi odlomak s tekstom.</w:t></w:r></w:p>' +
+      '<w:p></w:p><w:p></w:p><w:p></w:p><w:p></w:p>' +
+      '<w:p><w:r><w:t>Drugi odlomak s tekstom.</w:t></w:r></w:p>' +
+      '<w:sectPr><w:pgSz w:w="11906" w:h="16838"/>' +
+      '<w:pgMar w:top="1417" w:right="1417" w:bottom="1417" w:left="1417"/>' +
+      '</w:sectPr></w:body></w:document>';
+
+    const stylesXml =
+      '<?xml version="1.0"?><w:styles><w:docDefaults><w:rPrDefault><w:rPr>' +
+      '<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="24"/>' +
+      '</w:rPr></w:rPrDefault></w:docDefaults></w:styles>';
+
+    const entries = [
+      { name: 'word/document.xml', data: enc.encode(documentXml) },
+      { name: 'word/styles.xml', data: enc.encode(stylesXml) },
+    ];
+    const originalDocx = await writeZip(entries);
+
+    const result = await applyFixers(originalDocx, [
+      { ruleId: 'prazni-odlomci', fixerId: 'empty-paragraph-fixer', params: {} },
+    ]);
+
+    expect(result.changelog).toHaveLength(1);
+    expect(result.changelog[0].fixerId).toBe('empty-paragraph-fixer');
+    expect(result.changelog[0].ruleId).toBe('prazni-odlomci');
+
+    const newEntries = await readZip(result.docxBytes);
+    const newDocumentXml = dec.decode(newEntries.find((e) => e.name === 'word/document.xml')!.data);
+    const newStylesXml = newEntries.find((e) => e.name === 'word/styles.xml')!.data;
+
+    // Tocno 1 prazan odlomak prezivljava tamo gdje su bila 4.
+    const emptyCount = (newDocumentXml.match(/<w:p><\/w:p>/g) ?? []).length;
+    expect(emptyCount).toBe(1);
+
+    // Tekstualni odlomci i sectPr netaknuti.
+    expect(newDocumentXml).toContain('Prvi odlomak s tekstom.');
+    expect(newDocumentXml).toContain('Drugi odlomak s tekstom.');
+    expect(newDocumentXml).toContain('w:top="1417"');
+
+    // styles.xml uopce ne dira ovaj fixer: bit-identican original bajtovima, ne samo toContain.
+    expect(newStylesXml).toEqual(enc.encode(stylesXml));
+  });
+
   it('mijenja SAMO stvarno promijenjeni dio: styles fix ne re-enkodira document.xml', async () => {
     const fixture = buildSyntheticDocx();
     const originalDocx = await writeZip(fixture.entries);

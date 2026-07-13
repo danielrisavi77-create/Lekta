@@ -54,6 +54,20 @@ function academicWork(words: number, font = TNR, extraTail: ParaSpec[] = []): Pa
   ];
 }
 
+/** Niz od n uzastopnih potpuno childless praznih odlomaka (Word bare Enter). */
+function emptyRun(n: number): ParaSpec[] {
+  return Array.from({ length: n }, () => ({ text: '', empty: true }));
+}
+
+/** Odlomak koji sadrzi ISKLJUCIVO prijelom stranice (nevidljiva struktura, nije "prazan"). */
+const pageBreakPara: ParaSpec = { text: '', raw: '<w:p><w:r><w:br w:type="page"/></w:r></w:p>' };
+
+/** Odlomak koji sadrzi ISKLJUCIVO bookmark par (npr. interni TOC anchor), izgleda prazno ali nije. */
+const bookmarkPara: ParaSpec = {
+  text: '',
+  raw: '<w:p><w:bookmarkStart w:id="0" w:name="x"/><w:bookmarkEnd w:id="0"/></w:p>',
+};
+
 interface Fixture {
   file: string;
   profileId: string;
@@ -119,6 +133,59 @@ const FIXTURES: Fixture[] = [
       ],
       pageCm: { w: 14.8, h: 21.0 },
       marginsCm: { top: 4, right: 4, bottom: 4, left: 4 },
+    },
+  },
+  // Prazni odlomci (Enter-run) na 3 razlicita mjesta u inace urednom radu: analiza
+  // ne smije pomijesati brojanje odlomaka/rijeci niti "Prazni odlomci" nalaz.
+  {
+    file: 'fer-diplomski-prazni-odlomci',
+    profileId: 'fer-diplomski',
+    spec: {
+      paragraphs: [
+        head('Sažetak'),
+        line('Ovo je sažetak rada u jednom odlomku bez citata.'),
+        line('Ključne riječi: analiza, metoda, rezultati'),
+        ...emptyRun(3),
+        head('Sadržaj'),
+        head('1. Uvod'),
+        ...body(Math.round(9000 * 0.15)),
+        ...emptyRun(5),
+        head('2. Razrada'),
+        ...body(Math.round(9000 * 0.7)),
+        head('3. Zaključak'),
+        ...body(Math.round(9000 * 0.15)),
+        ...emptyRun(4),
+        head('Literatura'),
+        line('Prezime, I. (2020). Naslov djela. Zagreb: Nakladnik.'),
+      ],
+      pageCm: A4,
+      marginsCm: M25,
+    },
+  },
+  // Strukturno "prazni" ali ZASTICENI odlomci (prijelom stranice, bookmark par) usred
+  // urednog rada: analiza ih ne smije brojati kao prazninu niti pokvariti raspon odlomaka/rijeci.
+  {
+    file: 'pmf-matematika-zasticeni-odlomci',
+    profileId: 'pmf-matematika-graduate',
+    spec: {
+      paragraphs: [
+        head('Sažetak'),
+        line('Ovo je sažetak rada u jednom odlomku bez citata.'),
+        line('Ključne riječi: analiza, metoda, rezultati'),
+        head('Sadržaj'),
+        head('1. Uvod'),
+        ...body(Math.round(7000 * 0.15)),
+        pageBreakPara,
+        head('2. Razrada'),
+        ...body(Math.round(7000 * 0.7)),
+        bookmarkPara,
+        head('3. Zaključak'),
+        ...body(Math.round(7000 * 0.15)),
+        head('Literatura'),
+        line('Prezime, I. (2020). Naslov djela. Zagreb: Nakladnik.'),
+      ],
+      pageCm: A4,
+      marginsCm: M25,
     },
   },
 ];

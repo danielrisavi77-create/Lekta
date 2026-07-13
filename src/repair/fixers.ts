@@ -13,6 +13,7 @@ import {
   patchDefaultAlignment,
 } from './xml-patch';
 import { stripDirectFormatting, type RunLevelResult } from './run-level';
+import { stripOrphanedEmptyParagraphs } from './paragraph-cleanup';
 
 export interface DocxXmlParts {
   documentXml: string;
@@ -263,4 +264,28 @@ export function alignmentFixer(
       ? stripDirectFormatting(parts.documentXml, { stripLeftJustify: true })
       : null;
   return combineDeep(base, parts, deepResult);
+}
+
+// Hrvatska deklinacija broja odlomaka (1 odlomak, 2-4 odlomka, 5+ odlomaka; 11-14 iznimka).
+function odlomakLabel(n: number): string {
+  const mod100 = n % 100;
+  const mod10 = n % 10;
+  let word: string;
+  if (mod10 === 1 && mod100 !== 11) word = 'odlomak';
+  else if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) word = 'odlomka';
+  else word = 'odlomaka';
+  return `${n} ${word}`;
+}
+
+export function emptyParagraphFixer(parts: DocxXmlParts): FixerOutput {
+  const result = stripOrphanedEmptyParagraphs(parts.documentXml);
+  if (!result.applied) return NO_OP(parts);
+
+  const totalBefore = result.paragraphsRemoved + result.runsCollapsed;
+  return {
+    parts: { ...parts, documentXml: result.xml },
+    applied: true,
+    beforeLabel: `Prazni odlomci: ${odlomakLabel(totalBefore)}`,
+    afterLabel: `svedeno na ${odlomakLabel(result.runsCollapsed)}, uklonjeno ${result.paragraphsRemoved}`,
+  };
 }

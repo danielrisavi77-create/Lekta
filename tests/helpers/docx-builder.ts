@@ -19,6 +19,8 @@ export interface ParaSpec {
   spacing15?: boolean; // true => prored 1,5 (w:line 360 auto)
   spacingLine?: number; // w:line vrijednost (240-tine): 276 => 1,15; ima prednost pred spacing15
   styleId?: string; // npr. "Heading1" za naslov
+  empty?: true; // emitira potpuno childless <w:p/> (Word bare Enter), zanemaruje sva ostala polja
+  raw?: string; // escape hatch: doslovni XML jednog odlomka (bookmark, prijelom stranice, sectPr...), emitira se bez izmjene
 }
 
 export interface DocSpec {
@@ -33,6 +35,13 @@ function esc(s: string): string {
 }
 
 function paraXml(p: ParaSpec): string {
+  // Escape hatch prvo: doslovni XML jednog odlomka, bez ikakve obrade (bookmarkovi,
+  // prijelom stranice, ugnjezdeni sectPr...), koristi se za negative/protected fixture.
+  if (p.raw !== undefined) return p.raw;
+  // Potpuno childless odlomak (Word bare Enter): NIKAKAV drugi field na ovom
+  // specu se ne primjenjuje, ni pPr ni rPr ni tekst.
+  if (p.empty) return '<w:p/>';
+
   const rpr: string[] = [];
   if (p.font) rpr.push(`<w:rFonts w:ascii="${esc(p.font)}" w:hAnsi="${esc(p.font)}"/>`);
   if (p.sizePt) rpr.push(`<w:sz w:val="${Math.round(p.sizePt * 2)}"/>`);

@@ -7,6 +7,7 @@
 
 import type { RepairableItem } from './repair-panel';
 import type { RuleEntry } from '../profiles/profile-schema';
+import type { Issue } from '../scoring/checks';
 
 /** Minimalni oblik provjere iz analyzeDocx rezultata (result.checks[]). */
 export interface AnalyzedCheck {
@@ -102,4 +103,27 @@ export function buildRepairableItems(
     });
   }
   return out;
+}
+
+// Naslov checka "Prazni odlomci" iz analyzeDocx (src/analysis/analyze-docx.ts), byte-za-byte
+// (dijakritika). Koristi se SAMO za korelaciju "je li prekrseno", ne kao izvor pravila.
+const EMPTY_PARAGRAPHS_ISSUE_TITLE = 'Dokument sadrži mnogo praznih odlomaka';
+
+/**
+ * Univerzalna higijena dokumenta (prazni odlomci): NIJE vezana ni za jedan institucijski
+ * ruleEntry pa namjerno zaobilazi cijeli ruleEntry gate (autoFixable/status/fixerId) iz
+ * buildRepairableItems. Prekrsenost se racuna izravno iz issues[] (category:'elements' +
+ * tocan naslov checka), ne iz profila.
+ */
+export function universalRepairableItems(issues: Issue[]): RepairableItem[] {
+  const violated = issues.some((i) => i.category === 'elements' && i.title === EMPTY_PARAGRAPHS_ISSUE_TITLE);
+  return [
+    {
+      ruleId: 'empty-paragraphs-universal',
+      fixerId: 'empty-paragraph-fixer',
+      label: 'Prazni odlomci',
+      params: {},
+      violated,
+    },
+  ];
 }
