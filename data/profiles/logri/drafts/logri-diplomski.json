@@ -1,0 +1,198 @@
+{
+  "profileId": "logri-diplomski",
+  "entries": [
+    {
+      "ruleId": "logri-diplomski--font",
+      "checkId": "font",
+      "value": [
+        "Arial",
+        "Calibri",
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Vrsta slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "logri-smjernice-radovi",
+      "sourcePage": "Smjernice za studentske radove, t.1 Format teksta",
+      "quote": "FONT: preporuča se upotreba fonta koji podržava znakove hrvatske latinice (npr. Arial, Calibri, Times New Roman); VELIČINA FONTA: 12; PRORED: 1,5 pt; MARGINE: Normalne (2.5 cm vrh, 2.5 cm dno, 2.5 cm lijevo i 2.5 cm desno); PORAVNANJE TEKSTA: obostrano; NUMERIRANJE: dolje desno (naslovna stranica se ne numerira).",
+      "status": "advisory",
+      "scored": false,
+      "autoFixable": true,
+      "fixerId": "font-fixer",
+      "note": "Advisory: preporuka/dualno u izvoru (vidi quote)."
+    },
+    {
+      "ruleId": "logri-diplomski--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "logri-smjernice-radovi",
+      "sourcePage": "Smjernice za studentske radove, t.1 Format teksta",
+      "quote": "FONT: preporuča se upotreba fonta koji podržava znakove hrvatske latinice (npr. Arial, Calibri, Times New Roman); VELIČINA FONTA: 12; PRORED: 1,5 pt; MARGINE: Normalne (2.5 cm vrh, 2.5 cm dno, 2.5 cm lijevo i 2.5 cm desno); PORAVNANJE TEKSTA: obostrano; NUMERIRANJE: dolje desno (naslovna stranica se ne numerira).",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "font-fixer",
+      "verifiedHash": "bc87c88089a2b3c0a1f687ef9f6c56e9685a3c1225a82f44d29c730547f099a0",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "logri-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "logri-smjernice-radovi",
+      "sourcePage": "Smjernice za studentske radove, t.1 Format teksta",
+      "quote": "FONT: preporuča se upotreba fonta koji podržava znakove hrvatske latinice (npr. Arial, Calibri, Times New Roman); VELIČINA FONTA: 12; PRORED: 1,5 pt; MARGINE: Normalne (2.5 cm vrh, 2.5 cm dno, 2.5 cm lijevo i 2.5 cm desno); PORAVNANJE TEKSTA: obostrano; NUMERIRANJE: dolje desno (naslovna stranica se ne numerira).",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "line-spacing-fixer",
+      "verifiedHash": "bc87c88089a2b3c0a1f687ef9f6c56e9685a3c1225a82f44d29c730547f099a0",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "logri-diplomski--margins",
+      "checkId": "margins",
+      "value": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "category": "format",
+      "label": "Margine",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "logri-smjernice-radovi",
+      "sourcePage": "Smjernice za studentske radove, t.1 Format teksta",
+      "quote": "FONT: preporuča se upotreba fonta koji podržava znakove hrvatske latinice (npr. Arial, Calibri, Times New Roman); VELIČINA FONTA: 12; PRORED: 1,5 pt; MARGINE: Normalne (2.5 cm vrh, 2.5 cm dno, 2.5 cm lijevo i 2.5 cm desno); PORAVNANJE TEKSTA: obostrano; NUMERIRANJE: dolje desno (naslovna stranica se ne numerira).",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "margins-fixer",
+      "verifiedHash": "bc87c88089a2b3c0a1f687ef9f6c56e9685a3c1225a82f44d29c730547f099a0",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "logri-diplomski--justify",
+      "checkId": "justify",
+      "value": true,
+      "category": "format",
+      "label": "Obostrano poravnanje",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "logri-smjernice-radovi",
+      "sourcePage": "Smjernice za studentske radove, t.1 Format teksta",
+      "quote": "FONT: preporuča se upotreba fonta koji podržava znakove hrvatske latinice (npr. Arial, Calibri, Times New Roman); VELIČINA FONTA: 12; PRORED: 1,5 pt; MARGINE: Normalne (2.5 cm vrh, 2.5 cm dno, 2.5 cm lijevo i 2.5 cm desno); PORAVNANJE TEKSTA: obostrano; NUMERIRANJE: dolje desno (naslovna stranica se ne numerira).",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "alignment-fixer",
+      "verifiedHash": "bc87c88089a2b3c0a1f687ef9f6c56e9685a3c1225a82f44d29c730547f099a0",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "logri-diplomski--page-numbers",
+      "checkId": "page-numbers",
+      "value": true,
+      "category": "format",
+      "label": "Numeriranje stranica",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "logri-smjernice-radovi",
+      "sourcePage": "Smjernice za studentske radove, t.1 Format teksta",
+      "quote": "FONT: preporuča se upotreba fonta koji podržava znakove hrvatske latinice (npr. Arial, Calibri, Times New Roman); VELIČINA FONTA: 12; PRORED: 1,5 pt; MARGINE: Normalne (2.5 cm vrh, 2.5 cm dno, 2.5 cm lijevo i 2.5 cm desno); PORAVNANJE TEKSTA: obostrano; NUMERIRANJE: dolje desno (naslovna stranica se ne numerira).",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "bc87c88089a2b3c0a1f687ef9f6c56e9685a3c1225a82f44d29c730547f099a0",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "logri-diplomski--required-sections",
+      "checkId": "required-sections",
+      "value": [
+        {
+          "key": "intro",
+          "label": "Uvod",
+          "terms": [
+            "Uvod"
+          ]
+        },
+        {
+          "key": "razrada",
+          "label": "Razrada teme",
+          "terms": [
+            "Razrada teme",
+            "Razrada"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "Zaključak",
+          "terms": [
+            "Zaključak",
+            "Zaključci"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "Literatura",
+          "terms": [
+            "Literatura"
+          ]
+        }
+      ],
+      "category": "structure",
+      "label": "Obvezni dijelovi rada",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "logri-smjernice-radovi",
+      "sourcePage": "Smjernice za studentske radove (struktura seminarskih radova)",
+      "quote": "Studentski seminarski radovi u pravilu se sastoje od: Uvoda, Razrade teme (nekoliko potpoglavlja), Zaključka i Literature.",
+      "status": "advisory",
+      "scored": false,
+      "note": "Advisory: preporuka/dualno u izvoru (vidi quote)."
+    },
+    {
+      "ruleId": "logri-diplomski--citation-style",
+      "checkId": "citation-style",
+      "value": "apa",
+      "category": "citation",
+      "label": "Stil citiranja",
+      "machineCheckable": false,
+      "authority": "program-page",
+      "sourceId": "logri-smjernice-radovi",
+      "sourcePage": "Smjernice za studentske radove, t.3 Navodjenje literature prema APA standardu",
+      "quote": "Prilikom navođenja literature preporuča se koristiti APA standard/stil za citiranje, parafraziranje i popisivanje literature i izvora.",
+      "status": "advisory",
+      "scored": false,
+      "note": "Advisory: preporuka/dualno u izvoru (vidi quote)."
+    }
+  ],
+  "generatedAt": "2026-07-16"
+}

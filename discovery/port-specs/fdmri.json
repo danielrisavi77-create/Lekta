@@ -1,0 +1,342 @@
+{
+  "faculty": "fdmri",
+  "institution": "uniri",
+  "unit": {
+    "id": "fdmri",
+    "name": "Fakultet dentalne medicine Rijeka",
+    "family": "biomed",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Prijediplomski/integrirani studij (zavrsni rad), Fakultet dentalne medicine Rijeka",
+    "Diplomski/integrirani studij (diplomski rad), Fakultet dentalne medicine Rijeka",
+    "Opći profil fakulteta"
+  ],
+  "sources": [
+    {
+      "id": "fdmri-naputak-zavrsni-2024",
+      "kind": "guidelines",
+      "title": "Naputak o izradi i oblikovanju zavrsnog rada (Fakultet dentalne medicine Rijeka)",
+      "url": "https://fdmri.uniri.hr/",
+      "publisher": "Fakultet dentalne medicine Rijeka",
+      "fetchedAt": "2026-07-16",
+      "snapshotPath": "data/sources/fdmri/fdmri-naputak-zavrsni-2024.pdf",
+      "snapshotHash": "59f5eccc12445e1a7b9595ac1b88b7e0530b66ed35988d09cb89ac38678ad0df",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-16",
+      "note": "Tehnicko oblikovanje citano izravno iz PDF-a."
+    },
+    {
+      "id": "fdmri-naputak-diplomski-2025",
+      "kind": "guidelines",
+      "title": "Naputak o izradi i oblikovanju diplomskog rada (Fakultet dentalne medicine Rijeka)",
+      "url": "https://fdmri.uniri.hr/",
+      "publisher": "Fakultet dentalne medicine Rijeka",
+      "fetchedAt": "2026-07-16",
+      "snapshotPath": "data/sources/fdmri/fdmri-naputak-diplomski-2025.pdf",
+      "snapshotHash": "c78532eee79d38d3e83c40fb0c9ead33aeeb4f84248c7f269394efb6681bd794",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-16",
+      "note": "Tehnicko oblikovanje citano izravno iz PDF-a."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "fdmri-zavrsni",
+      "unitId": "fdmri",
+      "programs": [
+        "Prijediplomski/integrirani studij (zavrsni rad), Fakultet dentalne medicine Rijeka"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Fakultet dentalne medicine Rijeka, zavrsni rad",
+      "verifiedAt": "2026-07-16",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 2,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "requireA4": true
+      },
+      "facts": [],
+      "note": "Novi port (recovery): direktno citanje sluzbenog izvora; verified samo doslovno navedeno.",
+      "sources": [
+        {
+          "title": "Naputak o izradi i oblikovanju zavrsnog rada (Fakultet dentalne medicine Rijeka)",
+          "url": "https://fdmri.uniri.hr/"
+        },
+        {
+          "title": "Naputak o izradi i oblikovanju diplomskog rada (Fakultet dentalne medicine Rijeka)",
+          "url": "https://fdmri.uniri.hr/"
+        }
+      ],
+      "sourceHierarchy": [
+        "Naputak o izradi i oblikovanju zavrsnog rada (Fakultet dentalne medicine Rijeka)",
+        "Naputak o izradi i oblikovanju diplomskog rada (Fakultet dentalne medicine Rijeka)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Margine",
+        "Format papira",
+        "Numeriranje stranica",
+        "Opseg",
+        "Obvezni dijelovi rada"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "fdmri-diplomski",
+      "unitId": "fdmri",
+      "programs": [
+        "Diplomski/integrirani studij (diplomski rad), Fakultet dentalne medicine Rijeka"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Fakultet dentalne medicine Rijeka, diplomski rad",
+      "verifiedAt": "2026-07-16",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 2,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "requireA4": true
+      },
+      "facts": [],
+      "note": "Novi port (recovery): direktno citanje sluzbenog izvora; verified samo doslovno navedeno.",
+      "sources": [
+        {
+          "title": "Naputak o izradi i oblikovanju zavrsnog rada (Fakultet dentalne medicine Rijeka)",
+          "url": "https://fdmri.uniri.hr/"
+        },
+        {
+          "title": "Naputak o izradi i oblikovanju diplomskog rada (Fakultet dentalne medicine Rijeka)",
+          "url": "https://fdmri.uniri.hr/"
+        }
+      ],
+      "sourceHierarchy": [
+        "Naputak o izradi i oblikovanju zavrsnog rada (Fakultet dentalne medicine Rijeka)",
+        "Naputak o izradi i oblikovanju diplomskog rada (Fakultet dentalne medicine Rijeka)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Margine",
+        "Format papira",
+        "Numeriranje stranica",
+        "Opseg"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-fdmri-zavrsni--font-verified-2026-07-16",
+      "ruleId": "fdmri-zavrsni--font",
+      "profileId": "fdmri-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "fdmri-naputak-zavrsni-2024",
+      "sourcePage": "Naputak o oblikovanju zavrsnog rada (tehnicki dio)",
+      "quote": "Završni rad treba biti pisan na računalu u standardnoj veličini stranice (A4, 210x297 mm), s marginama od 2,5 cm i dvostrukim proredom. U pisanju je potrebno koristiti font Times New Roman, veličine 12. Osim uvodnih, sve stranice teksta (počinje od Uvoda) moraju biti numerirane u donjem desnom kutu. Završni rad mora biti napisan u rasponu od 15-50 stranica.",
+      "note": "Recovery port: covjek potvrdio uz otvoren snapshot."
+    },
+    {
+      "id": "led-fdmri-zavrsni--font-size-verified-2026-07-16",
+      "ruleId": "fdmri-zavrsni--font-size",
+      "profileId": "fdmri-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "fdmri-naputak-zavrsni-2024",
+      "sourcePage": "Naputak o oblikovanju zavrsnog rada",
+      "quote": "Završni rad treba biti pisan na računalu u standardnoj veličini stranice (A4, 210x297 mm), s marginama od 2,5 cm i dvostrukim proredom. U pisanju je potrebno koristiti font Times New Roman, veličine 12. Osim uvodnih, sve stranice teksta (počinje od Uvoda) moraju biti numerirane u donjem desnom kutu. Završni rad mora biti napisan u rasponu od 15-50 stranica.",
+      "note": "Recovery port: covjek potvrdio uz otvoren snapshot."
+    },
+    {
+      "id": "led-fdmri-zavrsni--line-spacing-verified-2026-07-16",
+      "ruleId": "fdmri-zavrsni--line-spacing",
+      "profileId": "fdmri-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "fdmri-naputak-zavrsni-2024",
+      "sourcePage": "Naputak o oblikovanju zavrsnog rada",
+      "quote": "Završni rad treba biti pisan na računalu u standardnoj veličini stranice (A4, 210x297 mm), s marginama od 2,5 cm i dvostrukim proredom. U pisanju je potrebno koristiti font Times New Roman, veličine 12. Osim uvodnih, sve stranice teksta (počinje od Uvoda) moraju biti numerirane u donjem desnom kutu. Završni rad mora biti napisan u rasponu od 15-50 stranica.",
+      "note": "Recovery port: covjek potvrdio uz otvoren snapshot."
+    },
+    {
+      "id": "led-fdmri-zavrsni--margins-verified-2026-07-16",
+      "ruleId": "fdmri-zavrsni--margins",
+      "profileId": "fdmri-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "fdmri-naputak-zavrsni-2024",
+      "sourcePage": "Naputak o oblikovanju zavrsnog rada",
+      "quote": "Završni rad treba biti pisan na računalu u standardnoj veličini stranice (A4, 210x297 mm), s marginama od 2,5 cm i dvostrukim proredom. U pisanju je potrebno koristiti font Times New Roman, veličine 12. Osim uvodnih, sve stranice teksta (počinje od Uvoda) moraju biti numerirane u donjem desnom kutu. Završni rad mora biti napisan u rasponu od 15-50 stranica.",
+      "note": "Recovery port: covjek potvrdio uz otvoren snapshot."
+    },
+    {
+      "id": "led-fdmri-zavrsni--paper-size-verified-2026-07-16",
+      "ruleId": "fdmri-zavrsni--paper-size",
+      "profileId": "fdmri-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "fdmri-naputak-zavrsni-2024",
+      "sourcePage": "Naputak o oblikovanju zavrsnog rada",
+      "quote": "Završni rad treba biti pisan na računalu u standardnoj veličini stranice (A4, 210x297 mm), s marginama od 2,5 cm i dvostrukim proredom. U pisanju je potrebno koristiti font Times New Roman, veličine 12. Osim uvodnih, sve stranice teksta (počinje od Uvoda) moraju biti numerirane u donjem desnom kutu. Završni rad mora biti napisan u rasponu od 15-50 stranica.",
+      "note": "Recovery port: covjek potvrdio uz otvoren snapshot."
+    },
+    {
+      "id": "led-fdmri-zavrsni--page-numbers-verified-2026-07-16",
+      "ruleId": "fdmri-zavrsni--page-numbers",
+      "profileId": "fdmri-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "fdmri-naputak-zavrsni-2024",
+      "sourcePage": "Naputak o oblikovanju zavrsnog rada",
+      "quote": "Završni rad treba biti pisan na računalu u standardnoj veličini stranice (A4, 210x297 mm), s marginama od 2,5 cm i dvostrukim proredom. U pisanju je potrebno koristiti font Times New Roman, veličine 12. Osim uvodnih, sve stranice teksta (počinje od Uvoda) moraju biti numerirane u donjem desnom kutu. Završni rad mora biti napisan u rasponu od 15-50 stranica.",
+      "note": "Recovery port: covjek potvrdio uz otvoren snapshot."
+    },
+    {
+      "id": "led-fdmri-zavrsni--page-count-verified-2026-07-16",
+      "ruleId": "fdmri-zavrsni--page-count",
+      "profileId": "fdmri-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "fdmri-naputak-zavrsni-2024",
+      "sourcePage": "Naputak o oblikovanju zavrsnog rada",
+      "quote": "Završni rad treba biti pisan na računalu u standardnoj veličini stranice (A4, 210x297 mm), s marginama od 2,5 cm i dvostrukim proredom. U pisanju je potrebno koristiti font Times New Roman, veličine 12. Osim uvodnih, sve stranice teksta (počinje od Uvoda) moraju biti numerirane u donjem desnom kutu. Završni rad mora biti napisan u rasponu od 15-50 stranica.",
+      "note": "Recovery port: covjek potvrdio uz otvoren snapshot."
+    },
+    {
+      "id": "led-fdmri-zavrsni--required-sections-verified-2026-07-16",
+      "ruleId": "fdmri-zavrsni--required-sections",
+      "profileId": "fdmri-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "fdmri-naputak-zavrsni-2024",
+      "sourcePage": "Tijelo zavrsnog rada, Prikaz sastavnica (pregledni rad)",
+      "quote": "Prikaz sastavnica završnog rada (pregledni rad): 1. Uvod, 2. Svrha rada, 3. Pregled literature na zadanu temu, 4. Rasprava, 5. Zaključci, 6. Sažetak, 7. Summary, 8. Literatura, 9. Životopis.",
+      "note": "Recovery port: covjek potvrdio uz otvoren snapshot."
+    },
+    {
+      "id": "led-fdmri-diplomski--font-verified-2026-07-16",
+      "ruleId": "fdmri-diplomski--font",
+      "profileId": "fdmri-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "fdmri-naputak-diplomski-2025",
+      "sourcePage": "Naputak o oblikovanju diplomskog rada (tehnicki dio)",
+      "quote": "Diplomski rad treba biti pisan na računalu u standardnoj veličini stranice (A4, 210x297 mm), s marginama od 2,5 cm i dvostrukim proredom. U pisanju je potrebno koristiti font Times New Roman, veličine 12. Osim uvodnih, sve stranice teksta (počine od Uvoda) moraju biti numerirane u donjem desnom kutu. Diplomski rad mora biti napisan u rasponu od 15-50 stranica.",
+      "note": "Recovery port: covjek potvrdio uz otvoren snapshot."
+    },
+    {
+      "id": "led-fdmri-diplomski--font-size-verified-2026-07-16",
+      "ruleId": "fdmri-diplomski--font-size",
+      "profileId": "fdmri-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "fdmri-naputak-diplomski-2025",
+      "sourcePage": "Naputak o oblikovanju diplomskog rada",
+      "quote": "Diplomski rad treba biti pisan na računalu u standardnoj veličini stranice (A4, 210x297 mm), s marginama od 2,5 cm i dvostrukim proredom. U pisanju je potrebno koristiti font Times New Roman, veličine 12. Osim uvodnih, sve stranice teksta (počine od Uvoda) moraju biti numerirane u donjem desnom kutu. Diplomski rad mora biti napisan u rasponu od 15-50 stranica.",
+      "note": "Recovery port: covjek potvrdio uz otvoren snapshot."
+    },
+    {
+      "id": "led-fdmri-diplomski--line-spacing-verified-2026-07-16",
+      "ruleId": "fdmri-diplomski--line-spacing",
+      "profileId": "fdmri-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "fdmri-naputak-diplomski-2025",
+      "sourcePage": "Naputak o oblikovanju diplomskog rada",
+      "quote": "Diplomski rad treba biti pisan na računalu u standardnoj veličini stranice (A4, 210x297 mm), s marginama od 2,5 cm i dvostrukim proredom. U pisanju je potrebno koristiti font Times New Roman, veličine 12. Osim uvodnih, sve stranice teksta (počine od Uvoda) moraju biti numerirane u donjem desnom kutu. Diplomski rad mora biti napisan u rasponu od 15-50 stranica.",
+      "note": "Recovery port: covjek potvrdio uz otvoren snapshot."
+    },
+    {
+      "id": "led-fdmri-diplomski--margins-verified-2026-07-16",
+      "ruleId": "fdmri-diplomski--margins",
+      "profileId": "fdmri-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "fdmri-naputak-diplomski-2025",
+      "sourcePage": "Naputak o oblikovanju diplomskog rada",
+      "quote": "Diplomski rad treba biti pisan na računalu u standardnoj veličini stranice (A4, 210x297 mm), s marginama od 2,5 cm i dvostrukim proredom. U pisanju je potrebno koristiti font Times New Roman, veličine 12. Osim uvodnih, sve stranice teksta (počine od Uvoda) moraju biti numerirane u donjem desnom kutu. Diplomski rad mora biti napisan u rasponu od 15-50 stranica.",
+      "note": "Recovery port: covjek potvrdio uz otvoren snapshot."
+    },
+    {
+      "id": "led-fdmri-diplomski--paper-size-verified-2026-07-16",
+      "ruleId": "fdmri-diplomski--paper-size",
+      "profileId": "fdmri-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "fdmri-naputak-diplomski-2025",
+      "sourcePage": "Naputak o oblikovanju diplomskog rada",
+      "quote": "Diplomski rad treba biti pisan na računalu u standardnoj veličini stranice (A4, 210x297 mm), s marginama od 2,5 cm i dvostrukim proredom. U pisanju je potrebno koristiti font Times New Roman, veličine 12. Osim uvodnih, sve stranice teksta (počine od Uvoda) moraju biti numerirane u donjem desnom kutu. Diplomski rad mora biti napisan u rasponu od 15-50 stranica.",
+      "note": "Recovery port: covjek potvrdio uz otvoren snapshot."
+    },
+    {
+      "id": "led-fdmri-diplomski--page-numbers-verified-2026-07-16",
+      "ruleId": "fdmri-diplomski--page-numbers",
+      "profileId": "fdmri-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "fdmri-naputak-diplomski-2025",
+      "sourcePage": "Naputak o oblikovanju diplomskog rada",
+      "quote": "Diplomski rad treba biti pisan na računalu u standardnoj veličini stranice (A4, 210x297 mm), s marginama od 2,5 cm i dvostrukim proredom. U pisanju je potrebno koristiti font Times New Roman, veličine 12. Osim uvodnih, sve stranice teksta (počine od Uvoda) moraju biti numerirane u donjem desnom kutu. Diplomski rad mora biti napisan u rasponu od 15-50 stranica.",
+      "note": "Recovery port: covjek potvrdio uz otvoren snapshot."
+    },
+    {
+      "id": "led-fdmri-diplomski--page-count-verified-2026-07-16",
+      "ruleId": "fdmri-diplomski--page-count",
+      "profileId": "fdmri-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "fdmri-naputak-diplomski-2025",
+      "sourcePage": "Naputak o oblikovanju diplomskog rada",
+      "quote": "Diplomski rad treba biti pisan na računalu u standardnoj veličini stranice (A4, 210x297 mm), s marginama od 2,5 cm i dvostrukim proredom. U pisanju je potrebno koristiti font Times New Roman, veličine 12. Osim uvodnih, sve stranice teksta (počine od Uvoda) moraju biti numerirane u donjem desnom kutu. Diplomski rad mora biti napisan u rasponu od 15-50 stranica.",
+      "note": "Recovery port: covjek potvrdio uz otvoren snapshot."
+    }
+  ]
+}

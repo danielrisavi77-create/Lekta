@@ -225,6 +225,22 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "fdmri-diplomski",
+      "scored": 7,
+      "machineCheckable": 7,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-16"
+    },
+    {
+      "profileId": "fdmri-zavrsni",
+      "scored": 8,
+      "machineCheckable": 8,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-16"
+    },
+    {
       "profileId": "fer-diplomski",
       "scored": 0,
       "machineCheckable": 6,
@@ -935,6 +951,14 @@
       "advisory": 0,
       "ratio": 1,
       "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "logri-diplomski",
+      "scored": 5,
+      "machineCheckable": 7,
+      "advisory": 3,
+      "ratio": 0.7142857142857143,
+      "lastVerified": "2026-07-16"
     },
     {
       "profileId": "medri-farmacija-diplomski",
@@ -1809,5 +1833,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 1344
+  "totalScored": 1364
 }

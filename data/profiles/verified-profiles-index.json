@@ -7954,5 +7954,38 @@
       "graduate"
     ],
     "status": "partial"
+  },
+  {
+    "id": "fdmri-zavrsni",
+    "unitId": "fdmri",
+    "programs": [
+      "Prijediplomski/integrirani studij (zavrsni rad), Fakultet dentalne medicine Rijeka"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "fdmri-diplomski",
+    "unitId": "fdmri",
+    "programs": [
+      "Diplomski/integrirani studij (diplomski rad), Fakultet dentalne medicine Rijeka"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "logri-diplomski",
+    "unitId": "logri",
+    "programs": [
+      "Diplomski studij Logopedija (Fakultet za logopediju Rijeka)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial"
   }
 ]

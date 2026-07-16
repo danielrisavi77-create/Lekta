@@ -1,0 +1,144 @@
+{
+  "faculty": "logri",
+  "institution": "uniri",
+  "unit": {
+    "id": "logri",
+    "name": "Fakultet za logopediju Rijeka",
+    "family": "social",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Diplomski studij Logopedija (Fakultet za logopediju Rijeka)",
+    "Opći profil fakulteta"
+  ],
+  "sources": [
+    {
+      "id": "logri-smjernice-radovi",
+      "kind": "guidelines",
+      "title": "Smjernice za pisanje i oblikovanje studentskih radova (Fakultet za logopediju Rijeka)",
+      "url": "https://logri.uniri.hr/",
+      "publisher": "Fakultet za logopediju Rijeka",
+      "fetchedAt": "2026-07-16",
+      "snapshotPath": "data/sources/logri/logri-smjernice-studentski-radovi.pdf",
+      "snapshotHash": "bc87c88089a2b3c0a1f687ef9f6c56e9685a3c1225a82f44d29c730547f099a0",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-16",
+      "note": "Sluzbene smjernice fakulteta za oblikovanje studentskih radova; font i APA su preporuka pa ostaju advisory."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "logri-diplomski",
+      "unitId": "logri",
+      "programs": [
+        "Diplomski studij Logopedija (Fakultet za logopediju Rijeka)"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Fakultet za logopediju Rijeka, diplomski rad",
+      "verifiedAt": "2026-07-16",
+      "documentDate": null,
+      "rules": {
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "justify": true
+      },
+      "facts": [],
+      "note": "Novi port (recovery): direktno citanje sluzbenog izvora; verified samo doslovno navedeno.",
+      "sources": [
+        {
+          "title": "Smjernice za pisanje i oblikovanje studentskih radova (Fakultet za logopediju Rijeka)",
+          "url": "https://logri.uniri.hr/"
+        }
+      ],
+      "sourceHierarchy": [
+        "Smjernice za pisanje i oblikovanje studentskih radova (Fakultet za logopediju Rijeka)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Velicina slova",
+        "Prored",
+        "Margine",
+        "Obostrano poravnanje",
+        "Numeriranje stranica"
+      ],
+      "advisoryScope": [
+        "Vrsta slova",
+        "Obvezni dijelovi rada",
+        "Stil citiranja"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-logri-diplomski--font-size-verified-2026-07-16",
+      "ruleId": "logri-diplomski--font-size",
+      "profileId": "logri-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "logri-smjernice-radovi",
+      "sourcePage": "Smjernice za studentske radove, t.1 Format teksta",
+      "quote": "FONT: preporuča se upotreba fonta koji podržava znakove hrvatske latinice (npr. Arial, Calibri, Times New Roman); VELIČINA FONTA: 12; PRORED: 1,5 pt; MARGINE: Normalne (2.5 cm vrh, 2.5 cm dno, 2.5 cm lijevo i 2.5 cm desno); PORAVNANJE TEKSTA: obostrano; NUMERIRANJE: dolje desno (naslovna stranica se ne numerira).",
+      "note": "Recovery port: covjek potvrdio uz otvoren snapshot."
+    },
+    {
+      "id": "led-logri-diplomski--line-spacing-verified-2026-07-16",
+      "ruleId": "logri-diplomski--line-spacing",
+      "profileId": "logri-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "logri-smjernice-radovi",
+      "sourcePage": "Smjernice za studentske radove, t.1 Format teksta",
+      "quote": "FONT: preporuča se upotreba fonta koji podržava znakove hrvatske latinice (npr. Arial, Calibri, Times New Roman); VELIČINA FONTA: 12; PRORED: 1,5 pt; MARGINE: Normalne (2.5 cm vrh, 2.5 cm dno, 2.5 cm lijevo i 2.5 cm desno); PORAVNANJE TEKSTA: obostrano; NUMERIRANJE: dolje desno (naslovna stranica se ne numerira).",
+      "note": "Recovery port: covjek potvrdio uz otvoren snapshot."
+    },
+    {
+      "id": "led-logri-diplomski--margins-verified-2026-07-16",
+      "ruleId": "logri-diplomski--margins",
+      "profileId": "logri-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "logri-smjernice-radovi",
+      "sourcePage": "Smjernice za studentske radove, t.1 Format teksta",
+      "quote": "FONT: preporuča se upotreba fonta koji podržava znakove hrvatske latinice (npr. Arial, Calibri, Times New Roman); VELIČINA FONTA: 12; PRORED: 1,5 pt; MARGINE: Normalne (2.5 cm vrh, 2.5 cm dno, 2.5 cm lijevo i 2.5 cm desno); PORAVNANJE TEKSTA: obostrano; NUMERIRANJE: dolje desno (naslovna stranica se ne numerira).",
+      "note": "Recovery port: covjek potvrdio uz otvoren snapshot."
+    },
+    {
+      "id": "led-logri-diplomski--justify-verified-2026-07-16",
+      "ruleId": "logri-diplomski--justify",
+      "profileId": "logri-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "logri-smjernice-radovi",
+      "sourcePage": "Smjernice za studentske radove, t.1 Format teksta",
+      "quote": "FONT: preporuča se upotreba fonta koji podržava znakove hrvatske latinice (npr. Arial, Calibri, Times New Roman); VELIČINA FONTA: 12; PRORED: 1,5 pt; MARGINE: Normalne (2.5 cm vrh, 2.5 cm dno, 2.5 cm lijevo i 2.5 cm desno); PORAVNANJE TEKSTA: obostrano; NUMERIRANJE: dolje desno (naslovna stranica se ne numerira).",
+      "note": "Recovery port: covjek potvrdio uz otvoren snapshot."
+    },
+    {
+      "id": "led-logri-diplomski--page-numbers-verified-2026-07-16",
+      "ruleId": "logri-diplomski--page-numbers",
+      "profileId": "logri-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "logri-smjernice-radovi",
+      "sourcePage": "Smjernice za studentske radove, t.1 Format teksta",
+      "quote": "FONT: preporuča se upotreba fonta koji podržava znakove hrvatske latinice (npr. Arial, Calibri, Times New Roman); VELIČINA FONTA: 12; PRORED: 1,5 pt; MARGINE: Normalne (2.5 cm vrh, 2.5 cm dno, 2.5 cm lijevo i 2.5 cm desno); PORAVNANJE TEKSTA: obostrano; NUMERIRANJE: dolje desno (naslovna stranica se ne numerira).",
+      "note": "Recovery port: covjek potvrdio uz otvoren snapshot."
+    }
+  ]
+}

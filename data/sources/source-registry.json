@@ -2389,5 +2389,44 @@
     "snapshotHash": "990e30dedf4c88dd47cde5ca6d139d9d0dd75ac1358ae75bbcba6d5fae36c6c7",
     "validityClass": "stable",
     "lastChecked": "2026-07-16"
+  },
+  {
+    "id": "fdmri-naputak-zavrsni-2024",
+    "kind": "guidelines",
+    "title": "Naputak o izradi i oblikovanju zavrsnog rada (Fakultet dentalne medicine Rijeka)",
+    "url": "https://fdmri.uniri.hr/",
+    "publisher": "Fakultet dentalne medicine Rijeka",
+    "fetchedAt": "2026-07-16",
+    "snapshotPath": "data/sources/fdmri/fdmri-naputak-zavrsni-2024.pdf",
+    "snapshotHash": "59f5eccc12445e1a7b9595ac1b88b7e0530b66ed35988d09cb89ac38678ad0df",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-16",
+    "note": "Tehnicko oblikovanje citano izravno iz PDF-a."
+  },
+  {
+    "id": "fdmri-naputak-diplomski-2025",
+    "kind": "guidelines",
+    "title": "Naputak o izradi i oblikovanju diplomskog rada (Fakultet dentalne medicine Rijeka)",
+    "url": "https://fdmri.uniri.hr/",
+    "publisher": "Fakultet dentalne medicine Rijeka",
+    "fetchedAt": "2026-07-16",
+    "snapshotPath": "data/sources/fdmri/fdmri-naputak-diplomski-2025.pdf",
+    "snapshotHash": "c78532eee79d38d3e83c40fb0c9ead33aeeb4f84248c7f269394efb6681bd794",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-16",
+    "note": "Tehnicko oblikovanje citano izravno iz PDF-a."
+  },
+  {
+    "id": "logri-smjernice-radovi",
+    "kind": "guidelines",
+    "title": "Smjernice za pisanje i oblikovanje studentskih radova (Fakultet za logopediju Rijeka)",
+    "url": "https://logri.uniri.hr/",
+    "publisher": "Fakultet za logopediju Rijeka",
+    "fetchedAt": "2026-07-16",
+    "snapshotPath": "data/sources/logri/logri-smjernice-studentski-radovi.pdf",
+    "snapshotHash": "bc87c88089a2b3c0a1f687ef9f6c56e9685a3c1225a82f44d29c730547f099a0",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-16",
+    "note": "Sluzbene smjernice fakulteta za oblikovanje studentskih radova; font i APA su preporuka pa ostaju advisory."
   }
 ]

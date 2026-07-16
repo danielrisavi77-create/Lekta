@@ -149,6 +149,14 @@
     "justify",
     "toc"
   ],
+  "fdmri-diplomski": [
+    "justify",
+    "toc"
+  ],
+  "fdmri-zavrsni": [
+    "justify",
+    "toc"
+  ],
   "fer-diplomski": [
     "font",
     "font-size",
@@ -594,6 +602,11 @@
     "justify",
     "toc",
     "page-numbers"
+  ],
+  "logri-diplomski": [
+    "font",
+    "paper-size",
+    "toc"
   ],
   "medri-farmacija-diplomski": [
     "font",

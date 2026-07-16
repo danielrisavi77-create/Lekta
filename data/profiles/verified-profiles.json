@@ -38902,5 +38902,171 @@
       "Obvezni dijelovi rada"
     ],
     "advisoryScope": []
+  },
+  {
+    "id": "fdmri-zavrsni",
+    "unitId": "fdmri",
+    "programs": [
+      "Prijediplomski/integrirani studij (zavrsni rad), Fakultet dentalne medicine Rijeka"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Fakultet dentalne medicine Rijeka, zavrsni rad",
+    "verifiedAt": "2026-07-16",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 2,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireA4": true
+    },
+    "facts": [],
+    "note": "Novi port (recovery): direktno citanje sluzbenog izvora; verified samo doslovno navedeno.",
+    "sources": [
+      {
+        "title": "Naputak o izradi i oblikovanju zavrsnog rada (Fakultet dentalne medicine Rijeka)",
+        "url": "https://fdmri.uniri.hr/"
+      },
+      {
+        "title": "Naputak o izradi i oblikovanju diplomskog rada (Fakultet dentalne medicine Rijeka)",
+        "url": "https://fdmri.uniri.hr/"
+      }
+    ],
+    "sourceHierarchy": [
+      "Naputak o izradi i oblikovanju zavrsnog rada (Fakultet dentalne medicine Rijeka)",
+      "Naputak o izradi i oblikovanju diplomskog rada (Fakultet dentalne medicine Rijeka)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Margine",
+      "Format papira",
+      "Numeriranje stranica",
+      "Opseg",
+      "Obvezni dijelovi rada"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "fdmri-diplomski",
+    "unitId": "fdmri",
+    "programs": [
+      "Diplomski/integrirani studij (diplomski rad), Fakultet dentalne medicine Rijeka"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Fakultet dentalne medicine Rijeka, diplomski rad",
+    "verifiedAt": "2026-07-16",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 2,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireA4": true
+    },
+    "facts": [],
+    "note": "Novi port (recovery): direktno citanje sluzbenog izvora; verified samo doslovno navedeno.",
+    "sources": [
+      {
+        "title": "Naputak o izradi i oblikovanju zavrsnog rada (Fakultet dentalne medicine Rijeka)",
+        "url": "https://fdmri.uniri.hr/"
+      },
+      {
+        "title": "Naputak o izradi i oblikovanju diplomskog rada (Fakultet dentalne medicine Rijeka)",
+        "url": "https://fdmri.uniri.hr/"
+      }
+    ],
+    "sourceHierarchy": [
+      "Naputak o izradi i oblikovanju zavrsnog rada (Fakultet dentalne medicine Rijeka)",
+      "Naputak o izradi i oblikovanju diplomskog rada (Fakultet dentalne medicine Rijeka)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Margine",
+      "Format papira",
+      "Numeriranje stranica",
+      "Opseg"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "logri-diplomski",
+    "unitId": "logri",
+    "programs": [
+      "Diplomski studij Logopedija (Fakultet za logopediju Rijeka)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Fakultet za logopediju Rijeka, diplomski rad",
+    "verifiedAt": "2026-07-16",
+    "documentDate": null,
+    "rules": {
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "justify": true
+    },
+    "facts": [],
+    "note": "Novi port (recovery): direktno citanje sluzbenog izvora; verified samo doslovno navedeno.",
+    "sources": [
+      {
+        "title": "Smjernice za pisanje i oblikovanje studentskih radova (Fakultet za logopediju Rijeka)",
+        "url": "https://logri.uniri.hr/"
+      }
+    ],
+    "sourceHierarchy": [
+      "Smjernice za pisanje i oblikovanje studentskih radova (Fakultet za logopediju Rijeka)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Velicina slova",
+      "Prored",
+      "Margine",
+      "Obostrano poravnanje",
+      "Numeriranje stranica"
+    ],
+    "advisoryScope": [
+      "Vrsta slova",
+      "Obvezni dijelovi rada",
+      "Stil citiranja"
+    ]
   }
 ]

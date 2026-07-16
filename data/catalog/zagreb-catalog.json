@@ -766,6 +766,21 @@
     "name": "Sveuciliste u Rijeci",
     "units": [
       {
+        "id": "apuri",
+        "name": "Akademija primijenjenih umjetnosti u Rijeci",
+        "family": "arts",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski sveučilišni studij Primijenjena umjetnost",
+          "Prijediplomski sveučilišni studij Likovna pedagogija",
+          "Prijediplomski sveučilišni studij Vizualne komunikacije i grafički dizajn",
+          "Prijediplomski sveučilišni studij Gluma",
+          "Prijediplomski sveučilišni studij Mediji",
+          "Diplomski sveučilišni studij Primijenjena umjetnost",
+          "Diplomski sveučilišni studij Vizualne komunikacije i grafički dizajn"
+        ]
+      },
+      {
         "id": "biotech",
         "name": "Fakultet biotehnologije i razvoja lijekova, Rijeka",
         "family": "stem",
@@ -796,6 +811,17 @@
           "Sveučilišni diplomski studij Poslovna ekonomija (smjer Financije)",
           "Sveučilišni diplomski studij Poslovna ekonomija (smjer Marketing)",
           "Sveučilišni diplomski studij Poslovna ekonomija (smjer Međunarodno poslovanje)"
+        ]
+      },
+      {
+        "id": "fdmri",
+        "name": "Fakultet dentalne medicine Rijeka",
+        "family": "biomed",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski/integrirani studij (zavrsni rad), Fakultet dentalne medicine Rijeka",
+          "Diplomski/integrirani studij (diplomski rad), Fakultet dentalne medicine Rijeka",
+          "Opći profil fakulteta"
         ]
       },
       {
@@ -877,6 +903,22 @@
         ]
       },
       {
+        "id": "gradri",
+        "name": "Građevinski fakultet u Rijeci",
+        "family": "stem",
+        "status": "partial",
+        "programs": [
+          "Sveučilišni prijediplomski studij Građevinarstvo",
+          "Stručni prijediplomski studij Građevinarstvo",
+          "Sveučilišni diplomski studij Građevinarstvo",
+          "Stručni diplomski studij Građevinarstvo",
+          "Sveučilišni diplomski studij Građevinarstvo (smjer Konstrukcije)",
+          "Sveučilišni diplomski studij Građevinarstvo (smjer Hidrotehnika)",
+          "Sveučilišni diplomski studij Građevinarstvo (smjer Geotehnika)",
+          "Sveučilišni diplomski studij Građevinarstvo (smjer Urbano inženjerstvo)"
+        ]
+      },
+      {
         "id": "inf",
         "name": "Fakultet informatike i digitalnih tehnologija, Rijeka",
         "family": "stem",
@@ -888,6 +930,28 @@
           "Sveučilišni prijediplomski studij Informatika (modul Razvoj programske potpore)",
           "Sveučilišni prijediplomski studij Informatika (modul Multimedijski sustavi)",
           "Sveučilišni prijediplomski studij Informatika (modul Informacijski sustavi)"
+        ]
+      },
+      {
+        "id": "logri",
+        "name": "Fakultet za logopediju Rijeka",
+        "family": "social",
+        "status": "partial",
+        "programs": [
+          "Diplomski studij Logopedija (Fakultet za logopediju Rijeka)",
+          "Opći profil fakulteta"
+        ]
+      },
+      {
+        "id": "matematika",
+        "name": "Fakultet za matematiku u Rijeci",
+        "family": "stem",
+        "status": "partial",
+        "programs": [
+          "Sveučilišni prijediplomski studij Matematika",
+          "Sveučilišni diplomski studij Diskretna matematika i primjene",
+          "Sveučilišni diplomski studij Matematika (nastavnički smjer)",
+          "Sveučilišni diplomski studij Matematika i informatika (nastavnički smjer)"
         ]
       },
       {
@@ -967,49 +1031,6 @@
           "Sveučilišni integrirani prijediplomski i diplomski Učiteljski studij",
           "Sveučilišni prijediplomski studij Rani i predškolski odgoj i obrazovanje",
           "Sveučilišni diplomski studij Rani i predškolski odgoj i obrazovanje"
-        ]
-      },
-      {
-        "id": "gradri",
-        "name": "Građevinski fakultet u Rijeci",
-        "family": "stem",
-        "status": "partial",
-        "programs": [
-          "Sveučilišni prijediplomski studij Građevinarstvo",
-          "Stručni prijediplomski studij Građevinarstvo",
-          "Sveučilišni diplomski studij Građevinarstvo",
-          "Stručni diplomski studij Građevinarstvo",
-          "Sveučilišni diplomski studij Građevinarstvo (smjer Konstrukcije)",
-          "Sveučilišni diplomski studij Građevinarstvo (smjer Hidrotehnika)",
-          "Sveučilišni diplomski studij Građevinarstvo (smjer Geotehnika)",
-          "Sveučilišni diplomski studij Građevinarstvo (smjer Urbano inženjerstvo)"
-        ]
-      },
-      {
-        "id": "matematika",
-        "name": "Fakultet za matematiku u Rijeci",
-        "family": "stem",
-        "status": "partial",
-        "programs": [
-          "Sveučilišni prijediplomski studij Matematika",
-          "Sveučilišni diplomski studij Diskretna matematika i primjene",
-          "Sveučilišni diplomski studij Matematika (nastavnički smjer)",
-          "Sveučilišni diplomski studij Matematika i informatika (nastavnički smjer)"
-        ]
-      },
-      {
-        "id": "apuri",
-        "name": "Akademija primijenjenih umjetnosti u Rijeci",
-        "family": "arts",
-        "status": "partial",
-        "programs": [
-          "Prijediplomski sveučilišni studij Primijenjena umjetnost",
-          "Prijediplomski sveučilišni studij Likovna pedagogija",
-          "Prijediplomski sveučilišni studij Vizualne komunikacije i grafički dizajn",
-          "Prijediplomski sveučilišni studij Gluma",
-          "Prijediplomski sveučilišni studij Mediji",
-          "Diplomski sveučilišni studij Primijenjena umjetnost",
-          "Diplomski sveučilišni studij Vizualne komunikacije i grafički dizajn"
         ]
       }
     ]

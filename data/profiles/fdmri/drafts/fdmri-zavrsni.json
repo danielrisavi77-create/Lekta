@@ -1,0 +1,245 @@
+{
+  "profileId": "fdmri-zavrsni",
+  "entries": [
+    {
+      "ruleId": "fdmri-zavrsni--font",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Vrsta slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "fdmri-naputak-zavrsni-2024",
+      "sourcePage": "Naputak o oblikovanju zavrsnog rada (tehnicki dio)",
+      "quote": "Završni rad treba biti pisan na računalu u standardnoj veličini stranice (A4, 210x297 mm), s marginama od 2,5 cm i dvostrukim proredom. U pisanju je potrebno koristiti font Times New Roman, veličine 12. Osim uvodnih, sve stranice teksta (počinje od Uvoda) moraju biti numerirane u donjem desnom kutu. Završni rad mora biti napisan u rasponu od 15-50 stranica.",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "font-fixer",
+      "verifiedHash": "59f5eccc12445e1a7b9595ac1b88b7e0530b66ed35988d09cb89ac38678ad0df",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "fdmri-zavrsni--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "fdmri-naputak-zavrsni-2024",
+      "sourcePage": "Naputak o oblikovanju zavrsnog rada",
+      "quote": "Završni rad treba biti pisan na računalu u standardnoj veličini stranice (A4, 210x297 mm), s marginama od 2,5 cm i dvostrukim proredom. U pisanju je potrebno koristiti font Times New Roman, veličine 12. Osim uvodnih, sve stranice teksta (počinje od Uvoda) moraju biti numerirane u donjem desnom kutu. Završni rad mora biti napisan u rasponu od 15-50 stranica.",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "font-fixer",
+      "verifiedHash": "59f5eccc12445e1a7b9595ac1b88b7e0530b66ed35988d09cb89ac38678ad0df",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "fdmri-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "value": 2,
+      "category": "format",
+      "label": "Prored",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "fdmri-naputak-zavrsni-2024",
+      "sourcePage": "Naputak o oblikovanju zavrsnog rada",
+      "quote": "Završni rad treba biti pisan na računalu u standardnoj veličini stranice (A4, 210x297 mm), s marginama od 2,5 cm i dvostrukim proredom. U pisanju je potrebno koristiti font Times New Roman, veličine 12. Osim uvodnih, sve stranice teksta (počinje od Uvoda) moraju biti numerirane u donjem desnom kutu. Završni rad mora biti napisan u rasponu od 15-50 stranica.",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "line-spacing-fixer",
+      "verifiedHash": "59f5eccc12445e1a7b9595ac1b88b7e0530b66ed35988d09cb89ac38678ad0df",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "fdmri-zavrsni--margins",
+      "checkId": "margins",
+      "value": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "category": "format",
+      "label": "Margine",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "fdmri-naputak-zavrsni-2024",
+      "sourcePage": "Naputak o oblikovanju zavrsnog rada",
+      "quote": "Završni rad treba biti pisan na računalu u standardnoj veličini stranice (A4, 210x297 mm), s marginama od 2,5 cm i dvostrukim proredom. U pisanju je potrebno koristiti font Times New Roman, veličine 12. Osim uvodnih, sve stranice teksta (počinje od Uvoda) moraju biti numerirane u donjem desnom kutu. Završni rad mora biti napisan u rasponu od 15-50 stranica.",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "margins-fixer",
+      "verifiedHash": "59f5eccc12445e1a7b9595ac1b88b7e0530b66ed35988d09cb89ac38678ad0df",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "fdmri-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "value": true,
+      "category": "format",
+      "label": "Format papira",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "fdmri-naputak-zavrsni-2024",
+      "sourcePage": "Naputak o oblikovanju zavrsnog rada",
+      "quote": "Završni rad treba biti pisan na računalu u standardnoj veličini stranice (A4, 210x297 mm), s marginama od 2,5 cm i dvostrukim proredom. U pisanju je potrebno koristiti font Times New Roman, veličine 12. Osim uvodnih, sve stranice teksta (počinje od Uvoda) moraju biti numerirane u donjem desnom kutu. Završni rad mora biti napisan u rasponu od 15-50 stranica.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "59f5eccc12445e1a7b9595ac1b88b7e0530b66ed35988d09cb89ac38678ad0df",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "fdmri-zavrsni--page-numbers",
+      "checkId": "page-numbers",
+      "value": true,
+      "category": "format",
+      "label": "Numeriranje stranica",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "fdmri-naputak-zavrsni-2024",
+      "sourcePage": "Naputak o oblikovanju zavrsnog rada",
+      "quote": "Završni rad treba biti pisan na računalu u standardnoj veličini stranice (A4, 210x297 mm), s marginama od 2,5 cm i dvostrukim proredom. U pisanju je potrebno koristiti font Times New Roman, veličine 12. Osim uvodnih, sve stranice teksta (počinje od Uvoda) moraju biti numerirane u donjem desnom kutu. Završni rad mora biti napisan u rasponu od 15-50 stranica.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "59f5eccc12445e1a7b9595ac1b88b7e0530b66ed35988d09cb89ac38678ad0df",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "fdmri-zavrsni--page-count",
+      "checkId": "page-count",
+      "value": {
+        "min": 15,
+        "max": 50
+      },
+      "category": "scope",
+      "label": "Opseg",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "fdmri-naputak-zavrsni-2024",
+      "sourcePage": "Naputak o oblikovanju zavrsnog rada",
+      "quote": "Završni rad treba biti pisan na računalu u standardnoj veličini stranice (A4, 210x297 mm), s marginama od 2,5 cm i dvostrukim proredom. U pisanju je potrebno koristiti font Times New Roman, veličine 12. Osim uvodnih, sve stranice teksta (počinje od Uvoda) moraju biti numerirane u donjem desnom kutu. Završni rad mora biti napisan u rasponu od 15-50 stranica.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "59f5eccc12445e1a7b9595ac1b88b7e0530b66ed35988d09cb89ac38678ad0df",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "fdmri-zavrsni--required-sections",
+      "checkId": "required-sections",
+      "value": [
+        {
+          "key": "intro",
+          "label": "Uvod",
+          "terms": [
+            "Uvod"
+          ]
+        },
+        {
+          "key": "purpose",
+          "label": "Svrha rada",
+          "terms": [
+            "Svrha rada",
+            "Svrha"
+          ]
+        },
+        {
+          "key": "litreview",
+          "label": "Pregled literature",
+          "terms": [
+            "Pregled literature"
+          ]
+        },
+        {
+          "key": "discussion",
+          "label": "Rasprava",
+          "terms": [
+            "Rasprava"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "Zaključci",
+          "terms": [
+            "Zaključci",
+            "Zaključak"
+          ]
+        },
+        {
+          "key": "abstractHr",
+          "label": "Sažetak",
+          "terms": [
+            "Sažetak"
+          ]
+        },
+        {
+          "key": "abstractEn",
+          "label": "Summary",
+          "terms": [
+            "Summary",
+            "Abstract"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "Literatura",
+          "terms": [
+            "Literatura"
+          ]
+        },
+        {
+          "key": "cv",
+          "label": "Životopis",
+          "terms": [
+            "Životopis"
+          ]
+        }
+      ],
+      "category": "structure",
+      "label": "Obvezni dijelovi rada",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "fdmri-naputak-zavrsni-2024",
+      "sourcePage": "Tijelo zavrsnog rada, Prikaz sastavnica (pregledni rad)",
+      "quote": "Prikaz sastavnica završnog rada (pregledni rad): 1. Uvod, 2. Svrha rada, 3. Pregled literature na zadanu temu, 4. Rasprava, 5. Zaključci, 6. Sažetak, 7. Summary, 8. Literatura, 9. Životopis.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "59f5eccc12445e1a7b9595ac1b88b7e0530b66ed35988d09cb89ac38678ad0df",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "human-audit"
+    }
+  ],
+  "generatedAt": "2026-07-16"
+}
