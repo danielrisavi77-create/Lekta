@@ -731,24 +731,12 @@
     "paper-size"
   ],
   "pravo-socijalne-djelatnosti-doktorski": [
-    "font",
-    "font-size",
-    "line-spacing",
-    "margins",
     "justify",
-    "paper-size",
-    "toc",
-    "page-numbers"
+    "paper-size"
   ],
   "pravo-socijalne-djelatnosti-specijalisticki": [
-    "font",
-    "font-size",
-    "line-spacing",
-    "margins",
     "justify",
-    "paper-size",
-    "toc",
-    "page-numbers"
+    "paper-size"
   ],
   "pravo-socijalni-opci-akademski-rad": [
     "font",

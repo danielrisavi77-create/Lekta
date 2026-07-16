@@ -36,6 +36,18 @@
     "lastChecked": "2026-07-16"
   },
   {
+    "id": "pravo-scsr-upute-poslijediplomski",
+    "kind": "guidelines",
+    "title": "Upute za studente poslijediplomskih studija iz socijalnih djelatnosti (socijalni rad i socijalna politika)",
+    "url": "https://www.pravo.unizg.hr/wp-content/uploads/2023/02/Upute1_poslijediplomski.pdf",
+    "publisher": "Pravni fakultet Sveucilista u Zagrebu, Studijski centar socijalnog rada",
+    "fetchedAt": "2026-07-16",
+    "snapshotPath": "data/sources/pravo/pravo-scsr-upute-poslijediplomski.pdf",
+    "snapshotHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-16"
+  },
+  {
     "id": "pravo-pravilnik-studiji-2026",
     "kind": "pravilnik",
     "title": "Pravilnik o studijima i studiranju Pravnog fakulteta (donesen 12.7.2024, na snazi od 1.10.2024)",

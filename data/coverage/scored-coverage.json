@@ -1138,19 +1138,19 @@
     },
     {
       "profileId": "pravo-socijalne-djelatnosti-doktorski",
-      "scored": 0,
+      "scored": 9,
       "machineCheckable": 9,
-      "advisory": 9,
-      "ratio": 0,
-      "lastVerified": null
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-16"
     },
     {
       "profileId": "pravo-socijalne-djelatnosti-specijalisticki",
-      "scored": 0,
+      "scored": 9,
       "machineCheckable": 9,
-      "advisory": 9,
-      "ratio": 0,
-      "lastVerified": null
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-16"
     },
     {
       "profileId": "pravo-socijalni-opci-akademski-rad",
@@ -1697,5 +1697,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 1241
+  "totalScored": 1259
 }

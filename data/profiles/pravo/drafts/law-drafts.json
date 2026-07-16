@@ -2546,10 +2546,15 @@
         "category": "format",
         "label": "Font glavnog teksta",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-poslijediplomski",
+        "sourcePage": "str. 7, Format teksta",
+        "quote": "oblik i velicina slova mora biti jednaka u cijelom tekstu (velicina: 12, oblik: Times New Roman ili Arial)",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09"
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--font-size",
@@ -2560,10 +2565,15 @@
         "category": "format",
         "label": "Velicina fonta glavnog teksta",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-poslijediplomski",
+        "sourcePage": "str. 7, Format teksta",
+        "quote": "oblik i velicina slova mora biti jednaka u cijelom tekstu (velicina: 12, oblik: Times New Roman ili Arial)",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09"
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--line-spacing",
@@ -2572,10 +2582,15 @@
         "category": "format",
         "label": "Prored glavnog teksta",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-poslijediplomski",
+        "sourcePage": "str. 7, Format teksta",
+        "quote": "prored: 1,5",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09"
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--margins",
@@ -2589,10 +2604,15 @@
         "category": "format",
         "label": "Margine",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "advisory"
+        "sourceId": "pravo-scsr-upute-poslijediplomski",
+        "sourcePage": "str. 7, Format teksta",
+        "quote": "margine: 2,5 cm s lijeve strane te 2,5 cm s desne strane, gore i dolje",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09"
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--citation-style",
@@ -2601,10 +2621,15 @@
         "category": "citation",
         "label": "Stil citiranja",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-poslijediplomski",
+        "sourcePage": "str. 18, Citiranje i navodjenje autora u tekstu",
+        "quote": "Referenca u tekstu se stavlja u zagrade, a sadrzi prezime autora i godinu izdanja. Ako je rijec o preciznijem navodu ili citatu u referencu treba ukljuciti i broj stranice.",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09"
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--required-sections",
@@ -2649,10 +2674,15 @@
         "category": "structure",
         "label": "Obvezni dijelovi rada",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-poslijediplomski",
+        "sourcePage": "str. 5-7, Okvirna struktura specijalistickog zavrsnog rada / Format teksta",
+        "quote": "Okvirna struktura specijalistickog zavrsnog rada: Uvod, Prikaz koncepata i pojmova, Pregledno poglavlje (informacije o problemu), Analiza problema, Prikaz nalaza, Prikaz preporuka, Zakljucak. Obavezni redoslijed dijelova: naslovna stranica, sadrzaj, popis kratica, uvod, sredisnji dio, zakljucak, popis tablica i slika, literatura, prilozi.",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09"
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--toc",
@@ -2661,10 +2691,15 @@
         "category": "structure",
         "label": "Sadrzaj",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-poslijediplomski",
+        "sourcePage": "str. 12, Sadrzaj",
+        "quote": "U sadrzaju je potrebno navesti popis svih naslova i podnaslova poglavlja s naznakom stranica na kojima se ista nalaze (do trece razine numeracije), ukljucujuci i popis kratica, tablica, slika, literature, priloga; naslov Sadrzaj pise se na vrhu stranice lijevo i ne oznacava se brojem.",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09"
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--page-numbers",
@@ -2673,10 +2708,15 @@
         "category": "format",
         "label": "Numeriranje stranica",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-poslijediplomski",
+        "sourcePage": "str. 7, Format teksta",
+        "quote": "stranice moraju biti oznacene rednim brojem (dolje desno), pri cemu se prva brojcana oznaka stavlja na prvu stranicu uvoda",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09"
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--word-count",
@@ -2688,10 +2728,15 @@
         "category": "scope",
         "label": "Opseg (broj rijeci)",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "advisory"
+        "sourceId": "pravo-scsr-upute-poslijediplomski",
+        "sourcePage": "str. 4, Specijalisticki zavrsni rad",
+        "quote": "Specijalisticki zavrsni rad duzinom u pravilu treba obuhvatiti izmedju 20 000 i 25 000 rijeci (izmedju 70 i 90 kartica).",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09"
       }
     ],
     "pravo-socijalne-djelatnosti-doktorski": [
@@ -2705,10 +2750,15 @@
         "category": "format",
         "label": "Font glavnog teksta",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-poslijediplomski",
+        "sourcePage": "str. 7, Format teksta",
+        "quote": "oblik i velicina slova mora biti jednaka u cijelom tekstu (velicina: 12, oblik: Times New Roman ili Arial)",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09"
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-doktorski--font-size",
@@ -2719,10 +2769,15 @@
         "category": "format",
         "label": "Velicina fonta glavnog teksta",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-poslijediplomski",
+        "sourcePage": "str. 7, Format teksta",
+        "quote": "oblik i velicina slova mora biti jednaka u cijelom tekstu (velicina: 12, oblik: Times New Roman ili Arial)",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09"
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-doktorski--line-spacing",
@@ -2731,10 +2786,15 @@
         "category": "format",
         "label": "Prored glavnog teksta",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-poslijediplomski",
+        "sourcePage": "str. 7, Format teksta",
+        "quote": "prored: 1,5",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09"
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-doktorski--margins",
@@ -2748,10 +2808,15 @@
         "category": "format",
         "label": "Margine",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "advisory"
+        "sourceId": "pravo-scsr-upute-poslijediplomski",
+        "sourcePage": "str. 7, Format teksta",
+        "quote": "margine: 2,5 cm s lijeve strane te 2,5 cm s desne strane, gore i dolje",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09"
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-doktorski--citation-style",
@@ -2760,10 +2825,15 @@
         "category": "citation",
         "label": "Stil citiranja",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-poslijediplomski",
+        "sourcePage": "str. 18, Citiranje i navodjenje autora u tekstu",
+        "quote": "Referenca u tekstu se stavlja u zagrade, a sadrzi prezime autora i godinu izdanja. Ako je rijec o preciznijem navodu ili citatu u referencu treba ukljuciti i broj stranice.",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09"
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-doktorski--required-sections",
@@ -2823,10 +2893,15 @@
         "category": "structure",
         "label": "Obvezni dijelovi rada",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-poslijediplomski",
+        "sourcePage": "str. 6-7, Okvirna struktura disertacije / Format teksta",
+        "quote": "Svaka doktorska disertacija mora imati sazetak na hrvatskom i engleskom jeziku, opsega do 1 000 rijeci. Okvirna struktura disertacije: Sazetak (HR i EN), Uvod, Pregled relevantne literature, Prikaz glavnih teza, Opis koristene metodologije, Prikaz i interpretacija nalaza, Zakljucak + prilozi.",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09"
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-doktorski--toc",
@@ -2835,10 +2910,15 @@
         "category": "structure",
         "label": "Sadrzaj",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-poslijediplomski",
+        "sourcePage": "str. 12, Sadrzaj",
+        "quote": "U sadrzaju je potrebno navesti popis svih naslova i podnaslova poglavlja s naznakom stranica na kojima se ista nalaze (do trece razine numeracije), ukljucujuci i popis kratica, tablica, slika, literature, priloga; naslov Sadrzaj pise se na vrhu stranice lijevo i ne oznacava se brojem.",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09"
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-doktorski--page-numbers",
@@ -2847,10 +2927,15 @@
         "category": "format",
         "label": "Numeriranje stranica",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-poslijediplomski",
+        "sourcePage": "str. 7, Format teksta",
+        "quote": "stranice moraju biti oznacene rednim brojem (dolje desno), pri cemu se prva brojcana oznaka stavlja na prvu stranicu uvoda",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09"
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-doktorski--word-count",
@@ -2862,10 +2947,15 @@
         "category": "scope",
         "label": "Opseg (broj rijeci)",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "advisory"
+        "sourceId": "pravo-scsr-upute-poslijediplomski",
+        "sourcePage": "str. 5, Doktorska disertacija",
+        "quote": "Doktorska disertacija duzinom u pravilu treba obuhvatiti izmedju 45 000 i 60 000 rijeci ili izmedju 150 i 200 kartica.",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09"
       }
     ],
     "trgovacko-pravo": [
