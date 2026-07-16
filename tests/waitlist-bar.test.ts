@@ -61,15 +61,28 @@ describe('mountWaitlistBar prikaz', () => {
     const shown = mountWaitlistBar(node, uncovered, { config: { endpoint: '' }, ...store, resolveToken: async () => '' });
     expect(shown).toBe(false);
   });
-  it('nepokrivena + konfigurirano: prikazuje i salje anoniman signal, sprema id', async () => {
+  it('nepokrivena + konfigurirano: prikazuje, ali prikaz sam NE salje signal (privola)', async () => {
     const store = memStore(), node = el(), f = makeFetch({ requestId: 'req-42' });
     const shown = mountWaitlistBar(node, uncovered, { config: CFG, ...store, resolveToken: async () => '', fetchImpl: f.fn });
     expect(shown).toBe(true);
     expect(node.hidden).toBe(false);
     expect(node.querySelector('.wl-email')).toBeTruthy();
     await flush();
-    expect(f.calls.length).toBe(1);                       // anoniman submit
+    expect(f.calls.length).toBe(0);                       // puki prikaz ne okida mrezu
+    expect(store.getEntry(uncovered.dedupeKey)).toBe(null);
+  });
+  it('fokus na polje e-maila okine anoniman signal (jednom po celiji), sprema id', async () => {
+    const store = memStore(), node = el(), f = makeFetch({ requestId: 'req-42' });
+    mountWaitlistBar(node, uncovered, { config: CFG, ...store, resolveToken: async () => '', fetchImpl: f.fn });
+    await flush();
+    expect(f.calls.length).toBe(0);
+    (node.querySelector('.wl-email') as any).onfocus();   // eksplicitna radnja: korisnik krece ostaviti e-mail
+    await flush();
+    expect(f.calls.length).toBe(1);                       // anoniman submit tek sad
     expect(store.getEntry(uncovered.dedupeKey)).toEqual({ s: 'sent', id: 'req-42' });
+    (node.querySelector('.wl-email') as any).onfocus();   // ponovni fokus ne re-okida
+    await flush();
+    expect(f.calls.length).toBe(1);
   });
   it('vec zatvorena u sesiji: ne prikazuje ponovno', () => {
     const store = memStore(); store.setEntry(uncovered.dedupeKey, { s: 'closed' });
@@ -90,8 +103,9 @@ describe('mountWaitlistBar interakcija', () => {
   it('slanje valjanog e-maila veze na postojeci id (attach) i pokaze uspjeh', async () => {
     const store = memStore(), node = el(), f = makeFetch({ requestId: 'req-9', attached: true });
     mountWaitlistBar(node, uncovered, { config: CFG, ...store, resolveToken: async () => '', fetchImpl: f.fn });
-    await flush(); // anoniman upis -> id req-9
     const input = node.querySelector('.wl-email') as any;
+    input.onfocus(); // fokus okida anoniman upis -> id req-9
+    await flush();
     input.value = 'me@x.hr';
     await (node.querySelector('.wl-form') as any).onsubmit({ preventDefault() {} });
     const attachCall = f.calls.find((c) => c.requestId);
@@ -112,9 +126,11 @@ describe('mountWaitlistBar interakcija', () => {
   it('kad anon upis nema id (rate limit): slanje e-maila salje novi upis s e-mailom', async () => {
     const store = memStore(), node = el(), f = makeFetch({ requestId: null });
     mountWaitlistBar(node, uncovered, { config: CFG, ...store, resolveToken: async () => '', fetchImpl: f.fn });
-    await flush(); // anon upis vrati null id
+    const input = node.querySelector('.wl-email') as any;
+    input.onfocus(); // fokus okida anon upis koji vrati null id (rate limit)
+    await flush();
     expect(store.getEntry(uncovered.dedupeKey)).toEqual({ s: 'sent', id: null });
-    (node.querySelector('.wl-email') as any).value = 'me@x.hr';
+    input.value = 'me@x.hr';
     await (node.querySelector('.wl-form') as any).onsubmit({ preventDefault() {} });
     const submitWithEmail = f.calls.find((c) => !c.requestId && c.email === 'me@x.hr');
     expect(submitWithEmail).toBeTruthy();

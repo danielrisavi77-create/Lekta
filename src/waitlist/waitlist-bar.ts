@@ -3,8 +3,10 @@
  *
  * Sav DOM glue trake je ovdje s INJEKTIRANIM ovisnostima (config, storage, token, fetch), pa je
  * ponasanje (prikaz, dedup, zatvaranje, slanje/vezanje e-maila) jedinicno testabilno u happy-dom.
- * app.ts je tanak: izracuna detekciju i preda elementre. Anoniman signal se salje pri prikazu
- * (jednom po celiji po sesiji); e-mail se veze na taj isti red, uz fallback na novi upis.
+ * app.ts je tanak: izracuna detekciju i preda elementre. Anoniman signal potraznje se salje tek kad
+ * korisnik EKSPLICITNO krene ostaviti e-mail (fokus/klik u polje), NE na prikaz trake (privola:
+ * puko prikazivanje ne okida mrezni poziv). Jednom po celiji po sesiji; e-mail se veze na taj isti
+ * red, uz fallback na novi upis. Zatvaranje (X) namjerno NE okida signal.
  */
 
 import { waitlistCopy, type WaitlistCopy } from './waitlist-copy';
@@ -79,12 +81,18 @@ export function mountWaitlistBar(
   el.classList.remove('wl-done');
   el.innerHTML = waitlistBarHtml(copy);
   el.hidden = false;
-  if (!entry) void fireSignal(detection, deps);
+  // Opcija A (privola): prikaz trake NE salje nista. Signal ceka eksplicitnu radnju (fokus polja).
 
   const close = el.querySelector('.wl-close');
   const form = el.querySelector('.wl-form');
   const input = el.querySelector('.wl-email');
   const msg = el.querySelector('.wl-msg');
+
+  // Anoniman signal potraznje se okida tek kad korisnik svjesno krene ostaviti e-mail (fokus/klik u
+  // polje), jednom po celiji po sesiji. fireSignal sinkrono upise 'sent' pa ponovni fokus ne re-okida.
+  if (input) input.onfocus = () => {
+    if (!deps.getEntry(detection.dedupeKey)) void fireSignal(detection, deps);
+  };
 
   if (close) close.onclick = () => {
     deps.setEntry(detection.dedupeKey, { s: 'closed' });
