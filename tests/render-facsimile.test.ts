@@ -220,4 +220,74 @@ describe('renderFacsimile: fusnote', () => {
     expect(flagTargets.get(0)).toBe(fnEl);
     expect(fnEl.className).toContain('lekta-pv-footnote--has-unlocated');
   });
+
+  it('fusnota s runovima: italic run postaje <span> italic, tekst ocuvan', () => {
+    const { root } = renderFacsimile(
+      model([para(1, 'Tijelo')], {
+        footnotes: [{ id: 1, text: 'Vidi op. cit. gore', runs: [run('Vidi '), run('op. cit.', { italic: true }), run(' gore')] }],
+      }),
+      [],
+    );
+    const fn = root.querySelector('#lekta-fac-fn-1') as HTMLElement;
+    expect(fn.textContent).toContain('Vidi op. cit. gore');
+    const span = fn.querySelector('span[style]') as HTMLElement;
+    expect(span).not.toBeNull();
+    expect(span.style.fontStyle).toBe('italic');
+    expect(span.textContent).toBe('op. cit.');
+  });
+
+  it('fusnota NE primjenjuje razliku u velicini (CSS skalira odjeljak)', () => {
+    const { root } = renderFacsimile(
+      model([para(1, 'T')], { footnotes: [{ id: 1, text: 'malo', runs: [run('malo', { size: 8 })] }], baseSize: 12 }),
+      [],
+    );
+    const fn = root.querySelector('#lekta-fac-fn-1') as HTMLElement;
+    expect(fn.querySelector('span[style]')).toBeNull(); // size 8 != 12, ali applySize=false -> bez spana
+    expect(fn.textContent).toContain('malo');
+  });
+});
+
+describe('renderFacsimile: paginacija', () => {
+  it('dijeli na vise listova po pageBreakAfter i dodaje brojeve stranica', () => {
+    const { root } = renderFacsimile(
+      model([para(1, 'Prva stranica'), para(2, 'Kraj prve', { pageBreakAfter: true }), para(3, 'Druga stranica')]),
+      [],
+    );
+    const pages = root.querySelectorAll('.lekta-fac-page');
+    expect(pages.length).toBe(2);
+    expect((pages[0].querySelector('.lekta-fac-pagenum') as HTMLElement).textContent).toBe('1');
+    expect((pages[1].querySelector('.lekta-fac-pagenum') as HTMLElement).textContent).toBe('2');
+    // Odlomci sjede na pravom listu (prijelom je iza odlomka 2).
+    expect(pages[0].querySelector('#lekta-fac-p-1')).not.toBeNull();
+    expect(pages[0].querySelector('#lekta-fac-p-2')).not.toBeNull();
+    expect(pages[1].querySelector('#lekta-fac-p-3')).not.toBeNull();
+    expect(pages[0].querySelector('#lekta-fac-p-3')).toBeNull();
+  });
+
+  it('jedan list kad nema prijeloma: bez broja stranice', () => {
+    const { root } = renderFacsimile(model([para(1, 'x'), para(2, 'y')]), []);
+    expect(root.querySelectorAll('.lekta-fac-page').length).toBe(1);
+    expect(root.querySelector('.lekta-fac-pagenum')).toBeNull();
+  });
+
+  it('pageBreakAfter na zadnjem odlomku ne stvara prazan trailing list', () => {
+    const { root } = renderFacsimile(model([para(1, 'a'), para(2, 'b', { pageBreakAfter: true })]), []);
+    expect(root.querySelectorAll('.lekta-fac-page').length).toBe(1);
+  });
+
+  it('fusnote na zadnjem listu; flagTargets dohvaca highlight preko granice stranice', () => {
+    const { root, flagTargets } = renderFacsimile(
+      model([para(1, 'Prvi'), para(2, 'granica', { pageBreakAfter: true }), para(3, 'zadnji tekst tu')], {
+        footnotes: [{ id: 1, text: 'Fusnota' }],
+      }),
+      [flag({ paragraphIndex: 3, excerpt: 'zadnji', severity: 'error' })],
+    );
+    const pages = root.querySelectorAll('.lekta-fac-page');
+    expect(pages.length).toBe(2);
+    expect(pages[0].querySelector('.lekta-fac-footnotes')).toBeNull();
+    expect(pages[1].querySelector('.lekta-fac-footnotes')).not.toBeNull();
+    const mark = pages[1].querySelector('mark.lekta-flag') as HTMLElement;
+    expect(mark).not.toBeNull();
+    expect(flagTargets.get(0)).toBe(mark);
+  });
 });

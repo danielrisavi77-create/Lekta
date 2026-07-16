@@ -57,12 +57,16 @@ export interface PreviewParagraph {
   align?: string | null;
   /** Run-oblikovanje (bold/italic/font/velicina). Samo za faksimil; MVP pregled cita `text`. */
   runs?: PreviewRun[];
+  /** Iza ovog odlomka je prijelom stranice (eksplicitni w:br type=page ili lastRenderedPageBreak). */
+  pageBreakAfter?: boolean;
 }
 
 /** Jedna fusnota u pregledu (zaseban koordinatni prostor od tijela). */
 export interface PreviewFootnote {
   id: number;
   text: string;
+  /** Run-oblikovanje fusnote (bold/italic/font); faksimil. Velicina se ne primjenjuje (CSS skalira). */
+  runs?: PreviewRun[];
 }
 
 /** Margine i velicina stranice (cm) iz sectPr; za faksimil layout. */

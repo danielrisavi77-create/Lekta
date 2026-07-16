@@ -1,20 +1,24 @@
 /**
  * Renderer "Vjernog prikaza" (faksimil) za preview modal, druga verzija pored MVP "Oznacenog
  * pregleda" (render-preview.ts). Obje verzije koegzistiraju: MVP je citljiv tijek teksta, faksimil
- * dodaje layout stranice (A4 sirina + prave margine iz sectPr), stvaran bazni font/velicinu i
- * run-oblikovanje (bold/italic/font/velicina po runu), pa odlomak izgleda blize izvornom Wordu.
+ * dodaje layout stranice (A4 sirina + prave margine iz sectPr), stvaran bazni font/velicinu,
+ * run-oblikovanje (bold/italic/font/velicina po runu), PAGINACIJU (podjela na listove po prijelomima
+ * stranica iz dokumenta, s brojevima stranica) i fusnote u stvarnom oblikovanju.
  *
  * Cista funkcija bez mreze i globalnog stanja; testabilna u happy-dom. XSS-safe po konstrukciji:
  * SAV tekst dokumenta ide kroz createTextNode/textContent (nikad innerHTML), a oblikovanje se
  * postavlja preko element.style.* (CSP dopusta 'unsafe-inline' za style-src, ne za script-src).
  *
- * Dva neovisna sloja nad istim tekstom odlomka:
- *   1) run-formatiranje: iz preview.paragraphs[].runs, rekonstruirano nad `text` (ground truth)
- *      indexOf-obilaskom; runovi koji se ne nadju gube samo OBLIKOVANJE, nikad tekst (praznine
- *      pokriva bazni stil). Rezultat: root.textContent == izvorni tekst odlomka (integritet).
- *   2) highlight: isjecci nalaza omotani u <mark> (crveno/zuto/plavo), identicno render-preview.ts;
- *      preklapajuci se spajaju u jedan <mark>, flag bez lociranog isjecka sidri se na razinu odlomka.
+ * Dva neovisna sloja nad istim tekstom (odlomka ili fusnote):
+ *   1) run-formatiranje: iz `runs`, rekonstruirano nad `text` (ground truth) indexOf-obilaskom;
+ *      runovi koji se ne nadju gube samo OBLIKOVANJE, nikad tekst. root.textContent == izvorni tekst.
+ *   2) highlight: isjecci nalaza omotani u <mark> (crveno/zuto/plavo), identicno render-preview.ts.
  * Sloj 1 i 2 spajaju se tako da <mark> nosi <span>-ove oblikovanja unutar sebe (npr. bold + zuto).
+ *
+ * Paginacija (A): dokument OOXML ne nosi prave prijelome stranica osim eksplicitnih (w:br type=page)
+ * i Wordovih hintova (lastRenderedPageBreak). Dijelimo na listove po `pageBreakAfter` (koji ih oba
+ * pokriva); gdje hintova nema, dokument je jedan dugi list. Ovo je faithful gdje Word ima zabiljezene
+ * prijelome, a caption posteno kaze da se prijelomi mogu razlikovati. Fusnote idu na dno ZADNJEG lista.
  *
  * Vraca isti oblik kao render-preview (root, flagTargets, locatedCount) pa bocna lista nalaza i
  * skrolanje u src/ui/app.ts rade bez ijedne izmjene.
@@ -32,6 +36,7 @@ const SEVERITY_RANK: Record<PreviewSeverity, number> = { error: 3, warning: 2, i
 
 /** Zadane vrijednosti kad sectPr/dominant podatci nedostaju (A4, standardne margine, TNR 12). */
 const DEFAULT_PAGE_W_CM = 21;
+const DEFAULT_PAGE_H_CM = 29.7;
 const DEFAULT_MARGIN_CM = 2.5;
 const DEFAULT_BASE_SIZE_PT = 12;
 const DEFAULT_BASE_FONT = 'Times New Roman';
@@ -66,10 +71,12 @@ interface FlagEntry {
   flagIndex: number;
 }
 
-/** Efektivni bazni stil stranice; run se usporedjuje s njim da se izbjegnu suvisni <span>. */
+/** Efektivni bazni stil; run se usporedjuje s njim da se izbjegnu suvisni <span>.
+ *  applySize=false (fusnote): ne primjenjuj razlike u velicini (CSS skalira cijeli odjeljak). */
 interface BaseStyle {
   font: string;
   size: number;
+  applySize?: boolean;
 }
 
 interface FmtSeg {
@@ -91,7 +98,7 @@ function topSeverity(entries: FlagEntry[]): PreviewSeverity {
 }
 
 /** Ime elementa za odlomak: naslovi 1..6 -> h1..h6 (klamp), ostalo -> p. */
-function paragraphTag(headingLevel: number | null): string {
+function paragraphTag(headingLevel: number | null | undefined): string {
   if (typeof headingLevel === 'number' && headingLevel >= 1) return 'h' + Math.min(6, Math.floor(headingLevel));
   return 'p';
 }
@@ -151,7 +158,7 @@ function applyRunStyle(span: HTMLElement, run: PreviewRun, base: BaseStyle): voi
   if (run.bold) span.style.fontWeight = '700';
   if (run.italic) span.style.fontStyle = 'italic';
   if (run.font && normFont(run.font) !== normFont(base.font)) span.style.fontFamily = fontStack(run.font);
-  if (typeof run.size === 'number' && run.size > 0 && run.size !== base.size) span.style.fontSize = run.size + 'pt';
+  if (base.applySize !== false && typeof run.size === 'number' && run.size > 0 && run.size !== base.size) span.style.fontSize = run.size + 'pt';
 }
 
 /** True ako run nema vidljive razlike od baznog stila (renderira se kao goli tekstni cvor). */
@@ -159,7 +166,7 @@ function runIsBase(run: PreviewRun | null, base: BaseStyle): boolean {
   if (!run) return true;
   if (run.bold || run.italic) return false;
   if (run.font && normFont(run.font) !== normFont(base.font)) return false;
-  if (typeof run.size === 'number' && run.size > 0 && run.size !== base.size) return false;
+  if (base.applySize !== false && typeof run.size === 'number' && run.size > 0 && run.size !== base.size) return false;
   return true;
 }
 
@@ -196,24 +203,23 @@ function appendStyledText(
 }
 
 /**
- * Ispuni element odlomka: run-oblikovanje + <mark> oko lociranih isjecaka. Vraca flag-entrije cija
- * lokacija nije nadjena (prazan isjecak ili podniz ne postoji) da ih pozivatelj sidri na razinu
- * odlomka. Struktura je identicna render-preview.ts, samo se leaf-tekst emitira kroz appendStyledText.
+ * Ispuni element: run-oblikovanje + <mark> oko lociranih isjecaka nad `text`/`runs`. Vraca flag-
+ * entrije cija lokacija nije nadjena (prazan isjecak ili podniz ne postoji) da ih pozivatelj sidri na
+ * razinu elementa. Isti kod za tijelo i fusnote (fusnote prosljedjuju bazu s applySize=false).
  */
-function fillFormattedParagraph(
+function fillFormatted(
   el: HTMLElement,
-  para: PreviewParagraph,
-  paraFlags: FlagEntry[],
+  text: string,
+  runs: PreviewRun[] | undefined,
+  entries: FlagEntry[],
   base: BaseStyle,
   doc: Document,
   flagTargets: Map<number, HTMLElement>,
 ): FlagEntry[] {
-  const text = para.text || '';
-  const segs = buildFmtSegs(text, para.runs);
-
+  const segs = buildFmtSegs(text, runs);
   const located: MergedRange[] = [];
   const unlocated: FlagEntry[] = [];
-  for (const entry of paraFlags) {
+  for (const entry of entries) {
     const ex = entry.flag.excerpt;
     const idx = ex ? text.indexOf(ex) : -1;
     if (idx >= 0) located.push({ start: idx, end: idx + ex.length, entries: [entry] });
@@ -256,62 +262,60 @@ function fillFormattedParagraph(
   return unlocated;
 }
 
-/** Ispuni fusnotu: samo tekst + <mark> (footnote preview nema run-oblikovanje). Kao render-preview. */
-function fillFootnote(
-  body: HTMLElement,
-  text: string,
-  fnFlags: FlagEntry[],
-  doc: Document,
-  flagTargets: Map<number, HTMLElement>,
-): FlagEntry[] {
-  const located: MergedRange[] = [];
-  const unlocated: FlagEntry[] = [];
-  for (const entry of fnFlags) {
-    const ex = entry.flag.excerpt;
-    const idx = ex ? text.indexOf(ex) : -1;
-    if (idx >= 0) located.push({ start: idx, end: idx + ex.length, entries: [entry] });
-    else unlocated.push(entry);
-  }
-  if (located.length === 0) {
-    body.textContent = text;
-    return unlocated;
-  }
-  located.sort((a, b) => a.start - b.start || a.end - b.end);
-  const merged: MergedRange[] = [];
-  for (const r of located) {
-    const last = merged[merged.length - 1];
-    if (last && r.start < last.end) {
-      last.end = Math.max(last.end, r.end);
-      last.entries.push(...r.entries);
-    } else {
-      merged.push({ start: r.start, end: r.end, entries: [...r.entries] });
-    }
-  }
-  let cursor = 0;
-  for (const m of merged) {
-    if (m.start > cursor) body.appendChild(doc.createTextNode(text.slice(cursor, m.start)));
-    const sev = topSeverity(m.entries);
-    const mark = doc.createElement('mark');
-    mark.className = `lekta-flag lekta-flag--${sev}`;
-    mark.setAttribute('data-flag-severity', sev);
-    const titles = [...new Set(m.entries.map((e) => e.flag.title))].join('; ');
-    if (titles) mark.title = titles;
-    mark.textContent = text.slice(m.start, m.end);
-    body.appendChild(mark);
-    for (const e of m.entries) flagTargets.set(e.flagIndex, mark);
-    cursor = m.end;
-  }
-  if (cursor < text.length) body.appendChild(doc.createTextNode(text.slice(cursor)));
-  return unlocated;
-}
-
 function cmOrNull(v: number | null | undefined): number | null {
   return typeof v === 'number' && isFinite(v) && v > 0 ? v : null;
 }
 
+/** Napravi jedan A4 list sa sirinom, marginama (padding) i baznom tipografijom. */
+function makeSheet(model: PreviewModel, base: BaseStyle, doc: Document): HTMLElement {
+  const page = doc.createElement('div');
+  page.className = 'lekta-fac-page';
+  page.style.width = (cmOrNull(model?.page?.size?.w) ?? DEFAULT_PAGE_W_CM) + 'cm';
+  page.style.minHeight = (cmOrNull(model?.page?.size?.h) ?? DEFAULT_PAGE_H_CM) + 'cm';
+  const m = model?.page?.margins || null;
+  page.style.paddingTop = (cmOrNull(m?.top) ?? DEFAULT_MARGIN_CM) + 'cm';
+  page.style.paddingRight = (cmOrNull(m?.right) ?? DEFAULT_MARGIN_CM) + 'cm';
+  page.style.paddingBottom = (cmOrNull(m?.bottom) ?? DEFAULT_MARGIN_CM) + 'cm';
+  page.style.paddingLeft = (cmOrNull(m?.left) ?? DEFAULT_MARGIN_CM) + 'cm';
+  page.style.fontFamily = fontStack(base.font);
+  page.style.fontSize = base.size + 'pt';
+  return page;
+}
+
+/** Dodaj odlomak (body) na dani list. */
+function appendParagraph(
+  page: HTMLElement,
+  para: PreviewParagraph,
+  byPara: Map<number, FlagEntry[]>,
+  base: BaseStyle,
+  doc: Document,
+  flagTargets: Map<number, HTMLElement>,
+): void {
+  const el = doc.createElement(paragraphTag(para.headingLevel));
+  el.id = `lekta-fac-p-${para.index}`;
+  el.setAttribute('data-p-index', String(para.index));
+  el.className = para.headingLevel ? 'lekta-fac-heading' : 'lekta-fac-para';
+  const alignCss = alignToCss(para.align);
+  if (alignCss) el.style.textAlign = alignCss;
+
+  const paraFlags = byPara.get(para.index) ?? [];
+  if (paraFlags.length) {
+    const unlocated = fillFormatted(el, para.text || '', para.runs, paraFlags, base, doc, flagTargets);
+    el.classList.add('lekta-fac-para--flagged');
+    if (unlocated.length) {
+      el.classList.add('lekta-fac-para--has-unlocated');
+      for (const e of unlocated) if (!flagTargets.has(e.flagIndex)) flagTargets.set(e.flagIndex, el);
+    }
+  } else {
+    const segs = buildFmtSegs(para.text || '', para.runs);
+    appendStyledText(el, para.text || '', 0, (para.text || '').length, segs, base, doc);
+  }
+  page.appendChild(el);
+}
+
 /**
- * Sagradi faksimil pregled: stranica (A4 sirina + margine) s odlomcima u stvarnom oblikovanju i
- * inline oznakama nalaza. `options.doc` je za testove; u pregledniku se koristi globalni document.
+ * Sagradi faksimil pregled: jedan ili vise A4 listova (po prijelomima stranica), s odlomcima u
+ * stvarnom oblikovanju i inline oznakama nalaza. `options.doc` je za testove.
  */
 export function renderFacsimile(
   model: PreviewModel,
@@ -329,6 +333,8 @@ export function renderFacsimile(
     font: (model?.baseFont || DEFAULT_BASE_FONT).trim(),
     size: cmOrNull(model?.baseSize) ?? DEFAULT_BASE_SIZE_PT,
   };
+  // Fusnote: isti font/velicina za usporedbu, ali BEZ primjene razlike u velicini (CSS skalira odjeljak).
+  const fnBase: BaseStyle = { font: base.font, size: base.size, applySize: false };
 
   // Grupiraj flagove: tijelo po 1-based indeksu odlomka, fusnote po id-u (isti kljucevi kao MVP).
   const byPara = new Map<number, FlagEntry[]>();
@@ -347,77 +353,66 @@ export function renderFacsimile(
   root.className = 'lekta-facsimile';
   if (model?.truncated) root.setAttribute('data-truncated', 'true');
 
-  // Stranica: bijeli list A4 sirine sa stvarnim marginama (padding) i baznom tipografijom.
-  const page = doc.createElement('div');
-  page.className = 'lekta-fac-page';
-  const pageW = cmOrNull(model?.page?.size?.w) ?? DEFAULT_PAGE_W_CM;
-  page.style.width = pageW + 'cm';
-  const m = model?.page?.margins || null;
-  page.style.paddingTop = (cmOrNull(m?.top) ?? DEFAULT_MARGIN_CM) + 'cm';
-  page.style.paddingRight = (cmOrNull(m?.right) ?? DEFAULT_MARGIN_CM) + 'cm';
-  page.style.paddingBottom = (cmOrNull(m?.bottom) ?? DEFAULT_MARGIN_CM) + 'cm';
-  page.style.paddingLeft = (cmOrNull(m?.left) ?? DEFAULT_MARGIN_CM) + 'cm';
-  page.style.fontFamily = fontStack(base.font);
-  page.style.fontSize = base.size + 'pt';
-  root.appendChild(page);
-
+  // Podjela na listove po prijelomima stranica (pageBreakAfter). Bez prijeloma = jedan list.
+  const pages: PreviewParagraph[][] = [[]];
   for (const para of paragraphs) {
-    const el = doc.createElement(paragraphTag(para.headingLevel));
-    el.id = `lekta-fac-p-${para.index}`;
-    el.setAttribute('data-p-index', String(para.index));
-    el.className = para.headingLevel ? 'lekta-fac-heading' : 'lekta-fac-para';
-    const alignCss = alignToCss(para.align);
-    if (alignCss) el.style.textAlign = alignCss;
-
-    const paraFlags = byPara.get(para.index) ?? [];
-    if (paraFlags.length) {
-      const unlocated = fillFormattedParagraph(el, para, paraFlags, base, doc, flagTargets);
-      el.classList.add('lekta-fac-para--flagged');
-      if (unlocated.length) {
-        el.classList.add('lekta-fac-para--has-unlocated');
-        for (const e of unlocated) if (!flagTargets.has(e.flagIndex)) flagTargets.set(e.flagIndex, el);
-      }
-    } else {
-      const segs = buildFmtSegs(para.text || '', para.runs);
-      appendStyledText(el, para.text || '', 0, (para.text || '').length, segs, base, doc);
-    }
-    page.appendChild(el);
+    pages[pages.length - 1].push(para);
+    if (para.pageBreakAfter) pages.push([]);
   }
+  if (pages.length > 1 && pages[pages.length - 1].length === 0) pages.pop();
+  const multiPage = pages.length > 1;
 
-  // Fusnote na dnu stranice (odvojene crtom); zaseban koordinatni prostor kao u MVP-u.
-  if (footnotes.length) {
-    const section = doc.createElement('section');
-    section.className = 'lekta-pv-footnotes lekta-fac-footnotes';
-    const head = doc.createElement('h3');
-    head.className = 'lekta-pv-fn-head';
-    head.textContent = 'Fusnote';
-    section.appendChild(head);
-    for (const fn of footnotes) {
-      const el = doc.createElement('div');
-      el.className = 'lekta-pv-footnote';
-      el.id = `lekta-fac-fn-${fn.id}`;
-      el.setAttribute('data-fn-id', String(fn.id));
-      const num = doc.createElement('sup');
-      num.className = 'lekta-pv-fn-num';
-      num.textContent = String(fn.id);
-      el.appendChild(num);
-      const body = doc.createElement('span');
-      const fnFlags = byFn.get(fn.id) ?? [];
-      if (fnFlags.length) {
-        const unlocated = fillFootnote(body, fn.text, fnFlags, doc, flagTargets);
-        el.classList.add('lekta-pv-footnote--flagged');
-        if (unlocated.length) {
-          el.classList.add('lekta-pv-footnote--has-unlocated');
-          for (const e of unlocated) if (!flagTargets.has(e.flagIndex)) flagTargets.set(e.flagIndex, el);
+  pages.forEach((group, pi) => {
+    const page = makeSheet(model, base, doc);
+    if (multiPage) page.setAttribute('data-page', String(pi + 1));
+    for (const para of group) appendParagraph(page, para, byPara, base, doc, flagTargets);
+
+    // Fusnote na dnu ZADNJEG lista (odvojene crtom); zaseban koordinatni prostor kao u MVP-u.
+    if (pi === pages.length - 1 && footnotes.length) {
+      const section = doc.createElement('section');
+      section.className = 'lekta-pv-footnotes lekta-fac-footnotes';
+      const head = doc.createElement('h3');
+      head.className = 'lekta-pv-fn-head';
+      head.textContent = 'Fusnote';
+      section.appendChild(head);
+      for (const fn of footnotes) {
+        const el = doc.createElement('div');
+        el.className = 'lekta-pv-footnote';
+        el.id = `lekta-fac-fn-${fn.id}`;
+        el.setAttribute('data-fn-id', String(fn.id));
+        const num = doc.createElement('sup');
+        num.className = 'lekta-pv-fn-num';
+        num.textContent = String(fn.id);
+        el.appendChild(num);
+        const body = doc.createElement('span');
+        const fnFlags = byFn.get(fn.id) ?? [];
+        if (fnFlags.length) {
+          const unlocated = fillFormatted(body, fn.text || '', fn.runs, fnFlags, fnBase, doc, flagTargets);
+          el.classList.add('lekta-pv-footnote--flagged');
+          if (unlocated.length) {
+            el.classList.add('lekta-pv-footnote--has-unlocated');
+            for (const e of unlocated) if (!flagTargets.has(e.flagIndex)) flagTargets.set(e.flagIndex, el);
+          }
+        } else {
+          const segs = buildFmtSegs(fn.text || '', fn.runs);
+          appendStyledText(body, fn.text || '', 0, (fn.text || '').length, segs, fnBase, doc);
         }
-      } else {
-        body.textContent = fn.text;
+        el.appendChild(body);
+        section.appendChild(el);
       }
-      el.appendChild(body);
-      section.appendChild(el);
+      page.appendChild(section);
     }
-    page.appendChild(section);
-  }
+
+    // Broj stranice (samo kad ima vise listova); sjedi u donjoj margini.
+    if (multiPage) {
+      const pn = doc.createElement('div');
+      pn.className = 'lekta-fac-pagenum';
+      pn.setAttribute('aria-hidden', 'true');
+      pn.textContent = String(pi + 1);
+      page.appendChild(pn);
+    }
+    root.appendChild(page);
+  });
 
   return { root, flagTargets, locatedCount: flagTargets.size };
 }
