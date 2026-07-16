@@ -126,7 +126,11 @@ TRACK D (odluke i podaci):     D1, D2 (prije K8), D3 (u K0), D4 (prije K11 imeno
   adversarial review; NE deploya se sam (ide zajedno s K6).
 
 ### K6. Umetanje sekcije prije Uvoda + korisnikova potvrda (BL-07c)
-- Trajanje: 3-4 dana. Status: GOTOVO 2026-07-13 (commit f7b7c1c, CI zelen, DARK)
+- Trajanje: 3-4 dana. Status: GOTOVO 2026-07-13 (commit f7b7c1c, CI zelen, DARK);
+  stale-index dug ZATVOREN 2026-07-16 (commit 31052dc): sidro Uvoda se sada RE-DERIVIRA
+  iz trenutnog documentXml po tekstu (insertSectionBreakBeforeHeading, isti obrazac kao K7),
+  introParagraphIndex je demotiran na cisti gate signal; prednji dio = prethodni odlomak ILI
+  tablica (naslovnica-tablica). Golden nepromijenjen, check + CI zeleni. DARK ostaje.
 - IZVJESTAJ: novi kompozitni section-insert-fixer za JEDNOSEKCIJSKI rad. Nova primitiva
   insertSectionBreakBeforeParagraph (xml-patch.ts) umece <w:p><w:pPr><w:sectPr>..</w:pPr></w:p>
   prije Uvoda; koordinatni sustav = analyzeDocx introParagraphIndex (n-ti <w:p> == n-ti
@@ -171,8 +175,8 @@ TRACK D (odluke i podaci):     D1, D2 (prije K8), D3 (u K0), D4 (prije K11 imeno
   DARK: TOC_FIELD_LIVE=false; app.ts zove flag-gated tocFieldRepairableItem. check + CI zeleni.
   PREOSTAJE (vlasnik, izlazni gate): rucna Word/LibreOffice provjera (regenerira li Word TOC na
   otvaranju, bez upozorenja) -> TOC_FIELD_LIVE=true -> deploy (moze uz K5/K6 matricu). NAPOMENA:
-  isti stale-index rizik tinja u K6 section-insert (empty-paragraph prije njega u bateriji);
-  rijesiti/provjeriti prije SECTION_INSERT_LIVE flipa (K6 koristi anal-time introParagraphIndex).
+  isti stale-index rizik postojao u K6 section-insert -> ZATVOREN 2026-07-16 (commit 31052dc,
+  re-derivacija sidra po tekstu); oba LIVE puta (toc-field + section-insert) sada re-deriviraju.
 - Sto: umetanje TOC polja (w:fldSimple ili sdt, "TOC \\o 1-3 \\h", w:dirty) na mjesto
   postojeceg naslova Sadrzaj; rucni sadrzaj se NE brise (samo preporuka u panelu).
 - Ulazni gate: K6. Izlazni gate: Word pri otvaranju izracuna TOC; no-op ako polje postoji;
