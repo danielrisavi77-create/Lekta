@@ -513,6 +513,22 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "foi-diplomski",
+      "scored": 5,
+      "machineCheckable": 6,
+      "advisory": 2,
+      "ratio": 0.8333333333333334,
+      "lastVerified": "2026-07-16"
+    },
+    {
+      "profileId": "foi-zavrsni",
+      "scored": 5,
+      "machineCheckable": 6,
+      "advisory": 2,
+      "ratio": 0.8333333333333334,
+      "lastVerified": "2026-07-16"
+    },
+    {
       "profileId": "foozpu-diplomski",
       "scored": 6,
       "machineCheckable": 6,
@@ -1697,5 +1713,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 1265
+  "totalScored": 1275
 }

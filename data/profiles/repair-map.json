@@ -2271,6 +2271,42 @@
       "autoFixable": true
     }
   ],
+  "foi-diplomski": [
+    {
+      "ruleId": "foi-diplomski--font",
+      "checkId": "font",
+      "label": "Vrsta slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "foi-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    }
+  ],
+  "foi-zavrsni": [
+    {
+      "ruleId": "foi-zavrsni--font",
+      "checkId": "font",
+      "label": "Vrsta slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "foi-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    }
+  ],
   "foozpu-diplomski": [
     {
       "ruleId": "foozpu-diplomski--paper-size",

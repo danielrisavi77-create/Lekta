@@ -7800,5 +7800,27 @@
     "rules": {
       "recommendedCitation": "chicago-notes"
     }
+  },
+  {
+    "id": "foi-zavrsni",
+    "unitId": "foi",
+    "programs": [
+      "Prijediplomski studiji Fakulteta organizacije i informatike (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "foi-diplomski",
+    "unitId": "foi",
+    "programs": [
+      "Diplomski studiji Fakulteta organizacije i informatike"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial"
   }
 ]

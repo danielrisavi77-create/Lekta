@@ -324,6 +324,18 @@
     "toc",
     "page-numbers"
   ],
+  "foi-diplomski": [
+    "line-spacing",
+    "margins",
+    "justify",
+    "toc"
+  ],
+  "foi-zavrsni": [
+    "line-spacing",
+    "margins",
+    "justify",
+    "toc"
+  ],
   "foozpu-diplomski": [
     "justify",
     "toc",

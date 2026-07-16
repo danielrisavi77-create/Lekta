@@ -1,0 +1,286 @@
+{
+  "faculty": "foi",
+  "institution": "unizg",
+  "unit": {
+    "id": "foi",
+    "name": "Fakultet organizacije i informatike",
+    "family": "stem",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Prijediplomski studiji Fakulteta organizacije i informatike (zavrsni rad)",
+    "Diplomski studiji Fakulteta organizacije i informatike",
+    "Opći profil fakulteta"
+  ],
+  "sources": [
+    {
+      "id": "foi-pravilnik-zavrsni-diplomski-2021",
+      "kind": "regulation",
+      "title": "Pravilnik o zavrsnom radu na preddiplomskim studijima i diplomskom radu na diplomskim studijima FOI-ja (2021)",
+      "url": "https://radovi.foi.hr/build/files/FOI_Pravilnik_o_zavrsnom_i_diplomskom_radu.pdf",
+      "publisher": "Fakultet organizacije i informatike Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-16",
+      "snapshotPath": "data/sources/foi/foi-pravilnik-zavrsni-diplomski-2021.pdf",
+      "snapshotHash": "cc2a40c2abc829dea5dbcedac0f2df30da9ec8d2554dc4f369468dd6d3b64b98",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-16",
+      "note": "Proceduralni pravilnik; cl.10 st.1 daje obvezne dijelove rada, cl.10 st.2 propisuje obavezni Predlozak."
+    },
+    {
+      "id": "foi-predlozak-zavrsni-diplomski",
+      "kind": "template",
+      "title": "Predlozak za pisanje zavrsnog/diplomskog rada (DOCX)",
+      "url": "https://radovi.foi.hr/build/files/Predlozak_za_pisanje_zavsnog-diplomskog_rada.docx",
+      "publisher": "Fakultet organizacije i informatike Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-16",
+      "snapshotPath": "data/sources/foi/foi-predlozak-zavrsni-diplomski.docx",
+      "snapshotHash": "57551d6b28d3af1046aaad67a04b54001ccaa92a9ac5f509d9b8bc806ec38358",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-16",
+      "note": "Obavezan predlozak (Pravilnik cl.10 st.2). Format citan iz word/styles.xml (Normal: TNR, sz24=12pt) i word/document.xml sectPr (pgSz A4, pgNumType). Margine mijesane (predtekst 3,0 lijevo / tijelo 2,5) pa advisory."
+    },
+    {
+      "id": "foi-preporuke-citiranja-apa",
+      "kind": "guidelines",
+      "title": "Preporuke citiranja i referenciranja primjenom stila referenciranja APA",
+      "url": "https://radovi.foi.hr/build/files/Preporuke_citiranja_i_referenciranja_primjenom_stila_referenciranja_APA.pdf",
+      "publisher": "Fakultet organizacije i informatike Sveucilista u Zagrebu",
+      "fetchedAt": "2026-07-16",
+      "snapshotPath": "data/sources/foi/foi-preporuke-citiranja-apa.pdf",
+      "snapshotHash": "9c293fbbdda869dec80831a92d2330270a4d0ebaa61b93c5f17df07cc210bedd",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-16",
+      "note": "FOI nudi APA i IEEE (student bira) - citation-style ostaje advisory."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "foi-zavrsni",
+      "unitId": "foi",
+      "programs": [
+        "Prijediplomski studiji Fakulteta organizacije i informatike (zavrsni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "FOI, zavrsni rad",
+      "verifiedAt": "2026-07-16",
+      "documentDate": "2021-10-21",
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "requireA4": true
+      },
+      "facts": [],
+      "note": "Format iz obaveznog FOI predloska (Pravilnik cl.10 st.2); obvezni dijelovi iz Pravilnika cl.10 st.1. Margine/prored/stil citiranja advisory.",
+      "sources": [
+        {
+          "title": "Pravilnik o zavrsnom radu na preddiplomskim studijima i diplomskom radu na diplomskim studijima FOI-ja (2021)",
+          "url": "https://radovi.foi.hr/build/files/FOI_Pravilnik_o_zavrsnom_i_diplomskom_radu.pdf"
+        },
+        {
+          "title": "Predlozak za pisanje zavrsnog/diplomskog rada (DOCX)",
+          "url": "https://radovi.foi.hr/build/files/Predlozak_za_pisanje_zavsnog-diplomskog_rada.docx"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o zavrsnom radu na preddiplomskim studijima i diplomskom radu na diplomskim studijima FOI-ja (2021)",
+        "Predlozak za pisanje zavrsnog/diplomskog rada (DOCX)",
+        "Preporuke citiranja i referenciranja primjenom stila referenciranja APA"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Vrsta slova",
+        "Velicina slova",
+        "Format papira",
+        "Numeriranje stranica",
+        "Obvezni dijelovi rada"
+      ],
+      "advisoryScope": [
+        "Margine",
+        "Prored",
+        "Stil citiranja"
+      ]
+    },
+    {
+      "id": "foi-diplomski",
+      "unitId": "foi",
+      "programs": [
+        "Diplomski studiji Fakulteta organizacije i informatike"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "FOI, diplomski rad",
+      "verifiedAt": "2026-07-16",
+      "documentDate": "2021-10-21",
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "requireA4": true
+      },
+      "facts": [],
+      "note": "Format iz obaveznog FOI predloska (Pravilnik cl.10 st.2); obvezni dijelovi iz Pravilnika cl.10 st.1. Margine/prored/stil citiranja advisory.",
+      "sources": [
+        {
+          "title": "Pravilnik o zavrsnom radu na preddiplomskim studijima i diplomskom radu na diplomskim studijima FOI-ja (2021)",
+          "url": "https://radovi.foi.hr/build/files/FOI_Pravilnik_o_zavrsnom_i_diplomskom_radu.pdf"
+        },
+        {
+          "title": "Predlozak za pisanje zavrsnog/diplomskog rada (DOCX)",
+          "url": "https://radovi.foi.hr/build/files/Predlozak_za_pisanje_zavsnog-diplomskog_rada.docx"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o zavrsnom radu na preddiplomskim studijima i diplomskom radu na diplomskim studijima FOI-ja (2021)",
+        "Predlozak za pisanje zavrsnog/diplomskog rada (DOCX)",
+        "Preporuke citiranja i referenciranja primjenom stila referenciranja APA"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Vrsta slova",
+        "Velicina slova",
+        "Format papira",
+        "Numeriranje stranica",
+        "Obvezni dijelovi rada"
+      ],
+      "advisoryScope": [
+        "Margine",
+        "Prored",
+        "Stil citiranja"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-foi-zavrsni--font-verified-2026-07-16",
+      "ruleId": "foi-zavrsni--font",
+      "profileId": "foi-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "foi-predlozak-zavrsni-diplomski",
+      "sourcePage": "word/styles.xml, stil Normal",
+      "quote": "Obavezni predlozak (Pravilnik cl.10 st.2), word/styles.xml stil Normal: w:rFonts w:ascii=Times New Roman, w:sz w:val=24 (24 polutocke = 12 pt).",
+      "note": "Novi port FOI: covjek potvrdio uz otvoren snapshot (pravilnik + obavezni predlozak)."
+    },
+    {
+      "id": "led-foi-zavrsni--font-size-verified-2026-07-16",
+      "ruleId": "foi-zavrsni--font-size",
+      "profileId": "foi-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "foi-predlozak-zavrsni-diplomski",
+      "sourcePage": "word/styles.xml, stil Normal",
+      "quote": "Obavezni predlozak (Pravilnik cl.10 st.2), word/styles.xml stil Normal: w:rFonts w:ascii=Times New Roman, w:sz w:val=24 (24 polutocke = 12 pt).",
+      "note": "Novi port FOI: covjek potvrdio uz otvoren snapshot (pravilnik + obavezni predlozak)."
+    },
+    {
+      "id": "led-foi-zavrsni--paper-size-verified-2026-07-16",
+      "ruleId": "foi-zavrsni--paper-size",
+      "profileId": "foi-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "foi-predlozak-zavrsni-diplomski",
+      "sourcePage": "word/document.xml, sectPr",
+      "quote": "Obavezni predlozak, word/document.xml sectPr: w:pgSz w:w=11906 w:h=16838 (210x297 mm = A4 format).",
+      "note": "Novi port FOI: covjek potvrdio uz otvoren snapshot (pravilnik + obavezni predlozak)."
+    },
+    {
+      "id": "led-foi-zavrsni--page-numbers-verified-2026-07-16",
+      "ruleId": "foi-zavrsni--page-numbers",
+      "profileId": "foi-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "foi-predlozak-zavrsni-diplomski",
+      "sourcePage": "word/document.xml, sectPr",
+      "quote": "Obavezni predlozak, word/document.xml sectPr: w:pgNumType (predtekst rimski, tijelo arapski od 1) - stranice se numeriraju.",
+      "note": "Novi port FOI: covjek potvrdio uz otvoren snapshot (pravilnik + obavezni predlozak)."
+    },
+    {
+      "id": "led-foi-zavrsni--required-sections-verified-2026-07-16",
+      "ruleId": "foi-zavrsni--required-sections",
+      "profileId": "foi-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "foi-pravilnik-zavrsni-diplomski-2021",
+      "sourcePage": "Clanak 10. stavak 1.",
+      "quote": "Zavrsni/diplomski rad sastoji se od naslovne stranice, izjave o izvornosti rada, sazetka, kljucnih rijeci, sadrzaja, uvoda, obrade teme, zakljucka, popisa literature i drugih izvora podataka koji su koristeni u izradi zavrsnog/diplomskog rada te priloga (ako postoje).",
+      "note": "Novi port FOI: covjek potvrdio uz otvoren snapshot (pravilnik + obavezni predlozak)."
+    },
+    {
+      "id": "led-foi-diplomski--font-verified-2026-07-16",
+      "ruleId": "foi-diplomski--font",
+      "profileId": "foi-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "foi-predlozak-zavrsni-diplomski",
+      "sourcePage": "word/styles.xml, stil Normal",
+      "quote": "Obavezni predlozak (Pravilnik cl.10 st.2), word/styles.xml stil Normal: w:rFonts w:ascii=Times New Roman, w:sz w:val=24 (24 polutocke = 12 pt).",
+      "note": "Novi port FOI: covjek potvrdio uz otvoren snapshot (pravilnik + obavezni predlozak)."
+    },
+    {
+      "id": "led-foi-diplomski--font-size-verified-2026-07-16",
+      "ruleId": "foi-diplomski--font-size",
+      "profileId": "foi-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "foi-predlozak-zavrsni-diplomski",
+      "sourcePage": "word/styles.xml, stil Normal",
+      "quote": "Obavezni predlozak (Pravilnik cl.10 st.2), word/styles.xml stil Normal: w:rFonts w:ascii=Times New Roman, w:sz w:val=24 (24 polutocke = 12 pt).",
+      "note": "Novi port FOI: covjek potvrdio uz otvoren snapshot (pravilnik + obavezni predlozak)."
+    },
+    {
+      "id": "led-foi-diplomski--paper-size-verified-2026-07-16",
+      "ruleId": "foi-diplomski--paper-size",
+      "profileId": "foi-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "foi-predlozak-zavrsni-diplomski",
+      "sourcePage": "word/document.xml, sectPr",
+      "quote": "Obavezni predlozak, word/document.xml sectPr: w:pgSz w:w=11906 w:h=16838 (210x297 mm = A4 format).",
+      "note": "Novi port FOI: covjek potvrdio uz otvoren snapshot (pravilnik + obavezni predlozak)."
+    },
+    {
+      "id": "led-foi-diplomski--page-numbers-verified-2026-07-16",
+      "ruleId": "foi-diplomski--page-numbers",
+      "profileId": "foi-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "foi-predlozak-zavrsni-diplomski",
+      "sourcePage": "word/document.xml, sectPr",
+      "quote": "Obavezni predlozak, word/document.xml sectPr: w:pgNumType (predtekst rimski, tijelo arapski od 1) - stranice se numeriraju.",
+      "note": "Novi port FOI: covjek potvrdio uz otvoren snapshot (pravilnik + obavezni predlozak)."
+    },
+    {
+      "id": "led-foi-diplomski--required-sections-verified-2026-07-16",
+      "ruleId": "foi-diplomski--required-sections",
+      "profileId": "foi-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "foi-pravilnik-zavrsni-diplomski-2021",
+      "sourcePage": "Clanak 10. stavak 1.",
+      "quote": "Zavrsni/diplomski rad sastoji se od naslovne stranice, izjave o izvornosti rada, sazetka, kljucnih rijeci, sadrzaja, uvoda, obrade teme, zakljucka, popisa literature i drugih izvora podataka koji su koristeni u izradi zavrsnog/diplomskog rada te priloga (ako postoje).",
+      "note": "Novi port FOI: covjek potvrdio uz otvoren snapshot (pravilnik + obavezni predlozak)."
+    }
+  ]
+}

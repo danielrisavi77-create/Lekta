@@ -4,6 +4,22 @@
     "name": "Sveučilište u Zagrebu",
     "units": [
       {
+        "id": "adu",
+        "name": "Akademija dramske umjetnosti",
+        "family": "arts",
+        "programs": [
+          "Gluma",
+          "Dramaturgija",
+          "Snimanje",
+          "Montaža",
+          "Produkcija",
+          "Filmska i TV režija",
+          "Kazališna režija i radiofonija",
+          "Opći profil akademije"
+        ],
+        "status": "partial"
+      },
+      {
         "id": "agr",
         "name": "Agronomski fakultet",
         "family": "stem",
@@ -14,6 +30,23 @@
           "Opći profil fakulteta"
         ],
         "status": "partial"
+      },
+      {
+        "id": "alu",
+        "name": "Akademija likovnih umjetnosti",
+        "family": "arts",
+        "programs": [
+          "Slikarstvo",
+          "Kiparstvo",
+          "Grafika",
+          "Nastavnički odsjek",
+          "Konzerviranje i restauriranje",
+          "Animirani film i novi mediji",
+          "Diplomski studiji Akademije likovnih umjetnosti",
+          "Doktorski studij Akademije likovnih umjetnosti",
+          "Opći profil akademije"
+        ],
+        "status": "generic"
       },
       {
         "id": "arh",
@@ -27,20 +60,6 @@
           "Opći profil fakulteta"
         ],
         "status": "generic"
-      },
-      {
-        "id": "erf",
-        "name": "Edukacijsko-rehabilitacijski fakultet",
-        "family": "social",
-        "programs": [
-          "Edukacijska rehabilitacija",
-          "Logopedija",
-          "Socijalna pedagogija",
-          "Diplomski studiji Edukacijsko-rehabilitacijskog fakulteta",
-          "Doktorski studij Edukacijsko-rehabilitacijskog fakulteta",
-          "Opći profil fakulteta"
-        ],
-        "status": "research"
       },
       {
         "id": "efzg",
@@ -58,6 +77,33 @@
           "Opći profil fakulteta"
         ],
         "status": "research"
+      },
+      {
+        "id": "erf",
+        "name": "Edukacijsko-rehabilitacijski fakultet",
+        "family": "social",
+        "programs": [
+          "Edukacijska rehabilitacija",
+          "Logopedija",
+          "Socijalna pedagogija",
+          "Diplomski studiji Edukacijsko-rehabilitacijskog fakulteta",
+          "Doktorski studij Edukacijsko-rehabilitacijskog fakulteta",
+          "Opći profil fakulteta"
+        ],
+        "status": "research"
+      },
+      {
+        "id": "fbf",
+        "name": "Farmaceutsko-biokemijski fakultet",
+        "family": "biomed",
+        "programs": [
+          "Farmacija",
+          "Medicinska biokemija",
+          "Poslijediplomski specijalisticki studiji Farmaceutsko-biokemijskog fakulteta",
+          "Doktorski studij Farmaceutsko-biokemijskog fakulteta",
+          "Opći profil fakulteta"
+        ],
+        "status": "generic"
       },
       {
         "id": "fer",
@@ -86,6 +132,30 @@
           "Opći profil fakulteta"
         ],
         "status": "generic"
+      },
+      {
+        "id": "ffzg",
+        "name": "Filozofski fakultet",
+        "family": "social",
+        "programs": [
+          "Prijediplomski studiji Filozofskog fakulteta (zavrsni rad)",
+          "Diplomski studiji Filozofskog fakulteta",
+          "Opći profil fakulteta",
+          "Arheologija",
+          "Etnologija i kulturna antropologija",
+          "Filozofija",
+          "Informacijske i komunikacijske znanosti",
+          "Komparativna književnost",
+          "Kroatistika",
+          "Lingvistika",
+          "Pedagogija",
+          "Povijest",
+          "Povijest umjetnosti",
+          "Psihologija",
+          "Sociologija",
+          "Jezici i književnosti"
+        ],
+        "status": "partial"
       },
       {
         "id": "fhs",
@@ -120,6 +190,31 @@
         "status": "generic"
       },
       {
+        "id": "foi",
+        "name": "Fakultet organizacije i informatike",
+        "family": "stem",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski studiji Fakulteta organizacije i informatike (zavrsni rad)",
+          "Diplomski studiji Fakulteta organizacije i informatike",
+          "Opći profil fakulteta"
+        ]
+      },
+      {
+        "id": "fpz",
+        "name": "Fakultet prometnih znanosti",
+        "family": "stem",
+        "programs": [
+          "Promet",
+          "Aeronautika",
+          "Inteligentni transportni sustavi i logistika",
+          "Prijediplomski studiji Fakulteta prometnih znanosti (zavrsni rad)",
+          "Diplomski studiji Fakulteta prometnih znanosti",
+          "Opći profil fakulteta"
+        ],
+        "status": "generic"
+      },
+      {
         "id": "fpzg",
         "name": "Fakultet političkih znanosti",
         "family": "social",
@@ -142,20 +237,6 @@
         "status": "partial"
       },
       {
-        "id": "fpz",
-        "name": "Fakultet prometnih znanosti",
-        "family": "stem",
-        "programs": [
-          "Promet",
-          "Aeronautika",
-          "Inteligentni transportni sustavi i logistika",
-          "Prijediplomski studiji Fakulteta prometnih znanosti (zavrsni rad)",
-          "Diplomski studiji Fakulteta prometnih znanosti",
-          "Opći profil fakulteta"
-        ],
-        "status": "generic"
-      },
-      {
         "id": "fsb",
         "name": "Fakultet strojarstva i brodogradnje",
         "family": "stem",
@@ -167,56 +248,6 @@
           "Prijediplomski studiji Fakulteta strojarstva i brodogradnje (zavrsni rad)",
           "Doktorski studij Fakulteta strojarstva i brodogradnje",
           "Opći profil fakulteta"
-        ],
-        "status": "partial"
-      },
-      {
-        "id": "sumfak",
-        "name": "Fakultet šumarstva i drvne tehnologije",
-        "family": "stem",
-        "programs": [
-          "Šumarstvo",
-          "Drvna tehnologija",
-          "Diplomski studiji Fakulteta šumarstva i drvne tehnologije",
-          "Prijediplomski studiji Fakulteta šumarstva i drvne tehnologije (zavrsni rad)",
-          "Opći profil fakulteta"
-        ],
-        "status": "generic"
-      },
-      {
-        "id": "fbf",
-        "name": "Farmaceutsko-biokemijski fakultet",
-        "family": "biomed",
-        "programs": [
-          "Farmacija",
-          "Medicinska biokemija",
-          "Poslijediplomski specijalisticki studiji Farmaceutsko-biokemijskog fakulteta",
-          "Doktorski studij Farmaceutsko-biokemijskog fakulteta",
-          "Opći profil fakulteta"
-        ],
-        "status": "generic"
-      },
-      {
-        "id": "ffzg",
-        "name": "Filozofski fakultet",
-        "family": "social",
-        "programs": [
-          "Prijediplomski studiji Filozofskog fakulteta (zavrsni rad)",
-          "Diplomski studiji Filozofskog fakulteta",
-          "Opći profil fakulteta",
-          "Arheologija",
-          "Etnologija i kulturna antropologija",
-          "Filozofija",
-          "Informacijske i komunikacijske znanosti",
-          "Komparativna književnost",
-          "Kroatistika",
-          "Lingvistika",
-          "Pedagogija",
-          "Povijest",
-          "Povijest umjetnosti",
-          "Psihologija",
-          "Sociologija",
-          "Jezici i književnosti"
         ],
         "status": "partial"
       },
@@ -301,35 +332,21 @@
         "status": "partial"
       },
       {
-        "id": "pravo",
-        "name": "Pravni fakultet",
-        "family": "social",
+        "id": "muza",
+        "name": "Muzička akademija",
+        "family": "arts",
         "programs": [
-          "Sveučilišni integrirani prijediplomski i diplomski studij Pravo",
-          "Sveučilišni prijediplomski studij Socijalni rad",
-          "Stručni prijediplomski studij Javna uprava",
-          "Stručni prijediplomski Porezni studij",
-          "Sveučilišni diplomski studij Socijalni rad",
-          "Sveučilišni diplomski studij Socijalna politika",
-          "Stručni diplomski studij Javna uprava",
-          "Sveučilišni specijalistički studij Europsko pravo",
-          "Sveučilišni specijalistički studij Građanskopravne i obiteljskopravne znanosti",
-          "Sveučilišni specijalistički studij Kaznenopravne znanosti",
-          "Sveučilišni specijalistički studij Fiskalni sustav i fiskalna politika",
-          "Sveučilišni specijalistički studij Javno pravo i javna uprava",
-          "Sveučilišni specijalistički studij Međunarodno javno i međunarodno privatno pravo",
-          "Sveučilišni specijalistički studij Pravo društava i trgovačko pravo",
-          "Sveučilišni specijalistički studij Obiteljska medijacija",
-          "Sveučilišni specijalistički studij Psihosocijalni pristup u socijalnom radu",
-          "Sveučilišni specijalistički studij Socijalna politika",
-          "Sveučilišni specijalistički studij Supervizija psihosocijalnog rada",
-          "Sveučilišni interdisciplinarni specijalistički studij Prava djece",
-          "Doktorski studij Pravne znanosti",
-          "Doktorski studij Socijalni rad i socijalna politika",
-          "Erasmus Mundus Joint Master – Redesigning the Post-Industrial City (MSc RePIC)",
-          "Opći profil Pravnog fakulteta"
+          "Kompozicija",
+          "Dirigiranje",
+          "Instrumentalni studiji",
+          "Pjevanje",
+          "Muzikologija",
+          "Glazbena pedagogija",
+          "Diplomski studiji Muzičke akademije",
+          "Doktorski studij Muzičke akademije",
+          "Opći profil akademije"
         ],
-        "status": "partial"
+        "status": "generic"
       },
       {
         "id": "pbf",
@@ -363,6 +380,37 @@
         "status": "partial"
       },
       {
+        "id": "pravo",
+        "name": "Pravni fakultet",
+        "family": "social",
+        "programs": [
+          "Sveučilišni integrirani prijediplomski i diplomski studij Pravo",
+          "Sveučilišni prijediplomski studij Socijalni rad",
+          "Stručni prijediplomski studij Javna uprava",
+          "Stručni prijediplomski Porezni studij",
+          "Sveučilišni diplomski studij Socijalni rad",
+          "Sveučilišni diplomski studij Socijalna politika",
+          "Stručni diplomski studij Javna uprava",
+          "Sveučilišni specijalistički studij Europsko pravo",
+          "Sveučilišni specijalistički studij Građanskopravne i obiteljskopravne znanosti",
+          "Sveučilišni specijalistički studij Kaznenopravne znanosti",
+          "Sveučilišni specijalistički studij Fiskalni sustav i fiskalna politika",
+          "Sveučilišni specijalistički studij Javno pravo i javna uprava",
+          "Sveučilišni specijalistički studij Međunarodno javno i međunarodno privatno pravo",
+          "Sveučilišni specijalistički studij Pravo društava i trgovačko pravo",
+          "Sveučilišni specijalistički studij Obiteljska medijacija",
+          "Sveučilišni specijalistički studij Psihosocijalni pristup u socijalnom radu",
+          "Sveučilišni specijalistički studij Socijalna politika",
+          "Sveučilišni specijalistički studij Supervizija psihosocijalnog rada",
+          "Sveučilišni interdisciplinarni specijalistički studij Prava djece",
+          "Doktorski studij Pravne znanosti",
+          "Doktorski studij Socijalni rad i socijalna politika",
+          "Erasmus Mundus Joint Master – Redesigning the Post-Industrial City (MSc RePIC)",
+          "Opći profil Pravnog fakulteta"
+        ],
+        "status": "partial"
+      },
+      {
         "id": "rgnf",
         "name": "Rudarsko-geološko-naftni fakultet",
         "family": "stem",
@@ -385,6 +433,19 @@
           "Dentalna medicina",
           "Diplomski studiji Stomatološkog fakulteta",
           "Doktorski studij Stomatološkog fakulteta",
+          "Opći profil fakulteta"
+        ],
+        "status": "generic"
+      },
+      {
+        "id": "sumfak",
+        "name": "Fakultet šumarstva i drvne tehnologije",
+        "family": "stem",
+        "programs": [
+          "Šumarstvo",
+          "Drvna tehnologija",
+          "Diplomski studiji Fakulteta šumarstva i drvne tehnologije",
+          "Prijediplomski studiji Fakulteta šumarstva i drvne tehnologije (zavrsni rad)",
           "Opći profil fakulteta"
         ],
         "status": "generic"
@@ -426,56 +487,6 @@
           "Diplomski studiji Veterinarskog fakulteta Sveucilista u Zagrebu",
           "Doktorski studij Veterinarskog fakulteta",
           "Opći profil fakulteta"
-        ],
-        "status": "generic"
-      },
-      {
-        "id": "adu",
-        "name": "Akademija dramske umjetnosti",
-        "family": "arts",
-        "programs": [
-          "Gluma",
-          "Dramaturgija",
-          "Snimanje",
-          "Montaža",
-          "Produkcija",
-          "Filmska i TV režija",
-          "Kazališna režija i radiofonija",
-          "Opći profil akademije"
-        ],
-        "status": "partial"
-      },
-      {
-        "id": "alu",
-        "name": "Akademija likovnih umjetnosti",
-        "family": "arts",
-        "programs": [
-          "Slikarstvo",
-          "Kiparstvo",
-          "Grafika",
-          "Nastavnički odsjek",
-          "Konzerviranje i restauriranje",
-          "Animirani film i novi mediji",
-          "Diplomski studiji Akademije likovnih umjetnosti",
-          "Doktorski studij Akademije likovnih umjetnosti",
-          "Opći profil akademije"
-        ],
-        "status": "generic"
-      },
-      {
-        "id": "muza",
-        "name": "Muzička akademija",
-        "family": "arts",
-        "programs": [
-          "Kompozicija",
-          "Dirigiranje",
-          "Instrumentalni studiji",
-          "Pjevanje",
-          "Muzikologija",
-          "Glazbena pedagogija",
-          "Diplomski studiji Muzičke akademije",
-          "Doktorski studij Muzičke akademije",
-          "Opći profil akademije"
         ],
         "status": "generic"
       }

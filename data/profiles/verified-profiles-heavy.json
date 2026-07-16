@@ -29845,5 +29845,111 @@
     "ruleAuthority": "official-sources-only",
     "fieldValidation": null,
     "repositoryRole": "Opći format-profil; nije vezan uz konkretan javni rad kao izvor pravila."
+  },
+  "foi-zavrsni": {
+    "id": "foi-zavrsni",
+    "unitId": "foi",
+    "programs": [
+      "Prijediplomski studiji Fakulteta organizacije i informatike (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "FOI, zavrsni rad",
+    "verifiedAt": "2026-07-16",
+    "documentDate": "2021-10-21",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "requireA4": true
+    },
+    "facts": [],
+    "note": "Format iz obaveznog FOI predloska (Pravilnik cl.10 st.2); obvezni dijelovi iz Pravilnika cl.10 st.1. Margine/prored/stil citiranja advisory.",
+    "sources": [
+      {
+        "title": "Pravilnik o zavrsnom radu na preddiplomskim studijima i diplomskom radu na diplomskim studijima FOI-ja (2021)",
+        "url": "https://radovi.foi.hr/build/files/FOI_Pravilnik_o_zavrsnom_i_diplomskom_radu.pdf"
+      },
+      {
+        "title": "Predlozak za pisanje zavrsnog/diplomskog rada (DOCX)",
+        "url": "https://radovi.foi.hr/build/files/Predlozak_za_pisanje_zavsnog-diplomskog_rada.docx"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnom radu na preddiplomskim studijima i diplomskom radu na diplomskim studijima FOI-ja (2021)",
+      "Predlozak za pisanje zavrsnog/diplomskog rada (DOCX)",
+      "Preporuke citiranja i referenciranja primjenom stila referenciranja APA"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Format papira",
+      "Numeriranje stranica",
+      "Obvezni dijelovi rada"
+    ],
+    "advisoryScope": [
+      "Margine",
+      "Prored",
+      "Stil citiranja"
+    ]
+  },
+  "foi-diplomski": {
+    "id": "foi-diplomski",
+    "unitId": "foi",
+    "programs": [
+      "Diplomski studiji Fakulteta organizacije i informatike"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "FOI, diplomski rad",
+    "verifiedAt": "2026-07-16",
+    "documentDate": "2021-10-21",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "requireA4": true
+    },
+    "facts": [],
+    "note": "Format iz obaveznog FOI predloska (Pravilnik cl.10 st.2); obvezni dijelovi iz Pravilnika cl.10 st.1. Margine/prored/stil citiranja advisory.",
+    "sources": [
+      {
+        "title": "Pravilnik o zavrsnom radu na preddiplomskim studijima i diplomskom radu na diplomskim studijima FOI-ja (2021)",
+        "url": "https://radovi.foi.hr/build/files/FOI_Pravilnik_o_zavrsnom_i_diplomskom_radu.pdf"
+      },
+      {
+        "title": "Predlozak za pisanje zavrsnog/diplomskog rada (DOCX)",
+        "url": "https://radovi.foi.hr/build/files/Predlozak_za_pisanje_zavsnog-diplomskog_rada.docx"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnom radu na preddiplomskim studijima i diplomskom radu na diplomskim studijima FOI-ja (2021)",
+      "Predlozak za pisanje zavrsnog/diplomskog rada (DOCX)",
+      "Preporuke citiranja i referenciranja primjenom stila referenciranja APA"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Format papira",
+      "Numeriranje stranica",
+      "Obvezni dijelovi rada"
+    ],
+    "advisoryScope": [
+      "Margine",
+      "Prored",
+      "Stil citiranja"
+    ]
   }
 }

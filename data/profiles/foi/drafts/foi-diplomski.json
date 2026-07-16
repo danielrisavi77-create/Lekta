@@ -1,0 +1,201 @@
+{
+  "profileId": "foi-diplomski",
+  "entries": [
+    {
+      "ruleId": "foi-diplomski--font",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Vrsta slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "foi-predlozak-zavrsni-diplomski",
+      "sourcePage": "word/styles.xml, stil Normal",
+      "quote": "Obavezni predlozak (Pravilnik cl.10 st.2), word/styles.xml stil Normal: w:rFonts w:ascii=Times New Roman, w:sz w:val=24 (24 polutocke = 12 pt).",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "font-fixer",
+      "verifiedHash": "57551d6b28d3af1046aaad67a04b54001ccaa92a9ac5f509d9b8bc806ec38358",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "foi-diplomski--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "foi-predlozak-zavrsni-diplomski",
+      "sourcePage": "word/styles.xml, stil Normal",
+      "quote": "Obavezni predlozak (Pravilnik cl.10 st.2), word/styles.xml stil Normal: w:rFonts w:ascii=Times New Roman, w:sz w:val=24 (24 polutocke = 12 pt).",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "font-fixer",
+      "verifiedHash": "57551d6b28d3af1046aaad67a04b54001ccaa92a9ac5f509d9b8bc806ec38358",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "foi-diplomski--paper-size",
+      "checkId": "paper-size",
+      "value": true,
+      "category": "format",
+      "label": "A4 format",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "foi-predlozak-zavrsni-diplomski",
+      "sourcePage": "word/document.xml, sectPr",
+      "quote": "Obavezni predlozak, word/document.xml sectPr: w:pgSz w:w=11906 w:h=16838 (210x297 mm = A4 format).",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "57551d6b28d3af1046aaad67a04b54001ccaa92a9ac5f509d9b8bc806ec38358",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "foi-diplomski--page-numbers",
+      "checkId": "page-numbers",
+      "value": true,
+      "category": "format",
+      "label": "Numeriranje stranica",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "foi-predlozak-zavrsni-diplomski",
+      "sourcePage": "word/document.xml, sectPr",
+      "quote": "Obavezni predlozak, word/document.xml sectPr: w:pgNumType (predtekst rimski, tijelo arapski od 1) - stranice se numeriraju.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "57551d6b28d3af1046aaad67a04b54001ccaa92a9ac5f509d9b8bc806ec38358",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "foi-diplomski--required-sections",
+      "checkId": "required-sections",
+      "value": [
+        {
+          "key": "declaration",
+          "label": "izjava o izvornosti",
+          "terms": [
+            "izjava o izvornosti"
+          ]
+        },
+        {
+          "key": "abstract",
+          "label": "sazetak",
+          "terms": [
+            "sažetak",
+            "sazetak"
+          ]
+        },
+        {
+          "key": "keywords",
+          "label": "kljucne rijeci",
+          "terms": [
+            "ključne riječi",
+            "kljucne rijeci"
+          ]
+        },
+        {
+          "key": "toc",
+          "label": "sadrzaj",
+          "terms": [
+            "sadržaj",
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zakljucak",
+          "terms": [
+            "zaključak",
+            "zakljucak"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "popis literature",
+          "terms": [
+            "literatura",
+            "popis literature"
+          ]
+        }
+      ],
+      "category": "structure",
+      "label": "Obvezni dijelovi rada",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "foi-pravilnik-zavrsni-diplomski-2021",
+      "sourcePage": "Clanak 10. stavak 1.",
+      "quote": "Zavrsni/diplomski rad sastoji se od naslovne stranice, izjave o izvornosti rada, sazetka, kljucnih rijeci, sadrzaja, uvoda, obrade teme, zakljucka, popisa literature i drugih izvora podataka koji su koristeni u izradi zavrsnog/diplomskog rada te priloga (ako postoje).",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "cc2a40c2abc829dea5dbcedac0f2df30da9ec8d2554dc4f369468dd6d3b64b98",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "foi-diplomski--margins",
+      "checkId": "margins",
+      "value": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "category": "format",
+      "label": "Margine",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "foi-predlozak-zavrsni-diplomski",
+      "sourcePage": "word/document.xml, sectPr (tijelo)",
+      "quote": "Obavezni predlozak, word/document.xml sectPr (tijelo): w:pgMar left/top/right/bottom=1417 twips (2,5 cm); predtekst ima lijevu marginu 1701 (3,0 cm) pa margine ostaju advisory.",
+      "status": "advisory",
+      "scored": false,
+      "autoFixable": true,
+      "fixerId": "margins-fixer",
+      "note": "Advisory: nije jedinstveno/nedvosmisleno propisano u izvoru (vidi quote)."
+    },
+    {
+      "ruleId": "foi-diplomski--citation-style",
+      "checkId": "citation-style",
+      "value": "apa",
+      "category": "citation",
+      "label": "Stil citiranja",
+      "machineCheckable": false,
+      "authority": "program-page",
+      "sourceId": "foi-preporuke-citiranja-apa",
+      "sourcePage": "Preporuke citiranja (APA/IEEE)",
+      "quote": "FOI dopusta APA ili IEEE stil (student bira uz mentora); Preporuke citiranja objavljene na FOI-radovi. Stil nije jedinstveno propisan pa ostaje advisory.",
+      "status": "advisory",
+      "scored": false,
+      "note": "Advisory: nije jedinstveno/nedvosmisleno propisano u izvoru (vidi quote)."
+    }
+  ],
+  "generatedAt": "2026-07-16"
+}
