@@ -57,6 +57,14 @@
       "WEB_VERBATIM_HIT",
       "WEB_QUERY_PLAN",
       "OK_WEB"
+    ],
+    "m4_corpus": [
+      "CORPUS_FULLTEXT_MATCH",
+      "CORPUS_TITLE_MATCH",
+      "CORPUS_NO_INDEX",
+      "CORPUS_NOT_CHECKED",
+      "CORPUS_SUMMARY",
+      "OK_CORPUS"
     ]
   }
 }

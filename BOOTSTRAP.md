@@ -1,5 +1,14 @@
 # Bootstrap: prototip -> Vite/TypeScript app
 
+> STATUS: ZASTARJELO / POVIJESNO (2026-07-16). Bootstrap faza je zavrsena: `src/main.ts` i
+> `index.html` sada su RUCNO odrzavani (`src/main.ts` je tanki bootstrap od ~10 redaka, cijeli
+> `src/` je splitan i bez ijedne `@ts-nocheck` direktive; CLAUDE.md backlog 3 je GOTOVO). Ovaj
+> dokument se cuva samo kao povijesni zapis kako je repo scaffoldan.
+>
+> UPOZORENJE (destruktivno): skripta `npm run bootstrap` (`scripts/split-prototype.mjs`) i dalje
+> postoji i regenerirala bi `src/main.ts` te `index.html` iz prototipa, cime bi PREGAZILA trenutnu
+> modularnu arhitekturu (rucni main.ts -> @ts-nocheck monolit). NE pokreci je na trenutnom stablu.
+
 Repo je scaffoldan (Vite + TypeScript, build gate, docs, profili, rule-compiler).
 Puni runtime (DOCX parser, auditi, Legal Citation Engine, UI, narudzbe) zivi u
 single-file prototipu kao jedan veliki inline `<script>`. Po dogovoru se taj kod

@@ -43,9 +43,13 @@ function stripMarker(s: string): string {
 // prije tocke nije samostalno veliko slovo.
 function firstSentence(s: string): [string, string] {
   // Terminator recenice je . ? ili ! (naslovi cesto zavrsavaju upitnikom: "Is Medieval History Relevant?").
+  // Lijeni *? je O(n^2) na ulazu bez terminatora; realna referenca je nekoliko stotina znakova, pa
+  // regex skenira samo prvih SCAN_CAP znakova (AUD-10, self-DoS). Preko toga pada na linearni fallback nize.
+  const SCAN_CAP = 4000;
+  const scan = s.length > SCAN_CAP ? s.slice(0, SCAN_CAP) : s;
   const re = /([^\s][^.?!]*?[^\s.?!])([.?!])\s+/g;
   let m: RegExpExecArray | null;
-  while ((m = re.exec(s))) {
+  while ((m = re.exec(scan))) {
     const head = s.slice(0, m.index + m[1].length);
     const after = s.charAt(m.index + m[0].length);
     if (/(?:^|\s)[\p{Lu}]$/u.test(head)) continue;                    // inicijal ("I. Ivic")

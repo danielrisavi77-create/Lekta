@@ -9,9 +9,10 @@
  * Svrha je ista kao kod realnih fixtura: PRIJE refaktora enginea (faza B porta) snimi
  * baseline; refaktor je gotov tek kad se snapshoti NE mijenjaju (inace regresija).
  *
- * Granica: docx-builder zasad ne radi fusnote, pa Legal Citation Engine (fusnote,
- * op. cit., Ibid.) NIJE pokriven ovdje. Taj golden (uz prosirenje buildera za fusnote)
- * dolazi kao PRVI korak porta legal-citation enginea u fazi B, baseline prije diranja.
+ * Pokrivenost: docx-builder sada emitira word/footnotes.xml, pa je Legal Citation Engine
+ * (fusnote, op. cit., Ibid., propisi, sudska praksa, bibliografija) POKRIVEN case-om
+ * "pravo-integrirani-fusnote" (pravoLegalSpec ispod). Njegov snapshot je baseline koji
+ * cuva engine: refaktor legal-citation koda koji promijeni izlaz obara ovaj test.
  *
  * Sinteticki dokumenti nisu pravi radovi ni izvor pravila (CLAUDE.md).
  */

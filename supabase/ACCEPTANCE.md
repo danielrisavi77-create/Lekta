@@ -16,7 +16,7 @@ Gdje je svaki kriterij pokriven. "Unit" = `npm run check` (vitest, ciste funkcij
 | 9 | Garancija: tier<2 odbijen na ulazu; nakon 30 dana odbijen; approved -> manual_orders | Unit: `tests/guarantee.test.ts` (`canFileGuaranteeClaim`). Integracija: approved tok |
 | 10 | Izvjestaj sadrzi coverage tier (+ verzija/datum pravila, per-rule confidence; T0/T1 "nepotvrdeno") | Unit (dio): `tests/report-boundary.test.ts` (`coverageTier`). Ostatak (per-rule confidence, oznake) je buduci rad na sadrzaju izvjestaja |
 | 11 | document_slots pri vezivanju snima profile_ref + coverage_tier; v_tier_share tocan | Integracija: `consume_slot_and_bind` (0007) + `v_tier_share` (0008) na fixture setu |
-| 12 | Promjena cijene upisuje products + pricing_changelog u istoj transakciji | `set_product_price` (0009), atomski. Integracija: pozovi i provjeri oba retka |
+| 12 | Promjena cijene upisuje products + pricing_changelog u istoj transakciji | `set_product_price` (0020), atomski. Integracija: pozovi i provjeri oba retka |
 | 13 | RLS: korisnik A ne vidi retke korisnika B ni u jednoj novoj tablici | Integracija: RLS politike u migracijama 0002-0007 |
 | 14 | Sva tri viewa vracaju ocekivane vrijednosti na fixture setu | Integracija: `v_weekly_revenue`/`v_weekly_slot_activity`/`v_tier_share` (0008) |
 

@@ -34,7 +34,9 @@ function extractCitations(paragraphs: any){
     }
    }
   }
-  const narr=/\b([\p{Lu}][\p{L}'’\-]{2,})(?:\s+(?:i|and|&)\s+[\p{Lu}][\p{L}'’\-]{2,})?\s*\(((?:18|19|20)\d{2}[a-z]?)\)/gu;
+  // Vodeca granica je Unicode-svjesna (lookbehind), NE ASCII \b: prezime koje pocinje
+  // dijakritikom (C/C/S/Z/Dj) nema ASCII granicu ispred sebe pa ga \b nikad ne uhvati.
+  const narr=/(?<![\p{L}\p{N}])([\p{Lu}][\p{L}'’\-]{2,})(?:\s+(?:i|and|&)\s+[\p{Lu}][\p{L}'’\-]{2,})?\s*\(((?:18|19|20)\d{2}[a-z]?)\)/gu;
   while((m=narr.exec(t))){const before=t.slice(Math.max(0,m.index-40),m.index);if(/[\p{Lu}][\p{L}'’\-]{2,}\s+$/u.test(before))continue;found.push({author:citationAuthor(m[1]),year:m[2].toLowerCase(),raw:m[0],p:idx+1,kind:'narrative'})}
  });
  const unique: any[]=[];const seen=new Set();for(const c of found){if(!c.author)continue;const k=`${normalize(c.author)}|${c.year}|${c.p}|${c.kind}`;if(!seen.has(k)){seen.add(k);unique.push(c)}}return unique

@@ -17,7 +17,6 @@
     "generate-legal-pages": "node scripts/generate-legal-pages.mjs",
     "extract-citation-sections": "node scripts/extract-citation-sections.mjs",
     "citation-dossiers": "node scripts/citation-spec-dossier.mjs",
-    "codex": "node scripts/codex-launcher.mjs",
     "approve-citation-spec": "node scripts/approve-citation-spec.mjs",
     "docx-smoke": "vite-node scripts/docx-smoke.mts",
     "dev": "vite",

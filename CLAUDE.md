@@ -1,21 +1,21 @@
-# CLAUDE.md â ThesisReady
+# CLAUDE.md - ThesisReady
 
-Operativni vodiÄ za rad na ovom repozitoriju. ProÄitaj prije bilo kakve izmjene.
+Operativni vodič za rad na ovom repozitoriju. Pročitaj prije bilo kakve izmjene.
 
-## Å to je ovo
+## Što je ovo
 
 Klijentska web aplikacija (Vite + TypeScript) koja u pregledniku analizira `.docx`
 akademske radove i provjerava oblikovanje, strukturu, opseg i citiranje prema
-sluÅ¾benim profilima fakulteta (FPZG i Pravni fakultet u Zagrebu). Sva analiza je
-lokalna: dokument se ne Å¡alje na posluÅ¾itelj. Postoji i monetizacija (paketi,
-narudÅ¾be, payment linkovi), GDPR pravni tekstovi i ugraÄena QA dijagnostika.
+službenim profilima fakulteta (FPZG i Pravni fakultet u Zagrebu). Sva analiza je
+lokalna: dokument se ne šalje na poslužitelj. Postoji i monetizacija (paketi,
+narudžbe, payment linkovi), GDPR pravni tekstovi i ugrađena QA dijagnostika.
 
 Stack: Vite, TypeScript (strict), vitest + happy-dom. Bez frameworka, bez backenda.
-Ovo NIJE Next.js projekt i nema veze s maturiraj.hr; ne mijeÅ¡aj konvencije.
+Ovo NIJE Next.js projekt i nema veze s maturiraj.hr; ne miješaj konvencije.
 
 ## Tvrdo pravilo: build gate
 
-Svaka promjena mora proÄi prije commita:
+Svaka promjena mora proći prije commita:
 
 ```bash
 npm run check   # tsc --noEmit && vitest run && vite build
@@ -27,7 +27,7 @@ Ako `check` pada, promjena nije gotova. Ne commitaj crveno.
 
 - `data/` je tipiziran i modularan: profili, izvori, rokovi, katalog, coverage,
   metodologija, svaki u svom JSON-u. Loaderi u `src/*` ih hidriraju i tipiziraju.
-- `src/ui/app.ts` je UI orkestrator (~517 redaka, tipiziran, VISE NIJE `@ts-nocheck`):
+- `src/ui/app.ts` je UI orkestrator (~771 redaka, tipiziran, VISE NIJE `@ts-nocheck`):
   UI, narudzbe, placanje i QA. Analiticka jezgra je izvucena: `analyzeDocx` + auditni
   helperi zive u `src/analysis/analyze-docx.ts` (tipizirano), a analiza u pregledniku radi
   u Web Workeru (`analyze-docx.worker.ts` + most `analyze-docx-client.ts` s inline
@@ -42,63 +42,63 @@ Ako `check` pada, promjena nije gotova. Ne commitaj crveno.
 
 Pravila profila postoje u dva oblika:
 
-- `rules` â naslijeÄeni agregirani objekt koji engine povijesno Äita.
-- `ruleEntries` â granularna pravila s identitetom, autoritetom, izvorom,
+- `rules` - naslijeđeni agregirani objekt koji engine povijesno čita.
+- `ruleEntries` - granularna pravila s identitetom, autoritetom, izvorom,
   `sourcePage`, `machineCheckable` i datumom verifikacije. Ovo je AUTORSKI izvor istine.
 
-`src/profiles/rule-compiler.ts` na uÄitavanju raÄuna `effectiveRules`:
+`src/profiles/rule-compiler.ts` na učitavanju računa `effectiveRules`:
 
 ```
 effectiveRules = clone(rules baseline) + svaki prepoznati ruleEntry preko njega
 ```
 
-Engine (`currentProfile` u `src/ui/app.ts`) Äita `definition.effectiveRules`, uz fallback
+Engine (`currentProfile` u `src/ui/app.ts`) čita `definition.effectiveRules`, uz fallback
 na `definition.rules`. Test `tests/rule-compiler.test.ts` dokazuje da je za trenutne
-podatke `effectiveRules` deep-equal `rules`, dakle ukljuÄenje kompajlera ne mijenja
-ponaÅ¡anje.
+podatke `effectiveRules` deep-equal `rules`, dakle uključenje kompajlera ne mijenja
+ponašanje.
 
-### Kako se od sada ureÄuje pravilo
+### Kako se od sada uređuje pravilo
 
-1. Uredi odgovarajuÄi `ruleEntry` u JSON profilu (ne `rules`).
+1. Uredi odgovarajući `ruleEntry` u JSON profilu (ne `rules`).
 2. Ako `ruleEntry` za to pravilo ne postoji, dodaj ga s ispravnim `checkId`
    (popis prepoznatih `checkId`-jeva je `COMPILED_CHECK_IDS` u `rule-compiler.ts`).
-3. Migracijski cilj: jednom kad je kljuÄ izraÅ¾en kao `ruleEntry`, OBRIÅ I ga iz `rules`.
+3. Migracijski cilj: jednom kad je ključ izražen kao `ruleEntry`, OBRIŠI ga iz `rules`.
    Overlay ga i dalje proizvodi pa engine ne vidi promjenu. Time nestaje dvostruko
-   odrÅ¾avanje. Nakon brisanja prilagodi faithfulness test (viÅ¡e neÄe biti pune
-   jednakosti za taj kljuÄ; tada se oslanjamo na ânula diagnosticsâ + golden testove).
-4. Novi `checkId` koji joÅ¡ nije podrÅ¾an: dodaj mapiranje u `applyEntry` u `rule-compiler.ts`
-   i pokrij testom. Bez mapiranja kompajler vraÄa diagnostic i pravilo se NE primjenjuje.
+   održavanje. Nakon brisanja prilagodi faithfulness test (više neće biti pune
+   jednakosti za taj ključ; tada se oslanjamo na "nula diagnostics" + golden testove).
+4. Novi `checkId` koji još nije podržan: dodaj mapiranje u `applyEntry` u `rule-compiler.ts`
+   i pokrij testom. Bez mapiranja kompajler vraća diagnostic i pravilo se NE primjenjuje.
 
 ### Hijerarhija pravila i uloga repozitorija
 
-Ne izmiÅ¡ljaj pravila. Bodovana pravila smiju doÄi samo iz navedenih sluÅ¾benih izvora.
-Hijerarhija: aktualna odluka/pravilnik za godinu i vrstu rada > aktualna sluÅ¾bena
-stranica studija > opÄe FPZG upute i citiranje > pisana uputa mentora/kolegija.
-Studentski radovi iz repozitorija sluÅ¾e ISKLJUÄIVO regresijskom testiranju parsera,
-nikada kao izvor pravila. `sourcePage` koji nije potvrÄen ostaje `null`, ne nagaÄaj ga.
+Ne izmišljaj pravila. Bodovana pravila smiju doći samo iz navedenih službenih izvora.
+Hijerarhija: aktualna odluka/pravilnik za godinu i vrstu rada > aktualna službena
+stranica studija > opće FPZG upute i citiranje > pisana uputa mentora/kolegija.
+Studentski radovi iz repozitorija služe ISKLJUČIVO regresijskom testiranju parsera,
+nikada kao izvor pravila. `sourcePage` koji nije potvrđen ostaje `null`, ne nagađaj ga.
 
 ## Parser: ne diraj bez golden testa
 
-Legal Citation Engine i OOXML parser su teÅ¡ki regexi nad hrvatskim pravnim i
+Legal Citation Engine i OOXML parser su teški regexi nad hrvatskim pravnim i
 akademskim formama i lako se kvare. Pravilo: ne mijenjaj parser, audit ni citation
-engine bez golden-file testa koji PRVO dokazuje zateÄeno ponaÅ¡anje.
+engine bez golden-file testa koji PRVO dokazuje zatečeno ponašanje.
 
 - Golden harness: `tests/docx-golden.test.ts` + `tests/fixtures/docx/`.
 - Ubaci realne `.docx`, snimi baseline s `npm test -- -u`, pa refaktoriraj.
-- Suite se sam preskaÄe bez fixtura; sada je AKTIVAN sa 6 realnih fixtura u tests/fixtures/docx/ (snapshoti commitani), izlozen kroz src/analysis/golden-entry.ts.
+- Suite se sam preskače bez fixtura; sada je AKTIVAN sa 6 realnih fixtura u tests/fixtures/docx/ (snapshoti commitani), izlozen kroz src/analysis/golden-entry.ts.
 
 ## Mapa datoteka
 
-- `src/ui/app.ts` â UI orkestrator (UI, narudzbe, placanje, QA). Meta: dovrsiti split.
-- `src/analysis/analyze-docx.ts` â analyzeDocx + auditni helperi (jezgra analize).
-- `src/analysis/analyze-docx-client.ts` â most prema Web Workeru, inline fallback.
-- `src/profiles/profile-loader.ts` â registar profila, hidracija izvora, kompilacija.
-- `src/profiles/rule-compiler.ts` â Option A: ruleEntries -> effectiveRules.
-- `src/profiles/profile-schema.ts` â tipovi profila i pravila.
-- `src/profiles/profile-validator.ts` â strukturna validacija profila.
-- `src/{catalog,submission,coverage,methodology,config}/*` â tanki loaderi.
-- `data/**` â autorski podaci (profili, izvori, rokovi, katalog, coverage).
-- `tests/**` â vitest: registar, regresija, UI smoke, rule-compiler, docx-golden.
+- `src/ui/app.ts` - UI orkestrator (UI, narudzbe, placanje, QA). Meta: dovrsiti split.
+- `src/analysis/analyze-docx.ts` - analyzeDocx + auditni helperi (jezgra analize).
+- `src/analysis/analyze-docx-client.ts` - most prema Web Workeru, inline fallback.
+- `src/profiles/profile-loader.ts` - registar profila, hidracija izvora, kompilacija.
+- `src/profiles/rule-compiler.ts` - Option A: ruleEntries -> effectiveRules.
+- `src/profiles/profile-schema.ts` - tipovi profila i pravila.
+- `src/profiles/profile-validator.ts` - strukturna validacija profila.
+- `src/{catalog,submission,coverage,methodology,config}/*` - tanki loaderi.
+- `data/**` - autorski podaci (profili, izvori, rokovi, katalog, coverage).
+- `tests/**` - vitest: registar, regresija, UI smoke, rule-compiler, docx-golden.
 
 ## Provenijencija fieldValidation (PID je identitet, ne sha256)
 
@@ -118,11 +118,11 @@ ModSecurity vraca HTTP 418.
 
 ## Konvencije
 
-- Hrvatski je default jezik sadrÅ¾aja i komentara u domenskim datotekama.
-- Bez em i en crtica u tekstu; koristi zarez, dvotoÄku, zagrade ili zasebne reÄenice.
+- Hrvatski je default jezik sadržaja i komentara u domenskim datotekama.
+- Bez em i en crtica u tekstu; koristi zarez, dvotočku, zagrade ili zasebne rečenice.
 - TypeScript strict, cijeli `src/` bez `@ts-nocheck`. `any` je dopusten na granici prema
   DOM-u i labavim podacima (UI glue: `$`/`$$`, lookup-mape); u novom logickom kodu izbjegavaj.
-- Bez localStorage hackova u novim modulima; postojeÄi `safeStorageGet/Set` ostaje.
+- Bez localStorage hackova u novim modulima; postojeći `safeStorageGet/Set` ostaje.
 - Produkcijski kod, ne primjeri. Male, fokusirane promjene, svaki korak zelen.
 
 ## Codex (drugo misljenje)
@@ -141,21 +141,21 @@ je neovisno drugo misljenje drugog modela.
   ne CLAUDE.md); kad mijenjas tvrdo pravilo, azuriraj obje datoteke.
 - Codexov Stop review gate je namjerno iskljucen (rucni review na commit-tockama).
 
-## Backlog (svaki je Äist, samostalan task; Definition of Done = `npm run check` zelen)
+## Backlog (svaki je čist, samostalan task; Definition of Done = `npm run check` zelen)
 
 1. Golden harness s podacima: ubaci 5 do 10 realnih `.docx` fixtura i snimi baseline.
    DoD: golden suite aktivan i zelen, snapshoti commitani.
-2. (GOTOVO) Option A kompajler i `effectiveRules` wiring. SljedeÄi korak unutar ovoga:
-   ukloni iz `rules` kljuÄeve koji su veÄ u `ruleEntries`, profil po profil, i prilagodi
-   faithfulness test. DoD: nema dvostrukog voÄenja za migrirane kljuÄeve, check zelen.
+2. (GOTOVO) Option A kompajler i `effectiveRules` wiring. Sljedeći korak unutar ovoga:
+   ukloni iz `rules` ključeve koji su već u `ruleEntries`, profil po profil, i prilagodi
+   faithfulness test. DoD: nema dvostrukog vođenja za migrirane ključeve, check zelen.
 3. (GOTOVO) Razbijanje `src/ui/app.ts`: parser i citation engine su vec u
    `src/{docx,audits,citations,scoring}`, `analyzeDocx` + auditni helperi u
    `src/analysis/analyze-docx.ts`, a `@ts-nocheck` je skinut sa samog app.ts I sa svih
    preostalih modula (5 generator-alata `src/tools/*-page.ts` + `src/shared/ui-boot.ts`);
    CIJELI `src/` prolazi tsc strict bez supresije. Golden netaknut, check zelen.
-4. Popuni `sourcePage` za sve `ruleEntries` iz `source-registry` (ruÄno potvrÄeno;
-   nepotvrÄeno ostaje `null`). DoD: validator bez novih greÅ¡aka, check zelen.
-5. DovrÅ¡i preostale profile iz jednog tipiziranog izvora (ruleEntries). DoD: coverage
+4. Popuni `sourcePage` za sve `ruleEntries` iz `source-registry` (ručno potvrđeno;
+   nepotvrđeno ostaje `null`). DoD: validator bez novih grešaka, check zelen.
+5. Dovrši preostale profile iz jednog tipiziranog izvora (ruleEntries). DoD: coverage
    matrica i QA dijagnostika bez regresija, check zelen.
-6. (Proizvodna odluka, kad zatreba naplata) pravi backend za narudÅ¾be i plaÄanje
+6. (Proizvodna odluka, kad zatreba naplata) pravi backend za narudžbe i plaćanje
    (Supabase), umjesto klijentskog JSON-a i Netlify forme.

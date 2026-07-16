@@ -10,6 +10,7 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 import { resolveCheckout, buildLemonSqueezyCheckout } from '../../../src/report/checkout.ts';
 import { mapProductRow } from '../../../src/catalog/products-catalog.ts';
+import { corsHeadersFor } from '../_shared/cors.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -17,20 +18,23 @@ const ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY')!;
 const LS_API_KEY = Deno.env.get('LEMONSQUEEZY_API_KEY') ?? '';
 const LS_STORE_ID = Deno.env.get('LEMONSQUEEZY_STORE_ID') ?? '';
 const REDIRECT_URL = Deno.env.get('CHECKOUT_REDIRECT_URL') ?? '';
+// Dnevni limit kreiranja checkouta po korisniku (SEC-06, AUD-23/35): bez njega prijavljeni korisnik
+// moze u petlji okidati LS checkout pozive i puniti checkout_consents. Isti obrazac kao DAILY_CAP u
+// generate-report.
+const CHECKOUT_DAILY_CAP = Number(Deno.env.get('CHECKOUT_DAILY_CAP') ?? '20');
 
-const CORS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, content-type',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-};
-
-function json(body: unknown, status = 200): Response {
-  return new Response(JSON.stringify(body), { status, headers: { ...CORS, 'content-type': 'application/json' } });
-}
+// Dopusteno CORS porijeklo (SEC-05): produkcijska domena; override preko ALLOWED_ORIGIN (zarezom
+// odvojeno). Localhost je uvijek dopusten (dev). Reflektira se u corsHeadersFor (nikad '*'), isti
+// obrazac kao faculty-request/preflight-start.
+const ALLOWED_ORIGINS = (Deno.env.get('ALLOWED_ORIGIN') ?? 'https://lektahr.netlify.app')
+  .split(',').map((s) => s.trim()).filter(Boolean);
 
 Deno.serve(async (req: Request) => {
+ const cors = corsHeadersFor(req.headers.get('Origin'), ALLOWED_ORIGINS);
+ const json = (body: unknown, status = 200): Response =>
+   new Response(JSON.stringify(body), { status, headers: { ...cors, 'content-type': 'application/json' } });
  try {
-  if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS });
+  if (req.method === 'OPTIONS') return new Response('ok', { headers: cors });
   if (req.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
 
   // auth: Supabase JWT obavezan (sekcija 5, korak 1)
@@ -69,6 +73,17 @@ Deno.serve(async (req: Request) => {
   }
 
   const admin = createClient(SUPABASE_URL, SERVICE_ROLE, { auth: { persistSession: false } });
+
+  // rate limit (SEC-06, AUD-23/35): dnevni cap kreiranja checkouta po korisniku PRIJE consent upisa
+  // i LS poziva. COUNT nad checkout_consents (indeks user_id, created_at). Sprjecava petlju
+  // neogranicenih LS checkout sesija i rasta tablice; isti obrazac kao DAILY_CAP u generate-report.
+  const dayAgoIso = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
+  const { count: recentCheckouts } = await admin
+    .from('checkout_consents')
+    .select('id', { count: 'exact', head: true })
+    .eq('user_id', user.id)
+    .gt('created_at', dayAgoIso);
+  if ((recentCheckouts ?? 0) >= CHECKOUT_DAILY_CAP) return json({ error: 'rate_limited' }, 429);
 
   // proizvod iz kataloga (jedina istina o cijenama, sekcija 5 korak 2)
   const { data: prow } = await admin.from('products').select('*').eq('id', productId).eq('active', true).maybeSingle();
@@ -121,7 +136,12 @@ Deno.serve(async (req: Request) => {
     },
     body: JSON.stringify(lsBody),
   });
-  if (!lsRes.ok) return json({ error: 'checkout_failed', detail: await lsRes.text() }, 502);
+  if (!lsRes.ok) {
+    // AUD-26: ne prosljeduj sirovo LS tijelo greske klijentu (otkriva internu strukturu providera).
+    // Logiraj detalj serverski (Edge logovi = error tracking, P0 8-1), klijentu vrati genericko.
+    console.error('[create-checkout] lemonsqueezy', lsRes.status, await lsRes.text());
+    return json({ error: 'checkout_failed' }, 502);
+  }
   const lsJson = (await lsRes.json()) as any;
   const checkoutUrl = lsJson?.data?.attributes?.url;
   if (!checkoutUrl) return json({ error: 'no_checkout_url' }, 502);

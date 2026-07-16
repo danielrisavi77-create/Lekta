@@ -103,7 +103,12 @@ TRACK D (odluke i podaci):     D1, D2 (prije K8), D3 (u K0), D4 (prije K11 imeno
 - Rizik: dvostruka analiza na slabom uredjaju (ne paralelno s prvom analizom; isti capovi).
 
 ### K4. Fixer pgNumType nad postojecim sekcijama (BL-06)
-- Trajanje: 2-3 dana. Status: CEKA
+- Trajanje: 2-3 dana. Status: NEUSKLADENO (2026-07-16): fixer JE implementiran u povijesti (commit
+  21fd329, feat(repair): K4 pgNumType fixer), ali trenutno radno stablo ima necommitane izmjene koje
+  ga uklanjaju (M src/repair/fixers.ts bez pgNumType funkcije, D src/repair/page-numbering.test.ts).
+  Nije GOTOVO dok se radno stablo i povijest ne usklade (dovrsiti revert i commitati ga s
+  obrazlozenjem, ili vratiti fixer). Stari status CEKA ne odrazava taj implementiran-pa-revertiran
+  lifecycle.
 - Sto: novi fixer krpa w:pgNumType (start=1, fmt lowerRoman/decimal) po sekcijama prema
   profilu (checkId page-numbers vec postoji u rule-compileru); dokument bez sekcija =
   bit-identican no-op s objasnjenjem u panelu.
@@ -114,7 +119,11 @@ TRACK D (odluke i podaci):     D1, D2 (prije K8), D3 (u K0), D4 (prije K11 imeno
   otvaraju izlaz bez upozorenja (rucna matrica); /codex:adversarial-review odradjen; deploy.
 
 ### K5. Footer PAGE polje: prosirenje engine politike (BL-07b) : NAJTEZI KORAK
-- Trajanje: 4-5 dana. Status: CEKA
+- Trajanje: 4-5 dana. Status: NEUSKLADENO (2026-07-16): footer fixer JE implementiran u povijesti
+  (commit c9f2a3b, feat(repair): K5 footer PAGE polje), ali trenutno radno stablo ima necommitane
+  izmjene koje ga uklanjaju (M src/repair/fixers.ts bez footer funkcije, D src/repair/footer-page.test.ts).
+  Nije GOTOVO dok se radno stablo i povijest ne usklade. Stari status CEKA ne odrazava taj
+  implementiran-pa-revertiran lifecycle.
 - Sto: umetanje footer parta (footerN.xml + rels + [Content_Types].xml + w:footerReference
   u sectPr) s PAGE poljem; prvo prosirenje apply-fixers politike izvan
   document.xml/styles.xml: nove maske, nova backstop pravila, eksplicitni popis partova

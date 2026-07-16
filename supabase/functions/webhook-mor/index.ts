@@ -153,6 +153,7 @@ async function pullReferralSignupReward(admin: any, orderId: string): Promise<vo
 }
 
 Deno.serve(async (req: Request) => {
+ try {
   if (req.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
 
   const raw = await req.text();
@@ -203,25 +204,48 @@ Deno.serve(async (req: Request) => {
   if (error && (error as any).code === '23505') return json({ ok: true, action: 'duplicate_ignored' });
   if (error) return json({ error: 'insert_failed', detail: error.message }, 500);
 
+  // AUD-28: entitlement je JEZGRA i vec je kreiran (idempotentan preko unique(provider,order_id)).
+  // Post-entitlement bonusi (referrer nagrada, pass kupon, referral atribucija) NE SMIJU srusiti
+  // handler u 500 ako transientno padnu: LS bi retryjao, pogodio 23505 na entitlementu gore i vratio
+  // 'duplicate_ignored', pa bi kupon/atribucija za taj order ostali TRAJNO nekreirani. Zato svaki
+  // bonus lovi svoju gresku i nastavlja (logira se), a jezgra ostaje uspjesna (200). Pred-entitlement
+  // greske i dalje idu na top-level catch -> 500 -> LS retry (tada entitlement bude kreiran).
+
   // Referral (pozovi-prijatelja, 0013): kupceva placena kupnja nagraduje preporucitelja internim
-  // entitlementom. Fail-safe (ne provjerava se rezultat); ZASEBAN od attributeReferral (0005 program).
+  // entitlementom. Fail-safe (interni try/catch); ZASEBAN od attributeReferral (0005 program).
   await tryGrantReferrerReward(admin, ev.userId, product.workType, ev.orderId);
 
   // pass bonus kupon (6.5): samo uz tek kreiran entitlement (ne na duplikat)
   if (isPassProduct(product.kind)) {
-    await admin.from('coupon_grants').insert({
-      user_id: ev.userId,
-      code: makePassCouponCode(ev.orderId),
-      reason: 'pass_bonus',
-      source_order_id: ev.orderId,
-      expires_at: isoAfterDays(Date.now(), PASS_COUPON_VALID_DAYS),
-    });
+    try {
+      await admin.from('coupon_grants').insert({
+        user_id: ev.userId,
+        code: makePassCouponCode(ev.orderId),
+        reason: 'pass_bonus',
+        source_order_id: ev.orderId,
+        expires_at: isoAfterDays(Date.now(), PASS_COUPON_VALID_DAYS),
+      });
+    } catch (e) {
+      console.error('webhook-mor pass_coupon_failed', { orderId: ev.orderId, error: String(e) });
+    }
     // TODO(integracija): kreiraj -20% Lemon Squeezy discount (vrijedi na slot_zavrsni/slot_diplomski)
     // i posalji kod korisniku mailom. Zakljucaj da ne vrijedi na partner proizvode (sekcija 7).
   }
 
   // referral atribucija (sekcija 6.6 / 8): samo uz tek kreiran entitlement (duplikat je vec izasao gore)
-  if (ev.referralCode) await attributeReferral(admin, ev);
+  if (ev.referralCode) {
+    try {
+      await attributeReferral(admin, ev);
+    } catch (e) {
+      console.error('webhook-mor attribute_referral_failed', { orderId: ev.orderId, error: String(e) });
+    }
+  }
 
   return json({ ok: true, action: 'entitlement_created' });
+ } catch (e) {
+  // Pred-entitlement greska (potpis, parsiranje, entitlement insert): vrati 500 pa LS retryja i
+  // entitlement na kraju bude kreiran. Post-entitlement bonusi su vec ulovljeni gore, ne dolaze ovamo.
+  console.error('[webhook-mor]', e);
+  return json({ error: 'internal' }, 500);
+ }
 });

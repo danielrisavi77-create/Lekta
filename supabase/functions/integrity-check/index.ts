@@ -15,6 +15,7 @@
 // deno-lint-ignore-file no-explicit-any
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 import { INTEGRITY_RETENTION_DAYS } from '../../../src/integrity/integrity-consent.ts';
+import { corsHeadersFor } from '../_shared/cors.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -25,15 +26,26 @@ const AI_DETECTOR_API_URL = Deno.env.get('AI_DETECTOR_API_URL') ?? '';
 const AI_DETECTOR_API_KEY = Deno.env.get('AI_DETECTOR_API_KEY') ?? '';
 // Dnevni limit besplatnih teaser provjera po korisniku (anti-abuse; teaser salje tekst pa nije nula).
 const TEASER_DAILY_CAP = Number(Deno.env.get('INTEGRITY_TEASER_DAILY_CAP') ?? '2');
+// Dnevni limit PUNIH (placenih) provjera po korisniku (SEC-01, AUD-22/29): aktivan entitlement NE
+// znaci neograniceno placenih vanjskih poziva ni pohrane punog teksta; svaki puni poziv okine
+// embedding + AI-detektor i upise red s punim tekstom (~300 KB), pa i on treba gornju granicu.
+const FULL_DAILY_CAP = Number(Deno.env.get('INTEGRITY_FULL_DAILY_CAP') ?? '20');
+// Timeout na vanjske providere (SEC-01, AUD-29): bez njega spor/viseci provider drzi zahtjev otvoren.
+const PROVIDER_TIMEOUT_MS = Number(Deno.env.get('INTEGRITY_PROVIDER_TIMEOUT_MS') ?? '10000');
 const MAX_TEXT = 300 * 1024; // ~300 KB teksta rada
 
-const CORS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, content-type',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-};
-function json(body: unknown, status = 200): Response {
-  return new Response(JSON.stringify(body), { status, headers: { ...CORS, 'content-type': 'application/json' } });
+// Dopusteno CORS porijeklo (SEC-05): produkcijska domena; override preko ALLOWED_ORIGIN (zarezom
+// odvojeno). Localhost je uvijek dopusten (dev). Reflektira se u corsHeadersFor (nikad '*'), isti
+// obrazac kao faculty-request/preflight-start.
+const ALLOWED_ORIGINS = (Deno.env.get('ALLOWED_ORIGIN') ?? 'https://lektahr.netlify.app')
+  .split(',').map((s) => s.trim()).filter(Boolean);
+
+// sha256 (hex): idempotency kljuc za tekst. Nema zaseban stupac u shemi (izvan dosega Edge funkcije),
+// pa se kljuc sprema unutar result_summary jsonb-a i deduplicira preko jsonb contains (vidi 3b).
+async function sha256Hex(input: string): Promise<string> {
+  const data = new TextEncoder().encode(input);
+  const digest = await crypto.subtle.digest('SHA-256', data);
+  return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('');
 }
 
 // --- Provider seam-ovi (env-konfigurirani). Vracaju {available:false} dok tajne/korpus nisu spremni. ---
@@ -49,6 +61,7 @@ async function crossLingualCheck(admin: any, text: string, lang: string, full: b
       method: 'POST',
       headers: { 'content-type': 'application/json', Authorization: `Bearer ${EMBEDDING_API_KEY}` },
       body: JSON.stringify({ input: text.slice(0, MAX_TEXT), lang }),
+      signal: AbortSignal.timeout(PROVIDER_TIMEOUT_MS), // SEC-01: prekid viseceg providera
     });
     if (!res.ok) return { available: false, reason: `embedding ${res.status}` };
     const data = await res.json();
@@ -85,6 +98,7 @@ async function aiSignalCheck(text: string) {
       method: 'POST',
       headers: { 'content-type': 'application/json', Authorization: `Bearer ${AI_DETECTOR_API_KEY}` },
       body: JSON.stringify({ text: text.slice(0, MAX_TEXT) }),
+      signal: AbortSignal.timeout(PROVIDER_TIMEOUT_MS), // SEC-01: prekid viseceg providera
     });
     if (!res.ok) return { available: false, reason: `ai ${res.status}` };
     const data = await res.json();
@@ -100,8 +114,11 @@ async function aiSignalCheck(text: string) {
 }
 
 Deno.serve(async (req: Request) => {
+ const cors = corsHeadersFor(req.headers.get('Origin'), ALLOWED_ORIGINS);
+ const json = (body: unknown, status = 200): Response =>
+   new Response(JSON.stringify(body), { status, headers: { ...cors, 'content-type': 'application/json' } });
  try {
-  if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS });
+  if (req.method === 'OPTIONS') return new Response('ok', { headers: cors });
   if (req.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
 
   // 1. auth: prijavljen korisnik (Supabase JWT)
@@ -131,6 +148,8 @@ Deno.serve(async (req: Request) => {
   const now = new Date();
   const nowIso = now.toISOString();
 
+  const dayAgoIso = new Date(now.getTime() - 24 * 3600 * 1000).toISOString();
+
   // 3. gate: teaser = besplatno uz dnevni limit; full = trazi aktivan entitlement (Thesis Pass/slot).
   //    (MVP: bilo koji aktivan entitlement otkljucava puni izvjestaj; vezanje iskljucivo na Pass
   //    ili trosenje zasebnog integ. kredita je buduce profinjenje.)
@@ -140,7 +159,7 @@ Deno.serve(async (req: Request) => {
       .select('id', { count: 'exact', head: true })
       .eq('user_id', user.id)
       .eq('mode', 'teaser')
-      .gt('created_at', new Date(now.getTime() - 24 * 3600 * 1000).toISOString());
+      .gt('created_at', dayAgoIso);
     if ((count ?? 0) >= TEASER_DAILY_CAP) return json({ error: 'rate_limited' }, 429);
   } else {
     const { data: ent } = await admin
@@ -151,6 +170,39 @@ Deno.serve(async (req: Request) => {
       .gt('purchase_expires_at', nowIso)
       .limit(1);
     if (!ent || ent.length === 0) return json({ error: 'payment_required' }, 402);
+  }
+
+  // 3b. idempotency (SEC-01, AUD-29): identican tekst istog korisnika u istom nacinu, jos unutar
+  //     dnevnog prozora, vraca VEC izracunati rezultat BEZ ponovnog (placenog) poziva providerima i
+  //     BEZ novog reda punog teksta. Nema hash stupca (schema izvan dosega Edge funkcije), pa se
+  //     kljuc sprema u result_summary.idempotencyHash i deduplicira preko jsonb contains (kratak
+  //     upit; filtriranje po cijelom 300 KB tekstu bi probilo duljinu PostgREST URL-a).
+  const idempotencyHash = await sha256Hex(`${mode}|${lang}|${text}`);
+  const { data: prior } = await admin
+    .from('integrity_checks')
+    .select('result_summary')
+    .eq('user_id', user.id)
+    .eq('status', 'done')
+    .gt('created_at', dayAgoIso)
+    .contains('result_summary', { idempotencyHash })
+    .order('created_at', { ascending: false })
+    .limit(1);
+  if (prior && prior.length === 1 && prior[0].result_summary) {
+    // Ne vracaj interni idempotencyHash klijentu; izlaz je identican svjezoj provjeri.
+    const { idempotencyHash: _omit, ...cached } = prior[0].result_summary as any;
+    return json({ report: cached, idempotent: true }, 200);
+  }
+
+  // 3c. dnevni cap za PUNE provjere (SEC-01, AUD-22): nova (ne-idempotentna) puna provjera trosi
+  //     kvotu; sprjecava petlju N placenih poziva i N redaka punog teksta iza jednog entitlementa.
+  if (mode === 'full') {
+    const { count: fullCount } = await admin
+      .from('integrity_checks')
+      .select('id', { count: 'exact', head: true })
+      .eq('user_id', user.id)
+      .eq('mode', 'full')
+      .gt('created_at', dayAgoIso);
+    if ((fullCount ?? 0) >= FULL_DAILY_CAP) return json({ error: 'rate_limited' }, 429);
   }
 
   // 4. provjere (env-seam-ovi). full = svi detalji; teaser = ograniceni signal.
@@ -164,6 +216,7 @@ Deno.serve(async (req: Request) => {
   report.ai = full ? ai : { available: (ai as any).available === true };
 
   // 5. zapis uz retenciju (sirovi tekst se cuva do purge_integrity_text, 7d; migracija 0018).
+  //    idempotencyHash se sprema UZ sazetak (interni kljuc za 3b; ne vraca se klijentu).
   const retentionExpires = new Date(now.getTime() + INTEGRITY_RETENTION_DAYS * 24 * 3600 * 1000).toISOString();
   await admin.from('integrity_checks').insert({
     user_id: user.id,
@@ -172,7 +225,7 @@ Deno.serve(async (req: Request) => {
     mode,
     consent,
     sent_text: text,
-    result_summary: report,
+    result_summary: { ...report, idempotencyHash },
     retention_expires_at: retentionExpires,
     status: 'done',
   });

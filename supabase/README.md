@@ -33,7 +33,7 @@ serverska odluka; klijent nikad nije izvor istine.
   `v_tier_share` (samo service role; interne nagrade iskljucene iz prihoda).
 - `kpi-weekly.sql` - tjedni KPI upiti (pokreni kao service role). Checkout->purchase konverzija
   dolazi iz Lemon Squeezy dashboarda, ostalo je DB-izvedivo.
-- `migrations/0009_set_product_price.sql` - `set_product_price` (atomski products + pricing_changelog,
+- `migrations/0020_set_product_price.sql` - `set_product_price` (atomski products + pricing_changelog,
   kriterij 14.12). Rucni UPDATE cijene bez changeloga je prekrsaj procesa.
 - `migrations/0011_faculty_requests.sql` - `faculty_requests` (waitlist nepokrivenih fakulteta) +
   `faculty_request_counts` view + RLS (klijent ne cita ni ne pise, sve preko service role) +

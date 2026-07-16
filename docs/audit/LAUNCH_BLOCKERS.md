@@ -8,6 +8,12 @@ Duplikati kroz dimenzije su spojeni u jedan blokator (izvorni id-jevi navedeni).
 
 Datum: 2026-07-11. Autor: glavni auditor (read-only sinteza).
 
+> Kanonski launch-gate (jedan izvor istine): ovaj dokument (paketi P0-01 do P0-07) je mjerodavni,
+> konsolidirani popis blokatora lansiranja. Tematska pred-launch lista
+> [docs/PRE_LAUNCH_CHECKLIST.md](../PRE_LAUNCH_CHECKLIST.md) (P0 po sekcijama) i co-pilot luk
+> [docs/roadmap/LAUNCH_CHECKLIST.md](../roadmap/LAUNCH_CHECKLIST.md) su komplementarni; njihove P0
+> sheme su zasebne i ne preslikavaju se 1:1 na P0-0x pakete odavde.
+
 ---
 
 ## 1. Executive sazetak

@@ -1,3 +1,6 @@
+-- Renumerirano 0009 -> 0020 (AUD-17): prefiks 0009 je dijelio s 0009_log_retention pa bi
+-- ga db push tiho preskocio. Funkcija nema apply-time ovisnost (poziva se tek runtime iz
+-- admina) pa je pomaknuta na kraj umjesto kaskadnog pomaka 0010-0019.
 -- Lekta monetizacija: atomska promjena cijene (MONETIZATION_PLAN.md sekcije 11, 14 kriterij 12).
 -- Svaka promjena cijene mora upisati products I pricing_changelog u ISTOJ transakciji, inace
 -- nema atribucije cjenovnih testova. Rucni UPDATE products bez changeloga je prekrsaj procesa.

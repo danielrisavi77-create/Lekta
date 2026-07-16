@@ -9,17 +9,28 @@ on:
   pull_request:
   workflow_dispatch:
 
+# Least-privilege token (AUD-48): gate nista ne pise, samo cita kod.
+permissions:
+  contents: read
+
 jobs:
   build-gate:
     runs-on: ubuntu-latest
+    # Matrica (AUD-49): CI je pinao samo Node 20, a developeri rade na Node 24 (lokalni
+    # npm run check). Gate sada dokazuje zeleno na obje verzije, ukljucujuci onu koja se
+    # stvarno pokrece lokalno.
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [20, 24]
     steps:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Node 20
+      - name: Node ${{ matrix.node }}
         uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: ${{ matrix.node }}
           cache: npm
 
       - name: Instaliraj ovisnosti

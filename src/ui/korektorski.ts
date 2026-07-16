@@ -49,33 +49,52 @@ function setupSections(): void {
   });
 }
 
-// Demo video: bez autoplaya i bez loopa, pokrece se iskljucivo rucno (play overlay ili klik
-// na video). Protiv stekanja: preload ostaje none dok je sekcija daleko, a IO s velikim
-// rootMarginom unaprijed bufferira prije nego korisnik stigne kliknuti. Izlazak iz vidokruga
-// pauzira, povratak nastavlja samo ako je vec sviralo. Na kraju se umjesto restarta pokaze
-// zavrsni ekran (pecat + ponovi / CTA na analizator sa "kreni ovdje" spotom na dropzoni).
-// Uz reduced-motion ili bez IO: native kontrole, bez play overlaya, zavrsni ekran ostaje.
+// Kvalitete demo videa (isti sadrzaj, razlicit enkod); JS prebacuje src cuvajuci poziciju.
+const Q_MAP: Record<string, { webm: string; mp4: string }> = {
+  '720': { webm: '/assets/demo-720.webm', mp4: '/assets/demo-720.mp4' },
+  '1080': { webm: '/assets/demo-1080.webm', mp4: '/assets/demo-1080.mp4' },
+  '1440': { webm: '/assets/demo-1440.webm', mp4: '/assets/demo-1440.mp4' },
+};
+
+function fmtTime(s: number): string {
+  const t = Math.max(0, Math.floor(s || 0));
+  return Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0');
+}
+
+// Demo video s custom KS kontrolama (bez autoplaya i loopa): pokrece se rucno (play overlay ili
+// klik na video). Kontrolna traka (play/pauza, +-10s, seek, glasnoca, brzina, kvaliteta, fullscreen)
+// pojavi se tek kad demo krene. Protiv stekanja: preload none dok je sekcija daleko, IO s velikim
+// rootMarginom unaprijed bufferira; izlazak iz vidokruga pauzira, povratak nastavlja samo ako je
+// vec sviralo. Na kraju umjesto restarta zavrsni ekran (pecat + ponovi / CTA sa "kreni ovdje" spotom).
 function setupVideo(): void {
   const v = document.querySelector<HTMLVideoElement>('.ks-video');
   if (!v) return;
+  const stage = v.closest<HTMLElement>('.ks-video-stage');
   const playOverlay = document.getElementById('ksVideoPlay');
   const endOverlay = document.getElementById('ksVideoEnd');
-  const basic = prefersReduced() || typeof IntersectionObserver !== 'function';
-  if (basic) { v.controls = true; playOverlay?.remove(); }
+  const ctrl = document.getElementById('ksVctrl');
+  const noIO = typeof IntersectionObserver !== 'function';
 
-  const showPlay = (show: boolean) => { if (playOverlay && !basic) playOverlay.hidden = !show; };
+  const showPlay = (show: boolean) => { if (playOverlay) playOverlay.hidden = !show; };
   const showEnd = (show: boolean) => {
     if (!endOverlay) return;
     endOverlay.hidden = !show;
     if (show) endOverlay.focus();
   };
-  const start = () => { showEnd(false); v.play().catch(() => { v.controls = true; showPlay(false); }); };
+  const start = () => { v.play().catch(() => { v.controls = true; }); };
 
   playOverlay?.addEventListener('click', start);
-  if (!basic) v.addEventListener('click', () => { if (v.paused) start(); else v.pause(); });
-  v.addEventListener('play', () => { showPlay(false); showEnd(false); });
-  v.addEventListener('pause', () => { if (!v.ended) showPlay(true); });
-  v.addEventListener('ended', () => { showPlay(false); showEnd(true); });
+  v.addEventListener('click', () => { if (v.paused || v.ended) start(); else v.pause(); });
+  // Prvi play aktivira kontrolnu traku; pauza samo mijenja ikonu (veliki overlay se vise ne vraca).
+  v.addEventListener('play', () => {
+    stage?.classList.add('ks-playing', 'ks-vc-on');
+    if (ctrl) ctrl.hidden = false;
+    showPlay(false); showEnd(false);
+  });
+  v.addEventListener('pause', () => { if (!v.ended) stage?.classList.remove('ks-playing'); });
+  // Sakrij kontrolnu traku iz tab-reda po zavrsetku (opacity:0 bez hidden bi ostavio fokus na
+  // nevidljivim gumbima iza zavrsnog overlaya, WCAG 2.4.7). 'play' pri replayu vraca hidden=false. AUD-14.
+  v.addEventListener('ended', () => { stage?.classList.remove('ks-playing', 'ks-vc-on'); if (ctrl) ctrl.hidden = true; showEnd(true); });
 
   endOverlay?.querySelector('[data-video-replay]')?.addEventListener('click', () => {
     v.currentTime = 0;
@@ -93,7 +112,99 @@ function setupVideo(): void {
     });
   });
 
-  if (basic) return;
+  // Custom kontrolna traka
+  if (ctrl && stage) {
+    const seek = ctrl.querySelector<HTMLInputElement>('[data-vc=seek]');
+    const cur = ctrl.querySelector<HTMLElement>('[data-vc=cur]');
+    const durEl = ctrl.querySelector<HTMLElement>('[data-vc=dur]');
+    const volbar = ctrl.querySelector<HTMLInputElement>('[data-vc=vol]');
+    const speedBtn = ctrl.querySelector<HTMLElement>('[data-vc=speed-btn]');
+    const qualBtn = ctrl.querySelector<HTMLElement>('[data-vc=quality-btn]');
+    // preservesPitch da ubrzanje ne "chipmunkira" glazbu (uz vendor varijante)
+    const anyV = v as unknown as Record<string, unknown>;
+    anyV.preservesPitch = true; anyV.mozPreservesPitch = true; anyV.webkitPreservesPitch = true;
+    v.volume = 0.85;
+
+    const updateVol = () => {
+      const muted = v.muted || v.volume === 0;
+      stage.classList.toggle('ks-muted', muted);
+      const pct = Math.round((v.muted ? 0 : v.volume) * 100);
+      if (volbar) { volbar.value = String(pct); volbar.style.setProperty('--v', pct + '%'); }
+    };
+    updateVol();
+
+    ctrl.querySelector('[data-vc=play]')?.addEventListener('click', () => { if (v.paused || v.ended) start(); else v.pause(); });
+    ctrl.querySelector('[data-vc=back]')?.addEventListener('click', () => { v.currentTime = Math.max(0, v.currentTime - 10); });
+    ctrl.querySelector('[data-vc=fwd]')?.addEventListener('click', () => { v.currentTime = Math.min(v.duration || 0, v.currentTime + 10); });
+    ctrl.querySelector('[data-vc=mute]')?.addEventListener('click', () => { v.muted = !v.muted; if (!v.muted && v.volume === 0) v.volume = 0.5; updateVol(); });
+
+    seek?.addEventListener('input', () => { if (v.duration) v.currentTime = (Number(seek.value) / 1000) * v.duration; });
+    volbar?.addEventListener('input', () => { const val = Number(volbar.value); v.volume = val / 100; v.muted = val === 0; updateVol(); });
+
+    v.addEventListener('timeupdate', () => {
+      if (cur) cur.textContent = fmtTime(v.currentTime);
+      if (v.duration && seek) { const p = (v.currentTime / v.duration) * 1000; seek.value = String(p); seek.style.setProperty('--p', (p / 10) + '%'); }
+    });
+    v.addEventListener('loadedmetadata', () => { if (durEl && v.duration) durEl.textContent = fmtTime(v.duration); });
+    v.addEventListener('volumechange', updateVol);
+
+    ctrl.querySelectorAll<HTMLButtonElement>('[data-speed]').forEach((b) => {
+      b.addEventListener('click', () => {
+        v.playbackRate = Number(b.dataset.speed);
+        if (speedBtn) speedBtn.textContent = b.textContent || '';
+        ctrl.querySelectorAll('[data-speed]').forEach((x) => { const on = x === b; x.classList.toggle('on', on); x.setAttribute('aria-checked', String(on)); });
+      });
+    });
+
+    const canWebm = !!v.canPlayType('video/webm; codecs="vp9, opus"');
+    ctrl.querySelectorAll<HTMLButtonElement>('[data-q]').forEach((b) => {
+      b.addEventListener('click', () => {
+        const map = Q_MAP[b.dataset.q || ''];
+        if (!map) return;
+        const t = v.currentTime; const wasPlaying = !v.paused && !v.ended;
+        v.src = canWebm ? map.webm : map.mp4;
+        v.load();
+        v.addEventListener('loadedmetadata', () => { try { v.currentTime = t; } catch { /* clamp */ } if (wasPlaying) v.play().catch(() => {}); }, { once: true });
+        if (qualBtn) qualBtn.textContent = b.textContent || '';
+        ctrl.querySelectorAll('[data-q]').forEach((x) => { const on = x === b; x.classList.toggle('on', on); x.setAttribute('aria-checked', String(on)); });
+      });
+    });
+
+    ctrl.querySelector('[data-vc=full]')?.addEventListener('click', () => {
+      const doc = document as unknown as Record<string, unknown> & { fullscreenElement?: Element };
+      const el = stage as unknown as Record<string, unknown>;
+      if (document.fullscreenElement || doc.webkitFullscreenElement) {
+        (document.exitFullscreen || (doc.webkitExitFullscreen as (() => void) | undefined))?.call(document);
+      } else {
+        (el.requestFullscreen as (() => void) | undefined || (el.webkitRequestFullscreen as (() => void) | undefined))?.call(el);
+      }
+    });
+
+    // Izbornici brzine/kvalitete: klik gumba otvara, klik na stavku/vani i Escape zatvaraju.
+    ctrl.querySelectorAll<HTMLElement>('.ks-vc-menu').forEach((menu) => {
+      const btn = menu.querySelector<HTMLElement>('.ks-vc-mbtn');
+      btn?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const open = menu.hasAttribute('data-open');
+        ctrl.querySelectorAll('.ks-vc-menu').forEach((m) => m.removeAttribute('data-open'));
+        if (!open) { menu.setAttribute('data-open', ''); btn.setAttribute('aria-expanded', 'true'); }
+        else btn.setAttribute('aria-expanded', 'false');
+      });
+      menu.querySelector('.ks-vc-list')?.addEventListener('click', () => {
+        menu.removeAttribute('data-open');
+        btn?.setAttribute('aria-expanded', 'false');
+      });
+    });
+    document.addEventListener('click', () => ctrl.querySelectorAll('.ks-vc-menu').forEach((m) => {
+      m.removeAttribute('data-open');
+      m.querySelector('.ks-vc-mbtn')?.setAttribute('aria-expanded', 'false');
+    }));
+    ctrl.addEventListener('keydown', (e) => {
+      if ((e as KeyboardEvent).key === 'Escape') ctrl.querySelectorAll('.ks-vc-menu').forEach((m) => m.removeAttribute('data-open'));
+    });
+  }
+
+  if (noIO) return;
   // Pauza izvan vidokruga; nastavak samo ako je korisnik vec gledao (nikad hladni autoplay).
   let wasPlaying = false;
   const io = new IntersectionObserver((entries) => {

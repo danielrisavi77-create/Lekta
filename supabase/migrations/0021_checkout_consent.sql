@@ -1,3 +1,6 @@
+-- Renumerirano 0008 -> 0021 (AUD-17): prefiks 0008 je dijelio s 0008_analytics_views pa bi
+-- ga db push tiho preskocio. Tablica nema apply-time ovisnost (create-checkout je puni runtime)
+-- pa je pomaknuta na kraj umjesto kaskadnog pomaka 0010-0019.
 -- Lekta: trajni zapis pristanka na trenutnu isporuku digitalnog sadrzaja i odricanja od
 -- 14-dnevnog prava na odustanak (Zakon o zastiti potrosaca cl. 86; EU Direktiva 2011/83).
 -- Pre-launch checklist P0 1-1: "pristanak (tekst plus timestamp) zabiljezen uz narudzbu".

@@ -69,16 +69,22 @@ $$;
 
 revoke execute on function purge_integrity_text() from public;
 
+-- Fail-closed retencija (AUD-18 / LEKTA-SEC-02): bez pg_crona purge_integrity_text()
+-- se nikad ne bi zakazao, a migracija bi tiho prosla zeleno, pa bi sirovi sent_text
+-- (cijeli poslani tekst rada) zauvijek ostao. Zato izostanak pg_crona ovdje RUSI
+-- migraciju (glasno) umjesto da je preskoci. Idempotentno: re-run radi unschedule pa
+-- schedule istog imenovanog joba.
 do $$
 begin
-  if exists (select 1 from pg_extension where extname = 'pg_cron') then
-    begin
-      perform cron.unschedule('purge-integrity-text');
-    exception when others then
-      null; -- job jos ne postoji
-    end;
-    perform cron.schedule('purge-integrity-text', '0 4 * * *', 'select purge_integrity_text();');
+  if not exists (select 1 from pg_extension where extname = 'pg_cron') then
+    raise exception 'pg_cron nije dostupan: retencijski purge_integrity_text() se ne moze zakazati (fail-closed). Ukljuci pg_cron ekstenziju pa ponovno pokreni migraciju.';
   end if;
+  begin
+    perform cron.unschedule('purge-integrity-text');
+  exception when others then
+    null; -- job jos ne postoji
+  end;
+  perform cron.schedule('purge-integrity-text', '0 4 * * *', 'select purge_integrity_text();');
 end $$;
 
 comment on table integrity_checks is

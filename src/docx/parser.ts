@@ -149,6 +149,10 @@ export function readRPr(rPr: any): any {
   const out: any = {}, fonts = direct(rPr, 'w:rFonts'), sz = direct(rPr, 'w:sz'), b = direct(rPr, 'w:b'), i = direct(rPr, 'w:i');
   const font = attr(fonts, 'w:ascii') || attr(fonts, 'w:hAnsi') || attr(fonts, 'w:cs');
   if (font) out.font = font;
+  // Dokument u zadanoj Wordovoj temi (npr. Calibri) nema eksplicitni w:ascii, samo
+  // w:asciiTheme (minorHAnsi/majorHAnsi). Zapamti temu da je analyzeDocx razrijesi iz
+  // theme1.xml; bez toga font ostaje null i provjera fonta lazno prolazi. Vidi AUD-04.
+  else { const ft = attr(fonts, 'w:asciiTheme') || attr(fonts, 'w:hAnsiTheme') || attr(fonts, 'w:cstheme'); if (ft) out.fontTheme = ft; }
   if (sz && attr(sz, 'w:val') != null) out.size = Number(attr(sz, 'w:val')) / 2;
   if (b) out.bold = !['0', 'false', 'off'].includes(String(attr(b, 'w:val') || '1').toLowerCase());
   if (i) out.italic = !['0', 'false', 'off'].includes(String(attr(i, 'w:val') || '1').toLowerCase());
@@ -160,7 +164,10 @@ export function readPPr(pPr: any): any {
   if (!pPr) return {};
   const sp = direct(pPr, 'w:spacing'), jc = direct(pPr, 'w:jc'), ol = direct(pPr, 'w:outlineLvl'), ps = direct(pPr, 'w:pStyle');
   let line = null;
-  if (sp && attr(sp, 'w:line')) { const v = Number(attr(sp, 'w:line')), rule = attr(sp, 'w:lineRule') || 'auto'; line = rule === 'auto' ? v / 240 : v / 20; }
+  // Samo lineRule='auto' kodira prored kao visekratnik (240-tine). 'exact'/'atLeast' su
+  // apsolutne tocke (20-tine) i NISU usporedivi s profilnim omjerom (npr. 1.5), pa ih
+  // ostavljamo null (prored "nije pouzdano ocitljiv") umjesto laznog pada. Vidi AUD-01.
+  if (sp && attr(sp, 'w:line')) { const v = Number(attr(sp, 'w:line')), rule = attr(sp, 'w:lineRule') || 'auto'; if (rule === 'auto') line = v / 240; }
   return { styleId: attr(ps, 'w:val') || null, line, lineRule: attr(sp, 'w:lineRule') || null, before: sp && attr(sp, 'w:before') ? Number(attr(sp, 'w:before')) / 20 : null, after: sp && attr(sp, 'w:after') ? Number(attr(sp, 'w:after')) / 20 : null, align: attr(jc, 'w:val') || null, outline: ol ? Number(attr(ol, 'w:val')) : null, num: !!direct(pPr, 'w:numPr') };
 }
 
@@ -193,6 +200,19 @@ export function parseStyles(xml: any): any {
   return { styles, resolve, defaultR, defaultP, defaultParagraphStyleId };
 }
 
+/** Razrijesi tema-fontove iz word/theme/theme1.xml: minor (tijelo) i major (naslovi) latin
+ *  typeface. asciiTheme='minorHAnsi' -> minor; 'majorHAnsi' -> major. Vraca null ako teme nema
+ *  ili je neispravna, pa se ponasanje vraca na "font nije eksplicitan". */
+export function parseThemeFonts(xmlText: string | null | undefined): { minor: string | null; major: string | null } | null {
+  if (!xmlText) return null;
+  let x: any;
+  try { x = parseXml(xmlText, 'Word tema'); } catch { return null; }
+  const scheme = first(x, 'a:fontScheme');
+  if (!scheme) return null;
+  const latin = (node: any) => { const f = node ? first(node, 'a:latin') : null; return f ? (attr(f, 'typeface') || null) : null; };
+  return { minor: latin(first(scheme, 'a:minorFont')), major: latin(first(scheme, 'a:majorFont')) };
+}
+
 /** Izvuci tekst odlomka (tabovi, prijelomi, nbsp). */
 export function paragraphText(p: any): string {
   let out = '';
@@ -211,7 +231,9 @@ export function headingLevel(styleName: any, pProps: any): number | null {
   // razina 1, nego pada na pouzdaniji outlineLvl. Word ugradjeni naslovi su 1-9.
   let m = n.match(/(?:heading|naslov)\s*([1-9])(?![0-9])/i);
   if (m) return Number(m[1]);
-  if (Number.isFinite(pProps.outline)) return pProps.outline + 1;
+  // OOXML w:outlineLvl val 0-8 su razine 1-9; val 9 znaci "Body Text" (bez outline razine),
+  // pa se NE smije tumaciti kao naslov razine 10 (onecistio bi hijerarhiju i broj naslova). AUD-06.
+  if (Number.isFinite(pProps.outline) && pProps.outline >= 0 && pProps.outline <= 8) return pProps.outline + 1;
   return null;
 }
 

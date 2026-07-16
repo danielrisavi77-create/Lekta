@@ -35,17 +35,26 @@ describe('uploadCapBytes', () => {
 });
 
 describe('decompressionBudgetBytes', () => {
-  it('jaci uredaj ili nepoznato: null (ZipReader koristi puni 200 MB, kao golden)', () => {
+  it('jaci uredaj ili nepoznato (bez coarse pointera): null (puni 200 MB, kao golden)', () => {
     expect(decompressionBudgetBytes()).toBeNull();
-    expect(decompressionBudgetBytes(null)).toBeNull();
-    expect(decompressionBudgetBytes(8)).toBeNull();
-    expect(decompressionBudgetBytes(0)).toBeNull();
+    expect(decompressionBudgetBytes({ deviceMemory: null })).toBeNull();
+    expect(decompressionBudgetBytes({ deviceMemory: 8 })).toBeNull();
+    expect(decompressionBudgetBytes({ deviceMemory: 0 })).toBeNull();
+    expect(decompressionBudgetBytes({ deviceMemory: 8, coarsePointer: false })).toBeNull();
   });
 
   it('slab uredaj dobije tvrdi budzet: <=2 GB -> 100 MB, <=4 GB -> 150 MB', () => {
-    expect(decompressionBudgetBytes(2)).toBe(100 * MB);
-    expect(decompressionBudgetBytes(1)).toBe(100 * MB);
-    expect(decompressionBudgetBytes(4)).toBe(150 * MB);
-    expect(decompressionBudgetBytes(3)).toBe(150 * MB);
+    expect(decompressionBudgetBytes({ deviceMemory: 2 })).toBe(100 * MB);
+    expect(decompressionBudgetBytes({ deviceMemory: 1 })).toBe(100 * MB);
+    expect(decompressionBudgetBytes({ deviceMemory: 4 })).toBe(150 * MB);
+    expect(decompressionBudgetBytes({ deviceMemory: 3 })).toBe(150 * MB);
+  });
+
+  it('AUD-03: coarse pointer bez deviceMemory (iOS Safari, Firefox) stegne na 150 MB', () => {
+    expect(decompressionBudgetBytes({ coarsePointer: true })).toBe(150 * MB);
+    expect(decompressionBudgetBytes({ deviceMemory: null, coarsePointer: true })).toBe(150 * MB);
+    expect(decompressionBudgetBytes({ deviceMemory: 8, coarsePointer: true })).toBe(150 * MB);
+    // vrlo slab uredaj i dalje ima prednost (100 MB) i uz coarse pointer
+    expect(decompressionBudgetBytes({ deviceMemory: 2, coarsePointer: true })).toBe(100 * MB);
   });
 });

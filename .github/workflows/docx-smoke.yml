@@ -9,6 +9,10 @@ on:
   pull_request:
   workflow_dispatch:
 
+# Least-privilege token (AUD-48): upload-artifact ne treba contents: write.
+permissions:
+  contents: read
+
 jobs:
   generate-and-analyze:
     runs-on: ubuntu-latest
@@ -16,10 +20,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Node 20
+      - name: Node 24
         uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
 
       - name: Instaliraj ovisnosti

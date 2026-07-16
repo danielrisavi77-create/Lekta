@@ -12,16 +12,6 @@ import {
   patchDefaultSpacing,
   patchDefaultParagraphSpacing,
   patchDefaultAlignment,
-  patchSectionPageNumbering,
-  addFooterReferenceToSection,
-  addContentTypeOverride,
-  addRelationship,
-  nextRelationshipId,
-  nextFooterPartName,
-  buildFooterPageXml,
-  FOOTER_CONTENT_TYPE,
-  FOOTER_REL_TYPE,
-  type SectionNumberingTarget,
   patchFootnoteTextSpacing,
 } from './xml-patch';
 import { stripDirectFormatting, type RunLevelResult } from './run-level';
@@ -30,15 +20,6 @@ import { stripOrphanedEmptyParagraphs } from './paragraph-cleanup';
 export interface DocxXmlParts {
   documentXml: string;
   stylesXml: string;
-  /** [Content_Types].xml (K5 footer part flow). Opcionalno: stariji pozivi daju samo doc+styles. */
-  contentTypesXml?: string;
-  /** word/_rels/document.xml.rels (K5). */
-  documentRelsXml?: string;
-  /** Novi partovi za dodati u zip (npr. word/footer1.xml). apply-fixers ih pise iz allow-liste. */
-  addedParts?: { name: string; content: string }[];
-  /** SVA imena zip entryja ulaznog docx-a (apply-fixers ih puni). Nuzno da imenovanje novog
-   *  footer parta ne kolidira s orphan partom koji postoji u zipu ali NIJE u content-typesu. */
-  existingParts?: string[];
   /** word/footnotes.xml, ako docx ima fusnote. Opcionalan: mnogi dokumenti nemaju
    * nijednu fusnotu, tada je dio odsutan iz zipa (isti obrazac kao stylesXml koji
    * je optional u apply-fixers.ts, samo strozi jer footnotes.xml smije potpuno
@@ -315,81 +296,6 @@ export function paragraphSpacingFixer(parts: DocxXmlParts, deep = false): FixerO
       ? stripDirectFormatting(parts.documentXml, { stripParagraphSpacing: true })
       : null;
   return combineDeep(base, parts, deepResult);
-}
-
-// Numeriranje stranica po sekcijama: rimski na prednjim listovima, arapski od Uvoda
-// (start=1). Radi ISKLJUCIVO nad postojecim sekcijama (BL-06 korak a); ciljeve (koje su
-// sekcije rimske, koja je prva glavna) racuna repair-items iz granice Uvoda, pa je fixer
-// cisti XML transform. Nema deep varijante (pgNumType nije izravno formatiranje u tijelu).
-export function pageNumberingFixer(parts: DocxXmlParts, targets: SectionNumberingTarget[]): FixerOutput {
-  const result = patchSectionPageNumbering(parts.documentXml, targets);
-  if (!result.applied) return NO_OP(parts);
-  const roman = targets.filter((t) => /roman/i.test(t.fmt)).length;
-  const decimal = targets.filter((t) => t.fmt === 'decimal').length;
-  return {
-    parts: { ...parts, documentXml: result.xml },
-    applied: true,
-    beforeLabel: 'Numeriranje stranica po sekcijama nije postavljeno',
-    afterLabel: `Rimski na prednjim (${roman}), arapski od Uvoda (${decimal}), prva stranica = 1`,
-  };
-}
-
-export interface FooterPageTarget {
-  /** Sekcija (dokument-poredak, isto kao pgNumType) u koju se umece podnozje s brojem stranice. */
-  sectionIndex: number;
-  align?: 'left' | 'center' | 'right';
-}
-
-// Podnozje s automatskim brojem stranice (K5, BL-07b). Umece novi footer part + <Override> +
-// <Relationship> + <w:footerReference> u ciljni sectPr, uskladjeno (ili sve ili NO_OP). No-op i
-// kad sekcija vec ima footer (ne diramo tudji), kad nema part flowa (content-types/rels) ili kad
-// indeks ne postoji. NEMA deep varijante.
-//
-// POZNATA OGRANICENJA (svjesno deferirano, adversarial review K5):
-//  - Ne suzbija naslovnicu i ne dijeli sekcije: to orkestrira K6 (titlePg + potvrda korisnika),
-//    zato je K5 DARK (nije wiran u repair-items). Na jednosekcijskom radu broj bi pao i na
-//    naslovnicu, pa se footer NE smije nuditi dok naslovnica nije zasebna sekcija (K6).
-//  - Ne cita word/settings.xml: kod <w:evenAndOddHeaders/> broj bi bio samo na neparnim
-//    stranicama (rijetka konfiguracija). Puna pokrivenost (even footerReference) je K6 dorada.
-//  - Realna Word/LibreOffice valjanost dokazuje se rucnom K5 matricom (izlazni gate), ne
-//    automatskim gateom (golden pokriva samo sinteticku XML-transform putanju).
-export function footerPageFixer(parts: DocxXmlParts, target: FooterPageTarget): FixerOutput {
-  const contentTypesXml = parts.contentTypesXml ?? '';
-  const documentRelsXml = parts.documentRelsXml ?? '';
-  const addedParts = parts.addedParts ?? [];
-  if (!contentTypesXml || !documentRelsXml) return NO_OP(parts); // bez part flowa ne umecemo footer
-
-  const rId = nextRelationshipId(documentRelsXml);
-  // 1. footerReference u ciljni sectPr (no-op ako sekcija vec ima footer ili ne postoji).
-  const secRes = addFooterReferenceToSection(parts.documentXml, target.sectionIndex, rId);
-  if (!secRes.applied) return NO_OP(parts);
-  // 2. novi footer part + content-type + relationship (sve troje ili NO_OP: bez djelomicnog stanja).
-  // Ime bira preko content-types Override-a, dodanih partova I stvarnih zip entryja (existingParts),
-  // inace bi orphan word/footerN.xml (u zipu bez Override-a) doveo do kolizije: apply-fixers bi
-  // odbacio nas part kao "postoji", a footerReference/Override/rel bi ostali dangling na stari.
-  const takenNames = [...addedParts.map((p) => p.name), ...(parts.existingParts ?? [])];
-  const footerName = nextFooterPartName(contentTypesXml, takenNames);
-  const ctRes = addContentTypeOverride(contentTypesXml, `/${footerName}`, FOOTER_CONTENT_TYPE);
-  const relsRes = addRelationship(documentRelsXml, rId, FOOTER_REL_TYPE, footerName.replace(/^word\//, ''));
-  if (!ctRes.applied || !relsRes.applied) return NO_OP(parts);
-
-  // align iz nesigurnog params casta: svedi na whitelist (inace bi navodnik u vrijednosti
-  // razbio <w:jc w:val="..."/> i proizveo nevaljan footer XML).
-  const align: 'left' | 'center' | 'right' =
-    target.align === 'left' || target.align === 'center' ? target.align : 'right';
-  const alignLabel = align === 'right' ? 'desno' : align === 'center' ? 'sredina' : 'lijevo';
-  return {
-    parts: {
-      ...parts,
-      documentXml: secRes.xml,
-      contentTypesXml: ctRes.xml,
-      documentRelsXml: relsRes.xml,
-      addedParts: [...addedParts, { name: footerName, content: buildFooterPageXml(align) }],
-    },
-    applied: true,
-    beforeLabel: 'Podnozje s brojem stranice: nije postavljeno',
-    afterLabel: `Umetnuto podnozje s automatskim brojem stranice (${alignLabel})`,
-  };
 }
 
 // Fusnote: isti patch-only cilj kao paragraphSpacingFixer (0/0), ali preko FootnoteText

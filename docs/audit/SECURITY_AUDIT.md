@@ -1,6 +1,13 @@
 # Sigurnosni audit, Lekta (ThesisReady)
 
 Datum: 2026-07-10
+
+> Napomena (dvije datoteke istog imena): ovo je raniji sigurnosni audit (shema nalaza
+> security-01 do 06). Nadopunjen je i zamijenjen novijim, sirim auditom u korijenu repozitorija
+> [SECURITY_AUDIT.md](../../SECURITY_AUDIT.md) (14.7.2026, shema LEKTA-SEC-01 do 07), koji je
+> aktualni izvor istine. Ovaj dokument ostaje kao povijesni zapis; nalazi ispod (send-reminders,
+> IP salt, HSTS, CORS) vecinom su preneseni u noviji audit.
+
 Opseg: klijentski bundle (src, dist), autorski podaci (data), Supabase Edge funkcije i RLS migracije (supabase), hosting konfiguracija (netlify.toml, public/\_headers), obrada datoteka (docx, pdf) i XSS ploha.
 Nacin rada: READ ONLY. Nijedna produkcijska datoteka nije mijenjana. Nalazi imaju dokaz iz koda (datoteka:linija).
 

@@ -6,7 +6,9 @@ export default defineConfig({
   define: { __DEV_TOOLS__: 'true' },
   test: {
     environment: 'happy-dom',
-    passWithNoTests: true,
+    // Gate MORA pasti ako se ne kolektira nijedan test (npr. loše rješavanje globa ili
+    // toolchain regresija koja tiho kolektira 0): inace `npm run check` laže zeleno. Vidi AUD-46.
+    passWithNoTests: false,
     setupFiles: ['./tests/setup/xml-dom.ts'],
     // Paralelne sesije drze git worktreeove pod .claude/worktrees/; default exclude ih ne
     // pokriva pa bi parent `npm run check` testirao TUDJU kopiju repoa (duplo testova +

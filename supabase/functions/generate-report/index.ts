@@ -10,6 +10,7 @@
 // deno-lint-ignore-file no-explicit-any
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 
+import { corsHeadersFor } from '../_shared/cors.ts';
 import { computeFingerprint } from '../../../src/fingerprint/fingerprint.ts';
 import { isReportWorkType } from '../../../src/report/pricing.ts';
 import { buildFullReport } from '../../../src/report/report.ts';
@@ -28,18 +29,11 @@ const DAILY_CAP = Number(Deno.env.get('DAILY_CAP') ?? '30');
 // pa ip_hash nikad nije nesoljen (security-02).
 const IP_HASH_SALT = Deno.env.get('IP_HASH_SALT') ?? '';
 
-const CORS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, content-type',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-};
-
-function json(body: unknown, status = 200): Response {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { ...CORS, 'content-type': 'application/json' },
-  });
-}
+// Dopusteno CORS porijeklo (SEC-05): produkcijska domena; override preko ALLOWED_ORIGIN (zarezom
+// odvojeno). Localhost je uvijek dopusten (dev). Reflektira se u corsHeadersFor (nikad '*'), isti
+// obrazac kao faculty-request/preflight-start.
+const ALLOWED_ORIGINS = (Deno.env.get('ALLOWED_ORIGIN') ?? 'https://lektahr.netlify.app')
+  .split(',').map((s) => s.trim()).filter(Boolean);
 
 async function sha256Hex(input: string): Promise<string> {
   const data = new TextEncoder().encode(input);
@@ -48,8 +42,11 @@ async function sha256Hex(input: string): Promise<string> {
 }
 
 Deno.serve(async (req: Request) => {
+ const cors = corsHeadersFor(req.headers.get('Origin'), ALLOWED_ORIGINS);
+ const json = (body: unknown, status = 200): Response =>
+   new Response(JSON.stringify(body), { status, headers: { ...cors, 'content-type': 'application/json' } });
  try {
-  if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS });
+  if (req.method === 'OPTIONS') return new Response('ok', { headers: cors });
   if (req.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
 
   // 1. auth: prijavljen korisnik (Supabase JWT)

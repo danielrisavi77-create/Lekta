@@ -16,7 +16,7 @@ import './motion.css'; // dijeljeni sloj gibanja: tokeni gibanja, tekstura papir
 import './skip-link.css'; // pristupacni "Preskoci na sadrzaj" (BL-P1-01)
 import './a11y.css'; // dijeljeni a11y sloj: forced-colors fokus fallback (BL-P2-02)
 import { setupSkipLink } from './skip-link';
-import { createIcons, SunMoon, Menu, Lock, Upload, CheckCircle, AlertTriangle, AlertCircle, Info, SlidersHorizontal, ClipboardCheck, X, ChevronDown, Wrench, BadgeCheck, Zap } from 'lucide';
+import { createIcons, SunMoon, Menu, Lock, Upload, CheckCircle, AlertTriangle, AlertCircle, Info, SlidersHorizontal, ClipboardCheck, X, ChevronDown, Wrench, BadgeCheck, Zap, Lamp } from 'lucide';
 
 // Korektorski stol: "radna lampa" (tamni stol) je default na SVIM stranicama. Kad korisnik
 // nema spremljenu temu, postavi data-theme="dark" prije boota, pa #themeBtn preklopnik radi
@@ -48,7 +48,7 @@ function motionReady(): Promise<any> {
 function renderIcons() {
   try {
     createIcons({
-      icons: { SunMoon, Menu, Lock, Upload, CheckCircle, AlertTriangle, AlertCircle, Info, SlidersHorizontal, ClipboardCheck, X, ChevronDown, Wrench, BadgeCheck, Zap },
+      icons: { SunMoon, Menu, Lock, Upload, CheckCircle, AlertTriangle, AlertCircle, Info, SlidersHorizontal, ClipboardCheck, X, ChevronDown, Wrench, BadgeCheck, Zap, Lamp },
       attrs: { 'aria-hidden': 'true', 'stroke-width': 2 },
     });
   } catch (e) {
@@ -159,8 +159,13 @@ function setupNavTools() {
 function setupThemeToggle() {
   const btn = document.getElementById('themeBtn');
   if (!btn) return;
-  // BL-P3-08: aria-pressed prati aktivnu (tamnu) temu, pa citac zaslona zna stanje preklopnika.
-  const reflect = () => btn.setAttribute('aria-pressed', document.documentElement.dataset.theme === 'dark' ? 'true' : 'false');
+  // BL-P3-08: stanje i naziv prate aktivnu temu, pa je preklopnik jasan i citacu zaslona.
+  const reflect = () => {
+    const dark = document.documentElement.dataset.theme === 'dark';
+    btn.setAttribute('aria-pressed', dark ? 'true' : 'false');
+    btn.setAttribute('aria-label', dark ? 'Ugasi radnu lampu' : 'Upali radnu lampu');
+    btn.setAttribute('title', dark ? 'Ugasi radnu lampu' : 'Upali radnu lampu');
+  };
   reflect();
   btn.addEventListener('click', () => {
     const dark = document.documentElement.dataset.theme === 'dark';

@@ -1,7 +1,9 @@
-# Supply-chain provjera (BL-P3-14): revizija PRODUKCIJSKIH ovisnosti.
+# Supply-chain provjera (BL-P3-14): revizija PRODUKCIJSKIH ovisnosti + skeniranje tajni.
 # Dev CLI-jevi (netlify-cli, supabase) dominiraju lockfileom pa ih namjerno izostavljamo
 # (--omit=dev); ono sto zavrsi u browser bundleu mora biti bez high/critical ranjivosti.
 # Tjedni cron hvata novoobjavljene ranjivosti i bez novog commita.
+# gitleaks job (AUD-47 / LEKTA-SEC-07): dosad je jedini security korak bio npm audit (samo CVE
+# ovisnosti); commitirana tajna ne bi bila uhvacena. gitleaks skenira kod i git povijest.
 name: security-audit
 
 on:
@@ -11,6 +13,10 @@ on:
   schedule:
     - cron: "0 6 * * 1" # ponedjeljak 06:00 UTC
 
+# Least-privilege token (AUD-48): ovi jobovi nista ne pisu, samo citaju kod.
+permissions:
+  contents: read
+
 jobs:
   npm-audit:
     runs-on: ubuntu-latest
@@ -18,10 +24,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Node 20
+      - name: Node 24
         uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
 
       - name: Instaliraj ovisnosti
@@ -29,3 +35,46 @@ jobs:
 
       - name: Audit produkcijskih ovisnosti (high+)
         run: npm audit --omit=dev --audit-level=high
+
+  gitleaks:
+    name: Skeniranje tajni (gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (puna povijest za skeniranje svih commitova)
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Instaliraj gitleaks (pinano s GitHub releasea, bez marketplace akcije/licence)
+        run: |
+          VER=8.18.4
+          curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${VER}/gitleaks_${VER}_linux_x64.tar.gz" -o "$RUNNER_TEMP/gitleaks.tar.gz"
+          tar -xzf "$RUNNER_TEMP/gitleaks.tar.gz" -C "$RUNNER_TEMP" gitleaks
+          sudo install "$RUNNER_TEMP/gitleaks" /usr/local/bin/gitleaks
+          gitleaks version
+
+      - name: Pripremi gitleaks konfiguraciju (allowlist za vec prihvacene javne artefakte)
+        run: |
+          cat > "$RUNNER_TEMP/gitleaks.toml" <<'GITLEAKS_TOML'
+          # Prosiruje ugradjena gitleaks pravila; allowlist samo za PO ODLUCI javne artefakte.
+          [extend]
+          useDefault = true
+          [allowlist]
+          description = "Javni Supabase anon kljuc (AUD-13, namjerno javan) i harvestirani provenijencijski HTML"
+          regexTarget = "match"
+          # Tocan anon JWT iz src/ui/app.ts (role: anon, ovaj projekt). Payload segment enkodira
+          # role/ref/iat/exp; service-role kljuc ima drugaciji payload pa i dalje PADA (nije allowlistan).
+          regexes = [
+          '''eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpycmp0dGl6anlmY3htY3Bnem1sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM1ODIzMTcsImV4cCI6MjA5OTE1ODMxN30\.[A-Za-z0-9_-]+''',
+          ]
+          # Harvestirani sluzbeni izvori (HTML snapshoti) mogu nositi benigne eyJ/base64 blobove.
+          # Lockfile nosi integritetske hasheve, ne aplikacijske tajne.
+          paths = [
+          '''data/sources/.*\.html$''',
+          '''(^|/)package-lock\.json$''',
+          ]
+          GITLEAKS_TOML
+          cat "$RUNNER_TEMP/gitleaks.toml"
+
+      - name: Skeniraj repo i git povijest za tajnama
+        run: gitleaks detect --source . --config "$RUNNER_TEMP/gitleaks.toml" --redact --verbose --exit-code 1

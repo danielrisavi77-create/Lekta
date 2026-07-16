@@ -29,14 +29,19 @@ export function uploadCapBytes(opts: { deviceMemory?: number | null; coarsePoint
  * Dekompresijski budzet PO ZAPISU koji se salje ZipReaderu na slabom uredaju:
  *  - deviceMemory <= 2 GB: 100 MB,
  *  - deviceMemory <= 4 GB: 150 MB,
+ *  - coarse pointer bez deviceMemory (iOS Safari, mobilni Firefox): 150 MB,
  *  - jaci uredaj: null (ZipReader koristi puni MAX_DECOMPRESSED_BYTES = 200 MB).
  * Vracanjem null-a na jacem uredaju ponasanje ostaje identicno golden korpusu, koji ZipReaderu
  * NE salje budzet; time se OOM-guard aktivira samo tamo gdje je stvarno potreban.
+ *
+ * coarsePointer se MORA uzeti u obzir (AUD-03): iOS Safari i svi Firefox ne izlazu
+ * navigator.deviceMemory, pa bi bez toga dodirni uredaji dobili puni 200 MB budzet koji ih
+ * ovaj guard treba stegnuti (uploadCapBytes vec tretira coarsePointer kao mobitel).
  */
-export function decompressionBudgetBytes(deviceMemory?: number | null): number | null {
-  const dm = typeof deviceMemory === 'number' && deviceMemory > 0 ? deviceMemory : null;
-  if (dm === null) return null;
-  if (dm <= 2) return 100 * MB;
-  if (dm <= 4) return 150 * MB;
+export function decompressionBudgetBytes(opts: { deviceMemory?: number | null; coarsePointer?: boolean } = {}): number | null {
+  const dm = typeof opts.deviceMemory === 'number' && opts.deviceMemory > 0 ? opts.deviceMemory : null;
+  if (dm !== null && dm <= 2) return 100 * MB;
+  if (dm !== null && dm <= 4) return 150 * MB;
+  if (opts.coarsePointer) return 150 * MB;
   return null;
 }

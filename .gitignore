@@ -11,10 +11,11 @@ __pycache__/
 # Cache harvest citata (doi.org/CSL) - transient, ne commitati
 .harvest-cache/
 .playwright-mcp/
-# Generator demo videa: izvor (scene.html + skripte + fonts) se commita, izlazi ne
+# Generator demo videa: izvor (scene.html + skripte + ambient.filter + fonts) se commita, izlazi ne
 scripts/demo-video/frames/
-scripts/demo-video/demo.webm
-scripts/demo-video/demo.mp4
+scripts/demo-video/*.webm
+scripts/demo-video/*.mp4
+scripts/demo-video/*.wav
 scripts/demo-video/*.png
 # Claude Code lokalni skillovi/agenti (ui-ux-pro-max bundle ~3MB); frontend-design skill se commita zasebno po zelji
 .claude/skills/ui-ux-pro-max/
@@ -25,9 +26,28 @@ scripts/demo-video/*.png
 .claude/skills/slides/
 .claude/skills/ui-styling/
 
-# Lekta training pipeline: lokalni i osjetljivi izlazi
+# Lekta training pipeline: lokalni i osjetljivi izlazi (AUD-42 / LEKTA-SEC-06).
+# Vracen blok koji je izmjena uklonila: bez njega bi run_pipeline.py regenerirao
+# harvestane materijale ravno u index.
 training-pipeline/output/
 training-pipeline/sources/
+# Korpusni indeksi (sqlite/db) nikad u glavni repo; veliki i regenerabilni.
+# lekta-pipeline/korpus.db je 1.4G. *.db* je mreza ispod (parent je prije imao samo *.sqlite*).
 *.sqlite
 *.sqlite-shm
 *.sqlite-wal
+*.db
+*.db-shm
+*.db-wal
+
+# Lokalni dev preflight fajlovi (AUD-32 / LEKTA-SEC-07): zaglavlje "ne commitati",
+# sadrze placeholder HMAC secret i lokalne apsolutne putanje. Datoteke ostaju na disku,
+# samo ne smiju u commit.
+_preflight_*.mts
+vite.dev-preflight.config.mts
+
+# Sirovi izvor-PDF bez registriranog profila (AUD-45): Algebra je u katalogu status
+# 'research', PDF nije u source-registry ni vezan uz profil. Ne commitaj ga dok se
+# profil ne promovira; tada se ignore ukloni i izvor upise u registry. Ostali 169
+# sluzbenih pravilnik-PDF-ova su drugdje i ostaju pracenih (ova pravila ih ne diraju).
+data/sources/algebra/

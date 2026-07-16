@@ -119,24 +119,62 @@ $$;
 
 revoke execute on function expire_stale_preflight_jobs() from public;
 
+-- Sinkroni put oslobadanja (AUD-19 / LEKTA-SEC-02): partial-unique
+-- preflight_checks_one_active_per_user dopusta najvise jedan aktivan (pending/running)
+-- job po korisniku, a jedini oslobadjac je bio expire_stale_preflight_jobs iza pg_cron
+-- guarda. Ako cron ne radi, zaglavljen pending/running job trajno bi blokirao svaki novi
+-- preflight tog korisnika (INSERT novog pending reda krsi jedinstvenost, bez puta
+-- samo-oporavka). Zato oslobadanje NE ovisi vise iskljucivo o cronu: prije svakog inserta
+-- vlastite zaglavljene jobove starije od 1 h flipamo na status='error', cime se oslobodi
+-- partial-unique slot. Jedinstvenost aktivnog joba tako ostaje concurrency cap za stvarno
+-- svjeze jobove, ali vise ne postaje trajni lock. NAPOMENA: prag se ne moze staviti u
+-- predikat indeksa jer now() nije IMMUTABLE, pa reclaim ide kroz trigger, ne kroz indeks.
+create or replace function preflight_expire_stale_before_insert()
+returns trigger
+language plpgsql
+set search_path = public
+as $$
+begin
+  update preflight_checks
+     set status = 'error',
+         error_code = coalesce(error_code, 'upload_expired')
+   where user_id = new.user_id
+     and status in ('pending','running')
+     and created_at < now() - interval '1 hour';
+  return new;
+end;
+$$;
+
+drop trigger if exists preflight_checks_expire_stale on preflight_checks;
+create trigger preflight_checks_expire_stale
+  before insert on preflight_checks
+  for each row
+  execute function preflight_expire_stale_before_insert();
+
+-- Fail-closed retencija (AUD-18/AUD-19 / LEKTA-SEC-02): bez pg_crona ni
+-- purge_preflight_results() (brise isjecke rada + forenzicki nalaz) ni
+-- expire_stale_preflight_jobs() se ne bi zakazali, a migracija bi tiho prosla zeleno.
+-- Zato izostanak pg_crona ovdje RUSI migraciju (glasno). Idempotentno: re-run radi
+-- unschedule pa schedule istih imenovanih jobova.
 do $$
 begin
-  if exists (select 1 from pg_extension where extname = 'pg_cron') then
-    begin
-      perform cron.unschedule('purge-preflight-results');
-    exception when others then
-      null; -- job jos ne postoji
-    end;
-    perform cron.schedule('purge-preflight-results', '30 4 * * *',
-                          'select purge_preflight_results();');
-    begin
-      perform cron.unschedule('expire-stale-preflight-jobs');
-    exception when others then
-      null;
-    end;
-    perform cron.schedule('expire-stale-preflight-jobs', '15 * * * *',
-                          'select expire_stale_preflight_jobs();');
+  if not exists (select 1 from pg_extension where extname = 'pg_cron') then
+    raise exception 'pg_cron nije dostupan: retencijski purge_preflight_results() i expire_stale_preflight_jobs() se ne mogu zakazati (fail-closed). Ukljuci pg_cron ekstenziju pa ponovno pokreni migraciju.';
   end if;
+  begin
+    perform cron.unschedule('purge-preflight-results');
+  exception when others then
+    null; -- job jos ne postoji
+  end;
+  perform cron.schedule('purge-preflight-results', '30 4 * * *',
+                        'select purge_preflight_results();');
+  begin
+    perform cron.unschedule('expire-stale-preflight-jobs');
+  exception when others then
+    null;
+  end;
+  perform cron.schedule('expire-stale-preflight-jobs', '15 * * * *',
+                        'select expire_stale_preflight_jobs();');
 end $$;
 
 comment on table preflight_checks is

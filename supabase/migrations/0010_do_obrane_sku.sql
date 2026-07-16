@@ -4,7 +4,7 @@
 -- Bez auto-fixa i bez dodatnih obecanja; deliverable je identican standardnom slotu.
 --
 -- NAPOMENA (cijene): 9,99 / 16,99 EUR su inicijalni prijedlog (oko 1,7x osnovnog slota za
--- 8,5x dulji prozor); promjena cijene ide preko set_product_price (migracija 0009), bez deploya.
+-- 8,5x dulji prozor); promjena cijene ide preko set_product_price (migracija 0020), bez deploya.
 --
 -- PREDUVJET u kodu: slot-logic mora postovati slot_window_days s entitlementa (snapshot
 -- proizvoda), inace bi se slot i dalje vezao na standardnih 7/14 dana. Vidi entitlements

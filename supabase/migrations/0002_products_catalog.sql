@@ -64,12 +64,15 @@ insert into products (id, kind, audience, work_type, slots_total, slot_window_da
 on conflict (id) do nothing;
 
 -- RLS (sekcija 13).
--- products: SELECT za sve (anon ukljucivo, treba za paywall i SEO) uz active=true;
+-- products: SELECT za sve (anon ukljucivo, treba za paywall i SEO) uz active=true I
+-- audience='retail' (AUD-20). Partnerski (veleprodajni) redovi i njihov mor_product_id
+-- ostaju skriveni od anon/authenticated jer nemaju drugu SELECT policy; vidi ih samo
+-- service role (zaobilazi RLS) ili buduca namjenska partner policy.
 -- INSERT/UPDATE/DELETE samo service role (bez policyja = default deny).
 alter table products enable row level security;
 drop policy if exists products_select_active on products;
 create policy products_select_active on products
-  for select using (active = true);
+  for select using (active = true and audience = 'retail');
 
 -- pricing_changelog: samo service role, bez klijentskog citanja (default deny).
 alter table pricing_changelog enable row level security;

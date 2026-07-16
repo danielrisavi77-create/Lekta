@@ -77,12 +77,18 @@ export const FORENSIC_CODES: ReadonlySet<string> = new Set([
   'RSID_ABSENT', 'RSID_FEW_SESSIONS', 'RSID_LOW_SESSIONS',
   'RSID_SINGLE_PASTE', 'OK_RSID',
   'WEB_VERBATIM_HIT', 'WEB_QUERY_PLAN', 'OK_WEB',
+  // m4_corpus: podudarnost s hrvatskim korpusom (Dabar/Hrcak). Zasad mentorska
+  // razina (kao m3_websim); flip na studenta = premjestiti ove kodove u
+  // STUDENT_VISIBLE_CODES, maknuti m4_corpus iz STUDENT_HIDDEN_MODULES i dodati
+  // student copy. Ceka deployan korpusni indeks.
+  'CORPUS_FULLTEXT_MATCH', 'CORPUS_TITLE_MATCH', 'CORPUS_NO_INDEX',
+  'CORPUS_NOT_CHECKED', 'CORPUS_SUMMARY', 'OK_CORPUS',
 ]);
 
 /** Moduli koji se studentu uklanjaju U CIJELOSTI (ni prazna ljuska): sama
  *  prisutnost modula odaje sto se mjeri. */
 export const STUDENT_HIDDEN_MODULES: ReadonlySet<string> = new Set([
-  'm1_rsid', 'm3_websim',
+  'm1_rsid', 'm3_websim', 'm4_corpus',
 ]);
 
 /** doc_summary ALLOWLISTA (nikad blocklista): "Uređivanje (min)" (TotalTime)

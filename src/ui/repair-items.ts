@@ -8,7 +8,6 @@
 import type { RepairableItem } from './repair-panel';
 import type { RuleEntry } from '../profiles/profile-schema';
 import type { Issue } from '../scoring/checks';
-import type { SectionNumberingTarget } from '../repair/xml-patch';
 
 /** Minimalni oblik provjere iz analyzeDocx rezultata (result.checks[]). */
 export interface AnalyzedCheck {
@@ -25,8 +24,6 @@ const CHECK_TITLE: Record<string, string> = {
   'line-spacing': 'Prored osnovnog teksta',
   justify: 'Poravnanje osnovnog teksta',
   'paragraph-spacing': 'Razmak prije i poslije odlomka',
-  'page-number-start': 'Numeriranje od prve stranice Uvoda',
-  'page-number-scheme': 'Shema numeriranja stranica',
   'footnote-spacing': 'Razmak prije i poslije fusnota',
 };
 // paper-size ima dinamican naslov ('Format stranice A4' / 'Format stranice (A4/A3)') -> prefiks.
@@ -148,70 +145,6 @@ export function paragraphSpacingRepairableItem(checks: AnalyzedCheck[], profile:
       label: 'Razmak prije i poslije odlomka',
       params: {},
       violated: isViolated('paragraph-spacing', checks),
-    },
-  ];
-}
-
-/**
- * Ciljevi numeriranja iz granice Uvoda, ISTI kriterij kao audit checkPageNumberStartAtIntro
- * (analyze-docx.ts): prednje sekcije zavrsavaju PRIJE Uvoda (paragraphIndex < introIndex).
- * Prednje -> rimski (start=1 na prvoj), glavne od Uvoda -> arapski (start=1 na prvoj glavnoj).
- * detectable:false (prazni targets) kad nema splita: <2 sekcije, nepoznat Uvod, ili su sve
- * odnosno nijedna sekcija prednje. Cista funkcija (testabilno, bez DOM-a).
- */
-export function sectionNumberingTargets(
-  sections: Array<{ paragraphIndex?: number | null }> | undefined | null,
-  introParagraphIndex: number | null | undefined,
-): { detectable: boolean; targets: SectionNumberingTarget[] } {
-  if (introParagraphIndex == null || !Array.isArray(sections) || sections.length < 2) {
-    return { detectable: false, targets: [] };
-  }
-  const isFront = (s: { paragraphIndex?: number | null }) =>
-    typeof s?.paragraphIndex === 'number' && s.paragraphIndex < introParagraphIndex;
-  // Prva sekcija koja NIJE prednja = pocetak glavnog teksta. mainStartIndex<=0 znaci
-  // "nema prednje sekcije" ili "nema glavne" -> nema splita za popraviti.
-  const mainStartIndex = sections.findIndex((s) => !isFront(s));
-  if (mainStartIndex <= 0) return { detectable: false, targets: [] };
-  // Kljucni uvjet ISPRAVNOSTI (adversarial review): pgNumType w:start=1 restarta numeriranje
-  // na POCETKU glavne sekcije, pa prijelom sekcije mora KOINCIDIRATI s Uvodom. Zadnja prednja
-  // sekcija mora zavrsavati tocno na paragrafu prije Uvoda (glavna sekcija POCINJE Uvodom),
-  // inace bi arapski restart pao na prednji dio (sazetak/sadrzaj), a Uvod ne bi dobio broj 1.
-  // Kad prijelom nije na Uvodu, umetanje prijeloma je posao koraka b (K6), ne K4 -> no-op.
-  const before = sections[mainStartIndex - 1];
-  if (before.paragraphIndex !== introParagraphIndex - 1) return { detectable: false, targets: [] };
-  const targets: SectionNumberingTarget[] = sections.map((_s, i): SectionNumberingTarget => {
-    if (i < mainStartIndex) {
-      return i === 0 ? { sectionIndex: i, fmt: 'lowerRoman', start: 1 } : { sectionIndex: i, fmt: 'lowerRoman' };
-    }
-    return i === mainStartIndex ? { sectionIndex: i, fmt: 'decimal', start: 1 } : { sectionIndex: i, fmt: 'decimal' };
-  });
-  return { detectable: true, targets };
-}
-
-/**
- * Popravak numeriranja stranica od Uvoda (BL-06 korak a): rimski na prednjim listovima,
- * arapski od Uvoda (start=1). Gejtano profilnim flagom checkPageNumberStartAtIntro (isti
- * obrazac kao paragraphSpacingRepairableItem) I detektabilnom granicom Uvoda iz
- * result.details (sections + introParagraphIndex). Kad dokument nema split sekcija, popravak
- * se ne nudi (fixer bi ionako bio bit-identican no-op). violated se ocitava iz checkova
- * numeriranja (postoje samo kad dokument ima PAGE polje), pa je u teaseru konzervativan.
- */
-export function pageNumberingRepairableItem(result: any, profile: any): RepairableItem[] {
-  if (profile?.checkPageNumberStartAtIntro !== true) return [];
-  const { detectable, targets } = sectionNumberingTargets(
-    result?.details?.sections,
-    result?.details?.introParagraphIndex,
-  );
-  if (!detectable) return [];
-  const checks: AnalyzedCheck[] = result?.checks ?? [];
-  const violated = isViolated('page-number-start', checks) || isViolated('page-number-scheme', checks);
-  return [
-    {
-      ruleId: 'page-numbering-universal',
-      fixerId: 'page-numbering-fixer',
-      label: 'Numeriranje stranica od Uvoda (rimski/arapski)',
-      params: { targets },
-      violated,
     },
   ];
 }

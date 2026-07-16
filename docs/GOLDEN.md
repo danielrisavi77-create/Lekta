@@ -2,7 +2,7 @@
 
 Legal Citation Engine i OOXML parser su tezki regexi nad hrvatskim pravnim i
 akademskim formama; lako se kvare. Pravilo iz CLAUDE.md: **ne mijenjaj parser,
-audit ni citation engine bez golden testa koji PRVO dokazuje zatecено ponasanje.**
+audit ni citation engine bez golden testa koji PRVO dokazuje zateceno ponasanje.**
 
 Harness: `tests/docx-golden.test.ts` + `tests/fixtures/docx/`.
 

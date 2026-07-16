@@ -67,6 +67,10 @@ function analyzeInWorker(file: File, profile: any, settings: any, onProgress: an
     if (activeWorker) { try { activeWorker.terminate(); } catch { /* vec ugasen */ } }
     activeWorker = w;
     let settled = false;
+    // Je li analiza VEC ZAPOCELA (stigao prvi progress od workera). Ako worker padne (onerror)
+    // NAKON pocetka, to je gotovo sigurno pad SAME ANALIZE (OOM na velikom/zlonamjernom docx-u),
+    // a NE infrastrukture, pa se NE smije ponoviti inline (bomba bi tamo zamrznula karticu). AUD-02.
+    let started = false;
     const done = (finish: () => void) => {
       if (settled) return;
       settled = true;
@@ -79,11 +83,15 @@ function analyzeInWorker(file: File, profile: any, settings: any, onProgress: an
     cancelActive = () => done(() => reject(new AnalysisCancelledError()));
     w.onerror = (ev: any) => {
       if (ev && typeof ev.preventDefault === 'function') ev.preventDefault();
-      done(() => reject(new WorkerInfraError((ev && ev.message) || 'Worker skripta se nije ucitala.')));
+      // Pad PRIJE prvog progressa = infra (spawn/ucitavanje) -> smije na inline fallback.
+      // Pad NAKON pocetka = pad analize (npr. OOM) -> obicna greska, bez inline ponavljanja.
+      done(() => reject(started
+        ? new Error('Analiza u pozadini je neočekivano prekinuta; dokument je možda prevelik ili oštećen.')
+        : new WorkerInfraError((ev && ev.message) || 'Worker skripta se nije ucitala.')));
     };
     w.onmessage = (ev: MessageEvent) => {
       const d = ev.data || {};
-      if (d.type === 'progress') { if (!settled) onProgress(d.pct, d.msg); return; }
+      if (d.type === 'progress') { started = true; if (!settled) onProgress(d.pct, d.msg); return; }
       if (d.type === 'result') { done(() => resolve(d.result)); return; }
       if (d.type === 'error') {
         const err = new Error(d.message || 'Analiza nije uspjela.');
@@ -112,6 +120,9 @@ export async function analyzeDocxOffThread(file: File, profile: any, settings: a
   }
   // Lijeno: motor se dohvaca samo kad zaista treba (nema/slomljen worker), pa ne opterecuje
   // glavni entry chunk. U testovima (bez Workera) ovaj put je uvijek aktivan.
+  // Napomena (AUD-08): inline put koristi nativni preglednicki DOMParser, dok worker i golden
+  // korpus koriste @xmldom/xmldom. Ovo je rijedak fallback (nema/slomljen worker), pa se svjesno
+  // prihvaca moguca sitna razlika u parsiranju umjesto globalnog override-a DOMParsera na glavnoj niti.
   const { analyzeDocx } = await import('./analyze-docx');
   return analyzeDocx(file, profile, settings, onProgress);
 }

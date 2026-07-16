@@ -1006,13 +1006,13 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
 /* Video overlayi zive na uvijek tamnom okviru (#0F0C0A u obje teme), pa su im boje
    fiksne (desk-ink/red iz tamne palete), ne tematske varijable. */
 .ks-video-stage{position:relative}
-.ks-video-play{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:14px;border:0;border-radius:0;background:rgba(15,12,10,.34);cursor:pointer;padding:0;margin:0}
+.ks-video-play{position:absolute;inset:0;z-index:5;display:grid;place-content:center;justify-items:center;gap:14px;border:0;border-radius:0;background:rgba(15,12,10,.34);cursor:pointer;padding:0;margin:0}
 .ks-video-play[hidden]{display:none}
 .ks-video-play:hover .ks-vp-circle{transform:scale(1.07)}
 .ks-vp-circle{width:76px;height:76px;border-radius:50%;background:#E4573D;color:#1A1512;display:grid;place-items:center;box-shadow:0 10px 32px rgba(0,0,0,.5);transition:transform .15s var(--ease)}
 .ks-vp-circle svg{width:30px;height:30px;margin-left:4px;display:block}
 .ks-vp-note{font-family:var(--font-hand);font-size:22px;line-height:1.3;color:#EDE7DC;background:rgba(15,12,10,.72);padding:3px 14px;transform:rotate(-2deg)}
-.ks-video-end{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:16px;text-align:center;background:rgba(15,12,10,.87);padding:20px;overflow:auto}
+.ks-video-end{position:absolute;inset:0;z-index:7;display:grid;place-content:center;justify-items:center;gap:16px;text-align:center;background:rgba(15,12,10,.87);padding:20px;overflow:auto}
 .ks-video-end[hidden]{display:none}
 .ks-vstamp{border:3px solid #E4573D;color:#E4573D;padding:10px 22px 12px;transform:rotate(-6deg);display:grid;gap:3px;animation:ksStampIn .5s var(--ease-pop) both}
 .ks-vstamp b{font:700 27px/1.1 var(--sans);letter-spacing:.22em;text-transform:uppercase}
@@ -1025,6 +1025,37 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
 .ks-vend-replay:hover{border-color:#EDE7DC}
 @keyframes ksStampIn{0%{opacity:0;transform:rotate(-6deg) scale(2.2)}55%{opacity:1;transform:rotate(-6deg) scale(.95)}75%{transform:rotate(-6deg) scale(1.05)}100%{transform:rotate(-6deg) scale(1)}}
 @keyframes ksVendIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+/* KS kontrolna traka (custom player): tamna traka na dnu videa, crveni akcent, mono oznake.
+   Vidljiva tek kad demo krene (.ks-vc-on); play overlay (z5) i zavrsni ekran (z7) su iznad nje. */
+.ks-vctrl{position:absolute;left:0;right:0;bottom:0;z-index:3;display:flex;align-items:center;gap:7px;padding:24px 12px 11px;background:linear-gradient(to top,rgba(15,12,10,.92),rgba(15,12,10,.5) 58%,transparent);color:#EDE7DC;font:500 12px var(--sans);opacity:0;transform:translateY(6px);transition:opacity .2s,transform .2s}
+.ks-video-stage.ks-vc-on .ks-vctrl{opacity:1;transform:none}
+.ks-vctrl[hidden]{display:none}
+.ks-vc-btn{flex:none;width:34px;height:34px;display:grid;place-items:center;border:0;background:none;color:#EDE7DC;cursor:pointer;border-radius:2px}
+.ks-vc-btn:hover{color:#E4573D}
+.ks-vc-btn svg{width:19px;height:19px;display:block}
+.ks-vc-btn .i-pause,.ks-video-stage.ks-playing .ks-vc-btn .i-play{display:none}
+.ks-video-stage.ks-playing .ks-vc-btn .i-pause{display:block}
+.ks-vc-btn .i-mute,.ks-video-stage.ks-muted .ks-vc-btn .i-vol{display:none}
+.ks-video-stage.ks-muted .ks-vc-btn .i-mute{display:block}
+.ks-vc-time{flex:none;font-variant-numeric:tabular-nums;letter-spacing:.02em;color:rgba(237,231,220,.75);white-space:nowrap}
+.ks-vc-time b{color:#EDE7DC;font-weight:600}
+.ks-vc-seek{flex:1 1 auto;min-width:60px;height:5px;-webkit-appearance:none;appearance:none;background:linear-gradient(to right,#E4573D var(--p,0%),rgba(237,231,220,.25) var(--p,0%));border-radius:3px;cursor:pointer}
+.ks-vc-seek::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:#E4573D;border:0;cursor:pointer}
+.ks-vc-seek::-moz-range-thumb{width:13px;height:13px;border-radius:50%;background:#E4573D;border:0;cursor:pointer}
+.ks-vc-vol{flex:none;display:flex;align-items:center;gap:2px}
+.ks-vc-volbar{width:64px;height:4px;-webkit-appearance:none;appearance:none;background:linear-gradient(to right,#EDE7DC var(--v,85%),rgba(237,231,220,.25) var(--v,85%));border-radius:3px;cursor:pointer}
+.ks-vc-volbar::-webkit-slider-thumb{-webkit-appearance:none;width:11px;height:11px;border-radius:50%;background:#EDE7DC;border:0;cursor:pointer}
+.ks-vc-volbar::-moz-range-thumb{width:11px;height:11px;border-radius:50%;background:#EDE7DC;border:0;cursor:pointer}
+.ks-vc-menu{flex:none;position:relative}
+.ks-vc-mbtn{border:0;background:none;color:#EDE7DC;font:600 11.5px var(--sans);letter-spacing:.04em;cursor:pointer;padding:7px 7px;border-radius:2px;min-width:42px}
+.ks-vc-mbtn:hover,.ks-vc-menu[data-open] .ks-vc-mbtn{color:#E4573D}
+.ks-vc-list{position:absolute;bottom:calc(100% + 8px);right:0;background:#1A1512;border:1px solid rgba(237,231,220,.16);box-shadow:0 10px 30px rgba(0,0,0,.5);padding:5px;display:none;gap:1px;min-width:80px;z-index:5}
+.ks-vc-menu[data-open] .ks-vc-list{display:grid}
+.ks-vc-list button{text-align:left;border:0;background:none;color:#EDE7DC;font:500 12px var(--sans);padding:8px 11px;cursor:pointer;white-space:nowrap;border-radius:2px}
+.ks-vc-list button:hover{background:rgba(237,231,220,.08);color:#E4573D}
+.ks-vc-list button.on{color:#E4573D;font-weight:700}
+@media(max-width:640px){.ks-vc-volbar{display:none}.ks-vctrl{gap:4px;padding:22px 8px 9px}.ks-vc-btn[data-vc=back],.ks-vc-btn[data-vc=fwd]{display:none}.ks-vc-mbtn{min-width:0;padding:7px 5px}}
+@media(prefers-reduced-motion:reduce){.ks-vctrl{transition:none}}
 /* "kreni ovdje" spot na dropzoni nakon video CTA (papirni kontekst, pa tamnija crvena) */
 .dropzone.ks-spot{position:relative;border-color:var(--red-deep);animation:ksSpotPulse 1.1s var(--ease) 2}
 .dropzone.ks-spot::after{content:"kreni ovdje";position:absolute;top:-15px;right:16px;transform:rotate(3deg);font-family:var(--font-hand);font-size:24px;color:var(--red-deep);animation:ksVendIn .3s var(--ease) both}
@@ -1262,9 +1293,9 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
   <nav class="shell nav" aria-label="Glavna navigacija">
     <a class="logo" href="#top"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span><span class="logo-tag">korektorski stol</span></a>
     <div class="nav-links"><a href="#video">Video</a><a href="#how">Kako radi</a><a href="#analyzer">Provjera</a><a href="#podcrta">Što provjerava</a><a href="landing_usporedba.html">Usporedba</a><div class="nav-tools"><button class="nav-tools-btn" type="button" aria-expanded="false">Alati <span class="caret" aria-hidden="true">&#9662;</span></button><div class="nav-tools-menu"><a href="alati.html">Svi alati</a><a href="citat.html">Citat generator</a><a href="kartice.html">Brojač kartica</a><a href="naslovnica.html">Naslovnica</a><a href="literatura.html">Sređivanje literature</a><a href="izjava.html">Izjava o izvornosti</a></div></div><a href="#pricing">Tarife</a><a href="#faq">Pitanja</a></div>
-    <button class="lampa-btn" id="themeBtn" aria-label="Promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 2h8l-5 7h4L7 22l3-9H6l3-11Z"/></svg><span class="lampa-txt">Lampa</span></button>
     <button class="btn btn-ghost btn-sm hidden" id="authEntry" data-auth-entry type="button">Prijava</button>
     <a class="btn btn-primary btn-sm" href="#analyzer">Provjeri rad</a>
+    <button class="lampa-btn" id="themeBtn" type="button" aria-label="Promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><i data-lucide="lamp"></i><span class="lampa-txt">Lampa</span></button>
     <button class="icon-btn mobile-menu" id="mobileMenuBtn" aria-label="Otvori izbornik" aria-expanded="false"><i data-lucide="menu"></i></button>
   </nav>
   <div class="mobile-nav" id="mobileNav">
@@ -1331,13 +1362,33 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
 
 <section class="section" id="video">
   <div class="shell">
-    <div class="ks-sec-head" data-reveal><span class="ks-vplay" aria-hidden="true">▶</span><h2>Pogledaj kako Lekta čita rad<span class="ks-dot">.</span></h2><span class="ks-vmeta">demo · 26 sekundi · bez zvuka</span></div>
+    <div class="ks-sec-head" data-reveal><span class="ks-vplay" aria-hidden="true">▶</span><h2>Pogledaj kako Lekta čita rad<span class="ks-dot">.</span></h2><span class="ks-vmeta">demo · 26 sekundi · uz glazbu</span></div>
     <div class="ks-video-wrap" data-reveal>
       <div class="ks-video-frame">
         <div class="ks-video-dots" aria-hidden="true"><i class="d1"></i><i></i><i></i><span>Lekta · demo · lokalno ●</span></div>
         <div class="ks-video-stage">
-          <video class="ks-video" muted playsinline preload="none" poster="/assets/demo-poster.jpg" aria-label="Demo od 26 sekundi: Lekta pregleda rad, označi probleme i vodi dokument do ocjene 100 od 100"><source src="/assets/demo.webm" type="video/webm"><source src="/assets/demo.mp4" type="video/mp4"></video>
-          <button class="ks-video-play" id="ksVideoPlay" type="button" aria-label="Pokreni demo od 26 sekundi"><span class="ks-vp-circle" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" focusable="false"><path d="M8 5v14l11-7z"/></svg></span><span class="ks-vp-note" aria-hidden="true">pritisni play · 26 s · bez zvuka</span></button>
+          <video class="ks-video" playsinline preload="none" poster="/assets/demo-poster.jpg" aria-label="Demo od 26 sekundi uz glazbu: Lekta pregleda rad, označi probleme i vodi dokument do ocjene 100 od 100"><source src="/assets/demo-1080.webm" type="video/webm"><source src="/assets/demo-1080.mp4" type="video/mp4"></video>
+          <div class="ks-vctrl" id="ksVctrl" hidden>
+            <button class="ks-vc-btn" data-vc="play" type="button" aria-label="Reproduciraj ili pauziraj"><svg class="i-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><svg class="i-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+            <button class="ks-vc-btn" data-vc="back" type="button" aria-label="Nazad 10 sekundi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 18 5 12l6-6M19 18l-6-6 6-6"/></svg></button>
+            <button class="ks-vc-btn" data-vc="fwd" type="button" aria-label="Naprijed 10 sekundi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 6l6 6-6 6M5 6l6 6-6 6"/></svg></button>
+            <span class="ks-vc-time"><b data-vc="cur">0:00</b> / <span data-vc="dur">0:26</span></span>
+            <input class="ks-vc-seek" type="range" min="0" max="1000" value="0" step="1" data-vc="seek" aria-label="Traka napretka">
+            <div class="ks-vc-vol">
+              <button class="ks-vc-btn" data-vc="mute" type="button" aria-label="Utišaj ili uključi zvuk"><svg class="i-vol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a9 9 0 0 1 0 14"/></svg><svg class="i-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M22 9l-6 6M16 9l6 6"/></svg></button>
+              <input class="ks-vc-volbar" type="range" min="0" max="100" value="85" step="1" data-vc="vol" aria-label="Glasnoća">
+            </div>
+            <div class="ks-vc-menu" data-menu="speed">
+              <button class="ks-vc-mbtn" type="button" data-vc="speed-btn" aria-haspopup="true" aria-expanded="false" aria-label="Brzina reprodukcije">1×</button>
+              <div class="ks-vc-list" role="menu"><button type="button" data-speed="0.75" role="menuitemradio" aria-checked="false">0.75×</button><button type="button" data-speed="1" class="on" role="menuitemradio" aria-checked="true">1×</button><button type="button" data-speed="1.5" role="menuitemradio" aria-checked="false">1.5×</button><button type="button" data-speed="2" role="menuitemradio" aria-checked="false">2×</button></div>
+            </div>
+            <div class="ks-vc-menu" data-menu="quality">
+              <button class="ks-vc-mbtn" type="button" data-vc="quality-btn" aria-haspopup="true" aria-expanded="false" aria-label="Kvaliteta videa">1080p</button>
+              <div class="ks-vc-list" role="menu"><button type="button" data-q="720" role="menuitemradio" aria-checked="false">720p</button><button type="button" data-q="1080" class="on" role="menuitemradio" aria-checked="true">1080p</button><button type="button" data-q="1440" role="menuitemradio" aria-checked="false">1440p HD</button></div>
+            </div>
+            <button class="ks-vc-btn" data-vc="full" type="button" aria-label="Cijeli zaslon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 1 2-2v-3"/></svg></button>
+          </div>
+          <button class="ks-video-play" id="ksVideoPlay" type="button" aria-label="Pokreni demo od 26 sekundi"><span class="ks-vp-circle" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" focusable="false"><path d="M8 5v14l11-7z"/></svg></span><span class="ks-vp-note" aria-hidden="true">pritisni play · 26 s · uz glazbu</span></button>
           <div class="ks-video-end" id="ksVideoEnd" role="group" aria-label="Demo je gotov" tabindex="-1" hidden>
             <div class="ks-vstamp" aria-hidden="true"><b>Pregledano</b><i>Lekta · ocjena 100/100</i></div>
             <p class="ks-vend-note">Ovaj rad je prošao. Tvoj je sljedeći.</p>

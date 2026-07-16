@@ -53,7 +53,7 @@ Zadani `DEFAULT_PRODUCTION_CONFIG` (`src/ui/app.ts:71`) ima popunjene `supabaseU
 | `document_slots` (0001) | `fingerprint` = { titleNorm, **authorNorm**, headings[], sectionCount }, `label` (fragment naslova), `user_id` | nema purge joba |
 | `report_generations` (0001) | `doc_fingerprint`, `ip_hash`, `user_id`, `status` | purge > 90 dana (`purge_old_report_generations`, 0009) |
 | `entitlements`, `coupon_grants`, `manual_orders` (0001/0003) | `user_id`, `order_id` | nije definirano |
-| `checkout_consents` (0008) | `user_id`, `consent_text`, `terms_version`, `consented_at` | dokazna, drzi se |
+| `checkout_consents` (0021) | `user_id`, `consent_text`, `terms_version`, `consented_at` | dokazna, drzi se |
 | `guarantee_claims` (0007) | `user_id`, `slot_id`, `rule_key`, `evidence_path` (slobodan tekst korisnika) | nije definirano |
 | `deadline_subscriptions` (0012) | `user_id`, `faculty_id`, `work_type`, `deadline_date` | opt-out |
 | `referral_signups` (0013) | `user_id`, `referred_ip_hash` | anti-fraud |

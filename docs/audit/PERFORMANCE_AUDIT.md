@@ -101,6 +101,15 @@ podataka pa `currentProfile()` i `applyScoredAdvisory` treba prilagoditi asinkro
 utrke između odabira profila i pristiglih pravila. Golden korpus štiti jezgru analize; UI grana treba
 regresijski smoke za "odaberi profil pa odmah pokreni analizu".
 
+> AŽURIRANO 2026-07-16 (light/heavy split IZVEDEN, performance-01 uglavnom riješeno): autorski
+> podatkovni sloj je razdvojen na lagani indeks `data/profiles/verified-profiles-index.json` i
+> teški `data/profiles/verified-profiles-heavy.json` koji se lijeno učita (dinamički import u
+> `src/profiles/profile-registry.ts`). Izmjereno nakon splita: glavni `dist/assets/index-*.js` je
+> oko 489 KB raw / ~97 KB gzip (prije 2,4 MB / 369 KB), a teški chunk (~865 KB raw / ~99 KB gzip)
+> više nije na kritičnom putu, što nadmašuje ciljni -40% gzip. Brojke u nastavku (2,4 MB / 369 KB)
+> opisuju stanje PRIJE splita i zadržane su radi povijesti. Draftovi i source-registry
+> (performance-02) su zaseban, još otvoren korak.
+
 ## performance-02 (P2): Draftovi i source-registry putuju samo radi determinističke advisory liste
 
 Problem: jedina runtime uporaba draftova plus `SOURCE_REGISTRY` u javnoj aplikaciji je
