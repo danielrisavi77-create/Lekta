@@ -38230,5 +38230,89 @@
     "sourcePage": "Clanak 10. stavak 1.",
     "quote": "Zavrsni/diplomski rad sastoji se od naslovne stranice, izjave o izvornosti rada, sazetka, kljucnih rijeci, sadrzaja, uvoda, obrade teme, zakljucka, popisa literature i drugih izvora podataka koji su koristeni u izradi zavrsnog/diplomskog rada te priloga (ako postoje).",
     "note": "Novi port FOI: covjek potvrdio uz otvoren snapshot (pravilnik + obavezni predlozak)."
+  },
+  {
+    "id": "led-simet-zavrsni--font-verified-2026-07-16",
+    "ruleId": "simet-zavrsni--font",
+    "profileId": "simet-zavrsni",
+    "action": "verified",
+    "actor": "Daniel",
+    "timestamp": "2026-07-16",
+    "sourceId": "simet-pravilnik-studiranje",
+    "sourcePage": "Prilog II, t.6 Izgled teksta (str. 45)",
+    "quote": "Tekst se piše u Times New Roman 12, jednostruki prored, osim dijelova označenih sa * koji se pišu veličinom slova 14.",
+    "note": "Novi port SIMET: covjek potvrdio uz otvoren snapshot (Pravilnik o studiranju, Prilog II)."
+  },
+  {
+    "id": "led-simet-zavrsni--font-size-verified-2026-07-16",
+    "ruleId": "simet-zavrsni--font-size",
+    "profileId": "simet-zavrsni",
+    "action": "verified",
+    "actor": "Daniel",
+    "timestamp": "2026-07-16",
+    "sourceId": "simet-pravilnik-studiranje",
+    "sourcePage": "Prilog II, t.6 Izgled teksta (str. 45)",
+    "quote": "Tekst se piše u Times New Roman 12, jednostruki prored, osim dijelova označenih sa * koji se pišu veličinom slova 14.",
+    "note": "Novi port SIMET: covjek potvrdio uz otvoren snapshot (Pravilnik o studiranju, Prilog II)."
+  },
+  {
+    "id": "led-simet-zavrsni--line-spacing-verified-2026-07-16",
+    "ruleId": "simet-zavrsni--line-spacing",
+    "profileId": "simet-zavrsni",
+    "action": "verified",
+    "actor": "Daniel",
+    "timestamp": "2026-07-16",
+    "sourceId": "simet-pravilnik-studiranje",
+    "sourcePage": "Prilog II, t.6 Izgled teksta (str. 45)",
+    "quote": "Tekst se piše u Times New Roman 12, jednostruki prored, osim dijelova označenih sa * koji se pišu veličinom slova 14.",
+    "note": "Novi port SIMET: covjek potvrdio uz otvoren snapshot (Pravilnik o studiranju, Prilog II)."
+  },
+  {
+    "id": "led-simet-zavrsni--paper-size-verified-2026-07-16",
+    "ruleId": "simet-zavrsni--paper-size",
+    "profileId": "simet-zavrsni",
+    "action": "verified",
+    "actor": "Daniel",
+    "timestamp": "2026-07-16",
+    "sourceId": "simet-pravilnik-studiranje",
+    "sourcePage": "Prilog II, Shema izgleda zavrsnog rada, t.1 (str. 44)",
+    "quote": "Format rada A4. Spiralni uvez. Svi prilozi manji od formata A4 moraju se lijepiti na listove formata A4, a veći presaviti na format A4.",
+    "note": "Novi port SIMET: covjek potvrdio uz otvoren snapshot (Pravilnik o studiranju, Prilog II)."
+  },
+  {
+    "id": "led-simet-zavrsni--page-numbers-verified-2026-07-16",
+    "ruleId": "simet-zavrsni--page-numbers",
+    "profileId": "simet-zavrsni",
+    "action": "verified",
+    "actor": "Daniel",
+    "timestamp": "2026-07-16",
+    "sourceId": "simet-pravilnik-studiranje",
+    "sourcePage": "Prilog II, Shema, t.3 (str. 44)",
+    "quote": "Sve stranice i prilozi moraju biti numerirani.",
+    "note": "Novi port SIMET: covjek potvrdio uz otvoren snapshot (Pravilnik o studiranju, Prilog II)."
+  },
+  {
+    "id": "led-simet-zavrsni--page-count-verified-2026-07-16",
+    "ruleId": "simet-zavrsni--page-count",
+    "profileId": "simet-zavrsni",
+    "action": "verified",
+    "actor": "Daniel",
+    "timestamp": "2026-07-16",
+    "sourceId": "simet-pravilnik-studiranje",
+    "sourcePage": "Prilog II, cl. XI (str. 40)",
+    "quote": "Završni rad, obima maksimalno 30 stranica pisanih u Times New Roman 12 na hrvatskom jeziku, jednostruki prored, ovjeren potpisom voditelja (i suvoditelja ako je imenovan) predaje se u Studentsku referadu.",
+    "note": "Novi port SIMET: covjek potvrdio uz otvoren snapshot (Pravilnik o studiranju, Prilog II)."
+  },
+  {
+    "id": "led-simet-zavrsni--required-sections-verified-2026-07-16",
+    "ruleId": "simet-zavrsni--required-sections",
+    "profileId": "simet-zavrsni",
+    "action": "verified",
+    "actor": "Daniel",
+    "timestamp": "2026-07-16",
+    "sourceId": "simet-pravilnik-studiranje",
+    "sourcePage": "Prilog II, t.8 Sadrzaj zavrsnog rada (str. 45)",
+    "quote": "Završni rad mora sadržavati naslov završnog rada na hrvatskom i engleskom jeziku, te sažetak i ključne riječi na hrvatskom i engleskom jeziku, kao i životopis studenta i popis literature.",
+    "note": "Novi port SIMET: covjek potvrdio uz otvoren snapshot (Pravilnik o studiranju, Prilog II)."
   }
 ]

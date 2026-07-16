@@ -1,0 +1,164 @@
+{
+  "faculty": "simet",
+  "institution": "unizg",
+  "unit": {
+    "id": "simet",
+    "name": "Metalurski fakultet",
+    "family": "stem",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Prijediplomski studiji Metalurskog fakulteta (zavrsni rad)",
+    "Diplomski studij Metalurgija",
+    "Opći profil fakulteta"
+  ],
+  "sources": [
+    {
+      "id": "simet-pravilnik-studiranje",
+      "kind": "regulation",
+      "title": "Pravilnik o studiranju na preddiplomskim studijima i diplomskom studiju Metalurskog fakulteta (Prilog II: Naputak o zavrsnom radu)",
+      "url": "https://arhiva.simet.hr/vidik.simet.hr/simet/hr/nastava/osnovna-pravila-studiranja/pravilnik-o-studiranju/Pravilnik%20o%20studiranju%20na%20preddiplomskim%20i%20diplomskom%20studiju%20Metalurskog%20fakulteta.pdf",
+      "publisher": "Metalurski fakultet Sveucilista u Zagrebu (Sisak)",
+      "fetchedAt": "2026-07-16",
+      "snapshotPath": "data/sources/simet/simet-pravilnik-studiranje.pdf",
+      "snapshotHash": "5350853e639a4f66d09c5ea6664eee96e317bbe8569b053632050ed52c16ec3d",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-16",
+      "note": "Prilog II (Naputak o zavrsnom radu i zavrsnom ispitu) sadrzi tehnicko oblikovanje (Shema izgleda zavrsnog rada, str. 44-45; opseg cl. XI, str. 40). Prilog III (diplomski) proceduralni, format ne ponavlja pa diplomski profil ceka."
+    }
+  ],
+  "profiles": [
+    {
+      "id": "simet-zavrsni",
+      "unitId": "simet",
+      "programs": [
+        "Prijediplomski studiji Metalurskog fakulteta (zavrsni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Metalurski fakultet (Sisak), zavrsni rad",
+      "verifiedAt": "2026-07-16",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1,
+        "requireA4": true
+      },
+      "facts": [],
+      "note": "Tehnicko oblikovanje iz Pravilnika o studiranju, Prilog II (Shema izgleda zavrsnog rada). Margine nisu propisane pa izostavljene.",
+      "sources": [
+        {
+          "title": "Pravilnik o studiranju na preddiplomskim studijima i diplomskom studiju Metalurskog fakulteta (Prilog II: Naputak o zavrsnom radu)",
+          "url": "https://arhiva.simet.hr/vidik.simet.hr/simet/hr/nastava/osnovna-pravila-studiranja/pravilnik-o-studiranju/Pravilnik%20o%20studiranju%20na%20preddiplomskim%20i%20diplomskom%20studiju%20Metalurskog%20fakulteta.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o studiranju na preddiplomskim studijima i diplomskom studiju Metalurskog fakulteta (Prilog II: Naputak o zavrsnom radu)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Format papira",
+        "Numeriranje stranica",
+        "Opseg",
+        "Obvezni dijelovi rada"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-simet-zavrsni--font-verified-2026-07-16",
+      "ruleId": "simet-zavrsni--font",
+      "profileId": "simet-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "simet-pravilnik-studiranje",
+      "sourcePage": "Prilog II, t.6 Izgled teksta (str. 45)",
+      "quote": "Tekst se piše u Times New Roman 12, jednostruki prored, osim dijelova označenih sa * koji se pišu veličinom slova 14.",
+      "note": "Novi port SIMET: covjek potvrdio uz otvoren snapshot (Pravilnik o studiranju, Prilog II)."
+    },
+    {
+      "id": "led-simet-zavrsni--font-size-verified-2026-07-16",
+      "ruleId": "simet-zavrsni--font-size",
+      "profileId": "simet-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "simet-pravilnik-studiranje",
+      "sourcePage": "Prilog II, t.6 Izgled teksta (str. 45)",
+      "quote": "Tekst se piše u Times New Roman 12, jednostruki prored, osim dijelova označenih sa * koji se pišu veličinom slova 14.",
+      "note": "Novi port SIMET: covjek potvrdio uz otvoren snapshot (Pravilnik o studiranju, Prilog II)."
+    },
+    {
+      "id": "led-simet-zavrsni--line-spacing-verified-2026-07-16",
+      "ruleId": "simet-zavrsni--line-spacing",
+      "profileId": "simet-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "simet-pravilnik-studiranje",
+      "sourcePage": "Prilog II, t.6 Izgled teksta (str. 45)",
+      "quote": "Tekst se piše u Times New Roman 12, jednostruki prored, osim dijelova označenih sa * koji se pišu veličinom slova 14.",
+      "note": "Novi port SIMET: covjek potvrdio uz otvoren snapshot (Pravilnik o studiranju, Prilog II)."
+    },
+    {
+      "id": "led-simet-zavrsni--paper-size-verified-2026-07-16",
+      "ruleId": "simet-zavrsni--paper-size",
+      "profileId": "simet-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "simet-pravilnik-studiranje",
+      "sourcePage": "Prilog II, Shema izgleda zavrsnog rada, t.1 (str. 44)",
+      "quote": "Format rada A4. Spiralni uvez. Svi prilozi manji od formata A4 moraju se lijepiti na listove formata A4, a veći presaviti na format A4.",
+      "note": "Novi port SIMET: covjek potvrdio uz otvoren snapshot (Pravilnik o studiranju, Prilog II)."
+    },
+    {
+      "id": "led-simet-zavrsni--page-numbers-verified-2026-07-16",
+      "ruleId": "simet-zavrsni--page-numbers",
+      "profileId": "simet-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "simet-pravilnik-studiranje",
+      "sourcePage": "Prilog II, Shema, t.3 (str. 44)",
+      "quote": "Sve stranice i prilozi moraju biti numerirani.",
+      "note": "Novi port SIMET: covjek potvrdio uz otvoren snapshot (Pravilnik o studiranju, Prilog II)."
+    },
+    {
+      "id": "led-simet-zavrsni--page-count-verified-2026-07-16",
+      "ruleId": "simet-zavrsni--page-count",
+      "profileId": "simet-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "simet-pravilnik-studiranje",
+      "sourcePage": "Prilog II, cl. XI (str. 40)",
+      "quote": "Završni rad, obima maksimalno 30 stranica pisanih u Times New Roman 12 na hrvatskom jeziku, jednostruki prored, ovjeren potpisom voditelja (i suvoditelja ako je imenovan) predaje se u Studentsku referadu.",
+      "note": "Novi port SIMET: covjek potvrdio uz otvoren snapshot (Pravilnik o studiranju, Prilog II)."
+    },
+    {
+      "id": "led-simet-zavrsni--required-sections-verified-2026-07-16",
+      "ruleId": "simet-zavrsni--required-sections",
+      "profileId": "simet-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "simet-pravilnik-studiranje",
+      "sourcePage": "Prilog II, t.8 Sadrzaj zavrsnog rada (str. 45)",
+      "quote": "Završni rad mora sadržavati naslov završnog rada na hrvatskom i engleskom jeziku, te sažetak i ključne riječi na hrvatskom i engleskom jeziku, kao i životopis studenta i popis literature.",
+      "note": "Novi port SIMET: covjek potvrdio uz otvoren snapshot (Pravilnik o studiranju, Prilog II)."
+    }
+  ]
+}

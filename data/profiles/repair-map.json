@@ -4785,6 +4785,32 @@
       "autoFixable": true
     }
   ],
+  "simet-zavrsni": [
+    {
+      "ruleId": "simet-zavrsni--font",
+      "checkId": "font",
+      "label": "Vrsta slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "simet-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "simet-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored (jednostruki)",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    }
+  ],
   "tfpu-diplomski": [
     {
       "ruleId": "tfpu-diplomski--paper-size",

@@ -2280,5 +2280,18 @@
     "validityClass": "stable",
     "lastChecked": "2026-07-16",
     "note": "FOI nudi APA i IEEE (student bira) - citation-style ostaje advisory."
+  },
+  {
+    "id": "simet-pravilnik-studiranje",
+    "kind": "regulation",
+    "title": "Pravilnik o studiranju na preddiplomskim studijima i diplomskom studiju Metalurskog fakulteta (Prilog II: Naputak o zavrsnom radu)",
+    "url": "https://arhiva.simet.hr/vidik.simet.hr/simet/hr/nastava/osnovna-pravila-studiranja/pravilnik-o-studiranju/Pravilnik%20o%20studiranju%20na%20preddiplomskim%20i%20diplomskom%20studiju%20Metalurskog%20fakulteta.pdf",
+    "publisher": "Metalurski fakultet Sveucilista u Zagrebu (Sisak)",
+    "fetchedAt": "2026-07-16",
+    "snapshotPath": "data/sources/simet/simet-pravilnik-studiranje.pdf",
+    "snapshotHash": "5350853e639a4f66d09c5ea6664eee96e317bbe8569b053632050ed52c16ec3d",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-16",
+    "note": "Prilog II (Naputak o zavrsnom radu i zavrsnom ispitu) sadrzi tehnicko oblikovanje (Shema izgleda zavrsnog rada, str. 44-45; opseg cl. XI, str. 40). Prilog III (diplomski) proceduralni, format ne ponavlja pa diplomski profil ceka."
   }
 ]

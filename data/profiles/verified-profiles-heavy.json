@@ -29951,5 +29951,51 @@
       "Prored",
       "Stil citiranja"
     ]
+  },
+  "simet-zavrsni": {
+    "id": "simet-zavrsni",
+    "unitId": "simet",
+    "programs": [
+      "Prijediplomski studiji Metalurskog fakulteta (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Metalurski fakultet (Sisak), zavrsni rad",
+    "verifiedAt": "2026-07-16",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1,
+      "requireA4": true
+    },
+    "facts": [],
+    "note": "Tehnicko oblikovanje iz Pravilnika o studiranju, Prilog II (Shema izgleda zavrsnog rada). Margine nisu propisane pa izostavljene.",
+    "sources": [
+      {
+        "title": "Pravilnik o studiranju na preddiplomskim studijima i diplomskom studiju Metalurskog fakulteta (Prilog II: Naputak o zavrsnom radu)",
+        "url": "https://arhiva.simet.hr/vidik.simet.hr/simet/hr/nastava/osnovna-pravila-studiranja/pravilnik-o-studiranju/Pravilnik%20o%20studiranju%20na%20preddiplomskim%20i%20diplomskom%20studiju%20Metalurskog%20fakulteta.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o studiranju na preddiplomskim studijima i diplomskom studiju Metalurskog fakulteta (Prilog II: Naputak o zavrsnom radu)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Format papira",
+      "Numeriranje stranica",
+      "Opseg",
+      "Obvezni dijelovi rada"
+    ],
+    "advisoryScope": []
   }
 }

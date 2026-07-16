@@ -7822,5 +7822,16 @@
       "graduate"
     ],
     "status": "partial"
+  },
+  {
+    "id": "simet-zavrsni",
+    "unitId": "simet",
+    "programs": [
+      "Prijediplomski studiji Metalurskog fakulteta (zavrsni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial"
   }
 ]

@@ -438,6 +438,17 @@
         "status": "generic"
       },
       {
+        "id": "simet",
+        "name": "Metalurski fakultet",
+        "family": "stem",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski studiji Metalurskog fakulteta (zavrsni rad)",
+          "Diplomski studij Metalurgija",
+          "Opći profil fakulteta"
+        ]
+      },
+      {
         "id": "sumfak",
         "name": "Fakultet šumarstva i drvne tehnologije",
         "family": "stem",

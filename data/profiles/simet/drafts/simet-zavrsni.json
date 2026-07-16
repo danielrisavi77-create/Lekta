@@ -1,0 +1,201 @@
+{
+  "profileId": "simet-zavrsni",
+  "entries": [
+    {
+      "ruleId": "simet-zavrsni--font",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Vrsta slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "simet-pravilnik-studiranje",
+      "sourcePage": "Prilog II, t.6 Izgled teksta (str. 45)",
+      "quote": "Tekst se piše u Times New Roman 12, jednostruki prored, osim dijelova označenih sa * koji se pišu veličinom slova 14.",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "font-fixer",
+      "verifiedHash": "5350853e639a4f66d09c5ea6664eee96e317bbe8569b053632050ed52c16ec3d",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "simet-zavrsni--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "simet-pravilnik-studiranje",
+      "sourcePage": "Prilog II, t.6 Izgled teksta (str. 45)",
+      "quote": "Tekst se piše u Times New Roman 12, jednostruki prored, osim dijelova označenih sa * koji se pišu veličinom slova 14.",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "font-fixer",
+      "verifiedHash": "5350853e639a4f66d09c5ea6664eee96e317bbe8569b053632050ed52c16ec3d",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "simet-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1,
+      "category": "format",
+      "label": "Prored (jednostruki)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "simet-pravilnik-studiranje",
+      "sourcePage": "Prilog II, t.6 Izgled teksta (str. 45)",
+      "quote": "Tekst se piše u Times New Roman 12, jednostruki prored, osim dijelova označenih sa * koji se pišu veličinom slova 14.",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "line-spacing-fixer",
+      "verifiedHash": "5350853e639a4f66d09c5ea6664eee96e317bbe8569b053632050ed52c16ec3d",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "simet-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "value": true,
+      "category": "format",
+      "label": "A4 format",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "simet-pravilnik-studiranje",
+      "sourcePage": "Prilog II, Shema izgleda zavrsnog rada, t.1 (str. 44)",
+      "quote": "Format rada A4. Spiralni uvez. Svi prilozi manji od formata A4 moraju se lijepiti na listove formata A4, a veći presaviti na format A4.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "5350853e639a4f66d09c5ea6664eee96e317bbe8569b053632050ed52c16ec3d",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "simet-zavrsni--page-numbers",
+      "checkId": "page-numbers",
+      "value": true,
+      "category": "format",
+      "label": "Numeriranje stranica",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "simet-pravilnik-studiranje",
+      "sourcePage": "Prilog II, Shema, t.3 (str. 44)",
+      "quote": "Sve stranice i prilozi moraju biti numerirani.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "5350853e639a4f66d09c5ea6664eee96e317bbe8569b053632050ed52c16ec3d",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "simet-zavrsni--page-count",
+      "checkId": "page-count",
+      "value": {
+        "max": 30
+      },
+      "category": "scope",
+      "label": "Opseg (najvise 30 str.)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "simet-pravilnik-studiranje",
+      "sourcePage": "Prilog II, cl. XI (str. 40)",
+      "quote": "Završni rad, obima maksimalno 30 stranica pisanih u Times New Roman 12 na hrvatskom jeziku, jednostruki prored, ovjeren potpisom voditelja (i suvoditelja ako je imenovan) predaje se u Studentsku referadu.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "5350853e639a4f66d09c5ea6664eee96e317bbe8569b053632050ed52c16ec3d",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "simet-zavrsni--required-sections",
+      "checkId": "required-sections",
+      "value": [
+        {
+          "key": "abstractHr",
+          "label": "sazetak na hrvatskom",
+          "terms": [
+            "sažetak",
+            "sazetak"
+          ]
+        },
+        {
+          "key": "abstractEn",
+          "label": "abstract na engleskom",
+          "terms": [
+            "abstract",
+            "summary"
+          ]
+        },
+        {
+          "key": "keywordsHr",
+          "label": "kljucne rijeci",
+          "terms": [
+            "ključne riječi",
+            "kljucne rijeci"
+          ]
+        },
+        {
+          "key": "keywordsEn",
+          "label": "keywords",
+          "terms": [
+            "keywords",
+            "key words"
+          ]
+        },
+        {
+          "key": "cv",
+          "label": "zivotopis",
+          "terms": [
+            "životopis",
+            "zivotopis",
+            "curriculum"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "popis literature",
+          "terms": [
+            "literatura",
+            "popis literature"
+          ]
+        }
+      ],
+      "category": "structure",
+      "label": "Obvezni dijelovi rada",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "simet-pravilnik-studiranje",
+      "sourcePage": "Prilog II, t.8 Sadrzaj zavrsnog rada (str. 45)",
+      "quote": "Završni rad mora sadržavati naslov završnog rada na hrvatskom i engleskom jeziku, te sažetak i ključne riječi na hrvatskom i engleskom jeziku, kao i životopis studenta i popis literature.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "5350853e639a4f66d09c5ea6664eee96e317bbe8569b053632050ed52c16ec3d",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "human-audit"
+    }
+  ],
+  "generatedAt": "2026-07-16"
+}
