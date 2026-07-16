@@ -2232,10 +2232,16 @@
         "category": "format",
         "label": "Font glavnog teksta",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-zavrsni-2024",
+        "sourcePage": "str. 8, Upute za oblikovanje teksta, t.1 Osnovne upute",
+        "quote": "oblik i velicina slova treba biti jednaka u cijelom tekstu (velicina: 12, oblik: Times New Roman)",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "f23d811384c5e80415aaf498c023488527d8d93eb6b9b13dc9bc07323535706e",
+        "note": "Covjek potvrdio uz otvoren snapshot prijediplomskih SCSR Uputa; opci akademski rad mapiran na prijediplomsku razinu (odluka korisnika, margine 3,5/3 se poklapaju). verifiedHash zabiljezen."
       },
       {
         "ruleId": "pravo-socijalni-opci-akademski-rad--font-size",
@@ -2246,10 +2252,16 @@
         "category": "format",
         "label": "Velicina fonta glavnog teksta",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-zavrsni-2024",
+        "sourcePage": "str. 8, Upute za oblikovanje teksta, t.1 Osnovne upute",
+        "quote": "oblik i velicina slova treba biti jednaka u cijelom tekstu (velicina: 12, oblik: Times New Roman)",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "f23d811384c5e80415aaf498c023488527d8d93eb6b9b13dc9bc07323535706e",
+        "note": "Covjek potvrdio uz otvoren snapshot prijediplomskih SCSR Uputa; opci akademski rad mapiran na prijediplomsku razinu (odluka korisnika, margine 3,5/3 se poklapaju). verifiedHash zabiljezen."
       },
       {
         "ruleId": "pravo-socijalni-opci-akademski-rad--line-spacing",
@@ -2258,10 +2270,16 @@
         "category": "format",
         "label": "Prored glavnog teksta",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-zavrsni-2024",
+        "sourcePage": "str. 8, Upute za oblikovanje teksta, t.1",
+        "quote": "prored treba biti: 1,5",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "f23d811384c5e80415aaf498c023488527d8d93eb6b9b13dc9bc07323535706e",
+        "note": "Covjek potvrdio uz otvoren snapshot prijediplomskih SCSR Uputa; opci akademski rad mapiran na prijediplomsku razinu (odluka korisnika, margine 3,5/3 se poklapaju). verifiedHash zabiljezen."
       },
       {
         "ruleId": "pravo-socijalni-opci-akademski-rad--margins",
@@ -2275,10 +2293,16 @@
         "category": "format",
         "label": "Margine",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "advisory"
+        "sourceId": "pravo-scsr-upute-zavrsni-2024",
+        "sourcePage": "str. 8, Upute za oblikovanje teksta, t.1",
+        "quote": "margine trebaju biti slijedece: 3,5 cm s lijeve strane te 3 cm s desne strane, gore i dolje",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "f23d811384c5e80415aaf498c023488527d8d93eb6b9b13dc9bc07323535706e",
+        "note": "Covjek potvrdio uz otvoren snapshot prijediplomskih SCSR Uputa; opci akademski rad mapiran na prijediplomsku razinu (odluka korisnika, margine 3,5/3 se poklapaju). verifiedHash zabiljezen."
       },
       {
         "ruleId": "pravo-socijalni-opci-akademski-rad--citation-style",
@@ -2287,10 +2311,16 @@
         "category": "citation",
         "label": "Stil citiranja",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-zavrsni-2024",
+        "sourcePage": "str. 13, Navodjenje autora u tekstu",
+        "quote": "Referenca u tekstu se stavlja u zagrade, a sadrzi prezime autora i godinu izdanja. Ako je rijec o preciznijem navodu ili citatu u referencu treba ukljuciti i broj stranice.",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "f23d811384c5e80415aaf498c023488527d8d93eb6b9b13dc9bc07323535706e",
+        "note": "Covjek potvrdio uz otvoren snapshot prijediplomskih SCSR Uputa; opci akademski rad mapiran na prijediplomsku razinu (odluka korisnika, margine 3,5/3 se poklapaju). verifiedHash zabiljezen."
       },
       {
         "ruleId": "pravo-socijalni-opci-akademski-rad--required-sections",
@@ -2299,10 +2329,16 @@
         "category": "structure",
         "label": "Obvezni dijelovi rada",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-zavrsni-2024",
+        "sourcePage": "str. 2-3, Struktura zavrsnog rada",
+        "quote": "Struktura zavrsnog rada: Sazetak, Uvod, Razrada teme po poglavljima, Zakljucak, Literatura, Prilog.",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "f23d811384c5e80415aaf498c023488527d8d93eb6b9b13dc9bc07323535706e",
+        "note": "Genericki opci prijediplomski rad; value ostaje prazan (bez stroge liste), citiran opci strukturni okvir iz prijediplomskih SCSR uputa (odluka korisnika: mapiranje na zavrsni izvor jer se margine 3,5/3 poklapaju)."
       },
       {
         "ruleId": "pravo-socijalni-opci-akademski-rad--paper-size",
@@ -2314,7 +2350,7 @@
         "sourceId": null,
         "sourcePage": null,
         "quote": null,
-        "status": "draft"
+        "status": "advisory"
       }
     ],
     "pravo-specijalisticki-pravni-opci": [

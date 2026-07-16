@@ -1154,11 +1154,11 @@
     },
     {
       "profileId": "pravo-socijalni-opci-akademski-rad",
-      "scored": 0,
+      "scored": 6,
       "machineCheckable": 7,
-      "advisory": 7,
-      "ratio": 0,
-      "lastVerified": null
+      "advisory": 1,
+      "ratio": 0.8571428571428571,
+      "lastVerified": "2026-07-16"
     },
     {
       "profileId": "pravo-socijalni-rad-diplomski",
@@ -1697,5 +1697,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 1259
+  "totalScored": 1265
 }

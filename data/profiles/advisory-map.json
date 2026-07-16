@@ -739,10 +739,6 @@
     "paper-size"
   ],
   "pravo-socijalni-opci-akademski-rad": [
-    "font",
-    "font-size",
-    "line-spacing",
-    "margins",
     "justify",
     "paper-size",
     "toc",
