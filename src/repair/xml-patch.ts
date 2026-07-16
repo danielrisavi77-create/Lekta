@@ -702,18 +702,69 @@ export function findParagraphEndAfterMatch(
     if (!isBodyLevelPosition(masked, start)) continue;
     const endPos = paragraphEndPosition(masked, start);
     if (endPos < 0) continue;
-    const text = documentXml
-      .slice(start, endPos)
-      .replace(/<[^>]+>/g, '')
-      .replace(/&amp;/g, '&')
-      .replace(/&lt;/g, '<')
-      .replace(/&gt;/g, '>')
-      .replace(/&quot;/g, '"')
-      .replace(/&apos;/g, "'");
-    if (matches(text)) return endPos;
+    if (matches(paragraphPlainText(documentXml, start, endPos))) return endPos;
     // Preskoci CIJELI ovaj odlomak: bez ovoga bi pOpen uhvatio ugnjezdene <w:p> (tekstualni okvir)
     // kao zasebne kandidate i dvaput procesirao isto tijelo.
     pOpen.lastIndex = endPos;
   }
   return -1;
+}
+
+// Goli tekst odlomka [start, endPos) iz IZVORNOG XML-a: bez tagova, s dekodiranim osnovnim
+// entitetima (ukljucuje diakritiku). Pozivatelj normalizira (npr. sectionName). Zajednicki za
+// re-derivaciju sidra po tekstu (K6 Uvod, K7 Sadrzaj).
+function paragraphPlainText(documentXml: string, start: number, endPos: number): string {
+  return documentXml
+    .slice(start, endPos)
+    .replace(/<[^>]+>/g, '')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'");
+}
+
+// Umetni prijelom sekcije (marker <w:p><w:pPr>{markerSectPr}</w:pPr></w:p>) NEPOSREDNO PRIJE prvog
+// odlomka NA RAZINI TIJELA ciji tekst zadovoljava matches() (npr. "Uvod"). Kao
+// insertSectionBreakBeforeParagraph, ali sidro se RE-DERIVIRA iz TRENUTNOG documentXml po tekstu,
+// ne iz anal-time indeksa (adversarial K6/K7 HIGH): raniji fixer u istoj bateriji -- npr.
+// empty-paragraph-fixer koji BRISE odlomke -- pomakne anal-time indeks pa bi prijelom pao na krivi
+// odlomak. "prevStart" je PRETHODNI odlomak NA RAZINI TIJELA (preskace ugnjezdene <w:p> iz okvira).
+//
+// applied:false kad: dokument ima <w:sectPrChange> (praceni sectPr); nema odlomka koji zadovoljava
+// matches() na razini tijela; taj odlomak je PRVI na razini tijela (nema prednjeg dijela za rimske
+// listove); sam ciljni odlomak VEC ima sectPr u pPr (idempotencija); ili odlomak neposredno PRIJE
+// njega vec ima sectPr (prijelom vec tocno prije Uvoda).
+export function insertSectionBreakBeforeHeading(
+  documentXml: string,
+  matches: (paragraphText: string) => boolean,
+  markerSectPr: string,
+): { xml: string; applied: boolean } {
+  if (/<w:sectPrChange\b/.test(documentXml)) return { xml: documentXml, applied: false };
+  const masked = documentXml.replace(
+    /<!--[\s\S]*?-->|<!\[CDATA\[[\s\S]*?\]\]>|<\?[\s\S]*?\?>/g,
+    (m) => ' '.repeat(m.length),
+  );
+  const pOpen = /<w:p(?=[\s/>])/g;
+  let prevStart = -1;
+  for (let m = pOpen.exec(masked); m; m = pOpen.exec(masked)) {
+    const start = m.index;
+    if (!isBodyLevelPosition(masked, start)) continue;
+    const endPos = paragraphEndPosition(masked, start);
+    if (endPos < 0) continue;
+    if (matches(paragraphPlainText(documentXml, start, endPos))) {
+      // Prednji dio (za rimske listove) mora postojati: ili prethodni odlomak NA RAZINI TIJELA
+      // (prevStart), ili tablica prije Uvoda (naslovnica zna biti tablica pa nema prednjeg ODLOMKA,
+      // ali prednji dio ipak postoji). Bez ikakvog sadrzaja prije Uvoda -> no-op.
+      const hasFrontMatter = prevStart >= 0 || /<w:tbl\b/.test(masked.slice(0, start));
+      if (!hasFrontMatter) return { xml: documentXml, applied: false };
+      if (paragraphOwnsSectPr(masked, start)) return { xml: documentXml, applied: false };
+      if (prevStart >= 0 && paragraphOwnsSectPr(masked, prevStart)) return { xml: documentXml, applied: false };
+      const marker = `<w:p><w:pPr>${markerSectPr}</w:pPr></w:p>`;
+      return { xml: documentXml.slice(0, start) + marker + documentXml.slice(start), applied: true };
+    }
+    prevStart = start;
+    pOpen.lastIndex = endPos; // preskoci ugnjezdene <w:p> ovog odlomka (tekstualni okvir)
+  }
+  return { xml: documentXml, applied: false };
 }

@@ -7,8 +7,10 @@
 import { describe, it, expect } from 'vitest';
 import {
   insertSectionBreakBeforeParagraph,
+  insertSectionBreakBeforeHeading,
   extractFinalSectionGeometry,
 } from './xml-patch';
+import { sectionName } from '../utils/helpers';
 import { sectionInsertFixer, type DocxXmlParts } from './fixers';
 import { applyFixers } from './apply-fixers';
 import { introSectionItem, introSectionRepairableItem } from '../ui/repair-items';
@@ -197,6 +199,62 @@ describe('insertSectionBreakBeforeParagraph', () => {
   });
 });
 
+describe('insertSectionBreakBeforeHeading (re-derivacija sidra Uvoda po tekstu)', () => {
+  const isUvod = (t: string) => ['uvod', 'introduction'].includes(sectionName(t));
+
+  it('umece marker TOCNO prije odlomka Uvoda (nadjen po tekstu)', () => {
+    const res = insertSectionBreakBeforeHeading(singleDoc(), isUvod, MARKER_SECT);
+    expect(res.applied).toBe(true);
+    expect(res.xml).toContain(
+      `</w:p><w:p><w:pPr>${MARKER_SECT}</w:pPr></w:p><w:p><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:r><w:t>Uvod`,
+    );
+  });
+
+  it('Uvod je PRVI odlomak na razini tijela -> no-op (nema prednjeg dijela)', () => {
+    const doc = `<w:document ${NS}><w:body>` +
+      '<w:p><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:r><w:t>Uvod</w:t></w:r></w:p>' +
+      '<w:p><w:r><w:t>Tijelo.</w:t></w:r></w:p>' + MAIN_SECT + '</w:body></w:document>';
+    expect(insertSectionBreakBeforeHeading(doc, isUvod, MARKER_SECT).applied).toBe(false);
+  });
+
+  it('nema odlomka Uvoda -> no-op', () => {
+    const doc = `<w:document ${NS}><w:body>` +
+      '<w:p><w:r><w:t>NASLOVNICA</w:t></w:r></w:p>' +
+      '<w:p><w:r><w:t>Zakljucak</w:t></w:r></w:p>' + MAIN_SECT + '</w:body></w:document>';
+    expect(insertSectionBreakBeforeHeading(doc, isUvod, MARKER_SECT).applied).toBe(false);
+  });
+
+  it('naslovnica kao TABLICA, Uvod prvi odlomak tijela -> prednji dio (tablica) postoji, umece', () => {
+    // Regresija: prednji dio nije ODLOMAK vec tablica; bez provjere tablice bi bio lazan no-op.
+    const doc = `<w:document ${NS}><w:body>` +
+      '<w:tbl><w:tr><w:tc><w:p><w:r><w:t>Naslov rada</w:t></w:r></w:p></w:tc></w:tr></w:tbl>' +
+      '<w:p><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:r><w:t>Uvod</w:t></w:r></w:p>' +
+      '<w:p><w:r><w:t>Tijelo.</w:t></w:r></w:p>' + MAIN_SECT + '</w:body></w:document>';
+    const res = insertSectionBreakBeforeHeading(doc, isUvod, MARKER_SECT);
+    expect(res.applied).toBe(true);
+    expect(res.xml).toContain(`</w:tbl><w:p><w:pPr>${MARKER_SECT}</w:pPr></w:p><w:p><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:r><w:t>Uvod`);
+  });
+
+  it('odlomak PRIJE Uvoda vec ima sectPr (prijelom vec tocno prije) -> no-op', () => {
+    const doc = `<w:document ${NS}><w:body>` +
+      `<w:p><w:pPr>${MARKER_SECT}</w:pPr><w:r><w:t>NASLOVNICA</w:t></w:r></w:p>` +
+      '<w:p><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:r><w:t>Uvod</w:t></w:r></w:p>' +
+      MAIN_SECT + '</w:body></w:document>';
+    expect(insertSectionBreakBeforeHeading(doc, isUvod, MARKER_SECT).applied).toBe(false);
+  });
+
+  it('komentar s <w:p prije Uvoda ne zbuni sidro (marker pred PRAVI Uvod)', () => {
+    const doc = `<w:document ${NS}><w:body>` +
+      '<w:p><w:r><w:t>NASLOVNICA</w:t></w:r></w:p>' +
+      '<!-- <w:p>Uvod krivi</w:p> -->' +
+      '<w:p><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:r><w:t>Uvod</w:t></w:r></w:p>' +
+      MAIN_SECT + '</w:body></w:document>';
+    const res = insertSectionBreakBeforeHeading(doc, isUvod, MARKER_SECT);
+    expect(res.applied).toBe(true);
+    expect(res.xml).toContain(`-->` + `<w:p><w:pPr>${MARKER_SECT}</w:pPr></w:p><w:p><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:r><w:t>Uvod`);
+  });
+});
+
 describe('sectionInsertFixer (kompozit: prijelom + pgNum + footer + titlePg)', () => {
   it('jednosekcijski rad -> 2 sekcije, rimski/arapski, titlePg, footer s PAGE', () => {
     const out = sectionInsertFixer(partsFor(singleDoc()), { introParagraphIndex: 2, align: 'center' });
@@ -225,10 +283,29 @@ describe('sectionInsertFixer (kompozit: prijelom + pgNum + footer + titlePg)', (
     expect(out.afterLabel).toContain('podnožju');
   });
 
-  it('idempotentan: druga primjena istog cilja je NO_OP (cilj je sad marker)', () => {
+  it('SIDRO Uvoda otporno na promjenu broja odlomaka (adversarial K6 follow-up)', () => {
+    // Rad SAZETAK(p1), Uvod(p2), Tijelo(p3). Prosljedjujemo ZASTARJELI introParagraphIndex 3 (kao da
+    // je raniji fixer u bateriji, npr. empty-paragraph-fixer, obrisao odlomak prije Uvoda pa se Uvod
+    // pomakao s p3 na p2). Fixer IGNORIRA index i re-derivira Uvod po tekstu -> prijelom TOCNO prije
+    // Uvoda (p2), NE prije Tijela (p3, gdje bi zastarjeli index pao).
+    const doc = `<w:document ${NS}><w:body>` +
+      '<w:p><w:r><w:t>SAZETAK</w:t></w:r></w:p>' +
+      '<w:p><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:r><w:t>Uvod</w:t></w:r></w:p>' +
+      '<w:p><w:r><w:t>Tijelo rada.</w:t></w:r></w:p>' +
+      MAIN_SECT + '</w:body></w:document>';
+    const out = sectionInsertFixer(partsFor(doc), { introParagraphIndex: 3, align: 'center' });
+    expect(out.applied).toBe(true);
+    const d = out.parts.documentXml;
+    // Marker (zavrsava titlePg) je neposredno prije Uvoda.
+    expect(d).toContain('<w:titlePg/></w:sectPr></w:pPr></w:p><w:p><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:r><w:t>Uvod</w:t>');
+    // NIJE prije Tijela (sto bi bio slucaj sa zastarjelim indeksom 3).
+    expect(d).not.toContain('<w:titlePg/></w:sectPr></w:pPr></w:p><w:p><w:r><w:t>Tijelo');
+  });
+
+  it('idempotentan: druga primjena istog cilja je NO_OP (2 sekcije -> preSectPr backstop)', () => {
     const first = sectionInsertFixer(partsFor(singleDoc()), { introParagraphIndex: 2 });
     expect(first.applied).toBe(true);
-    // Nakon umetanja Uvod je p3, ali param ostaje 2 (isti request) -> p2 je marker -> guard.
+    // Nakon umetanja dokument ima 2 sectPr (marker + zavrsni) -> preSectPr.length!==1 backstop -> NO_OP.
     const second = sectionInsertFixer(
       { ...partsFor(first.parts.documentXml), contentTypesXml: first.parts.contentTypesXml, documentRelsXml: first.parts.documentRelsXml, addedParts: first.parts.addedParts },
       { introParagraphIndex: 2 },

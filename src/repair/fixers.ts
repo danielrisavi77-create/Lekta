@@ -20,7 +20,7 @@ import {
   nextFooterPartName,
   buildFooterPageXml,
   extractFinalSectionGeometry,
-  insertSectionBreakBeforeParagraph,
+  insertSectionBreakBeforeHeading,
   FOOTER_CONTENT_TYPE,
   FOOTER_REL_TYPE,
   type SectionNumberingTarget,
@@ -460,7 +460,9 @@ export function footnoteSpacingFixer(parts: DocxXmlParts, deep = false): FixerOu
 }
 
 export interface SectionInsertTarget {
-  /** 1-based redni broj odlomka Uvoda (analyzeDocx introParagraphIndex / paragraph.index). */
+  /** 1-based redni broj odlomka Uvoda (analyzeDocx introParagraphIndex). Sluzi SAMO kao gate signal
+   *  (repair-items ga daje kad Uvod postoji, >=2); stvarno sidro fixer RE-DERIVIRA iz trenutnog XML-a
+   *  po tekstu (adversarial K6 follow-up: raniji fixer u bateriji moze pomaknuti anal-time indeks). */
   introParagraphIndex: number;
   /** Poravnanje broja stranice u podnozju (kao footerPageFixer); default 'center'. */
   align?: 'left' | 'center' | 'right';
@@ -468,9 +470,13 @@ export interface SectionInsertTarget {
   frontFmt?: 'lowerRoman' | 'upperRoman';
 }
 
+// Naslovi Uvoda (ISTI kriterij kao analyzeDocx introParagraphIndex: sectionName(text) in ovom skupu).
+const INTRO_HEADING_TERMS = ['uvod', 'introduction'];
+
 // Umetanje sekcije prije Uvoda + kompletno "numeriranje od Uvoda" (K6, BL-07c). KOMPOZITNI
 // fixer koji spaja tri koraka u jednu atomsku operaciju (sve ili NO_OP):
-//  1. umetne prijelom sekcije prije Uvoda (insertSectionBreakBeforeParagraph); marker prednje
+//  1. umetne prijelom sekcije prije Uvoda (insertSectionBreakBeforeHeading, sidro re-derivirano po
+//     tekstu iz trenutnog XML-a); marker prednje
 //     sekcije nosi geometriju stranice zavrsnog sectPr-a + <w:titlePg/> (naslovnica = "drukcija
 //     prva stranica"; bez definiranog "first" footera Word na njoj ne prikaze broj),
 //  2. postavi pgNumType: prednja sekcija (0) rimski start=1, glavna (1) arapski start=1 (K4),
@@ -518,7 +524,14 @@ export function sectionInsertFixer(parts: DocxXmlParts, target: SectionInsertTar
 
   const geo = extractFinalSectionGeometry(parts.documentXml);
   const markerSectPr = `<w:sectPr>${geo.pgSz ?? ''}${geo.pgMar ?? ''}<w:titlePg/></w:sectPr>`;
-  const ins = insertSectionBreakBeforeParagraph(parts.documentXml, target.introParagraphIndex, markerSectPr);
+  // Sidro (Uvod) se RE-DERIVIRA iz TRENUTNOG documentXml po tekstu (sectionName), NE iz anal-time
+  // target.introParagraphIndex (gate): raniji fixer u istoj bateriji (npr. empty-paragraph-fixer koji
+  // brise odlomke) pomakne indeks pa bi prijelom pao na krivi odlomak (adversarial K6 follow-up).
+  const ins = insertSectionBreakBeforeHeading(
+    parts.documentXml,
+    (t) => INTRO_HEADING_TERMS.includes(sectionName(t)),
+    markerSectPr,
+  );
   if (!ins.applied) return NO_OP(parts);
 
   // pgNumType: sekcija 0 (prednja) rimski start=1, sekcija 1 (glavna) arapski start=1.
