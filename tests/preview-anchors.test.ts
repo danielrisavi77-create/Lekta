@@ -107,7 +107,14 @@ describe('privatnost: preview i tekst dokumenta ne napustaju preglednik', () => 
       stats: { words: 100 },
       checks: [],
       issues: [{ severity: 'warning', category: 'structure', title: 't', where: 'w', detail: `odlomak 12: ${secret}` }],
-      preview: { paragraphs: [{ index: 1, text: secret, headingLevel: null }], truncated: false },
+      preview: {
+        paragraphs: [{ index: 1, text: secret, headingLevel: null, align: 'both', runs: [{ text: secret, bold: false, italic: true, font: 'Times New Roman', size: 12 }] }],
+        footnotes: [{ id: 1, text: secret }],
+        baseFont: 'Times New Roman',
+        baseSize: 12,
+        page: { margins: { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 }, size: { w: 21, h: 29.7 } },
+        truncated: false,
+      },
       details: { profileFingerprint: 'fp', typoLint: { findings: [{ paragraphIndex: 0, excerpt: secret }] } },
     };
     const out = sanitizeAnalysisResult(result);

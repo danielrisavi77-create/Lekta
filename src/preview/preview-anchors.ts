@@ -36,17 +36,53 @@ import {
 
 export type PreviewSeverity = 'error' | 'warning' | 'info';
 
+/**
+ * Oblikovanje jednog runa za "Vjeran prikaz" (faksimil). Aditivno uz `text` odlomka: renderer
+ * rekonstruira vjeran tekst iz odlomka `text` (ground truth) i preko njega mapira ova svojstva.
+ */
+export interface PreviewRun {
+  text: string;
+  bold: boolean;
+  italic: boolean;
+  font: string | null;
+  size: number | null;
+}
+
 /** Jedan odlomak dokumenta za render pregleda; index je 1-based (poravnat s paragraph.index). */
 export interface PreviewParagraph {
   index: number;
   text: string;
   headingLevel: number | null;
+  /** OOXML poravnanje (w:jc): 'both' | 'center' | 'right' | 'left' | ... Samo za faksimil. */
+  align?: string | null;
+  /** Run-oblikovanje (bold/italic/font/velicina). Samo za faksimil; MVP pregled cita `text`. */
+  runs?: PreviewRun[];
 }
 
-/** Oblik top-level polja `preview` koje analyzeDocx vraca (slice 1). */
+/** Jedna fusnota u pregledu (zaseban koordinatni prostor od tijela). */
+export interface PreviewFootnote {
+  id: number;
+  text: string;
+}
+
+/** Margine i velicina stranice (cm) iz sectPr; za faksimil layout. */
+export interface PreviewPage {
+  margins: { top: number | null; right: number | null; bottom: number | null; left: number | null } | null;
+  size: { w: number | null; h: number | null } | null;
+}
+
+/** Oblik top-level polja `preview` koje analyzeDocx vraca (slice 1; obogaceno za faksimil). */
 export interface PreviewModel {
   paragraphs: PreviewParagraph[];
   truncated: boolean;
+  /** Fusnote dokumenta (renderiraju se na dnu). */
+  footnotes?: PreviewFootnote[];
+  /** Dominantni font tijela (za baznu tipografiju stranice); faksimil. */
+  baseFont?: string | null;
+  /** Dominantna velicina tijela u tockama; faksimil. */
+  baseSize?: number | null;
+  /** Margine/velicina stranice iz sectPr; faksimil. */
+  page?: PreviewPage | null;
 }
 
 /** Izvor nalaza (za grupiranje i boju u UI-ju). */
