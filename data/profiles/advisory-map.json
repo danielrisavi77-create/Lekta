@@ -766,14 +766,8 @@
     "paper-size"
   ],
   "pravo-socijalni-rad-zavrsni": [
-    "font",
-    "font-size",
-    "line-spacing",
-    "margins",
     "justify",
-    "paper-size",
-    "toc",
-    "page-numbers"
+    "paper-size"
   ],
   "pravo-specijalisticki-pravni-opci": [
     "margins",

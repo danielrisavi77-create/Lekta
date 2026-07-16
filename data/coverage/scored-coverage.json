@@ -1170,11 +1170,11 @@
     },
     {
       "profileId": "pravo-socijalni-rad-zavrsni",
-      "scored": 0,
+      "scored": 10,
       "machineCheckable": 11,
-      "advisory": 11,
-      "ratio": 0,
-      "lastVerified": null
+      "advisory": 1,
+      "ratio": 0.9090909090909091,
+      "lastVerified": "2026-07-16"
     },
     {
       "profileId": "pravo-specijalisticki-pravni-opci",
@@ -1697,5 +1697,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 1231
+  "totalScored": 1241
 }

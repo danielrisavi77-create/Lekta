@@ -24,6 +24,18 @@
     "lastChecked": "2026-07-16"
   },
   {
+    "id": "pravo-scsr-upute-zavrsni-2024",
+    "kind": "guidelines",
+    "title": "Upute za izradu zavrsnog rada - Sveucilisni prijediplomski studij Socijalni rad",
+    "url": "https://www.pravo.unizg.hr/wp-content/uploads/2025/01/Upute-za-izradu-zavrsnog-rada-2024-25.pdf",
+    "publisher": "Pravni fakultet Sveucilista u Zagrebu, Studijski centar socijalnog rada",
+    "fetchedAt": "2026-07-16",
+    "snapshotPath": "data/sources/pravo/pravo-scsr-upute-zavrsni-2024.pdf",
+    "snapshotHash": "f23d811384c5e80415aaf498c023488527d8d93eb6b9b13dc9bc07323535706e",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-16"
+  },
+  {
     "id": "pravo-pravilnik-studiji-2026",
     "kind": "pravilnik",
     "title": "Pravilnik o studijima i studiranju Pravnog fakulteta (donesen 12.7.2024, na snazi od 1.10.2024)",
