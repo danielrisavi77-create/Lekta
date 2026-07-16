@@ -1,0 +1,223 @@
+{
+  "profileId": "more-zavrsni",
+  "entries": [
+    {
+      "ruleId": "more-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "value": true,
+      "category": "format",
+      "label": "Format papira",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "more-upute-zavrsni-diplomski",
+      "sourcePage": "Odjeljak 'Oblikovanje teksta završnog/diplomskog rada', blok formata (natuknica 'Format')",
+      "quote": "Format: A4",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "e1733e2cb428ceb635561276131fc83a17916d8c666bcff8567f8df6183c51ff",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "more-zavrsni--margins",
+      "checkId": "margins",
+      "value": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "category": "format",
+      "label": "Margine",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "more-upute-zavrsni-diplomski",
+      "sourcePage": "Odjeljak 'Oblikovanje teksta završnog/diplomskog rada', blok formata (natuknica 'Margine')",
+      "quote": "Margine: 2,5 cm",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "margins-fixer",
+      "verifiedHash": "e1733e2cb428ceb635561276131fc83a17916d8c666bcff8567f8df6183c51ff",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "more-zavrsni--font",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Vrsta slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "more-upute-zavrsni-diplomski",
+      "sourcePage": "Odjeljak 'Oblikovanje teksta završnog/diplomskog rada', blok formata (natuknica 'Font')",
+      "quote": "Font: Times New Roman",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "font-fixer",
+      "verifiedHash": "e1733e2cb428ceb635561276131fc83a17916d8c666bcff8567f8df6183c51ff",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "more-zavrsni--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "more-upute-zavrsni-diplomski",
+      "sourcePage": "Odjeljak 'Oblikovanje teksta završnog/diplomskog rada', blok formata (natuknica 'Tekst')",
+      "quote": "Tekst: 12",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "font-fixer",
+      "verifiedHash": "e1733e2cb428ceb635561276131fc83a17916d8c666bcff8567f8df6183c51ff",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "more-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "more-upute-zavrsni-diplomski",
+      "sourcePage": "Odjeljak 'Oblikovanje teksta završnog/diplomskog rada', blok formata (natuknica 'Prored')",
+      "quote": "Prored: 1,5",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "line-spacing-fixer",
+      "verifiedHash": "e1733e2cb428ceb635561276131fc83a17916d8c666bcff8567f8df6183c51ff",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "more-zavrsni--page-numbers",
+      "checkId": "page-numbers",
+      "value": true,
+      "category": "format",
+      "label": "Numeriranje stranica",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "more-upute-zavrsni-diplomski",
+      "sourcePage": "Odjeljak 'Oblikovanje teksta završnog/diplomskog rada', blok formata (natuknica 'Numeracija stranice')",
+      "quote": "Numeracija stranice: dno, desno (arapski brojevi), počinje od poglavlja Uvod",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "e1733e2cb428ceb635561276131fc83a17916d8c666bcff8567f8df6183c51ff",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "more-zavrsni--page-count",
+      "checkId": "page-count",
+      "value": {
+        "min": 15
+      },
+      "category": "scope",
+      "label": "Opseg",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "more-upute-zavrsni-diplomski",
+      "sourcePage": "Uvodni popis zahtjeva, natuknica o opsegu završnog rada",
+      "quote": "Opseg završnog rada je najmanje 15 stranica.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "e1733e2cb428ceb635561276131fc83a17916d8c666bcff8567f8df6183c51ff",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "more-zavrsni--required-sections",
+      "checkId": "required-sections",
+      "value": [
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "Uvod"
+          ]
+        },
+        {
+          "key": "razrada-teme",
+          "label": "Razrada teme",
+          "terms": [
+            "Razrada teme",
+            "Razrada"
+          ]
+        },
+        {
+          "key": "zakljucci",
+          "label": "Zaključci",
+          "terms": [
+            "Zaključci",
+            "Zaključak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "Literatura"
+          ]
+        }
+      ],
+      "category": "structure",
+      "label": "Obvezni dijelovi rada",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "more-upute-zavrsni-diplomski",
+      "sourcePage": "Uvodni popis zahtjeva, natuknica o sadržaju završnog rada",
+      "quote": "Sadržaj završnog rada mora uključivati sljedeća poglavlja: Uvod, Razrada teme, Zaključci i Literatura.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "e1733e2cb428ceb635561276131fc83a17916d8c666bcff8567f8df6183c51ff",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "more-zavrsni--citation-style",
+      "checkId": "citation-style",
+      "value": "harvard",
+      "category": "citation",
+      "label": "Stil citiranja",
+      "machineCheckable": false,
+      "authority": "program-page",
+      "sourceId": "more-upute-zavrsni-diplomski",
+      "sourcePage": "Odjeljak 'Smjernice za citiranje i poglavlje Literatura', pododjeljak 'citiranje u tekstu', t. 1",
+      "quote": "Jedan autor: ime autora (bez inicijala) i godina publikacije (npr. Petrić (2011) opisuje ..., odnosno (Petrić, 2011)).",
+      "status": "advisory",
+      "scored": false,
+      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote)."
+    }
+  ],
+  "generatedAt": "2026-07-16"
+}

@@ -1,0 +1,119 @@
+{
+  "faculty": "umas",
+  "institution": "unist",
+  "unit": {
+    "id": "umas",
+    "name": "Umjetnicka akademija u Splitu",
+    "family": "arts",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Umjetnička akademija u Splitu, završni rad (preddiplomski studij)",
+    "Umjetnička akademija u Splitu, diplomski/magistarski rad (diplomski studij)",
+    "Opći profil fakulteta"
+  ],
+  "sources": [
+    {
+      "id": "umas-pravilnik-zavrsni-diplomski-2019",
+      "kind": "pravilnik",
+      "title": "Pravilnik o završnom i diplomskom/magistarskom radu (Umjetnička akademija u Splitu, srpanj 2019.)",
+      "url": "https://stari.umas.hr/wp-content/uploads/2019/07/Pravilnik-o-zavr%C5%A1nim-radovima.pdf",
+      "publisher": "Umjetnička akademija u Splitu (Sveučilište u Splitu)",
+      "fetchedAt": "2026-07-16",
+      "snapshotPath": "data/sources/umas/umas-pravilnik-zavrsni-diplomski-2019.pdf",
+      "snapshotHash": "c9729ea732cb6ac18a872eecf42d51a39a62be74dc3536a5225328b157bdb992",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-16"
+    }
+  ],
+  "profiles": [
+    {
+      "id": "umas-zavrsni",
+      "unitId": "umas",
+      "programs": [
+        "Umjetnička akademija u Splitu, završni rad (preddiplomski studij)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Umjetnicka akademija u Splitu, zavrsni rad",
+      "verifiedAt": "2026-07-16",
+      "documentDate": null,
+      "rules": {},
+      "facts": [],
+      "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+      "sources": [
+        {
+          "title": "Pravilnik o završnom i diplomskom/magistarskom radu (Umjetnička akademija u Splitu, srpanj 2019.)",
+          "url": "https://stari.umas.hr/wp-content/uploads/2019/07/Pravilnik-o-zavr%C5%A1nim-radovima.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o završnom i diplomskom/magistarskom radu (Umjetnička akademija u Splitu, srpanj 2019.)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Obvezni dijelovi rada"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "umas-diplomski",
+      "unitId": "umas",
+      "programs": [
+        "Umjetnička akademija u Splitu, diplomski/magistarski rad (diplomski studij)"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Umjetnicka akademija u Splitu, diplomski rad",
+      "verifiedAt": "2026-07-16",
+      "documentDate": null,
+      "rules": {},
+      "facts": [],
+      "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+      "sources": [
+        {
+          "title": "Pravilnik o završnom i diplomskom/magistarskom radu (Umjetnička akademija u Splitu, srpanj 2019.)",
+          "url": "https://stari.umas.hr/wp-content/uploads/2019/07/Pravilnik-o-zavr%C5%A1nim-radovima.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o završnom i diplomskom/magistarskom radu (Umjetnička akademija u Splitu, srpanj 2019.)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Obvezni dijelovi rada"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-umas-zavrsni--required-sections-verified-2026-07-16",
+      "ruleId": "umas-zavrsni--required-sections",
+      "profileId": "umas-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "umas-pravilnik-zavrsni-diplomski-2019",
+      "sourcePage": "Članak 9. st. 2. t. c) (PDF str. 5; struktura navedena i u Cl. 9. st. 1. t. 1-6, PDF str. 4-5)",
+      "quote": "pisani rad treba biti u PDF-u kompletan: korica, naslovna stranica, Izjava o akademskoj čestitosti, sažetak ( TDK ) na hrvatskom i engleskom jeziku, ključne riječi na hrvatskom i engleskom jeziku, sadržaj, literatura - na isti način kao da je otisnut i uvezan.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-umas-diplomski--required-sections-verified-2026-07-16",
+      "ruleId": "umas-diplomski--required-sections",
+      "profileId": "umas-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "umas-pravilnik-zavrsni-diplomski-2019",
+      "sourcePage": "Članak 9. st. 2. t. c) (PDF str. 5; struktura navedena i u Cl. 9. st. 1. t. 1-6, PDF str. 4-5)",
+      "quote": "pisani rad treba biti u PDF-u kompletan: korica, naslovna stranica, Izjava o akademskoj čestitosti, sažetak ( TDK ) na hrvatskom i engleskom jeziku, ključne riječi na hrvatskom i engleskom jeziku, sadržaj, literatura - na isti način kao da je otisnut i uvezan.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    }
+  ]
+}

@@ -29997,5 +29997,540 @@
       "Obvezni dijelovi rada"
     ],
     "advisoryScope": []
+  },
+  "more-zavrsni": {
+    "id": "more-zavrsni",
+    "unitId": "more",
+    "programs": [
+      "Sveučilišni prijediplomski studij (Fakultet znanosti o moru, Split)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Fakultet znanosti o moru, zavrsni rad",
+    "verifiedAt": "2026-07-16",
+    "documentDate": null,
+    "rules": {
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5
+    },
+    "facts": [],
+    "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+    "sources": [
+      {
+        "title": "Upute za izradu završnog/diplomskog rada",
+        "url": "https://marjan.unist.hr/vp/Dokumenti%20za%20studente/Upute%20za%20izradu%20zavr%C5%A1nog%20%20diplomskog%20rada.doc?vel=51200"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu završnog/diplomskog rada"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Numeriranje stranica",
+      "Opseg",
+      "Obvezni dijelovi rada"
+    ],
+    "advisoryScope": [
+      "Stil citiranja"
+    ]
+  },
+  "more-diplomski": {
+    "id": "more-diplomski",
+    "unitId": "more",
+    "programs": [
+      "Sveučilišni diplomski studij (Fakultet znanosti o moru, Split)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Fakultet znanosti o moru, diplomski rad",
+    "verifiedAt": "2026-07-16",
+    "documentDate": null,
+    "rules": {
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5
+    },
+    "facts": [],
+    "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+    "sources": [
+      {
+        "title": "Upute za izradu završnog/diplomskog rada",
+        "url": "https://marjan.unist.hr/vp/Dokumenti%20za%20studente/Upute%20za%20izradu%20zavr%C5%A1nog%20%20diplomskog%20rada.doc?vel=51200"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu završnog/diplomskog rada"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Numeriranje stranica",
+      "Opseg",
+      "Obvezni dijelovi rada"
+    ],
+    "advisoryScope": [
+      "Stil citiranja"
+    ]
+  },
+  "forenzika-diplomski": {
+    "id": "forenzika-diplomski",
+    "unitId": "forenzika",
+    "programs": [
+      "Diplomski sveučilišni studij Forenzika"
+    ],
+    "workTypes": [
+      "diplomski"
+    ],
+    "status": "partial",
+    "profileLabel": "Fakultet za forenzicke znanosti, diplomski rad",
+    "verifiedAt": "2026-07-16",
+    "documentDate": null,
+    "rules": {
+      "requireA4": true,
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+    "sources": [
+      {
+        "title": "Pravilnik o diplomskom radu i ispitu (Fakultet za forenzičke znanosti, Sveučilište u Splitu, 10. rujna 2025.)",
+        "url": "https://forenzika.unist.hr/wp-content/uploads/2026/03/Pravilnik-o-diplomskom-ispitu.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o diplomskom radu i ispitu (Fakultet za forenzičke znanosti, Sveučilište u Splitu, 10. rujna 2025.)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Numeriranje stranica",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Margine",
+      "Obvezni dijelovi rada"
+    ],
+    "advisoryScope": [
+      "Opseg",
+      "Stil citiranja"
+    ]
+  },
+  "ozs-zavrsni": {
+    "id": "ozs-zavrsni",
+    "unitId": "ozs",
+    "programs": [
+      "Sveučilišni prijediplomski studij (npr. Sestrinstvo) - završni rad"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Fakultet zdravstvenih znanosti (Split), zavrsni rad",
+    "verifiedAt": "2026-07-16",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "spacing": 1.5
+    },
+    "facts": [],
+    "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+    "sources": [
+      {
+        "title": "Template za završni rad_ISTRAŽIVAČKI.docx (službeni predložak za završni rad, istraživački tip)",
+        "url": "https://fzz.unist.hr/Portals/0/adam/ContentBlocks/Q2c3cF-lcEq8Thd1fTgd4Q/Body/Template%20za%20zavr%C5%A1ni%20rad_ISTRA%C5%BDIVA%C4%8CKI.docx"
+      },
+      {
+        "title": "Template za završni rad_TEORIJSKI_ESEJSKI.docx (službeni predložak za završni rad, teorijsko-esejski tip)",
+        "url": "https://fzz.unist.hr/Portals/0/adam/ContentBlocks/LpQRLoMX6U666NF91yJWPw/Body/Template%20za%20zavr%C5%A1ni%20rad_TEORIJSKI_ESEJSKI.docx"
+      },
+      {
+        "title": "Template za diplomski rad.docx (službeni predložak za diplomski rad)",
+        "url": "https://fzz.unist.hr/Portals/0/adam/ContentBlocks/rYvKRceFM0mGBPeOYQXR7A/Body/Template%20za%20diplomski%20rad.docx"
+      }
+    ],
+    "sourceHierarchy": [
+      "Template za završni rad_ISTRAŽIVAČKI.docx (službeni predložak za završni rad, istraživački tip)",
+      "Template za završni rad_TEORIJSKI_ESEJSKI.docx (službeni predložak za završni rad, teorijsko-esejski tip)",
+      "Template za diplomski rad.docx (službeni predložak za diplomski rad)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Prored",
+      "Numeriranje stranica"
+    ],
+    "advisoryScope": [
+      "Velicina slova",
+      "Margine",
+      "Obvezni dijelovi rada"
+    ]
+  },
+  "ozs-diplomski": {
+    "id": "ozs-diplomski",
+    "unitId": "ozs",
+    "programs": [
+      "Sveučilišni diplomski studij (npr. Sestrinstvo) - diplomski rad"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Fakultet zdravstvenih znanosti (Split), diplomski rad",
+    "verifiedAt": "2026-07-16",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "spacing": 1.5
+    },
+    "facts": [],
+    "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+    "sources": [
+      {
+        "title": "Template za završni rad_ISTRAŽIVAČKI.docx (službeni predložak za završni rad, istraživački tip)",
+        "url": "https://fzz.unist.hr/Portals/0/adam/ContentBlocks/Q2c3cF-lcEq8Thd1fTgd4Q/Body/Template%20za%20zavr%C5%A1ni%20rad_ISTRA%C5%BDIVA%C4%8CKI.docx"
+      },
+      {
+        "title": "Template za završni rad_TEORIJSKI_ESEJSKI.docx (službeni predložak za završni rad, teorijsko-esejski tip)",
+        "url": "https://fzz.unist.hr/Portals/0/adam/ContentBlocks/LpQRLoMX6U666NF91yJWPw/Body/Template%20za%20zavr%C5%A1ni%20rad_TEORIJSKI_ESEJSKI.docx"
+      },
+      {
+        "title": "Template za diplomski rad.docx (službeni predložak za diplomski rad)",
+        "url": "https://fzz.unist.hr/Portals/0/adam/ContentBlocks/rYvKRceFM0mGBPeOYQXR7A/Body/Template%20za%20diplomski%20rad.docx"
+      }
+    ],
+    "sourceHierarchy": [
+      "Template za završni rad_ISTRAŽIVAČKI.docx (službeni predložak za završni rad, istraživački tip)",
+      "Template za završni rad_TEORIJSKI_ESEJSKI.docx (službeni predložak za završni rad, teorijsko-esejski tip)",
+      "Template za diplomski rad.docx (službeni predložak za diplomski rad)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Prored",
+      "Numeriranje stranica",
+      "Obvezni dijelovi rada"
+    ],
+    "advisoryScope": [
+      "Velicina slova",
+      "Margine"
+    ]
+  },
+  "umas-zavrsni": {
+    "id": "umas-zavrsni",
+    "unitId": "umas",
+    "programs": [
+      "Umjetnička akademija u Splitu, završni rad (preddiplomski studij)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Umjetnicka akademija u Splitu, zavrsni rad",
+    "verifiedAt": "2026-07-16",
+    "documentDate": null,
+    "rules": {},
+    "facts": [],
+    "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+    "sources": [
+      {
+        "title": "Pravilnik o završnom i diplomskom/magistarskom radu (Umjetnička akademija u Splitu, srpanj 2019.)",
+        "url": "https://stari.umas.hr/wp-content/uploads/2019/07/Pravilnik-o-zavr%C5%A1nim-radovima.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o završnom i diplomskom/magistarskom radu (Umjetnička akademija u Splitu, srpanj 2019.)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Obvezni dijelovi rada"
+    ],
+    "advisoryScope": []
+  },
+  "umas-diplomski": {
+    "id": "umas-diplomski",
+    "unitId": "umas",
+    "programs": [
+      "Umjetnička akademija u Splitu, diplomski/magistarski rad (diplomski studij)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Umjetnicka akademija u Splitu, diplomski rad",
+    "verifiedAt": "2026-07-16",
+    "documentDate": null,
+    "rules": {},
+    "facts": [],
+    "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+    "sources": [
+      {
+        "title": "Pravilnik o završnom i diplomskom/magistarskom radu (Umjetnička akademija u Splitu, srpanj 2019.)",
+        "url": "https://stari.umas.hr/wp-content/uploads/2019/07/Pravilnik-o-zavr%C5%A1nim-radovima.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o završnom i diplomskom/magistarskom radu (Umjetnička akademija u Splitu, srpanj 2019.)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Obvezni dijelovi rada"
+    ],
+    "advisoryScope": []
+  },
+  "oss-zavrsni": {
+    "id": "oss-zavrsni",
+    "unitId": "oss",
+    "programs": [
+      "Preddiplomski stručni studij (Sveučilišni odjel za stručne studije, Sveučilište u Splitu)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Sveucilisni odjel za strucne studije (Split), zavrsni rad",
+    "verifiedAt": "2026-07-16",
+    "documentDate": null,
+    "rules": {
+      "requireA4": true,
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5
+    },
+    "facts": [],
+    "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+    "sources": [
+      {
+        "title": "Upute za izradu završnog rada na društvenim studijima",
+        "url": "https://www.oss.unist.hr/sites/default/files/dokumenti/o-odjelu/propisi-i-dokumenti/strucni_studiji/Upute_za_izradu_zavrsnog_rada_drustveni_studiji.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu završnog rada na društvenim studijima"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Numeriranje stranica",
+      "Obvezni dijelovi rada"
+    ],
+    "advisoryScope": [
+      "Margine",
+      "Opseg"
+    ]
+  },
+  "oss-diplomski": {
+    "id": "oss-diplomski",
+    "unitId": "oss",
+    "programs": [
+      "Specijalistički diplomski stručni studij (Sveučilišni odjel za stručne studije, Sveučilište u Splitu)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Sveucilisni odjel za strucne studije (Split), diplomski rad",
+    "verifiedAt": "2026-07-16",
+    "documentDate": null,
+    "rules": {
+      "requireA4": true,
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5
+    },
+    "facts": [],
+    "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+    "sources": [
+      {
+        "title": "Upute za izradu završnog rada na društvenim studijima",
+        "url": "https://www.oss.unist.hr/sites/default/files/dokumenti/o-odjelu/propisi-i-dokumenti/strucni_studiji/Upute_za_izradu_zavrsnog_rada_drustveni_studiji.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu završnog rada na društvenim studijima"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Numeriranje stranica",
+      "Obvezni dijelovi rada"
+    ],
+    "advisoryScope": [
+      "Margine",
+      "Opseg"
+    ]
+  },
+  "kifos-zavrsni": {
+    "id": "kifos-zavrsni",
+    "unitId": "kifos",
+    "programs": [
+      "Sveučilišni prijediplomski studij Kineziologija"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Kinezioloski fakultet Osijek, zavrsni rad",
+    "verifiedAt": "2026-07-16",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.54,
+        "right": 2.54,
+        "bottom": 2.54,
+        "left": 2.54
+      }
+    },
+    "facts": [],
+    "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+    "sources": [
+      {
+        "title": "Upute za izradu i oblikovanje završnog i diplomskog rada",
+        "url": "https://www.kifos.hr/wp-content/uploads/2024/01/Upute-za-pisanje-zavrsnog-i-diplomskog-rada_2024.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu i oblikovanje završnog i diplomskog rada"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Format papira",
+      "Margine",
+      "Numeriranje stranica",
+      "Stil citiranja",
+      "Opseg",
+      "Obvezni dijelovi rada"
+    ],
+    "advisoryScope": []
+  },
+  "kifos-diplomski": {
+    "id": "kifos-diplomski",
+    "unitId": "kifos",
+    "programs": [
+      "Sveučilišni diplomski studij Kineziološka edukacija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Kinezioloski fakultet Osijek, diplomski rad",
+    "verifiedAt": "2026-07-16",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.54,
+        "right": 2.54,
+        "bottom": 2.54,
+        "left": 2.54
+      }
+    },
+    "facts": [],
+    "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+    "sources": [
+      {
+        "title": "Upute za izradu i oblikovanje završnog i diplomskog rada",
+        "url": "https://www.kifos.hr/wp-content/uploads/2024/01/Upute-za-pisanje-zavrsnog-i-diplomskog-rada_2024.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu i oblikovanje završnog i diplomskog rada"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Format papira",
+      "Margine",
+      "Numeriranje stranica",
+      "Stil citiranja",
+      "Opseg",
+      "Obvezni dijelovi rada"
+    ],
+    "advisoryScope": []
   }
 }

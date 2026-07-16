@@ -1,0 +1,78 @@
+{
+  "profileId": "umas-zavrsni",
+  "entries": [
+    {
+      "ruleId": "umas-zavrsni--required-sections",
+      "checkId": "required-sections",
+      "value": [
+        {
+          "key": "naslovnica",
+          "label": "Naslovnica",
+          "terms": [
+            "Naslovnica",
+            "Sveučilište u Splitu",
+            "Umjetnička akademija"
+          ]
+        },
+        {
+          "key": "izjava-cestitost",
+          "label": "Izjava o akademskoj čestitosti",
+          "terms": [
+            "Izjava o akademskoj čestitosti",
+            "akademskoj čestitosti"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sažetak (Temeljna dokumentacijska kartica)",
+          "terms": [
+            "Sažetak",
+            "Temeljna dokumentacijska kartica",
+            "Summary",
+            "Basic documentation card"
+          ]
+        },
+        {
+          "key": "kljucne-rijeci",
+          "label": "Ključne riječi (hrvatski i engleski)",
+          "terms": [
+            "Ključne riječi",
+            "Keywords"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "Sadržaj",
+            "Kazalo"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "Literatura",
+            "Bibliografija",
+            "Popis literature"
+          ]
+        }
+      ],
+      "category": "structure",
+      "label": "Obvezni dijelovi rada",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "umas-pravilnik-zavrsni-diplomski-2019",
+      "sourcePage": "Članak 9. st. 2. t. c) (PDF str. 5; struktura navedena i u Cl. 9. st. 1. t. 1-6, PDF str. 4-5)",
+      "quote": "pisani rad treba biti u PDF-u kompletan: korica, naslovna stranica, Izjava o akademskoj čestitosti, sažetak ( TDK ) na hrvatskom i engleskom jeziku, ključne riječi na hrvatskom i engleskom jeziku, sadržaj, literatura - na isti način kao da je otisnut i uvezan.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "c9729ea732cb6ac18a872eecf42d51a39a62be74dc3536a5225328b157bdb992",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    }
+  ],
+  "generatedAt": "2026-07-16"
+}

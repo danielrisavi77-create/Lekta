@@ -2293,5 +2293,101 @@
     "validityClass": "stable",
     "lastChecked": "2026-07-16",
     "note": "Prilog II (Naputak o zavrsnom radu i zavrsnom ispitu) sadrzi tehnicko oblikovanje (Shema izgleda zavrsnog rada, str. 44-45; opseg cl. XI, str. 40). Prilog III (diplomski) proceduralni, format ne ponavlja pa diplomski profil ceka."
+  },
+  {
+    "id": "more-upute-zavrsni-diplomski",
+    "kind": "doc",
+    "title": "Upute za izradu završnog/diplomskog rada",
+    "url": "https://marjan.unist.hr/vp/Dokumenti%20za%20studente/Upute%20za%20izradu%20zavr%C5%A1nog%20%20diplomskog%20rada.doc?vel=51200",
+    "publisher": "Sveučilišni odjel za studije mora (Fakultet znanosti o moru), Sveučilište u Splitu",
+    "fetchedAt": "2026-07-16",
+    "snapshotPath": "data/sources/more/more-upute-zavrsni-diplomski.doc",
+    "snapshotHash": "e1733e2cb428ceb635561276131fc83a17916d8c666bcff8567f8df6183c51ff",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-16"
+  },
+  {
+    "id": "forenzika-pravilnik-diplomski",
+    "kind": "pdf",
+    "title": "Pravilnik o diplomskom radu i ispitu (Fakultet za forenzičke znanosti, Sveučilište u Splitu, 10. rujna 2025.)",
+    "url": "https://forenzika.unist.hr/wp-content/uploads/2026/03/Pravilnik-o-diplomskom-ispitu.pdf",
+    "publisher": "Fakultet za forenzičke znanosti, Sveučilište u Splitu",
+    "fetchedAt": "2026-07-16",
+    "snapshotPath": "data/sources/forenzika/forenzika-pravilnik-diplomski.pdf",
+    "snapshotHash": "6eed97bb4df913d63e75e9875b112e634c8964554f6805012cde652ae1972841",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-16"
+  },
+  {
+    "id": "ozs-tpl-zavrsni-istrazivacki",
+    "kind": "docx-template",
+    "title": "Template za završni rad_ISTRAŽIVAČKI.docx (službeni predložak za završni rad, istraživački tip)",
+    "url": "https://fzz.unist.hr/Portals/0/adam/ContentBlocks/Q2c3cF-lcEq8Thd1fTgd4Q/Body/Template%20za%20zavr%C5%A1ni%20rad_ISTRA%C5%BDIVA%C4%8CKI.docx",
+    "publisher": "Fakultet zdravstvenih znanosti, Sveučilište u Splitu (fzz.unist.hr, bivši ozs.unist.hr)",
+    "fetchedAt": "2026-07-16",
+    "snapshotPath": "data/sources/ozs/ozs-tpl-zavrsni-istrazivacki.docx",
+    "snapshotHash": "1c41b3cc27890550200b207f9381f992ae49c9f9cf9d978e409b8da39e5f1b35",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-16"
+  },
+  {
+    "id": "ozs-tpl-zavrsni-esejski",
+    "kind": "docx-template",
+    "title": "Template za završni rad_TEORIJSKI_ESEJSKI.docx (službeni predložak za završni rad, teorijsko-esejski tip)",
+    "url": "https://fzz.unist.hr/Portals/0/adam/ContentBlocks/LpQRLoMX6U666NF91yJWPw/Body/Template%20za%20zavr%C5%A1ni%20rad_TEORIJSKI_ESEJSKI.docx",
+    "publisher": "Fakultet zdravstvenih znanosti, Sveučilište u Splitu (fzz.unist.hr, bivši ozs.unist.hr)",
+    "fetchedAt": "2026-07-16",
+    "snapshotPath": "data/sources/ozs/ozs-tpl-zavrsni-esejski.docx",
+    "snapshotHash": "9cbed0c2ea91d8518f3a435482ecf91b35fb8a5d215460f9a006feb57c2543b9",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-16"
+  },
+  {
+    "id": "ozs-tpl-diplomski",
+    "kind": "docx-template",
+    "title": "Template za diplomski rad.docx (službeni predložak za diplomski rad)",
+    "url": "https://fzz.unist.hr/Portals/0/adam/ContentBlocks/rYvKRceFM0mGBPeOYQXR7A/Body/Template%20za%20diplomski%20rad.docx",
+    "publisher": "Fakultet zdravstvenih znanosti, Sveučilište u Splitu (fzz.unist.hr, bivši ozs.unist.hr)",
+    "fetchedAt": "2026-07-16",
+    "snapshotPath": "data/sources/ozs/ozs-tpl-diplomski.docx",
+    "snapshotHash": "2e12145dcef0b66c342720559c1ea9b2cdbce9fef413096cc06e26d4ae24dcde",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-16"
+  },
+  {
+    "id": "umas-pravilnik-zavrsni-diplomski-2019",
+    "kind": "pravilnik",
+    "title": "Pravilnik o završnom i diplomskom/magistarskom radu (Umjetnička akademija u Splitu, srpanj 2019.)",
+    "url": "https://stari.umas.hr/wp-content/uploads/2019/07/Pravilnik-o-zavr%C5%A1nim-radovima.pdf",
+    "publisher": "Umjetnička akademija u Splitu (Sveučilište u Splitu)",
+    "fetchedAt": "2026-07-16",
+    "snapshotPath": "data/sources/umas/umas-pravilnik-zavrsni-diplomski-2019.pdf",
+    "snapshotHash": "c9729ea732cb6ac18a872eecf42d51a39a62be74dc3536a5225328b157bdb992",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-16"
+  },
+  {
+    "id": "oss-upute-drustveni",
+    "kind": "upute",
+    "title": "Upute za izradu završnog rada na društvenim studijima",
+    "url": "https://www.oss.unist.hr/sites/default/files/dokumenti/o-odjelu/propisi-i-dokumenti/strucni_studiji/Upute_za_izradu_zavrsnog_rada_drustveni_studiji.pdf",
+    "publisher": "Sveučilišni odjel za stručne studije, Sveučilište u Splitu",
+    "fetchedAt": "2026-07-16",
+    "snapshotPath": "data/sources/oss/oss-upute-drustveni.pdf",
+    "snapshotHash": "68690a8d965192f85e8b7c64bc83b6206bec34f252581588bb45d7e205e66d73",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-16"
+  },
+  {
+    "id": "kifos-upute-2024",
+    "kind": "pdf",
+    "title": "Upute za izradu i oblikovanje završnog i diplomskog rada",
+    "url": "https://www.kifos.hr/wp-content/uploads/2024/01/Upute-za-pisanje-zavrsnog-i-diplomskog-rada_2024.pdf",
+    "publisher": "Kineziološki fakultet Osijek (Sveučilište Josipa Jurja Strossmayera u Osijeku)",
+    "fetchedAt": "2026-07-16",
+    "snapshotPath": "data/sources/kifos/kifos-upute-2024.pdf",
+    "snapshotHash": "990e30dedf4c88dd47cde5ca6d139d9d0dd75ac1358ae75bbcba6d5fae36c6c7",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-16"
   }
 ]

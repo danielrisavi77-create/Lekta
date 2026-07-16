@@ -1,0 +1,171 @@
+{
+  "faculty": "forenzika",
+  "institution": "unist",
+  "unit": {
+    "id": "forenzika",
+    "name": "Fakultet za forenzicke znanosti",
+    "family": "stem",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Diplomski sveučilišni studij Forenzika",
+    "Opći profil fakulteta"
+  ],
+  "sources": [
+    {
+      "id": "forenzika-pravilnik-diplomski",
+      "kind": "pdf",
+      "title": "Pravilnik o diplomskom radu i ispitu (Fakultet za forenzičke znanosti, Sveučilište u Splitu, 10. rujna 2025.)",
+      "url": "https://forenzika.unist.hr/wp-content/uploads/2026/03/Pravilnik-o-diplomskom-ispitu.pdf",
+      "publisher": "Fakultet za forenzičke znanosti, Sveučilište u Splitu",
+      "fetchedAt": "2026-07-16",
+      "snapshotPath": "data/sources/forenzika/forenzika-pravilnik-diplomski.pdf",
+      "snapshotHash": "6eed97bb4df913d63e75e9875b112e634c8964554f6805012cde652ae1972841",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-16"
+    }
+  ],
+  "profiles": [
+    {
+      "id": "forenzika-diplomski",
+      "unitId": "forenzika",
+      "programs": [
+        "Diplomski sveučilišni studij Forenzika"
+      ],
+      "workTypes": [
+        "diplomski"
+      ],
+      "status": "partial",
+      "profileLabel": "Fakultet za forenzicke znanosti, diplomski rad",
+      "verifiedAt": "2026-07-16",
+      "documentDate": null,
+      "rules": {
+        "requireA4": true,
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+      "sources": [
+        {
+          "title": "Pravilnik o diplomskom radu i ispitu (Fakultet za forenzičke znanosti, Sveučilište u Splitu, 10. rujna 2025.)",
+          "url": "https://forenzika.unist.hr/wp-content/uploads/2026/03/Pravilnik-o-diplomskom-ispitu.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o diplomskom radu i ispitu (Fakultet za forenzičke znanosti, Sveučilište u Splitu, 10. rujna 2025.)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Numeriranje stranica",
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Margine",
+        "Obvezni dijelovi rada"
+      ],
+      "advisoryScope": [
+        "Opseg",
+        "Stil citiranja"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-forenzika-diplomski--paper-size-verified-2026-07-16",
+      "ruleId": "forenzika-diplomski--paper-size",
+      "profileId": "forenzika-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "forenzika-pravilnik-diplomski",
+      "sourcePage": "Članak 9., st. 1 (str. 5)",
+      "quote": "Pisano djelo treba biti tiskano na papiru formata A4, s označenim stranicama na donjem (gornjem) desnom rubu teksta.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-forenzika-diplomski--page-numbers-verified-2026-07-16",
+      "ruleId": "forenzika-diplomski--page-numbers",
+      "profileId": "forenzika-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "forenzika-pravilnik-diplomski",
+      "sourcePage": "Članak 9., st. 1 (str. 5)",
+      "quote": "Pisano djelo treba biti tiskano na papiru formata A4, s označenim stranicama na donjem (gornjem) desnom rubu teksta.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-forenzika-diplomski--font-verified-2026-07-16",
+      "ruleId": "forenzika-diplomski--font",
+      "profileId": "forenzika-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "forenzika-pravilnik-diplomski",
+      "sourcePage": "Članak 9., st. 3 (str. 5)",
+      "quote": "Tekst se piše proredom od 1,5 reda, stilom Times New Roman i veličinom slova 12 pri čemu rubovi na obje strane, gore i dolje, moraju biti široki najmanje 2,5 cm, uz obostrano poravnavanje teksta.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-forenzika-diplomski--font-size-verified-2026-07-16",
+      "ruleId": "forenzika-diplomski--font-size",
+      "profileId": "forenzika-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "forenzika-pravilnik-diplomski",
+      "sourcePage": "Članak 9., st. 3 (str. 5)",
+      "quote": "Tekst se piše proredom od 1,5 reda, stilom Times New Roman i veličinom slova 12 pri čemu rubovi na obje strane, gore i dolje, moraju biti široki najmanje 2,5 cm, uz obostrano poravnavanje teksta.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-forenzika-diplomski--line-spacing-verified-2026-07-16",
+      "ruleId": "forenzika-diplomski--line-spacing",
+      "profileId": "forenzika-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "forenzika-pravilnik-diplomski",
+      "sourcePage": "Članak 9., st. 3 (str. 5)",
+      "quote": "Tekst se piše proredom od 1,5 reda, stilom Times New Roman i veličinom slova 12 pri čemu rubovi na obje strane, gore i dolje, moraju biti široki najmanje 2,5 cm, uz obostrano poravnavanje teksta.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-forenzika-diplomski--margins-verified-2026-07-16",
+      "ruleId": "forenzika-diplomski--margins",
+      "profileId": "forenzika-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "forenzika-pravilnik-diplomski",
+      "sourcePage": "Članak 9., st. 3 (str. 5)",
+      "quote": "rubovi na obje strane, gore i dolje, moraju biti široki najmanje 2,5 cm, uz obostrano poravnavanje teksta.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-forenzika-diplomski--required-sections-verified-2026-07-16",
+      "ruleId": "forenzika-diplomski--required-sections",
+      "profileId": "forenzika-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "forenzika-pravilnik-diplomski",
+      "sourcePage": "Članak 8., st. 3 (str. 3)",
+      "quote": "Poglavlja diplomskog rada su: Uvod, Cilj rada, Izvori podataka i metode, Rezultati, Rasprava, Zaključci, Sažetak na hrvatskom jeziku, Sažetak na engleskom jeziku, Literatura i Životopis.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    }
+  ]
+}

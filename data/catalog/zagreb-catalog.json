@@ -1029,6 +1029,26 @@
         ]
       },
       {
+        "id": "fesb",
+        "name": "Fakultet elektrotehnike, strojarstva i brodogradnje (FESB)",
+        "family": "stem",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski studiji FESB (zavrsni rad)",
+          "Diplomski studiji FESB"
+        ]
+      },
+      {
+        "id": "ffst",
+        "name": "Filozofski fakultet u Splitu",
+        "family": "social",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski studiji FFST (zavrsni rad)",
+          "Diplomski studiji FFST"
+        ]
+      },
+      {
         "id": "fgag",
         "name": "Fakultet gradevinarstva, arhitekture i geodezije u Splitu",
         "family": "stem",
@@ -1036,6 +1056,16 @@
         "programs": [
           "Prijediplomski studiji FGAG (zavrsni rad)",
           "Diplomski studiji FGAG"
+        ]
+      },
+      {
+        "id": "forenzika",
+        "name": "Fakultet za forenzicke znanosti",
+        "family": "stem",
+        "status": "partial",
+        "programs": [
+          "Diplomski sveučilišni studij Forenzika",
+          "Opći profil fakulteta"
         ]
       },
       {
@@ -1076,6 +1106,39 @@
         ]
       },
       {
+        "id": "more",
+        "name": "Fakultet znanosti o moru",
+        "family": "stem",
+        "status": "partial",
+        "programs": [
+          "Sveučilišni prijediplomski studij (Fakultet znanosti o moru, Split)",
+          "Sveučilišni diplomski studij (Fakultet znanosti o moru, Split)",
+          "Opći profil fakulteta"
+        ]
+      },
+      {
+        "id": "oss",
+        "name": "Sveucilisni odjel za strucne studije (Split)",
+        "family": "mixed",
+        "status": "partial",
+        "programs": [
+          "Preddiplomski stručni studij (Sveučilišni odjel za stručne studije, Sveučilište u Splitu)",
+          "Specijalistički diplomski stručni studij (Sveučilišni odjel za stručne studije, Sveučilište u Splitu)",
+          "Opći profil fakulteta"
+        ]
+      },
+      {
+        "id": "ozs",
+        "name": "Fakultet zdravstvenih znanosti (Split)",
+        "family": "biomed",
+        "status": "partial",
+        "programs": [
+          "Sveučilišni prijediplomski studij (npr. Sestrinstvo) - završni rad",
+          "Sveučilišni diplomski studij (npr. Sestrinstvo) - diplomski rad",
+          "Opći profil fakulteta"
+        ]
+      },
+      {
         "id": "pfst",
         "name": "Pomorski fakultet u Splitu",
         "family": "stem",
@@ -1096,26 +1159,6 @@
         ]
       },
       {
-        "id": "ffst",
-        "name": "Filozofski fakultet u Splitu",
-        "family": "social",
-        "status": "partial",
-        "programs": [
-          "Prijediplomski studiji FFST (zavrsni rad)",
-          "Diplomski studiji FFST"
-        ]
-      },
-      {
-        "id": "fesb",
-        "name": "Fakultet elektrotehnike, strojarstva i brodogradnje (FESB)",
-        "family": "stem",
-        "status": "partial",
-        "programs": [
-          "Prijediplomski studiji FESB (zavrsni rad)",
-          "Diplomski studiji FESB"
-        ]
-      },
-      {
         "id": "pravst",
         "name": "Pravni fakultet u Splitu",
         "family": "social",
@@ -1123,6 +1166,17 @@
         "programs": [
           "Prijediplomski/integrirani studij (zavrsni rad), Pravni fakultet u Splitu",
           "Diplomski/integrirani studij, Pravni fakultet u Splitu"
+        ]
+      },
+      {
+        "id": "umas",
+        "name": "Umjetnicka akademija u Splitu",
+        "family": "arts",
+        "status": "partial",
+        "programs": [
+          "Umjetnička akademija u Splitu, završni rad (preddiplomski studij)",
+          "Umjetnička akademija u Splitu, diplomski/magistarski rad (diplomski studij)",
+          "Opći profil fakulteta"
         ]
       }
     ]
@@ -1217,6 +1271,16 @@
         ]
       },
       {
+        "id": "ftrr",
+        "name": "Fakultet turizma i ruralnog razvoja u Pozegi",
+        "family": "social",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski studiji FTRR (zavrsni rad, Pozega)",
+          "Diplomski studiji FTRR (diplomski rad, Pozega)"
+        ]
+      },
+      {
         "id": "grafos",
         "name": "Gradevinski i arhitektonski fakultet Osijek",
         "family": "stem",
@@ -1243,6 +1307,17 @@
         "programs": [
           "Prijediplomski studij Kemija (zavrsni rad, Osijek)",
           "Diplomski studij Kemija (Osijek)"
+        ]
+      },
+      {
+        "id": "kifos",
+        "name": "Kinezioloski fakultet Osijek",
+        "family": "social",
+        "status": "partial",
+        "programs": [
+          "Sveučilišni prijediplomski studij Kineziologija",
+          "Sveučilišni diplomski studij Kineziološka edukacija",
+          "Opći profil fakulteta"
         ]
       },
       {
@@ -1295,16 +1370,6 @@
         "programs": [
           "Prijediplomski studiji AUK Osijek (zavrsni rad)",
           "Diplomski studiji AUK Osijek"
-        ]
-      },
-      {
-        "id": "ftrr",
-        "name": "Fakultet turizma i ruralnog razvoja u Pozegi",
-        "family": "social",
-        "status": "partial",
-        "programs": [
-          "Prijediplomski studiji FTRR (zavrsni rad, Pozega)",
-          "Diplomski studiji FTRR (diplomski rad, Pozega)"
         ]
       }
     ]

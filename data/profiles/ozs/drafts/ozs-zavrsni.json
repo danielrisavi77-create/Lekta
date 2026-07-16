@@ -1,0 +1,189 @@
+{
+  "profileId": "ozs-zavrsni",
+  "entries": [
+    {
+      "ruleId": "ozs-zavrsni--font",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Vrsta slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ozs-tpl-zavrsni-istrazivacki",
+      "sourcePage": "word/styles.xml: w:style[w:styleId=\"Normal\", w:default=\"1\"] / w:rPr / w:rFonts",
+      "quote": "<w:rFonts w:ascii=\"Times New Roman\" w:eastAsia=\"Times New Roman\" w:hAnsi=\"Times New Roman\" w:cs=\"Times New Roman\"/> (stil Normal, zadani odlomak; isto u oba predloška za završni rad)",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "font-fixer",
+      "verifiedHash": "1c41b3cc27890550200b207f9381f992ae49c9f9cf9d978e409b8da39e5f1b35",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "ozs-zavrsni--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ozs-tpl-zavrsni-istrazivacki",
+      "sourcePage": "word/styles.xml: w:docDefaults / w:rPrDefault / w:rPr / w:sz (stil Normal nema vlastiti w:sz)",
+      "quote": "<w:sz w:val=\"24\"/> u docDefaults (24 half-pt = 12 pt); Normal ne nadjačava veličinu pa je efektivna veličina tijela 12 pt (posredno, naslijeđeno)",
+      "status": "advisory",
+      "scored": false,
+      "autoFixable": true,
+      "fixerId": "font-fixer",
+      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote)."
+    },
+    {
+      "ruleId": "ozs-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ozs-tpl-zavrsni-istrazivacki",
+      "sourcePage": "word/styles.xml: w:style[w:styleId=\"Normal\"] / w:pPr / w:spacing",
+      "quote": "<w:spacing w:line=\"360\" w:lineRule=\"auto\"/> (360/240 = 1,5 prored; stil Normal)",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "line-spacing-fixer",
+      "verifiedHash": "1c41b3cc27890550200b207f9381f992ae49c9f9cf9d978e409b8da39e5f1b35",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "ozs-zavrsni--margins",
+      "checkId": "margins",
+      "value": {
+        "top": 3,
+        "right": 3,
+        "bottom": 3,
+        "left": 3
+      },
+      "category": "format",
+      "label": "Margine",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ozs-tpl-zavrsni-istrazivacki",
+      "sourcePage": "word/document.xml: sectPr tijela / w:pgMar (uvodni dio ima drukčije margine)",
+      "quote": "<w:pgMar w:top=\"1701\" w:right=\"1701\" w:bottom=\"1701\" w:left=\"1701\" .../> (1701 twips = 3,0 cm u dijelu s tijelom rada); prednji/naslovni dio koristi <w:pgMar ... 1418 ...> = 2,5 cm, pa je predložak nejednolik",
+      "status": "advisory",
+      "scored": false,
+      "autoFixable": true,
+      "fixerId": "margins-fixer",
+      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote)."
+    },
+    {
+      "ruleId": "ozs-zavrsni--page-numbers",
+      "checkId": "page-numbers",
+      "value": true,
+      "category": "format",
+      "label": "Numeriranje stranica",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ozs-tpl-zavrsni-istrazivacki",
+      "sourcePage": "word/document.xml: sectPr / w:pgNumType uz w:footerReference",
+      "quote": "<w:pgNumType w:fmt=\"upperRoman\"/> (prednji dio) te <w:pgNumType w:start=\"1\"/> (tijelo, arapski) uz <w:footerReference .../> — predložak numerira stranice",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "1c41b3cc27890550200b207f9381f992ae49c9f9cf9d978e409b8da39e5f1b35",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "ozs-zavrsni--required-sections",
+      "checkId": "required-sections",
+      "value": [
+        {
+          "key": "sazetak",
+          "label": "Sažetak",
+          "terms": [
+            "sažetak",
+            "sazetak",
+            "summary"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "sadržaj",
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "cilj",
+          "label": "Cilj rada",
+          "terms": [
+            "cilj rada",
+            "cilj"
+          ]
+        },
+        {
+          "key": "rasprava",
+          "label": "Rasprava",
+          "terms": [
+            "rasprava"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zaključak",
+          "terms": [
+            "zaključak",
+            "zaključci",
+            "zaključ"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "literatura"
+          ]
+        },
+        {
+          "key": "zivotopis",
+          "label": "Životopis",
+          "terms": [
+            "životopis",
+            "zivotopis"
+          ]
+        }
+      ],
+      "category": "structure",
+      "label": "Obvezni dijelovi rada",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ozs-tpl-zavrsni-esejski",
+      "sourcePage": "word/document.xml: odlomci w:pStyle=\"Heading1\" (zajednički skup dvaju predložaka za završni rad)",
+      "quote": "Heading1 u teorijsko-esejskom predlošku: 1. UVOD; 2. CILJ RADA; 3. RASPRAVA; 4. ZAKLJUČAK; 5. LITERATURA; 6. ŽIVOTOPIS (uz SAŽETAK, SUMMARY, SADRŽAJ). Istraživački predložak dodatno ima 3. ISPITANICI I METODE i 4. REZULTATI, pa je popis dualan (advisory je zajednički presjek)",
+      "status": "advisory",
+      "scored": false,
+      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote)."
+    }
+  ],
+  "generatedAt": "2026-07-16"
+}

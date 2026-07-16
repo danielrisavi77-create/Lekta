@@ -1,0 +1,357 @@
+{
+  "faculty": "kifos",
+  "institution": "unios",
+  "unit": {
+    "id": "kifos",
+    "name": "Kinezioloski fakultet Osijek",
+    "family": "social",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Sveučilišni prijediplomski studij Kineziologija",
+    "Sveučilišni diplomski studij Kineziološka edukacija",
+    "Opći profil fakulteta"
+  ],
+  "sources": [
+    {
+      "id": "kifos-upute-2024",
+      "kind": "pdf",
+      "title": "Upute za izradu i oblikovanje završnog i diplomskog rada",
+      "url": "https://www.kifos.hr/wp-content/uploads/2024/01/Upute-za-pisanje-zavrsnog-i-diplomskog-rada_2024.pdf",
+      "publisher": "Kineziološki fakultet Osijek (Sveučilište Josipa Jurja Strossmayera u Osijeku)",
+      "fetchedAt": "2026-07-16",
+      "snapshotPath": "data/sources/kifos/kifos-upute-2024.pdf",
+      "snapshotHash": "990e30dedf4c88dd47cde5ca6d139d9d0dd75ac1358ae75bbcba6d5fae36c6c7",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-16"
+    }
+  ],
+  "profiles": [
+    {
+      "id": "kifos-zavrsni",
+      "unitId": "kifos",
+      "programs": [
+        "Sveučilišni prijediplomski studij Kineziologija"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Kinezioloski fakultet Osijek, zavrsni rad",
+      "verifiedAt": "2026-07-16",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "requireA4": true,
+        "margins": {
+          "top": 2.54,
+          "right": 2.54,
+          "bottom": 2.54,
+          "left": 2.54
+        }
+      },
+      "facts": [],
+      "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+      "sources": [
+        {
+          "title": "Upute za izradu i oblikovanje završnog i diplomskog rada",
+          "url": "https://www.kifos.hr/wp-content/uploads/2024/01/Upute-za-pisanje-zavrsnog-i-diplomskog-rada_2024.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu i oblikovanje završnog i diplomskog rada"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Format papira",
+        "Margine",
+        "Numeriranje stranica",
+        "Stil citiranja",
+        "Opseg",
+        "Obvezni dijelovi rada"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "kifos-diplomski",
+      "unitId": "kifos",
+      "programs": [
+        "Sveučilišni diplomski studij Kineziološka edukacija"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Kinezioloski fakultet Osijek, diplomski rad",
+      "verifiedAt": "2026-07-16",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "requireA4": true,
+        "margins": {
+          "top": 2.54,
+          "right": 2.54,
+          "bottom": 2.54,
+          "left": 2.54
+        }
+      },
+      "facts": [],
+      "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+      "sources": [
+        {
+          "title": "Upute za izradu i oblikovanje završnog i diplomskog rada",
+          "url": "https://www.kifos.hr/wp-content/uploads/2024/01/Upute-za-pisanje-zavrsnog-i-diplomskog-rada_2024.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu i oblikovanje završnog i diplomskog rada"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Format papira",
+        "Margine",
+        "Numeriranje stranica",
+        "Stil citiranja",
+        "Opseg",
+        "Obvezni dijelovi rada"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-kifos-zavrsni--font-verified-2026-07-16",
+      "ruleId": "kifos-zavrsni--font",
+      "profileId": "kifos-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "kifos-upute-2024",
+      "sourcePage": "PDF str. 2",
+      "quote": "Rad treba pisati fontom Times New Roman, veličine 12 točaka uz prored 1,5.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-kifos-zavrsni--font-size-verified-2026-07-16",
+      "ruleId": "kifos-zavrsni--font-size",
+      "profileId": "kifos-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "kifos-upute-2024",
+      "sourcePage": "PDF str. 2",
+      "quote": "Rad treba pisati fontom Times New Roman, veličine 12 točaka uz prored 1,5.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-kifos-zavrsni--line-spacing-verified-2026-07-16",
+      "ruleId": "kifos-zavrsni--line-spacing",
+      "profileId": "kifos-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "kifos-upute-2024",
+      "sourcePage": "PDF str. 2",
+      "quote": "Rad treba pisati fontom Times New Roman, veličine 12 točaka uz prored 1,5.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-kifos-zavrsni--paper-size-verified-2026-07-16",
+      "ruleId": "kifos-zavrsni--paper-size",
+      "profileId": "kifos-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "kifos-upute-2024",
+      "sourcePage": "PDF str. 2",
+      "quote": "Veličina je stranice A4 (210x297 mm).",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-kifos-zavrsni--margins-verified-2026-07-16",
+      "ruleId": "kifos-zavrsni--margins",
+      "profileId": "kifos-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "kifos-upute-2024",
+      "sourcePage": "PDF str. 2",
+      "quote": "Sve rubnice trebaju biti veličine 25,4 mm.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-kifos-zavrsni--page-numbers-verified-2026-07-16",
+      "ruleId": "kifos-zavrsni--page-numbers",
+      "profileId": "kifos-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "kifos-upute-2024",
+      "sourcePage": "PDF str. 2",
+      "quote": "Stranice trebaju biti numerirane s pomoću automatske funkcije umetanja brojeva u donjem desnom uglu u zaglavlju. Numeracija stranica počinje na stranici uvoda.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-kifos-zavrsni--citation-style-verified-2026-07-16",
+      "ruleId": "kifos-zavrsni--citation-style",
+      "profileId": "kifos-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "kifos-upute-2024",
+      "sourcePage": "PDF str. 2",
+      "quote": "Formalno uređenje teksta treba biti sukladno APA standardima (engl. Publication Manual of the American Psychological Association, Seventh Edition, 2019).",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-kifos-zavrsni--page-count-verified-2026-07-16",
+      "ruleId": "kifos-zavrsni--page-count",
+      "profileId": "kifos-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "kifos-upute-2024",
+      "sourcePage": "PDF str. 2",
+      "quote": "Opseg završnog rada ograničen je na 15 do 30 stranica, a diplomski na 30 do 50 stranica (broje se i označavaju redni brojevi stranica od početka Uvoda sve do kraja rada). U opseg rada se ne uključuje sažetak, sadržaj, popis literature ni prilozi.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-kifos-zavrsni--required-sections-verified-2026-07-16",
+      "ruleId": "kifos-zavrsni--required-sections",
+      "profileId": "kifos-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "kifos-upute-2024",
+      "sourcePage": "PDF str. 2",
+      "quote": "Završni/diplomski sastoji se od sljedećih cjelina: sažetka i ključnih riječi, sadržaja, uvoda, glavnog dijela i zaključka te popisa literature (prilozi po potrebi).",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-kifos-diplomski--font-verified-2026-07-16",
+      "ruleId": "kifos-diplomski--font",
+      "profileId": "kifos-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "kifos-upute-2024",
+      "sourcePage": "PDF str. 2",
+      "quote": "Rad treba pisati fontom Times New Roman, veličine 12 točaka uz prored 1,5.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-kifos-diplomski--font-size-verified-2026-07-16",
+      "ruleId": "kifos-diplomski--font-size",
+      "profileId": "kifos-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "kifos-upute-2024",
+      "sourcePage": "PDF str. 2",
+      "quote": "Rad treba pisati fontom Times New Roman, veličine 12 točaka uz prored 1,5.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-kifos-diplomski--line-spacing-verified-2026-07-16",
+      "ruleId": "kifos-diplomski--line-spacing",
+      "profileId": "kifos-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "kifos-upute-2024",
+      "sourcePage": "PDF str. 2",
+      "quote": "Rad treba pisati fontom Times New Roman, veličine 12 točaka uz prored 1,5.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-kifos-diplomski--paper-size-verified-2026-07-16",
+      "ruleId": "kifos-diplomski--paper-size",
+      "profileId": "kifos-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "kifos-upute-2024",
+      "sourcePage": "PDF str. 2",
+      "quote": "Veličina je stranice A4 (210x297 mm).",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-kifos-diplomski--margins-verified-2026-07-16",
+      "ruleId": "kifos-diplomski--margins",
+      "profileId": "kifos-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "kifos-upute-2024",
+      "sourcePage": "PDF str. 2",
+      "quote": "Sve rubnice trebaju biti veličine 25,4 mm.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-kifos-diplomski--page-numbers-verified-2026-07-16",
+      "ruleId": "kifos-diplomski--page-numbers",
+      "profileId": "kifos-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "kifos-upute-2024",
+      "sourcePage": "PDF str. 2",
+      "quote": "Stranice trebaju biti numerirane s pomoću automatske funkcije umetanja brojeva u donjem desnom uglu u zaglavlju. Numeracija stranica počinje na stranici uvoda.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-kifos-diplomski--citation-style-verified-2026-07-16",
+      "ruleId": "kifos-diplomski--citation-style",
+      "profileId": "kifos-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "kifos-upute-2024",
+      "sourcePage": "PDF str. 2",
+      "quote": "Formalno uređenje teksta treba biti sukladno APA standardima (engl. Publication Manual of the American Psychological Association, Seventh Edition, 2019).",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-kifos-diplomski--page-count-verified-2026-07-16",
+      "ruleId": "kifos-diplomski--page-count",
+      "profileId": "kifos-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "kifos-upute-2024",
+      "sourcePage": "PDF str. 2",
+      "quote": "Opseg završnog rada ograničen je na 15 do 30 stranica, a diplomski na 30 do 50 stranica (broje se i označavaju redni brojevi stranica od početka Uvoda sve do kraja rada). U opseg rada se ne uključuje sažetak, sadržaj, popis literature ni prilozi.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-kifos-diplomski--required-sections-verified-2026-07-16",
+      "ruleId": "kifos-diplomski--required-sections",
+      "profileId": "kifos-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "kifos-upute-2024",
+      "sourcePage": "PDF str. 2",
+      "quote": "Završni/diplomski sastoji se od sljedećih cjelina: sažetka i ključnih riječi, sadržaja, uvoda, glavnog dijela i zaključka te popisa literature (prilozi po potrebi).",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    }
+  ]
+}

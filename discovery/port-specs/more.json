@@ -1,0 +1,335 @@
+{
+  "faculty": "more",
+  "institution": "unist",
+  "unit": {
+    "id": "more",
+    "name": "Fakultet znanosti o moru",
+    "family": "stem",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Sveučilišni prijediplomski studij (Fakultet znanosti o moru, Split)",
+    "Sveučilišni diplomski studij (Fakultet znanosti o moru, Split)",
+    "Opći profil fakulteta"
+  ],
+  "sources": [
+    {
+      "id": "more-upute-zavrsni-diplomski",
+      "kind": "doc",
+      "title": "Upute za izradu završnog/diplomskog rada",
+      "url": "https://marjan.unist.hr/vp/Dokumenti%20za%20studente/Upute%20za%20izradu%20zavr%C5%A1nog%20%20diplomskog%20rada.doc?vel=51200",
+      "publisher": "Sveučilišni odjel za studije mora (Fakultet znanosti o moru), Sveučilište u Splitu",
+      "fetchedAt": "2026-07-16",
+      "snapshotPath": "data/sources/more/more-upute-zavrsni-diplomski.doc",
+      "snapshotHash": "e1733e2cb428ceb635561276131fc83a17916d8c666bcff8567f8df6183c51ff",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-16"
+    }
+  ],
+  "profiles": [
+    {
+      "id": "more-zavrsni",
+      "unitId": "more",
+      "programs": [
+        "Sveučilišni prijediplomski studij (Fakultet znanosti o moru, Split)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Fakultet znanosti o moru, zavrsni rad",
+      "verifiedAt": "2026-07-16",
+      "documentDate": null,
+      "rules": {
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5
+      },
+      "facts": [],
+      "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+      "sources": [
+        {
+          "title": "Upute za izradu završnog/diplomskog rada",
+          "url": "https://marjan.unist.hr/vp/Dokumenti%20za%20studente/Upute%20za%20izradu%20zavr%C5%A1nog%20%20diplomskog%20rada.doc?vel=51200"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu završnog/diplomskog rada"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Margine",
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Numeriranje stranica",
+        "Opseg",
+        "Obvezni dijelovi rada"
+      ],
+      "advisoryScope": [
+        "Stil citiranja"
+      ]
+    },
+    {
+      "id": "more-diplomski",
+      "unitId": "more",
+      "programs": [
+        "Sveučilišni diplomski studij (Fakultet znanosti o moru, Split)"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Fakultet znanosti o moru, diplomski rad",
+      "verifiedAt": "2026-07-16",
+      "documentDate": null,
+      "rules": {
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5
+      },
+      "facts": [],
+      "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+      "sources": [
+        {
+          "title": "Upute za izradu završnog/diplomskog rada",
+          "url": "https://marjan.unist.hr/vp/Dokumenti%20za%20studente/Upute%20za%20izradu%20zavr%C5%A1nog%20%20diplomskog%20rada.doc?vel=51200"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu završnog/diplomskog rada"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Margine",
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Numeriranje stranica",
+        "Opseg",
+        "Obvezni dijelovi rada"
+      ],
+      "advisoryScope": [
+        "Stil citiranja"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-more-zavrsni--paper-size-verified-2026-07-16",
+      "ruleId": "more-zavrsni--paper-size",
+      "profileId": "more-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "more-upute-zavrsni-diplomski",
+      "sourcePage": "Odjeljak 'Oblikovanje teksta završnog/diplomskog rada', blok formata (natuknica 'Format')",
+      "quote": "Format: A4",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-more-zavrsni--margins-verified-2026-07-16",
+      "ruleId": "more-zavrsni--margins",
+      "profileId": "more-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "more-upute-zavrsni-diplomski",
+      "sourcePage": "Odjeljak 'Oblikovanje teksta završnog/diplomskog rada', blok formata (natuknica 'Margine')",
+      "quote": "Margine: 2,5 cm",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-more-zavrsni--font-verified-2026-07-16",
+      "ruleId": "more-zavrsni--font",
+      "profileId": "more-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "more-upute-zavrsni-diplomski",
+      "sourcePage": "Odjeljak 'Oblikovanje teksta završnog/diplomskog rada', blok formata (natuknica 'Font')",
+      "quote": "Font: Times New Roman",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-more-zavrsni--font-size-verified-2026-07-16",
+      "ruleId": "more-zavrsni--font-size",
+      "profileId": "more-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "more-upute-zavrsni-diplomski",
+      "sourcePage": "Odjeljak 'Oblikovanje teksta završnog/diplomskog rada', blok formata (natuknica 'Tekst')",
+      "quote": "Tekst: 12",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-more-zavrsni--line-spacing-verified-2026-07-16",
+      "ruleId": "more-zavrsni--line-spacing",
+      "profileId": "more-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "more-upute-zavrsni-diplomski",
+      "sourcePage": "Odjeljak 'Oblikovanje teksta završnog/diplomskog rada', blok formata (natuknica 'Prored')",
+      "quote": "Prored: 1,5",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-more-zavrsni--page-numbers-verified-2026-07-16",
+      "ruleId": "more-zavrsni--page-numbers",
+      "profileId": "more-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "more-upute-zavrsni-diplomski",
+      "sourcePage": "Odjeljak 'Oblikovanje teksta završnog/diplomskog rada', blok formata (natuknica 'Numeracija stranice')",
+      "quote": "Numeracija stranice: dno, desno (arapski brojevi), počinje od poglavlja Uvod",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-more-zavrsni--page-count-verified-2026-07-16",
+      "ruleId": "more-zavrsni--page-count",
+      "profileId": "more-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "more-upute-zavrsni-diplomski",
+      "sourcePage": "Uvodni popis zahtjeva, natuknica o opsegu završnog rada",
+      "quote": "Opseg završnog rada je najmanje 15 stranica.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-more-zavrsni--required-sections-verified-2026-07-16",
+      "ruleId": "more-zavrsni--required-sections",
+      "profileId": "more-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "more-upute-zavrsni-diplomski",
+      "sourcePage": "Uvodni popis zahtjeva, natuknica o sadržaju završnog rada",
+      "quote": "Sadržaj završnog rada mora uključivati sljedeća poglavlja: Uvod, Razrada teme, Zaključci i Literatura.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-more-diplomski--paper-size-verified-2026-07-16",
+      "ruleId": "more-diplomski--paper-size",
+      "profileId": "more-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "more-upute-zavrsni-diplomski",
+      "sourcePage": "Odjeljak 'Oblikovanje teksta završnog/diplomskog rada', blok formata (natuknica 'Format')",
+      "quote": "Format: A4",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-more-diplomski--margins-verified-2026-07-16",
+      "ruleId": "more-diplomski--margins",
+      "profileId": "more-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "more-upute-zavrsni-diplomski",
+      "sourcePage": "Odjeljak 'Oblikovanje teksta završnog/diplomskog rada', blok formata (natuknica 'Margine')",
+      "quote": "Margine: 2,5 cm",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-more-diplomski--font-verified-2026-07-16",
+      "ruleId": "more-diplomski--font",
+      "profileId": "more-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "more-upute-zavrsni-diplomski",
+      "sourcePage": "Odjeljak 'Oblikovanje teksta završnog/diplomskog rada', blok formata (natuknica 'Font')",
+      "quote": "Font: Times New Roman",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-more-diplomski--font-size-verified-2026-07-16",
+      "ruleId": "more-diplomski--font-size",
+      "profileId": "more-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "more-upute-zavrsni-diplomski",
+      "sourcePage": "Odjeljak 'Oblikovanje teksta završnog/diplomskog rada', blok formata (natuknica 'Tekst')",
+      "quote": "Tekst: 12",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-more-diplomski--line-spacing-verified-2026-07-16",
+      "ruleId": "more-diplomski--line-spacing",
+      "profileId": "more-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "more-upute-zavrsni-diplomski",
+      "sourcePage": "Odjeljak 'Oblikovanje teksta završnog/diplomskog rada', blok formata (natuknica 'Prored')",
+      "quote": "Prored: 1,5",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-more-diplomski--page-numbers-verified-2026-07-16",
+      "ruleId": "more-diplomski--page-numbers",
+      "profileId": "more-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "more-upute-zavrsni-diplomski",
+      "sourcePage": "Odjeljak 'Oblikovanje teksta završnog/diplomskog rada', blok formata (natuknica 'Numeracija stranice')",
+      "quote": "Numeracija stranice: dno, desno (arapski brojevi), počinje od poglavlja Uvod",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-more-diplomski--page-count-verified-2026-07-16",
+      "ruleId": "more-diplomski--page-count",
+      "profileId": "more-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "more-upute-zavrsni-diplomski",
+      "sourcePage": "Uvodni popis zahtjeva, natuknica o opsegu diplomskog rada",
+      "quote": "Opseg diplomskog rada bez priloga je najmanje 30 stranica.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-more-diplomski--required-sections-verified-2026-07-16",
+      "ruleId": "more-diplomski--required-sections",
+      "profileId": "more-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "more-upute-zavrsni-diplomski",
+      "sourcePage": "Uvodni popis zahtjeva, natuknica o sadržaju diplomskog rada",
+      "quote": "Sadržaj diplomskog rada mora uključivati sljedeća poglavlja: Uvod, Materijali i metode, Rezultati, Rasprava, Zaključci i Literatura.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    }
+  ]
+}

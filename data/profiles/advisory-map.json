@@ -346,6 +346,10 @@
     "toc",
     "page-numbers"
   ],
+  "forenzika-diplomski": [
+    "justify",
+    "toc"
+  ],
   "fpz-diplomski": [
     "font",
     "font-size",
@@ -559,6 +563,14 @@
     "font",
     "justify"
   ],
+  "kifos-diplomski": [
+    "justify",
+    "toc"
+  ],
+  "kifos-zavrsni": [
+    "justify",
+    "toc"
+  ],
   "kifst-diplomski": [
     "paper-size",
     "toc",
@@ -624,6 +636,14 @@
     "toc",
     "page-numbers"
   ],
+  "more-diplomski": [
+    "justify",
+    "toc"
+  ],
+  "more-zavrsni": [
+    "justify",
+    "toc"
+  ],
   "muza-diplomski": [
     "font",
     "font-size",
@@ -636,6 +656,30 @@
   ],
   "muza-doktorski": [
     "justify",
+    "toc"
+  ],
+  "oss-diplomski": [
+    "margins",
+    "justify",
+    "toc"
+  ],
+  "oss-zavrsni": [
+    "margins",
+    "justify",
+    "toc"
+  ],
+  "ozs-diplomski": [
+    "font-size",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc"
+  ],
+  "ozs-zavrsni": [
+    "font-size",
+    "margins",
+    "justify",
+    "paper-size",
     "toc"
   ],
   "pbf-diplomski": [
@@ -918,6 +962,26 @@
     "toc"
   ],
   "ufzg-zavrsni": [],
+  "umas-diplomski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "umas-zavrsni": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
   "unidu-ekonomija-diplomski": [
     "line-spacing",
     "toc",

@@ -1,0 +1,241 @@
+{
+  "profileId": "kifos-diplomski",
+  "entries": [
+    {
+      "ruleId": "kifos-diplomski--font",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Vrsta slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "kifos-upute-2024",
+      "sourcePage": "PDF str. 2",
+      "quote": "Rad treba pisati fontom Times New Roman, veličine 12 točaka uz prored 1,5.",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "font-fixer",
+      "verifiedHash": "990e30dedf4c88dd47cde5ca6d139d9d0dd75ac1358ae75bbcba6d5fae36c6c7",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "kifos-diplomski--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "kifos-upute-2024",
+      "sourcePage": "PDF str. 2",
+      "quote": "Rad treba pisati fontom Times New Roman, veličine 12 točaka uz prored 1,5.",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "font-fixer",
+      "verifiedHash": "990e30dedf4c88dd47cde5ca6d139d9d0dd75ac1358ae75bbcba6d5fae36c6c7",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "kifos-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "kifos-upute-2024",
+      "sourcePage": "PDF str. 2",
+      "quote": "Rad treba pisati fontom Times New Roman, veličine 12 točaka uz prored 1,5.",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "line-spacing-fixer",
+      "verifiedHash": "990e30dedf4c88dd47cde5ca6d139d9d0dd75ac1358ae75bbcba6d5fae36c6c7",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "kifos-diplomski--paper-size",
+      "checkId": "paper-size",
+      "value": true,
+      "category": "format",
+      "label": "Format papira",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "kifos-upute-2024",
+      "sourcePage": "PDF str. 2",
+      "quote": "Veličina je stranice A4 (210x297 mm).",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "990e30dedf4c88dd47cde5ca6d139d9d0dd75ac1358ae75bbcba6d5fae36c6c7",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "kifos-diplomski--margins",
+      "checkId": "margins",
+      "value": {
+        "top": 2.54,
+        "right": 2.54,
+        "bottom": 2.54,
+        "left": 2.54
+      },
+      "category": "format",
+      "label": "Margine",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "kifos-upute-2024",
+      "sourcePage": "PDF str. 2",
+      "quote": "Sve rubnice trebaju biti veličine 25,4 mm.",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "margins-fixer",
+      "verifiedHash": "990e30dedf4c88dd47cde5ca6d139d9d0dd75ac1358ae75bbcba6d5fae36c6c7",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "kifos-diplomski--page-numbers",
+      "checkId": "page-numbers",
+      "value": true,
+      "category": "format",
+      "label": "Numeriranje stranica",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "kifos-upute-2024",
+      "sourcePage": "PDF str. 2",
+      "quote": "Stranice trebaju biti numerirane s pomoću automatske funkcije umetanja brojeva u donjem desnom uglu u zaglavlju. Numeracija stranica počinje na stranici uvoda.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "990e30dedf4c88dd47cde5ca6d139d9d0dd75ac1358ae75bbcba6d5fae36c6c7",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "kifos-diplomski--citation-style",
+      "checkId": "citation-style",
+      "value": "apa",
+      "category": "citation",
+      "label": "Stil citiranja",
+      "machineCheckable": false,
+      "authority": "program-page",
+      "sourceId": "kifos-upute-2024",
+      "sourcePage": "PDF str. 2",
+      "quote": "Formalno uređenje teksta treba biti sukladno APA standardima (engl. Publication Manual of the American Psychological Association, Seventh Edition, 2019).",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "990e30dedf4c88dd47cde5ca6d139d9d0dd75ac1358ae75bbcba6d5fae36c6c7",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "kifos-diplomski--page-count",
+      "checkId": "page-count",
+      "value": {
+        "min": 30,
+        "max": 50
+      },
+      "category": "scope",
+      "label": "Opseg",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "kifos-upute-2024",
+      "sourcePage": "PDF str. 2",
+      "quote": "Opseg završnog rada ograničen je na 15 do 30 stranica, a diplomski na 30 do 50 stranica (broje se i označavaju redni brojevi stranica od početka Uvoda sve do kraja rada). U opseg rada se ne uključuje sažetak, sadržaj, popis literature ni prilozi.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "990e30dedf4c88dd47cde5ca6d139d9d0dd75ac1358ae75bbcba6d5fae36c6c7",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "kifos-diplomski--required-sections",
+      "checkId": "required-sections",
+      "value": [
+        {
+          "key": "sazetak",
+          "label": "Sažetak",
+          "terms": [
+            "sažetak",
+            "sazetak",
+            "ključne riječi",
+            "kljucne rijeci",
+            "abstract"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "sadržaj",
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zaključak",
+          "terms": [
+            "zaključak",
+            "zakljucak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "literatura",
+            "popis literature",
+            "reference"
+          ]
+        }
+      ],
+      "category": "structure",
+      "label": "Obvezni dijelovi rada",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "kifos-upute-2024",
+      "sourcePage": "PDF str. 2",
+      "quote": "Završni/diplomski sastoji se od sljedećih cjelina: sažetka i ključnih riječi, sadržaja, uvoda, glavnog dijela i zaključka te popisa literature (prilozi po potrebi).",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "990e30dedf4c88dd47cde5ca6d139d9d0dd75ac1358ae75bbcba6d5fae36c6c7",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    }
+  ],
+  "generatedAt": "2026-07-16"
+}

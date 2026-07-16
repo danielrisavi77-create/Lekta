@@ -1,0 +1,209 @@
+{
+  "profileId": "ozs-diplomski",
+  "entries": [
+    {
+      "ruleId": "ozs-diplomski--font",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Vrsta slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ozs-tpl-diplomski",
+      "sourcePage": "word/styles.xml: w:style[w:styleId=\"Normal\", w:default=\"1\"] / w:rPr / w:rFonts",
+      "quote": "<w:rFonts w:ascii=\"Times New Roman\" w:eastAsia=\"Times New Roman\" w:hAnsi=\"Times New Roman\" w:cs=\"Times New Roman\"/> (stil Normal, zadani odlomak)",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "font-fixer",
+      "verifiedHash": "2e12145dcef0b66c342720559c1ea9b2cdbce9fef413096cc06e26d4ae24dcde",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "ozs-diplomski--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ozs-tpl-diplomski",
+      "sourcePage": "word/styles.xml: w:docDefaults / w:rPrDefault / w:rPr / w:sz (stil Normal nema vlastiti w:sz)",
+      "quote": "<w:sz w:val=\"24\"/> u docDefaults (24 half-pt = 12 pt); Normal ne nadjačava veličinu pa je efektivna veličina tijela 12 pt (posredno, naslijeđeno)",
+      "status": "advisory",
+      "scored": false,
+      "autoFixable": true,
+      "fixerId": "font-fixer",
+      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote)."
+    },
+    {
+      "ruleId": "ozs-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ozs-tpl-diplomski",
+      "sourcePage": "word/styles.xml: w:style[w:styleId=\"Normal\"] / w:pPr / w:spacing",
+      "quote": "<w:spacing w:line=\"360\" w:lineRule=\"auto\"/> (360/240 = 1,5 prored; stil Normal)",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "line-spacing-fixer",
+      "verifiedHash": "2e12145dcef0b66c342720559c1ea9b2cdbce9fef413096cc06e26d4ae24dcde",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "ozs-diplomski--margins",
+      "checkId": "margins",
+      "value": {
+        "top": 3,
+        "right": 3,
+        "bottom": 3,
+        "left": 3
+      },
+      "category": "format",
+      "label": "Margine",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ozs-tpl-diplomski",
+      "sourcePage": "word/document.xml: sectPr tijela / w:pgMar (uvodni dio ima drukčije margine)",
+      "quote": "<w:pgMar w:top=\"1701\" w:right=\"1701\" w:bottom=\"1701\" w:left=\"1701\" .../> (1701 twips = 3,0 cm u dijelu s tijelom rada); prednji/naslovni dio koristi <w:pgMar ... 1418 ...> = 2,5 cm, pa je predložak nejednolik",
+      "status": "advisory",
+      "scored": false,
+      "autoFixable": true,
+      "fixerId": "margins-fixer",
+      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote)."
+    },
+    {
+      "ruleId": "ozs-diplomski--page-numbers",
+      "checkId": "page-numbers",
+      "value": true,
+      "category": "format",
+      "label": "Numeriranje stranica",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ozs-tpl-diplomski",
+      "sourcePage": "word/document.xml: sectPr / w:pgNumType uz w:footerReference",
+      "quote": "<w:pgNumType w:fmt=\"upperRoman\"/> (prednji dio) te <w:pgNumType w:start=\"1\"/> (tijelo, arapski) uz <w:footerReference .../> — predložak numerira stranice",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "2e12145dcef0b66c342720559c1ea9b2cdbce9fef413096cc06e26d4ae24dcde",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "ozs-diplomski--required-sections",
+      "checkId": "required-sections",
+      "value": [
+        {
+          "key": "sazetak",
+          "label": "Sažetak",
+          "terms": [
+            "sažetak",
+            "sazetak",
+            "summary"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "sadržaj",
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "cilj",
+          "label": "Cilj rada",
+          "terms": [
+            "cilj rada",
+            "cilj"
+          ]
+        },
+        {
+          "key": "ispitanici-metode",
+          "label": "Ispitanici i metode",
+          "terms": [
+            "ispitanici i metode",
+            "ispitanici",
+            "metode"
+          ]
+        },
+        {
+          "key": "rezultati",
+          "label": "Rezultati",
+          "terms": [
+            "rezultati"
+          ]
+        },
+        {
+          "key": "rasprava",
+          "label": "Rasprava",
+          "terms": [
+            "rasprava"
+          ]
+        },
+        {
+          "key": "zakljucci",
+          "label": "Zaključci",
+          "terms": [
+            "zaključci",
+            "zaključak",
+            "zaključ"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "literatura"
+          ]
+        },
+        {
+          "key": "zivotopis",
+          "label": "Životopis",
+          "terms": [
+            "životopis",
+            "zivotopis"
+          ]
+        }
+      ],
+      "category": "structure",
+      "label": "Obvezni dijelovi rada",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ozs-tpl-diplomski",
+      "sourcePage": "word/document.xml: odlomci w:pStyle=\"Heading1\"",
+      "quote": "Heading1 u predlošku: 1. UVOD; 2. CILJ RADA; 3. ISPITANICI I METODE; 4. REZULTATI; 5. RASPRAVA; 6. ZAKLJUČCI; 7. LITERATURA; 8. ŽIVOTOPIS (uz SAŽETAK, SUMMARY, SADRŽAJ i Temeljnu dokumentacijsku karticu)",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "2e12145dcef0b66c342720559c1ea9b2cdbce9fef413096cc06e26d4ae24dcde",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    }
+  ],
+  "generatedAt": "2026-07-16"
+}

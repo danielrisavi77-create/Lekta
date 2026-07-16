@@ -7833,5 +7833,126 @@
       "final"
     ],
     "status": "partial"
+  },
+  {
+    "id": "more-zavrsni",
+    "unitId": "more",
+    "programs": [
+      "Sveučilišni prijediplomski studij (Fakultet znanosti o moru, Split)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "more-diplomski",
+    "unitId": "more",
+    "programs": [
+      "Sveučilišni diplomski studij (Fakultet znanosti o moru, Split)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "forenzika-diplomski",
+    "unitId": "forenzika",
+    "programs": [
+      "Diplomski sveučilišni studij Forenzika"
+    ],
+    "workTypes": [
+      "diplomski"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "ozs-zavrsni",
+    "unitId": "ozs",
+    "programs": [
+      "Sveučilišni prijediplomski studij (npr. Sestrinstvo) - završni rad"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "ozs-diplomski",
+    "unitId": "ozs",
+    "programs": [
+      "Sveučilišni diplomski studij (npr. Sestrinstvo) - diplomski rad"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "umas-zavrsni",
+    "unitId": "umas",
+    "programs": [
+      "Umjetnička akademija u Splitu, završni rad (preddiplomski studij)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "umas-diplomski",
+    "unitId": "umas",
+    "programs": [
+      "Umjetnička akademija u Splitu, diplomski/magistarski rad (diplomski studij)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "oss-zavrsni",
+    "unitId": "oss",
+    "programs": [
+      "Preddiplomski stručni studij (Sveučilišni odjel za stručne studije, Sveučilište u Splitu)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "oss-diplomski",
+    "unitId": "oss",
+    "programs": [
+      "Specijalistički diplomski stručni studij (Sveučilišni odjel za stručne studije, Sveučilište u Splitu)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "kifos-zavrsni",
+    "unitId": "kifos",
+    "programs": [
+      "Sveučilišni prijediplomski studij Kineziologija"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "kifos-diplomski",
+    "unitId": "kifos",
+    "programs": [
+      "Sveučilišni diplomski studij Kineziološka edukacija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial"
   }
 ]

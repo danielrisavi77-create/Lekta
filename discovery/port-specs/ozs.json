@@ -1,0 +1,245 @@
+{
+  "faculty": "ozs",
+  "institution": "unist",
+  "unit": {
+    "id": "ozs",
+    "name": "Fakultet zdravstvenih znanosti (Split)",
+    "family": "biomed",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Sveučilišni prijediplomski studij (npr. Sestrinstvo) - završni rad",
+    "Sveučilišni diplomski studij (npr. Sestrinstvo) - diplomski rad",
+    "Opći profil fakulteta"
+  ],
+  "sources": [
+    {
+      "id": "ozs-tpl-zavrsni-istrazivacki",
+      "kind": "docx-template",
+      "title": "Template za završni rad_ISTRAŽIVAČKI.docx (službeni predložak za završni rad, istraživački tip)",
+      "url": "https://fzz.unist.hr/Portals/0/adam/ContentBlocks/Q2c3cF-lcEq8Thd1fTgd4Q/Body/Template%20za%20zavr%C5%A1ni%20rad_ISTRA%C5%BDIVA%C4%8CKI.docx",
+      "publisher": "Fakultet zdravstvenih znanosti, Sveučilište u Splitu (fzz.unist.hr, bivši ozs.unist.hr)",
+      "fetchedAt": "2026-07-16",
+      "snapshotPath": "data/sources/ozs/ozs-tpl-zavrsni-istrazivacki.docx",
+      "snapshotHash": "1c41b3cc27890550200b207f9381f992ae49c9f9cf9d978e409b8da39e5f1b35",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-16"
+    },
+    {
+      "id": "ozs-tpl-zavrsni-esejski",
+      "kind": "docx-template",
+      "title": "Template za završni rad_TEORIJSKI_ESEJSKI.docx (službeni predložak za završni rad, teorijsko-esejski tip)",
+      "url": "https://fzz.unist.hr/Portals/0/adam/ContentBlocks/LpQRLoMX6U666NF91yJWPw/Body/Template%20za%20zavr%C5%A1ni%20rad_TEORIJSKI_ESEJSKI.docx",
+      "publisher": "Fakultet zdravstvenih znanosti, Sveučilište u Splitu (fzz.unist.hr, bivši ozs.unist.hr)",
+      "fetchedAt": "2026-07-16",
+      "snapshotPath": "data/sources/ozs/ozs-tpl-zavrsni-esejski.docx",
+      "snapshotHash": "9cbed0c2ea91d8518f3a435482ecf91b35fb8a5d215460f9a006feb57c2543b9",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-16"
+    },
+    {
+      "id": "ozs-tpl-diplomski",
+      "kind": "docx-template",
+      "title": "Template za diplomski rad.docx (službeni predložak za diplomski rad)",
+      "url": "https://fzz.unist.hr/Portals/0/adam/ContentBlocks/rYvKRceFM0mGBPeOYQXR7A/Body/Template%20za%20diplomski%20rad.docx",
+      "publisher": "Fakultet zdravstvenih znanosti, Sveučilište u Splitu (fzz.unist.hr, bivši ozs.unist.hr)",
+      "fetchedAt": "2026-07-16",
+      "snapshotPath": "data/sources/ozs/ozs-tpl-diplomski.docx",
+      "snapshotHash": "2e12145dcef0b66c342720559c1ea9b2cdbce9fef413096cc06e26d4ae24dcde",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-16"
+    }
+  ],
+  "profiles": [
+    {
+      "id": "ozs-zavrsni",
+      "unitId": "ozs",
+      "programs": [
+        "Sveučilišni prijediplomski studij (npr. Sestrinstvo) - završni rad"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Fakultet zdravstvenih znanosti (Split), zavrsni rad",
+      "verifiedAt": "2026-07-16",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "spacing": 1.5
+      },
+      "facts": [],
+      "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+      "sources": [
+        {
+          "title": "Template za završni rad_ISTRAŽIVAČKI.docx (službeni predložak za završni rad, istraživački tip)",
+          "url": "https://fzz.unist.hr/Portals/0/adam/ContentBlocks/Q2c3cF-lcEq8Thd1fTgd4Q/Body/Template%20za%20zavr%C5%A1ni%20rad_ISTRA%C5%BDIVA%C4%8CKI.docx"
+        },
+        {
+          "title": "Template za završni rad_TEORIJSKI_ESEJSKI.docx (službeni predložak za završni rad, teorijsko-esejski tip)",
+          "url": "https://fzz.unist.hr/Portals/0/adam/ContentBlocks/LpQRLoMX6U666NF91yJWPw/Body/Template%20za%20zavr%C5%A1ni%20rad_TEORIJSKI_ESEJSKI.docx"
+        },
+        {
+          "title": "Template za diplomski rad.docx (službeni predložak za diplomski rad)",
+          "url": "https://fzz.unist.hr/Portals/0/adam/ContentBlocks/rYvKRceFM0mGBPeOYQXR7A/Body/Template%20za%20diplomski%20rad.docx"
+        }
+      ],
+      "sourceHierarchy": [
+        "Template za završni rad_ISTRAŽIVAČKI.docx (službeni predložak za završni rad, istraživački tip)",
+        "Template za završni rad_TEORIJSKI_ESEJSKI.docx (službeni predložak za završni rad, teorijsko-esejski tip)",
+        "Template za diplomski rad.docx (službeni predložak za diplomski rad)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Vrsta slova",
+        "Prored",
+        "Numeriranje stranica"
+      ],
+      "advisoryScope": [
+        "Velicina slova",
+        "Margine",
+        "Obvezni dijelovi rada"
+      ]
+    },
+    {
+      "id": "ozs-diplomski",
+      "unitId": "ozs",
+      "programs": [
+        "Sveučilišni diplomski studij (npr. Sestrinstvo) - diplomski rad"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Fakultet zdravstvenih znanosti (Split), diplomski rad",
+      "verifiedAt": "2026-07-16",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "spacing": 1.5
+      },
+      "facts": [],
+      "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+      "sources": [
+        {
+          "title": "Template za završni rad_ISTRAŽIVAČKI.docx (službeni predložak za završni rad, istraživački tip)",
+          "url": "https://fzz.unist.hr/Portals/0/adam/ContentBlocks/Q2c3cF-lcEq8Thd1fTgd4Q/Body/Template%20za%20zavr%C5%A1ni%20rad_ISTRA%C5%BDIVA%C4%8CKI.docx"
+        },
+        {
+          "title": "Template za završni rad_TEORIJSKI_ESEJSKI.docx (službeni predložak za završni rad, teorijsko-esejski tip)",
+          "url": "https://fzz.unist.hr/Portals/0/adam/ContentBlocks/LpQRLoMX6U666NF91yJWPw/Body/Template%20za%20zavr%C5%A1ni%20rad_TEORIJSKI_ESEJSKI.docx"
+        },
+        {
+          "title": "Template za diplomski rad.docx (službeni predložak za diplomski rad)",
+          "url": "https://fzz.unist.hr/Portals/0/adam/ContentBlocks/rYvKRceFM0mGBPeOYQXR7A/Body/Template%20za%20diplomski%20rad.docx"
+        }
+      ],
+      "sourceHierarchy": [
+        "Template za završni rad_ISTRAŽIVAČKI.docx (službeni predložak za završni rad, istraživački tip)",
+        "Template za završni rad_TEORIJSKI_ESEJSKI.docx (službeni predložak za završni rad, teorijsko-esejski tip)",
+        "Template za diplomski rad.docx (službeni predložak za diplomski rad)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Vrsta slova",
+        "Prored",
+        "Numeriranje stranica",
+        "Obvezni dijelovi rada"
+      ],
+      "advisoryScope": [
+        "Velicina slova",
+        "Margine"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-ozs-zavrsni--font-verified-2026-07-16",
+      "ruleId": "ozs-zavrsni--font",
+      "profileId": "ozs-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "ozs-tpl-zavrsni-istrazivacki",
+      "sourcePage": "word/styles.xml: w:style[w:styleId=\"Normal\", w:default=\"1\"] / w:rPr / w:rFonts",
+      "quote": "<w:rFonts w:ascii=\"Times New Roman\" w:eastAsia=\"Times New Roman\" w:hAnsi=\"Times New Roman\" w:cs=\"Times New Roman\"/> (stil Normal, zadani odlomak; isto u oba predloška za završni rad)",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-ozs-zavrsni--line-spacing-verified-2026-07-16",
+      "ruleId": "ozs-zavrsni--line-spacing",
+      "profileId": "ozs-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "ozs-tpl-zavrsni-istrazivacki",
+      "sourcePage": "word/styles.xml: w:style[w:styleId=\"Normal\"] / w:pPr / w:spacing",
+      "quote": "<w:spacing w:line=\"360\" w:lineRule=\"auto\"/> (360/240 = 1,5 prored; stil Normal)",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-ozs-zavrsni--page-numbers-verified-2026-07-16",
+      "ruleId": "ozs-zavrsni--page-numbers",
+      "profileId": "ozs-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "ozs-tpl-zavrsni-istrazivacki",
+      "sourcePage": "word/document.xml: sectPr / w:pgNumType uz w:footerReference",
+      "quote": "<w:pgNumType w:fmt=\"upperRoman\"/> (prednji dio) te <w:pgNumType w:start=\"1\"/> (tijelo, arapski) uz <w:footerReference .../> — predložak numerira stranice",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-ozs-diplomski--font-verified-2026-07-16",
+      "ruleId": "ozs-diplomski--font",
+      "profileId": "ozs-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "ozs-tpl-diplomski",
+      "sourcePage": "word/styles.xml: w:style[w:styleId=\"Normal\", w:default=\"1\"] / w:rPr / w:rFonts",
+      "quote": "<w:rFonts w:ascii=\"Times New Roman\" w:eastAsia=\"Times New Roman\" w:hAnsi=\"Times New Roman\" w:cs=\"Times New Roman\"/> (stil Normal, zadani odlomak)",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-ozs-diplomski--line-spacing-verified-2026-07-16",
+      "ruleId": "ozs-diplomski--line-spacing",
+      "profileId": "ozs-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "ozs-tpl-diplomski",
+      "sourcePage": "word/styles.xml: w:style[w:styleId=\"Normal\"] / w:pPr / w:spacing",
+      "quote": "<w:spacing w:line=\"360\" w:lineRule=\"auto\"/> (360/240 = 1,5 prored; stil Normal)",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-ozs-diplomski--page-numbers-verified-2026-07-16",
+      "ruleId": "ozs-diplomski--page-numbers",
+      "profileId": "ozs-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "ozs-tpl-diplomski",
+      "sourcePage": "word/document.xml: sectPr / w:pgNumType uz w:footerReference",
+      "quote": "<w:pgNumType w:fmt=\"upperRoman\"/> (prednji dio) te <w:pgNumType w:start=\"1\"/> (tijelo, arapski) uz <w:footerReference .../> — predložak numerira stranice",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-ozs-diplomski--required-sections-verified-2026-07-16",
+      "ruleId": "ozs-diplomski--required-sections",
+      "profileId": "ozs-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "ozs-tpl-diplomski",
+      "sourcePage": "word/document.xml: odlomci w:pStyle=\"Heading1\"",
+      "quote": "Heading1 u predlošku: 1. UVOD; 2. CILJ RADA; 3. ISPITANICI I METODE; 4. REZULTATI; 5. RASPRAVA; 6. ZAKLJUČCI; 7. LITERATURA; 8. ŽIVOTOPIS (uz SAŽETAK, SUMMARY, SADRŽAJ i Temeljnu dokumentacijsku karticu)",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    }
+  ]
+}

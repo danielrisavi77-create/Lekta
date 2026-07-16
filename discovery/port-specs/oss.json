@@ -1,0 +1,273 @@
+{
+  "faculty": "oss",
+  "institution": "unist",
+  "unit": {
+    "id": "oss",
+    "name": "Sveucilisni odjel za strucne studije (Split)",
+    "family": "mixed",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Preddiplomski stručni studij (Sveučilišni odjel za stručne studije, Sveučilište u Splitu)",
+    "Specijalistički diplomski stručni studij (Sveučilišni odjel za stručne studije, Sveučilište u Splitu)",
+    "Opći profil fakulteta"
+  ],
+  "sources": [
+    {
+      "id": "oss-upute-drustveni",
+      "kind": "upute",
+      "title": "Upute za izradu završnog rada na društvenim studijima",
+      "url": "https://www.oss.unist.hr/sites/default/files/dokumenti/o-odjelu/propisi-i-dokumenti/strucni_studiji/Upute_za_izradu_zavrsnog_rada_drustveni_studiji.pdf",
+      "publisher": "Sveučilišni odjel za stručne studije, Sveučilište u Splitu",
+      "fetchedAt": "2026-07-16",
+      "snapshotPath": "data/sources/oss/oss-upute-drustveni.pdf",
+      "snapshotHash": "68690a8d965192f85e8b7c64bc83b6206bec34f252581588bb45d7e205e66d73",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-16"
+    }
+  ],
+  "profiles": [
+    {
+      "id": "oss-zavrsni",
+      "unitId": "oss",
+      "programs": [
+        "Preddiplomski stručni studij (Sveučilišni odjel za stručne studije, Sveučilište u Splitu)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Sveucilisni odjel za strucne studije (Split), zavrsni rad",
+      "verifiedAt": "2026-07-16",
+      "documentDate": null,
+      "rules": {
+        "requireA4": true,
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5
+      },
+      "facts": [],
+      "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+      "sources": [
+        {
+          "title": "Upute za izradu završnog rada na društvenim studijima",
+          "url": "https://www.oss.unist.hr/sites/default/files/dokumenti/o-odjelu/propisi-i-dokumenti/strucni_studiji/Upute_za_izradu_zavrsnog_rada_drustveni_studiji.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu završnog rada na društvenim studijima"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Numeriranje stranica",
+        "Obvezni dijelovi rada"
+      ],
+      "advisoryScope": [
+        "Margine",
+        "Opseg"
+      ]
+    },
+    {
+      "id": "oss-diplomski",
+      "unitId": "oss",
+      "programs": [
+        "Specijalistički diplomski stručni studij (Sveučilišni odjel za stručne studije, Sveučilište u Splitu)"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Sveucilisni odjel za strucne studije (Split), diplomski rad",
+      "verifiedAt": "2026-07-16",
+      "documentDate": null,
+      "rules": {
+        "requireA4": true,
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5
+      },
+      "facts": [],
+      "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+      "sources": [
+        {
+          "title": "Upute za izradu završnog rada na društvenim studijima",
+          "url": "https://www.oss.unist.hr/sites/default/files/dokumenti/o-odjelu/propisi-i-dokumenti/strucni_studiji/Upute_za_izradu_zavrsnog_rada_drustveni_studiji.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Upute za izradu završnog rada na društvenim studijima"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Numeriranje stranica",
+        "Obvezni dijelovi rada"
+      ],
+      "advisoryScope": [
+        "Margine",
+        "Opseg"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-oss-zavrsni--paper-size-verified-2026-07-16",
+      "ruleId": "oss-zavrsni--paper-size",
+      "profileId": "oss-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "oss-upute-drustveni",
+      "sourcePage": "PDF str. 3 (tiskana str. 1), odjeljak '1. UVOD'",
+      "quote": "osnovnog teksta rada na papiru A4 formata",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-oss-zavrsni--font-verified-2026-07-16",
+      "ruleId": "oss-zavrsni--font",
+      "profileId": "oss-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "oss-upute-drustveni",
+      "sourcePage": "PDF str. 3 (tiskana str. 1), odjeljak '1. UVOD'",
+      "quote": "Standardna veličina slova za tekst završnog rada je 12 pt., font Times New Roman",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-oss-zavrsni--font-size-verified-2026-07-16",
+      "ruleId": "oss-zavrsni--font-size",
+      "profileId": "oss-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "oss-upute-drustveni",
+      "sourcePage": "PDF str. 3 (tiskana str. 1), odjeljak '1. UVOD'",
+      "quote": "Standardna veličina slova za tekst završnog rada je 12 pt., font Times New Roman",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-oss-zavrsni--line-spacing-verified-2026-07-16",
+      "ruleId": "oss-zavrsni--line-spacing",
+      "profileId": "oss-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "oss-upute-drustveni",
+      "sourcePage": "PDF str. 3 (tiskana str. 1), odjeljak '1. UVOD'",
+      "quote": "proreda 1,5 i margina od 2,5 cm sa svih strana",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-oss-zavrsni--page-numbers-verified-2026-07-16",
+      "ruleId": "oss-zavrsni--page-numbers",
+      "profileId": "oss-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "oss-upute-drustveni",
+      "sourcePage": "PDF str. 9 (tiskana str. 7)",
+      "quote": "Stranice rada završnog rada moraju biti numerirane arapskim brojevima u donjem desnom uglu stranice",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-oss-zavrsni--required-sections-verified-2026-07-16",
+      "ruleId": "oss-zavrsni--required-sections",
+      "profileId": "oss-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "oss-upute-drustveni",
+      "sourcePage": "PDF str. 4 (tiskana str. 2), odjeljak '2. IZGLED ZAVRŠNOG RADA'",
+      "quote": "Završni rad sadrži sljedeće dijelove: naslovna stranica, prva stranica, sadržaj, naslov i sažetak (na hrvatskom, odnosno engleskom jeziku), uvod, izlaganje tematike (u pravilu sadrži oko pet analitički strukturiranih dijelova), zaključak, literatura, popis tablica, popis slika, popis grafikona i prilozi.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-oss-diplomski--paper-size-verified-2026-07-16",
+      "ruleId": "oss-diplomski--paper-size",
+      "profileId": "oss-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "oss-upute-drustveni",
+      "sourcePage": "PDF str. 3 (tiskana str. 1), odjeljak '1. UVOD'",
+      "quote": "osnovnog teksta rada na papiru A4 formata",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-oss-diplomski--font-verified-2026-07-16",
+      "ruleId": "oss-diplomski--font",
+      "profileId": "oss-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "oss-upute-drustveni",
+      "sourcePage": "PDF str. 3 (tiskana str. 1), odjeljak '1. UVOD'",
+      "quote": "Standardna veličina slova za tekst završnog rada je 12 pt., font Times New Roman",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-oss-diplomski--font-size-verified-2026-07-16",
+      "ruleId": "oss-diplomski--font-size",
+      "profileId": "oss-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "oss-upute-drustveni",
+      "sourcePage": "PDF str. 3 (tiskana str. 1), odjeljak '1. UVOD'",
+      "quote": "Standardna veličina slova za tekst završnog rada je 12 pt., font Times New Roman",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-oss-diplomski--line-spacing-verified-2026-07-16",
+      "ruleId": "oss-diplomski--line-spacing",
+      "profileId": "oss-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "oss-upute-drustveni",
+      "sourcePage": "PDF str. 3 (tiskana str. 1), odjeljak '1. UVOD'",
+      "quote": "proreda 1,5 i margina od 2,5 cm sa svih strana",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-oss-diplomski--page-numbers-verified-2026-07-16",
+      "ruleId": "oss-diplomski--page-numbers",
+      "profileId": "oss-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "oss-upute-drustveni",
+      "sourcePage": "PDF str. 9 (tiskana str. 7)",
+      "quote": "Stranice rada završnog rada moraju biti numerirane arapskim brojevima u donjem desnom uglu stranice",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-oss-diplomski--required-sections-verified-2026-07-16",
+      "ruleId": "oss-diplomski--required-sections",
+      "profileId": "oss-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-16",
+      "sourceId": "oss-upute-drustveni",
+      "sourcePage": "PDF str. 4 (tiskana str. 2), odjeljak '2. IZGLED ZAVRŠNOG RADA'",
+      "quote": "Završni rad sadrži sljedeće dijelove: naslovna stranica, prva stranica, sadržaj, naslov i sažetak (na hrvatskom, odnosno engleskom jeziku), uvod, izlaganje tematike (u pravilu sadrži oko pet analitički strukturiranih dijelova), zaključak, literatura, popis tablica, popis slika, popis grafikona i prilozi.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    }
+  ]
+}

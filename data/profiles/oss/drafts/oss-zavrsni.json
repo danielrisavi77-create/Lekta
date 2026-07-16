@@ -1,0 +1,216 @@
+{
+  "profileId": "oss-zavrsni",
+  "entries": [
+    {
+      "ruleId": "oss-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "value": true,
+      "category": "format",
+      "label": "Format papira",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "oss-upute-drustveni",
+      "sourcePage": "PDF str. 3 (tiskana str. 1), odjeljak '1. UVOD'",
+      "quote": "osnovnog teksta rada na papiru A4 formata",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "68690a8d965192f85e8b7c64bc83b6206bec34f252581588bb45d7e205e66d73",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "oss-zavrsni--font",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Vrsta slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "oss-upute-drustveni",
+      "sourcePage": "PDF str. 3 (tiskana str. 1), odjeljak '1. UVOD'",
+      "quote": "Standardna veličina slova za tekst završnog rada je 12 pt., font Times New Roman",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "font-fixer",
+      "verifiedHash": "68690a8d965192f85e8b7c64bc83b6206bec34f252581588bb45d7e205e66d73",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "oss-zavrsni--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "oss-upute-drustveni",
+      "sourcePage": "PDF str. 3 (tiskana str. 1), odjeljak '1. UVOD'",
+      "quote": "Standardna veličina slova za tekst završnog rada je 12 pt., font Times New Roman",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "font-fixer",
+      "verifiedHash": "68690a8d965192f85e8b7c64bc83b6206bec34f252581588bb45d7e205e66d73",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "oss-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "oss-upute-drustveni",
+      "sourcePage": "PDF str. 3 (tiskana str. 1), odjeljak '1. UVOD'",
+      "quote": "proreda 1,5 i margina od 2,5 cm sa svih strana",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "line-spacing-fixer",
+      "verifiedHash": "68690a8d965192f85e8b7c64bc83b6206bec34f252581588bb45d7e205e66d73",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "oss-zavrsni--margins",
+      "checkId": "margins",
+      "value": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "category": "format",
+      "label": "Margine",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "oss-upute-drustveni",
+      "sourcePage": "PDF str. 3 (tiskana str. 1), odjeljak '1. UVOD'",
+      "quote": "proreda 1,5 i margina od 2,5 cm sa svih strana",
+      "status": "advisory",
+      "scored": false,
+      "autoFixable": true,
+      "fixerId": "margins-fixer",
+      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote)."
+    },
+    {
+      "ruleId": "oss-zavrsni--page-numbers",
+      "checkId": "page-numbers",
+      "value": true,
+      "category": "format",
+      "label": "Numeriranje stranica",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "oss-upute-drustveni",
+      "sourcePage": "PDF str. 9 (tiskana str. 7)",
+      "quote": "Stranice rada završnog rada moraju biti numerirane arapskim brojevima u donjem desnom uglu stranice",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "68690a8d965192f85e8b7c64bc83b6206bec34f252581588bb45d7e205e66d73",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "oss-zavrsni--page-count",
+      "checkId": "page-count",
+      "value": {
+        "min": 25,
+        "max": 35
+      },
+      "category": "scope",
+      "label": "Opseg",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "oss-upute-drustveni",
+      "sourcePage": "PDF str. 3 (tiskana str. 1), odjeljak '1. UVOD'",
+      "quote": "Opseg završnoga rada ovisi o vrsti i složenosti teme koja se obrađuje, a u pravilu iznosi između 25 i 35 stranica (na preddiplomskim stručnim studijima), odnosno između 40 i 50 stranica (na specijalističkim diplomskim stručnim studijima) osnovnog teksta rada na papiru A4 formata",
+      "status": "advisory",
+      "scored": false,
+      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote)."
+    },
+    {
+      "ruleId": "oss-zavrsni--required-sections",
+      "checkId": "required-sections",
+      "value": [
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "sadržaj",
+            "sadrzaj",
+            "table of contents"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sažetak",
+          "terms": [
+            "sažetak",
+            "sazetak",
+            "summary"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod",
+            "introduction"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zaključak",
+          "terms": [
+            "zaključak",
+            "zakljucak",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "literatura",
+            "popis literature",
+            "references",
+            "bibliografija"
+          ]
+        }
+      ],
+      "category": "structure",
+      "label": "Obvezni dijelovi rada",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "oss-upute-drustveni",
+      "sourcePage": "PDF str. 4 (tiskana str. 2), odjeljak '2. IZGLED ZAVRŠNOG RADA'",
+      "quote": "Završni rad sadrži sljedeće dijelove: naslovna stranica, prva stranica, sadržaj, naslov i sažetak (na hrvatskom, odnosno engleskom jeziku), uvod, izlaganje tematike (u pravilu sadrži oko pet analitički strukturiranih dijelova), zaključak, literatura, popis tablica, popis slika, popis grafikona i prilozi.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "68690a8d965192f85e8b7c64bc83b6206bec34f252581588bb45d7e205e66d73",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    }
+  ],
+  "generatedAt": "2026-07-16"
+}

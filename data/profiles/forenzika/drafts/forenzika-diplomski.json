@@ -1,0 +1,274 @@
+{
+  "profileId": "forenzika-diplomski",
+  "entries": [
+    {
+      "ruleId": "forenzika-diplomski--paper-size",
+      "checkId": "paper-size",
+      "value": true,
+      "category": "format",
+      "label": "Format papira",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "forenzika-pravilnik-diplomski",
+      "sourcePage": "Članak 9., st. 1 (str. 5)",
+      "quote": "Pisano djelo treba biti tiskano na papiru formata A4, s označenim stranicama na donjem (gornjem) desnom rubu teksta.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "6eed97bb4df913d63e75e9875b112e634c8964554f6805012cde652ae1972841",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "forenzika-diplomski--page-numbers",
+      "checkId": "page-numbers",
+      "value": true,
+      "category": "format",
+      "label": "Numeriranje stranica",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "forenzika-pravilnik-diplomski",
+      "sourcePage": "Članak 9., st. 1 (str. 5)",
+      "quote": "Pisano djelo treba biti tiskano na papiru formata A4, s označenim stranicama na donjem (gornjem) desnom rubu teksta.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "6eed97bb4df913d63e75e9875b112e634c8964554f6805012cde652ae1972841",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "forenzika-diplomski--font",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Vrsta slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "forenzika-pravilnik-diplomski",
+      "sourcePage": "Članak 9., st. 3 (str. 5)",
+      "quote": "Tekst se piše proredom od 1,5 reda, stilom Times New Roman i veličinom slova 12 pri čemu rubovi na obje strane, gore i dolje, moraju biti široki najmanje 2,5 cm, uz obostrano poravnavanje teksta.",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "font-fixer",
+      "verifiedHash": "6eed97bb4df913d63e75e9875b112e634c8964554f6805012cde652ae1972841",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "forenzika-diplomski--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "forenzika-pravilnik-diplomski",
+      "sourcePage": "Članak 9., st. 3 (str. 5)",
+      "quote": "Tekst se piše proredom od 1,5 reda, stilom Times New Roman i veličinom slova 12 pri čemu rubovi na obje strane, gore i dolje, moraju biti široki najmanje 2,5 cm, uz obostrano poravnavanje teksta.",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "font-fixer",
+      "verifiedHash": "6eed97bb4df913d63e75e9875b112e634c8964554f6805012cde652ae1972841",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "forenzika-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "forenzika-pravilnik-diplomski",
+      "sourcePage": "Članak 9., st. 3 (str. 5)",
+      "quote": "Tekst se piše proredom od 1,5 reda, stilom Times New Roman i veličinom slova 12 pri čemu rubovi na obje strane, gore i dolje, moraju biti široki najmanje 2,5 cm, uz obostrano poravnavanje teksta.",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "line-spacing-fixer",
+      "verifiedHash": "6eed97bb4df913d63e75e9875b112e634c8964554f6805012cde652ae1972841",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "forenzika-diplomski--margins",
+      "checkId": "margins",
+      "value": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "category": "format",
+      "label": "Margine",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "forenzika-pravilnik-diplomski",
+      "sourcePage": "Članak 9., st. 3 (str. 5)",
+      "quote": "rubovi na obje strane, gore i dolje, moraju biti široki najmanje 2,5 cm, uz obostrano poravnavanje teksta.",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "margins-fixer",
+      "verifiedHash": "6eed97bb4df913d63e75e9875b112e634c8964554f6805012cde652ae1972841",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "forenzika-diplomski--required-sections",
+      "checkId": "required-sections",
+      "value": [
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "cilj-rada",
+          "label": "Cilj rada",
+          "terms": [
+            "cilj rada",
+            "cilj"
+          ]
+        },
+        {
+          "key": "izvori-podataka-i-metode",
+          "label": "Izvori podataka i metode",
+          "terms": [
+            "izvori podataka i metode",
+            "materijali i metode",
+            "metode"
+          ]
+        },
+        {
+          "key": "rezultati",
+          "label": "Rezultati",
+          "terms": [
+            "rezultati"
+          ]
+        },
+        {
+          "key": "rasprava",
+          "label": "Rasprava",
+          "terms": [
+            "rasprava",
+            "diskusija"
+          ]
+        },
+        {
+          "key": "zakljucci",
+          "label": "Zaključci",
+          "terms": [
+            "zaključci",
+            "zaključak"
+          ]
+        },
+        {
+          "key": "sazetak-hr",
+          "label": "Sažetak na hrvatskom jeziku",
+          "terms": [
+            "sažetak",
+            "sažetak na hrvatskom"
+          ]
+        },
+        {
+          "key": "sazetak-en",
+          "label": "Sažetak na engleskom jeziku",
+          "terms": [
+            "summary",
+            "abstract",
+            "sažetak na engleskom"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "literatura",
+            "popis literature",
+            "reference"
+          ]
+        },
+        {
+          "key": "zivotopis",
+          "label": "Životopis",
+          "terms": [
+            "životopis",
+            "curriculum vitae"
+          ]
+        }
+      ],
+      "category": "structure",
+      "label": "Obvezni dijelovi rada",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "forenzika-pravilnik-diplomski",
+      "sourcePage": "Članak 8., st. 3 (str. 3)",
+      "quote": "Poglavlja diplomskog rada su: Uvod, Cilj rada, Izvori podataka i metode, Rezultati, Rasprava, Zaključci, Sažetak na hrvatskom jeziku, Sažetak na engleskom jeziku, Literatura i Životopis.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "6eed97bb4df913d63e75e9875b112e634c8964554f6805012cde652ae1972841",
+      "lastVerified": "2026-07-16",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "forenzika-diplomski--page-count",
+      "checkId": "page-count",
+      "value": {
+        "min": 30
+      },
+      "category": "scope",
+      "label": "Opseg",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "forenzika-pravilnik-diplomski",
+      "sourcePage": "Članak 8., st. 2 (str. 3)",
+      "quote": "Preporučuje se da rad ima minimalno 30 stranica teksta.",
+      "status": "advisory",
+      "scored": false,
+      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote)."
+    },
+    {
+      "ruleId": "forenzika-diplomski--citation-style",
+      "checkId": "citation-style",
+      "value": [
+        "apa",
+        "vancouver",
+        "chicago"
+      ],
+      "category": "citation",
+      "label": "Stil citiranja",
+      "machineCheckable": false,
+      "authority": "program-page",
+      "sourceId": "forenzika-pravilnik-diplomski",
+      "sourcePage": "Članak 8., poglavlje g. Literatura (str. 4)",
+      "quote": "Svaki rad treba imati 15 - 30 (pročitanih) referencija, koje je potrebno propisno citirati. S obzirom na interdisciplinarnost studijskog programa Forenzika moguće je rabiti jedan od sljedeća tri stila za navođenje literature: APA sustav citiranja, Vancouverski sustav citiranja ili Chicago sustav citiranja. Student u dogovoru s mentorom odabire odgovarajući stil te odabrani stil dosljedno primjenjuje.",
+      "status": "advisory",
+      "scored": false,
+      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote)."
+    }
+  ],
+  "generatedAt": "2026-07-16"
+}
