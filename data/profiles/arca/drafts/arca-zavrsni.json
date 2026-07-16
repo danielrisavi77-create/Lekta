@@ -1,0 +1,128 @@
+{
+  "profileId": "arca-zavrsni",
+  "entries": [
+    {
+      "ruleId": "arca-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "value": true,
+      "category": "format",
+      "label": "Format papira",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "arca-pravilnik-zavrsni-2023",
+      "sourcePage": "Prilog 3 (naslovnica), str. 9 PDF-a",
+      "quote": "Napomena: prva stranica završnog rada identična je naslovnoj stranici, format papira A4.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "1e17ff9505c307ef0244f1a73ffe489af5983b7fb8e2c72ef6806c51b8dffa55",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "arca-zavrsni--page-numbers",
+      "checkId": "page-numbers",
+      "value": true,
+      "category": "format",
+      "label": "Numeriranje stranica",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "arca-pravilnik-zavrsni-2023",
+      "sourcePage": "Prilog 3 (Napomene za daljnje stranice), str. 11 PDF-a",
+      "quote": "Stranice završnog rada se numeriraju, a tablice i slike numeriraju i opisuju.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "1e17ff9505c307ef0244f1a73ffe489af5983b7fb8e2c72ef6806c51b8dffa55",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "arca-zavrsni--required-sections",
+      "checkId": "required-sections",
+      "value": [
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "sadržaj",
+            "kazalo"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sažetak",
+          "terms": [
+            "sažetak",
+            "summary"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "bit",
+          "label": "Bit",
+          "terms": [
+            "bit"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zaključak",
+          "terms": [
+            "zaključak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "literatura",
+            "popis literature"
+          ]
+        }
+      ],
+      "category": "structure",
+      "label": "Obvezni dijelovi rada",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "arca-pravilnik-zavrsni-2023",
+      "sourcePage": "Prilog 3 (Napomene za daljnje stranice), str. 10-11 PDF-a",
+      "quote": "treća stranica – sadržaj završnog rada s nazivima poglavlja, podpoglavlja, naslove i podnaslove s rednim brojem stranice na kojoj se nalaze [...] • Sažetak [...] • Uvod • Bit • Zaključak • Literatura – popis korištene literature",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "1e17ff9505c307ef0244f1a73ffe489af5983b7fb8e2c72ef6806c51b8dffa55",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "arca-zavrsni--font",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Vrsta slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "arca-pravilnik-zavrsni-2023",
+      "sourcePage": "Prilog 3 (naslovnica), str. 9-10 PDF-a",
+      "quote": "VELEUČILIŠTE ARCA (Times New Roman 14 Pt Bold-Center) [...] IME I PREZIME (Times New Roman 18 pt Bold-Center) [...] ZAVRŠNI RAD (Times New Roman 14 Pt Bold-Center)",
+      "status": "advisory",
+      "scored": false,
+      "autoFixable": true,
+      "fixerId": "font-fixer",
+      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote)."
+    }
+  ],
+  "generatedAt": "2026-07-17"
+}

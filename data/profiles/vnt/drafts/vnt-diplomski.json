@@ -1,0 +1,230 @@
+{
+  "profileId": "vnt-diplomski",
+  "entries": [
+    {
+      "ruleId": "vnt-diplomski--paper-size",
+      "checkId": "paper-size",
+      "value": true,
+      "category": "format",
+      "label": "Format papira",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "vnt-pravilnik-zavrsni-2025",
+      "sourcePage": "Članak 30. (PDF str. 8), odjeljak '4.1. Način pisanja završnog rada/diplomskog rada'",
+      "quote": "Završni rad/diplomski rad piše se na papiru A4 formata, u Times New Roman fontu, veličine slova 12 s jednim i pol (1,5) redom razmaka, poravnan obostrano s marginama od 30 mm lijevo, te 25 mm desno, gore i dolje.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "44fe57b26c687306a2c9572a305d8be40749c9cf4ed022f2f3161aa64e9b72f2",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "vnt-diplomski--font",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Vrsta slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "vnt-pravilnik-zavrsni-2025",
+      "sourcePage": "Članak 30. (PDF str. 8), odjeljak '4.1. Način pisanja završnog rada/diplomskog rada'",
+      "quote": "Završni rad/diplomski rad piše se na papiru A4 formata, u Times New Roman fontu, veličine slova 12 s jednim i pol (1,5) redom razmaka, poravnan obostrano s marginama od 30 mm lijevo, te 25 mm desno, gore i dolje.",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "font-fixer",
+      "verifiedHash": "44fe57b26c687306a2c9572a305d8be40749c9cf4ed022f2f3161aa64e9b72f2",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "vnt-diplomski--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "vnt-pravilnik-zavrsni-2025",
+      "sourcePage": "Članak 30. (PDF str. 8), odjeljak '4.1. Način pisanja završnog rada/diplomskog rada'",
+      "quote": "Završni rad/diplomski rad piše se na papiru A4 formata, u Times New Roman fontu, veličine slova 12 s jednim i pol (1,5) redom razmaka, poravnan obostrano s marginama od 30 mm lijevo, te 25 mm desno, gore i dolje.",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "font-fixer",
+      "verifiedHash": "44fe57b26c687306a2c9572a305d8be40749c9cf4ed022f2f3161aa64e9b72f2",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "vnt-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "vnt-pravilnik-zavrsni-2025",
+      "sourcePage": "Članak 30. (PDF str. 8), odjeljak '4.1. Način pisanja završnog rada/diplomskog rada'",
+      "quote": "Završni rad/diplomski rad piše se na papiru A4 formata, u Times New Roman fontu, veličine slova 12 s jednim i pol (1,5) redom razmaka, poravnan obostrano s marginama od 30 mm lijevo, te 25 mm desno, gore i dolje.",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "line-spacing-fixer",
+      "verifiedHash": "44fe57b26c687306a2c9572a305d8be40749c9cf4ed022f2f3161aa64e9b72f2",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "vnt-diplomski--margins",
+      "checkId": "margins",
+      "value": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3
+      },
+      "category": "format",
+      "label": "Margine",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "vnt-pravilnik-zavrsni-2025",
+      "sourcePage": "Članak 30. (PDF str. 8), odjeljak '4.1. Način pisanja završnog rada/diplomskog rada'",
+      "quote": "poravnan obostrano s marginama od 30 mm lijevo, te 25 mm desno, gore i dolje.",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "margins-fixer",
+      "verifiedHash": "44fe57b26c687306a2c9572a305d8be40749c9cf4ed022f2f3161aa64e9b72f2",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "vnt-diplomski--page-numbers",
+      "checkId": "page-numbers",
+      "value": true,
+      "category": "format",
+      "label": "Numeriranje stranica",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "vnt-pravilnik-zavrsni-2025",
+      "sourcePage": "Članak 33. (PDF str. 9), odjeljak '4.4. Numeriranje stranica'",
+      "quote": "Za numeraciju stranica završnog rada/diplomskog rada koriste se arapski brojevi. Prva stranica UVODA je prva stranica od koje započinje numeracija arapskim brojevima.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "44fe57b26c687306a2c9572a305d8be40749c9cf4ed022f2f3161aa64e9b72f2",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "vnt-diplomski--page-count",
+      "checkId": "page-count",
+      "value": {
+        "min": 30
+      },
+      "category": "scope",
+      "label": "Opseg",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "vnt-pravilnik-zavrsni-2025",
+      "sourcePage": "Članak 10. (PDF str. 3), odjeljak '2.6. Opseg završnog rada/diplomskog rada'",
+      "quote": "Opseg završnog rada/diplomskog rada treba biti najmanje 30 stranica. U opseg završnog rada/diplomskog rada ne ubrajaju se sadržaj, sažetak sa ključnim riječima, popis literature, popis priloga i prilozi.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "44fe57b26c687306a2c9572a305d8be40749c9cf4ed022f2f3161aa64e9b72f2",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "vnt-diplomski--required-sections",
+      "checkId": "required-sections",
+      "value": [
+        {
+          "key": "sazetak",
+          "label": "Sažetak",
+          "terms": [
+            "sažetak",
+            "sazetak",
+            "summary"
+          ]
+        },
+        {
+          "key": "abstract",
+          "label": "Abstract (sažetak na engleskom)",
+          "terms": [
+            "abstract"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "sadržaj",
+            "sadrzaj",
+            "table of contents"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod",
+            "introduction"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zaključak",
+          "terms": [
+            "zaključak",
+            "zakljucak",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Popis literature",
+          "terms": [
+            "literatura",
+            "popis literature",
+            "references",
+            "bibliografija"
+          ]
+        }
+      ],
+      "category": "structure",
+      "label": "Obvezni dijelovi rada",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "vnt-pravilnik-zavrsni-2025",
+      "sourcePage": "Članak 14. (PDF str. 4-5), odjeljak '3.1. Sastavni dijelovi završnog rada/diplomskog rada'",
+      "quote": "Završni rad/diplomski rad sastoji se od: naslovnica završnog rada/diplomskog, praznog lista, druge unutarnje stranice, Prijave teme za završni rad/diplomski rad, izjave studenta, sažetka sa ključnim riječima na hrvatskom jeziku, sažetka sa ključnim riječima na engleskom jeziku, sadržaja, uvoda, razrade teme, zaključka, popisa literature i drugih izvora podataka koji su korišteni u radu, popisa korištenih kratica i akronima ako su korišteni u radu, popisa tablica, grafikona, shema, fotografija i dr., popisa priloga (ako postoje), priloga (ako postoje).",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "44fe57b26c687306a2c9572a305d8be40749c9cf4ed022f2f3161aa64e9b72f2",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    }
+  ],
+  "generatedAt": "2026-07-17"
+}

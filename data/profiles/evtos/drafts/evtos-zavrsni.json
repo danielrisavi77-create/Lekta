@@ -1,0 +1,223 @@
+{
+  "profileId": "evtos-zavrsni",
+  "entries": [
+    {
+      "ruleId": "evtos-zavrsni--font",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Vrsta slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "evtos-pravilnik-zavrsni-diplomski",
+      "sourcePage": "Upute za pisanje i opremanje završnih i diplomskih radova, II. Izgled završnog rada (str. 7)",
+      "quote": "Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "font-fixer",
+      "verifiedHash": "0a5a726ed889907a5cd212498768ae2e1f5b5d2cd45c3d1714cbaa138e7fc8f1",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "evtos-zavrsni--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "evtos-pravilnik-zavrsni-diplomski",
+      "sourcePage": "Upute za pisanje i opremanje završnih i diplomskih radova, II. Izgled završnog rada (str. 7)",
+      "quote": "Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "font-fixer",
+      "verifiedHash": "0a5a726ed889907a5cd212498768ae2e1f5b5d2cd45c3d1714cbaa138e7fc8f1",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "evtos-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "evtos-pravilnik-zavrsni-diplomski",
+      "sourcePage": "Upute za pisanje i opremanje završnih i diplomskih radova, II. Izgled završnog rada (str. 7)",
+      "quote": "Rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5.",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "line-spacing-fixer",
+      "verifiedHash": "0a5a726ed889907a5cd212498768ae2e1f5b5d2cd45c3d1714cbaa138e7fc8f1",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "evtos-zavrsni--margins",
+      "checkId": "margins",
+      "value": {
+        "top": 2.5,
+        "right": 2,
+        "bottom": 2.5,
+        "left": 3
+      },
+      "category": "format",
+      "label": "Margine",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "evtos-pravilnik-zavrsni-diplomski",
+      "sourcePage": "Upute za pisanje i opremanje završnih i diplomskih radova, II. Izgled završnog rada (str. 7)",
+      "quote": "Rubnice trebaju biti sljedeće veličine: lijeva 30 mm, desna 20 mm, gornja i donja po 25 mm.",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "margins-fixer",
+      "verifiedHash": "0a5a726ed889907a5cd212498768ae2e1f5b5d2cd45c3d1714cbaa138e7fc8f1",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "evtos-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "value": true,
+      "category": "format",
+      "label": "Format papira",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "evtos-pravilnik-zavrsni-diplomski",
+      "sourcePage": "Upute za pisanje i opremanje završnih i diplomskih radova, II. Izgled završnog rada (str. 7)",
+      "quote": "Veličina je stranice A4 (210 x 297 mm).",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "0a5a726ed889907a5cd212498768ae2e1f5b5d2cd45c3d1714cbaa138e7fc8f1",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "evtos-zavrsni--page-numbers",
+      "checkId": "page-numbers",
+      "value": true,
+      "category": "format",
+      "label": "Numeriranje stranica",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "evtos-pravilnik-zavrsni-diplomski",
+      "sourcePage": "Upute za pisanje i opremanje završnih i diplomskih radova, II. Izgled završnog rada (str. 7)",
+      "quote": "Stranice moraju biti numerirane.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "0a5a726ed889907a5cd212498768ae2e1f5b5d2cd45c3d1714cbaa138e7fc8f1",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "evtos-zavrsni--page-count",
+      "checkId": "page-count",
+      "value": {
+        "min": 25,
+        "max": 35
+      },
+      "category": "scope",
+      "label": "Opseg",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "evtos-pravilnik-zavrsni-diplomski",
+      "sourcePage": "Članak 13. (str. 3); potvrđeno i u Uputama, II. Izgled završnog rada (str. 7)",
+      "quote": "Stručni završni radovi opsega su 25 do 35 stranica ne računajući sažetak, sadržaj, popis literature i priloge kao što su prikazi slučaja iz prakse, fotografije, predgovor i slično.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "0a5a726ed889907a5cd212498768ae2e1f5b5d2cd45c3d1714cbaa138e7fc8f1",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "evtos-zavrsni--required-sections",
+      "checkId": "required-sections",
+      "value": [
+        {
+          "key": "sazetak",
+          "label": "Sažetak",
+          "terms": [
+            "sažetak"
+          ]
+        },
+        {
+          "key": "kljucne-rijeci",
+          "label": "Ključne riječi",
+          "terms": [
+            "ključne riječi"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "glavni-dio",
+          "label": "Glavni dio",
+          "terms": [
+            "glavni dio",
+            "razrada"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zaključak",
+          "terms": [
+            "zaključak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "literatura",
+            "popis literature"
+          ]
+        }
+      ],
+      "category": "structure",
+      "label": "Obvezni dijelovi rada",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "evtos-pravilnik-zavrsni-diplomski",
+      "sourcePage": "Upute za pisanje i opremanje završnih i diplomskih radova, I. Osnovne cjeline završnog rada (str. 7); Članak 14. (str. 3-4)",
+      "quote": "Završni rad treba sadržavati sljedeće cjeline: sažetak i ključne riječi na jeziku na kojem je rad napisan, uvod, glavni dio i literaturu, i to navedenim redoslijedom. [...] Svaki završni i diplomski rad ima uvod, ... zaključak, literaturu i druge izvore ...",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "0a5a726ed889907a5cd212498768ae2e1f5b5d2cd45c3d1714cbaa138e7fc8f1",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    }
+  ],
+  "generatedAt": "2026-07-17"
+}

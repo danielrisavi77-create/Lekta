@@ -39,6 +39,14 @@
     "toc",
     "page-numbers"
   ],
+  "arca-zavrsni": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "toc"
+  ],
   "arh-diplomski": [
     "font",
     "font-size",
@@ -129,6 +137,14 @@
     "page-numbers"
   ],
   "erf-doktorski": [
+    "justify",
+    "toc"
+  ],
+  "evtos-diplomski": [
+    "justify",
+    "toc"
+  ],
+  "evtos-zavrsni": [
     "justify",
     "toc"
   ],
@@ -536,6 +552,16 @@
     "toc",
     "page-numbers"
   ],
+  "iv-diplomski": [
+    "justify",
+    "paper-size",
+    "toc"
+  ],
+  "iv-zavrsni": [
+    "justify",
+    "paper-size",
+    "toc"
+  ],
   "kbf-diplomski": [
     "paper-size"
   ],
@@ -903,6 +929,11 @@
     "toc",
     "page-numbers"
   ],
+  "securus-zavrsni": [
+    "line-spacing",
+    "justify",
+    "toc"
+  ],
   "sfzg-diplomski": [
     "paper-size"
   ],
@@ -1107,6 +1138,24 @@
   "vkjs-zavrsni": [
     "toc",
     "page-numbers"
+  ],
+  "vnt-diplomski": [
+    "justify",
+    "toc"
+  ],
+  "vnt-zavrsni": [
+    "justify",
+    "toc"
+  ],
+  "vsig-diplomski": [
+    "justify",
+    "paper-size",
+    "toc"
+  ],
+  "vsig-zavrsni": [
+    "justify",
+    "paper-size",
+    "toc"
   ],
   "vsite-diplomski": [
     "font",

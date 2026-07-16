@@ -1,0 +1,282 @@
+{
+  "faculty": "vsig",
+  "institution": "vsig",
+  "institutionName": "Veleuciliste Ivanic-Grad",
+  "unit": {
+    "id": "vsig",
+    "name": "Veleuciliste Ivanic-Grad",
+    "family": "mixed",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Stručni prijediplomski studij (završni rad)",
+    "Stručni diplomski studij (diplomski rad)",
+    "Opći profil fakulteta"
+  ],
+  "sources": [
+    {
+      "id": "vsig-pravilnik-2023",
+      "kind": "pdf",
+      "title": "Pravilnik o završnom i diplomskom radu na Veleučilištu Ivanić-Grad (oznaka 022-PRA-07-04-2023, vrijedi od 06.04.2023.) s prilogom Upute za izradu Rada",
+      "url": "https://vsig.hr/web/wp-content/uploads/2021/05/022-PRA-07-04-2023-Pravilnik-o-zavrsnom-i-diplomskom-radu-na-Veleucilistu-Ivanic-Grad-v_1_compressed-1.pdf",
+      "publisher": "Veleučilište Ivanić-Grad",
+      "fetchedAt": "2026-07-17",
+      "snapshotPath": "data/sources/vsig/vsig-pravilnik-2023.pdf",
+      "snapshotHash": "153d6b271e89d4959e39cfda51852fcbcdf221dbfa8e84c4fba0676a49e73c0b",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-17"
+    }
+  ],
+  "profiles": [
+    {
+      "id": "vsig-zavrsni",
+      "unitId": "vsig",
+      "programs": [
+        "Stručni prijediplomski studij (završni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Veleuciliste Ivanic-Grad, zavrsni rad",
+      "verifiedAt": "2026-07-17",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "spacing": 1.5
+      },
+      "facts": [],
+      "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+      "sources": [
+        {
+          "title": "Pravilnik o završnom i diplomskom radu na Veleučilištu Ivanić-Grad (oznaka 022-PRA-07-04-2023, vrijedi od 06.04.2023.) s prilogom Upute za izradu Rada",
+          "url": "https://vsig.hr/web/wp-content/uploads/2021/05/022-PRA-07-04-2023-Pravilnik-o-zavrsnom-i-diplomskom-radu-na-Veleucilistu-Ivanic-Grad-v_1_compressed-1.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o završnom i diplomskom radu na Veleučilištu Ivanić-Grad (oznaka 022-PRA-07-04-2023, vrijedi od 06.04.2023.) s prilogom Upute za izradu Rada"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Vrsta slova",
+        "Velicina slova",
+        "Margine",
+        "Prored",
+        "Numeriranje stranica",
+        "Stil citiranja"
+      ],
+      "advisoryScope": [
+        "Obvezni dijelovi rada"
+      ]
+    },
+    {
+      "id": "vsig-diplomski",
+      "unitId": "vsig",
+      "programs": [
+        "Stručni diplomski studij (diplomski rad)"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Veleuciliste Ivanic-Grad, diplomski rad",
+      "verifiedAt": "2026-07-17",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "spacing": 1.5
+      },
+      "facts": [],
+      "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+      "sources": [
+        {
+          "title": "Pravilnik o završnom i diplomskom radu na Veleučilištu Ivanić-Grad (oznaka 022-PRA-07-04-2023, vrijedi od 06.04.2023.) s prilogom Upute za izradu Rada",
+          "url": "https://vsig.hr/web/wp-content/uploads/2021/05/022-PRA-07-04-2023-Pravilnik-o-zavrsnom-i-diplomskom-radu-na-Veleucilistu-Ivanic-Grad-v_1_compressed-1.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o završnom i diplomskom radu na Veleučilištu Ivanić-Grad (oznaka 022-PRA-07-04-2023, vrijedi od 06.04.2023.) s prilogom Upute za izradu Rada"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Vrsta slova",
+        "Velicina slova",
+        "Margine",
+        "Prored",
+        "Numeriranje stranica",
+        "Stil citiranja"
+      ],
+      "advisoryScope": [
+        "Obvezni dijelovi rada"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-vsig-zavrsni--font-verified-2026-07-17",
+      "ruleId": "vsig-zavrsni--font",
+      "profileId": "vsig-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "vsig-pravilnik-2023",
+      "sourcePage": "Prilog Upute za izradu Rada, odjeljak 'Općenito — oblikovanje', str. 17/41 (PDF str. 17)",
+      "quote": "Font — Times New Roman",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-vsig-zavrsni--font-size-verified-2026-07-17",
+      "ruleId": "vsig-zavrsni--font-size",
+      "profileId": "vsig-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "vsig-pravilnik-2023",
+      "sourcePage": "Prilog Upute za izradu Rada, odjeljak 'Općenito — oblikovanje', str. 17/41 (PDF str. 17)",
+      "quote": "Veličina fonta — 12",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-vsig-zavrsni--margins-verified-2026-07-17",
+      "ruleId": "vsig-zavrsni--margins",
+      "profileId": "vsig-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "vsig-pravilnik-2023",
+      "sourcePage": "Prilog Upute za izradu Rada, odjeljak 'Općenito — oblikovanje', str. 17/41 (PDF str. 17)",
+      "quote": "Margine — margina 2,5 cm sa svake strane",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-vsig-zavrsni--line-spacing-verified-2026-07-17",
+      "ruleId": "vsig-zavrsni--line-spacing",
+      "profileId": "vsig-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "vsig-pravilnik-2023",
+      "sourcePage": "Prilog Upute za izradu Rada, odjeljak 'Općenito — oblikovanje', str. 17/41 (PDF str. 17)",
+      "quote": "Prored — 1,5 redak",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-vsig-zavrsni--page-numbers-verified-2026-07-17",
+      "ruleId": "vsig-zavrsni--page-numbers",
+      "profileId": "vsig-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "vsig-pravilnik-2023",
+      "sourcePage": "Prilog Upute za izradu Rada, str. 24/41 (PDF str. 24)",
+      "quote": "Tekst Rada počinje UVODOM. Ovo je prva stranica koja je numerirana (broj 1). Kako se stranice broje od naslovne stranice (1. stranice knjižnoga bloka, ne od korica), ali se NE označavaju, ne pišu se (naslovna stranica, sažeci, sadržaj), UVOD počinje najranije na 4. stranici.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-vsig-zavrsni--citation-style-verified-2026-07-17",
+      "ruleId": "vsig-zavrsni--citation-style",
+      "profileId": "vsig-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "vsig-pravilnik-2023",
+      "sourcePage": "Prilog Upute za izradu Rada, odjeljak 'NAVOĐENJE IZVORA', str. 26/41 (PDF str. 26)",
+      "quote": "U ovoj uputi je sadržano samo nekoliko primjera navođenja izvora koji se najčešće koriste. Zaostale izvore možete konzultirati ovu stranicu ili priručnik Publication Manual of the American Psychological Association prema kojem su i rađene ove upute.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-vsig-diplomski--font-verified-2026-07-17",
+      "ruleId": "vsig-diplomski--font",
+      "profileId": "vsig-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "vsig-pravilnik-2023",
+      "sourcePage": "Prilog Upute za izradu Rada, odjeljak 'Općenito — oblikovanje', str. 17/41 (PDF str. 17)",
+      "quote": "Font — Times New Roman",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-vsig-diplomski--font-size-verified-2026-07-17",
+      "ruleId": "vsig-diplomski--font-size",
+      "profileId": "vsig-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "vsig-pravilnik-2023",
+      "sourcePage": "Prilog Upute za izradu Rada, odjeljak 'Općenito — oblikovanje', str. 17/41 (PDF str. 17)",
+      "quote": "Veličina fonta — 12",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-vsig-diplomski--margins-verified-2026-07-17",
+      "ruleId": "vsig-diplomski--margins",
+      "profileId": "vsig-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "vsig-pravilnik-2023",
+      "sourcePage": "Prilog Upute za izradu Rada, odjeljak 'Općenito — oblikovanje', str. 17/41 (PDF str. 17)",
+      "quote": "Margine — margina 2,5 cm sa svake strane",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-vsig-diplomski--line-spacing-verified-2026-07-17",
+      "ruleId": "vsig-diplomski--line-spacing",
+      "profileId": "vsig-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "vsig-pravilnik-2023",
+      "sourcePage": "Prilog Upute za izradu Rada, odjeljak 'Općenito — oblikovanje', str. 17/41 (PDF str. 17)",
+      "quote": "Prored — 1,5 redak",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-vsig-diplomski--page-numbers-verified-2026-07-17",
+      "ruleId": "vsig-diplomski--page-numbers",
+      "profileId": "vsig-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "vsig-pravilnik-2023",
+      "sourcePage": "Prilog Upute za izradu Rada, str. 24/41 (PDF str. 24)",
+      "quote": "Tekst Rada počinje UVODOM. Ovo je prva stranica koja je numerirana (broj 1). Kako se stranice broje od naslovne stranice (1. stranice knjižnoga bloka, ne od korica), ali se NE označavaju, ne pišu se (naslovna stranica, sažeci, sadržaj), UVOD počinje najranije na 4. stranici.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-vsig-diplomski--citation-style-verified-2026-07-17",
+      "ruleId": "vsig-diplomski--citation-style",
+      "profileId": "vsig-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "vsig-pravilnik-2023",
+      "sourcePage": "Prilog Upute za izradu Rada, odjeljak 'NAVOĐENJE IZVORA', str. 26/41 (PDF str. 26)",
+      "quote": "U ovoj uputi je sadržano samo nekoliko primjera navođenja izvora koji se najčešće koriste. Zaostale izvore možete konzultirati ovu stranicu ili priručnik Publication Manual of the American Psychological Association prema kojem su i rađene ove upute.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    }
+  ]
+}

@@ -7987,5 +7987,115 @@
       "graduate"
     ],
     "status": "partial"
+  },
+  {
+    "id": "vnt-zavrsni",
+    "unitId": "vnt",
+    "programs": [
+      "Stručni prijediplomski studij (Veleučilište „Nikola Tesla” u Gospiću)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "vnt-diplomski",
+    "unitId": "vnt",
+    "programs": [
+      "Stručni diplomski studij (Veleučilište „Nikola Tesla” u Gospiću)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "iv-zavrsni",
+    "unitId": "iv",
+    "programs": [
+      "Istarsko veleučilište – prijediplomski / stručni studiji (završni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "iv-diplomski",
+    "unitId": "iv",
+    "programs": [
+      "Istarsko veleučilište – diplomski studiji (diplomski rad)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "vsig-zavrsni",
+    "unitId": "vsig",
+    "programs": [
+      "Stručni prijediplomski studij (završni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "vsig-diplomski",
+    "unitId": "vsig",
+    "programs": [
+      "Stručni diplomski studij (diplomski rad)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "arca-zavrsni",
+    "unitId": "arca",
+    "programs": [
+      "Prijediplomski stručni studij (završni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "securus-zavrsni",
+    "unitId": "securus",
+    "programs": [
+      "Stručni studij (završni rad) - Veleučilište menadžmenta i sigurnosti Securus"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "evtos-zavrsni",
+    "unitId": "evtos",
+    "programs": [
+      "Stručni studij teologije (stručni završni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "evtos-diplomski",
+    "unitId": "evtos",
+    "programs": [
+      "Specijalistički diplomski stručni studij teologije (specijalistički diplomski rad)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial"
   }
 ]

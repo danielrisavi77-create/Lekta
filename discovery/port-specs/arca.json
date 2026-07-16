@@ -1,0 +1,106 @@
+{
+  "faculty": "arca",
+  "institution": "arca",
+  "institutionName": "Veleuciliste Arca (Split)",
+  "unit": {
+    "id": "arca",
+    "name": "Veleuciliste Arca (Split)",
+    "family": "mixed",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Prijediplomski stručni studij (završni rad)",
+    "Opći profil fakulteta"
+  ],
+  "sources": [
+    {
+      "id": "arca-pravilnik-zavrsni-2023",
+      "kind": "pdf",
+      "title": "Pravilnik o završnom radu Veleučilišta Arca (17.04.2023.)",
+      "url": "https://api.velarca.hr/dokument/pravilnik-o-zavrsnom-radu-veleuciliste-arca-2/pravilnik-o-zavrsnom-radu-veleuciliste-arca-2/",
+      "publisher": "Veleučilište Arca",
+      "fetchedAt": "2026-07-17",
+      "snapshotPath": "data/sources/arca/arca-pravilnik-zavrsni-2023.pdf",
+      "snapshotHash": "1e17ff9505c307ef0244f1a73ffe489af5983b7fb8e2c72ef6806c51b8dffa55",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-17"
+    }
+  ],
+  "profiles": [
+    {
+      "id": "arca-zavrsni",
+      "unitId": "arca",
+      "programs": [
+        "Prijediplomski stručni studij (završni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Veleuciliste Arca (Split), zavrsni rad",
+      "verifiedAt": "2026-07-17",
+      "documentDate": null,
+      "rules": {
+        "requireA4": true
+      },
+      "facts": [],
+      "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+      "sources": [
+        {
+          "title": "Pravilnik o završnom radu Veleučilišta Arca (17.04.2023.)",
+          "url": "https://api.velarca.hr/dokument/pravilnik-o-zavrsnom-radu-veleuciliste-arca-2/pravilnik-o-zavrsnom-radu-veleuciliste-arca-2/"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o završnom radu Veleučilišta Arca (17.04.2023.)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Numeriranje stranica",
+        "Obvezni dijelovi rada"
+      ],
+      "advisoryScope": [
+        "Vrsta slova"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-arca-zavrsni--paper-size-verified-2026-07-17",
+      "ruleId": "arca-zavrsni--paper-size",
+      "profileId": "arca-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "arca-pravilnik-zavrsni-2023",
+      "sourcePage": "Prilog 3 (naslovnica), str. 9 PDF-a",
+      "quote": "Napomena: prva stranica završnog rada identična je naslovnoj stranici, format papira A4.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-arca-zavrsni--page-numbers-verified-2026-07-17",
+      "ruleId": "arca-zavrsni--page-numbers",
+      "profileId": "arca-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "arca-pravilnik-zavrsni-2023",
+      "sourcePage": "Prilog 3 (Napomene za daljnje stranice), str. 11 PDF-a",
+      "quote": "Stranice završnog rada se numeriraju, a tablice i slike numeriraju i opisuju.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-arca-zavrsni--required-sections-verified-2026-07-17",
+      "ruleId": "arca-zavrsni--required-sections",
+      "profileId": "arca-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "arca-pravilnik-zavrsni-2023",
+      "sourcePage": "Prilog 3 (Napomene za daljnje stranice), str. 10-11 PDF-a",
+      "quote": "treća stranica – sadržaj završnog rada s nazivima poglavlja, podpoglavlja, naslove i podnaslove s rednim brojem stranice na kojoj se nalaze [...] • Sažetak [...] • Uvod • Bit • Zaključak • Literatura – popis korištene literature",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    }
+  ]
+}

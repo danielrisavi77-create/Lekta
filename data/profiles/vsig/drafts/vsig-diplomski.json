@@ -1,0 +1,190 @@
+{
+  "profileId": "vsig-diplomski",
+  "entries": [
+    {
+      "ruleId": "vsig-diplomski--font",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Vrsta slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "vsig-pravilnik-2023",
+      "sourcePage": "Prilog Upute za izradu Rada, odjeljak 'Općenito — oblikovanje', str. 17/41 (PDF str. 17)",
+      "quote": "Font — Times New Roman",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "font-fixer",
+      "verifiedHash": "153d6b271e89d4959e39cfda51852fcbcdf221dbfa8e84c4fba0676a49e73c0b",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "vsig-diplomski--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "vsig-pravilnik-2023",
+      "sourcePage": "Prilog Upute za izradu Rada, odjeljak 'Općenito — oblikovanje', str. 17/41 (PDF str. 17)",
+      "quote": "Veličina fonta — 12",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "font-fixer",
+      "verifiedHash": "153d6b271e89d4959e39cfda51852fcbcdf221dbfa8e84c4fba0676a49e73c0b",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "vsig-diplomski--margins",
+      "checkId": "margins",
+      "value": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "category": "format",
+      "label": "Margine",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "vsig-pravilnik-2023",
+      "sourcePage": "Prilog Upute za izradu Rada, odjeljak 'Općenito — oblikovanje', str. 17/41 (PDF str. 17)",
+      "quote": "Margine — margina 2,5 cm sa svake strane",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "margins-fixer",
+      "verifiedHash": "153d6b271e89d4959e39cfda51852fcbcdf221dbfa8e84c4fba0676a49e73c0b",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "vsig-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "vsig-pravilnik-2023",
+      "sourcePage": "Prilog Upute za izradu Rada, odjeljak 'Općenito — oblikovanje', str. 17/41 (PDF str. 17)",
+      "quote": "Prored — 1,5 redak",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "line-spacing-fixer",
+      "verifiedHash": "153d6b271e89d4959e39cfda51852fcbcdf221dbfa8e84c4fba0676a49e73c0b",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "vsig-diplomski--page-numbers",
+      "checkId": "page-numbers",
+      "value": true,
+      "category": "format",
+      "label": "Numeriranje stranica",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "vsig-pravilnik-2023",
+      "sourcePage": "Prilog Upute za izradu Rada, str. 24/41 (PDF str. 24)",
+      "quote": "Tekst Rada počinje UVODOM. Ovo je prva stranica koja je numerirana (broj 1). Kako se stranice broje od naslovne stranice (1. stranice knjižnoga bloka, ne od korica), ali se NE označavaju, ne pišu se (naslovna stranica, sažeci, sadržaj), UVOD počinje najranije na 4. stranici.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "153d6b271e89d4959e39cfda51852fcbcdf221dbfa8e84c4fba0676a49e73c0b",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "vsig-diplomski--citation-style",
+      "checkId": "citation-style",
+      "value": "apa",
+      "category": "citation",
+      "label": "Stil citiranja",
+      "machineCheckable": false,
+      "authority": "program-page",
+      "sourceId": "vsig-pravilnik-2023",
+      "sourcePage": "Prilog Upute za izradu Rada, odjeljak 'NAVOĐENJE IZVORA', str. 26/41 (PDF str. 26)",
+      "quote": "U ovoj uputi je sadržano samo nekoliko primjera navođenja izvora koji se najčešće koriste. Zaostale izvore možete konzultirati ovu stranicu ili priručnik Publication Manual of the American Psychological Association prema kojem su i rađene ove upute.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "153d6b271e89d4959e39cfda51852fcbcdf221dbfa8e84c4fba0676a49e73c0b",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "vsig-diplomski--required-sections",
+      "checkId": "required-sections",
+      "value": [
+        {
+          "key": "sazetak",
+          "label": "Sažetak",
+          "terms": [
+            "sažetak",
+            "abstract"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "sadržaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zaključak",
+          "terms": [
+            "zaključak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "literatura",
+            "popis literature"
+          ]
+        }
+      ],
+      "category": "structure",
+      "label": "Obvezni dijelovi rada",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "vsig-pravilnik-2023",
+      "sourcePage": "Prilog Upute za izradu Rada, odjeljak 'STRUKTURA RADA', str. 21-24/41 (PDF str. 21-24)",
+      "quote": "TEORIJSKI RAD (STRUČNI) Rad treba sadržavati sljedeća poglavlja: - Sadržaj - Uvod (teorijska pozadina, dosadašnje spoznaje, problem) - Razrada teme po poglavljima i potpoglavljima - Zaključak - Literatura (minimalno 15 referenci) - Prilozi. [Uz to, str. 21: 'Nakon naslovne stranice, slijedi stranica na kojoj se nalaze naslovi, sažeci (250 — 300 riječi) i ključne riječi, na hrvatskom i engleskom jeziku.' Eksperimentalni rad dodatno traži Ciljeve i hipoteze, Metode istraživanja, Rezultate i Raspravu — struktura je dualna, ovisno o vrsti rada, pa je popis dan kao zajednička okosnica.]",
+      "status": "advisory",
+      "scored": false,
+      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote)."
+    }
+  ],
+  "generatedAt": "2026-07-17"
+}

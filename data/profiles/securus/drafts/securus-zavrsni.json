@@ -1,0 +1,204 @@
+{
+  "profileId": "securus-zavrsni",
+  "entries": [
+    {
+      "ruleId": "securus-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "value": true,
+      "category": "format",
+      "label": "Format papira",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "securus-pravilnik-zavrsni-2023",
+      "sourcePage": "Članak 11. stavak 3.",
+      "quote": "Završni rad piše se na računalu i jednostrano ispisuje na bijelom papiru formata A4 (210 x 297 mm), marginama 3 cm lijevo, 2 cm desno, 2,5 cm gore i dolje, korištenjem opće prihvaćenih formata (doc, docx, odt). Rad se piše u fontu Times New Roman 12.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "ec5a39f6a42e3cf2506f2e774ac47ab72dd17d9744dd525a103fb535e4e9fb02",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "securus-zavrsni--margins",
+      "checkId": "margins",
+      "value": {
+        "top": 2.5,
+        "right": 2,
+        "bottom": 2.5,
+        "left": 3
+      },
+      "category": "format",
+      "label": "Margine",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "securus-pravilnik-zavrsni-2023",
+      "sourcePage": "Članak 11. stavak 3.",
+      "quote": "Završni rad piše se na računalu i jednostrano ispisuje na bijelom papiru formata A4 (210 x 297 mm), marginama 3 cm lijevo, 2 cm desno, 2,5 cm gore i dolje, korištenjem opće prihvaćenih formata (doc, docx, odt).",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "margins-fixer",
+      "verifiedHash": "ec5a39f6a42e3cf2506f2e774ac47ab72dd17d9744dd525a103fb535e4e9fb02",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "securus-zavrsni--font",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Vrsta slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "securus-pravilnik-zavrsni-2023",
+      "sourcePage": "Članak 11. stavak 3.",
+      "quote": "Rad se piše u fontu Times New Roman 12.",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "font-fixer",
+      "verifiedHash": "ec5a39f6a42e3cf2506f2e774ac47ab72dd17d9744dd525a103fb535e4e9fb02",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "securus-zavrsni--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "securus-pravilnik-zavrsni-2023",
+      "sourcePage": "Članak 11. stavak 3.",
+      "quote": "Rad se piše u fontu Times New Roman 12.",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "font-fixer",
+      "verifiedHash": "ec5a39f6a42e3cf2506f2e774ac47ab72dd17d9744dd525a103fb535e4e9fb02",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "securus-zavrsni--page-numbers",
+      "checkId": "page-numbers",
+      "value": true,
+      "category": "format",
+      "label": "Numeriranje stranica",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "securus-pravilnik-zavrsni-2023",
+      "sourcePage": "Članak 15. stavak 4.",
+      "quote": "Sažetak je prva stranica rada s kojom započinje numeriranje stranica (za numeraciju primijeniti arapske brojeve u donjem desnom uglu stranice).",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "ec5a39f6a42e3cf2506f2e774ac47ab72dd17d9744dd525a103fb535e4e9fb02",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "securus-zavrsni--citation-style",
+      "checkId": "citation-style",
+      "value": "apa",
+      "category": "citation",
+      "label": "Stil citiranja",
+      "machineCheckable": false,
+      "authority": "program-page",
+      "sourceId": "securus-pravilnik-zavrsni-2023",
+      "sourcePage": "Članak 17. stavak 2. i Članak 21. stavak 1.",
+      "quote": "Navodi u APA (American Psychological Association) stilu koriste se kod svakog izravnog citiranja, navođenja činjeničnog iskaza koji nije općenito poznat, s tim da je autor takvog iskaza neka određena osoba te kod parafraziranja. [...] Popis korištene literature treba navesti sukladno važećim normama i definiranim preporukama APA stila, a detalji stila dostupni su na stranici: www.apastyle.org",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "ec5a39f6a42e3cf2506f2e774ac47ab72dd17d9744dd525a103fb535e4e9fb02",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "securus-zavrsni--required-sections",
+      "checkId": "required-sections",
+      "value": [
+        {
+          "key": "sazetak",
+          "label": "Sažetak (na hrvatskom jeziku)",
+          "terms": [
+            "sažetak"
+          ]
+        },
+        {
+          "key": "abstract",
+          "label": "Abstract (sažetak na engleskom jeziku)",
+          "terms": [
+            "abstract"
+          ]
+        },
+        {
+          "key": "kljucne-rijeci",
+          "label": "Popis ključnih riječi (HR i EN)",
+          "terms": [
+            "ključne riječi",
+            "key words",
+            "keywords"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "sadržaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zaključak",
+          "terms": [
+            "zaključak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Popis literature i drugih izvora podataka",
+          "terms": [
+            "popis literature",
+            "literatura",
+            "izvori podataka"
+          ]
+        }
+      ],
+      "category": "structure",
+      "label": "Obvezni dijelovi rada",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "securus-pravilnik-zavrsni-2023",
+      "sourcePage": "Članak 11. stavak 6.",
+      "quote": "Obvezni dijelovi rada redom su: 1) Korice (Prilog 5.) 2) Praznog lista 3) Druge stranice - podkorice (Prilog 6.) 4) Potpisanog teksta zadatka (Prilog 4.) 5) Sažetka na hrvatskom jeziku 6) Sažetka na engleskom jeziku (Abstract) 7) Popisa ključnih riječi na hrvatskom i engleskom jeziku 8) Sadržaja 9) Uvoda 10) Razrade teme prema definiranom zadatku 11) Zaključka 12) Popisa literature i drugih izvora podataka koji su korišteni u izradi završnog rada",
+      "status": "advisory",
+      "scored": false,
+      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote)."
+    }
+  ],
+  "generatedAt": "2026-07-17"
+}

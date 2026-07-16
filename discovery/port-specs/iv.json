@@ -1,0 +1,308 @@
+{
+  "faculty": "iv",
+  "institution": "iv",
+  "institutionName": "Istarsko veleuciliste (Universita Istriana), Pula",
+  "unit": {
+    "id": "iv",
+    "name": "Istarsko veleuciliste (Universita Istriana), Pula",
+    "family": "mixed",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Istarsko veleučilište – prijediplomski / stručni studiji (završni rad)",
+    "Istarsko veleučilište – diplomski studiji (diplomski rad)",
+    "Opći profil fakulteta"
+  ],
+  "sources": [
+    {
+      "id": "iv-pravilnik-2025",
+      "kind": "pdf",
+      "title": "Pravilnik o izradi završnih i diplomskih radova",
+      "url": "https://www.iv.hr/wp-content/uploads/2025/12/Pravilnik-o-izradi-zavrsnih-i-diplomskih-radova-za-web.pdf",
+      "publisher": "Istarsko veleučilište – Università Istriana di scienze applicate",
+      "fetchedAt": "2026-07-17",
+      "snapshotPath": "data/sources/iv/iv-pravilnik-2025.pdf",
+      "snapshotHash": "591cc934a85b7ded7a1ebdfd157e7262c407c09e3444eb82a63e1babf0cf4b22",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-17"
+    },
+    {
+      "id": "iv-naslovnica-2025",
+      "kind": "docx",
+      "title": "Prva i druga naslovnica završnog / diplomskog rada (predložak, Prilog Pravilniku)",
+      "url": "https://www.iv.hr/wp-content/uploads/2025/12/Prva-i-druga-naslovnica-zavrsnog-diplomskog-rada.docx",
+      "publisher": "Istarsko veleučilište – Università Istriana di scienze applicate",
+      "fetchedAt": "2026-07-17",
+      "snapshotPath": "data/sources/iv/iv-naslovnica-2025.docx",
+      "snapshotHash": "97b90192482c28e27e9128b029bf9de3fef24c6d3505597adfa444f01a892858",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-17"
+    }
+  ],
+  "profiles": [
+    {
+      "id": "iv-zavrsni",
+      "unitId": "iv",
+      "programs": [
+        "Istarsko veleučilište – prijediplomski / stručni studiji (završni rad)"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Istarsko veleuciliste (Universita Istriana), Pula, zavrsni rad",
+      "verifiedAt": "2026-07-17",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Arial"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+      "sources": [
+        {
+          "title": "Pravilnik o izradi završnih i diplomskih radova",
+          "url": "https://www.iv.hr/wp-content/uploads/2025/12/Pravilnik-o-izradi-zavrsnih-i-diplomskih-radova-za-web.pdf"
+        },
+        {
+          "title": "Prva i druga naslovnica završnog / diplomskog rada (predložak, Prilog Pravilniku)",
+          "url": "https://www.iv.hr/wp-content/uploads/2025/12/Prva-i-druga-naslovnica-zavrsnog-diplomskog-rada.docx"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o izradi završnih i diplomskih radova",
+        "Prva i druga naslovnica završnog / diplomskog rada (predložak, Prilog Pravilniku)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Margine",
+        "Numeriranje stranica",
+        "Obvezni dijelovi rada"
+      ],
+      "advisoryScope": [
+        "Opseg",
+        "Stil citiranja",
+        "Format papira"
+      ]
+    },
+    {
+      "id": "iv-diplomski",
+      "unitId": "iv",
+      "programs": [
+        "Istarsko veleučilište – diplomski studiji (diplomski rad)"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "partial",
+      "profileLabel": "Istarsko veleuciliste (Universita Istriana), Pula, diplomski rad",
+      "verifiedAt": "2026-07-17",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Arial"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        }
+      },
+      "facts": [],
+      "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+      "sources": [
+        {
+          "title": "Pravilnik o izradi završnih i diplomskih radova",
+          "url": "https://www.iv.hr/wp-content/uploads/2025/12/Pravilnik-o-izradi-zavrsnih-i-diplomskih-radova-za-web.pdf"
+        },
+        {
+          "title": "Prva i druga naslovnica završnog / diplomskog rada (predložak, Prilog Pravilniku)",
+          "url": "https://www.iv.hr/wp-content/uploads/2025/12/Prva-i-druga-naslovnica-zavrsnog-diplomskog-rada.docx"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o izradi završnih i diplomskih radova",
+        "Prva i druga naslovnica završnog / diplomskog rada (predložak, Prilog Pravilniku)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Vrsta slova",
+        "Velicina slova",
+        "Prored",
+        "Margine",
+        "Numeriranje stranica",
+        "Obvezni dijelovi rada"
+      ],
+      "advisoryScope": [
+        "Opseg",
+        "Stil citiranja",
+        "Format papira"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-iv-zavrsni--font-verified-2026-07-17",
+      "ruleId": "iv-zavrsni--font",
+      "profileId": "iv-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "iv-pravilnik-2025",
+      "sourcePage": "t. 3 Tehnički zahtjevi (str. 2)",
+      "quote": "Font: Arial, 12 pt. Uspravno, strani izrazi kurziv (italic)",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-iv-zavrsni--font-size-verified-2026-07-17",
+      "ruleId": "iv-zavrsni--font-size",
+      "profileId": "iv-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "iv-pravilnik-2025",
+      "sourcePage": "t. 3 Tehnički zahtjevi (str. 2)",
+      "quote": "Font: Arial, 12 pt. Uspravno, strani izrazi kurziv (italic)",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-iv-zavrsni--line-spacing-verified-2026-07-17",
+      "ruleId": "iv-zavrsni--line-spacing",
+      "profileId": "iv-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "iv-pravilnik-2025",
+      "sourcePage": "t. 3 Tehnički zahtjevi (str. 2)",
+      "quote": "Prored: 1,5",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-iv-zavrsni--margins-verified-2026-07-17",
+      "ruleId": "iv-zavrsni--margins",
+      "profileId": "iv-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "iv-pravilnik-2025",
+      "sourcePage": "t. 3 Tehnički zahtjevi (str. 2)",
+      "quote": "Margine: 2,5 cm sa svih strana.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-iv-zavrsni--page-numbers-verified-2026-07-17",
+      "ruleId": "iv-zavrsni--page-numbers",
+      "profileId": "iv-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "iv-pravilnik-2025",
+      "sourcePage": "t. 3 Tehnički zahtjevi (str. 2)",
+      "quote": "Numeriranje stranica: arapskim brojevima, dolje desno; naslovnica se ne numerira.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-iv-zavrsni--required-sections-verified-2026-07-17",
+      "ruleId": "iv-zavrsni--required-sections",
+      "profileId": "iv-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "iv-pravilnik-2025",
+      "sourcePage": "t. 5 Struktura završnog i diplomskog rada (str. 3)",
+      "quote": "Rad mora sadržavati sljedeće cjeline: NASLOVNA STRANICA PRVA; NASLOVNA STRANICA DRUGA; IZJAVA O AKADEMSKOJ ČESTITOSTI; IZJAVA O KORIŠTENJU AUTRORSKOG DJELA; SADRŽAJ; UVOD; TEORIJSKI I/ILI ANALITIČKI DIO (GLAVNI DIO); METODOLOGIJA ISTRAŽIVANJA (obvezno kod empirijskih radova); REZULTATI I RASPRAVA (mogu biti objedinjeni); ZAKLJUČAK; POPIS LITERATURE; POPIS TABLICA I SLIKA (ako je primjenjivo); PRILOZI (ako postoje); SAŽETAK (hrvatski jezik); SUMMARY (engleski jezik)",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-iv-diplomski--font-verified-2026-07-17",
+      "ruleId": "iv-diplomski--font",
+      "profileId": "iv-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "iv-pravilnik-2025",
+      "sourcePage": "t. 3 Tehnički zahtjevi (str. 2)",
+      "quote": "Font: Arial, 12 pt. Uspravno, strani izrazi kurziv (italic)",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-iv-diplomski--font-size-verified-2026-07-17",
+      "ruleId": "iv-diplomski--font-size",
+      "profileId": "iv-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "iv-pravilnik-2025",
+      "sourcePage": "t. 3 Tehnički zahtjevi (str. 2)",
+      "quote": "Font: Arial, 12 pt. Uspravno, strani izrazi kurziv (italic)",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-iv-diplomski--line-spacing-verified-2026-07-17",
+      "ruleId": "iv-diplomski--line-spacing",
+      "profileId": "iv-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "iv-pravilnik-2025",
+      "sourcePage": "t. 3 Tehnički zahtjevi (str. 2)",
+      "quote": "Prored: 1,5",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-iv-diplomski--margins-verified-2026-07-17",
+      "ruleId": "iv-diplomski--margins",
+      "profileId": "iv-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "iv-pravilnik-2025",
+      "sourcePage": "t. 3 Tehnički zahtjevi (str. 2)",
+      "quote": "Margine: 2,5 cm sa svih strana.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-iv-diplomski--page-numbers-verified-2026-07-17",
+      "ruleId": "iv-diplomski--page-numbers",
+      "profileId": "iv-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "iv-pravilnik-2025",
+      "sourcePage": "t. 3 Tehnički zahtjevi (str. 2)",
+      "quote": "Numeriranje stranica: arapskim brojevima, dolje desno; naslovnica se ne numerira.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-iv-diplomski--required-sections-verified-2026-07-17",
+      "ruleId": "iv-diplomski--required-sections",
+      "profileId": "iv-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "iv-pravilnik-2025",
+      "sourcePage": "t. 5 Struktura završnog i diplomskog rada (str. 3)",
+      "quote": "Rad mora sadržavati sljedeće cjeline: NASLOVNA STRANICA PRVA; NASLOVNA STRANICA DRUGA; IZJAVA O AKADEMSKOJ ČESTITOSTI; IZJAVA O KORIŠTENJU AUTRORSKOG DJELA; SADRŽAJ; UVOD; TEORIJSKI I/ILI ANALITIČKI DIO (GLAVNI DIO); METODOLOGIJA ISTRAŽIVANJA (obvezno kod empirijskih radova); REZULTATI I RASPRAVA (mogu biti objedinjeni); ZAKLJUČAK; POPIS LITERATURE; POPIS TABLICA I SLIKA (ako je primjenjivo); PRILOZI (ako postoje); SAŽETAK (hrvatski jezik); SUMMARY (engleski jezik)",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    }
+  ]
+}

@@ -2428,5 +2428,89 @@
     "validityClass": "stable",
     "lastChecked": "2026-07-16",
     "note": "Sluzbene smjernice fakulteta za oblikovanje studentskih radova; font i APA su preporuka pa ostaju advisory."
+  },
+  {
+    "id": "vnt-pravilnik-zavrsni-2025",
+    "kind": "pravilnik",
+    "title": "Pravilnik o završnom radu i diplomskom radu (Veleučilište „Nikola Tesla” u Gospiću, veljača 2025.)",
+    "url": "https://velegs-nikolatesla.hr/pravilnici/Pravilnik%20o%20zavrsnom%20radu%202025.pdf",
+    "publisher": "Veleučilište „Nikola Tesla” u Gospiću",
+    "fetchedAt": "2026-07-17",
+    "snapshotPath": "data/sources/vnt/vnt-pravilnik-zavrsni-2025.pdf",
+    "snapshotHash": "44fe57b26c687306a2c9572a305d8be40749c9cf4ed022f2f3161aa64e9b72f2",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-17"
+  },
+  {
+    "id": "iv-pravilnik-2025",
+    "kind": "pdf",
+    "title": "Pravilnik o izradi završnih i diplomskih radova",
+    "url": "https://www.iv.hr/wp-content/uploads/2025/12/Pravilnik-o-izradi-zavrsnih-i-diplomskih-radova-za-web.pdf",
+    "publisher": "Istarsko veleučilište – Università Istriana di scienze applicate",
+    "fetchedAt": "2026-07-17",
+    "snapshotPath": "data/sources/iv/iv-pravilnik-2025.pdf",
+    "snapshotHash": "591cc934a85b7ded7a1ebdfd157e7262c407c09e3444eb82a63e1babf0cf4b22",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-17"
+  },
+  {
+    "id": "iv-naslovnica-2025",
+    "kind": "docx",
+    "title": "Prva i druga naslovnica završnog / diplomskog rada (predložak, Prilog Pravilniku)",
+    "url": "https://www.iv.hr/wp-content/uploads/2025/12/Prva-i-druga-naslovnica-zavrsnog-diplomskog-rada.docx",
+    "publisher": "Istarsko veleučilište – Università Istriana di scienze applicate",
+    "fetchedAt": "2026-07-17",
+    "snapshotPath": "data/sources/iv/iv-naslovnica-2025.docx",
+    "snapshotHash": "97b90192482c28e27e9128b029bf9de3fef24c6d3505597adfa444f01a892858",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-17"
+  },
+  {
+    "id": "vsig-pravilnik-2023",
+    "kind": "pdf",
+    "title": "Pravilnik o završnom i diplomskom radu na Veleučilištu Ivanić-Grad (oznaka 022-PRA-07-04-2023, vrijedi od 06.04.2023.) s prilogom Upute za izradu Rada",
+    "url": "https://vsig.hr/web/wp-content/uploads/2021/05/022-PRA-07-04-2023-Pravilnik-o-zavrsnom-i-diplomskom-radu-na-Veleucilistu-Ivanic-Grad-v_1_compressed-1.pdf",
+    "publisher": "Veleučilište Ivanić-Grad",
+    "fetchedAt": "2026-07-17",
+    "snapshotPath": "data/sources/vsig/vsig-pravilnik-2023.pdf",
+    "snapshotHash": "153d6b271e89d4959e39cfda51852fcbcdf221dbfa8e84c4fba0676a49e73c0b",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-17"
+  },
+  {
+    "id": "arca-pravilnik-zavrsni-2023",
+    "kind": "pdf",
+    "title": "Pravilnik o završnom radu Veleučilišta Arca (17.04.2023.)",
+    "url": "https://api.velarca.hr/dokument/pravilnik-o-zavrsnom-radu-veleuciliste-arca-2/pravilnik-o-zavrsnom-radu-veleuciliste-arca-2/",
+    "publisher": "Veleučilište Arca",
+    "fetchedAt": "2026-07-17",
+    "snapshotPath": "data/sources/arca/arca-pravilnik-zavrsni-2023.pdf",
+    "snapshotHash": "1e17ff9505c307ef0244f1a73ffe489af5983b7fb8e2c72ef6806c51b8dffa55",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-17"
+  },
+  {
+    "id": "securus-pravilnik-zavrsni-2023",
+    "kind": "pravilnik",
+    "title": "Pravilnik o završnom radu Veleučilišta menadžmenta i sigurnosti Securus u Puli (travanj 2023.)",
+    "url": "https://www.vs-securus.hr/wp-content/uploads/2023/05/Pravilnik-o-zavr%C5%A1nom-radu-Securus-2023.pdf",
+    "publisher": "Veleučilište menadžmenta i sigurnosti Securus, Pula",
+    "fetchedAt": "2026-07-17",
+    "snapshotPath": "data/sources/securus/securus-pravilnik-zavrsni-2023.pdf",
+    "snapshotHash": "ec5a39f6a42e3cf2506f2e774ac47ab72dd17d9744dd525a103fb535e4e9fb02",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-17"
+  },
+  {
+    "id": "evtos-pravilnik-zavrsni-diplomski",
+    "kind": "pravilnik",
+    "title": "Pravilnik o završnim i diplomskim radovima (uključuje Upute za pisanje i opremanje završnih i diplomskih radova)",
+    "url": "https://www.etvos.hr/wp-content/uploads/2024/02/Pravilnik-o-zavrsnim-i-diplomskim-radovima.pdf",
+    "publisher": "Visoko evanđeosko teološko učilište u Osijeku – Visoka škola (Evanđeosko teološko veleučilište)",
+    "fetchedAt": "2026-07-17",
+    "snapshotPath": "data/sources/evtos/evtos-pravilnik-zavrsni-diplomski.pdf",
+    "snapshotHash": "0a5a726ed889907a5cd212498768ae2e1f5b5d2cd45c3d1714cbaa138e7fc8f1",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-17"
   }
 ]

@@ -30698,5 +30698,528 @@
       "Obvezni dijelovi rada",
       "Stil citiranja"
     ]
+  },
+  "vnt-zavrsni": {
+    "id": "vnt-zavrsni",
+    "unitId": "vnt",
+    "programs": [
+      "Stručni prijediplomski studij (Veleučilište „Nikola Tesla” u Gospiću)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Veleuciliste Nikola Tesla u Gospicu, zavrsni rad",
+    "verifiedAt": "2026-07-17",
+    "documentDate": null,
+    "rules": {
+      "requireA4": true,
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3
+      }
+    },
+    "facts": [],
+    "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+    "sources": [
+      {
+        "title": "Pravilnik o završnom radu i diplomskom radu (Veleučilište „Nikola Tesla” u Gospiću, veljača 2025.)",
+        "url": "https://velegs-nikolatesla.hr/pravilnici/Pravilnik%20o%20zavrsnom%20radu%202025.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o završnom radu i diplomskom radu (Veleučilište „Nikola Tesla” u Gospiću, veljača 2025.)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Margine",
+      "Numeriranje stranica",
+      "Opseg",
+      "Obvezni dijelovi rada"
+    ],
+    "advisoryScope": []
+  },
+  "vnt-diplomski": {
+    "id": "vnt-diplomski",
+    "unitId": "vnt",
+    "programs": [
+      "Stručni diplomski studij (Veleučilište „Nikola Tesla” u Gospiću)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Veleuciliste Nikola Tesla u Gospicu, diplomski rad",
+    "verifiedAt": "2026-07-17",
+    "documentDate": null,
+    "rules": {
+      "requireA4": true,
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3
+      }
+    },
+    "facts": [],
+    "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+    "sources": [
+      {
+        "title": "Pravilnik o završnom radu i diplomskom radu (Veleučilište „Nikola Tesla” u Gospiću, veljača 2025.)",
+        "url": "https://velegs-nikolatesla.hr/pravilnici/Pravilnik%20o%20zavrsnom%20radu%202025.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o završnom radu i diplomskom radu (Veleučilište „Nikola Tesla” u Gospiću, veljača 2025.)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Margine",
+      "Numeriranje stranica",
+      "Opseg",
+      "Obvezni dijelovi rada"
+    ],
+    "advisoryScope": []
+  },
+  "iv-zavrsni": {
+    "id": "iv-zavrsni",
+    "unitId": "iv",
+    "programs": [
+      "Istarsko veleučilište – prijediplomski / stručni studiji (završni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Istarsko veleuciliste (Universita Istriana), Pula, zavrsni rad",
+    "verifiedAt": "2026-07-17",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Arial"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+    "sources": [
+      {
+        "title": "Pravilnik o izradi završnih i diplomskih radova",
+        "url": "https://www.iv.hr/wp-content/uploads/2025/12/Pravilnik-o-izradi-zavrsnih-i-diplomskih-radova-za-web.pdf"
+      },
+      {
+        "title": "Prva i druga naslovnica završnog / diplomskog rada (predložak, Prilog Pravilniku)",
+        "url": "https://www.iv.hr/wp-content/uploads/2025/12/Prva-i-druga-naslovnica-zavrsnog-diplomskog-rada.docx"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o izradi završnih i diplomskih radova",
+      "Prva i druga naslovnica završnog / diplomskog rada (predložak, Prilog Pravilniku)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Margine",
+      "Numeriranje stranica",
+      "Obvezni dijelovi rada"
+    ],
+    "advisoryScope": [
+      "Opseg",
+      "Stil citiranja",
+      "Format papira"
+    ]
+  },
+  "iv-diplomski": {
+    "id": "iv-diplomski",
+    "unitId": "iv",
+    "programs": [
+      "Istarsko veleučilište – diplomski studiji (diplomski rad)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Istarsko veleuciliste (Universita Istriana), Pula, diplomski rad",
+    "verifiedAt": "2026-07-17",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Arial"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    "facts": [],
+    "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+    "sources": [
+      {
+        "title": "Pravilnik o izradi završnih i diplomskih radova",
+        "url": "https://www.iv.hr/wp-content/uploads/2025/12/Pravilnik-o-izradi-zavrsnih-i-diplomskih-radova-za-web.pdf"
+      },
+      {
+        "title": "Prva i druga naslovnica završnog / diplomskog rada (predložak, Prilog Pravilniku)",
+        "url": "https://www.iv.hr/wp-content/uploads/2025/12/Prva-i-druga-naslovnica-zavrsnog-diplomskog-rada.docx"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o izradi završnih i diplomskih radova",
+      "Prva i druga naslovnica završnog / diplomskog rada (predložak, Prilog Pravilniku)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Margine",
+      "Numeriranje stranica",
+      "Obvezni dijelovi rada"
+    ],
+    "advisoryScope": [
+      "Opseg",
+      "Stil citiranja",
+      "Format papira"
+    ]
+  },
+  "vsig-zavrsni": {
+    "id": "vsig-zavrsni",
+    "unitId": "vsig",
+    "programs": [
+      "Stručni prijediplomski studij (završni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Veleuciliste Ivanic-Grad, zavrsni rad",
+    "verifiedAt": "2026-07-17",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "spacing": 1.5
+    },
+    "facts": [],
+    "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+    "sources": [
+      {
+        "title": "Pravilnik o završnom i diplomskom radu na Veleučilištu Ivanić-Grad (oznaka 022-PRA-07-04-2023, vrijedi od 06.04.2023.) s prilogom Upute za izradu Rada",
+        "url": "https://vsig.hr/web/wp-content/uploads/2021/05/022-PRA-07-04-2023-Pravilnik-o-zavrsnom-i-diplomskom-radu-na-Veleucilistu-Ivanic-Grad-v_1_compressed-1.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o završnom i diplomskom radu na Veleučilištu Ivanić-Grad (oznaka 022-PRA-07-04-2023, vrijedi od 06.04.2023.) s prilogom Upute za izradu Rada"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Margine",
+      "Prored",
+      "Numeriranje stranica",
+      "Stil citiranja"
+    ],
+    "advisoryScope": [
+      "Obvezni dijelovi rada"
+    ]
+  },
+  "vsig-diplomski": {
+    "id": "vsig-diplomski",
+    "unitId": "vsig",
+    "programs": [
+      "Stručni diplomski studij (diplomski rad)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Veleuciliste Ivanic-Grad, diplomski rad",
+    "verifiedAt": "2026-07-17",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "spacing": 1.5
+    },
+    "facts": [],
+    "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+    "sources": [
+      {
+        "title": "Pravilnik o završnom i diplomskom radu na Veleučilištu Ivanić-Grad (oznaka 022-PRA-07-04-2023, vrijedi od 06.04.2023.) s prilogom Upute za izradu Rada",
+        "url": "https://vsig.hr/web/wp-content/uploads/2021/05/022-PRA-07-04-2023-Pravilnik-o-zavrsnom-i-diplomskom-radu-na-Veleucilistu-Ivanic-Grad-v_1_compressed-1.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o završnom i diplomskom radu na Veleučilištu Ivanić-Grad (oznaka 022-PRA-07-04-2023, vrijedi od 06.04.2023.) s prilogom Upute za izradu Rada"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Margine",
+      "Prored",
+      "Numeriranje stranica",
+      "Stil citiranja"
+    ],
+    "advisoryScope": [
+      "Obvezni dijelovi rada"
+    ]
+  },
+  "arca-zavrsni": {
+    "id": "arca-zavrsni",
+    "unitId": "arca",
+    "programs": [
+      "Prijediplomski stručni studij (završni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Veleuciliste Arca (Split), zavrsni rad",
+    "verifiedAt": "2026-07-17",
+    "documentDate": null,
+    "rules": {
+      "requireA4": true
+    },
+    "facts": [],
+    "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+    "sources": [
+      {
+        "title": "Pravilnik o završnom radu Veleučilišta Arca (17.04.2023.)",
+        "url": "https://api.velarca.hr/dokument/pravilnik-o-zavrsnom-radu-veleuciliste-arca-2/pravilnik-o-zavrsnom-radu-veleuciliste-arca-2/"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o završnom radu Veleučilišta Arca (17.04.2023.)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Numeriranje stranica",
+      "Obvezni dijelovi rada"
+    ],
+    "advisoryScope": [
+      "Vrsta slova"
+    ]
+  },
+  "securus-zavrsni": {
+    "id": "securus-zavrsni",
+    "unitId": "securus",
+    "programs": [
+      "Stručni studij (završni rad) - Veleučilište menadžmenta i sigurnosti Securus"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Veleuciliste menadzmenta i sigurnosti Securus (Pula), zavrsni rad",
+    "verifiedAt": "2026-07-17",
+    "documentDate": null,
+    "rules": {
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2,
+        "bottom": 2.5,
+        "left": 3
+      },
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ]
+    },
+    "facts": [],
+    "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+    "sources": [
+      {
+        "title": "Pravilnik o završnom radu Veleučilišta menadžmenta i sigurnosti Securus u Puli (travanj 2023.)",
+        "url": "https://www.vs-securus.hr/wp-content/uploads/2023/05/Pravilnik-o-zavr%C5%A1nom-radu-Securus-2023.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o završnom radu Veleučilišta menadžmenta i sigurnosti Securus u Puli (travanj 2023.)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Numeriranje stranica",
+      "Stil citiranja"
+    ],
+    "advisoryScope": [
+      "Obvezni dijelovi rada"
+    ]
+  },
+  "evtos-zavrsni": {
+    "id": "evtos-zavrsni",
+    "unitId": "evtos",
+    "programs": [
+      "Stručni studij teologije (stručni završni rad)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Evandjeosko teolosko veleuciliste (Osijek), zavrsni rad",
+    "verifiedAt": "2026-07-17",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2,
+        "bottom": 2.5,
+        "left": 3
+      },
+      "requireA4": true
+    },
+    "facts": [],
+    "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+    "sources": [
+      {
+        "title": "Pravilnik o završnim i diplomskim radovima (uključuje Upute za pisanje i opremanje završnih i diplomskih radova)",
+        "url": "https://www.etvos.hr/wp-content/uploads/2024/02/Pravilnik-o-zavrsnim-i-diplomskim-radovima.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o završnim i diplomskim radovima (uključuje Upute za pisanje i opremanje završnih i diplomskih radova)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Margine",
+      "Format papira",
+      "Numeriranje stranica",
+      "Opseg",
+      "Obvezni dijelovi rada"
+    ],
+    "advisoryScope": []
+  },
+  "evtos-diplomski": {
+    "id": "evtos-diplomski",
+    "unitId": "evtos",
+    "programs": [
+      "Specijalistički diplomski stručni studij teologije (specijalistički diplomski rad)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Evandjeosko teolosko veleuciliste (Osijek), diplomski rad",
+    "verifiedAt": "2026-07-17",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2,
+        "bottom": 2.5,
+        "left": 3
+      },
+      "requireA4": true
+    },
+    "facts": [],
+    "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+    "sources": [
+      {
+        "title": "Pravilnik o završnim i diplomskim radovima (uključuje Upute za pisanje i opremanje završnih i diplomskih radova)",
+        "url": "https://www.etvos.hr/wp-content/uploads/2024/02/Pravilnik-o-zavrsnim-i-diplomskim-radovima.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o završnim i diplomskim radovima (uključuje Upute za pisanje i opremanje završnih i diplomskih radova)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Margine",
+      "Format papira",
+      "Numeriranje stranica",
+      "Opseg",
+      "Obvezni dijelovi rada"
+    ],
+    "advisoryScope": []
   }
 }

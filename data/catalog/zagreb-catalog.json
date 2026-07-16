@@ -1911,5 +1911,105 @@
         ]
       }
     ]
+  },
+  {
+    "id": "vnt",
+    "name": "Veleuciliste Nikola Tesla u Gospicu",
+    "units": [
+      {
+        "id": "vnt",
+        "name": "Veleuciliste Nikola Tesla u Gospicu",
+        "family": "mixed",
+        "status": "partial",
+        "programs": [
+          "Stručni prijediplomski studij (Veleučilište „Nikola Tesla” u Gospiću)",
+          "Stručni diplomski studij (Veleučilište „Nikola Tesla” u Gospiću)",
+          "Opći profil fakulteta"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "iv",
+    "name": "Istarsko veleuciliste (Universita Istriana), Pula",
+    "units": [
+      {
+        "id": "iv",
+        "name": "Istarsko veleuciliste (Universita Istriana), Pula",
+        "family": "mixed",
+        "status": "partial",
+        "programs": [
+          "Istarsko veleučilište – prijediplomski / stručni studiji (završni rad)",
+          "Istarsko veleučilište – diplomski studiji (diplomski rad)",
+          "Opći profil fakulteta"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "vsig",
+    "name": "Veleuciliste Ivanic-Grad",
+    "units": [
+      {
+        "id": "vsig",
+        "name": "Veleuciliste Ivanic-Grad",
+        "family": "mixed",
+        "status": "partial",
+        "programs": [
+          "Stručni prijediplomski studij (završni rad)",
+          "Stručni diplomski studij (diplomski rad)",
+          "Opći profil fakulteta"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "arca",
+    "name": "Veleuciliste Arca (Split)",
+    "units": [
+      {
+        "id": "arca",
+        "name": "Veleuciliste Arca (Split)",
+        "family": "mixed",
+        "status": "partial",
+        "programs": [
+          "Prijediplomski stručni studij (završni rad)",
+          "Opći profil fakulteta"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "securus",
+    "name": "Veleuciliste menadzmenta i sigurnosti Securus (Pula)",
+    "units": [
+      {
+        "id": "securus",
+        "name": "Veleuciliste menadzmenta i sigurnosti Securus (Pula)",
+        "family": "social",
+        "status": "partial",
+        "programs": [
+          "Stručni studij (završni rad) - Veleučilište menadžmenta i sigurnosti Securus",
+          "Opći profil fakulteta"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "evtos",
+    "name": "Evandjeosko teolosko veleuciliste (Osijek)",
+    "units": [
+      {
+        "id": "evtos",
+        "name": "Evandjeosko teolosko veleuciliste (Osijek)",
+        "family": "social",
+        "status": "partial",
+        "programs": [
+          "Stručni studij teologije (stručni završni rad)",
+          "Specijalistički diplomski stručni studij teologije (specijalistički diplomski rad)",
+          "Opći profil fakulteta"
+        ]
+      }
+    ]
   }
 ]

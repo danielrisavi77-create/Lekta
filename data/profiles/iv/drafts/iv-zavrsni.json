@@ -1,0 +1,244 @@
+{
+  "profileId": "iv-zavrsni",
+  "entries": [
+    {
+      "ruleId": "iv-zavrsni--font",
+      "checkId": "font",
+      "value": [
+        "Arial"
+      ],
+      "category": "format",
+      "label": "Vrsta slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "iv-pravilnik-2025",
+      "sourcePage": "t. 3 Tehnički zahtjevi (str. 2)",
+      "quote": "Font: Arial, 12 pt. Uspravno, strani izrazi kurziv (italic)",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "font-fixer",
+      "verifiedHash": "591cc934a85b7ded7a1ebdfd157e7262c407c09e3444eb82a63e1babf0cf4b22",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "iv-zavrsni--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "iv-pravilnik-2025",
+      "sourcePage": "t. 3 Tehnički zahtjevi (str. 2)",
+      "quote": "Font: Arial, 12 pt. Uspravno, strani izrazi kurziv (italic)",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "font-fixer",
+      "verifiedHash": "591cc934a85b7ded7a1ebdfd157e7262c407c09e3444eb82a63e1babf0cf4b22",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "iv-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "iv-pravilnik-2025",
+      "sourcePage": "t. 3 Tehnički zahtjevi (str. 2)",
+      "quote": "Prored: 1,5",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "line-spacing-fixer",
+      "verifiedHash": "591cc934a85b7ded7a1ebdfd157e7262c407c09e3444eb82a63e1babf0cf4b22",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "iv-zavrsni--margins",
+      "checkId": "margins",
+      "value": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "category": "format",
+      "label": "Margine",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "iv-pravilnik-2025",
+      "sourcePage": "t. 3 Tehnički zahtjevi (str. 2)",
+      "quote": "Margine: 2,5 cm sa svih strana.",
+      "status": "verified",
+      "scored": true,
+      "autoFixable": true,
+      "fixerId": "margins-fixer",
+      "verifiedHash": "591cc934a85b7ded7a1ebdfd157e7262c407c09e3444eb82a63e1babf0cf4b22",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "iv-zavrsni--page-numbers",
+      "checkId": "page-numbers",
+      "value": true,
+      "category": "format",
+      "label": "Numeriranje stranica",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "iv-pravilnik-2025",
+      "sourcePage": "t. 3 Tehnički zahtjevi (str. 2)",
+      "quote": "Numeriranje stranica: arapskim brojevima, dolje desno; naslovnica se ne numerira.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "591cc934a85b7ded7a1ebdfd157e7262c407c09e3444eb82a63e1babf0cf4b22",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "iv-zavrsni--required-sections",
+      "checkId": "required-sections",
+      "value": [
+        {
+          "key": "toc",
+          "label": "sadržaj",
+          "terms": [
+            "sadrzaj",
+            "contents",
+            "table of contents"
+          ]
+        },
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod",
+            "introduction"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zaključak",
+          "terms": [
+            "zakljucak",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "popis literature",
+          "terms": [
+            "popis literature",
+            "literatura",
+            "bibliografija",
+            "references"
+          ]
+        },
+        {
+          "key": "abstract",
+          "label": "sažetak",
+          "terms": [
+            "sazetak"
+          ]
+        },
+        {
+          "key": "summary",
+          "label": "summary",
+          "terms": [
+            "summary",
+            "abstract"
+          ]
+        },
+        {
+          "key": "keywords",
+          "label": "ključne riječi / keywords",
+          "terms": [
+            "kljucne rijeci",
+            "keywords"
+          ]
+        }
+      ],
+      "category": "structure",
+      "label": "Obvezni dijelovi rada",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "iv-pravilnik-2025",
+      "sourcePage": "t. 5 Struktura završnog i diplomskog rada (str. 3)",
+      "quote": "Rad mora sadržavati sljedeće cjeline: NASLOVNA STRANICA PRVA; NASLOVNA STRANICA DRUGA; IZJAVA O AKADEMSKOJ ČESTITOSTI; IZJAVA O KORIŠTENJU AUTRORSKOG DJELA; SADRŽAJ; UVOD; TEORIJSKI I/ILI ANALITIČKI DIO (GLAVNI DIO); METODOLOGIJA ISTRAŽIVANJA (obvezno kod empirijskih radova); REZULTATI I RASPRAVA (mogu biti objedinjeni); ZAKLJUČAK; POPIS LITERATURE; POPIS TABLICA I SLIKA (ako je primjenjivo); PRILOZI (ako postoje); SAŽETAK (hrvatski jezik); SUMMARY (engleski jezik)",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "591cc934a85b7ded7a1ebdfd157e7262c407c09e3444eb82a63e1babf0cf4b22",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "workflow-harvest+adversarial-verify"
+    },
+    {
+      "ruleId": "iv-zavrsni--page-count",
+      "checkId": "page-count",
+      "value": {
+        "min": 30,
+        "max": 40
+      },
+      "category": "scope",
+      "label": "Opseg",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "iv-pravilnik-2025",
+      "sourcePage": "t. 2 Opseg rada (str. 2)",
+      "quote": "Završni rad: optimalno između 30 i 40 stranica teksta. ... Vrijednost i kvaliteta rada ne određuju se opsegom, već jasnoćom ciljeva, ispravnošću primijenjenih metoda te kvalitetom analize i zaključaka.",
+      "status": "advisory",
+      "scored": false,
+      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote)."
+    },
+    {
+      "ruleId": "iv-zavrsni--citation-style",
+      "checkId": "citation-style",
+      "value": "apa",
+      "category": "citation",
+      "label": "Stil citiranja",
+      "machineCheckable": false,
+      "authority": "program-page",
+      "sourceId": "iv-pravilnik-2025",
+      "sourcePage": "t. 7 Citiranje i referenciranje (str. 4–5)",
+      "quote": "Društvene znanosti – APA stil citiranja (autor–godina) [...] Tehničke znanosti – numerički stil",
+      "status": "advisory",
+      "scored": false,
+      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote)."
+    },
+    {
+      "ruleId": "iv-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "value": true,
+      "category": "format",
+      "label": "Format papira",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "iv-naslovnica-2025",
+      "sourcePage": "word/document.xml → w:sectPr/w:pgSz w:w=\"11906\" w:h=\"16838\" (A4)",
+      "quote": "<w:pgSz w:w=\"11906\" w:h=\"16838\" w:code=\"9\"/> (A4 210x297 mm; iz službenog predloška naslovnice, Prilog Pravilniku; sam tekst Pravilnika ne navodi izrijekom veličinu papira)",
+      "status": "advisory",
+      "scored": false,
+      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote)."
+    }
+  ],
+  "generatedAt": "2026-07-17"
+}

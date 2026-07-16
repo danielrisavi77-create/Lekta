@@ -1,0 +1,157 @@
+{
+  "faculty": "securus",
+  "institution": "securus",
+  "institutionName": "Veleuciliste menadzmenta i sigurnosti Securus (Pula)",
+  "unit": {
+    "id": "securus",
+    "name": "Veleuciliste menadzmenta i sigurnosti Securus (Pula)",
+    "family": "social",
+    "status": "partial"
+  },
+  "catalogPrograms": [
+    "Stručni studij (završni rad) - Veleučilište menadžmenta i sigurnosti Securus",
+    "Opći profil fakulteta"
+  ],
+  "sources": [
+    {
+      "id": "securus-pravilnik-zavrsni-2023",
+      "kind": "pravilnik",
+      "title": "Pravilnik o završnom radu Veleučilišta menadžmenta i sigurnosti Securus u Puli (travanj 2023.)",
+      "url": "https://www.vs-securus.hr/wp-content/uploads/2023/05/Pravilnik-o-zavr%C5%A1nom-radu-Securus-2023.pdf",
+      "publisher": "Veleučilište menadžmenta i sigurnosti Securus, Pula",
+      "fetchedAt": "2026-07-17",
+      "snapshotPath": "data/sources/securus/securus-pravilnik-zavrsni-2023.pdf",
+      "snapshotHash": "ec5a39f6a42e3cf2506f2e774ac47ab72dd17d9744dd525a103fb535e4e9fb02",
+      "validityClass": "stable",
+      "lastChecked": "2026-07-17"
+    }
+  ],
+  "profiles": [
+    {
+      "id": "securus-zavrsni",
+      "unitId": "securus",
+      "programs": [
+        "Stručni studij (završni rad) - Veleučilište menadžmenta i sigurnosti Securus"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "partial",
+      "profileLabel": "Veleuciliste menadzmenta i sigurnosti Securus (Pula), zavrsni rad",
+      "verifiedAt": "2026-07-17",
+      "documentDate": null,
+      "rules": {
+        "requireA4": true,
+        "margins": {
+          "top": 2.5,
+          "right": 2,
+          "bottom": 2.5,
+          "left": 3
+        },
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ]
+      },
+      "facts": [],
+      "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
+      "sources": [
+        {
+          "title": "Pravilnik o završnom radu Veleučilišta menadžmenta i sigurnosti Securus u Puli (travanj 2023.)",
+          "url": "https://www.vs-securus.hr/wp-content/uploads/2023/05/Pravilnik-o-zavr%C5%A1nom-radu-Securus-2023.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o završnom radu Veleučilišta menadžmenta i sigurnosti Securus u Puli (travanj 2023.)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Margine",
+        "Vrsta slova",
+        "Velicina slova",
+        "Numeriranje stranica",
+        "Stil citiranja"
+      ],
+      "advisoryScope": [
+        "Obvezni dijelovi rada"
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-securus-zavrsni--paper-size-verified-2026-07-17",
+      "ruleId": "securus-zavrsni--paper-size",
+      "profileId": "securus-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "securus-pravilnik-zavrsni-2023",
+      "sourcePage": "Članak 11. stavak 3.",
+      "quote": "Završni rad piše se na računalu i jednostrano ispisuje na bijelom papiru formata A4 (210 x 297 mm), marginama 3 cm lijevo, 2 cm desno, 2,5 cm gore i dolje, korištenjem opće prihvaćenih formata (doc, docx, odt). Rad se piše u fontu Times New Roman 12.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-securus-zavrsni--margins-verified-2026-07-17",
+      "ruleId": "securus-zavrsni--margins",
+      "profileId": "securus-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "securus-pravilnik-zavrsni-2023",
+      "sourcePage": "Članak 11. stavak 3.",
+      "quote": "Završni rad piše se na računalu i jednostrano ispisuje na bijelom papiru formata A4 (210 x 297 mm), marginama 3 cm lijevo, 2 cm desno, 2,5 cm gore i dolje, korištenjem opće prihvaćenih formata (doc, docx, odt).",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-securus-zavrsni--font-verified-2026-07-17",
+      "ruleId": "securus-zavrsni--font",
+      "profileId": "securus-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "securus-pravilnik-zavrsni-2023",
+      "sourcePage": "Članak 11. stavak 3.",
+      "quote": "Rad se piše u fontu Times New Roman 12.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-securus-zavrsni--font-size-verified-2026-07-17",
+      "ruleId": "securus-zavrsni--font-size",
+      "profileId": "securus-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "securus-pravilnik-zavrsni-2023",
+      "sourcePage": "Članak 11. stavak 3.",
+      "quote": "Rad se piše u fontu Times New Roman 12.",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-securus-zavrsni--page-numbers-verified-2026-07-17",
+      "ruleId": "securus-zavrsni--page-numbers",
+      "profileId": "securus-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "securus-pravilnik-zavrsni-2023",
+      "sourcePage": "Članak 15. stavak 4.",
+      "quote": "Sažetak je prva stranica rada s kojom započinje numeriranje stranica (za numeraciju primijeniti arapske brojeve u donjem desnom uglu stranice).",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    },
+    {
+      "id": "led-securus-zavrsni--citation-style-verified-2026-07-17",
+      "ruleId": "securus-zavrsni--citation-style",
+      "profileId": "securus-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "securus-pravilnik-zavrsni-2023",
+      "sourcePage": "Članak 17. stavak 2. i Članak 21. stavak 1.",
+      "quote": "Navodi u APA (American Psychological Association) stilu koriste se kod svakog izravnog citiranja, navođenja činjeničnog iskaza koji nije općenito poznat, s tim da je autor takvog iskaza neka određena osoba te kod parafraziranja. [...] Popis korištene literature treba navesti sukladno važećim normama i definiranim preporukama APA stila, a detalji stila dostupni su na stranici: www.apastyle.org",
+      "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+    }
+  ]
+}

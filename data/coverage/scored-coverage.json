@@ -41,6 +41,14 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "arca-zavrsni",
+      "scored": 3,
+      "machineCheckable": 4,
+      "advisory": 1,
+      "ratio": 0.75,
+      "lastVerified": "2026-07-17"
+    },
+    {
       "profileId": "arh-diplomski",
       "scored": 2,
       "machineCheckable": 2,
@@ -191,6 +199,22 @@
       "advisory": 0,
       "ratio": 1,
       "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "evtos-diplomski",
+      "scored": 8,
+      "machineCheckable": 8,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-17"
+    },
+    {
+      "profileId": "evtos-zavrsni",
+      "scored": 8,
+      "machineCheckable": 8,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-17"
     },
     {
       "profileId": "fazos-diplomski",
@@ -833,6 +857,22 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "iv-diplomski",
+      "scored": 6,
+      "machineCheckable": 8,
+      "advisory": 3,
+      "ratio": 0.75,
+      "lastVerified": "2026-07-17"
+    },
+    {
+      "profileId": "iv-zavrsni",
+      "scored": 6,
+      "machineCheckable": 8,
+      "advisory": 3,
+      "ratio": 0.75,
+      "lastVerified": "2026-07-17"
+    },
+    {
       "profileId": "kbf-diplomski",
       "scored": 9,
       "machineCheckable": 8,
@@ -1401,6 +1441,14 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "securus-zavrsni",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 1,
+      "ratio": 1,
+      "lastVerified": "2026-07-17"
+    },
+    {
       "profileId": "sfzg-diplomski",
       "scored": 9,
       "machineCheckable": 8,
@@ -1745,6 +1793,38 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "vnt-diplomski",
+      "scored": 8,
+      "machineCheckable": 8,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-17"
+    },
+    {
+      "profileId": "vnt-zavrsni",
+      "scored": 8,
+      "machineCheckable": 8,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-17"
+    },
+    {
+      "profileId": "vsig-diplomski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 1,
+      "ratio": 1,
+      "lastVerified": "2026-07-17"
+    },
+    {
+      "profileId": "vsig-zavrsni",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 1,
+      "ratio": 1,
+      "lastVerified": "2026-07-17"
+    },
+    {
       "profileId": "vsite-diplomski",
       "scored": 2,
       "machineCheckable": 2,
@@ -1833,5 +1913,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 1364
+  "totalScored": 1429
 }
