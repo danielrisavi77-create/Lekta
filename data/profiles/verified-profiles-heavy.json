@@ -31221,5 +31221,60 @@
       "Obvezni dijelovi rada"
     ],
     "advisoryScope": []
+  },
+  "unizd-tko-diplomski": {
+    "id": "unizd-tko-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Teolosko-katehetski odjel (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Zadar - Teolosko-katehetski odjel, diplomski rad",
+    "verifiedAt": "2026-07-17",
+    "documentDate": "2016-12-12",
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireA4": true
+    },
+    "facts": [],
+    "note": "Odjelni izvor (Teolosko-katehetski odjel, Zadar): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila. Opseg (optimalan) i Chicago (prilagodjeni autor-godina) -> advisory.",
+    "sources": [
+      {
+        "title": "Upute za izradu diplomskog rada — Teološko-katehetski odjel, Sveučilište u Zadru",
+        "url": "https://tko.unizd.hr/Portals/65/Upute%20za%20izradu%20diplomskog%20rada_1.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu diplomskog rada — Teološko-katehetski odjel, Sveučilište u Zadru"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Margine",
+      "Format papira",
+      "Numeriranje stranica",
+      "Obvezni dijelovi rada"
+    ],
+    "advisoryScope": [
+      "Opseg",
+      "Stil citiranja"
+    ]
   }
 }

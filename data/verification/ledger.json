@@ -40078,5 +40078,89 @@
     "sourcePage": "Upute za pisanje i opremanje završnih i diplomskih radova, I. Osnovne cjeline završnog rada (str. 7); Članak 14. (str. 3-4)",
     "quote": "Završni rad treba sadržavati sljedeće cjeline: sažetak i ključne riječi na jeziku na kojem je rad napisan, uvod, glavni dio i literaturu, i to navedenim redoslijedom. [...] Svaki završni i diplomski rad ima uvod, ... zaključak, literaturu i druge izvore ...",
     "note": "Public-uni wave: adversarijalno potvrdjeno uz snapshot."
+  },
+  {
+    "id": "led-unizd-tko-diplomski--font-verified-2026-07-17",
+    "ruleId": "unizd-tko-diplomski--font",
+    "profileId": "unizd-tko-diplomski",
+    "action": "verified",
+    "actor": "Daniel",
+    "timestamp": "2026-07-17",
+    "sourceId": "unizd-tko-upute-diplomski",
+    "sourcePage": "str. 1, odjeljak 1.2. Izgled diplomskog rada",
+    "quote": "Rad treba pisati fontom Times New Roman, veličine 12 pt, uz prored 1,5.",
+    "note": "Depth-gap wave (Teolosko-katehetski odjel): adversarijalno potvrdjeno uz snapshot."
+  },
+  {
+    "id": "led-unizd-tko-diplomski--font-size-verified-2026-07-17",
+    "ruleId": "unizd-tko-diplomski--font-size",
+    "profileId": "unizd-tko-diplomski",
+    "action": "verified",
+    "actor": "Daniel",
+    "timestamp": "2026-07-17",
+    "sourceId": "unizd-tko-upute-diplomski",
+    "sourcePage": "str. 1, odjeljak 1.2. Izgled diplomskog rada",
+    "quote": "Rad treba pisati fontom Times New Roman, veličine 12 pt, uz prored 1,5.",
+    "note": "Depth-gap wave (Teolosko-katehetski odjel): adversarijalno potvrdjeno uz snapshot."
+  },
+  {
+    "id": "led-unizd-tko-diplomski--line-spacing-verified-2026-07-17",
+    "ruleId": "unizd-tko-diplomski--line-spacing",
+    "profileId": "unizd-tko-diplomski",
+    "action": "verified",
+    "actor": "Daniel",
+    "timestamp": "2026-07-17",
+    "sourceId": "unizd-tko-upute-diplomski",
+    "sourcePage": "str. 1, odjeljak 1.2. Izgled diplomskog rada",
+    "quote": "Rad treba pisati fontom Times New Roman, veličine 12 pt, uz prored 1,5.",
+    "note": "Depth-gap wave (Teolosko-katehetski odjel): adversarijalno potvrdjeno uz snapshot."
+  },
+  {
+    "id": "led-unizd-tko-diplomski--margins-verified-2026-07-17",
+    "ruleId": "unizd-tko-diplomski--margins",
+    "profileId": "unizd-tko-diplomski",
+    "action": "verified",
+    "actor": "Daniel",
+    "timestamp": "2026-07-17",
+    "sourceId": "unizd-tko-upute-diplomski",
+    "sourcePage": "str. 1, odjeljak 1.2. Izgled diplomskog rada",
+    "quote": "Margine rada uglavnom su već zadane u standardnim postavkama računalnog programa u kojem se piše, a trebaju biti 2,5 cm sa svake strane.",
+    "note": "Depth-gap wave (Teolosko-katehetski odjel): adversarijalno potvrdjeno uz snapshot."
+  },
+  {
+    "id": "led-unizd-tko-diplomski--paper-size-verified-2026-07-17",
+    "ruleId": "unizd-tko-diplomski--paper-size",
+    "profileId": "unizd-tko-diplomski",
+    "action": "verified",
+    "actor": "Daniel",
+    "timestamp": "2026-07-17",
+    "sourceId": "unizd-tko-upute-diplomski",
+    "sourcePage": "str. 1, odjeljak 1.2. Izgled diplomskog rada",
+    "quote": "Format rada je AC (210 x 297 mm).",
+    "note": "Depth-gap wave (Teolosko-katehetski odjel): adversarijalno potvrdjeno uz snapshot."
+  },
+  {
+    "id": "led-unizd-tko-diplomski--page-numbers-verified-2026-07-17",
+    "ruleId": "unizd-tko-diplomski--page-numbers",
+    "profileId": "unizd-tko-diplomski",
+    "action": "verified",
+    "actor": "Daniel",
+    "timestamp": "2026-07-17",
+    "sourceId": "unizd-tko-upute-diplomski",
+    "sourcePage": "str. 1, odjeljak 1.2. Izgled diplomskog rada",
+    "quote": "Stranice rada potrebno je numerirati arapskim brojkama u donjem desnom uglu stranice. Naslovnica se ne numerira.",
+    "note": "Depth-gap wave (Teolosko-katehetski odjel): adversarijalno potvrdjeno uz snapshot."
+  },
+  {
+    "id": "led-unizd-tko-diplomski--required-sections-verified-2026-07-17",
+    "ruleId": "unizd-tko-diplomski--required-sections",
+    "profileId": "unizd-tko-diplomski",
+    "action": "verified",
+    "actor": "Daniel",
+    "timestamp": "2026-07-17",
+    "sourceId": "unizd-tko-upute-diplomski",
+    "sourcePage": "str. 4, odjeljak 1.3. Osnovne cjeline diplomskog rada",
+    "quote": "Završni rad treba sadržavati sljedeće cjeline: Sadržaj; Uvod; Razradu teme; Zaključak; Sažetak; Sažetak na stranom jeziku (engleski, njemački, talijanski ili francuski); Literaturu; Životopis; Popis tablica (ako ih ima); Popis ilustracija (ako ih ima).",
+    "note": "Depth-gap wave (Teolosko-katehetski odjel): adversarijalno potvrdjeno uz snapshot."
   }
 ]

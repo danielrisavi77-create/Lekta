@@ -1705,6 +1705,14 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "unizd-tko-diplomski",
+      "scored": 7,
+      "machineCheckable": 8,
+      "advisory": 2,
+      "ratio": 0.875,
+      "lastVerified": "2026-07-17"
+    },
+    {
       "profileId": "unizd-turizam-diplomski",
       "scored": 7,
       "machineCheckable": 7,
@@ -1913,5 +1921,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 1429
+  "totalScored": 1436
 }

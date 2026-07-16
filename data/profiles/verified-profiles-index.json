@@ -8097,5 +8097,16 @@
       "graduate"
     ],
     "status": "partial"
+  },
+  {
+    "id": "unizd-tko-diplomski",
+    "unitId": "unizd",
+    "programs": [
+      "Teolosko-katehetski odjel (diplomski rad, Zadar)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial"
   }
 ]

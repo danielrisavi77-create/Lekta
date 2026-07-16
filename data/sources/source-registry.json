@@ -2512,5 +2512,18 @@
     "snapshotHash": "0a5a726ed889907a5cd212498768ae2e1f5b5d2cd45c3d1714cbaa138e7fc8f1",
     "validityClass": "stable",
     "lastChecked": "2026-07-17"
+  },
+  {
+    "id": "unizd-tko-upute-diplomski",
+    "kind": "upute",
+    "title": "Upute za izradu diplomskog rada — Teološko-katehetski odjel, Sveučilište u Zadru",
+    "url": "https://tko.unizd.hr/Portals/65/Upute%20za%20izradu%20diplomskog%20rada_1.pdf",
+    "publisher": "Teološko-katehetski odjel, Sveučilište u Zadru",
+    "fetchedAt": "2026-07-17",
+    "snapshotPath": "data/sources/unizd/unizd-tko-upute-diplomski.pdf",
+    "snapshotHash": "ab4812a811af3968d45b0d0c046beb9405ce8a47a6256cbc27c8fc9a583db07f",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-17",
+    "note": "Odjelni izvor (Teolosko-katehetski odjel), razlicit od krovnih UNIZD uputa. Opseg + Chicago -> advisory."
   }
 ]
