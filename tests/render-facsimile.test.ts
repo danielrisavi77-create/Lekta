@@ -291,3 +291,67 @@ describe('renderFacsimile: paginacija', () => {
     expect(flagTargets.get(0)).toBe(mark);
   });
 });
+
+describe('renderFacsimile: in-text oznake fusnota (markeri)', () => {
+  it('ubaci <sup> broj na tocnom offsetu u sredini odlomka', () => {
+    const { root } = renderFacsimile(model([para(1, 'AB CD', { markers: [{ id: 1, offset: 2 }] })]), []);
+    const el = root.querySelector('.lekta-fac-para') as HTMLElement;
+    const sup = el.querySelector('sup.lekta-fac-fnmark') as HTMLElement;
+    expect(sup).not.toBeNull();
+    expect(sup.textContent).toBe('1');
+    expect(sup.getAttribute('data-fn-ref')).toBe('1');
+    // Redoslijed: "AB" | sup(1) | " CD"
+    expect(el.childNodes[0].textContent).toBe('AB');
+    expect((el.childNodes[1] as HTMLElement).tagName).toBe('SUP');
+    expect(el.childNodes[2].textContent).toBe(' CD');
+    expect(el.textContent).toBe('AB1 CD');
+  });
+
+  it('marker na samom kraju odlomka (offset == duljina) dolazi nakon sveg teksta', () => {
+    const { root } = renderFacsimile(model([para(1, 'Hello', { markers: [{ id: 2, offset: 5 }] })]), []);
+    const el = root.querySelector('.lekta-fac-para') as HTMLElement;
+    const kids = el.childNodes;
+    expect(kids[0].textContent).toBe('Hello');
+    expect((kids[kids.length - 1] as HTMLElement).tagName).toBe('SUP');
+    expect((kids[kids.length - 1] as HTMLElement).textContent).toBe('2');
+    expect(el.textContent).toBe('Hello2');
+  });
+
+  it('vise markera u istom odlomku, svaki na svom offsetu', () => {
+    const { root } = renderFacsimile(model([para(1, 'a b c', { markers: [{ id: 1, offset: 1 }, { id: 2, offset: 3 }] })]), []);
+    const el = root.querySelector('.lekta-fac-para') as HTMLElement;
+    const sups = el.querySelectorAll('sup.lekta-fac-fnmark');
+    expect(sups.length).toBe(2);
+    expect(el.textContent).toBe('a1 b2 c');
+  });
+
+  it('marker u odlomku s highlightom: sup u praznini, highlight ostaje netaknut', () => {
+    const { root } = renderFacsimile(
+      model([para(1, 'abcdef', { markers: [{ id: 3, offset: 2 }] })]),
+      [flag({ paragraphIndex: 1, excerpt: 'ef', severity: 'error' })],
+    );
+    const el = root.querySelector('.lekta-fac-para') as HTMLElement;
+    const sup = el.querySelector('sup.lekta-fac-fnmark') as HTMLElement;
+    expect(sup.textContent).toBe('3');
+    const mark = el.querySelector('mark.lekta-flag') as HTMLElement;
+    expect(mark.textContent).toBe('ef');
+    // "ab" | sup(3) | "cd" | mark("ef")  -> tekst: ab3cdef
+    expect(el.textContent).toBe('ab3cdef');
+  });
+
+  it('marker unutar bold runa: sup se ubaci unutar oblikovanog dijela, tekst ocuvan', () => {
+    const { root } = renderFacsimile(
+      model([para(1, 'abcd', { runs: [run('ab'), run('cd', { bold: true })], markers: [{ id: 1, offset: 3 }] })]),
+      [],
+    );
+    const el = root.querySelector('.lekta-fac-para') as HTMLElement;
+    expect(el.querySelector('sup.lekta-fac-fnmark')).not.toBeNull();
+    expect(el.querySelectorAll('span[style]').length).toBeGreaterThan(0); // bold "c"/"d"
+    expect(el.textContent).toBe('abc1d');
+  });
+
+  it('odlomak bez markera nema <sup>', () => {
+    const { root } = renderFacsimile(model([para(1, 'Cist odlomak bez fusnote')]), []);
+    expect(root.querySelector('sup')).toBeNull();
+  });
+});

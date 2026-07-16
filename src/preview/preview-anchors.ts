@@ -59,6 +59,14 @@ export interface PreviewParagraph {
   runs?: PreviewRun[];
   /** Iza ovog odlomka je prijelom stranice (eksplicitni w:br type=page ili lastRenderedPageBreak). */
   pageBreakAfter?: boolean;
+  /** Oznake fusnota u tijelu (superscript broj) s znakovnim offsetom unutar `text`; faksimil. */
+  markers?: PreviewFootnoteMark[];
+}
+
+/** Oznaka fusnote u tijelu: id (prikazani broj) na znakovnom offsetu unutar teksta odlomka. */
+export interface PreviewFootnoteMark {
+  id: number;
+  offset: number;
 }
 
 /** Jedna fusnota u pregledu (zaseban koordinatni prostor od tijela). */

@@ -29,6 +29,7 @@ import type {
   PreviewSeverity,
   PreviewRun,
   PreviewModel,
+  PreviewFootnoteMark,
 } from './preview-anchors';
 import type { RenderedPreview } from './render-preview';
 
@@ -170,10 +171,34 @@ function runIsBase(run: PreviewRun | null, base: BaseStyle): boolean {
   return true;
 }
 
+/** Dodaj komad teksta[c1,c2) kao goli cvor (bazni stil) ili <span> (odstupanje od baze). */
+function emitPiece(container: HTMLElement, text: string, c1: number, c2: number, run: PreviewRun | null, base: BaseStyle, doc: Document): void {
+  if (c2 <= c1) return;
+  const piece = text.slice(c1, c2);
+  if (runIsBase(run, base)) {
+    container.appendChild(doc.createTextNode(piece));
+  } else {
+    const span = doc.createElement('span');
+    applyRunStyle(span, run as PreviewRun, base);
+    span.textContent = piece;
+    container.appendChild(span);
+  }
+}
+
+/** Ubaci superscript broj fusnote (in-text marker) u `container`. */
+function emitFootnoteMark(container: HTMLElement, id: number, doc: Document): void {
+  const sup = doc.createElement('sup');
+  sup.className = 'lekta-fac-fnmark';
+  sup.setAttribute('data-fn-ref', String(id));
+  sup.textContent = String(id);
+  container.appendChild(sup);
+}
+
 /**
  * U `container` dodaje tekst[from, to), podijeljen po segmentima oblikovanja `segs`: bazni dijelovi
- * kao tekstni cvorovi, ostali kao <span> sa stilom. Poziva se i za goli dio odlomka i za unutrasnjost
- * <mark>-a, pa se oblikovanje i highlight ispravno gnijezde.
+ * kao tekstni cvorovi, ostali kao <span> sa stilom. Ubacuje in-text oznake fusnota (`markers`, sortirane
+ * po offsetu) na tocnom mjestu. Poziva se i za goli dio odlomka i za unutrasnjost <mark>-a, pa se
+ * oblikovanje, highlight i marker ispravno gnijezde. Marker na offsetu == `to` obradjuje pozivatelj.
  */
 function appendStyledText(
   container: HTMLElement,
@@ -183,6 +208,7 @@ function appendStyledText(
   segs: FmtSeg[],
   base: BaseStyle,
   doc: Document,
+  markers: PreviewFootnoteMark[] | null,
 ): void {
   if (to <= from) return;
   for (const seg of segs) {
@@ -190,15 +216,16 @@ function appendStyledText(
     const a = Math.max(seg.start, from);
     const b = Math.min(seg.end, to);
     if (a >= b) continue;
-    const piece = text.slice(a, b);
-    if (runIsBase(seg.run, base)) {
-      container.appendChild(doc.createTextNode(piece));
-    } else {
-      const span = doc.createElement('span');
-      applyRunStyle(span, seg.run as PreviewRun, base);
-      span.textContent = piece;
-      container.appendChild(span);
+    let cur = a;
+    if (markers) {
+      for (const mk of markers) {
+        if (mk.offset < a || mk.offset >= b) continue; // [a, b): marker na granici pripada sljedecem segmentu
+        if (mk.offset > cur) emitPiece(container, text, cur, mk.offset, seg.run, base, doc);
+        emitFootnoteMark(container, mk.id, doc);
+        cur = mk.offset;
+      }
     }
+    if (cur < b) emitPiece(container, text, cur, b, seg.run, base, doc);
   }
 }
 
@@ -215,8 +242,10 @@ function fillFormatted(
   base: BaseStyle,
   doc: Document,
   flagTargets: Map<number, HTMLElement>,
+  markers?: PreviewFootnoteMark[],
 ): FlagEntry[] {
   const segs = buildFmtSegs(text, runs);
+  const mk = markers && markers.length ? [...markers].sort((a, b) => a.offset - b.offset) : null;
   const located: MergedRange[] = [];
   const unlocated: FlagEntry[] = [];
   for (const entry of entries) {
@@ -227,37 +256,40 @@ function fillFormatted(
   }
 
   if (located.length === 0) {
-    appendStyledText(el, text, 0, text.length, segs, base, doc);
-    return unlocated;
-  }
-
-  located.sort((a, b) => a.start - b.start || a.end - b.end);
-  const merged: MergedRange[] = [];
-  for (const r of located) {
-    const last = merged[merged.length - 1];
-    if (last && r.start < last.end) {
-      last.end = Math.max(last.end, r.end);
-      last.entries.push(...r.entries);
-    } else {
-      merged.push({ start: r.start, end: r.end, entries: [...r.entries] });
+    appendStyledText(el, text, 0, text.length, segs, base, doc, mk);
+  } else {
+    located.sort((a, b) => a.start - b.start || a.end - b.end);
+    const merged: MergedRange[] = [];
+    for (const r of located) {
+      const last = merged[merged.length - 1];
+      if (last && r.start < last.end) {
+        last.end = Math.max(last.end, r.end);
+        last.entries.push(...r.entries);
+      } else {
+        merged.push({ start: r.start, end: r.end, entries: [...r.entries] });
+      }
     }
+
+    let cursor = 0;
+    for (const m of merged) {
+      if (m.start > cursor) appendStyledText(el, text, cursor, m.start, segs, base, doc, mk);
+      const sev = topSeverity(m.entries);
+      const mark = doc.createElement('mark');
+      mark.className = `lekta-flag lekta-flag--${sev}`;
+      mark.setAttribute('data-flag-severity', sev);
+      const titles = [...new Set(m.entries.map((e) => e.flag.title))].join('; ');
+      if (titles) mark.title = titles;
+      appendStyledText(mark, text, m.start, m.end, segs, base, doc, mk);
+      el.appendChild(mark);
+      for (const e of m.entries) flagTargets.set(e.flagIndex, mark);
+      cursor = m.end;
+    }
+    if (cursor < text.length) appendStyledText(el, text, cursor, text.length, segs, base, doc, mk);
   }
 
-  let cursor = 0;
-  for (const m of merged) {
-    if (m.start > cursor) appendStyledText(el, text, cursor, m.start, segs, base, doc);
-    const sev = topSeverity(m.entries);
-    const mark = doc.createElement('mark');
-    mark.className = `lekta-flag lekta-flag--${sev}`;
-    mark.setAttribute('data-flag-severity', sev);
-    const titles = [...new Set(m.entries.map((e) => e.flag.title))].join('; ');
-    if (titles) mark.title = titles;
-    appendStyledText(mark, text, m.start, m.end, segs, base, doc);
-    el.appendChild(mark);
-    for (const e of m.entries) flagTargets.set(e.flagIndex, mark);
-    cursor = m.end;
-  }
-  if (cursor < text.length) appendStyledText(el, text, cursor, text.length, segs, base, doc);
+  // Oznake fusnota na samom kraju odlomka (offset == duljina teksta): appendStyledText ih ne emitira
+  // (raspon je [a, b) pa je krajnji offset iskljucen), pa ih dodajemo ovdje, nakon svog teksta.
+  if (mk) for (const m of mk) if (m.offset >= text.length) emitFootnoteMark(el, m.id, doc);
 
   return unlocated;
 }
@@ -299,16 +331,11 @@ function appendParagraph(
   if (alignCss) el.style.textAlign = alignCss;
 
   const paraFlags = byPara.get(para.index) ?? [];
-  if (paraFlags.length) {
-    const unlocated = fillFormatted(el, para.text || '', para.runs, paraFlags, base, doc, flagTargets);
-    el.classList.add('lekta-fac-para--flagged');
-    if (unlocated.length) {
-      el.classList.add('lekta-fac-para--has-unlocated');
-      for (const e of unlocated) if (!flagTargets.has(e.flagIndex)) flagTargets.set(e.flagIndex, el);
-    }
-  } else {
-    const segs = buildFmtSegs(para.text || '', para.runs);
-    appendStyledText(el, para.text || '', 0, (para.text || '').length, segs, base, doc);
+  const unlocated = fillFormatted(el, para.text || '', para.runs, paraFlags, base, doc, flagTargets, para.markers);
+  if (paraFlags.length) el.classList.add('lekta-fac-para--flagged');
+  if (unlocated.length) {
+    el.classList.add('lekta-fac-para--has-unlocated');
+    for (const e of unlocated) if (!flagTargets.has(e.flagIndex)) flagTargets.set(e.flagIndex, el);
   }
   page.appendChild(el);
 }
@@ -386,16 +413,12 @@ export function renderFacsimile(
         el.appendChild(num);
         const body = doc.createElement('span');
         const fnFlags = byFn.get(fn.id) ?? [];
-        if (fnFlags.length) {
-          const unlocated = fillFormatted(body, fn.text || '', fn.runs, fnFlags, fnBase, doc, flagTargets);
-          el.classList.add('lekta-pv-footnote--flagged');
-          if (unlocated.length) {
-            el.classList.add('lekta-pv-footnote--has-unlocated');
-            for (const e of unlocated) if (!flagTargets.has(e.flagIndex)) flagTargets.set(e.flagIndex, el);
-          }
-        } else {
-          const segs = buildFmtSegs(fn.text || '', fn.runs);
-          appendStyledText(body, fn.text || '', 0, (fn.text || '').length, segs, fnBase, doc);
+        // Fusnote nemaju in-text oznake (markers), pa ih fillFormatted ne dobiva.
+        const unlocated = fillFormatted(body, fn.text || '', fn.runs, fnFlags, fnBase, doc, flagTargets);
+        if (fnFlags.length) el.classList.add('lekta-pv-footnote--flagged');
+        if (unlocated.length) {
+          el.classList.add('lekta-pv-footnote--has-unlocated');
+          for (const e of unlocated) if (!flagTargets.has(e.flagIndex)) flagTargets.set(e.flagIndex, el);
         }
         el.appendChild(body);
         section.appendChild(el);
