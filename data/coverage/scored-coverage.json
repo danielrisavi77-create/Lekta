@@ -1082,11 +1082,11 @@
     },
     {
       "profileId": "pravo-doktorski-pravne-znanosti",
-      "scored": 4,
+      "scored": 5,
       "machineCheckable": 6,
-      "advisory": 2,
-      "ratio": 0.6666666666666666,
-      "lastVerified": "2026-06-30"
+      "advisory": 1,
+      "ratio": 0.8333333333333334,
+      "lastVerified": "2026-07-16"
     },
     {
       "profileId": "pravo-integrirani-diplomski",
@@ -1114,11 +1114,11 @@
     },
     {
       "profileId": "pravo-opci-pravni-akademski-rad",
-      "scored": 7,
+      "scored": 8,
       "machineCheckable": 9,
-      "advisory": 2,
-      "ratio": 0.7777777777777778,
-      "lastVerified": "2026-06-30"
+      "advisory": 1,
+      "ratio": 0.8888888888888888,
+      "lastVerified": "2026-07-16"
     },
     {
       "profileId": "pravo-porezni-prijediplomski",
@@ -1178,11 +1178,11 @@
     },
     {
       "profileId": "pravo-specijalisticki-pravni-opci",
-      "scored": 4,
+      "scored": 5,
       "machineCheckable": 6,
-      "advisory": 2,
-      "ratio": 0.6666666666666666,
-      "lastVerified": "2026-06-30"
+      "advisory": 1,
+      "ratio": 0.8333333333333334,
+      "lastVerified": "2026-07-16"
     },
     {
       "profileId": "pravos-diplomski",
@@ -1697,5 +1697,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 1212
+  "totalScored": 1215
 }

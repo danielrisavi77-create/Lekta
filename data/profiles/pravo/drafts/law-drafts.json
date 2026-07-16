@@ -2029,8 +2029,12 @@
         "sourceId": "pravo-upute-oblikovanje-2024",
         "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
         "quote": "Rad mora imati uvodni dio, sredisnji dio (s vise poglavlja i/ili potpoglavlja) te zakljucni dio. Na kraju rada treba biti popis koristenih izvora i literature (bibliografija).",
-        "status": "draft",
-        "note": "Izjavu o izvornosti potkrijepiti iz Pravilnika/postupka; nije navedena u ovim Uputama."
+        "status": "verified",
+        "note": "Izjavu o izvornosti potkrijepiti iz Pravilnika/postupka; nije navedena u ovim Uputama.",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
       },
       {
         "ruleId": "pravo-opci-pravni-akademski-rad--footnote-font",
@@ -2284,8 +2288,12 @@
         "sourceId": "pravo-upute-oblikovanje-2024",
         "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
         "quote": "Rad mora imati uvodni dio, sredisnji dio (s vise poglavlja i/ili potpoglavlja) te zakljucni dio. Na kraju rada treba biti popis koristenih izvora i literature (bibliografija).",
-        "status": "draft",
-        "note": "Izjavu o izvornosti potkrijepiti iz Pravilnika/postupka; nije navedena u ovim Uputama."
+        "status": "verified",
+        "note": "Izjavu o izvornosti potkrijepiti iz Pravilnika/postupka; nije navedena u ovim Uputama.",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
       }
     ],
     "pravo-doktorski-pravne-znanosti": [
@@ -2389,8 +2397,12 @@
         "sourceId": "pravo-upute-oblikovanje-2024",
         "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
         "quote": "Rad mora imati uvodni dio, sredisnji dio (s vise poglavlja i/ili potpoglavlja) te zakljucni dio. Na kraju rada treba biti popis koristenih izvora i literature (bibliografija).",
-        "status": "draft",
-        "note": "Izjavu o izvornosti potkrijepiti iz Pravilnika/postupka; nije navedena u ovim Uputama."
+        "status": "verified",
+        "note": "Izjavu o izvornosti potkrijepiti iz Pravilnika/postupka; nije navedena u ovim Uputama.",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
       }
     ],
     "pravo-socijalne-djelatnosti-specijalisticki": [

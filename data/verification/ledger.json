@@ -37426,5 +37426,41 @@
     "sourcePage": "str. 15",
     "quote": "Grozdek ovCci G, aekMc Z. Neurofacilitacijska fizioterapija. Zagreb: Zdravstveno eistul;cv",
     "note": "Potvrda citatnog stila (vancouver) za zvu iz sluzbenog izvora; podupire rules.recommendedCitation u profilima."
+  },
+  {
+    "id": "led-pravo-opci-pravni-akademski-rad--required-sections-verified-2026-07-16",
+    "ruleId": "pravo-opci-pravni-akademski-rad--required-sections",
+    "profileId": "pravo-opci-pravni-akademski-rad",
+    "action": "verified",
+    "actor": "Daniel",
+    "timestamp": "2026-07-16",
+    "sourceId": "pravo-upute-oblikovanje-2024",
+    "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+    "quote": "Rad mora imati uvodni dio, sredisnji dio (s vise poglavlja i/ili potpoglavlja) te zakljucni dio. Na kraju rada treba biti popis koristenih izvora i literature (bibliografija).",
+    "note": "Covjek potvrdio uz otvoren snapshot izvora; verifiedHash zabiljezen."
+  },
+  {
+    "id": "led-pravo-specijalisticki-pravni-opci--required-sections-verified-2026-07-16",
+    "ruleId": "pravo-specijalisticki-pravni-opci--required-sections",
+    "profileId": "pravo-specijalisticki-pravni-opci",
+    "action": "verified",
+    "actor": "Daniel",
+    "timestamp": "2026-07-16",
+    "sourceId": "pravo-upute-oblikovanje-2024",
+    "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+    "quote": "Rad mora imati uvodni dio, sredisnji dio (s vise poglavlja i/ili potpoglavlja) te zakljucni dio. Na kraju rada treba biti popis koristenih izvora i literature (bibliografija).",
+    "note": "Covjek potvrdio uz otvoren snapshot izvora; verifiedHash zabiljezen."
+  },
+  {
+    "id": "led-pravo-doktorski-pravne-znanosti--required-sections-verified-2026-07-16",
+    "ruleId": "pravo-doktorski-pravne-znanosti--required-sections",
+    "profileId": "pravo-doktorski-pravne-znanosti",
+    "action": "verified",
+    "actor": "Daniel",
+    "timestamp": "2026-07-16",
+    "sourceId": "pravo-upute-oblikovanje-2024",
+    "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+    "quote": "Rad mora imati uvodni dio, sredisnji dio (s vise poglavlja i/ili potpoglavlja) te zakljucni dio. Na kraju rada treba biti popis koristenih izvora i literature (bibliografija).",
+    "note": "Covjek potvrdio uz otvoren snapshot izvora; verifiedHash zabiljezen."
   }
 ]
