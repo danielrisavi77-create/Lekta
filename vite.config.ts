@@ -100,6 +100,45 @@ function assertSafeBuild(devTools: boolean) {
   };
 }
 
+// AUD-54 (audit performance): automatski bundle-size guard. Dosad nista nije cuvalo (a) da
+// verified-profiles-heavy ostane LAZY (zaseban chunk, ne uvucen u glavni entry) ni (b) da glavni
+// index chunk ne naraste tiho preko budzeta. Vite prag 500 kB je samo UPOZORENJE (ne pada build),
+// pa je regresija (npr. staticki import teskih profila) prolazila neopazeno. Ovaj plugin PADA
+// produkcijski build kad se invarijanta prekrsi, pa je `npm run check` hvata. QA/DEV_CONSOLE build
+// ima drukciji graf pa se guard tamo preskace.
+function bundleSizeGuard(devTools: boolean) {
+  const INDEX_ENTRY_BUDGET = 700 * 1024; // glavni entry je ~502 KB danas; heavy uvucen bi ga probio
+  return {
+    name: 'lekta-bundle-size-guard',
+    apply: 'build' as const,
+    generateBundle(_opts: unknown, bundle: Record<string, { type: string }>) {
+      if (devTools) return;
+      const chunks = Object.values(bundle).filter(
+        (o): o is { type: 'chunk'; fileName: string; name: string; isEntry: boolean; code: string } =>
+          (o as { type: string }).type === 'chunk',
+      );
+      const heavy = chunks.find((c) => /verified-profiles-heavy/.test(c.fileName));
+      if (!heavy) {
+        throw new Error(
+          '[bundle-guard] verified-profiles-heavy chunk ne postoji: teski profili su vjerojatno ' +
+          'uvuceni u drugi chunk (lazy split se izgubio). Vrati dinamicki import teskih profila.',
+        );
+      }
+      const indexEntry = chunks.find((c) => c.isEntry && c.name === 'index');
+      if (indexEntry) {
+        const bytes = Buffer.byteLength(indexEntry.code);
+        if (bytes > INDEX_ENTRY_BUDGET) {
+          throw new Error(
+            `[bundle-guard] glavni index chunk je ${Math.round(bytes / 1024)} KB, preko budzeta ` +
+            `${Math.round(INDEX_ENTRY_BUDGET / 1024)} KB. Vjerojatno je nesto tesko uslo u entry ` +
+            '(heavy profili ili nova velika ovisnost); code-splitaj ili svjesno podigni budzet.',
+          );
+        }
+      }
+    },
+  };
+}
+
 // Citatni alati po fakultetu (/alati/citati/**, /alati/brojac-kartica.html) NISU Vite ulazi
 // nego build-time IZLAZ generatora u dist/ (SEO: ~178 pred-renderanih stranica, ne stavljaju
 // se kao ulazi da ne zatrpaju dev graf). Posljedica je da ih `npm run dev` sam po sebi ne

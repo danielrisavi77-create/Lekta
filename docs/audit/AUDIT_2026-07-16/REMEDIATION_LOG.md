@@ -155,3 +155,9 @@ Deterministicki workflow (3 faze: migracije -> Edge -> adversarijalna provjera k
 - Svjesna nepokrivenost: teaser per-IP cap (`scope='integrity_teaser'`) nije ozicen (kontrakt ga naveo samo kao primjer); teaser zadrzava per-user cap i upisuje ip_hash. Opcionalni follow-up.
 - Rezidualni rizik: Edge nije u automatiziranom gateu; verifier preporuca post-deploy dimni test (429 na per-IP capu preflight+integrity full, dupli webhook retry ne duplicira kupon/referral).
 - GOTCHA: na grani audit/remediation-2026-07-16 teche PARALELNA sesija (commit 6ad90e5 "preflight deploy runbook" + necommitani docs/deploy/PREFLIGHT_DEPLOY.md); batch A commit uzima SAMO supabase/** putanje.
+
+## Osmi batch — AUD-54 (bundle guard) + teaser per-IP cap
+
+- AUD-54 (Info): `vite.config.ts` dobio plugin `lekta-bundle-size-guard` (apply:build, generateBundle). Pada produkcijski build ako (a) `verified-profiles-heavy` prestane biti zaseban chunk (lazy split izgubljen) ili (b) glavni `index` entry probije 700 KB budzet. Vite prag 500 kB je samo upozorenje pa regresija (npr. staticki import teskih profila) prije nije rusila gate. QA/DEV_CONSOLE build preskace guard. Verificirano: `npm run check` exit 0, heavy chunk 886 KB zaseban, index 502 KB pod budzetom.
+- Teaser per-IP cap: `integrity-check/index.ts` sad zove `claim_ip_rate_slot('integrity_teaser', ipHash, TEASER_DAILY_CAP_IP)` (novi env `INTEGRITY_TEASER_DAILY_CAP_IP`, default 6, visi od per-user teaser capa jer NAT/fakultet dijeli IP). Per-IP claim pomaknut u zajednicki 3c blok NAKON idempotency gatea (3b) za oba nacina, pa idempotentni replay ne trosi slot. Zatvara svjesnu nepokrivenost iz batcha A (kontrakt je 'integrity_teaser' naveo samo kao primjer; funkcija 0022 prima bilo koji scope pa nema migracijske izmjene). Pin-scan 2/2, full check 1745 zeleno.
+- Gate: `npm run check` 132 dat./1745 testova exit 0. Preostalo za odluku: AUD-52 devDeps, AUD-43/57 nested repo, AUD-53/12 demo asseti.

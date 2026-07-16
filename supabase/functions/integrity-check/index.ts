@@ -35,6 +35,10 @@ const FULL_DAILY_CAP = Number(Deno.env.get('INTEGRITY_FULL_DAILY_CAP') ?? '20');
 // racuna s istog IP-ja. Enforcement je ATOMICAN preko claim_ip_rate_slot (0022, scope=integrity_full),
 // ne TOCTOU COUNT. Zaseban od per-user capa (razlicit prag je namjeran).
 const FULL_DAILY_CAP_IP = Number(Deno.env.get('INTEGRITY_FULL_DAILY_CAP_IP') ?? '20');
+// Dnevni per-IP limit TEASER provjera (AUD-22, teaser): teaser je besplatan ali i dalje SALJE tekst,
+// pa vise racuna s istog IP-ja moze zloporabiti besplatni sloj. Isti atomicni brojac (0022,
+// scope=integrity_teaser). Prag je visi od per-user teaser capa jer NAT/fakultet dijeli jedan IP.
+const TEASER_DAILY_CAP_IP = Number(Deno.env.get('INTEGRITY_TEASER_DAILY_CAP_IP') ?? '6');
 // Timeout na vanjske providere (SEC-01, AUD-29): bez njega spor/viseci provider drzi zahtjev otvoren.
 const PROVIDER_TIMEOUT_MS = Number(Deno.env.get('INTEGRITY_PROVIDER_TIMEOUT_MS') ?? '10000');
 // Salt za per-IP hash (isti obrazac kao preflight-start / generate-report). Prazno -> hash-ip
@@ -204,12 +208,12 @@ Deno.serve(async (req: Request) => {
     return json({ report: cached, idempotent: true }, 200);
   }
 
-  // 3c. dnevni capovi za PUNE provjere (SEC-01, AUD-22): nova (ne-idempotentna) puna provjera trosi
-  //     kvotu; sprjecava petlju N placenih poziva i N redaka punog teksta iza jednog entitlementa.
-  //     Per-USER cap je rolling-24h COUNT; per-IP cap je ATOMICAN (claim_ip_rate_slot, 0022,
-  //     scope='integrity_full') pa vise racuna s istog IP-ja ne moze paralelno proci stale COUNT.
-  //     Oba se zovu tek NAKON entitlement + idempotency gatea, pa idempotentni replay (3b) ne
-  //     trosi slot. claim_ip_rate_slot inkrementira brojac UNAPRIJED (prije platnih poziva u 4).
+  // 3c. dnevni capovi (SEC-01, AUD-22): nova (ne-idempotentna) provjera trosi kvotu. Per-USER FULL
+  //     cap je rolling-24h COUNT (sprjecava petlju N placenih poziva iza jednog entitlementa).
+  //     Per-IP cap je ATOMICAN (claim_ip_rate_slot, 0022) i vrijedi za OBA nacina, pa vise racuna
+  //     s istog IP-ja ne moze paralelno proci stale COUNT. Zove se tek NAKON entitlement +
+  //     idempotency gatea, pa idempotentni replay (3b) NE trosi slot; inkrementira brojac UNAPRIJED
+  //     (prije platnih poziva u 4). scope razlikuje full/teaser (razliciti pragovi po nacinu).
   if (mode === 'full') {
     const { count: fullCount } = await admin
       .from('integrity_checks')
@@ -218,12 +222,15 @@ Deno.serve(async (req: Request) => {
       .eq('mode', 'full')
       .gt('created_at', dayAgoIso);
     if ((fullCount ?? 0) >= FULL_DAILY_CAP) return json({ error: 'rate_limited' }, 429);
-
+  }
+  {
+    const scope = mode === 'full' ? 'integrity_full' : 'integrity_teaser';
+    const capIp = mode === 'full' ? FULL_DAILY_CAP_IP : TEASER_DAILY_CAP_IP;
     // Ugovor: true = dopusteno; false / error / null = tretiraj kao odbijeno (429).
     const { data: ipOk } = await admin.rpc('claim_ip_rate_slot', {
-      p_scope: 'integrity_full',
+      p_scope: scope,
       p_ip_hash: ipHash,
-      p_daily_cap: FULL_DAILY_CAP_IP,
+      p_daily_cap: capIp,
     });
     if (ipOk !== true) return json({ error: 'rate_limited' }, 429);
   }
