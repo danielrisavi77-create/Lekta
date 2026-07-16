@@ -1130,11 +1130,11 @@
     },
     {
       "profileId": "pravo-socijalna-politika-diplomski",
-      "scored": 0,
+      "scored": 8,
       "machineCheckable": 11,
-      "advisory": 11,
-      "ratio": 0,
-      "lastVerified": null
+      "advisory": 3,
+      "ratio": 0.7272727272727273,
+      "lastVerified": "2026-07-16"
     },
     {
       "profileId": "pravo-socijalne-djelatnosti-doktorski",
@@ -1162,11 +1162,11 @@
     },
     {
       "profileId": "pravo-socijalni-rad-diplomski",
-      "scored": 0,
+      "scored": 8,
       "machineCheckable": 11,
-      "advisory": 11,
-      "ratio": 0,
-      "lastVerified": null
+      "advisory": 3,
+      "ratio": 0.7272727272727273,
+      "lastVerified": "2026-07-16"
     },
     {
       "profileId": "pravo-socijalni-rad-zavrsni",
@@ -1697,5 +1697,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 1215
+  "totalScored": 1231
 }

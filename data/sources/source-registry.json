@@ -12,6 +12,18 @@
     "lastChecked": "2026-06-30"
   },
   {
+    "id": "pravo-scsr-upute-diplomski-2021",
+    "kind": "guidelines",
+    "title": "Upute za izradu diplomskog rada iz socijalnih djelatnosti - Socijalni rad i socijalna politika",
+    "url": "https://www.pravo.unizg.hr/wp-content/uploads/2023/02/Upute_za_izradu_diplomskog_rada_2021-22_1.pdf",
+    "publisher": "Pravni fakultet Sveucilista u Zagrebu, Studijski centar socijalnog rada",
+    "fetchedAt": "2026-07-16",
+    "snapshotPath": "data/sources/pravo/pravo-scsr-upute-diplomski-2021.pdf",
+    "snapshotHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-16"
+  },
+  {
     "id": "pravo-pravilnik-studiji-2026",
     "kind": "pravilnik",
     "title": "Pravilnik o studijima i studiranju Pravnog fakulteta (donesen 12.7.2024, na snazi od 1.10.2024)",

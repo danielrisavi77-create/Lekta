@@ -1464,10 +1464,15 @@
         "category": "format",
         "label": "Font glavnog teksta",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-diplomski-2021",
+        "sourcePage": "str. 11, Upute za oblikovanje teksta rada, t.1",
+        "quote": "oblik i velicina slova treba biti jednaka u cijelom tekstu (velicina: 12, oblik: Times New Roman)",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70"
       },
       {
         "ruleId": "pravo-socijalni-rad-diplomski--font-size",
@@ -1478,10 +1483,15 @@
         "category": "format",
         "label": "Velicina fonta glavnog teksta",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-diplomski-2021",
+        "sourcePage": "str. 11, Upute za oblikovanje teksta rada, t.1",
+        "quote": "oblik i velicina slova treba biti jednaka u cijelom tekstu (velicina: 12, oblik: Times New Roman)",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70"
       },
       {
         "ruleId": "pravo-socijalni-rad-diplomski--line-spacing",
@@ -1490,10 +1500,15 @@
         "category": "format",
         "label": "Prored glavnog teksta",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-diplomski-2021",
+        "sourcePage": "str. 11, Upute za oblikovanje teksta rada, t.1",
+        "quote": "prored treba biti: 1,5",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70"
       },
       {
         "ruleId": "pravo-socijalni-rad-diplomski--margins",
@@ -1519,10 +1534,15 @@
         "category": "citation",
         "label": "Stil citiranja",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-diplomski-2021",
+        "sourcePage": "str. 13 i 17, Upute za navodjenje literature / Navodjenje citata i referenci u tekstu",
+        "quote": "Referenca u tekstu se stavlja u zagrade, a sadrzi prezime autora i godinu izdanja; prema uputama iz Revije za socijalnu politiku ili iz Ljetopisa socijalnog rada",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70"
       },
       {
         "ruleId": "pravo-socijalni-rad-diplomski--required-sections",
@@ -1598,10 +1618,15 @@
         "category": "structure",
         "label": "Obvezni dijelovi rada",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-diplomski-2021",
+        "sourcePage": "str. 3-10, struktura rada i naslovni listovi",
+        "quote": "Treca stranica sadrzava naslov, sazetak, kljucne rijeci na hrvatskom i engleskom jeziku; Cetvrta stranica sadrzi izjavu o izvornosti",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70"
       },
       {
         "ruleId": "pravo-socijalni-rad-diplomski--toc",
@@ -1610,10 +1635,15 @@
         "category": "structure",
         "label": "Sadrzaj",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-diplomski-2021",
+        "sourcePage": "str. 7-9, Drugi list (Sadrzaj)",
+        "quote": "Na drugoj stranici se nalazi sadrzaj rada i ona se ne numerira",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70"
       },
       {
         "ruleId": "pravo-socijalni-rad-diplomski--page-numbers",
@@ -1622,10 +1652,15 @@
         "category": "format",
         "label": "Numeriranje stranica",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-diplomski-2021",
+        "sourcePage": "str. 11, Upute za oblikovanje teksta rada, t.1",
+        "quote": "stranice trebaju biti oznacene rednim brojem (dolje desno), pri cemu se prva brojcana oznaka stavlja na prvu stranicu uvoda",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70"
       },
       {
         "ruleId": "pravo-socijalni-rad-diplomski--paper-size",
@@ -1637,7 +1672,7 @@
         "sourceId": null,
         "sourcePage": null,
         "quote": null,
-        "status": "draft"
+        "status": "advisory"
       },
       {
         "ruleId": "pravo-socijalni-rad-diplomski--heading-rules",
@@ -1670,10 +1705,15 @@
         "category": "structure",
         "label": "Oblikovanje naslova po razinama",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-diplomski-2021",
+        "sourcePage": "str. 11, Upute za oblikovanje teksta rada, t.1",
+        "quote": "glavni naslovi trebaju biti oznaceni masnim slovima (bold), a podnaslovi kosim slovima (italic) s brojcanim oznacavanjem arapskim brojkama, pri cemu je iza zadnjeg broja potrebno staviti tocku (najvise 5 u nizu)",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70"
       },
       {
         "ruleId": "pravo-socijalni-rad-diplomski--page-count",
@@ -1701,10 +1741,15 @@
         "category": "format",
         "label": "Font glavnog teksta",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-diplomski-2021",
+        "sourcePage": "str. 11, Upute za oblikovanje teksta rada, t.1",
+        "quote": "oblik i velicina slova treba biti jednaka u cijelom tekstu (velicina: 12, oblik: Times New Roman)",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70"
       },
       {
         "ruleId": "pravo-socijalna-politika-diplomski--font-size",
@@ -1715,10 +1760,15 @@
         "category": "format",
         "label": "Velicina fonta glavnog teksta",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-diplomski-2021",
+        "sourcePage": "str. 11, Upute za oblikovanje teksta rada, t.1",
+        "quote": "oblik i velicina slova treba biti jednaka u cijelom tekstu (velicina: 12, oblik: Times New Roman)",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70"
       },
       {
         "ruleId": "pravo-socijalna-politika-diplomski--line-spacing",
@@ -1727,10 +1777,15 @@
         "category": "format",
         "label": "Prored glavnog teksta",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-diplomski-2021",
+        "sourcePage": "str. 11, Upute za oblikovanje teksta rada, t.1",
+        "quote": "prored treba biti: 1,5",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70"
       },
       {
         "ruleId": "pravo-socijalna-politika-diplomski--margins",
@@ -1756,10 +1811,15 @@
         "category": "citation",
         "label": "Stil citiranja",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-diplomski-2021",
+        "sourcePage": "str. 13 i 17, Upute za navodjenje literature / Navodjenje citata i referenci u tekstu",
+        "quote": "Referenca u tekstu se stavlja u zagrade, a sadrzi prezime autora i godinu izdanja; prema uputama iz Revije za socijalnu politiku ili iz Ljetopisa socijalnog rada",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70"
       },
       {
         "ruleId": "pravo-socijalna-politika-diplomski--required-sections",
@@ -1835,10 +1895,15 @@
         "category": "structure",
         "label": "Obvezni dijelovi rada",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-diplomski-2021",
+        "sourcePage": "str. 3-10, struktura rada i naslovni listovi",
+        "quote": "Treca stranica sadrzava naslov, sazetak, kljucne rijeci na hrvatskom i engleskom jeziku; Cetvrta stranica sadrzi izjavu o izvornosti",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70"
       },
       {
         "ruleId": "pravo-socijalna-politika-diplomski--toc",
@@ -1847,10 +1912,15 @@
         "category": "structure",
         "label": "Sadrzaj",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-diplomski-2021",
+        "sourcePage": "str. 7-9, Drugi list (Sadrzaj)",
+        "quote": "Na drugoj stranici se nalazi sadrzaj rada i ona se ne numerira",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70"
       },
       {
         "ruleId": "pravo-socijalna-politika-diplomski--page-numbers",
@@ -1859,10 +1929,15 @@
         "category": "format",
         "label": "Numeriranje stranica",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-diplomski-2021",
+        "sourcePage": "str. 11, Upute za oblikovanje teksta rada, t.1",
+        "quote": "stranice trebaju biti oznacene rednim brojem (dolje desno), pri cemu se prva brojcana oznaka stavlja na prvu stranicu uvoda",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70"
       },
       {
         "ruleId": "pravo-socijalna-politika-diplomski--paper-size",
@@ -1874,7 +1949,7 @@
         "sourceId": null,
         "sourcePage": null,
         "quote": null,
-        "status": "draft"
+        "status": "advisory"
       },
       {
         "ruleId": "pravo-socijalna-politika-diplomski--heading-rules",
@@ -1907,10 +1982,15 @@
         "category": "structure",
         "label": "Oblikovanje naslova po razinama",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "draft"
+        "sourceId": "pravo-scsr-upute-diplomski-2021",
+        "sourcePage": "str. 11, Upute za oblikovanje teksta rada, t.1",
+        "quote": "glavni naslovi trebaju biti oznaceni masnim slovima (bold), a podnaslovi kosim slovima (italic) s brojcanim oznacavanjem arapskim brojkama, pri cemu je iza zadnjeg broja potrebno staviti tocku (najvise 5 u nizu)",
+        "status": "verified",
+        "authority": "program-page",
+        "verifiedBy": "Daniel",
+        "reviewedBy": null,
+        "lastVerified": "2026-07-16",
+        "verifiedHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70"
       },
       {
         "ruleId": "pravo-socijalna-politika-diplomski--page-count",
