@@ -16,17 +16,20 @@ as $$
   select count(*)::int from del;
 $$;
 
--- Ako je pg_cron dostupan (Supabase: ukljuci ekstenziju u Dashboard -> Database -> Extensions),
--- zakazi dnevno brisanje u 03:00 UTC. Ako nije, migracija ne pada; brisanje pozovi rucno ili
--- ukljuci pg_cron pa ponovno primijeni ovaj blok.
+-- Fail-closed retencija (AUD-18/19 / LEKTA-SEC-02 obrazac, prosiren na cron sibling): bez pg_crona
+-- purge_old_report_generations() se nikad ne bi zakazao, a migracija bi tiho prosla zeleno, pa bi
+-- stari zapisi generacija (s hashiranim IP-jem) ostali zauvijek suprotno politici minimizacije.
+-- Zato izostanak pg_crona RUSI migraciju (glasno) umjesto tihog preskoka. Idempotentno: re-run
+-- radi unschedule pa schedule istog imenovanog joba (03:00 UTC).
 do $$
 begin
-  if exists (select 1 from pg_extension where extname = 'pg_cron') then
-    begin
-      perform cron.unschedule('purge-report-generations');
-    exception when others then
-      null; -- job jos ne postoji
-    end;
-    perform cron.schedule('purge-report-generations', '0 3 * * *', 'select purge_old_report_generations(90);');
+  if not exists (select 1 from pg_extension where extname = 'pg_cron') then
+    raise exception 'pg_cron nije dostupan: purge_old_report_generations() se ne moze zakazati (fail-closed). Ukljuci pg_cron ekstenziju pa ponovno pokreni migraciju.';
   end if;
+  begin
+    perform cron.unschedule('purge-report-generations');
+  exception when others then
+    null; -- job jos ne postoji
+  end;
+  perform cron.schedule('purge-report-generations', '0 3 * * *', 'select purge_old_report_generations(90);');
 end $$;

@@ -147,14 +147,19 @@ as $$
   select count(*)::int from upd;
 $$;
 
+-- Fail-closed retencija (AUD-18/19 / LEKTA-SEC-02 obrazac, prosiren na cron sibling): bez pg_crona
+-- purge_faculty_request_ip() se nikad ne bi zakazao, a migracija bi tiho prosla zeleno, pa bi
+-- ip_hash (anti-spam identifikator) ostao zauvijek suprotno politici minimizacije (0009/0016 red).
+-- Zato izostanak pg_crona RUSI migraciju (glasno). Idempotentno: re-run radi unschedule pa schedule.
 do $$
 begin
-  if exists (select 1 from pg_extension where extname = 'pg_cron') then
-    begin
-      perform cron.unschedule('purge-faculty-request-ip');
-    exception when others then
-      null; -- job jos ne postoji
-    end;
-    perform cron.schedule('purge-faculty-request-ip', '15 3 * * *', 'select purge_faculty_request_ip(30);');
+  if not exists (select 1 from pg_extension where extname = 'pg_cron') then
+    raise exception 'pg_cron nije dostupan: purge_faculty_request_ip() se ne moze zakazati (fail-closed). Ukljuci pg_cron ekstenziju pa ponovno pokreni migraciju.';
   end if;
+  begin
+    perform cron.unschedule('purge-faculty-request-ip');
+  exception when others then
+    null; -- job jos ne postoji
+  end;
+  perform cron.schedule('purge-faculty-request-ip', '15 3 * * *', 'select purge_faculty_request_ip(30);');
 end $$;

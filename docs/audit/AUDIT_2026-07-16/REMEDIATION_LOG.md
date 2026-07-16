@@ -132,3 +132,26 @@ Batch 1 (AUD-17, 01, 04, 09) + Batch 2 (AUD-38, 31/39, 46) + D1 (02,03,05,06,07,
 Sesti batch (subagenti): D5 (18,19,20) + D6 (22,23,24,25,26,28,29,33,35) + D8 (34,40,41) + D9/D10 (32,42,44,45,47,48,49,50) + D12 (55,56,58,59,60,61,62,63,64) = 32.
 
 Neizvrseno: AUD-27 (cross-cutting migracija), AUD-52 (skidanje devDeps, operativno/deploy rizik), AUD-54 (bundle guard, Info), AUD-53/12 (demo asseti, odluka), AUD-43/57 (ugnijezdeni repo, odluka), AUD-13/16 (by-design), AUD-37 (vec sanirano), AUD-21/51 (REJECTED). Gate: `npm run check` exit 0, `python -m pytest` 152 passed.
+
+## Sedmi batch — koordinirani migracija+Edge (workflow s adversarijalnom provjerom kontrakta)
+
+Deterministicki workflow (3 faze: migracije -> Edge -> adversarijalna provjera kontrakta), jer Edge nije u `npm run check` pa bi neuskladeni SQL<->Edge kontrakt pukao tek u runtimeu. Verifier procitao stvarne datoteke: `contractConsistent: true`, 0 mismatcheva, verdikt GO uz obvezni post-deploy dimni test.
+
+### AUD-27 + AUD-22 (unificirano) — atomski per-IP dnevni cap
+- Nova migracija `0022_ip_rate_limits.sql`: tablica `ip_rate_limits (scope, ip_hash, day, count)` + `claim_ip_rate_slot(p_scope, p_ip_hash, p_daily_cap) -> boolean` (SECURITY DEFINER, `INSERT ... ON CONFLICT DO UPDATE ... WHERE count < cap RETURNING` pod row-lockom, nema TOCTOU) + `purge_ip_rate_limits` + fail-closed pg_cron. Grantovi: revoke public/anon/authenticated, service_role zadrzava execute.
+- `0023_integrity_ip_hash.sql`: `integrity_checks.ip_hash` stupac + indeks (idempotentno).
+- Edge: `preflight-start` zamijenio ne-atomicni COUNT-pa-INSERT per-IP blok RPC pozivom (`claim_ip_rate_slot('preflight', ipHash, DAILY_CAP_IP)`, 429 na false); `integrity-check` full nacin dobio per-IP cap (`scope='integrity_full'`, novi env `INTEGRITY_FULL_DAILY_CAP_IP=20`) + racuna i upisuje `ip_hash` preko `_shared/hash-ip.ts`. Per-USER capovi nepromijenjeni.
+
+### AUD-28 — retry-safe kupon/referral idempotencija
+- `0024_webhook_idempotency.sql`: UNIQUE `coupon_grants_order_reason_key (source_order_id, reason)` i `referrals_converted_order_key (converted_order_id)` preko `pg_constraint` guarda (idempotentno).
+- Edge `webhook-mor`: tri insert sitea (referrals + 2 kupona) presla na `.upsert(..., { ignoreDuplicates: true })` (ON CONFLICT DO NOTHING); za referrals dodan refetch-na-skip da interna nagrada koristi stabilan refId. `grant-referrer-reward.ts` pise na DRUGU tablicu (referral_signups) pa nije zahvacen.
+
+### pg_cron siblings (dosljednost SEC-02)
+- `0009_log_retention.sql`, `0011_faculty_requests.sql`, `0016_retention_slots_faculty.sql`: isti fail-closed DO-block obrazac kao 0018/0019 (raise exception ako pg_cron ekstenzija nedostaje), postojeci unschedule/schedule parovi ocuvani.
+
+### Verifikacija i napomene
+- Ciljani gate (batch A je izvan TS/vite grafa): `tests/migration-numbering.test.ts` 3/3 + `tests/supabase-edge-imports.test.ts` 2/2 zeleno, exit 0. Numeracija 0022/0023/0024 jedinstvena, poredak 0009<0015 ocuvan.
+- Adversarijalni verifier: 0 mismatcheva; SECURITY DEFINER stvarno atomican, grantovi ispravni, oba constrainta ciljaju postojece stupce, jedini writeri potvrdjeni.
+- Svjesna nepokrivenost: teaser per-IP cap (`scope='integrity_teaser'`) nije ozicen (kontrakt ga naveo samo kao primjer); teaser zadrzava per-user cap i upisuje ip_hash. Opcionalni follow-up.
+- Rezidualni rizik: Edge nije u automatiziranom gateu; verifier preporuca post-deploy dimni test (429 na per-IP capu preflight+integrity full, dupli webhook retry ne duplicira kupon/referral).
+- GOTCHA: na grani audit/remediation-2026-07-16 teche PARALELNA sesija (commit 6ad90e5 "preflight deploy runbook" + necommitani docs/deploy/PREFLIGHT_DEPLOY.md); batch A commit uzima SAMO supabase/** putanje.

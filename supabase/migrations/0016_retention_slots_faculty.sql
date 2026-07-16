@@ -86,24 +86,27 @@ revoke execute on function purge_faculty_request_email(int, int) from public;
 
 -- ---------------------------------------------------------------------------
 -- pg_cron: zakazi dnevno, stagger POSLIJE postojecih jobova (0009 '0 3', 0011 '15 3') da se ne
--- pregaze. Guard oko pg_extension: migracija NE pada bez pg_cron (lokalni Supabase/CI).
--- unschedule-u-try + schedule cini re-run idempotentnim (zamijeni job, ne dupliraj). Ako pg_cron
--- nije ukljucen na produkciji, ukljuci ga pa ponovno primijeni ovaj blok (kao za 0009/0011).
+-- pregaze. unschedule-u-try + schedule cini re-run idempotentnim (zamijeni job, ne dupliraj).
+-- Fail-closed (AUD-18/19 / LEKTA-SEC-02 obrazac, prosiren na cron sibling): bez pg_crona ni
+-- purge_document_slots() ni purge_faculty_request_email() se ne bi zakazali, a migracija bi tiho
+-- prosla zeleno, pa bi PII (otisak/label document_slots, e-mail faculty_requests) ostao zauvijek
+-- suprotno politici minimizacije. Zato izostanak pg_crona RUSI migraciju (glasno).
 do $$
 begin
-  if exists (select 1 from pg_extension where extname = 'pg_cron') then
-    begin
-      perform cron.unschedule('purge-document-slots');
-    exception when others then
-      null; -- job jos ne postoji
-    end;
-    perform cron.schedule('purge-document-slots', '30 3 * * *', 'select purge_document_slots(30);');
-
-    begin
-      perform cron.unschedule('purge-faculty-request-email');
-    exception when others then
-      null; -- job jos ne postoji
-    end;
-    perform cron.schedule('purge-faculty-request-email', '45 3 * * *', 'select purge_faculty_request_email(90, 7);');
+  if not exists (select 1 from pg_extension where extname = 'pg_cron') then
+    raise exception 'pg_cron nije dostupan: purge_document_slots() i purge_faculty_request_email() se ne mogu zakazati (fail-closed). Ukljuci pg_cron ekstenziju pa ponovno pokreni migraciju.';
   end if;
+  begin
+    perform cron.unschedule('purge-document-slots');
+  exception when others then
+    null; -- job jos ne postoji
+  end;
+  perform cron.schedule('purge-document-slots', '30 3 * * *', 'select purge_document_slots(30);');
+
+  begin
+    perform cron.unschedule('purge-faculty-request-email');
+  exception when others then
+    null; -- job jos ne postoji
+  end;
+  perform cron.schedule('purge-faculty-request-email', '45 3 * * *', 'select purge_faculty_request_email(90, 7);');
 end $$;

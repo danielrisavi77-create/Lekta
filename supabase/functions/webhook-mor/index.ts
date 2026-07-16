@@ -77,22 +77,37 @@ async function attributeReferral(admin: any, ev: LemonEvent): Promise<void> {
     return;
   }
 
-  const { data: ref } = await admin
+  // AUD-28: ON CONFLICT (converted_order_id) DO NOTHING preko unique constraint-a
+  // referrals_converted_order_key (0024). Retry istog ordera NE stvara drugi referral kredit.
+  const { data: refIns } = await admin
     .from('referrals')
-    .insert({
+    .upsert({
       referrer_user_id: referrerUserId,
       referred_user_id: ev.userId,
       code: ev.referralCode,
       status: 'credited',
       converted_order_id: ev.orderId,
       credited_at: new Date().toISOString(),
-    })
-    .select('id')
-    .single();
+    }, { onConflict: 'converted_order_id', ignoreDuplicates: true })
+    .select('id');
+
+  // Kad je upsert preskocen (postojeci kredit za ovaj order), refetch postojeceg reda da interna
+  // nagrada koristi ISTI referral.id (order_id = reward:referral:{id}); tako ju unique(provider,
+  // order_id) deduplicira i retry ne kreira drugu nagradu (novi id -> novi order_id -> nema guarda).
+  let refId: string | null = refIns && refIns.length === 1 ? refIns[0].id : null;
+  if (!refId) {
+    const { data: existingRef } = await admin
+      .from('referrals')
+      .select('id')
+      .eq('converted_order_id', ev.orderId)
+      .maybeSingle();
+    refId = existingRef?.id ?? null;
+  }
+  if (!refId) return; // bez referral.id nema stabilnog kljuca nagrade; ne kreiraj nista
 
   // nagrada referreru: interni entitlement (1 seminarski slot); unique(provider,order_id) stiti od duplog
-  const reward = referralRewardEntitlement(ref.id);
-  await admin.from('entitlements').insert({
+  const reward = referralRewardEntitlement(refId);
+  const { error: rewardErr } = await admin.from('entitlements').insert({
     user_id: referrerUserId,
     work_type: reward.workType,
     slots_total: reward.slotsTotal,
@@ -101,15 +116,20 @@ async function attributeReferral(admin: any, ev: LemonEvent): Promise<void> {
     provider: reward.provider,
     purchase_expires_at: isoAfterDays(Date.now(), 90),
   });
+  // 23505 = nagrada za ovaj referral vec postoji (retry): idempotentno, nastavi na kupon.
+  if (rewardErr && (rewardErr as any).code !== '23505') {
+    console.error('webhook-mor referral_reward_failed', { orderId: ev.orderId, code: (rewardErr as any).code });
+  }
 
-  // welcome kupon za referred (zapis; primjena -20% na LS checkoutu je integracija)
-  await admin.from('coupon_grants').insert({
+  // welcome kupon za referred (zapis; primjena -20% na LS checkoutu je integracija). AUD-28:
+  // ON CONFLICT (source_order_id, reason) DO NOTHING preko coupon_grants_order_reason_key (0024).
+  await admin.from('coupon_grants').upsert({
     user_id: ev.userId,
     code: `WELCOME-${ev.referralCode}`,
     reason: 'referral_welcome',
     source_order_id: ev.orderId,
     expires_at: isoAfterDays(Date.now(), 120),
-  });
+  }, { onConflict: 'source_order_id,reason', ignoreDuplicates: true });
   void REFERRAL_WELCOME_DISCOUNT; // -20% se postavlja u LS discount konfiguraciji (TODO)
 }
 
@@ -218,13 +238,15 @@ Deno.serve(async (req: Request) => {
   // pass bonus kupon (6.5): samo uz tek kreiran entitlement (ne na duplikat)
   if (isPassProduct(product.kind)) {
     try {
-      await admin.from('coupon_grants').insert({
+      // AUD-28: ON CONFLICT (source_order_id, reason) DO NOTHING preko
+      // coupon_grants_order_reason_key (0024); retry ne duplira pass_bonus kupon.
+      await admin.from('coupon_grants').upsert({
         user_id: ev.userId,
         code: makePassCouponCode(ev.orderId),
         reason: 'pass_bonus',
         source_order_id: ev.orderId,
         expires_at: isoAfterDays(Date.now(), PASS_COUPON_VALID_DAYS),
-      });
+      }, { onConflict: 'source_order_id,reason', ignoreDuplicates: true });
     } catch (e) {
       console.error('webhook-mor pass_coupon_failed', { orderId: ev.orderId, error: String(e) });
     }

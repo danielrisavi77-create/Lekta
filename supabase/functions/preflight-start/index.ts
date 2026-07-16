@@ -102,16 +102,12 @@ Deno.serve(async (req: Request) => {
     return json({ error: 'payload_too_large', maxBytes }, 413, origin);
   }
 
-  // 3. dnevni capovi (best-effort, COUNT-pa-INSERT). VAZNO: partial unique
-  //    index u 0019 je po user_id, pa atomski jamci samo <=1 AKTIVAN job po
-  //    korisniku. To u praksi drzi per-USER dnevni cap cvrstim (zahtjevi istog
-  //    korisnika su serijalizirani, pa ih dnevni COUNT stigne uhvatiti), ali
-  //    NE backstopa per-IP cap: vise RAZLICITIH racuna s istog IP-a moze
-  //    paralelno proci stale COUNT (index nije po ip_hash). Prihvatljivo za
-  //    soft-launch (trosak ~0/analiza; obilazak trazi vise OTP-verificiranih
-  //    racuna koji istovremeno racaju). Pre-scale fiks: fold gate+INSERT u
-  //    jednu SECURITY DEFINER funkciju pod pg_advisory_xact_lock(ip_hash) da
-  //    COUNT i INSERT budu u istoj transakciji (docs/DEPLOY_PREFLIGHT.md).
+  // 3. dnevni capovi. Per-USER cap ostaje COUNT-pa-INSERT: partial unique index u
+  //    0019 (po user_id) atomski jamci <=1 AKTIVAN job po korisniku, pa su zahtjevi
+  //    istog korisnika serijalizirani i dnevni COUNT ih stigne uhvatiti (TOCTOU je
+  //    benigni). Per-IP cap je SADA atomican (AUD-27): claim_ip_rate_slot (0022)
+  //    rezervira slot pod row-lockom umjesto ranijeg stale COUNT-a nad ip_hash, pa
+  //    vise RAZLICITIH racuna s istog IP-a vise ne moze paralelno proci ispod capa.
   const now = new Date();
   const dayAgo = new Date(now.getTime() - 24 * 3600 * 1000).toISOString();
   const { count: userCount } = await admin
@@ -123,12 +119,17 @@ Deno.serve(async (req: Request) => {
 
   const ipHash = await hashClientIpSalted(
     req.headers.get('x-forwarded-for'), IP_HASH_SALT, SERVICE_ROLE);
-  const { count: ipCount } = await admin
-    .from('preflight_checks')
-    .select('id', { count: 'exact', head: true })
-    .eq('ip_hash', ipHash)
-    .gt('created_at', dayAgo);
-  if ((ipCount ?? 0) >= DAILY_CAP_IP) return json({ error: 'rate_limited' }, 429, origin);
+  // AUD-27: atomicna rezervacija per-IP dnevnog slota (0022). Zamjenjuje raniji
+  // ne-atomicni COUNT nad preflight_checks.ip_hash. claim_ip_rate_slot radi ON
+  // CONFLICT increment WHERE count < cap pod row-lockom, pa nema TOCTOU. Ugovor:
+  // true = dopusteno; false / error / null = tretiraj kao odbijeno (429). ipHash
+  // se i dalje upisuje u preflight_checks.insert nize.
+  const { data: ipOk } = await admin.rpc('claim_ip_rate_slot', {
+    p_scope: 'preflight',
+    p_ip_hash: ipHash,
+    p_daily_cap: DAILY_CAP_IP,
+  });
+  if (ipOk !== true) return json({ error: 'rate_limited' }, 429, origin);
 
   // 4. dedup: isti korisnik + ista datoteka + jos zivi nalaz -> vrati postojeci
   //    job bez novog computea (ponovljeni pregled je besplatan i trenutan)

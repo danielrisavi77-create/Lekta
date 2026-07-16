@@ -16,6 +16,7 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 import { INTEGRITY_RETENTION_DAYS } from '../../../src/integrity/integrity-consent.ts';
 import { corsHeadersFor } from '../_shared/cors.ts';
+import { hashClientIpSalted } from '../_shared/hash-ip.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -30,8 +31,15 @@ const TEASER_DAILY_CAP = Number(Deno.env.get('INTEGRITY_TEASER_DAILY_CAP') ?? '2
 // znaci neograniceno placenih vanjskih poziva ni pohrane punog teksta; svaki puni poziv okine
 // embedding + AI-detektor i upise red s punim tekstom (~300 KB), pa i on treba gornju granicu.
 const FULL_DAILY_CAP = Number(Deno.env.get('INTEGRITY_FULL_DAILY_CAP') ?? '20');
+// Dnevni per-IP limit PUNIH provjera (AUD-22): per-user cap gore ne backstopa vise RAZLICITIH
+// racuna s istog IP-ja. Enforcement je ATOMICAN preko claim_ip_rate_slot (0022, scope=integrity_full),
+// ne TOCTOU COUNT. Zaseban od per-user capa (razlicit prag je namjeran).
+const FULL_DAILY_CAP_IP = Number(Deno.env.get('INTEGRITY_FULL_DAILY_CAP_IP') ?? '20');
 // Timeout na vanjske providere (SEC-01, AUD-29): bez njega spor/viseci provider drzi zahtjev otvoren.
 const PROVIDER_TIMEOUT_MS = Number(Deno.env.get('INTEGRITY_PROVIDER_TIMEOUT_MS') ?? '10000');
+// Salt za per-IP hash (isti obrazac kao preflight-start / generate-report). Prazno -> hash-ip
+// izvodi stabilan salt iz service-role kljuca (nikad nesoljeno).
+const IP_HASH_SALT = Deno.env.get('IP_HASH_SALT') ?? '';
 const MAX_TEXT = 300 * 1024; // ~300 KB teksta rada
 
 // Dopusteno CORS porijeklo (SEC-05): produkcijska domena; override preko ALLOWED_ORIGIN (zarezom
@@ -149,6 +157,9 @@ Deno.serve(async (req: Request) => {
   const nowIso = now.toISOString();
 
   const dayAgoIso = new Date(now.getTime() - 24 * 3600 * 1000).toISOString();
+  // Per-IP identitet (AUD-22): soljeni hash klijentskog IP-ja. Racuna se prije capa (full
+  // koristi ga za claim_ip_rate_slot) i upisuje se u integrity_checks.ip_hash (stupac 0023).
+  const ipHash = await hashClientIpSalted(req.headers.get('x-forwarded-for'), IP_HASH_SALT, SERVICE_ROLE);
 
   // 3. gate: teaser = besplatno uz dnevni limit; full = trazi aktivan entitlement (Thesis Pass/slot).
   //    (MVP: bilo koji aktivan entitlement otkljucava puni izvjestaj; vezanje iskljucivo na Pass
@@ -193,8 +204,12 @@ Deno.serve(async (req: Request) => {
     return json({ report: cached, idempotent: true }, 200);
   }
 
-  // 3c. dnevni cap za PUNE provjere (SEC-01, AUD-22): nova (ne-idempotentna) puna provjera trosi
+  // 3c. dnevni capovi za PUNE provjere (SEC-01, AUD-22): nova (ne-idempotentna) puna provjera trosi
   //     kvotu; sprjecava petlju N placenih poziva i N redaka punog teksta iza jednog entitlementa.
+  //     Per-USER cap je rolling-24h COUNT; per-IP cap je ATOMICAN (claim_ip_rate_slot, 0022,
+  //     scope='integrity_full') pa vise racuna s istog IP-ja ne moze paralelno proci stale COUNT.
+  //     Oba se zovu tek NAKON entitlement + idempotency gatea, pa idempotentni replay (3b) ne
+  //     trosi slot. claim_ip_rate_slot inkrementira brojac UNAPRIJED (prije platnih poziva u 4).
   if (mode === 'full') {
     const { count: fullCount } = await admin
       .from('integrity_checks')
@@ -203,6 +218,14 @@ Deno.serve(async (req: Request) => {
       .eq('mode', 'full')
       .gt('created_at', dayAgoIso);
     if ((fullCount ?? 0) >= FULL_DAILY_CAP) return json({ error: 'rate_limited' }, 429);
+
+    // Ugovor: true = dopusteno; false / error / null = tretiraj kao odbijeno (429).
+    const { data: ipOk } = await admin.rpc('claim_ip_rate_slot', {
+      p_scope: 'integrity_full',
+      p_ip_hash: ipHash,
+      p_daily_cap: FULL_DAILY_CAP_IP,
+    });
+    if (ipOk !== true) return json({ error: 'rate_limited' }, 429);
   }
 
   // 4. provjere (env-seam-ovi). full = svi detalji; teaser = ograniceni signal.
@@ -224,6 +247,7 @@ Deno.serve(async (req: Request) => {
     lang,
     mode,
     consent,
+    ip_hash: ipHash, // AUD-22: trajna per-IP atribucija reda (stupac 0023)
     sent_text: text,
     result_summary: { ...report, idempotencyHash },
     retention_expires_at: retentionExpires,
