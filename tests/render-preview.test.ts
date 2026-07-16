@@ -103,3 +103,32 @@ describe('renderPreview: DOM pregled s oznakama', () => {
     expect(res.flagTargets.get(1)).toBe(marks[0]);
   });
 });
+
+describe('renderPreview: fusnote', () => {
+  it('renderira odjeljak Fusnote s brojem i tekstom', () => {
+    const { root } = renderPreview(
+      { paragraphs: [para(1, 'Tijelo')], footnotes: [{ id: 1, text: 'Prva fusnota' }, { id: 2, text: 'Druga' }] },
+      [],
+    );
+    const fnSection = root.querySelector('.lekta-pv-footnotes');
+    expect(fnSection).not.toBeNull();
+    expect(fnSection!.querySelectorAll('.lekta-pv-footnote').length).toBe(2);
+    expect(root.querySelector('#lekta-pv-fn-1')!.textContent).toContain('Prva fusnota');
+  });
+
+  it('footnote-flag cilja element fusnote (footnote-level anchor)', () => {
+    const res = renderPreview(
+      { paragraphs: [para(1, 'Tijelo')], footnotes: [{ id: 7, text: 'Sporna fusnota' }] },
+      [flag({ paragraphIndex: 0, footnoteId: 7, excerpt: '', severity: 'error', title: 'op. cit.' })],
+    );
+    const fnEl = res.root.querySelector('#lekta-pv-fn-7')!;
+    expect(res.flagTargets.get(0)).toBe(fnEl);
+    expect(fnEl.className).toContain('lekta-pv-footnote--has-unlocated');
+    expect(res.locatedCount).toBe(1);
+  });
+
+  it('bez fusnota nema odjeljka Fusnote i tekst nije zahvacen', () => {
+    const { root } = renderPreview({ paragraphs: [para(1, 'x')] }, []);
+    expect(root.querySelector('.lekta-pv-footnotes')).toBeNull();
+  });
+});

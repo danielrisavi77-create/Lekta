@@ -56,12 +56,16 @@ export type PreviewFlagSource =
   | 'reference-missing'
   | 'reference-uncited'
   | 'reference-incomplete'
-  | 'legal-uncited';
+  | 'legal-uncited'
+  | 'issue-anchor'
+  | 'footnote-anchor';
 
 /** Usidren nalaz spreman za inline isticanje u pregledu. */
 export interface PreviewFlag {
-  /** 1-based indeks odlomka (poravnat s PreviewParagraph.index). */
+  /** 1-based indeks odlomka (poravnat s PreviewParagraph.index). 0 kad je nalaz vezan uz fusnotu. */
   paragraphIndex: number;
+  /** Ako je postavljeno, nalaz cilja FUSNOTU (zaseban koordinatni prostor), ne odlomak tijela. */
+  footnoteId?: number;
   /** Tekstualni isjecak koji renderer trazi unutar odlomka radi preciznog isticanja; moze biti ''. */
   excerpt: string;
   severity: PreviewSeverity;
@@ -190,4 +194,109 @@ export function collectPreviewFlags(details: any): PreviewFlag[] {
   }
 
   return flags;
+}
+
+// "odlomak N" ili "odlomak N: <tekst>"; tekst ide do sljedeceg ';' ili kraja segmenta.
+const ISSUE_ANCHOR_RE = /odlomak\s+(\d+)(?:\s*:\s*([^;]*))?/gi;
+
+function normSeverity(s: unknown): PreviewSeverity {
+  return s === 'error' || s === 'warning' || s === 'info' ? s : 'warning';
+}
+
+/**
+ * Usidri nalaze (Issue) koji vec nose redni broj odlomka u opisu ("odlomak N" ili
+ * "odlomak N: <tekst>"): preskakanja naslova, numeriranje i oblikovanje naslova, rucno
+ * oblikovani naslovi, dubina numeriranja, izravni citati bez lokatora, mrezni izvori bez
+ * datuma pristupa, neispravne poveznice. Kategorija 'formatting' se NAMJERNO preskace:
+ * font, margine, prored i razmaci su svojstva cijelog dokumenta i prikazuju se u globalnoj
+ * legendi (renderPreviewSide), ne kao inline oznaka na jednom mjestu.
+ */
+export function collectIssueAnchors(issues: any[]): PreviewFlag[] {
+  const flags: PreviewFlag[] = [];
+  for (const it of issues ?? []) {
+    if (!it || typeof it.detail !== 'string' || it.category === 'formatting') continue;
+    ISSUE_ANCHOR_RE.lastIndex = 0;
+    let m: RegExpExecArray | null;
+    while ((m = ISSUE_ANCHOR_RE.exec(it.detail))) {
+      const p = Number(m[1]);
+      if (!Number.isInteger(p) || p < 1) continue;
+      flags.push({
+        paragraphIndex: p,
+        excerpt: trimExcerpt(m[2] ?? ''),
+        severity: normSeverity(it.severity),
+        kind: String(it.category ?? 'nalaz'),
+        title: String(it.title ?? 'Nalaz'),
+        source: 'issue-anchor',
+      });
+    }
+  }
+  return flags;
+}
+
+// "bilj. N" (oznaka fusnote u opisu nalaza pravnog enginea i oblikovanja oznaka fusnota).
+const FOOTNOTE_ANCHOR_RE = /bilj\.\s*(\d+)/gi;
+
+/**
+ * Usidri nalaze vezane uz FUSNOTE (zaseban koordinatni prostor). Legal Citation Engine i
+ * provjera oznaka fusnota utiskuju "bilj. N" u opis (op.cit/Ibid/potpunost prvog navoda,
+ * skracenice id., propisi, sudska praksa, ukosena oznaka...). Uzimamo samo broj fusnote (poruka
+ * je dijagnostika, ne tekst fusnote, pa se ne moze locirati kao podniz); nalaz cilja cijelu
+ * fusnotu. Naslov Issue-a nosi vrstu problema.
+ */
+export function collectFootnoteAnchors(issues: any[]): PreviewFlag[] {
+  const flags: PreviewFlag[] = [];
+  for (const it of issues ?? []) {
+    if (!it || typeof it.detail !== 'string') continue;
+    FOOTNOTE_ANCHOR_RE.lastIndex = 0;
+    let m: RegExpExecArray | null;
+    const seenInIssue = new Set<number>();
+    while ((m = FOOTNOTE_ANCHOR_RE.exec(it.detail))) {
+      const id = Number(m[1]);
+      if (!Number.isInteger(id) || id < 1 || seenInIssue.has(id)) continue;
+      seenInIssue.add(id);
+      flags.push({
+        paragraphIndex: 0,
+        footnoteId: id,
+        excerpt: '',
+        severity: normSeverity(it.severity),
+        kind: String(it.category ?? 'fusnota'),
+        title: String(it.title ?? 'Nalaz u fusnoti'),
+        source: 'footnote-anchor',
+      });
+    }
+  }
+  return flags;
+}
+
+/**
+ * Kljuc za deduplikaciju: ista lokacija (odlomak ILI fusnota) + isti isjecak (prefiks 40 znakova)
+ * je isti nalaz. Bez isjecka razlucujemo naslovom, da dva razlicita nalaza bez isjecka na istoj
+ * lokaciji (npr. citat bez lokatora i neispravna poveznica) ostanu odvojena.
+ */
+function flagKey(f: PreviewFlag): string {
+  const loc = f.footnoteId != null ? `f${f.footnoteId}` : `p${f.paragraphIndex}`;
+  const ex = f.excerpt.slice(0, 40).toLowerCase().replace(/\s+/g, ' ').trim();
+  return ex ? `${loc}|ex:${ex}` : `${loc}|t:${f.title}`;
+}
+
+/**
+ * Skupi SVE usidrene nalaze za pregled: strukturirani (typo/register/reference) plus nalazi
+ * usidreni iz opisa Issue-a (odlomci) i fusnota, uz deduplikaciju. Strukturirani se dodaju prvi
+ * pa imaju prednost (npr. nepotpuna referenca ostaje iz reference-incomplete, ne iz Issue opisa).
+ */
+export function collectAllPreviewFlags(result: any): PreviewFlag[] {
+  const merged = [
+    ...collectPreviewFlags(result?.details),
+    ...collectIssueAnchors(result?.issues),
+    ...collectFootnoteAnchors(result?.issues),
+  ];
+  const seen = new Set<string>();
+  const out: PreviewFlag[] = [];
+  for (const f of merged) {
+    const k = flagKey(f);
+    if (seen.has(k)) continue;
+    seen.add(k);
+    out.push(f);
+  }
+  return out;
 }

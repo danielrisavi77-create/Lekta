@@ -17,8 +17,14 @@
  */
 import type { PreviewFlag, PreviewParagraph, PreviewSeverity } from './preview-anchors';
 
+export interface PreviewFootnote {
+  id: number;
+  text: string;
+}
+
 export interface PreviewModelInput {
   paragraphs: PreviewParagraph[];
+  footnotes?: PreviewFootnote[];
   truncated?: boolean;
 }
 
@@ -135,12 +141,17 @@ export function renderPreview(
   const paragraphs = model?.paragraphs ?? [];
   const flagTargets = new Map<number, HTMLElement>();
 
-  // Grupiraj flagove po 1-based indeksu odlomka, zadrzavajuci originalni indeks u nizu.
+  // Grupiraj flagove: tijelo po 1-based indeksu odlomka, fusnote po id-u; cuvamo originalni indeks.
   const byPara = new Map<number, FlagEntry[]>();
+  const byFn = new Map<number, FlagEntry[]>();
+  const push = (map: Map<number, FlagEntry[]>, key: number, entry: FlagEntry) => {
+    const list = map.get(key);
+    if (list) list.push(entry);
+    else map.set(key, [entry]);
+  };
   flags.forEach((flag, flagIndex) => {
-    const list = byPara.get(flag.paragraphIndex);
-    if (list) list.push({ flag, flagIndex });
-    else byPara.set(flag.paragraphIndex, [{ flag, flagIndex }]);
+    if (flag.footnoteId != null) push(byFn, flag.footnoteId, { flag, flagIndex });
+    else push(byPara, flag.paragraphIndex, { flag, flagIndex });
   });
 
   const root = doc.createElement('div');
@@ -166,6 +177,42 @@ export function renderPreview(
       el.textContent = para.text;
     }
     root.appendChild(el);
+  }
+
+  // Fusnote (zaseban koordinatni prostor): renderiraj ih na dnu i usidri footnote-flagove.
+  const footnotes = model?.footnotes ?? [];
+  if (footnotes.length) {
+    const section = doc.createElement('section');
+    section.className = 'lekta-pv-footnotes';
+    const head = doc.createElement('h3');
+    head.className = 'lekta-pv-fn-head';
+    head.textContent = 'Fusnote';
+    section.appendChild(head);
+    for (const fn of footnotes) {
+      const el = doc.createElement('div');
+      el.className = 'lekta-pv-footnote';
+      el.id = `lekta-pv-fn-${fn.id}`;
+      el.setAttribute('data-fn-id', String(fn.id));
+      const num = doc.createElement('sup');
+      num.className = 'lekta-pv-fn-num';
+      num.textContent = String(fn.id);
+      el.appendChild(num);
+      const body = doc.createElement('span');
+      const fnFlags = byFn.get(fn.id) ?? [];
+      if (fnFlags.length) {
+        const unlocated = fillParagraph(body, fn.text, fnFlags, doc, flagTargets);
+        el.classList.add('lekta-pv-footnote--flagged');
+        if (unlocated.length) {
+          el.classList.add('lekta-pv-footnote--has-unlocated');
+          for (const e of unlocated) if (!flagTargets.has(e.flagIndex)) flagTargets.set(e.flagIndex, el);
+        }
+      } else {
+        body.textContent = fn.text;
+      }
+      el.appendChild(body);
+      section.appendChild(el);
+    }
+    root.appendChild(section);
   }
 
   return { root, flagTargets, locatedCount: flagTargets.size };
