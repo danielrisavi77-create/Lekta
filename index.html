@@ -1385,13 +1385,22 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
 .lek-col-proof{grid-column:1;grid-row:1;position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding-top:0;min-width:0}
 .lek-col-form .wizard-grid{grid-template-columns:1fr}
 .lek-top-grid:not(:has(#progressView:not(.hidden))):not(:has(#resultView:not(.hidden))) .wizard-rail .rail-form-title{width:100%;margin-bottom:6px}
-/* Progresivni koraci: prije uploada desni papir prikazuje SAMO korak 1 (Dokument); uploadom
-   (#dropzone.has-file) otvaraju se II. Profil, III. Preciznija provjera i Analiziraj red. */
-.lek-col-form .analyzer-wrap:not(:has(#dropzone.has-file)) :is(.wizard-col-profile,.advanced-options,.analyze-row){display:none}
-.lek-col-form .analyzer-wrap:not(:has(#dropzone.has-file)) .dropzone{min-height:400px}
+/* Wizard paneli: jedan ekran po koraku (data-step na #wizardView) s povratkom; nista se ne gomila. */
+#wizardView[data-step="1"] :is(.wizard-col-profile,.advanced-options,.analyze-row,.lek-stepnav-2,.lek-stepnav-3){display:none}
+#wizardView[data-step="2"] :is(.wizard-col-upload,.advanced-options,.analyze-row,.lek-stepnav-1,.lek-stepnav-3){display:none}
+#wizardView[data-step="3"] :is(.wizard-col-upload,.wizard-col-profile,.lek-stepnav-1,.lek-stepnav-2){display:none}
+/* Naprijed s koraka 1 postoji samo kad je datoteka vec ucitana (povratak s koraka 2). */
+#wizardView[data-step="1"]:not(:has(#dropzone.has-file)) .lek-stepnav-1{display:none}
+.lek-stepnav-1{justify-content:flex-end}
+#wizardView[data-step="1"] .dropzone{min-height:400px}
+.lek-stepnav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 16px}
+.lek-stepnav-3{margin-bottom:10px}
+.lek-stepnav #stepFileName{display:inline-block;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:bottom}
 @keyframes lekStepIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-.lek-col-form .analyzer-wrap:has(#dropzone.has-file) :is(.wizard-col-profile,.advanced-options,.analyze-row){animation:lekStepIn .35s ease-out both}
-@media(prefers-reduced-motion:reduce){.lek-col-form .analyzer-wrap:has(#dropzone.has-file) :is(.wizard-col-profile,.advanced-options,.analyze-row){animation:none}}
+#wizardView[data-step="2"] :is(.wizard-col-profile,.lek-stepnav-2),#wizardView[data-step="3"] :is(.lek-stepnav-3,.advanced-options,.analyze-row){animation:lekStepIn .35s ease-out both}
+@media(prefers-reduced-motion:reduce){#wizardView[data-step="2"] :is(.wizard-col-profile,.lek-stepnav-2),#wizardView[data-step="3"] :is(.lek-stepnav-3,.advanced-options,.analyze-row){animation:none}}
+.analyzer-wrap:has(#wizardView[data-step="3"]) .rail-step[data-rail="3"]{color:var(--paper-ink)}
+.analyzer-wrap:has(#wizardView[data-step="3"]) .rail-step[data-rail="3"] b{border-color:var(--red-deep);color:var(--red-deep);background:none}
 .lek-top-grid:has(#progressView:not(.hidden)) .lek-col-form,.lek-top-grid:has(#resultView:not(.hidden)) .lek-col-form{grid-column:1 / -1}
 .lek-top-grid:has(#progressView:not(.hidden)) .lek-col-proof,.lek-top-grid:has(#resultView:not(.hidden)) .lek-col-proof{display:none}
 .lek-col-proof .hero-demo{width:100%;max-width:460px;margin:26px auto 0}
@@ -1473,7 +1482,7 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
     <div class="lek-col-form">
     <div class="analyzer-wrap">
       <div class="wizard-rail" aria-hidden="true"><span class="rail-form-title">Obrazac LK-01 · Tehnička provjera rada</span><span class="rail-step" data-rail="1"><b>1</b> Dokument</span><i class="rail-line"></i><span class="rail-step" data-rail="2"><b>2</b> Profil</span><i class="rail-line"></i><span class="rail-step" data-rail="3"><b>3</b> Nalaz</span></div>
-      <div class="analyzer-body wizard-view" id="wizardView">
+      <div class="analyzer-body wizard-view" id="wizardView" data-step="1">
         <div class="wizard-grid">
           <section class="wizard-col wizard-col-upload"><div class="wstep"><span class="wstep-no">I.</span>Dokument</div><div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Učitaj Word dokument"><input class="sr-only" type="file" id="fileInput" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"><div id="dropEmpty"><div class="upload-icon"><i data-lucide="upload"></i></div><h3 id="wordUploadTitle">Učitaj rad u Wordu</h3><p id="wordUploadDescription">Glavna analiza dokumenta · lokalno</p><button class="btn btn-primary btn-sm" type="button" id="browseBtn">Odaberi .docx</button></div><div class="selected-file hidden" id="selectedFile"><div class="file-icon">W</div><div class="meta"><strong id="selectedName"></strong><small id="selectedMeta"></small></div><button class="remove-file" id="removeFile" type="button" aria-label="Ukloni dokument"><i data-lucide="x"></i></button></div></div><div class="drop-error hidden" id="dropError" role="alert" aria-live="assertive"></div></section>
           <section class="wizard-col wizard-col-profile">
@@ -1496,6 +1505,9 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
             <div class="profile-note" id="profileNote"></div>
           </section>
         </div>
+        <div class="lek-stepnav lek-stepnav-1"><button class="btn btn-primary btn-sm" id="stepToProfile" type="button">Nastavi na profil →</button></div>
+        <div class="lek-stepnav lek-stepnav-2"><button class="btn btn-ghost btn-sm" id="stepBackDoc" type="button">← Dokument · <span id="stepFileName"></span></button><button class="btn btn-primary btn-sm" id="stepToAnalyze" type="button">Nastavi na provjeru →</button></div>
+        <div class="lek-stepnav lek-stepnav-3"><button class="btn btn-ghost btn-sm" id="stepBackProfile" type="button">← Profil fakulteta</button></div>
         <details class="advanced-options">
           <summary class="advanced-summary"><span class="adv-label">III. Preciznija provjera</span><span class="adv-hint">PDF, stil citiranja, jezik, strogost i faza provjere</span></summary>
           <div class="advanced-body">
