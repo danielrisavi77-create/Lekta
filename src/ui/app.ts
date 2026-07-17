@@ -24,7 +24,7 @@ import { VERIFIED_PROFILE_REGISTRY, LEGAL_DEPARTMENT_REGISTRY, BASE_PROFILES, FP
 import { applyBakedAdvisory, repairEntriesFor } from '../profiles/profile-runtime-maps';
 import { ZAGREB_CATALOG } from '../catalog/catalog-loader';
 import { attachSelectSearch } from './select-search';
-import { workTypesForSelection, defaultWorkTypeForProgram, citationForDefinition, isCitationLocked } from './work-selection';
+import { workTypesForSelection, defaultWorkTypeForProgram, citationForDefinition, isCitationLocked, languageForDefinition, isLanguageLocked } from './work-selection';
 import { INSTITUTIONAL_COVERAGE_MATRIX, COVERAGE_STATUS_META, CORPUS_STATS } from '../coverage/coverage-loader';
 import { FPZG_SUBMISSION_CALENDAR as _FPZG_CAL, ACADEMIC_DEADLINES } from '../submission/submission-loader';
 import { renderDeadlineReminderToggleIfAvailable } from './deadline-reminder-toggle';
@@ -373,7 +373,14 @@ function methodologyLabel(id: any){return id==='auto'?'Automatsko prepoznavanje'
 // jednako pouzdano provjerava. Samo 'custom' (prema uputama mentora, bez definiranog stila) ostaje 45.
 function profileReadiness(profile: any){const exact=profile.definitionId?100:35,citation=(profile.citationMode&&profile.citationMode!=='custom')?100:45,format=(profile.checkFont||profile.checkSpacing||profile.checkTitlePage)?100:55;const s=profile.fieldValidation?.sample||{},real=(s.docxAudits||0)+(s.publicPdfAudits||0),synthetic=s.syntheticDocxAudits||0,validation=real>=3?100:real?75:synthetic?50:25;const overall=Math.round(exact*.32+citation*.24+format*.22+validation*.22);return{overall,exact,citation,format,validation,label:overall>=85?'Visoka spremnost':overall>=65?'Dobra spremnost':overall>=45?'Ograničena spremnost':'Eksperimentalni profil'}}
 
-function syncProfileContext(){populateVariants();populateDepartments();populateMethodology();updateWorkTypeSupport();const d=findVerifiedDefinition(),ctx=[selectedUnit().id,$('#programSelect').value,$('#workType').value,$('#workVariant').value,$('#departmentSelect')?.value||'general',selectedMethodology()].join('|');const _cit=citationForDefinition(d);if(ctx!==lastProfileContext&&_cit)$('#citationStyle').value=_cit;/*B-cit-lock*/const _cl=isCitationLocked(d);$('#citationStyle').disabled=_cl;$('#citationLockNote')?.classList.toggle('hidden',!_cl);lastProfileContext=ctx;updateProfile();updateSubmissionContextFields();savePreferences()}
+function syncProfileContext(){populateVariants();populateDepartments();populateMethodology();updateWorkTypeSupport();const d=findVerifiedDefinition(),ctx=[selectedUnit().id,$('#programSelect').value,$('#workType').value,$('#workVariant').value,$('#departmentSelect')?.value||'general',selectedMethodology()].join('|');const _cit=citationForDefinition(d);if(ctx!==lastProfileContext&&_cit)$('#citationStyle').value=_cit;/*B-cit-lock*/const _cl=isCitationLocked(d);$('#citationStyle').disabled=_cl;$('#citationLockNote')?.classList.toggle('hidden',!_cl);
+ // Jezik rada iz profila, isti obrazac kao citatni stil: postavi SAMO na promjenu konteksta (da se
+ // rucni izbor ne gazi pri svakom syncu), a zakljucaj kad sluzbeni izvor propisuje jedan jezik.
+ // Bez ovoga bi npr. Algebrin diplomski (pise se iskljucivo na engleskom) lazno padao na "Osnovni
+ // dijelovi rada", jer detectStructure trazi hrvatske nazive dok je #docLanguage na 'hr'.
+ const _lang=languageForDefinition(d);if(ctx!==lastProfileContext&&_lang&&$('#docLanguage'))$('#docLanguage').value=_lang;
+ const _ll=isLanguageLocked(d);if($('#docLanguage'))$('#docLanguage').disabled=_ll;$('#languageLockNote')?.classList.toggle('hidden',!_ll);
+ lastProfileContext=ctx;updateProfile();updateSubmissionContextFields();savePreferences()}
 // Hrvatska sklonidba uz broj: 1 -> one, 2-4 -> few, ostalo -> many (uz 11-14 izuzetak).
 function hrPlural(n: any,one: any,few: any,many: any){const a=Math.abs(n)%100,b=a%10;if(b===1&&a!==11)return one;if(b>=2&&b<=4&&!(a>=12&&a<=14))return few;return many}
 // Ziva institucijska pokrivenost: broji profile i zbroj stvarnih (javnih PDF + DOCX) audita za ustanovu.

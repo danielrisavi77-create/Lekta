@@ -99,17 +99,29 @@ export function deriveConformancePlan(profileId: string): ConformancePlan {
   let targetWords = profile.wordMin ? Math.round(profile.wordMin * 1.05) : 1500;
   if (profile.wordMax && targetWords > profile.wordMax) targetWords = Math.floor(profile.wordMax * 0.9);
 
+  // Profil moze propisati jezik rada (npr. Algebrin diplomski se pise iskljucivo na engleskom).
+  // Engine tada trazi engleske nazive dijelova (detectStructure), pa i uskladjen dokument mora biti
+  // na engleskom, inace bi test "dokazivao" pad koji je artefakt krivo postavljenog jezika.
+  const lang: string = profile.documentLanguage || 'hr';
+  const L = lang === 'en'
+    ? { abstract: 'Abstract', toc: 'Contents', intro: '1. Introduction', body: '2. Discussion', concl: '3. Conclusion', refs: 'References',
+        abstractText: 'This abstract summarises the key findings of the study in a single paragraph.',
+        keywords: 'Keywords: analysis, method, research, result' }
+    : { abstract: 'Sažetak', toc: 'Sadržaj', intro: '1. Uvod', body: '2. Razrada', concl: '3. Zaključak', refs: 'Literatura',
+        abstractText: 'Sažetak rada u jednom odlomku s ključnim spoznajama istraživanja.',
+        keywords: 'Ključne riječi: analiza, metoda, istraživanje, rezultat' };
+
   const skeleton: ParaSpec[] = [
-    headed('Sažetak'),
-    { text: 'Sažetak rada u jednom odlomku s ključnim spoznajama istraživanja.', font, sizePt, jc: 'both', spacingLine: f.spacingLine },
-    { text: 'Ključne riječi: analiza, metoda, istraživanje, rezultat', font, sizePt, spacingLine: f.spacingLine },
-    headed('Sadržaj'),
+    headed(L.abstract),
+    { text: L.abstractText, font, sizePt, jc: 'both', spacingLine: f.spacingLine },
+    { text: L.keywords, font, sizePt, spacingLine: f.spacingLine },
+    headed(L.toc),
     PAGE_FIELD_PARA,
-    headed('1. Uvod'),
+    headed(L.intro),
     ...bodyParas(Math.round(targetWords * 0.15), f),
-    headed('2. Razrada'),
+    headed(L.body),
     ...bodyParas(Math.round(targetWords * 0.7), f),
-    headed('3. Zaključak'),
+    headed(L.concl),
     ...bodyParas(Math.round(targetWords * 0.15), f),
   ];
 
@@ -117,7 +129,7 @@ export function deriveConformancePlan(profileId: string): ConformancePlan {
   // (sectionName paragrafa === normalize(term) ili startsWith). Za nepokriveni zahtjev
   // dodajemo heading s prvim terminom prije Literature.
   const requirements: any[] = Array.isArray(profile.requiredSections) ? profile.requiredSections : [];
-  const skeletonNames = [...skeleton.map((p) => sectionName(p.text)), 'literatura'];
+  const skeletonNames = [...skeleton.map((p) => sectionName(p.text)), sectionName(L.refs)];
   let sectionsSatisfiable = requirements.length > 0;
   const extraHeadings: ParaSpec[] = [];
   for (const r of requirements) {
@@ -134,7 +146,7 @@ export function deriveConformancePlan(profileId: string): ConformancePlan {
     paragraphs: [
       ...skeleton,
       ...extraHeadings,
-      headed('Literatura'),
+      headed(L.refs),
       { text: 'Prezime, I. (2020). Naslov knjige. Zagreb: Naklada.', font, sizePt, spacingLine: f.spacingLine },
     ],
     marginsCm: profile.margins ?? { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 },
@@ -207,7 +219,8 @@ async function analyzeWith(profile: any, file: File): Promise<any> {
     profileId: profile.definitionId,
     workType: profile.selection.workType,
     citationStyle: 'fpzg',
-    language: 'hr',
+    // Jezik iz profila (kao zivi app: syncProfileContext postavi #docLanguage iz profila).
+    language: profile.documentLanguage || 'hr',
     strictness: 'standard',
     methodology: 'auto',
     selectionIds: {},

@@ -8261,5 +8261,54 @@
       "graduate"
     ],
     "status": "verified"
+  },
+  {
+    "id": "algebra-zavrsni",
+    "unitId": "algebra",
+    "programs": [
+      "Računarstvo i informatika",
+      "Dizajn",
+      "Ekonomija i poslovanje",
+      "Komunikacije i mediji",
+      "Opći profil ustanove"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "verified"
+  },
+  {
+    "id": "algebra-diplomski",
+    "unitId": "algebra",
+    "programs": [
+      "Računarstvo i informatika",
+      "Dizajn",
+      "Ekonomija i poslovanje",
+      "Komunikacije i mediji",
+      "Opći profil ustanove"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "verified",
+    "rules": {
+      "documentLanguage": "en",
+      "languageLocked": true
+    }
+  },
+  {
+    "id": "algebra-specijalisticki",
+    "unitId": "algebra",
+    "programs": [
+      "Računarstvo i informatika",
+      "Dizajn",
+      "Ekonomija i poslovanje",
+      "Komunikacije i mediji",
+      "Opći profil ustanove"
+    ],
+    "workTypes": [
+      "specialist"
+    ],
+    "status": "verified"
   }
 ]

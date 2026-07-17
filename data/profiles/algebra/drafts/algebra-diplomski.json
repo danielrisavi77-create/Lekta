@@ -1,0 +1,27 @@
+{
+  "profileId": "algebra-diplomski",
+  "entries": [
+    {
+      "ruleId": "algebra-diplomski--word-count",
+      "checkId": "word-count",
+      "value": {
+        "min": 20000,
+        "max": 25000
+      },
+      "category": "scope",
+      "label": "Opseg rada",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "algebra-pravilnik-radovi-2026",
+      "sourcePage": "Poglavlje 6. (Izrada završnog, diplomskog odnosno specijalističkog rada), stavak 4. odnosno 5.",
+      "quote": "Diplomski odnoso specijalistički rad od uvoda do zaključka mora obuhvatiti 20.000-25.000 riječi.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "e9ca604d0591b5401e655b59a9bd7b625b460d6b677dcfd7af5e342d3232846e",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "harvest+hr-en-cross-check"
+    }
+  ]
+}

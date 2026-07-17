@@ -33,9 +33,14 @@ export interface ProfileLike {
   workTypes?: string[];
 }
 
-/** Definicija profila s pravilima (za citatni stil). */
+/** Definicija profila s pravilima (za citatni stil i jezik rada). */
 export interface DefinitionLike {
-  rules?: { recommendedCitation?: string; citationLocked?: boolean } | null;
+  rules?: {
+    recommendedCitation?: string;
+    citationLocked?: boolean;
+    documentLanguage?: string;
+    languageLocked?: boolean;
+  } | null;
 }
 
 /**
@@ -112,4 +117,29 @@ export function citationForDefinition(def: DefinitionLike | null | undefined): s
  */
 export function isCitationLocked(def: DefinitionLike | null | undefined): boolean {
   return !!def?.rules?.citationLocked;
+}
+
+/**
+ * Jezik rada koji profil propisuje, ili null ako ga ne propisuje (tada bira korisnik).
+ *
+ * ZASTO postoji: engine detektira strukturu prema jeziku (detectStructure trazi 'uvod'/'zakljucak'
+ * za hr, 'introduction'/'conclusion' za en), a neki studiji pisu rad ISKLJUCIVO na engleskom
+ * (npr. Algebrin diplomski). Bez ovoga bi takav rad lazno padao na "Osnovni dijelovi rada" jer bi
+ * se u engleskom tekstu trazili hrvatski nazivi. Namjerno NIJE checkId: jezik se ne BODUJE (ne
+ * detektiramo jezik dokumenta) nego KONFIGURIRA analizu, isto kao citationLocked, koji takodjer
+ * zivi izravno u rules i nije compiled check.
+ *
+ * Vrijednost mora biti jedan od kljuceva #docLanguage ('hr' | 'en' | 'other').
+ */
+export function languageForDefinition(def: DefinitionLike | null | undefined): string | null {
+  return def?.rules?.documentLanguage || null;
+}
+
+/**
+ * Je li jezik rada zakljucan profilom (UI onemogucuje promjenu). Zakljucava se SAMO kad sluzbeni
+ * izvor propisuje jedan jezik; kad dopusta izbor (npr. "hrvatskim ili engleskim"), profil ne smije
+ * ni predlagati ni zakljucavati, nego izbor ostaje korisniku.
+ */
+export function isLanguageLocked(def: DefinitionLike | null | undefined): boolean {
+  return !!def?.rules?.languageLocked;
 }

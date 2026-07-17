@@ -2609,5 +2609,29 @@
     "lastChecked": "2026-07-17",
     "validityClass": "stable",
     "snapshotHash": "ac7fb707920ca89d618e4ff8ac19ea698f76adb3b75ea79947f36ca2a8c3ff57"
+  },
+  {
+    "id": "algebra-pravilnik-radovi-2026",
+    "kind": "pdf",
+    "title": "Pravilnik o zavrsnom, diplomskom odnosno specijalistickom radu i zavrsnom ispitu (Sveuciliste Algebra Bernays, 20.02.2026.)",
+    "url": "https://www.algebra.hr/sveuciliste/wp-content/uploads/2024/04/Pravilnik-o-zavrsnom-diplomskom-odnosno-specijalistickom-radu-i-zavrsnom-ispitu_20.02.2026-1.pdf",
+    "publisher": "Sveuciliste Algebra Bernays",
+    "fetchedAt": "2026-07-17",
+    "lastChecked": "2026-07-17",
+    "validityClass": "stable",
+    "snapshotPath": "data/sources/algebra/algebra-pravilnik-2026-hr.pdf",
+    "snapshotHash": "e9ca604d0591b5401e655b59a9bd7b625b460d6b677dcfd7af5e342d3232846e"
+  },
+  {
+    "id": "algebra-pravilnik-radovi-2026-en",
+    "kind": "pdf",
+    "title": "Book of Regulations on the Final, Graduation or Specialist Thesis and the Final Exam (Sveuciliste Algebra Bernays, 20.02.2026., sluzbena engleska inacica)",
+    "url": "https://www.algebra.hr/sveuciliste/wp-content/uploads/2024/04/Book-of-Regulations-on-the-Final-Graduation-or-Specialist-Thesis-and-the-Final-Exam_20.02.2026.pdf",
+    "publisher": "Sveuciliste Algebra Bernays",
+    "fetchedAt": "2026-07-17",
+    "lastChecked": "2026-07-17",
+    "validityClass": "stable",
+    "snapshotPath": "data/sources/algebra/algebra-pravilnik-2026-en.pdf",
+    "snapshotHash": "eb448e0e5794074ab5fabd40705cd4a71c6617f046dc507ff24612e929ccdd20"
   }
 ]

@@ -13,6 +13,8 @@ import {
   isWorkTypeLocked,
   citationForDefinition,
   isCitationLocked,
+  languageForDefinition,
+  isLanguageLocked,
   WORK_TYPE_PRIORITY,
   type WorkType,
 } from '../src/ui/work-selection';
@@ -119,5 +121,34 @@ describe('feature 3: automatski odabir citatnog stila iz profila', () => {
     const withCit = REG.filter((d) => d.rules?.recommendedCitation);
     expect(withCit.length).toBeGreaterThan(0);
     for (const d of withCit) expect(citationForDefinition(d)).toBe(d.rules.recommendedCitation);
+  });
+});
+
+describe('jezik rada iz profila', () => {
+  it('profil bez jezicnog pravila ne predlaze nista i ne zakljucava (izbor ostaje korisniku)', () => {
+    expect(languageForDefinition(null)).toBeNull();
+    expect(languageForDefinition({ rules: {} })).toBeNull();
+    expect(isLanguageLocked(null)).toBe(false);
+    expect(isLanguageLocked({ rules: {} })).toBe(false);
+  });
+
+  it('profil s propisanim jezikom vrati kod, a zakljucava se samo uz languageLocked', () => {
+    expect(languageForDefinition({ rules: { documentLanguage: 'en' } })).toBe('en');
+    expect(isLanguageLocked({ rules: { documentLanguage: 'en' } })).toBe(false);
+    expect(isLanguageLocked({ rules: { documentLanguage: 'en', languageLocked: true } })).toBe(true);
+  });
+
+  it('registar: jezik je uvijek kljuc #docLanguage, a zakljucan je samo uz propisan jezik', () => {
+    const withLang = REG.filter((d: any) => d.rules?.documentLanguage);
+    expect(withLang.length, 'ocekivan barem jedan profil s propisanim jezikom').toBeGreaterThan(0);
+    for (const d of withLang as any[]) {
+      expect(['hr', 'en', 'other'], `${d.id}: nepoznat jezik`).toContain(d.rules.documentLanguage);
+    }
+    // Zakljucan jezik bez vrijednosti bio bi mrtav lokot: UI bi onemogucio izbor, a nista ne bi postavio.
+    for (const d of REG as any[]) {
+      if (d.rules?.languageLocked) {
+        expect(languageForDefinition(d), `${d.id}: languageLocked bez documentLanguage`).not.toBeNull();
+      }
+    }
   });
 });

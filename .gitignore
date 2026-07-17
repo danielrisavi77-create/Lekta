@@ -45,9 +45,3 @@ training-pipeline/sources/
 # samo ne smiju u commit.
 _preflight_*.mts
 vite.dev-preflight.config.mts
-
-# Sirovi izvor-PDF bez registriranog profila (AUD-45): Algebra je u katalogu status
-# 'research', PDF nije u source-registry ni vezan uz profil. Ne commitaj ga dok se
-# profil ne promovira; tada se ignore ukloni i izvor upise u registry. Ostali 169
-# sluzbenih pravilnik-PDF-ova su drugdje i ostaju pracenih (ova pravila ih ne diraju).
-data/sources/algebra/

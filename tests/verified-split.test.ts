@@ -31,6 +31,9 @@ function lightEntry(p: any) {
   const rulesLite: any = {};
   if (rules.recommendedCitation != null) rulesLite.recommendedCitation = rules.recommendedCitation;
   if (rules.citationLocked != null) rulesLite.citationLocked = rules.citationLocked;
+  // Zrcali gen-verified-split.mjs: jezik rada je u light indexu (picker ga cita prije heavy chunka).
+  if (rules.documentLanguage != null) rulesLite.documentLanguage = rules.documentLanguage;
+  if (rules.languageLocked != null) rulesLite.languageLocked = rules.languageLocked;
   if (Object.keys(rulesLite).length) light.rules = rulesLite;
   return light;
 }

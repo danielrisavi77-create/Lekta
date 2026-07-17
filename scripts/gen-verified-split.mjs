@@ -6,7 +6,7 @@
  * facts, scopes...) trebaju TEK nakon odabira profila. Ova skripta dijeli izvor na:
  *   - data/profiles/verified-profiles-index.json : LAGANI indeks (id, unitId, programs,
  *       workTypes, status, variant + fieldValidation.sample + rules.recommendedCitation/
- *       citationLocked) koji picker/hero citaju PRIJE odabira. ~8 KB gzip, eager.
+ *       citationLocked/documentLanguage/languageLocked) koji picker/hero citaju PRIJE odabira. ~8 KB gzip, eager.
  *   - data/profiles/verified-profiles-heavy.json : { id -> PUN profil (bez publicSources) }.
  *       Dinamicki (lazy) chunk; profile-registry ga spoji u registry na prvu interakciju.
  *
@@ -47,6 +47,11 @@ function lightEntry(profile) {
   const rulesLite = {};
   if (rules.recommendedCitation != null) rulesLite.recommendedCitation = rules.recommendedCitation;
   if (rules.citationLocked != null) rulesLite.citationLocked = rules.citationLocked;
+  // Jezik rada cita syncProfileContext u istom picker-trenutku kao citatni stil (PRIJE lazy heavy
+  // chunka), pa documentLanguage/languageLocked moraju u light index, inace bi zivi #docLanguage
+  // ostao nepostavljen za profile koji propisuju jezik (npr. Algebrin diplomski na engleskom).
+  if (rules.documentLanguage != null) rulesLite.documentLanguage = rules.documentLanguage;
+  if (rules.languageLocked != null) rulesLite.languageLocked = rules.languageLocked;
   if (Object.keys(rulesLite).length) light.rules = rulesLite;
   return light;
 }
