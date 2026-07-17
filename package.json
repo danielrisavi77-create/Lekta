@@ -23,6 +23,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest",
+    "conformance": "vitest run --config vitest.conformance.config.ts",
     "check": "tsc --noEmit && vitest run && vite build"
   },
   "devDependencies": {

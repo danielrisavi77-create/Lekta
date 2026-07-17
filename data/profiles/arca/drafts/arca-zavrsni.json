@@ -119,8 +119,6 @@
       "quote": "VELEUČILIŠTE ARCA (Times New Roman 14 Pt Bold-Center) [...] IME I PREZIME (Times New Roman 18 pt Bold-Center) [...] ZAVRŠNI RAD (Times New Roman 14 Pt Bold-Center)",
       "status": "advisory",
       "scored": false,
-      "autoFixable": true,
-      "fixerId": "font-fixer",
       "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote)."
     }
   ],

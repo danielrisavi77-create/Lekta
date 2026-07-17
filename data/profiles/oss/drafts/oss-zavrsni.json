@@ -105,8 +105,6 @@
       "quote": "proreda 1,5 i margina od 2,5 cm sa svih strana",
       "status": "advisory",
       "scored": false,
-      "autoFixable": true,
-      "fixerId": "margins-fixer",
       "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote)."
     },
     {

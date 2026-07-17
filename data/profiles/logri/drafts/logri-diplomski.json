@@ -18,8 +18,6 @@
       "quote": "FONT: preporuča se upotreba fonta koji podržava znakove hrvatske latinice (npr. Arial, Calibri, Times New Roman); VELIČINA FONTA: 12; PRORED: 1,5 pt; MARGINE: Normalne (2.5 cm vrh, 2.5 cm dno, 2.5 cm lijevo i 2.5 cm desno); PORAVNANJE TEKSTA: obostrano; NUMERIRANJE: dolje desno (naslovna stranica se ne numerira).",
       "status": "advisory",
       "scored": false,
-      "autoFixable": true,
-      "fixerId": "font-fixer",
       "note": "Advisory: preporuka/dualno u izvoru (vidi quote)."
     },
     {
