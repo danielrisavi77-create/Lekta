@@ -27,7 +27,6 @@
 <title>Besplatni brojač kartica, riječi i znakova - Lekta</title>
 <script>try{var _t=localStorage.getItem('lekta.theme');if(_t)document.documentElement.dataset.theme=_t;}catch(e){}</script>
 <style>
-body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 var(--sans);min-width:320px}
 @media print{.topbar,.cta,.kt-actions,.out-bar,.hero-back,.sibling,footer{display:none!important}.out-panel{position:static}}
 
 .hero h1{font-family:var(--ink-serif);font-size:clamp(28px,4.2vw,44px);line-height:1.08;letter-spacing:-.015em;margin:14px auto 12px;max-width:660px;font-weight:800}
@@ -39,7 +38,6 @@ body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 var(--sans);m
 .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-sm);padding:24px}
 .card h2{font-family:var(--ink-serif);margin:0 0 4px;font-size:19px;font-weight:800}
 .field{margin-bottom:12px}
-.field label{display:block;font-size:11px;font-weight:800;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}
 .field textarea{width:100%;padding:13px 14px;border:1px solid var(--line-strong);border-radius:12px;background:var(--panel-2);color:var(--text);font:inherit;resize:vertical}
 .field textarea:focus{outline:none;box-shadow:var(--focus);background:var(--panel);border-color:var(--brand)}
 textarea#kt-input{min-height:360px;line-height:1.62}
@@ -57,20 +55,14 @@ textarea#kt-input{min-height:360px;line-height:1.62}
 .stat-row dt{margin:0;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
 .stat-row dd{margin:0;font-family:var(--ink-serif);font-size:21px;font-weight:700;color:var(--text);font-variant-numeric:tabular-nums;line-height:1;white-space:nowrap}
 .out-bar{display:flex;gap:10px;align-items:center;margin-top:14px}
-.note{margin-top:18px;padding:2px 0 2px 14px;border-left:2px solid var(--line-strong);font-size:12.5px;color:var(--muted);line-height:1.55}
 .note b{color:var(--text)}
 
 .sec-h{font-family:var(--ink-serif);font-size:clamp(21px,3vw,27px);font-weight:800;letter-spacing:-.015em;line-height:1.15;margin:0 0 6px}
 .sec-sub{color:var(--muted);font-size:14.5px;line-height:1.55;max-width:640px;margin:0}
-.fact-list{margin:18px 0 0;padding:0;border-top:1px solid var(--line)}
 .fact-list>div{display:grid;grid-template-columns:minmax(92px,132px) 1fr;gap:18px;align-items:baseline;padding:13px 2px;border-bottom:1px solid var(--line)}
 .fact-list dt{margin:0;font-family:var(--ink-serif);font-size:16px;font-weight:800;color:var(--brand)}
 .fact-list dd{margin:0;font-size:14px;color:var(--text);line-height:1.5}
-.faq{margin-top:14px;border-top:1px solid var(--line)}
-.faq details{border-bottom:1px solid var(--line)}
 .faq summary{list-style:none;cursor:pointer;padding:15px 2px;font-family:var(--ink-serif);font-size:16px;font-weight:700;color:var(--text);display:flex;justify-content:space-between;align-items:center;gap:16px}
-.faq summary::-webkit-details-marker{display:none}
-.faq summary::after{content:"+";font-size:20px;font-weight:400;color:var(--muted);line-height:1}
 .faq details[open] summary{color:var(--brand)}
 .faq details[open] summary::after{content:"\2212";color:var(--brand)}
 .faq details p{margin:0 2px 16px;color:var(--muted);font-size:14.5px;line-height:1.6;max-width:640px}
@@ -80,7 +72,6 @@ textarea#kt-input{min-height:360px;line-height:1.62}
 .cta-upsell a{color:var(--brand);font-weight:700;text-decoration:underline;text-underline-offset:3px}
 .disclaimer{text-align:center;color:var(--muted);font-size:12px;margin:18px auto 0;max-width:760px}
 
-@media(prefers-reduced-motion:reduce){.btn{transition:none}}
 @media(max-width:560px){.fact-list>div{grid-template-columns:1fr;gap:2px;padding:12px 2px}}
 @media(max-width:820px){.grid{grid-template-columns:1fr}.out-panel{position:static}.nav-links{display:none}.hero{padding:32px 0 2px}}
 
@@ -90,7 +81,6 @@ textarea#kt-input{min-height:360px;line-height:1.62}
 /* Brojevi kao podatkovna povrsina: Source Serif + tabularne znamenke */
 .kpi-num,.stat-row dd{font-family:var(--mono);font-variant-numeric:tabular-nums}
 
-body{background:var(--desk);color:var(--desk-ink);font:15px/1.6 var(--sans);overflow-x:clip;position:relative}
 .lampa-btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--desk-line);background:transparent;padding:8px 13px;border-radius:2px;color:var(--desk-muted);font:600 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
 
 /* KS: papir scope ove stranice (paneli brojaca + CTA kutija su listovi papira na stolu) */
@@ -99,9 +89,6 @@ body{background:var(--desk);color:var(--desk-ink);font:15px/1.6 var(--sans);over
 /* KS: tipografija i forme unutar papira */
 .card h2,.card h3,.cta h2,.cta h3{font-family:var(--display-serif);font-weight:500}
 .card input,.card select,.card textarea,.cta input,.cta select,.cta textarea{background:#fff;border:1px solid var(--paper-line);border-radius:0;color:var(--paper-ink)}
-.card .field label{font:500 10px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--paper-muted)}
-.card .btn-primary,.cta .btn-primary{background:var(--paper-ink);color:var(--paper);box-shadow:3px 3px 0 var(--red-deep)}
-.card .btn-primary:hover,.cta .btn-primary:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--red-deep);background:var(--paper-ink);color:var(--paper)}
 .card .btn-primary:disabled,.cta .btn-primary:disabled{opacity:.45;transform:none;box-shadow:2px 2px 0 var(--paper-line)}
 .card .note{border-left-color:var(--red)}
 
