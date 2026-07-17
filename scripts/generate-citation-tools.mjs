@@ -161,7 +161,6 @@ const PAGE_STYLE = `
   #bulk-output a { color: var(--red-deep); font-size: 0.8rem; }
   /* PROTECTED: i skupni izlaz literature ostaje serif na bijelom listu */
   #bulk-result { min-height: 120px; font-family: var(--font-serif); font-variant-numeric: tabular-nums; font-size: 0.9rem; background: var(--sheet); color: var(--paper-ink); }
-  .lekta-stats strong { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
   /* responzivno: uvijek na SAMOM KRAJU bloka da pregazi gornja pravila */
   @media (max-width: 700px) {
     body { margin: 0; max-width: none; border-radius: 0; border-left-width: 0; border-right-width: 0; box-shadow: none; }
@@ -453,7 +452,6 @@ function clientSpec(spec) {
       label: spec.label,
       sourceLabel: spec.sourceLabel,
       verifiedAt: spec.verifiedAt,
-      accessDate: spec.accessDate !== false,
     };
   }
   return {
@@ -461,7 +459,6 @@ function clientSpec(spec) {
     label: spec.label,
     sourceLabel: spec.sourceLabel,
     verifiedAt: spec.verifiedAt,
-    accessDate: spec.accessDate !== false,
     authorFormat: spec.authorFormat,
     inText: {
       mode: spec.inText.mode,
@@ -509,7 +506,6 @@ function buildFaculties(engine, specs) {
   const styleFromSpec = (spec) => ({
     token: spec.styleToken,
     label: spec.label,
-    mode: spec.inText?.mode ?? engine.citationMeta(spec.styleToken)?.mode ?? 'author-year',
     engineStyle: engine.engineStyleFor(spec.styleToken), // null za custom -> klijent koristi formatFromSpec
     accessDate: spec.accessDate !== false,
     programsHint: '',
@@ -531,7 +527,6 @@ function buildFaculties(engine, specs) {
           return {
             token: tok,
             label: spec ? spec.label : m.label,
-            mode: m.mode,
             engineStyle: engine.engineStyleFor(tok),
             accessDate: spec ? spec.accessDate !== false : m.accessDate,
             programsHint: progs,
@@ -627,6 +622,7 @@ function buildCharCounterHtml() {
 <style>${PAGE_STYLE}
   textarea { min-height: 220px; }
   .lekta-stats { display: flex; gap: 1.5rem; margin-top: 0.75rem; font-size: 0.9375rem; }
+  .lekta-stats strong { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
 </style>
 </head>
 <body>
