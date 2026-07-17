@@ -23,6 +23,7 @@ import { VERIFIED_PROFILE_REGISTRY, LEGAL_DEPARTMENT_REGISTRY, BASE_PROFILES, FP
 // mape pece scripts/gen-profile-runtime-maps.mts, drift hvata tests/profile-runtime-maps.test.ts.
 import { applyBakedAdvisory, repairEntriesFor } from '../profiles/profile-runtime-maps';
 import { ZAGREB_CATALOG } from '../catalog/catalog-loader';
+import { attachSelectSearch } from './select-search';
 import { workTypesForSelection, defaultWorkTypeForProgram, citationForDefinition, isCitationLocked } from './work-selection';
 import { INSTITUTIONAL_COVERAGE_MATRIX, COVERAGE_STATUS_META } from '../coverage/coverage-loader';
 import { FPZG_SUBMISSION_CALENDAR as _FPZG_CAL, ACADEMIC_DEADLINES } from '../submission/submission-loader';
@@ -156,6 +157,11 @@ function bind(){
  $('#paperCoverBtn')&&($('#paperCoverBtn').onclick=()=>revealAnalyzerForm(true));$('#uploadCtaBtn')&&($('#uploadCtaBtn').onclick=()=>revealAnalyzerForm(true));$('#paperCover')?.addEventListener('dragenter',()=>revealAnalyzerForm(false));document.addEventListener('click',(e: any)=>{if(e.target.closest('a[href="#analyzer"]'))revealAnalyzerForm(false)});
  // Promaseni drop izvan dropzonea ne smije otvoriti datoteku u pregledniku (file inputi ostaju nativni).
  document.addEventListener('dragover',(e: any)=>e.preventDefault());document.addEventListener('drop',(e: any)=>{if(!e.target.closest('#dropzone,input[type="file"]'))e.preventDefault()});
+ // Pretrazive ploce nad selectima profila (select-search.ts). Fakultet pretrazuje SVIH 133 jedinica
+ // preko svih ustanova: odabir prvo postavi sveuciliste (change -> populateUnits) pa fakultet.
+ attachSelectSearch({select:$('#institutionSelect'),placeholder:'Pretraži sveučilišta i ustanove…'});
+ attachSelectSearch({select:$('#unitSelect'),placeholder:'Upiši ime fakulteta, npr. filozofski…',getOptions:()=>allUnits().sort(byNameHr).map((u: any)=>({value:u.id,label:u.name,sub:u.institutionName,extra:{institutionId:u.institutionId}})),apply:(o)=>{const inst=$('#institutionSelect');if(o.extra?.institutionId&&inst.value!==o.extra.institutionId){inst.value=o.extra.institutionId;inst.dispatchEvent(new Event('change',{bubbles:true}))}const u=$('#unitSelect');u.value=o.value;u.dispatchEvent(new Event('change',{bubbles:true}))}});
+ attachSelectSearch({select:$('#programSelect'),placeholder:'Pretraži studije…'});
 }
 // Wizard paneli (jedan ekran po koraku): 1 Dokument, 2 Profil, 3 Provjera. data-step na #wizardView
 // gejta CSS panele (index.html LEK blok); spekulativna analiza radi neovisno o panelima.
