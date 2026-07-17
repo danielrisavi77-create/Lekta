@@ -19,7 +19,9 @@ import { buildDocxFile, type DocSpec, type ParaSpec } from './docx-builder';
 import { resolveProfile } from '../../src/analysis/golden-entry';
 import { analyzeDocx } from '../../src/analysis/analyze-docx';
 import { normalize, sectionName } from '../../src/utils/helpers';
-import { VERIFIED_PROFILE_REGISTRY } from '../../src/profiles/profile-registry';
+import { VERIFIED_PROFILE_REGISTRY, BASE_PROFILES, FPZG_PARTIAL } from '../../src/profiles/profile-registry';
+import { normalizeCheckFlags } from '../../src/profiles/profile-baseline';
+import { citationMeta } from '../../src/citations/citation-meta';
 import catalog from '../../data/catalog/zagreb-catalog.json';
 
 export type ConformanceDim =
@@ -86,7 +88,11 @@ function bodyParas(words: number, f: Fmt): ParaSpec[] {
 export function deriveConformancePlan(profileId: string): ConformancePlan {
   // Bez test-layer guarda: normalizeCheckFlags (profile-baseline.ts) sam gasi checkX bez
   // vrijednosti, pa ovaj sloj testira PRODUKCIJSKO ponasanje, a ne vlastiti zaobilazak.
-  const profile = resolveProfile(profileId);
+  return derivePlanFor(profileId, resolveProfile(profileId));
+}
+
+/** Jezgra derivacije nad VEC razrijesenim profilom (dijele je registarski i fallback put). */
+function derivePlanFor(profileId: string, profile: any): ConformancePlan {
 
   const font: string = profile.font?.[0] ?? 'Times New Roman';
   const sizePt: number = profile.size?.[0] ?? 12;
@@ -234,9 +240,14 @@ async function analyzeWith(profile: any, file: File): Promise<any> {
  * dokazuje da analiza zavrsava i vraca provjere.
  */
 export async function expectProfileConformance(profileId: string): Promise<void> {
-  const plan = deriveConformancePlan(profileId);
-  const ok = await analyzeWith(plan.profile, buildDocxFile(plan.compliantSpec, `${profileId}-ok.docx`));
-  const bad = await analyzeWith(plan.profile, buildDocxFile(plan.violatingSpec, `${profileId}-los.docx`));
+  await runPlan(profileId, deriveConformancePlan(profileId));
+}
+
+/** Analiziraj uskladjen + neuskladjen docx plana i assertaj sve izvedene dimenzije. */
+async function runPlan(label0: string, plan: ConformancePlan): Promise<void> {
+  const profileId = plan.profileId;
+  const ok = await analyzeWith(plan.profile, buildDocxFile(plan.compliantSpec, `${label0}-ok.docx`));
+  const bad = await analyzeWith(plan.profile, buildDocxFile(plan.violatingSpec, `${label0}-los.docx`));
 
   // Smoke: analiza je zavrsila i emitirala provjere za oba dokumenta.
   expect(ok.checks?.length, `${profileId}: compliant checks prazni`).toBeGreaterThan(0);
@@ -293,4 +304,56 @@ export function tripwireProfileIds(): string[] {
     byInst.get(inst)!.push(p.id);
   }
   return [...byInst.keys()].sort().map((inst) => byInst.get(inst)!.sort()[0]);
+}
+
+// --- Fallback baseline (BASE_PROFILES) -------------------------------------------------------
+// Jedinice bez profila (npr. tvz/vern/rit) i vrste rada koje profil ne pokriva NE prolaze kroz
+// resolveProfile nego padaju na genericki obiteljski baseline u currentProfile() (src/ui/app.ts).
+// Taj put nema pokrivenosti u golden/conformance korpusu (resolveProfile baca za ne-registrirani
+// id), a upravo je on ono sto student iz neportanog fakulteta stvarno dobije. Ovdje ga gradimo
+// DOM-free, vjerno grani u currentProfile(), i vrtimo kroz istu derivaciju plana.
+
+/** Obitelji koje katalog stvarno koristi (+ fpzg kao poseban unit s vlastitim baselineom). */
+export const BASELINE_FAMILIES = ['social', 'stem', 'biomed', 'arts', 'mixed'] as const;
+/** Reprezentativne vrste rada: 'seminar' pokriva lightBaseline granu (gasi requireToc), ostale teske. */
+export const BASELINE_WORK_TYPES = ['final', 'graduate', 'seminar'] as const;
+
+/**
+ * Izgradi analizabilni baseline profil za (obitelj, vrsta rada), vjerno fallback grani
+ * currentProfile(): clone(FPZG_PARTIAL ili BASE_PROFILES[family]) -> lightBaseline gasi requireToc
+ * za seminar/project/article -> normalizeCheckFlags. Postavlja samo polja koja analyzeDocx cita.
+ */
+export function buildBaselineProfile(family: string, workType: string): any {
+  const src = family === 'fpzg' ? FPZG_PARTIAL : (BASE_PROFILES as any)[family] || (BASE_PROFILES as any).mixed;
+  const base: any = structuredClone(src);
+  const lightBaseline = ['seminar', 'project', 'article'].includes(workType);
+  if (lightBaseline) base.requireToc = false;
+  normalizeCheckFlags(base);
+  // Metapodaci koje analyzeDocx cita; definitionId je null jer baseline NIJE registriran profil.
+  base.name = `Baseline ${family} · ${workType}`;
+  base.statusKey = 'generic';
+  base.status = 'Generička provjera';
+  base.definitionId = null;
+  base.selection = { workType };
+  base.citationMode = citationMeta('fpzg').mode;
+  return base;
+}
+
+/** Plan provjera za fallback baseline (dijeli jezgru s registarskim putem). */
+export function deriveBaselinePlan(family: string, workType: string): ConformancePlan {
+  return derivePlanFor(`baseline:${family}:${workType}`, buildBaselineProfile(family, workType));
+}
+
+/** Sve kombinacije (obitelj x vrsta rada) za matricu fallback baselinea. */
+export function baselineConformanceCases(): Array<{ family: string; workType: string; id: string }> {
+  const out: Array<{ family: string; workType: string; id: string }> = [];
+  for (const family of [...BASELINE_FAMILIES, 'fpzg']) {
+    for (const workType of BASELINE_WORK_TYPES) out.push({ family, workType, id: `baseline:${family}:${workType}` });
+  }
+  return out;
+}
+
+/** Runner za jednu baseline kombinaciju: analiza zavrsava i sve izvedene dimenzije se drze. */
+export async function expectBaselineConformance(family: string, workType: string): Promise<void> {
+  await runPlan(`baseline-${family}-${workType}`, deriveBaselinePlan(family, workType));
 }
