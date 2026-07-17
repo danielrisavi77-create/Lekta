@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://lektahr.netlify.app/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://lektahr.netlify.app/alati.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://lektahr.netlify.app/citat.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://lektahr.netlify.app/naslovnica.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://lektahr.netlify.app/literatura.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://lektahr.netlify.app/izjava.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://lektahr.netlify.app/kartice.html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://lektahr.netlify.app/landing_usporedba.html</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://lektahr.netlify.app/privatnost.html</loc><changefreq>monthly</changefreq><priority>0.4</priority></url>
-  <url><loc>https://lektahr.netlify.app/uvjeti-koristenja.html</loc><changefreq>monthly</changefreq><priority>0.4</priority></url>
-  <url><loc>https://lektahr.netlify.app/pravila-povrata.html</loc><changefreq>monthly</changefreq><priority>0.4</priority></url>
-  <url><loc>https://lektahr.netlify.app/odricanje-od-odgovornosti.html</loc><changefreq>monthly</changefreq><priority>0.3</priority></url>
-  <url><loc>https://lektahr.netlify.app/obrada-dokumenata.html</loc><changefreq>monthly</changefreq><priority>0.4</priority></url>
-  <url><loc>https://lektahr.netlify.app/kolacici.html</loc><changefreq>monthly</changefreq><priority>0.3</priority></url>
-  <url><loc>https://lektahr.netlify.app/garancija.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://lektahr.netlify.app/</loc></url>
+  <url><loc>https://lektahr.netlify.app/alati.html</loc></url>
+  <url><loc>https://lektahr.netlify.app/citat.html</loc></url>
+  <url><loc>https://lektahr.netlify.app/naslovnica.html</loc></url>
+  <url><loc>https://lektahr.netlify.app/literatura.html</loc></url>
+  <url><loc>https://lektahr.netlify.app/izjava.html</loc></url>
+  <url><loc>https://lektahr.netlify.app/kartice.html</loc></url>
+  <url><loc>https://lektahr.netlify.app/landing_usporedba.html</loc></url>
+  <url><loc>https://lektahr.netlify.app/privatnost.html</loc></url>
+  <url><loc>https://lektahr.netlify.app/uvjeti-koristenja.html</loc></url>
+  <url><loc>https://lektahr.netlify.app/pravila-povrata.html</loc></url>
+  <url><loc>https://lektahr.netlify.app/odricanje-od-odgovornosti.html</loc></url>
+  <url><loc>https://lektahr.netlify.app/obrada-dokumenata.html</loc></url>
+  <url><loc>https://lektahr.netlify.app/kolacici.html</loc></url>
+  <url><loc>https://lektahr.netlify.app/garancija.html</loc></url>
 </urlset>
