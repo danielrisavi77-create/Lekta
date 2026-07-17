@@ -8,7 +8,7 @@
  * eval-om cita citationMeta/engineStyleFor pri gradnji mape fakultet -> stil. Bez duplog
  * odrzavanja logike formatiranja.
  */
-import { formatCitation, parseAuthors } from '../tools/citation';
+import { formatCitation, parseAuthors, SOURCE_TYPE_FIELDS } from '../tools/citation';
 import type { CitationStyle, SourceType } from '../tools/citation';
 import { citationMeta } from './citation-meta';
 import { parseReference, splitReferences } from './parse-reference';
@@ -48,31 +48,46 @@ export interface SourceTypeForm {
   fields: FormField[];
 }
 
-// Polja forme po vrsti izvora. Kljucevi odgovaraju CitationInput poljima (citation.ts).
-const F: Record<string, FormField> = {
-  authors: { key: 'authors', label: 'Autor(i) — "Prezime, Ime", vise odvoji s ";"' },
-  title: { key: 'title', label: 'Naslov' },
-  year: { key: 'year', label: 'Godina' },
-  place: { key: 'place', label: 'Mjesto izdanja' },
-  publisher: { key: 'publisher', label: 'Izdavac' },
-  journal: { key: 'container', label: 'Casopis' },
-  book: { key: 'container', label: 'Naslov knjige/zbornika' },
-  law: { key: 'container', label: 'Sluzbeni list (npr. Narodne novine)' },
-  editor: { key: 'editor', label: 'Urednik' },
-  volume: { key: 'volume', label: 'Godiste / svezak' },
-  issue: { key: 'issue', label: 'Broj' },
-  pages: { key: 'pages', label: 'Stranice (npr. 145-170)' },
-  doi: { key: 'doi', label: 'DOI (neobavezno)' },
-  url: { key: 'url', label: 'URL' },
-  accessed: { key: 'accessed', label: 'Datum pristupa' },
-  institution: { key: 'institution', label: 'Ustanova' },
+// Labele polja forme. Kljucevi odgovaraju CitationInput poljima (citation.ts); koji su polja
+// za koju vrstu izvora dolazi iz SOURCE_TYPE_FIELDS (citation.ts), ne odavde.
+const FIELD_LABEL: Record<string, string> = {
+  authors: 'Autor(i) — "Prezime, Ime", vise odvoji s ";"',
+  title: 'Naslov',
+  year: 'Godina',
+  place: 'Mjesto izdanja',
+  publisher: 'Izdavac',
+  editor: 'Urednik',
+  volume: 'Godiste / svezak',
+  issue: 'Broj',
+  pages: 'Stranice (npr. 145-170)',
+  doi: 'DOI (neobavezno)',
+  url: 'URL',
+  accessed: 'Datum pristupa',
+  institution: 'Ustanova',
 };
 
-export const SOURCE_TYPES: SourceTypeForm[] = [
-  { type: 'knjiga', label: 'Knjiga', fields: [F.authors, F.title, F.year, F.place, F.publisher] },
-  { type: 'clanak', label: 'Clanak u casopisu', fields: [F.authors, F.title, F.journal, F.volume, F.issue, F.year, F.pages, F.doi] },
-  { type: 'poglavlje', label: 'Poglavlje u knjizi/zborniku', fields: [F.authors, F.title, F.editor, F.book, F.place, F.publisher, F.year, F.pages] },
-  { type: 'mrezni', label: 'Mrezni izvor', fields: [F.authors, F.title, F.publisher, F.year, F.url, F.accessed] },
-  { type: 'zavrsni', label: 'Zavrsni / diplomski rad', fields: [F.authors, F.title, F.institution, F.year] },
-  { type: 'propis', label: 'Propis / sluzbeni akt', fields: [F.title, F.law, F.issue, F.year] },
-];
+// "container" nosi razlicitu labelu ovisno o vrsti izvora (casopis/knjiga-zbornik/sluzbeni list).
+const CONTAINER_LABEL: Partial<Record<SourceType, string>> = {
+  clanak: 'Casopis',
+  poglavlje: 'Naslov knjige/zbornika',
+  propis: 'Sluzbeni list (npr. Narodne novine)',
+};
+
+const TYPE_LABEL: Record<SourceType, string> = {
+  knjiga: 'Knjiga',
+  clanak: 'Clanak u casopisu',
+  poglavlje: 'Poglavlje u knjizi/zborniku',
+  mrezni: 'Mrezni izvor',
+  zavrsni: 'Zavrsni / diplomski rad',
+  propis: 'Propis / sluzbeni akt',
+};
+
+function fieldLabel(type: SourceType, key: string): string {
+  return key === 'container' ? CONTAINER_LABEL[type] || 'Izvor' : FIELD_LABEL[key] || key;
+}
+
+export const SOURCE_TYPES: SourceTypeForm[] = (Object.keys(SOURCE_TYPE_FIELDS) as SourceType[]).map((type) => ({
+  type,
+  label: TYPE_LABEL[type],
+  fields: SOURCE_TYPE_FIELDS[type].map((f) => ({ key: f.key, label: fieldLabel(type, f.key) })),
+}));

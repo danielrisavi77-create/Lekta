@@ -756,14 +756,74 @@ function inTextAuthorYear(list: ParsedAuthor[], year: string, cfg: InTextStyle):
   return cfg.comma ? `(${who}, ${yr})` : `(${who} ${yr})`;
 }
 
-const RECOMMENDED: Record<SourceType, Array<keyof CitationInput>> = {
-  knjiga: ['authors', 'title', 'year', 'publisher'],
-  poglavlje: ['authors', 'title', 'container', 'editor', 'year', 'publisher'],
-  clanak: ['authors', 'title', 'container', 'year'],
-  mrezni: ['title', 'url'],
-  zavrsni: ['authors', 'title', 'year', 'institution'],
-  propis: ['title', 'container'],
+/** Jedno polje forme za jednu vrstu izvora. `recommended` ulazi u "preporuceno dodati". */
+export interface SourceTypeFieldSpec {
+  key: keyof CitationInput;
+  recommended?: boolean;
+}
+
+/**
+ * KANONSKI popis polja po vrsti izvora: jedini izvor istine za koja polja postoje za koju
+ * vrstu i koja su od njih preporucena. citation-web.ts (SOURCE_TYPES, forma i bulk-kartica)
+ * i RECOMMENDED ispod citaju OVU tablicu; ne dupliciraj popis polja nigdje drugdje (prije su
+ * postojala tri odvojena, rucno odrzavana popisa koja su se razisla - vidi audit 2026-07-17).
+ */
+export const SOURCE_TYPE_FIELDS: Record<SourceType, SourceTypeFieldSpec[]> = {
+  knjiga: [
+    { key: 'authors', recommended: true },
+    { key: 'title', recommended: true },
+    { key: 'year', recommended: true },
+    { key: 'place' },
+    { key: 'publisher', recommended: true },
+  ],
+  clanak: [
+    { key: 'authors', recommended: true },
+    { key: 'title', recommended: true },
+    { key: 'container', recommended: true },
+    { key: 'volume' },
+    { key: 'issue' },
+    { key: 'year', recommended: true },
+    { key: 'pages' },
+    { key: 'doi' },
+  ],
+  poglavlje: [
+    { key: 'authors', recommended: true },
+    { key: 'title', recommended: true },
+    { key: 'editor', recommended: true },
+    { key: 'container', recommended: true },
+    { key: 'place' },
+    { key: 'publisher', recommended: true },
+    { key: 'year', recommended: true },
+    { key: 'pages' },
+  ],
+  mrezni: [
+    { key: 'authors' },
+    { key: 'title', recommended: true },
+    { key: 'publisher' },
+    { key: 'year' },
+    { key: 'url', recommended: true },
+    { key: 'doi' },
+    { key: 'accessed' },
+  ],
+  zavrsni: [
+    { key: 'authors', recommended: true },
+    { key: 'title', recommended: true },
+    { key: 'institution', recommended: true },
+    { key: 'year', recommended: true },
+  ],
+  propis: [
+    { key: 'title', recommended: true },
+    { key: 'container', recommended: true },
+    { key: 'issue' },
+    { key: 'year' },
+  ],
 };
+
+const RECOMMENDED: Record<SourceType, Array<keyof CitationInput>> = Object.fromEntries(
+  (Object.keys(SOURCE_TYPE_FIELDS) as SourceType[]).map(
+    (t) => [t, SOURCE_TYPE_FIELDS[t].filter((f) => f.recommended).map((f) => f.key)] as const,
+  ),
+) as Record<SourceType, Array<keyof CitationInput>>;
 
 const FIELD_LABEL: Partial<Record<keyof CitationInput, string>> = {
   authors: 'autor',

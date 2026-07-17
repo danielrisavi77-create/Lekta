@@ -14,14 +14,11 @@ function esc(s: string): string {
 }
 
 // Koja polja su relevantna za koji tip izvora (jedan izvor: ostala se sakriju da forma ostane cista).
-const FIELDS_BY_TYPE: any = {
-  knjiga: ['authors', 'title', 'year', 'place', 'publisher'],
-  poglavlje: ['authors', 'title', 'container', 'editor', 'pages', 'year', 'place', 'publisher'],
-  clanak: ['authors', 'title', 'container', 'volume', 'issue', 'year', 'pages', 'doi'],
-  mrezni: ['authors', 'title', 'publisher', 'url', 'doi', 'accessed'],
-  zavrsni: ['authors', 'title', 'year', 'institution'],
-  propis: ['title', 'container', 'issue'],
-};
+// Izvedeno iz SOURCE_TYPES (citation-web.ts), koji sam cita kanonski SOURCE_TYPE_FIELDS
+// (citation.ts) - isti popis kao bulk-kartica i "preporuceno dodati", bez odvojenog rucnog popisa.
+const FIELDS_BY_TYPE: Record<string, string[]> = Object.fromEntries(
+  SOURCE_TYPES.map((s) => [s.type, s.fields.map((f) => f.key)]),
+);
 
 // Sva opcionalna tekstualna polja (za readForm/clear/sample petlje).
 const TEXT_FIELDS = ['authors', 'title', 'container', 'editor', 'year', 'publisher', 'place', 'volume', 'issue', 'pages', 'url', 'doi', 'accessed', 'institution'];
