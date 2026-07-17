@@ -116,13 +116,10 @@ export function initials(first: string): string {
     .join(' ');
 }
 
-/** Autor-godina (APA-slicno): "Prezime, I., & Prezime, I." */
+/** Autor-godina (APA-slicno): "Prezime, I., & Prezime, I." Isti format kao authorsApa
+ *  (uklj. 21+ autora elipsu), pa delegira umjesto paralelne kopije koja moze divergirati. */
 function authorsAuthorYear(list: ParsedAuthor[]): string {
-  if (!list.length) return '';
-  const fmt = (a: ParsedAuthor) => (a.first ? `${a.last}, ${initials(a.first)}` : a.last);
-  if (list.length === 1) return fmt(list[0]);
-  const head = list.slice(0, -1).map(fmt).join(', ');
-  return `${head}, & ${fmt(list[list.length - 1])}`;
+  return authorsApa(list);
 }
 
 /** Harvard kompaktni inicijali: "Ann Marie" -> "A.M." (bez razmaka; cite-them-right).
@@ -276,12 +273,13 @@ function collapsePages(p?: string): string {
   return m && m[1] === m[2] ? m[1] : s;
 }
 
-/** Naslov u navodnicima sa zarezom UNUTAR navodnika (Harvard cite-them-right: "Naslov,").
- *  Dvostruki navodnici + zarez unutra su NAMJERNI: to je oblik koji doi.org/CSL
- *  harvard-cite-them-right procesor emitira i protiv kojeg je motor validiran (264/264).
- *  Britanska knjiga CTR koristi jednostruke navodnike; taj oblik zivi u per-fakultet spec-u. */
-function quotedComma(title: string): string {
-  const t = (title || '').trim().replace(/[.,]\s*$/, '');
+/** Naslov u navodnicima sa zarezom UNUTAR navodnika ("Naslov,"): Harvard cite-them-right
+ *  I IEEE dijele ovaj oblik. Dvostruki navodnici + zarez unutra su NAMJERNI: to je oblik koji
+ *  doi.org/CSL harvard-cite-them-right procesor emitira i protiv kojeg je motor validiran
+ *  (264/264). Britanska knjiga CTR koristi jednostruke navodnike; taj oblik zivi u per-fakultet
+ *  spec-u. */
+function quotedTrailingComma(title: string): string {
+  const t = (title || '').trim().replace(/[.,]$/, '');
   return t ? `"${t},"` : '';
 }
 
@@ -396,7 +394,7 @@ function formatHarvard(inp: CitationInput): string {
       const loc = [inp.container, volIss].filter(Boolean).join(', ');
       const pgs = collapsePages(inp.pages);
       const pg = pgs ? `, ${/[-–]/.test(pgs) ? 'pp.' : 'p.'} ${pgs}` : ''; // cite-them-right: p. jedna, pp. raspon
-      parts.push(withDot(`${lead} ${quotedComma(t)} ${loc}${pg}`.trim()));
+      parts.push(withDot(`${lead} ${quotedTrailingComma(t)} ${loc}${pg}`.trim()));
       if (doi) parts.push(withDot(`Available at: ${doi}`));
       else if (inp.url) { // online clanak bez DOI-a: Available at URL (+ Accessed datum)
         const acc = inp.accessed ? ` (Accessed: ${inp.accessed})` : '';
@@ -419,7 +417,7 @@ function formatHarvard(inp: CitationInput): string {
         const e = joinEditors(inp.editor, 'and', false); // CTR: "A and B" (bez Oxford zareza)
         ed = `${e.text} (${e.multi ? 'eds' : 'ed.'}) `;
       }
-      parts.push(withDot(`${lead} ${quotedComma(t)} in ${ed}${inp.container || ''}`.trim()));
+      parts.push(withDot(`${lead} ${quotedTrailingComma(t)} in ${ed}${inp.container || ''}`.trim()));
       const pub = [inp.place, inp.publisher].filter(Boolean).join(': ');
       const tail = [pub, inp.pages ? `pp. ${inp.pages}` : ''].filter(Boolean).join(', ');
       if (tail) parts.push(withDot(tail));
@@ -580,12 +578,6 @@ function authorsIeee(list: ParsedAuthor[]): string {
   return `${head}, and ${fmt(list[list.length - 1])}`;
 }
 
-/** IEEE naslov clanka/priloga: u navodnicima s zarezom UNUTAR navodnika ("Naslov,"). */
-function ieeeQuoted(title: string): string {
-  const t = (title || '').trim().replace(/[.,]$/, '');
-  return t ? `"${t},"` : '';
-}
-
 /** Vancouver inicijali: bez tocaka i razmaka ("Ana Maria" -> "AM"). */
 function vancInitials(first: string): string {
   return first.split(/[\s-]+/).filter(Boolean).map((p) => p[0].toUpperCase()).join('');
@@ -621,7 +613,7 @@ function formatIeee(inp: CitationInput): string {
       break;
     }
     case 'clanak': {
-      if (t) parts.push(ieeeQuoted(t));
+      if (t) parts.push(quotedTrailingComma(t));
       const vol = inp.volume ? `vol. ${inp.volume}` : '';
       const no = inp.issue ? `no. ${inp.issue}` : '';
       const pp = inp.pages ? `pp. ${inp.pages}` : '';
@@ -632,7 +624,7 @@ function formatIeee(inp: CitationInput): string {
       break;
     }
     case 'poglavlje': {
-      if (t) parts.push(ieeeQuoted(t));
+      if (t) parts.push(quotedTrailingComma(t));
       const ed = inp.editor ? `${inp.editor}, Ed. ` : '';
       const inWork = inp.container ? `in ${inp.container}` : '';
       const pub = [inp.place, inp.publisher].filter(Boolean).join(': ');
@@ -642,7 +634,7 @@ function formatIeee(inp: CitationInput): string {
       break;
     }
     case 'mrezni': {
-      if (t) parts.push(ieeeQuoted(t));
+      if (t) parts.push(quotedTrailingComma(t));
       if (inp.publisher) parts.push(withDot(inp.publisher));
       const link = doiUrl(inp.doi) || inp.url;
       if (link) {
