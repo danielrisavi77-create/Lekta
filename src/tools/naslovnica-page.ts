@@ -176,6 +176,14 @@ function populateInstitutions() {
   fillSelect($('#tp-institution'), 'Slobodan unos / nije na popisu', [...ZAGREB_CATALOG].sort(hrSort));
 }
 
+/** Prijedlozi za slobodni unos #tp-university, izvedeni iz kataloga (isti izvor kao kaskada). */
+function populateUniversityDatalist() {
+  const dl = $('#dl-university');
+  if (!dl) return;
+  const names = [...new Set(ZAGREB_CATALOG.map((i) => i.name))].sort((a, b) => a.localeCompare(b, 'hr'));
+  dl.innerHTML = names.map((name) => `<option value="${escapeHtml(name)}">`).join('');
+}
+
 function populateUnits(institutionId: string) {
   const inst = ZAGREB_CATALOG.find((i) => i.id === institutionId);
   const units = inst ? [...inst.units].sort(hrSort) : [];
@@ -277,6 +285,7 @@ const CASCADE_SELECTS = ['#tp-institution', '#tp-unit', '#tp-program'];
 function init() {
   if (!$('#tp-sheet')) return;
   populateInstitutions();
+  populateUniversityDatalist();
   populateUnits('');
   populatePrograms('');
   applyUrlParams();
