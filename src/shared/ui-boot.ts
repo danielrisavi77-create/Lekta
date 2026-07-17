@@ -12,6 +12,7 @@ import '@fontsource/ibm-plex-mono/500.css';
 import '@fontsource/ibm-plex-mono/600.css';
 import 'open-props/easings'; // samo easing krivulje (bez boja/sjena, da topla paleta ostane netaknuta)
 import './design-system.css'; // JEDINI izvor tokena (boje/tipografija/radius/sjene/fokus) za sve stranice
+import './tool-page.css'; // dijeljeni chrome (topbar/nav/gumbi/hero/card/footer/KS tema) za alat-stranice
 import './motion.css'; // dijeljeni sloj gibanja: tokeni gibanja, tekstura papira, View Transitions, tipografija
 import './skip-link.css'; // pristupacni "Preskoci na sadrzaj" (BL-P1-01)
 import './a11y.css'; // dijeljeni a11y sloj: forced-colors fokus fallback (BL-P2-02)
