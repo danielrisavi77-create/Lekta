@@ -1439,6 +1439,8 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
 .lek-cover-hit{position:absolute;inset:0;z-index:6;background:none;border:0;cursor:pointer;border-radius:4px}
 .lek-cover-hit:focus-visible{outline:2.5px solid var(--red-deep);outline-offset:6px}
 .lek-head-cta{margin-top:18px}
+/* Povratak iz rezultata: meki put natrag na dokument/profil, dokument ostaje u memoriji. */
+.lek-stepnav-result{margin:0 0 14px}
 /* Uredniska traka s brojkama: dio zaglavlja (izmedju leada i papira), isti serifni glas kao H1. */
 .lek-col-proof .hero-coverage{align-self:stretch;margin-top:22px;border-top:1px solid var(--desk-line);border-bottom:1px solid var(--desk-line);padding:14px 0 12px}
 .lek-col-proof .cov-stats{justify-content:space-between;gap:24px;padding-right:24px}
@@ -1452,7 +1454,7 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
 .lek-bridge{position:absolute;top:52%;left:-108px;width:134px;transform:rotate(-4deg);font-family:var(--font-hand);font-size:21px;line-height:1.12;color:var(--red);text-align:center;pointer-events:none;z-index:4}
 @media(max-width:1180px){.lek-bridge{display:none}}
 @media(max-width:1000px){.lek-top-grid{display:flex;flex-direction:column;gap:26px;align-items:stretch}.lek-col-proof{align-items:stretch}.lek-cover-stage{max-width:340px}.lek-head-copy h1{font-size:clamp(30px,7.2vw,40px)}.lek-col-proof .cov-stats{gap:20px}.lek-col-proof .cov-stat b{font-size:24px}}
-@media print{.lek-col-proof,.lek-bridge,.lek-paper-cover{display:none!important}.lek-top-grid{display:block!important}}
+@media print{.lek-col-proof,.lek-bridge,.lek-paper-cover,.lek-stepnav-result{display:none!important}.lek-top-grid{display:block!important}}
 </style>
 </head>
 <body>
@@ -1583,6 +1585,7 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
       </div>
       <div class="progress-view hidden" id="progressView" role="status" aria-live="polite"><div class="spinner"></div><h3>Analiziram dokument…</h3><p id="progressMessage">Otvaram Word strukturu</p><div class="progress-track"><i id="progressBar"></i></div><div class="progress-step" id="progressPercent" aria-hidden="true">0%</div><div class="progress-actions" style="margin-top:24px"><button class="btn btn-secondary btn-sm" id="cancelAnalysisBtn" type="button">Prekini analizu</button></div></div>
       <div class="result-view hidden" id="resultView">
+        <div class="lek-stepnav lek-stepnav-result"><div class="lek-stepnav-back"><button class="btn btn-ghost btn-sm" id="resultBackDoc" type="button">← Dokument</button><span class="lek-stepfile" id="resultFileName"></span><button class="btn btn-ghost btn-sm" id="resultBackProfile" type="button">← Profil fakulteta</button></div></div>
         <div class="demo-bar hidden" id="demoBar" role="note" aria-label="Primjer izvještaja"></div>
         <div class="result-summary"><div class="score-card"><div class="score-ring" id="scoreRing"><div class="score-ring-inner"><span><b id="scoreValue">0</b><small>/ 100</small></span></div><svg class="ks-circle" viewBox="0 0 190 150" fill="none" aria-hidden="true" focusable="false"><path d="M95 14 C 158 10, 184 40, 181 75 C 178 116, 138 140, 92 137 C 44 134, 8 112, 11 72 C 14 34, 52 12, 95 16"/></svg></div><div class="score-label" id="scoreLabel">Analiza završena</div><div class="ready-stamp hidden" id="readyStamp" aria-hidden="true">Tehnički uredno</div></div><div class="result-main"><h2 id="resultTitle">Rezultat provjere</h2><p id="resultSubtitle"></p><div class="metrics"><div class="metric metric-jump" data-jump="issues" role="button" tabindex="0" aria-label="Prikaži sve probleme"><span>MOGUĆI PROBLEMI</span><b id="metricIssues">0</b></div><div class="metric"><span>RIJEČI</span><b id="metricWords">0</b></div><div class="metric"><span>IZVORI</span><b id="metricRefs">0</b></div><div class="metric"><span>CITATNICE</span><b id="metricCitations">0</b></div></div><div class="result-actions result-actions--util"><button class="btn btn-primary btn-sm hidden" id="unlockReport">Otključaj puni izvještaj</button><button class="btn btn-ghost btn-sm" id="orderFromResult">Naruči ručno sređivanje</button><div class="dl-menu"><button class="btn btn-ghost btn-sm dl-menu-btn" type="button" aria-haspopup="true" aria-expanded="false">Preuzmi <i data-lucide="chevron-down"></i></button><div class="dl-menu-list" role="menu"><button class="dl-item" id="printReport" type="button" role="menuitem">Spremi kao PDF</button><button class="dl-item" id="downloadHtml" type="button" role="menuitem">HTML izvještaj</button><button class="dl-item" id="downloadJson" type="button" role="menuitem">Podatke (JSON)</button><button class="dl-item" id="reportWrongCheck" type="button" role="menuitem" title="Prijavi ako je neka provjera po tvome kriva">Prijavi pogrešnu provjeru</button></div></div><button class="btn btn-ghost btn-sm" id="newAnalysis">Nova provjera</button></div></div></div>
         <div class="result-guide hidden" id="resultGuide"></div>
