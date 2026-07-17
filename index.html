@@ -1385,6 +1385,13 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
 .lek-col-proof{grid-column:1;grid-row:1;position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding-top:0;min-width:0}
 .lek-col-form .wizard-grid{grid-template-columns:1fr}
 .lek-top-grid:not(:has(#progressView:not(.hidden))):not(:has(#resultView:not(.hidden))) .wizard-rail .rail-form-title{width:100%;margin-bottom:6px}
+/* Progresivni koraci: prije uploada desni papir prikazuje SAMO korak 1 (Dokument); uploadom
+   (#dropzone.has-file) otvaraju se II. Profil, III. Preciznija provjera i Analiziraj red. */
+.lek-col-form .analyzer-wrap:not(:has(#dropzone.has-file)) :is(.wizard-col-profile,.advanced-options,.analyze-row){display:none}
+.lek-col-form .analyzer-wrap:not(:has(#dropzone.has-file)) .dropzone{min-height:400px}
+@keyframes lekStepIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.lek-col-form .analyzer-wrap:has(#dropzone.has-file) :is(.wizard-col-profile,.advanced-options,.analyze-row){animation:lekStepIn .35s ease-out both}
+@media(prefers-reduced-motion:reduce){.lek-col-form .analyzer-wrap:has(#dropzone.has-file) :is(.wizard-col-profile,.advanced-options,.analyze-row){animation:none}}
 .lek-top-grid:has(#progressView:not(.hidden)) .lek-col-form,.lek-top-grid:has(#resultView:not(.hidden)) .lek-col-form{grid-column:1 / -1}
 .lek-top-grid:has(#progressView:not(.hidden)) .lek-col-proof,.lek-top-grid:has(#resultView:not(.hidden)) .lek-col-proof{display:none}
 .lek-col-proof .hero-demo{width:100%;max-width:460px;margin:26px auto 0}
