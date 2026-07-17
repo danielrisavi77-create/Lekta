@@ -38,12 +38,9 @@ async function copyText(text: string): Promise<boolean> {
 }
 
 interface CopyButtonOptions {
-  okLabel?: string;
   failLabel?: string;
   holdMs?: number;
   statusEl?: any;       // opcionalni aria-live element: ishod se najavljuje citacu ekrana (WCAG 4.1.3)
-  okStatus?: string;
-  failStatus?: string;
 }
 
 /**
@@ -58,11 +55,11 @@ export function bindCopyButton(
   opts: CopyButtonOptions = {},
 ): void {
   if (!btn) return;
-  const okLabel = opts.okLabel ?? 'Kopirano ✓';
+  const okLabel = 'Kopirano ✓';
   const failLabel = opts.failLabel ?? 'Označi pa Ctrl+C';
   const holdMs = opts.holdMs ?? 1600;
-  const okStatus = opts.okStatus ?? 'Sažetak kopiran u međuspremnik.';
-  const failStatus = opts.failStatus ?? 'Kopiranje nije uspjelo, označite tekst pa Ctrl+C.';
+  const okStatus = 'Sažetak kopiran u međuspremnik.';
+  const failStatus = 'Kopiranje nije uspjelo, označite tekst pa Ctrl+C.';
   const original = btn.textContent;
   let timer = 0;
   btn.addEventListener('click', async () => {
