@@ -21,6 +21,14 @@
  * Popravljen drift (bio uzrok razlicitog izgleda bez namjere): .nav gap 20px->22px na
  * izjava/literatura, .nav-links gap 18px->20px + visak white-space:nowrap na literatura,
  * .tp-toolbar margin-top 4px->6px na izjava. Kanonizirano na vecinsku vrijednost.
+ *
+ * Uklonjen mrtav CSS iz tri preklopljena vala redizajna (Val 3 / Val 4 / KS) koji su
+ * ovdje spojeni ekstrakcijom: KS uvijek dolazi zadnji pa pobjedjuje, pa su ranije-u-datoteci
+ * deklaracije istog selektora bile bez ikakvog efekta u isporucenoj stranici. Obrisano:
+ * .hero h1 .ink bazna deklaracija (font-weight 480/boja brand, nikad vidljiva - KS na kraju
+ * bloka postavlja font-weight 400/boja red), .eyebrow Val 4 varijanta (mono font, nikad
+ * vidljiva - KS postavlja sans font). Ne brisi KS deklaracije istih selektora, one su jedine
+ * koje se stvarno renderiraju.
  */
 
 *{box-sizing:border-box}
@@ -53,7 +61,6 @@ a{color:inherit}:focus-visible{outline:2px solid var(--brand);outline-offset:2px
 .hero{padding:44px 0 6px;text-align:center}
 .eyebrow{display:inline-flex;align-items:center;gap:12px;font-size:11px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
 .eyebrow::before,.eyebrow::after{content:"";width:24px;height:1px;background:var(--line-strong)}
-.hero h1 .ink{font-style:italic;font-weight:480;color:var(--brand)}
 .hero .sibling{margin:14px 0 0;font-size:13px;color:var(--muted)}
 .card .sub{color:var(--muted);font-size:13px;margin:0 0 16px}
 .cta p{color:var(--muted);margin:0 auto 18px;max-width:560px}
@@ -63,9 +70,6 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
 .footer-inner .footer-links{display:flex;gap:16px;flex-wrap:wrap;margin-left:auto}
 .footer-inner a{text-decoration:none}.footer-inner a:hover{color:var(--brand)}
 @media(max-width:820px){.mobile-menu{display:grid;margin-left:auto}.mobile-nav.open{display:flex;flex-direction:column;gap:2px;position:absolute;left:0;right:0;top:100%;background:var(--panel);border-bottom:1px solid var(--line);box-shadow:var(--shadow);padding:10px 20px 16px;z-index:29}.mobile-nav a:not(.btn){padding:13px 6px;color:var(--text);text-decoration:none;font-weight:700;border-bottom:1px solid var(--line)}.mobile-nav .btn{margin-top:10px;width:100%;justify-content:center}}
-/* Val 3: Editorial Instrument layer */
-/* Val 4: Tinta i papir eyebrow (mono podatkovni glas) */
-.eyebrow{font-family:var(--mono);font-weight:600;letter-spacing:.1em}
 /* ===== KS: Korektorski stol sloj ===== */
 /* ===== KS: Korektorski stol chrome (dijeljeni predlozak) ===== */
 ::selection{background:var(--red);color:#fff}

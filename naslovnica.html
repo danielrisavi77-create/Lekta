@@ -125,11 +125,6 @@ body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 var(--sans);m
 .hero h1,.sec-h,.cta h2,.card h2{font-family:var(--display-serif)}
 /* Jedan suzdrzan proof akcent: crvena korekturna crta pod istaknutom rijeci u naslovu.
    Koristi text-decoration da prezivi forced-colors (za razliku od box-shadow). */
-/* Paper-edge highlight na tool-UI karticama; SAMO na ekranu da ne pokvari ispis
-   (@media print resetira .card box-shadow, a ovaj appendani blok bi ga inace nadjacao). */
-@media screen{
-  .card{box-shadow:var(--shadow-sm)}
-}
 
 body{background:var(--desk);color:var(--desk-ink);font:15px/1.6 var(--sans);overflow-x:clip;position:relative}
 .lampa-btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--desk-line);background:transparent;padding:8px 13px;border-radius:2px;color:var(--desk-muted);font:600 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;cursor:pointer}

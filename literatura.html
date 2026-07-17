@@ -92,11 +92,12 @@ textarea#lit-input{min-height:380px;line-height:1.6}
 .cta h2{font-family:var(--display-serif)}
 /* Brojaci: Source Serif s tabelarnim brojkama da metrike ostanu poravnate */
 .metric b{font-family:var(--mono);font-variant-numeric:tabular-nums}
-/* Paper-edge na UI karticama i CTA plohi; inset highlight ne kvari WHCM jer stvarni rub ostaje */
-@media screen{.card{box-shadow:var(--shadow-sm)}}
 /* Jedan suzdrzan proof akcent: crvena korektorska crta ispod imena alata u heroju */
 /* Sredjeni popis (.lit-item) je citateljska ploha i zadrzava vlastitu tipografiju, bez Fraunces */
-@media print{.hero h1 .ink{font-style:italic;font-weight:480;color:var(--brand)}}
+/* .ink je u dijeljenom tool-page.css bez media scopinga, pa ucitava se NAKON ovog inline
+   bloka (vidi src/shared/tool-page.css header) - !important je jedini nacin da ovaj
+   print-only izgled prezivi taj kasniji, nescopani KS redak. */
+@media print{.hero h1 .ink{font-style:italic!important;font-weight:480!important;color:var(--brand)!important}}
 
 body{background:var(--desk);color:var(--desk-ink);font:15px/1.6 var(--sans);overflow-x:clip;position:relative}
 .lampa-btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--desk-line);background:transparent;padding:8px 13px;border-radius:2px;color:var(--desk-muted);font:600 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
