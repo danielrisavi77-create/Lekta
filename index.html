@@ -1375,23 +1375,25 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
 @media(max-width:768px){.ks-video-note{right:0;top:-26px}}
 /* ===== LEK-MERGE: vrh = dokaz + upload (hero spojen u #analyzer) ===== */
 #analyzer{padding-top:40px}
-.analyzer-header{align-items:flex-start;margin-bottom:26px}
-.analyzer-header .hero-kicker{margin:0}
-.analyzer-header h1{font-family:var(--display-serif);font-weight:400;font-size:clamp(34px,3.8vw,52px);line-height:1.08;letter-spacing:-.02em;margin:12px 0 0;color:var(--desk-ink);max-width:820px}
-.analyzer-header .lek-top-lead{margin:14px 0 0;max-width:62ch;font-family:var(--display-serif);font-size:16px;line-height:1.55;color:var(--desk-muted)}
-.lek-top-grid{display:grid;grid-template-columns:repeat(2,minmax(0,500px));justify-content:center;gap:48px;align-items:start}
+.analyzer-header{margin-bottom:10px}
+.lek-head-copy{width:100%}
+.lek-head-copy .hero-kicker{margin:0}
+.lek-head-copy h1{font-family:var(--display-serif);font-weight:400;font-size:clamp(30px,3vw,44px);line-height:1.1;letter-spacing:-.02em;margin:10px 0 0;color:var(--desk-ink)}
+.lek-head-copy .lek-top-lead{margin:12px 0 0;max-width:56ch;font-family:var(--display-serif);font-size:15.5px;line-height:1.55;color:var(--desk-muted)}
+.lek-top-grid{display:grid;grid-template-columns:minmax(0,600px) minmax(0,520px);justify-content:center;gap:56px;align-items:start}
 .lek-col-form{grid-column:2;grid-row:1;min-width:0}
-.lek-col-proof{grid-column:1;grid-row:1;position:relative;display:flex;flex-direction:column;align-items:center;gap:12px;padding-top:6px;min-width:0}
+.lek-col-proof{grid-column:1;grid-row:1;position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding-top:0;min-width:0}
 .lek-col-form .wizard-grid{grid-template-columns:1fr}
 .lek-top-grid:not(:has(#progressView:not(.hidden))):not(:has(#resultView:not(.hidden))) .wizard-rail .rail-form-title{width:100%;margin-bottom:6px}
 .lek-top-grid:has(#progressView:not(.hidden)) .lek-col-form,.lek-top-grid:has(#resultView:not(.hidden)) .lek-col-form{grid-column:1 / -1}
 .lek-top-grid:has(#progressView:not(.hidden)) .lek-col-proof,.lek-top-grid:has(#resultView:not(.hidden)) .lek-col-proof{display:none}
-.lek-col-proof .hero-demo{width:100%;max-width:500px}
+.lek-col-proof .hero-demo{width:100%;max-width:460px;margin:26px auto 0}
+.lek-col-proof .hero-replay{align-self:center}
 .lek-col-proof .hero-coverage{margin-top:8px;align-self:stretch}
-.lek-col-proof .trust-row{margin-top:4px;justify-content:center}
-.lek-bridge{position:absolute;top:34%;right:-34px;width:134px;transform:rotate(-5deg);font-family:var(--font-hand);font-size:21px;line-height:1.12;color:var(--red);text-align:center;pointer-events:none;z-index:4}
+.lek-col-proof .trust-row{margin-top:4px;justify-content:flex-start}
+.lek-bridge{position:absolute;top:auto;bottom:24%;right:-48px;width:134px;transform:rotate(-5deg);font-family:var(--font-hand);font-size:21px;line-height:1.12;color:var(--red);text-align:center;pointer-events:none;z-index:4}
 @media(max-width:1180px){.lek-bridge{display:none}}
-@media(max-width:1000px){.lek-top-grid{display:flex;flex-direction:column;gap:26px}.lek-col-form,.lek-col-proof{grid-column:auto}.lek-col-proof{order:-1}.lek-col-proof .hero-demo{max-width:320px}.analyzer-header h1{font-size:clamp(30px,7.2vw,42px)}}
+@media(max-width:1000px){.lek-top-grid{display:flex;flex-direction:column;gap:26px}.lek-col-proof{align-items:stretch}.lek-col-proof .hero-demo{max-width:320px}.lek-head-copy h1{font-size:clamp(30px,7.2vw,40px)}}
 @media print{.lek-col-proof,.lek-bridge{display:none!important}.lek-top-grid{display:block!important}}
 </style>
 </head>
@@ -1428,8 +1430,39 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
 <main id="top">
 <section class="section section-soft" id="analyzer">
   <div class="shell">
-    <div class="analyzer-header"><div class="lek-head-copy hero-copy"><div class="hero-kicker"><i class="pulse" aria-hidden="true"></i>23:47 · predaja je sutra · sve pod kontrolom</div><h1>Je li tvoj rad tehnički <span class="h1-crta">spreman<svg viewBox="0 0 200 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M2 6 Q 20 1, 40 6 T 78 6 T 116 6 T 154 6 T 196 6"/></svg></span> za predaju?<br>Lekta ti kaže <em>prije</em> mentora.</h1><p class="lek-top-lead">Oblikovanje, struktura, opseg i citiranje, izmjereno lokalno po verificiranim pravilima tvog fakulteta. Dokument ne napušta uređaj.</p></div><div class="launch-actions"><button class="btn btn-secondary btn-sm" id="historyBtn" type="button">Povijest <span id="historyCount"></span></button><!-- dev-only:start --><button class="btn btn-secondary btn-sm hidden" id="qaBtn" type="button">QA konzola</button><!-- dev-only:end --><span class="privacy-pill"><i data-lucide="lock"></i> Lokalna obrada</span></div></div>
+    <div class="analyzer-header"><div class="launch-actions"><button class="btn btn-secondary btn-sm" id="historyBtn" type="button">Povijest <span id="historyCount"></span></button><!-- dev-only:start --><button class="btn btn-secondary btn-sm hidden" id="qaBtn" type="button">QA konzola</button><!-- dev-only:end --><span class="privacy-pill"><i data-lucide="lock"></i> Lokalna obrada</span></div></div>
     <div class="lek-top-grid">
+    <div class="lek-col-proof">
+      <div class="lek-head-copy hero-copy"><div class="hero-kicker"><i class="pulse" aria-hidden="true"></i>23:47 · predaja je sutra · sve pod kontrolom</div><h1>Je li tvoj rad tehnički <span class="h1-crta">spreman<svg viewBox="0 0 200 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M2 6 Q 20 1, 40 6 T 78 6 T 116 6 T 154 6 T 196 6"/></svg></span> za predaju?<br>Lekta ti kaže <em>prije</em> mentora.</h1><p class="lek-top-lead">Oblikovanje, struktura, opseg i citiranje, izmjereno lokalno po verificiranim pravilima tvog fakulteta. Dokument ne napušta uređaj.</p></div>
+      <div class="hero-demo" aria-hidden="true">
+        <div class="hd-stage">
+          <div class="hd-back" data-hero="back"></div>
+          <div class="hd-sheet" data-hero="sheet">
+            <div class="hd-doc-title">3. MEDIJSKO UOKVIRIVANJE KLIMATSKIH PROMJENA</div>
+            <p>Analiza okvira pokazala je da dnevne novine klimatske promjene najčešće uokviruju kroz ekonomsku prizmu (Peruško 2021.), dok se znanstveni okvir pojavljuje u <span class="hd-strike" data-hero="strike">značajno manjem broju</span> slučajeva. Slično tvrdi i <span class="hd-circle" data-hero="circle">Jandrić (2019)</span>, koji upozorava da izostanak znanstvenih izvora osiromašuje raspravu…</p>
+            <p>U promatranom razdoblju objavljeno je 214 članaka, od čega su 122 sadržavala barem jedan izravni citat. Kako navodi Grbeša (2020), medijska pozornost raste s blizinom klimatskih konferencija…</p>
+            <div class="hd-a hd-a1" data-hero="a1">izvor nije u literaturi!!</div>
+            <div class="hd-a hd-a2" data-hero="a2">preciznije!</div>
+            <div class="hd-a hd-a3" data-hero="a3">margina 2,3 → 3 cm!</div>
+            <i class="hd-a3line" data-hero="a3line"></i>
+            <div class="hd-f hd-f2" data-hero="f2">✓ jasnije, ok</div>
+            <div class="hd-f hd-f3" data-hero="f3">✓ margina 3 cm</div>
+            <i class="hd-scan" data-hero="scan"></i>
+          </div>
+          <div class="hd-postit" data-hero="postit">rok:<br><b>15. 9.</b><br>NE paničari →<br>provjeri</div>
+          <div class="hd-score" data-hero="score">
+            <div class="hd-score-k">LEKTA · NALAZ</div>
+            <div class="hd-score-n"><span data-hero="scoreval">71</span><span class="hd-score-max">/100</span></div>
+            <div class="hd-score-chip" data-hero="scorechip">17 nalaza · potrebne dorade<i class="hd-caret" aria-hidden="true">▮</i></div>
+          </div>
+        </div>
+      </div>
+      <button class="hero-replay" id="heroReplay" type="button" aria-label="Ponovno pokreni animaciju primjera"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>Ponovi pregled</button>
+      <div class="lek-bridge" aria-hidden="true">ovaj je prošao. tvoj je sljedeći →</div>
+      <button class="linklike-serif" id="heroDemoBtn" type="button" title="Pogledaj kako izgleda izvještaj bez učitavanja dokumenta">Pogledaj cijeli primjer izvještaja →</button>
+      <div class="hero-coverage" id="heroCoverage" hidden></div>
+      <div class="trust-row"><span><b aria-hidden="true">●</b> Lokalno</span><span><b aria-hidden="true">●</b> Bez registracije</span><span><b aria-hidden="true">●</b> Rezultat u sekundama</span><span><b aria-hidden="true">●</b> Nije provjera plagijata</span></div>
+    </div>
     <div class="lek-col-form">
     <div class="analyzer-wrap">
       <div class="wizard-rail" aria-hidden="true"><span class="rail-form-title">Obrazac LK-01 · Tehnička provjera rada</span><span class="rail-step" data-rail="1"><b>1</b> Dokument</span><i class="rail-line"></i><span class="rail-step" data-rail="2"><b>2</b> Profil</span><i class="rail-line"></i><span class="rail-step" data-rail="3"><b>3</b> Nalaz</span></div>
@@ -1493,36 +1526,6 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
       </div>
     </div>
     </div>
-    <aside class="lek-col-proof">
-      <div class="hero-demo" aria-hidden="true">
-        <div class="hd-stage">
-          <div class="hd-back" data-hero="back"></div>
-          <div class="hd-sheet" data-hero="sheet">
-            <div class="hd-doc-title">3. MEDIJSKO UOKVIRIVANJE KLIMATSKIH PROMJENA</div>
-            <p>Analiza okvira pokazala je da dnevne novine klimatske promjene najčešće uokviruju kroz ekonomsku prizmu (Peruško 2021.), dok se znanstveni okvir pojavljuje u <span class="hd-strike" data-hero="strike">značajno manjem broju</span> slučajeva. Slično tvrdi i <span class="hd-circle" data-hero="circle">Jandrić (2019)</span>, koji upozorava da izostanak znanstvenih izvora osiromašuje raspravu…</p>
-            <p>U promatranom razdoblju objavljeno je 214 članaka, od čega su 122 sadržavala barem jedan izravni citat. Kako navodi Grbeša (2020), medijska pozornost raste s blizinom klimatskih konferencija…</p>
-            <div class="hd-a hd-a1" data-hero="a1">izvor nije u literaturi!!</div>
-            <div class="hd-a hd-a2" data-hero="a2">preciznije!</div>
-            <div class="hd-a hd-a3" data-hero="a3">margina 2,3 → 3 cm!</div>
-            <i class="hd-a3line" data-hero="a3line"></i>
-            <div class="hd-f hd-f2" data-hero="f2">✓ jasnije, ok</div>
-            <div class="hd-f hd-f3" data-hero="f3">✓ margina 3 cm</div>
-            <i class="hd-scan" data-hero="scan"></i>
-          </div>
-          <div class="hd-postit" data-hero="postit">rok:<br><b>15. 9.</b><br>NE paničari →<br>provjeri</div>
-          <div class="hd-score" data-hero="score">
-            <div class="hd-score-k">LEKTA · NALAZ</div>
-            <div class="hd-score-n"><span data-hero="scoreval">71</span><span class="hd-score-max">/100</span></div>
-            <div class="hd-score-chip" data-hero="scorechip">17 nalaza · potrebne dorade<i class="hd-caret" aria-hidden="true">▮</i></div>
-          </div>
-        </div>
-      </div>
-      <button class="hero-replay" id="heroReplay" type="button" aria-label="Ponovno pokreni animaciju primjera"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>Ponovi pregled</button>
-      <div class="lek-bridge" aria-hidden="true">ovaj je prošao. tvoj je sljedeći →</div>
-      <button class="linklike-serif" id="heroDemoBtn" type="button" title="Pogledaj kako izgleda izvještaj bez učitavanja dokumenta">Pogledaj cijeli primjer izvještaja →</button>
-      <div class="hero-coverage" id="heroCoverage" hidden></div>
-      <div class="trust-row"><span><b aria-hidden="true">●</b> Lokalno</span><span><b aria-hidden="true">●</b> Bez registracije</span><span><b aria-hidden="true">●</b> Rezultat u sekundama</span><span><b aria-hidden="true">●</b> Nije provjera plagijata</span></div>
-    </aside>
     </div>
   </div>
 </section>
