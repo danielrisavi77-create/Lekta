@@ -363,6 +363,10 @@
   "fhs-zavrsni": [
     "paper-size"
   ],
+  "fipu-diplomski": [
+    "justify",
+    "page-numbers"
+  ],
   "fipu-zavrsni": [
     "justify",
     "page-numbers"
@@ -702,6 +706,14 @@
     "page-numbers"
   ],
   "math-uniri-diplomski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "page-numbers"
+  ],
+  "math-uniri-diplomski-en": [
     "font",
     "font-size",
     "line-spacing",

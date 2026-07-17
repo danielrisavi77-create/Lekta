@@ -790,9 +790,8 @@
         "programs": [
           "Prijediplomski sveučilišni studij Primijenjena umjetnost",
           "Prijediplomski sveučilišni studij Likovna pedagogija",
-          "Prijediplomski sveučilišni studij Vizualne komunikacije i grafički dizajn",
-          "Prijediplomski sveučilišni studij Gluma",
-          "Prijediplomski sveučilišni studij Mediji",
+          "Prijediplomski sveučilišni studij Grafički dizajn i vizualne komunikacije",
+          "Prijediplomski sveučilišni studij Gluma i mediji",
           "Diplomski sveučilišni studij Primijenjena umjetnost",
           "Diplomski sveučilišni studij Vizualne komunikacije i grafički dizajn"
         ]
@@ -967,8 +966,9 @@
         "programs": [
           "Sveučilišni prijediplomski studij Matematika",
           "Sveučilišni diplomski studij Diskretna matematika i primjene",
-          "Sveučilišni diplomski studij Matematika (nastavnički smjer)",
-          "Sveučilišni diplomski studij Matematika i informatika (nastavnički smjer)"
+          "Sveučilišni diplomski studij Matematika",
+          "Sveučilišni diplomski studij Matematika i informatika",
+          "Sveučilišni diplomski studij Discrete Mathematics and Its Applications (na engleskom jeziku)"
         ]
       },
       {
@@ -1546,7 +1546,7 @@
           "Sveučilišni prijediplomski studij Povijest",
           "Sveučilišni prijediplomski studij Arheologija",
           "Sveučilišni prijediplomski studij Latinski jezik i rimska književnost",
-          "Sveučilišni prijediplomski studij Jezik i interkulturalno posredovanje",
+          "Sveučilišni prijediplomski studij Jezična i interkulturalna medijacija",
           "Sveučilišni diplomski studij Hrvatski jezik i književnost",
           "Sveučilišni diplomski studij Talijanski jezik i književnost",
           "Sveučilišni diplomski studij Povijest",
@@ -1573,7 +1573,8 @@
         "status": "partial",
         "programs": [
           "Sveučilišni prijediplomski studij Informatika",
-          "Sveučilišni prijediplomski studij Primijenjena ekonomija"
+          "Diplomski sveučilišni studij Informatika",
+          "Diplomski sveučilišni studij Informatika - nastavni smjer"
         ]
       },
       {

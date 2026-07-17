@@ -8120,7 +8120,7 @@
       "Sveučilišni prijediplomski studij Povijest",
       "Sveučilišni prijediplomski studij Arheologija",
       "Sveučilišni prijediplomski studij Latinski jezik i rimska književnost",
-      "Sveučilišni prijediplomski studij Jezik i interkulturalno posredovanje"
+      "Sveučilišni prijediplomski studij Jezična i interkulturalna medijacija"
     ],
     "workTypes": [
       "final"
@@ -8145,8 +8145,7 @@
     "id": "fipu-zavrsni",
     "unitId": "fipu",
     "programs": [
-      "Sveučilišni prijediplomski studij Informatika",
-      "Sveučilišni prijediplomski studij Primijenjena ekonomija"
+      "Sveučilišni prijediplomski studij Informatika"
     ],
     "workTypes": [
       "final"
@@ -8192,9 +8191,8 @@
     "programs": [
       "Prijediplomski sveučilišni studij Primijenjena umjetnost",
       "Prijediplomski sveučilišni studij Likovna pedagogija",
-      "Prijediplomski sveučilišni studij Vizualne komunikacije i grafički dizajn",
-      "Prijediplomski sveučilišni studij Gluma",
-      "Prijediplomski sveučilišni studij Mediji"
+      "Prijediplomski sveučilišni studij Grafički dizajn i vizualne komunikacije",
+      "Prijediplomski sveučilišni studij Gluma i mediji"
     ],
     "workTypes": [
       "final"
@@ -8229,8 +8227,8 @@
     "unitId": "matematika",
     "programs": [
       "Sveučilišni diplomski studij Diskretna matematika i primjene",
-      "Sveučilišni diplomski studij Matematika (nastavnički smjer)",
-      "Sveučilišni diplomski studij Matematika i informatika (nastavnički smjer)"
+      "Sveučilišni diplomski studij Matematika",
+      "Sveučilišni diplomski studij Matematika i informatika"
     ],
     "workTypes": [
       "graduate"
@@ -8331,5 +8329,32 @@
       "specialist"
     ],
     "status": "verified"
+  },
+  {
+    "id": "fipu-diplomski",
+    "unitId": "fipu",
+    "programs": [
+      "Diplomski sveučilišni studij Informatika",
+      "Diplomski sveučilišni studij Informatika - nastavni smjer"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "verified"
+  },
+  {
+    "id": "math-uniri-diplomski-en",
+    "unitId": "matematika",
+    "programs": [
+      "Sveučilišni diplomski studij Discrete Mathematics and Its Applications (na engleskom jeziku)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "verified",
+    "rules": {
+      "documentLanguage": "en",
+      "languageLocked": true
+    }
   }
 ]

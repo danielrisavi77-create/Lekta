@@ -39658,7 +39658,7 @@
       "Sveučilišni prijediplomski studij Povijest",
       "Sveučilišni prijediplomski studij Arheologija",
       "Sveučilišni prijediplomski studij Latinski jezik i rimska književnost",
-      "Sveučilišni prijediplomski studij Jezik i interkulturalno posredovanje"
+      "Sveučilišni prijediplomski studij Jezična i interkulturalna medijacija"
     ],
     "workTypes": [
       "final"
@@ -39881,8 +39881,7 @@
     "id": "fipu-zavrsni",
     "unitId": "fipu",
     "programs": [
-      "Sveučilišni prijediplomski studij Informatika",
-      "Sveučilišni prijediplomski studij Primijenjena ekonomija"
+      "Sveučilišni prijediplomski studij Informatika"
     ],
     "workTypes": [
       "final"
@@ -40324,9 +40323,8 @@
     "programs": [
       "Prijediplomski sveučilišni studij Primijenjena umjetnost",
       "Prijediplomski sveučilišni studij Likovna pedagogija",
-      "Prijediplomski sveučilišni studij Vizualne komunikacije i grafički dizajn",
-      "Prijediplomski sveučilišni studij Gluma",
-      "Prijediplomski sveučilišni studij Mediji"
+      "Prijediplomski sveučilišni studij Grafički dizajn i vizualne komunikacije",
+      "Prijediplomski sveučilišni studij Gluma i mediji"
     ],
     "workTypes": [
       "final"
@@ -40558,8 +40556,8 @@
     "unitId": "matematika",
     "programs": [
       "Sveučilišni diplomski studij Diskretna matematika i primjene",
-      "Sveučilišni diplomski studij Matematika (nastavnički smjer)",
-      "Sveučilišni diplomski studij Matematika i informatika (nastavnički smjer)"
+      "Sveučilišni diplomski studij Matematika",
+      "Sveučilišni diplomski studij Matematika i informatika"
     ],
     "workTypes": [
       "graduate"
@@ -41006,5 +41004,157 @@
       "Tehničko oblikovanje (u nejavnom predlošku)",
       "Stil citiranja"
     ]
+  },
+  {
+    "id": "fipu-diplomski",
+    "unitId": "fipu",
+    "programs": [
+      "Diplomski sveučilišni studij Informatika",
+      "Diplomski sveučilišni studij Informatika - nastavni smjer"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "verified",
+    "profileLabel": "Fakultet informatike u Puli, diplomski rad",
+    "verifiedAt": "2026-07-17",
+    "documentDate": null,
+    "rules": {
+      "requireA4": true,
+      "font": [
+        "Arial"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "footnoteSize": 10,
+      "footnoteSpacing": 1,
+      "requireToc": true,
+      "requiredSections": [
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "Sadržaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "Uvod"
+          ]
+        },
+        {
+          "key": "obrada",
+          "label": "Obrada teme",
+          "terms": [
+            "Obrada teme",
+            "Razrada"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zaključak",
+          "terms": [
+            "Zaključak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Popis literature",
+          "terms": [
+            "Literatura",
+            "Popis literature"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sažetak",
+          "terms": [
+            "Sažetak"
+          ]
+        },
+        {
+          "key": "kljucne",
+          "label": "Ključne riječi",
+          "terms": [
+            "Ključne riječi"
+          ]
+        }
+      ]
+    },
+    "facts": [],
+    "note": "Pravila su iz krovnog pravilnika Sveučilišta Jurja Dobrile u Puli (važeći tekst čl. 5 prema izmjenama od 23.07.2021.), koji obvezuje sve sastavnice. Sastavnica nema vlastiti naputak. Pravilnik ne propisuje stil citiranja ni brojčani opseg (opseg je određen programom studija).",
+    "sources": [
+      {
+        "title": "Pravilnik o izmjenama i dopunama Pravilnika o diplomskom radu i diplomskom koncertu na sveucilisnim diplomskim studijima i integriranome preddiplomskom i diplomskom studiju (23.07.2021.)",
+        "url": "https://www.unipu.hr/_download/repository/2021-07-23-Pravilnik_o_izmjenama_i_dopunama_Pravilnika_o_dipl._radu_i_dipl._koncertu_na_sveucilisnim_dipl._studijima_i_integriranome_preddipl._i_dipl._studiju.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o završnom radu i završnom koncertu Sveučilišta Jurja Dobrile u Puli (izmjene 23.07.2021.)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Veličina slova",
+      "Prored",
+      "Margine",
+      "Veličina slova u bilješkama",
+      "Prored u bilješkama",
+      "Sadržaj",
+      "Obvezni dijelovi rada"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "math-uniri-diplomski-en",
+    "unitId": "matematika",
+    "programs": [
+      "Sveučilišni diplomski studij Discrete Mathematics and Its Applications (na engleskom jeziku)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "verified",
+    "profileLabel": "Fakultet za matematiku u Rijeci, diplomski rad (engleski)",
+    "verifiedAt": "2026-07-17",
+    "documentDate": null,
+    "rules": {
+      "requireA4": true,
+      "pageMin": 30,
+      "pageMax": 90,
+      "requireToc": true,
+      "documentLanguage": "en",
+      "languageLocked": true
+    },
+    "facts": [],
+    "note": "Pravilnik propisuje format papira, opseg i obvezne dijelove rada, ali NE propisuje vrstu slova, veličinu, prored, margine ni stil citiranja, pa se te dimenzije ne boduju (fakultet nema ni službeni predložak). Opseg je izražen u stranicama teksta uz gustoću od 30 redaka po 60 znakova. Studij Discrete Mathematics and Its Applications izvodi se na engleskom jeziku (sluzbena stranica studija), pa je jezik rada zakljucan na engleski i struktura se provjerava prema engleskim nazivima dijelova. Broj obveznih dijelova ne boduje se jer pravilnik (hrvatski) ne navodi engleske nazive.",
+    "sources": [
+      {
+        "title": "Pravilnik o diplomskom radu na sveucilisnim diplomskim studijima Fakulteta za matematiku (20.12.2023.)",
+        "url": "https://math.uniri.hr/wp-content/uploads/2023/12/Pravilnik-o-diplomskom-radu-na-sveucilisnim-diplomskim-studijima-Fakulteta-za-matematiku.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o završnom radu na sveučilišnim prijediplomskim studijima Fakulteta za matematiku (2023.)",
+      "Pravilnik o diplomskom radu na sveučilišnim diplomskim studijima Fakulteta za matematiku (2023.)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Opseg rada",
+      "Jezik rada"
+    ],
+    "advisoryScope": []
   }
 ]

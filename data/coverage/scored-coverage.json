@@ -561,6 +561,14 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "fipu-diplomski",
+      "scored": 9,
+      "machineCheckable": 9,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-17"
+    },
+    {
       "profileId": "fipu-zavrsni",
       "scored": 9,
       "machineCheckable": 9,
@@ -1092,6 +1100,14 @@
       "profileId": "math-uniri-diplomski",
       "scored": 4,
       "machineCheckable": 4,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-17"
+    },
+    {
+      "profileId": "math-uniri-diplomski-en",
+      "scored": 3,
+      "machineCheckable": 3,
       "advisory": 0,
       "ratio": 1,
       "lastVerified": "2026-07-17"
@@ -2049,5 +2065,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 1522
+  "totalScored": 1534
 }
