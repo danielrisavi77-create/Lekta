@@ -2638,7 +2638,7 @@
     "id": "zsem-zavrsni",
     "unitId": "zsem",
     "programs": [
-      "Prijediplomski strucni studiji ZSEM (zavrsni rad)"
+      "Prijediplomski studij Ekonomija i management"
     ],
     "workTypes": [
       "final"
@@ -2649,12 +2649,16 @@
     "id": "zsem-diplomski",
     "unitId": "zsem",
     "programs": [
-      "Diplomski studiji ZSEM"
+      "Diplomski studij MBA"
     ],
     "workTypes": [
       "graduate"
     ],
-    "status": "partial"
+    "status": "partial",
+    "rules": {
+      "documentLanguage": "en",
+      "languageLocked": true
+    }
   },
   {
     "id": "libertas-zavrsni",
@@ -8352,6 +8356,21 @@
       "graduate"
     ],
     "status": "verified",
+    "rules": {
+      "documentLanguage": "en",
+      "languageLocked": true
+    }
+  },
+  {
+    "id": "zsem-zavrsni-en",
+    "unitId": "zsem",
+    "programs": [
+      "Prijediplomski studij Poslovna matematika i ekonomija"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
     "rules": {
       "documentLanguage": "en",
       "languageLocked": true

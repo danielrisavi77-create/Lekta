@@ -16055,7 +16055,7 @@
     "id": "zsem-zavrsni",
     "unitId": "zsem",
     "programs": [
-      "Prijediplomski strucni studiji ZSEM (zavrsni rad)"
+      "Prijediplomski studij Ekonomija i management"
     ],
     "workTypes": [
       "final"
@@ -16076,7 +16076,7 @@
       "requireA4": true
     },
     "facts": [],
-    "note": "Tehničko uređenje rada iz službenog Pravilnika (Zagrebacka skola ekonomije i managementa), čitano izravno.",
+    "note": "Tehničko uređenje rada iz službenog Pravilnika (Zagrebacka skola ekonomije i managementa), čitano izravno. Studij Ekonomija i management izvodi se na hrvatskom i engleskom jeziku, pa jezik rada bira student.",
     "sources": [
       {
         "title": "Pravilnik o izradi i obrani zavrsnog rada na prijediplomskim strucnim studijima (ZSEM, 2023)",
@@ -16106,7 +16106,7 @@
     "id": "zsem-diplomski",
     "unitId": "zsem",
     "programs": [
-      "Diplomski studiji ZSEM"
+      "Diplomski studij MBA"
     ],
     "workTypes": [
       "graduate"
@@ -16138,10 +16138,12 @@
           },
           "3": {}
         }
-      }
+      },
+      "documentLanguage": "en",
+      "languageLocked": true
     },
     "facts": [],
-    "note": "Tehničko uređenje rada iz službenog Pravilnika (Zagrebacka skola ekonomije i managementa), čitano izravno.",
+    "note": "Tehničko uređenje rada iz službenog Pravilnika (Zagrebacka skola ekonomije i managementa), čitano izravno. Diplomski MBA program izvodi se na engleskom jeziku (službena stranica studija), pa je jezik rada zaključan na engleski.",
     "sources": [
       {
         "title": "Pravilnik o izradi i obrani zavrsnog rada na prijediplomskim strucnim studijima (ZSEM, 2023)",
@@ -16162,7 +16164,8 @@
       "Veličina slova",
       "Prored",
       "Obostrano poravnanje",
-      "Oblikovanje naslova po razinama"
+      "Oblikovanje naslova po razinama",
+      "Jezik rada"
     ],
     "advisoryScope": []
   },
@@ -41153,6 +41156,60 @@
     "normativeScope": [
       "Format papira",
       "Opseg rada",
+      "Jezik rada"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "zsem-zavrsni-en",
+    "unitId": "zsem",
+    "programs": [
+      "Prijediplomski studij Poslovna matematika i ekonomija"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "ZSEM, završni rad (engleski)",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "justify": true,
+      "requireA4": true,
+      "documentLanguage": "en",
+      "languageLocked": true
+    },
+    "facts": [],
+    "note": "Tehničko uređenje rada iz službenog Pravilnika (Zagrebacka skola ekonomije i managementa), čitano izravno. Studij Poslovna matematika i ekonomija izvodi se isključivo na engleskom jeziku (službena stranica studija), pa je jezik rada zaključan na engleski.",
+    "sources": [
+      {
+        "title": "Pravilnik o izradi i obrani zavrsnog rada na prijediplomskim strucnim studijima (ZSEM, 2023)",
+        "url": "https://zsem.hr/wp-content/uploads/2024/11/Pravilnik-o-izradi-i-obrani-zavrsnog-rada-na-prijediplomskim-strucnim-studijima-2023.docx.pdf"
+      },
+      {
+        "title": "Pravilnik o diplomskom radu (ZSEM, svibanj 2023)",
+        "url": "https://zsem.hr/wp-content/uploads/2024/11/PRAVILNIK-O-DIPLOMSKOM-RADU-svibanj-2023-1.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o izradi i obrani zavrsnog rada na prijediplomskim strucnim studijima (ZSEM, 2023)",
+      "Pravilnik o diplomskom radu (ZSEM, svibanj 2023)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Veličina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Opseg (najmanje 30 str.)",
       "Jezik rada"
     ],
     "advisoryScope": []

@@ -609,12 +609,9 @@
         "name": "Zagrebačka škola ekonomije i managementa",
         "family": "social",
         "programs": [
-          "Ekonomija i management",
-          "Poslovna matematika i ekonomija",
-          "MBA i diplomski studiji",
-          "Prijediplomski strucni studiji ZSEM (zavrsni rad)",
-          "Diplomski studiji ZSEM",
-          "Opći profil ustanove"
+          "Prijediplomski studij Ekonomija i management",
+          "Prijediplomski studij Poslovna matematika i ekonomija",
+          "Diplomski studij MBA"
         ],
         "status": "research"
       }

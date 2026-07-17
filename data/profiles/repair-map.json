@@ -7281,6 +7281,48 @@
       "autoFixable": true
     }
   ],
+  "zsem-zavrsni-en": [
+    {
+      "ruleId": "zsem-zavrsni-en--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "zsem-zavrsni-en--font",
+      "checkId": "font",
+      "label": "Vrsta slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "zsem-zavrsni-en--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "zsem-zavrsni-en--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "zsem-zavrsni-en--justify",
+      "checkId": "justify",
+      "label": "Obostrano poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
   "zvu-specijalisticki": [
     {
       "ruleId": "zvu-specijalisticki--paper-size",
