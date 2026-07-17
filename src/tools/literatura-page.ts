@@ -1,7 +1,7 @@
 // DOM glue za besplatno sredjivanje literature (literatura.html). Logika je u
 // bibliography.ts (tipizirano, testabilno); ovdje samo vezanje forme i ispis. Bez mreze.
 import '../shared/ui-boot';
-import { organizeBibliography, bibliographyText } from './bibliography';
+import { organizeBibliography, bibliographyText, type BibResult } from './bibliography';
 import { bibliographyDoc, docxBlob } from '../docx/docx-writer';
 import { escapeHtml } from '../utils/helpers';
 import { bindCopyButton, downloadBlob } from './tool-ui';
@@ -16,9 +16,14 @@ Marić, M. Uvod u politologiju. Zagreb.
 Državni zavod za statistiku (2021). Popis stanovništva. https://dzs.hr/popis
 Čović, Č. (2018). Metodologija. Split: Redak.`;
 
+// Rezultat zadnjeg render()-a, ponovno koristen u copy/docx handlerima umjesto da svaki
+// klik nanovo parsira, spaja, dedupeira i sortira isti unos (render() ga vec izgradio prije klika).
+let lastResult: BibResult | null = null;
+
 function render() {
   const input = $('#lit-input');
   const r = organizeBibliography(input?.value || '');
+  lastResult = r;
 
   const set = (id: any, v: any) => { const el = $(id); if (el) el.textContent = v; };
   set('#lit-total', nf.format(r.inputCount));
@@ -40,7 +45,6 @@ function render() {
   if (copy) copy.disabled = r.entries.length === 0;
   const docx = $('#lit-docx');
   if (docx) docx.disabled = r.entries.length === 0;
-  return r;
 }
 
 function init() {
@@ -53,14 +57,14 @@ function init() {
   $('#lit-clear')?.addEventListener('click', () => { input.value = ''; render(); input.focus(); });
 
   bindCopyButton($('#lit-copy'), () => {
-    const r = organizeBibliography(input.value || '');
-    return r.entries.length ? bibliographyText(r) : '';
+    const r = lastResult;
+    return r && r.entries.length ? bibliographyText(r) : '';
   });
 
   // Preuzmi gotov .docx (docx-writer): jedinice s visecim uvlacenjem, stil ostaje autorov.
   $('#lit-docx')?.addEventListener('click', () => {
-    const r = organizeBibliography(input.value || '');
-    if (!r.entries.length) return;
+    const r = lastResult;
+    if (!r || !r.entries.length) return;
     try {
       downloadBlob(docxBlob(bibliographyDoc(r.entries.map(e => e.text))), 'literatura.docx');
     } catch {
