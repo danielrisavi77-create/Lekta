@@ -85,7 +85,19 @@ function setupReveal() {
       obs.unobserve(el);
     }
   }, { threshold: 0.14, rootMargin: '0px 0px -6% 0px' });
-  els.forEach((el, i) => { el.dataset.revealDelay = String((i % 4) * 70); io.observe(el); });
+  // Stagger po GRUPI (isti roditelj): svako sljedece reveal-dijete kasni STEP vise, do CAP koraka.
+  // Cist sweep unutar reda umjesto globalnog i%4 koji se ne poravna s vizualnim grupama (grupa od 3
+  // kartice znala je dobiti npr. 210/0/70 pa bi zadnja uletjela prva). Sekcijski blok (jedini reveal
+  // u roditelju) nema kasnjenje. HTML-postavljeni data-reveal-delay ima prednost.
+  const STEP = 70, CAP = 5;
+  els.forEach((el) => {
+    if (el.dataset.revealDelay === undefined) {
+      const group = el.parentElement?.querySelectorAll(':scope > [data-reveal]');
+      const idx = group && group.length > 1 ? Array.prototype.indexOf.call(group, el) : 0;
+      el.dataset.revealDelay = String(Math.min(idx, CAP) * STEP);
+    }
+    io.observe(el);
+  });
 }
 // app.ts injektira check-kartice nakon boota pa ponovno skenira nove [data-reveal] elemente.
 (window as any).__lektaReveal = setupReveal;
