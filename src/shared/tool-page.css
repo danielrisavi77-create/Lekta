@@ -98,7 +98,7 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
 .footer-inner{display:flex;align-items:center;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:13px}
 .footer-inner .footer-links{display:flex;gap:16px;flex-wrap:wrap;margin-left:auto}
 .footer-inner a{text-decoration:none}.footer-inner a:hover{color:var(--brand)}
-@media(max-width:820px){.mobile-menu{display:grid;margin-left:auto}.mobile-nav.open{display:flex;flex-direction:column;gap:2px;position:absolute;left:0;right:0;top:100%;background:var(--panel);border-bottom:1px solid var(--line);box-shadow:var(--shadow);padding:10px 20px 16px;z-index:29}.mobile-nav a:not(.btn){padding:13px 6px;color:var(--text);text-decoration:none;font-weight:700;border-bottom:1px solid var(--line)}.mobile-nav .btn{margin-top:10px;width:100%;justify-content:center}}
+@media(max-width:820px){.nav-links{display:none}.mobile-menu{display:grid;margin-left:auto}.mobile-nav.open{display:flex;flex-direction:column;gap:2px;position:absolute;left:0;right:0;top:100%;background:var(--panel);border-bottom:1px solid var(--line);box-shadow:var(--shadow);padding:10px 20px 16px;z-index:29}.mobile-nav a:not(.btn){padding:13px 6px;color:var(--text);text-decoration:none;font-weight:700;border-bottom:1px solid var(--line)}.mobile-nav .btn{margin-top:10px;width:100%;justify-content:center}}
 /* ===== KS: Korektorski stol sloj ===== */
 /* ===== KS: Korektorski stol chrome (dijeljeni predlozak) ===== */
 ::selection{background:var(--red);color:#fff}
@@ -113,13 +113,18 @@ h1,h2,h3,h4{font-family:var(--display-serif);font-optical-sizing:auto;font-weigh
 footer .logo-word{font-size:21px}
 footer .ks-mark{width:24px;height:24px;font-size:15px}
 footer .ks-tick{width:11px;height:11px}
-.nav-links a{color:var(--desk-muted);font-family:var(--display-serif);font-weight:400;font-size:15.5px}
-.nav-links a:hover{color:var(--red)}
-.nav-links a.active{color:var(--red);font-weight:500}
-.nav-tools-btn{font-family:var(--display-serif);font-weight:400;font-size:15.5px;color:var(--desk-muted)}
-.nav-tools-btn.active{color:var(--red);font-weight:500}
+/* Nav: moderni Inter Tight (site-wide ujednacenje s landingom); crvena crtica
+   za hover I aktivnu (trenutnu) stavku, wordmark ostaje serif. */
+.nav-links a{position:relative;color:var(--desk-muted);font-family:var(--ui);font-weight:500;font-size:14.5px;letter-spacing:-.006em;padding:7px 11px;border-radius:4px;transition:color .16s var(--ease-out-3)}
+.nav-links a::after{content:"";position:absolute;left:11px;right:11px;bottom:4px;height:2px;background:var(--red);border-radius:2px;transform:scaleX(0);transform-origin:left center;transition:transform .2s var(--ease-out-3)}
+.nav-links a:hover{color:var(--desk-ink)}
+.nav-links a:hover::after,.nav-links a.active::after{transform:scaleX(1)}
+.nav-links a.active{color:var(--desk-ink);font-weight:600}
+@media(prefers-reduced-motion:reduce){.nav-links a::after{transition:none}}
+.nav-tools-btn{font-family:var(--ui);font-weight:500;font-size:14.5px;letter-spacing:-.006em;color:var(--desk-muted);padding:7px 11px;border-radius:4px}
+.nav-tools-btn.active{color:var(--red);font-weight:600}
 .nav-tools-menu{background:var(--paper);color:var(--paper-ink);border:0;border-radius:0;box-shadow:var(--paper-sh);padding:8px}
-.nav-tools-menu a{color:var(--paper-ink);border-radius:0;font-family:var(--display-serif);font-weight:400;font-size:15px}
+.nav-tools-menu a{color:var(--paper-ink);border-radius:0;font-family:var(--ui);font-weight:500;font-size:14px;letter-spacing:-.006em}
 .nav-tools-menu a:hover{background:var(--paper-2);color:var(--red-deep)}
 .nav-tools-menu a.active{background:var(--red-soft);color:var(--red-deep);font-weight:500}
 .lampa-btn:hover{color:var(--desk-ink);border-color:var(--desk-muted)}
