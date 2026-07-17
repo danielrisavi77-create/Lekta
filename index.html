@@ -1425,7 +1425,20 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
 .analyzer-wrap:has(#wizardView[data-step="3"]) .rail-step[data-rail="3"] b{border-color:var(--red-deep);color:var(--red-deep);background:none}
 .lek-top-grid:has(#progressView:not(.hidden)) .lek-col-form,.lek-top-grid:has(#resultView:not(.hidden)) .lek-col-form{grid-column:1 / -1}
 .lek-top-grid:has(#progressView:not(.hidden)) .lek-col-proof,.lek-top-grid:has(#resultView:not(.hidden)) .lek-col-proof{display:none}
-.lek-col-proof .hero-demo{width:100%;max-width:460px;margin:18px auto 0}
+/* Papir je klikabilna NASLOVNICA obrasca: dok korisnik ne krene (klik/CTA/drag), analyzer-wrap je
+   skriven a cover stoji na njegovom mjestu. .lek-engaged je jednosmjeran (postavlja ga JS). */
+.lek-col-form:not(.lek-engaged) .analyzer-wrap{display:none}
+.lek-col-form.lek-engaged .lek-paper-cover{display:none}
+.lek-top-grid:has(#progressView:not(.hidden)) .lek-paper-cover,.lek-top-grid:has(#resultView:not(.hidden)) .lek-paper-cover{display:none}
+.lek-top-grid:has(#progressView:not(.hidden)) .analyzer-wrap,.lek-top-grid:has(#resultView:not(.hidden)) .analyzer-wrap{display:block}
+.lek-paper-cover{display:flex;flex-direction:column;align-items:center}
+.lek-cover-stage{position:relative;width:100%;max-width:480px;transition:transform .25s ease}
+.lek-cover-stage:hover{transform:translateY(-4px)}
+@media(prefers-reduced-motion:reduce){.lek-cover-stage{transition:none}.lek-cover-stage:hover{transform:none}}
+.lek-cover-stage .hero-demo{width:100%}
+.lek-cover-hit{position:absolute;inset:0;z-index:6;background:none;border:0;cursor:pointer;border-radius:4px}
+.lek-cover-hit:focus-visible{outline:2.5px solid var(--red-deep);outline-offset:6px}
+.lek-head-cta{margin-top:18px}
 /* Uredniska traka s brojkama: dio zaglavlja (izmedju leada i papira), isti serifni glas kao H1. */
 .lek-col-proof .hero-coverage{align-self:stretch;margin-top:22px;border-top:1px solid var(--desk-line);border-bottom:1px solid var(--desk-line);padding:14px 0 12px}
 .lek-col-proof .cov-stats{justify-content:space-between;gap:24px;padding-right:24px}
@@ -1436,10 +1449,10 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
 .lek-col-proof .trust-row{margin-top:12px;align-self:stretch;justify-content:center;gap:14px}
 .lek-col-proof .trust-row span{font-style:italic;font-size:13.5px}
 .lek-col-proof .trust-row b{font-size:9px}
-.lek-bridge{position:absolute;top:auto;bottom:24%;right:-48px;width:134px;transform:rotate(-5deg);font-family:var(--font-hand);font-size:21px;line-height:1.12;color:var(--red);text-align:center;pointer-events:none;z-index:4}
+.lek-bridge{position:absolute;top:52%;left:-108px;width:134px;transform:rotate(-4deg);font-family:var(--font-hand);font-size:21px;line-height:1.12;color:var(--red);text-align:center;pointer-events:none;z-index:4}
 @media(max-width:1180px){.lek-bridge{display:none}}
-@media(max-width:1000px){.lek-top-grid{display:flex;flex-direction:column;gap:26px;align-items:stretch}.lek-col-proof{align-items:stretch}.lek-col-proof .hero-demo{max-width:320px}.lek-head-copy h1{font-size:clamp(30px,7.2vw,40px)}.lek-col-proof .cov-stats{gap:20px}.lek-col-proof .cov-stat b{font-size:24px}}
-@media print{.lek-col-proof,.lek-bridge{display:none!important}.lek-top-grid{display:block!important}}
+@media(max-width:1000px){.lek-top-grid{display:flex;flex-direction:column;gap:26px;align-items:stretch}.lek-col-proof{align-items:stretch}.lek-cover-stage{max-width:340px}.lek-head-copy h1{font-size:clamp(30px,7.2vw,40px)}.lek-col-proof .cov-stats{gap:20px}.lek-col-proof .cov-stat b{font-size:24px}}
+@media print{.lek-col-proof,.lek-bridge,.lek-paper-cover{display:none!important}.lek-top-grid{display:block!important}}
 </style>
 </head>
 <body>
@@ -1479,6 +1492,12 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
     <div class="lek-col-proof">
       <div class="lek-head-copy hero-copy"><div class="hero-kicker"><i class="pulse" aria-hidden="true"></i>23:47 · predaja je sutra · sve pod kontrolom</div><h1>Je li tvoj rad tehnički <span class="h1-crta">spreman<svg viewBox="0 0 200 10" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M2 6 Q 20 1, 40 6 T 78 6 T 116 6 T 154 6 T 196 6"/></svg></span> za predaju?<br>Lekta ti kaže <em>prije</em> mentora.</h1><p class="lek-top-lead">Oblikovanje, struktura, opseg i citiranje, izmjereno lokalno po verificiranim pravilima tvog fakulteta. Dokument ne napušta uređaj.</p></div>
       <div class="hero-coverage" id="heroCoverage" hidden></div>
+      <div class="lek-head-cta"><button class="btn btn-primary" id="uploadCtaBtn" type="button">Učitaj rad (.docx)</button></div>
+      <div class="trust-row"><span><b aria-hidden="true">●</b> Lokalno</span><span><b aria-hidden="true">●</b> Bez registracije</span><span><b aria-hidden="true">●</b> Rezultat u sekundama</span><span><b aria-hidden="true">●</b> Nije provjera plagijata</span></div>
+    </div>
+    <div class="lek-col-form">
+    <div class="lek-paper-cover" id="paperCover">
+      <div class="lek-cover-stage">
       <div class="hero-demo" aria-hidden="true">
         <div class="hd-stage">
           <div class="hd-back" data-hero="back"></div>
@@ -1502,11 +1521,11 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
           </div>
         </div>
       </div>
+      <button class="lek-cover-hit" id="paperCoverBtn" type="button" aria-label="Učitaj svoj rad (.docx) i pokreni provjeru"></button>
+      <div class="lek-bridge" aria-hidden="true">ovaj je prošao. klikni pa provjeri svoj →</div>
+      </div>
       <div class="lek-demo-actions"><button class="hero-replay" id="heroReplay" type="button" aria-label="Ponovno pokreni animaciju primjera"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>Ponovi pregled</button><button class="linklike-serif" id="heroDemoBtn" type="button" title="Pogledaj kako izgleda izvještaj bez učitavanja dokumenta">Pogledaj cijeli primjer izvještaja →</button></div>
-      <div class="lek-bridge" aria-hidden="true">ovaj je prošao. tvoj je sljedeći →</div>
-      <div class="trust-row"><span><b aria-hidden="true">●</b> Lokalno</span><span><b aria-hidden="true">●</b> Bez registracije</span><span><b aria-hidden="true">●</b> Rezultat u sekundama</span><span><b aria-hidden="true">●</b> Nije provjera plagijata</span></div>
     </div>
-    <div class="lek-col-form">
     <div class="analyzer-wrap">
       <div class="wizard-rail" aria-hidden="true"><span class="rail-form-title">Obrazac LK-01 · Tehnička provjera rada</span><span class="rail-step" data-rail="1"><b>1</b> Dokument</span><i class="rail-line"></i><span class="rail-step" data-rail="2"><b>2</b> Profil</span><i class="rail-line"></i><span class="rail-step" data-rail="3"><b>3</b> Nalaz</span></div>
       <div class="analyzer-body wizard-view" id="wizardView" data-step="1">
