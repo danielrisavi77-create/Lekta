@@ -1,0 +1,93 @@
+name: Approved academic object trial build
+
+on:
+  workflow_dispatch:
+    inputs:
+      profile_id:
+        description: Lekta profile ID used for analysis
+        required: true
+        type: string
+        default: fpzg-politologija-diplomski
+      convert_pdf:
+        description: Create temporary DOCX working copies from text PDFs
+        required: true
+        type: boolean
+        default: true
+      max_documents:
+        description: Hard trial cap, never more than 10
+        required: true
+        type: choice
+        options: ['1', '5', '10']
+        default: '10'
+      upload_sanitized_artifact:
+        description: Upload sanitized output only
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Require reviewed master revision
+        run: test "$GITHUB_REF" = "refs/heads/master"
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+      - name: Install project dependencies
+        run: |
+          npm ci
+          python -m pip install -r training-pipeline/requirements.txt
+      - name: Validate tests and object approvals
+        run: |
+          python -m unittest discover -s training-pipeline/tests -p 'test_*.py'
+          python training-pipeline/scripts/download_approved_academic_objects.py \
+            --manifest training-pipeline/approved-academic-objects.json \
+            --out "$RUNNER_TEMP/approved-academic-objects" \
+            --max-documents "${{ inputs.max_documents }}" \
+            --validate-only
+      - name: Download approved PDFs into ephemeral storage
+        run: |
+          python training-pipeline/scripts/download_approved_academic_objects.py \
+            --manifest training-pipeline/approved-academic-objects.json \
+            --out "$RUNNER_TEMP/approved-academic-objects" \
+            --max-documents "${{ inputs.max_documents }}"
+      - name: Run capped build
+        run: |
+          EXTRA=()
+          if [ "${{ inputs.convert_pdf }}" = "true" ]; then EXTRA=(--convert-pdf); fi
+          python training-pipeline/run_pipeline.py \
+            --roots "$RUNNER_TEMP/approved-academic-objects" \
+            --mode build \
+            --profile "${{ inputs.profile_id }}" \
+            --max-documents "${{ inputs.max_documents }}" \
+            --out-dir "$RUNNER_TEMP/lekta-output" \
+            "${EXTRA[@]}"
+      - name: Publish sanitized run summary
+        run: |
+          python training-pipeline/scripts/render_summary.py \
+            --input "$RUNNER_TEMP/lekta-output/sanitized/summary.json" \
+            --output "$RUNNER_TEMP/lekta-summary.md"
+          cat "$RUNNER_TEMP/lekta-summary.md" >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload sanitized artifact
+        if: ${{ inputs.upload_sanitized_artifact }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: approved-academic-build-${{ github.run_id }}
+          path: ${{ runner.temp }}/lekta-output/sanitized/
+          retention-days: 7
+          if-no-files-found: error
+      - name: Remove raw and private working files
+        if: ${{ always() }}
+        run: |
+          rm -rf "$RUNNER_TEMP/approved-academic-objects" "$RUNNER_TEMP/lekta-output/.private"

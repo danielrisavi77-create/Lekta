@@ -127,6 +127,23 @@ Lokalna validacija registra bez mrežnog pristupa:
 python training-pipeline/scripts/build_academic_repository_registry.py --validate
 ```
 
+### Probni build odobrenih Dabar objekata
+
+`approved-academic-objects.json` je objektni allowlist. Odobrenje vrijedi samo za
+tocan OAI identifikator, host, sastavnicu, licencu i sluzbenu stranicu objekta.
+Odobrenje cijelog repozitorija nije dopusteno. Svaki zapis mora imati
+`reviewStatus: approved`, datum i osobu koja je provjerila dokaz.
+
+Workflow `Approved academic object trial build` prije svakog dohvata ponovno cita
+OAI metapodatke i zahtijeva isti open access status i istu permisivnu licencu.
+Prihvaca najvise 10 objekata, ne slijedi preusmjeravanja izvan odobrenog hosta,
+provjerava PDF magic bytes i ogranicava pojedinu datoteku na 50 MB. PDF-ovi i
+privatni medurezultati ostaju u ephemeral direktoriju i brisu se i nakon pada.
+Sanitizirani artefakt je po zadanim postavkama iskljucen.
+
+Prazan allowlist namjerno onemogucava build. Dodavanje odobrenih objekata ide kroz
+mali PR koji uz svaki zapis ostavlja provjerljiv trag licence i ljudskog pregleda.
+
 ## Sigurnosne granice
 
 - `training-pipeline/output/` i klonirani izvori nikad se ne commitaju;
