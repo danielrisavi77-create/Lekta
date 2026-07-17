@@ -301,7 +301,7 @@ h1,.section-head h2,.cta h2,.result-main h2,.analyzer-header h2{font-family:var(
 /* Otvoreni sheet vrijedi u CIJELOM hamburger rasponu (max-width mora pratiti .mobile-menu breakpoint).
    backdrop-filter na .topbar cini topbar containing blockom za fixed potomke (sheet bi se sabio u traku),
    pa se pri otvorenom izborniku gasi; top je 66px jer je KS nav 66px visok. */
-@media(max-width:1160px){.mobile-nav.open{display:flex;flex-direction:column;gap:2px;position:fixed;left:0;right:0;top:66px;bottom:0;overflow:auto;background:var(--bg);padding:18px 22px 26px;z-index:29}.mobile-nav a:not(.btn){padding:15px 6px;color:var(--text);text-decoration:none;font-family:var(--display-serif);font-optical-sizing:auto;font-weight:550;font-size:21px;border-bottom:1px solid var(--line);min-height:44px;display:flex;align-items:center}.mobile-nav .btn{margin-top:16px;width:100%;min-height:48px}body:has(.mobile-nav.open){overflow:hidden}.topbar:has(.mobile-nav.open){background:var(--bg);border-bottom-color:var(--line);backdrop-filter:none;-webkit-backdrop-filter:none;transition:none}}
+@media(max-width:1160px){.mobile-nav.open{display:flex;flex-direction:column;gap:2px;position:fixed;left:0;right:0;top:66px;bottom:0;overflow:auto;background:var(--bg);padding:18px 22px 26px;z-index:29}.mobile-nav a:not(.btn){padding:15px 6px;color:var(--text);text-decoration:none;font-family:var(--ui);font-weight:600;font-size:19px;border-bottom:1px solid var(--line);min-height:44px;display:flex;align-items:center}.mobile-nav .btn{margin-top:16px;width:100%;min-height:48px}body:has(.mobile-nav.open){overflow:hidden}.topbar:has(.mobile-nav.open){background:var(--bg);border-bottom-color:var(--line);backdrop-filter:none;-webkit-backdrop-filter:none;transition:none}}
 /* v2.3 signature: "spremno" pecat (crvena margina kroz rezultat umirovljena; crvena = samo nalazi) */
 .result-view{position:relative}
 .full-report-banner{margin:16px 20px 0;padding:14px 16px;border:1px solid var(--ok);background:var(--ok-soft);border-radius:14px;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px}
@@ -706,6 +706,7 @@ html:root{
   --shadow:var(--paper-sh);--shadow-sm:var(--paper-sh-sm);
   --radius-xl:2px;--radius:2px;--radius-sm:2px;
   --sans:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --ui:"Inter Tight Variable","Inter Tight",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
   --focus:0 0 0 2px var(--paper),0 0 0 4px var(--scan);
 }
 html:root[data-theme="light"]{
@@ -797,11 +798,14 @@ body{position:relative}
 .ks-tick{position:absolute;right:-4px;bottom:-4px;width:13px;height:13px;background:var(--red);color:#F7F3E8;display:grid;place-items:center}
 .ks-tick svg{width:9px;height:9px;display:block}
 .logo-word{font-family:var(--display-serif);font-style:italic;font-weight:500;font-size:27px;letter-spacing:-.01em;background:none;-webkit-text-fill-color:currentColor;color:var(--desk-ink)}
-.logo-tag{font-size:10px;letter-spacing:.22em;color:var(--desk-faint);text-transform:uppercase;font-family:var(--sans)}
-@media(max-width:1240px){.logo-tag{display:none}}
-.nav-links{margin-left:auto;display:flex;align-items:center;gap:26px;font-family:var(--display-serif);font-size:15.5px}
-.nav-links a{color:var(--desk-muted);font-weight:400;padding:0}
-.nav-links a:hover{color:var(--red);background:none}
+/* Nav landinga: .topbar scope nadjacava dijeljeni tool-page.css (KS serif nav) koji
+   Vite injektira poslije inline stila; ista specificnost bi izgubila po redoslijedu. */
+.topbar .nav-links{margin-left:auto;display:flex;align-items:center;gap:3px;font-family:var(--ui);font-size:14.5px}
+.topbar .nav-links a{position:relative;color:var(--desk-muted);font-family:var(--ui);font-weight:500;font-size:14.5px;letter-spacing:-.006em;padding:7px 11px;border-radius:4px;transition:color .16s var(--ease)}
+.topbar .nav-links a::after{content:"";position:absolute;left:11px;right:11px;bottom:4px;height:2px;background:var(--red);border-radius:2px;transform:scaleX(0);transform-origin:left center;transition:transform .2s var(--ease)}
+.topbar .nav-links a:hover{color:var(--desk-ink);background:none}
+.topbar .nav-links a:hover::after{transform:scaleX(1)}
+@media(prefers-reduced-motion:reduce){.topbar .nav-links a::after{transition:none}}
 .lampa-btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--desk-line);background:transparent;padding:8px 13px;border-radius:2px;color:var(--desk-muted);font:600 11px/1 var(--sans);letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
 .lampa-btn:hover{color:var(--desk-ink);border-color:var(--desk-muted)}
 .lampa-btn svg{width:13px;height:13px;flex:none}
@@ -810,16 +814,16 @@ body{position:relative}
 .nav>.btn-ghost{font-family:var(--sans);font-size:12px}
 /* Alati dropdown u navu: gumb izgleda kao nav link, izbornik je papir na stolu.
    [aria-expanded="true"] otvara i na dodir (touch bez hovera), uz postojeci hover/focus-within. */
-.nav-tools-btn{font-family:var(--display-serif);font-weight:400;font-size:15.5px;color:var(--desk-muted)}
+.topbar .nav-tools-btn{font-family:var(--ui);font-weight:500;font-size:14.5px;letter-spacing:-.006em;color:var(--desk-muted);padding:7px 11px;border-radius:4px;transition:color .16s var(--ease)}
 .nav-tools:hover .nav-tools-btn,.nav-tools:focus-within .nav-tools-btn,.nav-tools-btn[aria-expanded="true"]{color:var(--red)}
 .nav-tools-menu{min-width:232px;grid-template-columns:1fr;background:var(--paper);color:var(--paper-ink);border:0;border-radius:0;box-shadow:var(--paper-sh);padding:8px}
-.nav-tools-menu a{color:var(--paper-ink);border-radius:0;font-family:var(--display-serif);font-weight:400;font-size:15px;padding:10px 12px}
+.topbar .nav-tools-menu a{color:var(--paper-ink);border-radius:0;font-family:var(--ui);font-weight:500;font-size:14px;letter-spacing:-.006em;padding:10px 12px}
 .nav-tools-menu a:hover{background:var(--paper-2);color:var(--red-deep)}
 .nav-tools-btn[aria-expanded="true"] .caret{transform:rotate(180deg)}
 .nav-tools-btn[aria-expanded="true"]~.nav-tools-menu{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
 /* Mobilni sheet izbornik na stolu */
 .mobile-nav{background:var(--desk)}
-.mobile-nav a{font-family:var(--display-serif);font-size:17px;color:var(--desk-ink);border-bottom:1px solid var(--desk-line);border-radius:0;padding:13px 4px}
+.mobile-nav a{font-family:var(--ui);font-weight:500;font-size:16px;color:var(--desk-ink);border-bottom:1px solid var(--desk-line);border-radius:0;padding:13px 4px}
 .mobile-nav a:hover{background:none;color:var(--red)}
 .mobile-nav .mobile-nav-cta{margin-top:14px;display:grid}
 .mobile-nav .mobile-nav-cta a{border:none;background:var(--red);color:var(--on-red);text-align:center;font-family:var(--sans);font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.05em;padding:14px}
@@ -1479,21 +1483,20 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
 <div class="ks-vignette" aria-hidden="true"></div>
 <header class="topbar">
   <nav class="shell nav" aria-label="Glavna navigacija">
-    <a class="logo" href="#top"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span><span class="logo-tag">korektorski stol</span></a>
-    <div class="nav-links"><a href="#video">Video</a><a href="#how">Kako radi</a><a href="#analyzer">Provjera</a><a href="#podcrta">Što provjerava</a><a href="landing_usporedba.html">Usporedba</a><div class="nav-tools"><button class="nav-tools-btn" type="button" aria-expanded="false">Alati <span class="caret" aria-hidden="true">&#9662;</span></button><div class="nav-tools-menu"><a href="alati.html">Svi alati</a><a href="citat.html">Citat generator</a><a href="kartice.html">Brojač kartica</a><a href="naslovnica.html">Naslovnica</a><a href="literatura.html">Sređivanje literature</a><a href="izjava.html">Izjava o izvornosti</a></div></div><a href="#pricing">Tarife</a><a href="#faq">Pitanja</a></div>
+    <a class="logo" href="#top"><span class="ks-mark" aria-hidden="true">L<span class="ks-tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 13l5 5L20 6"/></svg></span></span><span class="logo-word">Lekta</span></a>
+    <div class="nav-links"><a href="#how">Kako radi</a><a href="#video">Video</a><a href="#podcrta">Što provjerava</a><div class="nav-tools"><button class="nav-tools-btn" type="button" aria-expanded="false">Alati <span class="caret" aria-hidden="true">&#9662;</span></button><div class="nav-tools-menu"><a href="alati.html">Svi alati</a><a href="citat.html">Citat generator</a><a href="kartice.html">Brojač kartica</a><a href="naslovnica.html">Naslovnica</a><a href="literatura.html">Sređivanje literature</a><a href="izjava.html">Izjava o izvornosti</a></div></div><a href="landing_usporedba.html">Usporedba</a><a href="#pricing">Tarife</a><a href="#faq">Pitanja</a></div>
     <button class="btn btn-ghost btn-sm hidden" id="authEntry" data-auth-entry type="button">Prijava</button>
     <a class="btn btn-primary btn-sm" href="#analyzer">Provjeri rad</a>
     <button class="lampa-btn" id="themeBtn" type="button" aria-label="Promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><i data-lucide="lamp"></i><span class="lampa-txt">Lampa</span></button>
     <button class="icon-btn mobile-menu" id="mobileMenuBtn" aria-label="Otvori izbornik" aria-expanded="false"><i data-lucide="menu"></i></button>
   </nav>
   <div class="mobile-nav" id="mobileNav">
-    <a href="#video">Video</a>
     <a href="#how">Kako radi</a>
-    <a href="#analyzer">Provjera</a>
+    <a href="#video">Video</a>
     <a href="#podcrta">Što provjerava</a>
+    <a href="landing_usporedba.html">Usporedba</a>
     <a href="#pricing">Tarife</a>
     <a href="#faq">Pitanja</a>
-    <a href="landing_usporedba.html">Usporedba</a>
     <a href="alati.html">Svi alati</a>
     <a href="citat.html">Citat generator</a>
     <a href="kartice.html">Brojač kartica</a>
