@@ -36,7 +36,7 @@ function hasContent(input: any): boolean {
     || String(input.place || '').trim() || String(input.date || '').trim());
 }
 
-function render() {
+function render(): void {
   const input = readInput();
   const model = buildStatement(input);
   for (const id of ['#st-copy', '#st-docx', '#st-print']) {
@@ -60,7 +60,6 @@ function render() {
       hint.textContent = 'Sva preporučena polja su ispunjena.';
     }
   }
-  return model;
 }
 
 function init() {
