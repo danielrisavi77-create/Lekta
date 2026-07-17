@@ -139,6 +139,35 @@ function bundleSizeGuard(devTools: boolean) {
   };
 }
 
+// Preload fontova iznad folda: font-display:swap + kasno otkrivanje (tek nakon parsiranja CSS-a)
+// daju vidljiv FOUT bljesak na serifnim naslovima. Preload ih pokrece vec pri parsiranju HTML-a,
+// paralelno s JS-om; ukupni transfer se NE povecava (iste datoteke se ionako skidaju). Imena su
+// hashirana pri buildu pa linkove moze ubaciti samo build (transformIndexHtml + sken bundlea).
+// crossorigin je OBAVEZAN i za same-origin (font fetch je uvijek CORS anonymous; bez atributa
+// preglednik preload ne bi uparivao s @font-face zahtjevom pa bi datoteku skinuo DVAPUT).
+function fontPreload() {
+  const WANTED = [
+    /newsreader-latin-opsz-normal/, /newsreader-latin-opsz-italic/,
+    /caveat-latin-600/, /inter-tight-latin-wght/, /ibm-plex-mono-latin-600/,
+  ];
+  return {
+    name: 'lekta-font-preload',
+    apply: 'build' as const,
+    transformIndexHtml: {
+      order: 'post' as const,
+      handler(html: string, ctx: { bundle?: Record<string, unknown> }) {
+        if (!ctx.bundle) return html;
+        const links = Object.keys(ctx.bundle)
+          .filter((f) => f.endsWith('.woff2') && WANTED.some((r) => r.test(f)))
+          .sort()
+          .map((f) => `<link rel="preload" as="font" type="font/woff2" crossorigin href="/${f}">`)
+          .join('');
+        return links ? html.replace('</title>', '</title>' + links) : html;
+      },
+    },
+  };
+}
+
 // Citatni alati po fakultetu (/alati/citati/**, /alati/brojac-kartica.html) NISU Vite ulazi
 // nego build-time IZLAZ generatora u dist/ (SEO: ~178 pred-renderanih stranica, ne stavljaju
 // se kao ulazi da ne zatrpaju dev graf). Posljedica je da ih `npm run dev` sam po sebi ne
@@ -216,7 +245,7 @@ export default defineConfig(({ command }) => {
   // Interna verifikacijska konzola ulazi u build SAMO kad su dev alati ukljuceni (QA opt-in).
   if (devTools) input.verification = resolve(__dirname, 'verification.html');
   return {
-    plugins: [htmlCharsetUtf8(), citationTools(), stripRuntimeDeadProvenance(devTools), stripDevOnlyHtml(devTools), assertSafeBuild(devTools)],
+    plugins: [htmlCharsetUtf8(), citationTools(), stripRuntimeDeadProvenance(devTools), stripDevOnlyHtml(devTools), fontPreload(), assertSafeBuild(devTools)],
     define: { __DEV_TOOLS__: JSON.stringify(devTools) },
     // Dev watcher po defaultu gleda sve osim node_modules/.git. U repou zive git worktreei
     // (.claude/worktrees/*/) s vlastitim izgradenim dist/ stablima (tisuce citatnih HTML-ova);
