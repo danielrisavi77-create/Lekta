@@ -705,8 +705,8 @@ html:root{
   --stamp:var(--red-deep);
   --shadow:var(--paper-sh);--shadow-sm:var(--paper-sh-sm);
   --radius-xl:2px;--radius:2px;--radius-sm:2px;
-  --sans:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   --ui:"Inter Tight Variable","Inter Tight",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  --sans:var(--ui);/* glas sucelja = Inter Tight; --mono ostaje IBM Plex Mono za podatke */
   --focus:0 0 0 2px var(--paper),0 0 0 4px var(--scan);
 }
 html:root[data-theme="light"]{
