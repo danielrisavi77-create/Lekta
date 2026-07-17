@@ -104,6 +104,7 @@ footer{padding:30px 0;border-top:1px solid var(--line)}
 ::selection{background:var(--red);color:#fff}
 h1,h2,h3,h4{font-family:var(--display-serif);font-optical-sizing:auto;font-weight:400}
 .topbar{background:color-mix(in srgb,var(--desk) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--desk-line)}
+.topbar.scrolled{background:color-mix(in srgb,var(--desk) 92%,transparent);border-bottom-color:var(--desk-line);box-shadow:none}
 .nav{height:66px;gap:24px}
 .logo{gap:12px;color:var(--desk-ink);font-family:var(--display-serif)}
 .ks-mark{position:relative;width:30px;height:30px;flex:none;background:var(--desk-ink);color:var(--desk);display:grid;place-items:center;font-family:var(--display-serif);font-weight:600;font-size:19px;line-height:1}
