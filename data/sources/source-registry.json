@@ -2525,5 +2525,89 @@
     "validityClass": "stable",
     "lastChecked": "2026-07-17",
     "note": "Odjelni izvor (Teolosko-katehetski odjel), razlicit od krovnih UNIZD uputa. Opseg + Chicago -> advisory."
+  },
+  {
+    "id": "unipu-zavrsni-izmjene-2021",
+    "kind": "pdf",
+    "title": "Pravilnik o izmjenama i dopunama Pravilnika o zavrsnom radu i zavrsnom koncertu na preddiplomskim sveucilisnim i strucnim studijima (23.07.2021.)",
+    "url": "https://www.unipu.hr/_download/repository/2021-07-23-Pravilnik_o_izmjenama_i_dopunama__Pravilnika_o_zavrsnom_radu_i_zavrsnom_koncertu_na_preddiplomskim_sveucilisnim_i_strucnim_studijima.pdf",
+    "publisher": "Sveuciliste Jurja Dobrile u Puli",
+    "snapshotPath": "data/sources/unipu/unipu-zavrsni-izmjene-2021.pdf",
+    "fetchedAt": "2026-07-17",
+    "lastChecked": "2026-07-17",
+    "validityClass": "stable",
+    "snapshotHash": "196ba803ff4e8cd9c0f95e7265c2a056b0ac1f52a51c7044df0ca49a48468da3"
+  },
+  {
+    "id": "unipu-diplomski-izmjene-2021",
+    "kind": "pdf",
+    "title": "Pravilnik o izmjenama i dopunama Pravilnika o diplomskom radu i diplomskom koncertu na sveucilisnim diplomskim studijima i integriranome preddiplomskom i diplomskom studiju (23.07.2021.)",
+    "url": "https://www.unipu.hr/_download/repository/2021-07-23-Pravilnik_o_izmjenama_i_dopunama_Pravilnika_o_dipl._radu_i_dipl._koncertu_na_sveucilisnim_dipl._studijima_i_integriranome_preddipl._i_dipl._studiju.pdf",
+    "publisher": "Sveuciliste Jurja Dobrile u Puli",
+    "snapshotPath": "data/sources/unipu/unipu-diplomski-izmjene-2021.pdf",
+    "fetchedAt": "2026-07-17",
+    "lastChecked": "2026-07-17",
+    "validityClass": "stable",
+    "snapshotHash": "9c9e27a6467d0d5f08684bab6e19a93e3a108a9232752054babfdfe8545d873c"
+  },
+  {
+    "id": "apuri-pravilnik-zavrsni-2025",
+    "kind": "pdf",
+    "title": "Pravilnik o zavrsnom radu na sveucilisnim prijediplomskim studijima (APURI, 27.03.2025.)",
+    "url": "https://apuri.uniri.hr/wp-content/uploads/2025/04/Pravilnik-o-zavrsnom-radu-na-sveucilisnim-prijediplomskim-studijima.pdf",
+    "publisher": "Akademija primijenjenih umjetnosti u Rijeci, Sveuciliste u Rijeci",
+    "snapshotPath": "data/sources/apuri/apuri-pravilnik-zavrsni-2025.pdf",
+    "fetchedAt": "2026-07-17",
+    "lastChecked": "2026-07-17",
+    "validityClass": "stable",
+    "snapshotHash": "dfefd549af2e812c56deccf2b4c3f9140384f7e8f3e69296f76e1a1ce4d4f213"
+  },
+  {
+    "id": "math-uniri-pravilnik-zavrsni-2023",
+    "kind": "pdf",
+    "title": "Pravilnik o zavrsnom radu na sveucilisnim prijediplomskim studijima Fakulteta za matematiku (20.12.2023.)",
+    "url": "https://math.uniri.hr/wp-content/uploads/2023/12/Pravilnik-o-zavrsnom-radu-na-sveucilisnim-prijediplomskim-studijima-Fakulteta-za-matematiku.pdf",
+    "publisher": "Fakultet za matematiku, Sveuciliste u Rijeci",
+    "snapshotPath": "data/sources/math-uniri/math-uniri-pravilnik-zavrsni-2023.pdf",
+    "fetchedAt": "2026-07-17",
+    "lastChecked": "2026-07-17",
+    "validityClass": "stable",
+    "snapshotHash": "f9181928d9bcfdd0aac2a9084e93a0d5693c1fb8db3e17dd935ac75611397799"
+  },
+  {
+    "id": "math-uniri-pravilnik-diplomski-2023",
+    "kind": "pdf",
+    "title": "Pravilnik o diplomskom radu na sveucilisnim diplomskim studijima Fakulteta za matematiku (20.12.2023.)",
+    "url": "https://math.uniri.hr/wp-content/uploads/2023/12/Pravilnik-o-diplomskom-radu-na-sveucilisnim-diplomskim-studijima-Fakulteta-za-matematiku.pdf",
+    "publisher": "Fakultet za matematiku, Sveuciliste u Rijeci",
+    "snapshotPath": "data/sources/math-uniri/math-uniri-pravilnik-diplomski-2023.pdf",
+    "fetchedAt": "2026-07-17",
+    "lastChecked": "2026-07-17",
+    "validityClass": "stable",
+    "snapshotHash": "afe96bb4cd1811b5744449bb5f4a0628121f874302ad2a092b82dc1c70e99b0f"
+  },
+  {
+    "id": "mathos-pravilnik-zavrsni-2026",
+    "kind": "pdf",
+    "title": "Pravilnik o zavrsnim radovima s Uputama za izradu zavrsnog rada (FPMI Osijek, 23.02.2026.)",
+    "url": "https://www.mathos.unios.hr/wp-content/uploads/2026/03/Pravilnik-o-zavrsnim-radovima-veljaca-2026.pdf",
+    "publisher": "Fakultet primijenjene matematike i informatike, Sveuciliste J. J. Strossmayera u Osijeku",
+    "snapshotPath": "data/sources/mathos/mathos-pravilnik-zavrsni-2026.pdf",
+    "fetchedAt": "2026-07-17",
+    "lastChecked": "2026-07-17",
+    "validityClass": "stable",
+    "snapshotHash": "587634d10fc5e9e54b5f1135297bf3a6f4a67d43373a159317d14d4f4fac8d7d"
+  },
+  {
+    "id": "mathos-pravilnik-diplomski-2023",
+    "kind": "pdf",
+    "title": "Pravilnik o diplomskim radovima s Uputama za izradu diplomskog rada (FPMI Osijek, 30.10.2023.)",
+    "url": "https://www.mathos.unios.hr/wp-content/uploads/2023/11/Pravilnik_o_diplomskim_radovima_-_potpisano.pdf",
+    "publisher": "Fakultet primijenjene matematike i informatike, Sveuciliste J. J. Strossmayera u Osijeku",
+    "snapshotPath": "data/sources/mathos/mathos-pravilnik-diplomski-2023.pdf",
+    "fetchedAt": "2026-07-17",
+    "lastChecked": "2026-07-17",
+    "validityClass": "stable",
+    "snapshotHash": "ac7fb707920ca89d618e4ff8ac19ea698f76adb3b75ea79947f36ca2a8c3ff57"
   }
 ]

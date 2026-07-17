@@ -8108,5 +8108,158 @@
       "graduate"
     ],
     "status": "partial"
+  },
+  {
+    "id": "ffpu-zavrsni",
+    "unitId": "ffpu",
+    "programs": [
+      "Sveučilišni prijediplomski studij Hrvatski jezik i književnost",
+      "Sveučilišni prijediplomski studij Engleski jezik i književnost",
+      "Sveučilišni prijediplomski studij Talijanski jezik i književnost",
+      "Sveučilišni prijediplomski studij Japanski jezik i kultura",
+      "Sveučilišni prijediplomski studij Povijest",
+      "Sveučilišni prijediplomski studij Arheologija",
+      "Sveučilišni prijediplomski studij Latinski jezik i rimska književnost",
+      "Sveučilišni prijediplomski studij Jezik i interkulturalno posredovanje"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "verified"
+  },
+  {
+    "id": "ffpu-diplomski",
+    "unitId": "ffpu",
+    "programs": [
+      "Sveučilišni diplomski studij Hrvatski jezik i književnost",
+      "Sveučilišni diplomski studij Talijanski jezik i književnost",
+      "Sveučilišni diplomski studij Povijest",
+      "Sveučilišni diplomski studij Japanologija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "verified"
+  },
+  {
+    "id": "fipu-zavrsni",
+    "unitId": "fipu",
+    "programs": [
+      "Sveučilišni prijediplomski studij Informatika",
+      "Sveučilišni prijediplomski studij Primijenjena ekonomija"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "verified"
+  },
+  {
+    "id": "mfpu-diplomski",
+    "unitId": "mfpu",
+    "programs": [
+      "Diplomski sveučilišni studij Sestrinstvo"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "verified"
+  },
+  {
+    "id": "mapu-glazbena-pedagogija-zavrsni",
+    "unitId": "mapu",
+    "programs": [
+      "Sveučilišni prijediplomski studij Glazbena pedagogija"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "verified"
+  },
+  {
+    "id": "mapu-glazbena-pedagogija-diplomski",
+    "unitId": "mapu",
+    "programs": [
+      "Sveučilišni diplomski studij Glazbena pedagogija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "verified"
+  },
+  {
+    "id": "apuri-zavrsni",
+    "unitId": "apuri",
+    "programs": [
+      "Prijediplomski sveučilišni studij Primijenjena umjetnost",
+      "Prijediplomski sveučilišni studij Likovna pedagogija",
+      "Prijediplomski sveučilišni studij Vizualne komunikacije i grafički dizajn",
+      "Prijediplomski sveučilišni studij Gluma",
+      "Prijediplomski sveučilišni studij Mediji"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "verified"
+  },
+  {
+    "id": "apuri-diplomski",
+    "unitId": "apuri",
+    "programs": [
+      "Diplomski sveučilišni studij Primijenjena umjetnost",
+      "Diplomski sveučilišni studij Vizualne komunikacije i grafički dizajn"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "verified"
+  },
+  {
+    "id": "math-uniri-zavrsni",
+    "unitId": "matematika",
+    "programs": [
+      "Sveučilišni prijediplomski studij Matematika"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "verified"
+  },
+  {
+    "id": "math-uniri-diplomski",
+    "unitId": "matematika",
+    "programs": [
+      "Sveučilišni diplomski studij Diskretna matematika i primjene",
+      "Sveučilišni diplomski studij Matematika (nastavnički smjer)",
+      "Sveučilišni diplomski studij Matematika i informatika (nastavnički smjer)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "verified"
+  },
+  {
+    "id": "mathos-zavrsni",
+    "unitId": "mathos",
+    "programs": [
+      "Sveučilišni prijediplomski studij Matematika",
+      "Sveučilišni prijediplomski studij Matematika i računarstvo"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "verified"
+  },
+  {
+    "id": "mathos-diplomski",
+    "unitId": "mathos",
+    "programs": [
+      "Sveučilišni diplomski studij Matematika i računarstvo",
+      "Sveučilišni diplomski studij Financijska matematika i statistika",
+      "Sveučilišni diplomski nastavnički studij matematike i informatike"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "verified"
   }
 ]

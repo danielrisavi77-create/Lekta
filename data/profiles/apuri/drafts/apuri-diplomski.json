@@ -1,0 +1,197 @@
+{
+  "profileId": "apuri-diplomski",
+  "entries": [
+    {
+      "ruleId": "apuri-diplomski--font",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Vrsta slova",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "apuri-pravilnik-diplomski-2025",
+      "sourcePage": "Upute za pisanje diplomskog rada (sastavni dio Pravilnika, čl. 8), odjeljak \"Oblikovanje teksta\"",
+      "quote": "Pismo osnovnog teksta je Times New Roman, a veličina slova 12 tipografskih točaka. Pismo bilježaka pod tekstom i bilježaka na kraju teksta je Times New Roman veličine slova 10 tipografskih točaka. Prored između redaka treba ujednačiti u cijelom tekstu na 1,5. Rubovi stranice odnosno margine na vrhu i dnu kao i desno trebaju iznositi 2,5 cm, dok se lijevo za potrebe uveza može pustiti nešto veća margina od 3 cm. Tekst urediti obostranim poravnavanjem.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "6ca953a7deac52d9d7272367a25f99a1e9ed135fa4b23425091e5ee09d86ea56",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "harvest+ocr-verify"
+    },
+    {
+      "ruleId": "apuri-diplomski--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Veličina slova",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "apuri-pravilnik-diplomski-2025",
+      "sourcePage": "Upute za pisanje diplomskog rada (sastavni dio Pravilnika, čl. 8), odjeljak \"Oblikovanje teksta\"",
+      "quote": "Pismo osnovnog teksta je Times New Roman, a veličina slova 12 tipografskih točaka. Pismo bilježaka pod tekstom i bilježaka na kraju teksta je Times New Roman veličine slova 10 tipografskih točaka. Prored između redaka treba ujednačiti u cijelom tekstu na 1,5. Rubovi stranice odnosno margine na vrhu i dnu kao i desno trebaju iznositi 2,5 cm, dok se lijevo za potrebe uveza može pustiti nešto veća margina od 3 cm. Tekst urediti obostranim poravnavanjem.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "6ca953a7deac52d9d7272367a25f99a1e9ed135fa4b23425091e5ee09d86ea56",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "harvest+ocr-verify"
+    },
+    {
+      "ruleId": "apuri-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "apuri-pravilnik-diplomski-2025",
+      "sourcePage": "Upute za pisanje diplomskog rada (sastavni dio Pravilnika, čl. 8), odjeljak \"Oblikovanje teksta\"",
+      "quote": "Pismo osnovnog teksta je Times New Roman, a veličina slova 12 tipografskih točaka. Pismo bilježaka pod tekstom i bilježaka na kraju teksta je Times New Roman veličine slova 10 tipografskih točaka. Prored između redaka treba ujednačiti u cijelom tekstu na 1,5. Rubovi stranice odnosno margine na vrhu i dnu kao i desno trebaju iznositi 2,5 cm, dok se lijevo za potrebe uveza može pustiti nešto veća margina od 3 cm. Tekst urediti obostranim poravnavanjem.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "6ca953a7deac52d9d7272367a25f99a1e9ed135fa4b23425091e5ee09d86ea56",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "harvest+ocr-verify"
+    },
+    {
+      "ruleId": "apuri-diplomski--footnote-size",
+      "checkId": "footnote-size",
+      "value": 10,
+      "category": "format",
+      "label": "Veličina slova u bilješkama",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "apuri-pravilnik-diplomski-2025",
+      "sourcePage": "Upute za pisanje diplomskog rada (sastavni dio Pravilnika, čl. 8), odjeljak \"Oblikovanje teksta\"",
+      "quote": "Pismo osnovnog teksta je Times New Roman, a veličina slova 12 tipografskih točaka. Pismo bilježaka pod tekstom i bilježaka na kraju teksta je Times New Roman veličine slova 10 tipografskih točaka. Prored između redaka treba ujednačiti u cijelom tekstu na 1,5. Rubovi stranice odnosno margine na vrhu i dnu kao i desno trebaju iznositi 2,5 cm, dok se lijevo za potrebe uveza može pustiti nešto veća margina od 3 cm. Tekst urediti obostranim poravnavanjem.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "6ca953a7deac52d9d7272367a25f99a1e9ed135fa4b23425091e5ee09d86ea56",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "harvest+ocr-verify"
+    },
+    {
+      "ruleId": "apuri-diplomski--justify",
+      "checkId": "justify",
+      "value": true,
+      "category": "format",
+      "label": "Poravnanje",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "apuri-pravilnik-diplomski-2025",
+      "sourcePage": "Upute za pisanje diplomskog rada (sastavni dio Pravilnika, čl. 8), odjeljak \"Oblikovanje teksta\"",
+      "quote": "Pismo osnovnog teksta je Times New Roman, a veličina slova 12 tipografskih točaka. Pismo bilježaka pod tekstom i bilježaka na kraju teksta je Times New Roman veličine slova 10 tipografskih točaka. Prored između redaka treba ujednačiti u cijelom tekstu na 1,5. Rubovi stranice odnosno margine na vrhu i dnu kao i desno trebaju iznositi 2,5 cm, dok se lijevo za potrebe uveza može pustiti nešto veća margina od 3 cm. Tekst urediti obostranim poravnavanjem.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "6ca953a7deac52d9d7272367a25f99a1e9ed135fa4b23425091e5ee09d86ea56",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "harvest+ocr-verify"
+    },
+    {
+      "ruleId": "apuri-diplomski--page-numbers",
+      "checkId": "page-numbers",
+      "value": true,
+      "category": "format",
+      "label": "Numeracija stranica",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "apuri-pravilnik-diplomski-2025",
+      "sourcePage": "Upute za pisanje diplomskog rada, odjeljak \"Oblikovanje teksta\" (numeracija)",
+      "quote": "Stranice rada numerirati pozicioniranjem arapske brojke u desni donji kut. Naslovna strana kao i stranice sa sadržajem i sažetkom se ne numeriraju. Prva brojčana oznaka pozicionira se na prvu stranicu uvoda.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "6ca953a7deac52d9d7272367a25f99a1e9ed135fa4b23425091e5ee09d86ea56",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "harvest+ocr-verify"
+    },
+    {
+      "ruleId": "apuri-diplomski--required-sections",
+      "checkId": "required-sections",
+      "value": [
+        {
+          "key": "sazetak",
+          "label": "Sažetak",
+          "terms": [
+            "Sažetak"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "Sadržaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "Uvod"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zaključak",
+          "terms": [
+            "Zaključak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "Literatura"
+          ]
+        }
+      ],
+      "category": "structure",
+      "label": "Obvezni dijelovi rada",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "apuri-pravilnik-diplomski-2025",
+      "sourcePage": "Upute za pisanje diplomskog rada, odjeljak \"Obavezni dijelovi rada\"",
+      "quote": "SAŽETAK je jezgrovit prikaz glavnih teza rada u dužini od najviše pola kartice teksta. [...] UVOD je prvo poglavlje u radu i numerira se brojem 1. [...] LITERATURA je popis korištenih izvora te se numerira kao poglavlje. Izvori se u popisu numeriraju abecednim redom prema prezimenima autora.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "6ca953a7deac52d9d7272367a25f99a1e9ed135fa4b23425091e5ee09d86ea56",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "harvest+ocr-verify"
+    },
+    {
+      "ruleId": "apuri-diplomski--toc",
+      "checkId": "toc",
+      "value": true,
+      "category": "structure",
+      "label": "Sadržaj",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "apuri-pravilnik-diplomski-2025",
+      "sourcePage": "Upute za pisanje diplomskog rada, odjeljak \"Obavezni dijelovi rada\"",
+      "quote": "SAŽETAK je jezgrovit prikaz glavnih teza rada u dužini od najviše pola kartice teksta. [...] UVOD je prvo poglavlje u radu i numerira se brojem 1.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "6ca953a7deac52d9d7272367a25f99a1e9ed135fa4b23425091e5ee09d86ea56",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "harvest+ocr-verify"
+    }
+  ]
+}

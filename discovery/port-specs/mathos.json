@@ -1,0 +1,267 @@
+{
+  "faculty": "mathos",
+  "institution": "unios",
+  "unit": {
+    "id": "mathos"
+  },
+  "catalogPrograms": [
+    "Sveučilišni prijediplomski studij Matematika",
+    "Sveučilišni prijediplomski studij Matematika i računarstvo",
+    "Sveučilišni diplomski studij Matematika i računarstvo",
+    "Sveučilišni diplomski studij Financijska matematika i statistika",
+    "Sveučilišni diplomski nastavnički studij matematike i informatike"
+  ],
+  "sources": [
+    {
+      "id": "mathos-pravilnik-zavrsni-2026",
+      "kind": "pdf",
+      "title": "Pravilnik o zavrsnim radovima s Uputama za izradu zavrsnog rada (FPMI Osijek, 23.02.2026.)",
+      "url": "https://www.mathos.unios.hr/wp-content/uploads/2026/03/Pravilnik-o-zavrsnim-radovima-veljaca-2026.pdf",
+      "publisher": "Fakultet primijenjene matematike i informatike, Sveuciliste J. J. Strossmayera u Osijeku",
+      "snapshotPath": "data/sources/mathos/mathos-pravilnik-zavrsni-2026.pdf",
+      "fetchedAt": "2026-07-17",
+      "lastChecked": "2026-07-17",
+      "validityClass": "stable",
+      "snapshotHash": "587634d10fc5e9e54b5f1135297bf3a6f4a67d43373a159317d14d4f4fac8d7d"
+    },
+    {
+      "id": "mathos-pravilnik-diplomski-2023",
+      "kind": "pdf",
+      "title": "Pravilnik o diplomskim radovima s Uputama za izradu diplomskog rada (FPMI Osijek, 30.10.2023.)",
+      "url": "https://www.mathos.unios.hr/wp-content/uploads/2023/11/Pravilnik_o_diplomskim_radovima_-_potpisano.pdf",
+      "publisher": "Fakultet primijenjene matematike i informatike, Sveuciliste J. J. Strossmayera u Osijeku",
+      "snapshotPath": "data/sources/mathos/mathos-pravilnik-diplomski-2023.pdf",
+      "fetchedAt": "2026-07-17",
+      "lastChecked": "2026-07-17",
+      "validityClass": "stable",
+      "snapshotHash": "ac7fb707920ca89d618e4ff8ac19ea698f76adb3b75ea79947f36ca2a8c3ff57"
+    }
+  ],
+  "profiles": [
+    {
+      "id": "mathos-zavrsni",
+      "unitId": "mathos",
+      "programs": [
+        "Sveučilišni prijediplomski studij Matematika",
+        "Sveučilišni prijediplomski studij Matematika i računarstvo"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "verified",
+      "profileLabel": "FPMI Osijek, zavrsni rad",
+      "verifiedAt": "2026-07-17",
+      "documentDate": null,
+      "rules": {
+        "requireToc": true,
+        "requiredSections": [
+          {
+            "key": "sadrzaj",
+            "label": "Sadržaj",
+            "terms": [
+              "Sadržaj"
+            ]
+          },
+          {
+            "key": "uvod",
+            "label": "Uvod",
+            "terms": [
+              "Uvod"
+            ]
+          },
+          {
+            "key": "glavni",
+            "label": "Glavni dio rada",
+            "terms": [
+              "Glavni dio"
+            ]
+          },
+          {
+            "key": "literatura",
+            "label": "Literatura",
+            "terms": [
+              "Literatura"
+            ]
+          },
+          {
+            "key": "sazetak",
+            "label": "Sažetak",
+            "terms": [
+              "Sažetak"
+            ]
+          },
+          {
+            "key": "kljucne",
+            "label": "Ključne riječi",
+            "terms": [
+              "Ključne riječi"
+            ]
+          },
+          {
+            "key": "zivotopis",
+            "label": "Životopis",
+            "terms": [
+              "Životopis"
+            ]
+          }
+        ]
+      },
+      "facts": [],
+      "note": "Pravilnik nalaže pisanje rada u LaTeX-u uz službeni predložak, pa se .docx provjerom pokriva samo struktura rada. Vrsta slova, veličina, prored, margine, format papira i opseg nisu propisani pravilnikom (vrijednosti nosi LaTeX predložak, koji nije provjerljiv u .docx-u). Stil citiranja nije imenovani standard nego numeričko pozivanje u uglatim zagradama.",
+      "sources": [
+        {
+          "title": "Pravilnik o zavrsnim radovima s Uputama za izradu zavrsnog rada (FPMI Osijek, 23.02.2026.)",
+          "url": "https://www.mathos.unios.hr/wp-content/uploads/2026/03/Pravilnik-o-zavrsnim-radovima-veljaca-2026.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o završnim radovima (FPMI Osijek, 2026.)",
+        "Pravilnik o diplomskim radovima (FPMI Osijek, 2023.)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Sadržaj",
+        "Obvezni dijelovi rada"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "mathos-diplomski",
+      "unitId": "mathos",
+      "programs": [
+        "Sveučilišni diplomski studij Matematika i računarstvo",
+        "Sveučilišni diplomski studij Financijska matematika i statistika",
+        "Sveučilišni diplomski nastavnički studij matematike i informatike"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "verified",
+      "profileLabel": "FPMI Osijek, diplomski rad",
+      "verifiedAt": "2026-07-17",
+      "documentDate": null,
+      "rules": {
+        "requireToc": true,
+        "requiredSections": [
+          {
+            "key": "sadrzaj",
+            "label": "Sadržaj",
+            "terms": [
+              "Sadržaj"
+            ]
+          },
+          {
+            "key": "uvod",
+            "label": "Uvod",
+            "terms": [
+              "Uvod"
+            ]
+          },
+          {
+            "key": "glavni",
+            "label": "Glavni dio rada",
+            "terms": [
+              "Glavni dio"
+            ]
+          },
+          {
+            "key": "literatura",
+            "label": "Literatura",
+            "terms": [
+              "Literatura"
+            ]
+          },
+          {
+            "key": "sazetak",
+            "label": "Sažetak",
+            "terms": [
+              "Sažetak"
+            ]
+          },
+          {
+            "key": "kljucne",
+            "label": "Ključne riječi",
+            "terms": [
+              "Ključne riječi"
+            ]
+          },
+          {
+            "key": "zivotopis",
+            "label": "Životopis",
+            "terms": [
+              "Životopis"
+            ]
+          }
+        ]
+      },
+      "facts": [],
+      "note": "Pravilnik nalaže pisanje rada u LaTeX-u uz službeni predložak, pa se .docx provjerom pokriva samo struktura rada. Vrsta slova, veličina, prored, margine, format papira i opseg nisu propisani pravilnikom (vrijednosti nosi LaTeX predložak, koji nije provjerljiv u .docx-u). Stil citiranja nije imenovani standard nego numeričko pozivanje u uglatim zagradama.",
+      "sources": [
+        {
+          "title": "Pravilnik o diplomskim radovima s Uputama za izradu diplomskog rada (FPMI Osijek, 30.10.2023.)",
+          "url": "https://www.mathos.unios.hr/wp-content/uploads/2023/11/Pravilnik_o_diplomskim_radovima_-_potpisano.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o završnim radovima (FPMI Osijek, 2026.)",
+        "Pravilnik o diplomskim radovima (FPMI Osijek, 2023.)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Sadržaj",
+        "Obvezni dijelovi rada"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-mathos-zavrsni--toc-verified-2026-07-17",
+      "ruleId": "mathos-zavrsni--toc",
+      "profileId": "mathos-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "mathos-pravilnik-zavrsni-2026",
+      "sourcePage": "Prilog 1 (Upute za izradu završnog rada), I. Osnovne cjeline",
+      "quote": "Završni rad sadrži sljedeće cjeline i to navedenim redoslijedom: Sadržaj [...] Uvod [...] Glavni dio rada [...] Literatura: korištenu literaturu treba navesti abecednim redom prema prezimenu prvog autora. [...] Sažetak [...] Ključne riječi [...] Engleski prijevod [...] Životopis",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-mathos-zavrsni--required-sections-verified-2026-07-17",
+      "ruleId": "mathos-zavrsni--required-sections",
+      "profileId": "mathos-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "mathos-pravilnik-zavrsni-2026",
+      "sourcePage": "Prilog 1 (Upute za izradu završnog rada), I. Osnovne cjeline",
+      "quote": "Završni rad sadrži sljedeće cjeline i to navedenim redoslijedom: Sadržaj [...] Uvod [...] Glavni dio rada [...] Literatura: korištenu literaturu treba navesti abecednim redom prema prezimenu prvog autora. [...] Sažetak [...] Ključne riječi [...] Engleski prijevod [...] Životopis",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-mathos-diplomski--toc-verified-2026-07-17",
+      "ruleId": "mathos-diplomski--toc",
+      "profileId": "mathos-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "mathos-pravilnik-diplomski-2023",
+      "sourcePage": "Prilog 1 (Upute za izradu završnog rada), I. Osnovne cjeline",
+      "quote": "Diplomski rad sadrži sljedeće cjeline i to navedenim redoslijedom: Sadržaj [...] Uvod [...] Glavni dio rada [...] Literatura: korištenu literaturu treba navesti abecednim redom prema prezimenu prvog autora. [...] Sažetak [...] Ključne riječi [...] Engleski prijevod [...] Životopis",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-mathos-diplomski--required-sections-verified-2026-07-17",
+      "ruleId": "mathos-diplomski--required-sections",
+      "profileId": "mathos-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "mathos-pravilnik-diplomski-2023",
+      "sourcePage": "Prilog 1 (Upute za izradu završnog rada), I. Osnovne cjeline",
+      "quote": "Diplomski rad sadrži sljedeće cjeline i to navedenim redoslijedom: Sadržaj [...] Uvod [...] Glavni dio rada [...] Literatura: korištenu literaturu treba navesti abecednim redom prema prezimenu prvog autora. [...] Sažetak [...] Ključne riječi [...] Engleski prijevod [...] Životopis",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    }
+  ]
+}

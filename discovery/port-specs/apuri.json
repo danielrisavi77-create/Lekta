@@ -1,0 +1,388 @@
+{
+  "faculty": "apuri",
+  "institution": "uniri",
+  "unit": {
+    "id": "apuri"
+  },
+  "catalogPrograms": [
+    "Prijediplomski sveučilišni studij Primijenjena umjetnost",
+    "Prijediplomski sveučilišni studij Likovna pedagogija",
+    "Prijediplomski sveučilišni studij Vizualne komunikacije i grafički dizajn",
+    "Prijediplomski sveučilišni studij Gluma",
+    "Prijediplomski sveučilišni studij Mediji",
+    "Diplomski sveučilišni studij Primijenjena umjetnost",
+    "Diplomski sveučilišni studij Vizualne komunikacije i grafički dizajn"
+  ],
+  "sources": [
+    {
+      "id": "apuri-pravilnik-zavrsni-2025",
+      "kind": "pdf",
+      "title": "Pravilnik o zavrsnom radu na sveucilisnim prijediplomskim studijima (APURI, 27.03.2025.)",
+      "url": "https://apuri.uniri.hr/wp-content/uploads/2025/04/Pravilnik-o-zavrsnom-radu-na-sveucilisnim-prijediplomskim-studijima.pdf",
+      "publisher": "Akademija primijenjenih umjetnosti u Rijeci, Sveuciliste u Rijeci",
+      "snapshotPath": "data/sources/apuri/apuri-pravilnik-zavrsni-2025.pdf",
+      "fetchedAt": "2026-07-17",
+      "lastChecked": "2026-07-17",
+      "validityClass": "stable",
+      "snapshotHash": "dfefd549af2e812c56deccf2b4c3f9140384f7e8f3e69296f76e1a1ce4d4f213"
+    },
+    {
+      "id": "apuri-pravilnik-diplomski-2025",
+      "kind": "pdf",
+      "title": "Pravilnik o diplomskom radu i diplomskom ispitu s Uputama za pisanje diplomskog rada (APURI, 03.02.2025.)",
+      "url": "https://apuri.uniri.hr/wp-content/uploads/2025/02/Pravilnik-o-diplomskom-radu-i-diplomskom-ispitu-veljaca-2025.pdf",
+      "publisher": "Akademija primijenjenih umjetnosti u Rijeci, Sveuciliste u Rijeci",
+      "snapshotPath": "data/sources/apuri/apuri-pravilnik-diplomski-2025.pdf",
+      "fetchedAt": "2026-07-17",
+      "lastChecked": "2026-07-17",
+      "validityClass": "stable",
+      "snapshotHash": "6ca953a7deac52d9d7272367a25f99a1e9ed135fa4b23425091e5ee09d86ea56"
+    }
+  ],
+  "profiles": [
+    {
+      "id": "apuri-zavrsni",
+      "unitId": "apuri",
+      "programs": [
+        "Prijediplomski sveučilišni studij Primijenjena umjetnost",
+        "Prijediplomski sveučilišni studij Likovna pedagogija",
+        "Prijediplomski sveučilišni studij Vizualne komunikacije i grafički dizajn",
+        "Prijediplomski sveučilišni studij Gluma",
+        "Prijediplomski sveučilišni studij Mediji"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "verified",
+      "profileLabel": "Akademija primijenjenih umjetnosti u Rijeci, zavrsni rad",
+      "verifiedAt": "2026-07-17",
+      "documentDate": null,
+      "rules": {
+        "requireA4": true,
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "footnoteSize": 10,
+        "justify": true,
+        "requirePageNumbers": true
+      },
+      "facts": [],
+      "note": "Završni i diplomski rad sastoje se od praktičnog umjetničkog rada i pisanog dijela; provjerava se samo pisani dio. Pravilnik ne propisuje imenovani stil citiranja (upute traže fusnotni sustav bez imenovanog standarda), pa se citiranje ne boduje. Za završni rad opseg je propisan \"u pravilu\" (2 do 10 stranica) pa se ne boduje kao tvrdo pravilo.",
+      "sources": [
+        {
+          "title": "Pravilnik o zavrsnom radu na sveucilisnim prijediplomskim studijima (APURI, 27.03.2025.)",
+          "url": "https://apuri.uniri.hr/wp-content/uploads/2025/04/Pravilnik-o-zavrsnom-radu-na-sveucilisnim-prijediplomskim-studijima.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o završnom radu na sveučilišnim prijediplomskim studijima (APURI, 2025.)",
+        "Pravilnik o diplomskom radu i diplomskom ispitu s Uputama (APURI, 2025.)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Vrsta slova",
+        "Veličina slova",
+        "Prored",
+        "Margine",
+        "Veličina slova u fusnotama",
+        "Poravnanje",
+        "Obrojčavanje stranica"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "apuri-diplomski",
+      "unitId": "apuri",
+      "programs": [
+        "Diplomski sveučilišni studij Primijenjena umjetnost",
+        "Diplomski sveučilišni studij Vizualne komunikacije i grafički dizajn"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "verified",
+      "profileLabel": "Akademija primijenjenih umjetnosti u Rijeci, diplomski rad",
+      "verifiedAt": "2026-07-17",
+      "documentDate": null,
+      "rules": {
+        "font": [
+          "Times New Roman"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "footnoteSize": 10,
+        "justify": true,
+        "requirePageNumbers": true,
+        "requiredSections": [
+          {
+            "key": "sazetak",
+            "label": "Sažetak",
+            "terms": [
+              "Sažetak"
+            ]
+          },
+          {
+            "key": "sadrzaj",
+            "label": "Sadržaj",
+            "terms": [
+              "Sadržaj"
+            ]
+          },
+          {
+            "key": "uvod",
+            "label": "Uvod",
+            "terms": [
+              "Uvod"
+            ]
+          },
+          {
+            "key": "zakljucak",
+            "label": "Zaključak",
+            "terms": [
+              "Zaključak"
+            ]
+          },
+          {
+            "key": "literatura",
+            "label": "Literatura",
+            "terms": [
+              "Literatura"
+            ]
+          }
+        ],
+        "requireToc": true
+      },
+      "facts": [],
+      "note": "Završni i diplomski rad sastoje se od praktičnog umjetničkog rada i pisanog dijela; provjerava se samo pisani dio. Pravilnik ne propisuje imenovani stil citiranja (upute traže fusnotni sustav bez imenovanog standarda), pa se citiranje ne boduje. Za završni rad opseg je propisan \"u pravilu\" (2 do 10 stranica) pa se ne boduje kao tvrdo pravilo.",
+      "sources": [
+        {
+          "title": "Pravilnik o diplomskom radu i diplomskom ispitu s Uputama za pisanje diplomskog rada (APURI, 03.02.2025.)",
+          "url": "https://apuri.uniri.hr/wp-content/uploads/2025/02/Pravilnik-o-diplomskom-radu-i-diplomskom-ispitu-veljaca-2025.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o završnom radu na sveučilišnim prijediplomskim studijima (APURI, 2025.)",
+        "Pravilnik o diplomskom radu i diplomskom ispitu s Uputama (APURI, 2025.)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Vrsta slova",
+        "Veličina slova",
+        "Prored",
+        "Veličina slova u bilješkama",
+        "Poravnanje",
+        "Numeracija stranica",
+        "Obvezni dijelovi rada",
+        "Sadržaj"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-apuri-zavrsni--paper-size-verified-2026-07-17",
+      "ruleId": "apuri-zavrsni--paper-size",
+      "profileId": "apuri-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "apuri-pravilnik-zavrsni-2025",
+      "sourcePage": "Članak 7. (glava III. Oblikovanje završnog rada)",
+      "quote": "Završni rad otisnut je na papiru A4 formata. Oblikovanje teksta mora biti kako slijedi: − Margine: 2,5 cm − Font: Times New Roman − Veličina: 12pt, za fusnote 10pt − Prored: 1,5 − Poravnanje: obostrano − Obrojčavanje stranica: u podnožju, desno",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-apuri-zavrsni--font-verified-2026-07-17",
+      "ruleId": "apuri-zavrsni--font",
+      "profileId": "apuri-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "apuri-pravilnik-zavrsni-2025",
+      "sourcePage": "Članak 7. (glava III. Oblikovanje završnog rada)",
+      "quote": "Završni rad otisnut je na papiru A4 formata. Oblikovanje teksta mora biti kako slijedi: − Margine: 2,5 cm − Font: Times New Roman − Veličina: 12pt, za fusnote 10pt − Prored: 1,5 − Poravnanje: obostrano − Obrojčavanje stranica: u podnožju, desno",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-apuri-zavrsni--font-size-verified-2026-07-17",
+      "ruleId": "apuri-zavrsni--font-size",
+      "profileId": "apuri-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "apuri-pravilnik-zavrsni-2025",
+      "sourcePage": "Članak 7. (glava III. Oblikovanje završnog rada)",
+      "quote": "Završni rad otisnut je na papiru A4 formata. Oblikovanje teksta mora biti kako slijedi: − Margine: 2,5 cm − Font: Times New Roman − Veličina: 12pt, za fusnote 10pt − Prored: 1,5 − Poravnanje: obostrano − Obrojčavanje stranica: u podnožju, desno",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-apuri-zavrsni--line-spacing-verified-2026-07-17",
+      "ruleId": "apuri-zavrsni--line-spacing",
+      "profileId": "apuri-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "apuri-pravilnik-zavrsni-2025",
+      "sourcePage": "Članak 7. (glava III. Oblikovanje završnog rada)",
+      "quote": "Završni rad otisnut je na papiru A4 formata. Oblikovanje teksta mora biti kako slijedi: − Margine: 2,5 cm − Font: Times New Roman − Veličina: 12pt, za fusnote 10pt − Prored: 1,5 − Poravnanje: obostrano − Obrojčavanje stranica: u podnožju, desno",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-apuri-zavrsni--margins-verified-2026-07-17",
+      "ruleId": "apuri-zavrsni--margins",
+      "profileId": "apuri-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "apuri-pravilnik-zavrsni-2025",
+      "sourcePage": "Članak 7. (glava III. Oblikovanje završnog rada)",
+      "quote": "Završni rad otisnut je na papiru A4 formata. Oblikovanje teksta mora biti kako slijedi: − Margine: 2,5 cm − Font: Times New Roman − Veličina: 12pt, za fusnote 10pt − Prored: 1,5 − Poravnanje: obostrano − Obrojčavanje stranica: u podnožju, desno",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-apuri-zavrsni--footnote-size-verified-2026-07-17",
+      "ruleId": "apuri-zavrsni--footnote-size",
+      "profileId": "apuri-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "apuri-pravilnik-zavrsni-2025",
+      "sourcePage": "Članak 7. (glava III. Oblikovanje završnog rada)",
+      "quote": "Završni rad otisnut je na papiru A4 formata. Oblikovanje teksta mora biti kako slijedi: − Margine: 2,5 cm − Font: Times New Roman − Veličina: 12pt, za fusnote 10pt − Prored: 1,5 − Poravnanje: obostrano − Obrojčavanje stranica: u podnožju, desno",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-apuri-zavrsni--justify-verified-2026-07-17",
+      "ruleId": "apuri-zavrsni--justify",
+      "profileId": "apuri-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "apuri-pravilnik-zavrsni-2025",
+      "sourcePage": "Članak 7. (glava III. Oblikovanje završnog rada)",
+      "quote": "Završni rad otisnut je na papiru A4 formata. Oblikovanje teksta mora biti kako slijedi: − Margine: 2,5 cm − Font: Times New Roman − Veličina: 12pt, za fusnote 10pt − Prored: 1,5 − Poravnanje: obostrano − Obrojčavanje stranica: u podnožju, desno",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-apuri-zavrsni--page-numbers-verified-2026-07-17",
+      "ruleId": "apuri-zavrsni--page-numbers",
+      "profileId": "apuri-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "apuri-pravilnik-zavrsni-2025",
+      "sourcePage": "Članak 7. (glava III. Oblikovanje završnog rada)",
+      "quote": "Završni rad otisnut je na papiru A4 formata. Oblikovanje teksta mora biti kako slijedi: − Margine: 2,5 cm − Font: Times New Roman − Veličina: 12pt, za fusnote 10pt − Prored: 1,5 − Poravnanje: obostrano − Obrojčavanje stranica: u podnožju, desno",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-apuri-diplomski--font-verified-2026-07-17",
+      "ruleId": "apuri-diplomski--font",
+      "profileId": "apuri-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "apuri-pravilnik-diplomski-2025",
+      "sourcePage": "Upute za pisanje diplomskog rada (sastavni dio Pravilnika, čl. 8), odjeljak \"Oblikovanje teksta\"",
+      "quote": "Pismo osnovnog teksta je Times New Roman, a veličina slova 12 tipografskih točaka. Pismo bilježaka pod tekstom i bilježaka na kraju teksta je Times New Roman veličine slova 10 tipografskih točaka. Prored između redaka treba ujednačiti u cijelom tekstu na 1,5. Rubovi stranice odnosno margine na vrhu i dnu kao i desno trebaju iznositi 2,5 cm, dok se lijevo za potrebe uveza može pustiti nešto veća margina od 3 cm. Tekst urediti obostranim poravnavanjem.",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-apuri-diplomski--font-size-verified-2026-07-17",
+      "ruleId": "apuri-diplomski--font-size",
+      "profileId": "apuri-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "apuri-pravilnik-diplomski-2025",
+      "sourcePage": "Upute za pisanje diplomskog rada (sastavni dio Pravilnika, čl. 8), odjeljak \"Oblikovanje teksta\"",
+      "quote": "Pismo osnovnog teksta je Times New Roman, a veličina slova 12 tipografskih točaka. Pismo bilježaka pod tekstom i bilježaka na kraju teksta je Times New Roman veličine slova 10 tipografskih točaka. Prored između redaka treba ujednačiti u cijelom tekstu na 1,5. Rubovi stranice odnosno margine na vrhu i dnu kao i desno trebaju iznositi 2,5 cm, dok se lijevo za potrebe uveza može pustiti nešto veća margina od 3 cm. Tekst urediti obostranim poravnavanjem.",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-apuri-diplomski--line-spacing-verified-2026-07-17",
+      "ruleId": "apuri-diplomski--line-spacing",
+      "profileId": "apuri-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "apuri-pravilnik-diplomski-2025",
+      "sourcePage": "Upute za pisanje diplomskog rada (sastavni dio Pravilnika, čl. 8), odjeljak \"Oblikovanje teksta\"",
+      "quote": "Pismo osnovnog teksta je Times New Roman, a veličina slova 12 tipografskih točaka. Pismo bilježaka pod tekstom i bilježaka na kraju teksta je Times New Roman veličine slova 10 tipografskih točaka. Prored između redaka treba ujednačiti u cijelom tekstu na 1,5. Rubovi stranice odnosno margine na vrhu i dnu kao i desno trebaju iznositi 2,5 cm, dok se lijevo za potrebe uveza može pustiti nešto veća margina od 3 cm. Tekst urediti obostranim poravnavanjem.",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-apuri-diplomski--footnote-size-verified-2026-07-17",
+      "ruleId": "apuri-diplomski--footnote-size",
+      "profileId": "apuri-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "apuri-pravilnik-diplomski-2025",
+      "sourcePage": "Upute za pisanje diplomskog rada (sastavni dio Pravilnika, čl. 8), odjeljak \"Oblikovanje teksta\"",
+      "quote": "Pismo osnovnog teksta je Times New Roman, a veličina slova 12 tipografskih točaka. Pismo bilježaka pod tekstom i bilježaka na kraju teksta je Times New Roman veličine slova 10 tipografskih točaka. Prored između redaka treba ujednačiti u cijelom tekstu na 1,5. Rubovi stranice odnosno margine na vrhu i dnu kao i desno trebaju iznositi 2,5 cm, dok se lijevo za potrebe uveza može pustiti nešto veća margina od 3 cm. Tekst urediti obostranim poravnavanjem.",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-apuri-diplomski--justify-verified-2026-07-17",
+      "ruleId": "apuri-diplomski--justify",
+      "profileId": "apuri-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "apuri-pravilnik-diplomski-2025",
+      "sourcePage": "Upute za pisanje diplomskog rada (sastavni dio Pravilnika, čl. 8), odjeljak \"Oblikovanje teksta\"",
+      "quote": "Pismo osnovnog teksta je Times New Roman, a veličina slova 12 tipografskih točaka. Pismo bilježaka pod tekstom i bilježaka na kraju teksta je Times New Roman veličine slova 10 tipografskih točaka. Prored između redaka treba ujednačiti u cijelom tekstu na 1,5. Rubovi stranice odnosno margine na vrhu i dnu kao i desno trebaju iznositi 2,5 cm, dok se lijevo za potrebe uveza može pustiti nešto veća margina od 3 cm. Tekst urediti obostranim poravnavanjem.",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-apuri-diplomski--page-numbers-verified-2026-07-17",
+      "ruleId": "apuri-diplomski--page-numbers",
+      "profileId": "apuri-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "apuri-pravilnik-diplomski-2025",
+      "sourcePage": "Upute za pisanje diplomskog rada, odjeljak \"Oblikovanje teksta\" (numeracija)",
+      "quote": "Stranice rada numerirati pozicioniranjem arapske brojke u desni donji kut. Naslovna strana kao i stranice sa sadržajem i sažetkom se ne numeriraju. Prva brojčana oznaka pozicionira se na prvu stranicu uvoda.",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-apuri-diplomski--required-sections-verified-2026-07-17",
+      "ruleId": "apuri-diplomski--required-sections",
+      "profileId": "apuri-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "apuri-pravilnik-diplomski-2025",
+      "sourcePage": "Upute za pisanje diplomskog rada, odjeljak \"Obavezni dijelovi rada\"",
+      "quote": "SAŽETAK je jezgrovit prikaz glavnih teza rada u dužini od najviše pola kartice teksta. [...] UVOD je prvo poglavlje u radu i numerira se brojem 1. [...] LITERATURA je popis korištenih izvora te se numerira kao poglavlje. Izvori se u popisu numeriraju abecednim redom prema prezimenima autora.",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-apuri-diplomski--toc-verified-2026-07-17",
+      "ruleId": "apuri-diplomski--toc",
+      "profileId": "apuri-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "apuri-pravilnik-diplomski-2025",
+      "sourcePage": "Upute za pisanje diplomskog rada, odjeljak \"Obavezni dijelovi rada\"",
+      "quote": "SAŽETAK je jezgrovit prikaz glavnih teza rada u dužini od najviše pola kartice teksta. [...] UVOD je prvo poglavlje u radu i numerira se brojem 1.",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    }
+  ]
+}

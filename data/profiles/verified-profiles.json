@@ -39646,5 +39646,1173 @@
       "Opseg",
       "Stil citiranja"
     ]
+  },
+  {
+    "id": "ffpu-zavrsni",
+    "unitId": "ffpu",
+    "programs": [
+      "Sveučilišni prijediplomski studij Hrvatski jezik i književnost",
+      "Sveučilišni prijediplomski studij Engleski jezik i književnost",
+      "Sveučilišni prijediplomski studij Talijanski jezik i književnost",
+      "Sveučilišni prijediplomski studij Japanski jezik i kultura",
+      "Sveučilišni prijediplomski studij Povijest",
+      "Sveučilišni prijediplomski studij Arheologija",
+      "Sveučilišni prijediplomski studij Latinski jezik i rimska književnost",
+      "Sveučilišni prijediplomski studij Jezik i interkulturalno posredovanje"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "verified",
+    "profileLabel": "Filozofski fakultet u Puli, zavrsni rad",
+    "verifiedAt": "2026-07-17",
+    "documentDate": null,
+    "rules": {
+      "requireA4": true,
+      "font": [
+        "Arial"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "footnoteSize": 10,
+      "footnoteSpacing": 1,
+      "requireToc": true,
+      "requiredSections": [
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "Sadržaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "Uvod"
+          ]
+        },
+        {
+          "key": "obrada",
+          "label": "Obrada teme",
+          "terms": [
+            "Obrada teme",
+            "Razrada"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zaključak",
+          "terms": [
+            "Zaključak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Popis literature",
+          "terms": [
+            "Literatura",
+            "Popis literature"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sažetak",
+          "terms": [
+            "Sažetak"
+          ]
+        },
+        {
+          "key": "kljucne",
+          "label": "Ključne riječi",
+          "terms": [
+            "Ključne riječi"
+          ]
+        }
+      ]
+    },
+    "facts": [],
+    "note": "Pravila su iz krovnog pravilnika Sveučilišta Jurja Dobrile u Puli (važeći tekst čl. 5 prema izmjenama od 23.07.2021.), koji obvezuje sve sastavnice. Sastavnica nema vlastiti naputak. Pravilnik ne propisuje stil citiranja ni brojčani opseg (opseg je određen programom studija).",
+    "sources": [
+      {
+        "title": "Pravilnik o izmjenama i dopunama Pravilnika o zavrsnom radu i zavrsnom koncertu na preddiplomskim sveucilisnim i strucnim studijima (23.07.2021.)",
+        "url": "https://www.unipu.hr/_download/repository/2021-07-23-Pravilnik_o_izmjenama_i_dopunama__Pravilnika_o_zavrsnom_radu_i_zavrsnom_koncertu_na_preddiplomskim_sveucilisnim_i_strucnim_studijima.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o završnom radu i završnom koncertu Sveučilišta Jurja Dobrile u Puli (izmjene 23.07.2021.)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Veličina slova",
+      "Prored",
+      "Margine",
+      "Veličina slova u bilješkama",
+      "Prored u bilješkama",
+      "Sadržaj",
+      "Obvezni dijelovi rada"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "ffpu-diplomski",
+    "unitId": "ffpu",
+    "programs": [
+      "Sveučilišni diplomski studij Hrvatski jezik i književnost",
+      "Sveučilišni diplomski studij Talijanski jezik i književnost",
+      "Sveučilišni diplomski studij Povijest",
+      "Sveučilišni diplomski studij Japanologija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "verified",
+    "profileLabel": "Filozofski fakultet u Puli, diplomski rad",
+    "verifiedAt": "2026-07-17",
+    "documentDate": null,
+    "rules": {
+      "requireA4": true,
+      "font": [
+        "Arial"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "footnoteSize": 10,
+      "footnoteSpacing": 1,
+      "requireToc": true,
+      "requiredSections": [
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "Sadržaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "Uvod"
+          ]
+        },
+        {
+          "key": "obrada",
+          "label": "Obrada teme",
+          "terms": [
+            "Obrada teme",
+            "Razrada"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zaključak",
+          "terms": [
+            "Zaključak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Popis literature",
+          "terms": [
+            "Literatura",
+            "Popis literature"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sažetak",
+          "terms": [
+            "Sažetak"
+          ]
+        },
+        {
+          "key": "kljucne",
+          "label": "Ključne riječi",
+          "terms": [
+            "Ključne riječi"
+          ]
+        }
+      ]
+    },
+    "facts": [],
+    "note": "Pravila su iz krovnog pravilnika Sveučilišta Jurja Dobrile u Puli (važeći tekst čl. 5 prema izmjenama od 23.07.2021.), koji obvezuje sve sastavnice. Sastavnica nema vlastiti naputak. Pravilnik ne propisuje stil citiranja ni brojčani opseg (opseg je određen programom studija).",
+    "sources": [
+      {
+        "title": "Pravilnik o izmjenama i dopunama Pravilnika o diplomskom radu i diplomskom koncertu na sveucilisnim diplomskim studijima i integriranome preddiplomskom i diplomskom studiju (23.07.2021.)",
+        "url": "https://www.unipu.hr/_download/repository/2021-07-23-Pravilnik_o_izmjenama_i_dopunama_Pravilnika_o_dipl._radu_i_dipl._koncertu_na_sveucilisnim_dipl._studijima_i_integriranome_preddipl._i_dipl._studiju.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o završnom radu i završnom koncertu Sveučilišta Jurja Dobrile u Puli (izmjene 23.07.2021.)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Veličina slova",
+      "Prored",
+      "Margine",
+      "Veličina slova u bilješkama",
+      "Prored u bilješkama",
+      "Sadržaj",
+      "Obvezni dijelovi rada"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "fipu-zavrsni",
+    "unitId": "fipu",
+    "programs": [
+      "Sveučilišni prijediplomski studij Informatika",
+      "Sveučilišni prijediplomski studij Primijenjena ekonomija"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "verified",
+    "profileLabel": "Fakultet informatike u Puli, zavrsni rad",
+    "verifiedAt": "2026-07-17",
+    "documentDate": null,
+    "rules": {
+      "requireA4": true,
+      "font": [
+        "Arial"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "footnoteSize": 10,
+      "footnoteSpacing": 1,
+      "requireToc": true,
+      "requiredSections": [
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "Sadržaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "Uvod"
+          ]
+        },
+        {
+          "key": "obrada",
+          "label": "Obrada teme",
+          "terms": [
+            "Obrada teme",
+            "Razrada"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zaključak",
+          "terms": [
+            "Zaključak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Popis literature",
+          "terms": [
+            "Literatura",
+            "Popis literature"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sažetak",
+          "terms": [
+            "Sažetak"
+          ]
+        },
+        {
+          "key": "kljucne",
+          "label": "Ključne riječi",
+          "terms": [
+            "Ključne riječi"
+          ]
+        }
+      ]
+    },
+    "facts": [],
+    "note": "Pravila su iz krovnog pravilnika Sveučilišta Jurja Dobrile u Puli (važeći tekst čl. 5 prema izmjenama od 23.07.2021.), koji obvezuje sve sastavnice. Sastavnica nema vlastiti naputak. Pravilnik ne propisuje stil citiranja ni brojčani opseg (opseg je određen programom studija). Fakultetski akti o završnom radu su procesni i ne propisuju oblikovanje; dopuštaju i alternativni oblik rada (programski proizvod ili objavljeni znanstveni rad), koji se ovom provjerom ne obuhvaća.",
+    "sources": [
+      {
+        "title": "Pravilnik o izmjenama i dopunama Pravilnika o zavrsnom radu i zavrsnom koncertu na preddiplomskim sveucilisnim i strucnim studijima (23.07.2021.)",
+        "url": "https://www.unipu.hr/_download/repository/2021-07-23-Pravilnik_o_izmjenama_i_dopunama__Pravilnika_o_zavrsnom_radu_i_zavrsnom_koncertu_na_preddiplomskim_sveucilisnim_i_strucnim_studijima.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o završnom radu i završnom koncertu Sveučilišta Jurja Dobrile u Puli (izmjene 23.07.2021.)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Veličina slova",
+      "Prored",
+      "Margine",
+      "Veličina slova u bilješkama",
+      "Prored u bilješkama",
+      "Sadržaj",
+      "Obvezni dijelovi rada"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "mfpu-diplomski",
+    "unitId": "mfpu",
+    "programs": [
+      "Diplomski sveučilišni studij Sestrinstvo"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "verified",
+    "profileLabel": "Medicinski fakultet u Puli, diplomski rad",
+    "verifiedAt": "2026-07-17",
+    "documentDate": null,
+    "rules": {
+      "requireA4": true,
+      "font": [
+        "Arial"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "footnoteSize": 10,
+      "footnoteSpacing": 1,
+      "requireToc": true,
+      "requiredSections": [
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "Sadržaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "Uvod"
+          ]
+        },
+        {
+          "key": "obrada",
+          "label": "Obrada teme",
+          "terms": [
+            "Obrada teme",
+            "Razrada"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zaključak",
+          "terms": [
+            "Zaključak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Popis literature",
+          "terms": [
+            "Literatura",
+            "Popis literature"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sažetak",
+          "terms": [
+            "Sažetak"
+          ]
+        },
+        {
+          "key": "kljucne",
+          "label": "Ključne riječi",
+          "terms": [
+            "Ključne riječi"
+          ]
+        }
+      ]
+    },
+    "facts": [],
+    "note": "Pravila su iz krovnog pravilnika Sveučilišta Jurja Dobrile u Puli (važeći tekst čl. 5 prema izmjenama od 23.07.2021.), koji obvezuje sve sastavnice. Sastavnica nema vlastiti naputak. Pravilnik ne propisuje stil citiranja ni brojčani opseg (opseg je određen programom studija).",
+    "sources": [
+      {
+        "title": "Pravilnik o izmjenama i dopunama Pravilnika o diplomskom radu i diplomskom koncertu na sveucilisnim diplomskim studijima i integriranome preddiplomskom i diplomskom studiju (23.07.2021.)",
+        "url": "https://www.unipu.hr/_download/repository/2021-07-23-Pravilnik_o_izmjenama_i_dopunama_Pravilnika_o_dipl._radu_i_dipl._koncertu_na_sveucilisnim_dipl._studijima_i_integriranome_preddipl._i_dipl._studiju.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o završnom radu i završnom koncertu Sveučilišta Jurja Dobrile u Puli (izmjene 23.07.2021.)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Veličina slova",
+      "Prored",
+      "Margine",
+      "Veličina slova u bilješkama",
+      "Prored u bilješkama",
+      "Sadržaj",
+      "Obvezni dijelovi rada"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "mapu-glazbena-pedagogija-zavrsni",
+    "unitId": "mapu",
+    "programs": [
+      "Sveučilišni prijediplomski studij Glazbena pedagogija"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "verified",
+    "profileLabel": "Muzicka akademija u Puli, Glazbena pedagogija, zavrsni rad",
+    "verifiedAt": "2026-07-17",
+    "documentDate": null,
+    "rules": {
+      "requireA4": true,
+      "font": [
+        "Arial"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "footnoteSize": 10,
+      "footnoteSpacing": 1,
+      "requireToc": true,
+      "requiredSections": [
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "Sadržaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "Uvod"
+          ]
+        },
+        {
+          "key": "obrada",
+          "label": "Obrada teme",
+          "terms": [
+            "Obrada teme",
+            "Razrada"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zaključak",
+          "terms": [
+            "Zaključak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Popis literature",
+          "terms": [
+            "Literatura",
+            "Popis literature"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sažetak",
+          "terms": [
+            "Sažetak"
+          ]
+        },
+        {
+          "key": "kljucne",
+          "label": "Ključne riječi",
+          "terms": [
+            "Ključne riječi"
+          ]
+        }
+      ]
+    },
+    "facts": [],
+    "note": "Pravila su iz krovnog pravilnika Sveučilišta Jurja Dobrile u Puli (važeći tekst čl. 5 prema izmjenama od 23.07.2021.), koji obvezuje sve sastavnice. Sastavnica nema vlastiti naputak. Pravilnik ne propisuje stil citiranja ni brojčani opseg (opseg je određen programom studija). Profil vrijedi samo za studij Glazbene pedagogije. Instrumentalni odsjeci završavaju završnim/diplomskim koncertom i predaju audiosnimku, a ne pisani rad, pa za njih ova provjera nije primjenjiva.",
+    "sources": [
+      {
+        "title": "Pravilnik o izmjenama i dopunama Pravilnika o zavrsnom radu i zavrsnom koncertu na preddiplomskim sveucilisnim i strucnim studijima (23.07.2021.)",
+        "url": "https://www.unipu.hr/_download/repository/2021-07-23-Pravilnik_o_izmjenama_i_dopunama__Pravilnika_o_zavrsnom_radu_i_zavrsnom_koncertu_na_preddiplomskim_sveucilisnim_i_strucnim_studijima.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o završnom radu i završnom koncertu Sveučilišta Jurja Dobrile u Puli (izmjene 23.07.2021.)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Veličina slova",
+      "Prored",
+      "Margine",
+      "Veličina slova u bilješkama",
+      "Prored u bilješkama",
+      "Sadržaj",
+      "Obvezni dijelovi rada"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "mapu-glazbena-pedagogija-diplomski",
+    "unitId": "mapu",
+    "programs": [
+      "Sveučilišni diplomski studij Glazbena pedagogija"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "verified",
+    "profileLabel": "Muzicka akademija u Puli, Glazbena pedagogija, diplomski rad",
+    "verifiedAt": "2026-07-17",
+    "documentDate": null,
+    "rules": {
+      "requireA4": true,
+      "font": [
+        "Arial"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "footnoteSize": 10,
+      "footnoteSpacing": 1,
+      "requireToc": true,
+      "requiredSections": [
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "Sadržaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "Uvod"
+          ]
+        },
+        {
+          "key": "obrada",
+          "label": "Obrada teme",
+          "terms": [
+            "Obrada teme",
+            "Razrada"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zaključak",
+          "terms": [
+            "Zaključak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Popis literature",
+          "terms": [
+            "Literatura",
+            "Popis literature"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sažetak",
+          "terms": [
+            "Sažetak"
+          ]
+        },
+        {
+          "key": "kljucne",
+          "label": "Ključne riječi",
+          "terms": [
+            "Ključne riječi"
+          ]
+        }
+      ]
+    },
+    "facts": [],
+    "note": "Pravila su iz krovnog pravilnika Sveučilišta Jurja Dobrile u Puli (važeći tekst čl. 5 prema izmjenama od 23.07.2021.), koji obvezuje sve sastavnice. Sastavnica nema vlastiti naputak. Pravilnik ne propisuje stil citiranja ni brojčani opseg (opseg je određen programom studija). Profil vrijedi samo za studij Glazbene pedagogije. Instrumentalni odsjeci završavaju završnim/diplomskim koncertom i predaju audiosnimku, a ne pisani rad, pa za njih ova provjera nije primjenjiva.",
+    "sources": [
+      {
+        "title": "Pravilnik o izmjenama i dopunama Pravilnika o diplomskom radu i diplomskom koncertu na sveucilisnim diplomskim studijima i integriranome preddiplomskom i diplomskom studiju (23.07.2021.)",
+        "url": "https://www.unipu.hr/_download/repository/2021-07-23-Pravilnik_o_izmjenama_i_dopunama_Pravilnika_o_dipl._radu_i_dipl._koncertu_na_sveucilisnim_dipl._studijima_i_integriranome_preddipl._i_dipl._studiju.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o završnom radu i završnom koncertu Sveučilišta Jurja Dobrile u Puli (izmjene 23.07.2021.)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Veličina slova",
+      "Prored",
+      "Margine",
+      "Veličina slova u bilješkama",
+      "Prored u bilješkama",
+      "Sadržaj",
+      "Obvezni dijelovi rada"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "apuri-zavrsni",
+    "unitId": "apuri",
+    "programs": [
+      "Prijediplomski sveučilišni studij Primijenjena umjetnost",
+      "Prijediplomski sveučilišni studij Likovna pedagogija",
+      "Prijediplomski sveučilišni studij Vizualne komunikacije i grafički dizajn",
+      "Prijediplomski sveučilišni studij Gluma",
+      "Prijediplomski sveučilišni studij Mediji"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "verified",
+    "profileLabel": "Akademija primijenjenih umjetnosti u Rijeci, zavrsni rad",
+    "verifiedAt": "2026-07-17",
+    "documentDate": null,
+    "rules": {
+      "requireA4": true,
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "footnoteSize": 10,
+      "justify": true,
+      "requirePageNumbers": true
+    },
+    "facts": [],
+    "note": "Završni i diplomski rad sastoje se od praktičnog umjetničkog rada i pisanog dijela; provjerava se samo pisani dio. Pravilnik ne propisuje imenovani stil citiranja (upute traže fusnotni sustav bez imenovanog standarda), pa se citiranje ne boduje. Za završni rad opseg je propisan \"u pravilu\" (2 do 10 stranica) pa se ne boduje kao tvrdo pravilo.",
+    "sources": [
+      {
+        "title": "Pravilnik o zavrsnom radu na sveucilisnim prijediplomskim studijima (APURI, 27.03.2025.)",
+        "url": "https://apuri.uniri.hr/wp-content/uploads/2025/04/Pravilnik-o-zavrsnom-radu-na-sveucilisnim-prijediplomskim-studijima.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o završnom radu na sveučilišnim prijediplomskim studijima (APURI, 2025.)",
+      "Pravilnik o diplomskom radu i diplomskom ispitu s Uputama (APURI, 2025.)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Veličina slova",
+      "Prored",
+      "Margine",
+      "Veličina slova u fusnotama",
+      "Poravnanje",
+      "Obrojčavanje stranica"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "apuri-diplomski",
+    "unitId": "apuri",
+    "programs": [
+      "Diplomski sveučilišni studij Primijenjena umjetnost",
+      "Diplomski sveučilišni studij Vizualne komunikacije i grafički dizajn"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "verified",
+    "profileLabel": "Akademija primijenjenih umjetnosti u Rijeci, diplomski rad",
+    "verifiedAt": "2026-07-17",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "footnoteSize": 10,
+      "justify": true,
+      "requirePageNumbers": true,
+      "requiredSections": [
+        {
+          "key": "sazetak",
+          "label": "Sažetak",
+          "terms": [
+            "Sažetak"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "Sadržaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "Uvod"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zaključak",
+          "terms": [
+            "Zaključak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "Literatura"
+          ]
+        }
+      ],
+      "requireToc": true
+    },
+    "facts": [],
+    "note": "Završni i diplomski rad sastoje se od praktičnog umjetničkog rada i pisanog dijela; provjerava se samo pisani dio. Pravilnik ne propisuje imenovani stil citiranja (upute traže fusnotni sustav bez imenovanog standarda), pa se citiranje ne boduje. Za završni rad opseg je propisan \"u pravilu\" (2 do 10 stranica) pa se ne boduje kao tvrdo pravilo.",
+    "sources": [
+      {
+        "title": "Pravilnik o diplomskom radu i diplomskom ispitu s Uputama za pisanje diplomskog rada (APURI, 03.02.2025.)",
+        "url": "https://apuri.uniri.hr/wp-content/uploads/2025/02/Pravilnik-o-diplomskom-radu-i-diplomskom-ispitu-veljaca-2025.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o završnom radu na sveučilišnim prijediplomskim studijima (APURI, 2025.)",
+      "Pravilnik o diplomskom radu i diplomskom ispitu s Uputama (APURI, 2025.)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Veličina slova",
+      "Prored",
+      "Veličina slova u bilješkama",
+      "Poravnanje",
+      "Numeracija stranica",
+      "Obvezni dijelovi rada",
+      "Sadržaj"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "math-uniri-zavrsni",
+    "unitId": "matematika",
+    "programs": [
+      "Sveučilišni prijediplomski studij Matematika"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "verified",
+    "profileLabel": "Fakultet za matematiku u Rijeci, zavrsni rad",
+    "verifiedAt": "2026-07-17",
+    "documentDate": null,
+    "rules": {
+      "requireA4": true,
+      "pageMin": 15,
+      "pageMax": 30,
+      "requireToc": true,
+      "requiredSections": [
+        {
+          "key": "sazetak",
+          "label": "Sažetak i ključne riječi",
+          "terms": [
+            "Sažetak"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "Uvod"
+          ]
+        },
+        {
+          "key": "razrada",
+          "label": "Razrada teme",
+          "terms": [
+            "Razrada"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zaključak",
+          "terms": [
+            "Zaključak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Popis literature",
+          "terms": [
+            "Literatura",
+            "Popis literature"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "Sadržaj"
+          ]
+        }
+      ]
+    },
+    "facts": [],
+    "note": "Pravilnik propisuje format papira, opseg i obvezne dijelove rada, ali NE propisuje vrstu slova, veličinu, prored, margine ni stil citiranja, pa se te dimenzije ne boduju (fakultet nema ni službeni predložak). Opseg je izražen u stranicama teksta uz gustoću od 30 redaka po 60 znakova.",
+    "sources": [
+      {
+        "title": "Pravilnik o zavrsnom radu na sveucilisnim prijediplomskim studijima Fakulteta za matematiku (20.12.2023.)",
+        "url": "https://math.uniri.hr/wp-content/uploads/2023/12/Pravilnik-o-zavrsnom-radu-na-sveucilisnim-prijediplomskim-studijima-Fakulteta-za-matematiku.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o završnom radu na sveučilišnim prijediplomskim studijima Fakulteta za matematiku (2023.)",
+      "Pravilnik o diplomskom radu na sveučilišnim diplomskim studijima Fakulteta za matematiku (2023.)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Opseg rada",
+      "Sadržaj",
+      "Obvezni dijelovi rada"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "math-uniri-diplomski",
+    "unitId": "matematika",
+    "programs": [
+      "Sveučilišni diplomski studij Diskretna matematika i primjene",
+      "Sveučilišni diplomski studij Matematika (nastavnički smjer)",
+      "Sveučilišni diplomski studij Matematika i informatika (nastavnički smjer)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "verified",
+    "profileLabel": "Fakultet za matematiku u Rijeci, diplomski rad",
+    "verifiedAt": "2026-07-17",
+    "documentDate": null,
+    "rules": {
+      "requireA4": true,
+      "pageMin": 30,
+      "pageMax": 90,
+      "requireToc": true,
+      "requiredSections": [
+        {
+          "key": "sazetak",
+          "label": "Sažetak i ključne riječi",
+          "terms": [
+            "Sažetak"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "Uvod"
+          ]
+        },
+        {
+          "key": "razrada",
+          "label": "Razrada teme",
+          "terms": [
+            "Razrada"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zaključak",
+          "terms": [
+            "Zaključak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Popis literature",
+          "terms": [
+            "Literatura",
+            "Popis literature"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "Sadržaj"
+          ]
+        }
+      ]
+    },
+    "facts": [],
+    "note": "Pravilnik propisuje format papira, opseg i obvezne dijelove rada, ali NE propisuje vrstu slova, veličinu, prored, margine ni stil citiranja, pa se te dimenzije ne boduju (fakultet nema ni službeni predložak). Opseg je izražen u stranicama teksta uz gustoću od 30 redaka po 60 znakova.",
+    "sources": [
+      {
+        "title": "Pravilnik o diplomskom radu na sveucilisnim diplomskim studijima Fakulteta za matematiku (20.12.2023.)",
+        "url": "https://math.uniri.hr/wp-content/uploads/2023/12/Pravilnik-o-diplomskom-radu-na-sveucilisnim-diplomskim-studijima-Fakulteta-za-matematiku.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o završnom radu na sveučilišnim prijediplomskim studijima Fakulteta za matematiku (2023.)",
+      "Pravilnik o diplomskom radu na sveučilišnim diplomskim studijima Fakulteta za matematiku (2023.)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Opseg rada",
+      "Sadržaj",
+      "Obvezni dijelovi rada"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "mathos-zavrsni",
+    "unitId": "mathos",
+    "programs": [
+      "Sveučilišni prijediplomski studij Matematika",
+      "Sveučilišni prijediplomski studij Matematika i računarstvo"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "verified",
+    "profileLabel": "FPMI Osijek, zavrsni rad",
+    "verifiedAt": "2026-07-17",
+    "documentDate": null,
+    "rules": {
+      "requireToc": true,
+      "requiredSections": [
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "Sadržaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "Uvod"
+          ]
+        },
+        {
+          "key": "glavni",
+          "label": "Glavni dio rada",
+          "terms": [
+            "Glavni dio"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "Literatura"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sažetak",
+          "terms": [
+            "Sažetak"
+          ]
+        },
+        {
+          "key": "kljucne",
+          "label": "Ključne riječi",
+          "terms": [
+            "Ključne riječi"
+          ]
+        },
+        {
+          "key": "zivotopis",
+          "label": "Životopis",
+          "terms": [
+            "Životopis"
+          ]
+        }
+      ]
+    },
+    "facts": [],
+    "note": "Pravilnik nalaže pisanje rada u LaTeX-u uz službeni predložak, pa se .docx provjerom pokriva samo struktura rada. Vrsta slova, veličina, prored, margine, format papira i opseg nisu propisani pravilnikom (vrijednosti nosi LaTeX predložak, koji nije provjerljiv u .docx-u). Stil citiranja nije imenovani standard nego numeričko pozivanje u uglatim zagradama.",
+    "sources": [
+      {
+        "title": "Pravilnik o zavrsnim radovima s Uputama za izradu zavrsnog rada (FPMI Osijek, 23.02.2026.)",
+        "url": "https://www.mathos.unios.hr/wp-content/uploads/2026/03/Pravilnik-o-zavrsnim-radovima-veljaca-2026.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o završnim radovima (FPMI Osijek, 2026.)",
+      "Pravilnik o diplomskim radovima (FPMI Osijek, 2023.)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Sadržaj",
+      "Obvezni dijelovi rada"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "mathos-diplomski",
+    "unitId": "mathos",
+    "programs": [
+      "Sveučilišni diplomski studij Matematika i računarstvo",
+      "Sveučilišni diplomski studij Financijska matematika i statistika",
+      "Sveučilišni diplomski nastavnički studij matematike i informatike"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "verified",
+    "profileLabel": "FPMI Osijek, diplomski rad",
+    "verifiedAt": "2026-07-17",
+    "documentDate": null,
+    "rules": {
+      "requireToc": true,
+      "requiredSections": [
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "Sadržaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "Uvod"
+          ]
+        },
+        {
+          "key": "glavni",
+          "label": "Glavni dio rada",
+          "terms": [
+            "Glavni dio"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "Literatura"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sažetak",
+          "terms": [
+            "Sažetak"
+          ]
+        },
+        {
+          "key": "kljucne",
+          "label": "Ključne riječi",
+          "terms": [
+            "Ključne riječi"
+          ]
+        },
+        {
+          "key": "zivotopis",
+          "label": "Životopis",
+          "terms": [
+            "Životopis"
+          ]
+        }
+      ]
+    },
+    "facts": [],
+    "note": "Pravilnik nalaže pisanje rada u LaTeX-u uz službeni predložak, pa se .docx provjerom pokriva samo struktura rada. Vrsta slova, veličina, prored, margine, format papira i opseg nisu propisani pravilnikom (vrijednosti nosi LaTeX predložak, koji nije provjerljiv u .docx-u). Stil citiranja nije imenovani standard nego numeričko pozivanje u uglatim zagradama.",
+    "sources": [
+      {
+        "title": "Pravilnik o diplomskim radovima s Uputama za izradu diplomskog rada (FPMI Osijek, 30.10.2023.)",
+        "url": "https://www.mathos.unios.hr/wp-content/uploads/2023/11/Pravilnik_o_diplomskim_radovima_-_potpisano.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o završnim radovima (FPMI Osijek, 2026.)",
+      "Pravilnik o diplomskim radovima (FPMI Osijek, 2023.)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Sadržaj",
+      "Obvezni dijelovi rada"
+    ],
+    "advisoryScope": []
   }
 ]

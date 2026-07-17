@@ -1,0 +1,497 @@
+{
+  "faculty": "ffpu",
+  "institution": "unipu",
+  "unit": {
+    "id": "ffpu"
+  },
+  "catalogPrograms": [
+    "Sveučilišni prijediplomski studij Hrvatski jezik i književnost",
+    "Sveučilišni prijediplomski studij Engleski jezik i književnost",
+    "Sveučilišni prijediplomski studij Talijanski jezik i književnost",
+    "Sveučilišni prijediplomski studij Japanski jezik i kultura",
+    "Sveučilišni prijediplomski studij Povijest",
+    "Sveučilišni prijediplomski studij Arheologija",
+    "Sveučilišni prijediplomski studij Latinski jezik i rimska književnost",
+    "Sveučilišni prijediplomski studij Jezik i interkulturalno posredovanje",
+    "Sveučilišni diplomski studij Hrvatski jezik i književnost",
+    "Sveučilišni diplomski studij Talijanski jezik i književnost",
+    "Sveučilišni diplomski studij Povijest",
+    "Sveučilišni diplomski studij Japanologija"
+  ],
+  "sources": [
+    {
+      "id": "unipu-zavrsni-izmjene-2021",
+      "kind": "pdf",
+      "title": "Pravilnik o izmjenama i dopunama Pravilnika o zavrsnom radu i zavrsnom koncertu na preddiplomskim sveucilisnim i strucnim studijima (23.07.2021.)",
+      "url": "https://www.unipu.hr/_download/repository/2021-07-23-Pravilnik_o_izmjenama_i_dopunama__Pravilnika_o_zavrsnom_radu_i_zavrsnom_koncertu_na_preddiplomskim_sveucilisnim_i_strucnim_studijima.pdf",
+      "publisher": "Sveuciliste Jurja Dobrile u Puli",
+      "snapshotPath": "data/sources/unipu/unipu-zavrsni-izmjene-2021.pdf",
+      "fetchedAt": "2026-07-17",
+      "lastChecked": "2026-07-17",
+      "validityClass": "stable",
+      "snapshotHash": "196ba803ff4e8cd9c0f95e7265c2a056b0ac1f52a51c7044df0ca49a48468da3"
+    },
+    {
+      "id": "unipu-diplomski-izmjene-2021",
+      "kind": "pdf",
+      "title": "Pravilnik o izmjenama i dopunama Pravilnika o diplomskom radu i diplomskom koncertu na sveucilisnim diplomskim studijima i integriranome preddiplomskom i diplomskom studiju (23.07.2021.)",
+      "url": "https://www.unipu.hr/_download/repository/2021-07-23-Pravilnik_o_izmjenama_i_dopunama_Pravilnika_o_dipl._radu_i_dipl._koncertu_na_sveucilisnim_dipl._studijima_i_integriranome_preddipl._i_dipl._studiju.pdf",
+      "publisher": "Sveuciliste Jurja Dobrile u Puli",
+      "snapshotPath": "data/sources/unipu/unipu-diplomski-izmjene-2021.pdf",
+      "fetchedAt": "2026-07-17",
+      "lastChecked": "2026-07-17",
+      "validityClass": "stable",
+      "snapshotHash": "9c9e27a6467d0d5f08684bab6e19a93e3a108a9232752054babfdfe8545d873c"
+    }
+  ],
+  "profiles": [
+    {
+      "id": "ffpu-zavrsni",
+      "unitId": "ffpu",
+      "programs": [
+        "Sveučilišni prijediplomski studij Hrvatski jezik i književnost",
+        "Sveučilišni prijediplomski studij Engleski jezik i književnost",
+        "Sveučilišni prijediplomski studij Talijanski jezik i književnost",
+        "Sveučilišni prijediplomski studij Japanski jezik i kultura",
+        "Sveučilišni prijediplomski studij Povijest",
+        "Sveučilišni prijediplomski studij Arheologija",
+        "Sveučilišni prijediplomski studij Latinski jezik i rimska književnost",
+        "Sveučilišni prijediplomski studij Jezik i interkulturalno posredovanje"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "verified",
+      "profileLabel": "Filozofski fakultet u Puli, zavrsni rad",
+      "verifiedAt": "2026-07-17",
+      "documentDate": null,
+      "rules": {
+        "requireA4": true,
+        "font": [
+          "Arial"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "footnoteSize": 10,
+        "footnoteSpacing": 1,
+        "requireToc": true,
+        "requiredSections": [
+          {
+            "key": "sadrzaj",
+            "label": "Sadržaj",
+            "terms": [
+              "Sadržaj"
+            ]
+          },
+          {
+            "key": "uvod",
+            "label": "Uvod",
+            "terms": [
+              "Uvod"
+            ]
+          },
+          {
+            "key": "obrada",
+            "label": "Obrada teme",
+            "terms": [
+              "Obrada teme",
+              "Razrada"
+            ]
+          },
+          {
+            "key": "zakljucak",
+            "label": "Zaključak",
+            "terms": [
+              "Zaključak"
+            ]
+          },
+          {
+            "key": "literatura",
+            "label": "Popis literature",
+            "terms": [
+              "Literatura",
+              "Popis literature"
+            ]
+          },
+          {
+            "key": "sazetak",
+            "label": "Sažetak",
+            "terms": [
+              "Sažetak"
+            ]
+          },
+          {
+            "key": "kljucne",
+            "label": "Ključne riječi",
+            "terms": [
+              "Ključne riječi"
+            ]
+          }
+        ]
+      },
+      "facts": [],
+      "note": "Pravila su iz krovnog pravilnika Sveučilišta Jurja Dobrile u Puli (važeći tekst čl. 5 prema izmjenama od 23.07.2021.), koji obvezuje sve sastavnice. Sastavnica nema vlastiti naputak. Pravilnik ne propisuje stil citiranja ni brojčani opseg (opseg je određen programom studija).",
+      "sources": [
+        {
+          "title": "Pravilnik o izmjenama i dopunama Pravilnika o zavrsnom radu i zavrsnom koncertu na preddiplomskim sveucilisnim i strucnim studijima (23.07.2021.)",
+          "url": "https://www.unipu.hr/_download/repository/2021-07-23-Pravilnik_o_izmjenama_i_dopunama__Pravilnika_o_zavrsnom_radu_i_zavrsnom_koncertu_na_preddiplomskim_sveucilisnim_i_strucnim_studijima.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o završnom radu i završnom koncertu Sveučilišta Jurja Dobrile u Puli (izmjene 23.07.2021.)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Vrsta slova",
+        "Veličina slova",
+        "Prored",
+        "Margine",
+        "Veličina slova u bilješkama",
+        "Prored u bilješkama",
+        "Sadržaj",
+        "Obvezni dijelovi rada"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "ffpu-diplomski",
+      "unitId": "ffpu",
+      "programs": [
+        "Sveučilišni diplomski studij Hrvatski jezik i književnost",
+        "Sveučilišni diplomski studij Talijanski jezik i književnost",
+        "Sveučilišni diplomski studij Povijest",
+        "Sveučilišni diplomski studij Japanologija"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "verified",
+      "profileLabel": "Filozofski fakultet u Puli, diplomski rad",
+      "verifiedAt": "2026-07-17",
+      "documentDate": null,
+      "rules": {
+        "requireA4": true,
+        "font": [
+          "Arial"
+        ],
+        "size": [
+          12
+        ],
+        "spacing": 1.5,
+        "margins": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "footnoteSize": 10,
+        "footnoteSpacing": 1,
+        "requireToc": true,
+        "requiredSections": [
+          {
+            "key": "sadrzaj",
+            "label": "Sadržaj",
+            "terms": [
+              "Sadržaj"
+            ]
+          },
+          {
+            "key": "uvod",
+            "label": "Uvod",
+            "terms": [
+              "Uvod"
+            ]
+          },
+          {
+            "key": "obrada",
+            "label": "Obrada teme",
+            "terms": [
+              "Obrada teme",
+              "Razrada"
+            ]
+          },
+          {
+            "key": "zakljucak",
+            "label": "Zaključak",
+            "terms": [
+              "Zaključak"
+            ]
+          },
+          {
+            "key": "literatura",
+            "label": "Popis literature",
+            "terms": [
+              "Literatura",
+              "Popis literature"
+            ]
+          },
+          {
+            "key": "sazetak",
+            "label": "Sažetak",
+            "terms": [
+              "Sažetak"
+            ]
+          },
+          {
+            "key": "kljucne",
+            "label": "Ključne riječi",
+            "terms": [
+              "Ključne riječi"
+            ]
+          }
+        ]
+      },
+      "facts": [],
+      "note": "Pravila su iz krovnog pravilnika Sveučilišta Jurja Dobrile u Puli (važeći tekst čl. 5 prema izmjenama od 23.07.2021.), koji obvezuje sve sastavnice. Sastavnica nema vlastiti naputak. Pravilnik ne propisuje stil citiranja ni brojčani opseg (opseg je određen programom studija).",
+      "sources": [
+        {
+          "title": "Pravilnik o izmjenama i dopunama Pravilnika o diplomskom radu i diplomskom koncertu na sveucilisnim diplomskim studijima i integriranome preddiplomskom i diplomskom studiju (23.07.2021.)",
+          "url": "https://www.unipu.hr/_download/repository/2021-07-23-Pravilnik_o_izmjenama_i_dopunama_Pravilnika_o_dipl._radu_i_dipl._koncertu_na_sveucilisnim_dipl._studijima_i_integriranome_preddipl._i_dipl._studiju.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o završnom radu i završnom koncertu Sveučilišta Jurja Dobrile u Puli (izmjene 23.07.2021.)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Vrsta slova",
+        "Veličina slova",
+        "Prored",
+        "Margine",
+        "Veličina slova u bilješkama",
+        "Prored u bilješkama",
+        "Sadržaj",
+        "Obvezni dijelovi rada"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-ffpu-zavrsni--paper-size-verified-2026-07-17",
+      "ruleId": "ffpu-zavrsni--paper-size",
+      "profileId": "ffpu-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "unipu-zavrsni-izmjene-2021",
+      "sourcePage": "Članak 5. stavak 1. (izmjene 23.07.2021., točka II.), str. 1 PDF-a",
+      "quote": "Završni rad treba biti napisan u digitalnom obliku u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm, a sastoji se od: - prve ili vanjske naslovne stranice (prilog 1 Pravilnika) - druge ili unutarnje naslovne stranice (prilog 1 Pravilnika) - potpisane izjave o akademskoj čestitosti - potpisane izjave o korištenju autorskog djela - sadržaja - uvoda - obrade teme - zaključka - popisa literature i drugih izvora podataka koji su upotrijebljeni u izradi završnog rada - priloga (ako postoje) - sažetka na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku - ključne riječi na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku.",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-ffpu-zavrsni--font-verified-2026-07-17",
+      "ruleId": "ffpu-zavrsni--font",
+      "profileId": "ffpu-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "unipu-zavrsni-izmjene-2021",
+      "sourcePage": "Članak 5. stavak 1. (izmjene 23.07.2021., točka II.), str. 1 PDF-a",
+      "quote": "Završni rad treba biti napisan u digitalnom obliku u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm, a sastoji se od: - prve ili vanjske naslovne stranice (prilog 1 Pravilnika) - druge ili unutarnje naslovne stranice (prilog 1 Pravilnika) - potpisane izjave o akademskoj čestitosti - potpisane izjave o korištenju autorskog djela - sadržaja - uvoda - obrade teme - zaključka - popisa literature i drugih izvora podataka koji su upotrijebljeni u izradi završnog rada - priloga (ako postoje) - sažetka na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku - ključne riječi na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku.",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-ffpu-zavrsni--font-size-verified-2026-07-17",
+      "ruleId": "ffpu-zavrsni--font-size",
+      "profileId": "ffpu-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "unipu-zavrsni-izmjene-2021",
+      "sourcePage": "Članak 5. stavak 1. (izmjene 23.07.2021., točka II.), str. 1 PDF-a",
+      "quote": "Završni rad treba biti napisan u digitalnom obliku u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm, a sastoji se od: - prve ili vanjske naslovne stranice (prilog 1 Pravilnika) - druge ili unutarnje naslovne stranice (prilog 1 Pravilnika) - potpisane izjave o akademskoj čestitosti - potpisane izjave o korištenju autorskog djela - sadržaja - uvoda - obrade teme - zaključka - popisa literature i drugih izvora podataka koji su upotrijebljeni u izradi završnog rada - priloga (ako postoje) - sažetka na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku - ključne riječi na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku.",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-ffpu-zavrsni--line-spacing-verified-2026-07-17",
+      "ruleId": "ffpu-zavrsni--line-spacing",
+      "profileId": "ffpu-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "unipu-zavrsni-izmjene-2021",
+      "sourcePage": "Članak 5. stavak 1. (izmjene 23.07.2021., točka II.), str. 1 PDF-a",
+      "quote": "Završni rad treba biti napisan u digitalnom obliku u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm, a sastoji se od: - prve ili vanjske naslovne stranice (prilog 1 Pravilnika) - druge ili unutarnje naslovne stranice (prilog 1 Pravilnika) - potpisane izjave o akademskoj čestitosti - potpisane izjave o korištenju autorskog djela - sadržaja - uvoda - obrade teme - zaključka - popisa literature i drugih izvora podataka koji su upotrijebljeni u izradi završnog rada - priloga (ako postoje) - sažetka na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku - ključne riječi na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku.",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-ffpu-zavrsni--margins-verified-2026-07-17",
+      "ruleId": "ffpu-zavrsni--margins",
+      "profileId": "ffpu-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "unipu-zavrsni-izmjene-2021",
+      "sourcePage": "Članak 5. stavak 1. (izmjene 23.07.2021., točka II.), str. 1 PDF-a",
+      "quote": "Završni rad treba biti napisan u digitalnom obliku u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm, a sastoji se od: - prve ili vanjske naslovne stranice (prilog 1 Pravilnika) - druge ili unutarnje naslovne stranice (prilog 1 Pravilnika) - potpisane izjave o akademskoj čestitosti - potpisane izjave o korištenju autorskog djela - sadržaja - uvoda - obrade teme - zaključka - popisa literature i drugih izvora podataka koji su upotrijebljeni u izradi završnog rada - priloga (ako postoje) - sažetka na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku - ključne riječi na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku.",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-ffpu-zavrsni--footnote-size-verified-2026-07-17",
+      "ruleId": "ffpu-zavrsni--footnote-size",
+      "profileId": "ffpu-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "unipu-zavrsni-izmjene-2021",
+      "sourcePage": "Članak 5. stavak 1. (izmjene 23.07.2021., točka II.), str. 1 PDF-a",
+      "quote": "Završni rad treba biti napisan u digitalnom obliku u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm, a sastoji se od: - prve ili vanjske naslovne stranice (prilog 1 Pravilnika) - druge ili unutarnje naslovne stranice (prilog 1 Pravilnika) - potpisane izjave o akademskoj čestitosti - potpisane izjave o korištenju autorskog djela - sadržaja - uvoda - obrade teme - zaključka - popisa literature i drugih izvora podataka koji su upotrijebljeni u izradi završnog rada - priloga (ako postoje) - sažetka na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku - ključne riječi na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku.",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-ffpu-zavrsni--footnote-spacing-verified-2026-07-17",
+      "ruleId": "ffpu-zavrsni--footnote-spacing",
+      "profileId": "ffpu-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "unipu-zavrsni-izmjene-2021",
+      "sourcePage": "Članak 5. stavak 1. (izmjene 23.07.2021., točka II.), str. 1 PDF-a",
+      "quote": "Završni rad treba biti napisan u digitalnom obliku u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm, a sastoji se od: - prve ili vanjske naslovne stranice (prilog 1 Pravilnika) - druge ili unutarnje naslovne stranice (prilog 1 Pravilnika) - potpisane izjave o akademskoj čestitosti - potpisane izjave o korištenju autorskog djela - sadržaja - uvoda - obrade teme - zaključka - popisa literature i drugih izvora podataka koji su upotrijebljeni u izradi završnog rada - priloga (ako postoje) - sažetka na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku - ključne riječi na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku.",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-ffpu-zavrsni--toc-verified-2026-07-17",
+      "ruleId": "ffpu-zavrsni--toc",
+      "profileId": "ffpu-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "unipu-zavrsni-izmjene-2021",
+      "sourcePage": "Članak 5. stavak 1. (izmjene 23.07.2021., točka II.), str. 1 PDF-a",
+      "quote": "Završni rad treba biti napisan u digitalnom obliku u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm, a sastoji se od: - prve ili vanjske naslovne stranice (prilog 1 Pravilnika) - druge ili unutarnje naslovne stranice (prilog 1 Pravilnika) - potpisane izjave o akademskoj čestitosti - potpisane izjave o korištenju autorskog djela - sadržaja - uvoda - obrade teme - zaključka - popisa literature i drugih izvora podataka koji su upotrijebljeni u izradi završnog rada - priloga (ako postoje) - sažetka na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku - ključne riječi na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku.",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-ffpu-zavrsni--required-sections-verified-2026-07-17",
+      "ruleId": "ffpu-zavrsni--required-sections",
+      "profileId": "ffpu-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "unipu-zavrsni-izmjene-2021",
+      "sourcePage": "Članak 5. stavak 1. (izmjene 23.07.2021., točka II.), str. 1 PDF-a",
+      "quote": "Završni rad treba biti napisan u digitalnom obliku u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm, a sastoji se od: - prve ili vanjske naslovne stranice (prilog 1 Pravilnika) - druge ili unutarnje naslovne stranice (prilog 1 Pravilnika) - potpisane izjave o akademskoj čestitosti - potpisane izjave o korištenju autorskog djela - sadržaja - uvoda - obrade teme - zaključka - popisa literature i drugih izvora podataka koji su upotrijebljeni u izradi završnog rada - priloga (ako postoje) - sažetka na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku - ključne riječi na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku.",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-ffpu-diplomski--paper-size-verified-2026-07-17",
+      "ruleId": "ffpu-diplomski--paper-size",
+      "profileId": "ffpu-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "unipu-diplomski-izmjene-2021",
+      "sourcePage": "Članak 5. stavak 1. (izmjene 23.07.2021., točka II.), str. 1 PDF-a",
+      "quote": "Diplomski rad treba biti napisan u digitalnom obliku u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm, a sastoji se od: - prve ili vanjske naslovne stranice (prilog 1 Pravilnika) - druge ili unutarnje naslovne stranice (prilog 1 Pravilnika) - potpisane izjave o akademskoj čestitosti - potpisane izjave o korištenju autorskog djela - sadržaja - uvoda - obrade teme - zaključka - popisa literature i drugih izvora podataka koji su upotrijebljeni u izradi diplomskog rada - priloga (ako postoje) - sažetka na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku - ključne riječi na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku.",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-ffpu-diplomski--font-verified-2026-07-17",
+      "ruleId": "ffpu-diplomski--font",
+      "profileId": "ffpu-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "unipu-diplomski-izmjene-2021",
+      "sourcePage": "Članak 5. stavak 1. (izmjene 23.07.2021., točka II.), str. 1 PDF-a",
+      "quote": "Diplomski rad treba biti napisan u digitalnom obliku u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm, a sastoji se od: - prve ili vanjske naslovne stranice (prilog 1 Pravilnika) - druge ili unutarnje naslovne stranice (prilog 1 Pravilnika) - potpisane izjave o akademskoj čestitosti - potpisane izjave o korištenju autorskog djela - sadržaja - uvoda - obrade teme - zaključka - popisa literature i drugih izvora podataka koji su upotrijebljeni u izradi diplomskog rada - priloga (ako postoje) - sažetka na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku - ključne riječi na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku.",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-ffpu-diplomski--font-size-verified-2026-07-17",
+      "ruleId": "ffpu-diplomski--font-size",
+      "profileId": "ffpu-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "unipu-diplomski-izmjene-2021",
+      "sourcePage": "Članak 5. stavak 1. (izmjene 23.07.2021., točka II.), str. 1 PDF-a",
+      "quote": "Diplomski rad treba biti napisan u digitalnom obliku u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm, a sastoji se od: - prve ili vanjske naslovne stranice (prilog 1 Pravilnika) - druge ili unutarnje naslovne stranice (prilog 1 Pravilnika) - potpisane izjave o akademskoj čestitosti - potpisane izjave o korištenju autorskog djela - sadržaja - uvoda - obrade teme - zaključka - popisa literature i drugih izvora podataka koji su upotrijebljeni u izradi diplomskog rada - priloga (ako postoje) - sažetka na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku - ključne riječi na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku.",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-ffpu-diplomski--line-spacing-verified-2026-07-17",
+      "ruleId": "ffpu-diplomski--line-spacing",
+      "profileId": "ffpu-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "unipu-diplomski-izmjene-2021",
+      "sourcePage": "Članak 5. stavak 1. (izmjene 23.07.2021., točka II.), str. 1 PDF-a",
+      "quote": "Diplomski rad treba biti napisan u digitalnom obliku u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm, a sastoji se od: - prve ili vanjske naslovne stranice (prilog 1 Pravilnika) - druge ili unutarnje naslovne stranice (prilog 1 Pravilnika) - potpisane izjave o akademskoj čestitosti - potpisane izjave o korištenju autorskog djela - sadržaja - uvoda - obrade teme - zaključka - popisa literature i drugih izvora podataka koji su upotrijebljeni u izradi diplomskog rada - priloga (ako postoje) - sažetka na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku - ključne riječi na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku.",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-ffpu-diplomski--margins-verified-2026-07-17",
+      "ruleId": "ffpu-diplomski--margins",
+      "profileId": "ffpu-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "unipu-diplomski-izmjene-2021",
+      "sourcePage": "Članak 5. stavak 1. (izmjene 23.07.2021., točka II.), str. 1 PDF-a",
+      "quote": "Diplomski rad treba biti napisan u digitalnom obliku u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm, a sastoji se od: - prve ili vanjske naslovne stranice (prilog 1 Pravilnika) - druge ili unutarnje naslovne stranice (prilog 1 Pravilnika) - potpisane izjave o akademskoj čestitosti - potpisane izjave o korištenju autorskog djela - sadržaja - uvoda - obrade teme - zaključka - popisa literature i drugih izvora podataka koji su upotrijebljeni u izradi diplomskog rada - priloga (ako postoje) - sažetka na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku - ključne riječi na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku.",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-ffpu-diplomski--footnote-size-verified-2026-07-17",
+      "ruleId": "ffpu-diplomski--footnote-size",
+      "profileId": "ffpu-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "unipu-diplomski-izmjene-2021",
+      "sourcePage": "Članak 5. stavak 1. (izmjene 23.07.2021., točka II.), str. 1 PDF-a",
+      "quote": "Diplomski rad treba biti napisan u digitalnom obliku u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm, a sastoji se od: - prve ili vanjske naslovne stranice (prilog 1 Pravilnika) - druge ili unutarnje naslovne stranice (prilog 1 Pravilnika) - potpisane izjave o akademskoj čestitosti - potpisane izjave o korištenju autorskog djela - sadržaja - uvoda - obrade teme - zaključka - popisa literature i drugih izvora podataka koji su upotrijebljeni u izradi diplomskog rada - priloga (ako postoje) - sažetka na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku - ključne riječi na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku.",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-ffpu-diplomski--footnote-spacing-verified-2026-07-17",
+      "ruleId": "ffpu-diplomski--footnote-spacing",
+      "profileId": "ffpu-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "unipu-diplomski-izmjene-2021",
+      "sourcePage": "Članak 5. stavak 1. (izmjene 23.07.2021., točka II.), str. 1 PDF-a",
+      "quote": "Diplomski rad treba biti napisan u digitalnom obliku u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm, a sastoji se od: - prve ili vanjske naslovne stranice (prilog 1 Pravilnika) - druge ili unutarnje naslovne stranice (prilog 1 Pravilnika) - potpisane izjave o akademskoj čestitosti - potpisane izjave o korištenju autorskog djela - sadržaja - uvoda - obrade teme - zaključka - popisa literature i drugih izvora podataka koji su upotrijebljeni u izradi diplomskog rada - priloga (ako postoje) - sažetka na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku - ključne riječi na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku.",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-ffpu-diplomski--toc-verified-2026-07-17",
+      "ruleId": "ffpu-diplomski--toc",
+      "profileId": "ffpu-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "unipu-diplomski-izmjene-2021",
+      "sourcePage": "Članak 5. stavak 1. (izmjene 23.07.2021., točka II.), str. 1 PDF-a",
+      "quote": "Diplomski rad treba biti napisan u digitalnom obliku u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm, a sastoji se od: - prve ili vanjske naslovne stranice (prilog 1 Pravilnika) - druge ili unutarnje naslovne stranice (prilog 1 Pravilnika) - potpisane izjave o akademskoj čestitosti - potpisane izjave o korištenju autorskog djela - sadržaja - uvoda - obrade teme - zaključka - popisa literature i drugih izvora podataka koji su upotrijebljeni u izradi diplomskog rada - priloga (ako postoje) - sažetka na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku - ključne riječi na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku.",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-ffpu-diplomski--required-sections-verified-2026-07-17",
+      "ruleId": "ffpu-diplomski--required-sections",
+      "profileId": "ffpu-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "unipu-diplomski-izmjene-2021",
+      "sourcePage": "Članak 5. stavak 1. (izmjene 23.07.2021., točka II.), str. 1 PDF-a",
+      "quote": "Diplomski rad treba biti napisan u digitalnom obliku u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm, a sastoji se od: - prve ili vanjske naslovne stranice (prilog 1 Pravilnika) - druge ili unutarnje naslovne stranice (prilog 1 Pravilnika) - potpisane izjave o akademskoj čestitosti - potpisane izjave o korištenju autorskog djela - sadržaja - uvoda - obrade teme - zaključka - popisa literature i drugih izvora podataka koji su upotrijebljeni u izradi diplomskog rada - priloga (ako postoje) - sažetka na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku - ključne riječi na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku.",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    }
+  ]
+}

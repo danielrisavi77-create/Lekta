@@ -1,0 +1,237 @@
+{
+  "profileId": "mapu-glazbena-pedagogija-zavrsni",
+  "entries": [
+    {
+      "ruleId": "mapu-glazbena-pedagogija-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "value": true,
+      "category": "format",
+      "label": "Format papira",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "unipu-zavrsni-izmjene-2021",
+      "sourcePage": "Članak 5. stavak 1. (izmjene 23.07.2021., točka II.), str. 1 PDF-a",
+      "quote": "Završni rad treba biti napisan u digitalnom obliku u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm, a sastoji se od: - prve ili vanjske naslovne stranice (prilog 1 Pravilnika) - druge ili unutarnje naslovne stranice (prilog 1 Pravilnika) - potpisane izjave o akademskoj čestitosti - potpisane izjave o korištenju autorskog djela - sadržaja - uvoda - obrade teme - zaključka - popisa literature i drugih izvora podataka koji su upotrijebljeni u izradi završnog rada - priloga (ako postoje) - sažetka na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku - ključne riječi na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "196ba803ff4e8cd9c0f95e7265c2a056b0ac1f52a51c7044df0ca49a48468da3",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "harvest+ocr-verify"
+    },
+    {
+      "ruleId": "mapu-glazbena-pedagogija-zavrsni--font",
+      "checkId": "font",
+      "value": [
+        "Arial"
+      ],
+      "category": "format",
+      "label": "Vrsta slova",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "unipu-zavrsni-izmjene-2021",
+      "sourcePage": "Članak 5. stavak 1. (izmjene 23.07.2021., točka II.), str. 1 PDF-a",
+      "quote": "Završni rad treba biti napisan u digitalnom obliku u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm, a sastoji se od: - prve ili vanjske naslovne stranice (prilog 1 Pravilnika) - druge ili unutarnje naslovne stranice (prilog 1 Pravilnika) - potpisane izjave o akademskoj čestitosti - potpisane izjave o korištenju autorskog djela - sadržaja - uvoda - obrade teme - zaključka - popisa literature i drugih izvora podataka koji su upotrijebljeni u izradi završnog rada - priloga (ako postoje) - sažetka na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku - ključne riječi na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "196ba803ff4e8cd9c0f95e7265c2a056b0ac1f52a51c7044df0ca49a48468da3",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "harvest+ocr-verify"
+    },
+    {
+      "ruleId": "mapu-glazbena-pedagogija-zavrsni--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Veličina slova",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "unipu-zavrsni-izmjene-2021",
+      "sourcePage": "Članak 5. stavak 1. (izmjene 23.07.2021., točka II.), str. 1 PDF-a",
+      "quote": "Završni rad treba biti napisan u digitalnom obliku u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm, a sastoji se od: - prve ili vanjske naslovne stranice (prilog 1 Pravilnika) - druge ili unutarnje naslovne stranice (prilog 1 Pravilnika) - potpisane izjave o akademskoj čestitosti - potpisane izjave o korištenju autorskog djela - sadržaja - uvoda - obrade teme - zaključka - popisa literature i drugih izvora podataka koji su upotrijebljeni u izradi završnog rada - priloga (ako postoje) - sažetka na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku - ključne riječi na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "196ba803ff4e8cd9c0f95e7265c2a056b0ac1f52a51c7044df0ca49a48468da3",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "harvest+ocr-verify"
+    },
+    {
+      "ruleId": "mapu-glazbena-pedagogija-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "unipu-zavrsni-izmjene-2021",
+      "sourcePage": "Članak 5. stavak 1. (izmjene 23.07.2021., točka II.), str. 1 PDF-a",
+      "quote": "Završni rad treba biti napisan u digitalnom obliku u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm, a sastoji se od: - prve ili vanjske naslovne stranice (prilog 1 Pravilnika) - druge ili unutarnje naslovne stranice (prilog 1 Pravilnika) - potpisane izjave o akademskoj čestitosti - potpisane izjave o korištenju autorskog djela - sadržaja - uvoda - obrade teme - zaključka - popisa literature i drugih izvora podataka koji su upotrijebljeni u izradi završnog rada - priloga (ako postoje) - sažetka na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku - ključne riječi na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "196ba803ff4e8cd9c0f95e7265c2a056b0ac1f52a51c7044df0ca49a48468da3",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "harvest+ocr-verify"
+    },
+    {
+      "ruleId": "mapu-glazbena-pedagogija-zavrsni--margins",
+      "checkId": "margins",
+      "value": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "category": "format",
+      "label": "Margine",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "unipu-zavrsni-izmjene-2021",
+      "sourcePage": "Članak 5. stavak 1. (izmjene 23.07.2021., točka II.), str. 1 PDF-a",
+      "quote": "Završni rad treba biti napisan u digitalnom obliku u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm, a sastoji se od: - prve ili vanjske naslovne stranice (prilog 1 Pravilnika) - druge ili unutarnje naslovne stranice (prilog 1 Pravilnika) - potpisane izjave o akademskoj čestitosti - potpisane izjave o korištenju autorskog djela - sadržaja - uvoda - obrade teme - zaključka - popisa literature i drugih izvora podataka koji su upotrijebljeni u izradi završnog rada - priloga (ako postoje) - sažetka na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku - ključne riječi na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "196ba803ff4e8cd9c0f95e7265c2a056b0ac1f52a51c7044df0ca49a48468da3",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "harvest+ocr-verify"
+    },
+    {
+      "ruleId": "mapu-glazbena-pedagogija-zavrsni--footnote-size",
+      "checkId": "footnote-size",
+      "value": 10,
+      "category": "format",
+      "label": "Veličina slova u bilješkama",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "unipu-zavrsni-izmjene-2021",
+      "sourcePage": "Članak 5. stavak 1. (izmjene 23.07.2021., točka II.), str. 1 PDF-a",
+      "quote": "Završni rad treba biti napisan u digitalnom obliku u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm, a sastoji se od: - prve ili vanjske naslovne stranice (prilog 1 Pravilnika) - druge ili unutarnje naslovne stranice (prilog 1 Pravilnika) - potpisane izjave o akademskoj čestitosti - potpisane izjave o korištenju autorskog djela - sadržaja - uvoda - obrade teme - zaključka - popisa literature i drugih izvora podataka koji su upotrijebljeni u izradi završnog rada - priloga (ako postoje) - sažetka na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku - ključne riječi na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "196ba803ff4e8cd9c0f95e7265c2a056b0ac1f52a51c7044df0ca49a48468da3",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "harvest+ocr-verify"
+    },
+    {
+      "ruleId": "mapu-glazbena-pedagogija-zavrsni--footnote-spacing",
+      "checkId": "footnote-spacing",
+      "value": 1,
+      "category": "format",
+      "label": "Prored u bilješkama",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "unipu-zavrsni-izmjene-2021",
+      "sourcePage": "Članak 5. stavak 1. (izmjene 23.07.2021., točka II.), str. 1 PDF-a",
+      "quote": "Završni rad treba biti napisan u digitalnom obliku u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm, a sastoji se od: - prve ili vanjske naslovne stranice (prilog 1 Pravilnika) - druge ili unutarnje naslovne stranice (prilog 1 Pravilnika) - potpisane izjave o akademskoj čestitosti - potpisane izjave o korištenju autorskog djela - sadržaja - uvoda - obrade teme - zaključka - popisa literature i drugih izvora podataka koji su upotrijebljeni u izradi završnog rada - priloga (ako postoje) - sažetka na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku - ključne riječi na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "196ba803ff4e8cd9c0f95e7265c2a056b0ac1f52a51c7044df0ca49a48468da3",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "harvest+ocr-verify"
+    },
+    {
+      "ruleId": "mapu-glazbena-pedagogija-zavrsni--toc",
+      "checkId": "toc",
+      "value": true,
+      "category": "structure",
+      "label": "Sadržaj",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "unipu-zavrsni-izmjene-2021",
+      "sourcePage": "Članak 5. stavak 1. (izmjene 23.07.2021., točka II.), str. 1 PDF-a",
+      "quote": "Završni rad treba biti napisan u digitalnom obliku u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm, a sastoji se od: - prve ili vanjske naslovne stranice (prilog 1 Pravilnika) - druge ili unutarnje naslovne stranice (prilog 1 Pravilnika) - potpisane izjave o akademskoj čestitosti - potpisane izjave o korištenju autorskog djela - sadržaja - uvoda - obrade teme - zaključka - popisa literature i drugih izvora podataka koji su upotrijebljeni u izradi završnog rada - priloga (ako postoje) - sažetka na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku - ključne riječi na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "196ba803ff4e8cd9c0f95e7265c2a056b0ac1f52a51c7044df0ca49a48468da3",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "harvest+ocr-verify"
+    },
+    {
+      "ruleId": "mapu-glazbena-pedagogija-zavrsni--required-sections",
+      "checkId": "required-sections",
+      "value": [
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "Sadržaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "Uvod"
+          ]
+        },
+        {
+          "key": "obrada",
+          "label": "Obrada teme",
+          "terms": [
+            "Obrada teme",
+            "Razrada"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zaključak",
+          "terms": [
+            "Zaključak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Popis literature",
+          "terms": [
+            "Literatura",
+            "Popis literature"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sažetak",
+          "terms": [
+            "Sažetak"
+          ]
+        },
+        {
+          "key": "kljucne",
+          "label": "Ključne riječi",
+          "terms": [
+            "Ključne riječi"
+          ]
+        }
+      ],
+      "category": "structure",
+      "label": "Obvezni dijelovi rada",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "unipu-zavrsni-izmjene-2021",
+      "sourcePage": "Članak 5. stavak 1. (izmjene 23.07.2021., točka II.), str. 1 PDF-a",
+      "quote": "Završni rad treba biti napisan u digitalnom obliku u formatu A4; vrsta slova: Arial; veličina slova teksta 12; podrubne bilješke 10; prored 1,5; prored u bilješci 1,0; margine 2,5 cm, a sastoji se od: - prve ili vanjske naslovne stranice (prilog 1 Pravilnika) - druge ili unutarnje naslovne stranice (prilog 1 Pravilnika) - potpisane izjave o akademskoj čestitosti - potpisane izjave o korištenju autorskog djela - sadržaja - uvoda - obrade teme - zaključka - popisa literature i drugih izvora podataka koji su upotrijebljeni u izradi završnog rada - priloga (ako postoje) - sažetka na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku - ključne riječi na hrvatskom jeziku, jeziku na kojem je rad pisan i na engleskom jeziku.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "196ba803ff4e8cd9c0f95e7265c2a056b0ac1f52a51c7044df0ca49a48468da3",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "harvest+ocr-verify"
+    }
+  ]
+}

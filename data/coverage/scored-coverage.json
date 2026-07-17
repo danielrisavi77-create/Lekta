@@ -41,6 +41,22 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "apuri-diplomski",
+      "scored": 8,
+      "machineCheckable": 8,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-17"
+    },
+    {
+      "profileId": "apuri-zavrsni",
+      "scored": 8,
+      "machineCheckable": 8,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-17"
+    },
+    {
       "profileId": "arca-zavrsni",
       "scored": 3,
       "machineCheckable": 4,
@@ -337,6 +353,22 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "ffpu-diplomski",
+      "scored": 9,
+      "machineCheckable": 9,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-17"
+    },
+    {
+      "profileId": "ffpu-zavrsni",
+      "scored": 9,
+      "machineCheckable": 9,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-17"
+    },
+    {
       "profileId": "ffri-diplomski",
       "scored": 6,
       "machineCheckable": 6,
@@ -495,6 +527,14 @@
       "advisory": 2,
       "ratio": 1,
       "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "fipu-zavrsni",
+      "scored": 9,
+      "machineCheckable": 9,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-17"
     },
     {
       "profileId": "fizri-diplomski",
@@ -1001,6 +1041,54 @@
       "lastVerified": "2026-07-16"
     },
     {
+      "profileId": "mapu-glazbena-pedagogija-diplomski",
+      "scored": 9,
+      "machineCheckable": 9,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-17"
+    },
+    {
+      "profileId": "mapu-glazbena-pedagogija-zavrsni",
+      "scored": 9,
+      "machineCheckable": 9,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-17"
+    },
+    {
+      "profileId": "math-uniri-diplomski",
+      "scored": 4,
+      "machineCheckable": 4,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-17"
+    },
+    {
+      "profileId": "math-uniri-zavrsni",
+      "scored": 4,
+      "machineCheckable": 4,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-17"
+    },
+    {
+      "profileId": "mathos-diplomski",
+      "scored": 2,
+      "machineCheckable": 2,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-17"
+    },
+    {
+      "profileId": "mathos-zavrsni",
+      "scored": 2,
+      "machineCheckable": 2,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-17"
+    },
+    {
       "profileId": "medri-farmacija-diplomski",
       "scored": 5,
       "machineCheckable": 5,
@@ -1063,6 +1151,14 @@
       "advisory": 0,
       "ratio": 1,
       "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "mfpu-diplomski",
+      "scored": 9,
+      "machineCheckable": 9,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-17"
     },
     {
       "profileId": "more-diplomski",
@@ -1921,5 +2017,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 1436
+  "totalScored": 1518
 }

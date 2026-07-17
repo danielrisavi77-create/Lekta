@@ -1,0 +1,93 @@
+{
+  "profileId": "mathos-zavrsni",
+  "entries": [
+    {
+      "ruleId": "mathos-zavrsni--toc",
+      "checkId": "toc",
+      "value": true,
+      "category": "structure",
+      "label": "Sadržaj",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "mathos-pravilnik-zavrsni-2026",
+      "sourcePage": "Prilog 1 (Upute za izradu završnog rada), I. Osnovne cjeline",
+      "quote": "Završni rad sadrži sljedeće cjeline i to navedenim redoslijedom: Sadržaj [...] Uvod [...] Glavni dio rada [...] Literatura: korištenu literaturu treba navesti abecednim redom prema prezimenu prvog autora. [...] Sažetak [...] Ključne riječi [...] Engleski prijevod [...] Životopis",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "587634d10fc5e9e54b5f1135297bf3a6f4a67d43373a159317d14d4f4fac8d7d",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "harvest+ocr-verify"
+    },
+    {
+      "ruleId": "mathos-zavrsni--required-sections",
+      "checkId": "required-sections",
+      "value": [
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "Sadržaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "Uvod"
+          ]
+        },
+        {
+          "key": "glavni",
+          "label": "Glavni dio rada",
+          "terms": [
+            "Glavni dio"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "Literatura"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sažetak",
+          "terms": [
+            "Sažetak"
+          ]
+        },
+        {
+          "key": "kljucne",
+          "label": "Ključne riječi",
+          "terms": [
+            "Ključne riječi"
+          ]
+        },
+        {
+          "key": "zivotopis",
+          "label": "Životopis",
+          "terms": [
+            "Životopis"
+          ]
+        }
+      ],
+      "category": "structure",
+      "label": "Obvezni dijelovi rada",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "mathos-pravilnik-zavrsni-2026",
+      "sourcePage": "Prilog 1 (Upute za izradu završnog rada), I. Osnovne cjeline",
+      "quote": "Završni rad sadrži sljedeće cjeline i to navedenim redoslijedom: Sadržaj [...] Uvod [...] Glavni dio rada [...] Literatura: korištenu literaturu treba navesti abecednim redom prema prezimenu prvog autora. [...] Sažetak [...] Ključne riječi [...] Engleski prijevod [...] Životopis",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "587634d10fc5e9e54b5f1135297bf3a6f4a67d43373a159317d14d4f4fac8d7d",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "harvest+ocr-verify"
+    }
+  ]
+}

@@ -39,6 +39,13 @@
     "toc",
     "page-numbers"
   ],
+  "apuri-diplomski": [
+    "margins",
+    "paper-size"
+  ],
+  "apuri-zavrsni": [
+    "toc"
+  ],
   "arca-zavrsni": [
     "font",
     "font-size",
@@ -227,6 +234,14 @@
     "toc",
     "page-numbers"
   ],
+  "ffpu-diplomski": [
+    "justify",
+    "page-numbers"
+  ],
+  "ffpu-zavrsni": [
+    "justify",
+    "page-numbers"
+  ],
   "ffri-diplomski": [
     "toc",
     "page-numbers"
@@ -307,6 +322,10 @@
   ],
   "fhs-zavrsni": [
     "paper-size"
+  ],
+  "fipu-zavrsni": [
+    "justify",
+    "page-numbers"
   ],
   "fizri-diplomski": [
     "font",
@@ -634,6 +653,48 @@
     "paper-size",
     "toc"
   ],
+  "mapu-glazbena-pedagogija-diplomski": [
+    "justify",
+    "page-numbers"
+  ],
+  "mapu-glazbena-pedagogija-zavrsni": [
+    "justify",
+    "page-numbers"
+  ],
+  "math-uniri-diplomski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "page-numbers"
+  ],
+  "math-uniri-zavrsni": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "page-numbers"
+  ],
+  "mathos-diplomski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "page-numbers"
+  ],
+  "mathos-zavrsni": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "page-numbers"
+  ],
   "medri-farmacija-diplomski": [
     "font",
     "justify",
@@ -673,6 +734,10 @@
   "mev-zavrsni": [
     "font",
     "toc",
+    "page-numbers"
+  ],
+  "mfpu-diplomski": [
+    "justify",
     "page-numbers"
   ],
   "more-diplomski": [

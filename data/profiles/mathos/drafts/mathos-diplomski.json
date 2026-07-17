@@ -1,0 +1,93 @@
+{
+  "profileId": "mathos-diplomski",
+  "entries": [
+    {
+      "ruleId": "mathos-diplomski--toc",
+      "checkId": "toc",
+      "value": true,
+      "category": "structure",
+      "label": "Sadržaj",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "mathos-pravilnik-diplomski-2023",
+      "sourcePage": "Prilog 1 (Upute za izradu završnog rada), I. Osnovne cjeline",
+      "quote": "Diplomski rad sadrži sljedeće cjeline i to navedenim redoslijedom: Sadržaj [...] Uvod [...] Glavni dio rada [...] Literatura: korištenu literaturu treba navesti abecednim redom prema prezimenu prvog autora. [...] Sažetak [...] Ključne riječi [...] Engleski prijevod [...] Životopis",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "ac7fb707920ca89d618e4ff8ac19ea698f76adb3b75ea79947f36ca2a8c3ff57",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "harvest+ocr-verify"
+    },
+    {
+      "ruleId": "mathos-diplomski--required-sections",
+      "checkId": "required-sections",
+      "value": [
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "Sadržaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "Uvod"
+          ]
+        },
+        {
+          "key": "glavni",
+          "label": "Glavni dio rada",
+          "terms": [
+            "Glavni dio"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "Literatura"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sažetak",
+          "terms": [
+            "Sažetak"
+          ]
+        },
+        {
+          "key": "kljucne",
+          "label": "Ključne riječi",
+          "terms": [
+            "Ključne riječi"
+          ]
+        },
+        {
+          "key": "zivotopis",
+          "label": "Životopis",
+          "terms": [
+            "Životopis"
+          ]
+        }
+      ],
+      "category": "structure",
+      "label": "Obvezni dijelovi rada",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "mathos-pravilnik-diplomski-2023",
+      "sourcePage": "Prilog 1 (Upute za izradu završnog rada), I. Osnovne cjeline",
+      "quote": "Diplomski rad sadrži sljedeće cjeline i to navedenim redoslijedom: Sadržaj [...] Uvod [...] Glavni dio rada [...] Literatura: korištenu literaturu treba navesti abecednim redom prema prezimenu prvog autora. [...] Sažetak [...] Ključne riječi [...] Engleski prijevod [...] Životopis",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "ac7fb707920ca89d618e4ff8ac19ea698f76adb3b75ea79947f36ca2a8c3ff57",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "harvest+ocr-verify"
+    }
+  ]
+}

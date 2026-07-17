@@ -1,0 +1,128 @@
+{
+  "profileId": "math-uniri-diplomski",
+  "entries": [
+    {
+      "ruleId": "math-uniri-diplomski--paper-size",
+      "checkId": "paper-size",
+      "value": true,
+      "category": "format",
+      "label": "Format papira",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "math-uniri-pravilnik-diplomski-2023",
+      "sourcePage": "Članak 8. stavak 1.",
+      "quote": "Diplomski rad mora biti otisnut na papiru formata A4 (21 x 29,7 cm) i mora imati najmanje 30, a najviše 90 stranica teksta. Jedna stranica sadrži 30 redova po 60 otisnutih znakova, a sastoji se od: 1. korica (meki ili tvrdi uvez) 2. naslovnice [...] 4. sažetaka i ključnih riječi 5. uvoda, razrade teme i zaključka 6. popisa literature 7. popisa izvora 8. popisa priloga (slikovnih, grafičkih, zvučnih zapisa i sl.) 9. sadržaja (na početku ili na kraju rada).",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "afe96bb4cd1811b5744449bb5f4a0628121f874302ad2a092b82dc1c70e99b0f",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "harvest+ocr-verify"
+    },
+    {
+      "ruleId": "math-uniri-diplomski--page-count",
+      "checkId": "page-count",
+      "value": {
+        "min": 30,
+        "max": 90
+      },
+      "category": "scope",
+      "label": "Opseg rada",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "math-uniri-pravilnik-diplomski-2023",
+      "sourcePage": "Članak 8. stavak 1.",
+      "quote": "Diplomski rad mora biti otisnut na papiru formata A4 (21 x 29,7 cm) i mora imati najmanje 30, a najviše 90 stranica teksta. Jedna stranica sadrži 30 redova po 60 otisnutih znakova, a sastoji se od: 1. korica (meki ili tvrdi uvez) 2. naslovnice [...] 4. sažetaka i ključnih riječi 5. uvoda, razrade teme i zaključka 6. popisa literature 7. popisa izvora 8. popisa priloga (slikovnih, grafičkih, zvučnih zapisa i sl.) 9. sadržaja (na početku ili na kraju rada).",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "afe96bb4cd1811b5744449bb5f4a0628121f874302ad2a092b82dc1c70e99b0f",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "harvest+ocr-verify"
+    },
+    {
+      "ruleId": "math-uniri-diplomski--toc",
+      "checkId": "toc",
+      "value": true,
+      "category": "structure",
+      "label": "Sadržaj",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "math-uniri-pravilnik-diplomski-2023",
+      "sourcePage": "Članak 8. stavak 1.",
+      "quote": "Diplomski rad mora biti otisnut na papiru formata A4 (21 x 29,7 cm) i mora imati najmanje 30, a najviše 90 stranica teksta. Jedna stranica sadrži 30 redova po 60 otisnutih znakova, a sastoji se od: 1. korica (meki ili tvrdi uvez) 2. naslovnice [...] 4. sažetaka i ključnih riječi 5. uvoda, razrade teme i zaključka 6. popisa literature 7. popisa izvora 8. popisa priloga (slikovnih, grafičkih, zvučnih zapisa i sl.) 9. sadržaja (na početku ili na kraju rada).",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "afe96bb4cd1811b5744449bb5f4a0628121f874302ad2a092b82dc1c70e99b0f",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "harvest+ocr-verify"
+    },
+    {
+      "ruleId": "math-uniri-diplomski--required-sections",
+      "checkId": "required-sections",
+      "value": [
+        {
+          "key": "sazetak",
+          "label": "Sažetak i ključne riječi",
+          "terms": [
+            "Sažetak"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "Uvod"
+          ]
+        },
+        {
+          "key": "razrada",
+          "label": "Razrada teme",
+          "terms": [
+            "Razrada"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zaključak",
+          "terms": [
+            "Zaključak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Popis literature",
+          "terms": [
+            "Literatura",
+            "Popis literature"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "Sadržaj"
+          ]
+        }
+      ],
+      "category": "structure",
+      "label": "Obvezni dijelovi rada",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "math-uniri-pravilnik-diplomski-2023",
+      "sourcePage": "Članak 8. stavak 1.",
+      "quote": "Diplomski rad mora biti otisnut na papiru formata A4 (21 x 29,7 cm) i mora imati najmanje 30, a najviše 90 stranica teksta. Jedna stranica sadrži 30 redova po 60 otisnutih znakova, a sastoji se od: 1. korica (meki ili tvrdi uvez) 2. naslovnice [...] 4. sažetaka i ključnih riječi 5. uvoda, razrade teme i zaključka 6. popisa literature 7. popisa izvora 8. popisa priloga (slikovnih, grafičkih, zvučnih zapisa i sl.) 9. sadržaja (na početku ili na kraju rada).",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "afe96bb4cd1811b5744449bb5f4a0628121f874302ad2a092b82dc1c70e99b0f",
+      "lastVerified": "2026-07-17",
+      "verifiedBy": "Daniel",
+      "reviewedBy": "Daniel",
+      "confirmedVia": "harvest+ocr-verify"
+    }
+  ]
+}

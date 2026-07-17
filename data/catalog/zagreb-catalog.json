@@ -1545,7 +1545,8 @@
           "Sveučilišni diplomski studij Glazbena pedagogija",
           "Sveučilišni diplomski studij Klavir",
           "Sveučilišni diplomski studij Klasična harmonika",
-          "Sveučilišni diplomski studij Solo pjevanje"
+          "Sveučilišni diplomski studij Solo pjevanje",
+          "Sveučilišni prijediplomski studij Glazbena pedagogija"
         ]
       },
       {
@@ -1564,7 +1565,8 @@
         "family": "biomed",
         "status": "partial",
         "programs": [
-          "Sveučilišni integrirani prijediplomski i diplomski studij Medicina"
+          "Prijediplomski stručni studij Sestrinstvo",
+          "Diplomski sveučilišni studij Sestrinstvo"
         ]
       }
     ]

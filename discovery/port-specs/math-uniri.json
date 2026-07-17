@@ -1,0 +1,311 @@
+{
+  "faculty": "math-uniri",
+  "institution": "uniri",
+  "unit": {
+    "id": "matematika"
+  },
+  "catalogPrograms": [
+    "Sveučilišni prijediplomski studij Matematika",
+    "Sveučilišni diplomski studij Diskretna matematika i primjene",
+    "Sveučilišni diplomski studij Matematika (nastavnički smjer)",
+    "Sveučilišni diplomski studij Matematika i informatika (nastavnički smjer)"
+  ],
+  "sources": [
+    {
+      "id": "math-uniri-pravilnik-zavrsni-2023",
+      "kind": "pdf",
+      "title": "Pravilnik o zavrsnom radu na sveucilisnim prijediplomskim studijima Fakulteta za matematiku (20.12.2023.)",
+      "url": "https://math.uniri.hr/wp-content/uploads/2023/12/Pravilnik-o-zavrsnom-radu-na-sveucilisnim-prijediplomskim-studijima-Fakulteta-za-matematiku.pdf",
+      "publisher": "Fakultet za matematiku, Sveuciliste u Rijeci",
+      "snapshotPath": "data/sources/math-uniri/math-uniri-pravilnik-zavrsni-2023.pdf",
+      "fetchedAt": "2026-07-17",
+      "lastChecked": "2026-07-17",
+      "validityClass": "stable",
+      "snapshotHash": "f9181928d9bcfdd0aac2a9084e93a0d5693c1fb8db3e17dd935ac75611397799"
+    },
+    {
+      "id": "math-uniri-pravilnik-diplomski-2023",
+      "kind": "pdf",
+      "title": "Pravilnik o diplomskom radu na sveucilisnim diplomskim studijima Fakulteta za matematiku (20.12.2023.)",
+      "url": "https://math.uniri.hr/wp-content/uploads/2023/12/Pravilnik-o-diplomskom-radu-na-sveucilisnim-diplomskim-studijima-Fakulteta-za-matematiku.pdf",
+      "publisher": "Fakultet za matematiku, Sveuciliste u Rijeci",
+      "snapshotPath": "data/sources/math-uniri/math-uniri-pravilnik-diplomski-2023.pdf",
+      "fetchedAt": "2026-07-17",
+      "lastChecked": "2026-07-17",
+      "validityClass": "stable",
+      "snapshotHash": "afe96bb4cd1811b5744449bb5f4a0628121f874302ad2a092b82dc1c70e99b0f"
+    }
+  ],
+  "profiles": [
+    {
+      "id": "math-uniri-zavrsni",
+      "unitId": "matematika",
+      "programs": [
+        "Sveučilišni prijediplomski studij Matematika"
+      ],
+      "workTypes": [
+        "final"
+      ],
+      "status": "verified",
+      "profileLabel": "Fakultet za matematiku u Rijeci, zavrsni rad",
+      "verifiedAt": "2026-07-17",
+      "documentDate": null,
+      "rules": {
+        "requireA4": true,
+        "pageMin": 15,
+        "pageMax": 30,
+        "requireToc": true,
+        "requiredSections": [
+          {
+            "key": "sazetak",
+            "label": "Sažetak i ključne riječi",
+            "terms": [
+              "Sažetak"
+            ]
+          },
+          {
+            "key": "uvod",
+            "label": "Uvod",
+            "terms": [
+              "Uvod"
+            ]
+          },
+          {
+            "key": "razrada",
+            "label": "Razrada teme",
+            "terms": [
+              "Razrada"
+            ]
+          },
+          {
+            "key": "zakljucak",
+            "label": "Zaključak",
+            "terms": [
+              "Zaključak"
+            ]
+          },
+          {
+            "key": "literatura",
+            "label": "Popis literature",
+            "terms": [
+              "Literatura",
+              "Popis literature"
+            ]
+          },
+          {
+            "key": "sadrzaj",
+            "label": "Sadržaj",
+            "terms": [
+              "Sadržaj"
+            ]
+          }
+        ]
+      },
+      "facts": [],
+      "note": "Pravilnik propisuje format papira, opseg i obvezne dijelove rada, ali NE propisuje vrstu slova, veličinu, prored, margine ni stil citiranja, pa se te dimenzije ne boduju (fakultet nema ni službeni predložak). Opseg je izražen u stranicama teksta uz gustoću od 30 redaka po 60 znakova.",
+      "sources": [
+        {
+          "title": "Pravilnik o zavrsnom radu na sveucilisnim prijediplomskim studijima Fakulteta za matematiku (20.12.2023.)",
+          "url": "https://math.uniri.hr/wp-content/uploads/2023/12/Pravilnik-o-zavrsnom-radu-na-sveucilisnim-prijediplomskim-studijima-Fakulteta-za-matematiku.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o završnom radu na sveučilišnim prijediplomskim studijima Fakulteta za matematiku (2023.)",
+        "Pravilnik o diplomskom radu na sveučilišnim diplomskim studijima Fakulteta za matematiku (2023.)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Opseg rada",
+        "Sadržaj",
+        "Obvezni dijelovi rada"
+      ],
+      "advisoryScope": []
+    },
+    {
+      "id": "math-uniri-diplomski",
+      "unitId": "matematika",
+      "programs": [
+        "Sveučilišni diplomski studij Diskretna matematika i primjene",
+        "Sveučilišni diplomski studij Matematika (nastavnički smjer)",
+        "Sveučilišni diplomski studij Matematika i informatika (nastavnički smjer)"
+      ],
+      "workTypes": [
+        "graduate"
+      ],
+      "status": "verified",
+      "profileLabel": "Fakultet za matematiku u Rijeci, diplomski rad",
+      "verifiedAt": "2026-07-17",
+      "documentDate": null,
+      "rules": {
+        "requireA4": true,
+        "pageMin": 30,
+        "pageMax": 90,
+        "requireToc": true,
+        "requiredSections": [
+          {
+            "key": "sazetak",
+            "label": "Sažetak i ključne riječi",
+            "terms": [
+              "Sažetak"
+            ]
+          },
+          {
+            "key": "uvod",
+            "label": "Uvod",
+            "terms": [
+              "Uvod"
+            ]
+          },
+          {
+            "key": "razrada",
+            "label": "Razrada teme",
+            "terms": [
+              "Razrada"
+            ]
+          },
+          {
+            "key": "zakljucak",
+            "label": "Zaključak",
+            "terms": [
+              "Zaključak"
+            ]
+          },
+          {
+            "key": "literatura",
+            "label": "Popis literature",
+            "terms": [
+              "Literatura",
+              "Popis literature"
+            ]
+          },
+          {
+            "key": "sadrzaj",
+            "label": "Sadržaj",
+            "terms": [
+              "Sadržaj"
+            ]
+          }
+        ]
+      },
+      "facts": [],
+      "note": "Pravilnik propisuje format papira, opseg i obvezne dijelove rada, ali NE propisuje vrstu slova, veličinu, prored, margine ni stil citiranja, pa se te dimenzije ne boduju (fakultet nema ni službeni predložak). Opseg je izražen u stranicama teksta uz gustoću od 30 redaka po 60 znakova.",
+      "sources": [
+        {
+          "title": "Pravilnik o diplomskom radu na sveucilisnim diplomskim studijima Fakulteta za matematiku (20.12.2023.)",
+          "url": "https://math.uniri.hr/wp-content/uploads/2023/12/Pravilnik-o-diplomskom-radu-na-sveucilisnim-diplomskim-studijima-Fakulteta-za-matematiku.pdf"
+        }
+      ],
+      "sourceHierarchy": [
+        "Pravilnik o završnom radu na sveučilišnim prijediplomskim studijima Fakulteta za matematiku (2023.)",
+        "Pravilnik o diplomskom radu na sveučilišnim diplomskim studijima Fakulteta za matematiku (2023.)"
+      ],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": [
+        "Format papira",
+        "Opseg rada",
+        "Sadržaj",
+        "Obvezni dijelovi rada"
+      ],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    {
+      "id": "led-math-uniri-zavrsni--paper-size-verified-2026-07-17",
+      "ruleId": "math-uniri-zavrsni--paper-size",
+      "profileId": "math-uniri-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "math-uniri-pravilnik-zavrsni-2023",
+      "sourcePage": "Članak 8. stavak 1.",
+      "quote": "Završni rad mora biti otisnut na papiru formata A4 (21 x 29,7 cm) i mora imati najmanje 15, a najviše 30 stranica teksta. Jedna stranica sadrži 30 redova po 60 otisnutih znakova, a sastoji se od: 1. korica (meki ili tvrdi uvez) 2. naslovnice [...] 4. sažetaka i ključnih riječi 5. uvoda, razrade teme i zaključka 6. popisa literature 7. popisa izvora 8. popisa priloga (slikovnih, grafičkih, zvučnih zapisa i sl.) 9. sadržaja (na početku ili na kraju rada).",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-math-uniri-zavrsni--page-count-verified-2026-07-17",
+      "ruleId": "math-uniri-zavrsni--page-count",
+      "profileId": "math-uniri-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "math-uniri-pravilnik-zavrsni-2023",
+      "sourcePage": "Članak 8. stavak 1.",
+      "quote": "Završni rad mora biti otisnut na papiru formata A4 (21 x 29,7 cm) i mora imati najmanje 15, a najviše 30 stranica teksta. Jedna stranica sadrži 30 redova po 60 otisnutih znakova, a sastoji se od: 1. korica (meki ili tvrdi uvez) 2. naslovnice [...] 4. sažetaka i ključnih riječi 5. uvoda, razrade teme i zaključka 6. popisa literature 7. popisa izvora 8. popisa priloga (slikovnih, grafičkih, zvučnih zapisa i sl.) 9. sadržaja (na početku ili na kraju rada).",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-math-uniri-zavrsni--toc-verified-2026-07-17",
+      "ruleId": "math-uniri-zavrsni--toc",
+      "profileId": "math-uniri-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "math-uniri-pravilnik-zavrsni-2023",
+      "sourcePage": "Članak 8. stavak 1.",
+      "quote": "Završni rad mora biti otisnut na papiru formata A4 (21 x 29,7 cm) i mora imati najmanje 15, a najviše 30 stranica teksta. Jedna stranica sadrži 30 redova po 60 otisnutih znakova, a sastoji se od: 1. korica (meki ili tvrdi uvez) 2. naslovnice [...] 4. sažetaka i ključnih riječi 5. uvoda, razrade teme i zaključka 6. popisa literature 7. popisa izvora 8. popisa priloga (slikovnih, grafičkih, zvučnih zapisa i sl.) 9. sadržaja (na početku ili na kraju rada).",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-math-uniri-zavrsni--required-sections-verified-2026-07-17",
+      "ruleId": "math-uniri-zavrsni--required-sections",
+      "profileId": "math-uniri-zavrsni",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "math-uniri-pravilnik-zavrsni-2023",
+      "sourcePage": "Članak 8. stavak 1.",
+      "quote": "Završni rad mora biti otisnut na papiru formata A4 (21 x 29,7 cm) i mora imati najmanje 15, a najviše 30 stranica teksta. Jedna stranica sadrži 30 redova po 60 otisnutih znakova, a sastoji se od: 1. korica (meki ili tvrdi uvez) 2. naslovnice [...] 4. sažetaka i ključnih riječi 5. uvoda, razrade teme i zaključka 6. popisa literature 7. popisa izvora 8. popisa priloga (slikovnih, grafičkih, zvučnih zapisa i sl.) 9. sadržaja (na početku ili na kraju rada).",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-math-uniri-diplomski--paper-size-verified-2026-07-17",
+      "ruleId": "math-uniri-diplomski--paper-size",
+      "profileId": "math-uniri-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "math-uniri-pravilnik-diplomski-2023",
+      "sourcePage": "Članak 8. stavak 1.",
+      "quote": "Diplomski rad mora biti otisnut na papiru formata A4 (21 x 29,7 cm) i mora imati najmanje 30, a najviše 90 stranica teksta. Jedna stranica sadrži 30 redova po 60 otisnutih znakova, a sastoji se od: 1. korica (meki ili tvrdi uvez) 2. naslovnice [...] 4. sažetaka i ključnih riječi 5. uvoda, razrade teme i zaključka 6. popisa literature 7. popisa izvora 8. popisa priloga (slikovnih, grafičkih, zvučnih zapisa i sl.) 9. sadržaja (na početku ili na kraju rada).",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-math-uniri-diplomski--page-count-verified-2026-07-17",
+      "ruleId": "math-uniri-diplomski--page-count",
+      "profileId": "math-uniri-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "math-uniri-pravilnik-diplomski-2023",
+      "sourcePage": "Članak 8. stavak 1.",
+      "quote": "Diplomski rad mora biti otisnut na papiru formata A4 (21 x 29,7 cm) i mora imati najmanje 30, a najviše 90 stranica teksta. Jedna stranica sadrži 30 redova po 60 otisnutih znakova, a sastoji se od: 1. korica (meki ili tvrdi uvez) 2. naslovnice [...] 4. sažetaka i ključnih riječi 5. uvoda, razrade teme i zaključka 6. popisa literature 7. popisa izvora 8. popisa priloga (slikovnih, grafičkih, zvučnih zapisa i sl.) 9. sadržaja (na početku ili na kraju rada).",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-math-uniri-diplomski--toc-verified-2026-07-17",
+      "ruleId": "math-uniri-diplomski--toc",
+      "profileId": "math-uniri-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "math-uniri-pravilnik-diplomski-2023",
+      "sourcePage": "Članak 8. stavak 1.",
+      "quote": "Diplomski rad mora biti otisnut na papiru formata A4 (21 x 29,7 cm) i mora imati najmanje 30, a najviše 90 stranica teksta. Jedna stranica sadrži 30 redova po 60 otisnutih znakova, a sastoji se od: 1. korica (meki ili tvrdi uvez) 2. naslovnice [...] 4. sažetaka i ključnih riječi 5. uvoda, razrade teme i zaključka 6. popisa literature 7. popisa izvora 8. popisa priloga (slikovnih, grafičkih, zvučnih zapisa i sl.) 9. sadržaja (na početku ili na kraju rada).",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    },
+    {
+      "id": "led-math-uniri-diplomski--required-sections-verified-2026-07-17",
+      "ruleId": "math-uniri-diplomski--required-sections",
+      "profileId": "math-uniri-diplomski",
+      "action": "verified",
+      "actor": "Daniel",
+      "timestamp": "2026-07-17",
+      "sourceId": "math-uniri-pravilnik-diplomski-2023",
+      "sourcePage": "Članak 8. stavak 1.",
+      "quote": "Diplomski rad mora biti otisnut na papiru formata A4 (21 x 29,7 cm) i mora imati najmanje 30, a najviše 90 stranica teksta. Jedna stranica sadrži 30 redova po 60 otisnutih znakova, a sastoji se od: 1. korica (meki ili tvrdi uvez) 2. naslovnice [...] 4. sažetaka i ključnih riječi 5. uvoda, razrade teme i zaključka 6. popisa literature 7. popisa izvora 8. popisa priloga (slikovnih, grafičkih, zvučnih zapisa i sl.) 9. sadržaja (na početku ili na kraju rada).",
+      "note": "Harvest 2026-07-17: doslovni citat iz snapshota, potvrdjen OCR-om."
+    }
+  ]
+}
