@@ -686,7 +686,18 @@
     "toc",
     "page-numbers"
   ],
+  "libertas-diplomski-en": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
   "libertas-zavrsni": [
+    "margins",
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "libertas-zavrsni-en": [
     "margins",
     "justify",
     "toc",

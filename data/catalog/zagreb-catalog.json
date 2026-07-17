@@ -575,7 +575,9 @@
           "Turizam i hotelijerstvo",
           "Prijediplomski studiji Libertas (zavrsni rad)",
           "Diplomski studiji Libertas",
-          "Opći profil ustanove"
+          "Opći profil ustanove",
+          "Prijediplomski sveučilišni studij Međunarodni odnosi (Dubrovnik, engleski)",
+          "Diplomski sveučilišni studij Međunarodni odnosi i diplomacija (Dubrovnik, engleski)"
         ],
         "status": "research"
       }
@@ -1847,7 +1849,10 @@
         "status": "partial",
         "programs": [
           "Strucni prijediplomski studiji (Veleuciliste Aspira)",
-          "Strucni diplomski studiji (Veleuciliste Aspira)"
+          "Strucni diplomski studiji (Veleuciliste Aspira)",
+          "Management in Hospitality and Tourism (engleski)",
+          "Sports Management (engleski)",
+          "Computer Engineering (engleski)"
         ]
       }
     ]

@@ -3725,6 +3725,48 @@
       "autoFixable": true
     }
   ],
+  "libertas-diplomski-en": [
+    {
+      "ruleId": "libertas-diplomski-en--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "libertas-diplomski-en--font",
+      "checkId": "font",
+      "label": "Vrsta slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "libertas-diplomski-en--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "libertas-diplomski-en--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "libertas-diplomski-en--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    }
+  ],
   "libertas-zavrsni": [
     {
       "ruleId": "libertas-zavrsni--paper-size",
@@ -3752,6 +3794,40 @@
     },
     {
       "ruleId": "libertas-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    }
+  ],
+  "libertas-zavrsni-en": [
+    {
+      "ruleId": "libertas-zavrsni-en--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "libertas-zavrsni-en--font",
+      "checkId": "font",
+      "label": "Vrsta slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "libertas-zavrsni-en--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "libertas-zavrsni-en--line-spacing",
       "checkId": "line-spacing",
       "label": "Prored",
       "status": "verified",

@@ -8375,5 +8375,68 @@
       "documentLanguage": "en",
       "languageLocked": true
     }
+  },
+  {
+    "id": "aspira-zavrsni-en",
+    "unitId": "aspira",
+    "programs": [
+      "Management in Hospitality and Tourism (engleski)",
+      "Sports Management (engleski)",
+      "Computer Engineering (engleski)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "rules": {
+      "documentLanguage": "en",
+      "languageLocked": true
+    }
+  },
+  {
+    "id": "aspira-diplomski-en",
+    "unitId": "aspira",
+    "programs": [
+      "Management in Hospitality and Tourism (engleski)",
+      "Sports Management (engleski)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "rules": {
+      "documentLanguage": "en",
+      "languageLocked": true
+    }
+  },
+  {
+    "id": "libertas-zavrsni-en",
+    "unitId": "libertas",
+    "programs": [
+      "Prijediplomski sveučilišni studij Međunarodni odnosi (Dubrovnik, engleski)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "rules": {
+      "documentLanguage": "en",
+      "languageLocked": true
+    }
+  },
+  {
+    "id": "libertas-diplomski-en",
+    "unitId": "libertas",
+    "programs": [
+      "Diplomski sveučilišni studij Međunarodni odnosi i diplomacija (Dubrovnik, engleski)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "rules": {
+      "documentLanguage": "en",
+      "languageLocked": true
+    }
   }
 ]

@@ -41213,5 +41213,213 @@
       "Jezik rada"
     ],
     "advisoryScope": []
+  },
+  {
+    "id": "aspira-zavrsni-en",
+    "unitId": "aspira",
+    "programs": [
+      "Management in Hospitality and Tourism (engleski)",
+      "Sports Management (engleski)",
+      "Computer Engineering (engleski)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Veleučilište Aspira, završni rad (engleski)",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "justify": true,
+      "documentLanguage": "en",
+      "languageLocked": true
+    },
+    "facts": [],
+    "note": "Format iz Pravilnika ASP-P/033 Čl.6 (byte-level): TNR, A4, prored 1,5, font 12 (naslovi 14, fusnote 10), obostrano poravnanje, 30-50 stranica; margine 'standardne' (bez brojke). Citat CUSTOM: nacini citiranja delegirani na pravilnik ASP-P/070 i Uputu za pisanje i citiranje koji NISU javno dostupni pa se stil ne pina. Validacija podatkovno blokirana: repozitorij.aspira.hr je 100% restrictedAccess (0 otvorenih od 510 radova). Aspira vodi paralelne hrvatske i engleske verzije programa (potvrdjeno na sluzbenoj engleskoj stranici i u AZVO registru studijskih programa na stranom jeziku); engleske verzije imaju jezik rada zakljucan na engleski.",
+    "sources": [
+      {
+        "title": "Pravilnik o izgledu zavrsnog i diplomskog rada, ASP-P/033 v.6 (Veleuciliste Aspira, 2023)",
+        "url": "https://www.aspira.hr/wp-content/uploads/2023/10/Pravilnik-o-izgledu-zavrsnog-i-diplomskog-rada.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o izgledu zavrsnog i diplomskog rada, ASP-P/033 v.6 (Veleuciliste Aspira, 2023)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Veličina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Jezik rada"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "aspira-diplomski-en",
+    "unitId": "aspira",
+    "programs": [
+      "Management in Hospitality and Tourism (engleski)",
+      "Sports Management (engleski)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Veleučilište Aspira, diplomski rad (engleski)",
+    "verifiedAt": "2026-07-04",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "justify": true,
+      "documentLanguage": "en",
+      "languageLocked": true
+    },
+    "facts": [],
+    "note": "Format iz Pravilnika ASP-P/033 Čl.6 (byte-level): TNR, A4, prored 1,5, font 12 (naslovi 14, fusnote 10), obostrano poravnanje, 30-50 stranica; margine 'standardne' (bez brojke). Citat CUSTOM: nacini citiranja delegirani na pravilnik ASP-P/070 i Uputu za pisanje i citiranje koji NISU javno dostupni pa se stil ne pina. Validacija podatkovno blokirana: repozitorij.aspira.hr je 100% restrictedAccess (0 otvorenih od 510 radova). Engleske diplomske verzije (Sports Management, Hospitality and Tourism) imaju jezik rada zakljucan na engleski; hrvatske verzije ostaju na hrvatskom.",
+    "sources": [
+      {
+        "title": "Pravilnik o izgledu zavrsnog i diplomskog rada, ASP-P/033 v.6 (Veleuciliste Aspira, 2023)",
+        "url": "https://www.aspira.hr/wp-content/uploads/2023/10/Pravilnik-o-izgledu-zavrsnog-i-diplomskog-rada.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o izgledu zavrsnog i diplomskog rada, ASP-P/033 v.6 (Veleuciliste Aspira, 2023)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Veličina slova",
+      "Prored",
+      "Obostrano poravnanje",
+      "Jezik rada"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "libertas-zavrsni-en",
+    "unitId": "libertas",
+    "programs": [
+      "Prijediplomski sveučilišni studij Međunarodni odnosi (Dubrovnik, engleski)"
+    ],
+    "workTypes": [
+      "final"
+    ],
+    "status": "partial",
+    "profileLabel": "Libertas, završni rad (engleski)",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "documentLanguage": "en",
+      "languageLocked": true
+    },
+    "facts": [],
+    "note": "Tehničko uređenje rada iz službenog Pravilnika (Sveučilište Libertas), čitano izravno. Nastava na lokaciji Dubrovnik izvodi se na engleskom jeziku (\"Dubrovnik (in English)\", sluzbena stranica); dubrovacka varijanta Medjunarodnih odnosa ima jezik rada zakljucan na engleski, dok se isti program u Zagrebu izvodi na hrvatskom.",
+    "sources": [
+      {
+        "title": "Pravilnik o zavrsnom radu (Libertas, srpanj 2024)",
+        "url": "https://www.libertas.hr/wp-content/uploads/2025/01/Pravilnik-o-zavrsnom-radu.pdf"
+      },
+      {
+        "title": "Pravilnik o diplomskom radu (Libertas, srpanj 2024)",
+        "url": "https://www.libertas.hr/wp-content/uploads/2025/01/Pravilnik-o-diplomskom-radu.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnom radu (Libertas, srpanj 2024)",
+      "Pravilnik o diplomskom radu (Libertas, srpanj 2024)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Veličina slova",
+      "Prored",
+      "Jezik rada"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "libertas-diplomski-en",
+    "unitId": "libertas",
+    "programs": [
+      "Diplomski sveučilišni studij Međunarodni odnosi i diplomacija (Dubrovnik, engleski)"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "partial",
+    "profileLabel": "Libertas, diplomski rad (engleski)",
+    "verifiedAt": "2026-07-02",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireA4": true,
+      "documentLanguage": "en",
+      "languageLocked": true
+    },
+    "facts": [],
+    "note": "Tehničko uređenje rada iz službenog Pravilnika (Sveučilište Libertas), čitano izravno. Diplomski Medjunarodni odnosi i diplomacija u Dubrovniku: \"Place of delivery: Zagreb (in Croatian), Dubrovnik (in English)\" - dubrovacka varijanta ima jezik rada zakljucan na engleski.",
+    "sources": [
+      {
+        "title": "Pravilnik o zavrsnom radu (Libertas, srpanj 2024)",
+        "url": "https://www.libertas.hr/wp-content/uploads/2025/01/Pravilnik-o-zavrsnom-radu.pdf"
+      },
+      {
+        "title": "Pravilnik o diplomskom radu (Libertas, srpanj 2024)",
+        "url": "https://www.libertas.hr/wp-content/uploads/2025/01/Pravilnik-o-diplomskom-radu.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o zavrsnom radu (Libertas, srpanj 2024)",
+      "Pravilnik o diplomskom radu (Libertas, srpanj 2024)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Vrsta slova",
+      "Veličina slova",
+      "Prored",
+      "Margine",
+      "Jezik rada"
+    ],
+    "advisoryScope": []
   }
 ]

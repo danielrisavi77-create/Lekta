@@ -1065,7 +1065,23 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "libertas-diplomski-en",
+      "scored": 5,
+      "machineCheckable": 5,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
       "profileId": "libertas-zavrsni",
+      "scored": 4,
+      "machineCheckable": 4,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "libertas-zavrsni-en",
       "scored": 4,
       "machineCheckable": 4,
       "advisory": 0,
@@ -2073,5 +2089,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 1540
+  "totalScored": 1549
 }
