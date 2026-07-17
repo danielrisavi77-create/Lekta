@@ -28,6 +28,20 @@ interface ZipEntry {
  */
 export const MAX_DECOMPRESSED_BYTES = 200 * 1024 * 1024;
 
+/**
+ * Gornja granica broja zapisa u arhivi. Realan .docx ima 10-40 zapisa, doktorat prepun
+ * slika 200-300 (svaka slika je zapis); 512 daje visestruki zazor, a napadacki zipovi
+ * deklariraju do 65535 (EOCD count je uint16) da napusu central-directory obradu.
+ */
+export const MAX_ZIP_ENTRIES = 512;
+
+/**
+ * Sigurnosna granica broja odlomaka za jeftini regex pre-scan XML dijelova PRIJE DOM
+ * parsiranja. Ista vrijednost kao MAX_ANALYZE_PARAGRAPHS u analyze-docx.ts (tamo lokalna
+ * konstanta da se engine import graf ne dira); ovdje exportana za intake sloj (UI).
+ */
+export const MAX_SCAN_PARAGRAPHS = 300000;
+
 /** Greska kad zapis premasi sigurnosnu granicu dekompresije (razlikovanje od korupcije). */
 export class ZipLimitError extends Error {}
 
@@ -71,12 +85,20 @@ export class ZipReader {
   bytes: Uint8Array;
   entries: Map<string, ZipEntry>;
   maxBytes: number;
+  // Agregatni cross-entry cap: zbroj SVIH dekomprimiranih bajtova ove arhive ne smije
+  // premasiti 2x per-entry budzet. Legitimna analiza cita document.xml (dominira) + stilove,
+  // temu, fusnote, rels i zaglavlja, ukupno daleko ispod 2x; bomba od stotina zapisa pada
+  // s teoretskih N x maxBytes na 2x. Ponovljena citanja istog zapisa dvostruko se broje
+  // (prihvatljivo uz 2x zazor; partPageCache u analyzeDocx ionako sprjecava ponavljanja).
+  usedBytes = 0;
+  aggregateMax: number;
 
   constructor(buffer: ArrayBuffer, opts: { maxDecompressedBytes?: number } = {}) {
     this.view = new DataView(buffer);
     this.bytes = new Uint8Array(buffer);
     this.entries = new Map();
     this.maxBytes = opts.maxDecompressedBytes ?? MAX_DECOMPRESSED_BYTES;
+    this.aggregateMax = this.maxBytes * 2;
     this.parse();
   }
 
@@ -87,6 +109,11 @@ export class ZipReader {
     }
     if (eocd < 0) throw new Error('Datoteka nije valjana ZIP/DOCX arhiva.');
     const count = this.view.getUint16(eocd + 10, true), offset = this.view.getUint32(eocd + 16, true);
+    if (count > MAX_ZIP_ENTRIES) {
+      throw new ZipLimitError(
+        `DOCX arhiva sadrži previše zapisa i premašuje sigurnosnu granicu (${MAX_ZIP_ENTRIES} zapisa). Datoteka je odbijena.`,
+      );
+    }
     let p = offset;
     for (let i = 0; i < count; i++) {
       if (this.view.getUint32(p, true) !== 0x02014b50) break;
@@ -104,16 +131,21 @@ export class ZipReader {
     if (!e) return null;
     const p = e.local;
     if (this.view.getUint32(p, true) !== 0x04034b50) throw new Error('Oštećen lokalni zapis u DOCX datoteci.');
+    // Efektivni cap za OVAJ zapis: per-entry granica, dodatno stegnuta preostalim agregatnim
+    // budzetom (2x per-entry preko cijele arhive), da zbroj mnogo "urednih" zapisa ne moze
+    // napuhati memoriju iako je svaki pojedinacno ispod granice.
+    const cap = Math.min(this.maxBytes, this.aggregateMax - this.usedBytes);
     // Jeftin pred-filtar: deklarirana nekomprimirana velicina iznad granice = odbij odmah.
     // Lazljivu bombu (mali uncomp, golem stvarni izlaz) hvata streaming cap ispod.
-    if (e.uncomp > this.maxBytes) {
+    if (e.uncomp > cap) {
       throw new ZipLimitError(
-        `Deklarirana velicina zapisa premasuje sigurnosnu granicu (${Math.round(this.maxBytes / 1024 / 1024)} MB). Datoteka je odbijena kao moguca dekompresijska bomba.`,
+        `Deklarirana velicina zapisa premasuje sigurnosnu granicu (${Math.round(cap / 1024 / 1024)} MB). Datoteka je odbijena kao moguca dekompresijska bomba.`,
       );
     }
     const nameLen = this.view.getUint16(p + 26, true), extraLen = this.view.getUint16(p + 28, true), start = p + 30 + nameLen + extraLen, compressed = this.bytes.slice(start, start + e.comp);
     if (e.method === 0) {
-      if (compressed.byteLength > this.maxBytes) throw new ZipLimitError('Zapis premasuje sigurnosnu granicu.');
+      if (compressed.byteLength > cap) throw new ZipLimitError('Zapis premasuje sigurnosnu granicu.');
+      this.usedBytes += compressed.byteLength;
       return compressed;
     }
     if (e.method === 8) {
@@ -121,7 +153,9 @@ export class ZipReader {
       if (!DS) throw new Error('Ovaj preglednik ne podržava lokalno raspakiravanje DOCX datoteka. Otvori aplikaciju u novijem Chromeu, Edgeu ili Firefoxu.');
       let ds;
       try { ds = new DS('deflate-raw'); } catch (err) { throw new Error('Preglednik ne podržava deflate-raw raspakiravanje. Upotrijebi noviji Chrome ili Edge.'); }
-      return await inflateWithCap(compressed, this.maxBytes, ds);
+      const out = await inflateWithCap(compressed, cap, ds);
+      this.usedBytes += out.byteLength;
+      return out;
     }
     throw new Error(`Nepodržana ZIP kompresija (${e.method}).`);
   }

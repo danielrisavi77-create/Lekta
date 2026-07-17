@@ -32,6 +32,15 @@ export function isAnalysisCancelled(e: unknown): boolean {
   return e instanceof AnalysisCancelledError || (e as { name?: string } | null)?.name === 'AnalysisCancelledError';
 }
 
+/**
+ * Tvrdi timeout jedne analize u workeru. Tipicna analiza je 0,3-0,8 s, veliki realni radovi
+ * par sekundi, slab mobitel 10-30x sporije; 180 s je vise od 100x tipicnog stropa i hvata
+ * samo patoloske slucajeve (dokument koji parser melje minutama). Timeout je obicna greska
+ * analize, NE WorkerInfraError: NIKAD ne smije pasti na inline fallback (isti princip kao
+ * AUD-02, bomba bi na glavnoj niti zamrznula karticu).
+ */
+const ANALYSIS_TIMEOUT_MS = 180_000;
+
 let workerBroken = false; // nakon prvog infra pada ova sesija trajno radi inline
 let activeWorker: Worker | null = null;
 // Odbacivac tekuce worker-analize: postavljen dok analiza traje, gasi worker i rejecta promise.
@@ -71,9 +80,11 @@ function analyzeInWorker(file: File, profile: any, settings: any, onProgress: an
     // NAKON pocetka, to je gotovo sigurno pad SAME ANALIZE (OOM na velikom/zlonamjernom docx-u),
     // a NE infrastrukture, pa se NE smije ponoviti inline (bomba bi tamo zamrznula karticu). AUD-02.
     let started = false;
+    let timeoutTimer: ReturnType<typeof setTimeout> | null = null;
     const done = (finish: () => void) => {
       if (settled) return;
       settled = true;
+      if (timeoutTimer !== null) { clearTimeout(timeoutTimer); timeoutTimer = null; }
       try { w.terminate(); } catch { /* vec ugasen */ }
       if (activeWorker === w) activeWorker = null;
       cancelActive = null;
@@ -81,6 +92,10 @@ function analyzeInWorker(file: File, profile: any, settings: any, onProgress: an
     };
     // Izlozi prekid: cancelActiveAnalysis() ovo pozove pa se worker ugasi i promise odbaci.
     cancelActive = () => done(() => reject(new AnalysisCancelledError()));
+    // Tvrdi timeout: obican Error (ne WorkerInfraError) da se patoloska analiza ne ponovi inline.
+    timeoutTimer = setTimeout(() => done(() => reject(new Error(
+      'Analiza je trajala predugo i prekinuta je radi zaštite uređaja. Pokušaj ponovno; ako se ponovi, dokument je vjerojatno prevelik za ovaj uređaj.',
+    ))), ANALYSIS_TIMEOUT_MS);
     w.onerror = (ev: any) => {
       if (ev && typeof ev.preventDefault === 'function') ev.preventDefault();
       // Pad PRIJE prvog progressa = infra (spawn/ucitavanje) -> smije na inline fallback.

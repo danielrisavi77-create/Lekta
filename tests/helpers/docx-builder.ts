@@ -139,10 +139,11 @@ function crc32(bytes: Uint8Array): number {
   return (c ^ 0xffffffff) >>> 0;
 }
 
-interface ZipFile { name: string; data: Uint8Array }
+export interface ZipFileSpec { name: string; data: Uint8Array }
 
-/** Sastavi ZIP s pohranjenim (nekompresiranim) zapisima koje ZipReader cita (method 0). */
-function zipStore(files: ZipFile[]): Uint8Array {
+/** Sastavi ZIP s pohranjenim (nekompresiranim) zapisima koje ZipReader cita (method 0).
+ *  Exportan za sigurnosne testove (zip-hardening, intake-gate) koji grade i ne-docx arhive. */
+export function zipStore(files: ZipFileSpec[]): Uint8Array {
   const enc = new TextEncoder();
   const locals: Uint8Array[] = [];
   const centrals: Uint8Array[] = [];
@@ -214,8 +215,12 @@ function zipStore(files: ZipFile[]): Uint8Array {
   return out;
 }
 
-/** Izgradi .docx (Uint8Array) iz specifikacije dokumenta. */
-export function buildDocx(spec: DocSpec): Uint8Array {
+/** Izgradi .docx (Uint8Array) iz specifikacije dokumenta.
+ *  `extraFiles` (aditivno, default prazno) dodaje proizvoljne zapise u arhivu; sluzi
+ *  sigurnosnim testovima (vbaProject.bin, docProps/app.xml, patoloski footnotes.xml).
+ *  Zapis iz extraFiles s istim imenom NADJACAVA standardni dio (zadnji u mapi pobjedjuje
+ *  u ZipReader.entries), pa test moze podmetnuti vlastiti footnotes.xml. */
+export function buildDocx(spec: DocSpec, extraFiles: ZipFileSpec[] = []): Uint8Array {
   const enc = new TextEncoder();
   const hasFootnotes = !!spec.footnotes?.length;
   const files = [
@@ -225,12 +230,12 @@ export function buildDocx(spec: DocSpec): Uint8Array {
     { name: 'word/styles.xml', data: enc.encode(STYLES_XML) },
   ];
   if (hasFootnotes) files.push({ name: 'word/footnotes.xml', data: enc.encode(footnotesXml(spec.footnotes!)) });
-  return zipStore(files);
+  return zipStore([...files, ...extraFiles]);
 }
 
 /** Pomocno: .docx kao File objekt (analyzeDocx ocekuje file.arrayBuffer() i file.name). */
-export function buildDocxFile(spec: DocSpec, name = 'sinteticki.docx'): File {
-  const bytes = buildDocx(spec);
+export function buildDocxFile(spec: DocSpec, name = 'sinteticki.docx', extraFiles: ZipFileSpec[] = []): File {
+  const bytes = buildDocx(spec, extraFiles);
   return new File([bytes], name, {
     type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   });
