@@ -373,7 +373,7 @@ function currentProfile(){
  if(department){const overlay=deepMerge(structuredClone(department.rules||{}),department.rulesByWorkType?.[workType]||{});base=deepMerge(base,overlay)}
  normalizeCheckFlags(base);
  const override=$('#mentorOverride').checked;
- if(override){base.font=[$('#customFont').value.trim()||'Times New Roman'];base.size=[Number($('#customSize').value)||12];base.spacing=Number($('#customSpacing').value)||1.5;const m=Number($('#customMargin').value)||2.5;base.margins={top:m,right:m,bottom:m,left:m};base.checkMargins=true;base.checkJustify=true}
+ if(override){base.font=[$('#customFont').value.trim()||'Times New Roman'];base.size=[Number($('#customSize').value)||12];base.spacing=Number($('#customSpacing').value)||1.5;const m=Number($('#customMargin').value)||2.5;base.margins={top:m,right:m,bottom:m,left:m};base.checkFont=true;base.checkSize=true;base.checkSpacing=true;base.checkMargins=true;base.checkJustify=true}// sve cetiri zastavice eksplicitno: grana bezuvjetno daje vrijednosti (uz || default), a normalizeCheckFlags je prije nje mogao ugasiti zastavicu profilu bez vrijednosti; bez ovoga bi korisnikov izricit zahtjev (npr. font) bio tiho ignoriran
  const fallbackStatus=(PROFILE_STATUS as any)[u.status]||PROFILE_STATUS.generic;
  const deptSuffix=department?` · ${department.name}`:'',methodSuffix=methodology?` · ${methodology.shortLabel}`:(methodologyId==='auto'&&socialMethodologyEligible()?' · metodologija: auto':'');
  base.name=`${u.name} · ${$('#programSelect').value} · ${workTypeLabel(workType)}${definition?.variantLabel?' · '+definition.variantLabel:''}${deptSuffix}${methodSuffix}`;

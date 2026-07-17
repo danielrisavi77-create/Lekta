@@ -55,24 +55,6 @@ const PAPER_CM: Record<string, [number, number]> = {
   A4: [21, 29.7], A3: [29.7, 42], A2: [42, 59.4], A1: [59.4, 84.1], A0: [84.1, 118.8],
 };
 
-/**
- * Test-layer crash guard, NIJE demotija: sirovi engine se rusi kad je checkX ukljucen a profil
- * NEMA vrijednost (profile.font.some / profile.margins[side] na undefined; empirijski ~50
- * profila, npr. vsite-zavrsni). Zivi app to izbjegava pecenom advisory-map demotijom koju
- * golden put namjerno ne primjenjuje. Ovdje gasimo checkX SAMO kad vrijednost ne postoji;
- * dimenzije s vrijednoscu ostaju bodovane (vjerno sirovom engineu).
- */
-export function guardMissingValueFlags(profile: any): any {
-  if (!(Array.isArray(profile.font) && profile.font.length)) profile.checkFont = false;
-  if (!(Array.isArray(profile.size) && profile.size.length)) profile.checkSize = false;
-  if (typeof profile.spacing !== 'number') profile.checkSpacing = false;
-  const m = profile.margins;
-  if (!(m && ['top', 'right', 'bottom', 'left'].every((s) => typeof m[s] === 'number'))) {
-    profile.checkMargins = false;
-  }
-  return profile;
-}
-
 /** Word PAGE polje kao sirovi odlomak: engine detektira /\bPAGE\b/i nad sirovim document.xml. */
 const PAGE_FIELD_PARA: ParaSpec = {
   text: '',
@@ -102,7 +84,9 @@ function bodyParas(words: number, f: Fmt): ParaSpec[] {
 
 /** Izvedi plan provjera za jedan profil. Baca za nepoznat profileId. */
 export function deriveConformancePlan(profileId: string): ConformancePlan {
-  const profile = guardMissingValueFlags(resolveProfile(profileId));
+  // Bez test-layer guarda: normalizeCheckFlags (profile-baseline.ts) sam gasi checkX bez
+  // vrijednosti, pa ovaj sloj testira PRODUKCIJSKO ponasanje, a ne vlastiti zaobilazak.
+  const profile = resolveProfile(profileId);
 
   const font: string = profile.font?.[0] ?? 'Times New Roman';
   const sizePt: number = profile.size?.[0] ?? 12;
