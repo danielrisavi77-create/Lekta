@@ -1386,8 +1386,8 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
 .lek-col-form .wizard-grid{grid-template-columns:1fr}
 .lek-top-grid:not(:has(#progressView:not(.hidden))):not(:has(#resultView:not(.hidden))) .wizard-rail .rail-form-title{width:100%;margin-bottom:6px}
 /* Wizard paneli: jedan ekran po koraku (data-step na #wizardView) s povratkom; nista se ne gomila. */
-#wizardView[data-step="1"] :is(.wizard-col-profile,.advanced-options,.analyze-row,.lek-stepnav-2,.lek-stepnav-3){display:none}
-#wizardView[data-step="2"] :is(.wizard-col-upload,.advanced-options,.analyze-row,.lek-stepnav-1,.lek-stepnav-3){display:none}
+#wizardView[data-step="1"] :is(.wizard-col-profile,.advanced-options,.analyze-row,.lek-stepnav-2,.lek-stepnav-3,#fpzgPhaseHint){display:none}
+#wizardView[data-step="2"] :is(.wizard-col-upload,.advanced-options,.analyze-row,.lek-stepnav-1,.lek-stepnav-3,#fpzgPhaseHint){display:none}
 #wizardView[data-step="3"] :is(.wizard-col-upload,.wizard-col-profile,.lek-stepnav-1,.lek-stepnav-2){display:none}
 /* Naprijed s koraka 1 postoji samo kad je datoteka vec ucitana (povratak s koraka 2). */
 #wizardView[data-step="1"]:not(:has(#dropzone.has-file)) .lek-stepnav-1{display:none}
@@ -1395,7 +1395,28 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
 #wizardView[data-step="1"] .dropzone{min-height:400px}
 .lek-stepnav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 16px}
 .lek-stepnav-3{margin-bottom:10px}
-.lek-stepnav #stepFileName{display:inline-block;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:bottom}
+/* Gumbi u jednom retku, ime datoteke je natpis koji se skuplja prvi: tako ni pri dugom nazivu
+   primarni gumb (ima 3px stamp sjenu) ne moze prelijevati stupac ni zasjeci karticu profila. */
+.lek-stepnav .btn{white-space:nowrap;flex:0 0 auto}
+.lek-stepnav-back{display:flex;align-items:center;gap:9px;min-width:0;flex:1 1 auto}
+.lek-stepfile{min-width:0;flex:1 1 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:400 11px var(--sans);color:var(--paper-muted)}
+/* Ispod ~430px nema mjesta za oba gumba u retku: primarni ide u svoj puni redak (namjerno),
+   umjesto da flex-wrap lomi red i na sirokom ekranu. */
+@media(max-width:430px){.lek-stepnav{flex-wrap:wrap;row-gap:10px}.lek-stepnav-2 #stepToAnalyze{width:100%}}
+/* Korak 2: unos pa ishod. Cetiri puna polja bez naslova grupa (legende ostaju citacima ekrana),
+   objasnjenja bez vlastitih crta, a sve o profilu u JEDNOJ kartici na dnu. */
+#wizardView[data-step="2"] .wizard-col-profile .form-grid{grid-template-columns:1fr}
+.wizard-col-profile .fg-label{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.wizard-col-profile .no-faculty-link{display:block;width:fit-content;margin:6px 0 0 auto;font:400 11px var(--sans);color:var(--paper-muted);text-decoration-color:var(--paper-line);text-underline-offset:3px}
+.wizard-col-profile .no-faculty-link:hover{color:var(--red-deep)}
+.wizard-col-profile :is(.work-support,.subtle-help,.methodology-help){border-top:0;margin-top:6px;padding-top:0}
+.wizard-col-profile :is(.work-support,.subtle-help,.methodology-help)::before{top:0}
+#profileNote{background:#fff;border:1px solid var(--paper-line);border-radius:0;box-shadow:var(--paper-sh-sm);padding:14px 16px;margin:22px 0 6px}
+#profileNote::before{display:none}
+.pcard-label{font:600 10px var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--paper-muted);margin-bottom:9px}
+.pcard-work{font-family:var(--display-serif);font-size:14.5px;color:var(--paper-ink)}
+.pcard-work strong{font-weight:400}
+#profileNote details.more{margin-top:11px;padding-top:9px;border-top:1px dashed var(--paper-line)}
 @keyframes lekStepIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 #wizardView[data-step="2"] :is(.wizard-col-profile,.lek-stepnav-2),#wizardView[data-step="3"] :is(.lek-stepnav-3,.advanced-options,.analyze-row){animation:lekStepIn .35s ease-out both}
 @media(prefers-reduced-motion:reduce){#wizardView[data-step="2"] :is(.wizard-col-profile,.lek-stepnav-2),#wizardView[data-step="3"] :is(.lek-stepnav-3,.advanced-options,.analyze-row){animation:none}}
@@ -1409,7 +1430,7 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
 .lek-col-proof .trust-row{margin-top:4px;justify-content:flex-start}
 .lek-bridge{position:absolute;top:auto;bottom:24%;right:-48px;width:134px;transform:rotate(-5deg);font-family:var(--font-hand);font-size:21px;line-height:1.12;color:var(--red);text-align:center;pointer-events:none;z-index:4}
 @media(max-width:1180px){.lek-bridge{display:none}}
-@media(max-width:1000px){.lek-top-grid{display:flex;flex-direction:column;gap:26px}.lek-col-proof{align-items:stretch}.lek-col-proof .hero-demo{max-width:320px}.lek-head-copy h1{font-size:clamp(30px,7.2vw,40px)}}
+@media(max-width:1000px){.lek-top-grid{display:flex;flex-direction:column;gap:26px;align-items:stretch}.lek-col-proof{align-items:stretch}.lek-col-proof .hero-demo{max-width:320px}.lek-head-copy h1{font-size:clamp(30px,7.2vw,40px)}}
 @media print{.lek-col-proof,.lek-bridge{display:none!important}.lek-top-grid{display:block!important}}
 </style>
 </head>
@@ -1490,7 +1511,7 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
             <fieldset class="profile-group"><legend class="fg-label">Ustanova</legend>
             <div class="form-grid">
               <div class="field full"><label for="institutionSelect">Sveučilište</label><select id="institutionSelect"></select></div>
-              <div class="field full"><label for="unitSelect">Fakultet ili akademija</label><select id="unitSelect"></select><button type="button" class="no-faculty-link hidden" id="noFacultyBtn">Nema mog fakulteta na popisu</button><div class="no-faculty-panel" id="noFacultyPanel" hidden><label for="noFacultyName">Naziv fakulteta</label><input id="noFacultyName" type="text" maxlength="200" placeholder="npr. Filozofski fakultet u Osijeku"><label for="noFacultyEmail">E-mail (nije obavezno)</label><input id="noFacultyEmail" type="email" inputmode="email" autocomplete="email" placeholder="tvoj@email.hr"><button type="button" class="btn btn-primary btn-sm" id="noFacultySubmit">Pošalji</button><div class="wl-msg" id="noFacultyMsg" aria-live="polite"></div></div></div>
+              <div class="field full"><label for="unitSelect">Fakultet ili akademija</label><select id="unitSelect"></select><button type="button" class="no-faculty-link hidden" id="noFacultyBtn">Nema mog fakulteta?</button><div class="no-faculty-panel" id="noFacultyPanel" hidden><label for="noFacultyName">Naziv fakulteta</label><input id="noFacultyName" type="text" maxlength="200" placeholder="npr. Filozofski fakultet u Osijeku"><label for="noFacultyEmail">E-mail (nije obavezno)</label><input id="noFacultyEmail" type="email" inputmode="email" autocomplete="email" placeholder="tvoj@email.hr"><button type="button" class="btn btn-primary btn-sm" id="noFacultySubmit">Pošalji</button><div class="wl-msg" id="noFacultyMsg" aria-live="polite"></div></div></div>
               <div class="field full"><label for="programSelect">Studij</label><select id="programSelect"></select></div><div class="field full hidden" id="departmentField"><label for="departmentSelect">Katedra ili područje rada (opcionalno)</label><select id="departmentSelect"><option value="general">Bez posebnog profila katedre</option></select><div class="subtle-help">Profil katedre nadopunjuje studijski profil i vrijedi samo za ono što izričito uređuje.</div></div>
             </div>
             </fieldset>
@@ -1499,15 +1520,16 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
               <div class="field"><label for="workType">Vrsta rada</label><select id="workType"><option value="seminar">Seminarski rad</option><option value="final">Završni rad</option><option value="graduate" selected>Diplomski rad</option><option value="specialist">Specijalistički rad</option><option value="doctoral">Doktorski rad</option><option value="article">Znanstveni članak</option><option value="project">Projektni / istraživački rad</option></select><div class="work-support" id="workTypeSupport"></div></div>
               <div class="field hidden" id="variantField"><label for="workVariant">Varijanta rada</label><select id="workVariant"><option value="default">Opći profil</option></select></div>
               <div class="field full hidden" id="methodologyField"><label for="methodologySelect">Metodološka varijanta diplomskog rada</label><select id="methodologySelect"><option value="auto">Automatski prepoznaj iz strukture</option><option value="theoretical">Teorijski rad</option><option value="qualitative">Empirijski rad, kvalitativno istraživanje</option><option value="quantitative">Empirijski rad, kvantitativno istraživanje</option></select><div class="methodology-help">Aktivira provjeru cilja, pitanja ili hipoteza, metode, rezultata i rasprave. Automatski način zaključuje iz strukture dokumenta.</div></div>
-              <div class="field full hidden" id="fpzgCohortField"><label for="fpzgCohort">Status završnog rada u 2025./2026.</label><select id="fpzgCohort"><option value="current">Završni rad upisan u 2025./2026.</option><option value="carried">Završni rad prenesen iz 2024./2025.</option></select><div class="subtle-help">Preneseni završni rad ima i prvi dio integriranog ispitnog roka; novoupisani završni rad nema taj rok.</div></div><div class="field full hidden" id="fpzgDeadlineField"><label for="fpzgDeadline">Ciljani godišnji rok obrane</label><select id="fpzgDeadline"></select><div class="subtle-help" id="fpzgDeadlineHelp">Rokovi se preuzimaju iz odluke FPZG-a i akademskog kalendara za 2025./2026.</div></div><div class="field full hidden" id="fpzgPhaseHint"><div class="subtle-help">Za godišnji rok obrane i kohortu odaberi „Fazu provjere" pod <button type="button" class="linklike" id="openPhaseFromHint">III. Preciznija provjera</button>.</div></div>
+              <div class="field full hidden" id="fpzgCohortField"><label for="fpzgCohort">Status završnog rada u 2025./2026.</label><select id="fpzgCohort"><option value="current">Završni rad upisan u 2025./2026.</option><option value="carried">Završni rad prenesen iz 2024./2025.</option></select><div class="subtle-help">Preneseni završni rad ima i prvi dio integriranog ispitnog roka; novoupisani završni rad nema taj rok.</div></div><div class="field full hidden" id="fpzgDeadlineField"><label for="fpzgDeadline">Ciljani godišnji rok obrane</label><select id="fpzgDeadline"></select><div class="subtle-help" id="fpzgDeadlineHelp">Rokovi se preuzimaju iz odluke FPZG-a i akademskog kalendara za 2025./2026.</div></div>
             </div>
             </fieldset>
             <div class="profile-note" id="profileNote"></div>
           </section>
         </div>
         <div class="lek-stepnav lek-stepnav-1"><button class="btn btn-primary btn-sm" id="stepToProfile" type="button">Nastavi na profil →</button></div>
-        <div class="lek-stepnav lek-stepnav-2"><button class="btn btn-ghost btn-sm" id="stepBackDoc" type="button">← Dokument · <span id="stepFileName"></span></button><button class="btn btn-primary btn-sm" id="stepToAnalyze" type="button">Nastavi na provjeru →</button></div>
+        <div class="lek-stepnav lek-stepnav-2"><div class="lek-stepnav-back"><button class="btn btn-ghost btn-sm" id="stepBackDoc" type="button">← Dokument</button><span class="lek-stepfile" id="stepFileName"></span></div><button class="btn btn-primary btn-sm" id="stepToAnalyze" type="button">Nastavi na provjeru →</button></div>
         <div class="lek-stepnav lek-stepnav-3"><button class="btn btn-ghost btn-sm" id="stepBackProfile" type="button">← Profil fakulteta</button></div>
+        <div class="hidden" id="fpzgPhaseHint"><div class="subtle-help">Za godišnji rok obrane i kohortu odaberi „Fazu provjere" pod <button type="button" class="linklike" id="openPhaseFromHint">III. Preciznija provjera</button>.</div></div>
         <details class="advanced-options">
           <summary class="advanced-summary"><span class="adv-label">III. Preciznija provjera</span><span class="adv-hint">PDF, stil citiranja, jezik, strogost i faza provjere</span></summary>
           <div class="advanced-body">
