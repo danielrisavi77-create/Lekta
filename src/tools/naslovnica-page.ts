@@ -124,10 +124,15 @@ function renderBadge(sel: TemplateSelection) {
   badge.title = note;
 }
 
+// Rezultat zadnjeg render()-a, ponovno koristen u copy/docx handlerima umjesto da svaki
+// klik nanovo cita DOM i gradi model (render() ga vec izgradio prije klika).
+let lastModel: TitlePageModel | null = null;
+
 function render() {
   const input = readInput();
   const sel = currentSelection();
   const model = buildTitlePage(input, sel.template ?? undefined);
+  lastModel = model;
 
   const sheet = $('#tp-sheet');
   if (sheet) {
@@ -158,7 +163,6 @@ function render() {
   if (copy) copy.disabled = !hasContent;
   if (print) print.disabled = !hasContent;
   if (docx) docx.disabled = !hasContent;
-  return model;
 }
 
 // --- Kaskada ustanova -> fakultet -> studij (auto-popuna, polja ostaju editabilna) ---
@@ -323,8 +327,8 @@ function init() {
   });
 
   bindCopyButton($('#tp-copy'), () => {
-    const model = buildTitlePage(readInput(), currentSelection().template ?? undefined);
-    return model.lines.length ? titlePageText(model) : '';
+    const model = lastModel;
+    return model && model.lines.length ? titlePageText(model) : '';
   });
 
   $('#tp-print')?.addEventListener('click', () => window.print());
@@ -332,8 +336,8 @@ function init() {
   // Preuzmi gotov .docx (docx-writer): s predloskom fakulteta kad postoji, inace genericki.
   $('#tp-docx')?.addEventListener('click', () => {
     const template = currentSelection().template ?? undefined;
-    const model = buildTitlePage(readInput(), template);
-    if (!model.lines.length) return;
+    const model = lastModel;
+    if (!model || !model.lines.length) return;
     try {
       downloadBlob(docxBlob(titlePageDoc(model, template)), 'naslovnica.docx');
     } catch {
