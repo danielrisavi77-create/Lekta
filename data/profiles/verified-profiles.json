@@ -33924,7 +33924,7 @@
         "top": 2.5,
         "right": 2.5,
         "bottom": 2.5,
-        "left": 3.0
+        "left": 3
       }
     },
     "facts": [],
@@ -34020,7 +34020,7 @@
         "top": 2.5,
         "right": 2.5,
         "bottom": 2.5,
-        "left": 3.0
+        "left": 3
       }
     },
     "facts": [],
@@ -34675,9 +34675,9 @@
       "requireA4": true,
       "justify": true,
       "margins": {
-        "top": 2.0,
-        "right": 2.0,
-        "bottom": 2.0,
+        "top": 2,
+        "right": 2,
+        "bottom": 2,
         "left": 2.5
       }
     },
@@ -34774,9 +34774,9 @@
       "requireA4": true,
       "justify": true,
       "margins": {
-        "top": 2.0,
-        "right": 2.0,
-        "bottom": 2.0,
+        "top": 2,
+        "right": 2,
+        "bottom": 2,
         "left": 2.5
       }
     },
@@ -35225,12 +35225,12 @@
       "size": [
         12
       ],
-      "spacing": 1.0,
+      "spacing": 1,
       "requireA4": true,
       "margins": {
-        "top": 2.0,
-        "right": 2.0,
-        "bottom": 2.0,
+        "top": 2,
+        "right": 2,
+        "bottom": 2,
         "left": 2.5
       }
     },
@@ -35318,12 +35318,12 @@
       "size": [
         12
       ],
-      "spacing": 1.0,
+      "spacing": 1,
       "requireA4": true,
       "margins": {
-        "top": 2.0,
-        "right": 2.0,
-        "bottom": 2.0,
+        "top": 2,
+        "right": 2,
+        "bottom": 2,
         "left": 2.5
       }
     },
@@ -35411,12 +35411,12 @@
       "size": [
         12
       ],
-      "spacing": 1.0,
+      "spacing": 1,
       "requireA4": true,
       "margins": {
-        "top": 2.0,
-        "right": 2.0,
-        "bottom": 2.0,
+        "top": 2,
+        "right": 2,
+        "bottom": 2,
         "left": 2.5
       }
     },
@@ -35504,12 +35504,12 @@
       "size": [
         12
       ],
-      "spacing": 1.0,
+      "spacing": 1,
       "requireA4": true,
       "margins": {
-        "top": 2.0,
-        "right": 2.0,
-        "bottom": 2.0,
+        "top": 2,
+        "right": 2,
+        "bottom": 2,
         "left": 2.5
       }
     },
@@ -35589,12 +35589,12 @@
       "size": [
         12
       ],
-      "spacing": 1.0,
+      "spacing": 1,
       "requireA4": true,
       "margins": {
-        "top": 2.0,
-        "right": 2.0,
-        "bottom": 2.0,
+        "top": 2,
+        "right": 2,
+        "bottom": 2,
         "left": 2.5
       }
     },
@@ -35674,12 +35674,12 @@
       "size": [
         12
       ],
-      "spacing": 1.0,
+      "spacing": 1,
       "requireA4": true,
       "margins": {
-        "top": 2.0,
-        "right": 2.0,
-        "bottom": 2.0,
+        "top": 2,
+        "right": 2,
+        "bottom": 2,
         "left": 2.5
       }
     },
@@ -35759,12 +35759,12 @@
       "size": [
         12
       ],
-      "spacing": 1.0,
+      "spacing": 1,
       "requireA4": true,
       "margins": {
-        "top": 2.0,
-        "right": 2.0,
-        "bottom": 2.0,
+        "top": 2,
+        "right": 2,
+        "bottom": 2,
         "left": 2.5
       }
     },
@@ -35852,12 +35852,12 @@
       "size": [
         12
       ],
-      "spacing": 1.0,
+      "spacing": 1,
       "requireA4": true,
       "margins": {
-        "top": 2.0,
-        "right": 2.0,
-        "bottom": 2.0,
+        "top": 2,
+        "right": 2,
+        "bottom": 2,
         "left": 2.5
       }
     },
@@ -40819,11 +40819,18 @@
     "id": "algebra-zavrsni",
     "unitId": "algebra",
     "programs": [
-      "Računarstvo i informatika",
-      "Dizajn",
-      "Ekonomija i poslovanje",
-      "Komunikacije i mediji",
-      "Opći profil ustanove"
+      "Stručni prijediplomski studij 3D oblikovanje tržišnih komunikacija",
+      "Stručni prijediplomski studij Digitalni marketing",
+      "Stručni prijediplomski studij Dizajn interijera",
+      "Stručni prijediplomski studij Dizajn",
+      "Stručni prijediplomski studij Kibernetička sigurnost",
+      "Stručni prijediplomski studij Komunikacijski menadžment",
+      "Stručni prijediplomski studij Multimedijska produkcija",
+      "Stručni prijediplomski studij Razvoj računalnih igara",
+      "Sveučilišni prijediplomski studij Ekonomija digitalnog poslovanja",
+      "Sveučilišni prijediplomski studij Podatkovna znanost i umjetna inteligencija",
+      "Sveučilišni prijediplomski studij Programsko inženjerstvo",
+      "Sveučilišni prijediplomski studij Psihologija"
     ],
     "workTypes": [
       "final"
@@ -40837,19 +40844,20 @@
       "wordMax": 15000
     },
     "facts": [],
-    "note": "Pravilnik propisuje opseg rada i jezik, a tehničko oblikovanje (font, veličina slova, prored, margine, format papira) izrijekom delegira na elektronički predložak koji je dostupan samo unutar sustava digitalne referade, pa se te dimenzije ne provjeravaju. Stil citiranja nije propisan. Opseg je propisan \"od uvoda do zaključka\", a ova provjera broji riječi cijelog dokumenta, pa rad ispod donje granice sigurno odstupa, dok rad iznad nje može imati kraće tijelo od propisanog. Rad se može pisati na hrvatskom ili engleskom jeziku, pa jezik odabire student, a provjera strukture slijedi odabrani jezik.",
+    "note": "Pravilnik propisuje opseg rada, a tehničko oblikovanje (font, veličina, prored, margine, format papira) delegira na elektronički predložak dostupan samo u sustavu digitalne referade, pa se te dimenzije ne provjeravaju. Stil citiranja nije propisan. Opseg je propisan \"od uvoda do zaključka\", a provjera broji riječi cijelog dokumenta, pa rad ispod donje granice sigurno odstupa, dok rad iznad nje može imati kraće tijelo. Pravilnik dopušta pisanje na hrvatskom ili engleskom jeziku, pa jezik odabire student.",
     "sources": [
       {
         "title": "Pravilnik o zavrsnom, diplomskom odnosno specijalistickom radu i zavrsnom ispitu (Sveuciliste Algebra Bernays, 20.02.2026.)",
-        "url": "https://www.algebra.hr/sveuciliste/wp-content/uploads/2024/04/Pravilnik-o-zavrsnom-diplomskom-odnosno-specijalistickom-radu-i-zavrsnom-ispitu_20.02.2026-1.pdf"
+        "url": "https://www.algebra.hr/sveuciliste/referada/dokumenti/"
       },
       {
         "title": "Book of Regulations on the Final, Graduation or Specialist Thesis and the Final Exam (Sveuciliste Algebra Bernays, 20.02.2026., sluzbena engleska inacica)",
-        "url": "https://www.algebra.hr/sveuciliste/wp-content/uploads/2024/04/Book-of-Regulations-on-the-Final-Graduation-or-Specialist-Thesis-and-the-Final-Exam_20.02.2026.pdf"
+        "url": "https://www.algebra.hr/sveuciliste/referada/dokumenti/"
       }
     ],
     "sourceHierarchy": [
-      "Pravilnik o završnom, diplomskom odnosno specijalističkom radu i završnom ispitu (Sveučilište Algebra Bernays, 20.02.2026.)"
+      "Pravilnik o završnom, diplomskom odnosno specijalističkom radu i završnom ispitu (Sveučilište Algebra Bernays, 20.02.2026.)",
+      "Službene stranice studija (jezik izvođenja), algebra.hr"
     ],
     "ruleAuthority": "official-program-guidelines",
     "normativeScope": [
@@ -40864,11 +40872,13 @@
     "id": "algebra-diplomski",
     "unitId": "algebra",
     "programs": [
-      "Računarstvo i informatika",
-      "Dizajn",
-      "Ekonomija i poslovanje",
-      "Komunikacije i mediji",
-      "Opći profil ustanove"
+      "Stručni diplomski studij Digitalni marketing",
+      "Stručni diplomski studij Kibernetička sigurnost",
+      "Stručni diplomski studij Kreativno upravljanje u dizajnu",
+      "Stručni diplomski studij Podatkovna znanost i umjetna inteligencija",
+      "Stručni diplomski studij Programsko inženjerstvo",
+      "Sveučilišni diplomski studij Ekonomija digitalnog poslovanja",
+      "Sveučilišni diplomski studij Računarstvo"
     ],
     "workTypes": [
       "graduate"
@@ -40884,19 +40894,65 @@
       "languageLocked": true
     },
     "facts": [],
-    "note": "Pravilnik propisuje opseg rada i jezik, a tehničko oblikovanje (font, veličina slova, prored, margine, format papira) izrijekom delegira na elektronički predložak koji je dostupan samo unutar sustava digitalne referade, pa se te dimenzije ne provjeravaju. Stil citiranja nije propisan. Opseg je propisan \"od uvoda do zaključka\", a ova provjera broji riječi cijelog dokumenta, pa rad ispod donje granice sigurno odstupa, dok rad iznad nje može imati kraće tijelo od propisanog. Diplomski rad piše se isključivo na engleskom jeziku, pa je jezik rada zaključan na engleski i struktura se provjerava prema engleskim nazivima dijelova (Introduction, Conclusion, References).",
+    "note": "Pravilnik propisuje opseg rada, a tehničko oblikovanje (font, veličina, prored, margine, format papira) delegira na elektronički predložak dostupan samo u sustavu digitalne referade, pa se te dimenzije ne provjeravaju. Stil citiranja nije propisan. Opseg je propisan \"od uvoda do zaključka\", a provjera broji riječi cijelog dokumenta, pa rad ispod donje granice sigurno odstupa, dok rad iznad nje može imati kraće tijelo. Ovi se diplomski studiji u cijelosti izvode na engleskom jeziku (službene stranice studija), pa je jezik rada zaključan na engleski i struktura se provjerava prema engleskim nazivima dijelova (Introduction, Conclusion, References).",
     "sources": [
       {
         "title": "Pravilnik o zavrsnom, diplomskom odnosno specijalistickom radu i zavrsnom ispitu (Sveuciliste Algebra Bernays, 20.02.2026.)",
-        "url": "https://www.algebra.hr/sveuciliste/wp-content/uploads/2024/04/Pravilnik-o-zavrsnom-diplomskom-odnosno-specijalistickom-radu-i-zavrsnom-ispitu_20.02.2026-1.pdf"
+        "url": "https://www.algebra.hr/sveuciliste/referada/dokumenti/"
       },
       {
         "title": "Book of Regulations on the Final, Graduation or Specialist Thesis and the Final Exam (Sveuciliste Algebra Bernays, 20.02.2026., sluzbena engleska inacica)",
-        "url": "https://www.algebra.hr/sveuciliste/wp-content/uploads/2024/04/Book-of-Regulations-on-the-Final-Graduation-or-Specialist-Thesis-and-the-Final-Exam_20.02.2026.pdf"
+        "url": "https://www.algebra.hr/sveuciliste/referada/dokumenti/"
       }
     ],
     "sourceHierarchy": [
-      "Pravilnik o završnom, diplomskom odnosno specijalističkom radu i završnom ispitu (Sveučilište Algebra Bernays, 20.02.2026.)"
+      "Pravilnik o završnom, diplomskom odnosno specijalističkom radu i završnom ispitu (Sveučilište Algebra Bernays, 20.02.2026.)",
+      "Službene stranice studija (jezik izvođenja), algebra.hr"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Opseg rada",
+      "Jezik rada"
+    ],
+    "advisoryScope": [
+      "Tehničko oblikovanje (u nejavnom predlošku)",
+      "Stil citiranja"
+    ]
+  },
+  {
+    "id": "algebra-diplomski-odnosi-s-javnoscu",
+    "unitId": "algebra",
+    "programs": [
+      "Sveučilišni diplomski studij Odnosi s javnošću"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "verified",
+    "profileLabel": "Sveuciliste Algebra Bernays, Odnosi s javnoscu, diplomski rad (hrvatski)",
+    "verifiedAt": "2026-07-17",
+    "documentDate": null,
+    "rules": {
+      "wordMin": 20000,
+      "wordMax": 25000,
+      "documentLanguage": "hr",
+      "languageLocked": true
+    },
+    "facts": [],
+    "note": "Pravilnik propisuje opseg rada, a tehničko oblikovanje (font, veličina, prored, margine, format papira) delegira na elektronički predložak dostupan samo u sustavu digitalne referade, pa se te dimenzije ne provjeravaju. Stil citiranja nije propisan. Opseg je propisan \"od uvoda do zaključka\", a provjera broji riječi cijelog dokumenta, pa rad ispod donje granice sigurno odstupa, dok rad iznad nje može imati kraće tijelo. Sveučilišni diplomski studij Odnosi s javnošću izvodi se na hrvatskom jeziku (službena stranica studija), za razliku od ostalih diplomskih studija na engleskom, pa je jezik rada zaključan na hrvatski.",
+    "sources": [
+      {
+        "title": "Pravilnik o zavrsnom, diplomskom odnosno specijalistickom radu i zavrsnom ispitu (Sveuciliste Algebra Bernays, 20.02.2026.)",
+        "url": "https://www.algebra.hr/sveuciliste/referada/dokumenti/"
+      },
+      {
+        "title": "Book of Regulations on the Final, Graduation or Specialist Thesis and the Final Exam (Sveuciliste Algebra Bernays, 20.02.2026., sluzbena engleska inacica)",
+        "url": "https://www.algebra.hr/sveuciliste/referada/dokumenti/"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o završnom, diplomskom odnosno specijalističkom radu i završnom ispitu (Sveučilište Algebra Bernays, 20.02.2026.)",
+      "Službene stranice studija (jezik izvođenja), algebra.hr"
     ],
     "ruleAuthority": "official-program-guidelines",
     "normativeScope": [
@@ -40912,11 +40968,8 @@
     "id": "algebra-specijalisticki",
     "unitId": "algebra",
     "programs": [
-      "Računarstvo i informatika",
-      "Dizajn",
-      "Ekonomija i poslovanje",
-      "Komunikacije i mediji",
-      "Opći profil ustanove"
+      "Poslijediplomski specijalistički studij Strateško komuniciranje",
+      "Poslijediplomski specijalistički studij Vodstvo i menadžment u obrazovanju"
     ],
     "workTypes": [
       "specialist"
@@ -40930,19 +40983,20 @@
       "wordMax": 25000
     },
     "facts": [],
-    "note": "Pravilnik propisuje opseg rada i jezik, a tehničko oblikovanje (font, veličina slova, prored, margine, format papira) izrijekom delegira na elektronički predložak koji je dostupan samo unutar sustava digitalne referade, pa se te dimenzije ne provjeravaju. Stil citiranja nije propisan. Opseg je propisan \"od uvoda do zaključka\", a ova provjera broji riječi cijelog dokumenta, pa rad ispod donje granice sigurno odstupa, dok rad iznad nje može imati kraće tijelo od propisanog. Rad se može pisati na hrvatskom ili engleskom jeziku, pa jezik odabire student, a provjera strukture slijedi odabrani jezik.",
+    "note": "Pravilnik propisuje opseg rada, a tehničko oblikovanje (font, veličina, prored, margine, format papira) delegira na elektronički predložak dostupan samo u sustavu digitalne referade, pa se te dimenzije ne provjeravaju. Stil citiranja nije propisan. Opseg je propisan \"od uvoda do zaključka\", a provjera broji riječi cijelog dokumenta, pa rad ispod donje granice sigurno odstupa, dok rad iznad nje može imati kraće tijelo. Pravilnik dopušta pisanje na hrvatskom ili engleskom jeziku, pa jezik odabire student.",
     "sources": [
       {
         "title": "Pravilnik o zavrsnom, diplomskom odnosno specijalistickom radu i zavrsnom ispitu (Sveuciliste Algebra Bernays, 20.02.2026.)",
-        "url": "https://www.algebra.hr/sveuciliste/wp-content/uploads/2024/04/Pravilnik-o-zavrsnom-diplomskom-odnosno-specijalistickom-radu-i-zavrsnom-ispitu_20.02.2026-1.pdf"
+        "url": "https://www.algebra.hr/sveuciliste/referada/dokumenti/"
       },
       {
         "title": "Book of Regulations on the Final, Graduation or Specialist Thesis and the Final Exam (Sveuciliste Algebra Bernays, 20.02.2026., sluzbena engleska inacica)",
-        "url": "https://www.algebra.hr/sveuciliste/wp-content/uploads/2024/04/Book-of-Regulations-on-the-Final-Graduation-or-Specialist-Thesis-and-the-Final-Exam_20.02.2026.pdf"
+        "url": "https://www.algebra.hr/sveuciliste/referada/dokumenti/"
       }
     ],
     "sourceHierarchy": [
-      "Pravilnik o završnom, diplomskom odnosno specijalističkom radu i završnom ispitu (Sveučilište Algebra Bernays, 20.02.2026.)"
+      "Pravilnik o završnom, diplomskom odnosno specijalističkom radu i završnom ispitu (Sveučilište Algebra Bernays, 20.02.2026.)",
+      "Službene stranice studija (jezik izvođenja), algebra.hr"
     ],
     "ruleAuthority": "official-program-guidelines",
     "normativeScope": [

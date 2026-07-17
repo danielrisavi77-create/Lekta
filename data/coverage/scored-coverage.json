@@ -33,6 +33,14 @@
       "lastVerified": "2026-07-17"
     },
     {
+      "profileId": "algebra-diplomski-odnosi-s-javnoscu",
+      "scored": 1,
+      "machineCheckable": 1,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-17"
+    },
+    {
       "profileId": "algebra-specijalisticki",
       "scored": 1,
       "machineCheckable": 1,
@@ -2041,5 +2049,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 1521
+  "totalScored": 1522
 }

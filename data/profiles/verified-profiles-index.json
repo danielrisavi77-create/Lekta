@@ -8266,11 +8266,18 @@
     "id": "algebra-zavrsni",
     "unitId": "algebra",
     "programs": [
-      "Računarstvo i informatika",
-      "Dizajn",
-      "Ekonomija i poslovanje",
-      "Komunikacije i mediji",
-      "Opći profil ustanove"
+      "Stručni prijediplomski studij 3D oblikovanje tržišnih komunikacija",
+      "Stručni prijediplomski studij Digitalni marketing",
+      "Stručni prijediplomski studij Dizajn interijera",
+      "Stručni prijediplomski studij Dizajn",
+      "Stručni prijediplomski studij Kibernetička sigurnost",
+      "Stručni prijediplomski studij Komunikacijski menadžment",
+      "Stručni prijediplomski studij Multimedijska produkcija",
+      "Stručni prijediplomski studij Razvoj računalnih igara",
+      "Sveučilišni prijediplomski studij Ekonomija digitalnog poslovanja",
+      "Sveučilišni prijediplomski studij Podatkovna znanost i umjetna inteligencija",
+      "Sveučilišni prijediplomski studij Programsko inženjerstvo",
+      "Sveučilišni prijediplomski studij Psihologija"
     ],
     "workTypes": [
       "final"
@@ -8281,11 +8288,13 @@
     "id": "algebra-diplomski",
     "unitId": "algebra",
     "programs": [
-      "Računarstvo i informatika",
-      "Dizajn",
-      "Ekonomija i poslovanje",
-      "Komunikacije i mediji",
-      "Opći profil ustanove"
+      "Stručni diplomski studij Digitalni marketing",
+      "Stručni diplomski studij Kibernetička sigurnost",
+      "Stručni diplomski studij Kreativno upravljanje u dizajnu",
+      "Stručni diplomski studij Podatkovna znanost i umjetna inteligencija",
+      "Stručni diplomski studij Programsko inženjerstvo",
+      "Sveučilišni diplomski studij Ekonomija digitalnog poslovanja",
+      "Sveučilišni diplomski studij Računarstvo"
     ],
     "workTypes": [
       "graduate"
@@ -8297,14 +8306,26 @@
     }
   },
   {
+    "id": "algebra-diplomski-odnosi-s-javnoscu",
+    "unitId": "algebra",
+    "programs": [
+      "Sveučilišni diplomski studij Odnosi s javnošću"
+    ],
+    "workTypes": [
+      "graduate"
+    ],
+    "status": "verified",
+    "rules": {
+      "documentLanguage": "hr",
+      "languageLocked": true
+    }
+  },
+  {
     "id": "algebra-specijalisticki",
     "unitId": "algebra",
     "programs": [
-      "Računarstvo i informatika",
-      "Dizajn",
-      "Ekonomija i poslovanje",
-      "Komunikacije i mediji",
-      "Opći profil ustanove"
+      "Poslijediplomski specijalistički studij Strateško komuniciranje",
+      "Poslijediplomski specijalistički studij Vodstvo i menadžment u obrazovanju"
     ],
     "workTypes": [
       "specialist"

@@ -41157,7 +41157,7 @@
     "sourceId": "algebra-pravilnik-radovi-2026",
     "sourcePage": "Poglavlje 6. (Izrada završnog, diplomskog odnosno specijalističkog rada), stavak 4. odnosno 5.",
     "quote": "Završni rad od uvoda do zaključka mora obuhvatiti 12.000-15.000 riječi.",
-    "note": "Harvest 2026-07-17: doslovni citat iz snapshota; potvrdjen i u sluzbenoj engleskoj inacici istog akta."
+    "note": "Algebra rework 2026-07-17: doslovni citat opsega iz snapshota, potvrdjen u sluzbenoj engleskoj inacici."
   },
   {
     "id": "led-algebra-diplomski--word-count-verified-2026-07-17",
@@ -41169,7 +41169,19 @@
     "sourceId": "algebra-pravilnik-radovi-2026",
     "sourcePage": "Poglavlje 6. (Izrada završnog, diplomskog odnosno specijalističkog rada), stavak 4. odnosno 5.",
     "quote": "Diplomski odnoso specijalistički rad od uvoda do zaključka mora obuhvatiti 20.000-25.000 riječi.",
-    "note": "Harvest 2026-07-17: doslovni citat iz snapshota; potvrdjen i u sluzbenoj engleskoj inacici istog akta."
+    "note": "Algebra rework 2026-07-17: doslovni citat opsega iz snapshota, potvrdjen u sluzbenoj engleskoj inacici."
+  },
+  {
+    "id": "led-algebra-diplomski-odnosi-s-javnoscu--word-count-verified-2026-07-17",
+    "ruleId": "algebra-diplomski-odnosi-s-javnoscu--word-count",
+    "profileId": "algebra-diplomski-odnosi-s-javnoscu",
+    "action": "verified",
+    "actor": "Daniel",
+    "timestamp": "2026-07-17",
+    "sourceId": "algebra-pravilnik-radovi-2026",
+    "sourcePage": "Poglavlje 6. (Izrada završnog, diplomskog odnosno specijalističkog rada), stavak 4. odnosno 5.",
+    "quote": "Diplomski odnoso specijalistički rad od uvoda do zaključka mora obuhvatiti 20.000-25.000 riječi.",
+    "note": "Algebra rework 2026-07-17: doslovni citat opsega iz snapshota, potvrdjen u sluzbenoj engleskoj inacici."
   },
   {
     "id": "led-algebra-specijalisticki--word-count-verified-2026-07-17",
@@ -41181,6 +41193,6 @@
     "sourceId": "algebra-pravilnik-radovi-2026",
     "sourcePage": "Poglavlje 6. (Izrada završnog, diplomskog odnosno specijalističkog rada), stavak 4. odnosno 5.",
     "quote": "Diplomski odnoso specijalistički rad od uvoda do zaključka mora obuhvatiti 20.000-25.000 riječi.",
-    "note": "Harvest 2026-07-17: doslovni citat iz snapshota; potvrdjen i u sluzbenoj engleskoj inacici istog akta."
+    "note": "Algebra rework 2026-07-17: doslovni citat opsega iz snapshota, potvrdjen u sluzbenoj engleskoj inacici."
   }
 ]
