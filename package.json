@@ -11,6 +11,7 @@
     "demand-signal": "node discovery/demand-signal.mjs",
     "notify-covered": "node discovery/notify-covered.mjs",
     "recompute-coverage": "node scripts/recompute-coverage.mjs",
+    "gen-corpus-stats": "node scripts/gen-corpus-stats.mjs",
     "apply-verification": "node scripts/apply-verification.mjs",
     "dossier": "node scripts/verification-dossier.mjs",
     "generate-citation-tools": "node scripts/generate-citation-tools.mjs",

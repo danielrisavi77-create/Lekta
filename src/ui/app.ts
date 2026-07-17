@@ -25,7 +25,7 @@ import { applyBakedAdvisory, repairEntriesFor } from '../profiles/profile-runtim
 import { ZAGREB_CATALOG } from '../catalog/catalog-loader';
 import { attachSelectSearch } from './select-search';
 import { workTypesForSelection, defaultWorkTypeForProgram, citationForDefinition, isCitationLocked } from './work-selection';
-import { INSTITUTIONAL_COVERAGE_MATRIX, COVERAGE_STATUS_META } from '../coverage/coverage-loader';
+import { INSTITUTIONAL_COVERAGE_MATRIX, COVERAGE_STATUS_META, CORPUS_STATS } from '../coverage/coverage-loader';
 import { FPZG_SUBMISSION_CALENDAR as _FPZG_CAL, ACADEMIC_DEADLINES } from '../submission/submission-loader';
 import { renderDeadlineReminderToggleIfAvailable } from './deadline-reminder-toggle';
 import { renderRepairPanel } from './repair-panel';
@@ -380,7 +380,12 @@ function hrPlural(n: any,one: any,few: any,many: any){const a=Math.abs(n)%100,b=
 // Samoazurira se iz registra pa se ne tvrdo-kodira po profilu. Vraca null za ustanove bez profila.
 function institutionCoverage(u: any){const profs=VERIFIED_PROFILE_REGISTRY.filter((d: any)=>d.unitId===u.id);if(!profs.length)return null;const works=profs.reduce((n: any,d: any)=>n+((d.fieldValidation?.sample?.publicPdfAudits||0)+(d.fieldValidation?.sample?.docxAudits||0)),0);const pPart=`${profs.length} ${hrPlural(profs.length,'studijski profil','studijska profila','studijskih profila')}`;const wPart=works?`, ${works} ${hrPlural(works,'stvarni verificirani rad','stvarna verificirana rada','stvarnih verificiranih radova')} iz službenih repozitorija`:'';return{status:'institution-covered',label:'Pokrivenost ustanove',note:`${u.name}: pokriveno ${pPart}${wPart}.`}}
 // Globalni hero signal pokrivenosti: zivo iz registra (samoazurira se), sakriven ako nema profila.
-function renderHeroCoverage(){const el=$('#heroCoverage');if(!el)return;const profs=VERIFIED_PROFILE_REGISTRY;if(!profs.length){el.hidden=true;return}const units=new Set(profs.map((p: any)=>p.unitId));const insts=ZAGREB_CATALOG.filter((g: any)=>(g.units||[]).some((u: any)=>units.has(u.id))).length;const works=profs.reduce((n: any,d: any)=>n+((d.fieldValidation?.sample?.publicPdfAudits||0)+(d.fieldValidation?.sample?.docxAudits||0)),0);el.innerHTML=`<div class="cov-stats"><div class="cov-stat"><b>${profs.length}</b><span>${hrPlural(profs.length,'studijski profil','studijska profila','studijskih profila')}</span></div><div class="cov-stat"><b>${insts}</b><span>${hrPlural(insts,'ustanova','ustanove','ustanova')}</span></div><div class="cov-stat"><b>${works}</b><span>${hrPlural(works,'javni rad','javna rada','javnih radova')}</span></div></div><span class="cov-note">Utemeljeno na stvarnim javnim radovima iz službenih repozitorija.</span>`;el.hidden=false}
+function renderHeroCoverage(){const el=$('#heroCoverage');if(!el)return;const profs=VERIFIED_PROFILE_REGISTRY;if(!profs.length){el.hidden=true;return}const units=new Set(profs.map((p: any)=>p.unitId));const insts=ZAGREB_CATALOG.filter((g: any)=>(g.units||[]).some((u: any)=>units.has(u.id))).length;
+ // "Javnih radova" je snapshot M4 korpusa (Hrcak+Dabar, scripts/gen-corpus-stats.mjs), NE
+ // fieldValidation audit-uzorak (taj mjeri nesto drugo: institutionCoverage nize ga i dalje
+ // koristi za "stvarni verificirani rad").
+ const corpusWorks=CORPUS_STATS.works;
+ el.innerHTML=`<div class="cov-stats"><div class="cov-stat"><b>${profs.length}</b><span>${hrPlural(profs.length,'studijski profil','studijska profila','studijskih profila')}</span></div><div class="cov-stat"><b>${insts}</b><span>${hrPlural(insts,'ustanova','ustanove','ustanova')}</span></div><div class="cov-stat"><b>${fmt(corpusWorks)}</b><span>${hrPlural(corpusWorks,'javni rad','javna rada','javnih radova')}</span></div></div><span class="cov-note">Utemeljeno na stvarnim javnim radovima iz službenih repozitorija.</span>`;el.hidden=false}
 function currentProfile(){
  const g=selectedInstitution(),u=selectedUnit(),definition=findVerifiedDefinition(),department=findDepartmentDefinition(),cit=citationMeta($('#citationStyle').value),workType=$('#workType').value,methodologyId=selectedMethodology(),methodology=SOCIAL_METHOD_REGISTRY[methodologyId]||null;
  let base: any=definition?structuredClone(definition.rules):structuredClone(u.id==='fpzg'?FPZG_PARTIAL:(BASE_PROFILES[u.family]||BASE_PROFILES.mixed));
