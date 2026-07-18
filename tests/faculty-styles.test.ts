@@ -1,11 +1,20 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeAll } from 'vitest';
+import { readFileSync, readdirSync } from 'node:fs';
+import { join } from 'node:path';
 
-import { buildFacultyOptions, formatForFaculty } from '../src/citations/faculty-styles';
+import { buildFacultyOptions, formatForFaculty, ensureFacultySpecsLoaded } from '../src/citations/faculty-styles';
+import committedIndex from '../data/tools/citation-specs/verified-index.json';
 import type { CitationInput } from '../src/tools/citation';
 
+const VERIFIED_DIR = join(__dirname, '..', 'data', 'tools', 'citation-specs', 'verified');
+
 // Test radi kroz Vite pipeline (vitest) pa import.meta.glob verified specova stvarno ucita.
+// .spec je LIJENO ucitan (perf split); ensureFacultySpecsLoaded() ovdje eksplicitno pricekan
+// (umjesto oslanjanja na to da ce dovoljno mikrotaskova proci izmedju testova) tako da testovi
+// niz custom-spec formata ne ovise o implicitnom vremenu ucitavanja lijenog chunka.
 describe('faculty-styles (izbornik fakulteta u citat.html)', () => {
   const opts = buildFacultyOptions();
+  beforeAll(async () => { await ensureFacultySpecsLoaded(); });
 
   it('gradi fakultete iz verified specova, grupirane po sveucilistu i imenovane', () => {
     expect(opts.length).toBeGreaterThanOrEqual(55);
@@ -56,5 +65,38 @@ describe('faculty-styles (izbornik fakulteta u citat.html)', () => {
     const inp: CitationInput = { type: 'knjiga', authors: 'Ivić, Ivan', title: 'Test', year: '2020', publisher: 'X' };
     const r = formatForFaculty(pin, inp);
     expect(r.citation).toBeTruthy();
+  });
+});
+
+// Drift + korektnost splita (perf: lijeni citation-specs chunk, isti obrazac kao
+// tests/verified-split.test.ts). Ako padne: node scripts/gen-citation-specs-index.mjs pa commit.
+describe('citation-specs verified-index.json: drift + korektnost splita', () => {
+  const files = readdirSync(VERIFIED_DIR).filter((f) => f.endsWith('.json')).sort();
+
+  function lightEntry(file: string) {
+    const spec = JSON.parse(readFileSync(join(VERIFIED_DIR, file), 'utf8'));
+    return {
+      file,
+      facultyId: spec.facultyId,
+      styleToken: spec.styleToken,
+      outcome: spec.outcome,
+      label: spec.label,
+      sourceLabel: spec.sourceLabel,
+      verifiedAt: spec.verifiedAt ?? null,
+    };
+  }
+
+  it('commitani verified-index.json === regenerirana light projekcija svih verified/*.json', () => {
+    expect(committedIndex).toEqual(files.map(lightEntry));
+  });
+
+  it('ensureFacultySpecsLoaded spoji pun spec u svaki FacultyStyle (spec !== null nakon ucitavanja)', async () => {
+    await ensureFacultySpecsLoaded();
+    const allOpts = buildFacultyOptions();
+    for (const opt of allOpts) {
+      for (const style of opt.styles) {
+        expect(style.spec, `${opt.id}: spec nije ucitan nakon ensureFacultySpecsLoaded`).not.toBeNull();
+      }
+    }
   });
 });

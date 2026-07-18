@@ -1,0 +1,641 @@
+[
+  {
+    "file": "biotech.json",
+    "facultyId": "biotech",
+    "styleToken": "biotech",
+    "outcome": "custom-spec",
+    "label": "Vancouver numeričko (službene upute Odjela za biotehnologiju)",
+    "sourceLabel": "Upute za pisanje završnog i diplomskog rada (Odjel za biotehnologiju)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "efos.json",
+    "facultyId": "efos",
+    "styleToken": "efos",
+    "outcome": "custom-spec",
+    "label": "Harvardski stil autor-godina (službene upute EFOS)",
+    "sourceLabel": "Upute za izradu studentskih radova na Ekonomskom fakultetu u Osijeku",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "efri.json",
+    "facultyId": "efri",
+    "styleToken": "harvard",
+    "outcome": "style-pin",
+    "label": "Harvard (službeni pravilnici EFRI)",
+    "sourceLabel": "Pravilnik o završnom radu Ekonomskog fakulteta Sveučilišta u Rijeci (2014)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "efst.json",
+    "facultyId": "efst",
+    "styleToken": "harvard",
+    "outcome": "style-pin",
+    "label": "Harvard (službene upute EFST)",
+    "sourceLabel": "Uputa za izradu studentskih radova (Ekonomski fakultet u Splitu, 2013)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "efzg.json",
+    "facultyId": "efzg",
+    "styleToken": "harvard",
+    "outcome": "style-pin",
+    "label": "Harvard stil (službene upute EFZG za završni rad)",
+    "sourceLabel": "Postupak prijave, izrade i obrane završnog rada na preddiplomskom sveučilišnom studiju (EFZG)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "erf.json",
+    "facultyId": "erf",
+    "styleToken": "erf",
+    "outcome": "custom-spec",
+    "label": "APA 7 autor-godina (ERF upute preko časopisa HRRI)",
+    "sourceLabel": "Upute autorima časopisa Hrvatska revija za rehabilitacijska istraživanja; ERF Upute za izradu diplomskog rada upućuju na propozicije tog časopisa",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "fazos.json",
+    "facultyId": "fazos",
+    "styleToken": "apa7",
+    "outcome": "style-pin",
+    "label": "APA stil citiranja (službene upute FAZOS)",
+    "sourceLabel": "Upute za izradu završnog rada (Fakultet agrobiotehničkih znanosti Osijek)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "fbf.json",
+    "facultyId": "fbf",
+    "styleToken": "fbf",
+    "outcome": "custom-spec",
+    "label": "Vancouver numeričko (službene upute FBF)",
+    "sourceLabel": "Uputa za prijavu teme i oblikovanje završnog specijalističkog rada (Farmaceutsko-biokemijski fakultet, 2014)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "fer.json",
+    "facultyId": "fer",
+    "styleToken": "fer",
+    "outcome": "custom-spec",
+    "label": "FER numeričko navođenje (službene upute za diplomski rad, ZEMRIS)",
+    "sourceLabel": "Upute za izradu diplomskog rada (FER, ZEMRIS predlozak)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "ferit.json",
+    "facultyId": "ferit",
+    "styleToken": "ferit-brojcani",
+    "outcome": "custom-spec",
+    "label": "Brojčani stil citiranja (službene upute FERIT)",
+    "sourceLabel": "Službene upute za pisanje diplomskog rada (FERIT), t. 2.9 i 2.10",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "ffrz.json",
+    "facultyId": "ffrz",
+    "styleToken": "ffrz",
+    "outcome": "custom-spec",
+    "label": "Autor-godina po pravilima časopisa Obnovljeni život (službene upute FFRZ)",
+    "sourceLabel": "Upute za oblikovanje diplomskog rada (FFRZ, 2021), pravila navođenja prema časopisu Obnovljeni život",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "ffzg-apa7.json",
+    "facultyId": "ffzg",
+    "styleToken": "apa7",
+    "outcome": "style-pin",
+    "label": "APA stil (službene upute Odsjeka za psihologiju FFZG)",
+    "sourceLabel": "Upute za pisanje i oblikovanje diplomskog rada na Odsjeku za psihologiju Filozofskog fakulteta Sveučilišta u Zagrebu",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "ffzg-filoz-fusnote.json",
+    "facultyId": "ffzg",
+    "styleToken": "filoz-fusnote",
+    "outcome": "custom-spec",
+    "label": "Fusnotni stil Odsjeka za filozofiju (službene upute FFZG)",
+    "sourceLabel": "Upute za oblikovanje diplomskoga rada na studiju filozofije (Odsjek za filozofiju, Filozofski fakultet u Zagrebu)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "fhs.json",
+    "facultyId": "fhs",
+    "styleToken": "fhs-apa",
+    "outcome": "custom-spec",
+    "label": "Prilagođeni APA 7 autor-godina (službene upute FHS za diplomski rad)",
+    "sourceLabel": "Upute za izradu diplomskoga rada (Fakultet hrvatskih studija, 2026)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "fmtu-chicago-author.json",
+    "facultyId": "fmtu",
+    "styleToken": "chicago-author",
+    "outcome": "style-pin",
+    "label": "Chicago autor-datum sustav (službene upute FMTU)",
+    "sourceLabel": "Upute za prijavu, izradu, predaju i obranu završnog rada na sveučilišnom prijediplomskom studiju (FMTU Opatija)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "fmtu-chicago-notes.json",
+    "facultyId": "fmtu",
+    "styleToken": "chicago-notes",
+    "outcome": "style-pin",
+    "label": "Chicago bibliografski sustav s fusnotama (službene upute FMTU)",
+    "sourceLabel": "Upute za prijavu, izradu, predaju i obranu završnog rada na sveučilišnom prijediplomskom studiju (FMTU Opatija)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "fpz.json",
+    "facultyId": "fpz",
+    "styleToken": "vancouver",
+    "outcome": "style-pin",
+    "label": "Vancouver, inačica FPZ (službene upute FPZ)",
+    "sourceLabel": "Upute za izradu završnog i diplomskog rada, Fakultet prometnih znanosti (2018)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "fpzg.json",
+    "facultyId": "fpzg",
+    "styleToken": "fpzg",
+    "outcome": "custom-spec",
+    "label": "FPZG autor-godina (službena Pravila navođenja)",
+    "sourceLabel": "Pravila navođenja bibliografskih jedinica i citatnica na Fakultetu političkih znanosti",
+    "verifiedAt": "2026-07-09"
+  },
+  {
+    "file": "geof.json",
+    "facultyId": "geof",
+    "styleToken": "geof",
+    "outcome": "custom-spec",
+    "label": "GEOF autor-godina (službeni Naputak za ocjenske radove)",
+    "sourceLabel": "Opći naputak za pisanje ocjenskih radova na Geodetskom fakultetu",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "grad.json",
+    "facultyId": "grad",
+    "styleToken": "grad",
+    "outcome": "custom-spec",
+    "label": "Numeričko navođenje u uglatim zagradama (službeni predlozak GRAD)",
+    "sourceLabel": "Službeni predlozak završnog/diplomskog rada Građevinskog fakulteta u Zagrebu (2024)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "grafos.json",
+    "facultyId": "grafos",
+    "styleToken": "grafos-brojcani",
+    "outcome": "custom-spec",
+    "label": "Brojčani stil citiranja (službene smjernice GrAFOS)",
+    "sourceLabel": "Smjernice za izradu i oblikovanje diplomskih i završnih radova (Građevinski i arhitektonski fakultet Osijek, 2022.), t. 3.4",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "grf.json",
+    "facultyId": "grf",
+    "styleToken": "grf",
+    "outcome": "custom-spec",
+    "label": "GRF numerički stil (službene upute za završni rad)",
+    "sourceLabel": "Upute za izradu završnog rada (Grafički fakultet Sveučilišta u Zagrebu)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "kbf.json",
+    "facultyId": "kbf",
+    "styleToken": "kbf-fusnote",
+    "outcome": "custom-spec",
+    "label": "Fusnotni stil Bogoslovske smotre (službene upute KBF)",
+    "sourceLabel": "Upute za izradu završnoga i diplomskoga rada (Katolički bogoslovni fakultet Sveučilišta u Zagrebu)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "kemos.json",
+    "facultyId": "kemos",
+    "styleToken": "kemos-brojcani",
+    "outcome": "custom-spec",
+    "label": "Brojčani stil citiranja (službene upute Odjela za kemiju u Osijeku)",
+    "sourceLabel": "Upute za pisanje završnog / diplomskog rada, Sveučilište u Osijeku, Odjel za kemiju (lipanj 2024.)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "kif.json",
+    "facultyId": "kif",
+    "styleToken": "kif",
+    "outcome": "custom-spec",
+    "label": "APA autor-godina, hrvatska prilagodba (službene upute KIF)",
+    "sourceLabel": "Upute za izradu diplomskog/specijalističkog diplomskog rada (Kineziološki fakultet Sveučilišta u Zagrebu)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "kifst.json",
+    "facultyId": "kifst",
+    "styleToken": "kifst",
+    "outcome": "custom-spec",
+    "label": "APA autor-godina (službene upute KIFST)",
+    "sourceLabel": "Upute za izradu diplomskog rada (Kineziološki fakultet u Splitu)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "libertas.json",
+    "facultyId": "libertas",
+    "styleToken": "harvard",
+    "outcome": "style-pin",
+    "label": "Harvard (Pravilnik o diplomskom radu, Libertas)",
+    "sourceLabel": "Pravilnik o diplomskom radu (Libertas, srpanj 2024)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "medri.json",
+    "facultyId": "medri",
+    "styleToken": "medri",
+    "outcome": "custom-spec",
+    "label": "Vancouver numeričko (službeni Naputak MEDRI)",
+    "sourceLabel": "Naputak za prijavu, oblikovanje i izradu diplomskog rada - Farmacija (MEDRI, 2025)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "mef.json",
+    "facultyId": "mef",
+    "styleToken": "mef",
+    "outcome": "custom-spec",
+    "label": "MEF autor-godina (službeni Pravilnik o diplomskom radu)",
+    "sourceLabel": "Pravilnik o diplomskom radu Medicinskog fakulteta u Zagrebu (upute za citiranje literature)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "mefos.json",
+    "facultyId": "mefos",
+    "styleToken": "mefos",
+    "outcome": "custom-spec",
+    "label": "Vancouver numeričko (službene upute MEFOS)",
+    "sourceLabel": "Upute za izradu i oblikovanje završnog i diplomskog rada (MEFOS, 2025)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "mefst.json",
+    "facultyId": "mefst",
+    "styleToken": "mefst",
+    "outcome": "custom-spec",
+    "label": "Vancouver numeričko (službena Uputa MEFST)",
+    "sourceLabel": "Uputa za oblikovanje diplomskoga rada (MEFST, 2021)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "mev-harvard.json",
+    "facultyId": "mev",
+    "styleToken": "harvard",
+    "outcome": "custom-spec",
+    "label": "Harvard autor-godina (službene upute MEV)",
+    "sourceLabel": "Upute za izradu završnog rada na Međimurskom veleučilištu u Čakovcu",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "mev-vancouver.json",
+    "facultyId": "mev",
+    "styleToken": "vancouver",
+    "outcome": "custom-spec",
+    "label": "Vancouver numerički (službene upute MEV)",
+    "sourceLabel": "Upute za izradu završnog rada na Međimurskom veleučilištu u Čakovcu",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "pbf.json",
+    "facultyId": "pbf",
+    "styleToken": "pbf",
+    "outcome": "custom-spec",
+    "label": "PBF harvardski sustav (službene upute za diplomski rad)",
+    "sourceLabel": "Upute za izradu diplomskog rada (Prehrambeno-biotehnološki fakultet Sveučilišta u Zagrebu)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "pfri-europski-fusnote.json",
+    "facultyId": "pfri",
+    "styleToken": "europski-fusnote",
+    "outcome": "custom-spec",
+    "label": "Europski fusnotni sustav (službene upute PFRI)",
+    "sourceLabel": "Upute za izradu završnog rada (Sveučilište u Rijeci, Pomorski fakultet, ožujak 2025)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "pfri-harvardski-brojcani.json",
+    "facultyId": "pfri",
+    "styleToken": "harvardski-brojcani",
+    "outcome": "custom-spec",
+    "label": "Harvardski brojčani sustav (službene upute PFRI)",
+    "sourceLabel": "Upute za izradu završnog rada (Sveučilište u Rijeci, Pomorski fakultet, ožujak 2025)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "pfst.json",
+    "facultyId": "pfst",
+    "styleToken": "pfst",
+    "outcome": "custom-spec",
+    "label": "Numeričko navođenje u kutnim zagradama (službene upute PFST)",
+    "sourceLabel": "Upute za izradu diplomskih i drugih ocjenskih radova, Pomorski fakultet u Splitu (2022)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "pmf.json",
+    "facultyId": "pmf",
+    "styleToken": "pmf",
+    "outcome": "custom-spec",
+    "label": "Harvardski sustav (upute Geografskog odsjeka PMF)",
+    "sourceLabel": "Upute za prijavu i izradu diplomskog rada, Geografski odsjek Prirodoslovno-matematičkog fakulteta u Zagrebu",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "pmfst.json",
+    "facultyId": "pmfst",
+    "styleToken": "pmfst",
+    "outcome": "custom-spec",
+    "label": "PMFST autor-godina (upute Odjela za biologiju i kemiju)",
+    "sourceLabel": "Upute za pisanje završnog rada (PMFST, odjel bio/kem)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "pravo.json",
+    "facultyId": "pravo",
+    "styleToken": "pravo-fusnote",
+    "outcome": "custom-spec",
+    "label": "Pravni fakultet: pravne fusnote (službene upute)",
+    "sourceLabel": "Upute za oblikovanje i uređenje teksta i navođenje izvora (Pravni fakultet u Zagrebu)",
+    "verifiedAt": "2026-07-09"
+  },
+  {
+    "file": "pravri.json",
+    "facultyId": "pravri",
+    "styleToken": "pravri-fusnote",
+    "outcome": "custom-spec",
+    "label": "Pravne fusnote (službene upute PRAVRI)",
+    "sourceLabel": "Upute za izradu studentskih pisanih radova (PRAVRI, rev. 2023)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "ptfos.json",
+    "facultyId": "ptfos",
+    "styleToken": "ptfos-autor-godina",
+    "outcome": "custom-spec",
+    "label": "PTFOS autor-godina (službene upute za diplomski rad)",
+    "sourceLabel": "Upute za pisanje, ocjenu i obranu diplomskih radova (PTFOS)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "pvzg.json",
+    "facultyId": "pvzg",
+    "styleToken": "harvard",
+    "outcome": "style-pin",
+    "label": "Harvard (Pravilnik o završnom radu PVZG)",
+    "sourceLabel": "Pravilnik o završnom radu, Poslovno veleučilište Zagreb (2018)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "rgnf.json",
+    "facultyId": "rgnf",
+    "styleToken": "rgnf-harvard",
+    "outcome": "custom-spec",
+    "label": "Harvard autor-godina (službene upute RGNF)",
+    "sourceLabel": "Predlozak za izradu završnog i diplomskog rada (Rudarsko-geološko-naftni fakultet)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "riteh.json",
+    "facultyId": "riteh",
+    "styleToken": "riteh",
+    "outcome": "custom-spec",
+    "label": "Numeričko citiranje u uglatim zagradama (službene upute RiTeh)",
+    "sourceLabel": "Upute za izradu završnog i diplomskog rada (Tehnički fakultet u Rijeci)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "sfzg.json",
+    "facultyId": "sfzg",
+    "styleToken": "vancouver",
+    "outcome": "style-pin",
+    "label": "Vancouver (ICMJE, službene upute SFZG)",
+    "sourceLabel": "Naputak za tehničko oblikovanje i izradu diplomskog rada na Stomatološkom fakultetu Sveučilišta u Zagrebu",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "sumfak.json",
+    "facultyId": "sumfak",
+    "styleToken": "sumfak",
+    "outcome": "custom-spec",
+    "label": "Autor-godina (službene upute Fakulteta šumarstva i drvne tehnologije)",
+    "sourceLabel": "Upute za izradu završnog i diplomskog rada, poglavlje Pravila citiranja i izrada popisa literature (Fakultet šumarstva i drvne tehnologije, Sveučilište u Zagrebu)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "ttf-apa7.json",
+    "facultyId": "ttf",
+    "styleToken": "apa7",
+    "outcome": "style-pin",
+    "label": "APA (7. izdanje) (službene upute TTF)",
+    "sourceLabel": "Upute za izradu završnog i diplomskog rada (Tekstilno-tehnološki fakultet, Sveučilište u Zagrebu)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "ttf-vancouver.json",
+    "facultyId": "ttf",
+    "styleToken": "vancouver",
+    "outcome": "style-pin",
+    "label": "Vancouver (službene upute TTF)",
+    "sourceLabel": "Upute za izradu završnog i diplomskog rada (Tekstilno-tehnološki fakultet, Sveučilište u Zagrebu)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "ufri.json",
+    "facultyId": "ufri",
+    "styleToken": "ufri",
+    "outcome": "custom-spec",
+    "label": "Autor-godina (službene upute UFRI, diplomski rad)",
+    "sourceLabel": "Upute za izradu diplomskog rada (Učiteljski fakultet u Rijeci)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "ufzg.json",
+    "facultyId": "ufzg",
+    "styleToken": "apa7",
+    "outcome": "style-pin",
+    "label": "APA (službene upute UFZG)",
+    "sourceLabel": "Upute za izradu završnog odnosno diplomskog rada (Učiteljski fakultet u Zagrebu)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "unidu-harvard.json",
+    "facultyId": "unidu",
+    "styleToken": "harvard",
+    "outcome": "style-pin",
+    "label": "Harvard (službene upute Odjela za komunikologiju, unidu)",
+    "sourceLabel": "Upute za izradu diplomskog rada (2025), Odjel za komunikologiju (Sveučilište u Dubrovniku)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "unidu-povijest-fusnote.json",
+    "facultyId": "unidu",
+    "styleToken": "unidu-povijest-fusnote",
+    "outcome": "custom-spec",
+    "label": "Fusnotni stil (službene upute za završni rad, Povijest Jadrana i Mediterana, unidu)",
+    "sourceLabel": "Upute za izradu završnog rada, preddiplomski studij Povijest Jadrana i Mediterana (Sveučilište u Dubrovniku)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "unin-apa7.json",
+    "facultyId": "unin",
+    "styleToken": "apa7",
+    "outcome": "custom-spec",
+    "label": "APA 7 autor-godina (službene upute UNIN, biomedicina)",
+    "sourceLabel": "Upute za izradu završnih i diplomskih radova (Sveučilište Sjever)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "unin-harvard.json",
+    "facultyId": "unin",
+    "styleToken": "harvard",
+    "outcome": "style-pin",
+    "label": "Harvard (službene upute UNIN, društvene znanosti)",
+    "sourceLabel": "Upute za izradu završnih i diplomskih radova (Sveučilište Sjever)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "unin-vancouver.json",
+    "facultyId": "unin",
+    "styleToken": "vancouver",
+    "outcome": "style-pin",
+    "label": "Vancouver (službene upute UNIN, tehničke znanosti)",
+    "sourceLabel": "Upute za izradu završnih i diplomskih radova (Sveučilište Sjever)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "unipu-chicago-notes.json",
+    "facultyId": "fetpu",
+    "styleToken": "chicago-notes",
+    "outcome": "custom-spec",
+    "label": "Chicago fusnotni stil (službene upute FET Pula)",
+    "sourceLabel": "Naputak za izradu završnih i diplomskih radova (Fakultet ekonomije i turizma, Sveučilište Jurja Dobrile u Puli)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "unipu-harvard.json",
+    "facultyId": "fetpu",
+    "styleToken": "harvard",
+    "outcome": "custom-spec",
+    "label": "Harvard autor-godina (službene upute FET Pula)",
+    "sourceLabel": "Naputak za izradu završnih i diplomskih radova (Fakultet ekonomije i turizma, Sveučilište Jurja Dobrile u Puli)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "unizd-fusnote.json",
+    "facultyId": "unizd",
+    "styleToken": "unizd-fusnote",
+    "outcome": "custom-spec",
+    "label": "Europski sustav fusnota (službene upute Odjela za turizam UNIZD)",
+    "sourceLabel": "Upute za izradu završnoga i diplomskog rada (Odjel za turizam i komunikacijske znanosti, Sveučilište u Zadru)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "unizd-harvard.json",
+    "facultyId": "unizd",
+    "styleToken": "harvard",
+    "outcome": "style-pin",
+    "label": "Harvard (službene upute Odjela za turizam UNIZD)",
+    "sourceLabel": "Upute za izradu završnoga i diplomskog rada (Odjel za turizam i komunikacijske znanosti, Sveučilište u Zadru)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "vef.json",
+    "facultyId": "vef",
+    "styleToken": "vef",
+    "outcome": "custom-spec",
+    "label": "VEF autor-godina (službeni Naputak za diplomski rad)",
+    "sourceLabel": "Naputak za prijavu, pisanje i oblikovanje diplomskog rada (Veterinarski fakultet Sveučilišta u Zagrebu)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "veleknin.json",
+    "facultyId": "veleknin",
+    "styleToken": "veleknin",
+    "outcome": "custom-spec",
+    "label": "Autor-godina (službene upute Veleučilišta Marko Marulić u Kninu)",
+    "sourceLabel": "Upute za izradu i obranu završnog rada (Veleučilište Marko Marulić u Kninu)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "veleri.json",
+    "facultyId": "veleri",
+    "styleToken": "veleri",
+    "outcome": "custom-spec",
+    "label": "Autor-godina (službene upute Veleučilišta u Rijeci)",
+    "sourceLabel": "Upute za izradu i formalni izgled završnog/diplomskog rada (Veleučilište u Rijeci)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "vevu.json",
+    "facultyId": "vevu",
+    "styleToken": "vevu",
+    "outcome": "custom-spec",
+    "label": "Autor-godina (službene upute VEVU za završni rad)",
+    "sourceLabel": "Upute za izradu završnog rada (VEVU)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "vhzk.json",
+    "facultyId": "vhzk",
+    "styleToken": "vhzk-harvard",
+    "outcome": "custom-spec",
+    "label": "Harvard (službene upute VHZK)",
+    "sourceLabel": "Pravilnik o završnom radu, Prilog 7: Upute za tehničko oblikovanje i citiranje literature (Veleučilište Hrvatsko zagorje Krapina)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "vkjs.json",
+    "facultyId": "vkjs",
+    "styleToken": "apa7",
+    "outcome": "custom-spec",
+    "label": "APA autor-godina (službene upute VKJS)",
+    "sourceLabel": "Upute za izradu završnog i diplomskog rada (Veleučilište kriminalistike i javne sigurnosti)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "vub.json",
+    "facultyId": "vub",
+    "styleToken": "vancouver",
+    "outcome": "style-pin",
+    "label": "Vancouver (službene upute VUB)",
+    "sourceLabel": "Upute za izradu diplomskog rada (Veleučilište u Bjelovaru)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "vuv.json",
+    "facultyId": "vuv",
+    "styleToken": "vuv",
+    "outcome": "custom-spec",
+    "label": "Autor-godina (službene upute VUV)",
+    "sourceLabel": "Upute za izradu završnog/diplomskog rada (Veleučilište u Virovitici)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "vvg.json",
+    "facultyId": "vvg",
+    "styleToken": "vvg",
+    "outcome": "custom-spec",
+    "label": "Numeričko citiranje u uglatim zagradama (službene upute VVG)",
+    "sourceLabel": "Upute za izradu diplomskog (završnog) rada (Veleučilište Velika Gorica)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "zsem.json",
+    "facultyId": "zsem",
+    "styleToken": "zsem",
+    "outcome": "custom-spec",
+    "label": "Harvard autor-godina (službeni Pravilnik ZSEM)",
+    "sourceLabel": "Pravilnik o diplomskom radu ZSEM (2023), cl. 31-32 (način citiranja i popis literature)",
+    "verifiedAt": "2026-07-10"
+  },
+  {
+    "file": "zvu.json",
+    "facultyId": "zvu",
+    "styleToken": "vancouver",
+    "outcome": "custom-spec",
+    "label": "Vancouver numerički (službene upute ZVU)",
+    "sourceLabel": "Pravilnik o završnim radovima na stručnim i specijalističkim diplomskim studijima, Prilog 3: Citiranje literature (Zdravstveno veleučilište, 2015)",
+    "verifiedAt": "2026-07-10"
+  }
+]

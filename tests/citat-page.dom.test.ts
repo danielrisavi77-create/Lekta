@@ -1,5 +1,6 @@
 // @vitest-environment happy-dom
 import { describe, it, expect, beforeAll, vi } from 'vitest';
+import { ensureFacultySpecsLoaded } from '../src/citations/faculty-styles';
 
 // ui-boot uvlaci fontove/ikone/motion (nebitno za logiku) - mockaj da test ostane cist.
 vi.mock('../src/shared/ui-boot', () => ({}));
@@ -46,6 +47,10 @@ describe('citat-page: izbornik fakulteta + bulk (DOM)', () => {
   beforeAll(async () => {
     buildDom();
     await import('../src/tools/citat-page'); // init() se okine na import (readyState !== loading)
+    // Puni specovi (custom-spec formatFromSpec) su lijeno ucitani (perf split); eksplicitno
+    // pricekaj umjesto oslanjanja na mikrotaskove izmedju testova (isti obrazac kao
+    // naslovnica-page.dom.test.ts + ensureTemplatesHeavy).
+    await ensureFacultySpecsLoaded();
   });
 
   it('izbornik fakulteta se napuni (grupe + fakulteti)', () => {

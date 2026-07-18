@@ -4,7 +4,7 @@
 import '../shared/ui-boot';
 import { formatCitation, parseAuthors } from './citation';
 import { bindCopyButton } from './tool-ui';
-import { buildFacultyOptions, formatForFaculty, type FacultyStyle } from '../citations/faculty-styles';
+import { buildFacultyOptions, formatForFaculty, ensureFacultySpecsLoaded, type FacultyStyle } from '../citations/faculty-styles';
 import { splitReferences, parseReference, type BulkStyle } from '../citations/parse-reference';
 import { SOURCE_TYPES } from '../citations/citation-web';
 
@@ -403,6 +403,10 @@ function init() {
   syncVisibleFields();
   updateStyleInfo();
   render();
+  // Puni specovi (custom-spec formatFromSpec) su lijeno ucitani (faculty-styles.ts, perf);
+  // pokreni dohvat ODMAH (fire-and-forget, ne blokira init) i korigiraj prikaz cim stignu -
+  // dotad je vec render()irano s obiteljskim motorom kao privremenom aproksimacijom.
+  void ensureFacultySpecsLoaded().then(() => render());
 }
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
