@@ -4,7 +4,7 @@
 
 export const ZNAKOVA_PO_KARTICI = 1800;
 // Procjena A4 stranice (TNR 12, prored 1,5, standardne margine): oko 2600 znakova s razmacima.
-// Kartica (1800) je tako oko dvije trecine A4 stranice. Djelitelj /2 (koji smo prije koristili)
+// Kartica (1800) je tako oko 70% A4 stranice. Djelitelj /2 (koji smo prije koristili)
 // odgovara JEDNOSTRUKOM proredu pa je podbrajao stranice pri deklariranom proredu 1,5.
 export const ZNAKOVA_PO_STRANICI = 2600;
 export const RIJECI_PO_MINUTI = 200; // prosjecna brzina tihog citanja
@@ -13,7 +13,8 @@ export interface TextMetrics {
   words: number;
   charsWithSpaces: number;   // svi znakovi osim prijeloma retka (kao "znakova s razmacima")
   charsWithoutSpaces: number; // samo ne-praznine (uz NBSP koji nosi sadrzaj, npr. "10 kg")
-  pages: number;             // procjena A4 stranica (TNR 12, prored 1,5): kartica je oko 2/3 stranice
+  pages: number;             // procjena A4 stranica (TNR 12, prored 1,5): kartica je oko 70% stranice.
+                             // Zaokruzuje se UVIJEK naviše (Math.ceil), pa i kratak tekst pokaze 1.
   kartice: number;           // znakovi s razmacima / 1800, na dvije decimale
   sentences: number;
   paragraphs: number;
