@@ -214,7 +214,7 @@ textarea#kt-input.kt-drop{border-color:var(--brand);box-shadow:var(--focus)}
           <div class="stat-row"><dt>Rečenice</dt><dd id="m-sentences">0</dd></div>
           <div class="stat-row"><dt>Odlomci</dt><dd id="m-paragraphs">0</dd></div>
           <div class="stat-row"><dt>Procjena A4 stranica</dt><dd id="m-pages">0</dd></div>
-          <div class="stat-row"><dt>Vrijeme čitanja</dt><dd id="m-reading">0 min</dd></div>
+          <div class="stat-row"><dt>Procjena vremena čitanja</dt><dd id="m-reading">0 min</dd></div>
         </dl>
         <div class="row2">
           <div class="field"><label for="kt-goal">Cilj (kartice, opcionalno)</label><input id="kt-goal" type="text" inputmode="decimal" placeholder="npr. 15"></div>
@@ -226,7 +226,7 @@ textarea#kt-input.kt-drop{border-color:var(--brand);box-shadow:var(--focus)}
           <button class="btn btn-primary" id="kt-copy" type="button" disabled>Kopiraj sažetak</button>
         </div>
         <div class="sr-only" id="kt-copy-status" role="status" aria-live="polite"></div>
-        <div class="note"><b>Napomena:</b> kartica se u lekturi i prijevodu obično računa kao 1800 znakova s razmacima. Neki fakulteti ili izdavači koriste drukčiju mjeru (npr. broj riječi ili 1500 znakova), pa opseg uvijek provjeri prema uputama svog studija ili mentora.</div>
+        <div class="note"><b>Napomena:</b> kartica se u lekturi i prijevodu obično računa kao 1800 znakova s razmacima. Neki fakulteti ili izdavači koriste drukčiju mjeru (npr. broj riječi ili 1500 znakova bez razmaka), pa opseg uvijek provjeri prema uputama svog studija ili mentora.</div>
       </div>
     </div>
   </div>
@@ -239,19 +239,20 @@ textarea#kt-input.kt-drop{border-color:var(--brand);box-shadow:var(--focus)}
     <dl class="fact-list">
       <div><dt>Mjera</dt><dd>1 kartica je 1800 znakova s razmacima, klasično 30 redaka po 60 znakova. Neki kolegiji umjesto toga računaju 1500 znakova bez razmaka.</dd></div>
       <div><dt>Riječi</dt><dd>približno 250 riječi po kartici.</dd></div>
-      <div><dt>Stranice</dt><dd>oko dvije trećine A4 stranice u Times New Roman 12 s proredom 1,5.</dd></div>
+      <div><dt>Stranice</dt><dd>oko 70% A4 stranice u Times New Roman 12 s proredom 1,5. Procjena stranica uvijek se zaokružuje naviše na cijelu stranicu, pa i vrlo kratak tekst pokaže 1.</dd></div>
+      <div><dt>Vrijeme čitanja</dt><dd>procjena prema prosječnoj brzini tihog čitanja (oko 200 riječi u minuti); stvarno vrijeme ovisi o težini teksta i čitatelju.</dd></div>
       <div><dt>Izračun</dt><dd>ukupan broj znakova s razmacima podijeljen s 1800.</dd></div>
     </dl>
     <h2 class="sec-h" style="margin-top:42px">Česta pitanja o karticama teksta</h2>
     <div class="faq">
       <details><summary>Koliko znakova ima jedna autorska kartica?</summary><p>Standardno 1800 znakova s razmacima (30 redaka po 60 znakova). Dio kolegija umjesto toga računa 1500 znakova bez razmaka, pa provjeri uputu mentora.</p></details>
       <details><summary>Broje li se razmaci?</summary><p>Da, u standardnoj autorskoj kartici mjera je 1800 znakova s razmacima. Zato brojač prikazuje i znakove s razmacima i bez njih.</p></details>
-      <details><summary>Koliko je jedna kartica riječi i stranica?</summary><p>Približno 250 riječi, odnosno oko dvije trećine A4 stranice u Times New Roman 12 s proredom 1,5. Točan broj ovisi o duljini riječi i oblikovanju.</p></details>
+      <details><summary>Koliko je jedna kartica riječi i stranica?</summary><p>Približno 250 riječi, odnosno oko 70% A4 stranice u Times New Roman 12 s proredom 1,5. Točan broj ovisi o duljini riječi i oblikovanju.</p></details>
       <details><summary>Kako izbrojiti kartice teksta?</summary><p>Ukupan broj znakova s razmacima podijeli s 1800. Na primjer, 9000 znakova je 5 kartica.</p></details>
     </div>
   </div>
 </section>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Koliko znakova ima jedna autorska kartica?","acceptedAnswer":{"@type":"Answer","text":"Standardno 1800 znakova s razmacima (30 redaka po 60 znakova). Dio kolegija umjesto toga računa 1500 znakova bez razmaka, pa provjeri uputu mentora."}},{"@type":"Question","name":"Broje li se razmaci?","acceptedAnswer":{"@type":"Answer","text":"Da, u standardnoj autorskoj kartici mjera je 1800 znakova s razmacima. Zato brojač prikazuje i znakove s razmacima i bez njih."}},{"@type":"Question","name":"Koliko je jedna kartica riječi i stranica?","acceptedAnswer":{"@type":"Answer","text":"Približno 250 riječi, odnosno oko dvije trećine A4 stranice u Times New Roman 12 s proredom 1,5. Točan broj ovisi o duljini riječi i oblikovanju."}},{"@type":"Question","name":"Kako izbrojiti kartice teksta?","acceptedAnswer":{"@type":"Answer","text":"Ukupan broj znakova s razmacima podijeli s 1800. Na primjer, 9000 znakova je 5 kartica."}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Koliko znakova ima jedna autorska kartica?","acceptedAnswer":{"@type":"Answer","text":"Standardno 1800 znakova s razmacima (30 redaka po 60 znakova). Dio kolegija umjesto toga računa 1500 znakova bez razmaka, pa provjeri uputu mentora."}},{"@type":"Question","name":"Broje li se razmaci?","acceptedAnswer":{"@type":"Answer","text":"Da, u standardnoj autorskoj kartici mjera je 1800 znakova s razmacima. Zato brojač prikazuje i znakove s razmacima i bez njih."}},{"@type":"Question","name":"Koliko je jedna kartica riječi i stranica?","acceptedAnswer":{"@type":"Answer","text":"Približno 250 riječi, odnosno oko 70% A4 stranice u Times New Roman 12 s proredom 1,5. Točan broj ovisi o duljini riječi i oblikovanju."}},{"@type":"Question","name":"Kako izbrojiti kartice teksta?","acceptedAnswer":{"@type":"Answer","text":"Ukupan broj znakova s razmacima podijeli s 1800. Na primjer, 9000 znakova je 5 kartica."}}]}</script>
 
 <section class="section">
   <div class="shell">

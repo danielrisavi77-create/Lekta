@@ -168,7 +168,7 @@ function summaryText(m: any) {
     `Rečenice: ${nf.format(m.sentences)}`,
     `Odlomci: ${nf.format(m.paragraphs)}`,
     `Procjena A4 stranica: ${nf.format(m.pages)}`,
-    `Vrijeme čitanja: ${readingLabel(m.readingMinutes)}`,
+    `Procjena vremena čitanja: ${readingLabel(m.readingMinutes)}`,
   ].join('\n');
 }
 
