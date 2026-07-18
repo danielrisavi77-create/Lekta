@@ -305,6 +305,15 @@ describe('statementDoc: izjava iz StatementModel', () => {
     expect(attr(first(name, 'w:jc'), 'w:val')).toBe('right');
     expect(paraOf(doc, model.placeDate)).toBeTruthy();
   });
+
+  it('bez mjesta/datuma i imena, potpisna linija se NE ispisuje (uskladeno s web pregledom)', async () => {
+    // izjava-page.ts prikazuje potpisni blok samo uz (model.placeDate || model.signatureName);
+    // .docx export mora vrijediti isto, inace prazan potpisni blok ispada samo u preuzetom fajlu.
+    const empty = buildStatement({ author: '', workType: 'Diplomski rad', title: 'Naslov', place: '', date: '' });
+    const doc = await readDocument(buildDocxBytes(statementDoc(empty)));
+    const line = els(doc, 'w:p').find((p) => /^_+$/.test(paraText(p)));
+    expect(line).toBeFalsy();
+  });
 });
 
 describe('bibliographyDoc: popis literature', () => {

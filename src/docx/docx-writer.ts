@@ -353,9 +353,13 @@ export function statementDoc(model: StatementModel): DocSpec {
   if (model.placeDate) {
     paragraphs.push({ text: model.placeDate, jc: 'left', spacingAfterPt: 36 });
   }
-  paragraphs.push({ text: SIGNATURE_LINE, jc: 'right', spacingBeforePt: 24 });
-  if (model.signatureName) {
-    paragraphs.push({ text: model.signatureName, jc: 'right' });
+  // Potpisni blok (linija + ime) izostaje kad nema ni mjesta/datuma ni imena, isto kao
+  // web pregled u izjava-page.ts (foot se renderira samo uz placeDate || signatureName).
+  if (model.placeDate || model.signatureName) {
+    paragraphs.push({ text: SIGNATURE_LINE, jc: 'right', spacingBeforePt: 24 });
+    if (model.signatureName) {
+      paragraphs.push({ text: model.signatureName, jc: 'right' });
+    }
   }
   return { paragraphs };
 }
