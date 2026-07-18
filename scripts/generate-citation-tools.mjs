@@ -141,6 +141,7 @@ const PAGE_STYLE = `
   .cit-missing { margin-top: 0.5rem; font-size: 0.8rem; color: var(--red-deep); }
   .cit-empty { color: var(--paper-muted); font-size: 0.875rem; }
   #style-info { margin: 0.5rem 0 0.25rem; font-size: 0.9rem; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
   a { color: var(--red-deep); text-decoration-thickness: 1px; text-underline-offset: 2px; }
   a:hover { text-decoration-thickness: 2px; }
   #style-info a { color: var(--red-deep); }
@@ -268,7 +269,7 @@ const TOOL_JS = String.raw`
     if (!byAppearance) items.sort(function (a, b) { return a.key.localeCompare(b.key, 'hr'); });
     var listText = items.map(function (x) { return x.text; }).join('\n');
     el('bulk-output').innerHTML =
-      '<label>Literatura (abecedno, ' + items.length + ') <a href="#" id="bulk-copy">kopiraj</a></label>' +
+      '<label for="bulk-result">Literatura (abecedno, ' + items.length + ') <a href="#" id="bulk-copy">kopiraj</a></label>' +
       '<textarea id="bulk-result" rows="' + Math.min(20, Math.max(4, items.length + 1)) + '"></textarea>';
     el('bulk-result').value = listText;
     el('bulk-copy').addEventListener('click', function (e) {
@@ -281,8 +282,13 @@ const TOOL_JS = String.raw`
   function showTab(which) {
     el('panel-single').style.display = which === 'single' ? '' : 'none';
     el('panel-bulk').style.display = which === 'bulk' ? '' : 'none';
-    el('tab-single').className = 'tab' + (which === 'single' ? ' active' : '');
-    el('tab-bulk').className = 'tab' + (which === 'bulk' ? ' active' : '');
+    var single = which === 'single';
+    el('tab-single').className = 'tab' + (single ? ' active' : '');
+    el('tab-single').setAttribute('aria-selected', String(single));
+    el('tab-single').tabIndex = single ? 0 : -1;
+    el('tab-bulk').className = 'tab' + (!single ? ' active' : '');
+    el('tab-bulk').setAttribute('aria-selected', String(!single));
+    el('tab-bulk').tabIndex = !single ? 0 : -1;
   }
 
   function setStyle(style) {
@@ -340,6 +346,23 @@ const TOOL_JS = String.raw`
   el('generate-btn').addEventListener('click', generateSingle);
   el('tab-single').addEventListener('click', function () { showTab('single'); });
   el('tab-bulk').addEventListener('click', function () { showTab('bulk'); });
+  // Tipkovnicka navigacija tablista (ARIA APG): strelice + Home/End sele fokus i aktiviraju tab.
+  var tablist = el('tool-tabs');
+  if (tablist) {
+    tablist.addEventListener('keydown', function (e) {
+      var order = ['single', 'bulk'];
+      var current = document.activeElement && document.activeElement.id === 'tab-bulk' ? 1 : 0;
+      var next = -1;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next = (current + 1) % order.length;
+      else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') next = (current + order.length - 1) % order.length;
+      else if (e.key === 'Home') next = 0;
+      else if (e.key === 'End') next = order.length - 1;
+      if (next < 0) return;
+      e.preventDefault();
+      showTab(order[next]);
+      el('tab-' + order[next]).focus();
+    });
+  }
   el('bulk-parse').addEventListener('click', parseBulk);
   el('bulk-generate').addEventListener('click', generateBulk);
 
@@ -383,17 +406,18 @@ function toolFormHtml({ withFacultyPicker }) {
   return `<div id="tool">
 ${picker}
 <div id="style-info"></div>
-<div id="tool-tabs" class="tabs">
-  <button id="tab-single" class="tab active" type="button">Jedan izvor</button>
-  <button id="tab-bulk" class="tab" type="button">Cijela literatura</button>
+<div id="tool-tabs" class="tabs" role="tablist" aria-label="Nacin unosa">
+  <button id="tab-single" class="tab active" type="button" role="tab" aria-selected="true" aria-controls="panel-single">Jedan izvor</button>
+  <button id="tab-bulk" class="tab" type="button" role="tab" aria-selected="false" aria-controls="panel-bulk" tabindex="-1">Cijela literatura</button>
 </div>
-<div id="panel-single">
+<div id="panel-single" role="tabpanel" aria-labelledby="tab-single">
   <div id="single-card"></div>
   <button id="generate-btn" type="button">Generiraj citat</button>
   <div id="citation-output" aria-live="polite"></div>
 </div>
-<div id="panel-bulk" style="display:none">
+<div id="panel-bulk" role="tabpanel" aria-labelledby="tab-bulk" style="display:none">
   <p class="bulk-note">Zalijepi popis literature (jedna referenca po retku ili odvojene praznim retkom). Alat prepozna polja koliko moze; OBAVEZNO provjeri i ispravi svaki unos prije koristenja.</p>
+  <label class="sr-only" for="bulk-input">Zalijepi popis literature</label>
   <textarea id="bulk-input" rows="8" placeholder="Zalijepi cijelu literaturu ovdje, npr.:&#10;Kovacic, I. (2020). Naslov knjige. Zagreb: Izdavac.&#10;Horvat, A. (2019). Naslov clanka. Casopis, 28(3), 45-67."></textarea>
   <button id="bulk-parse" type="button">Prepoznaj reference</button>
   <div id="bulk-entries"></div>
