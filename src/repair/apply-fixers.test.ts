@@ -573,4 +573,155 @@ describe('applyFixers golden round-trip', () => {
     // mora biti bit-identican originalu (nikakav decode/encode round-trip).
     expect(newDocumentBytes).toEqual(originalDocumentBytes);
   });
+
+  // === page-number-alignment-fixer ===
+  // Prvi fixer koji cita/pise VISE zip entryja po regexu (word/footerN.xml,
+  // word/headerN.xml) umjesto jednog fiksno imenovanog opcionalnog parta.
+  // Namjerno se NE koristi rels/content-types wiring (footerReference) jer
+  // apply-fixers.ts footerHeaderParts populacija je cisto ime-po-regexu, ne
+  // ovisi o sectPr referenci - to je i tocka koju "orphan" test dolje dokazuje.
+  function footerPagePart(jc: string) {
+    return (
+      '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+      '<w:ftr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">' +
+      `<w:p><w:pPr><w:jc w:val="${jc}"/></w:pPr>` +
+      '<w:r><w:fldChar w:fldCharType="begin"/></w:r>' +
+      '<w:r><w:instrText xml:space="preserve"> PAGE </w:instrText></w:r>' +
+      '<w:r><w:fldChar w:fldCharType="separate"/></w:r>' +
+      '<w:r><w:t>1</w:t></w:r>' +
+      '<w:r><w:fldChar w:fldCharType="end"/></w:r>' +
+      '</w:p></w:ftr>'
+    );
+  }
+
+  function buildFooterHeaderDocx(parts: Record<string, string>) {
+    const enc = new TextEncoder();
+    const documentXml =
+      '<?xml version="1.0"?><w:document><w:body>' +
+      '<w:p><w:r><w:t>Tekst tijela rada koji se ne smije mijenjati.</w:t></w:r></w:p>' +
+      '</w:body></w:document>';
+    const stylesXml = '<?xml version="1.0"?><w:styles></w:styles>';
+    const entries = [
+      { name: 'word/document.xml', data: enc.encode(documentXml) },
+      { name: 'word/styles.xml', data: enc.encode(stylesXml) },
+      ...Object.entries(parts).map(([name, content]) => ({ name, data: enc.encode(content) })),
+    ];
+    return { documentXml, stylesXml, entries };
+  }
+
+  it('page-number-alignment-fixer (shallow): footer1.xml poravnat desno, document.xml/styles.xml bit-identicni', async () => {
+    const dec = new TextDecoder();
+    const fixture = buildFooterHeaderDocx({ 'word/footer1.xml': footerPagePart('left') });
+    const originalDocx = await writeZip(fixture.entries);
+
+    const result = await applyFixers(originalDocx, [
+      { ruleId: 'poravnanje-broja-stranice', fixerId: 'page-number-alignment-fixer', params: {} },
+    ]);
+
+    expect(result.changelog).toHaveLength(1);
+    expect(result.changelog[0].beforeLabel).toBe('Poravnanje broja stranice: lijevo');
+    expect(result.changelog[0].afterLabel).toBe('Poravnanje broja stranice: desno');
+
+    const newEntries = await readZip(result.docxBytes);
+    const newFooterXml = dec.decode(newEntries.find((e) => e.name === 'word/footer1.xml')!.data);
+    const newDocumentXml = dec.decode(newEntries.find((e) => e.name === 'word/document.xml')!.data);
+    const newStylesXml = dec.decode(newEntries.find((e) => e.name === 'word/styles.xml')!.data);
+
+    expect(newFooterXml).toContain('<w:jc w:val="right"/>');
+    expect(newDocumentXml).toBe(fixture.documentXml);
+    expect(newStylesXml).toBe(fixture.stylesXml);
+  });
+
+  it('page-number-alignment-fixer: no-op kad je PAGE polje vec desno poravnato', async () => {
+    const fixture = buildFooterHeaderDocx({ 'word/footer1.xml': footerPagePart('right') });
+    const originalDocx = await writeZip(fixture.entries);
+
+    const result = await applyFixers(originalDocx, [
+      { ruleId: 'poravnanje-broja-stranice', fixerId: 'page-number-alignment-fixer', params: {} },
+    ]);
+
+    expect(result.changelog).toHaveLength(0);
+    expect(result.skipped).toEqual(['poravnanje-broja-stranice']);
+    expect(result.docxBytes).toEqual(originalDocx);
+  });
+
+  it('page-number-alignment-fixer: dokument bez footer/header partova -> skipped, ne baca', async () => {
+    const fixture = buildFooterHeaderDocx({});
+    const originalDocx = await writeZip(fixture.entries);
+
+    const result = await applyFixers(originalDocx, [
+      { ruleId: 'poravnanje-broja-stranice', fixerId: 'page-number-alignment-fixer', params: {} },
+    ]);
+
+    expect(result.changelog).toHaveLength(0);
+    expect(result.skipped).toEqual(['poravnanje-broja-stranice']);
+    expect(result.docxBytes).toEqual(originalDocx);
+  });
+
+  it('page-number-alignment-fixer: VISE partova, SAMO stvarno promijenjeni se re-enkodira', async () => {
+    const dec = new TextDecoder();
+    const fixture = buildFooterHeaderDocx({
+      'word/footer1.xml': footerPagePart('left'), // krivo -> mora se promijeniti
+      'word/footer2.xml': footerPagePart('right'), // vec ispravno -> mora ostati bit-identican
+    });
+    const originalDocx = await writeZip(fixture.entries);
+    const originalEntries = await readZip(originalDocx);
+    const originalFooter2Bytes = originalEntries.find((e) => e.name === 'word/footer2.xml')!.data;
+
+    const result = await applyFixers(originalDocx, [
+      { ruleId: 'poravnanje-broja-stranice', fixerId: 'page-number-alignment-fixer', params: {} },
+    ]);
+
+    expect(result.changelog).toHaveLength(1);
+    // Samo footer1 je STVARNO touchan (footer2 je vec ispravan pa se ne broji u
+    // touchedCount); broj-podnozja napomena se pojavljuje samo kad je touchedCount>1.
+    expect(result.changelog[0].afterLabel).toBe('Poravnanje broja stranice: desno');
+
+    const newEntries = await readZip(result.docxBytes);
+    const newFooter1 = dec.decode(newEntries.find((e) => e.name === 'word/footer1.xml')!.data);
+    const newFooter2Bytes = newEntries.find((e) => e.name === 'word/footer2.xml')!.data;
+    expect(newFooter1).toContain('<w:jc w:val="right"/>');
+    // footer2 vec ispravan: bit-identican (nikakav decode/encode round-trip).
+    expect(newFooter2Bytes).toEqual(originalFooter2Bytes);
+  });
+
+  it('page-number-alignment-fixer: VISE stvarno pogresnih partova -> changelog spominje broj podnozja/zaglavlja', async () => {
+    const fixture = buildFooterHeaderDocx({
+      'word/footer1.xml': footerPagePart('left'),
+      'word/header1.xml': footerPagePart('center'),
+    });
+    const originalDocx = await writeZip(fixture.entries);
+
+    const result = await applyFixers(originalDocx, [
+      { ruleId: 'poravnanje-broja-stranice', fixerId: 'page-number-alignment-fixer', params: {} },
+    ]);
+
+    expect(result.changelog).toHaveLength(1);
+    expect(result.changelog[0].afterLabel).toBe('Poravnanje broja stranice: desno (2 podnožja/zaglavlja)');
+
+    const dec = new TextDecoder();
+    const newEntries = await readZip(result.docxBytes);
+    expect(dec.decode(newEntries.find((e) => e.name === 'word/footer1.xml')!.data)).toContain('<w:jc w:val="right"/>');
+    expect(dec.decode(newEntries.find((e) => e.name === 'word/header1.xml')!.data)).toContain('<w:jc w:val="right"/>');
+  });
+
+  it('page-number-alignment-fixer: nereferencirani ("orphan") footer se SVEJEDNO popravlja (namjerno siri opseg od audita)', async () => {
+    // Ovaj footer nema footerReference ni u jednom sectPr (nije wiran preko rels/
+    // content-types), pa ga analyzeDocx pageNumberAlignment check NIKAD ne vidi.
+    // Fixer ga svejedno popravlja jer opseg partova (regex po imenu) je namjerno
+    // siri od audit-vidljivog opsega (rels-razrijesene mete) - popravljanje
+    // nereferenciranog dijela je bezopasno jer dokument ga nikad ne renderira.
+    const dec = new TextDecoder();
+    const fixture = buildFooterHeaderDocx({ 'word/footer3.xml': footerPagePart('center') });
+    const originalDocx = await writeZip(fixture.entries);
+
+    const result = await applyFixers(originalDocx, [
+      { ruleId: 'poravnanje-broja-stranice', fixerId: 'page-number-alignment-fixer', params: {} },
+    ]);
+
+    expect(result.changelog).toHaveLength(1);
+    const newEntries = await readZip(result.docxBytes);
+    const newFooter3 = dec.decode(newEntries.find((e) => e.name === 'word/footer3.xml')!.data);
+    expect(newFooter3).toContain('<w:jc w:val="right"/>');
+  });
 });

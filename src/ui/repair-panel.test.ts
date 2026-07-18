@@ -183,3 +183,74 @@ describe('renderRepairPanel: re-check spremnosti (K3)', () => {
     expect(mountEl.querySelector('.lekta-repair-panel__recheck-pending')).toBeNull();
   });
 });
+
+describe('renderRepairPanel: potvrda lokacije (K6 umetanje sekcije)', () => {
+  const confirmItem = () =>
+    item({
+      ruleId: 'sec',
+      fixerId: 'section-insert-fixer',
+      params: { target: { introParagraphIndex: 2, align: 'center' } },
+      violated: true,
+      requiresConfirmation: true,
+      confirmationText: 'Umetnut ćemo prijelom sekcije prije Uvoda.',
+    });
+
+  const ctx = (mountEl: HTMLElement) => ({
+    items: [confirmItem()],
+    getDocxBytes: async () => singleSectionDocx(),
+    originalFileName: 'rad.docx',
+    mountEl,
+  });
+
+  it('prvi klik prikaze potvrdni korak i NE popravlja odmah', async () => {
+    const mountEl = mount();
+    renderRepairPanel(ctx(mountEl));
+    mountEl.querySelector<HTMLButtonElement>('.lekta-repair-panel__download')!.click();
+
+    const box = mountEl.querySelector<HTMLElement>('.lekta-repair-panel__confirm-box')!;
+    expect(box.hidden).toBe(false);
+    expect(box.textContent).toContain('prijelom sekcije prije Uvoda');
+    expect(mountEl.querySelector('.lekta-repair-panel__confirm')).not.toBeNull();
+    // Popravak NIJE pokrenut (nema dinamickog importa/applyFixers): summary bez "Primijenjeno".
+    await new Promise((r) => setTimeout(r, 30));
+    expect(mountEl.querySelector('.lekta-repair-panel__summary')?.textContent || '').not.toContain('Primijenjeno');
+  });
+
+  it('potvrda ("Potvrdi i popravi") pokrece popravak i zatvori okvir', async () => {
+    const mountEl = mount();
+    renderRepairPanel(ctx(mountEl));
+    mountEl.querySelector<HTMLButtonElement>('.lekta-repair-panel__download')!.click();
+    mountEl.querySelector<HTMLButtonElement>('.lekta-repair-panel__confirm')!.click();
+
+    await waitFor(() =>
+      (mountEl.querySelector('.lekta-repair-panel__summary')?.textContent || '').includes('Primijenjeno'),
+    );
+    expect(mountEl.querySelector<HTMLElement>('.lekta-repair-panel__confirm-box')!.hidden).toBe(true);
+  });
+
+  it('"Odustani" zatvori potvrdu bez popravka', async () => {
+    const mountEl = mount();
+    renderRepairPanel(ctx(mountEl));
+    mountEl.querySelector<HTMLButtonElement>('.lekta-repair-panel__download')!.click();
+    mountEl.querySelector<HTMLButtonElement>('.lekta-repair-panel__cancel')!.click();
+
+    expect(mountEl.querySelector<HTMLElement>('.lekta-repair-panel__confirm-box')!.hidden).toBe(true);
+    await new Promise((r) => setTimeout(r, 30));
+    expect(mountEl.querySelector('.lekta-repair-panel__summary')?.textContent || '').not.toContain('Primijenjeno');
+  });
+
+  it('stavka bez potvrde popravlja odmah (nema potvrdnog koraka)', async () => {
+    const mountEl = mount();
+    renderRepairPanel({
+      items: [item({ ruleId: 'm', fixerId: 'margins-fixer', params: { top: 3, right: 3, bottom: 3, left: 3 }, violated: true })],
+      getDocxBytes: async () => singleSectionDocx(),
+      originalFileName: 'rad.docx',
+      mountEl,
+    });
+    mountEl.querySelector<HTMLButtonElement>('.lekta-repair-panel__download')!.click();
+    await waitFor(() =>
+      (mountEl.querySelector('.lekta-repair-panel__summary')?.textContent || '').includes('Primijenjeno'),
+    );
+    expect(mountEl.querySelector<HTMLElement>('.lekta-repair-panel__confirm-box')!.hidden).toBe(true);
+  });
+});

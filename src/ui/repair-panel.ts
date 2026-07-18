@@ -14,6 +14,12 @@ export interface RepairableItem {
   /** Je li dimenzija prekrsena u analizi. Prekrsene su predodabrane (opt-out);
    * neprekrsene (Feature B "uskladi sve") su opt-in i default NEodabrane. */
   violated?: boolean;
+  /** Trazi izricitu potvrdu lokacije prije primjene (K6: umetanje sekcije prije Uvoda je
+   * semanticka odluka o mjestu prijeloma). Kad je bar jedna odabrana stavka ovakva, prvi
+   * klik na "Preuzmi" prikaze potvrdni korak umjesto da odmah popravi. */
+  requiresConfirmation?: boolean;
+  /** Tekst potvrde (sto ce se tocno napraviti i gdje); prikazuje se u potvrdnom koraku. */
+  confirmationText?: string;
 }
 
 /** Fixeri koji podrzavaju v2 dubinsko ciscenje izravnog formatiranja u tekstu. */
@@ -106,6 +112,14 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
   downloadBtn.className = 'lekta-repair-panel__download';
   downloadBtn.textContent = 'Preuzmi popravljeni dokument';
 
+  // Potvrdni korak (K6): kad je odabrana stavka koja trazi potvrdu lokacije (umetanje sekcije),
+  // klik na "Preuzmi" prikaze ovaj okvir umjesto da odmah popravi; strukturna izmjena krece tek
+  // iz onConfirm callbacka. Bez trajne zastavice: potvrda se trazi na SVAKOJ takvoj primjeni, pa
+  // se strukturni popravak nikad ne dogodi bez svjesnog pristanka bas na toj primjeni.
+  const confirmBox = document.createElement('div');
+  confirmBox.className = 'lekta-repair-panel__confirm-box';
+  confirmBox.hidden = true;
+
   const summary = document.createElement('div');
   summary.className = 'lekta-repair-panel__summary';
   summary.hidden = true;
@@ -119,14 +133,33 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
     return checked;
   }
 
-  downloadBtn.addEventListener('click', async () => {
+  downloadBtn.addEventListener('click', () => {
     const checkedItems = getCheckedItems();
     if (checkedItems.length === 0) {
       // Tihi no-op zbunjuje: reci sto treba (i ocisti eventualni stari sazetak).
+      confirmBox.hidden = true;
       summary.hidden = false;
       summary.innerHTML = '<strong>Odaberi barem jednu stavku za popravak.</strong>';
       return;
     }
+    // Potvrda lokacije (K6): ako je odabrana stavka koja to trazi, prvo pokazi potvrdni korak.
+    // Trazi se SVAKI put (nema trajne zastavice), pa uzastopni "Preuzmi" nakon prve potvrde ne
+    // preskacu potvrdu za novu strukturnu primjenu. Popravak krece tek iz onConfirm callbacka.
+    const needsConfirm = checkedItems.filter((i) => i.requiresConfirmation);
+    if (needsConfirm.length > 0) {
+      renderConfirmation(confirmBox, needsConfirm, async () => {
+        confirmBox.hidden = true;
+        confirmBox.innerHTML = '';
+        await performRepair();
+      });
+      return;
+    }
+    void performRepair();
+  });
+
+  async function performRepair(): Promise<void> {
+    const checkedItems = getCheckedItems();
+    if (checkedItems.length === 0) return;
 
     downloadBtn.disabled = true;
     const originalLabel = downloadBtn.textContent;
@@ -169,13 +202,45 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
     // Re-check (spremnost prije -> poslije): tek NAKON preuzimanja, kao dopuna. Preuzimanje
     // se vec dogodilo pa ovo ne blokira korisnika; ako ponovna analiza padne, panel ostaje.
     if (repairedBytes) await renderRecheck(summary, repairedBytes, ctx);
-  });
+  }
 
   container.appendChild(list);
   if (deepToggle) container.appendChild(deepRow);
   container.appendChild(downloadBtn);
+  container.appendChild(confirmBox);
   container.appendChild(summary);
   ctx.mountEl.appendChild(container);
+}
+
+/**
+ * Potvrdni korak za stavke koje traze potvrdu lokacije (K6 umetanje sekcije). Prikazuje sto
+ * ce se tocno napraviti i gdje, pa trazi izricit klik prije primjene. onConfirm se poziva
+ * tek na "Potvrdi i popravi"; "Odustani" samo zatvori okvir (nista se ne mijenja).
+ */
+function renderConfirmation(box: HTMLElement, items: RepairableItem[], onConfirm: () => void): void {
+  box.hidden = false;
+  const texts = items.map((i) => i.confirmationText || `Potvrdi popravak: ${i.label}`);
+  box.innerHTML =
+    '<p><strong>Potvrdi lokaciju prije popravka:</strong></p>' +
+    texts.map((t) => `<p>${escapeHtml(t)}</p>`).join('');
+
+  const confirmBtn = document.createElement('button');
+  confirmBtn.type = 'button';
+  confirmBtn.className = 'lekta-repair-panel__confirm';
+  confirmBtn.textContent = 'Potvrdi i popravi';
+  confirmBtn.addEventListener('click', onConfirm);
+
+  const cancelBtn = document.createElement('button');
+  cancelBtn.type = 'button';
+  cancelBtn.className = 'lekta-repair-panel__cancel';
+  cancelBtn.textContent = 'Odustani';
+  cancelBtn.addEventListener('click', () => {
+    box.hidden = true;
+    box.innerHTML = '';
+  });
+
+  box.appendChild(confirmBtn);
+  box.appendChild(cancelBtn);
 }
 
 // Hrvatska sklonidba uz broj: 1 popravak, 2-4 popravka, 5+ popravaka

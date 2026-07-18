@@ -5,6 +5,7 @@ import {
   universalRepairableItems,
   paragraphSpacingRepairableItem,
   footnoteSpacingRepairableItem,
+  pageNumberAlignmentRepairableItem,
   type AnalyzedCheck,
 } from './repair-items';
 import type { RuleEntry } from '../profiles/profile-schema';
@@ -223,6 +224,35 @@ describe('footnoteSpacingRepairableItem (razmak prije/poslije fusnota, ovisi o p
     );
     expect(items).toEqual([
       { ruleId: 'footnote-spacing-universal', fixerId: 'footnote-spacing-fixer', label: 'Razmak prije i poslije fusnota', params: {}, violated: true },
+    ]);
+  });
+});
+
+describe('pageNumberAlignmentRepairableItem (poravnanje broja stranice, ovisi o profilu)', () => {
+  it('prazno kad profil ne provjerava poravnanje broja stranice (pageNumberAlignment nije true)', () => {
+    expect(pageNumberAlignmentRepairableItem([FAIL('Položaj broja stranice')], {})).toEqual([]);
+    expect(
+      pageNumberAlignmentRepairableItem([FAIL('Položaj broja stranice')], { pageNumberAlignment: false }),
+    ).toEqual([]);
+  });
+
+  it('profil provjerava poravnanje, check prolazi -> violated:false', () => {
+    const items = pageNumberAlignmentRepairableItem(
+      [PASS('Položaj broja stranice')],
+      { pageNumberAlignment: true },
+    );
+    expect(items).toEqual([
+      { ruleId: 'page-number-alignment-universal', fixerId: 'page-number-alignment-fixer', label: 'Položaj broja stranice', params: {}, violated: false },
+    ]);
+  });
+
+  it('profil provjerava poravnanje, check ne prolazi -> violated:true', () => {
+    const items = pageNumberAlignmentRepairableItem(
+      [FAIL('Položaj broja stranice')],
+      { pageNumberAlignment: true },
+    );
+    expect(items).toEqual([
+      { ruleId: 'page-number-alignment-universal', fixerId: 'page-number-alignment-fixer', label: 'Položaj broja stranice', params: {}, violated: true },
     ]);
   });
 });

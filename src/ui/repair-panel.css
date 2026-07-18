@@ -85,3 +85,38 @@
   margin: 0.5rem 0;
   padding-left: 1.25rem;
 }
+
+/* Potvrdni korak (K6: umetanje sekcije prije Uvoda trazi izricitu potvrdu lokacije). */
+.lekta-repair-panel__confirm-box {
+  margin-top: 0.875rem;
+  padding: 0.75rem 0.875rem;
+  border-radius: 0.5rem;
+  background: white;
+  border: 1px solid var(--lekta-border, #d4d4d8);
+  font-size: 0.8125rem;
+  color: var(--lekta-muted, #52525b);
+}
+
+.lekta-repair-panel__confirm-box p {
+  margin: 0 0 0.5rem;
+}
+
+.lekta-repair-panel__confirm {
+  padding: 0.5rem 0.875rem;
+  margin-right: 0.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  background: var(--lekta-accent, #18181b);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.lekta-repair-panel__cancel {
+  padding: 0.5rem 0.875rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--lekta-border, #d4d4d8);
+  background: white;
+  color: var(--lekta-muted, #52525b);
+  cursor: pointer;
+}

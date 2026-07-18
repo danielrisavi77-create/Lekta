@@ -56,10 +56,32 @@ const SYNTHETIC_PARAMS: Record<FixerId, Record<string, unknown>> = {
   // "param" opcionalni deep flag koji withDeep() dodaje; prazan objekt ovdje samo osigurava
   // da FixerRequest.params nikad nije undefined (runFixer cita p.deep bez null-guarda).
   'paragraph-spacing-fixer': {},
+  // pageNumberingFixer uzima targets ovisne O DOKUMENTU (koje su sekcije rimske, koja prva
+  // glavna), pa fiksni map ne moze posluziti oba sinteticka dokumenta. Prazni targets =
+  // bit-identican no-op (jedini smislen fiksni default; idempotencijski test nad
+  // single-section dokumentom ga zato preskace). buildCases per-dokument override daje prave
+  // targete multi-section dokumentu.
+  'page-numbering-fixer': { targets: [] },
+  // footerPageFixer umece podnozje u ciljanu sekciju. Default sekcija 0 (single-section
+  // dokument); buildCases per-dokument override cilja glavnu sekciju multi-section dokumenta.
+  'footer-page-fixer': { target: { sectionIndex: 0, align: 'right' } },
   // Isti obrazac kao paragraph-spacing-fixer (uvijek gadja 0/0 u FootnoteText stilu), samo
   // nad word/footnotes.xml; sinteticki dokumenti nemaju fusnote pa footnoteSpacingFixer ovdje
   // uvijek zavrsi kao no-op (parts.footnotesXml je undefined), sto je ocekivano i pokriveno.
   'footnote-spacing-fixer': {},
+  // pageNumberAlignmentFixer ne uzima ciljane vrijednosti (uvijek gadja desno), a sinteticki
+  // dokumenti nemaju footer/header partove pa uvijek zavrsi kao no-op (parts.footerHeaderParts
+  // je prazna mapa), sto je ocekivano i pokriveno (isti obrazac kao footnote-spacing-fixer).
+  'page-number-alignment-fixer': {},
+  // sectionInsertFixer umece prijelom prije Uvoda (odlomak 2 u OBA sinteticka dokumenta).
+  // Single-section: primijeni (nema splita) -> 2 sekcije + rimski/arapski + footer + titlePg.
+  // Multi-section: NO_OP (odlomak prije Uvoda vec nosi sectPr = prijelom vec postoji).
+  'section-insert-fixer': { target: { introParagraphIndex: 2, align: 'center' } },
+  // tocFieldFixer RE-DERIVIRA sidro po tekstu naslova "Sadrzaj" (ne po indeksu). Sinteticki docx
+  // (singleSection/multiSection) NEMAJU naslov Sadrzaj pa je ovdje bit-identican NO_OP; umetanje
+  // TOC polja pokriveno je jedinicno u src/repair/toc-field.test.ts (nad tocManualDocx). Index je
+  // samo gate signal. Prazan/nepostojeci Sadrzaj -> NO_OP je ocekivano i pokriveno.
+  'toc-field-fixer': { target: { sadrzajParagraphIndex: 1 } },
 };
 
 /** Ciljani params po fixeru IZ PROFILA (isti izvor kao zivi repair-items.ts). */
@@ -90,6 +112,12 @@ function paramsForFixer(fixerId: FixerId, profile: unknown): Record<string, unkn
       // ciljana profilna vrijednost (cilj je uvijek fiksno 0/0 u FootnoteText stilu).
       return (profile as { checkFootnoteParagraphSpacingZero?: boolean } | null)
         ?.checkFootnoteParagraphSpacingZero === true
+        ? {}
+        : null;
+    case 'page-number-alignment-fixer':
+      // Isto gate kao pageNumberAlignmentRepairableItem u src/ui/repair-items.ts: zastavica,
+      // ne ciljana profilna vrijednost (cilj je uvijek fiksno desno poravnanje).
+      return (profile as { pageNumberAlignment?: boolean } | null)?.pageNumberAlignment === true
         ? {}
         : null;
     default:
@@ -146,6 +174,9 @@ function sectPrMarkers(documentXml: string) {
           }
         : null,
       pgNumType: pgNum ? { fmt: attr(pgNum, 'w:fmt'), start: attr(pgNum, 'w:start') } : null,
+      // K6: titlePg (naslovnica = drukcija prva stranica -> bez broja). Lockamo ga u golden
+      // da regresija u suzbijanju naslovnice padne snapshot.
+      titlePg: /<w:titlePg\b/.test(s),
     };
   });
 }
@@ -161,6 +192,17 @@ function directFormattingCounts(documentXml: string) {
   };
 }
 
+/** K5 footer flow: koje word/footerN.xml partove izlaz ima (+ imaju li PAGE polje) i koliko je
+ *  footerReference oznaka u document.xml. Prazno {parts:[],footerRefs:0} za sve fixere osim footera. */
+function footerMarkers(entries: { name: string; data: Uint8Array }[], documentXml: string) {
+  const dec = new TextDecoder();
+  const parts = entries
+    .filter((e) => /^word\/footer\d+\.xml$/.test(e.name))
+    .map((e) => ({ name: e.name, hasPage: /\bPAGE\b/.test(dec.decode(e.data)) }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+  return { parts, footerRefs: (documentXml.match(/<w:footerReference\b/g) ?? []).length };
+}
+
 async function extractMarkers(bytes: Uint8Array) {
   const entries = await readZip(bytes);
   const dec = new TextDecoder();
@@ -173,6 +215,7 @@ async function extractMarkers(bytes: Uint8Array) {
     normal: normalStyleMarkers(stylesXml),
     sectPr: sectPrMarkers(documentXml),
     directFormatting: directFormattingCounts(documentXml),
+    footer: footerMarkers(entries, documentXml),
   };
 }
 
@@ -211,8 +254,30 @@ async function buildCases(): Promise<Case[]> {
     const bytes = new Uint8Array(readFileSync(join(FIXTURE_DIR, fileName)));
     cases.push({ name: fileName, bytes, paramsFor: (id) => paramsForFixer(id, profile) });
   }
-  cases.push({ name: 'synthetic-single-section', bytes: await singleSectionDocx(), paramsFor: (id) => SYNTHETIC_PARAMS[id] });
-  cases.push({ name: 'synthetic-multi-section', bytes: await multiSectionDocx(), paramsFor: (id) => SYNTHETIC_PARAMS[id] });
+  // Multi-section: naslovnica (sekcija 0) -> rimski start=1, tijelo od Uvoda (sekcija 1) ->
+  // arapski start=1. Isti targeti koje bi sectionNumberingTargets izracunao iz granice Uvoda.
+  const multiTargets = [
+    { sectionIndex: 0, fmt: 'lowerRoman', start: 1 },
+    { sectionIndex: 1, fmt: 'decimal', start: 1 },
+  ];
+  cases.push({
+    name: 'synthetic-single-section',
+    bytes: await singleSectionDocx(),
+    // Jedna sekcija = nema front/main split -> prazni targeti -> bit-identican no-op (kao ziva
+    // putanja gdje sectionNumberingTargets vrati detectable:false pa se popravak ne nudi).
+    paramsFor: (id) => (id === 'page-numbering-fixer' ? { targets: [] } : SYNTHETIC_PARAMS[id]),
+  });
+  cases.push({
+    name: 'synthetic-multi-section',
+    bytes: await multiSectionDocx(),
+    // Footer u GLAVNU sekciju (index 1, od Uvoda); naslovnica (sekcija 0) ostaje bez broja.
+    paramsFor: (id) =>
+      id === 'page-numbering-fixer'
+        ? { targets: multiTargets }
+        : id === 'footer-page-fixer'
+          ? { target: { sectionIndex: 1, align: 'right' } }
+          : SYNTHETIC_PARAMS[id],
+  });
   return cases;
 }
 
