@@ -29,11 +29,11 @@
   },
   "devDependencies": {
     "esbuild": "^0.28.1",
-    "happy-dom": "^20.10.6",
+    "happy-dom": "^20.11.0",
     "netlify-cli": "^26.2.0",
     "supabase": "^2.109.1",
     "typescript": "^7.0.2",
-    "vite": "^8.1.4",
+    "vite": "^8.1.5",
     "vitest": "^2.1.4"
   },
   "dependencies": {
@@ -44,7 +44,7 @@
     "@fontsource/ibm-plex-mono": "^5.2.7",
     "@xmldom/xmldom": "^0.9.10",
     "canvas-confetti": "^1.9.4",
-    "lucide": "^1.24.0",
+    "lucide": "^1.25.0",
     "motion": "^12.42.2",
     "open-props": "^1.7.23"
   }
