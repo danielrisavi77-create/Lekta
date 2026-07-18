@@ -6,7 +6,8 @@ import '../shared/ui-boot';
 import { buildTitlePage, titlePageText, type TitlePageModel } from './title-page';
 import { titlePageDoc, docxBlob } from '../docx/docx-writer';
 import { escapeHtml } from '../utils/helpers';
-import { bindCopyButton, downloadBlob } from './tool-ui';
+import { bindCopyButton, bindDownloadButton, defaultSelectedIndex } from './tool-ui';
+import { readToolDraft, saveToolDraft } from './draft-share';
 import { ZAGREB_CATALOG } from '../catalog/catalog-loader';
 import { selectTemplate, type TemplateSelection } from '../title-pages/template-loader';
 import { workTypeLabel } from '../config/config-loader';
@@ -19,7 +20,8 @@ const $ = (s: string): any => document.querySelector(s);
 
 const FIELDS = {
   university: '#tp-university', faculty: '#tp-faculty', study: '#tp-study',
-  author: '#tp-author', title: '#tp-title', subtitle: '#tp-subtitle',
+  author: '#tp-author', studentId: '#tp-studentid', course: '#tp-course',
+  title: '#tp-title', subtitle: '#tp-subtitle',
   workType: '#tp-worktype', mentor: '#tp-mentor', comentor: '#tp-comentor',
   place: '#tp-place', year: '#tp-year',
 };
@@ -146,6 +148,20 @@ function renderBadge(sel: TemplateSelection) {
   setBadgeNote('');
 }
 
+/** Urednicke napomene predloska (template.notes): sto sluzbeni predlozak trazi a generator
+ *  jos ne podrzava (dvojezicna naslovnica, zasebne korice, logotip...). Prikazuju se kao
+ *  prosirivi <details> ispod badgea; bez napomena blok je skriven. escapeHtml + textContent
+ *  (napomena je cisti tekst iz naseg JSON-a, ali granica prema podacima ostaje ista). */
+function renderTemplateNotes(sel: TemplateSelection) {
+  const box = $('#tp-notes');
+  if (!box) return;
+  const notes = (sel.template?.notes || '').trim();
+  const body = $('#tp-notes-text');
+  if (body) body.textContent = notes;
+  box.hidden = !notes;
+  if (!notes) box.removeAttribute('open');
+}
+
 // #tp-hint je aria-live=polite: pisanje na svaki keystroke tjera citac ekrana da istu poruku
 // ponavlja uz svaki utipkani znak. Debounce nakon pauze u tipkanju + changed-guard (textContent
 // na istu vrijednost i dalje mijenja text node pa SR zna ponoviti najavu). Isti obrazac kao
@@ -185,6 +201,7 @@ function render() {
   }
 
   renderBadge(sel);
+  renderTemplateNotes(sel);
   scheduleHint(model.missing);
 
   const hasContent = model.lines.length > 0;
@@ -234,6 +251,17 @@ function populatePrograms(unitId: string) {
   if (programSel) programSel.disabled = !unit || !programs.length;
 }
 
+// Prati je li #tp-university/#tp-faculty/#tp-study TRENUTNO popunila kaskada (institucija/
+// fakultet/studij select) ili je korisnik rucno upisao svoju vrijednost. Kaskada smije
+// isprazniti/prepisati polje SAMO dok je "auto" (vidi onInstitutionChange/onUnitChange/
+// onProgramChange dolje); rucni unos (input event, ne programsko postavljanje .value) gasi
+// odgovarajucu zastavicu pa ga kaskada vise ne dira. Bez ovoga: promjena ustanove/fakulteta
+// na placeholder ili na drugi izbor ostavlja STARI naziv fakulteta/studija u polju bez ikakvog
+// upozorenja, i on tiho zavrsi u pregledu/kopiji/ispisu/.docx.
+let universityAuto = false;
+let facultyAuto = false;
+let studyAuto = false;
+
 /** Upisi izbor kaskade u URL (deep-link), bez unosa u povijest preglednika. */
 function syncUrl() {
   const unitId = $('#tp-unit')?.value || '';
@@ -250,7 +278,19 @@ function onInstitutionChange() {
   populateUnits(instId);
   populatePrograms('');
   const inst = ZAGREB_CATALOG.find((i) => i.id === instId);
-  if (inst) $(FIELDS.university).value = inst.name;
+  if (inst) {
+    $(FIELDS.university).value = inst.name;
+    universityAuto = true;
+  } else if (universityAuto) {
+    // Ustanova vracena na placeholder: sveuciliste vise ne odgovara nikakvom odabiru,
+    // isprazni GA SAMO ako ga je popunila kaskada (rucni unos ostaje netaknut).
+    $(FIELDS.university).value = '';
+    universityAuto = false;
+  }
+  // Fakultet/studij su ovisili o (staroj) ustanovi; populateUnits/populatePrograms su vec
+  // resetirali selecte, pa tekstualna polja moraju pratiti AKO ih je popunila kaskada.
+  if (facultyAuto) { $(FIELDS.faculty).value = ''; facultyAuto = false; }
+  if (studyAuto) { $(FIELDS.study).value = ''; studyAuto = false; }
   syncUrl();
   render();
 }
@@ -264,8 +304,16 @@ function onUnitChange() {
     // Samostalne ustanove (npr. Sveuciliste Sjever) u katalogu imaju jedinicu istog
     // imena; tada fakultet ostaje prazan da se redak na naslovnici ne duplicira.
     $(FIELDS.faculty).value = inst && unit.name === inst.name ? '' : unit.name;
-    if (inst && !$(FIELDS.university).value) $(FIELDS.university).value = inst.name;
+    facultyAuto = true;
+    if (inst && !$(FIELDS.university).value) { $(FIELDS.university).value = inst.name; universityAuto = true; }
+  } else if (facultyAuto) {
+    // Fakultet vracen na placeholder: vise ne odgovara nikakvom odabiru.
+    $(FIELDS.faculty).value = '';
+    facultyAuto = false;
   }
+  // Studij je ovisio o (starom) fakultetu; populatePrograms je vec resetirao select, pa
+  // tekstualno polje mora pratiti AKO ga je popunila kaskada (rucni unos ostaje netaknut).
+  if (studyAuto) { $(FIELDS.study).value = ''; studyAuto = false; }
   syncUrl();
   render();
 }
@@ -280,9 +328,15 @@ function onProgramChange() {
   const program = $('#tp-program')?.value || '';
   if (program) {
     $(FIELDS.study).value = studyTextForProgram(program);
+    studyAuto = true;
     const wt = defaultWorkTypeForProgram(program, new Set(), currentLevel());
     const wtSel = $('#tp-worktype');
     if (wtSel && [...wtSel.options].some((o: any) => o.value === wt)) wtSel.value = wt;
+  } else if (studyAuto) {
+    // Studij vracen na placeholder (opcionalan odabir): vise ne odgovara, isprazni GA SAMO
+    // ako ga je popunila kaskada.
+    $(FIELDS.study).value = '';
+    studyAuto = false;
   }
   syncUrl();
   render();
@@ -304,16 +358,46 @@ function applyUrlParams() {
   populatePrograms(params.unitId);
   const unit = inst.units.find((u) => u.id === params.unitId)!;
   $(FIELDS.university).value = inst.name;
+  universityAuto = true;
   $(FIELDS.faculty).value = unit.name === inst.name ? '' : unit.name;
+  facultyAuto = true;
   if (params.program && unit.programs.includes(params.program)) {
     $('#tp-program').value = params.program;
     $(FIELDS.study).value = studyTextForProgram(params.program);
+    studyAuto = true;
   }
 }
 
 // Titula mentora/komentora (izvan FIELDS jer se ne kopira u model kao tekstualna vrijednost).
 const LABEL_SELECTS = ['#tp-mentor-label', '#tp-comentor-label'];
 const CASCADE_SELECTS = ['#tp-institution', '#tp-unit', '#tp-program'];
+
+// Draft dijeljen s izjavom o izvornosti (sessionStorage): puni SAMO prazna polja pri
+// ucitavanju, sprema se na svaki rucni unos (vidljivi label vrste rada, ne value kljuc).
+function applySharedDraft(): void {
+  const d = readToolDraft();
+  const fillIfEmpty = (sel: string, v?: string) => {
+    const el = $(sel);
+    if (el && v && !el.value.trim()) el.value = v;
+  };
+  fillIfEmpty(FIELDS.author, d.author);
+  fillIfEmpty(FIELDS.title, d.title);
+  fillIfEmpty(FIELDS.place, d.place);
+  const wt = $('#tp-worktype');
+  if (wt && d.workTypeLabel) {
+    const opt = Array.from(wt.options as any[]).find((o: any) => o.textContent?.trim() === d.workTypeLabel);
+    if (opt) wt.value = opt.value;
+  }
+}
+
+function persistSharedDraft(): void {
+  saveToolDraft({
+    author: $(FIELDS.author)?.value || '',
+    title: $(FIELDS.title)?.value || '',
+    workTypeLabel: $('#tp-worktype')?.selectedOptions?.[0]?.textContent?.trim() || '',
+    place: $(FIELDS.place)?.value || '',
+  });
+}
 
 function init() {
   if (!$('#tp-sheet')) return;
@@ -322,11 +406,19 @@ function init() {
   populateUnits('');
   populatePrograms('');
   applyUrlParams();
+  applySharedDraft();
 
   for (const sel of Object.values(FIELDS)) {
     const el = $(sel);
-    if (el) el.addEventListener('input', render);
+    if (el) el.addEventListener('input', () => { render(); persistSharedDraft(); });
   }
+  $('#tp-worktype')?.addEventListener('change', persistSharedDraft);
+  // Rucni unos (stvarni input event, ne programsko postavljanje .value iz kaskade) gasi
+  // odgovarajucu "auto" zastavicu: kaskada vise ne smije tiho prepisati/isprazniti dok
+  // korisnik sam uredjuje polje.
+  $(FIELDS.university)?.addEventListener('input', () => { universityAuto = false; });
+  $(FIELDS.faculty)?.addEventListener('input', () => { facultyAuto = false; });
+  $(FIELDS.study)?.addEventListener('input', () => { studyAuto = false; });
   for (const sel of LABEL_SELECTS) { const el = $(sel); if (el) el.addEventListener('change', render); }
   $('#tp-institution')?.addEventListener('change', onInstitutionChange);
   $('#tp-unit')?.addEventListener('change', onUnitChange);
@@ -341,13 +433,15 @@ function init() {
 
   $('#tp-clear')?.addEventListener('click', () => {
     // Selecti (vrsta rada, kaskada) nemaju smislen value='' za prikaz, pa se vracaju na
-    // prvu opciju; tekstualna polja se prazne (kao izjava).
+    // HTML default ('selected' atribut; #tp-worktype je Diplomski, ne prva opcija);
+    // tekstualna polja se prazne (kao izjava).
     for (const sel of Object.values(FIELDS)) {
       const el = $(sel); if (!el) continue;
-      if (el.tagName === 'SELECT') el.selectedIndex = 0; else el.value = '';
+      if (el.tagName === 'SELECT') el.selectedIndex = defaultSelectedIndex(el); else el.value = '';
     }
     for (const sel of LABEL_SELECTS) { const el = $(sel); if (el) el.selectedIndex = 0; }
     for (const sel of CASCADE_SELECTS) { const el = $(sel); if (el) el.selectedIndex = 0; }
+    universityAuto = false; facultyAuto = false; studyAuto = false;
     populateUnits('');
     populatePrograms('');
     history.replaceState(null, '', location.pathname);
@@ -363,15 +457,13 @@ function init() {
   $('#tp-print')?.addEventListener('click', () => window.print());
 
   // Preuzmi gotov .docx (docx-writer): s predloskom fakulteta kad postoji, inace genericki.
-  $('#tp-docx')?.addEventListener('click', () => {
+  bindDownloadButton($('#tp-docx'), () => {
     const template = currentSelection().template ?? undefined;
     const model = lastModel;
-    if (!model || !model.lines.length) return;
-    try {
-      downloadBlob(docxBlob(titlePageDoc(model, template)), 'naslovnica.docx');
-    } catch {
-      // .docx nije uspio (rijetko): pregled i ispis su i dalje tu.
-    }
+    return model && model.lines.length ? docxBlob(titlePageDoc(model, template)) : null;
+  }, 'naslovnica.docx', {
+    statusEl: $('#tp-hint'),
+    failStatus: 'Preuzimanje .docx nije uspjelo, pokušaj kopirati tekst ili spremiti kao PDF.',
   });
 }
 

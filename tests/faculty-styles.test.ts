@@ -20,11 +20,22 @@ describe('faculty-styles (izbornik fakulteta u citat.html)', () => {
     expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b, 'hr')));
   });
 
-  it('ustanova-razina facultyId dobije ime ustanove (unipu -> Pula, ne sirovi id)', () => {
-    const unipu = opts.find((o) => o.id === 'unipu');
-    expect(unipu).toBeTruthy();
-    expect(unipu!.name).not.toBe('unipu');
-    expect(unipu!.name).toMatch(/Pul/);
+  it('fetpu (stvarna fakultetska jedinica) dobije svoje ime, ne ime cijele institucije', () => {
+    // unipu-*.json specovi su ranije nosili facultyId "unipu" (ID CIJELE institucije Sveuciliste
+    // Jurja Dobrile u Puli, koja ima vise jedinica: fetpu, foozpu...) umjesto stvarne sastavnice
+    // "fetpu"; metaFor() je tiho fallbackao na ime institucije, pa je izbornik nudio "Sveuciliste
+    // Jurja Dobrile u Puli" kao da student moze citirati "s cijele institucije". Ispravljeno u
+    // data/tools/citation-specs/verified/unipu-harvard.json i unipu-chicago-notes.json.
+    const fetpu = opts.find((o) => o.id === 'fetpu');
+    expect(fetpu).toBeTruthy();
+    expect(fetpu!.name).toMatch(/ekonomije i turizma/i);
+    expect(opts.find((o) => o.id === 'unipu')).toBeUndefined();
+  });
+
+  it('ustanova-razina facultyId za STVARNO jedno-jedinicnu instituciju i dalje dobije ime ustanove preko metaFor fallbacka (unin)', () => {
+    const unin = opts.find((o) => o.id === 'unin');
+    expect(unin).toBeTruthy();
+    expect(unin!.name).toMatch(/Sjever/);
   });
 
   it('custom-spec -> vjeran render preko formatFromSpec (efos)', () => {

@@ -86,19 +86,6 @@ export function selectTemplate(unitId: string | null | undefined, level: string)
   };
 }
 
-/** Hrvatski URL slug razine (?razina=diplomski) <-> WorkType kljuc. */
-export const LEVEL_SLUGS: Record<WorkType, string> = {
-  seminar: 'seminarski',
-  final: 'zavrsni',
-  graduate: 'diplomski',
-  specialist: 'specijalisticki',
-  doctoral: 'doktorski',
-  article: 'clanak',
-  project: 'projektni',
-};
-
-export function workTypeFromSlug(slug: string): WorkType | null {
-  const entry = (Object.entries(LEVEL_SLUGS) as Array<[WorkType, string]>)
-    .find(([, s]) => s === slug);
-  return entry ? entry[0] : null;
-}
+// Slugovi razine zive u level-slugs.ts (bez templates.json u lancu, v. komentar ondje);
+// re-export cuva postojece potrosace ovog modula.
+export { LEVEL_SLUGS, workTypeFromSlug } from './level-slugs';

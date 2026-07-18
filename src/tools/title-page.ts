@@ -11,6 +11,8 @@ export interface TitlePageInput {
   faculty?: string;    // npr. Fakultet političkih znanosti
   study?: string;      // studij, odsjek ili smjer (opcionalno)
   author?: string;
+  studentId?: string;  // JMBAG / maticni broj studenta (opcionalno; trazi ga ~30 predlozaka)
+  course?: string;     // naziv kolegija/predmeta (opcionalno; seminarski radovi)
   title?: string;
   subtitle?: string;
   workType?: string;   // npr. Diplomski rad
@@ -24,7 +26,7 @@ export interface TitlePageInput {
 
 export type TitleRole =
   | 'university' | 'faculty' | 'study'
-  | 'author' | 'title' | 'subtitle' | 'worktype'
+  | 'author' | 'studentId' | 'course' | 'title' | 'subtitle' | 'worktype'
   | 'mentor' | 'comentor' | 'placeyear';
 
 /** Tipografija jednog retka kad je naslovnica gradjena po predlosku fakulteta. */
@@ -91,6 +93,8 @@ const ROLE_LABELS_HR: Record<TitleRole, string> = {
   faculty: 'fakultet',
   study: 'studij',
   author: 'ime i prezime',
+  studentId: 'JMBAG',
+  course: 'kolegij',
   title: 'naslov rada',
   subtitle: 'podnaslov',
   worktype: 'vrsta rada',
@@ -100,8 +104,9 @@ const ROLE_LABELS_HR: Record<TitleRole, string> = {
 };
 
 type CleanFields = {
-  university: string; faculty: string; study: string; author: string; title: string;
-  subtitle: string; workType: string; mentor: string; comentor: string; place: string; year: string;
+  university: string; faculty: string; study: string; author: string; studentId: string;
+  course: string; title: string; subtitle: string; workType: string; mentor: string;
+  comentor: string; place: string; year: string;
 };
 
 function cleanFields(input: TitlePageInput): CleanFields {
@@ -110,6 +115,8 @@ function cleanFields(input: TitlePageInput): CleanFields {
     faculty: clean(input.faculty),
     study: clean(input.study),
     author: clean(input.author),
+    studentId: clean(input.studentId),
+    course: clean(input.course),
     title: clean(input.title),
     subtitle: clean(input.subtitle),
     workType: clean(input.workType),
@@ -127,6 +134,8 @@ function textForRole(role: TitleRole, f: CleanFields, input: TitlePageInput): st
     case 'faculty': return f.faculty;
     case 'study': return f.study;
     case 'author': return f.author;
+    case 'studentId': return f.studentId ? `JMBAG: ${f.studentId}` : '';
+    case 'course': return f.course ? `Kolegij: ${f.course}` : '';
     case 'title': return f.title;
     case 'subtitle': return f.subtitle;
     case 'worktype': return f.workType;
@@ -150,28 +159,72 @@ function styleForElement(el: TemplateElement, template: TitlePageTemplate): Titl
   return Object.keys(style).length ? style : undefined;
 }
 
+/** Ponovljena uloga (npr. dvojezicni worktype ZAVRSNI RAD / BACHELOR THESIS, ili studij u dva
+ *  retka: fiksna institucijska fraza + stvarni naziv studija) ima samo JEDNO korisnicko polje.
+ *  Ovo bira koji element uloge to polje prima: prvi NELOCKANI obavezni element, inace prvi
+ *  nelockani element; ako su svi elementi uloge locked (nepromjenjiva fraza bez slobodnog
+ *  polja, npr. biotech-final gdje su i institucijska fraza i naziv studija fiksni), uloga
+ *  uopce ne cita korisnikov unos. Za ulogu s jednim elementom to je uvijek taj element
+ *  (ponasanje kao prije uvodjenja locked). */
+function pickRecipients(elements: TemplateElement[]): Set<TemplateElement> {
+  const byRole = new Map<TitleRole, TemplateElement[]>();
+  for (const el of elements) {
+    if (el.locked && el.fixedText) continue;
+    const arr = byRole.get(el.role);
+    if (arr) arr.push(el); else byRole.set(el.role, [el]);
+  }
+  const recipients = new Set<TemplateElement>();
+  for (const candidates of byRole.values()) {
+    recipients.add(candidates.find((el) => el.required) ?? candidates[0]);
+  }
+  return recipients;
+}
+
+/** Ubaci novi redak iza ZADNJEG retka neke od uloga (redom prioriteta), nasljedujuci
+ *  njegovu grupu; bez pogotka redak ide na kraj. Za studentId/course koji nemaju element
+ *  u predlosku (v1 predlosci ih ne modeliraju), pa se sidre uz srodnu ulogu. */
+function insertAfterRole(lines: TitleLine[], anchors: TitleRole[], line: TitleLine): void {
+  for (const anchor of anchors) {
+    for (let i = lines.length - 1; i >= 0; i--) {
+      if (lines[i].role === anchor) {
+        lines.splice(i + 1, 0, { ...line, group: lines[i].group });
+        return;
+      }
+    }
+  }
+  lines.push(line);
+}
+
 export function buildTitlePage(input: TitlePageInput, template?: TitlePageTemplate): TitlePageModel {
   const f = cleanFields(input);
 
   if (template) {
     const lines: TitleLine[] = [];
     const missing: string[] = [];
-    const seenRoles = new Set<TitleRole>();
+    const recipients = pickRecipients(template.elements);
+    const roleOccurrences = new Map<TitleRole, number>();
+    for (const el of template.elements) roleOccurrences.set(el.role, (roleOccurrences.get(el.role) ?? 0) + 1);
     for (const el of template.elements) {
-      // Prvi element uloge dobiva korisnikov unos (uz fixedText kao popunu praznog polja).
-      // Ponovljena uloga (npr. dvojezicni worktype ZAVRSNI RAD / BACHELOR THESIS ili studij u
-      // dva retka) ima samo jedno korisnicko polje, pa dodatni elementi prikazuju ISKLJUCIVO
-      // svoj fixedText; bez fixedTexta se preskacu da se korisnikov unos ne ponovi.
-      const firstOfRole = !seenRoles.has(el.role);
-      seenRoles.add(el.role);
-      const text = firstOfRole
+      const text = recipients.has(el)
         ? textForRole(el.role, f, input) || clean(el.fixedText)
         : clean(el.fixedText);
       if (text) {
         lines.push({ role: el.role, text, style: styleForElement(el, template), group: el.group });
-      } else if (el.required && firstOfRole) {
-        missing.push(ROLE_LABELS_HR[el.role]);
+      } else if (el.required) {
+        // Generickog ROLE_LABELS_HR ne moze razlikovati "Naziv studija" od "Smjer studija":
+        // za ponovljenu ulogu missing hint koristi vlastiti el.label kad postoji.
+        const isDuplicateRole = (roleOccurrences.get(el.role) ?? 0) > 1;
+        missing.push(isDuplicateRole && el.label ? clean(el.label) : ROLE_LABELS_HR[el.role]);
       }
+    }
+    // JMBAG/kolegij: v1 predlosci ih ne modeliraju kao elemente (samo notes), pa se popunjeni
+    // unos sidri uz srodnu ulogu (JMBAG ispod imena, kolegij uz studij) s fontom predloska.
+    const injectedStyle: TitleLineStyle | undefined = template.defaultFont ? { font: template.defaultFont } : undefined;
+    if (f.studentId) {
+      insertAfterRole(lines, ['author'], { role: 'studentId', text: textForRole('studentId', f, input), style: injectedStyle });
+    }
+    if (f.course) {
+      insertAfterRole(lines, ['study', 'faculty'], { role: 'course', text: textForRole('course', f, input), style: injectedStyle });
     }
     return { lines, missing, templateId: template.id };
   }
@@ -182,7 +235,9 @@ export function buildTitlePage(input: TitlePageInput, template?: TitlePageTempla
   push('university', f.university);
   push('faculty', f.faculty);
   push('study', f.study);
+  push('course', textForRole('course', f, input));
   push('author', f.author);
+  push('studentId', textForRole('studentId', f, input));
   push('title', f.title);
   push('subtitle', f.subtitle);
   push('worktype', f.workType);
@@ -215,8 +270,8 @@ export function titlePageText(model: TitlePageModel): string {
   const group = (roles: TitleRole[]) =>
     model.lines.filter(l => roles.includes(l.role)).map(l => l.text).join('\n');
   return [
-    group(['university', 'faculty', 'study']),
-    group(['author', 'title', 'subtitle', 'worktype']),
+    group(['university', 'faculty', 'study', 'course']),
+    group(['author', 'studentId', 'title', 'subtitle', 'worktype']),
     group(['mentor', 'comentor']),
     group(['placeyear']),
   ].filter(Boolean).join('\n\n');

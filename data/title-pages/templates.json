@@ -1009,7 +1009,8 @@
         "align": "center",
         "font": "Verdana",
         "sizePt": 12,
-        "uppercase": true
+        "uppercase": true,
+        "locked": true
       },
       {
         "role": "study",
@@ -1020,7 +1021,8 @@
         "align": "center",
         "font": "Verdana",
         "sizePt": 12,
-        "uppercase": true
+        "uppercase": true,
+        "locked": true
       },
       {
         "role": "author",
@@ -1125,7 +1127,8 @@
         "fixedText": "Diplomski sveučilišni studij",
         "align": "center",
         "font": "Verdana",
-        "uppercase": true
+        "uppercase": true,
+        "locked": true
       },
       {
         "role": "study",
@@ -2659,7 +2662,8 @@
         "fixedText": "Sveučilišni specijalistički studij",
         "font": "Calibri",
         "sizePt": 14,
-        "bold": true
+        "bold": true,
+        "locked": true
       },
       {
         "role": "study",
@@ -6010,7 +6014,8 @@
         "fixedText": "SVEUČILIŠNI PRIJEDIPLOMSKI STUDIJ",
         "uppercase": true,
         "font": "Times New Roman",
-        "sizePt": 16
+        "sizePt": 16,
+        "locked": true
       },
       {
         "role": "study",
@@ -6129,7 +6134,8 @@
         "fixedText": "SVEUČILIŠNI DIPLOMSKI STUDIJ",
         "uppercase": true,
         "font": "Times New Roman",
-        "sizePt": 12
+        "sizePt": 12,
+        "locked": true
       },
       {
         "role": "study",

@@ -41,6 +41,11 @@ export interface TemplateElement {
   label?: string;
   /** Tekst propisan predloskom, npr. "SVEUCILISTE U ZAGREBU" (auto-popuna). */
   fixedText?: string;
+  /** true SAMO uz fixedText: retak se NIKAD ne prepisuje korisnikovim unosom, cak ni kao
+   *  prvi/jedini element svoje uloge (npr. nepromjenjiva institucijska fraza ispred stvarnog
+   *  naziva studija u drugom elementu iste uloge). Bez ovoga prvi element uloge prima
+   *  korisnikov unos (vidi buildTitlePage). */
+  locked?: boolean;
   font?: string;
   sizePt?: number;
   bold?: boolean;

@@ -3,7 +3,7 @@
  * Ciste funkcije bez DOM-a (testabilne); naslovnica-page.ts ih veze na location/history.
  */
 import type { WorkType } from '../profiles/profile-schema';
-import { LEVEL_SLUGS, workTypeFromSlug } from './template-loader';
+import { LEVEL_SLUGS, workTypeFromSlug } from './level-slugs';
 
 export interface TitlePageParams {
   unitId?: string;

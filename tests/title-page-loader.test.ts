@@ -28,6 +28,7 @@ import type {
 } from '../src/title-pages/template-schema';
 import { findUnit } from '../src/catalog/catalog-loader';
 import { WORK_TYPE_LABELS } from '../src/config/config-loader';
+import { buildTitlePage } from '../src/tools/title-page';
 
 const EVIDENCE_DIR = join(__dirname, '..', 'data', 'title-pages', 'evidence');
 
@@ -35,6 +36,9 @@ const TITLE_ROLES = new Set([
   'university', 'faculty', 'study',
   'author', 'title', 'subtitle', 'worktype',
   'mentor', 'comentor', 'placeyear',
+  // Generator od 2026-07 podrzava i JMBAG/kolegij; predlosci ih smiju modelirati kao elemente.
+  // NIKAD u REDACT_WHITELIST (JMBAG je osobni podatak, kolegij moze identificirati rad).
+  'studentId', 'course',
 ]);
 
 /** Uloge cija se vrijednost smije naci u commitanom evidence tekstu (GDPR whitelist). */
@@ -214,6 +218,79 @@ describe('templates.json: validacijski gate za pipeline output', () => {
       for (const pid of t.provenance.evidencePids || []) {
         expect(knownPids.has(pid), `${ctx}: evidencePid "${pid}" nije u publicSources`).toBe(true);
       }
+    }
+  });
+});
+
+describe('buildTitlePage nad stvarnim predloscima s dva "study" elementa (fixedText+label bug)', () => {
+  // Regresija: firstOfRole je davao korisnikovom unosu prednost i nad "locked" fixedText, a
+  // drugi element uloge bez fixedTexta se tiho gubio (missing=[] iako obavezan). Ovih 9
+  // predloska ima dva "study" elementa; provjera radi izravno na ucitanom templates.json,
+  // ne na sintetickom fixtureu.
+  const byId = (id: string): TitlePageTemplate => {
+    const t = TITLE_PAGE_TEMPLATES.find((x) => x.id === id);
+    if (!t) throw new Error(`predlozak "${id}" ne postoji u templates.json`);
+    return t;
+  };
+
+  it('svih 9 predlozaka i dalje ima tocno dva "study" elementa (ne bi tiho izasli iz obuhvata)', () => {
+    const ids = [
+      'biotech-final', 'biotech-graduate', 'efzg-specialist',
+      'fkit-final', 'fkit-graduate', 'fmtu-final', 'fmtu-graduate',
+      'kbf-final', 'kbf-graduate',
+    ];
+    for (const id of ids) {
+      expect(byId(id).elements.filter((e) => e.role === 'study'), id).toHaveLength(2);
+    }
+  });
+
+  it('fkit-final/graduate i efzg-specialist: fiksna fraza ostaje, naziv studija se popunjava i vise ne nestaje', () => {
+    for (const id of ['fkit-final', 'fkit-graduate', 'efzg-specialist']) {
+      const t = byId(id);
+      const withInput = buildTitlePage({ study: 'Kemijsko inženjerstvo' }, t);
+      const studyLines = withInput.lines.filter((l) => l.role === 'study').map((l) => l.text);
+      expect(studyLines, id).toHaveLength(2);
+      expect(studyLines[0], id).toBe(t.elements.find((e) => e.role === 'study')!.fixedText);
+      expect(studyLines[1], id).toBe('Kemijsko inženjerstvo');
+
+      const withoutInput = buildTitlePage({}, t);
+      expect(withoutInput.missing, id).toContain('Naziv studija');
+    }
+  });
+
+  it('biotech-final: oba retka su fiksna, stray unos u #tp-study se ne prepisuje preko njih', () => {
+    const t = byId('biotech-final');
+    const [first, second] = t.elements.filter((e) => e.role === 'study');
+    const m = buildTitlePage({ study: 'Nešto sasvim drugo' }, t);
+    const studyLines = m.lines.filter((l) => l.role === 'study').map((l) => l.text);
+    expect(studyLines).toEqual([first.fixedText, second.fixedText]);
+    // Ostali obavezni podaci (author/title/placeyear...) nisu popunjeni u ovom testu i ocekivano
+    // su missing; provjerava se samo da study rola tu nikad ne zavrsi (oba retka su fiksna).
+    expect(m.missing).not.toContain('studij');
+  });
+
+  it('fmtu-final/graduate: naziv studija se popunjava, smjer studija je posteno missing (ne tiho izgubljen)', () => {
+    for (const id of ['fmtu-final', 'fmtu-graduate']) {
+      const t = byId(id);
+      const m = buildTitlePage({ study: 'Pomorski menadžment' }, t);
+      const studyLines = m.lines.filter((l) => l.role === 'study').map((l) => l.text);
+      expect(studyLines, id).toEqual(['Pomorski menadžment']);
+      expect(m.missing, id).toContain('Smjer studija');
+    }
+  });
+
+  it('kbf-final/graduate: naziv studijskoga programa (obavezan) dobiva unos, institut (opcionalan) ostaje tih', () => {
+    for (const id of ['kbf-final', 'kbf-graduate']) {
+      const t = byId(id);
+      const filled = buildTitlePage({ study: 'Teologija' }, t);
+      expect(filled.lines.filter((l) => l.role === 'study').map((l) => l.text), id).toEqual(['Teologija']);
+      // Ostali obavezni podaci (author/mentor/placeyear...) nisu popunjeni u ovom testu; provjerava
+      // se samo da obavezni "Naziv studijskoga programa" ovdje NIJE missing (dobio je unos).
+      expect(filled.missing, id).not.toContain('Naziv studijskoga programa');
+
+      const empty = buildTitlePage({}, t);
+      expect(empty.lines.filter((l) => l.role === 'study'), id).toHaveLength(0);
+      expect(empty.missing, id).toContain('Naziv studijskoga programa');
     }
   });
 });

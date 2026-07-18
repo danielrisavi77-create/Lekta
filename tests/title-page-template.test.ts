@@ -119,6 +119,80 @@ describe('buildTitlePage s predloskom', () => {
     expect(m.lines.map((l) => l.text)).toEqual(['Politologija']);
   });
 
+  it('ponovljena uloga: fixedText+label (fkit/efzg/biotech-graduate obrazac) - locked fraza se ne prepisuje, drugi element prima unos', () => {
+    // Regresija za bug: prvi element (fiksna institucijska fraza) je prije "locked" gubio
+    // fixedText jer je firstOfRole davao prednost korisnikovom unosu; drugi element (stvarni
+    // naziv studija, bez fixedTexta) je bio potpuno preskocen (i missing=[] iako obavezan).
+    const fixedPlusLabel: TitlePageTemplate = {
+      ...TEMPLATE,
+      elements: [
+        { role: 'study', required: true, elementProvenance: 'official-rules', group: 0, fixedText: 'SVEUČILIŠNI PRIJEDIPLOMSKI STUDIJ', locked: true },
+        { role: 'study', required: true, elementProvenance: 'official-rules', group: 0, label: 'Naziv studija' },
+      ],
+    };
+    const filled = buildTitlePage({ study: 'Kemijsko inženjerstvo' }, fixedPlusLabel);
+    expect(filled.lines.filter((l) => l.role === 'study').map((l) => l.text)).toEqual([
+      'SVEUČILIŠNI PRIJEDIPLOMSKI STUDIJ', 'Kemijsko inženjerstvo',
+    ]);
+    expect(filled.missing).not.toContain('Naziv studija');
+
+    const empty = buildTitlePage({}, fixedPlusLabel);
+    expect(empty.lines.filter((l) => l.role === 'study').map((l) => l.text)).toEqual([
+      'SVEUČILIŠNI PRIJEDIPLOMSKI STUDIJ',
+    ]);
+    expect(empty.missing).toContain('Naziv studija');
+  });
+
+  it('ponovljena uloga: oba elementa locked (biotech-final obrazac) - korisnikov unos se ignorira, oba retka fiksna', () => {
+    const bothLocked: TitlePageTemplate = {
+      ...TEMPLATE,
+      elements: [
+        { role: 'study', required: true, elementProvenance: 'official-template', group: 0, fixedText: 'Preddiplomski sveučilišni studij', locked: true },
+        { role: 'study', required: true, elementProvenance: 'official-template', group: 0, fixedText: '"Biotehnologija i istraživanje lijekova"', locked: true },
+      ],
+    };
+    // Stray unos u #tp-study (npr. korisnik krivo misli da polje treba ispuniti) se NE smije
+    // prelupiti preko fiksne institucijske fraze niti preko fiksnog naziva studija.
+    const m = buildTitlePage({ study: 'Nešto sasvim drugo' }, bothLocked);
+    expect(m.lines.filter((l) => l.role === 'study').map((l) => l.text)).toEqual([
+      'Preddiplomski sveučilišni studij', '"Biotehnologija i istraživanje lijekova"',
+    ]);
+    expect(m.missing).toHaveLength(0);
+  });
+
+  it('ponovljena uloga: dva razlicita obavezna polja bez fixedTexta (fmtu obrazac) - prvo dobiva unos, drugo je posteno missing', () => {
+    // Genuinski dva razlicita polja (Naziv studija / Smjer studija) dijele jedno tekstualno
+    // polje na formi; ne moze se izmisliti drugi tekst, ali vise ne smije nestati bez upozorenja.
+    const twoRequiredLabels: TitlePageTemplate = {
+      ...TEMPLATE,
+      elements: [
+        { role: 'study', required: true, elementProvenance: 'official-rules', group: 0, label: 'Naziv studija' },
+        { role: 'study', required: true, elementProvenance: 'official-rules', group: 0, label: 'Smjer studija' },
+      ],
+    };
+    const m = buildTitlePage({ study: 'Pomorski menadžment' }, twoRequiredLabels);
+    expect(m.lines.filter((l) => l.role === 'study').map((l) => l.text)).toEqual(['Pomorski menadžment']);
+    expect(m.missing).toEqual(['Smjer studija']);
+  });
+
+  it('ponovljena uloga: opcionalno pa obavezno bez fixedTexta (kbf obrazac) - unos ide na obavezni element, opcionalni ostaje tih', () => {
+    const optionalThenRequired: TitlePageTemplate = {
+      ...TEMPLATE,
+      elements: [
+        { role: 'study', required: false, elementProvenance: 'official-template', group: 0, label: 'Institut (ako postoji)' },
+        { role: 'study', required: true, elementProvenance: 'official-rules', group: 0, label: 'Naziv studijskoga programa' },
+      ],
+    };
+    const filled = buildTitlePage({ study: 'Teologija' }, optionalThenRequired);
+    // Obavezno polje (drugi element) dobiva stvaran unos, ne opcionalni prvi.
+    expect(filled.lines.filter((l) => l.role === 'study').map((l) => l.text)).toEqual(['Teologija']);
+    expect(filled.missing).toHaveLength(0);
+
+    const empty = buildTitlePage({}, optionalThenRequired);
+    expect(empty.lines.filter((l) => l.role === 'study')).toHaveLength(0);
+    expect(empty.missing).toEqual(['Naziv studijskoga programa']);
+  });
+
   it('mentor zadrzava prefiks titule i s predloskom', () => {
     const m = buildTitlePage({ ...INPUT, mentorLabel: 'Mentorica', mentor: 'Ana Barić' }, TEMPLATE);
     expect(m.lines.find((l) => l.role === 'mentor')!.text).toBe('Mentorica: Ana Barić');
@@ -132,5 +206,24 @@ describe('buildTitlePage s predloskom', () => {
       'Mentor: dr. sc. Ivan Ivić',
       'Zagreb, 2026.',
     ].join('\n\n'));
+  });
+
+  it('JMBAG/kolegij bez elementa u predlosku se sidre uz srodnu ulogu (JMBAG iza imena, isti group)', () => {
+    // v1 predlosci ne modeliraju studentId/course kao elemente (samo notes), pa ih jezgra
+    // ubacuje: JMBAG odmah iza author retka (nasljeduje group), kolegij iza study/faculty.
+    const m = buildTitlePage({ ...INPUT, studentId: '0123456789', course: 'Metodologija' }, TEMPLATE);
+    const roles = m.lines.map((l) => l.role);
+    const authorIdx = roles.indexOf('author');
+    expect(roles[authorIdx + 1]).toBe('studentId');
+    expect(m.lines[authorIdx + 1].text).toBe('JMBAG: 0123456789');
+    expect(m.lines[authorIdx + 1].group).toBe(m.lines[authorIdx].group);
+    expect(m.lines[authorIdx + 1].style?.font).toBe('Times New Roman');
+    // TEMPLATE nema study element -> kolegij pada na sidro 'faculty'.
+    const facultyIdx = roles.indexOf('faculty');
+    expect(roles[facultyIdx + 1]).toBe('course');
+    expect(m.lines[facultyIdx + 1].group).toBe(m.lines[facultyIdx].group);
+    // Bez unosa se nista ne ubacuje (regresija: predlozak ostaje netaknut).
+    const plain = buildTitlePage(INPUT, TEMPLATE);
+    expect(plain.lines.some((l) => l.role === 'studentId' || l.role === 'course')).toBe(false);
   });
 });

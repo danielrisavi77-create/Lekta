@@ -80,6 +80,9 @@
 /* Vidljiva napomena porijekla (npr. raspored preuzet iz druge vrste rada): title tooltip nije
    dostupan na dodir ni tipkovnicom, pa kljucna ograda mora biti obican vidljivi tekst. */
 .tp-badge-note{font-size:12.5px;color:var(--muted);margin:-4px 0 10px;line-height:1.5;max-width:52ch}
+.tp-notes{margin:0 0 12px;border:1px solid var(--line);border-radius:10px;background:var(--panel-2);font-size:13.5px}
+.tp-notes summary{cursor:pointer;padding:8px 12px;font-weight:700;color:var(--ink)}
+.tp-notes p{margin:0;padding:0 12px 10px;color:var(--muted);white-space:pre-wrap;line-height:1.5}
 
 .sec-h{font-family:var(--ink-serif);font-size:clamp(21px,3vw,27px);font-weight:800;letter-spacing:-.015em;line-height:1.15;margin:0 0 6px}
 .sec-sub{color:var(--muted);font-size:14.5px;line-height:1.55;max-width:640px;margin:0}
@@ -103,7 +106,7 @@
      Vodic (#vodic), zavrsni CTA (#tp-cta), oznaka porijekla (.tp-badge) i akcije
      ne smiju zavrsiti u PDF-u, inace se dobiju dodatne stranice teksta. Body pozadinu
      resetira dijeljeni tool-page.css (@media print na kraju, ucitava se nakon svega). */
-  .topbar,.hero,footer,#vodic,#tp-cta,.cta,.disclaimer,.tp-form-col,.out-bar,.out-hint,.note,.tp-badge,.card>h2,.card>.sub{display:none!important}
+  .topbar,.hero,footer,#vodic,#tp-cta,.cta,.disclaimer,.tp-form-col,.out-bar,.out-hint,.note,.tp-badge,.tp-notes,.card>h2,.card>.sub{display:none!important}
   .section{padding:0}.shell{width:100%}.grid{display:block}
   .out-panel{position:static}
   .tp-badge-note{display:none!important}
@@ -240,6 +243,10 @@
         <label for="tp-author">Ime i prezime</label>
         <input id="tp-author" type="text" placeholder="npr. Ana Anić">
       </div>
+      <div class="row2">
+        <div class="field"><label for="tp-studentid">JMBAG (opcionalno)</label><input id="tp-studentid" type="text" inputmode="numeric" placeholder="npr. 0123456789"></div>
+        <div class="field"><label for="tp-course">Kolegij / predmet (opcionalno)</label><input id="tp-course" type="text" placeholder="npr. Lokalna politika"></div>
+      </div>
       <div class="field">
         <label for="tp-title">Naslov rada</label>
         <input id="tp-title" type="text" placeholder="Naslov rada">
@@ -291,6 +298,10 @@
         <p class="sub">Ažurira se dok tipkaš. Spremi kao PDF ispisom u datoteku.</p>
         <span class="tp-badge generic" id="tp-template-badge">Generički raspored</span>
         <p class="tp-badge-note" id="tp-badge-note" hidden></p>
+        <details class="tp-notes" id="tp-notes" hidden>
+          <summary>Napomene o ovom predlošku</summary>
+          <p id="tp-notes-text"></p>
+        </details>
         <div class="tp-sheet-wrap">
           <div id="tp-sheet" role="group" aria-label="Pregled naslovnice"><div class="tp-empty">Ispuni polja lijevo pa se naslovnica slaže ovdje.</div></div>
         </div>
