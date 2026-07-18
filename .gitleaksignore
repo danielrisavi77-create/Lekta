@@ -1,0 +1,10 @@
+# Fingerprinti poznatih LAZNIH POZITIVA za gitleaks (security-audit.yml).
+# Format: <commit>:<putanja>:<ruleID>:<linija>  (iz "Fingerprint:" retka gitleaks nalaza)
+#
+# AUD-13 dokazni citat u audit izvjestaju: anon JWT je citiran VEC SKRACEN
+# ("eyJhbGciOiJIUzI1NiI...exp 2036...", bez payload/signature dijela) pa nema
+# tajne, ali generic-api-key heuristika hvata prefiks. Puni anon kljuc je ionako
+# javan po dizajnu (RLS ga stiti) i allowlistan punim regexom u security-audit.yml;
+# ovaj skraceni oblik regex ne pokriva. Nalaz je u povijesnom blobu (commit
+# cf38fb0) pa se ne moze ukloniti uredivanjem datoteke bez prepisivanja povijesti.
+cf38fb02655adb69238287206b4220d63fa93666:docs/audit/AUDIT_2026-07-16/10_CODE_TS.md:generic-api-key:136
