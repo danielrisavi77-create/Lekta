@@ -45,7 +45,7 @@ body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 var(--sans);m
 .disclaimer{text-align:center;color:var(--muted);font-size:12px;margin:18px auto 0;max-width:760px}
 
 @media(max-width:820px){.nav-links{display:none}.hero{padding:32px 0 2px}}
-.tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.tool-card{display:block;background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-sm);padding:22px;text-decoration:none;color:inherit;transition:transform .22s var(--ease-out-3),box-shadow .22s var(--ease-out-3)}.tool-card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}.tool-card h2{font-family:var(--ink-serif);font-size:19px;font-weight:800;margin:0 0 6px}.tool-card p{color:var(--muted);font-size:14px;margin:0 0 12px;line-height:1.55}.tool-go{color:var(--brand);font-weight:750;font-size:14px}@media(max-width:640px){.tools-grid{grid-template-columns:1fr}}
+.tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.tools-grid .tool-card:last-child:nth-child(odd){grid-column:1/-1}.tool-card{display:block;background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-sm);padding:22px;text-decoration:none;color:inherit;transition:transform .22s var(--ease-out-3),box-shadow .22s var(--ease-out-3)}.tool-card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}.tool-card h2{font-family:var(--ink-serif);font-size:19px;font-weight:800;margin:0 0 6px}.tool-card p{color:var(--muted);font-size:14px;margin:0 0 12px;line-height:1.55}.tool-go{color:var(--brand);font-weight:750;font-size:14px}@media(max-width:640px){.tools-grid{grid-template-columns:1fr}}
 .pick-list{list-style:none;margin:10px 0 0;padding:0}.pick-list li{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:12px 2px;border-bottom:1px solid var(--line)}.pick-list li:last-child{border-bottom:0}.pick-list span{color:var(--text);font-size:14.5px;line-height:1.5}.pick-list a{flex:none;color:var(--brand);font-weight:750;font-size:14px;text-decoration:none;white-space:nowrap}.pick-list a:hover{text-decoration:underline}@media(max-width:560px){.pick-list li{flex-direction:column;gap:3px;align-items:flex-start}}
 
 /* Sve na ovoj stranici je marketinski chrome (nema pregleda dokumenta), pa smiju sva */
@@ -79,6 +79,15 @@ body{background:var(--desk);color:var(--desk-ink);font:15px/1.6 var(--sans);over
 /* KS: pristupacnost i mobilno (mora ostati na kraju bloka) */
 @media(prefers-reduced-motion:reduce){.btn,.tool-card{transition:none}.tool-card:hover{transform:none}.btn-primary,.card .btn-primary,.cta .btn-primary{transition:none}}
 @media(max-width:560px){.lampa-txt{display:none}.lampa-btn{padding:8px 10px}}
+/* KS: .mobile-nav na istom pragu na kojem se hamburger otvara (820px, vidi .nav-links gore);
+   bez ovoga izbornik na tamnoj temi pada na ~2,6:1 kontrast, ispod AA (isti popravak kao citat.html). */
+@media(max-width:820px){
+  .mobile-nav.open{background:var(--paper);color:var(--paper-ink);border-bottom:0;box-shadow:var(--paper-sh)}
+  .mobile-nav a:not(.btn){color:var(--paper-ink)!important;border-bottom:1px solid var(--paper-line)}
+  .mobile-nav a:not(.btn):hover{color:var(--red-deep)}
+  .mobile-nav .btn-primary{background:var(--red);color:var(--on-red);box-shadow:none}
+  .mobile-nav .btn-primary:hover{background:var(--red-deep);color:#F7F3E8;transform:none;box-shadow:none}
+}
 </style>
 </head>
 <body>

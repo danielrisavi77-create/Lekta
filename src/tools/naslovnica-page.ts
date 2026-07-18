@@ -8,7 +8,8 @@ import { titlePageDoc, docxBlob } from '../docx/docx-writer';
 import { escapeHtml } from '../utils/helpers';
 import { bindCopyButton, downloadBlob } from './tool-ui';
 import { ZAGREB_CATALOG } from '../catalog/catalog-loader';
-import { selectTemplate, LEVEL_SLUGS, type TemplateSelection } from '../title-pages/template-loader';
+import { selectTemplate, type TemplateSelection } from '../title-pages/template-loader';
+import { workTypeLabel } from '../config/config-loader';
 import { parseTitlePageParams, serializeTitlePageParams } from '../title-pages/title-page-params';
 import { defaultWorkTypeForProgram } from '../ui/work-selection';
 import type { WorkType } from '../profiles/profile-schema';
@@ -86,7 +87,10 @@ function renderTemplateSheet(model: TitlePageModel): string {
     if (!groups.length || line.group !== prev) groups.push({ group: line.group, html: [] });
     const css = lineStyleCss(line.style);
     groups[groups.length - 1].html.push(
-      `<div class="tp-line tp-t-${line.role}"${css ? ` style="${css}"` : ''}>${escapeHtml(line.text)}</div>`,
+      // tp-${role}, NE tp-t-${role}: dijeli CSS s genericnim rasporedom (.tp-study/.tp-author/...
+      // u naslovnica.html), koji "t-" prefiks nikad nije imao pravilo za sebe. lineStyleCss ispod
+      // postavlja samo font-size/bold/italic/uppercase/align/font-family, nikad color, pa nema sudara.
+      `<div class="tp-line tp-${line.role}"${css ? ` style="${css}"` : ''}>${escapeHtml(line.text)}</div>`,
     );
     prev = line.group;
   }
@@ -120,9 +124,12 @@ function renderBadge(sel: TemplateSelection) {
     // fakultetski raspored prilagodjen, ne da je sluzbeni propis bas za ovu vrstu rada.
     badge.className = sel.provenance === 'official' ? 'tp-badge official' : 'tp-badge derived';
     badge.textContent = 'Raspored tvog fakulteta';
-    const from = sel.reusedFromLevel ? LEVEL_SLUGS[sel.reusedFromLevel] : '';
+    // workTypeLabel daje puni HR naziv ("Zavrsni rad"); ovdje treba mala pocetnica jer je
+    // umetnut usred recenice ("za zavrsni rad", ne "za Zavrsni rad rad" - LEVEL_SLUGS je ASCII
+    // URL-slug tablica namijenjena ?razina= parametru, nikad prikaznom tekstu).
+    const from = sel.reusedFromLevel ? workTypeLabel(sel.reusedFromLevel).toLowerCase() : '';
     const reuseNote =
-      `Preuzet iz fakultetskog rasporeda za ${from} rad i prilagođen odabranoj vrsti rada.` +
+      `Preuzet iz fakultetskog rasporeda za ${from} i prilagođen odabranoj vrsti rada.` +
       (note ? ` ${note}` : '');
     badge.title = reuseNote;
     setBadgeNote(reuseNote);

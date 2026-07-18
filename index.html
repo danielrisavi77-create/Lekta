@@ -805,7 +805,7 @@ body{position:relative}
 .logo-word{font-family:var(--display-serif);font-style:italic;font-weight:500;font-size:27px;letter-spacing:-.01em;background:none;-webkit-text-fill-color:currentColor;color:var(--desk-ink)}
 /* Nav landinga: .topbar scope nadjacava dijeljeni tool-page.css (KS serif nav) koji
    Vite injektira poslije inline stila; ista specificnost bi izgubila po redoslijedu. */
-.topbar .nav-links{margin-left:auto;display:flex;align-items:center;gap:3px;font-family:var(--ui);font-size:14.5px}
+.topbar .nav-links{align-items:center;gap:3px;font-family:var(--ui);font-size:14.5px}
 .topbar .nav-links a{position:relative;color:var(--desk-muted);font-family:var(--ui);font-weight:500;font-size:14.5px;letter-spacing:-.006em;padding:7px 11px;border-radius:4px;transition:color .16s var(--ease)}
 .topbar .nav-links a::after{content:"";position:absolute;left:11px;right:11px;bottom:4px;height:2px;background:var(--red);border-radius:2px;transform:scaleX(0);transform-origin:left center;transition:transform .2s var(--ease)}
 .topbar .nav-links a:hover{color:var(--desk-ink);background:none}
@@ -1379,7 +1379,14 @@ footer{border-top:1px solid var(--desk-line);padding:52px 0 36px;position:relati
 /* Mobilna/tablet navigacija: MORA biti na kraju sloja (appendana pravila gaze media blokove
    bez obzira na poziciju media querya). KS nav se skuplja vec na 1160px: siri je od starog,
    a s Usporedbom i Alati dropdownom ne stane ispod toga (isti prag drzi i .mobile-nav.open blok). */
-@media(max-width:1160px){.nav-links{display:none}.mobile-menu{display:grid}}
+/* .topbar-scoped (0,2,0), ne gola .nav-links/.mobile-menu (0,1,0): tool-page.css (ui-boot,
+   JS-injektiran POSLIJE ovog inline <style>) nosi vlastiti bezuvjetni .nav-links{display:flex}
+   + @media(max-width:820px) par za 6 alat-stranica. Izmedju 820-1160px ta tocka ne pogadja pa
+   gola .nav-links ovdje gubi cascade (kasnije ucitano, ista specificnost) i index.html-ov sirok
+   prag (visak stavki nasuprot alat-stranicama) tiho nikad ne okine - nav ostaje zbijen umjesto
+   hamburgera. Visa specificnost je jedini nacin da PRAG ovdje prezivi (isti gotcha kao literatura.html
+   .ink komentar, vidi tool-page.css header). */
+@media(max-width:1160px){.topbar .nav-links{display:none}.topbar .mobile-menu{display:grid}}
 @media(max-width:720px){.nav{gap:12px}.nav>.btn-primary{display:none}.lampa-txt{display:none}.lampa-btn{padding:8px 10px}}
 @media(max-width:768px){.ks-video-note{right:0;top:-26px}}
 /* ===== LEK-MERGE: vrh = dokaz + upload (hero spojen u #analyzer) ===== */

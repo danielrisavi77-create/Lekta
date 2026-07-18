@@ -33,6 +33,7 @@
 
 .section{padding:26px 0}
 .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:16px;align-items:start}
+.grid>*{min-width:0}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-sm);padding:24px}
 .card h2{font-family:var(--ink-serif);margin:0 0 4px;font-size:19px;font-weight:800}
 .field{margin-bottom:12px}
@@ -48,12 +49,12 @@ textarea#lit-input{min-height:380px;line-height:1.6}
 .metric.warnstat b{color:var(--warn)}
 
 .lit-list{list-style:none;padding:0;margin:0;display:grid;gap:8px;max-height:52vh;overflow:auto}
-.lit-item{font-family:var(--ink-serif);font-size:14.5px;line-height:1.5;padding:11px 13px 11px 32px;border:1px solid var(--line);border-radius:11px;background:var(--panel-2);text-indent:-19px}
+.lit-item{font-family:var(--ink-serif);font-size:14.5px;line-height:1.5;padding:11px 13px 11px 32px;border:1px solid var(--line);border-radius:11px;background:var(--panel-2);text-indent:-19px;overflow-wrap:anywhere}
 .lit-item.has-issue{border-color:color-mix(in srgb,var(--warn) 45%,var(--line))}
 .lit-text{display:inline}
 .lit-chips{display:block;margin-top:7px;text-indent:0}
-.lit-chip{display:inline-block;font-family:Inter,sans-serif;font-size:10px;font-weight:800;color:var(--warn);background:var(--warn-soft);border-radius:999px;padding:3px 8px;margin:0 5px 4px 0}
-.lit-empty{color:var(--muted);font-style:italic;font-family:Inter,sans-serif;padding:22px;text-align:center}
+.lit-chip{display:inline-block;font-family:var(--sans);font-size:10px;font-weight:800;color:var(--warn);background:var(--warn-soft);border-radius:999px;padding:3px 8px;margin:0 5px 4px 0}
+.lit-empty{color:var(--muted);font-style:italic;font-family:var(--sans);padding:22px;text-align:center}
 .out-bar{display:flex;gap:10px;align-items:center;margin-top:14px;flex-wrap:wrap}
 .note b{color:var(--text)}
 
@@ -92,7 +93,7 @@ textarea#lit-input{min-height:380px;line-height:1.6}
 .lampa-btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--desk-line);background:transparent;padding:8px 13px;border-radius:2px;color:var(--desk-muted);font:600 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
 
 /* KS: papir scope ove stranice (paneli alata + CTA kutija su listovi papira na stolu) */
-.card,.cta{--text:var(--paper-ink);--muted:var(--paper-muted);--muted-2:var(--paper-muted);--line:var(--paper-line);--line-strong:var(--paper-line);--panel:#fff;--panel-2:var(--paper-2);--bg:var(--paper);--brand:var(--red-deep);--brand-2:var(--paper-ink);--brand-soft:var(--red-soft);--on-brand:#F7F3E8;--info-soft:rgba(74,108,240,.08);--pass:#1E7F4F;--ok:#1E7F4F;--ok-soft:rgba(30,127,79,.12);--warn:#8A570E;--warn-strong:#8A570E;background:var(--paper);color:var(--paper-ink);border:0;border-radius:0;box-shadow:var(--paper-sh-sm)}
+.card,.cta{--text:var(--paper-ink);--muted:var(--paper-muted);--muted-2:var(--paper-muted);--line:var(--paper-line);--line-strong:var(--paper-line);--panel:#fff;--panel-2:var(--paper-2);--bg:var(--paper);--brand:var(--red-deep);--brand-2:var(--paper-ink);--brand-soft:var(--red-soft);--on-brand:#F7F3E8;--info-soft:rgba(74,108,240,.08);--pass:#1E7F4F;--ok:#1E7F4F;--ok-soft:rgba(30,127,79,.12);--warn:#8A570E;--warn-strong:#8A570E;--warn-soft:rgba(138,87,14,.14);background:var(--paper);color:var(--paper-ink);border:0;border-radius:0;box-shadow:var(--paper-sh-sm)}
 
 /* KS: tipografija i kontrole unutar papira */
 .card h2,.card h3,.cta h2,.cta h3{font-weight:500}
@@ -113,6 +114,15 @@ textarea#lit-input{min-height:380px;line-height:1.6}
 
 /* KS: mobilna pravila (na samom kraju da gaze starije media blokove) */
 @media(max-width:560px){.lampa-txt{display:none}.lampa-btn{padding:8px 10px}}
+/* KS: .mobile-nav na istom pragu na kojem se hamburger otvara (820px, vidi .nav-links gore);
+   bez ovoga izbornik na tamnoj temi pada na ~2,6:1 kontrast, ispod AA (isti popravak kao citat.html). */
+@media(max-width:820px){
+  .mobile-nav.open{background:var(--paper);color:var(--paper-ink);border-bottom:0;box-shadow:var(--paper-sh)}
+  .mobile-nav a:not(.btn){color:var(--paper-ink)!important;border-bottom:1px solid var(--paper-line)}
+  .mobile-nav a:not(.btn):hover{color:var(--red-deep)}
+  .mobile-nav .btn-primary{background:var(--red);color:var(--on-red);box-shadow:none}
+  .mobile-nav .btn-primary:hover{background:var(--red-deep);color:#F7F3E8;transform:none;box-shadow:none}
+}
 </style>
 </head>
 <body>

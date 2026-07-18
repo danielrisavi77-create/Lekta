@@ -115,6 +115,19 @@ const PAGE_STYLE = `
     --red:#C4372E;
     --paper-sh:0 2px 6px rgba(56,46,32,.16),0 18px 44px rgba(56,46,32,.2);
   }
+  /* Generirane stranice nemaju #themeBtn/setupThemeToggle poput ostatka sitea (bez chroma,
+     namjerno minimalne) pa [data-theme="light"] gore nikad nitko ne postavlja - OS preferenca
+     je jedini nacin da posjetitelj s postavljenom svijetlom temom uopce vidi svijetlu varijantu. */
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      color-scheme: light;
+      --desk:#DFD8C6; --desk-ink:#26221B;
+      --paper:#FDFBF3; --paper-2:#F4EFDF;
+      --sheet:#FFFFFF;
+      --red:#C4372E;
+      --paper-sh:0 2px 6px rgba(56,46,32,.16),0 18px 44px rgba(56,46,32,.2);
+    }
+  }
   * { box-sizing: border-box; }
   html { background: var(--desk); min-height: 100%; }
   body {
@@ -153,6 +166,11 @@ const PAGE_STYLE = `
   .tabs { display: flex; gap: 0.5rem; margin: 1.1rem 0 0.25rem; }
   .tab { margin: 0; background: var(--paper-2); color: var(--paper-muted); padding: 0.4rem 0.9rem; font-size: 0.85rem; border: 1px solid var(--paper-line); }
   .tab.active { background: var(--red-deep); color: var(--on-red); border-color: transparent; }
+  /* generic button:hover (specificnost 0,1,1) inace pobjedjuje .tab (0,1,0) pa neaktivni tab na
+     hover dobiva CTA-crvenu pozadinu bez uskladjenog teksta; .tab:not(.active):hover je vece
+     specificnosti (0,3,0, :not() argument racuna kao klasa) pa pobjedjuje s blagom reakcijom.
+     .tab.active vec ima visu specificnost (0,2,0) od button:hover pa aktivni tab nije pogodjen. */
+  .tab:not(.active):hover { background: var(--paper-line); color: var(--paper-ink); }
   textarea#bulk-input { min-height: 170px; }
   .bulk-note { font-size: 0.85rem; color: var(--paper-ink); background: var(--paper-2); border: 1px solid var(--paper-line); border-left: 3px solid var(--red-deep); padding: 0.55rem 0.75rem; border-radius: 0 2px 2px 0; margin: 0.6rem 0; }
   .bulk-card { border: 1px solid var(--paper-line); border-radius: 2px; padding: 0.5rem 0.75rem 0.75rem; margin: 0.6rem 0; }
@@ -162,6 +180,11 @@ const PAGE_STYLE = `
   #bulk-output a { color: var(--red-deep); font-size: 0.8rem; }
   /* PROTECTED: i skupni izlaz literature ostaje serif na bijelom listu */
   #bulk-result { min-height: 120px; font-family: var(--font-serif); font-variant-numeric: tabular-nums; font-size: 0.9rem; background: var(--sheet); color: var(--paper-ink); }
+  /* Odvojeno od .lekta-tool-meta (mono, sitno, za kratke oznake): metaLine za verificirani spec
+     nosi punu recenicu s izvorom i datumom - upravo TA tvrdnja je jedini stvarni diferencijator
+     naspram genericnih citatnih alata, pa izgleda kao znacka povjerenja, ne suha fusnota. */
+  .lekta-source-note { position: relative; margin: 0 0 1.25rem; padding: 0.65rem 0.85rem 0.65rem 2.1rem; font-family: var(--font-serif); font-size: 0.875rem; line-height: 1.5; color: var(--paper-ink); background: var(--paper-2); border: 1px solid var(--paper-line); border-left: 3px solid var(--red-deep); border-radius: 0 2px 2px 0; }
+  .lekta-source-note::before { content: "✓"; position: absolute; left: 0.75rem; top: 0.7rem; color: var(--red-deep); font-weight: 700; }
   /* responzivno: uvijek na SAMOM KRAJU bloka da pregazi gornja pravila */
   @media (max-width: 700px) {
     body { margin: 0; max-width: none; border-radius: 0; border-left-width: 0; border-right-width: 0; box-shadow: none; }
@@ -618,8 +641,12 @@ function buildFacultyStylePage(faculty, style, engineJs) {
     : style.spec
       ? `Vjeran format prema sluzbenim uputama: ${escapeHtml(style.spec.sourceLabel)}, provjereno ${escapeHtml(style.spec.verifiedAt ?? '')}.`
       : `Stil: ${escapeHtml(style.label)}. Prema profilu ${escapeHtml(faculty.name)} u Lekti.`;
+  // Spec-branke (pin/custom-spec) nose punu recenicu s izvorom+datumom - jedini stvarni
+  // diferencijator naspram genericnih citatnih alata, pa dobiva znacku povjerenja
+  // (.lekta-source-note), ne sitni mono meta-stil rezerviran za kratke oznake.
+  const metaClass = style.spec ? 'lekta-source-note' : 'lekta-tool-meta';
   const body = `<h1>Generator citata za ${escapeHtml(faculty.name)}</h1>
-<p class="lekta-tool-meta">${metaLine}</p>
+<p class="${metaClass}">${metaLine}</p>
 ${toolFormHtml({ withFacultyPicker: false })}
 ${ctaHtml('./index.html', 'Svi fakulteti')}`;
   return pageShell({

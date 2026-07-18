@@ -70,7 +70,7 @@
 .bulk-card-fields input,.bulk-card-fields select{padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--bg,var(--panel));color:var(--text);font:inherit;font-size:13px}
 #bulk-result{width:100%;font-family:var(--ink-serif);font-size:14px;line-height:1.6;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--brand-soft);color:var(--text);margin-top:8px;resize:vertical}
 #bulk-output label{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
-@media(max-width:560px){.bulk-card-fields{grid-template-columns:1fr}.fact-list>div,.cite-ex>div{grid-template-columns:1fr;gap:2px}}
+@media(max-width:560px){.row2,.bulk-card-fields{grid-template-columns:1fr}.fact-list>div,.cite-ex>div{grid-template-columns:1fr;gap:2px}}
 
 .sec-h{font-family:var(--ink-serif);font-size:clamp(21px,3vw,27px);font-weight:800;letter-spacing:-.015em;line-height:1.15;margin:0 0 6px}
 .sec-sub{color:var(--muted);font-size:14.5px;line-height:1.55;max-width:640px;margin:0}
@@ -121,7 +121,11 @@
 .lampa-txt{display:none}
 .lampa-btn{padding:8px 10px}
 .mobile-nav.open{background:var(--paper);color:var(--paper-ink);border-bottom:0;box-shadow:var(--paper-sh)}
-.mobile-nav a:not(.btn){color:var(--paper-ink);border-bottom:1px solid var(--paper-line)}
+/* !important: tool-page.css (ui-boot, JS-injektiran POSLIJE ovog inline <style>) nosi vlastiti
+   .mobile-nav a:not(.btn){color:var(--text)} iste specificnosti, kasnije ucitan pa inace pobjedjuje
+   (isti gotcha kao literatura.html .ink komentar) - bez ovoga tekst ostaje --desk-ink na paper
+   pozadini, ~2,6:1 kontrast. background gore ne treba !important (ne gubi cascade, provjereno). */
+.mobile-nav a:not(.btn){color:var(--paper-ink)!important;border-bottom:1px solid var(--paper-line)}
 .mobile-nav a:not(.btn):hover{color:var(--red-deep)}
 .mobile-nav .btn-primary{background:var(--red);color:var(--on-red);box-shadow:none}
 .mobile-nav .btn-primary:hover{background:var(--red-deep);color:#F7F3E8;transform:none;box-shadow:none}
@@ -179,7 +183,7 @@
 
 <section class="section">
   <div class="shell">
-    <div class="card" style="margin-bottom:18px">
+    <div class="card" style="margin-bottom:6px">
       <div class="field">
         <label for="f-faculty">Tvoj fakultet <span class="sub" style="font-weight:normal">(učita njegov provjereni citatni stil)</span></label>
         <select id="f-faculty">

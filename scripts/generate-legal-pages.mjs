@@ -45,7 +45,36 @@ async function loadLegal() {
   return factory();
 }
 
+// Brand tipografija (Newsreader) za h1/h4 umjesto generic Georgia/system-ui koje su pravne
+// stranice do sad koristile - BEZ design-system.css/JS-a (stranice su namjerno skriptless,
+// vidi CSP komentar na vrhu). Ponovno koristi VEC izgradjeni woff2 iz glavnog Vite bundlea
+// preko @font-face + apsolutne /assets/ putanje (isti self-host izvor kao ui-boot.ts, isti
+// fajl, browser cache hit ako je posjetitelj vec bio na indexu); latin + latin-ext (hrvatska
+// dijakritika c/c/z/s/dj je u latin-ext rasponu). Kozmeticko poboljsanje pa NE smije srusiti
+// build ako datoteka nije nadjena (buduca promjena build konfiguracije) - tiho pada na Georgia.
+const NEWSREADER_SUBSETS = [
+  { pattern: /^newsreader-latin-opsz-normal.*\.woff2$/i, unicodeRange: 'U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD' },
+  { pattern: /^newsreader-latin-ext-opsz-normal.*\.woff2$/i, unicodeRange: 'U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF' },
+];
+
+function newsreaderFontFace() {
+  const assetsDir = path.join(DIST, 'assets');
+  if (!fs.existsSync(assetsDir)) return '';
+  const files = fs.readdirSync(assetsDir);
+  return NEWSREADER_SUBSETS
+    .map((s) => {
+      const file = files.find((f) => s.pattern.test(f));
+      if (!file) return '';
+      return `@font-face { font-family: "Newsreader Variable"; font-style: normal; font-weight: 200 800; font-display: swap; src: url("/assets/${file}") format("woff2-variations"); unicode-range: ${s.unicodeRange}; }`;
+    })
+    .filter(Boolean)
+    .join('\n  ');
+}
+const NEWSREADER_FONT_FACE = newsreaderFontFace();
+const NEWSREADER_FALLBACK = NEWSREADER_FONT_FACE ? '"Newsreader Variable", ' : '';
+
 const PAGE_STYLE = `
+  ${NEWSREADER_FONT_FACE}
   /* ===== KS: Korektorski stol sloj ===== */
   /* Lekta Korektorski stol: pravni dokument kao list papira pod radnom lampom, korektorska crvena samo za akcente.
      Stranice su samostalne (ne ucitavaju design-system.css), pa tokeni istog imena zive lokalno. */
@@ -55,7 +84,7 @@ const PAGE_STYLE = `
     --paper:#F7F3E8; --paper-2:#F0EAD9; --paper-ink:#26221B; --paper-muted:#6E6656; --paper-line:#DCD4BF;
     --red:#E4573D; --red-deep:#C4372E;
     --paper-sh:0 3px 8px rgba(0,0,0,.35),0 22px 60px rgba(0,0,0,.55);
-    --font-serif:Georgia,"Times New Roman",serif;
+    --font-serif:${NEWSREADER_FALLBACK}Georgia,"Times New Roman",serif;
     --font-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   }
   :root[data-theme="light"] {
@@ -64,6 +93,15 @@ const PAGE_STYLE = `
     --paper:#FDFBF3; --paper-2:#F4EFDF;
     --red:#C4372E;
     --paper-sh:0 2px 6px rgba(56,46,32,.16),0 18px 44px rgba(56,46,32,.2);
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      color-scheme: light;
+      --desk:#DFD8C6; --desk-ink:#26221B; --desk-muted:rgba(38,34,27,.6); --desk-line:rgba(38,34,27,.18);
+      --paper:#FDFBF3; --paper-2:#F4EFDF;
+      --red:#C4372E;
+      --paper-sh:0 2px 6px rgba(56,46,32,.16),0 18px 44px rgba(56,46,32,.2);
+    }
   }
   * { box-sizing: border-box; }
   body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; margin: 0; color: var(--desk-ink); line-height: 1.62; background: var(--desk); }

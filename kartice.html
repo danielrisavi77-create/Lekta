@@ -106,6 +106,15 @@ textarea#kt-input{min-height:360px;line-height:1.62}
 
 /* KS: mobilno (mora ostati na kraju bloka) */
 @media(max-width:560px){.lampa-btn{padding:8px 10px}.lampa-btn .lampa-txt{display:none}}
+/* KS: .mobile-nav na istom pragu na kojem se hamburger otvara (820px, vidi .nav-links gore);
+   bez ovoga izbornik na tamnoj temi pada na ~2,6:1 kontrast, ispod AA (isti popravak kao citat.html). */
+@media(max-width:820px){
+  .mobile-nav.open{background:var(--paper);color:var(--paper-ink);border-bottom:0;box-shadow:var(--paper-sh)}
+  .mobile-nav a:not(.btn){color:var(--paper-ink)!important;border-bottom:1px solid var(--paper-line)}
+  .mobile-nav a:not(.btn):hover{color:var(--red-deep)}
+  .mobile-nav .btn-primary{background:var(--red);color:var(--on-red);box-shadow:none}
+  .mobile-nav .btn-primary:hover{background:var(--red-deep);color:#F7F3E8;transform:none;box-shadow:none}
+}
 </style>
 </head>
 <body>
