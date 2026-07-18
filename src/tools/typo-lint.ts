@@ -28,6 +28,21 @@ export const KIND_DECIMALNI_SEPARATOR = 'decimalni-separator';
 export const KIND_VISESTRUKE_TOCKE = 'visestruke-tocke';
 export const KIND_RAZMAK_UZ_ZAGRADU = 'razmak-nakon-otvorene-zagrade';
 
+// Hrvatski nazivi za prikaz (bocna lista Oznacenog pregleda, rezultat u app.ts): JEDAN izvor
+// istine da app.ts i preview-anchors.ts ne odrzavaju dvije nezavisne mape koje se mogu razici
+// (isti obrazac kao ruleEntries/effectiveRules, vidi CLAUDE.md Option A). em-en-crtica naziv
+// mora odgovarati stvarnom suggestion tekstu iznad (zarez/dvotocka/zagrade, NE spojnica).
+export const KIND_LABELS_HR: Record<string, string> = {
+  [KIND_DVOSTRUKI_RAZMAK]: 'Dvostruki razmak',
+  [KIND_RAZMAK_PRIJE_INTERPUNKCIJE]: 'Razmak prije interpunkcije',
+  [KIND_EM_EN_CRTICA]: 'Crtica umjesto zareza, dvotočke ili zagrada',
+  [KIND_NAVODNICI_NEDOSLJEDNI]: 'Nedosljedni navodnici',
+  [KIND_HOMOGLIF_CIRILICA]: 'Ćirilični homoglif u latiničnoj riječi',
+  [KIND_DECIMALNI_SEPARATOR]: 'Nedosljedan decimalni separator',
+  [KIND_VISESTRUKE_TOCKE]: 'Dvostruke točke',
+  [KIND_RAZMAK_UZ_ZAGRADU]: 'Razmak uz zagradu',
+};
+
 const EXCERPT_RADIUS = 25;
 const EXCERPT_MAX = 60;
 

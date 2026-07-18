@@ -18,14 +18,8 @@
  * (sanitizeAnalysisResult u src/report/report.ts izbacuje `preview` i redaktira "odlomak N: <tekst>").
  */
 import {
-  KIND_DVOSTRUKI_RAZMAK,
-  KIND_RAZMAK_PRIJE_INTERPUNKCIJE,
-  KIND_EM_EN_CRTICA,
-  KIND_NAVODNICI_NEDOSLJEDNI,
   KIND_HOMOGLIF_CIRILICA,
-  KIND_DECIMALNI_SEPARATOR,
-  KIND_VISESTRUKE_TOCKE,
-  KIND_RAZMAK_UZ_ZAGRADU,
+  KIND_LABELS_HR as TYPO_LABELS,
 } from '../tools/typo-lint';
 import {
   KIND_DUGA_RECENICA,
@@ -123,17 +117,6 @@ export interface PreviewFlag {
   title: string;
   source: PreviewFlagSource;
 }
-
-const TYPO_LABELS: Record<string, string> = {
-  [KIND_DVOSTRUKI_RAZMAK]: 'Dvostruki razmak',
-  [KIND_RAZMAK_PRIJE_INTERPUNKCIJE]: 'Razmak prije interpunkcije',
-  [KIND_EM_EN_CRTICA]: 'Crtica umjesto spojnice ili zareza',
-  [KIND_NAVODNICI_NEDOSLJEDNI]: 'Nedosljedni navodnici',
-  [KIND_HOMOGLIF_CIRILICA]: 'Ćirilični homoglif u latiničnoj riječi',
-  [KIND_DECIMALNI_SEPARATOR]: 'Nedosljedan decimalni separator',
-  [KIND_VISESTRUKE_TOCKE]: 'Višestruke točke',
-  [KIND_RAZMAK_UZ_ZAGRADU]: 'Razmak uz otvorenu zagradu',
-};
 
 const REGISTER_LABELS: Record<string, string> = {
   [KIND_DUGA_RECENICA]: 'Duga rečenica',
