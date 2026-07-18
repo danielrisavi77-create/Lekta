@@ -91,6 +91,35 @@ describe('bindCopyButton', () => {
     btn.click();
     await vi.waitFor(() => expect(btn.textContent).toBe('Označi pa Ctrl+C'));
   });
+
+  it('zadani okStatus je generican (bez imenice specificne za jedan alat kao "sazetak")', async () => {
+    // bindCopyButton je zajednicki za 6 poziva (citat/izjava/kartice/literatura/naslovnica/bulk);
+    // hardkodiran "Sažetak kopiran..." bi bio netocan za sve osim kartice.html.
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    vi.stubGlobal('navigator', { clipboard: { writeText } });
+    const btn = makeBtn();
+    const status = document.createElement('p');
+    bindCopyButton(btn, () => 'tekst', { holdMs: 500, statusEl: status });
+
+    btn.click();
+    await vi.waitFor(() => expect(status.textContent).toBeTruthy());
+    expect(status.textContent).not.toContain('Sažetak');
+  });
+
+  it('opts.okStatus nadjacava zadanu poruku kad poziva tocno zna sto kopira', async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    vi.stubGlobal('navigator', { clipboard: { writeText } });
+    const btn = makeBtn();
+    const status = document.createElement('p');
+    bindCopyButton(btn, () => 'tekst', {
+      holdMs: 500,
+      statusEl: status,
+      okStatus: 'Sažetak kopiran u međuspremnik.',
+    });
+
+    btn.click();
+    await vi.waitFor(() => expect(status.textContent).toBe('Sažetak kopiran u međuspremnik.'));
+  });
 });
 
 describe('bindDownloadButton', () => {

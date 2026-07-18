@@ -268,6 +268,7 @@ function init() {
     return m.charsWithSpaces ? summaryText(m) : '';
   }, {
     statusEl: $('#kt-copy-status'),
+    okStatus: 'Sažetak kopiran u međuspremnik.',
     failLabel: 'Očitaj brojke ispod',
     failStatus: 'Kopiranje nije uspjelo. Brojke su prikazane u tablici ispod, prepiši ih ručno.',
   });

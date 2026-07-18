@@ -96,6 +96,7 @@ interface CopyButtonOptions {
   failLabel?: string;
   failStatus?: string; // override zadane fallback poruke kad stranica nema vidljiv blok za rucno oznacavanje
   holdMs?: number;
+  okStatus?: string;    // override generickog "Sadržaj kopiran..." kad poziva tocno zna sto se kopira
   statusEl?: any;       // opcionalni aria-live element: ishod se najavljuje citacu ekrana (WCAG 4.1.3)
 }
 
@@ -126,7 +127,11 @@ export function bindCopyButton(
   const coarse = isCoarsePointer();
   const failLabel = opts.failLabel ?? (coarse ? 'Odaberi i kopiraj ručno' : 'Označi pa Ctrl+C');
   const holdMs = opts.holdMs ?? 1600;
-  const okStatus = 'Sažetak kopiran u međuspremnik.';
+  // Bez imenice specificne za jedan alat: zadani okStatus je zajednicki za svih 6 poziva
+  // bindCopyButton (citat, izjava, kartice, literatura, naslovnica, bulk-literatura), ne samo
+  // za kartice.html ciji gumb doista kopira "sazetak". Poziv koji tocno zna sto kopira moze
+  // proslijediti opts.okStatus.
+  const okStatus = opts.okStatus ?? 'Sadržaj kopiran u međuspremnik.';
   const failStatus = opts.failStatus
     ?? (coarse ? 'Kopiranje nije uspjelo, odaberi tekst i kopiraj ga ručno.' : 'Kopiranje nije uspjelo, označi tekst pa Ctrl+C.');
   const original = btn.textContent;
