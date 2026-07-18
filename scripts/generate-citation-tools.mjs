@@ -142,6 +142,12 @@ const PAGE_STYLE = `
   }
   /* korektorska margina: crvena linija uz lijevi rub lista */
   body::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--red-deep); }
+  /* Tanka brend-traka iznad h1: ime alata (Lekta) i "besplatno" su inace vidljivi tek unutar
+     ctaHtml() bloka, POSLIJE cijele forme - prvi dojam s Googlea nema ni jedno ni drugo prije
+     klika/scrolla. List papira ostaje minimalan (mono, sitno, bez logotipa/boxa). */
+  .lekta-brand { display: flex; align-items: baseline; justify-content: space-between; gap: 0.5rem; font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.03em; color: var(--paper-muted); margin-bottom: 0.9rem; }
+  .lekta-brand a { color: var(--paper-muted); text-decoration: none; font-weight: 700; }
+  .lekta-brand a:hover { color: var(--red-deep); }
   h1 { font-family: var(--font-serif); font-weight: 600; font-size: 1.55rem; letter-spacing: -0.01em; line-height: 1.12; margin: 0.1rem 0 0.3rem; color: var(--paper-ink); }
   .lekta-tool-meta { color: var(--paper-muted); font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.02em; margin: 0 0 1.25rem; padding-bottom: 0.85rem; border-bottom: 1px solid var(--paper-line); }
   label { display: block; font-size: 0.85rem; font-weight: 600; margin: 0.75rem 0 0.25rem; color: var(--paper-ink); }
@@ -506,6 +512,7 @@ ${canonical ? `<meta property="og:url" content="${canonical}">` : ''}
 <style>${PAGE_STYLE}</style>
 </head>
 <body>
+<div class="lekta-brand"><a href="${SITE_ORIGIN}">Lekta</a><span>Besplatan alat, bez registracije</span></div>
 ${bodyHtml}
 <script type="application/json" id="lekta-tool-config">${configJs}</script>
 <script src="/alati/citation-tool.js"></script>
@@ -807,7 +814,7 @@ ${ctaHtml(`${SITE_ORIGIN}/alati/brojac-kartica.html`, 'Brojač kartica')}
 ${facultyLinksHtml(catalog, faculties)}`;
   return pageShell({
     title: 'Generator citata po fakultetu | Lekta',
-    description: 'Odaberi svoj fakultet i citiraj prema njegovim pravilima; razina potvrde (službeno verificirano ili opći oblik stila) ovisi o fakultetu.',
+    description: 'Besplatno. Odaberi svoj fakultet i citiraj prema njegovim pravilima; razina potvrde (službeno verificirano ili opći oblik stila) ovisi o fakultetu.',
     canonical: `${SITE_ORIGIN}/alati/citati/index.html`,
     bodyHtml: body,
     configJs: jsonInline(config),
@@ -888,10 +895,10 @@ ${ctaHtml('./index.html', 'Svi fakulteti', faculty.id)}`;
   // interpunkcije (metaLine ovdje kaze "opci oblik stila", ne "tocno"); bez speca nema nikakvog
   // verificiranog izvora (TOOL_JS klijentski trazi da korisnik SAM provjeri kod mentora).
   const description = style.spec && style.spec.pin
-    ? `Fakultet propisuje stil ${style.shortLabel} za ${displayName} (službeno potvrđeno); format prema općem obliku stila.`
+    ? `Besplatno. Fakultet propisuje stil ${style.shortLabel} za ${displayName} (službeno potvrđeno); format prema općem obliku stila.`
     : style.spec
-      ? `Citiraj po stilu ${style.shortLabel} točno po službenim uputama za ${displayName}, s izvorom i datumom provjere.`
-      : `Citiraj po stilu ${style.shortLabel} za ${displayName}, prema profilu Lekte; točnu interpunkciju provjeri u uputama fakulteta ili kod mentora.`;
+      ? `Besplatno. Citiraj po stilu ${style.shortLabel} točno po službenim uputama za ${displayName}, s izvorom i datumom provjere.`
+      : `Besplatno. Citiraj po stilu ${style.shortLabel} za ${displayName}, prema profilu Lekte; točnu interpunkciju provjeri u uputama fakulteta ili kod mentora.`;
   return pageShell({
     title: `Generator citata za ${displayName} (${style.shortLabel}) | Lekta`,
     description,
@@ -935,7 +942,7 @@ input.addEventListener('input', function () {
 
 function buildCharCounterHtml() {
   const title = 'Brojač kartica | Lekta';
-  const description = 'Izbroji kartice teksta (1800 znakova po kartici) za svoj rad.';
+  const description = 'Besplatno. Izbroji kartice teksta (1800 znakova po kartici) za svoj rad.';
   const canonical = `${SITE_ORIGIN}/alati/brojac-kartica.html`;
   const ogName = title.replace(/ \| Lekta$/, '');
   return `<!doctype html>
@@ -971,6 +978,7 @@ function buildCharCounterHtml() {
 </style>
 </head>
 <body>
+<div class="lekta-brand"><a href="${SITE_ORIGIN}">Lekta</a><span>Besplatan alat, bez registracije</span></div>
 <h1>Brojač kartica</h1>
 <p class="lekta-tool-meta">1 kartica = 1800 znakova (uključujući razmake), standardna jedinica za akademske i lektorske radove.</p>
 <textarea id="text-input" placeholder="Zalijepi svoj tekst ovdje..."></textarea>
