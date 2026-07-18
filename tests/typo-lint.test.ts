@@ -10,6 +10,7 @@ import {
   KIND_DECIMALNI_SEPARATOR,
   KIND_VISESTRUKE_TOCKE,
   KIND_RAZMAK_UZ_ZAGRADU,
+  KIND_DOCUMENT_WIDE,
 } from '../src/tools/typo-lint';
 
 // Pomocnik: nalazi samo trazene vrste, da provjere ne smetaju jedna drugoj.
@@ -45,10 +46,14 @@ describe('typoLint: razmak prije interpunkcije', () => {
 });
 
 describe('typoLint: em i en crtica', () => {
-  it('prijavljuje em crticu i predlaze zarez, dvotocku ili zagrade', () => {
+  it('prijavljuje em crticu i predlaze zarez, dvotocku, zagrade ili zasebne recenice', () => {
     const f = byKind(['Rad je gotov \u2014 skoro.'], KIND_EM_EN_CRTICA);
     expect(f).toHaveLength(1);
     expect(f[0].suggestion).toContain('zarezom');
+    // CLAUDE.md stilska konvencija navodi cetiri alternative za em/en crticu; treca dosad
+    // nedostajala je bas "zasebne recenice" (cesto najprirodniji ispravak kad crtica spaja
+    // dvije samostalne recenice, npr. prijevod/engleski utjecaj).
+    expect(f[0].suggestion).toContain('zasebne re\u010denice');
     // Poruka ne smije sadrzavati samu crticu; excerpt smije jer citira ulaz.
     expect(f[0].suggestion).not.toContain('\u2014');
     expect(f[0].suggestion).not.toContain('\u2013');
@@ -119,6 +124,19 @@ describe('typoLint: decimalni separator (globalno)', () => {
   it('ne stvara lazni nalaz zbog URL-a s verzijom', () => {
     const p = ['Vidi https://example.com/v1.2 za detalje.', 'Vrijednost je 2,5.'];
     expect(byKind(p, KIND_DECIMALNI_SEPARATOR)).toHaveLength(0);
+  });
+});
+
+describe('typoLint: KIND_DOCUMENT_WIDE (cjelodokumentske provjere)', () => {
+  it('sadrzi tocno navodnike i decimalni separator: jedine dvije provjere koje javljaju NAJVISE 1 nalaz za cijeli dokument', () => {
+    // app.ts renderTypoLint koristi ovaj popis da NE prikaze brojcani chip "· 1" za ove dvije
+    // (misljivo kao "jedno mjesto za popraviti") iako je problem po definiciji rasprostranjen.
+    expect(KIND_DOCUMENT_WIDE.has(KIND_NAVODNICI_NEDOSLJEDNI)).toBe(true);
+    expect(KIND_DOCUMENT_WIDE.has(KIND_DECIMALNI_SEPARATOR)).toBe(true);
+    expect(KIND_DOCUMENT_WIDE.size).toBe(2);
+  });
+  it('ostale provjere (npr. dvostruki razmak) NISU cjelodokumentske: broje svaku pojavu', () => {
+    expect(KIND_DOCUMENT_WIDE.has(KIND_DVOSTRUKI_RAZMAK)).toBe(false);
   });
 });
 

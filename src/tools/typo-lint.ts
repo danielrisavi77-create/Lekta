@@ -28,6 +28,16 @@ export const KIND_DECIMALNI_SEPARATOR = 'decimalni-separator';
 export const KIND_VISESTRUKE_TOCKE = 'visestruke-tocke';
 export const KIND_RAZMAK_UZ_ZAGRADU = 'razmak-nakon-otvorene-zagrade';
 
+// Ove dvije provjere su cjelodokumentske (firstMixPoint): za razliku od ostalih koje prijavljuju
+// SVAKU pojavu, ove prijavljuju NAJVISE JEDAN nalaz za cijeli dokument (samo tocku prve mijesane
+// pojave). Brojcani prikaz "1" u UI-ju bi se citao kao "jedno mjesto za popraviti", iako je
+// problem po definiciji rasprostranjen kroz dokument; app.ts renderTypoLint zato ovim kindovima
+// ne prikazuje brojcani chip nego tekstualnu oznaku.
+export const KIND_DOCUMENT_WIDE: ReadonlySet<string> = new Set([
+  KIND_NAVODNICI_NEDOSLJEDNI,
+  KIND_DECIMALNI_SEPARATOR,
+]);
+
 // Hrvatski nazivi za prikaz (bocna lista Oznacenog pregleda, rezultat u app.ts): JEDAN izvor
 // istine da app.ts i preview-anchors.ts ne odrzavaju dvije nezavisne mape koje se mogu razici
 // (isti obrazac kao ruleEntries/effectiveRules, vidi CLAUDE.md Option A). em-en-crtica naziv
@@ -143,7 +153,7 @@ function checkEmEnCrtica(p: string, pi: number, out: TypoFinding[]): void {
       paragraphIndex: pi,
       kind: KIND_EM_EN_CRTICA,
       excerpt: excerptAt(p, m.index, 1),
-      suggestion: `zamijeni ${naziv} zarezom, dvotočkom ili zagradama`,
+      suggestion: `zamijeni ${naziv} zarezom, dvotočkom, zagradama ili razdvoji u zasebne rečenice`,
     });
   }
 }
