@@ -796,14 +796,18 @@ function buildIndexPage(faculties, catalog) {
     styles: f.styles.map((s) => ({ token: s.token, label: s.label, engineStyle: s.engineStyle, accessDate: s.accessDate, programsHint: s.programsHint, spec: s.spec })),
   }));
   const config = { mode: 'index', generalToolUrl: GENERAL_TOOL_URL, faculties: clientData };
+  // Ova stranica popisuje SVE fakultete, a razina potvrde im se razlikuje (puni verificirani
+  // spec / samo style-pin / genericki oblik bez ikakvog izvora) - vidi trosmjernu granu u
+  // buildFacultyStylePage. Blanket "provjereno" bi ovdje tvrdio istu razinu za sve, sto vecina
+  // (bez speca) stvarno nema.
   const body = `<h1>Generator citata po fakultetu</h1>
-<p class="lekta-tool-meta">Odaberi fakultet pa se učita njegov citatni stil. Provjereno prema profilima Lekte.</p>
+<p class="lekta-tool-meta">Odaberi fakultet pa se učita njegov citatni stil, prema profilima Lekte (razina potvrde ovisi o dostupnom izvoru).</p>
 ${toolFormHtml({ withFacultyPicker: true })}
 ${ctaHtml(`${SITE_ORIGIN}/alati/brojac-kartica.html`, 'Brojač kartica')}
 ${facultyLinksHtml(catalog, faculties)}`;
   return pageShell({
     title: 'Generator citata po fakultetu | Lekta',
-    description: 'Odaberi svoj fakultet i citiraj točno po njegovim pravilima, provjereno i s izvorom.',
+    description: 'Odaberi svoj fakultet i citiraj prema njegovim pravilima; razina potvrde (službeno verificirano ili opći oblik stila) ovisi o fakultetu.',
     canonical: `${SITE_ORIGIN}/alati/citati/index.html`,
     bodyHtml: body,
     configJs: jsonInline(config),
@@ -844,7 +848,10 @@ function buildFacultyStylePage(faculty, style) {
   };
   const displayName = faculty.displayName || faculty.name;
   const metaLine = style.spec && style.spec.pin
-    ? `Stil propisan službenim uputama: ${escapeHtml(style.spec.sourceLabel)}, provjereno ${escapeHtml(style.spec.verifiedAt ?? '')}. Format: opći oblik stila ${escapeHtml(style.label)}.`
+    // shortLabel (ne style.label): style.label vec nosi punu provenijenciju u zagradama
+    // ("APA stil (sluzbene upute ...)"), pa bi se "sluzbene upute" spomenule dvaput u istoj
+    // recenici da ovdje ide puni label.
+    ? `Stil propisan službenim uputama: ${escapeHtml(style.spec.sourceLabel)}, provjereno ${escapeHtml(style.spec.verifiedAt ?? '')}. Format: opći oblik stila ${escapeHtml(style.shortLabel)}.`
     : style.spec
       ? `Vjeran format prema službenim uputama: ${escapeHtml(style.spec.sourceLabel)}, provjereno ${escapeHtml(style.spec.verifiedAt ?? '')}.`
       // "Prema profilu fakulteta X" umjesto "Prema profilu X": faculty.name je uvijek nominativ
@@ -875,11 +882,19 @@ ${exampleHtml}
 ${toolFormHtml({ withFacultyPicker: false })}
 ${siblingLine}
 ${ctaHtml('./index.html', 'Svi fakulteti', faculty.id)}`;
+  // Ista trosmjerna grana kao metaLine (pin / puni spec / bez speca): description je ono sto
+  // korisnik vidi PRIJE klika u Googleu, pa ne smije tvrditi vecu razinu potvrde nego sto
+  // stranica stvarno nosi. pin dokazuje SAMO koji je stil propisan, ne i tocan format do
+  // interpunkcije (metaLine ovdje kaze "opci oblik stila", ne "tocno"); bez speca nema nikakvog
+  // verificiranog izvora (TOOL_JS klijentski trazi da korisnik SAM provjeri kod mentora).
+  const description = style.spec && style.spec.pin
+    ? `Fakultet propisuje stil ${style.shortLabel} za ${displayName} (službeno potvrđeno); format prema općem obliku stila.`
+    : style.spec
+      ? `Citiraj po stilu ${style.shortLabel} točno po službenim uputama za ${displayName}, s izvorom i datumom provjere.`
+      : `Citiraj po stilu ${style.shortLabel} za ${displayName}, prema profilu Lekte; točnu interpunkciju provjeri u uputama fakulteta ili kod mentora.`;
   return pageShell({
     title: `Generator citata za ${displayName} (${style.shortLabel}) | Lekta`,
-    description: style.spec
-      ? `Citiraj po stilu ${style.shortLabel} točno po službenim uputama za ${displayName}, s izvorom i datumom provjere.`
-      : `Citiraj po stilu ${style.shortLabel} za ${displayName}, provjereno i s izvorom.`,
+    description,
     canonical: `${SITE_ORIGIN}/alati/citati/${slugFor(faculty, style)}.html`,
     bodyHtml: body,
     configJs: jsonInline(config),
