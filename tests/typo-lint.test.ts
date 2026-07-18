@@ -152,6 +152,17 @@ describe('typoLint: razmak uz zagradu', () => {
   it('ne prijavljuje urednu zagradu', () => {
     expect(byKind(['Navod (bez razmaka) unutra.'], KIND_RAZMAK_UZ_ZAGRADU)).toHaveLength(0);
   });
+  it('visestruki razmak odmah uz zagradu prijavljuje se SAMO kao razmak uz zagradu, ne i kao dvostruki razmak', () => {
+    const otvorena = byKind(['Navod (  vrlo bitno) unutra.'], KIND_RAZMAK_UZ_ZAGRADU);
+    const zatvorena = byKind(['Navod (vrlo bitno  ) unutra.'], KIND_RAZMAK_UZ_ZAGRADU);
+    expect(otvorena).toHaveLength(1);
+    expect(zatvorena).toHaveLength(1);
+    expect(byKind(['Navod (  vrlo bitno) unutra.'], KIND_DVOSTRUKI_RAZMAK)).toHaveLength(0);
+    expect(byKind(['Navod (vrlo bitno  ) unutra.'], KIND_DVOSTRUKI_RAZMAK)).toHaveLength(0);
+  });
+  it('visestruki razmak koji NIJE uz zagradu i dalje se prijavljuje kao dvostruki razmak', () => {
+    expect(byKind(['Rijeci  razdvojene razmakom, bez zagrada.'], KIND_DVOSTRUKI_RAZMAK)).toHaveLength(1);
+  });
 });
 
 describe('typoLint: opcenito ponasanje', () => {

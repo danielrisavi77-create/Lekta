@@ -99,11 +99,17 @@ function firstMixPoint(hits: StyleHit[]): StyleHit | null {
   return null;
 }
 
-// 1. Dva ili vise uzastopnih razmaka (ukljucen i nelomljivi razmak U+00A0).
+// 1. Dva ili vise uzastopnih razmaka (ukljucen i nelomljivi razmak U+00A0). Preskace raspone
+// odmah uz zagradu: checkRazmakUzZagradu vec prijavljuje tu istu prazninu (i precizniji je
+// prijedlog, "ukloni razmak" umjesto "svedi na jedan"), pa bi inace ista greska dobila dva
+// medjusobno neusaglasena prijedloga ispravka za gotovo isti raspon.
 function checkDvostrukiRazmak(p: string, pi: number, out: TypoFinding[]): void {
   const re = /[ \u00A0]{2,}/g;
   let m: RegExpExecArray | null;
   while ((m = re.exec(p)) !== null) {
+    const start = m.index;
+    const end = start + m[0].length;
+    if (p[start - 1] === '(' || p[end] === ')') continue;
     out.push({
       paragraphIndex: pi,
       kind: KIND_DVOSTRUKI_RAZMAK,
