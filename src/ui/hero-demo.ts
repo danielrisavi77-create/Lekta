@@ -40,6 +40,20 @@ function setup(): void {
   const h = (k: string) => root.querySelector<HTMLElement>(`[data-hero="${k}"]`);
   let timers: number[] = [];
   let raf = 0;
+  let autoReplays = 0;
+
+  // Marketing: hero "zivi pregled" je nas najjaci wordless value-prop. Nakon sto demo zavrsi i
+  // korisnik zastane (dwell), pustimo ga JOS JEDNOM da ponovno pokazemo proizvod na djelu. Cap 1
+  // (nikad loop) da ne odvlaci paznju ni ne trosi bateriju; presko0ci ako je tab skriven ili je
+  // hero izasao iz vidnog polja. Rucni replay (clearTimers) otkazuje nudge (korisnik je vec ukljucen).
+  const maybeReplay = (): void => {
+    if (autoReplays >= 1 || document.hidden) return;
+    const rect = root.getBoundingClientRect();
+    const vh = window.innerHeight || document.documentElement.clientHeight;
+    if (rect.top >= vh * 0.6 || rect.bottom <= vh * 0.2) return;
+    autoReplays += 1;
+    play();
+  };
   const later = (fn: () => void, ms: number) => { timers.push(window.setTimeout(fn, ms)); };
   const clearTimers = () => {
     timers.forEach((t) => window.clearTimeout(t));
@@ -166,6 +180,8 @@ function setup(): void {
       if (l) l.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 260, fill: 'forwards' });
     }, 3920);
     fix('a3', 'f3', 3950);
+    // ~5s dwell nakon zavrsetka demoa: jednokratni auto-replay (uvjeti u maybeReplay).
+    later(maybeReplay, 9400);
   }
 
   // "Naoruzaj" stage odmah (sakrij animirane dijelove prije prvog painta koliko je moguce),

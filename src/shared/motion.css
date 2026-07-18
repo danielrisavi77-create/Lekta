@@ -129,3 +129,23 @@ body::after {
 @media (prefers-reduced-motion: no-preference) {
   .ks-tape-track { will-change: transform }
 }
+
+/* Marketing: paywall lock-panel dobiva SUPTILAN reveal (fade-up), nikad pulsiranje - kod ove
+   publike (student, trust-critical) povjerenje > pritisak. Vise lock-panela na rezultatu vecinom
+   zivi u sklopljenim detaljima pa animiraju tek pri otvaranju. Reduced-motion off. */
+@media (prefers-reduced-motion: no-preference) {
+  .lock-panel { animation: lekta-fade-up var(--dur-2) var(--ease-spring) both }
+}
+
+/* Marketing quick-win #4: reading-progress traka rezultata ("koliko je ostalo" na dugoj stranici
+   rezultata smanjuje napustanje). Vidljiva SAMO dok je ekran rezultata aktivan (:has gate). Punjenje
+   je scroll-driven (bez JS scroll listenera). Bez scroll-timeline podrske ili uz reduced-motion traka
+   ostaje scaleX(0) = nevidljiva, pa nema regresije. Element ubacuje app.ts (ensureResultScrollProgress). */
+#lekResultProgress { position: fixed; top: 0; left: 0; height: 3px; width: 100%; transform-origin: 0 50%; transform: scaleX(0); background: var(--red, #C4372E); z-index: 2147483001; opacity: 0; pointer-events: none; transition: opacity .3s ease }
+:root:has(#resultView:not(.hidden)) #lekResultProgress { opacity: 1 }
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    #lekResultProgress { animation: lekta-read-progress linear both; animation-timeline: scroll(root) }
+    @keyframes lekta-read-progress { from { transform: scaleX(0) } to { transform: scaleX(1) } }
+  }
+}
