@@ -3,8 +3,17 @@
 // Glue (kartice-page.ts) samo veze textarea i ispisuje ove brojeve.
 
 export const ZNAKOVA_PO_KARTICI = 1800;
+// Alternativna mjera dijela kolegija: 1500 znakova BEZ razmaka (v. FAQ na kartice.html).
+export const ZNAKOVA_PO_KARTICI_BEZ_RAZMAKA = 1500;
+
+/** Kartice iz broja znakova, na dvije decimale. Mnozi PRIJE dijeljenja (cijeli brojnik):
+ *  naivni Math.round((chars/per)*100)/100 za tocno pola stotinke (npr. 1809/1800=1,005)
+ *  IEEE-754 zaokruzi na nizu stranu (v. regresijski test u counter.test.ts). */
+export function karticeFrom(chars: number, znakovaPoKartici: number): number {
+  return Math.round((chars * 100) / znakovaPoKartici) / 100;
+}
 // Procjena A4 stranice (TNR 12, prored 1,5, standardne margine): oko 2600 znakova s razmacima.
-// Kartica (1800) je tako oko 70% A4 stranice. Djelitelj /2 (koji smo prije koristili)
+// Kartica (1800) je tako oko dvije trecine A4 stranice. Djelitelj /2 (koji smo prije koristili)
 // odgovara JEDNOSTRUKOM proredu pa je podbrajao stranice pri deklariranom proredu 1,5.
 export const ZNAKOVA_PO_STRANICI = 2600;
 export const RIJECI_PO_MINUTI = 200; // prosjecna brzina tihog citanja
@@ -13,8 +22,7 @@ export interface TextMetrics {
   words: number;
   charsWithSpaces: number;   // svi znakovi osim prijeloma retka (kao "znakova s razmacima")
   charsWithoutSpaces: number; // samo ne-praznine (uz NBSP koji nosi sadrzaj, npr. "10 kg")
-  pages: number;             // procjena A4 stranica (TNR 12, prored 1,5): kartica je oko 70% stranice.
-                             // Zaokruzuje se UVIJEK naviše (Math.ceil), pa i kratak tekst pokaze 1.
+  pages: number;             // procjena A4 stranica (TNR 12, prored 1,5): kartica je oko 2/3 stranice
   kartice: number;           // znakovi s razmacima / 1800, na dvije decimale
   sentences: number;
   paragraphs: number;
@@ -121,8 +129,7 @@ export function countText(input: string): TextMetrics {
     if (!/\s/u.test(ch) || code === 0x00a0 || code === 0x202f) charsWithoutSpaces++;
   }
 
-  const karticeRaw = charsWithSpaces / ZNAKOVA_PO_KARTICI;
-  const kartice = Math.round(karticeRaw * 100) / 100;
+  const kartice = karticeFrom(charsWithSpaces, ZNAKOVA_PO_KARTICI);
   // Procjena A4 stranica iz iste (trimane) osnovice kao kartice, da metrike ostanu uskladjene.
   const pages = trimmed ? Math.max(1, Math.ceil(charsWithSpaces / ZNAKOVA_PO_STRANICI)) : 0;
 

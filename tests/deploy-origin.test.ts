@@ -39,4 +39,19 @@ describe('SEO generator origin (BL-P0-01-4)', () => {
       expect(src).not.toMatch(/LEKTA_SITE_ORIGIN\s*\|\|\s*'https:/);
     }
   });
+
+  // public/sitemap.xml i public/robots.txt su rucno odrzavani (kopiraju se u dist/ nepromijenjeni,
+  // za razliku od ostatka SEO pipelinea koji ih derivira iz SITE_ORIGIN); testira se javna kopija
+  // izravno (dist/ zrcali public/ 1:1 preko Vite publicDir), bez potrebe za punim buildom.
+  it('public/sitemap.xml <loc> i public/robots.txt Sitemap: prate SITE_ORIGIN (dist/ ih zrcali)', () => {
+    const sitemapXml = read('public/sitemap.xml');
+    const locs = [...sitemapXml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((mm) => mm[1]);
+    expect(locs.length).toBeGreaterThan(0);
+    for (const loc of locs) expect(loc.startsWith(SITE_ORIGIN)).toBe(true);
+
+    const robotsTxt = read('public/robots.txt');
+    const sitemapLines = [...robotsTxt.matchAll(/^Sitemap:\s*(\S+)/gim)].map((mm) => mm[1]);
+    expect(sitemapLines.length).toBeGreaterThan(0);
+    for (const url of sitemapLines) expect(url.startsWith(SITE_ORIGIN)).toBe(true);
+  });
 });

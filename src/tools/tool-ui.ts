@@ -2,6 +2,16 @@
 // potvrdom i fallbackom. Uklanjaju 4-5x dupliciran objectURL/copy obrazac po glue-u
 // i rjesavaju dvije UX greske (dvoklik zaglavi gumb; kopiranje tiho zakaze bez Clipboard API-ja).
 
+/** Stvarno pocetno stanje <select> elementa (iz HTML 'selected' atributa), ne uvijek prva
+ *  opcija: npr. "Vrsta rada" ima 'Diplomski rad' selected (treca opcija), pa bi selectedIndex=0
+ *  u 'Ocisti' vratio pogresan default. hasAttribute('selected') cita izravno HTML atribut
+ *  (za razliku od .defaultSelected, koji neki testni DOM-ovi ne implementiraju). */
+export function defaultSelectedIndex(select: any): number {
+  const opts: any[] = Array.from(select?.options || []);
+  const idx = opts.findIndex((o) => o.hasAttribute && o.hasAttribute('selected'));
+  return idx >= 0 ? idx : 0;
+}
+
 /** Preuzmi Blob pod danim imenom; objectURL se uredno revoka. */
 export function downloadBlob(blob: Blob, name: string): void {
   const a = document.createElement('a');
@@ -37,11 +47,67 @@ async function copyText(text: string): Promise<boolean> {
   }
 }
 
+interface DownloadButtonOptions {
+  failLabel?: string;
+  holdMs?: number;
+  statusEl?: any;      // opcionalni aria-live/hint element: neuspjeh se ondje ispisuje kao tekst
+  failStatus?: string;
+}
+
+/**
+ * Vezi gumb za preuzimanje: na klik pozove buildBlob() (koji smije baciti, npr. docx generator)
+ * i preuzme rezultat. buildBlob() koji vrati null/undefined (npr. nema sadrzaja) tiho ne radi
+ * nista, isto kao dosadasnji rani return. Kad generiranje ili preuzimanje baci, gumb NE ostaje
+ * nijem: privremeno pokazuje failLabel (analogno bindCopyButton), uz opcionalnu aria-live poruku,
+ * pa primarni CTA nikad ne izgleda kao da klik nije napravio nista.
+ */
+export function bindDownloadButton(
+  btn: any,
+  buildBlob: () => Blob | null | undefined,
+  filename: string,
+  opts: DownloadButtonOptions = {},
+): void {
+  if (!btn) return;
+  const failLabel = opts.failLabel ?? 'Preuzimanje nije uspjelo';
+  const holdMs = opts.holdMs ?? 2200;
+  const original = btn.textContent;
+  let timer = 0;
+  btn.addEventListener('click', () => {
+    try {
+      const blob = buildBlob();
+      if (!blob) return;
+      downloadBlob(blob, filename);
+    } catch {
+      if (timer) clearTimeout(timer);
+      btn.textContent = failLabel;
+      if (opts.statusEl && opts.failStatus) {
+        opts.statusEl.className = 'out-hint warn';
+        opts.statusEl.textContent = opts.failStatus;
+      }
+      timer = window.setTimeout(() => {
+        btn.textContent = original;
+        timer = 0;
+      }, holdMs);
+    }
+  });
+}
+
 interface CopyButtonOptions {
   failLabel?: string;
   failStatus?: string; // override zadane fallback poruke kad stranica nema vidljiv blok za rucno oznacavanje
   holdMs?: number;
   statusEl?: any;       // opcionalni aria-live element: ishod se najavljuje citacu ekrana (WCAG 4.1.3)
+}
+
+// Dodirni uredjaji nemaju fizicku Ctrl tipku, pa zadana poruka o neuspjeloj kopiji ne smije
+// pretpostaviti tipkovnicku kombinaciju na njima (i tamo je fallback selekcija cesce nepouzdana,
+// npr. 'readonly' textarea ometa selekciju na iOS Safariju, pa je bas taj put vjerojatniji ondje).
+function isCoarsePointer(): boolean {
+  try {
+    return !!window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+  } catch {
+    return false;
+  }
 }
 
 /**
@@ -57,10 +123,12 @@ export function bindCopyButton(
 ): void {
   if (!btn) return;
   const okLabel = 'Kopirano ✓';
-  const failLabel = opts.failLabel ?? 'Označi pa Ctrl+C';
+  const coarse = isCoarsePointer();
+  const failLabel = opts.failLabel ?? (coarse ? 'Odaberi i kopiraj ručno' : 'Označi pa Ctrl+C');
   const holdMs = opts.holdMs ?? 1600;
   const okStatus = 'Sažetak kopiran u međuspremnik.';
-  const failStatus = opts.failStatus ?? 'Kopiranje nije uspjelo, označite tekst pa Ctrl+C.';
+  const failStatus = opts.failStatus
+    ?? (coarse ? 'Kopiranje nije uspjelo, odaberi tekst i kopiraj ga ručno.' : 'Kopiranje nije uspjelo, označi tekst pa Ctrl+C.');
   const original = btn.textContent;
   let timer = 0;
   btn.addEventListener('click', async () => {

@@ -272,8 +272,8 @@ const TITLE_GROUP_GAP_PT = 120;
 
 /** Logicke skupine naslovnice, istim redoslijedom kao titlePageText. */
 const TITLE_GROUPS: TitleRole[][] = [
-  ['university', 'faculty', 'study'],
-  ['author', 'title', 'subtitle', 'worktype'],
+  ['university', 'faculty', 'study', 'course'],
+  ['author', 'studentId', 'title', 'subtitle', 'worktype'],
   ['mentor', 'comentor'],
   ['placeyear'],
 ];

@@ -38,6 +38,25 @@ describe('countText', () => {
     expect(m.pages).toBe(1);
   });
 
+  it('karticeFrom radi i za alternativnu mjeru (1500 bez razmaka) s istim float-sigurnim zaokruzivanjem', async () => {
+    const { karticeFrom } = await import('../src/tools/counter');
+    expect(karticeFrom(1500, 1500)).toBe(1);
+    expect(karticeFrom(750, 1500)).toBe(0.5);
+    // Pola stotinke na 1500 osnovici: 15n+7.5 nije cijeli broj pa uzmi 1507.5 -> nemoguce;
+    // ekvivalent 18n+9 slucaja: 3015/1500 = 2.01 tocno, a 2258/1500 = 1.505333 -> 1.51.
+    expect(karticeFrom(3015, 1500)).toBe(2.01);
+    expect(karticeFrom(2258, 1500)).toBe(1.51);
+  });
+
+  it('BUG: 1809 znakova (tocno 1,005 kartica) se zaokruzuje NAGORE na 1,01, ne nadole na 1,00', () => {
+    // IEEE-754 double: 1809/1800 se cesto pohrani kao 1.00499999999999989, pa naivni
+    // Math.round(x*100)/100 pada na pogresnu (nizu) stranu. Racunanje preko cijelog
+    // broja (charsWithSpaces*100) prije dijeljenja to zaobilazi.
+    const m = countText('a'.repeat(1809));
+    expect(m.charsWithSpaces).toBe(1809);
+    expect(m.kartice).toBe(1.01);
+  });
+
   it('pola kartice se zaokruzi na jednu stranicu', () => {
     const m = countText('a'.repeat(900));
     expect(m.kartice).toBe(0.5);

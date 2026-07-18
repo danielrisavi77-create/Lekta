@@ -187,6 +187,19 @@ describe('titlePageDoc: naslovnica iz TitlePageModel', () => {
     for (const line of model.lines) expect(paraOf(doc, line.text)).toBeTruthy();
   });
 
+  it('JMBAG i kolegij retci NE ispadaju iz genericke naslovnice (TITLE_GROUPS ih nosi)', async () => {
+    // Regresija: genericka grana filtrira retke po TITLE_GROUPS popisima uloga; uloga koja
+    // fali u popisu tiho bi nestala iz .docx-a iako je u modelu i pregledu.
+    const withIds = buildTitlePage({
+      university: 'Sveučilište u Zagrebu', study: 'Politologija', course: 'Metode istraživanja',
+      author: 'Ana Anić', studentId: '0036512345', title: 'Naslov rada', place: 'Zagreb', year: '2026',
+    });
+    const doc = await readDocument(buildDocxBytes(titlePageDoc(withIds)));
+    expect(els(doc, 'w:p').length).toBe(withIds.lines.length);
+    expect(paraOf(doc, 'JMBAG: 0036512345')).toBeTruthy();
+    expect(paraOf(doc, 'Kolegij: Metode istraživanja')).toBeTruthy();
+  });
+
   it('naslov je centriran, bold i veci od retka ustanove', async () => {
     const doc = await readDocument(buildDocxBytes(titlePageDoc(model)));
     const title = paraOf(doc, 'Politika i mediji');

@@ -52,6 +52,19 @@ describe.each(TOOL_PAGES)('SEO head: %s', (page) => {
   });
 });
 
+describe('landing_usporedba.html mobilni nav: "Svi alati" (uskladjeno s kartice.html/naslovnica.html)', () => {
+  // Uzak test za ovu jednu stranicu i mobilni nav - NE generalizira na sve TOOL_PAGES:
+  // citat.html/literatura.html/izjava.html trenutno TAKODJER nemaju "Svi alati" u mobilnom
+  // navu, ali to je vec postojeci, nepovezan gap koji ovaj popravak ne dira i ne popravlja.
+  it('#mobileNav sadrzi link na alati.html', () => {
+    const html = head('landing_usporedba.html');
+    // [^>]* na otvorenom div tagu: robusno na dodatne atribute (npr. role/aria-label) koji
+    // ne mijenjaju identitet elementa.
+    const nav = html.match(/<div class="mobile-nav" id="mobileNav"[^>]*>([\s\S]*?)<\/div>/)?.[1] ?? '';
+    expect(nav).toContain('<a href="alati.html">Svi alati</a>');
+  });
+});
+
 describe('globalni SEO invarijanti', () => {
   it('nijedan .html ne referencira favicon.svg kao og/twitter sliku', () => {
     const htmls = readdirSync(root).filter((f) => f.endsWith('.html'));

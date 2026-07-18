@@ -12,7 +12,8 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Besplatni alati za akademski rad">
 <meta name="twitter:description" content="Pet besplatnih alata za akademski rad: citat generator, sređivanje literature, naslovnica, izjava o izvornosti i brojač kartica. Sve lokalno u pregledniku.">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Besplatni alati za akademski rad","description":"Pet besplatnih alata za akademski rad: citat generator, sređivanje literature, naslovnica, izjava o izvornosti i brojač kartica. Sve lokalno u pregledniku.","inLanguage":"hr","isPartOf":{"@type":"WebSite","name":"Lekta"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Besplatni alati za akademski rad","description":"Pet besplatnih alata za akademski rad: citat generator, sređivanje literature, naslovnica, izjava o izvornosti i brojač kartica. Sve lokalno u pregledniku.","inLanguage":"hr","isPartOf":{"@type":"WebSite","name":"Lekta"},"mainEntity":{"@type":"ItemList","itemListElement":[{"@type":"ListItem","position":1,"name":"Citat generator","url":"https://lektahr.netlify.app/citat.html"},{"@type":"ListItem","position":2,"name":"Sređivanje literature","url":"https://lektahr.netlify.app/literatura.html"},{"@type":"ListItem","position":3,"name":"Naslovnica","url":"https://lektahr.netlify.app/naslovnica.html"},{"@type":"ListItem","position":4,"name":"Izjava o izvornosti","url":"https://lektahr.netlify.app/izjava.html"},{"@type":"ListItem","position":5,"name":"Brojač kartica","url":"https://lektahr.netlify.app/kartice.html"}]}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Trebam li račun ili prijavu za korištenje alata?","acceptedAnswer":{"@type":"Answer","text":"Ne. Svih pet alata radi bez registracije i bez prijave, izravno u pregledniku."}},{"@type":"Question","name":"Šalje li se moj tekst ili dokument na poslužitelj?","acceptedAnswer":{"@type":"Answer","text":"Ne. Svi alati rade lokalno u pregledniku, uključujući uvoz .docx datoteke u brojaču kartica; ništa se ne šalje na poslužitelj."}},{"@type":"Question","name":"Kada koristim besplatan alat, a kada punu provjeru rada?","acceptedAnswer":{"@type":"Answer","text":"Alati rješavaju jedan dio odjednom (citat, naslovnicu, izjavu, literaturu ili brojanje kartica). Puna provjera Lekte gleda cijeli rad odjednom, prema profilu tvog fakulteta."}},{"@type":"Question","name":"Jesu li alati vezani uz konkretan fakultet?","acceptedAnswer":{"@type":"Answer","text":"Citat generator i naslovnica prepoznaju stvarna pravila po fakultetu kad su verificirana; ostali alati (literatura, izjava, brojač kartica) rade jednako za sve fakultete."}}]}</script>
 <link rel="canonical" href="https://lektahr.netlify.app/alati.html">
 <meta property="og:url" content="https://lektahr.netlify.app/alati.html">
 <meta property="og:image" content="https://lektahr.netlify.app/og-image.png">
@@ -47,6 +48,7 @@ body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 var(--sans);m
 @media(max-width:820px){.nav-links{display:none}.hero{padding:32px 0 2px}}
 .tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.tools-grid .tool-card:last-child:nth-child(odd){grid-column:1/-1}.tool-card{display:block;background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-sm);padding:22px;text-decoration:none;color:inherit;transition:transform .22s var(--ease-out-3),box-shadow .22s var(--ease-out-3)}.tool-card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}.tool-card h2{font-family:var(--ink-serif);font-size:19px;font-weight:800;margin:0 0 6px}.tool-card p{color:var(--muted);font-size:14px;margin:0 0 12px;line-height:1.55}.tool-go{color:var(--brand);font-weight:750;font-size:14px}@media(max-width:640px){.tools-grid{grid-template-columns:1fr}}
 .pick-list{list-style:none;margin:10px 0 0;padding:0}.pick-list li{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:12px 2px;border-bottom:1px solid var(--line)}.pick-list li:last-child{border-bottom:0}.pick-list span{color:var(--text);font-size:14.5px;line-height:1.5}.pick-list a{flex:none;color:var(--brand);font-weight:750;font-size:14px;text-decoration:none;white-space:nowrap}.pick-list a:hover{text-decoration:underline}@media(max-width:560px){.pick-list li{flex-direction:column;gap:3px;align-items:flex-start}}
+.faq summary{list-style:none;cursor:pointer;padding:15px 2px;font-family:var(--ink-serif);font-size:16px;font-weight:700;color:var(--text);display:flex;justify-content:space-between;align-items:center;gap:16px}.faq details[open] summary{color:var(--brand)}.faq details[open] summary::after{content:"\2212";color:var(--brand)}.faq details p{margin:0 2px 16px;color:var(--muted);font-size:14.5px;line-height:1.6;max-width:640px}
 
 /* Sve na ovoj stranici je marketinski chrome (nema pregleda dokumenta), pa smiju sva */
 /* naslovna mjesta na Fraunces. Samo dodane paint osobine; nista se ne mijenja u DOM-u. */
@@ -75,6 +77,7 @@ body{background:var(--desk);color:var(--desk-ink);font:15px/1.6 var(--sans);over
 .tool-go,.pick-list a{color:var(--red-deep)}
 .note{border-left:2px solid var(--red-deep)}
 .hero .sibling a{color:var(--red)}
+.faq details[open] summary,.faq details[open] summary::after{color:var(--red)}
 
 /* KS: pristupacnost i mobilno (mora ostati na kraju bloka) */
 @media(prefers-reduced-motion:reduce){.btn,.tool-card{transition:none}.tool-card:hover{transform:none}.btn-primary,.card .btn-primary,.cta .btn-primary{transition:none}}
@@ -143,7 +146,7 @@ body{background:var(--desk);color:var(--desk-ink);font:15px/1.6 var(--sans);over
       <a class="tool-card" href="citat.html"><h2>Citat generator</h2><p>Oblikuj citat po stilu (autor-godina, fusnota) ili vjerno po fakultetu, pojedinačno ili cijelu literaturu odjednom.</p><span class="tool-go">Otvori &rarr;</span></a>
       <a class="tool-card" href="literatura.html"><h2>Sređivanje literature</h2><p>Posloži gotov popis: sortiraj, ukloni duplikate, označi rupe i izvezi u .docx. Ne mijenja tvoj citatni stil.</p><span class="tool-go">Otvori &rarr;</span></a>
       <a class="tool-card" href="naslovnica.html"><h2>Naslovnica</h2><p>Složi naslovnicu za seminarski, završni, diplomski ili doktorski rad, kopiraj tekst ili spremi kao .docx.</p><span class="tool-go">Otvori &rarr;</span></a>
-      <a class="tool-card" href="izjava.html"><h2>Izjava o izvornosti</h2><p>Uobičajena formulacija izjave o izvornosti (akademskoj čestitosti); ispuni podatke, spremi PDF ili .docx.</p><span class="tool-go">Otvori &rarr;</span></a>
+      <a class="tool-card" href="izjava.html"><h2>Izjava o izvornosti</h2><p>Sastavi izjavu o izvornosti (akademskoj čestitosti): ispuni podatke, spremi PDF ili .docx.</p><span class="tool-go">Otvori &rarr;</span></a>
       <a class="tool-card" href="kartice.html"><h2>Brojač kartica</h2><p>Broji autorske kartice (1800 znakova s razmacima), riječi, znakove, rečenice i procjenu vremena čitanja.</p><span class="tool-go">Otvori &rarr;</span></a>
     </div>
     <div class="card" style="margin-top:20px">
@@ -156,6 +159,16 @@ body{background:var(--desk);color:var(--desk-ink);font:15px/1.6 var(--sans);over
         <li><span>Želim znati koliko kartica, riječi i znakova ima moj tekst.</span><a href="kartice.html">Brojač kartica &rarr;</a></li>
       </ul>
       <div class="note"><b>Citat generator ili sređivanje literature?</b> Citat generator prepisuje reference u zadani stil (stvara oblik). Sređivanje literature slaže i čisti popis koji već imaš, bez diranja stila.</div>
+      <div class="note"><b>Trebaš samo citat po svom fakultetu ili brz brojač bez ostalih polja?</b> Statičke verzije: <a href="/alati/citati/index.html">generator citata po fakultetu</a> i <a href="/alati/brojac-kartica.html">brzi brojač kartica</a>, lakša inačica bez uvoza .docx i kalkulatora cijene.</div>
+    </div>
+    <div class="card" style="margin-top:20px">
+      <h2>Česta pitanja</h2>
+      <div class="faq">
+        <details><summary>Trebam li račun ili prijavu za korištenje alata?</summary><p>Ne. Svih pet alata radi bez registracije i bez prijave, izravno u pregledniku.</p></details>
+        <details><summary>Šalje li se moj tekst ili dokument na poslužitelj?</summary><p>Ne. Svi alati rade lokalno u pregledniku, uključujući uvoz .docx datoteke u brojaču kartica; ništa se ne šalje na poslužitelj.</p></details>
+        <details><summary>Kada koristim besplatan alat, a kada punu provjeru rada?</summary><p>Alati rješavaju jedan dio odjednom (citat, naslovnicu, izjavu, literaturu ili brojanje kartica). Puna provjera Lekte gleda cijeli rad odjednom, prema profilu tvog fakulteta.</p></details>
+        <details><summary>Jesu li alati vezani uz konkretan fakultet?</summary><p>Citat generator i naslovnica prepoznaju stvarna pravila po fakultetu kad su verificirana; ostali alati (literatura, izjava, brojač kartica) rade jednako za sve fakultete.</p></details>
+      </div>
     </div>
     <div class="cta" style="margin-top:20px">
       <h2>Trebaš provjeriti cijeli rad?</h2>

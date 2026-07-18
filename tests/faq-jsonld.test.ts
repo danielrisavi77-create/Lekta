@@ -56,3 +56,67 @@ describe('FAQ JSON-LD mirror', () => {
     for (const a of answers) expect(a.length).toBeGreaterThan(10);
   });
 });
+
+describe.each(['izjava.html', 'alati.html'])('FAQ JSON-LD mirror: %s', (page) => {
+  // Isti obrazac kao index.html gore, primijenjen po stranici umjesto generalizirano preko
+  // svih *.html (siri sweep otkrio je vec postojeci, nepovezan drift na naslovnica.html i
+  // citat.html izvan dosega ove promjene). Konkretan povod za izjava.html: FAQPage JSON-LD
+  // odgovor na "Je li izjava o izvornosti obavezna?" izostavljao je zavrsnu recenicu
+  // "Provjeri sluzbene upute." koju vidljivi <details> ima.
+  const html = readFileSync(join(root, page), 'utf8');
+  const faqBlock = html.match(/<div class="faq">([\s\S]*?)<\/div>/);
+  const visible = [...(faqBlock?.[1] ?? '').matchAll(/<summary>([\s\S]*?)<\/summary>/g)].map((m) =>
+    decodeEntities(m[1]),
+  );
+  const scripts = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map(
+    (m) => JSON.parse(m[1]),
+  );
+  const faqPage = scripts.find((s) => s['@type'] === 'FAQPage');
+  const structured = ((faqPage?.mainEntity ?? []) as Array<{ name: string; acceptedAnswer?: { text?: string } }>);
+
+  it('vidljivi FAQ i JSON-LD sadrze ista pitanja istim redom', () => {
+    expect(visible.length).toBeGreaterThan(0);
+    expect(structured.map((q) => q.name.trim())).toEqual(visible);
+  });
+
+  it('vidljivi i JSON-LD odgovor su identicni za svako pitanje', () => {
+    const visibleAnswers = [...(faqBlock?.[1] ?? '').matchAll(/<summary>[\s\S]*?<\/summary><p>([\s\S]*?)<\/p>/g)].map(
+      (m) => decodeEntities(m[1]),
+    );
+    expect(visibleAnswers.length).toBe(structured.length);
+    structured.forEach((q, i) => {
+      expect(decodeEntities(q.acceptedAnswer?.text ?? ''), `pitanje "${q.name}"`).toBe(visibleAnswers[i]);
+    });
+  });
+});
+
+describe('literatura.html FAQ: IEEE/Vancouver poredak (bibliography.ts sort toggle)', () => {
+  // Uzak test za ono sto je ova promjena dirala (redoslijed IEEE/Vancouver naspram abecednog);
+  // NE generalizira na sve *.html FAQ blokove - siri sweep (nazalost) otkrio je vec postojeci,
+  // nepovezan drift pitanja/odgovora na naslovnica.html/izjava.html/citat.html koji ova promjena
+  // ne dira i ne popravlja.
+  const html = readFileSync(join(root, 'literatura.html'), 'utf8');
+  const faqBlock = html.match(/<div class="faq">([\s\S]*?)<\/div>/);
+  const visible = [...(faqBlock?.[1] ?? '').matchAll(/<summary>([\s\S]*?)<\/summary>/g)].map((m) =>
+    decodeEntities(m[1]),
+  );
+  const visibleAnswer = decodeEntities(
+    faqBlock?.[1]?.match(/Kojim redom se slaže popis literature\?<\/summary><p>([\s\S]*?)<\/p>/)?.[1] ?? '',
+  );
+  const scripts = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map(
+    (m) => JSON.parse(m[1]),
+  );
+  const faqPage = scripts.find((s) => s['@type'] === 'FAQPage');
+  const structured = ((faqPage?.mainEntity ?? []) as Array<{ name: string; acceptedAnswer?: { text?: string } }>);
+  const structuredAnswer = structured.find((q) => q.name === 'Kojim redom se slaže popis literature?')?.acceptedAnswer?.text ?? '';
+
+  it('"Kojim redom..." pitanje spominje IEEE/Vancouver izuzetak, i vidljivo i u JSON-LD-u', () => {
+    expect(visible).toContain('Kojim redom se slaže popis literature?');
+    expect(visibleAnswer).toMatch(/IEEE|Vancouver/);
+    expect(structuredAnswer).toMatch(/IEEE|Vancouver/);
+  });
+
+  it('vidljivi i JSON-LD odgovor na "Kojim redom..." su identicni', () => {
+    expect(structuredAnswer).toBe(visibleAnswer);
+  });
+});

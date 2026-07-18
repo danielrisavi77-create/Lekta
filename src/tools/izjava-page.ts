@@ -4,8 +4,9 @@ import '../shared/ui-boot';
 import { buildStatement, statementText } from './statement';
 import { statementDoc, docxBlob } from '../docx/docx-writer';
 import { escapeHtml } from '../utils/helpers';
-import { bindCopyButton, downloadBlob } from './tool-ui';
+import { bindCopyButton, bindDownloadButton, defaultSelectedIndex } from './tool-ui';
 import { formatCroatianDate } from './hr-date';
+import { readToolDraft, saveToolDraft } from './draft-share';
 
 const $ = (s: string): any => document.querySelector(s);
 
@@ -22,6 +23,9 @@ const SAMPLE: any = {
   place: 'Zagreb',
   date: '3. srpnja 2026.',
 };
+// #st-date-picker (input type=date) ocekuje ISO oblik; mora odgovarati SAMPLE.date iznad,
+// inace bi 'Ubaci primjer' opet razisao picker od teksta.
+const SAMPLE_DATE_ISO = '2026-07-03';
 
 function readInput() {
   const out: any = {};
@@ -70,9 +74,41 @@ function scheduleHint(missing: string[]) {
   }, 600);
 }
 
+// Draft dijeljen s generatorom naslovnice (sessionStorage): puni SAMO prazna polja,
+// sprema se na svaki unos (vidljivi label vrste rada, ne value kljuc).
+function applySharedDraft(): void {
+  const d = readToolDraft();
+  const fillIfEmpty = (sel: string, v?: string) => {
+    const el = $(sel);
+    if (el && v && !el.value.trim()) el.value = v;
+  };
+  fillIfEmpty('#st-author', d.author);
+  fillIfEmpty('#st-title', d.title);
+  fillIfEmpty('#st-place', d.place);
+  const wt = $('#st-worktype');
+  if (wt && d.workTypeLabel) {
+    const opt = Array.from(wt.options as any[]).find((o: any) => o.textContent?.trim() === d.workTypeLabel);
+    if (opt) wt.value = opt.value || opt.textContent.trim();
+  }
+}
+
+function persistSharedDraft(): void {
+  saveToolDraft({
+    author: $('#st-author')?.value || '',
+    title: $('#st-title')?.value || '',
+    workTypeLabel: $('#st-worktype')?.selectedOptions?.[0]?.textContent?.trim() || '',
+    place: $('#st-place')?.value || '',
+  });
+}
+
 function init() {
   if (!$('#st-sheet')) return;
-  for (const sel of Object.values(FIELDS)) { const el = $(sel); if (el) el.addEventListener('input', render); }
+  for (const sel of Object.values(FIELDS)) {
+    const el = $(sel);
+    if (el) el.addEventListener('input', () => { render(); persistSharedDraft(); });
+  }
+  $('#st-worktype')?.addEventListener('change', persistSharedDraft);
+  applySharedDraft();
 
   // Date picker puni tekstualni datum hrvatskim oblikom (3. srpnja 2026.); tekst ostaje uredljiv.
   $('#st-date-picker')?.addEventListener('change', () => {
@@ -84,14 +120,16 @@ function init() {
 
   $('#st-sample')?.addEventListener('click', () => {
     for (const [key, sel] of Object.entries(FIELDS)) { const el = $(sel); if (el) el.value = SAMPLE[key] || ''; }
+    const picker = $('#st-date-picker'); if (picker) picker.value = SAMPLE_DATE_ISO;
     render();
   });
 
   $('#st-clear')?.addEventListener('click', () => {
     for (const [key, sel] of Object.entries(FIELDS)) {
       const el = $(sel); if (!el) continue;
-      if (el.tagName === 'SELECT') el.selectedIndex = 0; else el.value = '';
+      if (el.tagName === 'SELECT') el.selectedIndex = defaultSelectedIndex(el); else el.value = '';
     }
+    const picker = $('#st-date-picker'); if (picker) picker.value = '';
     render();
     $('#st-author')?.focus();
   });
@@ -104,14 +142,12 @@ function init() {
   $('#st-print')?.addEventListener('click', () => window.print());
 
   // Preuzmi gotov .docx (docx-writer): formulacija je uobicajena, obvezni obrazac faksa ima prednost.
-  $('#st-docx')?.addEventListener('click', () => {
+  bindDownloadButton($('#st-docx'), () => {
     const input = readInput();
-    if (!hasContent(input)) return;
-    try {
-      downloadBlob(docxBlob(statementDoc(buildStatement(input))), 'izjava-o-izvornosti.docx');
-    } catch {
-      // .docx nije uspio (rijetko): pregled i ispis su i dalje tu.
-    }
+    return hasContent(input) ? docxBlob(statementDoc(buildStatement(input))) : null;
+  }, 'izjava-o-izvornosti.docx', {
+    statusEl: $('#st-hint'),
+    failStatus: 'Preuzimanje .docx nije uspjelo. Pregled i ispis su i dalje dostupni.',
   });
 }
 

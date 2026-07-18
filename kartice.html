@@ -38,10 +38,17 @@
 .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-sm);padding:24px}
 .card h2{font-family:var(--ink-serif);margin:0 0 4px;font-size:19px;font-weight:800}
 .field{margin-bottom:12px}
-.field textarea{width:100%;padding:13px 14px;border:1px solid var(--line-strong);border-radius:12px;background:var(--panel-2);color:var(--text);font:inherit;resize:vertical}
-.field textarea:focus{outline:none;box-shadow:var(--focus);background:var(--panel);border-color:var(--brand)}
+.field textarea,.field select,.field input[type=text]{width:100%;padding:13px 14px;border:1px solid var(--line-strong);border-radius:12px;background:var(--panel-2);color:var(--text);font:inherit;resize:vertical}
+.field textarea:focus,.field select:focus,.field input[type=text]:focus{outline:none;box-shadow:var(--focus);background:var(--panel);border-color:var(--brand)}
+.field select,.field input[type=text]{padding:10px 12px}
 textarea#kt-input{min-height:360px;line-height:1.62}
+textarea#kt-input.kt-drop{border-color:var(--brand);box-shadow:var(--focus)}
 .kt-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:6px}
+.kt-actions label.btn{position:relative;overflow:hidden}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.out-hint{font-size:13px;font-weight:600;margin:8px 0 0;min-height:1em}
+.out-hint.ok{color:var(--ok,#2c7a4b)}
+.out-hint.warn{color:#a15c07}
 
 .out-panel{position:sticky;top:88px}
 .kpi{display:flex;flex-direction:column;align-items:center;text-align:center;gap:3px;padding:4px 0 20px;border-bottom:1px solid var(--line)}
@@ -173,12 +180,14 @@ textarea#kt-input{min-height:360px;line-height:1.62}
       <p class="sub">Zalijepi uvod, poglavlje ili cijeli rad. Broji se dok tipkaš.</p>
       <div class="field">
         <label for="kt-input">Tekst za brojanje</label>
-        <textarea id="kt-input" maxlength="2000000" placeholder="Zalijepi tekst ovdje…"></textarea>
+        <textarea id="kt-input" maxlength="2000000" placeholder="Zalijepi tekst ovdje ili dovuci .docx datoteku…"></textarea>
       </div>
       <div class="kt-actions">
+        <label class="btn btn-secondary btn-sm" for="kt-file">Učitaj .docx<input id="kt-file" type="file" accept=".docx" style="position:absolute;width:1px;height:1px;opacity:0;overflow:hidden"></label>
         <button class="btn btn-secondary btn-sm" id="kt-sample" type="button">Ubaci primjer</button>
         <button class="btn btn-ghost btn-sm" id="kt-clear" type="button">Očisti</button>
       </div>
+      <p class="out-hint" id="kt-docx-status" aria-live="polite"></p>
     </div>
 
     <div class="out-panel">
@@ -188,7 +197,14 @@ textarea#kt-input{min-height:360px;line-height:1.62}
         <div class="kpi">
           <span class="kpi-num" id="m-kartice">0</span>
           <span class="kpi-unit">kartica</span>
-          <span class="kpi-hint">1800 znakova s razmacima</span>
+          <span class="kpi-hint" id="kt-measure-hint">1800 znakova s razmacima</span>
+        </div>
+        <div class="field">
+          <label for="kt-measure">Mjera kartice</label>
+          <select id="kt-measure">
+            <option value="1800" selected>1800 znakova s razmacima (standard)</option>
+            <option value="1500">1500 znakova bez razmaka (dio kolegija)</option>
+          </select>
         </div>
         <div class="sr-only" id="kt-sr-summary" role="status" aria-live="polite"></div>
         <dl class="stat-list" aria-label="Detaljne mjere teksta">
@@ -200,6 +216,12 @@ textarea#kt-input{min-height:360px;line-height:1.62}
           <div class="stat-row"><dt>Procjena A4 stranica</dt><dd id="m-pages">0</dd></div>
           <div class="stat-row"><dt>Vrijeme čitanja</dt><dd id="m-reading">0 min</dd></div>
         </dl>
+        <div class="row2">
+          <div class="field"><label for="kt-goal">Cilj (kartice, opcionalno)</label><input id="kt-goal" type="text" inputmode="decimal" placeholder="npr. 15"></div>
+          <div class="field"><label for="kt-price">Cijena po kartici (EUR, opcionalno)</label><input id="kt-price" type="text" inputmode="decimal" placeholder="npr. 2,50"></div>
+        </div>
+        <p class="sub" id="kt-goal-line" aria-live="polite"></p>
+        <p class="sub" id="kt-price-line" aria-live="polite"></p>
         <div class="out-bar">
           <button class="btn btn-primary" id="kt-copy" type="button" disabled>Kopiraj sažetak</button>
         </div>
@@ -217,19 +239,19 @@ textarea#kt-input{min-height:360px;line-height:1.62}
     <dl class="fact-list">
       <div><dt>Mjera</dt><dd>1 kartica je 1800 znakova s razmacima, klasično 30 redaka po 60 znakova. Neki kolegiji umjesto toga računaju 1500 znakova bez razmaka.</dd></div>
       <div><dt>Riječi</dt><dd>približno 250 riječi po kartici.</dd></div>
-      <div><dt>Stranice</dt><dd>oko 70% A4 stranice u Times New Roman 12 s proredom 1,5. Procjena stranica uvijek se zaokružuje naviše na cijelu stranicu, pa i vrlo kratak tekst pokaže 1.</dd></div>
+      <div><dt>Stranice</dt><dd>oko dvije trećine A4 stranice u Times New Roman 12 s proredom 1,5.</dd></div>
       <div><dt>Izračun</dt><dd>ukupan broj znakova s razmacima podijeljen s 1800.</dd></div>
     </dl>
     <h2 class="sec-h" style="margin-top:42px">Česta pitanja o karticama teksta</h2>
     <div class="faq">
       <details><summary>Koliko znakova ima jedna autorska kartica?</summary><p>Standardno 1800 znakova s razmacima (30 redaka po 60 znakova). Dio kolegija umjesto toga računa 1500 znakova bez razmaka, pa provjeri uputu mentora.</p></details>
-      <details><summary>Broje li se razmaci?</summary><p>U standardnoj autorskoj kartici da: mjera je 1800 znakova s razmacima. Zato brojač prikazuje i znakove s razmacima i bez njih.</p></details>
-      <details><summary>Koliko je jedna kartica riječi i stranica?</summary><p>Približno 250 riječi, odnosno oko 70% A4 stranice u Times New Roman 12 s proredom 1,5. Točan broj ovisi o duljini riječi i oblikovanju.</p></details>
+      <details><summary>Broje li se razmaci?</summary><p>Da, u standardnoj autorskoj kartici mjera je 1800 znakova s razmacima. Zato brojač prikazuje i znakove s razmacima i bez njih.</p></details>
+      <details><summary>Koliko je jedna kartica riječi i stranica?</summary><p>Približno 250 riječi, odnosno oko dvije trećine A4 stranice u Times New Roman 12 s proredom 1,5. Točan broj ovisi o duljini riječi i oblikovanju.</p></details>
       <details><summary>Kako izbrojiti kartice teksta?</summary><p>Ukupan broj znakova s razmacima podijeli s 1800. Na primjer, 9000 znakova je 5 kartica.</p></details>
     </div>
   </div>
 </section>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Koliko znakova ima jedna autorska kartica?","acceptedAnswer":{"@type":"Answer","text":"Standardno 1800 znakova s razmacima (30 redaka po 60 znakova). Dio kolegija umjesto toga računa 1500 znakova bez razmaka, pa provjeri uputu mentora."}},{"@type":"Question","name":"Broje li se razmaci?","acceptedAnswer":{"@type":"Answer","text":"U standardnoj autorskoj kartici da: mjera je 1800 znakova s razmacima. Zato brojač prikazuje i znakove s razmacima i bez njih."}},{"@type":"Question","name":"Koliko je jedna kartica riječi i stranica?","acceptedAnswer":{"@type":"Answer","text":"Približno 250 riječi, odnosno oko 70% A4 stranice u Times New Roman 12 s proredom 1,5. Točan broj ovisi o duljini riječi i oblikovanju."}},{"@type":"Question","name":"Kako izbrojiti kartice teksta?","acceptedAnswer":{"@type":"Answer","text":"Ukupan broj znakova s razmacima podijeli s 1800. Na primjer, 9000 znakova je 5 kartica."}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Koliko znakova ima jedna autorska kartica?","acceptedAnswer":{"@type":"Answer","text":"Standardno 1800 znakova s razmacima (30 redaka po 60 znakova). Dio kolegija umjesto toga računa 1500 znakova bez razmaka, pa provjeri uputu mentora."}},{"@type":"Question","name":"Broje li se razmaci?","acceptedAnswer":{"@type":"Answer","text":"Da, u standardnoj autorskoj kartici mjera je 1800 znakova s razmacima. Zato brojač prikazuje i znakove s razmacima i bez njih."}},{"@type":"Question","name":"Koliko je jedna kartica riječi i stranica?","acceptedAnswer":{"@type":"Answer","text":"Približno 250 riječi, odnosno oko dvije trećine A4 stranice u Times New Roman 12 s proredom 1,5. Točan broj ovisi o duljini riječi i oblikovanju."}},{"@type":"Question","name":"Kako izbrojiti kartice teksta?","acceptedAnswer":{"@type":"Answer","text":"Ukupan broj znakova s razmacima podijeli s 1800. Na primjer, 9000 znakova je 5 kartica."}}]}</script>
 
 <section class="section">
   <div class="shell">

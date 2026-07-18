@@ -1,10 +1,10 @@
 // DOM glue za besplatno sredjivanje literature (literatura.html). Logika je u
 // bibliography.ts (tipizirano, testabilno); ovdje samo vezanje forme i ispis. Bez mreze.
 import '../shared/ui-boot';
-import { organizeBibliography, bibliographyText, type BibResult } from './bibliography';
+import { organizeBibliography, bibliographyText, type BibSortMode, type BibResult } from './bibliography';
 import { bibliographyDoc, docxBlob } from '../docx/docx-writer';
 import { escapeHtml } from '../utils/helpers';
-import { bindCopyButton, downloadBlob } from './tool-ui';
+import { bindCopyButton, bindDownloadButton } from './tool-ui';
 
 const $ = (s: string): any => document.querySelector(s);
 const nf = new Intl.NumberFormat('hr-HR');
@@ -15,6 +15,15 @@ anić, a. (2019). Civilno društvo i demokracija. Zagreb: Školska knjiga.
 Marić, M. Uvod u politologiju. Zagreb.
 Državni zavod za statistiku (2021). Popis stanovništva. https://dzs.hr/popis
 Čović, Č. (2018). Metodologija. Split: Redak.`;
+
+/** Trenutni izbor prekidaca poretka; zadano abecedno (autor-godina) kad se ne moze ocitati. */
+function currentSortMode(): BibSortMode {
+  return $('#lit-sort')?.value === 'appearance' ? 'appearance' : 'alphabetical';
+}
+
+// Rezultat zadnjeg render()-a, ponovno koristen u copy/docx handlerima umjesto da svaki
+// klik nanovo parsira, spaja, dedupeira i sortira isti unos (render() ga vec izgradio prije klika).
+let lastResult: BibResult | null = null;
 
 // SR najava metrika: vizualne brojke se osvjezavaju na svaki unos, ali izgovor ide u skriveni
 // #lit-sr-summary (role=status) tek nakon pauze u tipkanju, da citac ekrana ne ponavlja sve
@@ -35,13 +44,10 @@ function scheduleSrSummary(r: BibResult) {
   }, 900);
 }
 
-// Rezultat zadnjeg render()-a, ponovno koristen u copy/docx handlerima umjesto da svaki
-// klik nanovo parsira, spaja, dedupeira i sortira isti unos (render() ga vec izgradio prije klika).
-let lastResult: BibResult | null = null;
-
 function render() {
   const input = $('#lit-input');
-  const r = organizeBibliography(input?.value || '');
+  const sort = currentSortMode();
+  const r = organizeBibliography(input?.value || '', { sort });
   lastResult = r;
 
   // Changed-guard: textContent na istu vrijednost svejedno zamjenjuje text node, sto aria-live
@@ -51,6 +57,9 @@ function render() {
   set('#lit-unique', nf.format(r.entries.length));
   set('#lit-dupes', nf.format(r.duplicatesRemoved));
   set('#lit-issues', nf.format(r.withIssues));
+  set('#lit-order-note', sort === 'appearance'
+    ? 'Poredak: izvorni redoslijed pojavljivanja (IEEE/Vancouver).'
+    : 'Poredak: abecedno po hrvatskom poretku (autor-godina).');
   scheduleSrSummary(r);
 
   const list = $('#lit-list');
@@ -74,6 +83,7 @@ function init() {
   if (!input) return;
   render();
   input.addEventListener('input', render);
+  $('#lit-sort')?.addEventListener('change', render);
 
   $('#lit-sample')?.addEventListener('click', () => { input.value = SAMPLE; render(); input.focus(); });
   $('#lit-clear')?.addEventListener('click', () => { input.value = ''; render(); input.focus(); });
@@ -84,15 +94,10 @@ function init() {
   }, { statusEl: $('#lit-copy-status') });
 
   // Preuzmi gotov .docx (docx-writer): jedinice s visecim uvlacenjem, stil ostaje autorov.
-  $('#lit-docx')?.addEventListener('click', () => {
+  bindDownloadButton($('#lit-docx'), () => {
     const r = lastResult;
-    if (!r || !r.entries.length) return;
-    try {
-      downloadBlob(docxBlob(bibliographyDoc(r.entries.map(e => e.text))), 'literatura.docx');
-    } catch {
-      // .docx nije uspio (rijetko): sredjeni popis je i dalje vidljiv za kopiranje.
-    }
-  });
+    return r && r.entries.length ? docxBlob(bibliographyDoc(r.entries.map(e => e.text))) : null;
+  }, 'literatura.docx');
 }
 
 if (document.readyState === 'loading') {

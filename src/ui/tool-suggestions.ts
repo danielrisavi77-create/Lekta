@@ -6,6 +6,9 @@
  * poziva suggestTool i, ako postoji pogodak, prikaze CTA prema alatu. Konzervativno:
  * kad nista ne odgovara vraca null (nema laznih ponuda).
  */
+import { serializeTitlePageParams } from '../title-pages/title-page-params';
+import { LEVEL_SLUGS } from '../title-pages/level-slugs';
+import type { WorkType } from '../profiles/profile-schema';
 
 export interface ToolSuggestion {
   /** Relativna putanja alata (postojeca stranica u root-u). */
@@ -20,17 +23,35 @@ export interface IssueLike {
   category?: string;
 }
 
+/** Trenutna selekcija analize: alat koji je konzumira (naslovnica preko ?fakultet=...)
+ *  dobiva predlozak korisnikova fakulteta umjesto praznog generickog obrasca. */
+export interface SuggestionContext {
+  unitId?: string;
+  workType?: string;
+  program?: string;
+}
+
+/** Query string za naslovnicu iz konteksta analize; prazan kad konteksta nema. */
+function titlePageQuery(ctx?: SuggestionContext): string {
+  if (!ctx?.unitId) return '';
+  const level = ctx.workType && (LEVEL_SLUGS as Record<string, string>)[ctx.workType]
+    ? (ctx.workType as WorkType)
+    : undefined;
+  const qs = serializeTitlePageParams({ unitId: ctx.unitId, level, program: ctx.program || undefined });
+  return qs ? `?${qs}` : '';
+}
+
 /**
  * Mapiraj problem na alat. Redoslijed je namjeran: specificni obrasci (naslovnica,
  * izjava, literatura, opseg) prije opceg citatnog, jer literatura i navodi oboje
  * mogu nositi kategoriju "citations".
  */
-export function suggestTool(issue: IssueLike): ToolSuggestion | null {
+export function suggestTool(issue: IssueLike, ctx?: SuggestionContext): ToolSuggestion | null {
   const text = `${issue.title ?? ''} ${issue.detail ?? ''}`.toLowerCase();
   const cat = issue.category ?? '';
 
   if (/naslovnic|naslovna stranica/.test(text)) {
-    return { href: 'naslovnica.html', label: 'Složi naslovnicu' };
+    return { href: `naslovnica.html${titlePageQuery(ctx)}`, label: 'Složi naslovnicu' };
   }
   if (/izjav|izvornost|plagijat/.test(text)) {
     return { href: 'izjava.html', label: 'Izradi izjavu o izvornosti' };

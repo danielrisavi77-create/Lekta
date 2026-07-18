@@ -4,7 +4,7 @@
  * na privremenom labelu i da se koristi fallback kad Clipboard API-ja nema.
  */
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { bindCopyButton } from '../src/tools/tool-ui';
+import { bindCopyButton, bindDownloadButton } from '../src/tools/tool-ui';
 
 function makeBtn(label = 'Kopiraj'): any {
   const b = document.createElement('button');
@@ -63,5 +63,87 @@ describe('bindCopyButton', () => {
     btn.click();
     await vi.waitFor(() => expect(btn.textContent).toBe('Označi pa Ctrl+C'));
     await vi.waitFor(() => expect(btn.textContent).toBe('Kopiraj'));
+  });
+
+  it('zadana poruka o neuspjehu ne spominje Ctrl+C na dodirnom uredjaju (coarse pointer)', async () => {
+    vi.stubGlobal('navigator', {});
+    vi.stubGlobal('document', Object.assign(document, { execCommand: () => false }));
+    vi.stubGlobal('window', Object.assign(window, {
+      matchMedia: (q: string) => ({ matches: q.includes('coarse') }),
+    }));
+    const btn = makeBtn();
+    bindCopyButton(btn, () => 'tekst', { holdMs: 500 }); // bez failLabel override -> zadano
+
+    btn.click();
+    await vi.waitFor(() => expect(btn.textContent).toBe('Odaberi i kopiraj ručno'));
+    expect(btn.textContent).not.toMatch(/Ctrl/);
+  });
+
+  it('zadana poruka o neuspjehu i dalje spominje Ctrl+C na uredjaju s finim pokazivacem (mis)', async () => {
+    vi.stubGlobal('navigator', {});
+    vi.stubGlobal('document', Object.assign(document, { execCommand: () => false }));
+    vi.stubGlobal('window', Object.assign(window, {
+      matchMedia: () => ({ matches: false }),
+    }));
+    const btn = makeBtn();
+    bindCopyButton(btn, () => 'tekst', { holdMs: 500 });
+
+    btn.click();
+    await vi.waitFor(() => expect(btn.textContent).toBe('Označi pa Ctrl+C'));
+  });
+});
+
+describe('bindDownloadButton', () => {
+  it('uspjesno preuzimanje ne mijenja label gumba', async () => {
+    const btn = makeBtn('Preuzmi .docx');
+    const blob = new Blob(['test'], { type: 'text/plain' });
+    bindDownloadButton(btn, () => blob, 'test.docx', { holdMs: 300 });
+
+    btn.click();
+    // Nema promjene labela na uspjeh (preuzimanje samo pokrece browserov save-dijalog).
+    expect(btn.textContent).toBe('Preuzmi .docx');
+  });
+
+  it('buildBlob koji vrati null tiho ne radi nista', () => {
+    const btn = makeBtn('Preuzmi .docx');
+    const buildBlob = vi.fn(() => null);
+    bindDownloadButton(btn, buildBlob, 'test.docx');
+
+    btn.click();
+    expect(buildBlob).toHaveBeenCalled();
+    expect(btn.textContent).toBe('Preuzmi .docx');
+  });
+
+  it('BUG: kad buildBlob() baci, gumb privremeno pokazuje failLabel pa se vrati na original', async () => {
+    const btn = makeBtn('Preuzmi .docx');
+    bindDownloadButton(btn, () => { throw new Error('generiranje nije uspjelo'); }, 'test.docx', { holdMs: 300 });
+
+    btn.click();
+    expect(btn.textContent).toBe('Preuzimanje nije uspjelo');
+    await vi.waitFor(() => expect(btn.textContent).toBe('Preuzmi .docx'));
+  });
+
+  it('statusEl dobiva failStatus poruku kad generiranje baci', () => {
+    const btn = makeBtn('Preuzmi .docx');
+    const status = document.createElement('p');
+    bindDownloadButton(btn, () => { throw new Error('x'); }, 'test.docx', {
+      holdMs: 300,
+      statusEl: status,
+      failStatus: 'Preuzimanje nije uspjelo, pokušaj ponovno.',
+    });
+
+    btn.click();
+    expect(status.textContent).toBe('Preuzimanje nije uspjelo, pokušaj ponovno.');
+    expect(status.className).toBe('out-hint warn');
+  });
+
+  it('dvoklik dok jos pise failLabel ne zaglavi gumb (isti C1 obrazac kao bindCopyButton)', async () => {
+    const btn = makeBtn('Preuzmi .docx');
+    bindDownloadButton(btn, () => { throw new Error('x'); }, 'test.docx', { holdMs: 300 });
+
+    btn.click();
+    expect(btn.textContent).toBe('Preuzimanje nije uspjelo');
+    btn.click();
+    await vi.waitFor(() => expect(btn.textContent).toBe('Preuzmi .docx'));
   });
 });
