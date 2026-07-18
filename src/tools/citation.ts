@@ -33,7 +33,7 @@ export interface CitationInput {
   url?: string;
   /** DOI (npr. "10.1234/abc" ili puni URL); normalizira se u https://doi.org/... */
   doi?: string;
-  /** Datum pristupa mreznom izvoru, slobodan format (npr. "2.7.2026."). */
+  /** Datum pristupa mreznom izvoru, slobodan format (npr. "2. 7. 2026."). */
   accessed?: string;
   institution?: string;
 }
@@ -89,20 +89,27 @@ export function parseAuthors(raw: string | undefined): ParsedAuthor[] {
     .split(/[;\n]/)
     .map((s) => s.trim())
     .filter(Boolean)
-    .map((chunk) => {
+    .flatMap((chunk): ParsedAuthor[] => {
       if (!chunk.includes(',') && ORG_KEYWORDS.test(chunk)) {
-        return { last: chunk, first: '' };
+        return [{ last: chunk, first: '' }];
       }
       if (chunk.includes(',')) {
-        const [last, first] = chunk.split(',');
-        return { last: last.trim(), first: (first || '').trim() };
+        const segs = chunk.split(',').map((s) => s.trim()).filter(Boolean);
+        // Placeholder trazi ';' izmedju autora, ali kopirana referenca cesto vec ima zareze
+        // ("Kovacic, Ivan, Horvat, Ana"): vise od jednog "prezime, ime" para u istom chunku.
+        // Ne odbacuj visak tiho - uparuje uzastopne segmente kao (prezime, ime); neparni
+        // zavrsni segment ostaje samostalni autor bez imena (bolje djelomican podatak nego
+        // nestao koautor).
+        const out: ParsedAuthor[] = [];
+        for (let i = 0; i < segs.length; i += 2) out.push({ last: segs[i], first: segs[i + 1] || '' });
+        return out;
       }
       // "Ivan Ivic" -> zadnja rijec je prezime
       const parts = chunk.split(/\s+/);
-      if (parts.length === 1) return { last: parts[0], first: '' };
+      if (parts.length === 1) return [{ last: parts[0], first: '' }];
       const last = parts[parts.length - 1];
       const first = parts.slice(0, -1).join(' ');
-      return { last, first };
+      return [{ last, first }];
     });
 }
 
@@ -792,7 +799,7 @@ export const SOURCE_TYPE_FIELDS: Record<SourceType, SourceTypeFieldSpec[]> = {
     { key: 'authors' },
     { key: 'title', recommended: true },
     { key: 'publisher' },
-    { key: 'year' },
+    { key: 'year', recommended: true },
     { key: 'url', recommended: true },
     { key: 'doi' },
     { key: 'accessed', recommended: true },

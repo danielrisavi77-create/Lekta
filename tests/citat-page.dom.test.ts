@@ -17,11 +17,13 @@ function buildDom(): void {
       <select id="f-type">${TYPES.map((t) => `<option value="${t}">${t}</option>`).join('')}</select>
       <select id="f-style"><option value="autor-godina">Autor-godina</option><option value="fusnota">Fusnota</option></select>
       ${FIELDS.map((k) => `<div data-field="${k}"><input id="f-${k}"></div>`).join('')}
+      <p id="f-authors-preview" hidden></p>
       <div id="out" class="empty"></div>
       <div id="out-hint"></div>
       <button id="copyBtn"></button>
       <div id="out-intext" hidden><span id="intextValue"></span></div>
       <button id="copyIntextBtn"></button>
+      <button id="c-add-to-bulk" disabled></button>
       <button id="c-sample"></button>
       <button id="c-clear"></button>
     </div>
@@ -69,6 +71,16 @@ describe('citat-page: izbornik fakulteta + bulk (DOM)', () => {
     setVal('#f-publisher', 'Naklada Slap');
     expect($('#out').textContent).toContain('Milas, G. (2009)');
     expect($('#out').textContent).toContain('Naklada Slap');
+  });
+
+  it('BUG: "Mrezni izvor" prikazuje polje za godinu (SOURCE_TYPE_FIELDS.mrezni ukljucuje year)', () => {
+    // Regresija: godina je bila izostavljena iz popisa polja za mrezni tip, pa se
+    // #f-year red skrivao i autor-godina stil je tiho ispisivao "(n.d.)"/"(bez dat.)"
+    // iako je korisnik znao tocan datum.
+    fireChange('#f-type', 'mrezni');
+    const row = document.querySelector('[data-field="year"]') as HTMLElement;
+    expect(row.style.display).not.toBe('none');
+    fireChange('#f-type', 'knjiga'); // ne ostavljaj tip promijenjen za naredne testove
   });
 
   it('povratak na "Bez fakulteta" vrati genericki izbor stila', () => {
@@ -121,5 +133,47 @@ describe('citat-page: izbornik fakulteta + bulk (DOM)', () => {
     const authors = card.querySelector('input[data-key="authors"]');
     expect(authors.value).toContain('Smith, J.');
     expect(authors.value).toContain('Jones, A.');
+  });
+
+  it('ziva linija ispod Autor(i) pokazuje kako je unos rasclanjen (parseAuthors uvid)', () => {
+    $('#tab-single').click();
+    setVal('#f-authors', 'Ivić, Ivan; Horvat, Ana');
+    const line = $('#f-authors-preview');
+    expect(line.hidden).toBe(false);
+    expect(line.textContent).toContain('Prepoznato (2)');
+    expect(line.textContent).toContain('Ivić, Ivan');
+    expect(line.textContent).toContain('Horvat, Ana');
+    setVal('#f-authors', '');
+    expect(line.hidden).toBe(true);
+  });
+
+  it('most single->bulk: "+ Dodaj u popis" gura trenutni unos kao novu bulk karticu', () => {
+    // Ocisti bulk stanje od prethodnih testova pa dodaj iz jednog izvora.
+    $('#bulk-input').value = '';
+    $('#bulk-parse').click();
+    expect($('#bulk-entries').querySelectorAll('.bulk-card').length).toBe(0);
+
+    setVal('#f-type', 'knjiga');
+    setVal('#f-authors', 'Kovačić, Iva');
+    setVal('#f-title', 'Naslov iz jednog izvora');
+    setVal('#f-year', '2021');
+    expect($('#c-add-to-bulk').disabled).toBe(false);
+    $('#c-add-to-bulk').click();
+
+    const cards = $('#bulk-entries').querySelectorAll('.bulk-card');
+    expect(cards.length).toBe(1);
+    const title = cards[0].querySelector('input[data-key="title"]');
+    expect(title.value).toBe('Naslov iz jednog izvora');
+    expect($('#bulk-generate').hidden).toBe(false);
+    expect($('#tab-bulk').textContent).toContain('(1)');
+
+    // Dodana kartica prolazi kroz postojeci generateBulk mehanizam.
+    $('#bulk-generate').click();
+    expect($('#bulk-result').value).toContain('Kovačić');
+  });
+
+  it('prazan unos onemogucuje "+ Dodaj u popis" (kao i copy)', () => {
+    $('#c-clear').click();
+    expect($('#c-add-to-bulk').disabled).toBe(true);
   });
 });

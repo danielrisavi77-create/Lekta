@@ -18,6 +18,31 @@ describe('parseAuthors', () => {
     ]);
   });
 
+  it('BUG: zarez umjesto ";" izmedju autora vise ne gubi koautore nakon drugog', () => {
+    // Regresija: chunk.split(',') je uzimao samo prva dva dijela (last, first); sve nakon
+    // drugog zareza unutar istog chunka se tiho gubilo. Placeholder trazi ';', ali korisnik
+    // koji kopira gotovu referencu prirodno koristi zarez i za autore i za prezime/ime.
+    expect(parseAuthors('Kovacic, Ivan, Horvat, Ana')).toEqual([
+      { last: 'Kovacic', first: 'Ivan' },
+      { last: 'Horvat', first: 'Ana' },
+    ]);
+  });
+
+  it('BUG: 3 autora zarezom, tri autora + tocan pravilan par', () => {
+    expect(parseAuthors('Kovacic, Ivan, Horvat, Ana, Novak, Petra')).toEqual([
+      { last: 'Kovacic', first: 'Ivan' },
+      { last: 'Horvat', first: 'Ana' },
+      { last: 'Novak', first: 'Petra' },
+    ]);
+  });
+
+  it('BUG: neparan zavrsni segment ostaje autor bez imena umjesto da nestane', () => {
+    expect(parseAuthors('Kovacic, Ivan, Horvat')).toEqual([
+      { last: 'Kovacic', first: 'Ivan' },
+      { last: 'Horvat', first: '' },
+    ]);
+  });
+
   it('odbacuje prazne unose', () => {
     expect(parseAuthors('  ;  ')).toEqual([]);
     expect(parseAuthors(undefined)).toEqual([]);
@@ -99,6 +124,20 @@ describe('formatCitation autor-godina', () => {
       'autor-godina',
     );
     expect(r.citation).toBe('Upute za izradu rada. FPZG. Pristupljeno 2.7.2026. https://fpzg.hr/upute');
+  });
+
+  it('mrezni bez godine je "preporuceno dodati" (godina je recommended, ne samo dostupno polje)', () => {
+    // Regresija: godina je bila SAKRIVENA za mrezni tip u formi (FIELDS_BY_TYPE), pa je
+    // autor-godina stil tiho ispisivao "(bez dat.)" iako je korisnik znao datum. Polje je
+    // sad vidljivo (SOURCE_TYPE_FIELDS.mrezni ukljucuje year); ovo dodatno provjerava da
+    // nedostajuca godina i STVARNO upozorava korisnika preko "missing", ne samo sto polje
+    // postoji na formi.
+    const r = formatCitation(
+      { type: 'mrezni', authors: 'Državni zavod za statistiku', title: 'Popis stanovništva', url: 'https://dzs.hr/popis' },
+      'autor-godina',
+    );
+    expect(r.missing).toContain('godina');
+    expect(r.citation).toContain('bez dat.');
   });
 
   it('prijavljuje polja koja nedostaju', () => {

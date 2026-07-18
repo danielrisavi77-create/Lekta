@@ -84,26 +84,43 @@ function updateStyleInfo(): void {
   const src = fs.sourceLabel ? `„${esc(fs.sourceLabel)}”` : 'službenim uputama';
   const when = fs.verifiedAt ? `, provjereno ${esc(fs.verifiedAt)}` : '';
   info.innerHTML = fs.pin
-    ? `Stil: <strong>${esc(fs.label)}</strong>. Propisan službenim uputama: ${src}${when}. Format: opći ${esc(fs.label)} oblik.`
+    ? `Stil: <strong>${esc(fs.label)}</strong>. Propisan službenim uputama: ${src}${when}. Format: opći oblik stila ${esc(fs.label)}.`
     : `Vjeran format prema službenim uputama: ${src}${when}.`;
   info.hidden = false;
 }
 
+// Ziva linija ispod polja Autor(i): kako je slobodni unos stvarno rasclanjen (prezime/ime po
+// autoru), da se krivo razdvajanje vidi ODMAH, a ne tek u finalnom citatu. parseAuthors ima
+// dokumentirana ogranicenja (npr. engleski grupni autori bez zareza), pa je uvid vrijedan.
+function renderAuthorsPreview(raw: string): void {
+  const line = $('#f-authors-preview');
+  if (!line) return;
+  const authors = parseAuthors(raw);
+  if (!raw.trim() || !authors.length) { line.hidden = true; line.textContent = ''; return; }
+  const shown = authors.map((a) => (a.first ? `${a.last}, ${a.first}` : a.last)).join(' · ');
+  line.textContent = `Prepoznato (${authors.length}): ${shown}`;
+  line.hidden = false;
+}
+
 function render() {
+  renderAuthorsPreview($('#f-authors')?.value || '');
   const { citation, inText, missing } = formatWithCurrent(readInp());
   const out = $('#out');
   const hint = $('#out-hint');
+  const addBtn = $('#c-add-to-bulk');
   if (!citation) {
     out.textContent = 'Ispuni polja lijevo pa se citat pojavljuje ovdje.';
     out.classList.add('empty');
     hint.textContent = '';
     $('#copyBtn').disabled = true;
+    if (addBtn) addBtn.disabled = true;
     renderInText('');
     return;
   }
   out.textContent = citation;
   out.classList.remove('empty');
   $('#copyBtn').disabled = false;
+  if (addBtn) addBtn.disabled = false;
   renderInText(inText);
   hint.textContent = missing.length ? 'Preporučeno dodati: ' + missing.join(', ') + '.' : 'Sva preporučena polja su ispunjena.';
   hint.className = missing.length ? 'out-hint warn' : 'out-hint ok';
@@ -288,6 +305,39 @@ function bindTablistKeys() {
   });
 }
 
+// --- Most "Jedan izvor" -> "Cijela literatura": trenutni strukturirani unos ide kao NOVA
+// kartica u bulk tok (isti renderBulkCard/generateBulk mehanizam), bez ponovnog tipkanja.
+// Poznato ogranicenje (namjerno): "Prepoznaj reference" u bulk kartici gradi kartice ISKLJUCIVO
+// iz zalijepljenog teksta pa brise i dodane (to je njegov ugovor); title na gumbu to kaze.
+let _addFlashTimer = 0;
+let _tabBulkBase = '';
+function addSingleToBulk() {
+  const inp = readInp();
+  const box = $('#bulk-entries');
+  if (!box) return;
+  const idx = box.querySelectorAll('.bulk-card').length + 1;
+  const card = document.createElement('div');
+  card.className = 'bulk-card';
+  const head = document.createElement('div');
+  head.className = 'bulk-card-head';
+  head.textContent = `Referenca ${idx} (iz kartice Jedan izvor)`;
+  const fields = document.createElement('div');
+  fields.className = 'bulk-card-fields';
+  card.appendChild(head);
+  card.appendChild(fields);
+  box.appendChild(card);
+  renderBulkCard(fields, inp);
+  $('#bulk-generate').hidden = false;
+  const tab = $('#tab-bulk');
+  if (tab) tab.textContent = `${_tabBulkBase} (${box.querySelectorAll('.bulk-card').length})`;
+  const btn = $('#c-add-to-bulk');
+  if (btn) {
+    if (_addFlashTimer) clearTimeout(_addFlashTimer);
+    btn.textContent = 'Dodano u popis ✓';
+    _addFlashTimer = window.setTimeout(() => { btn.textContent = '+ Dodaj u popis literature'; _addFlashTimer = 0; }, 1400);
+  }
+}
+
 function init() {
   if (!$('#f-type')) return; // stranica nije citat-alat; ne rusi se (kao ostali tool page-ovi)
   populateFaculties();
@@ -303,6 +353,8 @@ function init() {
   $('#tab-single')?.addEventListener('click', () => showTab('single'));
   $('#tab-bulk')?.addEventListener('click', () => showTab('bulk'));
   bindTablistKeys();
+  _tabBulkBase = $('#tab-bulk')?.textContent?.trim() || 'Cijela literatura';
+  $('#c-add-to-bulk')?.addEventListener('click', addSingleToBulk);
   $('#bulk-parse')?.addEventListener('click', parseBulk);
   $('#bulk-generate')?.addEventListener('click', generateBulk);
   // Promjena stila ponovno prepozna vec zalijepljeni popis (bez ovoga picker ne bi imao ucinak).

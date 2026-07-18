@@ -7,12 +7,12 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Lekta">
 <meta property="og:locale" content="hr_HR">
-<meta property="og:title" content="Besplatni hrvatski citat generator">
+<meta property="og:title" content="Besplatni hrvatski generator citata">
 <meta property="og:description" content="Besplatni hrvatski generator citata: knjiga, poglavlje, članak, mrežni izvor, završni rad i propis, u stilu autor-godina ili fusnota. Sve lokalno u pregledniku.">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Besplatni hrvatski citat generator">
+<meta name="twitter:title" content="Besplatni hrvatski generator citata">
 <meta name="twitter:description" content="Besplatni hrvatski generator citata: knjiga, poglavlje, članak, mrežni izvor, završni rad i propis, u stilu autor-godina ili fusnota. Sve lokalno u pregledniku.">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Besplatni hrvatski citat generator","description":"Besplatni hrvatski generator citata: knjiga, poglavlje, članak, mrežni izvor, završni rad i propis, u stilu autor-godina ili fusnota. Sve lokalno u pregledniku.","applicationCategory":"EducationalApplication","operatingSystem":"Web","inLanguage":"hr","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},"publisher":{"@type":"Organization","name":"Lekta"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Besplatni hrvatski generator citata","description":"Besplatni hrvatski generator citata: knjiga, poglavlje, članak, mrežni izvor, završni rad i propis, u stilu autor-godina ili fusnota. Sve lokalno u pregledniku.","applicationCategory":"EducationalApplication","operatingSystem":"Web","inLanguage":"hr","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},"publisher":{"@type":"Organization","name":"Lekta"}}</script>
 <link rel="canonical" href="https://lektahr.netlify.app/citat.html">
 <meta property="og:url" content="https://lektahr.netlify.app/citat.html">
 <meta property="og:image" content="https://lektahr.netlify.app/og-image.png">
@@ -24,7 +24,7 @@
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="color-scheme" content="light dark">
-<title>Besplatni hrvatski citat generator - Lekta</title>
+<title>Besplatni hrvatski generator citata - Lekta</title>
 <script>try{var _t=localStorage.getItem('lekta.theme');if(_t)document.documentElement.dataset.theme=_t;}catch(e){}</script>
 <style>
 .hero h1{font-family:var(--ink-serif);font-size:clamp(28px,4.2vw,44px);line-height:1.08;letter-spacing:-.015em;margin:14px auto 12px;max-width:660px;font-weight:800}
@@ -143,7 +143,7 @@
         <button class="nav-tools-btn active" type="button" aria-expanded="false">Alati <span class="caret" aria-hidden="true">▾</span></button>
         <div class="nav-tools-menu">
           <a href="alati.html">Svi alati</a>
-          <a class="active" aria-current="page" href="citat.html">Citat generator</a>
+          <a class="active" aria-current="page" href="citat.html">Generator citata</a>
           <a href="kartice.html">Brojač kartica</a>
           <a href="naslovnica.html">Naslovnica</a>
           <a href="literatura.html">Sređivanje literature</a>
@@ -160,7 +160,7 @@
     <a href="index.html#how">Kako radi</a>
     <a href="landing_usporedba.html">Usporedba</a>
     <a href="alati.html">Svi alati</a>
-    <a class="active" aria-current="page" href="citat.html">Citat generator</a>
+    <a class="active" aria-current="page" href="citat.html">Generator citata</a>
     <a href="kartice.html">Brojač kartica</a>
     <a href="naslovnica.html">Naslovnica</a>
     <a href="literatura.html">Sređivanje literature</a>
@@ -175,7 +175,7 @@
   <div class="shell">
     <div class="hero-back"><a class="backlink" href="index.html#top">&larr; Natrag na Lektu</a></div>
     <span class="eyebrow">Besplatan alat, bez registracije</span>
-    <h1>Hrvatski <span class="ink">citat generator</span></h1>
+    <h1>Hrvatski <span class="ink">generator citata</span></h1>
     <p class="lead">Oblikuj citat u zadanom stilu (autor-godina, fusnota) ili vjerno po fakultetu, pojedinačno ili cijelu literaturu odjednom. Za knjigu, poglavlje, članak, mrežni izvor, završni rad ili propis. Sve lokalno, ništa se ne šalje na poslužitelj.</p>
     <p class="sibling">Već imaš gotov popis? Posloži ga i izvezi u <a href="literatura.html">Sređivanju literature</a>. Za opseg: <a href="kartice.html">brojač kartica</a>, za izjavu o izvornosti: <a href="izjava.html">generator izjave</a>.</p>
   </div>
@@ -201,7 +201,7 @@
       <div class="grid">
     <div class="card">
       <h2>Podaci o izvoru</h2>
-      <p class="sub">Ispuni što imaš. Preporučena polja koja fale prikazuju se ispod citata.</p>
+      <p class="sub">Ispuni što imaš. Preporučena polja koja nedostaju prikazuju se ispod citata.</p>
 
       <div class="row2">
         <div class="field">
@@ -227,6 +227,7 @@
       <div class="field" data-field="authors">
         <label for="f-authors">Autor(i)</label>
         <textarea id="f-authors" placeholder="Ivić, Ivan; Horvat, Ana (jedan po retku ili odvojeno ;)"></textarea>
+        <p class="sub" id="f-authors-preview" aria-live="polite" hidden></p>
       </div>
       <div class="field" data-field="title">
         <label for="f-title">Naslov</label>
@@ -284,7 +285,7 @@
       </div>
       <div class="field" data-field="accessed">
         <label for="f-accessed">Datum pristupa</label>
-        <input id="f-accessed" type="text" placeholder="2.7.2026.">
+        <input id="f-accessed" type="text" placeholder="2. 7. 2026.">
       </div>
       <div class="tp-toolbar">
         <button class="btn btn-secondary btn-sm" id="c-sample" type="button">Ubaci primjer</button>
@@ -301,6 +302,7 @@
         <div class="out-bar">
           <button class="btn btn-primary" id="copyBtn" type="button" disabled>Kopiraj citat</button>
           <button class="btn btn-secondary" id="copyIntextBtn" type="button" disabled>Kopiraj (u tekstu)</button>
+          <button class="btn btn-secondary" id="c-add-to-bulk" type="button" disabled title="Dodaje trenutni izvor kao karticu u karticu 'Cijela literatura' (Prepoznaj reference tamo briše dodano)">+ Dodaj u popis literature</button>
         </div>
         <div class="sr-only" id="copy-status" role="status" aria-live="polite"></div>
         <p class="out-hint" id="out-hint" aria-live="polite"></p>
@@ -344,8 +346,8 @@
     <p class="sec-sub">Okvirni oblici u dva najčešća hrvatska akademska stila: autor-godina (društvene znanosti) i fusnota (pravo, humanistika). Točnu interpunkciju uvijek uskladi s uputama svog fakulteta.</p>
     <div class="cite-ex">
       <div><h3>Knjiga</h3><p><b>Autor-godina:</b> <code>Prezime, I. (2024). Naslov knjige. Zagreb: Izdavač.</code> &middot; u tekstu <code>(Prezime, 2024)</code></p><p><b>Fusnota:</b> <code>I. Prezime, Naslov knjige, Izdavač, Zagreb, 2024., str. 15.</code></p></div>
-      <div><h3>Poglavlje u knjizi ili zborniku</h3><p><b>Autor-godina:</b> <code>Prezime, I. (2024). Naslov poglavlja. U: A. Urednik (ur.), Naslov zbornika (str. 33-50). Zagreb: Izdavač.</code></p><p><b>Fusnota:</b> <code>I. Prezime, „Naslov poglavlja", u: A. Urednik (ur.), Naslov zbornika, Izdavač, Zagreb, 2024., str. 33-50.</code></p></div>
-      <div><h3>Članak u časopisu</h3><p><b>Autor-godina:</b> <code>Prezime, I. (2024). Naslov članka. Naziv časopisa, 70(2), 145-170.</code> &middot; u tekstu <code>(Prezime, 2024: 150)</code></p><p><b>Fusnota:</b> <code>I. Prezime, „Naslov članka", Naziv časopisa, god. 70, br. 2, 2024., str. 145-170.</code></p></div>
+      <div><h3>Poglavlje u knjizi ili zborniku</h3><p><b>Autor-godina:</b> <code>Prezime, I. (2024). Naslov poglavlja. U: A. Urednik (ur.), Naslov zbornika (str. 33-50). Zagreb: Izdavač.</code></p><p><b>Fusnota:</b> <code>I. Prezime, „Naslov poglavlja”, u: A. Urednik (ur.), Naslov zbornika, Izdavač, Zagreb, 2024., str. 33-50.</code></p></div>
+      <div><h3>Članak u časopisu</h3><p><b>Autor-godina:</b> <code>Prezime, I. (2024). Naslov članka. Naziv časopisa, 70(2), 145-170.</code> &middot; u tekstu <code>(Prezime, 2024: 150)</code></p><p><b>Fusnota:</b> <code>I. Prezime, „Naslov članka”, Naziv časopisa, god. 70, br. 2, 2024., str. 145-170.</code></p></div>
       <div><h3>Mrežni izvor</h3><p><code>Prezime, I. (2024). Naslov stranice. Naziv mjesta. Dostupno na: https://... (pristupljeno 2. 7. 2026.).</code></p><p class="sub" style="margin:0">Za mrežne izvore uvijek navedi datum pristupa; ako izvor ima DOI, on ima prednost pred URL-om.</p></div>
       <div><h3>Završni ili diplomski rad</h3><p><code>Prezime, I. (2024). Naslov rada (diplomski rad). Zagreb: Fakultet političkih znanosti.</code></p></div>
       <div><h3>Zakon ili propis</h3><p><code>Naziv zakona, Narodne novine br. 93/14.</code> &middot; u tekstu <code>(čl. 5. Zakona o ...)</code></p></div>

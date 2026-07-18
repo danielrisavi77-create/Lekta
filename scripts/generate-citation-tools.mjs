@@ -5,8 +5,9 @@
 // Pokreni: node scripts/generate-citation-tools.mjs  (wiran u netlify.toml POSLIJE `vite build`).
 //
 // Stil po fakultetu se NE autorira rucno: derivira se iz data/profiles/verified-profiles.json
-// (rules.recommendedCitation token) + src/citations/citation-meta.ts (token -> label/mode) i
-// renderira postojecim motorom src/tools/citation.ts (autor-godina / fusnota / ieee / vancouver).
+// (recommendedCitation token, Option A effectiveRules preko citation-effective-rules.mjs) +
+// src/citations/citation-meta.ts (token -> label/mode) i renderira postojecim motorom
+// src/tools/citation.ts (autor-godina / fusnota / ieee / vancouver).
 // Motor se esbuildom bundla u IIFE i (a) inlinea u stranice, (b) Node ga eval-om cita za mapu.
 // Custom / bez tokena -> stranica posteno vodi na opci generator, bez izmisljenog stila.
 //
@@ -21,6 +22,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import esbuild from 'esbuild';
 import { SITE_ORIGIN } from './site-origin.mjs';
+import { recommendedCitationOf } from './citation-effective-rules.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -150,6 +152,7 @@ const PAGE_STYLE = `
   /* PROTECTED: prikaz formatiranog citata = bijeli list, citljiva serifna tipografija (zrcali izlaz) */
   #citation-output { margin-top: 1rem; padding: 0.9rem 1rem; background: var(--sheet); border: 1px solid var(--paper-line); border-radius: 2px; min-height: 1.25rem; }
   .cit-line { font-family: var(--font-serif); font-variant-numeric: tabular-nums; font-size: 1rem; line-height: 1.5; white-space: pre-wrap; color: var(--paper-ink); }
+  .cit-copy { margin-top: 0.4rem; font-size: 0.85rem; }
   .cit-intext { margin-top: 0.5rem; font-size: 0.85rem; color: var(--paper-muted); }
   .cit-missing { margin-top: 0.5rem; font-size: 0.8rem; color: var(--red-deep); }
   .cit-empty { color: var(--paper-muted); font-size: 0.875rem; }
@@ -180,22 +183,29 @@ const PAGE_STYLE = `
   #bulk-output a { color: var(--red-deep); font-size: 0.8rem; }
   /* PROTECTED: i skupni izlaz literature ostaje serif na bijelom listu */
   #bulk-result { min-height: 120px; font-family: var(--font-serif); font-variant-numeric: tabular-nums; font-size: 0.9rem; background: var(--sheet); color: var(--paper-ink); }
+  .lekta-example { margin: 0.9rem 0 0.25rem; }
   /* Odvojeno od .lekta-tool-meta (mono, sitno, za kratke oznake): metaLine za verificirani spec
      nosi punu recenicu s izvorom i datumom - upravo TA tvrdnja je jedini stvarni diferencijator
      naspram genericnih citatnih alata, pa izgleda kao znacka povjerenja, ne suha fusnota. */
   .lekta-source-note { position: relative; margin: 0 0 1.25rem; padding: 0.65rem 0.85rem 0.65rem 2.1rem; font-family: var(--font-serif); font-size: 0.875rem; line-height: 1.5; color: var(--paper-ink); background: var(--paper-2); border: 1px solid var(--paper-line); border-left: 3px solid var(--red-deep); border-radius: 0 2px 2px 0; }
   .lekta-source-note::before { content: "✓"; position: absolute; left: 0.75rem; top: 0.7rem; color: var(--red-deep); font-weight: 700; }
+  .lekta-links { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--paper-line); }
+  .lekta-links h2 { font-family: var(--font-serif); font-size: 1.02rem; font-weight: 600; margin: 1.1rem 0 0.35rem; color: var(--paper-ink); }
+  .lekta-links ul { margin: 0; padding-left: 1.1rem; }
+  .lekta-links li { margin: 0.15rem 0; font-size: 0.875rem; }
   /* responzivno: uvijek na SAMOM KRAJU bloka da pregazi gornja pravila */
   @media (max-width: 700px) {
     body { margin: 0; max-width: none; border-radius: 0; border-left-width: 0; border-right-width: 0; box-shadow: none; }
   }
 `;
 
-// Klijentski upravljac alata: cita window.LEKTA_TOOL_CONFIG + window.LektaCitation. Bez ${} i backtickova.
+// Klijentski upravljac alata: cita LEKTA_TOOL_CONFIG (JSON data island, ne izvrsna inline
+// skripta) + window.LektaCitation. Bez ${} i backtickova.
 const TOOL_JS = String.raw`
 (function () {
   var C = window.LektaCitation;
-  var cfg = window.LEKTA_TOOL_CONFIG || {};
+  var cfgEl = document.getElementById('lekta-tool-config');
+  var cfg = cfgEl ? JSON.parse(cfgEl.textContent) : {};
   function el(id) { return document.getElementById(id); }
   function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
   var current = null;
@@ -240,17 +250,54 @@ const TOOL_JS = String.raw`
     return C.formatCitation(inp, current.engineStyle);
   }
 
+  // Kopiranje u meduspremnik: Clipboard API pa execCommand fallback (isti obrazac kao
+  // bulk-copy nize); potvrda kratkim "kopirano" na samom linku.
+  function copyPlain(text, linkEl) {
+    function done(ok) {
+      if (!linkEl) return;
+      var orig = linkEl.getAttribute('data-label') || linkEl.textContent;
+      linkEl.setAttribute('data-label', orig);
+      linkEl.textContent = ok ? 'kopirano ✓' : 'označi pa kopiraj ručno';
+      setTimeout(function () { linkEl.textContent = orig; }, 1400);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(fallbackCopy(text)); });
+    } else {
+      done(fallbackCopy(text));
+    }
+  }
+  function fallbackCopy(text) {
+    try {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.top = '-1000px';
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = document.execCommand('copy');
+      ta.remove();
+      return ok;
+    } catch (_) { return false; }
+  }
+
   // --- Jedan izvor ---
   var singleCard = el('single-card');
+  var lastSingle = { citation: '', inText: '' };
   function generateSingle() {
     if (!current || (!current.engineStyle && !current.spec)) return;
     var res = formatWithCurrent(readCard(singleCard));
+    lastSingle = { citation: res.citation || '', inText: res.inText || '' };
     var html = res.citation
       ? '<div class="cit-line">' + esc(res.citation) + '</div>'
       : '<div class="cit-empty">Popuni polja pa klikni Generiraj.</div>';
-    if (res.inText) html += '<div class="cit-intext">U tekstu: ' + esc(res.inText) + '</div>';
-    if (res.missing && res.missing.length) html += '<div class="cit-missing">Nedostaje (preporuceno): ' + res.missing.map(esc).join(', ') + '</div>';
+    if (res.citation) html += '<div class="cit-copy"><a href="#" id="single-copy">kopiraj citat</a></div>';
+    if (res.inText) html += '<div class="cit-intext">U tekstu: ' + esc(res.inText) + ' <a href="#" id="single-copy-intext">kopiraj</a></div>';
+    if (res.missing && res.missing.length) html += '<div class="cit-missing">Nedostaje (preporučeno): ' + res.missing.map(esc).join(', ') + '</div>';
     el('citation-output').innerHTML = html;
+    var c1 = el('single-copy');
+    if (c1) c1.addEventListener('click', function (e) { e.preventDefault(); copyPlain(lastSingle.citation, c1); });
+    var c2 = el('single-copy-intext');
+    if (c2) c2.addEventListener('click', function (e) { e.preventDefault(); copyPlain(lastSingle.inText, c2); });
   }
 
   // --- Cijela literatura (bulk): zalijepi -> prepoznaj -> UREDI po unosu -> formatiraj + sortiraj ---
@@ -265,7 +312,7 @@ const TOOL_JS = String.raw`
       card.className = 'bulk-card' + (p.lowConfidence ? ' low-conf' : '');
       var head = document.createElement('div');
       head.className = 'bulk-card-head';
-      head.textContent = 'Referenca ' + (i + 1) + (p.lowConfidence ? ' (malo prepoznato, dopuni rucno)' : '');
+      head.textContent = 'Referenca ' + (i + 1) + (p.lowConfidence ? ' (malo prepoznato, dopuni ručno)' : '');
       var fields = document.createElement('div');
       fields.className = 'bulk-card-fields';
       card.appendChild(head);
@@ -324,17 +371,17 @@ const TOOL_JS = String.raw`
       el('panel-single').style.display = 'none';
       el('panel-bulk').style.display = 'none';
       el('style-info').innerHTML = style
-        ? '<p>Za ovaj stil (' + esc(style.label) + ') Lekta nema automatski format. Koristi <a href="' + esc(cfg.generalToolUrl || '/citat.html') + '">opci generator citata</a> i provjeri upute mentora.</p>'
-        : '<p>Za ovaj fakultet jos nemamo verificiran citatni stil. Koristi <a href="' + esc(cfg.generalToolUrl || '/citat.html') + '">opci generator citata</a> i provjeri sluzbene upute.</p>';
+        ? '<p>Za ovaj stil (' + esc(style.label) + ') Lekta nema automatski format. Koristi <a href="' + esc(cfg.generalToolUrl || '/citat.html') + '">opći generator citata</a> i provjeri upute mentora.</p>'
+        : '<p>Za ovaj fakultet još nemamo verificiran citatni stil. Koristi <a href="' + esc(cfg.generalToolUrl || '/citat.html') + '">opći generator citata</a> i provjeri službene upute.</p>';
       return;
     }
     if (tabs) tabs.style.display = '';
     if (style.spec && style.spec.pin) {
-      el('style-info').innerHTML = '<p>Stil: <strong>' + esc(style.label) + '</strong>. Propisan sluzbenim uputama: &quot;' + esc(style.spec.sourceLabel) + '&quot;, provjereno ' + esc(style.spec.verifiedAt || '') + '. Format: opci ' + esc(style.label) + ' oblik.</p>';
+      el('style-info').innerHTML = '<p>Stil: <strong>' + esc(style.label) + '</strong>. Propisan službenim uputama: &quot;' + esc(style.spec.sourceLabel) + '&quot;, provjereno ' + esc(style.spec.verifiedAt || '') + '. Format: opći oblik stila ' + esc(style.label) + '.</p>';
     } else if (style.spec) {
-      el('style-info').innerHTML = '<p>Stil: <strong>' + esc(style.label) + '</strong>. Format prema sluzbenim uputama: &quot;' + esc(style.spec.sourceLabel) + '&quot;, provjereno ' + esc(style.spec.verifiedAt || '') + '.</p>';
+      el('style-info').innerHTML = '<p>Stil: <strong>' + esc(style.label) + '</strong>. Format prema službenim uputama: &quot;' + esc(style.spec.sourceLabel) + '&quot;, provjereno ' + esc(style.spec.verifiedAt || '') + '.</p>';
     } else {
-      el('style-info').innerHTML = '<p>Stil: <strong>' + esc(style.label) + '</strong> (opci oblik). Tvoj fakultet koristi ovaj stil; tocan izgled interpunkcije provjeri u uputama fakulteta ili kod mentora.</p>';
+      el('style-info').innerHTML = '<p>Stil: <strong>' + esc(style.label) + '</strong> (opći oblik). Tvoj fakultet koristi ovaj stil; točan izgled interpunkcije provjeri u uputama fakulteta ili kod mentora.</p>';
     }
     showTab('single');
     renderCard(singleCard, readCard(singleCard));
@@ -399,22 +446,69 @@ const TOOL_JS = String.raw`
 })();
 `;
 
-function pageShell({ title, description, canonical, bodyHtml, engineJs, configJs }) {
+const OG_IMAGE = `${SITE_ORIGIN}/og-image.png`;
+
+// Minimalni WebApplication JSON-LD, isti oblik kao rucno pisane alat-stranice (citat.html i dr.).
+// application/ld+json je INERTAN za CSP script-src (verify-deploy-dist.mjs provjera #6), pa smije
+// ostati inline bez hash whitelistinga.
+function webAppJsonLd(name, description) {
+  return jsonInline({
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name,
+    description,
+    applicationCategory: 'EducationalApplication',
+    operatingSystem: 'Web',
+    inLanguage: 'hr',
+    isAccessibleForFree: true,
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+    publisher: { '@type': 'Organization', name: 'Lekta' },
+  });
+}
+
+// CSP script-src NEMA 'unsafe-inline' (public/_headers): engine+TOOL_JS idu kao JEDAN
+// vanjski asset (dist/alati/citation-tool.js, vec dopusten preko 'self', pise ga main()
+// jednom); LEKTA_TOOL_CONFIG kao ne-izvrsni JSON data island koji CSP script-src ne gata
+// (isti obrazac kao application/ld+json JSON-LD u index.html).
+//
+// robots: postavlja se SAMO na "noindex,follow" za genericke (bez verificiranog speca)
+// fakultet x stil stranice - blizu bajt-identican predlozak na desetke URL-ova je near-duplicate
+// signal Googleu; follow zadrzava prijenos internog linka dalje prema indeksiranim stranicama.
+function pageShell({ title, description, canonical, bodyHtml, configJs, robots }) {
+  const ogName = title.replace(/ \| Lekta$/, '');
   return `<!doctype html>
 <html lang="hr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>try{var _t=localStorage.getItem('lekta.theme');if(_t)document.documentElement.dataset.theme=_t;}catch(e){}</script>
 <title>${escapeHtml(title)}</title>
 <meta name="description" content="${escapeHtml(description)}">
+${robots ? `<meta name="robots" content="${robots}">` : ''}
 ${canonical ? `<link rel="canonical" href="${canonical}">` : ''}
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Lekta">
+<meta property="og:locale" content="hr_HR">
+<meta property="og:title" content="${escapeHtml(ogName)}">
+<meta property="og:description" content="${escapeHtml(description)}">
+${canonical ? `<meta property="og:url" content="${canonical}">` : ''}
+<meta property="og:image" content="${OG_IMAGE}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${escapeHtml(ogName)}">
+<meta name="twitter:description" content="${escapeHtml(description)}">
+<meta name="twitter:image" content="${OG_IMAGE}">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<script type="application/ld+json">${webAppJsonLd(ogName, description)}</script>
 <style>${PAGE_STYLE}</style>
 </head>
 <body>
 ${bodyHtml}
-<script>${engineJs}</script>
-<script>window.LEKTA_TOOL_CONFIG = ${configJs};</script>
-<script>${TOOL_JS}</script>
+<script type="application/json" id="lekta-tool-config">${configJs}</script>
+<script src="/alati/citation-tool.js"></script>
 </body>
 </html>
 `;
@@ -429,7 +523,7 @@ function toolFormHtml({ withFacultyPicker }) {
   return `<div id="tool">
 ${picker}
 <div id="style-info"></div>
-<div id="tool-tabs" class="tabs" role="tablist" aria-label="Nacin unosa">
+<div id="tool-tabs" class="tabs" role="tablist" aria-label="Način unosa">
   <button id="tab-single" class="tab active" type="button" role="tab" aria-selected="true" aria-controls="panel-single">Jedan izvor</button>
   <button id="tab-bulk" class="tab" type="button" role="tab" aria-selected="false" aria-controls="panel-bulk" tabindex="-1">Cijela literatura</button>
 </div>
@@ -439,9 +533,9 @@ ${picker}
   <div id="citation-output" aria-live="polite"></div>
 </div>
 <div id="panel-bulk" role="tabpanel" aria-labelledby="tab-bulk" style="display:none">
-  <p class="bulk-note">Zalijepi popis literature (jedna referenca po retku ili odvojene praznim retkom). Alat prepozna polja koliko moze; OBAVEZNO provjeri i ispravi svaki unos prije koristenja.</p>
+  <p class="bulk-note">Zalijepi popis literature (jedna referenca po retku ili odvojene praznim retkom). Alat prepozna polja koliko može; OBAVEZNO provjeri i ispravi svaki unos prije korištenja.</p>
   <label class="sr-only" for="bulk-input">Zalijepi popis literature</label>
-  <textarea id="bulk-input" rows="8" placeholder="Zalijepi cijelu literaturu ovdje, npr.:&#10;Kovacic, I. (2020). Naslov knjige. Zagreb: Izdavac.&#10;Horvat, A. (2019). Naslov clanka. Casopis, 28(3), 45-67."></textarea>
+  <textarea id="bulk-input" rows="8" placeholder="Zalijepi cijelu literaturu ovdje, npr.:&#10;Kovačić, I. (2020). Naslov knjige. Zagreb: Izdavač.&#10;Horvat, A. (2019). Naslov članka. Časopis, 28(3), 45-67."></textarea>
   <button id="bulk-parse" type="button">Prepoznaj reference</button>
   <div id="bulk-entries"></div>
   <button id="bulk-generate" type="button" style="display:none">Generiraj i sortiraj abecedno</button>
@@ -450,12 +544,17 @@ ${picker}
 </div>`;
 }
 
-function ctaHtml(backHref, backLabel) {
+function ctaHtml(backHref, backLabel, unitId = '') {
+  // unitId: fakultet-specificna stranica ga proslijedi pa glavna aplikacija (?unit=, cita ga
+  // applyUnitFromUrl u src/ui/app.ts) unaprijed odabere korisnikov fakultet - bez toga
+  // posjetitelj s npr. ffzg stranice mora ponovno traziti svoj fakultet u izborniku.
+  const unitParam = unitId ? `&unit=${encodeURIComponent(unitId)}` : '';
   return `<div class="lekta-cta">
   <strong>Provjeri cijeli rad na Lekti</strong>
   <p>Citat je samo jedan dio. Lekta provjerava oblikovanje, strukturu i citiranje odjednom, prema stvarnim pravilima tvog fakulteta.</p>
-  <a href="${SITE_ORIGIN}/?utm_source=alat_citati">Provjeri cijeli rad</a>
+  <a href="${SITE_ORIGIN}/?utm_source=alat_citati${unitParam}">Provjeri cijeli rad</a>
   <a class="lekta-back" href="${backHref}">${escapeHtml(backLabel)}</a>
+  <a class="lekta-back" href="${SITE_ORIGIN}/alati.html">Svi besplatni alati</a>
 </div>`;
 }
 
@@ -538,7 +637,7 @@ function buildFaculties(engine, specs) {
     const u = p.unitId;
     if (!u) continue;
     (acc[u] ??= {});
-    const tok = p.rules && p.rules.recommendedCitation;
+    const tok = recommendedCitationOf(p);
     if (!tok) continue;
     const t = (acc[u][tok] ??= { count: 0, programs: new Set() });
     t.count++;
@@ -553,14 +652,34 @@ function buildFaculties(engine, specs) {
   const styleFromSpec = (spec) => ({
     token: spec.styleToken,
     label: spec.label,
+    // shortLabel: kratka obiteljska oznaka stila (npr. "Harvard / autor-godina") za <title>,
+    // odvojena od spec.label koji nosi punu provenijenciju ("... (sluzbene upute FET Pula)")
+    // i zna narasti preko SERP granice kad se doda imenu fakulteta.
+    shortLabel: engine.citationMeta(spec.styleToken).label,
     engineStyle: engine.engineStyleFor(spec.styleToken), // null za custom -> klijent koristi formatFromSpec
     accessDate: spec.accessDate !== false,
     programsHint: '',
     spec: clientSpec(spec),
+    fullSpec: spec, // server-side samo: buildFacultyStylePage vadi worked example/evidence citat
   });
 
   // fakulteti = oni s profilnim tokenima UNIJA onih koji imaju samo verified spec
   const unitIds = new Set([...Object.keys(acc), ...Object.keys(specsByFac)]);
+
+  // Tvrdi gate: spec.facultyId koji ne postoji medju stvarnim catalog unit ID-ovima
+  // (data/catalog/zagreb-catalog.json) NE SMIJE tiho pasti na fallback {name:u,instId:'other'}
+  // koji bi ispisao sirovi ID kao ime fakulteta na javnoj stranici (npr. "Generator citata za
+  // unipu"). Bolje srusiti build nego objaviti pogresno naslovljenu, osirocenu stranicu.
+  for (const facId of Object.keys(specsByFac)) {
+    if (!unitMeta[facId]) {
+      console.error(
+        `[generate-citation-tools] FAIL: facultyId "${facId}" (iz ${specsByFac[facId].map((s) => s.styleToken).join(', ')}) ` +
+          'ne postoji medju stvarnim catalog unit ID-ovima u data/catalog/zagreb-catalog.json',
+      );
+      process.exit(1);
+    }
+  }
+
   const faculties = [...unitIds]
     .map((u) => {
       const meta = unitMeta[u] || { name: u, instId: 'other', instName: 'Ostalo' };
@@ -574,10 +693,12 @@ function buildFaculties(engine, specs) {
           return {
             token: tok,
             label: spec ? spec.label : m.label,
+            shortLabel: m.label,
             engineStyle: engine.engineStyleFor(tok),
             accessDate: spec ? spec.accessDate !== false : m.accessDate,
             programsHint: progs,
             spec: spec ? clientSpec(spec) : null,
+            fullSpec: spec,
           };
         });
       // dodaj verified specove ciji token NIJE medju profilnim tokenima (custom-spec surface)
@@ -588,6 +709,11 @@ function buildFaculties(engine, specs) {
       return { id: u, name: meta.name, instId: meta.instId, instName: meta.instName, styles };
     })
     .sort((a, b) => a.name.localeCompare(b.name, 'hr'));
+
+  // Prikazno ime za H1/<title> statickih stranica (dvosmislena imena dobivaju sveuciliste);
+  // izbornik ostaje na kratkom imenu jer optgroup po sveucilistu vec disambiguira.
+  const displayNames = buildDisplayNames(faculties);
+  for (const f of faculties) f.displayName = displayNames.get(f.id) || f.name;
 
   // faculty <select> grupiran po sveucilistu (redoslijed iz kataloga)
   FACULTY_OPTIONS = catalog
@@ -605,88 +731,168 @@ function buildFaculties(engine, specs) {
   return faculties;
 }
 
+// Genericka imena fakulteta ("Filozofski fakultet", "Pravni fakultet") postoje na vise
+// sveucilista; katalog zagrebacke sastavnice cesto NE nosi grad u imenu dok sestrinske nose
+// ("Filozofski fakultet u Rijeci", "Filozofski fakultet Osijek"), pa H1/<title> bez
+// kvalifikatora ne kaze o kojem se sveucilistu radi. Kvalificiramo SAMO imena koja su i
+// dalje dvosmislena: baza imena (bez lokacijskog sufiksa) kolidira preko vise institucija,
+// a samo ime nema vlastiti razlikovni sufiks.
+function stripLocationSuffix(name) {
+  return name
+    .replace(/\s+u\s+\p{Lu}[\p{L}]+$/u, '')
+    .replace(/\s+(Osijek|Rijeka|Split|Zadar|Pula|Zagreb|Varaždin|Dubrovnik|Koprivnica|Križevci)$/u, '')
+    .trim();
+}
+
+/** Mapa f.id -> prikazno ime za H1/<title>; dvosmislena gola imena dobivaju "(instName)". */
+function buildDisplayNames(faculties) {
+  const byBase = new Map();
+  for (const f of faculties) {
+    const base = stripLocationSuffix(f.name).toLowerCase();
+    if (!byBase.has(base)) byBase.set(base, []);
+    byBase.get(base).push(f);
+  }
+  const out = new Map();
+  for (const group of byBase.values()) {
+    const multiInst = new Set(group.map((f) => f.instId)).size > 1;
+    for (const f of group) {
+      const hasOwnSuffix = stripLocationSuffix(f.name) !== f.name;
+      out.set(f.id, multiInst && !hasOwnSuffix ? `${f.name} (${f.instName})` : f.name);
+    }
+  }
+  return out;
+}
+
 function slugFor(faculty, style) {
   const renderable = faculty.styles.filter((s) => s.engineStyle || s.spec);
   return renderable.length > 1 ? `${faculty.id}-${slugify(style.token)}` : faculty.id;
 }
 
-function buildIndexPage(faculties, engineJs) {
+// Crawlabilni <a href> popis svih statickih (fakultet x stil) stranica, grupiran po
+// sveucilistu (katalog redoslijed). Bez ovoga jedini put do 143 generirane stranice je
+// <select> presretnut TOOL_JS-om (0 stvarnih linkova za Google da slijedi/da im prenese equity).
+function facultyLinksHtml(catalog, faculties) {
+  const groups = catalog
+    .map((inst) => {
+      const list = faculties.filter((f) => f.instId === inst.id);
+      const items = list.flatMap((f) => {
+        const renderable = f.styles.filter((s) => s.engineStyle || s.spec);
+        return renderable.map((s) => {
+          const suffix = renderable.length > 1 ? ` &ndash; ${escapeHtml(s.shortLabel)}` : '';
+          return `<li><a href="./${slugFor(f, s)}.html">${escapeHtml(f.displayName || f.name)}${suffix}</a></li>`;
+        });
+      });
+      if (!items.length) return '';
+      return `<h2>${escapeHtml(inst.name)}</h2><ul>${items.join('')}</ul>`;
+    })
+    .filter(Boolean)
+    .join('');
+  return `<nav class="lekta-links" aria-label="Svi fakulteti po sveučilištu">${groups}</nav>`;
+}
+
+function buildIndexPage(faculties, catalog) {
   const clientData = faculties.map((f) => ({
     id: f.id,
     styles: f.styles.map((s) => ({ token: s.token, label: s.label, engineStyle: s.engineStyle, accessDate: s.accessDate, programsHint: s.programsHint, spec: s.spec })),
   }));
   const config = { mode: 'index', generalToolUrl: GENERAL_TOOL_URL, faculties: clientData };
   const body = `<h1>Generator citata po fakultetu</h1>
-<p class="lekta-tool-meta">Odaberi fakultet pa se ucita njegov citatni stil. Provjereno prema profilima Lekte.</p>
+<p class="lekta-tool-meta">Odaberi fakultet pa se učita njegov citatni stil. Provjereno prema profilima Lekte.</p>
 ${toolFormHtml({ withFacultyPicker: true })}
-${ctaHtml(`${SITE_ORIGIN}/alati/brojac-kartica.html`, 'Brojac kartica')}`;
+${ctaHtml(`${SITE_ORIGIN}/alati/brojac-kartica.html`, 'Brojač kartica')}
+${facultyLinksHtml(catalog, faculties)}`;
   return pageShell({
     title: 'Generator citata po fakultetu | Lekta',
-    description: 'Odaberi svoj fakultet i citiraj tocno po njegovim pravilima, provjereno i s izvorom.',
+    description: 'Odaberi svoj fakultet i citiraj točno po njegovim pravilima, provjereno i s izvorom.',
     canonical: `${SITE_ORIGIN}/alati/citati/index.html`,
     bodyHtml: body,
-    engineJs,
     configJs: jsonInline(config),
   });
 }
 
-function buildFacultyStylePage(faculty, style, engineJs) {
+// Stvarno jedinstven tekst po (fakultet x stil) stranici, izvucen iz PUNOG speca (ne
+// clientSpec-osiromasenog): konkretan formatiran primjer citata (custom-spec specovi) ili
+// citiran redak sluzbenih uputa s brojem stranice (style-pin specovi, sourceTypes su []).
+// Bez ovoga su verificirane stranice skoro identicne kao genericke (near-duplicate SEO rizik).
+function workedExampleHtml(style) {
+  const full = style.fullSpec;
+  if (!full) return '';
+  const withExample = (full.sourceTypes || []).find((t) => t.example && t.example.expected);
+  if (withExample) {
+    const sourcePage = withExample.provenance && withExample.provenance.sourcePage;
+    const pageNote = sourcePage ? ` (${escapeHtml(sourcePage)})` : '';
+    return `<div class="lekta-example">
+  <p class="lekta-tool-meta">Primjer iz službenih uputa${pageNote}:</p>
+  <p class="cit-line">${escapeHtml(withExample.example.expected)}</p>
+</div>`;
+  }
+  if (full.evidence && full.evidence.quoteRaw) {
+    const sourcePage = full.evidence.sourcePage;
+    const pageNote = sourcePage ? ` (${escapeHtml(sourcePage)})` : '';
+    return `<div class="lekta-example">
+  <p class="lekta-tool-meta">Iz službenih uputa${pageNote}: &quot;${escapeHtml(full.evidence.quoteRaw)}&quot;</p>
+</div>`;
+  }
+  return '';
+}
+
+function buildFacultyStylePage(faculty, style) {
   const config = {
     mode: 'static',
     generalToolUrl: GENERAL_TOOL_URL,
     style: { token: style.token, label: style.label, engineStyle: style.engineStyle, accessDate: style.accessDate, spec: style.spec },
   };
+  const displayName = faculty.displayName || faculty.name;
   const metaLine = style.spec && style.spec.pin
-    ? `Stil propisan sluzbenim uputama: ${escapeHtml(style.spec.sourceLabel)}, provjereno ${escapeHtml(style.spec.verifiedAt ?? '')}. Format: opci ${escapeHtml(style.label)} oblik.`
+    ? `Stil propisan službenim uputama: ${escapeHtml(style.spec.sourceLabel)}, provjereno ${escapeHtml(style.spec.verifiedAt ?? '')}. Format: opći oblik stila ${escapeHtml(style.label)}.`
     : style.spec
-      ? `Vjeran format prema sluzbenim uputama: ${escapeHtml(style.spec.sourceLabel)}, provjereno ${escapeHtml(style.spec.verifiedAt ?? '')}.`
-      : `Stil: ${escapeHtml(style.label)}. Prema profilu ${escapeHtml(faculty.name)} u Lekti.`;
+      ? `Vjeran format prema službenim uputama: ${escapeHtml(style.spec.sourceLabel)}, provjereno ${escapeHtml(style.spec.verifiedAt ?? '')}.`
+      // "Prema profilu fakulteta X" umjesto "Prema profilu X": faculty.name je uvijek nominativ
+      // iz kataloga, a "prema profilu" trazi genitiv ("profil koga/cega") koji katalog ne nosi.
+      : `Stil: ${escapeHtml(style.label)}. Prema profilu fakulteta ${escapeHtml(faculty.name)} u Lekti.`;
+  // Kojim se smjerovima/studijima ovaj stil obicno veze (vec izracunato za index izbornik):
+  // posjetitelj koji sleti na krivi stil odmah vidi je li ovo njegova varijanta.
+  const hintLine = style.programsHint
+    ? `<p class="lekta-tool-meta">Na ovom fakultetu stil se najčešće veže uz: ${escapeHtml(style.programsHint)}.</p>`
+    : '';
+  // Sestrinski stilovi ISTOG fakulteta (npr. FFZG ima 5 varijanti po odsjecima): izravan
+  // link umjesto povratka na puni izbornik svih fakulteta u Hrvatskoj.
+  const siblings = faculty.styles
+    .filter((s) => (s.engineStyle || s.spec) && s.token !== style.token)
+    .map((s) => `<a href="./${slugFor(faculty, s)}.html">${escapeHtml(s.label)}${s.programsHint ? ` (${escapeHtml(s.programsHint)})` : ''}</a>`);
+  const siblingLine = siblings.length
+    ? `<p class="lekta-tool-meta">Ostali stilovi na ovom fakultetu: ${siblings.join(' · ')}.</p>`
+    : '';
+  const exampleHtml = workedExampleHtml(style);
   // Spec-branke (pin/custom-spec) nose punu recenicu s izvorom+datumom - jedini stvarni
   // diferencijator naspram genericnih citatnih alata, pa dobiva znacku povjerenja
   // (.lekta-source-note), ne sitni mono meta-stil rezerviran za kratke oznake.
   const metaClass = style.spec ? 'lekta-source-note' : 'lekta-tool-meta';
-  const body = `<h1>Generator citata za ${escapeHtml(faculty.name)}</h1>
+  const body = `<h1>Generator citata za ${escapeHtml(displayName)}</h1>
 <p class="${metaClass}">${metaLine}</p>
+${hintLine}
+${exampleHtml}
 ${toolFormHtml({ withFacultyPicker: false })}
-${ctaHtml('./index.html', 'Svi fakulteti')}`;
+${siblingLine}
+${ctaHtml('./index.html', 'Svi fakulteti', faculty.id)}`;
   return pageShell({
-    title: `Generator citata za ${faculty.name} (${style.label}) | Lekta`,
+    title: `Generator citata za ${displayName} (${style.shortLabel}) | Lekta`,
     description: style.spec
-      ? `Citiraj tocno po sluzbenim uputama za ${faculty.name}, s izvorom i datumom provjere.`
-      : `Citiraj po stilu ${style.label} za ${faculty.name}, provjereno i s izvorom.`,
+      ? `Citiraj po stilu ${style.shortLabel} točno po službenim uputama za ${displayName}, s izvorom i datumom provjere.`
+      : `Citiraj po stilu ${style.shortLabel} za ${displayName}, provjereno i s izvorom.`,
     canonical: `${SITE_ORIGIN}/alati/citati/${slugFor(faculty, style)}.html`,
     bodyHtml: body,
-    engineJs,
     configJs: jsonInline(config),
+    // Genericke stranice (bez verificiranog speca) su skoro bajt-identicne desetke puta -
+    // near-duplicate signal Googleu; noindex,follow ih uklanja iz indeksa bez brisanja
+    // stranice ni prekidanja internog linkanja (vidi pageShell komentar).
+    robots: style.spec ? undefined : 'noindex,follow',
   });
 }
 
-function buildCharCounterHtml() {
-  return String.raw`<!doctype html>
-<html lang="hr">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Brojac kartica | Lekta</title>
-<meta name="description" content="Izbroji kartice teksta (1800 znakova po kartici) za svoj rad.">
-<link rel="canonical" href="${SITE_ORIGIN}/alati/brojac-kartica.html">
-<style>${PAGE_STYLE}
-  textarea { min-height: 220px; }
-  .lekta-stats { display: flex; gap: 1.5rem; margin-top: 0.75rem; font-size: 0.9375rem; }
-  .lekta-stats strong { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
-</style>
-</head>
-<body>
-<h1>Brojac kartica</h1>
-<p class="lekta-tool-meta">1 kartica = 1800 znakova (ukljucujuci razmake), standardna jedinica za akademske i lektorske radove.</p>
-<textarea id="text-input" placeholder="Zalijepi svoj tekst ovdje..."></textarea>
-<div class="lekta-stats">
-  <span>Znakova: <strong id="char-count">0</strong></span>
-  <span>Kartica: <strong id="page-count">0,00</strong></span>
-  <span>Rijeci: <strong id="word-count">0</strong></span>
-</div>
-${ctaHtml(`${SITE_ORIGIN}/alati/citati/index.html`, 'Generator citata po fakultetu')}
-<script>
+// Standalone brojac logika (bez engine/config ovisnosti): zaseban vanjski asset iz istog
+// razloga kao citation-tool.js (CSP script-src bez 'unsafe-inline').
+const BROJAC_JS = String.raw`
 var input = document.getElementById('text-input');
 var charCount = document.getElementById('char-count');
 var pageCount = document.getElementById('page-count');
@@ -710,14 +916,71 @@ input.addEventListener('input', function () {
   pageCount.textContent = (chars / 1800).toFixed(2).replace('.', ',');
   wordCount.textContent = words;
 });
-</script>
+`;
+
+function buildCharCounterHtml() {
+  const title = 'Brojač kartica | Lekta';
+  const description = 'Izbroji kartice teksta (1800 znakova po kartici) za svoj rad.';
+  const canonical = `${SITE_ORIGIN}/alati/brojac-kartica.html`;
+  const ogName = title.replace(/ \| Lekta$/, '');
+  return `<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>try{var _t=localStorage.getItem('lekta.theme');if(_t)document.documentElement.dataset.theme=_t;}catch(e){}</script>
+<title>${escapeHtml(title)}</title>
+<meta name="description" content="${escapeHtml(description)}">
+<link rel="canonical" href="${canonical}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Lekta">
+<meta property="og:locale" content="hr_HR">
+<meta property="og:title" content="${escapeHtml(ogName)}">
+<meta property="og:description" content="${escapeHtml(description)}">
+<meta property="og:url" content="${canonical}">
+<meta property="og:image" content="${OG_IMAGE}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${escapeHtml(ogName)}">
+<meta name="twitter:description" content="${escapeHtml(description)}">
+<meta name="twitter:image" content="${OG_IMAGE}">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<script type="application/ld+json">${webAppJsonLd(ogName, description)}</script>
+<style>${PAGE_STYLE}
+  textarea { min-height: 220px; }
+  .lekta-stats { display: flex; gap: 1.5rem; margin-top: 0.75rem; font-size: 0.9375rem; }
+  .lekta-stats strong { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+<h1>Brojač kartica</h1>
+<p class="lekta-tool-meta">1 kartica = 1800 znakova (uključujući razmake), standardna jedinica za akademske i lektorske radove.</p>
+<textarea id="text-input" placeholder="Zalijepi svoj tekst ovdje..."></textarea>
+<div class="lekta-stats">
+  <span>Znakova: <strong id="char-count">0</strong></span>
+  <span>Kartica: <strong id="page-count">0,00</strong></span>
+  <span>Riječi: <strong id="word-count">0</strong></span>
+</div>
+${ctaHtml(`${SITE_ORIGIN}/alati/citati/index.html`, 'Generator citata po fakultetu')}
+<script src="/alati/brojac-kartica.js"></script>
 </body>
 </html>
 `;
 }
 
+// urls: [{loc, lastmod?}]. lastmod se pise SAMO kad postoji stvaran datum (spec.verifiedAt);
+// build-datum kao fallback bi mijenjao lastmod na svaki build bez promjene sadrzaja, sto je
+// za crawl-budget gori signal od izostavljenog polja (Google nekonzistentan lastmod ignorira).
 function buildSitemap(urls) {
-  const entries = urls.map((u) => `  <url><loc>${u}</loc></url>`).join('\n');
+  const entries = urls
+    .map((u) => {
+      const lastmod = u.lastmod && /^\d{4}-\d{2}-\d{2}$/.test(u.lastmod) ? `<lastmod>${u.lastmod}</lastmod>` : '';
+      return `  <url><loc>${u.loc}</loc>${lastmod}</url>`;
+    })
+    .join('\n');
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${entries}\n</urlset>\n`;
 }
 
@@ -726,17 +989,25 @@ async function main() {
   const engine = loadEngineInNode(engineJs);
   const specs = loadVerifiedSpecs(engine); // gate: exit 1 na neverificirano/drift
   const faculties = buildFaculties(engine, specs);
+  const catalog = loadJson(CATALOG_PATH);
 
   fs.mkdirSync(CITATI_OUT_DIR, { recursive: true });
 
+  // Engine + TOOL_JS su IDENTICNI na svakoj stranici (samo LEKTA_TOOL_CONFIG varira po
+  // stranici, i taj ide kao odvojeni JSON data island) - pisu se JEDNOM kao vanjski asset,
+  // ne inlineaju se po stranici (CSP script-src bez 'unsafe-inline', vidi pageShell()).
+  fs.writeFileSync(path.join(OUT_DIR, 'citation-tool.js'), `${engineJs}\n${TOOL_JS}`, 'utf-8');
+  fs.writeFileSync(path.join(OUT_DIR, 'brojac-kartica.js'), BROJAC_JS, 'utf-8');
+
   const sitemapUrls = [
-    `${SITE_ORIGIN}/alati/brojac-kartica.html`,
-    `${SITE_ORIGIN}/alati/citati/index.html`,
+    { loc: `${SITE_ORIGIN}/alati/brojac-kartica.html` },
+    { loc: `${SITE_ORIGIN}/alati/citati/index.html` },
   ];
 
-  fs.writeFileSync(path.join(CITATI_OUT_DIR, 'index.html'), buildIndexPage(faculties, engineJs), 'utf-8');
+  fs.writeFileSync(path.join(CITATI_OUT_DIR, 'index.html'), buildIndexPage(faculties, catalog), 'utf-8');
 
   let pageCount = 0;
+  let noindexCount = 0;
   const seen = new Set();
   for (const f of faculties) {
     for (const s of f.styles) {
@@ -744,8 +1015,11 @@ async function main() {
       const slug = slugFor(f, s);
       if (seen.has(slug)) continue;
       seen.add(slug);
-      fs.writeFileSync(path.join(CITATI_OUT_DIR, `${slug}.html`), buildFacultyStylePage(f, s, engineJs), 'utf-8');
-      sitemapUrls.push(`${SITE_ORIGIN}/alati/citati/${slug}.html`);
+      fs.writeFileSync(path.join(CITATI_OUT_DIR, `${slug}.html`), buildFacultyStylePage(f, s), 'utf-8');
+      // Genericke (bez speca) stranice su noindex (vidi buildFacultyStylePage) - ne salju se u
+      // sitemap, jer navodjenje noindex URL-ova u sitemapu je bespotreban crawl-budget signal.
+      if (s.spec) sitemapUrls.push({ loc: `${SITE_ORIGIN}/alati/citati/${slug}.html`, lastmod: s.spec?.verifiedAt ?? undefined });
+      else noindexCount++;
       pageCount++;
     }
   }
@@ -763,6 +1037,10 @@ async function main() {
   console.log(
     `[generate-citation-tools] ${withSpec} s VERIFICIRANIM specom (sluzbene upute), ` +
       `${withStyle - withSpec} s obiteljskim stilom, ${noStyle} bez (vode na opci alat).`,
+  );
+  console.log(
+    `[generate-citation-tools] ${pageCount - noindexCount} stranica u sitemapu (spec), ` +
+      `${noindexCount} genericka (noindex,follow, near-duplicate zastita).`,
   );
 }
 
