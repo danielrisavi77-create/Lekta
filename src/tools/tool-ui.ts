@@ -39,6 +39,7 @@ async function copyText(text: string): Promise<boolean> {
 
 interface CopyButtonOptions {
   failLabel?: string;
+  failStatus?: string; // override zadane fallback poruke kad stranica nema vidljiv blok za rucno oznacavanje
   holdMs?: number;
   statusEl?: any;       // opcionalni aria-live element: ishod se najavljuje citacu ekrana (WCAG 4.1.3)
 }
@@ -59,7 +60,7 @@ export function bindCopyButton(
   const failLabel = opts.failLabel ?? 'Označi pa Ctrl+C';
   const holdMs = opts.holdMs ?? 1600;
   const okStatus = 'Sažetak kopiran u međuspremnik.';
-  const failStatus = 'Kopiranje nije uspjelo, označite tekst pa Ctrl+C.';
+  const failStatus = opts.failStatus ?? 'Kopiranje nije uspjelo, označite tekst pa Ctrl+C.';
   const original = btn.textContent;
   let timer = 0;
   btn.addEventListener('click', async () => {

@@ -137,10 +137,17 @@ function init() {
     input.focus();
   });
 
+  // Default fallback poruka ("oznaci pa Ctrl+C") pretpostavlja vidljiv blok teksta identican
+  // onome sto se kopira; ovdje summaryText() ide ISKLJUCIVO u međuspremnik, brojke na stranici
+  // su razbacane po zasebnim <dd> elementima. Custom poruka upucuje na stvarno dostupnu radnju.
   bindCopyButton($('#kt-copy'), () => {
     const m = countText(input.value || '');
     return m.charsWithSpaces ? summaryText(m) : '';
-  }, { statusEl: $('#kt-copy-status') });
+  }, {
+    statusEl: $('#kt-copy-status'),
+    failLabel: 'Očitaj brojke ispod',
+    failStatus: 'Kopiranje nije uspjelo. Brojke su prikazane u tablici ispod, prepiši ih ručno.',
+  });
 }
 
 if (document.readyState === 'loading') {
