@@ -1,0 +1,1982 @@
+[
+  {
+    "id": "adu-graduate",
+    "unitId": "adu",
+    "level": "graduate",
+    "name": "Akademija dramske umjetnosti: diplomski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "agr-doctoral",
+    "unitId": "agr",
+    "level": "doctoral",
+    "name": "Agronomski fakultet: doktorski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "agr-final",
+    "unitId": "agr",
+    "level": "final",
+    "name": "Agronomski fakultet: zavrsni rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "agr-graduate",
+    "unitId": "agr",
+    "level": "graduate",
+    "name": "Agronomski fakultet: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "alu-doctoral",
+    "unitId": "alu",
+    "level": "doctoral",
+    "name": "Akademija likovnih umjetnosti: doktorski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "alu-graduate",
+    "unitId": "alu",
+    "level": "graduate",
+    "name": "Akademija likovnih umjetnosti: diplomski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "apuri",
+    "unitId": "apuri",
+    "level": null,
+    "name": "Akademija primijenjenih umjetnosti u Rijeci: naslovnica",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "aspira",
+    "unitId": "aspira",
+    "level": null,
+    "name": "Veleuciliste Aspira: naslovnica",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "bak-final",
+    "unitId": "bak",
+    "level": "final",
+    "name": "Veleuciliste Baltazar Zapresic: završni rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "biolos-final",
+    "unitId": "biolos",
+    "level": "final",
+    "name": "Odjel za biologiju, Sveuciliste u Osijeku: završni rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "biolos-graduate",
+    "unitId": "biolos",
+    "level": "graduate",
+    "name": "Odjel za biologiju, Sveuciliste u Osijeku: diplomski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "biotech-final",
+    "unitId": "biotech",
+    "level": "final",
+    "name": "Fakultet biotehnologije i razvoja lijekova, Rijeka: zavrsni rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "biotech-graduate",
+    "unitId": "biotech",
+    "level": "graduate",
+    "name": "Fakultet biotehnologije i razvoja lijekova, Rijeka: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "effectus-final",
+    "unitId": "effectus",
+    "level": "final",
+    "name": "EFFECTUS veleučilište: završni rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "effectus-graduate",
+    "unitId": "effectus",
+    "level": "graduate",
+    "name": "EFFECTUS veleučilište: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "effectus-seminar",
+    "unitId": "effectus",
+    "level": "seminar",
+    "name": "EFFECTUS veleučilište: seminarski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "efos-doctoral",
+    "unitId": "efos",
+    "level": "doctoral",
+    "name": "Ekonomski fakultet u Osijeku: doktorski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "efos-final",
+    "unitId": "efos",
+    "level": "final",
+    "name": "Ekonomski fakultet u Osijeku: završni rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "efos-graduate",
+    "unitId": "efos",
+    "level": "graduate",
+    "name": "Ekonomski fakultet u Osijeku: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "efos-seminar",
+    "unitId": "efos",
+    "level": "seminar",
+    "name": "Ekonomski fakultet u Osijeku: seminarski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "efos-specialist",
+    "unitId": "efos",
+    "level": "specialist",
+    "name": "Ekonomski fakultet u Osijeku: specijalistički rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "efri-final",
+    "unitId": "efri",
+    "level": "final",
+    "name": "Ekonomski fakultet u Rijeci: zavrsni rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "efri-graduate",
+    "unitId": "efri",
+    "level": "graduate",
+    "name": "Ekonomski fakultet u Rijeci: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "efst",
+    "unitId": "efst",
+    "level": null,
+    "name": "Ekonomski fakultet u Splitu: studentski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "efzg-doctoral",
+    "unitId": "efzg",
+    "level": "doctoral",
+    "name": "Ekonomski fakultet: doktorski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "efzg-final",
+    "unitId": "efzg",
+    "level": "final",
+    "name": "Ekonomski fakultet: završni rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "efzg-graduate",
+    "unitId": "efzg",
+    "level": "graduate",
+    "name": "Ekonomski fakultet: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "efzg-seminar",
+    "unitId": "efzg",
+    "level": "seminar",
+    "name": "Ekonomski fakultet: seminarski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "efzg-specialist",
+    "unitId": "efzg",
+    "level": "specialist",
+    "name": "Ekonomski fakultet: sveučilišni specijalistički rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "erf-doctoral",
+    "unitId": "erf",
+    "level": "doctoral",
+    "name": "Edukacijsko-rehabilitacijski fakultet: doktorski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "erf-graduate",
+    "unitId": "erf",
+    "level": "graduate",
+    "name": "Edukacijsko-rehabilitacijski fakultet: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fazos-final",
+    "unitId": "fazos",
+    "level": "final",
+    "name": "Fakultet agrobiotehnickih znanosti Osijek: zavrsni rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fazos-graduate",
+    "unitId": "fazos",
+    "level": "graduate",
+    "name": "Fakultet agrobiotehnickih znanosti Osijek: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fbf-doctoral",
+    "unitId": "fbf",
+    "level": "doctoral",
+    "name": "Farmaceutsko-biokemijski fakultet: doktorski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fbf-specialist",
+    "unitId": "fbf",
+    "level": "specialist",
+    "name": "Farmaceutsko-biokemijski fakultet: završni specijalistički rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fdmz-graduate",
+    "unitId": "fdmz",
+    "level": "graduate",
+    "name": "Fakultet za dentalnu medicinu i zdravstvo Osijek: diplomski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fer-doctoral",
+    "unitId": "fer",
+    "level": "doctoral",
+    "name": "Fakultet elektrotehnike i računarstva: doktorski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fer-graduate",
+    "unitId": "fer",
+    "level": "graduate",
+    "name": "Fakultet elektrotehnike i računarstva: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "ferit-final",
+    "unitId": "ferit",
+    "level": "final",
+    "name": "Fakultet elektrotehnike, racunarstva i informacijskih tehnologija Osijek: zavrsni rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "ferit-graduate",
+    "unitId": "ferit",
+    "level": "graduate",
+    "name": "Fakultet elektrotehnike, racunarstva i informacijskih tehnologija Osijek: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fesb",
+    "unitId": "fesb",
+    "level": null,
+    "name": "Fakultet elektrotehnike, strojarstva i brodogradnje (FESB): naslovnica",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fetpu-final",
+    "unitId": "fetpu",
+    "level": "final",
+    "name": "Fakultet ekonomije i turizma Dr. Mijo Mirkovic, Pula: završni rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fetpu-graduate",
+    "unitId": "fetpu",
+    "level": "graduate",
+    "name": "Fakultet ekonomije i turizma Dr. Mijo Mirkovic, Pula: diplomski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "ffos-final",
+    "unitId": "ffos",
+    "level": "final",
+    "name": "Filozofski fakultet Osijek: završni rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "ffos-graduate",
+    "unitId": "ffos",
+    "level": "graduate",
+    "name": "Filozofski fakultet Osijek: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "ffpu",
+    "unitId": "ffpu",
+    "level": null,
+    "name": "Filozofski fakultet u Puli: naslovnica",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "ffri-final",
+    "unitId": "ffri",
+    "level": "final",
+    "name": "Filozofski fakultet u Rijeci: zavrsni rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "ffri-graduate",
+    "unitId": "ffri",
+    "level": "graduate",
+    "name": "Filozofski fakultet u Rijeci: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "ffrz-doctoral",
+    "unitId": "ffrz",
+    "level": "doctoral",
+    "name": "Fakultet filozofije i religijskih znanosti: doktorski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "ffrz-final",
+    "unitId": "ffrz",
+    "level": "final",
+    "name": "Fakultet filozofije i religijskih znanosti: bakalaureatski (zavrsni) rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "ffrz-graduate",
+    "unitId": "ffrz",
+    "level": "graduate",
+    "name": "Fakultet filozofije i religijskih znanosti: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "ffst-final",
+    "unitId": "ffst",
+    "level": "final",
+    "name": "Filozofski fakultet u Splitu: završni rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "ffst-graduate",
+    "unitId": "ffst",
+    "level": "graduate",
+    "name": "Filozofski fakultet u Splitu: diplomski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "ffzg-final",
+    "unitId": "ffzg",
+    "level": "final",
+    "name": "Filozofski fakultet: završni rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "ffzg-graduate",
+    "unitId": "ffzg",
+    "level": "graduate",
+    "name": "Filozofski fakultet: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fgag-final",
+    "unitId": "fgag",
+    "level": "final",
+    "name": "Fakultet gradevinarstva, arhitekture i geodezije u Splitu: završni rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fgag-graduate",
+    "unitId": "fgag",
+    "level": "graduate",
+    "name": "Fakultet gradevinarstva, arhitekture i geodezije u Splitu: diplomski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fhs-doctoral",
+    "unitId": "fhs",
+    "level": "doctoral",
+    "name": "Fakultet hrvatskih studija: doktorski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fhs-final",
+    "unitId": "fhs",
+    "level": "final",
+    "name": "Fakultet hrvatskih studija: završni rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fhs-graduate",
+    "unitId": "fhs",
+    "level": "graduate",
+    "name": "Fakultet hrvatskih studija: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fipu",
+    "unitId": "fipu",
+    "level": null,
+    "name": "Fakultet informatike u Puli: naslovnica",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fizos-graduate",
+    "unitId": "fizos",
+    "level": "graduate",
+    "name": "Odjel za fiziku, Sveuciliste u Osijeku: diplomski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fizri-final",
+    "unitId": "fizri",
+    "level": "final",
+    "name": "Fakultet za fiziku u Rijeci: završni rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fkit-doctoral",
+    "unitId": "fkit",
+    "level": "doctoral",
+    "name": "Fakultet kemijskog inženjerstva i tehnologije: doktorski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fkit-final",
+    "unitId": "fkit",
+    "level": "final",
+    "name": "Fakultet kemijskog inženjerstva i tehnologije: završni rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fkit-graduate",
+    "unitId": "fkit",
+    "level": "graduate",
+    "name": "Fakultet kemijskog inženjerstva i tehnologije: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fmtu-final",
+    "unitId": "fmtu",
+    "level": "final",
+    "name": "Fakultet za menadzment u turizmu i ugostiteljstvu, Opatija: zavrsni rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fmtu-graduate",
+    "unitId": "fmtu",
+    "level": "graduate",
+    "name": "Fakultet za menadzment u turizmu i ugostiteljstvu, Opatija: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "foozos-graduate",
+    "unitId": "foozos",
+    "level": "graduate",
+    "name": "Fakultet za odgojne i obrazovne znanosti Osijek: diplomski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "foozpu-final",
+    "unitId": "foozpu",
+    "level": "final",
+    "name": "Fakultet za odgojne i obrazovne znanosti, Pula: završni rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "foozpu-graduate",
+    "unitId": "foozpu",
+    "level": "graduate",
+    "name": "Fakultet za odgojne i obrazovne znanosti, Pula: diplomski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fpz-final",
+    "unitId": "fpz",
+    "level": "final",
+    "name": "Fakultet prometnih znanosti: zavrsni rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fpz-graduate",
+    "unitId": "fpz",
+    "level": "graduate",
+    "name": "Fakultet prometnih znanosti: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fpzg-doctoral",
+    "unitId": "fpzg",
+    "level": "doctoral",
+    "name": "Fakultet političkih znanosti: doktorski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fpzg-final",
+    "unitId": "fpzg",
+    "level": "final",
+    "name": "Fakultet političkih znanosti: završni rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fpzg-graduate",
+    "unitId": "fpzg",
+    "level": "graduate",
+    "name": "Fakultet političkih znanosti: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fpzg-specialist",
+    "unitId": "fpzg",
+    "level": "specialist",
+    "name": "Fakultet političkih znanosti: završni specijalistički rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fpzpu-final",
+    "unitId": "fpzpu",
+    "level": "final",
+    "name": "Fakultet prirodnih znanosti u Puli: završni rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fpzpu-graduate",
+    "unitId": "fpzpu",
+    "level": "graduate",
+    "name": "Fakultet prirodnih znanosti u Puli: diplomski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fsb-doctoral",
+    "unitId": "fsb",
+    "level": "doctoral",
+    "name": "Fakultet strojarstva i brodogradnje: doktorski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fsb-final",
+    "unitId": "fsb",
+    "level": "final",
+    "name": "Fakultet strojarstva i brodogradnje: završni rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fsb-graduate",
+    "unitId": "fsb",
+    "level": "graduate",
+    "name": "Fakultet strojarstva i brodogradnje: diplomski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "ftrr-final",
+    "unitId": "ftrr",
+    "level": "final",
+    "name": "Fakultet turizma i ruralnog razvoja u Pozegi: završni rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fzsri-final",
+    "unitId": "fzsri",
+    "level": "final",
+    "name": "Fakultet zdravstvenih studija u Rijeci: završni rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "fzsri-graduate",
+    "unitId": "fzsri",
+    "level": "graduate",
+    "name": "Fakultet zdravstvenih studija u Rijeci: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "geof-doctoral",
+    "unitId": "geof",
+    "level": "doctoral",
+    "name": "Geodetski fakultet: doktorska disertacija",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "geof-graduate",
+    "unitId": "geof",
+    "level": "graduate",
+    "name": "Geodetski fakultet: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "grad-doctoral",
+    "unitId": "grad",
+    "level": "doctoral",
+    "name": "Građevinski fakultet: doktorski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "grad-final",
+    "unitId": "grad",
+    "level": "final",
+    "name": "Građevinski fakultet: završni rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "grad-graduate",
+    "unitId": "grad",
+    "level": "graduate",
+    "name": "Građevinski fakultet: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "gradri-final",
+    "unitId": "gradri",
+    "level": "final",
+    "name": "Građevinski fakultet u Rijeci: završni rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "gradri-graduate",
+    "unitId": "gradri",
+    "level": "graduate",
+    "name": "Građevinski fakultet u Rijeci: diplomski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "grafos",
+    "unitId": "grafos",
+    "level": null,
+    "name": "Gradevinski i arhitektonski fakultet Osijek: naslovnica",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "grf-doctoral",
+    "unitId": "grf",
+    "level": "doctoral",
+    "name": "Grafički fakultet: doktorski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "grf-final",
+    "unitId": "grf",
+    "level": "final",
+    "name": "Grafički fakultet: završni rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "hks-graduate",
+    "unitId": "hks",
+    "level": "graduate",
+    "name": "Hrvatsko katoličko sveučilište: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "inf-final",
+    "unitId": "inf",
+    "level": "final",
+    "name": "Fakultet informatike i digitalnih tehnologija, Rijeka: završni rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "inf-graduate",
+    "unitId": "inf",
+    "level": "graduate",
+    "name": "Fakultet informatike i digitalnih tehnologija, Rijeka: diplomski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "kbf-doctoral",
+    "unitId": "kbf",
+    "level": "doctoral",
+    "name": "Katolički bogoslovni fakultet: doktorski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "kbf-final",
+    "unitId": "kbf",
+    "level": "final",
+    "name": "Katolički bogoslovni fakultet: završni rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "kbf-graduate",
+    "unitId": "kbf",
+    "level": "graduate",
+    "name": "Katolički bogoslovni fakultet: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "kbfdj-graduate",
+    "unitId": "kbfdj",
+    "level": "graduate",
+    "name": "Katolicki bogoslovni fakultet u Djakovu: diplomski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "kbfst-graduate",
+    "unitId": "kbfst",
+    "level": "graduate",
+    "name": "Katolički bogoslovni fakultet u Splitu: diplomski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "kemos-final",
+    "unitId": "kemos",
+    "level": "final",
+    "name": "Odjel za kemiju, Sveuciliste u Osijeku: zavrsni rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "kemos-graduate",
+    "unitId": "kemos",
+    "level": "graduate",
+    "name": "Odjel za kemiju, Sveuciliste u Osijeku: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "kif-doctoral",
+    "unitId": "kif",
+    "level": "doctoral",
+    "name": "Kineziološki fakultet: doktorski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "kif-graduate",
+    "unitId": "kif",
+    "level": "graduate",
+    "name": "Kineziološki fakultet: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "kif-specialist",
+    "unitId": "kif",
+    "level": "specialist",
+    "name": "Kineziološki fakultet: specijalistički diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "kifst-graduate",
+    "unitId": "kifst",
+    "level": "graduate",
+    "name": "Kineziološki fakultet u Splitu: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "ktfst-final",
+    "unitId": "ktfst",
+    "level": "final",
+    "name": "Kemijsko-tehnoloski fakultet u Splitu: završni rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "ktfst-graduate",
+    "unitId": "ktfst",
+    "level": "graduate",
+    "name": "Kemijsko-tehnoloski fakultet u Splitu: diplomski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "mapu",
+    "unitId": "mapu",
+    "level": null,
+    "name": "Muzička akademija u Puli: naslovnica",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "mathos",
+    "unitId": "mathos",
+    "level": null,
+    "name": "Fakultet primijenjene matematike i informatike (Osijek): naslovnica",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "medri-graduate",
+    "unitId": "medri",
+    "level": "graduate",
+    "name": "Medicinski fakultet u Rijeci: diplomski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "mef-doctoral",
+    "unitId": "mef",
+    "level": "doctoral",
+    "name": "Medicinski fakultet: doktorski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "mef-graduate",
+    "unitId": "mef",
+    "level": "graduate",
+    "name": "Medicinski fakultet: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "mefos-final",
+    "unitId": "mefos",
+    "level": "final",
+    "name": "Medicinski fakultet Osijek: zavrsni rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "mefos-graduate",
+    "unitId": "mefos",
+    "level": "graduate",
+    "name": "Medicinski fakultet Osijek: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "mefst-graduate",
+    "unitId": "mefst",
+    "level": "graduate",
+    "name": "Medicinski fakultet u Splitu: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "mev",
+    "unitId": "mev",
+    "level": null,
+    "name": "Međimursko veleučilište u Čakovcu: završni rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "mfpu",
+    "unitId": "mfpu",
+    "level": null,
+    "name": "Medicinski fakultet u Puli: naslovnica",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "muza",
+    "unitId": "muza",
+    "level": null,
+    "name": "Muzicka akademija: naslovnica",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "odhz-final",
+    "unitId": "odhz",
+    "level": "final",
+    "name": "Odjel drustveno-humanistickih znanosti (UNISB): završni rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "odhz-graduate",
+    "unitId": "odhz",
+    "level": "graduate",
+    "name": "Odjel drustveno-humanistickih znanosti (UNISB): diplomski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "pbf-doctoral",
+    "unitId": "pbf",
+    "level": "doctoral",
+    "name": "Prehrambeno-biotehnološki fakultet: doktorski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "pbf-graduate",
+    "unitId": "pbf",
+    "level": "graduate",
+    "name": "Prehrambeno-biotehnološki fakultet: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "pfri-final",
+    "unitId": "pfri",
+    "level": "final",
+    "name": "Pomorski fakultet u Rijeci: zavrsni rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "pfri-graduate",
+    "unitId": "pfri",
+    "level": "graduate",
+    "name": "Pomorski fakultet u Rijeci: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "pfst-final",
+    "unitId": "pfst",
+    "level": "final",
+    "name": "Pomorski fakultet u Splitu: završni rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "pfst-graduate",
+    "unitId": "pfst",
+    "level": "graduate",
+    "name": "Pomorski fakultet u Splitu: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "pmf-graduate",
+    "unitId": "pmf",
+    "level": "graduate",
+    "name": "Prirodoslovno-matematički fakultet: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "pmfst-final",
+    "unitId": "pmfst",
+    "level": "final",
+    "name": "Prirodoslovno-matematicki fakultet u Splitu: zavrsni rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "pmfst-graduate",
+    "unitId": "pmfst",
+    "level": "graduate",
+    "name": "Prirodoslovno-matematicki fakultet u Splitu: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "pravo-doctoral",
+    "unitId": "pravo",
+    "level": "doctoral",
+    "name": "Pravni fakultet: doktorski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "pravo-final",
+    "unitId": "pravo",
+    "level": "final",
+    "name": "Pravni fakultet: završni rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "pravo-graduate",
+    "unitId": "pravo",
+    "level": "graduate",
+    "name": "Pravni fakultet: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "pravo-specialist",
+    "unitId": "pravo",
+    "level": "specialist",
+    "name": "Pravni fakultet: specijalistički rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "pravos-final",
+    "unitId": "pravos",
+    "level": "final",
+    "name": "Pravni fakultet Osijek: zavrsni rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "pravos-graduate",
+    "unitId": "pravos",
+    "level": "graduate",
+    "name": "Pravni fakultet Osijek: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "pravri-final",
+    "unitId": "pravri",
+    "level": "final",
+    "name": "Pravni fakultet u Rijeci: zavrsni rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "pravri-graduate",
+    "unitId": "pravri",
+    "level": "graduate",
+    "name": "Pravni fakultet u Rijeci: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "pravri-seminar",
+    "unitId": "pravri",
+    "level": "seminar",
+    "name": "Pravni fakultet u Rijeci: seminarski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "pravri-specialist",
+    "unitId": "pravri",
+    "level": "specialist",
+    "name": "Pravni fakultet u Rijeci: zavrsni rad specijalistickog studija",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "ptfos-graduate",
+    "unitId": "ptfos",
+    "level": "graduate",
+    "name": "Prehrambeno-tehnoloski fakultet Osijek: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "pvzg",
+    "unitId": "pvzg",
+    "level": null,
+    "name": "Poslovno veleučilište Zagreb: naslovnica",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "rgnf-final",
+    "unitId": "rgnf",
+    "level": "final",
+    "name": "Rudarsko-geološko-naftni fakultet: završni rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "rgnf-graduate",
+    "unitId": "rgnf",
+    "level": "graduate",
+    "name": "Rudarsko-geološko-naftni fakultet: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "riteh-final",
+    "unitId": "riteh",
+    "level": "final",
+    "name": "Tehnički fakultet u Rijeci: završni rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "riteh-graduate",
+    "unitId": "riteh",
+    "level": "graduate",
+    "name": "Tehnički fakultet u Rijeci: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "rrif",
+    "unitId": "rrif",
+    "level": null,
+    "name": "Veleučilište RRiF: završni rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "sfsb-final",
+    "unitId": "sfsb",
+    "level": "final",
+    "name": "Strojarski fakultet u Slavonskom Brodu: završni rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "sfsb-graduate",
+    "unitId": "sfsb",
+    "level": "graduate",
+    "name": "Strojarski fakultet u Slavonskom Brodu: diplomski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "sfzg-doctoral",
+    "unitId": "sfzg",
+    "level": "doctoral",
+    "name": "Stomatološki fakultet: doktorski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "sfzg-graduate",
+    "unitId": "sfzg",
+    "level": "graduate",
+    "name": "Stomatološki fakultet: diplomski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "sumfak-final",
+    "unitId": "sumfak",
+    "level": "final",
+    "name": "Fakultet šumarstva i drvne tehnologije: završni rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "sumfak-graduate",
+    "unitId": "sumfak",
+    "level": "graduate",
+    "name": "Fakultet šumarstva i drvne tehnologije: diplomski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "teho-final",
+    "unitId": "teho",
+    "level": "final",
+    "name": "Tehnicki odjel (UNISB): završni rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "tfpu-final",
+    "unitId": "tfpu",
+    "level": "final",
+    "name": "Tehnicki fakultet u Puli: završni rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "tfpu-graduate",
+    "unitId": "tfpu",
+    "level": "graduate",
+    "name": "Tehnicki fakultet u Puli: diplomski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "ttf-doctoral",
+    "unitId": "ttf",
+    "level": "doctoral",
+    "name": "Tekstilno-tehnološki fakultet: doktorski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "ttf-final",
+    "unitId": "ttf",
+    "level": "final",
+    "name": "Tekstilno-tehnološki fakultet: završni rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "ttf-graduate",
+    "unitId": "ttf",
+    "level": "graduate",
+    "name": "Tekstilno-tehnološki fakultet: diplomski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "tvz",
+    "unitId": "tvz",
+    "level": null,
+    "name": "Tehnicko veleuciliste u Zagrebu: naslovnica",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "uaos-final",
+    "unitId": "uaos",
+    "level": "final",
+    "name": "Akademija za umjetnost i kulturu u Osijeku: završni rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "uaos-graduate",
+    "unitId": "uaos",
+    "level": "graduate",
+    "name": "Akademija za umjetnost i kulturu u Osijeku: diplomski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "ufri-graduate",
+    "unitId": "ufri",
+    "level": "graduate",
+    "name": "Učiteljski fakultet u Rijeci: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "ufzg-doctoral",
+    "unitId": "ufzg",
+    "level": "doctoral",
+    "name": "Učiteljski fakultet: doktorski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "ufzg-final",
+    "unitId": "ufzg",
+    "level": "final",
+    "name": "Učiteljski fakultet: završni rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "ufzg-graduate",
+    "unitId": "ufzg",
+    "level": "graduate",
+    "name": "Učiteljski fakultet: diplomski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "unidu-povijest-final",
+    "unitId": "unidu",
+    "level": "final",
+    "name": "Sveuciliste u Dubrovniku: zavrsni rad (Odjel za humanisticke studije)",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "unidu-umjetnost-graduate",
+    "unitId": "unidu",
+    "level": "graduate",
+    "name": "Sveuciliste u Dubrovniku: diplomski rad (Odjel za umjetnost i restauraciju)",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "unin-final",
+    "unitId": "unin",
+    "level": "final",
+    "name": "Sveuciliste Sjever: završni rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "unin-graduate",
+    "unitId": "unin",
+    "level": "graduate",
+    "name": "Sveuciliste Sjever: diplomski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "unizd-final",
+    "unitId": "unizd",
+    "level": "final",
+    "name": "Sveuciliste u Zadru: zavrsni rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "unizd-graduate",
+    "unitId": "unizd",
+    "level": "graduate",
+    "name": "Sveuciliste u Zadru: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "vef-doctoral",
+    "unitId": "vef",
+    "level": "doctoral",
+    "name": "Veterinarski fakultet: doktorski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "vef-graduate",
+    "unitId": "vef",
+    "level": "graduate",
+    "name": "Veterinarski fakultet: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "veleknin-final",
+    "unitId": "veleknin",
+    "level": "final",
+    "name": "Veleuciliste Marko Marulic u Kninu: zavrsni rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "veleri-final",
+    "unitId": "veleri",
+    "level": "final",
+    "name": "Veleuciliste u Rijeci: zavrsni rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "veleri-graduate",
+    "unitId": "veleri",
+    "level": "graduate",
+    "name": "Veleuciliste u Rijeci: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "vern",
+    "unitId": "vern",
+    "level": null,
+    "name": "Sveučilište VERN': naslovnica",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "vevu-final",
+    "unitId": "vevu",
+    "level": "final",
+    "name": "Veleuciliste Lavoslav Ruzicka u Vukovaru: zavrsni rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "vevu-graduate",
+    "unitId": "vevu",
+    "level": "graduate",
+    "name": "Veleuciliste Lavoslav Ruzicka u Vukovaru: diplomski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "vguk-final",
+    "unitId": "vguk",
+    "level": "final",
+    "name": "Veleuciliste u Krizevcima: završni rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "vhzk-final",
+    "unitId": "vhzk",
+    "level": "final",
+    "name": "Veleuciliste Hrvatsko zagorje Krapina: zavrsni rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "vkjs",
+    "unitId": "vkjs",
+    "level": null,
+    "name": "Veleučilište kriminalistike i javne sigurnosti: naslovnica završnog i diplomskog rada",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "vsite",
+    "unitId": "vsite",
+    "level": null,
+    "name": "Veleučilište suvremenih informacijskih tehnologija: naslovnica",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "vss",
+    "unitId": "vss",
+    "level": null,
+    "name": "Veleuciliste studija sigurnosti: naslovnica",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "vub-final",
+    "unitId": "vub",
+    "level": "final",
+    "name": "Veleuciliste u Bjelovaru: završni rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "vub-graduate",
+    "unitId": "vub",
+    "level": "graduate",
+    "name": "Veleuciliste u Bjelovaru: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "vuka-final",
+    "unitId": "vuka",
+    "level": "final",
+    "name": "Veleuciliste u Karlovcu: završni rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "vuka-graduate",
+    "unitId": "vuka",
+    "level": "graduate",
+    "name": "Veleuciliste u Karlovcu: diplomski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "vus-final",
+    "unitId": "vus",
+    "level": "final",
+    "name": "Veleuciliste u Sibeniku: završni rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "vuv-final",
+    "unitId": "vuv",
+    "level": "final",
+    "name": "Veleuciliste u Virovitici: završni rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "vuv-graduate",
+    "unitId": "vuv",
+    "level": "graduate",
+    "name": "Veleuciliste u Virovitici: diplomski rad",
+    "provenance": {
+      "status": "derived"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "vvg",
+    "unitId": "vvg",
+    "level": null,
+    "name": "Veleuciliste Velika Gorica: zavrsni i diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "zsem-graduate",
+    "unitId": "zsem",
+    "level": "graduate",
+    "name": "Zagrebačka škola ekonomije i managementa: diplomski rad",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  },
+  {
+    "id": "zvu",
+    "unitId": "zvu",
+    "level": null,
+    "name": "Zdravstveno veleučilište: naslovnica završnog rada",
+    "provenance": {
+      "status": "official"
+    },
+    "status": "verified"
+  }
+]

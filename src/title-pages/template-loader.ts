@@ -3,13 +3,49 @@
  * Tanak prolaz: import + tipiziranje + izbor predloska za (unitId, razina).
  * Fallback lanac: unit+razina -> unit (level=null) -> fakultetski kanonski predlozak
  * (druga vrsta rada, reuse) -> null (genericka grana koda).
+ *
+ * TITLE_PAGE_TEMPLATES je LAGANI indeks (perf: skini ~0,5 MB s naslovnica-*.js glavnog chunka).
+ * Nosi samo polja koja se citaju PRIJE stvarnog odabira predloska (id, unitId, level, name,
+ * provenance.status, status) - vidi renderCoverageCount u naslovnica-page.ts. Teska polja
+ * (elements, marginsCm, derivation, puna provenijencija) dolaze LIJENO preko
+ * ensureTemplatesHeavy(), koji dinamicki ucita templates-heavy.json i spoji ga U ISTE objekte
+ * (mutacija in place, isti obrazac kao profile-registry.ensureProfileRules). Izvor:
+ * scripts/gen-title-page-split.mjs; drift hvata tests/title-page-loader.test.ts.
  */
-import rawTemplates from '../../data/title-pages/templates.json';
+import rawIndex from '../../data/title-pages/templates-index.json';
 import type { WorkType } from '../profiles/profile-schema';
 import type { TitlePageTemplate, TemplateProvenanceStatus } from './template-schema';
 
 // Granica prema podacima: JSON inferira siroke tipove, jednom castamo na autorski oblik.
-export const TITLE_PAGE_TEMPLATES = rawTemplates as unknown as TitlePageTemplate[];
+export const TITLE_PAGE_TEMPLATES = rawIndex as unknown as TitlePageTemplate[];
+
+let _templatesHeavyReady: Promise<void> | null = null;
+let _templatesHeavyLoaded = false;
+/**
+ * Lijeno ucita puna polja predloska (elements/marginsCm/derivation/puna provenijencija) i spoji
+ * ih u TITLE_PAGE_TEMPLATES (mutacija in place). Memoizirano: heavy chunk se dohvaca tocno
+ * jednom. Pozovi (i await) PRIJE citanja .elements/.marginsCm/.notes/pune .provenance (render()
+ * u naslovnica-page.ts); renderCoverageCount (samo .unitId) radi i bez ovoga.
+ */
+export function ensureTemplatesHeavy(): Promise<void> {
+  if (!_templatesHeavyReady) {
+    _templatesHeavyReady = import('../../data/title-pages/templates-heavy.json').then((mod) => {
+      const heavy = ((mod as { default?: unknown }).default ?? mod) as Record<string, TitlePageTemplate>;
+      for (const entry of TITLE_PAGE_TEMPLATES) {
+        const full = heavy[entry.id];
+        if (full) Object.assign(entry, full);
+      }
+      _templatesHeavyLoaded = true;
+    });
+  }
+  return _templatesHeavyReady;
+}
+
+/** Sinkrona provjera (bez await-a): je li heavy chunk vec spojen. Koristi render() u
+ *  naslovnica-page.ts da preskoči nepotreban await (i njegov mikrotask tik) kad je vec ucitan. */
+export function templatesHeavyLoaded(): boolean {
+  return _templatesHeavyLoaded;
+}
 
 /**
  * Redoslijed reusea kad fakultet nema predlozak za trazenu vrstu rada: najprije standardni

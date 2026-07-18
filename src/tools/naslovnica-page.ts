@@ -9,7 +9,7 @@ import { escapeHtml } from '../utils/helpers';
 import { bindCopyButton, bindDownloadButton, defaultSelectedIndex } from './tool-ui';
 import { readToolDraft, saveToolDraft } from './draft-share';
 import { ZAGREB_CATALOG } from '../catalog/catalog-loader';
-import { selectTemplate, type TemplateSelection } from '../title-pages/template-loader';
+import { selectTemplate, ensureTemplatesHeavy, templatesHeavyLoaded, type TemplateSelection } from '../title-pages/template-loader';
 import { workTypeLabel } from '../config/config-loader';
 import { parseTitlePageParams, serializeTitlePageParams } from '../title-pages/title-page-params';
 import { defaultWorkTypeForProgram } from '../ui/work-selection';
@@ -185,7 +185,23 @@ function scheduleHint(missing: string[]) {
 // klik nanovo cita DOM i gradi model (render() ga vec izgradio prije klika).
 let lastModel: TitlePageModel | null = null;
 
-function render() {
+// Predlosci su LIJENO ucitani (perf split, v. template-loader.ts): dok je stvaran fakultet
+// odabran a heavy chunk jos ne stigne, currentSelection() bi vratila NEPOTPUN predlozak (bez
+// elements). Ako je vec ucitan (uobicajen slucaj: cim se stranica otvori, ensureTemplatesHeavy
+// se pokrene fire-and-forget), render() ostaje potpuno sinkron - nikakav await, nikakav mikrotask
+// tik. Genericki odabir (bez fakulteta) ionako nikad ne treba heavy podatke.
+async function render(): Promise<void> {
+  const unitId = $('#tp-unit')?.value || '';
+  if (unitId && !templatesHeavyLoaded()) {
+    // Onemoguci izvoz ODMAH (sinkrono, prije awaita): sprijeci klik s nepotpunim predloskom
+    // u tom kratkom prozoru dok chunk ne stigne.
+    const copy0 = $('#tp-copy'), print0 = $('#tp-print'), docx0 = $('#tp-docx'), share0 = $('#tp-share');
+    if (copy0) copy0.disabled = true;
+    if (print0) print0.disabled = true;
+    if (docx0) docx0.disabled = true;
+    if (share0) share0.disabled = true;
+    await ensureTemplatesHeavy();
+  }
   const input = readInput();
   const sel = currentSelection();
   const model = buildTitlePage(input, sel.template ?? undefined);

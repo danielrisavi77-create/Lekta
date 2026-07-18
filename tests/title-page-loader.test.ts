@@ -4,7 +4,7 @@
  * (3) VALIDACIJSKI GATE za pipeline output: svaki zapis u templates.json i
  * evidence/*.json mora proci strukturna i GDPR pravila (README sloja).
  */
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeAll } from 'vitest';
 import { readdirSync, readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -19,6 +19,7 @@ import {
   reuseForLevel,
   findTitlePageTemplate,
   selectTemplate,
+  ensureTemplatesHeavy,
   LEVEL_SLUGS,
   workTypeFromSlug,
 } from '../src/title-pages/template-loader';
@@ -29,6 +30,14 @@ import type {
 import { findUnit } from '../src/catalog/catalog-loader';
 import { WORK_TYPE_LABELS } from '../src/config/config-loader';
 import { buildTitlePage } from '../src/tools/title-page';
+
+// TITLE_PAGE_TEMPLATES je LAGANI indeks (perf split, v. template-loader.ts); testovi ispod
+// (validacijski gate, buildTitlePage regresije, audit-sekvenca) trebaju PUNA polja (elements,
+// puna provenijencija...), pa cekamo heavy merge JEDNOM za cijelu datoteku - nakon toga je
+// TITLE_PAGE_TEMPLATES deep-equal originalnom templates.json (faithfulness test ispod).
+beforeAll(async () => {
+  await ensureTemplatesHeavy();
+});
 
 const EVIDENCE_DIR = join(__dirname, '..', 'data', 'title-pages', 'evidence');
 
@@ -55,13 +64,46 @@ function loadEvidenceFiles(): Array<{ file: string; data: TitlePageEvidenceFile 
 }
 
 describe('template-loader: faithfulness i manifest', () => {
-  it('TITLE_PAGE_TEMPLATES = raw JSON', () => {
+  it('TITLE_PAGE_TEMPLATES = raw JSON (nakon ensureTemplatesHeavy merga)', () => {
     expect(TITLE_PAGE_TEMPLATES).toEqual(rawTemplates);
   });
   it('broj zapisa se slaze s manifestom', () => {
     const row = manifest.find((m) => m.name === 'TITLE_PAGE_TEMPLATES');
     expect(row).toBeDefined();
     expect(TITLE_PAGE_TEMPLATES).toHaveLength(row!.entries);
+  });
+});
+
+// Drift + korektnost splita (perf: lijeni heavy chunk, isti obrazac kao tests/verified-split.test.ts).
+// Ako padne: node scripts/gen-title-page-split.mjs pa commit.
+// NAPOMENA: cita datoteke izravno preko fs (ne static import) - static import bi dijelio ISTI
+// modul-cache objekt s template-loader.ts-ovim rawIndex/TITLE_PAGE_TEMPLATES, pa bi ga
+// ensureTemplatesHeavy() (gornji beforeAll) mutirao PRIJE nego ovaj test uopce procita "light"
+// vrijednost - fs.readFileSync uvijek daje svjeza, nezavisna objekta.
+describe('templates-index/heavy.json: drift + korektnost splita', () => {
+  const TITLE_PAGES_DIR = join(__dirname, '..', 'data', 'title-pages');
+  const committedIndex = JSON.parse(readFileSync(join(TITLE_PAGES_DIR, 'templates-index.json'), 'utf8'));
+  const committedHeavy = JSON.parse(readFileSync(join(TITLE_PAGES_DIR, 'templates-heavy.json'), 'utf8'));
+
+  function lightEntry(t: TitlePageTemplate) {
+    return {
+      id: t.id,
+      unitId: t.unitId,
+      level: t.level,
+      name: t.name,
+      provenance: { status: t.provenance.status },
+      status: t.status,
+    };
+  }
+
+  it('commitani templates-index.json === regenerirana light projekcija', () => {
+    expect(committedIndex).toEqual((rawTemplates as TitlePageTemplate[]).map(lightEntry));
+  });
+
+  it('commitani templates-heavy.json === { id -> pun predlozak }', () => {
+    const expected: Record<string, TitlePageTemplate> = {};
+    for (const t of rawTemplates as TitlePageTemplate[]) expected[t.id] = t;
+    expect(committedHeavy).toEqual(expected);
   });
 });
 

@@ -1,6 +1,7 @@
 // @vitest-environment happy-dom
 import { describe, it, expect, beforeAll } from 'vitest';
 import { vi } from 'vitest';
+import { ensureTemplatesHeavy } from '../src/title-pages/template-loader';
 
 // ui-boot uvlaci fontove/ikone/motion (nebitno za logiku) - mockaj da test ostane cist.
 vi.mock('../src/shared/ui-boot', () => ({}));
@@ -52,6 +53,9 @@ describe('naslovnica-page: kaskada ustanova/fakultet/studij ne ostavlja zastarje
   beforeAll(async () => {
     buildDom();
     await import('../src/tools/naslovnica-page'); // init() se okine na import (readyState !== loading)
+    // Predlosci su LIJENO ucitani (perf split); eksplicitno pricekaj umjesto oslanjanja na
+    // mikrotaskove izmedju testova (isti obrazac kao citat-page.dom.test.ts + faculty-styles).
+    await ensureTemplatesHeavy();
   });
 
   it('kaskada se popuni realnim katalogom', () => {
