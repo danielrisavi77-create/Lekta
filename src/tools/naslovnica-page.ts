@@ -93,6 +93,17 @@ function renderTemplateSheet(model: TitlePageModel): string {
   return groups.map((g) => `<div class="tp-group">${g.html.join('')}</div>`).join('');
 }
 
+// Ograda o preuzetom rasporedu ide u VIDLJIVI #tp-badge-note, ne (samo) u title tooltip:
+// title nije dostupan na dodir (mobitel/tablet), ne fokusira se tipkovnicom i citaci ekrana
+// ga nepouzdano izgovaraju, a bas ta napomena kaze da raspored NIJE sluzbeni predlozak za
+// odabranu vrstu rada. Bez napomene element je skriven.
+function setBadgeNote(text: string) {
+  const el = $('#tp-badge-note');
+  if (!el) return;
+  el.textContent = text;
+  el.hidden = !text;
+}
+
 function renderBadge(sel: TemplateSelection) {
   const badge = $('#tp-template-badge');
   if (!badge) return;
@@ -101,6 +112,7 @@ function renderBadge(sel: TemplateSelection) {
     badge.className = 'tp-badge generic';
     badge.textContent = 'Generički raspored';
     badge.title = note;
+    setBadgeNote('');
     return;
   }
   if (sel.levelReused) {
@@ -109,9 +121,11 @@ function renderBadge(sel: TemplateSelection) {
     badge.className = sel.provenance === 'official' ? 'tp-badge official' : 'tp-badge derived';
     badge.textContent = 'Raspored tvog fakulteta';
     const from = sel.reusedFromLevel ? LEVEL_SLUGS[sel.reusedFromLevel] : '';
-    badge.title =
+    const reuseNote =
       `Preuzet iz fakultetskog rasporeda za ${from} rad i prilagođen odabranoj vrsti rada.` +
       (note ? ` ${note}` : '');
+    badge.title = reuseNote;
+    setBadgeNote(reuseNote);
     return;
   }
   if (sel.provenance === 'official') {
@@ -122,6 +136,24 @@ function renderBadge(sel: TemplateSelection) {
     badge.textContent = 'Raspored izveden iz javnih radova';
   }
   badge.title = note;
+  setBadgeNote('');
+}
+
+// #tp-hint je aria-live=polite: pisanje na svaki keystroke tjera citac ekrana da istu poruku
+// ponavlja uz svaki utipkani znak. Debounce nakon pauze u tipkanju + changed-guard (textContent
+// na istu vrijednost i dalje mijenja text node pa SR zna ponoviti najavu). Isti obrazac kao
+// scheduleSrSummary u kartice-page.ts; vizualni pregled naslovnice ostaje trenutan.
+let _hintTimer: any = 0;
+function scheduleHint(missing: string[]) {
+  const hint = $('#tp-hint');
+  if (!hint) return;
+  clearTimeout(_hintTimer);
+  _hintTimer = setTimeout(() => {
+    const cls = missing.length ? 'out-hint warn' : 'out-hint ok';
+    const text = missing.length ? `Preporučeno dodati: ${missing.join(', ')}.` : 'Sva preporučena polja su ispunjena.';
+    if (hint.className !== cls) hint.className = cls;
+    if (hint.textContent !== text) hint.textContent = text;
+  }, 600);
 }
 
 // Rezultat zadnjeg render()-a, ponovno koristen u copy/docx handlerima umjesto da svaki
@@ -146,17 +178,7 @@ function render() {
   }
 
   renderBadge(sel);
-
-  const hint = $('#tp-hint');
-  if (hint) {
-    if (model.missing.length) {
-      hint.className = 'out-hint warn';
-      hint.textContent = `Preporučeno dodati: ${model.missing.join(', ')}.`;
-    } else {
-      hint.className = 'out-hint ok';
-      hint.textContent = 'Sva preporučena polja su ispunjena.';
-    }
-  }
+  scheduleHint(model.missing);
 
   const hasContent = model.lines.length > 0;
   const copy = $('#tp-copy'), print = $('#tp-print'), docx = $('#tp-docx');
@@ -329,7 +351,7 @@ function init() {
   bindCopyButton($('#tp-copy'), () => {
     const model = lastModel;
     return model && model.lines.length ? titlePageText(model) : '';
-  });
+  }, { statusEl: $('#tp-copy-status') });
 
   $('#tp-print')?.addEventListener('click', () => window.print());
 

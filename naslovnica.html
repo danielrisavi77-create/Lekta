@@ -73,11 +73,15 @@
 .tp-group .tp-line{line-height:1.35;margin-top:4px}
 .tp-group .tp-line:first-child{margin-top:0}
 
-/* Badge porijekla predloska (iznad pregleda) */
+/* Badge porijekla predloska (iznad pregleda). Tekst koristi --ok-on-soft/--red-on-soft
+   (design-system.css): --ok/--brand na soft podlozi mjere 3.9-4.1:1, ispod WCAG AA 4.5:1. */
 .tp-badge{display:inline-block;font-size:12px;font-weight:750;padding:4px 10px;border-radius:999px;margin:0 0 10px;border:1px solid var(--line-strong)}
-.tp-badge.official{background:var(--ok-soft);color:var(--ok);border-color:transparent}
-.tp-badge.derived{background:var(--brand-soft);color:var(--brand);border-color:transparent}
+.tp-badge.official{background:var(--ok-soft);color:var(--ok-on-soft);border-color:transparent}
+.tp-badge.derived{background:var(--brand-soft);color:var(--red-on-soft);border-color:transparent}
 .tp-badge.generic{background:var(--panel-2);color:var(--muted)}
+/* Vidljiva napomena porijekla (npr. raspored preuzet iz druge vrste rada): title tooltip nije
+   dostupan na dodir ni tipkovnicom, pa kljucna ograda mora biti obican vidljivi tekst. */
+.tp-badge-note{font-size:12.5px;color:var(--muted);margin:-4px 0 10px;line-height:1.5;max-width:52ch}
 
 .sec-h{font-family:var(--ink-serif);font-size:clamp(21px,3vw,27px);font-weight:800;letter-spacing:-.015em;line-height:1.15;margin:0 0 6px}
 .sec-sub{color:var(--muted);font-size:14.5px;line-height:1.55;max-width:640px;margin:0}
@@ -104,6 +108,7 @@
   .topbar,.hero,footer,#vodic,#tp-cta,.cta,.disclaimer,.tp-form-col,.out-bar,.out-hint,.note,.tp-badge,.card>h2,.card>.sub{display:none!important}
   .section{padding:0}.shell{width:100%}.grid{display:block}
   .out-panel{position:static}
+  .tp-badge-note{display:none!important}
   .tp-sheet-wrap{background:#fff;border:0;padding:0}
   .card{border:0;box-shadow:none;padding:0;background:#fff}
   #tp-sheet{box-shadow:none;border:0;border-radius:0;aspect-ratio:auto;min-height:auto;padding:0}
@@ -162,10 +167,10 @@
       <a href="index.html#pricing">Paketi</a>
     </div>
     <button class="icon-btn mobile-menu" id="mobileMenuBtn" type="button" aria-label="Otvori izbornik" aria-expanded="false"><i data-lucide="menu"></i></button>
-    <button class="lampa-btn" id="themeBtn" type="button" aria-label="Promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 2h8l-5 7h4L7 22l3-9H6l3-11Z"/></svg><span class="lampa-txt">Lampa</span></button>
+    <button class="lampa-btn" id="themeBtn" type="button" aria-label="Lampa: promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 2h8l-5 7h4L7 22l3-9H6l3-11Z"/></svg><span class="lampa-txt">Lampa</span></button>
     <a class="btn btn-primary btn-sm" href="index.html#analyzer">Provjeri rad</a>
   </nav>
-  <div class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav" id="mobileNav" role="navigation" aria-label="Mobilna navigacija">
     <a href="index.html#how">Kako radi</a>
     <a href="landing_usporedba.html">Usporedba</a>
     <a href="alati.html">Svi alati</a>
@@ -278,14 +283,16 @@
         <h2>Pregled naslovnice</h2>
         <p class="sub">Ažurira se dok tipkaš. Spremi kao PDF ispisom u datoteku.</p>
         <span class="tp-badge generic" id="tp-template-badge">Generički raspored</span>
+        <p class="tp-badge-note" id="tp-badge-note" hidden></p>
         <div class="tp-sheet-wrap">
-          <div id="tp-sheet" aria-label="Pregled naslovnice"><div class="tp-empty">Ispuni polja lijevo pa se naslovnica slaže ovdje.</div></div>
+          <div id="tp-sheet" role="group" aria-label="Pregled naslovnice"><div class="tp-empty">Ispuni polja lijevo pa se naslovnica slaže ovdje.</div></div>
         </div>
         <div class="out-bar">
           <button class="btn btn-primary" id="tp-print" type="button" disabled>Spremi kao PDF</button>
           <button class="btn btn-secondary" id="tp-docx" type="button" disabled>Preuzmi .docx</button>
           <button class="btn btn-secondary" id="tp-copy" type="button" disabled>Kopiraj tekst</button>
         </div>
+        <div class="sr-only" id="tp-copy-status" role="status" aria-live="polite"></div>
         <p class="out-hint" id="tp-hint" aria-live="polite"></p>
         <div class="note"><b>Napomena:</b> raspored je uobičajen za hrvatske akademske radove. Neki fakulteti propisuju vlastiti predložak (logotip, točan raspored, font, veličine). Konačnu naslovnicu uvijek uskladi s uputama svog studija ili mentora.</div>
       </div>
