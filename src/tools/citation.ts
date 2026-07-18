@@ -795,7 +795,7 @@ export const SOURCE_TYPE_FIELDS: Record<SourceType, SourceTypeFieldSpec[]> = {
     { key: 'year' },
     { key: 'url', recommended: true },
     { key: 'doi' },
-    { key: 'accessed' },
+    { key: 'accessed', recommended: true },
   ],
   zavrsni: [
     { key: 'authors', recommended: true },
@@ -806,7 +806,7 @@ export const SOURCE_TYPE_FIELDS: Record<SourceType, SourceTypeFieldSpec[]> = {
   propis: [
     { key: 'title', recommended: true },
     { key: 'container', recommended: true },
-    { key: 'issue' },
+    { key: 'issue', recommended: true },
     { key: 'year' },
   ],
 };
@@ -826,6 +826,8 @@ const FIELD_LABEL: Partial<Record<keyof CitationInput, string>> = {
   publisher: 'izdavač',
   url: 'poveznica',
   institution: 'ustanova',
+  accessed: 'datum pristupa',
+  issue: 'broj',
 };
 
 export function formatCitation(inp: CitationInput, style: CitationStyle): CitationResult {

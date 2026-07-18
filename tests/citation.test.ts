@@ -177,6 +177,16 @@ describe('formatCitation fusnota', () => {
     expect(r.citation).toBe('Zakon o radu. Narodne novine, 93/14.');
   });
 
+  it('propis bez broja je "preporuceno dodati" (FAQ tretira broj sluzbenog glasila kao dio ispravnog navoda)', () => {
+    const r = formatCitation({ type: 'propis', title: 'Zakon o radu', container: 'Narodne novine' }, 'fusnota');
+    expect(r.missing).toContain('broj');
+  });
+
+  it('mrezni bez datuma pristupa je "preporuceno dodati" (stranica sama tvrdi da je datum pristupa uvijek potreban)', () => {
+    const r = formatCitation({ type: 'mrezni', title: 'Upute za izradu rada', url: 'https://fpzg.hr/upute' }, 'autor-godina');
+    expect(r.missing).toContain('datum pristupa');
+  });
+
   it('tri autora: prvi obrnut, zadnji spojen s "i"', () => {
     const r = formatCitation(
       { type: 'knjiga', authors: 'Ivic, Ivan; Horvat, Ana; Kovac, Marko', title: 'Prirucnik', year: '2018', publisher: 'X' },
