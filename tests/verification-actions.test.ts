@@ -49,16 +49,32 @@ function draftEntry(over: Partial<RuleEntry> = {}): RuleEntry {
 }
 
 describe('pendingRules', () => {
-  it('hvata draft i needs-recheck iz zivih staging profila', () => {
+  it('vraca iskljucivo draft i needs-recheck; zivi staging smije biti prazan', () => {
     const profiles = [
       ...VERIFIED_PROFILES_WITH_DRAFTS,
       ...LEGAL_DEPARTMENTS_WITH_DRAFTS,
     ] as unknown as ThesisProfile[];
-    const pend = pendingRules(profiles);
-    expect(pend.length).toBeGreaterThan(0);
-    for (const p of pend) {
+    // Zivi red cekanja je od 2026-07-18 ispraznjen (0 draft / 0 needs-recheck u data/):
+    // to je ciljno stanje verifikacijske petlje, ne greska, pa se duljina nad zivim
+    // podacima vise ne tvrdi. Invarijanta vrijedi za sve sto pendingRules vrati.
+    for (const p of pendingRules(profiles)) {
       expect(p.entry.status === 'draft' || p.entry.status === 'needs-recheck').toBe(true);
     }
+    // Pozitivna provjera na sintetickom profilu (neovisna o stanju zivih podataka):
+    // draft i needs-recheck se hvataju, verified se preskace.
+    const synthetic = {
+      id: 'test-pending-synthetic',
+      rules: {},
+      ruleEntries: [
+        draftEntry(),
+        draftEntry({ ruleId: 'r-size', checkId: 'font-size', status: 'needs-recheck' }),
+        draftEntry({ ruleId: 'r-margins', checkId: 'margins', status: 'verified' }),
+      ],
+    } as unknown as ThesisProfile;
+    const mine = pendingRules([...profiles, synthetic]).filter(
+      (p) => p.profileId === 'test-pending-synthetic',
+    );
+    expect(mine.map((p) => p.entry.ruleId).sort()).toEqual(['r-font', 'r-size']);
   });
 });
 

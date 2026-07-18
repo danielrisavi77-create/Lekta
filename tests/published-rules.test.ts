@@ -92,7 +92,15 @@ describe('zivi pravni profili: nista jos nije bodovano (aditivno, bez promjene)'
         expect(r.scored).toHaveLength(0);
         expect(r.effectiveScored).toEqual({});
       }
-      expect(r.advisory.length).toBeGreaterThan(0);
+      // Svaki profil objavljuje barem jedno pravilo (bodovano ili advisory). advisory
+      // smije biti prazan SAMO kad su SVA pravila profila verificirana i bodovana:
+      // potpuno verificiran profil je cilj verifikacijske petlje, ne greska (od
+      // 2026-07-16 vrijedi za pravo-socijalne-djelatnosti-specijalisticki/doktorski).
+      expect(r.scored.length + r.advisory.length).toBeGreaterThan(0);
+      if (r.advisory.length === 0) {
+        expect((p.ruleEntries ?? []).length).toBeGreaterThan(0);
+        expect((p.ruleEntries ?? []).every((e) => e.status === 'verified')).toBe(true);
+      }
     }
   });
 
