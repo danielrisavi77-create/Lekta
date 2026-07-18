@@ -135,17 +135,18 @@
       <a href="index.html#pricing">Paketi</a>
     </div>
     <button class="icon-btn mobile-menu" id="mobileMenuBtn" type="button" aria-label="Otvori izbornik" aria-expanded="false"><i data-lucide="menu"></i></button>
-    <button class="lampa-btn" id="themeBtn" type="button" aria-label="Promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 2h8l-5 7h4L7 22l3-9H6l3-11Z"/></svg><span class="lampa-txt">Lampa</span></button>
+    <button class="lampa-btn" id="themeBtn" type="button" aria-label="Lampa: promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 2h8l-5 7h4L7 22l3-9H6l3-11Z"/></svg><span class="lampa-txt">Lampa</span></button>
     <a class="btn btn-primary btn-sm" href="index.html#analyzer">Provjeri rad</a>
   </nav>
-  <div class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav" id="mobileNav" role="navigation" aria-label="Mobilna navigacija">
     <a href="index.html#how">Kako radi</a>
     <a href="landing_usporedba.html">Usporedba</a>
+    <a href="alati.html">Svi alati</a>
     <a href="citat.html">Citat generator</a>
     <a href="kartice.html">Brojač kartica</a>
     <a href="naslovnica.html">Naslovnica</a>
     <a href="literatura.html">Sređivanje literature</a>
-    <a href="izjava.html">Izjava o izvornosti</a>
+    <a class="active" aria-current="page" href="izjava.html">Izjava o izvornosti</a>
     <a href="index.html#pricing">Paketi</a>
     <a class="btn btn-primary" href="index.html#analyzer">Provjeri rad</a>
   </div>
@@ -213,13 +214,14 @@
         <h2>Pregled izjave</h2>
         <p class="sub">Ažurira se dok tipkaš. Spremi kao PDF ispisom u datoteku.</p>
         <div class="tp-sheet-wrap">
-          <div id="st-sheet" aria-label="Pregled izjave o izvornosti"></div>
+          <div id="st-sheet" role="group" aria-label="Pregled izjave o izvornosti"></div>
         </div>
         <div class="out-bar">
           <button class="btn btn-primary" id="st-print" type="button" disabled>Spremi kao PDF</button>
           <button class="btn btn-secondary" id="st-docx" type="button" disabled>Preuzmi .docx</button>
           <button class="btn btn-secondary" id="st-copy" type="button" disabled>Kopiraj tekst</button>
         </div>
+        <div class="sr-only" id="st-copy-status" role="status" aria-live="polite"></div>
         <p class="out-hint" id="st-hint" aria-live="polite"></p>
         <div class="note"><b>Napomena:</b> ovo je uobičajena formulacija izjave o izvornosti. Mnogi fakulteti propisuju vlastiti, obvezni tekst i obrazac (ponekad s OIB-om, JMBAG-om ili dodatnom suglasnošću). Konačnu izjavu uvijek uskladi sa službenim obrascem svog studija.</div>
       </div>

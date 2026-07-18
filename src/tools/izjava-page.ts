@@ -50,16 +50,24 @@ function render(): void {
     sheet.innerHTML = `<div class="st-heading">${escapeHtml(model.heading)}</div><div class="st-body">${escapeHtml(model.body)}</div>${foot}`;
   }
 
+  scheduleHint(model.missing);
+}
+
+// #st-hint je aria-live=polite: pisanje na svaki keystroke tjera citac ekrana da istu poruku
+// ponavlja uz svaki utipkani znak. Debounce nakon pauze u tipkanju + changed-guard (textContent
+// na istu vrijednost i dalje mijenja text node pa SR zna ponoviti najavu). Isti obrazac kao
+// scheduleSrSummary u kartice-page.ts; vizualni pregled dokumenta ostaje trenutan.
+let _hintTimer: any = 0;
+function scheduleHint(missing: string[]) {
   const hint = $('#st-hint');
-  if (hint) {
-    if (model.missing.length) {
-      hint.className = 'out-hint warn';
-      hint.textContent = `Preporučeno dodati: ${model.missing.join(', ')}.`;
-    } else {
-      hint.className = 'out-hint ok';
-      hint.textContent = 'Sva preporučena polja su ispunjena.';
-    }
-  }
+  if (!hint) return;
+  clearTimeout(_hintTimer);
+  _hintTimer = setTimeout(() => {
+    const cls = missing.length ? 'out-hint warn' : 'out-hint ok';
+    const text = missing.length ? `Preporučeno dodati: ${missing.join(', ')}.` : 'Sva preporučena polja su ispunjena.';
+    if (hint.className !== cls) hint.className = cls;
+    if (hint.textContent !== text) hint.textContent = text;
+  }, 600);
 }
 
 function init() {
@@ -91,7 +99,7 @@ function init() {
   bindCopyButton($('#st-copy'), () => {
     const input = readInput();
     return hasContent(input) ? statementText(buildStatement(input)) : '';
-  });
+  }, { statusEl: $('#st-copy-status') });
 
   $('#st-print')?.addEventListener('click', () => window.print());
 
