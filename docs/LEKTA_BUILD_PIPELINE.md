@@ -103,12 +103,12 @@ TRACK D (odluke i podaci):     D1, D2 (prije K8), D3 (u K0), D4 (prije K11 imeno
 - Rizik: dvostruka analiza na slabom uredjaju (ne paralelno s prvom analizom; isti capovi).
 
 ### K4. Fixer pgNumType nad postojecim sekcijama (BL-06)
-- Trajanje: 2-3 dana. Status: NEUSKLADENO (2026-07-16): fixer JE implementiran u povijesti (commit
-  21fd329, feat(repair): K4 pgNumType fixer), ali trenutno radno stablo ima necommitane izmjene koje
-  ga uklanjaju (M src/repair/fixers.ts bez pgNumType funkcije, D src/repair/page-numbering.test.ts).
-  Nije GOTOVO dok se radno stablo i povijest ne usklade (dovrsiti revert i commitati ga s
-  obrazlozenjem, ili vratiti fixer). Stari status CEKA ne odrazava taj implementiran-pa-revertiran
-  lifecycle.
+- Trajanje: 2-3 dana. Status: GOTOVO 2026-07-13 (commit 21fd329, CI zelen, DARK). NAPOMENA
+  (2026-07-18): izmedju 2026-07-16 audit-remediacije (commit cf38fb0) i ovog datuma, K4 kod je
+  bio odsutan iz lokalnog mastera (uklonjen bez zabiljezenog obrazlozenja, vidi AUD-64); vracen
+  spajanjem origin/master natrag u master. Razlog izvornog nestanka ostaje nerazjasnjen (nije
+  potvrdjeno je li bio namjeran revert nakon vlasnicke Word/LO provjere ili slucajno pokupljen
+  iz paralelne sesije). DARK ostaje do eksplicitne vlasnicke odluke.
 - Sto: novi fixer krpa w:pgNumType (start=1, fmt lowerRoman/decimal) po sekcijama prema
   profilu (checkId page-numbers vec postoji u rule-compileru); dokument bez sekcija =
   bit-identican no-op s objasnjenjem u panelu.
@@ -119,11 +119,9 @@ TRACK D (odluke i podaci):     D1, D2 (prije K8), D3 (u K0), D4 (prije K11 imeno
   otvaraju izlaz bez upozorenja (rucna matrica); /codex:adversarial-review odradjen; deploy.
 
 ### K5. Footer PAGE polje: prosirenje engine politike (BL-07b) : NAJTEZI KORAK
-- Trajanje: 4-5 dana. Status: NEUSKLADENO (2026-07-16): footer fixer JE implementiran u povijesti
-  (commit c9f2a3b, feat(repair): K5 footer PAGE polje), ali trenutno radno stablo ima necommitane
-  izmjene koje ga uklanjaju (M src/repair/fixers.ts bez footer funkcije, D src/repair/footer-page.test.ts).
-  Nije GOTOVO dok se radno stablo i povijest ne usklade. Stari status CEKA ne odrazava taj
-  implementiran-pa-revertiran lifecycle.
+- Trajanje: 4-5 dana. Status: GOTOVO 2026-07-13 (commit c9f2a3b, CI zelen, DARK). Ista napomena
+  kao K4 (2026-07-18): kod je bio odsutan iz lokalnog mastera od cf38fb0 do spajanja s
+  origin/master; razlog nestanka nerazjasnjen. DARK ostaje do eksplicitne vlasnicke odluke.
 - Sto: umetanje footer parta (footerN.xml + rels + [Content_Types].xml + w:footerReference
   u sectPr) s PAGE poljem; prvo prosirenje apply-fixers politike izvan
   document.xml/styles.xml: nove maske, nova backstop pravila, eksplicitni popis partova
@@ -135,7 +133,27 @@ TRACK D (odluke i podaci):     D1, D2 (prije K8), D3 (u K0), D4 (prije K11 imeno
   adversarial review; NE deploya se sam (ide zajedno s K6).
 
 ### K6. Umetanje sekcije prije Uvoda + korisnikova potvrda (BL-07c)
-- Trajanje: 3-4 dana. Status: CEKA
+- Trajanje: 3-4 dana. Status: GOTOVO 2026-07-13 (commit f7b7c1c, CI zelen, DARK);
+  stale-index dug ZATVOREN 2026-07-16 (commit 31052dc): sidro Uvoda se sada RE-DERIVIRA
+  iz trenutnog documentXml po tekstu (insertSectionBreakBeforeHeading, isti obrazac kao K7),
+  introParagraphIndex je demotiran na cisti gate signal; prednji dio = prethodni odlomak ILI
+  tablica (naslovnica-tablica). Golden nepromijenjen, check + CI zeleni. DARK ostaje.
+- IZVJESTAJ: novi kompozitni section-insert-fixer za JEDNOSEKCIJSKI rad. Nova primitiva
+  insertSectionBreakBeforeParagraph (xml-patch.ts) umece <w:p><w:pPr><w:sectPr>..</w:pPr></w:p>
+  prije Uvoda; koordinatni sustav = analyzeDocx introParagraphIndex (n-ti <w:p> == n-ti
+  els(doc,'w:p')), MASKIRA komentare/CDATA/PI da <w:p u komentaru ne pomakne indeks, guardovi
+  tbl/txbxContent/sdtContent balans + pPrChange (zivi sectPr) + sectPrChange no-op. Marker
+  nosi pgSz/pgMar zavrsnog sectPr + <w:titlePg/> (naslovnica bez broja). Kompozit REUSE K4
+  (patchSectionPageNumbering [{0,rimski,1},{1,arapski,1}]) + K5 (footerPageFixer, glavnu Word
+  nasljedjuje). OPSEG v1: samo cist jednosekcijski rad (backstop preSectPr.length===1; odbija
+  i docx s postojecim titlePg/header/footerReference; visesekcijski deferiran). Panel trazi
+  potvrdu lokacije prije SVAKE strukturne primjene (bez latch flaga; escapeHtml). Adversarial
+  review (Workflow 4 lens-a, 7->5 nalaza fixano: titlePg na glavnoj sekciji, comment drift,
+  pPrChange, sdtContent, confirm latch), golden regeneriran, check + CI zeleni.
+  DARK: SECTION_INSERT_LIVE=false; app.ts zove flag-gated introSectionRepairableItem, nikad
+  jezgru. PREOSTAJE (vlasnik, izlazni gate): rucna Word/LibreOffice matrica na izlazu fixera
+  (golden dokazuje samo XML-transform, ne realnu Word valjanost) -> SECTION_INSERT_LIVE=true
+  -> DEPLOY K5+K6 ZAJEDNO + landing/FAQ + SEO (K13).
 - Sto: umetanje w:p/w:pPr/w:sectPr prije odlomka Uvoda (sidro: postojeca detekcija
   checkPageNumberStartAtIntro); panel trazi potvrdu lokacije prije primjene; kombinirano s
   K4+K5 daje kompletno "numeriranje od Uvoda".
@@ -149,7 +167,23 @@ TRACK D (odluke i podaci):     D1, D2 (prije K8), D3 (u K0), D4 (prije K11 imeno
   po stavci + backstop.
 
 ### K7. TOC polje s dirty flagom (BL-09)
-- Trajanje: 2 dana. Status: CEKA
+- Trajanje: 2 dana. Status: GOTOVO 2026-07-13 (commit e4ce6f5, CI zelen, DARK)
+- IZVJESTAJ: novi toc-field-fixer umece ZIVO TOC polje (fldChar begin/instrText " TOC \\o "1-3"
+  \\h \\z \\u "/separate/placeholder/end, w:dirty na begin) neposredno IZA naslova "Sadrzaj";
+  Word ga regenerira pri otvaranju. Rucno utipkane stavke se NE brisu (nedestruktivno; preporuka
+  za brisanje u afterLabel). analyze-docx details += sadrzajParagraphIndex + hasTocField. SIDRO se
+  RE-DERIVIRA iz trenutnog documentXml po tekstu (sectionName), NE iz anal-time indeksa (adversarial
+  HIGH: empty-paragraph/section-insert u istoj bateriji pomicu indekse). documentHasTocField usidren
+  na gramatiku field koda (instrukcija pocinje s TOC): hvata split-run instrText, ne lazira na "toc"
+  u HYPERLINK URL-u, fixer ne duplicira polje (idempotentan). Adversarial review (Workflow 3 lens-a,
+  7->5 nalaza): HIGH stale-index -> re-derivacija; MEDIUM split-run + LOW HYPERLINK -> field-grammar
+  detekcija; MEDIUM updateFields (LibreOffice/Docs ne osvjezavaju polje na otvaranju -> placeholder)
+  + LOW nested-Sadrzaj divergencija DOKUMENTIRANI. Testovi: src/repair/toc-field.test.ts (27).
+  DARK: TOC_FIELD_LIVE=false; app.ts zove flag-gated tocFieldRepairableItem. check + CI zeleni.
+  PREOSTAJE (vlasnik, izlazni gate): rucna Word/LibreOffice provjera (regenerira li Word TOC na
+  otvaranju, bez upozorenja) -> TOC_FIELD_LIVE=true -> deploy (moze uz K5/K6 matricu). NAPOMENA:
+  isti stale-index rizik postojao u K6 section-insert -> ZATVOREN 2026-07-16 (commit 31052dc,
+  re-derivacija sidra po tekstu); oba LIVE puta (toc-field + section-insert) sada re-deriviraju.
 - Sto: umetanje TOC polja (w:fldSimple ili sdt, "TOC \\o 1-3 \\h", w:dirty) na mjesto
   postojeceg naslova Sadrzaj; rucni sadrzaj se NE brise (samo preporuka u panelu).
 - Ulazni gate: K6. Izlazni gate: Word pri otvaranju izracuna TOC; no-op ako polje postoji;

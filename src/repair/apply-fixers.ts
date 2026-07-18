@@ -13,10 +13,19 @@ import {
   lineSpacingFixer,
   alignmentFixer,
   paragraphSpacingFixer,
+  pageNumberingFixer,
+  footerPageFixer,
+  sectionInsertFixer,
   emptyParagraphFixer,
   footnoteSpacingFixer,
+  pageNumberAlignmentFixer,
+  tocFieldFixer,
   type DocxXmlParts,
+  type FooterPageTarget,
+  type SectionInsertTarget,
+  type TocFieldTarget,
 } from './fixers';
+import type { SectionNumberingTarget } from './xml-patch';
 
 /** Poznati fixeri kao runtime konstanta: profile-validator provjerava clanstvo
  * fixerId-a iz podataka u ovom popisu (tipfeler u draftu = strukturna greska,
@@ -28,8 +37,13 @@ export const FIXER_IDS = [
   'line-spacing-fixer',
   'alignment-fixer',
   'paragraph-spacing-fixer',
+  'page-numbering-fixer',
+  'footer-page-fixer',
+  'section-insert-fixer',
   'empty-paragraph-fixer',
   'footnote-spacing-fixer',
+  'page-number-alignment-fixer',
+  'toc-field-fixer',
 ] as const;
 
 export type FixerId = (typeof FIXER_IDS)[number];
@@ -55,7 +69,15 @@ export interface ApplyFixersResult {
 
 const DOCUMENT_XML_PATH = 'word/document.xml';
 const STYLES_XML_PATH = 'word/styles.xml';
+const CONTENT_TYPES_PATH = '[Content_Types].xml';
+const DOCUMENT_RELS_PATH = 'word/_rels/document.xml.rels';
+// Engine POLITIKA (K5): jedini novi partovi koje engine smije DODATI su word/footerN.xml.
+// Backstop protiv fixera koji bi (greskom) pokusao ubaciti bilo sto izvan te maske.
+const ENGINE_ADDABLE_PART = /^word\/footer\d+\.xml$/;
 const FOOTNOTES_XML_PATH = 'word/footnotes.xml';
+// Isti regex kao PAGE-part enumeracija u analyze-docx.ts (linija ~47): svi POSTOJECI
+// footer/header partovi, ne samo footeri koje K5 smije dodati (ENGINE_ADDABLE_PART).
+const FOOTER_HEADER_PART_RE = /^word\/(footer|header)\d+\.xml$/i;
 
 function runFixer(fixerId: FixerId, parts: DocxXmlParts, params: Record<string, unknown>) {
   switch (fixerId) {
@@ -77,11 +99,33 @@ function runFixer(fixerId: FixerId, parts: DocxXmlParts, params: Record<string, 
       const p = params as { deep?: boolean };
       return paragraphSpacingFixer(parts, p.deep === true);
     }
+    case 'page-numbering-fixer': {
+      const p = params as { targets?: SectionNumberingTarget[] };
+      return pageNumberingFixer(parts, Array.isArray(p.targets) ? p.targets : []);
+    }
+    case 'footer-page-fixer': {
+      const p = params as { target?: FooterPageTarget };
+      return p.target ? footerPageFixer(parts, p.target) : { parts, applied: false, beforeLabel: '', afterLabel: '' };
+    }
+    case 'section-insert-fixer': {
+      const p = params as { target?: SectionInsertTarget };
+      return p.target && typeof p.target.introParagraphIndex === 'number'
+        ? sectionInsertFixer(parts, p.target)
+        : { parts, applied: false, beforeLabel: '', afterLabel: '' };
+    }
     case 'empty-paragraph-fixer':
       return emptyParagraphFixer(parts);
     case 'footnote-spacing-fixer': {
       const p = params as { deep?: boolean };
       return footnoteSpacingFixer(parts, p.deep === true);
+    }
+    case 'page-number-alignment-fixer':
+      return pageNumberAlignmentFixer(parts);
+    case 'toc-field-fixer': {
+      const p = params as { target?: TocFieldTarget };
+      return p.target && typeof p.target.sadrzajParagraphIndex === 'number'
+        ? tocFieldFixer(parts, p.target)
+        : { parts, applied: false, beforeLabel: '', afterLabel: '' };
     }
     default:
       return { parts, applied: false, beforeLabel: '', afterLabel: '' };
@@ -98,7 +142,10 @@ export async function applyFixers(
 
   const documentEntry = entries.find((e) => e.name === DOCUMENT_XML_PATH);
   const stylesEntry = entries.find((e) => e.name === STYLES_XML_PATH);
+  const contentTypesEntry = entries.find((e) => e.name === CONTENT_TYPES_PATH);
+  const documentRelsEntry = entries.find((e) => e.name === DOCUMENT_RELS_PATH);
   const footnotesEntry = entries.find((e) => e.name === FOOTNOTES_XML_PATH);
+  const footerHeaderEntries = entries.filter((e) => FOOTER_HEADER_PART_RE.test(e.name));
 
   if (!documentEntry) {
     throw new Error(`apply-fixers: nedostaje ${DOCUMENT_XML_PATH} u docx-u, nije valjan Word dokument`);
@@ -107,14 +154,26 @@ export async function applyFixers(
   let parts: DocxXmlParts = {
     documentXml: decoder.decode(documentEntry.data),
     stylesXml: stylesEntry ? decoder.decode(stylesEntry.data) : '',
+    contentTypesXml: contentTypesEntry ? decoder.decode(contentTypesEntry.data) : '',
+    documentRelsXml: documentRelsEntry ? decoder.decode(documentRelsEntry.data) : '',
+    addedParts: [],
+    // Sva postojeca imena partova: footer imenovanje ih mora vidjeti da ne kolidira s
+    // orphan word/footerN.xml koji je u zipu ali ne u content-typesu (adversarial K5 nalaz).
+    existingParts: entries.map((e) => e.name),
     footnotesXml: footnotesEntry ? decoder.decode(footnotesEntry.data) : undefined,
+    footerHeaderParts: Object.fromEntries(
+      footerHeaderEntries.map((e) => [e.name, decoder.decode(e.data)]),
+    ),
   };
   // Zapamti pocetne stringove: dio se re-enkodira SAMO ako ga je neki fixer
   // stvarno promijenio. TextDecoder je non-fatal (nevaljani UTF-8 -> U+FFFD),
   // pa bi bezuvjetni decode+encode tiho prepisao bajtove i netaknutog dijela.
   const originalDocumentXml = parts.documentXml;
   const originalStylesXml = parts.stylesXml;
+  const originalContentTypes = parts.contentTypesXml;
+  const originalDocumentRels = parts.documentRelsXml;
   const originalFootnotesXml = parts.footnotesXml;
+  const originalFooterHeaderParts = { ...parts.footerHeaderParts };
 
   const changelog: ChangelogEntry[] = [];
   const skipped: string[] = [];
@@ -153,11 +212,34 @@ export async function applyFixers(
     if (entry.name === STYLES_XML_PATH && stylesEntry && parts.stylesXml !== originalStylesXml) {
       return { name: entry.name, data: encoder.encode(parts.stylesXml) };
     }
+    if (entry.name === CONTENT_TYPES_PATH && contentTypesEntry && (parts.contentTypesXml ?? '') !== originalContentTypes) {
+      return { name: entry.name, data: encoder.encode(parts.contentTypesXml ?? '') };
+    }
+    if (entry.name === DOCUMENT_RELS_PATH && documentRelsEntry && (parts.documentRelsXml ?? '') !== originalDocumentRels) {
+      return { name: entry.name, data: encoder.encode(parts.documentRelsXml ?? '') };
+    }
     if (entry.name === FOOTNOTES_XML_PATH && footnotesEntry && parts.footnotesXml !== originalFootnotesXml) {
       return { name: entry.name, data: encoder.encode(parts.footnotesXml) };
     }
+    if (
+      FOOTER_HEADER_PART_RE.test(entry.name) &&
+      parts.footerHeaderParts?.[entry.name] !== undefined &&
+      parts.footerHeaderParts[entry.name] !== originalFooterHeaderParts[entry.name]
+    ) {
+      return { name: entry.name, data: encoder.encode(parts.footerHeaderParts[entry.name]) };
+    }
     return entry; // netaknuto, isti podatak
   });
+
+  // Novi partovi (K5 footer flow): SAMO iz allow-liste (word/footerN.xml) i SAMO imena koja
+  // jos ne postoje u zipu (ne prepisujemo postojeci part). Ostalo se tiho odbacuje (backstop
+  // protiv fixera koji bi pokusao dodati part izvan politike enginea).
+  const existingNames = new Set(entries.map((e) => e.name));
+  for (const p of parts.addedParts ?? []) {
+    if (!ENGINE_ADDABLE_PART.test(p.name) || existingNames.has(p.name)) continue;
+    existingNames.add(p.name);
+    newEntries.push({ name: p.name, data: encoder.encode(p.content) });
+  }
 
   const newDocxBytes = await writeZip(newEntries);
 

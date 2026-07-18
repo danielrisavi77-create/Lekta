@@ -7,6 +7,7 @@ import {
   patchDefaultParagraphSpacing,
   patchDefaultAlignment,
   patchFootnoteTextSpacing,
+  patchFooterPageAlignment,
 } from './xml-patch';
 
 const DOCUMENT_XML =
@@ -207,5 +208,67 @@ describe('findStyleBlock / patchFootnoteTextSpacing', () => {
   it('vraca applied:false kad FootnoteText stil ne postoji', () => {
     const result = patchFootnoteTextSpacing(STYLES_XML, 0, 0); // STYLES_XML nema FootnoteText
     expect(result.applied).toBe(false);
+  });
+});
+
+describe('patchFooterPageAlignment', () => {
+  const pageField = (jc: string | null) =>
+    `<w:p>${jc ? `<w:pPr><w:jc w:val="${jc}"/></w:pPr>` : ''}` +
+    '<w:r><w:fldChar w:fldCharType="begin"/></w:r>' +
+    '<w:r><w:instrText xml:space="preserve"> PAGE </w:instrText></w:r>' +
+    '<w:r><w:fldChar w:fldCharType="separate"/></w:r>' +
+    '<w:r><w:t>1</w:t></w:r>' +
+    '<w:r><w:fldChar w:fldCharType="end"/></w:r>' +
+    '</w:p>';
+  const wrap = (body: string) =>
+    '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+    '<w:ftr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">' +
+    body +
+    '</w:ftr>';
+
+  it('mijenja w:jc s left na right', () => {
+    const result = patchFooterPageAlignment(wrap(pageField('left')), 'right');
+    expect(result.applied).toBe(true);
+    expect(result.xml).toContain('<w:jc w:val="right"/>');
+    expect(result.before).toEqual({ 'w:val': 'left' });
+    expect(result.after).toEqual({ 'w:val': 'right' });
+  });
+
+  it('no-op kad je vec right', () => {
+    const result = patchFooterPageAlignment(wrap(pageField('right')), 'right');
+    expect(result.applied).toBe(false);
+    expect(result.xml).toBe(wrap(pageField('right')));
+  });
+
+  it('no-op (patch-only) kad w:jc uopce ne postoji na PAGE odlomku', () => {
+    const xml = wrap(pageField(null));
+    const result = patchFooterPageAlignment(xml, 'right');
+    expect(result.applied).toBe(false);
+    expect(result.found['w:val']).toBeFalsy();
+    expect(result.xml).toBe(xml);
+  });
+
+  it('no-op kad paragraf s PAGE ne postoji uopce', () => {
+    const xml = wrap('<w:p><w:pPr><w:jc w:val="left"/></w:pPr><w:r><w:t>Podnožje</w:t></w:r></w:p>');
+    const result = patchFooterPageAlignment(xml, 'right');
+    expect(result.applied).toBe(false);
+  });
+
+  it('hvata PRVI odlomak s PAGE kad mu prethodi odlomak bez PAGE polja', () => {
+    const decoy = '<w:p><w:pPr><w:jc w:val="center"/></w:pPr><w:r><w:t>Autor</w:t></w:r></w:p>';
+    const xml = wrap(decoy + pageField('left'));
+    const result = patchFooterPageAlignment(xml, 'right');
+    expect(result.applied).toBe(true);
+    // decoy odlomak (centriran) ostaje netaknut, samo PAGE odlomak se mijenja
+    expect(result.xml).toContain('<w:jc w:val="center"/>');
+    expect(result.xml).toContain('<w:jc w:val="right"/>');
+    expect(result.before).toEqual({ 'w:val': 'left' });
+  });
+
+  it('samozatvarajuci <w:p/> ispred pravog PAGE odlomka ne proguta ga (SELF_CLOSING_SRC/PAIRED_SRC alternacija)', () => {
+    const xml = wrap('<w:p/>' + pageField('left'));
+    const result = patchFooterPageAlignment(xml, 'right');
+    expect(result.applied).toBe(true);
+    expect(result.xml).toContain('<w:jc w:val="right"/>');
   });
 });

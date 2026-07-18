@@ -126,3 +126,26 @@ export function multiSectionDocx(): Promise<Uint8Array> {
       '</w:document>',
   );
 }
+
+/**
+ * Jednosekcijski rad s naslovom "Sadržaj" (Heading1) i RUCNO utipkanom stavkom (bez zivog TOC
+ * polja). Ciljni oblik za K7 (umetanje TOC polja iza naslova Sadrzaj). Paragraph indeksi:
+ * NASLOVNICA(1), Sadržaj(2), rucna stavka Uvod..1(3), Uvod(4), tijelo(5), pa zavrsni sectPr.
+ */
+export function tocManualDocx(): Promise<Uint8Array> {
+  const body =
+    '<w:body>' +
+    '<w:p><w:r><w:t>NASLOVNICA</w:t></w:r></w:p>' +
+    '<w:p><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:r><w:t>Sadržaj</w:t></w:r></w:p>' +
+    '<w:p><w:r><w:t>Uvod\t1</w:t></w:r></w:p>' +
+    '<w:p><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:r><w:t>Uvod</w:t></w:r></w:p>' +
+    DIRECT_FORMATTED_PARAGRAPH +
+    SECT_PR +
+    '</w:body>';
+  return docxBytes(
+    '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+      '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">' +
+      body +
+      '</w:document>',
+  );
+}
