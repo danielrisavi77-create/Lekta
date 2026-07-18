@@ -40,11 +40,19 @@ function hasContent(input: any): boolean {
     || String(input.place || '').trim() || String(input.date || '').trim());
 }
 
+// Gumbi ostaju disabled dok ne postoji ijedan identitetski podatak (hasContent), bez ikakvog
+// vidljivog objasnjenja zasto - title daje razlog NA SAMOM gumbu (aria-describedby vec upucuje
+// na #st-hint za citac ekrana), umjesto da prvi klik zavrsi tiho, bez reakcije.
+const LOCKED_TITLE = 'Upiši barem ime i prezime, naslov rada, mjesto ili datum da otključaš preuzimanje i kopiranje.';
+
 function render(): void {
   const input = readInput();
   const model = buildStatement(input);
+  const locked = !hasContent(input);
   for (const id of ['#st-copy', '#st-docx', '#st-print']) {
-    const b = $(id); if (b) b.disabled = !hasContent(input);
+    const b = $(id); if (!b) continue;
+    b.disabled = locked;
+    b.title = locked ? LOCKED_TITLE : '';
   }
   const sheet = $('#st-sheet');
   if (sheet) {
@@ -54,21 +62,29 @@ function render(): void {
     sheet.innerHTML = `<div class="st-heading">${escapeHtml(model.heading)}</div><div class="st-body">${escapeHtml(model.body)}</div>${foot}`;
   }
 
-  scheduleHint(model.missing);
+  scheduleHint(model.missing, locked);
 }
 
 // #st-hint je aria-live=polite: pisanje na svaki keystroke tjera citac ekrana da istu poruku
 // ponavlja uz svaki utipkani znak. Debounce nakon pauze u tipkanju + changed-guard (textContent
 // na istu vrijednost i dalje mijenja text node pa SR zna ponoviti najavu). Isti obrazac kao
 // scheduleSrSummary u kartice-page.ts; vizualni pregled dokumenta ostaje trenutan.
+// "Preporuceno" tocno opisuje stanje KAD JE VEC OTKLJUCANO (barem jedno polje popunjeno, ostala
+// su doista opcionalna dopuna) - ali dok je locked (nijedno polje popunjeno), ista rijec zvuci
+// opcionalno iako gumbi ostaju disabled dok se ne upise barem jedno; poruka tad mora reci da je
+// rijec o uvjetu za otkljucavanje, ne o preporuci.
 let _hintTimer: any = 0;
-function scheduleHint(missing: string[]) {
+function scheduleHint(missing: string[], locked: boolean) {
   const hint = $('#st-hint');
   if (!hint) return;
   clearTimeout(_hintTimer);
   _hintTimer = setTimeout(() => {
     const cls = missing.length ? 'out-hint warn' : 'out-hint ok';
-    const text = missing.length ? `Preporučeno dodati: ${missing.join(', ')}.` : 'Sva preporučena polja su ispunjena.';
+    const text = !missing.length
+      ? 'Sva preporučena polja su ispunjena.'
+      : locked
+        ? `Upiši barem jedno da otključaš preuzimanje i kopiranje: ${missing.join(', ')}.`
+        : `Preporučeno dodati: ${missing.join(', ')}.`;
     if (hint.className !== cls) hint.className = cls;
     if (hint.textContent !== text) hint.textContent = text;
   }, 600);

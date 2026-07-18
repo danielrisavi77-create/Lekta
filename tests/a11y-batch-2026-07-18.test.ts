@@ -236,7 +236,7 @@ describe('kartice: bez "Nema teksta." najave na pocetni load (AUD a11y #Kartice-
 describe('izjava: #st-hint debounce (AUD a11y #Izjava-hint)', () => {
   it('render() vise ne pise izravno u #st-hint (delegira na scheduleHint)', () => {
     const ts = read('src/tools/izjava-page.ts');
-    expect(ts).toContain('scheduleHint(model.missing);');
+    expect(ts).toContain('scheduleHint(model.missing, locked);');
     expect(ts).toContain('function scheduleHint(');
   });
 });

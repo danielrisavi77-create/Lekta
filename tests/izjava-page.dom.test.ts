@@ -74,3 +74,26 @@ describe('izjava-page: date-picker <-> tekst sinkronizacija i Ocisti default (DO
     expect(wt.value).toBe('Diplomski rad');
   });
 });
+
+function fireInput(el: any) { el.dispatchEvent(new Event('input', { bubbles: true })); }
+
+describe('izjava-page: #st-hint tekst razlikuje "locked" (nijedno polje) od "preporuceno" (vec otkljucano)', () => {
+  beforeEach(async () => {
+    vi.resetModules();
+    buildDom();
+    await import('../src/tools/izjava-page');
+  });
+
+  it('BUG: prazna forma (locked) ne kaze "Preporučeno" nego trazi da se otkljuca izvoz', async () => {
+    await vi.waitFor(() => expect($('#st-hint').textContent).toBeTruthy());
+    expect($('#st-hint').textContent).not.toContain('Preporučeno');
+    expect($('#st-hint').textContent).toContain('otključaš');
+  });
+
+  it('kad je barem jedno polje popunjeno (otkljucano), ostatak je i dalje "Preporučeno dodati"', async () => {
+    $('#st-author').value = 'Ana Anić';
+    fireInput($('#st-author'));
+    await vi.waitFor(() => expect($('#st-hint').textContent).toContain('Preporučeno dodati'));
+    expect($('#st-copy').disabled).toBe(false);
+  });
+});
