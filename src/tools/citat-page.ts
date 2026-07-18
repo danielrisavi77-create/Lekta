@@ -122,6 +122,16 @@ function populateFaculties() {
   facSel.insertAdjacentHTML('beforeend', html);
 }
 
+// Odabrani fakultet ide na glavni analizator kroz ?unit= (isti catalog unit ID prostor kao
+// ZAGREB_CATALOG); index.html#analyzer to cita preko applyUnitFromUrl (src/ui/app.ts) i
+// unaprijed postavi isti fakultet, umjesto da korisnik ponovno trazi ustanovu od nule.
+function syncCtaAnalyzerLink() {
+  const cta = $('#cta-analyzer');
+  if (!cta) return;
+  const unitId = ($('#f-faculty')?.value || '').trim();
+  cta.setAttribute('href', unitId ? `index.html?unit=${encodeURIComponent(unitId)}#analyzer` : 'index.html#analyzer');
+}
+
 // Odabir fakulteta -> #f-style nosi njegove stilove; prazan -> vrati genericki izbor.
 function onFacultyChange() {
   const facSel = $('#f-faculty');
@@ -134,6 +144,7 @@ function onFacultyChange() {
     facultyStyles = opt.styles;
     styleSel.innerHTML = opt.styles.map((s, i) => `<option value="${i}">${esc(s.label)}</option>`).join('');
   }
+  syncCtaAnalyzerLink();
   updateStyleInfo();
   render();
 }
