@@ -179,13 +179,21 @@ function bulkStyle(): BulkStyle {
   return (($('#bulk-style')?.value as BulkStyle) || 'auto');
 }
 
+// Sazeta najava rezultata prepoznavanja/generiranja u sr-only aria-live status: sami
+// spremnici (#bulk-entries/#bulk-output) NISU live regije (najava cijelog bloka bi brbljala),
+// citac ekrana dobiva samo kratki sazetak sto se dogodilo.
+function announceBulk(msg: string) {
+  const live = $('#bulk-status');
+  if (live) live.textContent = msg;
+}
+
 function parseBulk() {
   const refs = splitReferences($('#bulk-input').value);
   const box = $('#bulk-entries');
   box.innerHTML = '';
   $('#bulk-copy').hidden = true;
   $('#bulk-output').innerHTML = '';
-  if (!refs.length) { $('#bulk-generate').hidden = true; return; }
+  if (!refs.length) { $('#bulk-generate').hidden = true; announceBulk('Nije prepoznata nijedna referenca.'); return; }
   const style = bulkStyle();
   refs.forEach((raw: string, i: number) => {
     const p = parseReference(raw, style);
@@ -204,6 +212,7 @@ function parseBulk() {
     renderBulkCard(fields, values);
   });
   $('#bulk-generate').hidden = false;
+  announceBulk(`Prepoznato referenci: ${refs.length}. Provjeri i dopuni polja po unosu, pa generiraj literaturu.`);
 }
 
 function generateBulk() {
@@ -220,17 +229,44 @@ function generateBulk() {
   const listText = items.map((x) => x.text).join('\n');
   const label = byAppearance ? 'redoslijedom pojavljivanja' : 'abecedno';
   $('#bulk-output').innerHTML =
-    `<label>Literatura (${label}, ${items.length})</label>` +
+    `<label for="bulk-result">Literatura (${label}, ${items.length})</label>` +
     `<textarea id="bulk-result" rows="${Math.min(20, Math.max(4, items.length + 1))}"></textarea>`;
   $('#bulk-result').value = listText;
   $('#bulk-copy').hidden = items.length === 0;
+  announceBulk(items.length
+    ? `Literatura generirana: ${items.length} jedinica, ${label}.`
+    : 'Nema jedinica za literaturu, dopuni polja po unosu.');
 }
 
 function showTab(which: 'single' | 'bulk') {
   $('#panel-single').hidden = which !== 'single';
   $('#panel-bulk').hidden = which !== 'bulk';
-  $('#tab-single').classList.toggle('active', which === 'single');
-  $('#tab-bulk').classList.toggle('active', which === 'bulk');
+  // ARIA tab semantika: roditelj je role=tablist, pa AT ocekuje aria-selected + roving
+  // tabindex na role=tab djeci (bez toga citac ekrana ne zna koji je tab aktivan).
+  for (const [id, active] of [['#tab-single', which === 'single'], ['#tab-bulk', which === 'bulk']] as const) {
+    const tab = $(id);
+    if (!tab) continue;
+    tab.classList.toggle('active', active);
+    tab.setAttribute('aria-selected', String(active));
+    tab.tabIndex = active ? 0 : -1;
+  }
+}
+
+// Tipkovnicka navigacija tablista (ARIA APG): strelice + Home/End sele fokus i aktiviraju tab.
+function bindTablistKeys() {
+  $('#tool-tabs')?.addEventListener('keydown', (e: KeyboardEvent) => {
+    const order: Array<'single' | 'bulk'> = ['single', 'bulk'];
+    const current = document.activeElement?.id === 'tab-bulk' ? 1 : 0;
+    let next = -1;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next = (current + 1) % order.length;
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') next = (current + order.length - 1) % order.length;
+    else if (e.key === 'Home') next = 0;
+    else if (e.key === 'End') next = order.length - 1;
+    if (next < 0) return;
+    e.preventDefault();
+    showTab(order[next]);
+    $(`#tab-${order[next]}`)?.focus();
+  });
 }
 
 function init() {
@@ -247,15 +283,19 @@ function init() {
   });
   $('#tab-single')?.addEventListener('click', () => showTab('single'));
   $('#tab-bulk')?.addEventListener('click', () => showTab('bulk'));
+  bindTablistKeys();
   $('#bulk-parse')?.addEventListener('click', parseBulk);
   $('#bulk-generate')?.addEventListener('click', generateBulk);
   // Promjena stila ponovno prepozna vec zalijepljeni popis (bez ovoga picker ne bi imao ucinak).
   $('#bulk-style')?.addEventListener('change', () => { if ($('#bulk-input').value.trim()) parseBulk(); });
 
   // Kopira samo kad citat/literatura postoji (gumbi su inace onemoguceni/skriveni).
-  bindCopyButton($('#copyBtn'), () => ($('#copyBtn').disabled ? '' : ($('#out').textContent || '')));
-  bindCopyButton($('#copyIntextBtn'), () => ($('#copyIntextBtn').disabled ? '' : ($('#intextValue').textContent || '')));
-  bindCopyButton($('#bulk-copy'), () => ($('#bulk-copy').hidden ? '' : ($('#bulk-result')?.value || '')));
+  // Zajednicki sr-only #copy-status (aria-live): ishod kopiranja se najavljuje i citacu
+  // ekrana, ne samo vizualnom promjenom teksta gumba (WCAG 4.1.3).
+  const copyStatus = { statusEl: $('#copy-status') };
+  bindCopyButton($('#copyBtn'), () => ($('#copyBtn').disabled ? '' : ($('#out').textContent || '')), copyStatus);
+  bindCopyButton($('#copyIntextBtn'), () => ($('#copyIntextBtn').disabled ? '' : ($('#intextValue').textContent || '')), copyStatus);
+  bindCopyButton($('#bulk-copy'), () => ($('#bulk-copy').hidden ? '' : ($('#bulk-result')?.value || '')), copyStatus);
 
   $('#c-sample')?.addEventListener('click', () => {
     const set = (id: string, v: string) => { const el = $(id); if (el) el.value = v; };

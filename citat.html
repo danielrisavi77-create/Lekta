@@ -149,13 +149,14 @@
       <a href="index.html#pricing">Paketi</a>
     </div>
     <button class="icon-btn mobile-menu" id="mobileMenuBtn" type="button" aria-label="Otvori izbornik" aria-expanded="false"><i data-lucide="menu"></i></button>
-    <button class="lampa-btn" id="themeBtn" type="button" aria-label="Promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 2h8l-5 7h4L7 22l3-9H6l3-11Z"/></svg><span class="lampa-txt">Lampa</span></button>
+    <button class="lampa-btn" id="themeBtn" type="button" aria-label="Lampa: promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 2h8l-5 7h4L7 22l3-9H6l3-11Z"/></svg><span class="lampa-txt">Lampa</span></button>
     <a class="btn btn-primary btn-sm" href="index.html#analyzer">Provjeri rad</a>
   </nav>
-  <div class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav" id="mobileNav" role="navigation" aria-label="Mobilna navigacija">
     <a href="index.html#how">Kako radi</a>
     <a href="landing_usporedba.html">Usporedba</a>
-    <a href="citat.html">Citat generator</a>
+    <a href="alati.html">Svi alati</a>
+    <a class="active" aria-current="page" href="citat.html">Citat generator</a>
     <a href="kartice.html">Brojač kartica</a>
     <a href="naslovnica.html">Naslovnica</a>
     <a href="literatura.html">Literatura</a>
@@ -186,13 +187,13 @@
         </select>
       </div>
       <p id="f-style-info" class="out-hint ok" hidden></p>
-      <div class="cit-tabs" id="tool-tabs" role="tablist">
-        <button id="tab-single" class="cit-tab active" type="button">Jedan izvor</button>
-        <button id="tab-bulk" class="cit-tab" type="button">Cijela literatura</button>
+      <div class="cit-tabs" id="tool-tabs" role="tablist" aria-label="Način unosa">
+        <button id="tab-single" class="cit-tab active" type="button" role="tab" aria-selected="true" aria-controls="panel-single">Jedan izvor</button>
+        <button id="tab-bulk" class="cit-tab" type="button" role="tab" aria-selected="false" aria-controls="panel-bulk" tabindex="-1">Cijela literatura</button>
       </div>
     </div>
 
-    <div id="panel-single">
+    <div id="panel-single" role="tabpanel" aria-labelledby="tab-single">
       <div class="grid">
     <div class="card">
       <h2>Podaci o izvoru</h2>
@@ -297,6 +298,7 @@
           <button class="btn btn-primary" id="copyBtn" type="button" disabled>Kopiraj citat</button>
           <button class="btn btn-secondary" id="copyIntextBtn" type="button" disabled>Kopiraj (u tekstu)</button>
         </div>
+        <div class="sr-only" id="copy-status" role="status" aria-live="polite"></div>
         <p class="out-hint" id="out-hint" aria-live="polite"></p>
         <div class="note"><b>Napomena:</b> generator daje okvirni oblik citata prema uobičajenim hrvatskim akademskim stilovima. Točan stil i interpunkciju uvijek provjeri prema uputama svog fakulteta, studija ili mentora.</div>
       </div>
@@ -304,7 +306,7 @@
       </div>
     </div>
 
-    <div id="panel-bulk" hidden>
+    <div id="panel-bulk" role="tabpanel" aria-labelledby="tab-bulk" hidden>
       <div class="card">
         <h2>Cijela literatura</h2>
         <p class="sub">Zalijepi popis literature (jedna referenca po retku ili odvojene praznim retkom). Alat prepozna polja koliko može; obavezno provjeri i ispravi svaki unos prije korištenja.</p>
@@ -317,8 +319,10 @@
             <option value="chicago">Chicago / fusnota (humanistika, pravo)</option>
           </select>
         </label>
+        <label class="sr-only" for="bulk-input">Zalijepi popis literature</label>
         <textarea id="bulk-input" rows="8" placeholder="Zalijepi cijelu literaturu ovdje, npr.:&#10;Kovačić, I. (2020). Naslov knjige. Zagreb: Izdavač.&#10;Horvat, A. (2019). Naslov članka. Časopis, 28(3), 45-67."></textarea>
         <div class="tp-toolbar"><button class="btn btn-secondary btn-sm" id="bulk-parse" type="button">Prepoznaj reference</button></div>
+        <div class="sr-only" id="bulk-status" role="status" aria-live="polite"></div>
         <div id="bulk-entries"></div>
         <button class="btn btn-primary" id="bulk-generate" type="button" hidden>Generiraj i sortiraj</button>
         <div id="bulk-output"></div>
