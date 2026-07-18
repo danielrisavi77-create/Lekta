@@ -779,7 +779,7 @@
   },
   {
     "id": "uniri",
-    "name": "Sveuciliste u Rijeci",
+    "name": "Sveučilište u Rijeci",
     "units": [
       {
         "id": "apuri",
@@ -885,7 +885,7 @@
       },
       {
         "id": "fmtu",
-        "name": "Fakultet za menadzment u turizmu i ugostiteljstvu, Opatija",
+        "name": "Fakultet za menadžment u turizmu i ugostiteljstvu, Opatija",
         "family": "social",
         "status": "partial",
         "programs": [
@@ -1053,7 +1053,7 @@
   },
   {
     "id": "unist",
-    "name": "Sveuciliste u Splitu",
+    "name": "Sveučilište u Splitu",
     "units": [
       {
         "id": "efst",
@@ -1125,7 +1125,7 @@
       },
       {
         "id": "ktfst",
-        "name": "Kemijsko-tehnoloski fakultet u Splitu",
+        "name": "Kemijsko-tehnološki fakultet u Splitu",
         "family": "stem",
         "status": "partial",
         "programs": [
@@ -1220,11 +1220,11 @@
   },
   {
     "id": "unios",
-    "name": "Sveuciliste Josipa Jurja Strossmayera u Osijeku",
+    "name": "Sveučilište Josipa Jurja Strossmayera u Osijeku",
     "units": [
       {
         "id": "biolos",
-        "name": "Odjel za biologiju, Sveuciliste u Osijeku",
+        "name": "Odjel za biologiju, Sveučilište u Osijeku",
         "family": "stem",
         "status": "partial",
         "programs": [
@@ -1244,7 +1244,7 @@
       },
       {
         "id": "fazos",
-        "name": "Fakultet agrobiotehnickih znanosti Osijek",
+        "name": "Fakultet agrobiotehničkih znanosti Osijek",
         "family": "stem",
         "status": "partial",
         "programs": [
@@ -1263,7 +1263,7 @@
       },
       {
         "id": "ferit",
-        "name": "Fakultet elektrotehnike, racunarstva i informacijskih tehnologija Osijek",
+        "name": "Fakultet elektrotehnike, računarstva i informacijskih tehnologija Osijek",
         "family": "stem",
         "status": "partial",
         "programs": [
@@ -1291,7 +1291,7 @@
       },
       {
         "id": "fizos",
-        "name": "Odjel za fiziku, Sveuciliste u Osijeku",
+        "name": "Odjel za fiziku, Sveučilište u Osijeku",
         "family": "stem",
         "status": "partial",
         "programs": [
@@ -1338,7 +1338,7 @@
       },
       {
         "id": "kemos",
-        "name": "Odjel za kemiju, Sveuciliste u Osijeku",
+        "name": "Odjel za kemiju, Sveučilište u Osijeku",
         "family": "stem",
         "status": "partial",
         "programs": [
@@ -1392,7 +1392,7 @@
       },
       {
         "id": "ptfos",
-        "name": "Prehrambeno-tehnoloski fakultet Osijek",
+        "name": "Prehrambeno-tehnološki fakultet Osijek",
         "family": "stem",
         "status": "partial",
         "programs": [
@@ -1413,11 +1413,11 @@
   },
   {
     "id": "unizd",
-    "name": "Sveuciliste u Zadru",
+    "name": "Sveučilište u Zadru",
     "units": [
       {
         "id": "unizd",
-        "name": "Sveuciliste u Zadru",
+        "name": "Sveučilište u Zadru",
         "family": "mixed",
         "status": "partial",
         "programs": [
@@ -1470,11 +1470,11 @@
   },
   {
     "id": "unipu",
-    "name": "Sveuciliste Jurja Dobrile u Puli",
+    "name": "Sveučilište Jurja Dobrile u Puli",
     "units": [
       {
         "id": "fetpu",
-        "name": "Fakultet ekonomije i turizma Dr. Mijo Mirkovic, Pula",
+        "name": "Fakultet ekonomije i turizma Dr. Mijo Mirković, Pula",
         "family": "social",
         "status": "partial",
         "programs": [
@@ -1590,11 +1590,11 @@
   },
   {
     "id": "unidu",
-    "name": "Sveuciliste u Dubrovniku",
+    "name": "Sveučilište u Dubrovniku",
     "units": [
       {
         "id": "unidu",
-        "name": "Sveuciliste u Dubrovniku",
+        "name": "Sveučilište u Dubrovniku",
         "family": "mixed",
         "status": "partial",
         "programs": [
@@ -1621,11 +1621,11 @@
   },
   {
     "id": "unin",
-    "name": "Sveuciliste Sjever",
+    "name": "Sveučilište Sjever",
     "units": [
       {
         "id": "unin",
-        "name": "Sveuciliste Sjever",
+        "name": "Sveučilište Sjever",
         "family": "mixed",
         "status": "partial",
         "programs": [
@@ -1641,11 +1641,11 @@
   },
   {
     "id": "veleri",
-    "name": "Veleuciliste u Rijeci",
+    "name": "Veleučilište u Rijeci",
     "units": [
       {
         "id": "veleri",
-        "name": "Veleuciliste u Rijeci",
+        "name": "Veleučilište u Rijeci",
         "family": "mixed",
         "status": "partial",
         "programs": [
@@ -1657,11 +1657,11 @@
   },
   {
     "id": "vub",
-    "name": "Veleuciliste u Bjelovaru",
+    "name": "Veleučilište u Bjelovaru",
     "units": [
       {
         "id": "vub",
-        "name": "Veleuciliste u Bjelovaru",
+        "name": "Veleučilište u Bjelovaru",
         "family": "biomed",
         "status": "partial",
         "programs": [
@@ -1674,11 +1674,11 @@
   },
   {
     "id": "mev",
-    "name": "Medimursko veleuciliste u Cakovcu",
+    "name": "Međimursko veleučilište u Čakovcu",
     "units": [
       {
         "id": "mev",
-        "name": "Medimursko veleuciliste u Cakovcu",
+        "name": "Međimursko veleučilište u Čakovcu",
         "family": "mixed",
         "status": "partial",
         "programs": [
@@ -1691,11 +1691,11 @@
   },
   {
     "id": "vvg",
-    "name": "Veleuciliste Velika Gorica",
+    "name": "Veleučilište Velika Gorica",
     "units": [
       {
         "id": "vvg",
-        "name": "Veleuciliste Velika Gorica",
+        "name": "Veleučilište Velika Gorica",
         "family": "mixed",
         "status": "partial",
         "programs": [
@@ -1707,11 +1707,11 @@
   },
   {
     "id": "vevu",
-    "name": "Veleuciliste Lavoslav Ruzicka u Vukovaru",
+    "name": "Veleučilište Lavoslav Ružička u Vukovaru",
     "units": [
       {
         "id": "vevu",
-        "name": "Veleuciliste Lavoslav Ruzicka u Vukovaru",
+        "name": "Veleučilište Lavoslav Ružička u Vukovaru",
         "family": "mixed",
         "status": "partial",
         "programs": [
@@ -1723,11 +1723,11 @@
   },
   {
     "id": "vuv",
-    "name": "Veleuciliste u Virovitici",
+    "name": "Veleučilište u Virovitici",
     "units": [
       {
         "id": "vuv",
-        "name": "Veleuciliste u Virovitici",
+        "name": "Veleučilište u Virovitici",
         "family": "mixed",
         "status": "partial",
         "programs": [
@@ -1739,11 +1739,11 @@
   },
   {
     "id": "veleknin",
-    "name": "Veleuciliste Marko Marulic u Kninu",
+    "name": "Veleučilište Marko Marulić u Kninu",
     "units": [
       {
         "id": "veleknin",
-        "name": "Veleuciliste Marko Marulic u Kninu",
+        "name": "Veleučilište Marko Marulić u Kninu",
         "family": "mixed",
         "status": "partial",
         "programs": [
@@ -1755,11 +1755,11 @@
   },
   {
     "id": "vhzk",
-    "name": "Veleuciliste Hrvatsko zagorje Krapina",
+    "name": "Veleučilište Hrvatsko zagorje Krapina",
     "units": [
       {
         "id": "vhzk",
-        "name": "Veleuciliste Hrvatsko zagorje Krapina",
+        "name": "Veleučilište Hrvatsko zagorje Krapina",
         "family": "mixed",
         "status": "partial",
         "programs": [
@@ -1770,11 +1770,11 @@
   },
   {
     "id": "vus",
-    "name": "Veleuciliste u Sibeniku",
+    "name": "Veleučilište u Šibeniku",
     "units": [
       {
         "id": "vus",
-        "name": "Veleuciliste u Sibeniku",
+        "name": "Veleučilište u Šibeniku",
         "family": "social",
         "status": "partial",
         "programs": [
@@ -1786,11 +1786,11 @@
   },
   {
     "id": "vuka",
-    "name": "Veleuciliste u Karlovcu",
+    "name": "Veleučilište u Karlovcu",
     "units": [
       {
         "id": "vuka",
-        "name": "Veleuciliste u Karlovcu",
+        "name": "Veleučilište u Karlovcu",
         "family": "mixed",
         "status": "partial",
         "programs": [
@@ -1808,11 +1808,11 @@
   },
   {
     "id": "bak",
-    "name": "Veleuciliste Baltazar Zapresic",
+    "name": "Veleučilište Baltazar Zaprešić",
     "units": [
       {
         "id": "bak",
-        "name": "Veleuciliste Baltazar Zapresic",
+        "name": "Veleučilište Baltazar Zaprešić",
         "family": "social",
         "status": "partial",
         "programs": [
@@ -1824,11 +1824,11 @@
   },
   {
     "id": "vguk",
-    "name": "Veleuciliste u Krizevcima",
+    "name": "Veleučilište u Križevcima",
     "units": [
       {
         "id": "vguk",
-        "name": "Veleuciliste u Krizevcima",
+        "name": "Veleučilište u Križevcima",
         "family": "stem",
         "status": "partial",
         "programs": [
@@ -1840,11 +1840,11 @@
   },
   {
     "id": "aspira",
-    "name": "Veleuciliste Aspira",
+    "name": "Veleučilište Aspira",
     "units": [
       {
         "id": "aspira",
-        "name": "Veleuciliste Aspira",
+        "name": "Veleučilište Aspira",
         "family": "social",
         "status": "partial",
         "programs": [
@@ -1859,11 +1859,11 @@
   },
   {
     "id": "par",
-    "name": "Veleuciliste PAR",
+    "name": "Veleučilište PAR",
     "units": [
       {
         "id": "par",
-        "name": "Veleuciliste PAR",
+        "name": "Veleučilište PAR",
         "family": "social",
         "status": "partial",
         "programs": [
@@ -1875,11 +1875,11 @@
   },
   {
     "id": "vss",
-    "name": "Veleuciliste studija sigurnosti",
+    "name": "Veleučilište studija sigurnosti",
     "units": [
       {
         "id": "vss",
-        "name": "Veleuciliste studija sigurnosti",
+        "name": "Veleučilište studija sigurnosti",
         "family": "mixed",
         "status": "partial",
         "programs": [
@@ -1891,7 +1891,7 @@
   },
   {
     "id": "unisb",
-    "name": "Sveuciliste u Slavonskom Brodu",
+    "name": "Sveučilište u Slavonskom Brodu",
     "units": [
       {
         "id": "sfsb",
@@ -1925,7 +1925,7 @@
       },
       {
         "id": "odhz",
-        "name": "Odjel drustveno-humanistickih znanosti (UNISB)",
+        "name": "Odjel društveno-humanističkih znanosti (UNISB)",
         "family": "social",
         "status": "partial",
         "programs": [
@@ -1937,11 +1937,11 @@
   },
   {
     "id": "vnt",
-    "name": "Veleuciliste Nikola Tesla u Gospicu",
+    "name": "Veleučilište Nikola Tesla u Gospiću",
     "units": [
       {
         "id": "vnt",
-        "name": "Veleuciliste Nikola Tesla u Gospicu",
+        "name": "Veleučilište Nikola Tesla u Gospiću",
         "family": "mixed",
         "status": "partial",
         "programs": [
@@ -1954,11 +1954,11 @@
   },
   {
     "id": "iv",
-    "name": "Istarsko veleuciliste (Universita Istriana), Pula",
+    "name": "Istarsko veleučilište (Universita Istriana), Pula",
     "units": [
       {
         "id": "iv",
-        "name": "Istarsko veleuciliste (Universita Istriana), Pula",
+        "name": "Istarsko veleučilište (Universita Istriana), Pula",
         "family": "mixed",
         "status": "partial",
         "programs": [
@@ -1971,11 +1971,11 @@
   },
   {
     "id": "vsig",
-    "name": "Veleuciliste Ivanic-Grad",
+    "name": "Veleučilište Ivanić-Grad",
     "units": [
       {
         "id": "vsig",
-        "name": "Veleuciliste Ivanic-Grad",
+        "name": "Veleučilište Ivanić-Grad",
         "family": "mixed",
         "status": "partial",
         "programs": [
@@ -1988,11 +1988,11 @@
   },
   {
     "id": "arca",
-    "name": "Veleuciliste Arca (Split)",
+    "name": "Veleučilište Arca (Split)",
     "units": [
       {
         "id": "arca",
-        "name": "Veleuciliste Arca (Split)",
+        "name": "Veleučilište Arca (Split)",
         "family": "mixed",
         "status": "partial",
         "programs": [
@@ -2004,11 +2004,11 @@
   },
   {
     "id": "securus",
-    "name": "Veleuciliste menadzmenta i sigurnosti Securus (Pula)",
+    "name": "Veleučilište menadžmenta i sigurnosti Securus (Pula)",
     "units": [
       {
         "id": "securus",
-        "name": "Veleuciliste menadzmenta i sigurnosti Securus (Pula)",
+        "name": "Veleučilište menadžmenta i sigurnosti Securus (Pula)",
         "family": "social",
         "status": "partial",
         "programs": [
@@ -2020,11 +2020,11 @@
   },
   {
     "id": "evtos",
-    "name": "Evandjeosko teolosko veleuciliste (Osijek)",
+    "name": "Evanđeosko teološko veleučilište (Osijek)",
     "units": [
       {
         "id": "evtos",
-        "name": "Evandjeosko teolosko veleuciliste (Osijek)",
+        "name": "Evanđeosko teološko veleučilište (Osijek)",
         "family": "social",
         "status": "partial",
         "programs": [
