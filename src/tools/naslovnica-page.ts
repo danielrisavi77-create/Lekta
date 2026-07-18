@@ -44,8 +44,10 @@ function readInput() {
   const out: any = {};
   for (const [key, sel] of Object.entries(FIELDS)) out[key] = $(sel)?.value || '';
   // Opcije vrste rada nose value KLJUC (graduate...); tekst retka je vidljivi label opcije.
+  // Prazna value (placeholder "Odaberi vrstu rada") mora ostati prazan workType, ne njegov
+  // vidljivi tekst - inace placeholder tiho postaje "vrsta rada" ispisana na naslovnici.
   const wt = $('#tp-worktype');
-  out.workType = wt?.selectedOptions?.[0]?.textContent?.trim() || '';
+  out.workType = wt?.value ? wt.selectedOptions?.[0]?.textContent?.trim() || '' : '';
   out.mentorLabel = $('#tp-mentor-label')?.value || '';
   out.comentorLabel = $('#tp-comentor-label')?.value || '';
   return out;
@@ -391,10 +393,11 @@ function applySharedDraft(): void {
 }
 
 function persistSharedDraft(): void {
+  const wt = $('#tp-worktype');
   saveToolDraft({
     author: $(FIELDS.author)?.value || '',
     title: $(FIELDS.title)?.value || '',
-    workTypeLabel: $('#tp-worktype')?.selectedOptions?.[0]?.textContent?.trim() || '',
+    workTypeLabel: wt?.value ? wt.selectedOptions?.[0]?.textContent?.trim() || '' : '',
     place: $(FIELDS.place)?.value || '',
   });
 }
