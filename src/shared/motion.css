@@ -69,5 +69,17 @@ body::after {
   ::view-transition-old(root), ::view-transition-new(root) { animation: none }
 }
 
+/* Lokalni (same-document) prijelazi: swap analyzer viewova (wizard/progress/result) i koraci
+   wizarda. JS helper withViewTransition doda .vt-local na <html> za vrijeme prijelaza: root fade
+   (gore, za cross-page nav) se gasi da se ne bljesne cijela stranica, a tri analyzer viewa dijele
+   ime pa se vidljivi glatko morfira u sljedeci (default group cross-fade + morf okvira). Uvijek
+   je vidljiv najvise jedan (ostali .hidden => display:none => nisu u snapshotu). Gejtirano JS-om
+   (bez startViewTransition podrske ili uz reduced-motion => obicna mutacija bez .vt-local). */
+:root.vt-local::view-transition-old(root),
+:root.vt-local::view-transition-new(root) { animation: none }
+:root.vt-local #wizardView,
+:root.vt-local #progressView,
+:root.vt-local #resultView { view-transition-name: lekta-analyzer }
+
 /* Hero "zivi pregled" timeline (Tinta i papir) zivi u index.html Val 4a sloju + src/ui/hero-demo.ts
    (index-only), pa ovdje nema hero keyframeova; stari "prva tinta" potez je umirovljen. */
