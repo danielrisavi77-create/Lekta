@@ -8,6 +8,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { SITE_ORIGIN } from './site-origin.mjs';
 
@@ -80,4 +81,126 @@ for (const p of collectFiles(DIST, '.xml')) {
   if (WRONG_DOMAIN.test(fs.readFileSync(p, 'utf8'))) fail(`dist/${path.relative(DIST, p)} (sitemap) sadrzi lekta.hr`);
 }
 
-console.log(`[verify-deploy-dist] OK: bez dev alata u HTML/JS, pravne stranice prisutne, konzola iskljucena, origin unutar ${SITE_ORIGIN}.`);
+// 6. CSP script-src whitelist: public/_headers NEMA 'unsafe-inline' za skripte, samo par
+//    sha256 hasheva. Svaki inline <script> u distu (bez src=, bez inertnog type-a poput
+//    application/json ili application/ld+json koje CSP script-src uopce ne gata jer se ne
+//    izvrsavaju kao skripta) MORA imati hash u toj whitelisti, inace ga preglednik u
+//    produkciji tiho blokira (nema vidljive greske, samo CSP violation u konzoli) - upravo
+//    ova klasa buga (generate-citation-tools.mjs je inlineao po-stranicu razlicit config).
+const headersRaw = fs.readFileSync(path.join(ROOT, 'public/_headers'), 'utf8');
+const cspLine = headersRaw.match(/Content-Security-Policy:\s*(.+)/);
+if (!cspLine) fail('public/_headers nema Content-Security-Policy direktivu');
+const scriptSrc = cspLine[1].match(/script-src ([^;]+)/);
+if (!scriptSrc) fail('CSP nema script-src direktivu');
+const allowedScriptHashes = new Set(
+  [...scriptSrc[1].matchAll(/'sha256-([^']+)'/g)].map((m) => `sha256-${m[1]}`),
+);
+const INERT_SCRIPT_TYPES = new Set(['application/json', 'application/ld+json']);
+const scriptTagRe = /<script\b([^>]*)>([\s\S]*?)<\/script>/gi;
+for (const p of collectFiles(DIST, '.html')) {
+  const html = fs.readFileSync(p, 'utf8');
+  const rel = path.relative(DIST, p);
+  scriptTagRe.lastIndex = 0;
+  let m;
+  while ((m = scriptTagRe.exec(html))) {
+    const [, attrs, body] = m;
+    if (/\bsrc=/i.test(attrs)) continue; // vanjska skripta, script-src 'self' vec pokriva
+    const typeMatch = attrs.match(/\btype=["']?([^"'\s>]+)/i);
+    if (typeMatch && INERT_SCRIPT_TYPES.has(typeMatch[1].toLowerCase())) continue; // ne izvrsava se
+    if (!body.trim()) continue;
+    const hash = `sha256-${crypto.createHash('sha256').update(body).digest('base64')}`;
+    if (!allowedScriptHashes.has(hash)) {
+      fail(
+        `dist/${rel} sadrzi inline <script> ciji hash (${hash}) NIJE u public/_headers CSP ` +
+          'script-src whitelisti - produkcijski preglednik ce ga tiho blokirati bez vidljive greske',
+      );
+    }
+  }
+}
+
+// 7. dist/sitemap.xml i dist/robots.txt su RUCNO odrzavani staticki fajlovi (public/sitemap.xml,
+//    public/robots.txt), ne generirani iz SITE_ORIGIN kao ostatak SEO pipelinea (provjera #5
+//    hvata generirane kanonike/loc-ove, ali ne i ove); ako se LEKTA_SITE_ORIGIN ikad promijeni
+//    (netlify.toml predvidja moguc prelazak s domene), ova dva fajla bi tiho i dalje oglasavala
+//    staru domenu bez pada builda dok ostatak sitea vec prati novu.
+const sitemapPath = path.join(DIST, 'sitemap.xml');
+if (fs.existsSync(sitemapPath)) {
+  const sitemapXml = fs.readFileSync(sitemapPath, 'utf8');
+  const locs = [...sitemapXml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+  if (!locs.length) fail('dist/sitemap.xml nema <loc> unosa');
+  for (const loc of locs) {
+    if (!loc.startsWith(SITE_ORIGIN)) fail(`dist/sitemap.xml <loc>${loc}</loc> nije unutar ${SITE_ORIGIN}`);
+  }
+}
+const robotsPath = path.join(DIST, 'robots.txt');
+if (fs.existsSync(robotsPath)) {
+  const robotsTxt = fs.readFileSync(robotsPath, 'utf8');
+  const sitemapLines = [...robotsTxt.matchAll(/^Sitemap:\s*(\S+)/gim)].map((m) => m[1]);
+  if (!sitemapLines.length) fail('dist/robots.txt nema Sitemap: retka');
+  for (const url of sitemapLines) {
+    if (!url.startsWith(SITE_ORIGIN)) fail(`dist/robots.txt "Sitemap: ${url}" nije unutar ${SITE_ORIGIN}`);
+  }
+}
+
+// 8. generirane citatne SEO stranice (dist/alati/citati/*.html + brojac-kartica.html) moraju
+//    imati puni OG/Twitter/favicon blok (prije ovog gate-a 0/142 ih je imalo - dijeljeni link
+//    padao kao goli tekst) i genericke (bez verificiranog speca) stranice moraju biti
+//    noindex, a noindex URL NIKAD u sitemap-alati.xml (crawl-budget/near-duplicate signal).
+const citatiDir = path.join(DIST, 'alati/citati');
+if (fs.existsSync(citatiDir)) {
+  const citatiPages = fs
+    .readdirSync(citatiDir)
+    .filter((f) => f.endsWith('.html'))
+    .map((f) => path.join(citatiDir, f));
+  const brojacPath = path.join(DIST, 'alati/brojac-kartica.html');
+  if (fs.existsSync(brojacPath)) citatiPages.push(brojacPath);
+  if (!citatiPages.length) fail('dist/alati/citati nema HTML stranica');
+  for (const p of citatiPages) {
+    const html = fs.readFileSync(p, 'utf8');
+    const rel = path.relative(DIST, p);
+    for (const needle of ['property="og:title"', 'property="og:image"', 'name="twitter:card" content="summary_large_image"', 'rel="icon"', 'application/ld+json']) {
+      if (!html.includes(needle)) fail(`dist/${rel} nema "${needle}" (SEO/social meta regresija u generate-citation-tools.mjs)`);
+    }
+  }
+  const sitemapAlatiPath = path.join(DIST, 'alati/sitemap-alati.xml');
+  if (fs.existsSync(sitemapAlatiPath)) {
+    const sitemapAlati = fs.readFileSync(sitemapAlatiPath, 'utf8');
+    // Basename SET iz <loc>, ne .includes() substring: "rgnf-harvard.html" je substring od
+    // stvarno drugog fajla "rgnf-rgnf-harvard.html" (custom-spec token nazvan po fakultetu).
+    const sitemapFiles = new Set(
+      [...sitemapAlati.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1].split('/').pop()),
+    );
+    for (const p of citatiPages) {
+      const html = fs.readFileSync(p, 'utf8');
+      const rel = path.relative(DIST, p);
+      const isNoindex = /name="robots" content="noindex/.test(html);
+      if (isNoindex && sitemapFiles.has(path.basename(p))) {
+        fail(`dist/${rel} je noindex ali se navodi u dist/alati/sitemap-alati.xml (bespotreban crawl-budget signal)`);
+      }
+    }
+  }
+  // Hrvatski dijakritici: generate-citation-tools.mjs je nekoc pisao SVE literal stringove bez
+  // c/c/z/s/dj (za razliku od index.html/app.ts), pa je greska umnozena preko ~144 generiranih
+  // stranica. ASCII-fallback substringovi NIKAD ne smiju biti u dist HTML-u; ocekivane dijakriticke
+  // rijeci moraju biti PRISUTNE bar negdje u korpusu (hvata regresiju, ne trazi je na svakoj stranici).
+  const BANNED_ASCII = ['sluzbenim uputama', 'Brojac kartica', 'sveucilistu', 'tocno po', 'opci oblik', 'jos nemamo'];
+  const offendersByNeedle = new Map();
+  for (const p of citatiPages) {
+    const html = fs.readFileSync(p, 'utf8');
+    for (const needle of BANNED_ASCII) {
+      if (!html.includes(needle)) continue;
+      if (!offendersByNeedle.has(needle)) offendersByNeedle.set(needle, []);
+      offendersByNeedle.get(needle).push(path.relative(DIST, p));
+    }
+  }
+  if (offendersByNeedle.size) {
+    const detail = [...offendersByNeedle.entries()].map(([needle, files]) => `"${needle}" u ${files.slice(0, 3).join(', ')}`).join('; ');
+    fail(`generirane citatne stranice sadrze ASCII-fallback (bez dijakritike) tekst: ${detail}`);
+  }
+  const allCitatiHtml = citatiPages.map((p) => fs.readFileSync(p, 'utf8')).join('\n');
+  for (const expected of ['Riječi', 'uključujući', 'Brojač', 'sveučilištu', 'službenih uputa']) {
+    if (!allCitatiHtml.includes(expected)) fail(`nijedna generirana citatna stranica ne sadrzi ocekivanu dijakriticku rijec "${expected}" (dijakriticka regresija?)`);
+  }
+}
+
+console.log(`[verify-deploy-dist] OK: bez dev alata u HTML/JS, pravne stranice prisutne, konzola iskljucena, origin unutar ${SITE_ORIGIN}, svi inline <script> pokriveni CSP whitelistom, citatne SEO stranice imaju OG/Twitter/favicon i noindex/sitemap su konzistentni.`);

@@ -100,6 +100,15 @@ engine bez golden-file testa koji PRVO dokazuje zatečeno ponašanje.
 - `data/**` - autorski podaci (profili, izvori, rokovi, katalog, coverage).
 - `tests/**` - vitest: registar, regresija, UI smoke, rule-compiler, docx-golden.
 
+Pravne stranice (`privatnost.html`, `uvjeti-koristenja.html` i dr.) generira
+`scripts/generate-legal-pages.mjs`, koji se u `netlify.toml` pokrece TEK NAKON
+`vite build`. Provjera tih linkova (goli `<a href>` na svim alat-stranicama i
+landingu, bez JS presretanja/modala kao na `index.html`) zahtijeva puni build
+lanac (`vite build && generate-citation-tools && generate-legal-pages`); sam
+`npm run dev` ili goli `vite build && vite preview` ce 404-ati jer datoteke jos
+ne postoje. `scripts/verify-deploy-dist.mjs` cuva da su u stvarnom `dist/` uvijek
+prisutne prije deploya.
+
 ## Provenijencija fieldValidation (PID je identitet, ne sha256)
 
 Javni PDF uzorci u `fieldValidation.publicSources` identificiraju se PID-om

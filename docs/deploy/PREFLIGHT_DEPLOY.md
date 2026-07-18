@@ -79,9 +79,14 @@ npx supabase login
 npx supabase link --project-ref zrrjttizjyfcxmcpgzml     # traži DB password
 npx supabase migration list                              # READ-ONLY: provjeri stanje
 ```
-**OPREZ (AUD-17):** migracije su preimenovane (0020/0021). Prije `db push` provjeri
-`migration list` — ako je živa baza već primijenila stare 0008/0009 duplikate preko
-dashboarda, uskladi prije pusha. Kad je čisto:
+**VAŽAN OPREZ — dvije razdvojene migracijske loze (utvrđeno 2026-07-16):** živi projekt
+`zrrjttizjyfcxmcpgzml` ima SAMO 5 migracija, sve s **timestamp verzijama** (`20260709…`,
+waitlist + rokovi), i NIJEDNU numeriranu `0001-0021`. Znači cijeli numerirani set (uklj.
+0019_preflight) NIKAD nije primijenjen na produkciju. `db push` bi pokušao primijeniti
+svih 0001-0021 povrh 5 timestamp migracija → moguć sukob (tablice koje timestamp loza već
+ima). Zato `db push` NIJE čist apply; prvo `migration list` pa **uskladi loze**
+(vjerojatno: repair/baseline numeriranog seta ili selektivan push samo preflight objekata).
+NE pushaj naslijepo. Kad je stanje razriješeno:
 ```bash
 npx supabase db push                                     # kreira preflight tablice + RLS + purge
 ```
