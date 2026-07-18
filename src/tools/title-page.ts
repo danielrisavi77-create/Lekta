@@ -76,6 +76,15 @@ function placeYear(place: string, year: string): string {
   return place || y;
 }
 
+// FAQ (naslovnica.html) tvrdi da je mentor "gotovo uvijek" obvezan kod zavrsnih/diplomskih, ali
+// da kod seminarskih ovisi o kolegiju; projektni radovi cesto uopce nemaju mentora. Bez ovog
+// uvjeta genericka (bez predloska) grana bi svejedno prikazala "Preporuceno dodati: mentor" za
+// te dvije vrste rada i proturjecila vlastitom FAQ-u.
+function mentorRecommended(workType: string): boolean {
+  const wt = workType.toLowerCase();
+  return !wt.includes('seminar') && !wt.includes('projekt');
+}
+
 /** Hrvatske oznake uloga za missing hint kad obveznost dolazi iz predloska. */
 const ROLE_LABELS_HR: Record<TitleRole, string> = {
   university: 'sveučilište',
@@ -181,7 +190,10 @@ export function buildTitlePage(input: TitlePageInput, template?: TitlePageTempla
   push('comentor', textForRole('comentor', f, input));
   push('placeyear', placeYear(f.place, f.year));
 
-  const missing = RECOMMENDED.filter(([key]) => !(f as Record<string, string>)[key]).map(([, label]) => label);
+  const missing = RECOMMENDED
+    .filter(([key]) => key !== 'mentor' || mentorRecommended(f.workType))
+    .filter(([key]) => !(f as Record<string, string>)[key])
+    .map(([, label]) => label);
 
   return { lines, missing };
 }
