@@ -173,10 +173,12 @@ function setupThemeToggle() {
   const btn = document.getElementById('themeBtn');
   if (!btn) return;
   // BL-P3-08: stanje i naziv prate aktivnu temu, pa je preklopnik jasan i citacu zaslona.
+  // WCAG 2.5.3 (Label in Name): aria-label MORA sadrzavati vidljivi tekst gumba ("Lampa",
+  // <span class="lampa-txt">), inace glasovna kontrola ("klikni Lampa") ne pogodi element.
   const reflect = () => {
     const dark = document.documentElement.dataset.theme === 'dark';
     btn.setAttribute('aria-pressed', dark ? 'true' : 'false');
-    btn.setAttribute('aria-label', dark ? 'Ugasi radnu lampu' : 'Upali radnu lampu');
+    btn.setAttribute('aria-label', dark ? 'Lampa: ugasi' : 'Lampa: upali');
     btn.setAttribute('title', dark ? 'Ugasi radnu lampu' : 'Upali radnu lampu');
   };
   reflect();
