@@ -102,3 +102,30 @@ body::after {
   #resultView.result-enter .priority-item:nth-child(3) { animation-delay: .38s }
   #resultView.result-enter .priority-item:nth-child(4) { animation-delay: .46s }
 }
+
+/* Korak 5 - suptilna dubina hero prizora (parallax) + will-change higijena.
+   Scroll-driven animacija (bez JS, bez scroll listenera): mapira polozaj scrolla na napredak
+   animacije pa je compositor-driven i bez janka. Progresivno pobojlsanje - nepodrzani preglednici
+   (@supports promasi) jednostavno ne parallaxaju. CLS-safe po konstrukciji: na scroll 0 (pocetni
+   above-fold) animacija je na 0% = neutralno stanje elementa, pa NEMA pomaka pri loadu (LCP/CLS se
+   ne kvare). Samo desktop (>1000px) da se ne trosi baterija na mobitelu i da se stack ne mice.
+   Meta target je .lek-paper-cover (bez vlastitog transforma; dijete .lek-cover-stage zadrzava svoj
+   hover-lift jer je drugi element; a cover je vec display:none kad je analyzer engaged/rezultat, pa
+   se parallax sam gasi izvan pocetnog hero stanja). Tekst/CTA (lijevi stupac) se NAMJERNO ne dira -
+   samo dekorativni demo papir dobiva drift, sto stvara dubinu izmedju stupaca. Reduced-motion off. */
+@supports (animation-timeline: scroll()) {
+  @media (min-width: 1001px) and (prefers-reduced-motion: no-preference) {
+    @keyframes lekta-hero-parallax { to { transform: translateY(-46px); opacity: .5 } }
+    .lek-paper-cover {
+      animation: lekta-hero-parallax linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 720px;
+      will-change: transform, opacity;
+    }
+  }
+}
+/* Perpetualni marquee: transform-only petlja (ksMarquee), drzi je na compositoru radi glatkoce na
+   slabijim uredajima. Vec je reduced-motion gejtirana u index.html (.ks-tape-track animation:none). */
+@media (prefers-reduced-motion: no-preference) {
+  .ks-tape-track { will-change: transform }
+}
