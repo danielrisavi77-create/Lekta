@@ -171,6 +171,7 @@
 </header>
 
 <main>
+<noscript><div class="shell"><div class="note">Ovaj alat zahtijeva JavaScript za generiranje citata. Uključi JavaScript u pregledniku pa osvježi stranicu.</div></div></noscript>
 <section class="hero">
   <div class="shell">
     <div class="hero-back"><a class="backlink" href="index.html#top">&larr; Natrag na Lektu</a></div>
@@ -233,20 +234,20 @@
         <label for="f-title">Naslov</label>
         <input id="f-title" type="text" placeholder="Naslov rada ili djela">
       </div>
-      <div class="field" data-field="container">
+      <div class="field" data-field="container" style="display:none">
         <label for="f-container">Izvor (časopis / zbornik / službeni list)</label>
         <input id="f-container" type="text" placeholder="npr. Zbornik PFZ ili Narodne novine">
       </div>
-      <div class="field" data-field="editor">
+      <div class="field" data-field="editor" style="display:none">
         <label for="f-editor">Urednik (za poglavlje)</label>
         <input id="f-editor" type="text" placeholder="npr. I. Urednik">
       </div>
       <div class="row2">
-        <div class="field" data-field="volume">
+        <div class="field" data-field="volume" style="display:none">
           <label for="f-volume">Godište / volumen</label>
           <input id="f-volume" type="text" placeholder="70">
         </div>
-        <div class="field" data-field="issue">
+        <div class="field" data-field="issue" style="display:none">
           <label for="f-issue">Broj</label>
           <input id="f-issue" type="text" placeholder="2 ili 93/14">
         </div>
@@ -256,7 +257,7 @@
           <label for="f-year">Godina</label>
           <input id="f-year" type="text" placeholder="2024">
         </div>
-        <div class="field" data-field="pages">
+        <div class="field" data-field="pages" style="display:none">
           <label for="f-pages">Stranice</label>
           <input id="f-pages" type="text" placeholder="145-170">
         </div>
@@ -271,19 +272,19 @@
           <input id="f-publisher" type="text" placeholder="Narodne novine">
         </div>
       </div>
-      <div class="field" data-field="institution">
+      <div class="field" data-field="institution" style="display:none">
         <label for="f-institution">Ustanova (za završni rad)</label>
         <input id="f-institution" type="text" placeholder="Fakultet političkih znanosti, Zagreb">
       </div>
-      <div class="field" data-field="url">
+      <div class="field" data-field="url" style="display:none">
         <label for="f-url">Poveznica</label>
         <input id="f-url" type="text" placeholder="https://...">
       </div>
-      <div class="field" data-field="doi">
+      <div class="field" data-field="doi" style="display:none">
         <label for="f-doi">DOI</label>
         <input id="f-doi" type="text" placeholder="10.1234/primjer ili https://doi.org/...">
       </div>
-      <div class="field" data-field="accessed">
+      <div class="field" data-field="accessed" style="display:none">
         <label for="f-accessed">Datum pristupa</label>
         <input id="f-accessed" type="text" placeholder="2. 7. 2026.">
       </div>
