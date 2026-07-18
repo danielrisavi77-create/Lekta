@@ -21,9 +21,10 @@ export interface StatementModel {
   missing: string[];   // preporucena, a prazna polja
 }
 
+// workType namjerno IZOSTAVLJEN: #st-worktype select nema praznu opciju (uvijek nosi neku
+// vrijednost), pa se ovo polje u stvarnom UI-u nikad ne moze pojaviti kao nedostajuce.
 const RECOMMENDED: Array<[keyof StatementInput, string]> = [
   ['author', 'ime i prezime'],
-  ['workType', 'vrsta rada'],
   ['title', 'naslov rada'],
   ['place', 'mjesto'],
   ['date', 'datum'],

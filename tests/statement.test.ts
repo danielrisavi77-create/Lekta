@@ -6,7 +6,7 @@ describe('buildStatement', () => {
     const m = buildStatement({});
     expect(m.heading).toBe('Izjava o izvornosti');
     expect(m.signatureName).toBe('');
-    expect(m.missing).toEqual(['ime i prezime', 'vrsta rada', 'naslov rada', 'mjesto', 'datum']);
+    expect(m.missing).toEqual(['ime i prezime', 'naslov rada', 'mjesto', 'datum']);
   });
 
   it('uvrštava vrstu rada malim slovom i naslov u navodnike', () => {
