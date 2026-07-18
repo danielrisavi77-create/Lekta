@@ -40,6 +40,12 @@
   --on-red: #1A1512;
   --pass: #2E8B5F;
   --pass-soft: rgba(46, 139, 95, .14);
+  /* Tekst NA soft podlogama (badge/chip na papiru): --pass/--red-deep na alpha-blendanoj
+     soft pozadini mjere 3.9-4.1:1 (ispod WCAG AA 4.5:1 za mali tekst), pa badge tekst koristi
+     ove tamnije parove. Jedna vrijednost za obje teme (papir se malo mijenja): izmjereno
+     official 5.7/6.0:1, derived 5.3/5.8:1 (tests/a11y-batch-2026-07-18.test.ts). */
+  --ok-on-soft: #176243;
+  --red-on-soft: #A62B23;
   --scan: #4A6CF0;
   --lamp: rgba(255, 214, 150, .15);
   --paper-sh: 0 3px 8px rgba(0, 0, 0, .35), 0 22px 60px rgba(0, 0, 0, .55);

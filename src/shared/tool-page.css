@@ -141,7 +141,9 @@ footer .ks-tick{width:11px;height:11px}
 .btn-secondary{background:transparent;border:1.5px solid var(--line-strong);color:var(--text);border-radius:2px}
 .btn-secondary:hover{border-color:var(--text);background:transparent;color:var(--text)}
 .btn-ghost{background:transparent;color:var(--brand)}
-.eyebrow{font-family:var(--sans);font-weight:600;letter-spacing:.18em;color:var(--desk-faint)}
+/* a11y: --desk-faint na --desk pozadini daje ~2.6:1 (tamna) / ~2.2:1 (svijetla), duboko ispod
+   WCAG AA 4.5:1 za 11px tekst; --desk-muted mjeri 5.2:1 / 4.6:1 (tests/a11y-batch-2026-07-18.test.ts). */
+.eyebrow{font-family:var(--sans);font-weight:600;letter-spacing:.18em;color:var(--desk-muted)}
 .hero h1{font-family:var(--display-serif);font-weight:400;letter-spacing:-.02em;color:var(--desk-ink)}
 .hero h1 .ink{font-style:italic;font-weight:400;color:var(--red)}
 .hero p.lead,.hero .lead{font-family:var(--display-serif);color:var(--desk-muted)}
