@@ -82,6 +82,11 @@ body{background:var(--desk);color:var(--desk-ink);font:15px/1.6 var(--sans);over
 /* KS: pristupacnost i mobilno (mora ostati na kraju bloka) */
 @media(prefers-reduced-motion:reduce){.btn,.tool-card{transition:none}.tool-card:hover{transform:none}.btn-primary,.card .btn-primary,.cta .btn-primary{transition:none}}
 @media(max-width:560px){.lampa-txt{display:none}.lampa-btn{padding:8px 10px}}
+/* KS: papir-na-stolu rotacija (:nth-child(1..5) gore) pretpostavlja visestupcani grid; u
+   jednostupcanom mobilnom prikazu (.tools-grid{grid-template-columns:1fr} gore) kartice pune
+   sirine ostaju vidljivo zarotirane bez ovoga (klinasti razmaci, cik-cak rub). Ista specificnost
+   (0,3,0) kao :nth-child(1..5), pobjeduje jer je iza njih u izvoru (mora ostati na kraju bloka). */
+@media(max-width:640px){.tools-grid .tool-card:nth-child(n){transform:none}}
 /* KS: .mobile-nav na istom pragu na kojem se hamburger otvara (820px, vidi .nav-links gore);
    bez ovoga izbornik na tamnoj temi pada na ~2,6:1 kontrast, ispod AA (isti popravak kao citat.html). */
 @media(max-width:820px){
