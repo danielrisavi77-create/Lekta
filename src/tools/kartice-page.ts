@@ -73,10 +73,14 @@ function render(text: any) {
 
 // Najava za citace ekrana: vizualne metrike se osvjezavaju na svaki unos, ali se izgovor
 // salje u skriveni aria-live tek nakon pauze u tipkanju, da SR ne brblja na svaki znak.
+// srArmed sprijecava "Nema teksta." najavu na POCETNI prazni render (init() prije bilo kakve
+// korisnicke radnje) - ta promjena live regije bi citac ekrana najavio ~0.9s nakon ucitavanja
+// stranice iako korisnik nista nije napravio. Postavlja se tek u stvarnim korisnickim akcijama.
+let srArmed = false;
 let _srTimer: any = 0;
 function scheduleSrSummary(m: any) {
   const live = $('#kt-sr-summary');
-  if (!live) return;
+  if (!live || !srArmed) return;
   clearTimeout(_srTimer);
   _srTimer = setTimeout(() => {
     live.textContent = m.charsWithSpaces
@@ -109,6 +113,7 @@ function init() {
   // umjesto vise punih regex prolaza preko cijelog teksta na svaki keystroke.
   let rafId = 0;
   input.addEventListener('input', () => {
+    srArmed = true;
     if (rafId) return;
     rafId = requestAnimationFrame(() => {
       rafId = 0;
@@ -119,12 +124,14 @@ function init() {
   });
 
   $('#kt-clear')?.addEventListener('click', () => {
+    srArmed = true;
     input.value = '';
     render('');
     input.focus();
   });
 
   $('#kt-sample')?.addEventListener('click', () => {
+    srArmed = true;
     input.value = SAMPLE;
     render(input.value);
     input.focus();
