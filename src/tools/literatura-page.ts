@@ -26,7 +26,7 @@ function scheduleSrSummary(r: BibResult) {
   clearTimeout(_srTimer);
   _srTimer = setTimeout(() => {
     const text = r.inputCount
-      ? `Uneseno ${nf.format(r.inputCount)}, jedinstveno ${nf.format(r.entries.length)}, `
+      ? `Prepoznato ${nf.format(r.inputCount)}, jedinstveno ${nf.format(r.entries.length)}, `
         + `duplikata uklonjeno ${nf.format(r.duplicatesRemoved)}, s upozorenjem ${nf.format(r.withIssues)}.`
       : '';
     // Prazna regija + prazan unos = ucitavanje stranice; bez najave dok korisnik nesto ne unese.

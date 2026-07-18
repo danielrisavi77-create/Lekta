@@ -22,6 +22,17 @@ function sortKey(text: string): string {
   return head.toLowerCase().trim();
 }
 
+// Sekundarni kljuc unutar istog autora: godina objave, od starije prema novijoj (FAQ i vodic
+// to izricito obecavaju). Trazi SAMO prije URL-a, isti razlog kao u detectIssues (portal
+// putanje imaju 4-znamenkaste segmente koji nisu prava godina). Bez prepoznate godine ide
+// na kraj unutar iste autorske skupine (Number.POSITIVE_INFINITY), ne na pocetak nasumice.
+function sortYear(text: string): number {
+  const urlMatch = text.match(/(https?:\/\/|www\.)/i);
+  const scope = urlMatch ? text.slice(0, urlMatch.index) : text;
+  const m = scope.match(/\b(1[89]\d{2}|20\d{2})\b/);
+  return m ? parseInt(m[0], 10) : Number.POSITIVE_INFINITY;
+}
+
 // Kljuc za duplikate: mala slova, sazeti razmaci, bez zavrsne interpunkcije.
 function dedupeKey(text: string): string {
   return text.toLowerCase().replace(/\s+/g, ' ').replace(/[\s.,;]+$/, '').trim();
@@ -76,7 +87,10 @@ export function organizeBibliography(raw: string): BibResult {
     unique.push(line);
   }
 
-  unique.sort((a, b) => sortKey(a).localeCompare(sortKey(b), 'hr'));
+  unique.sort((a, b) => {
+    const byAuthor = sortKey(a).localeCompare(sortKey(b), 'hr');
+    return byAuthor !== 0 ? byAuthor : sortYear(a) - sortYear(b);
+  });
 
   const entries = unique.map(text => ({ text, issues: detectIssues(text) }));
   const withIssues = entries.filter(e => e.issues.length > 0).length;

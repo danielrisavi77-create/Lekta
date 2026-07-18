@@ -27,6 +27,23 @@ describe('organizeBibliography', () => {
     expect(r.entries).toHaveLength(2);
   });
 
+  it('BUG: isti autor s razlicitim godinama ostaje u ulaznom redoslijedu (FAQ/vodic obecava kronoloski, stariji prije novijeg)', () => {
+    const r = organizeBibliography('Anić, A. (2022). Noviji rad.\nAnić, A. (2019). Stariji rad.');
+    expect(r.entries.map(e => e.text)).toEqual([
+      'Anić, A. (2019). Stariji rad.',
+      'Anić, A. (2022). Noviji rad.',
+    ]);
+  });
+
+  it('isti autor bez prepoznate godine ide iza svih datiranih zapisa istog autora', () => {
+    const r = organizeBibliography('Anić, A. (n.d.). Bez godine.\nAnić, A. (2019). Stariji rad.\nAnić, A. (2022). Noviji rad.');
+    expect(r.entries.map(e => e.text)).toEqual([
+      'Anić, A. (2019). Stariji rad.',
+      'Anić, A. (2022). Noviji rad.',
+      'Anić, A. (n.d.). Bez godine.',
+    ]);
+  });
+
   it('ignorira vodece nabrajanje pri sortiranju', () => {
     const r = organizeBibliography('[2] Zorić, Z. (2020). Rad.\n[1] Anić, A. (2019). Rad.');
     expect(r.entries[0].text).toContain('Anić');
