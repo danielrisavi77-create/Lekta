@@ -140,6 +140,16 @@ footer .ks-tick{width:11px;height:11px}
 .nav>.btn-primary:hover{background:var(--red-deep);color:#F7F3E8;transform:none;box-shadow:none}
 .btn-secondary{background:transparent;border:1.5px solid var(--line-strong);color:var(--text);border-radius:2px}
 .btn-secondary:hover{border-color:var(--text);background:transparent;color:var(--text)}
+/* Press-feedback (mikro-interakcija, korak 3): klik utisne. :not(:disabled) da onemoguceni gumbi ne
+   reagiraju i da rade nad visespecificnim hover pravilima (npr. landing .nav>.btn-primary:hover).
+   Papirni pecat (.btn-primary) se pomakne PREMA svojoj stamp-sjeni (utisak pritiskanja u list, na
+   temu korektorskog stola; sjenu ne diramo pa nema neslaganja boje po stranicama), plosnati gumbi
+   se lagano smanje. Site-wide (tool-page.css se ucita na svim stranicama). Reduced-motion gasi transform. */
+.btn:active:not(:disabled){transform:scale(.96)}
+.btn-primary:active:not(:disabled){transform:translate(1.5px,1.5px) scale(.98)}
+.icon-btn{transition:transform .12s var(--ease-out-3,ease)}
+.icon-btn:active:not(:disabled){transform:scale(.9)}
+@media(prefers-reduced-motion:reduce){.btn:active:not(:disabled),.btn-primary:active:not(:disabled),.icon-btn:active:not(:disabled){transform:none}}
 .btn-ghost{background:transparent;color:var(--brand)}
 /* a11y: --desk-faint na --desk pozadini daje ~2.6:1 (tamna) / ~2.2:1 (svijetla), duboko ispod
    WCAG AA 4.5:1 za 11px tekst; --desk-muted mjeri 5.2:1 / 4.6:1 (tests/a11y-batch-2026-07-18.test.ts). */
