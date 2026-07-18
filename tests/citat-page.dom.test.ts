@@ -74,13 +74,22 @@ describe('citat-page: izbornik fakulteta + bulk (DOM)', () => {
   it('povratak na "Bez fakulteta" vrati genericki izbor stila', () => {
     fireChange('#f-faculty', '');
     expect($('#f-style').querySelector('option[value="autor-godina"]')).toBeTruthy();
-    expect($('#f-style-info').hidden).toBe(true);
+    // #f-style-info OSTAJE vidljiv i u generickom modu: to je jedini indikator koji stil
+    // se stvarno koristi, i vrijedi za oba taba (#f-style zivi samo unutar panel-single,
+    // skrivenog na bulk tabu).
+    expect($('#f-style-info').hidden).toBe(false);
+    expect($('#f-style-info').textContent).toMatch(/Autor-godina/i);
   });
 
   it('tab prebacuje na "Cijela literatura"', () => {
     $('#tab-bulk').click();
     expect($('#panel-bulk').hidden).toBe(false);
     expect($('#panel-single').hidden).toBe(true);
+  });
+
+  it('stil ostaje vidljiv i na bulk tabu (isti stil formatira bulk izlaz)', () => {
+    expect($('#panel-bulk').hidden).toBe(false);
+    expect($('#f-style-info').hidden).toBe(false);
   });
 
   it('bulk: zalijepi -> prepoznaj -> editabilne kartice po referenci', () => {

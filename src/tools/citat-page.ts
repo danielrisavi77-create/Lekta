@@ -68,11 +68,19 @@ function renderInText(inText: string): void {
 }
 
 // Info linija ispod izbornika fakulteta: provenijencija odabranog stila (posteno, s izvorom).
+// Ziva iznad #tool-tabs (dijeli je "Jedan izvor" i "Cijela literatura"), pa mora prikazivati
+// stil i u generickom modu (bez fakulteta): to je isti stil koji formatWithCurrent koristi
+// za bulk izlaz, a #f-style zivi u panel-single, skrivenom dok je aktivan bulk tab.
 function updateStyleInfo(): void {
   const info = $('#f-style-info');
   if (!info) return;
   const fs = activeFacultyStyle();
-  if (!fs) { info.hidden = true; info.textContent = ''; return; }
+  if (!fs) {
+    const label = $('#f-style')?.selectedOptions?.[0]?.textContent?.trim() || '';
+    info.innerHTML = label ? `Stil: <strong>${esc(label)}</strong>. Vrijedi i za citat i za popis literature ("Cijela literatura").` : '';
+    info.hidden = !label;
+    return;
+  }
   const src = fs.sourceLabel ? `„${esc(fs.sourceLabel)}”` : 'službenim uputama';
   const when = fs.verifiedAt ? `, provjereno ${esc(fs.verifiedAt)}` : '';
   info.innerHTML = fs.pin
@@ -341,6 +349,7 @@ function init() {
 
   // Tema se sinkronizira preko lekta.theme (inline skripta u citat.html), ne ovdje.
   syncVisibleFields();
+  updateStyleInfo();
   render();
 }
 
