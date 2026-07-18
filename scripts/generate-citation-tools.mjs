@@ -662,7 +662,7 @@ ${ctaHtml('./index.html', 'Svi fakulteti')}`;
 }
 
 function buildCharCounterHtml() {
-  return `<!doctype html>
+  return String.raw`<!doctype html>
 <html lang="hr">
 <head>
 <meta charset="utf-8">
@@ -691,11 +691,21 @@ var input = document.getElementById('text-input');
 var charCount = document.getElementById('char-count');
 var pageCount = document.getElementById('page-count');
 var wordCount = document.getElementById('word-count');
+// Nevidljivi znakovi koji stizu copy-pasteom (zero-width, word joiner, meki prijelom, BOM):
+// isti popis kao INVISIBLE_RE u kanonskom brojacu (src/tools/counter.ts). Bez ovoga bi ova
+// staticka SEO stranica davala drugaciji (obicno visi) "naplatni" broj kartica za identican
+// tekst nego alat na /alati/kartice.html, ovisno o TOME koji copy-paste izvor korisnik koristi.
+var INVISIBLE_RE = /[\u00AD\u200B\u200C\u200D\u2060\uFEFF]/g;
 input.addEventListener('input', function () {
-  var text = input.value;
-  // isto pravilo kao kanonski brojac (src/tools/counter.ts): prijelomi retka se NE broje u znakove
-  var chars = text.replace(/[\\r\\n]/g, '').length;
-  var words = text.trim() ? text.trim().split(/\\s+/).length : 0;
+  // Isti koraci kao countText() u src/tools/counter.ts: NFC normalizacija (dekomponirani
+  // dijakritici inace broje osnovno slovo + kombinirajuci znak kao 2 znaka), CRLF/CR -> LF,
+  // izbacivanje nevidljivih znakova, pa trim rubnih praznina prije brojanja.
+  var text = input.value.normalize('NFC').replace(/\r\n?/g, '\n').replace(INVISIBLE_RE, '');
+  var trimmed = text.trim();
+  var chars = 0;
+  for (var ch of trimmed) { if (ch !== '\n') chars++; }
+  var split = trimmed.replace(/([^\s–—])[–—](?=[^\s–—])/gu, '$1 ');
+  var words = split ? split.split(/\s+/).filter(function (t) { return /[\p{L}\p{N}]/u.test(t); }).length : 0;
   charCount.textContent = chars;
   pageCount.textContent = (chars / 1800).toFixed(2).replace('.', ',');
   wordCount.textContent = words;
