@@ -80,6 +80,7 @@ async function buildEngine() {
     platform: 'browser',
     target: 'es2019',
     write: false,
+    minify: true,
     legalComments: 'none',
   });
   return out.outputFiles[0].text;
@@ -509,7 +510,7 @@ ${canonical ? `<meta property="og:url" content="${canonical}">` : ''}
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <script type="application/ld+json">${webAppJsonLd(ogName, description)}</script>
-<style>${PAGE_STYLE}</style>
+<link rel="stylesheet" href="/alati/citation-style.css">
 </head>
 <body>
 <div class="lekta-brand"><a href="${SITE_ORIGIN}">Lekta</a><span>Besplatan alat, bez registracije</span></div>
@@ -971,7 +972,8 @@ function buildCharCounterHtml() {
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <script type="application/ld+json">${webAppJsonLd(ogName, description)}</script>
-<style>${PAGE_STYLE}
+<link rel="stylesheet" href="/alati/citation-style.css">
+<style>
   textarea { min-height: 220px; }
   .lekta-stats { display: flex; gap: 1.5rem; margin-top: 0.75rem; font-size: 0.9375rem; }
   .lekta-stats strong { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
@@ -1021,6 +1023,10 @@ async function main() {
   // ne inlineaju se po stranici (CSP script-src bez 'unsafe-inline', vidi pageShell()).
   fs.writeFileSync(path.join(OUT_DIR, 'citation-tool.js'), `${engineJs}\n${TOOL_JS}`, 'utf-8');
   fs.writeFileSync(path.join(OUT_DIR, 'brojac-kartica.js'), BROJAC_JS, 'utf-8');
+  // PAGE_STYLE (~6 KB) je bajt-identican na svih ~143+2 generirane stranice; isti razlog kao
+  // gore (JEDAN vanjski asset umjesto ponovnog inliniranja po stranici, vidi public/_headers
+  // /alati/*.css pravilo za dulje kesiranje nego generic /*.html).
+  fs.writeFileSync(path.join(OUT_DIR, 'citation-style.css'), PAGE_STYLE, 'utf-8');
 
   const sitemapUrls = [
     { loc: `${SITE_ORIGIN}/alati/brojac-kartica.html` },
