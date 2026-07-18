@@ -16,6 +16,25 @@ Marić, M. Uvod u politologiju. Zagreb.
 Državni zavod za statistiku (2021). Popis stanovništva. https://dzs.hr/popis
 Čović, Č. (2018). Metodologija. Split: Redak.`;
 
+// SR najava metrika: vizualne brojke se osvjezavaju na svaki unos, ali izgovor ide u skriveni
+// #lit-sr-summary (role=status) tek nakon pauze u tipkanju, da citac ekrana ne ponavlja sve
+// cetiri brojke uz svaki utipkani znak (isti obrazac kao scheduleSrSummary u kartice-page.ts).
+let _srTimer: any = 0;
+function scheduleSrSummary(r: BibResult) {
+  const live = $('#lit-sr-summary');
+  if (!live) return;
+  clearTimeout(_srTimer);
+  _srTimer = setTimeout(() => {
+    const text = r.inputCount
+      ? `Uneseno ${nf.format(r.inputCount)}, jedinstveno ${nf.format(r.entries.length)}, `
+        + `duplikata uklonjeno ${nf.format(r.duplicatesRemoved)}, s upozorenjem ${nf.format(r.withIssues)}.`
+      : '';
+    // Prazna regija + prazan unos = ucitavanje stranice; bez najave dok korisnik nesto ne unese.
+    if (!live.textContent && !text) return;
+    if (live.textContent !== text) live.textContent = text;
+  }, 900);
+}
+
 // Rezultat zadnjeg render()-a, ponovno koristen u copy/docx handlerima umjesto da svaki
 // klik nanovo parsira, spaja, dedupeira i sortira isti unos (render() ga vec izgradio prije klika).
 let lastResult: BibResult | null = null;
@@ -25,11 +44,14 @@ function render() {
   const r = organizeBibliography(input?.value || '');
   lastResult = r;
 
-  const set = (id: any, v: any) => { const el = $(id); if (el) el.textContent = v; };
+  // Changed-guard: textContent na istu vrijednost svejedno zamjenjuje text node, sto aria-live
+  // regiji (#lit-order-note) izgleda kao nova poruka pa bi je citac ekrana ponavljao.
+  const set = (id: any, v: any) => { const el = $(id); if (el && el.textContent !== v) el.textContent = v; };
   set('#lit-total', nf.format(r.inputCount));
   set('#lit-unique', nf.format(r.entries.length));
   set('#lit-dupes', nf.format(r.duplicatesRemoved));
   set('#lit-issues', nf.format(r.withIssues));
+  scheduleSrSummary(r);
 
   const list = $('#lit-list');
   if (list) {
@@ -59,7 +81,7 @@ function init() {
   bindCopyButton($('#lit-copy'), () => {
     const r = lastResult;
     return r && r.entries.length ? bibliographyText(r) : '';
-  });
+  }, { statusEl: $('#lit-copy-status') });
 
   // Preuzmi gotov .docx (docx-writer): jedinice s visecim uvlacenjem, stil ostaje autorov.
   $('#lit-docx')?.addEventListener('click', () => {

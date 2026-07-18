@@ -136,16 +136,17 @@ textarea#lit-input{min-height:380px;line-height:1.6}
       <a href="index.html#pricing">Paketi</a>
     </div>
     <button class="icon-btn mobile-menu" id="mobileMenuBtn" type="button" aria-label="Otvori izbornik" aria-expanded="false"><i data-lucide="menu"></i></button>
-    <button class="lampa-btn" id="themeBtn" type="button" aria-label="Promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 2h8l-5 7h4L7 22l3-9H6l3-11Z"/></svg><span class="lampa-txt">Lampa</span></button>
+    <button class="lampa-btn" id="themeBtn" type="button" aria-label="Lampa: promijeni osvjetljenje" title="Radna lampa / danje svjetlo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 2h8l-5 7h4L7 22l3-9H6l3-11Z"/></svg><span class="lampa-txt">Lampa</span></button>
     <a class="btn btn-primary btn-sm" href="index.html#analyzer">Provjeri rad</a>
   </nav>
-  <div class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav" id="mobileNav" role="navigation" aria-label="Mobilna navigacija">
     <a href="index.html#how">Kako radi</a>
     <a href="landing_usporedba.html">Usporedba</a>
+    <a href="alati.html">Svi alati</a>
     <a href="citat.html">Citat generator</a>
     <a href="kartice.html">Brojač kartica</a>
     <a href="naslovnica.html">Naslovnica</a>
-    <a href="literatura.html">Sređivanje literature</a>
+    <a class="active" aria-current="page" href="literatura.html">Sređivanje literature</a>
     <a href="izjava.html">Izjava o izvornosti</a>
     <a href="index.html#pricing">Paketi</a>
     <a class="btn btn-primary" href="index.html#analyzer">Provjeri rad</a>
@@ -182,17 +183,21 @@ textarea#lit-input{min-height:380px;line-height:1.6}
       <div class="card">
         <h2>Sređeni popis</h2>
         <p class="sub">Ažurira se dok tipkaš.</p>
-        <div class="metrics" role="status" aria-live="polite">
+        <!-- Vizualne metrike se osvjezavaju na svaki unos; SR najava ide u zasebni debounceani
+             sr-only status (#lit-sr-summary) da citac ekrana ne ponavlja sve 4 brojke na svaki znak. -->
+        <div class="metrics">
           <div class="metric"><span>Uneseno</span><b id="lit-total">0</b></div>
           <div class="metric"><span>Jedinstveno</span><b id="lit-unique">0</b></div>
           <div class="metric"><span>Duplikata</span><b id="lit-dupes">0</b></div>
           <div class="metric warnstat"><span>S upozorenjem</span><b id="lit-issues">0</b></div>
         </div>
+        <div class="sr-only" id="lit-sr-summary" role="status" aria-live="polite"></div>
         <ul class="lit-list" id="lit-list" aria-label="Sređeni popis literature"><li class="lit-empty">Zalijepi popis izvora lijevo, po jedan u retku, pa se sređeni popis pojavljuje ovdje.</li></ul>
         <div class="out-bar">
           <button class="btn btn-primary" id="lit-copy" type="button" disabled>Kopiraj sređeni popis</button>
           <button class="btn btn-secondary" id="lit-docx" type="button" disabled>Preuzmi .docx</button>
         </div>
+        <div class="sr-only" id="lit-copy-status" role="status" aria-live="polite"></div>
         <div class="note"><b>Napomena:</b> alat sortira i čisti popis, ali ne mijenja stil citiranja ni sadržaj zapisa. Upozorenja su okvirna (npr. broj poput 93/14 nije prepoznat kao godina). Točan oblik referenci uvijek uskladi s uputama svog studija ili mentora.</div>
       </div>
     </div>
