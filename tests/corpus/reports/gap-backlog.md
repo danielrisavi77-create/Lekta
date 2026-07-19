@@ -2,9 +2,9 @@
 
 > Sto korpus JOS ne pokriva, po prioritetu. P0 = parser crash/sigurnost; P1 = jezgra predaje bez regresije; P2 = ostalo/korektnost; P3 = informativno.
 
-Ukupno: P0 0, P1 8, P2 1, P3 10.
+Ukupno: P0 0, P1 4, P2 1, P3 10.
 
-## P1 (8)
+## P1 (4)
 
 - **citation.punctuation** — Dosljednost interpunkcije citatnica
   - Detektor oddCitationPunctuation je uzak; treba precizan neispravan uzorak.
@@ -18,18 +18,6 @@ Ukupno: P0 0, P1 8, P2 1, P3 10.
 - **page.numbers.scheme** — Shema numeriranja stranica
   - Treba eksplicitni format numeriranja (pgNumType); builder ga ne emitira.
   - Potreban test: Dodaj pgNumType; postavi krivi format (rimski u tijelu).
-- **structure.heading.hierarchy** — Hijerarhija naslova
-  - Skok razine (H1->H3) treba Heading3; builder ima samo Heading1/2.
-  - Potreban test: Dodaj Heading3/4 stil (ili outlineLvl); H1 pa H3 bez H2 = jump.
-- **toc.coverage** — Naslovi dokumenta ↔ sadržaj
-  - Treba stvarno TOC polje i spremljene stavke; builder emitira samo PAGE.
-  - Potreban test: Dodaj fldSimple/instrText TOC s stavkama; izostavi jedan naslov iz TOC-a.
-- **toc.format** — Font i veličina sadržaja
-  - Treba TOC1/TOC2 stilovi u sadrzaju; builder ih ne emitira.
-  - Potreban test: Dodaj TOC stilove; mutiraj font/velicinu stavki sadrzaja.
-- **toc.page-numbers** — Brojevi stranica u sadržaju
-  - Treba TOC stavke s brojevima stranica; builder emitira samo PAGE.
-  - Potreban test: Dodaj TOC stavke; ukloni brojeve stranica dijelu stavki.
 
 ## P2 (1)
 

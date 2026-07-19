@@ -5,11 +5,11 @@
 ## Sazetak
 
 - Provjere ukupno: **71** (bodovane 54)
-- Bodovane s fail-slucajem (atomic ili boundary): **46/54 (85%)**
-- Bodovane s atomskim fail-slucajem: **45/54 (83%)**
+- Bodovane s fail-slucajem (atomic ili boundary): **50/54 (93%)**
+- Bodovane s atomskim fail-slucajem: **49/54 (91%)**
 - Provjere s valid-controlom: **6**
 - Provjere s boundary testom: **4**
-- Korpusni slucajevi: atomic **47**, valid **7**, boundary **14**
+- Korpusni slucajevi: atomic **51**, valid **7**, boundary **14**
 - Intake kodovi (svi runtime-dokazani u fazi 1): **6**
 
 ## Pokrivenost po provjeri
@@ -56,17 +56,17 @@
 | format.size.body | Veličina osnovnog teksta | formatting | da | ✓ | ✓ | ✓ |
 | structure.chapters.count | Broj glavnih poglavlja | structure | din | · | · | · |
 | page.numbers.present | Brojevi stranica | structure | da | ✓ | · | · |
-| toc.page-numbers | Brojevi stranica u sadržaju | structure | da | · | · | · |
+| toc.page-numbers | Brojevi stranica u sadržaju | structure | da | ✓ | · | · |
 | toc.field | Detalji automatskog sadržaja | structure | din | · | · | · |
 | structure.sections.profile | Dijelovi verificiranog profila | structure | da | ✓ | · | · |
 | structure.heading.depth | Dubina decimalnog numeriranja | structure | da | ✓ | · | · |
 | title.elements | Elementi naslovne stranice | structure | da | ✓ | · | · |
 | method.ethics | Etički aspekti empirijskog istraživanja | structure | din | · | · | · |
-| toc.format | Font i veličina sadržaja | structure | da | · | · | · |
-| structure.heading.hierarchy | Hijerarhija naslova | structure | da | · | · | · |
+| toc.format | Font i veličina sadržaja | structure | da | ✓ | · | · |
+| structure.heading.hierarchy | Hijerarhija naslova | structure | da | ✓ | · | · |
 | structure.keywords | Ključne riječi u samom radu | structure | da | ✓ | · | · |
 | method.variant | Metodološka varijanta rada | structure | din | · | · | · |
-| toc.coverage | Naslovi dokumenta ↔ sadržaj | structure | da | · | · | · |
+| toc.coverage | Naslovi dokumenta ↔ sadržaj | structure | da | ✓ | · | · |
 | page.numbers.title-suppressed | Naslovnica bez broja stranice | structure | info | · | · | · |
 | structure.heading.numbering | Numeriranje naslova | structure | da | ✓ | · | · |
 | page.numbers.start | Numeriranje od prve stranice Uvoda | structure | info | · | · | · |

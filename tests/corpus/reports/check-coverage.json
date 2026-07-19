@@ -2,13 +2,13 @@
   "summary": {
     "totalChecks": 71,
     "scoredChecks": 54,
-    "scoredWithAtomic": 45,
-    "scoredAtomicPct": 83,
-    "scoredWithFailCase": 46,
-    "scoredFailCasePct": 85,
+    "scoredWithAtomic": 49,
+    "scoredAtomicPct": 91,
+    "scoredWithFailCase": 50,
+    "scoredFailCasePct": 93,
     "checksWithValidControl": 6,
     "checksWithBoundary": 4,
-    "atomicCases": 47,
+    "atomicCases": 51,
     "validControlCases": 7,
     "boundaryCases": 14,
     "intakeCodes": 6
@@ -379,7 +379,7 @@
       "checkId": "toc.page-numbers",
       "category": "structure",
       "scored": true,
-      "hasAtomic": false,
+      "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
     },
@@ -433,7 +433,7 @@
       "checkId": "toc.format",
       "category": "structure",
       "scored": true,
-      "hasAtomic": false,
+      "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
     },
@@ -442,7 +442,7 @@
       "checkId": "structure.heading.hierarchy",
       "category": "structure",
       "scored": true,
-      "hasAtomic": false,
+      "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
     },
@@ -469,7 +469,7 @@
       "checkId": "toc.coverage",
       "category": "structure",
       "scored": true,
-      "hasAtomic": false,
+      "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
     },
@@ -682,34 +682,6 @@
       "title": "Shema numeriranja stranica",
       "reason": "Treba eksplicitni format numeriranja (pgNumType); builder ga ne emitira.",
       "desiredTest": "Dodaj pgNumType; postavi krivi format (rimski u tijelu)."
-    },
-    {
-      "priority": "P1",
-      "checkId": "structure.heading.hierarchy",
-      "title": "Hijerarhija naslova",
-      "reason": "Skok razine (H1->H3) treba Heading3; builder ima samo Heading1/2.",
-      "desiredTest": "Dodaj Heading3/4 stil (ili outlineLvl); H1 pa H3 bez H2 = jump."
-    },
-    {
-      "priority": "P1",
-      "checkId": "toc.coverage",
-      "title": "Naslovi dokumenta ↔ sadržaj",
-      "reason": "Treba stvarno TOC polje i spremljene stavke; builder emitira samo PAGE.",
-      "desiredTest": "Dodaj fldSimple/instrText TOC s stavkama; izostavi jedan naslov iz TOC-a."
-    },
-    {
-      "priority": "P1",
-      "checkId": "toc.format",
-      "title": "Font i veličina sadržaja",
-      "reason": "Treba TOC1/TOC2 stilovi u sadrzaju; builder ih ne emitira.",
-      "desiredTest": "Dodaj TOC stilove; mutiraj font/velicinu stavki sadrzaja."
-    },
-    {
-      "priority": "P1",
-      "checkId": "toc.page-numbers",
-      "title": "Brojevi stranica u sadržaju",
-      "reason": "Treba TOC stavke s brojevima stranica; builder emitira samo PAGE.",
-      "desiredTest": "Dodaj TOC stavke; ukloni brojeve stranica dijelu stavki."
     },
     {
       "priority": "P2",
