@@ -426,6 +426,17 @@ verify_jwt = true
 [functions.preflight-result]
 verify_jwt = true
 
+# Placeni server-side repair (WS-3/WS-6): trazi autenticiranog korisnika, pa gateway pred-validira JWT.
+[functions.repair-docx]
+verify_jwt = true
+
+[functions.delete-repair-job]
+verify_jwt = true
+
+# Orphan-BLOB sweep (WS-7): cron-okidano, stiti se dediciranom REPAIR_CLEANUP_CRON_SECRET tajnom u funkciji.
+[functions.cleanup-orphan-repairs]
+verify_jwt = false
+
 [analytics]
 enabled = true
 port = 54327
