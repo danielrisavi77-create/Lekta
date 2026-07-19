@@ -619,19 +619,29 @@ export function documentHasTocField(documentXml: string): boolean {
   return false;
 }
 
-// Novo TOC polje kao zaseban odlomak. fldChar (ne fldSimple): rezultat TOC-a je VISEODLOMACNI, pa
-// begin..separate..end (kao K5 PAGE polje) tocno modelira polje ciji rezultat Word regenerira preko
-// vise odlomaka; fldSimple je za jednoodlomacne inline rezultate. w:dirty na begin fldChar -> Word
-// osvjezi polje pri otvaranju. Placeholder tekst se vidi dok se polje ne osvjezi (+ uputa kako).
+// Novo TOC polje OMOTANO u SDT sadrzaj-kontrolu (docPartGallery "Table of Contents") - tocno kako
+// Word gradi automatski sadrzaj preko Reference > Sadrzaj. SDT omot je ono sto Wordu daje pravu TOC
+// karticu s gumbom "Azuriraj tablicu" (Update Table); goli fldChar bez SDT-a je valjano polje, ali
+// ga Word tretira kao obicno polje (samo F9/desni klik > Azuriraj polje, bez TOC UI-a). Zato SDT.
+// Unutar sdtContent je fldChar (ne fldSimple): rezultat TOC-a je VISEODLOMACNI, pa begin..separate..end
+// (kao K5 PAGE polje) tocno modelira polje ciji rezultat Word regenerira preko vise odlomaka. w:dirty
+// na begin fldChar -> Word osvjezi polje pri otvaranju. Placeholder tekst se vidi dok se polje ne osvjezi.
+// documentHasTocField prepoznaje i docPartGallery i fldChar TOC, pa idempotencija ostaje.
 export function buildTocFieldXml(): string {
   return (
+    '<w:sdt>' +
+    '<w:sdtPr><w:docPartObj><w:docPartGallery w:val="Table of Contents"/><w:docPartUnique/></w:docPartObj></w:sdtPr>' +
+    '<w:sdtEndPr/>' +
+    '<w:sdtContent>' +
     '<w:p>' +
     '<w:r><w:fldChar w:fldCharType="begin" w:dirty="true"/></w:r>' +
     '<w:r><w:instrText xml:space="preserve"> TOC \\o "1-3" \\h \\z \\u </w:instrText></w:r>' +
     '<w:r><w:fldChar w:fldCharType="separate"/></w:r>' +
     '<w:r><w:t xml:space="preserve">Sadrzaj se azurira u Wordu: kartica Reference &gt; Azuriraj tablicu (ili desni klik na sadrzaj &gt; Azuriraj polje).</w:t></w:r>' +
     '<w:r><w:fldChar w:fldCharType="end"/></w:r>' +
-    '</w:p>'
+    '</w:p>' +
+    '</w:sdtContent>' +
+    '</w:sdt>'
   );
 }
 

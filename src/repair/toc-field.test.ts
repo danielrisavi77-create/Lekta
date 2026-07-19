@@ -35,14 +35,16 @@ function partsFor(documentXml: string): DocxXmlParts {
 }
 
 describe('buildTocFieldXml', () => {
-  it('fldChar TOC polje s w:dirty i TOC instrukcijom, valjan jedan odlomak', () => {
+  it('SDT (Table of Contents) omot oko fldChar TOC polja s w:dirty i TOC instrukcijom', () => {
     const xml = buildTocFieldXml();
     expect(xml).toContain('<w:fldChar w:fldCharType="begin" w:dirty="true"/>');
     expect(xml).toMatch(/<w:instrText[^>]*> TOC \\o "1-3" \\h \\z \\u <\/w:instrText>/);
     expect(xml).toContain('<w:fldChar w:fldCharType="separate"/>');
     expect(xml).toContain('<w:fldChar w:fldCharType="end"/>');
-    expect(xml.startsWith('<w:p>')).toBe(true);
-    expect(xml.endsWith('</w:p>')).toBe(true);
+    // SDT sadrzaj-kontrola = prava Word TOC kartica ("Azuriraj tablicu"), ne golo polje.
+    expect(xml).toContain('<w:docPartGallery w:val="Table of Contents"/>');
+    expect(xml.startsWith('<w:sdt>')).toBe(true);
+    expect(xml.endsWith('</w:sdt>')).toBe(true);
   });
 });
 
@@ -136,7 +138,7 @@ describe('tocFieldFixer', () => {
     expect(out.applied).toBe(true);
     expect(documentHasTocField(out.parts.documentXml)).toBe(true);
     // Polje je neposredno IZA Sadrzaj, PRIJE rucne stavke.
-    expect(out.parts.documentXml).toContain('<w:t>Sadržaj</w:t></w:r></w:p><w:p><w:r><w:fldChar');
+    expect(out.parts.documentXml).toContain('<w:t>Sadržaj</w:t></w:r></w:p><w:sdt>');
     // Rucno upisana stavka NIJE obrisana.
     expect(out.parts.documentXml).toContain('<w:t>Uvod\t1</w:t>');
     expect(out.afterLabel).toContain('TOC polje');
@@ -161,7 +163,7 @@ describe('tocFieldFixer', () => {
     // Index 99 je besmislen (samo prolazi gate >=1); fixer nalazi Sadrzaj po tekstu, ne po indeksu.
     const out = tocFieldFixer(partsFor(manualTocDoc()), { sadrzajParagraphIndex: 99 });
     expect(out.applied).toBe(true);
-    expect(out.parts.documentXml).toContain('<w:t>Sadržaj</w:t></w:r></w:p><w:p><w:r><w:fldChar');
+    expect(out.parts.documentXml).toContain('<w:t>Sadržaj</w:t></w:r></w:p><w:sdt>');
   });
 
   it('sidro otporno na promjenu broja odlomaka (kao nakon empty-paragraph-fixera u bateriji)', () => {
@@ -171,9 +173,9 @@ describe('tocFieldFixer', () => {
     const shifted = manualTocDoc().replace('<w:p><w:r><w:t>NASLOVNICA</w:t></w:r></w:p>', '');
     const out = tocFieldFixer(partsFor(shifted), { sadrzajParagraphIndex: 2 });
     expect(out.applied).toBe(true);
-    expect(out.parts.documentXml).toContain('<w:t>Sadržaj</w:t></w:r></w:p><w:p><w:r><w:fldChar');
+    expect(out.parts.documentXml).toContain('<w:t>Sadržaj</w:t></w:r></w:p><w:sdt>');
     // Umetnuto je iza Sadrzaja (p1), NE iza odlomka koji bi bio na zastarjelom indeksu 2.
-    expect(out.parts.documentXml).not.toContain('<w:t>Uvod\t1</w:t></w:r></w:p><w:p><w:r><w:fldChar');
+    expect(out.parts.documentXml).not.toContain('<w:t>Uvod\t1</w:t></w:r></w:p><w:sdt>');
   });
 
   it('dokument bez naslova Sadrzaj -> NO_OP (re-derivacija ne nadje sidro)', () => {
