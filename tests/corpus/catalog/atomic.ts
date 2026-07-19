@@ -6,7 +6,7 @@
  * Mutacije rade nad cloneSpec(baselineSpec()) pa nikad ne kaljaju bazu ni druge slucajeve.
  */
 import type { DocSpec, ParaSpec } from '../../helpers/docx-builder';
-import { baselineSpec, cloneSpec, line, BASELINE_PROFILE_ID } from '../builder/baseline';
+import { baselineSpec, cloneSpec, line, heading, BASELINE_PROFILE_ID } from '../builder/baseline';
 import type { ErrorCase } from '../error-case';
 
 const PID = BASELINE_PROFILE_ID;
@@ -16,10 +16,20 @@ const isBodyPara = (p: ParaSpec): boolean => !p.styleId && !p.raw && !p.empty &&
 /** Bilo koji odlomak s eksplicitnim fontom (za mutaciju dominantnog fonta/velicine). */
 const hasFont = (p: ParaSpec): boolean => !p.raw && !p.empty && typeof p.font === 'string';
 
+/** Stvarni OOXML elementi (engine broji tablice iz <w:tbl>, slike iz <w:drawing>). */
+const TABLE_RAW: ParaSpec = { text: '', raw: '<w:tbl><w:tblPr><w:tblW w:w="0" w:type="auto"/></w:tblPr><w:tblGrid><w:gridCol w:w="4000"/><w:gridCol w:w="4000"/></w:tblGrid><w:tr><w:tc><w:tcPr><w:tcW w:w="4000" w:type="dxa"/></w:tcPr><w:p><w:r><w:t>A</w:t></w:r></w:p></w:tc><w:tc><w:tcPr><w:tcW w:w="4000" w:type="dxa"/></w:tcPr><w:p><w:r><w:t>B</w:t></w:r></w:p></w:tc></w:tr></w:tbl>' };
+const IMAGE_RAW: ParaSpec = { text: '', raw: '<w:p><w:r><w:drawing><wp:inline xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"><wp:extent cx="3000000" cy="2000000"/></wp:inline></w:drawing></w:r></w:p>' };
+
 function mutate(fn: (paras: ParaSpec[], spec: DocSpec) => void): DocSpec {
   const spec = cloneSpec(baselineSpec());
   fn(spec.paragraphs, spec);
   return spec;
+}
+
+/** Umetni iza prvog naslova koji odgovara re. */
+function insAfter(spec: DocSpec, re: RegExp, ...items: ParaSpec[]): void {
+  const i = spec.paragraphs.findIndex((p) => p.styleId && re.test(p.text));
+  spec.paragraphs.splice(i + 1, 0, ...items);
 }
 
 export const ATOMIC_CASES: ErrorCase[] = [
@@ -174,5 +184,82 @@ export const ATOMIC_CASES: ErrorCase[] = [
       ps.splice(i + 1, 0, line('Detalji su dostupni na poveznici http://primjer.hr/put<age> koja nije ispravno oblikovana.', { jc: 'both' }));
     }),
     expect: { checkId: 'element.link-form', title: 'Oblik poveznica', kind: 'status', outcome: 'not-pass' },
+  },
+
+  // --- Batch A: dodatne bodovane provjere (gap-backlog P1) ------------------------------------
+  {
+    id: 'atomic.citation.recognized',
+    title: 'Nijedna citatnica u tekstu',
+    category: 'citations', oracle: 'atomic-fail', profileId: PID, detectableNow: true,
+    build: () => mutate((ps, spec) => { spec.paragraphs = ps.filter((p) => !/\(Kovač|\(Horvat/.test(p.text)); }),
+    expect: { checkId: 'citation.recognized', title: 'Prepoznate citatnice', kind: 'status', outcome: 'not-pass' },
+  },
+  {
+    id: 'atomic.citation.author-year.suffix',
+    title: 'Dva rada istog autora iste godine bez sufiksa a/b',
+    category: 'citations', oracle: 'atomic-fail', profileId: PID, detectableNow: true,
+    build: () => { const s = cloneSpec(baselineSpec()); insAfter(s, /Literatura/, line('Kovač, A. (2020). Drugi rad o medijima. Zagreb: Naklada.')); return s; },
+    expect: { checkId: 'citation.author-year.suffix', title: 'Isti autor i godina (a/b/c)', kind: 'status', outcome: 'not-pass' },
+  },
+  {
+    id: 'atomic.reference.completeness',
+    title: 'Bibliografski zapis bez godine i izdavača',
+    category: 'citations', oracle: 'atomic-fail', profileId: PID, detectableNow: true,
+    build: () => { const s = cloneSpec(baselineSpec()); insAfter(s, /Literatura/, line('Anonimni izvor bez godine i izdavača')); return s; },
+    expect: { checkId: 'reference.completeness', title: 'Potpunost bibliografskih zapisa', kind: 'status', outcome: 'not-pass' },
+  },
+  {
+    id: 'atomic.reference.access-date',
+    title: 'Mrežni izvor bez datuma pristupa',
+    category: 'citations', oracle: 'atomic-fail', profileId: PID, detectableNow: true,
+    build: () => mutate((ps) => { const i = ps.findIndex((p) => /pristupljeno/.test(p.text)); if (i >= 0) ps[i] = line('Ministarstvo znanosti (2022). Izvješće o pismenosti. Dostupno na: https://www.primjer.hr/izvjesce'); }),
+    expect: { checkId: 'reference.access-date', title: 'Datumi pristupa mrežnim izvorima', kind: 'status', outcome: 'not-pass' },
+  },
+  {
+    id: 'atomic.element.table.caption',
+    title: 'Tablica bez naslova („Tablica N")',
+    category: 'elements', oracle: 'atomic-fail', profileId: PID, detectableNow: true,
+    // Stvarni <w:tbl> (tables=1) bez ijednog "Tablica N" naslova (tableCaps=0) -> tableCaps < tables.
+    build: () => mutate((ps, spec) => { spec.paragraphs = ps.filter((p) => !/^Tablica \d/.test(p.text)); insAfter(spec, /2\. Razrada/, TABLE_RAW); }),
+    expect: { checkId: 'element.table.caption', title: 'Naslovi tablica', kind: 'status', outcome: 'not-pass' },
+  },
+  {
+    id: 'atomic.element.figure.caption',
+    title: 'Slika bez naslova („Slika N")',
+    category: 'elements', oracle: 'atomic-fail', profileId: PID, detectableNow: true,
+    build: () => mutate((ps, spec) => { spec.paragraphs = ps.filter((p) => !/^Slika \d/.test(p.text)); insAfter(spec, /2\. Razrada/, IMAGE_RAW); }),
+    expect: { checkId: 'element.figure.caption', title: 'Naslovi slika i grafikona', kind: 'status', outcome: 'not-pass' },
+  },
+  {
+    id: 'atomic.element.source',
+    title: 'Tablica bez navedenog izvora ispod',
+    category: 'elements', oracle: 'atomic-fail', profileId: PID, detectableNow: true,
+    // Baza nema stvarnih tablica pa "Izvori ispod" ne emitira; cista varijanta dodaje tablicu I
+    // zadrzava "Izvor:" retke (provjera prolazi), a build ih uklanja (sourceLines < tables+images).
+    cleanBuild: () => mutate((_ps, spec) => { insAfter(spec, /2\. Razrada/, TABLE_RAW, line('Tablica 5. Dodatna s naslovom')); }),
+    build: () => mutate((ps, spec) => { spec.paragraphs = ps.filter((p) => !/^Izvor/.test(p.text)); insAfter(spec, /2\. Razrada/, TABLE_RAW, line('Tablica 5. Dodatna s naslovom')); }),
+    expect: { checkId: 'element.source', title: 'Izvori ispod slika i tablica', kind: 'status', outcome: 'not-pass' },
+  },
+  {
+    id: 'atomic.element.lists',
+    title: 'Više tablica bez popisa tablica',
+    category: 'elements', oracle: 'atomic-fail', profileId: PID, detectableNow: true,
+    build: () => mutate((ps, spec) => { spec.paragraphs = ps.filter((p) => !/^Popis tablica/.test(p.text)); insAfter(spec, /2\. Razrada/, TABLE_RAW, line('Tablica 6. Prva'), TABLE_RAW, line('Tablica 7. Druga')); }),
+    expect: { checkId: 'element.lists', title: 'Popisi slika i tablica', kind: 'status', outcome: 'not-pass' },
+  },
+  {
+    id: 'atomic.structure.heading.depth',
+    title: 'Predubok decimalni naslov (5 razina, prag je 4)',
+    category: 'structure', oracle: 'atomic-fail', profileId: PID, detectableNow: true,
+    build: () => { const s = cloneSpec(baselineSpec()); insAfter(s, /2\. Razrada/, heading('2.1.1.1.1. Vrlo duboko numeriran pododjeljak')); return s; },
+    expect: { checkId: 'structure.heading.depth', title: 'Dubina decimalnog numeriranja', kind: 'status', outcome: 'not-pass' },
+  },
+  {
+    id: 'atomic.toc.present',
+    title: 'Nema sadržaja (TOC)',
+    category: 'structure', oracle: 'atomic-fail', profileId: PID, detectableNow: true,
+    // "Sadržaj dokumenta" ima status uvijek 'pass' (blag audit), ali gubi bodove (earned < max).
+    build: () => mutate((ps, spec) => { spec.paragraphs = ps.filter((p) => !(p.styleId && /Sadržaj/.test(p.text)) && !(p.raw && /PAGE/.test(p.raw)) && !/^\d\. \w+\t\d/.test(p.text) && !/^Literatura\t\d/.test(p.text)); }),
+    expect: { checkId: 'toc.present', title: 'Sadržaj dokumenta', kind: 'earned', outcome: 'not-pass' },
   },
 ];

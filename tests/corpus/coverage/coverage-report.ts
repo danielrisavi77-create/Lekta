@@ -46,6 +46,8 @@ export interface CoverageReport {
     scoredChecks: number;
     scoredWithAtomic: number;
     scoredAtomicPct: number;
+    scoredWithFailCase: number;
+    scoredFailCasePct: number;
     checksWithValidControl: number;
     checksWithBoundary: number;
     atomicCases: number;
@@ -83,11 +85,13 @@ export function buildCoverage(): CoverageReport {
 
   const scored = rows.filter((r) => r.scored === true);
   const scoredWithAtomic = scored.filter((r) => r.hasAtomic).length;
+  // Boundary below/above JE dokaz detekcije pada, pa provjera s boundaryjem NIJE nepokrivena.
+  const scoredWithFailCase = scored.filter((r) => r.hasAtomic || r.hasBoundary).length;
 
-  // Gap-backlog: provjere bez atomskog slucaja (mogu pasti, a nisu regresijski pokrivene).
+  // Gap-backlog: bodovane provjere BEZ ijednog fail-slucaja (atomic ili boundary).
   const gaps: GapEntry[] = [];
   for (const r of scored) {
-    if (r.hasAtomic) continue;
+    if (r.hasAtomic || r.hasBoundary) continue;
     const core = CORE.has(r.category);
     gaps.push({
       priority: core ? 'P1' : 'P2',
@@ -121,6 +125,8 @@ export function buildCoverage(): CoverageReport {
       scoredChecks: scored.length,
       scoredWithAtomic,
       scoredAtomicPct: scored.length ? Math.round((scoredWithAtomic / scored.length) * 100) : 0,
+      scoredWithFailCase,
+      scoredFailCasePct: scored.length ? Math.round((scoredWithFailCase / scored.length) * 100) : 0,
       checksWithValidControl: rows.filter((r) => r.hasValidControl).length,
       checksWithBoundary: rows.filter((r) => r.hasBoundary).length,
       atomicCases: ALL_ATOMIC.length,
@@ -140,6 +146,7 @@ export function renderCoverageMarkdown(rep: CoverageReport): string {
   L.push('> Krizanje inventara provjera (faza 1) s korpusnim slucajevima. Ne lazira 100%: sve nepokriveno je u gap-backlogu.', '');
   L.push('## Sazetak', '');
   L.push(`- Provjere ukupno: **${s.totalChecks}** (bodovane ${s.scoredChecks})`);
+  L.push(`- Bodovane s fail-slucajem (atomic ili boundary): **${s.scoredWithFailCase}/${s.scoredChecks} (${s.scoredFailCasePct}%)**`);
   L.push(`- Bodovane s atomskim fail-slucajem: **${s.scoredWithAtomic}/${s.scoredChecks} (${s.scoredAtomicPct}%)**`);
   L.push(`- Provjere s valid-controlom: **${s.checksWithValidControl}**`);
   L.push(`- Provjere s boundary testom: **${s.checksWithBoundary}**`);

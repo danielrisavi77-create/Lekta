@@ -36,10 +36,14 @@ describe('Lekta Error Corpus - atomski slucajevi (faza 4)', () => {
   });
 
   it.each(detectable.map((c) => [c.id, c] as const))('%s: u bazi prolazi, mutacija ga ruši', async (_id, c) => {
-    // (1) U bazi ciljana provjera prolazi -> mutacija je jedini uzrok promjene.
-    const baseCheck = findCheck(baseline, c.expect.title);
+    // (1) Ciljana provjera prolazi u cistoj varijanti (dijeljena baza ili per-case cleanBuild)
+    //     -> mutacija je jedini uzrok promjene.
+    const cleanResult = c.cleanBuild
+      ? await analyzeFixture(buildDocxFile(c.cleanBuild(), `${c.id}-clean.docx`), { profileId: c.profileId })
+      : baseline;
+    const baseCheck = findCheck(cleanResult, c.expect.title);
     const passExp: CorpusExpectation = { ...c.expect, outcome: 'pass' };
-    expect(meetsExpectation(baseCheck, passExp), `${c.id}: baza NE prolazi ciljanu provjeru (${baseCheck.status} ${baseCheck.earned}/${baseCheck.max})`).toBe(true);
+    expect(meetsExpectation(baseCheck, passExp), `${c.id}: cista varijanta NE prolazi ciljanu provjeru (${baseCheck.status} ${baseCheck.earned}/${baseCheck.max})`).toBe(true);
 
     // (2) Nakon mutacije ciljana provjera pada / gubi bodove.
     const r = await analyzeFixture(buildDocxFile(c.build(), `${c.id}.docx`), { profileId: c.profileId });

@@ -2,34 +2,16 @@
 
 > Sto korpus JOS ne pokriva, po prioritetu. P0 = parser crash/sigurnost; P1 = jezgra predaje bez regresije; P2 = ostalo/korektnost; P3 = informativno.
 
-Ukupno: P0 0, P1 35, P2 1, P3 10.
+Ukupno: P0 0, P1 24, P2 1, P3 10.
 
-## P1 (35)
+## P1 (24)
 
-- **citation.author-year.suffix** — Isti autor i godina (a/b/c)
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.citation.author-year.suffix: baza prolazi, jedna mutacija ruši "Isti autor i godina (a/b/c)".
 - **citation.punctuation** — Dosljednost interpunkcije citatnica
   - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
   - Potreban test: atomic.citation.punctuation: baza prolazi, jedna mutacija ruši "Dosljednost interpunkcije citatnica".
-- **citation.recognized** — Prepoznate citatnice
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.citation.recognized: baza prolazi, jedna mutacija ruši "Prepoznate citatnice".
 - **citation.style-automation** — Automatizacija citatnog stila
   - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
   - Potreban test: atomic.citation.style-automation: baza prolazi, jedna mutacija ruši "Automatizacija citatnog stila".
-- **element.figure.caption** — Naslovi slika i grafikona
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.element.figure.caption: baza prolazi, jedna mutacija ruši "Naslovi slika i grafikona".
-- **element.lists** — Popisi slika i tablica
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.element.lists: baza prolazi, jedna mutacija ruši "Popisi slika i tablica".
-- **element.source** — Izvori ispod slika i tablica
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.element.source: baza prolazi, jedna mutacija ruši "Izvori ispod slika i tablica".
-- **element.table.caption** — Naslovi tablica
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.element.table.caption: baza prolazi, jedna mutacija ruši "Naslovi tablica".
 - **footnote.format** — Oblikovanje fusnota
   - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
   - Potreban test: atomic.footnote.format: baza prolazi, jedna mutacija ruši "Oblikovanje fusnota".
@@ -48,21 +30,12 @@ Ukupno: P0 0, P1 35, P2 1, P3 10.
 - **manual.checks** — Zahtjevi za ručnu završnu provjeru
   - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
   - Potreban test: atomic.manual.checks: baza prolazi, jedna mutacija ruši "Zahtjevi za ručnu završnu provjeru".
-- **page.margins** — Margine dokumenta
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.page.margins: baza prolazi, jedna mutacija ruši "Margine dokumenta".
 - **page.numbers.scheme** — Shema numeriranja stranica
   - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
   - Potreban test: atomic.page.numbers.scheme: baza prolazi, jedna mutacija ruši "Shema numeriranja stranica".
 - **page.size.project** — Format stranice (A3/A0)
   - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
   - Potreban test: atomic.page.size.project: baza prolazi, jedna mutacija ruši "Format stranice (A3/A0)".
-- **reference.access-date** — Datumi pristupa mrežnim izvorima
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.reference.access-date: baza prolazi, jedna mutacija ruši "Datumi pristupa mrežnim izvorima".
-- **reference.completeness** — Potpunost bibliografskih zapisa
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.reference.completeness: baza prolazi, jedna mutacija ruši "Potpunost bibliografskih zapisa".
 - **reference.min-count** — Minimalan broj izvora profila
   - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
   - Potreban test: atomic.reference.min-count: baza prolazi, jedna mutacija ruši "Minimalan broj izvora profila".
@@ -78,9 +51,6 @@ Ukupno: P0 0, P1 35, P2 1, P3 10.
 - **structure.heading.align** — Poravnanje naslova slijeva
   - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
   - Potreban test: atomic.structure.heading.align: baza prolazi, jedna mutacija ruši "Poravnanje naslova slijeva".
-- **structure.heading.depth** — Dubina decimalnog numeriranja
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.structure.heading.depth: baza prolazi, jedna mutacija ruši "Dubina decimalnog numeriranja".
 - **structure.heading.format** — Oblikovanje naslova po razinama
   - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
   - Potreban test: atomic.structure.heading.format: baza prolazi, jedna mutacija ruši "Oblikovanje naslova po razinama".
@@ -108,9 +78,6 @@ Ukupno: P0 0, P1 35, P2 1, P3 10.
 - **toc.page-numbers** — Brojevi stranica u sadržaju
   - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
   - Potreban test: atomic.toc.page-numbers: baza prolazi, jedna mutacija ruši "Brojevi stranica u sadržaju".
-- **toc.present** — Sadržaj dokumenta
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.toc.present: baza prolazi, jedna mutacija ruši "Sadržaj dokumenta".
 
 ## P2 (1)
 

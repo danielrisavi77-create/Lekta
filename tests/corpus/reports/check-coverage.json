@@ -2,11 +2,13 @@
   "summary": {
     "totalChecks": 71,
     "scoredChecks": 54,
-    "scoredWithAtomic": 19,
-    "scoredAtomicPct": 35,
+    "scoredWithAtomic": 29,
+    "scoredAtomicPct": 54,
+    "scoredWithFailCase": 30,
+    "scoredFailCasePct": 56,
     "checksWithValidControl": 6,
     "checksWithBoundary": 4,
-    "atomicCases": 21,
+    "atomicCases": 31,
     "validControlCases": 7,
     "boundaryCases": 14,
     "intakeCodes": 6
@@ -44,7 +46,7 @@
       "checkId": "reference.access-date",
       "category": "citations",
       "scored": true,
-      "hasAtomic": false,
+      "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
     },
@@ -71,7 +73,7 @@
       "checkId": "citation.author-year.suffix",
       "category": "citations",
       "scored": true,
-      "hasAtomic": false,
+      "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
     },
@@ -134,7 +136,7 @@
       "checkId": "reference.completeness",
       "category": "citations",
       "scored": true,
-      "hasAtomic": false,
+      "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
     },
@@ -161,7 +163,7 @@
       "checkId": "citation.recognized",
       "category": "citations",
       "scored": true,
-      "hasAtomic": false,
+      "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
     },
@@ -197,7 +199,7 @@
       "checkId": "element.source",
       "category": "elements",
       "scored": true,
-      "hasAtomic": false,
+      "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
     },
@@ -206,7 +208,7 @@
       "checkId": "element.figure.caption",
       "category": "elements",
       "scored": true,
-      "hasAtomic": false,
+      "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
     },
@@ -215,7 +217,7 @@
       "checkId": "element.table.caption",
       "category": "elements",
       "scored": true,
-      "hasAtomic": false,
+      "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
     },
@@ -233,7 +235,7 @@
       "checkId": "element.lists",
       "category": "elements",
       "scored": true,
-      "hasAtomic": false,
+      "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
     },
@@ -404,7 +406,7 @@
       "checkId": "structure.heading.depth",
       "category": "structure",
       "scored": true,
-      "hasAtomic": false,
+      "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
     },
@@ -593,7 +595,7 @@
       "checkId": "toc.present",
       "category": "structure",
       "scored": true,
-      "hasAtomic": false,
+      "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
     },
@@ -655,13 +657,6 @@
   "gaps": [
     {
       "priority": "P1",
-      "checkId": "citation.author-year.suffix",
-      "title": "Isti autor i godina (a/b/c)",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.citation.author-year.suffix: baza prolazi, jedna mutacija ruši \"Isti autor i godina (a/b/c)\"."
-    },
-    {
-      "priority": "P1",
       "checkId": "citation.punctuation",
       "title": "Dosljednost interpunkcije citatnica",
       "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
@@ -669,45 +664,10 @@
     },
     {
       "priority": "P1",
-      "checkId": "citation.recognized",
-      "title": "Prepoznate citatnice",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.citation.recognized: baza prolazi, jedna mutacija ruši \"Prepoznate citatnice\"."
-    },
-    {
-      "priority": "P1",
       "checkId": "citation.style-automation",
       "title": "Automatizacija citatnog stila",
       "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
       "desiredTest": "atomic.citation.style-automation: baza prolazi, jedna mutacija ruši \"Automatizacija citatnog stila\"."
-    },
-    {
-      "priority": "P1",
-      "checkId": "element.figure.caption",
-      "title": "Naslovi slika i grafikona",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.element.figure.caption: baza prolazi, jedna mutacija ruši \"Naslovi slika i grafikona\"."
-    },
-    {
-      "priority": "P1",
-      "checkId": "element.lists",
-      "title": "Popisi slika i tablica",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.element.lists: baza prolazi, jedna mutacija ruši \"Popisi slika i tablica\"."
-    },
-    {
-      "priority": "P1",
-      "checkId": "element.source",
-      "title": "Izvori ispod slika i tablica",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.element.source: baza prolazi, jedna mutacija ruši \"Izvori ispod slika i tablica\"."
-    },
-    {
-      "priority": "P1",
-      "checkId": "element.table.caption",
-      "title": "Naslovi tablica",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.element.table.caption: baza prolazi, jedna mutacija ruši \"Naslovi tablica\"."
     },
     {
       "priority": "P1",
@@ -753,13 +713,6 @@
     },
     {
       "priority": "P1",
-      "checkId": "page.margins",
-      "title": "Margine dokumenta",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.page.margins: baza prolazi, jedna mutacija ruši \"Margine dokumenta\"."
-    },
-    {
-      "priority": "P1",
       "checkId": "page.numbers.scheme",
       "title": "Shema numeriranja stranica",
       "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
@@ -771,20 +724,6 @@
       "title": "Format stranice (A3/A0)",
       "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
       "desiredTest": "atomic.page.size.project: baza prolazi, jedna mutacija ruši \"Format stranice (A3/A0)\"."
-    },
-    {
-      "priority": "P1",
-      "checkId": "reference.access-date",
-      "title": "Datumi pristupa mrežnim izvorima",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.reference.access-date: baza prolazi, jedna mutacija ruši \"Datumi pristupa mrežnim izvorima\"."
-    },
-    {
-      "priority": "P1",
-      "checkId": "reference.completeness",
-      "title": "Potpunost bibliografskih zapisa",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.reference.completeness: baza prolazi, jedna mutacija ruši \"Potpunost bibliografskih zapisa\"."
     },
     {
       "priority": "P1",
@@ -820,13 +759,6 @@
       "title": "Poravnanje naslova slijeva",
       "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
       "desiredTest": "atomic.structure.heading.align: baza prolazi, jedna mutacija ruši \"Poravnanje naslova slijeva\"."
-    },
-    {
-      "priority": "P1",
-      "checkId": "structure.heading.depth",
-      "title": "Dubina decimalnog numeriranja",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.structure.heading.depth: baza prolazi, jedna mutacija ruši \"Dubina decimalnog numeriranja\"."
     },
     {
       "priority": "P1",
@@ -890,13 +822,6 @@
       "title": "Brojevi stranica u sadržaju",
       "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
       "desiredTest": "atomic.toc.page-numbers: baza prolazi, jedna mutacija ruši \"Brojevi stranica u sadržaju\"."
-    },
-    {
-      "priority": "P1",
-      "checkId": "toc.present",
-      "title": "Sadržaj dokumenta",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.toc.present: baza prolazi, jedna mutacija ruši \"Sadržaj dokumenta\"."
     },
     {
       "priority": "P2",

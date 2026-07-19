@@ -32,6 +32,12 @@ export interface ErrorCase {
   profileId: string;
   /** Deterministicki gradi .docx spec (mutacija klona baze ili valjana varijanta). */
   build: () => DocSpec;
+  /**
+   * Opcionalno: "cista" varijanta u kojoj ciljana provjera PROLAZI, za dokaz uzrocnosti kad
+   * dijeljena baza tu provjeru uopce ne emitira (npr. element.source trazi stvarne tablice).
+   * Ako je zadan, atomski test provjerava prolaznost nad njim umjesto nad dijeljenom bazom.
+   */
+  cleanBuild?: () => DocSpec;
   expect: CorpusExpectation;
   /** Detektira li Lekta ovu klasu VEC danas. false -> ide u gap-backlog, ne u zeleni asert. */
   detectableNow: boolean;
