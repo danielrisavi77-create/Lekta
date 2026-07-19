@@ -67,6 +67,36 @@ function targetIds(cases: Array<{ expect: { checkId: string } }>): Set<string> {
 /** Kategorije koje smatramo "jezgrom predaje" (nepokrivenost = visi prioritet). */
 const CORE = new Set(['formatting', 'structure', 'citations', 'elements']);
 
+/**
+ * Poznati razlozi zasto neka provjera JOS nema fail-slucaj (enabler koji nedostaje). Cini
+ * gap-backlog akcijskim: umjesto generickog "nema atomica", tocno kaze sto treba omoguciti.
+ */
+const KNOWN_HARD: Record<string, { reason: string; desiredTest: string }> = {
+  'footnote.format': { reason: 'Builder ne kontrolira oblik fusnota (rPr/pPr na fusnotnim odlomcima).', desiredTest: 'Prosiri docx-builder footnotes na {text,font,sizePt,spacing}; cleanBuild prolazan pa mutacija fonta/velicine ruši.' },
+  'footnote.marker': { reason: 'Builder ne emitira <w:footnoteReference> markere u tijelu.', desiredTest: 'Dodaj footnoteReference markere; mutiraj u ukošene / iza interpunkcije.' },
+  'footnote.spacing': { reason: 'Builder ne podrzava before/after razmak na fusnotnim odlomcima.', desiredTest: 'Dodaj pPr spacing na fusnote; eksplicitni razmak != 0 ruši provjeru.' },
+  'format.spacing.paragraph': { reason: 'Builder podrzava samo prored (line), ne before/after razmak odlomka.', desiredTest: 'Dodaj before/after u ParaSpec; eksplicitni razmak > 0.6 pt ruši provjeru.' },
+  'structure.heading.hierarchy': { reason: 'Skok razine (H1->H3) treba Heading3; builder ima samo Heading1/2.', desiredTest: 'Dodaj Heading3/4 stil (ili outlineLvl); H1 pa H3 bez H2 = jump.' },
+  'structure.heading.format': { reason: 'auditHeadingRules se ne okida za ovaj profil (nema rules.levels).', desiredTest: 'Koristi profil s heading pravilima ili dodaj rules.levels; mutiraj velicinu/bold naslova.' },
+  'structure.heading.numbering': { reason: 'auditHeadingRules se ne okida za ovaj profil (nema rules.levels).', desiredTest: 'Profil s numberRequired; ukloni oznaku razine naslova.' },
+  'structure.heading.align': { reason: 'auditHeadingRules se ne okida za ovaj profil (nema rules.levels).', desiredTest: 'Profil s heading pravilima; centriraj naslov umjesto lijevo.' },
+  'toc.coverage': { reason: 'Treba stvarno TOC polje i spremljene stavke; builder emitira samo PAGE.', desiredTest: 'Dodaj fldSimple/instrText TOC s stavkama; izostavi jedan naslov iz TOC-a.' },
+  'toc.format': { reason: 'Treba TOC1/TOC2 stilovi u sadrzaju; builder ih ne emitira.', desiredTest: 'Dodaj TOC stilove; mutiraj font/velicinu stavki sadrzaja.' },
+  'toc.page-numbers': { reason: 'Treba TOC stavke s brojevima stranica; builder emitira samo PAGE.', desiredTest: 'Dodaj TOC stavke; ukloni brojeve stranica dijelu stavki.' },
+  'structure.abstract': { reason: 'Bodovanje sazetka gated (maxPoints); profil ga ne boduje.', desiredTest: 'Koristi profil koji boduje sazetak; ukloni Sažetak.' },
+  'structure.keywords': { reason: 'Bodovanje kljucnih rijeci gated; profil ih ne boduje kao scored.', desiredTest: 'Profil koji boduje kljucne rijeci; ukloni redak Ključne riječi.' },
+  'reference.min-count': { reason: 'Provjera se okida samo za profil s minReferences.', desiredTest: 'Koristi profil s minReferences; smanji broj izvora ispod minimuma.' },
+  'page.size.project': { reason: 'Provjera se okida samo za profil s paperSizes (A3/A0).', desiredTest: 'Koristi arhitektonski/projektni profil; postavi krivi format stranice.' },
+  'page.numbers.scheme': { reason: 'Treba eksplicitni format numeriranja (pgNumType); builder ga ne emitira.', desiredTest: 'Dodaj pgNumType; postavi krivi format (rimski u tijelu).' },
+  'citation.style-automation': { reason: 'Savjetodavna, uvijek-warn provjera (nema pass stanja).', desiredTest: 'Nije atomski testabilna kao fail; eventualno valid-control da ostaje info.' },
+  'manual.checks': { reason: 'Savjetodavni podsjetnik, uvijek-warn (nema pass stanja).', desiredTest: 'Nije atomski testabilna kao fail.' },
+  'citation.punctuation': { reason: 'Detektor oddCitationPunctuation je uzak; treba precizan neispravan uzorak.', desiredTest: 'Kalibriraj citatnicu s neispravnom interpunkcijom koja pouzdano okida detektor.' },
+  'reference.uncited': { reason: 'Dijeljena baza vec warna (2 necitirana izvora).', desiredTest: 'Ugodi bazu da svi izvori budu citirani (pass), pa mutacija doda necitirani.' },
+  'title.elements': { reason: 'Dijeljena baza vec warna (fali prepoznata vrsta rada).', desiredTest: 'Ugodi naslovnicu baze da prolazi, pa ukloni jedan element.' },
+  'structure.heading.word-styles': { reason: 'Dijeljena baza vec warna (TOC stavke izgledaju kao rucni naslovi).', desiredTest: 'Ugodi bazu da word-styles prolazi, pa dodaj rucno oblikovan naslov.' },
+  'scope.intro-conclusion-ratio': { reason: 'Dijeljena baza vec warna (omjer Uvoda/Zakljucka).', desiredTest: 'Ugodi opseg Uvoda/Zakljucka baze da prolazi, pa poremeti omjer.' },
+};
+
 export function buildCoverage(): CoverageReport {
   const inv = JSON.parse(readFileSync(INVENTORY_PATH, 'utf8'));
   const atomic = targetIds(ALL_ATOMIC);
@@ -93,11 +123,12 @@ export function buildCoverage(): CoverageReport {
   for (const r of scored) {
     if (r.hasAtomic || r.hasBoundary) continue;
     const core = CORE.has(r.category);
+    const known = r.checkId ? KNOWN_HARD[r.checkId] : undefined;
     gaps.push({
       priority: core ? 'P1' : 'P2',
       checkId: r.checkId, title: r.title,
-      reason: 'Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).',
-      desiredTest: `atomic.${r.checkId ?? 'TODO'}: baza prolazi, jedna mutacija ruši "${r.title}".`,
+      reason: known?.reason ?? 'Bodovana provjera bez fail-slucaja (moze pasti, nije regresijski pokrivena).',
+      desiredTest: known?.desiredTest ?? `atomic.${r.checkId ?? 'TODO'}: cista varijanta prolazi, jedna mutacija ruši "${r.title}".`,
     });
   }
   // Informativne provjere bez valid-controla (nizi prioritet).

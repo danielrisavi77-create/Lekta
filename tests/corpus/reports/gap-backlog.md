@@ -2,82 +2,79 @@
 
 > Sto korpus JOS ne pokriva, po prioritetu. P0 = parser crash/sigurnost; P1 = jezgra predaje bez regresije; P2 = ostalo/korektnost; P3 = informativno.
 
-Ukupno: P0 0, P1 24, P2 1, P3 10.
+Ukupno: P0 0, P1 23, P2 1, P3 10.
 
-## P1 (24)
+## P1 (23)
 
 - **citation.punctuation** — Dosljednost interpunkcije citatnica
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.citation.punctuation: baza prolazi, jedna mutacija ruši "Dosljednost interpunkcije citatnica".
+  - Detektor oddCitationPunctuation je uzak; treba precizan neispravan uzorak.
+  - Potreban test: Kalibriraj citatnicu s neispravnom interpunkcijom koja pouzdano okida detektor.
 - **citation.style-automation** — Automatizacija citatnog stila
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.citation.style-automation: baza prolazi, jedna mutacija ruši "Automatizacija citatnog stila".
+  - Savjetodavna, uvijek-warn provjera (nema pass stanja).
+  - Potreban test: Nije atomski testabilna kao fail; eventualno valid-control da ostaje info.
 - **footnote.format** — Oblikovanje fusnota
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.footnote.format: baza prolazi, jedna mutacija ruši "Oblikovanje fusnota".
+  - Builder ne kontrolira oblik fusnota (rPr/pPr na fusnotnim odlomcima).
+  - Potreban test: Prosiri docx-builder footnotes na {text,font,sizePt,spacing}; cleanBuild prolazan pa mutacija fonta/velicine ruši.
 - **footnote.marker** — Položaj i stil oznaka fusnota
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.footnote.marker: baza prolazi, jedna mutacija ruši "Položaj i stil oznaka fusnota".
-- **footnote.present** — Automatske fusnote
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.footnote.present: baza prolazi, jedna mutacija ruši "Automatske fusnote".
+  - Builder ne emitira <w:footnoteReference> markere u tijelu.
+  - Potreban test: Dodaj footnoteReference markere; mutiraj u ukošene / iza interpunkcije.
 - **footnote.spacing** — Razmak prije i poslije fusnota
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.footnote.spacing: baza prolazi, jedna mutacija ruši "Razmak prije i poslije fusnota".
+  - Builder ne podrzava before/after razmak na fusnotnim odlomcima.
+  - Potreban test: Dodaj pPr spacing na fusnote; eksplicitni razmak != 0 ruši provjeru.
 - **format.spacing.paragraph** — Razmak prije i poslije odlomka
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.format.spacing.paragraph: baza prolazi, jedna mutacija ruši "Razmak prije i poslije odlomka".
+  - Builder podrzava samo prored (line), ne before/after razmak odlomka.
+  - Potreban test: Dodaj before/after u ParaSpec; eksplicitni razmak > 0.6 pt ruši provjeru.
 - **manual.checks** — Zahtjevi za ručnu završnu provjeru
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.manual.checks: baza prolazi, jedna mutacija ruši "Zahtjevi za ručnu završnu provjeru".
+  - Savjetodavni podsjetnik, uvijek-warn (nema pass stanja).
+  - Potreban test: Nije atomski testabilna kao fail.
 - **page.numbers.scheme** — Shema numeriranja stranica
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.page.numbers.scheme: baza prolazi, jedna mutacija ruši "Shema numeriranja stranica".
+  - Treba eksplicitni format numeriranja (pgNumType); builder ga ne emitira.
+  - Potreban test: Dodaj pgNumType; postavi krivi format (rimski u tijelu).
 - **page.size.project** — Format stranice (A3/A0)
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.page.size.project: baza prolazi, jedna mutacija ruši "Format stranice (A3/A0)".
+  - Provjera se okida samo za profil s paperSizes (A3/A0).
+  - Potreban test: Koristi arhitektonski/projektni profil; postavi krivi format stranice.
 - **reference.min-count** — Minimalan broj izvora profila
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.reference.min-count: baza prolazi, jedna mutacija ruši "Minimalan broj izvora profila".
+  - Provjera se okida samo za profil s minReferences.
+  - Potreban test: Koristi profil s minReferences; smanji broj izvora ispod minimuma.
 - **reference.uncited** — Literatura → citirano
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.reference.uncited: baza prolazi, jedna mutacija ruši "Literatura → citirano".
+  - Dijeljena baza vec warna (2 necitirana izvora).
+  - Potreban test: Ugodi bazu da svi izvori budu citirani (pass), pa mutacija doda necitirani.
 - **scope.intro-conclusion-ratio** — Omjer Uvoda i Zaključka
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.scope.intro-conclusion-ratio: baza prolazi, jedna mutacija ruši "Omjer Uvoda i Zaključka".
+  - Dijeljena baza vec warna (omjer Uvoda/Zakljucka).
+  - Potreban test: Ugodi opseg Uvoda/Zakljucka baze da prolazi, pa poremeti omjer.
 - **structure.abstract** — Sažeci u samom radu
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.structure.abstract: baza prolazi, jedna mutacija ruši "Sažeci u samom radu".
+  - Bodovanje sazetka gated (maxPoints); profil ga ne boduje.
+  - Potreban test: Koristi profil koji boduje sazetak; ukloni Sažetak.
 - **structure.heading.align** — Poravnanje naslova slijeva
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.structure.heading.align: baza prolazi, jedna mutacija ruši "Poravnanje naslova slijeva".
+  - auditHeadingRules se ne okida za ovaj profil (nema rules.levels).
+  - Potreban test: Profil s heading pravilima; centriraj naslov umjesto lijevo.
 - **structure.heading.format** — Oblikovanje naslova po razinama
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.structure.heading.format: baza prolazi, jedna mutacija ruši "Oblikovanje naslova po razinama".
+  - auditHeadingRules se ne okida za ovaj profil (nema rules.levels).
+  - Potreban test: Koristi profil s heading pravilima ili dodaj rules.levels; mutiraj velicinu/bold naslova.
 - **structure.heading.hierarchy** — Hijerarhija naslova
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.structure.heading.hierarchy: baza prolazi, jedna mutacija ruši "Hijerarhija naslova".
+  - Skok razine (H1->H3) treba Heading3; builder ima samo Heading1/2.
+  - Potreban test: Dodaj Heading3/4 stil (ili outlineLvl); H1 pa H3 bez H2 = jump.
 - **structure.heading.numbering** — Numeriranje naslova
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.structure.heading.numbering: baza prolazi, jedna mutacija ruši "Numeriranje naslova".
+  - auditHeadingRules se ne okida za ovaj profil (nema rules.levels).
+  - Potreban test: Profil s numberRequired; ukloni oznaku razine naslova.
 - **structure.heading.word-styles** — Uporaba Word stilova naslova
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.structure.heading.word-styles: baza prolazi, jedna mutacija ruši "Uporaba Word stilova naslova".
+  - Dijeljena baza vec warna (TOC stavke izgledaju kao rucni naslovi).
+  - Potreban test: Ugodi bazu da word-styles prolazi, pa dodaj rucno oblikovan naslov.
 - **structure.keywords** — Ključne riječi u samom radu
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.structure.keywords: baza prolazi, jedna mutacija ruši "Ključne riječi u samom radu".
+  - Bodovanje kljucnih rijeci gated; profil ih ne boduje kao scored.
+  - Potreban test: Profil koji boduje kljucne rijeci; ukloni redak Ključne riječi.
 - **title.elements** — Elementi naslovne stranice
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.title.elements: baza prolazi, jedna mutacija ruši "Elementi naslovne stranice".
+  - Dijeljena baza vec warna (fali prepoznata vrsta rada).
+  - Potreban test: Ugodi naslovnicu baze da prolazi, pa ukloni jedan element.
 - **toc.coverage** — Naslovi dokumenta ↔ sadržaj
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.toc.coverage: baza prolazi, jedna mutacija ruši "Naslovi dokumenta ↔ sadržaj".
+  - Treba stvarno TOC polje i spremljene stavke; builder emitira samo PAGE.
+  - Potreban test: Dodaj fldSimple/instrText TOC s stavkama; izostavi jedan naslov iz TOC-a.
 - **toc.format** — Font i veličina sadržaja
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.toc.format: baza prolazi, jedna mutacija ruši "Font i veličina sadržaja".
+  - Treba TOC1/TOC2 stilovi u sadrzaju; builder ih ne emitira.
+  - Potreban test: Dodaj TOC stilove; mutiraj font/velicinu stavki sadrzaja.
 - **toc.page-numbers** — Brojevi stranica u sadržaju
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.toc.page-numbers: baza prolazi, jedna mutacija ruši "Brojevi stranica u sadržaju".
+  - Treba TOC stavke s brojevima stranica; builder emitira samo PAGE.
+  - Potreban test: Dodaj TOC stavke; ukloni brojeve stranica dijelu stavki.
 
 ## P2 (1)
 

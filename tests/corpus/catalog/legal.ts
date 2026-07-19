@@ -27,6 +27,15 @@ export const LEGAL_ATOMIC_CASES: ErrorCase[] = [
     expect: { checkId: 'legal.footnotes-present', title: 'Pravne fusnote', kind: 'status', outcome: 'not-pass' },
   },
   {
+    id: 'atomic.footnote.present',
+    title: 'Nema automatskih Word fusnota (profil ih očekuje)',
+    category: 'formatting', oracle: 'atomic-fail', profileId: PID, detectableNow: true,
+    // Isti uklonjeni skup fusnota ruši i opcu formatting-provjeru prisutnosti fusnota (footnote.present),
+    // ne samo pravnu (legal.footnotes-present) - dokaz da obje detekcije reagiraju.
+    build: () => { const s = cloneSpec(legalBaselineSpec()); s.footnotes = []; return s; },
+    expect: { checkId: 'footnote.present', title: 'Automatske fusnote', kind: 'status', outcome: 'not-pass' },
+  },
+  {
     id: 'atomic.legal.source-classification',
     title: 'Fusnote se ne mogu klasificirati u vrste izvora',
     category: 'citations', oracle: 'atomic-fail', profileId: PID, detectableNow: true,

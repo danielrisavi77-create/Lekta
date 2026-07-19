@@ -2,13 +2,13 @@
   "summary": {
     "totalChecks": 71,
     "scoredChecks": 54,
-    "scoredWithAtomic": 29,
-    "scoredAtomicPct": 54,
-    "scoredWithFailCase": 30,
-    "scoredFailCasePct": 56,
+    "scoredWithAtomic": 30,
+    "scoredAtomicPct": 56,
+    "scoredWithFailCase": 31,
+    "scoredFailCasePct": 57,
     "checksWithValidControl": 6,
     "checksWithBoundary": 4,
-    "atomicCases": 31,
+    "atomicCases": 32,
     "validControlCases": 7,
     "boundaryCases": 14,
     "intakeCodes": 6
@@ -253,7 +253,7 @@
       "checkId": "footnote.present",
       "category": "formatting",
       "scored": true,
-      "hasAtomic": false,
+      "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
     },
@@ -659,169 +659,162 @@
       "priority": "P1",
       "checkId": "citation.punctuation",
       "title": "Dosljednost interpunkcije citatnica",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.citation.punctuation: baza prolazi, jedna mutacija ruši \"Dosljednost interpunkcije citatnica\"."
+      "reason": "Detektor oddCitationPunctuation je uzak; treba precizan neispravan uzorak.",
+      "desiredTest": "Kalibriraj citatnicu s neispravnom interpunkcijom koja pouzdano okida detektor."
     },
     {
       "priority": "P1",
       "checkId": "citation.style-automation",
       "title": "Automatizacija citatnog stila",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.citation.style-automation: baza prolazi, jedna mutacija ruši \"Automatizacija citatnog stila\"."
+      "reason": "Savjetodavna, uvijek-warn provjera (nema pass stanja).",
+      "desiredTest": "Nije atomski testabilna kao fail; eventualno valid-control da ostaje info."
     },
     {
       "priority": "P1",
       "checkId": "footnote.format",
       "title": "Oblikovanje fusnota",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.footnote.format: baza prolazi, jedna mutacija ruši \"Oblikovanje fusnota\"."
+      "reason": "Builder ne kontrolira oblik fusnota (rPr/pPr na fusnotnim odlomcima).",
+      "desiredTest": "Prosiri docx-builder footnotes na {text,font,sizePt,spacing}; cleanBuild prolazan pa mutacija fonta/velicine ruši."
     },
     {
       "priority": "P1",
       "checkId": "footnote.marker",
       "title": "Položaj i stil oznaka fusnota",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.footnote.marker: baza prolazi, jedna mutacija ruši \"Položaj i stil oznaka fusnota\"."
-    },
-    {
-      "priority": "P1",
-      "checkId": "footnote.present",
-      "title": "Automatske fusnote",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.footnote.present: baza prolazi, jedna mutacija ruši \"Automatske fusnote\"."
+      "reason": "Builder ne emitira <w:footnoteReference> markere u tijelu.",
+      "desiredTest": "Dodaj footnoteReference markere; mutiraj u ukošene / iza interpunkcije."
     },
     {
       "priority": "P1",
       "checkId": "footnote.spacing",
       "title": "Razmak prije i poslije fusnota",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.footnote.spacing: baza prolazi, jedna mutacija ruši \"Razmak prije i poslije fusnota\"."
+      "reason": "Builder ne podrzava before/after razmak na fusnotnim odlomcima.",
+      "desiredTest": "Dodaj pPr spacing na fusnote; eksplicitni razmak != 0 ruši provjeru."
     },
     {
       "priority": "P1",
       "checkId": "format.spacing.paragraph",
       "title": "Razmak prije i poslije odlomka",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.format.spacing.paragraph: baza prolazi, jedna mutacija ruši \"Razmak prije i poslije odlomka\"."
+      "reason": "Builder podrzava samo prored (line), ne before/after razmak odlomka.",
+      "desiredTest": "Dodaj before/after u ParaSpec; eksplicitni razmak > 0.6 pt ruši provjeru."
     },
     {
       "priority": "P1",
       "checkId": "manual.checks",
       "title": "Zahtjevi za ručnu završnu provjeru",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.manual.checks: baza prolazi, jedna mutacija ruši \"Zahtjevi za ručnu završnu provjeru\"."
+      "reason": "Savjetodavni podsjetnik, uvijek-warn (nema pass stanja).",
+      "desiredTest": "Nije atomski testabilna kao fail."
     },
     {
       "priority": "P1",
       "checkId": "page.numbers.scheme",
       "title": "Shema numeriranja stranica",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.page.numbers.scheme: baza prolazi, jedna mutacija ruši \"Shema numeriranja stranica\"."
+      "reason": "Treba eksplicitni format numeriranja (pgNumType); builder ga ne emitira.",
+      "desiredTest": "Dodaj pgNumType; postavi krivi format (rimski u tijelu)."
     },
     {
       "priority": "P1",
       "checkId": "page.size.project",
       "title": "Format stranice (A3/A0)",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.page.size.project: baza prolazi, jedna mutacija ruši \"Format stranice (A3/A0)\"."
+      "reason": "Provjera se okida samo za profil s paperSizes (A3/A0).",
+      "desiredTest": "Koristi arhitektonski/projektni profil; postavi krivi format stranice."
     },
     {
       "priority": "P1",
       "checkId": "reference.min-count",
       "title": "Minimalan broj izvora profila",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.reference.min-count: baza prolazi, jedna mutacija ruši \"Minimalan broj izvora profila\"."
+      "reason": "Provjera se okida samo za profil s minReferences.",
+      "desiredTest": "Koristi profil s minReferences; smanji broj izvora ispod minimuma."
     },
     {
       "priority": "P1",
       "checkId": "reference.uncited",
       "title": "Literatura → citirano",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.reference.uncited: baza prolazi, jedna mutacija ruši \"Literatura → citirano\"."
+      "reason": "Dijeljena baza vec warna (2 necitirana izvora).",
+      "desiredTest": "Ugodi bazu da svi izvori budu citirani (pass), pa mutacija doda necitirani."
     },
     {
       "priority": "P1",
       "checkId": "scope.intro-conclusion-ratio",
       "title": "Omjer Uvoda i Zaključka",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.scope.intro-conclusion-ratio: baza prolazi, jedna mutacija ruši \"Omjer Uvoda i Zaključka\"."
+      "reason": "Dijeljena baza vec warna (omjer Uvoda/Zakljucka).",
+      "desiredTest": "Ugodi opseg Uvoda/Zakljucka baze da prolazi, pa poremeti omjer."
     },
     {
       "priority": "P1",
       "checkId": "structure.abstract",
       "title": "Sažeci u samom radu",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.structure.abstract: baza prolazi, jedna mutacija ruši \"Sažeci u samom radu\"."
+      "reason": "Bodovanje sazetka gated (maxPoints); profil ga ne boduje.",
+      "desiredTest": "Koristi profil koji boduje sazetak; ukloni Sažetak."
     },
     {
       "priority": "P1",
       "checkId": "structure.heading.align",
       "title": "Poravnanje naslova slijeva",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.structure.heading.align: baza prolazi, jedna mutacija ruši \"Poravnanje naslova slijeva\"."
+      "reason": "auditHeadingRules se ne okida za ovaj profil (nema rules.levels).",
+      "desiredTest": "Profil s heading pravilima; centriraj naslov umjesto lijevo."
     },
     {
       "priority": "P1",
       "checkId": "structure.heading.format",
       "title": "Oblikovanje naslova po razinama",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.structure.heading.format: baza prolazi, jedna mutacija ruši \"Oblikovanje naslova po razinama\"."
+      "reason": "auditHeadingRules se ne okida za ovaj profil (nema rules.levels).",
+      "desiredTest": "Koristi profil s heading pravilima ili dodaj rules.levels; mutiraj velicinu/bold naslova."
     },
     {
       "priority": "P1",
       "checkId": "structure.heading.hierarchy",
       "title": "Hijerarhija naslova",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.structure.heading.hierarchy: baza prolazi, jedna mutacija ruši \"Hijerarhija naslova\"."
+      "reason": "Skok razine (H1->H3) treba Heading3; builder ima samo Heading1/2.",
+      "desiredTest": "Dodaj Heading3/4 stil (ili outlineLvl); H1 pa H3 bez H2 = jump."
     },
     {
       "priority": "P1",
       "checkId": "structure.heading.numbering",
       "title": "Numeriranje naslova",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.structure.heading.numbering: baza prolazi, jedna mutacija ruši \"Numeriranje naslova\"."
+      "reason": "auditHeadingRules se ne okida za ovaj profil (nema rules.levels).",
+      "desiredTest": "Profil s numberRequired; ukloni oznaku razine naslova."
     },
     {
       "priority": "P1",
       "checkId": "structure.heading.word-styles",
       "title": "Uporaba Word stilova naslova",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.structure.heading.word-styles: baza prolazi, jedna mutacija ruši \"Uporaba Word stilova naslova\"."
+      "reason": "Dijeljena baza vec warna (TOC stavke izgledaju kao rucni naslovi).",
+      "desiredTest": "Ugodi bazu da word-styles prolazi, pa dodaj rucno oblikovan naslov."
     },
     {
       "priority": "P1",
       "checkId": "structure.keywords",
       "title": "Ključne riječi u samom radu",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.structure.keywords: baza prolazi, jedna mutacija ruši \"Ključne riječi u samom radu\"."
+      "reason": "Bodovanje kljucnih rijeci gated; profil ih ne boduje kao scored.",
+      "desiredTest": "Profil koji boduje kljucne rijeci; ukloni redak Ključne riječi."
     },
     {
       "priority": "P1",
       "checkId": "title.elements",
       "title": "Elementi naslovne stranice",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.title.elements: baza prolazi, jedna mutacija ruši \"Elementi naslovne stranice\"."
+      "reason": "Dijeljena baza vec warna (fali prepoznata vrsta rada).",
+      "desiredTest": "Ugodi naslovnicu baze da prolazi, pa ukloni jedan element."
     },
     {
       "priority": "P1",
       "checkId": "toc.coverage",
       "title": "Naslovi dokumenta ↔ sadržaj",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.toc.coverage: baza prolazi, jedna mutacija ruši \"Naslovi dokumenta ↔ sadržaj\"."
+      "reason": "Treba stvarno TOC polje i spremljene stavke; builder emitira samo PAGE.",
+      "desiredTest": "Dodaj fldSimple/instrText TOC s stavkama; izostavi jedan naslov iz TOC-a."
     },
     {
       "priority": "P1",
       "checkId": "toc.format",
       "title": "Font i veličina sadržaja",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.toc.format: baza prolazi, jedna mutacija ruši \"Font i veličina sadržaja\"."
+      "reason": "Treba TOC1/TOC2 stilovi u sadrzaju; builder ih ne emitira.",
+      "desiredTest": "Dodaj TOC stilove; mutiraj font/velicinu stavki sadrzaja."
     },
     {
       "priority": "P1",
       "checkId": "toc.page-numbers",
       "title": "Brojevi stranica u sadržaju",
-      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
-      "desiredTest": "atomic.toc.page-numbers: baza prolazi, jedna mutacija ruši \"Brojevi stranica u sadržaju\"."
+      "reason": "Treba TOC stavke s brojevima stranica; builder emitira samo PAGE.",
+      "desiredTest": "Dodaj TOC stavke; ukloni brojeve stranica dijelu stavki."
     },
     {
       "priority": "P2",

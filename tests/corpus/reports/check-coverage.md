@@ -5,11 +5,11 @@
 ## Sazetak
 
 - Provjere ukupno: **71** (bodovane 54)
-- Bodovane s fail-slucajem (atomic ili boundary): **30/54 (56%)**
-- Bodovane s atomskim fail-slucajem: **29/54 (54%)**
+- Bodovane s fail-slucajem (atomic ili boundary): **31/54 (57%)**
+- Bodovane s atomskim fail-slucajem: **30/54 (56%)**
 - Provjere s valid-controlom: **6**
 - Provjere s boundary testom: **4**
-- Korpusni slucajevi: atomic **31**, valid **7**, boundary **14**
+- Korpusni slucajevi: atomic **32**, valid **7**, boundary **14**
 - Intake kodovi (svi runtime-dokazani u fazi 1): **6**
 
 ## Pokrivenost po provjeri
@@ -42,7 +42,7 @@
 | element.link-form | Oblik poveznica | elements | da | ✓ | ✓ | · |
 | element.lists | Popisi slika i tablica | elements | da | ✓ | · | · |
 | element.empty-paragraphs | Prazni odlomci | elements | info | · | · | · |
-| footnote.present | Automatske fusnote | formatting | da | · | · | · |
+| footnote.present | Automatske fusnote | formatting | da | ✓ | · | · |
 | format.font.dominant | Dominantni font | formatting | da | ✓ | ✓ | · |
 | page.size.project | Format stranice (A3/A0) | formatting | da | · | · | · |
 | page.size.a4 | Format stranice A4 | formatting | da | ✓ | · | · |
