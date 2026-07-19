@@ -21,6 +21,7 @@ const TOOL_PAGES = [
   'izjava.html',
   'alati.html',
   'landing_usporedba.html',
+  'citati-i-literatura.html',
 ];
 
 function head(file: string): string {

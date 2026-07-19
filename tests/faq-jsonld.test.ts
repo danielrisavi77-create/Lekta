@@ -57,7 +57,7 @@ describe('FAQ JSON-LD mirror', () => {
   });
 });
 
-describe.each(['izjava.html', 'alati.html'])('FAQ JSON-LD mirror: %s', (page) => {
+describe.each(['izjava.html', 'alati.html', 'landing_usporedba.html', 'citati-i-literatura.html'])('FAQ JSON-LD mirror: %s', (page) => {
   // Isti obrazac kao index.html gore, primijenjen po stranici umjesto generalizirano preko
   // svih *.html (siri sweep otkrio je vec postojeci, nepovezan drift na naslovnica.html i
   // citat.html izvan dosega ove promjene). Konkretan povod za izjava.html: FAQPage JSON-LD
