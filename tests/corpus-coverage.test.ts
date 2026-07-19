@@ -16,9 +16,10 @@ import { PROFILE_ATOMIC_CASES } from './corpus/catalog/profile-enabled';
 import { FOOTNOTE_ATOMIC_CASES } from './corpus/catalog/footnote-format';
 import { TOC_ATOMIC_CASES } from './corpus/catalog/toc-hierarchy';
 import { SCHEME_PUNCT_ATOMIC_CASES } from './corpus/catalog/scheme-punctuation';
+import { INFORMATIVE_VALID_CASES } from './corpus/catalog/informative-controls';
 import { CHECK_ID_BY_TITLE, stableCheckId } from './corpus/ids/check-id-registry';
 
-const ALL_CASES = [...ATOMIC_CASES, ...LEGAL_ATOMIC_CASES, ...PROFILE_ATOMIC_CASES, ...FOOTNOTE_ATOMIC_CASES, ...TOC_ATOMIC_CASES, ...SCHEME_PUNCT_ATOMIC_CASES, ...VALID_CONTROL_CASES, ...LEGAL_VALID_CASES, ...BOUNDARY_CASES];
+const ALL_CASES = [...ATOMIC_CASES, ...LEGAL_ATOMIC_CASES, ...PROFILE_ATOMIC_CASES, ...FOOTNOTE_ATOMIC_CASES, ...TOC_ATOMIC_CASES, ...SCHEME_PUNCT_ATOMIC_CASES, ...VALID_CONTROL_CASES, ...LEGAL_VALID_CASES, ...INFORMATIVE_VALID_CASES, ...BOUNDARY_CASES];
 const KNOWN_IDS = new Set(Object.values(CHECK_ID_BY_TITLE));
 
 describe('Lekta Error Corpus - coverage izvjestaj (faza 6)', () => {
@@ -44,7 +45,7 @@ describe('Lekta Error Corpus - coverage izvjestaj (faza 6)', () => {
   it('svaka provjera s atomic/valid/boundary oznakom stvarno ima odgovarajuci slucaj', () => {
     const rep = buildCoverage();
     const atomicIds = new Set([...ATOMIC_CASES, ...LEGAL_ATOMIC_CASES, ...PROFILE_ATOMIC_CASES, ...FOOTNOTE_ATOMIC_CASES, ...TOC_ATOMIC_CASES, ...SCHEME_PUNCT_ATOMIC_CASES].map((c) => c.expect.checkId));
-    const validIds = new Set([...VALID_CONTROL_CASES, ...LEGAL_VALID_CASES].map((c) => c.expect.checkId));
+    const validIds = new Set([...VALID_CONTROL_CASES, ...LEGAL_VALID_CASES, ...INFORMATIVE_VALID_CASES].map((c) => c.expect.checkId));
     const boundaryIds = new Set(BOUNDARY_CASES.map((c) => c.expect.checkId));
     for (const r of rep.rows) {
       if (r.hasAtomic) expect(atomicIds.has(r.checkId!)).toBe(true);

@@ -20,10 +20,11 @@ import { PROFILE_ATOMIC_CASES } from '../catalog/profile-enabled';
 import { FOOTNOTE_ATOMIC_CASES } from '../catalog/footnote-format';
 import { TOC_ATOMIC_CASES } from '../catalog/toc-hierarchy';
 import { SCHEME_PUNCT_ATOMIC_CASES } from '../catalog/scheme-punctuation';
+import { INFORMATIVE_VALID_CASES } from '../catalog/informative-controls';
 
 // Jedinstveni skupovi (fpzg baseline + legal + profilno + footnote-format + TOC + shema/interpunkcija) za pokrivenost i export.
 const ALL_ATOMIC = [...ATOMIC_CASES, ...LEGAL_ATOMIC_CASES, ...PROFILE_ATOMIC_CASES, ...FOOTNOTE_ATOMIC_CASES, ...TOC_ATOMIC_CASES, ...SCHEME_PUNCT_ATOMIC_CASES];
-const ALL_VALID = [...VALID_CONTROL_CASES, ...LEGAL_VALID_CASES];
+const ALL_VALID = [...VALID_CONTROL_CASES, ...LEGAL_VALID_CASES, ...INFORMATIVE_VALID_CASES];
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const INVENTORY_PATH = resolve(HERE, '../generated/current-check-inventory.json');
@@ -101,6 +102,17 @@ const KNOWN_HARD: Record<string, { reason: string; desiredTest: string }> = {
   'scope.intro-conclusion-ratio': { reason: 'Dijeljena baza vec warna (omjer Uvoda/Zakljucka).', desiredTest: 'Ugodi opseg Uvoda/Zakljucka baze da prolazi, pa poremeti omjer.' },
 };
 
+/**
+ * Informativne provjere koje STRUKTURNO ne dosizu bodovani 'pass' iz kontroliranog buildera, pa im
+ * valid-control ne bi nista cuvao (bio bi vakuozno zelen = fake pokrivenost koju ovaj modul odbija).
+ * Transparentno kazu ZASTO ostaju u P3, umjesto genericnog "nema valid-controla".
+ */
+const KNOWN_ADVISORY: Record<string, { reason: string; desiredTest: string }> = {
+  'scope.pages': { reason: 'Hardkodiran status pass (max 0) neovisno o ulazu; nema dosezljivog warn stanja pa valid-control ne cuva nista.', desiredTest: 'Nije atomski/valid pokrivljiv: savjetodavna, uvijek informativna (kao style-automation/manual.checks).' },
+  'page.numbers.position': { reason: 'Poravnanje se cita iz stvarnih footer/header dijelova (w:footerReference); builder ih ne emitira pa bodovani pass nije konstruktibilan.', desiredTest: 'Trebalo bi prosiriti builder footer dijelovima s PAGE poljem i poravnanjem; tek tada valid-control (desno poravnat broj) ostaje pass.' },
+  'page.numbers.start': { reason: 'startOk trazi after.hasAnyPageField iz stvarnog footera; nedostupno builderu pa bodovani pass nije dosezljiv.', desiredTest: 'Trebalo bi builder footer dijelove po sekciji; tek tada sekcija s numeriranjem od 1 na Uvodu daje pass.' },
+};
+
 export function buildCoverage(): CoverageReport {
   const inv = JSON.parse(readFileSync(INVENTORY_PATH, 'utf8'));
   const atomic = targetIds(ALL_ATOMIC);
@@ -135,13 +147,15 @@ export function buildCoverage(): CoverageReport {
       desiredTest: known?.desiredTest ?? `atomic.${r.checkId ?? 'TODO'}: cista varijanta prolazi, jedna mutacija ruši "${r.title}".`,
     });
   }
-  // Informativne provjere bez valid-controla (nizi prioritet).
+  // Informativne provjere bez valid-controla (nizi prioritet). KNOWN_ADVISORY objasnjava strukturno
+  // nepokrivljive (hardkodiran max 0 ili nuzni footer dijelovi) da se ne lazira vakuoznim controlom.
   for (const r of rows.filter((x) => x.scored === false)) {
     if (r.hasValidControl) continue;
+    const adv = r.checkId ? KNOWN_ADVISORY[r.checkId] : undefined;
     gaps.push({
       priority: 'P3', checkId: r.checkId, title: r.title,
-      reason: 'Informativna provjera bez valid-controla (nizak rizik, ali nepokrivena).',
-      desiredTest: `valid.${r.checkId ?? 'TODO'}: valjana varijanta ostaje informativna/pass.`,
+      reason: adv?.reason ?? 'Informativna provjera bez valid-controla (nizak rizik, ali nepokrivena).',
+      desiredTest: adv?.desiredTest ?? `valid.${r.checkId ?? 'TODO'}: valjana varijanta dosize bodovani pass (max>0), ne informativni max-0.`,
     });
   }
   const order = { P0: 0, P1: 1, P2: 2, P3: 3 };

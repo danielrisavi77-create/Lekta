@@ -7,9 +7,9 @@
 - Provjere ukupno: **71** (bodovane 54)
 - Bodovane s fail-slucajem (atomic ili boundary): **52/54 (96%)**
 - Bodovane s atomskim fail-slucajem: **51/54 (94%)**
-- Provjere s valid-controlom: **12**
+- Provjere s valid-controlom: **18**
 - Provjere s boundary testom: **4**
-- Korpusni slucajevi: atomic **53**, valid **13**, boundary **14**
+- Korpusni slucajevi: atomic **53**, valid **19**, boundary **14**
 - Intake kodovi (svi runtime-dokazani u fazi 1): **6**
 
 ## Pokrivenost po provjeri
@@ -24,7 +24,7 @@
 | legal.footnote-bibliography | Fusnote ↔ bibliografija | citations | da | ✓ | · | · |
 | citation.author-year.suffix | Isti autor i godina (a/b/c) | citations | da | ✓ | ✓ | · |
 | legal.source-classification | Klasifikacija pravnih izvora | citations | da | ✓ | · | · |
-| legal.id-abbrev | Kratica id. u istoj bilješci | citations | info | · | · | · |
+| legal.id-abbrev | Kratica id. u istoj bilješci | citations | info | · | ✓ | · |
 | reference.uncited | Literatura → citirano | citations | da | ✓ | · | · |
 | citation.direct-quote-locator | Lokator uz izravne citate | citations | da | ✓ | ✓ | · |
 | reference.min-count | Minimalan broj izvora profila | citations | da | ✓ | · | · |
@@ -35,7 +35,7 @@
 | citation.recognized | Prepoznate citatnice | citations | da | ✓ | · | · |
 | legal.act-abbrev | Propisi i uvedene kratice | citations | info | ✓ | ✓ | · |
 | legal.ibid | Slijed Ibid. | citations | da | ✓ | ✓ | · |
-| legal.case-law | Sudska praksa | citations | info | ✓ | · | · |
+| legal.case-law | Sudska praksa | citations | info | ✓ | ✓ | · |
 | element.source | Izvori ispod slika i tablica | elements | da | ✓ | · | · |
 | element.figure.caption | Naslovi slika i grafikona | elements | da | ✓ | · | · |
 | element.table.caption | Naslovi tablica | elements | da | ✓ | ✓ | · |
@@ -67,7 +67,7 @@
 | structure.keywords | Ključne riječi u samom radu | structure | da | ✓ | · | · |
 | method.variant | Metodološka varijanta rada | structure | din | · | · | · |
 | toc.coverage | Naslovi dokumenta ↔ sadržaj | structure | da | ✓ | · | · |
-| page.numbers.title-suppressed | Naslovnica bez broja stranice | structure | info | · | · | · |
+| page.numbers.title-suppressed | Naslovnica bez broja stranice | structure | info | · | ✓ | · |
 | structure.heading.numbering | Numeriranje naslova | structure | da | ✓ | · | · |
 | page.numbers.start | Numeriranje od prve stranice Uvoda | structure | info | · | · | · |
 | structure.heading.format | Oblikovanje naslova po razinama | structure | da | ✓ | · | · |
@@ -78,12 +78,12 @@
 | page.numbers.position | Položaj broja stranice | structure | info | · | · | · |
 | structure.heading.align | Poravnanje naslova slijeva | structure | da | ✓ | · | · |
 | scope.words | Profilni opseg riječi | structure | da | ✓ | · | ✓ |
-| title.layout | Raspored naslovne stranice | structure | info | · | · | · |
-| title.order | Redoslijed elemenata naslovnice | structure | info | · | · | · |
+| title.layout | Raspored naslovne stranice | structure | info | · | ✓ | · |
+| title.order | Redoslijed elemenata naslovnice | structure | info | · | ✓ | · |
 | toc.present | Sadržaj dokumenta | structure | da | ✓ | · | · |
 | structure.abstract | Sažeci u samom radu | structure | da | ✓ | · | · |
 | page.numbers.scheme | Shema numeriranja stranica | structure | da | ✓ | · | · |
 | method.structure | Struktura metodološkog profila | structure | din | · | · | · |
-| title.typography | Tipografija korica i naslovnice | structure | info | · | · | · |
+| title.typography | Tipografija korica i naslovnice | structure | info | · | ✓ | · |
 | structure.heading.word-styles | Uporaba Word stilova naslova | structure | da | ✓ | · | · |
 | manual.checks | Zahtjevi za ručnu završnu provjeru | structure | da | · | · | · |
