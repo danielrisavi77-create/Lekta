@@ -56,17 +56,36 @@ function toBase64(bytes: Uint8Array): string {
   return btoa(bin);
 }
 
-// WS-6 STUB: pohrani original + rezultat vezano uz korisnika (retencija "do brisanja"). Zahtijeva
-// migraciju repair_jobs (original_path, result_path, work_type, fingerprint, status, created_at) +
-// Storage bucket 'repair' (privatan, RLS po user_id, enkripcija at-rest). Vraca jobId ili null.
-async function storeRepairJob(_admin: any, _userId: string, _meta: {
-  workType: string; fingerprint: unknown; slotId: string; originalBytes: Uint8Array; resultBytes: Uint8Array;
+const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+
+// WS-6: pohrani original + rezultat vezano uz korisnika (retencija "do brisanja"). Migracija
+// 0026_repair_jobs.sql daje tablicu repair_jobs (RLS select-own) + privatni bucket 'repair'.
+// Putanja je '<user_id>/<job_id>/{original,fixed}.docx' (poklapa se sa storage RLS foldername[1]).
+// Vraca jobId ili null. null NIJE greska za korisnika: popravak se svejedno vraca, samo se ne
+// pojavi u "Moji popravci". Pri djelomicnom padu cisti vec uploadane BLOB-ove (bez orphana).
+async function storeRepairJob(admin: any, userId: string, meta: {
+  workType: string; fingerprint: any; slotId: string;
+  originalBytes: Uint8Array; resultBytes: Uint8Array; changesCount: number;
 }): Promise<string | null> {
-  // TODO(WS-6): const orig = await admin.storage.from('repair').upload(`${userId}/${jobId}/original.docx`, originalBytes)
-  //             const res  = await admin.storage.from('repair').upload(`${userId}/${jobId}/fixed.docx`, resultBytes)
-  //             await admin.from('repair_jobs').insert({ user_id, work_type, fingerprint, status:'done', original_path, result_path })
-  //             Brisanje u "Moji popravci" uklanja Storage objekte + redak (right to erasure).
-  return null;
+  const jobId = crypto.randomUUID();
+  const origPath = `${userId}/${jobId}/original.docx`;
+  const resPath = `${userId}/${jobId}/fixed.docx`;
+  const bucket = admin.storage.from('repair');
+
+  const up1 = await bucket.upload(origPath, meta.originalBytes, { contentType: DOCX_MIME, upsert: false });
+  if (up1.error) return null;
+  const up2 = await bucket.upload(resPath, meta.resultBytes, { contentType: DOCX_MIME, upsert: false });
+  if (up2.error) { await bucket.remove([origPath]); return null; }
+
+  const label = String(meta.fingerprint?.titleNorm || 'rad').slice(0, 120);
+  const { data, error } = await admin.from('repair_jobs').insert({
+    id: jobId, user_id: userId, slot_id: meta.slotId, work_type: meta.workType,
+    fingerprint: meta.fingerprint, label, original_path: origPath, result_path: resPath,
+    original_bytes: meta.originalBytes.length, result_bytes: meta.resultBytes.length,
+    changes_count: meta.changesCount, status: 'done',
+  }).select('id').single();
+  if (error || !data) { await bucket.remove([origPath, resPath]); return null; }
+  return jobId;
 }
 
 Deno.serve(async (req: Request) => {
@@ -182,7 +201,7 @@ Deno.serve(async (req: Request) => {
 
     // 7. WS-6 STUB: pohrana originala + rezultata (retencija do brisanja). Ne blokira odgovor ako padne.
     let jobId: string | null = null;
-    try { jobId = await storeRepairJob(admin, user.id, { workType, fingerprint, slotId, originalBytes: docxBytes, resultBytes: result.docxBytes }); } catch (_e) { /* WS-6: log */ }
+    try { jobId = await storeRepairJob(admin, user.id, { workType, fingerprint, slotId, originalBytes: docxBytes, resultBytes: result.docxBytes, changesCount: result.changelog.length }); } catch (_e) { /* WS-6: log */ }
 
     const traceToken = await sha256Hex(`${slotId}.${now}.${user.id}`);
     return json({
