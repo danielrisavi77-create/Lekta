@@ -12,6 +12,24 @@ Endpointi (nakon deploya funkcija):
 
 ---
 
+## Dvije faze: besplatna beta pa naplata
+
+Preporuceni put: prvo pusti **besplatnu javnu betu** (svaki prijavljeni korisnik uploada+popravi
+besplatno, uz dnevni cap), pa kasnije upali naplatu. Prijelaz je jedna Edge tajna, bez ijedne
+klijentske izmjene.
+
+- **Faza 1 (besplatna beta):** koraci A, B (s `REPAIR_FREE_MODE=true`), C, E (samo `repairEndpoint`),
+  F, G. Korak D (Lemon Squeezy) se PRESKACE. Server preskace naplatu ali sve ostalo (auth, consent,
+  upload, pohrana, "Moji popravci", brisanje, rate-limit) radi normalno.
+- **Faza 2 (naplata):** odradi korak D, pa u Edge tajnama makni `REPAIR_FREE_MODE` (ili `false`) i
+  postavi `checkoutEndpoint` (korak E). Klijent i pravne stranice se NE mijenjaju. Repair-panel
+  ionako ne prikazuje cijenu, pa beta ne zavarava.
+
+VAZNO: i besplatna beta je privatnosni zaokret (dokument se uploada i pohranjuje). Zato i za betu
+moraju biti zive pravne stranice + consent (korak E: Netlify redeploy) i cleanup cron (korak C).
+
+---
+
 ## 0. Već napravljeno (INERTNO, na produkciji)
 
 - [x] Migracije `0026_repair_jobs` (bucket `repair` + tablica `repair_jobs` + RLS) i
@@ -48,6 +66,8 @@ Alternativa: daj Claudeu personal access token pa deploya preko Management API/M
 
 Nove za repair:
 
+- [ ] **Besplatna beta:** `REPAIR_FREE_MODE=true` (preskace naplatu; sve ostalo radi). Za Fazu 2
+  (naplata) ukloni je ili postavi na bilo sto osim `true`. Opcijski `REPAIR_FREE_DAILY_CAP` (default 10).
 - [ ] `REPAIR_CLEANUP_CRON_SECRET` = nasumična tajna (`openssl rand -hex 32`). Koristi je
   i pg_cron u koraku C. Bez nje `cleanup-orphan-repairs` fail-closed vraća 401.
 - [ ] (opcijski) `REPAIR_MAX_DOCX_BYTES` (default 20MB), `REPAIR_CLEANUP_GRACE_MINUTES` (default 60).
@@ -91,7 +111,7 @@ select cron.schedule(
 
 ---
 
-## D. Naplata (Lemon Squeezy) - VELIKI odgođeni dio
+## D. Naplata (Lemon Squeezy) - VELIKI odgođeni dio (PRESKOCI u Fazi 1 / besplatnoj beti)
 
 Trenutno **nijedan** proizvod u `products` nema `mor_product_id` (LS variant). Bez toga
 `create-checkout` vraća `409 product_not_mapped`.
@@ -118,8 +138,10 @@ repairEndpoint:'https://zrrjttizjyfcxmcpgzml.supabase.co/functions/v1/repair-doc
 checkoutEndpoint:'https://zrrjttizjyfcxmcpgzml.supabase.co/functions/v1/create-checkout',
 ```
 
-(Za samo repair bez prodaje možeš prvo postaviti samo `repairEndpoint` - tada server traži
-entitlement pa daje 402 dok checkout nije živ. Za punu prodaju treba oboje + korak D.)
+**Faza 1 (besplatna beta):** postavi SAMO `repairEndpoint` (ostavi `checkoutEndpoint:''`). Uz
+`REPAIR_FREE_MODE=true` (korak B) server ne traži naplatu pa nema 402. **Faza 2 (naplata):** dodaj
+`checkoutEndpoint` i makni `REPAIR_FREE_MODE` (+ korak D). Bez `REPAIR_FREE_MODE`, a bez entitlementa,
+server vraća 402 (paywall) pa repair ne radi dok checkout+LS nisu živi.
 
 - [ ] Config postavljen.
 - [ ] `npm run check` zelen.
