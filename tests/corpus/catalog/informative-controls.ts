@@ -8,18 +8,18 @@
  * valid-control bio zelen i za check koji strukturno nikad ne pada (fake pokrivenost koju ovaj modul
  * odbija, vidi coverage-report "ne lazira 100%").
  *
- * Svih 6 provjera dosize bodovani pass tek uz odgovarajuci profil + potvrdan prijelom prve stranice
- * (title.*), titlePg sekciju (page.numbers.title-suppressed) ili pravnu fusnotu (legal.*). Preostale
- * 3 informativne (scope.pages hardkodiran max 0; page.numbers.position/start trebaju stvarne footer
- * dijelove) NAMJERNO ostaju u gap-backlogu (KNOWN_ADVISORY), ne lazira ih se vakuoznim controlom.
+ * Osam provjera dosize bodovani pass uz odgovarajuci profil + potvrdan prijelom prve stranice
+ * (title.*), titlePg sekciju (page.numbers.title-suppressed), pravnu fusnotu (legal.*) ili stvarno
+ * podnožje s PAGE poljem (page.numbers.position/start). Preostaje SAMO scope.pages (hardkodiran max 0,
+ * nema dosezljivog warn stanja) u gap-backlogu (KNOWN_ADVISORY), ne lazira ga se vakuoznim controlom.
  */
 import type { DocSpec, ParaSpec } from '../../helpers/docx-builder';
 import { legalBaselineSpec, LEGAL_PROFILE_ID } from '../builder/legal-baseline';
-import { line, PAGE_FIELD } from '../builder/baseline';
+import { baselineSpec, cloneSpec, line, PAGE_FIELD } from '../builder/baseline';
 import type { ErrorCase } from '../error-case';
 
 const LEGAL = LEGAL_PROFILE_ID; // pravo-integrirani-diplomski (titlePageSequence + legal-centered + titlePg)
-const SOCIAL = 'pravo-socijalni-rad-zavrsni'; // titlePageTypography: 'social-work'
+const SOCIAL = 'pravo-socijalni-rad-zavrsni'; // titlePageTypography: 'social-work' + pageNumberAlignment + checkPageNumberStartAtIntro
 
 /** Potvrdan prijelom prve stranice: paragraf s <w:br w:type="page"/> (parser -> pageBreakAfter). */
 const PAGEBREAK: ParaSpec = { text: '', raw: '<w:p><w:r><w:br w:type="page"/></w:r></w:p>' };
@@ -75,6 +75,23 @@ function socialTitleSpec(): DocSpec {
   return s;
 }
 
+/** Prednja sekcija (rimski, BEZ podnožja) prije Uvoda; parser je cita kao zasebnu sekciju bez PAGE polja. */
+const FRONT_SECTION: ParaSpec = { text: '', raw: '<w:p><w:pPr><w:sectPr><w:pgNumType w:fmt="lowerRoman"/></w:sectPr></w:pPr></w:p>' };
+
+/**
+ * Valjan rad s ispravnim numeriranjem stranica: prednja sekcija (rimski, bez vidljivog broja) +
+ * glavna sekcija sa STVARNIM podnožjem (word/footer1.xml, PAGE polje desno) i numeriranjem od 1.
+ * Bodovano prolazi i position (broj desno) i start (glavni tekst od prve stranice Uvoda).
+ */
+function pageNumberSpec(): DocSpec {
+  const s = cloneSpec(baselineSpec());
+  const introIdx = s.paragraphs.findIndex((p) => p.styleId && /1\. Uvod/.test(p.text));
+  s.paragraphs.splice(introIdx, 0, FRONT_SECTION); // prednja sekcija bez podnožja
+  s.footer = { align: 'right', page: true };        // podnožje s brojem, desno (završna sekcija)
+  s.pageNumberStart = 1;                            // glavni tekst numeriran od 1
+  return s;
+}
+
 export const INFORMATIVE_VALID_CASES: ErrorCase[] = [
   {
     id: 'valid.legal.case-law',
@@ -123,5 +140,21 @@ export const INFORMATIVE_VALID_CASES: ErrorCase[] = [
     build: socialTitleSpec,
     expect: { checkId: 'title.typography', title: 'Tipografija korica i naslovnice', kind: 'earned', outcome: 'pass' },
     notes: 'Standardni elementi TNR 14 bold centrirano + naslov 16 bold -> bodovani pass po social-work obrascu.',
+  },
+  {
+    id: 'valid.page.numbers.position',
+    title: 'Broj stranice u podnožju poravnat desno ostaje bez nalaza',
+    category: 'structure', oracle: 'valid-control', profileId: SOCIAL, detectableNow: true,
+    build: pageNumberSpec,
+    expect: { checkId: 'page.numbers.position', title: 'Položaj broja stranice', kind: 'earned', outcome: 'pass' },
+    notes: 'Stvarno podnožje (word/footer1.xml) s PAGE poljem i w:jc right -> bodovani pass, ne lazno "nije desno".',
+  },
+  {
+    id: 'valid.page.numbers.start',
+    title: 'Numeriranje glavnog teksta od prve stranice Uvoda ostaje bez nalaza',
+    category: 'structure', oracle: 'valid-control', profileId: SOCIAL, detectableNow: true,
+    build: pageNumberSpec,
+    expect: { checkId: 'page.numbers.start', title: 'Numeriranje od prve stranice Uvoda', kind: 'earned', outcome: 'pass' },
+    notes: 'Prednja sekcija bez broja + glavna sekcija s podnožjem (PAGE) i pgNumType start=1 -> bodovani pass.',
   },
 ];

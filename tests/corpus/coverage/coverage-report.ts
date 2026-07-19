@@ -109,8 +109,6 @@ const KNOWN_HARD: Record<string, { reason: string; desiredTest: string }> = {
  */
 const KNOWN_ADVISORY: Record<string, { reason: string; desiredTest: string }> = {
   'scope.pages': { reason: 'Hardkodiran status pass (max 0) neovisno o ulazu; nema dosezljivog warn stanja pa valid-control ne cuva nista.', desiredTest: 'Nije atomski/valid pokrivljiv: savjetodavna, uvijek informativna (kao style-automation/manual.checks).' },
-  'page.numbers.position': { reason: 'Poravnanje se cita iz stvarnih footer/header dijelova (w:footerReference); builder ih ne emitira pa bodovani pass nije konstruktibilan.', desiredTest: 'Trebalo bi prosiriti builder footer dijelovima s PAGE poljem i poravnanjem; tek tada valid-control (desno poravnat broj) ostaje pass.' },
-  'page.numbers.start': { reason: 'startOk trazi after.hasAnyPageField iz stvarnog footera; nedostupno builderu pa bodovani pass nije dosezljiv.', desiredTest: 'Trebalo bi builder footer dijelove po sekciji; tek tada sekcija s numeriranjem od 1 na Uvodu daje pass.' },
 };
 
 export function buildCoverage(): CoverageReport {

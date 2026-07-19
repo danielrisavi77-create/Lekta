@@ -37,11 +37,21 @@ export interface FootnoteSpec {
   after?: number;
 }
 
+/** Podnožje sa (zadanim) brojem stranice: word/footer1.xml + veza u document.xml.rels.
+ *  Emitira se SAMO kad je `spec.footer` zadan, pa je izlaz za postojece specove BAJT-IDENTICAN.
+ *  Parser (analyze-docx) cita footer preko w:footerReference -> relMap -> partPageInfo (PAGE + w:jc). */
+export interface FooterSpec {
+  page?: boolean; // PAGE polje u podnožju (default true); false = podnožje bez broja
+  align?: 'left' | 'center' | 'right'; // poravnanje odlomka podnožja (w:jc), za provjeru položaja broja
+}
+
 export interface DocSpec {
   paragraphs: ParaSpec[];
   pageCm?: { w: number; h: number }; // default A4 21 x 29,7
   marginsCm?: { top: number; right: number; bottom: number; left: number };
   footnotes?: (string | FootnoteSpec)[]; // fusnote (string = goli tekst, ili FootnoteSpec s oblikom); word/footnotes.xml (id 1..N)
+  footer?: FooterSpec; // podnožje s brojem stranice na ZAVRŠNOJ sekciji (dokument-level sectPr)
+  pageNumberStart?: number; // w:pgNumType w:start na završnoj sekciji (npr. glavni tekst numeriran od 1)
 }
 
 function esc(s: string): string {
@@ -79,17 +89,47 @@ function paraXml(p: ParaSpec): string {
   return `<w:p>${pPr}<w:r>${rPr}<w:t xml:space="preserve">${esc(p.text)}</w:t></w:r></w:p>`;
 }
 
+const FOOTER_RID = 'rId100'; // veza document.xml.rels -> word/footer1.xml
+const REL_NS = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships';
+
 function sectPrXml(spec: DocSpec): string {
   const page = spec.pageCm ?? { w: 21.0, h: 29.7 };
   const m = spec.marginsCm ?? { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 };
   const tw = (cm: number) => Math.round(cm * TWIPS_PER_CM);
+  // Redoslijed po OOXML shemi: footerReference, pgSz, pgMar, pgNumType. xmlns:r deklariran LOKALNO
+  // na footerReference (root document.xml nema xmlns:r) pa je izlaz bez footera BAJT-IDENTICAN.
+  const footerRef = spec.footer ? `<w:footerReference w:type="default" r:id="${FOOTER_RID}" xmlns:r="${REL_NS}"/>` : '';
+  const pgNum = spec.pageNumberStart != null ? `<w:pgNumType w:start="${spec.pageNumberStart}"/>` : '';
   return (
     `<w:sectPr>` +
+    footerRef +
     `<w:pgSz w:w="${tw(page.w)}" w:h="${tw(page.h)}"/>` +
     `<w:pgMar w:top="${tw(m.top)}" w:right="${tw(m.right)}" w:bottom="${tw(m.bottom)}" w:left="${tw(m.left)}"/>` +
+    pgNum +
     `</w:sectPr>`
   );
 }
+
+/** word/footer1.xml: jedan odlomak s (opcionalnim) PAGE poljem i poravnanjem; parser cita PAGE + w:jc. */
+function footerXml(f: FooterSpec): string {
+  const jc = f.align ? `<w:pPr><w:jc w:val="${f.align}"/></w:pPr>` : '';
+  const pageField = f.page === false ? '' :
+    `<w:r><w:fldChar w:fldCharType="begin"/></w:r>` +
+    `<w:r><w:instrText xml:space="preserve"> PAGE </w:instrText></w:r>` +
+    `<w:r><w:fldChar w:fldCharType="end"/></w:r>`;
+  return (
+    `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
+    `<w:ftr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">` +
+    `<w:p>${jc}${pageField}</w:p></w:ftr>`
+  );
+}
+
+/** word/_rels/document.xml.rels s vezom na footer1.xml (parser relMap: Id -> Target). */
+const DOCUMENT_RELS =
+  `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
+  `<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">` +
+  `<Relationship Id="${FOOTER_RID}" Type="${REL_NS}/footer" Target="footer1.xml"/>` +
+  `</Relationships>`;
 
 export function documentXml(spec: DocSpec): string {
   const body = spec.paragraphs.map(paraXml).join('');
@@ -108,7 +148,7 @@ const STYLES_XML =
   `<w:style w:type="paragraph" w:styleId="Heading2"><w:name w:val="heading 2"/></w:style>` +
   `</w:styles>`;
 
-function contentTypesXml(hasFootnotes: boolean): string {
+function contentTypesXml(hasFootnotes: boolean, hasFooter = false): string {
   return (
     `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
     `<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">` +
@@ -118,6 +158,9 @@ function contentTypesXml(hasFootnotes: boolean): string {
     `<Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/>` +
     (hasFootnotes
       ? `<Override PartName="/word/footnotes.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml"/>`
+      : '') +
+    (hasFooter
+      ? `<Override PartName="/word/footer1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"/>`
       : '') +
     `</Types>`
   );
@@ -246,13 +289,18 @@ export function zipStore(files: ZipFileSpec[]): Uint8Array {
 export function buildDocx(spec: DocSpec, extraFiles: ZipFileSpec[] = []): Uint8Array {
   const enc = new TextEncoder();
   const hasFootnotes = !!spec.footnotes?.length;
+  const hasFooter = !!spec.footer;
   const files = [
-    { name: '[Content_Types].xml', data: enc.encode(contentTypesXml(hasFootnotes)) },
+    { name: '[Content_Types].xml', data: enc.encode(contentTypesXml(hasFootnotes, hasFooter)) },
     { name: '_rels/.rels', data: enc.encode(RELS) },
     { name: 'word/document.xml', data: enc.encode(documentXml(spec)) },
     { name: 'word/styles.xml', data: enc.encode(STYLES_XML) },
   ];
   if (hasFootnotes) files.push({ name: 'word/footnotes.xml', data: enc.encode(footnotesXml(spec.footnotes!)) });
+  if (hasFooter) {
+    files.push({ name: 'word/footer1.xml', data: enc.encode(footerXml(spec.footer!)) });
+    files.push({ name: 'word/_rels/document.xml.rels', data: enc.encode(DOCUMENT_RELS) });
+  }
   return zipStore([...files, ...extraFiles]);
 }
 

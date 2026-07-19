@@ -7,9 +7,9 @@
 - Provjere ukupno: **71** (bodovane 54)
 - Bodovane s fail-slucajem (atomic ili boundary): **52/54 (96%)**
 - Bodovane s atomskim fail-slucajem: **51/54 (94%)**
-- Provjere s valid-controlom: **18**
+- Provjere s valid-controlom: **20**
 - Provjere s boundary testom: **4**
-- Korpusni slucajevi: atomic **53**, valid **19**, boundary **14**
+- Korpusni slucajevi: atomic **53**, valid **21**, boundary **14**
 - Intake kodovi (svi runtime-dokazani u fazi 1): **6**
 
 ## Pokrivenost po provjeri
@@ -69,13 +69,13 @@
 | toc.coverage | Naslovi dokumenta ↔ sadržaj | structure | da | ✓ | · | · |
 | page.numbers.title-suppressed | Naslovnica bez broja stranice | structure | info | · | ✓ | · |
 | structure.heading.numbering | Numeriranje naslova | structure | da | ✓ | · | · |
-| page.numbers.start | Numeriranje od prve stranice Uvoda | structure | info | · | · | · |
+| page.numbers.start | Numeriranje od prve stranice Uvoda | structure | info | · | ✓ | · |
 | structure.heading.format | Oblikovanje naslova po razinama | structure | da | ✓ | · | · |
 | scope.intro-conclusion-ratio | Omjer Uvoda i Zaključka | structure | da | ✓ | · | · |
 | scope.cards | Opseg u autorskim karticama | structure | din | · | · | · |
 | scope.pages | Opseg u stranicama | structure | info | · | · | · |
 | structure.sections.basic | Osnovni dijelovi rada | structure | da | ✓ | · | · |
-| page.numbers.position | Položaj broja stranice | structure | info | · | · | · |
+| page.numbers.position | Položaj broja stranice | structure | info | · | ✓ | · |
 | structure.heading.align | Poravnanje naslova slijeva | structure | da | ✓ | · | · |
 | scope.words | Profilni opseg riječi | structure | da | ✓ | · | ✓ |
 | title.layout | Raspored naslovne stranice | structure | info | · | ✓ | · |

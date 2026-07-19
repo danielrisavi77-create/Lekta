@@ -6,10 +6,10 @@
     "scoredAtomicPct": 94,
     "scoredWithFailCase": 52,
     "scoredFailCasePct": 96,
-    "checksWithValidControl": 18,
+    "checksWithValidControl": 20,
     "checksWithBoundary": 4,
     "atomicCases": 53,
-    "validControlCases": 19,
+    "validControlCases": 21,
     "boundaryCases": 14,
     "intakeCodes": 6
   },
@@ -497,7 +497,7 @@
       "category": "structure",
       "scored": false,
       "hasAtomic": false,
-      "hasValidControl": false,
+      "hasValidControl": true,
       "hasBoundary": false
     },
     {
@@ -551,7 +551,7 @@
       "category": "structure",
       "scored": false,
       "hasAtomic": false,
-      "hasValidControl": false,
+      "hasValidControl": true,
       "hasBoundary": false
     },
     {
@@ -668,20 +668,6 @@
       "title": "Zahtjevi za ručnu završnu provjeru",
       "reason": "Savjetodavni podsjetnik, uvijek-warn (nema pass stanja).",
       "desiredTest": "Nije atomski testabilna kao fail."
-    },
-    {
-      "priority": "P3",
-      "checkId": "page.numbers.position",
-      "title": "Položaj broja stranice",
-      "reason": "Poravnanje se cita iz stvarnih footer/header dijelova (w:footerReference); builder ih ne emitira pa bodovani pass nije konstruktibilan.",
-      "desiredTest": "Trebalo bi prosiriti builder footer dijelovima s PAGE poljem i poravnanjem; tek tada valid-control (desno poravnat broj) ostaje pass."
-    },
-    {
-      "priority": "P3",
-      "checkId": "page.numbers.start",
-      "title": "Numeriranje od prve stranice Uvoda",
-      "reason": "startOk trazi after.hasAnyPageField iz stvarnog footera; nedostupno builderu pa bodovani pass nije dosezljiv.",
-      "desiredTest": "Trebalo bi builder footer dijelove po sekciji; tek tada sekcija s numeriranjem od 1 na Uvodu daje pass."
     },
     {
       "priority": "P3",
