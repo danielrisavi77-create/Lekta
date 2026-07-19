@@ -230,6 +230,39 @@ function citationTools() {
   };
 }
 
+// Dvije nezgode pri bundlanju hunspell-asm (WASM Hunspell za hrvatski pravopis) za preglednik:
+//   (1) emscripten runtime uvoz. dist/esm/loadModule.js radi `import * as runtime from './lib/node/hunspell'`
+//       pa getModuleLoader POZIVA `runtimeModule(...)` kao funkciju. Emscripten glue je UMD/CJS
+//       (`module.exports = Module`), pa `import * as` daje nepozivljiv namespace -> "t is not a function".
+//       (Node probe radi jer Node uzima CJS `main`; Vite bundla ESM `module`.) Prebaci na DEFAULT import
+//       (default CJS = sam Module factory, pozivljiv) i na browser varijantu (Node varijanta referira
+//       __filename; wasm je inline/SINGLE_FILE pa locateFile ne treba). Vite `browser` polje ovu
+//       pod-putanju ionako ne remapira.
+//   (2) nanoid. hunspell-asm i emscripten-wasm-loader uvoze nanoid kao `import * as nanoid` pa ga zovu
+//       `nanoid(45)`. Namespace objekt nije pozivljiv, a resolucija je dvoznacna (nested nanoid@2 CJS vs
+//       hoistani nanoid@3 ESM bez default exporta). nanoid ovdje sluzi ISKLJUCIVO za jedinstveno ime
+//       privremene datoteke u WASM in-memory FS-u, pa ga u potpunosti INLINEAMO trivijalnim generatorom.
+// Isti fix u dev i build (bez `apply`); par s optimizeDeps.exclude da esbuild pre-bundle ne zaobide ovo.
+function fixHunspellNanoid() {
+  const INLINE = "const nanoid=(n=21)=>{let s='';const a='useandom-26T198340PX75pxJACKVERYMINDBUSHWOLF_GQZbfghjklqvwyzrict';for(let i=0;i<n;i++)s+=a[Math.random()*64|0];return s};";
+  return {
+    name: 'lekta-fix-hunspell-nanoid',
+    enforce: 'pre' as const,
+    transform(code: string, id: string) {
+      if (!/\/(hunspell-asm|emscripten-wasm-loader)\//.test(id.replace(/\\/g, '/'))) return null;
+      // Jeftini bail: veliki emscripten glue (~740 KB) nema nijedan marker; ne skeniraj ga uzalud.
+      if (!code.includes('nanoid') && !code.includes('lib/node/hunspell')) return null;
+      let out = code;
+      // namespace import runtime -> default import + browser varijanta (pozivljivi Module factory)
+      out = out.replace(/import \* as (\w+) from (['"])\.\/lib\/node\/hunspell\2/, 'import $1 from $2./lib/browser/hunspell$2');
+      // preostale reference na node varijantu (belt-and-suspenders) -> browser
+      if (out.includes('./lib/node/hunspell')) out = out.replace(/\.\/lib\/node\/hunspell/g, './lib/browser/hunspell');
+      if (/import (?:\* as )?nanoid from ['"]nanoid['"];?/.test(out)) out = out.replace(/import (?:\* as )?nanoid from ['"]nanoid['"];?/, INLINE);
+      return out === code ? null : { code: out, map: null };
+    },
+  };
+}
+
 export default defineConfig(({ command }) => {
   const devTools = resolveDevTools(command, process.env);
   const input: Record<string, string> = {
@@ -246,8 +279,11 @@ export default defineConfig(({ command }) => {
   // Interna verifikacijska konzola ulazi u build SAMO kad su dev alati ukljuceni (QA opt-in).
   if (devTools) input.verification = resolve(__dirname, 'verification.html');
   return {
-    plugins: [htmlCharsetUtf8(), citationTools(), stripRuntimeDeadProvenance(devTools), stripDevOnlyHtml(devTools), fontPreload(), assertSafeBuild(devTools)],
+    plugins: [htmlCharsetUtf8(), citationTools(), fixHunspellNanoid(), stripRuntimeDeadProvenance(devTools), stripDevOnlyHtml(devTools), fontPreload(), assertSafeBuild(devTools)],
     define: { __DEV_TOOLS__: JSON.stringify(devTools) },
+    // hunspell-asm se ne pre-bundla u dev-u da fixHunspellNanoid transform (Vite plugin) stigne do
+    // njega; inace bi ga esbuild optimizer pre-bundlao mimo plugina i nanoid poziv bi pao u dev-u.
+    optimizeDeps: { exclude: ['hunspell-asm'] },
     // Dev watcher po defaultu gleda sve osim node_modules/.git. U repou zive git worktreei
     // (.claude/worktrees/*/) s vlastitim izgradenim dist/ stablima (tisuce citatnih HTML-ova);
     // watchanje svega toga iscrpi file handleove na Windowsu i rusi `npm run dev` (EMFILE).
