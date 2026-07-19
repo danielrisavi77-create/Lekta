@@ -34,6 +34,7 @@ export const KIND_JE_LI = 'je-li';
 export const KIND_S_SA = 's-sa';
 export const KIND_SRBIZAM = 'srbizam';
 export const KIND_PLEONAZAM = 'pleonazam';
+export const KIND_ADMINISTRATIVIZAM = 'administrativizam';
 
 export const GRAMMAR_KIND_LABELS: Record<string, string> = {
   [KIND_NE_SPOJENO]: 'Nijek „ne” (rastavljeno)',
@@ -44,6 +45,7 @@ export const GRAMMAR_KIND_LABELS: Record<string, string> = {
   [KIND_S_SA]: 'Prijedlog s/sa',
   [KIND_SRBIZAM]: 'Nestandardni oblik',
   [KIND_PLEONAZAM]: 'Pleonazam/suvišnost',
+  [KIND_ADMINISTRATIVIZAM]: 'Administrativni izraz / germanizam',
 };
 
 const EXCERPT_RADIUS = 24;
@@ -85,6 +87,8 @@ interface PhraseOpts {
   /** Preskoci ako izrazu neposredno prethodi samostalno „s”/„sa” (npr. „obzirom” unutar ispravnog
    *  „s obzirom”). Bez lookbehinda: provjerava tekst prije poklapanja. */
   skipIfPrecededByS?: boolean;
+  /** Preskoci ako izrazu neposredno slijedi broj (npr. „od strane 12” = „s 12. stranice”, ne pasiv). */
+  skipIfFollowedByNumber?: boolean;
 }
 
 /** Generic runner: za svaki izraz iz mape prijedlog je pridruzena vrijednost. */
@@ -105,6 +109,7 @@ function runPhraseMap(
         if (/^\s+li(?:$|[^\p{L}\p{N}])/u.test(after)) continue;
       }
       if (opts.skipIfPrecededByS && /(?:^|[^\p{L}\p{N}])(?:s|sa)\s+$/iu.test(p.slice(0, hit.at))) continue;
+      if (opts.skipIfFollowedByNumber && /^\s*\d/.test(p.slice(hit.at + hit.m.length))) continue;
       const s = sugg.get(hit.m.toLowerCase());
       if (s === undefined) continue;
       out.push({ paragraphIndex: pi, kind, excerpt: excerptAt(p, hit.at, hit.m.length), suggestion: s });
@@ -149,15 +154,17 @@ function checkKondicional(paragraphs: string[], out: GrammarFinding[]): void {
 }
 
 // ---------------------------------------------------------------------------------------------
-// 3. "da" + prezent umjesto infinitiva (srbizam) uz ISTI subjekt: modalni/fazni glagol u 1. licu
-//    (jd. ili mn.) + "da" + glagol koji zavrsava na -m/-mo (1. lice). Time je subjekt implicitno
-//    isti (razlicit subjekt npr. "moram da dodjes" -> zavrsava na -s, ne okida). 3. lice (mora/moze,
-//    kolizija s "more/sea" i epistemickim "mora da je") je NAMJERNO izostavljeno.
+// 3. "da" + prezent umjesto infinitiva (srbizam) uz ISTI subjekt: modalni/fazni glagol ILI futurski
+//    pomocni glagol u 1. licu (jd. ili mn.) + "da" + glagol koji zavrsava na -m/-mo (1. lice). Time je
+//    subjekt implicitno isti (razlicit subjekt npr. "moram da dodjes" -> zavrsava na -s, ne okida).
+//    Futur: "ću/ćemo da radim(o)" -> "radit ću / radit ćemo". 3. lice (mora/moze, kolizija s "more/sea"
+//    i epistemickim "mora da je"; ce da) je NAMJERNO izostavljeno.
 // ---------------------------------------------------------------------------------------------
 const DA_MODALI_1 = [
   'moram', 'moramo', 'mogu', 'možemo', 'želim', 'želimo', 'hoću', 'hoćemo',
   'trebam', 'trebamo', 'pokušavam', 'pokušavamo', 'namjeravam', 'namjeravamo',
   'počinjem', 'počinjemo', 'nastavljam', 'nastavljamo', 'prestajem', 'prestajemo',
+  'ću', 'ćemo', // futurski pomocni glagol 1. lica ("ću da napišem" -> "napisat ću")
 ];
 
 function checkDaPrezent(paragraphs: string[], out: GrammarFinding[]): void {
@@ -172,7 +179,7 @@ function checkDaPrezent(paragraphs: string[], out: GrammarFinding[]): void {
         paragraphIndex: pi,
         kind: KIND_DA_PREZENT,
         excerpt: excerptAt(p, at, m[2].length),
-        suggestion: 'uz isti subjekt hrvatski standard traži infinitiv umjesto „da” + prezent (npr. „moram ići” umjesto „moram da idem”)',
+        suggestion: 'uz isti subjekt hrvatski standard traži infinitiv, ne „da” + prezent (npr. „moram ići”, „napisat ću” umjesto „moram da idem”, „ću da napišem”)',
       });
       if (m.index === re.lastIndex) re.lastIndex++;
     }
@@ -257,6 +264,15 @@ function checkSSa(paragraphs: string[], out: GrammarFinding[]): void {
         suggestion: 'ispred „mnom” piše se „sa”: „sa mnom”',
       });
     }
+    // 6c. "s sobom" -> "sa sobom" (dva ista suglasnika traze "sa"). Cjelorijecno; "sa sobom" ostaje cist.
+    for (const hit of boundedFind(p, ['s sobom'], false)) {
+      out.push({
+        paragraphIndex: pi,
+        kind: KIND_S_SA,
+        excerpt: excerptAt(p, hit.at, hit.m.length),
+        suggestion: 'ispred „sobom” piše se „sa”: „sa sobom”',
+      });
+    }
   });
 }
 
@@ -312,8 +328,53 @@ const PLEONAZMI: Array<[string, string]> = [
 ];
 
 function checkPleonazmi(paragraphs: string[], out: GrammarFinding[]): void {
-  const entries = PLEONAZMI.map(([t, c]) => [t, `pleonazam/suvišnost: „${t}” — ${c}`] as [string, string]);
+  const entries = PLEONAZMI.map(([t, c]) => [t, `pleonazam/suvišnost: „${t}”: ${c}`] as [string, string]);
   runPhraseMap(paragraphs, out, KIND_PLEONAZAM, entries);
+}
+
+// 8b. Dvostruki superlativ: latinski pridjevi koji su vec apsolutni stupanj ("optimalan", "idealan",
+//     "minimalan", "maksimalan") ne trpe "naj-". Cjelorijecno s bilo kojim nastavkom; nema valjane
+//     hrvatske rijeci "najoptimalan..." pa je FP nula. Ne kolidira s "najam/najava" (drugi korijen).
+function checkDvostrukiSuperlativ(paragraphs: string[], out: GrammarFinding[]): void {
+  const re = /(^|[^\p{L}\p{N}])(naj(?:optimaln|idealn|minimaln|maksimaln)\p{L}*)(?=$|[^\p{L}\p{N}])/giu;
+  paragraphs.forEach((p, pi) => {
+    re.lastIndex = 0;
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(p)) !== null) {
+      const at = m.index + m[1].length;
+      out.push({
+        paragraphIndex: pi,
+        kind: KIND_PLEONAZAM,
+        excerpt: excerptAt(p, at, m[2].length),
+        suggestion: 'pridjev je već apsolutan stupanj, „naj-” je suvišan (npr. „optimalno” umjesto „najoptimalnije”)',
+      });
+      if (m.index === re.lastIndex) re.lastIndex++;
+    }
+  });
+}
+
+// ---------------------------------------------------------------------------------------------
+// 9. Administrativizmi i germanizmi (stil): kancelarijski sklopovi i "za + infinitiv" kalk. Case-
+//    insensitive (nisu vlastita imena), cjelorijecno. "od strane 12" (= s 12. stranice) se preskace
+//    (skipIfFollowedByNumber) da se ne pobrka s pasivnim "od strane <vrsitelja>".
+// ---------------------------------------------------------------------------------------------
+const ADMINISTRATIVIZMI: Array<[string, string]> = [
+  ['od strane', 'razmislite o aktivnoj rečenici: umjesto „ispitano od strane komisije” bolje „komisija je ispitala”'],
+  ['bez da', 'nestandardno „bez da”: koristite „a da (ne)”, npr. „otišao je a da se nije javio”'],
+  ['po pitanju', '„po pitanju” zamijenite izrazom „što se tiče” ili „u vezi s”'],
+  ['na način da', 'umjesto „na način da” dovoljno je „tako da”'],
+  ['iz razloga što', 'umjesto „iz razloga što” koristite „jer” ili „zato što”'],
+  ['iz razloga jer', 'umjesto „iz razloga jer” koristite „jer” ili „zato što”'],
+  ['za očekivati', 'germanizam „za + infinitiv”: umjesto „za očekivati” koristite „treba očekivati” ili „očekuje se”'],
+  ['za pretpostaviti', 'germanizam „za + infinitiv”: umjesto „za pretpostaviti” koristite „može se pretpostaviti”'],
+  ['za primijetiti', 'germanizam „za + infinitiv”: umjesto „za primijetiti” koristite „može se primijetiti”'],
+  ['za napomenuti', 'germanizam „za + infinitiv”: umjesto „za napomenuti” koristite „treba napomenuti”'],
+  ['za vidjeti', 'germanizam „za + infinitiv”: preoblikujte, npr. „može se vidjeti” ili „ostaje vidjeti”'],
+  ['za zaključiti', 'germanizam „za + infinitiv”: umjesto „za zaključiti” koristite „može se zaključiti”'],
+];
+
+function checkAdministrativizmi(paragraphs: string[], out: GrammarFinding[]): void {
+  runPhraseMap(paragraphs, out, KIND_ADMINISTRATIVIZAM, ADMINISTRATIVIZMI, { skipIfFollowedByNumber: true });
 }
 
 /** Pokrece sve gramaticke/stilske provjere nad odlomcima; nalazi sortirani po indeksu odlomka. */
@@ -328,6 +389,8 @@ export function grammarLint(paragraphs: string[]): GrammarFinding[] {
   checkSSa(ps, out);
   checkSrbizmi(ps, out);
   checkPleonazmi(ps, out);
+  checkDvostrukiSuperlativ(ps, out);
+  checkAdministrativizmi(ps, out);
   out.sort((a, b) => a.paragraphIndex - b.paragraphIndex);
   return out;
 }

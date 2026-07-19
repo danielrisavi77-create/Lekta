@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   grammarLint, grammarLintSummary,
   KIND_NE_SPOJENO, KIND_KONDICIONAL, KIND_DA_PREZENT, KIND_VEZNIK,
-  KIND_JE_LI, KIND_S_SA, KIND_SRBIZAM, KIND_PLEONAZAM,
+  KIND_JE_LI, KIND_S_SA, KIND_SRBIZAM, KIND_PLEONAZAM, KIND_ADMINISTRATIVIZAM,
 } from '../src/audits/grammar-hr';
 
 function kindsOf(text: string): string[] {
@@ -68,10 +68,17 @@ describe('grammar-hr: „da” + prezent umjesto infinitiva', () => {
     expect(has('Moramo da odemo ranije.', KIND_DA_PREZENT)).toBe(true);
   });
 
-  it('NE oznaci različit subjekt, 3. lice ni „da” kao veznik (FP-zamke)', () => {
+  it('oznaci futurski „ću/ćemo da” + prezent (isti subjekt)', () => {
+    expect(has('Ja ću da napišem taj rad do petka.', KIND_DA_PREZENT)).toBe(true);
+    expect(has('Mi ćemo da odemo ranije.', KIND_DA_PREZENT)).toBe(true);
+    expect(suggestionFor('Sutra ću da završim analizu.', KIND_DA_PREZENT)).toContain('napisat ću');
+  });
+
+  it('NE oznaci različit subjekt, 3. lice, futur „će da” ni „da” kao veznik (FP-zamke)', () => {
     for (const s of [
       'Želim da dođeš na vrijeme.', 'Mora da je već kasno.', 'Znam da idem u pravom smjeru.',
       'Rekao je da razumije problem.', 'Radi to da bi uspio.', 'Sve što mi treba da bih uspio jest mir.',
+      'Radit ću analizu do petka.', 'Naša će analiza obuhvatiti sve slučajeve.',
     ]) {
       expect(has(s, KIND_DA_PREZENT), s).toBe(false);
     }
@@ -116,16 +123,18 @@ describe('grammar-hr: upitna čestica „je li”', () => {
 });
 
 describe('grammar-hr: prijedlog s/sa (suženo)', () => {
-  it('oznaci „sa” + samoglasnik i „s mnom”', () => {
+  it('oznaci „sa” + samoglasnik, „s mnom” i „s sobom”', () => {
     expect(has('Došao je sa autom.', KIND_S_SA)).toBe(true);
     expect(has('Razgovarao je sa Ivanom.', KIND_S_SA)).toBe(true);
     expect(suggestionFor('Idi s mnom na predavanje.', KIND_S_SA)).toContain('sa mnom');
+    expect(suggestionFor('Ponio je alat s sobom.', KIND_S_SA)).toContain('sa sobom');
   });
 
   it('NE oznaci ispravne s/sa oblike (FP-zamke)', () => {
     for (const s of [
       'Razgovarao je sa mnom.', 'Došao je s autom na vrijeme.', 'Putovao je sa Zagrebom u pozadini.',
       'Radi sa školom već godinama.', 'Za i protiv, sa i bez toga.', 'Otišao je s njom.',
+      'Ponio je alat sa sobom.', 'Razmisli o tome sam sa sobom.',
     ]) {
       expect(has(s, KIND_S_SA), s).toBe(false);
     }
@@ -152,19 +161,45 @@ describe('grammar-hr: nestandardni (srpski) oblici', () => {
 });
 
 describe('grammar-hr: pleonazmi', () => {
-  it('oznaci suvišne konstrukcije', () => {
+  it('oznaci suvišne konstrukcije i dvostruki superlativ', () => {
     expect(suggestionFor('U tom vremenskom periodu porasla je potražnja.', KIND_PLEONAZAM)).toContain('razdoblj');
     expect(has('Njihova zajednička suradnja urodila je plodom.', KIND_PLEONAZAM)).toBe(true);
     expect(has('Bilo ih je otprilike oko sto.', KIND_PLEONAZAM)).toBe(true);
     expect(has('Odlučili su se vratiti natrag na početak.', KIND_PLEONAZAM)).toBe(true);
+    expect(has('Odabrali su najoptimalnije rješenje.', KIND_PLEONAZAM)).toBe(true);
+    expect(has('To je bio najidealniji scenarij.', KIND_PLEONAZAM)).toBe(true);
   });
 
-  it('NE oznaci valjane izraze (FP-zamke)', () => {
+  it('NE oznaci valjane izraze ni „najam/najava” (FP-zamke)', () => {
     for (const s of [
       'Period titranja iznosi dvije sekunde.', 'Pokrenuli su zajednički projekt.',
       'Rasprava oko problema potrajala je.', 'Napravili su korak natrag u pregovorima.',
+      'Ugovor o najmu istječe u lipnju.', 'Objavili su najavu događaja.',
+      'Odabrali su optimalno rješenje.', 'Tražili su najbolje moguće rješenje.',
     ]) {
       expect(has(s, KIND_PLEONAZAM), s).toBe(false);
+    }
+  });
+});
+
+describe('grammar-hr: administrativizmi i germanizmi', () => {
+  it('oznaci kancelarijske sklopove i „za + infinitiv”', () => {
+    expect(has('Rad je ocijenjen od strane povjerenstva.', KIND_ADMINISTRATIVIZAM)).toBe(true);
+    expect(suggestionFor('Otišao je bez da se ikome javio.', KIND_ADMINISTRATIVIZAM)).toContain('a da');
+    expect(has('Po pitanju metodologije nema primjedbi.', KIND_ADMINISTRATIVIZAM)).toBe(true);
+    expect(has('Riješili su to na način da su podijelili zadatke.', KIND_ADMINISTRATIVIZAM)).toBe(true);
+    expect(has('Iz razloga što je uzorak malen, rezultati su okvirni.', KIND_ADMINISTRATIVIZAM)).toBe(true);
+    expect(suggestionFor('Bilo je za očekivati takav ishod.', KIND_ADMINISTRATIVIZAM)).toContain('očekuje se');
+    expect(has('Za primijetiti je porast potražnje.', KIND_ADMINISTRATIVIZAM)).toBe(true);
+  });
+
+  it('NE oznaci valjane izraze ni „od strane <broj>” (FP-zamke)', () => {
+    for (const s of [
+      'S druge strane, rezultati su dosljedni.', 'Citat je preuzet od strane 12 izvornika.',
+      'Za tu je svrhu razvijen poseban model.', 'Naveo je razloge zbog kojih je odustao.',
+      'Na taj su način riješili problem.', 'U vezi s tim javit ćemo se naknadno.',
+    ]) {
+      expect(has(s, KIND_ADMINISTRATIVIZAM), s).toBe(false);
     }
   });
 });
