@@ -39,6 +39,7 @@ function fullResult(): any {
       profileFingerprint: 'fp-abc',
       sources: [{ title: 'FPZG upute', url: 'https://example.hr' }],
       incompleteReferences: [{ p: 5, text: `${SECRET} referenca` }],
+      references: [{ raw: `${SECRET} referenca za provjeru postojanja`, p: 5, author: 'Kovac', year: '2020' }],
       missingReferences: [{ author: 'Kovac', year: '2020', text: SECRET }],
       uncitedReferences: [{ author: 'Horvat', year: '2019', text: SECRET }],
       legalCitationEngine: { problems: [`${SECRET} problem`] },
@@ -69,6 +70,7 @@ describe('sanitizeAnalysisResult (data-flow-03)', () => {
     expect(clean.details).toBeDefined();
     expect((clean.details as any).typoLint).toBeUndefined();
     expect((clean.details as any).incompleteReferences).toBeUndefined();
+    expect((clean.details as any).references).toBeUndefined(); // feature #4: sirovi popis NE ide na mrezu
     expect((clean.details as any).legalCitationEngine).toBeUndefined();
     expect(clean.details!.ruleAuthority).toBe('official-source');
     expect(clean.details!.sources).toEqual([{ title: 'FPZG upute', url: 'https://example.hr' }]);

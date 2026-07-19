@@ -12,6 +12,8 @@ import {
   verifyReferences,
   _clearExistenceCache,
 } from '../src/citations/verify-existence';
+import { parseReference } from '../src/citations/parse-reference';
+import { summarizeVerification } from '../src/citations/verify-badges';
 import type { CitationInput } from '../src/tools/citation';
 
 // Fake fetch: mapira URL -> {ok,status,json}. Bez ikakve prave mreze.
@@ -171,5 +173,51 @@ describe('verifyReferences (batch, cache, deadline)', () => {
       { fetchImpl: fakeFetch([]) as any, delayMs: 0, deadlineMs: -1 },
     );
     expect(out.every((r) => r.verdict === 'unchecked')).toBe(true);
+  });
+});
+
+describe('analizatorski most: parseReference -> verifyReferences (feature #4)', () => {
+  beforeEach(() => _clearExistenceCache());
+
+  it('sirovi redak literature -> fields -> verdikt (isti put kao analizator)', async () => {
+    // Analizator radi: r.details.references.map(x => parseReference(x.raw,'auto').fields)
+    const raws = [
+      'Watson, J. D. (1953). Molecular structure of nucleic acids. Nature, 171, 737-738. https://doi.org/10.1038/171737a0',
+      'Izmisljenko, X. (2020). Nepostojeca studija. Journal of Nothing, 1(1), 1-2. https://doi.org/10.9999/fake',
+    ];
+    const inputs = raws.map((raw) => parseReference(raw, 'auto').fields);
+    const fetchImpl = fakeFetch([
+      { match: /works\/10\.1038/, ok: true, status: 200 },
+      { match: /works\/10\.9999/, ok: false, status: 404 },
+    ]) as any;
+    const results = await verifyReferences(inputs, { fetchImpl, delayMs: 0 });
+    expect(results.map((r) => r.verdict)).toEqual(['found', 'not-found']);
+  });
+
+  it('redak bez naslova i DOI-ja -> unchecked (ne baca)', async () => {
+    const inputs = [parseReference('---', 'auto').fields];
+    const results = await verifyReferences(inputs, { fetchImpl: fakeFetch([]) as any, delayMs: 0 });
+    expect(results[0].verdict).toBe('unchecked');
+  });
+});
+
+describe('summarizeVerification (aria sazetak, svih 5 verdikta)', () => {
+  it('svi domaci (not-indexed) -> NE lazna nula, spominje domaci izvor', () => {
+    const s = summarizeVerification([{ verdict: 'not-indexed' }, { verdict: 'not-indexed' }]);
+    expect(s).toContain('2 domaći izvor za ručnu provjeru');
+    expect(s).not.toContain('0 pronađeno');
+    expect(s).toContain('2 referenci');
+  });
+  it('mix svih verdikta -> samo ne-nulte kosare', () => {
+    const s = summarizeVerification([
+      { verdict: 'found' }, { verdict: 'weak' }, { verdict: 'not-found' },
+      { verdict: 'not-indexed' }, { verdict: 'unchecked' },
+    ]);
+    for (const t of ['1 pronađeno', '1 slab pogodak', '1 nije pronađeno', '1 domaći izvor', '1 nije provjereno']) {
+      expect(s).toContain(t);
+    }
+  });
+  it('prazan skup -> "nema rezultata", ne baca', () => {
+    expect(summarizeVerification([])).toContain('nema rezultata');
   });
 });
