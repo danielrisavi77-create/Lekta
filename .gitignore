@@ -50,3 +50,6 @@ training-pipeline/sources/
 # samo ne smiju u commit.
 _preflight_*.mts
 vite.dev-preflight.config.mts
+
+# Edge function bundlovi (build artefakt za MCP deploy; source je u supabase/functions/**)
+.tmp-edge-bundles/
