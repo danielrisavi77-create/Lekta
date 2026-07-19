@@ -65,6 +65,12 @@
 .bulk-card{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:12px 0;background:var(--panel)}
 .bulk-card.low-conf{border-color:var(--warn,#c9821f);background:color-mix(in srgb,var(--warn,#c9821f) 8%,var(--panel))}
 .bulk-card-head{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin-bottom:8px}
+.verify-badge{margin-top:10px;padding:7px 10px;border-radius:8px;font-size:13px;font-weight:650;border:1px solid var(--line)}
+.verify-badge.verify-ok{color:var(--ok,#1a7f4b);background:color-mix(in srgb,var(--ok,#1a7f4b) 10%,var(--panel));border-color:color-mix(in srgb,var(--ok,#1a7f4b) 35%,var(--line))}
+.verify-badge.verify-warn{color:var(--warn,#c9821f);background:color-mix(in srgb,var(--warn,#c9821f) 10%,var(--panel));border-color:color-mix(in srgb,var(--warn,#c9821f) 35%,var(--line))}
+.verify-badge.verify-bad{color:var(--bad,#c0392b);background:color-mix(in srgb,var(--bad,#c0392b) 10%,var(--panel));border-color:color-mix(in srgb,var(--bad,#c0392b) 35%,var(--line))}
+.verify-badge.verify-info{color:var(--brand);background:color-mix(in srgb,var(--brand) 8%,var(--panel));border-color:color-mix(in srgb,var(--brand) 30%,var(--line))}
+.verify-badge.verify-muted{color:var(--muted);background:var(--panel)}
 .bulk-card-fields{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px}
 .bulk-card-fields label{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--muted)}
 .bulk-card-fields input,.bulk-card-fields select{padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--bg,var(--panel));color:var(--text);font:inherit;font-size:13px}
@@ -336,7 +342,11 @@
         <p class="sub" style="margin-top:-6px">Podržani formati: BibTeX (.bib), RIS (.ris) i CSL-JSON (.json). Datoteka se čita lokalno u pregledniku i ne šalje se nikamo; zamjenjuje trenutni popis kartica.</p>
         <div class="sr-only" id="bulk-status" role="status" aria-live="polite"></div>
         <div id="bulk-entries"></div>
-        <button class="btn btn-primary" id="bulk-generate" type="button" hidden>Generiraj i sortiraj</button>
+        <div class="tp-toolbar">
+          <button class="btn btn-primary" id="bulk-generate" type="button" hidden>Generiraj i sortiraj</button>
+          <button class="btn btn-secondary" id="bulk-verify" type="button" hidden>Provjeri postoje li izvori (online)</button>
+        </div>
+        <p class="sub" id="bulk-verify-note" style="margin-top:6px">Provjera postojanja šalje autora, naslov, DOI i godinu tvojih referenci javnom servisu CrossRef; naslov i tijelo tvog rada se <b>ne</b> šalju. Ishod je okvirni: za domaće izvore (Hrčak, Dabar) CrossRef često nema zapis, pa „nije pronađeno” ne znači da izvor ne postoji.</p>
         <div id="bulk-output"></div>
         <div class="tp-toolbar"><button class="btn btn-secondary btn-sm" id="bulk-copy" type="button" hidden>Kopiraj literaturu</button></div>
         <div class="note"><b>Napomena:</b> automatsko prepoznavanje polja je okvirno; provjeri svaku referencu prije korištenja. Redoslijed je abecedni, osim kad fakultetski stil propisuje redoslijed pojavljivanja. Ovaj alat oblikuje citate u stil; za uklanjanje duplikata, oznaku nedostajućih godina i datuma pristupa i izvoz u .docx bez mijenjanja stila otvori <a href="literatura.html" style="color:var(--brand);font-weight:650">Sređivanje literature</a>.</div>

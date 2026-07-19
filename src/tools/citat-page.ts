@@ -7,6 +7,7 @@ import { bindCopyButton } from './tool-ui';
 import { buildFacultyOptions, formatForFaculty, ensureFacultySpecsLoaded, type FacultyStyle } from '../citations/faculty-styles';
 import { splitReferences, parseReference, type BulkStyle } from '../citations/parse-reference';
 import { parseReferenceFile } from '../citations/import-references';
+import { verifyReferences, type ExistenceVerdict } from '../citations/verify-existence';
 import { SOURCE_TYPES } from '../citations/citation-web';
 
 const $ = (s: string): any => document.querySelector(s);
@@ -230,7 +231,7 @@ function parseBulk() {
   box.innerHTML = '';
   $('#bulk-copy').hidden = true;
   $('#bulk-output').innerHTML = '';
-  if (!refs.length) { $('#bulk-generate').hidden = true; announceBulk('Nije prepoznata nijedna referenca.'); return; }
+  if (!refs.length) { $('#bulk-generate').hidden = true; { const v = $('#bulk-verify'); if (v) v.hidden = true; } announceBulk('Nije prepoznata nijedna referenca.'); return; }
   const style = bulkStyle();
   refs.forEach((raw: string, i: number) => {
     const p = parseReference(raw, style);
@@ -249,6 +250,7 @@ function parseBulk() {
     renderBulkCard(fields, values);
   });
   $('#bulk-generate').hidden = false;
+  { const v = $('#bulk-verify'); if (v) v.hidden = false; }
   announceBulk(`Prepoznato referenci: ${refs.length}. Provjeri i dopuni polja po unosu, pa generiraj literaturu.`);
 }
 
@@ -273,6 +275,7 @@ async function importReferencesFromFile(file: File): Promise<void> {
   $('#bulk-output').innerHTML = '';
   if (!refs.length) {
     $('#bulk-generate').hidden = true;
+    { const v = $('#bulk-verify'); if (v) v.hidden = true; }
     announceBulk('Nije prepoznata nijedna referenca. Podržani formati: BibTeX (.bib), RIS (.ris), CSL-JSON (.json).');
     return;
   }
@@ -292,7 +295,53 @@ async function importReferencesFromFile(file: File): Promise<void> {
     renderBulkCard(fields, values);
   });
   $('#bulk-generate').hidden = false;
+  { const v = $('#bulk-verify'); if (v) v.hidden = false; }
   announceBulk(`Uvezeno referenci: ${refs.length}. Provjeri i dopuni polja, pa generiraj literaturu.`);
+}
+
+// --- Opt-in ONLINE provjera postojanja referenci (CrossRef) ---
+// Salje SAMO strukturiranu referencu (autor/naslov/DOI/godina) javnom CrossRef-u; tijelo rada NIKAD.
+// Okida se iskljucivo klikom na #bulk-verify (uz vidljivu disclosure). Nikad ne kaze "izmisljeno".
+const VERDICT_BADGE: Record<ExistenceVerdict, { text: string; cls: string }> = {
+  found: { text: '✓ Pronađeno u CrossRef', cls: 'verify-ok' },
+  weak: { text: '⚠ Slab pogodak, provjeri', cls: 'verify-warn' },
+  'not-found': { text: '✗ Nije pronađeno u CrossRef (provjeri ručno)', cls: 'verify-bad' },
+  'not-indexed': { text: 'ℹ Domaći izvor, provjeri u Dabru/Hrčku', cls: 'verify-info' },
+  unchecked: { text: '– Nije provjereno (mreža)', cls: 'verify-muted' },
+};
+
+async function verifyBulk(): Promise<void> {
+  const cards: any[] = Array.from($('#bulk-entries').querySelectorAll('.bulk-card'));
+  if (!cards.length) return;
+  const inputs = cards.map((c) => readBulkCard(c.querySelector('.bulk-card-fields')));
+  const btn = $('#bulk-verify');
+  const orig = btn ? btn.textContent : '';
+  cards.forEach((c) => c.querySelector('.verify-badge')?.remove());
+  if (btn) { btn.disabled = true; btn.textContent = 'Provjeravam…'; }
+  announceBulk('Provjera postojanja izvora u tijeku…');
+  try {
+    const results = await verifyReferences(inputs, {
+      onProgress: (done, total) => { if (btn) btn.textContent = `Provjeravam… ${done}/${total}`; },
+    });
+    let found = 0, missing = 0, unchecked = 0;
+    results.forEach((res, i) => {
+      if (res.verdict === 'found') found++;
+      else if (res.verdict === 'not-found') missing++;
+      else if (res.verdict === 'unchecked') unchecked++;
+      const meta = VERDICT_BADGE[res.verdict];
+      const badge = document.createElement('div');
+      badge.className = 'verify-badge ' + meta.cls;
+      const match = (res.verdict === 'found' || res.verdict === 'weak') && res.matchedTitle
+        ? ` — podudara se s: „${res.matchedTitle}”` : '';
+      badge.textContent = meta.text + match;
+      cards[i].appendChild(badge);
+    });
+    announceBulk(`Provjera gotova: ${found} pronađeno, ${missing} nije pronađeno, ${unchecked} nije provjereno. Ishod je okvirni; provjeri sporne unose ručno.`);
+  } catch {
+    announceBulk('Provjera nije uspjela (mreža). Pokušaj ponovno.');
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = orig; }
+  }
 }
 
 function generateBulk() {
@@ -372,6 +421,7 @@ function addSingleToBulk() {
   box.appendChild(card);
   renderBulkCard(fields, inp);
   $('#bulk-generate').hidden = false;
+  { const v = $('#bulk-verify'); if (v) v.hidden = false; }
   const tab = $('#tab-bulk');
   if (tab) tab.textContent = `${_tabBulkBase} (${box.querySelectorAll('.bulk-card').length})`;
   const btn = $('#c-add-to-bulk');
@@ -401,6 +451,7 @@ function init() {
   $('#c-add-to-bulk')?.addEventListener('click', addSingleToBulk);
   $('#bulk-parse')?.addEventListener('click', parseBulk);
   $('#bulk-generate')?.addEventListener('click', generateBulk);
+  $('#bulk-verify')?.addEventListener('click', () => { void verifyBulk(); });
   // Uvoz iz Zotera/Mendeleya (.bib/.ris/.json): lokalno citanje, bez slanja na mrezu.
   $('#bulk-import')?.addEventListener('change', (e: Event) => {
     const input = e.target as HTMLInputElement;
