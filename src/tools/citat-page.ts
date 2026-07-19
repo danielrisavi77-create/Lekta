@@ -6,6 +6,7 @@ import { formatCitation, parseAuthors } from './citation';
 import { bindCopyButton } from './tool-ui';
 import { buildFacultyOptions, formatForFaculty, ensureFacultySpecsLoaded, type FacultyStyle } from '../citations/faculty-styles';
 import { splitReferences, parseReference, type BulkStyle } from '../citations/parse-reference';
+import { parseReferenceFile } from '../citations/import-references';
 import { SOURCE_TYPES } from '../citations/citation-web';
 
 const $ = (s: string): any => document.querySelector(s);
@@ -251,6 +252,49 @@ function parseBulk() {
   announceBulk(`Prepoznato referenci: ${refs.length}. Provjeri i dopuni polja po unosu, pa generiraj literaturu.`);
 }
 
+// --- Uvoz iz upravitelja referenci (Zotero/Mendeley): .bib / .ris / .json (CSL-JSON) ---
+// Strukturirani formati se mapiraju DETERMINISTICKI u CitationInput (import-references.ts, bez
+// mreze) i ubacuju u ISTI editabilni bulk tok, pa korisnik pregleda i dopuni prije generiranja.
+// Zamjenjuje postojeci popis (isti ugovor kao "Prepoznaj reference": cijela datoteka = svjez popis).
+const MAX_IMPORT_BYTES = 2 * 1024 * 1024;
+
+async function importReferencesFromFile(file: File): Promise<void> {
+  if (!file) return;
+  if (file.size > MAX_IMPORT_BYTES) {
+    announceBulk('Datoteka je prevelika (ograničenje 2 MB). Podijeli izvoz na manje dijelove.');
+    return;
+  }
+  let text = '';
+  try { text = await file.text(); } catch { announceBulk('Datoteku nije moguće pročitati.'); return; }
+  const refs = parseReferenceFile(text);
+  const box = $('#bulk-entries');
+  box.innerHTML = '';
+  $('#bulk-copy').hidden = true;
+  $('#bulk-output').innerHTML = '';
+  if (!refs.length) {
+    $('#bulk-generate').hidden = true;
+    announceBulk('Nije prepoznata nijedna referenca. Podržani formati: BibTeX (.bib), RIS (.ris), CSL-JSON (.json).');
+    return;
+  }
+  refs.forEach((ref, i) => {
+    const card = document.createElement('div');
+    card.className = 'bulk-card';
+    const head = document.createElement('div');
+    head.className = 'bulk-card-head';
+    head.textContent = `Referenca ${i + 1} (uvezeno, ${ref.source})`;
+    const fields = document.createElement('div');
+    fields.className = 'bulk-card-fields';
+    card.appendChild(head);
+    card.appendChild(fields);
+    box.appendChild(card);
+    const values: any = { type: ref.type };
+    Object.keys(ref.fields).forEach((k) => { values[k] = (ref.fields as any)[k]; });
+    renderBulkCard(fields, values);
+  });
+  $('#bulk-generate').hidden = false;
+  announceBulk(`Uvezeno referenci: ${refs.length}. Provjeri i dopuni polja, pa generiraj literaturu.`);
+}
+
 function generateBulk() {
   const items: { key: string; text: string }[] = [];
   $('#bulk-entries').querySelectorAll('.bulk-card-fields').forEach((card: any) => {
@@ -357,6 +401,13 @@ function init() {
   $('#c-add-to-bulk')?.addEventListener('click', addSingleToBulk);
   $('#bulk-parse')?.addEventListener('click', parseBulk);
   $('#bulk-generate')?.addEventListener('click', generateBulk);
+  // Uvoz iz Zotera/Mendeleya (.bib/.ris/.json): lokalno citanje, bez slanja na mrezu.
+  $('#bulk-import')?.addEventListener('change', (e: Event) => {
+    const input = e.target as HTMLInputElement;
+    const file = input.files && input.files[0];
+    if (file) void importReferencesFromFile(file);
+    input.value = ''; // dopusti ponovni uvoz iste datoteke
+  });
   // Promjena stila ponovno prepozna vec zalijepljeni popis (bez ovoga picker ne bi imao ucinak).
   $('#bulk-style')?.addEventListener('change', () => { if ($('#bulk-input').value.trim()) parseBulk(); });
 

@@ -330,6 +330,10 @@
         <label class="sr-only" for="bulk-input">Zalijepi popis literature</label>
         <textarea id="bulk-input" rows="8" placeholder="Zalijepi cijelu literaturu ovdje, npr.:&#10;Kovačić, I. (2020). Naslov knjige. Zagreb: Izdavač.&#10;Horvat, A. (2019). Naslov članka. Časopis, 28(3), 45-67."></textarea>
         <div class="tp-toolbar"><button class="btn btn-secondary btn-sm" id="bulk-parse" type="button">Prepoznaj reference</button></div>
+        <label class="bulk-style-row" for="bulk-import" style="margin-top:4px">Ili uvezi iz upravitelja referenci (Zotero, Mendeley, EndNote)
+          <input type="file" id="bulk-import" accept=".bib,.ris,.json,application/json,text/plain">
+        </label>
+        <p class="sub" style="margin-top:-6px">Podržani formati: BibTeX (.bib), RIS (.ris) i CSL-JSON (.json). Datoteka se čita lokalno u pregledniku i ne šalje se nikamo; zamjenjuje trenutni popis kartica.</p>
         <div class="sr-only" id="bulk-status" role="status" aria-live="polite"></div>
         <div id="bulk-entries"></div>
         <button class="btn btn-primary" id="bulk-generate" type="button" hidden>Generiraj i sortiraj</button>
