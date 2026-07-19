@@ -2,9 +2,9 @@
 
 > Sto korpus JOS ne pokriva, po prioritetu. P0 = parser crash/sigurnost; P1 = jezgra predaje bez regresije; P2 = ostalo/korektnost; P3 = informativno.
 
-Ukupno: P0 0, P1 41, P2 1, P3 11.
+Ukupno: P0 0, P1 35, P2 1, P3 10.
 
-## P1 (41)
+## P1 (35)
 
 - **citation.author-year.suffix** — Isti autor i godina (a/b/c)
   - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
@@ -45,24 +45,6 @@ Ukupno: P0 0, P1 41, P2 1, P3 11.
 - **format.spacing.paragraph** — Razmak prije i poslije odlomka
   - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
   - Potreban test: atomic.format.spacing.paragraph: baza prolazi, jedna mutacija ruši "Razmak prije i poslije odlomka".
-- **legal.first-citation-completeness** — Potpunost prvog navođenja
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.legal.first-citation-completeness: baza prolazi, jedna mutacija ruši "Potpunost prvog navođenja".
-- **legal.footnote-bibliography** — Fusnote ↔ bibliografija
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.legal.footnote-bibliography: baza prolazi, jedna mutacija ruši "Fusnote ↔ bibliografija".
-- **legal.footnotes-present** — Pravne fusnote
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.legal.footnotes-present: baza prolazi, jedna mutacija ruši "Pravne fusnote".
-- **legal.ibid** — Slijed Ibid.
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.legal.ibid: baza prolazi, jedna mutacija ruši "Slijed Ibid.".
-- **legal.opcit** — op. cit. → prvo navođenje
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.legal.opcit: baza prolazi, jedna mutacija ruši "op. cit. → prvo navođenje".
-- **legal.source-classification** — Klasifikacija pravnih izvora
-  - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
-  - Potreban test: atomic.legal.source-classification: baza prolazi, jedna mutacija ruši "Klasifikacija pravnih izvora".
 - **manual.checks** — Zahtjevi za ručnu završnu provjeru
   - Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).
   - Potreban test: atomic.manual.checks: baza prolazi, jedna mutacija ruši "Zahtjevi za ručnu završnu provjeru".
@@ -136,14 +118,11 @@ Ukupno: P0 0, P1 41, P2 1, P3 11.
   - Poznati bug: missingLocator regex `,\s*\d` tretira godinu (", 2019") kao broj stranice, pa citat s uobicajenom citatnicom (Prezime, 2019) NE moze pasti. Atomski slucaj to zaobilazi izostavljanjem zareza.
   - Potreban test: Popraviti detekciju lokatora (iskljuciti godinu iz kandidata za stranicu) + atomic bez zaobilaznice.
 
-## P3 (11)
+## P3 (10)
 
 - **element.empty-paragraphs** — Prazni odlomci
   - Informativna provjera bez valid-controla (nizak rizik, ali nepokrivena).
   - Potreban test: valid.element.empty-paragraphs: valjana varijanta ostaje informativna/pass.
-- **legal.act-abbrev** — Propisi i uvedene kratice
-  - Informativna provjera bez valid-controla (nizak rizik, ali nepokrivena).
-  - Potreban test: valid.legal.act-abbrev: valjana varijanta ostaje informativna/pass.
 - **legal.case-law** — Sudska praksa
   - Informativna provjera bez valid-controla (nizak rizik, ali nepokrivena).
   - Potreban test: valid.legal.case-law: valjana varijanta ostaje informativna/pass.

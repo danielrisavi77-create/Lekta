@@ -10,15 +10,17 @@ kontrolirane ulaze. Golden snapshoti ostaju bajt-identicni.
 
 ## Struktura
 
-```
+```text
 tests/corpus/
   inventory/extract-check-inventory.ts   # faza 1: hibridni inventar (staticki UNIJA runtime)
   ids/check-id-registry.ts               # faza 2: stabilni, jezicno-neovisni checkId po naslovu
   error-case.ts                          # faza 4: model ErrorCase + oracle helperi
-  builder/baseline.ts                    # PROLAZNA baza (score 93) + mutacijski helperi
+  builder/baseline.ts                    # PROLAZNA baza (fpzg, score 93) + mutacijski helperi
+  builder/legal-baseline.ts              # PROLAZNA pravna baza (fusnote, legal-notes profil)
   catalog/atomic.ts                      # atomski fail: 1 mutacija -> 1 provjera padne
   catalog/valid-controls.ts              # valjane netipicne reprezentacije (bez false-positive)
   catalog/boundary.ts                    # below/exact/within-tol/above za brojcane pragove
+  catalog/legal.ts                       # legal-citation klaster: atomic + valid (fusnote/opcit/Ibid/propisi/praksa)
   coverage/coverage-report.ts            # faza 6: krizanje inventara i slucajeva + gap-backlog
   cli/{inventory,coverage,export}.ts     # generatori artefakata
   generated/                             # inventar (JSON/MD) + profile-check-matrix.csv (commitano)

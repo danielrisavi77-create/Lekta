@@ -15,6 +15,11 @@ import { CHECK_ID_BY_TITLE } from '../ids/check-id-registry';
 import { ATOMIC_CASES } from '../catalog/atomic';
 import { VALID_CONTROL_CASES } from '../catalog/valid-controls';
 import { BOUNDARY_CASES } from '../catalog/boundary';
+import { LEGAL_ATOMIC_CASES, LEGAL_VALID_CASES } from '../catalog/legal';
+
+// Jedinstveni skupovi (fpzg + legal) za racun pokrivenosti i export.
+const ALL_ATOMIC = [...ATOMIC_CASES, ...LEGAL_ATOMIC_CASES];
+const ALL_VALID = [...VALID_CONTROL_CASES, ...LEGAL_VALID_CASES];
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const INVENTORY_PATH = resolve(HERE, '../generated/current-check-inventory.json');
@@ -62,8 +67,8 @@ const CORE = new Set(['formatting', 'structure', 'citations', 'elements']);
 
 export function buildCoverage(): CoverageReport {
   const inv = JSON.parse(readFileSync(INVENTORY_PATH, 'utf8'));
-  const atomic = targetIds(ATOMIC_CASES);
-  const valid = targetIds(VALID_CONTROL_CASES);
+  const atomic = targetIds(ALL_ATOMIC);
+  const valid = targetIds(ALL_VALID);
   const boundary = targetIds(BOUNDARY_CASES);
 
   const rows: CoverageRow[] = (inv.checks as Array<{ title: string; category: string; scored: boolean | 'dynamic' }>).map((c) => {
@@ -118,8 +123,8 @@ export function buildCoverage(): CoverageReport {
       scoredAtomicPct: scored.length ? Math.round((scoredWithAtomic / scored.length) * 100) : 0,
       checksWithValidControl: rows.filter((r) => r.hasValidControl).length,
       checksWithBoundary: rows.filter((r) => r.hasBoundary).length,
-      atomicCases: ATOMIC_CASES.length,
-      validControlCases: VALID_CONTROL_CASES.length,
+      atomicCases: ALL_ATOMIC.length,
+      validControlCases: ALL_VALID.length,
       boundaryCases: BOUNDARY_CASES.length,
       intakeCodes: (inv.intakeCodes ?? []).filter((c: any) => c.code !== 'suspicious').length,
     },

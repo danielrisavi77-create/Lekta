@@ -5,10 +5,10 @@
 ## Sazetak
 
 - Provjere ukupno: **71** (bodovane 54)
-- Bodovane s atomskim fail-slucajem: **13/54 (24%)**
-- Provjere s valid-controlom: **4**
+- Bodovane s atomskim fail-slucajem: **19/54 (35%)**
+- Provjere s valid-controlom: **6**
 - Provjere s boundary testom: **4**
-- Korpusni slucajevi: atomic **13**, valid **5**, boundary **14**
+- Korpusni slucajevi: atomic **21**, valid **7**, boundary **14**
 - Intake kodovi (svi runtime-dokazani u fazi 1): **6**
 
 ## Pokrivenost po provjeri
@@ -20,21 +20,21 @@
 | citation.author-year.missing-reference | Citirano → literatura | citations | da | ✓ | ✓ | · |
 | reference.access-date | Datumi pristupa mrežnim izvorima | citations | da | · | · | · |
 | citation.punctuation | Dosljednost interpunkcije citatnica | citations | da | · | · | · |
-| legal.footnote-bibliography | Fusnote ↔ bibliografija | citations | da | · | · | · |
+| legal.footnote-bibliography | Fusnote ↔ bibliografija | citations | da | ✓ | · | · |
 | citation.author-year.suffix | Isti autor i godina (a/b/c) | citations | da | · | · | · |
-| legal.source-classification | Klasifikacija pravnih izvora | citations | da | · | · | · |
+| legal.source-classification | Klasifikacija pravnih izvora | citations | da | ✓ | · | · |
 | legal.id-abbrev | Kratica id. u istoj bilješci | citations | info | · | · | · |
 | reference.uncited | Literatura → citirano | citations | da | · | · | · |
 | citation.direct-quote-locator | Lokator uz izravne citate | citations | da | ✓ | · | · |
 | reference.min-count | Minimalan broj izvora profila | citations | da | · | · | · |
-| legal.opcit | op. cit. → prvo navođenje | citations | da | · | · | · |
+| legal.opcit | op. cit. → prvo navođenje | citations | da | ✓ | · | · |
 | reference.completeness | Potpunost bibliografskih zapisa | citations | da | · | · | · |
-| legal.first-citation-completeness | Potpunost prvog navođenja | citations | da | · | · | · |
-| legal.footnotes-present | Pravne fusnote | citations | da | · | · | · |
+| legal.first-citation-completeness | Potpunost prvog navođenja | citations | da | ✓ | · | · |
+| legal.footnotes-present | Pravne fusnote | citations | da | ✓ | · | · |
 | citation.recognized | Prepoznate citatnice | citations | da | · | · | · |
-| legal.act-abbrev | Propisi i uvedene kratice | citations | info | · | · | · |
-| legal.ibid | Slijed Ibid. | citations | da | · | · | · |
-| legal.case-law | Sudska praksa | citations | info | · | · | · |
+| legal.act-abbrev | Propisi i uvedene kratice | citations | info | ✓ | ✓ | · |
+| legal.ibid | Slijed Ibid. | citations | da | ✓ | ✓ | · |
+| legal.case-law | Sudska praksa | citations | info | ✓ | · | · |
 | element.source | Izvori ispod slika i tablica | elements | da | · | · | · |
 | element.figure.caption | Naslovi slika i grafikona | elements | da | · | · | · |
 | element.table.caption | Naslovi tablica | elements | da | · | · | · |
