@@ -15,7 +15,9 @@
  */
 import type { ReportWorkType } from './pricing';
 import { isReportWorkType } from './pricing';
-import scopeJson from '../../data/work-type-scope.json';
+// `with { type: 'json' }` je OBAVEZAN za Deno (Supabase Edge/repair-docx); Vite/tsc/vitest ga
+// jednako podnose. Bez atributa Deno baca "Attempted to load JSON module without ... type: json".
+import scopeJson from '../../data/work-type-scope.json' with { type: 'json' };
 
 /** Profilske (engine) oznake vrste rada. */
 export type ProfileWorkType =
