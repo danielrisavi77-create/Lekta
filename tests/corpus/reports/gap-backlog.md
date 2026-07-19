@@ -2,7 +2,7 @@
 
 > Sto korpus JOS ne pokriva, po prioritetu. P0 = parser crash/sigurnost; P1 = jezgra predaje bez regresije; P2 = ostalo/korektnost; P3 = informativno.
 
-Ukupno: P0 0, P1 2, P2 1, P3 10.
+Ukupno: P0 0, P1 2, P2 1, P3 9.
 
 ## P1 (2)
 
@@ -19,11 +19,8 @@ Ukupno: P0 0, P1 2, P2 1, P3 10.
   - Poznati bug: missingLocator regex `,\s*\d` tretira godinu (", 2019") kao broj stranice, pa citat s uobicajenom citatnicom (Prezime, 2019) NE moze pasti. Atomski slucaj to zaobilazi izostavljanjem zareza.
   - Potreban test: Popraviti detekciju lokatora (iskljuciti godinu iz kandidata za stranicu) + atomic bez zaobilaznice.
 
-## P3 (10)
+## P3 (9)
 
-- **element.empty-paragraphs** — Prazni odlomci
-  - Informativna provjera bez valid-controla (nizak rizik, ali nepokrivena).
-  - Potreban test: valid.element.empty-paragraphs: valjana varijanta ostaje informativna/pass.
 - **legal.case-law** — Sudska praksa
   - Informativna provjera bez valid-controla (nizak rizik, ali nepokrivena).
   - Potreban test: valid.legal.case-law: valjana varijanta ostaje informativna/pass.

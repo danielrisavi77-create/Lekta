@@ -7,9 +7,9 @@
 - Provjere ukupno: **71** (bodovane 54)
 - Bodovane s fail-slucajem (atomic ili boundary): **52/54 (96%)**
 - Bodovane s atomskim fail-slucajem: **51/54 (94%)**
-- Provjere s valid-controlom: **6**
+- Provjere s valid-controlom: **12**
 - Provjere s boundary testom: **4**
-- Korpusni slucajevi: atomic **53**, valid **7**, boundary **14**
+- Korpusni slucajevi: atomic **53**, valid **13**, boundary **14**
 - Intake kodovi (svi runtime-dokazani u fazi 1): **6**
 
 ## Pokrivenost po provjeri
@@ -22,14 +22,14 @@
 | reference.access-date | Datumi pristupa mrežnim izvorima | citations | da | ✓ | · | · |
 | citation.punctuation | Dosljednost interpunkcije citatnica | citations | da | ✓ | · | · |
 | legal.footnote-bibliography | Fusnote ↔ bibliografija | citations | da | ✓ | · | · |
-| citation.author-year.suffix | Isti autor i godina (a/b/c) | citations | da | ✓ | · | · |
+| citation.author-year.suffix | Isti autor i godina (a/b/c) | citations | da | ✓ | ✓ | · |
 | legal.source-classification | Klasifikacija pravnih izvora | citations | da | ✓ | · | · |
 | legal.id-abbrev | Kratica id. u istoj bilješci | citations | info | · | · | · |
 | reference.uncited | Literatura → citirano | citations | da | ✓ | · | · |
-| citation.direct-quote-locator | Lokator uz izravne citate | citations | da | ✓ | · | · |
+| citation.direct-quote-locator | Lokator uz izravne citate | citations | da | ✓ | ✓ | · |
 | reference.min-count | Minimalan broj izvora profila | citations | da | ✓ | · | · |
 | legal.opcit | op. cit. → prvo navođenje | citations | da | ✓ | · | · |
-| reference.completeness | Potpunost bibliografskih zapisa | citations | da | ✓ | · | · |
+| reference.completeness | Potpunost bibliografskih zapisa | citations | da | ✓ | ✓ | · |
 | legal.first-citation-completeness | Potpunost prvog navođenja | citations | da | ✓ | · | · |
 | legal.footnotes-present | Pravne fusnote | citations | da | ✓ | · | · |
 | citation.recognized | Prepoznate citatnice | citations | da | ✓ | · | · |
@@ -38,10 +38,10 @@
 | legal.case-law | Sudska praksa | citations | info | ✓ | · | · |
 | element.source | Izvori ispod slika i tablica | elements | da | ✓ | · | · |
 | element.figure.caption | Naslovi slika i grafikona | elements | da | ✓ | · | · |
-| element.table.caption | Naslovi tablica | elements | da | ✓ | · | · |
+| element.table.caption | Naslovi tablica | elements | da | ✓ | ✓ | · |
 | element.link-form | Oblik poveznica | elements | da | ✓ | ✓ | · |
 | element.lists | Popisi slika i tablica | elements | da | ✓ | · | · |
-| element.empty-paragraphs | Prazni odlomci | elements | info | · | · | · |
+| element.empty-paragraphs | Prazni odlomci | elements | info | · | ✓ | · |
 | footnote.present | Automatske fusnote | formatting | da | ✓ | · | · |
 | format.font.dominant | Dominantni font | formatting | da | ✓ | ✓ | · |
 | page.size.project | Format stranice (A3/A0) | formatting | da | ✓ | · | · |
@@ -59,7 +59,7 @@
 | toc.page-numbers | Brojevi stranica u sadržaju | structure | da | ✓ | · | · |
 | toc.field | Detalji automatskog sadržaja | structure | din | · | · | · |
 | structure.sections.profile | Dijelovi verificiranog profila | structure | da | ✓ | · | · |
-| structure.heading.depth | Dubina decimalnog numeriranja | structure | da | ✓ | · | · |
+| structure.heading.depth | Dubina decimalnog numeriranja | structure | da | ✓ | ✓ | · |
 | title.elements | Elementi naslovne stranice | structure | da | ✓ | · | · |
 | method.ethics | Etički aspekti empirijskog istraživanja | structure | din | · | · | · |
 | toc.format | Font i veličina sadržaja | structure | da | ✓ | · | · |

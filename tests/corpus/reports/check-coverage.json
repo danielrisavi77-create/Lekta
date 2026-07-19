@@ -6,10 +6,10 @@
     "scoredAtomicPct": 94,
     "scoredWithFailCase": 52,
     "scoredFailCasePct": 96,
-    "checksWithValidControl": 6,
+    "checksWithValidControl": 12,
     "checksWithBoundary": 4,
     "atomicCases": 53,
-    "validControlCases": 7,
+    "validControlCases": 13,
     "boundaryCases": 14,
     "intakeCodes": 6
   },
@@ -74,7 +74,7 @@
       "category": "citations",
       "scored": true,
       "hasAtomic": true,
-      "hasValidControl": false,
+      "hasValidControl": true,
       "hasBoundary": false
     },
     {
@@ -110,7 +110,7 @@
       "category": "citations",
       "scored": true,
       "hasAtomic": true,
-      "hasValidControl": false,
+      "hasValidControl": true,
       "hasBoundary": false
     },
     {
@@ -137,7 +137,7 @@
       "category": "citations",
       "scored": true,
       "hasAtomic": true,
-      "hasValidControl": false,
+      "hasValidControl": true,
       "hasBoundary": false
     },
     {
@@ -218,7 +218,7 @@
       "category": "elements",
       "scored": true,
       "hasAtomic": true,
-      "hasValidControl": false,
+      "hasValidControl": true,
       "hasBoundary": false
     },
     {
@@ -245,7 +245,7 @@
       "category": "elements",
       "scored": false,
       "hasAtomic": false,
-      "hasValidControl": false,
+      "hasValidControl": true,
       "hasBoundary": false
     },
     {
@@ -407,7 +407,7 @@
       "category": "structure",
       "scored": true,
       "hasAtomic": true,
-      "hasValidControl": false,
+      "hasValidControl": true,
       "hasBoundary": false
     },
     {
@@ -675,13 +675,6 @@
       "title": "Lokator uz izravne citate",
       "reason": "Poznati bug: missingLocator regex `,\\s*\\d` tretira godinu (\", 2019\") kao broj stranice, pa citat s uobicajenom citatnicom (Prezime, 2019) NE moze pasti. Atomski slucaj to zaobilazi izostavljanjem zareza.",
       "desiredTest": "Popraviti detekciju lokatora (iskljuciti godinu iz kandidata za stranicu) + atomic bez zaobilaznice."
-    },
-    {
-      "priority": "P3",
-      "checkId": "element.empty-paragraphs",
-      "title": "Prazni odlomci",
-      "reason": "Informativna provjera bez valid-controla (nizak rizik, ali nepokrivena).",
-      "desiredTest": "valid.element.empty-paragraphs: valjana varijanta ostaje informativna/pass."
     },
     {
       "priority": "P3",
