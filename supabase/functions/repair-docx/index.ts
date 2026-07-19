@@ -40,6 +40,13 @@ const ALLOWED_ORIGINS = (Deno.env.get('ALLOWED_ORIGIN') ?? 'https://lektahr.netl
 // puno medija drzi na oku (WS-3 rizik). Uskladi s klijentskim uploadMaxBytes.
 const MAX_DOCX_BYTES = Number(Deno.env.get('REPAIR_MAX_DOCX_BYTES') ?? String(20 * 1024 * 1024));
 
+// Besplatna beta (WS-7): kad je REPAIR_FREE_MODE=true, preskace se NAPLATNI gate (nema 402 ni trosenja
+// slota), ali auth, consent, upload, popravak, POHRANA ("Moji popravci") i rate-limit po korisniku OSTAJU.
+// Prijelaz na naplatu = ukloni zastavicu (bez ijedne klijentske izmjene). REPAIR_FREE_DAILY_CAP ogranicava
+// broj besplatnih popravaka po korisniku u 24h (obrana od zlouporabe; broji se iz report_generations).
+const FREE_MODE = Deno.env.get('REPAIR_FREE_MODE') === 'true';
+const FREE_DAILY_CAP = Number(Deno.env.get('REPAIR_FREE_DAILY_CAP') ?? '10');
+
 // ZIVI fixeri: strukturni K5/K6/K7 su UPALJENI 2026-07-19 nakon vlasnicke Word/LibreOffice validacije
 // (WS-4): SECTION_INSERT_LIVE / TOC_FIELD_LIVE = true u repair-items.ts, TOC je SDT sadrzaj-kontrola.
 // DARK_FIXERS je sada prazan (svi fixeri zivi); ostaje kao tocka gasenja ako se neki fixer mora vratiti
@@ -66,7 +73,7 @@ const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingm
 // Vraca jobId ili null. null NIJE greska za korisnika: popravak se svejedno vraca, samo se ne
 // pojavi u "Moji popravci". Pri djelomicnom padu cisti vec uploadane BLOB-ove (bez orphana).
 async function storeRepairJob(admin: any, userId: string, meta: {
-  workType: string; fingerprint: any; slotId: string;
+  workType: string; fingerprint: any; slotId: string | null;
   originalBytes: Uint8Array; resultBytes: Uint8Array; changesCount: number;
   consentVersion: string; // WS-6.3: uvijek prisutna (consent gate iznad je zahtijeva), NOT NULL u bazi
 }): Promise<string | null> {
@@ -153,51 +160,59 @@ Deno.serve(async (req: Request) => {
     }
     if (!requests.length) return json({ error: 'no_live_fixers' }, 422);
 
-    // 5. otisak iz parsedStructure (serverski) + entitlement odluka (isti model kao generate-report)
+    // 5. otisak iz parsedStructure (serverski) + naplatni gate ILI besplatna beta (FREE_MODE)
     const fingerprint = computeFingerprint(meta.parsedStructure);
-    const { data: partner } = await admin
-      .from('partner_accounts').select('status, daily_cap').eq('user_id', user.id).maybeSingle();
-    const dailyCap = resolveDailyCap(
-      partner ? { status: (partner as any).status, dailyCap: (partner as any).daily_cap } : null, DAILY_CAP);
-
-    const [{ data: slots }, { data: entitlements }, { count: recent }] = await Promise.all([
-      admin.from('document_slots').select('id, work_type, fingerprint, slot_expires_at')
-        .eq('user_id', user.id).eq('work_type', workType).gt('slot_expires_at', now),
-      admin.from('entitlements')
-        .select('id, work_type, status, slots_used, slots_total, purchase_expires_at, products(slot_window_days)')
-        .eq('user_id', user.id).eq('work_type', workType).eq('status', 'active'),
-      admin.from('report_generations').select('id', { count: 'exact', head: true })
-        .eq('user_id', user.id).gt('created_at', new Date(Date.now() - 24 * 3600 * 1000).toISOString()),
-    ]);
-
-    const decision = decideReportAccess({
-      now, workType, fingerprint,
-      activeSlots: (slots ?? []).map((s: any) => ({ id: s.id, workType: s.work_type, fingerprint: s.fingerprint, slotExpiresAt: s.slot_expires_at })),
-      entitlements: (entitlements ?? []).map((e: any) => ({ id: e.id, workType: e.work_type, status: e.status, slotsUsed: e.slots_used, slotsTotal: e.slots_total, purchaseExpiresAt: e.purchase_expires_at, slotWindowDays: e.products?.slot_window_days ?? undefined })),
-      recentGenerationCount: recent ?? 0,
-    }, { dailyCap });
-
     const ipHash = await hashClientIpSalted(req.headers.get('x-forwarded-for'), IP_HASH_SALT, SERVICE_ROLE);
-    const log = (status: string, slotId: string | null) =>
-      admin.from('report_generations').insert({ user_id: user.id, slot_id: slotId, doc_fingerprint: fingerprint, ip_hash: ipHash, status });
+    const log = (status: string, sId: string | null) =>
+      admin.from('report_generations').insert({ user_id: user.id, slot_id: sId, doc_fingerprint: fingerprint, ip_hash: ipHash, status });
 
-    if (decision.decision === 'rate_limited') { await log('rate_limited', null); return json({ error: 'rate_limited' }, 429); }
-    if (decision.decision === 'payment_required') { await log('denied', null); return json({ error: 'payment_required', workType: decision.workType }, 402); }
-
-    let slotId: string;
-    if (decision.decision === 'recheck') {
-      slotId = decision.slotId; await log('recheck', slotId);
+    let slotId: string | null = null;
+    if (FREE_MODE) {
+      // Besplatna beta: bez naplate i bez slota (slot_id null), ali rate-limit po korisniku OSTAJE.
+      const { count: recent } = await admin.from('report_generations').select('id', { count: 'exact', head: true })
+        .eq('user_id', user.id).gt('created_at', new Date(Date.now() - 24 * 3600 * 1000).toISOString());
+      if ((recent ?? 0) >= FREE_DAILY_CAP) { await log('rate_limited', null); return json({ error: 'rate_limited' }, 429); }
+      await log('free', null);
     } else {
-      const label = (fingerprint.titleNorm || 'rad').slice(0, 60);
-      const coverageTier = coverageTierForStatus(meta.profileStatus);
-      const profileRef = meta.profileRef ?? null;
-      const { data: slot, error } = await admin.rpc('consume_slot_and_bind', {
-        p_entitlement_id: decision.entitlementId, p_user_id: user.id, p_work_type: workType,
-        p_fingerprint: fingerprint, p_label: label, p_slot_expires_at: decision.newSlot.slotExpiresAt,
-        p_profile_ref: profileRef, p_coverage_tier: coverageTier,
-      });
-      if (error || !slot) { await log('denied', null); return json({ error: 'payment_required', workType }, 402); }
-      slotId = (slot as any).id; await log('new_slot', slotId);
+      const { data: partner } = await admin
+        .from('partner_accounts').select('status, daily_cap').eq('user_id', user.id).maybeSingle();
+      const dailyCap = resolveDailyCap(
+        partner ? { status: (partner as any).status, dailyCap: (partner as any).daily_cap } : null, DAILY_CAP);
+
+      const [{ data: slots }, { data: entitlements }, { count: recent }] = await Promise.all([
+        admin.from('document_slots').select('id, work_type, fingerprint, slot_expires_at')
+          .eq('user_id', user.id).eq('work_type', workType).gt('slot_expires_at', now),
+        admin.from('entitlements')
+          .select('id, work_type, status, slots_used, slots_total, purchase_expires_at, products(slot_window_days)')
+          .eq('user_id', user.id).eq('work_type', workType).eq('status', 'active'),
+        admin.from('report_generations').select('id', { count: 'exact', head: true })
+          .eq('user_id', user.id).gt('created_at', new Date(Date.now() - 24 * 3600 * 1000).toISOString()),
+      ]);
+
+      const decision = decideReportAccess({
+        now, workType, fingerprint,
+        activeSlots: (slots ?? []).map((s: any) => ({ id: s.id, workType: s.work_type, fingerprint: s.fingerprint, slotExpiresAt: s.slot_expires_at })),
+        entitlements: (entitlements ?? []).map((e: any) => ({ id: e.id, workType: e.work_type, status: e.status, slotsUsed: e.slots_used, slotsTotal: e.slots_total, purchaseExpiresAt: e.purchase_expires_at, slotWindowDays: e.products?.slot_window_days ?? undefined })),
+        recentGenerationCount: recent ?? 0,
+      }, { dailyCap });
+
+      if (decision.decision === 'rate_limited') { await log('rate_limited', null); return json({ error: 'rate_limited' }, 429); }
+      if (decision.decision === 'payment_required') { await log('denied', null); return json({ error: 'payment_required', workType: decision.workType }, 402); }
+
+      if (decision.decision === 'recheck') {
+        slotId = decision.slotId; await log('recheck', slotId);
+      } else {
+        const label = (fingerprint.titleNorm || 'rad').slice(0, 60);
+        const coverageTier = coverageTierForStatus(meta.profileStatus);
+        const profileRef = meta.profileRef ?? null;
+        const { data: slot, error } = await admin.rpc('consume_slot_and_bind', {
+          p_entitlement_id: decision.entitlementId, p_user_id: user.id, p_work_type: workType,
+          p_fingerprint: fingerprint, p_label: label, p_slot_expires_at: decision.newSlot.slotExpiresAt,
+          p_profile_ref: profileRef, p_coverage_tier: coverageTier,
+        });
+        if (error || !slot) { await log('denied', null); return json({ error: 'payment_required', workType }, 402); }
+        slotId = (slot as any).id; await log('new_slot', slotId);
+      }
     }
 
     // 6. POPRAVAK: isti engine kao klijent (src/repair). applyFixers je fail-safe (ne baca na
