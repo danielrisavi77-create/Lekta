@@ -259,7 +259,9 @@ export function pageNumberAlignmentRepairableItem(checks: AnalyzedCheck[], profi
 // izlazni gate K6 trazi rucnu Word/LO matricu prije objave. Dok je false, popravak se ne nudi
 // korisniku (motor + testovi + golden su zeleni, ali putanja je "tamna"). Vlasnik je postavlja
 // na true TEK nakon rucne matrice (K5+K6 se objavljuju zajedno). Vidi docs/LEKTA_BUILD_PIPELINE.md K6.
-export const SECTION_INSERT_LIVE = false;
+// UPALJENO 2026-07-19 nakon vlasnicke Word/LibreOffice validacije (WS-4) na demo-diplomskom:
+// naslovnica bez broja, rimski na prednjim listovima, arapski od Uvoda - potvrdjeno u oba preglednika.
+export const SECTION_INSERT_LIVE = true;
 
 /**
  * Popravak "numeriranje od Uvoda" za dokument BEZ upotrebljivog prijeloma sekcije (najcesci
@@ -320,7 +322,9 @@ export function introSectionItem(result: any, profile: any): RepairableItem[] {
 // izlazni gate K7 trazi rucnu provjeru u Wordu. Dok je false, popravak se ne nudi (motor + testovi +
 // golden zeleni, putanja tamna). Vlasnik postavlja na true nakon Word provjere (moze zajedno s K5/K6
 // matricom, jednom Word sesijom). Vidi docs/LEKTA_BUILD_PIPELINE.md K7.
-export const TOC_FIELD_LIVE = false;
+// UPALJENO 2026-07-19 nakon vlasnicke Word validacije (WS-4): TOC je SDT sadrzaj-kontrola
+// (docPartGallery "Table of Contents") pa Word nudi "Azuriraj tablicu" i regenerira sadrzaj.
+export const TOC_FIELD_LIVE = true;
 
 /**
  * Popravak: pretvori rucni "Sadrzaj" u ZIVO TOC polje (K7, BL-09). Nedestruktivno (dodaje polje, NE

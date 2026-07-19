@@ -234,8 +234,10 @@ describe('tocFieldItem (gating, neovisno o TOC_FIELD_LIVE)', () => {
     expect(tocFieldItem({ details: { sadrzajParagraphIndex: 2, hasTocField: true } }, profile)).toEqual([]);
   });
 
-  it('TOC_FIELD_LIVE gate: javna tocFieldRepairableItem je prazna (dark) dok flag ne padne', () => {
-    expect(tocFieldRepairableItem(result, profile)).toEqual([]);
+  it('TOC_FIELD_LIVE upaljen (WS-4): javna tocFieldRepairableItem sada nudi stavku (live)', () => {
+    const items = tocFieldRepairableItem(result, profile);
+    expect(items).toHaveLength(1);
+    expect(items[0].fixerId).toBe('toc-field-fixer');
   });
 });
 

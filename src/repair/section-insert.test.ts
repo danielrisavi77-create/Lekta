@@ -430,9 +430,11 @@ describe('introSectionItem (gating, neovisno o SECTION_INSERT_LIVE)', () => {
     expect(introSectionItem(multi, profile)).toEqual([]);
   });
 
-  it('SECTION_INSERT_LIVE gate: javna introSectionRepairableItem je prazna (dark) dok flag ne padne', () => {
-    // Feature je namjerno tamna dok rucna Word/LO matrica nije odradjena.
-    expect(introSectionRepairableItem(singleSectionResult, profile)).toEqual([]);
+  it('SECTION_INSERT_LIVE upaljen (WS-4): javna introSectionRepairableItem sada nudi stavku (live)', () => {
+    // Flag je true nakon vlasnicke Word/LibreOffice validacije; javni wrapper zrcali jezgru.
+    const items = introSectionRepairableItem(singleSectionResult, profile);
+    expect(items).toHaveLength(1);
+    expect(items[0].fixerId).toBe('section-insert-fixer');
   });
 });
 

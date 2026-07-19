@@ -39,10 +39,11 @@ const ALLOWED_ORIGINS = (Deno.env.get('ALLOWED_ORIGIN') ?? 'https://lektahr.netl
 // puno medija drzi na oku (WS-3 rizik). Uskladi s klijentskim uploadMaxBytes.
 const MAX_DOCX_BYTES = Number(Deno.env.get('REPAIR_MAX_DOCX_BYTES') ?? String(20 * 1024 * 1024));
 
-// ZIVI fixeri (WS-4): strukturni K5/K6/K7 su TAMNI dok se ne odradi rucna Word/LibreOffice validacija.
-// Server NE smije pokrenuti tamni fixer i kad ga klijent zatrazi (obrana protiv over-promisea/povrata).
-// Mora ostati u sinkronizaciji s repair-items.ts (SECTION_INSERT_LIVE / TOC_FIELD_LIVE) i DEEP_CAPABLE.
-const DARK_FIXERS = new Set(['section-insert-fixer', 'toc-field-fixer', 'footer-page-fixer']);
+// ZIVI fixeri: strukturni K5/K6/K7 su UPALJENI 2026-07-19 nakon vlasnicke Word/LibreOffice validacije
+// (WS-4): SECTION_INSERT_LIVE / TOC_FIELD_LIVE = true u repair-items.ts, TOC je SDT sadrzaj-kontrola.
+// DARK_FIXERS je sada prazan (svi fixeri zivi); ostaje kao tocka gasenja ako se neki fixer mora vratiti
+// u tamno bez ponovnog uvodjenja filtera. Mora ostati u sinkronizaciji s repair-items.ts.
+const DARK_FIXERS = new Set<string>([]);
 const LIVE_FIXERS = new Set(FIXER_IDS.filter((f) => !DARK_FIXERS.has(f)));
 
 async function sha256Hex(input: string): Promise<string> {
