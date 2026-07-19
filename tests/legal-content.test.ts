@@ -43,6 +43,20 @@ describe('legal-content', () => {
     expect(html).toContain('Voditelj obrade');
   });
 
+  it('WS-6: privacy i processing objavljuju server-side popravak s pohranom-do-brisanja i pravom brisanja', () => {
+    for (const kind of ['privacy', 'processing'] as const) {
+      const html = docs[kind].html;
+      expect(html, `${kind}: automatski popravak`).toContain('automatski popravak');
+      expect(html, `${kind}: pohrana`).toMatch(/pohranjuj|pohran/);
+      expect(html, `${kind}: retencija do brisanja`).toContain('dok ih');
+      expect(html, `${kind}: Moji popravci (right to erasure)`).toContain('Moji popravci');
+    }
+    // privacy mora imenovati pravnu osnovu pohrane (privola) i izvrsitelja pohrane (Supabase Storage)
+    expect(docs.privacy.html).toContain('Supabase Storage');
+    // purchase mora navesti popravak kao placeni digitalni proizvod (per vrsta rada)
+    expect(docs.purchase.html).toContain('automatski popravak');
+  });
+
   it('guarantee definira svih 9 tocaka: rokove, dokaz, odluku, lijek i iskljucenja', () => {
     const html = docs.guarantee.html;
     expect(html).toContain('30 dana');            // rok podnosenja

@@ -55,3 +55,50 @@ describe('zip-codec round-trip', () => {
     expect(readBack.map((e) => e.name)).toEqual(names);
   });
 });
+
+describe('zip-codec zastita (WS-6.5: zip-bomb / entry-flood)', () => {
+  const enc = new TextEncoder();
+
+  it('produkcijski defaulti ne diraju valjan docx (ista putanja kao golden)', async () => {
+    const entries = [
+      { name: 'word/document.xml', data: enc.encode('<w:document/>'.repeat(500)) },
+      { name: 'word/media/image1.bin', data: randomBytes(80000) },
+    ];
+    const zipped = await writeZip(entries);
+    const readBack = await readZip(zipped); // bez limits -> defaulti 4096 / 64MB
+    expect(readBack.length).toBe(2);
+    expect(readBack[0].data).toEqual(entries[0].data);
+  });
+
+  it('odbija previse entryja (entry-flood) kad broj prijedje maxEntries', async () => {
+    const entries = [
+      { name: 'a.xml', data: enc.encode('a') },
+      { name: 'b.xml', data: enc.encode('b') },
+      { name: 'c.xml', data: enc.encode('c') },
+    ];
+    const zipped = await writeZip(entries);
+    await expect(readZip(zipped, { maxEntries: 2 })).rejects.toThrow(/previse zip entryja/);
+    // isti zip s dovoljnim capom prolazi
+    expect((await readZip(zipped, { maxEntries: 3 })).length).toBe(3);
+  });
+
+  it('presijeca dekompresiju kad ukupni sadrzaj probije budzet (deflate put)', async () => {
+    // 4000 bajtova se DEFLATE-a u writeZip; s budzetom 500 mora puknuti PRI dekompresiji, ne na kraju
+    const entries = [{ name: 'big.xml', data: enc.encode('x'.repeat(4000)) }];
+    const zipped = await writeZip(entries);
+    await expect(readZip(zipped, { maxTotalDecompressed: 500 })).rejects.toThrow(/budzet|zip-bomba/);
+    // dovoljan budzet -> prolazi netaknuto
+    const ok = await readZip(zipped, { maxTotalDecompressed: 10000 });
+    expect(ok[0].data.length).toBe(4000);
+  });
+
+  it('budzet se troshi PREKO svih entryja, ne po entryju', async () => {
+    const entries = [
+      { name: 'a.xml', data: enc.encode('a'.repeat(600)) },
+      { name: 'b.xml', data: enc.encode('b'.repeat(600)) },
+    ];
+    const zipped = await writeZip(entries);
+    // svaki entry 600B stane u 1000B pojedinacno, ali zbroj 1200B probija ukupni budzet
+    await expect(readZip(zipped, { maxTotalDecompressed: 1000 })).rejects.toThrow(/budzet|zip-bomba/);
+  });
+});

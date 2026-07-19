@@ -11,6 +11,7 @@
 
 import { isReportWorkType, type ReportWorkType } from './pricing';
 import type { FingerprintInput } from '../fingerprint/fingerprint';
+import { TERMS_VERSION } from '../legal/legal-content';
 
 const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
@@ -43,6 +44,8 @@ export interface RepairMeta {
   fileName?: string | null;
   /** Korisnik je svjesno potvrdio kupnju/popravak nizeg tiera (preskace tier_mismatch). */
   confirmedMismatch?: boolean;
+  /** WS-6.3: verzija uvjeta/privatnosti na koju je korisnik pristao pri uploadu (server je trajno biljezi). */
+  consentVersion: string;
 }
 
 export interface RepairChange { ruleId: string; beforeLabel: string; afterLabel: string }
@@ -91,6 +94,9 @@ export function buildRepairMeta(input: {
     },
     signals: { words: typeof input.words === 'number' ? input.words : null, titleMarker: input.titleMarker ?? null },
     requests: input.requests,
+    // Upload se u app.ts dogadja tek nakon izricite privole (consent checkbox), pa meta uvijek
+    // nosi verziju uvjeta koju je korisnik u tom trenutku vidio; server je zabiljezi uz posao.
+    consentVersion: TERMS_VERSION,
   };
   if (input.profileStatus != null) meta.profileStatus = input.profileStatus;
   if (input.profileRef != null) meta.profileRef = input.profileRef;
@@ -159,6 +165,14 @@ export async function uploadRepair(
   if (res.status === 422) {
     const data = (await res.json().catch(() => ({}))) as { error?: string };
     return data?.error === 'no_live_fixers' ? { kind: 'no_live_fixers' } : { kind: 'invalid_docx' };
+  }
+  if (res.status === 400) {
+    // WS-6.3: server odbija upload bez privole na TEKUCE uvjete (consent_required). U praksi rijetko
+    // (klijent zigose tekuci TERMS_VERSION); dogodi se ako su uvjeti bumpani, a stranica nije osvjezena.
+    const data = (await res.json().catch(() => ({}))) as { error?: string };
+    return data?.error === 'consent_required'
+      ? { kind: 'error', status: 400, message: 'Uvjeti su azurirani. Osvjezi stranicu i ponovno potvrdi privolu prije popravka.' }
+      : { kind: 'error', status: 400, message: 'neispravan zahtjev' };
   }
   return { kind: 'error', status: res.status, message: `neocekivani odgovor ${res.status}` };
 }

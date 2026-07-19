@@ -6,6 +6,7 @@ import {
   uploadRepair,
   type RepairMeta,
 } from '../src/report/repair-client';
+import { TERMS_VERSION } from '../src/legal/legal-content';
 
 const config = { endpoint: 'https://edge/repair-docx' };
 
@@ -24,6 +25,7 @@ function meta(over: Partial<RepairMeta> = {}): RepairMeta {
     signals: { words: 12000, titleMarker: 'graduate' },
     requests: [{ fixerId: 'font-fixer', ruleId: 'font', params: { fontName: 'Times New Roman' } }],
     fileName: 'moj-rad.docx',
+    consentVersion: TERMS_VERSION,
     ...over,
   };
 }
@@ -64,6 +66,10 @@ describe('buildRepairMeta (sanitizacija)', () => {
   it('ukljucuje confirmedMismatch samo kad je true', () => {
     expect(buildRepairMeta({ workType: 'zavrsni', parsedStructure, requests, confirmedMismatch: true }).confirmedMismatch).toBe(true);
     expect('confirmedMismatch' in buildRepairMeta({ workType: 'zavrsni', parsedStructure, requests, confirmedMismatch: false })).toBe(false);
+  });
+  it('WS-6.3: uvijek zigose consentVersion tekucim TERMS_VERSION (server ga trajno biljezi)', () => {
+    const m = buildRepairMeta({ workType: 'zavrsni', parsedStructure, requests });
+    expect(m.consentVersion).toBe(TERMS_VERSION);
   });
 });
 
@@ -134,6 +140,12 @@ describe('uploadRepair', () => {
   it('422 no_live_fixers vs ostalo', async () => {
     expect((await uploadRepair(config, 'j', new Uint8Array([1]), meta(), async () => res(422, { error: 'no_live_fixers' }))).kind).toBe('no_live_fixers');
     expect((await uploadRepair(config, 'j', new Uint8Array([1]), meta(), async () => res(422, { error: 'invalid_docx' }))).kind).toBe('invalid_docx');
+  });
+
+  it('WS-6.3: 400 consent_required -> error s uputom za osvjezavanje', async () => {
+    const out = await uploadRepair(config, 'j', new Uint8Array([1]), meta(), async () => res(400, { error: 'consent_required', termsVersion: '2026-07-19' }));
+    expect(out.kind).toBe('error');
+    expect((out as { message: string }).message).toMatch(/privol|Uvjeti/i);
   });
 
   it('mrezna greska -> error', async () => {

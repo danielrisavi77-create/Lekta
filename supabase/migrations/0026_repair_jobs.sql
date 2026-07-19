@@ -31,6 +31,13 @@ create table if not exists repair_jobs (
   result_bytes int check (result_bytes is null or result_bytes >= 0),
   changes_count int check (changes_count is null or changes_count >= 0),
   status text not null default 'done' check (status in ('done','failed')),
+  -- WS-6.3 privola na upload+pohranu: AUTORITATIVNA verzija Uvjeta/privatnosti (TERMS_VERSION) koju
+  -- server utisne TEK nakon consent gatea (repair-docx odbija upload ako klijentska privola nije za
+  -- tekucu verziju). NOT NULL: posao bez zabiljezene privole se ne smije pohraniti. Isti obrazac kao
+  -- checkout_consents.terms_version (0008): biljezimo VERZIJU (sadrzaj je nepromjenjiv po verziji), ne tekst.
+  consent_version text not null,
+  -- Vrijeme SERVERSKOG zapisa posla (nakon uploada+popravka), NE tocan klik privole. Privola se dogodi
+  -- u istom zahtjevu neposredno prije, pa je created_at pouzdana gornja granica trenutka pristanka.
   created_at timestamptz not null default now()
 );
 create index if not exists repair_jobs_user_time
@@ -56,5 +63,12 @@ create policy repair_objects_read_own on storage.objects
 -- Namjerno NEMA insert/update/delete policy na storage.objects za bucket 'repair':
 -- svako klijentsko pisanje/brisanje BLOB-a je odbijeno. Brisanje (right to erasure) ide preko
 -- Edge funkcije 'delete-repair-job' (service role): storage.remove([original_path, result_path])
--- + delete from repair_jobs where id = :job and user_id = :uid. Row-cascade na auth.users pokriva
--- brisanje racuna (ali ostavlja BLOB-ove -> Edge/cron ih mora pocistiti; v. WS-6 TODO).
+-- + delete from repair_jobs where id = :job and user_id = :uid.
+--
+-- OTVORENO (WS-7 deploy, obavezno prije go-livea): brisanje RACUNA. `on delete cascade` na user_id
+-- uklanja SAMO redak repair_jobs; storage.objects nisu FK-vezani (owner je ON DELETE SET NULL), pa
+-- BLOB-ovi (original.docx + fixed.docx) prezive brisanje racuna kao orphani, a gubitkom retka nestaje
+-- i pokazivac na njih. Treba dedicirana sweep-Edge (service role) koja listing-om po '<user_id>/'
+-- prefiksu uklanja objekte bez pripadnog auth.users racuna, okinuta pg_cronom (obrazac 0009/0011/0022)
+-- ILI iz procesa brisanja racuna. Nije hitno PRIJE deploya jer je repair inertan dok repairEndpoint=''
+-- (nijedan posao se ne pohranjuje), pa orphani ne mogu ni nastati do WS-7.

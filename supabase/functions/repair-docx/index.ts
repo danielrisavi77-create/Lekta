@@ -27,6 +27,7 @@ import { coverageTierForStatus } from '../../../src/report/guarantee.ts';
 import { resolveDailyCap } from '../../../src/report/partner.ts';
 import { unambiguousMismatch, estimateWorkType } from '../../../src/report/work-type-estimate.ts';
 import { applyFixers, FIXER_IDS, type FixerRequest } from '../../../src/repair/apply-fixers.ts';
+import { TERMS_VERSION } from '../../../src/legal/terms-version.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -67,6 +68,7 @@ const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingm
 async function storeRepairJob(admin: any, userId: string, meta: {
   workType: string; fingerprint: any; slotId: string;
   originalBytes: Uint8Array; resultBytes: Uint8Array; changesCount: number;
+  consentVersion: string; // WS-6.3: uvijek prisutna (consent gate iznad je zahtijeva), NOT NULL u bazi
 }): Promise<string | null> {
   const jobId = crypto.randomUUID();
   const origPath = `${userId}/${jobId}/original.docx`;
@@ -83,7 +85,7 @@ async function storeRepairJob(admin: any, userId: string, meta: {
     id: jobId, user_id: userId, slot_id: meta.slotId, work_type: meta.workType,
     fingerprint: meta.fingerprint, label, original_path: origPath, result_path: resPath,
     original_bytes: meta.originalBytes.length, result_bytes: meta.resultBytes.length,
-    changes_count: meta.changesCount, status: 'done',
+    changes_count: meta.changesCount, status: 'done', consent_version: meta.consentVersion,
   }).select('id').single();
   if (error || !data) { await bucket.remove([origPath, resPath]); return null; }
   return jobId;
@@ -125,6 +127,14 @@ Deno.serve(async (req: Request) => {
     if (!meta || !isReportWorkType(meta.workType) || !meta.parsedStructure) return json({ error: 'bad_request' }, 400);
     const workType = meta.workType;
     const now = new Date().toISOString();
+
+    // 2a. WS-6.3 consent gate: dokument se NE uploada ni pohranjuje bez privole na TRENUTNE uvjete.
+    //     Server je izvor istine (klijent zigose consentVersion=TERMS_VERSION); odbijamo ako privola
+    //     nedostaje ili je za zastarjelu verziju (korisnik mora ponovno pristati). Isti obrazac kao
+    //     create-checkout (consent_required 400). Gate je PRIJE entitlementa pa slot ne trosimo uzalud.
+    if (meta.consentVersion !== TERMS_VERSION) {
+      return json({ error: 'consent_required', termsVersion: TERMS_VERSION }, 400);
+    }
 
     // 3. WS-2 enforcement: nedvosmislen nesklad vrste rada -> 409 (osim ako je korisnik potvrdio).
     //    Signali su sanitizirani (broj rijeci + enum marker), nikad doslovni tekst.
@@ -202,7 +212,9 @@ Deno.serve(async (req: Request) => {
 
     // 7. WS-6 STUB: pohrana originala + rezultata (retencija do brisanja). Ne blokira odgovor ako padne.
     let jobId: string | null = null;
-    try { jobId = await storeRepairJob(admin, user.id, { workType, fingerprint, slotId, originalBytes: docxBytes, resultBytes: result.docxBytes, changesCount: result.changelog.length }); } catch (_e) { /* WS-6: log */ }
+    // Gate iznad je zajamcio meta.consentVersion === TERMS_VERSION, pa biljezimo AUTORITATIVNU serversku
+    // verziju (nikad null, nikad klijentov proizvoljni string). consent_version je NOT NULL u 0026.
+    try { jobId = await storeRepairJob(admin, user.id, { workType, fingerprint, slotId, originalBytes: docxBytes, resultBytes: result.docxBytes, changesCount: result.changelog.length, consentVersion: TERMS_VERSION }); } catch (_e) { /* WS-6: log */ }
 
     const traceToken = await sha256Hex(`${slotId}.${now}.${user.id}`);
     return json({

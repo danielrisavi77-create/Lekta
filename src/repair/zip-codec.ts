@@ -19,9 +19,28 @@ export interface ZipEntry {
   data: Uint8Array; // uvijek DEKOMPRIMIRAN sadrzaj
 }
 
+/** Zastitne granice citanja (WS-6.5). Izostavljeno = produkcijski defaulti (dovoljno siroki za pravi docx). */
+export interface ReadZipLimits {
+  maxEntries?: number;            // max broj zip entryja (default MAX_ZIP_ENTRIES)
+  maxTotalDecompressed?: number;  // max ukupno dekomprimiranih bajtova (default MAX_TOTAL_DECOMPRESSED_BYTES)
+}
+
 const LOCAL_FILE_HEADER_SIG = 0x04034b50;
 const CENTRAL_DIR_SIG = 0x02014b50;
 const EOCD_SIG = 0x06054b50;
+
+// Zip-bomb / entry-flood obrana (WS-6.5). Ovaj codec vrti se i u pregledniku (klijentski repair)
+// i na Supabase Edge (256MB, server-side repair), pa mora sam stati pred zlonamjernim docx-om,
+// neovisno o parserovom intake-gateu (koji NE stiti repair putanju). Granice su namjerno daleko
+// iznad svega realnog: pravi Word docx ima ~15-40 entryja i dekomprimira se na jedinice do desetke
+// MB (i s medijem), pa validan rad nikad ne okine ove capove niti mijenja golden. Bomba (npr. mali
+// deflate koji naraste u GB) presijeca se cim ukupna dekompresija probije budzet.
+// VAZNO za peak memorije: inflateRaw skuplja chunkove pa concatBytes alocira JOS jedan buffer iste
+// velicine dok su chunkovi jos zivi, pa je tranzijentni peak do 2x budzeta. Zato je budzet 64MB (a
+// ne blizu 256MB): peak ostaje <= ~128MB, sto s ulazom (do 20MB) i runtime baselineom stane ispod
+// Edge 256MB. Presjek (reader.cancel + throw) oslobodi memoriju odmah i da cist 422 umjesto OOM-a.
+const MAX_ZIP_ENTRIES = 4096;
+const MAX_TOTAL_DECOMPRESSED_BYTES = 64 * 1024 * 1024; // 64 MB ukupno; s 2x concat peakom <= ~128MB
 
 function crc32Table(): Uint32Array {
   const table = new Uint32Array(256);
@@ -59,17 +78,34 @@ async function deflateRaw(data: Uint8Array): Promise<Uint8Array> {
   return concatBytes(chunks);
 }
 
-async function inflateRaw(data: Uint8Array): Promise<Uint8Array> {
+// `budget` je preostali dopusteni broj DEKOMPRIMIRANIH bajtova. Presjecamo stream cim ga probije
+// (a ne tek na kraju), pa jedan bombasti entry ne moze alocirati GB prije provjere. Uncompressed-size
+// polje iz zip headera je nepouzdano (moze biti lazirano), zato mjerimo STVARNI izlaz streama.
+async function inflateRaw(data: Uint8Array, budget: number): Promise<Uint8Array> {
   const stream = new DecompressionStream('deflate-raw');
   const writer = stream.writable.getWriter();
-  writer.write(data as Uint8Array<ArrayBuffer>);
-  writer.close();
+  // Fire-and-forget upis: ako presjecemo reader.cancel()-om zbog budzeta, writable se abortira i
+  // write/close odbiju (ABORT_ERR). Drzimo promise da ga u finally progutamo (inace unhandled rejection).
+  const pump = (async () => {
+    try { await writer.write(data as Uint8Array<ArrayBuffer>); await writer.close(); }
+    catch { /* namjerno: cancel je abortirao pisanje */ }
+  })();
   const chunks: Uint8Array[] = [];
+  let total = 0;
   const reader = stream.readable.getReader();
-  for (;;) {
-    const { value, done } = await reader.read();
-    if (done) break;
-    chunks.push(value);
+  try {
+    for (;;) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      total += value.length;
+      if (total > budget) {
+        await reader.cancel().catch(() => {});
+        throw new Error('zip-codec: dekomprimirani sadrzaj prelazi dopusteni budzet (moguca zip-bomba)');
+      }
+      chunks.push(value);
+    }
+  } finally {
+    await pump.catch(() => {});
   }
   return concatBytes(chunks);
 }
@@ -119,7 +155,9 @@ class ByteWriter {
  * Cita zip datoteku u niz entryja, dekomprimirajuci sve na DEFLATE ili STORED.
  * Poredak entryja u vracenom nizu odgovara poretku u central directoryju.
  */
-export async function readZip(bytes: Uint8Array): Promise<ZipEntry[]> {
+export async function readZip(bytes: Uint8Array, limits?: ReadZipLimits): Promise<ZipEntry[]> {
+  const maxEntries = limits?.maxEntries ?? MAX_ZIP_ENTRIES;
+  const maxTotalDecompressed = limits?.maxTotalDecompressed ?? MAX_TOTAL_DECOMPRESSED_BYTES;
   const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
 
   // Nadji EOCD, traziti unatrag od kraja (dopusta proizvoljan komentar polje).
@@ -136,8 +174,13 @@ export async function readZip(bytes: Uint8Array): Promise<ZipEntry[]> {
   const totalEntries = view.getUint16(eocdOffset + 10, true);
   const centralDirOffset = view.getUint32(eocdOffset + 16, true);
 
+  if (totalEntries > maxEntries) {
+    throw new Error(`zip-codec: previse zip entryja (${totalEntries} > ${maxEntries}), moguc entry-flood`);
+  }
+
   const entries: ZipEntry[] = [];
   let ptr = centralDirOffset;
+  let decompressedBudget = maxTotalDecompressed;
 
   for (let i = 0; i < totalEntries; i++) {
     if (view.getUint32(ptr, true) !== CENTRAL_DIR_SIG) {
@@ -164,12 +207,17 @@ export async function readZip(bytes: Uint8Array): Promise<ZipEntry[]> {
 
     let data: Uint8Array;
     if (compressionMethod === 0) {
+      // STORED: "dekomprimirani" sadrzaj su sami bajtovi, pa i njih naplacujemo iz budzeta.
+      if (compressedData.length > decompressedBudget) {
+        throw new Error('zip-codec: sadrzaj prelazi dopusteni budzet (moguca zip-bomba)');
+      }
       data = compressedData.slice();
     } else if (compressionMethod === 8) {
-      data = await inflateRaw(compressedData);
+      data = await inflateRaw(compressedData, decompressedBudget);
     } else {
       throw new Error(`zip-codec: nepodrzana kompresijska metoda ${compressionMethod} za ${name}`);
     }
+    decompressedBudget -= data.length;
 
     entries.push({ name, data });
     ptr += 46 + fileNameLength + extraLength + commentLength;

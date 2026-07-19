@@ -43,10 +43,15 @@ Deno.serve(async (req: Request) => {
       .eq('id', jobId).eq('user_id', user.id).maybeSingle();
     if (!jobRow) return json({ error: 'not_found' }, 404); // vec obrisano ili nije korisnikovo
 
-    // 4. ukloni BLOB-ove pa redak. Storage.remove je idempotentan (nepostojeci kljuc ne baca),
-    //    pa ponovni poziv nakon djelomicnog pada svejedno konvergira u "obrisano".
+    // 4. Ukloni BLOB-ove PA tek onda redak, i SAMO ako je uklanjanje uspjelo. storage.remove vraca
+    //    {error} (ne baca), pa gresku moramo eksplicitno provjeriti; ako BLOB nije uklonjen, NE brisemo
+    //    redak (inace posao nestane iz "Moji popravci" a dokument ostane pohranjen, bez moguceg retryja).
+    //    Redak je jedini pokazivac na putanje BLOB-a, pa retry ostaje moguc dok redak postoji.
     const paths = [ (jobRow as any).original_path, (jobRow as any).result_path ].filter(Boolean);
-    if (paths.length) await admin.storage.from('repair').remove(paths);
+    if (paths.length) {
+      const { error: rmErr } = await admin.storage.from('repair').remove(paths);
+      if (rmErr) { console.error('[delete-repair-job] storage.remove', rmErr); return json({ error: 'blob_delete_failed' }, 502); }
+    }
     const { error: delErr } = await admin
       .from('repair_jobs').delete().eq('id', jobId).eq('user_id', user.id);
     if (delErr) return json({ error: 'delete_failed' }, 500);
