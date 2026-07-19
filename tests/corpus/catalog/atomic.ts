@@ -6,7 +6,7 @@
  * Mutacije rade nad cloneSpec(baselineSpec()) pa nikad ne kaljaju bazu ni druge slucajeve.
  */
 import type { DocSpec, ParaSpec } from '../../helpers/docx-builder';
-import { baselineSpec, cloneSpec, line, heading, BASELINE_PROFILE_ID } from '../builder/baseline';
+import { baselineSpec, cloneSpec, line, heading, body, PAGE_FIELD, BASELINE_PROFILE_ID } from '../builder/baseline';
 import type { ErrorCase } from '../error-case';
 
 const PID = BASELINE_PROFILE_ID;
@@ -30,6 +30,34 @@ function mutate(fn: (paras: ParaSpec[], spec: DocSpec) => void): DocSpec {
 function insAfter(spec: DocSpec, re: RegExp, ...items: ParaSpec[]): void {
   const i = spec.paragraphs.findIndex((p) => p.styleId && re.test(p.text));
   spec.paragraphs.splice(i + 1, 0, ...items);
+}
+
+/**
+ * Uravnotezen Uvod/Zakljucak (za cleanBuild scope.intro-conclusion-ratio): Uvod ~6%, Zakljucak
+ * ~9% glavnog opsega, unutar FPZG smjernice (Uvod <= 10.5%, Zakljucak 4.5-10.5%). Baza je
+ * neuravnotezena (Uvod 15.1%) pa build = baza warna.
+ */
+function balancedIntroConcl(): DocSpec {
+  return {
+    paragraphs: [
+      line('Sveučilište u Zagrebu', { jc: 'center' }),
+      line('Fakultet političkih znanosti', { jc: 'center' }),
+      heading('Sažetak'),
+      line('Sažetak rada u jednom odlomku s ključnim spoznajama.', { jc: 'both' }),
+      line('Ključne riječi: analiza, metoda, istraživanje'),
+      heading('Sadržaj'),
+      PAGE_FIELD,
+      heading('1. Uvod'),
+      ...body(300),
+      heading('2. Razrada'),
+      ...body(4200),
+      heading('3. Zaključak'),
+      ...body(450),
+      heading('Literatura'),
+      line('Kovač, A. (2020). Medijska pismenost. Zagreb: Naklada.'),
+    ],
+    marginsCm: { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 },
+  };
 }
 
 export const ATOMIC_CASES: ErrorCase[] = [
@@ -261,5 +289,42 @@ export const ATOMIC_CASES: ErrorCase[] = [
     // "Sadržaj dokumenta" ima status uvijek 'pass' (blag audit), ali gubi bodove (earned < max).
     build: () => mutate((ps, spec) => { spec.paragraphs = ps.filter((p) => !(p.styleId && /Sadržaj/.test(p.text)) && !(p.raw && /PAGE/.test(p.raw)) && !/^\d\. \w+\t\d/.test(p.text) && !/^Literatura\t\d/.test(p.text)); }),
     expect: { checkId: 'toc.present', title: 'Sadržaj dokumenta', kind: 'earned', outcome: 'not-pass' },
+  },
+
+  // --- Batch C: "warn" provjere preko cleanBuild (cista varijanta prolazi; baza vec warna) -----
+  // Dijeljenu bazu NE diramo (o njoj ovisi 30 slucajeva); cleanBuild je per-case popravak.
+  {
+    id: 'atomic.reference.uncited',
+    title: 'Izvori u literaturi bez ijedne citatnice u tekstu',
+    category: 'citations', oracle: 'atomic-fail', profileId: PID, detectableNow: true,
+    cleanBuild: () => { const s = cloneSpec(baselineSpec()); insAfter(s, /1\. Uvod/, line('Autori navode nove trendove (Marić, 2021) te izvještaj ministarstva (Ministarstvo znanosti, 2022).', { jc: 'both' })); return s; },
+    build: () => baselineSpec(), // baza citira samo 2 od 4 izvora -> 2 necitirana
+    expect: { checkId: 'reference.uncited', title: 'Literatura → citirano', kind: 'status', outcome: 'not-pass' },
+  },
+  {
+    id: 'atomic.structure.heading.word-styles',
+    title: 'Ručno numerirani kratki odlomci bez Word stila naslova',
+    category: 'structure', oracle: 'atomic-fail', profileId: PID, detectableNow: true,
+    // cleanBuild uklanja vodece brojeve iz TOC-stavki (unicode-safe: `\w` bi pao na "Zaključak").
+    cleanBuild: () => { const s = cloneSpec(baselineSpec()); s.paragraphs = s.paragraphs.map((p) => /^\d+\.\s/.test(p.text) && p.text.includes('\t') ? { ...p, text: p.text.replace(/^\d+\.\s*/, '') } : p); return s; },
+    build: () => baselineSpec(),
+    expect: { checkId: 'structure.heading.word-styles', title: 'Uporaba Word stilova naslova', kind: 'status', outcome: 'not-pass' },
+  },
+  {
+    id: 'atomic.title.elements',
+    title: 'Naslovnica navodi krivu vrstu rada za profil',
+    category: 'structure', oracle: 'atomic-fail', profileId: PID, detectableNow: true,
+    // Profil je zavrsni; cleanBuild stavi "Završni rad" (prepoznato), build ostaje "Diplomski rad".
+    cleanBuild: () => { const s = cloneSpec(baselineSpec()); const i = s.paragraphs.findIndex((p) => /Diplomski rad/.test(p.text)); if (i >= 0) s.paragraphs[i] = { ...s.paragraphs[i], text: 'Završni rad' }; return s; },
+    build: () => baselineSpec(),
+    expect: { checkId: 'title.elements', title: 'Elementi naslovne stranice', kind: 'status', outcome: 'not-pass' },
+  },
+  {
+    id: 'atomic.scope.intro-conclusion-ratio',
+    title: 'Uvod nesrazmjerno velik (odstupa od FPZG smjernice)',
+    category: 'structure', oracle: 'atomic-fail', profileId: PID, detectableNow: true,
+    cleanBuild: () => balancedIntroConcl(),
+    build: () => baselineSpec(), // Uvod ~15.1% > 10.5% praga
+    expect: { checkId: 'scope.intro-conclusion-ratio', title: 'Omjer Uvoda i Zaključka', kind: 'status', outcome: 'not-pass' },
   },
 ];

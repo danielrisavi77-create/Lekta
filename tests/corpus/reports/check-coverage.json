@@ -2,13 +2,13 @@
   "summary": {
     "totalChecks": 71,
     "scoredChecks": 54,
-    "scoredWithAtomic": 30,
-    "scoredAtomicPct": 56,
-    "scoredWithFailCase": 31,
-    "scoredFailCasePct": 57,
+    "scoredWithAtomic": 34,
+    "scoredAtomicPct": 63,
+    "scoredWithFailCase": 35,
+    "scoredFailCasePct": 65,
     "checksWithValidControl": 6,
     "checksWithBoundary": 4,
-    "atomicCases": 32,
+    "atomicCases": 36,
     "validControlCases": 7,
     "boundaryCases": 14,
     "intakeCodes": 6
@@ -100,7 +100,7 @@
       "checkId": "reference.uncited",
       "category": "citations",
       "scored": true,
-      "hasAtomic": false,
+      "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
     },
@@ -415,7 +415,7 @@
       "checkId": "title.elements",
       "category": "structure",
       "scored": true,
-      "hasAtomic": false,
+      "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
     },
@@ -514,7 +514,7 @@
       "checkId": "scope.intro-conclusion-ratio",
       "category": "structure",
       "scored": true,
-      "hasAtomic": false,
+      "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
     },
@@ -640,7 +640,7 @@
       "checkId": "structure.heading.word-styles",
       "category": "structure",
       "scored": true,
-      "hasAtomic": false,
+      "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
     },
@@ -727,20 +727,6 @@
     },
     {
       "priority": "P1",
-      "checkId": "reference.uncited",
-      "title": "Literatura → citirano",
-      "reason": "Dijeljena baza vec warna (2 necitirana izvora).",
-      "desiredTest": "Ugodi bazu da svi izvori budu citirani (pass), pa mutacija doda necitirani."
-    },
-    {
-      "priority": "P1",
-      "checkId": "scope.intro-conclusion-ratio",
-      "title": "Omjer Uvoda i Zaključka",
-      "reason": "Dijeljena baza vec warna (omjer Uvoda/Zakljucka).",
-      "desiredTest": "Ugodi opseg Uvoda/Zakljucka baze da prolazi, pa poremeti omjer."
-    },
-    {
-      "priority": "P1",
       "checkId": "structure.abstract",
       "title": "Sažeci u samom radu",
       "reason": "Bodovanje sazetka gated (maxPoints); profil ga ne boduje.",
@@ -776,24 +762,10 @@
     },
     {
       "priority": "P1",
-      "checkId": "structure.heading.word-styles",
-      "title": "Uporaba Word stilova naslova",
-      "reason": "Dijeljena baza vec warna (TOC stavke izgledaju kao rucni naslovi).",
-      "desiredTest": "Ugodi bazu da word-styles prolazi, pa dodaj rucno oblikovan naslov."
-    },
-    {
-      "priority": "P1",
       "checkId": "structure.keywords",
       "title": "Ključne riječi u samom radu",
       "reason": "Bodovanje kljucnih rijeci gated; profil ih ne boduje kao scored.",
       "desiredTest": "Profil koji boduje kljucne rijeci; ukloni redak Ključne riječi."
-    },
-    {
-      "priority": "P1",
-      "checkId": "title.elements",
-      "title": "Elementi naslovne stranice",
-      "reason": "Dijeljena baza vec warna (fali prepoznata vrsta rada).",
-      "desiredTest": "Ugodi naslovnicu baze da prolazi, pa ukloni jedan element."
     },
     {
       "priority": "P1",

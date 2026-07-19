@@ -5,11 +5,11 @@
 ## Sazetak
 
 - Provjere ukupno: **71** (bodovane 54)
-- Bodovane s fail-slucajem (atomic ili boundary): **31/54 (57%)**
-- Bodovane s atomskim fail-slucajem: **30/54 (56%)**
+- Bodovane s fail-slucajem (atomic ili boundary): **35/54 (65%)**
+- Bodovane s atomskim fail-slucajem: **34/54 (63%)**
 - Provjere s valid-controlom: **6**
 - Provjere s boundary testom: **4**
-- Korpusni slucajevi: atomic **32**, valid **7**, boundary **14**
+- Korpusni slucajevi: atomic **36**, valid **7**, boundary **14**
 - Intake kodovi (svi runtime-dokazani u fazi 1): **6**
 
 ## Pokrivenost po provjeri
@@ -25,7 +25,7 @@
 | citation.author-year.suffix | Isti autor i godina (a/b/c) | citations | da | ✓ | · | · |
 | legal.source-classification | Klasifikacija pravnih izvora | citations | da | ✓ | · | · |
 | legal.id-abbrev | Kratica id. u istoj bilješci | citations | info | · | · | · |
-| reference.uncited | Literatura → citirano | citations | da | · | · | · |
+| reference.uncited | Literatura → citirano | citations | da | ✓ | · | · |
 | citation.direct-quote-locator | Lokator uz izravne citate | citations | da | ✓ | · | · |
 | reference.min-count | Minimalan broj izvora profila | citations | da | · | · | · |
 | legal.opcit | op. cit. → prvo navođenje | citations | da | ✓ | · | · |
@@ -60,7 +60,7 @@
 | toc.field | Detalji automatskog sadržaja | structure | din | · | · | · |
 | structure.sections.profile | Dijelovi verificiranog profila | structure | da | ✓ | · | · |
 | structure.heading.depth | Dubina decimalnog numeriranja | structure | da | ✓ | · | · |
-| title.elements | Elementi naslovne stranice | structure | da | · | · | · |
+| title.elements | Elementi naslovne stranice | structure | da | ✓ | · | · |
 | method.ethics | Etički aspekti empirijskog istraživanja | structure | din | · | · | · |
 | toc.format | Font i veličina sadržaja | structure | da | · | · | · |
 | structure.heading.hierarchy | Hijerarhija naslova | structure | da | · | · | · |
@@ -71,7 +71,7 @@
 | structure.heading.numbering | Numeriranje naslova | structure | da | · | · | · |
 | page.numbers.start | Numeriranje od prve stranice Uvoda | structure | info | · | · | · |
 | structure.heading.format | Oblikovanje naslova po razinama | structure | da | · | · | · |
-| scope.intro-conclusion-ratio | Omjer Uvoda i Zaključka | structure | da | · | · | · |
+| scope.intro-conclusion-ratio | Omjer Uvoda i Zaključka | structure | da | ✓ | · | · |
 | scope.cards | Opseg u autorskim karticama | structure | din | · | · | · |
 | scope.pages | Opseg u stranicama | structure | info | · | · | · |
 | structure.sections.basic | Osnovni dijelovi rada | structure | da | ✓ | · | · |
@@ -85,5 +85,5 @@
 | page.numbers.scheme | Shema numeriranja stranica | structure | da | · | · | · |
 | method.structure | Struktura metodološkog profila | structure | din | · | · | · |
 | title.typography | Tipografija korica i naslovnice | structure | info | · | · | · |
-| structure.heading.word-styles | Uporaba Word stilova naslova | structure | da | · | · | · |
+| structure.heading.word-styles | Uporaba Word stilova naslova | structure | da | ✓ | · | · |
 | manual.checks | Zahtjevi za ručnu završnu provjeru | structure | da | · | · | · |

@@ -2,9 +2,9 @@
 
 > Sto korpus JOS ne pokriva, po prioritetu. P0 = parser crash/sigurnost; P1 = jezgra predaje bez regresije; P2 = ostalo/korektnost; P3 = informativno.
 
-Ukupno: P0 0, P1 23, P2 1, P3 10.
+Ukupno: P0 0, P1 19, P2 1, P3 10.
 
-## P1 (23)
+## P1 (19)
 
 - **citation.punctuation** — Dosljednost interpunkcije citatnica
   - Detektor oddCitationPunctuation je uzak; treba precizan neispravan uzorak.
@@ -36,12 +36,6 @@ Ukupno: P0 0, P1 23, P2 1, P3 10.
 - **reference.min-count** — Minimalan broj izvora profila
   - Provjera se okida samo za profil s minReferences.
   - Potreban test: Koristi profil s minReferences; smanji broj izvora ispod minimuma.
-- **reference.uncited** — Literatura → citirano
-  - Dijeljena baza vec warna (2 necitirana izvora).
-  - Potreban test: Ugodi bazu da svi izvori budu citirani (pass), pa mutacija doda necitirani.
-- **scope.intro-conclusion-ratio** — Omjer Uvoda i Zaključka
-  - Dijeljena baza vec warna (omjer Uvoda/Zakljucka).
-  - Potreban test: Ugodi opseg Uvoda/Zakljucka baze da prolazi, pa poremeti omjer.
 - **structure.abstract** — Sažeci u samom radu
   - Bodovanje sazetka gated (maxPoints); profil ga ne boduje.
   - Potreban test: Koristi profil koji boduje sazetak; ukloni Sažetak.
@@ -57,15 +51,9 @@ Ukupno: P0 0, P1 23, P2 1, P3 10.
 - **structure.heading.numbering** — Numeriranje naslova
   - auditHeadingRules se ne okida za ovaj profil (nema rules.levels).
   - Potreban test: Profil s numberRequired; ukloni oznaku razine naslova.
-- **structure.heading.word-styles** — Uporaba Word stilova naslova
-  - Dijeljena baza vec warna (TOC stavke izgledaju kao rucni naslovi).
-  - Potreban test: Ugodi bazu da word-styles prolazi, pa dodaj rucno oblikovan naslov.
 - **structure.keywords** — Ključne riječi u samom radu
   - Bodovanje kljucnih rijeci gated; profil ih ne boduje kao scored.
   - Potreban test: Profil koji boduje kljucne rijeci; ukloni redak Ključne riječi.
-- **title.elements** — Elementi naslovne stranice
-  - Dijeljena baza vec warna (fali prepoznata vrsta rada).
-  - Potreban test: Ugodi naslovnicu baze da prolazi, pa ukloni jedan element.
 - **toc.coverage** — Naslovi dokumenta ↔ sadržaj
   - Treba stvarno TOC polje i spremljene stavke; builder emitira samo PAGE.
   - Potreban test: Dodaj fldSimple/instrText TOC s stavkama; izostavi jedan naslov iz TOC-a.
