@@ -2,7 +2,7 @@
 
 > Sto korpus JOS ne pokriva, po prioritetu. P0 = parser crash/sigurnost; P1 = jezgra predaje bez regresije; P2 = ostalo/korektnost; P3 = informativno.
 
-Ukupno: P0 0, P1 2, P2 1, P3 9.
+Ukupno: P0 0, P1 2, P2 0, P3 9.
 
 ## P1 (2)
 
@@ -12,12 +12,6 @@ Ukupno: P0 0, P1 2, P2 1, P3 9.
 - **manual.checks** — Zahtjevi za ručnu završnu provjeru
   - Savjetodavni podsjetnik, uvijek-warn (nema pass stanja).
   - Potreban test: Nije atomski testabilna kao fail.
-
-## P2 (1)
-
-- **citation.direct-quote-locator** — Lokator uz izravne citate
-  - Poznati bug: missingLocator regex `,\s*\d` tretira godinu (", 2019") kao broj stranice, pa citat s uobicajenom citatnicom (Prezime, 2019) NE moze pasti. Atomski slucaj to zaobilazi izostavljanjem zareza.
-  - Potreban test: Popraviti detekciju lokatora (iskljuciti godinu iz kandidata za stranicu) + atomic bez zaobilaznice.
 
 ## P3 (9)
 

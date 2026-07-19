@@ -178,10 +178,11 @@ export const ATOMIC_CASES: ErrorCase[] = [
     profileId: PID,
     detectableNow: true,
     build: () => mutate((ps) => {
-      // Citatnica BEZ zareza ("Horvat 2019") da godina ne bude lazno procitana kao stranica
-      // (poznati bug: missingLocator regex `,\s*\d` tretira ", 2019" kao broj stranice).
+      // NORMALNE citatnice sa zarezom ("Kovač, 2020" / "Horvat, 2019") bez broja stranice.
+      // Nakon popravka detektora (godina se vise ne cita kao stranica, a "P" u imenu vise nije
+      // lazni lokator) izravni citat bez lokatora ISPRAVNO pada - bez zaobilaznice.
       const i = ps.findIndex((p) => /str\. 12/.test(p.text));
-      if (i >= 0) ps[i] = line('Kako navodi jedan autor (Kovač 2020), medijska pismenost raste. Drugi izvor tvrdi "pismenost je ključna vještina za sudjelovanje" (Horvat 2019).', { jc: 'both' });
+      if (i >= 0) ps[i] = line('Kako navodi jedan autor (Kovač, 2020), medijska pismenost raste. Drugi izvor tvrdi "pismenost je ključna vještina za sudjelovanje" (Horvat, 2019).', { jc: 'both' });
     }),
     expect: { checkId: 'citation.direct-quote-locator', title: 'Lokator uz izravne citate', kind: 'status', outcome: 'not-pass' },
   },

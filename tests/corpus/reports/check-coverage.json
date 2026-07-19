@@ -670,13 +670,6 @@
       "desiredTest": "Nije atomski testabilna kao fail."
     },
     {
-      "priority": "P2",
-      "checkId": "citation.direct-quote-locator",
-      "title": "Lokator uz izravne citate",
-      "reason": "Poznati bug: missingLocator regex `,\\s*\\d` tretira godinu (\", 2019\") kao broj stranice, pa citat s uobicajenom citatnicom (Prezime, 2019) NE moze pasti. Atomski slucaj to zaobilazi izostavljanjem zareza.",
-      "desiredTest": "Popraviti detekciju lokatora (iskljuciti godinu iz kandidata za stranicu) + atomic bez zaobilaznice."
-    },
-    {
       "priority": "P3",
       "checkId": "legal.case-law",
       "title": "Sudska praksa",

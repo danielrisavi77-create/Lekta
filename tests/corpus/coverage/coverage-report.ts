@@ -144,13 +144,6 @@ export function buildCoverage(): CoverageReport {
       desiredTest: `valid.${r.checkId ?? 'TODO'}: valjana varijanta ostaje informativna/pass.`,
     });
   }
-  // Poznati korektnosni dug (nije nepokrivenost nego bug u pragu): lokator uz izravne citate.
-  gaps.push({
-    priority: 'P2', checkId: 'citation.direct-quote-locator', title: 'Lokator uz izravne citate',
-    reason: 'Poznati bug: missingLocator regex `,\\s*\\d` tretira godinu (", 2019") kao broj stranice, pa citat s uobicajenom citatnicom (Prezime, 2019) NE moze pasti. Atomski slucaj to zaobilazi izostavljanjem zareza.',
-    desiredTest: 'Popraviti detekciju lokatora (iskljuciti godinu iz kandidata za stranicu) + atomic bez zaobilaznice.',
-  });
-
   const order = { P0: 0, P1: 1, P2: 2, P3: 3 };
   gaps.sort((a, b) => order[a.priority] - order[b.priority] || (a.checkId ?? '').localeCompare(b.checkId ?? ''));
 
