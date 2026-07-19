@@ -17,9 +17,10 @@ import { VALID_CONTROL_CASES } from '../catalog/valid-controls';
 import { BOUNDARY_CASES } from '../catalog/boundary';
 import { LEGAL_ATOMIC_CASES, LEGAL_VALID_CASES } from '../catalog/legal';
 import { PROFILE_ATOMIC_CASES } from '../catalog/profile-enabled';
+import { FOOTNOTE_ATOMIC_CASES } from '../catalog/footnote-format';
 
-// Jedinstveni skupovi (fpzg baseline + legal + profilno-uvjetovani) za racun pokrivenosti i export.
-const ALL_ATOMIC = [...ATOMIC_CASES, ...LEGAL_ATOMIC_CASES, ...PROFILE_ATOMIC_CASES];
+// Jedinstveni skupovi (fpzg baseline + legal + profilno-uvjetovani + footnote-format) za pokrivenost i export.
+const ALL_ATOMIC = [...ATOMIC_CASES, ...LEGAL_ATOMIC_CASES, ...PROFILE_ATOMIC_CASES, ...FOOTNOTE_ATOMIC_CASES];
 const ALL_VALID = [...VALID_CONTROL_CASES, ...LEGAL_VALID_CASES];
 
 const HERE = dirname(fileURLToPath(import.meta.url));

@@ -5,11 +5,11 @@
 ## Sazetak
 
 - Provjere ukupno: **71** (bodovane 54)
-- Bodovane s fail-slucajem (atomic ili boundary): **42/54 (78%)**
-- Bodovane s atomskim fail-slucajem: **41/54 (76%)**
+- Bodovane s fail-slucajem (atomic ili boundary): **46/54 (85%)**
+- Bodovane s atomskim fail-slucajem: **45/54 (83%)**
 - Provjere s valid-controlom: **6**
 - Provjere s boundary testom: **4**
-- Korpusni slucajevi: atomic **43**, valid **7**, boundary **14**
+- Korpusni slucajevi: atomic **47**, valid **7**, boundary **14**
 - Intake kodovi (svi runtime-dokazani u fazi 1): **6**
 
 ## Pokrivenost po provjeri
@@ -47,12 +47,12 @@
 | page.size.project | Format stranice (A3/A0) | formatting | da | ✓ | · | · |
 | page.size.a4 | Format stranice A4 | formatting | da | ✓ | · | · |
 | page.margins | Margine dokumenta | formatting | da | · | · | ✓ |
-| footnote.format | Oblikovanje fusnota | formatting | da | · | · | · |
-| footnote.marker | Položaj i stil oznaka fusnota | formatting | da | · | · | · |
+| footnote.format | Oblikovanje fusnota | formatting | da | ✓ | · | · |
+| footnote.marker | Položaj i stil oznaka fusnota | formatting | da | ✓ | · | · |
 | format.justify.body | Poravnanje osnovnog teksta | formatting | da | ✓ | · | · |
 | format.spacing.body | Prored osnovnog teksta | formatting | da | ✓ | · | ✓ |
-| footnote.spacing | Razmak prije i poslije fusnota | formatting | da | · | · | · |
-| format.spacing.paragraph | Razmak prije i poslije odlomka | formatting | da | · | · | · |
+| footnote.spacing | Razmak prije i poslije fusnota | formatting | da | ✓ | · | · |
+| format.spacing.paragraph | Razmak prije i poslije odlomka | formatting | da | ✓ | · | · |
 | format.size.body | Veličina osnovnog teksta | formatting | da | ✓ | ✓ | ✓ |
 | structure.chapters.count | Broj glavnih poglavlja | structure | din | · | · | · |
 | page.numbers.present | Brojevi stranica | structure | da | ✓ | · | · |

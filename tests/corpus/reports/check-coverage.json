@@ -2,13 +2,13 @@
   "summary": {
     "totalChecks": 71,
     "scoredChecks": 54,
-    "scoredWithAtomic": 41,
-    "scoredAtomicPct": 76,
-    "scoredWithFailCase": 42,
-    "scoredFailCasePct": 78,
+    "scoredWithAtomic": 45,
+    "scoredAtomicPct": 83,
+    "scoredWithFailCase": 46,
+    "scoredFailCasePct": 85,
     "checksWithValidControl": 6,
     "checksWithBoundary": 4,
-    "atomicCases": 43,
+    "atomicCases": 47,
     "validControlCases": 7,
     "boundaryCases": 14,
     "intakeCodes": 6
@@ -298,7 +298,7 @@
       "checkId": "footnote.format",
       "category": "formatting",
       "scored": true,
-      "hasAtomic": false,
+      "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
     },
@@ -307,7 +307,7 @@
       "checkId": "footnote.marker",
       "category": "formatting",
       "scored": true,
-      "hasAtomic": false,
+      "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
     },
@@ -334,7 +334,7 @@
       "checkId": "footnote.spacing",
       "category": "formatting",
       "scored": true,
-      "hasAtomic": false,
+      "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
     },
@@ -343,7 +343,7 @@
       "checkId": "format.spacing.paragraph",
       "category": "formatting",
       "scored": true,
-      "hasAtomic": false,
+      "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
     },
@@ -668,34 +668,6 @@
       "title": "Automatizacija citatnog stila",
       "reason": "Savjetodavna, uvijek-warn provjera (nema pass stanja).",
       "desiredTest": "Nije atomski testabilna kao fail; eventualno valid-control da ostaje info."
-    },
-    {
-      "priority": "P1",
-      "checkId": "footnote.format",
-      "title": "Oblikovanje fusnota",
-      "reason": "Builder ne kontrolira oblik fusnota (rPr/pPr na fusnotnim odlomcima).",
-      "desiredTest": "Prosiri docx-builder footnotes na {text,font,sizePt,spacing}; cleanBuild prolazan pa mutacija fonta/velicine ruši."
-    },
-    {
-      "priority": "P1",
-      "checkId": "footnote.marker",
-      "title": "Položaj i stil oznaka fusnota",
-      "reason": "Builder ne emitira <w:footnoteReference> markere u tijelu.",
-      "desiredTest": "Dodaj footnoteReference markere; mutiraj u ukošene / iza interpunkcije."
-    },
-    {
-      "priority": "P1",
-      "checkId": "footnote.spacing",
-      "title": "Razmak prije i poslije fusnota",
-      "reason": "Builder ne podrzava before/after razmak na fusnotnim odlomcima.",
-      "desiredTest": "Dodaj pPr spacing na fusnote; eksplicitni razmak != 0 ruši provjeru."
-    },
-    {
-      "priority": "P1",
-      "checkId": "format.spacing.paragraph",
-      "title": "Razmak prije i poslije odlomka",
-      "reason": "Builder podrzava samo prored (line), ne before/after razmak odlomka.",
-      "desiredTest": "Dodaj before/after u ParaSpec; eksplicitni razmak > 0.6 pt ruši provjeru."
     },
     {
       "priority": "P1",

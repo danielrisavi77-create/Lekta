@@ -18,16 +18,30 @@ export interface ParaSpec {
   jc?: 'both' | 'left' | 'center' | 'right'; // poravnanje
   spacing15?: boolean; // true => prored 1,5 (w:line 360 auto)
   spacingLine?: number; // w:line vrijednost (240-tine): 276 => 1,15; ima prednost pred spacing15
+  before?: number; // razmak PRIJE odlomka u tockama (w:spacing w:before, 20-tine tocke)
+  after?: number; // razmak POSLIJE odlomka u tockama (w:spacing w:after, 20-tine tocke)
   styleId?: string; // npr. "Heading1" za naslov
   empty?: true; // emitira potpuno childless <w:p/> (Word bare Enter), zanemaruje sva ostala polja
   raw?: string; // escape hatch: doslovni XML jednog odlomka (bookmark, prijelom stranice, sectPr...), emitira se bez izmjene
+}
+
+/** Fusnota s oblikovanjem (podskup ParaSpec-a): tekst + font/velicina/prored/razmaci/poravnanje.
+ *  Emitira se istim `paraXml`-om kao odlomak tijela, pa je oblik dosljedan i testabilan. */
+export interface FootnoteSpec {
+  text: string;
+  font?: string;
+  sizePt?: number;
+  jc?: 'both' | 'left' | 'center' | 'right';
+  spacingLine?: number;
+  before?: number;
+  after?: number;
 }
 
 export interface DocSpec {
   paragraphs: ParaSpec[];
   pageCm?: { w: number; h: number }; // default A4 21 x 29,7
   marginsCm?: { top: number; right: number; bottom: number; left: number };
-  footnotes?: string[]; // tekstovi fusnota; emitira word/footnotes.xml (id 1..N)
+  footnotes?: (string | FootnoteSpec)[]; // fusnote (string = goli tekst, ili FootnoteSpec s oblikom); word/footnotes.xml (id 1..N)
 }
 
 function esc(s: string): string {
@@ -51,8 +65,14 @@ function paraXml(p: ParaSpec): string {
 
   const ppr: string[] = [];
   if (p.styleId) ppr.push(`<w:pStyle w:val="${esc(p.styleId)}"/>`);
-  if (p.spacingLine) ppr.push(`<w:spacing w:line="${p.spacingLine}" w:lineRule="auto"/>`);
-  else if (p.spacing15) ppr.push('<w:spacing w:line="360" w:lineRule="auto"/>');
+  // Jedan <w:spacing> element nosi before/after (20-tine tocke) i line. Atributi se dodaju samo
+  // kad su zadani, pa je izlaz za postojece specove (bez before/after) BAJT-IDENTICAN.
+  const sp: string[] = [];
+  if (p.before != null) sp.push(`w:before="${Math.round(p.before * 20)}"`);
+  if (p.after != null) sp.push(`w:after="${Math.round(p.after * 20)}"`);
+  if (p.spacingLine) sp.push(`w:line="${p.spacingLine}"`, 'w:lineRule="auto"');
+  else if (p.spacing15) sp.push('w:line="360"', 'w:lineRule="auto"');
+  if (sp.length) ppr.push(`<w:spacing ${sp.join(' ')}/>`);
   if (p.jc) ppr.push(`<w:jc w:val="${p.jc}"/>`);
   const pPr = ppr.length ? `<w:pPr>${ppr.join('')}</w:pPr>` : '';
 
@@ -103,17 +123,20 @@ function contentTypesXml(hasFootnotes: boolean): string {
   );
 }
 
-/** word/footnotes.xml s fusnotama id 1..N (parser cita ovaj dio izravno). */
-function footnotesXml(texts: string[]): string {
-  const notes = texts
-    .map(
-      (t, i) =>
-        `<w:footnote w:id="${i + 1}"><w:p><w:r><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p></w:footnote>`,
-    )
+/** word/footnotes.xml s fusnotama id 1..N (parser cita ovaj dio izravno). Svaka fusnota se
+ *  renderira istim `paraXml`-om kao odlomak tijela; goli string je ekvivalent `{text}` i daje
+ *  BAJT-IDENTICAN izlaz kao prije (bez pPr/rPr), a FootnoteSpec dodaje oblik (font, velicina,
+ *  razmaci) za provjere oblikovanja/razmaka fusnota. */
+function footnotesXml(notes: (string | FootnoteSpec)[]): string {
+  const body = notes
+    .map((n, i) => {
+      const spec: ParaSpec = typeof n === 'string' ? { text: n } : { ...n };
+      return `<w:footnote w:id="${i + 1}">${paraXml(spec)}</w:footnote>`;
+    })
     .join('');
   return (
     `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
-    `<w:footnotes xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">${notes}</w:footnotes>`
+    `<w:footnotes xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">${body}</w:footnotes>`
   );
 }
 

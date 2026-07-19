@@ -2,9 +2,9 @@
 
 > Sto korpus JOS ne pokriva, po prioritetu. P0 = parser crash/sigurnost; P1 = jezgra predaje bez regresije; P2 = ostalo/korektnost; P3 = informativno.
 
-Ukupno: P0 0, P1 12, P2 1, P3 10.
+Ukupno: P0 0, P1 8, P2 1, P3 10.
 
-## P1 (12)
+## P1 (8)
 
 - **citation.punctuation** — Dosljednost interpunkcije citatnica
   - Detektor oddCitationPunctuation je uzak; treba precizan neispravan uzorak.
@@ -12,18 +12,6 @@ Ukupno: P0 0, P1 12, P2 1, P3 10.
 - **citation.style-automation** — Automatizacija citatnog stila
   - Savjetodavna, uvijek-warn provjera (nema pass stanja).
   - Potreban test: Nije atomski testabilna kao fail; eventualno valid-control da ostaje info.
-- **footnote.format** — Oblikovanje fusnota
-  - Builder ne kontrolira oblik fusnota (rPr/pPr na fusnotnim odlomcima).
-  - Potreban test: Prosiri docx-builder footnotes na {text,font,sizePt,spacing}; cleanBuild prolazan pa mutacija fonta/velicine ruši.
-- **footnote.marker** — Položaj i stil oznaka fusnota
-  - Builder ne emitira <w:footnoteReference> markere u tijelu.
-  - Potreban test: Dodaj footnoteReference markere; mutiraj u ukošene / iza interpunkcije.
-- **footnote.spacing** — Razmak prije i poslije fusnota
-  - Builder ne podrzava before/after razmak na fusnotnim odlomcima.
-  - Potreban test: Dodaj pPr spacing na fusnote; eksplicitni razmak != 0 ruši provjeru.
-- **format.spacing.paragraph** — Razmak prije i poslije odlomka
-  - Builder podrzava samo prored (line), ne before/after razmak odlomka.
-  - Potreban test: Dodaj before/after u ParaSpec; eksplicitni razmak > 0.6 pt ruši provjeru.
 - **manual.checks** — Zahtjevi za ručnu završnu provjeru
   - Savjetodavni podsjetnik, uvijek-warn (nema pass stanja).
   - Potreban test: Nije atomski testabilna kao fail.
