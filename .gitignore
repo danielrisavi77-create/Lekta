@@ -2,6 +2,9 @@ node_modules/
 dist/
 scratchpad-dist-public/
 artifacts/
+# WS-4 emit-repair-samples izlazi: kopije PRAVIH (osjetljivih) korisnickih .docx + popravljeni uzorci.
+# Nikad u repo (privatnost); lokalni artefakt za rucnu Word/LibreOffice validaciju.
+tmp/
 # Lekta Error Corpus: izvezeni binarni .docx se NE commitaju (generiraju se `npm run corpus:export`).
 .artifacts/
 *.local
