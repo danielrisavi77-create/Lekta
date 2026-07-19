@@ -1,0 +1,180 @@
+{
+  "$generatedBy": "scripts/generate-work-type-scope.mjs",
+  "note": "Okvirni opseg TEKSTA (rijeci/znakovi, NE stranice) po naplatnoj vrsti rada, IZVEDEN iz sluzbenih fakultetskih pravila. Sirovi min-max preko svih profila s pravilom + provenijencija; ne izmislja i ne racuna prosjeke. Pokrivenost je tanka pa je enforcement primarno na naslovnicki marker, opseg samo kao potvrda daleko-izvan-raspona.",
+  "karticaChars": 1800,
+  "billingTiers": [
+    "seminarski",
+    "zavrsni",
+    "diplomski",
+    "doktorski"
+  ],
+  "reportWorkTypeMap": {
+    "seminar": "seminarski",
+    "final": "zavrsni",
+    "graduate": "diplomski",
+    "specialist": "diplomski",
+    "doctoral": "doktorski",
+    "article": "zavrsni",
+    "project": "zavrsni"
+  },
+  "tiers": {
+    "seminarski": {
+      "words": null,
+      "chars": {
+        "min": 27000,
+        "max": 45000,
+        "sampleCount": 1,
+        "samples": [
+          {
+            "id": "trgovacko-pravo",
+            "min": 27000,
+            "max": 45000,
+            "mode": "main-text-excluding-front-refs"
+          }
+        ]
+      },
+      "anchored": true
+    },
+    "zavrsni": {
+      "words": {
+        "min": 5000,
+        "max": 15000,
+        "sampleCount": 3,
+        "samples": [
+          {
+            "id": "algebra-zavrsni",
+            "min": 12000,
+            "max": 15000,
+            "mode": null
+          },
+          {
+            "id": "fpzg-novinarstvo-zavrsni-tekst",
+            "min": 5000,
+            "max": 6000,
+            "mode": "fpzg-main-plus-footnotes"
+          },
+          {
+            "id": "fpzg-politologija-zavrsni",
+            "min": 5000,
+            "max": 6000,
+            "mode": "fpzg-main-plus-footnotes"
+          }
+        ]
+      },
+      "chars": null,
+      "anchored": true
+    },
+    "diplomski": {
+      "words": {
+        "min": 8000,
+        "max": 25000,
+        "sampleCount": 11,
+        "samples": [
+          {
+            "id": "algebra-diplomski",
+            "min": 20000,
+            "max": 25000,
+            "mode": null
+          },
+          {
+            "id": "algebra-diplomski-odnosi-s-javnoscu",
+            "min": 20000,
+            "max": 25000,
+            "mode": null
+          },
+          {
+            "id": "algebra-specijalisticki",
+            "min": 20000,
+            "max": 25000,
+            "mode": null
+          },
+          {
+            "id": "fpzg-nacionalna-sigurnost-diplomski",
+            "min": 10000,
+            "max": 12000,
+            "mode": "fpzg-main-plus-footnotes"
+          },
+          {
+            "id": "fpzg-novinarstvo-diplomski",
+            "min": 12000,
+            "max": 15000,
+            "mode": "fpzg-main-plus-footnotes"
+          },
+          {
+            "id": "fpzg-politologija-diplomski",
+            "min": 10000,
+            "max": 12000,
+            "mode": "fpzg-main-plus-footnotes"
+          },
+          {
+            "id": "fpzg-specijalisticki-odnosi-s-javnoscu",
+            "min": 8000,
+            "max": 12000,
+            "mode": "fpzg-main-plus-footnotes"
+          },
+          {
+            "id": "fpzg-specijalisticki-prilagodba-eu",
+            "min": 8000,
+            "max": 12000,
+            "mode": "fpzg-main-plus-footnotes"
+          },
+          {
+            "id": "fpzg-specijalisticki-sigurnosna-politika-rh",
+            "min": 8000,
+            "max": 12000,
+            "mode": "fpzg-main-plus-footnotes"
+          },
+          {
+            "id": "fpzg-specijalisticki-vanjska-politika-diplomacija",
+            "min": 8000,
+            "max": 12000,
+            "mode": "fpzg-main-plus-footnotes"
+          },
+          {
+            "id": "pravo-socijalne-djelatnosti-specijalisticki",
+            "min": 20000,
+            "max": 25000,
+            "mode": null
+          }
+        ]
+      },
+      "chars": {
+        "min": 36000,
+        "max": 72000,
+        "sampleCount": 1,
+        "samples": [
+          {
+            "id": "trgovacko-pravo",
+            "min": 36000,
+            "max": 72000,
+            "mode": "main-text-excluding-front-refs"
+          }
+        ]
+      },
+      "anchored": true
+    },
+    "doktorski": {
+      "words": {
+        "min": 45000,
+        "max": 60000,
+        "sampleCount": 1,
+        "samples": [
+          {
+            "id": "pravo-socijalne-djelatnosti-doktorski",
+            "min": 45000,
+            "max": 60000,
+            "mode": null
+          }
+        ]
+      },
+      "chars": null,
+      "anchored": true
+    }
+  },
+  "gaps": [
+    "seminarski: nema rasponā u rijecima (samo znakovi, 1 uzor.).",
+    "zavrsni: nema rasponā u znakovima (samo rijeci, 3 uzor.).",
+    "doktorski: nema rasponā u znakovima (samo rijeci, 1 uzor.).",
+    "doktorski: samo 1 uzorak/uzoraka za rijeci; raspon je statisticki tanak."
+  ]
+}

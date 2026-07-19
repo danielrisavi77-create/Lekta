@@ -19,6 +19,7 @@
     "extract-citation-sections": "node scripts/extract-citation-sections.mjs",
     "citation-dossiers": "node scripts/citation-spec-dossier.mjs",
     "approve-citation-spec": "node scripts/approve-citation-spec.mjs",
+    "gen:worktype-scope": "node scripts/generate-work-type-scope.mjs",
     "docx-smoke": "vite-node scripts/docx-smoke.mts",
     "corpus:inventory": "vite-node tests/corpus/cli/inventory.ts",
     "corpus:coverage": "vite-node tests/corpus/cli/coverage.ts",
