@@ -160,12 +160,20 @@ function applyRunStyle(span: HTMLElement, run: PreviewRun, base: BaseStyle): voi
   if (run.italic) span.style.fontStyle = 'italic';
   if (run.font && normFont(run.font) !== normFont(base.font)) span.style.fontFamily = fontStack(run.font);
   if (base.applySize !== false && typeof run.size === 'number' && run.size > 0 && run.size !== base.size) span.style.fontSize = run.size + 'pt';
+  const deco: string[] = [];
+  if (run.underline) deco.push('underline');
+  if (run.strike) deco.push('line-through');
+  if (deco.length) span.style.textDecoration = deco.join(' ');
+  if (run.caps) span.style.textTransform = 'uppercase'; // w:caps: prikazi velikim, tekst ostaje unesen
+  else if (run.smallCaps) span.style.fontVariant = 'small-caps';
+  if (run.color) span.style.color = run.color;
 }
 
 /** True ako run nema vidljive razlike od baznog stila (renderira se kao goli tekstni cvor). */
 function runIsBase(run: PreviewRun | null, base: BaseStyle): boolean {
   if (!run) return true;
   if (run.bold || run.italic) return false;
+  if (run.underline || run.strike || run.caps || run.smallCaps || run.color) return false;
   if (run.font && normFont(run.font) !== normFont(base.font)) return false;
   if (base.applySize !== false && typeof run.size === 'number' && run.size > 0 && run.size !== base.size) return false;
   return true;
@@ -316,7 +324,7 @@ function makeSheet(model: PreviewModel, base: BaseStyle, doc: Document): HTMLEle
 
 /** Dodaj odlomak (body) na dani list. */
 function appendParagraph(
-  page: HTMLElement,
+  container: HTMLElement,
   para: PreviewParagraph,
   byPara: Map<number, FlagEntry[]>,
   base: BaseStyle,
@@ -330,14 +338,123 @@ function appendParagraph(
   const alignCss = alignToCss(para.align);
   if (alignCss) el.style.textAlign = alignCss;
 
+  // Stvarna velicina odlomka: element dobiva pravu velicinu iz dokumenta (ne sinteticku CSS heading
+  // velicinu), a runovi odstupaju samo kad se od nje razlikuju. Tako naslov dobiva svoju velicinu.
+  const paraSize = cmOrNull(para.size);
+  const pBase: BaseStyle = { font: base.font, size: paraSize ?? base.size };
+  if (paraSize) el.style.fontSize = paraSize + 'pt';
+
+  // Okomiti razmaci i prored iz dokumenta (naslovnica pozicionira tekst upravo njima). Razmak 0 je
+  // znacajan (znaci "bez razmaka") pa se postavlja i tada; null (nije zadan) prepusta CSS zadanom.
+  const sb = para.spaceBefore, sa = para.spaceAfter;
+  if (typeof sb === 'number' && isFinite(sb) && sb >= 0) el.style.marginTop = sb + 'pt';
+  if (typeof sa === 'number' && isFinite(sa) && sa >= 0) el.style.marginBottom = sa + 'pt';
+  const lh = cmOrNull(para.lineHeight);
+  if (lh) el.style.lineHeight = String(lh);
+
   const paraFlags = byPara.get(para.index) ?? [];
-  const unlocated = fillFormatted(el, para.text || '', para.runs, paraFlags, base, doc, flagTargets, para.markers);
+  const unlocated = fillFormatted(el, para.text || '', para.runs, paraFlags, pBase, doc, flagTargets, para.markers);
   if (paraFlags.length) el.classList.add('lekta-fac-para--flagged');
   if (unlocated.length) {
     el.classList.add('lekta-fac-para--has-unlocated');
     for (const e of unlocated) if (!flagTargets.has(e.flagIndex)) flagTargets.set(e.flagIndex, el);
   }
-  page.appendChild(el);
+
+  // Ugradjene slike (grb/logo) idu nakon teksta odlomka. Renderiraju se SAMO data: URI-ji
+  // (obrana u dubinu; model ionako proizvodi samo data: URI), pa nema mrezne ni skriptne povrsine.
+  const images = para.images;
+  if (images && images.length) {
+    for (const im of images) {
+      if (!im || typeof im.src !== 'string' || !im.src.startsWith('data:')) continue;
+      const img = doc.createElement('img');
+      img.className = 'lekta-fac-img';
+      img.src = im.src;
+      img.alt = '';
+      // Postavi samo jednu dimenziju (sirinu ako je poznata) i prepusti drugu automatici + CSS
+      // max-width:100%, da omjer ostane ocuvan i preveliki logo ne prijedje sirinu stranice.
+      const w = cmOrNull(im.wCm), h = cmOrNull(im.hCm);
+      if (w) img.style.width = w + 'cm';
+      else if (h) img.style.height = h + 'cm';
+      el.appendChild(img);
+    }
+  }
+
+  // Prazan odlomak (bez teksta i bez slike) mora zauzeti visinu retka kao u Wordu, inace se okomiti
+  // razmaci naslovnice srusce. <br> daje liniju, a textContent ostaje prazan (integritet ocuvan).
+  if (!el.childNodes.length) el.appendChild(doc.createElement('br'));
+
+  container.appendChild(el);
+}
+
+/**
+ * Emitiraj odlomke jednog A4 lista: obicni odlomci idu izravno, a UZASTOPNI odlomci iste tablice
+ * (`para.cell.tableId`) skupljaju se u pravi `<table>` (mentor|student i sl.) umjesto okomitog slaganja.
+ */
+function appendBlocks(
+  page: HTMLElement,
+  paras: PreviewParagraph[],
+  byPara: Map<number, FlagEntry[]>,
+  base: BaseStyle,
+  doc: Document,
+  flagTargets: Map<number, HTMLElement>,
+): void {
+  let i = 0;
+  while (i < paras.length) {
+    const cell = paras[i].cell;
+    if (!cell) {
+      appendParagraph(page, paras[i], byPara, base, doc, flagTargets);
+      i++;
+      continue;
+    }
+    const tid = cell.tableId;
+    const tblParas: PreviewParagraph[] = [];
+    while (i < paras.length && paras[i].cell && (paras[i].cell as { tableId: number }).tableId === tid) {
+      tblParas.push(paras[i]);
+      i++;
+    }
+    appendTable(page, tblParas, byPara, base, doc, flagTargets);
+  }
+}
+
+/** Sagradi `<table>` iz odlomaka jedne tablice, grupirano po (row, col) iz `para.cell`. Celije nose
+ *  vlastite odlomke (s poravnanjem/oblikovanjem), pa mentor/student sjede jedan pored drugog. */
+function appendTable(
+  page: HTMLElement,
+  paras: PreviewParagraph[],
+  byPara: Map<number, FlagEntry[]>,
+  base: BaseStyle,
+  doc: Document,
+  flagTargets: Map<number, HTMLElement>,
+): void {
+  const rowsMap = new Map<number, Map<number, PreviewParagraph[]>>();
+  let maxCol = 0;
+  for (const p of paras) {
+    const c = p.cell;
+    if (!c) continue;
+    if (c.col > maxCol) maxCol = c.col;
+    let r = rowsMap.get(c.row);
+    if (!r) { r = new Map(); rowsMap.set(c.row, r); }
+    let list = r.get(c.col);
+    if (!list) { list = []; r.set(c.col, list); }
+    list.push(p);
+  }
+  const ncols = maxCol + 1;
+  const table = doc.createElement('table');
+  table.className = 'lekta-fac-table';
+  const rowKeys = [...rowsMap.keys()].sort((a, b) => a - b);
+  for (const rk of rowKeys) {
+    const tr = doc.createElement('tr');
+    const rowCells = rowsMap.get(rk) as Map<number, PreviewParagraph[]>;
+    for (let ci = 0; ci < ncols; ci++) {
+      const td = doc.createElement('td');
+      if (ncols > 1) td.style.width = (100 / ncols).toFixed(4) + '%';
+      for (const p of rowCells.get(ci) ?? []) appendParagraph(td, p, byPara, base, doc, flagTargets);
+      if (!td.childNodes.length) td.appendChild(doc.createElement('br'));
+      tr.appendChild(td);
+    }
+    table.appendChild(tr);
+  }
+  page.appendChild(table);
 }
 
 /**
@@ -392,7 +509,7 @@ export function renderFacsimile(
   pages.forEach((group, pi) => {
     const page = makeSheet(model, base, doc);
     if (multiPage) page.setAttribute('data-page', String(pi + 1));
-    for (const para of group) appendParagraph(page, para, byPara, base, doc, flagTargets);
+    appendBlocks(page, group, byPara, base, doc, flagTargets);
 
     // Fusnote na dnu ZADNJEG lista (odvojene crtom); zaseban koordinatni prostor kao u MVP-u.
     if (pi === pages.length - 1 && footnotes.length) {

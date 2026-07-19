@@ -9,7 +9,7 @@ import { escapeHtml } from '../utils/helpers';
 import { bindCopyButton, bindDownloadButton, defaultSelectedIndex } from './tool-ui';
 import { readToolDraft, saveToolDraft } from './draft-share';
 import { ZAGREB_CATALOG } from '../catalog/catalog-loader';
-import { selectTemplate, ensureTemplatesHeavy, templatesHeavyLoaded, type TemplateSelection } from '../title-pages/template-loader';
+import { selectTemplate, TITLE_PAGE_TEMPLATES, ensureTemplatesHeavy, templatesHeavyLoaded, type TemplateSelection } from '../title-pages/template-loader';
 import { workTypeLabel } from '../config/config-loader';
 import { parseTitlePageParams, serializeTitlePageParams } from '../title-pages/title-page-params';
 import { defaultWorkTypeForProgram } from '../ui/work-selection';
@@ -227,6 +227,10 @@ async function render(): Promise<void> {
   if (copy) copy.disabled = !hasContent;
   if (print) print.disabled = !hasContent;
   if (docx) docx.disabled = !hasContent;
+  // Poveznica ima smisla samo kad kaskada nosi konkretan fakultet (syncUrl vec upisao ?fakultet=
+  // u adresnu traku); prazan/rucni unos bez odabira daje golu pocetnu adresu, nista za dijeliti.
+  const share = $('#tp-share');
+  if (share) share.disabled = !$('#tp-unit')?.value;
 }
 
 // --- Kaskada ustanova -> fakultet -> studij (auto-popuna, polja ostaju editabilna) ---
@@ -242,6 +246,15 @@ function fillSelect(el: any, placeholder: string, items: Array<{ id?: string; na
 
 function populateInstitutions() {
   fillSelect($('#tp-institution'), 'Slobodan unos / nije na popisu', [...ZAGREB_CATALOG].sort(hrSort));
+}
+
+// Broj fakulteta/odsjeka s vlastitim predloskom (hero recenica), racunato iz zivih podataka
+// (ne rucno upisan broj) da se ne raziđe od data/title-pages/templates.json kako raste.
+function renderCoverageCount(): void {
+  const el = $('#tp-coverage-count');
+  if (!el) return;
+  const units = new Set(TITLE_PAGE_TEMPLATES.map((t: any) => t.unitId));
+  el.textContent = String(units.size);
 }
 
 /** Prijedlozi za slobodni unos #tp-university, izvedeni iz kataloga (isti izvor kao kaskada). */
@@ -420,6 +433,7 @@ function persistSharedDraft(): void {
 
 function init() {
   if (!$('#tp-sheet')) return;
+  renderCoverageCount();
   populateInstitutions();
   populateUniversityDatalist();
   populateUnits('');
@@ -472,6 +486,14 @@ function init() {
     const model = lastModel;
     return model && model.lines.length ? titlePageText(model) : '';
   }, { statusEl: $('#tp-copy-status') });
+
+  // Deep-link na trenutni predlozak: syncUrl() vec upisuje ?fakultet=&razina=&smjer= u adresnu
+  // traku na svaku promjenu kaskade (applyUrlParams cita to natrag); ovaj gumb samo cini tu
+  // vec postojecu infrastrukturu vidljivom i djeljivom.
+  bindCopyButton($('#tp-share'), () => ($('#tp-unit')?.value ? location.href : ''), {
+    statusEl: $('#tp-copy-status'),
+    okStatus: 'Poveznica na predložak kopirana u međuspremnik.',
+  });
 
   $('#tp-print')?.addEventListener('click', () => window.print());
 

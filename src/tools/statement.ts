@@ -11,6 +11,10 @@ export interface StatementInput {
   title?: string;
   place?: string;    // npr. Zagreb
   date?: string;     // slobodan tekst, npr. 3. srpnja 2026.
+  // OIB/JMBAG: opcionalno, dio fakulteta ih trazi uz potpis (v. .note u izjava.html). Nikad
+  // dio RECOMMENDED (nisu opceniti standard), pa ne ulaze u "missing" nudge.
+  oib?: string;
+  jmbag?: string;
 }
 
 export interface StatementModel {
@@ -18,6 +22,7 @@ export interface StatementModel {
   body: string;        // puni odlomak izjave s uvrstenim podacima
   placeDate: string;   // npr. "Zagreb, 3. srpnja 2026."
   signatureName: string;
+  identifiers: string; // npr. "JMBAG: 1234567890, OIB: 12345678901"; prazno kad oba polja prazna
   missing: string[];   // preporucena, a prazna polja
 }
 
@@ -49,6 +54,13 @@ function joinPlaceDate(place: string, date: string): string {
   return place || date;
 }
 
+function joinIdentifiers(jmbag: string, oib: string): string {
+  const parts: string[] = [];
+  if (jmbag) parts.push(`JMBAG: ${jmbag}`);
+  if (oib) parts.push(`OIB: ${oib}`);
+  return parts.join(', ');
+}
+
 export function buildStatement(input: StatementInput): StatementModel {
   const heading: string = input.heading === 'Izjava o akademskoj čestitosti'
     ? 'Izjava o akademskoj čestitosti'
@@ -59,6 +71,8 @@ export function buildStatement(input: StatementInput): StatementModel {
   const title = clean(input.title);
   const place = clean(input.place);
   const date = clean(input.date);
+  const oib = clean(input.oib);
+  const jmbag = clean(input.jmbag);
 
   const wt = workType ? workType.toLowerCase() : 'rad';
   const dem = demonstrative(wt);
@@ -73,7 +87,10 @@ export function buildStatement(input: StatementInput): StatementModel {
 
   const missing = RECOMMENDED.filter(([key]) => !clean(input[key])).map(([, label]) => label);
 
-  return { heading, body, placeDate: joinPlaceDate(place, date), signatureName: author, missing };
+  return {
+    heading, body, placeDate: joinPlaceDate(place, date), signatureName: author,
+    identifiers: joinIdentifiers(jmbag, oib), missing,
+  };
 }
 
 // Cisti tekst izjave za kopiranje.
@@ -81,5 +98,6 @@ export function statementText(model: StatementModel): string {
   const parts = [model.heading, '', model.body, ''];
   if (model.placeDate) parts.push(model.placeDate);
   if (model.signatureName) parts.push('', model.signatureName);
+  if (model.identifiers) parts.push(model.identifiers);
   return parts.join('\n');
 }

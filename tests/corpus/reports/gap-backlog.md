@@ -2,9 +2,9 @@
 
 > Sto korpus JOS ne pokriva, po prioritetu. P0 = parser crash/sigurnost; P1 = jezgra predaje bez regresije; P2 = ostalo/korektnost; P3 = informativno.
 
-Ukupno: P0 0, P1 19, P2 1, P3 10.
+Ukupno: P0 0, P1 12, P2 1, P3 10.
 
-## P1 (19)
+## P1 (12)
 
 - **citation.punctuation** — Dosljednost interpunkcije citatnica
   - Detektor oddCitationPunctuation je uzak; treba precizan neispravan uzorak.
@@ -30,30 +30,9 @@ Ukupno: P0 0, P1 19, P2 1, P3 10.
 - **page.numbers.scheme** — Shema numeriranja stranica
   - Treba eksplicitni format numeriranja (pgNumType); builder ga ne emitira.
   - Potreban test: Dodaj pgNumType; postavi krivi format (rimski u tijelu).
-- **page.size.project** — Format stranice (A3/A0)
-  - Provjera se okida samo za profil s paperSizes (A3/A0).
-  - Potreban test: Koristi arhitektonski/projektni profil; postavi krivi format stranice.
-- **reference.min-count** — Minimalan broj izvora profila
-  - Provjera se okida samo za profil s minReferences.
-  - Potreban test: Koristi profil s minReferences; smanji broj izvora ispod minimuma.
-- **structure.abstract** — Sažeci u samom radu
-  - Bodovanje sazetka gated (maxPoints); profil ga ne boduje.
-  - Potreban test: Koristi profil koji boduje sazetak; ukloni Sažetak.
-- **structure.heading.align** — Poravnanje naslova slijeva
-  - auditHeadingRules se ne okida za ovaj profil (nema rules.levels).
-  - Potreban test: Profil s heading pravilima; centriraj naslov umjesto lijevo.
-- **structure.heading.format** — Oblikovanje naslova po razinama
-  - auditHeadingRules se ne okida za ovaj profil (nema rules.levels).
-  - Potreban test: Koristi profil s heading pravilima ili dodaj rules.levels; mutiraj velicinu/bold naslova.
 - **structure.heading.hierarchy** — Hijerarhija naslova
   - Skok razine (H1->H3) treba Heading3; builder ima samo Heading1/2.
   - Potreban test: Dodaj Heading3/4 stil (ili outlineLvl); H1 pa H3 bez H2 = jump.
-- **structure.heading.numbering** — Numeriranje naslova
-  - auditHeadingRules se ne okida za ovaj profil (nema rules.levels).
-  - Potreban test: Profil s numberRequired; ukloni oznaku razine naslova.
-- **structure.keywords** — Ključne riječi u samom radu
-  - Bodovanje kljucnih rijeci gated; profil ih ne boduje kao scored.
-  - Potreban test: Profil koji boduje kljucne rijeci; ukloni redak Ključne riječi.
 - **toc.coverage** — Naslovi dokumenta ↔ sadržaj
   - Treba stvarno TOC polje i spremljene stavke; builder emitira samo PAGE.
   - Potreban test: Dodaj fldSimple/instrText TOC s stavkama; izostavi jedan naslov iz TOC-a.

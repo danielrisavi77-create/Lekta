@@ -7,6 +7,9 @@
     "moduleResolution": "bundler",
     "strict": true,
     "noEmit": true,
+    // Neki src/report i src/fingerprint moduli dijele se s Deno Edge Functionima
+    // (supabase/functions/**), koje zahtijevaju eksplicitan .ts u relativnim importima.
+    "allowImportingTsExtensions": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,

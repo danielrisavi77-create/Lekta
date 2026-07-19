@@ -72,6 +72,19 @@ function render() {
       : '<li class="lit-empty">Zalijepi popis izvora lijevo, po jedan u retku, pa se sređeni popis pojavljuje ovdje.</li>';
   }
 
+  // Uklanjanje duplikata nije crna kutija: "Duplikata" metrika je brojka, ovaj collapsible
+  // pokazuje TOCNO koji zapis je izbacen i na koji zadrzani zapis je mapiran, da lazno-pozitivan
+  // spoj (dva razlicita izvora slucajno protumacena kao isti) bude vidljiv, ne tih gubitak.
+  const dupesDetail = $('#lit-dupes-detail');
+  const dupesList = $('#lit-dupes-list');
+  if (dupesDetail && dupesList) {
+    dupesDetail.hidden = r.removedDuplicates.length === 0;
+    dupesList.innerHTML = r.removedDuplicates.map(d =>
+      `<li><b>Izbačeno:</b> ${escapeHtml(d.text)}<br><b>Zadržano kao:</b> ${escapeHtml(d.mappedTo)}</li>`,
+    ).join('');
+    if (!r.removedDuplicates.length) dupesDetail.removeAttribute('open');
+  }
+
   const copy = $('#lit-copy');
   if (copy) copy.disabled = r.entries.length === 0;
   const docx = $('#lit-docx');

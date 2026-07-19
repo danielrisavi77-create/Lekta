@@ -2,13 +2,13 @@
   "summary": {
     "totalChecks": 71,
     "scoredChecks": 54,
-    "scoredWithAtomic": 34,
-    "scoredAtomicPct": 63,
-    "scoredWithFailCase": 35,
-    "scoredFailCasePct": 65,
+    "scoredWithAtomic": 41,
+    "scoredAtomicPct": 76,
+    "scoredWithFailCase": 42,
+    "scoredFailCasePct": 78,
     "checksWithValidControl": 6,
     "checksWithBoundary": 4,
-    "atomicCases": 36,
+    "atomicCases": 43,
     "validControlCases": 7,
     "boundaryCases": 14,
     "intakeCodes": 6
@@ -118,7 +118,7 @@
       "checkId": "reference.min-count",
       "category": "citations",
       "scored": true,
-      "hasAtomic": false,
+      "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
     },
@@ -271,7 +271,7 @@
       "checkId": "page.size.project",
       "category": "formatting",
       "scored": true,
-      "hasAtomic": false,
+      "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
     },
@@ -451,7 +451,7 @@
       "checkId": "structure.keywords",
       "category": "structure",
       "scored": true,
-      "hasAtomic": false,
+      "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
     },
@@ -487,7 +487,7 @@
       "checkId": "structure.heading.numbering",
       "category": "structure",
       "scored": true,
-      "hasAtomic": false,
+      "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
     },
@@ -505,7 +505,7 @@
       "checkId": "structure.heading.format",
       "category": "structure",
       "scored": true,
-      "hasAtomic": false,
+      "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
     },
@@ -559,7 +559,7 @@
       "checkId": "structure.heading.align",
       "category": "structure",
       "scored": true,
-      "hasAtomic": false,
+      "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
     },
@@ -604,7 +604,7 @@
       "checkId": "structure.abstract",
       "category": "structure",
       "scored": true,
-      "hasAtomic": false,
+      "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
     },
@@ -713,59 +713,10 @@
     },
     {
       "priority": "P1",
-      "checkId": "page.size.project",
-      "title": "Format stranice (A3/A0)",
-      "reason": "Provjera se okida samo za profil s paperSizes (A3/A0).",
-      "desiredTest": "Koristi arhitektonski/projektni profil; postavi krivi format stranice."
-    },
-    {
-      "priority": "P1",
-      "checkId": "reference.min-count",
-      "title": "Minimalan broj izvora profila",
-      "reason": "Provjera se okida samo za profil s minReferences.",
-      "desiredTest": "Koristi profil s minReferences; smanji broj izvora ispod minimuma."
-    },
-    {
-      "priority": "P1",
-      "checkId": "structure.abstract",
-      "title": "Sažeci u samom radu",
-      "reason": "Bodovanje sazetka gated (maxPoints); profil ga ne boduje.",
-      "desiredTest": "Koristi profil koji boduje sazetak; ukloni Sažetak."
-    },
-    {
-      "priority": "P1",
-      "checkId": "structure.heading.align",
-      "title": "Poravnanje naslova slijeva",
-      "reason": "auditHeadingRules se ne okida za ovaj profil (nema rules.levels).",
-      "desiredTest": "Profil s heading pravilima; centriraj naslov umjesto lijevo."
-    },
-    {
-      "priority": "P1",
-      "checkId": "structure.heading.format",
-      "title": "Oblikovanje naslova po razinama",
-      "reason": "auditHeadingRules se ne okida za ovaj profil (nema rules.levels).",
-      "desiredTest": "Koristi profil s heading pravilima ili dodaj rules.levels; mutiraj velicinu/bold naslova."
-    },
-    {
-      "priority": "P1",
       "checkId": "structure.heading.hierarchy",
       "title": "Hijerarhija naslova",
       "reason": "Skok razine (H1->H3) treba Heading3; builder ima samo Heading1/2.",
       "desiredTest": "Dodaj Heading3/4 stil (ili outlineLvl); H1 pa H3 bez H2 = jump."
-    },
-    {
-      "priority": "P1",
-      "checkId": "structure.heading.numbering",
-      "title": "Numeriranje naslova",
-      "reason": "auditHeadingRules se ne okida za ovaj profil (nema rules.levels).",
-      "desiredTest": "Profil s numberRequired; ukloni oznaku razine naslova."
-    },
-    {
-      "priority": "P1",
-      "checkId": "structure.keywords",
-      "title": "Ključne riječi u samom radu",
-      "reason": "Bodovanje kljucnih rijeci gated; profil ih ne boduje kao scored.",
-      "desiredTest": "Profil koji boduje kljucne rijeci; ukloni redak Ključne riječi."
     },
     {
       "priority": "P1",

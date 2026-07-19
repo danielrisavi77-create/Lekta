@@ -28,37 +28,27 @@ function clampToMaxChars(value: string): string {
   return value.slice(0, end);
 }
 
-// Glavni broj (kartice) se glatko odbrojava do nove vrijednosti (serif brojka je fokus panela).
-// Cisto vizualno pobojlsanje: poestuje prefers-reduced-motion (tada se broj postavi odmah, bez
-// animacije). Jedan rAF loop, retargeta se na svaki render.
-const reduceMotion = typeof window.matchMedia === 'function'
-  && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-let ktNum: any = null;
-let ktRefs = false;
-let dispKartice = 0;
-let targetKartice = 0;
-let ktAnim = 0;
-function ktPaint(v: number) {
-  if (ktNum) ktNum.textContent = nf2.format(v);
-}
-function ktTick() {
-  const d = targetKartice - dispKartice;
-  if (Math.abs(d) < 0.004) { dispKartice = targetKartice; ktAnim = 0; ktPaint(dispKartice); return; }
-  dispKartice += d * 0.2;
-  ktPaint(dispKartice);
-  ktAnim = requestAnimationFrame(ktTick);
-}
-function animateKartice(target: number) {
-  if (!ktRefs) { ktNum = $('#m-kartice'); ktRefs = true; }
-  targetKartice = target;
-  if (reduceMotion) { dispKartice = target; ktPaint(target); return; }
-  ktPaint(dispKartice); // odmah osvjezi (i pri inicijalnom renderu)
-  if (!ktAnim) ktAnim = requestAnimationFrame(ktTick);
+// Svih 8 brojki (hero kartice + 7 stat-row vrijednosti) dobiva ISTI lagani "flash" na promjenu
+// vrijednosti (CSS animacija .stat-flash u kartice.html), umjesto rucnog rAF/easing engine-a
+// rezerviranog samo za hero broj. Dosljedan tretman ("uredjen instrument", ne jedna animirana
+// brojka medju sedam skokovitih) uz manje koda: prefers-reduced-motion pokriva CSS medij-upit
+// u stilu (@media(prefers-reduced-motion:reduce)), ne JS matchMedia provjera.
+function setStat(id: string, v: string) {
+  const el = $(id);
+  if (!el || el.textContent === v) return;
+  el.textContent = v;
+  el.classList.remove('stat-flash');
+  void el.offsetWidth; // reflow: restarta CSS animaciju i kad je klasa vec bila prisutna
+  el.classList.add('stat-flash');
 }
 
-const SAMPLE = `Ovo je primjer teksta koji možeš zamijeniti svojim radom. Zalijepi ovdje uvod, poglavlje ili cijeli rad pa gledaj kako se broj kartica, riječi i znakova mijenja u stvarnom vremenu.
+// Namjerno gust primjer kratica (prof. dr. sc., str., npr., itd.), decimale, raspona
+// stranica i URL-a: upravo slucajevi u kojima naivan brojac (dijeli po svakoj tocki)
+// precjenjuje broj recenica. countText() ih prepoznaje (v. counter.ts), pa prvi klik
+// na "Ubaci primjer" pokazuje TU razliku, ne genericki meta-tekst o alatu.
+const SAMPLE = `Prema uputama mentorice, prof. dr. sc. Ive Horvat, uvod treba sažeti dosadašnja istraživanja (usp. Anić, 2019, str. 45-52) i jasno postaviti cilj rada. Uzorak je obuhvatio 42,5% ispitanika starijih od 18 godina, dok su ostale skupine (npr. učenici, umirovljenici itd.) izostavljene iz analize. Detaljnija metodologija dostupna je na https://www.fpzg.unizg.hr/upute-za-pisanje, pristupljeno 3. srpnja 2026.
 
-Jedna autorska kartica u hrvatskoj lekturi i prijevodu iznosi 1800 znakova s razmacima. Cijena lekture obično se računa upravo po kartici, pa je ovaj broj koristan kad procjenjuješ trošak i opseg.`;
+Ovakav ulomak sadrži kratice, decimalni broj, raspon stranica, mrežnu poveznicu i naveden citat, upravo slučajeve u kojima obični brojači riječi krivo prepoznaju kraj rečenice. Brojač kartica ih prepoznaje i broji točno.`;
 
 function readingLabel(minutes: number): string {
   if (!minutes) return '0 min';
@@ -114,16 +104,15 @@ function renderGoalAndPrice(m: TextMetrics) {
 function render(text: any) {
   const m = countText(text);
   lastMetrics = m;
-  const set = (id: any, v: any) => { const el = $(id); if (el) el.textContent = v; };
 
-  animateKartice(displayedKartice(m)); // glatko odbrojavanje + prsten (umjesto izravnog set)
-  set('#m-words', nf.format(m.words));
-  set('#m-chars', nf.format(m.charsWithSpaces));
-  set('#m-chars-nospace', nf.format(m.charsWithoutSpaces));
-  set('#m-sentences', nf.format(m.sentences));
-  set('#m-paragraphs', nf.format(m.paragraphs));
-  set('#m-pages', nf.format(m.pages));
-  set('#m-reading', readingLabel(m.readingMinutes));
+  setStat('#m-kartice', nf2.format(displayedKartice(m)));
+  setStat('#m-words', nf.format(m.words));
+  setStat('#m-chars', nf.format(m.charsWithSpaces));
+  setStat('#m-chars-nospace', nf.format(m.charsWithoutSpaces));
+  setStat('#m-sentences', nf.format(m.sentences));
+  setStat('#m-paragraphs', nf.format(m.paragraphs));
+  setStat('#m-pages', nf.format(m.pages));
+  setStat('#m-reading', readingLabel(m.readingMinutes));
   renderGoalAndPrice(m);
 
   const copyBtn = $('#kt-copy');
@@ -214,7 +203,7 @@ function init() {
     srArmed = true;
     const hint = $('#kt-measure-hint');
     if (hint) hint.textContent = measureLabel();
-    animateKartice(displayedKartice(lastMetrics));
+    setStat('#m-kartice', nf2.format(displayedKartice(lastMetrics)));
     renderGoalAndPrice(lastMetrics);
     scheduleSrSummary(lastMetrics);
   });

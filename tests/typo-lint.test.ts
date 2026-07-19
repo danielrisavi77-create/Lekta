@@ -4,6 +4,7 @@ import {
   typoLintSummary,
   KIND_DVOSTRUKI_RAZMAK,
   KIND_RAZMAK_PRIJE_INTERPUNKCIJE,
+  KIND_RAZMAK_NAKON_INTERPUNKCIJE,
   KIND_EM_EN_CRTICA,
   KIND_NAVODNICI_NEDOSLJEDNI,
   KIND_HOMOGLIF_CIRILICA,
@@ -27,6 +28,30 @@ describe('typoLint: dvostruki razmak', () => {
   });
   it('ne prijavljuje uredan tekst s jednostrukim razmacima', () => {
     expect(byKind(['Ovo je uredan tekst.'], KIND_DVOSTRUKI_RAZMAK)).toHaveLength(0);
+  });
+});
+
+describe('typoLint: razmak NAKON interpunkcije', () => {
+  it('prijavljuje nedostatak razmaka nakon zareza (rijec,rijec)', () => {
+    const f = byKind(['Analiza,zatim rasprava.'], KIND_RAZMAK_NAKON_INTERPUNKCIJE);
+    expect(f).toHaveLength(1);
+    expect(f[0].suggestion).toContain('dodaj razmak');
+  });
+  it('prijavljuje granicu recenice bez razmaka (kraj.Nova)', () => {
+    const f = byKind(['Ovo je kraj.Nova recenica pocinje.'], KIND_RAZMAK_NAKON_INTERPUNKCIJE);
+    expect(f).toHaveLength(1);
+  });
+  it('NE prijavljuje decimalni zarez (1,5)', () => {
+    expect(byKind(['Vrijednost je 1,5 metra.'], KIND_RAZMAK_NAKON_INTERPUNKCIJE)).toHaveLength(0);
+  });
+  it('NE prijavljuje uredan razmak nakon zareza', () => {
+    expect(byKind(['Analiza, zatim rasprava.'], KIND_RAZMAK_NAKON_INTERPUNKCIJE)).toHaveLength(0);
+  });
+  it('NE prijavljuje inicijal (I.Ivic) ni decimalnu tocku (3.14)', () => {
+    expect(byKind(['Autor I.Ivic i vrijednost 3.14 su tu.'], KIND_RAZMAK_NAKON_INTERPUNKCIJE)).toHaveLength(0);
+  });
+  it('NE prijavljuje URL (maskiran)', () => {
+    expect(byKind(['Vidi na https://primjer.hr/a,b,c stranici.'], KIND_RAZMAK_NAKON_INTERPUNKCIJE)).toHaveLength(0);
   });
 });
 

@@ -1,8 +1,8 @@
 import type { Check, Issue } from '../scoring/checks';
-import { scoreMeta, categoryTotals } from '../scoring/checks';
+import { scoreMeta, categoryTotals } from '../scoring/checks.ts';
 import type { FingerprintInput } from '../fingerprint/fingerprint';
 import type { ReportWorkType } from './pricing';
-import { coverageTierForStatus } from './guarantee';
+import { coverageTierForStatus } from './guarantee.ts';
 
 /**
  * Granica teaser (klijent) i puni izvjestaj (server) kao cista podatkovna granica
@@ -144,7 +144,7 @@ export function buildTeaser(result: AnalysisResultLike, options: TeaserOptions =
     scoreLabel: scoreMeta(result.score).label,
     categoryScores: categoryScores(result.checks),
     issueCounts: issueCounts(issues),
-    sampleIssues: issues.slice(0, sampleSize),
+    sampleIssues: issues.slice(0, sampleSize).map((i) => ({ ...i, detail: redactParagraphQuotes(i.detail) ?? i.detail })),
     hasMore: issues.length > sampleSize,
     watermark: true,
   };

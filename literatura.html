@@ -56,6 +56,12 @@ textarea#lit-input{min-height:380px;line-height:1.6}
 .lit-chips{display:block;margin-top:7px;text-indent:0}
 .lit-chip{display:inline-block;font-family:var(--sans);font-size:10px;font-weight:800;color:var(--warn);background:var(--warn-soft);border-radius:999px;padding:3px 8px;margin:0 5px 4px 0}
 .lit-empty{color:var(--muted);font-style:italic;font-family:var(--sans);padding:22px;text-align:center}
+.lit-dupes-detail{margin:0 0 12px;font-size:13px}
+.lit-dupes-detail summary{cursor:pointer;font-weight:700;color:var(--muted);padding:2px 0}
+.lit-dupes-detail[open] summary{color:var(--text)}
+.lit-dupes-list{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:6px}
+.lit-dupes-list li{font-family:var(--ink-serif);font-size:13.5px;line-height:1.5;color:var(--muted);border:1px solid var(--line);border-radius:9px;padding:8px 11px;overflow-wrap:anywhere}
+.lit-dupes-list b{color:var(--text);font-weight:700}
 .out-bar{display:flex;gap:10px;align-items:center;margin-top:14px;flex-wrap:wrap}
 .note b{color:var(--text)}
 
@@ -211,6 +217,10 @@ textarea#lit-input{min-height:380px;line-height:1.6}
           <div class="metric warnstat"><span>S upozorenjem</span><b id="lit-issues">0</b></div>
         </div>
         <div class="sr-only" id="lit-sr-summary" role="status" aria-live="polite"></div>
+        <details class="lit-dupes-detail" id="lit-dupes-detail" hidden>
+          <summary>Prikaži izbačene duplikate</summary>
+          <ul class="lit-dupes-list" id="lit-dupes-list"></ul>
+        </details>
         <ul class="lit-list" id="lit-list" aria-label="Sređeni popis literature"><li class="lit-empty">Zalijepi popis izvora lijevo, po jedan u retku, pa se sređeni popis pojavljuje ovdje.</li></ul>
         <div class="out-bar">
           <button class="btn btn-primary" id="lit-copy" type="button" disabled>Kopiraj sređeni popis</button>

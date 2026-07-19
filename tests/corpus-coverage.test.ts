@@ -12,9 +12,10 @@ import { ATOMIC_CASES } from './corpus/catalog/atomic';
 import { VALID_CONTROL_CASES } from './corpus/catalog/valid-controls';
 import { BOUNDARY_CASES } from './corpus/catalog/boundary';
 import { LEGAL_ATOMIC_CASES, LEGAL_VALID_CASES } from './corpus/catalog/legal';
+import { PROFILE_ATOMIC_CASES } from './corpus/catalog/profile-enabled';
 import { CHECK_ID_BY_TITLE, stableCheckId } from './corpus/ids/check-id-registry';
 
-const ALL_CASES = [...ATOMIC_CASES, ...LEGAL_ATOMIC_CASES, ...VALID_CONTROL_CASES, ...LEGAL_VALID_CASES, ...BOUNDARY_CASES];
+const ALL_CASES = [...ATOMIC_CASES, ...LEGAL_ATOMIC_CASES, ...PROFILE_ATOMIC_CASES, ...VALID_CONTROL_CASES, ...LEGAL_VALID_CASES, ...BOUNDARY_CASES];
 const KNOWN_IDS = new Set(Object.values(CHECK_ID_BY_TITLE));
 
 describe('Lekta Error Corpus - coverage izvjestaj (faza 6)', () => {
@@ -33,13 +34,13 @@ describe('Lekta Error Corpus - coverage izvjestaj (faza 6)', () => {
     expect(rep.summary.scoredWithAtomic).toBeGreaterThanOrEqual(10);
     expect(rep.summary.scoredAtomicPct).toBeGreaterThan(0);
     expect(rep.summary.scoredAtomicPct).toBeLessThanOrEqual(100);
-    expect(rep.summary.atomicCases).toBe(ATOMIC_CASES.length + LEGAL_ATOMIC_CASES.length);
+    expect(rep.summary.atomicCases).toBe(ATOMIC_CASES.length + LEGAL_ATOMIC_CASES.length + PROFILE_ATOMIC_CASES.length);
     expect(rep.summary.boundaryCases).toBe(BOUNDARY_CASES.length);
   });
 
   it('svaka provjera s atomic/valid/boundary oznakom stvarno ima odgovarajuci slucaj', () => {
     const rep = buildCoverage();
-    const atomicIds = new Set([...ATOMIC_CASES, ...LEGAL_ATOMIC_CASES].map((c) => c.expect.checkId));
+    const atomicIds = new Set([...ATOMIC_CASES, ...LEGAL_ATOMIC_CASES, ...PROFILE_ATOMIC_CASES].map((c) => c.expect.checkId));
     const validIds = new Set([...VALID_CONTROL_CASES, ...LEGAL_VALID_CASES].map((c) => c.expect.checkId));
     const boundaryIds = new Set(BOUNDARY_CASES.map((c) => c.expect.checkId));
     for (const r of rep.rows) {

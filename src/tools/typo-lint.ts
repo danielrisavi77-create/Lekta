@@ -21,6 +21,7 @@ export interface TypoFinding {
 // Nazivi provjera (kind): stabilni hrvatski identifikatori.
 export const KIND_DVOSTRUKI_RAZMAK = 'dvostruki-razmak';
 export const KIND_RAZMAK_PRIJE_INTERPUNKCIJE = 'razmak-prije-interpunkcije';
+export const KIND_RAZMAK_NAKON_INTERPUNKCIJE = 'razmak-nakon-interpunkcije';
 export const KIND_EM_EN_CRTICA = 'em-en-crtica';
 export const KIND_NAVODNICI_NEDOSLJEDNI = 'navodnici-nedosljedni';
 export const KIND_HOMOGLIF_CIRILICA = 'homoglif-cirilica';
@@ -45,6 +46,7 @@ export const KIND_DOCUMENT_WIDE: ReadonlySet<string> = new Set([
 export const KIND_LABELS_HR: Record<string, string> = {
   [KIND_DVOSTRUKI_RAZMAK]: 'Dvostruki razmak',
   [KIND_RAZMAK_PRIJE_INTERPUNKCIJE]: 'Razmak prije interpunkcije',
+  [KIND_RAZMAK_NAKON_INTERPUNKCIJE]: 'Nedostaje razmak nakon interpunkcije',
   [KIND_EM_EN_CRTICA]: 'Crtica umjesto zareza, dvotočke ili zagrada',
   [KIND_NAVODNICI_NEDOSLJEDNI]: 'Nedosljedni navodnici',
   [KIND_HOMOGLIF_CIRILICA]: 'Ćirilični homoglif u latiničnoj riječi',
@@ -139,6 +141,34 @@ function checkRazmakPrijeInterpunkcije(p: string, pi: number, out: TypoFinding[]
       kind: KIND_RAZMAK_PRIJE_INTERPUNKCIJE,
       excerpt: excerptAt(p, m.index, m[0].length),
       suggestion: 'ukloni razmak prije interpunkcijskog znaka',
+    });
+  }
+}
+
+// 2b. Nema razmaka NAKON interpunkcije. Dva slucaja s niskim false-positiveom:
+//  - zarez/tocka-zarez izmedju dva SLOVA ("rijec,druga"): decimalni "1,5" ima znamenke pa ne upada;
+//  - . ! ? izmedju malog i VELIKOG slova ("kraj.Nova"): granica recenice bez razmaka. Inicijal
+//    ("I.Ivic") ne upada (veliko slovo prije tocke), decimal ("3.14") ne upada (znamenka), a URL-ovi
+//    su maskirani. Kratice ("npr.Nesto") se NAMJERNO prijavljuju: i iza kratice treba razmak.
+function checkRazmakNakonInterpunkcije(p: string, pi: number, out: TypoFinding[]): void {
+  const masked = maskUrls(p);
+  const reCommaSemi = /\p{L}[,;]\p{L}/gu;
+  let m: RegExpExecArray | null;
+  while ((m = reCommaSemi.exec(masked)) !== null) {
+    out.push({
+      paragraphIndex: pi,
+      kind: KIND_RAZMAK_NAKON_INTERPUNKCIJE,
+      excerpt: excerptAt(p, m.index, m[0].length),
+      suggestion: 'dodaj razmak nakon interpunkcijskog znaka',
+    });
+  }
+  const reSentence = /\p{Ll}[.!?]\p{Lu}/gu;
+  while ((m = reSentence.exec(masked)) !== null) {
+    out.push({
+      paragraphIndex: pi,
+      kind: KIND_RAZMAK_NAKON_INTERPUNKCIJE,
+      excerpt: excerptAt(p, m.index, m[0].length),
+      suggestion: 'dodaj razmak nakon interpunkcijskog znaka',
     });
   }
 }
@@ -275,6 +305,7 @@ export function typoLint(paragraphs: string[]): TypoFinding[] {
   paragraphs.forEach((p, pi) => {
     checkDvostrukiRazmak(p, pi, findings);
     checkRazmakPrijeInterpunkcije(p, pi, findings);
+    checkRazmakNakonInterpunkcije(p, pi, findings);
     checkEmEnCrtica(p, pi, findings);
     checkHomoglifCirilica(p, pi, findings);
     checkVisestrukeTocke(p, pi, findings);

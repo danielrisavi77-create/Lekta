@@ -40,6 +40,8 @@
 .field input:focus,.field select:focus,.field textarea:focus{outline:none;box-shadow:var(--focus);background:var(--panel);border-color:var(--brand)}
 .field textarea{resize:vertical;min-height:46px}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.doi-row{display:flex;gap:8px}
+.doi-row input{flex:1;min-width:0}
 
 .out-panel{position:sticky;top:88px}
 /* izlaz kao bibliografski redak na papiru s marginom i visećom uvlakom */
@@ -183,7 +185,7 @@
     <div class="hero-back"><a class="backlink" href="index.html#top">&larr; Natrag na Lektu</a></div>
     <span class="eyebrow">Besplatan alat, bez registracije</span>
     <h1>Hrvatski <span class="ink">generator citata</span></h1>
-    <p class="lead">Oblikuj citat u zadanom stilu (autor-godina, fusnota) ili prema stilu tvog fakulteta, pojedinačno ili cijelu literaturu odjednom. Za knjigu, poglavlje, članak, mrežni izvor, završni rad ili propis. Sve lokalno, ništa se ne šalje na poslužitelj.</p>
+    <p class="lead">Oblikuj citat u zadanom stilu (autor-godina, fusnota) ili prema stilu tvog fakulteta, pojedinačno ili cijelu literaturu odjednom. Za knjigu, poglavlje, članak, mrežni izvor, završni rad ili propis. Sve lokalno; jedina iznimka je opcionalno popunjavanje iz DOI-ja, koje šalje sam DOI javnom Crossref servisu.</p>
     <p class="sibling">Već imaš gotov popis? Posloži ga i izvezi u <a href="literatura.html">Sređivanju literature</a>. Za opseg: <a href="kartice.html">brojač kartica</a>, za izjavu o izvornosti: <a href="izjava.html">generator izjave</a>.</p>
   </div>
 </section>
@@ -288,7 +290,11 @@
       </div>
       <div class="field" data-field="doi" style="display:none">
         <label for="f-doi">DOI</label>
-        <input id="f-doi" type="text" placeholder="10.1234/primjer ili https://doi.org/...">
+        <div class="doi-row">
+          <input id="f-doi" type="text" placeholder="10.1234/primjer ili https://doi.org/...">
+          <button class="btn btn-secondary btn-sm" id="f-doi-fill" type="button">Popuni iz DOI-ja</button>
+        </div>
+        <p class="sub" id="f-doi-status" aria-live="polite"></p>
       </div>
       <div class="field" data-field="accessed" style="display:none">
         <label for="f-accessed">Datum pristupa</label>

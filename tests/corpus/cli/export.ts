@@ -18,6 +18,7 @@ import { ATOMIC_CASES } from '../catalog/atomic';
 import { VALID_CONTROL_CASES } from '../catalog/valid-controls';
 import { BOUNDARY_CASES } from '../catalog/boundary';
 import { LEGAL_ATOMIC_CASES, LEGAL_VALID_CASES } from '../catalog/legal';
+import { PROFILE_ATOMIC_CASES } from '../catalog/profile-enabled';
 import type { ErrorCase } from '../error-case';
 
 installXmlDomParser(true);
@@ -32,7 +33,7 @@ function parseArgs(argv: string[]) {
   return a;
 }
 
-const ALL: ErrorCase[] = [...ATOMIC_CASES, ...LEGAL_ATOMIC_CASES, ...VALID_CONTROL_CASES, ...LEGAL_VALID_CASES, ...BOUNDARY_CASES];
+const ALL: ErrorCase[] = [...ATOMIC_CASES, ...LEGAL_ATOMIC_CASES, ...PROFILE_ATOMIC_CASES, ...VALID_CONTROL_CASES, ...LEGAL_VALID_CASES, ...BOUNDARY_CASES];
 
 /** Ocekivani "status" datoteke u imenu: fail (atomski/boundary-not-pass), ok (valid/boundary-pass). */
 function expectedTag(c: ErrorCase): string {

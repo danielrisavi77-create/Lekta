@@ -360,6 +360,9 @@ export function statementDoc(model: StatementModel): DocSpec {
     if (model.signatureName) {
       paragraphs.push({ text: model.signatureName, jc: 'right' });
     }
+    if (model.identifiers) {
+      paragraphs.push({ text: model.identifiers, jc: 'right' });
+    }
   }
   return { paragraphs };
 }

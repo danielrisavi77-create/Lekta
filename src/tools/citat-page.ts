@@ -29,6 +29,20 @@ const TEXT_FIELDS = ['authors', 'title', 'container', 'editor', 'year', 'publish
 const GENERIC_STYLE_HTML = `<option value="autor-godina">Autor-godina (društvene znanosti)</option>
 <option value="fusnota">Fusnota / bibliografija (pravno, humanističko)</option>`;
 
+// Pamcenje odabranog fakulteta preko semestra: localStorage (ne sessionStorage kao draft-share.ts,
+// namjerno - fakultet nije osobni podatak kao ime, i vrijednost treba prezivjeti zatvaranje taba).
+// Isti try/catch obrazac kao ostali storage pristupi u kodu (privatni nacin/blokiran storage ne rusi alat).
+const FACULTY_STORAGE_KEY = 'lekta.citat-faculty';
+function saveFacultyChoice(id: string): void {
+  try {
+    if (id) localStorage.setItem(FACULTY_STORAGE_KEY, id);
+    else localStorage.removeItem(FACULTY_STORAGE_KEY);
+  } catch { /* bez storage-a: alat radi bez pamcenja */ }
+}
+function readFacultyChoice(): string {
+  try { return localStorage.getItem(FACULTY_STORAGE_KEY) || ''; } catch { return ''; }
+}
+
 // Kad je fakultet odabran, #f-style nosi njegove stilove (value = indeks); inace je null (genericki mod).
 let facultyStyles: FacultyStyle[] | null = null;
 
@@ -171,6 +185,7 @@ function onFacultyChange() {
     facultyStyles = opt.styles;
     styleSel.innerHTML = opt.styles.map((s, i) => `<option value="${i}">${esc(s.label)}</option>`).join('');
   }
+  saveFacultyChoice(facSel.value);
   syncCtaAnalyzerLink();
   updateStyleInfo();
   render();
@@ -432,9 +447,92 @@ function addSingleToBulk() {
   }
 }
 
+// --- Popuni iz DOI-ja: JEDINI mrezni poziv u ovom alatu (v. hero napomena u citat.html) ---
+// Salje se ISKLJUCIVO sam DOI, javnom Crossref REST API-ju (bez kljuca, CORS-otvoren); ostatak
+// forme ostaje lokalan. Korisnik ga okida eksplicitnim klikom, ne automatski na unos.
+const DOI_ENDPOINT = 'https://api.crossref.org/works/';
+
+function normalizeDoiInput(raw: string): string {
+  return (raw || '').trim().replace(/^https?:\/\/(dx\.)?doi\.org\//i, '').replace(/^doi:\s*/i, '');
+}
+
+// Crossref 'type' -> nas SourceType. Nepokriveni/nepoznati tipovi (dataset, standard...)
+// namjerno NE diraju #f-type: bolje zadrzati korisnikov trenutni odabir nego nagadati krivi.
+const CROSSREF_TYPE_MAP: Record<string, string> = {
+  'journal-article': 'clanak',
+  'proceedings-article': 'poglavlje',
+  'book-chapter': 'poglavlje',
+  book: 'knjiga',
+  monograph: 'knjiga',
+  dissertation: 'zavrsni',
+};
+
+function authorsFromCrossref(list: any): string {
+  if (!Array.isArray(list)) return '';
+  return list
+    .map((a: any) => {
+      const family = String(a?.family || '').trim();
+      const given = String(a?.given || '').trim();
+      if (!family && !given) return '';
+      return given ? `${family}, ${given}` : family;
+    })
+    .filter(Boolean)
+    .join('; ');
+}
+
+function yearFromCrossref(msg: any): string {
+  const parts = msg?.issued?.['date-parts']?.[0]
+    || msg?.['published-print']?.['date-parts']?.[0]
+    || msg?.['published-online']?.['date-parts']?.[0];
+  return parts && parts[0] ? String(parts[0]) : '';
+}
+
+async function fillFromDoi(): Promise<void> {
+  const input = $('#f-doi');
+  const status = $('#f-doi-status');
+  const btn = $('#f-doi-fill');
+  const doi = normalizeDoiInput(input?.value || '');
+  if (!doi) { if (status) status.textContent = 'Upiši DOI prije popunjavanja.'; return; }
+  const original = btn ? btn.textContent : '';
+  if (btn) { btn.disabled = true; btn.textContent = 'Dohvaćam…'; }
+  if (status) status.textContent = '';
+  try {
+    const res = await fetch(DOI_ENDPOINT + encodeURIComponent(doi), { headers: { Accept: 'application/json' } });
+    if (!res.ok) throw new Error(res.status === 404 ? 'DOI nije pronađen.' : 'Dohvat nije uspio.');
+    const data = await res.json();
+    const msg = data && data.message;
+    if (!msg) throw new Error('Dohvat nije uspio.');
+    const set = (id: string, v: string) => { if (!v) return; const el = $(id); if (el) el.value = v; };
+    const mappedType = CROSSREF_TYPE_MAP[msg.type];
+    if (mappedType && $('#f-type')) { $('#f-type').value = mappedType; syncVisibleFields(); }
+    set('#f-authors', authorsFromCrossref(msg.author));
+    set('#f-title', (Array.isArray(msg.title) && msg.title[0]) || '');
+    set('#f-container', (Array.isArray(msg['container-title']) && msg['container-title'][0]) || '');
+    set('#f-year', yearFromCrossref(msg));
+    set('#f-publisher', msg.publisher || '');
+    set('#f-volume', msg.volume || '');
+    set('#f-issue', msg.issue || '');
+    set('#f-pages', msg.page || '');
+    input.value = doi;
+    if (status) status.textContent = 'Polja popunjena iz Crossref metapodataka. Provjeri prije korištenja.';
+    render();
+  } catch (err: any) {
+    if (status) status.textContent = err?.message || 'Dohvat nije uspio, popuni polja ručno.';
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = original; }
+  }
+}
+
 function init() {
   if (!$('#f-type')) return; // stranica nije citat-alat; ne rusi se (kao ostali tool page-ovi)
   populateFaculties();
+  // Prisjeti se fakulteta odabranog na prethodnom posjetu (semestar zna trajati mjesecima):
+  // samo kad opcija stvarno postoji u izborniku (spisak fakulteta zna narasti/skratiti se).
+  const savedFaculty = readFacultyChoice();
+  const facSel = $('#f-faculty');
+  if (savedFaculty && facSel && [...facSel.options].some((o: any) => o.value === savedFaculty)) {
+    facSel.value = savedFaculty;
+  }
   // Promjena tipa samo prilagodi vidljiva polja; render okida opci change/input listener nize.
   $('#f-type').addEventListener('change', syncVisibleFields);
   $('#f-faculty')?.addEventListener('change', onFacultyChange);
@@ -501,10 +599,13 @@ function init() {
     $('#f-authors')?.focus();
   });
 
-  // Tema se sinkronizira preko lekta.theme (inline skripta u citat.html), ne ovdje.
+  $('#f-doi-fill')?.addEventListener('click', () => { void fillFromDoi(); });
+
+  // Tema se sinkronizira preko lekta.theme (inline skripta u citat.html), ne ovdje. onFacultyChange
+  // primjenjuje spremljeni odabir postavljen gore (ili genericki izbor, ako ga nema): puni #f-style,
+  // sinkronizira CTA link i renderira, pa odvojeni updateStyleInfo()/render() ovdje vise ne trebaju.
   syncVisibleFields();
-  updateStyleInfo();
-  render();
+  onFacultyChange();
   // Puni specovi (custom-spec formatFromSpec) su lijeno ucitani (faculty-styles.ts, perf);
   // pokreni dohvat ODMAH (fire-and-forget, ne blokira init) i korigiraj prikaz cim stignu -
   // dotad je vec render()irano s obiteljskim motorom kao privremenom aproksimacijom.

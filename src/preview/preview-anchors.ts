@@ -27,6 +27,7 @@ import {
   KIND_KOLOKVIJALIZAM,
   KIND_PRVO_LICE,
 } from '../audits/register';
+import { SUBMISSION_LABELS_HR } from '../audits/submission-lint';
 
 export type PreviewSeverity = 'error' | 'warning' | 'info';
 
@@ -40,6 +41,25 @@ export interface PreviewRun {
   italic: boolean;
   font: string | null;
   size: number | null;
+  /** Podcrtano (w:u != none). Samo faksimil. */
+  underline?: boolean;
+  /** Verzal: prikazi velikim slovima (w:caps); tekst ostaje kako je unesen. Samo faksimil. */
+  caps?: boolean;
+  /** Kapitalke (w:smallCaps). Samo faksimil. */
+  smallCaps?: boolean;
+  /** Precrtano (w:strike). Samo faksimil. */
+  strike?: boolean;
+  /** Boja teksta kao CSS hex (npr. "#1F4E79") iz w:color; null/undefined = zadana. Samo faksimil. */
+  color?: string | null;
+}
+
+/** Ugradjena slika (grb/logo) u odlomku za "Vjeran prikaz" (faksimil), kao data: URI. */
+export interface PreviewImage {
+  /** data: URI slike (npr. data:image/png;base64,...). Uvijek lokalan, nikad s mreze. */
+  src: string;
+  /** Sirina/visina u centimetrima iz wp:extent (EMU/360000); null kad dimenzija nije poznata. */
+  wCm: number | null;
+  hCm: number | null;
 }
 
 /** Jedan odlomak dokumenta za render pregleda; index je 1-based (poravnat s paragraph.index). */
@@ -55,6 +75,33 @@ export interface PreviewParagraph {
   pageBreakAfter?: boolean;
   /** Oznake fusnota u tijelu (superscript broj) s znakovnim offsetom unutar `text`; faksimil. */
   markers?: PreviewFootnoteMark[];
+  /**
+   * Efektivna velicina odlomka u tockama (faksimil): element dobiva ovu velicinu, a runovi
+   * odstupaju samo kad se od nje razlikuju. Time naslov dobiva STVARNU velicinu iz dokumenta,
+   * ne sinteticku CSS heading velicinu. null kad odlomak nema nijedan run s velicinom.
+   */
+  size?: number | null;
+  /** Razmak prije odlomka u tockama (w:spacing w:before, efektivan iz stila); faksimil margin-top. */
+  spaceBefore?: number | null;
+  /** Razmak poslije odlomka u tockama (w:spacing w:after); faksimil margin-bottom. */
+  spaceAfter?: number | null;
+  /** Prored kao visekratnik (w:line, lineRule=auto); faksimil line-height. null = zadano. */
+  lineHeight?: number | null;
+  /** Ugradjene slike odlomka (grb/logo) kao data: URI; faksimil. Prazno/undefined kad ih nema. */
+  images?: PreviewImage[];
+  /**
+   * Pripadnost celiji tablice (faksimil): kad je postavljeno, odlomak je unutar w:tc pa ga renderer
+   * grupira u <table> (mentor|student i sl.), umjesto da celije naslaze okomito. MVP pregled to
+   * zanemaruje (odlomci ostaju u tijeku). tableId/row/col su 0-based indeksi u dokumentu.
+   */
+  cell?: PreviewTableCell;
+}
+
+/** Pozicija odlomka unutar tablice (za faksimil grupiranje u <table>). */
+export interface PreviewTableCell {
+  tableId: number;
+  row: number;
+  col: number;
 }
 
 /** Oznaka fusnote u tijelu: id (prikazani broj) na znakovnom offsetu unutar teksta odlomka. */
@@ -99,6 +146,7 @@ export type PreviewFlagSource =
   | 'reference-uncited'
   | 'reference-incomplete'
   | 'legal-uncited'
+  | 'submission'
   | 'issue-anchor'
   | 'footnote-anchor';
 
@@ -221,6 +269,20 @@ export function collectPreviewFlags(details: any): PreviewFlag[] {
       kind: 'pravni-izvor-bez-fusnote',
       title: 'Jedinica literature nije citirana u fusnotama',
       source: 'legal-uncited',
+    });
+  }
+
+  // 7) Savjetodavni submission linter (naslov-tocka, izravni citat bez stranice, gola poveznica,
+  //    nesklad autor-godina, nevaljan ISBN/DOI...). paragraphIndex je vec 1-based; 0 = razina dokumenta.
+  for (const f of details.submissionLint?.findings ?? []) {
+    if (!isParagraphOrdinal(f?.paragraphIndex) || f.paragraphIndex < 1) continue;
+    flags.push({
+      paragraphIndex: f.paragraphIndex,
+      excerpt: trimExcerpt(f.excerpt),
+      severity: f.severity === 'error' ? 'error' : f.severity === 'info' ? 'info' : 'warning',
+      kind: String(f.kind ?? 'submission'),
+      title: SUBMISSION_LABELS_HR[f.kind] ?? String(f.kind ?? 'Napomena za predaju'),
+      source: 'submission',
     });
   }
 

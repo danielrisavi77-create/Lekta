@@ -99,6 +99,13 @@ export interface CitationSpec {
   evidence?: SpecProvenance | null;
   /** Kontradikcije/nesigurnosti za covjeka (draft faza). */
   contradictions?: string[];
+  /** Facultet-siroki facultyId (npr. "unizd") moze agregirati profile iz VISE odjela pod
+   *  istim styleToken, no spec je verificiran iz JEDNOG odjela/izvora. Kad je postavljeno,
+   *  generator (generate-citation-tools.mjs buildFaculties) primjenjuje spec na (unitId,token)
+   *  kanticu SAMO ako SVI profili u kantici imaju program koji sadrzi ovaj podniz; inace
+   *  kantica pada na genericki prikaz umjesto lazne tvrdnje "propisano" za odjele cije upute
+   *  nisu provjerene. Izostavljeno = spec pokriva citavu kanticu (facultyId je vec granularan). */
+  scopeProgramContains?: string;
 }
 
 const PLACEHOLDERS = new Set([

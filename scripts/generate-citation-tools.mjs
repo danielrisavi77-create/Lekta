@@ -631,6 +631,19 @@ function clientSpec(spec) {
 
 let FACULTY_OPTIONS = ''; // popunjava buildFaculties()
 
+// facultyId je katkad institucija-siroka (npr. "unizd") koja agregira profile iz VISE odjela
+// pod istim styleToken (npr. 9 unizd odjela dijeli 'harvard'), ali spec.scopeProgramContains
+// (kad postoji) kaze da je spec verificiran samo za JEDAN od tih odjela. Bez ove provjere
+// generator bi tvrdio da je stil "propisan sluzbenim uputama" tog jednog odjela i studentu
+// s pedagogije ili ekonomije, cije upute nikad nisu provjerene - krsi "ne izmisljaj pravila".
+// Kad kantica nije u potpunosti pokrivena, vracamo null pa buildFacultyStylePage pada na
+// genericki prikaz (bez tvrdnje o "propisanom" stilu) umjesto lazno preciznog spec-a.
+function specForBucket(spec, bucketPrograms) {
+  if (!spec || !spec.scopeProgramContains) return spec;
+  const covered = [...bucketPrograms].every((p) => p.includes(spec.scopeProgramContains));
+  return covered ? spec : null;
+}
+
 function buildFaculties(engine, specs) {
   const catalog = loadJson(CATALOG_PATH);
   const profiles = loadJson(PROFILES_PATH);
@@ -697,7 +710,7 @@ function buildFaculties(engine, specs) {
         .map((tok) => {
           const m = engine.citationMeta(tok);
           const progs = [...tokens[tok].programs].slice(0, 2).join(', ');
-          const spec = specs.get(`${u}:${tok}`) ?? null;
+          const spec = specForBucket(specs.get(`${u}:${tok}`) ?? null, tokens[tok].programs);
           return {
             token: tok,
             label: spec ? spec.label : m.label,
@@ -822,33 +835,57 @@ ${facultyLinksHtml(catalog, faculties)}`;
   });
 }
 
+// Kanonski uzorak za genericki primjer (bez verificiranog speca): ISTI sadrzaj kao #c-sample
+// u citat-page.ts, da "primjer" na SEO stranici i "Ubaci primjer" u zivom alatu daju identican
+// citat za isti stil (nema dva razlicita "tocna" odgovora za istog posjetitelja).
+const GENERIC_EXAMPLE_INPUT = {
+  type: 'knjiga',
+  authors: 'Ivić, Ivan; Horvat, Ana',
+  title: 'Ustavno pravo Republike Hrvatske',
+  year: '2020',
+  place: 'Zagreb',
+  publisher: 'Narodne novine',
+};
+
 // Stvarno jedinstven tekst po (fakultet x stil) stranici, izvucen iz PUNOG speca (ne
 // clientSpec-osiromasenog): konkretan formatiran primjer citata (custom-spec specovi) ili
 // citiran redak sluzbenih uputa s brojem stranice (style-pin specovi, sourceTypes su []).
 // Bez ovoga su verificirane stranice skoro identicne kao genericke (near-duplicate SEO rizik).
-function workedExampleHtml(style) {
+// Genericke stranice (bez speca, ~vecina) prije nisu imale NIKAKAV primjer: korisnik je vidio
+// prazna polja i morao sam nesto upisati da vidi kako stil uopce izgleda. Motor (formatCitation)
+// vec zna formatirati svaki style.engineStyle, pa build-time genericki primjer to popuni,
+// jasno oznacen kao "opci oblik", ne kao sluzbeno potvrdjen (ta razlika ostaje metaLine-u).
+function workedExampleHtml(style, engine) {
   const full = style.fullSpec;
-  if (!full) return '';
-  const withExample = (full.sourceTypes || []).find((t) => t.example && t.example.expected);
-  if (withExample) {
-    const sourcePage = withExample.provenance && withExample.provenance.sourcePage;
-    const pageNote = sourcePage ? ` (${escapeHtml(sourcePage)})` : '';
-    return `<div class="lekta-example">
+  if (full) {
+    const withExample = (full.sourceTypes || []).find((t) => t.example && t.example.expected);
+    if (withExample) {
+      const sourcePage = withExample.provenance && withExample.provenance.sourcePage;
+      const pageNote = sourcePage ? ` (${escapeHtml(sourcePage)})` : '';
+      return `<div class="lekta-example">
   <p class="lekta-tool-meta">Primjer iz službenih uputa${pageNote}:</p>
   <p class="cit-line">${escapeHtml(withExample.example.expected)}</p>
 </div>`;
-  }
-  if (full.evidence && full.evidence.quoteRaw) {
-    const sourcePage = full.evidence.sourcePage;
-    const pageNote = sourcePage ? ` (${escapeHtml(sourcePage)})` : '';
-    return `<div class="lekta-example">
+    }
+    if (full.evidence && full.evidence.quoteRaw) {
+      const sourcePage = full.evidence.sourcePage;
+      const pageNote = sourcePage ? ` (${escapeHtml(sourcePage)})` : '';
+      return `<div class="lekta-example">
   <p class="lekta-tool-meta">Iz službenih uputa${pageNote}: &quot;${escapeHtml(full.evidence.quoteRaw)}&quot;</p>
 </div>`;
+    }
+    return '';
   }
-  return '';
+  if (!style.engineStyle) return '';
+  const res = engine.formatCitation(GENERIC_EXAMPLE_INPUT, style.engineStyle);
+  if (!res || !res.citation) return '';
+  return `<div class="lekta-example">
+  <p class="lekta-tool-meta">Primjer (opći oblik stila ${escapeHtml(style.shortLabel)}, provjeri kod mentora):</p>
+  <p class="cit-line">${escapeHtml(res.citation)}</p>
+</div>`;
 }
 
-function buildFacultyStylePage(faculty, style) {
+function buildFacultyStylePage(faculty, style, engine) {
   const config = {
     mode: 'static',
     generalToolUrl: GENERAL_TOOL_URL,
@@ -878,7 +915,7 @@ function buildFacultyStylePage(faculty, style) {
   const siblingLine = siblings.length
     ? `<p class="lekta-tool-meta">Ostali stilovi na ovom fakultetu: ${siblings.join(' · ')}.</p>`
     : '';
-  const exampleHtml = workedExampleHtml(style);
+  const exampleHtml = workedExampleHtml(style, engine);
   // Spec-branke (pin/custom-spec) nose punu recenicu s izvorom+datumom - jedini stvarni
   // diferencijator naspram genericnih citatnih alata, pa dobiva znacku povjerenja
   // (.lekta-source-note), ne sitni mono meta-stil rezerviran za kratke oznake.
@@ -1044,7 +1081,7 @@ async function main() {
       const slug = slugFor(f, s);
       if (seen.has(slug)) continue;
       seen.add(slug);
-      fs.writeFileSync(path.join(CITATI_OUT_DIR, `${slug}.html`), buildFacultyStylePage(f, s), 'utf-8');
+      fs.writeFileSync(path.join(CITATI_OUT_DIR, `${slug}.html`), buildFacultyStylePage(f, s, engine), 'utf-8');
       // Genericke (bez speca) stranice su noindex (vidi buildFacultyStylePage) - ne salju se u
       // sitemap, jer navodjenje noindex URL-ova u sitemapu je bespotreban crawl-budget signal.
       if (s.spec) sitemapUrls.push({ loc: `${SITE_ORIGIN}/alati/citati/${slug}.html`, lastmod: s.spec?.verifiedAt ?? undefined });

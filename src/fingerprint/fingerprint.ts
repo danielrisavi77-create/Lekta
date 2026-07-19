@@ -1,4 +1,4 @@
-import { normalize, sectionName } from '../utils/helpers';
+import { normalize, sectionName } from '../utils/helpers.ts';
 
 /**
  * Otisak dokumenta (MONETIZATION_AND_ANTI_ABUSE.md sekcije 4 i 11).

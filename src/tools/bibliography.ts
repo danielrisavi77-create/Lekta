@@ -13,10 +13,18 @@ export interface BibEntry {
   issues: string[];
 }
 
+/** Izbaceni duplikat: njegov izvorni tekst + na koji zadrzani zapis je mapiran (dedupeKey pogodak).
+ *  Da korisnik moze provjeriti je li spoj tocan, ne samo vidjeti brojku. */
+export interface RemovedDuplicate {
+  text: string;
+  mappedTo: string;
+}
+
 export interface BibResult {
   entries: BibEntry[];       // jedinstveni zapisi, sortirani prema BibSortMode
   inputCount: number;        // broj unesenih redaka
   duplicatesRemoved: number; // koliko je duplikata izbaceno
+  removedDuplicates: RemovedDuplicate[]; // isti brojac, ali s uvidom KOJI zapis i NA STO je mapiran
   withIssues: number;        // koliko zapisa ima barem jedno upozorenje
   sortMode: BibSortMode;     // stvarno primijenjen nacin (odjek ulaznog opts.sort)
 }
@@ -99,15 +107,17 @@ export function organizeBibliography(raw: string, opts?: { sort?: BibSortMode })
   }
   const inputCount = lines.length;
 
-  const seen = new Set<string>();
+  const seen = new Map<string, string>(); // dedupeKey -> ZADRZANI izvorni tekst (prvo pojavljivanje)
   const unique: string[] = [];
-  let duplicatesRemoved = 0;
+  const removedDuplicates: RemovedDuplicate[] = [];
   for (const line of lines) {
     const key = dedupeKey(line);
-    if (seen.has(key)) { duplicatesRemoved++; continue; }
-    seen.add(key);
+    const kept = seen.get(key);
+    if (kept !== undefined) { removedDuplicates.push({ text: line, mappedTo: kept }); continue; }
+    seen.set(key, line);
     unique.push(line);
   }
+  const duplicatesRemoved = removedDuplicates.length;
 
   // 'appearance' (IEEE/Vancouver): abecedno sortiranje bi razbilo brojcani popis, jer sortKey
   // namjerno strippa vodece "[1]"/"1." da abecedni poredak radi kad TAKVIH brojeva nema.
@@ -122,7 +132,7 @@ export function organizeBibliography(raw: string, opts?: { sort?: BibSortMode })
   const entries = unique.map(text => ({ text, issues: detectIssues(text) }));
   const withIssues = entries.filter(e => e.issues.length > 0).length;
 
-  return { entries, inputCount, duplicatesRemoved, withIssues, sortMode };
+  return { entries, inputCount, duplicatesRemoved, removedDuplicates, withIssues, sortMode };
 }
 
 // Ciste, sredjene reference kao tekst za kopiranje (jedan zapis po retku).

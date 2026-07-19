@@ -13,6 +13,7 @@ const $ = (s: string): any => document.querySelector(s);
 const FIELDS = {
   heading: '#st-heading', author: '#st-author', workType: '#st-worktype',
   title: '#st-title', place: '#st-place', date: '#st-date',
+  jmbag: '#st-jmbag', oib: '#st-oib',
 };
 
 const SAMPLE: any = {
@@ -22,6 +23,8 @@ const SAMPLE: any = {
   title: 'Uloga civilnog društva u lokalnoj samoupravi',
   place: 'Zagreb',
   date: '3. srpnja 2026.',
+  jmbag: '0000000000',
+  oib: '00000000000',
 };
 // #st-date-picker (input type=date) ocekuje ISO oblik; mora odgovarati SAMPLE.date iznad,
 // inace bi 'Ubaci primjer' opet razisao picker od teksta.
@@ -57,7 +60,7 @@ function render(): void {
   const sheet = $('#st-sheet');
   if (sheet) {
     const foot = (model.placeDate || model.signatureName)
-      ? `<div class="st-foot"><div class="st-place">${escapeHtml(model.placeDate)}</div><div class="st-sign">${model.signatureName ? `<span class="st-name">${escapeHtml(model.signatureName)}</span>` : ''}<span class="st-sign-cap">(vlastoručni potpis)</span></div></div>`
+      ? `<div class="st-foot"><div class="st-place">${escapeHtml(model.placeDate)}</div><div class="st-sign">${model.signatureName ? `<span class="st-name">${escapeHtml(model.signatureName)}</span>` : ''}${model.identifiers ? `<span class="st-ident">${escapeHtml(model.identifiers)}</span>` : ''}<span class="st-sign-cap">(vlastoručni potpis)</span></div></div>`
       : '';
     sheet.innerHTML = `<div class="st-heading">${escapeHtml(model.heading)}</div><div class="st-body">${escapeHtml(model.body)}</div>${foot}`;
   }

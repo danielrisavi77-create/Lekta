@@ -355,3 +355,142 @@ describe('renderFacsimile: in-text oznake fusnota (markeri)', () => {
     expect(root.querySelector('sup')).toBeNull();
   });
 });
+
+describe('renderFacsimile: vjernost naslovnice (velicina, razmaci, prazni odlomci, slike)', () => {
+  it('element odlomka dobiva stvarnu velicinu; run jednak toj velicini nema span', () => {
+    const p = para(1, 'Naslov', { size: 20, runs: [run('Naslov', { size: 20 })] });
+    const { root } = renderFacsimile(model([p], { baseSize: 12 }), []);
+    const el = root.querySelector('.lekta-fac-para') as HTMLElement;
+    expect(el.style.fontSize).toBe('20pt');
+    expect(el.querySelector('span')).toBeNull(); // run 20 == velicina odlomka -> tekstni cvor
+    expect(el.textContent).toBe('Naslov');
+  });
+
+  it('run koji odstupa od velicine odlomka postaje span s vlastitom velicinom', () => {
+    const p = para(1, 'AB', { size: 20, runs: [run('A', { size: 20 }), run('B', { size: 28 })] });
+    const { root } = renderFacsimile(model([p], { baseSize: 12 }), []);
+    const el = root.querySelector('.lekta-fac-para') as HTMLElement;
+    expect(el.style.fontSize).toBe('20pt');
+    const spans = el.querySelectorAll('span');
+    expect(spans.length).toBe(1);
+    expect(spans[0].textContent).toBe('B');
+    expect(spans[0].style.fontSize).toBe('28pt');
+  });
+
+  it('okomiti razmaci (before/after) i prored postaju margine i line-height', () => {
+    const p = para(1, 'Tekst', { spaceBefore: 18, spaceAfter: 6, lineHeight: 2 });
+    const { root } = renderFacsimile(model([p]), []);
+    const el = root.querySelector('.lekta-fac-para') as HTMLElement;
+    expect(el.style.marginTop).toBe('18pt');
+    expect(el.style.marginBottom).toBe('6pt');
+    expect(el.style.lineHeight).toBe('2');
+  });
+
+  it('razmak 0 se postavlja (bez razmaka), a izostavljen razmak ne dira stil', () => {
+    const p = para(1, 'X', { spaceAfter: 0 });
+    const { root } = renderFacsimile(model([p]), []);
+    const el = root.querySelector('.lekta-fac-para') as HTMLElement;
+    expect(el.style.marginBottom).toBe('0pt');
+    expect(el.style.marginTop).toBe('');
+  });
+
+  it('prazan odlomak dobiva <br> da zauzme visinu retka, tekst ostaje prazan', () => {
+    const { root } = renderFacsimile(model([para(1, '')]), []);
+    const el = root.querySelector('.lekta-fac-para') as HTMLElement;
+    expect(el.querySelector('br')).not.toBeNull();
+    expect(el.textContent).toBe('');
+  });
+
+  it('ugradjena slika (grb) postaje <img> s data: izvorom i sirinom u cm; nema suvisnog <br>', () => {
+    const src = 'data:image/png;base64,AAAA';
+    const p = para(1, '', { images: [{ src, wCm: 3.5, hCm: 2 }] });
+    const { root } = renderFacsimile(model([p]), []);
+    const el = root.querySelector('.lekta-fac-para') as HTMLElement;
+    const img = el.querySelector('img.lekta-fac-img') as HTMLImageElement;
+    expect(img).not.toBeNull();
+    expect(img.getAttribute('src')).toBe(src);
+    expect(img.style.width).toBe('3.5cm');
+    expect(el.querySelector('br')).toBeNull(); // slika daje sadrzaj, prazni <br> se ne dodaje
+  });
+
+  it('ne-data: izvor slike se ne renderira (obrana u dubinu)', () => {
+    const p = para(1, 'x', { images: [{ src: 'https://zlo.example/x.png', wCm: 1, hCm: 1 }] });
+    const { root } = renderFacsimile(model([p]), []);
+    expect(root.querySelector('img')).toBeNull();
+  });
+});
+
+describe('renderFacsimile: znakovni stilovi (underline, caps, boja, precrtano)', () => {
+  it('podcrtan run postaje span s text-decoration underline', () => {
+    const p = para(1, 'AB', { runs: [run('A'), run('B', { underline: true })] });
+    const { root } = renderFacsimile(model([p]), []);
+    const el = root.querySelector('.lekta-fac-para') as HTMLElement;
+    const span = el.querySelector('span') as HTMLElement;
+    expect(span.textContent).toBe('B');
+    expect(span.style.textDecoration).toContain('underline');
+    expect(el.textContent).toBe('AB');
+  });
+
+  it('w:caps run: span s text-transform uppercase, tekst u DOM-u ostaje unesen', () => {
+    const p = para(1, 'zdravstveno', { runs: [run('zdravstveno', { caps: true })] });
+    const { root } = renderFacsimile(model([p]), []);
+    const el = root.querySelector('.lekta-fac-para') as HTMLElement;
+    const span = el.querySelector('span') as HTMLElement;
+    expect(span.style.textTransform).toBe('uppercase');
+    expect(el.textContent).toBe('zdravstveno'); // integritet: DOM tekst nije velikim slovima
+  });
+
+  it('boja i precrtavanje se primjenjuju kao span-stil', () => {
+    const p = para(1, 'XY', { runs: [run('X', { color: '#1F4E79' }), run('Y', { strike: true })] });
+    const { root } = renderFacsimile(model([p]), []);
+    const spans = (root.querySelector('.lekta-fac-para') as HTMLElement).querySelectorAll('span');
+    expect(spans.length).toBe(2);
+    expect(spans[0].style.color).toBeTruthy();
+    expect(spans[1].style.textDecoration).toContain('line-through');
+  });
+});
+
+describe('renderFacsimile: tablice (grupiranje celija u <table>)', () => {
+  it('uzastopni odlomci iste tablice grupiraju se u <table>; celije sjede u istom retku', () => {
+    const paras = [
+      para(1, 'Mentor:', { cell: { tableId: 0, row: 0, col: 0 } }),
+      para(2, 'Student:', { cell: { tableId: 0, row: 0, col: 1 } }),
+      para(3, 'poslije tablice', {}),
+    ];
+    const { root } = renderFacsimile(model(paras), []);
+    const table = root.querySelector('table.lekta-fac-table') as HTMLElement;
+    expect(table).not.toBeNull();
+    const tds = table.querySelectorAll('tr > td');
+    expect(tds.length).toBe(2);
+    expect(tds[0].textContent).toBe('Mentor:');
+    expect(tds[1].textContent).toBe('Student:');
+    expect((tds[0] as HTMLElement).style.width).toBe('50.0000%');
+    // Odlomak izvan tablice ostaje izvan <table> (u tijeku lista).
+    expect(root.querySelector('#lekta-fac-p-3')).not.toBeNull();
+    expect(table.querySelector('#lekta-fac-p-3')).toBeNull();
+  });
+
+  it('dva retka tablice daju dva <tr>, vise odlomaka po celiji ostaje u istoj celiji', () => {
+    const paras = [
+      para(1, 'Mentor:', { cell: { tableId: 0, row: 0, col: 0 } }),
+      para(2, 'Ivan Ivić', { cell: { tableId: 0, row: 0, col: 0 } }),
+      para(3, 'Student:', { cell: { tableId: 0, row: 0, col: 1 } }),
+      para(4, 'Sljedeci red', { cell: { tableId: 0, row: 1, col: 0 } }),
+    ];
+    const { root } = renderFacsimile(model(paras), []);
+    const trs = root.querySelectorAll('table.lekta-fac-table tr');
+    expect(trs.length).toBe(2);
+    const firstCell = trs[0].querySelector('td') as HTMLElement;
+    expect(firstCell.textContent).toBe('Mentor:Ivan Ivić'); // dva odlomka u istoj celiji
+  });
+
+  it('flag u odlomku tablicne celije i dalje se sidri (skrol iz bocne liste radi)', () => {
+    const paras = [para(1, 'Mentor Ivić', { cell: { tableId: 0, row: 0, col: 0 } })];
+    const { root, flagTargets } = renderFacsimile(model(paras), [
+      flag({ paragraphIndex: 1, excerpt: 'Ivić', severity: 'warning' }),
+    ]);
+    const mark = root.querySelector('table.lekta-fac-table mark.lekta-flag') as HTMLElement;
+    expect(mark).not.toBeNull();
+    expect(flagTargets.get(0)).toBe(mark);
+  });
+});

@@ -5,7 +5,7 @@
  * golden snapshoti ostaju nepromijenjeni. `makeCheck` namjerno ima parametar `issue`
  * koji zasjenjuje funkciju `issue` u svom tijelu, identicno originalu.
  */
-import { clamp } from '../utils/helpers';
+import { clamp } from '../utils/helpers.ts';
 
 export interface Issue {
   severity: 'error' | 'warning' | 'info' | string;

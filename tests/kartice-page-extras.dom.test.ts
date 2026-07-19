@@ -3,8 +3,8 @@
  * Nove kartice kontrole: mjera (1800 s razmacima / 1500 bez razmaka), cilj i cijena po
  * kartici, te .docx uvoz (extractDocxText + ZipReader put je pokriven u docx-text.test.ts;
  * ovdje DOM sloj: status poruke i odbijanje ne-docx ulaza).
- * matchMedia se stubna PRIJE importa da reduceMotion bude true -> #m-kartice se postavlja
- * sinkrono (bez rAF animacije), pa asertacije ne ovise o vremenu.
+ * #m-kartice se postavlja sinkrono preko setStat (CSS-only flash, bez rAF animacije), pa
+ * asertacije ne ovise o vremenu; matchMedia stub ostaje bezopasan (nista ga vise ne cita).
  */
 import { describe, it, expect, beforeAll, vi } from 'vitest';
 

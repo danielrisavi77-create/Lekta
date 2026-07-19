@@ -1,5 +1,5 @@
-import { fingerprintMatch, type DocumentFingerprint } from '../fingerprint/fingerprint';
-import { windowDaysFor, type ReportWorkType } from './pricing';
+import { fingerprintMatch, type DocumentFingerprint } from '../fingerprint/fingerprint.ts';
+import { windowDaysFor, type ReportWorkType } from './pricing.ts';
 
 /**
  * Cista odluka o pravu na placeni izvjestaj (MONETIZATION_AND_ANTI_ABUSE.md sekcije 5,
