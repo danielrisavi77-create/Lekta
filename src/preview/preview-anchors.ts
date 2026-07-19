@@ -147,6 +147,7 @@ export type PreviewFlagSource =
   | 'reference-incomplete'
   | 'legal-uncited'
   | 'submission'
+  | 'existence'
   | 'issue-anchor'
   | 'footnote-anchor';
 
@@ -362,6 +363,52 @@ export function collectFootnoteAnchors(issues: any[]): PreviewFlag[] {
 }
 
 /**
+ * Verdikti OPT-IN provjere postojanja koji se sidre u pregledu. found i unchecked se NAMJERNO
+ * preskacu: found nije problem (ne zatrpavamo pregled zelenim oznakama), a unchecked je neparsabilan
+ * unos bez lokacijske vrijednosti (posteno, ne pripisujemo mrezi neparsabilnost). Ostaju samo
+ * sumnjivi: not-found/weak (provjeri) i not-indexed (domaci izvor, provjeri u Dabru/Hrcku).
+ */
+const EXISTENCE_FLAG: Record<string, { severity: PreviewSeverity; title: string }> = {
+  'not-found': { severity: 'warning', title: 'Izvor nije pronađen u CrossRef' },
+  weak: { severity: 'warning', title: 'Slab pogodak u CrossRef, provjeri' },
+  'not-indexed': { severity: 'info', title: 'Domaći izvor, provjeri u Dabru/Hrčku' },
+};
+
+/** Jedan verdikt provjere postojanja usidren na odlomak literature (details.references[].p). */
+export interface ExistenceVerdictInput {
+  /** 1-based indeks odlomka reference. */
+  p: number;
+  /** Verdikt iz verify-existence (found/weak/not-found/not-indexed/unchecked). */
+  verdict: string;
+}
+
+/**
+ * Sidra verdikte OPT-IN online provjere postojanja (verify-existence) na odlomke literature preko
+ * `.p`. Provjera je post-analiza, korisnicki klik; verdikti NISU u result.details (ostaju lokalno
+ * stanje UI-ja, ne idu na mrezu) pa ih pozivatelj prosljedjuje eksplicitno. Namjerno BEZ isjecka
+ * (excerpt=''): flagKey tada razlucuje po naslovu pa se ne sudara s reference-* flagom na istom
+ * odlomku (ista referenca moze biti i "nije citirana" i "nije pronadjena" -> oba ostaju vidljiva).
+ */
+export function collectExistenceFlags(verdicts: ExistenceVerdictInput[] | null | undefined): PreviewFlag[] {
+  const flags: PreviewFlag[] = [];
+  if (!Array.isArray(verdicts)) return flags;
+  for (const v of verdicts) {
+    if (!v || !isParagraphOrdinal(v.p) || v.p < 1) continue;
+    const spec = EXISTENCE_FLAG[String(v.verdict)];
+    if (!spec) continue;
+    flags.push({
+      paragraphIndex: v.p,
+      excerpt: '',
+      severity: spec.severity,
+      kind: `existence-${v.verdict}`,
+      title: spec.title,
+      source: 'existence',
+    });
+  }
+  return flags;
+}
+
+/**
  * Kljuc za deduplikaciju: ista lokacija (odlomak ILI fusnota) + isti isjecak (prefiks 40 znakova)
  * je isti nalaz. Bez isjecka razlucujemo naslovom, da dva razlicita nalaza bez isjecka na istoj
  * lokaciji (npr. citat bez lokatora i neispravna poveznica) ostanu odvojena.
@@ -376,12 +423,18 @@ function flagKey(f: PreviewFlag): string {
  * Skupi SVE usidrene nalaze za pregled: strukturirani (typo/register/reference) plus nalazi
  * usidreni iz opisa Issue-a (odlomci) i fusnota, uz deduplikaciju. Strukturirani se dodaju prvi
  * pa imaju prednost (npr. nepotpuna referenca ostaje iz reference-incomplete, ne iz Issue opisa).
+ * Opcionalni `existence` su verdikti OPT-IN provjere postojanja (izvan result.details, prosljeduju
+ * se eksplicitno); dodaju se zadnji i bez isjecka pa ne istiskuju nijedan strukturirani flag.
  */
-export function collectAllPreviewFlags(result: any): PreviewFlag[] {
+export function collectAllPreviewFlags(
+  result: any,
+  existence?: ExistenceVerdictInput[] | null,
+): PreviewFlag[] {
   const merged = [
     ...collectPreviewFlags(result?.details),
     ...collectIssueAnchors(result?.issues),
     ...collectFootnoteAnchors(result?.issues),
+    ...collectExistenceFlags(existence),
   ];
   const seen = new Set<string>();
   const out: PreviewFlag[] = [];

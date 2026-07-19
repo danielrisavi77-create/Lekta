@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { collectPreviewFlags, collectIssueAnchors, collectFootnoteAnchors, collectAllPreviewFlags } from '../src/preview/preview-anchors';
+import { collectPreviewFlags, collectIssueAnchors, collectFootnoteAnchors, collectAllPreviewFlags, collectExistenceFlags } from '../src/preview/preview-anchors';
 import { KIND_HOMOGLIF_CIRILICA, KIND_DVOSTRUKI_RAZMAK } from '../src/tools/typo-lint';
 import { KIND_PRVO_LICE } from '../src/audits/register';
 import { sanitizeAnalysisResult } from '../src/report/report';
@@ -200,6 +200,61 @@ describe('collectAllPreviewFlags: spajanje + deduplikacija', () => {
     };
     const flags = collectAllPreviewFlags(result);
     expect(flags.filter((f) => f.paragraphIndex === 5)).toHaveLength(2);
+  });
+});
+
+describe('collectExistenceFlags: sidrenje verdikta provjere postojanja', () => {
+  it('sidri samo sumnjive verdikte (not-found/weak = warning, not-indexed = info)', () => {
+    const flags = collectExistenceFlags([
+      { p: 120, verdict: 'not-found' },
+      { p: 121, verdict: 'weak' },
+      { p: 122, verdict: 'not-indexed' },
+    ]);
+    expect(flags).toHaveLength(3);
+    expect(flags.every((f) => f.source === 'existence')).toBe(true);
+    expect(flags.every((f) => f.excerpt === '')).toBe(true); // sidro na razini odlomka (bez isjecka)
+    expect(flags[0]).toMatchObject({ paragraphIndex: 120, severity: 'warning', kind: 'existence-not-found' });
+    expect(flags[1]).toMatchObject({ paragraphIndex: 121, severity: 'warning', kind: 'existence-weak' });
+    expect(flags[2]).toMatchObject({ paragraphIndex: 122, severity: 'info', kind: 'existence-not-indexed' });
+    expect(flags.every((f) => typeof f.title === 'string' && f.title.length > 0)).toBe(true);
+  });
+
+  it('found i unchecked se NAMJERNO preskacu (nisu problem / nema lokacijske vrijednosti)', () => {
+    const flags = collectExistenceFlags([
+      { p: 5, verdict: 'found' },
+      { p: 6, verdict: 'unchecked' },
+      { p: 7, verdict: 'nepoznato' },
+    ]);
+    expect(flags).toHaveLength(0);
+  });
+
+  it('nevaljan ili nedostajuci p se preskace; prazan/nedostajuci ulaz vraca praznu listu', () => {
+    expect(collectExistenceFlags([{ p: 0, verdict: 'not-found' }, { p: null as any, verdict: 'weak' }])).toHaveLength(0);
+    expect(collectExistenceFlags(null)).toEqual([]);
+    expect(collectExistenceFlags(undefined)).toEqual([]);
+    expect(collectExistenceFlags([])).toEqual([]);
+  });
+
+  it('nikad ne kaze "izmisljeno" (cuva se od laznih negativa)', () => {
+    const flags = collectExistenceFlags([{ p: 3, verdict: 'not-found' }, { p: 4, verdict: 'not-indexed' }]);
+    expect(flags.some((f) => /izmišlj|izmisl/i.test(f.title))).toBe(false);
+  });
+
+  it('collectAllPreviewFlags: verdikt NE istiskuje strukturirani flag na istom odlomku', () => {
+    // Ista referenca (odlomak 120) je i "nije citirana u tekstu" i "nije pronadjena u CrossRef":
+    // oba nalaza moraju ostati (razliciti kljucevi jer existence nema isjecak).
+    const result = {
+      details: { uncitedReferences: [{ text: 'Barbić, J. (2019). Pravo društava.', author: 'Barbić', year: '2019', p: 120 }] },
+    };
+    const flags = collectAllPreviewFlags(result, [{ p: 120, verdict: 'not-found' }]);
+    const p120 = flags.filter((f) => f.paragraphIndex === 120).map((f) => f.source).sort();
+    expect(p120).toEqual(['existence', 'reference-uncited']);
+  });
+
+  it('collectAllPreviewFlags bez existence argumenta ne dodaje existence flagove (unatrag kompatibilno)', () => {
+    const result = { details: {}, issues: [{ severity: 'warning', category: 'structure', title: 'x', detail: 'odlomak 9: y' }] };
+    expect(collectAllPreviewFlags(result).some((f) => f.source === 'existence')).toBe(false);
+    expect(collectAllPreviewFlags(result).length).toBe(collectAllPreviewFlags(result, null).length);
   });
 });
 

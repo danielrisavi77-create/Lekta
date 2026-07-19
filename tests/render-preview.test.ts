@@ -1,6 +1,7 @@
 // @vitest-environment happy-dom
 import { describe, it, expect } from 'vitest';
 import { renderPreview } from '../src/preview/render-preview';
+import { collectAllPreviewFlags } from '../src/preview/preview-anchors';
 import type { PreviewFlag, PreviewParagraph } from '../src/preview/preview-anchors';
 
 function flag(partial: Partial<PreviewFlag> & { paragraphIndex: number }): PreviewFlag {
@@ -130,5 +131,39 @@ describe('renderPreview: fusnote', () => {
   it('bez fusnota nema odjeljka Fusnote i tekst nije zahvacen', () => {
     const { root } = renderPreview({ paragraphs: [para(1, 'x')] }, []);
     expect(root.querySelector('.lekta-pv-footnotes')).toBeNull();
+  });
+});
+
+describe('renderPreview + provjera postojanja (integracija cijelog lanca)', () => {
+  it('verdikt not-found se sidri na odlomak literature i istice ga, uz zadrzan reference-uncited', () => {
+    const refText = 'Fabbricato, L. (2021). An invented meta-analysis of imaginary policy outcomes. Journal of Nonexistent Policy Studies.';
+    // Ista referenca (odlomak 3) je i "nije citirana u tekstu" i "nije pronadjena online".
+    const result = {
+      details: { uncitedReferences: [{ text: refText, author: 'Fabbricato', year: '2021', p: 3 }] },
+    };
+    const flags = collectAllPreviewFlags(result, [{ p: 3, verdict: 'not-found' }]);
+    expect(flags.filter((f) => f.paragraphIndex === 3).map((f) => f.source).sort()).toEqual(['existence', 'reference-uncited']);
+
+    const res = renderPreview(
+      { paragraphs: [para(1, 'Uvodni tekst rada'), para(2, 'Sredina rada'), para(3, refText)] },
+      flags,
+    );
+    const p3 = res.root.querySelector('[data-p-index="3"]') as HTMLElement;
+    expect(p3.className).toContain('lekta-pv-para--flagged');
+    // Existence flag nema isjecak -> sidri se na razini odlomka (target je sam <p>), ne kao <mark>.
+    const existIdx = flags.findIndex((f) => f.source === 'existence');
+    expect(res.flagTargets.get(existIdx)).toBe(p3);
+    // Reference-uncited flag nosi isjecak pa lokira <mark> u istom odlomku.
+    expect(p3.querySelector('mark')).not.toBeNull();
+    // Nikad "izmisljeno" (cuva se od laznih negativa).
+    expect(res.root.textContent).not.toMatch(/izmišlj|izmisl/i);
+  });
+
+  it('found verdikt ne dodaje nikakvu oznaku u pregled (bez zelenog zatrpavanja)', () => {
+    const result = { details: {} };
+    const flags = collectAllPreviewFlags(result, [{ p: 2, verdict: 'found' }]);
+    const res = renderPreview({ paragraphs: [para(1, 'a'), para(2, 'Watson & Crick 1953')] }, flags);
+    expect(res.root.querySelector('.lekta-pv-para--flagged')).toBeNull();
+    expect(res.locatedCount).toBe(0);
   });
 });
