@@ -2,13 +2,13 @@
   "summary": {
     "totalChecks": 71,
     "scoredChecks": 54,
-    "scoredWithAtomic": 49,
-    "scoredAtomicPct": 91,
-    "scoredWithFailCase": 50,
-    "scoredFailCasePct": 93,
+    "scoredWithAtomic": 51,
+    "scoredAtomicPct": 94,
+    "scoredWithFailCase": 52,
+    "scoredFailCasePct": 96,
     "checksWithValidControl": 6,
     "checksWithBoundary": 4,
-    "atomicCases": 51,
+    "atomicCases": 53,
     "validControlCases": 7,
     "boundaryCases": 14,
     "intakeCodes": 6
@@ -55,7 +55,7 @@
       "checkId": "citation.punctuation",
       "category": "citations",
       "scored": true,
-      "hasAtomic": false,
+      "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
     },
@@ -613,7 +613,7 @@
       "checkId": "page.numbers.scheme",
       "category": "structure",
       "scored": true,
-      "hasAtomic": false,
+      "hasAtomic": true,
       "hasValidControl": false,
       "hasBoundary": false
     },
@@ -657,13 +657,6 @@
   "gaps": [
     {
       "priority": "P1",
-      "checkId": "citation.punctuation",
-      "title": "Dosljednost interpunkcije citatnica",
-      "reason": "Detektor oddCitationPunctuation je uzak; treba precizan neispravan uzorak.",
-      "desiredTest": "Kalibriraj citatnicu s neispravnom interpunkcijom koja pouzdano okida detektor."
-    },
-    {
-      "priority": "P1",
       "checkId": "citation.style-automation",
       "title": "Automatizacija citatnog stila",
       "reason": "Savjetodavna, uvijek-warn provjera (nema pass stanja).",
@@ -675,13 +668,6 @@
       "title": "Zahtjevi za ručnu završnu provjeru",
       "reason": "Savjetodavni podsjetnik, uvijek-warn (nema pass stanja).",
       "desiredTest": "Nije atomski testabilna kao fail."
-    },
-    {
-      "priority": "P1",
-      "checkId": "page.numbers.scheme",
-      "title": "Shema numeriranja stranica",
-      "reason": "Treba eksplicitni format numeriranja (pgNumType); builder ga ne emitira.",
-      "desiredTest": "Dodaj pgNumType; postavi krivi format (rimski u tijelu)."
     },
     {
       "priority": "P2",

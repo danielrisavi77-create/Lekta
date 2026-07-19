@@ -21,6 +21,7 @@ import { LEGAL_ATOMIC_CASES, LEGAL_VALID_CASES } from '../catalog/legal';
 import { PROFILE_ATOMIC_CASES } from '../catalog/profile-enabled';
 import { FOOTNOTE_ATOMIC_CASES } from '../catalog/footnote-format';
 import { TOC_ATOMIC_CASES } from '../catalog/toc-hierarchy';
+import { SCHEME_PUNCT_ATOMIC_CASES } from '../catalog/scheme-punctuation';
 import type { ErrorCase } from '../error-case';
 
 installXmlDomParser(true);
@@ -35,7 +36,7 @@ function parseArgs(argv: string[]) {
   return a;
 }
 
-const ALL: ErrorCase[] = [...ATOMIC_CASES, ...LEGAL_ATOMIC_CASES, ...PROFILE_ATOMIC_CASES, ...FOOTNOTE_ATOMIC_CASES, ...TOC_ATOMIC_CASES, ...VALID_CONTROL_CASES, ...LEGAL_VALID_CASES, ...BOUNDARY_CASES];
+const ALL: ErrorCase[] = [...ATOMIC_CASES, ...LEGAL_ATOMIC_CASES, ...PROFILE_ATOMIC_CASES, ...FOOTNOTE_ATOMIC_CASES, ...TOC_ATOMIC_CASES, ...SCHEME_PUNCT_ATOMIC_CASES, ...VALID_CONTROL_CASES, ...LEGAL_VALID_CASES, ...BOUNDARY_CASES];
 
 /** Ocekivani "status" datoteke u imenu: fail (atomski/boundary-not-pass), ok (valid/boundary-pass). */
 function expectedTag(c: ErrorCase): string {

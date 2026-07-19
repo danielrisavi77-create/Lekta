@@ -5,11 +5,11 @@
 ## Sazetak
 
 - Provjere ukupno: **71** (bodovane 54)
-- Bodovane s fail-slucajem (atomic ili boundary): **50/54 (93%)**
-- Bodovane s atomskim fail-slucajem: **49/54 (91%)**
+- Bodovane s fail-slucajem (atomic ili boundary): **52/54 (96%)**
+- Bodovane s atomskim fail-slucajem: **51/54 (94%)**
 - Provjere s valid-controlom: **6**
 - Provjere s boundary testom: **4**
-- Korpusni slucajevi: atomic **51**, valid **7**, boundary **14**
+- Korpusni slucajevi: atomic **53**, valid **7**, boundary **14**
 - Intake kodovi (svi runtime-dokazani u fazi 1): **6**
 
 ## Pokrivenost po provjeri
@@ -20,7 +20,7 @@
 | citation.style-automation | Automatizacija citatnog stila | citations | da | · | · | · |
 | citation.author-year.missing-reference | Citirano → literatura | citations | da | ✓ | ✓ | · |
 | reference.access-date | Datumi pristupa mrežnim izvorima | citations | da | ✓ | · | · |
-| citation.punctuation | Dosljednost interpunkcije citatnica | citations | da | · | · | · |
+| citation.punctuation | Dosljednost interpunkcije citatnica | citations | da | ✓ | · | · |
 | legal.footnote-bibliography | Fusnote ↔ bibliografija | citations | da | ✓ | · | · |
 | citation.author-year.suffix | Isti autor i godina (a/b/c) | citations | da | ✓ | · | · |
 | legal.source-classification | Klasifikacija pravnih izvora | citations | da | ✓ | · | · |
@@ -82,7 +82,7 @@
 | title.order | Redoslijed elemenata naslovnice | structure | info | · | · | · |
 | toc.present | Sadržaj dokumenta | structure | da | ✓ | · | · |
 | structure.abstract | Sažeci u samom radu | structure | da | ✓ | · | · |
-| page.numbers.scheme | Shema numeriranja stranica | structure | da | · | · | · |
+| page.numbers.scheme | Shema numeriranja stranica | structure | da | ✓ | · | · |
 | method.structure | Struktura metodološkog profila | structure | din | · | · | · |
 | title.typography | Tipografija korica i naslovnice | structure | info | · | · | · |
 | structure.heading.word-styles | Uporaba Word stilova naslova | structure | da | ✓ | · | · |
