@@ -1,0 +1,64 @@
+/**
+ * Dijeljeni izvor istine: checkId <-> tocan naslov provjere (makeCheck title) + zivi auto fixer.
+ *
+ * Do sada je ovo znanje zivjelo SAMO u src/ui/repair-items.ts (CHECK_TITLE + PAPER_SIZE_PREFIX)
+ * i sluzilo korelaciji "je li dimenzija prekrsena". Triage model (src/analysis/triage.ts) treba
+ * ISTI izvor da klasificira nalaz kao 'auto' (postoji zivi fixer). Da se ne vodi dvostruko,
+ * mapa je izdvojena ovdje, a repair-items je uvozi. Vrijednosti su bajt-identicne dosadasnjima
+ * (postojeci golden/repair testovi to cuvaju).
+ *
+ * VAZNO: `import type` za FixerId (samo tip) da se izbjegne runtime ovisnost o src/repair/*
+ * (koji koristi Web Streams CompressionStream) u analizi/preglednickoj jezgri.
+ */
+import type { FixerId } from '../repair/apply-fixers';
+
+/**
+ * checkId -> tocan naslov koji analyzeDocx proizvodi (makeCheck title). Sluzi korelaciji
+ * "je li prekrseno" (repair-items.isViolated) i detekciji dimenzije iz naslova (triage).
+ * paper-size ima dinamican naslov ('Format stranice A4' / '(A4/A3)') pa ide preko prefiksa.
+ */
+export const CHECK_TITLES: Record<string, string> = {
+  margins: 'Margine dokumenta',
+  font: 'Dominantni font',
+  'font-size': 'Veličina osnovnog teksta',
+  'line-spacing': 'Prored osnovnog teksta',
+  justify: 'Poravnanje osnovnog teksta',
+  'paragraph-spacing': 'Razmak prije i poslije odlomka',
+  'page-number-start': 'Numeriranje od prve stranice Uvoda',
+  'page-number-scheme': 'Shema numeriranja stranica',
+  'footnote-spacing': 'Razmak prije i poslije fusnota',
+  'page-number-alignment': 'Položaj broja stranice',
+};
+
+/** Prefiks naslova provjere formata papira (dinamican sufiks: 'A4' / '(A4/A3)'). */
+export const PAPER_SIZE_TITLE_PREFIX = 'Format stranice';
+
+/**
+ * checkId -> zivi auto fixer. SAMO dimenzije koje se popravljaju bez rizika za sadrzaj
+ * (svojstva oblikovanja). Strukturne dimenzije (numeriranje/sekcija/TOC/naslovi/natpisi) NISU
+ * ovdje: one su 'assisted' i klasificira ih triage (mijenjaju strukturu, traze potvrdu).
+ */
+export const AUTO_CHECK_FIXER: Record<string, FixerId> = {
+  margins: 'margins-fixer',
+  'paper-size': 'paper-size-fixer',
+  font: 'font-fixer',
+  'font-size': 'font-fixer',
+  'line-spacing': 'line-spacing-fixer',
+  justify: 'alignment-fixer',
+  'paragraph-spacing': 'paragraph-spacing-fixer',
+  'footnote-spacing': 'footnote-spacing-fixer',
+  'page-number-alignment': 'page-number-alignment-fixer',
+};
+
+/** Naslov informativne provjere praznih odlomaka (univerzalna higijena, auto empty-paragraph-fixer). */
+export const EMPTY_PARAGRAPHS_CHECK_TITLE = 'Prazni odlomci';
+
+/** Pripada li naslov provjere dimenziji sa zivim auto fixerom? Vrati {checkId, fixerId} ili null. */
+export function autoFixerForCheckTitle(title: string): { checkId: string; fixerId: FixerId } | null {
+  if (title === EMPTY_PARAGRAPHS_CHECK_TITLE) return { checkId: 'empty-paragraphs', fixerId: 'empty-paragraph-fixer' };
+  if (title.startsWith(PAPER_SIZE_TITLE_PREFIX)) return { checkId: 'paper-size', fixerId: AUTO_CHECK_FIXER['paper-size'] };
+  for (const [checkId, expected] of Object.entries(CHECK_TITLES)) {
+    if (title === expected && AUTO_CHECK_FIXER[checkId]) return { checkId, fixerId: AUTO_CHECK_FIXER[checkId] };
+  }
+  return null;
+}

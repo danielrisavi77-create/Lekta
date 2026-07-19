@@ -9,6 +9,7 @@ import type { RepairableItem } from './repair-panel';
 import type { RuleEntry } from '../profiles/profile-schema';
 import type { Issue } from '../scoring/checks';
 import type { SectionNumberingTarget } from '../repair/xml-patch';
+import { CHECK_TITLES, PAPER_SIZE_TITLE_PREFIX } from '../analysis/check-fixer-map';
 
 /** Minimalni oblik provjere iz analyzeDocx rezultata (result.checks[]). */
 export interface AnalyzedCheck {
@@ -17,21 +18,12 @@ export interface AnalyzedCheck {
   max: number;
 }
 
-/** checkId -> naslov checka koji analyzeDocx proizvodi (za korelaciju "je li prekrseno"). */
-const CHECK_TITLE: Record<string, string> = {
-  margins: 'Margine dokumenta',
-  font: 'Dominantni font',
-  'font-size': 'Veličina osnovnog teksta',
-  'line-spacing': 'Prored osnovnog teksta',
-  justify: 'Poravnanje osnovnog teksta',
-  'paragraph-spacing': 'Razmak prije i poslije odlomka',
-  'page-number-start': 'Numeriranje od prve stranice Uvoda',
-  'page-number-scheme': 'Shema numeriranja stranica',
-  'footnote-spacing': 'Razmak prije i poslije fusnota',
-  'page-number-alignment': 'Položaj broja stranice',
-};
+// checkId -> naslov checka (za korelaciju "je li prekrseno"). Dijeljeni izvor istine je
+// src/analysis/check-fixer-map.ts (isti ga koristi triage model); ovdje su lokalni aliasi
+// da ostatak datoteke ostane nepromijenjen.
+const CHECK_TITLE: Record<string, string> = CHECK_TITLES;
 // paper-size ima dinamican naslov ('Format stranice A4' / 'Format stranice (A4/A3)') -> prefiks.
-const PAPER_SIZE_PREFIX = 'Format stranice';
+const PAPER_SIZE_PREFIX = PAPER_SIZE_TITLE_PREFIX;
 
 /** A-serija (cm), isti izvor kao PS mapa u analyzeDocx; sluzi konverziji imena iz profila. */
 const A_SERIES: Record<string, [number, number]> = {
