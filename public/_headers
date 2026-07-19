@@ -24,11 +24,21 @@
 # registra); `preload` dodati TEK uz vlastitu domenu (npr. lekta.hr) koju trajno zakljucavas na HTTPS.
 # Permissions-Policy (audit security-05): zakljucaj senzore koje app NE koristi (camera/microphone/
 # geolocation/payment) da eventualni injection ne moze zatraziti pristup. Cisto aditivno, nizak rizik.
-# NAPOMENA (deferrano, security-05 srednji rizik): suzenje connect-src/form-action s `https:` na
-# konkretne hostove (self + *.supabase.co + Lemon Squeezy) trazi provjeru zive liste hostova (auth,
-# waitlist, katalog, checkout) da se legitiman poziv ne blokira; radi se kad se ozici naplata.
+# connect-src / form-action su SUZENI s `https:` na konkretnu allowlistu (Faza 4, dokaziva
+# privatnost): time slanje podataka izvan ovih hostova postaje tehnicki nemoguce, pa tvrdnja
+# "dokument ne napusta uredaj" (za besplatnu analizu) nije samo copy nego politika preglednika.
+# Dopusteni hostovi i zasto:
+#   'self'                    - vlastite stranice, Netlify forme (rucna narudzba), app asseti
+#   https://*.supabase.co     - Supabase (auth, Edge funkcije, REST): report, checkout, waitlist,
+#                               katalog, rokovi, integritet, referral (svi na projektnoj *.supabase.co)
+#   https://api.crossref.org  - "Popuni iz DOI-ja" na alatu Citati + provjera postojanja reference
+#   https://doi.org           - DOI resolver (provjera postojanja reference)
+#   https://*.lemonsqueezy.com- povratni checkout (form-action; POST/redirect na LS placanje)
+# VAZNO: ako se doda NOVI vanjski endpoint (npr. druga analitika), dodaj mu host OVDJE, inace ga
+# preglednik blokira. To je namjerno: nepredvidjeni odljev podataka pada zatvoreno. `npm run dev`
+# ne koristi _headers pa HMR websocket ostaje raditi.
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-ws2+tIofKe8Oi9MB7J4qYjlxZsGRTkubfdubL9tzznQ='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' https:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' https:
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-ws2+tIofKe8Oi9MB7J4qYjlxZsGRTkubfdubL9tzznQ='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self' https://*.supabase.co https://api.crossref.org https://doi.org; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self' https://*.supabase.co https://*.lemonsqueezy.com
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY
