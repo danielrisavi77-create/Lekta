@@ -1,0 +1,5 @@
+# Hunspell rjecnik (hrvatski pravopis): cuvaj TOCNE bajtove, bez EOL konverzije.
+# Uz core.autocrlf=true git bi ih na checkoutu pretvorio u CRLF, a \r bi usao u
+# affix polja (.aff) i unose (.dic) pa bi Hunspell parsiranje puklo. -text = binarno.
+src/audits/hr-dict/hr_HR.aff -text
+src/audits/hr-dict/hr_HR.dic -text
