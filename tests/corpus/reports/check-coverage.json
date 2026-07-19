@@ -1,0 +1,1028 @@
+{
+  "summary": {
+    "totalChecks": 71,
+    "scoredChecks": 54,
+    "scoredWithAtomic": 13,
+    "scoredAtomicPct": 24,
+    "checksWithValidControl": 4,
+    "checksWithBoundary": 4,
+    "atomicCases": 13,
+    "validControlCases": 5,
+    "boundaryCases": 14,
+    "intakeCodes": 6
+  },
+  "rows": [
+    {
+      "title": "Abecedni poredak literature",
+      "checkId": "reference.alphabetical",
+      "category": "citations",
+      "scored": true,
+      "hasAtomic": true,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Automatizacija citatnog stila",
+      "checkId": "citation.style-automation",
+      "category": "citations",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Citirano → literatura",
+      "checkId": "citation.author-year.missing-reference",
+      "category": "citations",
+      "scored": true,
+      "hasAtomic": true,
+      "hasValidControl": true,
+      "hasBoundary": false
+    },
+    {
+      "title": "Datumi pristupa mrežnim izvorima",
+      "checkId": "reference.access-date",
+      "category": "citations",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Dosljednost interpunkcije citatnica",
+      "checkId": "citation.punctuation",
+      "category": "citations",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Fusnote ↔ bibliografija",
+      "checkId": "legal.footnote-bibliography",
+      "category": "citations",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Isti autor i godina (a/b/c)",
+      "checkId": "citation.author-year.suffix",
+      "category": "citations",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Klasifikacija pravnih izvora",
+      "checkId": "legal.source-classification",
+      "category": "citations",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Kratica id. u istoj bilješci",
+      "checkId": "legal.id-abbrev",
+      "category": "citations",
+      "scored": false,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Literatura → citirano",
+      "checkId": "reference.uncited",
+      "category": "citations",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Lokator uz izravne citate",
+      "checkId": "citation.direct-quote-locator",
+      "category": "citations",
+      "scored": true,
+      "hasAtomic": true,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Minimalan broj izvora profila",
+      "checkId": "reference.min-count",
+      "category": "citations",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "op. cit. → prvo navođenje",
+      "checkId": "legal.opcit",
+      "category": "citations",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Potpunost bibliografskih zapisa",
+      "checkId": "reference.completeness",
+      "category": "citations",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Potpunost prvog navođenja",
+      "checkId": "legal.first-citation-completeness",
+      "category": "citations",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Pravne fusnote",
+      "checkId": "legal.footnotes-present",
+      "category": "citations",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Prepoznate citatnice",
+      "checkId": "citation.recognized",
+      "category": "citations",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Propisi i uvedene kratice",
+      "checkId": "legal.act-abbrev",
+      "category": "citations",
+      "scored": false,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Slijed Ibid.",
+      "checkId": "legal.ibid",
+      "category": "citations",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Sudska praksa",
+      "checkId": "legal.case-law",
+      "category": "citations",
+      "scored": false,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Izvori ispod slika i tablica",
+      "checkId": "element.source",
+      "category": "elements",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Naslovi slika i grafikona",
+      "checkId": "element.figure.caption",
+      "category": "elements",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Naslovi tablica",
+      "checkId": "element.table.caption",
+      "category": "elements",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Oblik poveznica",
+      "checkId": "element.link-form",
+      "category": "elements",
+      "scored": true,
+      "hasAtomic": true,
+      "hasValidControl": true,
+      "hasBoundary": false
+    },
+    {
+      "title": "Popisi slika i tablica",
+      "checkId": "element.lists",
+      "category": "elements",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Prazni odlomci",
+      "checkId": "element.empty-paragraphs",
+      "category": "elements",
+      "scored": false,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Automatske fusnote",
+      "checkId": "footnote.present",
+      "category": "formatting",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Dominantni font",
+      "checkId": "format.font.dominant",
+      "category": "formatting",
+      "scored": true,
+      "hasAtomic": true,
+      "hasValidControl": true,
+      "hasBoundary": false
+    },
+    {
+      "title": "Format stranice (A3/A0)",
+      "checkId": "page.size.project",
+      "category": "formatting",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Format stranice A4",
+      "checkId": "page.size.a4",
+      "category": "formatting",
+      "scored": true,
+      "hasAtomic": true,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Margine dokumenta",
+      "checkId": "page.margins",
+      "category": "formatting",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": true
+    },
+    {
+      "title": "Oblikovanje fusnota",
+      "checkId": "footnote.format",
+      "category": "formatting",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Položaj i stil oznaka fusnota",
+      "checkId": "footnote.marker",
+      "category": "formatting",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Poravnanje osnovnog teksta",
+      "checkId": "format.justify.body",
+      "category": "formatting",
+      "scored": true,
+      "hasAtomic": true,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Prored osnovnog teksta",
+      "checkId": "format.spacing.body",
+      "category": "formatting",
+      "scored": true,
+      "hasAtomic": true,
+      "hasValidControl": false,
+      "hasBoundary": true
+    },
+    {
+      "title": "Razmak prije i poslije fusnota",
+      "checkId": "footnote.spacing",
+      "category": "formatting",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Razmak prije i poslije odlomka",
+      "checkId": "format.spacing.paragraph",
+      "category": "formatting",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Veličina osnovnog teksta",
+      "checkId": "format.size.body",
+      "category": "formatting",
+      "scored": true,
+      "hasAtomic": true,
+      "hasValidControl": true,
+      "hasBoundary": true
+    },
+    {
+      "title": "Broj glavnih poglavlja",
+      "checkId": "structure.chapters.count",
+      "category": "structure",
+      "scored": "dynamic",
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Brojevi stranica",
+      "checkId": "page.numbers.present",
+      "category": "structure",
+      "scored": true,
+      "hasAtomic": true,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Brojevi stranica u sadržaju",
+      "checkId": "toc.page-numbers",
+      "category": "structure",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Detalji automatskog sadržaja",
+      "checkId": "toc.field",
+      "category": "structure",
+      "scored": "dynamic",
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Dijelovi verificiranog profila",
+      "checkId": "structure.sections.profile",
+      "category": "structure",
+      "scored": true,
+      "hasAtomic": true,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Dubina decimalnog numeriranja",
+      "checkId": "structure.heading.depth",
+      "category": "structure",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Elementi naslovne stranice",
+      "checkId": "title.elements",
+      "category": "structure",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Etički aspekti empirijskog istraživanja",
+      "checkId": "method.ethics",
+      "category": "structure",
+      "scored": "dynamic",
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Font i veličina sadržaja",
+      "checkId": "toc.format",
+      "category": "structure",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Hijerarhija naslova",
+      "checkId": "structure.heading.hierarchy",
+      "category": "structure",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Ključne riječi u samom radu",
+      "checkId": "structure.keywords",
+      "category": "structure",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Metodološka varijanta rada",
+      "checkId": "method.variant",
+      "category": "structure",
+      "scored": "dynamic",
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Naslovi dokumenta ↔ sadržaj",
+      "checkId": "toc.coverage",
+      "category": "structure",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Naslovnica bez broja stranice",
+      "checkId": "page.numbers.title-suppressed",
+      "category": "structure",
+      "scored": false,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Numeriranje naslova",
+      "checkId": "structure.heading.numbering",
+      "category": "structure",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Numeriranje od prve stranice Uvoda",
+      "checkId": "page.numbers.start",
+      "category": "structure",
+      "scored": false,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Oblikovanje naslova po razinama",
+      "checkId": "structure.heading.format",
+      "category": "structure",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Omjer Uvoda i Zaključka",
+      "checkId": "scope.intro-conclusion-ratio",
+      "category": "structure",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Opseg u autorskim karticama",
+      "checkId": "scope.cards",
+      "category": "structure",
+      "scored": "dynamic",
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Opseg u stranicama",
+      "checkId": "scope.pages",
+      "category": "structure",
+      "scored": false,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Osnovni dijelovi rada",
+      "checkId": "structure.sections.basic",
+      "category": "structure",
+      "scored": true,
+      "hasAtomic": true,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Položaj broja stranice",
+      "checkId": "page.numbers.position",
+      "category": "structure",
+      "scored": false,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Poravnanje naslova slijeva",
+      "checkId": "structure.heading.align",
+      "category": "structure",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Profilni opseg riječi",
+      "checkId": "scope.words",
+      "category": "structure",
+      "scored": true,
+      "hasAtomic": true,
+      "hasValidControl": false,
+      "hasBoundary": true
+    },
+    {
+      "title": "Raspored naslovne stranice",
+      "checkId": "title.layout",
+      "category": "structure",
+      "scored": false,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Redoslijed elemenata naslovnice",
+      "checkId": "title.order",
+      "category": "structure",
+      "scored": false,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Sadržaj dokumenta",
+      "checkId": "toc.present",
+      "category": "structure",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Sažeci u samom radu",
+      "checkId": "structure.abstract",
+      "category": "structure",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Shema numeriranja stranica",
+      "checkId": "page.numbers.scheme",
+      "category": "structure",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Struktura metodološkog profila",
+      "checkId": "method.structure",
+      "category": "structure",
+      "scored": "dynamic",
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Tipografija korica i naslovnice",
+      "checkId": "title.typography",
+      "category": "structure",
+      "scored": false,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Uporaba Word stilova naslova",
+      "checkId": "structure.heading.word-styles",
+      "category": "structure",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    },
+    {
+      "title": "Zahtjevi za ručnu završnu provjeru",
+      "checkId": "manual.checks",
+      "category": "structure",
+      "scored": true,
+      "hasAtomic": false,
+      "hasValidControl": false,
+      "hasBoundary": false
+    }
+  ],
+  "gaps": [
+    {
+      "priority": "P1",
+      "checkId": "citation.author-year.suffix",
+      "title": "Isti autor i godina (a/b/c)",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.citation.author-year.suffix: baza prolazi, jedna mutacija ruši \"Isti autor i godina (a/b/c)\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "citation.punctuation",
+      "title": "Dosljednost interpunkcije citatnica",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.citation.punctuation: baza prolazi, jedna mutacija ruši \"Dosljednost interpunkcije citatnica\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "citation.recognized",
+      "title": "Prepoznate citatnice",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.citation.recognized: baza prolazi, jedna mutacija ruši \"Prepoznate citatnice\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "citation.style-automation",
+      "title": "Automatizacija citatnog stila",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.citation.style-automation: baza prolazi, jedna mutacija ruši \"Automatizacija citatnog stila\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "element.figure.caption",
+      "title": "Naslovi slika i grafikona",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.element.figure.caption: baza prolazi, jedna mutacija ruši \"Naslovi slika i grafikona\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "element.lists",
+      "title": "Popisi slika i tablica",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.element.lists: baza prolazi, jedna mutacija ruši \"Popisi slika i tablica\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "element.source",
+      "title": "Izvori ispod slika i tablica",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.element.source: baza prolazi, jedna mutacija ruši \"Izvori ispod slika i tablica\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "element.table.caption",
+      "title": "Naslovi tablica",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.element.table.caption: baza prolazi, jedna mutacija ruši \"Naslovi tablica\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "footnote.format",
+      "title": "Oblikovanje fusnota",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.footnote.format: baza prolazi, jedna mutacija ruši \"Oblikovanje fusnota\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "footnote.marker",
+      "title": "Položaj i stil oznaka fusnota",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.footnote.marker: baza prolazi, jedna mutacija ruši \"Položaj i stil oznaka fusnota\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "footnote.present",
+      "title": "Automatske fusnote",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.footnote.present: baza prolazi, jedna mutacija ruši \"Automatske fusnote\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "footnote.spacing",
+      "title": "Razmak prije i poslije fusnota",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.footnote.spacing: baza prolazi, jedna mutacija ruši \"Razmak prije i poslije fusnota\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "format.spacing.paragraph",
+      "title": "Razmak prije i poslije odlomka",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.format.spacing.paragraph: baza prolazi, jedna mutacija ruši \"Razmak prije i poslije odlomka\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "legal.first-citation-completeness",
+      "title": "Potpunost prvog navođenja",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.legal.first-citation-completeness: baza prolazi, jedna mutacija ruši \"Potpunost prvog navođenja\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "legal.footnote-bibliography",
+      "title": "Fusnote ↔ bibliografija",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.legal.footnote-bibliography: baza prolazi, jedna mutacija ruši \"Fusnote ↔ bibliografija\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "legal.footnotes-present",
+      "title": "Pravne fusnote",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.legal.footnotes-present: baza prolazi, jedna mutacija ruši \"Pravne fusnote\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "legal.ibid",
+      "title": "Slijed Ibid.",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.legal.ibid: baza prolazi, jedna mutacija ruši \"Slijed Ibid.\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "legal.opcit",
+      "title": "op. cit. → prvo navođenje",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.legal.opcit: baza prolazi, jedna mutacija ruši \"op. cit. → prvo navođenje\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "legal.source-classification",
+      "title": "Klasifikacija pravnih izvora",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.legal.source-classification: baza prolazi, jedna mutacija ruši \"Klasifikacija pravnih izvora\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "manual.checks",
+      "title": "Zahtjevi za ručnu završnu provjeru",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.manual.checks: baza prolazi, jedna mutacija ruši \"Zahtjevi za ručnu završnu provjeru\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "page.margins",
+      "title": "Margine dokumenta",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.page.margins: baza prolazi, jedna mutacija ruši \"Margine dokumenta\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "page.numbers.scheme",
+      "title": "Shema numeriranja stranica",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.page.numbers.scheme: baza prolazi, jedna mutacija ruši \"Shema numeriranja stranica\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "page.size.project",
+      "title": "Format stranice (A3/A0)",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.page.size.project: baza prolazi, jedna mutacija ruši \"Format stranice (A3/A0)\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "reference.access-date",
+      "title": "Datumi pristupa mrežnim izvorima",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.reference.access-date: baza prolazi, jedna mutacija ruši \"Datumi pristupa mrežnim izvorima\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "reference.completeness",
+      "title": "Potpunost bibliografskih zapisa",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.reference.completeness: baza prolazi, jedna mutacija ruši \"Potpunost bibliografskih zapisa\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "reference.min-count",
+      "title": "Minimalan broj izvora profila",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.reference.min-count: baza prolazi, jedna mutacija ruši \"Minimalan broj izvora profila\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "reference.uncited",
+      "title": "Literatura → citirano",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.reference.uncited: baza prolazi, jedna mutacija ruši \"Literatura → citirano\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "scope.intro-conclusion-ratio",
+      "title": "Omjer Uvoda i Zaključka",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.scope.intro-conclusion-ratio: baza prolazi, jedna mutacija ruši \"Omjer Uvoda i Zaključka\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "structure.abstract",
+      "title": "Sažeci u samom radu",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.structure.abstract: baza prolazi, jedna mutacija ruši \"Sažeci u samom radu\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "structure.heading.align",
+      "title": "Poravnanje naslova slijeva",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.structure.heading.align: baza prolazi, jedna mutacija ruši \"Poravnanje naslova slijeva\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "structure.heading.depth",
+      "title": "Dubina decimalnog numeriranja",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.structure.heading.depth: baza prolazi, jedna mutacija ruši \"Dubina decimalnog numeriranja\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "structure.heading.format",
+      "title": "Oblikovanje naslova po razinama",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.structure.heading.format: baza prolazi, jedna mutacija ruši \"Oblikovanje naslova po razinama\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "structure.heading.hierarchy",
+      "title": "Hijerarhija naslova",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.structure.heading.hierarchy: baza prolazi, jedna mutacija ruši \"Hijerarhija naslova\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "structure.heading.numbering",
+      "title": "Numeriranje naslova",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.structure.heading.numbering: baza prolazi, jedna mutacija ruši \"Numeriranje naslova\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "structure.heading.word-styles",
+      "title": "Uporaba Word stilova naslova",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.structure.heading.word-styles: baza prolazi, jedna mutacija ruši \"Uporaba Word stilova naslova\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "structure.keywords",
+      "title": "Ključne riječi u samom radu",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.structure.keywords: baza prolazi, jedna mutacija ruši \"Ključne riječi u samom radu\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "title.elements",
+      "title": "Elementi naslovne stranice",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.title.elements: baza prolazi, jedna mutacija ruši \"Elementi naslovne stranice\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "toc.coverage",
+      "title": "Naslovi dokumenta ↔ sadržaj",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.toc.coverage: baza prolazi, jedna mutacija ruši \"Naslovi dokumenta ↔ sadržaj\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "toc.format",
+      "title": "Font i veličina sadržaja",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.toc.format: baza prolazi, jedna mutacija ruši \"Font i veličina sadržaja\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "toc.page-numbers",
+      "title": "Brojevi stranica u sadržaju",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.toc.page-numbers: baza prolazi, jedna mutacija ruši \"Brojevi stranica u sadržaju\"."
+    },
+    {
+      "priority": "P1",
+      "checkId": "toc.present",
+      "title": "Sadržaj dokumenta",
+      "reason": "Bodovana provjera bez atomskog fail-slucaja (moze pasti, nije regresijski pokrivena).",
+      "desiredTest": "atomic.toc.present: baza prolazi, jedna mutacija ruši \"Sadržaj dokumenta\"."
+    },
+    {
+      "priority": "P2",
+      "checkId": "citation.direct-quote-locator",
+      "title": "Lokator uz izravne citate",
+      "reason": "Poznati bug: missingLocator regex `,\\s*\\d` tretira godinu (\", 2019\") kao broj stranice, pa citat s uobicajenom citatnicom (Prezime, 2019) NE moze pasti. Atomski slucaj to zaobilazi izostavljanjem zareza.",
+      "desiredTest": "Popraviti detekciju lokatora (iskljuciti godinu iz kandidata za stranicu) + atomic bez zaobilaznice."
+    },
+    {
+      "priority": "P3",
+      "checkId": "element.empty-paragraphs",
+      "title": "Prazni odlomci",
+      "reason": "Informativna provjera bez valid-controla (nizak rizik, ali nepokrivena).",
+      "desiredTest": "valid.element.empty-paragraphs: valjana varijanta ostaje informativna/pass."
+    },
+    {
+      "priority": "P3",
+      "checkId": "legal.act-abbrev",
+      "title": "Propisi i uvedene kratice",
+      "reason": "Informativna provjera bez valid-controla (nizak rizik, ali nepokrivena).",
+      "desiredTest": "valid.legal.act-abbrev: valjana varijanta ostaje informativna/pass."
+    },
+    {
+      "priority": "P3",
+      "checkId": "legal.case-law",
+      "title": "Sudska praksa",
+      "reason": "Informativna provjera bez valid-controla (nizak rizik, ali nepokrivena).",
+      "desiredTest": "valid.legal.case-law: valjana varijanta ostaje informativna/pass."
+    },
+    {
+      "priority": "P3",
+      "checkId": "legal.id-abbrev",
+      "title": "Kratica id. u istoj bilješci",
+      "reason": "Informativna provjera bez valid-controla (nizak rizik, ali nepokrivena).",
+      "desiredTest": "valid.legal.id-abbrev: valjana varijanta ostaje informativna/pass."
+    },
+    {
+      "priority": "P3",
+      "checkId": "page.numbers.position",
+      "title": "Položaj broja stranice",
+      "reason": "Informativna provjera bez valid-controla (nizak rizik, ali nepokrivena).",
+      "desiredTest": "valid.page.numbers.position: valjana varijanta ostaje informativna/pass."
+    },
+    {
+      "priority": "P3",
+      "checkId": "page.numbers.start",
+      "title": "Numeriranje od prve stranice Uvoda",
+      "reason": "Informativna provjera bez valid-controla (nizak rizik, ali nepokrivena).",
+      "desiredTest": "valid.page.numbers.start: valjana varijanta ostaje informativna/pass."
+    },
+    {
+      "priority": "P3",
+      "checkId": "page.numbers.title-suppressed",
+      "title": "Naslovnica bez broja stranice",
+      "reason": "Informativna provjera bez valid-controla (nizak rizik, ali nepokrivena).",
+      "desiredTest": "valid.page.numbers.title-suppressed: valjana varijanta ostaje informativna/pass."
+    },
+    {
+      "priority": "P3",
+      "checkId": "scope.pages",
+      "title": "Opseg u stranicama",
+      "reason": "Informativna provjera bez valid-controla (nizak rizik, ali nepokrivena).",
+      "desiredTest": "valid.scope.pages: valjana varijanta ostaje informativna/pass."
+    },
+    {
+      "priority": "P3",
+      "checkId": "title.layout",
+      "title": "Raspored naslovne stranice",
+      "reason": "Informativna provjera bez valid-controla (nizak rizik, ali nepokrivena).",
+      "desiredTest": "valid.title.layout: valjana varijanta ostaje informativna/pass."
+    },
+    {
+      "priority": "P3",
+      "checkId": "title.order",
+      "title": "Redoslijed elemenata naslovnice",
+      "reason": "Informativna provjera bez valid-controla (nizak rizik, ali nepokrivena).",
+      "desiredTest": "valid.title.order: valjana varijanta ostaje informativna/pass."
+    },
+    {
+      "priority": "P3",
+      "checkId": "title.typography",
+      "title": "Tipografija korica i naslovnice",
+      "reason": "Informativna provjera bez valid-controla (nizak rizik, ali nepokrivena).",
+      "desiredTest": "valid.title.typography: valjana varijanta ostaje informativna/pass."
+    }
+  ]
+}
