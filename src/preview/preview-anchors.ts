@@ -28,6 +28,7 @@ import {
   KIND_PRVO_LICE,
 } from '../audits/register';
 import { SUBMISSION_LABELS_HR } from '../audits/submission-lint';
+import { GRAMMAR_KIND_LABELS } from '../audits/grammar-hr';
 
 export type PreviewSeverity = 'error' | 'warning' | 'info';
 
@@ -147,6 +148,7 @@ export type PreviewFlagSource =
   | 'reference-incomplete'
   | 'legal-uncited'
   | 'submission'
+  | 'grammar'
   | 'existence'
   | 'issue-anchor'
   | 'footnote-anchor';
@@ -218,6 +220,19 @@ export function collectPreviewFlags(details: any): PreviewFlag[] {
       kind: String(f.kind ?? 'registar'),
       title: REGISTER_LABELS[f.kind] ?? String(f.kind ?? 'Registar i jasnoća'),
       source: 'register',
+    });
+  }
+
+  // 2b) Gramatika i stil (grammarLint): 0-based -> 1-based; savjetodavno (ne ulazi u ocjenu)
+  for (const f of details.grammarLint?.findings ?? []) {
+    if (!isParagraphOrdinal(f?.paragraphIndex)) continue;
+    flags.push({
+      paragraphIndex: f.paragraphIndex + 1,
+      excerpt: trimExcerpt(f.excerpt),
+      severity: 'info',
+      kind: String(f.kind ?? 'gramatika'),
+      title: GRAMMAR_KIND_LABELS[f.kind] ?? String(f.kind ?? 'Gramatika i stil'),
+      source: 'grammar',
     });
   }
 
