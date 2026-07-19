@@ -14,6 +14,12 @@ export interface TriageViewOptions {
   unlocked: boolean;
   /** Aktivni filter razine ili null za sve. */
   filter: Fixability | null;
+  /**
+   * Je li placeni popravak dostupan na ovom rezultatu (repair panel ima sadrzaj koji korisnik moze
+   * pokrenuti). Tek tada triage nudi CTA "Popravi automatski (N)" koji vodi na taj panel. Brojac
+   * auto nalaza je vec vidljiv u besplatnoj dijagnozi, pa CTA ne otkriva nista novo (WS-1 granica).
+   */
+  repairAvailable?: boolean;
 }
 
 interface LevelMeta {
@@ -77,5 +83,11 @@ export function triagePanelHtml(triage: TriageModel | null | undefined, opts: Tr
   const list = findings.length
     ? `<ul class="triage-list">${findings.map((f) => findingHtml(f, opts.unlocked)).join('')}</ul>`
     : '<p class="triage-empty">Nema nalaza u ovom filtru.</p>';
-  return `<h3 class="triage-head">${c.total} ${nalazWord(c.total)}: podijeljeni po tome kako se rješavaju</h3><div class="triage-filters">${chip('auto', c.auto)}${chip('assisted', c.assisted)}${chip('manual', c.manual)}</div>${list}`;
+  // Teaser -> placeni popravak: kad je repair dostupan i ima auto nalaza, ponudi jedan CTA na
+  // panel "Popravi sve". Broj = auto bucket (isti kao chip), pa je obecanje posteno i bez recepta.
+  const cta =
+    opts.repairAvailable && c.auto > 0
+      ? `<button type="button" class="triage-repair-cta" data-triage-repair><i data-lucide="wand-2"></i>Popravi automatski (${c.auto}) <span aria-hidden="true">→</span></button>`
+      : '';
+  return `<h3 class="triage-head">${c.total} ${nalazWord(c.total)}: podijeljeni po tome kako se rješavaju</h3><div class="triage-filters">${chip('auto', c.auto)}${chip('assisted', c.assisted)}${chip('manual', c.manual)}</div>${cta}${list}`;
 }

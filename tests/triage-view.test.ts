@@ -86,4 +86,20 @@ describe('triagePanelHtml', () => {
     expect(html).toContain('Tvoja odluka');
     expect(html).toContain('data-lucide="wand-2"');
   });
+
+  it('nudi CTA na placeni popravak samo kad je repair dostupan (broj = auto bucket)', () => {
+    // Bez repairAvailand (default): nema CTA, jer teaser->placeno most nije primjenjiv.
+    const off = triagePanelHtml(MODEL, { unlocked: false, filter: null });
+    expect(off).not.toContain('data-triage-repair');
+    // S repairAvailable: CTA se pojavi i nosi tocan auto brojac (counts.auto === 1).
+    const on = triagePanelHtml(MODEL, { unlocked: false, filter: null, repairAvailable: true });
+    expect(on).toContain('data-triage-repair');
+    expect(on).toContain('Popravi automatski (1)');
+  });
+
+  it('nema CTA kad nema auto nalaza iako je repair dostupan', () => {
+    const manualOnly: TriageModel = { findings: [MODEL.findings[2]], counts: { auto: 0, assisted: 0, manual: 1, total: 1 } };
+    const html = triagePanelHtml(manualOnly, { unlocked: false, filter: null, repairAvailable: true });
+    expect(html).not.toContain('data-triage-repair');
+  });
 });

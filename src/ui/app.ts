@@ -706,13 +706,30 @@ function renderResultGuide(r: any){
 let _triageFilter: any=null;
 function renderTriage(r: any){
   const el=$('#triagePanel');if(!el)return;
-  const html=triagePanelHtml(r?.details?.triage,{unlocked:recipeUnlocked(),filter:_triageFilter});
+  // Repair je "dostupan" kad je panel #repairPanelMount vec renderiran s necim akcijskim (teaser+lock
+  // ili placeni panel). renderSubmissionChecklist tece PRIJE renderTriage u renderResult, pa je mount
+  // vec popunjen; demo rezultati nemaju panel. Time CTA ne vodi na prazno.
+  const repairAvailable=!r?.demo&&!!$('#repairPanelMount')?.childElementCount;
+  const html=triagePanelHtml(r?.details?.triage,{unlocked:recipeUnlocked(),filter:_triageFilter,repairAvailable});
   if(!html){el.classList.add('hidden');el.innerHTML='';return}
   el.classList.remove('hidden');el.innerHTML=html;
   el.querySelectorAll('[data-triage-level]').forEach((b: any)=>{b.onclick=()=>{const lvl=b.dataset.triageLevel;_triageFilter=_triageFilter===lvl?null:lvl;renderTriage(currentResult)}});
   el.querySelectorAll('[data-triage-jump]').forEach((b: any)=>{b.onclick=()=>{const v=String(b.dataset.triageJump);if(v[0]==='f')void openPreviewAt(0,Number(v.slice(1)));else void openPreviewAt(Number(v.slice(1)))}});
   el.querySelectorAll('[data-triage-order]').forEach((b: any)=>{b.onclick=()=>{($('#orderFromResult') as any)?.click()}});
+  el.querySelectorAll('[data-triage-repair]').forEach((b: any)=>{b.onclick=()=>scrollToRepairPanel(r)});
   window.__lektaIcons?.();
+}
+// Most iz besplatne dijagnoze u placeni popravak: prebaci na karticu "Spremnost za predaju" gdje
+// zivi #repairPanelMount, doskrolaj i kratko istakni panel te fokusiraj njegovu glavnu akciju.
+function scrollToRepairPanel(r: any){
+  openTab('submission');
+  const m=$('#repairPanelMount');
+  if(m){
+    m.scrollIntoView({behavior:motionReduced()?'auto':'smooth',block:'center'});
+    m.classList.remove('repair-flash');void (m as any).offsetWidth;m.classList.add('repair-flash');
+    const act: any=m.querySelector('[data-repair-go],button,a');act?.focus?.({preventScroll:true});
+  }
+  try{void trackEvent('triage_repair_cta',{count:r?.details?.triage?.counts?.auto||0})}catch(e: any){}
 }
 // Dokaziva privatnost (Faza 4): mjeri mrezne zahtjeve tijekom analize i posteno prikaze koliko ih
 // je otislo prema vanjskim posluziteljima. Probe se pokrece u runAnalysis, cita u renderResult.
