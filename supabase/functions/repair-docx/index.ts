@@ -25,7 +25,7 @@ import { isReportWorkType } from '../../../src/report/pricing.ts';
 import { decideReportAccess } from '../../../src/report/slot-logic.ts';
 import { coverageTierForStatus } from '../../../src/report/guarantee.ts';
 import { resolveDailyCap } from '../../../src/report/partner.ts';
-import { unambiguousMismatch } from '../../../src/report/work-type-estimate.ts';
+import { unambiguousMismatch, estimateWorkType } from '../../../src/report/work-type-estimate.ts';
 import { applyFixers, FIXER_IDS, type FixerRequest } from '../../../src/repair/apply-fixers.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
@@ -129,7 +129,7 @@ Deno.serve(async (req: Request) => {
     //    Signali su sanitizirani (broj rijeci + enum marker), nikad doslovni tekst.
     const signals = { words: Number(meta.signals?.words) || null, titleMarker: meta.signals?.titleMarker ?? null };
     if (meta.confirmedMismatch !== true && unambiguousMismatch(workType, signals)) {
-      return json({ error: 'tier_mismatch', workType }, 409);
+      return json({ error: 'tier_mismatch', workType, suggestedWorkType: estimateWorkType(signals).workType }, 409);
     }
 
     // 4. validacija fixer-zahtjeva: samo poznati I ZIVI fixeri (K5/K6/K7 tamni dok WS-4 ne prodje).
