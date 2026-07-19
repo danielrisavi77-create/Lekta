@@ -5,8 +5,10 @@ import {
   buildLemonSqueezyCheckout,
   checkoutRequestPayload,
   createCheckout,
+  checkoutMismatch,
 } from '../src/report/checkout';
 import type { Product } from '../src/catalog/products-catalog';
+import { TIER_RANK } from '../src/report/work-type-estimate';
 
 function product(over: Partial<Product> = {}): Product {
   return {
@@ -77,6 +79,33 @@ describe('checkoutRequestPayload (kriterij 14.1)', () => {
   });
   it('bez pristanka payload ne sadrzi consent polje', () => {
     expect('consent' in checkoutRequestPayload('slot_diplomski')).toBe(false);
+  });
+});
+
+describe('checkoutMismatch (WS-5 enforcement pri kupnji)', () => {
+  it('bez signala -> ne blokira (fail-open)', () => {
+    expect(checkoutMismatch('seminarski', null, false)).toEqual({ block: false });
+  });
+  it('potvrdjeno (korisnik svjesno kupuje nizi tier) -> ne blokira', () => {
+    expect(checkoutMismatch('seminarski', { words: 40000 }, true)).toEqual({ block: false });
+  });
+  it('proizvod bez repair-tiera (workType null) -> ne blokira', () => {
+    expect(checkoutMismatch(null, { words: 40000 }, false)).toEqual({ block: false });
+  });
+  it('nedvosmisleno prevelik opseg za seminarski -> blokira uz predlozeni tier', () => {
+    const out = checkoutMismatch('seminarski', { words: 40000 }, false);
+    expect(out.block).toBe(true);
+    if (out.block) expect(TIER_RANK[out.suggestedWorkType]).toBeGreaterThan(TIER_RANK.seminarski);
+  });
+  it('naslovnica doslovno kaze diplomski, a bira se seminarski -> blokira', () => {
+    const out = checkoutMismatch('seminarski', { words: 2000, titleMarker: 'graduate' }, false);
+    expect(out).toEqual({ block: true, suggestedWorkType: 'diplomski' });
+  });
+  it('granicno (dug seminar unutar razumnog) -> ne blokira', () => {
+    expect(checkoutMismatch('seminarski', { words: 8000 }, false)).toEqual({ block: false });
+  });
+  it('ispravan tier za opseg -> ne blokira', () => {
+    expect(checkoutMismatch('diplomski', { words: 20000, titleMarker: 'graduate' }, false)).toEqual({ block: false });
   });
 });
 

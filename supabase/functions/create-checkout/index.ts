@@ -8,7 +8,7 @@
 //
 // deno-lint-ignore-file no-explicit-any
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
-import { resolveCheckout, buildLemonSqueezyCheckout } from '../../../src/report/checkout.ts';
+import { resolveCheckout, buildLemonSqueezyCheckout, checkoutMismatch } from '../../../src/report/checkout.ts';
 import { mapProductRow } from '../../../src/catalog/products-catalog.ts';
 import { corsHeadersFor } from '../_shared/cors.ts';
 
@@ -60,6 +60,14 @@ Deno.serve(async (req: Request) => {
   const referralCode = body.referralCode ? String(body.referralCode) : null;
   if (!productId) return json({ error: 'bad_request' }, 400);
 
+  // WS-5 signali za provjeru vrste rada: SANITIZIRANI (broj rijeci + enum marker), nikad doslovni
+  // tekst rada. confirmedMismatch=true znaci da je korisnik svjesno potvrdio kupnju nizeg tiera.
+  const confirmedMismatch = body.confirmedMismatch === true;
+  const rawSignals = body.signals && typeof body.signals === 'object' ? body.signals : null;
+  const signals = rawSignals
+    ? { words: Number(rawSignals.words) || null, titleMarker: rawSignals.titleMarker != null ? String(rawSignals.titleMarker) : null }
+    : null;
+
   // consent gate (P0 1-1): digitalni pass se ne prodaje bez pristanka na trenutnu isporuku
   // i odricanja od 14-dnevnog prava na odustanak. Tekst + timestamp trajno se biljeze.
   const consent = body.consent;
@@ -104,6 +112,12 @@ Deno.serve(async (req: Request) => {
   const resolution = resolveCheckout(product, { isPartnerActive });
   if (!resolution.ok) return json({ error: resolution.error }, resolution.status);
   if (!product!.morProductId) return json({ error: 'product_not_mapped' }, 409); // popuni products.mor_product_id
+
+  // WS-5 enforcement: nedvosmislen nesklad vrste rada -> 409 PRIJE biljezenja pristanka i LS poziva
+  // (ne trosimo consent zapis ni LS sesiju na kupnju koju odbijamo). Granicno se ne blokira
+  // (fail-open); backstop je i u repair-docx prije trosenja slota. Isti ciljni modul (work-type-estimate).
+  const mm = checkoutMismatch(product!.workType, signals, confirmedMismatch);
+  if (mm.block) return json({ error: 'tier_mismatch', suggestedWorkType: mm.suggestedWorkType }, 409);
 
   // trajno zabiljezi pristanak PRIJE redirecta na placanje (P0 1-1). Ako se ne moze zapisati,
   // ne saljemo korisnika na placanje bez zapisanog pristanka.
