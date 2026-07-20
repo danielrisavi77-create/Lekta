@@ -4,6 +4,7 @@ import {
   decodeBase64,
   buildRepairMeta,
   uploadRepair,
+  REPAIR_MAX_REFERENCES,
   type RepairMeta,
 } from '../src/report/repair-client';
 import { TERMS_VERSION } from '../src/legal/legal-content';
@@ -70,6 +71,81 @@ describe('buildRepairMeta (sanitizacija)', () => {
   it('WS-6.3: uvijek zigose consentVersion tekucim TERMS_VERSION (server ga trajno biljezi)', () => {
     const m = buildRepairMeta({ workType: 'zavrsni', parsedStructure, requests });
     expect(m.consentVersion).toBe(TERMS_VERSION);
+  });
+
+  describe('K4: reference za provjeru u korpusu', () => {
+    const base = { workType: 'zavrsni', parsedStructure, requests } as const;
+
+    it('salje samo naslov i godinu (nista suvisno)', () => {
+      const m = buildRepairMeta({ ...base, references: [{ title: '  Sekundarna hipertenzija  ', year: 2014 }] });
+      expect(m.references).toEqual([{ title: 'Sekundarna hipertenzija', year: 2014 }]);
+    });
+
+    it('izbacuje reference bez naslova (kljuc korpusa je naslov)', () => {
+      const m = buildRepairMeta({ ...base, references: [{ title: '   ', year: 2014 }, { title: 'Ima naslov', year: null }] });
+      expect(m.references).toEqual([{ title: 'Ima naslov', year: null }]);
+    });
+
+    it('nevaljana godina postaje null, ne NaN (NaN bi u JSON-u pao na null tiho)', () => {
+      const m = buildRepairMeta({ ...base, references: [{ title: 'Rad', year: Number.NaN }] });
+      expect(m.references![0].year).toBe(null);
+    });
+
+    it('kapira popis, ne salje neogranicenu literaturu', () => {
+      const many = Array.from({ length: REPAIR_MAX_REFERENCES + 25 }, (_, i) => ({ title: `Rad ${i}`, year: 2020 }));
+      expect(buildRepairMeta({ ...base, references: many }).references).toHaveLength(REPAIR_MAX_REFERENCES);
+    });
+
+    it('bez referenci polje uopce ne postoji (nema provjere)', () => {
+      expect('references' in buildRepairMeta(base)).toBe(false);
+      expect('references' in buildRepairMeta({ ...base, references: [] })).toBe(false);
+      expect('references' in buildRepairMeta({ ...base, references: [{ title: '', year: null }] })).toBe(false);
+    });
+  });
+});
+
+describe('uploadRepair: sourceCheck je DODATAK, nikad uvjet', () => {
+  const ok = (extra: Record<string, unknown>) =>
+    uploadRepair(config, 'jwt', new Uint8Array([1]), meta(), async () =>
+      res(200, { docxBase64: b64([0x50, 0x4b]), ...extra }));
+
+  it('procita valjan sourceCheck', async () => {
+    const out = await ok({ sourceCheck: { found: [{ index: 2, verdict: 'weak', score: 0.71, matchedTitle: 'Naslov', where: 'FFZG', url: 'https://x/1' }], checked: 5, total: 9, truncated: true } });
+    expect(out.kind).toBe('ok');
+    if (out.kind !== 'ok') return;
+    expect(out.sourceCheck).toEqual({
+      found: [{ index: 2, verdict: 'weak', score: 0.71, matchedTitle: 'Naslov', where: 'FFZG', url: 'https://x/1' }],
+      checked: 5, total: 9, truncated: true,
+    });
+  });
+
+  it('stari server bez K3 (nema polja) -> null, popravak SVEJEDNO stize', async () => {
+    const out = await ok({ fileName: 'a.docx' });
+    expect(out.kind).toBe('ok');
+    if (out.kind === 'ok') expect(out.sourceCheck).toBe(null);
+  });
+
+  it('smece umjesto objekta -> null, bez rusenja', async () => {
+    for (const junk of [null, 'da', 42, {}, { found: 'ne-niz', checked: 1, total: 1 }, { found: [], checked: 1, total: 0 }]) {
+      const out = await ok({ sourceCheck: junk });
+      expect(out.kind).toBe('ok');
+      if (out.kind === 'ok') expect(out.sourceCheck).toBe(null);
+    }
+  });
+
+  it('odbacuje verdikt koji korpus NE SMIJE donijeti (not-found)', async () => {
+    const out = await ok({ sourceCheck: { found: [{ index: 0, verdict: 'not-found', score: 0.1, matchedTitle: 'X', where: 'Y', url: null }], checked: 1, total: 1 } });
+    if (out.kind === 'ok') expect(out.sourceCheck!.found).toEqual([]);
+  });
+
+  it('checked veci od total se skresa (brojac ne smije lagati na vise)', async () => {
+    const out = await ok({ sourceCheck: { found: [], checked: 99, total: 4 } });
+    if (out.kind === 'ok') expect(out.sourceCheck).toEqual({ found: [], checked: 4, total: 4, truncated: false });
+  });
+
+  it('checked < total je djelomicno i kad server ne posalje zastavicu', async () => {
+    const out = await ok({ sourceCheck: { found: [], checked: 2, total: 7 } });
+    if (out.kind === 'ok') expect(out.sourceCheck!.truncated).toBe(true);
   });
 });
 

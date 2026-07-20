@@ -33,6 +33,42 @@ export interface RepairFixerRequest {
   params: Record<string, unknown>;
 }
 
+/**
+ * Bibliografski metapodatak jedne reference, za provjeru postojanja u hrvatskom korpusu (K3/K4).
+ * SAMO naslov i godina: to je sve sto korpus treba, pa se ne salje nista suvisno. Sam dokument je
+ * ionako u istom zahtjevu, pa ovo nije novo otkrivanje sadrzaja nego uz njega izdvojen podatak.
+ */
+export interface RepairReference {
+  title: string;
+  year: number | null;
+}
+
+/**
+ * Gornja granica broja poslanih referenci. Server ima svoju (CORPUS_MAX_REFS), ali klijent NE smije
+ * ovisiti o tome da je serverska granica ista: bez ove kape golemi popis literature napuhne meta dio.
+ */
+export const REPAIR_MAX_REFERENCES = 60;
+
+/**
+ * Ishod provjere izvora u korpusu, kakav repair-docx vraca uz popravak.
+ * `found` sadrzi ISKLJUCIVO pogotke; izostanak reference iz tog popisa NIJE dokaz da izvor ne
+ * postoji. `checked`/`total` postoje da se djelomican rezultat (potrosen budzet vremena) ne bi
+ * prikazao kao potpun.
+ */
+export interface RepairSourceCheck {
+  found: Array<{
+    index: number;
+    verdict: 'found' | 'weak';
+    score: number;
+    matchedTitle: string;
+    where: string;
+    url: string | null;
+  }>;
+  checked: number;
+  total: number;
+  truncated: boolean;
+}
+
 /** Meta uz upload (JSON dio multiparta). Bez doslovnog teksta rada. */
 export interface RepairMeta {
   workType: ReportWorkType;
@@ -46,12 +82,14 @@ export interface RepairMeta {
   confirmedMismatch?: boolean;
   /** WS-6.3: verzija uvjeta/privatnosti na koju je korisnik pristao pri uploadu (server je trajno biljezi). */
   consentVersion: string;
+  /** K4: naslovi literature za provjeru postojanja u korpusu. Izostane kad ih nema. */
+  references?: RepairReference[];
 }
 
 export interface RepairChange { ruleId: string; beforeLabel: string; afterLabel: string }
 
 export type RepairOutcome =
-  | { kind: 'ok'; docxBytes: Uint8Array; fileName: string; changelog: RepairChange[]; skipped: string[]; slotId?: string; jobId?: string | null }
+  | { kind: 'ok'; docxBytes: Uint8Array; fileName: string; changelog: RepairChange[]; skipped: string[]; slotId?: string; jobId?: string | null; sourceCheck: RepairSourceCheck | null }
   | { kind: 'tier_mismatch'; suggestedWorkType: string }
   | { kind: 'paywall'; workType: ReportWorkType }
   | { kind: 'rate_limited' }
@@ -83,6 +121,7 @@ export function buildRepairMeta(input: {
   profileRef?: string | null;
   fileName?: string | null;
   confirmedMismatch?: boolean;
+  references?: RepairReference[] | null;
 }): RepairMeta {
   const workType: ReportWorkType = isReportWorkType(input.workType) ? input.workType : 'zavrsni';
   const meta: RepairMeta = {
@@ -102,7 +141,40 @@ export function buildRepairMeta(input: {
   if (input.profileRef != null) meta.profileRef = input.profileRef;
   if (input.fileName != null) meta.fileName = input.fileName;
   if (input.confirmedMismatch) meta.confirmedMismatch = true;
+  // Reference bez naslova nemaju sto traziti u korpusu (kljuc je naslov), pa ispadaju ovdje umjesto
+  // da putuju na server i tamo se tiho odbace. Prazan popis se izostavlja: nema polja, nema provjere.
+  const refs = (input.references || [])
+    .filter((r) => r && typeof r.title === 'string' && r.title.trim().length > 0)
+    .slice(0, REPAIR_MAX_REFERENCES)
+    .map((r) => ({ title: r.title.trim(), year: typeof r.year === 'number' && Number.isFinite(r.year) ? r.year : null }));
+  if (refs.length) meta.references = refs;
   return meta;
+}
+
+/**
+ * Procitaj `sourceCheck` iz odgovora obrambeno. Provjera izvora je DODATAK: bilo kakav neocekivan
+ * oblik (stari server bez K3, ugasena zastavica, ostecen JSON) daje `null`, a popravak se svejedno
+ * isporucuje. Verdikt izvan {found, weak} se odbacuje jer korpus druge presude ne smije donositi.
+ */
+function parseSourceCheck(raw: unknown): RepairSourceCheck | null {
+  const sc = raw as Partial<RepairSourceCheck> | null | undefined;
+  if (!sc || typeof sc !== 'object' || !Array.isArray(sc.found)) return null;
+  const total = Number(sc.total);
+  const checked = Number(sc.checked);
+  if (!Number.isFinite(total) || total <= 0) return null;
+  const found = sc.found
+    .filter((f: any) => f && (f.verdict === 'found' || f.verdict === 'weak')
+      && Number.isInteger(f.index) && f.index >= 0 && typeof f.matchedTitle === 'string')
+    .map((f: any) => ({
+      index: f.index as number,
+      verdict: f.verdict as 'found' | 'weak',
+      score: Number.isFinite(Number(f.score)) ? Number(f.score) : 0,
+      matchedTitle: String(f.matchedTitle),
+      where: typeof f.where === 'string' && f.where ? f.where : 'hrvatski repozitorij',
+      url: typeof f.url === 'string' && f.url ? f.url : null,
+    }));
+  const safeChecked = Number.isFinite(checked) ? Math.max(0, Math.min(checked, total)) : 0;
+  return { found, checked: safeChecked, total, truncated: sc.truncated === true || safeChecked < total };
 }
 
 /**
@@ -137,6 +209,7 @@ export async function uploadRepair(
   if (res.status === 200) {
     const data = (await res.json().catch(() => ({}))) as {
       docxBase64?: string; fileName?: string; changelog?: RepairChange[]; skipped?: string[]; slotId?: string; jobId?: string | null;
+      sourceCheck?: unknown;
     };
     if (!data.docxBase64) return { kind: 'error', status: 200, message: 'nedostaje docxBase64' };
     return {
@@ -147,6 +220,7 @@ export async function uploadRepair(
       skipped: Array.isArray(data.skipped) ? data.skipped : [],
       slotId: data.slotId,
       jobId: data.jobId ?? null,
+      sourceCheck: parseSourceCheck(data.sourceCheck),
     };
   }
   if (res.status === 409) {

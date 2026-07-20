@@ -12,7 +12,8 @@ import { parseReference } from '../citations/parse-reference';
 import { verifyReferences } from '../citations/verify-existence';
 import { VERDICT_BADGE, summarizeVerification } from '../citations/verify-badges';
 import { unlockFullReport as unlockReportRequest, toReportWorkType, extractParsedStructure } from '../report/report-client';
-import { uploadRepair, buildRepairMeta } from '../report/repair-client';
+import { uploadRepair, buildRepairMeta, REPAIR_MAX_REFERENCES } from '../report/repair-client';
+import { buildSourceCheckHtml } from './source-check-view';
 import { fetchRepairJobs, signRepairDownload, deleteRepairJob } from '../report/repair-history';
 import { buildTeaser, redactParagraphQuotes } from '../report/report';
 import { suggestTool } from './tool-suggestions';
@@ -1070,6 +1071,17 @@ function renderRepairSection(r: any){
 const _SERVER_DEEP_FIXERS=new Set(['font-fixer','line-spacing-fixer','alignment-fixer','paragraph-spacing-fixer','footnote-spacing-fixer']);
 // Hrvatska sklonidba uz broj: 1 izmjena, 2-4 izmjene, 5+ izmjena (iznimka 11-14 -> izmjena).
 function _plIzmjena(n: number){const d=n%10,dd=n%100;if(d===1&&dd!==11)return`${n} izmjena`;if(d>=2&&d<=4&&!(dd>=12&&dd<=14))return`${n} izmjene`;return`${n} izmjena`}
+// K4: literatura za provjeru postojanja u hrvatskom korpusu (placeni dodatak uz popravak). Naslov se
+// izvlaci ISTIM parserom kao besplatna CrossRef provjera, pa oba puta gledaju isti podatak. Reference
+// bez naslova ispadaju ODMAH ovdje, jer server indeksira pogotke po poziciji u POSLANOM nizu: kad bi
+// se filtriralo tek u buildRepairMeta, prikaz bi „tvoj navod” vezao uz krivu referencu.
+function repairReferencesFrom(r: any){
+ return (r.details?.references||[])
+  .filter((x: any)=>x&&x.raw&&String(x.raw).trim())
+  .map((x: any)=>{const f: any=parseReference(String(x.raw),'auto').fields;const y=Number(f.year??x.year);return{title:String(f.title||'').trim(),year:Number.isFinite(y)?y:null,raw:String(x.raw)}})
+  .filter((x: any)=>x.title)
+  .slice(0,REPAIR_MAX_REFERENCES);
+}
 function renderServerRepairPanel(mount: any,r: any,items: any[],file: any){
  const wrap=document.createElement('div');wrap.className='lekta-repair-panel';
  wrap.innerHTML=`<p><strong>Popravi sve jednim klikom.</strong> Dokument se šalje na server, popravi se i vraća gotov. Popravljaju se oblikovanje, numeriranje i struktura; ne diraju se sadržaj, citati ni argument. Datoteka se pohranjuje dok je ne obrišeš (Moji popravci).</p><label class="lekta-repair-panel__deep"><input type="checkbox" data-repair-consent><span>Pristajem da se dokument pošalje na server i pohrani do brisanja. Besplatna analiza ostaje na uređaju.</span></label><button type="button" class="lekta-repair-panel__download" data-repair-go disabled>Popravi sve jednim klikom</button><div class="lekta-repair-panel__summary" data-repair-summary hidden></div>`;
@@ -1083,13 +1095,18 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any){
   btn.disabled=true;const orig=btn.textContent;btn.textContent='Popravljam na serveru…';
   try{
    const requests=items.map((it: any)=>({fixerId:it.fixerId,ruleId:it.ruleId,params:_SERVER_DEEP_FIXERS.has(it.fixerId)?{...it.params,deep:true}:it.params}));
-   const meta=buildRepairMeta({workType:toReportWorkType(r.settings?.workType||r.selection?.workType||'final'),parsedStructure:extractParsedStructure(r),requests,words:r.stats?.officialWords||r.stats?.words||null,titleMarker:r.details?.titlePageWorkType||null,profileStatus:r.profileStatus||null,profileRef:r.details?.profileDefinitionId||null,fileName:r.file?.name||file.name||'rad.docx',confirmedMismatch});
+   const refsForCorpus=repairReferencesFrom(r);
+   const meta=buildRepairMeta({references:refsForCorpus.map((x: any)=>({title:x.title,year:x.year})),workType:toReportWorkType(r.settings?.workType||r.selection?.workType||'final'),parsedStructure:extractParsedStructure(r),requests,words:r.stats?.officialWords||r.stats?.words||null,titleMarker:r.details?.titlePageWorkType||null,profileStatus:r.profileStatus||null,profileRef:r.details?.profileDefinitionId||null,fileName:r.file?.name||file.name||'rad.docx',confirmedMismatch});
    const bytes=new Uint8Array(await file.arrayBuffer());
    const out=await uploadRepair(repairConfig(),token||'',bytes,meta,fetch);
    if(out.kind==='ok'){
     downloadBlob(out.docxBytes,'application/vnd.openxmlformats-officedocument.wordprocessingml.document',out.fileName);
     setSummary(`<strong>Popravljeno na serveru (${_plIzmjena(out.changelog.length)}).</strong> Preuzimanje je počelo.${out.skipped.length?`<p>Nije primijenjeno: ${out.skipped.map((s: string)=>escapeHtml(s)).join(', ')}.</p>`:''}`);
     trackEvent('repair_server_done',{profileId:r.details?.profileDefinitionId||'',changes:out.changelog.length});
+    // K4: provjera izvora je DODATAK uz popravak. Kad je izostala (stari server, ugasena zastavica,
+    // greska), buildSourceCheckHtml vrati prazan string pa sekcije naprosto nema. Nikad ne javlja
+    // "nije pronadjeno" jer korpus ne moze dokazati nepostojanje.
+    try{const sc=buildSourceCheckHtml(out.sourceCheck,refsForCorpus);if(sc){summary.innerHTML+=sc;if(out.sourceCheck)void trackEvent('repair_source_check',{found:out.sourceCheck.found.length,checked:out.sourceCheck.checked,total:out.sourceCheck.total})}}catch(e: any){console.error('Provjera izvora:',e)}
     try{const f=new File([out.docxBytes as Uint8Array<ArrayBuffer>],out.fileName,{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});const res: any=await analyzeDocxOffThread(f,analyzedProfile,r.settings,()=>{});if(res&&res.score!=null&&r.score!=null){const d=res.score-r.score;summary.innerHTML+=`<p><strong>Spremnost: ${r.score} → ${res.score}${d>0?` (+${d})`:d<0?` (${d})`:''}</strong></p>`}}catch(e: any){}
    } else if(out.kind==='tier_mismatch'){
     const sug=out.suggestedWorkType,lbl=(tierFor(sug)?.label||sug);

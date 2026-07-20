@@ -27,6 +27,19 @@ export const VERDICT_BADGE: Record<ExistenceVerdict, VerdictBadge> = {
 };
 
 /**
+ * Znacke za pogodak u HRVATSKOM KORPUSU (corpus-verify.ts, plaćeni repair). Namjerno ODVOJENE od
+ * VERDICT_BADGE: tamosnji tekst imenuje CrossRef, a ovdje je izvor drugi (Dabar i Hrcak), pa bi
+ * dijeljenje istog teksta korisniku reklo netocno gdje je rad nadjen.
+ *
+ * Postoje SAMO pozitivni verdikti. Korpus po konstrukciji ne moze reci "ne postoji" (pokriva
+ * hrvatske repozitorije, ne knjige ni strane izvore), pa negativne znacke ovdje ne smiju postojati.
+ */
+export const CORPUS_BADGE: Record<'found' | 'weak', VerdictBadge> = {
+  found: { text: '✓ Pronađeno u hrvatskom repozitoriju', cls: 'verify-ok', color: 'var(--ok,#1a7f4b)' },
+  weak: { text: '≈ Vjerojatno isti rad, provjeri', cls: 'verify-warn', color: 'var(--warn,#c9821f)' },
+};
+
+/**
  * Sazetak provjere postojanja za aria-live najavu: broji SVIH pet verdikta i gradi poruku
  * SAMO iz ne-nultih kosara + ukupno. Cuva od lazne nule kad su svi izvori domaci (not-indexed)
  * ili slabi (weak) pa bi naivni "found/not-found/unchecked" prikaz najavio "0, 0, 0".
