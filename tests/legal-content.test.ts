@@ -32,6 +32,31 @@ describe('legal-content', () => {
     }
   });
 
+  // K5: provjera izvora u korpusu je nova svrha obrade uz placeni popravak. Dvije stvari moraju
+  // ostati napisane: da nikakav podatak ne izlazi iz Lekte (korpus je nasa baza, ne vanjski servis)
+  // i da promasaj NIJE dokaz nepostojanja. Bez drugoga bi pravni tekst obecavao vise nego alat moze.
+  it('K5: privacy i processing opisuju provjeru izvora bez slanja trecim stranama', () => {
+    for (const kind of ['privacy', 'processing'] as LegalDocKind[]) {
+      const html = docs[kind].html;
+      expect(html, kind).toMatch(/korpus/i);
+      expect(html, kind).toContain('hrvatskih repozitorija');
+      expect(html, kind).toMatch(/ne šalju izvan Lekte|ne šalje vanjskim servisima/);
+      expect(html, kind).toContain('ne znači da');
+    }
+  });
+
+  it('K5: nijedan dokument ne tvrdi da korpus moze dokazati nepostojanje izvora', () => {
+    // Rijec "izmisljen" smije se pojaviti SAMO u nijekanoj recenici. Zato se gleda svaka recenica
+    // u kojoj stoji: ako ijedna nema nijek, tekst optuzuje korisnika za nesto sto alat ne moze znati.
+    for (const kind of KINDS) {
+      for (const rec of docs[kind].html.toLowerCase().split(/[.;]/)) {
+        if (!rec.includes('izmišljen')) continue;
+        expect(/\bne\b|\bnije\b|\bnisu\b/.test(rec), `${kind}: „${rec.trim()}”`).toBe(true);
+      }
+    }
+    expect(docs.disclaimer.html).toContain('ne može dokazati suprotno');
+  });
+
   it('privacy sadrzi GDPR minimum: pravnu osnovu, izvrsitelje, AZOP i obje retencije', () => {
     const html = docs.privacy.html;
     expect(html).toContain('čl. 6');

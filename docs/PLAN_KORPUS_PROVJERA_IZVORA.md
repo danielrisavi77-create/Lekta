@@ -210,6 +210,17 @@ Ništa se ne pali dok se u go-liveu ne flipne zastavica, isto kao WS-1 do WS-7.
 **Definicija gotovosti cijelog paketa:** `npm run check` zelen, golden bez churna, značajka
 inertna do flipa, runbook dopunjen.
 
+**Status 2026-07-20: K1 do K5 GOTOVI.** Commiti: K1+K2 (shema, uvoz, čista jezgra), K3 `2b8859b`
+(ožičenje u `repair-docx`), K4 `ddbad72` (prikaz u plaćenom rezultatu), K5 (pravni tekst +
+runbook). Značajka je i dalje **inertna** jer `repairEndpoint` u `DEFAULT_PRODUCTION_CONFIG` nije
+postavljen; pali se korakom E u `GO_LIVE_REPAIR.md`.
+
+K4 je usput zatvorio prazninu iz K3: server je čitao `meta.references`, ali ih klijent nije slao,
+pa provjera u produkciji ne bi nikad odradila ni jedan upit.
+
+Otvoreno i dalje: **Supabase Pro** (točka 6.1; korpus troši 70,7% free stropa, nema backupa,
+auto-pauza nakon 7 dana neaktivnosti) i **osvježavanje korpusa** (točka 6.2, zasad ručni harvest).
+
 ---
 
 ## 8. Stanje na produkciji i mjerenja (2026-07-20)

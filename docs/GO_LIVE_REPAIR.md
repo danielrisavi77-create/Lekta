@@ -20,7 +20,8 @@ klijentske izmjene.
 
 - **Faza 1 (besplatna beta):** koraci A, B (s `REPAIR_FREE_MODE=true`), C, E (samo `repairEndpoint`),
   F, G. Korak D (Lemon Squeezy) se PRESKACE. Server preskace naplatu ali sve ostalo (auth, consent,
-  upload, pohrana, "Moji popravci", brisanje, rate-limit) radi normalno.
+  upload, pohrana, "Moji popravci", brisanje, rate-limit) radi normalno. **Provjera izvora u
+  korpusu ide u istu fazu** (odluka vlasnika): u beti vozi besplatno zajedno s popravkom.
 - **Faza 2 (naplata):** odradi korak D, pa u Edge tajnama makni `REPAIR_FREE_MODE` (ili `false`) i
   postavi `checkoutEndpoint` (korak E). Klijent i pravne stranice se NE mijenjaju. Repair-panel
   ionako ne prikazuje cijenu, pa beta ne zavarava.
@@ -37,8 +38,17 @@ moraju biti zive pravne stranice + consent (korak E: Netlify redeploy) i cleanup
 - [x] Edge funkcije `cleanup-orphan-repairs` (verify_jwt=false) i `delete-repair-job`
   (verify_jwt=true) deployane (ACTIVE).
 - [x] Sav kod commitan (WS-1..WS-6 + sweep). `npm run check` zelen.
+- [x] **Provjera izvora u korpusu (K1..K5,** plan `PLAN_KORPUS_PROVJERA_IZVORA.md`**):** migracije
+  `0030_corpus_works` (pg_trgm + deny-all RLS) i `0032_corpus_search` (RPC `corpus_search_many`)
+  primijenjene; korpus **uvezen: 525.817 radova** iz Dabra i Hrčka (`scripts/load-corpus-supabase.mjs`,
+  847 s). Klijent šalje naslove literature uz popravak, sučelje prikazuje nalaz.
 
 Ostaje niže.
+
+> **Pazi na prostor u bazi.** Korpus zauzima **354 MB, to je 70,7% od 500 MB free stropa.** Prije
+> bilo kakvog većeg rasta podataka (ili prije dodavanja FTS indeksa, vidi plan) treba **Pro plan**.
+> Free tier k tome nema backupe i **auto-pauza se nakon 7 dana neaktivnosti**, što bi na produkciji
+> značilo hladan start. To je otvorena odluka vlasnika, nije blokada za betu.
 
 ---
 
@@ -71,6 +81,15 @@ Nove za repair:
 - [ ] `REPAIR_CLEANUP_CRON_SECRET` = nasumična tajna (`openssl rand -hex 32`). Koristi je
   i pg_cron u koraku C. Bez nje `cleanup-orphan-repairs` fail-closed vraća 401.
 - [ ] (opcijski) `REPAIR_MAX_DOCX_BYTES` (default 20MB), `REPAIR_CLEANUP_GRACE_MINUTES` (default 60).
+
+Provjera izvora u korpusu (sve **opcijske**, defaulti su već razumni; postavi samo ako mijenjaš):
+
+- `CORPUS_SOURCE_CHECK` (default `true`). Postavi na `false` kao **trenutačan kill switch**: popravak
+  radi dalje, samo bez sekcije o izvorima.
+- `CORPUS_BUDGET_MS` (default 6000), `CORPUS_MAX_REFS` (default 60), `CORPUS_CHUNK` (default 8).
+  Dohvat košta oko **2,8 ms po znaku naslova**, pa je 40 referenci 6 do 10 s. Podizanje budžeta
+  produžuje čekanje na popravak, spuštanje smanjuje koliko referenci stigne na red (sučelje to
+  pošteno prikazuje kao `checked`/`total`).
 
 Potvrdi da postoje (koriste ih repair-docx / delete-repair-job):
 
@@ -149,6 +168,11 @@ server vraća 402 (paywall) pa repair ne radi dok checkout+LS nisu živi.
 - [ ] Netlify deploy prošao (regenerira pravne stranice s novom "pohrana do brisanja" copy;
   `verify-deploy-dist.mjs` mora naći `privatnost.html` itd. u `dist/`).
 
+> **`TERMS_VERSION` je bumpan na `2026-07-20`** (K5: opis provjere izvora u privatnosti, obradi
+> dokumenata i odricanju). Server prihvaća SAMO tekuću verziju, pa kartica otvorena prije deploya
+> na upload dobije `400 consent_required` i poruku da osvježi stranicu. To je očekivano, ne kvar,
+> ali znači da deploy pravnih stranica i deploy `repair-docx` idu **zajedno**.
+
 ---
 
 ## F. Provjera nakon go-livea
@@ -159,6 +183,12 @@ server vraća 402 (paywall) pa repair ne radi dok checkout+LS nisu živi.
 - [ ] Landing FAQ "Šalje li se moj rad" spominje plaćeni popravak s pohranom.
 - [ ] E2E (LS test mode): kupi -> upload -> preuzmi popravljeni docx -> pojavi se u
   "Moji popravci" -> obriši -> nestane iz liste I iz Storagea.
+- [ ] Provjera izvora: popravi rad s hrvatskom literaturom pa potvrdi da se sekcija
+  "Provjera izvora u hrvatskom korpusu" pojavi, da značka prikazuje **oba broja** (`x od y`) i da
+  se pri velikom popisu literature javi "Rezultat je djelomičan". Zatim `CORPUS_SOURCE_CHECK=false`
+  pa ponovi: sekcije nema, popravak i dalje stiže (fail-open).
+- [ ] `corpus_works` je i dalje nedostupan klijentu: `select` s anon ključem mora vratiti 0 redaka
+  (deny-all RLS iz 0030), a RPC `corpus_search_many` smije zvati samo `service_role`.
 - [ ] Supabase `get_advisors` (security) bez novih upozorenja.
 - [ ] Nakon 1 dana: provjeri da je `cleanup-orphan-repairs` cron odradio bez greške
   (Edge logovi) i da nije obrisao ništa validno (nema `repair_jobs` bez BLOB-a).
@@ -170,3 +200,6 @@ server vraća 402 (paywall) pa repair ne radi dok checkout+LS nisu živi.
 Vrati `repairEndpoint:''` (i `checkoutEndpoint:''`) u `DEFAULT_PRODUCTION_CONFIG`,
 `npm run check`, commit, Netlify deploy. Repair se odmah vraća na lokalni/besplatni put;
 funkcije i tablice ostaju (inertne). Postojeći pohranjeni popravci ostaju dostupni vlasnicima.
+
+Za gašenje SAMO provjere izvora, bez diranja popravka: Edge tajna `CORPUS_SOURCE_CHECK=false`.
+Djeluje odmah, bez deploya i bez klijentske izmjene; sekcija naprosto izostane.

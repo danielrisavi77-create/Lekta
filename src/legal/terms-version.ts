@@ -5,4 +5,4 @@
 // svi postojeci uvoznici (`from '../legal/legal-content'`) rade nepromijenjeno.
 //
 // Bump SAMO kad se pravni tekst materijalno mijenja (uskladi s legal-content.ts sadrzajem).
-export const TERMS_VERSION = '2026-07-19';
+export const TERMS_VERSION = '2026-07-20';
