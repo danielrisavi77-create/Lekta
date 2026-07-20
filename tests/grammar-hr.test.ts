@@ -3,6 +3,7 @@ import {
   grammarLint, grammarLintSummary,
   KIND_NE_SPOJENO, KIND_KONDICIONAL, KIND_DA_PREZENT, KIND_VEZNIK,
   KIND_JE_LI, KIND_S_SA, KIND_SRBIZAM, KIND_PLEONAZAM, KIND_ADMINISTRATIVIZAM,
+  KIND_IJE_JE, KIND_ZAREZ, KIND_ANGLIZAM,
 } from '../src/audits/grammar-hr';
 
 function kindsOf(text: string): string[] {
@@ -201,6 +202,168 @@ describe('grammar-hr: administrativizmi i germanizmi', () => {
     ]) {
       expect(has(s, KIND_ADMINISTRATIVIZAM), s).toBe(false);
     }
+  });
+});
+
+describe('grammar-hr: pisanje ije/je', () => {
+  it('oznaci hiperkorekciju („ije” gdje ide „je”)', () => {
+    expect(suggestionFor('U tom vrijemenu porasla je potražnja.', KIND_IJE_JE)).toContain('vremenu');
+    expect(suggestionFor('Poslijedica toga bila je jasna.', KIND_IJE_JE)).toContain('posljedica');
+    expect(has('Prijedsjednik je otvorio sjednicu.', KIND_IJE_JE)).toBe(true);
+    expect(has('Postavljen je jasan zahtijev.', KIND_IJE_JE)).toBe(true);
+    expect(has('Nijesam o tome razmišljao.', KIND_IJE_JE)).toBe(true);
+  });
+
+  it('oznaci obrnutu pogrešku („je” gdje ide „ije”)', () => {
+    expect(suggestionFor('Odlučili su primjeniti novu metodu.', KIND_IJE_JE)).toContain('primijeniti');
+    expect(suggestionFor('Moguće je primjetiti porast.', KIND_IJE_JE)).toContain('primijetiti');
+    expect(suggestionFor('Uzorak su podjelili u dvije skupine.', KIND_IJE_JE)).toContain('podijelili');
+    expect(has('Svi djelovi sustava rade.', KIND_IJE_JE)).toBe(true);
+    expect(has('To je uvjek bio problem.', KIND_IJE_JE)).toBe(true);
+  });
+
+  it('NE oznaci valjane srodnice koje dijele pocetak (FP-zamke)', () => {
+    for (const s of [
+      'Primjena metode dala je rezultate.', 'Model se primjenjuje u praksi.',
+      'Podjela rada bila je jasna.', 'Svi dijelovi sustava rade.',
+      'Bio je svjestan rizika.', 'Prekinuo ga je smijeh iz publike.',
+      'Zamijenio je mjenjač na vozilu.', 'Njegovo djelo ostalo je zapamćeno.',
+      'Odlučio je naslijediti posjed.', 'Uspio je završiti na vrijeme.',
+      'Zakon zahtijeva pisani pristanak.', 'Ispunjenje zahtjeva je obvezno.',
+      'Skrb o dobrobiti djeteta je prioritet.', 'Razumijem tvoju zabrinutost.',
+      'Namjerava mijenjati pristup.', 'Vrijeme je isteklo.',
+    ]) {
+      expect(has(s, KIND_IJE_JE), s).toBe(false);
+    }
+  });
+
+  it('„slijedeći” okida SAMO uz imenicu u znacenju „iduci”, ne kao glagolski prilog', () => {
+    // pridjev (= iduci): pogresno napisano, treba "sljedeci"
+    expect(suggestionFor('Slijedeći korak je analiza podataka.', KIND_IJE_JE)).toContain('Sljedeći korak');
+    expect(suggestionFor('U slijedećem poglavlju iznosimo rezultate.', KIND_IJE_JE)).toContain('sljedećem poglavlju');
+    expect(has('Slijedeće godine ponovit ćemo mjerenje.', KIND_IJE_JE)).toBe(true);
+    expect(has('Podaci su u slijedećoj tablici.', KIND_IJE_JE)).toBe(true);
+
+    // glagolski prilog (= dok slijedi): POSVE ISPRAVNO, ne smije okinuti
+    for (const s of [
+      'Slijedeći upute mentora, autor je proširio okvir.',
+      'Slijedeći preporuke struke, uveli su novi postupak.',
+      'Slijedeći smjernice, ispunio je obrazac.',
+      'Sljedeći korak je analiza podataka.',
+      'Slijediti upute je obvezno.',
+    ]) {
+      expect(has(s, KIND_IJE_JE), s).toBe(false);
+    }
+  });
+});
+
+describe('grammar-hr: zarez ispred „ali”', () => {
+  it('oznaci nedostajuci zarez', () => {
+    expect(suggestionFor('Rezultat je točan ali nepotpun.', KIND_ZAREZ)).toContain('zarez');
+    expect(has('Pokušali su ali nisu uspjeli.', KIND_ZAREZ)).toBe(true);
+  });
+
+  it('NE oznaci kad zarez postoji, na pocetku recenice ni prezime Ali (FP-zamke)', () => {
+    for (const s of [
+      'Rezultat je točan, ali nepotpun.', 'Pokušali su, ali nisu uspjeli.',
+      'Uspjeli su. Ali tek iz drugog pokušaja.', 'Muhammad Ali bio je boksač.',
+      'Njegov alibi bio je uvjerljiv.', 'Poslao je ali.',
+    ]) {
+      expect(has(s, KIND_ZAREZ), s).toBe(false);
+    }
+  });
+});
+
+describe('grammar-hr: anglizmi i kalkovi', () => {
+  it('oznaci „bazirano na” i „na X bazi”', () => {
+    expect(suggestionFor('Model je baziran na regresiji.', KIND_ANGLIZAM)).toContain('utemeljen na');
+    expect(suggestionFor('Podatke prikupljamo na dnevnoj bazi.', KIND_ANGLIZAM)).toContain('svakodnevno');
+    expect(has('Zaključak se bazira na uzorku.', KIND_ANGLIZAM)).toBe(true);
+  });
+
+  it('NE oznaci prihvacene tudjice ni valjane izraze (FP-zamke)', () => {
+    for (const s of [
+      'Model je utemeljen na regresiji.', 'Metodu smo implementirali u praksi.',
+      'Baza podataka sadrži 500 zapisa.', 'Analiza se temelji na uzorku.',
+    ]) {
+      expect(has(s, KIND_ANGLIZAM), s).toBe(false);
+    }
+  });
+});
+
+describe('grammar-hr: prosireni nestandardni oblici', () => {
+  it('oznaci vjerovatno/uticaj/obim/preduzece (mala slova, sredina recenice)', () => {
+    expect(suggestionFor('To je vjerovatno točno.', KIND_SRBIZAM)).toContain('vjerojatno');
+    expect(suggestionFor('Veliki uticaj medija je nesporan.', KIND_SRBIZAM)).toContain('utjecaj');
+    expect(has('Veliki obim istraživanja iziskuje vrijeme.', KIND_SRBIZAM)).toBe(true);
+    expect(has('Njihovo preduzeće osnovano je 2010.', KIND_SRBIZAM)).toBe(true);
+    expect(has('Objavljeno je u zvaničnom listu.', KIND_SRBIZAM)).toBe(true);
+  });
+
+  // Dokumentirani kompromis: case-sensitive poklapanje stiti vlastita imena i naslove
+  // ("Ostrvo s blagom", "Saobracajni fakultet", list "Stampa"), a cijena je da se
+  // recenicno-inicijalni (veliko slovo) oblici PROPUSTAJU. Bolje propustiti nego lazno optuziti.
+  it('recenicno-inicijalne oblike NAMJERNO propusta (cijena zastite vlastitih imena)', () => {
+    expect(has('Uticaj medija je velik.', KIND_SRBIZAM)).toBe(false);
+    expect(has('Štampa je o tome izvijestila.', KIND_SRBIZAM)).toBe(false);
+  });
+
+  it('NE oznaci hrvatske standarde (FP-zamke)', () => {
+    for (const s of [
+      'To je vjerojatno točno.', 'Utjecaj medija je velik.', 'Opseg istraživanja bio je velik.',
+      'Poduzeće je osnovano 2010.', 'Dao je suglasnost za objavu.', 'Popis literature je potpun.',
+      'Objavljeno je u službenom listu.', 'Osobni podaci su zaštićeni.',
+    ]) {
+      expect(has(s, KIND_SRBIZAM), s).toBe(false);
+    }
+  });
+});
+
+// Precizijski gard preko SVIH provjera odjednom: dobro napisan hrvatski akademski tekst mora dati
+// TOCNO NULA nalaza. Recenice su birane tako da gaze uz same rubove pravila (ispravni parnjaci
+// izraza koje lovimo), pa hvata i medudjelovanje provjera koje per-kind zamke ne vide.
+const CISTI_KORPUS = [
+  'S obzirom na to da je uzorak malen, rezultate treba tumačiti oprezno.',
+  'Rezultat je točan, ali nepotpun, pa ga valja dopuniti.',
+  'Analiza se temelji na podacima prikupljenima tijekom 2024. godine.',
+  'U sljedećem poglavlju iznose se rezultati istraživanja.',
+  'Slijedeći upute mentora, autor je proširio teorijski okvir.',
+  'Primjena metode pokazala se učinkovitom u praksi.',
+  'Podjela ispitanika u dvije skupine provedena je nasumično.',
+  'Svi dijelovi sustava provjereni su prije predaje.',
+  'Autor je bio svjestan ograničenja odabranoga pristupa.',
+  'Zakon zahtijeva pisani pristanak ispitanika.',
+  'Ispunjenje zahtjeva propisano je pravilnikom.',
+  'Vjerojatnost pogreške iznosi manje od pet posto.',
+  'Utjecaj medija na javno mnijenje opsežno je istražen.',
+  'Opseg istraživanja obuhvaća tri hrvatske županije.',
+  'Poduzeće je osnovano 2010. i posluje do danas.',
+  'Dobivena je suglasnost etičkoga povjerenstva.',
+  'Popis literature izrađen je prema uputama fakulteta.',
+  'Osobni podaci ispitanika zaštićeni su u skladu s propisima.',
+  'Razumijem da su nalazi ograničeni na promatrani uzorak.',
+  'Autor namjerava mijenjati pristup u budućim istraživanjima.',
+  'Skrb o dobrobiti djeteta prioritet je svake ustanove.',
+  'Posljedice tih odluka vidljive su i danas.',
+  'Nasljednik je preuzeo obvezu vođenja projekta.',
+  'Predsjednik povjerenstva otvorio je obranu rada.',
+  'Rad je podijeljen na pet poglavlja i zaključak.',
+  'Metoda je primijenjena na cjelokupnom uzorku.',
+  'Moguće je primijetiti blagi porast tijekom promatranog razdoblja.',
+  'Citat je preuzet od strane 12 izvornika, uz naznaku stranice.',
+  'Sa mnom je surađivalo troje kolega s odsjeka.',
+  'Ponio je svu dokumentaciju sa sobom na obranu.',
+  'Vremenski okvir istraživanja obuhvaća dvije akademske godine.',
+  'Odabrano je optimalno rješenje za zadani problem.',
+  'Uvijek se navodi izvor podatka, bez iznimke.',
+  'Napisat ću zaključak nakon što dovršim analizu.',
+];
+
+describe('grammar-hr: precizija na cistom akademskom tekstu', () => {
+  it('dobro napisan hrvatski daje NULA nalaza (gard protiv laznih uzbuna)', () => {
+    const nalazi = grammarLint(CISTI_KORPUS);
+    const opis = nalazi.map((f) => `${f.kind}: „${f.excerpt}” -> ${f.suggestion}`).join('\n');
+    expect(nalazi.length, `ocekivano nula nalaza, dobiveno ${nalazi.length}:\n${opis}`).toBe(0);
   });
 });
 

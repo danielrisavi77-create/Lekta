@@ -35,6 +35,9 @@ export const KIND_S_SA = 's-sa';
 export const KIND_SRBIZAM = 'srbizam';
 export const KIND_PLEONAZAM = 'pleonazam';
 export const KIND_ADMINISTRATIVIZAM = 'administrativizam';
+export const KIND_IJE_JE = 'ije-je';
+export const KIND_ZAREZ = 'zarez';
+export const KIND_ANGLIZAM = 'anglizam';
 
 export const GRAMMAR_KIND_LABELS: Record<string, string> = {
   [KIND_NE_SPOJENO]: 'Nijek „ne” (rastavljeno)',
@@ -46,6 +49,9 @@ export const GRAMMAR_KIND_LABELS: Record<string, string> = {
   [KIND_SRBIZAM]: 'Nestandardni oblik',
   [KIND_PLEONAZAM]: 'Pleonazam/suvišnost',
   [KIND_ADMINISTRATIVIZAM]: 'Administrativni izraz / germanizam',
+  [KIND_IJE_JE]: 'Pisanje ije/je',
+  [KIND_ZAREZ]: 'Zarez (veznik „ali”)',
+  [KIND_ANGLIZAM]: 'Anglizam / kalk',
 };
 
 const EXCERPT_RADIUS = 24;
@@ -299,6 +305,18 @@ const SRBIZMI: Array<{ forms: string[]; std: string }> = [
   { forms: ['prisustvo', 'prisustva', 'prisustvu', 'prisustvom', 'prisustvovati', 'prisustvuje', 'prisustvujem', 'prisustvuju', 'prisustvovao', 'prisustvovala'], std: 'nazočnost / prisutnost' },
   { forms: ['učestvovati', 'učestvuje', 'učestvujem', 'učestvuju', 'učestvujemo', 'učestvovao', 'učestvovala', 'učešće', 'učešća', 'učesnik', 'učesnici', 'učesnika'], std: 'sudjelovati / sudionik' },
   { forms: ['opšti', 'opšta', 'opšte', 'opšteg', 'opštem', 'opštu', 'opštih', 'opštim', 'opština', 'opštine', 'opštini', 'opštinski'], std: 'opći / općina' },
+  { forms: ['vjerovatno', 'vjerovatna', 'vjerovatan', 'vjerovatni', 'vjerovatnoća', 'vjerovatnoće', 'vjerovatnoću'], std: 'vjerojatno / vjerojatnost' },
+  { forms: ['uticaj', 'uticaja', 'uticaju', 'uticajem', 'uticaji', 'uticaja', 'uticati', 'utiče', 'uticao', 'uticala'], std: 'utjecaj / utjecati' },
+  { forms: ['takođe', 'takodje'], std: 'također' },
+  { forms: ['uopšte'], std: 'uopće' },
+  { forms: ['saglasnost', 'saglasnosti', 'saglasan', 'saglasna', 'saglasno'], std: 'suglasnost / suglasan' },
+  { forms: ['spisak', 'spiska', 'spisku', 'spiskovi', 'spiskova'], std: 'popis' },
+  { forms: ['zvanično', 'zvanična', 'zvanični', 'zvaničan', 'zvaničnih', 'zvaničnom'], std: 'službeno / službeni' },
+  { forms: ['preduzeće', 'preduzeća', 'preduzeću', 'preduzećem', 'preduzeti', 'preduzima', 'preduzeo'], std: 'poduzeće / poduzeti' },
+  { forms: ['obim', 'obima', 'obimu', 'obimom', 'obiman', 'obimna', 'obimno'], std: 'opseg / opsežan' },
+  { forms: ['bezbjednost', 'bezbjednosti', 'bezbednost', 'bezbjedan', 'bezbedan', 'bezbjedno'], std: 'sigurnost / siguran' },
+  { forms: ['štampa', 'štampe', 'štampu', 'štampom', 'štampati', 'štampan', 'štampana', 'štampanje'], std: 'tisak / tiskati' },
+  { forms: ['lični', 'lična', 'lično', 'ličnu', 'ličnog', 'ličnom', 'ličnih', 'ličnim'], std: 'osobni / osobno' },
 ];
 
 function checkSrbizmi(paragraphs: string[], out: GrammarFinding[]): void {
@@ -377,6 +395,137 @@ function checkAdministrativizmi(paragraphs: string[], out: GrammarFinding[]): vo
   runPhraseMap(paragraphs, out, KIND_ADMINISTRATIVIZAM, ADMINISTRATIVIZMI, { skipIfFollowedByNumber: true });
 }
 
+// ---------------------------------------------------------------------------------------------
+// 10. Pisanje ije/je (refleks jata). Popis je KURIRAN: svaki lijevi oblik je nedvosmisleno pogresan
+//     (nije hrvatska rijec), a desni je njegov tocan parnjak. Cjelorijecno poklapanje je ovdje
+//     kljucno jer valjane srodnice dijele pocetak: "primjeniti" je pogresno ali "primjena/
+//     primjenjuje" su tocni; "podjeliti" je pogresno ali "podjela" je tocna; "svjest" je pogresno
+//     ali "svjestan" je tocan; "djete" je pogresno ali "djeteta" je tocno. Case-insensitive
+//     (nisu vlastita imena) pa se hvataju i recenicno-inicijalni oblici.
+// ---------------------------------------------------------------------------------------------
+const IJE_JE: Array<[string, string]> = [
+  // a) hiperkorekcija: "ije" ondje gdje stoji "je" ili nista
+  ['vrijemena', 'vremena'], ['vrijemenu', 'vremenu'], ['vrijemenom', 'vremenom'],
+  ['vrijemenski', 'vremenski'], ['vrijemenska', 'vremenska'], ['vrijemensko', 'vremensko'],
+  ['prijedsjednik', 'predsjednik'], ['prijedsjednika', 'predsjednika'], ['prijedsjedniku', 'predsjedniku'],
+  ['prijedstavnik', 'predstavnik'], ['prijedstavnika', 'predstavnika'],
+  ['prijedmet', 'predmet'], ['prijedmeta', 'predmeta'],
+  ['prijednost', 'prednost'], ['prijednosti', 'prednosti'],
+  ['razumijeti', 'razumjeti'], ['vidijeti', 'vidjeti'],
+  ['nijesam', 'nisam'], ['nijesi', 'nisi'], ['nijesmo', 'nismo'], ['nijeste', 'niste'], ['nijesu', 'nisu'],
+  ['dijeca', 'djeca'], ['dijelovanje', 'djelovanje'],
+  ['poslijedica', 'posljedica'], ['poslijedice', 'posljedice'], ['poslijedicu', 'posljedicu'],
+  ['poslijedicama', 'posljedicama'], ['poslijedični', 'posljedični'],
+  ['naslijednik', 'nasljednik'], ['naslijednika', 'nasljednika'], ['naslijedstvo', 'nasljedstvo'],
+  ['zahtijev', 'zahtjev'], ['zahtijevi', 'zahtjevi'], ['zahtijevima', 'zahtjevima'],
+  ['uspijeh', 'uspjeh'], ['uspijeha', 'uspjeha'],
+  ['smijer', 'smjer'], ['smijera', 'smjera'],
+  ['primijer', 'primjer'], ['primijera', 'primjera'],
+  ['cvijetovi', 'cvjetovi'], ['vijekovi', 'vjekovi'], ['vijekova', 'vjekova'],
+  // b) obrnuto: "je" ondje gdje stoji "ije"
+  ['primjeniti', 'primijeniti'], ['primjenio', 'primijenio'], ['primjenila', 'primijenila'],
+  ['primjenili', 'primijenili'], ['primjenjen', 'primijenjen'], ['primjenjena', 'primijenjena'],
+  ['primjetiti', 'primijetiti'], ['primjetio', 'primijetio'], ['primjetila', 'primijetila'],
+  ['primjetili', 'primijetili'],
+  ['podjeliti', 'podijeliti'], ['podjelio', 'podijelio'], ['podjelila', 'podijelila'],
+  ['podjelili', 'podijelili'], ['podjeljen', 'podijeljen'], ['podjeljena', 'podijeljena'],
+  ['djelovi', 'dijelovi'], ['djelovima', 'dijelovima'], ['djete', 'dijete'],
+  ['svjest', 'svijest'], ['svjesti', 'svijesti'],
+  ['uvjek', 'uvijek'],
+  ['obavjest', 'obavijest'], ['obavjesti', 'obavijesti'], ['obavjestiti', 'obavijestiti'],
+  ['zahtjevati', 'zahtijevati'], ['razumjem', 'razumijem'],
+  ['mjenjati', 'mijenjati'], ['mjenja', 'mijenja'], ['mjenjao', 'mijenjao'],
+];
+
+// "slijedeci" i "sljedeci" su OBA valjane rijeci pa se golo "slijedeci" NE smije oznaciti: kao
+// glagolski prilog ("slijedeci upute, autor je...") posve je tocno. Zato okidamo SAMO kad iza njega
+// stoji imenica koja nedvojbeno nosi znacenje "iduci" (slijedeci korak/poglavlje/godina/tablica),
+// gdje je rijec o pridjevu i pise se "sljedeci". Objekt glagolskog priloga (upute, preporuke,
+// smjernice) nije na popisu pa ispravna uporaba ostaje netaknuta.
+const SLJEDECI_IMENICE =
+  'korak|dan|tjedan|tjedn|mjesec|put|primjer|dio|dijel|razlog|razloz|način|odlomak|odlomk|' +
+  'poglavlj|potpoglavlj|razdoblj|pitanj|tablic|slik|godin|faz|etap|skupin|cjelin|prikaz|' +
+  'odjelj|točk|stavk|koraci|razin|semestar|semestr';
+
+function checkSljedeci(paragraphs: string[], out: GrammarFinding[]): void {
+  const re = new RegExp(
+    `(^|[^\\p{L}\\p{N}])(slijedeć(?:i|a|e|eg|ega|em|emu|oj|om|u|ih|im|ima)\\s+(?:${SLJEDECI_IMENICE})\\p{L}*)(?=$|[^\\p{L}\\p{N}])`,
+    'giu',
+  );
+  paragraphs.forEach((p, pi) => {
+    re.lastIndex = 0;
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(p)) !== null) {
+      const at = m.index + m[1].length;
+      const tocno = m[2].replace(/slijedeć/giu, (s) => (s[0] === 'S' ? 'Sljedeć' : 'sljedeć'));
+      out.push({
+        paragraphIndex: pi,
+        kind: KIND_IJE_JE,
+        excerpt: excerptAt(p, at, m[2].length),
+        suggestion: `u značenju „idući” piše se „${tocno}”; „slijedeći” je glagolski prilog od „slijediti”`,
+      });
+      if (m.index === re.lastIndex) re.lastIndex++;
+    }
+  });
+}
+
+function checkIjeJe(paragraphs: string[], out: GrammarFinding[]): void {
+  const entries = IJE_JE.map(([w, c]) => [w, `refleks jata: pravilno se piše „${c}”, ne „${w}”`] as [string, string]);
+  runPhraseMap(paragraphs, out, KIND_IJE_JE, entries);
+  checkSljedeci(paragraphs, out);
+}
+
+// ---------------------------------------------------------------------------------------------
+// 11. Zarez ispred suprotnog veznika "ali". Jedino pravilo o zarezu koje je bezuvjetno: "ali" kao
+//     suprotni veznik UVIJEK trazi zarez ispred sebe. Ostali kandidati su namjerno izostavljeni jer
+//     traze sintakticku analizu ("nego" u usporedbi nema zarez: "bolje nego prije"; "vec" je i prilog
+//     "vec je otisao"; "no" se sudara sa stranim tekstom). Okida samo kad "ali" slijedi neposredno iza
+//     SLOVA ili BROJKE (dakle bez zareza/tocke), i to malim slovom (prezime Ali ostaje netaknuto).
+// ---------------------------------------------------------------------------------------------
+function checkZarez(paragraphs: string[], out: GrammarFinding[]): void {
+  const re = /[\p{L}\p{N}]\s+ali(?=\s+[\p{L}\p{N}])/gu;
+  paragraphs.forEach((p, pi) => {
+    re.lastIndex = 0;
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(p)) !== null) {
+      const at = m.index + m[0].length - 3; // pocetak rijeci "ali"
+      out.push({
+        paragraphIndex: pi,
+        kind: KIND_ZAREZ,
+        excerpt: excerptAt(p, at, 3),
+        suggestion: 'ispred suprotnog veznika „ali” piše se zarez (npr. „rezultat je točan, ali nepotpun”)',
+      });
+      if (m.index === re.lastIndex) re.lastIndex++;
+    }
+  });
+}
+
+// ---------------------------------------------------------------------------------------------
+// 12. Anglizmi i kalkovi cesti u akademskom pismu. Suzeno na sklopove koji su nedvojbeno kalk
+//     ("bazirano na" < based on, "na dnevnoj bazi" < on a daily basis). Prihvacene tudjice
+//     (implementirati, fokusirati) NISU ovdje: ne zelimo prescriptivno gnjaviti oko uobicajenog.
+// ---------------------------------------------------------------------------------------------
+const ANGLIZMI: Array<[string, string]> = [
+  ['bazirano na', 'kalk prema „based on”: bolje „utemeljeno na” ili „na temelju”'],
+  ['baziran na', 'kalk prema „based on”: bolje „utemeljen na” ili „zasnovan na”'],
+  ['bazirana na', 'kalk prema „based on”: bolje „utemeljena na” ili „zasnovana na”'],
+  ['bazirani na', 'kalk prema „based on”: bolje „utemeljeni na” ili „zasnovani na”'],
+  ['bazirane na', 'kalk prema „based on”: bolje „utemeljene na” ili „zasnovane na”'],
+  // klitika „se” se penje pa red rijeci varira: pokrivamo oba ("bazira se na" i "se bazira na")
+  ['bazira se na', 'kalk prema „is based on”: bolje „temelji se na”'],
+  ['se bazira na', 'kalk prema „is based on”: bolje „temelji se na”'],
+  ['baziraju se na', 'kalk prema „are based on”: bolje „temelje se na”'],
+  ['se baziraju na', 'kalk prema „are based on”: bolje „temelje se na”'],
+  ['na dnevnoj bazi', 'kalk prema „on a daily basis”: dovoljno je „svakodnevno”'],
+  ['na tjednoj bazi', 'kalk prema „on a weekly basis”: dovoljno je „tjedno”'],
+  ['na mjesečnoj bazi', 'kalk prema „on a monthly basis”: dovoljno je „mjesečno”'],
+  ['na godišnjoj bazi', 'kalk prema „on a yearly basis”: dovoljno je „godišnje”'],
+];
+
+function checkAnglizmi(paragraphs: string[], out: GrammarFinding[]): void {
+  runPhraseMap(paragraphs, out, KIND_ANGLIZAM, ANGLIZMI);
+}
+
 /** Pokrece sve gramaticke/stilske provjere nad odlomcima; nalazi sortirani po indeksu odlomka. */
 export function grammarLint(paragraphs: string[]): GrammarFinding[] {
   const out: GrammarFinding[] = [];
@@ -391,6 +540,9 @@ export function grammarLint(paragraphs: string[]): GrammarFinding[] {
   checkPleonazmi(ps, out);
   checkDvostrukiSuperlativ(ps, out);
   checkAdministrativizmi(ps, out);
+  checkIjeJe(ps, out);
+  checkZarez(ps, out);
+  checkAnglizmi(ps, out);
   out.sort((a, b) => a.paragraphIndex - b.paragraphIndex);
   return out;
 }
