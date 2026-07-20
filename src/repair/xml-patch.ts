@@ -40,8 +40,10 @@ const NO_OP: PatchResult = { xml: '', applied: false, before: {}, after: {}, fou
 function patchTagAttributes(
   xml: string,
   tagPattern: RegExp,
-  attrUpdates: Record<string, string>,
-  skipTag?: (tag: string) => boolean,
+  // Fiksna mapa atributa, ili funkcija koja je racuna PO TAGU (null = preskoci ovaj tag).
+  // Per-tag varijanta postoji zbog sekcija: polozeni prilog treba ISTI format papira, ali sa
+  // zamijenjenim stranicama, pa mu se ne smiju upisati uspravne dimenzije.
+  attrUpdates: Record<string, string> | ((tag: string) => Record<string, string> | null),
 ): PatchResult {
   const globalPattern = new RegExp(tagPattern.source, 'g');
   const before: Record<string, string> = {};
@@ -50,9 +52,10 @@ function patchTagAttributes(
   let changed = false;
 
   const newXml = xml.replace(globalPattern, (tag) => {
-    if (skipTag && skipTag(tag)) return tag;
+    const updates = typeof attrUpdates === 'function' ? attrUpdates(tag) : attrUpdates;
+    if (!updates) return tag;
     let out = tag;
-    for (const [attr, newValue] of Object.entries(attrUpdates)) {
+    for (const [attr, newValue] of Object.entries(updates)) {
       const attrRegex = new RegExp(`(${escapeRegex(attr)}=")([^"]*)(")`);
       const attrMatch = out.match(attrRegex);
       if (!attrMatch) continue; // atribut ne postoji na ovom tagu, ne izmisljaj ga
@@ -127,10 +130,13 @@ function isIntentionalLandscape(tag: string, target: { w: number; h: number }): 
 }
 
 export function patchPaperSize(documentXml: string, sizeTwips: { w: number; h: number }): PatchResult {
-  return patchTagAttributes(documentXml, /<w:pgSz\b[^>]*\/?>/, {
-    'w:w': String(sizeTwips.w),
-    'w:h': String(sizeTwips.h),
-  }, (tag) => isIntentionalLandscape(tag, sizeTwips));
+  // Polozena sekcija dobiva ISTI format papira, samo sa zamijenjenim stranicama. Time se rjesavaju
+  // oba kvara odjednom: prilog ostaje polozen (uspravljanje bi razbilo siroku tablicu), ali mu se
+  // format ispravlja (prije je ostajao npr. Letter jer smo takvu sekciju preskakali u cijelosti).
+  return patchTagAttributes(documentXml, /<w:pgSz\b[^>]*\/?>/, (tag) =>
+    isIntentionalLandscape(tag, sizeTwips)
+      ? { 'w:w': String(sizeTwips.h), 'w:h': String(sizeTwips.w) }
+      : { 'w:w': String(sizeTwips.w), 'w:h': String(sizeTwips.h) });
 }
 
 // === Zadani font, velicina, prored, poravnanje (stylesXml, v1 opseg: samo

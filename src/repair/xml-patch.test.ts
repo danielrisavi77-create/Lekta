@@ -94,11 +94,21 @@ describe('patchPaperSize', () => {
 
   // Analiza polozenu sekciju TOLERIRA (near(w,h) ILI near(h,w)), pa uspravljanje nije popravak nego
   // steta: polozeni prilog sa sirokom tablicom se raspadne. Pravilo je jednosmjerno.
-  it('NE uspravlja sekciju s eksplicitnim w:orient="landscape"', () => {
+  it('NE uspravlja sekciju s eksplicitnim w:orient="landscape" (vec je na cilju, samo polozeno)', () => {
     const xml = '<w:sectPr><w:pgSz w:w="16838" w:h="11906" w:orient="landscape"/></w:sectPr>';
     const result = patchPaperSize(xml, { w: 11906, h: 16838 });
-    expect(result.applied).toBe(false);
+    expect(result.applied).toBe(false); // A4 polozeno je vec tocno, nema sto mijenjati
     expect(result.xml).toContain('w:w="16838"');
+    expect(result.xml).toContain('w:orient="landscape"');
+  });
+
+  it('polozenoj sekciji KRIVOG formata popravlja format, ali je ostavlja polozenom', () => {
+    // Letter polozeno (27,9 x 21,6 cm) uz cilj A4: mora postati A4 POLOZENO, ne A4 uspravno.
+    const xml = '<w:sectPr><w:pgSz w:w="15840" w:h="12240" w:orient="landscape"/></w:sectPr>';
+    const result = patchPaperSize(xml, { w: 11906, h: 16838 });
+    expect(result.applied).toBe(true);
+    expect(result.xml).toContain('w:w="16838"');   // sirina = visina cilja
+    expect(result.xml).toContain('w:h="11906"');   // visina = sirina cilja
     expect(result.xml).toContain('w:orient="landscape"');
   });
 
