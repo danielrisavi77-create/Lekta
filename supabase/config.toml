@@ -437,6 +437,10 @@ verify_jwt = true
 [functions.cleanup-orphan-repairs]
 verify_jwt = false
 
+# Admin "mini stats" (0031): uz JWT trazi i redak u admin_users, inace 403. Vraca samo agregate.
+[functions.admin-stats]
+verify_jwt = true
+
 [analytics]
 enabled = true
 port = 54327
