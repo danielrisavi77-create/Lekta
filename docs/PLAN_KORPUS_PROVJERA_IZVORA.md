@@ -129,6 +129,25 @@ Pragovi 0,60 i 0,80 dakle rade na stvarnim hrvatskim naslovima, u oba smjera.
 
 **Gotovo kad:** `deno check` bez novih grešaka; bez tablice se ponaša kao danas.
 
+**Stanje: GOTOVO (2026-07-20).** Migracija `0032_corpus_search.sql` primijenjena: RPC
+`corpus_search_many(qs[], min_sim, top_n)` s pragom 0,40 i `statement_timeout 8s` **ugrađenima u
+funkciju** (da se ne mogu zaboraviti), `security definer` uz pinan `search_path`, i pravima samo za
+`service_role` (nitko drugi ne smije zaobići deny-all RLS iz 0030). Jedan poziv obrađuje seriju
+referenci preko `LATERAL`. `deno check` daje 12 grešaka, svih 12 su zatečeni DOM-tipovi u
+`helpers.ts`, dakle **nula novih**.
+
+**Ograničenje koje je mjerenje nametnulo.** Dohvat košta oko **2,8 ms po znaku naslova** (31 znak
+→ 85 ms, 70 znakova → 200 ms), pa rad s 40 referenci traži 6 do 10 s. To je previše da bi se čekalo
+u istom zahtjevu, a dominira sam trigramski skan indeksa, pa ga filtar po godini ne bi spasio.
+Zato `verifyCorpusBatch` radi u **serijama unutar proračuna vremena** i vraća `checked`/`total`/
+`truncated`. Djelomičan rezultat je bolji od nikakvog, ali se **nikad ne smije prikazati kao
+potpun**: sučelje (K4) mora ispisati koliko je referenci stiglo na red.
+
+**Put optimizacije, kad zatreba:** zamijeniti trigramski dohvat **word-level FTS-om**
+(`tsvector` + GIN nad naslovom s razmacima), što je ono što pipeline i radi (FTS5 + bm25) i što je
+bitno jeftinije od znakovnih trigrama nad nizom od 70 znakova. Nije napravljeno sada jer bi dodalo
+50 do 80 MB indeksa, a baza je već na 70,7% od 500 MB free stropa. Prirodno ide uz prelazak na Pro.
+
 ### K4. UI u plaćenom rezultatu
 
 - Sekcija „Provjera izvora" sa značkama iz `verify-badges.ts`.

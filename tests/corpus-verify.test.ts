@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   bestCorpusCandidate, corpusMatchFrom, verifyAgainstCorpus, applyCorpusFallback,
+  verifyCorpusBatch, corpusKey,
   CORPUS_CANDIDATE_MIN, CORPUS_TOP, CORPUS_WEAK_MIN, CORPUS_FOUND_MIN,
   type CorpusCandidate,
 } from '../src/citations/corpus-verify';
@@ -80,6 +81,56 @@ describe('corpus-verify: promasaj NIKAD nije "ne postoji"', () => {
     await verifyAgainstCorpus({ title: 'Nesto' }, async (t, o) => { seen = { t, o }; return []; });
     expect(seen.t).toBe('Nesto');
     expect(seen.o).toEqual({ min: CORPUS_CANDIDATE_MIN, top: CORPUS_TOP });
+  });
+});
+
+describe('corpus-verify: serije i proracun vremena', () => {
+  const ref = (t: string) => ({ title: t, year: 2014 });
+
+  it('obradi sve reference kad budzet dostaje', async () => {
+    const items = [ref('Sekundarna hipertenzija'), ref('Analiza opreme za skijaško trčanje')];
+    const out = await verifyCorpusBatch(items, async (keys) => keys.map((k) =>
+      k.startsWith('sekundarna') ? [rad('Sekundarna hipertenzija')] : []), { chunkSize: 8, budgetMs: 10000 });
+    expect(out.total).toBe(2);
+    expect(out.checked).toBe(2);
+    expect(out.truncated).toBe(false);
+    expect(out.matches[0]?.verdict).toBe('found');
+    expect(out.matches[1]).toBeNull();
+  });
+
+  it('stane kad budzet istekne i POSTENO oznaci djelomican rezultat', async () => {
+    const items = Array.from({ length: 20 }, (_, i) => ref(`Naslov broj ${i}`));
+    let t = 0;
+    const out = await verifyCorpusBatch(items, async (keys) => { t += 3000; return keys.map(() => []); },
+      { chunkSize: 5, budgetMs: 5000, now: () => t });
+    expect(out.total).toBe(20);
+    expect(out.checked).toBeLessThan(20);
+    expect(out.truncated).toBe(true);
+  });
+
+  it('greska serije ne prekida posao ni ne daje negativnu presudu', async () => {
+    const items = [ref('Prvi rad'), ref('Sekundarna hipertenzija')];
+    let poziv = 0;
+    const out = await verifyCorpusBatch(items, async (keys) => {
+      poziv++;
+      if (poziv === 1) throw new Error('baza pukla');
+      return keys.map(() => [rad('Sekundarna hipertenzija')]);
+    }, { chunkSize: 1, budgetMs: 10000 });
+    expect(out.checked).toBe(2);
+    expect(out.matches[0]).toBeNull();          // pala serija: bez presude, NE "ne postoji"
+    expect(out.matches[1]?.verdict).toBe('found');
+  });
+
+  it('dohvat dobiva kljuc u obliku title_norm (bez dijakritike i razmaka)', async () => {
+    let seen: string[] = [];
+    await verifyCorpusBatch([{ title: 'Liječenje HIPERTENZIJE, u stanjima!' }],
+      async (keys) => { seen = keys; return keys.map(() => []); }, { budgetMs: 10000 });
+    expect(seen).toEqual(['lijecenjehipertenzijeustanjima']);
+  });
+
+  it('prazan ulaz ne ruši i ne javlja skraćenje', async () => {
+    const out = await verifyCorpusBatch([], async () => [], {});
+    expect(out).toEqual({ matches: [], checked: 0, total: 0, truncated: false });
   });
 });
 

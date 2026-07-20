@@ -28,6 +28,7 @@ import { resolveDailyCap } from '../../../src/report/partner.ts';
 import { unambiguousMismatch, estimateWorkType } from '../../../src/report/work-type-estimate.ts';
 import { applyFixers, FIXER_IDS, type FixerRequest } from '../../../src/repair/apply-fixers.ts';
 import { TERMS_VERSION } from '../../../src/legal/terms-version.ts';
+import { verifyCorpusBatch, type CorpusCandidate } from '../../../src/citations/corpus-verify.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -39,6 +40,16 @@ const ALLOWED_ORIGINS = (Deno.env.get('ALLOWED_ORIGIN') ?? 'https://lektahr.netl
 // Gornja granica uploada (sirovi docx). Base64 odgovor ~+33%; Edge memorija 256MB. Velik docx s
 // puno medija drzi na oku (WS-3 rizik). Uskladi s klijentskim uploadMaxBytes.
 const MAX_DOCX_BYTES = Number(Deno.env.get('REPAIR_MAX_DOCX_BYTES') ?? String(20 * 1024 * 1024));
+
+// Provjera postojanja domacih izvora u M4 korpusu (plan docs/PLAN_KORPUS_PROVJERA_IZVORA.md, K3).
+// Placeni dodatak uz popravak; besplatni sloj se NE mijenja i ostaje 100% lokalan.
+// Brojke su izvedene iz mjerenja na produkciji: dohvat kosta ~2,8 ms po znaku naslova (85 ms za
+// kratak, 200 ms za dug), pa rad s 40 referenci trazi 6 do 10 s. Zato budzet + serije + posten
+// djelomican rezultat, umjesto da popravak ceka bez ogranicenja.
+const CORPUS_ENABLED = (Deno.env.get('CORPUS_SOURCE_CHECK') ?? 'true') !== 'false';
+const CORPUS_MAX_REFS = Number(Deno.env.get('CORPUS_MAX_REFS') ?? '60');
+const CORPUS_BUDGET_MS = Number(Deno.env.get('CORPUS_BUDGET_MS') ?? '6000');
+const CORPUS_CHUNK = Number(Deno.env.get('CORPUS_CHUNK') ?? '8');
 
 // Besplatna beta (WS-7): kad je REPAIR_FREE_MODE=true, preskace se NAPLATNI gate (nema 402 ni trosenja
 // slota), ali auth, consent, upload, popravak, POHRANA ("Moji popravci") i rate-limit po korisniku OSTAJU.
@@ -114,7 +125,10 @@ Deno.serve(async (req: Request) => {
     if (!user) return json({ error: 'unauthorized' }, 401);
 
     // 2. multipart: 'file' (.docx binarno) + 'meta' (JSON: workType, parsedStructure, signals, requests,
-    //    profileStatus, profileRef, confirmedMismatch). Doslovni tekst rada NE ide u meta (samo brojevi/enumi).
+    //    profileStatus, profileRef, confirmedMismatch, references).
+    //    Iz meta je izostavljen tekst RADA (ostaju brojevi i enumi); jedina iznimka su `references`,
+    //    tj. naslovi i godine iz popisa literature, koji su nuzni za provjeru postojanja izvora
+    //    (korak 8). To nije novo otkrivanje jer cijeli .docx putuje u istom zahtjevu.
     const clen = Number(req.headers.get('content-length') ?? '0');
     if (clen && clen > MAX_DOCX_BYTES * 1.4) return json({ error: 'payload_too_large' }, 413);
     let form: FormData;
@@ -231,13 +245,69 @@ Deno.serve(async (req: Request) => {
     // verziju (nikad null, nikad klijentov proizvoljni string). consent_version je NOT NULL u 0026.
     try { jobId = await storeRepairJob(admin, user.id, { workType, fingerprint, slotId, originalBytes: docxBytes, resultBytes: result.docxBytes, changesCount: result.changelog.length, consentVersion: TERMS_VERSION }); } catch (_e) { /* WS-6: log */ }
 
+    // 8. PLACENI DODATAK: postoje li navedeni domaci izvori (M4 korpus, 526k radova iz Dabra i Hrcka).
+    //    Ide TEK NAKON popravka i pohrane, i cijeli je fail-open: greska, timeout ili ugasena
+    //    zastavica znace da `sourceCheck` izostane, a popravak se svejedno vrati. Nikad ne smije
+    //    srusiti ili odgoditi ono za sto je korisnik platio.
+    //
+    //    Naslove salje klijent (`meta.references`), jer ih je vec izdvojio pri analizi. To je
+    //    bibliografski metapodatak, a ne novo otkrivanje: cijeli .docx je ionako u istom zahtjevu.
+    //
+    //    PRESUDA: promasaj u korpusu NIJE dokaz da izvor ne postoji (korpus pokriva hrvatske
+    //    repozitorije, ne knjige ni strane izvore), pa se vraca samo ono sto je NADJENO, uz brojac
+    //    koliko je referenci stiglo na red. Sucelje mora prikazati `checked`/`total`, inace bi
+    //    djelomican rezultat izgledao kao potpun.
+    let sourceCheck: {
+      found: Array<{ index: number; verdict: 'found' | 'weak'; score: number; matchedTitle: string; where: string; url: string | null }>;
+      checked: number; total: number; truncated: boolean;
+    } | null = null;
+    if (CORPUS_ENABLED) {
+      try {
+        const rawRefs: any[] = Array.isArray(meta.references) ? meta.references : [];
+        const items = rawRefs.slice(0, CORPUS_MAX_REFS).map((r) => ({
+          title: typeof r?.title === 'string' ? r.title : null,
+          year: Number.isFinite(Number(r?.year)) ? Number(r.year) : null,
+        }));
+        if (items.length) {
+          const batch = await verifyCorpusBatch(items, async (keys, o) => {
+            const { data, error } = await admin.rpc('corpus_search_many', {
+              qs: keys, min_sim: o.min, top_n: o.top,
+            });
+            if (error) throw new Error(error.message);
+            // RPC vraca plosnat popis s q_index; presloziti u niz kandidata po indeksu unutar serije.
+            const byIndex: Array<CorpusCandidate[]> = keys.map(() => []);
+            for (const row of (data ?? []) as any[]) {
+              const i = Number(row.q_index) - 1; // generate_subscripts je 1-based
+              if (i >= 0 && i < byIndex.length) {
+                byIndex[i].push({
+                  title: String(row.title ?? ''), year: row.year ?? null,
+                  institution: row.institution ?? null, repo: row.repo ?? null, url: row.url ?? null,
+                });
+              }
+            }
+            return byIndex;
+          }, { chunkSize: CORPUS_CHUNK, budgetMs: CORPUS_BUDGET_MS });
+
+          sourceCheck = {
+            found: batch.matches.flatMap((m, i) => (m ? [{
+              index: i, verdict: m.verdict, score: Number(m.score.toFixed(3)),
+              matchedTitle: m.matchedTitle, where: m.where, url: m.url,
+            }] : [])),
+            checked: batch.checked, total: batch.total, truncated: batch.truncated,
+          };
+        }
+      } catch (_e) {
+        sourceCheck = null; // fail-open: popravak je vazniji od dodatka
+      }
+    }
+
     const traceToken = await sha256Hex(`${slotId}.${now}.${user.id}`);
     return json({
       docxBase64: toBase64(result.docxBytes),
       fileName: (meta.fileName ? String(meta.fileName).replace(/\.docx$/i, '') : 'rad') + '-popravljeno.docx',
       changelog: result.changelog,
       skipped: result.skipped,
-      slotId, jobId, traceToken, fingerprint,
+      slotId, jobId, traceToken, fingerprint, sourceCheck,
     }, 200);
   } catch (e) {
     console.error('[repair-docx]', e);

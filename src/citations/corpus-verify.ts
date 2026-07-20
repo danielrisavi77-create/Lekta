@@ -18,6 +18,15 @@
  */
 import { titleSimilarity } from './verify-existence';
 import type { ExistenceResult } from './verify-existence';
+import { normalize } from '../utils/helpers';
+
+/**
+ * Kljuc po kojem se pretrazuje korpus: MORA dati isti oblik kao stupac corpus_works.title_norm
+ * (koji uvozna skripta racuna istom funkcijom). Jedno mjesto istine, da server i baza ne razidju.
+ */
+export function corpusKey(title: string | null | undefined): string {
+  return normalize(title);
+}
 
 /**
  * Prag za DOHVAT kandidata. NIJE isto sto i prag odluke i NAMJERNO je nizi od njega.
@@ -161,4 +170,85 @@ export function applyCorpusFallback(prev: ExistenceResult, match: CorpusMatch | 
   if (!match) return prev;
   if (prev.verdict !== 'not-found' && prev.verdict !== 'not-indexed' && prev.verdict !== 'unchecked') return prev;
   return { ...prev, verdict: match.verdict, score: match.score, matchedTitle: match.matchedTitle };
+}
+
+// ------------------------------------------------------------------------------------------------
+// Serijska provjera s PRORACUNOM VREMENA.
+//
+// Izmjereno na produkciji: dohvat kosta oko 2,8 ms po znaku naslova, dakle ~85 ms za kratak i
+// ~200 ms za dug naslov. Rad s 40 referenci je 6 do 10 s, sto je previse da bi se cekalo u jednom
+// zahtjevu. Zato se obradjuje u malim serijama dok traje budzet, pa se POSTENO javi koliko je
+// referenci stiglo na red. Djelomican rezultat je bolji od nikakvog, ali NIKAD se ne smije
+// predstaviti kao potpun.
+// ------------------------------------------------------------------------------------------------
+
+export interface CorpusBatchItem {
+  title?: string | null;
+  year?: number | null;
+}
+
+export interface CorpusBatchResult {
+  /** Presuda po ulaznom indeksu; null znaci "bez presude" (nije nadjeno ili nije stiglo na red). */
+  matches: Array<CorpusMatch | null>;
+  /** Koliko je referenci stvarno provjereno (moze biti manje od ukupno, zbog budzeta). */
+  checked: number;
+  /** Ukupan broj poslanih referenci. */
+  total: number;
+  /** true kad je budzet potrosen prije kraja, pa je rezultat DJELOMICAN. */
+  truncated: boolean;
+}
+
+/** Dohvat jedne serije: prima kljuceve, vraca kandidate po indeksu unutar serije. */
+export type CorpusBatchFetcher = (
+  keys: string[],
+  opts: { min: number; top: number },
+) => Promise<Array<CorpusCandidate[]>>;
+
+export interface CorpusBatchOptions {
+  /** Koliko referenci po odlasku na bazu. */
+  chunkSize?: number;
+  /** Gornja granica ukupnog vremena u ms. */
+  budgetMs?: number;
+  /** Izvor vremena (injektiran radi determinističkih testova). */
+  now?: () => number;
+}
+
+/**
+ * Provjeri niz referenci u serijama, unutar zadanog budzeta.
+ * Greska pojedine serije NE prekida posao i NE proizvodi negativnu presudu: ta serija ostaje bez
+ * presude, ostale se nastavljaju (isti princip kao verifyAgainstCorpus).
+ */
+export async function verifyCorpusBatch(
+  items: CorpusBatchItem[],
+  fetchBatch: CorpusBatchFetcher,
+  opts: CorpusBatchOptions = {},
+): Promise<CorpusBatchResult> {
+  const list = items || [];
+  const chunkSize = Math.max(1, opts.chunkSize ?? 8);
+  const budgetMs = opts.budgetMs ?? 6000;
+  const now = opts.now ?? (() => Date.now());
+  const started = now();
+
+  const matches: Array<CorpusMatch | null> = new Array(list.length).fill(null);
+  let checked = 0;
+  let truncated = false;
+
+  for (let i = 0; i < list.length; i += chunkSize) {
+    if (now() - started >= budgetMs) { truncated = true; break; }
+    const slice = list.slice(i, i + chunkSize);
+    const keys = slice.map((it) => corpusKey(it?.title));
+    let candidates: Array<CorpusCandidate[]> = [];
+    try {
+      candidates = await fetchBatch(keys, { min: CORPUS_CANDIDATE_MIN, top: CORPUS_TOP });
+    } catch {
+      checked += slice.length; // pokusano je; ostaje bez presude, ne kao "ne postoji"
+      continue;
+    }
+    slice.forEach((it, k) => {
+      matches[i + k] = corpusMatchFrom({ title: it?.title, year: it?.year }, candidates[k] || []);
+    });
+    checked += slice.length;
+  }
+
+  return { matches, checked, total: list.length, truncated: truncated || checked < list.length };
 }
