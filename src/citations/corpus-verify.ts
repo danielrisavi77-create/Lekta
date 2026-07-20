@@ -16,9 +16,9 @@
  * strane izvore, zbornike ni starije radove. Zato se pri promasaju vraca `null` i zadrzava
  * postojeci ishod ('not-indexed' = provjeri rucno), umjesto da se referenca proglasi izmisljenom.
  */
-import { titleSimilarity } from './verify-existence';
-import type { ExistenceResult } from './verify-existence';
-import { normalize } from '../utils/helpers';
+import { titleSimilarity } from './verify-existence.ts';
+import type { ExistenceResult } from './verify-existence.ts';
+import { normalize } from '../utils/helpers.ts';
 
 /**
  * Kljuc po kojem se pretrazuje korpus: MORA dati isti oblik kao stupac corpus_works.title_norm

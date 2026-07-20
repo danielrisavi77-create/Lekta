@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   parseTokenResponse, isExpired, requestEmailOtp, verifyEmailOtp,
-  refreshSession, getValidAccessToken, type Session, type SessionStore,
+  refreshSession, getValidAccessToken, signInAnonymously, type Session, type SessionStore,
 } from '../src/auth/session';
 
 const CFG = { supabaseUrl: 'https://proj.supabase.co', anonKey: 'anon-key' };
@@ -125,5 +125,41 @@ describe('getValidAccessToken', () => {
     const token = await getValidAccessToken(CFG, store, fetchOnce(res(400)), 10_000);
     expect(token).toBe('new-other');
     expect(savedNull).toBe(false);
+  });
+});
+
+describe('signInAnonymously', () => {
+  const anonBody = {
+    access_token: 'jwt-anon', refresh_token: 'refresh-anon', expires_in: 3600,
+    user: { id: 'user-anon', email: '', is_anonymous: true },
+  };
+
+  it('gadja /auth/v1/signup s praznim tijelom i vraca anonimnu sesiju', async () => {
+    let url = '', init: any = null;
+    const out = await signInAnonymously(CFG, fetchOnce(res(200, anonBody), (u, i) => { url = u; init = i; }), 5_000);
+    expect(url).toBe('https://proj.supabase.co/auth/v1/signup');
+    expect(init.body).toBe('{}');
+    expect(out.ok).toBe(true);
+    if (out.ok) {
+      expect(out.session.userId).toBe('user-anon');
+      expect(out.session.isAnonymous).toBe(true);
+      expect(out.session.email).toBe('');
+    }
+  });
+
+  it('422 znaci da anonimne prijave nisu ukljucene (pozivatelj pada na e-mail)', async () => {
+    const out = await signInAnonymously(CFG, fetchOnce(res(422)));
+    expect(out).toEqual({ ok: false, message: 'anonimna prijava nije uključena' });
+  });
+
+  it('bez konfiguracije ne zove mrezu', async () => {
+    let called = false;
+    const out = await signInAnonymously({ supabaseUrl: '', anonKey: '' }, (async () => { called = true; return res(200); }) as unknown as typeof fetch);
+    expect(out.ok).toBe(false);
+    expect(called).toBe(false);
+  });
+
+  it('e-mail sesija NIJE oznacena kao anonimna', () => {
+    expect(parseTokenResponse(tokenBody, 0)!.isAnonymous).toBe(false);
   });
 });

@@ -12,8 +12,8 @@
  * Core (URL gradnja, slicnost naslova, verdikt iz kandidata) je CIST i mrezno-neovisan; mrezni
  * fetch je INJEKTIRAN (`fetchImpl`) pa je sve testabilno bez prave mreze.
  */
-import type { CitationInput } from '../tools/citation';
-import { normalize } from '../utils/helpers';
+import type { CitationInput } from '../tools/citation.ts';
+import { normalize } from '../utils/helpers.ts';
 
 export type ExistenceVerdict = 'found' | 'weak' | 'not-found' | 'not-indexed' | 'unchecked';
 

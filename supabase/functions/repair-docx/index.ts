@@ -57,6 +57,10 @@ const CORPUS_CHUNK = Number(Deno.env.get('CORPUS_CHUNK') ?? '8');
 // broj besplatnih popravaka po korisniku u 24h (obrana od zlouporabe; broji se iz report_generations).
 const FREE_MODE = Deno.env.get('REPAIR_FREE_MODE') === 'true';
 const FREE_DAILY_CAP = Number(Deno.env.get('REPAIR_FREE_DAILY_CAP') ?? '10');
+// Limit po IP-u: nuzan otkad anonimna prijava daje novi user_id u jednom pozivu, pa je limit po
+// korisniku sam po sebi bezvrijedan protiv farmanja. Prag je namjerno visi od korisnickog da
+// dijeljeni izlaz (faks, studentski dom) ne padne zbog nekoliko urednih korisnika.
+const FREE_IP_DAILY_CAP = Number(Deno.env.get('REPAIR_FREE_IP_DAILY_CAP') ?? '40');
 
 // ZIVI fixeri: strukturni K5/K6/K7 su UPALJENI 2026-07-19 nakon vlasnicke Word/LibreOffice validacije
 // (WS-4): SECTION_INSERT_LIVE / TOC_FIELD_LIVE = true u repair-items.ts, TOC je SDT sadrzaj-kontrola.
@@ -87,6 +91,10 @@ async function storeRepairJob(admin: any, userId: string, meta: {
   workType: string; fingerprint: any; slotId: string | null;
   originalBytes: Uint8Array; resultBytes: Uint8Array; changesCount: number;
   consentVersion: string; // WS-6.3: uvijek prisutna (consent gate iznad je zahtijeva), NOT NULL u bazi
+  // Anonimni racun (bez e-maila). Bitno za RETENCIJU: takav korisnik izgubi pristup ciscenjem
+  // preglednika i vise ne moze obrisati svoj dokument, pa se ti poslovi brisu automatski nakon
+  // 30 dana (0033). Prijavljeni e-mailom zadrzavaju "dok ih sam ne obrise".
+  anonymous: boolean;
 }): Promise<string | null> {
   const jobId = crypto.randomUUID();
   const origPath = `${userId}/${jobId}/original.docx`;
@@ -104,6 +112,7 @@ async function storeRepairJob(admin: any, userId: string, meta: {
     fingerprint: meta.fingerprint, label, original_path: origPath, result_path: resPath,
     original_bytes: meta.originalBytes.length, result_bytes: meta.resultBytes.length,
     changes_count: meta.changesCount, status: 'done', consent_version: meta.consentVersion,
+    anonymous: meta.anonymous,
   }).select('id').single();
   if (error || !data) { await bucket.remove([origPath, resPath]); return null; }
   return jobId;
@@ -182,10 +191,24 @@ Deno.serve(async (req: Request) => {
 
     let slotId: string | null = null;
     if (FREE_MODE) {
-      // Besplatna beta: bez naplate i bez slota (slot_id null), ali rate-limit po korisniku OSTAJE.
-      const { count: recent } = await admin.from('report_generations').select('id', { count: 'exact', head: true })
-        .eq('user_id', user.id).gt('created_at', new Date(Date.now() - 24 * 3600 * 1000).toISOString());
-      if ((recent ?? 0) >= FREE_DAILY_CAP) { await log('rate_limited', null); return json({ error: 'rate_limited' }, 429); }
+      // Besplatna beta: bez naplate i bez slota (slot_id null), ali rate-limit OSTAJE, i to DVOSTRUK.
+      //
+      // Po korisniku NIJE dovoljno otkad su anonimne prijave ukljucene: anonimni racun se dobiva
+      // jednim pozivom, pa se limit po user_id resetira ciscenjem preglednika. Zato uz njega ide i
+      // limit po IP-u (isti ip_hash koji vec biljezimo), s vecim pragom da legitimni dijeljeni
+      // izlaz (faks, dom, knjiznica) ne padne. Oba su fail-open na gresci upita: radije propusti
+      // nego da srusi popravak, jer ovo nije sigurnosna granica nego zastita od farmanja.
+      const since = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
+      const [{ count: recentUser }, { count: recentIp }] = await Promise.all([
+        admin.from('report_generations').select('id', { count: 'exact', head: true })
+          .eq('user_id', user.id).gt('created_at', since),
+        admin.from('report_generations').select('id', { count: 'exact', head: true })
+          .eq('ip_hash', ipHash).gt('created_at', since),
+      ]);
+      if ((recentUser ?? 0) >= FREE_DAILY_CAP || (recentIp ?? 0) >= FREE_IP_DAILY_CAP) {
+        await log('rate_limited', null);
+        return json({ error: 'rate_limited' }, 429);
+      }
       await log('free', null);
     } else {
       const { data: partner } = await admin
@@ -243,7 +266,7 @@ Deno.serve(async (req: Request) => {
     let jobId: string | null = null;
     // Gate iznad je zajamcio meta.consentVersion === TERMS_VERSION, pa biljezimo AUTORITATIVNU serversku
     // verziju (nikad null, nikad klijentov proizvoljni string). consent_version je NOT NULL u 0026.
-    try { jobId = await storeRepairJob(admin, user.id, { workType, fingerprint, slotId, originalBytes: docxBytes, resultBytes: result.docxBytes, changesCount: result.changelog.length, consentVersion: TERMS_VERSION }); } catch (_e) { /* WS-6: log */ }
+    try { jobId = await storeRepairJob(admin, user.id, { workType, fingerprint, slotId, originalBytes: docxBytes, resultBytes: result.docxBytes, changesCount: result.changelog.length, consentVersion: TERMS_VERSION, anonymous: user.is_anonymous === true }); } catch (_e) { /* WS-6: log */ }
 
     // 8. PLACENI DODATAK: postoje li navedeni domaci izvori (M4 korpus, 526k radova iz Dabra i Hrcka).
     //    Ide TEK NAKON popravka i pohrane, i cijeli je fail-open: greska, timeout ili ugasena

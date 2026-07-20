@@ -23,6 +23,8 @@ export interface Session {
   expiresAt: number;
   email: string;
   userId: string;
+  /** Anonimna sesija (bez e-maila). Opcijski da starije spremljene sesije ostanu valjane. */
+  isAnonymous?: boolean;
 }
 
 /** Perzistencija sesije (app.ts je veze na safeStorage; testovi na memoriju). */
@@ -66,6 +68,7 @@ export function parseTokenResponse(raw: unknown, now: number): Session | null {
     expiresAt: now + (Number.isFinite(expiresIn) ? expiresIn : 3600) * 1000,
     email: typeof user.email === 'string' ? user.email : '',
     userId: typeof user.id === 'string' ? user.id : '',
+    isAnonymous: user.is_anonymous === true,
   };
 }
 
@@ -118,6 +121,42 @@ export async function verifyEmailOtp(
     if (!res.ok) {
       if (res.status === 401 || res.status === 403) return { ok: false, message: 'kod nije točan ili je istekao' };
       return { ok: false, message: `potvrda nije uspjela (${res.status})` };
+    }
+    const session = parseTokenResponse(await res.json().catch(() => ({})), now);
+    if (!session) return { ok: false, message: 'nevaljan odgovor poslužitelja' };
+    return { ok: true, session };
+  } catch (e) {
+    return { ok: false, message: e instanceof Error ? e.message : 'mrežna greška' };
+  }
+}
+
+/**
+ * Anonimna prijava: korisnik dobiva pravi `user_id` i JWT bez e-maila i bez koda.
+ *
+ * Zasto postoji: server-side popravak MORA imati identitet, jer o njemu vise RLS, mapa u
+ * Storageu, "Moji popravci" i pravo na brisanje. Bez identiteta korisnik ne bi mogao obrisati
+ * vlastiti dokument, sto se kosi s objavljenom politikom ("dok ih sam ne obrise"). Anonimna
+ * sesija daje sve to, a ne trazi ni e-mail (pa je i manje osobnih podataka nego prije).
+ *
+ * Sesija zivi u istom storeu kao e-mail sesija; korisnik je kasnije moze nadograditi na
+ * e-mail bez gubitka popravaka (isti `user_id`).
+ */
+export async function signInAnonymously(
+  cfg: AuthConfig,
+  fetchImpl: typeof fetch = fetch,
+  now: number = Date.now(),
+): Promise<SessionResult> {
+  if (!cfg.supabaseUrl || !cfg.anonKey) return { ok: false, message: 'auth nije konfiguriran' };
+  try {
+    const res = await fetchImpl(`${trimUrl(cfg.supabaseUrl)}/auth/v1/signup`, {
+      method: 'POST',
+      headers: authHeaders(cfg),
+      body: '{}',
+    });
+    if (!res.ok) {
+      // 422 = anonimne prijave nisu ukljucene na projektu (external_anonymous_users_enabled).
+      if (res.status === 422) return { ok: false, message: 'anonimna prijava nije uključena' };
+      return { ok: false, message: `anonimna prijava nije uspjela (${res.status})` };
     }
     const session = parseTokenResponse(await res.json().catch(() => ({})), now);
     if (!session) return { ok: false, message: 'nevaljan odgovor poslužitelja' };

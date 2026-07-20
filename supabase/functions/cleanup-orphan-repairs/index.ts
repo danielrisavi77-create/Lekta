@@ -22,6 +22,8 @@ const CRON_SECRET = Deno.env.get('REPAIR_CLEANUP_CRON_SECRET');
 const GRACE_MINUTES = Number(Deno.env.get('REPAIR_CLEANUP_GRACE_MINUTES') ?? '60');
 const BATCH = 500;      // objekata po rundi (jedan storage.remove poziv)
 const MAX_ROUNDS = 40;  // gornja granica (~20k objekata po pozivu); ostatak pocisti sljedeci cron
+// Retencija anonimnih popravaka (0033). Vlasnikova odluka: 30 dana.
+const ANON_RETENTION_DAYS = Number(Deno.env.get('REPAIR_ANON_RETENTION_DAYS') ?? '30');
 
 Deno.serve(async (req: Request) => {
   const json = (body: unknown, status = 200): Response =>
@@ -47,7 +49,34 @@ Deno.serve(async (req: Request) => {
       removed += paths.length;
       if (paths.length < BATCH) break; // zadnja (nepuna) runda
     }
-    return json({ ok: true, removed }, 200);
+
+    // FAZA 2 (0033): istekli ANONIMNI popravci. Anonimni racun zivi samo u pregledniku, pa tko
+    // ocisti podatke vise ne moze sam obrisati svoj dokument; bez ovoga bismo ga drzali zauvijek,
+    // suprotno objavljenoj politici. Redoslijed je bitan: prvo Storage (kroz Storage API, jer SQL
+    // ne mice fizicki BLOB), pa tek onda redak. Padne li brisanje objekta, redak OSTAJE i sljedeci
+    // cron pokusava ponovno; nikad ne brisemo evidenciju o datoteci koja je jos gore.
+    let anonymousRemoved = 0;
+    for (let round = 0; round < MAX_ROUNDS; round++) {
+      const { data, error } = await admin.rpc('find_expired_anonymous_repairs', {
+        p_days: ANON_RETENTION_DAYS, p_limit: BATCH,
+      });
+      if (error) { console.error('[cleanup-orphan-repairs] anon rpc', error); return json({ error: 'anon_query_failed', removed, anonymousRemoved }, 500); }
+      const rows = (data ?? []) as Array<{ job_id: string; original_path: string | null; result_path: string | null }>;
+      if (rows.length === 0) break;
+
+      const paths = rows.flatMap((r) => [r.original_path, r.result_path]).filter((s): s is string => typeof s === 'string' && !!s);
+      if (paths.length) {
+        const { error: rmErr } = await admin.storage.from('repair').remove(paths);
+        if (rmErr) { console.error('[cleanup-orphan-repairs] anon remove', rmErr); return json({ error: 'anon_remove_failed', removed, anonymousRemoved }, 502); }
+      }
+      const { error: delErr } = await admin.from('repair_jobs').delete().in('id', rows.map((r) => r.job_id));
+      if (delErr) { console.error('[cleanup-orphan-repairs] anon delete', delErr); return json({ error: 'anon_delete_failed', removed, anonymousRemoved }, 500); }
+
+      anonymousRemoved += rows.length;
+      if (rows.length < BATCH) break;
+    }
+
+    return json({ ok: true, removed, anonymousRemoved }, 200);
   } catch (e) {
     console.error('[cleanup-orphan-repairs]', e);
     return json({ error: 'internal' }, 500);
