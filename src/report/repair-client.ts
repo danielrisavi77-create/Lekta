@@ -187,6 +187,7 @@ export async function uploadRepair(
   fileBytes: Uint8Array,
   meta: RepairMeta,
   fetchImpl: typeof fetch = fetch,
+  options?: { signal?: AbortSignal },
 ): Promise<RepairOutcome> {
   if (!config.endpoint) return { kind: 'error', message: 'repairEndpoint nije konfiguriran' };
 
@@ -201,8 +202,14 @@ export async function uploadRepair(
       method: 'POST',
       headers: { ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}) },
       body: form,
+      ...(options?.signal ? { signal: options.signal } : {}),
     });
   } catch (e) {
+    // Prekid (istekao rok ili korisnik) nije "mrezna greska": generickom porukom bi izgledao kao
+    // kvar posluzitelja, pa dobiva vlastiti tekst koji kaze sto se stvarno dogodilo.
+    if (e instanceof Error && e.name === 'AbortError') {
+      return { kind: 'error', message: 'Popravak je prekinut jer je predugo trajao. Provjeri vezu i pokušaj ponovno.' };
+    }
     return { kind: 'error', message: e instanceof Error ? e.message : 'mrezna greska' };
   }
 

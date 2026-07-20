@@ -101,10 +101,17 @@ async function storeRepairJob(admin: any, userId: string, meta: {
   const resPath = `${userId}/${jobId}/fixed.docx`;
   const bucket = admin.storage.from('repair');
 
-  const up1 = await bucket.upload(origPath, meta.originalBytes, { contentType: DOCX_MIME, upsert: false });
-  if (up1.error) return null;
-  const up2 = await bucket.upload(resPath, meta.resultBytes, { contentType: DOCX_MIME, upsert: false });
-  if (up2.error) { await bucket.remove([origPath]); return null; }
+  // Oba uploada idu USPOREDNO: nisu medjusobno ovisni, a serijski su se njihove latencije zbrajale
+  // na kriticnom putu. Pri padu bilo kojeg cistimo OBA patha (uspjeli upload ne smije ostati siroce).
+  const [up1, up2] = await Promise.all([
+    bucket.upload(origPath, meta.originalBytes, { contentType: DOCX_MIME, upsert: false }),
+    bucket.upload(resPath, meta.resultBytes, { contentType: DOCX_MIME, upsert: false }),
+  ]);
+  if (up1.error || up2.error) {
+    console.error('[repair-docx] storage upload failed', up1.error?.message ?? up2.error?.message);
+    await bucket.remove([origPath, resPath]).catch(() => {});
+    return null;
+  }
 
   const label = String(meta.fingerprint?.titleNorm || 'rad').slice(0, 120);
   const { data, error } = await admin.from('repair_jobs').insert({
@@ -114,8 +121,74 @@ async function storeRepairJob(admin: any, userId: string, meta: {
     changes_count: meta.changesCount, status: 'done', consent_version: meta.consentVersion,
     anonymous: meta.anonymous,
   }).select('id').single();
-  if (error || !data) { await bucket.remove([origPath, resPath]); return null; }
+  if (error || !data) {
+    console.error('[repair-docx] repair_jobs insert failed', error?.message);
+    await bucket.remove([origPath, resPath]).catch(() => {});
+    return null;
+  }
   return jobId;
+}
+
+interface SourceCheckResult {
+  found: Array<{ index: number; verdict: 'found' | 'weak'; score: number; matchedTitle: string; where: string; url: string | null }>;
+  checked: number; total: number; truncated: boolean;
+}
+
+/**
+ * PLACENI DODATAK: postoje li navedeni domaci izvori (M4 korpus, 526k radova iz Dabra i Hrcka).
+ *
+ * Cijeli je fail-open: greska, timeout ili ugasena zastavica znace da `sourceCheck` izostane, a
+ * popravak se svejedno vrati. NIKAD ne baca (pozivatelj ga pokrece bez await pa bi odbijeni promise
+ * bio neuhvacen) i nikad ne smije srusiti ono za sto je korisnik platio.
+ *
+ * Naslove salje klijent (`meta.references`), jer ih je vec izdvojio pri analizi. To je bibliografski
+ * metapodatak, a ne novo otkrivanje: cijeli .docx je ionako u istom zahtjevu.
+ *
+ * PRESUDA: promasaj u korpusu NIJE dokaz da izvor ne postoji (korpus pokriva hrvatske repozitorije,
+ * ne knjige ni strane izvore), pa se vraca samo ono sto je NADJENO, uz brojac koliko je referenci
+ * stiglo na red. Sucelje mora prikazati `checked`/`total`, inace bi djelomican rezultat izgledao
+ * kao potpun.
+ */
+async function runCorpusCheck(admin: any, references: unknown): Promise<SourceCheckResult | null> {
+  if (!CORPUS_ENABLED) return null;
+  try {
+    const rawRefs: any[] = Array.isArray(references) ? references : [];
+    const items = rawRefs.slice(0, CORPUS_MAX_REFS).map((r) => ({
+      title: typeof r?.title === 'string' ? r.title : null,
+      year: Number.isFinite(Number(r?.year)) ? Number(r.year) : null,
+    }));
+    if (!items.length) return null;
+
+    const batch = await verifyCorpusBatch(items, async (keys, o) => {
+      const { data, error } = await admin.rpc('corpus_search_many', {
+        qs: keys, min_sim: o.min, top_n: o.top,
+      });
+      if (error) throw new Error(error.message);
+      // RPC vraca plosnat popis s q_index; presloziti u niz kandidata po indeksu unutar serije.
+      const byIndex: Array<CorpusCandidate[]> = keys.map(() => []);
+      for (const row of (data ?? []) as any[]) {
+        const i = Number(row.q_index) - 1; // generate_subscripts je 1-based
+        if (i >= 0 && i < byIndex.length) {
+          byIndex[i].push({
+            title: String(row.title ?? ''), year: row.year ?? null,
+            institution: row.institution ?? null, repo: row.repo ?? null, url: row.url ?? null,
+          });
+        }
+      }
+      return byIndex;
+    }, { chunkSize: CORPUS_CHUNK, budgetMs: CORPUS_BUDGET_MS });
+
+    return {
+      found: batch.matches.flatMap((m, i) => (m ? [{
+        index: i, verdict: m.verdict, score: Number(m.score.toFixed(3)),
+        matchedTitle: m.matchedTitle, where: m.where, url: m.url,
+      }] : [])),
+      checked: batch.checked, total: batch.total, truncated: batch.truncated,
+    };
+  } catch (e) {
+    console.error('[repair-docx] corpus check failed', e instanceof Error ? e.message : e);
+    return null; // fail-open: popravak je vazniji od dodatka
+  }
 }
 
 Deno.serve(async (req: Request) => {
@@ -198,18 +271,26 @@ Deno.serve(async (req: Request) => {
       // limit po IP-u (isti ip_hash koji vec biljezimo), s vecim pragom da legitimni dijeljeni
       // izlaz (faks, dom, knjiznica) ne padne. Oba su fail-open na gresci upita: radije propusti
       // nego da srusi popravak, jer ovo nije sigurnosna granica nego zastita od farmanja.
+      //
+      // BROJI SE SAMO POTROSNJA OVOG PROIZVODA, i to samo pokusaji koji su stigli do popravka:
+      //  - 'rate_limited' retke MORAMO iskljuciti, inace svaki blokiran pokusaj sam sebi produzuje
+      //    blokadu (korisnik koji pokusava nikad ne izadje iz limita),
+      //  - statusi izvjestaja ('new_slot', 'recheck', 'denied') pripadaju generate-reportu koji pise u
+      //    ISTU tablicu, pa bi generirani izvjestaji trosili besplatne popravke,
+      //  - 'free' se biljezi TEK nakon uspjesnog popravka (nize), a 'repair_failed' vrijedi jedan
+      //    pokusaj: neuspio popravak tako kosta jedan slot umjesto dva, ali ni ne ostaje neogranicen.
       const since = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
+      const COUNTED = ['free', 'repair_failed'];
       const [{ count: recentUser }, { count: recentIp }] = await Promise.all([
         admin.from('report_generations').select('id', { count: 'exact', head: true })
-          .eq('user_id', user.id).gt('created_at', since),
+          .eq('user_id', user.id).in('status', COUNTED).gt('created_at', since),
         admin.from('report_generations').select('id', { count: 'exact', head: true })
-          .eq('ip_hash', ipHash).gt('created_at', since),
+          .eq('ip_hash', ipHash).in('status', COUNTED).gt('created_at', since),
       ]);
       if ((recentUser ?? 0) >= FREE_DAILY_CAP || (recentIp ?? 0) >= FREE_IP_DAILY_CAP) {
         await log('rate_limited', null);
         return json({ error: 'rate_limited' }, 429);
       }
-      await log('free', null);
     } else {
       const { data: partner } = await admin
         .from('partner_accounts').select('status, daily_cap').eq('user_id', user.id).maybeSingle();
@@ -252,7 +333,14 @@ Deno.serve(async (req: Request) => {
       }
     }
 
-    // 6. POPRAVAK: isti engine kao klijent (src/repair). applyFixers je fail-safe (ne baca na
+    // 6. PROVJERA IZVORA KRECE ODMAH, USPOREDNO s popravkom i pohranom. Ovisi iskljucivo o
+    //    meta.references, koje su dostupne od pocetka zahtjeva, pa ju je serijsko cekanje na kraju
+    //    stajalo do 6 sekundi cistog dodatka na vrijeme odgovora. Namjerno BEZ await ovdje;
+    //    runCorpusCheck ne baca, pa promise ne moze zavrsiti kao neuhvacena greska ni kad izadjemo
+    //    ranije (npr. 422 na nevaljanom docx-u).
+    const corpusPromise = runCorpusCheck(admin, meta.references);
+
+    // 7. POPRAVAK: isti engine kao klijent (src/repair). applyFixers je fail-safe (ne baca na
     //    pojedinacnom fixeru; baca samo ako docx nema word/document.xml).
     let result: Awaited<ReturnType<typeof applyFixers>>;
     try {
@@ -262,67 +350,26 @@ Deno.serve(async (req: Request) => {
       return json({ error: 'invalid_docx' }, 422);
     }
 
-    // 7. WS-6 STUB: pohrana originala + rezultata (retencija do brisanja). Ne blokira odgovor ako padne.
+    // Besplatna beta: potrosnja se biljezi TEK sada, kad je popravak stvarno napravljen. Ranije je
+    // redak isao prije popravka, pa je neuspio pokusaj trosio dva slota od deset (jedan 'free' i
+    // jedan 'repair_failed'), a korisnik nije dobio nista.
+    if (FREE_MODE) await log('free', null);
+
+    // 8. WS-6: pohrana originala + rezultata (retencija do brisanja). Ne blokira odgovor ako padne.
     let jobId: string | null = null;
     // Gate iznad je zajamcio meta.consentVersion === TERMS_VERSION, pa biljezimo AUTORITATIVNU serversku
     // verziju (nikad null, nikad klijentov proizvoljni string). consent_version je NOT NULL u 0026.
-    try { jobId = await storeRepairJob(admin, user.id, { workType, fingerprint, slotId, originalBytes: docxBytes, resultBytes: result.docxBytes, changesCount: result.changelog.length, consentVersion: TERMS_VERSION, anonymous: user.is_anonymous === true }); } catch (_e) { /* WS-6: log */ }
-
-    // 8. PLACENI DODATAK: postoje li navedeni domaci izvori (M4 korpus, 526k radova iz Dabra i Hrcka).
-    //    Ide TEK NAKON popravka i pohrane, i cijeli je fail-open: greska, timeout ili ugasena
-    //    zastavica znace da `sourceCheck` izostane, a popravak se svejedno vrati. Nikad ne smije
-    //    srusiti ili odgoditi ono za sto je korisnik platio.
-    //
-    //    Naslove salje klijent (`meta.references`), jer ih je vec izdvojio pri analizi. To je
-    //    bibliografski metapodatak, a ne novo otkrivanje: cijeli .docx je ionako u istom zahtjevu.
-    //
-    //    PRESUDA: promasaj u korpusu NIJE dokaz da izvor ne postoji (korpus pokriva hrvatske
-    //    repozitorije, ne knjige ni strane izvore), pa se vraca samo ono sto je NADJENO, uz brojac
-    //    koliko je referenci stiglo na red. Sucelje mora prikazati `checked`/`total`, inace bi
-    //    djelomican rezultat izgledao kao potpun.
-    let sourceCheck: {
-      found: Array<{ index: number; verdict: 'found' | 'weak'; score: number; matchedTitle: string; where: string; url: string | null }>;
-      checked: number; total: number; truncated: boolean;
-    } | null = null;
-    if (CORPUS_ENABLED) {
-      try {
-        const rawRefs: any[] = Array.isArray(meta.references) ? meta.references : [];
-        const items = rawRefs.slice(0, CORPUS_MAX_REFS).map((r) => ({
-          title: typeof r?.title === 'string' ? r.title : null,
-          year: Number.isFinite(Number(r?.year)) ? Number(r.year) : null,
-        }));
-        if (items.length) {
-          const batch = await verifyCorpusBatch(items, async (keys, o) => {
-            const { data, error } = await admin.rpc('corpus_search_many', {
-              qs: keys, min_sim: o.min, top_n: o.top,
-            });
-            if (error) throw new Error(error.message);
-            // RPC vraca plosnat popis s q_index; presloziti u niz kandidata po indeksu unutar serije.
-            const byIndex: Array<CorpusCandidate[]> = keys.map(() => []);
-            for (const row of (data ?? []) as any[]) {
-              const i = Number(row.q_index) - 1; // generate_subscripts je 1-based
-              if (i >= 0 && i < byIndex.length) {
-                byIndex[i].push({
-                  title: String(row.title ?? ''), year: row.year ?? null,
-                  institution: row.institution ?? null, repo: row.repo ?? null, url: row.url ?? null,
-                });
-              }
-            }
-            return byIndex;
-          }, { chunkSize: CORPUS_CHUNK, budgetMs: CORPUS_BUDGET_MS });
-
-          sourceCheck = {
-            found: batch.matches.flatMap((m, i) => (m ? [{
-              index: i, verdict: m.verdict, score: Number(m.score.toFixed(3)),
-              matchedTitle: m.matchedTitle, where: m.where, url: m.url,
-            }] : [])),
-            checked: batch.checked, total: batch.total, truncated: batch.truncated,
-          };
-        }
-      } catch (_e) {
-        sourceCheck = null; // fail-open: popravak je vazniji od dodatka
-      }
+    try {
+      jobId = await storeRepairJob(admin, user.id, { workType, fingerprint, slotId, originalBytes: docxBytes, resultBytes: result.docxBytes, changesCount: result.changelog.length, consentVersion: TERMS_VERSION, anonymous: user.is_anonymous === true });
+    } catch (e) {
+      // Tiho je bilo pogresno: klijentu obecavamo "Moji popravci", pa pad pohrane mora ostaviti trag.
+      console.error('[repair-docx] storeRepairJob threw', e instanceof Error ? e.message : e);
     }
+
+    // 9. Provjera izvora (pokrenuta u koraku 6) tek se sada preuzima. U pravilu je gotova jos
+    //    tijekom popravka i pohrane, pa se ovdje ne ceka nista; u najgorem slucaju placa se razlika
+    //    do njezina vlastitog budzeta, a ne cijelo njezino trajanje.
+    const sourceCheck = await corpusPromise;
 
     const traceToken = await sha256Hex(`${slotId}.${now}.${user.id}`);
     return json({

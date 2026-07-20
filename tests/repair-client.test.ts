@@ -228,4 +228,26 @@ describe('uploadRepair', () => {
     const out = await uploadRepair(config, 'j', new Uint8Array([1]), meta(), async () => { throw new Error('offline'); });
     expect(out).toMatchObject({ kind: 'error', message: 'offline' });
   });
+
+  // Prekid (istekao rok) mora imati vlastitu poruku: kao "mrezna greska" bi izgledao kao kvar
+  // posluzitelja, a korisnik treba znati da moze samo ponoviti.
+  it('AbortError -> vlastita poruka o prekidu, ne genericka mrezna greska', async () => {
+    const out = await uploadRepair(config, 'j', new Uint8Array([1]), meta(), async () => {
+      const e = new Error('The operation was aborted');
+      e.name = 'AbortError';
+      throw e;
+    });
+    expect(out.kind).toBe('error');
+    expect((out as { message: string }).message).toMatch(/predugo|prekinut/i);
+  });
+
+  it('signal se prosljedjuje fetchu samo kad je zadan', async () => {
+    let seen: unknown = 'nije pozvano';
+    const spy = async (_u: unknown, init: any) => { seen = 'signal' in (init ?? {}); return res(200, { docxBase64: '', changelog: [] }); };
+    await uploadRepair(config, 'j', new Uint8Array([1]), meta(), spy as unknown as typeof fetch);
+    expect(seen).toBe(false);
+    const ac = new AbortController();
+    await uploadRepair(config, 'j', new Uint8Array([1]), meta(), spy as unknown as typeof fetch, { signal: ac.signal });
+    expect(seen).toBe(true);
+  });
 });

@@ -370,10 +370,13 @@ function handleHistoryAction(e: any){const profileId=e.target.closest('[data-his
 // preko testirane src/report/repair-history.ts. RLS select-own: server vraca samo korisnikove poslove.
 function repairHistoryConfig(){const url=String(productionConfig?.supabaseUrl||'').trim();return{supabaseUrl:url,anonKey:String(productionConfig?.supabaseAnonKey||'').trim(),deleteEndpoint:url?url.replace(/\/+$/,'')+'/functions/v1/delete-repair-job':''}}
 function updateRepairHistoryButton(){const b=$('#repairHistoryBtn');if(b)b.classList.toggle('hidden',!repairServerConfigured())}
+// Ime preuzete datoteke iz naslova rada: svi popravci su se prije zvali "popravljeno.docx", pa se u
+// mapi preuzimanja nisu razlikovali. Znakovi koje datotecni sustavi odbijaju se uklanjaju.
+function repairDownloadName(j: any){const raw=String(j?.label||'').trim().replace(/[\\/:*?"<>|]+/g,' ').replace(/\s+/g,' ').slice(0,60).trim();return (raw?`${raw}-popravljeno`:'popravljeno')+'.docx'}
 function openRepairHistory(){$('#repairHistoryModal')?.classList.remove('hidden');trapModal($('#repairHistoryModal'));void renderRepairHistoryList()}
 function closeRepairHistory(){$('#repairHistoryModal')?.classList.add('hidden');releaseModal($('#repairHistoryModal'))}
-async function renderRepairHistoryList(){const el=$('#repairHistoryList');if(!el)return;el.innerHTML='<div class="empty">Učitavam…</div>';const token: any=await ensureAccessToken();if(authConfigured()&&!token){el.innerHTML='<div class="empty">Za pregled popravaka potrebna je prijava.</div>';openAuth(()=>renderRepairHistoryList());return}let jobs: any[]=[];try{jobs=await fetchRepairJobs(repairHistoryConfig(),token||'')}catch(e: any){el.innerHTML='<div class="empty">Popravke trenutačno nije moguće učitati.</div>';return}if(!jobs.length){el.innerHTML='<div class="empty">Još nemaš spremljenih popravaka. Pojave se ovdje nakon "Popravi sve".</div>';return}el.innerHTML=jobs.map((j: any)=>{const tier=tierFor(j.workType),date=j.createdAt?new Date(j.createdAt).toLocaleString('hr-HR'):'',mb=j.resultBytes?`${(j.resultBytes/1024/1024).toFixed(2)} MB`:'';return`<article class="history-card"><div class="history-head"><div><h4>${escapeHtml(j.label||'Popravljeni rad')}</h4><p>${escapeHtml(tier?tier.label:j.workType)}</p></div></div><div class="history-meta"><span>${escapeHtml(date)}</span>${j.changesCount!=null?`<span>${escapeHtml(_plIzmjena(j.changesCount))}</span>`:''}${mb?`<span>${escapeHtml(mb)}</span>`:''}</div><div class="history-actions"><button class="btn btn-secondary btn-sm" data-repair-download="${escapeHtml(j.id)}" data-path="${escapeHtml(j.resultPath)}">Preuzmi</button><button class="btn btn-ghost btn-sm" data-repair-del="${escapeHtml(j.id)}">Obriši</button></div></article>`}).join('');window.__lektaIcons?.()}
-async function handleRepairHistoryAction(e: any){const dl=e.target.closest('[data-repair-download]'),del=e.target.closest('[data-repair-del]');if(!dl&&!del)return;const token: any=await ensureAccessToken();if(authConfigured()&&!token){openAuth(()=>renderRepairHistoryList());return}if(dl){const path=dl.dataset.path,orig=dl.textContent;dl.disabled=true;dl.textContent='Pripremam…';try{let url=await signRepairDownload(repairHistoryConfig(),token||'',path);url+=(url.includes('?')?'&':'?')+'download=popravljeno.docx';const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener';a.click()}catch(err: any){toast('Preuzimanje trenutačno nije moguće.')}finally{dl.disabled=false;dl.textContent=orig}return}if(del){const id=del.dataset.repairDel;if(!confirm('Trajno obrisati ovaj popravak? Original i popravljena datoteka bit će uklonjeni sa servera.'))return;del.disabled=true;const out=await deleteRepairJob(repairHistoryConfig(),token||'',id);if(out.ok){toast('Popravak je obrisan.');void renderRepairHistoryList()}else{del.disabled=false;toast('Brisanje trenutačno nije moguće.')}return}}
+async function renderRepairHistoryList(){const el=$('#repairHistoryList');if(!el)return;el.innerHTML='<div class="empty">Učitavam…</div>';const token: any=await ensureAccessToken();if(authConfigured()&&!token){el.innerHTML='<div class="empty">Za pregled popravaka potrebna je prijava.</div>';openAuth(()=>renderRepairHistoryList());return}let jobs: any[]=[];try{jobs=await fetchRepairJobs(repairHistoryConfig(),token||'')}catch(e: any){el.innerHTML='<div class="empty">Popravke trenutačno nije moguće učitati.</div>';return}if(!jobs.length){el.innerHTML='<div class="empty">Još nemaš spremljenih popravaka. Pojave se ovdje nakon "Popravi sve".</div>';return}el.innerHTML=jobs.map((j: any)=>{const tier=tierFor(j.workType),date=j.createdAt?new Date(j.createdAt).toLocaleString('hr-HR'):'',mb=j.resultBytes?`${(j.resultBytes/1024/1024).toFixed(2)} MB`:'';return`<article class="history-card"><div class="history-head"><div><h4>${escapeHtml(j.label||'Popravljeni rad')}</h4><p>${escapeHtml(tier?tier.label:j.workType)}</p></div></div><div class="history-meta"><span>${escapeHtml(date)}</span>${j.changesCount!=null?`<span>${escapeHtml(_plIzmjena(j.changesCount))}</span>`:''}${mb?`<span>${escapeHtml(mb)}</span>`:''}</div><div class="history-actions"><button class="btn btn-secondary btn-sm" data-repair-download="${escapeHtml(j.id)}" data-path="${escapeHtml(j.resultPath)}" data-name="${escapeHtml(repairDownloadName(j))}">Preuzmi</button><button class="btn btn-ghost btn-sm" data-repair-del="${escapeHtml(j.id)}">Obriši</button></div></article>`}).join('');window.__lektaIcons?.()}
+async function handleRepairHistoryAction(e: any){const dl=e.target.closest('[data-repair-download]'),del=e.target.closest('[data-repair-del]');if(!dl&&!del)return;const token: any=await ensureAccessToken();if(authConfigured()&&!token){openAuth(()=>renderRepairHistoryList());return}if(dl){const path=dl.dataset.path,orig=dl.textContent;dl.disabled=true;dl.textContent='Pripremam…';try{let url=await signRepairDownload(repairHistoryConfig(),token||'',path);url+=(url.includes('?')?'&':'?')+'download='+encodeURIComponent(dl.dataset.name||'popravljeno.docx');const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener';a.click()}catch(err: any){toast('Preuzimanje trenutačno nije moguće.')}finally{dl.disabled=false;dl.textContent=orig}return}if(del){const id=del.dataset.repairDel;if(!confirm('Trajno obrisati ovaj popravak? Original i popravljena datoteka bit će uklonjeni sa servera.'))return;del.disabled=true;const out=await deleteRepairJob(repairHistoryConfig(),token||'',id);if(out.ok){toast('Popravak je obrisan.');void renderRepairHistoryList()}else{del.disabled=false;toast('Brisanje trenutačno nije moguće.')}return}}
 function applySelectionIds(p: any={}){setOptionIfExists($('#institutionSelect'),p.institution);populateUnits();setOptionIfExists($('#unitSelect'),p.unit);populatePrograms();setOptionIfExists($('#programSelect'),p.program);setOptionIfExists($('#workType'),p.workType);populateVariants();setOptionIfExists($('#workVariant'),p.variant);populateDepartments();setOptionIfExists($('#departmentSelect'),p.department);populateMethodology();setOptionIfExists($('#methodologySelect'),p.methodology);setOptionIfExists($('#citationStyle'),p.citation);syncProfileContext()}
 /* ?unit=<unitId> s alat-stranica (SEO citatne stranice i sl.): posjetitelj koji dolazi sa
    stranice SVOG fakulteta ne mora ga ponovno traziti u izborniku. Namjerno POSLIJE
@@ -1115,33 +1118,64 @@ function repairReferencesFrom(r: any){
   .filter((x: any)=>x.title)
   .slice(0,REPAIR_MAX_REFERENCES);
 }
+// Gornja granica uploada za popravak, USKLADJENA sa serverskim REPAIR_MAX_DOCX_BYTES (20 MB).
+// Bez ovoga korisnik potvrdi privolu, otvori se sesija i cijeli se dokument prenese uzalud da bi
+// tek server vratio 413. `uploadMaxBytes` iz konfiguracije NE vrijedi ovdje (gejta samo narudzbe).
+const REPAIR_MAX_UPLOAD_BYTES=20*1024*1024;
+// Krajnji rok jednog popravka. Namjerno velikodusan (spor uplink + serverska obrada), ali konacan:
+// bez njega zaglavljen zahtjev ostavlja gumb zauvijek u stanju "Saljem".
+const REPAIR_TIMEOUT_MS=180000;
 function renderServerRepairPanel(mount: any,r: any,items: any[],file: any){
  const wrap=document.createElement('div');wrap.className='lekta-repair-panel';
- wrap.innerHTML=`<p><strong>Popravi sve jednim klikom.</strong> Dokument se šalje na server, popravi se i vraća gotov. Popravljaju se oblikovanje, numeriranje i struktura; ne diraju se sadržaj, citati ni argument. Datoteka se pohranjuje dok je ne obrišeš (Moji popravci).</p><label class="lekta-repair-panel__deep"><input type="checkbox" data-repair-consent><span>Pristajem da se dokument pošalje na server i pohrani do brisanja. Besplatna analiza ostaje na uređaju.</span></label><button type="button" class="lekta-repair-panel__download" data-repair-go disabled>Popravi sve jednim klikom</button><div class="lekta-repair-panel__summary" data-repair-summary hidden></div>`;
+ wrap.innerHTML=`<p><strong>Popravi sve jednim klikom.</strong> Dokument se šalje na server, popravi se i vraća gotov. Popravljaju se oblikovanje, numeriranje i struktura; ne diraju se sadržaj, citati ni argument. Datoteka se pohranjuje dok je ne obrišeš (Moji popravci); kod prijave bez e-maila najviše 30 dana.</p><label class="lekta-repair-panel__deep"><input type="checkbox" data-repair-consent><span>Pristajem da se dokument pošalje na server i pohrani do brisanja. Besplatna analiza ostaje na uređaju.</span></label><button type="button" class="lekta-repair-panel__download" data-repair-go disabled>Popravi sve jednim klikom</button><div class="lekta-repair-panel__summary" data-repair-summary hidden></div>`;
  mount.appendChild(wrap);
  const consent: any=wrap.querySelector('[data-repair-consent]'),btn: any=wrap.querySelector('[data-repair-go]'),summary: any=wrap.querySelector('[data-repair-summary]');
  const setSummary=(html: string)=>{summary.hidden=false;summary.innerHTML=html};
  consent.addEventListener('change',()=>{btn.disabled=!consent.checked});
  async function go(confirmedMismatch: boolean){
+  // Velicina se provjerava PRIJE prijave i uploada: server bi isti dokument odbio tek nakon punog
+  // prijenosa (413), a to je na studentskom uplinku minuta cekanja za poruku koju znamo unaprijed.
+  if(file&&Number(file.size)>REPAIR_MAX_UPLOAD_BYTES){setSummary(`<strong>Dokument je prevelik za automatski popravak.</strong> Granica je ${Math.round(REPAIR_MAX_UPLOAD_BYTES/1024/1024)} MB, a ova datoteka ima ${(Number(file.size)/1024/1024).toFixed(1)} MB. Najčešći razlog su slike u punoj rezoluciji; smanji ih u Wordu (Format slike, Komprimiraj slike) pa pokušaj ponovno.`);return}
   // Bez trenja: anonimna sesija se otvara tiho. Pad na e-mail prijavu samo ako anonimne nisu ukljucene.
   const token: any=await ensureAccessToken();
   if(authConfigured()&&!token){openAuth(()=>go(confirmedMismatch));return}
-  btn.disabled=true;const orig=btn.textContent;btn.textContent='Popravljam na serveru…';
+  btn.disabled=true;const orig=btn.textContent;btn.textContent='Šaljem na server…';
   try{
    const requests=items.map((it: any)=>({fixerId:it.fixerId,ruleId:it.ruleId,params:_SERVER_DEEP_FIXERS.has(it.fixerId)?{...it.params,deep:true}:it.params}));
    const refsForCorpus=repairReferencesFrom(r);
    const meta=buildRepairMeta({references:refsForCorpus.map((x: any)=>({title:x.title,year:x.year})),workType:toReportWorkType(r.settings?.workType||r.selection?.workType||'final'),parsedStructure:extractParsedStructure(r),requests,words:r.stats?.officialWords||r.stats?.words||null,titleMarker:r.details?.titlePageWorkType||null,profileStatus:r.profileStatus||null,profileRef:r.details?.profileDefinitionId||null,fileName:r.file?.name||file.name||'rad.docx',confirmedMismatch});
    const bytes=new Uint8Array(await file.arrayBuffer());
-   const out=await uploadRepair(repairConfig(),token||'',bytes,meta,fetch);
+   // Krajnji rok: bez njega zaglavljen zahtjev drzi gumb u "Saljem" bez izlaza. Prekid se u
+   // repair-clientu prevodi u citljivu poruku, ne u "mreznu gresku".
+   const ac=new AbortController(),timer=setTimeout(()=>ac.abort(),REPAIR_TIMEOUT_MS);
+   let out: any;
+   try{out=await uploadRepair(repairConfig(),token||'',bytes,meta,fetch,{signal:ac.signal})}finally{clearTimeout(timer)}
    if(out.kind==='ok'){
     downloadBlob(out.docxBytes,'application/vnd.openxmlformats-officedocument.wordprocessingml.document',out.fileName);
-    setSummary(`<strong>Popravljeno na serveru (${_plIzmjena(out.changelog.length)}).</strong> Preuzimanje je počelo.${out.skipped.length?`<p>Nije primijenjeno: ${out.skipped.map((s: string)=>escapeHtml(s)).join(', ')}.</p>`:''}`);
-    trackEvent('repair_server_done',{profileId:r.details?.profileDefinitionId||'',changes:out.changelog.length});
+    // Rezervno preuzimanje: automatski a.click() moze blokirati preglednik (popup/download gard), a
+    // bajtovi su jos u memoriji, pa se drugi klik ne mora vracati na server.
+    const again=`<p><button type="button" class="btn btn-ghost btn-sm" data-repair-again>Preuzmi ponovno</button></p>`;
+    // Pohrana je fail-open: server vraca 200 s jobId:null i kad Storage ili baza zakazu. Panel je
+    // obecao "Moji popravci", pa se ta razlika MORA reci, inace korisnik izgubi jedini primjerak.
+    const stored=out.jobId
+     ?`<p>Datoteka je spremljena u <strong>Moji popravci</strong>, možeš je preuzeti i kasnije.</p>`
+     :`<p><strong>Popravak nije spremljen u Moji popravci</strong> (privremena greška na serveru). Sačuvaj preuzetu datoteku, ovdje je više neće biti.</p>`;
+    setSummary(`<strong>Popravljeno na serveru (${_plIzmjena(out.changelog.length)}).</strong> Preuzimanje je počelo.${again}${stored}${out.skipped.length?`<p>Nije primijenjeno: ${out.skipped.map((s: string)=>escapeHtml(s)).join(', ')}.</p>`:''}`);
+    const againBtn: any=summary.querySelector('[data-repair-again]');
+    if(againBtn)againBtn.onclick=()=>downloadBlob(out.docxBytes,'application/vnd.openxmlformats-officedocument.wordprocessingml.document',out.fileName);
+    trackEvent('repair_server_done',{profileId:r.details?.profileDefinitionId||'',changes:out.changelog.length,stored:out.jobId?1:0});
     // K4: provjera izvora je DODATAK uz popravak. Kad je izostala (stari server, ugasena zastavica,
     // greska), buildSourceCheckHtml vrati prazan string pa sekcije naprosto nema. Nikad ne javlja
     // "nije pronadjeno" jer korpus ne moze dokazati nepostojanje.
-    try{const sc=buildSourceCheckHtml(out.sourceCheck,refsForCorpus);if(sc){summary.innerHTML+=sc;if(out.sourceCheck)void trackEvent('repair_source_check',{found:out.sourceCheck.found.length,checked:out.sourceCheck.checked,total:out.sourceCheck.total})}}catch(e: any){console.error('Provjera izvora:',e)}
-    try{const f=new File([out.docxBytes as Uint8Array<ArrayBuffer>],out.fileName,{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});const res: any=await analyzeDocxOffThread(f,analyzedProfile,r.settings,()=>{});if(res&&res.score!=null&&r.score!=null){const d=res.score-r.score;summary.innerHTML+=`<p><strong>Spremnost: ${r.score} → ${res.score}${d>0?` (+${d})`:d<0?` (${d})`:''}</strong></p>`}
+    // Od ove tocke se sazetku sadrzaj DODAJE cvorovima, nikad preko innerHTML +=: to bi ponovno
+    // parsiralo cijeli sazetak i pobrisalo vec ozicene rukovatelje (npr. "Preuzmi ponovno").
+    const addHtml=(html: string)=>{const d=document.createElement('div');d.innerHTML=html;summary.appendChild(d);return d};
+    try{const sc=buildSourceCheckHtml(out.sourceCheck,refsForCorpus);if(sc){addHtml(sc);if(out.sourceCheck)void trackEvent('repair_source_check',{found:out.sourceCheck.found.length,checked:out.sourceCheck.checked,total:out.sourceCheck.total})}}catch(e: any){console.error('Provjera izvora:',e)}
+    // Ponovna analiza traje nekoliko sekundi, pa mora imati vidljiv status: bez njega se rezultat
+    // i gumb za usporedbu pojave niotkuda, a pri gresci korisnik nikad ne sazna da usporedba postoji.
+    const recheck=addHtml('<p class="muted">Provjeravam popravljeni dokument…</p>');
+    try{const f=new File([out.docxBytes as Uint8Array<ArrayBuffer>],out.fileName,{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});const res: any=await analyzeDocxOffThread(f,analyzedProfile,r.settings,()=>{},{skipFinalDelay:true});
+     if(res&&res.score!=null&&r.score!=null){const d=res.score-r.score;recheck.innerHTML=`<p><strong>Spremnost: ${r.score} → ${res.score}${d>0?` (+${d})`:d<0?` (${d})`:''}</strong></p>`}else{recheck.remove()}
      /* "Pokaži što je popravljeno": faksimil prije/poslije. Radi SAMO kad oba modela postoje;
         inace se gumb ne prikazuje umjesto da otvori prazan prozor. Wordove revizije namjerno NE
         koristimo: popravak najvise mijenja styles.xml, a to OOXML ne moze prikazati kao reviziju. */
@@ -1149,17 +1183,27 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any){
       const b=document.createElement('button');b.type='button';b.className='btn btn-secondary btn-sm';b.textContent='Pokaži što je popravljeno';
       b.onclick=async()=>{const {openRepairDiff}=await import('./repair-diff');openRepairDiff({before:r.preview,after:res.preview,changelog:out.changelog,fileName:out.fileName});void trackEvent('repair_diff_opened',{changes:out.changelog.length})};
       summary.appendChild(b);
-     }}catch(e: any){}
+     }}catch(e: any){console.error('Provjera popravljenog dokumenta:',e);recheck.innerHTML='<p class="muted">Popravljeni dokument je preuzet, ali ga nije bilo moguće ponovno provjeriti na ovom uređaju, pa usporedba prije/poslije nije dostupna.</p>'}
    } else if(out.kind==='tier_mismatch'){
     const sug=out.suggestedWorkType,lbl=(tierFor(sug)?.label||sug);
     setSummary(`<strong>Dokument izgleda kao ${escapeHtml(String(lbl))}.</strong> Odabrana vrsta rada je niža od stvarne. Kupi ispravnu vrstu rada, ili nastavi svejedno ovim popravkom.<div style="margin-top:8px"><button type="button" class="btn btn-secondary btn-sm" data-repair-confirm>Nastavi svejedno</button></div>`);
     const cb=summary.querySelector('[data-repair-confirm]');if(cb)cb.onclick=()=>go(true);
-   } else if(out.kind==='paywall'){toast('Za popravak je potrebna kupnja odgovarajuće vrste rada.')}
+   } else if(out.kind==='paywall'){
+    // Goli toast je bio slijepa ulica: korisnik sazna da treba kupiti, ali nema odakle. Ista lock
+    // ploca kao drugdje u izvjestaju nosi cijenu i put do placanja.
+    setSummary(`<p>Za popravak je potrebna kupnja odgovarajuće vrste rada.</p>${paywallLockHtml('Automatski popravak dokumenta')}`);wireLockCtas();
+   }
    else if(out.kind==='unauthorized'){openAuth(()=>go(confirmedMismatch))}
-   else if(out.kind==='rate_limited'){toast('Previše zahtjeva. Pokušaj ponovno za koji trenutak.')}
-   else if(out.kind==='too_large'){toast('Dokument je prevelik za automatski popravak na serveru.')}
-   else if(out.kind==='invalid_docx'||out.kind==='no_live_fixers'){setSummary('Automatski popravak nije uspio na ovom dokumentu. Ručne upute iznad i dalje vrijede.')}
-   else{toast('Popravak trenutačno nije dostupan.')}
+   else if(out.kind==='rate_limited'){setSummary('<strong>Dnevni limit besplatnih popravaka je iskorišten.</strong> Prozor je 24 sata, pa pokušaj ponovno sutra. Ručne upute iznad i dalje vrijede.')}
+   else if(out.kind==='too_large'){setSummary(`<strong>Dokument je prevelik za automatski popravak na serveru.</strong> Granica je ${Math.round(REPAIR_MAX_UPLOAD_BYTES/1024/1024)} MB. Najčešći razlog su slike u punoj rezoluciji; smanji ih u Wordu pa pokušaj ponovno.`)}
+   // Ova dva ishoda su RAZLICITA: invalid_docx govori o dokumentu, no_live_fixers o serverskoj
+   // konfiguraciji. Spojeni su krivo optuzivali korisnikov rad za nase gasenje fixera.
+   else if(out.kind==='invalid_docx'){setSummary('Automatski popravak nije uspio na ovom dokumentu. Ručne upute iznad i dalje vrijede.')}
+   else if(out.kind==='no_live_fixers'){setSummary('Traženi popravci trenutačno su isključeni na serveru. Pokušaj kasnije; ručne upute iznad i dalje vrijede.')}
+   // Poruke iz repair-clienta (istekli uvjeti, prekid, mrezna greska, 500) nose konkretan tekst;
+   // ranije su sve zavrsavale u genericnom toastu i korisnik nije imao sto uciniti.
+   else if(out.kind==='error'){setSummary(escapeHtml(out.message||'Popravak trenutačno nije dostupan.'))}
+   else{setSummary('Popravak trenutačno nije dostupan. Pokušaj ponovno za koji trenutak.')}
   }catch(e: any){console.error('Server repair:',e);setSummary('Greška pri popravku na serveru. Ručne upute iznad i dalje vrijede.')}
   finally{btn.disabled=false;btn.textContent=orig}
  }

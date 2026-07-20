@@ -62,7 +62,7 @@ export function cancelActiveAnalysis(): boolean {
   return false;
 }
 
-function analyzeInWorker(file: File, profile: any, settings: any, onProgress: any): Promise<any> {
+function analyzeInWorker(file: File, profile: any, settings: any, onProgress: any, options?: AnalyzeOptions): Promise<any> {
   return new Promise((resolve, reject) => {
     let w: Worker;
     try {
@@ -115,18 +115,21 @@ function analyzeInWorker(file: File, profile: any, settings: any, onProgress: an
       }
     };
     try {
-      w.postMessage({ file, profile, settings });
+      w.postMessage({ file, profile, settings, options });
     } catch (e) {
       done(() => reject(new WorkerInfraError(String(e))));
     }
   });
 }
 
+/** Postavke analize koje se prosljedjuju do analyzeDocx (i kroz worker protokol). */
+export interface AnalyzeOptions { skipFinalDelay?: boolean }
+
 /** Isti ugovor kao analyzeDocx; u pregledniku radi u workeru, inace na glavnoj niti. */
-export async function analyzeDocxOffThread(file: File, profile: any, settings: any, onProgress: any): Promise<any> {
+export async function analyzeDocxOffThread(file: File, profile: any, settings: any, onProgress: any, options?: AnalyzeOptions): Promise<any> {
   if (canUseWorker()) {
     try {
-      return await analyzeInWorker(file, profile, settings, onProgress);
+      return await analyzeInWorker(file, profile, settings, onProgress, options);
     } catch (e) {
       if (!(e instanceof WorkerInfraError)) throw e;
       workerBroken = true;
@@ -139,5 +142,5 @@ export async function analyzeDocxOffThread(file: File, profile: any, settings: a
   // korpus koriste @xmldom/xmldom. Ovo je rijedak fallback (nema/slomljen worker), pa se svjesno
   // prihvaca moguca sitna razlika u parsiranju umjesto globalnog override-a DOMParsera na glavnoj niti.
   const { analyzeDocx } = await import('./analyze-docx');
-  return analyzeDocx(file, profile, settings, onProgress);
+  return analyzeDocx(file, profile, settings, onProgress, options);
 }
