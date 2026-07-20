@@ -5,7 +5,7 @@
 // word/document.xml i word/styles.xml, vrati novi docx gdje su SVI ostali
 // zip entryji (slike, headeri, footeri, _rels, theme) neizmijenjeni.
 
-import { readZip, writeZip, type ZipEntry } from './zip-codec';
+import { readZip, writeZip, type ZipEntry } from './zip-codec.ts';
 import {
   marginsFixer,
   paperSizeFixer,
@@ -24,8 +24,8 @@ import {
   type FooterPageTarget,
   type SectionInsertTarget,
   type TocFieldTarget,
-} from './fixers';
-import type { SectionNumberingTarget } from './xml-patch';
+} from './fixers.ts';
+import type { SectionNumberingTarget } from './xml-patch.ts';
 
 /** Poznati fixeri kao runtime konstanta: profile-validator provjerava clanstvo
  * fixerId-a iz podataka u ovom popisu (tipfeler u draftu = strukturna greska,

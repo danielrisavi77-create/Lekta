@@ -29,10 +29,10 @@ import {
   buildTocFieldXml,
   documentHasTocField,
   findParagraphEndAfterMatch,
-} from './xml-patch';
-import { stripDirectFormatting, type RunLevelResult } from './run-level';
-import { stripOrphanedEmptyParagraphs } from './paragraph-cleanup';
-import { sectionName } from '../utils/helpers';
+} from './xml-patch.ts';
+import { stripDirectFormatting, type RunLevelResult } from './run-level.ts';
+import { stripOrphanedEmptyParagraphs } from './paragraph-cleanup.ts';
+import { sectionName } from '../utils/helpers.ts';
 
 export interface DocxXmlParts {
   documentXml: string;

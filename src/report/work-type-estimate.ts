@@ -13,8 +13,8 @@
  * - Ovo je ADVISORY heuristika (ne bodovano pravilo), pa genericki fallback ne krsi "ne izmisljaj
  *   bodovana pravila"; profilni charMin/wordMin (koji se BODUJE) ostaju netaknuti.
  */
-import type { ReportWorkType } from './pricing';
-import { isReportWorkType } from './pricing';
+import type { ReportWorkType } from './pricing.ts';
+import { isReportWorkType } from './pricing.ts';
 // `with { type: 'json' }` je OBAVEZAN za Deno (Supabase Edge/repair-docx); Vite/tsc/vitest ga
 // jednako podnose. Bez atributa Deno baca "Attempted to load JSON module without ... type: json".
 import scopeJson from '../../data/work-type-scope.json' with { type: 'json' };
