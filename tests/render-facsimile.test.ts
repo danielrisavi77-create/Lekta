@@ -494,3 +494,36 @@ describe('renderFacsimile: tablice (grupiranje celija u <table>)', () => {
     expect(flagTargets.get(0)).toBe(mark);
   });
 });
+
+// --- Redak Sadrzaja: tockasti leader + desno poravnat broj (vlasnik, 2026-07-20) --------------
+describe('renderFacsimile: redak Sadrzaja', () => {
+  it('TOC redak dobiva leader, a broj stranice postaje zaseban element', () => {
+    const { root } = renderFacsimile(model([para(1, 'Uvod\t3')]), []);
+    const p = root.querySelector('[data-p-index="1"]') as HTMLElement;
+    expect(p.classList.contains('lekta-fac-toc')).toBe(true);
+    expect(p.querySelector('.lekta-fac-toc-lead')).not.toBeNull();
+  });
+
+  it('INTEGRITET: tekst retka ostaje bajt-identican, tabulator ukljucen', () => {
+    const { root } = renderFacsimile(model([para(1, 'Uvod\t3')]), []);
+    const p = root.querySelector('[data-p-index="1"]') as HTMLElement;
+    expect(p.textContent).toBe('Uvod\t3');
+  });
+
+  it('obican odlomak s tabulatorom usred recenice NE dobiva TOC tretman', () => {
+    const { root } = renderFacsimile(model([para(1, 'Prvi\tdrugi dio recenice')]), []);
+    const p = root.querySelector('[data-p-index="1"]') as HTMLElement;
+    expect(p.classList.contains('lekta-fac-toc')).toBe(false);
+    expect(p.textContent).toBe('Prvi\tdrugi dio recenice');
+  });
+
+  it('cuva oblikovanje runova unutar TOC retka', () => {
+    const { root } = renderFacsimile(
+      model([para(1, 'Uvod\t3', { runs: [run('Uvod', { bold: true }), run('\t3')] })]),
+      [],
+    );
+    const p = root.querySelector('[data-p-index="1"]') as HTMLElement;
+    expect(p.textContent).toBe('Uvod\t3');
+    expect(p.querySelector('.lekta-fac-toc-lead')).not.toBeNull();
+  });
+});

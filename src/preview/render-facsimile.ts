@@ -323,6 +323,46 @@ function makeSheet(model: PreviewModel, base: BaseStyle, doc: Document): HTMLEle
 }
 
 /** Dodaj odlomak (body) na dani list. */
+/**
+ * Je li odlomak redak Sadrzaja: naslov, tabulator, pa SAMO broj stranice do kraja.
+ * Namjerno usko (broj mora biti zadnji): obicni tabulatori usred recenice se ne diraju.
+ */
+function isTocLine(text: string): boolean {
+  return /\t[ \t]*\d+[ \t]*$/.test(text);
+}
+
+/**
+ * Pretvori redak Sadrzaja u "naslov ....... broj": tabulator se OMOTA u `.lekta-fac-toc-lead`,
+ * koji preko CSS-a (flex:1 + isprekidani rub) crta tockice i gura broj na desnu marginu.
+ *
+ * INTEGRITET: tabulator ostaje kao TEKST unutar spana, a tockice su rub (ne znakovi), pa
+ * `root.textContent` ostaje bajt-identican izvornom tekstu (invarijanta iz zaglavlja modula).
+ * Word leader crta prema tab-stopu, kojeg u modelu nemamo; ovo je najbliza vjerna rekonstrukcija.
+ */
+function applyTocLeader(el: HTMLElement, doc: Document): void {
+  let target: Text | null = null;
+  const walk = (n: Node): void => {
+    for (const child of Array.from(n.childNodes)) {
+      if (child.nodeType === 3) {
+        if ((child as Text).data.includes('\t')) target = child as Text;
+      } else walk(child);
+    }
+  };
+  walk(el);
+  if (!target) return;
+
+  const node: Text = target;
+  const at = node.data.lastIndexOf('\t');
+  if (at < 0) return;
+  const tabNode = node.splitText(at); // tabNode pocinje tabulatorom
+  tabNode.splitText(1);               // odvoji broj stranice u svoj cvor
+  const lead = doc.createElement('span');
+  lead.className = 'lekta-fac-toc-lead';
+  tabNode.parentNode?.insertBefore(lead, tabNode);
+  lead.appendChild(tabNode);
+  el.classList.add('lekta-fac-toc');
+}
+
 function appendParagraph(
   container: HTMLElement,
   para: PreviewParagraph,
@@ -354,6 +394,9 @@ function appendParagraph(
 
   const paraFlags = byPara.get(para.index) ?? [];
   const unlocated = fillFormatted(el, para.text || '', para.runs, paraFlags, pBase, doc, flagTargets, para.markers);
+  // Nakon punjenja (da run-oblikovanje, nalazi i oznake fusnota ostanu netaknuti): redak Sadrzaja
+  // dobiva tockasti leader i desno poravnat broj stranice.
+  if (isTocLine(para.text || '')) applyTocLeader(el, doc);
   if (paraFlags.length) el.classList.add('lekta-fac-para--flagged');
   if (unlocated.length) {
     el.classList.add('lekta-fac-para--has-unlocated');

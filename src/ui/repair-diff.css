@@ -26,3 +26,13 @@
   padding: 8px;
 }
 .diff-col--after .diff-pane { border-color: #cfe6da; }
+
+/* Zoom traka i skokovi */
+.lekta-fac-zoombar { display: flex; align-items: center; gap: 4px; margin-left: auto; margin-right: 8px; }
+.lekta-fac-zoomval { min-width: 4.5em; text-align: center; font-variant-numeric: tabular-nums; font-size: .85rem; color: var(--muted); }
+/* Omotac nosi skaliranu visinu; bez njega transform ne mijenja skrolabilnu povrsinu. */
+.lekta-fac-zoombox { width: 100%; }
+
+.diff-jumps { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; margin: 0 0 10px; }
+.diff-jumps-label { font-size: .85rem; color: var(--muted); margin-right: 4px; }
+.diff-jumps .btn { min-width: 2.2em; padding: 2px 8px; }

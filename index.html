@@ -232,6 +232,11 @@ details.more{margin-top:12px;border-top:1px dashed var(--line-strong);padding-to
 .lekta-fac-page:last-child{margin-bottom:0}
 .lekta-fac-pagenum{position:absolute;left:0;right:0;bottom:1.1cm;text-align:center;font-size:.8em;color:#8a93a6}
 .lekta-fac-page .lekta-fac-para{margin:0 0 .5em;text-align:inherit;white-space:pre-wrap;overflow-wrap:break-word}
+/* Redak Sadrzaja: naslov ....... broj. Tockice su RUB (ne znakovi), a tabulator ostaje u tekstu
+   skriven bojom, pa textContent faksimila ostaje bajt-identican dokumentu. */
+.lekta-fac-toc{display:flex;align-items:baseline}
+.lekta-fac-toc-lead{flex:1 1 auto;min-width:1.5em;color:transparent;border-bottom:1px dotted currentColor;margin:0 .3em;transform:translateY(-.28em)}
+.lekta-fac-toc>:last-child{flex:0 0 auto}
 .lekta-fac-page .lekta-fac-heading{font-weight:700;line-height:1.25;margin:.85em 0 .35em;font-family:inherit;white-space:pre-wrap;overflow-wrap:break-word}
 .lekta-fac-page img.lekta-fac-img{max-width:100%;height:auto;vertical-align:top}
 .lekta-fac-page table.lekta-fac-table{border-collapse:collapse;width:100%;margin:0 0 .5em;table-layout:fixed}
