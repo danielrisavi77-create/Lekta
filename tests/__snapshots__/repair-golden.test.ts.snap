@@ -143,6 +143,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "footnote-typography-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "heading-case-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "heading-format-fixer": {
       "params": "nema-cilja-u-profilu",
     },
@@ -436,6 +439,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "footnote-typography-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "heading-case-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "heading-format-fixer": {
       "params": "nema-cilja-u-profilu",
     },
@@ -725,6 +731,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "footnote-typography-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "heading-case-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "heading-format-fixer": {
       "params": "nema-cilja-u-profilu",
     },
@@ -968,6 +977,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "footnote-typography-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "heading-case-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "heading-format-fixer": {
       "params": "nema-cilja-u-profilu",
     },
@@ -1187,6 +1199,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "footnote-typography-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "heading-case-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "heading-format-fixer": {
       "params": "nema-cilja-u-profilu",
     },
@@ -1398,6 +1413,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "footnote-typography-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "heading-case-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "heading-format-fixer": {
       "params": "nema-cilja-u-profilu",
     },
@@ -1607,6 +1625,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "params": "nema-cilja-u-profilu",
     },
     "footnote-typography-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "heading-case-fixer": {
       "params": "nema-cilja-u-profilu",
     },
     "heading-format-fixer": {
@@ -2159,6 +2180,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       ],
     },
     "footnote-typography-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "heading-case-fixer": {
       "params": "nema-cilja-u-profilu",
     },
     "heading-format-fixer": {
@@ -3013,6 +3037,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "footnote-typography-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "heading-case-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "heading-format-fixer": {
       "params": "nema-cilja-u-profilu",
     },
@@ -3583,6 +3610,9 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "params": "nema-cilja-u-profilu",
     },
     "footnote-typography-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "heading-case-fixer": {
       "params": "nema-cilja-u-profilu",
     },
     "heading-format-fixer": {

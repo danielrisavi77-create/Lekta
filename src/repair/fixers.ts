@@ -33,6 +33,7 @@ import {
   patchFootnoteTypography,
   type HeadingFormatSpec,
 } from './xml-patch.ts';
+import { upperCaseHeadings } from './heading-case.ts';
 import { stripDirectFormatting, type RunLevelResult } from './run-level.ts';
 import { stripOrphanedEmptyParagraphs } from './paragraph-cleanup.ts';
 import { sectionName } from '../utils/helpers.ts';
@@ -354,6 +355,21 @@ export function paragraphSpacingFixer(parts: DocxXmlParts, deep = false): FixerO
       ? stripDirectFormatting(parts.documentXml, { stripParagraphSpacing: true })
       : null;
   return combineDeep(base, parts, deepResult);
+}
+
+/**
+ * Velika slova naslova. JEDINI fixer koji mijenja AUTOROV TEKST, pa ga UI nikad ne stavlja pod
+ * "Popravi sve" nego iskljucivo uz izricitu privolu za tu stavku (requiresConfirmation).
+ */
+export function headingCaseFixer(parts: DocxXmlParts, levels: number[]): FixerOutput {
+  const res = upperCaseHeadings(parts.documentXml, levels);
+  if (!res.applied) return NO_OP(parts);
+  return {
+    parts: { ...parts, documentXml: res.xml },
+    applied: true,
+    beforeLabel: 'Naslovi: kako ih je autor napisao',
+    afterLabel: `Naslovi: velikim slovima (${res.changed} ${res.changed === 1 ? 'naslov' : 'naslova'})`,
+  };
 }
 
 /** Jedna razina naslova iz profila: sto se za nju ocekuje. */

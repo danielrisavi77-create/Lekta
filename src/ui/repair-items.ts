@@ -297,6 +297,38 @@ export function headingFormatRepairableItem(checks: AnalyzedCheck[], profile: an
 }
 
 /**
+ * Velika slova naslova: JEDINA stavka koja mijenja AUTOROV TEKST.
+ *
+ * Zato nikad ne ulazi u "Popravi sve" (vraca se odvojeno, vidi app.ts) i nosi
+ * `requiresConfirmation`. Korisniku se uz nju uvijek nudi i opcija "samo prijedlog", koja tocno
+ * pokaze koji bi se naslovi promijenili i kako, bez ijedne izmjene dokumenta.
+ */
+export function headingCaseRepairableItem(checks: AnalyzedCheck[], profile: any): RepairableItem[] {
+  const rules = profile?.headingRules;
+  const levels = rules?.levels;
+  if (!rules || !levels || typeof levels !== 'object') return [];
+  const maxLevel = Number(rules.maxLevel) || 3;
+  const wanted: number[] = [];
+  for (let level = 1; level <= maxLevel; level++) {
+    if (levels[String(level)]?.uppercase === true) wanted.push(level);
+  }
+  if (!wanted.length) return [];
+
+  const opis = wanted.length === 1 ? `naslova ${wanted[0]}. razine` : `naslova razina ${wanted.join(', ')}`;
+  return [
+    {
+      ruleId: 'heading-case-universal',
+      fixerId: 'heading-case-fixer',
+      label: 'Velika slova naslova',
+      params: { levels: wanted },
+      violated: isViolated('heading-format', checks),
+      requiresConfirmation: true,
+      confirmationText: `Ovo mijenja TEKST ${opis} u velika slova. Jedini je popravak koji dira sadržaj rada, pa se primjenjuje samo uz tvoju izričitu privolu.`,
+    },
+  ];
+}
+
+/**
  * Font i velicina teksta fusnota. Gated na profilne `footnoteFont`/`footnoteSize`, koje postavlja
  * samo pravni profil (isti izvor koji analiza koristi za provjeru "Oblikovanje fusnota").
  */

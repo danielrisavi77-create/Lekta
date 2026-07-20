@@ -35,6 +35,9 @@ const REQUESTS: FixerRequest[] = [
   },
   // Fusnote: Times New Roman 10 pt, obostrano.
   { ruleId: 'fusnote-tipografija', fixerId: 'footnote-typography-fixer', params: { fontName: 'Times New Roman', fontSizePt: 10, alignJustify: true } },
+  // Zahvat u TEKST: u produkciji ide samo uz izricitu privolu po stavci. Ovdje je ukljucen da
+  // provjera dokaze i da radi i da ne dira nista osim naslova trazene razine.
+  { ruleId: 'velika-slova-naslova', fixerId: 'heading-case-fixer', params: { levels: [1] } },
 ];
 
 const [inPath, outPath] = process.argv.slice(2);

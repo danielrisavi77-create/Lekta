@@ -40,7 +40,8 @@ import { renderDeadlineReminderToggleIfAvailable } from './deadline-reminder-tog
 import { renderRepairPanel } from './repair-panel';
 import { triagePanelHtml } from './triage-view';
 import { startNetworkProbe, networkProofMessage, type NetworkProbe } from './network-proof';
-import { buildRepairableItems, universalRepairableItems, paragraphSpacingRepairableItem, pageNumberingRepairableItem, footnoteSpacingRepairableItem, pageNumberAlignmentRepairableItem, introSectionRepairableItem, tocFieldRepairableItem, headingFormatRepairableItem, footnoteTypographyRepairableItem } from './repair-items';
+import { buildRepairableItems, universalRepairableItems, paragraphSpacingRepairableItem, pageNumberingRepairableItem, footnoteSpacingRepairableItem, pageNumberAlignmentRepairableItem, introSectionRepairableItem, tocFieldRepairableItem, headingFormatRepairableItem, footnoteTypographyRepairableItem, headingCaseRepairableItem } from './repair-items';
+import { headingCaseSuggestions } from '../repair/heading-case';
 import './repair-panel.css';
 import '../preflight/preflight-panel.css';
 const FPZG_SUBMISSION_CALENDAR: any = _FPZG_CAL;
@@ -1094,7 +1095,10 @@ function renderRepairSection(r: any){
  const file=selectedDocx;
  // WS-3: kad je repair server konfiguriran, placeni popravak ide na SERVER (upload -> gotov docx),
  // a klijentski src/repair vise nije put isporuke. Bez servera (soft-launch) ostaje lokalni popravak.
- if(repairServerConfigured()){renderServerRepairPanel(mount,r,items,file);repairPanelNode=mount.firstElementChild;repairPanelForResult=r;return}
+ // Zahvati u TEKST rada drze se odvojeno od "Popravi sve": za njih se trazi zasebna privola, a
+ // korisniku se uvijek nudi i opcija da samo vidi prijedlog i odluci sam.
+ const textItems=headingCaseRepairableItem(r.checks||[],analyzedProfile);
+ if(repairServerConfigured()){renderServerRepairPanel(mount,r,items,file,textItems);repairPanelNode=mount.firstElementChild;repairPanelForResult=r;return}
  renderRepairPanel({items,getDocxBytes:async()=>new Uint8Array(await file.arrayBuffer()),originalFileName:r.file?.name||'rad.docx',mountEl:mount,beforeScore:{score:r.score,categories:r.categories},reanalyze:async(bytes: Uint8Array)=>{const f=new File([bytes as Uint8Array<ArrayBuffer>],r.file?.name||'rad.docx',{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});const res: any=await analyzeDocxOffThread(f,analyzedProfile,r.settings,()=>{});return res?{score:res.score,categories:res.categories}:null}});
  // Zapamti stvarni cvor placenog panela za ocuvanje kroz re-render checkliste.
  repairPanelNode=mount.firstElementChild; repairPanelForResult=r;
@@ -1125,10 +1129,40 @@ const REPAIR_MAX_UPLOAD_BYTES=20*1024*1024;
 // Krajnji rok jednog popravka. Namjerno velikodusan (spor uplink + serverska obrada), ali konacan:
 // bez njega zaglavljen zahtjev ostavlja gumb zauvijek u stanju "Saljem".
 const REPAIR_TIMEOUT_MS=180000;
-function renderServerRepairPanel(mount: any,r: any,items: any[],file: any){
+/* Sekcija "zahvati u tekst rada": stavke koje mijenjaju AUTOROV TEKST. Namjerno izvan "Popravi
+   sve" i s dvije ravnopravne opcije, jer je odluka o sadrzaju korisnikova, ne nasa:
+     1. "Primijeni" (kvacica, po zadanom ISKLJUCENA) -> stavka ide uz popravak,
+     2. "Pokazi prijedlog" -> tocan popis sto bi se promijenilo, BEZ ijedne izmjene dokumenta.
+   Prijedlog se racuna lokalno iz vec analizirane strukture, pa ne treba ni server ni upload. */
+function renderTextItemsSection(host: any,r: any,textItems: any[]){
+ if(!textItems.length)return;
+ const box=document.createElement('div');box.className='lekta-repair-text';
+ box.innerHTML=`<p><strong>Zahvati u tekst rada.</strong> Ovo mijenja sadržaj, ne samo oblikovanje, pa se ne radi automatski. Možeš ga primijeniti ili samo vidjeti prijedlog i odlučiti sam.</p>`;
+ for(const it of textItems){
+  const row=document.createElement('div');row.className='lekta-repair-text__row';
+  row.innerHTML=`<label><input type="checkbox" data-text-apply value="${escapeHtml(it.ruleId)}"><span><strong>${escapeHtml(it.label)}</strong> ${escapeHtml(it.confirmationText||'')}</span></label><button type="button" class="btn btn-ghost btn-sm" data-text-preview>Pokaži prijedlog</button><div class="lekta-repair-text__preview" hidden></div>`;
+  const prev: any=row.querySelector('.lekta-repair-text__preview');
+  row.querySelector('[data-text-preview]')?.addEventListener('click',()=>{
+   if(!prev.hidden){prev.hidden=true;return}
+   const headings=(r.documentStructure?.headings||[]).map((h: any)=>({level:h.level,text:h.text}));
+   const levels=(it.params?.levels||[]) as number[];
+   const sug=headingCaseSuggestions(headings,levels);
+   prev.innerHTML=sug.length
+    ? `<p>Promijenilo bi se ${sug.length} ${sug.length===1?'naslov':'naslova'}:</p><ul>${sug.map((s: any)=>`<li><span class="muted">${escapeHtml(s.from)}</span> → <strong>${escapeHtml(s.to)}</strong></li>`).join('')}</ul>`
+    : '<p>Nijedan naslov ne bi se promijenio: svi su već napisani velikim slovima.</p>';
+   prev.hidden=false;
+   void trackEvent('repair_text_preview',{ruleId:it.ruleId,changes:sug.length});
+  });
+  box.appendChild(row);
+ }
+ host.appendChild(box);
+}
+
+function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textItems: any[]=[]){
  const wrap=document.createElement('div');wrap.className='lekta-repair-panel';
  wrap.innerHTML=`<p><strong>Popravi sve jednim klikom.</strong> Dokument se šalje na server, popravi se i vraća gotov. Popravljaju se oblikovanje, numeriranje i struktura; ne diraju se sadržaj, citati ni argument. Datoteka se pohranjuje dok je ne obrišeš (Moji popravci); kod prijave bez e-maila najviše 30 dana.</p><label class="lekta-repair-panel__deep"><input type="checkbox" data-repair-consent><span>Pristajem da se dokument pošalje na server i pohrani do brisanja. Besplatna analiza ostaje na uređaju.</span></label><button type="button" class="lekta-repair-panel__download" data-repair-go disabled>Popravi sve jednim klikom</button><div class="lekta-repair-panel__summary" data-repair-summary hidden></div>`;
  mount.appendChild(wrap);
+ renderTextItemsSection(wrap,r,textItems);
  const consent: any=wrap.querySelector('[data-repair-consent]'),btn: any=wrap.querySelector('[data-repair-go]'),summary: any=wrap.querySelector('[data-repair-summary]');
  const setSummary=(html: string)=>{summary.hidden=false;summary.innerHTML=html};
  consent.addEventListener('change',()=>{btn.disabled=!consent.checked});
@@ -1141,7 +1175,10 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any){
   if(authConfigured()&&!token){openAuth(()=>go(confirmedMismatch));return}
   btn.disabled=true;const orig=btn.textContent;btn.textContent='Šaljem na server…';
   try{
-   const requests=items.map((it: any)=>({fixerId:it.fixerId,ruleId:it.ruleId,params:_SERVER_DEEP_FIXERS.has(it.fixerId)?{...it.params,deep:true}:it.params}));
+   // Zahvat u tekst ide SAMO ako je korisnik za tu stavku izricito kvacnuo "Primijeni".
+   const okTextIds=new Set(Array.from(wrap.querySelectorAll('[data-text-apply]')).filter((c: any)=>c.checked).map((c: any)=>c.value));
+   const chosen=[...items,...textItems.filter((it: any)=>okTextIds.has(it.ruleId))];
+   const requests=chosen.map((it: any)=>({fixerId:it.fixerId,ruleId:it.ruleId,params:_SERVER_DEEP_FIXERS.has(it.fixerId)?{...it.params,deep:true}:it.params}));
    const refsForCorpus=repairReferencesFrom(r);
    const meta=buildRepairMeta({references:refsForCorpus.map((x: any)=>({title:x.title,year:x.year})),workType:toReportWorkType(r.settings?.workType||r.selection?.workType||'final'),parsedStructure:extractParsedStructure(r),requests,words:r.stats?.officialWords||r.stats?.words||null,titleMarker:r.details?.titlePageWorkType||null,profileStatus:r.profileStatus||null,profileRef:r.details?.profileDefinitionId||null,fileName:r.file?.name||file.name||'rad.docx',confirmedMismatch});
    const bytes=new Uint8Array(await file.arrayBuffer());

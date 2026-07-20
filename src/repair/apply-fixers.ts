@@ -22,6 +22,7 @@ import {
   tocFieldFixer,
   headingFormatFixer,
   footnoteTypographyFixer,
+  headingCaseFixer,
   type HeadingLevelTarget,
   type DocxXmlParts,
   type FooterPageTarget,
@@ -49,6 +50,7 @@ export const FIXER_IDS = [
   'toc-field-fixer',
   'heading-format-fixer',
   'footnote-typography-fixer',
+  'heading-case-fixer',
 ] as const;
 
 export type FixerId = (typeof FIXER_IDS)[number];
@@ -145,6 +147,13 @@ function runFixer(fixerId: FixerId, parts: DocxXmlParts, rawParams: Record<strin
       const p = params as { fontName?: string; fontSizePt?: number };
       return (p.fontName !== undefined || p.fontSizePt !== undefined)
         ? footnoteTypographyFixer(parts, p)
+        : { parts, applied: false, beforeLabel: '', afterLabel: '' };
+    }
+    case 'heading-case-fixer': {
+      const p = params as { levels?: number[] };
+      const levels = Array.isArray(p.levels) ? p.levels.map(Number).filter((n) => n >= 1 && n <= 9) : [];
+      return levels.length
+        ? headingCaseFixer(parts, levels)
         : { parts, applied: false, beforeLabel: '', afterLabel: '' };
     }
     default:

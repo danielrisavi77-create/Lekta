@@ -120,3 +120,34 @@
   color: var(--lekta-muted, #52525b);
   cursor: pointer;
 }
+
+/* Zahvati u TEKST rada (velika slova naslova i sl.). Vizualno odvojeni od ostalih popravaka
+   jer mijenjaju sadrzaj, pa se ne smiju stopiti s "Popravi sve". */
+.lekta-repair-text {
+  margin-top: 0.875rem;
+  padding: 0.75rem 0.875rem;
+  border: 1px dashed var(--lekta-border, #d4d4d8);
+  border-radius: 0.625rem;
+}
+.lekta-repair-text > p { margin: 0 0 0.5rem; }
+.lekta-repair-text__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.375rem 0;
+}
+.lekta-repair-text__row label {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  flex: 1 1 18rem;
+  cursor: pointer;
+}
+.lekta-repair-text__preview {
+  flex: 1 1 100%;
+  margin-top: 0.375rem;
+  font-size: 0.9em;
+}
+.lekta-repair-text__preview ul { margin: 0.25rem 0 0; padding-left: 1.1rem; }
+.lekta-repair-text__preview li { margin: 0.125rem 0; }

@@ -1,0 +1,125 @@
+// src/repair/heading-case.ts
+//
+// Velika slova naslova: JEDINI popravak koji dira AUTOROV TEKST, pa nikad ne ide pod "Popravi sve"
+// nego iskljucivo uz izricitu privolu za tu stavku.
+//
+// ZASTO SE NE RJESAVA OBLIKOVANJEM: Word ima `w:caps`, koji tekst samo PRIKAZUJE velikim slovima,
+// a sam tekst ostavlja kakav jest. To bi zavaralo i nas ("Oblikovanje naslova po razinama" cita
+// stvarni tekst preko isUppercaseText) i svakoga tko rad kopira ili pretrazuje. Ako uputa trazi
+// velika slova, posteno je promijeniti tekst i to jasno reci, ne sakriti promjenu u prikaz.
+//
+// Hrvatska lokalizacija je bitna: "đ" mora dati "Đ", a ne "D".
+
+/** Velika slova po hrvatskim pravilima, uz cuvanje XML entiteta (&amp; ne smije postati &AMP;). */
+export function toCroatianUpper(text: string): string {
+  return text
+    .split(/(&[a-zA-Z]+;|&#\d+;)/)
+    .map((part, i) => (i % 2 === 1 ? part : part.toLocaleUpperCase('hr-HR')))
+    .join('');
+}
+
+/** Je li tekst vec u cijelosti velikim slovima (ista logika kao provjera u analizi)? */
+export function isAlreadyUpper(text: string): boolean {
+  const letters = (String(text || '').match(/\p{L}+/gu) || []).join('');
+  return letters.length > 1 && letters === letters.toLocaleUpperCase('hr-HR');
+}
+
+export interface HeadingCaseResult {
+  xml: string;
+  applied: boolean;
+  /** Koliko je naslova stvarno promijenjeno. */
+  changed: number;
+}
+
+const PARAGRAPH_RE = /<w:p(?:\s[^>]*[^/>])?>[\s\S]*?<\/w:p>/g;
+
+/**
+ * Pretvori tekst naslova zadanih razina u velika slova, u `word/document.xml`.
+ *
+ * Dira ISKLJUCIVO sadrzaj `w:t` elemenata unutar odlomaka cija je `w:pStyle` jedna od trazenih
+ * razina. Sve ostalo (oznake, polja, fusnotne reference, oblikovanje runova) ostaje netaknuto,
+ * pa se promjena ne moze prosiriti izvan naslova.
+ */
+export function upperCaseHeadings(documentXml: string, levels: number[]): HeadingCaseResult {
+  const wanted = new Set(levels.map((n) => `Heading${n}`));
+  if (!wanted.size) return { xml: documentXml, applied: false, changed: 0 };
+
+  let changed = 0;
+  const xml = documentXml.replace(PARAGRAPH_RE, (paragraph) => {
+    const style = paragraph.match(/<w:pStyle\b[^>]*w:val="([^"]*)"/);
+    if (!style || !wanted.has(style[1])) return paragraph;
+
+    // Tekst odlomka za odluku "je li vec veliko": bez toga bi se svaki prolaz brojao kao promjena.
+    const plain = (paragraph.match(/<w:t\b[^>]*>([\s\S]*?)<\/w:t>/g) || [])
+      .map((t) => t.replace(/<[^>]+>/g, ''))
+      .join('');
+    if (!plain.trim() || isAlreadyUpper(plain)) return paragraph;
+
+    let touched = false;
+    const out = paragraph.replace(/(<w:t\b[^>]*>)([\s\S]*?)(<\/w:t>)/g, (_m, open: string, inner: string, close: string) => {
+      const upper = toCroatianUpper(inner);
+      if (upper !== inner) touched = true;
+      return open + upper + close;
+    });
+    if (touched) changed++;
+    return out;
+  });
+
+  return { xml, applied: changed > 0, changed };
+}
+
+export interface HeadingCaseSuggestion {
+  level: number;
+  from: string;
+  to: string;
+}
+
+/**
+ * Sto bi se promijenilo, bez ikakve izmjene dokumenta. Sluzi opciji "samo prijedlog": korisnik
+ * vidi tocan popis naslova i njihov novi oblik, pa moze odluciti rucno.
+ */
+export function headingCaseSuggestions(
+  headings: Array<{ level?: number | null; text?: string | null }>,
+  levels: number[],
+  limit = 50,
+): HeadingCaseSuggestion[] {
+  const wanted = new Set(levels);
+  const out: HeadingCaseSuggestion[] = [];
+  for (const h of headings || []) {
+    const level = Number(h?.level);
+    const text = String(h?.text ?? '').trim();
+    if (!wanted.has(level) || !text || isAlreadyUpper(text)) continue;
+    out.push({ level, from: text, to: toCroatianUpper(text) });
+    if (out.length >= limit) break;
+  }
+  return out;
+}
+
+/**
+ * Prijedlog numeriranja naslova (SAMO prijedlog, nikad automatska primjena).
+ *
+ * Numeriranje se ne primjenjuje automatski jer bi znacilo pisati u autorov rad na mjestu gdje
+ * pogreska nije samo kozmeticka: kriva razina ili preskocen broj mijenjaju znacenje strukture.
+ * Zato se racuna tocan predlozeni broj po dokument-poretku i prepusta se autoru.
+ */
+export function headingNumberSuggestions(
+  headings: Array<{ level?: number | null; text?: string | null }>,
+  maxLevel = 3,
+  limit = 60,
+): Array<{ level: number; from: string; to: string }> {
+  const counters: number[] = [];
+  const out: Array<{ level: number; from: string; to: string }> = [];
+  for (const h of headings || []) {
+    const level = Number(h?.level);
+    const text = String(h?.text ?? '').trim();
+    if (!Number.isFinite(level) || level < 1 || level > maxLevel || !text) continue;
+    counters.length = Math.max(counters.length, level);
+    counters[level - 1] = (counters[level - 1] || 0) + 1;
+    for (let i = level; i < counters.length; i++) counters[i] = 0;
+    const prefix = counters.slice(0, level).filter((n) => n > 0).join('.');
+    const bare = text.replace(/^\s*(?:(?:[IVXLCDM]+)|(?:\d+(?:\.\d+)*))\.?\s+/i, '');
+    const proposed = `${prefix}. ${bare}`;
+    if (proposed !== text && out.length < limit) out.push({ level, from: text, to: proposed });
+  }
+  return out;
+}

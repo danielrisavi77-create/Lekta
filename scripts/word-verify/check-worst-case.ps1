@@ -57,6 +57,9 @@ function Measure-Doc {
     NaslovBold   = [int]$doc.Styles.Item('Heading 1').Font.Bold
     FusnotaFont  = [string]$doc.Footnotes.Item(1).Range.Font.Name
     FusnotaPt    = [double]$doc.Footnotes.Item(1).Range.Font.Size
+    # Naslov 1. razine ("Uvod"): tekst mora postati velikim slovima, a tijelo NE.
+    NaslovTekst  = [string]$(($doc.Paragraphs | Where-Object { $_.Range.Text -match '^Uvod|^UVOD' } | Select-Object -First 1).Range.Text).Trim()
+    TijeloTekst  = [string]$doc.Paragraphs.Item($bodyIdx).Range.Text.Trim()
   }
   $doc.Close([int]0)
   return $m
@@ -106,6 +109,7 @@ Check 'Naslov 1 velicina' $prije.NaslovPt  $poslije.NaslovPt   14
 Check 'Naslov 1 bold'    $prije.NaslovBold $poslije.NaslovBold -1
 Check 'Fusnota font'     $prije.FusnotaFont $poslije.FusnotaFont 'Times New Roman'
 Check 'Fusnota velicina' $prije.FusnotaPt  $poslije.FusnotaPt  10
+Check 'Naslov velika slova' $prije.NaslovTekst $poslije.NaslovTekst 'UVOD'
 
 Write-Output ''
 Write-Output '--- NE SMIJE SE POKVARITI ---'
@@ -117,6 +121,8 @@ Check 'Slika'             $prije.Slika        $poslije.Slika        $null -Prese
 Check 'Fusnota'           $prije.Fusnota      $poslije.Fusnota      $null -Preserve
 Check 'Dijakritika'       $prije.Dijakritika  $poslije.Dijakritika  $null -Preserve
 Check 'Naslovnica redak'  $prije.Naslovnica   $poslije.Naslovnica   $null -Preserve
+# Zahvat u tekst smije dirati SAMO naslove: tijelo rada mora ostati slovo u slovo isto.
+Check 'Tekst tijela'      $prije.TijeloTekst  $poslije.TijeloTekst  $null -Preserve
 
 Write-Output ''
 Write-Output "Odlomaka: $($prije.Odlomaka) -> $($poslije.Odlomaka) (visak praznih u TIJELU se smije saziti)"
