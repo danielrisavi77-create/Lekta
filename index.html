@@ -228,7 +228,11 @@ details.more{margin-top:12px;border-top:1px dashed var(--line-strong);padding-to
 .preview-doc.is-facsimile{padding:0;background:#e9edf3;font:unset}
 .lekta-facsimile{padding:22px;box-sizing:border-box;min-height:100%}
 .lekta-facsimile[data-truncated]{padding-bottom:34px}
-.lekta-fac-page{position:relative;margin:0 auto 22px;background:#fff;color:#172033;box-shadow:0 1px 3px rgba(20,30,50,.12),0 10px 30px rgba(20,30,50,.14);box-sizing:border-box;line-height:1.5;text-align:left;tab-size:1.27cm;-moz-tab-size:1.27cm}
+/* content-visibility: rad od 100 stranica daje stotine listova i desetke tisuca cvorova, a
+   usporedba prije/poslije otvara DVA faksimila odjednom. Preglednik tako preskace raspored i
+   crtanje listova izvan vidnog polja; contain-intrinsic-size cuva visinu A4 lista pa skrolanje i
+   skok na promjenu (scrollIntoView radi i sa skrivenim sadrzajem) ostaju tocni. */
+.lekta-fac-page{position:relative;margin:0 auto 22px;background:#fff;color:#172033;box-shadow:0 1px 3px rgba(20,30,50,.12),0 10px 30px rgba(20,30,50,.14);box-sizing:border-box;line-height:1.5;text-align:left;tab-size:1.27cm;-moz-tab-size:1.27cm;content-visibility:auto;contain-intrinsic-size:auto 29.7cm}
 .lekta-fac-page:last-child{margin-bottom:0}
 .lekta-fac-pagenum{position:absolute;left:0;right:0;bottom:1.1cm;text-align:center;font-size:.8em;color:#8a93a6}
 .lekta-fac-page .lekta-fac-para{margin:0 0 .5em;text-align:inherit;white-space:pre-wrap;overflow-wrap:break-word}

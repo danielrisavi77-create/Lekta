@@ -217,6 +217,35 @@ describe('applyFixers golden round-trip', () => {
     expect(newDoc).toContain('w:ascii="Times New Roman"'); // run TNR ostaje
   });
 
+  // Isti backstop, ali Normal definira SAMO w:hAnsi. Deep skida oba atributa s runova, pa bi
+  // provjera koja gleda samo w:ascii ovdje krivo zakljucila "nema konflikta" i vratila dijakritike
+  // (High-ANSI raspon) na Normalov font umjesto na ciljani.
+  it('deep NE cisti font ni kad Normal nadjacava cilj SAMO preko w:hAnsi', async () => {
+    const enc = new TextEncoder();
+    const styles =
+      '<?xml version="1.0"?><w:styles><w:docDefaults><w:rPrDefault><w:rPr>' +
+      '<w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/></w:rPr></w:rPrDefault></w:docDefaults>' +
+      '<w:style w:type="paragraph" w:styleId="Normal"><w:name w:val="Normal"/>' +
+      '<w:rPr><w:rFonts w:hAnsi="Arial"/></w:rPr></w:style></w:styles>';
+    const doc =
+      '<?xml version="1.0"?><w:document><w:body>' +
+      '<w:p><w:r><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/></w:rPr><w:t>Rijec s dijakritikom: cscdz.</w:t></w:r></w:p>' +
+      '</w:body></w:document>';
+    const docx = await writeZip([
+      { name: 'word/document.xml', data: enc.encode(doc) },
+      { name: 'word/styles.xml', data: enc.encode(styles) },
+    ]);
+
+    const result = await applyFixers(docx, [
+      { ruleId: 'font-glavni', fixerId: 'font-fixer', params: { fontName: 'Times New Roman', deep: true } },
+    ]);
+
+    const newDoc = new TextDecoder().decode(
+      (await readZip(result.docxBytes)).find((e) => e.name === 'word/document.xml')!.data,
+    );
+    expect(newDoc).toContain('w:hAnsi="Times New Roman"');
+  });
+
   it('paragraph-spacing-fixer (shallow): stilski w:before/w:after na 0, w:line i document.xml netaknuti', async () => {
     const enc = new TextEncoder();
     const dec = new TextDecoder();

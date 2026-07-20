@@ -66,7 +66,12 @@ const FREE_IP_DAILY_CAP = Number(Deno.env.get('REPAIR_FREE_IP_DAILY_CAP') ?? '40
 // (WS-4): SECTION_INSERT_LIVE / TOC_FIELD_LIVE = true u repair-items.ts, TOC je SDT sadrzaj-kontrola.
 // DARK_FIXERS je sada prazan (svi fixeri zivi); ostaje kao tocka gasenja ako se neki fixer mora vratiti
 // u tamno bez ponovnog uvodjenja filtera. Mora ostati u sinkronizaciji s repair-items.ts.
-const DARK_FIXERS = new Set<string>([]);
+// 'footer-page-fixer' je namjerno izvan SAMOSTALNIH zahtjeva: na jednosekcijskom radu bi broj
+// stranice pao i na naslovnicu, pa ga klijent ni ne nudi kao zasebnu stavku. Zivi iskljucivo unutar
+// kompozita section-insert-fixer, koji ga zove IZNUTRA (ne kroz `requests`), pa ovo filtriranje ne
+// dira strukturni popravak. Prije je odluka postojala samo u klijentu, a rucno skrojen zahtjev
+// zaobisao bi je.
+const DARK_FIXERS = new Set<string>(['footer-page-fixer']);
 const LIVE_FIXERS = new Set(FIXER_IDS.filter((f) => !DARK_FIXERS.has(f)));
 
 async function sha256Hex(input: string): Promise<string> {

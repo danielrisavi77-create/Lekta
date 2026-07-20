@@ -56,9 +56,18 @@ Ugrađeni mailer uvijek šalje magic **link**, a klijent (`verifyEmailOtp`) oče
       `generate-legal-pages` i `verify-deploy-dist` se ne izvode; 2026-07-20 su zbog toga sve pravne
       stranice bile **404** dva dana, a s njima i sve provjere koje `verify-deploy-dist` jamči
       (bez dev alata, CSP whitelist, konzola isključena, noindex/sitemap).
-- [ ] Provjeriti da `cleanup-orphan-repairs` cron radi (Edge logovi): briše i orphan BLOB-ove i
-      anonimne popravke starije od 30 dana.
+- [x] **`cleanup-orphan-repairs` je dokazano ispravan** (2026-07-20): ručno pokrenut istim pozivom
+      koji izvodi cron (tajna iz Vaulta), odgovor `200 {ok:true, removed:0, anonymousRemoved:0}` uz
+      stanje bez ijednog siročeta. Posao je aktivan u `cron.job` (`20 4 * * *`); prvi automatski
+      prolaz je tek nakon postavljanja, pa `cron.job_run_details` treba pogledati jednom nakon 04:20 UTC.
 - [ ] Odlučiti retenciju za prijavljene e-mailom (sada: neograničeno, "dok sam ne obriše").
+- [ ] **Kapacitet:** Storage nema kvotu (po popravku se čuvaju original + rezultat, do 2×20 MB), a
+      baza je na ~70 % besplatnog stropa i bez backupa. Prije šireg poziva: odluka o Pro planu ili
+      gornja granica zauzeća bucketa uz iskren signal klijentu.
+- [ ] **Vidljivost:** `errorEndpoint` je prazan string, pa klijentske greške ostaju u konzoli
+      korisnika. Postaviti prije šireg poziva.
+- [ ] **Post-deploy smoke** (`/privatnost.html` očekuje 200) kao zakazani posao, da regresija
+      Netlify build lanca ne prođe neopaženo danima kao 2026-07-20.
 
 ## E. Provjera pred puštanje
 
@@ -68,3 +77,28 @@ Ugrađeni mailer uvijek šalje magic **link**, a klijent (`verifyEmailOtp`) oče
 - [ ] `/privatnost.html`, `/uvjeti-koristenja.html`, `/obrada-dokumenata.html` vraćaju 200 i sadrže
       tekst o pohrani popravka, anonimnim računima i roku od 30 dana.
 - [ ] Supabase `get_advisors` (security) bez novih upozorenja.
+
+---
+
+## F. Preostalo iz revizije popravka (2026-07-20)
+
+Puna revizija toka popravka (6 agenata, svaki nalaz s dokazom u kodu) provedena je 2026-07-20.
+Sve visoko rangirano je napravljeno: paralelizacija provjere izvora s popravkom i pohranom,
+pošten dnevni limit, poruke o greškama koje stvarno stižu do korisnika, provjera veličine prije
+uploada, zaštita naslovnice bez Word stilova, nevidljiv sadržaj (`w:cr`/`w:sym`/`w:ptab`),
+položene sekcije. Ostaje, po vrijednosti:
+
+- [ ] **Signed URL umjesto base64** u odgovoru `repair-docx` kad `jobId` postoji: popravljeni
+      dokument već leži u Storageu, a sada se isti bajtovi vraćaju napuhani za 33 %.
+- [ ] **Jedan spojeni prolaz dubokog čišćenja** umjesto četiri odvojena (`stripDirectFormatting`
+      se zove po fixeru), plus `balancedRanges` izračunat jednom. Zaštićeni sloj: golden prije refaktora.
+- [ ] **Raw pass-through nedirnutih zip zapisa**: `writeZip` danas rekomprimira i slike koje nitko
+      nije mijenjao. Zaštićeni sloj: golden prije refaktora.
+- [ ] **Faze i tijek uploada u sučelju** (sada: rok od 180 s i tekst gumba, bez postotka).
+- [ ] **`w:sectPrChange` čuvar** za `patchMargins`/`patchPaperSize` (danas bi prepisali i povijest
+      praćenih izmjena; `pgNumType` taj čuvar već ima).
+- [ ] **Golden s pravim Wordovim dokumentom** (fixture su sintetički, 4 dijela, STORED): dokazati da
+      slike, `numbering.xml`, `settings.xml` i `theme` prolaze bit-identično.
+- [ ] **`x-forwarded-for` provjera prije naplate**: `ip_hash` se računa iz PRVOG zapisa. Ako klijent
+      može utjecati na njega, IP limit (jedina obrana od farmanja anonimnih računa) i referral
+      anti-fraud su zaobilazni. Provjera je jedan poziv s izmišljenim zaglavljem pa usporedba hasha.

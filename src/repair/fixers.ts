@@ -155,9 +155,18 @@ function normalRunRPr(stylesXml: string): string {
   return rPr ? rPr[0] : '';
 }
 
+// Provjeravaju se OBA atributa, jer deep ciscenje s runova skida i w:ascii i w:hAnsi
+// (run-level.ts stripRunProps). Kad bi se gledao samo w:ascii, dokument ciji Normal definira samo
+// w:hAnsi razlicit od cilja prosao bi kao "bez konflikta", pa bi skidanje override-a vratilo
+// hrvatske dijakritike (High-ANSI raspon) na Normalov font umjesto na ciljani.
 function normalStyleConflictsFont(stylesXml: string, target: string): boolean {
-  const m = normalRunRPr(stylesXml).match(/<w:rFonts\b[^>]*w:ascii="([^"]*)"/);
-  return !!m && m[1] !== target;
+  const rFonts = normalRunRPr(stylesXml).match(/<w:rFonts\b[^>]*>/);
+  if (!rFonts) return false;
+  for (const attr of ['w:ascii', 'w:hAnsi']) {
+    const m = rFonts[0].match(new RegExp(`${attr}="([^"]*)"`));
+    if (m && m[1] !== target) return true;
+  }
+  return false;
 }
 
 function normalStyleConflictsSize(stylesXml: string, targetHalfPoints: number): boolean {
