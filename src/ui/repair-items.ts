@@ -254,6 +254,74 @@ export function pageNumberAlignmentRepairableItem(checks: AnalyzedCheck[], profi
   ];
 }
 
+/**
+ * Oblikovanje naslova po razinama. Vrijednosti dolaze ISKLJUCIVO iz `profile.headingRules`, dakle
+ * iz sluzbene upute fakulteta; profil bez tog pravila ne dobiva stavku. Popravljaju se samo
+ * velicina, podebljano, kurziv i poravnanje slijeva, jer se sve to nalazi u stilu razine.
+ *
+ * NAMJERNO IZOSTAVLJENO: velika slova i numeriranje naslova. Provjera velikih slova cita TEKST
+ * (isUppercaseText), pa bi je `w:caps` zavarao a da tekst ostane isti; pravo rjesenje trazi
+ * prepisivanje autorova teksta. Numeriranje bi ubacivalo oznake razina, sto je takodjer autorska
+ * odluka. Oboje ostaje u rucnim uputama.
+ */
+export function headingFormatRepairableItem(checks: AnalyzedCheck[], profile: any): RepairableItem[] {
+  const rules = profile?.headingRules;
+  if (!rules || typeof rules !== 'object') return [];
+  const levels = rules.levels && typeof rules.levels === 'object' ? rules.levels : {};
+  const maxLevel = Number(rules.maxLevel) || 3;
+  const sizeHalfPoints = Number.isFinite(Number(rules.size)) ? Math.round(Number(rules.size) * 2) : undefined;
+  const alignLeft = String(rules.align || '') === 'left';
+
+  const targets: Array<Record<string, unknown>> = [];
+  for (let level = 1; level <= maxLevel; level++) {
+    const spec = levels[String(level)] || {};
+    const target: Record<string, unknown> = { level };
+    if (sizeHalfPoints !== undefined) target.sizeHalfPoints = sizeHalfPoints;
+    if (spec.bold === true) target.bold = true;
+    if (spec.italic === true) target.italic = true;
+    if (alignLeft) target.alignLeft = true;
+    // Razina bez ijednog popravljivog svojstva (npr. samo `uppercase`) se ne salje.
+    if (Object.keys(target).length > 1) targets.push(target);
+  }
+  if (!targets.length) return [];
+
+  return [
+    {
+      ruleId: 'heading-format-universal',
+      fixerId: 'heading-format-fixer',
+      label: 'Oblikovanje naslova po razinama',
+      params: { targets },
+      violated: isViolated('heading-format', checks),
+    },
+  ];
+}
+
+/**
+ * Font i velicina teksta fusnota. Gated na profilne `footnoteFont`/`footnoteSize`, koje postavlja
+ * samo pravni profil (isti izvor koji analiza koristi za provjeru "Oblikovanje fusnota").
+ */
+export function footnoteTypographyRepairableItem(checks: AnalyzedCheck[], profile: any): RepairableItem[] {
+  const fonts: unknown = profile?.footnoteFont;
+  const size = Number(profile?.footnoteSize);
+  const fontName = Array.isArray(fonts) && typeof fonts[0] === 'string' ? String(fonts[0]) : undefined;
+  const fontSizePt = Number.isFinite(size) && size > 0 ? size : undefined;
+  if (fontName === undefined && fontSizePt === undefined) return [];
+
+  const params: Record<string, unknown> = {};
+  if (fontName !== undefined) params.fontName = fontName;
+  if (fontSizePt !== undefined) params.fontSizePt = fontSizePt;
+  if (profile?.footnoteJustify === true) params.alignJustify = true;
+  return [
+    {
+      ruleId: 'footnote-typography-universal',
+      fixerId: 'footnote-typography-fixer',
+      label: 'Font i veličina fusnota',
+      params,
+      violated: isViolated('footnote-typography', checks),
+    },
+  ];
+}
+
 // GO-LIVE zastavica (K6, BL-07c). Umetanje sekcije prije Uvoda je strukturna izmjena docx-a
 // ciju realnu Word/LibreOffice valjanost golden NE moze dokazati (pokriva samo XML-transform);
 // izlazni gate K6 trazi rucnu Word/LO matricu prije objave. Dok je false, popravak se ne nudi

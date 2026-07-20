@@ -8,6 +8,8 @@ import {
   patchDefaultAlignment,
   patchFootnoteTextSpacing,
   patchFooterPageAlignment,
+  patchHeadingFormat,
+  patchFootnoteTypography,
 } from './xml-patch';
 
 const DOCUMENT_XML =
@@ -175,6 +177,23 @@ describe('patchDefaultFont', () => {
     expect(result.xml).toContain('w:cstheme="minorBidi"');
   });
 
+  it('naslovima mice referencu na temu (inace ostaju Cambria), ali izricit font ne dira', () => {
+    // Wordov Heading1 nosi majorHAnsi (Cambria) i time blokira font dokumenta; Heading2 ovdje ima
+    // autorov izricit izbor (Georgia), koji je namjera, ne prepreka.
+    const styles =
+      '<w:styles><w:docDefaults><w:rPrDefault><w:rPr>' +
+      '<w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi"/></w:rPr></w:rPrDefault></w:docDefaults>' +
+      '<w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/>' +
+      '<w:rPr><w:rFonts w:asciiTheme="majorHAnsi" w:hAnsiTheme="majorHAnsi"/><w:sz w:val="32"/></w:rPr></w:style>' +
+      '<w:style w:type="paragraph" w:styleId="Heading2"><w:name w:val="heading 2"/>' +
+      '<w:rPr><w:rFonts w:ascii="Georgia" w:hAnsi="Georgia"/></w:rPr></w:style></w:styles>';
+    const r = patchDefaultFont(styles, { fontName: 'Times New Roman' });
+    expect(r.applied).toBe(true);
+    expect(r.xml).not.toContain('majorHAnsi');           // prepreka uklonjena -> naslov nasljedjuje TNR
+    expect(r.xml).toContain('<w:sz w:val="32"/>');       // velicina naslova netaknuta
+    expect(r.xml).toContain('w:ascii="Georgia"');        // autorov izbor netaknut
+  });
+
   it('rFonts koji UOPCE ne postoji se stvara na shemom propisanom mjestu (prvi u rPr)', () => {
     const bare = '<w:styles><w:docDefaults><w:rPrDefault><w:rPr><w:sz w:val="22"/></w:rPr></w:rPrDefault></w:docDefaults></w:styles>';
     const result = patchDefaultFont(bare, { fontName: 'Times New Roman', sizeHalfPoints: 24 });
@@ -182,6 +201,84 @@ describe('patchDefaultFont', () => {
     // CT_RPr trazi rFonts PRIJE sz; obrnut redoslijed Word prijavljuje kao ostecenje.
     expect(result.xml.indexOf('<w:rFonts')).toBeLessThan(result.xml.indexOf('<w:sz'));
     expect(result.xml).toContain('<w:sz w:val="24"/>');
+  });
+});
+
+describe('patchHeadingFormat (oblikovanje naslova po razinama)', () => {
+  // Stil kakav Word stvarno pise: velicina i isticanje su u stilu, ne na odlomcima.
+  const STYLES =
+    '<w:styles><w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/>' +
+    '<w:basedOn w:val="Normal"/><w:rPr><w:sz w:val="32"/></w:rPr></w:style>' +
+    '<w:style w:type="paragraph" w:styleId="Heading2"><w:name w:val="heading 2"/></w:style></w:styles>';
+
+  it('postavlja velicinu, podebljano i poravnanje slijeva u stil razine', () => {
+    const r = patchHeadingFormat(STYLES, 1, { sizeHalfPoints: 24, bold: true, alignLeft: true });
+    expect(r.applied).toBe(true);
+    const h1 = r.xml.match(/<w:style\b[^>]*w:styleId="Heading1"[\s\S]*?<\/w:style>/)![0];
+    expect(h1).toContain('<w:sz w:val="24"/>');
+    expect(h1).toContain('<w:b/>');
+    expect(h1).toContain('<w:jc w:val="left"/>');
+    // Drugi stil ostaje netaknut.
+    expect(r.xml).toContain('<w:style w:type="paragraph" w:styleId="Heading2"><w:name w:val="heading 2"/></w:style>');
+  });
+
+  it('stvara w:rPr i w:pPr kad ih razina uopce nema, po CT_Style redoslijedu (pPr prije rPr)', () => {
+    const r = patchHeadingFormat(STYLES, 2, { sizeHalfPoints: 26, italic: true, alignLeft: true });
+    expect(r.applied).toBe(true);
+    const h2 = r.xml.match(/<w:style\b[^>]*w:styleId="Heading2"[\s\S]*?<\/w:style>/)![0];
+    expect(h2).toContain('<w:i/>');
+    expect(h2).toContain('<w:jc w:val="left"/>');
+    expect(h2.indexOf('<w:pPr>')).toBeLessThan(h2.indexOf('<w:rPr>'));
+    expect(h2.indexOf('<w:name')).toBeLessThan(h2.indexOf('<w:pPr>'));
+  });
+
+  it('w:rPr stila se ne mijesa s w:rPr unutar w:pPr (svojstva oznake odlomka)', () => {
+    const tricky =
+      '<w:styles><w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/>' +
+      '<w:pPr><w:rPr><w:sz w:val="99"/></w:rPr></w:pPr></w:style></w:styles>';
+    const r = patchHeadingFormat(tricky, 1, { sizeHalfPoints: 28 });
+    expect(r.applied).toBe(true);
+    expect(r.xml).toContain('<w:sz w:val="99"/>');   // oznaka odlomka netaknuta
+    expect(r.xml).toContain('<w:sz w:val="28"/>');   // stilska velicina postavljena
+  });
+
+  it('iskljuceno podebljanje (w:val="0") se ukljucuje uklanjanjem atributa', () => {
+    const off = '<w:styles><w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/>' +
+      '<w:rPr><w:b w:val="0"/></w:rPr></w:style></w:styles>';
+    const r = patchHeadingFormat(off, 1, { bold: true });
+    expect(r.applied).toBe(true);
+    expect(r.xml).toContain('<w:b/>');
+    expect(r.xml).not.toContain('w:val="0"');
+  });
+
+  it('razina koja u dokumentu ne postoji je posten no-op (stil se ne izmislja)', () => {
+    expect(patchHeadingFormat(STYLES, 5, { bold: true }).applied).toBe(false);
+  });
+
+  it('nalazi stil i po lokaliziranom imenu kad styleId nije Wordov', () => {
+    const lo = '<w:styles><w:style w:type="paragraph" w:styleId="Naslov1"><w:name w:val="Naslov 1"/></w:style></w:styles>';
+    const r = patchHeadingFormat(lo, 1, { bold: true });
+    expect(r.applied).toBe(true);
+    expect(r.xml).toContain('<w:b/>');
+  });
+});
+
+describe('patchFootnoteTypography', () => {
+  const STYLES =
+    '<w:styles><w:style w:type="paragraph" w:styleId="FootnoteText"><w:name w:val="footnote text"/>' +
+    '<w:rPr><w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi"/><w:sz w:val="20"/></w:rPr></w:style></w:styles>';
+
+  it('postavlja font i velicinu fusnota i uklanja referencu na temu', () => {
+    const r = patchFootnoteTypography(STYLES, { fontName: 'Times New Roman', sizeHalfPoints: 20 });
+    expect(r.applied).toBe(true);
+    expect(r.xml).toContain('w:ascii="Times New Roman"');
+    expect(r.xml).not.toContain('w:asciiTheme');
+    expect(r.xml).toContain('<w:sz w:val="20"/>'); // vec tocna velicina ostaje
+  });
+
+  it('stil fusnota koji ne postoji je posten no-op', () => {
+    const none = '<w:styles><w:style w:type="paragraph" w:styleId="Normal"><w:name w:val="Normal"/></w:style></w:styles>';
+    expect(patchFootnoteTypography(none, { fontName: 'Times New Roman' }).applied).toBe(false);
   });
 });
 

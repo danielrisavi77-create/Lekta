@@ -52,6 +52,11 @@ function Measure-Doc {
     PrazniNaNasl = $prazni
     Dijakritika  = [bool]($doc.Content.Text -match 'cscdz')
     Naslovnica   = [string]$doc.Paragraphs.Item(1).Range.Text.Trim()
+    NaslovFont   = [string]$doc.Styles.Item('Heading 1').Font.Name
+    NaslovPt     = [double]$doc.Styles.Item('Heading 1').Font.Size
+    NaslovBold   = [int]$doc.Styles.Item('Heading 1').Font.Bold
+    FusnotaFont  = [string]$doc.Footnotes.Item(1).Range.Font.Name
+    FusnotaPt    = [double]$doc.Footnotes.Item(1).Range.Font.Size
   }
   $doc.Close([int]0)
   return $m
@@ -96,6 +101,11 @@ Check 'Sirina stranice' $prije.SirinaCm   $poslije.SirinaCm   21
 Check 'Visina stranice' $prije.VisinaCm   $poslije.VisinaCm   29.7
 # Polozeni prilog mora dobiti A4 sa zamijenjenim stranicama, ne uspravni A4 i ne stari Letter.
 Check 'Prilog (polozen)' $prije.Prilog    $poslije.Prilog     '29,7x21'
+Check 'Naslov 1 font'    $prije.NaslovFont $poslije.NaslovFont 'Times New Roman'
+Check 'Naslov 1 velicina' $prije.NaslovPt  $poslije.NaslovPt   14
+Check 'Naslov 1 bold'    $prije.NaslovBold $poslije.NaslovBold -1
+Check 'Fusnota font'     $prije.FusnotaFont $poslije.FusnotaFont 'Times New Roman'
+Check 'Fusnota velicina' $prije.FusnotaPt  $poslije.FusnotaPt  10
 
 Write-Output ''
 Write-Output '--- NE SMIJE SE POKVARITI ---'

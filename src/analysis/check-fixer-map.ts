@@ -28,6 +28,10 @@ export const CHECK_TITLES: Record<string, string> = {
   'page-number-scheme': 'Shema numeriranja stranica',
   'footnote-spacing': 'Razmak prije i poslije fusnota',
   'page-number-alignment': 'Položaj broja stranice',
+  // Oblikovanje naslova i tipografija fusnota dobili su popravak 2026-07-20. Oba idu kroz
+  // stilove (HeadingN, FootnoteText), pa ih analiza vidi jer razrjesava nasljedjivanje stila.
+  'heading-format': 'Oblikovanje naslova po razinama',
+  'footnote-typography': 'Oblikovanje fusnota',
 };
 
 /** Prefiks naslova provjere formata papira (dinamican sufiks: 'A4' / '(A4/A3)'). */

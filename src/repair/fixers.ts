@@ -29,6 +29,9 @@ import {
   buildTocFieldXml,
   documentHasTocField,
   findParagraphEndAfterMatch,
+  patchHeadingFormat,
+  patchFootnoteTypography,
+  type HeadingFormatSpec,
 } from './xml-patch.ts';
 import { stripDirectFormatting, type RunLevelResult } from './run-level.ts';
 import { stripOrphanedEmptyParagraphs } from './paragraph-cleanup.ts';
@@ -351,6 +354,82 @@ export function paragraphSpacingFixer(parts: DocxXmlParts, deep = false): FixerO
       ? stripDirectFormatting(parts.documentXml, { stripParagraphSpacing: true })
       : null;
   return combineDeep(base, parts, deepResult);
+}
+
+/** Jedna razina naslova iz profila: sto se za nju ocekuje. */
+export interface HeadingLevelTarget extends HeadingFormatSpec { level: number }
+
+/**
+ * Oblikovanje naslova po razinama (velicina, podebljano, kurziv, poravnanje slijeva).
+ *
+ * Popravlja se kroz ugradjene stilove `HeadingN`, jedno po razini, i to ATOMSKI po razini:
+ * razina bez odgovarajuceg stila u dokumentu se tiho preskace (nema naslova te razine), a fixer
+ * kao cjelina uspije ako je popravio bar jednu razinu.
+ *
+ * IZVAN OPSEGA (svjesno): velika slova i numeriranje naslova. Oboje mijenja ILI TEKST ILI
+ * znacenje: velika slova bi trazila prepisivanje teksta (w:caps mijenja samo prikaz, a provjera
+ * cita tekst), a numeriranje bi ubacivalo oznake razina, sto je autorska odluka.
+ */
+export function headingFormatFixer(parts: DocxXmlParts, targets: HeadingLevelTarget[]): FixerOutput {
+  let stylesXml = parts.stylesXml;
+  const doneLevels: string[] = [];
+  const beforeBits: string[] = [];
+  const afterBits: string[] = [];
+
+  for (const t of targets) {
+    const res = patchHeadingFormat(stylesXml, t.level, t);
+    if (!res.applied) continue;
+    stylesXml = res.xml;
+    doneLevels.push(String(t.level));
+    const desc: string[] = [];
+    if (res.after['velicina']) desc.push(`${Number(res.after['velicina']) / 2} pt`);
+    if (res.after['podebljano']) desc.push('podebljano');
+    if (res.after['kurziv']) desc.push('kurziv');
+    if (res.after['poravnanje']) desc.push('slijeva');
+    if (desc.length) afterBits.push(`razina ${t.level}: ${desc.join(', ')}`);
+    const wasSize = res.before['velicina'];
+    beforeBits.push(`razina ${t.level}: ${wasSize ? `${Number(wasSize) / 2} pt` : UNSET_LABEL}`);
+  }
+
+  if (!doneLevels.length) return NO_OP(parts);
+  return {
+    parts: { ...parts, stylesXml },
+    applied: true,
+    beforeLabel: `Naslovi (${beforeBits.join('; ')})`,
+    afterLabel: `Naslovi (${afterBits.join('; ')})`,
+  };
+}
+
+/**
+ * Font i velicina teksta fusnota. Razmak fusnota rjesava footnoteSpacingFixer; ovo je drugi dio
+ * iste provjere ("Oblikovanje fusnota"), koji do sada nije imao popravak.
+ */
+export function footnoteTypographyFixer(
+  parts: DocxXmlParts,
+  update: { fontName?: string; fontSizePt?: number; alignJustify?: boolean },
+): FixerOutput {
+  // Bez fusnota u dokumentu nema sto oblikovati (isti gard kao footnoteSpacingFixer).
+  if (parts.footnotesXml === undefined) return NO_OP(parts);
+  const result = patchFootnoteTypography(parts.stylesXml, {
+    fontName: update.fontName,
+    sizeHalfPoints: update.fontSizePt !== undefined ? ptToHalfPoints(update.fontSizePt) : undefined,
+    alignJustify: update.alignJustify,
+  });
+  if (!result.applied) return NO_OP(parts);
+
+  const label = (side: Record<string, string>): string => {
+    const bits: string[] = [];
+    if (side['font'] !== undefined) bits.push(`font ${side['font'] || UNSET_LABEL}`);
+    if (side['velicina'] !== undefined) bits.push(`${side['velicina'] ? `${Number(side['velicina']) / 2} pt` : UNSET_LABEL}`);
+    if (side['poravnanje'] !== undefined) bits.push(side['poravnanje'] === 'both' ? 'obostrano' : (side['poravnanje'] || UNSET_LABEL));
+    return bits.join(', ');
+  };
+  return {
+    parts: { ...parts, stylesXml: result.xml },
+    applied: true,
+    beforeLabel: `Fusnote: ${label(result.before)}`,
+    afterLabel: `Fusnote: ${label(result.after)}`,
+  };
 }
 
 // Numeriranje stranica po sekcijama: rimski na prednjim listovima, arapski od Uvoda

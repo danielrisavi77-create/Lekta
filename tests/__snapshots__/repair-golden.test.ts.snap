@@ -140,6 +140,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "footnote-spacing-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "footnote-typography-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "heading-format-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "line-spacing-fixer": {
       "applied": false,
       "changelog": [],
@@ -427,6 +433,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "footnote-spacing-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "footnote-typography-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "heading-format-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "line-spacing-fixer": {
       "applied": false,
       "changelog": [],
@@ -710,6 +722,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "footnote-spacing-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "footnote-typography-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "heading-format-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "line-spacing-fixer": {
       "applied": false,
       "changelog": [],
@@ -947,6 +965,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "footnote-spacing-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "footnote-typography-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "heading-format-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "line-spacing-fixer": {
       "applied": false,
       "changelog": [],
@@ -1160,6 +1184,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "footnote-spacing-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "footnote-typography-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "heading-format-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "line-spacing-fixer": {
       "params": "nema-cilja-u-profilu",
     },
@@ -1365,6 +1395,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
     "footnote-spacing-fixer": {
       "params": "nema-cilja-u-profilu",
     },
+    "footnote-typography-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "heading-format-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "line-spacing-fixer": {
       "params": "nema-cilja-u-profilu",
     },
@@ -1568,6 +1604,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "params": "nema-cilja-u-profilu",
     },
     "footnote-spacing-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "footnote-typography-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "heading-format-fixer": {
       "params": "nema-cilja-u-profilu",
     },
     "line-spacing-fixer": {
@@ -2115,6 +2157,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [
         "footnote-spacing-fixer-rule",
       ],
+    },
+    "footnote-typography-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "heading-format-fixer": {
+      "params": "nema-cilja-u-profilu",
     },
     "line-spacing-fixer": {
       "applied": true,
@@ -2962,6 +3010,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "footnote-spacing-fixer-rule",
       ],
     },
+    "footnote-typography-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "heading-format-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
     "line-spacing-fixer": {
       "applied": true,
       "changelog": [
@@ -3526,6 +3580,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "params": "nema-cilja-u-profilu",
     },
     "footnote-spacing-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "footnote-typography-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "heading-format-fixer": {
       "params": "nema-cilja-u-profilu",
     },
     "line-spacing-fixer": {

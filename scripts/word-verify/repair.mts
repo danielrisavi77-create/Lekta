@@ -23,6 +23,18 @@ const REQUESTS: FixerRequest[] = [
   { ruleId: 'razmaci', fixerId: 'paragraph-spacing-fixer', params: { deep: true } },
   { ruleId: 'prazni-odlomci', fixerId: 'empty-paragraph-fixer', params: {} },
   { ruleId: 'fusnote-razmak', fixerId: 'footnote-spacing-fixer', params: { deep: true } },
+  // Naslovi: razina 1 podebljana 14 pt, razine 2 i 3 podebljane 12 pt, sve poravnato slijeva.
+  {
+    ruleId: 'naslovi', fixerId: 'heading-format-fixer', params: {
+      targets: [
+        { level: 1, sizeHalfPoints: 28, bold: true, alignLeft: true },
+        { level: 2, sizeHalfPoints: 24, bold: true, alignLeft: true },
+        { level: 3, sizeHalfPoints: 24, bold: true, alignLeft: true },
+      ],
+    },
+  },
+  // Fusnote: Times New Roman 10 pt, obostrano.
+  { ruleId: 'fusnote-tipografija', fixerId: 'footnote-typography-fixer', params: { fontName: 'Times New Roman', fontSizePt: 10, alignJustify: true } },
 ];
 
 const [inPath, outPath] = process.argv.slice(2);

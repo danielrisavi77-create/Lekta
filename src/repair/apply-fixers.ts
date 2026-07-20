@@ -20,6 +20,9 @@ import {
   footnoteSpacingFixer,
   pageNumberAlignmentFixer,
   tocFieldFixer,
+  headingFormatFixer,
+  footnoteTypographyFixer,
+  type HeadingLevelTarget,
   type DocxXmlParts,
   type FooterPageTarget,
   type SectionInsertTarget,
@@ -44,6 +47,8 @@ export const FIXER_IDS = [
   'footnote-spacing-fixer',
   'page-number-alignment-fixer',
   'toc-field-fixer',
+  'heading-format-fixer',
+  'footnote-typography-fixer',
 ] as const;
 
 export type FixerId = (typeof FIXER_IDS)[number];
@@ -79,7 +84,10 @@ const FOOTNOTES_XML_PATH = 'word/footnotes.xml';
 // footer/header partovi, ne samo footeri koje K5 smije dodati (ENGINE_ADDABLE_PART).
 const FOOTER_HEADER_PART_RE = /^word\/(footer|header)\d+\.xml$/i;
 
-function runFixer(fixerId: FixerId, parts: DocxXmlParts, params: Record<string, unknown>) {
+function runFixer(fixerId: FixerId, parts: DocxXmlParts, rawParams: Record<string, unknown>) {
+  // Nedostajuci parametri su NO-OP, ne pad: pozivatelj (Edge, UI, golden harness) smije poslati
+  // zahtjev bez `params`, a citanje polja iz undefined bi srusilo cijeli popravak.
+  const params = rawParams ?? {};
   switch (fixerId) {
     case 'margins-fixer':
       return marginsFixer(parts, params as never);
@@ -125,6 +133,18 @@ function runFixer(fixerId: FixerId, parts: DocxXmlParts, params: Record<string, 
       const p = params as { target?: TocFieldTarget };
       return p.target && typeof p.target.sadrzajParagraphIndex === 'number'
         ? tocFieldFixer(parts, p.target)
+        : { parts, applied: false, beforeLabel: '', afterLabel: '' };
+    }
+    case 'heading-format-fixer': {
+      const p = params as { targets?: HeadingLevelTarget[] };
+      return Array.isArray(p.targets) && p.targets.length
+        ? headingFormatFixer(parts, p.targets)
+        : { parts, applied: false, beforeLabel: '', afterLabel: '' };
+    }
+    case 'footnote-typography-fixer': {
+      const p = params as { fontName?: string; fontSizePt?: number };
+      return (p.fontName !== undefined || p.fontSizePt !== undefined)
+        ? footnoteTypographyFixer(parts, p)
         : { parts, applied: false, beforeLabel: '', afterLabel: '' };
     }
     default:

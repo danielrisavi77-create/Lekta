@@ -316,12 +316,18 @@ function withContainer(
   transform: (inner: string) => UpsertResult,
 ): UpsertResult {
   const n = escapeRegex(name);
-  const paired = block.match(new RegExp(`<${n}\\b[^>]*>([\\s\\S]*?)</${n}>`));
-  if (paired && paired.index !== undefined) {
-    const res = transform(paired[1]);
+  // Pretraga ide po MASKIRANOM nizu: stil ima w:rPr i na svojoj razini i unutar w:pPr (svojstva
+  // znaka oznake odlomka), pa bi neoprezno trazenje pogodilo pogresan, ugnjezdeni element.
+  // Maskiranje cuva duljine, pa indeksi nadjeni ovdje vrijede i nad izvornim blokom.
+  const probe = maskAll(block, maskTags.filter((t) => t !== name));
+  const m = probe.match(new RegExp(`<${n}\\b[^>]*>[\\s\\S]*?</${n}>`));
+  if (m && m.index !== undefined) {
+    const openTag = m[0].match(new RegExp(`^<${n}\\b[^>]*>`))![0];
+    const innerStart = m.index + openTag.length;
+    const innerEnd = m.index + m[0].length - (name.length + 3); // </name>
+    const res = transform(block.slice(innerStart, innerEnd));
     if (!res.changed) return { ...res, inner: block };
-    const rebuilt = paired[0].replace(paired[1], () => res.inner);
-    return { ...res, inner: block.slice(0, paired.index) + rebuilt + block.slice(paired.index + paired[0].length) };
+    return { ...res, inner: block.slice(0, innerStart) + res.inner + block.slice(innerEnd) };
   }
   // Samozatvarajuci oblik (<w:pPr/>) ili element uopce ne postoji: gradi ga iz praznog sadrzaja.
   const res = transform('');
@@ -435,7 +441,30 @@ export function patchDefaultFont(
     }
   }
 
-  // 2. stil Normal, ali samo ako sam definira rPr (inace vrijedi docDefaults i nema sto ispravljati)
+  // 2. Naslovi: Wordovi ugradjeni stilovi HeadingN nose VLASTITU referencu na temu
+  //    (w:asciiTheme="majorHAnsi", u praksi Cambria), koja pobjeduje nasljedjivanje iz docDefaults.
+  //    Zbog nje font dokumenta nikad ne stigne do naslova, pa rad ispada dvofontan.
+  //    Uklanja se SAMO referenca na temu; naslov kojem je autor izricito zadao font (npr. Georgia)
+  //    ostaje netaknut, jer to nije prepreka nego namjera.
+  if (update.fontName !== undefined) {
+    const headingRe = /<w:style\b[^>]*w:styleId="Heading[1-9]"[\s\S]*?<\/w:style>/g;
+    let hm: RegExpExecArray | null;
+    const rebuilt: Array<{ start: number; end: number; block: string }> = [];
+    while ((hm = headingRe.exec(xml)) !== null) {
+      const rFonts = hm[0].match(/<w:rFonts\b[^>]*\/?>/);
+      if (!rFonts) continue;
+      if (/w:ascii="/.test(rFonts[0])) continue; // izricit font: ne diramo
+      const cleaned = removeAttributes(rFonts[0], ['w:asciiTheme', 'w:hAnsiTheme']);
+      if (cleaned === rFonts[0]) continue;
+      rebuilt.push({ start: hm.index, end: hm.index + hm[0].length, block: hm[0].replace(rFonts[0], () => cleaned) });
+    }
+    for (let i = rebuilt.length - 1; i >= 0; i--) {
+      xml = xml.slice(0, rebuilt[i].start) + rebuilt[i].block + xml.slice(rebuilt[i].end);
+      changed = true;
+    }
+  }
+
+  // 3. stil Normal, ali samo ako sam definira rPr (inace vrijedi docDefaults i nema sto ispravljati)
   const normal = findNormalStyleBlock(xml);
   if (normal) {
     const rPr = normal.block.match(/<w:rPr\b[^>]*>[\s\S]*?<\/w:rPr>/);
@@ -521,6 +550,154 @@ export function patchFootnoteTextSpacing(
     'w:before': String(beforeTwentieths),
     'w:after': String(afterTwentieths),
   });
+}
+
+/**
+ * Nadji stil po styleId, a ako ga nema, po lokaliziranom imenu (`w:name`). Wordovi ugradjeni
+ * styleId-evi su stabilni i neovisni o jeziku ("Heading1", "FootnoteText"), ali dokumenti iz
+ * LibreOfficea i starijih verzija znaju imati vlastite ("Naslov1"), pa ime sluzi kao rezerva.
+ */
+function findStyleByIdOrName(stylesXml: string, styleId: string, namePattern: RegExp) {
+  const byId = findStyleBlock(stylesXml, styleId);
+  if (byId) return byId;
+  const re = /<w:style\b[^>]*>[\s\S]*?<\/w:style>/g;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(stylesXml)) !== null) {
+    const nameVal = m[0].match(/<w:name\b[^>]*w:val="([^"]*)"/);
+    if (nameVal && namePattern.test(nameVal[1])) {
+      return { block: m[0], start: m.index, end: m.index + m[0].length };
+    }
+  }
+  return null;
+}
+
+/** Prekidacko svojstvo (w:b, w:i): prisutnost znaci ukljuceno, `w:val="0"` iskljuceno. */
+function upsertToggle(inner: string, name: string): UpsertResult {
+  const existing = findDirectChild(inner, name, []);
+  if (!existing) {
+    const at = schemaInsertIndex(inner, name, CT_RPR_ORDER, []);
+    return { inner: inner.slice(0, at) + `<${name}/>` + inner.slice(at), changed: true, before: { [name]: 'iskljuceno' }, after: { [name]: 'ukljuceno' } };
+  }
+  const off = /w:val="(?:0|false|off)"/.test(existing.tag);
+  if (!off) return { inner, changed: false, before: {}, after: {} };
+  const tag = removeAttributes(existing.tag, ['w:val']);
+  return {
+    inner: inner.slice(0, existing.start) + tag + inner.slice(existing.end),
+    changed: true, before: { [name]: 'iskljuceno' }, after: { [name]: 'ukljuceno' },
+  };
+}
+
+export interface HeadingFormatSpec {
+  sizeHalfPoints?: number;
+  bold?: boolean;
+  italic?: boolean;
+  alignLeft?: boolean;
+}
+
+/**
+ * Oblikovanje naslova JEDNE razine, kroz ugradjeni stil `HeadingN`.
+ *
+ * Radi kroz stil, a ne po odlomcima, jer analiza razrjesava nasljedjivanje
+ * (`merge(docDefaults, stilOdlomka, znakovniStil, izravno)` u analyze-docx), pa je stilski
+ * ispravak vidljiv i Wordu i nasoj ponovnoj provjeri. Stil se NE izmislja: dokument koji nema
+ * `HeadingN` nema ni naslove te razine.
+ */
+export function patchHeadingFormat(stylesXml: string, level: number, spec: HeadingFormatSpec): PatchResult {
+  const found = findStyleByIdOrName(stylesXml, `Heading${level}`, new RegExp(`^\\s*(?:heading|naslov)\\s*${level}\\s*$`, 'i'));
+  if (!found) return { ...NO_OP, xml: stylesXml };
+
+  let block = found.block;
+  const before: Record<string, string> = {};
+  const after: Record<string, string> = {};
+  const foundAttrs: Record<string, boolean> = {};
+  let changed = false;
+
+  if (spec.sizeHalfPoints !== undefined || spec.bold || spec.italic) {
+    const res = withContainer(block, 'w:rPr', CT_STYLE_ORDER, ['w:pPr', 'w:rPr'], (inner) => {
+      let cur = inner; const b: Record<string, string> = {}; const a: Record<string, string> = {}; let ch = false;
+      if (spec.sizeHalfPoints !== undefined) {
+        const r = upsertChild(cur, 'w:sz', { 'w:val': String(spec.sizeHalfPoints) }, CT_RPR_ORDER, []);
+        if (r.changed) { cur = r.inner; b['velicina'] = r.before['w:val'] ?? ''; a['velicina'] = String(spec.sizeHalfPoints); ch = true; }
+      }
+      if (spec.bold) {
+        const r = upsertToggle(cur, 'w:b');
+        if (r.changed) { cur = r.inner; b['podebljano'] = 'ne'; a['podebljano'] = 'da'; ch = true; }
+      }
+      if (spec.italic) {
+        const r = upsertToggle(cur, 'w:i');
+        if (r.changed) { cur = r.inner; b['kurziv'] = 'ne'; a['kurziv'] = 'da'; ch = true; }
+      }
+      return { inner: cur, changed: ch, before: b, after: a };
+    });
+    if (res.changed) { block = res.inner; Object.assign(before, res.before); Object.assign(after, res.after); changed = true; }
+  }
+
+  if (spec.alignLeft) {
+    const res = withContainer(block, 'w:pPr', CT_STYLE_ORDER, ['w:pPr', 'w:rPr'],
+      (inner) => upsertChild(inner, 'w:jc', { 'w:val': 'left' }, CT_PPR_ORDER, ['w:rPr']));
+    if (res.changed) {
+      block = res.inner;
+      before['poravnanje'] = res.before['w:val'] ?? '';
+      after['poravnanje'] = 'left';
+      changed = true;
+    }
+  }
+
+  for (const k of Object.keys(after)) foundAttrs[k] = true;
+  if (!changed) return { ...NO_OP, xml: stylesXml, found: foundAttrs };
+  return { xml: stylesXml.slice(0, found.start) + block + stylesXml.slice(found.end), applied: true, before, after, found: foundAttrs };
+}
+
+/**
+ * Font i velicina teksta fusnota (stil `FootnoteText`). Isti obrazac kao naslovi; stil se ne
+ * izmislja, jer dokument bez njega nema ni fusnota za oblikovati.
+ */
+export function patchFootnoteTypography(
+  stylesXml: string,
+  update: { fontName?: string; sizeHalfPoints?: number; alignJustify?: boolean },
+): PatchResult {
+  const found = findStyleByIdOrName(stylesXml, 'FootnoteText', /^\s*(?:footnote text|tekst fusnote|fusnota)\s*$/i);
+  if (!found) return { ...NO_OP, xml: stylesXml };
+
+  const before: Record<string, string> = {};
+  const after: Record<string, string> = {};
+  const res = withContainer(found.block, 'w:rPr', CT_STYLE_ORDER, ['w:pPr', 'w:rPr'], (inner) => {
+    let cur = inner; const b: Record<string, string> = {}; const a: Record<string, string> = {}; let ch = false;
+    if (update.fontName !== undefined) {
+      const r = upsertChild(cur, 'w:rFonts', { 'w:ascii': update.fontName, 'w:hAnsi': update.fontName },
+        CT_RPR_ORDER, [], ['w:asciiTheme', 'w:hAnsiTheme']);
+      if (r.changed) { cur = r.inner; b['font'] = r.before['w:ascii'] ?? ''; a['font'] = update.fontName; ch = true; }
+    }
+    if (update.sizeHalfPoints !== undefined) {
+      const r = upsertChild(cur, 'w:sz', { 'w:val': String(update.sizeHalfPoints) }, CT_RPR_ORDER, []);
+      if (r.changed) { cur = r.inner; b['velicina'] = r.before['w:val'] ?? ''; a['velicina'] = String(update.sizeHalfPoints); ch = true; }
+    }
+    return { inner: cur, changed: ch, before: b, after: a };
+  });
+
+  let block = res.changed ? res.inner : found.block;
+  let changed = res.changed;
+  Object.assign(before, res.before); Object.assign(after, res.after);
+
+  // Poravnanje fusnota je dio ISTE provjere ("Oblikovanje fusnota"), pa bi bez njega popravak
+  // ostavio provjeru crvenom i nakon uspjesnog ispravka fonta i velicine.
+  if (update.alignJustify) {
+    const jc = withContainer(block, 'w:pPr', CT_STYLE_ORDER, ['w:pPr', 'w:rPr'],
+      (inner) => upsertChild(inner, 'w:jc', { 'w:val': 'both' }, CT_PPR_ORDER, ['w:rPr']));
+    if (jc.changed) {
+      block = jc.inner;
+      before['poravnanje'] = jc.before['w:val'] ?? '';
+      after['poravnanje'] = 'both';
+      changed = true;
+    }
+  }
+
+  const foundAttrs: Record<string, boolean> = {};
+  if (update.fontName !== undefined) foundAttrs['font'] = true;
+  if (update.sizeHalfPoints !== undefined) foundAttrs['velicina'] = true;
+  if (update.alignJustify) foundAttrs['poravnanje'] = true;
+  if (!changed) return { ...NO_OP, xml: stylesXml, found: foundAttrs };
+  return { xml: stylesXml.slice(0, found.start) + block + stylesXml.slice(found.end), applied: true, before, after, found: foundAttrs };
 }
 
 export function patchDefaultAlignment(stylesXml: string, val: string): PatchResult {
