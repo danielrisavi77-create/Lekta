@@ -300,3 +300,28 @@ describe('stripOrphanedEmptyParagraphs: nista za ukloniti', () => {
     expect(r.xml).toBe(xml);
   });
 });
+
+// --- Regresija: naslovnica (prijavio vlasnik 2026-07-20) -------------------------------------
+// Popravak je spojio dvije naslovnice u jednu stranicu i zbio razmake. Dva uzroka, oba ovdje.
+describe('naslovnica se ne smije razbiti', () => {
+  const P_EMPTY = '<w:p><w:pPr><w:pStyle w:val="Normal"/></w:pPr></w:p>';
+  const P_BREAK = '<w:p><w:pPr><w:pStyle w:val="Normal"/><w:pageBreakBefore/></w:pPr></w:p>';
+  const P_TEXT = (t: string) => `<w:p><w:r><w:t>${t}</w:t></w:r></w:p>`;
+
+  it('odlomak s w:pageBreakBefore se NIKAD ne brise (inace se stranice spoje)', () => {
+    const xml = `<w:body>${P_TEXT('Naslovnica 1')}${P_EMPTY}${P_BREAK}${P_TEXT('Naslovnica 2')}</w:body>`;
+    const out = stripOrphanedEmptyParagraphs(xml);
+    expect(out.xml).toContain('w:pageBreakBefore');
+  });
+
+  it('prazni odlomci PRIJE prvog naslova (naslovnica) ostaju netaknuti', () => {
+    const front = P_EMPTY.repeat(8); // vertikalni razmak na naslovnici
+    const xml = `<w:body>${P_TEXT('SVEUCILISTE U ZAGREBU')}${front}${P_TEXT('Diplomski rad')}`
+      + `${P_BREAK}<w:p><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:r><w:t>Uvod</w:t></w:r></w:p>`
+      + `${P_EMPTY.repeat(4)}${P_TEXT('Tijelo rada')}</w:body>`;
+    const out = stripOrphanedEmptyParagraphs(xml);
+    const emptyCount = (s: string) => (s.match(/<w:p><w:pPr><w:pStyle w:val="Normal"\/><\/w:pPr><\/w:p>/g) || []).length;
+    // naslovnica: svih 8 mora prezivjeti; iza Uvoda se smije kolabirati 4 -> 1
+    expect(emptyCount(out.xml)).toBe(8 + 1);
+  });
+});

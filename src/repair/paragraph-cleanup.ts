@@ -92,8 +92,12 @@ function hasNonNormalStyle(paragraph: string): boolean {
 }
 
 /** Elementi cija prisutnost sama po sebi diskvalificira odlomak kao "prazan". */
+// `pageBreakBefore` je dodan 2026-07-20 nakon prijave s produkcije: prijelom stranice Word sprema
+// i kao SVOJSTVO ODLOMKA (<w:pageBreakBefore/> u w:pPr), ne samo kao <w:br w:type="page"/> u runu.
+// Takav odlomak nema vidljiv tekst, pa je prolazio kao "osirotjeli prazan" i bio obrisan, cime je
+// nestajao prijelom i DVIJE STRANICE SU SE SPOJILE U JEDNU (spojene naslovnice).
 const FORBIDDEN_CONTENT =
-  /<w:(?:drawing|pict|object|br|lastRenderedPageBreak|fldSimple|fldChar|instrText|footnoteReference|endnoteReference|commentReference|bookmarkStart|bookmarkEnd)\b/;
+  /<w:(?:drawing|pict|object|br|lastRenderedPageBreak|pageBreakBefore|fldSimple|fldChar|instrText|footnoteReference|endnoteReference|commentReference|bookmarkStart|bookmarkEnd)\b/;
 
 /** Ima li odlomkov (prvi) w:pPr blok ugnjezdeni w:sectPr (prijelom odjeljka). */
 function hasNestedSectPr(paragraph: string): boolean {
@@ -145,6 +149,27 @@ interface ParagraphMatch {
 }
 
 /**
+ * Raspon "front mattera" (naslovnice i sve prije prvog pravog naslova), koji se tretira kao
+ * zasticena zona. Granica je PRVI odlomak sa stilom naslova (`w:pStyle` ciji val sadrzi Heading
+ * ili Naslov): tijelo rada pocinje naslovom ("Sadrzaj", "Uvod"), a naslovnica ga po definiciji
+ * nema. Nema naslova -> nema zone (zatecено ponasanje).
+ *
+ * NAMJERNO NEMA rezervne granice na prvi prijelom stranice: prijelom se u dokumentu pojavljuje i
+ * daleko od naslovnice, pa bi takvo pravilo zastitilo pola dokumenta i ponistilo dokumentirano
+ * ponasanje da prijelom DIJELI nizove praznih odlomaka. Dokument bez ijednog stila naslova ostaje
+ * bez ove zastite, ali mu prijelomi vise ne nestaju (v. pageBreakBefore u FORBIDDEN_CONTENT), pa
+ * se stranice ionako ne mogu spojiti.
+ *
+ * Konzervativno u smjeru "radije ne diraj": pogresno zasticen odlomak znaci samo visak praznog
+ * reda, dok pogresno obrisan trajno mijenja izgled naslovnice.
+ */
+function frontMatterRange(documentXml: string): Array<[number, number]> {
+  const heading = documentXml.match(/<w:pStyle\b[^>]*w:val="[^"]*(?:Heading|Naslov)[^"]*"/i);
+  if (heading && heading.index !== undefined) return [[0, heading.index]];
+  return [];
+}
+
+/**
  * Kolabira nizove od 2 ili vise uzastopnih, strukturno praznih odlomaka na tocno 1;
  * nikad na 0. Sve ostalo (ukljucujuci odlomke u tablicama/okvirima/sdt, stilizirane,
  * one s prijelomom odjeljka, poljima, referencama ili vidljivim tekstom) ostaje
@@ -156,6 +181,11 @@ export function stripOrphanedEmptyParagraphs(documentXml: string): ParagraphClea
     ...balancedRanges(documentXml, 'w:txbxContent'),
     ...balancedRanges(documentXml, 'w:tbl'),
     ...balancedRanges(documentXml, 'w:sdt'),
+    // Naslovnica je jedno od rijetkih mjesta gdje su uzastopni prazni odlomci NAMJERNI: njima se
+    // radi okomiti razmak (fakultet gore, naslov u sredini, mentor i datum dolje). Kolabiranje ih
+    // je zbijalo u hrpu. Front matter se zato tretira kao zasticena zona (vlasnikova prijava
+    // 2026-07-20: "mora vratiti naslovnicu kako je bila").
+    ...frontMatterRange(documentXml),
   ];
 
   const matches: ParagraphMatch[] = [];
