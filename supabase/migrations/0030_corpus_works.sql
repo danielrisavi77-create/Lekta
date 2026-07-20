@@ -19,7 +19,11 @@
 --    Konacni verdikt NE donosi Postgres: kandidati se boduju bigram-Dice funkcijom u TypeScriptu
 --    (titleSimilarity iz src/citations/verify-existence.ts), isto kao sto m2_references.py nakon
 --    FTS-a racuna _best_match. Postgres je ovdje samo brzi filtar recalla.
-create extension if not exists pg_trgm;
+-- Shema `extensions` je Supabase konvencija (ondje vec zive pgcrypto, uuid-ossp, pg_stat_statements).
+-- Bez `with schema` proSirenje zavrsi u `public` (kao sto je pg_net na ovom projektu), sto zagadjuje
+-- korisnicku shemu. Operatorski razred se zato navodi kvalificirano (extensions.gin_trgm_ops), da
+-- indeks ne ovisi o search_pathu role koja pokrece migraciju.
+create extension if not exists pg_trgm with schema extensions;
 
 create table if not exists corpus_works (
   doc_id bigint primary key,
@@ -38,7 +42,7 @@ create table if not exists corpus_works (
 );
 
 create index if not exists corpus_works_title_norm_trgm
-  on corpus_works using gin (title_norm gin_trgm_ops);
+  on corpus_works using gin (title_norm extensions.gin_trgm_ops);
 create index if not exists corpus_works_year
   on corpus_works (year);
 

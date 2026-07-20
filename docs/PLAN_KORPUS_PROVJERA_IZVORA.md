@@ -177,12 +177,7 @@ pošteno je najavimo.
    (prihvaćeno). Volumen je tad malen, ali neka bude namjerno.
 4. **Očekivanja u copyju.** Pokrivenost je hrvatski repozitoriji, ne sve na svijetu. To mora
    biti jasno napisano da ne obećamo previše.
-5. **Brzina dohvata kandidata NIJE dokazana.** U probe-u nad SQLiteom (FTS5, `OR` po svim
-   tokenima naslova) upit je trajao **oko 3 sekunde**, ne ispod 200 ms. To ne ruši dizajn, jer
-   Postgres `pg_trgm` GIN radi drugim mehanizmom, ali znači da se brzina **mora izmjeriti nakon
-   uvoza** i po potrebi popraviti (npr. `similarity` prag na razini upita, ograničenje kandidata,
-   ili predfiltar po godini). Ako ispadne spora, K3 mora imati kratak timeout i fail-open, da
-   provjera izvora nikad ne produži popravak preko Edge limita.
+5. **~~Brzina dohvata~~ RIJEŠENO mjerenjem (2026-07-20), vidi odjeljak 8.**
 
 ---
 
@@ -195,3 +190,49 @@ Ništa se ne pali dok se u go-liveu ne flipne zastavica, isto kao WS-1 do WS-7.
 
 **Definicija gotovosti cijelog paketa:** `npm run check` zelen, golden bez churna, značajka
 inertna do flipa, runbook dopunjen.
+
+---
+
+## 8. Stanje na produkciji i mjerenja (2026-07-20)
+
+Migracija `0030` je **primijenjena** na Lekta (`zrrjttizjyfcxmcpgzml`) i korpus je **uvezen**:
+525.817 redaka za 847 s (553 preskočena jer nemaju upotrebljiv naslov), preko PostgREST-a
+service_role ključem (`scripts/load-corpus-supabase.mjs`, upsert po `source_id`, pa je ponovno
+pokretanje sigurno). Provjereno: RLS uključen, **nula politika** (deny-all), `pg_trgm` u shemi
+`extensions`, nula loše normaliziranih `title_norm`.
+
+### Zauzeće
+
+| | |
+|---|---|
+| Podaci | 176 MB |
+| Trigramski indeks | 109 MB |
+| Tablica ukupno | 341 MB |
+| **Cijela baza** | **354 MB** |
+| **Od 500 MB free stropa** | **70,7%** |
+
+Ranija procjena u ovom planu (~280 MB) bila je **preniska za ~26%**. Ostaje oko 146 MB zraka za
+sve ostalo, što potvrđuje da free plan nije mjesto za produkciju (otvoreno pitanje 1).
+
+### Brzina i prag dohvata
+
+Izmjereno nad punim korpusom (Supabase free, dakle slab CPU):
+
+| Prag `pg_trgm` | Vrijeme | Kandidata | Recall |
+|---|---|---|---|
+| 0,30 | 877 ms | 505 | pun, ali presporo |
+| **0,40 (odabrano)** | **143 ms** | 102 | hvata i kraćene navode |
+| 0,55 | 52 ms | 6 | **gubi stvarne pogotke** |
+
+**Ispravljena greška u dizajnu:** prag dohvata isprva je bio 0,55, prepisan iz pipelineovog
+`min_ratio`. To je bilo krivo jer pipeline taj broj primjenjuje na **svoju** mjeru (FTS5 + Dice),
+a mi na **pg_trgm sličnost**, što je druga skala. Mjerenje je pokazalo da naslov kraćen na tri
+riječi ima trigramsku sličnost **0,422**, pa bi ga prag 0,55 odbacio prije nego ga Dice uopće
+vidi. Dohvat je filtar recalla i mora biti labaviji od odluke; presudu i dalje donosi samo Dice
+(0,60 / 0,80). `CORPUS_CANDIDATE_MIN` je zato **0,40**.
+
+`CORPUS_TOP = 5` je provjeren i ostaje: za kraćeni upit pravi pogodak dolazi kao **rang 1**
+(trgm 0,744), a uz prag 0,40 često je i jedini kandidat.
+
+**Obavezno u K3:** upit mora sam postaviti `set local pg_trgm.similarity_threshold = 0.40`.
+Postgresov default je 0,30 i daje 877 ms, dakle šest puta sporije od potrebnog.

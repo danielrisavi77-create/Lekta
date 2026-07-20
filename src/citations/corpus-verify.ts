@@ -19,9 +19,25 @@
 import { titleSimilarity } from './verify-existence';
 import type { ExistenceResult } from './verify-existence';
 
-/** Najmanja slicnost za DOHVAT kandidata (mirror min_ratio iz corpus.title_hits). */
-export const CORPUS_CANDIDATE_MIN = 0.55;
-/** Najvise kandidata koje trazimo od izvora (mirror top iz corpus.title_hits). */
+/**
+ * Prag za DOHVAT kandidata. NIJE isto sto i prag odluke i NAMJERNO je nizi od njega.
+ *
+ * Pipeline koristi 0.55, ali nad SVOJOM mjerom (FTS5 + Dice). Nas dohvat ide preko pg_trgm
+ * `similarity()`, sto je DRUGA mjera, pa se broj ne smije prepisati doslovno: 0.55 na trigramima
+ * odbacuje stvarne pogotke prije nego ih Dice uopce vidi.
+ *
+ * Izmjereno nad punim korpusom (525.817 redaka, Supabase free): naslov kracen na tri rijeci ima
+ * trigramsku slicnost 0.422, dakle prag 0.55 bi ga izgubio. Brzina po pragu: 0.30 -> 877 ms
+ * (505 kandidata), 0.40 -> 143 ms (102), 0.55 -> 52 ms (6). Zato 0.40: dovoljno labavo da
+ * kraceni i nepotpuni navodi prezive dohvat, a jos uvijek ispod 200 ms.
+ *
+ * Dohvat je filtar RECALLA; presudu i dalje donosi iskljucivo Dice (WEAK_MIN/FOUND_MIN nize).
+ */
+export const CORPUS_CANDIDATE_MIN = 0.4;
+/**
+ * Najvise kandidata (mirror top iz corpus.title_hits). Provjereno da 5 nije preusko: za kraceni
+ * upit pravi pogodak dolazi kao RANG 1 (trgm 0.744), a uz prag 0.40 cesto je i jedini kandidat.
+ */
 export const CORPUS_TOP = 5;
 /** Prag za 'weak' (vjerojatno pronadjeno); mirror LIKELY iz m2_references. */
 export const CORPUS_WEAK_MIN = 0.6;
