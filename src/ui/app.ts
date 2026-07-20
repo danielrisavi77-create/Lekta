@@ -1136,7 +1136,15 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any){
     // greska), buildSourceCheckHtml vrati prazan string pa sekcije naprosto nema. Nikad ne javlja
     // "nije pronadjeno" jer korpus ne moze dokazati nepostojanje.
     try{const sc=buildSourceCheckHtml(out.sourceCheck,refsForCorpus);if(sc){summary.innerHTML+=sc;if(out.sourceCheck)void trackEvent('repair_source_check',{found:out.sourceCheck.found.length,checked:out.sourceCheck.checked,total:out.sourceCheck.total})}}catch(e: any){console.error('Provjera izvora:',e)}
-    try{const f=new File([out.docxBytes as Uint8Array<ArrayBuffer>],out.fileName,{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});const res: any=await analyzeDocxOffThread(f,analyzedProfile,r.settings,()=>{});if(res&&res.score!=null&&r.score!=null){const d=res.score-r.score;summary.innerHTML+=`<p><strong>Spremnost: ${r.score} → ${res.score}${d>0?` (+${d})`:d<0?` (${d})`:''}</strong></p>`}}catch(e: any){}
+    try{const f=new File([out.docxBytes as Uint8Array<ArrayBuffer>],out.fileName,{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});const res: any=await analyzeDocxOffThread(f,analyzedProfile,r.settings,()=>{});if(res&&res.score!=null&&r.score!=null){const d=res.score-r.score;summary.innerHTML+=`<p><strong>Spremnost: ${r.score} → ${res.score}${d>0?` (+${d})`:d<0?` (${d})`:''}</strong></p>`}
+     /* "Pokaži što je popravljeno": faksimil prije/poslije. Radi SAMO kad oba modela postoje;
+        inace se gumb ne prikazuje umjesto da otvori prazan prozor. Wordove revizije namjerno NE
+        koristimo: popravak najvise mijenja styles.xml, a to OOXML ne moze prikazati kao reviziju. */
+     if(res?.preview&&r.preview){
+      const b=document.createElement('button');b.type='button';b.className='btn btn-secondary btn-sm';b.textContent='Pokaži što je popravljeno';
+      b.onclick=async()=>{const {openRepairDiff}=await import('./repair-diff');openRepairDiff({before:r.preview,after:res.preview,changelog:out.changelog,fileName:out.fileName});void trackEvent('repair_diff_opened',{changes:out.changelog.length})};
+      summary.appendChild(b);
+     }}catch(e: any){}
    } else if(out.kind==='tier_mismatch'){
     const sug=out.suggestedWorkType,lbl=(tierFor(sug)?.label||sug);
     setSummary(`<strong>Dokument izgleda kao ${escapeHtml(String(lbl))}.</strong> Odabrana vrsta rada je niža od stvarne. Kupi ispravnu vrstu rada, ili nastavi svejedno ovim popravkom.<div style="margin-top:8px"><button type="button" class="btn btn-secondary btn-sm" data-repair-confirm>Nastavi svejedno</button></div>`);
