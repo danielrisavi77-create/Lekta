@@ -248,6 +248,18 @@ otp_expiry = 3600
 # subject = "You have been invited"
 # content_path = "./supabase/templates/invite.html"
 
+# OTP predlosci (prijava kodom) zive u supabase/templates/ kao izvor istine:
+#   supabase/templates/magic_link.html     -> Auth > Email Templates > "Magic Link"
+#   supabase/templates/confirm_signup.html -> Auth > Email Templates > "Confirm signup"
+# Oba MORAJU sadrzavati {{ .Token }}: klijent (verifyEmailOtp) ocekuje 6-znamenkasti kod i
+# nema callback rutu za magic link, pa zadani link-predlozak vodi na stranicu koje nema.
+#
+# NAMJERNO NISU wirani kao [auth.email.template.*]: to bi ih objavilo tek kroz
+# `supabase config push`, a taj bi push poslao i ostatak [auth] bloka koji je jos na
+# tvornickim LOKALNIM vrijednostima (site_url 127.0.0.1, additional_redirect_urls
+# 127.0.0.1, auth.rate_limit.email_sent = 2) i time razbio produkcijsku prijavu.
+# Dok se [auth] ne uskladi s produkcijom, predlosci se lijepe rucno u dashboard.
+
 # Uncomment to customize notification email template
 # [auth.email.notification.password_changed]
 # enabled = true

@@ -1,0 +1,30 @@
+<!--
+  Predlozak za prijavu kodom (Supabase Auth -> Email Templates -> "Magic Link").
+
+  ZASTO KOD, A NE LINK: klijent (`verifyEmailOtp`, src/auth/session.ts) salje kod na
+  /auth/v1/verify i NEMA callback rutu za magic link. Zadani Supabase predlozak salje
+  `{{ .ConfirmationURL }}`, pa klik vodi na stranicu koja ne postoji. Zato ovdje ide
+  ISKLJUCIVO `{{ .Token }}` i namjerno NEMA linka, da korisnik nema sto krivo kliknuti.
+
+  ISTI SADRZAJ TREBA I U "Confirm signup": prvi put kad se netko prijavi, racun jos ne
+  postoji (klijent salje create_user:true), pa GoTrue posalje signup predlozak. Ako je
+  ondje ostao zadani link, prvi korisnici dobiju link a postojeci kod.
+
+  Trajanje se ravna po auth.email.otp_expiry (trenutno 3600 s = 1 sat).
+
+  NAPOMENA: NE pokretati `supabase config push` da se ovo objavi. config.toml jos ima
+  tvornicke lokalne vrijednosti ([auth] site_url 127.0.0.1, rate_limit email_sent = 2),
+  pa bi push pregazio produkciju. Zalijepi sadrzaj u dashboard rucno.
+-->
+<h2>Prijava u Lektu</h2>
+
+<p>Tvoj kod za prijavu je:</p>
+
+<p style="font-size:28px; font-weight:700; letter-spacing:4px; margin:16px 0;">{{ .Token }}</p>
+
+<p>Upiši ga u prozor za prijavu na stranici. Kod vrijedi jedan sat.</p>
+
+<p style="color:#666; font-size:13px;">
+  Ako nisi tražio prijavu, slobodno zanemari ovaj e-mail. Netko je vjerojatno pogriješio
+  adresu, a bez koda se u tvoj račun ne može ući.
+</p>

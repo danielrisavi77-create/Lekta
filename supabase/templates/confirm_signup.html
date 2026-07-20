@@ -1,0 +1,26 @@
+<!--
+  Predlozak za PRVU prijavu (Supabase Auth -> Email Templates -> "Confirm signup").
+
+  Klijent salje create_user:true, pa korisnik koji se javlja prvi put jos nema racun i
+  GoTrue mu posalje OVAJ predlozak, a ne "Magic Link". Provjereno na produkciji: postojeci
+  racun ima confirmation_sent_at != null, dakle signup potvrda se stvarno salje.
+
+  Zato i ovdje ide `{{ .Token }}`, isto kao u magic_link.html. Da je ostao zadani link,
+  prvi korisnici bete dobili bi link koji nikamo ne vodi (klijent nema callback rutu), dok
+  bi postojeci korisnici dobivali kod - najgora vrsta kvara jer izgleda nasumicno.
+
+  NAPOMENA: NE pokretati `supabase config push` da se ovo objavi (config.toml jos ima
+  tvornicke lokalne [auth] vrijednosti). Zalijepi sadrzaj u dashboard rucno.
+-->
+<h2>Dobrodošao u Lektu</h2>
+
+<p>Tvoj kod za prijavu je:</p>
+
+<p style="font-size:28px; font-weight:700; letter-spacing:4px; margin:16px 0;">{{ .Token }}</p>
+
+<p>Upiši ga u prozor za prijavu na stranici. Kod vrijedi jedan sat.</p>
+
+<p style="color:#666; font-size:13px;">
+  Ako se nisi prijavljivao na Lektu, slobodno zanemari ovaj e-mail. Račun se bez koda ne
+  aktivira.
+</p>
