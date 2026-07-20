@@ -53,13 +53,13 @@ describe('applyFixers golden round-trip', () => {
     const result = await applyFixers(originalDocx, [
       { ruleId: 'margina-desno', fixerId: 'margins-fixer', params: { right: 2.5 } },
       { ruleId: 'font-glavni', fixerId: 'font-fixer', params: { fontName: 'Times New Roman', fontSizePt: 12 } },
-      // Namjerno trazimo fixer za atribut koji ne postoji u ovom fixtureu
-      // (nema w:jc taga), da dokazemo fail-safe skip ponasanje.
-      { ruleId: 'nepostojeci-atribut', fixerId: 'alignment-fixer', params: { val: 'both' } },
+      // Poravnanja u fixtureu NEMA (Word ga izostavlja kad je lijevo). Popravak ga mora STVORITI,
+      // inace bi obostrano poravnanje bilo nepopravljivo na vecini stvarnih radova.
+      { ruleId: 'poravnanje', fixerId: 'alignment-fixer', params: { val: 'both' } },
     ]);
 
-    expect(result.changelog).toHaveLength(2);
-    expect(result.skipped).toEqual(['nepostojeci-atribut']);
+    expect(result.changelog).toHaveLength(3);
+    expect(result.skipped).toEqual([]);
 
     const newEntries = await readZip(result.docxBytes);
     const dec = new TextDecoder();
@@ -82,6 +82,12 @@ describe('applyFixers golden round-trip', () => {
     expect(newContentTypes).toBe(fixture.contentTypesXml); // netaknuti xml entry bit-identican
 
     expect(newEntries).toHaveLength(fixture.entries.length); // nista izgubljeno ni dodano
+
+    // Novostvoreni w:jc mora biti U w:pPr stila Normal i na shemom propisanom mjestu (iza
+    // w:spacing), inace Word dokument prijavljuje kao ostecen.
+    const normalStyle = newStylesXml.match(/<w:style\b[^>]*w:styleId="Normal"[\s\S]*?<\/w:style>/)![0];
+    expect(normalStyle).toContain('<w:jc w:val="both"/>');
+    expect(normalStyle.indexOf('<w:spacing')).toBeLessThan(normalStyle.indexOf('<w:jc'));
   });
 
   it('baca gresku ako docx nema word/document.xml (nije valjan Word dokument)', async () => {
@@ -97,14 +103,15 @@ describe('applyFixers golden round-trip', () => {
     const fixture = buildSyntheticDocx();
     const originalDocx = await writeZip(fixture.entries);
 
-    // Margina vec ima ciljanu vrijednost (top 1600 nije dirana; right na postojecu 1134/2.0cm)
+    // Margina vec ima ciljanu vrijednost (top 1600 nije dirana; right na postojecu 1134/2.0cm).
+    // Fixeri koji vrijednost STVARAJU (poravnanje) namjerno nisu u ovom skupu: ovdje se dokazuje
+    // da dokument kojem stvarno nista ne treba izlazi bajt-identican.
     const result = await applyFixers(originalDocx, [
       { ruleId: 'vec-ok', fixerId: 'margins-fixer', params: { right: 2.0 } },
-      { ruleId: 'nepostojeci-atribut', fixerId: 'alignment-fixer', params: { val: 'both' } },
     ]);
 
     expect(result.changelog).toHaveLength(0);
-    expect(result.skipped).toEqual(['vec-ok', 'nepostojeci-atribut']);
+    expect(result.skipped).toEqual(['vec-ok']);
     // Bez rekompresije i bez re-encode: dokument bez popravaka se NE prepisuje.
     expect(result.docxBytes).toEqual(originalDocx);
   });
@@ -132,7 +139,7 @@ describe('applyFixers golden round-trip', () => {
     expect(newDocumentXml).toContain('Direktno formatiran odlomak.');
   });
 
-  it('deep BEZ stilskog backstopa (theme-only rFonts) NE cisti tijelo: nema regresije na theme', async () => {
+  it('theme-only rFonts (stock Word): upisuje doslovni font i UKLANJA referencu na temu', async () => {
     const enc = new TextEncoder();
     // Stock Word predlozak: docDefaults ima SAMO theme atribute, Normal bez spacinga.
     const themeStyles =
@@ -152,11 +159,25 @@ describe('applyFixers golden round-trip', () => {
       { ruleId: 'font-glavni', fixerId: 'font-fixer', params: { fontName: 'Times New Roman', deep: true } },
     ]);
 
-    // Stilski patch ne uspije (theme-only, patch-only politika) I deep se NE
-    // primijeni: da jest, dokument bi pao na Calibri theme umjesto na TNR.
-    expect(result.changelog).toHaveLength(0);
-    expect(result.skipped).toEqual(['font-glavni']);
-    expect(result.docxBytes).toEqual(docx);
+    // Ovo je najcesci oblik na svijetu: dokument koji je Word sam napravio. Prije se popravak
+    // ovdje predavao (theme-only = nema sto krpati), pa font nije bio popravljiv. Sada se doslovni
+    // font UPISUJE, a referenca na temu se MORA ukloniti jer po shemi ima prednost nad doslovnim
+    // imenom, pa bi inace tekst ostao Calibri unatoc upisanom Times New Romanu.
+    expect(result.changelog).toHaveLength(1);
+    expect(result.skipped).toEqual([]);
+
+    const dec = new TextDecoder();
+    const newEntries = await readZip(result.docxBytes);
+    const newStyles = dec.decode(newEntries.find((e) => e.name === 'word/styles.xml')!.data);
+    const newDoc = dec.decode(newEntries.find((e) => e.name === 'word/document.xml')!.data);
+
+    expect(newStyles).toContain('w:ascii="Times New Roman"');
+    expect(newStyles).toContain('w:hAnsi="Times New Roman"');
+    expect(newStyles).not.toContain('w:asciiTheme');
+    expect(newStyles).not.toContain('w:hAnsiTheme');
+    // Tekst zavrsava na cilju: ili run i dalje nosi TNR, ili ga nasljedjuje iz docDefaults.
+    expect(newDoc).not.toContain('Calibri');
+    expect(newDoc).toContain('Rucno postavljen TNR preko theme predloska.');
   });
 
   it('deep-only: stil VEC na cilju (patch no-op) ali deep i dalje cisti run-override', async () => {
@@ -187,7 +208,7 @@ describe('applyFixers golden round-trip', () => {
     expect(newDoc).toContain('Tekst tijela rada.'); // sadrzaj netaknut
   });
 
-  it('deep NE cisti font kad Normal stil nadjacava cilj drugim fontom (regresija-zastita)', async () => {
+  it('Normal stil koji nadjacava cilj i sam se poravnava s ciljem (tekst zavrsi na TNR)', async () => {
     const enc = new TextEncoder();
     // docDefaults ima literal ascii+hAnsi (backstop postoji), ALI Normal stil
     // definira SVOJ rFonts=Arial koji nadjacava docDefaults za Normal-odlomke.
@@ -209,18 +230,23 @@ describe('applyFixers golden round-trip', () => {
       { ruleId: 'font-glavni', fixerId: 'font-fixer', params: { fontName: 'Times New Roman', deep: true } },
     ]);
 
-    // docDefaults se patcha (changelog nije prazan), ALI deep NE skida run TNR:
-    // da ga skine, run bi pao na Normal=Arial umjesto na cilj TNR.
+    // Stara zastita je ovdje ODUSTAJALA od dubokog ciscenja, jer bi run pao na Normal=Arial.
+    // Sada se umjesto odustajanja i sam Normal dovodi na cilj, pa ISHOD (tekst je TNR) vrijedi
+    // bez obzira nosi li ga run ili ga nasljedjuje. Arial ne smije ostati nigdje.
     const newEntries = await readZip(result.docxBytes);
     const dec = new TextDecoder();
     const newDoc = dec.decode(newEntries.find((e) => e.name === 'word/document.xml')!.data);
-    expect(newDoc).toContain('w:ascii="Times New Roman"'); // run TNR ostaje
+    const newStyles = dec.decode(newEntries.find((e) => e.name === 'word/styles.xml')!.data);
+
+    expect(newStyles).not.toContain('"Arial"');   // kao VRIJEDNOST atributa; u tekstu rada smije stajati
+    expect(newStyles).toContain('w:ascii="Times New Roman"');
+    expect(newDoc).not.toContain('"Arial"');
+    expect(newDoc).toContain('Rucni TNR preko Arial Normala.');
   });
 
-  // Isti backstop, ali Normal definira SAMO w:hAnsi. Deep skida oba atributa s runova, pa bi
-  // provjera koja gleda samo w:ascii ovdje krivo zakljucila "nema konflikta" i vratila dijakritike
-  // (High-ANSI raspon) na Normalov font umjesto na ciljani.
-  it('deep NE cisti font ni kad Normal nadjacava cilj SAMO preko w:hAnsi', async () => {
+  // Isti slucaj, ali Normal definira SAMO w:hAnsi. To je slot iz kojeg se crtaju hrvatski
+  // dijakriticki znakovi, pa mora zavrsiti na cilju jednako kao i w:ascii.
+  it('Normal koji nadjacava cilj SAMO preko w:hAnsi takodjer zavrsi na cilju (dijakritika)', async () => {
     const enc = new TextEncoder();
     const styles =
       '<?xml version="1.0"?><w:styles><w:docDefaults><w:rPrDefault><w:rPr>' +
@@ -240,10 +266,13 @@ describe('applyFixers golden round-trip', () => {
       { ruleId: 'font-glavni', fixerId: 'font-fixer', params: { fontName: 'Times New Roman', deep: true } },
     ]);
 
-    const newDoc = new TextDecoder().decode(
-      (await readZip(result.docxBytes)).find((e) => e.name === 'word/document.xml')!.data,
-    );
-    expect(newDoc).toContain('w:hAnsi="Times New Roman"');
+    const dec2 = new TextDecoder();
+    const entries2 = await readZip(result.docxBytes);
+    const newDoc = dec2.decode(entries2.find((e) => e.name === 'word/document.xml')!.data);
+    const newStyles = dec2.decode(entries2.find((e) => e.name === 'word/styles.xml')!.data);
+    expect(newStyles).not.toContain('Arial');
+    expect(newStyles).toContain('w:hAnsi="Times New Roman"');
+    expect(newDoc).not.toContain('Arial');
   });
 
   it('paragraph-spacing-fixer (shallow): stilski w:before/w:after na 0, w:line i document.xml netaknuti', async () => {
@@ -364,11 +393,19 @@ describe('applyFixers golden round-trip', () => {
       { ruleId: 'razmak-odlomaka', fixerId: 'paragraph-spacing-fixer', params: { deep: true } },
     ]);
 
-    // Stilski patch ne uspije (Normal nema w:spacing, nema backstopa) I deep se
-    // NE primijeni: da jest, dokument bi pao na Wordov default umjesto na cilj.
-    expect(result.changelog).toHaveLength(0);
-    expect(result.skipped).toEqual(['razmak-odlomaka']);
-    expect(result.docxBytes).toEqual(docx);
+    // Normal nema w:spacing, sto je stanje u SVAKOM dokumentu koji je Word sam napravio. Prije se
+    // popravak tu predavao; sada se backstop stvara, pa se izravni razmak smije ocistiti jer
+    // odlomak pada na ciljanih 0/0, a ne na Wordov default.
+    expect(result.changelog).toHaveLength(1);
+    expect(result.skipped).toEqual([]);
+
+    const dec2 = new TextDecoder();
+    const entries2 = await readZip(result.docxBytes);
+    const newStyles = dec2.decode(entries2.find((e) => e.name === 'word/styles.xml')!.data);
+    const newDoc = dec2.decode(entries2.find((e) => e.name === 'word/document.xml')!.data);
+    expect(newStyles).toContain('<w:spacing w:before="0" w:after="0"/>');
+    expect(newDoc).not.toContain('w:before="240"');
+    expect(newDoc).toContain('Odlomak s izravnim razmakom bez stilskog backstopa.');
   });
 
   it('empty-paragraph-fixer: kolabira niz od 4 prazna odlomka na 1, styles.xml netaknut', async () => {
@@ -541,7 +578,7 @@ describe('applyFixers golden round-trip', () => {
     expect(newDocumentXml).toBe(fixture.documentXml);
   });
 
-  it('footnote-spacing-fixer deep BEZ FootnoteText backstopa NE cisti footnote odlomak (regresija-zastita)', async () => {
+  it('FootnoteText stil bez w:spacing: backstop se stvara, pa se izravni razmak fusnote cisti', async () => {
     const fixture = buildFootnoteDocx({ footnoteTextBackstop: false, footnoteSpacingOverride: true });
     const originalDocx = await writeZip(fixture.entries);
 
@@ -549,12 +586,37 @@ describe('applyFixers golden round-trip', () => {
       { ruleId: 'razmak-fusnota', fixerId: 'footnote-spacing-fixer', params: { deep: true } },
     ]);
 
-    // Stilski patch ne uspije (FootnoteText nema w:spacing, nema backstopa) I
-    // deep se NE primijeni: da jest, footnote odlomak bi pao na Word default
-    // umjesto na ciljanih 0/0.
+    // Stil FootnoteText postoji, ali bez w:spacing. Razlika prema "stil uopce ne postoji" je bitna:
+    // stil se i dalje NE izmislja (v. test nize), ali kad postoji, razmak se u njega upisuje.
+    expect(result.changelog).toHaveLength(1);
+    expect(result.skipped).toEqual([]);
+
+    const dec2 = new TextDecoder();
+    const entries2 = await readZip(result.docxBytes);
+    const newStyles = dec2.decode(entries2.find((e) => e.name === 'word/styles.xml')!.data);
+    const newFootnotes = dec2.decode(entries2.find((e) => e.name === 'word/footnotes.xml')!.data);
+    expect(newStyles).toContain('<w:spacing w:before="0" w:after="0"/>');
+    expect(newFootnotes).not.toContain('w:before="120"');
+  });
+
+  it('FootnoteText stil koji UOPCE ne postoji se ne izmislja (granica ostaje)', async () => {
+    const enc = new TextEncoder();
+    const styles = '<?xml version="1.0"?><w:styles><w:docDefaults><w:rPrDefault><w:rPr/></w:rPrDefault></w:docDefaults></w:styles>';
+    const doc = '<?xml version="1.0"?><w:document><w:body><w:p><w:r><w:t>Tijelo.</w:t></w:r></w:p></w:body></w:document>';
+    const notes = '<?xml version="1.0"?><w:footnotes><w:footnote w:id="1"><w:p><w:pPr><w:spacing w:before="120"/></w:pPr><w:r><w:t>Nota.</w:t></w:r></w:p></w:footnote></w:footnotes>';
+    const docx = await writeZip([
+      { name: 'word/document.xml', data: enc.encode(doc) },
+      { name: 'word/styles.xml', data: enc.encode(styles) },
+      { name: 'word/footnotes.xml', data: enc.encode(notes) },
+    ]);
+
+    const result = await applyFixers(docx, [
+      { ruleId: 'razmak-fusnota', fixerId: 'footnote-spacing-fixer', params: { deep: true } },
+    ]);
+
     expect(result.changelog).toHaveLength(0);
     expect(result.skipped).toEqual(['razmak-fusnota']);
-    expect(result.docxBytes).toEqual(originalDocx);
+    expect(result.docxBytes).toEqual(docx);
   });
 
   it('footnote-spacing-fixer bez word/footnotes.xml u zipu: skipped, ne baca, ostali entryji netaknuti', async () => {

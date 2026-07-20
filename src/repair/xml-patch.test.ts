@@ -148,15 +148,79 @@ describe('patchDefaultFont', () => {
     expect(result.xml).not.toContain('w:ascii="A & B'); // sirovi & ne smije u atribut
   });
 
-  it('theme-only rFonts (bez w:ascii) je posten no-op, ne izmislja atribute', () => {
-    // v1 granica: kad docDefaults koristi SAMO w:asciiTheme/w:hAnsiTheme, fixer ne
-    // dira nista i vraca applied:false (fail-safe skip koji UI iskreno prijavi).
+  it('theme-only rFonts: upisuje doslovni font i MICE referencu na temu (inace bi tema pobijedila)', () => {
+    // Stanje u svakom dokumentu koji je Word sam napravio. Po shemi w:asciiTheme ima prednost pred
+    // w:ascii, pa upis bez uklanjanja teme ne bi promijenio nista vidljivo.
     const themed =
       '<w:styles><w:docDefaults><w:rPrDefault><w:rPr>' +
-      '<w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi"/>' +
+      '<w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi" w:cstheme="minorBidi"/>' +
       '</w:rPr></w:rPrDefault></w:docDefaults></w:styles>';
     const result = patchDefaultFont(themed, { fontName: 'Times New Roman' });
-    expect(result.applied).toBe(false);
+    expect(result.applied).toBe(true);
+    expect(result.xml).toContain('w:ascii="Times New Roman"');
+    expect(result.xml).toContain('w:hAnsi="Times New Roman"');
+    expect(result.xml).not.toContain('w:asciiTheme');
+    expect(result.xml).not.toContain('w:hAnsiTheme');
+    // Slot za slozena pisma nije nas posao i ostaje netaknut.
+    expect(result.xml).toContain('w:cstheme="minorBidi"');
+  });
+
+  it('rFonts koji UOPCE ne postoji se stvara na shemom propisanom mjestu (prvi u rPr)', () => {
+    const bare = '<w:styles><w:docDefaults><w:rPrDefault><w:rPr><w:sz w:val="22"/></w:rPr></w:rPrDefault></w:docDefaults></w:styles>';
+    const result = patchDefaultFont(bare, { fontName: 'Times New Roman', sizeHalfPoints: 24 });
+    expect(result.applied).toBe(true);
+    // CT_RPr trazi rFonts PRIJE sz; obrnut redoslijed Word prijavljuje kao ostecenje.
+    expect(result.xml.indexOf('<w:rFonts')).toBeLessThan(result.xml.indexOf('<w:sz'));
+    expect(result.xml).toContain('<w:sz w:val="24"/>');
+  });
+});
+
+describe('postavljanje vrijednosti koje u dokumentu ne postoje', () => {
+  // Stil Normal kakav Word stvarno pise: bez pPr, bez proreda, bez poravnanja.
+  const STOCK_NORMAL =
+    '<w:styles><w:docDefaults><w:rPrDefault><w:rPr/></w:rPrDefault></w:docDefaults>' +
+    '<w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:qFormat/></w:style></w:styles>';
+
+  it('prored se stvara u w:pPr stila Normal koji uopce nema pPr', () => {
+    const r = patchDefaultSpacing(STOCK_NORMAL, 360, 'auto');
+    expect(r.applied).toBe(true);
+    expect(r.xml).toContain('<w:pPr><w:spacing w:line="360" w:lineRule="auto"/></w:pPr>');
+    // CT_Style trazi pPr IZA qFormat.
+    expect(r.xml.indexOf('<w:qFormat/>')).toBeLessThan(r.xml.indexOf('<w:pPr>'));
+  });
+
+  it('poravnanje se stvara, i to IZA proreda (CT_PPr redoslijed)', () => {
+    const withSpacing = patchDefaultSpacing(STOCK_NORMAL, 360, 'auto').xml;
+    const r = patchDefaultAlignment(withSpacing, 'both');
+    expect(r.applied).toBe(true);
+    expect(r.xml).toContain('<w:jc w:val="both"/>');
+    expect(r.xml.indexOf('<w:spacing')).toBeLessThan(r.xml.indexOf('<w:jc'));
+  });
+
+  it('razmaci odlomaka se dodaju na POSTOJECI w:spacing, ne stvaraju drugi element', () => {
+    const withLine = patchDefaultSpacing(STOCK_NORMAL, 360, 'auto').xml;
+    const r = patchDefaultParagraphSpacing(withLine, 0, 0);
+    expect(r.applied).toBe(true);
+    expect((r.xml.match(/<w:spacing\b/g) || [])).toHaveLength(1);
+    expect(r.xml).toContain('w:line="360"');
+    expect(r.xml).toContain('w:before="0"');
+    expect(r.xml).toContain('w:after="0"');
+  });
+
+  it('prored NE zavrsi na w:spacing iz w:rPr (razmak medju znakovima nije prored)', () => {
+    const charSpacing =
+      '<w:styles><w:style w:type="paragraph" w:styleId="Normal"><w:name w:val="Normal"/>' +
+      '<w:rPr><w:spacing w:val="20"/></w:rPr></w:style></w:styles>';
+    const r = patchDefaultSpacing(charSpacing, 360, 'auto');
+    expect(r.applied).toBe(true);
+    expect(r.xml).toContain('<w:spacing w:val="20"/>');          // znakovni razmak netaknut
+    expect(r.xml).toContain('<w:pPr><w:spacing w:line="360"');   // prored u vlastitom pPr
+  });
+
+  it('stil koji ne postoji se ne izmislja', () => {
+    const noNormal = '<w:styles><w:docDefaults><w:rPrDefault><w:rPr/></w:rPrDefault></w:docDefaults></w:styles>';
+    expect(patchDefaultAlignment(noNormal, 'both').applied).toBe(false);
+    expect(patchDefaultSpacing(noNormal, 360).applied).toBe(false);
   });
 });
 

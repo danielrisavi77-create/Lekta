@@ -143,54 +143,328 @@ function findBlock(xml: string, pattern: RegExp): { block: string; start: number
   return { block: match[0], start: match.index, end: match.index + match[0].length };
 }
 
+// === POSTAVLJANJE vrijednosti koje u dokumentu NE POSTOJE ===
+//
+// ZASTO OVO UOPCE TREBA: Word vecinu oblikovanja ne zapisuje doslovno. Font sprema kao referencu
+// na temu (w:asciiTheme="minorHAnsi"), poravnanje izostavlja kad je lijevo (zadano), a razmake
+// odlomaka drzi u zadanim postavkama dokumenta umjesto u stilu. Politika "krpaj samo postojece"
+// je zato na dokumentu koji je Word sam napravio odbijala popraviti font, prored, poravnanje i
+// razmake, dakle bas ona pravila zbog kojih se popravak i kupuje. Mjereno Wordom
+// (scripts/word-verify): od cetiri pravila primjenjivalo se nula do jedno.
+//
+// SIGURNOSNA GRANICA OSTAJE ISTA: pise se ISKLJUCIVO u docDefaults i u stil Normal (i FootnoteText
+// za fusnote). Naslovi, tablice i ostali stilovi se ne diraju, kao ni pojedinacni odlomci.
+//
+// Redoslijed djece je u OOXML-u STROG (shema koristi xsd:sequence). Word dokument s elementima u
+// krivom redoslijedu prijavljuje kao ostecen, pa se novi element mora umetnuti tocno na svoje
+// mjesto, ne na kraj.
+const CT_RPR_ORDER = [
+  'w:rStyle', 'w:rFonts', 'w:b', 'w:bCs', 'w:i', 'w:iCs', 'w:caps', 'w:smallCaps', 'w:strike',
+  'w:dstrike', 'w:outline', 'w:shadow', 'w:emboss', 'w:imprint', 'w:noProof', 'w:snapToGrid',
+  'w:vanish', 'w:webHidden', 'w:color', 'w:spacing', 'w:w', 'w:kern', 'w:position', 'w:sz',
+  'w:szCs', 'w:highlight', 'w:u', 'w:effect', 'w:bdr', 'w:shd', 'w:fitText', 'w:vertAlign',
+  'w:rtl', 'w:cs', 'w:em', 'w:lang', 'w:eastAsianLayout', 'w:specVanish', 'w:oMath',
+];
+
+const CT_PPR_ORDER = [
+  'w:pStyle', 'w:keepNext', 'w:keepLines', 'w:pageBreakBefore', 'w:framePr', 'w:widowControl',
+  'w:numPr', 'w:suppressLineNumbers', 'w:pBdr', 'w:shd', 'w:tabs', 'w:suppressAutoHyphens',
+  'w:kinsoku', 'w:wordWrap', 'w:overflowPunct', 'w:topLinePunct', 'w:autoSpaceDE', 'w:autoSpaceDN',
+  'w:bidi', 'w:adjustRightInd', 'w:snapToGrid', 'w:spacing', 'w:ind', 'w:contextualSpacing',
+  'w:mirrorIndents', 'w:suppressOverlap', 'w:jc', 'w:textDirection', 'w:textAlignment',
+  'w:textboxTightWrap', 'w:outlineLvl', 'w:divId', 'w:cnfStyle', 'w:rPr', 'w:sectPr', 'w:pPrChange',
+];
+
+const CT_STYLE_ORDER = [
+  'w:name', 'w:aliases', 'w:basedOn', 'w:next', 'w:link', 'w:autoRedefine', 'w:hidden',
+  'w:uiPriority', 'w:semiHidden', 'w:unhideWhenUsed', 'w:qFormat', 'w:locked', 'w:personal',
+  'w:personalCompose', 'w:personalReply', 'w:rsid', 'w:pPr', 'w:rPr', 'w:tblPr', 'w:trPr',
+  'w:tcPr', 'w:tblStylePr',
+];
+
+/**
+ * Zamijeni SADRZAJ svih <tag>...</tag> blokova NUL znakovima jednake duljine.
+ * Duljina ostaje ista pa indeksi nadjeni na maskiranom nizu vrijede i za izvorni. Sluzi da se
+ * pretraga izravne djece ne zavara istoimenim elementom iz ugnjezdenog bloka: `w:spacing` postoji
+ * i u CT_PPr (prored) i u CT_RPr (razmak medju znakovima), pa bi bez maskiranja `w:rPr` unutar
+ * `w:pPr` prored zavrsio na krivom elementu.
+ */
+function maskElement(xml: string, tag: string): string {
+  const re = new RegExp(`<${escapeRegex(tag)}\\b[^>]*>[\\s\\S]*?</${escapeRegex(tag)}>`, 'g');
+  return xml.replace(re, (m) => ' '.repeat(m.length));
+}
+
+function maskAll(xml: string, tags: string[]): string {
+  let out = xml;
+  for (const t of tags) out = maskElement(out, t);
+  return out;
+}
+
+/** Nadji izravno dijete `name`, preskacuci ugnjezdene blokove navedene u `maskTags`. */
+function findDirectChild(
+  inner: string, name: string, maskTags: string[],
+): { start: number; end: number; tag: string } | null {
+  const probe = maskAll(inner, maskTags);
+  const n = escapeRegex(name);
+  const m = probe.match(new RegExp(`<${n}\\b[^>]*/>|<${n}\\b[^>]*>[\\s\\S]*?</${n}>`));
+  if (!m || m.index === undefined) return null;
+  return { start: m.index, end: m.index + m[0].length, tag: inner.slice(m.index, m.index + m[0].length) };
+}
+
+/** Mjesto na koje `name` smije doci prema shemi: odmah iza zadnjeg elementa koji mu prethodi. */
+function schemaInsertIndex(inner: string, name: string, order: string[], maskTags: string[]): number {
+  const idx = order.indexOf(name);
+  if (idx < 0) return inner.length;
+  const probe = maskAll(inner, maskTags);
+  let at = 0;
+  for (let i = 0; i < idx; i++) {
+    const n = escapeRegex(order[i]);
+    const re = new RegExp(`<${n}\\b[^>]*/>|<${n}\\b[^>]*>[\\s\\S]*?</${n}>`, 'g');
+    let m: RegExpExecArray | null;
+    let last: RegExpExecArray | null = null;
+    while ((m = re.exec(probe)) !== null) last = m;
+    if (last) at = Math.max(at, last.index + last[0].length);
+  }
+  return at;
+}
+
+function buildSelfClosingTag(name: string, attrs: Record<string, string>): string {
+  const a = Object.entries(attrs).map(([k, v]) => ` ${k}="${escapeXmlAttr(v)}"`).join('');
+  return `<${name}${a}/>`;
+}
+
+/** Ukloni imenovane atribute s jednog taga (koristi se da referenca na temu ne nadjaca doslovni font). */
+function removeAttributes(tag: string, names: string[]): string {
+  let out = tag;
+  for (const n of names) out = out.replace(new RegExp(`\\s${escapeRegex(n)}="[^"]*"`, 'g'), '');
+  return out;
+}
+
+interface UpsertResult {
+  inner: string;
+  changed: boolean;
+  before: Record<string, string>;
+  after: Record<string, string>;
+}
+
+/**
+ * Postavi atribute na izravno dijete `name`: postojece vrijednosti se mijenjaju, atributi koji
+ * nedostaju se DODAJU, a ako elementa uopce nema, stvara se na shemom propisanom mjestu.
+ * `dropAttrs` se uklanjaju s postojeceg elementa (referenca na temu ima prednost pred doslovnim
+ * imenom fonta, pa bi bez uklanjanja upis bio tihi promasaj).
+ */
+function upsertChild(
+  inner: string,
+  name: string,
+  attrs: Record<string, string>,
+  order: string[],
+  maskTags: string[],
+  dropAttrs: string[] = [],
+): UpsertResult {
+  const before: Record<string, string> = {};
+  const after: Record<string, string> = {};
+  const existing = findDirectChild(inner, name, maskTags);
+
+  if (!existing) {
+    const at = schemaInsertIndex(inner, name, order, maskTags);
+    for (const [k, v] of Object.entries(attrs)) { before[k] = ''; after[k] = v; }
+    return {
+      inner: inner.slice(0, at) + buildSelfClosingTag(name, attrs) + inner.slice(at),
+      changed: true, before, after,
+    };
+  }
+
+  let tag = existing.tag;
+  let changed = false;
+  const dropped = removeAttributes(tag, dropAttrs);
+  if (dropped !== tag) { tag = dropped; changed = true; }
+
+  for (const [k, v] of Object.entries(attrs)) {
+    const escaped = escapeXmlAttr(v);
+    const attrRe = new RegExp(`(${escapeRegex(k)}=")([^"]*)(")`);
+    const m = tag.match(attrRe);
+    if (m) {
+      if (m[2] === escaped) continue;
+      before[k] = m[2]; after[k] = escaped;
+      tag = tag.replace(attrRe, (_x, p1: string, _old: string, p3: string) => p1 + escaped + p3);
+      changed = true;
+    } else {
+      // Atribut ne postoji: DODAJ ga (prije je ovdje bio tihi preskok, zbog cega se dokument koji
+      // vrijednost ne zapisuje nije dao popraviti).
+      before[k] = ''; after[k] = escaped;
+      tag = tag.replace(/\s*\/?>$/, (end) => ` ${k}="${escaped}"${end.trimStart()}`);
+      changed = true;
+    }
+  }
+
+  if (!changed) return { inner, changed: false, before, after };
+  return { inner: inner.slice(0, existing.start) + tag + inner.slice(existing.end), changed: true, before, after };
+}
+
+/** Dohvati sadrzaj kontejnera (npr. w:pPr) unutar bloka; stvori ga na shemom propisanom mjestu ako ga nema. */
+function withContainer(
+  block: string,
+  name: string,
+  order: string[],
+  maskTags: string[],
+  transform: (inner: string) => UpsertResult,
+): UpsertResult {
+  const n = escapeRegex(name);
+  const paired = block.match(new RegExp(`<${n}\\b[^>]*>([\\s\\S]*?)</${n}>`));
+  if (paired && paired.index !== undefined) {
+    const res = transform(paired[1]);
+    if (!res.changed) return { ...res, inner: block };
+    const rebuilt = paired[0].replace(paired[1], () => res.inner);
+    return { ...res, inner: block.slice(0, paired.index) + rebuilt + block.slice(paired.index + paired[0].length) };
+  }
+  // Samozatvarajuci oblik (<w:pPr/>) ili element uopce ne postoji: gradi ga iz praznog sadrzaja.
+  const res = transform('');
+  if (!res.changed) return { ...res, inner: block };
+  const created = `<${name}>${res.inner}</${name}>`;
+  const selfClosing = block.match(new RegExp(`<${n}\\b[^>]*/>`));
+  if (selfClosing && selfClosing.index !== undefined) {
+    return { ...res, inner: block.slice(0, selfClosing.index) + created + block.slice(selfClosing.index + selfClosing[0].length) };
+  }
+  // Umetanje unutar RODITELJA: pronadji njegov sadrzaj (blok je npr. cijeli <w:style ...>...</w:style>).
+  const open = block.match(/^<[^>]*>/);
+  const close = block.match(/<\/[^>]+>$/);
+  if (!open || !close) return { ...res, inner: block };
+  const innerStart = open[0].length;
+  const innerEnd = block.length - close[0].length;
+  const parentInner = block.slice(innerStart, innerEnd);
+  const at = schemaInsertIndex(parentInner, name, order, maskTags);
+  return {
+    ...res,
+    inner: block.slice(0, innerStart) + parentInner.slice(0, at) + created + parentInner.slice(at) + block.slice(innerEnd),
+  };
+}
+
+/**
+ * Zadani font i velicina osnovnog teksta.
+ *
+ * Pise na DVA mjesta, jer oba mogu odlucivati o izgledu tijela rada:
+ *  1. `docDefaults` (temelj cijelog dokumenta),
+ *  2. stil `Normal`, ali SAMO ako on sam definira font ili velicinu; tada nadjacava docDefaults pa
+ *     bi ispravak samo temelja bio bez ucinka.
+ *
+ * Referenca na temu (`w:asciiTheme`) po shemi IMA PREDNOST pred doslovnim imenom, pa se pri upisu
+ * doslovnog imena mora ukloniti, inace bi promjena bila tihi promasaj (dokument bi ostao Calibri).
+ */
 export function patchDefaultFont(
   stylesXml: string,
   update: { fontName?: string; sizeHalfPoints?: number },
 ): PatchResult {
-  const found = findBlock(stylesXml, /<w:docDefaults>[\s\S]*?<\/w:docDefaults>/);
-  if (!found) return { ...NO_OP, xml: stylesXml };
-
-  let block = found.block;
   const before: Record<string, string> = {};
   const after: Record<string, string> = {};
   const foundAttrs: Record<string, boolean> = {};
+  let xml = stylesXml;
   let changed = false;
 
-  if (update.fontName !== undefined) {
-    const fontResult = patchTagAttributes(block, /<w:rFonts\b[^>]*\/?>/, {
-      'w:ascii': update.fontName,
-      'w:hAnsi': update.fontName,
-    });
-    // Backstop postoji tek kad docDefaults ima LITERALNI w:ascii I w:hAnsi
-    // (theme-only rFonts se patch-only politikom ne dira). Deep strippa OBA
-    // slota s runova, pa i backstop mora jamciti oba: inace bi High-ANSI slot
-    // (hrvatski dijakritici c/z-kvacica, dj) pao na theme font.
-    if (fontResult.found['w:ascii'] && fontResult.found['w:hAnsi']) foundAttrs.fontName = true;
-    if (fontResult.applied) {
-      block = fontResult.xml;
-      before.fontName = fontResult.before['w:ascii'] ?? '';
-      after.fontName = update.fontName;
-      changed = true;
+  const applyToRPr = (blockStart: number, blockEnd: number, block: string): string => {
+    let out = block;
+    if (update.fontName !== undefined) {
+      const r = upsertChild(out, 'w:rFonts',
+        { 'w:ascii': update.fontName, 'w:hAnsi': update.fontName },
+        CT_RPR_ORDER, [], ['w:asciiTheme', 'w:hAnsiTheme']);
+      if (r.changed) {
+        out = r.inner;
+        if (before.fontName === undefined) {
+          before.fontName = r.before['w:ascii'] ?? '';
+          after.fontName = update.fontName;
+        }
+        changed = true;
+      }
+      foundAttrs.fontName = true; // nakon upserta backstop postoji u svakom slucaju
+    }
+    if (update.sizeHalfPoints !== undefined) {
+      const val = String(update.sizeHalfPoints);
+      const r = upsertChild(out, 'w:sz', { 'w:val': val }, CT_RPR_ORDER, []);
+      if (r.changed) {
+        out = r.inner;
+        if (before.sizeHalfPoints === undefined) {
+          before.sizeHalfPoints = r.before['w:val'] ?? '';
+          after.sizeHalfPoints = val;
+        }
+        changed = true;
+      }
+      foundAttrs.sizeHalfPoints = true;
+    }
+    if (out === block) return xml;
+    return xml.slice(0, blockStart) + out + xml.slice(blockEnd);
+  };
+
+  // 1. docDefaults -> w:rPrDefault -> w:rPr
+  const dd = findBlock(xml, /<w:docDefaults>[\s\S]*?<\/w:docDefaults>/);
+  if (dd) {
+    const rPrDefault = dd.block.match(/<w:rPrDefault\b[^>]*>[\s\S]*?<\/w:rPrDefault>|<w:rPrDefault\b[^>]*\/>/);
+    if (rPrDefault && rPrDefault.index !== undefined) {
+      const absStart = dd.start + rPrDefault.index;
+      const res = withContainer(rPrDefault[0], 'w:rPr', ['w:rPr'], [], (inner) => {
+        let cur = inner; const b: Record<string, string> = {}; const a: Record<string, string> = {}; let ch = false;
+        if (update.fontName !== undefined) {
+          const r = upsertChild(cur, 'w:rFonts', { 'w:ascii': update.fontName, 'w:hAnsi': update.fontName },
+            CT_RPR_ORDER, [], ['w:asciiTheme', 'w:hAnsiTheme']);
+          if (r.changed) { cur = r.inner; Object.assign(b, r.before); Object.assign(a, r.after); ch = true; }
+          foundAttrs.fontName = true;
+        }
+        if (update.sizeHalfPoints !== undefined) {
+          const r = upsertChild(cur, 'w:sz', { 'w:val': String(update.sizeHalfPoints) }, CT_RPR_ORDER, []);
+          if (r.changed) { cur = r.inner; Object.assign(b, r.before); Object.assign(a, r.after); ch = true; }
+          foundAttrs.sizeHalfPoints = true;
+        }
+        return { inner: cur, changed: ch, before: b, after: a };
+      });
+      if (res.changed) {
+        if (update.fontName !== undefined && before.fontName === undefined) {
+          before.fontName = res.before['w:ascii'] ?? '';
+          after.fontName = update.fontName;
+        }
+        if (update.sizeHalfPoints !== undefined && before.sizeHalfPoints === undefined) {
+          before.sizeHalfPoints = res.before['w:val'] ?? '';
+          after.sizeHalfPoints = String(update.sizeHalfPoints);
+        }
+        xml = xml.slice(0, absStart) + res.inner + xml.slice(absStart + rPrDefault[0].length);
+        changed = true;
+      }
     }
   }
 
-  if (update.sizeHalfPoints !== undefined) {
-    const szResult = patchTagAttributes(block, /<w:sz\b[^>]*\/?>/, {
-      'w:val': String(update.sizeHalfPoints),
-    });
-    if (szResult.found['w:val']) foundAttrs.sizeHalfPoints = true;
-    if (szResult.applied) {
-      block = szResult.xml;
-      before.sizeHalfPoints = szResult.before['w:val'] ?? '';
-      after.sizeHalfPoints = String(update.sizeHalfPoints);
-      changed = true;
+  // 2. stil Normal, ali samo ako sam definira rPr (inace vrijedi docDefaults i nema sto ispravljati)
+  const normal = findNormalStyleBlock(xml);
+  if (normal) {
+    const rPr = normal.block.match(/<w:rPr\b[^>]*>[\s\S]*?<\/w:rPr>/);
+    if (rPr && rPr.index !== undefined) {
+      const absStart = normal.start + rPr.index;
+      const updated = applyToRPr(absStart, absStart + rPr[0].length, rPr[0]);
+      if (updated !== xml) { xml = updated; changed = true; }
     }
   }
 
   if (!changed) return { ...NO_OP, xml: stylesXml, found: foundAttrs };
+  return { xml, applied: true, before, after, found: foundAttrs };
+}
 
-  const newXml = stylesXml.slice(0, found.start) + block + stylesXml.slice(found.end);
-  return { xml: newXml, applied: true, before, after, found: foundAttrs };
+/** Postavi atribute unutar w:pPr stila (stvarajuci pPr i sam element ako ne postoje). */
+function patchNormalParagraphProps(
+  stylesXml: string,
+  styleId: string,
+  element: string,
+  attrs: Record<string, string>,
+): PatchResult {
+  const found = findStyleBlock(stylesXml, styleId);
+  if (!found) return { ...NO_OP, xml: stylesXml };
+
+  // maskTags: w:rPr unutar w:pPr ima svoj w:spacing (razmak medju znakovima), koji se NE smije
+  // zamijeniti s proredom odlomka.
+  const res = withContainer(found.block, 'w:pPr', CT_STYLE_ORDER, ['w:pPr', 'w:rPr'],
+    (inner) => upsertChild(inner, element, attrs, CT_PPR_ORDER, ['w:rPr']));
+
+  const foundAttrs: Record<string, boolean> = {};
+  for (const k of Object.keys(attrs)) foundAttrs[k] = true;
+  if (!res.changed) return { ...NO_OP, xml: stylesXml, found: foundAttrs };
+
+  const newXml = stylesXml.slice(0, found.start) + res.inner + stylesXml.slice(found.end);
+  return { xml: newXml, applied: true, before: res.before, after: res.after, found: foundAttrs };
 }
 
 function findStyleBlock(stylesXml: string, styleId: string) {
@@ -208,17 +482,10 @@ export function patchDefaultSpacing(
   lineTwips: number,
   lineRule = 'auto',
 ): PatchResult {
-  const found = findNormalStyleBlock(stylesXml);
-  if (!found) return { ...NO_OP, xml: stylesXml };
-
-  const result = patchTagAttributes(found.block, /<w:spacing\b[^>]*\/?>/, {
+  return patchNormalParagraphProps(stylesXml, 'Normal', 'w:spacing', {
     'w:line': String(lineTwips),
     'w:lineRule': lineRule,
   });
-  if (!result.applied) return { ...NO_OP, xml: stylesXml, found: result.found };
-
-  const newXml = stylesXml.slice(0, found.start) + result.xml + stylesXml.slice(found.end);
-  return { xml: newXml, applied: true, before: result.before, after: result.after, found: result.found };
 }
 
 export function patchDefaultParagraphSpacing(
@@ -226,17 +493,10 @@ export function patchDefaultParagraphSpacing(
   beforeTwentieths: number,
   afterTwentieths: number,
 ): PatchResult {
-  const found = findNormalStyleBlock(stylesXml);
-  if (!found) return { ...NO_OP, xml: stylesXml };
-
-  const result = patchTagAttributes(found.block, /<w:spacing\b[^>]*\/?>/, {
+  return patchNormalParagraphProps(stylesXml, 'Normal', 'w:spacing', {
     'w:before': String(beforeTwentieths),
     'w:after': String(afterTwentieths),
   });
-  if (!result.applied) return { ...NO_OP, xml: stylesXml, found: result.found };
-
-  const newXml = stylesXml.slice(0, found.start) + result.xml + stylesXml.slice(found.end);
-  return { xml: newXml, applied: true, before: result.before, after: result.after, found: result.found };
 }
 
 // Word ugradjeni stil za tekst fusnota ima stabilan (locale-neovisan) styleId
@@ -249,28 +509,18 @@ export function patchFootnoteTextSpacing(
   beforeTwentieths: number,
   afterTwentieths: number,
 ): PatchResult {
-  const found = findStyleBlock(stylesXml, 'FootnoteText');
-  if (!found) return { ...NO_OP, xml: stylesXml };
-
-  const result = patchTagAttributes(found.block, /<w:spacing\b[^>]*\/?>/, {
+  // Stil se i dalje NE izmislja: ako dokument nema FootnoteText, nema ni fusnota kojima bismo
+  // razmak popravljali (patchNormalParagraphProps vraca no-op kad stil ne postoji).
+  return patchNormalParagraphProps(stylesXml, 'FootnoteText', 'w:spacing', {
     'w:before': String(beforeTwentieths),
     'w:after': String(afterTwentieths),
   });
-  if (!result.applied) return { ...NO_OP, xml: stylesXml, found: result.found };
-
-  const newXml = stylesXml.slice(0, found.start) + result.xml + stylesXml.slice(found.end);
-  return { xml: newXml, applied: true, before: result.before, after: result.after, found: result.found };
 }
 
 export function patchDefaultAlignment(stylesXml: string, val: string): PatchResult {
-  const found = findNormalStyleBlock(stylesXml);
-  if (!found) return { ...NO_OP, xml: stylesXml };
-
-  const result = patchTagAttributes(found.block, /<w:jc\b[^>]*\/?>/, { 'w:val': val });
-  if (!result.applied) return { ...NO_OP, xml: stylesXml, found: result.found };
-
-  const newXml = stylesXml.slice(0, found.start) + result.xml + stylesXml.slice(found.end);
-  return { xml: newXml, applied: true, before: result.before, after: result.after, found: result.found };
+  // Word izostavlja w:jc kad je poravnanje lijevo (zadano), pa je ovo najcesci slucaj u kojem se
+  // element mora STVORITI, a ne samo promijeniti.
+  return patchNormalParagraphProps(stylesXml, 'Normal', 'w:jc', { 'w:val': val });
 }
 
 // === Numeriranje stranica po sekcijama (documentXml, w:pgNumType u w:sectPr) ===

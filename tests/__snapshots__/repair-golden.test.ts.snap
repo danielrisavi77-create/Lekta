@@ -1667,7 +1667,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         },
         {
           "after": "Razmak prije/poslije: 0 pt / 0 pt",
-          "before": "Razmak prije/poslije: 0 pt / 8 pt",
+          "before": "Razmak prije/poslije: nije bilo postavljeno / 8 pt",
         },
         {
           "after": "Rimski na prednjim (1), arapski od Uvoda (1), prva stranica = 1",
@@ -2429,7 +2429,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "changelog": [
         {
           "after": "Razmak prije/poslije: 0 pt / 0 pt",
-          "before": "Razmak prije/poslije: 0 pt / 8 pt",
+          "before": "Razmak prije/poslije: nije bilo postavljeno / 8 pt",
         },
       ],
       "markers": {
@@ -2493,7 +2493,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "changelog": [
         {
           "after": "Razmak prije/poslije: 0 pt / 0 pt",
-          "before": "Razmak prije/poslije: 0 pt / 8 pt",
+          "before": "Razmak prije/poslije: nije bilo postavljeno / 8 pt",
         },
       ],
       "markers": {
@@ -2606,7 +2606,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         },
         {
           "after": "Razmak prije/poslije: 0 pt / 0 pt",
-          "before": "Razmak prije/poslije: 0 pt / 8 pt",
+          "before": "Razmak prije/poslije: nije bilo postavljeno / 8 pt",
         },
         {
           "after": "Umetnuto podnozje s automatskim brojem stranice (desno)",
@@ -3162,7 +3162,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "changelog": [
         {
           "after": "Razmak prije/poslije: 0 pt / 0 pt",
-          "before": "Razmak prije/poslije: 0 pt / 8 pt",
+          "before": "Razmak prije/poslije: nije bilo postavljeno / 8 pt",
         },
       ],
       "markers": {
@@ -3212,7 +3212,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "changelog": [
         {
           "after": "Razmak prije/poslije: 0 pt / 0 pt",
-          "before": "Razmak prije/poslije: 0 pt / 8 pt",
+          "before": "Razmak prije/poslije: nije bilo postavljeno / 8 pt",
         },
       ],
       "markers": {
@@ -3363,8 +3363,8 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           "before": "Margine: gornja 2,50 cm, desna 2,50 cm, donja 2,50 cm, lijeva 2,50 cm",
         },
         {
-          "after": "Font: Arial; izravno formatiranje uklonjeno u 137 odlomaka",
-          "before": "Font: Times New Roman",
+          "after": "Font: Arial, Veličina: 12 pt; izravno formatiranje uklonjeno u 137 odlomaka",
+          "before": "Font: Times New Roman, Veličina: nije bilo postavljeno",
         },
       ],
       "markers": {
@@ -3419,8 +3419,8 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "applied": true,
       "changelog": [
         {
-          "after": "Font: Arial",
-          "before": "Font: Times New Roman",
+          "after": "Font: Arial, Veličina: 12 pt",
+          "before": "Font: Times New Roman, Veličina: nije bilo postavljeno",
         },
       ],
       "markers": {
@@ -3472,8 +3472,8 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "applied": true,
       "changelog": [
         {
-          "after": "Font: Arial; izravno formatiranje uklonjeno u 137 odlomaka",
-          "before": "Font: Times New Roman",
+          "after": "Font: Arial, Veličina: 12 pt; izravno formatiranje uklonjeno u 137 odlomaka",
+          "before": "Font: Times New Roman, Veličina: nije bilo postavljeno",
         },
       ],
       "markers": {

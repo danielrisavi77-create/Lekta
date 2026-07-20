@@ -75,7 +75,15 @@ const NO_OP = (parts: DocxXmlParts): FixerOutput => ({ parts, applied: false, be
 function cmToTwips(cm: number): number {
   return Math.round((cm / 2.54) * 1440);
 }
+// Vrijednost koje u dokumentu NIJE BILO. Popravak je sada smije postaviti, pa se to mora i
+// prikazati posteno: "0 pt" bi tvrdilo da je bila nula, a bila je NASLIJEDJENA (iz zadanih
+// postavki dokumenta ili predloska), sto je nesto sasvim drugo. Prazan niz je i jedini razlog
+// zbog kojeg bi oznake ispale kao NaN.
+const UNSET_LABEL = 'nije bilo postavljeno';
+const isUnset = (raw: string | undefined): boolean => raw === undefined || raw === '';
+
 function twipsToCmLabel(twips: string): string {
+  if (isUnset(twips)) return UNSET_LABEL;
   const n = parseInt(twips, 10);
   return `${(n / 1440 * 2.54).toFixed(2).replace('.', ',')} cm`;
 }
@@ -83,10 +91,12 @@ function ptToHalfPoints(pt: number): number {
   return Math.round(pt * 2);
 }
 function halfPointsToPtLabel(hp: string): string {
+  if (isUnset(hp)) return UNSET_LABEL;
   const n = parseInt(hp, 10);
   return `${n / 2} pt`;
 }
 function twentiethsToPtLabel(twentieths: string): string {
+  if (isUnset(twentieths)) return UNSET_LABEL;
   const n = parseInt(twentieths, 10);
   return `${n / 20} pt`;
 }
@@ -94,6 +104,7 @@ function multiplierToTwips(multiplier: number): number {
   return Math.round(multiplier * 240);
 }
 function twipsToMultiplierLabel(twips: string): string {
+  if (isUnset(twips)) return UNSET_LABEL;
   const n = parseInt(twips, 10);
   return `${(n / 240).toFixed(2).replace('.', ',')}x prored`;
 }
@@ -223,7 +234,7 @@ export function fontFixer(
     const beforeParts: string[] = [];
     const afterParts: string[] = [];
     if (result.before.fontName !== undefined) {
-      beforeParts.push(`Font: ${result.before.fontName}`);
+      beforeParts.push(`Font: ${result.before.fontName || UNSET_LABEL}`);
       afterParts.push(`Font: ${result.after.fontName}`);
     }
     if (result.before.sizeHalfPoints !== undefined) {
@@ -244,15 +255,19 @@ export function fontFixer(
   // docDefaults; da Normal ima drugaciji font, skidanje run-override-a bi run
   // regresiralo na Normal, ne na cilj. Bez backstopa (npr. theme-only docDefaults)
   // isto ne diramo (dokument bi pao na theme/naslijedjeno).
+  // Sukob se provjerava nad ISPRAVLJENIM stilovima, ne nad ulaznima: patchDefaultFont sada
+  // poravnava i stil Normal s ciljem kad ga on sam definira, pa bi provjera nad ulazom trajno
+  // gasila duboko ciscenje na dokumentima koje smo upravo doveli u red.
+  const patchedStyles = result.applied ? result.xml : parts.stylesXml;
   const fontOk =
     update.fontName !== undefined &&
     result.found.fontName === true &&
-    !normalStyleConflictsFont(parts.stylesXml, update.fontName);
+    !normalStyleConflictsFont(patchedStyles, update.fontName);
   const sizeTarget = update.fontSizePt !== undefined ? ptToHalfPoints(update.fontSizePt) : undefined;
   const sizeOk =
     sizeTarget !== undefined &&
     result.found.sizeHalfPoints === true &&
-    !normalStyleConflictsSize(parts.stylesXml, sizeTarget);
+    !normalStyleConflictsSize(patchedStyles, sizeTarget);
   const deepOpts = update.deep
     ? {
         stripFontName: fontOk,
