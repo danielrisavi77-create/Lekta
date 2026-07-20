@@ -41,6 +41,7 @@ function patchTagAttributes(
   xml: string,
   tagPattern: RegExp,
   attrUpdates: Record<string, string>,
+  skipTag?: (tag: string) => boolean,
 ): PatchResult {
   const globalPattern = new RegExp(tagPattern.source, 'g');
   const before: Record<string, string> = {};
@@ -49,6 +50,7 @@ function patchTagAttributes(
   let changed = false;
 
   const newXml = xml.replace(globalPattern, (tag) => {
+    if (skipTag && skipTag(tag)) return tag;
     let out = tag;
     for (const [attr, newValue] of Object.entries(attrUpdates)) {
       const attrRegex = new RegExp(`(${escapeRegex(attr)}=")([^"]*)(")`);
@@ -97,11 +99,38 @@ export function patchMargins(
   return patchTagAttributes(documentXml, /<w:pgMar\b[^>]*\/?>/, attrUpdates);
 }
 
+// Tolerancija za prepoznavanje "ista stranica, druga orijentacija" (~0,7 cm u twipsima). Namjerno
+// siroka: posljedica pogodka je da sekciju NE diramo, a to je uvijek sigurniji ishod.
+const ORIENTATION_SWAP_TOLERANCE_TWIPS = 400;
+
+/**
+ * Smije li se OVA sekcija uspravljati? Ne smije, ako je namjerno POLOZENA.
+ *
+ * Analiza polozenu sekciju izricito TOLERIRA (`near(w,h) || near(h,w)` u analyze-docx), dakle to
+ * uopce nije prekrsaj; kad bi je popravak uspravio, polozeni prilog sa sirokom tablicom raspao bi
+ * se, i to uz zaostali `w:orient="landscape"`. Pravilo je jednosmjerno: polozenu sekciju nikad ne
+ * uspravljamo, ali zahtjev profila da stranica BUDE polozena i dalje prolazi.
+ *
+ * Prepoznaje se na dva nacina, jer polozenu sekciju ne pisu svi generatori jednako:
+ *   1. eksplicitan `w:orient="landscape"` (tako je pise Word i LibreOffice),
+ *   2. dimenzije koje su zamjena ciljanih, dok je cilj uspravan (sirina manja od visine).
+ */
+function isIntentionalLandscape(tag: string, target: { w: number; h: number }): boolean {
+  const targetIsPortrait = target.w < target.h;
+  if (!targetIsPortrait) return false; // profil sam trazi polozenu stranicu: krpaj normalno
+  if (/w:orient="landscape"/i.test(tag)) return true;
+  const w = Number(tag.match(/w:w="(\d+)"/)?.[1]);
+  const h = Number(tag.match(/w:h="(\d+)"/)?.[1]);
+  if (!Number.isFinite(w) || !Number.isFinite(h)) return false;
+  const tol = ORIENTATION_SWAP_TOLERANCE_TWIPS;
+  return Math.abs(w - target.h) <= tol && Math.abs(h - target.w) <= tol;
+}
+
 export function patchPaperSize(documentXml: string, sizeTwips: { w: number; h: number }): PatchResult {
   return patchTagAttributes(documentXml, /<w:pgSz\b[^>]*\/?>/, {
     'w:w': String(sizeTwips.w),
     'w:h': String(sizeTwips.h),
-  });
+  }, (tag) => isIntentionalLandscape(tag, sizeTwips));
 }
 
 // === Zadani font, velicina, prored, poravnanje (stylesXml, v1 opseg: samo

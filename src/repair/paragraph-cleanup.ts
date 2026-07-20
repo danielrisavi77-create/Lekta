@@ -96,8 +96,15 @@ function hasNonNormalStyle(paragraph: string): boolean {
 // i kao SVOJSTVO ODLOMKA (<w:pageBreakBefore/> u w:pPr), ne samo kao <w:br w:type="page"/> u runu.
 // Takav odlomak nema vidljiv tekst, pa je prolazio kao "osirotjeli prazan" i bio obrisan, cime je
 // nestajao prijelom i DVIJE STRANICE SU SE SPOJILE U JEDNU (spojene naslovnice).
+// Dopuna iste klase (2026-07-20): `hasVisibleText` gleda ISKLJUCIVO <w:t>, pa je sve vidljivo sto
+// nije tekstualni cvor prolazilo kao "prazno". Konkretno:
+//   w:cr    rucni prijelom retka unutar runa (razmak koji je autor namjerno napravio),
+//   w:sym   simbolski znak (Wingdings ukras na naslovnici nema w:t),
+//   w:ptab  apsolutni tabulator (npr. desno poravnat vodic s tockama),
+//   mc:AlternateContent  omotac oblika s rezervnim prikazom (danas ga posredno hvata w:drawing ili
+//                        w:pict iznutra, ali jamstvo ne smije ovisiti o obliku rezerve).
 const FORBIDDEN_CONTENT =
-  /<w:(?:drawing|pict|object|br|lastRenderedPageBreak|pageBreakBefore|fldSimple|fldChar|instrText|footnoteReference|endnoteReference|commentReference|bookmarkStart|bookmarkEnd)\b/;
+  /<w:(?:drawing|pict|object|br|cr|sym|ptab|lastRenderedPageBreak|pageBreakBefore|fldSimple|fldChar|instrText|footnoteReference|endnoteReference|commentReference|bookmarkStart|bookmarkEnd)\b|<mc:AlternateContent\b/;
 
 /** Ima li odlomkov (prvi) w:pPr blok ugnjezdeni w:sectPr (prijelom odjeljka). */
 function hasNestedSectPr(paragraph: string): boolean {
@@ -154,19 +161,33 @@ interface ParagraphMatch {
  * ili Naslov): tijelo rada pocinje naslovom ("Sadrzaj", "Uvod"), a naslovnica ga po definiciji
  * nema. Nema naslova -> nema zone (zatecено ponasanje).
  *
- * NAMJERNO NEMA rezervne granice na prvi prijelom stranice: prijelom se u dokumentu pojavljuje i
- * daleko od naslovnice, pa bi takvo pravilo zastitilo pola dokumenta i ponistilo dokumentirano
- * ponasanje da prijelom DIJELI nizove praznih odlomaka. Dokument bez ijednog stila naslova ostaje
- * bez ove zastite, ali mu prijelomi vise ne nestaju (v. pageBreakBefore u FORBIDDEN_CONTENT), pa
- * se stranice ionako ne mogu spojiti.
+ * REZERVA za dokumente BEZ ijednog stila naslova (rad formatiran rucno, sto analiza inace i
+ * prijavljuje): ondje granica pada na PRVI prijelom stranice, ali samo ako to podrucje uistinu
+ * izgleda kao naslovnica. Uvjeti su namjerno uski, jer prijelom stranice sam po sebi nista ne znaci
+ * (u sredini rada ih je puno) i jer je dokumentirano ponasanje da prijelom DIJELI nizove praznih
+ * odlomaka:
+ *   - podrucje mora sadrzavati bar dva odlomka s vidljivim tekstom (naslovnica ima ustanovu, naslov,
+ *     autora; niz samih praznih odlomaka prije prijeloma NIJE naslovnica),
+ *   - i ne smije biti dulje od jedne stranice teksta (cap odlomaka), da se ne zastiti pola rada.
  *
  * Konzervativno u smjeru "radije ne diraj": pogresno zasticen odlomak znaci samo visak praznog
  * reda, dok pogresno obrisan trajno mijenja izgled naslovnice.
  */
+const FRONT_MATTER_MAX_PARAGRAPHS = 60;
+const FRONT_MATTER_MIN_TEXT_PARAGRAPHS = 2;
+
 function frontMatterRange(documentXml: string): Array<[number, number]> {
   const heading = documentXml.match(/<w:pStyle\b[^>]*w:val="[^"]*(?:Heading|Naslov)[^"]*"/i);
   if (heading && heading.index !== undefined) return [[0, heading.index]];
-  return [];
+
+  const brk = documentXml.match(/<w:pageBreakBefore\b|<w:br\b[^>]*w:type="page"/i);
+  if (!brk || brk.index === undefined) return [];
+  const head = documentXml.slice(0, brk.index);
+  const paragraphs = head.match(new RegExp(`${SELF_CLOSING_SRC}|${PAIRED_SRC}`, 'g')) || [];
+  if (paragraphs.length > FRONT_MATTER_MAX_PARAGRAPHS) return [];
+  const withText = paragraphs.filter((p) => hasVisibleText(p)).length;
+  if (withText < FRONT_MATTER_MIN_TEXT_PARAGRAPHS) return [];
+  return [[0, brk.index]];
 }
 
 /**

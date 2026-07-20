@@ -91,6 +91,38 @@ describe('patchPaperSize', () => {
     expect(result.xml).toContain('w:h="11906"');
     expect(result.xml).toContain('w:top="1417"'); // pgMar netaknut
   });
+
+  // Analiza polozenu sekciju TOLERIRA (near(w,h) ILI near(h,w)), pa uspravljanje nije popravak nego
+  // steta: polozeni prilog sa sirokom tablicom se raspadne. Pravilo je jednosmjerno.
+  it('NE uspravlja sekciju s eksplicitnim w:orient="landscape"', () => {
+    const xml = '<w:sectPr><w:pgSz w:w="16838" w:h="11906" w:orient="landscape"/></w:sectPr>';
+    const result = patchPaperSize(xml, { w: 11906, h: 16838 });
+    expect(result.applied).toBe(false);
+    expect(result.xml).toContain('w:w="16838"');
+    expect(result.xml).toContain('w:orient="landscape"');
+  });
+
+  it('NE uspravlja sekciju s polozenim dimenzijama ni bez w:orient atributa', () => {
+    const xml = '<w:sectPr><w:pgSz w:w="16838" w:h="11906"/></w:sectPr>';
+    const result = patchPaperSize(xml, { w: 11906, h: 16838 });
+    expect(result.applied).toBe(false);
+  });
+
+  it('uspravnu sekciju krivog formata (npr. Letter) i dalje krpa', () => {
+    const xml = '<w:sectPr><w:pgSz w:w="12240" w:h="15840"/></w:sectPr>';
+    const result = patchPaperSize(xml, { w: 11906, h: 16838 });
+    expect(result.applied).toBe(true);
+    expect(result.xml).toContain('w:w="11906"');
+  });
+
+  it('mijesan dokument: uspravna sekcija se popravlja, polozeni prilog ostaje polozen', () => {
+    const xml = '<w:body><w:sectPr><w:pgSz w:w="12240" w:h="15840"/></w:sectPr>'
+      + '<w:sectPr><w:pgSz w:w="16838" w:h="11906" w:orient="landscape"/></w:sectPr></w:body>';
+    const result = patchPaperSize(xml, { w: 11906, h: 16838 });
+    expect(result.applied).toBe(true);
+    expect(result.xml).toContain('<w:pgSz w:w="11906" w:h="16838"/>');
+    expect(result.xml).toContain('<w:pgSz w:w="16838" w:h="11906" w:orient="landscape"/>');
+  });
 });
 
 describe('patchDefaultFont', () => {

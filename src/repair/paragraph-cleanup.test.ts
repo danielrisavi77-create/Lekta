@@ -314,6 +314,43 @@ describe('naslovnica se ne smije razbiti', () => {
     expect(out.xml).toContain('w:pageBreakBefore');
   });
 
+  // Ista klasa kao pageBreakBefore: sadrzaj koji se VIDI, a nije <w:t>, pa ga hasVisibleText ne
+  // primjecuje. Bez ovih zastita bi rucni prijelom retka i ukrasni simbol s naslovnice nestali.
+  it('odlomak s w:cr (rucni prijelom retka) se ne brise', () => {
+    const cr = '<w:p><w:r><w:cr/></w:r></w:p>';
+    const xml = `<w:body>${P_TEXT('A')}${P_EMPTY}${cr}${P_EMPTY}${P_TEXT('B')}</w:body>`;
+    expect(stripOrphanedEmptyParagraphs(xml).xml).toContain('<w:cr/>');
+  });
+
+  it('odlomak s w:sym (simbolski znak, npr. Wingdings ukras) se ne brise', () => {
+    const sym = '<w:p><w:r><w:sym w:font="Wingdings" w:char="F0A8"/></w:r></w:p>';
+    const xml = `<w:body>${P_TEXT('A')}${P_EMPTY}${sym}${P_EMPTY}${P_TEXT('B')}</w:body>`;
+    expect(stripOrphanedEmptyParagraphs(xml).xml).toContain('w:sym');
+  });
+
+  it('odlomak s w:ptab (apsolutni tabulator) se ne brise', () => {
+    const ptab = '<w:p><w:r><w:ptab w:alignment="right" w:relativeTo="margin" w:leader="dot"/></w:r></w:p>';
+    const xml = `<w:body>${P_TEXT('A')}${P_EMPTY}${ptab}${P_EMPTY}${P_TEXT('B')}</w:body>`;
+    expect(stripOrphanedEmptyParagraphs(xml).xml).toContain('w:ptab');
+  });
+
+  it('odlomak s mc:AlternateContent (oblik s VML rezervom) se ne brise', () => {
+    const alt = '<w:p><w:r><mc:AlternateContent><mc:Fallback><w:pict/></mc:Fallback></mc:AlternateContent></w:r></w:p>';
+    const xml = `<w:body>${P_TEXT('A')}${P_EMPTY}${alt}${P_EMPTY}${P_TEXT('B')}</w:body>`;
+    expect(stripOrphanedEmptyParagraphs(xml).xml).toContain('mc:AlternateContent');
+  });
+
+  // Rad formatiran bez ijednog Word stila naslova (sve rucno, sto analiza inace prijavljuje) nije
+  // imao NIKAKVU zastitu naslovnice: prva granica je bila prvi Heading, kojeg ondje nema.
+  it('bez ijednog stila naslova, naslovnica je zasticena do prvog prijeloma stranice', () => {
+    const xml = `<w:body>${P_TEXT('SVEUCILISTE U ZAGREBU')}${P_EMPTY.repeat(6)}${P_TEXT('Diplomski rad')}`
+      + `${P_BREAK}${P_TEXT('Uvod')}${P_EMPTY.repeat(4)}${P_TEXT('Tijelo rada')}</w:body>`;
+    const out = stripOrphanedEmptyParagraphs(xml);
+    const emptyCount = (s: string) => (s.match(/<w:p><w:pPr><w:pStyle w:val="Normal"\/><\/w:pPr><\/w:p>/g) || []).length;
+    // naslovnica: svih 6 prezivi; iza prijeloma se i dalje kolabira 4 -> 1
+    expect(emptyCount(out.xml)).toBe(6 + 1);
+  });
+
   it('prazni odlomci PRIJE prvog naslova (naslovnica) ostaju netaknuti', () => {
     const front = P_EMPTY.repeat(8); // vertikalni razmak na naslovnici
     const xml = `<w:body>${P_TEXT('SVEUCILISTE U ZAGREBU')}${front}${P_TEXT('Diplomski rad')}`
