@@ -11,7 +11,7 @@
  * null), slanje e-maila salje novi upis koji vec nosi e-mail.
  */
 
-import { toReportWorkType } from '../report/report-client';
+import { toReportWorkType } from '../report/report-work-type';
 import type { WaitlistCell } from './waitlist-detect';
 
 export interface WaitlistConfig {

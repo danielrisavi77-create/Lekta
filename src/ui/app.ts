@@ -11,10 +11,9 @@ import { extractCitations, extractReferences } from '../citations/author-year';
 import { parseReference } from '../citations/parse-reference';
 import { verifyReferences } from '../citations/verify-existence';
 import { VERDICT_BADGE, summarizeVerification } from '../citations/verify-badges';
-import { unlockFullReport as unlockReportRequest, toReportWorkType, extractParsedStructure } from '../report/report-client';
-import { uploadRepair, buildRepairMeta, REPAIR_MAX_REFERENCES } from '../report/repair-client';
+import { toReportWorkType } from '../report/report-work-type';
+import { REPAIR_MAX_REFERENCES } from '../report/repair-contract';
 import { buildSourceCheckHtml } from './source-check-view';
-import { fetchRepairJobs, signRepairDownload, deleteRepairJob } from '../report/repair-history';
 import { buildTeaser, redactParagraphQuotes } from '../report/report';
 import { suggestTool } from './tool-suggestions';
 import { tierFor } from '../report/pricing';
@@ -23,9 +22,7 @@ import { fetchRetailCatalog } from '../catalog/products-catalog';
 import { typoLint, typoLintSummary, KIND_LABELS_HR, KIND_DOCUMENT_WIDE } from '../tools/typo-lint';
 import { SUBMISSION_LABELS_HR } from '../audits/submission-lint';
 import { GRAMMAR_KIND_LABELS } from '../audits/grammar-hr';
-import { createCheckout } from '../report/checkout';
 import { slotProductForWorkType } from '../report/rulebook';
-import { getValidAccessToken, requestEmailOtp, verifyEmailOtp, signInAnonymously } from '../auth/session';
 import { VERIFIED_PROFILE_REGISTRY, LEGAL_DEPARTMENT_REGISTRY, BASE_PROFILES, FPZG_PARTIAL, PROFILE_STATUS, PROFILE_AUTHORITY, ensureProfileRules } from '../profiles/profile-registry';
 // Advisory demotion i repair stavke citaju se iz PECENIH mapa (performance-01/02): drafts (~1,3 MB)
 // i source-registry (152 KB) vise NISU u glavnom entry chunku. Izvor istine ostaje u draftovima;
@@ -38,7 +35,9 @@ import { INSTITUTIONAL_COVERAGE_MATRIX, COVERAGE_STATUS_META, CORPUS_STATS } fro
 import { FPZG_SUBMISSION_CALENDAR as _FPZG_CAL, ACADEMIC_DEADLINES } from '../submission/submission-loader';
 import { renderDeadlineReminderToggleIfAvailable } from './deadline-reminder-toggle';
 import { renderRepairPanel } from './repair-panel';
-import { triagePanelHtml } from './triage-view';
+import { buildFindingViewModels, findingCardHtml, topFindings, type FindingSessionState, type FindingViewModel } from './finding-view-model';
+import { collectAllPreviewFlags } from '../preview/preview-anchors';
+import { resultReadiness } from './result-readiness';
 import { startNetworkProbe, networkProofMessage, type NetworkProbe } from './network-proof';
 import { buildRepairableItems, universalRepairableItems, paragraphSpacingRepairableItem, pageNumberingRepairableItem, footnoteSpacingRepairableItem, pageNumberAlignmentRepairableItem, introSectionRepairableItem, tocFieldRepairableItem, headingFormatRepairableItem, footnoteTypographyRepairableItem, headingCaseRepairableItem } from './repair-items';
 import { headingCaseSuggestions } from '../repair/heading-case';
@@ -57,17 +56,41 @@ import { SOCIAL_METHOD_REGISTRY, SOCIAL_METHOD_SOURCE } from '../methodology/met
 import { cellCoverage, detectWaitlist } from '../waitlist/waitlist-detect';
 import { mountWaitlistBar } from '../waitlist/waitlist-bar';
 import { submitUnknownFaculty } from '../waitlist/waitlist-client';
-import { legalDocuments as legalContent, TERMS_VERSION } from '../legal/legal-content';
-import { PreflightPanel } from '../preflight/preflight-panel';
+import { TERMS_VERSION } from '../legal/terms-version';
+import type { PreflightPanel } from '../preflight/preflight-panel';
 import { academicYearFromDate } from '../profiles/academic-year';
 import { computeFingerprint } from '../fingerprint/fingerprint';
 import { activeDocumentProgress, describeProgress } from '../history/progress';
-import { postReferralRedeem } from '../referral/redeem-referral';
-import { renderReferralShareSection } from './referral-share-section';
 import './referral-share-section.css';
 declare global { interface Window { __lektaIcons?: any; __lektaAnimate?: any; __lektaReveal?: any; } }
 const $=(s: string,r: any=document): any=>r.querySelector(s), $$=(s: string,r: any=document): any[]=>[...r.querySelectorAll(s)];
 let selectedDocx: any=null,selectedPdf: any=null,selectedMetadataDocx: any=null,selectedAvFile: any=null,currentPdfAudit: any=null,currentMetadataAudit: any=null,currentResult: any=null,currentPackage='format';
+let _repairClientPromise: Promise<typeof import('../report/repair-client')>|null=null;
+function loadRepairClient(){return _repairClientPromise??=import('../report/repair-client')}
+let _repairHistoryClientPromise: Promise<typeof import('../report/repair-history')>|null=null;
+function loadRepairHistoryClient(){return _repairHistoryClientPromise??=import('../report/repair-history')}
+async function fetchRepairJobs(...args: any[]){return (await loadRepairHistoryClient()).fetchRepairJobs(args[0],args[1],args[2])}
+async function signRepairDownload(...args: any[]){return (await loadRepairHistoryClient()).signRepairDownload(args[0],args[1],args[2],args[3])}
+async function deleteRepairJob(...args: any[]){return (await loadRepairHistoryClient()).deleteRepairJob(args[0],args[1],args[2],args[3])}
+let _authClientPromise: Promise<typeof import('../auth/session')>|null=null;
+function loadAuthClient(){return _authClientPromise??=import('../auth/session')}
+async function getValidAccessToken(...args: any[]){return (await loadAuthClient()).getValidAccessToken(args[0],args[1])}
+async function requestEmailOtp(...args: any[]){return (await loadAuthClient()).requestEmailOtp(args[0],args[1])}
+async function verifyEmailOtp(...args: any[]){return (await loadAuthClient()).verifyEmailOtp(args[0],args[1],args[2])}
+async function signInAnonymously(...args: any[]){return (await loadAuthClient()).signInAnonymously(args[0])}
+let _checkoutClientPromise: Promise<typeof import('../report/checkout')>|null=null;
+function loadCheckoutClient(){return _checkoutClientPromise??=import('../report/checkout')}
+async function createCheckout(...args: any[]){return (await loadCheckoutClient()).createCheckout(args[0],args[1],args[2],args[3],args[4],args[5])}
+let _reportClientPromise: Promise<typeof import('../report/report-client')>|null=null;
+function loadReportClient(){return _reportClientPromise??=import('../report/report-client')}
+async function unlockReportRequest(...args: any[]){return (await loadReportClient()).unlockFullReport(args[0],args[1],args[2],args[3])}
+let _referralClientPromise: Promise<typeof import('../referral/redeem-referral')>|null=null;
+function loadReferralClient(){return _referralClientPromise??=import('../referral/redeem-referral')}
+async function postReferralRedeem(...args: any[]){return (await loadReferralClient()).postReferralRedeem(args[0],args[1],args[2])}
+let _referralSharePromise: Promise<typeof import('./referral-share-section')>|null=null;
+function loadReferralShare(){return _referralSharePromise??=import('./referral-share-section')}
+async function renderReferralShareSection(...args: any[]){return (await loadReferralShare()).renderReferralShareSection(args[0])}
+const findingStates=new Map<string,FindingSessionState>();
 // Profil kojim je currentResult ANALIZIRAN (snapshot iz runAnalysis). Repair
 // params smiju doci samo odavde: currentProfile() u trenutku rendera moze biti
 // druga selekcija (povijest/odjava) pa bi popravak gadjao krivi fakultet.
@@ -174,6 +197,10 @@ function bind(){
  document.addEventListener('keydown',(e: any)=>{if(e.key==='Escape'){const _modalOpen=!!document.querySelector('.modal-backdrop:not(.hidden)');closeOrder();closeHistory();closeLegal();closeAuth();closeGuarantee();closeCheckoutConsent();closeReport();closePreview();if(__DEV_TOOLS__){closeQa();closeSetup()}if(!_modalOpen&&!$('#progressView').classList.contains('hidden'))cancelAnalysis()}if(__DEV_TOOLS__&&e.ctrlKey&&e.shiftKey&&e.key.toLowerCase()==='q'&&qaMode)openQa()});if(__DEV_TOOLS__&&setupMode)setTimeout(openSetup,250);['#institutionSelect','#unitSelect','#programSelect','#workType','#workVariant','#departmentSelect','#methodologySelect'].forEach(s=>$(s)?.addEventListener('change',()=>{_profileConfirmed=true}));$('#analyzeProfile')?.addEventListener('click',(e: any)=>{if(e.target.closest('[data-confirm-profile]')){_profileConfirmed=true;updateProfile();runAnalysis()}else if(e.target.closest('[data-change-profile]')){$('#institutionSelect')?.focus();$('#institutionSelect')?.scrollIntoView({behavior:'smooth',block:'center'})}else if(e.target.closest('[data-confirm-docgate]')){_intake.confirmedSuspicious=true;runAnalysis()}else if(e.target.closest('[data-change-docfile]')){setWizardStep(1);try{$('#dropzone')?.focus()}catch(err: any){}}});$('#wizardView')?.addEventListener('change',()=>{invalidateSpeculative();clearTimeout(_specTimer);_specTimer=setTimeout(()=>{startSpeculativeAnalysis()},450)});$('#stepBackDoc')&&($('#stepBackDoc').onclick=()=>{setWizardStep(1,true);try{$('#dropzone')?.focus()}catch(e: any){}});$('#stepToProfile')&&($('#stepToProfile').onclick=()=>{setWizardStep(2,true);try{$('#institutionSelect')?.focus()}catch(e: any){}});$('#stepToAnalyze')&&($('#stepToAnalyze').onclick=()=>{_profileConfirmed=true;updateProfile();setWizardStep(3,true);try{$('#analyzeBtn')?.focus()}catch(e: any){}});$('#stepBackProfile')&&($('#stepBackProfile').onclick=()=>{setWizardStep(2,true);try{$('#institutionSelect')?.focus()}catch(e: any){}});
  $('#resultBackDoc')&&($('#resultBackDoc').onclick=()=>{backToWizardFromResult(1);try{$('#dropzone')?.focus({preventScroll:true})}catch(e: any){}});$('#resultBackProfile')&&($('#resultBackProfile').onclick=()=>{backToWizardFromResult(2);try{$('#institutionSelect')?.focus({preventScroll:true})}catch(e: any){}});
  $('#paperCoverBtn')&&($('#paperCoverBtn').onclick=()=>revealAnalyzerForm(true));$('#uploadCtaBtn')&&($('#uploadCtaBtn').onclick=()=>revealAnalyzerForm(true));$('#paperCover')?.addEventListener('dragenter',()=>revealAnalyzerForm(false));document.addEventListener('click',(e: any)=>{if(e.target.closest('a[href="#analyzer"]'))revealAnalyzerForm(false)});
+ $('#stepToProfile')?.addEventListener('click',()=>{void trackEvent('profile_step_opened',{})});
+ $('#stepToAnalyze')?.addEventListener('click',()=>{const p=currentProfile().p;void trackEvent('profile_completed',{profileStatus:p.statusKey||'generic'})});
+ $('#profileNote')?.addEventListener('click',(e: any)=>{if(e.target.closest('[data-profile-change]')){$('#institutionSelect')?.focus();$('#institutionSelect')?.scrollIntoView({behavior:'smooth',block:'center'})}});
+ $('#issueFilters').onclick=(e: any)=>{const b=e.target.closest('[data-filter]');if(!b)return;$$('.filter-btn').forEach(x=>x.classList.toggle('active',x===b));renderUnifiedIssues(b.dataset.filter)};
  // Promaseni drop izvan dropzonea ne smije otvoriti datoteku u pregledniku (file inputi ostaju nativni).
  document.addEventListener('dragover',(e: any)=>e.preventDefault());document.addEventListener('drop',(e: any)=>{if(!e.target.closest('#dropzone,input[type="file"]'))e.preventDefault()});
  // Pretrazive ploce nad selectima profila (select-search.ts). Fakultet pretrazuje SVIH 133 jedinica
@@ -185,6 +212,7 @@ function bind(){
 // Wizard paneli (jedan ekran po koraku): 1 Dokument, 2 Profil, 3 Provjera. data-step na #wizardView
 // gejta CSS panele (index.html LEK blok); spekulativna analiza radi neovisno o panelima.
 function setWizardStep(n: any,animate?: any){const w=$('#wizardView');if(!w)return;const apply=()=>{w.dataset.step=String(n);if(n===2&&selectedDocx){const f=$('#stepFileName');if(f){f.textContent=selectedDocx.name;f.title=selectedDocx.name}}};if(animate)withViewTransition(apply);else apply()}
+function usesCompactUploadFlow(){return !!(window.matchMedia&&window.matchMedia('(max-width:720px)').matches)}
 // Papir-naslovnica: obrazac je skriven dok korisnik ne krene. Jednosmjerno (klasa se ne skida),
 // pa "Nova provjera" i povratci NE vracaju cover usred toka. pick=true otvara i OS dijalog za
 // odabir datoteke (dozvoljeno jer se poziva iz korisnickog klika).
@@ -194,11 +222,12 @@ function revealAnalyzerForm(pick: any){if(!_engagedTracked){_engagedTracked=true
 // Spekulativna analiza odmah krece u pozadini pa je ponovni Analiziraj bez promjena prakticki instantan.
 function backToWizardFromResult(step: any){withViewTransition(()=>{$('#resultView')?.classList.add('hidden');$('#wizardView')?.classList.remove('hidden');setWizardStep(step)});document.querySelector('#analyzer')?.scrollIntoView({behavior:'smooth'});void startSpeculativeAnalysis()}
 function setFile(file: any){
- const err=$('#dropError'),clearErr=()=>{if(err){err.textContent='';err.classList.add('hidden')}$('#dropzone').classList.remove('has-error')};
+  if(file!==selectedDocx)findingStates.clear();
+  const err=$('#dropError'),clearErr=()=>{if(err){err.textContent='';err.classList.add('hidden')}$('#dropzone').classList.remove('has-error')};
  const _cap=effectiveUploadCap();if(file&&(!file.name.toLowerCase().endsWith('.docx')||file.size>_cap)){const tooBig=file.size>_cap,isDoc=/\.doc$/i.test(file.name),isMacroExt=/\.(docm|dotm)$/i.test(file.name),msg=tooBig?`Dokument je veći od ${Math.round(_cap/1024/1024)} MB${isLikelyMobile()?' (na mobitelu je granica niža radi memorije; za velike dokumente otvori na računalu)':''}.`:isMacroExt?'Dokumenti s makronaredbama (.docm i .dotm) nisu podržani. U Wordu spremi rad kao .docx bez makronaredbi.':isDoc?'Stariji .doc format nije podržan. U Wordu odaberi Datoteka pa Spremi kao i odaberi .docx.':'Odaberi Word dokument u .docx formatu.';$('#fileInput').value='';if(err){err.textContent=msg;err.classList.remove('hidden')}$('#dropzone').classList.add('has-error');toast(msg);return}
  clearErr();$('#detectBadge')?.classList.add('hidden');
- selectedDocx=file||null;$('#dropEmpty').classList.toggle('hidden',!!file);$('#selectedFile').classList.toggle('hidden',!file);$('#dropzone').classList.toggle('has-file',!!file);$('#analyzeBtn').disabled=!file;$('#demoBtn')?.classList.toggle('hidden',!!file);setWizardStep(file?2:1,!!file);
- if(file){$('#selectedName').textContent=file.name;$('#selectedMeta').textContent=`${(file.size/1024/1024).toFixed(2)} MB · spremno za lokalnu analizu`;updateQuickStats(file);updateProfile();void admitFile(file)}else{$('#fileInput').value='';invalidateSpeculative()}
+ selectedDocx=file||null;$('#dropEmpty').classList.toggle('hidden',!!file);$('#selectedFile').classList.toggle('hidden',!file);$('#dropzone').classList.toggle('has-file',!!file);$('#analyzeBtn').disabled=!file;$('#demoBtn')?.classList.toggle('hidden',!!file);setWizardStep(file&&!usesCompactUploadFlow()?2:1,!!file);
+ if(file){$('#selectedName').textContent=file.name;$('#selectedMeta').textContent=`${(file.size/1024/1024).toFixed(2)} MB · spremno za lokalnu analizu`;void trackEvent('file_selected',{sizeBucket:file.size<1024*1024?'under_1mb':file.size<5*1024*1024?'1_5mb':'over_5mb'});updateQuickStats(file);updateProfile();void admitFile(file)}else{$('#fileInput').value='';invalidateSpeculative()}
 }
 // Intake gate sloj 1: trijaza datoteke PRIJE detekcije konteksta i spekulativne analize.
 // Tvrdi reject (nedvosmisleno nije rad: premalo, nije ZIP, korupcija, makronaredbe, prazno)
@@ -312,15 +341,16 @@ async function trackEvent(event: any,data: any={}){if(!productionConfig?.analyti
 function renderConsentBanner(force=false){const b=$('#consentBanner');if(!b)return;const configured=!!productionConfig?.analyticsEndpoint,choice=safeStorageGet(STORAGE_KEYS.analyticsConsent);b.classList.toggle('hidden',!configured||(!force&&!!choice))}
 function setAnalyticsConsent(value: any){safeStorageSet(STORAGE_KEYS.analyticsConsent,value);$('#consentBanner')?.classList.add('hidden');toast(value==='granted'?'Anonimna analitika je dopuštena.':'Ostat će aktivne samo nužne lokalne postavke.')}
 function openPrivacySettings(){if(productionConfig?.analyticsEndpoint){renderConsentBanner(true)}else openLegal('privacy')}
-/* Pravni tekstovi zive u src/legal/legal-content.ts (isti izvor za modal i javne stranice). */
-function legalDocuments(){return legalContent({org:productionConfig.businessName,contact:productionConfig.contactEmail,controller:productionConfig.privacyController,days:productionConfig.retentionDays})}
+/* Pravni HTML je potreban samo pri otvaranju modala. Verzija uvjeta ostaje mali staticki
+   import jer se biljezi uz privole i narudzbe, a puni tekst ostaje izvan prvog bundlea. */
+let _legalOpenToken=0;
 // Fokus u modalima (a11y): zarobi Tab unutar modala i vrati fokus na okidac pri zatvaranju.
 let _modalReturnFocus: any=null;
 function modalFocusables(el: any){return[...el.querySelectorAll('a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])')].filter(x=>x.offsetWidth||x.offsetHeight||x.getClientRects().length)}
 let _modalDepth=0;function setBackgroundInert(on: any){['header.topbar','main','footer'].forEach((sel: any)=>{const el=document.querySelector(sel);if(!el)return;if(on){el.setAttribute('inert','');el.setAttribute('aria-hidden','true')}else{el.removeAttribute('inert');el.removeAttribute('aria-hidden')}})}function trapModal(el: any){if(!el)return;_modalReturnFocus=document.activeElement;if(++_modalDepth===1)setBackgroundInert(true);el._trap=(e: any)=>{if(e.key!=='Tab')return;const f=modalFocusables(el);if(!f.length)return;const first=f[0],last=f[f.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}};el.addEventListener('keydown',el._trap);setTimeout(()=>{(el.querySelector('.modal-close')||modalFocusables(el)[0])?.focus()},30)}
 function releaseModal(el: any){if(el&&el._trap){el.removeEventListener('keydown',el._trap);el._trap=null;if(--_modalDepth<=0){_modalDepth=0;setBackgroundInert(false)}}if(_modalReturnFocus){try{_modalReturnFocus.focus()}catch(e: any){}_modalReturnFocus=null}}
-function openLegal(kind='privacy'){const doc=(legalDocuments() as any)[kind]||legalDocuments().privacy;$('#legalTitle').textContent=doc.title;$('#legalContent').innerHTML=doc.html;$('#legalModal').classList.remove('hidden');trapModal($('#legalModal'))}
-function closeLegal(){$('#legalModal')?.classList.add('hidden');releaseModal($('#legalModal'))}
+async function openLegal(kind='privacy'){const modal=$('#legalModal'),title=$('#legalTitle'),content=$('#legalContent');if(!modal||!title||!content)return;const token=++_legalOpenToken;title.textContent='Učitavam pravne informacije';content.innerHTML='<p>Pripremam aktualni tekst.</p>';modal.classList.remove('hidden');trapModal(modal);try{const {legalDocuments}=await import('../legal/legal-content');if(token!==_legalOpenToken)return;const docs=legalDocuments({org:productionConfig.businessName,contact:productionConfig.contactEmail,controller:productionConfig.privacyController,days:productionConfig.retentionDays}),doc=(docs as any)[kind]||docs.privacy;title.textContent=doc.title;content.innerHTML=doc.html}catch(e: any){if(token!==_legalOpenToken)return;title.textContent='Pravne informacije';content.innerHTML='<p>Tekst trenutačno nije moguće učitati. Pokušaj ponovno.</p>'}}
+function closeLegal(){_legalOpenToken++;$('#legalModal')?.classList.add('hidden');releaseModal($('#legalModal'))}
 // Pregled dokumenta ima DVIJE verzije: "citljivo" (MVP tijek teksta, render-preview) i "faksimil"
 // (vjeran prikaz s layoutom stranice, stvarnim fontom/poravnanjem/marginama i run-oblikovanjem,
 // render-facsimile). Oba renderera i normalizator sidara LAZY se uvoze (ostaju izvan glavnog entry
@@ -332,19 +362,20 @@ const PREVIEW_CAPTIONS: any={
   citljivo:'Ovo je Lektin prikaz teksta, ne Microsoft Word. Crvene i žute oznake pokazuju mjesta koja Lekta može točno locirati; pravila koja vrijede za cijeli dokument navedena su desno.',
   faksimil:'Ovo je Lektin vjeran prikaz oblikovanja (font, poravnanje, margine), ne Microsoft Word: prijelomi stranica i točan razmještaj mogu se razlikovati. Crvene i žute oznake pokazuju mjesta koja Lekta može točno locirati; pravila za cijeli dokument navedena su desno.',
 };
-async function openPreview(){const r=currentResult;if(!r||!r.preview?.paragraphs?.length){toast('Pregled nije dostupan za ovaj rezultat.');return}const legend=$('#previewLegend');const {collectAllPreviewFlags}=await import('../preview/preview-anchors');if(currentResult!==r)return;const existence=_existenceVerdicts&&_existenceVerdicts.result===r?_existenceVerdicts.verdicts:null;_previewCtx={r,flags:collectAllPreviewFlags(r,existence),mode:'citljivo'};if(legend)legend.innerHTML=`<span class="pv-key"><span class="pv-swatch pv-swatch--error"></span> Treba ispraviti</span><span class="pv-key"><span class="pv-swatch pv-swatch--warning"></span> Provjeri</span><span class="pv-key"><span class="pv-swatch pv-swatch--info"></span> Informativno</span>`;$('#previewModal').classList.remove('hidden');trapModal($('#previewModal'));await renderPreviewMode();trackEvent('preview_opened',{profileId:r.details?.profileDefinitionId||''})}
+async function openPreview(){const r=currentResult;if(!r||!r.preview?.paragraphs?.length){toast('Pregled nije dostupan za ovaj rezultat.');return}const legend=$('#previewLegend');const existence=_existenceVerdicts&&_existenceVerdicts.result===r?_existenceVerdicts.verdicts:null;_previewCtx={r,flags:collectAllPreviewFlags(r,existence),mode:'citljivo',scroll:{},zoomState:null,zoomApi:null,anchorSelector:null};if(legend)legend.innerHTML=`<span class="pv-key"><span class="pv-swatch pv-swatch--error"></span> Treba ispraviti</span><span class="pv-key"><span class="pv-swatch pv-swatch--warning"></span> Provjeri</span><span class="pv-key"><span class="pv-swatch pv-swatch--info"></span> Informativno</span>`;$('#previewModal').classList.remove('hidden');trapModal($('#previewModal'));await renderPreviewMode();trackEvent('preview_opened',{profileId:r.details?.profileDefinitionId||''})}
 // Prebaci mod prikaza (citljivo/faksimil) bez zatvaranja modala; ista bocna lista, drugi renderer.
-function setPreviewMode(mode: any){if(!_previewCtx||_previewCtx.mode===mode)return;_previewCtx.mode=mode;void renderPreviewMode()}
+function savePreviewViewport(){const ctx=_previewCtx,docEl=$('#previewDoc');if(!ctx||!docEl)return;ctx.scroll[ctx.mode]={top:docEl.scrollTop,left:docEl.scrollLeft};if(ctx.zoomApi)ctx.zoomState=ctx.zoomApi.getState()}
+function setPreviewMode(mode: any){if(!_previewCtx||_previewCtx.mode===mode)return;savePreviewViewport();_previewCtx.zoomApi?.destroy?.();_previewCtx.zoomApi=null;_previewCtx.mode=mode;void renderPreviewMode()}
 // Renderiraj trenutni mod u #previewDoc. Race-safe: ako se mod promijeni tijekom lazy importa, stara
 // render-putanja odustaje (guard po ctx i modu) pa pobijedi zadnji izbor korisnika.
 async function renderPreviewMode(){const ctx=_previewCtx;if(!ctx)return;const {r,flags,mode}=ctx;const docEl=$('#previewDoc'),side=$('#previewSide'),caption=$('#previewCaption');if(!docEl)return;docEl.textContent='Pripremam pregled...';const rendered=mode==='faksimil'?(await import('../preview/render-facsimile')).renderFacsimile(r.preview,flags):(await import('../preview/render-preview')).renderPreview(r.preview,flags);if(_previewCtx!==ctx||_previewCtx.mode!==mode)return;docEl.textContent='';docEl.classList.toggle('is-facsimile',mode==='faksimil');docEl.appendChild(rendered.root);
  /* Zoom: faksimil je pravi A4 (21 cm), pa bez ovoga trazi stalno skrolanje. Zadano "prilagodi
     sirini". Samo za faksimil; citljivi nacin nema stranicu pa nema sto skalirati. */
  $('#previewZoomBar')?.remove();
- if(mode==='faksimil'){try{const {attachFacsimileZoom,createZoomControls}=await import('../preview/facsimile-zoom');const z=attachFacsimileZoom(docEl,rendered.root);const bar=createZoomControls(document,[z]);bar.id='previewZoomBar';caption?.parentElement?.insertBefore(bar,caption);z.remeasure();z.fitWidth()}catch(e: any){console.error('Zoom:',e)}}
- if(caption)caption.textContent=(PREVIEW_CAPTIONS[mode]||'')+(r.preview.truncated?' Dokument je velik pa je prikaz skraćen.':'');const cb=$('#previewModeCitljivo'),fb=$('#previewModeFaksimil');if(cb){cb.classList.toggle('is-active',mode==='citljivo');cb.setAttribute('aria-selected',mode==='citljivo'?'true':'false')}if(fb){fb.classList.toggle('is-active',mode==='faksimil');fb.setAttribute('aria-selected',mode==='faksimil'?'true':'false')}if(side)renderPreviewSide(side,flags,rendered);window.__lektaIcons?.()}
-function closePreview(){$('#previewModal')?.classList.add('hidden');releaseModal($('#previewModal'));const d=$('#previewDoc');if(d){d.textContent='';d.classList.remove('is-facsimile')}_previewCtx=null}
-function renderPreviewSide(side: any,flags: any[],rendered: any){const dotCls=(sev: string)=>sev==='error'?'pv-dot--error':sev==='warning'?'pv-dot--warning':'pv-dot--info';const anchored=flags.length?flags.map((f: any,i: number)=>{const loc=rendered.flagTargets.has(i);return`<button type="button" class="pv-item" data-flag="${i}"${loc?'':' disabled'}><span class="pv-item-title"><span class="pv-dot ${dotCls(f.severity)}"></span>${escapeHtml(f.title)}</span><span class="pv-item-loc">${f.footnoteId!=null?`bilješka ${f.footnoteId}`:`odlomak ${f.paragraphIndex}`}${loc?'':' · izvan skraćenog prikaza'}</span>${recipeUnlocked()&&f.excerpt?`<span class="pv-item-ex">${escapeHtml(f.excerpt)}</span>`:''}</button>`}).join(''):'<p class="pv-empty">Nema mjesta koja se mogu točno označiti u tekstu.</p>';const globalIssues=(currentResult?.issues||[]).filter((x: any)=>x.category==='formatting'&&(x.severity==='error'||x.severity==='warning'));const globalHtml=globalIssues.length?`<h4>Vrijedi za cijeli dokument</h4><ul class="preview-global">${globalIssues.map((x: any)=>`<li><strong>${escapeHtml(x.title)}</strong>${recipeUnlocked()&&x.detail?`<br><span class="pv-item-loc">${escapeHtml(x.detail)}</span>`:''}</li>`).join('')}</ul>`:'';side.innerHTML=`<h4>Označeno u tekstu (${flags.length})</h4>${anchored}${globalHtml}`;side.querySelectorAll('.pv-item[data-flag]').forEach((b: any)=>{b.onclick=()=>{const t=rendered.flagTargets.get(Number(b.dataset.flag));if(!t)return;t.scrollIntoView({block:'center',behavior:'smooth'});t.classList.add('lekta-flag--active');setTimeout(()=>t.classList.remove('lekta-flag--active'),1600)}})}
+  if(mode==='faksimil'){try{const {attachFacsimileZoom,createZoomControls}=await import('../preview/facsimile-zoom');const z=attachFacsimileZoom(docEl,rendered.root);ctx.zoomApi=z;z.remeasure();if(ctx.zoomState)z.setState(ctx.zoomState);else z.fitWidth();const bar=createZoomControls(document,[z]);bar.id='previewZoomBar';caption?.parentElement?.insertBefore(bar,caption)}catch(e: any){console.error('Zoom:',e)}}
+  const saved=ctx.scroll[mode];if(saved&&mode!=='faksimil'){docEl.scrollTop=saved.top;docEl.scrollLeft=saved.left}if(ctx.anchorSelector){const target=docEl.querySelector(ctx.anchorSelector);target?.scrollIntoView({block:'center'});}if(caption)caption.textContent=(PREVIEW_CAPTIONS[mode]||'')+(r.preview.truncated?' Dokument je velik pa je prikaz skraćen.':'');const cb=$('#previewModeCitljivo'),fb=$('#previewModeFaksimil');if(cb){cb.classList.toggle('is-active',mode==='citljivo');cb.setAttribute('aria-selected',mode==='citljivo'?'true':'false')}if(fb){fb.classList.toggle('is-active',mode==='faksimil');fb.setAttribute('aria-selected',mode==='faksimil'?'true':'false')}if(side)renderPreviewSide(side,flags,rendered);window.__lektaIcons?.()}
+function closePreview(){savePreviewViewport();_previewCtx?.zoomApi?.destroy?.();$('#previewZoomBar')?.remove();$('#previewModal')?.classList.add('hidden');releaseModal($('#previewModal'));const d=$('#previewDoc');if(d){d.textContent='';d.classList.remove('is-facsimile')}_previewCtx=null}
+function renderPreviewSide(side: any,flags: any[],rendered: any){const dotCls=(sev: string)=>sev==='error'?'pv-dot--error':sev==='warning'?'pv-dot--warning':'pv-dot--info';const anchored=flags.length?flags.map((f: any,i: number)=>{const loc=rendered.flagTargets.has(i);return`<button type="button" class="pv-item" data-flag="${i}"${loc?'':' disabled'}><span class="pv-item-title"><span class="pv-dot ${dotCls(f.severity)}"></span>${escapeHtml(f.title)}</span><span class="pv-item-loc">${f.footnoteId!=null?`bilješka ${f.footnoteId}`:`odlomak ${f.paragraphIndex}`}${loc?'':' · izvan skraćenog prikaza'}</span>${recipeUnlocked()&&f.excerpt?`<span class="pv-item-ex">${escapeHtml(f.excerpt)}</span>`:''}</button>`}).join(''):'<p class="pv-empty">Nema mjesta koja se mogu točno označiti u tekstu.</p>';const globalIssues=(currentResult?.issues||[]).filter((x: any)=>x.category==='formatting'&&(x.severity==='error'||x.severity==='warning'));const globalHtml=globalIssues.length?`<h4>Vrijedi za cijeli dokument</h4><ul class="preview-global">${globalIssues.map((x: any)=>`<li><strong>${escapeHtml(x.title)}</strong>${recipeUnlocked()&&x.detail?`<br><span class="pv-item-loc">${escapeHtml(x.detail)}</span>`:''}</li>`).join('')}</ul>`:'';side.innerHTML=`<h4>Označeno u tekstu (${flags.length})</h4>${anchored}${globalHtml}`;side.querySelectorAll('.pv-item[data-flag]').forEach((b: any)=>{b.onclick=()=>{const idx=Number(b.dataset.flag),f=flags[idx],t=rendered.flagTargets.get(idx);if(!t)return;_previewCtx.anchorSelector=f.footnoteId!=null?`[data-fn-id="${f.footnoteId}"]`:`[data-p-index="${f.paragraphIndex}"]`;void trackEvent('finding_jump',{category:f.kind||'',source:'preview'});t.scrollIntoView({block:'center',behavior:'smooth'});t.classList.add('lekta-flag--active');setTimeout(()=>t.classList.remove('lekta-flag--active'),1600)}})}
 function openSetup(){const c=productionConfig;$('#setupEnabled').value=String(!!c.enabled);$('#setupProvider').value=c.paymentProvider||'stripe';$('#setupOrderEndpoint').value=c.orderEndpoint||'';$('#setupBusinessName').value=c.businessName||'';$('#setupContactEmail').value=c.contactEmail||'';$('#setupRetentionDays').value=c.retentionDays||30;$('#setupUploadMb').value=Math.round((c.uploadMaxBytes||8*1024*1024)/1024/1024);$('#setupAnalyticsEndpoint').value=c.analyticsEndpoint||'';$('#setupErrorEndpoint')&&($('#setupErrorEndpoint').value=c.errorEndpoint||'');$('#setupReportEndpoint').value=c.reportEndpoint||'';$('#setupRepairEndpoint')&&($('#setupRepairEndpoint').value=c.repairEndpoint||'');$('#setupCheckoutEndpoint').value=c.checkoutEndpoint||'';$('#setupGuaranteeEndpoint')&&($('#setupGuaranteeEndpoint').value=c.guaranteeEndpoint||'');$('#setupSupabaseUrl')&&($('#setupSupabaseUrl').value=c.supabaseUrl||'');$('#setupSupabaseAnon')&&($('#setupSupabaseAnon').value=c.supabaseAnonKey||'');$('#setupPaymentLinks').innerHTML=PACKAGES.map(p=>`<div class="field full"><label for="setupPay-${p.id}">${escapeHtml(p.name)}</label><input class="input setup-payment" id="setupPay-${p.id}" data-package="${p.id}" value="${escapeHtml(c.paymentLinks?.[p.id]||'')}" placeholder="https://…"></div>`).join('');$('#setupModal').classList.remove('hidden');trapModal($('#setupModal'))}
 function closeSetup(){$('#setupModal')?.classList.add('hidden');releaseModal($('#setupModal'))}
 function readSetupConfig(){const paymentLinks: any={};$$('.setup-payment').forEach(x=>paymentLinks[x.dataset.package]=x.value.trim());return{...productionConfig,enabled:$('#setupEnabled').value==='true',paymentProvider:$('#setupProvider').value,orderEndpoint:$('#setupOrderEndpoint').value.trim(),businessName:$('#setupBusinessName').value.trim()||'Lekta',contactEmail:$('#setupContactEmail').value.trim(),privacyController:$('#setupBusinessName').value.trim()||'Lekta',retentionDays:Number($('#setupRetentionDays').value)||30,uploadMaxBytes:(Number($('#setupUploadMb').value)||8)*1024*1024,analyticsEndpoint:$('#setupAnalyticsEndpoint').value.trim(),errorEndpoint:($('#setupErrorEndpoint')?.value||'').trim(),reportEndpoint:$('#setupReportEndpoint').value.trim(),repairEndpoint:($('#setupRepairEndpoint')?.value||'').trim(),checkoutEndpoint:$('#setupCheckoutEndpoint').value.trim(),guaranteeEndpoint:($('#setupGuaranteeEndpoint')?.value||'').trim(),supabaseUrl:($('#setupSupabaseUrl')?.value||'').trim(),supabaseAnonKey:($('#setupSupabaseAnon')?.value||'').trim(),paymentLinks}}
@@ -487,7 +518,7 @@ async function updateProfile(){
  /* Kartica profila = ISHOD odabira, ne ponavljanje odabranog: put (grad/ustanova/studij) vec stoji u
     selectima iznad i u sazetku koraka 3, pa ga ovdje ne dupliciramo. Oba nekadasnja "more" bloka
     (pokrivenost + izvor/metoda) spojena su u jedan, da korak 2 ostane kratak. */
- $('#profileNote').innerHTML=`<div class="pcard-label">Tvoj profil</div><div class="chips"><span class="profile-status ${escapeHtml(p.statusKey)}">${p.statusKey==='verified'?'✓':'●'} ${escapeHtml(sm.label)}</span><span class="authority-status ${escapeHtml(am.className)}">⚖ ${escapeHtml(am.label)}</span></div><div class="pcard-work"><strong>${escapeHtml(workTypeLabel(sel.workType))}${variant}${methodVariant} · ${escapeHtml(sel.citationStyle)}</strong></div><details class="more"><summary><span class="chev">▸</span> Izvor, metoda i pokrivenost</summary><div class="more-body">${preflight}${scoredBlock}${guaranteeHtml}${detailsBody}</div></details>`;renderAnalyzeSummary(p);
+ $('#profileNote').innerHTML=`<div class="pcard-label">Tvoj profil</div><div class="chips"><span class="profile-status ${escapeHtml(p.statusKey)}">${p.statusKey==='verified'?'✓':'●'} ${escapeHtml(sm.label)}</span><span class="authority-status ${escapeHtml(am.className)}">⚖ ${escapeHtml(am.label)}</span></div><div class="pcard-path"><strong>${escapeHtml(sel.unit)}</strong>${sel.program?`<span>${escapeHtml(sel.program)}</span>`:''}</div><div class="pcard-work"><strong>${escapeHtml(workTypeLabel(sel.workType))}${variant}${methodVariant} · ${escapeHtml(sel.citationStyle)}</strong></div>${p.verifiedAt?`<div class="pcard-date">Pravila provjerena ${escapeHtml(new Date(p.verifiedAt+'T12:00:00').toLocaleDateString('hr-HR'))}</div>`:''}<button type="button" class="btn btn-ghost btn-sm pcard-change" data-profile-change>Promijeni profil</button><details class="more"><summary><span class="chev">▸</span> Izvori, metoda i pokrivenost</summary><div class="more-body">${preflight}${scoredBlock}${guaranteeHtml}${detailsBody}</div></details>`;renderAnalyzeSummary(p);
 }
 function renderAnalyzeSummary(p: any){const el=$('#analyzeProfile');if(!el)return;const sel=p.selection,sm=(PROFILE_STATUS as any)[p.statusKey]||PROFILE_STATUS.generic,path=[sel.institution,sel.unit,sel.program,workTypeLabel(sel.workType),sel.citationStyle].filter(Boolean).map((x: any)=>escapeHtml(x)).join(' · '),needsConfirm=!!selectedDocx&&needsProfileConfirmation(p.statusKey,_profileConfirmed);el.innerHTML=`<div class="ap-head"><span class="profile-status ${escapeHtml(p.statusKey)}">${p.statusKey==='verified'?'✓':'●'} ${escapeHtml(sm.label)}</span><span class="ap-path">${path}</span></div>${needsConfirm?`<div class="ap-warn"><p>Ovo je zadani profil. Provjeri je li to tvoj fakultet i studij prije analize, inače rezultat neće odgovarati tvojoj ustanovi.</p><div class="ap-actions"><button class="btn btn-primary btn-sm" type="button" data-confirm-profile>Da, ovo je moj profil</button><button class="btn btn-secondary btn-sm" type="button" data-change-profile>Promijeni fakultet</button></div></div>`:''}`}
 // Intake gate sloj 2: pred-run potvrda za sumnjiv dokument (malo rijeci po docProps/app.xml).
@@ -622,7 +653,7 @@ async function startSpeculativeAnalysis(){
  _spec={key,promise,file,pct:0,msg:'',adopted:false};
  promise.catch(()=>{if(_spec.promise===promise&&!_spec.adopted)clearSpec()}); // cancel/greska: stvarni run ce gresku ponoviti korisniku
 }
-async function runAnalysis(){if(!selectedDocx)return;if(!browserSupportsDocxAnalysis(selectedDocx)){const err=$('#dropError'),msg='Ovaj preglednik ne podržava čitanje datoteka potrebno za analizu. Ažuriraj preglednik ili otvori aplikaciju u novijem Chromeu, Safariju ili Firefoxu.';if(err){err.textContent=msg;err.classList.remove('hidden')}$('#dropzone')?.classList.add('has-error');toast(msg);return}if(_intake.file===selectedDocx&&_intake.promise){const _iv=_intake.verdict||await _intake.promise;if(!selectedDocx||_intake.file!==selectedDocx)return;if(_iv.kind==='reject'){toast(_iv.message);return}}await ensureProfileRules();const {id,p}=currentProfile(),settings=buildAnalysisSettings(id,p);if(needsProfileConfirmation(p.statusKey,_profileConfirmed)){renderAnalyzeSummary(p);$('#analyzeProfile')?.scrollIntoView({behavior:'smooth',block:'center'});toast('Potvrdi profil prije analize: provjeri fakultet i studij.');return}const _dgv=_intake.file===selectedDocx?_intake.verdict:null;if(_dgv&&_dgv.kind==='ok'&&_dgv.suspicious&&!_intake.confirmedSuspicious){renderDocGateConfirm(_dgv);$('#analyzeProfile')?.scrollIntoView({behavior:'smooth',block:'center'});toast('Provjeri je li učitan pravi rad prije analize.');return}const _specHit=!!(_spec.promise&&_spec.file===selectedDocx&&_spec.key===specKey(selectedDocx,settings));if(_specHit)_spec.adopted=true;else invalidateSpeculative();const token=++_analyzeToken,analyzeBtn=$('#analyzeBtn'),docxFile=selectedDocx;if(analyzeBtn)analyzeBtn.disabled=true;withViewTransition(()=>{$('#wizardView').classList.add('hidden');$('#resultView').classList.add('hidden');$('#progressView').classList.remove('hidden')});progress(0,'Pripremam paketnu analizu');_netProbe=startNetworkProbe();if(_specHit)progress(Math.max(_spec.pct||0,4),_spec.msg||'Analiza već radi u pozadini');$('#progressView')?.scrollIntoView({behavior:'smooth',block:'start'});try{
+async function runAnalysis(){if(!selectedDocx)return;if(!browserSupportsDocxAnalysis(selectedDocx)){const err=$('#dropError'),msg='Ovaj preglednik ne podržava čitanje datoteka potrebno za analizu. Ažuriraj preglednik ili otvori aplikaciju u novijem Chromeu, Safariju ili Firefoxu.';if(err){err.textContent=msg;err.classList.remove('hidden')}$('#dropzone')?.classList.add('has-error');toast(msg);return}if(_intake.file===selectedDocx&&_intake.promise){const _iv=_intake.verdict||await _intake.promise;if(!selectedDocx||_intake.file!==selectedDocx)return;if(_iv.kind==='reject'){toast(_iv.message);return}}await ensureProfileRules();const {id,p}=currentProfile(),settings=buildAnalysisSettings(id,p);if(needsProfileConfirmation(p.statusKey,_profileConfirmed)){renderAnalyzeSummary(p);$('#analyzeProfile')?.scrollIntoView({behavior:'smooth',block:'center'});toast('Potvrdi profil prije analize: provjeri fakultet i studij.');return}const _dgv=_intake.file===selectedDocx?_intake.verdict:null;if(_dgv&&_dgv.kind==='ok'&&_dgv.suspicious&&!_intake.confirmedSuspicious){renderDocGateConfirm(_dgv);$('#analyzeProfile')?.scrollIntoView({behavior:'smooth',block:'center'});toast('Provjeri je li učitan pravi rad prije analize.');return}const _specHit=!!(_spec.promise&&_spec.file===selectedDocx&&_spec.key===specKey(selectedDocx,settings));if(_specHit)_spec.adopted=true;else invalidateSpeculative();const token=++_analyzeToken,analyzeBtn=$('#analyzeBtn'),docxFile=selectedDocx;if(analyzeBtn)analyzeBtn.disabled=true;withViewTransition(()=>{$('#wizardView').classList.add('hidden');$('#resultView').classList.add('hidden');$('#progressView').classList.remove('hidden')});progress(0,'Pripremam paketnu analizu');_netProbe=startNetworkProbe();if(_specHit)progress(Math.max(_spec.pct||0,4),_spec.msg||'Analiza već radi u pozadini');$('#progressView')?.scrollIntoView({behavior:'smooth',block:'start'});void trackEvent('analysis_started',{profileStatus:p.statusKey||'generic',workType:settings.workType||''});try{
  // Pomocne datoteke (PDF, metapodaci) NE smiju obarati glavnu analizu: neuspjeh se biljezi
  // kao stavka, a glavni .docx se svejedno analizira (F1).
  currentPdfAudit=selectedPdf?await safeAux(()=>analyzePdfFile(selectedPdf),'PDF preflight'):null;
@@ -636,8 +667,8 @@ async function runAnalysis(){if(!selectedDocx)return;if(!browserSupportsDocxAnal
 // marginama, a upravo on govori da CIJELI izvjestaj nije reprezentativan (ako dokument nije
 // rad, odstupanje fonta je sum). Ne oduzima bodove (nije check). Uvjet je uzak (postRunSuspicion:
 // <1000 rijeci I nula naslova u Word stilovima) pa je lazna uzbuna na stvarnom radu neizgledna.
-if(_gw){result.issues=result.issues||[];result.issues.unshift(issue('error','structure','Dokument ne izgleda kao završni ili diplomski rad',`${_gw} Provjeri je li učitana prava datoteka; rezultat provjere za ovakav dokument nije reprezentativan.`,'Cijeli dokument'))}}currentResult=result;analyzedProfile=p;withViewTransition(()=>renderResult(currentResult));saveAnalysisHistory(currentResult)}catch(e: any){if(token!==_analyzeToken||isAnalysisCancelled(e))return;if(_specHit)clearSpec();console.error(e);currentResult=null;analyzedProfile=null;currentPdfAudit=null;currentMetadataAudit=null;toast(analysisErrorMessage(e));$('#progressView').classList.add('hidden');$('#wizardView').classList.remove('hidden')}finally{if(token===_analyzeToken&&analyzeBtn)analyzeBtn.disabled=false}}
-function cancelAnalysis(){if($('#progressView').classList.contains('hidden'))return;_analyzeToken++;cancelActiveAnalysis();clearSpec();const b=$('#analyzeBtn');if(b)b.disabled=!selectedDocx;withViewTransition(()=>{$('#progressView').classList.add('hidden');$('#wizardView').classList.remove('hidden')});progress(0,'Pripremam analizu');toast('Analiza je prekinuta.');setTimeout(()=>{try{$('#analyzeBtn')?.focus()}catch(e: any){}},0)}
+ if(_gw){result.issues=result.issues||[];result.issues.unshift(issue('error','structure','Dokument ne izgleda kao završni ili diplomski rad',`${_gw} Provjeri je li učitana prava datoteka; rezultat provjere za ovakav dokument nije reprezentativan.`,'Cijeli dokument'))}}currentResult=result;analyzedProfile=p;void trackEvent('analysis_completed',{profileStatus:p.statusKey||'generic',workType:settings.workType||'',issueCount:result.issues?.length||0});withViewTransition(()=>renderResult(currentResult));saveAnalysisHistory(currentResult)}catch(e: any){if(token!==_analyzeToken||isAnalysisCancelled(e))return;if(_specHit)clearSpec();console.error(e);currentResult=null;analyzedProfile=null;currentPdfAudit=null;currentMetadataAudit=null;toast(analysisErrorMessage(e));$('#progressView').classList.add('hidden');$('#wizardView').classList.remove('hidden')}finally{if(token===_analyzeToken&&analyzeBtn)analyzeBtn.disabled=false}}
+function cancelAnalysis(){if($('#progressView').classList.contains('hidden'))return;_analyzeToken++;cancelActiveAnalysis();clearSpec();void trackEvent('analysis_cancelled',{});const b=$('#analyzeBtn');if(b)b.disabled=!selectedDocx;withViewTransition(()=>{$('#progressView').classList.add('hidden');$('#wizardView').classList.remove('hidden')});progress(0,'Pripremam analizu');toast('Analiza je prekinuta.');setTimeout(()=>{try{$('#analyzeBtn')?.focus()}catch(e: any){}},0)}
 // Izvrsi pomocnu analizu (aux datoteka); nikad ne baca - neuspjeh vrati null i zabiljezi u konzolu.
 async function safeAux(fn: any,label: any){try{return await fn()}catch(e: any){console.warn(`Pomoćna analiza (${label}) nije uspjela:`,e);return null}}
 // Razlikovanje uzroka greske glavne analize u citljivu poruku (F5).
@@ -694,6 +725,24 @@ function renderNextSteps(r: any){const el=$('#nextSteps');if(!el)return;if(!r){e
 // Sklopivi "svi detalji" (tabovi+panels). Zatvoreno po zadanom (vodjeni prvi korak); jumpovi ga otvore.
 function revealResultDetails(){const d=$('#resultDetails');if(d)d.removeAttribute('hidden');const t=$('#resultDetailsToggle');if(t){t.setAttribute('aria-expanded','true');t.classList.add('open')}}
 function toggleResultDetails(){const d=$('#resultDetails');if(!d)return;if(d.hasAttribute('hidden')){revealResultDetails();d.scrollIntoView({behavior:'smooth',block:'nearest'})}else{d.setAttribute('hidden','');const t=$('#resultDetailsToggle');if(t){t.setAttribute('aria-expanded','false');t.classList.remove('open')}}}
+// "Zasto <score>?": posten razlomak ocjene. Ocjena = zaokruzeno (osvojeni/maksimalni bodovi) preko
+// SVIH bodovanih (max>0) strojno provjerljivih provjera profila. Ovdje se pokazuje tocno koliko je
+// osvojeno i koja pravila skidaju bodove, da broj ne bude neproziran. Nema skrivenog stropa: sto se
+// vidi ovdje, to je cijeli izracun. Prazan string kad ocjene nema ili nema bodovanih provjera.
+function scoreBreakdownHtml(r: any): string{
+  if(r?.score==null||!Array.isArray(r.checks))return '';
+  const scored=r.checks.filter((c: any)=>c&&c.scored&&c.max>0);
+  if(!scored.length)return '';
+  const earned=scored.reduce((s: number,c: any)=>s+(Number(c.earned)||0),0);
+  const max=scored.reduce((s: number,c: any)=>s+(Number(c.max)||0),0);
+  const catNames: any={formatting:'Oblikovanje',structure:'Struktura',citations:'Citatnice',elements:'Elementi'};
+  const lost=scored.filter((c: any)=>c.earned<c.max).sort((a: any,b: any)=>(b.max-b.earned)-(a.max-a.earned));
+  const rows=lost.map((c: any)=>`<li><span class="sw-pts">−${c.max-c.earned}</span><span class="sw-body"><span class="sw-title">${escapeHtml(c.title)}</span> <span class="sw-cat">${escapeHtml(catNames[c.category]||c.category||'')}</span>${c.detail?`<span class="sw-detail">${escapeHtml(c.detail)}</span>`:''}</span></li>`).join('');
+  const head=lost.length
+    ?`Ocjena je <strong>${earned} od ${max} bodova</strong> strojno provjerljivih pravila ovog profila. Bodove skidaju:`
+    :`Ocjena je <strong>${earned} od ${max} bodova</strong>: sva bodovana pravila su prošla. Ostatak do 100 su pravila koja nisu automatski provjerljiva.`;
+  return `<details class="score-why"><summary>Zašto ${r.score}?</summary><p class="sw-head">${head}</p>${lost.length?`<ul class="sw-list">${rows}</ul>`:''}<p class="sw-note">Ocjena mjeri samo automatski provjerljiva pravila (oblikovanje, struktura, citatnice). Ne ocjenjuje sadržaj, argument ni hoće li rad biti prihvaćen.</p></details>`;
+}
 // Vodjeni rezultat: "Najvaznije za popraviti" (top nalazi po ozbiljnosti) + primarni CTA (oznaceni
 // pregled) + prekidac za sve detalje. Zamjenjuje redundantnu "Sto dalje?" kutiju i vodi prvog korisnika.
 function renderResultGuide(r: any){
@@ -710,32 +759,127 @@ function renderResultGuide(r: any){
     :`<div class="guide-clean">Nema kritičnih stavki za popraviti.${hasPreview?' Otvori pregled da provjeriš napomene u tekstu.':' Rad je tehnički uredan.'}</div>`;
   const previewCta=hasPreview?`<button class="btn btn-primary btn-lg" id="guideOpenPreview" type="button">Otvori označeni pregled →</button>`:'';
   const shareCta=(r.score!=null)?`<button class="btn btn-ghost guide-share" id="guideShareScore" type="button"><i data-lucide="share-2"></i> Podijeli ocjenu</button>`:'';
-  el.innerHTML=`${body}<div class="guide-cta">${previewCta}${shareCta}<button class="tab-toggle guide-more" id="resultDetailsToggle" type="button" aria-expanded="false" aria-controls="resultDetails">${list.length?'Prikaži sve detalje i provjere':'Prikaži detalje'} <i data-lucide="chevron-down"></i></button></div>`;
+  el.innerHTML=`${body}${scoreBreakdownHtml(r)}<div class="guide-cta">${previewCta}${shareCta}<button class="tab-toggle guide-more" id="resultDetailsToggle" type="button" aria-expanded="false" aria-controls="resultDetails">${list.length?'Prikaži sve detalje i provjere':'Prikaži detalje'} <i data-lucide="chevron-down"></i></button></div>`;
   el.classList.remove('hidden');
   $('#guideOpenPreview')?.addEventListener('click',()=>{void openPreview()});
   $('#guideShareScore')?.addEventListener('click',()=>{void shareScore(r)});
   el.querySelectorAll('[data-goto-issues]').forEach((b: any)=>{b.onclick=()=>{revealResultDetails();openTab('issues');$('#resultDetails')?.scrollIntoView({behavior:'smooth',block:'start'})}});
   $('#resultDetailsToggle')?.addEventListener('click',toggleResultDetails);
 }
-// Triage prikaz (Faza 2): nalazi grupirani po razini popravljivosti (auto/assisted/manual) iz
-// details.triage. Brojaci su ujedno filteri; svaki nalaz nudi skok na mjesto u pregledu, a manual
-// nalazi vode na relevantni alat ili rucnu uslugu (lijevak). Sve BESPLATNO (dijagnoza); doslovni
-// isjecak se prikazuje samo kad je recept otkljucan (recipeUnlocked), po WS-1 granici.
+// Jedna UI projekcija za vrh rezultata, plan ispravaka i puni popis. Engineov rezultat ostaje isti.
 let _triageFilter: any=null;
+function findingsFor(r: any): FindingViewModel[]{return buildFindingViewModels(r,findingStates)}
+function repairAvailableFor(r: any){return !r?.demo&&!!$('#repairPanelMount')?.childElementCount}
+function wireFindingCards(root: any,r: any){
+  root?.querySelectorAll('[data-finding-id]').forEach((card: any)=>{
+    const id=String(card.dataset.findingId),finding=findingsFor(r).find(x=>x.id===id);if(!finding)return;
+    card.querySelector('[data-finding-jump]')?.addEventListener('click',()=>{void trackEvent('finding_opened',{category:finding.category});if(finding.scope.kind==='anchor')void openPreviewAt(finding.scope.paragraphIndex,finding.scope.footnoteId)});
+    card.querySelector('[data-finding-repair]')?.addEventListener('click',()=>{void trackEvent('finding_opened',{category:finding.category});scrollToRepairPanel(r)});
+    card.querySelector('[data-finding-confirm]')?.addEventListener('click',()=>{findingStates.set(id,{status:'confirmed'});void trackEvent('finding_resolved',{category:finding.category,manual:true});toast('Nalaz je označen kao ručno provjeren. Automatska ocjena se nije promijenila.');refreshFindingViews(r)});
+    card.querySelector('[data-finding-reopen]')?.addEventListener('click',()=>{findingStates.delete(id);toast('Nalaz je vraćen u otvorene stavke.');refreshFindingViews(r)});
+    const ignore=card.querySelector('[data-finding-ignore]'),form=card.querySelector('.finding-ignore-form'),input=card.querySelector('[data-finding-ignore-reason]');
+    ignore?.addEventListener('click',()=>{form?.classList.remove('hidden');input?.focus()});
+    card.querySelector('[data-finding-ignore-cancel]')?.addEventListener('click',()=>{form?.classList.add('hidden');if(input)input.value=''});
+    card.querySelector('[data-finding-ignore-save]')?.addEventListener('click',()=>{const reason=String(input?.value||'').trim();if(!reason){input?.setAttribute('aria-invalid','true');input?.focus();toast('Upiši razlog prije zanemarivanja nalaza.');return}findingStates.set(id,{status:'ignored',ignoredReason:reason});void trackEvent('finding_ignored',{category:finding.category});refreshFindingViews(r)});
+  });
+}
+function renderReadinessHeader(r: any){
+  const readiness=resultReadiness(r?.issues||[]),el=$('#resultReadiness'),scoreLabel=$('#scoreLabel'),subtitle=$('#resultSubtitle'),stamp=$('#readyStamp');
+  if(scoreLabel)scoreLabel.textContent=r?.score!=null?'Automatska tehnička ocjena':'Automatska provjera';
+  if(subtitle)subtitle.textContent=`Profil: ${r?.profile||'nije odabran'}.`;
+  if(el){el.className=`result-readiness result-readiness--${readiness.kind}`;el.innerHTML=`<strong>${escapeHtml(readiness.label)}</strong><span>${escapeHtml(readiness.description)}</span>`}
+  if(stamp){stamp.textContent='Bez automatskih blokatora';stamp.classList.toggle('hidden',readiness.kind!=='clear')}
+}
 function renderTriage(r: any){
-  const el=$('#triagePanel');if(!el)return;
-  // Repair je "dostupan" kad je panel #repairPanelMount vec renderiran s necim akcijskim (teaser+lock
-  // ili placeni panel). renderSubmissionChecklist tece PRIJE renderTriage u renderResult, pa je mount
-  // vec popunjen; demo rezultati nemaju panel. Time CTA ne vodi na prazno.
-  const repairAvailable=!r?.demo&&!!$('#repairPanelMount')?.childElementCount;
-  const html=triagePanelHtml(r?.details?.triage,{unlocked:recipeUnlocked(),filter:_triageFilter,repairAvailable});
-  if(!html){el.classList.add('hidden');el.innerHTML='';return}
-  el.classList.remove('hidden');el.innerHTML=html;
-  el.querySelectorAll('[data-triage-level]').forEach((b: any)=>{b.onclick=()=>{const lvl=b.dataset.triageLevel;_triageFilter=_triageFilter===lvl?null:lvl;renderTriage(currentResult)}});
-  el.querySelectorAll('[data-triage-jump]').forEach((b: any)=>{b.onclick=()=>{const v=String(b.dataset.triageJump);if(v[0]==='f')void openPreviewAt(0,Number(v.slice(1)));else void openPreviewAt(Number(v.slice(1)))}});
-  el.querySelectorAll('[data-triage-order]').forEach((b: any)=>{b.onclick=()=>{($('#orderFromResult') as any)?.click()}});
-  el.querySelectorAll('[data-triage-repair]').forEach((b: any)=>{b.onclick=()=>scrollToRepairPanel(r)});
-  window.__lektaIcons?.();
+  renderReadinessHeader(r);
+  const el=$('#triagePanel');if(!el)return;const findings=topFindings(findingsFor(r).filter(f=>f.kind==='document'),3);
+  if(!findings.length){el.classList.add('hidden');el.innerHTML='';return}
+  el.classList.remove('hidden');el.innerHTML=`<h3 class="triage-head">Tri najvažnija koraka</h3><div class="finding-list finding-list--top">${findings.map(f=>findingCardHtml(f,repairAvailableFor(r))).join('')}</div>`;
+  wireFindingCards(el,r);renderUnifiedActionPlan(r);renderUnifiedIssues('all');renderPhaseTwoResultViews(r);window.__lektaIcons?.();
+}
+function renderUnifiedActionPlan(r: any){
+  const el=$('#actionPlan');if(!el)return;const findings=findingsFor(r).sort((a,b)=>a.priorityRank-b.priorityRank||a.originalIndex-b.originalIndex),gated=paywallGateActive(),visible=gated?findings.slice(0,TEASER_SAMPLE):findings,hidden=findings.length-visible.length;
+  el.innerHTML=findings.length?`<div class="action-overview"><div class="action-stat"><span>OTVORENO</span><b>${findings.filter(f=>f.status==='open').length}</b></div><div class="action-stat"><span>RUČNO PROVJERENO</span><b>${findings.filter(f=>f.status==='confirmed').length}</b></div><div class="action-stat"><span>ZANEMARENO</span><b>${findings.filter(f=>f.status==='ignored').length}</b></div></div><div class="finding-list">${visible.map(f=>findingCardHtml(f,repairAvailableFor(r))).join('')}</div>${gated&&hidden>0?paywallLockHtml(`Cijeli plan ispravaka, još ${hidden} stavki`):''}`:'<div class="action-empty"><i data-lucide="check-circle"></i> Nema stavki za ispravak.</div>';
+  wireFindingCards(el,r);wireLockCtas();
+}
+function renderUnifiedIssues(filter='all'){
+  if(!currentResult)return;const el=$('#issuesList'),all=findingsFor(currentResult),gated=paywallGateActive(),visible=gated?all.slice(0,TEASER_SAMPLE):all,arr=visible.filter(f=>filter==='all'||f.severity===filter),hidden=all.length-visible.length;if(!el)return;
+  $('#issueCountLabel').textContent=gated?`Prikazano ${arr.length} od ${all.length} (puni popis je u punom izvještaju)`:`Prikazano ${arr.length} od ${all.length}`;el.innerHTML=(arr.length?`<div class="finding-list">${arr.map(f=>findingCardHtml(f,repairAvailableFor(currentResult))).join('')}</div>`:'<div class="empty"><i data-lucide="check-circle"></i><p>Nema problema u ovoj kategoriji.</p></div>')+(gated&&hidden>0?paywallLockHtml(`Još ${hidden} ${hidden===1?'problem':'problema'} s uputama za ispravak`):'');wireFindingCards(el,currentResult);wireLockCtas();window.__lektaIcons?.();
+}
+function refreshFindingViews(r: any){renderTriage(r);renderUnifiedActionPlan(r);renderUnifiedIssues('all');renderPhaseTwoResultViews(r);$('#issueTabCount').textContent=`(${findingsFor(r).filter(f=>f.kind==='document'&&f.status!=='ignored').length})`}
+
+// Faza 2: jedan put kroz nalaze. Prioriteti ostaju gore, a puni popis zivi na
+// jednom mjestu. Ogranicenja alata ostaju dostupna, ali nisu "problemi rada".
+function renderPhaseTwoResultViews(r: any){
+  const all=findingsFor(r),documentFindings=all.filter(f=>f.kind==='document'),limitations=all.filter(f=>f.kind==='limitation');
+  const manualOrder=$('#orderFromResult');if(manualOrder){manualOrder.textContent='Ručna obrada uz privolu';manualOrder.title='Dokument se za ručnu obradu prilaže tek nakon tvoje izričite privole.'}
+  const open=documentFindings.filter(f=>f.status!=='ignored'),top=topFindings(open,3),first=top[0],anchored=documentFindings.find(f=>f.scope.kind==='anchor');
+  const blockers=open.filter(f=>f.severity==='error').length,warnings=open.filter(f=>f.severity==='warning').length,manual=open.filter(f=>f.severity==='info').length;
+  const resultReadiness=$('#resultReadiness');
+  if(resultReadiness){
+    const base=resultReadiness.querySelector('strong')?.textContent||'';
+    const description=resultReadiness.querySelector('span')?.textContent||'';
+    resultReadiness.innerHTML=`<strong>${escapeHtml(base)}</strong><span>${escapeHtml(description)}</span><small>${blockers} ${blockers===1?'blokator':'blokatora'}, ${warnings} ${warnings===1?'dorada':'dorada'}, ${manual} ${manual===1?'ručna provjera':'ručnih provjera'} u dokumentu</small>`;
+  }
+  const metric=$('#metricIssues');if(metric)metric.textContent=String(open.length);
+  const issueTab=$('#issueTabCount');if(issueTab)issueTab.textContent=`(${open.length})`;
+  const issueTabButton=$('#tabbtn-issues');if(issueTabButton)issueTabButton.childNodes[0].textContent='Svi nalazi ';
+  $('#tabbtn-action')?.classList.add('hidden');
+
+  const guide=$('#resultGuide');
+  if(guide){
+    const summary=[blockers?`${blockers} ${blockers===1?'blokator':'blokatora'}`:'',warnings?`${warnings} dorada`:'',manual?`${manual} ${manual===1?'ručna provjera':'ručne provjere'}`:''].filter(Boolean).join(', ');
+    const primary=anchored
+      ?`<button class="btn btn-primary btn-lg" id="guideOpenPreview" type="button">Otvori označeno mjesto u dokumentu →</button>`
+      :first?`<button class="btn btn-primary btn-lg" id="guideOpenPriority" type="button">Pregledaj prvi nalaz →</button>`:'';
+    guide.innerHTML=first
+      ?`<h3 class="guide-h">Što prvo napraviti</h3><p class="guide-summary">${escapeHtml(summary)}. Počni s: <strong>${escapeHtml(first.title)}</strong>.</p><div class="guide-cta">${primary}<button class="tab-toggle guide-more" id="resultDetailsToggle" type="button" aria-expanded="false" aria-controls="resultDetails">Prikaži sve nalaze i provjere</button></div>`
+      :'<div class="guide-clean">Nema otvorenih problema dokumenta. Prije predaje pregledaj ograničenja analize i posebne upute profila.</div>';
+    $('#guideOpenPreview')?.addEventListener('click',()=>{if(anchored?.scope.kind==='anchor')void openPreviewAt(anchored.scope.paragraphIndex,anchored.scope.footnoteId)});
+    $('#guideOpenPriority')?.addEventListener('click',()=>{$('#triagePanel')?.scrollIntoView({behavior:'smooth',block:'start'})});
+    $('#resultDetailsToggle')?.addEventListener('click',toggleResultDetails);
+  }
+
+  const triage=$('#triagePanel');
+  if(triage){
+    triage.classList.toggle('hidden',!top.length);
+    triage.innerHTML=top.length?`<h3 class="triage-head">Najvažniji nalazi</h3><div class="finding-list finding-list--top">${top.map(f=>findingCardHtml(f,repairAvailableFor(r))).join('')}</div>`:'';
+    wireFindingCards(triage,r);
+  }
+
+  const filters=$('#issueFilters'),list=$('#issuesList'),count=$('#issueCountLabel');
+  if(!filters||!list||!count)return;
+  const active=filters.dataset.phaseTwoFilter||'all';
+  filters.innerHTML='<button class="filter-btn" data-filter="all">Problemi dokumenta</button><button class="filter-btn" data-filter="error">Blokatori</button><button class="filter-btn" data-filter="warning">Dorade</button><button class="filter-btn" data-filter="manual">Ručna provjera</button><button class="filter-btn" data-filter="limitations">Ograničenja analize</button><button class="filter-btn" data-filter="confirmed">Ručno provjereno</button><button class="filter-btn" data-filter="ignored">Zanemareno</button>';
+  filters.querySelector(`[data-filter="${active}"]`)?.classList.add('active');
+  filters.onclick=(event: any)=>{const button=event.target.closest('[data-filter]');if(!button)return;filters.dataset.phaseTwoFilter=button.dataset.filter;renderPhaseTwoResultViews(r)};
+  const selected=all.filter(f=>{
+    if(active==='all')return f.kind==='document'&&f.status!=='ignored';
+    if(active==='manual')return f.kind==='document'&&f.severity==='info'&&f.status!=='ignored';
+    if(active==='limitations')return f.kind==='limitation';
+    if(active==='confirmed'||active==='ignored')return f.kind==='document'&&f.status===active;
+    return f.kind==='document'&&f.severity===active&&f.status!=='ignored';
+  });
+  count.textContent=`${open.length} problema dokumenta, ${limitations.length} ograničenja analize`;
+  list.innerHTML=selected.length?`<div class="finding-list">${selected.map(f=>findingCardHtml(f,repairAvailableFor(r))).join('')}</div>`:'<div class="empty"><p>Nema nalaza u ovom prikazu.</p></div>';
+  wireFindingCards(list,r);
+  renderPhaseFourTrust(r);
+}
+
+// Zavrsni trust sloj je namjerno jedanput uz zakljucak rezultata. Izvor profila
+// nije izvor svakog pojedinog nalaza, pa ga ne ponavljamo po karticama.
+function renderPhaseFourTrust(r: any){
+  const readiness=$('#resultReadiness'),existing=$('#resultTrust');
+  if(!readiness)return;
+  const source=r?.details?.sources?.find((item: any)=>item?.title&&item?.url);
+  const checked=r?.details?.documentDate||r?.details?.verifiedAt;
+  const date=checked?new Date(`${checked}T12:00:00`).toLocaleDateString('hr-HR'):'';
+  const trust=existing||document.createElement('details');
+  trust.id='resultTrust';trust.className='result-trust';
+  trust.innerHTML=`<summary>Pravila i granice ove provjere</summary><div class="result-trust__body"><p><strong>Profil:</strong> ${escapeHtml(r?.profile||'Nije odabran profil')}.</p><p><strong>Ocjena uključuje:</strong> automatizirana tehnička pravila odabranog profila.</p><p><strong>Ne potvrđuje:</strong> odluku mentora ili povjerenstva, akademsku kvalitetu sadržaja, plagijat ni prihvaćanje rada.</p>${source?`<p><strong>Izvor profila:</strong> <a href="${escapeHtml(safeHref(source.url))}" target="_blank" rel="noopener">${escapeHtml(source.title)}</a>${date?` (${escapeHtml(date)})`:''}.</p>`:'<p>Za ovaj profil nije povezan pojedinačni službeni izvor.</p>'}</div>`;
+  if(!existing)readiness.insertAdjacentElement('afterend',trust);
+  const download=$('.dl-menu-btn');if(download&&download.firstChild)download.firstChild.textContent='Preuzmi izvještaj ';
+  const rerun=$('#newAnalysis');if(rerun){rerun.textContent='Ponovno analiziraj';rerun.title='Ponovno analiziraj dokument nakon izmjena da potvrdiš rezultat.'}
 }
 /* Glavni ulaz u automatski popravak, uz sam rezultat.
    Panel popravka fizicki zivi u kartici "Spremnost za predaju" (#repairPanelMount), sto korisnik
@@ -750,9 +894,22 @@ function renderRepairCta(r: any){
   if(!available){el.classList.add('hidden');el.innerHTML='';return}
   const auto=Number(r?.details?.triage?.counts?.auto)||0;
   el.classList.remove('hidden');
-  el.innerHTML=`<h3>Automatski popravak</h3><p>${auto>0?`Oblikovanje možemo popraviti umjesto tebe (${escapeHtml(String(auto))} ${auto===1?'stavka':'stavki'}) i vratiti ispravljen dokument.`:'Oblikovanje možemo popraviti umjesto tebe i vratiti ispravljen dokument.'}</p><button type="button" class="triage-repair-cta" data-repair-entry><i data-lucide="wand-2"></i>Popravi sve <span aria-hidden="true">→</span></button>`;
+  el.innerHTML=`<h3>Mogućnosti automatskog popravka</h3><p>${auto>0?`Dostupno je ${escapeHtml(String(auto))} ${auto===1?'podržano poboljšanje':'podržanih poboljšanja'}. Prije nastavka provjeri opseg popravka i podatkovni tok dokumenta.`:'Pregledaj koji su popravci podržani i pod kojim uvjetima se dokument obrađuje.'}</p><button type="button" class="triage-repair-cta" data-repair-entry><i data-lucide="wand-2"></i>Pregledaj mogućnosti popravka <span aria-hidden="true">→</span></button>`;
   (el.querySelector('[data-repair-entry]') as any).onclick=()=>scrollToRepairPanel(r);
+  renderPhaseThreeRepairEntry(r);
   window.__lektaIcons?.();
+}
+
+// Automatski Word popravci u ovom proizvodu rade u pregledniku. To mora biti
+// vidljivo na samoj odluci, odvojeno od ručne usluge gdje se dokument prilaže
+// tek uz zasebnu privolu.
+function renderPhaseThreeRepairEntry(r: any){
+  const entry=$('#repairEntry'),order=$('#orderFromResult');
+  if(order){order.textContent='Ručna obrada uz privolu';order.title='Dokument se za ručnu obradu prilaže tek nakon tvoje izričite privole.'}
+  if(!entry||entry.classList.contains('hidden'))return;
+  const auto=Number(r?.details?.triage?.counts?.auto)||0;
+  entry.innerHTML=`<h3>Automatski popravci na ovom uređaju</h3><p>${auto?`Možeš lokalno primijeniti ${auto} ${auto===1?'podržanu stavku':'podržane stavke'} i preuzeti novi Word dokument.`:'Pregledaj podržane lokalne popravke i preuzmi novi Word dokument.'} Dokument se pri tome ne šalje na poslužitelj.</p><button type="button" class="triage-repair-cta" data-repair-entry><i data-lucide="wand-2"></i>Odaberi lokalne popravke <span aria-hidden="true">→</span></button>`;
+  (entry.querySelector('[data-repair-entry]') as any).onclick=()=>scrollToRepairPanel(r);
 }
 // Most iz besplatne dijagnoze u placeni popravak: prebaci na karticu "Spremnost za predaju" gdje
 // zivi #repairPanelMount, doskrolaj i kratko istakni panel te fokusiraj njegovu glavnu akciju.
@@ -767,7 +924,8 @@ function scrollToRepairPanel(r: any){
   if(m){
     m.scrollIntoView({behavior:motionReduced()?'auto':'smooth',block:'center'});
     m.classList.remove('repair-flash');void (m as any).offsetWidth;m.classList.add('repair-flash');
-    const act: any=m.querySelector('[data-repair-go],button,a');act?.focus?.({preventScroll:true});
+    const act: any=m.querySelector('[data-repair-go]:not(:disabled),button:not(:disabled),a[href]');
+    if(act)act.focus?.({preventScroll:true});else{m.setAttribute('tabindex','-1');m.focus?.({preventScroll:true})}
   }
   try{void trackEvent('triage_repair_cta',{count:r?.details?.triage?.counts?.auto||0})}catch(e: any){}
 }
@@ -788,8 +946,9 @@ async function openPreviewAt(paragraphIndex: number,footnoteId?: number){
   await openPreview();
   const doc=$('#previewDoc');if(!doc)return;
   const sel=footnoteId!=null?`[data-fn-id="${footnoteId}"]`:`[data-p-index="${paragraphIndex}"]`;
+  if(_previewCtx)_previewCtx.anchorSelector=sel;
   const t=doc.querySelector(sel);
-  if(t){(t as any).scrollIntoView({block:'center',behavior:'smooth'});t.classList.add('lekta-flag--active');setTimeout(()=>t.classList.remove('lekta-flag--active'),1600)}
+  if(t){void trackEvent('finding_jump',{source:'report'});(t as any).scrollIntoView({block:'center',behavior:'smooth'});t.classList.add('lekta-flag--active');setTimeout(()=>t.classList.remove('lekta-flag--active'),1600)}
 }
 const _celebrated=new WeakSet();
 function celebrateReady(r: any){
@@ -1180,6 +1339,8 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
    const chosen=[...items,...textItems.filter((it: any)=>okTextIds.has(it.ruleId))];
    const requests=chosen.map((it: any)=>({fixerId:it.fixerId,ruleId:it.ruleId,params:_SERVER_DEEP_FIXERS.has(it.fixerId)?{...it.params,deep:true}:it.params}));
    const refsForCorpus=repairReferencesFrom(r);
+   const {buildRepairMeta,uploadRepair}=await loadRepairClient();
+   const {extractParsedStructure}=await loadReportClient();
    const meta=buildRepairMeta({references:refsForCorpus.map((x: any)=>({title:x.title,year:x.year})),workType:toReportWorkType(r.settings?.workType||r.selection?.workType||'final'),parsedStructure:extractParsedStructure(r),requests,words:r.stats?.officialWords||r.stats?.words||null,titleMarker:r.details?.titlePageWorkType||null,profileStatus:r.profileStatus||null,profileRef:r.details?.profileDefinitionId||null,fileName:r.file?.name||file.name||'rad.docx',confirmedMismatch});
    const bytes=new Uint8Array(await file.arrayBuffer());
    // Krajnji rok: bez njega zaglavljen zahtjev drzi gumb u "Saljem" bez izlaza. Prekid se u
@@ -1188,18 +1349,18 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
    let out: any;
    try{out=await uploadRepair(repairConfig(),token||'',bytes,meta,fetch,{signal:ac.signal})}finally{clearTimeout(timer)}
    if(out.kind==='ok'){
-    downloadBlob(out.docxBytes,'application/vnd.openxmlformats-officedocument.wordprocessingml.document',out.fileName);
-    // Rezervno preuzimanje: automatski a.click() moze blokirati preglednik (popup/download gard), a
-    // bajtovi su jos u memoriji, pa se drugi klik ne mora vracati na server.
-    const again=`<p><button type="button" class="btn btn-ghost btn-sm" data-repair-again>Preuzmi ponovno</button></p>`;
+    // Preuzimanje NE krece automatski: a.click() nakon await-a preglednik cesto blokira (nema
+    // korisnicke geste iza sebe), pa je preuzimanje IZRICIT gumb; klik je gesta koju preglednik postuje.
+    const DOCX_MIME='application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+    const dl=`<p><button type="button" class="btn btn-primary" data-repair-download>Preuzmi popravljeni dokument</button></p>`;
     // Pohrana je fail-open: server vraca 200 s jobId:null i kad Storage ili baza zakazu. Panel je
     // obecao "Moji popravci", pa se ta razlika MORA reci, inace korisnik izgubi jedini primjerak.
     const stored=out.jobId
      ?`<p>Datoteka je spremljena u <strong>Moji popravci</strong>, možeš je preuzeti i kasnije.</p>`
-     :`<p><strong>Popravak nije spremljen u Moji popravci</strong> (privremena greška na serveru). Sačuvaj preuzetu datoteku, ovdje je više neće biti.</p>`;
-    setSummary(`<strong>Popravljeno na serveru (${_plIzmjena(out.changelog.length)}).</strong> Preuzimanje je počelo.${again}${stored}${out.skipped.length?`<p>Nije primijenjeno: ${out.skipped.map((s: string)=>escapeHtml(s)).join(', ')}.</p>`:''}`);
-    const againBtn: any=summary.querySelector('[data-repair-again]');
-    if(againBtn)againBtn.onclick=()=>downloadBlob(out.docxBytes,'application/vnd.openxmlformats-officedocument.wordprocessingml.document',out.fileName);
+     :`<p><strong>Popravak nije spremljen u Moji popravci</strong> (privremena greška na serveru). Preuzmi datoteku i sačuvaj je, ovdje je više neće biti.</p>`;
+    setSummary(`<strong>Popravljeno na serveru (${_plIzmjena(out.changelog.length)}).</strong>${dl}${stored}${out.skipped.length?`<p>Nije primijenjeno: ${out.skipped.map((s: string)=>escapeHtml(s)).join(', ')}.</p>`:''}`);
+    const dlBtn: any=summary.querySelector('[data-repair-download]');
+    if(dlBtn)dlBtn.onclick=()=>downloadBlob(out.docxBytes,DOCX_MIME,out.fileName);
     trackEvent('repair_server_done',{profileId:r.details?.profileDefinitionId||'',changes:out.changelog.length,stored:out.jobId?1:0});
     // K4: provjera izvora je DODATAK uz popravak. Kad je izostala (stari server, ugasena zastavica,
     // greska), buildSourceCheckHtml vrati prazan string pa sekcije naprosto nema. Nikad ne javlja
@@ -1254,7 +1415,7 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
 // smije srusiti pri re-renderu (npr. handleUnlockReport ponovno zove renderResult).
 function preflightConfigured(){return!!String(productionConfig?.preflightStartEndpoint||'').trim()&&!!String(productionConfig?.preflightResultEndpoint||'').trim()}
 function preflightCitationClass(r: any): string{const s=String(r?.settings?.citationStyle||r?.details?.recommendedCitation||'').toLowerCase();if(/vancouver|ieee|numeric|brojc/.test(s))return'vancouver';if(/apa|harvard|chicago-author|author-year|mla/.test(s))return'author-year';return'unknown'}
-function renderPreflightSection(r: any){
+async function renderPreflightSection(r: any){
  const tabBtn=$('#tabbtn-preflight'),mount=$('#preflightMount');
  if(!tabBtn||!mount)return;
  if(!preflightConfigured()){tabBtn.classList.add('hidden');if(preflightPanel){preflightPanel.dispose();preflightPanel=null;preflightPanelForResult=null}return}
@@ -1265,6 +1426,8 @@ function renderPreflightSection(r: any){
  if(preflightPanel&&preflightPanelForResult===r){preflightPanel.render();return}
  if(preflightPanel){preflightPanel.dispose()}
  const capturedFile=selectedDocx;
+ const {PreflightPanel}=await import('../preflight/preflight-panel');
+ if(r!==currentResult)return;
  preflightPanel=new PreflightPanel(mount,{
   config:{startEndpoint:String(productionConfig.preflightStartEndpoint).trim(),resultEndpoint:String(productionConfig.preflightResultEndpoint).trim()},
   resolveToken:resolveAccessToken,

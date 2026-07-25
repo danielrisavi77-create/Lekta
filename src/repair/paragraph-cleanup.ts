@@ -122,6 +122,27 @@ function hasVisibleText(paragraph: string): boolean {
   return false;
 }
 
+/** Spoji sav vidljiv tekst odlomka (svi w:t, i kad je naslov razbijen na vise runova). */
+function paragraphVisibleText(paragraph: string): string {
+  let text = '';
+  for (const t of paragraph.matchAll(/<w:t\b[^>]*>([\s\S]*?)<\/w:t>/g)) text += t[1];
+  return text;
+}
+
+// Naslov kojim pocinju PRILOZI (dodaci): "Prilog", "Prilozi", "Prilog 1", "Dodatak", "Privitak",
+// "Appendix"... Anticipira i uppercase ("PRILOZI") jer regex ne pazi na velicinu slova.
+const APPENDIX_HEADING_RE = /^\s*(?:prilo(?:g|zi|ga)|dodat(?:ak|ci|aka)|privit(?:ak|ci)|privici|appendix|appendices)\b/i;
+
+/**
+ * Pocinje li odlomak sekciju priloga. Koristi se da se prazni odlomci NEPOSREDNO PRIJE naslova
+ * priloga ne kolabiraju: autori cesto priloge guraju na novu stranicu nizom Enter-a (a ne pravim
+ * prijelomom stranice); kolabiranje bi ih povuklo odmah iza literature. Cuvamo autorov razmak, bez
+ * izmisljanja prijeloma. (Pravi prijelom stranice je ionako vec zasticen preko FORBIDDEN_CONTENT.)
+ */
+function startsAppendixSection(paragraph: string): boolean {
+  return APPENDIX_HEADING_RE.test(paragraphVisibleText(paragraph));
+}
+
 /**
  * Kvalificira li se odlomak kao "osirotjeli prazan": bez stila, bez prijeloma
  * odjeljka, bez ugradjenog/nevidljivog sadrzaja i bez vidljivog teksta. Poziva
@@ -254,7 +275,11 @@ export function stripOrphanedEmptyParagraphs(documentXml: string): ParagraphClea
     let j = i;
     while (j < matches.length && matches[j].qualifies) j++;
     const runLength = j - i;
-    if (runLength >= 2) {
+    // Prazni odlomci neposredno prije naslova PRILOGA se ne diraju: oni "pune" stranicu da prilozi
+    // pocnu na novoj. Kolabiranje bi ih povuklo odmah iza literature (vlasnikova prijava). matches[j]
+    // je prvi ne-prazni odlomak nakon niza; ako je to naslov priloga, cijeli niz preskacemo.
+    const nextStartsAppendix = j < matches.length && startsAppendixSection(documentXml.slice(matches[j].start, matches[j].end));
+    if (runLength >= 2 && !nextStartsAppendix) {
       // Prvi u nizu prezivljava; ostatak se brise.
       for (let k = i + 1; k < j; k++) toDelete.add(k);
       paragraphsRemoved += runLength - 1;

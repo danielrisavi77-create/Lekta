@@ -15,6 +15,6 @@ export default defineConfig({
     // tudi crveni padovi). Worktree sesija svoje testove vrti iz vlastitog cwd-a.
     // tests/conformance/** je PUNA matrica (~744 analize, minute) i vrti se ZASEBNO preko
     // `npm run conformance` (vitest.conformance.config.ts); u checku je tripwire uzorak.
-    exclude: ['**/node_modules/**', '**/dist/**', '**/.claude/**', '**/tests/conformance/**'],
+    exclude: ['**/node_modules/**', '**/dist/**', '**/.claude/**', '**/tests/conformance/**', '**/tests/ux/**'],
   },
 });

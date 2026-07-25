@@ -1,6 +1,8 @@
 import { buildReportRequest, type AnalysisResultLike } from './report';
 import type { FingerprintInput } from '../fingerprint/fingerprint';
 import { isReportWorkType, type ReportWorkType } from './pricing';
+export { toReportWorkType } from './report-work-type';
+import { toReportWorkType } from './report-work-type';
 
 /**
  * Klijentska strana paywalla (MONETIZATION_AND_ANTI_ABUSE.md sekcija 5, korak klijenta).
@@ -26,21 +28,6 @@ export type UnlockOutcome =
   | { kind: 'error'; status?: number; message: string };
 
 /** Profilska vrsta rada (engine) -> naplatna vrsta rada (monetizacija). */
-const REPORT_WORK_TYPE: Record<string, ReportWorkType> = {
-  seminar: 'seminarski',
-  final: 'zavrsni',
-  graduate: 'diplomski',
-  specialist: 'diplomski',
-  doctoral: 'doktorski',
-  article: 'zavrsni',
-  project: 'zavrsni',
-};
-
-export function toReportWorkType(workType: string): ReportWorkType {
-  if (isReportWorkType(workType)) return workType;
-  return REPORT_WORK_TYPE[workType] ?? 'zavrsni';
-}
-
 /** Izvuce otisak-ulaz iz rezultata analize (analyzeDocx attacha `documentStructure`). */
 export function extractParsedStructure(
   result: { documentStructure?: FingerprintInput } | null | undefined,

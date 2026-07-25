@@ -43,6 +43,36 @@ describe('stripOrphanedEmptyParagraphs: prijelom stranice dijeli run', () => {
   });
 });
 
+describe('stripOrphanedEmptyParagraphs: prilozi na novoj stranici', () => {
+  it('prazni odlomci NEPOSREDNO PRIJE naslova priloga se NE kolabiraju (ostaju na novoj stranici)', () => {
+    const literatura = p(run('Popis literature'));
+    const izvor = p(run('Autor, N. (2020). Naslov.'));
+    const prilozi = p('<w:pPr><w:pStyle w:val="Heading1"/></w:pPr>' + run('Prilozi'));
+    const xml = '<w:body>' + literatura + izvor + p() + p() + p() + p() + prilozi + '</w:body>';
+    const r = stripOrphanedEmptyParagraphs(xml);
+
+    // Niz od 4 prazna prije "Prilozi" mora ostati netaknut: nista se ne brise.
+    expect(r.applied).toBe(false);
+    expect(r.paragraphsRemoved).toBe(0);
+    expect(r.xml).toBe(xml);
+  });
+
+  it('hvata i "Dodatak" i razbijeni naslov iz vise runova', () => {
+    const dodatak = p('<w:r><w:t>Doda</w:t></w:r><w:r><w:t>tak A</w:t></w:r>');
+    const xml = '<w:body>' + p(run('tekst')) + p() + p() + p() + dodatak + '</w:body>';
+    const r = stripOrphanedEmptyParagraphs(xml);
+    expect(r.applied).toBe(false);
+  });
+
+  it('prazni prije OBICNOG odlomka se i dalje kolabiraju (nema lazne zastite)', () => {
+    const obican = p(run('Sljedeci odlomak nije prilog.'));
+    const xml = '<w:body>' + p(run('tekst')) + p() + p() + p() + obican + '</w:body>';
+    const r = stripOrphanedEmptyParagraphs(xml);
+    expect(r.applied).toBe(true);
+    expect(r.paragraphsRemoved).toBe(2);
+  });
+});
+
 describe('stripOrphanedEmptyParagraphs: oznake (bookmarks)', () => {
   it('odlomak sa samo w:bookmarkStart/w:bookmarkEnd nikad se ne brise, cak ni uz susjedne prazne', () => {
     const bookmarkParagraph = p('<w:bookmarkStart w:id="0" w:name="_Toc1"/><w:bookmarkEnd w:id="0"/>');

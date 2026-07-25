@@ -17,7 +17,7 @@ import './motion.css'; // dijeljeni sloj gibanja: tokeni gibanja, tekstura papir
 import './skip-link.css'; // pristupacni "Preskoci na sadrzaj" (BL-P1-01)
 import './a11y.css'; // dijeljeni a11y sloj: forced-colors fokus fallback (BL-P2-02)
 import { setupSkipLink } from './skip-link';
-import { createIcons, SunMoon, Menu, Lock, Upload, CheckCircle, AlertTriangle, AlertCircle, Info, SlidersHorizontal, ClipboardCheck, X, ChevronDown, Wrench, BadgeCheck, Zap, Lamp } from 'lucide';
+import { createIcons, SunMoon, Menu, Lock, Upload, CheckCircle, AlertTriangle, AlertCircle, Info, SlidersHorizontal, ClipboardCheck, X, ChevronDown, Wrench, BadgeCheck, Zap, Lamp, Share2, Wand2 } from 'lucide';
 
 // Korektorski stol: "radna lampa" (tamni stol) je default na SVIM stranicama. Kad korisnik
 // nema spremljenu temu, postavi data-theme="dark" prije boota, pa #themeBtn preklopnik radi
@@ -49,7 +49,7 @@ function motionReady(): Promise<any> {
 function renderIcons() {
   try {
     createIcons({
-      icons: { SunMoon, Menu, Lock, Upload, CheckCircle, AlertTriangle, AlertCircle, Info, SlidersHorizontal, ClipboardCheck, X, ChevronDown, Wrench, BadgeCheck, Zap, Lamp },
+      icons: { SunMoon, Menu, Lock, Upload, CheckCircle, AlertTriangle, AlertCircle, Info, SlidersHorizontal, ClipboardCheck, X, ChevronDown, Wrench, BadgeCheck, Zap, Lamp, Share2, Wand2 },
       attrs: { 'aria-hidden': 'true', 'stroke-width': 2 },
     });
   } catch (e) {

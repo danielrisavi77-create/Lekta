@@ -1,0 +1,31 @@
+{
+  "version": "5",
+  "remote": {
+    "https://esm.sh/@supabase/supabase-js@2.110.2": "a764256c977bc03fc703d7b0031ac3138137a49b9f831775fd7a7f42019f652d"
+  },
+  "workspace": {
+    "packageJson": {
+      "dependencies": [
+        "npm:@fontsource-variable/inter-tight@^5.2.7",
+        "npm:@fontsource-variable/newsreader@^5.2.10",
+        "npm:@fontsource-variable/source-serif-4@^5.2.9",
+        "npm:@fontsource/caveat@^5.2.8",
+        "npm:@fontsource/ibm-plex-mono@^5.2.7",
+        "npm:@xmldom/xmldom@~0.9.10",
+        "npm:canvas-confetti@^1.9.4",
+        "npm:dictionary-hr@2",
+        "npm:esbuild@~0.28.1",
+        "npm:happy-dom@^20.10.6",
+        "npm:hunspell-asm@^4.0.2",
+        "npm:lucide@^1.24.0",
+        "npm:motion@^12.42.2",
+        "npm:netlify-cli@^26.2.0",
+        "npm:open-props@^1.7.23",
+        "npm:supabase@^2.109.1",
+        "npm:typescript@^7.0.2",
+        "npm:vite@^8.1.4",
+        "npm:vitest@^2.1.4"
+      ]
+    }
+  }
+}

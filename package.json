@@ -29,10 +29,12 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest",
+    "test:ux": "playwright test",
     "conformance": "vitest run --config vitest.conformance.config.ts",
     "check": "tsc --noEmit && vitest run && vite build"
   },
   "devDependencies": {
+    "@playwright/test": "^1.61.1",
     "dictionary-hr": "^2.0.0",
     "esbuild": "^0.28.1",
     "happy-dom": "^20.10.6",

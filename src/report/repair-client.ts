@@ -11,7 +11,9 @@
 
 import { isReportWorkType, type ReportWorkType } from './pricing';
 import type { FingerprintInput } from '../fingerprint/fingerprint';
-import { TERMS_VERSION } from '../legal/legal-content';
+import { TERMS_VERSION } from '../legal/terms-version';
+export { REPAIR_MAX_REFERENCES } from './repair-contract';
+import { REPAIR_MAX_REFERENCES } from './repair-contract';
 
 const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
@@ -47,7 +49,6 @@ export interface RepairReference {
  * Gornja granica broja poslanih referenci. Server ima svoju (CORPUS_MAX_REFS), ali klijent NE smije
  * ovisiti o tome da je serverska granica ista: bez ove kape golemi popis literature napuhne meta dio.
  */
-export const REPAIR_MAX_REFERENCES = 60;
 
 /**
  * Ishod provjere izvora u korpusu, kakav repair-docx vraca uz popravak.
