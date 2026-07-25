@@ -1,22 +1,65 @@
-/* Faksimil prije/poslije. Lazy chunk (ucitava se uz repair-diff.ts), ne ulazi u glavni CSS. */
+/* "Sto je popravljeno": popis promjena + faksimil prije/poslije. Lazy chunk (uz repair-diff.ts). */
 
 .modal--diff { max-width: min(1180px, 96vw); width: 100%; }
 
-.diff-changelog { list-style: none; margin: 0 0 12px; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+/* Oblikovne promjene (cijeli dokument) */
+.lekta-diff-formatting { margin: 0 0 14px; }
+.lekta-diff-formatting-head { margin: 0 0 6px; font-size: .82rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+.diff-changelog { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
 .diff-changelog li { font-size: .9rem; line-height: 1.4; }
 .diff-before { color: var(--muted); }
 .diff-arrow { color: var(--muted); }
 
 .diff-note { margin: 0 0 12px; font-size: .9rem; color: var(--muted); }
 
-.diff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-@media (max-width: 860px) { .diff-grid { grid-template-columns: 1fr; } }
+/* Prebacivac nacina (Popis / Usporedba): 44px meta, jer je .pv-mode inace ~32px (dodir na mobitelu). */
+.lekta-diff-modes { margin: 4px 0 12px; }
+.modal--diff .pv-mode { min-height: 44px; display: inline-flex; align-items: center; }
 
+.lekta-diff-viewhost { min-width: 0; }
+
+/* --- POPIS PROMJENA (mobilni default, radi i na siroku ekranu) --- */
+.lekta-diff-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; counter-reset: dif; }
+.lekta-diff-item {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: grid;
+  grid-template-columns: minmax(78px, auto) 1fr;
+  gap: 4px 12px;
+  align-items: start;
+}
+.lekta-diff-item-tag {
+  font-size: .72rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted);
+  padding-top: 2px;
+}
+.lekta-diff-item-rows { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.lekta-diff-line { margin: 0; font-size: .95rem; line-height: 1.45; word-break: break-word; }
+.lekta-diff-line--before { color: var(--muted); }
+.lekta-diff-kind { font-size: .72rem; text-transform: uppercase; letter-spacing: .04em; font-weight: 600; }
+.lekta-diff-line--before .lekta-diff-kind { color: var(--red-on-soft, #A62B23); }
+.lekta-diff-line--after .lekta-diff-kind { color: var(--ok-on-soft, #176243); }
+
+/* --- OZNAKE U TEKSTU (rijeci): crveno = uklonjeno, zeleno = dodano/ispravno --- */
+.lekta-diff-w { border-radius: 2px; padding: 0 1px; }
+.lekta-diff-w--del { background: var(--danger-soft, rgba(196,55,46,.12)); color: var(--red-on-soft, #A62B23); text-decoration: line-through; }
+.lekta-diff-w--ins { background: var(--ok-soft, rgba(46,139,95,.14)); color: var(--ok-on-soft, #176243); text-decoration: underline; text-decoration-thickness: 2px; }
+
+/* --- OZNAKE ODLOMKA (obrisan / dodan / promijenjen): rubna traka + blaga podloga --- */
+.lekta-diff-p { border-radius: 3px; }
+.lekta-diff-p--del { background: var(--danger-soft, rgba(196,55,46,.12)); box-shadow: inset 3px 0 0 var(--danger, #C4372E); padding-left: 6px; }
+.lekta-diff-p--ins { background: var(--ok-soft, rgba(46,139,95,.14)); box-shadow: inset 3px 0 0 var(--ok, #2E8B5F); padding-left: 6px; }
+.lekta-diff-p--chg-del { box-shadow: inset 3px 0 0 var(--danger, #C4372E); padding-left: 6px; }
+.lekta-diff-p--chg-ins { box-shadow: inset 3px 0 0 var(--ok, #2E8B5F); padding-left: 6px; }
+
+/* --- USPOREDBA (dva faksimila) --- */
+.diff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .diff-col { min-width: 0; display: flex; flex-direction: column; }
 .diff-col-title { margin: 0 0 6px; font-size: .85rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
-.diff-col--after .diff-col-title { color: #1a7a54; }
+.diff-col--after .diff-col-title { color: var(--ok-on-soft, #176243); }
+.diff-col--before .diff-col-title { color: var(--red-on-soft, #A62B23); }
 
-/* Faksimil je fiksne sirine (A4), pa kolona mora skrolati u OBA smjera umjesto da razvuce modal. */
+/* Faksimil je fiksne sirine (A4), pa kolona skrola u OBA smjera umjesto da razvuce modal. */
 .diff-pane {
   height: min(62vh, 720px);
   overflow: auto;
@@ -26,13 +69,48 @@
   padding: 8px;
 }
 .diff-col--after .diff-pane { border-color: #cfe6da; }
+.diff-col--before .diff-pane { border-color: #ecccc8; }
 
 /* Zoom traka i skokovi */
 .lekta-fac-zoombar { display: flex; align-items: center; gap: 4px; margin-left: auto; margin-right: 8px; }
 .lekta-fac-zoomval { min-width: 4.5em; text-align: center; font-variant-numeric: tabular-nums; font-size: .85rem; color: var(--muted); }
-/* Omotac nosi skaliranu visinu; bez njega transform ne mijenja skrolabilnu povrsinu. */
 .lekta-fac-zoombox { width: 100%; }
 
 .diff-jumps { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; margin: 0 0 10px; }
 .diff-jumps-label { font-size: .85rem; color: var(--muted); margin-right: 4px; }
 .diff-jumps .btn { min-width: 2.2em; padding: 2px 8px; }
+
+/* Skok na promjenu: kratki bljesak ciljanog odlomka. */
+@keyframes lektaDiffFlash {
+  0% { outline: 2px solid var(--brand, #C4372E); outline-offset: 2px; }
+  100% { outline: 2px solid transparent; outline-offset: 2px; }
+}
+.lekta-diff-flash { animation: lektaDiffFlash 1.3s ease-out; }
+
+/* --- MOBITEL: usporedba u jedan stupac, modal gotovo pun ekran --- */
+@media (max-width: 720px) {
+  .modal--diff { width: 96vw; max-width: 96vw; }
+  .diff-grid { grid-template-columns: 1fr; }
+  .diff-pane { height: min(52vh, 560px); }
+  .lekta-diff-item { grid-template-columns: 1fr; gap: 2px; }
+  .lekta-diff-item-tag { padding-top: 0; }
+  .lekta-fac-zoombar { flex-wrap: wrap; }
+}
+
+/* Bez animacija kad korisnik tako trazi. */
+@media (prefers-reduced-motion: reduce) {
+  .lekta-diff-flash { animation: none; }
+}
+
+/* Windows High Contrast: boja nije jedini signal (line-through/underline nose znacenje), a rubovi
+   moraju ostati vidljivi. */
+@media (forced-colors: active) {
+  .lekta-diff-w--del { text-decoration: line-through; }
+  .lekta-diff-w--ins { text-decoration: underline; }
+  .lekta-diff-p--del, .lekta-diff-p--ins, .lekta-diff-p--chg-del, .lekta-diff-p--chg-ins { box-shadow: none; outline: 1px solid CanvasText; }
+}
+
+/* Ispis: kontrole prikaza i skokovi nemaju smisla na papiru. */
+@media print {
+  .lekta-diff-modes, .diff-jumps, .lekta-fac-zoombar { display: none !important; }
+}

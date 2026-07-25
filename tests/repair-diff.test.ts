@@ -1,43 +1,92 @@
 // @vitest-environment happy-dom
-import { describe, it, expect } from 'vitest';
-import { locateChanges } from '../src/ui/repair-diff';
+import { describe, it, expect, beforeEach } from 'vitest';
+import { openRepairDiff, locateChanges } from '../src/ui/repair-diff';
+import type { PreviewModel, PreviewParagraph } from '../src/preview/preview-anchors';
 
-function m(texts: string[]) {
-  return { paragraphs: texts.map((text, i) => ({ index: i + 1, text })), truncated: false } as never;
+function para(index: number, text: string, extra: Partial<PreviewParagraph> = {}): PreviewParagraph {
+  return { index, text, headingLevel: null, ...extra };
+}
+function model(paragraphs: PreviewParagraph[]): PreviewModel {
+  return { paragraphs, truncated: false };
 }
 
-describe('locateChanges', () => {
-  it('bez razlika ne prijavljuje nista', () => {
-    expect(locateChanges(m(['a', 'b', 'c']), m(['a', 'b', 'c']))).toEqual([]);
-  });
+beforeEach(() => {
+  document.body.innerHTML = '';
+  // happy-dom nema scrollIntoView; skok na promjenu ga zove.
+  (Element.prototype as unknown as { scrollIntoView: () => void }).scrollIntoView = () => {};
+});
 
-  it('obrisan odlomak: prijavi JEDNO mjesto, ne sve ostale', () => {
-    // Kljucna invarijanta: bez resinkronizacije bi svaki odlomak iza brisanja ispao "promijenjen".
-    const out = locateChanges(m(['a', '', 'b', 'c']), m(['a', 'b', 'c']));
+describe('locateChanges (re-export, ispravna semantika)', () => {
+  it('obrisan odlomak je brisanje (after je null), ne lazna promjena na sljedecem', () => {
+    const out = locateChanges(model([para(1, 'a'), para(2, ''), para(3, 'b')]), model([para(1, 'a'), para(2, 'b')]));
     expect(out).toHaveLength(1);
     expect(out[0].before).toBe(2);
-    expect(out[0].after).toBe(2);
+    expect(out[0].after).toBeNull();
+  });
+});
+
+describe('openRepairDiff', () => {
+  const before = model([para(1, 'Uvod', { headingLevel: 1 }), para(2, 'tekst tijela'), para(3, '')]);
+  const after = model([para(1, 'UVOD', { headingLevel: 1 }), para(2, 'tekst tijela')]);
+  const changelog = [{ ruleId: 'font', beforeLabel: 'Arial 11', afterLabel: 'Times New Roman 12' }];
+
+  it('otvara modal, prikazuje oblikovni changelog i prebacivac nacina', () => {
+    openRepairDiff({ before, after, changelog });
+    const modal = document.getElementById('repairDiff');
+    expect(modal).not.toBeNull();
+    expect(modal!.querySelector('.diff-changelog')).not.toBeNull();
+    expect(modal!.textContent).toContain('Times New Roman 12');
+    const tabs = modal!.querySelectorAll('.lekta-diff-modes .pv-mode');
+    expect(tabs.length).toBe(2);
   });
 
-  it('umetnut odlomak (npr. Sadrzaj) daje jedno mjesto', () => {
-    const out = locateChanges(m(['a', 'b']), m(['a', 'SADRZAJ', 'b']));
-    expect(out).toHaveLength(1);
-    expect(out[0].after).toBe(2);
+  it('POPIS: promijenjeni naslov ima crveno "Uvod" (uklonjeno) i zeleno "UVOD" (dodano)', () => {
+    openRepairDiff({ before, after, changelog });
+    const modal = document.getElementById('repairDiff')!;
+    (modal.querySelectorAll('.lekta-diff-modes .pv-mode')[0] as HTMLButtonElement).click(); // Popis
+    const del = modal.querySelector('.lekta-diff-w--del');
+    const ins = modal.querySelector('.lekta-diff-w--ins');
+    expect(del?.textContent).toBe('Uvod');
+    expect(ins?.textContent).toBe('UVOD');
+    // Obrisani prazni odlomak je zaseban redak "Uklonjeno".
+    expect(modal.textContent).toContain('Uklonjeno');
   });
 
-  it('dodatak na kraju se prijavi', () => {
-    const out = locateChanges(m(['a']), m(['a', 'novo']));
-    expect(out).toHaveLength(1);
-    expect(out[0].after).toBe(2);
+  it('USPOREDBA: lijevi faksimil crveno oznacava staru rijec, desni zeleno novu, prazni odlomak crveno', () => {
+    openRepairDiff({ before, after, changelog });
+    const modal = document.getElementById('repairDiff')!;
+    (modal.querySelectorAll('.lekta-diff-modes .pv-mode')[1] as HTMLButtonElement).click(); // Usporedba
+    const panes = modal.querySelectorAll('.diff-pane');
+    expect(panes.length).toBe(2);
+    const beforePane = panes[0];
+    const afterPane = panes[1];
+
+    const beforeHeading = beforePane.querySelector('[data-p-index="1"]') as HTMLElement;
+    expect(beforeHeading.classList.contains('lekta-diff-p--chg-del')).toBe(true);
+    expect(beforeHeading.querySelector('.lekta-diff-w--del')?.textContent).toBe('Uvod');
+
+    const afterHeading = afterPane.querySelector('[data-p-index="1"]') as HTMLElement;
+    expect(afterHeading.classList.contains('lekta-diff-p--chg-ins')).toBe(true);
+    expect(afterHeading.querySelector('.lekta-diff-w--ins')?.textContent).toBe('UVOD');
+
+    // Obrisani prazni odlomak (index 3) postoji SAMO u lijevom faksimilu i oznacen je crveno.
+    const deletedPara = beforePane.querySelector('[data-p-index="3"]') as HTMLElement;
+    expect(deletedPara.classList.contains('lekta-diff-p--del')).toBe(true);
+    expect(afterPane.querySelector('[data-p-index="3"]')).toBeNull();
   });
 
-  it('prazan model ne rusi', () => {
-    expect(locateChanges(m([]), m([]))).toEqual([]);
+  it('ne mijenja ulazne modele (preuzeti dokument ostaje netaknut)', () => {
+    openRepairDiff({ before, after, changelog });
+    // Oznake su samo u pregledu; izvorni tekst odlomaka se ne dira.
+    expect(before.paragraphs[0].text).toBe('Uvod');
+    expect(after.paragraphs[0].text).toBe('UVOD');
   });
 
-  it('postuje limit (dugacak rad ne generira stotine gumba)', () => {
-    const before = m(Array.from({ length: 100 }, (_, i) => `x${i}`));
-    const after = m(Array.from({ length: 100 }, (_, i) => `y${i}`));
-    expect(locateChanges(before, after, 5).length).toBeLessThanOrEqual(6);
+  it('bez promjena u tekstu (samo oblikovanje) jasno to kaze', () => {
+    const same = model([para(1, 'Naslov', { headingLevel: 1 }), para(2, 'isti tekst')]);
+    const same2 = model([para(1, 'Naslov', { headingLevel: 1 }), para(2, 'isti tekst')]);
+    openRepairDiff({ before: same, after: same2, changelog });
+    const modal = document.getElementById('repairDiff')!;
+    expect(modal.textContent).toContain('oblikovne');
   });
 });
