@@ -44,11 +44,18 @@ const MAX_DOCX_BYTES = Number(Deno.env.get('REPAIR_MAX_DOCX_BYTES') ?? String(20
 // Provjera postojanja domacih izvora u M4 korpusu (plan docs/PLAN_KORPUS_PROVJERA_IZVORA.md, K3).
 // Placeni dodatak uz popravak; besplatni sloj se NE mijenja i ostaje 100% lokalan.
 // Brojke su izvedene iz mjerenja na produkciji: dohvat kosta ~2,8 ms po znaku naslova (85 ms za
-// kratak, 200 ms za dug), pa rad s 40 referenci trazi 6 do 10 s. Zato budzet + serije + posten
-// djelomican rezultat, umjesto da popravak ceka bez ogranicenja.
+// kratak, 200 ms za dug), pa serija od 8 traje ~2 s, a svih 60 referenci (CORPUS_MAX_REFS) ~16 s.
+//
+// BUDZET (2026-07-21, vlasnikov zahtjev "provjera traje koliko treba"): dignut sa 6 s na 45 s.
+// KLJUCNO: petlja u verifyCorpusBatch zavrsi CIM su sve reference provjerene; budzet je samo GORNJI
+// STROP, ne fiksno trajanje. Zato tipican rad (29 ref ~8 s, 60 ref ~16 s) prodje U CIJELOSTI i vrati
+// se u svom prirodnom vremenu; 45 s (~2,8x iznad najgoreg realnog slucaja) samo sprjecava da spora
+// baza objesi odgovor. Ostaje daleko ispod klijentskog REPAIR_TIMEOUT_MS (180 s). Fail-open: ako
+// budzet ipak istekne, neprovjerene reference ostaju BEZ ishoda (nikad "ne postoji"), pa se rezultat
+// ne cita kao potpun kad nije. Env CORPUS_BUDGET_MS i dalje nadjacava.
 const CORPUS_ENABLED = (Deno.env.get('CORPUS_SOURCE_CHECK') ?? 'true') !== 'false';
 const CORPUS_MAX_REFS = Number(Deno.env.get('CORPUS_MAX_REFS') ?? '60');
-const CORPUS_BUDGET_MS = Number(Deno.env.get('CORPUS_BUDGET_MS') ?? '6000');
+const CORPUS_BUDGET_MS = Number(Deno.env.get('CORPUS_BUDGET_MS') ?? '45000');
 const CORPUS_CHUNK = Number(Deno.env.get('CORPUS_CHUNK') ?? '8');
 
 // Besplatna beta (WS-7): kad je REPAIR_FREE_MODE=true, preskace se NAPLATNI gate (nema 402 ni trosenja
