@@ -221,8 +221,13 @@ details.more{margin-top:12px;border-top:1px dashed var(--line-strong);padding-to
 .preview-doc .lekta-pv-fn-num{color:#667085;font-weight:700;margin-right:6px}
 .preview-doc .lekta-pv-footnote--has-unlocated{box-shadow:inset 3px 0 0 #d08b00;padding-left:9px}
 /* Prekidac nacina prikaza (citljivo / faksimil) */
-.preview-modes{display:inline-flex;flex:0 0 auto;position:relative;z-index:6;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin:0 0 10px}
-.pv-mode{border:0;background:transparent;color:var(--muted);padding:6px 15px;font:inherit;font-size:12.5px;cursor:pointer;line-height:1.4}
+/* Segmentirani kontroler (Citljivo/Faksimil). BEZ overflow:hidden: on je rezao vrh teksta gumba
+   (vlasnikova slika). Zaobljenje ide preko krajnjih gumba, a tekst je vertikalno centriran flexom
+   pa se ne moze odrezati bez obzira na visinu gumba. */
+.preview-modes{display:flex;width:fit-content;max-width:100%;flex:0 0 auto;align-items:stretch;position:relative;z-index:6;border:1px solid var(--line);border-radius:8px;margin:2px 0 12px;background:var(--panel)}
+.pv-mode{display:flex;align-items:center;justify-content:center;border:0;background:transparent;color:var(--muted);padding:8px 16px;font:inherit;font-size:12.5px;cursor:pointer;line-height:1.4}
+.pv-mode:first-child{border-radius:7px 0 0 7px}
+.pv-mode:last-child{border-radius:0 7px 7px 0}
 .pv-mode+.pv-mode{border-left:1px solid var(--line)}
 .pv-mode.is-active{background:#246fb8;color:#fff}
 .pv-mode:hover:not(.is-active){background:rgba(36,111,184,.08)}
