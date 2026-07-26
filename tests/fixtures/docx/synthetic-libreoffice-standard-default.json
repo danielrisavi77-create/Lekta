@@ -1,0 +1,5 @@
+{
+  "profileId": "fpzg-politologija-zavrsni",
+  "synthetic": true,
+  "note": "RE-03 regresijski svjedok: rucno sastavljen (NE pravi rad) da vjerno reproducira LibreOffice/Google Docs izlaz gdje je default paragraph stil \"Standard\" (w:default=1), a \"Normal\" stil uopce ne postoji. Font/prored/poravnanje fixeri koji doslovno ciljaju \"Normal\" danas na ovom dokumentu tiho no-opaju."
+}

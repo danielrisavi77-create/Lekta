@@ -1810,6 +1810,994 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "params": "nema-cilja-u-profilu",
     },
   },
+  "synthetic-formula-omath.docx": {
+    "__kombinirano": {
+      "applied": 2,
+      "changelog": [
+        {
+          "after": "Prored: 1,20x prored",
+          "before": "Prored: nije bilo postavljeno",
+        },
+        {
+          "after": "svedeno na 1 odlomak, uklonjeno 1",
+          "before": "Prazni odlomci: 2 odlomka",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 0,
+          "directLine": 0,
+          "runFonts": 0,
+          "runSz": 0,
+        },
+        "docDefaults": {
+          "ascii": "Times New Roman",
+          "hAnsi": "Times New Roman",
+          "sz": "24",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
+        "normal": {
+          "jc": null,
+          "line": "288",
+          "lineRule": "auto",
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1701",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+            "titlePg": false,
+          },
+        ],
+      },
+      "skipped": [
+        "margins-fixer-rule",
+        "paper-size-fixer-rule",
+        "font-fixer-rule",
+      ],
+    },
+    "alignment-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "empty-paragraph-fixer": {
+      "applied": true,
+      "changelog": [
+        {
+          "after": "svedeno na 1 odlomak, uklonjeno 1",
+          "before": "Prazni odlomci: 2 odlomka",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 0,
+          "directLine": 0,
+          "runFonts": 0,
+          "runSz": 0,
+        },
+        "docDefaults": {
+          "ascii": "Times New Roman",
+          "hAnsi": "Times New Roman",
+          "sz": "24",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
+        "normal": {
+          "jc": null,
+          "line": null,
+          "lineRule": null,
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1701",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+            "titlePg": false,
+          },
+        ],
+      },
+      "noOpBitIdentican": false,
+      "params": {},
+      "skipped": [],
+    },
+    "font-fixer": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "fontName": "Times New Roman",
+        "fontSizePt": 12,
+      },
+      "skipped": [
+        "font-fixer-rule",
+      ],
+    },
+    "font-fixer(deep)": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "deep": true,
+        "fontName": "Times New Roman",
+        "fontSizePt": 12,
+      },
+      "skipped": [
+        "font-fixer-rule",
+      ],
+    },
+    "footer-page-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "footnote-spacing-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "footnote-typography-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "heading-case-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "heading-format-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "line-spacing-fixer": {
+      "applied": true,
+      "changelog": [
+        {
+          "after": "Prored: 1,20x prored",
+          "before": "Prored: nije bilo postavljeno",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 0,
+          "directLine": 0,
+          "runFonts": 0,
+          "runSz": 0,
+        },
+        "docDefaults": {
+          "ascii": "Times New Roman",
+          "hAnsi": "Times New Roman",
+          "sz": "24",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
+        "normal": {
+          "jc": null,
+          "line": "288",
+          "lineRule": "auto",
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1701",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+            "titlePg": false,
+          },
+        ],
+      },
+      "noOpBitIdentican": false,
+      "params": {
+        "multiplier": 1.2,
+      },
+      "skipped": [],
+    },
+    "line-spacing-fixer(deep)": {
+      "applied": true,
+      "changelog": [
+        {
+          "after": "Prored: 1,20x prored",
+          "before": "Prored: nije bilo postavljeno",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 0,
+          "directLine": 0,
+          "runFonts": 0,
+          "runSz": 0,
+        },
+        "docDefaults": {
+          "ascii": "Times New Roman",
+          "hAnsi": "Times New Roman",
+          "sz": "24",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
+        "normal": {
+          "jc": null,
+          "line": "288",
+          "lineRule": "auto",
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1701",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+            "titlePg": false,
+          },
+        ],
+      },
+      "noOpBitIdentican": false,
+      "params": {
+        "deep": true,
+        "multiplier": 1.2,
+      },
+      "skipped": [],
+    },
+    "margins-fixer": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "bottom": 2.5,
+        "left": 3,
+        "right": 2.5,
+        "top": 2.5,
+      },
+      "skipped": [
+        "margins-fixer-rule",
+      ],
+    },
+    "page-number-alignment-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "page-numbering-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "paper-size-fixer": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "h": 29.7,
+        "w": 21,
+      },
+      "skipped": [
+        "paper-size-fixer-rule",
+      ],
+    },
+    "paragraph-spacing-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "section-insert-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "toc-field-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+  },
+  "synthetic-hrvatski-naslov1-heading.docx": {
+    "__kombinirano": {
+      "applied": 2,
+      "changelog": [
+        {
+          "after": "Razmak prije/poslije: 0 pt / 0 pt",
+          "before": "Razmak prije/poslije: nije bilo postavljeno / nije bilo postavljeno",
+        },
+        {
+          "after": "Naslovi (razina 1: 12 pt, slijeva)",
+          "before": "Naslovi (razina 1: nije bilo postavljeno)",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 0,
+          "directLine": 0,
+          "runFonts": 0,
+          "runSz": 0,
+        },
+        "docDefaults": {
+          "ascii": "Times New Roman",
+          "hAnsi": "Times New Roman",
+          "sz": "24",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
+        "normal": {
+          "jc": "both",
+          "line": "360",
+          "lineRule": "auto",
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1417",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+            "titlePg": false,
+          },
+        ],
+      },
+      "skipped": [
+        "margins-fixer-rule",
+        "font-fixer-rule",
+        "line-spacing-fixer-rule",
+        "alignment-fixer-rule",
+        "empty-paragraph-fixer-rule",
+        "footnote-spacing-fixer-rule",
+        "footnote-typography-fixer-rule",
+        "heading-case-fixer-rule",
+      ],
+    },
+    "alignment-fixer": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "val": "both",
+      },
+      "skipped": [
+        "alignment-fixer-rule",
+      ],
+    },
+    "alignment-fixer(deep)": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "deep": true,
+        "val": "both",
+      },
+      "skipped": [
+        "alignment-fixer-rule",
+      ],
+    },
+    "empty-paragraph-fixer": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {},
+      "skipped": [
+        "empty-paragraph-fixer-rule",
+      ],
+    },
+    "font-fixer": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "fontName": "Times New Roman",
+        "fontSizePt": 12,
+      },
+      "skipped": [
+        "font-fixer-rule",
+      ],
+    },
+    "font-fixer(deep)": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "deep": true,
+        "fontName": "Times New Roman",
+        "fontSizePt": 12,
+      },
+      "skipped": [
+        "font-fixer-rule",
+      ],
+    },
+    "footer-page-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "footnote-spacing-fixer": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {},
+      "skipped": [
+        "footnote-spacing-fixer-rule",
+      ],
+    },
+    "footnote-spacing-fixer(deep)": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "deep": true,
+      },
+      "skipped": [
+        "footnote-spacing-fixer-rule",
+      ],
+    },
+    "footnote-typography-fixer": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "alignJustify": true,
+        "fontName": "Times New Roman",
+        "fontSizePt": 10,
+      },
+      "skipped": [
+        "footnote-typography-fixer-rule",
+      ],
+    },
+    "heading-case-fixer": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "levels": [
+          1,
+        ],
+      },
+      "skipped": [
+        "heading-case-fixer-rule",
+      ],
+    },
+    "heading-format-fixer": {
+      "applied": true,
+      "changelog": [
+        {
+          "after": "Naslovi (razina 1: 12 pt, slijeva)",
+          "before": "Naslovi (razina 1: nije bilo postavljeno)",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 0,
+          "directLine": 0,
+          "runFonts": 0,
+          "runSz": 0,
+        },
+        "docDefaults": {
+          "ascii": "Times New Roman",
+          "hAnsi": "Times New Roman",
+          "sz": "24",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
+        "normal": {
+          "jc": "both",
+          "line": "360",
+          "lineRule": "auto",
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1417",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+            "titlePg": false,
+          },
+        ],
+      },
+      "noOpBitIdentican": false,
+      "params": {
+        "targets": [
+          {
+            "alignLeft": true,
+            "level": 1,
+            "sizeHalfPoints": 24,
+          },
+          {
+            "alignLeft": true,
+            "bold": true,
+            "level": 2,
+            "sizeHalfPoints": 24,
+          },
+          {
+            "alignLeft": true,
+            "bold": true,
+            "italic": true,
+            "level": 3,
+            "sizeHalfPoints": 24,
+          },
+        ],
+      },
+      "skipped": [],
+    },
+    "line-spacing-fixer": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "multiplier": 1.5,
+      },
+      "skipped": [
+        "line-spacing-fixer-rule",
+      ],
+    },
+    "line-spacing-fixer(deep)": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "deep": true,
+        "multiplier": 1.5,
+      },
+      "skipped": [
+        "line-spacing-fixer-rule",
+      ],
+    },
+    "margins-fixer": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "bottom": 2.5,
+        "left": 2.5,
+        "right": 2.5,
+        "top": 2.5,
+      },
+      "skipped": [
+        "margins-fixer-rule",
+      ],
+    },
+    "page-number-alignment-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "page-numbering-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "paper-size-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "paragraph-spacing-fixer": {
+      "applied": true,
+      "changelog": [
+        {
+          "after": "Razmak prije/poslije: 0 pt / 0 pt",
+          "before": "Razmak prije/poslije: nije bilo postavljeno / nije bilo postavljeno",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 0,
+          "directLine": 0,
+          "runFonts": 0,
+          "runSz": 0,
+        },
+        "docDefaults": {
+          "ascii": "Times New Roman",
+          "hAnsi": "Times New Roman",
+          "sz": "24",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
+        "normal": {
+          "jc": "both",
+          "line": "360",
+          "lineRule": "auto",
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1417",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+            "titlePg": false,
+          },
+        ],
+      },
+      "noOpBitIdentican": false,
+      "params": {},
+      "skipped": [],
+    },
+    "paragraph-spacing-fixer(deep)": {
+      "applied": true,
+      "changelog": [
+        {
+          "after": "Razmak prije/poslije: 0 pt / 0 pt",
+          "before": "Razmak prije/poslije: nije bilo postavljeno / nije bilo postavljeno",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 0,
+          "directLine": 0,
+          "runFonts": 0,
+          "runSz": 0,
+        },
+        "docDefaults": {
+          "ascii": "Times New Roman",
+          "hAnsi": "Times New Roman",
+          "sz": "24",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
+        "normal": {
+          "jc": "both",
+          "line": "360",
+          "lineRule": "auto",
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1417",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+            "titlePg": false,
+          },
+        ],
+      },
+      "noOpBitIdentican": false,
+      "params": {
+        "deep": true,
+      },
+      "skipped": [],
+    },
+    "section-insert-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "toc-field-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+  },
+  "synthetic-libreoffice-standard-default.docx": {
+    "__kombinirano": {
+      "applied": 1,
+      "changelog": [
+        {
+          "after": "Font: Times New Roman, Veličina: 12 pt",
+          "before": "Font: Calibri, Veličina: 11 pt",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 0,
+          "directLine": 0,
+          "runFonts": 0,
+          "runSz": 0,
+        },
+        "docDefaults": {
+          "ascii": "Times New Roman",
+          "hAnsi": "Times New Roman",
+          "sz": "24",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
+        "normal": {
+          "jc": null,
+          "line": null,
+          "lineRule": null,
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1417",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+            "titlePg": false,
+          },
+        ],
+      },
+      "skipped": [
+        "margins-fixer-rule",
+        "paper-size-fixer-rule",
+        "line-spacing-fixer-rule",
+        "alignment-fixer-rule",
+        "empty-paragraph-fixer-rule",
+      ],
+    },
+    "alignment-fixer": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "val": "both",
+      },
+      "skipped": [
+        "alignment-fixer-rule",
+      ],
+    },
+    "alignment-fixer(deep)": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "deep": true,
+        "val": "both",
+      },
+      "skipped": [
+        "alignment-fixer-rule",
+      ],
+    },
+    "empty-paragraph-fixer": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {},
+      "skipped": [
+        "empty-paragraph-fixer-rule",
+      ],
+    },
+    "font-fixer": {
+      "applied": true,
+      "changelog": [
+        {
+          "after": "Font: Times New Roman, Veličina: 12 pt",
+          "before": "Font: Calibri, Veličina: 11 pt",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 0,
+          "directLine": 0,
+          "runFonts": 0,
+          "runSz": 0,
+        },
+        "docDefaults": {
+          "ascii": "Times New Roman",
+          "hAnsi": "Times New Roman",
+          "sz": "24",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
+        "normal": {
+          "jc": null,
+          "line": null,
+          "lineRule": null,
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1417",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+            "titlePg": false,
+          },
+        ],
+      },
+      "noOpBitIdentican": false,
+      "params": {
+        "fontName": "Times New Roman",
+        "fontSizePt": 12,
+      },
+      "skipped": [],
+    },
+    "font-fixer(deep)": {
+      "applied": true,
+      "changelog": [
+        {
+          "after": "Font: Times New Roman, Veličina: 12 pt",
+          "before": "Font: Calibri, Veličina: 11 pt",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 0,
+          "directLine": 0,
+          "runFonts": 0,
+          "runSz": 0,
+        },
+        "docDefaults": {
+          "ascii": "Times New Roman",
+          "hAnsi": "Times New Roman",
+          "sz": "24",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
+        "normal": {
+          "jc": null,
+          "line": null,
+          "lineRule": null,
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1417",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+            "titlePg": false,
+          },
+        ],
+      },
+      "noOpBitIdentican": false,
+      "params": {
+        "deep": true,
+        "fontName": "Times New Roman",
+        "fontSizePt": 12,
+      },
+      "skipped": [],
+    },
+    "footer-page-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "footnote-spacing-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "footnote-typography-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "heading-case-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "heading-format-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "line-spacing-fixer": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "multiplier": 1.5,
+      },
+      "skipped": [
+        "line-spacing-fixer-rule",
+      ],
+    },
+    "line-spacing-fixer(deep)": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "deep": true,
+        "multiplier": 1.5,
+      },
+      "skipped": [
+        "line-spacing-fixer-rule",
+      ],
+    },
+    "margins-fixer": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "bottom": 2.5,
+        "left": 2.5,
+        "right": 2.5,
+        "top": 2.5,
+      },
+      "skipped": [
+        "margins-fixer-rule",
+      ],
+    },
+    "page-number-alignment-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "page-numbering-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "paper-size-fixer": {
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "h": 29.7,
+        "w": 21,
+      },
+      "skipped": [
+        "paper-size-fixer-rule",
+      ],
+    },
+    "paragraph-spacing-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "section-insert-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+    "toc-field-fixer": {
+      "params": "nema-cilja-u-profilu",
+    },
+  },
   "synthetic-multi-section": {
     "__kombinirano": {
       "applied": 8,

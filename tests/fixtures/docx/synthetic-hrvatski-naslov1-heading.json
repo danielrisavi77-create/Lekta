@@ -1,0 +1,5 @@
+{
+  "profileId": "pravo-integrirani-diplomski",
+  "synthetic": true,
+  "note": "RE-08 regresijski svjedok: rucno sastavljen (NE pravi rad) da vjerno reproducira hrvatski Word/LibreOffice dokument ciji naslov nosi styleId \"Naslov1\" (lokalizirano ime \"Naslov 1\") umjesto \"Heading1\". Profil trazi velika slova na 1. razini naslova; heading-case-fixer (doslovni pStyle=\"Heading{n}\" match) danas na ovom naslovu ne radi nista."
+}

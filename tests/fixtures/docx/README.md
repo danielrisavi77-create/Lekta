@@ -23,3 +23,16 @@ sam preskace i build ostaje zelen (vidi `tests/docx-golden.test.ts`).
 Ne stavljaj radove s osobnim podacima koje ne smijes dijeliti. Po potrebi
 anonimiziraj (zamijeni imena, OIB, kontakte) prije commita. Repo je lokalni
 alat, ali fixture postaju dio povijesti gita.
+
+## Iznimka: sintetski regresijski svjedoci (`synthetic-*.docx`)
+
+Fixture s prefiksom `synthetic-` NISU pravi radovi: rucno su sastavljeni (isti
+zipStore pristup kao `tests/helpers/docx-builder.ts`) da vjerno reproduciraju
+TOCNO ODREDJEN strukturni kvirk (RE-ID iz `docs/AUDIT_REPAIR_ENGINE_2026-07-25.md`)
+koji su prave anonimizirane fixture jos ne pokrivaju: LibreOffice/Google Docs
+default paragraph stil "Standard" umjesto "Normal", hrvatski Word/LibreOffice
+naslov stilom "Naslov1" umjesto "Heading1", i rad s OMML formulom (`m:oMath`) uz
+osirotjeli prazan odlomak. Sidecar `.json` svakog nosi `"synthetic": true` i
+`note` s objasnjenjem. Sluze ISKLJUCIVO kao regresijski test-net (dokazuju
+zatecено, danas pogresno ponasanje prije Faze 2 popravka); kao i sve ostale
+fixture, nikad nisu izvor pravila.
