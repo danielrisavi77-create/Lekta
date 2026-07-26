@@ -4,7 +4,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
 {
   "fer-diplomski-prazni-odlomci.docx": {
     "__kombinirano": {
-      "applied": 3,
+      "applied": 4,
       "changelog": [
         {
           "after": "Margine: gornja 2,50 cm, desna 2,50 cm, donja 2,50 cm, lijeva 3,00 cm",
@@ -17,6 +17,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         {
           "after": "izravno formatiranje uklonjeno u 154 odlomaka",
           "before": "Izravno formatiranje u tekstu",
+        },
+        {
+          "after": "svedeno na 3 odlomka, uklonjeno 9",
+          "before": "Prazni odlomci: 12 odlomaka",
         },
       ],
       "markers": {
@@ -65,7 +69,54 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "params": "nema-cilja-u-profilu",
     },
     "empty-paragraph-fixer": {
-      "params": "nema-cilja-u-profilu",
+      "applied": true,
+      "changelog": [
+        {
+          "after": "svedeno na 3 odlomka, uklonjeno 9",
+          "before": "Prazni odlomci: 12 odlomaka",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 0,
+          "directLine": 151,
+          "runFonts": 160,
+          "runSz": 160,
+        },
+        "docDefaults": {
+          "ascii": "Times New Roman",
+          "hAnsi": "Times New Roman",
+          "sz": "24",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
+        "normal": {
+          "jc": null,
+          "line": null,
+          "lineRule": null,
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "1418",
+              "left": "1418",
+              "right": "1418",
+              "top": "1418",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "16840",
+              "w": "11907",
+            },
+            "titlePg": false,
+          },
+        ],
+      },
+      "noOpBitIdentican": false,
+      "params": {},
+      "skipped": [],
     },
     "font-fixer": {
       "applied": false,
@@ -355,13 +406,21 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [
         "line-spacing-fixer-rule",
+        "empty-paragraph-fixer-rule",
       ],
     },
     "alignment-fixer": {
       "params": "nema-cilja-u-profilu",
     },
     "empty-paragraph-fixer": {
-      "params": "nema-cilja-u-profilu",
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {},
+      "skipped": [
+        "empty-paragraph-fixer-rule",
+      ],
     },
     "font-fixer": {
       "applied": false,
@@ -647,13 +706,21 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [
         "line-spacing-fixer-rule",
+        "empty-paragraph-fixer-rule",
       ],
     },
     "alignment-fixer": {
       "params": "nema-cilja-u-profilu",
     },
     "empty-paragraph-fixer": {
-      "params": "nema-cilja-u-profilu",
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {},
+      "skipped": [
+        "empty-paragraph-fixer-rule",
+      ],
     },
     "font-fixer": {
       "applied": false,
@@ -893,13 +960,21 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [
         "line-spacing-fixer-rule",
+        "empty-paragraph-fixer-rule",
       ],
     },
     "alignment-fixer": {
       "params": "nema-cilja-u-profilu",
     },
     "empty-paragraph-fixer": {
-      "params": "nema-cilja-u-profilu",
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {},
+      "skipped": [
+        "empty-paragraph-fixer-rule",
+      ],
     },
     "font-fixer": {
       "applied": false,
@@ -1179,13 +1254,22 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           },
         ],
       },
-      "skipped": [],
+      "skipped": [
+        "empty-paragraph-fixer-rule",
+      ],
     },
     "alignment-fixer": {
       "params": "nema-cilja-u-profilu",
     },
     "empty-paragraph-fixer": {
-      "params": "nema-cilja-u-profilu",
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {},
+      "skipped": [
+        "empty-paragraph-fixer-rule",
+      ],
     },
     "font-fixer": {
       "params": "nema-cilja-u-profilu",
@@ -1331,13 +1415,22 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           },
         ],
       },
-      "skipped": [],
+      "skipped": [
+        "empty-paragraph-fixer-rule",
+      ],
     },
     "alignment-fixer": {
       "params": "nema-cilja-u-profilu",
     },
     "empty-paragraph-fixer": {
-      "params": "nema-cilja-u-profilu",
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {},
+      "skipped": [
+        "empty-paragraph-fixer-rule",
+      ],
     },
     "font-fixer": {
       "applied": false,
@@ -1545,13 +1638,22 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
           },
         ],
       },
-      "skipped": [],
+      "skipped": [
+        "empty-paragraph-fixer-rule",
+      ],
     },
     "alignment-fixer": {
       "params": "nema-cilja-u-profilu",
     },
     "empty-paragraph-fixer": {
-      "params": "nema-cilja-u-profilu",
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {},
+      "skipped": [
+        "empty-paragraph-fixer-rule",
+      ],
     },
     "font-fixer": {
       "applied": false,
@@ -1710,7 +1812,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
   },
   "synthetic-multi-section": {
     "__kombinirano": {
-      "applied": 7,
+      "applied": 8,
       "changelog": [
         {
           "after": "Margine: gornja 3,00 cm, desna 3,00 cm, donja 3,00 cm, lijeva 3,00 cm",
@@ -1739,6 +1841,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         {
           "after": "Umetnuto podnozje s automatskim brojem stranice (desno)",
           "before": "Podnozje s brojem stranice: nije postavljeno",
+        },
+        {
+          "after": "Naslovi: velikim slovima (1 naslov)",
+          "before": "Naslovi: kako ih je autor napisao",
         },
       ],
       "markers": {
@@ -1807,9 +1913,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [
         "paper-size-fixer-rule",
         "section-insert-fixer-rule",
+        "empty-paragraph-fixer-rule",
         "footnote-spacing-fixer-rule",
         "page-number-alignment-fixer-rule",
         "toc-field-fixer-rule",
+        "heading-format-fixer-rule",
+        "footnote-typography-fixer-rule",
       ],
     },
     "alignment-fixer": {
@@ -1946,7 +2055,14 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [],
     },
     "empty-paragraph-fixer": {
-      "params": "nema-cilja-u-profilu",
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {},
+      "skipped": [
+        "empty-paragraph-fixer-rule",
+      ],
     },
     "font-fixer": {
       "applied": true,
@@ -2180,13 +2296,103 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       ],
     },
     "footnote-typography-fixer": {
-      "params": "nema-cilja-u-profilu",
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "fontName": "Times New Roman",
+        "fontSizePt": 10,
+      },
+      "skipped": [
+        "footnote-typography-fixer-rule",
+      ],
     },
     "heading-case-fixer": {
-      "params": "nema-cilja-u-profilu",
+      "applied": true,
+      "changelog": [
+        {
+          "after": "Naslovi: velikim slovima (1 naslov)",
+          "before": "Naslovi: kako ih je autor napisao",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 1,
+          "directLine": 1,
+          "runFonts": 1,
+          "runSz": 1,
+        },
+        "docDefaults": {
+          "ascii": "Calibri",
+          "hAnsi": "Calibri",
+          "sz": "22",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
+        "normal": {
+          "jc": "left",
+          "line": "259",
+          "lineRule": "auto",
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1417",
+              "right": "1134",
+              "top": "1417",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+            "titlePg": false,
+          },
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1417",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+            "titlePg": false,
+          },
+        ],
+      },
+      "noOpBitIdentican": false,
+      "params": {
+        "levels": [
+          1,
+        ],
+      },
+      "skipped": [],
     },
     "heading-format-fixer": {
-      "params": "nema-cilja-u-profilu",
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "targets": [
+          {
+            "bold": true,
+            "level": 1,
+            "sizeHalfPoints": 32,
+          },
+        ],
+      },
+      "skipped": [
+        "heading-format-fixer-rule",
+      ],
     },
     "line-spacing-fixer": {
       "applied": true,
@@ -2658,7 +2864,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
   },
   "synthetic-single-section": {
     "__kombinirano": {
-      "applied": 6,
+      "applied": 7,
       "changelog": [
         {
           "after": "Margine: gornja 3,00 cm, desna 3,00 cm, donja 3,00 cm, lijeva 3,00 cm",
@@ -2683,6 +2889,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         {
           "after": "Umetnuto podnozje s automatskim brojem stranice (desno)",
           "before": "Podnozje s brojem stranice: nije postavljeno",
+        },
+        {
+          "after": "Naslovi: velikim slovima (1 naslov)",
+          "before": "Naslovi: kako ih je autor napisao",
         },
       ],
       "markers": {
@@ -2732,9 +2942,12 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "paper-size-fixer-rule",
         "page-numbering-fixer-rule",
         "section-insert-fixer-rule",
+        "empty-paragraph-fixer-rule",
         "footnote-spacing-fixer-rule",
         "page-number-alignment-fixer-rule",
         "toc-field-fixer-rule",
+        "heading-format-fixer-rule",
+        "footnote-typography-fixer-rule",
       ],
     },
     "alignment-fixer": {
@@ -2843,7 +3056,14 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [],
     },
     "empty-paragraph-fixer": {
-      "params": "nema-cilja-u-profilu",
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {},
+      "skipped": [
+        "empty-paragraph-fixer-rule",
+      ],
     },
     "font-fixer": {
       "applied": true,
@@ -3035,13 +3255,89 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       ],
     },
     "footnote-typography-fixer": {
-      "params": "nema-cilja-u-profilu",
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "fontName": "Times New Roman",
+        "fontSizePt": 10,
+      },
+      "skipped": [
+        "footnote-typography-fixer-rule",
+      ],
     },
     "heading-case-fixer": {
-      "params": "nema-cilja-u-profilu",
+      "applied": true,
+      "changelog": [
+        {
+          "after": "Naslovi: velikim slovima (1 naslov)",
+          "before": "Naslovi: kako ih je autor napisao",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 1,
+          "directLine": 1,
+          "runFonts": 1,
+          "runSz": 1,
+        },
+        "docDefaults": {
+          "ascii": "Calibri",
+          "hAnsi": "Calibri",
+          "sz": "22",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
+        "normal": {
+          "jc": "left",
+          "line": "259",
+          "lineRule": "auto",
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1417",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+            "titlePg": false,
+          },
+        ],
+      },
+      "noOpBitIdentican": false,
+      "params": {
+        "levels": [
+          1,
+        ],
+      },
+      "skipped": [],
     },
     "heading-format-fixer": {
-      "params": "nema-cilja-u-profilu",
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {
+        "targets": [
+          {
+            "bold": true,
+            "level": 1,
+            "sizeHalfPoints": 32,
+          },
+        ],
+      },
+      "skipped": [
+        "heading-format-fixer-rule",
+      ],
     },
     "line-spacing-fixer": {
       "applied": true,
@@ -3488,13 +3784,21 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       },
       "skipped": [
         "line-spacing-fixer-rule",
+        "empty-paragraph-fixer-rule",
       ],
     },
     "alignment-fixer": {
       "params": "nema-cilja-u-profilu",
     },
     "empty-paragraph-fixer": {
-      "params": "nema-cilja-u-profilu",
+      "applied": false,
+      "changelog": [],
+      "markers": null,
+      "noOpBitIdentican": true,
+      "params": {},
+      "skipped": [
+        "empty-paragraph-fixer-rule",
+      ],
     },
     "font-fixer": {
       "applied": true,

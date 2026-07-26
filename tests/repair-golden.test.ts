@@ -28,7 +28,12 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { applyFixers, FIXER_IDS, type FixerId, type FixerRequest } from '../src/repair/apply-fixers';
 import { readZip } from '../src/repair/zip-codec';
-import { paramsForCheck } from '../src/ui/repair-items';
+import {
+  paramsForCheck,
+  headingFormatRepairableItem,
+  headingCaseRepairableItem,
+  footnoteTypographyRepairableItem,
+} from '../src/ui/repair-items';
 import { resolveProfile } from '../src/analysis/golden-entry';
 import { singleSectionDocx, multiSectionDocx } from './helpers/synthetic-docx';
 
@@ -82,6 +87,20 @@ const SYNTHETIC_PARAMS: Record<FixerId, Record<string, unknown>> = {
   // TOC polja pokriveno je jedinicno u src/repair/toc-field.test.ts (nad tocManualDocx). Index je
   // samo gate signal. Prazan/nepostojeci Sadrzaj -> NO_OP je ocekivano i pokriveno.
   'toc-field-fixer': { target: { sadrzajParagraphIndex: 1 } },
+  // emptyParagraphFixer je univerzalna higijena (nije vezan za profilnu vrijednost, vidi
+  // universalRepairableItems u repair-items.ts: params je uvijek {}). Sinteticki dokumenti nemaju
+  // osirotjele prazne odlomke pa je ovdje bit-identican no-op (isti obrazac kao paragraph-spacing).
+  'empty-paragraph-fixer': {},
+  // headingFormatFixer cilja POSTOJECI stil HeadingN u styles.xml (patchHeadingFormat ne izmislja
+  // stil). Sinteticki STYLES_XML ne definira Heading1 pa je ovdje bit-identican no-op; stvarna
+  // primjena je jedinicno pokrivena u src/repair/xml-patch.test.ts (patchHeadingFormat).
+  'heading-format-fixer': { targets: [{ level: 1, sizeHalfPoints: 32, bold: true }] },
+  // footnoteTypographyFixer trazi word/footnotes.xml (isti gard kao footnote-spacing-fixer) i stil
+  // FootnoteText; sinteticki dokumenti nemaju fusnote pa je ovdje uvijek bit-identican no-op.
+  'footnote-typography-fixer': { fontName: 'Times New Roman', fontSizePt: 10 },
+  // headingCaseFixer cilja doslovni pStyle="Heading1" (RE-08, jos neizmijenjeno u Fazi 0/1). Oba
+  // sinteticka dokumenta imaju odlomak "Uvod" s pStyle Heading1 pa se STVARNO primjenjuje.
+  'heading-case-fixer': { levels: [1] },
 };
 
 /** Ciljani params po fixeru IZ PROFILA (isti izvor kao zivi repair-items.ts). */
@@ -120,6 +139,23 @@ function paramsForFixer(fixerId: FixerId, profile: unknown): Record<string, unkn
       return (profile as { pageNumberAlignment?: boolean } | null)?.pageNumberAlignment === true
         ? {}
         : null;
+    case 'empty-paragraph-fixer':
+      // Univerzalna higijena (universalRepairableItems): nije vezana za profil, params je uvijek {}.
+      return {};
+    case 'heading-format-fixer': {
+      // ISTI izvor kao zivi panel (repair-items.ts): checks se ovdje ne racuna (utjece samo na
+      // violated, ne na params), pa je prazan niz dovoljan da se izvuku ciljane params vrijednosti.
+      const item = headingFormatRepairableItem([], profile)[0];
+      return item ? (item.params as Record<string, unknown>) : null;
+    }
+    case 'footnote-typography-fixer': {
+      const item = footnoteTypographyRepairableItem([], profile)[0];
+      return item ? (item.params as Record<string, unknown>) : null;
+    }
+    case 'heading-case-fixer': {
+      const item = headingCaseRepairableItem([], profile)[0];
+      return item ? (item.params as Record<string, unknown>) : null;
+    }
     default:
       return null;
   }
