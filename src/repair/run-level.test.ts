@@ -131,6 +131,105 @@ describe('stripDirectFormatting: prored (stripParagraphSpacing)', () => {
   });
 });
 
+// RE-15: odlomak s namjernom lijevom uvlakom citavog bloka (dugi citat, potpis) cesto ima namjerno
+// jednostruk prored/razmak, razlicit od ostatka tijela. Deep ciscenje ga prije NIJE prepoznavalo
+// (zastita je postojala samo za w:lineRule exact/atLeast, ne za auto+uvlaka), pa je AKTIVNO kvarilo
+// ispravan element (dugi citat bi dobio prored 1,5 kao ostatak tijela).
+describe('stripDirectFormatting: RE-15 uvuceni blok-citat/potpis zadrzava svoj prored i razmak', () => {
+  const ALL = { stripLineSpacing: true, stripParagraphSpacing: true, stripLeftJustify: true };
+
+  it('w:ind w:left="720" (0,5 inch, prag): prored i razmak OSTAJU netaknuti', () => {
+    const xml =
+      '<w:body>' +
+      p('<w:pPr><w:ind w:left="720"/><w:spacing w:before="120" w:after="160" w:line="240" w:lineRule="auto"/></w:pPr>' + run('', 'Dugi citat od 40 i vise rijeci...')) +
+      '</w:body>';
+    const r = stripDirectFormatting(xml, ALL);
+    expect(r.applied).toBe(false);
+    expect(r.xml).toBe(xml);
+  });
+
+  it('w:ind w:start="720" (noviji sinonim za w:left): isto zasticeno', () => {
+    const xml =
+      '<w:body>' +
+      p('<w:pPr><w:ind w:start="720"/><w:spacing w:line="240" w:lineRule="auto"/></w:pPr>' + run('', 'citat')) +
+      '</w:body>';
+    const r = stripDirectFormatting(xml, ALL);
+    expect(r.applied).toBe(false);
+  });
+
+  it('bez uvlake: identican prored/razmak se i dalje cisti kao prije (bez regresije)', () => {
+    const xml =
+      '<w:body>' +
+      p('<w:pPr><w:spacing w:before="120" w:after="160" w:line="240" w:lineRule="auto"/></w:pPr>' + run('', 'obican odlomak')) +
+      '</w:body>';
+    const r = stripDirectFormatting(xml, ALL);
+    expect(r.applied).toBe(true);
+    expect(r.xml).not.toContain('<w:spacing');
+  });
+
+  it('uvlaka ISPOD praga (360 twips, sitna prva-redak uvlaka): NIJE blok citat, prored se i dalje cisti', () => {
+    const xml =
+      '<w:body>' +
+      p('<w:pPr><w:ind w:left="360"/><w:spacing w:line="240" w:lineRule="auto"/></w:pPr>' + run('', 'obican odlomak s malom uvlakom')) +
+      '</w:body>';
+    const r = stripDirectFormatting(xml, ALL);
+    expect(r.applied).toBe(true);
+    expect(r.xml).not.toContain('w:line="240"');
+  });
+
+  it('w:firstLine (SAMO prvi redak uvucen, ne citav blok) se NE racuna kao blok-citat: prored se cisti', () => {
+    const xml =
+      '<w:body>' +
+      p('<w:pPr><w:ind w:firstLine="720"/><w:spacing w:line="240" w:lineRule="auto"/></w:pPr>' + run('', 'obican odlomak s uvucenim prvim retkom')) +
+      '</w:body>';
+    const r = stripDirectFormatting(xml, ALL);
+    expect(r.applied).toBe(true);
+    expect(r.xml).not.toContain('w:line="240"');
+  });
+
+  // Codex adversarijalni nalaz: deep=true+val="both" migracija cijeli dokument prisiljava na
+  // obostrano, oslanjajuci se na Wordov obicaj da "left" ne zapisuje pa je gotovo uvijek ostatak
+  // zadanog. NO na blok-citatu s izricitim w:jc="left" TO NE VRIJEDI: ako je stil vec prebacen na
+  // "both" (patchDefaultAlignment se pokrece prije ovoga), brisanje ovog overridea otkriva "both" iz
+  // stila i citat, namjerno raged-right, postaje obostrano poravnat. Poravnanje se zato isto stiti.
+  it('poravnanje (stripLeftJustify) je TAKODJER zasticeno na uvucenom bloku: w:jc="left" ostaje netaknut', () => {
+    const xml =
+      '<w:body>' +
+      p('<w:pPr><w:ind w:left="720"/><w:jc w:val="left"/><w:spacing w:line="240" w:lineRule="auto"/></w:pPr>' + run('', 'citat')) +
+      '</w:body>';
+    const r = stripDirectFormatting(xml, ALL);
+    expect(r.applied).toBe(false);
+    expect(r.xml).toBe(xml);
+  });
+
+  it('poravnanje (stripLeftJustify) se i dalje cisti BEZ uvlake (bez regresije na postojece ponasanje)', () => {
+    const xml =
+      '<w:body>' +
+      p('<w:pPr><w:jc w:val="left"/></w:pPr>' + run('', 'tijelo')) +
+      '</w:body>';
+    const r = stripDirectFormatting(xml, ALL);
+    expect(r.applied).toBe(true);
+    expect(r.xml).not.toContain('w:jc');
+  });
+
+  // Codex adversarijalni nalaz: Wordov ugradjeni "List Paragraph" stil koristi TOCNO left=720/
+  // hanging=360 kao zadanu uvlaku numeriranog/grafickog popisa; takav odlomak NIJE blok-citat bez
+  // obzira na uvlaku, pa se prored/razmak mora i dalje cistiti kao inace.
+  it('numerirani/graficki popis (w:numPr) s indent=720 NIJE blok-citat: prored/razmak se i dalje cisti', () => {
+    const xml =
+      '<w:body>' +
+      p(
+        '<w:pPr><w:numPr><w:ilvl w:val="0"/><w:numId w:val="1"/></w:numPr><w:ind w:left="720" w:hanging="360"/><w:spacing w:line="240" w:lineRule="auto" w:before="120" w:after="120"/></w:pPr>' +
+          run('', 'prva stavka popisa'),
+      ) +
+      '</w:body>';
+    const r = stripDirectFormatting(xml, ALL);
+    expect(r.applied).toBe(true);
+    expect(r.xml).not.toContain('w:line="240"');
+    expect(r.xml).not.toContain('w:before="120"');
+  });
+});
+
 describe('stripDirectFormatting: golden baseline prije stripParagraphSpacing', () => {
   it('nijedna postojeca opcija ne dira w:before/w:after: samo w:line/w:lineRule se skida', () => {
     const xml =

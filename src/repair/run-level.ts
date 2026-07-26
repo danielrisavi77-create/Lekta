@@ -30,13 +30,18 @@
 // - Velicina: w:sz/w:szCs se uklanja SAMO ako je blizu ciljane (3 half-points
 //   = 1,5 pt); naslovnica i naslovi s velikim direct slovima, kao i namjerno
 //   sitniji tekst (10 pt potpisi uz cilj 12 pt), ostaju netaknuti.
-// - Prored: w:line/w:lineRule se uklanja SAMO kad je lineRule "auto" (ili
-//   izostavljen); "exact"/"atLeast" su layout odluke i ne diraju se. U
-//   TABLICAMA se prored i poravnanje NE diraju (jednostruki prored i lijevo
-//   poravnanje u celijama su pravilo, ne prekrsaj); font/velicina se i u
-//   tablicama usklađuju jer ulaze u dominantni font analize.
+// - Prored i razmak odlomka: w:line/w:lineRule se uklanja SAMO kad je lineRule
+//   "auto" (ili izostavljen); "exact"/"atLeast" su layout odluke i ne diraju
+//   se. U TABLICAMA se prored i poravnanje NE diraju (jednostruki prored i
+//   lijevo poravnanje u celijama su pravilo, ne prekrsaj); font/velicina se i
+//   u tablicama usklađuju jer ulaze u dominantni font analize. Odlomak s
+//   NAMJERNOM lijevom uvlakom citavog bloka (w:ind >= 720 twips, dugi citat ili
+//   potpis, ali NE numerirani/graficki popis) isto zadrzava svoj prored/
+//   razmak/poravnanje: cesto je namjerno drukciji od ostatka tijela (RE-15).
 // - Poravnanje: w:jc se uklanja SAMO kad je "left"/"start" (Word default);
-//   centrirano/desno je namjerno (naslovi slika, potpisi) i ne dira se.
+//   centrirano/desno je namjerno (naslovi slika, potpisi) i ne dira se, kao ni
+//   uvuceni blok gore (deep migracija na obostrano bi mu inace otkrila
+//   obostrano poravnanje iz stila umjesto namjerno raged-right izgleda).
 // Sve izvan ciljanih atributa ostaje bajt-identicno (isti regex-patch pristup
 // kao xml-patch.ts, bez DOM round-tripa).
 
@@ -216,11 +221,47 @@ function stripRunProps(rPr: string, opts: RunLevelOptions): { out: string; chang
   return { out, changed };
 }
 
+/**
+ * Prag lijeve uvlake iznad kojeg se odlomak tretira kao NAMJERNO uvucen blok
+ * (dugi citat, potpis), ne obican tekst tijela: 720 twips = 1,27 cm = 0,5 inch,
+ * tocno JEDAN klik na Wordov gumb "Povecaj uvlaku" i standardna APA/Chicago
+ * uvlaka za citat od 40+ rijeci (RE-15).
+ */
+const BLOCK_QUOTE_INDENT_TWIPS = 720;
+
+/**
+ * Ima li odlomak namjernu lijevu uvlaku CITAVOG bloka (w:ind w:left/w:start
+ * >= praga): takav odlomak je vjerojatno dugi citat ili potpis s namjerno
+ * drukcijim (cesto jednostrukim) proredom/razmakom (i, ako je stil dokumenta
+ * obostran, namjerno drukcijim poravnanjem) od ostatka tijela, pa deep
+ * ciscenje NE smije prisiliti opci prored/razmak/poravnanje dokumenta na njega
+ * (RE-15). w:firstLine/w:hanging (uvlaka SAMO prvog retka) se NAMJERNO ne
+ * racuna: to je obican stilski izbor tijela teksta, ne signal "ovo je uvuceni
+ * blok". Numerirani/graficki popis (w:numPr) je ISKLJUCEN bez obzira na
+ * uvlaku: Wordov ugradjeni "List Paragraph" stil koristi upravo left=720/
+ * hanging=360 kao zadanu uvlaku popisa, a popis nije blok-citat (Codex
+ * adversarijalni nalaz).
+ */
+function hasBlockQuoteIndent(pPr: string): boolean {
+  if (/<w:numPr\b/.test(pPr)) return false;
+  const ind = pPr.match(/<w:ind\b[^>]*>/);
+  if (!ind) return false;
+  const left = ind[0].match(/w:(?:left|start)="(-?\d+)"/);
+  if (!left) return false;
+  return Number(left[1]) >= BLOCK_QUOTE_INDENT_TWIPS;
+}
+
 function stripParagraphProps(pPr: string, opts: RunLevelOptions): { out: string; changed: boolean } {
   let out = pPr;
   let changed = false;
+  // RE-15: prored, razmak I poravnanje se NE diraju na namjerno uvucenom bloku. Poravnanje je
+  // ukljuceno jer stripLeftJustify se pokrece SAMO kad je ciljano poravnanje "both" (obostrano,
+  // fixers.ts alignmentFixer); ako je stil vec obostran, brisanje w:jc="left" overridea OTKRIVA
+  // obostrano iz stila, pa bi namjerno raged-right citat postao obostrano poravnat (Codex
+  // adversarijalni nalaz: "left je Word default" ne vrijedi kad je STIL vec obostran).
+  const protectBlockIndent = hasBlockQuoteIndent(pPr);
 
-  if (opts.stripLineSpacing) {
+  if (opts.stripLineSpacing && !protectBlockIndent) {
     out = out.replace(/<w:spacing\b[^>]*\/?>/g, (tag) => {
       if (!/w:line="/.test(tag)) return tag;
       const ruleMatch = tag.match(/w:lineRule="([^"]*)"/);
@@ -232,7 +273,7 @@ function stripParagraphProps(pPr: string, opts: RunLevelOptions): { out: string;
     });
   }
 
-  if (opts.stripParagraphSpacing) {
+  if (opts.stripParagraphSpacing && !protectBlockIndent) {
     out = out.replace(/<w:spacing\b[^>]*\/?>/g, (tag) => {
       const beforeMatch = tag.match(/w:before="([^"]*)"/);
       const afterMatch = tag.match(/w:after="([^"]*)"/);
@@ -246,7 +287,7 @@ function stripParagraphProps(pPr: string, opts: RunLevelOptions): { out: string;
     });
   }
 
-  if (opts.stripLeftJustify) {
+  if (opts.stripLeftJustify && !protectBlockIndent) {
     // Podnosi i prosireni prazni oblik <w:jc w:val="left"></w:jc>: inace bi
     // ostao siroce zatvarajuci tag i document.xml bi postao malformiran.
     out = out.replace(/<w:jc\b[^>]*w:val="(?:left|start)"[^>]*?(?:\/>|><\/w:jc>)/g, () => {
