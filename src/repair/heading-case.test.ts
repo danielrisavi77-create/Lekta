@@ -75,6 +75,17 @@ describe('upperCaseHeadings', () => {
     const xml = `<w:body>${heading(1, 'Uvod')}</w:body>`;
     expect(upperCaseHeadings(xml, []).applied).toBe(false);
   });
+
+  it('RE-10: odlomak demotiran s Heading1 na Normal (bez trenutnog pStyle) se ne tretira kao naslov, cak ni uz stari stil zarobljen u w:pPrChange', () => {
+    const demoted =
+      '<w:p><w:pPr><w:pPrChange w:id="1" w:author="M" w:date="2026-01-01T00:00:00Z">' +
+      '<w:pPr><w:pStyle w:val="Heading1"/></w:pPr></w:pPrChange></w:pPr>' +
+      '<w:r><w:t>Tekst koji vise nije naslov</w:t></w:r></w:p>';
+    const xml = `<w:body>${demoted}</w:body>`;
+    const r = upperCaseHeadings(xml, [1]);
+    expect(r.applied).toBe(false);
+    expect(r.xml).toBe(xml);
+  });
 });
 
 describe('prijedlozi (bez ijedne izmjene dokumenta)', () => {

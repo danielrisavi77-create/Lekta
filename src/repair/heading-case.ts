@@ -49,7 +49,13 @@ export function upperCaseHeadings(documentXml: string, levels: number[]): Headin
 
   let changed = 0;
   const xml = documentXml.replace(PARAGRAPH_RE, (paragraph) => {
-    const style = paragraph.match(/<w:pStyle\b[^>]*w:val="([^"]*)"/);
+    // RE-10: ukloni <w:pPrChange> (stari, VEC NEVAZECI snimak pPr iz track changes) prije trazenja
+    // pStyle. Bez ovoga, odlomak demotiran s HeadingN na Normal (sto Word cesto zapisuje kao
+    // IZOSTANAK pStyle elementa, jer je Normal zadani) moze pogresno "pronaci" stari pStyle=HeadingN
+    // zarobljen unutar pPrChange snimka kao jedini <w:pStyle> u cijelom odlomku, i tretirati vise
+    // ne-naslov tekst kao naslov (izvan opsega privole za ovaj popravak).
+    const withoutPPrChange = paragraph.replace(/<w:pPrChange\b[^>]*>[\s\S]*?<\/w:pPrChange>/, '');
+    const style = withoutPPrChange.match(/<w:pStyle\b[^>]*w:val="([^"]*)"/);
     if (!style || !wanted.has(style[1])) return paragraph;
 
     // Tekst odlomka za odluku "je li vec veliko": bez toga bi se svaki prolaz brojao kao promjena.
