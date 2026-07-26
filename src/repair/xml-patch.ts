@@ -296,9 +296,15 @@ function upsertChild(
       changed = true;
     } else {
       // Atribut ne postoji: DODAJ ga (prije je ovdje bio tihi preskok, zbog cega se dokument koji
-      // vrijednost ne zapisuje nije dao popraviti).
+      // vrijednost ne zapisuje nije dao popraviti). RE-02 (P0 korupcija): umetni ISKLJUCIVO u
+      // OTVARAJUCI tag. Za samozatvarajuci oblik `tag` JEST cijeli otvarajuci tag (ponasanje
+      // nepromijenjeno); za upareni PRAZAN oblik (`<name></name>`, npr. dio LibreOffice/starijeg
+      // Worda) `tag` sadrzi CIJELI element ukljucujuci zatvarajuci, pa bi umetanje na kraj niza
+      // pogodilo ZATVARAJUCI tag (`</name attr="...">`) i proizvelo XML koji parseri odbijaju.
       before[k] = ''; after[k] = escaped;
-      tag = tag.replace(/\s*\/?>$/, (end) => ` ${k}="${escaped}"${end.trimStart()}`);
+      const openTagRe = new RegExp(`^<${escapeRegex(name)}\\b[^>]*?/?>`);
+      tag = tag.replace(openTagRe, (openTag) =>
+        openTag.replace(/\s*\/?>$/, (end) => ` ${k}="${escaped}"${end.trimStart()}`));
       changed = true;
     }
   }

@@ -331,6 +331,30 @@ describe('postavljanje vrijednosti koje u dokumentu ne postoje', () => {
   });
 });
 
+// RE-02 (H-1, P0 korupcija): upsertChild je pri dodavanju atributa koji fali koristio regex nad
+// CIJELIM tagom (`/\s*\/?>$/`), pa je kod uparenog PRAZNOG oblika (`<name></name>`, bez sadrzaja
+// izmedju) atribut zavrsavao u ZATVARAJUCEM tagu (`</name attr="...">`), sto XML parseri odbijaju.
+describe('upsertChild (preko patchDefaultFont): atribut koji fali ide u OTVARAJUCI tag', () => {
+  it('upareni prazan <w:rFonts></w:rFonts> ne dobiva atribut u zatvarajucem tagu', () => {
+    const styles =
+      '<w:styles><w:docDefaults><w:rPrDefault><w:rPr>' +
+      '<w:rFonts w:cs="Calibri"></w:rFonts>' +
+      '</w:rPr></w:rPrDefault></w:docDefaults></w:styles>';
+    const r = patchDefaultFont(styles, { fontName: 'Times New Roman' });
+    expect(r.applied).toBe(true);
+    // Atribut nikad u zatvarajucem tagu (malformiran XML).
+    expect(r.xml).not.toMatch(/<\/w:rFonts\s+w:/);
+    expect(r.xml).toContain('</w:rFonts>');
+    const openTag = r.xml.match(/<w:rFonts\b[^>]*>/)?.[0] ?? '';
+    expect(openTag).toContain('w:ascii="Times New Roman"');
+    expect(openTag).toContain('w:hAnsi="Times New Roman"');
+    expect(openTag).toContain('w:cs="Calibri"'); // postojeci atribut netaknut
+    // Tocno jedan otvarajuci i jedan zatvarajuci tag (element ostaje dobro formiran).
+    expect((r.xml.match(/<w:rFonts\b[^>]*>/g) || []).length).toBe(1);
+    expect((r.xml.match(/<\/w:rFonts>/g) || []).length).toBe(1);
+  });
+});
+
 describe('patchDefaultSpacing', () => {
   it('mijenja prored, ostavlja docDefaults i jc netaknute', () => {
     const result = patchDefaultSpacing(STYLES_XML, 480, 'auto');
