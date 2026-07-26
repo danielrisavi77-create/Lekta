@@ -351,7 +351,11 @@ function withContainer(
   const res = transform('');
   if (!res.changed) return { ...res, inner: block };
   const created = `<${name}>${res.inner}</${name}>`;
-  const selfClosing = block.match(new RegExp(`<${n}\\b[^>]*/>`));
+  // Pretraga i ovdje ide po MASKIRANOM `probe`, ne po sirovom `block` (isti razlog kao pretraga
+  // uparenog oblika iznad): bez toga bi ugnjezdeni samozatvarajuci istoimeni element (npr. rPr
+  // paragraph-marka unutar pPr) bio pogresno pogodjen umjesto PRAVOG, stil-razine elementa koji se
+  // trazi. Maskiranje cuva duljine, pa indeks nadjen na probeu vrijedi i za rezanje izvornog blocka.
+  const selfClosing = probe.match(new RegExp(`<${n}\\b[^>]*/>`));
   if (selfClosing && selfClosing.index !== undefined) {
     return { ...res, inner: block.slice(0, selfClosing.index) + created + block.slice(selfClosing.index + selfClosing[0].length) };
   }
@@ -402,37 +406,21 @@ export function patchDefaultFont(
   let xml = stylesXml;
   let changed = false;
 
-  const applyToRPr = (blockStart: number, blockEnd: number, block: string): string => {
-    let out = block;
+  // Zajednicki transform za "font+velicina unutar w:rPr" (koraci 1 i 3 dijele isti obrazac).
+  const rPrTransform = (inner: string): UpsertResult => {
+    let cur = inner; const b: Record<string, string> = {}; const a: Record<string, string> = {}; let ch = false;
     if (update.fontName !== undefined) {
-      const r = upsertChild(out, 'w:rFonts',
-        { 'w:ascii': update.fontName, 'w:hAnsi': update.fontName },
+      const r = upsertChild(cur, 'w:rFonts', { 'w:ascii': update.fontName, 'w:hAnsi': update.fontName },
         CT_RPR_ORDER, [], ['w:asciiTheme', 'w:hAnsiTheme']);
-      if (r.changed) {
-        out = r.inner;
-        if (before.fontName === undefined) {
-          before.fontName = r.before['w:ascii'] ?? '';
-          after.fontName = update.fontName;
-        }
-        changed = true;
-      }
-      foundAttrs.fontName = true; // nakon upserta backstop postoji u svakom slucaju
+      if (r.changed) { cur = r.inner; Object.assign(b, r.before); Object.assign(a, r.after); ch = true; }
+      foundAttrs.fontName = true;
     }
     if (update.sizeHalfPoints !== undefined) {
-      const val = String(update.sizeHalfPoints);
-      const r = upsertChild(out, 'w:sz', { 'w:val': val }, CT_RPR_ORDER, []);
-      if (r.changed) {
-        out = r.inner;
-        if (before.sizeHalfPoints === undefined) {
-          before.sizeHalfPoints = r.before['w:val'] ?? '';
-          after.sizeHalfPoints = val;
-        }
-        changed = true;
-      }
+      const r = upsertChild(cur, 'w:sz', { 'w:val': String(update.sizeHalfPoints) }, CT_RPR_ORDER, []);
+      if (r.changed) { cur = r.inner; Object.assign(b, r.before); Object.assign(a, r.after); ch = true; }
       foundAttrs.sizeHalfPoints = true;
     }
-    if (out === block) return xml;
-    return xml.slice(0, blockStart) + out + xml.slice(blockEnd);
+    return { inner: cur, changed: ch, before: b, after: a };
   };
 
   // 1. docDefaults -> w:rPrDefault -> w:rPr
@@ -441,21 +429,7 @@ export function patchDefaultFont(
     const rPrDefault = dd.block.match(/<w:rPrDefault\b[^>]*>[\s\S]*?<\/w:rPrDefault>|<w:rPrDefault\b[^>]*\/>/);
     if (rPrDefault && rPrDefault.index !== undefined) {
       const absStart = dd.start + rPrDefault.index;
-      const res = withContainer(rPrDefault[0], 'w:rPr', ['w:rPr'], [], (inner) => {
-        let cur = inner; const b: Record<string, string> = {}; const a: Record<string, string> = {}; let ch = false;
-        if (update.fontName !== undefined) {
-          const r = upsertChild(cur, 'w:rFonts', { 'w:ascii': update.fontName, 'w:hAnsi': update.fontName },
-            CT_RPR_ORDER, [], ['w:asciiTheme', 'w:hAnsiTheme']);
-          if (r.changed) { cur = r.inner; Object.assign(b, r.before); Object.assign(a, r.after); ch = true; }
-          foundAttrs.fontName = true;
-        }
-        if (update.sizeHalfPoints !== undefined) {
-          const r = upsertChild(cur, 'w:sz', { 'w:val': String(update.sizeHalfPoints) }, CT_RPR_ORDER, []);
-          if (r.changed) { cur = r.inner; Object.assign(b, r.before); Object.assign(a, r.after); ch = true; }
-          foundAttrs.sizeHalfPoints = true;
-        }
-        return { inner: cur, changed: ch, before: b, after: a };
-      });
+      const res = withContainer(rPrDefault[0], 'w:rPr', ['w:rPr'], [], rPrTransform);
       if (res.changed) {
         if (update.fontName !== undefined && before.fontName === undefined) {
           before.fontName = res.before['w:ascii'] ?? '';
@@ -497,14 +471,29 @@ export function patchDefaultFont(
     }
   }
 
-  // 3. stil Normal, ali samo ako sam definira rPr (inace vrijedi docDefaults i nema sto ispravljati)
+  // 3. stil Normal, ali samo ako sam definira rPr (inace vrijedi docDefaults i nema sto ispravljati).
+  // RE-22: koristi withContainer (isti obrazac kao korak 1 i patchHeadingFormat/patchFootnoteTypography)
+  // umjesto rucnog upserta nad cijelim <w:rPr>...</w:rPr> nizom: prijasnji kod je taj niz tretirao
+  // KAO SVOJ SADRZAJ (bez izdvajanja unutrasnjosti), pa je nedostajuci w:rFonts zavrsavao IZVAN rPr-a,
+  // kao izravno (schema-nevaljano) dijete <w:style>, umjesto UNUTAR postojeceg rPr-a.
   const normal = findNormalStyleBlock(xml);
   if (normal) {
-    const rPr = normal.block.match(/<w:rPr\b[^>]*>[\s\S]*?<\/w:rPr>/);
-    if (rPr && rPr.index !== undefined) {
-      const absStart = normal.start + rPr.index;
-      const updated = applyToRPr(absStart, absStart + rPr[0].length, rPr[0]);
-      if (updated !== xml) { xml = updated; changed = true; }
+    // "Sam definira rPr" = ima STIL-RAZINE rPr (ne racuna se rPr paragraph-marka ugnjezden u pPr).
+    const hasOwnRPr = /<w:rPr\b/.test(maskElement(normal.block, 'w:pPr'));
+    if (hasOwnRPr) {
+      const res = withContainer(normal.block, 'w:rPr', CT_STYLE_ORDER, ['w:pPr', 'w:rPr'], rPrTransform);
+      if (res.changed) {
+        if (update.fontName !== undefined && before.fontName === undefined) {
+          before.fontName = res.before['w:ascii'] ?? '';
+          after.fontName = update.fontName;
+        }
+        if (update.sizeHalfPoints !== undefined && before.sizeHalfPoints === undefined) {
+          before.sizeHalfPoints = res.before['w:val'] ?? '';
+          after.sizeHalfPoints = String(update.sizeHalfPoints);
+        }
+        xml = xml.slice(0, normal.start) + res.inner + xml.slice(normal.end);
+        changed = true;
+      }
     }
   }
 

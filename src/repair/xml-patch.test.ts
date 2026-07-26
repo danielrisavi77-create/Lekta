@@ -202,6 +202,35 @@ describe('patchDefaultFont', () => {
     expect(result.xml.indexOf('<w:rFonts')).toBeLessThan(result.xml.indexOf('<w:sz'));
     expect(result.xml).toContain('<w:sz w:val="24"/>');
   });
+
+  // RE-22 (korak 3, Normal): kad Normal VEC ima upareni rPr koji jos ne sadrzi w:rFonts, novi rFonts
+  // mora zavrsiti UNUTAR tog rPr, ne kao sibling ISPRED njega pod <w:style> (schema-nevaljano dijete).
+  it('Normal ima upareni rPr bez rFonts: novi font ide UNUTAR rPr, ne kao sibling ispred njega', () => {
+    const styles =
+      '<w:styles><w:style w:type="paragraph" w:default="1" w:styleId="Normal">' +
+      '<w:name w:val="Normal"/><w:rPr><w:sz w:val="20"/></w:rPr></w:style></w:styles>';
+    const r = patchDefaultFont(styles, { fontName: 'Times New Roman' });
+    expect(r.applied).toBe(true);
+    expect(r.xml).toContain('<w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="20"/></w:rPr>');
+    // rFonts se NIKAD ne smije naci IZVAN rPr, kao izravno dijete <w:style> (sibling ISPRED njega).
+    expect(r.xml).not.toContain('<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:rPr>');
+  });
+
+  // RE-22 dodatak (Codex adversarijalni nalaz): Normal ima NESTED samozatvarajuci rPr paragraph-marka
+  // UNUTAR pPr, I ZASEBAN samozatvarajuci STIL-RAZINE rPr nakon pPr. withContainer-ova samozatvarajuca
+  // pretraga je gledala SIROVI blok (ne maskirani probe), pa je pogresno pogadjala UGNJEZDENI rPr
+  // (unutar pPr) umjesto stvarnog stil-razine rPr.
+  it('Normal ima i ugnjezdeni (paragraph-mark) i zaseban stil-razine samozatvarajuci rPr: font ide u STIL-RAZINE, ne u paragraph-mark', () => {
+    const styles =
+      '<w:styles><w:style w:type="paragraph" w:default="1" w:styleId="Normal">' +
+      '<w:name w:val="Normal"/><w:pPr><w:rPr/></w:pPr><w:rPr/></w:style></w:styles>';
+    const r = patchDefaultFont(styles, { fontName: 'Times New Roman' });
+    expect(r.applied).toBe(true);
+    // Paragraph-mark rPr (unutar pPr) mora ostati PRAZAN i netaknut.
+    expect(r.xml).toContain('<w:pPr><w:rPr/></w:pPr>');
+    // Stil-razine rPr (nakon pPr) mora dobiti font.
+    expect(r.xml).toContain('</w:pPr><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/></w:rPr>');
+  });
 });
 
 describe('patchHeadingFormat (oblikovanje naslova po razinama)', () => {
