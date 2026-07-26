@@ -106,8 +106,12 @@ function hasNonNormalStyle(paragraph: string): boolean {
 // RE-01 (2026-07-25, P0 gubitak sadrzaja): blok-jednadzba (OMML) zivi u SVOM imenskom prostoru
 // (m:oMath/m:oMathPara, tekst u <m:t>, ne <w:t>), pa je odlomak ciji je JEDINI sadrzaj jednadzba
 // prolazio kao "osirotjeli prazan" i bio trajno obrisan.
+// RE-12 (2026-07-25): recenzirani rad (track changes ukljucen). Obrisan tekst zivi u <w:delText>,
+// ne <w:t>, pa ga hasVisibleText ne vidi; commentRangeStart/End i moveFrom/ToRangeStart/End su
+// samozatvarajuci markeri raspona koji se mogu naci u JEDNOM odlomku dok im par zivi u drugom, pa
+// je brisanje jednog ostavljalo nesparen marker (osteceni review markup) ili tiho gubilo reviziju.
 const FORBIDDEN_CONTENT =
-  /<w:(?:drawing|pict|object|br|cr|sym|ptab|lastRenderedPageBreak|pageBreakBefore|fldSimple|fldChar|instrText|footnoteReference|endnoteReference|commentReference|bookmarkStart|bookmarkEnd)\b|<mc:AlternateContent\b|<m:oMath(?:Para)?\b/;
+  /<w:(?:drawing|pict|object|br|cr|sym|ptab|lastRenderedPageBreak|pageBreakBefore|fldSimple|fldChar|instrText|footnoteReference|endnoteReference|commentReference|bookmarkStart|bookmarkEnd|del|delText|ins|moveFromRangeStart|moveFromRangeEnd|moveToRangeStart|moveToRangeEnd|moveFrom|moveTo|commentRangeStart|commentRangeEnd)\b|<mc:AlternateContent\b|<m:oMath(?:Para)?\b/;
 
 /** Ima li odlomkov (prvi) w:pPr blok ugnjezdeni w:sectPr (prijelom odjeljka). */
 function hasNestedSectPr(paragraph: string): boolean {

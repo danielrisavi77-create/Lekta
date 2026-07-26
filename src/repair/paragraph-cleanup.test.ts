@@ -420,3 +420,47 @@ describe('stripOrphanedEmptyParagraphs: blok-jednadzba (m:oMath)', () => {
     expect(out.xml).toContain(inlineEq);
   });
 });
+
+// --- RE-12: tracked-changes i markeri raspona (recenzirani rad) --------------------------------
+// w:delText (brisani tekst u revizijama) je DRUGI tag od <w:t>, pa ga hasVisibleText ne vidi;
+// commentRangeStart/End i moveFrom/ToRangeStart/End su samozatvarajuci sidra koja mogu obuhvatiti
+// VISE odlomaka (par zivi u razlicitim paragrafima), pa brisanje jednog ostavlja NESPAREN marker
+// (osteceni review markup) ili tiho gubi revidirani sadrzaj.
+describe('stripOrphanedEmptyParagraphs: tracked-changes i markeri raspona', () => {
+  it('odlomak ciji je jedini sadrzaj obrisan tekst (w:del/w:delText) se ne brise', () => {
+    const deletion = '<w:p><w:del w:id="1" w:author="M" w:date="2026-01-01T00:00:00Z"><w:r><w:delText>obrisano</w:delText></w:r></w:del></w:p>';
+    const xml = '<w:body>' + p(run('prije')) + p() + deletion + p(run('poslije')) + '</w:body>';
+    const out = stripOrphanedEmptyParagraphs(xml);
+    expect(out.xml).toContain(deletion);
+  });
+
+  it('odlomak sa samo w:commentRangeStart se ne brise (sprjecava nesparen commentRangeEnd)', () => {
+    const rangeStart = '<w:p><w:commentRangeStart w:id="1"/></w:p>';
+    const xml = '<w:body>' + p(run('prije')) + p() + rangeStart + p(run('poslije')) + '</w:body>';
+    const out = stripOrphanedEmptyParagraphs(xml);
+    expect(out.xml).toContain(rangeStart);
+  });
+
+  it('odlomak sa samo w:commentRangeEnd se ne brise', () => {
+    const rangeEnd = '<w:p><w:commentRangeEnd w:id="1"/></w:p>';
+    const xml = '<w:body>' + p(run('prije')) + p() + rangeEnd + p(run('poslije')) + '</w:body>';
+    const out = stripOrphanedEmptyParagraphs(xml);
+    expect(out.xml).toContain(rangeEnd);
+  });
+
+  it('odlomak sa samo w:moveFromRangeStart/w:moveToRangeEnd markerima se ne brise', () => {
+    const moveFrom = '<w:p><w:moveFromRangeStart w:id="1" w:name="move1" w:author="M" w:date="2026-01-01T00:00:00Z"/></w:p>';
+    const moveTo = '<w:p><w:moveToRangeEnd w:id="1" w:name="move1"/></w:p>';
+    const xml = '<w:body>' + p(run('prije')) + p() + moveFrom + p(run('sredina')) + p() + moveTo + p(run('poslije')) + '</w:body>';
+    const out = stripOrphanedEmptyParagraphs(xml);
+    expect(out.xml).toContain(moveFrom);
+    expect(out.xml).toContain(moveTo);
+  });
+
+  it('odlomak s umetnutim tekstom u reviziji (w:ins) i dalje prezivljava preko vidljivog w:t (bez regresije)', () => {
+    const insertion = '<w:p><w:ins w:id="1" w:author="M" w:date="2026-01-01T00:00:00Z"><w:r><w:t>umetnuto</w:t></w:r></w:ins></w:p>';
+    const xml = '<w:body>' + p(run('prije')) + p() + insertion + p(run('poslije')) + '</w:body>';
+    const out = stripOrphanedEmptyParagraphs(xml);
+    expect(out.xml).toContain(insertion);
+  });
+});
