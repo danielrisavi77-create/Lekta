@@ -12,6 +12,14 @@
 // unutar tocno imenovanog taga je uze i sigurnije: ili se atribut nade i
 // promijeni, ili se ne dira NISTA. Dodatna prednost: nema DOMParser
 // ovisnosti, pa je testabilno u cistom Node bez happy-dom/jsdom polyfilla.
+//
+// POZNATO OGRANICENJE (svjesno prihvaceno, ne DOM parsiranje): tag-granica regexi (`[^>]*`) ne
+// razlikuju doslovni `>` unutar navodnicima omedjene vrijednosti atributa od stvarnog kraja taga.
+// XML shema NE zahtijeva escapeanje `>` u vrijednosti atributa (samo `<`, `&` i navodnik), pa je
+// takva vrijednost VALJANA XML, ali je nas regex ne razlikuje od stvarnog `>`. Stvaran Word/
+// LibreOffice izlaz OVO NIKAD ne proizvodi (dosljedno escapeaju `>` kao `&gt;` iako nije obavezno),
+// pa je rizik realno ogranicen na rucno/adversarijalno sastavljen docx, ne na prave studentske
+// radove. Puno rjesenje (kontekst navodnika kroz cijelu datoteku) je izvan opsega Faze 2.
 
 export interface PatchResult {
   xml: string;
@@ -350,6 +358,18 @@ function withContainer(
   // Umetanje unutar RODITELJA: pronadji njegov sadrzaj (blok je npr. cijeli <w:style ...>...</w:style>).
   const open = block.match(/^<[^>]*>/);
   const close = block.match(/<\/[^>]+>$/);
+  // RE-23: RODITELJ sam po sebi je samozatvarajuci (npr. cijeli <w:rPrDefault/> ili prazan
+  // <w:style .../>): `open` uhvati CIJELI tag (zavrsava na "/>"), a `close` ne postoji jer nema
+  // zasebnog zatvarajuceg taga. Prije se ovdje tiho vracao NEPROMIJENJEN blok uz naslijedjeni
+  // changed:true (lazni "uspjeh": fixer prijavi izmjenu, a styles.xml ostane bajt-identican).
+  // Ispravno je pretvoriti roditelja u upareni oblik i umetnuti novi sadrzaj UNUTAR njega.
+  if (open && !close && open[0].endsWith('/>')) {
+    const tagName = open[0].match(/^<([^\s/>]+)/)?.[1];
+    if (tagName) {
+      const openTag = open[0].slice(0, -2) + '>';
+      return { ...res, inner: openTag + created + `</${tagName}>` };
+    }
+  }
   if (!open || !close) return { ...res, inner: block };
   const innerStart = open[0].length;
   const innerEnd = block.length - close[0].length;

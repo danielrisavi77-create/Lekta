@@ -539,3 +539,31 @@ describe('RE-24: samozatvarajuci stil se ne "proguta" u sljedeci (findStyleBlock
     expect(r.xml).toContain('w:hAnsiTheme="minorHAnsi"');
   });
 });
+
+// RE-23: withContainer-ov fallback za SAMOZATVARAJUCEG RODITELJA (block sam po sebi je npr.
+// <w:rPrDefault/> ili cijeli samozatvarajuci <w:style .../>) je vracao changed:true (naslijedjeno iz
+// transform('')) BEZ IKAKVE stvarne izmjene u izlazu: `open` uhvati cijeli samozatvarajuci tag, ali
+// `close` (zaseban zatvarajuci tag) ne postoji, pa je `if (!open || !close) return {...res, inner:
+// block}` tiho vracao NEPROMIJENJEN blok uz lazni "uspjeh". Posljedica: fixer prijavi applied:true +
+// changelog, ali styles.xml ostane bajt-identican.
+describe('RE-23: withContainer stvarno puni samozatvarajuceg roditelja, ne lazni "changed:true"', () => {
+  it('potpuno samozatvarajuci <w:rPrDefault/> stvarno dobiva font (patchDefaultFont)', () => {
+    const styles = '<w:styles><w:docDefaults><w:rPrDefault/></w:docDefaults></w:styles>';
+    const r = patchDefaultFont(styles, { fontName: 'Times New Roman' });
+    expect(r.applied).toBe(true);
+    expect(r.xml).not.toBe(styles); // vise NE smije biti bajt-identican
+    expect(r.xml).toContain('<w:rPrDefault><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/></w:rPr></w:rPrDefault>');
+  });
+
+  it('potpuno samozatvarajuci <w:style .../> (prazan Heading1) stvarno dobiva oblikovanje (patchHeadingFormat)', () => {
+    const styles = '<w:styles><w:style w:type="paragraph" w:styleId="Heading1"/></w:styles>';
+    const r = patchHeadingFormat(styles, 1, { sizeHalfPoints: 32, bold: true });
+    expect(r.applied).toBe(true);
+    expect(r.xml).not.toBe(styles);
+    expect(r.xml).toContain('<w:sz w:val="32"/>');
+    expect(r.xml).toContain('<w:b/>');
+    // Stil mora ostati DOBRO FORMIRAN: upareni (ne vise samozatvarajuci) i i dalje w:type="paragraph".
+    expect(r.xml).toContain('<w:style w:type="paragraph" w:styleId="Heading1">');
+    expect(r.xml).toMatch(/<\/w:style>\s*<\/w:styles>$/);
+  });
+});
