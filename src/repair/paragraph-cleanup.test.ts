@@ -513,3 +513,34 @@ describe('stripOrphanedEmptyParagraphs: w:tab (tabulator)', () => {
     expect(out.xml).toContain(tabLine);
   });
 });
+
+// --- RE-14: front-matter granica trazi ZNAMENKU razine (Heading/Naslov bez broja nije granica) --
+// Granica je bila "prvi pStyle koji SADRZI Heading/Naslov kao podniz", pa je stil naslova rada BEZ
+// broja ("Naslov" = Title, "Podnaslov" = Subtitle) NA SAMOJ naslovnici zavrsavao zonu prerano:
+// prazni odlomci (razmak prije mentora/datuma) ispod njega su ostajali nezasticeni i kolabirali.
+describe('stripOrphanedEmptyParagraphs: front-matter granica trazi znamenku razine (RE-14)', () => {
+  const T = (t: string) => `<w:p><w:r><w:t>${t}</w:t></w:r></w:p>`;
+  const STYLED = (t: string, style: string) => `<w:p><w:pPr><w:pStyle w:val="${style}"/></w:pPr><w:r><w:t>${t}</w:t></w:r></w:p>`;
+  const EMPTY = '<w:p><w:pPr><w:pStyle w:val="Normal"/></w:pPr></w:p>';
+  const emptyCount = (s: string) => (s.match(/<w:p><w:pPr><w:pStyle w:val="Normal"\/><\/w:pPr><\/w:p>/g) || []).length;
+
+  it('stil "Naslov" (naslov rada, bez znamenke razine) na naslovnici se ne racuna kao granica tijela', () => {
+    const xml =
+      `<w:body>${T('SVEUCILISTE U ZAGREBU')}${STYLED('Diplomski rad', 'Naslov')}` +
+      `${EMPTY.repeat(6)}${T('Mentor: prof. X')}` +
+      `${STYLED('Uvod', 'Heading1')}${EMPTY.repeat(4)}${T('Tijelo rada')}</w:body>`;
+    const out = stripOrphanedEmptyParagraphs(xml);
+    // naslovnica: svih 6 mora prezivjeti (stvarna granica je "Uvod" Heading1); nakon Uvoda 4 -> 1
+    expect(emptyCount(out.xml)).toBe(6 + 1);
+  });
+
+  it('stil "Heading1" UNUTAR tablice (tablicna naslovnica) se ne racuna kao granica', () => {
+    const xml =
+      `<w:body>${T('SVEUCILISTE U ZAGREBU')}` +
+      `<w:tbl><w:tr><w:tc>${STYLED('Naziv fakulteta', 'Heading1')}</w:tc></w:tr></w:tbl>` +
+      `${EMPTY.repeat(6)}${T('Mentor: prof. X')}` +
+      `${STYLED('Uvod', 'Heading1')}${EMPTY.repeat(4)}${T('Tijelo rada')}</w:body>`;
+    const out = stripOrphanedEmptyParagraphs(xml);
+    expect(emptyCount(out.xml)).toBe(6 + 1);
+  });
+});

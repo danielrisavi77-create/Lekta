@@ -204,9 +204,13 @@ interface ParagraphMatch {
 
 /**
  * Raspon "front mattera" (naslovnice i sve prije prvog pravog naslova), koji se tretira kao
- * zasticena zona. Granica je PRVI odlomak sa stilom naslova (`w:pStyle` ciji val sadrzi Heading
- * ili Naslov): tijelo rada pocinje naslovom ("Sadrzaj", "Uvod"), a naslovnica ga po definiciji
- * nema. Nema naslova -> nema zone (zatecено ponasanje).
+ * zasticena zona. Granica je PRVI odlomak sa stilom NASLOVA RAZINE (`w:pStyle` ciji val sadrzi
+ * Heading ili Naslov + ZNAMENKU razine, npr. "Heading1"/"Naslov1"): tijelo rada pocinje naslovom
+ * ("Sadrzaj", "Uvod"), a naslovnica ga po definiciji nema. Stil BEZ znamenke (RE-14: "Naslov" =
+ * Title, "Podnaslov" = Subtitle) NIJE granica jer takav stil cesto zivi na SAMOJ naslovnici (naslov
+ * rada), pa bi ga tretiranje kao granice prerano zavrsilo zonu i ostavilo spacer odlomke ispod njega
+ * nezasticenima. Match unutar tablice/sdt (tablicna naslovnica) se preskace: takav "naslov" je dio
+ * strukture naslovnice, ne pocetak tijela. Nema naslova -> nema zone (zatecено ponasanje).
  *
  * REZERVA za dokumente BEZ ijednog stila naslova (rad formatiran rucno, sto analiza inace i
  * prijavljuje): ondje granica pada na PRVI prijelom stranice, ali samo ako to podrucje uistinu
@@ -222,10 +226,17 @@ interface ParagraphMatch {
  */
 const FRONT_MATTER_MAX_PARAGRAPHS = 60;
 const FRONT_MATTER_MIN_TEXT_PARAGRAPHS = 2;
+// Isti kriterij razine kao headingLevel (src/docx/parser.ts): znamenka 1-9 uz negativni lookahead
+// (viseznamenkasti "Heading 10" custom stil nije Wordov ugradjeni naslov razine 1).
+const FRONT_MATTER_HEADING_RE = /<w:pStyle\b[^>]*w:val="[^"]*(?:Heading|Naslov)\s*[1-9](?![0-9])[^"]*"/gi;
 
 function frontMatterRange(documentXml: string): Array<[number, number]> {
-  const heading = documentXml.match(/<w:pStyle\b[^>]*w:val="[^"]*(?:Heading|Naslov)[^"]*"/i);
-  if (heading && heading.index !== undefined) return [[0, heading.index]];
+  const skipZones = [...balancedRanges(documentXml, 'w:tbl'), ...balancedRanges(documentXml, 'w:sdt')];
+  FRONT_MATTER_HEADING_RE.lastIndex = 0;
+  let m: RegExpExecArray | null;
+  while ((m = FRONT_MATTER_HEADING_RE.exec(documentXml)) !== null) {
+    if (!insideRanges(m.index, skipZones)) return [[0, m.index]];
+  }
 
   const brk = documentXml.match(/<w:pageBreakBefore\b|<w:br\b[^>]*w:type="page"/i);
   if (!brk || brk.index === undefined) return [];
