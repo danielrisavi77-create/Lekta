@@ -103,8 +103,11 @@ function hasNonNormalStyle(paragraph: string): boolean {
 //   w:ptab  apsolutni tabulator (npr. desno poravnat vodic s tockama),
 //   mc:AlternateContent  omotac oblika s rezervnim prikazom (danas ga posredno hvata w:drawing ili
 //                        w:pict iznutra, ali jamstvo ne smije ovisiti o obliku rezerve).
+// RE-01 (2026-07-25, P0 gubitak sadrzaja): blok-jednadzba (OMML) zivi u SVOM imenskom prostoru
+// (m:oMath/m:oMathPara, tekst u <m:t>, ne <w:t>), pa je odlomak ciji je JEDINI sadrzaj jednadzba
+// prolazio kao "osirotjeli prazan" i bio trajno obrisan.
 const FORBIDDEN_CONTENT =
-  /<w:(?:drawing|pict|object|br|cr|sym|ptab|lastRenderedPageBreak|pageBreakBefore|fldSimple|fldChar|instrText|footnoteReference|endnoteReference|commentReference|bookmarkStart|bookmarkEnd)\b|<mc:AlternateContent\b/;
+  /<w:(?:drawing|pict|object|br|cr|sym|ptab|lastRenderedPageBreak|pageBreakBefore|fldSimple|fldChar|instrText|footnoteReference|endnoteReference|commentReference|bookmarkStart|bookmarkEnd)\b|<mc:AlternateContent\b|<m:oMath(?:Para)?\b/;
 
 /** Ima li odlomkov (prvi) w:pPr blok ugnjezdeni w:sectPr (prijelom odjeljka). */
 function hasNestedSectPr(paragraph: string): boolean {

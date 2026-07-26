@@ -392,3 +392,31 @@ describe('naslovnica se ne smije razbiti', () => {
     expect(emptyCount(out.xml)).toBe(8 + 1);
   });
 });
+
+// --- RE-01 (P0 gubitak sadrzaja): blok-jednadzba (OMML m:oMath) ----------------------------------
+// hasVisibleText cita SAMO <w:t>; tekst jednadzbe zivi u <m:t> (drugi imenski prostor), pa je
+// odlomak ciji je JEDINI sadrzaj jednadzba prolazio kao "osirotjeli prazan" i bio brisan cim je
+// bio dio kvalificirajuceg niza (npr. do golog Entera).
+describe('stripOrphanedEmptyParagraphs: blok-jednadzba (m:oMath)', () => {
+  const equation = '<w:p><m:oMathPara><m:oMath><m:r><m:t>E</m:t></m:r></m:oMath></m:oMathPara></w:p>';
+
+  it('odlomak ciji je jedini sadrzaj m:oMathPara/m:oMath se ne brise, cak ni uz susjedni prazan odlomak', () => {
+    const xml = '<w:body>' + p(run('prije')) + p() + equation + p(run('poslije')) + '</w:body>';
+    const out = stripOrphanedEmptyParagraphs(xml);
+    expect(out.xml).toContain(equation);
+  });
+
+  it('3 uzastopne jednadzbe prezivljavaju sve, ne kolabiraju na 1', () => {
+    const xml = '<w:body>' + p(run('prije')) + equation + equation + equation + p(run('poslije')) + '</w:body>';
+    const out = stripOrphanedEmptyParagraphs(xml);
+    expect(out.applied).toBe(false);
+    expect(out.xml).toBe(xml);
+  });
+
+  it('m:oMath BEZ oMathPara omotaca (inline oblik) se takodjer ne brise', () => {
+    const inlineEq = '<w:p><w:r><m:oMath><m:r><m:t>x</m:t></m:r></m:oMath></w:r></w:p>';
+    const xml = '<w:body>' + p(run('prije')) + p() + inlineEq + p(run('poslije')) + '</w:body>';
+    const out = stripOrphanedEmptyParagraphs(xml);
+    expect(out.xml).toContain(inlineEq);
+  });
+});
