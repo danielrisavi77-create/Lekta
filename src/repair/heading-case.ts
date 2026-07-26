@@ -36,16 +36,49 @@ export interface HeadingCaseResult {
 
 const PARAGRAPH_RE = /<w:p(?:\s[^>]*[^/>])?>[\s\S]*?<\/w:p>/g;
 
+// Izgradi mapu styleId -> razina naslova (1-9) iz stylesXml: prepoznaje i doslovni Wordov styleId
+// "HeadingN" i lokalizirano/vlastito ime (npr. "Naslov 1", "Naslov1"). NAMJERNO STROZE (usidreno
+// od pocetka do kraja) od headingLevel u src/docx/parser.ts (analiza): ova funkcija PREPISUJE
+// autorov tekst, pa lazni pogodak (npr. stil nazvan "NaslovIzvora" ili "BodyHeading1") ima puno
+// tezu posljedicu ovdje nego u analizi koja samo boduje. "Heading 1"/"Naslov1"/"Naslov 1" i slicno
+// jos uvijek prolaze; "NotHeading1Body" ili "Naslov1Caption" vise ne.
+const HEADING_STYLE_NAME_RE = /^\s*(?:heading|naslov)\s*([1-9])\s*$/i;
+
+function headingStyleLevels(stylesXml: string): Map<string, number> {
+  const levels = new Map<string, number>();
+  const re = /<w:style\b[^>]*\/>|<w:style\b[^>]*>[\s\S]*?<\/w:style>/g;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(stylesXml)) !== null) {
+    if (!/w:type="paragraph"/.test(m[0])) continue;
+    const idMatch = m[0].match(/w:styleId="([^"]*)"/);
+    if (!idMatch) continue;
+    // Provjeri IME i styleId NEOVISNO (ne "ime ako postoji, inace id"): stil moze imati heading-nalik
+    // styleId (npr. "Naslov2") uz nepovezano/generickо ime (npr. "Custom"), pa bi provjera SAMO imena
+    // (kad postoji) taj stil ostavila NEPREPOZNATIM, sto bi kasnije lazno otvorilo outlineLvl rezervu
+    // (Codex adversarijalni nalaz, drugi krug pregleda).
+    const nameMatch = m[0].match(/<w:name\b[^>]*w:val="([^"]*)"/);
+    const level = (nameMatch && nameMatch[1].match(HEADING_STYLE_NAME_RE)) || idMatch[1].match(HEADING_STYLE_NAME_RE);
+    if (level) levels.set(idMatch[1], Number(level[1]));
+  }
+  return levels;
+}
+
 /**
  * Pretvori tekst naslova zadanih razina u velika slova, u `word/document.xml`.
  *
  * Dira ISKLJUCIVO sadrzaj `w:t` elemenata unutar odlomaka cija je `w:pStyle` jedna od trazenih
- * razina. Sve ostalo (oznake, polja, fusnotne reference, oblikovanje runova) ostaje netaknuto,
- * pa se promjena ne moze prosiriti izvan naslova.
+ * razina (ili, bez stila, cija razina proizlazi iz DIREKTNOG w:outlineLvl na samom odlomku). Sve
+ * ostalo (oznake, polja, fusnotne reference, oblikovanje runova) ostaje netaknuto, pa se promjena
+ * ne moze prosiriti izvan naslova.
+ *
+ * RE-08: `stylesXml` je OPCIONALAN (bez njega ponasanje ostaje doslovni "Heading{n}", kao prije),
+ * ali kad je zadan, prepoznaje i lokalizirani/vlastiti styleId (npr. hrvatski Word/LibreOffice
+ * "Naslov1"), koji analiza i patchHeadingFormat vec prepoznaju preko id-ili-ime pretrage.
  */
-export function upperCaseHeadings(documentXml: string, levels: number[]): HeadingCaseResult {
-  const wanted = new Set(levels.map((n) => `Heading${n}`));
-  if (!wanted.size) return { xml: documentXml, applied: false, changed: 0 };
+export function upperCaseHeadings(documentXml: string, levels: number[], stylesXml = ''): HeadingCaseResult {
+  const wantedLevels = new Set(levels);
+  if (!wantedLevels.size) return { xml: documentXml, applied: false, changed: 0 };
+  const styleLevels = stylesXml ? headingStyleLevels(stylesXml) : new Map<string, number>();
 
   let changed = 0;
   const xml = documentXml.replace(PARAGRAPH_RE, (paragraph) => {
@@ -56,7 +89,25 @@ export function upperCaseHeadings(documentXml: string, levels: number[]): Headin
     // ne-naslov tekst kao naslov (izvan opsega privole za ovaj popravak).
     const withoutPPrChange = paragraph.replace(/<w:pPrChange\b[^>]*>[\s\S]*?<\/w:pPrChange>/, '');
     const style = withoutPPrChange.match(/<w:pStyle\b[^>]*w:val="([^"]*)"/);
-    if (!style || !wanted.has(style[1])) return paragraph;
+    // Razrijesi STVARNU razinu odlomka (neovisno o tome je li trazena), pa je TEK NA KRAJU usporedi
+    // s wantedLevels. Bitno: outlineLvl je rezerva SAMO kad NEMA prepoznatog stila uopce, ne kad
+    // prepoznati stil postoji ali nije trazena razina (inace bi npr. Heading2 s "vise" izravnim
+    // outlineLvl=0 na istom odlomku pogresno ispao kao trazeni Heading1).
+    let resolvedLevel: number | null = null;
+    if (style) {
+      // Doslovni Wordov oblik uvijek prepoznat, neovisno o stylesXml (bez regresije na stare pozive).
+      const literal = style[1].match(/^Heading([1-9])$/);
+      if (literal) resolvedLevel = Number(literal[1]);
+      else if (styleLevels.has(style[1])) resolvedLevel = styleLevels.get(style[1])!;
+    }
+    if (resolvedLevel === null) {
+      // Bez prepoznatog stila: DIREKTAN w:outlineLvl na odlomku Word ISTO tretira kao naslov
+      // (outlineLvl je 0-indeksiran 0-8, razina = vrijednost + 1; isti raspon kao headingLevel).
+      const pPr = withoutPPrChange.match(/<w:pPr\b[^>]*>[\s\S]*?<\/w:pPr>/);
+      const outline = pPr?.[0].match(/<w:outlineLvl\b[^>]*w:val="([0-8])"(?!\d)/);
+      if (outline) resolvedLevel = Number(outline[1]) + 1;
+    }
+    if (resolvedLevel === null || !wantedLevels.has(resolvedLevel)) return paragraph;
 
     // Tekst odlomka za odluku "je li vec veliko": bez toga bi se svaki prolaz brojao kao promjena.
     const plain = (paragraph.match(/<w:t\b[^>]*>([\s\S]*?)<\/w:t>/g) || [])

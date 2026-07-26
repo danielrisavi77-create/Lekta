@@ -86,6 +86,82 @@ describe('upperCaseHeadings', () => {
     expect(r.applied).toBe(false);
     expect(r.xml).toBe(xml);
   });
+
+  // RE-08: dosad SAMO doslovni pStyle="Heading{n}". Hrvatski Word/LibreOffice cesto ima vlastiti
+  // (lokalizirani) styleId "Naslov1" umjesto "Heading1"; analiza i patchHeadingFormat vec prepoznaju
+  // takav stil (id-ili-ime), pa je velika slova naslova bio JEDINI popravak koji je na takvom radu
+  // ostajao tihi no-op iako profil trazi velika slova.
+  it('RE-08: prepoznaje naslov po LOKALIZIRANOM styleId-u ("Naslov1"), uz stylesXml', () => {
+    const stylesXml = '<w:styles><w:style w:type="paragraph" w:styleId="Naslov1"><w:name w:val="Naslov 1"/></w:style></w:styles>';
+    const xml = `<w:body>${heading(1, 'Uvod').replace('Heading1', 'Naslov1')}</w:body>`;
+    const r = upperCaseHeadings(xml, [1], stylesXml);
+    expect(r.applied).toBe(true);
+    expect(r.changed).toBe(1);
+    expect(r.xml).toContain('<w:t>UVOD</w:t>');
+  });
+
+  it('RE-08: bez stylesXml (stari pozivi), lokalizirani "Naslov1" se i dalje NE prepoznaje (bez regresije)', () => {
+    const xml = `<w:body>${heading(1, 'Uvod').replace('Heading1', 'Naslov1')}</w:body>`;
+    const r = upperCaseHeadings(xml, [1]);
+    expect(r.applied).toBe(false);
+  });
+
+  it('RE-08: literalni "Heading1" i dalje radi UZ stylesXml koji ga NE definira (bez regresije)', () => {
+    const xml = `<w:body>${heading(1, 'Uvod')}</w:body>`;
+    const r = upperCaseHeadings(xml, [1], '<w:styles></w:styles>');
+    expect(r.applied).toBe(true);
+    expect(r.xml).toContain('<w:t>UVOD</w:t>');
+  });
+
+  it('RE-08: prepoznaje naslov preko DIREKTNOG w:outlineLvl na odlomku (bez imenovanog stila)', () => {
+    const outlineHeading = '<w:p><w:pPr><w:outlineLvl w:val="0"/></w:pPr><w:r><w:t>Uvod</w:t></w:r></w:p>';
+    const xml = `<w:body>${outlineHeading}</w:body>`;
+    const r = upperCaseHeadings(xml, [1]);
+    expect(r.applied).toBe(true);
+    expect(r.xml).toContain('<w:t>UVOD</w:t>');
+  });
+
+  it('RE-08: outlineLvl izvan trazenih razina se ne dira', () => {
+    const outlineHeading = '<w:p><w:pPr><w:outlineLvl w:val="1"/></w:pPr><w:r><w:t>Razrada</w:t></w:r></w:p>';
+    const xml = `<w:body>${outlineHeading}</w:body>`;
+    const r = upperCaseHeadings(xml, [1]);
+    expect(r.applied).toBe(false);
+  });
+
+  // RE-08 dodatak (Codex adversarijalni nalaz #2): odlomak IMA prepoznat stil (Heading2, razina
+  // nije trazena), ali NOSI I direktan (proturjecan) w:outlineLvl="0" na istom odlomku. Stil MORA
+  // pobijediti; outlineLvl je rezerva SAMO kad NEMA prepoznatog stila, ne kad postoji ali je
+  // "kriva" razina.
+  it('RE-08: prepoznat stil (Heading2) pobjedjuje nad proturjecnim direktnim outlineLvl na ISTOM odlomku', () => {
+    const xml = `<w:body><w:p><w:pPr><w:pStyle w:val="Heading2"/><w:outlineLvl w:val="0"/></w:pPr><w:r><w:t>Razrada</w:t></w:r></w:p></w:body>`;
+    const r = upperCaseHeadings(xml, [1]); // trazena SAMO razina 1
+    expect(r.applied).toBe(false);
+    expect(r.xml).toBe(xml);
+  });
+
+  // RE-08 dodatak (Codex adversarijalni nalaz #1/#3): ime/styleId koji SADRZI "heading"/"naslov"
+  // kao dio duljeg, nepovezanog imena ne smije lazno pogoditi (regex mora biti usidren).
+  it('RE-08: stil ciji NAZIV samo SADRZI "heading"/"naslov" (npr. "NotHeading1Body") ne pogadja lazno', () => {
+    const stylesXml = '<w:styles><w:style w:type="paragraph" w:styleId="Custom1"><w:name w:val="NotHeading1Body"/></w:style></w:styles>';
+    const xml = `<w:body><w:p><w:pPr><w:pStyle w:val="Custom1"/></w:pPr><w:r><w:t>Obican tekst</w:t></w:r></w:p></w:body>`;
+    const r = upperCaseHeadings(xml, [1], stylesXml);
+    expect(r.applied).toBe(false);
+    expect(r.xml).toBe(xml);
+  });
+
+  // RE-08 dodatak (Codex adversarijalni nalaz, drugi krug): stil s heading-nalik styleId-em
+  // ("Naslov2") ALI nepovezanim/generickim imenom ("Custom") mora se prepoznati preko STYLEID-A;
+  // provjera SAMO imena (kad ono postoji) bi ostavila ovaj stil "neprepoznatim", pa bi proturjecan
+  // direktan outlineLvl na istom odlomku lazno otvorio outlineLvl rezervu (vidi test iznad).
+  it('RE-08: prepoznaje stil preko STYLEID-A i kad ime NIJE heading-nalik (npr. "Naslov2" / ime "Custom")', () => {
+    const stylesXml = '<w:styles><w:style w:type="paragraph" w:styleId="Naslov2"><w:name w:val="Custom"/></w:style></w:styles>';
+    // Naslov2 (razina 2) NIJE trazena razina (trazimo [1]), ALI odlomak nosi i proturjecan
+    // direktan outlineLvl=0: stil MORA pobijediti preko styleId-a, outline rezerva se ne smije otvoriti.
+    const xml = '<w:body><w:p><w:pPr><w:pStyle w:val="Naslov2"/><w:outlineLvl w:val="0"/></w:pPr><w:r><w:t>Razrada</w:t></w:r></w:p></w:body>';
+    const r = upperCaseHeadings(xml, [1], stylesXml);
+    expect(r.applied).toBe(false);
+    expect(r.xml).toBe(xml);
+  });
 });
 
 describe('prijedlozi (bez ijedne izmjene dokumenta)', () => {

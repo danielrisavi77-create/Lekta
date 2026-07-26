@@ -362,7 +362,7 @@ export function paragraphSpacingFixer(parts: DocxXmlParts, deep = false): FixerO
  * "Popravi sve" nego iskljucivo uz izricitu privolu za tu stavku (requiresConfirmation).
  */
 export function headingCaseFixer(parts: DocxXmlParts, levels: number[]): FixerOutput {
-  const res = upperCaseHeadings(parts.documentXml, levels);
+  const res = upperCaseHeadings(parts.documentXml, levels, parts.stylesXml);
   if (!res.applied) return NO_OP(parts);
   return {
     parts: { ...parts, documentXml: res.xml },

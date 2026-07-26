@@ -2070,7 +2070,7 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
   },
   "synthetic-hrvatski-naslov1-heading.docx": {
     "__kombinirano": {
-      "applied": 2,
+      "applied": 3,
       "changelog": [
         {
           "after": "Razmak prije/poslije: 0 pt / 0 pt",
@@ -2079,6 +2079,10 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         {
           "after": "Naslovi (razina 1: 12 pt, slijeva)",
           "before": "Naslovi (razina 1: nije bilo postavljeno)",
+        },
+        {
+          "after": "Naslovi: velikim slovima (1 naslov)",
+          "before": "Naslovi: kako ih je autor napisao",
         },
       ],
       "markers": {
@@ -2127,7 +2131,6 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
         "empty-paragraph-fixer-rule",
         "footnote-spacing-fixer-rule",
         "footnote-typography-fixer-rule",
-        "heading-case-fixer-rule",
       ],
     },
     "alignment-fixer": {
@@ -2232,18 +2235,58 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       ],
     },
     "heading-case-fixer": {
-      "applied": false,
-      "changelog": [],
-      "markers": null,
-      "noOpBitIdentican": true,
+      "applied": true,
+      "changelog": [
+        {
+          "after": "Naslovi: velikim slovima (1 naslov)",
+          "before": "Naslovi: kako ih je autor napisao",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 0,
+          "directLine": 0,
+          "runFonts": 0,
+          "runSz": 0,
+        },
+        "docDefaults": {
+          "ascii": "Times New Roman",
+          "hAnsi": "Times New Roman",
+          "sz": "24",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
+        "normal": {
+          "jc": "both",
+          "line": "360",
+          "lineRule": "auto",
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1417",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+            "titlePg": false,
+          },
+        ],
+      },
+      "noOpBitIdentican": false,
       "params": {
         "levels": [
           1,
         ],
       },
-      "skipped": [
-        "heading-case-fixer-rule",
-      ],
+      "skipped": [],
     },
     "heading-format-fixer": {
       "applied": true,
