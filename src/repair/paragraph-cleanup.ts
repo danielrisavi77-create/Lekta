@@ -110,8 +110,10 @@ function hasNonNormalStyle(paragraph: string): boolean {
 // ne <w:t>, pa ga hasVisibleText ne vidi; commentRangeStart/End i moveFrom/ToRangeStart/End su
 // samozatvarajuci markeri raspona koji se mogu naci u JEDNOM odlomku dok im par zivi u drugom, pa
 // je brisanje jednog ostavljalo nesparen marker (osteceni review markup) ili tiho gubilo reviziju.
+// RE-13 (2026-07-25): w:tab (obican tabulator koji aktivira tab-stop s vodicem, npr. potpisna
+// linija "Potpis: ......") je isti vizualni slucaj kao w:ptab (vec zasticen), ali nije bio dodan.
 const FORBIDDEN_CONTENT =
-  /<w:(?:drawing|pict|object|br|cr|sym|ptab|lastRenderedPageBreak|pageBreakBefore|fldSimple|fldChar|instrText|footnoteReference|endnoteReference|commentReference|bookmarkStart|bookmarkEnd|del|delText|ins|moveFromRangeStart|moveFromRangeEnd|moveToRangeStart|moveToRangeEnd|moveFrom|moveTo|commentRangeStart|commentRangeEnd)\b|<mc:AlternateContent\b|<m:oMath(?:Para)?\b/;
+  /<w:(?:drawing|pict|object|br|cr|sym|ptab|tab|lastRenderedPageBreak|pageBreakBefore|fldSimple|fldChar|instrText|footnoteReference|endnoteReference|commentReference|bookmarkStart|bookmarkEnd|del|delText|ins|moveFromRangeStart|moveFromRangeEnd|moveToRangeStart|moveToRangeEnd|moveFrom|moveTo|commentRangeStart|commentRangeEnd)\b|<mc:AlternateContent\b|<m:oMath(?:Para)?\b/;
 
 /** Ima li odlomkov (prvi) w:pPr blok ugnjezdeni w:sectPr (prijelom odjeljka). */
 function hasNestedSectPr(paragraph: string): boolean {

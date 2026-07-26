@@ -499,3 +499,17 @@ describe('stripOrphanedEmptyParagraphs: vidljiva svojstva odlomka (pBdr/shd/numP
     expect(out.xml).toContain(listItem);
   });
 });
+
+// --- RE-13: prazan odlomak sa samo w:tab (potpisna linija s tockastim vodicem) ------------------
+// w:ptab (apsolutni tabulator) je vec zasticen (2026-07-20); w:tab (obican tabulator koji
+// aktivira tab-stop s vodicem, npr. "Potpis: ......") nije bio, iako je isti vizualni slucaj.
+describe('stripOrphanedEmptyParagraphs: w:tab (tabulator)', () => {
+  it('odlomak sa samo w:tab uz tab-stop s tockastim vodicem se ne brise', () => {
+    const tabLine =
+      '<w:p><w:pPr><w:tabs><w:tab w:val="right" w:leader="dot" w:pos="4536"/></w:tabs></w:pPr>' +
+      '<w:r><w:tab/></w:r></w:p>';
+    const xml = '<w:body>' + p(run('prije')) + p() + tabLine + p(run('poslije')) + '</w:body>';
+    const out = stripOrphanedEmptyParagraphs(xml);
+    expect(out.xml).toContain(tabLine);
+  });
+});
