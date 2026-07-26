@@ -10,6 +10,7 @@ import {
   patchFooterPageAlignment,
   patchHeadingFormat,
   patchFootnoteTypography,
+  resolveDefaultParagraphStyleId,
 } from './xml-patch';
 
 const DOCUMENT_XML =
@@ -594,5 +595,91 @@ describe('RE-23: withContainer stvarno puni samozatvarajuceg roditelja, ne lazni
     // Stil mora ostati DOBRO FORMIRAN: upareni (ne vise samozatvarajuci) i i dalje w:type="paragraph".
     expect(r.xml).toContain('<w:style w:type="paragraph" w:styleId="Heading1">');
     expect(r.xml).toMatch(/<\/w:style>\s*<\/w:styles>$/);
+  });
+});
+
+// RE-03 (P-A, kljucni primitiv): prored/poravnanje/razmak/font su tvrdo ciljali doslovni styleId
+// "Normal". Na LibreOffice/Google Docs izlazu (default paragraf stil "Standard", oznacen
+// w:default="1") ovi su fixeri tiho no-opali iako analiza isti dokument dinamicki cita ispravno.
+describe('resolveDefaultParagraphStyleId', () => {
+  it('vraca styleId stila s w:default="1" (tip paragraph), ne doslovni "Normal"', () => {
+    const styles = '<w:styles><w:style w:type="paragraph" w:default="1" w:styleId="Standard"><w:name w:val="Standard"/></w:style></w:styles>';
+    expect(resolveDefaultParagraphStyleId(styles)).toBe('Standard');
+  });
+
+  it('preskace w:default="1" na NE-paragraph stilu (npr. character/table)', () => {
+    const styles =
+      '<w:styles><w:style w:type="character" w:default="1" w:styleId="DefaultParagraphFont"/>' +
+      '<w:style w:type="paragraph" w:default="1" w:styleId="Standard"/></w:styles>';
+    expect(resolveDefaultParagraphStyleId(styles)).toBe('Standard');
+  });
+
+  it('bez ijednog w:default="1" pada natrag na "Normal"', () => {
+    const styles = '<w:styles><w:style w:type="paragraph" w:styleId="Heading1"/></w:styles>';
+    expect(resolveDefaultParagraphStyleId(styles)).toBe('Normal');
+  });
+
+  it('vise w:default="1" paragraph stilova (malformirano): POSLJEDNJI pobjedjuje, isto kao parseStyles (analiza)', () => {
+    const styles =
+      '<w:styles><w:style w:type="paragraph" w:default="1" w:styleId="Prvi"/>' +
+      '<w:style w:type="paragraph" w:default="1" w:styleId="Drugi"/></w:styles>';
+    expect(resolveDefaultParagraphStyleId(styles)).toBe('Drugi');
+  });
+});
+
+describe('RE-03: prored/poravnanje/razmak rade na dinamicki razrijesenom default stilu ("Standard")', () => {
+  const STANDARD_STYLES =
+    '<w:styles><w:style w:type="paragraph" w:default="1" w:styleId="Standard">' +
+    '<w:name w:val="Standard"/><w:pPr><w:spacing w:line="240" w:lineRule="auto"/><w:jc w:val="left"/></w:pPr>' +
+    '</w:style></w:styles>';
+
+  it('patchDefaultSpacing mijenja prored na "Standard", ne no-opa jer nije doslovno "Normal"', () => {
+    const r = patchDefaultSpacing(STANDARD_STYLES, 360, 'auto');
+    expect(r.applied).toBe(true);
+    expect(r.xml).toContain('<w:style w:type="paragraph" w:default="1" w:styleId="Standard">');
+    expect(r.xml).toContain('w:line="360"');
+  });
+
+  it('patchDefaultAlignment mijenja poravnanje na "Standard"', () => {
+    const r = patchDefaultAlignment(STANDARD_STYLES, 'both');
+    expect(r.applied).toBe(true);
+    expect(r.xml).toContain('w:jc w:val="both"');
+  });
+
+  it('patchDefaultParagraphSpacing mijenja razmak odlomka na "Standard"', () => {
+    const r = patchDefaultParagraphSpacing(STANDARD_STYLES, 0, 0);
+    expect(r.applied).toBe(true);
+    expect(r.xml).toContain('w:before="0"');
+    expect(r.xml).toContain('w:after="0"');
+  });
+
+  it('patchDefaultFont korak 3 pise font UNUTAR "Standard"-ovog VLASTITOG rPr-a (ne samo docDefaults)', () => {
+    const styles =
+      '<w:styles><w:style w:type="paragraph" w:default="1" w:styleId="Standard">' +
+      '<w:name w:val="Standard"/><w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:sz w:val="22"/></w:rPr>' +
+      '</w:style></w:styles>';
+    const r = patchDefaultFont(styles, { fontName: 'Times New Roman', sizeHalfPoints: 24 });
+    expect(r.applied).toBe(true);
+    expect(r.xml).toContain('<w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:sz w:val="24"/></w:rPr>');
+  });
+
+  it('literalno "Normal" i dalje radi (bez regresije na standardni Word izlaz)', () => {
+    const styles =
+      '<w:styles><w:style w:type="paragraph" w:default="1" w:styleId="Normal">' +
+      '<w:name w:val="Normal"/><w:pPr><w:spacing w:line="240" w:lineRule="auto"/></w:pPr></w:style></w:styles>';
+    const r = patchDefaultSpacing(styles, 360, 'auto');
+    expect(r.applied).toBe(true);
+    expect(r.xml).toContain('w:line="360"');
+  });
+
+  // RE-03 dodatak (Codex adversarijalni nalaz): bez w:default="1" I bez doslovnog "Normal" styleId-a,
+  // findStyleByIdOrName-ova pretraga po imenu ne provjerava w:type. NE-paragraph (npr. character) stil
+  // koji je slucajno nazvan "Standard" ne smije dobiti w:pPr (schema-nevaljano za character stil).
+  it('ime-fallback NE pogadja NE-paragraph stil slucajno nazvan "Standard"', () => {
+    const styles =
+      '<w:styles><w:style w:type="character" w:styleId="MyCharStyle"><w:name w:val="Standard"/></w:style></w:styles>';
+    const r = patchDefaultAlignment(styles, 'both');
+    expect(r.applied).toBe(false);
+    expect(r.xml).toBe(styles);
   });
 });

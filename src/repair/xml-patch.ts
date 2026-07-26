@@ -471,12 +471,13 @@ export function patchDefaultFont(
     }
   }
 
-  // 3. stil Normal, ali samo ako sam definira rPr (inace vrijedi docDefaults i nema sto ispravljati).
+  // 3. default paragraf stil (RE-03: dinamicki razrijesen, ne doslovni "Normal"), ali samo ako sam
+  // definira rPr (inace vrijedi docDefaults i nema sto ispravljati).
   // RE-22: koristi withContainer (isti obrazac kao korak 1 i patchHeadingFormat/patchFootnoteTypography)
   // umjesto rucnog upserta nad cijelim <w:rPr>...</w:rPr> nizom: prijasnji kod je taj niz tretirao
   // KAO SVOJ SADRZAJ (bez izdvajanja unutrasnjosti), pa je nedostajuci w:rFonts zavrsavao IZVAN rPr-a,
   // kao izravno (schema-nevaljano) dijete <w:style>, umjesto UNUTAR postojeceg rPr-a.
-  const normal = findNormalStyleBlock(xml);
+  const normal = findStyleByIdOrName(xml, resolveDefaultParagraphStyleId(xml), DEFAULT_PARAGRAPH_NAME_RE);
   if (normal) {
     // "Sam definira rPr" = ima STIL-RAZINE rPr (ne racuna se rPr paragraph-marka ugnjezden u pPr).
     const hasOwnRPr = /<w:rPr\b/.test(maskElement(normal.block, 'w:pPr'));
@@ -501,14 +502,19 @@ export function patchDefaultFont(
   return { xml, applied: true, before, after, found: foundAttrs };
 }
 
-/** Postavi atribute unutar w:pPr stila (stvarajuci pPr i sam element ako ne postoje). */
+/**
+ * Postavi atribute unutar w:pPr stila (stvarajuci pPr i sam element ako ne postoje). `namePattern`
+ * je opcionalna rezerva na lokalizirano ime (findStyleByIdOrName) kad `styleId` doslovno ne postoji;
+ * bez njega ponasanje ostaje EXACT-id-only (findStyleBlock), kao prije.
+ */
 function patchNormalParagraphProps(
   stylesXml: string,
   styleId: string,
   element: string,
   attrs: Record<string, string>,
+  namePattern?: RegExp,
 ): PatchResult {
-  const found = findStyleBlock(stylesXml, styleId);
+  const found = namePattern ? findStyleByIdOrName(stylesXml, styleId, namePattern) : findStyleBlock(stylesXml, styleId);
   if (!found) return { ...NO_OP, xml: stylesXml };
 
   // maskTags: w:rPr unutar w:pPr ima svoj w:spacing (razmak medju znakovima), koji se NE smije
@@ -539,17 +545,48 @@ function findStyleBlock(stylesXml: string, styleId: string) {
   );
 }
 
-const findNormalStyleBlock = (stylesXml: string) => findStyleBlock(stylesXml, 'Normal');
+/**
+ * Razrijesi styleId stila koji je DEFAULT paragraf stil dokumenta: prvo stil tipa paragraph s
+ * w:default="1" (ISTI kriterij kao styleData.defaultParagraphStyleId u src/docx/parser.ts, da se
+ * popravak i analiza slazu), inace "Normal" (Wordov fallback i kad atribut nije eksplicitno
+ * zapisan). Skenira SAMO otvarajuce tagove (samozatvarajuci ili ne), pa nema rizika "gutanja"
+ * susjednog stila (RE-24 klasa buga) jer se nikad ne trazi zatvarajuci tag.
+ *
+ * RE-03 (kljucni primitiv, P-A): fixeri su dosad tvrdo ciljali doslovni styleId "Normal", pa su na
+ * LibreOffice/Google Docs izlazu (default stil "Standard", oznacen w:default="1") tiho no-opali
+ * prored, poravnanje i razmak, iako je analiza ISTI dokument dinamicki citala ispravno.
+ */
+export function resolveDefaultParagraphStyleId(stylesXml: string): string {
+  const re = /<w:style\b[^>]*>/g;
+  let m: RegExpExecArray | null;
+  // POSLJEDNJI pogodak pobjedjuje (ne prvi): shema dopusta samo JEDAN w:default="1" po tipu, ali
+  // ako je dokument malformiran i ima vise, ISTI kriterij kao parseStyles (src/docx/parser.ts, koji
+  // u petlji bez prekida stalno reasignira) drzi popravak i analizu usuglasenima.
+  let resolved: string | null = null;
+  while ((m = re.exec(stylesXml)) !== null) {
+    const tag = m[0];
+    if (!/w:type="paragraph"/.test(tag)) continue;
+    if (!/w:default="1"/.test(tag)) continue;
+    const idMatch = tag.match(/w:styleId="([^"]*)"/);
+    if (idMatch) resolved = idMatch[1];
+  }
+  return resolved ?? 'Normal';
+}
+
+// Lokalizirana imena defaultnog paragraf stila: "Normal" (Word) i "Standard" (LibreOffice/OpenOffice
+// AND njemacki Word). Koristi se SAMO kao rezerva kad resolveDefaultParagraphStyleId-ov rezultat ne
+// postoji doslovno pod tim styleId-em (findStyleByIdOrName prvo uvijek proba TOCAN id).
+const DEFAULT_PARAGRAPH_NAME_RE = /^\s*(?:normal|standard)\s*$/i;
 
 export function patchDefaultSpacing(
   stylesXml: string,
   lineTwips: number,
   lineRule = 'auto',
 ): PatchResult {
-  return patchNormalParagraphProps(stylesXml, 'Normal', 'w:spacing', {
+  return patchNormalParagraphProps(stylesXml, resolveDefaultParagraphStyleId(stylesXml), 'w:spacing', {
     'w:line': String(lineTwips),
     'w:lineRule': lineRule,
-  });
+  }, DEFAULT_PARAGRAPH_NAME_RE);
 }
 
 export function patchDefaultParagraphSpacing(
@@ -557,10 +594,10 @@ export function patchDefaultParagraphSpacing(
   beforeTwentieths: number,
   afterTwentieths: number,
 ): PatchResult {
-  return patchNormalParagraphProps(stylesXml, 'Normal', 'w:spacing', {
+  return patchNormalParagraphProps(stylesXml, resolveDefaultParagraphStyleId(stylesXml), 'w:spacing', {
     'w:before': String(beforeTwentieths),
     'w:after': String(afterTwentieths),
-  });
+  }, DEFAULT_PARAGRAPH_NAME_RE);
 }
 
 // Word ugradjeni stil za tekst fusnota ima stabilan (locale-neovisan) styleId
@@ -595,6 +632,10 @@ function findStyleByIdOrName(stylesXml: string, styleId: string, namePattern: Re
   const re = /<w:style\b[^>]*\/>|<w:style\b[^>]*>[\s\S]*?<\/w:style>/g;
   let m: RegExpExecArray | null;
   while ((m = re.exec(stylesXml)) !== null) {
+    // RE-03 (Codex adversarijalni nalaz): ime-podudaranje SAMO PO SEBI nije dovoljno; svi
+    // pozivatelji (naslovi, fusnote, default paragraf stil) traze paragraph stil, pa NE-paragraph
+    // stil (npr. character) slucajno nazvan npr. "Standard" ne smije proci kao pogodak.
+    if (!/w:type="paragraph"/.test(m[0])) continue;
     const nameVal = m[0].match(/<w:name\b[^>]*w:val="([^"]*)"/);
     if (nameVal && namePattern.test(nameVal[1])) {
       return { block: m[0], start: m.index, end: m.index + m[0].length };
@@ -735,7 +776,9 @@ export function patchFootnoteTypography(
 export function patchDefaultAlignment(stylesXml: string, val: string): PatchResult {
   // Word izostavlja w:jc kad je poravnanje lijevo (zadano), pa je ovo najcesci slucaj u kojem se
   // element mora STVORITI, a ne samo promijeniti.
-  return patchNormalParagraphProps(stylesXml, 'Normal', 'w:jc', { 'w:val': val });
+  return patchNormalParagraphProps(
+    stylesXml, resolveDefaultParagraphStyleId(stylesXml), 'w:jc', { 'w:val': val }, DEFAULT_PARAGRAPH_NAME_RE,
+  );
 }
 
 // === Numeriranje stranica po sekcijama (documentXml, w:pgNumType u w:sectPr) ===

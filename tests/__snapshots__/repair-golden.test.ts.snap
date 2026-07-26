@@ -2476,11 +2476,19 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
   },
   "synthetic-libreoffice-standard-default.docx": {
     "__kombinirano": {
-      "applied": 1,
+      "applied": 3,
       "changelog": [
         {
           "after": "Font: Times New Roman, Veličina: 12 pt",
           "before": "Font: Calibri, Veličina: 11 pt",
+        },
+        {
+          "after": "Prored: 1,50x prored",
+          "before": "Prored: 1,00x prored",
+        },
+        {
+          "after": "Poravnanje: obostrano (justify)",
+          "before": "Poravnanje: lijevo",
         },
       ],
       "markers": {
@@ -2524,35 +2532,113 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "skipped": [
         "margins-fixer-rule",
         "paper-size-fixer-rule",
-        "line-spacing-fixer-rule",
-        "alignment-fixer-rule",
         "empty-paragraph-fixer-rule",
       ],
     },
     "alignment-fixer": {
-      "applied": false,
-      "changelog": [],
-      "markers": null,
-      "noOpBitIdentican": true,
+      "applied": true,
+      "changelog": [
+        {
+          "after": "Poravnanje: obostrano (justify)",
+          "before": "Poravnanje: lijevo",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 0,
+          "directLine": 0,
+          "runFonts": 0,
+          "runSz": 0,
+        },
+        "docDefaults": {
+          "ascii": "Calibri",
+          "hAnsi": "Calibri",
+          "sz": "22",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
+        "normal": {
+          "jc": null,
+          "line": null,
+          "lineRule": null,
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1417",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+            "titlePg": false,
+          },
+        ],
+      },
+      "noOpBitIdentican": false,
       "params": {
         "val": "both",
       },
-      "skipped": [
-        "alignment-fixer-rule",
-      ],
+      "skipped": [],
     },
     "alignment-fixer(deep)": {
-      "applied": false,
-      "changelog": [],
-      "markers": null,
-      "noOpBitIdentican": true,
+      "applied": true,
+      "changelog": [
+        {
+          "after": "Poravnanje: obostrano (justify)",
+          "before": "Poravnanje: lijevo",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 0,
+          "directLine": 0,
+          "runFonts": 0,
+          "runSz": 0,
+        },
+        "docDefaults": {
+          "ascii": "Calibri",
+          "hAnsi": "Calibri",
+          "sz": "22",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
+        "normal": {
+          "jc": null,
+          "line": null,
+          "lineRule": null,
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1417",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+            "titlePg": false,
+          },
+        ],
+      },
+      "noOpBitIdentican": false,
       "params": {
         "deep": true,
         "val": "both",
       },
-      "skipped": [
-        "alignment-fixer-rule",
-      ],
+      "skipped": [],
     },
     "empty-paragraph-fixer": {
       "applied": false,
@@ -2687,29 +2773,109 @@ exports[`Repair golden harness > baseline: svi fixeri x svi dokumenti (shallow +
       "params": "nema-cilja-u-profilu",
     },
     "line-spacing-fixer": {
-      "applied": false,
-      "changelog": [],
-      "markers": null,
-      "noOpBitIdentican": true,
+      "applied": true,
+      "changelog": [
+        {
+          "after": "Prored: 1,50x prored",
+          "before": "Prored: 1,00x prored",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 0,
+          "directLine": 0,
+          "runFonts": 0,
+          "runSz": 0,
+        },
+        "docDefaults": {
+          "ascii": "Calibri",
+          "hAnsi": "Calibri",
+          "sz": "22",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
+        "normal": {
+          "jc": null,
+          "line": null,
+          "lineRule": null,
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1417",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+            "titlePg": false,
+          },
+        ],
+      },
+      "noOpBitIdentican": false,
       "params": {
         "multiplier": 1.5,
       },
-      "skipped": [
-        "line-spacing-fixer-rule",
-      ],
+      "skipped": [],
     },
     "line-spacing-fixer(deep)": {
-      "applied": false,
-      "changelog": [],
-      "markers": null,
-      "noOpBitIdentican": true,
+      "applied": true,
+      "changelog": [
+        {
+          "after": "Prored: 1,50x prored",
+          "before": "Prored: 1,00x prored",
+        },
+      ],
+      "markers": {
+        "directFormatting": {
+          "directLeftJc": 0,
+          "directLine": 0,
+          "runFonts": 0,
+          "runSz": 0,
+        },
+        "docDefaults": {
+          "ascii": "Calibri",
+          "hAnsi": "Calibri",
+          "sz": "22",
+        },
+        "footer": {
+          "footerRefs": 0,
+          "parts": [],
+        },
+        "normal": {
+          "jc": null,
+          "line": null,
+          "lineRule": null,
+        },
+        "sectPr": [
+          {
+            "pgMar": {
+              "bottom": "1417",
+              "left": "1417",
+              "right": "1417",
+              "top": "1417",
+            },
+            "pgNumType": null,
+            "pgSz": {
+              "h": "16838",
+              "w": "11906",
+            },
+            "titlePg": false,
+          },
+        ],
+      },
+      "noOpBitIdentican": false,
       "params": {
         "deep": true,
         "multiplier": 1.5,
       },
-      "skipped": [
-        "line-spacing-fixer-rule",
-      ],
+      "skipped": [],
     },
     "margins-fixer": {
       "applied": false,
