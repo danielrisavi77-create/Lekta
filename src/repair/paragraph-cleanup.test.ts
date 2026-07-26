@@ -464,3 +464,38 @@ describe('stripOrphanedEmptyParagraphs: tracked-changes i markeri raspona', () =
     expect(out.xml).toContain(insertion);
   });
 });
+
+// --- RE-11: prazan odlomak s vidljivim svojstvom odlomka (w:pBdr/w:shd/w:numPr) -----------------
+// qualifiesAsOrphanedEmpty je gledao samo sadrzaj runova, nikad w:pPr svojstva odlomka: potpisna
+// linija (rub bez teksta iznad), istaknuta traka (shd) i prazna stavka popisa (numPr) su VIDLJIVE
+// na stranici iako odlomak nema w:t, pa su se tiho brisale kao "visak".
+describe('stripOrphanedEmptyParagraphs: vidljiva svojstva odlomka (pBdr/shd/numPr)', () => {
+  it('prazan odlomak s w:pBdr (potpisna linija, rub) se ne brise', () => {
+    const signatureLine = '<w:p><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="6" w:space="1" w:color="auto"/></w:pBdr></w:pPr></w:p>';
+    const xml = '<w:body>' + p(run('prije')) + p() + signatureLine + p(run('poslije')) + '</w:body>';
+    const out = stripOrphanedEmptyParagraphs(xml);
+    expect(out.xml).toContain(signatureLine);
+  });
+
+  it('prazan odlomak s w:shd fill razlicitim od auto (istaknuta traka) se ne brise', () => {
+    const shaded = '<w:p><w:pPr><w:shd w:val="clear" w:color="auto" w:fill="D9D9D9"/></w:pPr></w:p>';
+    const xml = '<w:body>' + p(run('prije')) + p() + shaded + p(run('poslije')) + '</w:body>';
+    const out = stripOrphanedEmptyParagraphs(xml);
+    expect(out.xml).toContain(shaded);
+  });
+
+  it('w:shd s fill="auto" (bez vidljive boje) i dalje kvalificira kao prazan (bez pretjerane zastite)', () => {
+    const noFill = p('<w:pPr><w:shd w:val="clear" w:color="auto" w:fill="auto"/></w:pPr>');
+    const xml = '<w:body>' + p(run('prije')) + noFill + p() + p(run('poslije')) + '</w:body>';
+    const out = stripOrphanedEmptyParagraphs(xml);
+    expect(out.applied).toBe(true);
+    expect(out.paragraphsRemoved).toBe(1);
+  });
+
+  it('prazan odlomak s w:numPr (prazna stavka popisa) se ne brise', () => {
+    const listItem = '<w:p><w:pPr><w:numPr><w:ilvl w:val="0"/><w:numId w:val="3"/></w:numPr></w:pPr></w:p>';
+    const xml = '<w:body>' + p(run('prije')) + p() + listItem + p(run('poslije')) + '</w:body>';
+    const out = stripOrphanedEmptyParagraphs(xml);
+    expect(out.xml).toContain(listItem);
+  });
+});

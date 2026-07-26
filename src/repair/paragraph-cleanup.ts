@@ -119,6 +119,22 @@ function hasNestedSectPr(paragraph: string): boolean {
   return !!pPr && /<w:sectPr\b/.test(pPr[0]);
 }
 
+// RE-11 (2026-07-25): odlomak bez teksta moze svejedno biti VIDLJIV na stranici preko svojstava
+// samog odlomka, ne runova: w:pBdr (rub, npr. potpisna linija "Potpis: ______"), w:shd s bojom
+// razlicitom od "auto" (istaknuta traka) i w:numPr (odlomak je stavka popisa, makar prazna).
+function hasVisibleParagraphProps(paragraph: string): boolean {
+  const pPr = paragraph.match(/<w:pPr\b[^>]*>[\s\S]*?<\/w:pPr>/);
+  if (!pPr) return false;
+  if (/<w:pBdr\b/.test(pPr[0])) return true;
+  if (/<w:numPr\b/.test(pPr[0])) return true;
+  const shd = pPr[0].match(/<w:shd\b[^>]*\/?>/);
+  if (shd) {
+    const fill = shd[0].match(/w:fill="([^"]*)"/);
+    if (fill && fill[1].toLowerCase() !== 'auto') return true;
+  }
+  return false;
+}
+
 /** Ima li odlomak ikakav vidljiv tekst (neprazan sadrzaj bilo kojeg w:t elementa). */
 function hasVisibleText(paragraph: string): boolean {
   const texts = paragraph.matchAll(/<w:t\b[^>]*\/>|<w:t\b[^>]*>([\s\S]*?)<\/w:t>/g);
@@ -158,6 +174,7 @@ function startsAppendixSection(paragraph: string): boolean {
 function qualifiesAsOrphanedEmpty(paragraph: string): boolean {
   if (hasNonNormalStyle(paragraph)) return false;
   if (hasNestedSectPr(paragraph)) return false;
+  if (hasVisibleParagraphProps(paragraph)) return false;
   if (FORBIDDEN_CONTENT.test(paragraph)) return false;
   if (hasVisibleText(paragraph)) return false;
   return true;
