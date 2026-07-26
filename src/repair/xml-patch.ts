@@ -281,10 +281,16 @@ function upsertChild(
 ): UpsertResult {
   const before: Record<string, string> = {};
   const after: Record<string, string> = {};
-  const existing = findDirectChild(inner, name, maskTags);
+  // RE-07 dodatak (Codex adversarijalni nalaz, ista klasa kao RE-10 u heading-case.ts): trazeni
+  // element se NIKAD ne smije naci UNUTAR <w:pPrChange> (stari snimak iz track changes revizija,
+  // Word ga nikad ne renderira). Bez ovog maskiranja, kad ZIVI element ne postoji, pretraga
+  // pogresno pronadje HISTORIJSKI element unutar pPrChangea i izmijeni NJEGA: fixer prijavi uspjeh
+  // (before/after popunjeni), a stvarno, vidljivo oblikovanje ostane NEPROMIJENJENO.
+  const searchMaskTags = [...maskTags, 'w:pPrChange'];
+  const existing = findDirectChild(inner, name, searchMaskTags);
 
   if (!existing) {
-    const at = schemaInsertIndex(inner, name, order, maskTags);
+    const at = schemaInsertIndex(inner, name, order, searchMaskTags);
     for (const [k, v] of Object.entries(attrs)) { before[k] = ''; after[k] = v; }
     return {
       inner: inner.slice(0, at) + buildSelfClosingTag(name, attrs) + inner.slice(at),
@@ -337,7 +343,15 @@ function withContainer(
   // Pretraga ide po MASKIRANOM nizu: stil ima w:rPr i na svojoj razini i unutar w:pPr (svojstva
   // znaka oznake odlomka), pa bi neoprezno trazenje pogodilo pogresan, ugnjezdeni element.
   // Maskiranje cuva duljine, pa indeksi nadjeni ovdje vrijede i nad izvornim blokom.
-  const probe = maskAll(block, maskTags.filter((t) => t !== name));
+  // RE-07 dodatak (Codex adversarijalni nalaz): w:pPrChange/w:rPrChange (track changes stari
+  // snimak) UVIJEK nose UGNIJEZDJENI element ISTOG imena (w:pPr unutar pPrChange, w:rPr unutar
+  // rPrChange), sto ovaj regex (bez brojanja dubine) ne razlikuje od stvarne zatvarajuce oznake
+  // trazenog kontejnera. Bez maskiranja, non-greedy trazilica na odlomku BEZ zivog w:pPr/w:rPr ali
+  // s pPrChange/rPrChange stane na UNUTARNJOJ zatvarajucoj oznaci, odrezuci "inner" prerano i to
+  // bas prije stvarne pPrChange/rPrChange zatvarajuce oznake; naknadno maskiranje u upsertChild
+  // tada vise ne moze djelovati jer odrezani "inner" vise nema svoju zatvarajucu oznaku. Uvijek se
+  // maskira, neovisno o maskTags koje pozivatelj salje (nikad legitiman cilj pretrage).
+  const probe = maskAll(block, [...maskTags.filter((t) => t !== name), 'w:pPrChange', 'w:rPrChange']);
   const m = probe.match(new RegExp(`<${n}\\b[^>]*>[\\s\\S]*?</${n}>`));
   if (m && m.index !== undefined) {
     const openTag = m[0].match(new RegExp(`^<${n}\\b[^>]*>`))![0];
@@ -1100,6 +1114,14 @@ export function addFooterReferenceToSection(
 // audit nikad ne mogu gledati razlicit odlomak. Ista SELF_CLOSING_SRC/PAIRED_SRC
 // alternacija kao paragraph-cleanup.ts/run-level.ts (ne naivni /<w:p>[\s\S]*?<\/w:p>/g,
 // koji moze "progutati" sljedeci pravi odlomak kad mu prethodi samozatvarajuci <w:p/>).
+//
+// RE-07: Word IZOSTAVLJA w:jc kad je poravnanje lijevo (zadano), sto je bas najcesci prekrsaj
+// ("broj lijevo, trazi se desno"). Prijasnja "patch-only" politika (patchTagAttributes, mijenja
+// SAMO postojeci atribut) taj slucaj nije mogla popraviti; sada se w:jc UMECE u pPr PAGE odlomka
+// (upsertChild/withContainer, ista infrastruktura kao patchDefaultAlignment). Ako je PRVI PAGE
+// odlomak vec na ciljanoj vrijednosti (no-op), petlja nastavlja na SLJEDECI PAGE odlomak u ISTOM
+// partu umjesto da odustane od cijelog parta (prije: prvi PAGE odlomak bez izmjene odmah je vracao
+// NO_OP, pa bi drugi, stvarno pogresno poravnati PAGE odlomak u istom partu ostao netaknut).
 
 const FOOTER_SELF_CLOSING_SRC = String.raw`<w:p(?:\s[^>]*)?/>`;
 const FOOTER_PAIRED_SRC = String.raw`<w:p(?:\s[^>]*[^/>])?>[\s\S]*?</w:p>`;
@@ -1114,14 +1136,15 @@ export function patchFooterPageAlignment(
   while ((match = FOOTER_PARAGRAPH_RE.exec(partXml))) {
     const block = match[0];
     if (!/\bPAGE\b/i.test(block)) continue;
-    const result = patchTagAttributes(block, /<w:jc\b[^>]*\/?>/, { 'w:val': align });
-    if (!result.applied) return { ...NO_OP, xml: partXml, found: result.found };
+    const res = withContainer(block, 'w:pPr', ['w:pPr'], [],
+      (inner) => upsertChild(inner, 'w:jc', { 'w:val': align }, CT_PPR_ORDER, ['w:rPr']));
+    if (!res.changed) continue; // vec ciljano poravnat: probaj sljedeci PAGE odlomak istog parta
     return {
-      xml: partXml.slice(0, match.index) + result.xml + partXml.slice(match.index + block.length),
+      xml: partXml.slice(0, match.index) + res.inner + partXml.slice(match.index + block.length),
       applied: true,
-      before: result.before,
-      after: result.after,
-      found: result.found,
+      before: res.before,
+      after: res.after,
+      found: { 'w:val': true },
     };
   }
   return { ...NO_OP, xml: partXml };

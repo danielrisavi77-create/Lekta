@@ -512,18 +512,34 @@ describe('patchFooterPageAlignment', () => {
     expect(result.xml).toBe(wrap(pageField('right')));
   });
 
-  it('no-op (patch-only) kad w:jc uopce ne postoji na PAGE odlomku', () => {
+  // RE-07: Word IZOSTAVLJA w:jc kad je poravnanje lijevo (zadano), sto je NAJCESCI slucaj u praksi.
+  // Prijasnja "patch-only" politika je to tretirala kao no-op (ne moze se popraviti bas najcesci
+  // prekrsaj); sada se w:jc UMECE u pPr PAGE odlomka (ista upsertChild/withContainer infrastruktura
+  // kao patchDefaultAlignment).
+  it('RE-07: UMECE w:jc kad ga PAGE odlomak uopce nema, umjesto no-opa', () => {
     const xml = wrap(pageField(null));
     const result = patchFooterPageAlignment(xml, 'right');
-    expect(result.applied).toBe(false);
-    expect(result.found['w:val']).toBeFalsy();
-    expect(result.xml).toBe(xml);
+    expect(result.applied).toBe(true);
+    expect(result.xml).toContain('<w:jc w:val="right"/>');
+    expect(result.before).toEqual({ 'w:val': '' });
+    expect(result.after).toEqual({ 'w:val': 'right' });
   });
 
   it('no-op kad paragraf s PAGE ne postoji uopce', () => {
     const xml = wrap('<w:p><w:pPr><w:jc w:val="left"/></w:pPr><w:r><w:t>Podnožje</w:t></w:r></w:p>');
     const result = patchFooterPageAlignment(xml, 'right');
     expect(result.applied).toBe(false);
+  });
+
+  // RE-07: prije je funkcija ODUSTAJALA OD CIJELOG PARTA cim prvi PAGE odlomak ne bi doveo do
+  // izmjene (npr. vec je na ciljanoj vrijednosti), pa je drugi, stvarno pogresno poravnati PAGE
+  // odlomak u ISTOM partu ostajao netaknut. Sada se u tom slucaju nastavlja na sljedeci PAGE odlomak.
+  it('RE-07: kad je PRVI PAGE odlomak vec ciljano poravnat, nastavlja na SLJEDECI PAGE odlomak istog parta', () => {
+    const xml = wrap(pageField('right') + pageField('left'));
+    const result = patchFooterPageAlignment(xml, 'right');
+    expect(result.applied).toBe(true);
+    const jcValues = [...result.xml.matchAll(/<w:jc w:val="(\w+)"\/>/g)].map((m) => m[1]);
+    expect(jcValues).toEqual(['right', 'right']);
   });
 
   it('hvata PRVI odlomak s PAGE kad mu prethodi odlomak bez PAGE polja', () => {
@@ -542,6 +558,34 @@ describe('patchFooterPageAlignment', () => {
     const result = patchFooterPageAlignment(xml, 'right');
     expect(result.applied).toBe(true);
     expect(result.xml).toContain('<w:jc w:val="right"/>');
+  });
+
+  // RE-07 dodatak (Codex adversarijalni nalaz, PRE-POSTOJECI u dijeljenom upsertChild primitivu,
+  // ISTA klasa kao RE-10 u heading-case.ts, ovdje prosiren jer je novo umetanje w:jc prvi put
+  // ispituje ovaj primitiv na STVARNIM odlomcima s track changes): kad zivi w:jc ne postoji, ali
+  // odlomak nosi <w:pPrChange> sa STARIM (vise nevazecim) snimkom koji ima svoj w:jc, upsertChild
+  // je taj historijski jc pogresno prepoznavao kao "postojeci direktan element" i mijenjao NJEGA,
+  // pa je fixer prijavljivao uspjeh (before/after popunjeni) dok je stvarno, vidljivo poravnanje
+  // ostajalo NEPROMIJENJENO (Word povijesni snimak nikad ne renderira). Potvrdjeno da je isti
+  // mehanizam postojao i PRIJE ovog popravka (patchTagAttributes je globalnim regexom isto
+  // pogresno mijenjao historijski jc, cak i kad je zivi jc postojao usporedo).
+  it('BEZ zivog w:jc, s pPrChange starim jc: UMECE novi zivi w:jc, ne dira historijski snimak', () => {
+    const withPPrChange = (liveJc: string | null) =>
+      `<w:p><w:pPr>${liveJc ? `<w:jc w:val="${liveJc}"/>` : ''}` +
+      '<w:pPrChange w:id="1" w:author="M" w:date="2026-01-01T00:00:00Z">' +
+      '<w:pPr><w:jc w:val="left"/></w:pPr></w:pPrChange></w:pPr>' +
+      '<w:r><w:fldChar w:fldCharType="begin"/></w:r>' +
+      '<w:r><w:instrText xml:space="preserve"> PAGE </w:instrText></w:r>' +
+      '<w:r><w:fldChar w:fldCharType="separate"/></w:r>' +
+      '<w:r><w:t>1</w:t></w:r>' +
+      '<w:r><w:fldChar w:fldCharType="end"/></w:r></w:p>';
+    const xml = wrap(withPPrChange(null));
+    const result = patchFooterPageAlignment(xml, 'right');
+    expect(result.applied).toBe(true);
+    // zivi w:jc (izvan/prije pPrChangea) mora postojati i biti "right"
+    expect(result.xml).toContain('<w:pPr><w:jc w:val="right"/><w:pPrChange');
+    // historijski snimak UNUTAR pPrChangea ostaje netaknut ("left")
+    expect(result.xml).toContain('<w:pPr><w:jc w:val="left"/></w:pPr></w:pPrChange>');
   });
 });
 
