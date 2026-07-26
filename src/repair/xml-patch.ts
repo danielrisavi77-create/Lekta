@@ -194,9 +194,13 @@ const CT_STYLE_ORDER = [
  * pretraga izravne djece ne zavara istoimenim elementom iz ugnjezdenog bloka: `w:spacing` postoji
  * i u CT_PPr (prored) i u CT_RPr (razmak medju znakovima), pa bi bez maskiranja `w:rPr` unutar
  * `w:pPr` prored zavrsio na krivom elementu.
+ * RE-24 (P-B): samozatvarajuci oblik (`<tag/>`) mora se prepoznati KAO CJELINA, inace bi ostao
+ * nemaskiran, a `[\s\S]*?</tag>` pretraga (koja OVAJ regex koristi za upareni oblik) bi mimo njega
+ * "progutala" kroz zatvarajuci tag SLJEDECEG (drukcijeg) elementa istog imena.
  */
 function maskElement(xml: string, tag: string): string {
-  const re = new RegExp(`<${escapeRegex(tag)}\\b[^>]*>[\\s\\S]*?</${escapeRegex(tag)}>`, 'g');
+  const escaped = escapeRegex(tag);
+  const re = new RegExp(`<${escaped}\\b[^>]*/>|<${escaped}\\b[^>]*>[\\s\\S]*?</${escaped}>`, 'g');
   return xml.replace(re, (m) => ' '.repeat(m.length));
 }
 
@@ -453,7 +457,10 @@ export function patchDefaultFont(
   //    Uklanja se SAMO referenca na temu; naslov kojem je autor izricito zadao font (npr. Georgia)
   //    ostaje netaknut, jer to nije prepreka nego namjera.
   if (update.fontName !== undefined) {
-    const headingRe = /<w:style\b[^>]*w:styleId="Heading[1-9]"[\s\S]*?<\/w:style>/g;
+    // RE-24 (P-B): samozatvarajuca alternativa PRIJE uparene. Bez nje, prazan (samozatvarajuci)
+    // Heading stil "guta" kroz zatvarajuci tag SLJEDECEG stila (cak i ne-heading, npr.
+    // FootnoteText), pa se referenca na temu skida iz TOG (pogresnog) stila.
+    const headingRe = /<w:style\b[^>]*w:styleId="Heading[1-9]"[^>]*\/>|<w:style\b[^>]*w:styleId="Heading[1-9]"[\s\S]*?<\/w:style>/g;
     let hm: RegExpExecArray | null;
     const rebuilt: Array<{ start: number; end: number; block: string }> = [];
     while ((hm = headingRe.exec(xml)) !== null) {
@@ -508,11 +515,18 @@ function patchNormalParagraphProps(
   return { xml: newXml, applied: true, before: res.before, after: res.after, found: foundAttrs };
 }
 
+// RE-24 (P-B): samozatvarajuci alternativa MORA doci PRIJE uparene u regexu ispod. Bez nje, kad je
+// CILJANI stil samozatvarajuci (`<w:style .../>`, npr. prazan LibreOffice placeholder), lazni
+// `[\s\S]*?<\/w:style>` nastavak "guta" kroz zatvarajuci tag SLJEDECEG (drukcijeg) stila, pa patch
+// zavrsi u pogresnom, susjednom stilu umjesto no-op/kreiranja na ciljanome (H-1 klasa korupcije).
 function findStyleBlock(stylesXml: string, styleId: string) {
   const escapedId = escapeRegex(styleId);
   return findBlock(
     stylesXml,
-    new RegExp(`<w:style\\b[^>]*w:styleId="${escapedId}"[^>]*>[\\s\\S]*?<\\/w:style>`),
+    new RegExp(
+      `<w:style\\b[^>]*w:styleId="${escapedId}"[^>]*/>` +
+        `|<w:style\\b[^>]*w:styleId="${escapedId}"[^>]*>[\\s\\S]*?<\\/w:style>`,
+    ),
   );
 }
 
@@ -566,7 +580,10 @@ export function patchFootnoteTextSpacing(
 function findStyleByIdOrName(stylesXml: string, styleId: string, namePattern: RegExp) {
   const byId = findStyleBlock(stylesXml, styleId);
   if (byId) return byId;
-  const re = /<w:style\b[^>]*>[\s\S]*?<\/w:style>/g;
+  // RE-24 (P-B): samozatvarajuca alternativa PRIJE uparene, isti razlog kao findStyleBlock: bez nje
+  // bi svaki prazan (samozatvarajuci) stil na putu "progutao" susjeda, pa bi imena iza njega ostala
+  // nedostizna ovoj petlji.
+  const re = /<w:style\b[^>]*\/>|<w:style\b[^>]*>[\s\S]*?<\/w:style>/g;
   let m: RegExpExecArray | null;
   while ((m = re.exec(stylesXml)) !== null) {
     const nameVal = m[0].match(/<w:name\b[^>]*w:val="([^"]*)"/);

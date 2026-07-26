@@ -499,3 +499,43 @@ describe('patchFooterPageAlignment', () => {
     expect(result.xml).toContain('<w:jc w:val="right"/>');
   });
 });
+
+// RE-24 (P-B, foundacijski primitiv): findStyleBlock/findStyleByIdOrName i korak-2 heading-cleanup
+// petlja u patchDefaultFont su koristili SAMO upareni oblik `<w:style ...>...</w:style>` za granicu
+// stila. Kad je CILJANI stil (Normal/FootnoteText) ili neki PRETHODNI Heading stil samozatvarajuci
+// (`<w:style .../>`, LibreOffice/minimizator/prazan placeholder), non-greedy `[\s\S]*?<\/w:style>`
+// dio regexa "guta" kroz SLJEDECI stil sve do NJEGOVOG zatvarajuceg taga, pa popravak zavrsi u
+// POGRESNOM (susjednom) stilu.
+describe('RE-24: samozatvarajuci stil se ne "proguta" u sljedeci (findStyleBlock/findStyleByIdOrName/korak-2)', () => {
+  it('samozatvarajuci Normal ne proguta sljedeci Heading1 (findStyleBlock, preko patchDefaultAlignment)', () => {
+    const styles =
+      '<w:styles><w:style w:type="paragraph" w:styleId="Normal"/>' +
+      '<w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/><w:rPr><w:sz w:val="32"/></w:rPr></w:style></w:styles>';
+    const heading1Block = '<w:style w:type="paragraph" w:styleId="Heading1"><w:name w:val="heading 1"/><w:rPr><w:sz w:val="32"/></w:rPr></w:style>';
+    const r = patchDefaultAlignment(styles, 'both');
+    // Heading1 mora ostati BAJT-IDENTICAN: poravnanje je trazeno za Normal, ne za Heading1.
+    expect(r.xml).toContain(heading1Block);
+  });
+
+  it('samozatvarajuci FootnoteText ne proguta sljedeci Heading2 (findStyleByIdOrName, preko patchFootnoteTypography)', () => {
+    const styles =
+      '<w:styles><w:style w:type="paragraph" w:styleId="FootnoteText"/>' +
+      '<w:style w:type="paragraph" w:styleId="Heading2"><w:name w:val="heading 2"/><w:rPr><w:sz w:val="24"/></w:rPr></w:style></w:styles>';
+    const heading2Block = '<w:style w:type="paragraph" w:styleId="Heading2"><w:name w:val="heading 2"/><w:rPr><w:sz w:val="24"/></w:rPr></w:style>';
+    const r = patchFootnoteTypography(styles, { fontName: 'Times New Roman', sizeHalfPoints: 20 });
+    // Heading2 mora ostati BAJT-IDENTICAN: fusnota je zatrazena za FootnoteText, ne za Heading2.
+    expect(r.xml).toContain(heading2Block);
+  });
+
+  it('samozatvarajuci (prazan, zadnji) Heading ne proguta sljedeci NE-heading stil (korak-2 font cleanup, preko patchDefaultFont)', () => {
+    const styles =
+      '<w:styles>' +
+      '<w:style w:type="paragraph" w:styleId="Heading2"/>' +
+      '<w:style w:type="paragraph" w:styleId="FootnoteText"><w:name w:val="footnote text"/><w:rPr><w:rFonts w:asciiTheme="minorHAnsi" w:hAnsiTheme="minorHAnsi"/></w:rPr></w:style>' +
+      '</w:styles>';
+    const r = patchDefaultFont(styles, { fontName: 'Times New Roman' });
+    // FootnoteText NIJE Heading stil: heading-only ciscenje teme ga ne smije dirati.
+    expect(r.xml).toContain('w:asciiTheme="minorHAnsi"');
+    expect(r.xml).toContain('w:hAnsiTheme="minorHAnsi"');
+  });
+});
