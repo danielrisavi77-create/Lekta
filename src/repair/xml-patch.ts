@@ -605,17 +605,23 @@ export function patchDefaultParagraphSpacing(
 // Isti patch-only obrazac kao patchDefaultParagraphSpacing: ako dokument ne
 // deklarira taj stil u styles.xml, findStyleBlock vraca null i funkcija je
 // posten no-op (ne izmislja stil koji ne postoji).
+// Dijeljeno s patchFootnoteTypography (ista lokalizirana imena).
+const FOOTNOTE_TEXT_NAME_RE = /^\s*(?:footnote text|tekst fusnote|fusnota)\s*$/i;
+
 export function patchFootnoteTextSpacing(
   stylesXml: string,
   beforeTwentieths: number,
   afterTwentieths: number,
 ): PatchResult {
-  // Stil se i dalje NE izmislja: ako dokument nema FootnoteText, nema ni fusnota kojima bismo
-  // razmak popravljali (patchNormalParagraphProps vraca no-op kad stil ne postoji).
+  // RE-21: findStyleByIdOrName (id-ili-ime), isti obrazac kao patchFootnoteTypography. Prije je ovo
+  // bio exact-match findStyleBlock, pa je na lokaliziranom radu (styleId "Fusnota") tipografija
+  // fusnota bila popravljena a razmak ne, iako je posrijedi ISTI stil.
+  // Stil se i dalje NE izmislja: ako dokument nema FootnoteText/Fusnota, nema ni fusnota kojima
+  // bismo razmak popravljali (patchNormalParagraphProps vraca no-op kad stil ne postoji).
   return patchNormalParagraphProps(stylesXml, 'FootnoteText', 'w:spacing', {
     'w:before': String(beforeTwentieths),
     'w:after': String(afterTwentieths),
-  });
+  }, FOOTNOTE_TEXT_NAME_RE);
 }
 
 /**
@@ -729,7 +735,7 @@ export function patchFootnoteTypography(
   stylesXml: string,
   update: { fontName?: string; sizeHalfPoints?: number; alignJustify?: boolean },
 ): PatchResult {
-  const found = findStyleByIdOrName(stylesXml, 'FootnoteText', /^\s*(?:footnote text|tekst fusnote|fusnota)\s*$/i);
+  const found = findStyleByIdOrName(stylesXml, 'FootnoteText', FOOTNOTE_TEXT_NAME_RE);
   if (!found) return { ...NO_OP, xml: stylesXml };
 
   const before: Record<string, string> = {};

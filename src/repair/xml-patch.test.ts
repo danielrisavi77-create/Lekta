@@ -466,6 +466,21 @@ describe('findStyleBlock / patchFootnoteTextSpacing', () => {
     const result = patchFootnoteTextSpacing(STYLES_XML, 0, 0); // STYLES_XML nema FootnoteText
     expect(result.applied).toBe(false);
   });
+
+  // RE-21: footnoteTypographyFixer (patchFootnoteTypography) vec razrjesava fusnotski stil preko
+  // findStyleByIdOrName (id-ili-ime), ali patchFootnoteTextSpacing je ostao na exact-match
+  // findStyleBlock. Na lokaliziranom radu (styleId "Fusnota", ne doslovni "FootnoteText")
+  // tipografija fusnota se popravljala, a RAZMAK ne, pa je provjera ostajala crvena.
+  it('RE-21: radi i kad je styleId lokaliziran ("Fusnota"), ne samo doslovni "FootnoteText"', () => {
+    const styles =
+      '<w:styles><w:style w:type="paragraph" w:styleId="Fusnota">' +
+      '<w:name w:val="Fusnota"/><w:pPr><w:spacing w:before="120" w:after="80"/></w:pPr>' +
+      '</w:style></w:styles>';
+    const result = patchFootnoteTextSpacing(styles, 0, 0);
+    expect(result.applied).toBe(true);
+    expect(result.xml).toContain('w:before="0"');
+    expect(result.xml).toContain('w:after="0"');
+  });
 });
 
 describe('patchFooterPageAlignment', () => {
