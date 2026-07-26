@@ -343,6 +343,46 @@ describe('stripDirectFormatting: zastite', () => {
     expect(r.xml).not.toContain('Calibri'); // tijelo izvan sdt-a ociscen
   });
 
+  // RE-16: dosad je SVAKI odlomak koji SADRZI w:sdt (ne samo onaj sto je NJIME omotan) bio
+  // preskocen u cijelosti, ukljucivo tekst IZVAN sdt-a u istom odlomku. Inline sdt (npr. Zotero/
+  // Mendeley citatna kontrola) je uvijek RUN-razine (shema ne dopusta ugnjezdeni <w:p> u sdt koji je
+  // sam ugnjezden unutar <w:p>, za razliku od w:txbxContent), pa se sada maskira KAO m:oMath: sdt
+  // ostaje bajt-identican, a ostatak odlomka se cisti kao i inace.
+  it('RE-16: inline sdt (Zotero/Mendeley citat) unutar odlomka ostaje netaknut, OSTATAK odlomka se cisti', () => {
+    const citation =
+      '<w:sdt><w:sdtPr><w:tag w:val="ZOTERO_ITEM CSL_CITATION"/></w:sdtPr><w:sdtContent>' +
+      run('<w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/>', '(Autor, 2020)') +
+      '</w:sdtContent></w:sdt>';
+    const xml =
+      '<w:body>' +
+      p(
+        run('<w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/>', 'Tekst prije. ') +
+          citation +
+          run('<w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/>', ' Tekst poslije.'),
+      ) +
+      '</w:body>';
+    const r = stripDirectFormatting(xml, ALL);
+
+    expect(r.applied).toBe(true);
+    expect(r.xml).toContain(citation); // sdt (citat) bajt-identican
+    // izvan sdt-a (prije i poslije) font ociscen: preostaje SAMO font UNUTAR sdt-a
+    expect(r.xml.match(/w:ascii="Calibri"/g)).toHaveLength(1);
+  });
+
+  // RE-16 zastita (obrnut smjer): sdt koji NIJE ugnjezden unutar odlomka nego CIJELI OMOTAVA
+  // odlomak (postojeci test iznad) mora i dalje ostati u cijelosti preskocen preko balancedRanges;
+  // ovaj test dokazuje da NOVO maskiranje ne remeti TU (vec postojecu) zastitu.
+  it('RE-16 zastita: neuravnotezen broj <w:sdt>/</w:sdt> unutar uhvacenog teksta odlomka i dalje preskace cijeli odlomak', () => {
+    // Rucno konstruiran (ne-realan Word izlaz) rub-slucaj: odlomak "vidi" otvarajuci <w:sdt> bez
+    // pripadajuceg zatvaranja unutar uhvacenog teksta (sigurnosna provjera prije maskiranja).
+    const xml =
+      '<w:body>' +
+      p(run('<w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/>', 'x') + '<w:sdt><w:sdtContent>') +
+      '</w:body>';
+    const r = stripDirectFormatting(xml, ALL);
+    expect(r.xml).toBe(xml);
+  });
+
   it('simbolski font u BILO KOJEM slotu (mijesani ascii+hAnsi) se ne skida', () => {
     const xml =
       '<w:body>' +

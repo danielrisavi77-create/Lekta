@@ -102,7 +102,7 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
     deepRow.className = 'lekta-repair-panel__deep';
     deepRow.innerHTML = `
       <input type="checkbox" checked />
-      <span>Ukloni i izravno formatiranje u tekstu (dubinsko usklađivanje). Netaknuti ostaju: naslovi i stilizirani dijelovi, podebljano/kurziv, centrirano, veće naslovne veličine, formule, tablice (prored/poravnanje), simbolski fontovi i tekstualni okviri. Tekst pisan drugim fontom uskladit će se s fontom profila.</span>
+      <span>Ukloni i izravno formatiranje u tekstu (dubinsko usklađivanje). Netaknuti ostaju: naslovi i stilizirani dijelovi, podebljano/kurziv, centrirano, veće naslovne veličine, formule, tablice (prored/poravnanje), simbolski fontovi, tekstualni okviri i citatne kontrole (npr. Zotero/Mendeley). Tekst pisan drugim fontom uskladit će se s fontom profila.</span>
     `;
     deepToggle = deepRow.querySelector('input');
   }

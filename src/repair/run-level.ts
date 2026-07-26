@@ -7,17 +7,22 @@
 //
 // Semantika je NAMJERNO konzervativna (uklanjamo samo ono sto sigurno smijemo):
 // - Obradjuju se odlomci tijela; PRESKACU se odlomci u tekstualnim okvirima
-//   (w:txbxContent) i strukturiranim kontrolama/ugradjenim naslovnicama (w:sdt),
-//   oboje balansirano prema ugnjezdenju; te odlomci sa stilom (w:pStyle)
-//   razlicitim od dozvoljenog cilja (opts.allowedStyleId, default "Normal" za
-//   tijelo): naslovi, citati, natpisi, popisi. Runovi koji referenciraju
-//   znakovni stil (w:rStyle) se takodjer preskacu (font/velicina im dolazi iz
-//   stila, ne iz Normal/docDefaults). fixers.ts footnoteSpacingFixer poziva
-//   ovo nad word/footnotes.xml s allowedStyleId "FootnoteText" (footnote
+//   (w:txbxContent) i odlomci koje CIJELE omotava strukturirana kontrola/
+//   ugradjena naslovnica (w:sdt, balansirano prema ugnjezdenju); te odlomci sa
+//   stilom (w:pStyle) razlicitim od dozvoljenog cilja (opts.allowedStyleId,
+//   default "Normal" za tijelo): naslovi, citati, natpisi, popisi. Runovi koji
+//   referenciraju znakovni stil (w:rStyle) se takodjer preskacu (font/velicina
+//   im dolazi iz stila, ne iz Normal/docDefaults). fixers.ts footnoteSpacingFixer
+//   poziva ovo nad word/footnotes.xml s allowedStyleId "FootnoteText" (footnote
 //   odlomci nose taj pStyle, ne "Normal").
-// - Formule (m:oMath) i povijest revizija (w:pPrChange/w:rPrChange) se prije
-//   obrade MASKIRAJU: Cambria Math u jednadzbama i track-changes zapisi se
-//   nikad ne diraju.
+// - Formule (m:oMath), povijest revizija (w:pPrChange/w:rPrChange) i INLINE
+//   strukturirana kontrola (w:sdt UGNIJEZDJEN unutar odlomka, npr. Zotero/
+//   Mendeley citatna kontrola) se prije obrade MASKIRAJU: Cambria Math u
+//   jednadzbama, track-changes zapisi i sadrzaj citatne kontrole se nikad ne
+//   diraju, ali OSTATAK odlomka se i dalje cisti (RE-16). Inline sdt (sdt
+//   ugnjezden UNUTAR <w:p>) je po shemi uvijek run-razine i ne moze nositi
+//   vlastiti ugnjezdeni <w:p> (za razliku od w:txbxContent, koji moze), pa
+//   maskiranje ne rizicira odrezivanje odlomka na krivom mjestu.
 // - Font: uklanjaju se SAMO w:ascii/w:hAnsi (+ theme parnjaci) s w:rFonts;
 //   bold, italic, boja, w:cs i sve ostalo u w:rPr ostaje netaknuto. Simbolski
 //   fontovi (Symbol, Wingdings, ...) su glyph-mapirani pa bi uklanjanje
@@ -131,15 +136,17 @@ const SYMBOL_FONTS = new Set([
 
 /**
  * Maskiraj blokove koje deep ciscenje NIKAD ne smije dirati: formule (m:oMath),
- * povijest revizija formatiranja (w:pPrChange/w:rPrChange) i obrisani tekst
- * (w:del, cije formatiranje vraca 'Odbaci promjenu'). Placeholder je NUL-omedjen
- * (NUL je nedopusten u XML 1.0 pa se ne moze sudariti s legitimnim sadrzajem);
- * restore ipak ne vjeruje slijepo indeksu (korumpiran ulaz s NUL sekvencama).
+ * povijest revizija formatiranja (w:pPrChange/w:rPrChange), obrisani tekst
+ * (w:del, cije formatiranje vraca 'Odbaci promjenu') i inline strukturiranu
+ * kontrolu (w:sdt, npr. Zotero/Mendeley citatna kontrola; RE-16). Placeholder
+ * je NUL-omedjen (NUL je nedopusten u XML 1.0 pa se ne moze sudariti s
+ * legitimnim sadrzajem); restore ipak ne vjeruje slijepo indeksu (korumpiran
+ * ulaz s NUL sekvencama).
  */
 function maskProtectedBlocks(paragraph: string): { masked: string; restore: (s: string) => string } {
   const stash: string[] = [];
   const masked = paragraph.replace(
-    /<m:oMath\b[\s\S]*?<\/m:oMath>|<w:(pPrChange|rPrChange|del)\b[\s\S]*?<\/w:\1>/g,
+    /<m:oMath\b[\s\S]*?<\/m:oMath>|<w:(pPrChange|rPrChange|del)\b[\s\S]*?<\/w:\1>|<w:sdt\b[\s\S]*?<\/w:sdt>/g,
     (block) => {
       stash.push(block);
       return `\u0000${stash.length - 1}\u0000`;
@@ -272,12 +279,26 @@ export function stripDirectFormatting(documentXml: string, opts: RunLevelOptions
   const newXml = documentXml.replace(/<w:p(?:\s[^>]*[^/>])?>[\s\S]*?<\/w:p>/g, (paragraph, offset: number) => {
     if (insideRanges(offset, txbx)) return paragraph; // tekstualni okvir: preskoci
     if (insideRanges(offset, sdt)) return paragraph; // sdt (naslovnica/kontrola): preskoci
-    // Odlomak koji SADRZI tekstualni okvir ili inline sdt (naslovnica-placeholder):
-    // unutarnji zatvaraci sijeku non-greedy match pa bi se dio obradio kao tijelo.
-    if (paragraph.includes('<w:txbxContent') || paragraph.includes('<w:sdt')) return paragraph;
+    // Odlomak koji SADRZI tekstualni okvir: moze nositi VLASTITE ugnjezdene
+    // odlomke (tekstualni okvir NIJE run-razine po shemi), pa bi non-greedy
+    // match ovog odlomka vec bio odrezan na krivom mjestu (na UNUTARNJEM
+    // </w:p>, ne na stvarnom kraju ovog odlomka) prije nego stignemo ovdje.
+    if (paragraph.includes('<w:txbxContent')) return paragraph;
+    // RE-16: inline sdt (npr. Zotero/Mendeley citatna kontrola) vise NE preskace
+    // cijeli odlomak; maskira se u maskProtectedBlocks nize kao m:oMath, pa se
+    // ostatak odlomka ipak cisti. Sigurnosna provjera prije toga: sdt ugnjezden
+    // unutar odlomka je po shemi UVIJEK run-razine (ne moze nositi vlastiti
+    // ugnjezdeni <w:p>, za razliku od w:txbxContent), pa NEURAVNOTEZEN broj
+    // otvorenih/zatvorenih <w:sdt> unutar uhvacenog teksta znaci da je non-greedy
+    // match ovog odlomka vec odrezan na krivom mjestu (rub-slucaj, ne stvaran
+    // Word/LibreOffice izlaz): takav odlomak ostaje potpuno preskocen.
+    const sdtOpen = (paragraph.match(/<w:sdt\b/g) || []).length;
+    const sdtClose = (paragraph.match(/<\/w:sdt>/g) || []).length;
+    if (sdtOpen !== sdtClose) return paragraph;
 
-    // Formule i track-changes povijest se maskiraju PRIJE svega (i prije
-    // pStyle provjere: povijesni pStyle u w:pPrChange ne smije laziti o stilu).
+    // Formule, track-changes povijest i inline sdt se maskiraju PRIJE svega (i
+    // prije pStyle provjere: povijesni pStyle u w:pPrChange ne smije laziti o
+    // stilu, niti citatna kontrola koja slucajno sadrzi tekst nalik pStyle-u).
     const { masked, restore } = maskProtectedBlocks(paragraph);
     if (hasNonTargetStyle(masked, opts.allowedStyleId ?? 'Normal')) return paragraph; // stilizirani odlomak: preskoci
 
