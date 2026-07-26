@@ -20,6 +20,10 @@ describe('toCroatianUpper', () => {
     expect(toCroatianUpper('pravo &amp; politika')).toBe('PRAVO &amp; POLITIKA');
     expect(toCroatianUpper('a &#233; b')).toBe('A &#233; B');
   });
+
+  it('RE-09: cuva HEKSADECIMALNU XML referencu (&#x161; ne smije postati &#X161;)', () => {
+    expect(toCroatianUpper('a &#x161; b')).toBe('A &#x161; B');
+  });
 });
 
 describe('isAlreadyUpper', () => {

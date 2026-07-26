@@ -10,10 +10,13 @@
 //
 // Hrvatska lokalizacija je bitna: "đ" mora dati "Đ", a ne "D".
 
-/** Velika slova po hrvatskim pravilima, uz cuvanje XML entiteta (&amp; ne smije postati &AMP;). */
+/** Velika slova po hrvatskim pravilima, uz cuvanje XML entiteta (&amp; ne smije postati &AMP;).
+ *  RE-09: heksadecimalna referenca (&#x161;) mora ostati NETAKNUTA, ne samo decimalna (&#233;):
+ *  bez zastite, "x" unutar nje uppercasea u "X" (&#X161;), sto XML CharRef gramatika ne dopusta
+ *  (literal "x" mora biti malo slovo), pa bi Word izlaz otvorio kroz "repair". */
 export function toCroatianUpper(text: string): string {
   return text
-    .split(/(&[a-zA-Z]+;|&#\d+;)/)
+    .split(/(&[a-zA-Z]+;|&#x[0-9a-fA-F]+;|&#\d+;)/)
     .map((part, i) => (i % 2 === 1 ? part : part.toLocaleUpperCase('hr-HR')))
     .join('');
 }
