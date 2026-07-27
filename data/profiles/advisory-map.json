@@ -127,6 +127,22 @@
     "margins",
     "toc"
   ],
+  "bak-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
+  "bak-zavrsni": [
+    "toc",
+    "page-numbers"
+  ],
+  "biolos-diplomski": [
+    "justify",
+    "toc"
+  ],
+  "biolos-zavrsni": [
+    "justify",
+    "toc"
+  ],
   "biotech-diplomski": [
     "margins",
     "justify",
@@ -239,6 +255,10 @@
   "fdmri-zavrsni": [
     "justify",
     "toc"
+  ],
+  "fdmz-diplomski": [
+    "toc",
+    "page-numbers"
   ],
   "fer-diplomski": [
     "font",
@@ -391,6 +411,10 @@
     "justify",
     "page-numbers"
   ],
+  "fizos-diplomski": [
+    "justify",
+    "toc"
+  ],
   "fizri-diplomski": [
     "font",
     "margins",
@@ -442,6 +466,16 @@
     "margins",
     "justify",
     "toc"
+  ],
+  "foozos-diplomski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
   ],
   "foozpu-diplomski": [
     "justify",
@@ -522,6 +556,16 @@
   "fpzg-specijalisticki-vanjska-politika-diplomacija": [
     "margins"
   ],
+  "fpzpu-diplomski": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "fpzpu-zavrsni": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
   "fsb-diplomski": [
     "font",
     "font-size",
@@ -596,6 +640,26 @@
     "justify",
     "paper-size"
   ],
+  "gradri-diplomski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "gradri-zavrsni": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
   "grafos-diplomski": [
     "toc",
     "page-numbers"
@@ -653,6 +717,11 @@
   ],
   "kbf-zavrsni": [
     "paper-size"
+  ],
+  "kbfdj-diplomski": [
+    "justify",
+    "toc",
+    "page-numbers"
   ],
   "kbfst-diplomski": [
     "margins",
@@ -1128,6 +1197,16 @@
   "ttf-zavrsni": [
     "paper-size"
   ],
+  "uaos-diplomski": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "uaos-zavrsni": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
   "ufri-diplomski": [
     "margins",
     "toc",
@@ -1209,6 +1288,46 @@
   ],
   "unin-tehnicki-zavrsni": [
     "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "unisb-btho-diplomski": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "unisb-btho-zavrsni": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "unisb-odhz-diplomski": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "unisb-odhz-zavrsni": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "unisb-sfsb-diplomski": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "unisb-sfsb-zavrsni": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "unisb-teho-diplomski": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "unisb-teho-zavrsni": [
+    "justify",
     "toc",
     "page-numbers"
   ],
@@ -1319,6 +1438,12 @@
     "justify",
     "paper-size",
     "page-numbers"
+  ],
+  "vss-diplomski": [
+    "toc"
+  ],
+  "vss-zavrsni": [
+    "toc"
   ],
   "vub-diplomski": [
     "toc",

@@ -1,0 +1,40 @@
+{
+  "profileId": "gradri-zavrsni",
+  "entries": [
+    {
+      "ruleId": "gradri-zavrsni--heading-rules",
+      "checkId": "heading-rules",
+      "value": {
+        "numberRequired": true,
+        "maxLevel": 3,
+        "levels": {
+          "1": {
+            "uppercase": true,
+            "bold": true
+          },
+          "2": {
+            "bold": true
+          },
+          "3": {
+            "bold": true,
+            "italic": true
+          }
+        }
+      },
+      "category": "structure",
+      "label": "Pravila naslova (numerirano, razina 1 velika+bold, razina 2 bold, razina 3 bold+kurziv)",
+      "machineCheckable": true,
+      "authority": "general",
+      "sourceId": "gradri-upute-2022",
+      "sourcePage": "Odjeljak 3.1 \"Tekst opcenito\", str. 7",
+      "quote": "Poglavlja moraju biti numerirana i svakom poglavlju treba dodijeliti odgovarajuci naslov. Naslov poglavlja pise se VELIKIM PODEBLJANIM SLOVIMA, velicine 14 pt. Svako novo poglavlje treba poceti na novoj stranici. Prva razina potpoglavlja pise se malim podebljanim slovima velicine 12 pt., a druga razina potpoglavlja malim podebljanim kosim slovima velicine 12 pt.",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-27",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "84ca526afbd5ab85a9ae92fa2346d6b1d76724d7bdbe2566bce92f82ed434800"
+    }
+  ]
+}

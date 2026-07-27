@@ -47,6 +47,95 @@
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
       "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "riteh-diplomski--font",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Font (preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "riteh-upute-radovi-2025",
+      "sourcePage": "Tehnicke upute za izradu pisanog dijela rada, str. 2",
+      "quote": "Kako bi rad bio pregledan i sustavno oblikovan, preporucuje se sljedece: odabrati velicinu slova 12 i prored 1,5; preporuca se font Times New Roman, koristiti standardne margine - margine dolje, gore i desno po 2 cm, margina lijevo 2,5 cm, odabrati poravnavanje na obje strane.",
+      "status": "advisory",
+      "lastVerified": "2026-07-27",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "riteh-diplomski--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova (preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "riteh-upute-radovi-2025",
+      "sourcePage": "Tehnicke upute za izradu pisanog dijela rada, str. 2",
+      "quote": "Kako bi rad bio pregledan i sustavno oblikovan, preporucuje se sljedece: odabrati velicinu slova 12 i prored 1,5; preporuca se font Times New Roman, koristiti standardne margine - margine dolje, gore i desno po 2 cm, margina lijevo 2,5 cm, odabrati poravnavanje na obje strane.",
+      "status": "advisory",
+      "lastVerified": "2026-07-27",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "riteh-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored (preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "riteh-upute-radovi-2025",
+      "sourcePage": "Tehnicke upute za izradu pisanog dijela rada, str. 2",
+      "quote": "Kako bi rad bio pregledan i sustavno oblikovan, preporucuje se sljedece: odabrati velicinu slova 12 i prored 1,5; preporuca se font Times New Roman, koristiti standardne margine - margine dolje, gore i desno po 2 cm, margina lijevo 2,5 cm, odabrati poravnavanje na obje strane.",
+      "status": "advisory",
+      "lastVerified": "2026-07-27",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "riteh-diplomski--margins",
+      "checkId": "margins",
+      "value": {
+        "top": 2,
+        "right": 2,
+        "bottom": 2,
+        "left": 2.5
+      },
+      "category": "format",
+      "label": "Margine (preporuka, lijeva asimetricna)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "riteh-upute-radovi-2025",
+      "sourcePage": "Tehnicke upute za izradu pisanog dijela rada, str. 2",
+      "quote": "Kako bi rad bio pregledan i sustavno oblikovan, preporucuje se sljedece: odabrati velicinu slova 12 i prored 1,5; preporuca se font Times New Roman, koristiti standardne margine - margine dolje, gore i desno po 2 cm, margina lijevo 2,5 cm, odabrati poravnavanje na obje strane.",
+      "status": "advisory",
+      "lastVerified": "2026-07-27",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "riteh-diplomski--justify",
+      "checkId": "justify",
+      "value": true,
+      "category": "format",
+      "label": "Poravnanje (preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "riteh-upute-radovi-2025",
+      "sourcePage": "Tehnicke upute za izradu pisanog dijela rada, str. 2",
+      "quote": "Kako bi rad bio pregledan i sustavno oblikovan, preporucuje se sljedece: odabrati velicinu slova 12 i prored 1,5; preporuca se font Times New Roman, koristiti standardne margine - margine dolje, gore i desno po 2 cm, margina lijevo 2,5 cm, odabrati poravnavanje na obje strane.",
+      "status": "advisory",
+      "lastVerified": "2026-07-27",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null
     }
   ],
   "generatedAt": "2026-07-03"

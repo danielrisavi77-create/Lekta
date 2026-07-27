@@ -1,0 +1,73 @@
+{
+  "profileId": "foozos-diplomski",
+  "entries": [
+    {
+      "ruleId": "foozos-diplomski--font",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Font (preporuka, vidi napomenu o tenziji)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "foozos-smjernice-s-empirijskim",
+      "sourcePage": "Smjernice, odjeljak \"Tehnicka obrada teksta\"",
+      "quote": "Velicina je stranice A4. Tekst se pise racunalom u slovopisu \"Times New Roman\", stil slovopisa \"obican\", velicine 12., proreda 1,5 retka, poravnanje \"obostrano\". [Napomena: Pravilnik Cl.4(2) ove Smjernice naziva \"preporucenim\", dok Cl.16 iste Smjernice proglasava \"sastavnim dijelom\" Pravilnika - tenzija nerazrijesena, entries stoga ADVISORY.]",
+      "status": "advisory",
+      "lastVerified": "2026-07-27",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "foozos-diplomski--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova (preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "foozos-smjernice-s-empirijskim",
+      "sourcePage": "Smjernice, odjeljak \"Tehnicka obrada teksta\"",
+      "quote": "Velicina je stranice A4. Tekst se pise racunalom u slovopisu \"Times New Roman\", stil slovopisa \"obican\", velicine 12., proreda 1,5 retka, poravnanje \"obostrano\". [Napomena: Pravilnik Cl.4(2) ove Smjernice naziva \"preporucenim\", dok Cl.16 iste Smjernice proglasava \"sastavnim dijelom\" Pravilnika - tenzija nerazrijesena, entries stoga ADVISORY.]",
+      "status": "advisory",
+      "lastVerified": "2026-07-27",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "foozos-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored (preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "foozos-smjernice-s-empirijskim",
+      "sourcePage": "Smjernice, odjeljak \"Tehnicka obrada teksta\"",
+      "quote": "Velicina je stranice A4. Tekst se pise racunalom u slovopisu \"Times New Roman\", stil slovopisa \"obican\", velicine 12., proreda 1,5 retka, poravnanje \"obostrano\". [Napomena: Pravilnik Cl.4(2) ove Smjernice naziva \"preporucenim\", dok Cl.16 iste Smjernice proglasava \"sastavnim dijelom\" Pravilnika - tenzija nerazrijesena, entries stoga ADVISORY.]",
+      "status": "advisory",
+      "lastVerified": "2026-07-27",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "foozos-diplomski--justify",
+      "checkId": "justify",
+      "value": true,
+      "category": "format",
+      "label": "Poravnanje (preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "foozos-smjernice-s-empirijskim",
+      "sourcePage": "Smjernice, odjeljak \"Tehnicka obrada teksta\"",
+      "quote": "Velicina je stranice A4. Tekst se pise racunalom u slovopisu \"Times New Roman\", stil slovopisa \"obican\", velicine 12., proreda 1,5 retka, poravnanje \"obostrano\". [Napomena: Pravilnik Cl.4(2) ove Smjernice naziva \"preporucenim\", dok Cl.16 iste Smjernice proglasava \"sastavnim dijelom\" Pravilnika - tenzija nerazrijesena, entries stoga ADVISORY.]",
+      "status": "advisory",
+      "lastVerified": "2026-07-27",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null
+    }
+  ]
+}
