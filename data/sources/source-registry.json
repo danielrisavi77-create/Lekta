@@ -2633,5 +2633,70 @@
     "validityClass": "stable",
     "snapshotPath": "data/sources/algebra/algebra-pravilnik-2026-en.pdf",
     "snapshotHash": "eb448e0e5794074ab5fabd40705cd4a71c6617f046dc507ff24612e929ccdd20"
+  },
+  {
+    "id": "vguk-smjernice-2026",
+    "kind": "guidelines",
+    "title": "Smjernice za pisanje zavrsnog/diplomskog rada na Veleucilistu u Krizevcima",
+    "url": "https://www.vguk.hr/upload/Hodogrami/Prijediplomski/Novi_obrasci_OK/2026_Smjernice_za_pisanje_Zavrsnog_Diplomskog_rada.pdf",
+    "publisher": "Veleuciliste u Krizevcima",
+    "fetchedAt": "2026-07-27",
+    "snapshotPath": "data/sources/vguk/vguk-smjernice-2026.pdf",
+    "snapshotHash": "f9c219728ec92f68199a5973d33d9730451bab3e7db9e1b5ff4b89f3ee735b34",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-27",
+    "note": "Font Times New Roman 12pt, prored 1,5, obostrano poravnat razmak 0 prije/poslije, margine 3,00cm lijeva/2,5cm ostale, brojevi stranica u donjem desnom kutu."
+  },
+  {
+    "id": "vus-pravilnik-zavrsni-diplomski-2023",
+    "kind": "regulation",
+    "title": "Pravilnik o zavrsnom i diplomskom radu (Veleuciliste u Sibeniku, 2023)",
+    "url": "https://www.vus.hr/_download/repository/Pravilnik%20o%20zavr%C5%A1nom%20i%20diplomskom%20radu%5B3%5D.pdf",
+    "publisher": "Veleuciliste u Sibeniku",
+    "fetchedAt": "2026-07-27",
+    "snapshotPath": "data/sources/vus/vus-pravilnik-zavrsni-diplomski-2023.pdf",
+    "snapshotHash": "4c7c9268c917b41f32be6043babf3bd82c142e3f5112083156e4063fd2d720e2",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-27",
+    "note": "Lokalna kopija je usvojena verzija 2023-09-20 (na snazi od 2023-10-01); institucija je od tad objavila revidirano izdanje na istoj URL putanji (nije bajt-identicno, provjereno 2026-07-27). Font TNR 12pt, poravnanje obostrano (justify), prored 1,5 (moguc prored prije/poslije 0), min. 30/40 str. A4."
+  },
+  {
+    "id": "vuka-poslovni-upute",
+    "kind": "guidelines",
+    "title": "Upute za pisanje seminarskih i zavrsnih radova - Poslovni odjel (Veleuciliste u Karlovcu)",
+    "url": "https://www.vuka.hr/_download/repository/Upute_za_pisanje_seminarskih_i_zavrsnih_radova_PO.pdf",
+    "publisher": "Veleuciliste u Karlovcu, Poslovni odjel",
+    "fetchedAt": "2026-07-27",
+    "snapshotPath": "data/sources/vuka/vuka-poslovni-upute.pdf",
+    "snapshotHash": "cdd389a04f661585bb47dd26b7d36bb2c4ff3fce7a00ddf87091a9a485fbd64f",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-27",
+    "note": "Font Arial ili Times New Roman 12pt (naslovi 14 bold), prored 1,5. Margine: lijevo 2,5-3cm (raspon, ne fiksna vrijednost), gore/dolje/desno 2-2,5cm (raspon) - NIJE dovoljno precizno za autoFixable margine."
+  },
+  {
+    "id": "vuka-strojarski-upute-2025",
+    "kind": "guidelines",
+    "title": "Upute za pisanje zavrsnih/diplomskih radova - Strojarski odjel (Veleuciliste u Karlovcu, 2025)",
+    "url": "https://www.vuka.hr/_download/repository/UPUTE%20STROJARSKI%20ODJEL%202025.pdf",
+    "publisher": "Veleuciliste u Karlovcu, Strojarski odjel",
+    "fetchedAt": "2026-07-27",
+    "snapshotPath": "data/sources/vuka/vuka-strojarski-upute-2025.pdf",
+    "snapshotHash": "d73de07034527be55b6b5c4a80422ed4d61844292ad0c4427d70474ae7fbf7f2",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-27",
+    "note": "Margine 3.0cm sve strane (Lijeva/Gornja/Donja/Desna margina 3.0 cm), fontovi Arial za naslove."
+  },
+  {
+    "id": "ftrr-pravilnik-zavrsni-diplomski",
+    "kind": "regulation",
+    "title": "Pravilnik o zavrsnom i diplomskom radu, prociscen tekst 2024 (FTRR Pozega)",
+    "url": "https://ftrr.hr/images/Dokumenti/propisi/2024/08-01/pravilnik-o-zavrnom-diplomskom-radu.pdf",
+    "publisher": "Fakultet turizma i ruralnog razvoja u Pozegi",
+    "fetchedAt": "2026-07-27",
+    "snapshotPath": "data/sources/ftrr/ftrr-pravilnik-zavrsni-diplomski.pdf",
+    "snapshotHash": "022952e068eb6cfc45cfad4300a99c64f2f11200a8623e6656894d5300d46bdf",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-27",
+    "note": "Clanak 29: velicina TNR 12pt prored 1.5, standardne margine 25mm sve strane, A4 (Clanak 12)."
   }
 ]

@@ -1,6 +1,14 @@
 {
   "cells": [
     {
+      "profileId": "adu-montaza-diplomski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-27"
+    },
+    {
       "profileId": "agr-diplomski",
       "scored": 2,
       "machineCheckable": 7,
@@ -111,6 +119,38 @@
       "advisory": 0,
       "ratio": 1,
       "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "aspira-diplomski",
+      "scored": 7,
+      "machineCheckable": 7,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-27"
+    },
+    {
+      "profileId": "aspira-diplomski-en",
+      "scored": 7,
+      "machineCheckable": 7,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-27"
+    },
+    {
+      "profileId": "aspira-zavrsni",
+      "scored": 7,
+      "machineCheckable": 7,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-27"
+    },
+    {
+      "profileId": "aspira-zavrsni-en",
+      "scored": 7,
+      "machineCheckable": 7,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-27"
     },
     {
       "profileId": "biotech-diplomski",
@@ -815,6 +855,22 @@
       "advisory": 7,
       "ratio": 0,
       "lastVerified": null
+    },
+    {
+      "profileId": "ftrr-diplomski",
+      "scored": 5,
+      "machineCheckable": 5,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-27"
+    },
+    {
+      "profileId": "ftrr-zavrsni",
+      "scored": 5,
+      "machineCheckable": 5,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-27"
     },
     {
       "profileId": "fzsri-diplomski",
@@ -1937,6 +1993,22 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "vguk-diplomski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-27"
+    },
+    {
+      "profileId": "vguk-zavrsni",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-27"
+    },
+    {
       "profileId": "vhzk-zavrsni",
       "scored": 6,
       "machineCheckable": 5,
@@ -2017,6 +2089,62 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "vuka-poslovni-diplomski",
+      "scored": 2,
+      "machineCheckable": 2,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-27"
+    },
+    {
+      "profileId": "vuka-poslovni-opci-akademski-rad",
+      "scored": 2,
+      "machineCheckable": 2,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-27"
+    },
+    {
+      "profileId": "vuka-poslovni-zavrsni",
+      "scored": 2,
+      "machineCheckable": 2,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-27"
+    },
+    {
+      "profileId": "vuka-strojarski-diplomski",
+      "scored": 1,
+      "machineCheckable": 1,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-27"
+    },
+    {
+      "profileId": "vuka-strojarski-zavrsni",
+      "scored": 1,
+      "machineCheckable": 1,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-27"
+    },
+    {
+      "profileId": "vus-diplomski",
+      "scored": 4,
+      "machineCheckable": 4,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-27"
+    },
+    {
+      "profileId": "vus-zavrsni",
+      "scored": 4,
+      "machineCheckable": 4,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-27"
+    },
+    {
       "profileId": "vuv-diplomski",
       "scored": 8,
       "machineCheckable": 8,
@@ -2089,5 +2217,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 1582
+  "totalScored": 1654
 }

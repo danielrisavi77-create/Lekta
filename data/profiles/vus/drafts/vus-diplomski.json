@@ -1,0 +1,93 @@
+{
+  "profileId": "vus-diplomski",
+  "entries": [
+    {
+      "ruleId": "vus-diplomski--font",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Font",
+      "sourceId": "vus-pravilnik-zavrsni-diplomski-2023",
+      "authority": "binding",
+      "verifiedHash": "4c7c9268c917b41f32be6043babf3bd82c142e3f5112083156e4063fd2d720e2",
+      "sourcePage": "Prilog I. (Upute za izradu zavrsnog i diplomskog rada), odjeljak '1. UVOD'",
+      "quote": "Font slova u radu je Times New Roman, 12 pt, poravnanje: obostrano (justify) prored 1,5 (mogucnost proreda prije i poslije 0)",
+      "autoFixable": true,
+      "fixerId": "font-fixer",
+      "machineCheckable": true,
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-27",
+      "confirmedVia": "ai-1pass-batch"
+    },
+    {
+      "ruleId": "vus-diplomski--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova",
+      "sourceId": "vus-pravilnik-zavrsni-diplomski-2023",
+      "authority": "binding",
+      "verifiedHash": "4c7c9268c917b41f32be6043babf3bd82c142e3f5112083156e4063fd2d720e2",
+      "sourcePage": "Prilog I. (Upute za izradu zavrsnog i diplomskog rada), odjeljak '1. UVOD'",
+      "quote": "Font slova u radu je Times New Roman, 12 pt, poravnanje: obostrano (justify) prored 1,5 (mogucnost proreda prije i poslije 0)",
+      "autoFixable": true,
+      "fixerId": "font-fixer",
+      "machineCheckable": true,
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-27",
+      "confirmedVia": "ai-1pass-batch"
+    },
+    {
+      "ruleId": "vus-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored",
+      "sourceId": "vus-pravilnik-zavrsni-diplomski-2023",
+      "authority": "binding",
+      "verifiedHash": "4c7c9268c917b41f32be6043babf3bd82c142e3f5112083156e4063fd2d720e2",
+      "sourcePage": "Prilog I. (Upute za izradu zavrsnog i diplomskog rada), odjeljak '1. UVOD'",
+      "quote": "Font slova u radu je Times New Roman, 12 pt, poravnanje: obostrano (justify) prored 1,5 (mogucnost proreda prije i poslije 0)",
+      "autoFixable": true,
+      "fixerId": "line-spacing-fixer",
+      "machineCheckable": true,
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-27",
+      "confirmedVia": "ai-1pass-batch"
+    },
+    {
+      "ruleId": "vus-diplomski--justify",
+      "checkId": "justify",
+      "value": true,
+      "category": "format",
+      "label": "Poravnanje",
+      "sourceId": "vus-pravilnik-zavrsni-diplomski-2023",
+      "authority": "binding",
+      "verifiedHash": "4c7c9268c917b41f32be6043babf3bd82c142e3f5112083156e4063fd2d720e2",
+      "sourcePage": "Prilog I. (Upute za izradu zavrsnog i diplomskog rada), odjeljak '1. UVOD'",
+      "quote": "Font slova u radu je Times New Roman, 12 pt, poravnanje: obostrano (justify) prored 1,5 (mogucnost proreda prije i poslije 0)",
+      "autoFixable": true,
+      "fixerId": "alignment-fixer",
+      "machineCheckable": true,
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-27",
+      "confirmedVia": "ai-1pass-batch"
+    }
+  ]
+}

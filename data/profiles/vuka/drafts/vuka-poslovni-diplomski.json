@@ -1,0 +1,49 @@
+{
+  "profileId": "vuka-poslovni-diplomski",
+  "entries": [
+    {
+      "ruleId": "vuka-poslovni-diplomski--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova",
+      "sourceId": "vuka-poslovni-upute",
+      "authority": "general",
+      "verifiedHash": "cdd389a04f661585bb47dd26b7d36bb2c4ff3fce7a00ddf87091a9a485fbd64f",
+      "sourcePage": "odjeljak o oblikovanju (seminarski/zavrsni radovi)",
+      "quote": "Visina teksta mora biti 12 tocaka razumljivog fonta (Arial ili Times New Roman). Prored medju redovima mora biti 1.5.",
+      "autoFixable": true,
+      "fixerId": "font-fixer",
+      "machineCheckable": true,
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-27",
+      "confirmedVia": "ai-1pass-batch"
+    },
+    {
+      "ruleId": "vuka-poslovni-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored",
+      "sourceId": "vuka-poslovni-upute",
+      "authority": "general",
+      "verifiedHash": "cdd389a04f661585bb47dd26b7d36bb2c4ff3fce7a00ddf87091a9a485fbd64f",
+      "sourcePage": "odjeljak o oblikovanju (seminarski/zavrsni radovi)",
+      "quote": "Visina teksta mora biti 12 tocaka razumljivog fonta (Arial ili Times New Roman). Prored medju redovima mora biti 1.5.",
+      "autoFixable": true,
+      "fixerId": "line-spacing-fixer",
+      "machineCheckable": true,
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-27",
+      "confirmedVia": "ai-1pass-batch"
+    }
+  ]
+}
