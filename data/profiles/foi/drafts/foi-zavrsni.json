@@ -64,7 +64,9 @@
       "lastVerified": "2026-07-16",
       "verifiedBy": "Daniel",
       "reviewedBy": "Daniel",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "autoFixable": true,
+      "fixerId": "paper-size-fixer"
     },
     {
       "ruleId": "foi-zavrsni--page-numbers",

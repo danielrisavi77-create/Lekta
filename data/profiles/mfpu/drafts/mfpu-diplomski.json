@@ -18,7 +18,9 @@
       "lastVerified": "2026-07-17",
       "verifiedBy": "Daniel",
       "reviewedBy": "Daniel",
-      "confirmedVia": "harvest+ocr-verify"
+      "confirmedVia": "harvest+ocr-verify",
+      "autoFixable": true,
+      "fixerId": "paper-size-fixer"
     },
     {
       "ruleId": "mfpu-diplomski--font",
@@ -39,7 +41,9 @@
       "lastVerified": "2026-07-17",
       "verifiedBy": "Daniel",
       "reviewedBy": "Daniel",
-      "confirmedVia": "harvest+ocr-verify"
+      "confirmedVia": "harvest+ocr-verify",
+      "autoFixable": true,
+      "fixerId": "font-fixer"
     },
     {
       "ruleId": "mfpu-diplomski--font-size",
@@ -60,7 +64,9 @@
       "lastVerified": "2026-07-17",
       "verifiedBy": "Daniel",
       "reviewedBy": "Daniel",
-      "confirmedVia": "harvest+ocr-verify"
+      "confirmedVia": "harvest+ocr-verify",
+      "autoFixable": true,
+      "fixerId": "font-fixer"
     },
     {
       "ruleId": "mfpu-diplomski--line-spacing",
@@ -79,7 +85,9 @@
       "lastVerified": "2026-07-17",
       "verifiedBy": "Daniel",
       "reviewedBy": "Daniel",
-      "confirmedVia": "harvest+ocr-verify"
+      "confirmedVia": "harvest+ocr-verify",
+      "autoFixable": true,
+      "fixerId": "line-spacing-fixer"
     },
     {
       "ruleId": "mfpu-diplomski--margins",
@@ -103,7 +111,9 @@
       "lastVerified": "2026-07-17",
       "verifiedBy": "Daniel",
       "reviewedBy": "Daniel",
-      "confirmedVia": "harvest+ocr-verify"
+      "confirmedVia": "harvest+ocr-verify",
+      "autoFixable": true,
+      "fixerId": "margins-fixer"
     },
     {
       "ruleId": "mfpu-diplomski--footnote-size",

@@ -111,7 +111,9 @@
       "lastVerified": "2026-07-17",
       "verifiedBy": "Daniel",
       "reviewedBy": "Daniel",
-      "confirmedVia": "workflow-harvest+adversarial-verify"
+      "confirmedVia": "workflow-harvest+adversarial-verify",
+      "autoFixable": true,
+      "fixerId": "paper-size-fixer"
     },
     {
       "ruleId": "evtos-diplomski--page-numbers",

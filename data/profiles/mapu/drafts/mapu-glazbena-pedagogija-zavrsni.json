@@ -18,7 +18,9 @@
       "lastVerified": "2026-07-17",
       "verifiedBy": "Daniel",
       "reviewedBy": "Daniel",
-      "confirmedVia": "harvest+ocr-verify"
+      "confirmedVia": "harvest+ocr-verify",
+      "autoFixable": true,
+      "fixerId": "paper-size-fixer"
     },
     {
       "ruleId": "mapu-glazbena-pedagogija-zavrsni--font",
@@ -39,7 +41,9 @@
       "lastVerified": "2026-07-17",
       "verifiedBy": "Daniel",
       "reviewedBy": "Daniel",
-      "confirmedVia": "harvest+ocr-verify"
+      "confirmedVia": "harvest+ocr-verify",
+      "autoFixable": true,
+      "fixerId": "font-fixer"
     },
     {
       "ruleId": "mapu-glazbena-pedagogija-zavrsni--font-size",
@@ -60,7 +64,9 @@
       "lastVerified": "2026-07-17",
       "verifiedBy": "Daniel",
       "reviewedBy": "Daniel",
-      "confirmedVia": "harvest+ocr-verify"
+      "confirmedVia": "harvest+ocr-verify",
+      "autoFixable": true,
+      "fixerId": "font-fixer"
     },
     {
       "ruleId": "mapu-glazbena-pedagogija-zavrsni--line-spacing",
@@ -79,7 +85,9 @@
       "lastVerified": "2026-07-17",
       "verifiedBy": "Daniel",
       "reviewedBy": "Daniel",
-      "confirmedVia": "harvest+ocr-verify"
+      "confirmedVia": "harvest+ocr-verify",
+      "autoFixable": true,
+      "fixerId": "line-spacing-fixer"
     },
     {
       "ruleId": "mapu-glazbena-pedagogija-zavrsni--margins",
@@ -103,7 +111,9 @@
       "lastVerified": "2026-07-17",
       "verifiedBy": "Daniel",
       "reviewedBy": "Daniel",
-      "confirmedVia": "harvest+ocr-verify"
+      "confirmedVia": "harvest+ocr-verify",
+      "autoFixable": true,
+      "fixerId": "margins-fixer"
     },
     {
       "ruleId": "mapu-glazbena-pedagogija-zavrsni--footnote-size",

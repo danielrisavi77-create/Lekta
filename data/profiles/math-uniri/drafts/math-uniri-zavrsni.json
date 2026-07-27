@@ -18,7 +18,9 @@
       "lastVerified": "2026-07-17",
       "verifiedBy": "Daniel",
       "reviewedBy": "Daniel",
-      "confirmedVia": "harvest+ocr-verify"
+      "confirmedVia": "harvest+ocr-verify",
+      "autoFixable": true,
+      "fixerId": "paper-size-fixer"
     },
     {
       "ruleId": "math-uniri-zavrsni--page-count",
