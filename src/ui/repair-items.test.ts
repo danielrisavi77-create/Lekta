@@ -6,6 +6,7 @@ import {
   paragraphSpacingRepairableItem,
   footnoteSpacingRepairableItem,
   pageNumberAlignmentRepairableItem,
+  introSectionItem,
   type AnalyzedCheck,
 } from './repair-items';
 import type { RuleEntry } from '../profiles/profile-schema';
@@ -267,5 +268,38 @@ describe('pageNumberAlignmentRepairableItem (poravnanje broja stranice, ovisi o 
     expect(items).toEqual([
       { ruleId: 'page-number-alignment-universal', fixerId: 'page-number-alignment-fixer', label: 'Položaj broja stranice', params: { align: 'right' }, violated: true },
     ]);
+  });
+});
+
+// RE-05: section-insert (numeriranje od Uvoda) je umetao podnozje s CENTRIRANIM brojem
+// (align:'center' hardkodiran), dok SVI profili koji ovu stavku nude (checkPageNumberStartAtIntro)
+// istodobno traze broj DESNO (pageNumberAlignment "right"): popravak je sam sebi proizvodio novi
+// prekrsaj na recheku. align se sada izvodi iz profila (isti pageNumberAlignment kao gore).
+describe('introSectionItem (numeriranje od Uvoda: umetni prijelom sekcije)', () => {
+  const RESULT = (introParagraphIndex: number, sections: unknown[], checks: AnalyzedCheck[] = []) => ({
+    details: { introParagraphIndex, sections },
+    checks,
+  });
+
+  it('prazno kad profil ne trazi checkPageNumberStartAtIntro', () => {
+    expect(introSectionItem(RESULT(3, [{}]), { pageNumberAlignment: 'right' })).toEqual([]);
+  });
+
+  it('prazno kad je dokument visesekcijski (K6 v1 opseg: samo jednosekcijski)', () => {
+    const profile = { checkPageNumberStartAtIntro: true, pageNumberAlignment: 'right' };
+    expect(introSectionItem(RESULT(3, [{}, {}]), profile)).toEqual([]);
+  });
+
+  it('align u params.target dolazi IZ PROFILA (pageNumberAlignment "right"), ne hardkodiran "center"', () => {
+    const profile = { checkPageNumberStartAtIntro: true, pageNumberAlignment: 'right' };
+    const items = introSectionItem(RESULT(3, [{}]), profile);
+    expect(items).toHaveLength(1);
+    expect(items[0].params).toEqual({ target: { introParagraphIndex: 3, align: 'right' } });
+  });
+
+  it('bez konkretne vrijednosti u profilu (nepoznat/nedostajuci pageNumberAlignment): align defaultira na "right"', () => {
+    const profile = { checkPageNumberStartAtIntro: true };
+    const items = introSectionItem(RESULT(3, [{}]), profile);
+    expect(items[0].params).toEqual({ target: { introParagraphIndex: 3, align: 'right' } });
   });
 });

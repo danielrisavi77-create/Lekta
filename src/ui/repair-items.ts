@@ -235,6 +235,19 @@ export function footnoteSpacingRepairableItem(checks: AnalyzedCheck[], profile: 
   ];
 }
 
+const VALID_PAGE_ALIGNMENTS = new Set(['left', 'center', 'right']);
+
+/**
+ * Normalizira profile.pageNumberAlignment u jedan od tri legalna cilja fixera. Profili u data/
+ * nose STRING ("right"), ne boolean; legacy `true` i svaka nepoznata/nevaljana vrijednost
+ * defaultiraju na "right" (jedina vrijednost koju ijedan stvarni profil danas koristi, RE-04/RE-05).
+ */
+function resolvePageNumberAlign(profile: any): 'left' | 'center' | 'right' {
+  const raw = profile?.pageNumberAlignment;
+  if (typeof raw === 'string' && VALID_PAGE_ALIGNMENTS.has(raw)) return raw as 'left' | 'center' | 'right';
+  return 'right';
+}
+
 /**
  * Univerzalni popravak poravnanja broja stranice: isti obrazac kao
  * footnoteSpacingRepairableItem, gated na profile.pageNumberAlignment (analyzeDocx
@@ -248,7 +261,7 @@ export function footnoteSpacingRepairableItem(checks: AnalyzedCheck[], profile: 
  */
 export function pageNumberAlignmentRepairableItem(checks: AnalyzedCheck[], profile: any): RepairableItem[] {
   if (!profile?.pageNumberAlignment) return [];
-  const align = profile.pageNumberAlignment === true ? 'right' : String(profile.pageNumberAlignment);
+  const align = resolvePageNumberAlign(profile);
   return [
     {
       ruleId: 'page-number-alignment-universal',
@@ -407,12 +420,17 @@ export function introSectionItem(result: any, profile: any): RepairableItem[] {
   const startStatus = checkStatusByTitle(checks, CHECK_TITLE['page-number-start']);
   // violated: numeriranje od Uvoda nije potvrdjeno (status != 'pass' ili check ne postoji).
   const violated = startStatus !== 'pass';
+  // RE-05: align se IZVODI iz profila (isti pageNumberAlignment kao pageNumberAlignmentRepairableItem),
+  // ne hardkodira na 'center'. Prije je popravak umetao CENTRIRAN broj dok su SVI profili koji ovu
+  // stavku nude (checkPageNumberStartAtIntro) istodobno trazili broj DESNO: popravak je sam sebi
+  // proizvodio novi prekrsaj na recheku ("Spremnost 85 -> 82").
+  const align = resolvePageNumberAlign(profile);
   return [
     {
       ruleId: 'section-insert-intro',
       fixerId: 'section-insert-fixer',
       label: 'Numeriranje od Uvoda: umetni prijelom sekcije (rimski/arapski, naslovnica bez broja)',
-      params: { target: { introParagraphIndex: introIdx, align: 'center' } },
+      params: { target: { introParagraphIndex: introIdx, align } },
       violated,
       requiresConfirmation: true,
       confirmationText:
