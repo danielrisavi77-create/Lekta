@@ -709,14 +709,19 @@ export function emptyParagraphFixer(parts: DocxXmlParts): FixerOutput {
 // popravlja svaki koji ima krivo poravnano PAGE polje; namjerno siri opseg od audita
 // (koji gleda samo sectPr-referencirane mete) jer popravljanje nereferenciranog
 // ("orphan") footera je bezopasno, vidi CLAUDE.md/plan zabiljesku.
-export function pageNumberAlignmentFixer(parts: DocxXmlParts): FixerOutput {
+// RE-04: `align` dolazi iz profila (repair-items.ts, profile.pageNumberAlignment); default
+// "right" cuva ponasanje starih poziva bez params (golden, direktni pozivi bez align).
+export function pageNumberAlignmentFixer(
+  parts: DocxXmlParts,
+  align: 'left' | 'center' | 'right' = 'right',
+): FixerOutput {
   const partsMap = parts.footerHeaderParts ?? {};
   const names = Object.keys(partsMap).sort();
   const updated: Record<string, string> = {};
   let firstBefore: string | null = null;
   let touchedCount = 0;
   for (const name of names) {
-    const result = patchFooterPageAlignment(partsMap[name], 'right');
+    const result = patchFooterPageAlignment(partsMap[name], align);
     if (!result.applied) continue;
     touchedCount += 1;
     if (firstBefore == null) firstBefore = result.before['w:val'] ?? null;
@@ -728,7 +733,7 @@ export function pageNumberAlignmentFixer(parts: DocxXmlParts): FixerOutput {
     parts: { ...parts, footerHeaderParts: { ...partsMap, ...updated } },
     applied: true,
     beforeLabel: `Poravnanje broja stranice: ${ALIGNMENT_LABELS[firstBefore ?? ''] ?? firstBefore}`,
-    afterLabel: `Poravnanje broja stranice: desno${countNote}`,
+    afterLabel: `Poravnanje broja stranice: ${ALIGNMENT_LABELS[align] ?? align}${countNote}`,
   };
 }
 

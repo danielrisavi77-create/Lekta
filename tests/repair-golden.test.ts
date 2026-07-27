@@ -74,7 +74,7 @@ const SYNTHETIC_PARAMS: Record<FixerId, Record<string, unknown>> = {
   // nad word/footnotes.xml; sinteticki dokumenti nemaju fusnote pa footnoteSpacingFixer ovdje
   // uvijek zavrsi kao no-op (parts.footnotesXml je undefined), sto je ocekivano i pokriveno.
   'footnote-spacing-fixer': {},
-  // pageNumberAlignmentFixer ne uzima ciljane vrijednosti (uvijek gadja desno), a sinteticki
+  // pageNumberAlignmentFixer bez params.align defaultira na "right" (RE-04), a sinteticki
   // dokumenti nemaju footer/header partove pa uvijek zavrsi kao no-op (parts.footerHeaderParts
   // je prazna mapa), sto je ocekivano i pokriveno (isti obrazac kao footnote-spacing-fixer).
   'page-number-alignment-fixer': {},

@@ -240,15 +240,21 @@ export function footnoteSpacingRepairableItem(checks: AnalyzedCheck[], profile: 
  * footnoteSpacingRepairableItem, gated na profile.pageNumberAlignment (analyzeDocx
  * samo tada dodaje check 'Položaj broja stranice', vidi src/analysis/analyze-docx.ts).
  * Nije vezan za ruleEntry.
+ *
+ * RE-04: profili u data/ nose STRING vrijednost ("right"), ne boolean `true`; gate koji je trazio
+ * doslovni `=== true` je bio MRTAV za svaki stvarni profil (analiza sama gate-a na truthy, vidi
+ * profile.pageNumberAlignment&&pageNums u analyze-docx.ts). Gate je sada na truthy, a STRING
+ * vrijednost ide u params.align (fixer ju je dosad ignorirao i imao tvrdo upisano 'right').
  */
 export function pageNumberAlignmentRepairableItem(checks: AnalyzedCheck[], profile: any): RepairableItem[] {
-  if (profile?.pageNumberAlignment !== true) return [];
+  if (!profile?.pageNumberAlignment) return [];
+  const align = profile.pageNumberAlignment === true ? 'right' : String(profile.pageNumberAlignment);
   return [
     {
       ruleId: 'page-number-alignment-universal',
       fixerId: 'page-number-alignment-fixer',
       label: 'Položaj broja stranice',
-      params: {},
+      params: { align },
       violated: isViolated('page-number-alignment', checks),
     },
   ];

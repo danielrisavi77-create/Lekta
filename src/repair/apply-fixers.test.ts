@@ -723,6 +723,26 @@ describe('applyFixers golden round-trip', () => {
     expect(newStylesXml).toBe(fixture.stylesXml);
   });
 
+  // RE-04: params.align se sada STVARNO propagira (prije je fixer imao tvrdo upisano 'right' i
+  // ignorirao params). 'center' dokazuje propagaciju: default (bez params) uvijek daje 'right', pa
+  // 'right' ne bi razlikovao "propagirano" od "tvrdo upisano".
+  it('page-number-alignment-fixer: params.align se propagira (RE-04, ne samo tvrdo "right")', async () => {
+    const fixture = buildFooterHeaderDocx({ 'word/footer1.xml': footerPagePart('left') });
+    const originalDocx = await writeZip(fixture.entries);
+
+    const result = await applyFixers(originalDocx, [
+      { ruleId: 'poravnanje-broja-stranice', fixerId: 'page-number-alignment-fixer', params: { align: 'center' } },
+    ]);
+
+    expect(result.changelog).toHaveLength(1);
+    expect(result.changelog[0].afterLabel).toBe('Poravnanje broja stranice: sredina');
+
+    const newEntries = await readZip(result.docxBytes);
+    const dec = new TextDecoder();
+    const newFooterXml = dec.decode(newEntries.find((e) => e.name === 'word/footer1.xml')!.data);
+    expect(newFooterXml).toContain('<w:jc w:val="center"/>');
+  });
+
   it('page-number-alignment-fixer: no-op kad je PAGE polje vec desno poravnato', async () => {
     const fixture = buildFooterHeaderDocx({ 'word/footer1.xml': footerPagePart('right') });
     const originalDocx = await writeZip(fixture.entries);

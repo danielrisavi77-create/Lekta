@@ -129,8 +129,10 @@ function runFixer(fixerId: FixerId, parts: DocxXmlParts, rawParams: Record<strin
       const p = params as { deep?: boolean };
       return footnoteSpacingFixer(parts, p.deep === true);
     }
-    case 'page-number-alignment-fixer':
-      return pageNumberAlignmentFixer(parts);
+    case 'page-number-alignment-fixer': {
+      const p = params as { align?: 'left' | 'center' | 'right' };
+      return pageNumberAlignmentFixer(parts, p.align);
+    }
     case 'toc-field-fixer': {
       const p = params as { target?: TocFieldTarget };
       return p.target && typeof p.target.sadrzajParagraphIndex === 'number'

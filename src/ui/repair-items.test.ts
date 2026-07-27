@@ -229,30 +229,43 @@ describe('footnoteSpacingRepairableItem (razmak prije/poslije fusnota, ovisi o p
 });
 
 describe('pageNumberAlignmentRepairableItem (poravnanje broja stranice, ovisi o profilu)', () => {
-  it('prazno kad profil ne provjerava poravnanje broja stranice (pageNumberAlignment nije true)', () => {
+  it('prazno kad profil ne provjerava poravnanje broja stranice (pageNumberAlignment falsy)', () => {
     expect(pageNumberAlignmentRepairableItem([FAIL('Položaj broja stranice')], {})).toEqual([]);
     expect(
       pageNumberAlignmentRepairableItem([FAIL('Položaj broja stranice')], { pageNumberAlignment: false }),
     ).toEqual([]);
   });
 
-  it('profil provjerava poravnanje, check prolazi -> violated:false', () => {
+  // RE-04: svi profili u data/ nose STRING "right" (ne boolean true); gate koji trazi doslovni
+  // `=== true` je bio MRTAV za svaki stvarni profil. Gate je sada na truthy, a STRING vrijednost
+  // ide u params.align (fixer ju je dosad ignorirao i imao tvrdo upisano 'right').
+  it('profil provjerava poravnanje u STVARNOM obliku iz data/ (string "right"), check prolazi -> violated:false, align u params', () => {
     const items = pageNumberAlignmentRepairableItem(
       [PASS('Položaj broja stranice')],
-      { pageNumberAlignment: true },
+      { pageNumberAlignment: 'right' },
     );
     expect(items).toEqual([
-      { ruleId: 'page-number-alignment-universal', fixerId: 'page-number-alignment-fixer', label: 'Položaj broja stranice', params: {}, violated: false },
+      { ruleId: 'page-number-alignment-universal', fixerId: 'page-number-alignment-fixer', label: 'Položaj broja stranice', params: { align: 'right' }, violated: false },
     ]);
   });
 
-  it('profil provjerava poravnanje, check ne prolazi -> violated:true', () => {
+  it('profil provjerava poravnanje (string "right"), check ne prolazi -> violated:true', () => {
+    const items = pageNumberAlignmentRepairableItem(
+      [FAIL('Položaj broja stranice')],
+      { pageNumberAlignment: 'right' },
+    );
+    expect(items).toEqual([
+      { ruleId: 'page-number-alignment-universal', fixerId: 'page-number-alignment-fixer', label: 'Položaj broja stranice', params: { align: 'right' }, violated: true },
+    ]);
+  });
+
+  it('legacy boolean true (bez konkretne vrijednosti u profilu) i dalje radi, align defaultira na "right"', () => {
     const items = pageNumberAlignmentRepairableItem(
       [FAIL('Položaj broja stranice')],
       { pageNumberAlignment: true },
     );
     expect(items).toEqual([
-      { ruleId: 'page-number-alignment-universal', fixerId: 'page-number-alignment-fixer', label: 'Položaj broja stranice', params: {}, violated: true },
+      { ruleId: 'page-number-alignment-universal', fixerId: 'page-number-alignment-fixer', label: 'Položaj broja stranice', params: { align: 'right' }, violated: true },
     ]);
   });
 });
