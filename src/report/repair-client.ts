@@ -93,7 +93,10 @@ export type RepairOutcome =
   | { kind: 'ok'; docxBytes: Uint8Array; fileName: string; changelog: RepairChange[]; skipped: string[]; slotId?: string; jobId?: string | null; sourceCheck: RepairSourceCheck | null }
   | { kind: 'tier_mismatch'; suggestedWorkType: string }
   | { kind: 'paywall'; workType: ReportWorkType }
-  | { kind: 'rate_limited' }
+  // RE-33: reason razlikuje placeni dnevni strop od besplatne kvote (po korisniku ili po IP-u),
+  // da poruka ne tvrdi "besplatnih" i kad je posrijedi placeni mod ili dijeljeni IP koji korisnik
+  // osobno nije potrosio. Odsutan (stari server bez K-oznake) -> generic fallback tekst.
+  | { kind: 'rate_limited'; reason?: 'free_user' | 'free_ip' | 'paid_daily' }
   | { kind: 'unauthorized' }
   | { kind: 'too_large' }
   | { kind: 'no_live_fixers' }
@@ -240,7 +243,11 @@ export async function uploadRepair(
     const wt = data.workType && isReportWorkType(data.workType) ? data.workType : meta.workType;
     return { kind: 'paywall', workType: wt };
   }
-  if (res.status === 429) return { kind: 'rate_limited' };
+  if (res.status === 429) {
+    const data = (await res.json().catch(() => ({}))) as { reason?: string };
+    const reason = data.reason === 'free_user' || data.reason === 'free_ip' || data.reason === 'paid_daily' ? data.reason : undefined;
+    return { kind: 'rate_limited', reason };
+  }
   if (res.status === 401) return { kind: 'unauthorized' };
   if (res.status === 413) return { kind: 'too_large' };
   if (res.status === 415) return { kind: 'invalid_docx' };

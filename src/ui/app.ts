@@ -34,7 +34,7 @@ import { workTypesForSelection, defaultWorkTypeForProgram, citationForDefinition
 import { INSTITUTIONAL_COVERAGE_MATRIX, COVERAGE_STATUS_META, CORPUS_STATS } from '../coverage/coverage-loader';
 import { FPZG_SUBMISSION_CALENDAR as _FPZG_CAL, ACADEMIC_DEADLINES } from '../submission/submission-loader';
 import { renderDeadlineReminderToggleIfAvailable } from './deadline-reminder-toggle';
-import { renderRepairPanel } from './repair-panel';
+import { renderRepairPanel, renderConfirmation } from './repair-panel';
 import { buildFindingViewModels, findingCardHtml, topFindings, type FindingSessionState, type FindingViewModel } from './finding-view-model';
 import { collectAllPreviewFlags } from '../preview/preview-anchors';
 import { resultReadiness } from './result-readiness';
@@ -1363,6 +1363,10 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
  wrap.appendChild(consentRow);
  const btn=document.createElement('button');btn.type='button';btn.className='lekta-repair-panel__download';btn.disabled=true;btn.textContent='Popravi sve jednim klikom';
  wrap.appendChild(btn);
+ // RE-19: potvrdni korak za stavke koje traze potvrdu lokacije (K6 section-insert), isti obrazac
+ // i CSS klase kao lokalni panel (renderConfirmation, dijeljen iz repair-panel.ts).
+ const confirmBox=document.createElement('div');confirmBox.className='lekta-repair-panel__confirm-box';confirmBox.hidden=true;
+ wrap.appendChild(confirmBox);
  const summary=document.createElement('div');summary.className='lekta-repair-panel__summary';summary.hidden=true;
  wrap.appendChild(summary);
  mount.appendChild(wrap);
@@ -1378,7 +1382,15 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
  // RE-37: uspjesan popravak TRAJNO zakljucava gumb (umjesto povratka na identican CTA), da drugi
  // klik ne posalje drugi upload/potrosi drugi slot jer korisnik misli da se nista nije dogodilo.
  let lockButton=false;
+ // RE-20: in-flight cuvar dijeljen izmedju glavnog gumba i "Nastavi svejedno" (koji zove isti go()):
+ // disable-first, PRIJE ijednog awaita, da dvostruki klik ne posalje dva uploada/potrosi dva slota.
+ let inFlight=false;
  async function go(confirmedMismatch: boolean){
+  if(inFlight)return;
+  inFlight=true;
+  const orig=btn.textContent;
+  btn.disabled=true;
+  try{
   // Velicina se provjerava PRIJE prijave i uploada: server bi isti dokument odbio tek nakon punog
   // prijenosa (413), a to je na studentskom uplinku minuta cekanja za poruku koju znamo unaprijed.
   if(file&&Number(file.size)>REPAIR_MAX_UPLOAD_BYTES){setSummary(`<strong>Dokument je prevelik za automatski popravak.</strong> Granica je ${Math.round(REPAIR_MAX_UPLOAD_BYTES/1024/1024)} MB, a ova datoteka ima ${(Number(file.size)/1024/1024).toFixed(1)} MB. Najčešći razlog su slike u punoj rezoluciji; smanji ih u Wordu (Format slike, Komprimiraj slike) pa pokušaj ponovno.`);return}
@@ -1387,7 +1399,7 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
   // Bez trenja: anonimna sesija se otvara tiho. Pad na e-mail prijavu samo ako anonimne nisu ukljucene.
   const token: any=await ensureAccessToken();
   if(authConfigured()&&!token){openAuth(()=>go(confirmedMismatch));return}
-  btn.disabled=true;const orig=btn.textContent;btn.textContent='Šaljem na server…';
+  btn.textContent='Šaljem na server…';
   try{
    // Zahvat u tekst ide SAMO ako je korisnik za tu stavku izricito kvacnuo "Primijeni".
    const okTextIds=new Set(Array.from(wrap.querySelectorAll('[data-text-apply]')).filter((c: any)=>c.checked).map((c: any)=>c.value));
@@ -1404,7 +1416,13 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
    const ac=new AbortController(),timer=setTimeout(()=>ac.abort(),REPAIR_TIMEOUT_MS);
    let out: any;
    try{out=await uploadRepair(repairConfig(),token||'',bytes,meta,fetch,{signal:ac.signal})}finally{clearTimeout(timer)}
-   if(out.kind==='ok'){
+   if(out.kind==='ok'&&out.changelog.length===0){
+    // RE-32: server namjerno NIJE trosio slot/kvotu ni pohranio posao kad nema stvarnih izmjena
+    // (vidi repair-docx/index.ts korak 7a); gumb NIJE zakljucan (lockButton ostaje false) jer
+    // korisnik moze smisleno pokusati ponovno s drugim odabirom stavki.
+    const skippedLabels=out.skipped.map((s: string)=>[...items,...textItems].find((i: any)=>i.ruleId===s)?.label||s);
+    setSummary(`<strong>Nije bilo potrebnih izmjena.</strong> Odabrane stavke su već usklađene ili ih nismo mogli automatski primijeniti na ovom dokumentu.${skippedLabels.length?` <p>Nije primijenjeno: ${skippedLabels.map(escapeHtml).join(', ')}.</p>`:''}`);
+   } else if(out.kind==='ok'){
     lockButton=true;
     // Preuzimanje NE krece automatski: a.click() nakon await-a preglednik cesto blokira (nema
     // korisnicke geste iza sebe), pa je preuzimanje IZRICIT gumb; klik je gesta koju preglednik postuje.
@@ -1466,7 +1484,9 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
     setSummary(`<p>Za popravak je potrebna kupnja odgovarajuće vrste rada.</p>${paywallLockHtml('Automatski popravak dokumenta')}`);wireLockCtas();
    }
    else if(out.kind==='unauthorized'){openAuth(()=>go(confirmedMismatch))}
-   else if(out.kind==='rate_limited'){setSummary('<strong>Dnevni limit besplatnih popravaka je iskorišten.</strong> Prozor je 24 sata, pa pokušaj ponovno sutra. Ručne upute iznad i dalje vrijede.')}
+   // RE-33: razlog razlikuje placeni dnevni strop (uopce ne spominje "besplatno") od besplatne
+   // kvote (po korisniku ili po dijeljenom IP-u, gdje korisnik OSOBNO nije nuzno nista potrosio).
+   else if(out.kind==='rate_limited'){setSummary(out.reason==='paid_daily'?'<strong>Dnevni limit zahtjeva je iskorišten.</strong> Prozor je 24 sata, pa pokušaj ponovno sutra.':out.reason==='free_ip'?'<strong>Dnevni limit besplatnih popravaka za ovu mrežu/uređaj je iskorišten.</strong> Prozor je 24 sata; pokušaj ponovno sutra ili s drugog uređaja.':'<strong>Dnevni limit besplatnih popravaka je iskorišten.</strong> Prozor je 24 sata, pa pokušaj ponovno sutra. Ručne upute iznad i dalje vrijede.')}
    else if(out.kind==='too_large'){setSummary(`<strong>Dokument je prevelik za automatski popravak na serveru.</strong> Granica je ${Math.round(REPAIR_MAX_UPLOAD_BYTES/1024/1024)} MB. Najčešći razlog su slike u punoj rezoluciji; smanji ih u Wordu pa pokušaj ponovno.`)}
    // Ova dva ishoda su RAZLICITA: invalid_docx govori o dokumentu, no_live_fixers o serverskoj
    // konfiguraciji. Spojeni su krivo optuzivali korisnikov rad za nase gasenje fixera.
@@ -1477,9 +1497,23 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
    else if(out.kind==='error'){setSummary(escapeHtml(out.message||'Popravak trenutačno nije dostupan.'))}
    else{setSummary('Popravak trenutačno nije dostupan. Pokušaj ponovno za koji trenutak.')}
   }catch(e: any){console.error('Server repair:',e);setSummary('Greška pri popravku na serveru. Ručne upute iznad i dalje vrijede.')}
-  finally{if(!lockButton){btn.disabled=false;btn.textContent=orig}}
+  }finally{
+   inFlight=false;
+   if(!lockButton){btn.disabled=false;btn.textContent=orig}
+  }
  }
- btn.onclick=()=>go(false);
+ // RE-19: prikazi potvrdni korak PRIJE poziva go() kad je odabrana stavka koja trazi potvrdu
+ // lokacije (K6 section-insert); go() se poziva tek iz "Potvrdi i popravi" (isti obrazac kao
+ // lokalni panel). "Nastavi svejedno" (data-repair-confirm, tier_mismatch) zove go(true) izravno:
+ // do te tocke je lokacija vec jednom potvrdjena u prvom pokusaju iste serije odabira.
+ btn.onclick=()=>{
+  const needsConfirm=getCheckedItems().filter((it: any)=>it.requiresConfirmation);
+  if(needsConfirm.length){
+   renderConfirmation(confirmBox,needsConfirm,()=>{confirmBox.hidden=true;confirmBox.innerHTML='';void go(false)});
+   return;
+  }
+  void go(false);
+ };
 }
 
 // Provjera prije predaje: cloud forenzika izvornosti. Sekcija (i tab) postoje

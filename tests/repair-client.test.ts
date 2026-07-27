@@ -213,6 +213,25 @@ describe('uploadRepair', () => {
     expect((await uploadRepair(config, 'j', new Uint8Array([1]), meta(), async () => res(415, {}))).kind).toBe('invalid_docx');
   });
 
+  // RE-33: 429 nosi razlog da poruka ne tvrdi "besplatnih" i kad je posrijedi placeni strop ili
+  // dijeljeni IP-cap (korisnik osobno nije nista potrosio).
+  it('429 nosi reason kad ga server posalje (free_user/free_ip/paid_daily)', async () => {
+    for (const reason of ['free_user', 'free_ip', 'paid_daily'] as const) {
+      const out = await uploadRepair(config, 'j', new Uint8Array([1]), meta(), async () => res(429, { reason }));
+      expect(out).toEqual({ kind: 'rate_limited', reason });
+    }
+  });
+
+  it('429 bez reason (stari server) -> reason undefined, ne baca', async () => {
+    const out = await uploadRepair(config, 'j', new Uint8Array([1]), meta(), async () => res(429, {}));
+    expect(out).toEqual({ kind: 'rate_limited', reason: undefined });
+  });
+
+  it('429 s nepoznatim reason stringom se odbacuje (whitelist)', async () => {
+    const out = await uploadRepair(config, 'j', new Uint8Array([1]), meta(), async () => res(429, { reason: 'nesto-drugo' }));
+    expect(out).toEqual({ kind: 'rate_limited', reason: undefined });
+  });
+
   it('422 no_live_fixers vs ostalo', async () => {
     expect((await uploadRepair(config, 'j', new Uint8Array([1]), meta(), async () => res(422, { error: 'no_live_fixers' }))).kind).toBe('no_live_fixers');
     expect((await uploadRepair(config, 'j', new Uint8Array([1]), meta(), async () => res(422, { error: 'invalid_docx' }))).kind).toBe('invalid_docx');

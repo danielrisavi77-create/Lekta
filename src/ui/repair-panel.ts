@@ -224,7 +224,7 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
  * ce se tocno napraviti i gdje, pa trazi izricit klik prije primjene. onConfirm se poziva
  * tek na "Potvrdi i popravi"; "Odustani" samo zatvori okvir (nista se ne mijenja).
  */
-function renderConfirmation(box: HTMLElement, items: RepairableItem[], onConfirm: () => void): void {
+export function renderConfirmation(box: HTMLElement, items: RepairableItem[], onConfirm: () => void): void {
   box.hidden = false;
   const texts = items.map((i) => i.confirmationText || `Potvrdi popravak: ${i.label}`);
   box.innerHTML =

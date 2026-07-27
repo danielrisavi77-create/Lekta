@@ -4,7 +4,11 @@
 //
 // Vjeran obrascu generate-report/index.ts: tanki glue (HTTP/JWT/SQL), a ODLUKE donose ciste,
 // testirane funkcije (decideReportAccess, unambiguousMismatch, applyFixers) koje pokriva npm run check.
-// Server racuna otisak iz parsedStructure (kao generate-report), pa lazirani otisak ne dobiva tudji slot.
+// RE-18 (2026-07-27): otisak se racuna iz STVARNO UPLOADANIH bajtova (extractFingerprintInputFromDocx
+// nad word/document.xml + styles.xml), NIKAD iz klijentske meta.parsedStructure - inace bi lazirana
+// meta (kopirana iz ranije analize) omogucila da se jedan potroseni slot "posudi" za popravak bilo
+// kojeg drugog dokumenta iste vrste rada. Slot/kvota se trose TEK nakon sto applyFixers stvarno nesto
+// promijeni (korak 7a, RE-17/RE-32): pao popravak ili 0 izmjena vise ne kostaju nista.
 //
 // STATUS NACRTA (NIJE deployano):
 //  - Tok auth -> mismatch-gate -> entitlement -> applyFixers -> vrati docx je KOMPLETAN i koristi
@@ -21,6 +25,8 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.110.2';
 import { corsHeadersFor } from '../_shared/cors.ts';
 import { hashClientIpSalted } from '../_shared/hash-ip.ts';
 import { computeFingerprint } from '../../../src/fingerprint/fingerprint.ts';
+import { extractFingerprintInputFromDocx } from '../../../src/fingerprint/extract-from-docx.ts';
+import { readZip } from '../../../src/repair/zip-codec.ts';
 import { isReportWorkType } from '../../../src/report/pricing.ts';
 import { decideReportAccess } from '../../../src/report/slot-logic.ts';
 import { coverageTierForStatus } from '../../../src/report/guarantee.ts';
@@ -268,13 +274,34 @@ Deno.serve(async (req: Request) => {
     }
     if (!requests.length) return json({ error: 'no_live_fixers' }, 422);
 
-    // 5. otisak iz parsedStructure (serverski) + naplatni gate ILI besplatna beta (FREE_MODE)
-    const fingerprint = computeFingerprint(meta.parsedStructure);
+    // 5. otisak IZ STVARNIH bajtova (RE-18): document.xml/styles.xml se citaju direktno iz
+    //    uploadanog zipa, NIKAD iz klijentske meta.parsedStructure. Prije je otisak dolazio iz
+    //    klijentskog JSON-a pa je jedan potroseni slot mogao "posuditi" identitet za popravak
+    //    BILO KOJEG drugog dokumenta iste vrste rada (isti meta, zamijenjen file). title/author
+    //    se namjerno ne pokusavaju izvuci (naslovnica varijante); computeFingerprint pada na prvi H1.
+    let fingerprint: ReturnType<typeof computeFingerprint>;
+    try {
+      const entries = await readZip(docxBytes);
+      const decoder = new TextDecoder();
+      const documentEntry = entries.find((e) => e.name === 'word/document.xml');
+      const stylesEntry = entries.find((e) => e.name === 'word/styles.xml');
+      if (!documentEntry) return json({ error: 'invalid_docx' }, 422);
+      fingerprint = computeFingerprint(extractFingerprintInputFromDocx(
+        decoder.decode(documentEntry.data),
+        stylesEntry ? decoder.decode(stylesEntry.data) : '',
+      ));
+    } catch (_e) {
+      return json({ error: 'invalid_docx' }, 422);
+    }
     const ipHash = await hashClientIpSalted(req.headers.get('x-forwarded-for'), IP_HASH_SALT, SERVICE_ROLE);
     const log = (status: string, sId: string | null) =>
       admin.from('report_generations').insert({ user_id: user.id, slot_id: sId, doc_fingerprint: fingerprint, ip_hash: ipHash, status });
 
-    let slotId: string | null = null;
+    // Naplatni gate ILI besplatna beta (FREE_MODE): ODLUCI ovdje (rate_limited/payment_required
+    // vracaju odmah, ne trose nista), ali STVARNU potrosnju (RPC/log upis) odgodi u `commit` do
+    // koraka 7a: RE-17/RE-32, pao popravak (422) ili uspjeh s 0 izmjena vise NE smiju trositi
+    // placeni slot ni besplatnu dnevnu kvotu bez ijedne stvarne izmjene.
+    let commit: () => Promise<{ slotId: string | null; entitlementFailed?: boolean }>;
     if (FREE_MODE) {
       // Besplatna beta: bez naplate i bez slota (slot_id null), ali rate-limit OSTAJE, i to DVOSTRUK.
       //
@@ -289,8 +316,9 @@ Deno.serve(async (req: Request) => {
       //    blokadu (korisnik koji pokusava nikad ne izadje iz limita),
       //  - statusi izvjestaja ('new_slot', 'recheck', 'denied') pripadaju generate-reportu koji pise u
       //    ISTU tablicu, pa bi generirani izvjestaji trosili besplatne popravke,
-      //  - 'free' se biljezi TEK nakon uspjesnog popravka (nize), a 'repair_failed' vrijedi jedan
-      //    pokusaj: neuspio popravak tako kosta jedan slot umjesto dva, ali ni ne ostaje neogranicen.
+      //  - 'free' se biljezi TEK nakon uspjesnog popravka s >0 izmjena (7a), a 'repair_failed'
+      //    vrijedi jedan pokusaj (RE-17 catch grana ispod); nula-izmjena (RE-32) se NE biljezi
+      //    uopce, ne trosi kvotu jer korisnik nista nije dobio ali ni izgubio.
       const since = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
       const COUNTED = ['free', 'repair_failed'];
       const [{ count: recentUser }, { count: recentIp }] = await Promise.all([
@@ -299,10 +327,11 @@ Deno.serve(async (req: Request) => {
         admin.from('report_generations').select('id', { count: 'exact', head: true })
           .eq('ip_hash', ipHash).in('status', COUNTED).gt('created_at', since),
       ]);
-      if ((recentUser ?? 0) >= FREE_DAILY_CAP || (recentIp ?? 0) >= FREE_IP_DAILY_CAP) {
-        await log('rate_limited', null);
-        return json({ error: 'rate_limited' }, 429);
-      }
+      // RE-33: 429 nosi razlog, da klijent ne mora tvrditi "besplatnih" i kad je posrijedi
+      // dijeljeni IP-cap (korisnik osobno nije potrosio nista) ili placeni dnevni strop.
+      if ((recentUser ?? 0) >= FREE_DAILY_CAP) { await log('rate_limited', null); return json({ error: 'rate_limited', reason: 'free_user' }, 429); }
+      if ((recentIp ?? 0) >= FREE_IP_DAILY_CAP) { await log('rate_limited', null); return json({ error: 'rate_limited', reason: 'free_ip' }, 429); }
+      commit = async () => { await log('free', null); return { slotId: null }; };
     } else {
       const { data: partner } = await admin
         .from('partner_accounts').select('status, daily_cap').eq('user_id', user.id).maybeSingle();
@@ -326,22 +355,25 @@ Deno.serve(async (req: Request) => {
         recentGenerationCount: recent ?? 0,
       }, { dailyCap });
 
-      if (decision.decision === 'rate_limited') { await log('rate_limited', null); return json({ error: 'rate_limited' }, 429); }
+      if (decision.decision === 'rate_limited') { await log('rate_limited', null); return json({ error: 'rate_limited', reason: 'paid_daily' }, 429); }
       if (decision.decision === 'payment_required') { await log('denied', null); return json({ error: 'payment_required', workType: decision.workType }, 402); }
 
       if (decision.decision === 'recheck') {
-        slotId = decision.slotId; await log('recheck', slotId);
+        const slotId = decision.slotId;
+        commit = async () => { await log('recheck', slotId); return { slotId }; };
       } else {
         const label = (fingerprint.titleNorm || 'rad').slice(0, 60);
         const coverageTier = coverageTierForStatus(meta.profileStatus);
         const profileRef = meta.profileRef ?? null;
-        const { data: slot, error } = await admin.rpc('consume_slot_and_bind', {
-          p_entitlement_id: decision.entitlementId, p_user_id: user.id, p_work_type: workType,
-          p_fingerprint: fingerprint, p_label: label, p_slot_expires_at: decision.newSlot.slotExpiresAt,
-          p_profile_ref: profileRef, p_coverage_tier: coverageTier,
-        });
-        if (error || !slot) { await log('denied', null); return json({ error: 'payment_required', workType }, 402); }
-        slotId = (slot as any).id; await log('new_slot', slotId);
+        commit = async () => {
+          const { data: slot, error } = await admin.rpc('consume_slot_and_bind', {
+            p_entitlement_id: decision.entitlementId, p_user_id: user.id, p_work_type: workType,
+            p_fingerprint: fingerprint, p_label: label, p_slot_expires_at: decision.newSlot.slotExpiresAt,
+            p_profile_ref: profileRef, p_coverage_tier: coverageTier,
+          });
+          if (error || !slot) { await log('denied', null); return { slotId: null, entitlementFailed: true }; }
+          const sId = (slot as any).id; await log('new_slot', sId); return { slotId: sId };
+        };
       }
     }
 
@@ -358,14 +390,31 @@ Deno.serve(async (req: Request) => {
     try {
       result = await applyFixers(docxBytes, requests);
     } catch (_e) {
-      await log('repair_failed', slotId);
+      // RE-17: nijedan slot/kvota nije jos potrosen (commit se zove tek ispod), pa pao popravak
+      // vise ne kosta nista. 'repair_failed' se ipak biljezi (slotId uvijek null) da FREE_MODE
+      // racuna neuspjeli pokusaj kao jedan slot, ne dva (isti razlog kao ranije).
+      await log('repair_failed', null);
       return json({ error: 'invalid_docx' }, 422);
     }
 
-    // Besplatna beta: potrosnja se biljezi TEK sada, kad je popravak stvarno napravljen. Ranije je
-    // redak isao prije popravka, pa je neuspio pokusaj trosio dva slota od deset (jedan 'free' i
-    // jedan 'repair_failed'), a korisnik nije dobio nista.
-    if (FREE_MODE) await log('free', null);
+    // 7a. RE-32: 0 stvarnih izmjena vise NIJE "uspjeh" koji trosi slot/kvotu ili pise u "Moji
+    //     popravci" - dokument je vec uskladjen (ili nista od trazenog nije bilo primjenjivo), pa
+    //     se vraca bit-identican dokument BEZ ikakve potrosnje. changelog:[] u odgovoru je signal
+    //     klijentu da ne tvrdi "Popravljeno".
+    if (result.changelog.length === 0) {
+      const sourceCheck = await corpusPromise;
+      return json({
+        docxBase64: toBase64(result.docxBytes),
+        fileName: (meta.fileName ? String(meta.fileName).replace(/\.docx$/i, '') : 'rad') + '-popravljeno.docx',
+        changelog: [], skipped: result.skipped,
+        slotId: null, jobId: null, fingerprint, sourceCheck,
+      }, 200);
+    }
+
+    // RE-17: popravak je STVARNO nesto promijenio - tek sada trosimo slot/kvotu.
+    const committed = await commit();
+    if (committed.entitlementFailed) return json({ error: 'payment_required', workType }, 402);
+    const slotId = committed.slotId;
 
     // 8. WS-6: pohrana originala + rezultata (retencija do brisanja). Ne blokira odgovor ako padne.
     let jobId: string | null = null;
