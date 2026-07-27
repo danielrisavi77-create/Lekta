@@ -177,15 +177,22 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
       const docxBytes = await ctx.getDocxBytes();
       const result = await applyFixers(docxBytes, requests);
 
-      const skippedLabels = result.skipped
-        .map((ruleId) => ctx.items.find((i) => i.ruleId === ruleId)?.label || ruleId);
+      // RE-36/41: "vec uskladjeno" (nema se sto popraviti) i "nije bilo moguce" izgledaju
+      // identicno kad se ne razdvoje, pa uredan rad u "uskladi sve" toku djeluje kao kvar.
+      const reasons = result.skippedReasons ?? {};
+      const alreadyOk: string[] = [];
+      const cannotFix: string[] = [];
+      for (const ruleId of result.skipped) {
+        const label = ctx.items.find((i) => i.ruleId === ruleId)?.label || ruleId;
+        (reasons[ruleId] === 'already-ok' ? alreadyOk : cannotFix).push(label);
+      }
       if (result.changelog.length === 0) {
         // Nijedan popravak nije primijenjen: NE isporucuj "popravljeni" dokument,
         // reci iskreno sto se dogodilo (fail-safe skip, npr. atribut ne postoji).
-        renderNothingApplied(summary, skippedLabels);
+        renderNothingApplied(summary, alreadyOk, cannotFix);
         return;
       }
-      renderSummary(summary, result.changelog, skippedLabels);
+      renderSummary(summary, result.changelog, alreadyOk, cannotFix);
       triggerDownload(result.docxBytes, buildFixedFileName(ctx.originalFileName));
       repairedBytes = result.docxBytes;
     } catch (err) {
@@ -256,7 +263,8 @@ function pluralRepairs(n: number): string {
 function renderSummary(
   el: HTMLElement,
   changelog: { ruleId: string; beforeLabel: string; afterLabel: string }[],
-  skippedLabels: string[],
+  alreadyOk: string[],
+  cannotFix: string[],
 ): void {
   el.hidden = false;
   el.innerHTML = `
@@ -266,7 +274,8 @@ function renderSummary(
         .map((c) => `<li>${escapeHtml(c.beforeLabel)} &rarr; ${escapeHtml(c.afterLabel)}</li>`)
         .join('')}
     </ul>
-    ${skippedLabels.length ? `<p>Nije bilo moguće automatski primijeniti: ${skippedLabels.map(escapeHtml).join(', ')}. Za to i dalje vrijede ručne upute iznad.</p>` : ''}
+    ${alreadyOk.length ? `<p>Već usklađeno, nije trebalo mijenjati: ${alreadyOk.map(escapeHtml).join(', ')}.</p>` : ''}
+    ${cannotFix.length ? `<p>Nije bilo moguće automatski primijeniti: ${cannotFix.map(escapeHtml).join(', ')}. Za to i dalje vrijede ručne upute iznad.</p>` : ''}
   `;
 }
 
@@ -356,11 +365,15 @@ function buildBeforeAfter(before: RepairScoreSnapshot, after: RepairScoreSnapsho
   return wrap;
 }
 
-function renderNothingApplied(el: HTMLElement, skippedLabels: string[]): void {
+function renderNothingApplied(el: HTMLElement, alreadyOk: string[], cannotFix: string[]): void {
   el.hidden = false;
+  // RE-36: kad je SVE odabrano vec uskladjeno, "nista nije primijenjeno" izgleda kao kvar iako je
+  // rad uredan; naslov se preokrene u pozitivnu poruku samo u tom slucaju.
+  const allAlreadyOk = alreadyOk.length > 0 && cannotFix.length === 0;
   el.innerHTML = `
-    <strong>Nijedan odabrani popravak nije bilo moguće automatski primijeniti.</strong>
-    ${skippedLabels.length ? `<p>Preskočeno: ${skippedLabels.map(escapeHtml).join(', ')}.</p>` : ''}
+    <strong>${allAlreadyOk ? 'Odabrano je već usklađeno, nije bilo potrebno ništa mijenjati.' : 'Nijedan odabrani popravak nije bilo moguće automatski primijeniti.'}</strong>
+    ${alreadyOk.length ? `<p>Već usklađeno: ${alreadyOk.map(escapeHtml).join(', ')}.</p>` : ''}
+    ${cannotFix.length ? `<p>Nije bilo moguće automatski primijeniti: ${cannotFix.map(escapeHtml).join(', ')}.</p>` : ''}
     <p>Dokument nije mijenjan. Ručne upute iznad i dalje vrijede.</p>
   `;
 }

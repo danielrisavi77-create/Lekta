@@ -194,7 +194,7 @@ function bind(){
  $$('.tab').forEach(b=>{b.onclick=()=>openTab(b.dataset.tab);b.onkeydown=(e: any)=>{if(!['ArrowRight','ArrowLeft','Home','End'].includes(e.key))return;const tabs=Array.from<any>(document.querySelectorAll('.tab')).filter((t: any)=>t.offsetParent!==null);const i=tabs.indexOf(b);if(i<0)return;e.preventDefault();const n=e.key==='Home'?0:e.key==='End'?tabs.length-1:e.key==='ArrowRight'?(i+1)%tabs.length:(i-1+tabs.length)%tabs.length;const t=tabs[n];openTab(t.dataset.tab);t.focus()}});$('#detailsToggle').onclick=()=>{const d=$('#tabDetails'),hidden=d.hasAttribute('hidden');if(hidden){d.removeAttribute('hidden');$('#detailsToggle').classList.add('open');$('#detailsToggle').setAttribute('aria-expanded','true');openTab('formatting')}else{d.setAttribute('hidden','');$('#detailsToggle').classList.remove('open');$('#detailsToggle').setAttribute('aria-expanded','false');openTab('overview')}};$('#issueFilters').onclick=(e: any)=>{const b=e.target.closest('[data-filter]');if(!b)return;$$('.filter-btn').forEach(x=>x.classList.toggle('active',x===b));renderIssues(b.dataset.filter)};$('#submissionChecklist').onchange=(e: any)=>{const c=e.target.closest('[data-submission-check]');if(c){saveSubmissionCheck(c.dataset.submissionCheck,c.checked);if(currentResult)renderSubmissionChecklist(currentResult)}};$('#submissionChecklist').onclick=(e: any)=>{const b=e.target.closest('[data-download-submission]');if(b){downloadSubmissionReport();return}const ph=e.target.closest('[data-open-phase]');if(ph){$('#resultView').classList.add('hidden');$('#wizardView').classList.remove('hidden');setWizardStep(3);const d=document.querySelector('.advanced-options');if(d)(d as any).open=true;document.querySelector('#analyzer')?.scrollIntoView({behavior:'smooth'});setTimeout(()=>$('#submissionPhase')?.focus(),350)}};$('#categoryGrid').onclick=(e: any)=>{const c=e.target.closest('[data-cat-tab]');if(!c)return;const t=c.dataset.catTab;if(t&&t!=='overview'){revealResultDetails();revealDetails();openTab(t)}};$('#categoryGrid').onkeydown=(e: any)=>{if(e.key!=='Enter'&&e.key!==' ')return;const c=e.target.closest('[data-cat-tab]');if(!c)return;e.preventDefault();c.click()};$$('.metric-jump').forEach(m=>{m.onclick=()=>{revealResultDetails();openTab(m.dataset.jump)};m.onkeydown=(e: any)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();revealResultDetails();openTab(m.dataset.jump)}}});{const dm=document.querySelector('.dl-menu'),db=dm?.querySelector('.dl-menu-btn');if(dm&&db){const set=(v: any)=>db.setAttribute('aria-expanded',v?'true':'false');dm.addEventListener('mouseenter',()=>set(true));dm.addEventListener('mouseleave',()=>set(false));dm.addEventListener('focusin',()=>set(true));dm.addEventListener('focusout',()=>set(false));dm.addEventListener('keydown',(e: any)=>{if(e.key==='Escape'){set(false);document.activeElement&&(document.activeElement as any).blur&&(document.activeElement as any).blur()}})}}{const ph=$('#openPhaseFromHint');if(ph)ph.onclick=()=>{setWizardStep(3);const d=document.querySelector('.advanced-options');if(d)(d as any).open=true;const sp=$('#submissionPhase');if(sp){sp.focus();sp.scrollIntoView({behavior:'smooth',block:'center'})}}}
  $('#newAnalysis').onclick=resetAnalyzer;$('#previewModeCitljivo')&&($('#previewModeCitljivo').onclick=()=>setPreviewMode('citljivo'));$('#previewModeFaksimil')&&($('#previewModeFaksimil').onclick=()=>setPreviewMode('faksimil'));$('#closePreview')&&($('#closePreview').onclick=closePreview);$('#closePreviewBottom')&&($('#closePreviewBottom').onclick=closePreview);$('#previewModal')&&($('#previewModal').onclick=(e: any)=>{if(e.target.id==='previewModal')closePreview()});$('#reportWrongCheck')&&($('#reportWrongCheck').onclick=reportWrongCheck);$('#closeReport')&&($('#closeReport').onclick=closeReport);$('#cancelReport')&&($('#cancelReport').onclick=closeReport);$('#submitReport')&&($('#submitReport').onclick=submitReport);$('#reportModal')&&($('#reportModal').onclick=(e: any)=>{if(e.target.id==='reportModal')closeReport()});$('#printReport').onclick=()=>window.print();$('#downloadHtml').onclick=downloadHtmlReport;{const ub=$('#unlockReport');if(ub){ub.onclick=handleUnlockReport;ub.classList.toggle('hidden',!reportEndpointConfigured())}}$('#downloadJson').onclick=downloadResult;$('#orderFromResult').onclick=()=>openOrder('panic');$('#historyBtn').onclick=openHistory;$('#closeHistory').onclick=closeHistory;$('#closeHistoryBottom').onclick=closeHistory;$('#clearHistory').onclick=clearAnalysisHistory;$('#historyModal').onclick=(e: any)=>{if(e.target.id==='historyModal')closeHistory()};$('#historyList').onclick=handleHistoryAction;$('#repairHistoryBtn')&&($('#repairHistoryBtn').onclick=openRepairHistory);$('#closeRepairHistory')&&($('#closeRepairHistory').onclick=closeRepairHistory);$('#closeRepairHistoryBottom')&&($('#closeRepairHistoryBottom').onclick=closeRepairHistory);$('#repairHistoryModal')&&($('#repairHistoryModal').onclick=(e: any)=>{if(e.target.id==='repairHistoryModal')closeRepairHistory()});$('#repairHistoryList')&&($('#repairHistoryList').onclick=handleRepairHistoryAction);if(__DEV_TOOLS__){$('#qaBtn').onclick=openQa;$('#closeQa').onclick=closeQa;$('#closeQaBottom').onclick=closeQa;$('#qaModal').onclick=(e: any)=>{if(e.target.id==='qaModal')closeQa()};$('#downloadManifest').onclick=downloadProfileManifest;}$('#closeAuth')&&($('#closeAuth').onclick=closeAuth);$('#authSubmit')&&($('#authSubmit').onclick=authSubmit);$('#authChangeEmail')&&($('#authChangeEmail').onclick=authChangeEmail);$('#authModal')&&($('#authModal').onclick=(e: any)=>{if(e.target.id==='authModal')closeAuth()});$('#authCode')&&$('#authCode').addEventListener('keydown',(e: any)=>{if(e.key==='Enter')authSubmit()});$('#authEmail')&&$('#authEmail').addEventListener('keydown',(e: any)=>{if(e.key==='Enter'&&_authStep==='email')authSubmit()});$('#closeGuarantee')&&($('#closeGuarantee').onclick=closeGuarantee);$('#guaranteeSubmit')&&($('#guaranteeSubmit').onclick=submitGuaranteeClaim);$('#guaranteeModal')&&($('#guaranteeModal').onclick=(e: any)=>{if(e.target.id==='guaranteeModal')closeGuarantee()});$('#closeCheckoutConsent')&&($('#closeCheckoutConsent').onclick=closeCheckoutConsent);$('#cancelCheckoutConsent')&&($('#cancelCheckoutConsent').onclick=closeCheckoutConsent);$('#checkoutConsentModal')&&($('#checkoutConsentModal').onclick=(e: any)=>{if(e.target.id==='checkoutConsentModal')closeCheckoutConsent()});
  $$('.order-btn').forEach(b=>b.onclick=()=>openOrder(b.dataset.package));$('#closeModal').onclick=closeOrder;$('#cancelOrder').onclick=closeOrder;$('#orderModal').onclick=(e: any)=>{if(e.target.id==='orderModal')closeOrder()};$('#submitOrder').onclick=submitOrder;$('#orderDocument').onchange=updateOrderFileMeta;document.addEventListener('click',(e: any)=>{const b=e.target.closest('.legal-open');if(b){e.preventDefault();openLegal(b.dataset.legal)}});$('#closeLegal').onclick=closeLegal;$('#closeLegalBottom').onclick=closeLegal;$('#legalModal').onclick=(e: any)=>{if(e.target.id==='legalModal')closeLegal()};$('#privacySettingsBtn').onclick=openPrivacySettings;$('#analyticsAccept').onclick=()=>setAnalyticsConsent('granted');$('#analyticsDecline').onclick=()=>setAnalyticsConsent('denied');if(__DEV_TOOLS__){$('#closeSetup').onclick=closeSetup;$('#setupModal').onclick=(e: any)=>{if(e.target.id==='setupModal')closeSetup()};$('#saveProductionConfig').onclick=saveSetupConfig;$('#resetProductionConfig').onclick=resetSetupConfig;$('#exportProductionConfig').onclick=exportProductionConfig;}
- document.addEventListener('keydown',(e: any)=>{if(e.key==='Escape'){const _modalOpen=!!document.querySelector('.modal-backdrop:not(.hidden)');closeOrder();closeHistory();closeLegal();closeAuth();closeGuarantee();closeCheckoutConsent();closeReport();closePreview();if(__DEV_TOOLS__){closeQa();closeSetup()}if(!_modalOpen&&!$('#progressView').classList.contains('hidden'))cancelAnalysis()}if(__DEV_TOOLS__&&e.ctrlKey&&e.shiftKey&&e.key.toLowerCase()==='q'&&qaMode)openQa()});if(__DEV_TOOLS__&&setupMode)setTimeout(openSetup,250);['#institutionSelect','#unitSelect','#programSelect','#workType','#workVariant','#departmentSelect','#methodologySelect'].forEach(s=>$(s)?.addEventListener('change',()=>{_profileConfirmed=true}));$('#analyzeProfile')?.addEventListener('click',(e: any)=>{if(e.target.closest('[data-confirm-profile]')){_profileConfirmed=true;updateProfile();runAnalysis()}else if(e.target.closest('[data-change-profile]')){$('#institutionSelect')?.focus();$('#institutionSelect')?.scrollIntoView({behavior:'smooth',block:'center'})}else if(e.target.closest('[data-confirm-docgate]')){_intake.confirmedSuspicious=true;runAnalysis()}else if(e.target.closest('[data-change-docfile]')){setWizardStep(1);try{$('#dropzone')?.focus()}catch(err: any){}}});$('#wizardView')?.addEventListener('change',()=>{invalidateSpeculative();clearTimeout(_specTimer);_specTimer=setTimeout(()=>{startSpeculativeAnalysis()},450)});$('#stepBackDoc')&&($('#stepBackDoc').onclick=()=>{setWizardStep(1,true);try{$('#dropzone')?.focus()}catch(e: any){}});$('#stepToProfile')&&($('#stepToProfile').onclick=()=>{setWizardStep(2,true);try{$('#institutionSelect')?.focus()}catch(e: any){}});$('#stepToAnalyze')&&($('#stepToAnalyze').onclick=()=>{_profileConfirmed=true;updateProfile();setWizardStep(3,true);try{$('#analyzeBtn')?.focus()}catch(e: any){}});$('#stepBackProfile')&&($('#stepBackProfile').onclick=()=>{setWizardStep(2,true);try{$('#institutionSelect')?.focus()}catch(e: any){}});
+ document.addEventListener('keydown',(e: any)=>{if(e.key==='Escape'){const _modalOpen=!!document.querySelector('.modal-backdrop:not(.hidden)');closeOrder();closeHistory();closeLegal();closeAuth();closeGuarantee();closeCheckoutConsent();closeReport();closePreview();closeRepairHistory();if(__DEV_TOOLS__){closeQa();closeSetup()}if(!_modalOpen&&!$('#progressView').classList.contains('hidden'))cancelAnalysis()}if(__DEV_TOOLS__&&e.ctrlKey&&e.shiftKey&&e.key.toLowerCase()==='q'&&qaMode)openQa()});if(__DEV_TOOLS__&&setupMode)setTimeout(openSetup,250);['#institutionSelect','#unitSelect','#programSelect','#workType','#workVariant','#departmentSelect','#methodologySelect'].forEach(s=>$(s)?.addEventListener('change',()=>{_profileConfirmed=true}));$('#analyzeProfile')?.addEventListener('click',(e: any)=>{if(e.target.closest('[data-confirm-profile]')){_profileConfirmed=true;updateProfile();runAnalysis()}else if(e.target.closest('[data-change-profile]')){$('#institutionSelect')?.focus();$('#institutionSelect')?.scrollIntoView({behavior:'smooth',block:'center'})}else if(e.target.closest('[data-confirm-docgate]')){_intake.confirmedSuspicious=true;runAnalysis()}else if(e.target.closest('[data-change-docfile]')){setWizardStep(1);try{$('#dropzone')?.focus()}catch(err: any){}}});$('#wizardView')?.addEventListener('change',()=>{invalidateSpeculative();clearTimeout(_specTimer);_specTimer=setTimeout(()=>{startSpeculativeAnalysis()},450)});$('#stepBackDoc')&&($('#stepBackDoc').onclick=()=>{setWizardStep(1,true);try{$('#dropzone')?.focus()}catch(e: any){}});$('#stepToProfile')&&($('#stepToProfile').onclick=()=>{setWizardStep(2,true);try{$('#institutionSelect')?.focus()}catch(e: any){}});$('#stepToAnalyze')&&($('#stepToAnalyze').onclick=()=>{_profileConfirmed=true;updateProfile();setWizardStep(3,true);try{$('#analyzeBtn')?.focus()}catch(e: any){}});$('#stepBackProfile')&&($('#stepBackProfile').onclick=()=>{setWizardStep(2,true);try{$('#institutionSelect')?.focus()}catch(e: any){}});
  $('#resultBackDoc')&&($('#resultBackDoc').onclick=()=>{backToWizardFromResult(1);try{$('#dropzone')?.focus({preventScroll:true})}catch(e: any){}});$('#resultBackProfile')&&($('#resultBackProfile').onclick=()=>{backToWizardFromResult(2);try{$('#institutionSelect')?.focus({preventScroll:true})}catch(e: any){}});
  $('#paperCoverBtn')&&($('#paperCoverBtn').onclick=()=>revealAnalyzerForm(true));$('#uploadCtaBtn')&&($('#uploadCtaBtn').onclick=()=>revealAnalyzerForm(true));$('#paperCover')?.addEventListener('dragenter',()=>revealAnalyzerForm(false));document.addEventListener('click',(e: any)=>{if(e.target.closest('a[href="#analyzer"]'))revealAnalyzerForm(false)});
  $('#stepToProfile')?.addEventListener('click',()=>{void trackEvent('profile_step_opened',{})});
@@ -408,7 +408,11 @@ function repairDownloadName(j: any){const raw=String(j?.label||'').trim().replac
 function openRepairHistory(){$('#repairHistoryModal')?.classList.remove('hidden');trapModal($('#repairHistoryModal'));void renderRepairHistoryList()}
 function closeRepairHistory(){$('#repairHistoryModal')?.classList.add('hidden');releaseModal($('#repairHistoryModal'))}
 async function renderRepairHistoryList(){const el=$('#repairHistoryList');if(!el)return;el.innerHTML='<div class="empty">Učitavam…</div>';const token: any=await ensureAccessToken();if(authConfigured()&&!token){el.innerHTML='<div class="empty">Za pregled popravaka potrebna je prijava.</div>';openAuth(()=>renderRepairHistoryList());return}let jobs: any[]=[];try{jobs=await fetchRepairJobs(repairHistoryConfig(),token||'')}catch(e: any){el.innerHTML='<div class="empty">Popravke trenutačno nije moguće učitati.</div>';return}if(!jobs.length){el.innerHTML='<div class="empty">Još nemaš spremljenih popravaka. Pojave se ovdje nakon "Popravi sve".</div>';return}el.innerHTML=jobs.map((j: any)=>{const tier=tierFor(j.workType),date=j.createdAt?new Date(j.createdAt).toLocaleString('hr-HR'):'',mb=j.resultBytes?`${(j.resultBytes/1024/1024).toFixed(2)} MB`:'';return`<article class="history-card"><div class="history-head"><div><h4>${escapeHtml(j.label||'Popravljeni rad')}</h4><p>${escapeHtml(tier?tier.label:j.workType)}</p></div></div><div class="history-meta"><span>${escapeHtml(date)}</span>${j.changesCount!=null?`<span>${escapeHtml(_plIzmjena(j.changesCount))}</span>`:''}${mb?`<span>${escapeHtml(mb)}</span>`:''}</div><div class="history-actions"><button class="btn btn-secondary btn-sm" data-repair-download="${escapeHtml(j.id)}" data-path="${escapeHtml(j.resultPath)}" data-name="${escapeHtml(repairDownloadName(j))}">Preuzmi</button><button class="btn btn-ghost btn-sm" data-repair-del="${escapeHtml(j.id)}">Obriši</button></div></article>`}).join('');window.__lektaIcons?.()}
-async function handleRepairHistoryAction(e: any){const dl=e.target.closest('[data-repair-download]'),del=e.target.closest('[data-repair-del]');if(!dl&&!del)return;const token: any=await ensureAccessToken();if(authConfigured()&&!token){openAuth(()=>renderRepairHistoryList());return}if(dl){const path=dl.dataset.path,orig=dl.textContent;dl.disabled=true;dl.textContent='Pripremam…';try{let url=await signRepairDownload(repairHistoryConfig(),token||'',path);url+=(url.includes('?')?'&':'?')+'download='+encodeURIComponent(dl.dataset.name||'popravljeno.docx');const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener';a.click()}catch(err: any){toast('Preuzimanje trenutačno nije moguće.')}finally{dl.disabled=false;dl.textContent=orig}return}if(del){const id=del.dataset.repairDel;if(!confirm('Trajno obrisati ovaj popravak? Original i popravljena datoteka bit će uklonjeni sa servera.'))return;del.disabled=true;const out=await deleteRepairJob(repairHistoryConfig(),token||'',id);if(out.ok){toast('Popravak je obrisan.');void renderRepairHistoryList()}else{del.disabled=false;toast('Brisanje trenutačno nije moguće.')}return}}
+async function handleRepairHistoryAction(e: any){const dl=e.target.closest('[data-repair-download]'),del=e.target.closest('[data-repair-del]');if(!dl&&!del)return;const token: any=await ensureAccessToken();if(authConfigured()&&!token){openAuth(()=>renderRepairHistoryList());return}if(dl){const path=dl.dataset.path,orig=dl.textContent;dl.disabled=true;dl.textContent='Pripremam…';
+  // RE-39: a.click() NAKON awaita cesto je popup-blokiran (nema vise svjeze korisnicke geste iza sebe).
+  // Prazan tab se otvara SINKRONO, dok gesta jos vrijedi; URL se upisuje tek kad ga dobijemo.
+  const win=window.open('','_blank');
+  try{let url=await signRepairDownload(repairHistoryConfig(),token||'',path);url+=(url.includes('?')?'&':'?')+'download='+encodeURIComponent(dl.dataset.name||'popravljeno.docx');if(win){win.location.href=url}else{const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener';a.click()}}catch(err: any){if(win)win.close();toast('Preuzimanje trenutačno nije moguće.')}finally{dl.disabled=false;dl.textContent=orig}return}if(del){const id=del.dataset.repairDel;if(!confirm('Trajno obrisati ovaj popravak? Original i popravljena datoteka bit će uklonjeni sa servera.'))return;del.disabled=true;const out=await deleteRepairJob(repairHistoryConfig(),token||'',id);if(out.ok){toast('Popravak je obrisan.');void renderRepairHistoryList()}else{del.disabled=false;toast('Brisanje trenutačno nije moguće.')}return}}
 function applySelectionIds(p: any={}){setOptionIfExists($('#institutionSelect'),p.institution);populateUnits();setOptionIfExists($('#unitSelect'),p.unit);populatePrograms();setOptionIfExists($('#programSelect'),p.program);setOptionIfExists($('#workType'),p.workType);populateVariants();setOptionIfExists($('#workVariant'),p.variant);populateDepartments();setOptionIfExists($('#departmentSelect'),p.department);populateMethodology();setOptionIfExists($('#methodologySelect'),p.methodology);setOptionIfExists($('#citationStyle'),p.citation);syncProfileContext()}
 /* ?unit=<unitId> s alat-stranica (SEO citatne stranice i sl.): posjetitelj koji dolazi sa
    stranice SVOG fakulteta ne mora ga ponovno traziti u izborniku. Namjerno POSLIJE
@@ -892,23 +896,28 @@ function renderRepairCta(r: any){
   const mount=$('#repairPanelMount');
   const available=!r?.demo&&!!mount?.childElementCount;
   if(!available){el.classList.add('hidden');el.innerHTML='';return}
-  const auto=Number(r?.details?.triage?.counts?.auto)||0;
   el.classList.remove('hidden');
-  el.innerHTML=`<h3>Mogućnosti automatskog popravka</h3><p>${auto>0?`Dostupno je ${escapeHtml(String(auto))} ${auto===1?'podržano poboljšanje':'podržanih poboljšanja'}. Prije nastavka provjeri opseg popravka i podatkovni tok dokumenta.`:'Pregledaj koji su popravci podržani i pod kojim uvjetima se dokument obrađuje.'}</p><button type="button" class="triage-repair-cta" data-repair-entry><i data-lucide="wand-2"></i>Pregledaj mogućnosti popravka <span aria-hidden="true">→</span></button>`;
-  (el.querySelector('[data-repair-entry]') as any).onclick=()=>scrollToRepairPanel(r);
+  // RE-34: renderPhaseThreeRepairEntry pise u ISTI element odmah ispod, pa je posebna verzija
+  // teksta ovdje uvijek bila mrtva (odmah pregazena); jedini pisac je sad renderPhaseThreeRepairEntry.
   renderPhaseThreeRepairEntry(r);
   window.__lektaIcons?.();
 }
 
-// Automatski Word popravci u ovom proizvodu rade u pregledniku. To mora biti
-// vidljivo na samoj odluci, odvojeno od ručne usluge gdje se dokument prilaže
-// tek uz zasebnu privolu.
+// Copy mora biti gejtan na stvarni put popravka (repairServerConfigured()): server je LIVE po
+// defaultu, pa tvrdnja "ne salje se na posluzitelj" NIJE tocna kad god je repairEndpoint
+// konfiguriran (RE-34). Rucna obrada ostaje odvojena, uz zasebnu privolu.
 function renderPhaseThreeRepairEntry(r: any){
   const entry=$('#repairEntry'),order=$('#orderFromResult');
   if(order){order.textContent='Ručna obrada uz privolu';order.title='Dokument se za ručnu obradu prilaže tek nakon tvoje izričite privole.'}
   if(!entry||entry.classList.contains('hidden'))return;
   const auto=Number(r?.details?.triage?.counts?.auto)||0;
-  entry.innerHTML=`<h3>Automatski popravci na ovom uređaju</h3><p>${auto?`Možeš lokalno primijeniti ${auto} ${auto===1?'podržanu stavku':'podržane stavke'} i preuzeti novi Word dokument.`:'Pregledaj podržane lokalne popravke i preuzmi novi Word dokument.'} Dokument se pri tome ne šalje na poslužitelj.</p><button type="button" class="triage-repair-cta" data-repair-entry><i data-lucide="wand-2"></i>Odaberi lokalne popravke <span aria-hidden="true">→</span></button>`;
+  const serverSide=repairServerConfigured();
+  const heading=serverSide?'Automatski popravak':'Automatski popravci na ovom uređaju';
+  const action=auto
+    ?`${serverSide?'Možeš poslati na popravak':'Možeš lokalno primijeniti'} ${auto} ${auto===1?'podržanu stavku':'podržane stavke'} i preuzeti novi Word dokument.`
+    :`Pregledaj podržane ${serverSide?'':'lokalne '}popravke i preuzmi novi Word dokument.`;
+  const disclosure=serverSide?' Dokument se pritom šalje na server radi popravka i pohranjuje dok ga ne obrišeš.':' Dokument se pri tome ne šalje na poslužitelj.';
+  entry.innerHTML=`<h3>${escapeHtml(heading)}</h3><p>${action}${disclosure}</p><button type="button" class="triage-repair-cta" data-repair-entry><i data-lucide="wand-2"></i>${serverSide?'Pošalji na popravak':'Odaberi lokalne popravke'} <span aria-hidden="true">→</span></button>`;
   (entry.querySelector('[data-repair-entry]') as any).onclick=()=>scrollToRepairPanel(r);
 }
 // Most iz besplatne dijagnoze u placeni popravak: prebaci na karticu "Spremnost za predaju" gdje
@@ -1319,16 +1328,62 @@ function renderTextItemsSection(host: any,r: any,textItems: any[]){
 
 function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textItems: any[]=[]){
  const wrap=document.createElement('div');wrap.className='lekta-repair-panel';
- wrap.innerHTML=`<p><strong>Popravi sve jednim klikom.</strong> Dokument se šalje na server, popravi se i vraća gotov. Popravljaju se oblikovanje, numeriranje i struktura; ne diraju se sadržaj, citati ni argument. Datoteka se pohranjuje dok je ne obrišeš (Moji popravci); kod prijave bez e-maila najviše 30 dana.</p><label class="lekta-repair-panel__deep"><input type="checkbox" data-repair-consent><span>Pristajem da se dokument pošalje na server i pohrani do brisanja. Besplatna analiza ostaje na uređaju.</span></label><button type="button" class="lekta-repair-panel__download" data-repair-go disabled>Popravi sve jednim klikom</button><div class="lekta-repair-panel__summary" data-repair-summary hidden></div>`;
+ const intro=document.createElement('p');
+ intro.innerHTML='<strong>Popravi sve jednim klikom.</strong> Dokument se šalje na server, popravi se i vraća gotov. Popravljaju se oblikovanje, numeriranje i struktura; ne diraju se sadržaj, citati ni argument. Datoteka se pohranjuje dok je ne obrišeš (Moji popravci); kod prijave bez e-maila najviše 30 dana.';
+ wrap.appendChild(intro);
+ // RE-35: popis stavki (kao lokalni panel), ne skriveno "sve ili nista": prekrsene su predodabrane
+ // (opt-out), neprekrsene ("uskladi sve", Feature B) su opt-in.
+ const list=document.createElement('ul');list.className='lekta-repair-panel__list';
+ const ordered=[...items].sort((a: any,b: any)=>Number(b.violated!==false)-Number(a.violated!==false));
+ const firstExtraIdx=ordered.findIndex((i: any)=>i.violated===false);
+ ordered.forEach((item: any,orderIdx: number)=>{
+  const idx=items.indexOf(item),isViolated=item.violated!==false;
+  if(orderIdx===firstExtraIdx&&firstExtraIdx!==-1){
+   const sub=document.createElement('li');sub.className='lekta-repair-panel__subtitle';
+   sub.textContent=firstExtraIdx===0?'Sve prepoznato je usklađeno. Po želji dodatno uskladi:':'Uskladi i ostalo (trenutno nije prekršeno):';
+   list.appendChild(sub);
+  }
+  const li=document.createElement('li');li.className='lekta-repair-panel__item';
+  li.innerHTML=`<label><input type="checkbox" ${isViolated?'checked':''} data-idx="${idx}" /><span>${escapeHtml(item.label)}</span></label><span class="lekta-repair-panel__badge">${isViolated?'Možemo ovo popraviti umjesto tebe':'Uskladi s profilom'}</span>`;
+  list.appendChild(li);
+ });
+ wrap.appendChild(list);
+ // Isti v2 dubinski preklopnik i disclosure recenica kao lokalni panel (RE-35: prije je serverski
+ // put PRISILNO ukljucivao deep bez ijedne rijeci u copyju).
+ const deepAvailable=items.some((i: any)=>_SERVER_DEEP_FIXERS.has(i.fixerId));
+ let deepToggle: any=null;
+ if(deepAvailable){
+  const deepRow=document.createElement('label');deepRow.className='lekta-repair-panel__deep';
+  deepRow.innerHTML='<input type="checkbox" checked /><span>Ukloni i izravno formatiranje u tekstu (dubinsko usklađivanje). Netaknuti ostaju: naslovi i stilizirani dijelovi, podebljano/kurziv, centrirano, veće naslovne veličine, formule, tablice (prored/poravnanje), simbolski fontovi, tekstualni okviri i citatne kontrole (npr. Zotero/Mendeley). Tekst pisan drugim fontom uskladit će se s fontom profila.</span>';
+  wrap.appendChild(deepRow);
+  deepToggle=deepRow.querySelector('input');
+ }
+ const consentRow=document.createElement('label');consentRow.className='lekta-repair-panel__deep';
+ consentRow.innerHTML='<input type="checkbox" data-repair-consent><span>Pristajem da se dokument pošalje na server i pohrani do brisanja. Besplatna analiza ostaje na uređaju.</span>';
+ wrap.appendChild(consentRow);
+ const btn=document.createElement('button');btn.type='button';btn.className='lekta-repair-panel__download';btn.disabled=true;btn.textContent='Popravi sve jednim klikom';
+ wrap.appendChild(btn);
+ const summary=document.createElement('div');summary.className='lekta-repair-panel__summary';summary.hidden=true;
+ wrap.appendChild(summary);
  mount.appendChild(wrap);
  renderTextItemsSection(wrap,r,textItems);
- const consent: any=wrap.querySelector('[data-repair-consent]'),btn: any=wrap.querySelector('[data-repair-go]'),summary: any=wrap.querySelector('[data-repair-summary]');
+ const consent: any=consentRow.querySelector('input');
  const setSummary=(html: string)=>{summary.hidden=false;summary.innerHTML=html};
  consent.addEventListener('change',()=>{btn.disabled=!consent.checked});
+ function getCheckedItems(): any[]{
+  const checked: any[]=[];
+  list.querySelectorAll('input[type="checkbox"]').forEach((input: any)=>{if(input.checked)checked.push(items[Number(input.dataset.idx)])});
+  return checked;
+ }
+ // RE-37: uspjesan popravak TRAJNO zakljucava gumb (umjesto povratka na identican CTA), da drugi
+ // klik ne posalje drugi upload/potrosi drugi slot jer korisnik misli da se nista nije dogodilo.
+ let lockButton=false;
  async function go(confirmedMismatch: boolean){
   // Velicina se provjerava PRIJE prijave i uploada: server bi isti dokument odbio tek nakon punog
   // prijenosa (413), a to je na studentskom uplinku minuta cekanja za poruku koju znamo unaprijed.
   if(file&&Number(file.size)>REPAIR_MAX_UPLOAD_BYTES){setSummary(`<strong>Dokument je prevelik za automatski popravak.</strong> Granica je ${Math.round(REPAIR_MAX_UPLOAD_BYTES/1024/1024)} MB, a ova datoteka ima ${(Number(file.size)/1024/1024).toFixed(1)} MB. Najčešći razlog su slike u punoj rezoluciji; smanji ih u Wordu (Format slike, Komprimiraj slike) pa pokušaj ponovno.`);return}
+  const chosenItems=getCheckedItems();
+  if(!chosenItems.length){setSummary('<strong>Odaberi barem jednu stavku za popravak.</strong>');return}
   // Bez trenja: anonimna sesija se otvara tiho. Pad na e-mail prijavu samo ako anonimne nisu ukljucene.
   const token: any=await ensureAccessToken();
   if(authConfigured()&&!token){openAuth(()=>go(confirmedMismatch));return}
@@ -1336,8 +1391,9 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
   try{
    // Zahvat u tekst ide SAMO ako je korisnik za tu stavku izricito kvacnuo "Primijeni".
    const okTextIds=new Set(Array.from(wrap.querySelectorAll('[data-text-apply]')).filter((c: any)=>c.checked).map((c: any)=>c.value));
-   const chosen=[...items,...textItems.filter((it: any)=>okTextIds.has(it.ruleId))];
-   const requests=chosen.map((it: any)=>({fixerId:it.fixerId,ruleId:it.ruleId,params:_SERVER_DEEP_FIXERS.has(it.fixerId)?{...it.params,deep:true}:it.params}));
+   const deep=deepToggle?.checked===true;
+   const chosen=[...chosenItems,...textItems.filter((it: any)=>okTextIds.has(it.ruleId))];
+   const requests=chosen.map((it: any)=>({fixerId:it.fixerId,ruleId:it.ruleId,params:(deep&&_SERVER_DEEP_FIXERS.has(it.fixerId))?{...it.params,deep:true}:it.params}));
    const refsForCorpus=repairReferencesFrom(r);
    const {buildRepairMeta,uploadRepair}=await loadRepairClient();
    const {extractParsedStructure}=await loadReportClient();
@@ -1349,6 +1405,7 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
    let out: any;
    try{out=await uploadRepair(repairConfig(),token||'',bytes,meta,fetch,{signal:ac.signal})}finally{clearTimeout(timer)}
    if(out.kind==='ok'){
+    lockButton=true;
     // Preuzimanje NE krece automatski: a.click() nakon await-a preglednik cesto blokira (nema
     // korisnicke geste iza sebe), pa je preuzimanje IZRICIT gumb; klik je gesta koju preglednik postuje.
     const DOCX_MIME='application/vnd.openxmlformats-officedocument.wordprocessingml.document';
@@ -1358,7 +1415,9 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
     const stored=out.jobId
      ?`<p>Datoteka je spremljena u <strong>Moji popravci</strong>, možeš je preuzeti i kasnije.</p>`
      :`<p><strong>Popravak nije spremljen u Moji popravci</strong> (privremena greška na serveru). Preuzmi datoteku i sačuvaj je, ovdje je više neće biti.</p>`;
-    setSummary(`<strong>Popravljeno na serveru (${_plIzmjena(out.changelog.length)}).</strong>${dl}${stored}${out.skipped.length?`<p>Nije primijenjeno: ${out.skipped.map((s: string)=>escapeHtml(s)).join(', ')}.</p>`:''}`);
+    // RE-31: skipped nosi sirove ruleId slugove; mapiraj na citljivu labelu (isto kao lokalni panel).
+    const skippedLabels=out.skipped.map((s: string)=>[...items,...textItems].find((i: any)=>i.ruleId===s)?.label||s);
+    setSummary(`<strong>Popravljeno na serveru (${_plIzmjena(out.changelog.length)}).</strong>${dl}${stored}${skippedLabels.length?`<p>Nije primijenjeno: ${skippedLabels.map(escapeHtml).join(', ')}.</p>`:''}`);
     const dlBtn: any=summary.querySelector('[data-repair-download]');
     if(dlBtn)dlBtn.onclick=()=>downloadBlob(out.docxBytes,DOCX_MIME,out.fileName);
     trackEvent('repair_server_done',{profileId:r.details?.profileDefinitionId||'',changes:out.changelog.length,stored:out.jobId?1:0});
@@ -1372,8 +1431,15 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
     // Ponovna analiza traje nekoliko sekundi, pa mora imati vidljiv status: bez njega se rezultat
     // i gumb za usporedbu pojave niotkuda, a pri gresci korisnik nikad ne sazna da usporedba postoji.
     const recheck=addHtml('<p class="muted">Provjeravam popravljeni dokument…</p>');
-    try{const f=new File([out.docxBytes as Uint8Array<ArrayBuffer>],out.fileName,{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'});const res: any=await analyzeDocxOffThread(f,analyzedProfile,r.settings,()=>{},{skipFinalDelay:true});
-     if(res&&res.score!=null&&r.score!=null){const d=res.score-r.score;recheck.innerHTML=`<p><strong>Spremnost: ${r.score} → ${res.score}${d>0?` (+${d})`:d<0?` (${d})`:''}</strong></p>`}else{recheck.remove()}
+    try{const f=new File([out.docxBytes as Uint8Array<ArrayBuffer>],out.fileName,{type:DOCX_MIME});const res: any=await analyzeDocxOffThread(f,analyzedProfile,r.settings,()=>{},{skipFinalDelay:true});
+     if(res&&res.score!=null&&r.score!=null){
+      const d=res.score-r.score;
+      // RE-40: "Popravljeno" gore govori o PRIMIJENJENIM izmjenama (cinjenica); ovdje se posebno
+      // priznaje kad se ocjena NIJE poboljsala, umjesto da tihi (0)/negativan broj ostane bez rijeci.
+      const scoreLine=`<p><strong>Spremnost: ${r.score} → ${res.score}${d>0?` (+${d})`:d<0?` (${d})`:''}</strong></p>`;
+      const flatNote=d<=0?'<p class="muted">Bodovna ocjena se nije poboljšala. Popravljene su prepoznate stavke oblikovanja; preostale provjere traže ručnu izmjenu (upute iznad).</p>':'';
+      recheck.innerHTML=scoreLine+flatNote;
+     }else{recheck.remove()}
      /* "Pokaži što je popravljeno": faksimil prije/poslije. Radi SAMO kad oba modela postoje;
         inace se gumb ne prikazuje umjesto da otvori prazan prozor. Wordove revizije namjerno NE
         koristimo: popravak najvise mijenja styles.xml, a to OOXML ne moze prikazati kao reviziju. */
@@ -1382,10 +1448,18 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
       b.onclick=async()=>{const {openRepairDiff}=await import('./repair-diff');openRepairDiff({before:r.preview,after:res.preview,changelog:out.changelog,fileName:out.fileName});void trackEvent('repair_diff_opened',{changes:out.changelog.length})};
       summary.appendChild(b);
      }}catch(e: any){console.error('Provjera popravljenog dokumenta:',e);recheck.innerHTML='<p class="muted">Popravljeni dokument je preuzet, ali ga nije bilo moguće ponovno provjeriti na ovom uređaju, pa usporedba prije/poslije nije dostupna.</p>'}
+    // RE-37: uvijek ponudi nacin da se GLAVNI izvjestaj (ne samo redak ispod) osvjezi na popravljeni
+    // dokument, umjesto da korisnik zakljuci "nista se nije dogodilo" jer ocjena gore ostaje stara.
+    const reloadBtn=document.createElement('button');
+    reloadBtn.type='button';reloadBtn.className='btn btn-secondary btn-sm';
+    reloadBtn.textContent='Učitaj popravljeni dokument za novu analizu';
+    reloadBtn.onclick=()=>{const f=new File([out.docxBytes as Uint8Array<ArrayBuffer>],out.fileName,{type:DOCX_MIME});resetAnalyzer();setFile(f)};
+    summary.appendChild(reloadBtn);
+    btn.textContent='Popravak preuzet ✓';
    } else if(out.kind==='tier_mismatch'){
     const sug=out.suggestedWorkType,lbl=(tierFor(sug)?.label||sug);
     setSummary(`<strong>Dokument izgleda kao ${escapeHtml(String(lbl))}.</strong> Odabrana vrsta rada je niža od stvarne. Kupi ispravnu vrstu rada, ili nastavi svejedno ovim popravkom.<div style="margin-top:8px"><button type="button" class="btn btn-secondary btn-sm" data-repair-confirm>Nastavi svejedno</button></div>`);
-    const cb=summary.querySelector('[data-repair-confirm]');if(cb)cb.onclick=()=>go(true);
+    const cb=summary.querySelector<HTMLButtonElement>('[data-repair-confirm]');if(cb)cb.onclick=()=>go(true);
    } else if(out.kind==='paywall'){
     // Goli toast je bio slijepa ulica: korisnik sazna da treba kupiti, ali nema odakle. Ista lock
     // ploca kao drugdje u izvjestaju nosi cijenu i put do placanja.
@@ -1403,7 +1477,7 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
    else if(out.kind==='error'){setSummary(escapeHtml(out.message||'Popravak trenutačno nije dostupan.'))}
    else{setSummary('Popravak trenutačno nije dostupan. Pokušaj ponovno za koji trenutak.')}
   }catch(e: any){console.error('Server repair:',e);setSummary('Greška pri popravku na serveru. Ručne upute iznad i dalje vrijede.')}
-  finally{btn.disabled=false;btn.textContent=orig}
+  finally{if(!lockButton){btn.disabled=false;btn.textContent=orig}}
  }
  btn.onclick=()=>go(false);
 }

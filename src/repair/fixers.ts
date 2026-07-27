@@ -63,14 +63,28 @@ export interface DocxXmlParts {
   footerHeaderParts?: Record<string, string>;
 }
 
+// RE-36/41: zasto fixer NIJE primijenjen, da UI moze razlikovati "vec je na cilju" (nema se sto
+// popraviti) od "nije bilo moguce" (ciljana struktura/stil ne postoji). Bez ovoga skipped[] izgleda
+// isto za uredan rad i za rad koji stvarno treba rucnu izmjenu.
+export type FixerNoOpReason = 'already-ok' | 'no-target' | 'invalid-params' | 'unsupported-structure';
+
 export interface FixerOutput {
   parts: DocxXmlParts;
   applied: boolean;
   beforeLabel: string;
   afterLabel: string;
+  /** Prisutno SAMO kad applied===false; odsutno = razlog nije (jos) klasificiran. */
+  reason?: FixerNoOpReason;
 }
 
-const NO_OP = (parts: DocxXmlParts): FixerOutput => ({ parts, applied: false, beforeLabel: '', afterLabel: '' });
+const NO_OP = (parts: DocxXmlParts, reason?: FixerNoOpReason): FixerOutput => ({ parts, applied: false, beforeLabel: '', afterLabel: '', reason });
+
+/** PatchResult.found: applied:false+found:true znaci "vec na ciljanoj vrijednosti" (backstop
+ *  postoji), found:false/prazno znaci da ciljani stil/atribut uopce nije pronadjen (xml-patch.ts
+ *  ovo vec racuna za deep-ciscenja backstop; ovdje se isto citanje samo surface-a kao reason). */
+function reasonFromPatch(result: { found?: Record<string, boolean> }): FixerNoOpReason {
+  return Object.values(result.found ?? {}).some(Boolean) ? 'already-ok' : 'no-target';
+}
 
 // === Konverzije jedinica ===
 // OOXML koristi twips (1/1440 inca) za marge/format stranice, half-points za
@@ -200,7 +214,7 @@ export function marginsFixer(
     if (marginsCm[key] !== undefined) twips[key] = cmToTwips(marginsCm[key]!);
   }
   const result = patchMargins(parts.documentXml, twips);
-  if (!result.applied) return NO_OP(parts);
+  if (!result.applied) return NO_OP(parts, reasonFromPatch(result));
 
   return {
     parts: { ...parts, documentXml: result.xml },
@@ -212,7 +226,7 @@ export function marginsFixer(
 
 export function paperSizeFixer(parts: DocxXmlParts, sizeCm: { w: number; h: number }): FixerOutput {
   const result = patchPaperSize(parts.documentXml, { w: cmToTwips(sizeCm.w), h: cmToTwips(sizeCm.h) });
-  if (!result.applied) return NO_OP(parts);
+  if (!result.applied) return NO_OP(parts, reasonFromPatch(result));
 
   return {
     parts: { ...parts, documentXml: result.xml },
@@ -233,7 +247,7 @@ export function fontFixer(
 
   let base: FixerOutput;
   if (!result.applied) {
-    base = NO_OP(parts);
+    base = NO_OP(parts, reasonFromPatch(result));
   } else {
     const beforeParts: string[] = [];
     const afterParts: string[] = [];
@@ -288,7 +302,7 @@ export function fontFixer(
 export function lineSpacingFixer(parts: DocxXmlParts, multiplier: number, deep = false): FixerOutput {
   const result = patchDefaultSpacing(parts.stylesXml, multiplierToTwips(multiplier), 'auto');
   const base: FixerOutput = !result.applied
-    ? NO_OP(parts)
+    ? NO_OP(parts, reasonFromPatch(result))
     : {
         parts: { ...parts, stylesXml: result.xml },
         applied: true,
@@ -319,7 +333,7 @@ export function alignmentFixer(
 ): FixerOutput {
   const result = patchDefaultAlignment(parts.stylesXml, val);
   const base: FixerOutput = !result.applied
-    ? NO_OP(parts)
+    ? NO_OP(parts, reasonFromPatch(result))
     : {
         parts: { ...parts, stylesXml: result.xml },
         applied: true,
@@ -340,7 +354,7 @@ export function alignmentFixer(
 export function paragraphSpacingFixer(parts: DocxXmlParts, deep = false): FixerOutput {
   const result = patchDefaultParagraphSpacing(parts.stylesXml, 0, 0);
   const base: FixerOutput = !result.applied
-    ? NO_OP(parts)
+    ? NO_OP(parts, reasonFromPatch(result))
     : {
         parts: { ...parts, stylesXml: result.xml },
         applied: true,
@@ -391,10 +405,14 @@ export function headingFormatFixer(parts: DocxXmlParts, targets: HeadingLevelTar
   const doneLevels: string[] = [];
   const beforeBits: string[] = [];
   const afterBits: string[] = [];
+  let sawFound = false; // barem jedna razina je pronadjena vec na cilju (already-ok signal)
 
   for (const t of targets) {
     const res = patchHeadingFormat(stylesXml, t.level, t);
-    if (!res.applied) continue;
+    if (!res.applied) {
+      if (Object.values(res.found ?? {}).some(Boolean)) sawFound = true;
+      continue;
+    }
     stylesXml = res.xml;
     doneLevels.push(String(t.level));
     const desc: string[] = [];
@@ -407,7 +425,7 @@ export function headingFormatFixer(parts: DocxXmlParts, targets: HeadingLevelTar
     beforeBits.push(`razina ${t.level}: ${wasSize ? `${Number(wasSize) / 2} pt` : UNSET_LABEL}`);
   }
 
-  if (!doneLevels.length) return NO_OP(parts);
+  if (!doneLevels.length) return NO_OP(parts, sawFound ? 'already-ok' : 'no-target');
   return {
     parts: { ...parts, stylesXml },
     applied: true,
@@ -425,13 +443,13 @@ export function footnoteTypographyFixer(
   update: { fontName?: string; fontSizePt?: number; alignJustify?: boolean },
 ): FixerOutput {
   // Bez fusnota u dokumentu nema sto oblikovati (isti gard kao footnoteSpacingFixer).
-  if (parts.footnotesXml === undefined) return NO_OP(parts);
+  if (parts.footnotesXml === undefined) return NO_OP(parts, 'unsupported-structure');
   const result = patchFootnoteTypography(parts.stylesXml, {
     fontName: update.fontName,
     sizeHalfPoints: update.fontSizePt !== undefined ? ptToHalfPoints(update.fontSizePt) : undefined,
     alignJustify: update.alignJustify,
   });
-  if (!result.applied) return NO_OP(parts);
+  if (!result.applied) return NO_OP(parts, reasonFromPatch(result));
 
   const label = (side: Record<string, string>): string => {
     const bits: string[] = [];
@@ -534,11 +552,11 @@ export function footerPageFixer(parts: DocxXmlParts, target: FooterPageTarget): 
 // ovaj popravak (analyzeDocx checkFootnoteParagraphSpacingZero ne prijavljuje nista
 // kad nema fusnota), i ne pokusava se patchati prazan string.
 export function footnoteSpacingFixer(parts: DocxXmlParts, deep = false): FixerOutput {
-  if (!parts.footnotesXml) return NO_OP(parts);
+  if (!parts.footnotesXml) return NO_OP(parts, 'unsupported-structure');
 
   const result = patchFootnoteTextSpacing(parts.stylesXml, 0, 0);
   const base: FixerOutput = !result.applied
-    ? NO_OP(parts)
+    ? NO_OP(parts, reasonFromPatch(result))
     : {
         parts: { ...parts, stylesXml: result.xml },
         applied: true,

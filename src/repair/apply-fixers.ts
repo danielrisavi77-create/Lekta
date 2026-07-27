@@ -28,6 +28,7 @@ import {
   type FooterPageTarget,
   type SectionInsertTarget,
   type TocFieldTarget,
+  type FixerNoOpReason,
 } from './fixers.ts';
 import type { SectionNumberingTarget } from './xml-patch.ts';
 
@@ -72,6 +73,10 @@ export interface ApplyFixersResult {
   docxBytes: Uint8Array;
   changelog: ChangelogEntry[];
   skipped: string[]; // ruleId-evi koje nismo uspjeli primijeniti (fail-safe, ne baca)
+  /** RE-36/41: ruleId -> zasto (kad je poznato). Cisto ADITIVNO polje (skipped ostaje nepromijenjen
+   *  radi wire-kompatibilnosti sa serverskim putem); UI ga koristi da "vec uskladjeno" ne izgleda
+   *  kao "nije bilo moguce". Bez zapisa za ruleId = razlog nije klasificiran (npr. fixer je bacio). */
+  skippedReasons: Record<string, FixerNoOpReason>;
 }
 
 const DOCUMENT_XML_PATH = 'word/document.xml';
@@ -115,7 +120,7 @@ function runFixer(fixerId: FixerId, parts: DocxXmlParts, rawParams: Record<strin
       const p = params as { w?: unknown; h?: unknown };
       return isFiniteNumber(p.w) && isFiniteNumber(p.h)
         ? paperSizeFixer(parts, { w: p.w, h: p.h })
-        : { parts, applied: false, beforeLabel: '', afterLabel: '' };
+        : { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
     }
     case 'font-fixer': {
       const p = params as { fontName?: unknown; fontSizePt?: unknown; deep?: boolean };
@@ -123,19 +128,19 @@ function runFixer(fixerId: FixerId, parts: DocxXmlParts, rawParams: Record<strin
       const fontSizePt = isFiniteNumber(p.fontSizePt) ? p.fontSizePt : undefined;
       return fontName !== undefined || fontSizePt !== undefined
         ? fontFixer(parts, { fontName, fontSizePt, deep: p.deep === true })
-        : { parts, applied: false, beforeLabel: '', afterLabel: '' };
+        : { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
     }
     case 'line-spacing-fixer': {
       const p = params as { multiplier?: unknown; deep?: boolean };
       return isFiniteNumber(p.multiplier)
         ? lineSpacingFixer(parts, p.multiplier, p.deep === true)
-        : { parts, applied: false, beforeLabel: '', afterLabel: '' };
+        : { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
     }
     case 'alignment-fixer': {
       const p = params as { val?: unknown; deep?: boolean };
       return typeof p.val === 'string' && ALIGNMENT_VAL_VALUES.has(p.val)
         ? alignmentFixer(parts, p.val as 'left' | 'right' | 'center' | 'both', p.deep === true)
-        : { parts, applied: false, beforeLabel: '', afterLabel: '' };
+        : { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
     }
     case 'paragraph-spacing-fixer': {
       const p = params as { deep?: boolean };
@@ -147,13 +152,13 @@ function runFixer(fixerId: FixerId, parts: DocxXmlParts, rawParams: Record<strin
     }
     case 'footer-page-fixer': {
       const p = params as { target?: FooterPageTarget };
-      return p.target ? footerPageFixer(parts, p.target) : { parts, applied: false, beforeLabel: '', afterLabel: '' };
+      return p.target ? footerPageFixer(parts, p.target) : { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
     }
     case 'section-insert-fixer': {
       const p = params as { target?: SectionInsertTarget };
       return p.target && typeof p.target.introParagraphIndex === 'number'
         ? sectionInsertFixer(parts, p.target)
-        : { parts, applied: false, beforeLabel: '', afterLabel: '' };
+        : { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
     }
     case 'empty-paragraph-fixer':
       return emptyParagraphFixer(parts);
@@ -173,13 +178,13 @@ function runFixer(fixerId: FixerId, parts: DocxXmlParts, rawParams: Record<strin
       const p = params as { target?: TocFieldTarget };
       return p.target && typeof p.target.sadrzajParagraphIndex === 'number'
         ? tocFieldFixer(parts, p.target)
-        : { parts, applied: false, beforeLabel: '', afterLabel: '' };
+        : { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
     }
     case 'heading-format-fixer': {
       const p = params as { targets?: HeadingLevelTarget[] };
       return Array.isArray(p.targets) && p.targets.length
         ? headingFormatFixer(parts, p.targets)
-        : { parts, applied: false, beforeLabel: '', afterLabel: '' };
+        : { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
     }
     case 'footnote-typography-fixer': {
       const p = params as { fontName?: unknown; fontSizePt?: unknown };
@@ -187,17 +192,17 @@ function runFixer(fixerId: FixerId, parts: DocxXmlParts, rawParams: Record<strin
       const fontSizePt = isFiniteNumber(p.fontSizePt) ? p.fontSizePt : undefined;
       return fontName !== undefined || fontSizePt !== undefined
         ? footnoteTypographyFixer(parts, { fontName, fontSizePt })
-        : { parts, applied: false, beforeLabel: '', afterLabel: '' };
+        : { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
     }
     case 'heading-case-fixer': {
       const p = params as { levels?: number[] };
       const levels = Array.isArray(p.levels) ? p.levels.map(Number).filter((n) => n >= 1 && n <= 9) : [];
       return levels.length
         ? headingCaseFixer(parts, levels)
-        : { parts, applied: false, beforeLabel: '', afterLabel: '' };
+        : { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
     }
     default:
-      return { parts, applied: false, beforeLabel: '', afterLabel: '' };
+      return { parts, applied: false, beforeLabel: '', afterLabel: '', reason: 'invalid-params' as const };
   }
 }
 
@@ -246,6 +251,7 @@ export async function applyFixers(
 
   const changelog: ChangelogEntry[] = [];
   const skipped: string[] = [];
+  const skippedReasons: Record<string, FixerNoOpReason> = {};
 
   for (const request of requests) {
     let result: ReturnType<typeof runFixer>;
@@ -256,6 +262,7 @@ export async function applyFixers(
       // bateriju, ukljucivo popravke VEC uspjesno primijenjene prije njega u istom pozivu. Server
       // bez ovoga mapira ijedan takav pad u 422 invalid_docx, sto krivo optuzuje korisnikov
       // dokument umjesto internog buga fixera. Isti fail-safe tretman kao "nije uspio primijeniti".
+      // Razlog se ovdje NAMJERNO ne biljezi (neocekivan pad, ne uobicajen no-op).
       skipped.push(request.ruleId);
       continue;
     }
@@ -263,6 +270,9 @@ export async function applyFixers(
       // Fail-safe: fixer nije uspio primijeniti popravak (npr. atribut ne
       // postoji u ovom dokumentu), tiho preskoci, ne baca korisniku gresku.
       skipped.push(request.ruleId);
+      // RE-36/41: reason (kad ga fixer racuna) omogucuje UI-ju da razdvoji "vec uskladjeno" od
+      // "nije bilo moguce", umjesto identicnog popisa krivnji za oba slucaja.
+      if (result.reason) skippedReasons[request.ruleId] = result.reason;
       continue;
     }
     parts = result.parts;
@@ -278,7 +288,7 @@ export async function applyFixers(
   // (bez rekompresije, bez re-encode), da "popravljeni" dokument bez popravaka
   // ne bude tiho prepisan.
   if (changelog.length === 0) {
-    return { docxBytes, changelog, skipped };
+    return { docxBytes, changelog, skipped, skippedReasons };
   }
 
   // Rekonstruiraj zip: SAMO stvarno promijenjeni dio (document.xml odnosno
@@ -322,5 +332,5 @@ export async function applyFixers(
 
   const newDocxBytes = await writeZip(newEntries);
 
-  return { docxBytes: newDocxBytes, changelog, skipped };
+  return { docxBytes: newDocxBytes, changelog, skipped, skippedReasons };
 }

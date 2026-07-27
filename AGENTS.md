@@ -7,9 +7,11 @@ Kanonski operativni vodic je CLAUDE.md; za netrivijalne zadatke procitaj i njega
 
 Klijentska web aplikacija (Vite + TypeScript strict, vitest + happy-dom) koja u
 pregledniku analizira .docx akademske radove i provjerava oblikovanje, strukturu,
-opseg i citiranje prema sluzbenim profilima fakulteta. Sva analiza je lokalna,
-dokument se ne salje na posluzitelj. Bez frameworka, bez backenda.
-Ovo NIJE Next.js projekt.
+opseg i citiranje prema sluzbenim profilima fakulteta. Sva ANALIZA je lokalna,
+dokument se pritom ne salje na posluzitelj. To NE vrijedi za sve znacajke: placeni
+automatski popravak (src/repair, kad je repairEndpoint konfiguriran), narudzbe,
+waitlist i rokovi/podsjetnici idu na zivi Supabase backend (supabase/migrations,
+supabase/functions). Ovo NIJE Next.js projekt.
 
 ## Tvrdi gate
 

@@ -241,7 +241,9 @@ export async function verifyCorpusBatch(
     try {
       candidates = await fetchBatch(keys, { min: CORPUS_CANDIDATE_MIN, top: CORPUS_TOP });
     } catch {
-      checked += slice.length; // pokusano je; ostaje bez presude, ne kao "ne postoji"
+      // RE-42: pala serija NE broji se kao "checked" (prije je ovo diglo checked===total i sakrilo
+      // pad baze iza postenog izgleda "sve provjereno, nista nije prepoznato"). Ostaje bez presude
+      // (matches[i+k]===null), a truncated ispod ispravno postaje true jer checked<total.
       continue;
     }
     slice.forEach((it, k) => {

@@ -116,7 +116,10 @@ describe('corpus-verify: serije i proracun vremena', () => {
       if (poziv === 1) throw new Error('baza pukla');
       return keys.map(() => [rad('Sekundarna hipertenzija')]);
     }, { chunkSize: 1, budgetMs: 10000 });
-    expect(out.checked).toBe(2);
+    // RE-42: pala serija se NE broji kao checked (prije je checked===total tvrdio "sve provjereno"
+    // i kad je baza pukla); ostaje bez presude i truncated posteno javlja djelomican rezultat.
+    expect(out.checked).toBe(1);
+    expect(out.truncated).toBe(true);
     expect(out.matches[0]).toBeNull();          // pala serija: bez presude, NE "ne postoji"
     expect(out.matches[1]?.verdict).toBe('found');
   });

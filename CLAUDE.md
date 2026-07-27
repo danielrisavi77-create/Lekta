@@ -6,11 +6,16 @@ Operativni vodič za rad na ovom repozitoriju. Pročitaj prije bilo kakve izmjen
 
 Klijentska web aplikacija (Vite + TypeScript) koja u pregledniku analizira `.docx`
 akademske radove i provjerava oblikovanje, strukturu, opseg i citiranje prema
-službenim profilima fakulteta (FPZG i Pravni fakultet u Zagrebu). Sva analiza je
-lokalna: dokument se ne šalje na poslužitelj. Postoji i monetizacija (paketi,
+službenim profilima fakulteta (FPZG i Pravni fakultet u Zagrebu). Sva ANALIZA je
+lokalna: dokument se pritom ne šalje na poslužitelj. Postoji i monetizacija (paketi,
 narudžbe, payment linkovi), GDPR pravni tekstovi i ugrađena QA dijagnostika.
 
-Stack: Vite, TypeScript (strict), vitest + happy-dom. Bez frameworka, bez backenda.
+Stack: Vite, TypeScript (strict), vitest + happy-dom, bez frontend frameworka.
+Za razliku od besplatne analize, repozitorij VIŠE NIJE bez backenda: placeni
+automatski popravak (`src/repair`, kad je `repairEndpoint` konfiguriran), narudžbe,
+waitlist i rokovi/podsjetnici idu na živi Supabase backend (`supabase/migrations`,
+`supabase/functions`). "Bez backenda" vrijedi samo za samu analizu, ne za proizvod
+u cjelini.
 Ovo NIJE Next.js projekt i nema veze s maturiraj.hr; ne miješaj konvencije.
 
 ## Tvrdo pravilo: build gate
@@ -27,7 +32,7 @@ Ako `check` pada, promjena nije gotova. Ne commitaj crveno.
 
 - `data/` je tipiziran i modularan: profili, izvori, rokovi, katalog, coverage,
   metodologija, svaki u svom JSON-u. Loaderi u `src/*` ih hidriraju i tipiziraju.
-- `src/ui/app.ts` je UI orkestrator (~771 redaka, tipiziran, VISE NIJE `@ts-nocheck`):
+- `src/ui/app.ts` je UI orkestrator (~1530 redaka, tipiziran, VISE NIJE `@ts-nocheck`):
   UI, narudzbe, placanje i QA. Analiticka jezgra je izvucena: `analyzeDocx` + auditni
   helperi zive u `src/analysis/analyze-docx.ts` (tipizirano), a analiza u pregledniku radi
   u Web Workeru (`analyze-docx.worker.ts` + most `analyze-docx-client.ts` s inline
@@ -97,6 +102,12 @@ engine bez golden-file testa koji PRVO dokazuje zatečeno ponašanje.
 - `src/profiles/profile-schema.ts` - tipovi profila i pravila.
 - `src/profiles/profile-validator.ts` - strukturna validacija profila.
 - `src/{catalog,submission,coverage,methodology,config}/*` - tanki loaderi.
+- `src/citations/*` - Legal Citation Engine i korpusna/CrossRef verifikacija citata.
+- `src/repair/*` - Repair Engine: XML fixeri (`fixers.ts`, `xml-patch.ts`), zip codec,
+  `apply-fixers.ts` (jezgra dijeljena s serverskim putem). Golden-zasticeno kao parser.
+- `src/report/*` - klijenti prema Supabase backendu (repair-client, repair-history, auth).
+- `supabase/migrations/**`, `supabase/functions/**` - zivi backend (repair-docx, waitlist,
+  deadline-reminders, narudzbe); NIJE "bez backenda" iznad, vidi "Sto je ovo".
 - `data/**` - autorski podaci (profili, izvori, rokovi, katalog, coverage).
 - `tests/**` - vitest: registar, regresija, UI smoke, rule-compiler, docx-golden.
 
