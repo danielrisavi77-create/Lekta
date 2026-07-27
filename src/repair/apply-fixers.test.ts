@@ -835,4 +835,121 @@ describe('applyFixers golden round-trip', () => {
     const newFooter3 = dec.decode(newEntries.find((e) => e.name === 'word/footer3.xml')!.data);
     expect(newFooter3).toContain('<w:jc w:val="right"/>');
   });
+
+  // RE-27: runFixer tvrdi (u vlastitom komentaru) da su "nedostajuci parametri NO-OP, ne pad", ali
+  // to nije vrijedilo za skalarne brojcane parametre: nedostajuca/nevaljana vrijednost bi prosla
+  // kroz cmToTwips/ptToHalfPoints/multiplierToTwips kao NaN, koji Number(...)/String(...) pretvore
+  // u LITERALNI string "NaN" upisan u XML atribut, prijavljeno kao USPJESAN popravak (schema-nevaljan
+  // dokument isporucen kao popravljen). Isto za "whitelist" stringove (w:val enumeracije): nevaljana
+  // vrijednost bi se doslovno upisala u XML umjesto da se odbije.
+  describe('RE-27: skalarni parametri i whitelist stringovi se validiraju (Number.isFinite / whitelist) -> NO-OP umjesto NaN/nevaljane vrijednosti', () => {
+    it('paper-size-fixer s params:{} je NO-OP (prije: upisivao w:w="NaN"/w:h="NaN")', async () => {
+      const fixture = buildSyntheticDocx();
+      const originalDocx = await writeZip(fixture.entries);
+      const result = await applyFixers(originalDocx, [{ ruleId: 'r1', fixerId: 'paper-size-fixer', params: {} }]);
+      expect(result.changelog).toHaveLength(0);
+      expect(result.skipped).toEqual(['r1']);
+      const newEntries = await readZip(result.docxBytes);
+      const dec = new TextDecoder();
+      const newDoc = dec.decode(newEntries.find((e) => e.name === 'word/document.xml')!.data);
+      expect(newDoc).not.toContain('NaN');
+      expect(newDoc).toBe(fixture.documentXml);
+    });
+
+    it('line-spacing-fixer s params:{} je NO-OP (prije: upisivao w:line="NaN")', async () => {
+      const fixture = buildSyntheticDocx();
+      const originalDocx = await writeZip(fixture.entries);
+      const result = await applyFixers(originalDocx, [{ ruleId: 'r1', fixerId: 'line-spacing-fixer', params: {} }]);
+      expect(result.changelog).toHaveLength(0);
+      expect(result.skipped).toEqual(['r1']);
+      const newEntries = await readZip(result.docxBytes);
+      const dec = new TextDecoder();
+      const newStyles = dec.decode(newEntries.find((e) => e.name === 'word/styles.xml')!.data);
+      expect(newStyles).not.toContain('NaN');
+      expect(newStyles).toBe(fixture.stylesXml);
+    });
+
+    it('margins-fixer s nevaljanom (non-finite) vrijednosti za JEDNU marginu: ta margina se preskace, ostale prolaze', async () => {
+      const fixture = buildSyntheticDocx();
+      const originalDocx = await writeZip(fixture.entries);
+      const result = await applyFixers(originalDocx, [
+        { ruleId: 'r1', fixerId: 'margins-fixer', params: { right: 2.5, top: 'abc' } },
+      ]);
+      expect(result.changelog).toHaveLength(1);
+      const newEntries = await readZip(result.docxBytes);
+      const dec = new TextDecoder();
+      const newDoc = dec.decode(newEntries.find((e) => e.name === 'word/document.xml')!.data);
+      expect(newDoc).not.toContain('NaN');
+      expect(newDoc).toContain('w:right="1417"'); // 2,5cm primijenjen
+      expect(newDoc).toContain('w:top="1600"'); // nevaljan top netaknut (izvorna vrijednost)
+    });
+
+    it('font-fixer s nevaljanim (non-finite) fontSizePt: velicina se preskace (fontName i dalje prolazi ako je poslan)', async () => {
+      const fixture = buildSyntheticDocx();
+      const originalDocx = await writeZip(fixture.entries);
+      const result = await applyFixers(originalDocx, [
+        { ruleId: 'r1', fixerId: 'font-fixer', params: { fontName: 'Arial', fontSizePt: 'abc' } },
+      ]);
+      const newEntries = await readZip(result.docxBytes);
+      const dec = new TextDecoder();
+      const newStyles = dec.decode(newEntries.find((e) => e.name === 'word/styles.xml')!.data);
+      expect(newStyles).not.toContain('NaN');
+      expect(newStyles).toContain('w:ascii="Arial"'); // font i dalje primijenjen
+      expect(newStyles).toContain('w:val="22"'); // izvorna velicina netaknuta
+    });
+
+    it('alignment-fixer s params:{} (bez val) je NO-OP umjesto pada (prije: TypeError iz escapeXmlAttr)', async () => {
+      const fixture = buildSyntheticDocx();
+      const originalDocx = await writeZip(fixture.entries);
+      const result = await applyFixers(originalDocx, [{ ruleId: 'r1', fixerId: 'alignment-fixer', params: {} }]);
+      expect(result.changelog).toHaveLength(0);
+      expect(result.skipped).toEqual(['r1']);
+    });
+
+    it('alignment-fixer s nepoznatom vrijednosti vala (izvan whiteliste) je NO-OP, ne upisuje je doslovno', async () => {
+      const fixture = buildSyntheticDocx();
+      const originalDocx = await writeZip(fixture.entries);
+      const result = await applyFixers(originalDocx, [
+        { ruleId: 'r1', fixerId: 'alignment-fixer', params: { val: 'bogus' } },
+      ]);
+      expect(result.changelog).toHaveLength(0);
+      expect(result.skipped).toEqual(['r1']);
+    });
+
+    it('page-number-alignment-fixer s nepoznatom vrijednosti align (izvan whiteliste) NE upisuje je doslovno u w:jc', async () => {
+      const fixture = buildFooterHeaderDocx({ 'word/footer1.xml': footerPagePart('left') });
+      const originalDocx = await writeZip(fixture.entries);
+      const result = await applyFixers(originalDocx, [
+        { ruleId: 'r1', fixerId: 'page-number-alignment-fixer', params: { align: 'bogus' } },
+      ]);
+      const newEntries = await readZip(result.docxBytes);
+      const dec = new TextDecoder();
+      const newFooter = dec.decode(newEntries.find((e) => e.name === 'word/footer1.xml')!.data);
+      expect(newFooter).not.toContain('w:val="bogus"');
+    });
+
+    it('footnote-typography-fixer s nevaljanim (non-finite) fontSizePt: velicina se preskace (fixer dira FootnoteText STIL u styles.xml, footnotes.xml je samo gate)', async () => {
+      const enc = new TextEncoder();
+      const documentXml = '<?xml version="1.0"?><w:document><w:body><w:p/></w:body></w:document>';
+      const stylesXml =
+        '<?xml version="1.0"?><w:styles><w:style w:type="paragraph" w:styleId="FootnoteText">' +
+        '<w:rPr><w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/><w:sz w:val="20"/></w:rPr></w:style></w:styles>';
+      const footnotesXml = '<?xml version="1.0"?><w:footnotes><w:footnote w:id="1"><w:p/></w:footnote></w:footnotes>';
+      const entries = [
+        { name: 'word/document.xml', data: enc.encode(documentXml) },
+        { name: 'word/styles.xml', data: enc.encode(stylesXml) },
+        { name: 'word/footnotes.xml', data: enc.encode(footnotesXml) },
+      ];
+      const originalDocx = await writeZip(entries);
+      const result = await applyFixers(originalDocx, [
+        { ruleId: 'r1', fixerId: 'footnote-typography-fixer', params: { fontName: 'Arial', fontSizePt: 'abc' } },
+      ]);
+      const newEntries = await readZip(result.docxBytes);
+      const dec = new TextDecoder();
+      const newStyles = dec.decode(newEntries.find((e) => e.name === 'word/styles.xml')!.data);
+      expect(newStyles).not.toContain('NaN');
+      expect(newStyles).toContain('w:ascii="Arial"');
+      expect(newStyles).toContain('w:val="20"'); // izvorna velicina netaknuta
+    });
+  });
 });

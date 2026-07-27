@@ -86,24 +86,56 @@ const FOOTNOTES_XML_PATH = 'word/footnotes.xml';
 // footer/header partovi, ne samo footeri koje K5 smije dodati (ENGINE_ADDABLE_PART).
 const FOOTER_HEADER_PART_RE = /^word\/(footer|header)\d+\.xml$/i;
 
+// RE-27: skalarni parametar mora biti PRAVI konacan broj prije nego udje u cmToTwips/
+// ptToHalfPoints/multiplierToTwips; inace NaN prolazi kroz Number(...)/String(...) i zavrsi kao
+// LITERALNI string "NaN" upisan u XML atribut (schema-nevaljan dokument prijavljen kao popravljen).
+function isFiniteNumber(v: unknown): v is number {
+  return typeof v === 'number' && Number.isFinite(v);
+}
+
+const ALIGNMENT_VAL_VALUES = new Set(['left', 'right', 'center', 'both']);
+const PAGE_ALIGN_VALUES = new Set(['left', 'center', 'right']);
+
 function runFixer(fixerId: FixerId, parts: DocxXmlParts, rawParams: Record<string, unknown>) {
   // Nedostajuci parametri su NO-OP, ne pad: pozivatelj (Edge, UI, golden harness) smije poslati
   // zahtjev bez `params`, a citanje polja iz undefined bi srusilo cijeli popravak.
   const params = rawParams ?? {};
   switch (fixerId) {
-    case 'margins-fixer':
-      return marginsFixer(parts, params as never);
-    case 'paper-size-fixer':
-      return paperSizeFixer(parts, params as never);
-    case 'font-fixer':
-      return fontFixer(parts, params as never);
+    case 'margins-fixer': {
+      // RE-27: svaka margina se validira POJEDINACNO (ne cijeli objekt odjednom), pa jedna
+      // nevaljana vrijednost ne obara ostale ispravne margine u istom zahtjevu.
+      const p = params as Partial<Record<'top' | 'right' | 'bottom' | 'left', unknown>>;
+      const marginsCm: Partial<Record<'top' | 'right' | 'bottom' | 'left', number>> = {};
+      for (const key of ['top', 'right', 'bottom', 'left'] as const) {
+        if (isFiniteNumber(p[key])) marginsCm[key] = p[key];
+      }
+      return marginsFixer(parts, marginsCm);
+    }
+    case 'paper-size-fixer': {
+      const p = params as { w?: unknown; h?: unknown };
+      return isFiniteNumber(p.w) && isFiniteNumber(p.h)
+        ? paperSizeFixer(parts, { w: p.w, h: p.h })
+        : { parts, applied: false, beforeLabel: '', afterLabel: '' };
+    }
+    case 'font-fixer': {
+      const p = params as { fontName?: unknown; fontSizePt?: unknown; deep?: boolean };
+      const fontName = typeof p.fontName === 'string' && p.fontName.trim() !== '' ? p.fontName : undefined;
+      const fontSizePt = isFiniteNumber(p.fontSizePt) ? p.fontSizePt : undefined;
+      return fontName !== undefined || fontSizePt !== undefined
+        ? fontFixer(parts, { fontName, fontSizePt, deep: p.deep === true })
+        : { parts, applied: false, beforeLabel: '', afterLabel: '' };
+    }
     case 'line-spacing-fixer': {
-      const p = params as { multiplier: number; deep?: boolean };
-      return lineSpacingFixer(parts, p.multiplier, p.deep === true);
+      const p = params as { multiplier?: unknown; deep?: boolean };
+      return isFiniteNumber(p.multiplier)
+        ? lineSpacingFixer(parts, p.multiplier, p.deep === true)
+        : { parts, applied: false, beforeLabel: '', afterLabel: '' };
     }
     case 'alignment-fixer': {
-      const p = params as { val: 'left' | 'right' | 'center' | 'both'; deep?: boolean };
-      return alignmentFixer(parts, p.val, p.deep === true);
+      const p = params as { val?: unknown; deep?: boolean };
+      return typeof p.val === 'string' && ALIGNMENT_VAL_VALUES.has(p.val)
+        ? alignmentFixer(parts, p.val as 'left' | 'right' | 'center' | 'both', p.deep === true)
+        : { parts, applied: false, beforeLabel: '', afterLabel: '' };
     }
     case 'paragraph-spacing-fixer': {
       const p = params as { deep?: boolean };
@@ -130,8 +162,12 @@ function runFixer(fixerId: FixerId, parts: DocxXmlParts, rawParams: Record<strin
       return footnoteSpacingFixer(parts, p.deep === true);
     }
     case 'page-number-alignment-fixer': {
-      const p = params as { align?: 'left' | 'center' | 'right' };
-      return pageNumberAlignmentFixer(parts, p.align);
+      // RE-27: nevaljana vrijednost se NE prosljedjuje doslovno (schema-nevaljan w:jc); tretira se
+      // kao da nije poslana, pa fixerov vlastiti default ('right', jedina vrijednost koju ijedan
+      // stvaran profil danas trazi) i dalje vrijedi.
+      const p = params as { align?: unknown };
+      const align = typeof p.align === 'string' && PAGE_ALIGN_VALUES.has(p.align) ? (p.align as 'left' | 'center' | 'right') : undefined;
+      return pageNumberAlignmentFixer(parts, align);
     }
     case 'toc-field-fixer': {
       const p = params as { target?: TocFieldTarget };
@@ -146,9 +182,11 @@ function runFixer(fixerId: FixerId, parts: DocxXmlParts, rawParams: Record<strin
         : { parts, applied: false, beforeLabel: '', afterLabel: '' };
     }
     case 'footnote-typography-fixer': {
-      const p = params as { fontName?: string; fontSizePt?: number };
-      return (p.fontName !== undefined || p.fontSizePt !== undefined)
-        ? footnoteTypographyFixer(parts, p)
+      const p = params as { fontName?: unknown; fontSizePt?: unknown };
+      const fontName = typeof p.fontName === 'string' && p.fontName.trim() !== '' ? p.fontName : undefined;
+      const fontSizePt = isFiniteNumber(p.fontSizePt) ? p.fontSizePt : undefined;
+      return fontName !== undefined || fontSizePt !== undefined
+        ? footnoteTypographyFixer(parts, { fontName, fontSizePt })
         : { parts, applied: false, beforeLabel: '', afterLabel: '' };
     }
     case 'heading-case-fixer': {
