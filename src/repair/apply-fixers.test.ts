@@ -952,4 +952,42 @@ describe('applyFixers golden round-trip', () => {
       expect(newStyles).toContain('w:val="20"'); // izvorna velicina netaknuta
     });
   });
+
+  // RE-26: applyFixers samu sebe u komentaru zove "fail-safe", ali runFixer se dosad pozivao BEZ
+  // try/catch: fixer koji baci (npr. neocekivana kombinacija ulaza koju RE-27-stil validacija jos
+  // ne pokriva za sve fixere, npr. ugnjezdeni target objekti nizovnih fixera) obarao je CIJELU
+  // bateriju, ukljucivo popravke koji su VEC uspjesno primijenjeni PRIJE njega u istom pozivu.
+  describe('RE-26: fixer koji baci (npr. page-numbering-fixer s ne-string fmt u targetu) ne obara cijelu bateriju', () => {
+    it('valjan popravak PRIJE fixera-koji-baca ostaje primijenjen; onaj koji baca zavrsi u skipped, applyFixers ne baca', async () => {
+      const enc = new TextEncoder();
+      const documentXml =
+        '<?xml version="1.0"?><w:document><w:body>' +
+        '<w:p><w:r><w:t>tekst</w:t></w:r></w:p>' +
+        '<w:sectPr><w:pgSz w:w="11906" w:h="16838"/>' +
+        '<w:pgMar w:top="1600" w:right="1134" w:bottom="1417" w:left="1417"/></w:sectPr>' +
+        '</w:body></w:document>';
+      const entries = [
+        { name: 'word/document.xml', data: enc.encode(documentXml) },
+        { name: 'word/styles.xml', data: enc.encode('<?xml version="1.0"?><w:styles></w:styles>') },
+      ];
+      const originalDocx = await writeZip(entries);
+
+      const result = await applyFixers(originalDocx, [
+        { ruleId: 'valjan-margina', fixerId: 'margins-fixer', params: { right: 2.5 } },
+        // fmt kao BROJ umjesto stringa: escapeXmlAttr unutar patchSectionPageNumbering baca
+        // TypeError ('s.replace is not a function'), jer ovaj ugnjezdeni target-objekt fixer
+        // nije obuhvacen RE-27-ovom validacijom top-level skalara.
+        { ruleId: 'ruzan-baca', fixerId: 'page-numbering-fixer', params: { targets: [{ sectionIndex: 0, fmt: 123 }] } },
+      ]);
+
+      expect(result.changelog).toHaveLength(1);
+      expect(result.changelog[0].ruleId).toBe('valjan-margina');
+      expect(result.skipped).toEqual(['ruzan-baca']);
+
+      const newEntries = await readZip(result.docxBytes);
+      const dec = new TextDecoder();
+      const newDoc = dec.decode(newEntries.find((e) => e.name === 'word/document.xml')!.data);
+      expect(newDoc).toContain('w:right="1417"'); // 2,5cm i dalje primijenjeno
+    });
+  });
 });

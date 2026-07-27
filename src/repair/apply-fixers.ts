@@ -248,7 +248,17 @@ export async function applyFixers(
   const skipped: string[] = [];
 
   for (const request of requests) {
-    const result = runFixer(request.fixerId, parts, request.params);
+    let result: ReturnType<typeof runFixer>;
+    try {
+      result = runFixer(request.fixerId, parts, request.params);
+    } catch {
+      // RE-26: fixer koji BACI (neocekivana/rubna kombinacija ulaza) ne smije oboriti CIJELU
+      // bateriju, ukljucivo popravke VEC uspjesno primijenjene prije njega u istom pozivu. Server
+      // bez ovoga mapira ijedan takav pad u 422 invalid_docx, sto krivo optuzuje korisnikov
+      // dokument umjesto internog buga fixera. Isti fail-safe tretman kao "nije uspio primijeniti".
+      skipped.push(request.ruleId);
+      continue;
+    }
     if (!result.applied) {
       // Fail-safe: fixer nije uspio primijeniti popravak (npr. atribut ne
       // postoji u ovom dokumentu), tiho preskoci, ne baca korisniku gresku.
