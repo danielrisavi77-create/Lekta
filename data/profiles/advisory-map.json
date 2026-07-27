@@ -458,16 +458,13 @@
     "toc"
   ],
   "fpzg-mes-master-thesis": [
-    "margins",
-    "justify"
+    "margins"
   ],
   "fpzg-nacionalna-sigurnost-diplomski": [
-    "margins",
-    "justify"
+    "margins"
   ],
   "fpzg-novinarstvo-diplomski": [
-    "margins",
-    "justify"
+    "margins"
   ],
   "fpzg-novinarstvo-zavrsni-av": [
     "font",
@@ -480,38 +477,30 @@
     "page-numbers"
   ],
   "fpzg-novinarstvo-zavrsni-tekst": [
-    "margins",
-    "justify"
+    "margins"
   ],
   "fpzg-opci-akademski-rad": [
     "margins",
-    "justify",
     "paper-size",
     "toc"
   ],
   "fpzg-politologija-diplomski": [
-    "margins",
-    "justify"
+    "margins"
   ],
   "fpzg-politologija-zavrsni": [
-    "margins",
-    "justify"
+    "margins"
   ],
   "fpzg-specijalisticki-odnosi-s-javnoscu": [
-    "margins",
-    "justify"
+    "margins"
   ],
   "fpzg-specijalisticki-prilagodba-eu": [
-    "margins",
-    "justify"
+    "margins"
   ],
   "fpzg-specijalisticki-sigurnosna-politika-rh": [
-    "margins",
-    "justify"
+    "margins"
   ],
   "fpzg-specijalisticki-vanjska-politika-diplomacija": [
-    "margins",
-    "justify"
+    "margins"
   ],
   "fsb-diplomski": [
     "font",
@@ -916,41 +905,31 @@
   ],
   "pravo-doktorski-pravne-znanosti": [
     "margins",
-    "justify",
     "paper-size",
-    "toc",
-    "page-numbers"
+    "toc"
   ],
   "pravo-integrirani-diplomski": [
     "margins",
-    "justify",
     "paper-size"
   ],
   "pravo-javna-uprava-diplomski": [
     "margins",
-    "justify",
     "paper-size"
   ],
   "pravo-javna-uprava-prijediplomski": [
     "margins",
-    "justify",
     "paper-size"
   ],
   "pravo-opci-pravni-akademski-rad": [
     "margins",
-    "justify",
     "paper-size",
-    "toc",
-    "page-numbers"
+    "toc"
   ],
   "pravo-porezni-prijediplomski": [
     "margins",
-    "justify",
     "paper-size"
   ],
   "pravo-socijalna-politika-diplomski": [
-    "margins",
-    "justify",
     "paper-size"
   ],
   "pravo-socijalne-djelatnosti-doktorski": [
@@ -968,8 +947,6 @@
     "page-numbers"
   ],
   "pravo-socijalni-rad-diplomski": [
-    "margins",
-    "justify",
     "paper-size"
   ],
   "pravo-socijalni-rad-zavrsni": [
@@ -978,10 +955,8 @@
   ],
   "pravo-specijalisticki-pravni-opci": [
     "margins",
-    "justify",
     "paper-size",
-    "toc",
-    "page-numbers"
+    "toc"
   ],
   "pravos-diplomski": [
     "justify",

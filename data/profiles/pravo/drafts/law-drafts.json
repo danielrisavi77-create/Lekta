@@ -21,7 +21,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-3pass-batch",
         "lastVerified": "2026-06-30",
-        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "pravo-integrirani-diplomski--font-size",
@@ -40,7 +42,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-3pass-batch",
         "lastVerified": "2026-06-30",
-        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "pravo-integrirani-diplomski--line-spacing",
@@ -57,7 +61,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-3pass-batch",
         "lastVerified": "2026-06-30",
-        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "autoFixable": true,
+        "fixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "pravo-integrirani-diplomski--margins",
@@ -315,6 +321,27 @@
         "sourcePage": null,
         "quote": null,
         "status": "advisory"
+      },
+      {
+        "ruleId": "pravo-integrirani-diplomski--justify",
+        "checkId": "justify",
+        "value": true,
+        "category": "format",
+        "label": "Poravnanje glavnog teksta",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "authority": "general",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Glavni tekst (...) poravnanje s obiju strana (justified)",
+        "machineCheckable": true,
+        "status": "verified",
+        "scored": true,
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "lastVerified": "2026-07-27",
+        "confirmedVia": "ai-1pass-batch",
+        "autoFixable": true,
+        "fixerId": "alignment-fixer"
       }
     ],
     "pravo-javna-uprava-prijediplomski": [
@@ -335,7 +362,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-3pass-batch",
         "lastVerified": "2026-06-30",
-        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "pravo-javna-uprava-prijediplomski--font-size",
@@ -354,7 +383,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-3pass-batch",
         "lastVerified": "2026-06-30",
-        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "pravo-javna-uprava-prijediplomski--line-spacing",
@@ -371,7 +402,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-3pass-batch",
         "lastVerified": "2026-06-30",
-        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "autoFixable": true,
+        "fixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "pravo-javna-uprava-prijediplomski--margins",
@@ -615,6 +648,27 @@
         "confirmedVia": "ai-3pass-batch",
         "lastVerified": "2026-06-30",
         "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-javna-uprava-prijediplomski--justify",
+        "checkId": "justify",
+        "value": true,
+        "category": "format",
+        "label": "Poravnanje glavnog teksta",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "authority": "general",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Glavni tekst (...) poravnanje s obiju strana (justified)",
+        "machineCheckable": true,
+        "status": "verified",
+        "scored": true,
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "lastVerified": "2026-07-27",
+        "confirmedVia": "ai-1pass-batch",
+        "autoFixable": true,
+        "fixerId": "alignment-fixer"
       }
     ],
     "pravo-javna-uprava-diplomski": [
@@ -635,7 +689,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-3pass-batch",
         "lastVerified": "2026-06-30",
-        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "pravo-javna-uprava-diplomski--font-size",
@@ -654,7 +710,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-3pass-batch",
         "lastVerified": "2026-06-30",
-        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "pravo-javna-uprava-diplomski--line-spacing",
@@ -671,7 +729,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-3pass-batch",
         "lastVerified": "2026-06-30",
-        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "autoFixable": true,
+        "fixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "pravo-javna-uprava-diplomski--margins",
@@ -915,6 +975,27 @@
         "confirmedVia": "ai-3pass-batch",
         "lastVerified": "2026-06-30",
         "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-javna-uprava-diplomski--justify",
+        "checkId": "justify",
+        "value": true,
+        "category": "format",
+        "label": "Poravnanje glavnog teksta",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "authority": "general",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Glavni tekst (...) poravnanje s obiju strana (justified)",
+        "machineCheckable": true,
+        "status": "verified",
+        "scored": true,
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "lastVerified": "2026-07-27",
+        "confirmedVia": "ai-1pass-batch",
+        "autoFixable": true,
+        "fixerId": "alignment-fixer"
       }
     ],
     "pravo-porezni-prijediplomski": [
@@ -935,7 +1016,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-3pass-batch",
         "lastVerified": "2026-06-30",
-        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "pravo-porezni-prijediplomski--font-size",
@@ -954,7 +1037,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-3pass-batch",
         "lastVerified": "2026-06-30",
-        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "pravo-porezni-prijediplomski--line-spacing",
@@ -971,7 +1056,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-3pass-batch",
         "lastVerified": "2026-06-30",
-        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "autoFixable": true,
+        "fixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "pravo-porezni-prijediplomski--margins",
@@ -1215,6 +1302,27 @@
         "confirmedVia": "ai-3pass-batch",
         "lastVerified": "2026-06-30",
         "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-porezni-prijediplomski--justify",
+        "checkId": "justify",
+        "value": true,
+        "category": "format",
+        "label": "Poravnanje glavnog teksta",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "authority": "general",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Glavni tekst (...) poravnanje s obiju strana (justified)",
+        "machineCheckable": true,
+        "status": "verified",
+        "scored": true,
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "lastVerified": "2026-07-27",
+        "confirmedVia": "ai-1pass-batch",
+        "autoFixable": true,
+        "fixerId": "alignment-fixer"
       }
     ],
     "pravo-socijalni-rad-zavrsni": [
@@ -1235,7 +1343,9 @@
         "verifiedBy": "Daniel",
         "reviewedBy": null,
         "lastVerified": "2026-07-16",
-        "verifiedHash": "f23d811384c5e80415aaf498c023488527d8d93eb6b9b13dc9bc07323535706e"
+        "verifiedHash": "f23d811384c5e80415aaf498c023488527d8d93eb6b9b13dc9bc07323535706e",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "pravo-socijalni-rad-zavrsni--font-size",
@@ -1254,7 +1364,9 @@
         "verifiedBy": "Daniel",
         "reviewedBy": null,
         "lastVerified": "2026-07-16",
-        "verifiedHash": "f23d811384c5e80415aaf498c023488527d8d93eb6b9b13dc9bc07323535706e"
+        "verifiedHash": "f23d811384c5e80415aaf498c023488527d8d93eb6b9b13dc9bc07323535706e",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "pravo-socijalni-rad-zavrsni--line-spacing",
@@ -1271,7 +1383,9 @@
         "verifiedBy": "Daniel",
         "reviewedBy": null,
         "lastVerified": "2026-07-16",
-        "verifiedHash": "f23d811384c5e80415aaf498c023488527d8d93eb6b9b13dc9bc07323535706e"
+        "verifiedHash": "f23d811384c5e80415aaf498c023488527d8d93eb6b9b13dc9bc07323535706e",
+        "autoFixable": true,
+        "fixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "pravo-socijalni-rad-zavrsni--margins",
@@ -1293,7 +1407,9 @@
         "verifiedBy": "Daniel",
         "reviewedBy": null,
         "lastVerified": "2026-07-16",
-        "verifiedHash": "f23d811384c5e80415aaf498c023488527d8d93eb6b9b13dc9bc07323535706e"
+        "verifiedHash": "f23d811384c5e80415aaf498c023488527d8d93eb6b9b13dc9bc07323535706e",
+        "autoFixable": true,
+        "fixerId": "margins-fixer"
       },
       {
         "ruleId": "pravo-socijalni-rad-zavrsni--citation-style",
@@ -1522,7 +1638,9 @@
         "verifiedBy": "Daniel",
         "reviewedBy": null,
         "lastVerified": "2026-07-16",
-        "verifiedHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70"
+        "verifiedHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "pravo-socijalni-rad-diplomski--font-size",
@@ -1541,7 +1659,9 @@
         "verifiedBy": "Daniel",
         "reviewedBy": null,
         "lastVerified": "2026-07-16",
-        "verifiedHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70"
+        "verifiedHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "pravo-socijalni-rad-diplomski--line-spacing",
@@ -1558,24 +1678,35 @@
         "verifiedBy": "Daniel",
         "reviewedBy": null,
         "lastVerified": "2026-07-16",
-        "verifiedHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70"
+        "verifiedHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70",
+        "autoFixable": true,
+        "fixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "pravo-socijalni-rad-diplomski--margins",
         "checkId": "margins",
         "value": {
-          "top": 3,
+          "left": 3.5,
           "right": 3,
-          "bottom": 3,
-          "left": 3.5
+          "top": 3,
+          "bottom": 3
         },
         "category": "format",
         "label": "Margine",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "advisory"
+        "sourceId": "pravo-scsr-upute-diplomski-2021",
+        "authority": "general",
+        "verifiedHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70",
+        "sourcePage": "str. 11, odjeljak 'Upute za oblikovanje teksta rada' (1. Osnovne upute)",
+        "quote": "margine trebaju biti slijedee: 3,5cm s lijeve strane te 3cm s desne strane, gore i dolje",
+        "status": "verified",
+        "scored": true,
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "lastVerified": "2026-07-27",
+        "confirmedVia": "ai-1pass-batch",
+        "autoFixable": true,
+        "fixerId": "margins-fixer"
       },
       {
         "ruleId": "pravo-socijalni-rad-diplomski--citation-style",
@@ -1779,6 +1910,48 @@
         "sourcePage": null,
         "quote": null,
         "status": "advisory"
+      },
+      {
+        "ruleId": "pravo-socijalni-rad-diplomski--justify",
+        "checkId": "justify",
+        "value": true,
+        "category": "format",
+        "label": "Poravnanje",
+        "sourceId": "pravo-scsr-upute-diplomski-2021",
+        "authority": "general",
+        "verifiedHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70",
+        "sourcePage": "str. 11, odjeljak 'Upute za oblikovanje teksta rada' (1. Osnovne upute)",
+        "quote": "tekst je potrebno pisati s obostranim poravnanjem",
+        "machineCheckable": true,
+        "status": "verified",
+        "scored": true,
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "lastVerified": "2026-07-27",
+        "confirmedVia": "ai-1pass-batch",
+        "autoFixable": true,
+        "fixerId": "alignment-fixer"
+      },
+      {
+        "ruleId": "pravo-socijalni-rad-diplomski--footnote-size",
+        "checkId": "footnote-size",
+        "value": [
+          10
+        ],
+        "category": "format",
+        "label": "Velicina fonta fusnota",
+        "sourceId": "pravo-scsr-upute-diplomski-2021",
+        "authority": "general",
+        "verifiedHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70",
+        "sourcePage": "str. 11, odjeljak 'Upute za oblikovanje teksta rada' (1. Osnovne upute)",
+        "quote": "biljeske (fusnote) se ispisuju na dnu svake stranice - oznacavaju se od rednog broja 1 i nadalje, velicina slova je 10",
+        "machineCheckable": true,
+        "status": "verified",
+        "scored": true,
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "lastVerified": "2026-07-27",
+        "confirmedVia": "ai-1pass-batch"
       }
     ],
     "pravo-socijalna-politika-diplomski": [
@@ -1799,7 +1972,9 @@
         "verifiedBy": "Daniel",
         "reviewedBy": null,
         "lastVerified": "2026-07-16",
-        "verifiedHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70"
+        "verifiedHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "pravo-socijalna-politika-diplomski--font-size",
@@ -1818,7 +1993,9 @@
         "verifiedBy": "Daniel",
         "reviewedBy": null,
         "lastVerified": "2026-07-16",
-        "verifiedHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70"
+        "verifiedHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "pravo-socijalna-politika-diplomski--line-spacing",
@@ -1835,24 +2012,35 @@
         "verifiedBy": "Daniel",
         "reviewedBy": null,
         "lastVerified": "2026-07-16",
-        "verifiedHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70"
+        "verifiedHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70",
+        "autoFixable": true,
+        "fixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "pravo-socijalna-politika-diplomski--margins",
         "checkId": "margins",
         "value": {
-          "top": 3,
+          "left": 3.5,
           "right": 3,
-          "bottom": 3,
-          "left": 3.5
+          "top": 3,
+          "bottom": 3
         },
         "category": "format",
         "label": "Margine",
         "machineCheckable": true,
-        "sourceId": null,
-        "sourcePage": null,
-        "quote": null,
-        "status": "advisory"
+        "sourceId": "pravo-scsr-upute-diplomski-2021",
+        "authority": "general",
+        "verifiedHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70",
+        "sourcePage": "str. 11, odjeljak 'Upute za oblikovanje teksta rada' (1. Osnovne upute)",
+        "quote": "margine trebaju biti slijedee: 3,5cm s lijeve strane te 3cm s desne strane, gore i dolje",
+        "status": "verified",
+        "scored": true,
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "lastVerified": "2026-07-27",
+        "confirmedVia": "ai-1pass-batch",
+        "autoFixable": true,
+        "fixerId": "margins-fixer"
       },
       {
         "ruleId": "pravo-socijalna-politika-diplomski--citation-style",
@@ -2056,6 +2244,48 @@
         "sourcePage": null,
         "quote": null,
         "status": "advisory"
+      },
+      {
+        "ruleId": "pravo-socijalna-politika-diplomski--justify",
+        "checkId": "justify",
+        "value": true,
+        "category": "format",
+        "label": "Poravnanje",
+        "sourceId": "pravo-scsr-upute-diplomski-2021",
+        "authority": "general",
+        "verifiedHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70",
+        "sourcePage": "str. 11, odjeljak 'Upute za oblikovanje teksta rada' (1. Osnovne upute)",
+        "quote": "tekst je potrebno pisati s obostranim poravnanjem",
+        "machineCheckable": true,
+        "status": "verified",
+        "scored": true,
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "lastVerified": "2026-07-27",
+        "confirmedVia": "ai-1pass-batch",
+        "autoFixable": true,
+        "fixerId": "alignment-fixer"
+      },
+      {
+        "ruleId": "pravo-socijalna-politika-diplomski--footnote-size",
+        "checkId": "footnote-size",
+        "value": [
+          10
+        ],
+        "category": "format",
+        "label": "Velicina fonta fusnota",
+        "sourceId": "pravo-scsr-upute-diplomski-2021",
+        "authority": "general",
+        "verifiedHash": "278bacc828637eec754614afa9bd51c66bdca22539ae1540d9f6a827dcb15c70",
+        "sourcePage": "str. 11, odjeljak 'Upute za oblikovanje teksta rada' (1. Osnovne upute)",
+        "quote": "biljeske (fusnote) se ispisuju na dnu svake stranice - oznacavaju se od rednog broja 1 i nadalje, velicina slova je 10",
+        "machineCheckable": true,
+        "status": "verified",
+        "scored": true,
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "lastVerified": "2026-07-27",
+        "confirmedVia": "ai-1pass-batch"
       }
     ],
     "pravo-opci-pravni-akademski-rad": [
@@ -2076,7 +2306,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-3pass-batch",
         "lastVerified": "2026-06-30",
-        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "pravo-opci-pravni-akademski-rad--font-size",
@@ -2095,7 +2327,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-3pass-batch",
         "lastVerified": "2026-06-30",
-        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "pravo-opci-pravni-akademski-rad--line-spacing",
@@ -2112,7 +2346,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-3pass-batch",
         "lastVerified": "2026-06-30",
-        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "autoFixable": true,
+        "fixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "pravo-opci-pravni-akademski-rad--margins",
@@ -2220,6 +2456,46 @@
         "confirmedVia": "ai-3pass-batch",
         "lastVerified": "2026-06-30",
         "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-opci-pravni-akademski-rad--justify",
+        "checkId": "justify",
+        "value": true,
+        "category": "format",
+        "label": "Poravnanje glavnog teksta",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "authority": "general",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Glavni tekst (...) poravnanje s obiju strana (justified)",
+        "machineCheckable": true,
+        "status": "verified",
+        "scored": true,
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "lastVerified": "2026-07-27",
+        "confirmedVia": "ai-1pass-batch",
+        "autoFixable": true,
+        "fixerId": "alignment-fixer"
+      },
+      {
+        "ruleId": "pravo-opci-pravni-akademski-rad--page-numbers",
+        "checkId": "page-numbers",
+        "value": true,
+        "category": "format",
+        "label": "Numeracija stranica",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "authority": "general",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti automatski umetnut broj stranice.",
+        "machineCheckable": true,
+        "status": "verified",
+        "scored": true,
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "lastVerified": "2026-07-27",
+        "confirmedVia": "ai-1pass-batch"
       }
     ],
     "pravo-socijalni-opci-akademski-rad": [
@@ -2241,7 +2517,9 @@
         "reviewedBy": null,
         "lastVerified": "2026-07-16",
         "verifiedHash": "f23d811384c5e80415aaf498c023488527d8d93eb6b9b13dc9bc07323535706e",
-        "note": "Covjek potvrdio uz otvoren snapshot prijediplomskih SCSR Uputa; opci akademski rad mapiran na prijediplomsku razinu (odluka korisnika, margine 3,5/3 se poklapaju). verifiedHash zabiljezen."
+        "note": "Covjek potvrdio uz otvoren snapshot prijediplomskih SCSR Uputa; opci akademski rad mapiran na prijediplomsku razinu (odluka korisnika, margine 3,5/3 se poklapaju). verifiedHash zabiljezen.",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "pravo-socijalni-opci-akademski-rad--font-size",
@@ -2261,7 +2539,9 @@
         "reviewedBy": null,
         "lastVerified": "2026-07-16",
         "verifiedHash": "f23d811384c5e80415aaf498c023488527d8d93eb6b9b13dc9bc07323535706e",
-        "note": "Covjek potvrdio uz otvoren snapshot prijediplomskih SCSR Uputa; opci akademski rad mapiran na prijediplomsku razinu (odluka korisnika, margine 3,5/3 se poklapaju). verifiedHash zabiljezen."
+        "note": "Covjek potvrdio uz otvoren snapshot prijediplomskih SCSR Uputa; opci akademski rad mapiran na prijediplomsku razinu (odluka korisnika, margine 3,5/3 se poklapaju). verifiedHash zabiljezen.",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "pravo-socijalni-opci-akademski-rad--line-spacing",
@@ -2279,7 +2559,9 @@
         "reviewedBy": null,
         "lastVerified": "2026-07-16",
         "verifiedHash": "f23d811384c5e80415aaf498c023488527d8d93eb6b9b13dc9bc07323535706e",
-        "note": "Covjek potvrdio uz otvoren snapshot prijediplomskih SCSR Uputa; opci akademski rad mapiran na prijediplomsku razinu (odluka korisnika, margine 3,5/3 se poklapaju). verifiedHash zabiljezen."
+        "note": "Covjek potvrdio uz otvoren snapshot prijediplomskih SCSR Uputa; opci akademski rad mapiran na prijediplomsku razinu (odluka korisnika, margine 3,5/3 se poklapaju). verifiedHash zabiljezen.",
+        "autoFixable": true,
+        "fixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "pravo-socijalni-opci-akademski-rad--margins",
@@ -2302,7 +2584,9 @@
         "reviewedBy": null,
         "lastVerified": "2026-07-16",
         "verifiedHash": "f23d811384c5e80415aaf498c023488527d8d93eb6b9b13dc9bc07323535706e",
-        "note": "Covjek potvrdio uz otvoren snapshot prijediplomskih SCSR Uputa; opci akademski rad mapiran na prijediplomsku razinu (odluka korisnika, margine 3,5/3 se poklapaju). verifiedHash zabiljezen."
+        "note": "Covjek potvrdio uz otvoren snapshot prijediplomskih SCSR Uputa; opci akademski rad mapiran na prijediplomsku razinu (odluka korisnika, margine 3,5/3 se poklapaju). verifiedHash zabiljezen.",
+        "autoFixable": true,
+        "fixerId": "margins-fixer"
       },
       {
         "ruleId": "pravo-socijalni-opci-akademski-rad--citation-style",
@@ -2371,7 +2655,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-3pass-batch",
         "lastVerified": "2026-06-30",
-        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "pravo-specijalisticki-pravni-opci--font-size",
@@ -2390,7 +2676,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-3pass-batch",
         "lastVerified": "2026-06-30",
-        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "pravo-specijalisticki-pravni-opci--line-spacing",
@@ -2407,7 +2695,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-3pass-batch",
         "lastVerified": "2026-06-30",
-        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "autoFixable": true,
+        "fixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "pravo-specijalisticki-pravni-opci--margins",
@@ -2460,6 +2750,107 @@
         "reviewedBy": null,
         "lastVerified": "2026-07-16",
         "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-specijalisticki-pravni-opci--justify",
+        "checkId": "justify",
+        "value": true,
+        "category": "format",
+        "label": "Poravnanje glavnog teksta",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "authority": "general",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Glavni tekst (...) poravnanje s obiju strana (justified)",
+        "machineCheckable": true,
+        "status": "verified",
+        "scored": true,
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "lastVerified": "2026-07-27",
+        "confirmedVia": "ai-1pass-batch",
+        "autoFixable": true,
+        "fixerId": "alignment-fixer"
+      },
+      {
+        "ruleId": "pravo-specijalisticki-pravni-opci--footnote-font",
+        "checkId": "footnote-font",
+        "value": [
+          "Times New Roman"
+        ],
+        "category": "format",
+        "label": "Font fusnota",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "authority": "general",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta, Biljeske (fusnote)",
+        "quote": "Biljeske (fusnote) - font: Times New Roman",
+        "machineCheckable": true,
+        "status": "verified",
+        "scored": true,
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "lastVerified": "2026-07-27",
+        "confirmedVia": "ai-1pass-batch"
+      },
+      {
+        "ruleId": "pravo-specijalisticki-pravni-opci--footnote-size",
+        "checkId": "footnote-size",
+        "value": [
+          10
+        ],
+        "category": "format",
+        "label": "Velicina fonta fusnota",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "authority": "general",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta, Biljeske (fusnote)",
+        "quote": "Biljeske (fusnote) - velicina fonta: 10",
+        "machineCheckable": true,
+        "status": "verified",
+        "scored": true,
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "lastVerified": "2026-07-27",
+        "confirmedVia": "ai-1pass-batch"
+      },
+      {
+        "ruleId": "pravo-specijalisticki-pravni-opci--footnote-spacing",
+        "checkId": "footnote-spacing",
+        "value": 1,
+        "category": "format",
+        "label": "Prored fusnota",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "authority": "general",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta, Biljeske (fusnote)",
+        "quote": "Biljeske (fusnote) - prored: 1 (razmak 0 i prije i poslije)",
+        "machineCheckable": true,
+        "status": "verified",
+        "scored": true,
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "lastVerified": "2026-07-27",
+        "confirmedVia": "ai-1pass-batch"
+      },
+      {
+        "ruleId": "pravo-specijalisticki-pravni-opci--page-numbers",
+        "checkId": "page-numbers",
+        "value": true,
+        "category": "format",
+        "label": "Numeracija stranica",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "authority": "general",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti automatski umetnut broj stranice.",
+        "machineCheckable": true,
+        "status": "verified",
+        "scored": true,
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "lastVerified": "2026-07-27",
+        "confirmedVia": "ai-1pass-batch"
       }
     ],
     "pravo-doktorski-pravne-znanosti": [
@@ -2480,7 +2871,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-3pass-batch",
         "lastVerified": "2026-06-30",
-        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "pravo-doktorski-pravne-znanosti--font-size",
@@ -2499,7 +2892,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-3pass-batch",
         "lastVerified": "2026-06-30",
-        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "pravo-doktorski-pravne-znanosti--line-spacing",
@@ -2516,7 +2911,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-3pass-batch",
         "lastVerified": "2026-06-30",
-        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "autoFixable": true,
+        "fixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "pravo-doktorski-pravne-znanosti--margins",
@@ -2569,6 +2966,107 @@
         "reviewedBy": null,
         "lastVerified": "2026-07-16",
         "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959"
+      },
+      {
+        "ruleId": "pravo-doktorski-pravne-znanosti--justify",
+        "checkId": "justify",
+        "value": true,
+        "category": "format",
+        "label": "Poravnanje glavnog teksta",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "authority": "general",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Glavni tekst (...) poravnanje s obiju strana (justified)",
+        "machineCheckable": true,
+        "status": "verified",
+        "scored": true,
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "lastVerified": "2026-07-27",
+        "confirmedVia": "ai-1pass-batch",
+        "autoFixable": true,
+        "fixerId": "alignment-fixer"
+      },
+      {
+        "ruleId": "pravo-doktorski-pravne-znanosti--footnote-font",
+        "checkId": "footnote-font",
+        "value": [
+          "Times New Roman"
+        ],
+        "category": "format",
+        "label": "Font fusnota",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "authority": "general",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta, Biljeske (fusnote)",
+        "quote": "Biljeske (fusnote) - font: Times New Roman",
+        "machineCheckable": true,
+        "status": "verified",
+        "scored": true,
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "lastVerified": "2026-07-27",
+        "confirmedVia": "ai-1pass-batch"
+      },
+      {
+        "ruleId": "pravo-doktorski-pravne-znanosti--footnote-size",
+        "checkId": "footnote-size",
+        "value": [
+          10
+        ],
+        "category": "format",
+        "label": "Velicina fonta fusnota",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "authority": "general",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta, Biljeske (fusnote)",
+        "quote": "Biljeske (fusnote) - velicina fonta: 10",
+        "machineCheckable": true,
+        "status": "verified",
+        "scored": true,
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "lastVerified": "2026-07-27",
+        "confirmedVia": "ai-1pass-batch"
+      },
+      {
+        "ruleId": "pravo-doktorski-pravne-znanosti--footnote-spacing",
+        "checkId": "footnote-spacing",
+        "value": 1,
+        "category": "format",
+        "label": "Prored fusnota",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "authority": "general",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta, Biljeske (fusnote)",
+        "quote": "Biljeske (fusnote) - prored: 1 (razmak 0 i prije i poslije)",
+        "machineCheckable": true,
+        "status": "verified",
+        "scored": true,
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "lastVerified": "2026-07-27",
+        "confirmedVia": "ai-1pass-batch"
+      },
+      {
+        "ruleId": "pravo-doktorski-pravne-znanosti--page-numbers",
+        "checkId": "page-numbers",
+        "value": true,
+        "category": "format",
+        "label": "Numeracija stranica",
+        "sourceId": "pravo-upute-oblikovanje-2024",
+        "authority": "general",
+        "verifiedHash": "1917a74d113d9b60dd5873958406be1317447ab55736df6d238b0253c1fb5959",
+        "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
+        "quote": "Stranice rada trebaju biti numerirane, odnosno na svakoj stranici (osim naslovnice) treba biti automatski umetnut broj stranice.",
+        "machineCheckable": true,
+        "status": "verified",
+        "scored": true,
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "lastVerified": "2026-07-27",
+        "confirmedVia": "ai-1pass-batch"
       }
     ],
     "pravo-socijalne-djelatnosti-specijalisticki": [
@@ -2590,7 +3088,9 @@
         "verifiedBy": "Daniel",
         "reviewedBy": null,
         "lastVerified": "2026-07-16",
-        "verifiedHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09"
+        "verifiedHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--font-size",
@@ -2609,7 +3109,9 @@
         "verifiedBy": "Daniel",
         "reviewedBy": null,
         "lastVerified": "2026-07-16",
-        "verifiedHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09"
+        "verifiedHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--line-spacing",
@@ -2626,7 +3128,9 @@
         "verifiedBy": "Daniel",
         "reviewedBy": null,
         "lastVerified": "2026-07-16",
-        "verifiedHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09"
+        "verifiedHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09",
+        "autoFixable": true,
+        "fixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--margins",
@@ -2648,7 +3152,9 @@
         "verifiedBy": "Daniel",
         "reviewedBy": null,
         "lastVerified": "2026-07-16",
-        "verifiedHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09"
+        "verifiedHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09",
+        "autoFixable": true,
+        "fixerId": "margins-fixer"
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--citation-style",
@@ -2794,7 +3300,9 @@
         "verifiedBy": "Daniel",
         "reviewedBy": null,
         "lastVerified": "2026-07-16",
-        "verifiedHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09"
+        "verifiedHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-doktorski--font-size",
@@ -2813,7 +3321,9 @@
         "verifiedBy": "Daniel",
         "reviewedBy": null,
         "lastVerified": "2026-07-16",
-        "verifiedHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09"
+        "verifiedHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-doktorski--line-spacing",
@@ -2830,7 +3340,9 @@
         "verifiedBy": "Daniel",
         "reviewedBy": null,
         "lastVerified": "2026-07-16",
-        "verifiedHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09"
+        "verifiedHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09",
+        "autoFixable": true,
+        "fixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-doktorski--margins",
@@ -2852,7 +3364,9 @@
         "verifiedBy": "Daniel",
         "reviewedBy": null,
         "lastVerified": "2026-07-16",
-        "verifiedHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09"
+        "verifiedHash": "8ba1b9167a5b0e03ad0cfcc3542a2657e2f7c731fb34b042a6ef5ec0fcde3c09",
+        "autoFixable": true,
+        "fixerId": "margins-fixer"
       },
       {
         "ruleId": "pravo-socijalne-djelatnosti-doktorski--citation-style",
@@ -3282,7 +3796,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "98eb269b496a9de605ad1845da7b0276d6b70b711af54c6ae3a3dcad480d5bae"
+        "verifiedHash": "98eb269b496a9de605ad1845da7b0276d6b70b711af54c6ae3a3dcad480d5bae",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "sociologija--font-size",
@@ -3301,7 +3817,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "98eb269b496a9de605ad1845da7b0276d6b70b711af54c6ae3a3dcad480d5bae"
+        "verifiedHash": "98eb269b496a9de605ad1845da7b0276d6b70b711af54c6ae3a3dcad480d5bae",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "sociologija--line-spacing",
@@ -3318,7 +3836,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "98eb269b496a9de605ad1845da7b0276d6b70b711af54c6ae3a3dcad480d5bae"
+        "verifiedHash": "98eb269b496a9de605ad1845da7b0276d6b70b711af54c6ae3a3dcad480d5bae",
+        "autoFixable": true,
+        "fixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "sociologija--required-sections",

@@ -2561,6 +2561,502 @@
       "autoFixable": true
     }
   ],
+  "fpzg-doktorski-politologija": [
+    {
+      "ruleId": "fpzg-doktorski-politologija--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-doktorski-politologija--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-doktorski-politologija--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-doktorski-politologija--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-doktorski-politologija--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    }
+  ],
+  "fpzg-mes-master-thesis": [
+    {
+      "ruleId": "fpzg-mes-master-thesis--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-mes-master-thesis--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-mes-master-thesis--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-mes-master-thesis--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-mes-master-thesis--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
+  "fpzg-nacionalna-sigurnost-diplomski": [
+    {
+      "ruleId": "fpzg-nacionalna-sigurnost-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-nacionalna-sigurnost-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-nacionalna-sigurnost-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-nacionalna-sigurnost-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-nacionalna-sigurnost-diplomski--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
+  "fpzg-novinarstvo-diplomski": [
+    {
+      "ruleId": "fpzg-novinarstvo-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-novinarstvo-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-novinarstvo-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-novinarstvo-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-novinarstvo-diplomski--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
+  "fpzg-novinarstvo-zavrsni-tekst": [
+    {
+      "ruleId": "fpzg-novinarstvo-zavrsni-tekst--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-novinarstvo-zavrsni-tekst--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-novinarstvo-zavrsni-tekst--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-novinarstvo-zavrsni-tekst--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-novinarstvo-zavrsni-tekst--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
+  "fpzg-opci-akademski-rad": [
+    {
+      "ruleId": "fpzg-opci-akademski-rad--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-opci-akademski-rad--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-opci-akademski-rad--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-opci-akademski-rad--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
+  "fpzg-politologija-diplomski": [
+    {
+      "ruleId": "fpzg-politologija-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-politologija-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-politologija-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-politologija-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-politologija-diplomski--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
+  "fpzg-politologija-zavrsni": [
+    {
+      "ruleId": "fpzg-politologija-zavrsni--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-politologija-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-politologija-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-politologija-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-politologija-zavrsni--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
+  "fpzg-specijalisticki-odnosi-s-javnoscu": [
+    {
+      "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
+  "fpzg-specijalisticki-prilagodba-eu": [
+    {
+      "ruleId": "fpzg-specijalisticki-prilagodba-eu--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-prilagodba-eu--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-prilagodba-eu--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-prilagodba-eu--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-prilagodba-eu--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
+  "fpzg-specijalisticki-sigurnosna-politika-rh": [
+    {
+      "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
+  "fpzg-specijalisticki-vanjska-politika-diplomacija": [
+    {
+      "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
   "fsb-doktorski": [
     {
       "ruleId": "fsb-doktorski--font",
@@ -4837,6 +5333,464 @@
       "autoFixable": true
     }
   ],
+  "pravo-doktorski-pravne-znanosti": [
+    {
+      "ruleId": "pravo-doktorski-pravne-znanosti--font",
+      "checkId": "font",
+      "label": "Font glavnog teksta",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-doktorski-pravne-znanosti--font-size",
+      "checkId": "font-size",
+      "label": "Velicina fonta glavnog teksta",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-doktorski-pravne-znanosti--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored glavnog teksta",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-doktorski-pravne-znanosti--justify",
+      "checkId": "justify",
+      "label": "Poravnanje glavnog teksta",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
+  "pravo-integrirani-diplomski": [
+    {
+      "ruleId": "pravo-integrirani-diplomski--font",
+      "checkId": "font",
+      "label": "Font glavnog teksta",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-integrirani-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina fonta glavnog teksta",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-integrirani-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored glavnog teksta",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-integrirani-diplomski--justify",
+      "checkId": "justify",
+      "label": "Poravnanje glavnog teksta",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
+  "pravo-javna-uprava-diplomski": [
+    {
+      "ruleId": "pravo-javna-uprava-diplomski--font",
+      "checkId": "font",
+      "label": "Font glavnog teksta",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-javna-uprava-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina fonta glavnog teksta",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-javna-uprava-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored glavnog teksta",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-javna-uprava-diplomski--justify",
+      "checkId": "justify",
+      "label": "Poravnanje glavnog teksta",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
+  "pravo-javna-uprava-prijediplomski": [
+    {
+      "ruleId": "pravo-javna-uprava-prijediplomski--font",
+      "checkId": "font",
+      "label": "Font glavnog teksta",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-javna-uprava-prijediplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina fonta glavnog teksta",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-javna-uprava-prijediplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored glavnog teksta",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-javna-uprava-prijediplomski--justify",
+      "checkId": "justify",
+      "label": "Poravnanje glavnog teksta",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
+  "pravo-opci-pravni-akademski-rad": [
+    {
+      "ruleId": "pravo-opci-pravni-akademski-rad--font",
+      "checkId": "font",
+      "label": "Font glavnog teksta",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-opci-pravni-akademski-rad--font-size",
+      "checkId": "font-size",
+      "label": "Velicina fonta glavnog teksta",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-opci-pravni-akademski-rad--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored glavnog teksta",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-opci-pravni-akademski-rad--justify",
+      "checkId": "justify",
+      "label": "Poravnanje glavnog teksta",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
+  "pravo-porezni-prijediplomski": [
+    {
+      "ruleId": "pravo-porezni-prijediplomski--font",
+      "checkId": "font",
+      "label": "Font glavnog teksta",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-porezni-prijediplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina fonta glavnog teksta",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-porezni-prijediplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored glavnog teksta",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-porezni-prijediplomski--justify",
+      "checkId": "justify",
+      "label": "Poravnanje glavnog teksta",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
+  "pravo-socijalna-politika-diplomski": [
+    {
+      "ruleId": "pravo-socijalna-politika-diplomski--font",
+      "checkId": "font",
+      "label": "Font glavnog teksta",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-socijalna-politika-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina fonta glavnog teksta",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-socijalna-politika-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored glavnog teksta",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-socijalna-politika-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-socijalna-politika-diplomski--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
+  "pravo-socijalne-djelatnosti-doktorski": [
+    {
+      "ruleId": "pravo-socijalne-djelatnosti-doktorski--font",
+      "checkId": "font",
+      "label": "Font glavnog teksta",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-socijalne-djelatnosti-doktorski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina fonta glavnog teksta",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-socijalne-djelatnosti-doktorski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored glavnog teksta",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-socijalne-djelatnosti-doktorski--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    }
+  ],
+  "pravo-socijalne-djelatnosti-specijalisticki": [
+    {
+      "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--font",
+      "checkId": "font",
+      "label": "Font glavnog teksta",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--font-size",
+      "checkId": "font-size",
+      "label": "Velicina fonta glavnog teksta",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored glavnog teksta",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-socijalne-djelatnosti-specijalisticki--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    }
+  ],
+  "pravo-socijalni-opci-akademski-rad": [
+    {
+      "ruleId": "pravo-socijalni-opci-akademski-rad--font",
+      "checkId": "font",
+      "label": "Font glavnog teksta",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-socijalni-opci-akademski-rad--font-size",
+      "checkId": "font-size",
+      "label": "Velicina fonta glavnog teksta",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-socijalni-opci-akademski-rad--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored glavnog teksta",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-socijalni-opci-akademski-rad--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    }
+  ],
+  "pravo-socijalni-rad-diplomski": [
+    {
+      "ruleId": "pravo-socijalni-rad-diplomski--font",
+      "checkId": "font",
+      "label": "Font glavnog teksta",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-socijalni-rad-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina fonta glavnog teksta",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-socijalni-rad-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored glavnog teksta",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-socijalni-rad-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-socijalni-rad-diplomski--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
+  "pravo-socijalni-rad-zavrsni": [
+    {
+      "ruleId": "pravo-socijalni-rad-zavrsni--font",
+      "checkId": "font",
+      "label": "Font glavnog teksta",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-socijalni-rad-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina fonta glavnog teksta",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-socijalni-rad-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored glavnog teksta",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-socijalni-rad-zavrsni--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    }
+  ],
+  "pravo-specijalisticki-pravni-opci": [
+    {
+      "ruleId": "pravo-specijalisticki-pravni-opci--font",
+      "checkId": "font",
+      "label": "Font glavnog teksta",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-specijalisticki-pravni-opci--font-size",
+      "checkId": "font-size",
+      "label": "Velicina fonta glavnog teksta",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-specijalisticki-pravni-opci--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored glavnog teksta",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravo-specijalisticki-pravni-opci--justify",
+      "checkId": "justify",
+      "label": "Poravnanje glavnog teksta",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
   "pravos-diplomski": [
     {
       "ruleId": "pravos-diplomski--paper-size",
@@ -5404,6 +6358,32 @@
       "ruleId": "simet-zavrsni--line-spacing",
       "checkId": "line-spacing",
       "label": "Prored (jednostruki)",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    }
+  ],
+  "sociologija": [
+    {
+      "ruleId": "sociologija--font",
+      "checkId": "font",
+      "label": "Font glavnog teksta",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "sociologija--font-size",
+      "checkId": "font-size",
+      "label": "Velicina fonta glavnog teksta",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "sociologija--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored glavnog teksta",
       "status": "verified",
       "fixerId": "line-spacing-fixer",
       "autoFixable": true

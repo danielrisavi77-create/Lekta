@@ -698,27 +698,27 @@
     },
     {
       "profileId": "fpzg-mes-master-thesis",
-      "scored": 8,
-      "machineCheckable": 8,
+      "scored": 9,
+      "machineCheckable": 9,
       "advisory": 0,
       "ratio": 1,
-      "lastVerified": "2026-07-02"
+      "lastVerified": "2026-07-27"
     },
     {
       "profileId": "fpzg-nacionalna-sigurnost-diplomski",
-      "scored": 9,
-      "machineCheckable": 9,
+      "scored": 10,
+      "machineCheckable": 10,
       "advisory": 0,
       "ratio": 1,
-      "lastVerified": "2026-07-02"
+      "lastVerified": "2026-07-27"
     },
     {
       "profileId": "fpzg-novinarstvo-diplomski",
-      "scored": 9,
-      "machineCheckable": 9,
+      "scored": 10,
+      "machineCheckable": 10,
       "advisory": 0,
       "ratio": 1,
-      "lastVerified": "2026-07-02"
+      "lastVerified": "2026-07-27"
     },
     {
       "profileId": "fpzg-novinarstvo-zavrsni-av",
@@ -730,67 +730,67 @@
     },
     {
       "profileId": "fpzg-novinarstvo-zavrsni-tekst",
-      "scored": 9,
-      "machineCheckable": 9,
+      "scored": 10,
+      "machineCheckable": 10,
       "advisory": 0,
       "ratio": 1,
-      "lastVerified": "2026-07-02"
+      "lastVerified": "2026-07-27"
     },
     {
       "profileId": "fpzg-opci-akademski-rad",
-      "scored": 5,
-      "machineCheckable": 5,
+      "scored": 6,
+      "machineCheckable": 6,
       "advisory": 0,
       "ratio": 1,
-      "lastVerified": "2026-07-02"
+      "lastVerified": "2026-07-27"
     },
     {
       "profileId": "fpzg-politologija-diplomski",
-      "scored": 9,
-      "machineCheckable": 9,
+      "scored": 10,
+      "machineCheckable": 10,
       "advisory": 0,
       "ratio": 1,
-      "lastVerified": "2026-07-02"
+      "lastVerified": "2026-07-27"
     },
     {
       "profileId": "fpzg-politologija-zavrsni",
-      "scored": 9,
-      "machineCheckable": 9,
+      "scored": 10,
+      "machineCheckable": 10,
       "advisory": 0,
       "ratio": 1,
-      "lastVerified": "2026-07-02"
+      "lastVerified": "2026-07-27"
     },
     {
       "profileId": "fpzg-specijalisticki-odnosi-s-javnoscu",
-      "scored": 9,
-      "machineCheckable": 9,
+      "scored": 10,
+      "machineCheckable": 10,
       "advisory": 0,
       "ratio": 1,
-      "lastVerified": "2026-07-02"
+      "lastVerified": "2026-07-27"
     },
     {
       "profileId": "fpzg-specijalisticki-prilagodba-eu",
-      "scored": 9,
-      "machineCheckable": 9,
+      "scored": 10,
+      "machineCheckable": 10,
       "advisory": 0,
       "ratio": 1,
-      "lastVerified": "2026-07-02"
+      "lastVerified": "2026-07-27"
     },
     {
       "profileId": "fpzg-specijalisticki-sigurnosna-politika-rh",
-      "scored": 9,
-      "machineCheckable": 9,
+      "scored": 10,
+      "machineCheckable": 10,
       "advisory": 0,
       "ratio": 1,
-      "lastVerified": "2026-07-02"
+      "lastVerified": "2026-07-27"
     },
     {
       "profileId": "fpzg-specijalisticki-vanjska-politika-diplomacija",
-      "scored": 9,
-      "machineCheckable": 9,
+      "scored": 10,
+      "machineCheckable": 10,
       "advisory": 0,
       "ratio": 1,
-      "lastVerified": "2026-07-02"
+      "lastVerified": "2026-07-27"
     },
     {
       "profileId": "fsb-diplomski",
@@ -1394,59 +1394,59 @@
     },
     {
       "profileId": "pravo-doktorski-pravne-znanosti",
-      "scored": 5,
-      "machineCheckable": 6,
+      "scored": 10,
+      "machineCheckable": 11,
       "advisory": 1,
-      "ratio": 0.8333333333333334,
-      "lastVerified": "2026-07-16"
+      "ratio": 0.9090909090909091,
+      "lastVerified": "2026-07-27"
     },
     {
       "profileId": "pravo-integrirani-diplomski",
+      "scored": 12,
+      "machineCheckable": 14,
+      "advisory": 2,
+      "ratio": 0.8571428571428571,
+      "lastVerified": "2026-07-27"
+    },
+    {
+      "profileId": "pravo-javna-uprava-diplomski",
+      "scored": 12,
+      "machineCheckable": 13,
+      "advisory": 1,
+      "ratio": 0.9230769230769231,
+      "lastVerified": "2026-07-27"
+    },
+    {
+      "profileId": "pravo-javna-uprava-prijediplomski",
+      "scored": 12,
+      "machineCheckable": 13,
+      "advisory": 1,
+      "ratio": 0.9230769230769231,
+      "lastVerified": "2026-07-27"
+    },
+    {
+      "profileId": "pravo-opci-pravni-akademski-rad",
+      "scored": 10,
+      "machineCheckable": 11,
+      "advisory": 1,
+      "ratio": 0.9090909090909091,
+      "lastVerified": "2026-07-27"
+    },
+    {
+      "profileId": "pravo-porezni-prijediplomski",
+      "scored": 12,
+      "machineCheckable": 13,
+      "advisory": 1,
+      "ratio": 0.9230769230769231,
+      "lastVerified": "2026-07-27"
+    },
+    {
+      "profileId": "pravo-socijalna-politika-diplomski",
       "scored": 11,
       "machineCheckable": 13,
       "advisory": 2,
       "ratio": 0.8461538461538461,
-      "lastVerified": "2026-07-02"
-    },
-    {
-      "profileId": "pravo-javna-uprava-diplomski",
-      "scored": 11,
-      "machineCheckable": 12,
-      "advisory": 1,
-      "ratio": 0.9166666666666666,
-      "lastVerified": "2026-07-02"
-    },
-    {
-      "profileId": "pravo-javna-uprava-prijediplomski",
-      "scored": 11,
-      "machineCheckable": 12,
-      "advisory": 1,
-      "ratio": 0.9166666666666666,
-      "lastVerified": "2026-07-02"
-    },
-    {
-      "profileId": "pravo-opci-pravni-akademski-rad",
-      "scored": 8,
-      "machineCheckable": 9,
-      "advisory": 1,
-      "ratio": 0.8888888888888888,
-      "lastVerified": "2026-07-16"
-    },
-    {
-      "profileId": "pravo-porezni-prijediplomski",
-      "scored": 11,
-      "machineCheckable": 12,
-      "advisory": 1,
-      "ratio": 0.9166666666666666,
-      "lastVerified": "2026-07-02"
-    },
-    {
-      "profileId": "pravo-socijalna-politika-diplomski",
-      "scored": 8,
-      "machineCheckable": 11,
-      "advisory": 3,
-      "ratio": 0.7272727272727273,
-      "lastVerified": "2026-07-16"
+      "lastVerified": "2026-07-27"
     },
     {
       "profileId": "pravo-socijalne-djelatnosti-doktorski",
@@ -1474,11 +1474,11 @@
     },
     {
       "profileId": "pravo-socijalni-rad-diplomski",
-      "scored": 8,
-      "machineCheckable": 11,
-      "advisory": 3,
-      "ratio": 0.7272727272727273,
-      "lastVerified": "2026-07-16"
+      "scored": 11,
+      "machineCheckable": 13,
+      "advisory": 2,
+      "ratio": 0.8461538461538461,
+      "lastVerified": "2026-07-27"
     },
     {
       "profileId": "pravo-socijalni-rad-zavrsni",
@@ -1490,11 +1490,11 @@
     },
     {
       "profileId": "pravo-specijalisticki-pravni-opci",
-      "scored": 5,
-      "machineCheckable": 6,
+      "scored": 10,
+      "machineCheckable": 11,
       "advisory": 1,
-      "ratio": 0.8333333333333334,
-      "lastVerified": "2026-07-16"
+      "ratio": 0.9090909090909091,
+      "lastVerified": "2026-07-27"
     },
     {
       "profileId": "pravos-diplomski",
@@ -2089,5 +2089,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 1549
+  "totalScored": 1582
 }

@@ -19,7 +19,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "fpzg-politologija-diplomski--font-size",
@@ -38,7 +40,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "fpzg-politologija-diplomski--line-spacing",
@@ -55,7 +59,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "fpzg-politologija-diplomski--paper-size",
@@ -72,7 +78,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "paper-size-fixer"
       },
       {
         "ruleId": "fpzg-politologija-diplomski--page-numbers",
@@ -223,6 +231,27 @@
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
         "verifiedHash": "56df35ca9ab16a3650f6599ca481928dfdc7a2d081321529ba3219a34fe9be9b"
+      },
+      {
+        "ruleId": "fpzg-politologija-diplomski--justify",
+        "checkId": "justify",
+        "value": true,
+        "category": "format",
+        "label": "Poravnanje",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "authority": "general",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify). Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+        "autoFixable": true,
+        "fixerId": "alignment-fixer",
+        "machineCheckable": true,
+        "status": "verified",
+        "scored": true,
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "lastVerified": "2026-07-27",
+        "confirmedVia": "ai-1pass-batch"
       }
     ],
     "fpzg-nacionalna-sigurnost-diplomski": [
@@ -243,7 +272,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "fpzg-nacionalna-sigurnost-diplomski--font-size",
@@ -262,7 +293,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "fpzg-nacionalna-sigurnost-diplomski--line-spacing",
@@ -279,7 +312,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "fpzg-nacionalna-sigurnost-diplomski--paper-size",
@@ -296,7 +331,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "paper-size-fixer"
       },
       {
         "ruleId": "fpzg-nacionalna-sigurnost-diplomski--page-numbers",
@@ -447,6 +484,27 @@
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
         "verifiedHash": "56df35ca9ab16a3650f6599ca481928dfdc7a2d081321529ba3219a34fe9be9b"
+      },
+      {
+        "ruleId": "fpzg-nacionalna-sigurnost-diplomski--justify",
+        "checkId": "justify",
+        "value": true,
+        "category": "format",
+        "label": "Poravnanje",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "authority": "general",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify). Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+        "autoFixable": true,
+        "fixerId": "alignment-fixer",
+        "machineCheckable": true,
+        "status": "verified",
+        "scored": true,
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "lastVerified": "2026-07-27",
+        "confirmedVia": "ai-1pass-batch"
       }
     ],
     "fpzg-novinarstvo-diplomski": [
@@ -467,7 +525,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "fpzg-novinarstvo-diplomski--font-size",
@@ -486,7 +546,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "fpzg-novinarstvo-diplomski--line-spacing",
@@ -503,7 +565,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "fpzg-novinarstvo-diplomski--paper-size",
@@ -520,7 +584,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "paper-size-fixer"
       },
       {
         "ruleId": "fpzg-novinarstvo-diplomski--page-numbers",
@@ -671,6 +737,27 @@
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
         "verifiedHash": "56df35ca9ab16a3650f6599ca481928dfdc7a2d081321529ba3219a34fe9be9b"
+      },
+      {
+        "ruleId": "fpzg-novinarstvo-diplomski--justify",
+        "checkId": "justify",
+        "value": true,
+        "category": "format",
+        "label": "Poravnanje",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "authority": "general",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify). Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+        "autoFixable": true,
+        "fixerId": "alignment-fixer",
+        "machineCheckable": true,
+        "status": "verified",
+        "scored": true,
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "lastVerified": "2026-07-27",
+        "confirmedVia": "ai-1pass-batch"
       }
     ],
     "fpzg-specijalisticki-odnosi-s-javnoscu": [
@@ -691,7 +778,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--font-size",
@@ -710,7 +799,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--line-spacing",
@@ -727,7 +818,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--paper-size",
@@ -744,7 +837,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "paper-size-fixer"
       },
       {
         "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--page-numbers",
@@ -895,6 +990,27 @@
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
         "verifiedHash": "56df35ca9ab16a3650f6599ca481928dfdc7a2d081321529ba3219a34fe9be9b"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-odnosi-s-javnoscu--justify",
+        "checkId": "justify",
+        "value": true,
+        "category": "format",
+        "label": "Poravnanje",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "authority": "general",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify). Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+        "autoFixable": true,
+        "fixerId": "alignment-fixer",
+        "machineCheckable": true,
+        "status": "verified",
+        "scored": true,
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "lastVerified": "2026-07-27",
+        "confirmedVia": "ai-1pass-batch"
       }
     ],
     "fpzg-specijalisticki-prilagodba-eu": [
@@ -915,7 +1031,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "fpzg-specijalisticki-prilagodba-eu--font-size",
@@ -934,7 +1052,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "fpzg-specijalisticki-prilagodba-eu--line-spacing",
@@ -951,7 +1071,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "fpzg-specijalisticki-prilagodba-eu--paper-size",
@@ -968,7 +1090,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "paper-size-fixer"
       },
       {
         "ruleId": "fpzg-specijalisticki-prilagodba-eu--page-numbers",
@@ -1119,6 +1243,27 @@
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
         "verifiedHash": "56df35ca9ab16a3650f6599ca481928dfdc7a2d081321529ba3219a34fe9be9b"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-prilagodba-eu--justify",
+        "checkId": "justify",
+        "value": true,
+        "category": "format",
+        "label": "Poravnanje",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "authority": "general",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify). Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+        "autoFixable": true,
+        "fixerId": "alignment-fixer",
+        "machineCheckable": true,
+        "status": "verified",
+        "scored": true,
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "lastVerified": "2026-07-27",
+        "confirmedVia": "ai-1pass-batch"
       }
     ],
     "fpzg-specijalisticki-sigurnosna-politika-rh": [
@@ -1139,7 +1284,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--font-size",
@@ -1158,7 +1305,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--line-spacing",
@@ -1175,7 +1324,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--paper-size",
@@ -1192,7 +1343,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "paper-size-fixer"
       },
       {
         "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--page-numbers",
@@ -1343,6 +1496,27 @@
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
         "verifiedHash": "56df35ca9ab16a3650f6599ca481928dfdc7a2d081321529ba3219a34fe9be9b"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-sigurnosna-politika-rh--justify",
+        "checkId": "justify",
+        "value": true,
+        "category": "format",
+        "label": "Poravnanje",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "authority": "general",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify). Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+        "autoFixable": true,
+        "fixerId": "alignment-fixer",
+        "machineCheckable": true,
+        "status": "verified",
+        "scored": true,
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "lastVerified": "2026-07-27",
+        "confirmedVia": "ai-1pass-batch"
       }
     ],
     "fpzg-specijalisticki-vanjska-politika-diplomacija": [
@@ -1363,7 +1537,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--font-size",
@@ -1382,7 +1558,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--line-spacing",
@@ -1399,7 +1577,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--paper-size",
@@ -1416,7 +1596,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "paper-size-fixer"
       },
       {
         "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--page-numbers",
@@ -1567,6 +1749,27 @@
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
         "verifiedHash": "56df35ca9ab16a3650f6599ca481928dfdc7a2d081321529ba3219a34fe9be9b"
+      },
+      {
+        "ruleId": "fpzg-specijalisticki-vanjska-politika-diplomacija--justify",
+        "checkId": "justify",
+        "value": true,
+        "category": "format",
+        "label": "Poravnanje",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "authority": "general",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify). Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+        "autoFixable": true,
+        "fixerId": "alignment-fixer",
+        "machineCheckable": true,
+        "status": "verified",
+        "scored": true,
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "lastVerified": "2026-07-27",
+        "confirmedVia": "ai-1pass-batch"
       }
     ],
     "fpzg-doktorski-politologija": [
@@ -1587,7 +1790,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "a38f06f9e72255ade0010197674965fae0715f1f476044ba29a53886151f069c"
+        "verifiedHash": "a38f06f9e72255ade0010197674965fae0715f1f476044ba29a53886151f069c",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "fpzg-doktorski-politologija--font-size",
@@ -1606,7 +1811,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "a38f06f9e72255ade0010197674965fae0715f1f476044ba29a53886151f069c"
+        "verifiedHash": "a38f06f9e72255ade0010197674965fae0715f1f476044ba29a53886151f069c",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "fpzg-doktorski-politologija--line-spacing",
@@ -1623,7 +1830,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "a38f06f9e72255ade0010197674965fae0715f1f476044ba29a53886151f069c"
+        "verifiedHash": "a38f06f9e72255ade0010197674965fae0715f1f476044ba29a53886151f069c",
+        "autoFixable": true,
+        "fixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "fpzg-doktorski-politologija--margins",
@@ -1645,7 +1854,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "a38f06f9e72255ade0010197674965fae0715f1f476044ba29a53886151f069c"
+        "verifiedHash": "a38f06f9e72255ade0010197674965fae0715f1f476044ba29a53886151f069c",
+        "autoFixable": true,
+        "fixerId": "margins-fixer"
       },
       {
         "ruleId": "fpzg-doktorski-politologija--paper-size",
@@ -1662,7 +1873,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "a38f06f9e72255ade0010197674965fae0715f1f476044ba29a53886151f069c"
+        "verifiedHash": "a38f06f9e72255ade0010197674965fae0715f1f476044ba29a53886151f069c",
+        "autoFixable": true,
+        "fixerId": "paper-size-fixer"
       },
       {
         "ruleId": "fpzg-doktorski-politologija--page-numbers",
@@ -1734,7 +1947,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "fpzg-politologija-zavrsni--font-size",
@@ -1753,7 +1968,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "fpzg-politologija-zavrsni--line-spacing",
@@ -1770,7 +1987,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "fpzg-politologija-zavrsni--paper-size",
@@ -1787,7 +2006,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "paper-size-fixer"
       },
       {
         "ruleId": "fpzg-politologija-zavrsni--page-numbers",
@@ -1912,6 +2133,27 @@
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
         "verifiedHash": "70cfc36aa789d1533f44d43c5790a5d4627575898a6a98e3096e2327c22d320c"
+      },
+      {
+        "ruleId": "fpzg-politologija-zavrsni--justify",
+        "checkId": "justify",
+        "value": true,
+        "category": "format",
+        "label": "Poravnanje",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "authority": "general",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify). Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+        "autoFixable": true,
+        "fixerId": "alignment-fixer",
+        "machineCheckable": true,
+        "status": "verified",
+        "scored": true,
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "lastVerified": "2026-07-27",
+        "confirmedVia": "ai-1pass-batch"
       }
     ],
     "fpzg-novinarstvo-zavrsni-tekst": [
@@ -1949,7 +2191,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "fpzg-novinarstvo-zavrsni-tekst--font-size",
@@ -1968,7 +2212,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "fpzg-novinarstvo-zavrsni-tekst--line-spacing",
@@ -1985,7 +2231,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "fpzg-novinarstvo-zavrsni-tekst--paper-size",
@@ -2002,7 +2250,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "paper-size-fixer"
       },
       {
         "ruleId": "fpzg-novinarstvo-zavrsni-tekst--page-numbers",
@@ -2127,6 +2377,27 @@
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
         "verifiedHash": "70cfc36aa789d1533f44d43c5790a5d4627575898a6a98e3096e2327c22d320c"
+      },
+      {
+        "ruleId": "fpzg-novinarstvo-zavrsni-tekst--justify",
+        "checkId": "justify",
+        "value": true,
+        "category": "format",
+        "label": "Poravnanje",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "authority": "general",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify). Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+        "autoFixable": true,
+        "fixerId": "alignment-fixer",
+        "machineCheckable": true,
+        "status": "verified",
+        "scored": true,
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "lastVerified": "2026-07-27",
+        "confirmedVia": "ai-1pass-batch"
       }
     ],
     "fpzg-novinarstvo-zavrsni-av": [
@@ -2183,7 +2454,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "fpzg-mes-master-thesis--font-size",
@@ -2202,7 +2475,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "fpzg-mes-master-thesis--line-spacing",
@@ -2219,7 +2494,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "fpzg-mes-master-thesis--paper-size",
@@ -2236,7 +2513,9 @@
         "verifiedBy": "Daniel Risavi",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "paper-size-fixer"
       },
       {
         "ruleId": "fpzg-mes-master-thesis--page-numbers",
@@ -2341,6 +2620,27 @@
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
         "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-mes-master-thesis--justify",
+        "checkId": "justify",
+        "value": true,
+        "category": "format",
+        "label": "Poravnanje",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "authority": "general",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify). Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+        "autoFixable": true,
+        "fixerId": "alignment-fixer",
+        "machineCheckable": true,
+        "status": "verified",
+        "scored": true,
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "lastVerified": "2026-07-27",
+        "confirmedVia": "ai-1pass-batch"
       }
     ],
     "fpzg-opci-akademski-rad": [
@@ -2378,7 +2678,9 @@
         "verifiedBy": "Daniel",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "fpzg-opci-akademski-rad--font-size",
@@ -2397,7 +2699,9 @@
         "verifiedBy": "Daniel",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "font-fixer"
       },
       {
         "ruleId": "fpzg-opci-akademski-rad--line-spacing",
@@ -2414,7 +2718,9 @@
         "verifiedBy": "Daniel",
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
-        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "autoFixable": true,
+        "fixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "fpzg-opci-akademski-rad--page-numbers",
@@ -2432,6 +2738,27 @@
         "confirmedVia": "ai-1pass-batch",
         "lastVerified": "2026-07-02",
         "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c"
+      },
+      {
+        "ruleId": "fpzg-opci-akademski-rad--justify",
+        "checkId": "justify",
+        "value": true,
+        "category": "format",
+        "label": "Poravnanje",
+        "sourceId": "fpzg-upute-akademski-radovi",
+        "sourcePage": "str. 14, odjeljak 'FORMAT I OPREMA RADA' (Format rada)",
+        "authority": "general",
+        "verifiedHash": "8d003172c9ca69b2491816848e17affe2522ea4c8f94f7abfd5678322fc26c0c",
+        "quote": "Diplomski i zavrsni specijalisticki rad trebaju biti napisani fontom/ pismom Times New Roman, velicinom slova 12 s proredom 1,5, te obostrano poravnati (Justify). Stranice rada se numeriraju, ali ne i naslovnice; prethodni dijelovi numeriraju se rimskim brojkama, a osnovni tekst arapskima tako da brojka 1 bude na prvoj stranici uvoda.",
+        "autoFixable": true,
+        "fixerId": "alignment-fixer",
+        "machineCheckable": true,
+        "status": "verified",
+        "scored": true,
+        "verifiedBy": "Daniel Risavi",
+        "reviewedBy": "Daniel Risavi",
+        "lastVerified": "2026-07-27",
+        "confirmedVia": "ai-1pass-batch"
       }
     ]
   }

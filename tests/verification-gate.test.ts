@@ -253,9 +253,19 @@ describe('seedani pravni nacrti su ponasanje-neutralni', () => {
     for (const p of lawProfiles) expect((p.ruleEntries ?? []).length).toBeGreaterThan(0);
   });
 
-  it('effectiveRules ostaje deep-equal rules (nema promjene ponasanja)', () => {
+  it('effectiveRules ostaje deep-equal rules (nema promjene ponasanja), OSIM kljuceva namjerno migriranih 2026-07-27', () => {
+    // margins/justify/footnote-*/page-numbers su tog datuma dobili ruleEntries izravno iz
+    // sluzbenih izvora (data/sources/pravo/*), pa vise NISU "ponasanje-neutralni" naspram stare
+    // rules baze: margins je za socijalni-rad/socijalna-politika ISPRAVLJEN s pogodenih 2,5cm na
+    // izvorom potvrdjenih 3,5/3/3/3, a ostali kljucevi su posve novi (rules ih nikad nije imao).
+    // CLAUDE.md migracijski koraci: kad kljuc postane ruleEntry-vodjen, faithfulness vise ne trazi
+    // punu jednakost za taj kljuc (oslanjamo se na nula-diagnostics + golden umjesto). Ostali
+    // kljucevi i dalje moraju ostati deep-equal, da ova provjera i dalje hvata nenamjerni drift.
+    const MIGRATED_2026_07_27 = ['margins', 'justify', 'footnoteFont', 'footnoteSize', 'footnoteSpacing', 'requirePageNumbers'];
+    const omit = (obj: Record<string, unknown>) =>
+      Object.fromEntries(Object.entries(obj).filter(([k]) => !MIGRATED_2026_07_27.includes(k)));
     for (const p of lawProfiles) {
-      expect(compileEffectiveRules(p)).toEqual(p.rules ?? {});
+      expect(omit(compileEffectiveRules(p) as Record<string, unknown>)).toEqual(omit(p.rules ?? {}));
     }
   });
 
