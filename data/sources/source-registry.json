@@ -2854,5 +2854,70 @@
     "validityClass": "stable",
     "lastChecked": "2026-07-27",
     "note": "Izvorno doneseno 4.3.2014, procisceni tekst objavljen 2025/07. Clanak 7(5): \"mora slijediti smjernice Uputa za izradu diplomskoga rada\" (Prilog 2, obvezujuce). A4, margine lijevo 3,5cm ostale 2,5cm, TNR 12pt prored 1,5, tekst samo na desnoj stranici (knjizni format). Napomena o postojanosti: web index spominje i moguci noviji akt iz 4.4.2025 na mrtvom URL-u (404, nema Wayback zapisa) - nepotvrdjeno zamjenjuje li ovaj procisceni tekst; tretiran kao aktualan jer je objavljen NAKON tog navodnog datuma i eksplicitno oznacen procisceni."
+  },
+  {
+    "id": "alu-okiru-upute-2015",
+    "kind": "guidelines",
+    "title": "Upute za izradu pisanog dijela diplomskog rada (Odsjek za konzerviranje i restauriranje umjetnina, ALU Zagreb, svibanj 2015)",
+    "url": "https://www.alu.unizg.hr/alu/cms/upload/orku/dipl/Upute_za_izradu_pisanog_dijela_diplomskog_rada_OKIRU_2015.pdf",
+    "publisher": "Akademija likovnih umjetnosti, Sveuciliste u Zagrebu - Odsjek za konzerviranje i restauriranje umjetnina",
+    "fetchedAt": "2026-07-28",
+    "snapshotPath": "data/sources/alu/alu-okiru-upute-2015.pdf",
+    "snapshotHash": "14a33841c9b5799a374ed235e973485928a58b9c832b21f464625044c5e872ac",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-28",
+    "note": "Formalni odsjecki akt (KLASA 602-04/15-19/1), izravno implementira Clanak 92. Pravilnika o diplomskom radu i diplomskom ispitu ALU (taj clanak sam po sebi prazan, samo definira strukturu rada). \"Diplomski rad se pise u formatu A-4 (sve 4 margine MORAJU biti 2,5 cm)... vrsta fonta: Times New Roman; velicina fonta: 12; razmak: 1,5... Tekst MORA biti uoblicen opcijom Justified\". Fusnote: velicina 10, jednostruki prored. Potvrdjeno josš vazecim preko pratece \"Upute za izradu seminarskog rada\" (izmjena kolovoz 2025, ista pravila). SAMO za OKIRU (konzerviranje/restauriranje), NE propagirati na ostale ALU odsjeke (slikarstvo/kiparstvo/grafika/novi mediji/nastavnicki) koji nemaju ekvivalentan izvor."
+  },
+  {
+    "id": "algebra-diplomski-predlozak-2017-wayback",
+    "kind": "template",
+    "title": "Predlozak diplomskog rada (Visoko uciliste Algebra, 2017, arhivirano preko Wayback Machine)",
+    "url": "https://web.archive.org/web/20211210005533/https://www.algebra.hr/visoko-uciliste/wp-content/uploads/sites/2/2017/11/Diplomski-rad_predlozak.docx",
+    "publisher": "Visoko uciliste Algebra (prethodnik danasnjeg Sveucilista Algebra Bernays)",
+    "fetchedAt": "2026-07-28",
+    "snapshotPath": "data/sources/algebra/algebra-diplomski-predlozak-2017-wayback.docx",
+    "snapshotHash": "0e34f2044d0f533e40ca4787df1d4d36db5007ec092a99e2f4bae4495b7d1dae",
+    "validityClass": "unstable",
+    "lastChecked": "2026-07-28",
+    "note": "Aktualni Pravilnik (2026) definira format kroz \"elektronicki predlozak (Prilog 1)\" dostupan SAMO unutar studentske digitalne referade (negativno) - ovaj docx je najbolji javno dohvatljiv supstitut (2017-2021 Wayback snimka, vise NIJE live na algebra.hr; CDX pretraga nije nasla noviju/preimenovanu javnu kopiju). Vlastiti stilovi/sectPr (rucno provjereno python-docx): Normal 12pt TNR, 1,5 prored, Justify, A4, tijelo margine top/bottom/right 2,5cm lijevo 3,0cm (naslovnica-zona 3,0/3,0/3,0/3,5). Prozna potvrda: \"Osnovni stil pisanja je Times New Roman 12 pt.\" NE MOZE se dokazati bajt-identicnost s trenutnom internom verzijom (9 godina star, drugaciji brand \"Visoko uciliste\" umjesto \"Sveuciliste\") - ADVISORY zbog rizika zastarjelosti, ne scored."
+  },
+  {
+    "id": "fpz-upute-2026",
+    "kind": "guidelines",
+    "title": "Upute za prijavu, izradu i obranu zavrsnog i diplomskog rada (Fakultet prometnih znanosti, 2026, azurirano 5.3.2026)",
+    "url": "https://www.fpz.unizg.hr/file/688510c810f19a8a9eead0c69e01a3c7.pdf",
+    "publisher": "Fakultet prometnih znanosti, Sveuciliste u Zagrebu - Odbor za zavrsne i diplomske radove",
+    "fetchedAt": "2026-07-28",
+    "snapshotPath": "data/sources/fpz/fpz-upute-2026.pdf",
+    "snapshotHash": "3328794a2b9b7963f80af701a01b43ceb10002798f70da52bc5f77af55806880",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-28",
+    "note": "Zamjenjuje fpz-upute-zavrsni-diplomski-2018 (superseded). Odjeljak 7 \"Tehnicke upute\", str. 13: \"Kako bi rad bio pregledan i sustavno oblikovan, preporucuje se: odabrati velicinu slova 12 i prored 1,15, za fusnote odabrati velicinu slova 10, upotrebljavati standardne margine (gore, dolje, lijevo, desno po 2,5 cm)\". Suzeno naspram 2018 izdanja (prored bio \"1,15 ili 1,5\", sada flat 1,15) ali JOS UVIJEK izricito \"preporucuje se\" (donio Odbor, ne Fakultetsko vijece/Senat) - ostaje advisory, ne scored."
+  },
+  {
+    "id": "mathos-predlozak-zavrsni-2026",
+    "kind": "template",
+    "title": "Predlozak zavrsnog rada (LaTeX, Prilog 1 Pravilnika o zavrsnim radovima, Odjel za matematiku Osijek, ozujak 2026)",
+    "url": "https://www.mathos.unios.hr/wp-content/uploads/2026/03/Predlozak_zavrsni_rad.rar",
+    "publisher": "Odjel za matematiku, Sveuciliste J.J. Strossmayera u Osijeku",
+    "fetchedAt": "2026-07-28",
+    "snapshotPath": "data/sources/mathos/mathos-predlozak-zavrsni-2026.rar",
+    "snapshotHash": "a853241d2b72cff22076a68405b4a4aef802d54d7eddfce309c0faf14eb34026",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-28",
+    "note": "Pravilnik o zavrsnim radovima (mathos-pravilnik-zavrsni-2026, skeniran PDF bez teksta) Clanak 7(1): \"rad treba biti napisan u formi kao sto je navedeno u Prilogu 1\"; Clanak 16/17: Prilog 1 je \"sastavni dio ovog Pravilnika\". Ovaj .rar JEST Prilog 1 (imenovani LaTeX predlozak). Sadrzi mathos.cls (sha256 3efb1d67e4b304d1ab3ac0c28709e76ca091eaf1e3e3369010a61188bb45908f), rucno provjeren: \"\\LoadClass[a4paper, twoside,openright]{report}\" + \"\\usepackage[a4paper,top=3cm,bottom=3cm,left=3cm,right=3cm]{geometry}\" + \"\\usepackage[fontsize=12pt]{scrextend}\". Font (Palatino/TeX Gyre Pagella) je LaTeX-specifican, NE mapira se na Word font-checkId - namjerno izostavljen."
+  },
+  {
+    "id": "mathos-predlozak-diplomski-2026",
+    "kind": "template",
+    "title": "Predlozak diplomskog rada (LaTeX, Prilog 1 Pravilnika o diplomskim radovima, Odjel za matematiku Osijek, ozujak 2026)",
+    "url": "https://www.mathos.unios.hr/wp-content/uploads/2026/03/Predlozak_diplomski_rad.rar",
+    "publisher": "Odjel za matematiku, Sveuciliste J.J. Strossmayera u Osijeku",
+    "fetchedAt": "2026-07-28",
+    "snapshotPath": "data/sources/mathos/mathos-predlozak-diplomski-2026.rar",
+    "snapshotHash": "8d280764934c41a5890a3ca090bb66002603d24618823b6a8a29abdf770873d7",
+    "validityClass": "stable",
+    "lastChecked": "2026-07-28",
+    "note": "Pravilnik o diplomskim radovima (mathos-pravilnik-diplomski-2023, skeniran PDF bez teksta) Clanak 7(1)/16: isti mehanizam kao zavrsni - Prilog 1 sastavni dio Pravilnika. Sadrzi ISTI mathos.cls (bajt-identican zavrsnom predlosku, sha256 3efb1d67e4b304d1ab3ac0c28709e76ca091eaf1e3e3369010a61188bb45908f): A4, margine 3cm sve strane, 12pt."
   }
 ]

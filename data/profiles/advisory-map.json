@@ -83,6 +83,10 @@
     "toc",
     "page-numbers"
   ],
+  "alu-konzerviranje-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
   "apuri-diplomski": [
     "margins",
     "paper-size"
@@ -830,20 +834,14 @@
   ],
   "mathos-diplomski": [
     "font",
-    "font-size",
     "line-spacing",
-    "margins",
     "justify",
-    "paper-size",
     "page-numbers"
   ],
   "mathos-zavrsni": [
     "font",
-    "font-size",
     "line-spacing",
-    "margins",
     "justify",
-    "paper-size",
     "page-numbers"
   ],
   "medri-farmacija-diplomski": [

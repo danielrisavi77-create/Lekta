@@ -88,6 +88,76 @@
       "verifiedBy": "Daniel",
       "reviewedBy": "Daniel",
       "confirmedVia": "harvest+ocr-verify"
+    },
+    {
+      "ruleId": "mathos-diplomski--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "mathos-predlozak-diplomski-2026",
+      "sourcePage": "mathos.cls (Prilog 1)",
+      "quote": "\\LoadClass[a4paper, twoside,openright]{report} ... \\usepackage[a4paper,top=3cm,bottom=3cm,left=3cm,right=3cm]{geometry} ... \\usepackage[fontsize=12pt]{scrextend}",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-28",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "8d280764934c41a5890a3ca090bb66002603d24618823b6a8a29abdf770873d7",
+      "autoFixable": true,
+      "fixerId": "font-fixer"
+    },
+    {
+      "ruleId": "mathos-diplomski--margins",
+      "checkId": "margins",
+      "value": {
+        "top": 3,
+        "right": 3,
+        "bottom": 3,
+        "left": 3
+      },
+      "category": "format",
+      "label": "Margine",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "mathos-predlozak-diplomski-2026",
+      "sourcePage": "mathos.cls (Prilog 1)",
+      "quote": "\\LoadClass[a4paper, twoside,openright]{report} ... \\usepackage[a4paper,top=3cm,bottom=3cm,left=3cm,right=3cm]{geometry} ... \\usepackage[fontsize=12pt]{scrextend}",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-28",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "8d280764934c41a5890a3ca090bb66002603d24618823b6a8a29abdf770873d7",
+      "autoFixable": true,
+      "fixerId": "margins-fixer"
+    },
+    {
+      "ruleId": "mathos-diplomski--paper-size",
+      "checkId": "paper-size",
+      "value": true,
+      "category": "format",
+      "label": "Format papira A4",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "mathos-predlozak-diplomski-2026",
+      "sourcePage": "mathos.cls (Prilog 1)",
+      "quote": "\\LoadClass[a4paper, twoside,openright]{report} ... \\usepackage[a4paper,top=3cm,bottom=3cm,left=3cm,right=3cm]{geometry} ... \\usepackage[fontsize=12pt]{scrextend}",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-28",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "8d280764934c41a5890a3ca090bb66002603d24618823b6a8a29abdf770873d7",
+      "autoFixable": true,
+      "fixerId": "paper-size-fixer"
     }
   ]
 }

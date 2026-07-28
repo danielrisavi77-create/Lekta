@@ -22,6 +22,111 @@
       "verifiedBy": "Daniel",
       "reviewedBy": "Daniel",
       "confirmedVia": "harvest+hr-en-cross-check"
+    },
+    {
+      "ruleId": "algebra-zavrsni--font",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Font (predlozak, currency-rizik)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "algebra-diplomski-predlozak-2017-wayback",
+      "sourcePage": "Prilog \"Izrazi ili formule\" + sectPr (Wayback 2021 snimka 2017 predloska)",
+      "quote": "Osnovni stil pisanja je Times New Roman 12 pt. [dokazano iz sectPr/stilova predloska: prored 1,5, Justify, A4, margine tijela top/bottom/right 2,5cm lijevo 3,0cm. NAPOMENA: 9-godisnja Wayback kopija internog predloska, ne moze se dokazati bajt-identicnost s trenutnom verzijom u studentskoj referadi - advisory zbog rizika zastarjelosti.]",
+      "status": "advisory",
+      "lastVerified": "2026-07-28",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "algebra-zavrsni--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova (predlozak, currency-rizik)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "algebra-diplomski-predlozak-2017-wayback",
+      "sourcePage": "Prilog \"Izrazi ili formule\" + sectPr (Wayback 2021 snimka 2017 predloska)",
+      "quote": "Osnovni stil pisanja je Times New Roman 12 pt. [dokazano iz sectPr/stilova predloska: prored 1,5, Justify, A4, margine tijela top/bottom/right 2,5cm lijevo 3,0cm. NAPOMENA: 9-godisnja Wayback kopija internog predloska, ne moze se dokazati bajt-identicnost s trenutnom verzijom u studentskoj referadi - advisory zbog rizika zastarjelosti.]",
+      "status": "advisory",
+      "lastVerified": "2026-07-28",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "algebra-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored (predlozak, currency-rizik)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "algebra-diplomski-predlozak-2017-wayback",
+      "sourcePage": "Prilog \"Izrazi ili formule\" + sectPr (Wayback 2021 snimka 2017 predloska)",
+      "quote": "Osnovni stil pisanja je Times New Roman 12 pt. [dokazano iz sectPr/stilova predloska: prored 1,5, Justify, A4, margine tijela top/bottom/right 2,5cm lijevo 3,0cm. NAPOMENA: 9-godisnja Wayback kopija internog predloska, ne moze se dokazati bajt-identicnost s trenutnom verzijom u studentskoj referadi - advisory zbog rizika zastarjelosti.]",
+      "status": "advisory",
+      "lastVerified": "2026-07-28",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "algebra-zavrsni--justify",
+      "checkId": "justify",
+      "value": true,
+      "category": "format",
+      "label": "Poravnanje (predlozak, currency-rizik)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "algebra-diplomski-predlozak-2017-wayback",
+      "sourcePage": "Prilog \"Izrazi ili formule\" + sectPr (Wayback 2021 snimka 2017 predloska)",
+      "quote": "Osnovni stil pisanja je Times New Roman 12 pt. [dokazano iz sectPr/stilova predloska: prored 1,5, Justify, A4, margine tijela top/bottom/right 2,5cm lijevo 3,0cm. NAPOMENA: 9-godisnja Wayback kopija internog predloska, ne moze se dokazati bajt-identicnost s trenutnom verzijom u studentskoj referadi - advisory zbog rizika zastarjelosti.]",
+      "status": "advisory",
+      "lastVerified": "2026-07-28",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "algebra-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "value": true,
+      "category": "format",
+      "label": "Format papira A4 (predlozak, currency-rizik)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "algebra-diplomski-predlozak-2017-wayback",
+      "sourcePage": "Prilog \"Izrazi ili formule\" + sectPr (Wayback 2021 snimka 2017 predloska)",
+      "quote": "Osnovni stil pisanja je Times New Roman 12 pt. [dokazano iz sectPr/stilova predloska: prored 1,5, Justify, A4, margine tijela top/bottom/right 2,5cm lijevo 3,0cm. NAPOMENA: 9-godisnja Wayback kopija internog predloska, ne moze se dokazati bajt-identicnost s trenutnom verzijom u studentskoj referadi - advisory zbog rizika zastarjelosti.]",
+      "status": "advisory",
+      "lastVerified": "2026-07-28",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null
+    },
+    {
+      "ruleId": "algebra-zavrsni--margins",
+      "checkId": "margins",
+      "value": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 3
+      },
+      "category": "format",
+      "label": "Margine (predlozak, currency-rizik)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "algebra-diplomski-predlozak-2017-wayback",
+      "sourcePage": "Prilog \"Izrazi ili formule\" + sectPr (Wayback 2021 snimka 2017 predloska)",
+      "quote": "Osnovni stil pisanja je Times New Roman 12 pt. [dokazano iz sectPr/stilova predloska: prored 1,5, Justify, A4, margine tijela top/bottom/right 2,5cm lijevo 3,0cm. NAPOMENA: 9-godisnja Wayback kopija internog predloska, ne moze se dokazati bajt-identicnost s trenutnom verzijom u studentskoj referadi - advisory zbog rizika zastarjelosti.]",
+      "status": "advisory",
+      "lastVerified": "2026-07-28",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null
     }
   ]
 }

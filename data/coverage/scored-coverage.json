@@ -35,33 +35,33 @@
     {
       "profileId": "algebra-diplomski",
       "scored": 1,
-      "machineCheckable": 1,
-      "advisory": 0,
-      "ratio": 1,
+      "machineCheckable": 7,
+      "advisory": 6,
+      "ratio": 0.14285714285714285,
       "lastVerified": "2026-07-17"
     },
     {
       "profileId": "algebra-diplomski-odnosi-s-javnoscu",
       "scored": 1,
-      "machineCheckable": 1,
-      "advisory": 0,
-      "ratio": 1,
+      "machineCheckable": 7,
+      "advisory": 6,
+      "ratio": 0.14285714285714285,
       "lastVerified": "2026-07-17"
     },
     {
       "profileId": "algebra-specijalisticki",
       "scored": 1,
-      "machineCheckable": 1,
-      "advisory": 0,
-      "ratio": 1,
+      "machineCheckable": 7,
+      "advisory": 6,
+      "ratio": 0.14285714285714285,
       "lastVerified": "2026-07-17"
     },
     {
       "profileId": "algebra-zavrsni",
       "scored": 1,
-      "machineCheckable": 1,
-      "advisory": 0,
-      "ratio": 1,
+      "machineCheckable": 7,
+      "advisory": 6,
+      "ratio": 0.14285714285714285,
       "lastVerified": "2026-07-17"
     },
     {
@@ -79,6 +79,14 @@
       "advisory": 2,
       "ratio": 1,
       "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "alu-konzerviranje-diplomski",
+      "scored": 8,
+      "machineCheckable": 8,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
     },
     {
       "profileId": "apuri-diplomski",
@@ -771,17 +779,17 @@
     {
       "profileId": "fpz-diplomski",
       "scored": 3,
-      "machineCheckable": 5,
-      "advisory": 4,
-      "ratio": 0.6,
+      "machineCheckable": 6,
+      "advisory": 5,
+      "ratio": 0.5,
       "lastVerified": "2026-07-02"
     },
     {
       "profileId": "fpz-zavrsni",
       "scored": 3,
-      "machineCheckable": 5,
-      "advisory": 4,
-      "ratio": 0.6,
+      "machineCheckable": 6,
+      "advisory": 5,
+      "ratio": 0.5,
       "lastVerified": "2026-07-02"
     },
     {
@@ -1290,19 +1298,19 @@
     },
     {
       "profileId": "mathos-diplomski",
-      "scored": 2,
-      "machineCheckable": 2,
+      "scored": 5,
+      "machineCheckable": 5,
       "advisory": 0,
       "ratio": 1,
-      "lastVerified": "2026-07-17"
+      "lastVerified": "2026-07-28"
     },
     {
       "profileId": "mathos-zavrsni",
-      "scored": 2,
-      "machineCheckable": 2,
+      "scored": 5,
+      "machineCheckable": 5,
       "advisory": 0,
       "ratio": 1,
-      "lastVerified": "2026-07-17"
+      "lastVerified": "2026-07-28"
     },
     {
       "profileId": "medri-farmacija-diplomski",
@@ -2409,5 +2417,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 1777
+  "totalScored": 1791
 }
