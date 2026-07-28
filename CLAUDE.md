@@ -92,6 +92,21 @@ engine bez golden-file testa koji PRVO dokazuje zatečeno ponašanje.
 - Ubaci realne `.docx`, snimi baseline s `npm test -- -u`, pa refaktoriraj.
 - Suite se sam preskače bez fixtura; sada je AKTIVAN sa 6 realnih fixtura u tests/fixtures/docx/ (snapshoti commitani), izlozen kroz src/analysis/golden-entry.ts.
 
+## Popravak: deterministican, per-fakultet kroz PODATKE
+
+U popravku nema modela ni prompta. "Recept" je niz `{fixerId, ruleId, params}` koji klijent slozi
+iz profila (`paramsForCheck` u `src/ui/repair-items.ts`); server pravila NE izvodi, nego provjeri
+je li fixer poznat i ziv, sanira parametre i izvrsi. Zato je pravilo po fakultetu izrazeno kao
+podatak (`data/profiles/**`), nikad kao tekst upute.
+
+- Recept je zapisan u `docs/REPAIR_RECIPE.md`, GENERIRAN iz koda i profila (`npm run repair-recipe`,
+  izvor `src/repair/recipe.ts`). Ne uredjuj ga rucno; `tests/repair-recipe.test.ts` pada na drift.
+- Tok: dokument ide na server SAMO za popravak. Provjera izvora ide ZASEBNIM, usporednim pozivom
+  (`source-check`), a pohrana u "Moji popravci" dovrsava se u pozadini (`EdgeRuntime.waitUntil`),
+  pa odgovor nosi samo popravljeni docx.
+- Postenje: dok pohrana traje (`storagePending`), sucelje NE smije tvrditi da je spremljeno;
+  promasaj u korpusu NIKAD nije dokaz da izvor ne postoji.
+
 ## Mapa datoteka
 
 - `src/ui/app.ts` - UI orkestrator (UI, narudzbe, placanje, QA). Meta: dovrsiti split.
@@ -105,9 +120,11 @@ engine bez golden-file testa koji PRVO dokazuje zatečeno ponašanje.
 - `src/citations/*` - Legal Citation Engine i korpusna/CrossRef verifikacija citata.
 - `src/repair/*` - Repair Engine: XML fixeri (`fixers.ts`, `xml-patch.ts`), zip codec,
   `apply-fixers.ts` (jezgra dijeljena s serverskim putem). Golden-zasticeno kao parser.
-- `src/report/*` - klijenti prema Supabase backendu (repair-client, repair-history, auth).
-- `supabase/migrations/**`, `supabase/functions/**` - zivi backend (repair-docx, waitlist,
-  deadline-reminders, narudzbe); NIJE "bez backenda" iznad, vidi "Sto je ovo".
+  `recipe.ts` je build/docs sloj (NIJE u bundleu): iz njega se generira `docs/REPAIR_RECIPE.md`.
+- `src/report/*` - klijenti prema Supabase backendu (repair-client, source-check-client,
+  repair-history, auth).
+- `supabase/migrations/**`, `supabase/functions/**` - zivi backend (repair-docx, source-check,
+  waitlist, deadline-reminders, narudzbe); NIJE "bez backenda" iznad, vidi "Sto je ovo".
 - `data/**` - autorski podaci (profili, izvori, rokovi, katalog, coverage).
 - `tests/**` - vitest: registar, regresija, UI smoke, rule-compiler, docx-golden.
 

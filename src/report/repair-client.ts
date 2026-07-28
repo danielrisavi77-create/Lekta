@@ -12,6 +12,7 @@
 import { isReportWorkType, type ReportWorkType } from './pricing';
 import type { FingerprintInput } from '../fingerprint/fingerprint';
 import { TERMS_VERSION } from '../legal/terms-version';
+import { parseSourceCheck, type RepairSourceCheck } from './source-check-parse';
 export { REPAIR_MAX_REFERENCES } from './repair-contract';
 import { REPAIR_MAX_REFERENCES } from './repair-contract';
 
@@ -51,24 +52,11 @@ export interface RepairReference {
  */
 
 /**
- * Ishod provjere izvora u korpusu, kakav repair-docx vraca uz popravak.
- * `found` sadrzi ISKLJUCIVO pogotke; izostanak reference iz tog popisa NIJE dokaz da izvor ne
- * postoji. `checked`/`total` postoje da se djelomican rezultat (potrosen budzet vremena) ne bi
- * prikazao kao potpun.
+ * Ishod provjere izvora u korpusu. Tip i njegov obrambeni parser sada zive u source-check-parse,
+ * jer isti oblik dolazi i iz zasebne source-check funkcije (usporedni put); ovdje se re-exportaju
+ * da pozivatelji repair-clienta ostanu nepromijenjeni.
  */
-export interface RepairSourceCheck {
-  found: Array<{
-    index: number;
-    verdict: 'found' | 'weak';
-    score: number;
-    matchedTitle: string;
-    where: string;
-    url: string | null;
-  }>;
-  checked: number;
-  total: number;
-  truncated: boolean;
-}
+export type { RepairSourceCheck } from './source-check-parse';
 
 /** Meta uz upload (JSON dio multiparta). Bez doslovnog teksta rada. */
 export interface RepairMeta {
@@ -85,12 +73,23 @@ export interface RepairMeta {
   consentVersion: string;
   /** K4: naslovi literature za provjeru postojanja u korpusu. Izostane kad ih nema. */
   references?: RepairReference[];
+  /**
+   * Klijent sam zove source-check USPOREDNO, pa server istu provjeru NE smije odraditi jos jednom
+   * (dvostruk trosak baze bez ijedne koristi) niti drzati odgovor dok ona traje.
+   *
+   * Zastavica postoji zbog redoslijeda deploya: server se objavljuje prije klijenta, pa stariji
+   * klijent (bez zastavice) mora i dalje dobiti sourceCheck u odgovoru popravka. Kad svi klijenti
+   * budu novi, grana na serveru moze nestati.
+   */
+  sourceCheckSeparate?: boolean;
 }
 
 export interface RepairChange { ruleId: string; beforeLabel: string; afterLabel: string }
 
 export type RepairOutcome =
-  | { kind: 'ok'; docxBytes: Uint8Array; fileName: string; changelog: RepairChange[]; skipped: string[]; slotId?: string; jobId?: string | null; sourceCheck: RepairSourceCheck | null }
+  // storagePending: pohrana ("Moji popravci") se dovrsava u pozadini nakon odgovora, pa jobId JEST
+  // dodijeljen, ali posao jos ne mora biti vidljiv. Sucelje tada ne smije tvrditi da je spremljeno.
+  | { kind: 'ok'; docxBytes: Uint8Array; fileName: string; changelog: RepairChange[]; skipped: string[]; slotId?: string; jobId?: string | null; storagePending: boolean; sourceCheck: RepairSourceCheck | null }
   | { kind: 'tier_mismatch'; suggestedWorkType: string }
   | { kind: 'paywall'; workType: ReportWorkType }
   // RE-33: reason razlikuje placeni dnevni strop od besplatne kvote (po korisniku ili po IP-u),
@@ -126,6 +125,8 @@ export function buildRepairMeta(input: {
   fileName?: string | null;
   confirmedMismatch?: boolean;
   references?: RepairReference[] | null;
+  /** Pozivatelj sam zove source-check usporedno; server tada preskace provjeru izvora. */
+  sourceCheckSeparate?: boolean;
 }): RepairMeta {
   const workType: ReportWorkType = isReportWorkType(input.workType) ? input.workType : 'zavrsni';
   const meta: RepairMeta = {
@@ -145,40 +146,19 @@ export function buildRepairMeta(input: {
   if (input.profileRef != null) meta.profileRef = input.profileRef;
   if (input.fileName != null) meta.fileName = input.fileName;
   if (input.confirmedMismatch) meta.confirmedMismatch = true;
+  if (input.sourceCheckSeparate) meta.sourceCheckSeparate = true;
   // Reference bez naslova nemaju sto traziti u korpusu (kljuc je naslov), pa ispadaju ovdje umjesto
   // da putuju na server i tamo se tiho odbace. Prazan popis se izostavlja: nema polja, nema provjere.
-  const refs = (input.references || [])
-    .filter((r) => r && typeof r.title === 'string' && r.title.trim().length > 0)
-    .slice(0, REPAIR_MAX_REFERENCES)
-    .map((r) => ({ title: r.title.trim(), year: typeof r.year === 'number' && Number.isFinite(r.year) ? r.year : null }));
-  if (refs.length) meta.references = refs;
+  // Kad provjeru vodi zaseban poziv, popis literature se uz dokument NE salje uopce: server ga tada
+  // ne koristi ni za sto, a najmanji ispravan skup podataka je i najbolji.
+  if (!input.sourceCheckSeparate) {
+    const refs = (input.references || [])
+      .filter((r) => r && typeof r.title === 'string' && r.title.trim().length > 0)
+      .slice(0, REPAIR_MAX_REFERENCES)
+      .map((r) => ({ title: r.title.trim(), year: typeof r.year === 'number' && Number.isFinite(r.year) ? r.year : null }));
+    if (refs.length) meta.references = refs;
+  }
   return meta;
-}
-
-/**
- * Procitaj `sourceCheck` iz odgovora obrambeno. Provjera izvora je DODATAK: bilo kakav neocekivan
- * oblik (stari server bez K3, ugasena zastavica, ostecen JSON) daje `null`, a popravak se svejedno
- * isporucuje. Verdikt izvan {found, weak} se odbacuje jer korpus druge presude ne smije donositi.
- */
-function parseSourceCheck(raw: unknown): RepairSourceCheck | null {
-  const sc = raw as Partial<RepairSourceCheck> | null | undefined;
-  if (!sc || typeof sc !== 'object' || !Array.isArray(sc.found)) return null;
-  const total = Number(sc.total);
-  const checked = Number(sc.checked);
-  if (!Number.isFinite(total) || total <= 0) return null;
-  const found = sc.found
-    .filter((f: any) => f && (f.verdict === 'found' || f.verdict === 'weak')
-      && Number.isInteger(f.index) && f.index >= 0 && typeof f.matchedTitle === 'string')
-    .map((f: any) => ({
-      index: f.index as number,
-      verdict: f.verdict as 'found' | 'weak',
-      score: Number.isFinite(Number(f.score)) ? Number(f.score) : 0,
-      matchedTitle: String(f.matchedTitle),
-      where: typeof f.where === 'string' && f.where ? f.where : 'hrvatski repozitorij',
-      url: typeof f.url === 'string' && f.url ? f.url : null,
-    }));
-  const safeChecked = Number.isFinite(checked) ? Math.max(0, Math.min(checked, total)) : 0;
-  return { found, checked: safeChecked, total, truncated: sc.truncated === true || safeChecked < total };
 }
 
 /**
@@ -220,7 +200,7 @@ export async function uploadRepair(
   if (res.status === 200) {
     const data = (await res.json().catch(() => ({}))) as {
       docxBase64?: string; fileName?: string; changelog?: RepairChange[]; skipped?: string[]; slotId?: string; jobId?: string | null;
-      sourceCheck?: unknown;
+      storagePending?: boolean; sourceCheck?: unknown;
     };
     if (!data.docxBase64) return { kind: 'error', status: 200, message: 'nedostaje docxBase64' };
     return {
@@ -231,6 +211,9 @@ export async function uploadRepair(
       skipped: Array.isArray(data.skipped) ? data.skipped : [],
       slotId: data.slotId,
       jobId: data.jobId ?? null,
+      // Stari server ne salje polje: tamo je pohrana bila gotova prije odgovora, pa false znaci
+      // "ishod je vec poznat", sto je za taj server tocno.
+      storagePending: data.storagePending === true,
       sourceCheck: parseSourceCheck(data.sourceCheck),
     };
   }

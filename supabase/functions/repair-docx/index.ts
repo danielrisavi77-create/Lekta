@@ -34,7 +34,7 @@ import { resolveDailyCap } from '../../../src/report/partner.ts';
 import { unambiguousMismatch, estimateWorkType } from '../../../src/report/work-type-estimate.ts';
 import { applyFixers, FIXER_IDS, type FixerRequest } from '../../../src/repair/apply-fixers.ts';
 import { TERMS_VERSION } from '../../../src/legal/terms-version.ts';
-import { verifyCorpusBatch, type CorpusCandidate } from '../../../src/citations/corpus-verify.ts';
+import { runCorpusCheck, corpusConfigFromEnv } from '../_shared/corpus-check.ts';
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SERVICE_ROLE = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -48,21 +48,13 @@ const ALLOWED_ORIGINS = (Deno.env.get('ALLOWED_ORIGIN') ?? 'https://lektahr.netl
 const MAX_DOCX_BYTES = Number(Deno.env.get('REPAIR_MAX_DOCX_BYTES') ?? String(20 * 1024 * 1024));
 
 // Provjera postojanja domacih izvora u M4 korpusu (plan docs/PLAN_KORPUS_PROVJERA_IZVORA.md, K3).
-// Placeni dodatak uz popravak; besplatni sloj se NE mijenja i ostaje 100% lokalan.
-// Brojke su izvedene iz mjerenja na produkciji: dohvat kosta ~2,8 ms po znaku naslova (85 ms za
-// kratak, 200 ms za dug), pa serija od 8 traje ~2 s, a svih 60 referenci (CORPUS_MAX_REFS) ~16 s.
+// Placeni dodatak uz popravak; besplatni sloj se NE mijenja i ostaje 100% lokalan. Konfiguracija i
+// fail-open ugovor zive u _shared/corpus-check.ts (dijeljeno sa source-check funkcijom).
 //
-// BUDZET (2026-07-21, vlasnikov zahtjev "provjera traje koliko treba"): dignut sa 6 s na 45 s.
-// KLJUCNO: petlja u verifyCorpusBatch zavrsi CIM su sve reference provjerene; budzet je samo GORNJI
-// STROP, ne fiksno trajanje. Zato tipican rad (29 ref ~8 s, 60 ref ~16 s) prodje U CIJELOSTI i vrati
-// se u svom prirodnom vremenu; 45 s (~2,8x iznad najgoreg realnog slucaja) samo sprjecava da spora
-// baza objesi odgovor. Ostaje daleko ispod klijentskog REPAIR_TIMEOUT_MS (180 s). Fail-open: ako
-// budzet ipak istekne, neprovjerene reference ostaju BEZ ishoda (nikad "ne postoji"), pa se rezultat
-// ne cita kao potpun kad nije. Env CORPUS_BUDGET_MS i dalje nadjacava.
-const CORPUS_ENABLED = (Deno.env.get('CORPUS_SOURCE_CHECK') ?? 'true') !== 'false';
-const CORPUS_MAX_REFS = Number(Deno.env.get('CORPUS_MAX_REFS') ?? '60');
-const CORPUS_BUDGET_MS = Number(Deno.env.get('CORPUS_BUDGET_MS') ?? '45000');
-const CORPUS_CHUNK = Number(Deno.env.get('CORPUS_CHUNK') ?? '8');
+// OVAJ put je sada NASLIJEDJENI: novi klijent salje meta.sourceCheckSeparate i zove source-check
+// usporedno, pa popravak ne ceka korpus. Grana ispod ostaje zbog starijih klijenata (deploy nije
+// atomaran: server se objavi prije klijenta), da nitko ne ostane bez znacajke u medjuvremenu.
+const CORPUS_CONFIG = corpusConfigFromEnv(Deno.env);
 
 // Besplatna beta (WS-7): kad je REPAIR_FREE_MODE=true, preskace se NAPLATNI gate (nema 402 ni trosenja
 // slota), ali auth, consent, upload, popravak, POHRANA ("Moji popravci") i rate-limit po korisniku OSTAJU.
@@ -105,7 +97,11 @@ const DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingm
 // Putanja je '<user_id>/<job_id>/{original,fixed}.docx' (poklapa se sa storage RLS foldername[1]).
 // Vraca jobId ili null. null NIJE greska za korisnika: popravak se svejedno vraca, samo se ne
 // pojavi u "Moji popravci". Pri djelomicnom padu cisti vec uploadane BLOB-ove (bez orphana).
-async function storeRepairJob(admin: any, userId: string, meta: {
+//
+// jobId dolazi IZVANA (od pozivatelja), a ne generira se ovdje, jer se pohrana od 2026-07-27 vrti
+// kao POZADINSKI zadatak: odgovor korisniku odlazi prije nego ona zavrsi, pa mora znati jobId
+// unaprijed. Vracena vrijednost tada sluzi samo logu (nitko je vise ne ceka).
+async function storeRepairJob(admin: any, userId: string, jobId: string, meta: {
   workType: string; fingerprint: any; slotId: string | null;
   originalBytes: Uint8Array; resultBytes: Uint8Array; changesCount: number;
   consentVersion: string; // WS-6.3: uvijek prisutna (consent gate iznad je zahtijeva), NOT NULL u bazi
@@ -114,7 +110,6 @@ async function storeRepairJob(admin: any, userId: string, meta: {
   // 30 dana (0033). Prijavljeni e-mailom zadrzavaju "dok ih sam ne obrise".
   anonymous: boolean;
 }): Promise<string | null> {
-  const jobId = crypto.randomUUID();
   const origPath = `${userId}/${jobId}/original.docx`;
   const resPath = `${userId}/${jobId}/fixed.docx`;
   const bucket = admin.storage.from('repair');
@@ -147,72 +142,14 @@ async function storeRepairJob(admin: any, userId: string, meta: {
   return jobId;
 }
 
-interface SourceCheckResult {
-  found: Array<{ index: number; verdict: 'found' | 'weak'; score: number; matchedTitle: string; where: string; url: string | null }>;
-  checked: number; total: number; truncated: boolean;
-}
-
-/**
- * PLACENI DODATAK: postoje li navedeni domaci izvori (M4 korpus, 526k radova iz Dabra i Hrcka).
- *
- * Cijeli je fail-open: greska, timeout ili ugasena zastavica znace da `sourceCheck` izostane, a
- * popravak se svejedno vrati. NIKAD ne baca (pozivatelj ga pokrece bez await pa bi odbijeni promise
- * bio neuhvacen) i nikad ne smije srusiti ono za sto je korisnik platio.
- *
- * Naslove salje klijent (`meta.references`), jer ih je vec izdvojio pri analizi. To je bibliografski
- * metapodatak, a ne novo otkrivanje: cijeli .docx je ionako u istom zahtjevu.
- *
- * PRESUDA: promasaj u korpusu NIJE dokaz da izvor ne postoji (korpus pokriva hrvatske repozitorije,
- * ne knjige ni strane izvore), pa se vraca samo ono sto je NADJENO, uz brojac koliko je referenci
- * stiglo na red. Sucelje mora prikazati `checked`/`total`, inace bi djelomican rezultat izgledao
- * kao potpun.
- */
-async function runCorpusCheck(admin: any, references: unknown): Promise<SourceCheckResult | null> {
-  if (!CORPUS_ENABLED) return null;
-  try {
-    const rawRefs: any[] = Array.isArray(references) ? references : [];
-    const items = rawRefs.slice(0, CORPUS_MAX_REFS).map((r) => ({
-      title: typeof r?.title === 'string' ? r.title : null,
-      year: Number.isFinite(Number(r?.year)) ? Number(r.year) : null,
-    }));
-    if (!items.length) return null;
-
-    const batch = await verifyCorpusBatch(items, async (keys, o) => {
-      const { data, error } = await admin.rpc('corpus_search_many', {
-        qs: keys, min_sim: o.min, top_n: o.top,
-      });
-      if (error) throw new Error(error.message);
-      // RPC vraca plosnat popis s q_index; presloziti u niz kandidata po indeksu unutar serije.
-      const byIndex: Array<CorpusCandidate[]> = keys.map(() => []);
-      for (const row of (data ?? []) as any[]) {
-        const i = Number(row.q_index) - 1; // generate_subscripts je 1-based
-        if (i >= 0 && i < byIndex.length) {
-          byIndex[i].push({
-            title: String(row.title ?? ''), year: row.year ?? null,
-            institution: row.institution ?? null, repo: row.repo ?? null, url: row.url ?? null,
-          });
-        }
-      }
-      return byIndex;
-    }, { chunkSize: CORPUS_CHUNK, budgetMs: CORPUS_BUDGET_MS });
-
-    return {
-      found: batch.matches.flatMap((m, i) => (m ? [{
-        index: i, verdict: m.verdict, score: Number(m.score.toFixed(3)),
-        matchedTitle: m.matchedTitle, where: m.where, url: m.url,
-      }] : [])),
-      checked: batch.checked, total: batch.total, truncated: batch.truncated,
-    };
-  } catch (e) {
-    console.error('[repair-docx] corpus check failed', e instanceof Error ? e.message : e);
-    return null; // fail-open: popravak je vazniji od dodatka
-  }
-}
-
 Deno.serve(async (req: Request) => {
   const cors = corsHeadersFor(req.headers.get('Origin'), ALLOWED_ORIGINS);
   const json = (body: unknown, status = 200): Response =>
     new Response(JSON.stringify(body), { status, headers: { ...cors, 'content-type': 'application/json' } });
+  // Mjerenje trajanja po fazama: bez njega je "popravak je spor" osjecaj, ne podatak. Ispisuje se
+  // jednim retkom na kraju uspjesnog puta (koraci koji izadju ranije ionako nisu spori).
+  const t0 = performance.now();
+  const ms = (from: number) => Math.round(performance.now() - from);
   try {
     if (req.method === 'OPTIONS') return new Response('ok', { headers: cors });
     if (req.method !== 'POST') return json({ error: 'method_not_allowed' }, 405);
@@ -377,16 +314,20 @@ Deno.serve(async (req: Request) => {
       }
     }
 
-    // 6. PROVJERA IZVORA KRECE ODMAH, USPOREDNO s popravkom i pohranom. Ovisi iskljucivo o
-    //    meta.references, koje su dostupne od pocetka zahtjeva, pa ju je serijsko cekanje na kraju
-    //    stajalo do 6 sekundi cistog dodatka na vrijeme odgovora. Namjerno BEZ await ovdje;
-    //    runCorpusCheck ne baca, pa promise ne moze zavrsiti kao neuhvacena greska ni kad izadjemo
-    //    ranije (npr. 422 na nevaljanom docx-u).
-    const corpusPromise = runCorpusCheck(admin, meta.references);
+    // 6. PROVJERA IZVORA (naslijedjeni put). Novi klijent salje sourceCheckSeparate:true i zove
+    //    source-check funkciju USPOREDNO s uploadom, pa popravak na nju uopce ne ceka; tada je
+    //    ovdje preskacemo da se isti posao ne odradi dvaput (dvostruki trosak baze bez ijedne
+    //    koristi). Za starijeg klijenta ostaje kako je bilo: krece odmah, usporedno s popravkom i
+    //    pohranom, namjerno BEZ await (runCorpusCheck ne baca, pa promise ne moze zavrsiti kao
+    //    neuhvacena greska ni kad izadjemo ranije, npr. 422 na nevaljanom docx-u).
+    const corpusPromise = meta.sourceCheckSeparate === true
+      ? Promise.resolve(null)
+      : runCorpusCheck(admin, meta.references, CORPUS_CONFIG);
 
     // 7. POPRAVAK: isti engine kao klijent (src/repair). applyFixers je fail-safe (ne baca na
     //    pojedinacnom fixeru; baca samo ako docx nema word/document.xml).
     let result: Awaited<ReturnType<typeof applyFixers>>;
+    const tRepair = performance.now();
     try {
       result = await applyFixers(docxBytes, requests);
     } catch (_e) {
@@ -402,7 +343,10 @@ Deno.serve(async (req: Request) => {
     //     se vraca bit-identican dokument BEZ ikakve potrosnje. changelog:[] u odgovoru je signal
     //     klijentu da ne tvrdi "Popravljeno".
     if (result.changelog.length === 0) {
+      const msRepair = ms(tRepair);
+      const tCorpus = performance.now();
       const sourceCheck = await corpusPromise;
+      console.log(`[repair-docx] timings repair=${msRepair} store=0 corpus=${ms(tCorpus)} total=${ms(t0)} (nula izmjena)`);
       return json({
         docxBase64: toBase64(result.docxBytes),
         fileName: (meta.fileName ? String(meta.fileName).replace(/\.docx$/i, '') : 'rad') + '-popravljeno.docx',
@@ -412,25 +356,48 @@ Deno.serve(async (req: Request) => {
     }
 
     // RE-17: popravak je STVARNO nesto promijenio - tek sada trosimo slot/kvotu.
+    const msRepair = ms(tRepair);
     const committed = await commit();
     if (committed.entitlementFailed) return json({ error: 'payment_required', workType }, 402);
     const slotId = committed.slotId;
 
-    // 8. WS-6: pohrana originala + rezultata (retencija do brisanja). Ne blokira odgovor ako padne.
-    let jobId: string | null = null;
+    // 8. WS-6: pohrana originala + rezultata (retencija do brisanja).
+    //
+    // POZADINSKI ZADATAK: dva Storage uploada (do 2 x 20 MB) su drzala odgovor iako korisnik na njih
+    // ne ceka nista - popravljeni dokument je vec u memoriji i mogao je krenuti prema njemu.
+    // EdgeRuntime.waitUntil drzi izolat zivim dok zadatak ne zavrsi, pa se pohrana dovrsi nakon
+    // odgovora. jobId se generira OVDJE da ga odgovor moze nositi prije nego pohrana zavrsi.
+    //
+    // FALLBACK je namjeran: ako runtime nema waitUntil (lokalni serve, starija verzija), pohrana se
+    // ceka kao dosad. Radije sporije nego izgubljen dokument.
+    const jobId = crypto.randomUUID();
+    const tStore = performance.now();
     // Gate iznad je zajamcio meta.consentVersion === TERMS_VERSION, pa biljezimo AUTORITATIVNU serversku
     // verziju (nikad null, nikad klijentov proizvoljni string). consent_version je NOT NULL u 0026.
-    try {
-      jobId = await storeRepairJob(admin, user.id, { workType, fingerprint, slotId, originalBytes: docxBytes, resultBytes: result.docxBytes, changesCount: result.changelog.length, consentVersion: TERMS_VERSION, anonymous: user.is_anonymous === true });
-    } catch (e) {
-      // Tiho je bilo pogresno: klijentu obecavamo "Moji popravci", pa pad pohrane mora ostaviti trag.
-      console.error('[repair-docx] storeRepairJob threw', e instanceof Error ? e.message : e);
+    const storeTask = (async () => {
+      try {
+        const stored = await storeRepairJob(admin, user.id, jobId, { workType, fingerprint, slotId, originalBytes: docxBytes, resultBytes: result.docxBytes, changesCount: result.changelog.length, consentVersion: TERMS_VERSION, anonymous: user.is_anonymous === true });
+        console.log(`[repair-docx] store job=${jobId} ok=${stored ? 1 : 0} ms=${ms(tStore)}`);
+      } catch (e) {
+        // Tiho je bilo pogresno: klijentu obecavamo "Moji popravci", pa pad pohrane mora ostaviti trag.
+        // U pozadinskom zadatku je ovaj log JEDINI trag: korisnik je odgovor vec dobio.
+        console.error('[repair-docx] storeRepairJob threw', e instanceof Error ? e.message : e);
+      }
+    })();
+    const bg = (globalThis as any).EdgeRuntime?.waitUntil;
+    let msStore = 0;
+    if (typeof bg === 'function') {
+      bg.call((globalThis as any).EdgeRuntime, storeTask);
+    } else {
+      await storeTask;
+      msStore = ms(tStore);
     }
 
-    // 9. Provjera izvora (pokrenuta u koraku 6) tek se sada preuzima. U pravilu je gotova jos
-    //    tijekom popravka i pohrane, pa se ovdje ne ceka nista; u najgorem slucaju placa se razlika
-    //    do njezina vlastitog budzeta, a ne cijelo njezino trajanje.
+    // 9. Provjera izvora (naslijedjeni put) tek se sada preuzima. Za novog klijenta je ovo vec
+    //    razrijesen null (provjeru vodi zaseban, usporedan poziv), pa se ne ceka nista.
+    const tCorpus = performance.now();
     const sourceCheck = await corpusPromise;
+    console.log(`[repair-docx] timings repair=${msRepair} store=${msStore} corpus=${ms(tCorpus)} total=${ms(t0)}`);
 
     const traceToken = await sha256Hex(`${slotId}.${now}.${user.id}`);
     return json({
@@ -438,7 +405,9 @@ Deno.serve(async (req: Request) => {
       fileName: (meta.fileName ? String(meta.fileName).replace(/\.docx$/i, '') : 'rad') + '-popravljeno.docx',
       changelog: result.changelog,
       skipped: result.skipped,
-      slotId, jobId, traceToken, fingerprint, sourceCheck,
+      // storagePending: pohrana jos traje u pozadini, pa jobId JEST rezerviran ali posao mozda jos
+      // nije vidljiv u "Moji popravci". Klijent zato ne smije tvrditi da je spremljeno.
+      slotId, jobId, storagePending: typeof bg === 'function', traceToken, fingerprint, sourceCheck,
     }, 200);
   } catch (e) {
     console.error('[repair-docx]', e);

@@ -67,6 +67,8 @@ const $=(s: string,r: any=document): any=>r.querySelector(s), $$=(s: string,r: a
 let selectedDocx: any=null,selectedPdf: any=null,selectedMetadataDocx: any=null,selectedAvFile: any=null,currentPdfAudit: any=null,currentMetadataAudit: any=null,currentResult: any=null,currentPackage='format';
 let _repairClientPromise: Promise<typeof import('../report/repair-client')>|null=null;
 function loadRepairClient(){return _repairClientPromise??=import('../report/repair-client')}
+let _sourceCheckClientPromise: Promise<typeof import('../report/source-check-client')>|null=null;
+function loadSourceCheckClient(){return _sourceCheckClientPromise??=import('../report/source-check-client')}
 let _repairHistoryClientPromise: Promise<typeof import('../report/repair-history')>|null=null;
 function loadRepairHistoryClient(){return _repairHistoryClientPromise??=import('../report/repair-history')}
 async function fetchRepairJobs(...args: any[]){return (await loadRepairHistoryClient()).fetchRepairJobs(args[0],args[1],args[2])}
@@ -1067,6 +1069,13 @@ function reportEndpointConfigured(){return!!String(productionConfig?.reportEndpo
 // placeni popravak ide na server (upload -> repair-docx -> gotov docx).
 function repairServerConfigured(){return!!String(productionConfig?.repairEndpoint||'').trim()}
 function repairConfig(){return{endpoint:String(productionConfig?.repairEndpoint||'').trim()}}
+// Provjera izvora ide zasebnom funkcijom (source-check) USPOREDNO s uploadom, da popravak vise ne
+// ceka korpusni budzet. Endpoint se izvodi iz repairEndpointa (ista Supabase projektna baza, susjedna
+// funkcija), isti obrazac kao repairHistoryConfig; zaseban setup unos ne bi imao sto dodati.
+// Izvodi se SAMO kad repairEndpoint stvarno zavrsava na /repair-docx: inace bi se zahtjev za
+// provjeru izvora poslao na nepoznat URL (u najgorem slucaju na sam repair, koji ocekuje multipart).
+// Bez podudaranja nema endpointa, a klijent to cita kao "provjera nije dostupna", ne kao gresku.
+function sourceCheckConfig(){const r=String(productionConfig?.repairEndpoint||'').trim();return{endpoint:/\/repair-docx\/?$/.test(r)?r.replace(/\/repair-docx\/?$/,'/source-check'):''}}
 function eurLabel(n: any){return`${Number(n).toFixed(2).replace('.',',')} €`}
 // Teaser/full granica (buildTeaser semantika u zivom UI-u). Aktivna SAMO kad je paywall
 // konfiguriran (reportEndpoint) i rezultat jos nije otkljucan; bez konfiguracije aplikacija
@@ -1409,13 +1418,28 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
    const refsForCorpus=repairReferencesFrom(r);
    const {buildRepairMeta,uploadRepair}=await loadRepairClient();
    const {extractParsedStructure}=await loadReportClient();
-   const meta=buildRepairMeta({references:refsForCorpus.map((x: any)=>({title:x.title,year:x.year})),workType:toReportWorkType(r.settings?.workType||r.selection?.workType||'final'),parsedStructure:extractParsedStructure(r),requests,words:r.stats?.officialWords||r.stats?.words||null,titleMarker:r.details?.titlePageWorkType||null,profileStatus:r.profileStatus||null,profileRef:r.details?.profileDefinitionId||null,fileName:r.file?.name||file.name||'rad.docx',confirmedMismatch});
+   // Provjera izvora KRECE PRIJE uploada i tece usporedno s njim: ovisi samo o naslovima literature,
+   // koje vec imamo iz lokalne analize. Dok je bila dio odgovora popravka, korisnik je gledao
+   // spinner i nakon sto je dokument bio gotov. Namjerno BEZ await: `checkSources` ne baca (svaki
+   // neuspjeh je {kind:'unavailable'}), pa promise ne moze zavrsiti kao neuhvacena greska.
+   const scCfg=sourceCheckConfig();
+   const sourceCheckSeparate=!!scCfg.endpoint&&refsForCorpus.length>0;
+   const sourceCheckPromise: Promise<any>|null=sourceCheckSeparate
+    ?loadSourceCheckClient().then(({checkSources})=>checkSources(scCfg,token||'',refsForCorpus.map((x: any)=>({title:x.title,year:x.year}))))
+     .catch((e: any)=>({kind:'unavailable',reason:e instanceof Error?e.message:'greska'}))
+    :null;
+   // Kad provjeru vodi zaseban poziv, popis literature se uz dokument ne salje i server ju preskace.
+   const meta=buildRepairMeta({references:refsForCorpus.map((x: any)=>({title:x.title,year:x.year})),sourceCheckSeparate,workType:toReportWorkType(r.settings?.workType||r.selection?.workType||'final'),parsedStructure:extractParsedStructure(r),requests,words:r.stats?.officialWords||r.stats?.words||null,titleMarker:r.details?.titlePageWorkType||null,profileStatus:r.profileStatus||null,profileRef:r.details?.profileDefinitionId||null,fileName:r.file?.name||file.name||'rad.docx',confirmedMismatch});
    const bytes=new Uint8Array(await file.arrayBuffer());
    // Krajnji rok: bez njega zaglavljen zahtjev drzi gumb u "Saljem" bez izlaza. Prekid se u
    // repair-clientu prevodi u citljivu poruku, ne u "mreznu gresku".
    const ac=new AbortController(),timer=setTimeout(()=>ac.abort(),REPAIR_TIMEOUT_MS);
    let out: any;
+   // Koliko je korisnik STVARNO cekao (upload + serverska obrada + preuzimanje odgovora). Bez ove
+   // brojke je svaka optimizacija toka nagadjanje; ide uz repair_server_done.
+   const tUpload=performance.now();
    try{out=await uploadRepair(repairConfig(),token||'',bytes,meta,fetch,{signal:ac.signal})}finally{clearTimeout(timer)}
+   const uploadMs=Math.round(performance.now()-tUpload);
    if(out.kind==='ok'&&out.changelog.length===0){
     // RE-32: server namjerno NIJE trosio slot/kvotu ni pohranio posao kad nema stvarnih izmjena
     // (vidi repair-docx/index.ts korak 7a); gumb NIJE zakljucan (lockButton ostaje false) jer
@@ -1430,7 +1454,14 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
     const dl=`<p><button type="button" class="btn btn-primary" data-repair-download>Preuzmi popravljeni dokument</button></p>`;
     // Pohrana je fail-open: server vraca 200 s jobId:null i kad Storage ili baza zakazu. Panel je
     // obecao "Moji popravci", pa se ta razlika MORA reci, inace korisnik izgubi jedini primjerak.
-    const stored=out.jobId
+    //
+    // storagePending: pohrana se od 2026-07-27 dovrsava u POZADINI (odgovor ne ceka Storage), pa u
+    // trenutku pisanja ishod jos nije poznat. Tvrdnja "spremljeno je" tada ne bi bila dokazana, a
+    // tvrdnja "nije spremljeno" bila bi lazna uzbuna. Zato treci, istinit tekst: sprema se, a
+    // preuzimanje je ono sto sigurno imas.
+    const stored=out.storagePending
+     ?`<p>Kopija se sprema u <strong>Moji popravci</strong> (bit će ondje za koji trenutak). Preuzmi datoteku odmah, to je primjerak koji sigurno imaš.</p>`
+     :out.jobId
      ?`<p>Datoteka je spremljena u <strong>Moji popravci</strong>, možeš je preuzeti i kasnije.</p>`
      :`<p><strong>Popravak nije spremljen u Moji popravci</strong> (privremena greška na serveru). Preuzmi datoteku i sačuvaj je, ovdje je više neće biti.</p>`;
     // RE-31: skipped nosi sirove ruleId slugove; mapiraj na citljivu labelu (isto kao lokalni panel).
@@ -1438,14 +1469,32 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
     setSummary(`<strong>Popravljeno na serveru (${_plIzmjena(out.changelog.length)}).</strong>${dl}${stored}${skippedLabels.length?`<p>Nije primijenjeno: ${skippedLabels.map(escapeHtml).join(', ')}.</p>`:''}`);
     const dlBtn: any=summary.querySelector('[data-repair-download]');
     if(dlBtn)dlBtn.onclick=()=>downloadBlob(out.docxBytes,DOCX_MIME,out.fileName);
-    trackEvent('repair_server_done',{profileId:r.details?.profileDefinitionId||'',changes:out.changelog.length,stored:out.jobId?1:0});
+    trackEvent('repair_server_done',{profileId:r.details?.profileDefinitionId||'',changes:out.changelog.length,stored:out.jobId?1:0,ms:uploadMs});
     // K4: provjera izvora je DODATAK uz popravak. Kad je izostala (stari server, ugasena zastavica,
     // greska), buildSourceCheckHtml vrati prazan string pa sekcije naprosto nema. Nikad ne javlja
     // "nije pronadjeno" jer korpus ne moze dokazati nepostojanje.
     // Od ove tocke se sazetku sadrzaj DODAJE cvorovima, nikad preko innerHTML +=: to bi ponovno
     // parsiralo cijeli sazetak i pobrisalo vec ozicene rukovatelje (npr. "Preuzmi ponovno").
     const addHtml=(html: string)=>{const d=document.createElement('div');d.innerHTML=html;summary.appendChild(d);return d};
-    try{const sc=buildSourceCheckHtml(out.sourceCheck,refsForCorpus);if(sc){addHtml(sc);if(out.sourceCheck)void trackEvent('repair_source_check',{found:out.sourceCheck.found.length,checked:out.sourceCheck.checked,total:out.sourceCheck.total})}}catch(e: any){console.error('Provjera izvora:',e)}
+    if(sourceCheckPromise){
+     // Usporedni put: dokument je vec tu, provjera izvora jos moze trajati. Mjesto joj se rezervira
+     // ODMAH i uredno oznaci da traje, inace bi sekcija iskrsnula niotkuda (ili je korisnik uopce
+     // ne bi docekao jer je vec preuzeo datoteku i otisao).
+     const scBox=addHtml('<p class="muted">Provjeravam navedene izvore u hrvatskom korpusu…</p>');
+     void sourceCheckPromise.then((res: any)=>{
+      const result=res&&res.kind==='ok'?res.result:null;
+      try{
+       const html=buildSourceCheckHtml(result,refsForCorpus);
+       // Bez rezultata sekcija NESTAJE umjesto da tvrdi bilo sto: nedostupna provjera nije nalaz.
+       if(html){scBox.innerHTML=html;if(result)void trackEvent('repair_source_check',{found:result.found.length,checked:result.checked,total:result.total})}
+       else scBox.remove();
+      }catch(e: any){console.error('Provjera izvora:',e);scBox.remove()}
+     });
+    } else {
+     // Naslijedjeni put (stari server ili nema referenci): sourceCheck je stigao uz popravak. Kad je
+     // izostao, buildSourceCheckHtml vrati prazan string pa sekcije naprosto nema.
+     try{const sc=buildSourceCheckHtml(out.sourceCheck,refsForCorpus);if(sc){addHtml(sc);if(out.sourceCheck)void trackEvent('repair_source_check',{found:out.sourceCheck.found.length,checked:out.sourceCheck.checked,total:out.sourceCheck.total})}}catch(e: any){console.error('Provjera izvora:',e)}
+    }
     // Ponovna analiza traje nekoliko sekundi, pa mora imati vidljiv status: bez njega se rezultat
     // i gumb za usporedbu pojave niotkuda, a pri gresci korisnik nikad ne sazna da usporedba postoji.
     const recheck=addHtml('<p class="muted">Provjeravam popravljeni dokument…</p>');

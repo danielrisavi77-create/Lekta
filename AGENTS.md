@@ -31,6 +31,20 @@ se kvare. Ne mijenjaj parser, audit ni citation engine bez golden-file testa
 koji PRVO dokazuje zateceno ponasanje: tests/docx-golden.test.ts +
 tests/fixtures/docx/ (aktivan, snapshoti commitani).
 
+## Popravak: deterministican, per-fakultet kroz PODATKE
+
+U popravku nema modela ni prompta. "Recept" je niz {fixerId, ruleId, params} koji
+klijent slozi iz profila (paramsForCheck u src/ui/repair-items.ts); server pravila
+NE izvodi, nego provjeri je li fixer poznat i ziv, sanira parametre i izvrsi.
+
+- docs/REPAIR_RECIPE.md je GENERIRAN (npm run repair-recipe, izvor src/repair/recipe.ts).
+  Ne uredjuj ga rucno; tests/repair-recipe.test.ts pada na drift.
+- Dokument ide na server SAMO za popravak. Provjera izvora ide zasebnim usporednim
+  pozivom (supabase/functions/source-check), a pohrana u "Moji popravci" dovrsava se
+  u pozadini (EdgeRuntime.waitUntil).
+- Postenje: dok pohrana traje (storagePending), sucelje NE smije tvrditi da je
+  spremljeno; promasaj u korpusu NIKAD nije dokaz da izvor ne postoji.
+
 ## Pravila profila (Option A)
 
 - ruleEntries u data/** su autorski izvor istine; rules je naslijedeni agregat

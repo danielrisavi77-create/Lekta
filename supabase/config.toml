@@ -445,6 +445,13 @@ verify_jwt = true
 [functions.delete-repair-job]
 verify_jwt = true
 
+# Provjera postojanja izvora u korpusu, izdvojena iz repair-docx odgovora da popravak ne ceka do
+# 45 s korpusnog budzeta (klijent ju zove usporedno s uploadom). Trazi prijavu jer bi inace bila
+# besplatan javni pretrazivac nad 526k radova; uz JWT ide i dvostruki atomski dnevni cap
+# (claim_ip_rate_slot, scope source_check_user / source_check_ip).
+[functions.source-check]
+verify_jwt = true
+
 # Orphan-BLOB sweep (WS-7): cron-okidano, stiti se dediciranom REPAIR_CLEANUP_CRON_SECRET tajnom u funkciji.
 [functions.cleanup-orphan-repairs]
 verify_jwt = false

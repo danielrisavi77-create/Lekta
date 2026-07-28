@@ -52,20 +52,38 @@ Ostaje niže.
 
 ---
 
-## A. Deploy `repair-docx` (jedina preostala funkcija)
+## A. Deploy Edge funkcija (`source-check` PA `repair-docx`)
 
 Bundle je prevelik za MCP inline, pa preko Supabase CLI-ja (bundla iz izvora sam):
 
 ```bash
 # jednom: login (interaktivno) ILI postavi SUPABASE_ACCESS_TOKEN
 npx supabase login
-# deploy (config.toml vec ima verify_jwt=true za repair-docx)
-npx supabase functions deploy repair-docx --project-ref zrrjttizjyfcxmcpgzml
+# REDOSLIJED JE BITAN (vidi ispod): prvo source-check, pa repair-docx, pa tek onda klijent (korak E)
+npx supabase functions deploy source-check --project-ref zrrjttizjyfcxmcpgzml
+npx supabase functions deploy repair-docx  --project-ref zrrjttizjyfcxmcpgzml
 ```
 
 Alternativa: daj Claudeu personal access token pa deploya preko Management API/MCP-a.
 
+- [ ] `source-check` deployan, status ACTIVE.
 - [ ] `repair-docx` deployan, status ACTIVE.
+
+### Zasto ovaj redoslijed (2026-07-27)
+
+Provjera postojanja izvora vise ne putuje u odgovoru popravka: klijent ju zove **usporedno** s
+uploadom (`source-check`), pa dokument stize u svom vremenu umjesto da ceka do 45 s korpusnog
+budzeta. Klijent to javlja zastavicom `meta.sourceCheckSeparate`, a `repair-docx` tada korpus
+preskace (da se isti posao ne odradi dvaput).
+
+Deploy nije atomaran, pa oba smjera moraju biti sigurna:
+
+- **Novi server + stari klijent** (izmedju koraka A i E): stari klijent ne salje zastavicu, pa
+  `repair-docx` radi po starom i vraca `sourceCheck` u odgovoru. Nitko nista ne gubi.
+- **Novi klijent + stari server** (kad bi se E odradio prije A): klijent bi zvao `source-check`
+  koji jos ne postoji, pa bi provjera izvora tiho izostala. Zato **klijent ide zadnji**.
+
+Kad svi klijenti budu novi, korpusna grana u `repair-docx` moze nestati.
 
 > Napomena: `create-checkout` je već deployan ali STAR (prije WS-5 tier_mismatch enforcementa).
 > Prije prodaje ga redeployaj isto komandom `npx supabase functions deploy create-checkout ...`.
@@ -82,14 +100,25 @@ Nove za repair:
   i pg_cron u koraku C. Bez nje `cleanup-orphan-repairs` fail-closed vraća 401.
 - [ ] (opcijski) `REPAIR_MAX_DOCX_BYTES` (default 20MB), `REPAIR_CLEANUP_GRACE_MINUTES` (default 60).
 
-Provjera izvora u korpusu (sve **opcijske**, defaulti su već razumni; postavi samo ako mijenjaš):
+Provjera izvora u korpusu (sve **opcijske**, defaulti su već razumni; postavi samo ako mijenjaš).
+Iste vrijednosti čita i `repair-docx` (naslijeđeni put) i `source-check` (usporedni put), jer dijele
+`_shared/corpus-check.ts`:
 
 - `CORPUS_SOURCE_CHECK` (default `true`). Postavi na `false` kao **trenutačan kill switch**: popravak
-  radi dalje, samo bez sekcije o izvorima.
-- `CORPUS_BUDGET_MS` (default 6000), `CORPUS_MAX_REFS` (default 60), `CORPUS_CHUNK` (default 8).
-  Dohvat košta oko **2,8 ms po znaku naslova**, pa je 40 referenci 6 do 10 s. Podizanje budžeta
-  produžuje čekanje na popravak, spuštanje smanjuje koliko referenci stigne na red (sučelje to
-  pošteno prikazuje kao `checked`/`total`).
+  radi dalje, samo bez sekcije o izvorima (`source-check` tada vraća 503, klijent to čita kao
+  "provjera nije dostupna", nikad kao "izvor ne postoji").
+- `CORPUS_BUDGET_MS` (default 45000), `CORPUS_MAX_REFS` (default 60), `CORPUS_CHUNK` (default 8).
+  Dohvat košta oko **2,8 ms po znaku naslova**, pa je 40 referenci 6 do 10 s. Budžet je gornji strop,
+  ne fiksno trajanje. Otkad provjera ide zasebnim pozivom, njezino trajanje **više ne odgađa
+  popravak**; spuštanje budžeta samo smanjuje koliko referenci stigne na red (sučelje to pošteno
+  prikazuje kao `checked`/`total`).
+
+Dnevni limiti zasebne provjere (opcijski; brani da endpoint bez dokumenta ne postane besplatan javni
+pretraživač nad korpusom):
+
+- `SOURCE_CHECK_USER_DAILY_CAP` (default 40), `SOURCE_CHECK_IP_DAILY_CAP` (default 120). Atomski su
+  (`claim_ip_rate_slot`, migracija 0022), pa paralelni pozivi ne mogu proći kroz stale COUNT.
+  Ne troše ni slot ni kvotu popravaka.
 
 Potvrdi da postoje (koriste ih repair-docx / delete-repair-job):
 
@@ -187,6 +216,21 @@ server vraća 402 (paywall) pa repair ne radi dok checkout+LS nisu živi.
   "Provjera izvora u hrvatskom korpusu" pojavi, da značka prikazuje **oba broja** (`x od y`) i da
   se pri velikom popisu literature javi "Rezultat je djelomičan". Zatim `CORPUS_SOURCE_CHECK=false`
   pa ponovi: sekcije nema, popravak i dalje stiže (fail-open).
+- [ ] **Brzina (zbog čega je tok razdvojen).** Otvori Network panel i popravi rad s 40+ referenci:
+  - `repair-docx` odgovor traje otprilike koliko sam popravak (sekunde), **ne** 10-20 s;
+  - `source-check` je zaseban, **usporedan** zahtjev koji smije trajati dulje, a sekcija o izvorima
+    se dopuni sama kad stigne (dotad piše "Provjeravam navedene izvore…");
+  - u Edge logovima `[repair-docx] timings repair=… store=… corpus=… total=…` ima `store=0` i
+    `corpus=0` (pohrana je u pozadini, korpus na zasebnom pozivu).
+- [ ] **Pozadinska pohrana stvarno završi.** Potvrdi da `EdgeRuntime.waitUntil` postoji u runtimeu:
+  log `[repair-docx] store job=<uuid> ok=1 ms=…` mora se pojaviti **nakon** odgovora. Ako ga nema,
+  funkcija je pala na `await` fallback (sporije, ali ispravno) - tada `store` u `timings` nije 0.
+  Zatim otvori "Moji popravci": posao se mora pojaviti za koji trenutak.
+- [ ] **Poštenje copyja:** dok je pohrana u tijeku, sučelje smije reći samo "Kopija **se sprema**",
+  nikad "spremljeno je". Provjeri i suprotan slučaj (privremeno srušen bucket): korisnik mora dobiti
+  dokument i jasnu poruku, ne tihi gubitak.
+- [ ] `source-check` bez prijave -> 401; preko dnevnog capa -> 429 s razlogom, a **popravak i dalje
+  radi** (provjera izvora je dodatak, ne uvjet).
 - [ ] `corpus_works` je i dalje nedostupan klijentu: `select` s anon ključem mora vratiti 0 redaka
   (deny-all RLS iz 0030), a RPC `corpus_search_many` smije zvati samo `service_role`.
 - [ ] Supabase `get_advisors` (security) bez novih upozorenja.
