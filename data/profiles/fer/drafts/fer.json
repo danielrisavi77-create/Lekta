@@ -15,7 +15,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "paper-size-fixer"
       },
       {
         "ruleId": "fer-diplomski--page-numbers",
@@ -49,12 +50,15 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "font-fixer"
       },
       {
         "ruleId": "fer-diplomski--font-size",
         "checkId": "font-size",
-        "value": 12,
+        "value": [
+          12
+        ],
         "category": "format",
         "label": "Velicina slova",
         "machineCheckable": true,
@@ -65,7 +69,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "font-fixer"
       },
       {
         "ruleId": "fer-diplomski--line-spacing",
@@ -81,7 +86,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "fer-diplomski--margins",
@@ -102,7 +108,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "margins-fixer"
       },
       {
         "ruleId": "fer-diplomski--citation-style",
@@ -159,7 +166,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "paper-size-fixer"
       },
       {
         "ruleId": "fer-zavrsni--page-numbers",
@@ -193,12 +201,15 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "font-fixer"
       },
       {
         "ruleId": "fer-zavrsni--font-size",
         "checkId": "font-size",
-        "value": 12,
+        "value": [
+          12
+        ],
         "category": "format",
         "label": "Velicina slova",
         "machineCheckable": true,
@@ -209,7 +220,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "font-fixer"
       },
       {
         "ruleId": "fer-zavrsni--line-spacing",
@@ -225,7 +237,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "fer-zavrsni--margins",
@@ -246,7 +259,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "margins-fixer"
       },
       {
         "ruleId": "fer-zavrsni--citation-style",

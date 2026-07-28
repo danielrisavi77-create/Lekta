@@ -32,18 +32,41 @@ for (const id of [...DRAFT_PROFILE_IDS].sort()) {
   // advisory: identican izracun kao zivi applyScoredAdvisory (kljuc postoji cim profil ima ruleEntries,
   // makar demotiran skup bio prazan -> app tada postavlja advisoryDimensions=[]).
   advisoryMap[id] = computeDemotedAdvisory({ id }, entries, SOURCES);
-  // repair: samo pravila koja buildRepairableItems uopce obradjuje (autoFixable + verified + fixerId +
-  // checkId), slim na polja koja ta funkcija cita. params i dalje dolaze iz profila u tocki spoja.
+  // repair: pravila koja buildRepairableItems obradjuje, slim na polja koja ta funkcija cita.
+  // Dvije vrste: (1) autoFixable+verified -> obavezan popravak (NEPROMIJENJENO: params i dalje
+  // dolaze iz profila u spoju, tj. currentProfile()/definition.rules). (2) advisory s
+  // recommendedFixerId -> NEobavezan, jasno oznacen "preporuceni" popravak (institucija to zove
+  // preporukom, ne propisom; vidi profile-schema.ts). KLJUCNA RAZLIKA: effectiveRules iz
+  // ruleEntries NIJE zivo wiran u definition.rules (poznat jaz, vidi strateski audit 2026-07-13),
+  // pa "preporuceni" zapis NOSI SVOJU vrijednost (value) da paramsFromValue moze izgraditi
+  // params BEZ oslanjanja na definition.rules (koji za advisory-only institucije nikad nije
+  // populiran tim poljima).
   const repairEntries = entries
-    .filter((e) => e.autoFixable === true && e.status === 'verified' && e.fixerId && e.checkId)
-    .map((e) => ({
-      ruleId: e.ruleId,
-      checkId: e.checkId,
-      label: e.label,
-      status: e.status,
-      fixerId: e.fixerId,
-      autoFixable: e.autoFixable,
-    }));
+    .filter(
+      (e) =>
+        (e.autoFixable === true && e.status === 'verified' && e.fixerId && e.checkId) ||
+        (e.status === 'advisory' && e.recommendedFixerId && e.checkId),
+    )
+    .map((e) =>
+      e.autoFixable === true
+        ? {
+            ruleId: e.ruleId,
+            checkId: e.checkId,
+            label: e.label,
+            status: e.status,
+            fixerId: e.fixerId,
+            autoFixable: e.autoFixable,
+          }
+        : {
+            ruleId: e.ruleId,
+            checkId: e.checkId,
+            label: e.label,
+            status: e.status,
+            fixerId: e.recommendedFixerId,
+            recommended: true,
+            value: e.value,
+          },
+    );
   if (repairEntries.length > 0) repairMap[id] = repairEntries;
 }
 

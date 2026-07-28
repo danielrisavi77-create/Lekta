@@ -13,13 +13,16 @@
       "reviewedBy": "Daniel Risavi",
       "authority": "program-page",
       "sourceId": "agr-upute-zavrsni-2017",
-      "value": 12,
+      "value": [
+        12
+      ],
       "category": "format",
       "label": "Velicina slova",
       "machineCheckable": true,
       "sourcePage": "5. Tehnicko oblikovanje rada (Preporuke)",
       "quote": "rad se pise velicinom slova 12 pt, prored 1,15",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "recommendedFixerId": "font-fixer"
     },
     {
       "ruleId": "agr-zavrsni--line-spacing",
@@ -36,7 +39,8 @@
       "machineCheckable": true,
       "sourcePage": "5. Tehnicko oblikovanje rada (Preporuke)",
       "quote": "rad se pise velicinom slova 12 pt, prored 1,15",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "recommendedFixerId": "line-spacing-fixer"
     },
     {
       "ruleId": "agr-zavrsni--margins",
@@ -58,7 +62,8 @@
       "machineCheckable": true,
       "sourcePage": "5. Tehnicko oblikovanje rada (Preporuke)",
       "quote": "margine rada trebaju iznositi 2,5 cm",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "recommendedFixerId": "margins-fixer"
     },
     {
       "ruleId": "agr-zavrsni--paper-size",
@@ -75,7 +80,8 @@
       "machineCheckable": true,
       "sourcePage": "1. Uvodne odrednice",
       "quote": "Zavrsni rad je pisani tekst opsega 20 - 30 stranica osnovnog teksta na papiru A4 formata",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "recommendedFixerId": "paper-size-fixer"
     },
     {
       "ruleId": "agr-zavrsni--page-numbers",

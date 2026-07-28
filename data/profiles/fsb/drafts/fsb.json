@@ -4,7 +4,9 @@
       {
         "ruleId": "fsb-diplomski--font-size",
         "checkId": "font-size",
-        "value": 12,
+        "value": [
+          12
+        ],
         "category": "format",
         "label": "Velicina slova",
         "machineCheckable": true,
@@ -15,12 +17,16 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "font-fixer"
       },
       {
         "ruleId": "fsb-diplomski--font",
         "checkId": "font",
-        "value": ["Times New Roman", "Arial"],
+        "value": [
+          "Times New Roman",
+          "Arial"
+        ],
         "category": "format",
         "label": "Vrsta slova",
         "machineCheckable": true,
@@ -31,7 +37,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "font-fixer"
       },
       {
         "ruleId": "fsb-diplomski--line-spacing",
@@ -47,12 +54,18 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "fsb-diplomski--margins",
         "checkId": "margins",
-        "value": { "top": 2, "bottom": 2, "left": 2.5, "right": 2 },
+        "value": {
+          "top": 2,
+          "bottom": 2,
+          "left": 2.5,
+          "right": 2
+        },
         "category": "format",
         "label": "Margine",
         "machineCheckable": true,
@@ -63,7 +76,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "margins-fixer"
       },
       {
         "ruleId": "fsb-diplomski--page-numbers",
@@ -100,7 +114,13 @@
       {
         "ruleId": "fsb-diplomski--required-sections",
         "checkId": "required-sections",
-        "value": ["sazetak", "kljucne rijeci", "uvod", "zakljucak", "popis literature"],
+        "value": [
+          "sazetak",
+          "kljucne rijeci",
+          "uvod",
+          "zakljucak",
+          "popis literature"
+        ],
         "category": "structure",
         "label": "Obvezne cjeline rada",
         "machineCheckable": false,
@@ -118,7 +138,9 @@
       {
         "ruleId": "fsb-zavrsni--font-size",
         "checkId": "font-size",
-        "value": 12,
+        "value": [
+          12
+        ],
         "category": "format",
         "label": "Velicina slova",
         "machineCheckable": true,
@@ -129,12 +151,16 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "font-fixer"
       },
       {
         "ruleId": "fsb-zavrsni--font",
         "checkId": "font",
-        "value": ["Times New Roman", "Arial"],
+        "value": [
+          "Times New Roman",
+          "Arial"
+        ],
         "category": "format",
         "label": "Vrsta slova",
         "machineCheckable": true,
@@ -145,7 +171,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "font-fixer"
       },
       {
         "ruleId": "fsb-zavrsni--line-spacing",
@@ -161,12 +188,18 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "fsb-zavrsni--margins",
         "checkId": "margins",
-        "value": { "top": 2, "bottom": 2, "left": 2.5, "right": 2 },
+        "value": {
+          "top": 2,
+          "bottom": 2,
+          "left": 2.5,
+          "right": 2
+        },
         "category": "format",
         "label": "Margine",
         "machineCheckable": true,
@@ -177,7 +210,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "margins-fixer"
       },
       {
         "ruleId": "fsb-zavrsni--page-numbers",
@@ -214,7 +248,13 @@
       {
         "ruleId": "fsb-zavrsni--required-sections",
         "checkId": "required-sections",
-        "value": ["sazetak", "kljucne rijeci", "uvod", "zakljucak", "popis literature"],
+        "value": [
+          "sazetak",
+          "kljucne rijeci",
+          "uvod",
+          "zakljucak",
+          "popis literature"
+        ],
         "category": "structure",
         "label": "Obvezne cjeline rada",
         "machineCheckable": false,

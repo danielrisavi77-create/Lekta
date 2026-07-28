@@ -59,3 +59,32 @@ describe('validateProfiles autoFixable pravila (jedinicno)', () => {
     expect(errors).toEqual([]);
   });
 });
+
+describe('validateProfiles recommendedFixerId pravila (jedinicno)', () => {
+  const profileWith = (entry: Partial<RuleEntry>) =>
+    [{ id: 'p1', ruleEntries: [{ ruleId: 'r1', ...entry } as RuleEntry] }] as any;
+
+  it('recommendedFixerId s nepoznatim fixerId-om (tipfeler) je greska', () => {
+    const errors = validateProfiles(profileWith({ status: 'advisory', recommendedFixerId: 'margin-fixer' }));
+    expect(errors).toHaveLength(1);
+    expect(errors[0].message).toContain('nepoznat recommendedFixerId "margin-fixer"');
+  });
+
+  it('recommendedFixerId zajedno s autoFixable:true na istom zapisu je greska', () => {
+    const errors = validateProfiles(
+      profileWith({ status: 'verified', autoFixable: true, fixerId: 'margins-fixer', recommendedFixerId: 'margins-fixer' }),
+    );
+    expect(errors).toHaveLength(1);
+    expect(errors[0].message).toContain('odaberi jedno');
+  });
+
+  it('ispravno recommendedFixerId na advisory pravilu prolazi', () => {
+    const errors = validateProfiles(profileWith({ status: 'advisory', recommendedFixerId: 'margins-fixer' }));
+    expect(errors).toEqual([]);
+  });
+
+  it('pravilo bez recommendedFixerId se ne provjerava (default null)', () => {
+    const errors = validateProfiles(profileWith({ status: 'advisory' }));
+    expect(errors).toEqual([]);
+  });
+});

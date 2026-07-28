@@ -77,7 +77,8 @@
       "lastVerified": "2026-07-03",
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "recommendedFixerId": "line-spacing-fixer"
     },
     {
       "ruleId": "pmf-matematika-graduate--margins",
@@ -99,7 +100,8 @@
       "lastVerified": "2026-07-03",
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "recommendedFixerId": "margins-fixer"
     },
     {
       "ruleId": "pmf-matematika-graduate--citation-style",

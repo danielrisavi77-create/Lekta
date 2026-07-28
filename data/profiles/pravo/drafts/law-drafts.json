@@ -80,7 +80,8 @@
         "sourceId": null,
         "sourcePage": null,
         "quote": null,
-        "status": "advisory"
+        "status": "advisory",
+        "recommendedFixerId": "margins-fixer"
       },
       {
         "ruleId": "pravo-integrirani-diplomski--citation-style",
@@ -421,7 +422,8 @@
         "sourceId": null,
         "sourcePage": null,
         "quote": null,
-        "status": "advisory"
+        "status": "advisory",
+        "recommendedFixerId": "margins-fixer"
       },
       {
         "ruleId": "pravo-javna-uprava-prijediplomski--citation-style",
@@ -748,7 +750,8 @@
         "sourceId": null,
         "sourcePage": null,
         "quote": null,
-        "status": "advisory"
+        "status": "advisory",
+        "recommendedFixerId": "margins-fixer"
       },
       {
         "ruleId": "pravo-javna-uprava-diplomski--citation-style",
@@ -1075,7 +1078,8 @@
         "sourceId": null,
         "sourcePage": null,
         "quote": null,
-        "status": "advisory"
+        "status": "advisory",
+        "recommendedFixerId": "margins-fixer"
       },
       {
         "ruleId": "pravo-porezni-prijediplomski--citation-style",
@@ -1556,7 +1560,8 @@
         "sourceId": null,
         "sourcePage": null,
         "quote": null,
-        "status": "advisory"
+        "status": "advisory",
+        "recommendedFixerId": "paper-size-fixer"
       },
       {
         "ruleId": "pravo-socijalni-rad-zavrsni--heading-rules",
@@ -1853,7 +1858,8 @@
         "sourceId": null,
         "sourcePage": null,
         "quote": null,
-        "status": "advisory"
+        "status": "advisory",
+        "recommendedFixerId": "paper-size-fixer"
       },
       {
         "ruleId": "pravo-socijalni-rad-diplomski--heading-rules",
@@ -2187,7 +2193,8 @@
         "sourceId": null,
         "sourcePage": null,
         "quote": null,
-        "status": "advisory"
+        "status": "advisory",
+        "recommendedFixerId": "paper-size-fixer"
       },
       {
         "ruleId": "pravo-socijalna-politika-diplomski--heading-rules",
@@ -2365,7 +2372,8 @@
         "sourceId": null,
         "sourcePage": null,
         "quote": null,
-        "status": "advisory"
+        "status": "advisory",
+        "recommendedFixerId": "margins-fixer"
       },
       {
         "ruleId": "pravo-opci-pravni-akademski-rad--citation-style",
@@ -2634,7 +2642,8 @@
         "sourceId": null,
         "sourcePage": null,
         "quote": null,
-        "status": "advisory"
+        "status": "advisory",
+        "recommendedFixerId": "paper-size-fixer"
       }
     ],
     "pravo-specijalisticki-pravni-opci": [
@@ -2714,7 +2723,8 @@
         "sourceId": null,
         "sourcePage": null,
         "quote": null,
-        "status": "advisory"
+        "status": "advisory",
+        "recommendedFixerId": "margins-fixer"
       },
       {
         "ruleId": "pravo-specijalisticki-pravni-opci--citation-style",
@@ -2930,7 +2940,8 @@
         "sourceId": null,
         "sourcePage": null,
         "quote": null,
-        "status": "advisory"
+        "status": "advisory",
+        "recommendedFixerId": "margins-fixer"
       },
       {
         "ruleId": "pravo-doktorski-pravne-znanosti--citation-style",

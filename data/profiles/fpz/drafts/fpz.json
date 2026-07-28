@@ -73,7 +73,9 @@
       {
         "ruleId": "fpz-zavrsni--font-size",
         "checkId": "font-size",
-        "value": 12,
+        "value": [
+          12
+        ],
         "category": "format",
         "label": "Velicina slova",
         "machineCheckable": true,
@@ -84,7 +86,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-28",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "font-fixer"
       },
       {
         "ruleId": "fpz-zavrsni--line-spacing",
@@ -100,7 +103,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-28",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "fpz-zavrsni--margins",
@@ -121,7 +125,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-28",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "margins-fixer"
       },
       {
         "ruleId": "fpz-zavrsni--citation-style",
@@ -231,7 +236,9 @@
       {
         "ruleId": "fpz-diplomski--font-size",
         "checkId": "font-size",
-        "value": 12,
+        "value": [
+          12
+        ],
         "category": "format",
         "label": "Velicina slova",
         "machineCheckable": true,
@@ -242,7 +249,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-28",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "font-fixer"
       },
       {
         "ruleId": "fpz-diplomski--line-spacing",
@@ -258,7 +266,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-28",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "fpz-diplomski--margins",
@@ -279,7 +288,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-28",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "margins-fixer"
       },
       {
         "ruleId": "fpz-diplomski--citation-style",

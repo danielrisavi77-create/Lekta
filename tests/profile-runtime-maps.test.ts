@@ -29,15 +29,31 @@ function expectedMaps() {
     if (entries.length === 0) continue;
     advisory[id] = computeDemotedAdvisory({ id }, entries, SOURCES);
     const r = entries
-      .filter((e) => e.autoFixable === true && e.status === 'verified' && e.fixerId && e.checkId)
-      .map((e) => ({
-        ruleId: e.ruleId,
-        checkId: e.checkId,
-        label: e.label,
-        status: e.status,
-        fixerId: e.fixerId,
-        autoFixable: e.autoFixable,
-      }));
+      .filter(
+        (e) =>
+          (e.autoFixable === true && e.status === 'verified' && e.fixerId && e.checkId) ||
+          (e.status === 'advisory' && e.recommendedFixerId && e.checkId),
+      )
+      .map((e) =>
+        e.autoFixable === true
+          ? {
+              ruleId: e.ruleId,
+              checkId: e.checkId,
+              label: e.label,
+              status: e.status,
+              fixerId: e.fixerId,
+              autoFixable: e.autoFixable,
+            }
+          : {
+              ruleId: e.ruleId,
+              checkId: e.checkId,
+              label: e.label,
+              status: e.status,
+              fixerId: e.recommendedFixerId,
+              recommended: true,
+              value: e.value,
+            },
+      );
     if (r.length > 0) repair[id] = r;
   }
   return { advisory, repair };

@@ -344,6 +344,12 @@
     "justify",
     "toc"
   ],
+  "ffst-diplomski": [
+    "toc"
+  ],
+  "ffst-zavrsni": [
+    "toc"
+  ],
   "ffzg-arheologija-graduate": [
     "justify",
     "paper-size",

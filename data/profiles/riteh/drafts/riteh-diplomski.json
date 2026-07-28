@@ -64,7 +64,8 @@
       "status": "advisory",
       "lastVerified": "2026-07-27",
       "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "reviewedBy": null,
+      "recommendedFixerId": "font-fixer"
     },
     {
       "ruleId": "riteh-diplomski--font-size",
@@ -82,7 +83,8 @@
       "status": "advisory",
       "lastVerified": "2026-07-27",
       "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "reviewedBy": null,
+      "recommendedFixerId": "font-fixer"
     },
     {
       "ruleId": "riteh-diplomski--line-spacing",
@@ -98,7 +100,8 @@
       "status": "advisory",
       "lastVerified": "2026-07-27",
       "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "reviewedBy": null,
+      "recommendedFixerId": "line-spacing-fixer"
     },
     {
       "ruleId": "riteh-diplomski--margins",
@@ -119,7 +122,8 @@
       "status": "advisory",
       "lastVerified": "2026-07-27",
       "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "reviewedBy": null,
+      "recommendedFixerId": "margins-fixer"
     },
     {
       "ruleId": "riteh-diplomski--justify",
@@ -135,7 +139,8 @@
       "status": "advisory",
       "lastVerified": "2026-07-27",
       "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "reviewedBy": null,
+      "recommendedFixerId": "alignment-fixer"
     }
   ],
   "generatedAt": "2026-07-03"

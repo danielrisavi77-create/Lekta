@@ -63,6 +63,36 @@ export function paramsForCheck(checkId: string, profile: any): Record<string, un
   }
 }
 
+/**
+ * Isti oblik ciljanih params kao paramsForCheck, ali izvedeno IZRAVNO iz vrijednosti ruleEntry-ja
+ * (entry.value), ne iz `profile`. Potrebno za "preporucene" (advisory) popravke: effectiveRules iz
+ * ruleEntries NIJE zivo wiran u definition.rules (poznat jaz, vidi strateski audit 2026-07-13), pa
+ * bi paramsForCheck(checkId, profile) za advisory-only institucije uvijek vratio null. Oblik
+ * vrijednosti je namjerno identican onome sto rule-compiler.ts.applyEntry postavlja na `profile`
+ * (npr. font-size: [12], margins: {top,right,bottom,left}), pa je pretvorba 1:1 s paramsForCheck.
+ */
+function paramsFromValue(checkId: string, value: unknown): Record<string, unknown> | null {
+  switch (checkId) {
+    case 'margins':
+      return value && typeof value === 'object' ? { ...(value as Record<string, unknown>) } : null;
+    case 'font':
+      return Array.isArray(value) && value[0] ? { fontName: value[0] } : null;
+    case 'font-size':
+      return Array.isArray(value) && value[0] != null ? { fontSizePt: value[0] } : null;
+    case 'line-spacing':
+      return typeof value === 'number' ? { multiplier: value } : null;
+    case 'justify':
+      return value === true ? { val: 'both' } : value === false ? { val: 'left' } : null;
+    case 'paper-size': {
+      const name = Array.isArray(value) ? value[0] : value === true ? 'A4' : typeof value === 'string' ? value : null;
+      const dim = name ? A_SERIES[name] : null;
+      return dim ? { w: dim[0], h: dim[1] } : null;
+    }
+    default:
+      return null;
+  }
+}
+
 /** Status checka po naslovu (ili undefined ako ga nema). Za razliku od isViolated NE trazi
  *  max>0: numeriranje-checkovi su nebodovani (max=0, "Word ne sprema dovoljno podataka") na
  *  jednosekcijskom radu, ali im status ostaje 'warn' kad numeriranje od Uvoda nije potvrdjeno. */
@@ -85,6 +115,13 @@ function isViolated(checkId: string, checks: AnalyzedCheck[]): boolean {
  * Default (Opcija A, besplatni teaser): vraca SAMO prekrsene dimenzije. S
  * includeNonViolated (Feature B, placeno): vraca i neprekrsene (violated:false),
  * za "uskladi cijeli dokument" tok. Prazno dok nijedno pravilo nije autoFixable.
+ *
+ * Dodatno (neovisno o gornjem): pravila s status:'advisory' + recommended:true (pecena
+ * projekcija recommendedFixerId, vidi profile-schema.ts) daju NEOBAVEZAN, jasno oznacen
+ * "preporuceno" popravak. Uvijek se vracaju (bez obzira na includeNonViolated) jer su
+ * jedini nacin da institucije bez ijednog BODOVANOG pravila ipak ponude koristan popravak;
+ * violated je uvijek false (demotirani check uvijek javlja 'pass', pa se sukladnost ne moze
+ * provjeriti niti kazniti - vidi analyzeDocx checkFont===false granu).
  */
 export function buildRepairableItems(
   checks: AnalyzedCheck[],
@@ -94,11 +131,28 @@ export function buildRepairableItems(
 ): RepairableItem[] {
   const out: RepairableItem[] = [];
   for (const e of ruleEntries) {
-    if (e.autoFixable !== true || e.status !== 'verified' || !e.fixerId || !e.checkId) continue;
-    const violated = isViolated(e.checkId, checks);
-    if (!violated && !opts?.includeNonViolated) continue; // A: samo prekrseno
+    const isRecommended = e.recommended === true && e.status === 'advisory';
+    const isRequired = e.autoFixable === true && e.status === 'verified';
+    if ((!isRecommended && !isRequired) || !e.fixerId || !e.checkId) continue;
+    if (isRecommended) {
+      // Vrijednost dolazi IZ ZAPISA (pecena projekcija nosi e.value), ne iz `profile`:
+      // effectiveRules iz ruleEntries nije zivo wiran u definition.rules (vidi paramsFromValue).
+      const params = paramsFromValue(e.checkId, e.value);
+      if (!params) continue;
+      out.push({
+        ruleId: e.ruleId,
+        fixerId: e.fixerId as RepairableItem['fixerId'],
+        label: e.label || CHECK_TITLE[e.checkId] || e.ruleId,
+        params,
+        violated: false,
+        recommended: true,
+      });
+      continue;
+    }
     const params = paramsForCheck(e.checkId, profile);
     if (!params) continue; // profil nema ciljanu vrijednost -> ne nudi popravak
+    const violated = isViolated(e.checkId, checks);
+    if (!violated && !opts?.includeNonViolated) continue; // A: samo prekrseno
     out.push({
       ruleId: e.ruleId,
       fixerId: e.fixerId as RepairableItem['fixerId'],

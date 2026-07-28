@@ -193,7 +193,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "paper-size-fixer"
       },
       {
         "ruleId": "efzg-zavrsni--citation-style",
@@ -429,7 +430,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-03",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "paper-size-fixer"
       },
       {
         "ruleId": "efzg-diplomski--citation-style",
@@ -644,7 +646,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-03",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "paper-size-fixer"
       },
       {
         "ruleId": "efzg-specijalisticki--citation-style",
@@ -809,7 +812,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-03",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "paper-size-fixer"
       },
       {
         "ruleId": "efzg-strucni-racunovodstvo--citation-style",

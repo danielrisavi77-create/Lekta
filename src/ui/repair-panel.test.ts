@@ -95,6 +95,53 @@ describe('renderRepairPanel: grupiranje i checkboxi', () => {
   });
 });
 
+describe('renderRepairPanel: preporucene (advisory) stavke', () => {
+  it('preporucena stavka je odznacena, ima "Preporučeno" oznaku i vlastiti podnaslov', () => {
+    const mountEl = mount();
+    renderRepairPanel({
+      ...ctxBase,
+      mountEl,
+      items: [
+        item({ ruleId: 'v', label: 'Prekrseno', violated: true }),
+        item({ ruleId: 'r', label: 'Institucijska preporuka', violated: false, recommended: true, fixerId: 'font-fixer' }),
+      ],
+    });
+    const byLabel = (t: string) =>
+      Array.from(mountEl.querySelectorAll('.lekta-repair-panel__item')).find((li) => li.textContent?.includes(t))!;
+    const recLi = byLabel('Institucijska preporuka');
+    expect(recLi.querySelector('input')!.checked).toBe(false);
+    expect(recLi.querySelector('.lekta-repair-panel__badge')?.textContent).toBe('Preporučeno');
+    const subtitles = Array.from(mountEl.querySelectorAll('.lekta-repair-panel__subtitle')).map((s) => s.textContent);
+    expect(subtitles.some((t) => t?.includes('Preporučeno, nije obavezno'))).toBe(true);
+  });
+
+  it('preporucena stavka ide IZA neprekrsene-ali-bodovane skupine (Feature B)', () => {
+    const mountEl = mount();
+    renderRepairPanel({
+      ...ctxBase,
+      mountEl,
+      items: [
+        item({ ruleId: 'n', label: 'Uredno bodovano', violated: false, fixerId: 'font-fixer' }),
+        item({ ruleId: 'r', label: 'Preporuka', violated: false, recommended: true, fixerId: 'margins-fixer' }),
+      ],
+    });
+    const labels = Array.from(mountEl.querySelectorAll('.lekta-repair-panel__item span')).map((s) => s.textContent);
+    expect(labels.indexOf('Uredno bodovano')).toBeLessThan(labels.indexOf('Preporuka'));
+  });
+
+  it('samo preporucene stavke (institucija bez ijednog bodovanog pravila): jedna skupina, sve odznacene', () => {
+    const mountEl = mount();
+    renderRepairPanel({
+      ...ctxBase,
+      mountEl,
+      items: [item({ ruleId: 'r', label: 'Preporuka', violated: false, recommended: true, fixerId: 'font-fixer' })],
+    });
+    const boxes = mountEl.querySelectorAll<HTMLInputElement>('.lekta-repair-panel__list input[type="checkbox"]');
+    expect(boxes).toHaveLength(1);
+    expect(boxes[0].checked).toBe(false);
+  });
+});
+
 describe('renderRepairPanel: klik s 0 odabranih', () => {
   it('prazan odabir daje poruku umjesto tihog no-opa', () => {
     const mountEl = mount();

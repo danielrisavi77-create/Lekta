@@ -22,12 +22,15 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "font-fixer"
       },
       {
         "ruleId": "sumfak-diplomski--font-size",
         "checkId": "font-size",
-        "value": 12,
+        "value": [
+          12
+        ],
         "category": "format",
         "label": "Velicina slova",
         "machineCheckable": true,
@@ -38,7 +41,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "font-fixer"
       },
       {
         "ruleId": "sumfak-diplomski--line-spacing",
@@ -54,7 +58,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "sumfak-diplomski--margins",
@@ -75,7 +80,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "margins-fixer"
       },
       {
         "ruleId": "sumfak-diplomski--justify",
@@ -91,7 +97,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "alignment-fixer"
       },
       {
         "ruleId": "sumfak-diplomski--paper-size",
@@ -107,7 +114,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "paper-size-fixer"
       },
       {
         "ruleId": "sumfak-diplomski--page-count",
@@ -227,12 +235,15 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "font-fixer"
       },
       {
         "ruleId": "sumfak-zavrsni--font-size",
         "checkId": "font-size",
-        "value": 12,
+        "value": [
+          12
+        ],
         "category": "format",
         "label": "Velicina slova",
         "machineCheckable": true,
@@ -243,7 +254,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "font-fixer"
       },
       {
         "ruleId": "sumfak-zavrsni--line-spacing",
@@ -259,7 +271,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "sumfak-zavrsni--margins",
@@ -280,7 +293,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "margins-fixer"
       },
       {
         "ruleId": "sumfak-zavrsni--justify",
@@ -296,7 +310,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "alignment-fixer"
       },
       {
         "ruleId": "sumfak-zavrsni--citation-style",

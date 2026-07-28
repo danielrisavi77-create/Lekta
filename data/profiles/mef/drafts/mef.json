@@ -63,7 +63,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "line-spacing-fixer"
       },
       {
         "ruleId": "mef-diplomski--margins",
@@ -84,7 +85,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "margins-fixer"
       },
       {
         "ruleId": "mef-diplomski--paper-size",

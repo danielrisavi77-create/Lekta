@@ -39,7 +39,8 @@
       "status": "advisory",
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "reviewedBy": null,
+      "recommendedFixerId": "font-fixer"
     },
     {
       "ruleId": "algebra-diplomski--font-size",
@@ -57,7 +58,8 @@
       "status": "advisory",
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "reviewedBy": null,
+      "recommendedFixerId": "font-fixer"
     },
     {
       "ruleId": "algebra-diplomski--line-spacing",
@@ -73,7 +75,8 @@
       "status": "advisory",
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "reviewedBy": null,
+      "recommendedFixerId": "line-spacing-fixer"
     },
     {
       "ruleId": "algebra-diplomski--justify",
@@ -89,7 +92,8 @@
       "status": "advisory",
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "reviewedBy": null,
+      "recommendedFixerId": "alignment-fixer"
     },
     {
       "ruleId": "algebra-diplomski--paper-size",
@@ -105,7 +109,8 @@
       "status": "advisory",
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "reviewedBy": null,
+      "recommendedFixerId": "paper-size-fixer"
     },
     {
       "ruleId": "algebra-diplomski--margins",
@@ -126,7 +131,8 @@
       "status": "advisory",
       "lastVerified": "2026-07-28",
       "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "reviewedBy": null,
+      "recommendedFixerId": "margins-fixer"
     }
   ]
 }

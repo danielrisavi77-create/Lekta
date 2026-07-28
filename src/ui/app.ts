@@ -1341,10 +1341,14 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
  intro.innerHTML='<strong>Popravi sve jednim klikom.</strong> Dokument se šalje na server, popravi se i vraća gotov. Popravljaju se oblikovanje, numeriranje i struktura; ne diraju se sadržaj, citati ni argument. Datoteka se pohranjuje dok je ne obrišeš (Moji popravci); kod prijave bez e-maila najviše 30 dana.';
  wrap.appendChild(intro);
  // RE-35: popis stavki (kao lokalni panel), ne skriveno "sve ili nista": prekrsene su predodabrane
- // (opt-out), neprekrsene ("uskladi sve", Feature B) su opt-in.
+ // (opt-out), neprekrsene ("uskladi sve", Feature B) su opt-in. Trece: institucijska preporuka
+ // (advisory, recommended:true) - uvijek opt-in, uvijek ponudjena (nije bodovana pa "prekrseno"
+ // nema smisla za nju), u vlastitoj skupini s jasnom "Preporučeno" oznakom.
  const list=document.createElement('ul');list.className='lekta-repair-panel__list';
- const ordered=[...items].sort((a: any,b: any)=>Number(b.violated!==false)-Number(a.violated!==false));
- const firstExtraIdx=ordered.findIndex((i: any)=>i.violated===false);
+ const rank=(i: any)=>i.violated!==false?0:i.recommended?2:1;
+ const ordered=[...items].sort((a: any,b: any)=>rank(a)-rank(b));
+ const firstExtraIdx=ordered.findIndex((i: any)=>rank(i)===1);
+ const firstRecommendedIdx=ordered.findIndex((i: any)=>rank(i)===2);
  ordered.forEach((item: any,orderIdx: number)=>{
   const idx=items.indexOf(item),isViolated=item.violated!==false;
   if(orderIdx===firstExtraIdx&&firstExtraIdx!==-1){
@@ -1352,8 +1356,14 @@ function renderServerRepairPanel(mount: any,r: any,items: any[],file: any,textIt
    sub.textContent=firstExtraIdx===0?'Sve prepoznato je usklađeno. Po želji dodatno uskladi:':'Uskladi i ostalo (trenutno nije prekršeno):';
    list.appendChild(sub);
   }
+  if(orderIdx===firstRecommendedIdx&&firstRecommendedIdx!==-1){
+   const sub=document.createElement('li');sub.className='lekta-repair-panel__subtitle';
+   sub.textContent='Preporučeno, nije obavezno (institucija to ne propisuje):';
+   list.appendChild(sub);
+  }
   const li=document.createElement('li');li.className='lekta-repair-panel__item';
-  li.innerHTML=`<label><input type="checkbox" ${isViolated?'checked':''} data-idx="${idx}" /><span>${escapeHtml(item.label)}</span></label><span class="lekta-repair-panel__badge">${isViolated?'Možemo ovo popraviti umjesto tebe':'Uskladi s profilom'}</span>`;
+  const badgeText=item.recommended?'Preporučeno':(isViolated?'Možemo ovo popraviti umjesto tebe':'Uskladi s profilom');
+  li.innerHTML=`<label><input type="checkbox" ${isViolated?'checked':''} data-idx="${idx}" /><span>${escapeHtml(item.label)}</span></label><span class="lekta-repair-panel__badge">${badgeText}</span>`;
   list.appendChild(li);
  });
  wrap.appendChild(list);

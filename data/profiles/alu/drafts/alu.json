@@ -7,7 +7,9 @@
       {
         "ruleId": "alu-diplomski--font-size",
         "checkId": "font-size",
-        "value": 12,
+        "value": [
+          12
+        ],
         "category": "format",
         "label": "Velicina slova (pisano obrazlozenje)",
         "machineCheckable": true,
@@ -18,7 +20,8 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "font-fixer"
       },
       {
         "ruleId": "alu-diplomski--line-spacing",
@@ -50,12 +53,16 @@
         "status": "advisory",
         "lastVerified": "2026-07-02",
         "verifiedBy": "owner-bulk-approval",
-        "reviewedBy": null
+        "reviewedBy": null,
+        "recommendedFixerId": "paper-size-fixer"
       },
       {
         "ruleId": "alu-diplomski--page-count",
         "checkId": "page-count",
-        "value": { "min": 5, "max": 25 },
+        "value": {
+          "min": 5,
+          "max": 25
+        },
         "category": "scope",
         "label": "Opseg pisanog obrazlozenja (kartice)",
         "machineCheckable": true,
@@ -71,7 +78,10 @@
       {
         "ruleId": "alu-diplomski--required-sections",
         "checkId": "required-sections",
-        "value": ["likovni dio", "pisano obrazlozenje"],
+        "value": [
+          "likovni dio",
+          "pisano obrazlozenje"
+        ],
         "category": "structure",
         "label": "Obvezni dijelovi diplomskog rada",
         "machineCheckable": false,

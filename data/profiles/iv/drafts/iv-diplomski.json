@@ -237,7 +237,8 @@
       "quote": "<w:pgSz w:w=\"11906\" w:h=\"16838\" w:code=\"9\"/> (A4 210x297 mm; iz službenog predloška naslovnice, Prilog Pravilniku; sam tekst Pravilnika ne navodi izrijekom veličinu papira)",
       "status": "advisory",
       "scored": false,
-      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote)."
+      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote).",
+      "recommendedFixerId": "paper-size-fixer"
     }
   ],
   "generatedAt": "2026-07-17"

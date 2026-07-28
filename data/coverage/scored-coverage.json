@@ -529,6 +529,22 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "ffst-diplomski",
+      "scored": 7,
+      "machineCheckable": 7,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "ffst-zavrsni",
+      "scored": 7,
+      "machineCheckable": 7,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
+    },
+    {
       "profileId": "ffzg-arheologija-graduate",
       "scored": 5,
       "machineCheckable": 6,
@@ -2417,5 +2433,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 1791
+  "totalScored": 1805
 }

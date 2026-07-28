@@ -7,7 +7,9 @@
     {
       "ruleId": "agr-diplomski--font-size",
       "checkId": "font-size",
-      "value": 12,
+      "value": [
+        12
+      ],
       "category": "format",
       "label": "Velicina slova",
       "machineCheckable": true,
@@ -19,7 +21,8 @@
       "lastVerified": "2026-07-03",
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "recommendedFixerId": "font-fixer"
     },
     {
       "ruleId": "agr-diplomski--line-spacing",
@@ -36,7 +39,8 @@
       "lastVerified": "2026-07-03",
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "recommendedFixerId": "line-spacing-fixer"
     },
     {
       "ruleId": "agr-diplomski--margins",
@@ -58,7 +62,8 @@
       "lastVerified": "2026-07-03",
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "recommendedFixerId": "margins-fixer"
     },
     {
       "ruleId": "agr-diplomski--paper-size",
@@ -75,7 +80,8 @@
       "lastVerified": "2026-07-03",
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "confirmedVia": "human-audit",
+      "recommendedFixerId": "paper-size-fixer"
     },
     {
       "ruleId": "agr-diplomski--page-numbers",

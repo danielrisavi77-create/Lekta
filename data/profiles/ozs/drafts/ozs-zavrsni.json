@@ -39,7 +39,8 @@
       "quote": "<w:sz w:val=\"24\"/> u docDefaults (24 half-pt = 12 pt); Normal ne nadjačava veličinu pa je efektivna veličina tijela 12 pt (posredno, naslijeđeno)",
       "status": "advisory",
       "scored": false,
-      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote)."
+      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote).",
+      "recommendedFixerId": "font-fixer"
     },
     {
       "ruleId": "ozs-zavrsni--line-spacing",
@@ -80,7 +81,8 @@
       "quote": "<w:pgMar w:top=\"1701\" w:right=\"1701\" w:bottom=\"1701\" w:left=\"1701\" .../> (1701 twips = 3,0 cm u dijelu s tijelom rada); prednji/naslovni dio koristi <w:pgMar ... 1418 ...> = 2,5 cm, pa je predložak nejednolik",
       "status": "advisory",
       "scored": false,
-      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote)."
+      "note": "Advisory: dualno/ambiguozno u izvoru (vidi quote).",
+      "recommendedFixerId": "margins-fixer"
     },
     {
       "ruleId": "ozs-zavrsni--page-numbers",

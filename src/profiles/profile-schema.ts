@@ -89,6 +89,23 @@ export interface RuleEntry {
    * autoFixable. params za fixer NE stoje ovdje: izvode se iz vrijednosti profila u tocki spoja.
    */
   fixerId?: string | null;
+  /**
+   * Repair Engine: fixer koji se smije ponuditi kao NEOBAVEZNA, jasno oznacena preporuka
+   * ("Preporučeno, nije obavezno") za pravilo koje NIJE bodovano (tipicno status 'advisory' -
+   * institucija sama tu vrijednost zove preporukom, ne propisom). Za razliku od `autoFixable`
+   * (koji iznudjuje status:'verified', vidi profile-validator.ts) ovo polje NE cini pravilo
+   * bodovanim niti obveznim; samo otkljucuje gumb za primjenu iste vec-poznate ciljane vrijednosti.
+   * Nikad se ne kombinira s `autoFixable:true` na istom zapisu (to bi bilo dvostruko/zbunjujuce -
+   * ako je pravilo vec obavezan popravak, ne treba mu i "preporuceni" alias).
+   */
+  recommendedFixerId?: string | null;
+  /**
+   * SAMO u pecenoj slim projekciji (data/profiles/repair-map.json preko repairEntriesFor, vidi
+   * scripts/gen-profile-runtime-maps.mts): oznacava da je ovaj zapis potekao iz recommendedFixerId
+   * (neobavezan popravak), ne iz autoFixable (obavezan). Izvorni ruleEntries u drafts direktorijima
+   * nikad ne postavljaju ovo polje izravno - postavlja ga SAMO build koraka projekcije.
+   */
+  recommended?: boolean;
 }
 
 /** Referenca na jedan sluzbeni izvor koji podupire dio kompozitnog pravila. */

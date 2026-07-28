@@ -20,6 +20,9 @@ export interface RepairableItem {
   requiresConfirmation?: boolean;
   /** Tekst potvrde (sto ce se tocno napraviti i gdje); prikazuje se u potvrdnom koraku. */
   confirmationText?: string;
+  /** Pravilo je institucijska PREPORUKA (advisory), ne bodovan propis: gumb se nudi kao
+   * neobavezno "Preporučeno", u zasebnoj skupini, uvijek opt-in (violated je uvijek false). */
+  recommended?: boolean;
 }
 
 /** Fixeri koji podrzavaju v2 dubinsko ciscenje izravnog formatiranja u tekstu. */
@@ -62,10 +65,12 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
   const list = document.createElement('ul');
   list.className = 'lekta-repair-panel__list';
 
-  // Prekrsene dimenzije prve (predodabrane); neprekrsene iza podnaslova kao
-  // opt-in "uskladi cijeli dokument" (Feature B).
-  const ordered = [...ctx.items].sort((a, b) => Number(b.violated !== false) - Number(a.violated !== false));
-  const firstExtraIdx = ordered.findIndex((i) => i.violated === false);
+  // Tri skupine, tim redom: prekrseno (predodabrano) > neprekrseno-ali-bodovano, opt-in
+  // "uskladi cijeli dokument" (Feature B) > institucijska preporuka (advisory), uvijek opt-in.
+  const rank = (i: RepairableItem) => (i.violated !== false ? 0 : i.recommended ? 2 : 1);
+  const ordered = [...ctx.items].sort((a, b) => rank(a) - rank(b));
+  const firstExtraIdx = ordered.findIndex((i) => rank(i) === 1);
+  const firstRecommendedIdx = ordered.findIndex((i) => rank(i) === 2);
 
   ordered.forEach((item, orderIdx) => {
     const idx = ctx.items.indexOf(item);
@@ -81,14 +86,25 @@ export function renderRepairPanel(ctx: RepairPanelContext): void {
           : 'Uskladi i ostalo (trenutno nije prekršeno):';
       list.appendChild(sub);
     }
+    if (orderIdx === firstRecommendedIdx && firstRecommendedIdx !== -1) {
+      const sub = document.createElement('li');
+      sub.className = 'lekta-repair-panel__subtitle';
+      sub.textContent = 'Preporučeno, nije obavezno (institucija to ne propisuje):';
+      list.appendChild(sub);
+    }
     const li = document.createElement('li');
     li.className = 'lekta-repair-panel__item';
+    const badgeText = item.recommended
+      ? 'Preporučeno'
+      : isViolated
+        ? 'Možemo ovo popraviti umjesto tebe'
+        : 'Uskladi s profilom';
     li.innerHTML = `
       <label>
         <input type="checkbox" ${isViolated ? 'checked' : ''} data-idx="${idx}" />
         <span>${escapeHtml(item.label)}</span>
       </label>
-      <span class="lekta-repair-panel__badge">${isViolated ? 'Možemo ovo popraviti umjesto tebe' : 'Uskladi s profilom'}</span>
+      <span class="lekta-repair-panel__badge">${badgeText}</span>
     `;
     list.appendChild(li);
   });

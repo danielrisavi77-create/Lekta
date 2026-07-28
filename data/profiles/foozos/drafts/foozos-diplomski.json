@@ -17,7 +17,8 @@
       "status": "advisory",
       "lastVerified": "2026-07-27",
       "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "reviewedBy": null,
+      "recommendedFixerId": "font-fixer"
     },
     {
       "ruleId": "foozos-diplomski--font-size",
@@ -35,7 +36,8 @@
       "status": "advisory",
       "lastVerified": "2026-07-27",
       "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "reviewedBy": null,
+      "recommendedFixerId": "font-fixer"
     },
     {
       "ruleId": "foozos-diplomski--line-spacing",
@@ -51,7 +53,8 @@
       "status": "advisory",
       "lastVerified": "2026-07-27",
       "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "reviewedBy": null,
+      "recommendedFixerId": "line-spacing-fixer"
     },
     {
       "ruleId": "foozos-diplomski--justify",
@@ -67,7 +70,8 @@
       "status": "advisory",
       "lastVerified": "2026-07-27",
       "verifiedBy": "owner-bulk-approval",
-      "reviewedBy": null
+      "reviewedBy": null,
+      "recommendedFixerId": "alignment-fixer"
     }
   ]
 }

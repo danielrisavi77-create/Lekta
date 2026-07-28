@@ -179,7 +179,8 @@
       "quote": "Obavezni predlozak, word/document.xml sectPr (tijelo): w:pgMar left/top/right/bottom=1417 twips (2,5 cm); predtekst ima lijevu marginu 1701 (3,0 cm) pa margine ostaju advisory.",
       "status": "advisory",
       "scored": false,
-      "note": "Advisory: nije jedinstveno/nedvosmisleno propisano u izvoru (vidi quote)."
+      "note": "Advisory: nije jedinstveno/nedvosmisleno propisano u izvoru (vidi quote).",
+      "recommendedFixerId": "margins-fixer"
     },
     {
       "ruleId": "foi-zavrsni--citation-style",

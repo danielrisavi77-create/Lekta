@@ -61,6 +61,23 @@ export function validateProfiles(profiles: ThesisProfile[]): ProfileValidationEr
         });
       }
     }
+    // recommendedFixerId (neobavezni "preporuceno" popravak za nebodovano pravilo): isti
+    // fixerId-tipfeler rizik kao autoFixable, plus zabrana kombiniranja s autoFixable (dvostruko).
+    for (const entry of profile.ruleEntries ?? []) {
+      if (!entry.recommendedFixerId) continue;
+      if (!(FIXER_IDS as readonly string[]).includes(entry.recommendedFixerId)) {
+        errors.push({
+          profileId: profile.id,
+          message: `Pravilo ${entry.ruleId}: nepoznat recommendedFixerId "${entry.recommendedFixerId}" (poznati: ${FIXER_IDS.join(', ')}).`,
+        });
+      }
+      if (entry.autoFixable === true) {
+        errors.push({
+          profileId: profile.id,
+          message: `Pravilo ${entry.ruleId}: recommendedFixerId i autoFixable:true na istom zapisu (odaberi jedno).`,
+        });
+      }
+    }
   }
   return errors;
 }
