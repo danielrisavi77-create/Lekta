@@ -1,0 +1,72 @@
+{
+  "profileId": "unizd-zdravstvo-diplomski",
+  "entries": [
+    {
+      "ruleId": "unizd-zdravstvo-diplomski--font",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Font",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "unizd-zdravstvo-pravilnik-2022-diplomski",
+      "sourcePage": "Clanak 7 + Prilog 4",
+      "quote": "Diplomski rad, bez priloga, treba sadrzavati najmanje 20 kartica ispisanih fontom Times New Roman 12 Pt. Diplomski rad treba biti oblikovan prema uputama u Prilogu 4: format papira je A4.",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-28",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "bd347a3d71d63b4d5de80c725bb086e2afcc9e20338b500a3fc8a3fe0b3178b1",
+      "autoFixable": true,
+      "fixerId": "font-fixer"
+    },
+    {
+      "ruleId": "unizd-zdravstvo-diplomski--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "unizd-zdravstvo-pravilnik-2022-diplomski",
+      "sourcePage": "Clanak 7 + Prilog 4",
+      "quote": "Diplomski rad, bez priloga, treba sadrzavati najmanje 20 kartica ispisanih fontom Times New Roman 12 Pt. Diplomski rad treba biti oblikovan prema uputama u Prilogu 4: format papira je A4.",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-28",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "bd347a3d71d63b4d5de80c725bb086e2afcc9e20338b500a3fc8a3fe0b3178b1",
+      "autoFixable": true,
+      "fixerId": "font-fixer"
+    },
+    {
+      "ruleId": "unizd-zdravstvo-diplomski--paper-size",
+      "checkId": "paper-size",
+      "value": true,
+      "category": "format",
+      "label": "Format papira A4",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "unizd-zdravstvo-pravilnik-2022-diplomski",
+      "sourcePage": "Clanak 7 + Prilog 4",
+      "quote": "Diplomski rad, bez priloga, treba sadrzavati najmanje 20 kartica ispisanih fontom Times New Roman 12 Pt. Diplomski rad treba biti oblikovan prema uputama u Prilogu 4: format papira je A4.",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-28",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "bd347a3d71d63b4d5de80c725bb086e2afcc9e20338b500a3fc8a3fe0b3178b1",
+      "autoFixable": true,
+      "fixerId": "paper-size-fixer"
+    }
+  ]
+}

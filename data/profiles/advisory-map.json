@@ -174,6 +174,11 @@
     "toc",
     "page-numbers"
   ],
+  "efos-opci-akademski-rad": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
   "efos-zavrsni": [
     "justify",
     "toc",
@@ -188,6 +193,11 @@
     "page-numbers"
   ],
   "efst-diplomski": [
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "efst-opci-akademski-rad": [
     "paper-size",
     "toc",
     "page-numbers"
@@ -313,6 +323,47 @@
     "toc",
     "page-numbers"
   ],
+  "ffos-germanistika-diplomski": [
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "ffos-germanistika-zavrsni": [
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "ffos-informatologija-diplomski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "ffos-informatologija-zavrsni": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "ffos-psihologija-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
+  "ffos-psihologija-zavrsni": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
   "ffos-zavrsni": [
     "justify",
     "toc",
@@ -327,6 +378,33 @@
     "page-numbers"
   ],
   "ffri-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
+  "ffri-germanistika-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
+  "ffri-germanistika-zavrsni": [
+    "toc",
+    "page-numbers"
+  ],
+  "ffri-kulturalni-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
+  "ffri-povum-diplomski": [
+    "margins",
+    "toc",
+    "page-numbers"
+  ],
+  "ffri-povum-zavrsni": [
+    "margins",
+    "toc",
+    "page-numbers"
+  ],
+  "ffri-psihologija-diplomski": [
+    "margins",
     "toc",
     "page-numbers"
   ],
@@ -589,6 +667,16 @@
   "fsb-doktorski": [
     "justify",
     "toc"
+  ],
+  "fsb-opci-akademski-rad": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
   ],
   "fsb-zavrsni": [
     "font",
@@ -886,8 +974,16 @@
     "toc",
     "page-numbers"
   ],
+  "mev-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
   "mev-zavrsni": [
     "font",
+    "toc",
+    "page-numbers"
+  ],
+  "mev-zavrsni-drustveni": [
     "toc",
     "page-numbers"
   ],
@@ -1076,6 +1172,11 @@
     "toc",
     "page-numbers"
   ],
+  "pravri-opci-akademski-rad": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
   "pravri-zavrsni": [
     "justify",
     "toc",
@@ -1194,6 +1295,12 @@
   "ttf-diplomski": [
     "paper-size"
   ],
+  "ttf-dizajn-diplomski": [
+    "paper-size"
+  ],
+  "ttf-dizajn-zavrsni": [
+    "paper-size"
+  ],
   "ttf-doktorski": [
     "justify",
     "toc"
@@ -1256,12 +1363,36 @@
     "toc",
     "page-numbers"
   ],
+  "unidu-komunikologija-zavrsni": [
+    "toc",
+    "page-numbers"
+  ],
+  "unidu-marikultura-diplomski": [
+    "margins",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
   "unidu-povijest-zavrsni": [
     "paper-size",
     "toc",
     "page-numbers"
   ],
+  "unidu-sestrinstvo-zavrsni": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
   "unidu-umjetnost-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
+  "unidu-umjetnost-zavrsni": [
     "toc",
     "page-numbers"
   ],
@@ -1335,8 +1466,131 @@
     "toc",
     "page-numbers"
   ],
+  "unizd-arheologija-diplomski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "toc",
+    "page-numbers"
+  ],
+  "unizd-arheologija-zavrsni": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "toc",
+    "page-numbers"
+  ],
+  "unizd-ekologija-diplomski": [
+    "margins",
+    "toc",
+    "page-numbers"
+  ],
+  "unizd-ekologija-zavrsni": [
+    "margins",
+    "toc",
+    "page-numbers"
+  ],
+  "unizd-etnologija-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
+  "unizd-filozofija-diplomski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "unizd-filozofija-zavrsni": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "unizd-francuski-diplomski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "unizd-geografija-diplomski": [
+    "margins",
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "unizd-germanistika-diplomski": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "unizd-germanistika-zavrsni": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "unizd-hispanistika-diplomski": [
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "unizd-informacijske-diplomski": [
+    "margins",
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "unizd-informacijske-zavrsni": [
+    "margins",
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "unizd-klasicna-filologija-diplomski": [
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "unizd-klasicna-filologija-zavrsni": [
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
   "unizd-pedagogija-diplomski": [
     "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "unizd-pomorski-diplomski": [
+    "margins",
+    "toc",
+    "page-numbers"
+  ],
+  "unizd-pomorski-zavrsni": [
+    "margins",
+    "toc",
+    "page-numbers"
+  ],
+  "unizd-povijest-diplomski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "unizd-povijest-umj-diplomski": [
     "toc",
     "page-numbers"
   ],
@@ -1344,8 +1598,35 @@
     "toc",
     "page-numbers"
   ],
+  "unizd-povijest-zavrsni": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "unizd-psihologija-diplomski": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
   "unizd-psihologija-zavrsni": [
     "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "unizd-sociologija-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
+  "unizd-talijanistika-diplomski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
     "toc",
     "page-numbers"
   ],
@@ -1361,6 +1642,24 @@
     "toc",
     "page-numbers"
   ],
+  "unizd-ucitelji-diplomski": [
+    "toc",
+    "page-numbers"
+  ],
+  "unizd-zdravstvo-diplomski": [
+    "line-spacing",
+    "margins",
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "unizd-zdravstvo-zavrsni": [
+    "line-spacing",
+    "margins",
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
   "vef-diplomski": [
     "margins",
     "justify"
@@ -1368,6 +1667,11 @@
   "vef-doktorski": [
     "justify",
     "toc"
+  ],
+  "veleknin-diplomski": [
+    "paper-size",
+    "toc",
+    "page-numbers"
   ],
   "veleknin-zavrsni": [
     "toc",
@@ -1378,6 +1682,10 @@
     "page-numbers"
   ],
   "veleri-zavrsni": [
+    "toc",
+    "page-numbers"
+  ],
+  "vevu-diplomski": [
     "toc",
     "page-numbers"
   ],
@@ -1453,6 +1761,22 @@
     "toc",
     "page-numbers"
   ],
+  "vub-zavrsni-sestrinstvo": [
+    "toc",
+    "page-numbers"
+  ],
+  "vub-zavrsni-tehnicki": [
+    "toc",
+    "page-numbers"
+  ],
+  "vuka-lovstvo-zavrsni": [
+    "font",
+    "line-spacing",
+    "margins",
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
   "vuka-poslovni-diplomski": [
     "font",
     "margins",
@@ -1471,6 +1795,34 @@
   ],
   "vuka-poslovni-zavrsni": [
     "font",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "vuka-prehrambena-zavrsni": [
+    "font",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "vuka-sigurnost-diplomski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
+  ],
+  "vuka-sigurnost-zavrsni": [
+    "font",
+    "font-size",
+    "line-spacing",
     "margins",
     "justify",
     "paper-size",

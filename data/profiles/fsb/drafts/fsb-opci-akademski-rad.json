@@ -1,0 +1,116 @@
+{
+  "profileId": "fsb-opci-akademski-rad",
+  "entries": [
+    {
+      "ruleId": "fsb-opci-akademski-rad--font",
+      "checkId": "font",
+      "value": [
+        "Times New Roman",
+        "Arial"
+      ],
+      "category": "format",
+      "label": "Font (preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "fsb-upute-radovi-2020",
+      "sourcePage": "Upute, opci dio",
+      "quote": "Velicina fonta: 12 pt. Vrsta fonta: Times New Roman, Arial ili sl. Prored (Line spacing): 1,5 lines. Poravnanje (Alignment): Justified. Margine: lijeva 2,5 cm, ostale 2 cm.",
+      "status": "advisory",
+      "lastVerified": "2026-07-28",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "recommendedFixerId": "font-fixer"
+    },
+    {
+      "ruleId": "fsb-opci-akademski-rad--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova (preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "fsb-upute-radovi-2020",
+      "sourcePage": "Upute, opci dio",
+      "quote": "Velicina fonta: 12 pt. Vrsta fonta: Times New Roman, Arial ili sl. Prored (Line spacing): 1,5 lines. Poravnanje (Alignment): Justified. Margine: lijeva 2,5 cm, ostale 2 cm.",
+      "status": "advisory",
+      "lastVerified": "2026-07-28",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "recommendedFixerId": "font-fixer"
+    },
+    {
+      "ruleId": "fsb-opci-akademski-rad--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored (preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "fsb-upute-radovi-2020",
+      "sourcePage": "Upute, opci dio",
+      "quote": "Velicina fonta: 12 pt. Vrsta fonta: Times New Roman, Arial ili sl. Prored (Line spacing): 1,5 lines. Poravnanje (Alignment): Justified. Margine: lijeva 2,5 cm, ostale 2 cm.",
+      "status": "advisory",
+      "lastVerified": "2026-07-28",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "recommendedFixerId": "line-spacing-fixer"
+    },
+    {
+      "ruleId": "fsb-opci-akademski-rad--justify",
+      "checkId": "justify",
+      "value": true,
+      "category": "format",
+      "label": "Poravnanje (preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "fsb-upute-radovi-2020",
+      "sourcePage": "Upute, opci dio",
+      "quote": "Velicina fonta: 12 pt. Vrsta fonta: Times New Roman, Arial ili sl. Prored (Line spacing): 1,5 lines. Poravnanje (Alignment): Justified. Margine: lijeva 2,5 cm, ostale 2 cm.",
+      "status": "advisory",
+      "lastVerified": "2026-07-28",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "recommendedFixerId": "alignment-fixer"
+    },
+    {
+      "ruleId": "fsb-opci-akademski-rad--margins",
+      "checkId": "margins",
+      "value": {
+        "top": 2,
+        "right": 2,
+        "bottom": 2,
+        "left": 2.5
+      },
+      "category": "format",
+      "label": "Margine (lijeva 2,5cm) (preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "fsb-upute-radovi-2020",
+      "sourcePage": "Upute, opci dio",
+      "quote": "Velicina fonta: 12 pt. Vrsta fonta: Times New Roman, Arial ili sl. Prored (Line spacing): 1,5 lines. Poravnanje (Alignment): Justified. Margine: lijeva 2,5 cm, ostale 2 cm.",
+      "status": "advisory",
+      "lastVerified": "2026-07-28",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "recommendedFixerId": "margins-fixer"
+    },
+    {
+      "ruleId": "fsb-opci-akademski-rad--citation-style",
+      "checkId": "citation-style",
+      "value": "ieee",
+      "category": "citation",
+      "label": "Stil citiranja (IEEE) (preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "fsb-upute-radovi-2020",
+      "sourcePage": "Upute, opci dio",
+      "quote": "Velicina fonta: 12 pt. Vrsta fonta: Times New Roman, Arial ili sl. Prored (Line spacing): 1,5 lines. Poravnanje (Alignment): Justified. Margine: lijeva 2,5 cm, ostale 2 cm.",
+      "status": "advisory",
+      "lastVerified": "2026-07-28",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null
+    }
+  ]
+}

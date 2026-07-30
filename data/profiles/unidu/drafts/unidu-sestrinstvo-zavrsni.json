@@ -1,0 +1,100 @@
+{
+  "profileId": "unidu-sestrinstvo-zavrsni",
+  "entries": [
+    {
+      "ruleId": "unidu-sestrinstvo-zavrsni--font",
+      "checkId": "font",
+      "value": [
+        "Times New Roman",
+        "Arial"
+      ],
+      "category": "format",
+      "label": "Font (preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unidu-sestrinstvo-preporuke",
+      "sourcePage": "Tablica \"Preporuke za tehnicko oblikovanje rada\"",
+      "quote": "Rad se pise velicinom slova 12, dok naslovi i podnaslovi mogu biti veci 14 do 16, prored 1,5. Margine rada trebaju iznositi 2.5 cm. Vrsta slova (fonta) moze biti Times New Roman ili Ariel [sic]. Tekst treba biti formatiran u blok (justify).",
+      "status": "advisory",
+      "lastVerified": "2026-07-28",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "recommendedFixerId": "font-fixer"
+    },
+    {
+      "ruleId": "unidu-sestrinstvo-zavrsni--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova (preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unidu-sestrinstvo-preporuke",
+      "sourcePage": "Tablica \"Preporuke za tehnicko oblikovanje rada\"",
+      "quote": "Rad se pise velicinom slova 12, dok naslovi i podnaslovi mogu biti veci 14 do 16, prored 1,5. Margine rada trebaju iznositi 2.5 cm. Vrsta slova (fonta) moze biti Times New Roman ili Ariel [sic]. Tekst treba biti formatiran u blok (justify).",
+      "status": "advisory",
+      "lastVerified": "2026-07-28",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "recommendedFixerId": "font-fixer"
+    },
+    {
+      "ruleId": "unidu-sestrinstvo-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored (preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unidu-sestrinstvo-preporuke",
+      "sourcePage": "Tablica \"Preporuke za tehnicko oblikovanje rada\"",
+      "quote": "Rad se pise velicinom slova 12, dok naslovi i podnaslovi mogu biti veci 14 do 16, prored 1,5. Margine rada trebaju iznositi 2.5 cm. Vrsta slova (fonta) moze biti Times New Roman ili Ariel [sic]. Tekst treba biti formatiran u blok (justify).",
+      "status": "advisory",
+      "lastVerified": "2026-07-28",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "recommendedFixerId": "line-spacing-fixer"
+    },
+    {
+      "ruleId": "unidu-sestrinstvo-zavrsni--margins",
+      "checkId": "margins",
+      "value": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "category": "format",
+      "label": "Margine (preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unidu-sestrinstvo-preporuke",
+      "sourcePage": "Tablica \"Preporuke za tehnicko oblikovanje rada\"",
+      "quote": "Rad se pise velicinom slova 12, dok naslovi i podnaslovi mogu biti veci 14 do 16, prored 1,5. Margine rada trebaju iznositi 2.5 cm. Vrsta slova (fonta) moze biti Times New Roman ili Ariel [sic]. Tekst treba biti formatiran u blok (justify).",
+      "status": "advisory",
+      "lastVerified": "2026-07-28",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "recommendedFixerId": "margins-fixer"
+    },
+    {
+      "ruleId": "unidu-sestrinstvo-zavrsni--justify",
+      "checkId": "justify",
+      "value": true,
+      "category": "format",
+      "label": "Poravnanje (preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unidu-sestrinstvo-preporuke",
+      "sourcePage": "Tablica \"Preporuke za tehnicko oblikovanje rada\"",
+      "quote": "Rad se pise velicinom slova 12, dok naslovi i podnaslovi mogu biti veci 14 do 16, prored 1,5. Margine rada trebaju iznositi 2.5 cm. Vrsta slova (fonta) moze biti Times New Roman ili Ariel [sic]. Tekst treba biti formatiran u blok (justify).",
+      "status": "advisory",
+      "lastVerified": "2026-07-28",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "recommendedFixerId": "alignment-fixer"
+    }
+  ]
+}

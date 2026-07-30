@@ -1,0 +1,69 @@
+{
+  "profileId": "vuka-prehrambena-zavrsni",
+  "entries": [
+    {
+      "ruleId": "vuka-prehrambena-zavrsni--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "vuka-prehrambena-upute-2025",
+      "sourcePage": "\"Kod pisanja zavrsnog rada mora se udovoljiti slijedecim zahtjevima\"",
+      "quote": "Visina slova 12 tocaka, a naslova 14 podebljano te prored 1,5. Preporuca se font \"Arial CE\" ili \"Times New Roman CE\".",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-28",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "e34ef7c2c471f8ad43c0d3ce25d249fe8c3a28e5491dc2ca452c002ffadd4310",
+      "autoFixable": true,
+      "fixerId": "font-fixer"
+    },
+    {
+      "ruleId": "vuka-prehrambena-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "vuka-prehrambena-upute-2025",
+      "sourcePage": "\"Kod pisanja zavrsnog rada mora se udovoljiti slijedecim zahtjevima\"",
+      "quote": "Visina slova 12 tocaka, a naslova 14 podebljano te prored 1,5. Preporuca se font \"Arial CE\" ili \"Times New Roman CE\".",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-28",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "e34ef7c2c471f8ad43c0d3ce25d249fe8c3a28e5491dc2ca452c002ffadd4310",
+      "autoFixable": true,
+      "fixerId": "line-spacing-fixer"
+    },
+    {
+      "ruleId": "vuka-prehrambena-zavrsni--font",
+      "checkId": "font",
+      "value": [
+        "Arial",
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Font (preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "vuka-prehrambena-upute-2025",
+      "sourcePage": "\"Kod pisanja zavrsnog rada mora se udovoljiti slijedecim zahtjevima\"",
+      "quote": "Visina slova 12 tocaka, a naslova 14 podebljano te prored 1,5. Preporuca se font \"Arial CE\" ili \"Times New Roman CE\".",
+      "status": "advisory",
+      "lastVerified": "2026-07-28",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "recommendedFixerId": "font-fixer"
+    }
+  ]
+}

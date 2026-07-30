@@ -1201,6 +1201,48 @@
       "autoFixable": true
     }
   ],
+  "efos-opci-akademski-rad": [
+    {
+      "ruleId": "efos-opci-akademski-rad--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "efos-opci-akademski-rad--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "efos-opci-akademski-rad--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "efos-opci-akademski-rad--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "efos-opci-akademski-rad--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    }
+  ],
   "efos-zavrsni": [
     {
       "ruleId": "efos-zavrsni--paper-size",
@@ -1378,6 +1420,48 @@
     },
     {
       "ruleId": "efst-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    }
+  ],
+  "efst-opci-akademski-rad": [
+    {
+      "ruleId": "efst-opci-akademski-rad--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "efst-opci-akademski-rad--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "efst-opci-akademski-rad--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "efst-opci-akademski-rad--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "efst-opci-akademski-rad--margins",
       "checkId": "margins",
       "label": "Margine",
       "status": "verified",
@@ -2502,6 +2586,250 @@
       "autoFixable": true
     }
   ],
+  "ffos-germanistika-diplomski": [
+    {
+      "ruleId": "ffos-germanistika-diplomski--font",
+      "checkId": "font",
+      "label": "Font (tri opcije)",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffos-germanistika-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffos-germanistika-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffos-germanistika-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine (desna 2cm, ostale 2,5cm)",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    }
+  ],
+  "ffos-germanistika-zavrsni": [
+    {
+      "ruleId": "ffos-germanistika-zavrsni--font",
+      "checkId": "font",
+      "label": "Font (tri opcije)",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffos-germanistika-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffos-germanistika-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffos-germanistika-zavrsni--margins",
+      "checkId": "margins",
+      "label": "Margine (desna 2cm, ostale 2,5cm)",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    }
+  ],
+  "ffos-informatologija-diplomski": [
+    {
+      "ruleId": "ffos-informatologija-diplomski--font",
+      "checkId": "font",
+      "label": "Font (preporuka)",
+      "status": "advisory",
+      "fixerId": "font-fixer",
+      "recommended": true,
+      "value": [
+        "Times New Roman"
+      ]
+    },
+    {
+      "ruleId": "ffos-informatologija-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova (preporuka)",
+      "status": "advisory",
+      "fixerId": "font-fixer",
+      "recommended": true,
+      "value": [
+        12
+      ]
+    },
+    {
+      "ruleId": "ffos-informatologija-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored (preporuka)",
+      "status": "advisory",
+      "fixerId": "line-spacing-fixer",
+      "recommended": true,
+      "value": 1.5
+    },
+    {
+      "ruleId": "ffos-informatologija-diplomski--justify",
+      "checkId": "justify",
+      "label": "Poravnanje (preporuka)",
+      "status": "advisory",
+      "fixerId": "alignment-fixer",
+      "recommended": true,
+      "value": true
+    }
+  ],
+  "ffos-informatologija-zavrsni": [
+    {
+      "ruleId": "ffos-informatologija-zavrsni--font",
+      "checkId": "font",
+      "label": "Font (preporuka)",
+      "status": "advisory",
+      "fixerId": "font-fixer",
+      "recommended": true,
+      "value": [
+        "Times New Roman"
+      ]
+    },
+    {
+      "ruleId": "ffos-informatologija-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova (preporuka)",
+      "status": "advisory",
+      "fixerId": "font-fixer",
+      "recommended": true,
+      "value": [
+        12
+      ]
+    },
+    {
+      "ruleId": "ffos-informatologija-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored (preporuka)",
+      "status": "advisory",
+      "fixerId": "line-spacing-fixer",
+      "recommended": true,
+      "value": 1.5
+    },
+    {
+      "ruleId": "ffos-informatologija-zavrsni--justify",
+      "checkId": "justify",
+      "label": "Poravnanje (preporuka)",
+      "status": "advisory",
+      "fixerId": "alignment-fixer",
+      "recommended": true,
+      "value": true
+    }
+  ],
+  "ffos-psihologija-diplomski": [
+    {
+      "ruleId": "ffos-psihologija-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffos-psihologija-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffos-psihologija-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffos-psihologija-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine (uniformno 2,5cm)",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffos-psihologija-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffos-psihologija-diplomski--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
+  "ffos-psihologija-zavrsni": [
+    {
+      "ruleId": "ffos-psihologija-zavrsni--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffos-psihologija-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffos-psihologija-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffos-psihologija-zavrsni--margins",
+      "checkId": "margins",
+      "label": "Margine (desna 2cm, ostale 2,5cm)",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffos-psihologija-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    }
+  ],
   "ffos-zavrsni": [
     {
       "ruleId": "ffos-zavrsni--paper-size",
@@ -2673,6 +3001,282 @@
       "ruleId": "ffri-diplomski--justify",
       "checkId": "justify",
       "label": "Obostrano poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
+  "ffri-germanistika-diplomski": [
+    {
+      "ruleId": "ffri-germanistika-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-germanistika-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-germanistika-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-germanistika-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine (lijevo/desno 3cm, gore/dolje 2cm)",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-germanistika-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-germanistika-diplomski--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
+  "ffri-germanistika-zavrsni": [
+    {
+      "ruleId": "ffri-germanistika-zavrsni--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-germanistika-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-germanistika-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-germanistika-zavrsni--margins",
+      "checkId": "margins",
+      "label": "Margine (lijevo/desno 3cm, gore/dolje 2cm)",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-germanistika-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-germanistika-zavrsni--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
+  "ffri-kulturalni-diplomski": [
+    {
+      "ruleId": "ffri-kulturalni-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-kulturalni-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-kulturalni-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-kulturalni-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-kulturalni-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-kulturalni-diplomski--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
+  "ffri-povum-diplomski": [
+    {
+      "ruleId": "ffri-povum-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-povum-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-povum-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-povum-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-povum-diplomski--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
+  "ffri-povum-zavrsni": [
+    {
+      "ruleId": "ffri-povum-zavrsni--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-povum-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-povum-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-povum-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-povum-zavrsni--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
+  "ffri-psihologija-diplomski": [
+    {
+      "ruleId": "ffri-psihologija-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-psihologija-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-psihologija-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-psihologija-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ffri-psihologija-diplomski--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
       "status": "verified",
       "fixerId": "alignment-fixer",
       "autoFixable": true
@@ -4903,6 +5507,63 @@
       "autoFixable": true
     }
   ],
+  "fsb-opci-akademski-rad": [
+    {
+      "ruleId": "fsb-opci-akademski-rad--font",
+      "checkId": "font",
+      "label": "Font (preporuka)",
+      "status": "advisory",
+      "fixerId": "font-fixer",
+      "recommended": true,
+      "value": [
+        "Times New Roman",
+        "Arial"
+      ]
+    },
+    {
+      "ruleId": "fsb-opci-akademski-rad--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova (preporuka)",
+      "status": "advisory",
+      "fixerId": "font-fixer",
+      "recommended": true,
+      "value": [
+        12
+      ]
+    },
+    {
+      "ruleId": "fsb-opci-akademski-rad--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored (preporuka)",
+      "status": "advisory",
+      "fixerId": "line-spacing-fixer",
+      "recommended": true,
+      "value": 1.5
+    },
+    {
+      "ruleId": "fsb-opci-akademski-rad--justify",
+      "checkId": "justify",
+      "label": "Poravnanje (preporuka)",
+      "status": "advisory",
+      "fixerId": "alignment-fixer",
+      "recommended": true,
+      "value": true
+    },
+    {
+      "ruleId": "fsb-opci-akademski-rad--margins",
+      "checkId": "margins",
+      "label": "Margine (lijeva 2,5cm) (preporuka)",
+      "status": "advisory",
+      "fixerId": "margins-fixer",
+      "recommended": true,
+      "value": {
+        "top": 2,
+        "right": 2,
+        "bottom": 2,
+        "left": 2.5
+      }
+    }
+  ],
   "fsb-zavrsni": [
     {
       "ruleId": "fsb-zavrsni--font-size",
@@ -6890,6 +7551,56 @@
       "autoFixable": true
     }
   ],
+  "mev-diplomski": [
+    {
+      "ruleId": "mev-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "mev-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "mev-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "mev-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova (tekst rada)",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "mev-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "mev-diplomski--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
   "mev-zavrsni": [
     {
       "ruleId": "mev-zavrsni--paper-size",
@@ -6929,6 +7640,56 @@
       "label": "Prored",
       "status": "verified",
       "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    }
+  ],
+  "mev-zavrsni-drustveni": [
+    {
+      "ruleId": "mev-zavrsni-drustveni--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "mev-zavrsni-drustveni--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "mev-zavrsni-drustveni--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "mev-zavrsni-drustveni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova (tekst rada)",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "mev-zavrsni-drustveni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "mev-zavrsni-drustveni--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
       "autoFixable": true
     }
   ],
@@ -8508,6 +9269,48 @@
       "autoFixable": true
     }
   ],
+  "pravri-opci-akademski-rad": [
+    {
+      "ruleId": "pravri-opci-akademski-rad--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravri-opci-akademski-rad--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravri-opci-akademski-rad--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravri-opci-akademski-rad--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "pravri-opci-akademski-rad--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    }
+  ],
   "pravri-zavrsni": [
     {
       "ruleId": "pravri-zavrsni--paper-size",
@@ -9359,6 +10162,90 @@
       "autoFixable": true
     }
   ],
+  "ttf-dizajn-diplomski": [
+    {
+      "ruleId": "ttf-dizajn-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ttf-dizajn-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ttf-dizajn-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ttf-dizajn-diplomski--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ttf-dizajn-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    }
+  ],
+  "ttf-dizajn-zavrsni": [
+    {
+      "ruleId": "ttf-dizajn-zavrsni--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ttf-dizajn-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ttf-dizajn-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ttf-dizajn-zavrsni--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "ttf-dizajn-zavrsni--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    }
+  ],
   "ttf-doktorski": [
     {
       "ruleId": "ttf-doktorski--font",
@@ -9845,6 +10732,90 @@
       "autoFixable": true
     }
   ],
+  "unidu-komunikologija-zavrsni": [
+    {
+      "ruleId": "unidu-komunikologija-zavrsni--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unidu-komunikologija-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unidu-komunikologija-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unidu-komunikologija-zavrsni--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unidu-komunikologija-zavrsni--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unidu-komunikologija-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    }
+  ],
+  "unidu-marikultura-diplomski": [
+    {
+      "ruleId": "unidu-marikultura-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unidu-marikultura-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unidu-marikultura-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unidu-marikultura-diplomski--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
   "unidu-povijest-zavrsni": [
     {
       "ruleId": "unidu-povijest-zavrsni--font",
@@ -9885,6 +10856,63 @@
       "status": "verified",
       "fixerId": "margins-fixer",
       "autoFixable": true
+    }
+  ],
+  "unidu-sestrinstvo-zavrsni": [
+    {
+      "ruleId": "unidu-sestrinstvo-zavrsni--font",
+      "checkId": "font",
+      "label": "Font (preporuka)",
+      "status": "advisory",
+      "fixerId": "font-fixer",
+      "recommended": true,
+      "value": [
+        "Times New Roman",
+        "Arial"
+      ]
+    },
+    {
+      "ruleId": "unidu-sestrinstvo-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova (preporuka)",
+      "status": "advisory",
+      "fixerId": "font-fixer",
+      "recommended": true,
+      "value": [
+        12
+      ]
+    },
+    {
+      "ruleId": "unidu-sestrinstvo-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored (preporuka)",
+      "status": "advisory",
+      "fixerId": "line-spacing-fixer",
+      "recommended": true,
+      "value": 1.5
+    },
+    {
+      "ruleId": "unidu-sestrinstvo-zavrsni--margins",
+      "checkId": "margins",
+      "label": "Margine (preporuka)",
+      "status": "advisory",
+      "fixerId": "margins-fixer",
+      "recommended": true,
+      "value": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      }
+    },
+    {
+      "ruleId": "unidu-sestrinstvo-zavrsni--justify",
+      "checkId": "justify",
+      "label": "Poravnanje (preporuka)",
+      "status": "advisory",
+      "fixerId": "alignment-fixer",
+      "recommended": true,
+      "value": true
     }
   ],
   "unidu-umjetnost-diplomski": [
@@ -9932,6 +10960,56 @@
       "ruleId": "unidu-umjetnost-diplomski--justify",
       "checkId": "justify",
       "label": "Obostrano poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
+  "unidu-umjetnost-zavrsni": [
+    {
+      "ruleId": "unidu-umjetnost-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unidu-umjetnost-zavrsni--margins",
+      "checkId": "margins",
+      "label": "Margine (lijeva 3cm)",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unidu-umjetnost-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unidu-umjetnost-zavrsni--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unidu-umjetnost-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unidu-umjetnost-zavrsni--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
       "status": "verified",
       "fixerId": "alignment-fixer",
       "autoFixable": true
@@ -10525,6 +11603,665 @@
       "autoFixable": true
     }
   ],
+  "unizd-arheologija-diplomski": [
+    {
+      "ruleId": "unizd-arheologija-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-arheologija-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine (lijeva 3cm)",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-arheologija-diplomski--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-arheologija-diplomski--font",
+      "checkId": "font",
+      "label": "Font (preporuka)",
+      "status": "advisory",
+      "fixerId": "font-fixer",
+      "recommended": true,
+      "value": [
+        "Times New Roman"
+      ]
+    },
+    {
+      "ruleId": "unizd-arheologija-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova (preporuka)",
+      "status": "advisory",
+      "fixerId": "font-fixer",
+      "recommended": true,
+      "value": [
+        12
+      ]
+    },
+    {
+      "ruleId": "unizd-arheologija-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored (preporuka)",
+      "status": "advisory",
+      "fixerId": "line-spacing-fixer",
+      "recommended": true,
+      "value": 1.5
+    }
+  ],
+  "unizd-arheologija-zavrsni": [
+    {
+      "ruleId": "unizd-arheologija-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-arheologija-zavrsni--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-arheologija-zavrsni--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-arheologija-zavrsni--font",
+      "checkId": "font",
+      "label": "Font (preporuka)",
+      "status": "advisory",
+      "fixerId": "font-fixer",
+      "recommended": true,
+      "value": [
+        "Times New Roman"
+      ]
+    },
+    {
+      "ruleId": "unizd-arheologija-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova (preporuka)",
+      "status": "advisory",
+      "fixerId": "font-fixer",
+      "recommended": true,
+      "value": [
+        12
+      ]
+    },
+    {
+      "ruleId": "unizd-arheologija-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored (preporuka)",
+      "status": "advisory",
+      "fixerId": "line-spacing-fixer",
+      "recommended": true,
+      "value": 1.5
+    }
+  ],
+  "unizd-ekologija-diplomski": [
+    {
+      "ruleId": "unizd-ekologija-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-ekologija-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-ekologija-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-ekologija-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-ekologija-diplomski--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
+  "unizd-ekologija-zavrsni": [
+    {
+      "ruleId": "unizd-ekologija-zavrsni--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-ekologija-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-ekologija-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-ekologija-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-ekologija-zavrsni--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
+  "unizd-etnologija-diplomski": [
+    {
+      "ruleId": "unizd-etnologija-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-etnologija-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-etnologija-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-etnologija-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-etnologija-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-etnologija-diplomski--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
+  "unizd-filozofija-diplomski": [
+    {
+      "ruleId": "unizd-filozofija-diplomski--font",
+      "checkId": "font",
+      "label": "Font (preporuka)",
+      "status": "advisory",
+      "fixerId": "font-fixer",
+      "recommended": true,
+      "value": [
+        "Times New Roman"
+      ]
+    },
+    {
+      "ruleId": "unizd-filozofija-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova (preporuka)",
+      "status": "advisory",
+      "fixerId": "font-fixer",
+      "recommended": true,
+      "value": [
+        12
+      ]
+    },
+    {
+      "ruleId": "unizd-filozofija-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored (preporuka)",
+      "status": "advisory",
+      "fixerId": "line-spacing-fixer",
+      "recommended": true,
+      "value": 1.5
+    }
+  ],
+  "unizd-filozofija-zavrsni": [
+    {
+      "ruleId": "unizd-filozofija-zavrsni--font",
+      "checkId": "font",
+      "label": "Font (preporuka)",
+      "status": "advisory",
+      "fixerId": "font-fixer",
+      "recommended": true,
+      "value": [
+        "Times New Roman"
+      ]
+    },
+    {
+      "ruleId": "unizd-filozofija-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova (preporuka)",
+      "status": "advisory",
+      "fixerId": "font-fixer",
+      "recommended": true,
+      "value": [
+        12
+      ]
+    },
+    {
+      "ruleId": "unizd-filozofija-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored (preporuka)",
+      "status": "advisory",
+      "fixerId": "line-spacing-fixer",
+      "recommended": true,
+      "value": 1.5
+    }
+  ],
+  "unizd-francuski-diplomski": [
+    {
+      "ruleId": "unizd-francuski-diplomski--font",
+      "checkId": "font",
+      "label": "Font (preporuka)",
+      "status": "advisory",
+      "fixerId": "font-fixer",
+      "recommended": true,
+      "value": [
+        "Times New Roman"
+      ]
+    },
+    {
+      "ruleId": "unizd-francuski-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova (preporuka)",
+      "status": "advisory",
+      "fixerId": "font-fixer",
+      "recommended": true,
+      "value": [
+        12
+      ]
+    },
+    {
+      "ruleId": "unizd-francuski-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored (preporuka)",
+      "status": "advisory",
+      "fixerId": "line-spacing-fixer",
+      "recommended": true,
+      "value": 1.5
+    }
+  ],
+  "unizd-geografija-diplomski": [
+    {
+      "ruleId": "unizd-geografija-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-geografija-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-geografija-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-geografija-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    }
+  ],
+  "unizd-germanistika-diplomski": [
+    {
+      "ruleId": "unizd-germanistika-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-germanistika-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova (tijelo)",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-germanistika-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-germanistika-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine (sve 3cm)",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-germanistika-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    }
+  ],
+  "unizd-germanistika-zavrsni": [
+    {
+      "ruleId": "unizd-germanistika-zavrsni--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-germanistika-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova (tijelo)",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-germanistika-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-germanistika-zavrsni--margins",
+      "checkId": "margins",
+      "label": "Margine (sve 3cm)",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-germanistika-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    }
+  ],
+  "unizd-hispanistika-diplomski": [
+    {
+      "ruleId": "unizd-hispanistika-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-hispanistika-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-hispanistika-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-hispanistika-diplomski--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-hispanistika-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    }
+  ],
+  "unizd-informacijske-diplomski": [
+    {
+      "ruleId": "unizd-informacijske-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-informacijske-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-informacijske-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-informacijske-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    }
+  ],
+  "unizd-informacijske-zavrsni": [
+    {
+      "ruleId": "unizd-informacijske-zavrsni--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-informacijske-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-informacijske-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-informacijske-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    }
+  ],
+  "unizd-klasicna-filologija-diplomski": [
+    {
+      "ruleId": "unizd-klasicna-filologija-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-klasicna-filologija-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-klasicna-filologija-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-klasicna-filologija-diplomski--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-klasicna-filologija-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    }
+  ],
+  "unizd-klasicna-filologija-zavrsni": [
+    {
+      "ruleId": "unizd-klasicna-filologija-zavrsni--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-klasicna-filologija-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-klasicna-filologija-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-klasicna-filologija-zavrsni--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-klasicna-filologija-zavrsni--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    }
+  ],
   "unizd-pedagogija-diplomski": [
     {
       "ruleId": "unizd-pedagogija-diplomski--font",
@@ -10562,6 +12299,178 @@
       "ruleId": "unizd-pedagogija-diplomski--justify",
       "checkId": "justify",
       "label": "Obostrano poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
+  "unizd-pomorski-diplomski": [
+    {
+      "ruleId": "unizd-pomorski-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-pomorski-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-pomorski-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-pomorski-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-pomorski-diplomski--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
+  "unizd-pomorski-zavrsni": [
+    {
+      "ruleId": "unizd-pomorski-zavrsni--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-pomorski-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-pomorski-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-pomorski-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-pomorski-zavrsni--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
+  "unizd-povijest-diplomski": [
+    {
+      "ruleId": "unizd-povijest-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-povijest-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine (lijeva 3,5cm)",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-povijest-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova (preporuka)",
+      "status": "advisory",
+      "fixerId": "font-fixer",
+      "recommended": true,
+      "value": [
+        12
+      ]
+    },
+    {
+      "ruleId": "unizd-povijest-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored (dvostruki) (preporuka)",
+      "status": "advisory",
+      "fixerId": "line-spacing-fixer",
+      "recommended": true,
+      "value": 2
+    }
+  ],
+  "unizd-povijest-umj-diplomski": [
+    {
+      "ruleId": "unizd-povijest-umj-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-povijest-umj-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-povijest-umj-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-povijest-umj-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine (lijeva 3,5cm)",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-povijest-umj-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-povijest-umj-diplomski--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
       "status": "verified",
       "fixerId": "alignment-fixer",
       "autoFixable": true
@@ -10617,6 +12526,86 @@
       "autoFixable": true
     }
   ],
+  "unizd-povijest-zavrsni": [
+    {
+      "ruleId": "unizd-povijest-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-povijest-zavrsni--margins",
+      "checkId": "margins",
+      "label": "Margine (lijeva 3,5cm)",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-povijest-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova (preporuka)",
+      "status": "advisory",
+      "fixerId": "font-fixer",
+      "recommended": true,
+      "value": [
+        12
+      ]
+    },
+    {
+      "ruleId": "unizd-povijest-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored (dvostruki) (preporuka)",
+      "status": "advisory",
+      "fixerId": "line-spacing-fixer",
+      "recommended": true,
+      "value": 2
+    }
+  ],
+  "unizd-psihologija-diplomski": [
+    {
+      "ruleId": "unizd-psihologija-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-psihologija-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-psihologija-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-psihologija-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine (lijeva 3cm)",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-psihologija-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    }
+  ],
   "unizd-psihologija-zavrsni": [
     {
       "ruleId": "unizd-psihologija-zavrsni--paper-size",
@@ -10657,6 +12646,89 @@
       "status": "verified",
       "fixerId": "line-spacing-fixer",
       "autoFixable": true
+    }
+  ],
+  "unizd-sociologija-diplomski": [
+    {
+      "ruleId": "unizd-sociologija-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-sociologija-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-sociologija-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-sociologija-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-sociologija-diplomski--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-sociologija-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    }
+  ],
+  "unizd-talijanistika-diplomski": [
+    {
+      "ruleId": "unizd-talijanistika-diplomski--font",
+      "checkId": "font",
+      "label": "Font (preporuka)",
+      "status": "advisory",
+      "fixerId": "font-fixer",
+      "recommended": true,
+      "value": [
+        "Times New Roman"
+      ]
+    },
+    {
+      "ruleId": "unizd-talijanistika-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova (preporuka)",
+      "status": "advisory",
+      "fixerId": "font-fixer",
+      "recommended": true,
+      "value": [
+        12
+      ]
+    },
+    {
+      "ruleId": "unizd-talijanistika-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored (preporuka)",
+      "status": "advisory",
+      "fixerId": "line-spacing-fixer",
+      "recommended": true,
+      "value": 1.5
     }
   ],
   "unizd-tko-diplomski": [
@@ -10801,6 +12873,108 @@
       "autoFixable": true
     }
   ],
+  "unizd-ucitelji-diplomski": [
+    {
+      "ruleId": "unizd-ucitelji-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-ucitelji-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-ucitelji-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-ucitelji-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-ucitelji-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-ucitelji-diplomski--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    }
+  ],
+  "unizd-zdravstvo-diplomski": [
+    {
+      "ruleId": "unizd-zdravstvo-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-zdravstvo-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-zdravstvo-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    }
+  ],
+  "unizd-zdravstvo-zavrsni": [
+    {
+      "ruleId": "unizd-zdravstvo-zavrsni--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-zdravstvo-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "unizd-zdravstvo-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    }
+  ],
   "vef-diplomski": [
     {
       "ruleId": "vef-diplomski--font",
@@ -10886,6 +13060,48 @@
       "label": "Format papira A4",
       "status": "verified",
       "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    }
+  ],
+  "veleknin-diplomski": [
+    {
+      "ruleId": "veleknin-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "veleknin-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "veleknin-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "veleknin-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "veleknin-diplomski--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
       "autoFixable": true
     }
   ],
@@ -11036,6 +13252,56 @@
       "label": "Margine",
       "status": "verified",
       "fixerId": "margins-fixer",
+      "autoFixable": true
+    }
+  ],
+  "vevu-diplomski": [
+    {
+      "ruleId": "vevu-diplomski--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "vevu-diplomski--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "vevu-diplomski--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "vevu-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "vevu-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "vevu-diplomski--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
       "autoFixable": true
     }
   ],
@@ -11609,6 +13875,136 @@
       "autoFixable": true
     }
   ],
+  "vub-zavrsni-sestrinstvo": [
+    {
+      "ruleId": "vub-zavrsni-sestrinstvo--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "vub-zavrsni-sestrinstvo--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "vub-zavrsni-sestrinstvo--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "vub-zavrsni-sestrinstvo--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "vub-zavrsni-sestrinstvo--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "vub-zavrsni-sestrinstvo--margins",
+      "checkId": "margins",
+      "label": "Margine (lijeva 3cm za uvez)",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    }
+  ],
+  "vub-zavrsni-tehnicki": [
+    {
+      "ruleId": "vub-zavrsni-tehnicki--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "vub-zavrsni-tehnicki--font",
+      "checkId": "font",
+      "label": "Font",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "vub-zavrsni-tehnicki--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "vub-zavrsni-tehnicki--justify",
+      "checkId": "justify",
+      "label": "Poravnanje",
+      "status": "verified",
+      "fixerId": "alignment-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "vub-zavrsni-tehnicki--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "vub-zavrsni-tehnicki--margins",
+      "checkId": "margins",
+      "label": "Margine",
+      "status": "verified",
+      "fixerId": "margins-fixer",
+      "autoFixable": true
+    }
+  ],
+  "vuka-lovstvo-zavrsni": [
+    {
+      "ruleId": "vuka-lovstvo-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "vuka-lovstvo-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "label": "Format papira A4",
+      "status": "verified",
+      "fixerId": "paper-size-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "vuka-lovstvo-zavrsni--font",
+      "checkId": "font",
+      "label": "Font (preporuka)",
+      "status": "advisory",
+      "fixerId": "font-fixer",
+      "recommended": true,
+      "value": [
+        "Arial",
+        "Times New Roman"
+      ]
+    }
+  ],
   "vuka-poslovni-diplomski": [
     {
       "ruleId": "vuka-poslovni-diplomski--font-size",
@@ -11661,6 +14057,104 @@
       "status": "verified",
       "fixerId": "line-spacing-fixer",
       "autoFixable": true
+    }
+  ],
+  "vuka-prehrambena-zavrsni": [
+    {
+      "ruleId": "vuka-prehrambena-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova",
+      "status": "verified",
+      "fixerId": "font-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "vuka-prehrambena-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored",
+      "status": "verified",
+      "fixerId": "line-spacing-fixer",
+      "autoFixable": true
+    },
+    {
+      "ruleId": "vuka-prehrambena-zavrsni--font",
+      "checkId": "font",
+      "label": "Font (preporuka)",
+      "status": "advisory",
+      "fixerId": "font-fixer",
+      "recommended": true,
+      "value": [
+        "Arial",
+        "Times New Roman"
+      ]
+    }
+  ],
+  "vuka-sigurnost-diplomski": [
+    {
+      "ruleId": "vuka-sigurnost-diplomski--font",
+      "checkId": "font",
+      "label": "Font (preporuka)",
+      "status": "advisory",
+      "fixerId": "font-fixer",
+      "recommended": true,
+      "value": [
+        "Arial",
+        "Times New Roman"
+      ]
+    },
+    {
+      "ruleId": "vuka-sigurnost-diplomski--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova (preporuka)",
+      "status": "advisory",
+      "fixerId": "font-fixer",
+      "recommended": true,
+      "value": [
+        12
+      ]
+    },
+    {
+      "ruleId": "vuka-sigurnost-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored (preporuka)",
+      "status": "advisory",
+      "fixerId": "line-spacing-fixer",
+      "recommended": true,
+      "value": 1.5
+    }
+  ],
+  "vuka-sigurnost-zavrsni": [
+    {
+      "ruleId": "vuka-sigurnost-zavrsni--font",
+      "checkId": "font",
+      "label": "Font (preporuka)",
+      "status": "advisory",
+      "fixerId": "font-fixer",
+      "recommended": true,
+      "value": [
+        "Arial",
+        "Times New Roman"
+      ]
+    },
+    {
+      "ruleId": "vuka-sigurnost-zavrsni--font-size",
+      "checkId": "font-size",
+      "label": "Velicina slova (preporuka)",
+      "status": "advisory",
+      "fixerId": "font-fixer",
+      "recommended": true,
+      "value": [
+        12
+      ]
+    },
+    {
+      "ruleId": "vuka-sigurnost-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "label": "Prored (preporuka)",
+      "status": "advisory",
+      "fixerId": "line-spacing-fixer",
+      "recommended": true,
+      "value": 1.5
     }
   ],
   "vuka-strojarski-diplomski": [

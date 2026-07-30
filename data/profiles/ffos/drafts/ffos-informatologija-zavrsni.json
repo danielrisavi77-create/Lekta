@@ -1,0 +1,77 @@
+{
+  "profileId": "ffos-informatologija-zavrsni",
+  "entries": [
+    {
+      "ruleId": "ffos-informatologija-zavrsni--font",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Font (preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffos-informatologija-upute",
+      "sourcePage": "Odjeljak \"Oblikovanje teksta\"",
+      "quote": "Za tekst se preporuca koristiti font Times New Roman, velicine 12 tocaka, prored 1,5 i obostrano poravnanje.",
+      "status": "advisory",
+      "lastVerified": "2026-07-28",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "recommendedFixerId": "font-fixer"
+    },
+    {
+      "ruleId": "ffos-informatologija-zavrsni--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova (preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffos-informatologija-upute",
+      "sourcePage": "Odjeljak \"Oblikovanje teksta\"",
+      "quote": "Za tekst se preporuca koristiti font Times New Roman, velicine 12 tocaka, prored 1,5 i obostrano poravnanje.",
+      "status": "advisory",
+      "lastVerified": "2026-07-28",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "recommendedFixerId": "font-fixer"
+    },
+    {
+      "ruleId": "ffos-informatologija-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored (preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffos-informatologija-upute",
+      "sourcePage": "Odjeljak \"Oblikovanje teksta\"",
+      "quote": "Za tekst se preporuca koristiti font Times New Roman, velicine 12 tocaka, prored 1,5 i obostrano poravnanje.",
+      "status": "advisory",
+      "lastVerified": "2026-07-28",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "recommendedFixerId": "line-spacing-fixer"
+    },
+    {
+      "ruleId": "ffos-informatologija-zavrsni--justify",
+      "checkId": "justify",
+      "value": true,
+      "category": "format",
+      "label": "Poravnanje (preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "ffos-informatologija-upute",
+      "sourcePage": "Odjeljak \"Oblikovanje teksta\"",
+      "quote": "Za tekst se preporuca koristiti font Times New Roman, velicine 12 tocaka, prored 1,5 i obostrano poravnanje.",
+      "status": "advisory",
+      "lastVerified": "2026-07-28",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "recommendedFixerId": "alignment-fixer"
+    }
+  ]
+}

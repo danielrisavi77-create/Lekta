@@ -233,6 +233,14 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "efos-opci-akademski-rad",
+      "scored": 5,
+      "machineCheckable": 6,
+      "advisory": 1,
+      "ratio": 0.8333333333333334,
+      "lastVerified": "2026-07-28"
+    },
+    {
       "profileId": "efos-zavrsni",
       "scored": 5,
       "machineCheckable": 5,
@@ -263,6 +271,14 @@
       "advisory": 0,
       "ratio": 1,
       "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "efst-opci-akademski-rad",
+      "scored": 5,
+      "machineCheckable": 6,
+      "advisory": 1,
+      "ratio": 0.8333333333333334,
+      "lastVerified": "2026-07-28"
     },
     {
       "profileId": "efst-zavrsni",
@@ -465,6 +481,54 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "ffos-germanistika-diplomski",
+      "scored": 4,
+      "machineCheckable": 4,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "ffos-germanistika-zavrsni",
+      "scored": 4,
+      "machineCheckable": 4,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "ffos-informatologija-diplomski",
+      "scored": 0,
+      "machineCheckable": 4,
+      "advisory": 4,
+      "ratio": 0,
+      "lastVerified": null
+    },
+    {
+      "profileId": "ffos-informatologija-zavrsni",
+      "scored": 0,
+      "machineCheckable": 4,
+      "advisory": 4,
+      "ratio": 0,
+      "lastVerified": null
+    },
+    {
+      "profileId": "ffos-psihologija-diplomski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "ffos-psihologija-zavrsni",
+      "scored": 5,
+      "machineCheckable": 5,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
+    },
+    {
       "profileId": "ffos-zavrsni",
       "scored": 6,
       "machineCheckable": 6,
@@ -495,6 +559,54 @@
       "advisory": 0,
       "ratio": 1,
       "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "ffri-germanistika-diplomski",
+      "scored": 7,
+      "machineCheckable": 7,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "ffri-germanistika-zavrsni",
+      "scored": 7,
+      "machineCheckable": 7,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "ffri-kulturalni-diplomski",
+      "scored": 7,
+      "machineCheckable": 7,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "ffri-povum-diplomski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "ffri-povum-zavrsni",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "ffri-psihologija-diplomski",
+      "scored": 5,
+      "machineCheckable": 5,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
     },
     {
       "profileId": "ffri-zavrsni",
@@ -945,6 +1057,14 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "fsb-opci-akademski-rad",
+      "scored": 0,
+      "machineCheckable": 6,
+      "advisory": 6,
+      "ratio": 0,
+      "lastVerified": null
+    },
+    {
       "profileId": "fsb-zavrsni",
       "scored": 0,
       "machineCheckable": 5,
@@ -1385,12 +1505,28 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "mev-diplomski",
+      "scored": 7,
+      "machineCheckable": 7,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
+    },
+    {
       "profileId": "mev-zavrsni",
       "scored": 7,
       "machineCheckable": 7,
       "advisory": 0,
       "ratio": 1,
       "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "mev-zavrsni-drustveni",
+      "scored": 7,
+      "machineCheckable": 7,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
     },
     {
       "profileId": "mfpu-diplomski",
@@ -1697,6 +1833,14 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "pravri-opci-akademski-rad",
+      "scored": 5,
+      "machineCheckable": 6,
+      "advisory": 1,
+      "ratio": 0.8333333333333334,
+      "lastVerified": "2026-07-28"
+    },
+    {
       "profileId": "pravri-zavrsni",
       "scored": 5,
       "machineCheckable": 5,
@@ -1865,6 +2009,22 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "ttf-dizajn-diplomski",
+      "scored": 7,
+      "machineCheckable": 8,
+      "advisory": 1,
+      "ratio": 0.875,
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "ttf-dizajn-zavrsni",
+      "scored": 7,
+      "machineCheckable": 8,
+      "advisory": 1,
+      "ratio": 0.875,
+      "lastVerified": "2026-07-28"
+    },
+    {
       "profileId": "ttf-doktorski",
       "scored": 6,
       "machineCheckable": 6,
@@ -1969,6 +2129,22 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "unidu-komunikologija-zavrsni",
+      "scored": 7,
+      "machineCheckable": 7,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "unidu-marikultura-diplomski",
+      "scored": 4,
+      "machineCheckable": 4,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
+    },
+    {
       "profileId": "unidu-povijest-zavrsni",
       "scored": 5,
       "machineCheckable": 5,
@@ -1977,12 +2153,28 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "unidu-sestrinstvo-zavrsni",
+      "scored": 0,
+      "machineCheckable": 5,
+      "advisory": 5,
+      "ratio": 0,
+      "lastVerified": null
+    },
+    {
       "profileId": "unidu-umjetnost-diplomski",
       "scored": 6,
       "machineCheckable": 6,
       "advisory": 0,
       "ratio": 1,
       "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "unidu-umjetnost-zavrsni",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
     },
     {
       "profileId": "unin-biomedicina-diplomski",
@@ -2097,12 +2289,172 @@
       "lastVerified": "2026-07-27"
     },
     {
+      "profileId": "unizd-arheologija-diplomski",
+      "scored": 3,
+      "machineCheckable": 6,
+      "advisory": 3,
+      "ratio": 0.5,
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "unizd-arheologija-zavrsni",
+      "scored": 3,
+      "machineCheckable": 6,
+      "advisory": 3,
+      "ratio": 0.5,
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "unizd-ekologija-diplomski",
+      "scored": 5,
+      "machineCheckable": 5,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "unizd-ekologija-zavrsni",
+      "scored": 5,
+      "machineCheckable": 5,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "unizd-etnologija-diplomski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "unizd-filozofija-diplomski",
+      "scored": 0,
+      "machineCheckable": 3,
+      "advisory": 3,
+      "ratio": 0,
+      "lastVerified": null
+    },
+    {
+      "profileId": "unizd-filozofija-zavrsni",
+      "scored": 0,
+      "machineCheckable": 3,
+      "advisory": 3,
+      "ratio": 0,
+      "lastVerified": null
+    },
+    {
+      "profileId": "unizd-francuski-diplomski",
+      "scored": 0,
+      "machineCheckable": 3,
+      "advisory": 3,
+      "ratio": 0,
+      "lastVerified": null
+    },
+    {
+      "profileId": "unizd-geografija-diplomski",
+      "scored": 4,
+      "machineCheckable": 4,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "unizd-germanistika-diplomski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "unizd-germanistika-zavrsni",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "unizd-hispanistika-diplomski",
+      "scored": 5,
+      "machineCheckable": 5,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "unizd-informacijske-diplomski",
+      "scored": 4,
+      "machineCheckable": 4,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "unizd-informacijske-zavrsni",
+      "scored": 4,
+      "machineCheckable": 4,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "unizd-klasicna-filologija-diplomski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "unizd-klasicna-filologija-zavrsni",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
+    },
+    {
       "profileId": "unizd-pedagogija-diplomski",
       "scored": 6,
       "machineCheckable": 5,
       "advisory": 0,
       "ratio": 1.2,
       "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "unizd-pomorski-diplomski",
+      "scored": 5,
+      "machineCheckable": 5,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "unizd-pomorski-zavrsni",
+      "scored": 5,
+      "machineCheckable": 5,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "unizd-povijest-diplomski",
+      "scored": 4,
+      "machineCheckable": 6,
+      "advisory": 2,
+      "ratio": 0.6666666666666666,
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "unizd-povijest-umj-diplomski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
     },
     {
       "profileId": "unizd-povijest-umj-zavrsni",
@@ -2113,12 +2465,44 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "unizd-povijest-zavrsni",
+      "scored": 4,
+      "machineCheckable": 6,
+      "advisory": 2,
+      "ratio": 0.6666666666666666,
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "unizd-psihologija-diplomski",
+      "scored": 5,
+      "machineCheckable": 5,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
+    },
+    {
       "profileId": "unizd-psihologija-zavrsni",
       "scored": 7,
       "machineCheckable": 6,
       "advisory": 0,
       "ratio": 1.1666666666666667,
       "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "unizd-sociologija-diplomski",
+      "scored": 8,
+      "machineCheckable": 8,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "unizd-talijanistika-diplomski",
+      "scored": 0,
+      "machineCheckable": 3,
+      "advisory": 3,
+      "ratio": 0,
+      "lastVerified": null
     },
     {
       "profileId": "unizd-tko-diplomski",
@@ -2145,6 +2529,30 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "unizd-ucitelji-diplomski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "unizd-zdravstvo-diplomski",
+      "scored": 3,
+      "machineCheckable": 3,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "unizd-zdravstvo-zavrsni",
+      "scored": 3,
+      "machineCheckable": 3,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
+    },
+    {
       "profileId": "vef-diplomski",
       "scored": 6,
       "machineCheckable": 8,
@@ -2159,6 +2567,14 @@
       "advisory": 0,
       "ratio": 1,
       "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "veleknin-diplomski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
     },
     {
       "profileId": "veleknin-zavrsni",
@@ -2183,6 +2599,14 @@
       "advisory": 0,
       "ratio": 1,
       "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "vevu-diplomski",
+      "scored": 6,
+      "machineCheckable": 6,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
     },
     {
       "profileId": "vevu-zavrsni",
@@ -2305,6 +2729,30 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "vub-zavrsni-sestrinstvo",
+      "scored": 8,
+      "machineCheckable": 8,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "vub-zavrsni-tehnicki",
+      "scored": 7,
+      "machineCheckable": 7,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "vuka-lovstvo-zavrsni",
+      "scored": 2,
+      "machineCheckable": 3,
+      "advisory": 1,
+      "ratio": 0.6666666666666666,
+      "lastVerified": "2026-07-28"
+    },
+    {
       "profileId": "vuka-poslovni-diplomski",
       "scored": 2,
       "machineCheckable": 2,
@@ -2327,6 +2775,30 @@
       "advisory": 0,
       "ratio": 1,
       "lastVerified": "2026-07-27"
+    },
+    {
+      "profileId": "vuka-prehrambena-zavrsni",
+      "scored": 2,
+      "machineCheckable": 3,
+      "advisory": 1,
+      "ratio": 0.6666666666666666,
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "vuka-sigurnost-diplomski",
+      "scored": 1,
+      "machineCheckable": 4,
+      "advisory": 3,
+      "ratio": 0.25,
+      "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "vuka-sigurnost-zavrsni",
+      "scored": 1,
+      "machineCheckable": 4,
+      "advisory": 3,
+      "ratio": 0.25,
+      "lastVerified": "2026-07-28"
     },
     {
       "profileId": "vuka-strojarski-diplomski",
@@ -2433,5 +2905,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 1805
+  "totalScored": 2067
 }

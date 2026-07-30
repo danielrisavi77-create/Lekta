@@ -1,0 +1,60 @@
+{
+  "profileId": "unizd-filozofija-zavrsni",
+  "entries": [
+    {
+      "ruleId": "unizd-filozofija-zavrsni--font",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Font (preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unizd-filozofija-preporuke-zavrsni",
+      "sourcePage": "Preporuke Strucnog vijeca (zavrsni)",
+      "quote": "Preporuke Strucnog vijeca Odjela za filozofiju o izgledu i opsegu zavrsnog rada: font Times New Roman, velicina 12 (sazeci/fusnote 10), prored 1,5.",
+      "status": "advisory",
+      "lastVerified": "2026-07-28",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "recommendedFixerId": "font-fixer"
+    },
+    {
+      "ruleId": "unizd-filozofija-zavrsni--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova (preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unizd-filozofija-preporuke-zavrsni",
+      "sourcePage": "Preporuke Strucnog vijeca (zavrsni)",
+      "quote": "Preporuke Strucnog vijeca Odjela za filozofiju o izgledu i opsegu zavrsnog rada: font Times New Roman, velicina 12 (sazeci/fusnote 10), prored 1,5.",
+      "status": "advisory",
+      "lastVerified": "2026-07-28",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "recommendedFixerId": "font-fixer"
+    },
+    {
+      "ruleId": "unizd-filozofija-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored (preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unizd-filozofija-preporuke-zavrsni",
+      "sourcePage": "Preporuke Strucnog vijeca (zavrsni)",
+      "quote": "Preporuke Strucnog vijeca Odjela za filozofiju o izgledu i opsegu zavrsnog rada: font Times New Roman, velicina 12 (sazeci/fusnote 10), prored 1,5.",
+      "status": "advisory",
+      "lastVerified": "2026-07-28",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "recommendedFixerId": "line-spacing-fixer"
+    }
+  ]
+}

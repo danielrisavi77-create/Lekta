@@ -43,6 +43,9 @@ export interface RecipeItem {
    * Bez ove razlike izgleda kao da svaki profil ima popravak, a "prazni odlomci" ima svaki.
    */
   scope: 'profil' | 'opce';
+  /** Preporuceno (advisory), nije obavezno: vrijednost dolazi iz ruleEntry.value (paramsFromValue),
+   *  ne iz profil.rules kao za obavezne stavke - vidi tests/repair-recipe.test.ts. */
+  recommended?: boolean;
   /** Ciljana vrijednost, citljivo ("Times New Roman", "3 / 2,5 / 3 / 2,5 cm", "1,5"). */
   target: string;
   /** Sirovi params koje klijent salje serveru (dokazni trag uz citljivi target). */
@@ -175,6 +178,7 @@ export function buildRecipe(): RecipeProfile[] {
       scope: 'profil',
       target: describeTarget(it.fixerId, it.params || {}),
       params: it.params || {},
+      ...(it.recommended ? { recommended: true } : {}),
       ...(it.requiresConfirmation ? { condition: 'Trazi izricitu privolu (mijenja autorov tekst ili strukturu).' } : {}),
       ...provenanceFor(entry.id, it.ruleId),
     }));

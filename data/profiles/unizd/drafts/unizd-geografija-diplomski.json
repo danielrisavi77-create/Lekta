@@ -1,0 +1,93 @@
+{
+  "profileId": "unizd-geografija-diplomski",
+  "entries": [
+    {
+      "ruleId": "unizd-geografija-diplomski--font",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Font",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "unizd-geografija-upute-2015",
+      "sourcePage": "Odjeljak B, \"Vaznije odrednice tehnickog uredjenja rada\"",
+      "quote": "Rad se pise jednostranicno na papiru formata A4. Kartica teksta je jedna stranica teksta ispisana na racunalu u Times New Romanu (CE) s velicinom slova 12 te proredom velicine 1.5.",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-28",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "8435a47e0f77ff754c1c9c64b92414e00c29e62d80f751288753d30fd0861226",
+      "autoFixable": true,
+      "fixerId": "font-fixer"
+    },
+    {
+      "ruleId": "unizd-geografija-diplomski--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "unizd-geografija-upute-2015",
+      "sourcePage": "Odjeljak B, \"Vaznije odrednice tehnickog uredjenja rada\"",
+      "quote": "Rad se pise jednostranicno na papiru formata A4. Kartica teksta je jedna stranica teksta ispisana na racunalu u Times New Romanu (CE) s velicinom slova 12 te proredom velicine 1.5.",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-28",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "8435a47e0f77ff754c1c9c64b92414e00c29e62d80f751288753d30fd0861226",
+      "autoFixable": true,
+      "fixerId": "font-fixer"
+    },
+    {
+      "ruleId": "unizd-geografija-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "unizd-geografija-upute-2015",
+      "sourcePage": "Odjeljak B, \"Vaznije odrednice tehnickog uredjenja rada\"",
+      "quote": "Rad se pise jednostranicno na papiru formata A4. Kartica teksta je jedna stranica teksta ispisana na racunalu u Times New Romanu (CE) s velicinom slova 12 te proredom velicine 1.5.",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-28",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "8435a47e0f77ff754c1c9c64b92414e00c29e62d80f751288753d30fd0861226",
+      "autoFixable": true,
+      "fixerId": "line-spacing-fixer"
+    },
+    {
+      "ruleId": "unizd-geografija-diplomski--paper-size",
+      "checkId": "paper-size",
+      "value": true,
+      "category": "format",
+      "label": "Format papira A4",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "unizd-geografija-upute-2015",
+      "sourcePage": "Odjeljak B, \"Vaznije odrednice tehnickog uredjenja rada\"",
+      "quote": "Rad se pise jednostranicno na papiru formata A4. Kartica teksta je jedna stranica teksta ispisana na racunalu u Times New Romanu (CE) s velicinom slova 12 te proredom velicine 1.5.",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-28",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "8435a47e0f77ff754c1c9c64b92414e00c29e62d80f751288753d30fd0861226",
+      "autoFixable": true,
+      "fixerId": "paper-size-fixer"
+    }
+  ]
+}

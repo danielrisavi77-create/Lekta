@@ -1,0 +1,93 @@
+{
+  "profileId": "unizd-informacijske-diplomski",
+  "entries": [
+    {
+      "ruleId": "unizd-informacijske-diplomski--font",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Font",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "unizd-informacijske-upute-2020",
+      "sourcePage": "S1.3.1 \"Oblikovanje diplomskog rada\"",
+      "quote": "Diplomski rad slaze se na stranici A4 formata (210x297mm), Times New Roman tip slova, velicina 12pt uz prored 1.5.",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-28",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "94caed2dea1d9940685282b3f650fea825eaf53f8f565c4fa55c8dbcb311eb78",
+      "autoFixable": true,
+      "fixerId": "font-fixer"
+    },
+    {
+      "ruleId": "unizd-informacijske-diplomski--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "unizd-informacijske-upute-2020",
+      "sourcePage": "S1.3.1 \"Oblikovanje diplomskog rada\"",
+      "quote": "Diplomski rad slaze se na stranici A4 formata (210x297mm), Times New Roman tip slova, velicina 12pt uz prored 1.5.",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-28",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "94caed2dea1d9940685282b3f650fea825eaf53f8f565c4fa55c8dbcb311eb78",
+      "autoFixable": true,
+      "fixerId": "font-fixer"
+    },
+    {
+      "ruleId": "unizd-informacijske-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "unizd-informacijske-upute-2020",
+      "sourcePage": "S1.3.1 \"Oblikovanje diplomskog rada\"",
+      "quote": "Diplomski rad slaze se na stranici A4 formata (210x297mm), Times New Roman tip slova, velicina 12pt uz prored 1.5.",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-28",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "94caed2dea1d9940685282b3f650fea825eaf53f8f565c4fa55c8dbcb311eb78",
+      "autoFixable": true,
+      "fixerId": "line-spacing-fixer"
+    },
+    {
+      "ruleId": "unizd-informacijske-diplomski--paper-size",
+      "checkId": "paper-size",
+      "value": true,
+      "category": "format",
+      "label": "Format papira A4",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "unizd-informacijske-upute-2020",
+      "sourcePage": "S1.3.1 \"Oblikovanje diplomskog rada\"",
+      "quote": "Diplomski rad slaze se na stranici A4 formata (210x297mm), Times New Roman tip slova, velicina 12pt uz prored 1.5.",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-28",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "94caed2dea1d9940685282b3f650fea825eaf53f8f565c4fa55c8dbcb311eb78",
+      "autoFixable": true,
+      "fixerId": "paper-size-fixer"
+    }
+  ]
+}

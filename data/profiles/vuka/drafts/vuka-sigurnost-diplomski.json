@@ -1,0 +1,80 @@
+{
+  "profileId": "vuka-sigurnost-diplomski",
+  "entries": [
+    {
+      "ruleId": "vuka-sigurnost-diplomski--font",
+      "checkId": "font",
+      "value": [
+        "Arial",
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Font (preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "vuka-sigurnost-upute-2026",
+      "sourcePage": "Upute SIZ 2026",
+      "quote": "Prilikom pisanja preporuca se koristenje font-a Arial ili Times New Roman, velicina slova 12, pri cemu je prored teksta 1,5. U tekstu je obavezno citiranje literature prema redoslijedu pojavljivanja.",
+      "status": "advisory",
+      "lastVerified": "2026-07-28",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "recommendedFixerId": "font-fixer"
+    },
+    {
+      "ruleId": "vuka-sigurnost-diplomski--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova (preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "vuka-sigurnost-upute-2026",
+      "sourcePage": "Upute SIZ 2026",
+      "quote": "Prilikom pisanja preporuca se koristenje font-a Arial ili Times New Roman, velicina slova 12, pri cemu je prored teksta 1,5. U tekstu je obavezno citiranje literature prema redoslijedu pojavljivanja.",
+      "status": "advisory",
+      "lastVerified": "2026-07-28",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "recommendedFixerId": "font-fixer"
+    },
+    {
+      "ruleId": "vuka-sigurnost-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored (preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "vuka-sigurnost-upute-2026",
+      "sourcePage": "Upute SIZ 2026",
+      "quote": "Prilikom pisanja preporuca se koristenje font-a Arial ili Times New Roman, velicina slova 12, pri cemu je prored teksta 1,5. U tekstu je obavezno citiranje literature prema redoslijedu pojavljivanja.",
+      "status": "advisory",
+      "lastVerified": "2026-07-28",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "recommendedFixerId": "line-spacing-fixer"
+    },
+    {
+      "ruleId": "vuka-sigurnost-diplomski--citation-style",
+      "checkId": "citation-style",
+      "value": "ieee",
+      "category": "citation",
+      "label": "Stil citiranja (obavezno, numericki po redoslijedu)",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "vuka-sigurnost-upute-2026",
+      "sourcePage": "Upute SIZ 2026",
+      "quote": "Prilikom pisanja preporuca se koristenje font-a Arial ili Times New Roman, velicina slova 12, pri cemu je prored teksta 1,5. U tekstu je obavezno citiranje literature prema redoslijedu pojavljivanja.",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-28",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "53f81d674eab02246a2fdca11e8c440fe55b3713de085b3a4910793a96608245"
+    }
+  ]
+}

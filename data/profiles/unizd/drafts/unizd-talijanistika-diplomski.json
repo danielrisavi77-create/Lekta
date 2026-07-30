@@ -1,0 +1,60 @@
+{
+  "profileId": "unizd-talijanistika-diplomski",
+  "entries": [
+    {
+      "ruleId": "unizd-talijanistika-diplomski--font",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Font (preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unizd-talijanistika-stranica",
+      "sourcePage": "Stranica \"diplomski-rad\"",
+      "quote": "Diplomski rad pise se na talijanskom jeziku i trebao bi sadrzavati... (font Times New Roman, velicina 12, prored 1,5, margine: lijeva 4 cm, desna 2,5 cm).",
+      "status": "advisory",
+      "lastVerified": "2026-07-28",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "recommendedFixerId": "font-fixer"
+    },
+    {
+      "ruleId": "unizd-talijanistika-diplomski--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova (preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unizd-talijanistika-stranica",
+      "sourcePage": "Stranica \"diplomski-rad\"",
+      "quote": "Diplomski rad pise se na talijanskom jeziku i trebao bi sadrzavati... (font Times New Roman, velicina 12, prored 1,5, margine: lijeva 4 cm, desna 2,5 cm).",
+      "status": "advisory",
+      "lastVerified": "2026-07-28",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "recommendedFixerId": "font-fixer"
+    },
+    {
+      "ruleId": "unizd-talijanistika-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored (preporuka)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "unizd-talijanistika-stranica",
+      "sourcePage": "Stranica \"diplomski-rad\"",
+      "quote": "Diplomski rad pise se na talijanskom jeziku i trebao bi sadrzavati... (font Times New Roman, velicina 12, prored 1,5, margine: lijeva 4 cm, desna 2,5 cm).",
+      "status": "advisory",
+      "lastVerified": "2026-07-28",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "recommendedFixerId": "line-spacing-fixer"
+    }
+  ]
+}

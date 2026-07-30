@@ -1,0 +1,100 @@
+{
+  "profileId": "ffos-germanistika-zavrsni",
+  "entries": [
+    {
+      "ruleId": "ffos-germanistika-zavrsni--font",
+      "checkId": "font",
+      "value": [
+        "Times New Roman",
+        "Calibri",
+        "Arial"
+      ],
+      "category": "format",
+      "label": "Font (tri opcije)",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "ffos-germanistika-upute-2025",
+      "sourcePage": "S2.2 \"Allgemeine Textformatierung\"",
+      "quote": "Text: Times New Roman 12 oder Calibri 12 oder Arial 12, Zeilenabstand 1,5. Marginen: rechts 20mm; links, oben und unten 25mm.",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-28",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "2231b462e7c855817d3471ec0719cb447adb3a82329a79b0fa38ff15c5940575",
+      "autoFixable": true,
+      "fixerId": "font-fixer"
+    },
+    {
+      "ruleId": "ffos-germanistika-zavrsni--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "ffos-germanistika-upute-2025",
+      "sourcePage": "S2.2 \"Allgemeine Textformatierung\"",
+      "quote": "Text: Times New Roman 12 oder Calibri 12 oder Arial 12, Zeilenabstand 1,5. Marginen: rechts 20mm; links, oben und unten 25mm.",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-28",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "2231b462e7c855817d3471ec0719cb447adb3a82329a79b0fa38ff15c5940575",
+      "autoFixable": true,
+      "fixerId": "font-fixer"
+    },
+    {
+      "ruleId": "ffos-germanistika-zavrsni--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "ffos-germanistika-upute-2025",
+      "sourcePage": "S2.2 \"Allgemeine Textformatierung\"",
+      "quote": "Text: Times New Roman 12 oder Calibri 12 oder Arial 12, Zeilenabstand 1,5. Marginen: rechts 20mm; links, oben und unten 25mm.",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-28",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "2231b462e7c855817d3471ec0719cb447adb3a82329a79b0fa38ff15c5940575",
+      "autoFixable": true,
+      "fixerId": "line-spacing-fixer"
+    },
+    {
+      "ruleId": "ffos-germanistika-zavrsni--margins",
+      "checkId": "margins",
+      "value": {
+        "top": 2.5,
+        "right": 2,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "category": "format",
+      "label": "Margine (desna 2cm, ostale 2,5cm)",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "ffos-germanistika-upute-2025",
+      "sourcePage": "S2.2 \"Allgemeine Textformatierung\"",
+      "quote": "Text: Times New Roman 12 oder Calibri 12 oder Arial 12, Zeilenabstand 1,5. Marginen: rechts 20mm; links, oben und unten 25mm.",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-28",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "2231b462e7c855817d3471ec0719cb447adb3a82329a79b0fa38ff15c5940575",
+      "autoFixable": true,
+      "fixerId": "margins-fixer"
+    }
+  ]
+}

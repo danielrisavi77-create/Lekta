@@ -40,11 +40,14 @@ describe('recept govori istinu o tome sto popravak radi', () => {
 
   // Jezgra Option A: ciljane vrijednosti dolaze IZ PROFILA, nikad iz koda. Uzorak dokazuje da se
   // objavljena brojka poklapa s profilom, pa recept ne moze tvrditi vrijednost koju engine ne koristi.
+  // Preporucene (advisory) stavke su izuzete: njihova vrijednost dolazi iz ruleEntry.value
+  // (paramsFromValue), ne iz profil.rules kao za obavezne stavke - vidi src/ui/repair-items.ts.
   it('ciljane vrijednosti se poklapaju s profilom (uzorak: font, prored, margine)', () => {
     let checked = 0;
     for (const p of fresh) {
       const profile: any = resolveProfile(p.id);
       for (const it of p.items) {
+        if (it.recommended) continue;
         if (it.fixerId === 'line-spacing-fixer' && it.params.multiplier != null) {
           expect(it.params.multiplier, p.id).toBe(profile.spacing);
           checked++;

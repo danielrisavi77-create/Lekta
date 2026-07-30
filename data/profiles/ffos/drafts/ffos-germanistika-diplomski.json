@@ -1,0 +1,100 @@
+{
+  "profileId": "ffos-germanistika-diplomski",
+  "entries": [
+    {
+      "ruleId": "ffos-germanistika-diplomski--font",
+      "checkId": "font",
+      "value": [
+        "Times New Roman",
+        "Calibri",
+        "Arial"
+      ],
+      "category": "format",
+      "label": "Font (tri opcije)",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "ffos-germanistika-upute-diplomski-2025",
+      "sourcePage": "S2.2 \"Allgemeine Textformatierung\"",
+      "quote": "Text: Times New Roman 12 oder Calibri 12 oder Arial 12, Zeilenabstand 1,5. Marginen: rechts 20mm; links, oben und unten 25mm.",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-28",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "bedb441d957c29a9b0293572fb6bad96bcf2d7c9473e86f7b583cb4ff830157a",
+      "autoFixable": true,
+      "fixerId": "font-fixer"
+    },
+    {
+      "ruleId": "ffos-germanistika-diplomski--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "ffos-germanistika-upute-diplomski-2025",
+      "sourcePage": "S2.2 \"Allgemeine Textformatierung\"",
+      "quote": "Text: Times New Roman 12 oder Calibri 12 oder Arial 12, Zeilenabstand 1,5. Marginen: rechts 20mm; links, oben und unten 25mm.",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-28",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "bedb441d957c29a9b0293572fb6bad96bcf2d7c9473e86f7b583cb4ff830157a",
+      "autoFixable": true,
+      "fixerId": "font-fixer"
+    },
+    {
+      "ruleId": "ffos-germanistika-diplomski--line-spacing",
+      "checkId": "line-spacing",
+      "value": 1.5,
+      "category": "format",
+      "label": "Prored",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "ffos-germanistika-upute-diplomski-2025",
+      "sourcePage": "S2.2 \"Allgemeine Textformatierung\"",
+      "quote": "Text: Times New Roman 12 oder Calibri 12 oder Arial 12, Zeilenabstand 1,5. Marginen: rechts 20mm; links, oben und unten 25mm.",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-28",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "bedb441d957c29a9b0293572fb6bad96bcf2d7c9473e86f7b583cb4ff830157a",
+      "autoFixable": true,
+      "fixerId": "line-spacing-fixer"
+    },
+    {
+      "ruleId": "ffos-germanistika-diplomski--margins",
+      "checkId": "margins",
+      "value": {
+        "top": 2.5,
+        "right": 2,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "category": "format",
+      "label": "Margine (desna 2cm, ostale 2,5cm)",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "ffos-germanistika-upute-diplomski-2025",
+      "sourcePage": "S2.2 \"Allgemeine Textformatierung\"",
+      "quote": "Text: Times New Roman 12 oder Calibri 12 oder Arial 12, Zeilenabstand 1,5. Marginen: rechts 20mm; links, oben und unten 25mm.",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-28",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "bedb441d957c29a9b0293572fb6bad96bcf2d7c9473e86f7b583cb4ff830157a",
+      "autoFixable": true,
+      "fixerId": "margins-fixer"
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "profileId": "unizd-zdravstvo-zavrsni",
+  "entries": [
+    {
+      "ruleId": "unizd-zdravstvo-zavrsni--font",
+      "checkId": "font",
+      "value": [
+        "Times New Roman"
+      ],
+      "category": "format",
+      "label": "Font",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "unizd-zdravstvo-pravilnik-2022",
+      "sourcePage": "Clanak 8 + Prilog 4",
+      "quote": "Zavrsni rad, bez priloga, treba sadrzavati najmanje 16 kartica ispisanih fontom Times New Roman 12 Pt. Zavrsni rad treba biti oblikovan prema uputama u Prilogu 4: format papira je A4.",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-28",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "8daaa26933e050582a2253681f943a9caf765cd12760de91ebd283b84097d3c7",
+      "autoFixable": true,
+      "fixerId": "font-fixer"
+    },
+    {
+      "ruleId": "unizd-zdravstvo-zavrsni--font-size",
+      "checkId": "font-size",
+      "value": [
+        12
+      ],
+      "category": "format",
+      "label": "Velicina slova",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "unizd-zdravstvo-pravilnik-2022",
+      "sourcePage": "Clanak 8 + Prilog 4",
+      "quote": "Zavrsni rad, bez priloga, treba sadrzavati najmanje 16 kartica ispisanih fontom Times New Roman 12 Pt. Zavrsni rad treba biti oblikovan prema uputama u Prilogu 4: format papira je A4.",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-28",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "8daaa26933e050582a2253681f943a9caf765cd12760de91ebd283b84097d3c7",
+      "autoFixable": true,
+      "fixerId": "font-fixer"
+    },
+    {
+      "ruleId": "unizd-zdravstvo-zavrsni--paper-size",
+      "checkId": "paper-size",
+      "value": true,
+      "category": "format",
+      "label": "Format papira A4",
+      "machineCheckable": true,
+      "authority": "binding",
+      "sourceId": "unizd-zdravstvo-pravilnik-2022",
+      "sourcePage": "Clanak 8 + Prilog 4",
+      "quote": "Zavrsni rad, bez priloga, treba sadrzavati najmanje 16 kartica ispisanih fontom Times New Roman 12 Pt. Zavrsni rad treba biti oblikovan prema uputama u Prilogu 4: format papira je A4.",
+      "status": "verified",
+      "scored": true,
+      "verifiedBy": "Daniel Risavi",
+      "reviewedBy": "Daniel Risavi",
+      "lastVerified": "2026-07-28",
+      "confirmedVia": "ai-1pass-batch",
+      "verifiedHash": "8daaa26933e050582a2253681f943a9caf765cd12760de91ebd283b84097d3c7",
+      "autoFixable": true,
+      "fixerId": "paper-size-fixer"
+    }
+  ]
+}
