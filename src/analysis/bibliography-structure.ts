@@ -54,6 +54,13 @@ function firstAuthor(fields: Partial<CitationInput>, fallback: string): string {
   return normalize(parsed.split(',')[0] || parsed).trim();
 }
 
+/** Isto parsanje kao firstAuthor(), ali BEZ normalize() - hrvatska kolacija (localeCompare 'hr')
+ * treba ocuvane dijakritike (c/c/s/z/dj), inace pada na obican ASCII poredak. */
+function firstAuthorSortKey(fields: Partial<CitationInput>, fallback: string): string {
+  const parsed = String(fields.authors || fallback).split(/[;\n]/)[0] || '';
+  return (parsed.split(',')[0] || parsed).trim().toLowerCase();
+}
+
 function canonical(text: string): string {
   return normalize(text)
     .replace(/\b(?:https?:\/\/|www\.)\S+/gi, (url) => url.replace(/[.,;:]+$/, ''))
@@ -131,7 +138,7 @@ export function analyzeBibliographyStructure(
       entryIds: group.map((entry) => entry.id),
       suffixes: group.map((_entry, index) => String.fromCharCode(97 + index)),
     }));
-  const order = entries.map((entry) => firstAuthor(entry.fields, '') || canonical(entry.rawText));
+  const order = entries.map((entry) => firstAuthorSortKey(entry.fields, '') || canonical(entry.rawText));
   const sorted = [...order].sort((a, b) => a.localeCompare(b, language === 'en' ? 'en' : 'hr'));
   const alphabetical = { expected: order.every((value, index) => value === sorted[index]), order };
   const missingFromBibliography = citations

@@ -48,9 +48,13 @@ export const clamp = (n: number, a: number, b: number): number => Math.max(a, Ma
 /** Formatiraj broj u hr-HR lokalu. */
 export const fmt = (n?: number): string => new Intl.NumberFormat('hr-HR').format(n || 0);
 
-/** Normaliziraj tekst za usporedbu bez dijakritike i interpunkcije (NFD, lowercase, alfanumerik). */
+/** Normaliziraj tekst za usporedbu bez dijakritike i interpunkcije (NFD, lowercase, alfanumerik).
+ * \u0111/\u0110 nema NFD kanonsku dekompoziciju (za razliku od \u010d/\u0107/\u0161/\u017e), pa ga NFD korak ne dotakne; bez
+ * ovog eksplicitnog preslikavanja bi ispao u finalnom stripu umjesto da se, dosljedno ostalima,
+ * preslo\u017ei na bazno slovo d/D. */
 export const normalize = (s: unknown): string =>
   String(s || '')
+    .replace(/[\u0111\u0110]/g, 'd')
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()

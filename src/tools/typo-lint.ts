@@ -174,8 +174,10 @@ function checkRazmakNakonInterpunkcije(p: string, pi: number, out: TypoFinding[]
 }
 
 // 3. Em (U+2014) ili en (U+2013) crtica; projektna preferenca je zarez, dvotocka ili zagrade.
+//    Izuzima crticu uz brojku (raspon godina "1945.-1990.", stranica "str. 45-47") - to je
+//    ispravna hrvatska konvencija za brojcani raspon, ne pogresna interpunkcija.
 function checkEmEnCrtica(p: string, pi: number, out: TypoFinding[]): void {
-  const re = /[\u2013\u2014]/g;
+  const re = /(?<!\d\.?)[\u2013\u2014](?!\.?\d)/g;
   let m: RegExpExecArray | null;
   while ((m = re.exec(p)) !== null) {
     const naziv = m[0] === '\u2014' ? 'em crticu (U+2014)' : 'en crticu (U+2013)';
@@ -298,15 +300,21 @@ function checkDecimalniSeparator(paragraphs: string[], out: TypoFinding[]): void
   }
 }
 
-/** Pokrece sve provjere nad odlomcima; nalazi su sortirani po indeksu odlomka. */
-export function typoLint(paragraphs: string[]): TypoFinding[] {
+/**
+ * Pokrece sve provjere nad odlomcima; nalazi su sortirani po indeksu odlomka.
+ * `bibliographyStart` (0-indeksirano, kao extractReferences().start) iskljucuje popis literature
+ * iz crtica provjere: naslov knjige/clanka smije sadrzavati crticu (podnaslov, izvorni naziv) bez
+ * da to bude "krivo interpunkcijsko mjesto" - preostale provjere (dvostruki razmak i sl.) ostaju
+ * mehanicke pa i dalje vrijede i unutar literature.
+ */
+export function typoLint(paragraphs: string[], bibliographyStart = -1): TypoFinding[] {
   const findings: TypoFinding[] = [];
 
   paragraphs.forEach((p, pi) => {
     checkDvostrukiRazmak(p, pi, findings);
     checkRazmakPrijeInterpunkcije(p, pi, findings);
     checkRazmakNakonInterpunkcije(p, pi, findings);
-    checkEmEnCrtica(p, pi, findings);
+    if (bibliographyStart < 0 || pi < bibliographyStart) checkEmEnCrtica(p, pi, findings);
     checkHomoglifCirilica(p, pi, findings);
     checkVisestrukeTocke(p, pi, findings);
     checkRazmakUzZagradu(p, pi, findings);

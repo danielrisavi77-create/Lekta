@@ -1,9 +1,12 @@
 /**
- * Faza 4 (Lekta Error Corpus): SHEMA NUMERIRANJA + INTERPUNKCIJA CITATA - zadnje dvije bodovane
- * provjere bez atomskog slucaja. Obje na referentnom fpzg profilu, bez izmjene buildera
- * (raw sectPr sekcijski prijelomi za shemu, tekst-mutacija za interpunkciju). Dokazujemo:
+ * Faza 4 (Lekta Error Corpus): INTERPUNKCIJA CITATA - zadnja preostala bodovana provjera bez
+ * atomskog slucaja, na referentnom fpzg profilu, bez izmjene buildera (tekst-mutacija). Dokazujemo:
  *   (1) cleanBuild prolazi ciljanu provjeru,
  *   (2) jedna mutacija je rusi.
+ *
+ * Shema numeriranja stranica (page.numbers.scheme) je namjerno izostavljena: demotirana je na
+ * informativnu (max 0, uvijek 'pass') jer nema sourced ruleEntry, pa vise nema fail-stanje za
+ * dokazati.
  */
 import { describe, it, expect } from 'vitest';
 import { buildDocxFile } from './helpers/docx-builder';

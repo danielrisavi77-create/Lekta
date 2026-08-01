@@ -6,7 +6,7 @@
  * Mutacije rade nad cloneSpec(baselineSpec()) pa nikad ne kaljaju bazu ni druge slucajeve.
  */
 import type { DocSpec, ParaSpec } from '../../helpers/docx-builder';
-import { baselineSpec, cloneSpec, line, heading, body, PAGE_FIELD, BASELINE_PROFILE_ID } from '../builder/baseline';
+import { baselineSpec, cloneSpec, line, heading, BASELINE_PROFILE_ID } from '../builder/baseline';
 import type { ErrorCase } from '../error-case';
 
 const PID = BASELINE_PROFILE_ID;
@@ -30,34 +30,6 @@ function mutate(fn: (paras: ParaSpec[], spec: DocSpec) => void): DocSpec {
 function insAfter(spec: DocSpec, re: RegExp, ...items: ParaSpec[]): void {
   const i = spec.paragraphs.findIndex((p) => p.styleId && re.test(p.text));
   spec.paragraphs.splice(i + 1, 0, ...items);
-}
-
-/**
- * Uravnotezen Uvod/Zakljucak (za cleanBuild scope.intro-conclusion-ratio): Uvod ~6%, Zakljucak
- * ~9% glavnog opsega, unutar FPZG smjernice (Uvod <= 10.5%, Zakljucak 4.5-10.5%). Baza je
- * neuravnotezena (Uvod 15.1%) pa build = baza warna.
- */
-function balancedIntroConcl(): DocSpec {
-  return {
-    paragraphs: [
-      line('Sveučilište u Zagrebu', { jc: 'center' }),
-      line('Fakultet političkih znanosti', { jc: 'center' }),
-      heading('Sažetak'),
-      line('Sažetak rada u jednom odlomku s ključnim spoznajama.', { jc: 'both' }),
-      line('Ključne riječi: analiza, metoda, istraživanje'),
-      heading('Sadržaj'),
-      PAGE_FIELD,
-      heading('1. Uvod'),
-      ...body(300),
-      heading('2. Razrada'),
-      ...body(4200),
-      heading('3. Zaključak'),
-      ...body(450),
-      heading('Literatura'),
-      line('Kovač, A. (2020). Medijska pismenost. Zagreb: Naklada.'),
-    ],
-    marginsCm: { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 },
-  };
 }
 
 export const ATOMIC_CASES: ErrorCase[] = [
@@ -169,22 +141,6 @@ export const ATOMIC_CASES: ErrorCase[] = [
       ps.splice(i + 1, 0, line('Prema novom istraživanju (Novak, 2018) trend se ubrzano mijenja u posljednjih nekoliko godina.', { jc: 'both' }));
     }),
     expect: { checkId: 'citation.author-year.missing-reference', title: 'Citirano → literatura', kind: 'status', outcome: 'not-pass' },
-  },
-  {
-    id: 'atomic.citation.direct-quote-locator',
-    title: 'Izravni citat bez lokatora (broja stranice)',
-    category: 'citations',
-    oracle: 'atomic-fail',
-    profileId: PID,
-    detectableNow: true,
-    build: () => mutate((ps) => {
-      // NORMALNE citatnice sa zarezom ("Kovač, 2020" / "Horvat, 2019") bez broja stranice.
-      // Nakon popravka detektora (godina se vise ne cita kao stranica, a "P" u imenu vise nije
-      // lazni lokator) izravni citat bez lokatora ISPRAVNO pada - bez zaobilaznice.
-      const i = ps.findIndex((p) => /str\. 12/.test(p.text));
-      if (i >= 0) ps[i] = line('Kako navodi jedan autor (Kovač, 2020), medijska pismenost raste. Drugi izvor tvrdi "pismenost je ključna vještina za sudjelovanje" (Horvat, 2019).', { jc: 'both' });
-    }),
-    expect: { checkId: 'citation.direct-quote-locator', title: 'Lokator uz izravne citate', kind: 'status', outcome: 'not-pass' },
   },
   {
     id: 'atomic.reference.alphabetical',
@@ -319,13 +275,5 @@ export const ATOMIC_CASES: ErrorCase[] = [
     cleanBuild: () => { const s = cloneSpec(baselineSpec()); const i = s.paragraphs.findIndex((p) => /Diplomski rad/.test(p.text)); if (i >= 0) s.paragraphs[i] = { ...s.paragraphs[i], text: 'Završni rad' }; return s; },
     build: () => baselineSpec(),
     expect: { checkId: 'title.elements', title: 'Elementi naslovne stranice', kind: 'status', outcome: 'not-pass' },
-  },
-  {
-    id: 'atomic.scope.intro-conclusion-ratio',
-    title: 'Uvod nesrazmjerno velik (odstupa od FPZG smjernice)',
-    category: 'structure', oracle: 'atomic-fail', profileId: PID, detectableNow: true,
-    cleanBuild: () => balancedIntroConcl(),
-    build: () => baselineSpec(), // Uvod ~15.1% > 10.5% praga
-    expect: { checkId: 'scope.intro-conclusion-ratio', title: 'Omjer Uvoda i Zaključka', kind: 'status', outcome: 'not-pass' },
   },
 ];

@@ -702,11 +702,11 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "formatting",
-        "detail": "1 sekcija odstupa od A4",
+        "detail": "1 sekcija odstupa od formata A4",
         "earned": 1,
         "max": 3,
         "status": "warn",
-        "title": "Format stranice A4",
+        "title": "Format stranice (A4)",
       },
       {
         "category": "structure",
@@ -851,9 +851,9 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "formatting",
-        "detail": "Provjeri Page Size / Veličina papira u Wordu.",
+        "detail": "Profil očekuje A4.",
         "severity": "warning",
-        "title": "Format stranice možda nije A4",
+        "title": "Format stranice ne odgovara profilu",
         "where": "",
       },
       {
@@ -955,7 +955,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "earned": 3,
         "max": 3,
         "status": "pass",
-        "title": "Format stranice A4",
+        "title": "Format stranice (A4)",
       },
       {
         "category": "structure",
@@ -1162,7 +1162,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "earned": 3,
         "max": 3,
         "status": "pass",
-        "title": "Format stranice A4",
+        "title": "Format stranice (A4)",
       },
       {
         "category": "structure",
@@ -1362,7 +1362,7 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "earned": 3,
         "max": 3,
         "status": "pass",
-        "title": "Format stranice A4",
+        "title": "Format stranice (A4)",
       },
       {
         "category": "structure",
@@ -2265,10 +2265,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "structure",
-        "detail": "Format brojeva sekcija nije eksplicitno zapisan",
-        "earned": 2,
-        "max": 4,
-        "status": "warn",
+        "detail": "Informativno: ne ulazi u službenu ocjenu. Format brojeva sekcija nije eksplicitno zapisan",
+        "earned": 0,
+        "max": 0,
+        "status": "pass",
         "title": "Shema numeriranja stranica",
       },
       {
@@ -2297,10 +2297,10 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "structure",
-        "detail": "Uvod približno 100.0% · Zaključak približno 0.0% glavnog opsega",
-        "earned": 2,
-        "max": 4,
-        "status": "warn",
+        "detail": "Informativno: ne ulazi u službenu ocjenu. Uvod približno 100.0% · Zaključak približno 0.0% glavnog opsega",
+        "earned": 0,
+        "max": 0,
+        "status": "pass",
         "title": "Omjer Uvoda i Zaključka",
       },
       {
@@ -2369,9 +2369,9 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "citations",
-        "detail": "Nisu prepoznati izravni citati s autor-godina citatnicom",
-        "earned": 4,
-        "max": 4,
+        "detail": "Informativno: ne ulazi u službenu ocjenu. Nisu prepoznati izravni citati s autor-godina citatnicom",
+        "earned": 0,
+        "max": 0,
         "status": "pass",
         "title": "Lokator uz izravne citate",
       },
@@ -2507,9 +2507,9 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
       },
       {
         "category": "structure",
-        "detail": "Aktualne FPZG upute traže rimske brojeve na prednjim stranicama i arapske brojeve od prve stranice Uvoda, počevši od 1. U starijem prihvaćenom radu pronađena je arapska numeracija prednjih stranica, ali taj presedan ne mijenja službeno pravilo.",
-        "severity": "warning",
-        "title": "Provjeri rimsku i arapsku numeraciju",
+        "detail": "Aktualne FPZG upute traže rimske brojeve na prednjim stranicama i arapske brojeve od prve stranice Uvoda, počevši od 1. U starijem prihvaćenom radu pronađena je arapska numeracija prednjih stranica, ali taj presedan ne mijenja službeno pravilo. Ova provjera je informativna: nema potvrđenog izvora za cijelu shemu pa ne ulazi u ocjenu.",
+        "severity": "info",
+        "title": "Informativno: Provjeri rimsku i arapsku numeraciju",
         "where": "Sekcije dokumenta",
       },
       {
@@ -2530,14 +2530,14 @@ exports[`DOCX golden snapshots > stabilni rezultati svih fixtura 1`] = `
         "category": "structure",
         "detail": "Broj je izračunat prema pravilima odabranog profila koliko je moguće iz strukture DOCX-a. U Wordu dodatno potvrdi Word Count i granice dijelova rada.",
         "severity": "warning",
-        "title": "Broj riječi je izvan raspona odabranog profila",
+        "title": "Broj riječi je izvan raspona odabranog profila (uz ±10% toleranciju)",
         "where": "Opseg rada",
       },
       {
         "category": "structure",
-        "detail": "Uvod je preporučeno ograničiti na približno 10%, a Zaključak na približno 5-10% ukupnog teksta. Automatska procjena ovisi o pravilnim Heading stilovima.",
-        "severity": "warning",
-        "title": "Omjer Uvoda ili Zaključka odstupa od FPZG smjernice",
+        "detail": "Uvod je preporučeno ograničiti na približno 10%, a Zaključak na približno 5-10% ukupnog teksta. Automatska procjena ovisi o pravilnim Heading stilovima. Ova provjera je informativna: postotci nisu potvrđeni u službenoj FPZG uputi pa ne ulaze u ocjenu.",
+        "severity": "info",
+        "title": "Informativno: Omjer Uvoda ili Zaključka odstupa od FPZG smjernice",
         "where": "Struktura rada",
       },
       {
