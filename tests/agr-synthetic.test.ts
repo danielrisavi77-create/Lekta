@@ -75,7 +75,8 @@ describe('AGR sinteticki golden: doktorski (imperativno, prored 1,5, margine)', 
     const r: any = await analyzeFixture(file, { profileId: 'agr-doktorski' });
     expect(check(r, 'Veličina osnovnog teksta').status).toBe('pass');
     expect(check(r, 'Prored osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Format stranice A4').status).toBe('pass');
+    // agr-doktorski ima i requireA4 i paperSizes:['A4'] (paper-size ruleEntry) - naslov je "(A4)".
+    expect(check(r, 'Format stranice (A4)').status).toBe('pass');
     expect(check(r, 'Sadržaj dokumenta').status).toBe('pass');
     const m = check(r, 'Margine dokumenta');
     expect(m.max).toBeGreaterThan(0); // doktorski boduje margine

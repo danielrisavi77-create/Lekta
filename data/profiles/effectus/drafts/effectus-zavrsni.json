@@ -174,6 +174,32 @@
       "verifiedBy": "Daniel Risavi",
       "reviewedBy": "Daniel Risavi",
       "confirmedVia": "human-audit"
+    },
+    {
+      "ruleId": "effectus-zavrsni--required-sections",
+      "checkId": "required-sections",
+      "value": [
+        { "key": "sazetak", "label": "sažetak", "terms": ["sažetak", "sazetak"] },
+        { "key": "abstract", "label": "abstract", "terms": ["abstract"] },
+        { "key": "sadrzaj", "label": "sadržaj", "terms": ["sadržaj", "sadrzaj"] },
+        { "key": "uvod", "label": "uvodni dio", "terms": ["uvod"] },
+        { "key": "zakljucak", "label": "zaključak", "terms": ["zaključak", "zakljucak"] },
+        { "key": "literatura", "label": "popis literature", "terms": ["literatura", "popis literature"] }
+      ],
+      "category": "structure",
+      "label": "Obvezni dijelovi rada (Tablica 1: Korice, Sažetak, Abstract, Sadržaj, Uvodni dio, Zaključak, Popis literature su \"Obavezno\" za završni rad)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "effectus-pravilnik-2023",
+      "sourcePage": "Upute (Prilog 1), tč. 5 Tablica 1 (str. 6)",
+      "quote": "Tablica 1: Sastavni dijelovi seminarskog, završnog i diplomskog rada ... Sažetak: Neobavezno / Obavezno / Obavezno. Abstract: Neobavezno / Obavezno / Obavezno. Sadržaj: Obavezno / Obavezno / Obavezno. Uvodni dio: Obavezno / Obavezno / Obavezno. Zaključak: Obavezno / Obavezno / Obavezno. Popis literature i drugih izvora podataka: Obavezno / Obavezno / Obavezno.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "52db197d9244f792219b5e46dc1eb9a35e98d92302a72b74c7d8020dcc3dfd6b",
+      "lastVerified": "2026-08-01",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "confirmedVia": "owner-bulk-approval"
     }
   ],
   "generatedAt": "2026-07-03"

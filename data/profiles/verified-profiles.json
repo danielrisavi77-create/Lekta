@@ -4613,7 +4613,10 @@
         "Times New Roman"
       ],
       "tocSize": 12,
-      "pageNumberAlignment": "right"
+      "pageNumberAlignment": "right",
+      "footnoteSize": [
+        10
+      ]
     },
     "facts": [
       "30–60 stranica",
@@ -4918,7 +4921,10 @@
         "Times New Roman"
       ],
       "tocSize": 12,
-      "pageNumberAlignment": "right"
+      "pageNumberAlignment": "right",
+      "footnoteSize": [
+        10
+      ]
     },
     "facts": [
       "30–60 stranica",
@@ -5370,7 +5376,14 @@
         "Potvrditi aktualne tehničke upute, opseg i obveznu strukturu na konkretnom specijalističkom studiju.",
         "Provjeriti obrasce prijave teme, sastav povjerenstva, način predaje i zahtjeve mentora.",
         "Pravni izvori i način citiranja moraju slijediti aktualnu pisanu uputu studija ili mentora; opće fakultetske upute prikazuju se samo kao pomoć."
-      ]
+      ],
+      "footnoteFont": [
+        "Times New Roman"
+      ],
+      "footnoteSize": [
+        10
+      ],
+      "footnoteSpacing": 1
     },
     "facts": [
       "završni specijalistički rad",
@@ -5487,7 +5500,14 @@
         "Primijeniti aktualne sveučilišne i fakultetske upute za doktorski rad, obvezne obrasce i odluke doktorskog studija.",
         "Provjeriti naslovnice, sažetke, ključne riječi, životopis, izjave, metapodatke i format datoteke za repozitorij.",
         "Opseg, strukturu, citatni sustav i oblik pravnih izvora potvrditi s mentorom i nadležnim tijelom studija."
-      ]
+      ],
+      "footnoteFont": [
+        "Times New Roman"
+      ],
+      "footnoteSize": [
+        10
+      ],
+      "footnoteSpacing": 1
     },
     "facts": [
       "doktorski rad",
@@ -6280,7 +6300,10 @@
       "requirePageNumbers": true,
       "requireA4": true,
       "recommendedCitation": "harvard",
-      "accessDate": true
+      "accessDate": true,
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [
       "Postavke stranice su imperativne: font 12, prored 1,5, margine 2,5 cm, A4.",
@@ -7392,7 +7415,10 @@
       "requirePageNumbers": true,
       "requireA4": true,
       "requireToc": true,
-      "recommendedCitation": "harvard"
+      "recommendedCitation": "harvard",
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [
       "Rad se tiska na papiru A4 formata, fontom Times New Roman ili Arial (imperativ, scored).",
@@ -7513,7 +7539,10 @@
       "requirePageNumbers": true,
       "requireA4": true,
       "checkMargins": false,
-      "recommendedCitation": "harvard"
+      "recommendedCitation": "harvard",
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [
       "Font Times New Roman veličine 12, prored 1,5 i format A4 propisani su imperativno u odjeljku 4 (Tehnicke upute) -> boduje se.",
@@ -7632,7 +7661,10 @@
       "requirePageNumbers": true,
       "checkJustify": true,
       "checkMargins": true,
-      "recommendedCitation": "apa7"
+      "recommendedCitation": "apa7",
+      "justify": true,
+      "minReferences": 20,
+      "wordMin": 4000
     },
     "facts": [
       "Font Times New Roman, veličina 12 pt, prored 1,5, margine 2,5 cm sa svake strane, tekst obostrano poravnat (imperativ).",
@@ -8015,7 +8047,8 @@
             "bibliography"
           ]
         }
-      ]
+      ],
+      "justify": true
     },
     "facts": [
       "Font Arial (obavezna potpora svih hrvatskih znakova), veličina 12 pt, prored 1,5, margine 2,5 cm sa svih strana, tekst obostrano poravnat (imperativ).",
@@ -8167,7 +8200,8 @@
             "bibliography"
           ]
         }
-      ]
+      ],
+      "justify": true
     },
     "facts": [
       "Font Arial (obavezna potpora svih hrvatskih znakova), veličina 12 pt, prored 1,5, margine 2,5 cm sa svih strana, tekst obostrano poravnat (imperativ).",
@@ -8740,7 +8774,8 @@
             "literatura"
           ]
         }
-      ]
+      ],
+      "justify": true
     },
     "facts": [
       "Diplomski rad mora sadržavati naslovnu stranicu, sadržaj, sažetke i ključne riječi, uvod, razradu teme, zaključak i popis literature (imperativ).",
@@ -8852,7 +8887,10 @@
       },
       "requirePageNumbers": true,
       "requireA4": true,
-      "recommendedCitation": "harvard"
+      "recommendedCitation": "harvard",
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [
       "Rad se piše fontom Times New Roman veličine 12, prored 1,5 (imperativ, scored).",
@@ -9032,6 +9070,9 @@
             "zivotopis"
           ]
         }
+      ],
+      "paperSizes": [
+        "A4"
       ]
     },
     "facts": [
@@ -9146,7 +9187,10 @@
       "requirePageNumbers": true,
       "checkJustify": true,
       "checkMargins": true,
-      "recommendedCitation": "vancouver"
+      "recommendedCitation": "vancouver",
+      "justify": true,
+      "pageMin": 25,
+      "pageMax": 50
     },
     "facts": [
       "Rad se piše fontom Times New Roman, veličina 12, prored 1,5 retka, obostrano poravnanje (imperativ, scored).",
@@ -9810,7 +9854,11 @@
       "requireA4": true,
       "checkJustify": true,
       "checkMargins": true,
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "ieee",
+      "paperSizes": [
+        "A4"
+      ],
+      "justify": true
     },
     "facts": [
       "Format A-4, pismo Times New Roman 12 pt, prored 1,5 i iskljucivanje na puni format navedeni su kao cvrsta specifikacija oblikovanja (scored).",
@@ -10087,7 +10135,11 @@
             "popis literature"
           ]
         }
-      ]
+      ],
+      "paperSizes": [
+        "A4"
+      ],
+      "justify": true
     },
     "facts": [
       "Format je imperativan: A4, sve margine 2,5 cm, Times New Roman 12, prored 1,5, tekst obostrano poravnan, numeriranje na dnu po sredini (prva stranica uvoda nosi broj 1).",
@@ -10279,7 +10331,11 @@
             "popis literature"
           ]
         }
-      ]
+      ],
+      "paperSizes": [
+        "A4"
+      ],
+      "justify": true
     },
     "facts": [
       "Diplomski rad je znanstveni (empirijski) rad; format je identican završnom: A4, margine 2,5 cm, Times New Roman 12, prored 1,5, obostrano poravnanje, numeriranje na dnu po sredini.",
@@ -10511,7 +10567,10 @@
         12
       ],
       "spacing": 1.5,
-      "requireA4": true
+      "requireA4": true,
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [
       "Diplomski rad mora biti napisan na listu formata A4 (imperativ iz Pravilnika, scored).",
@@ -10610,7 +10669,10 @@
         12
       ],
       "spacing": 1.5,
-      "requireA4": true
+      "requireA4": true,
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [
       "Završni rad mora biti napisan na listu formata A4 (imperativ iz Pravilnika, scored).",
@@ -10791,7 +10853,12 @@
             "popis literature"
           ]
         }
-      ]
+      ],
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 40,
+      "pageMax": 80
     },
     "facts": [
       "Diplomski rad mora sadržavati propisane uvodne stranice (naslovnica, temeljna dokumentacijska kartica sa sažetkom, sadržaj) te glavna poglavlja Uvod, Teorijski dio, Eksperimentalni dio, Rezultati i Rasprava, Zakljucci i Literatura (imperativ).",
@@ -10959,7 +11026,11 @@
             "zivotopis"
           ]
         }
-      ]
+      ],
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 50
     },
     "facts": [
       "Rad treba biti ispisan na papiru A4 i sadržavati najmanje 50 stranica teksta (imperativ).",
@@ -11101,7 +11172,11 @@
             "zivotopis"
           ]
         }
-      ]
+      ],
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 30
     },
     "facts": [
       "Rad treba biti ispisan na papiru A4 i sadržavati najmanje 30 stranica teksta (imperativ).",
@@ -11275,7 +11350,8 @@
             "literatura"
           ]
         }
-      ]
+      ],
+      "justify": true
     },
     "facts": [
       "OPE TEHNICKE UPUTE su imperativne: treba postivati tehničke karakteristike, a font je obvezan (obavezna potpora svih hrvatskih znakova, Times New Roman).",
@@ -11446,7 +11522,8 @@
             "literatura"
           ]
         }
-      ]
+      ],
+      "justify": true
     },
     "facts": [
       "Završni rad se oblikuje prema istom odjeljku OPE TEHNICKE UPUTE kao i diplomski rad (font Times New Roman, obavezna potpora hrvatskih znakova).",
@@ -11619,7 +11696,8 @@
             "popis literature"
           ]
         }
-      ]
+      ],
+      "justify": true
     },
     "facts": [
       "Tehničko oblikovanje je imperativno: Times New Roman, veličina 12, prored 1,5, margine 3,5 cm lijevo te 2,5 cm desno, gore i dolje (odjeljak 4.5).",
@@ -11790,7 +11868,8 @@
             "popis literature"
           ]
         }
-      ]
+      ],
+      "justify": true
     },
     "facts": [
       "Tehničko oblikovanje je imperativno: Times New Roman, veličina 12, prored 1,5, margine 3,5 cm lijevo te 2,5 cm desno, gore i dolje (odjeljak 4.5).",
@@ -12228,7 +12307,8 @@
             "kljucne rijeci"
           ]
         }
-      ]
+      ],
+      "justify": true
     },
     "facts": [
       "Graficko formatiranje je imperativno: tijelo teksta Times New Roman veličine 12, margine desno 3,5 cm te lijevo, gore i dolje 2,5 cm, prored 1,5, arapski brojevi stranica u donjem desnom kutu, tekst poravnat po obje margine (scored).",
@@ -12378,7 +12458,8 @@
             "kljucne rijeci"
           ]
         }
-      ]
+      ],
+      "justify": true
     },
     "facts": [
       "Osnovni tekst je Times New Roman 12 p, sve margine 2,5 cm, prored 1,5, desni rub poravnat, stranice numerirane arapskim brojkama od Uvoda (imperativ, odjeljak 6. Oblikovanje teksta).",
@@ -12490,7 +12571,10 @@
       "requireA4": true,
       "pageMin": 30,
       "pageMax": 80,
-      "recommendedCitation": "harvard"
+      "recommendedCitation": "harvard",
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [
       "Format tiska je A4, prored 1,5 i margine 2,5 cm sa svake strane (imperativ, scored).",
@@ -12684,7 +12768,10 @@
       ],
       "requireA4": true,
       "requireToc": true,
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "ieee",
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [
       "Diplomski rad mora biti otisnut na papiru formata A4 (imperativ, scored).",
@@ -12966,7 +13053,8 @@
       "requirePageNumbers": true,
       "checkJustify": true,
       "checkMargins": true,
-      "recommendedCitation": "harvard"
+      "recommendedCitation": "harvard",
+      "justify": true
     },
     "facts": [
       "Tekst treba oblikovati: Times New Roman veličine 12, prored 1,5, obostrano poravnanje, margine 25 mm (2,5 cm) sa sve četiri strane, sve stranice numerirane pri dnu desno (imperativ, prema smjernicama casopisa Suvremena lingvistika).",
@@ -13161,6 +13249,10 @@
             "summary"
           ]
         }
+      ],
+      "justify": true,
+      "paperSizes": [
+        "A4"
       ]
     },
     "facts": [
@@ -13448,7 +13540,8 @@
       "requirePageNumbers": true,
       "checkJustify": true,
       "checkMargins": true,
-      "recommendedCitation": "chicago-author"
+      "recommendedCitation": "chicago-author",
+      "justify": true
     },
     "facts": [
       "Graficko oblikovanje je imperativno: font Times New Roman veličine 12, prored 1,5, margine 2,5 cm, obostrano poravnanje, paginirane stranice (naslovna stranica se ne paginira).",
@@ -13677,7 +13770,10 @@
       "requireToc": true,
       "requirePageNumbers": true,
       "requireA4": true,
-      "recommendedCitation": "harvard"
+      "recommendedCitation": "harvard",
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [
       "Veličina pisma 12 točaka, prored 1,5 i margine 2,5 cm (sve strane, tijelo rada) propisani su u odjeljku Postavke stranice (imperativ, scored).",
@@ -13798,7 +13894,10 @@
       "requireToc": true,
       "requirePageNumbers": true,
       "requireA4": true,
-      "recommendedCitation": "harvard"
+      "recommendedCitation": "harvard",
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [
       "Veličina pisma 12 točaka, prored 1,5 i margine 2,5 cm (sve strane, tijelo rada) propisani su u odjeljku Postavke stranice (imperativ, scored).",
@@ -13916,7 +14015,10 @@
       "requireA4": true,
       "requirePageNumbers": true,
       "requireToc": true,
-      "recommendedCitation": "vancouver"
+      "recommendedCitation": "vancouver",
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [
       "Format rada je A4 (imperativna tehnička uputa, scored).",
@@ -14139,7 +14241,10 @@
       "requireToc": true,
       "requirePageNumbers": true,
       "requireA4": true,
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "ieee",
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [
       "Odjeljak Postavke stranice propisuje pismo (Times New Roman ili Arial uz obveznu potporu hrvatskih znakova), veličinu 12 tipografskih točaka i prored 1,5 (scored).",
@@ -16073,7 +16178,11 @@
       ],
       "spacing": 1.5,
       "justify": true,
-      "requireA4": true
+      "requireA4": true,
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 30
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog Pravilnika (Zagrebacka skola ekonomije i managementa), čitano izravno. Studij Ekonomija i management izvodi se na hrvatskom i engleskom jeziku, pa jezik rada bira student.",
@@ -16190,7 +16299,10 @@
         12
       ],
       "spacing": 1.5,
-      "requireA4": true
+      "requireA4": true,
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog Pravilnika (Sveučilište Libertas), čitano izravno.",
@@ -16244,7 +16356,10 @@
         "bottom": 2.5,
         "left": 2.5
       },
-      "requireA4": true
+      "requireA4": true,
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog Pravilnika (Sveučilište Libertas), čitano izravno.",
@@ -16301,7 +16416,20 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 35,
+      "pageMax": 50,
+      "requiredSections": [
+        { "key": "sazetak", "label": "sažetak", "terms": ["sažetak", "sazetak"] },
+        { "key": "abstract", "label": "abstract", "terms": ["abstract"] },
+        { "key": "sadrzaj", "label": "sadržaj", "terms": ["sadržaj", "sadrzaj"] },
+        { "key": "uvod", "label": "uvodni dio", "terms": ["uvod"] },
+        { "key": "zakljucak", "label": "zaključak", "terms": ["zaključak", "zakljucak"] },
+        { "key": "literatura", "label": "popis literature", "terms": ["literatura", "popis literature"] }
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (EFFECTUS veleučilište), čitano izravno.",
@@ -16413,7 +16541,20 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 50,
+      "pageMax": 80,
+      "requiredSections": [
+        { "key": "sazetak", "label": "sažetak", "terms": ["sažetak", "sazetak"] },
+        { "key": "abstract", "label": "abstract", "terms": ["abstract"] },
+        { "key": "sadrzaj", "label": "sadržaj", "terms": ["sadržaj", "sadrzaj"] },
+        { "key": "uvod", "label": "uvodni dio", "terms": ["uvod"] },
+        { "key": "zakljucak", "label": "zaključak", "terms": ["zaključak", "zakljucak"] },
+        { "key": "literatura", "label": "popis literature", "terms": ["literatura", "popis literature"] }
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (EFFECTUS veleučilište), čitano izravno.",
@@ -16519,7 +16660,12 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 3
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 30,
+      "pageMax": 50
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Veleučilište RRiF), čitano izravno.",
@@ -16572,7 +16718,11 @@
         "right": 2,
         "bottom": 3,
         "left": 3
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 25
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Poslovno veleučilište Zagreb), čitano izravno.",
@@ -16625,7 +16775,11 @@
         "right": 2,
         "bottom": 3,
         "left": 3
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 40
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Poslovno veleučilište Zagreb), čitano izravno.",
@@ -16674,7 +16828,12 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 25,
+      "pageMax": 50
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Zdravstveno veleučilište), čitano izravno. Font nije scored: Pravilnik ga navodi kao preporuku s izborom tri fonta (Arial, Times New Roman ili Calibri). Citatni stil Vancouver preporucen samo za biomedicinu.",
@@ -16723,7 +16882,12 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 25,
+      "pageMax": 50
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Zdravstveno veleučilište), čitano izravno. Font nije scored: Pravilnik ga navodi kao preporuku s izborom tri fonta (Arial, Times New Roman ili Calibri). Citatni stil Vancouver preporucen samo za biomedicinu.",
@@ -16762,7 +16926,9 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "rules": {
-      "requireToc": true
+      "requireToc": true,
+      "pageMin": 30,
+      "pageMax": 40
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Veleučilište suvremenih informacijskih tehnologija), čitano izravno.",
@@ -16796,7 +16962,9 @@
     "verifiedAt": "2026-07-02",
     "documentDate": null,
     "rules": {
-      "requireToc": true
+      "requireToc": true,
+      "pageMin": 50,
+      "pageMax": 60
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Veleučilište suvremenih informacijskih tehnologija), čitano izravno.",
@@ -16845,7 +17013,10 @@
         "bottom": 2.5,
         "left": 2.5
       },
-      "recommendedCitation": "apa7"
+      "recommendedCitation": "apa7",
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Veleučilište kriminalistike i javne sigurnosti), čitano izravno.",
@@ -16899,7 +17070,10 @@
         "bottom": 2.5,
         "left": 2.5
       },
-      "recommendedCitation": "apa7"
+      "recommendedCitation": "apa7",
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Veleučilište kriminalistike i javne sigurnosti), čitano izravno.",
@@ -16952,7 +17126,10 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Hrvatsko katolicko sveučilište), čitano izravno. Opseg (u karticama) i citatni stil odreduju se odjelnim Posebnim uputama i razlikuju se po odjelu -> nisu u institucijskom scored skupu.",
@@ -17013,7 +17190,11 @@
         "bottom": 3,
         "left": 3
       },
-      "recommendedCitation": "harvard"
+      "recommendedCitation": "harvard",
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 25
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Ekonomski fakultet u Rijeci, Sveučilište u Rijeci), čitano izravno.",
@@ -17073,7 +17254,11 @@
         "bottom": 3,
         "left": 3
       },
-      "recommendedCitation": "harvard"
+      "recommendedCitation": "harvard",
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 40
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Ekonomski fakultet u Rijeci, Sveučilište u Rijeci), čitano izravno.",
@@ -17127,7 +17312,10 @@
         "bottom": 2.5,
         "left": 2.5
       },
-      "recommendedCitation": "pravo-fusnote"
+      "recommendedCitation": "pravo-fusnote",
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Pravni fakultet u Rijeci, Sveučilište u Rijeci), čitano izravno.",
@@ -17231,7 +17419,10 @@
         "bottom": 2.5,
         "left": 2.5
       },
-      "recommendedCitation": "pravo-fusnote"
+      "recommendedCitation": "pravo-fusnote",
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Pravni fakultet u Rijeci, Sveučilište u Rijeci), čitano izravno.",
@@ -17339,7 +17530,11 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ],
+      "requirePageNumbers": true
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Filozofski fakultet u Rijeci, Sveučilište u Rijeci), čitano izravno. NAPOMENA (2026-08-01): \"Prijediplomski studij Psihologija\" uklonjen - taj program NEMA zavrsni rad kao zanr (zavrsava se pismenim ispitom, potvrdjeno na 3 nacina: stranica odsjeka, izvedbeni plan 2024/25, Pravilnik Cl.17(3) \"studenti koji su u obvezi polagati zavrsni ispit ne izradjuju zavrsni rad\"). \"Prijediplomski studij Hrvatski jezik i knjizevnost\" uklonjen - vlastita Uputa Odsjeka za kroatistiku propisuje 14pt (ne 12pt), izdvojen u ffri-kroatistika-zavrsni.",
@@ -17450,7 +17645,10 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Filozofski fakultet u Rijeci, Sveučilište u Rijeci), čitano izravno.",
@@ -17557,7 +17755,8 @@
         "bottom": 2.5,
         "left": 3
       },
-      "recommendedCitation": "chicago-notes"
+      "recommendedCitation": "chicago-notes",
+      "pageMin": 30
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Pomorski fakultet u Rijeci, Sveučilište u Rijeci), čitano izravno.",
@@ -17665,7 +17864,8 @@
         "bottom": 2.5,
         "left": 3
       },
-      "recommendedCitation": "chicago-notes"
+      "recommendedCitation": "chicago-notes",
+      "pageMin": 50
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Pomorski fakultet u Rijeci, Sveučilište u Rijeci), čitano izravno.",
@@ -17766,7 +17966,12 @@
         "left": 2.5
       },
       "recommendedCitation": "vancouver",
-      "checkFont": false
+      "checkFont": false,
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 15,
+      "pageMax": 50
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Medicinski fakultet u Rijeci, Sveučilište u Rijeci), čitano izravno.",
@@ -17871,7 +18076,10 @@
         "bottom": 2.5,
         "left": 2.5
       },
-      "recommendedCitation": "chicago-author"
+      "recommendedCitation": "chicago-author",
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Fakultet za menadžment u turizmu i ugostiteljstvu, Opatija, Sveučilište u Rijeci), čitano izravno.",
@@ -17979,7 +18187,10 @@
         "bottom": 2.5,
         "left": 2.5
       },
-      "recommendedCitation": "chicago-author"
+      "recommendedCitation": "chicago-author",
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Fakultet za menadžment u turizmu i ugostiteljstvu, Opatija, Sveučilište u Rijeci), čitano izravno.",
@@ -18077,7 +18288,11 @@
       "checkSize": false,
       "checkSpacing": false,
       "checkMargins": false,
-      "checkJustify": false
+      "checkJustify": false,
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 30
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Fakultet informatike i digitalnih tehnologija, Rijeka, Sveučilište u Rijeci), čitano izravno. Font/velicina/prored/margine/citiranje su u predlošku i Uputama iza Merlin logina -> nedostupni javno, izostavljeni.",
@@ -18170,7 +18385,11 @@
       "checkSize": false,
       "checkSpacing": false,
       "checkMargins": false,
-      "checkJustify": false
+      "checkJustify": false,
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 40
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Fakultet informatike i digitalnih tehnologija, Rijeka, Sveučilište u Rijeci), čitano izravno. Font/velicina/prored/margine/citiranje su u predlošku i Uputama iza Merlin logina -> nedostupni javno, izostavljeni.",
@@ -18271,7 +18490,12 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 20,
+      "pageMax": 40
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Prirodoslovno-matematicki fakultet u Splitu, Sveučilište u Splitu), čitano izravno.",
@@ -18372,7 +18596,10 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Prirodoslovno-matematicki fakultet u Splitu, Sveučilište u Splitu), čitano izravno.",
@@ -18659,7 +18886,9 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "pageMin": 30,
+      "pageMax": 40
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Ekonomski fakultet u Splitu, Sveučilište u Splitu), čitano izravno.",
@@ -18759,7 +18988,9 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "pageMin": 50,
+      "pageMax": 80
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Ekonomski fakultet u Splitu, Sveučilište u Splitu), čitano izravno.",
@@ -18861,7 +19092,10 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 3.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Kemijsko-tehnološki fakultet u Splitu, Sveučilište u Splitu), čitano izravno.",
@@ -18963,7 +19197,10 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 3.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Kemijsko-tehnološki fakultet u Splitu, Sveučilište u Splitu), čitano izravno.",
@@ -19253,7 +19490,10 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Medicinski fakultet u Splitu, Sveučilište u Splitu), čitano izravno.",
@@ -19354,7 +19594,10 @@
         "right": 2,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Fakultet elektrotehnike, racunarstva i informacijskih tehnologija Osijek, Sveučilište Josipa Jurja Strossmayera u Osijeku), čitano izravno. Citat IEEE iz Uputa (brojčano [1] uglate zagrade). Validacija podatkovno blokirana: FERIT (etfos) objavljuje samo produzeni sažetak, puni rad embargiran.",
@@ -19456,7 +19699,10 @@
         "right": 2,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Fakultet elektrotehnike, racunarstva i informacijskih tehnologija Osijek, Sveučilište Josipa Jurja Strossmayera u Osijeku), čitano izravno. Citat IEEE iz Uputa. Field-sampled 4 stvarna javna diplomska rada iz FERIT repozitorija (repozitorij.etfos.hr).",
@@ -19566,7 +19812,10 @@
         "right": 2,
         "bottom": 2,
         "left": 2.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Građevinski i arhitektonski fakultet Osijek, Sveučilište Josipa Jurja Strossmayera u Osijeku), čitano izravno. Citat IEEE iz Smjernica 2022 (numerira arapskim brojevima u uglatim zagradama). Validacija blokirana: GFOS repozitorij nema otvorenih radova (embargo).",
@@ -19621,7 +19870,10 @@
         "right": 2,
         "bottom": 2,
         "left": 2.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Građevinski i arhitektonski fakultet Osijek, Sveučilište Josipa Jurja Strossmayera u Osijeku), čitano izravno. Citat IEEE iz Smjernica 2022. Validacija blokirana: GFOS nema otvorenih radova (embargo).",
@@ -19676,7 +19928,10 @@
         "right": 2,
         "bottom": 2.5,
         "left": 3
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Prehrambeno-tehnološki fakultet Osijek, Sveučilište Josipa Jurja Strossmayera u Osijeku), čitano izravno. Citat autor-godina/Harvard iz Uputa 2020 ('uz prezime autora godina u zagradi', abecedni popis). Field-sampled 3 rada.",
@@ -19773,7 +20028,10 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Ekonomski fakultet u Osijeku, Sveučilište Josipa Jurja Strossmayera u Osijeku), čitano izravno. Citatni stil (Harvard) preuzet iz službenih Uputa za pisanje studentskih radova (EFOS, 2023, imperativ 'koristiti harvardski stil'). Field-sampled 1 stvarnim javnim završnim radom (vecina EFOS radova restrictedAccess). Citat Harvard iz Uputa 2023 (imperativ). Field-sampled 1 rad; vecina EFOS radova restrictedAccess (embargo).",
@@ -19876,7 +20134,12 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 30,
+      "pageMax": 50
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Ekonomski fakultet u Osijeku, Sveučilište Josipa Jurja Strossmayera u Osijeku), čitano izravno. Citatni stil (Harvard) preuzet iz službenih Uputa (EFOS, 2023). Terenska validacija podatkovno blokirana: EFOS repozitorij nema otvorenih diplomskih radova (svi restrictedAccess/embargo). Citat Harvard iz Uputa 2023. Validacija podatkovno blokirana: EFOS repozitorij nema otvorenih diplomskih (embargo).",
@@ -19980,7 +20243,11 @@
         "right": 2,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 20
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Pravni fakultet Osijek, Sveučilište Josipa Jurja Strossmayera u Osijeku), čitano izravno. Field-sampled 3 stvarna javna rada iz Pravnog fakulteta Osijek. Citatni stil nije imenovan u Uputama (biljeske/fusnote spominju se opisno) pa ostaje neodredjen (posten strop). Field-sampled 3 rada. Citatni stil nije imenovan u Uputama pa ostaje neodredjen.",
@@ -20076,7 +20343,11 @@
         "right": 2,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 20
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Pravni fakultet Osijek, Sveučilište Josipa Jurja Strossmayera u Osijeku), čitano izravno. Field-sampled 3 stvarna javna diplomska rada iz Pravnog fakulteta Osijek. Citatni stil nije imenovan u Uputama pa ostaje neodredjen. Field-sampled 3 rada. Citatni stil nije imenovan u Uputama.",
@@ -20172,7 +20443,12 @@
         "right": 2,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 15,
+      "pageMax": 20
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Filozofski fakultet Osijek, Sveučilište Josipa Jurja Strossmayera u Osijeku), čitano izravno. Field-sampled 3 stvarna javna završna rada iz FFOS repozitorija. Citatni stil NIJE fiksiran: Pravilnik propisuje 'stil citiranja u struci, odnosno prema uputama mentora' (bez imenovanog stila) pa ostaje neodredjen (posten strop, ne izmišljam stil). Field-sampled 3 rada. Citatni stil NEODREDJEN: Pravilnik deferira na 'stil u struci / prema uputama mentora' (bez imenovanog stila).",
@@ -20268,7 +20544,12 @@
         "right": 2,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 30,
+      "pageMax": 50
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Filozofski fakultet Osijek, Sveučilište Josipa Jurja Strossmayera u Osijeku), čitano izravno. Field-sampled 3 stvarna javna diplomska rada iz FFOS repozitorija. Citatni stil nije imenovan u izvoru (Pravilnik deferira na struku/mentora) pa ostaje neodredjen. Field-sampled 3 rada. Citatni stil neodredjen (Pravilnik deferira na struku/mentora).",
@@ -20366,7 +20647,11 @@
         "bottom": 2.5,
         "left": 3
       },
-      "recommendedCitation": "apa7"
+      "recommendedCitation": "apa7",
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 20
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Fakultet agrobiotehnickih znanosti Osijek, Sveučilište Josipa Jurja Strossmayera u Osijeku), čitano izravno.",
@@ -20470,7 +20755,11 @@
         "bottom": 2.5,
         "left": 3
       },
-      "recommendedCitation": "apa7"
+      "recommendedCitation": "apa7",
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 30
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Fakultet agrobiotehnickih znanosti Osijek, Sveučilište Josipa Jurja Strossmayera u Osijeku), čitano izravno.",
@@ -20574,7 +20863,10 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Medicinski fakultet Osijek, Sveučilište Josipa Jurja Strossmayera u Osijeku), čitano izravno. Citat Vancouver iz Uputa 2025 ('Vancouverskim stilom, prema redoslijedu pojavljivanja'). Field-sampled 3 rada.",
@@ -20672,7 +20964,10 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Medicinski fakultet Osijek, Sveučilište Josipa Jurja Strossmayera u Osijeku), čitano izravno. Citat Vancouver iz Uputa 2025. Field-sampled 3 rada.",
@@ -20769,7 +21064,10 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Odjel za kemiju, Sveučilište u Osijeku, Sveučilište Josipa Jurja Strossmayera u Osijeku), čitano izravno. Citat numericki/IEEE iz Uputa 2024 (brojevi u uglatim zagradama [1], po redoslijedu). Field-sampled 3 rada.",
@@ -20865,7 +21163,10 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Odjel za kemiju, Sveučilište u Osijeku, Sveučilište Josipa Jurja Strossmayera u Osijeku), čitano izravno. Citat numericki/IEEE iz Uputa 2024. Field-sampled 3 rada.",
@@ -20961,7 +21262,10 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Sveučilište u Zadru, Sveučilište u Zadru), čitano izravno. Citat CUSTOM byte-verificirano: Upute nude DVA sustava (Harvardski ILI europski fusnotni) uz izbor 'u dogovoru s mentorom' pa se stil ne pina. Field-sampled 3 rada (2026-07-04).",
@@ -21058,7 +21362,11 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 70
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Sveučilište u Zadru, Sveučilište u Zadru), čitano izravno. Citat CUSTOM byte-verificirano: Upute nude DVA sustava (Harvardski ILI europski fusnotni) uz izbor 'u dogovoru s mentorom' pa se stil ne pina. Field-sampled 3 rada (2026-07-04).",
@@ -21156,7 +21464,12 @@
         "bottom": 2.5,
         "left": 3
       },
-      "recommendedCitation": "apa7"
+      "recommendedCitation": "apa7",
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 20,
+      "pageMax": 30
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Sveučilište u Zadru, Sveučilište u Zadru), čitano izravno.",
@@ -21360,7 +21673,10 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 3.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Sveučilište u Zadru, Sveučilište u Zadru), čitano izravno.",
@@ -21467,7 +21783,11 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 25
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Fakultet ekonomije i turizma Dr. Mijo Mirkovic, Pula, Sveučilište Jurja Dobrile u Puli), čitano izravno.",
@@ -21576,7 +21896,11 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 60
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Fakultet ekonomije i turizma Dr. Mijo Mirkovic, Pula, Sveučilište Jurja Dobrile u Puli), čitano izravno.",
@@ -21679,7 +22003,11 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 35
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Tehnički fakultet u Puli, Sveučilište Jurja Dobrile u Puli), čitano izravno.",
@@ -21782,7 +22110,11 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 60
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Tehnički fakultet u Puli, Sveučilište Jurja Dobrile u Puli), čitano izravno.",
@@ -21870,7 +22202,11 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 30
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Fakultet za odgojne i obrazovne znanosti, Pula, Sveučilište Jurja Dobrile u Puli), čitano izravno.",
@@ -21975,7 +22311,11 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 50
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Fakultet za odgojne i obrazovne znanosti, Pula, Sveučilište Jurja Dobrile u Puli), čitano izravno.",
@@ -22132,7 +22472,10 @@
         "bottom": 2.5,
         "left": 2.5
       },
-      "recommendedCitation": "harvard"
+      "recommendedCitation": "harvard",
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Sveučilište u Dubrovniku, Sveučilište u Dubrovniku), čitano izravno.",
@@ -22224,7 +22567,10 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Sveučilište u Dubrovniku, Sveučilište u Dubrovniku), čitano izravno.",
@@ -22320,7 +22666,10 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Sveučilište u Dubrovniku, Sveučilište u Dubrovniku), čitano izravno.",
@@ -22418,7 +22767,10 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 3
-      }
+      },
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Sveučilište u Dubrovniku, Sveučilište u Dubrovniku), čitano izravno. Citatni stil (fusnotni -> chicago-notes) preuzet iz službenog Naputka. Terenska validacija podatkovno blokirana: repozitorij.unidu.hr nema atribuiranih otvorenih radova Odjela za umjetnost i restauraciju.",
@@ -22469,7 +22821,12 @@
         "left": 2.5
       },
       "recommendedCitation": "vancouver",
-      "checkFont": false
+      "checkFont": false,
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 15,
+      "pageMax": 50
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Medicinski fakultet u Rijeci), čitano izravno.",
@@ -22577,7 +22934,10 @@
         "bottom": 2.5,
         "left": 2.5
       },
-      "recommendedCitation": "vancouver"
+      "recommendedCitation": "vancouver",
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Fakultet zdravstvenih studija u Rijeci), čitano izravno.",
@@ -22698,7 +23058,10 @@
         "bottom": 2.5,
         "left": 2.5
       },
-      "recommendedCitation": "vancouver"
+      "recommendedCitation": "vancouver",
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Fakultet zdravstvenih studija u Rijeci), čitano izravno.",
@@ -22990,7 +23353,12 @@
         12
       ],
       "spacing": 1.5,
-      "requireA4": true
+      "requireA4": true,
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 15,
+      "pageMax": 30
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Fakultet za fiziku u Rijeci), čitano izravno.",
@@ -23030,7 +23398,11 @@
         12
       ],
       "spacing": 1.5,
-      "requireA4": true
+      "requireA4": true,
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 30
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Fakultet za fiziku u Rijeci), čitano izravno.",
@@ -23077,7 +23449,10 @@
       "justify": true,
       "requireA4": true,
       "checkMargins": false,
-      "recommendedCitation": "harvard"
+      "recommendedCitation": "harvard",
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Učiteljski fakultet u Rijeci), čitano izravno.",
@@ -24322,7 +24697,11 @@
       "footnoteSize": [
         10
       ],
-      "recommendedCitation": "harvard"
+      "recommendedCitation": "harvard",
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 30
     },
     "facts": [],
     "note": "Tehničko uređenje iz Uputa za formalni izgled rada (aktualna verzija 2025-11; TNR 12, prored 1,5, obostrano, margine 30 mm gore/dolje/lijevo i 20 mm desno, A4). Citiranje: autor-godina u zagradama u tekstu ('Izvori citata ili parafraza u samom tekstu navode se u zagradi, npr. (Dujanic, 2020, 55)'), fusnote izričito samo objasnidbene, stil neimenovan -> harvard. Opseg po Pravilniku 4.3.2025 čl. 13 (min 30/40 str.).",
@@ -24446,7 +24825,11 @@
       "footnoteSize": [
         10
       ],
-      "recommendedCitation": "harvard"
+      "recommendedCitation": "harvard",
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 40
     },
     "facts": [],
     "note": "Tehničko uređenje iz Uputa za formalni izgled rada (aktualna verzija 2025-11; TNR 12, prored 1,5, obostrano, margine 30 mm gore/dolje/lijevo i 20 mm desno, A4). Citiranje: autor-godina u zagradama u tekstu ('Izvori citata ili parafraza u samom tekstu navode se u zagradi, npr. (Dujanic, 2020, 55)'), fusnote izričito samo objasnidbene, stil neimenovan -> harvard. Opseg po Pravilniku 4.3.2025 čl. 13 (min 30/40 str.).",
@@ -24565,7 +24948,10 @@
         "bottom": 2.5,
         "left": 3
       },
-      "recommendedCitation": "vancouver"
+      "recommendedCitation": "vancouver",
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Veleučilište u Bjelovaru, Veleučilište u Bjelovaru), čitano izravno.",
@@ -24623,7 +25009,11 @@
       "footnoteSize": [
         10
       ],
-      "recommendedCitation": "vancouver"
+      "recommendedCitation": "vancouver",
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 30
     },
     "facts": [],
     "note": "Pravilnik 19.9.2024 čl. 10 st. 2 cini Prilog 2 obvezujucim. Tehnički predložak: A4, margine 2,5 cm, TNR 12 (fusnote 10), prored 1,5, obostrano. Citiranje: 'Literatura se navodi vancouverskim stilom citiranja' (uglata zagrada) -> vancouver. Zamjenjuje stariju tipografiju (margine 3 cm) iz starog Priloga 3.",
@@ -24730,7 +25120,10 @@
         "bottom": 2.5,
         "left": 3
       },
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "ieee",
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Veleučilište Velika Gorica, Veleučilište Velika Gorica), čitano izravno.",
@@ -24824,7 +25217,10 @@
         "bottom": 2.5,
         "left": 3
       },
-      "recommendedCitation": "ieee"
+      "recommendedCitation": "ieee",
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Veleučilište Velika Gorica, Veleučilište Velika Gorica), čitano izravno.",
@@ -24925,7 +25321,10 @@
         "bottom": 2.5,
         "left": 2.5
       },
-      "recommendedCitation": "harvard"
+      "recommendedCitation": "harvard",
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Prilog 4 Upute (isti dokument za završni i diplomski): A4, sve margine 25 mm, TNR 12 (poglavlja 14 bold), prored 1,5, obostrano. Citiranje: 'u zagradi se upisuje prezime autora, godina izdanja izvora' (autor-godina, neimenovan) -> harvard; fusnote samo za pojasnjenja i pravne propise.",
@@ -25038,7 +25437,12 @@
       },
       "footnoteSize": [
         10
-      ]
+      ],
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 20,
+      "pageMax": 35
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Veleučilište u Virovitici), čitano izravno.",
@@ -25145,7 +25549,12 @@
       },
       "footnoteSize": [
         10
-      ]
+      ],
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 35,
+      "pageMax": 60
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Veleučilište u Virovitici), čitano izravno.",
@@ -25249,7 +25658,11 @@
         "bottom": 2.5,
         "left": 2.5
       },
-      "minReferences": 15
+      "minReferences": 15,
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 20
     },
     "facts": [],
     "note": "Upute 2024 (pokrivaju završni i diplomski): A4, TNR 12, prored 1,5, margine 2,5 cm, obostrano bez uvlačenja prvog retka, najmanje 15 bibliografskih jedinica, opseg 20-50 str. Citiranje NIJE pinano: 'literaturni izvori navodit ce se prema najnovijoj verziji APA, Vancouverskog i Harvardskog stila' = tri stila na izbor (razliciti modovi) - posten strop.",
@@ -25506,6 +25919,23 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 3
+      },
+      "headingRules": {
+        "numberRequired": true,
+        "maxLevel": 3,
+        "levels": {
+          "1": {
+            "uppercase": true,
+            "bold": true
+          },
+          "2": {
+            "bold": true
+          },
+          "3": {
+            "bold": true,
+            "italic": true
+          }
+        }
       }
     },
     "facts": [],
@@ -25612,6 +26042,23 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 3
+      },
+      "headingRules": {
+        "numberRequired": true,
+        "maxLevel": 3,
+        "levels": {
+          "1": {
+            "uppercase": true,
+            "bold": true
+          },
+          "2": {
+            "bold": true
+          },
+          "3": {
+            "bold": true,
+            "italic": true
+          }
+        }
       }
     },
     "facts": [],
@@ -25716,7 +26163,10 @@
         "bottom": 2.5,
         "left": 2.5
       },
-      "recommendedCitation": "harvard"
+      "recommendedCitation": "harvard",
+      "footnoteSize": [
+        10
+      ]
     },
     "facts": [],
     "note": "Fakultetska tipografija (FFRI Pravilnik 2023: Times New Roman 12, prored 1,5, margine 2,5 cm, obostrano) uz odsjecki citatni stil: autor-godina u tekstu, (Familienname Jahr: Seite), bez fusnota (Leitfaden 2018). Odsjecke upute citane izravno.",
@@ -25828,7 +26278,10 @@
         "bottom": 2.5,
         "left": 2.5
       },
-      "recommendedCitation": "harvard"
+      "recommendedCitation": "harvard",
+      "footnoteSize": [
+        10
+      ]
     },
     "facts": [],
     "note": "Fakultetska tipografija (FFRI Pravilnik 2023: Times New Roman 12, prored 1,5, margine 2,5 cm, obostrano) uz odsjecki citatni stil: autor-godina u tekstu (Leitfaden 2018). Odsjecke upute citane izravno.",
@@ -26049,7 +26502,10 @@
         "bottom": 2.5,
         "left": 2.5
       },
-      "recommendedCitation": "chicago-notes"
+      "recommendedCitation": "chicago-notes",
+      "footnoteSize": [
+        10
+      ]
     },
     "facts": [],
     "note": "Fakultetska tipografija (FFRI Pravilnik 2023: Times New Roman 12, prored 1,5, margine 2,5 cm, obostrano) uz odsjecki citatni stil: fusnote/podrubne bilješke, numerički slijed (odsječke Upute). Odsjecke upute citane izravno.",
@@ -26159,7 +26615,10 @@
         "bottom": 2.5,
         "left": 2.5
       },
-      "recommendedCitation": "chicago-notes"
+      "recommendedCitation": "chicago-notes",
+      "footnoteSize": [
+        10
+      ]
     },
     "facts": [],
     "note": "Fakultetska tipografija (FFRI Pravilnik 2023: Times New Roman 12, prored 1,5, margine 2,5 cm, obostrano) uz odsjecki citatni stil: fusnote/podrubne bilješke, numerički slijed (odsječke Upute). Odsjecke upute citane izravno.",
@@ -26269,7 +26728,10 @@
         "bottom": 2.5,
         "left": 2.5
       },
-      "recommendedCitation": "harvard"
+      "recommendedCitation": "harvard",
+      "footnoteSize": [
+        10
+      ]
     },
     "facts": [],
     "note": "Fakultetska tipografija (FFRI Pravilnik 2023: Times New Roman 12, prored 1,5, margine 2,5 cm, obostrano) uz odsjecki citatni stil: iskljucivo unutartekstne citatnice, prezime-godina (Upute 2021). Odsjecke upute citane izravno.",
@@ -26378,7 +26840,12 @@
         "bottom": 3,
         "left": 3
       },
-      "recommendedCitation": "harvard"
+      "recommendedCitation": "harvard",
+      "spacing": 1.5,
+      "footnoteSize": [
+        10
+      ],
+      "footnoteSpacing": 1
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Fakultet prirodnih znanosti u Puli, studij Znanost o moru), čitano izravno. Times New Roman 12, margine gore 3,5 / dolje 3,0 / lijevo 3,0 / desno 2,5 cm, autor-godina citiranje. Prored nije brojčano propisan pa se ne boduje.",
@@ -26481,7 +26948,12 @@
         "bottom": 3,
         "left": 3
       },
-      "recommendedCitation": "harvard"
+      "recommendedCitation": "harvard",
+      "spacing": 1.5,
+      "footnoteSize": [
+        10
+      ],
+      "footnoteSpacing": 1
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog izvora (Fakultet prirodnih znanosti u Puli, studij Znanost o moru), čitano izravno. Times New Roman 12, margine gore 3,5 / dolje 3,0 / lijevo 3,0 / desno 2,5 cm, autor-godina citiranje. Prored nije brojčano propisan pa se ne boduje.",
@@ -26587,7 +27059,8 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "requirePageNumbers": true
     },
     "facts": [],
     "note": "Filozofski fakultet u Splitu u javnim službenim izvorima NE propisuje strojno-provjerljivo oblikovanje: font, margine i prored delegirani su na predložak (Upute ga cak ne linkaju), a opseg 'Pravilnikom nije propisan'. Prikazana format-pravila su OPĆI hrvatski akademski baseline, NISU fakultetski propis; koristi službeni predložak. Citatni stil je CUSTOM: Pravilnik 2024 (Čl.9) nudi više stilova (APA, MLA, Chicago, Harvard 'ovisno o polju'), Upute izbor prepustaju mentoru.",
@@ -26691,7 +27164,8 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "requirePageNumbers": true
     },
     "facts": [],
     "note": "Filozofski fakultet u Splitu u javnim službenim izvorima NE propisuje strojno-provjerljivo oblikovanje: font, margine i prored delegirani su na predložak (Upute ga cak ne linkaju), a opseg 'Pravilnikom nije propisan'. Prikazana format-pravila su OPĆI hrvatski akademski baseline, NISU fakultetski propis; koristi službeni predložak. Citatni stil je CUSTOM: Pravilnik 2024 (Čl.9) nudi više stilova (APA, MLA, Chicago, Harvard 'ovisno o polju'), Upute izbor prepustaju mentoru.",
@@ -26795,7 +27269,9 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "requirePageNumbers": true,
+      "recommendedCitation": "custom"
     },
     "facts": [],
     "note": "FESB u javnim službenim pravilnicima (završni 2019, diplomski 2013) NE propisuje ni citatni stil ni oblikovanje (oba su cisto proceduralna; konkretno oblikovanje je u neobjavljenom 'obrascu za pisanje rada', Čl.17). Prikazana format-pravila su OPĆI baseline, NISU fakultetski propis. Citatni stil CUSTOM (IEEE bi bio tipican ali nije u nijednom službenom FESB dokumentu). Validacija podatkovno blokirana: repozitorij nema otvorenih završnih radova (embargo).",
@@ -26850,7 +27326,9 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "requirePageNumbers": true,
+      "recommendedCitation": "custom"
     },
     "facts": [],
     "note": "FESB u javnim službenim pravilnicima (završni 2019, diplomski 2013) NE propisuje ni citatni stil ni oblikovanje (oba su cisto proceduralna; konkretno oblikovanje je u neobjavljenom 'obrascu za pisanje rada', Čl.17). Prikazana format-pravila su OPĆI baseline, NISU fakultetski propis. Citatni stil CUSTOM (IEEE bi bio tipican ali nije u nijednom službenom FESB dokumentu).",
@@ -27416,7 +27894,8 @@
         "bottom": 2.5,
         "left": 2.5
       },
-      "recommendedCitation": "apa7"
+      "recommendedCitation": "apa7",
+      "justify": true
     },
     "facts": [],
     "note": "Fakultetska tipografija (FFOS: Times New Roman 12, prored 1,5, margine 2,5/2/2,5/2,5 cm) uz odsjecki citatni stil: APA standard obvezan ('Formalno uređenje teksta treba biti sukladno APA standardima'); izvor formalno navodi 6. izdanje, mod je isti autor-godina pa je kanonski token apa7. Odsjecke upute citane izravno.",
@@ -28513,7 +28992,8 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 3
-      }
+      },
+      "requirePageNumbers": true
     },
     "facts": [],
     "note": "Pravilnik o završnom radu (8.9.2023): A4, margine 3 cm lijevo te 2,5 cm desno/gore/dolje, poravnanje po objema marginama, TNR ili Arial 12 (odabrani font kroz cijeli tekst), prored 1,5. Citiranje: 'navodi se prezime autora i godina' + Harvard Educational Review stil (Zotero) -> harvard.",
@@ -28623,7 +29103,8 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 3
-      }
+      },
+      "requirePageNumbers": true
     },
     "facts": [],
     "note": "Pravilnik o diplomskom radu (6.10.2023): A4, margine 3 cm lijevo te 2,5 cm desno/gore/dolje, poravnanje po objema marginama, TNR ili Arial 12 (odabrani font kroz cijeli tekst), prored 1,5. Citiranje: 'navodi se prezime autora i godina' + Harvard Educational Review stil (Zotero) -> harvard.",
@@ -28730,7 +29211,8 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "requirePageNumbers": true
     },
     "facts": [],
     "note": "Upute 2023: 'Format: A4 (210x297 mm), tekst s 1,5 proredom, veličina slova 12 pt, pisano u Times New Roman, margine sa svih strana od 2,5 cm'. Citatni stil NIJE pinan: novije Upute daju autor-godina primjere bez imena stila, a starije Opće upute propisuju CROSBI/HZB format; kontradikcija bez imenovanog stila = bez pina (posten strop).",
@@ -30179,7 +30661,10 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "footnoteSize": [
+        10
+      ]
     },
     "facts": [],
     "note": "Format iz odjelnih Uputa (byte-level): TNR 12, prored 1,5, margine 2,5, justify, A4. Citat CUSTOM: odjel propisuje vlastiti hibridni sustav (fusnote s 'Kombol, 1961: 72') koji nije imenovani standard.",
@@ -30276,7 +30761,10 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "footnoteSize": [
+        10
+      ]
     },
     "facts": [],
     "note": "Format iz odjelnih Uputa (byte-level): TNR 12, prored 1,5, margine 2,5, justify, A4. Citat CUSTOM: odjel propisuje vlastiti hibridni sustav (fusnote s 'Kombol, 1961: 72') koji nije imenovani standard.",
@@ -30748,7 +31236,10 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "footnoteSize": [
+        10
+      ]
     },
     "facts": [],
     "note": "Odjelni Pravilnik s brojkama pokriva DIPLOMSKI rad; za završni nema javne brojcane upute. Citat custom (Pravilnik ne imenuje standard). Format-pravila su OPĆI hrvatski akademski baseline, NISU odjelni propis (odjel ne objavljuje javnu uputu o oblikovanju); koristi upute mentora/odjela.",
@@ -30843,7 +31334,10 @@
         "right": 3,
         "bottom": 3,
         "left": 3
-      }
+      },
+      "footnoteSize": [
+        10
+      ]
     },
     "facts": [],
     "note": "Format iz Pravilnika 2017 (byte-level): TNR 12, prored 1,5, sve margine 3 cm, A4. Citat CUSTOM: Pravilnik ne mandira imenovani standard.",
@@ -30938,7 +31432,8 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "justify": true
     },
     "facts": [],
     "note": "Format iz odjelnih Uputa (byte-level): TNR 12, prored 1,5, margine 2,5, A4. Citat CUSTOM: upute ne mandiraju jedan imenovani standard.",
@@ -31121,7 +31616,11 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "footnoteSize": [
+        10
+      ],
+      "footnoteSpacing": 1.5
     },
     "facts": [],
     "note": "Odjelne Upute s brojkama pokrivaju DIPLOMSKI rad; za završni nema javne brojcane upute. Citat custom (fusnotni sustav bez imenovanog standarda). Format-pravila su OPĆI hrvatski akademski baseline, NISU odjelni propis (odjel ne objavljuje javnu uputu o oblikovanju); koristi upute mentora/odjela.",
@@ -31213,7 +31712,11 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 3.5
-      }
+      },
+      "footnoteSize": [
+        10
+      ],
+      "footnoteSpacing": 1.5
     },
     "facts": [],
     "note": "Format iz Uputa 2012 (byte-level): veličina 12 (bilješke 10), DVOSTRUKI prored (2,0), margine 2,5 uz lijevu 3,5, A4; vrsta fonta nije propisana. Citat CUSTOM: fusnotni sustav bez imenovanog standarda.",
@@ -31502,7 +32005,11 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "footnoteSize": [
+        10
+      ],
+      "footnoteSpacing": 1
     },
     "facts": [],
     "note": "Odjelni javni dokumenti su administrativni (prijava teme/mentorstvo) i NE propisuju oblikovanje ni citatni stil (byte-level provjereno). Format-pravila su OPĆI hrvatski akademski baseline, NISU odjelni propis (odjel ne objavljuje javnu uputu o oblikovanju); koristi upute mentora/odjela.",
@@ -32779,7 +33286,8 @@
       "checkSize": false,
       "checkSpacing": false,
       "checkMargins": false,
-      "checkJustify": false
+      "checkJustify": false,
+      "pageMin": 50
     },
     "note": "Predlozak za ocjenske radove (FEPR, vrijedi za seminarski/zavrsni/diplomski): IEEE sustav referenciranja obvezan -> ieee. Tipografija nije prozno propisana (Word predložak) pa se ne boduje (posten strop bez teh. pravila).",
     "sources": [
@@ -33734,7 +34242,8 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "justify": true
     },
     "facts": [],
     "note": "Citat APA MANDIRAN: Uputa 2025 doslovno 'propisano je korištenje... APA stila' (byte-level verificirano). Format: TNR 12, prored 1,5, margine 2,5. Opseg: završni min 45.000, diplomski min 72.000 znakova (Uvod-Zaključak).",
@@ -33830,7 +34339,8 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "justify": true
     },
     "facts": [],
     "note": "Citat APA MANDIRAN: Uputa 2025 doslovno 'propisano je korištenje... APA stila' (byte-level verificirano). Format: TNR 12, prored 1,5, margine 2,5. Opseg: završni min 45.000, diplomski min 72.000 znakova (Uvod-Zaključak).",
@@ -33926,7 +34436,9 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 3
-      }
+      },
+      "justify": true,
+      "requirePageNumbers": true
     },
     "facts": [],
     "note": "Citat AUTOR-GODINA mod mandiran: Smjernice propisuju primjere '(Andersson i Georges, 2004)', '(Konjaci i sur., 2021)' + abecedni popis (byte-level verificirano); stil nije imenovan pa je token harvard = autor-godina mod (pravilo: pina se mandirani MOD). Format: TNR 12, prored 1,5, lijeva margina 3,0, ostale 2,5.",
@@ -34022,7 +34534,9 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 3
-      }
+      },
+      "justify": true,
+      "requirePageNumbers": true
     },
     "facts": [],
     "note": "Citat AUTOR-GODINA mod mandiran: Smjernice propisuju primjere '(Andersson i Georges, 2004)', '(Konjaci i sur., 2021)' + abecedni popis (byte-level verificirano); stil nije imenovan pa je token harvard = autor-godina mod (pravilo: pina se mandirani MOD). Format: TNR 12, prored 1,5, lijeva margina 3,0, ostale 2,5.",
@@ -34112,7 +34626,11 @@
       ],
       "spacing": 1.5,
       "requireA4": true,
-      "justify": true
+      "justify": true,
+      "footnoteSize": [
+        10
+      ],
+      "requirePageNumbers": true
     },
     "facts": [],
     "note": "Format iz Pravilnika ASP-P/033 Čl.6 (byte-level): TNR, A4, prored 1,5, font 12 (naslovi 14, fusnote 10), obostrano poravnanje, 30-50 stranica; margine 'standardne' (bez brojke). Citat CUSTOM: nacini citiranja delegirani na pravilnik ASP-P/070 i Uputu za pisanje i citiranje koji NISU javno dostupni pa se stil ne pina. Validacija podatkovno blokirana: repozitorij.aspira.hr je 100% restrictedAccess (0 otvorenih od 510 radova).",
@@ -34157,7 +34675,11 @@
       ],
       "spacing": 1.5,
       "requireA4": true,
-      "justify": true
+      "justify": true,
+      "footnoteSize": [
+        10
+      ],
+      "requirePageNumbers": true
     },
     "facts": [],
     "note": "Format iz Pravilnika ASP-P/033 Čl.6 (byte-level): TNR, A4, prored 1,5, font 12 (naslovi 14, fusnote 10), obostrano poravnanje, 30-50 stranica; margine 'standardne' (bez brojke). Citat CUSTOM: nacini citiranja delegirani na pravilnik ASP-P/070 i Uputu za pisanje i citiranje koji NISU javno dostupni pa se stil ne pina. Validacija podatkovno blokirana: repozitorij.aspira.hr je 100% restrictedAccess (0 otvorenih od 510 radova).",
@@ -34319,7 +34841,8 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "requirePageNumbers": true
     },
     "facts": [],
     "note": "Institucija ne objavljuje javnu uputu o oblikovanju/citiranju (provjereno na vss.hr) pa je citat custom. Format-pravila su OPĆI hrvatski akademski baseline, NISU institucijski propis (institucija ne objavljuje javnu uputu o oblikovanju); koristi upute mentora.",
@@ -34395,7 +34918,8 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "requirePageNumbers": true
     },
     "facts": [],
     "note": "Institucija ne objavljuje javnu uputu o oblikovanju/citiranju (provjereno na vss.hr) pa je citat custom. Format-pravila su OPĆI hrvatski akademski baseline, NISU institucijski propis (institucija ne objavljuje javnu uputu o oblikovanju); koristi upute mentora.",
@@ -36421,7 +36945,8 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 4
-      }
+      },
+      "requirePageNumbers": true
     },
     "facts": [
       "Naslovi poglavlja: veličina 14 pt.",
@@ -36603,7 +37128,9 @@
       "checkSize": false,
       "checkSpacing": false,
       "checkMargins": false,
-      "checkJustify": false
+      "checkJustify": false,
+      "pageMin": 40,
+      "pageMax": 50
     },
     "facts": [],
     "note": "Odsjek produkcije ADU ima Pravilnik odsjeka (2017): diplomski je produkcijski projekt uz teorijski pisani rad, a za pisanje se poziva na sveučilišna pravila pisanja diplomskih radova bez vlastite propisane tipografije. Tipografija se ne nameće; citatni stil je prema uputama mentora (custom). Uzorci su 3 stvarna javna diplomska rada odsjeka iz repozitorija ADU (Dabar), A4 preflight.",
@@ -36873,7 +37400,12 @@
       "checkSize": false,
       "checkSpacing": false,
       "checkMargins": false,
-      "checkJustify": false
+      "checkJustify": false,
+      "size": [
+        12
+      ],
+      "pageMin": 5,
+      "pageMax": 15
     },
     "facts": [
       "Pisano obrazloženje: 5 do 15 kartica teksta, veličina slova 12 točaka, klasični prored, tvrdi uvez (čl. 32).",
@@ -36965,7 +37497,13 @@
       "checkSize": false,
       "checkSpacing": false,
       "checkMargins": false,
-      "checkJustify": false
+      "checkJustify": false,
+      "size": [
+        12
+      ],
+      "requireA4": true,
+      "pageMin": 10,
+      "pageMax": 20
     },
     "facts": [
       "Pisano obrazloženje likovnog koncepta: 10 do 20 kartica teksta, veličina slova 12 točaka, klasični prored (čl. 39).",
@@ -37057,7 +37595,9 @@
       "checkSize": false,
       "checkSpacing": false,
       "checkMargins": false,
-      "checkJustify": false
+      "checkJustify": false,
+      "pageMin": 15,
+      "pageMax": 25
     },
     "facts": [
       "Pisano obrazloženje: 15 do 25 kartica teksta uz slikovni materijal (čl. 50).",
@@ -37332,7 +37872,26 @@
       "checkSize": false,
       "checkSpacing": false,
       "checkMargins": false,
-      "checkJustify": false
+      "checkJustify": false,
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "requireA4": true,
+      "justify": true,
+      "footnoteSize": [
+        10
+      ],
+      "footnoteSpacing": 1
     },
     "facts": [
       "Diplomski rad ima praktični dio (uključuje pisanu dokumentaciju konzervatorsko-restauratorskog rada) i teorijski dio (čl. 92).",
@@ -37475,7 +38034,8 @@
             "bibliography"
           ]
         }
-      ]
+      ],
+      "justify": true
     },
     "facts": [
       "Font Arial, veličina 12 pt, prored 1,5, margine 2,5 cm sa svih strana, tekst obostrano poravnat (imperativ, jedinstvene Upute TTF).",
@@ -37623,7 +38183,8 @@
             "bibliography"
           ]
         }
-      ]
+      ],
+      "justify": true
     },
     "facts": [
       "Font Arial, veličina 12 pt, prored 1,5, margine 2,5 cm sa svih strana, tekst obostrano poravnat (imperativ, jedinstvene Upute TTF).",
@@ -38237,7 +38798,64 @@
       "size": [
         12
       ],
-      "requireA4": true
+      "requireA4": true,
+      "requirePageNumbers": true,
+      "requiredSections": [
+        {
+          "key": "declaration",
+          "label": "izjava o izvornosti",
+          "terms": [
+            "izjava o izvornosti"
+          ]
+        },
+        {
+          "key": "abstract",
+          "label": "sazetak",
+          "terms": [
+            "sažetak",
+            "sazetak"
+          ]
+        },
+        {
+          "key": "keywords",
+          "label": "kljucne rijeci",
+          "terms": [
+            "ključne riječi",
+            "kljucne rijeci"
+          ]
+        },
+        {
+          "key": "toc",
+          "label": "sadrzaj",
+          "terms": [
+            "sadržaj",
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zakljucak",
+          "terms": [
+            "zaključak",
+            "zakljucak"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "popis literature",
+          "terms": [
+            "literatura",
+            "popis literature"
+          ]
+        }
+      ]
     },
     "facts": [],
     "note": "Format iz obaveznog FOI predloska (Pravilnik cl.10 st.2); obvezni dijelovi iz Pravilnika cl.10 st.1. Margine/prored/stil citiranja advisory.",
@@ -38290,7 +38908,64 @@
       "size": [
         12
       ],
-      "requireA4": true
+      "requireA4": true,
+      "requirePageNumbers": true,
+      "requiredSections": [
+        {
+          "key": "declaration",
+          "label": "izjava o izvornosti",
+          "terms": [
+            "izjava o izvornosti"
+          ]
+        },
+        {
+          "key": "abstract",
+          "label": "sazetak",
+          "terms": [
+            "sažetak",
+            "sazetak"
+          ]
+        },
+        {
+          "key": "keywords",
+          "label": "kljucne rijeci",
+          "terms": [
+            "ključne riječi",
+            "kljucne rijeci"
+          ]
+        },
+        {
+          "key": "toc",
+          "label": "sadrzaj",
+          "terms": [
+            "sadržaj",
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zakljucak",
+          "terms": [
+            "zaključak",
+            "zakljucak"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "popis literature",
+          "terms": [
+            "literatura",
+            "popis literature"
+          ]
+        }
+      ]
     },
     "facts": [],
     "note": "Format iz obaveznog FOI predloska (Pravilnik cl.10 st.2); obvezni dijelovi iz Pravilnika cl.10 st.1. Margine/prored/stil citiranja advisory.",
@@ -38344,7 +39019,60 @@
         12
       ],
       "spacing": 1,
-      "requireA4": true
+      "requireA4": true,
+      "requirePageNumbers": true,
+      "pageMax": 30,
+      "requiredSections": [
+        {
+          "key": "abstractHr",
+          "label": "sazetak na hrvatskom",
+          "terms": [
+            "sažetak",
+            "sazetak"
+          ]
+        },
+        {
+          "key": "abstractEn",
+          "label": "abstract na engleskom",
+          "terms": [
+            "abstract",
+            "summary"
+          ]
+        },
+        {
+          "key": "keywordsHr",
+          "label": "kljucne rijeci",
+          "terms": [
+            "ključne riječi",
+            "kljucne rijeci"
+          ]
+        },
+        {
+          "key": "keywordsEn",
+          "label": "keywords",
+          "terms": [
+            "keywords",
+            "key words"
+          ]
+        },
+        {
+          "key": "cv",
+          "label": "zivotopis",
+          "terms": [
+            "životopis",
+            "zivotopis",
+            "curriculum"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "popis literature",
+          "terms": [
+            "literatura",
+            "popis literature"
+          ]
+        }
+      ]
     },
     "facts": [],
     "note": "Tehnicko oblikovanje iz Pravilnika o studiranju, Prilog II (Shema izgleda zavrsnog rada). Margine nisu propisane pa izostavljene.",
@@ -38396,7 +39124,41 @@
       "size": [
         12
       ],
-      "spacing": 1.5
+      "spacing": 1.5,
+      "requirePageNumbers": true,
+      "pageMin": 15,
+      "requiredSections": [
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "Uvod"
+          ]
+        },
+        {
+          "key": "razrada-teme",
+          "label": "Razrada teme",
+          "terms": [
+            "Razrada teme",
+            "Razrada"
+          ]
+        },
+        {
+          "key": "zakljucci",
+          "label": "Zaključci",
+          "terms": [
+            "Zaključci",
+            "Zaključak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "Literatura"
+          ]
+        }
+      ]
     },
     "facts": [],
     "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
@@ -38451,7 +39213,57 @@
       "size": [
         12
       ],
-      "spacing": 1.5
+      "spacing": 1.5,
+      "requirePageNumbers": true,
+      "pageMin": 30,
+      "requiredSections": [
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "Uvod"
+          ]
+        },
+        {
+          "key": "materijali-i-metode",
+          "label": "Materijali i metode",
+          "terms": [
+            "Materijali i metode",
+            "Materijal i metode"
+          ]
+        },
+        {
+          "key": "rezultati",
+          "label": "Rezultati",
+          "terms": [
+            "Rezultati",
+            "Rezultati i rasprava"
+          ]
+        },
+        {
+          "key": "rasprava",
+          "label": "Rasprava",
+          "terms": [
+            "Rasprava",
+            "Rezultati i rasprava"
+          ]
+        },
+        {
+          "key": "zakljucci",
+          "label": "Zaključci",
+          "terms": [
+            "Zaključci",
+            "Zaključak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "Literatura"
+          ]
+        }
+      ]
     },
     "facts": [],
     "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
@@ -38486,7 +39298,7 @@
       "Diplomski sveučilišni studij Forenzika"
     ],
     "workTypes": [
-      "diplomski"
+      "graduate"
     ],
     "status": "partial",
     "profileLabel": "Fakultet za forenzicke znanosti, diplomski rad",
@@ -38506,7 +39318,91 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "requirePageNumbers": true,
+      "requiredSections": [
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "cilj-rada",
+          "label": "Cilj rada",
+          "terms": [
+            "cilj rada",
+            "cilj"
+          ]
+        },
+        {
+          "key": "izvori-podataka-i-metode",
+          "label": "Izvori podataka i metode",
+          "terms": [
+            "izvori podataka i metode",
+            "materijali i metode",
+            "metode"
+          ]
+        },
+        {
+          "key": "rezultati",
+          "label": "Rezultati",
+          "terms": [
+            "rezultati"
+          ]
+        },
+        {
+          "key": "rasprava",
+          "label": "Rasprava",
+          "terms": [
+            "rasprava",
+            "diskusija"
+          ]
+        },
+        {
+          "key": "zakljucci",
+          "label": "Zaključci",
+          "terms": [
+            "zaključci",
+            "zaključak"
+          ]
+        },
+        {
+          "key": "sazetak-hr",
+          "label": "Sažetak na hrvatskom jeziku",
+          "terms": [
+            "sažetak",
+            "sažetak na hrvatskom"
+          ]
+        },
+        {
+          "key": "sazetak-en",
+          "label": "Sažetak na engleskom jeziku",
+          "terms": [
+            "summary",
+            "abstract",
+            "sažetak na engleskom"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "literatura",
+            "popis literature",
+            "reference"
+          ]
+        },
+        {
+          "key": "zivotopis",
+          "label": "Životopis",
+          "terms": [
+            "životopis",
+            "curriculum vitae"
+          ]
+        }
+      ]
     },
     "facts": [],
     "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
@@ -38551,7 +39447,8 @@
       "font": [
         "Times New Roman"
       ],
-      "spacing": 1.5
+      "spacing": 1.5,
+      "requirePageNumbers": true
     },
     "facts": [],
     "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
@@ -38603,7 +39500,89 @@
       "font": [
         "Times New Roman"
       ],
-      "spacing": 1.5
+      "spacing": 1.5,
+      "requirePageNumbers": true,
+      "requiredSections": [
+        {
+          "key": "sazetak",
+          "label": "Sažetak",
+          "terms": [
+            "sažetak",
+            "sazetak",
+            "summary"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "sadržaj",
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "cilj",
+          "label": "Cilj rada",
+          "terms": [
+            "cilj rada",
+            "cilj"
+          ]
+        },
+        {
+          "key": "ispitanici-metode",
+          "label": "Ispitanici i metode",
+          "terms": [
+            "ispitanici i metode",
+            "ispitanici",
+            "metode"
+          ]
+        },
+        {
+          "key": "rezultati",
+          "label": "Rezultati",
+          "terms": [
+            "rezultati"
+          ]
+        },
+        {
+          "key": "rasprava",
+          "label": "Rasprava",
+          "terms": [
+            "rasprava"
+          ]
+        },
+        {
+          "key": "zakljucci",
+          "label": "Zaključci",
+          "terms": [
+            "zaključci",
+            "zaključak",
+            "zaključ"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "literatura"
+          ]
+        },
+        {
+          "key": "zivotopis",
+          "label": "Životopis",
+          "terms": [
+            "životopis",
+            "zivotopis"
+          ]
+        }
+      ]
     },
     "facts": [],
     "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
@@ -38651,7 +39630,62 @@
     "profileLabel": "Umjetnicka akademija u Splitu, zavrsni rad",
     "verifiedAt": "2026-07-16",
     "documentDate": null,
-    "rules": {},
+    "rules": {
+      "requiredSections": [
+        {
+          "key": "naslovnica",
+          "label": "Naslovnica",
+          "terms": [
+            "Naslovnica",
+            "Sveučilište u Splitu",
+            "Umjetnička akademija"
+          ]
+        },
+        {
+          "key": "izjava-cestitost",
+          "label": "Izjava o akademskoj čestitosti",
+          "terms": [
+            "Izjava o akademskoj čestitosti",
+            "akademskoj čestitosti"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sažetak (Temeljna dokumentacijska kartica)",
+          "terms": [
+            "Sažetak",
+            "Temeljna dokumentacijska kartica",
+            "Summary",
+            "Basic documentation card"
+          ]
+        },
+        {
+          "key": "kljucne-rijeci",
+          "label": "Ključne riječi (hrvatski i engleski)",
+          "terms": [
+            "Ključne riječi",
+            "Keywords"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "Sadržaj",
+            "Kazalo"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "Literatura",
+            "Bibliografija",
+            "Popis literature"
+          ]
+        }
+      ]
+    },
     "facts": [],
     "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
     "sources": [
@@ -38682,7 +39716,62 @@
     "profileLabel": "Umjetnicka akademija u Splitu, diplomski rad",
     "verifiedAt": "2026-07-16",
     "documentDate": null,
-    "rules": {},
+    "rules": {
+      "requiredSections": [
+        {
+          "key": "naslovnica",
+          "label": "Naslovnica",
+          "terms": [
+            "Naslovnica",
+            "Sveučilište u Splitu",
+            "Umjetnička akademija"
+          ]
+        },
+        {
+          "key": "izjava-cestitost",
+          "label": "Izjava o akademskoj čestitosti",
+          "terms": [
+            "Izjava o akademskoj čestitosti",
+            "akademskoj čestitosti"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sažetak (Temeljna dokumentacijska kartica)",
+          "terms": [
+            "Sažetak",
+            "Temeljna dokumentacijska kartica",
+            "Summary",
+            "Basic documentation card"
+          ]
+        },
+        {
+          "key": "kljucne-rijeci",
+          "label": "Ključne riječi (hrvatski i engleski)",
+          "terms": [
+            "Ključne riječi",
+            "Keywords"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "Sadržaj",
+            "Kazalo"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "Literatura",
+            "Bibliografija",
+            "Popis literature"
+          ]
+        }
+      ]
+    },
     "facts": [],
     "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
     "sources": [
@@ -38721,7 +39810,55 @@
       "size": [
         12
       ],
-      "spacing": 1.5
+      "spacing": 1.5,
+      "requirePageNumbers": true,
+      "requiredSections": [
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "sadržaj",
+            "sadrzaj",
+            "table of contents"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sažetak",
+          "terms": [
+            "sažetak",
+            "sazetak",
+            "summary"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod",
+            "introduction"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zaključak",
+          "terms": [
+            "zaključak",
+            "zakljucak",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "literatura",
+            "popis literature",
+            "references",
+            "bibliografija"
+          ]
+        }
+      ]
     },
     "facts": [],
     "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
@@ -38769,7 +39906,55 @@
       "size": [
         12
       ],
-      "spacing": 1.5
+      "spacing": 1.5,
+      "requirePageNumbers": true,
+      "requiredSections": [
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "sadržaj",
+            "sadrzaj",
+            "table of contents"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sažetak",
+          "terms": [
+            "sažetak",
+            "sazetak",
+            "summary"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod",
+            "introduction"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zaključak",
+          "terms": [
+            "zaključak",
+            "zakljucak",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "literatura",
+            "popis literature",
+            "references",
+            "bibliografija"
+          ]
+        }
+      ]
     },
     "facts": [],
     "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
@@ -38823,7 +40008,55 @@
         "right": 2.54,
         "bottom": 2.54,
         "left": 2.54
-      }
+      },
+      "requirePageNumbers": true,
+      "pageMin": 15,
+      "pageMax": 30,
+      "requiredSections": [
+        {
+          "key": "sazetak",
+          "label": "Sažetak",
+          "terms": [
+            "sažetak",
+            "sazetak",
+            "ključne riječi",
+            "kljucne rijeci",
+            "abstract"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "sadržaj",
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zaključak",
+          "terms": [
+            "zaključak",
+            "zakljucak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "literatura",
+            "popis literature",
+            "reference"
+          ]
+        }
+      ]
     },
     "facts": [],
     "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
@@ -38877,7 +40110,55 @@
         "right": 2.54,
         "bottom": 2.54,
         "left": 2.54
-      }
+      },
+      "requirePageNumbers": true,
+      "pageMin": 30,
+      "pageMax": 50,
+      "requiredSections": [
+        {
+          "key": "sazetak",
+          "label": "Sažetak",
+          "terms": [
+            "sažetak",
+            "sazetak",
+            "ključne riječi",
+            "kljucne rijeci",
+            "abstract"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "sadržaj",
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zaključak",
+          "terms": [
+            "zaključak",
+            "zakljucak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "literatura",
+            "popis literature",
+            "reference"
+          ]
+        }
+      ]
     },
     "facts": [],
     "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
@@ -38931,7 +40212,78 @@
         "bottom": 2.5,
         "left": 2.5
       },
-      "requireA4": true
+      "requireA4": true,
+      "requirePageNumbers": true,
+      "pageMin": 15,
+      "pageMax": 50,
+      "requiredSections": [
+        {
+          "key": "intro",
+          "label": "Uvod",
+          "terms": [
+            "Uvod"
+          ]
+        },
+        {
+          "key": "purpose",
+          "label": "Svrha rada",
+          "terms": [
+            "Svrha rada",
+            "Svrha"
+          ]
+        },
+        {
+          "key": "litreview",
+          "label": "Pregled literature",
+          "terms": [
+            "Pregled literature"
+          ]
+        },
+        {
+          "key": "discussion",
+          "label": "Rasprava",
+          "terms": [
+            "Rasprava"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "Zaključci",
+          "terms": [
+            "Zaključci",
+            "Zaključak"
+          ]
+        },
+        {
+          "key": "abstractHr",
+          "label": "Sažetak",
+          "terms": [
+            "Sažetak"
+          ]
+        },
+        {
+          "key": "abstractEn",
+          "label": "Summary",
+          "terms": [
+            "Summary",
+            "Abstract"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "Literatura",
+          "terms": [
+            "Literatura"
+          ]
+        },
+        {
+          "key": "cv",
+          "label": "Životopis",
+          "terms": [
+            "Životopis"
+          ]
+        }
+      ]
     },
     "facts": [],
     "note": "Novi port (recovery): direktno citanje sluzbenog izvora; verified samo doslovno navedeno.",
@@ -38989,7 +40341,10 @@
         "bottom": 2.5,
         "left": 2.5
       },
-      "requireA4": true
+      "requireA4": true,
+      "requirePageNumbers": true,
+      "pageMin": 15,
+      "pageMax": 50
     },
     "facts": [],
     "note": "Novi port (recovery): direktno citanje sluzbenog izvora; verified samo doslovno navedeno.",
@@ -39043,7 +40398,8 @@
         "bottom": 2.5,
         "left": 2.5
       },
-      "justify": true
+      "justify": true,
+      "requirePageNumbers": true
     },
     "facts": [],
     "note": "Novi port (recovery): direktno citanje sluzbenog izvora; verified samo doslovno navedeno.",
@@ -39097,7 +40453,63 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 3
-      }
+      },
+      "requirePageNumbers": true,
+      "pageMin": 30,
+      "requiredSections": [
+        {
+          "key": "sazetak",
+          "label": "Sažetak",
+          "terms": [
+            "sažetak",
+            "sazetak",
+            "summary"
+          ]
+        },
+        {
+          "key": "abstract",
+          "label": "Abstract (sažetak na engleskom)",
+          "terms": [
+            "abstract"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "sadržaj",
+            "sadrzaj",
+            "table of contents"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod",
+            "introduction"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zaključak",
+          "terms": [
+            "zaključak",
+            "zakljucak",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Popis literature",
+          "terms": [
+            "literatura",
+            "popis literature",
+            "references",
+            "bibliografija"
+          ]
+        }
+      ]
     },
     "facts": [],
     "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
@@ -39150,7 +40562,63 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 3
-      }
+      },
+      "requirePageNumbers": true,
+      "pageMin": 30,
+      "requiredSections": [
+        {
+          "key": "sazetak",
+          "label": "Sažetak",
+          "terms": [
+            "sažetak",
+            "sazetak",
+            "summary"
+          ]
+        },
+        {
+          "key": "abstract",
+          "label": "Abstract (sažetak na engleskom)",
+          "terms": [
+            "abstract"
+          ]
+        },
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "sadržaj",
+            "sadrzaj",
+            "table of contents"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod",
+            "introduction"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zaključak",
+          "terms": [
+            "zaključak",
+            "zakljucak",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Popis literature",
+          "terms": [
+            "literatura",
+            "popis literature",
+            "references",
+            "bibliografija"
+          ]
+        }
+      ]
     },
     "facts": [],
     "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
@@ -39202,7 +40670,68 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "requirePageNumbers": true,
+      "requiredSections": [
+        {
+          "key": "toc",
+          "label": "sadržaj",
+          "terms": [
+            "sadrzaj",
+            "contents",
+            "table of contents"
+          ]
+        },
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod",
+            "introduction"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zaključak",
+          "terms": [
+            "zakljucak",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "popis literature",
+          "terms": [
+            "popis literature",
+            "literatura",
+            "bibliografija",
+            "references"
+          ]
+        },
+        {
+          "key": "abstract",
+          "label": "sažetak",
+          "terms": [
+            "sazetak"
+          ]
+        },
+        {
+          "key": "summary",
+          "label": "summary",
+          "terms": [
+            "summary",
+            "abstract"
+          ]
+        },
+        {
+          "key": "keywords",
+          "label": "ključne riječi / keywords",
+          "terms": [
+            "kljucne rijeci",
+            "keywords"
+          ]
+        }
+      ]
     },
     "facts": [],
     "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
@@ -39261,7 +40790,68 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "requirePageNumbers": true,
+      "requiredSections": [
+        {
+          "key": "toc",
+          "label": "sadržaj",
+          "terms": [
+            "sadrzaj",
+            "contents",
+            "table of contents"
+          ]
+        },
+        {
+          "key": "intro",
+          "label": "uvod",
+          "terms": [
+            "uvod",
+            "introduction"
+          ]
+        },
+        {
+          "key": "conclusion",
+          "label": "zaključak",
+          "terms": [
+            "zakljucak",
+            "conclusion"
+          ]
+        },
+        {
+          "key": "refs",
+          "label": "popis literature",
+          "terms": [
+            "popis literature",
+            "literatura",
+            "bibliografija",
+            "references"
+          ]
+        },
+        {
+          "key": "abstract",
+          "label": "sažetak",
+          "terms": [
+            "sazetak"
+          ]
+        },
+        {
+          "key": "summary",
+          "label": "summary",
+          "terms": [
+            "summary",
+            "abstract"
+          ]
+        },
+        {
+          "key": "keywords",
+          "label": "ključne riječi / keywords",
+          "terms": [
+            "kljucne rijeci",
+            "keywords"
+          ]
+        }
+      ]
     },
     "facts": [],
     "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
@@ -39320,7 +40910,8 @@
         "bottom": 2.5,
         "left": 2.5
       },
-      "spacing": 1.5
+      "spacing": 1.5,
+      "requirePageNumbers": true
     },
     "facts": [],
     "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
@@ -39372,7 +40963,8 @@
         "bottom": 2.5,
         "left": 2.5
       },
-      "spacing": 1.5
+      "spacing": 1.5,
+      "requirePageNumbers": true
     },
     "facts": [],
     "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
@@ -39412,7 +41004,55 @@
     "verifiedAt": "2026-07-17",
     "documentDate": null,
     "rules": {
-      "requireA4": true
+      "requireA4": true,
+      "requirePageNumbers": true,
+      "requiredSections": [
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "sadržaj",
+            "kazalo"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sažetak",
+          "terms": [
+            "sažetak",
+            "summary"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "bit",
+          "label": "Bit",
+          "terms": [
+            "bit"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zaključak",
+          "terms": [
+            "zaključak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "literatura",
+            "popis literature"
+          ]
+        }
+      ]
     },
     "facts": [],
     "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
@@ -39461,7 +41101,8 @@
       ],
       "size": [
         12
-      ]
+      ],
+      "requirePageNumbers": true
     },
     "facts": [],
     "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
@@ -39514,7 +41155,56 @@
         "bottom": 2.5,
         "left": 3
       },
-      "requireA4": true
+      "requireA4": true,
+      "requirePageNumbers": true,
+      "pageMin": 25,
+      "pageMax": 35,
+      "requiredSections": [
+        {
+          "key": "sazetak",
+          "label": "Sažetak",
+          "terms": [
+            "sažetak"
+          ]
+        },
+        {
+          "key": "kljucne-rijeci",
+          "label": "Ključne riječi",
+          "terms": [
+            "ključne riječi"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "glavni-dio",
+          "label": "Glavni dio",
+          "terms": [
+            "glavni dio",
+            "razrada"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zaključak",
+          "terms": [
+            "zaključak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "literatura",
+            "popis literature"
+          ]
+        }
+      ]
     },
     "facts": [],
     "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
@@ -39567,7 +41257,56 @@
         "bottom": 2.5,
         "left": 3
       },
-      "requireA4": true
+      "requireA4": true,
+      "requirePageNumbers": true,
+      "pageMin": 50,
+      "pageMax": 60,
+      "requiredSections": [
+        {
+          "key": "sazetak",
+          "label": "Sažetak",
+          "terms": [
+            "sažetak"
+          ]
+        },
+        {
+          "key": "kljucne-rijeci",
+          "label": "Ključne riječi",
+          "terms": [
+            "ključne riječi"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "glavni-dio",
+          "label": "Glavni dio",
+          "terms": [
+            "glavni dio",
+            "razrada"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zaključak",
+          "terms": [
+            "zaključak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "literatura",
+            "popis literature"
+          ]
+        }
+      ]
     },
     "facts": [],
     "note": "Novi port (public-uni wave): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila.",
@@ -39620,7 +41359,76 @@
         "bottom": 2.5,
         "left": 2.5
       },
-      "requireA4": true
+      "requireA4": true,
+      "requirePageNumbers": true,
+      "requiredSections": [
+        {
+          "key": "sadrzaj",
+          "label": "Sadržaj",
+          "terms": [
+            "sadržaj",
+            "kazalo"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "Uvod",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "razrada",
+          "label": "Razrada teme",
+          "terms": [
+            "razrada",
+            "razrada teme"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "Zaključak",
+          "terms": [
+            "zaključak"
+          ]
+        },
+        {
+          "key": "sazetak",
+          "label": "Sažetak",
+          "terms": [
+            "sažetak"
+          ]
+        },
+        {
+          "key": "sazetak-strani",
+          "label": "Sažetak na stranom jeziku",
+          "terms": [
+            "summary",
+            "abstract",
+            "zusammenfassung",
+            "riassunto",
+            "résumé",
+            "sažetak na stranom jeziku"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "Literatura",
+          "terms": [
+            "literatura",
+            "popis literature",
+            "bibliografija"
+          ]
+        },
+        {
+          "key": "zivotopis",
+          "label": "Životopis",
+          "terms": [
+            "životopis",
+            "curriculum vitae"
+          ]
+        }
+      ]
     },
     "facts": [],
     "note": "Odjelni izvor (Teolosko-katehetski odjel, Zadar): harvest + nezavisna adversarijalna verifikacija; verified samo doslovno potvrdjena pravila. Opseg (optimalan) i Chicago (prilagodjeni autor-godina) -> advisory.",
@@ -40705,7 +42513,17 @@
             "Životopis"
           ]
         }
-      ]
+      ],
+      "size": [
+        12
+      ],
+      "margins": {
+        "top": 3,
+        "right": 3,
+        "bottom": 3,
+        "left": 3
+      },
+      "requireA4": true
     },
     "facts": [],
     "note": "Pravilnik nalaže pisanje rada u LaTeX-u uz službeni predložak, pa se .docx provjerom pokriva samo struktura rada. Vrsta slova, veličina, prored, margine, format papira i opseg nisu propisani pravilnikom (vrijednosti nosi LaTeX predložak, koji nije provjerljiv u .docx-u). Stil citiranja nije imenovani standard nego numeričko pozivanje u uglatim zagradama.",
@@ -40793,7 +42611,17 @@
             "Životopis"
           ]
         }
-      ]
+      ],
+      "size": [
+        12
+      ],
+      "margins": {
+        "top": 3,
+        "right": 3,
+        "bottom": 3,
+        "left": 3
+      },
+      "requireA4": true
     },
     "facts": [],
     "note": "Pravilnik nalaže pisanje rada u LaTeX-u uz službeni predložak, pa se .docx provjerom pokriva samo struktura rada. Vrsta slova, veličina, prored, margine, format papira i opseg nisu propisani pravilnikom (vrijednosti nosi LaTeX predložak, koji nije provjerljiv u .docx-u). Stil citiranja nije imenovani standard nego numeričko pozivanje u uglatim zagradama.",
@@ -41179,7 +43007,11 @@
       "justify": true,
       "requireA4": true,
       "documentLanguage": "en",
-      "languageLocked": true
+      "languageLocked": true,
+      "paperSizes": [
+        "A4"
+      ],
+      "pageMin": 30
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog Pravilnika (Zagrebacka skola ekonomije i managementa), čitano izravno. Studij Poslovna matematika i ekonomija izvodi se isključivo na engleskom jeziku (službena stranica studija), pa je jezik rada zaključan na engleski.",
@@ -41235,7 +43067,11 @@
       "requireA4": true,
       "justify": true,
       "documentLanguage": "en",
-      "languageLocked": true
+      "languageLocked": true,
+      "footnoteSize": [
+        10
+      ],
+      "requirePageNumbers": true
     },
     "facts": [],
     "note": "Format iz Pravilnika ASP-P/033 Čl.6 (byte-level): TNR, A4, prored 1,5, font 12 (naslovi 14, fusnote 10), obostrano poravnanje, 30-50 stranica; margine 'standardne' (bez brojke). Citat CUSTOM: nacini citiranja delegirani na pravilnik ASP-P/070 i Uputu za pisanje i citiranje koji NISU javno dostupni pa se stil ne pina. Validacija podatkovno blokirana: repozitorij.aspira.hr je 100% restrictedAccess (0 otvorenih od 510 radova). Aspira vodi paralelne hrvatske i engleske verzije programa (potvrdjeno na sluzbenoj engleskoj stranici i u AZVO registru studijskih programa na stranom jeziku); engleske verzije imaju jezik rada zakljucan na engleski.",
@@ -41284,7 +43120,11 @@
       "requireA4": true,
       "justify": true,
       "documentLanguage": "en",
-      "languageLocked": true
+      "languageLocked": true,
+      "footnoteSize": [
+        10
+      ],
+      "requirePageNumbers": true
     },
     "facts": [],
     "note": "Format iz Pravilnika ASP-P/033 Čl.6 (byte-level): TNR, A4, prored 1,5, font 12 (naslovi 14, fusnote 10), obostrano poravnanje, 30-50 stranica; margine 'standardne' (bez brojke). Citat CUSTOM: nacini citiranja delegirani na pravilnik ASP-P/070 i Uputu za pisanje i citiranje koji NISU javno dostupni pa se stil ne pina. Validacija podatkovno blokirana: repozitorij.aspira.hr je 100% restrictedAccess (0 otvorenih od 510 radova). Engleske diplomske verzije (Sports Management, Hospitality and Tourism) imaju jezik rada zakljucan na engleski; hrvatske verzije ostaju na hrvatskom.",
@@ -41331,7 +43171,10 @@
       "spacing": 1.5,
       "requireA4": true,
       "documentLanguage": "en",
-      "languageLocked": true
+      "languageLocked": true,
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog Pravilnika (Sveučilište Libertas), čitano izravno. Nastava na lokaciji Dubrovnik izvodi se na engleskom jeziku (\"Dubrovnik (in English)\", sluzbena stranica); dubrovacka varijanta Medjunarodnih odnosa ima jezik rada zakljucan na engleski, dok se isti program u Zagrebu izvodi na hrvatskom.",
@@ -41388,7 +43231,10 @@
       },
       "requireA4": true,
       "documentLanguage": "en",
-      "languageLocked": true
+      "languageLocked": true,
+      "paperSizes": [
+        "A4"
+      ]
     },
     "facts": [],
     "note": "Tehničko uređenje rada iz službenog Pravilnika (Sveučilište Libertas), čitano izravno. Diplomski Medjunarodni odnosi i diplomacija u Dubrovniku: \"Place of delivery: Zagreb (in Croatian), Dubrovnik (in English)\" - dubrovacka varijanta ima jezik rada zakljucan na engleski.",
@@ -41445,7 +43291,8 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "pageMin": 30
     },
     "facts": [
       "najmanje 30 stranica (zavrsni rad)"
@@ -41508,7 +43355,8 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "pageMin": 50
     },
     "facts": [
       "najmanje 50 stranica (diplomski rad)"
@@ -41571,7 +43419,8 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "pageMin": 30
     },
     "facts": [
       "najmanje 30 stranica (zavrsni rad)"
@@ -41634,7 +43483,8 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "pageMin": 50
     },
     "facts": [
       "najmanje 50 stranica (diplomski rad)"
@@ -41697,7 +43547,8 @@
         "right": 2.5,
         "bottom": 2.5,
         "left": 2.5
-      }
+      },
+      "pageMin": 50
     },
     "facts": [
       "najmanje 50 stranica (diplomski rad)"
@@ -41761,7 +43612,10 @@
         "left": 2.5
       },
       "requirePageNumbers": true,
-      "requireA4": true
+      "requireA4": true,
+      "footnoteSize": [
+        10
+      ]
     },
     "facts": [],
     "note": "Odsjek za kroatistiku ima vlastitu Uputu koja ODSTUPA od opce FFRI zavrsni Upute: tijelo teksta 14pt (ne 12pt), uz dopusteno odstupanje po dogovoru s mentorom. Izdvojeno iz opceg ffri-zavrsni profila zbog ove razlike.",
@@ -41792,5 +43646,377 @@
     "advisoryScope": [
       "Odstupanje od fonta/velicine po dogovoru s mentorom (izricito dopusteno u izvoru)"
     ]
+  },
+  {
+    "id": "efos-doktorski",
+    "unitId": "efos",
+    "programs": [
+      "Doktorski studij EFOS"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial",
+    "profileLabel": "EFOS, doktorski rad",
+    "verifiedAt": "2026-08-01",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "paperSizes": [
+        "A4"
+      ]
+    },
+    "facts": [
+      "Obujam rada nije strogo definiran; preporučuje se 150-300 stranica (savjet, ne bodovano)."
+    ],
+    "note": "Deepen pass (2026-08-01): naslovnica za doktorski rad (data/title-pages/templates.json, efos-doctoral) vec postojala verificirana, profil pravila nedostajao - otkriveno skriptom A (naslovnica-vs-profil mismatch audit). Isti institucija-wide izvor kao efos-zavrsni/efos-diplomski (\"Opce upute za oblikovanje rada\" vrijedi za sve razine, potvrdjeno naslovom dokumenta \"Upute za pisanje seminarskih, zavrsnih, diplomskih, specijalistickih i doktorskih radova\"). Opseg NIJE scored jer izvor doslovno kaze \"nije strogo definiran... preporucuje se\" (za razliku od diplomskog, koji koristi izravan imperativ \"treba imati\").",
+    "sources": [
+      {
+        "title": "Upute za pisanje studentskih radova (EFOS, 2023)",
+        "url": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pisanje studentskih radova (EFOS, 2023)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "advisoryScope": [
+      "Opseg (150-300 str., preporuka)"
+    ]
+  },
+  {
+    "id": "efos-specijalisticki",
+    "unitId": "efos",
+    "programs": [
+      "Specijalistički diplomski studij EFOS"
+    ],
+    "workTypes": [
+      "specialist"
+    ],
+    "status": "partial",
+    "profileLabel": "EFOS, specijalistički rad",
+    "verifiedAt": "2026-08-01",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "paperSizes": [
+        "A4"
+      ]
+    },
+    "facts": [
+      "Obujam rada nije unaprijed definiran; preporučuje se 60-100 stranica (savjet, ne bodovano)."
+    ],
+    "note": "Deepen pass (2026-08-01): naslovnica za specijalisticki rad (efos-specialist) vec postojala verificirana, profil pravila nedostajao. Isti institucija-wide izvor kao ostali efos profili. Opseg NIJE scored (izvor: \"nije unaprijed definiran... preporucuje se\").",
+    "sources": [
+      {
+        "title": "Upute za pisanje studentskih radova (EFOS, 2023)",
+        "url": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pisanje studentskih radova (EFOS, 2023)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "advisoryScope": [
+      "Opseg (60-100 str., preporuka)"
+    ]
+  },
+  {
+    "id": "efzg-seminarski",
+    "unitId": "efzg",
+    "programs": [
+      "Prijediplomski studiji Ekonomskog fakulteta (zavrsni rad)",
+      "Diplomski studiji Ekonomskog fakulteta",
+      "Poslovna ekonomija",
+      "Ekonomija"
+    ],
+    "workTypes": [
+      "seminar"
+    ],
+    "status": "partial",
+    "profileLabel": "Ekonomski fakultet u Zagrebu, seminarski rad",
+    "verifiedAt": "2026-08-01",
+    "documentDate": null,
+    "rules": {},
+    "facts": [
+      "Cijela tehnicka uputa je preporucna (\"preporucuje se sljedece\"), ne imperativna - font nije ni imenovan.",
+      "Preporucljiv opseg seminarskoga rada je 10-15 stranica (savjet, ne bodovano).",
+      "Preporuka: velicina slova 12, prored 1,5, margine 2,54 cm sa svake strane, fusnote velicina 10 (sve savjet, ne bodovano)."
+    ],
+    "note": "Deepen pass (2026-08-01): naslovnica za seminarski rad (efzg-seminar) vec postojala verificirana, profil pravila nedostajao. Izvor (Upute 2003) je IZRICITO advisory (source-registry: 'Nema imperativnog tehnickog oblikovanja pa nema scored pravila iz ovog izvora') - efzg-zavrsni-ova SCORED pravila dolaze iz drugog, katedarskog 'Postupak izrade zavrsnog rada' dokumenta koji je specifican za zavrsni rad i ne pokriva seminarski. Profil ostaje potpuno advisory (posteno, ne izmisljeno) - i dalje bolje od potpune praznine na coverage matrici.",
+    "sources": [
+      {
+        "title": "Upute za pisanje seminarskoga i diplomskoga rada (Ekonomski fakultet u Zagrebu, 2003)",
+        "url": "https://www.efzg.unizg.hr/UserDocsImages/dokumenti/efzg_diplomski_seminarski_upute.pdf?vel=216027"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za pisanje seminarskoga i diplomskoga rada (Ekonomski fakultet u Zagrebu, 2003)"
+    ],
+    "ruleAuthority": "official-recommended-mentor-priority",
+    "normativeScope": [],
+    "advisoryScope": [
+      "Velicina slova (12)",
+      "Prored (1,5)",
+      "Margine (2,54 cm)",
+      "Velicina fusnote (10)",
+      "Opseg (10-15 str.)"
+    ]
+  },
+  {
+    "id": "kif-specijalisticki",
+    "unitId": "kif",
+    "programs": [
+      "Specijalistički diplomski studij Kineziološkog fakulteta"
+    ],
+    "workTypes": [
+      "specialist"
+    ],
+    "status": "partial",
+    "profileLabel": "Kineziološki fakultet, specijalistički diplomski rad",
+    "verifiedAt": "2026-08-01",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "justify": true,
+      "requirePageNumbers": true,
+      "recommendedCitation": "apa7",
+      "wordMin": 6000,
+      "minReferences": 20
+    },
+    "facts": [],
+    "note": "Deepen pass (2026-08-01): naslovnica za specijalisticki diplomski rad (kif-specialist) vec postojala verificirana, profil pravila nedostajao. Isti izvor kao kif-diplomski (\"Upute za izradu diplomskog/specijalistickog diplomskog rada\", naslov dokumenta doslovno spaja obje razine; sekcija 'opce - oblikovanje' i 'struktura diplomskog/specijalistickog diplomskog rada' navode obje razine zajedno). OPSEG (rijeci) RAZLIKUJE se po razini: dvostupcna tablica u izvoru grupira 'STRUCNI DIPLOMSKI RAD I SPECIJALISTICKI DIPLOMSKI RAD' zajedno na 6000 rijeci / 25 kartica (za razliku od 'ZNANSTVENO-ISTRAZIVACKI DIPLOMSKI RAD' na 4000 rijeci) - specijalisticki NIJE isti prag kao postojeci kif-diplomski unos, nego visi.",
+    "sources": [
+      {
+        "title": "Upute za izradu diplomskog/specijalistickog diplomskog rada (Kinezioloski fakultet Sveucilista u Zagrebu, 2023)",
+        "url": "https://www.kif.unizg.hr/_download/repository/Kinezioloski-upute-diplomskizavrsni-rad.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu diplomskog/specijalistickog diplomskog rada (Kinezioloski fakultet Sveucilista u Zagrebu, 2023)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored",
+      "Margine",
+      "Obostrano poravnanje",
+      "Numeracija stranica",
+      "Stil citiranja (APA)",
+      "Opseg (min. 6000 rijeci)",
+      "Najmanji broj referenci (20)"
+    ],
+    "advisoryScope": [
+      "Obvezne cjeline (Uvod, Razrada teme, Zakljucak, Literatura, Prilozi)"
+    ]
+  },
+  {
+    "id": "pravri-specijalisticki",
+    "unitId": "pravri",
+    "programs": [
+      "Sveučilišni specijalistički studij Financijsko pravo trgovačkih društava",
+      "Sveučilišni specijalistički studij Pravo europskih integracija",
+      "Sveučilišni specijalistički studij Kriminalističko istraživanje"
+    ],
+    "workTypes": [
+      "specialist"
+    ],
+    "status": "partial",
+    "profileLabel": "Pravni fakultet u Rijeci, završni rad sveučilišnog specijalističkog studija",
+    "verifiedAt": "2026-08-01",
+    "documentDate": null,
+    "rules": {
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.5,
+      "requireA4": true,
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "paperSizes": [
+        "A4"
+      ]
+    },
+    "facts": [],
+    "note": "Deepen pass (2026-08-01): naslovnica za zavrsni rad specijalistickog studija (pravri-specialist, Prilozi 8/10/12) vec postojala verificirana, profil pravila nedostajao. Isti institucija-wide izvor kao pravri-zavrsni/pravri-diplomski (poglavlje II 'Tehnicke upute za pisanje rada', 2.1 Normativ stranice - opce, prije razdvajanja po razinama u Prilozima). Opseg NIJE scored (izvor koristi 'najcesce'/opisno, ne imperativ - isti razlog zasto ga zavrsni/diplomski vec nemaju scored).",
+    "sources": [
+      {
+        "title": "Upute za izradu studentskih pisanih radova (PRAVRI, rev. 2023)",
+        "url": "https://pravri.uniri.hr/files/Dokumenti/Pravilnici/uputeradovi.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Upute za izradu studentskih pisanih radova (PRAVRI, rev. 2023)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Prored"
+    ],
+    "advisoryScope": []
+  },
+  {
+    "id": "effectus-seminarski",
+    "unitId": "effectus",
+    "programs": [
+      "Financije i poslovno pravo",
+      "Poslovno upravljanje",
+      "Poslovno upravljanje - Financijski menadžment",
+      "Poslovno upravljanje - Menadžment ljudskih potencijala i znanja",
+      "Poslovno upravljanje - Porezi i poslovno pravo",
+      "Poslovno upravljanje - Analitički menadžment",
+      "Poslovno upravljanje - Bihevioralna ekonomija"
+    ],
+    "workTypes": [
+      "seminar"
+    ],
+    "status": "partial",
+    "profileLabel": "Effectus, seminarski rad",
+    "verifiedAt": "2026-08-01",
+    "documentDate": null,
+    "rules": {
+      "recommendedCitation": "chicago-notes",
+      "font": [
+        "Times New Roman"
+      ],
+      "size": [
+        12
+      ],
+      "spacing": 1.15,
+      "justify": true,
+      "paperSizes": [
+        "A4"
+      ],
+      "margins": {
+        "top": 2.5,
+        "right": 2.5,
+        "bottom": 2.5,
+        "left": 2.5
+      },
+      "pageMin": 10,
+      "pageMax": 20,
+      "minReferences": 5,
+      "requiredSections": [
+        {
+          "key": "sadrzaj",
+          "label": "sadržaj",
+          "terms": [
+            "sadržaj",
+            "sadrzaj"
+          ]
+        },
+        {
+          "key": "uvod",
+          "label": "uvodni dio",
+          "terms": [
+            "uvod"
+          ]
+        },
+        {
+          "key": "zakljucak",
+          "label": "zaključak",
+          "terms": [
+            "zaključak",
+            "zakljucak"
+          ]
+        },
+        {
+          "key": "literatura",
+          "label": "popis literature",
+          "terms": [
+            "literatura",
+            "popis literature"
+          ]
+        }
+      ]
+    },
+    "facts": [],
+    "note": "Deepen pass (2026-08-01): isti institucija-wide Pravilnik kao effectus-zavrsni/effectus-diplomski (vec snapshotiran), sad prosiren na razinu koja dosad nije imala profil pravila iako naslovnica (data/title-pages/templates.json, effectus-seminar) vec postoji verificirana. Sazetak/Abstract su Neobavezno za seminarski (Tablica 1) pa NISU u requiredSections, za razliku od zavrsnog/diplomskog. \"Najmanje dvije knjige\" unutar min. 5 izvora nije zaseban checkId u shemi, ostaje u citatu ali se ne boduje posebno.",
+    "sources": [
+      {
+        "title": "Pravilnik o izradi i obrani zavrsnog i diplomskog rada s Uputama (Effectus, 2023)",
+        "url": "https://effectus.com.hr/wp-content/uploads/2023/03/Pravilnik-o-izradi-i-obrani-zavrsnog-i-diplomskog-rada_2023.pdf"
+      }
+    ],
+    "sourceHierarchy": [
+      "Pravilnik o izradi i obrani zavrsnog i diplomskog rada s Uputama (Effectus, 2023)"
+    ],
+    "ruleAuthority": "official-program-guidelines",
+    "normativeScope": [
+      "Format papira",
+      "Margine",
+      "Vrsta slova",
+      "Velicina slova",
+      "Obostrano poravnanje",
+      "Prored",
+      "Nacin citiranja (brojcane fusnote)",
+      "Opseg (10-20 str.)",
+      "Minimalan broj izvora (5, od toga najmanje 2 knjige)",
+      "Obvezni dijelovi rada (Sadrzaj, Uvodni dio, Zakljucak, Popis literature)"
+    ],
+    "advisoryScope": []
   }
 ]

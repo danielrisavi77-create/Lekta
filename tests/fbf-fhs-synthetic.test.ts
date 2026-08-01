@@ -37,7 +37,8 @@ describe('fbf-specijalisticki: scored velicina/prored/margine/A4 (bez fonta), va
     expect(check(r, 'Veličina osnovnog teksta').status).toBe('pass');
     expect(check(r, 'Prored osnovnog teksta').status).toBe('pass');
     expect(check(r, 'Margine dokumenta').status).toBe('pass');
-    expect(check(r, 'Format stranice A4').status).toBe('pass');
+    // fbf-specijalisticki ima i requireA4 i paperSizes:['A4'] (paper-size ruleEntry).
+    expect(check(r, 'Format stranice (A4)').status).toBe('pass');
     expect(check(r, 'Dominantni font').status).toBe('pass'); // informativno
   });
 });

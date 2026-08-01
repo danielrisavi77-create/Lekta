@@ -1,8 +1,8 @@
 {
-  "profileId": "effectus-diplomski",
+  "profileId": "effectus-seminarski",
   "entries": [
     {
-      "ruleId": "effectus-diplomski--paper-size",
+      "ruleId": "effectus-seminarski--paper-size",
       "checkId": "paper-size",
       "value": "A4",
       "category": "format",
@@ -17,13 +17,13 @@
       "autoFixable": true,
       "fixerId": "paper-size-fixer",
       "verifiedHash": "52db197d9244f792219b5e46dc1eb9a35e98d92302a72b74c7d8020dcc3dfd6b",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "Daniel Risavi",
-      "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "lastVerified": "2026-08-01",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "confirmedVia": "owner-bulk-approval"
     },
     {
-      "ruleId": "effectus-diplomski--margins",
+      "ruleId": "effectus-seminarski--margins",
       "checkId": "margins",
       "value": {
         "top": 2.5,
@@ -43,13 +43,13 @@
       "autoFixable": true,
       "fixerId": "margins-fixer",
       "verifiedHash": "52db197d9244f792219b5e46dc1eb9a35e98d92302a72b74c7d8020dcc3dfd6b",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "Daniel Risavi",
-      "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "lastVerified": "2026-08-01",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "confirmedVia": "owner-bulk-approval"
     },
     {
-      "ruleId": "effectus-diplomski--font",
+      "ruleId": "effectus-seminarski--font",
       "checkId": "font",
       "value": [
         "Times New Roman"
@@ -66,13 +66,13 @@
       "autoFixable": true,
       "fixerId": "font-fixer",
       "verifiedHash": "52db197d9244f792219b5e46dc1eb9a35e98d92302a72b74c7d8020dcc3dfd6b",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "Daniel Risavi",
-      "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "lastVerified": "2026-08-01",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "confirmedVia": "owner-bulk-approval"
     },
     {
-      "ruleId": "effectus-diplomski--font-size",
+      "ruleId": "effectus-seminarski--font-size",
       "checkId": "font-size",
       "value": 12,
       "category": "format",
@@ -87,13 +87,13 @@
       "autoFixable": true,
       "fixerId": "font-fixer",
       "verifiedHash": "52db197d9244f792219b5e46dc1eb9a35e98d92302a72b74c7d8020dcc3dfd6b",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "Daniel Risavi",
-      "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "lastVerified": "2026-08-01",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "confirmedVia": "owner-bulk-approval"
     },
     {
-      "ruleId": "effectus-diplomski--justify",
+      "ruleId": "effectus-seminarski--justify",
       "checkId": "justify",
       "value": true,
       "category": "format",
@@ -108,13 +108,13 @@
       "autoFixable": true,
       "fixerId": "alignment-fixer",
       "verifiedHash": "52db197d9244f792219b5e46dc1eb9a35e98d92302a72b74c7d8020dcc3dfd6b",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "Daniel Risavi",
-      "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "lastVerified": "2026-08-01",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "confirmedVia": "owner-bulk-approval"
     },
     {
-      "ruleId": "effectus-diplomski--line-spacing",
+      "ruleId": "effectus-seminarski--line-spacing",
       "checkId": "line-spacing",
       "value": 1.15,
       "category": "format",
@@ -129,35 +129,78 @@
       "autoFixable": true,
       "fixerId": "line-spacing-fixer",
       "verifiedHash": "52db197d9244f792219b5e46dc1eb9a35e98d92302a72b74c7d8020dcc3dfd6b",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "Daniel Risavi",
-      "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "lastVerified": "2026-08-01",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "confirmedVia": "owner-bulk-approval"
     },
     {
-      "ruleId": "effectus-diplomski--page-count",
+      "ruleId": "effectus-seminarski--page-count",
       "checkId": "page-count",
       "value": {
-        "min": 50,
-        "max": 80
+        "min": 10,
+        "max": 20
       },
       "category": "scope",
-      "label": "Opseg (50-80 str.)",
+      "label": "Opseg (10-20 str.)",
       "machineCheckable": true,
       "authority": "program-page",
       "sourceId": "effectus-pravilnik-2023",
-      "sourcePage": "Upute (Prilog 1), tč. 3 (str. 5)",
-      "quote": "Opseg diplomskog rada mora iznositi 50-80 stranica (od uvoda do zaključka; u ovaj opseg ne uračunava se naslovna stranica, sadržaj i popis literature).",
+      "sourcePage": "Upute (Prilog 1), tč. 3 (str. 4)",
+      "quote": "Opseg seminarskog rada mora iznositi 10-20 stranica.",
       "status": "verified",
       "scored": true,
       "verifiedHash": "52db197d9244f792219b5e46dc1eb9a35e98d92302a72b74c7d8020dcc3dfd6b",
-      "lastVerified": "2026-07-02",
-      "verifiedBy": "Daniel Risavi",
-      "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
+      "lastVerified": "2026-08-01",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "confirmedVia": "owner-bulk-approval"
     },
     {
-      "ruleId": "effectus-diplomski--citation-style",
+      "ruleId": "effectus-seminarski--reference-count",
+      "checkId": "reference-count",
+      "value": 5,
+      "category": "scope",
+      "label": "Najmanji broj izvora (5, od toga najmanje 2 knjige)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "effectus-pravilnik-2023",
+      "sourcePage": "Upute (Prilog 1), tč. 2.2 (str. 4)",
+      "quote": "Za pisanje seminarskog rada potrebno je koristiti minimalno pet izvora, od toga najmanje dvije knjige.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "52db197d9244f792219b5e46dc1eb9a35e98d92302a72b74c7d8020dcc3dfd6b",
+      "lastVerified": "2026-08-01",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "confirmedVia": "owner-bulk-approval"
+    },
+    {
+      "ruleId": "effectus-seminarski--required-sections",
+      "checkId": "required-sections",
+      "value": [
+        { "key": "sadrzaj", "label": "sadržaj", "terms": ["sadržaj", "sadrzaj"] },
+        { "key": "uvod", "label": "uvodni dio", "terms": ["uvod"] },
+        { "key": "zakljucak", "label": "zaključak", "terms": ["zaključak", "zakljucak"] },
+        { "key": "literatura", "label": "popis literature", "terms": ["literatura", "popis literature"] }
+      ],
+      "category": "structure",
+      "label": "Obvezni dijelovi rada (Tablica 1: Sadržaj, Uvodni dio, Zaključak, Popis literature su \"Obavezno\" za seminarski rad; Sažetak/Abstract su Neobavezno)",
+      "machineCheckable": true,
+      "authority": "program-page",
+      "sourceId": "effectus-pravilnik-2023",
+      "sourcePage": "Upute (Prilog 1), tč. 5 Tablica 1 (str. 6)",
+      "quote": "Tablica 1: Sastavni dijelovi seminarskog, završnog i diplomskog rada ... Sadržaj: Obavezno / Obavezno / Obavezno. Uvodni dio: Obavezno / Obavezno / Obavezno. Zaključak: Obavezno / Obavezno / Obavezno. Popis literature i drugih izvora podataka: Obavezno / Obavezno / Obavezno.",
+      "status": "verified",
+      "scored": true,
+      "verifiedHash": "52db197d9244f792219b5e46dc1eb9a35e98d92302a72b74c7d8020dcc3dfd6b",
+      "lastVerified": "2026-08-01",
+      "verifiedBy": "owner-bulk-approval",
+      "reviewedBy": null,
+      "confirmedVia": "owner-bulk-approval"
+    },
+    {
+      "ruleId": "effectus-seminarski--citation-style",
       "checkId": "citation-style",
       "value": "chicago-notes",
       "category": "citation",
@@ -170,37 +213,11 @@
       "status": "verified",
       "scored": true,
       "verifiedHash": "52db197d9244f792219b5e46dc1eb9a35e98d92302a72b74c7d8020dcc3dfd6b",
-      "lastVerified": "2026-07-03",
-      "verifiedBy": "Daniel Risavi",
-      "reviewedBy": "Daniel Risavi",
-      "confirmedVia": "human-audit"
-    },
-    {
-      "ruleId": "effectus-diplomski--required-sections",
-      "checkId": "required-sections",
-      "value": [
-        { "key": "sazetak", "label": "sažetak", "terms": ["sažetak", "sazetak"] },
-        { "key": "abstract", "label": "abstract", "terms": ["abstract"] },
-        { "key": "sadrzaj", "label": "sadržaj", "terms": ["sadržaj", "sadrzaj"] },
-        { "key": "uvod", "label": "uvodni dio", "terms": ["uvod"] },
-        { "key": "zakljucak", "label": "zaključak", "terms": ["zaključak", "zakljucak"] },
-        { "key": "literatura", "label": "popis literature", "terms": ["literatura", "popis literature"] }
-      ],
-      "category": "structure",
-      "label": "Obvezni dijelovi rada (Tablica 1: Korice, Sažetak, Abstract, Sadržaj, Uvodni dio, Zaključak, Popis literature su \"Obavezno\" za diplomski rad)",
-      "machineCheckable": true,
-      "authority": "program-page",
-      "sourceId": "effectus-pravilnik-2023",
-      "sourcePage": "Upute (Prilog 1), tč. 5 Tablica 1 (str. 6)",
-      "quote": "Tablica 1: Sastavni dijelovi seminarskog, završnog i diplomskog rada ... Sažetak: Neobavezno / Obavezno / Obavezno. Abstract: Neobavezno / Obavezno / Obavezno. Sadržaj: Obavezno / Obavezno / Obavezno. Uvodni dio: Obavezno / Obavezno / Obavezno. Zaključak: Obavezno / Obavezno / Obavezno. Popis literature i drugih izvora podataka: Obavezno / Obavezno / Obavezno.",
-      "status": "verified",
-      "scored": true,
-      "verifiedHash": "52db197d9244f792219b5e46dc1eb9a35e98d92302a72b74c7d8020dcc3dfd6b",
       "lastVerified": "2026-08-01",
       "verifiedBy": "owner-bulk-approval",
       "reviewedBy": null,
       "confirmedVia": "owner-bulk-approval"
     }
   ],
-  "generatedAt": "2026-07-03"
+  "generatedAt": "2026-08-01"
 }

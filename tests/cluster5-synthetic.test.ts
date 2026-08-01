@@ -32,13 +32,16 @@ function doc(): ParaSpec[] {
 }
 const F = 'Dominantni font', V = 'Veličina osnovnog teksta', P = 'Prored osnovnog teksta';
 const J = 'Poravnanje osnovnog teksta', M = 'Margine dokumenta', A4 = 'Format stranice A4', SA = 'Sadržaj dokumenta';
+// profil ima i requireA4 i paperSizes:['A4'] (paper-size ruleEntry) - profile.paperSizes ima prednost
+// u analyze-docx.ts pa checker koristi naslov "Format stranice (A4)", ne legacy "Format stranice A4".
+const A4P = 'Format stranice (A4)';
 
 const cases: Array<{ id: string; margins: any; pass: string[] }> = [
-  { id: 'grf-diplomski', margins: { top: 2.5, right: 2.5, bottom: 3.5, left: 3.5 }, pass: [F, V, P, M, A4, SA] },
+  { id: 'grf-diplomski', margins: { top: 2.5, right: 2.5, bottom: 3.5, left: 3.5 }, pass: [F, V, P, M, A4P, SA] },
   { id: 'kbf-diplomski', margins: { top: 2.5, right: 2.5, bottom: 2.5, left: 3.5 }, pass: [F, V, P, J, M, SA] },
   { id: 'kbf-zavrsni', margins: { top: 2.5, right: 2.5, bottom: 2.5, left: 3.5 }, pass: [F, V, P, J, M, SA] },
-  { id: 'kif-doktorski', margins: { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 }, pass: [F, V, P, M, A4, SA] },
-  { id: 'mef-doktorski', margins: { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 }, pass: [F, M, A4, SA] }, // font/margine informativno
+  { id: 'kif-doktorski', margins: { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 }, pass: [F, V, P, M, A4P, SA] },
+  { id: 'mef-doktorski', margins: { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 }, pass: [F, M, A4P, SA] }, // font/margine informativno
   { id: 'muza-diplomski', margins: { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 }, pass: [F, M] }, // ne puca; informativno
   { id: 'muza-doktorski', margins: { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 }, pass: [F, V, P, A4] },
   { id: 'pbf-doktorski', margins: { top: 2.5, right: 2.5, bottom: 2.5, left: 2.5 }, pass: [F, V, P, A4] },

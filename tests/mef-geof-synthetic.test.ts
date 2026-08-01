@@ -53,7 +53,8 @@ describe('mef sinteticki golden: diplomski (harvard, font+velicina scored, A4)',
     const r: any = await analyzeFixture(file, { profileId: 'mef-diplomski' });
     expect(check(r, 'Dominantni font').status).toBe('pass');
     expect(check(r, 'Veličina osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Format stranice A4').status).toBe('pass');
+    // mef-diplomski ima i requireA4 i paperSizes:['A4'] (paper-size ruleEntry).
+    expect(check(r, 'Format stranice (A4)').status).toBe('pass');
     expect(check(r, 'Sadržaj dokumenta').status).toBe('pass');
   });
 });

@@ -250,19 +250,27 @@
     },
     {
       "profileId": "effectus-diplomski",
-      "scored": 7,
-      "machineCheckable": 7,
+      "scored": 8,
+      "machineCheckable": 8,
       "advisory": 0,
       "ratio": 1,
-      "lastVerified": "2026-07-03"
+      "lastVerified": "2026-08-01"
+    },
+    {
+      "profileId": "effectus-seminarski",
+      "scored": 9,
+      "machineCheckable": 9,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-08-01"
     },
     {
       "profileId": "effectus-zavrsni",
-      "scored": 7,
-      "machineCheckable": 7,
+      "scored": 8,
+      "machineCheckable": 8,
       "advisory": 0,
       "ratio": 1,
-      "lastVerified": "2026-07-03"
+      "lastVerified": "2026-08-01"
     },
     {
       "profileId": "efos-diplomski",
@@ -273,12 +281,28 @@
       "lastVerified": "2026-07-02"
     },
     {
+      "profileId": "efos-doktorski",
+      "scored": 5,
+      "machineCheckable": 5,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-08-01"
+    },
+    {
       "profileId": "efos-opci-akademski-rad",
       "scored": 5,
       "machineCheckable": 6,
       "advisory": 1,
       "ratio": 0.8333333333333334,
       "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "efos-specijalisticki",
+      "scored": 5,
+      "machineCheckable": 5,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-08-01"
     },
     {
       "profileId": "efos-zavrsni",
@@ -343,6 +367,14 @@
       "advisory": 0,
       "ratio": 1,
       "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "efzg-seminarski",
+      "scored": 0,
+      "machineCheckable": 5,
+      "advisory": 5,
+      "ratio": 0,
+      "lastVerified": null
     },
     {
       "profileId": "efzg-specijalisticki",
@@ -1362,11 +1394,11 @@
     },
     {
       "profileId": "kif-diplomski",
-      "scored": 7,
-      "machineCheckable": 7,
+      "scored": 9,
+      "machineCheckable": 9,
       "advisory": 1,
       "ratio": 1,
-      "lastVerified": "2026-07-02"
+      "lastVerified": "2026-08-01"
     },
     {
       "profileId": "kif-doktorski",
@@ -1375,6 +1407,14 @@
       "advisory": 3,
       "ratio": 0.8571428571428571,
       "lastVerified": "2026-07-02"
+    },
+    {
+      "profileId": "kif-specijalisticki",
+      "scored": 8,
+      "machineCheckable": 8,
+      "advisory": 1,
+      "ratio": 1,
+      "lastVerified": "2026-08-01"
     },
     {
       "profileId": "kifos-diplomski",
@@ -1911,6 +1951,14 @@
       "advisory": 1,
       "ratio": 0.8333333333333334,
       "lastVerified": "2026-07-28"
+    },
+    {
+      "profileId": "pravri-specijalisticki",
+      "scored": 5,
+      "machineCheckable": 5,
+      "advisory": 0,
+      "ratio": 1,
+      "lastVerified": "2026-08-01"
     },
     {
       "profileId": "pravri-zavrsni",
@@ -3025,5 +3073,5 @@
       "lastVerified": "2026-07-02"
     }
   ],
-  "totalScored": 2053
+  "totalScored": 2089
 }

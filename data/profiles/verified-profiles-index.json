@@ -5176,7 +5176,10 @@
     "workTypes": [
       "final"
     ],
-    "status": "partial"
+    "status": "partial",
+    "rules": {
+      "recommendedCitation": "custom"
+    }
   },
   {
     "id": "fesb-diplomski",
@@ -5196,6 +5199,9 @@
         "metadataSpotChecks": 0,
         "years": []
       }
+    },
+    "rules": {
+      "recommendedCitation": "custom"
     }
   },
   {
@@ -7865,7 +7871,7 @@
       "Diplomski sveučilišni studij Forenzika"
     ],
     "workTypes": [
-      "diplomski"
+      "graduate"
     ],
     "status": "partial"
   },
@@ -8499,5 +8505,88 @@
       "final"
     ],
     "status": "partial"
+  },
+  {
+    "id": "efos-doktorski",
+    "unitId": "efos",
+    "programs": [
+      "Doktorski studij EFOS"
+    ],
+    "workTypes": [
+      "doctoral"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "efos-specijalisticki",
+    "unitId": "efos",
+    "programs": [
+      "Specijalistički diplomski studij EFOS"
+    ],
+    "workTypes": [
+      "specialist"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "efzg-seminarski",
+    "unitId": "efzg",
+    "programs": [
+      "Prijediplomski studiji Ekonomskog fakulteta (zavrsni rad)",
+      "Diplomski studiji Ekonomskog fakulteta",
+      "Poslovna ekonomija",
+      "Ekonomija"
+    ],
+    "workTypes": [
+      "seminar"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "kif-specijalisticki",
+    "unitId": "kif",
+    "programs": [
+      "Specijalistički diplomski studij Kineziološkog fakulteta"
+    ],
+    "workTypes": [
+      "specialist"
+    ],
+    "status": "partial",
+    "rules": {
+      "recommendedCitation": "apa7"
+    }
+  },
+  {
+    "id": "pravri-specijalisticki",
+    "unitId": "pravri",
+    "programs": [
+      "Sveučilišni specijalistički studij Financijsko pravo trgovačkih društava",
+      "Sveučilišni specijalistički studij Pravo europskih integracija",
+      "Sveučilišni specijalistički studij Kriminalističko istraživanje"
+    ],
+    "workTypes": [
+      "specialist"
+    ],
+    "status": "partial"
+  },
+  {
+    "id": "effectus-seminarski",
+    "unitId": "effectus",
+    "programs": [
+      "Financije i poslovno pravo",
+      "Poslovno upravljanje",
+      "Poslovno upravljanje - Financijski menadžment",
+      "Poslovno upravljanje - Menadžment ljudskih potencijala i znanja",
+      "Poslovno upravljanje - Porezi i poslovno pravo",
+      "Poslovno upravljanje - Analitički menadžment",
+      "Poslovno upravljanje - Bihevioralna ekonomija"
+    ],
+    "workTypes": [
+      "seminar"
+    ],
+    "status": "partial",
+    "rules": {
+      "recommendedCitation": "chicago-notes"
+    }
   }
 ]

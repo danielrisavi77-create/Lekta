@@ -212,6 +212,10 @@
     "toc",
     "page-numbers"
   ],
+  "effectus-seminarski": [
+    "toc",
+    "page-numbers"
+  ],
   "effectus-zavrsni": [
     "toc",
     "page-numbers"
@@ -221,7 +225,17 @@
     "toc",
     "page-numbers"
   ],
+  "efos-doktorski": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
   "efos-opci-akademski-rad": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "efos-specijalisticki": [
     "justify",
     "toc",
     "page-numbers"
@@ -261,6 +275,16 @@
   "efzg-doktorski": [
     "justify",
     "toc"
+  ],
+  "efzg-seminarski": [
+    "font",
+    "font-size",
+    "line-spacing",
+    "margins",
+    "justify",
+    "paper-size",
+    "toc",
+    "page-numbers"
   ],
   "efzg-specijalisticki": [
     "paper-size",
@@ -906,12 +930,15 @@
     "page-numbers"
   ],
   "kif-diplomski": [
-    "justify",
     "paper-size"
   ],
   "kif-doktorski": [
     "font",
     "justify"
+  ],
+  "kif-specijalisticki": [
+    "paper-size",
+    "toc"
   ],
   "kifos-diplomski": [
     "justify",
@@ -1250,6 +1277,11 @@
     "page-numbers"
   ],
   "pravri-opci-akademski-rad": [
+    "justify",
+    "toc",
+    "page-numbers"
+  ],
+  "pravri-specijalisticki": [
     "justify",
     "toc",
     "page-numbers"

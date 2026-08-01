@@ -40,7 +40,8 @@ for (const id of ['ffrz-diplomski', 'ffrz-bakalaureatski']) {
       expect(check(r, 'Veličina osnovnog teksta').status).toBe('pass');
       expect(check(r, 'Prored osnovnog teksta').status).toBe('pass');
       expect(check(r, 'Margine dokumenta').status).toBe('pass');
-      expect(check(r, 'Format stranice A4').status).toBe('pass');
+      // ffrz-diplomski/bakalaureatski imaju i requireA4 i paperSizes:['A4'] (paper-size ruleEntry).
+      expect(check(r, 'Format stranice (A4)').status).toBe('pass');
       expect(check(r, 'Sadržaj dokumenta').status).toBe('pass');
     });
   });

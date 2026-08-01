@@ -51,7 +51,8 @@ describe('pbf sinteticki golden: diplomski (harvard, prored 1,5, A4)', () => {
     expect(check(r, 'Veličina osnovnog teksta').status).toBe('pass');
     expect(check(r, 'Prored osnovnog teksta').status).toBe('pass');
     expect(check(r, 'Poravnanje osnovnog teksta').status).toBe('pass');
-    expect(check(r, 'Format stranice A4').status).toBe('pass');
+    // pbf-diplomski ima i requireA4 i paperSizes:['A4'] (paper-size ruleEntry).
+    expect(check(r, 'Format stranice (A4)').status).toBe('pass');
     expect(check(r, 'Sadržaj dokumenta').status).toBe('pass');
   });
 });

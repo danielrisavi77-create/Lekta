@@ -1453,6 +1453,43 @@
     ],
     "items": [
       {
+        "ruleId": "alu-kiparstvo-diplomski--font-size",
+        "fixerId": "font-fixer",
+        "label": "Velicina slova",
+        "scope": "profil",
+        "target": "12 pt",
+        "params": {
+          "fontSizePt": 12
+        },
+        "source": {
+          "id": "alu-pravilnik-diplomski-2014",
+          "title": "Pravilnik o diplomskom radu i diplomskom ispitu (Akademija likovnih umjetnosti, 2014)",
+          "url": "https://www.alu.unizg.hr//alu/cms/upload/dokumenti/PRAVILNIK_O_DIPLOMSKOM_RADU_I_DIPLOMSKOM_ISPITU_lipanj_2014.pdf"
+        },
+        "sourcePage": "Clanak 39, 48 (Kiparski odsjek)",
+        "authority": "binding",
+        "lastVerified": "2026-07-30"
+      },
+      {
+        "ruleId": "alu-kiparstvo-diplomski--paper-size",
+        "fixerId": "paper-size-fixer",
+        "label": "Format papira A4 (polozeni/landscape - provjera je orijentacijski neutralna)",
+        "scope": "profil",
+        "target": "21 x 29,7 cm",
+        "params": {
+          "w": 21,
+          "h": 29.7
+        },
+        "source": {
+          "id": "alu-pravilnik-diplomski-2014",
+          "title": "Pravilnik o diplomskom radu i diplomskom ispitu (Akademija likovnih umjetnosti, 2014)",
+          "url": "https://www.alu.unizg.hr//alu/cms/upload/dokumenti/PRAVILNIK_O_DIPLOMSKOM_RADU_I_DIPLOMSKOM_ISPITU_lipanj_2014.pdf"
+        },
+        "sourcePage": "Clanak 39, 48 (Kiparski odsjek)",
+        "authority": "binding",
+        "lastVerified": "2026-07-30"
+      },
+      {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
         "label": "Usklađivanje predajnog paketa",
@@ -1484,6 +1521,128 @@
       "graduate"
     ],
     "items": [
+      {
+        "ruleId": "alu-konzerviranje-diplomski--font",
+        "fixerId": "font-fixer",
+        "label": "Font",
+        "scope": "profil",
+        "target": "Times New Roman",
+        "params": {
+          "fontName": "Times New Roman"
+        },
+        "source": {
+          "id": "alu-okiru-upute-2015",
+          "title": "Upute za izradu pisanog dijela diplomskog rada (Odsjek za konzerviranje i restauriranje umjetnina, ALU Zagreb, svibanj 2015)",
+          "url": "https://www.alu.unizg.hr/alu/cms/upload/orku/dipl/Upute_za_izradu_pisanog_dijela_diplomskog_rada_OKIRU_2015.pdf"
+        },
+        "sourcePage": "Clanak 92. Pravilnika o diplomskom radu i diplomskom ispitu ALU (implementirano ovom Uputom)",
+        "authority": "general",
+        "lastVerified": "2026-07-28"
+      },
+      {
+        "ruleId": "alu-konzerviranje-diplomski--font-size",
+        "fixerId": "font-fixer",
+        "label": "Velicina slova",
+        "scope": "profil",
+        "target": "12 pt",
+        "params": {
+          "fontSizePt": 12
+        },
+        "source": {
+          "id": "alu-okiru-upute-2015",
+          "title": "Upute za izradu pisanog dijela diplomskog rada (Odsjek za konzerviranje i restauriranje umjetnina, ALU Zagreb, svibanj 2015)",
+          "url": "https://www.alu.unizg.hr/alu/cms/upload/orku/dipl/Upute_za_izradu_pisanog_dijela_diplomskog_rada_OKIRU_2015.pdf"
+        },
+        "sourcePage": "Clanak 92. Pravilnika o diplomskom radu i diplomskom ispitu ALU (implementirano ovom Uputom)",
+        "authority": "general",
+        "lastVerified": "2026-07-28"
+      },
+      {
+        "ruleId": "alu-konzerviranje-diplomski--line-spacing",
+        "fixerId": "line-spacing-fixer",
+        "label": "Prored",
+        "scope": "profil",
+        "target": "prored 1,5",
+        "params": {
+          "multiplier": 1.5
+        },
+        "source": {
+          "id": "alu-okiru-upute-2015",
+          "title": "Upute za izradu pisanog dijela diplomskog rada (Odsjek za konzerviranje i restauriranje umjetnina, ALU Zagreb, svibanj 2015)",
+          "url": "https://www.alu.unizg.hr/alu/cms/upload/orku/dipl/Upute_za_izradu_pisanog_dijela_diplomskog_rada_OKIRU_2015.pdf"
+        },
+        "sourcePage": "Clanak 92. Pravilnika o diplomskom radu i diplomskom ispitu ALU (implementirano ovom Uputom)",
+        "authority": "general",
+        "lastVerified": "2026-07-28"
+      },
+      {
+        "ruleId": "alu-konzerviranje-diplomski--margins",
+        "fixerId": "margins-fixer",
+        "label": "Margine",
+        "scope": "profil",
+        "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
+        "params": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "source": {
+          "id": "alu-okiru-upute-2015",
+          "title": "Upute za izradu pisanog dijela diplomskog rada (Odsjek za konzerviranje i restauriranje umjetnina, ALU Zagreb, svibanj 2015)",
+          "url": "https://www.alu.unizg.hr/alu/cms/upload/orku/dipl/Upute_za_izradu_pisanog_dijela_diplomskog_rada_OKIRU_2015.pdf"
+        },
+        "sourcePage": "Clanak 92. Pravilnika o diplomskom radu i diplomskom ispitu ALU (implementirano ovom Uputom)",
+        "authority": "general",
+        "lastVerified": "2026-07-28"
+      },
+      {
+        "ruleId": "alu-konzerviranje-diplomski--paper-size",
+        "fixerId": "paper-size-fixer",
+        "label": "Format papira A4",
+        "scope": "profil",
+        "target": "21 x 29,7 cm",
+        "params": {
+          "w": 21,
+          "h": 29.7
+        },
+        "source": {
+          "id": "alu-okiru-upute-2015",
+          "title": "Upute za izradu pisanog dijela diplomskog rada (Odsjek za konzerviranje i restauriranje umjetnina, ALU Zagreb, svibanj 2015)",
+          "url": "https://www.alu.unizg.hr/alu/cms/upload/orku/dipl/Upute_za_izradu_pisanog_dijela_diplomskog_rada_OKIRU_2015.pdf"
+        },
+        "sourcePage": "Clanak 92. Pravilnika o diplomskom radu i diplomskom ispitu ALU (implementirano ovom Uputom)",
+        "authority": "general",
+        "lastVerified": "2026-07-28"
+      },
+      {
+        "ruleId": "alu-konzerviranje-diplomski--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Poravnanje",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
+        },
+        "source": {
+          "id": "alu-okiru-upute-2015",
+          "title": "Upute za izradu pisanog dijela diplomskog rada (Odsjek za konzerviranje i restauriranje umjetnina, ALU Zagreb, svibanj 2015)",
+          "url": "https://www.alu.unizg.hr/alu/cms/upload/orku/dipl/Upute_za_izradu_pisanog_dijela_diplomskog_rada_OKIRU_2015.pdf"
+        },
+        "sourcePage": "Clanak 92. Pravilnika o diplomskom radu i diplomskom ispitu ALU (implementirano ovom Uputom)",
+        "authority": "general",
+        "lastVerified": "2026-07-28"
+      },
+      {
+        "ruleId": "footnote-typography-universal",
+        "fixerId": "footnote-typography-fixer",
+        "label": "Font i veličina fusnota",
+        "scope": "profil",
+        "target": "10 pt",
+        "params": {
+          "fontSizePt": 10
+        }
+      },
       {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
@@ -1580,6 +1739,24 @@
       "graduate"
     ],
     "items": [
+      {
+        "ruleId": "alu-slikarstvo-diplomski--font-size",
+        "fixerId": "font-fixer",
+        "label": "Velicina slova",
+        "scope": "profil",
+        "target": "12 pt",
+        "params": {
+          "fontSizePt": 12
+        },
+        "source": {
+          "id": "alu-pravilnik-diplomski-2014",
+          "title": "Pravilnik o diplomskom radu i diplomskom ispitu (Akademija likovnih umjetnosti, 2014)",
+          "url": "https://www.alu.unizg.hr//alu/cms/upload/dokumenti/PRAVILNIK_O_DIPLOMSKOM_RADU_I_DIPLOMSKOM_ISPITU_lipanj_2014.pdf"
+        },
+        "sourcePage": "Clanak 32 (Slikarski odsjek)",
+        "authority": "binding",
+        "lastVerified": "2026-07-30"
+      },
       {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
@@ -2238,6 +2415,16 @@
         "lastVerified": "2026-07-27"
       },
       {
+        "ruleId": "footnote-typography-universal",
+        "fixerId": "footnote-typography-fixer",
+        "label": "Font i veličina fusnota",
+        "scope": "profil",
+        "target": "10 pt",
+        "params": {
+          "fontSizePt": 10
+        }
+      },
+      {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
         "label": "Usklađivanje predajnog paketa",
@@ -2359,6 +2546,16 @@
         "sourcePage": "Clanak 6., stavci 4-9 (str. 2 od 5)",
         "authority": "binding",
         "lastVerified": "2026-07-27"
+      },
+      {
+        "ruleId": "footnote-typography-universal",
+        "fixerId": "footnote-typography-fixer",
+        "label": "Font i veličina fusnota",
+        "scope": "profil",
+        "target": "10 pt",
+        "params": {
+          "fontSizePt": 10
+        }
       },
       {
         "ruleId": "cross-file-submission-consistency-assisted",
@@ -2484,6 +2681,16 @@
         "lastVerified": "2026-07-27"
       },
       {
+        "ruleId": "footnote-typography-universal",
+        "fixerId": "footnote-typography-fixer",
+        "label": "Font i veličina fusnota",
+        "scope": "profil",
+        "target": "10 pt",
+        "params": {
+          "fontSizePt": 10
+        }
+      },
+      {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
         "label": "Usklađivanje predajnog paketa",
@@ -2605,6 +2812,16 @@
         "sourcePage": "Clanak 6., stavci 4-9 (str. 2 od 5)",
         "authority": "binding",
         "lastVerified": "2026-07-27"
+      },
+      {
+        "ruleId": "footnote-typography-universal",
+        "fixerId": "footnote-typography-fixer",
+        "label": "Font i veličina fusnota",
+        "scope": "profil",
+        "target": "10 pt",
+        "params": {
+          "fontSizePt": 10
+        }
       },
       {
         "ruleId": "cross-file-submission-consistency-assisted",
@@ -2733,6 +2950,24 @@
         "lastVerified": "2026-07-27"
       },
       {
+        "ruleId": "bak-diplomski--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Poravnanje",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
+        },
+        "source": {
+          "id": "bak-uputa-2025",
+          "title": "Uputa za izradu zavrsnih i diplomskih radova (Veleuciliste Baltazar Zapresic, 2025)",
+          "url": "https://www.bak.hr/wp-content/uploads/2025/02/Uputa-za-izradu-zavrsnih-i-diplomskih-radova-2025.pdf"
+        },
+        "sourcePage": "Odjeljak \"Tehnicko oblikovanje rada\", str. 6-7",
+        "authority": "general",
+        "lastVerified": "2026-07-27"
+      },
+      {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
         "label": "Usklađivanje predajnog paketa",
@@ -2848,6 +3083,24 @@
         "params": {
           "w": 21,
           "h": 29.7
+        },
+        "source": {
+          "id": "bak-uputa-2025",
+          "title": "Uputa za izradu zavrsnih i diplomskih radova (Veleuciliste Baltazar Zapresic, 2025)",
+          "url": "https://www.bak.hr/wp-content/uploads/2025/02/Uputa-za-izradu-zavrsnih-i-diplomskih-radova-2025.pdf"
+        },
+        "sourcePage": "Odjeljak \"Tehnicko oblikovanje rada\", str. 6-7",
+        "authority": "general",
+        "lastVerified": "2026-07-27"
+      },
+      {
+        "ruleId": "bak-zavrsni--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Poravnanje",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
         },
         "source": {
           "id": "bak-uputa-2025",
@@ -3482,6 +3735,150 @@
     ]
   },
   {
+    "id": "effectus-seminarski",
+    "label": "Effectus, seminarski rad",
+    "unitId": "effectus",
+    "status": "partial",
+    "workTypes": [
+      "seminar"
+    ],
+    "items": [
+      {
+        "ruleId": "effectus-seminarski--paper-size",
+        "fixerId": "paper-size-fixer",
+        "label": "Format papira",
+        "scope": "profil",
+        "target": "21 x 29,7 cm",
+        "params": {
+          "w": 21,
+          "h": 29.7
+        },
+        "source": {
+          "id": "effectus-pravilnik-2023",
+          "title": "Pravilnik o izradi i obrani zavrsnog i diplomskog rada s Uputama (Effectus, 2023)",
+          "url": "https://effectus.com.hr/wp-content/uploads/2023/03/Pravilnik-o-izradi-i-obrani-zavrsnog-i-diplomskog-rada_2023.pdf"
+        },
+        "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+        "authority": "program-page",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "effectus-seminarski--margins",
+        "fixerId": "margins-fixer",
+        "label": "Margine",
+        "scope": "profil",
+        "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
+        "params": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "source": {
+          "id": "effectus-pravilnik-2023",
+          "title": "Pravilnik o izradi i obrani zavrsnog i diplomskog rada s Uputama (Effectus, 2023)",
+          "url": "https://effectus.com.hr/wp-content/uploads/2023/03/Pravilnik-o-izradi-i-obrani-zavrsnog-i-diplomskog-rada_2023.pdf"
+        },
+        "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+        "authority": "program-page",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "effectus-seminarski--font",
+        "fixerId": "font-fixer",
+        "label": "Vrsta slova",
+        "scope": "profil",
+        "target": "Times New Roman",
+        "params": {
+          "fontName": "Times New Roman"
+        },
+        "source": {
+          "id": "effectus-pravilnik-2023",
+          "title": "Pravilnik o izradi i obrani zavrsnog i diplomskog rada s Uputama (Effectus, 2023)",
+          "url": "https://effectus.com.hr/wp-content/uploads/2023/03/Pravilnik-o-izradi-i-obrani-zavrsnog-i-diplomskog-rada_2023.pdf"
+        },
+        "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+        "authority": "program-page",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "effectus-seminarski--font-size",
+        "fixerId": "font-fixer",
+        "label": "Velicina slova",
+        "scope": "profil",
+        "target": "12 pt",
+        "params": {
+          "fontSizePt": 12
+        },
+        "source": {
+          "id": "effectus-pravilnik-2023",
+          "title": "Pravilnik o izradi i obrani zavrsnog i diplomskog rada s Uputama (Effectus, 2023)",
+          "url": "https://effectus.com.hr/wp-content/uploads/2023/03/Pravilnik-o-izradi-i-obrani-zavrsnog-i-diplomskog-rada_2023.pdf"
+        },
+        "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+        "authority": "program-page",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "effectus-seminarski--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Obostrano poravnanje",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
+        },
+        "source": {
+          "id": "effectus-pravilnik-2023",
+          "title": "Pravilnik o izradi i obrani zavrsnog i diplomskog rada s Uputama (Effectus, 2023)",
+          "url": "https://effectus.com.hr/wp-content/uploads/2023/03/Pravilnik-o-izradi-i-obrani-zavrsnog-i-diplomskog-rada_2023.pdf"
+        },
+        "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+        "authority": "program-page",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "effectus-seminarski--line-spacing",
+        "fixerId": "line-spacing-fixer",
+        "label": "Prored",
+        "scope": "profil",
+        "target": "prored 1,15",
+        "params": {
+          "multiplier": 1.15
+        },
+        "source": {
+          "id": "effectus-pravilnik-2023",
+          "title": "Pravilnik o izradi i obrani zavrsnog i diplomskog rada s Uputama (Effectus, 2023)",
+          "url": "https://effectus.com.hr/wp-content/uploads/2023/03/Pravilnik-o-izradi-i-obrani-zavrsnog-i-diplomskog-rada_2023.pdf"
+        },
+        "sourcePage": "Upute (Prilog 1), tč. 3 Tehnicki detalji (str. 4)",
+        "authority": "program-page",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "cross-file-submission-consistency-assisted",
+        "fixerId": "submission-metadata-fixer",
+        "label": "Usklađivanje predajnog paketa",
+        "scope": "opce",
+        "target": "potvrđene DOCX metapodatke između Worda, PDF-a i obrasca",
+        "params": {
+          "version": 1,
+          "fields": []
+        },
+        "condition": "Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni."
+      },
+      {
+        "ruleId": "empty-paragraphs-universal",
+        "fixerId": "empty-paragraph-fixer",
+        "label": "Prazni odlomci",
+        "scope": "opce",
+        "target": "uklanjanje viska praznih odlomaka",
+        "params": {},
+        "condition": "Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka."
+      }
+    ]
+  },
+  {
     "id": "effectus-zavrsni",
     "label": "Effectus, završni rad",
     "unitId": "effectus",
@@ -3752,6 +4149,132 @@
     ]
   },
   {
+    "id": "efos-doktorski",
+    "label": "EFOS, doktorski rad",
+    "unitId": "efos",
+    "status": "partial",
+    "workTypes": [
+      "doctoral"
+    ],
+    "items": [
+      {
+        "ruleId": "efos-doktorski--paper-size",
+        "fixerId": "paper-size-fixer",
+        "label": "Format papira",
+        "scope": "profil",
+        "target": "21 x 29,7 cm",
+        "params": {
+          "w": 21,
+          "h": 29.7
+        },
+        "source": {
+          "id": "efos-upute-studentski-2023",
+          "title": "Upute za pisanje studentskih radova (EFOS, 2023)",
+          "url": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx"
+        },
+        "sourcePage": "Opce upute za oblikovanje rada",
+        "authority": "program-page",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "efos-doktorski--margins",
+        "fixerId": "margins-fixer",
+        "label": "Margine",
+        "scope": "profil",
+        "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
+        "params": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "source": {
+          "id": "efos-upute-studentski-2023",
+          "title": "Upute za pisanje studentskih radova (EFOS, 2023)",
+          "url": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx"
+        },
+        "sourcePage": "Opce upute za oblikovanje rada",
+        "authority": "program-page",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "efos-doktorski--font",
+        "fixerId": "font-fixer",
+        "label": "Vrsta slova",
+        "scope": "profil",
+        "target": "Times New Roman",
+        "params": {
+          "fontName": "Times New Roman"
+        },
+        "source": {
+          "id": "efos-upute-studentski-2023",
+          "title": "Upute za pisanje studentskih radova (EFOS, 2023)",
+          "url": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx"
+        },
+        "sourcePage": "Opce upute za oblikovanje rada",
+        "authority": "program-page",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "efos-doktorski--font-size",
+        "fixerId": "font-fixer",
+        "label": "Velicina slova",
+        "scope": "profil",
+        "target": "12 pt",
+        "params": {
+          "fontSizePt": 12
+        },
+        "source": {
+          "id": "efos-upute-studentski-2023",
+          "title": "Upute za pisanje studentskih radova (EFOS, 2023)",
+          "url": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx"
+        },
+        "sourcePage": "Opce upute za oblikovanje rada",
+        "authority": "program-page",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "efos-doktorski--line-spacing",
+        "fixerId": "line-spacing-fixer",
+        "label": "Prored",
+        "scope": "profil",
+        "target": "prored 1,5",
+        "params": {
+          "multiplier": 1.5
+        },
+        "source": {
+          "id": "efos-upute-studentski-2023",
+          "title": "Upute za pisanje studentskih radova (EFOS, 2023)",
+          "url": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx"
+        },
+        "sourcePage": "Opce upute za oblikovanje rada",
+        "authority": "program-page",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "cross-file-submission-consistency-assisted",
+        "fixerId": "submission-metadata-fixer",
+        "label": "Usklađivanje predajnog paketa",
+        "scope": "opce",
+        "target": "potvrđene DOCX metapodatke između Worda, PDF-a i obrasca",
+        "params": {
+          "version": 1,
+          "fields": []
+        },
+        "condition": "Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni."
+      },
+      {
+        "ruleId": "empty-paragraphs-universal",
+        "fixerId": "empty-paragraph-fixer",
+        "label": "Prazni odlomci",
+        "scope": "opce",
+        "target": "uklanjanje viska praznih odlomaka",
+        "params": {},
+        "condition": "Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka."
+      }
+    ]
+  },
+  {
     "id": "efos-opci-akademski-rad",
     "label": "EFOS · opći akademski rad (seminar/projekt)",
     "unitId": "efos",
@@ -3855,6 +4378,132 @@
         "sourcePage": "Upute, travanj 2023",
         "authority": "binding",
         "lastVerified": "2026-07-28"
+      },
+      {
+        "ruleId": "cross-file-submission-consistency-assisted",
+        "fixerId": "submission-metadata-fixer",
+        "label": "Usklađivanje predajnog paketa",
+        "scope": "opce",
+        "target": "potvrđene DOCX metapodatke između Worda, PDF-a i obrasca",
+        "params": {
+          "version": 1,
+          "fields": []
+        },
+        "condition": "Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni."
+      },
+      {
+        "ruleId": "empty-paragraphs-universal",
+        "fixerId": "empty-paragraph-fixer",
+        "label": "Prazni odlomci",
+        "scope": "opce",
+        "target": "uklanjanje viska praznih odlomaka",
+        "params": {},
+        "condition": "Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka."
+      }
+    ]
+  },
+  {
+    "id": "efos-specijalisticki",
+    "label": "EFOS, specijalistički rad",
+    "unitId": "efos",
+    "status": "partial",
+    "workTypes": [
+      "specialist"
+    ],
+    "items": [
+      {
+        "ruleId": "efos-specijalisticki--paper-size",
+        "fixerId": "paper-size-fixer",
+        "label": "Format papira",
+        "scope": "profil",
+        "target": "21 x 29,7 cm",
+        "params": {
+          "w": 21,
+          "h": 29.7
+        },
+        "source": {
+          "id": "efos-upute-studentski-2023",
+          "title": "Upute za pisanje studentskih radova (EFOS, 2023)",
+          "url": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx"
+        },
+        "sourcePage": "Opce upute za oblikovanje rada",
+        "authority": "program-page",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "efos-specijalisticki--margins",
+        "fixerId": "margins-fixer",
+        "label": "Margine",
+        "scope": "profil",
+        "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
+        "params": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "source": {
+          "id": "efos-upute-studentski-2023",
+          "title": "Upute za pisanje studentskih radova (EFOS, 2023)",
+          "url": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx"
+        },
+        "sourcePage": "Opce upute za oblikovanje rada",
+        "authority": "program-page",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "efos-specijalisticki--font",
+        "fixerId": "font-fixer",
+        "label": "Vrsta slova",
+        "scope": "profil",
+        "target": "Times New Roman",
+        "params": {
+          "fontName": "Times New Roman"
+        },
+        "source": {
+          "id": "efos-upute-studentski-2023",
+          "title": "Upute za pisanje studentskih radova (EFOS, 2023)",
+          "url": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx"
+        },
+        "sourcePage": "Opce upute za oblikovanje rada",
+        "authority": "program-page",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "efos-specijalisticki--font-size",
+        "fixerId": "font-fixer",
+        "label": "Velicina slova",
+        "scope": "profil",
+        "target": "12 pt",
+        "params": {
+          "fontSizePt": 12
+        },
+        "source": {
+          "id": "efos-upute-studentski-2023",
+          "title": "Upute za pisanje studentskih radova (EFOS, 2023)",
+          "url": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx"
+        },
+        "sourcePage": "Opce upute za oblikovanje rada",
+        "authority": "program-page",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "efos-specijalisticki--line-spacing",
+        "fixerId": "line-spacing-fixer",
+        "label": "Prored",
+        "scope": "profil",
+        "target": "prored 1,5",
+        "params": {
+          "multiplier": 1.5
+        },
+        "source": {
+          "id": "efos-upute-studentski-2023",
+          "title": "Upute za pisanje studentskih radova (EFOS, 2023)",
+          "url": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx"
+        },
+        "sourcePage": "Opce upute za oblikovanje rada",
+        "authority": "program-page",
+        "lastVerified": "2026-08-01"
       },
       {
         "ruleId": "cross-file-submission-consistency-assisted",
@@ -4926,6 +5575,79 @@
         "sourcePage": "odjeljak 'Postavke stranice' (DR.SC.-08, Upute za oblikovanje doktorskog rada)",
         "authority": "general",
         "lastVerified": "2026-07-02"
+      },
+      {
+        "ruleId": "cross-file-submission-consistency-assisted",
+        "fixerId": "submission-metadata-fixer",
+        "label": "Usklađivanje predajnog paketa",
+        "scope": "opce",
+        "target": "potvrđene DOCX metapodatke između Worda, PDF-a i obrasca",
+        "params": {
+          "version": 1,
+          "fields": []
+        },
+        "condition": "Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni."
+      },
+      {
+        "ruleId": "empty-paragraphs-universal",
+        "fixerId": "empty-paragraph-fixer",
+        "label": "Prazni odlomci",
+        "scope": "opce",
+        "target": "uklanjanje viska praznih odlomaka",
+        "params": {},
+        "condition": "Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka."
+      }
+    ]
+  },
+  {
+    "id": "efzg-seminarski",
+    "label": "Ekonomski fakultet u Zagrebu, seminarski rad",
+    "unitId": "efzg",
+    "status": "partial",
+    "workTypes": [
+      "seminar"
+    ],
+    "items": [
+      {
+        "ruleId": "efzg-seminarski--line-spacing",
+        "fixerId": "line-spacing-fixer",
+        "label": "Prored (preporuka)",
+        "scope": "profil",
+        "target": "prored 1,5",
+        "params": {
+          "multiplier": 1.5
+        },
+        "recommended": true,
+        "source": {
+          "id": "efzg-upute-diplomski-seminarski",
+          "title": "Upute za pisanje seminarskoga i diplomskoga rada (Ekonomski fakultet u Zagrebu, 2003)",
+          "url": "https://www.efzg.unizg.hr/UserDocsImages/dokumenti/efzg_diplomski_seminarski_upute.pdf?vel=216027"
+        },
+        "sourcePage": "Metodologija izrade rada, Izgled rada",
+        "authority": "official-recommended-mentor-priority",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "efzg-seminarski--margins",
+        "fixerId": "margins-fixer",
+        "label": "Margine (preporuka)",
+        "scope": "profil",
+        "target": "2,54 / 2,54 / 2,54 / 2,54 cm (gore/desno/dolje/lijevo)",
+        "params": {
+          "top": 2.54,
+          "right": 2.54,
+          "bottom": 2.54,
+          "left": 2.54
+        },
+        "recommended": true,
+        "source": {
+          "id": "efzg-upute-diplomski-seminarski",
+          "title": "Upute za pisanje seminarskoga i diplomskoga rada (Ekonomski fakultet u Zagrebu, 2003)",
+          "url": "https://www.efzg.unizg.hr/UserDocsImages/dokumenti/efzg_diplomski_seminarski_upute.pdf?vel=216027"
+        },
+        "sourcePage": "Metodologija izrade rada, Izgled rada",
+        "authority": "official-recommended-mentor-priority",
+        "lastVerified": "2026-08-01"
       },
       {
         "ruleId": "cross-file-submission-consistency-assisted",
@@ -8680,6 +9402,24 @@
         "lastVerified": "2026-07-28"
       },
       {
+        "ruleId": "ffos-psihologija-diplomski--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Poravnanje",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
+        },
+        "source": {
+          "id": "ffos-psihologija-diplomski-2015",
+          "title": "Upute za oblikovanje diplomskog rada, 2015 (Odsjek za psihologiju, FFOS)",
+          "url": "https://www.ffos.unios.hr/wp-content/uploads/2021/03/Psihologija_upute-za-oblikovanje-diplomskog-rada-2015.pdf"
+        },
+        "sourcePage": "cijeli dokument",
+        "authority": "binding",
+        "lastVerified": "2026-07-28"
+      },
+      {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
         "label": "Usklađivanje predajnog paketa",
@@ -9510,6 +10250,16 @@
         "lastVerified": "2026-07-28"
       },
       {
+        "ruleId": "footnote-typography-universal",
+        "fixerId": "footnote-typography-fixer",
+        "label": "Font i veličina fusnota",
+        "scope": "profil",
+        "target": "10 pt",
+        "params": {
+          "fontSizePt": 10
+        }
+      },
+      {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
         "label": "Usklađivanje predajnog paketa",
@@ -9652,6 +10402,16 @@
         "sourcePage": "S3.7, str. 20 (uz obvezujucu deklaraciju na str. 5)",
         "authority": "binding",
         "lastVerified": "2026-07-28"
+      },
+      {
+        "ruleId": "footnote-typography-universal",
+        "fixerId": "footnote-typography-fixer",
+        "label": "Font i veličina fusnota",
+        "scope": "profil",
+        "target": "10 pt",
+        "params": {
+          "fontSizePt": 10
+        }
       },
       {
         "ruleId": "cross-file-submission-consistency-assisted",
@@ -9798,6 +10558,16 @@
         "lastVerified": "2026-08-01"
       },
       {
+        "ruleId": "footnote-typography-universal",
+        "fixerId": "footnote-typography-fixer",
+        "label": "Font i veličina fusnota",
+        "scope": "profil",
+        "target": "10 pt",
+        "params": {
+          "fontSizePt": 10
+        }
+      },
+      {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
         "label": "Usklađivanje predajnog paketa",
@@ -9942,6 +10712,16 @@
         "lastVerified": "2026-07-28"
       },
       {
+        "ruleId": "footnote-typography-universal",
+        "fixerId": "footnote-typography-fixer",
+        "label": "Font i veličina fusnota",
+        "scope": "profil",
+        "target": "10 pt",
+        "params": {
+          "fontSizePt": 10
+        }
+      },
+      {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
         "label": "Usklađivanje predajnog paketa",
@@ -10065,6 +10845,16 @@
         "lastVerified": "2026-07-28"
       },
       {
+        "ruleId": "footnote-typography-universal",
+        "fixerId": "footnote-typography-fixer",
+        "label": "Font i veličina fusnota",
+        "scope": "profil",
+        "target": "10 pt",
+        "params": {
+          "fontSizePt": 10
+        }
+      },
+      {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
         "label": "Usklađivanje predajnog paketa",
@@ -10186,6 +10976,16 @@
         "sourcePage": "Clanak 9 Pravilnika + odsjecki dodatak",
         "authority": "binding",
         "lastVerified": "2026-07-28"
+      },
+      {
+        "ruleId": "footnote-typography-universal",
+        "fixerId": "footnote-typography-fixer",
+        "label": "Font i veličina fusnota",
+        "scope": "profil",
+        "target": "10 pt",
+        "params": {
+          "fontSizePt": 10
+        }
       },
       {
         "ruleId": "cross-file-submission-consistency-assisted",
@@ -11362,6 +12162,24 @@
         "lastVerified": "2026-07-02"
       },
       {
+        "ruleId": "ffzg-etnologija-graduate--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Obostrano poravnanje",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
+        },
+        "source": {
+          "id": "ffzg-etnologija-diplomski-2019",
+          "title": "Upute za prijavu, izradu i obranu diplomskog rada (Filozofski fakultet, Odsjek za etnologiju i kulturnu antropologiju)",
+          "url": "https://etno.ffzg.unizg.hr/wp-content/uploads/2019/08/UPUTE-DIPLOMSKI-RAD-EKA.pdf"
+        },
+        "sourcePage": "odjeljak Graficko oblikovanje teksta",
+        "authority": "program-page",
+        "lastVerified": "2026-07-02"
+      },
+      {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
         "label": "Usklađivanje predajnog paketa",
@@ -11458,6 +12276,24 @@
           "right": 2.5,
           "bottom": 2.5,
           "left": 2.5
+        },
+        "source": {
+          "id": "ffzg-filoz-diplomski-2019",
+          "title": "Upute za oblikovanje diplomskoga rada na studiju filozofije (Filozofski fakultet, Odsjek za filozofiju, 2019)",
+          "url": "https://filoz.ffzg.unizg.hr/wp-content/uploads/2019/06/Upute-za-oblikovanje-diplomskoga-rada.pdf"
+        },
+        "sourcePage": "odjeljak Tekst treba oblikovati na sljedei nacin",
+        "authority": "program-page",
+        "lastVerified": "2026-07-02"
+      },
+      {
+        "ruleId": "ffzg-filozofija-diplomski--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Obostrano poravnanje",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
         },
         "source": {
           "id": "ffzg-filoz-diplomski-2019",
@@ -11645,6 +12481,24 @@
         "lastVerified": "2026-07-02"
       },
       {
+        "ruleId": "ffzg-kroatistika-graduate--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Obostrano poravnanje",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
+        },
+        "source": {
+          "id": "ffzg-kroatistika-diplomski-2026",
+          "title": "Opce upute za sastavljanje diplomskoga rada (Filozofski fakultet, Odsjek za kroatistiku)",
+          "url": "https://kroat.ffzg.unizg.hr/index.php/studij/diplomski-rad/153-opce-upute-za-sastavljanje-diplomskoga-rada"
+        },
+        "sourcePage": "odjeljak 6. Oblikovanje teksta",
+        "authority": "program-page",
+        "lastVerified": "2026-07-02"
+      },
+      {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
         "label": "Usklađivanje predajnog paketa",
@@ -11729,6 +12583,24 @@
         "target": "prored 1,5",
         "params": {
           "multiplier": 1.5
+        },
+        "source": {
+          "id": "ffzg-lingvistika-diplomski-2024",
+          "title": "Smjernice za izradu i obranu diplomskog rada (Filozofski fakultet, Odsjek za lingvistiku, 2024)",
+          "url": "https://www.ffzg.unizg.hr/oling/wp-content/uploads/2024/04/Smjernice-za-izradu-diplomskoga-rada-Lingvistika-1.pdf"
+        },
+        "sourcePage": "odjeljak Oblikovanje teksta, tocka 1",
+        "authority": "program-page",
+        "lastVerified": "2026-07-02"
+      },
+      {
+        "ruleId": "ffzg-lingvistika-diplomski--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Obostrano poravnanje",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
         },
         "source": {
           "id": "ffzg-lingvistika-diplomski-2024",
@@ -12002,6 +12874,43 @@
         "lastVerified": "2026-07-02"
       },
       {
+        "ruleId": "ffzg-povijest-umjetnosti-diplomski--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Obostrano poravnanje",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
+        },
+        "source": {
+          "id": "ffzg-povum-diplomski-2016",
+          "title": "Upute za prijavu, izradu i obranu diplomskog rada na Odsjeku za povijest umjetnosti (Filozofski fakultet Sveucilista u Zagrebu, 2016)",
+          "url": "https://povum.ffzg.unizg.hr/wp-content/uploads/2011/02/PUM-Upute_za_izradu_diplomskog_rada2016.pdf"
+        },
+        "sourcePage": "odjeljak 7.2. Opseg i graficko oblikovanje",
+        "authority": "program-page",
+        "lastVerified": "2026-07-02"
+      },
+      {
+        "ruleId": "ffzg-povijest-umjetnosti-diplomski--paper-size",
+        "fixerId": "paper-size-fixer",
+        "label": "Format papira",
+        "scope": "profil",
+        "target": "21 x 29,7 cm",
+        "params": {
+          "w": 21,
+          "h": 29.7
+        },
+        "source": {
+          "id": "ffzg-povum-diplomski-2016",
+          "title": "Upute za prijavu, izradu i obranu diplomskog rada na Odsjeku za povijest umjetnosti (Filozofski fakultet Sveucilista u Zagrebu, 2016)",
+          "url": "https://povum.ffzg.unizg.hr/wp-content/uploads/2011/02/PUM-Upute_za_izradu_diplomskog_rada2016.pdf"
+        },
+        "sourcePage": "odjeljak 7.2. Opseg i graficko oblikovanje",
+        "authority": "program-page",
+        "lastVerified": "2026-07-02"
+      },
+      {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
         "label": "Usklađivanje predajnog paketa",
@@ -12233,6 +13142,24 @@
           "right": 3.5,
           "bottom": 2.5,
           "left": 2.5
+        },
+        "source": {
+          "id": "ffzg-socio-diplomski-2014",
+          "title": "Upute za prijavu, izradu i obranu diplomskog rada (Filozofski fakultet, Odsjek za sociologiju)",
+          "url": "https://www.ffzg.unizg.hr/socio/wp-content/uploads/2014/02/Upute-za-diplomski.pdf"
+        },
+        "sourcePage": "odjeljak GRAFICKO FORMATIRANJE RADA",
+        "authority": "program-page",
+        "lastVerified": "2026-07-02"
+      },
+      {
+        "ruleId": "ffzg-sociologija-diplomski--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Obostrano poravnanje",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
         },
         "source": {
           "id": "ffzg-socio-diplomski-2014",
@@ -12559,6 +13486,24 @@
         "lastVerified": "2026-07-02"
       },
       {
+        "ruleId": "fhs-diplomski--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Obostrano poravnanje",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
+        },
+        "source": {
+          "id": "fhs-upute-diplomski-2026",
+          "title": "Upute za izradu i obranu diplomskoga rada i za zavrsetak diplomskoga studija (Fakultet hrvatskih studija, ak. god. 2025./2026.)",
+          "url": "https://www.fhs.hr/images/50014269/Upute%20za%20izradu%20i%20obranu%20diplomskoga%20rada%202025-2026%20(3).pdf"
+        },
+        "sourcePage": "odjeljak OPE TEHNICKE UPUTE",
+        "authority": "program-page",
+        "lastVerified": "2026-07-02"
+      },
+      {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
         "label": "Usklađivanje predajnog paketa",
@@ -12790,6 +13735,24 @@
           "right": 2.5,
           "bottom": 2.5,
           "left": 2.5
+        },
+        "source": {
+          "id": "fhs-upute-zavrsni-diplomski-2023",
+          "title": "Upute za pisanje zavrsnoga i diplomskoga rada (Fakultet hrvatskih studija)",
+          "url": "https://www.fhs.hr/_download/repository/2021_2023__Nove_upute_za_prijavu_i_pisanje_zavrsnoga_i_diplomskoga_rada.doc.pdf"
+        },
+        "sourcePage": "odjeljak OPE TEHNICKE UPUTE",
+        "authority": "program-page",
+        "lastVerified": "2026-07-02"
+      },
+      {
+        "ruleId": "fhs-zavrsni--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Obostrano poravnanje",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
         },
         "source": {
           "id": "fhs-upute-zavrsni-diplomski-2023",
@@ -14578,7 +15541,7 @@
     "unitId": "forenzika",
     "status": "partial",
     "workTypes": [
-      "diplomski"
+      "graduate"
     ],
     "items": [
       {
@@ -16539,6 +17502,24 @@
         "lastVerified": "2026-07-27"
       },
       {
+        "ruleId": "fpzpu-diplomski--line-spacing",
+        "fixerId": "line-spacing-fixer",
+        "label": "Prored",
+        "scope": "profil",
+        "target": "prored 1,5",
+        "params": {
+          "multiplier": 1.5
+        },
+        "source": {
+          "id": "fpzpu-pravilnik-zavrsni-2019-procisceni",
+          "title": "Pravilnik o zavrsnom radu i zavrsnom koncertu na (pred)diplomskim sveucilisnim i strucnim studijima, procisceni tekst 30.9.2019 (Sveuciliste Jurja Dobrile u Puli)",
+          "url": "https://www.unipu.hr/_download/repository/2019-09-30-Pravilnik_o_zavrsnom_radu-zavrsnom_koncertu-procisceni_tekst.pdf"
+        },
+        "sourcePage": "Clanak 5, stavak 1",
+        "authority": "general",
+        "lastVerified": "2026-07-27"
+      },
+      {
         "ruleId": "fpzpu-diplomski--margins",
         "fixerId": "margins-fixer",
         "label": "Margine",
@@ -16577,6 +17558,16 @@
         "sourcePage": "Clanak 5, stavak 1",
         "authority": "general",
         "lastVerified": "2026-07-27"
+      },
+      {
+        "ruleId": "footnote-typography-universal",
+        "fixerId": "footnote-typography-fixer",
+        "label": "Font i veličina fusnota",
+        "scope": "profil",
+        "target": "10 pt",
+        "params": {
+          "fontSizePt": 10
+        }
       },
       {
         "ruleId": "cross-file-submission-consistency-assisted",
@@ -16647,6 +17638,24 @@
         "lastVerified": "2026-07-27"
       },
       {
+        "ruleId": "fpzpu-zavrsni--line-spacing",
+        "fixerId": "line-spacing-fixer",
+        "label": "Prored",
+        "scope": "profil",
+        "target": "prored 1,5",
+        "params": {
+          "multiplier": 1.5
+        },
+        "source": {
+          "id": "fpzpu-pravilnik-zavrsni-2019-procisceni",
+          "title": "Pravilnik o zavrsnom radu i zavrsnom koncertu na (pred)diplomskim sveucilisnim i strucnim studijima, procisceni tekst 30.9.2019 (Sveuciliste Jurja Dobrile u Puli)",
+          "url": "https://www.unipu.hr/_download/repository/2019-09-30-Pravilnik_o_zavrsnom_radu-zavrsnom_koncertu-procisceni_tekst.pdf"
+        },
+        "sourcePage": "Clanak 5, stavak 1",
+        "authority": "general",
+        "lastVerified": "2026-07-27"
+      },
+      {
         "ruleId": "fpzpu-zavrsni--margins",
         "fixerId": "margins-fixer",
         "label": "Margine",
@@ -16685,6 +17694,16 @@
         "sourcePage": "Clanak 5, stavak 1",
         "authority": "general",
         "lastVerified": "2026-07-27"
+      },
+      {
+        "ruleId": "footnote-typography-universal",
+        "fixerId": "footnote-typography-fixer",
+        "label": "Font i veličina fusnota",
+        "scope": "profil",
+        "target": "10 pt",
+        "params": {
+          "fontSizePt": 10
+        }
       },
       {
         "ruleId": "cross-file-submission-consistency-assisted",
@@ -18255,6 +19274,43 @@
     ],
     "items": [
       {
+        "ruleId": "heading-format-universal",
+        "fixerId": "heading-format-fixer",
+        "label": "Oblikovanje naslova po razinama",
+        "scope": "profil",
+        "target": "razina 1 podebljano; razina 2 podebljano; razina 3 podebljano kurziv",
+        "params": {
+          "targets": [
+            {
+              "level": 1,
+              "bold": true
+            },
+            {
+              "level": 2,
+              "bold": true
+            },
+            {
+              "level": 3,
+              "bold": true,
+              "italic": true
+            }
+          ]
+        }
+      },
+      {
+        "ruleId": "heading-case-universal",
+        "fixerId": "heading-case-fixer",
+        "label": "Velika slova naslova",
+        "scope": "profil",
+        "target": "velika slova, razine 1",
+        "params": {
+          "levels": [
+            1
+          ]
+        },
+        "condition": "Trazi izricitu privolu (mijenja autorov tekst ili strukturu)."
+      },
+      {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
         "label": "Usklađivanje predajnog paketa",
@@ -18286,6 +19342,43 @@
       "final"
     ],
     "items": [
+      {
+        "ruleId": "heading-format-universal",
+        "fixerId": "heading-format-fixer",
+        "label": "Oblikovanje naslova po razinama",
+        "scope": "profil",
+        "target": "razina 1 podebljano; razina 2 podebljano; razina 3 podebljano kurziv",
+        "params": {
+          "targets": [
+            {
+              "level": 1,
+              "bold": true
+            },
+            {
+              "level": 2,
+              "bold": true
+            },
+            {
+              "level": 3,
+              "bold": true,
+              "italic": true
+            }
+          ]
+        }
+      },
+      {
+        "ruleId": "heading-case-universal",
+        "fixerId": "heading-case-fixer",
+        "label": "Velika slova naslova",
+        "scope": "profil",
+        "target": "velika slova, razine 1",
+        "params": {
+          "levels": [
+            1
+          ]
+        },
+        "condition": "Trazi izricitu privolu (mijenja autorov tekst ili strukturu)."
+      },
       {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
@@ -18962,6 +20055,24 @@
         "lastVerified": "2026-07-02"
       },
       {
+        "ruleId": "grf-zavrsni--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Obostrano poravnanje (puni format)",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
+        },
+        "source": {
+          "id": "grf-upute-zavrsni",
+          "title": "Upute za izradu zavrsnog rada (Graficki fakultet Sveucilista u Zagrebu)",
+          "url": "https://www.grf.unizg.hr/images/stories/SMP/upute-za-izradu-zavrsnog-rada.pdf"
+        },
+        "sourcePage": "odjeljak 2. Sastavljanje zavrsnog rada (prijelom teksta)",
+        "authority": "program-page",
+        "lastVerified": "2026-07-02"
+      },
+      {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
         "label": "Usklađivanje predajnog paketa",
@@ -19578,6 +20689,24 @@
         "lastVerified": "2026-07-02"
       },
       {
+        "ruleId": "kbf-diplomski--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Obostrano poravnanje",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
+        },
+        "source": {
+          "id": "kbf-upute-zavrsni-diplomski-2017",
+          "title": "Prijedlog uputa za pisanje zavrsnoga i diplomskoga rada (Katolicki bogoslovni fakultet, 2017)",
+          "url": "https://www.kbf.unizg.hr/wp-content/uploads/2017/06/Upute-za-pisanje-zavr%C5%A1noga-i-diplomskoga-rada-KONA%C4%8CNA-VERZIJA.pdf"
+        },
+        "sourcePage": "odjeljak 4.5. Tehnicke upute za oblikovanje teksta",
+        "authority": "program-page",
+        "lastVerified": "2026-07-02"
+      },
+      {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
         "label": "Usklađivanje predajnog paketa",
@@ -19809,6 +20938,24 @@
           "right": 2.5,
           "bottom": 2.5,
           "left": 3.5
+        },
+        "source": {
+          "id": "kbf-upute-zavrsni-diplomski-2017",
+          "title": "Prijedlog uputa za pisanje zavrsnoga i diplomskoga rada (Katolicki bogoslovni fakultet, 2017)",
+          "url": "https://www.kbf.unizg.hr/wp-content/uploads/2017/06/Upute-za-pisanje-zavr%C5%A1noga-i-diplomskoga-rada-KONA%C4%8CNA-VERZIJA.pdf"
+        },
+        "sourcePage": "odjeljak 4.5. Tehnicke upute za oblikovanje teksta",
+        "authority": "program-page",
+        "lastVerified": "2026-07-02"
+      },
+      {
+        "ruleId": "kbf-zavrsni--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Obostrano poravnanje",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
         },
         "source": {
           "id": "kbf-upute-zavrsni-diplomski-2017",
@@ -20411,6 +21558,24 @@
         "lastVerified": "2026-07-02"
       },
       {
+        "ruleId": "kif-diplomski--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Obostrano poravnanje",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
+        },
+        "source": {
+          "id": "kif-upute-oblikovanje-diplomski",
+          "title": "Prilog 1. Upute za oblikovanje diplomskog rada (Kinezioloski fakultet Sveucilista u Zagrebu)",
+          "url": "https://www.kif.unizg.hr/_download/repository/Upute_-_diplomski_rad%5B1%5D.pdf"
+        },
+        "sourcePage": "Prilog 1. Upute za oblikovanje diplomskog rada, Openito - oblikovanje",
+        "authority": "program-page",
+        "lastVerified": "2026-08-01"
+      },
+      {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
         "label": "Usklađivanje predajnog paketa",
@@ -20566,6 +21731,131 @@
         "target": "Word sam azurira sadrzaj",
         "params": {},
         "condition": "Dokument ima naslov Sadrzaj, a jos nema zivo TOC polje. Nedestruktivno: rucne stavke se ne brisu."
+      },
+      {
+        "ruleId": "empty-paragraphs-universal",
+        "fixerId": "empty-paragraph-fixer",
+        "label": "Prazni odlomci",
+        "scope": "opce",
+        "target": "uklanjanje viska praznih odlomaka",
+        "params": {},
+        "condition": "Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka."
+      }
+    ]
+  },
+  {
+    "id": "kif-specijalisticki",
+    "label": "Kineziološki fakultet, specijalistički diplomski rad",
+    "unitId": "kif",
+    "status": "partial",
+    "workTypes": [
+      "specialist"
+    ],
+    "items": [
+      {
+        "ruleId": "kif-specijalisticki--font",
+        "fixerId": "font-fixer",
+        "label": "Font",
+        "scope": "profil",
+        "target": "Times New Roman",
+        "params": {
+          "fontName": "Times New Roman"
+        },
+        "source": {
+          "id": "kif-upute-diplomski-2023",
+          "title": "Upute za izradu diplomskog/specijalistickog diplomskog rada (Kinezioloski fakultet Sveucilista u Zagrebu, 2023)",
+          "url": "https://www.kif.unizg.hr/_download/repository/Kinezioloski-upute-diplomskizavrsni-rad.pdf"
+        },
+        "sourcePage": "str. 8, opce - oblikovanje",
+        "authority": "program-page",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "kif-specijalisticki--font-size",
+        "fixerId": "font-fixer",
+        "label": "Velicina slova",
+        "scope": "profil",
+        "target": "12 pt",
+        "params": {
+          "fontSizePt": 12
+        },
+        "source": {
+          "id": "kif-upute-diplomski-2023",
+          "title": "Upute za izradu diplomskog/specijalistickog diplomskog rada (Kinezioloski fakultet Sveucilista u Zagrebu, 2023)",
+          "url": "https://www.kif.unizg.hr/_download/repository/Kinezioloski-upute-diplomskizavrsni-rad.pdf"
+        },
+        "sourcePage": "str. 8, opce - oblikovanje",
+        "authority": "program-page",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "kif-specijalisticki--line-spacing",
+        "fixerId": "line-spacing-fixer",
+        "label": "Prored",
+        "scope": "profil",
+        "target": "prored 1,5",
+        "params": {
+          "multiplier": 1.5
+        },
+        "source": {
+          "id": "kif-upute-diplomski-2023",
+          "title": "Upute za izradu diplomskog/specijalistickog diplomskog rada (Kinezioloski fakultet Sveucilista u Zagrebu, 2023)",
+          "url": "https://www.kif.unizg.hr/_download/repository/Kinezioloski-upute-diplomskizavrsni-rad.pdf"
+        },
+        "sourcePage": "str. 8, opce - oblikovanje",
+        "authority": "program-page",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "kif-specijalisticki--margins",
+        "fixerId": "margins-fixer",
+        "label": "Margine",
+        "scope": "profil",
+        "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
+        "params": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "source": {
+          "id": "kif-upute-diplomski-2023",
+          "title": "Upute za izradu diplomskog/specijalistickog diplomskog rada (Kinezioloski fakultet Sveucilista u Zagrebu, 2023)",
+          "url": "https://www.kif.unizg.hr/_download/repository/Kinezioloski-upute-diplomskizavrsni-rad.pdf"
+        },
+        "sourcePage": "str. 8, opce - oblikovanje",
+        "authority": "program-page",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "kif-specijalisticki--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Obostrano poravnanje",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
+        },
+        "source": {
+          "id": "kif-upute-diplomski-2023",
+          "title": "Upute za izradu diplomskog/specijalistickog diplomskog rada (Kinezioloski fakultet Sveucilista u Zagrebu, 2023)",
+          "url": "https://www.kif.unizg.hr/_download/repository/Kinezioloski-upute-diplomskizavrsni-rad.pdf"
+        },
+        "sourcePage": "str. 8, opce - oblikovanje",
+        "authority": "program-page",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "cross-file-submission-consistency-assisted",
+        "fixerId": "submission-metadata-fixer",
+        "label": "Usklađivanje predajnog paketa",
+        "scope": "opce",
+        "target": "potvrđene DOCX metapodatke između Worda, PDF-a i obrasca",
+        "params": {
+          "version": 1,
+          "fields": []
+        },
+        "condition": "Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni."
       },
       {
         "ruleId": "empty-paragraphs-universal",
@@ -22311,6 +23601,64 @@
     ],
     "items": [
       {
+        "ruleId": "mathos-diplomski--font-size",
+        "fixerId": "font-fixer",
+        "label": "Velicina slova",
+        "scope": "profil",
+        "target": "12 pt",
+        "params": {
+          "fontSizePt": 12
+        },
+        "source": {
+          "id": "mathos-predlozak-diplomski-2026",
+          "title": "Predlozak diplomskog rada (LaTeX, Prilog 1 Pravilnika o diplomskim radovima, Odjel za matematiku Osijek, ozujak 2026)",
+          "url": "https://www.mathos.unios.hr/wp-content/uploads/2026/03/Predlozak_diplomski_rad.rar"
+        },
+        "sourcePage": "mathos.cls (Prilog 1)",
+        "authority": "binding",
+        "lastVerified": "2026-07-28"
+      },
+      {
+        "ruleId": "mathos-diplomski--margins",
+        "fixerId": "margins-fixer",
+        "label": "Margine",
+        "scope": "profil",
+        "target": "3 / 3 / 3 / 3 cm (gore/desno/dolje/lijevo)",
+        "params": {
+          "top": 3,
+          "right": 3,
+          "bottom": 3,
+          "left": 3
+        },
+        "source": {
+          "id": "mathos-predlozak-diplomski-2026",
+          "title": "Predlozak diplomskog rada (LaTeX, Prilog 1 Pravilnika o diplomskim radovima, Odjel za matematiku Osijek, ozujak 2026)",
+          "url": "https://www.mathos.unios.hr/wp-content/uploads/2026/03/Predlozak_diplomski_rad.rar"
+        },
+        "sourcePage": "mathos.cls (Prilog 1)",
+        "authority": "binding",
+        "lastVerified": "2026-07-28"
+      },
+      {
+        "ruleId": "mathos-diplomski--paper-size",
+        "fixerId": "paper-size-fixer",
+        "label": "Format papira A4",
+        "scope": "profil",
+        "target": "21 x 29,7 cm",
+        "params": {
+          "w": 21,
+          "h": 29.7
+        },
+        "source": {
+          "id": "mathos-predlozak-diplomski-2026",
+          "title": "Predlozak diplomskog rada (LaTeX, Prilog 1 Pravilnika o diplomskim radovima, Odjel za matematiku Osijek, ozujak 2026)",
+          "url": "https://www.mathos.unios.hr/wp-content/uploads/2026/03/Predlozak_diplomski_rad.rar"
+        },
+        "sourcePage": "mathos.cls (Prilog 1)",
+        "authority": "binding",
+        "lastVerified": "2026-07-28"
+      },
+      {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
         "label": "Usklađivanje predajnog paketa",
@@ -22351,6 +23699,64 @@
       "final"
     ],
     "items": [
+      {
+        "ruleId": "mathos-zavrsni--font-size",
+        "fixerId": "font-fixer",
+        "label": "Velicina slova",
+        "scope": "profil",
+        "target": "12 pt",
+        "params": {
+          "fontSizePt": 12
+        },
+        "source": {
+          "id": "mathos-predlozak-zavrsni-2026",
+          "title": "Predlozak zavrsnog rada (LaTeX, Prilog 1 Pravilnika o zavrsnim radovima, Odjel za matematiku Osijek, ozujak 2026)",
+          "url": "https://www.mathos.unios.hr/wp-content/uploads/2026/03/Predlozak_zavrsni_rad.rar"
+        },
+        "sourcePage": "mathos.cls (Prilog 1)",
+        "authority": "binding",
+        "lastVerified": "2026-07-28"
+      },
+      {
+        "ruleId": "mathos-zavrsni--margins",
+        "fixerId": "margins-fixer",
+        "label": "Margine",
+        "scope": "profil",
+        "target": "3 / 3 / 3 / 3 cm (gore/desno/dolje/lijevo)",
+        "params": {
+          "top": 3,
+          "right": 3,
+          "bottom": 3,
+          "left": 3
+        },
+        "source": {
+          "id": "mathos-predlozak-zavrsni-2026",
+          "title": "Predlozak zavrsnog rada (LaTeX, Prilog 1 Pravilnika o zavrsnim radovima, Odjel za matematiku Osijek, ozujak 2026)",
+          "url": "https://www.mathos.unios.hr/wp-content/uploads/2026/03/Predlozak_zavrsni_rad.rar"
+        },
+        "sourcePage": "mathos.cls (Prilog 1)",
+        "authority": "binding",
+        "lastVerified": "2026-07-28"
+      },
+      {
+        "ruleId": "mathos-zavrsni--paper-size",
+        "fixerId": "paper-size-fixer",
+        "label": "Format papira A4",
+        "scope": "profil",
+        "target": "21 x 29,7 cm",
+        "params": {
+          "w": 21,
+          "h": 29.7
+        },
+        "source": {
+          "id": "mathos-predlozak-zavrsni-2026",
+          "title": "Predlozak zavrsnog rada (LaTeX, Prilog 1 Pravilnika o zavrsnim radovima, Odjel za matematiku Osijek, ozujak 2026)",
+          "url": "https://www.mathos.unios.hr/wp-content/uploads/2026/03/Predlozak_zavrsni_rad.rar"
+        },
+        "sourcePage": "mathos.cls (Prilog 1)",
+        "authority": "binding",
+        "lastVerified": "2026-07-28"
+      },
       {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
@@ -26556,6 +27962,17 @@
         "lastVerified": "2026-07-27"
       },
       {
+        "ruleId": "footnote-typography-universal",
+        "fixerId": "footnote-typography-fixer",
+        "label": "Font i veličina fusnota",
+        "scope": "profil",
+        "target": "Times New Roman, 10 pt",
+        "params": {
+          "fontName": "Times New Roman",
+          "fontSizePt": 10
+        }
+      },
+      {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
         "label": "Usklađivanje predajnog paketa",
@@ -27688,6 +29105,16 @@
         }
       },
       {
+        "ruleId": "footnote-typography-universal",
+        "fixerId": "footnote-typography-fixer",
+        "label": "Font i veličina fusnota",
+        "scope": "profil",
+        "target": "10 pt",
+        "params": {
+          "fontSizePt": 10
+        }
+      },
+      {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
         "label": "Usklađivanje predajnog paketa",
@@ -28255,6 +29682,16 @@
         }
       },
       {
+        "ruleId": "footnote-typography-universal",
+        "fixerId": "footnote-typography-fixer",
+        "label": "Font i veličina fusnota",
+        "scope": "profil",
+        "target": "10 pt",
+        "params": {
+          "fontSizePt": 10
+        }
+      },
+      {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
         "label": "Usklađivanje predajnog paketa",
@@ -28585,6 +30022,17 @@
         "sourcePage": "odjeljak 4. Oblikovanje i uredenje teksta",
         "authority": "general",
         "lastVerified": "2026-07-27"
+      },
+      {
+        "ruleId": "footnote-typography-universal",
+        "fixerId": "footnote-typography-fixer",
+        "label": "Font i veličina fusnota",
+        "scope": "profil",
+        "target": "Times New Roman, 10 pt",
+        "params": {
+          "fontName": "Times New Roman",
+          "fontSizePt": 10
+        }
       },
       {
         "ruleId": "cross-file-submission-consistency-assisted",
@@ -29091,6 +30539,132 @@
         "sourcePage": "2.1. Normativ stranice / Kartica teksta",
         "authority": "binding",
         "lastVerified": "2026-07-28"
+      },
+      {
+        "ruleId": "cross-file-submission-consistency-assisted",
+        "fixerId": "submission-metadata-fixer",
+        "label": "Usklađivanje predajnog paketa",
+        "scope": "opce",
+        "target": "potvrđene DOCX metapodatke između Worda, PDF-a i obrasca",
+        "params": {
+          "version": 1,
+          "fields": []
+        },
+        "condition": "Lokalno uspoređuje potvrđene podatke predajnog paketa. Originalne datoteke i PDF tekst ostaju nepromijenjeni."
+      },
+      {
+        "ruleId": "empty-paragraphs-universal",
+        "fixerId": "empty-paragraph-fixer",
+        "label": "Prazni odlomci",
+        "scope": "opce",
+        "target": "uklanjanje viska praznih odlomaka",
+        "params": {},
+        "condition": "Univerzalna higijena, ne ovisi o profilu; nudi se kad analiza nadje mnogo praznih odlomaka."
+      }
+    ]
+  },
+  {
+    "id": "pravri-specijalisticki",
+    "label": "Pravni fakultet u Rijeci, završni rad sveučilišnog specijalističkog studija",
+    "unitId": "pravri",
+    "status": "partial",
+    "workTypes": [
+      "specialist"
+    ],
+    "items": [
+      {
+        "ruleId": "pravri-specijalisticki--paper-size",
+        "fixerId": "paper-size-fixer",
+        "label": "Format papira",
+        "scope": "profil",
+        "target": "21 x 29,7 cm",
+        "params": {
+          "w": 21,
+          "h": 29.7
+        },
+        "source": {
+          "id": "pravri-upute-radovi-2023",
+          "title": "Upute za izradu studentskih pisanih radova (PRAVRI, rev. 2023)",
+          "url": "https://pravri.uniri.hr/files/Dokumenti/Pravilnici/uputeradovi.pdf"
+        },
+        "sourcePage": "poglavlje 2.1 Normativ stranice (str. 7)",
+        "authority": "program-page",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "pravri-specijalisticki--margins",
+        "fixerId": "margins-fixer",
+        "label": "Margine",
+        "scope": "profil",
+        "target": "2,5 / 2,5 / 2,5 / 2,5 cm (gore/desno/dolje/lijevo)",
+        "params": {
+          "top": 2.5,
+          "right": 2.5,
+          "bottom": 2.5,
+          "left": 2.5
+        },
+        "source": {
+          "id": "pravri-upute-radovi-2023",
+          "title": "Upute za izradu studentskih pisanih radova (PRAVRI, rev. 2023)",
+          "url": "https://pravri.uniri.hr/files/Dokumenti/Pravilnici/uputeradovi.pdf"
+        },
+        "sourcePage": "poglavlje 2.1 Normativ stranice (str. 7)",
+        "authority": "program-page",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "pravri-specijalisticki--line-spacing",
+        "fixerId": "line-spacing-fixer",
+        "label": "Prored",
+        "scope": "profil",
+        "target": "prored 1,5",
+        "params": {
+          "multiplier": 1.5
+        },
+        "source": {
+          "id": "pravri-upute-radovi-2023",
+          "title": "Upute za izradu studentskih pisanih radova (PRAVRI, rev. 2023)",
+          "url": "https://pravri.uniri.hr/files/Dokumenti/Pravilnici/uputeradovi.pdf"
+        },
+        "sourcePage": "poglavlje 2.1 Normativ stranice (str. 7)",
+        "authority": "program-page",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "pravri-specijalisticki--font",
+        "fixerId": "font-fixer",
+        "label": "Vrsta slova",
+        "scope": "profil",
+        "target": "Times New Roman",
+        "params": {
+          "fontName": "Times New Roman"
+        },
+        "source": {
+          "id": "pravri-upute-radovi-2023",
+          "title": "Upute za izradu studentskih pisanih radova (PRAVRI, rev. 2023)",
+          "url": "https://pravri.uniri.hr/files/Dokumenti/Pravilnici/uputeradovi.pdf"
+        },
+        "sourcePage": "poglavlje 2.1 Normativ stranice (str. 7)",
+        "authority": "program-page",
+        "lastVerified": "2026-08-01"
+      },
+      {
+        "ruleId": "pravri-specijalisticki--font-size",
+        "fixerId": "font-fixer",
+        "label": "Velicina slova",
+        "scope": "profil",
+        "target": "12 pt",
+        "params": {
+          "fontSizePt": 12
+        },
+        "source": {
+          "id": "pravri-upute-radovi-2023",
+          "title": "Upute za izradu studentskih pisanih radova (PRAVRI, rev. 2023)",
+          "url": "https://pravri.uniri.hr/files/Dokumenti/Pravilnici/uputeradovi.pdf"
+        },
+        "sourcePage": "poglavlje 2.1 Normativ stranice (str. 7)",
+        "authority": "program-page",
+        "lastVerified": "2026-08-01"
       },
       {
         "ruleId": "cross-file-submission-consistency-assisted",
@@ -30560,6 +32134,24 @@
         "target": "prored 1,5",
         "params": {
           "multiplier": 1.5
+        },
+        "source": {
+          "id": "sfzg-naputak-diplomski-2024",
+          "title": "Naputak za tehnicko oblikovanje i izradu diplomskog rada (Stomatoloski fakultet Sveucilista u Zagrebu, 2024)",
+          "url": "https://www.sfzg.unizg.hr/_download/repository/Naputak%20za%20oblikovanje%20diplomskog%202024.pdf"
+        },
+        "sourcePage": "odjeljak Postavke stranice i pisma",
+        "authority": "program-page",
+        "lastVerified": "2026-07-02"
+      },
+      {
+        "ruleId": "sfzg-diplomski--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Obostrano poravnanje",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
         },
         "source": {
           "id": "sfzg-naputak-diplomski-2024",
@@ -32209,6 +33801,24 @@
         "lastVerified": "2026-07-02"
       },
       {
+        "ruleId": "ttf-diplomski--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Obostrano poravnanje",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
+        },
+        "source": {
+          "id": "ttf-upute-zavrsni-diplomski",
+          "title": "Upute za oblikovanje zavrsnog i diplomskog rada na Sveucilistu u Zagrebu Tekstilno-tehnoloskom fakultetu",
+          "url": "https://api.ttf.hr/documents/2jkTqCAb3q90sHtmCP6YSBKg40rbo1mHCTrqdwwWKt9Y4aYZMqpiLuOVdsdi/upute-za-oblikovanje-zavrsnog-i-diplomskog-rada-ttf.pdf"
+        },
+        "sourcePage": "Postavke stranice",
+        "authority": "program-page",
+        "lastVerified": "2026-07-02"
+      },
+      {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
         "label": "Usklađivanje predajnog paketa",
@@ -32293,6 +33903,24 @@
         "target": "prored 1,5",
         "params": {
           "multiplier": 1.5
+        },
+        "source": {
+          "id": "ttf-upute-zavrsni-diplomski",
+          "title": "Upute za oblikovanje zavrsnog i diplomskog rada na Sveucilistu u Zagrebu Tekstilno-tehnoloskom fakultetu",
+          "url": "https://api.ttf.hr/documents/2jkTqCAb3q90sHtmCP6YSBKg40rbo1mHCTrqdwwWKt9Y4aYZMqpiLuOVdsdi/upute-za-oblikovanje-zavrsnog-i-diplomskog-rada-ttf.pdf"
+        },
+        "sourcePage": "str. 1, \"Postavke stranice\"",
+        "authority": "binding",
+        "lastVerified": "2026-07-28"
+      },
+      {
+        "ruleId": "ttf-dizajn-diplomski--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Poravnanje",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
         },
         "source": {
           "id": "ttf-upute-zavrsni-diplomski",
@@ -32409,6 +34037,24 @@
         "target": "prored 1,5",
         "params": {
           "multiplier": 1.5
+        },
+        "source": {
+          "id": "ttf-upute-zavrsni-diplomski",
+          "title": "Upute za oblikovanje zavrsnog i diplomskog rada na Sveucilistu u Zagrebu Tekstilno-tehnoloskom fakultetu",
+          "url": "https://api.ttf.hr/documents/2jkTqCAb3q90sHtmCP6YSBKg40rbo1mHCTrqdwwWKt9Y4aYZMqpiLuOVdsdi/upute-za-oblikovanje-zavrsnog-i-diplomskog-rada-ttf.pdf"
+        },
+        "sourcePage": "str. 1, \"Postavke stranice\"",
+        "authority": "binding",
+        "lastVerified": "2026-07-28"
+      },
+      {
+        "ruleId": "ttf-dizajn-zavrsni--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Poravnanje",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
         },
         "source": {
           "id": "ttf-upute-zavrsni-diplomski",
@@ -32672,6 +34318,24 @@
           "right": 2.5,
           "bottom": 2.5,
           "left": 2.5
+        },
+        "source": {
+          "id": "ttf-upute-zavrsni-diplomski",
+          "title": "Upute za oblikovanje zavrsnog i diplomskog rada na Sveucilistu u Zagrebu Tekstilno-tehnoloskom fakultetu",
+          "url": "https://api.ttf.hr/documents/2jkTqCAb3q90sHtmCP6YSBKg40rbo1mHCTrqdwwWKt9Y4aYZMqpiLuOVdsdi/upute-za-oblikovanje-zavrsnog-i-diplomskog-rada-ttf.pdf"
+        },
+        "sourcePage": "Postavke stranice",
+        "authority": "program-page",
+        "lastVerified": "2026-07-02"
+      },
+      {
+        "ruleId": "ttf-zavrsni--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Obostrano poravnanje",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
         },
         "source": {
           "id": "ttf-upute-zavrsni-diplomski",
@@ -33193,6 +34857,24 @@
         "lastVerified": "2026-07-02"
       },
       {
+        "ruleId": "ufzg-diplomski--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Obostrano poravnanje",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
+        },
+        "source": {
+          "id": "ufzg-upute-zavrsni-diplomski-2026",
+          "title": "Upute za izradu zavrsnog odnosno diplomskog rada (Uciteljski fakultet Sveucilista u Zagrebu)",
+          "url": "https://www.ufzg.unizg.hr/wp-content/uploads/2026/05/Upute-za-izradu-zavrsnog-odnosno-diplomskog-rada.pdf"
+        },
+        "sourcePage": "odjeljak 2. Opseg i oblikovanje zavrsnog odnosno diplomskog rada",
+        "authority": "program-page",
+        "lastVerified": "2026-07-02"
+      },
+      {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
         "label": "Usklađivanje predajnog paketa",
@@ -33443,6 +35125,24 @@
         "params": {
           "w": 21,
           "h": 29.7
+        },
+        "source": {
+          "id": "ufzg-upute-zavrsni-diplomski-2026",
+          "title": "Upute za izradu zavrsnog odnosno diplomskog rada (Uciteljski fakultet Sveucilista u Zagrebu)",
+          "url": "https://www.ufzg.unizg.hr/wp-content/uploads/2026/05/Upute-za-izradu-zavrsnog-odnosno-diplomskog-rada.pdf"
+        },
+        "sourcePage": "odjeljak 2. Opseg i oblikovanje zavrsnog odnosno diplomskog rada",
+        "authority": "program-page",
+        "lastVerified": "2026-07-02"
+      },
+      {
+        "ruleId": "ufzg-zavrsni--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Obostrano poravnanje",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
         },
         "source": {
           "id": "ufzg-upute-zavrsni-diplomski-2026",
@@ -37846,6 +39546,16 @@
         "lastVerified": "2026-07-28"
       },
       {
+        "ruleId": "footnote-typography-universal",
+        "fixerId": "footnote-typography-fixer",
+        "label": "Font i veličina fusnota",
+        "scope": "profil",
+        "target": "10 pt",
+        "params": {
+          "fontSizePt": 10
+        }
+      },
+      {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
         "label": "Usklađivanje predajnog paketa",
@@ -37972,6 +39682,16 @@
         "lastVerified": "2026-07-28"
       },
       {
+        "ruleId": "footnote-typography-universal",
+        "fixerId": "footnote-typography-fixer",
+        "label": "Font i veličina fusnota",
+        "scope": "profil",
+        "target": "10 pt",
+        "params": {
+          "fontSizePt": 10
+        }
+      },
+      {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
         "label": "Usklađivanje predajnog paketa",
@@ -38047,6 +39767,24 @@
         "target": "prored 1,5",
         "params": {
           "multiplier": 1.5
+        },
+        "source": {
+          "id": "unizd-hispanistika-upute-2022",
+          "title": "Upute za izradu diplomskog rada (Hispanistika i iberski studiji)",
+          "url": "https://his.unizd.hr/Portals/72/ZAVR%C5%A0NI%20I%20DIPLOMSKI/Upute%20za%20izradu%20diplomskog%20rada%202022-23-izmjena.pdf"
+        },
+        "sourcePage": "2.1.1. Uredjenje teksta",
+        "authority": "binding",
+        "lastVerified": "2026-07-28"
+      },
+      {
+        "ruleId": "unizd-hispanistika-diplomski--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Poravnanje",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
         },
         "source": {
           "id": "unizd-hispanistika-upute-2022",
@@ -38414,6 +40152,16 @@
         "lastVerified": "2026-07-28"
       },
       {
+        "ruleId": "footnote-typography-universal",
+        "fixerId": "footnote-typography-fixer",
+        "label": "Font i veličina fusnota",
+        "scope": "profil",
+        "target": "10 pt",
+        "params": {
+          "fontSizePt": 10
+        }
+      },
+      {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
         "label": "Usklađivanje predajnog paketa",
@@ -38537,6 +40285,16 @@
         "sourcePage": "str. 2-3 \"Postavke stranice\"",
         "authority": "binding",
         "lastVerified": "2026-07-28"
+      },
+      {
+        "ruleId": "footnote-typography-universal",
+        "fixerId": "footnote-typography-fixer",
+        "label": "Font i veličina fusnota",
+        "scope": "profil",
+        "target": "10 pt",
+        "params": {
+          "fontSizePt": 10
+        }
       },
       {
         "ruleId": "cross-file-submission-consistency-assisted",
@@ -39148,6 +40906,16 @@
         "lastVerified": "2026-07-28"
       },
       {
+        "ruleId": "footnote-typography-universal",
+        "fixerId": "footnote-typography-fixer",
+        "label": "Font i veličina fusnota",
+        "scope": "profil",
+        "target": "10 pt",
+        "params": {
+          "fontSizePt": 10
+        }
+      },
+      {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
         "label": "Usklađivanje predajnog paketa",
@@ -39544,6 +41312,16 @@
         "sourcePage": "Upute 2012",
         "authority": "program-page",
         "lastVerified": "2026-07-28"
+      },
+      {
+        "ruleId": "footnote-typography-universal",
+        "fixerId": "footnote-typography-fixer",
+        "label": "Font i veličina fusnota",
+        "scope": "profil",
+        "target": "10 pt",
+        "params": {
+          "fontSizePt": 10
+        }
       },
       {
         "ruleId": "cross-file-submission-consistency-assisted",
@@ -39972,6 +41750,16 @@
         "sourcePage": "Odjeljak 5, \"Upute za pisanje diplomskoga rada\"",
         "authority": "binding",
         "lastVerified": "2026-07-28"
+      },
+      {
+        "ruleId": "footnote-typography-universal",
+        "fixerId": "footnote-typography-fixer",
+        "label": "Font i veličina fusnota",
+        "scope": "profil",
+        "target": "10 pt",
+        "params": {
+          "fontSizePt": 10
+        }
       },
       {
         "ruleId": "cross-file-submission-consistency-assisted",
@@ -42061,6 +43849,24 @@
         "lastVerified": "2026-07-27"
       },
       {
+        "ruleId": "vguk-diplomski--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Poravnanje",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
+        },
+        "source": {
+          "id": "vguk-smjernice-2026",
+          "title": "Smjernice za pisanje zavrsnog/diplomskog rada na Veleucilistu u Krizevcima",
+          "url": "https://www.vguk.hr/upload/Hodogrami/Prijediplomski/Novi_obrasci_OK/2026_Smjernice_za_pisanje_Zavrsnog_Diplomskog_rada.pdf"
+        },
+        "sourcePage": "odjeljak 'TEHNICKE UPUTE ZA PISANJE ZAVRSNOG/DIPLOMSKOG RADA' (OSNOVNE UPUTE)",
+        "authority": "general",
+        "lastVerified": "2026-07-27"
+      },
+      {
         "ruleId": "cross-file-submission-consistency-assisted",
         "fixerId": "submission-metadata-fixer",
         "label": "Usklađivanje predajnog paketa",
@@ -42157,6 +43963,24 @@
           "right": 2.5,
           "bottom": 2.5,
           "left": 3
+        },
+        "source": {
+          "id": "vguk-smjernice-2026",
+          "title": "Smjernice za pisanje zavrsnog/diplomskog rada na Veleucilistu u Krizevcima",
+          "url": "https://www.vguk.hr/upload/Hodogrami/Prijediplomski/Novi_obrasci_OK/2026_Smjernice_za_pisanje_Zavrsnog_Diplomskog_rada.pdf"
+        },
+        "sourcePage": "odjeljak 'TEHNICKE UPUTE ZA PISANJE ZAVRSNOG/DIPLOMSKOG RADA' (OSNOVNE UPUTE)",
+        "authority": "general",
+        "lastVerified": "2026-07-27"
+      },
+      {
+        "ruleId": "vguk-zavrsni--justify",
+        "fixerId": "alignment-fixer",
+        "label": "Poravnanje",
+        "scope": "profil",
+        "target": "obostrano",
+        "params": {
+          "val": "both"
         },
         "source": {
           "id": "vguk-smjernice-2026",

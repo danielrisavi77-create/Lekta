@@ -313,6 +313,7 @@
           "Izobrazba trenera",
           "Diplomski studiji Kineziološkog fakulteta",
           "Doktorski studij Kineziološkog fakulteta",
+          "Specijalistički diplomski studij Kineziološkog fakulteta",
           "Opći profil fakulteta"
         ],
         "status": "partial"
@@ -1006,7 +1007,10 @@
         "programs": [
           "Stručni prijediplomski studij Upravni studij",
           "Integrirani prijediplomski i diplomski sveučilišni studij Pravo",
-          "Stručni diplomski studij Javna uprava"
+          "Stručni diplomski studij Javna uprava",
+          "Sveučilišni specijalistički studij Financijsko pravo trgovačkih društava",
+          "Sveučilišni specijalistički studij Pravo europskih integracija",
+          "Sveučilišni specijalistički studij Kriminalističko istraživanje"
         ]
       },
       {
@@ -1239,7 +1243,9 @@
         "status": "partial",
         "programs": [
           "Prijediplomski/strucni studiji EFOS (zavrsni rad)",
-          "Diplomski studiji EFOS"
+          "Diplomski studiji EFOS",
+          "Doktorski studij EFOS",
+          "Specijalistički diplomski studij EFOS"
         ]
       },
       {

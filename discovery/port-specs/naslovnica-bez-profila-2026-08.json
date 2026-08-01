@@ -1,0 +1,177 @@
+{
+  "faculty": "efos",
+  "institution": "unios",
+  "catalogPrograms": [
+    "Doktorski studij EFOS",
+    "Specijalistički diplomski studij EFOS"
+  ],
+  "sources": [],
+  "profiles": [
+    {
+      "id": "efos-doktorski",
+      "unitId": "efos",
+      "programs": ["Doktorski studij EFOS"],
+      "workTypes": ["doctoral"],
+      "status": "partial",
+      "profileLabel": "EFOS, doktorski rad",
+      "verifiedAt": "2026-08-01",
+      "documentDate": null,
+      "rules": {
+        "font": ["Times New Roman"],
+        "size": [12],
+        "spacing": 1.5,
+        "requireA4": true,
+        "margins": { "top": 2.5, "right": 2.5, "bottom": 2.5, "left": 2.5 }
+      },
+      "facts": [
+        "Obujam rada nije strogo definiran; preporučuje se 150-300 stranica (savjet, ne bodovano)."
+      ],
+      "note": "Deepen pass (2026-08-01): naslovnica za doktorski rad (data/title-pages/templates.json, efos-doctoral) vec postojala verificirana, profil pravila nedostajao - otkriveno skriptom A (naslovnica-vs-profil mismatch audit). Isti institucija-wide izvor kao efos-zavrsni/efos-diplomski (\"Opce upute za oblikovanje rada\" vrijedi za sve razine, potvrdjeno naslovom dokumenta \"Upute za pisanje seminarskih, zavrsnih, diplomskih, specijalistickih i doktorskih radova\"). Opseg NIJE scored jer izvor doslovno kaze \"nije strogo definiran... preporucuje se\" (za razliku od diplomskog, koji koristi izravan imperativ \"treba imati\").",
+      "sources": [{ "title": "Upute za pisanje studentskih radova (EFOS, 2023)", "url": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx" }],
+      "sourceHierarchy": ["Upute za pisanje studentskih radova (EFOS, 2023)"],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": ["Format papira", "Margine", "Vrsta slova", "Velicina slova", "Prored"],
+      "advisoryScope": ["Opseg (150-300 str., preporuka)"]
+    },
+    {
+      "id": "efos-specijalisticki",
+      "unitId": "efos",
+      "programs": ["Specijalistički diplomski studij EFOS"],
+      "workTypes": ["specialist"],
+      "status": "partial",
+      "profileLabel": "EFOS, specijalistički rad",
+      "verifiedAt": "2026-08-01",
+      "documentDate": null,
+      "rules": {
+        "font": ["Times New Roman"],
+        "size": [12],
+        "spacing": 1.5,
+        "requireA4": true,
+        "margins": { "top": 2.5, "right": 2.5, "bottom": 2.5, "left": 2.5 }
+      },
+      "facts": [
+        "Obujam rada nije unaprijed definiran; preporučuje se 60-100 stranica (savjet, ne bodovano)."
+      ],
+      "note": "Deepen pass (2026-08-01): naslovnica za specijalisticki rad (efos-specialist) vec postojala verificirana, profil pravila nedostajao. Isti institucija-wide izvor kao ostali efos profili. Opseg NIJE scored (izvor: \"nije unaprijed definiran... preporucuje se\").",
+      "sources": [{ "title": "Upute za pisanje studentskih radova (EFOS, 2023)", "url": "https://www.efos.unios.hr/wp-content/uploads/2024/01/Upute_za_pisanje_studentskih_radova_travanj-2023_lekt.docx" }],
+      "sourceHierarchy": ["Upute za pisanje studentskih radova (EFOS, 2023)"],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": ["Format papira", "Margine", "Vrsta slova", "Velicina slova", "Prored"],
+      "advisoryScope": ["Opseg (60-100 str., preporuka)"]
+    },
+    {
+      "id": "efzg-seminarski",
+      "unitId": "efzg",
+      "programs": [
+        "Prijediplomski studiji Ekonomskog fakulteta (zavrsni rad)",
+        "Diplomski studiji Ekonomskog fakulteta",
+        "Poslovna ekonomija",
+        "Ekonomija"
+      ],
+      "workTypes": ["seminar"],
+      "status": "partial",
+      "profileLabel": "Ekonomski fakultet u Zagrebu, seminarski rad",
+      "verifiedAt": "2026-08-01",
+      "documentDate": null,
+      "rules": {},
+      "facts": [
+        "Cijela tehnicka uputa je preporucna (\"preporucuje se sljedece\"), ne imperativna - font nije ni imenovan.",
+        "Preporucljiv opseg seminarskoga rada je 10-15 stranica (savjet, ne bodovano).",
+        "Preporuka: velicina slova 12, prored 1,5, margine 2,54 cm sa svake strane, fusnote velicina 10 (sve savjet, ne bodovano)."
+      ],
+      "note": "Deepen pass (2026-08-01): naslovnica za seminarski rad (efzg-seminar) vec postojala verificirana, profil pravila nedostajao. Izvor (Upute 2003) je IZRICITO advisory (source-registry: 'Nema imperativnog tehnickog oblikovanja pa nema scored pravila iz ovog izvora') - efzg-zavrsni-ova SCORED pravila dolaze iz drugog, katedarskog 'Postupak izrade zavrsnog rada' dokumenta koji je specifican za zavrsni rad i ne pokriva seminarski. Profil ostaje potpuno advisory (posteno, ne izmisljeno) - i dalje bolje od potpune praznine na coverage matrici.",
+      "sources": [{ "title": "Upute za pisanje seminarskoga i diplomskoga rada (Ekonomski fakultet u Zagrebu, 2003)", "url": "https://www.efzg.unizg.hr/UserDocsImages/dokumenti/efzg_diplomski_seminarski_upute.pdf?vel=216027" }],
+      "sourceHierarchy": ["Upute za pisanje seminarskoga i diplomskoga rada (Ekonomski fakultet u Zagrebu, 2003)"],
+      "ruleAuthority": "official-recommended-mentor-priority",
+      "normativeScope": [],
+      "advisoryScope": ["Velicina slova (12)", "Prored (1,5)", "Margine (2,54 cm)", "Velicina fusnote (10)", "Opseg (10-15 str.)"]
+    },
+    {
+      "id": "kif-specijalisticki",
+      "unitId": "kif",
+      "programs": ["Specijalistički diplomski studij Kineziološkog fakulteta"],
+      "workTypes": ["specialist"],
+      "status": "partial",
+      "profileLabel": "Kineziološki fakultet, specijalistički diplomski rad",
+      "verifiedAt": "2026-08-01",
+      "documentDate": null,
+      "rules": {
+        "font": ["Times New Roman"],
+        "size": [12],
+        "spacing": 1.5,
+        "margins": { "top": 2.5, "right": 2.5, "bottom": 2.5, "left": 2.5 },
+        "justify": true,
+        "requirePageNumbers": true,
+        "recommendedCitation": "apa7",
+        "wordMin": 6000,
+        "minReferences": 20
+      },
+      "facts": [],
+      "note": "Deepen pass (2026-08-01): naslovnica za specijalisticki diplomski rad (kif-specialist) vec postojala verificirana, profil pravila nedostajao. Isti izvor kao kif-diplomski (\"Upute za izradu diplomskog/specijalistickog diplomskog rada\", naslov dokumenta doslovno spaja obje razine; sekcija 'opce - oblikovanje' i 'struktura diplomskog/specijalistickog diplomskog rada' navode obje razine zajedno). OPSEG (rijeci) RAZLIKUJE se po razini: dvostupcna tablica u izvoru grupira 'STRUCNI DIPLOMSKI RAD I SPECIJALISTICKI DIPLOMSKI RAD' zajedno na 6000 rijeci / 25 kartica (za razliku od 'ZNANSTVENO-ISTRAZIVACKI DIPLOMSKI RAD' na 4000 rijeci) - specijalisticki NIJE isti prag kao postojeci kif-diplomski unos, nego visi.",
+      "sources": [{ "title": "Upute za izradu diplomskog/specijalistickog diplomskog rada (Kinezioloski fakultet Sveucilista u Zagrebu, 2023)", "url": "https://www.kif.unizg.hr/_download/repository/Kinezioloski-upute-diplomskizavrsni-rad.pdf" }],
+      "sourceHierarchy": ["Upute za izradu diplomskog/specijalistickog diplomskog rada (Kinezioloski fakultet Sveucilista u Zagrebu, 2023)"],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": ["Vrsta slova", "Velicina slova", "Prored", "Margine", "Obostrano poravnanje", "Numeracija stranica", "Stil citiranja (APA)", "Opseg (min. 6000 rijeci)", "Najmanji broj referenci (20)"],
+      "advisoryScope": ["Obvezne cjeline (Uvod, Razrada teme, Zakljucak, Literatura, Prilozi)"]
+    },
+    {
+      "id": "pravri-specijalisticki",
+      "unitId": "pravri",
+      "programs": [
+        "Sveučilišni specijalistički studij Financijsko pravo trgovačkih društava",
+        "Sveučilišni specijalistički studij Pravo europskih integracija",
+        "Sveučilišni specijalistički studij Kriminalističko istraživanje"
+      ],
+      "workTypes": ["specialist"],
+      "status": "partial",
+      "profileLabel": "Pravni fakultet u Rijeci, završni rad sveučilišnog specijalističkog studija",
+      "verifiedAt": "2026-08-01",
+      "documentDate": null,
+      "rules": {
+        "font": ["Times New Roman"],
+        "size": [12],
+        "spacing": 1.5,
+        "requireA4": true,
+        "margins": { "top": 2.5, "right": 2.5, "bottom": 2.5, "left": 2.5 }
+      },
+      "facts": [],
+      "note": "Deepen pass (2026-08-01): naslovnica za zavrsni rad specijalistickog studija (pravri-specialist, Prilozi 8/10/12) vec postojala verificirana, profil pravila nedostajao. Isti institucija-wide izvor kao pravri-zavrsni/pravri-diplomski (poglavlje II 'Tehnicke upute za pisanje rada', 2.1 Normativ stranice - opce, prije razdvajanja po razinama u Prilozima). Opseg NIJE scored (izvor koristi 'najcesce'/opisno, ne imperativ - isti razlog zasto ga zavrsni/diplomski vec nemaju scored).",
+      "sources": [{ "title": "Upute za izradu studentskih pisanih radova (PRAVRI, rev. 2023)", "url": "https://pravri.uniri.hr/files/Dokumenti/Pravilnici/uputeradovi.pdf" }],
+      "sourceHierarchy": ["Upute za izradu studentskih pisanih radova (PRAVRI, rev. 2023)"],
+      "ruleAuthority": "official-program-guidelines",
+      "normativeScope": ["Format papira", "Margine", "Vrsta slova", "Velicina slova", "Prored"],
+      "advisoryScope": []
+    }
+  ],
+  "ledger": [
+    { "id": "led-efos-doktorski--paper-size-verified-2026-08-01", "ruleId": "efos-doktorski--paper-size", "profileId": "efos-doktorski", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-08-01", "sourceId": "efos-upute-studentski-2023", "sourcePage": "Opce upute za oblikovanje rada", "quote": "veličina je stranice A4 (210x297 mm), a rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mm", "note": "Deepen pass: isti opci institucija-wide izvor kao efos-zavrsni/diplomski." },
+    { "id": "led-efos-doktorski--margins-verified-2026-08-01", "ruleId": "efos-doktorski--margins", "profileId": "efos-doktorski", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-08-01", "sourceId": "efos-upute-studentski-2023", "sourcePage": "Opce upute za oblikovanje rada", "quote": "veličina je stranice A4 (210x297 mm), a rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mm", "note": "Deepen pass: isti opci institucija-wide izvor kao efos-zavrsni/diplomski." },
+    { "id": "led-efos-doktorski--font-verified-2026-08-01", "ruleId": "efos-doktorski--font", "profileId": "efos-doktorski", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-08-01", "sourceId": "efos-upute-studentski-2023", "sourcePage": "Opce upute za oblikovanje rada", "quote": "rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5", "note": "Deepen pass: isti opci institucija-wide izvor kao efos-zavrsni/diplomski." },
+    { "id": "led-efos-doktorski--font-size-verified-2026-08-01", "ruleId": "efos-doktorski--font-size", "profileId": "efos-doktorski", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-08-01", "sourceId": "efos-upute-studentski-2023", "sourcePage": "Opce upute za oblikovanje rada", "quote": "rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5", "note": "Deepen pass: isti opci institucija-wide izvor kao efos-zavrsni/diplomski." },
+    { "id": "led-efos-doktorski--line-spacing-verified-2026-08-01", "ruleId": "efos-doktorski--line-spacing", "profileId": "efos-doktorski", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-08-01", "sourceId": "efos-upute-studentski-2023", "sourcePage": "Opce upute za oblikovanje rada", "quote": "rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5", "note": "Deepen pass: isti opci institucija-wide izvor kao efos-zavrsni/diplomski." },
+
+    { "id": "led-efos-specijalisticki--paper-size-verified-2026-08-01", "ruleId": "efos-specijalisticki--paper-size", "profileId": "efos-specijalisticki", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-08-01", "sourceId": "efos-upute-studentski-2023", "sourcePage": "Opce upute za oblikovanje rada", "quote": "veličina je stranice A4 (210x297 mm), a rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mm", "note": "Deepen pass: isti opci institucija-wide izvor kao efos-zavrsni/diplomski." },
+    { "id": "led-efos-specijalisticki--margins-verified-2026-08-01", "ruleId": "efos-specijalisticki--margins", "profileId": "efos-specijalisticki", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-08-01", "sourceId": "efos-upute-studentski-2023", "sourcePage": "Opce upute za oblikovanje rada", "quote": "veličina je stranice A4 (210x297 mm), a rubnice trebaju biti sljedeće veličine: lijeva 25 mm, desna 25 mm, gornja i donja po 25 mm", "note": "Deepen pass: isti opci institucija-wide izvor kao efos-zavrsni/diplomski." },
+    { "id": "led-efos-specijalisticki--font-verified-2026-08-01", "ruleId": "efos-specijalisticki--font", "profileId": "efos-specijalisticki", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-08-01", "sourceId": "efos-upute-studentski-2023", "sourcePage": "Opce upute za oblikovanje rada", "quote": "rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5", "note": "Deepen pass: isti opci institucija-wide izvor kao efos-zavrsni/diplomski." },
+    { "id": "led-efos-specijalisticki--font-size-verified-2026-08-01", "ruleId": "efos-specijalisticki--font-size", "profileId": "efos-specijalisticki", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-08-01", "sourceId": "efos-upute-studentski-2023", "sourcePage": "Opce upute za oblikovanje rada", "quote": "rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5", "note": "Deepen pass: isti opci institucija-wide izvor kao efos-zavrsni/diplomski." },
+    { "id": "led-efos-specijalisticki--line-spacing-verified-2026-08-01", "ruleId": "efos-specijalisticki--line-spacing", "profileId": "efos-specijalisticki", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-08-01", "sourceId": "efos-upute-studentski-2023", "sourcePage": "Opce upute za oblikovanje rada", "quote": "rad treba pisati fontom Times New Roman veličine 12 točaka uz prored 1,5", "note": "Deepen pass: isti opci institucija-wide izvor kao efos-zavrsni/diplomski." },
+
+    { "id": "led-kif-specijalisticki--font-verified-2026-08-01", "ruleId": "kif-specijalisticki--font", "profileId": "kif-specijalisticki", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-08-01", "sourceId": "kif-upute-diplomski-2023", "sourcePage": "str. 8, opce - oblikovanje", "quote": "Times New Roman, veličina fonta – 12 pt, prored – 1,5 redak, razmak – prije i poslije – 0 pt, poravnanje – obostrano", "note": "Deepen pass: naslov dokumenta 'diplomskog/specijalistickog diplomskog rada' + section 'struktura diplomskog/specijalistickog diplomskog rada' potvrdjuju da isto oblikovanje vrijedi za obje razine." },
+    { "id": "led-kif-specijalisticki--font-size-verified-2026-08-01", "ruleId": "kif-specijalisticki--font-size", "profileId": "kif-specijalisticki", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-08-01", "sourceId": "kif-upute-diplomski-2023", "sourcePage": "str. 8, opce - oblikovanje", "quote": "Times New Roman, veličina fonta – 12 pt, prored – 1,5 redak, razmak – prije i poslije – 0 pt, poravnanje – obostrano", "note": "Deepen pass: isti izvor kao kif-diplomski, potvrdjeno da vrijedi za obje razine." },
+    { "id": "led-kif-specijalisticki--line-spacing-verified-2026-08-01", "ruleId": "kif-specijalisticki--line-spacing", "profileId": "kif-specijalisticki", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-08-01", "sourceId": "kif-upute-diplomski-2023", "sourcePage": "str. 8, opce - oblikovanje", "quote": "Times New Roman, veličina fonta – 12 pt, prored – 1,5 redak, razmak – prije i poslije – 0 pt, poravnanje – obostrano", "note": "Deepen pass: isti izvor kao kif-diplomski, potvrdjeno da vrijedi za obje razine." },
+    { "id": "led-kif-specijalisticki--margins-verified-2026-08-01", "ruleId": "kif-specijalisticki--margins", "profileId": "kif-specijalisticki", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-08-01", "sourceId": "kif-upute-diplomski-2023", "sourcePage": "str. 8, opce - oblikovanje", "quote": "Margine 2,5 cm sa svake strane", "note": "Deepen pass: isti izvor kao kif-diplomski, potvrdjeno da vrijedi za obje razine." },
+    { "id": "led-kif-specijalisticki--justify-verified-2026-08-01", "ruleId": "kif-specijalisticki--justify", "profileId": "kif-specijalisticki", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-08-01", "sourceId": "kif-upute-diplomski-2023", "sourcePage": "str. 8, opce - oblikovanje", "quote": "Times New Roman, veličina fonta – 12 pt, prored – 1,5 redak, razmak – prije i poslije – 0 pt, poravnanje – obostrano", "note": "Deepen pass: isti izvor kao kif-diplomski (koji dosad NIJE imao ovo scored - dodano i njemu istovremeno)." },
+    { "id": "led-kif-specijalisticki--page-numbers-verified-2026-08-01", "ruleId": "kif-specijalisticki--page-numbers", "profileId": "kif-specijalisticki", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-08-01", "sourceId": "kif-upute-diplomski-2023", "sourcePage": "str. 26, odjeljak 7 sadrzaj, UVOD", "quote": "Uvod je prva stranica na kojoj se mora naći napisana numeracija", "note": "Deepen pass: opis prije dvostupcne tablice (zajednicki za obje razine)." },
+    { "id": "led-kif-specijalisticki--citation-style-verified-2026-08-01", "ruleId": "kif-specijalisticki--citation-style", "profileId": "kif-specijalisticki", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-08-01", "sourceId": "kif-upute-diplomski-2023", "sourcePage": "str. 28, Kako navoditi izvore", "quote": "Kinezioloskom fakultetu koristi se American Psychological Association APA stil citiranja", "note": "Deepen pass: isti izvor kao kif-diplomski, opcenit odjeljak o citiranju." },
+    { "id": "led-kif-specijalisticki--word-count-verified-2026-08-01", "ruleId": "kif-specijalisticki--word-count", "profileId": "kif-specijalisticki", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-08-01", "sourceId": "kif-upute-diplomski-2023", "sourcePage": "str. 27, odjeljak 7 sadrzaj, OPSEG", "quote": "STRUCNI DIPLOMSKI RAD I SPECIJALISTICKI DIPLOMSKI RAD: Opseg ne smije biti manji od 6000 rijeci, odnosno 25 kartica teksta", "note": "Deepen pass: dvostupcna tablica grupira specijalisticki sa strucnim diplomskim (6000), NE sa znanstveno-istrazivackim diplomskim (4000, vec scored kod kif-diplomski)." },
+    { "id": "led-kif-specijalisticki--reference-count-verified-2026-08-01", "ruleId": "kif-specijalisticki--reference-count", "profileId": "kif-specijalisticki", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-08-01", "sourceId": "kif-upute-diplomski-2023", "sourcePage": "str. 27, odjeljak 7 sadrzaj, LITERATURA", "quote": "minimalno 20 referenci", "note": "Deepen pass: isti izvor kao kif-diplomski (koji dosad NIJE imao ovo scored - dodano i njemu istovremeno)." },
+
+    { "id": "led-pravri-specijalisticki--paper-size-verified-2026-08-01", "ruleId": "pravri-specijalisticki--paper-size", "profileId": "pravri-specijalisticki", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-08-01", "sourceId": "pravri-upute-radovi-2023", "sourcePage": "poglavlje 2.1 Normativ stranice (str. 7)", "quote": "Format papira: A4 (21,0 cm × 29,7 cm) Margine (praznine od tekstualnog sloga do ruba papira): 2,5 cm sa svih strana (gore, dolje, lijevo, desno) Prored teksta: 1,5 redak Vrsta slova: Times New Roman Veličina slova: 12 (tipografskih točaka).", "note": "Deepen pass: isti opci institucija-wide izvor kao pravri-zavrsni/diplomski (poglavlje II prije razdvajanja po razinama u Prilozima)." },
+    { "id": "led-pravri-specijalisticki--margins-verified-2026-08-01", "ruleId": "pravri-specijalisticki--margins", "profileId": "pravri-specijalisticki", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-08-01", "sourceId": "pravri-upute-radovi-2023", "sourcePage": "poglavlje 2.1 Normativ stranice (str. 7)", "quote": "Format papira: A4 (21,0 cm × 29,7 cm) Margine (praznine od tekstualnog sloga do ruba papira): 2,5 cm sa svih strana (gore, dolje, lijevo, desno) Prored teksta: 1,5 redak Vrsta slova: Times New Roman Veličina slova: 12 (tipografskih točaka).", "note": "Deepen pass: isti opci institucija-wide izvor kao pravri-zavrsni/diplomski." },
+    { "id": "led-pravri-specijalisticki--line-spacing-verified-2026-08-01", "ruleId": "pravri-specijalisticki--line-spacing", "profileId": "pravri-specijalisticki", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-08-01", "sourceId": "pravri-upute-radovi-2023", "sourcePage": "poglavlje 2.1 Normativ stranice (str. 7)", "quote": "Format papira: A4 (21,0 cm × 29,7 cm) Margine (praznine od tekstualnog sloga do ruba papira): 2,5 cm sa svih strana (gore, dolje, lijevo, desno) Prored teksta: 1,5 redak Vrsta slova: Times New Roman Veličina slova: 12 (tipografskih točaka).", "note": "Deepen pass: isti opci institucija-wide izvor kao pravri-zavrsni/diplomski." },
+    { "id": "led-pravri-specijalisticki--font-verified-2026-08-01", "ruleId": "pravri-specijalisticki--font", "profileId": "pravri-specijalisticki", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-08-01", "sourceId": "pravri-upute-radovi-2023", "sourcePage": "poglavlje 2.1 Normativ stranice (str. 7)", "quote": "Format papira: A4 (21,0 cm × 29,7 cm) Margine (praznine od tekstualnog sloga do ruba papira): 2,5 cm sa svih strana (gore, dolje, lijevo, desno) Prored teksta: 1,5 redak Vrsta slova: Times New Roman Veličina slova: 12 (tipografskih točaka).", "note": "Deepen pass: isti opci institucija-wide izvor kao pravri-zavrsni/diplomski." },
+    { "id": "led-pravri-specijalisticki--font-size-verified-2026-08-01", "ruleId": "pravri-specijalisticki--font-size", "profileId": "pravri-specijalisticki", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-08-01", "sourceId": "pravri-upute-radovi-2023", "sourcePage": "poglavlje 2.1 Normativ stranice (str. 7)", "quote": "Format papira: A4 (21,0 cm × 29,7 cm) Margine (praznine od tekstualnog sloga do ruba papira): 2,5 cm sa svih strana (gore, dolje, lijevo, desno) Prored teksta: 1,5 redak Vrsta slova: Times New Roman Veličina slova: 12 (tipografskih točaka).", "note": "Deepen pass: isti opci institucija-wide izvor kao pravri-zavrsni/diplomski." },
+
+    { "id": "led-efzg-seminarski--advisory-note-2026-08-01", "ruleId": "efzg-seminarski--advisory-note", "profileId": "efzg-seminarski", "action": "verified", "actor": "owner-bulk-approval", "timestamp": "2026-08-01", "sourceId": "efzg-upute-diplomski-seminarski", "sourcePage": "str. 2, Svrha seminarskoga rada / str. metodologija izrade rada", "quote": "Preporučljiv opseg seminarskoga rada je 10 - 15 stranica. Kako bi rad bio pregledan i sustavno oblikovan, preporučuje se sljedeće: odabrati veličinu slova 12 i prored 1.5, za bilješke veličinu slova 10, koristiti standardne margine - margine dolje, gore, lijevo i desno po 2,54 cm.", "note": "Deepen pass: EFZG seminarski profil je namjerno potpuno advisory - izvor je izricito preporucan (nema imperativa), ne izmisljam scored pravila." }
+  ]
+}
